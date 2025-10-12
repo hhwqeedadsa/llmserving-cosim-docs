@@ -35,7 +35,7 @@ if __name__ == '__main__':
     spine_ids = []
     # step1: 生成节点,要求host在前,node在后,且顺序编号,不符合要求会报错
     for host_id in range(host_num):
-        graph.add_netisim_host(host_id, forward_delay='1300ns')
+        graph.add_netisim_host(host_id, forward_delay='1ns')
         host_ids.append(host_id)
 
     # step2: 生成拓扑连线,按照自定义拓扑,将指定id的节点(host或node皆可)进行连线并指定带宽和时延(发包器会自动连接)

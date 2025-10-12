@@ -42,7 +42,7 @@ if __name__ == '__main__':
         host_ids.append(host_id)
 
     for leaf_sw_id in range(leaf_sw_num):
-        graph.add_netisim_node(leaf_sw_id + host_num, forward_delay='1301ns')
+        graph.add_netisim_node(leaf_sw_id + host_num, forward_delay='1ns')
         leaf_ids.append(leaf_sw_id + host_num)
 
     for spine_sw_id in range(spine_sw_num):

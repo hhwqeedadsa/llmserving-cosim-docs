@@ -36,15 +36,15 @@ if __name__ == '__main__':
 
     # step1: 生成节点,要求host在前,node在后,且顺序编号,不符合要求会报错
     for host_id in range(host_num):
-        graph.add_netisim_host(host_id, forward_delay='1300ns')
+        graph.add_netisim_host(host_id, forward_delay='1ns')
         host_ids.append(host_id)
 
     for leaf_sw_id in range(leaf_sw_num):
-        graph.add_netisim_node(leaf_sw_id + host_num, forward_delay='1300ns')
+        graph.add_netisim_node(leaf_sw_id + host_num, forward_delay='1ns')
         leaf_ids.append(leaf_sw_id + host_num)
 
     for spine_sw_id in range(spine_sw_num):
-        graph.add_netisim_node(spine_sw_id + host_num + leaf_sw_num, forward_delay='1300ns')
+        graph.add_netisim_node(spine_sw_id + host_num + leaf_sw_num, forward_delay='1ns')
         spine_ids.append(spine_sw_id + host_num + leaf_sw_num)
 
 

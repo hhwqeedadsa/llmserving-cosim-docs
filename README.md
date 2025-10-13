@@ -1,6 +1,6 @@
-# NS-3 UB Tools
+# ns-3 UB Tools
 
-A collection of network simulation tools for NS-3, focusing on cluster network topology generation and traffic analysis.
+A collection of network simulation tools for ns-3, focusing on cluster network topology generation and traffic analysis.
 
 ## Components
 

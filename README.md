@@ -1,38 +1,55 @@
 # ns-3 UB Tools
 
-A collection of network simulation tools for ns-3, focusing on cluster network topology generation and traffic analysis.
+Utilities for ns-3-based network simulation, including topology generation/visualization, traffic generation, and trace analysis.
 
 ## Components
 
-### Network Topology Tools
-- `net_sim_builder.py` - Network simulation builder
-- `topo_plot.py` - Topology visualization tool
-- `user_topo_*.py` - Various topology examples (2-layer Clos, 4x4 2DFM, etc.)
+### Topology
+- `net_sim_builder.py` — Network simulation builder.
+- `topo_plot.py` — Topology visualization.
+- `user_topo_*.py` — Example topologies (e.g., 2-layer Clos, 4x4 2DFM).
 
 ### Traffic Generation
-- `traffic_maker/all2allv_maker.py` - All-to-all traffic pattern generator
-- `traffic_maker/xccl_rdma_maker.py` - XCCL RDMA traffic generator
+- `traffic_maker/all2allv_maker.py` — All-to-all(-v) traffic generator.
+- `traffic_maker/xccl_rdma_maker.py` — XCCL RDMA traffic generator.
 
 ### Trace Analysis
-- `trace_analysis/parse_trace.py` - Main trace parsing script
-- `trace_analysis/task_statistics.py` - Task statistics analyzer
-- `trace_analysis/cal_throughput.py` - Throughput calculator
+- `trace_analysis/parse_trace.py` — Orchestrates trace parsing.
+- `trace_analysis/task_statistics.py` — Task-level statistics.
+- `trace_analysis/cal_throughput.py` — Link throughput calculation.
+
+## Installation
+
+Prerequisite: Python 3.10+ recommended.
+
+Install third-party dependencies via requirements file:
+
+```bash
+python3 -m pip install --user -r requirements.txt
+```
+
+Dependencies (for reference): pandas, numpy, matplotlib, seaborn, networkx.
 
 ## Usage
 
-### Running Trace Analysis
+### Trace Analysis
+Run the parser on a case directory (the directory containing `runlog/`, `output/`, and `traffic.csv`). The optional flag controls test vs output subdirectory.
+
 ```bash
-python3 trace_analysis/parse_trace.py <trace_file.csv> [true/false]
+python3 trace_analysis/parse_trace.py <case_dir> [true|false]
 ```
 
-### Generating Topologies
+This invokes `task_statistics.py` and `cal_throughput.py` using the same Python interpreter.
+
+### Topology Visualization
+```bash
+python3 topo_plot.py -i <case_dir>
+```
+
+### Topology Examples
 ```bash
 python3 user_topo_example.py
 ```
 
-## Requirements
-- Python 3.x
-- pandas, glob, pandas, re, csv
-
 ## License
-Open source project for network simulation research.
+Open-source utilities for network simulation research.

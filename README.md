@@ -32,8 +32,7 @@ python3 user_topo_example.py
 
 ## Requirements
 - Python 3.x
-- pandas
-- Required packages will be auto-installed when running parse_trace.py
+- pandas, glob, pandas, re, csv
 
 ## License
 Open source project for network simulation research.

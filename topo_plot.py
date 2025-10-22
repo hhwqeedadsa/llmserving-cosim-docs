@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as np
 import matplotlib.patches as mpatches
 from matplotlib.patches import FancyArrowPatch
+from matplotlib.lines import Line2D
 import argparse
 import os
 
@@ -26,7 +27,7 @@ def get_range_int(range_int_str: str):
     else:
         return int(range_int_str), int(range_int_str)
 
-def plot_network_topology(input_dir, output_name="network_topology"):
+def plot_network_topology(input_dir, output_name="network_topology", save_pdf=False):
     # 读取数据
     nodes = pd.read_csv(os.path.join(input_dir, 'node.csv'))  
     edges = pd.read_csv(os.path.join(input_dir, 'topology.csv'))  
@@ -124,7 +125,7 @@ def plot_network_topology(input_dir, output_name="network_topology"):
         
         arrow = FancyArrowPatch((x1, y1), (x2, y2),
                                connectionstyle=f"arc3,rad={rad}",
-                               arrowstyle="-", color=COLORS['d_d_egde'],
+                               arrowstyle="-", color=COLORS['d_d_edge'],
                                linewidth=0.8, alpha=0.3)
         ax.add_patch(arrow)
 
@@ -217,7 +218,7 @@ def plot_network_topology(input_dir, output_name="network_topology"):
     # 添加标签 - 使用自适应字体大小
     if switch_nodes:
         switch_labels = {node: f"SW\n{node}" for node in switch_nodes}
-        nx.draw_networkx_labels(G, positions, labels=switch_labels, font_size=switch_font_size, 
+        nx.draw_networkx_labels(G, positions, labels=switch_labels, font_size=int(switch_font_size), 
                                font_color='white', font_weight='bold')
 
     # 设备标签 - 使用自适应字体大小
@@ -231,7 +232,7 @@ def plot_network_topology(input_dir, output_name="network_topology"):
         device_label_positions = {node: (positions[node][0], positions[node][1] - 0.4) 
                                  for node in device_labels.keys()}
         nx.draw_networkx_labels(G, device_label_positions, labels=device_labels, 
-                               font_size=device_font_size, font_color='black', font_weight='bold')
+                               font_size=int(device_font_size), font_color='black', font_weight='bold')
 
     # 图例和样式
     # 统计所有switch节点（不区分层级）
@@ -242,7 +243,7 @@ def plot_network_topology(input_dir, output_name="network_topology"):
     legend_elements = [
         mpatches.Rectangle((0, 0), 1, 1, facecolor=COLORS['leaf'], edgecolor=COLORS['leaf_edge'], 
                        label=f'Switches ({len(all_switch_nodes)})'),
-        plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['device'], 
+        Line2D([0], [0], marker='o', color='w', markerfacecolor=COLORS['device'], 
                    markeredgecolor=COLORS['device_edge'], markersize=8, linewidth=0,
                    label=f'Hosts ({len(layer_groups.get(0, []))})'),
         # plt.Line2D([0], [0], color=COLORS['edge_device'], linewidth=2, label='Host-SW Links'),
@@ -262,15 +263,30 @@ def plot_network_topology(input_dir, output_name="network_topology"):
 
     # 保存文件 - 输出到输入目录
     output_png = os.path.join(input_dir, f"{output_name}.png")
-    output_pdf = os.path.join(input_dir, f"{output_name}.pdf")
     plt.savefig(output_png, dpi=300, bbox_inches='tight', 
                facecolor=COLORS['background'], pad_inches=0.1)
-    plt.savefig(output_pdf, bbox_inches='tight', 
-               facecolor=COLORS['background'], pad_inches=0.1)
+    
+    saved_files = [output_png]
+    
+    if save_pdf:
+        output_pdf = os.path.join(input_dir, f"{output_name}.pdf")
+        plt.savefig(output_pdf, bbox_inches='tight', 
+                   facecolor=COLORS['background'], pad_inches=0.1)
+        saved_files.append(output_pdf)
 
     print(f"✅ Network topology visualization completed!")
-    print(f"📁 Saved as: {output_png} & {output_pdf}")
-    plt.show()
+    if len(saved_files) == 1:
+        print(f"📁 Saved as: {saved_files[0]}")
+    else:
+        print(f"📁 Saved as: {' & '.join(saved_files)}")
+    # Only show the plot if running in an interactive backend
+    try:
+        backend = plt.get_backend().lower()
+    except Exception:
+        backend = ''
+
+    if 'agg' not in backend:
+        plt.show()
 
 def main():
     parser = argparse.ArgumentParser(
@@ -291,6 +307,8 @@ Input Files Required:
                       help='Directory containing node.csv and topology.csv')
     parser.add_argument('-o', '--output', default='network_topology',
                       help='Output filename prefix (default: network_topology)')
+    parser.add_argument('--pdf', action='store_true',
+                      help='Also save PDF format (PNG is always saved)')
     
     args = parser.parse_args()
     

@@ -6,19 +6,19 @@ import networkx as nx
 # =============================
 def all_simple_paths(G, source, target):
     try:
-        # 这里你可以在neetworkx库中寻找适合的寻路函数。
+        # 这里你可以在networkx库中寻找适合的寻路函数。
         # 调用networkx库的all_simple_paths函数，可以获得跳数<=cutoff值的所有不成环路径。
         paths = nx.all_simple_paths(G, source, target, cutoff=2)
-    except nx.exception.NetworkXNoPath:
+    except nx.NetworkXNoPath:
         paths = []
     return paths
 
 def all_shortest_paths(G, source, target):
     try:
-        # 这里你可以在neetworkx库中寻找适合的寻路函数。
+        # 这里你可以在networkx库中寻找适合的寻路函数。
         # 调用networkx库的all_shortest_path函数，可以获得所有最短路径。
         paths = nx.all_shortest_paths(G, source, target)
-    except nx.exception.NetworkXNoPath:
+    except nx.NetworkXNoPath:
         paths = []
     return paths
 

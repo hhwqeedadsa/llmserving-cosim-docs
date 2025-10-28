@@ -172,4 +172,4 @@ if __name__ == "__main__":
     os.makedirs(output_dir, exist_ok=True)
     
     process_files_to_csv(input_dir, traffic_file,output_file)
-    print(f"处理完成，结果已保存到 {output_file}")
+    print(f"Saved traffic tasks throughput results to {output_file}")

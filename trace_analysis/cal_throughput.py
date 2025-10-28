@@ -50,7 +50,7 @@ def process_files(directory, output_csv):
         writer.writerow(['file', 'startTimestamp (us)', 'completesTimestamp (us)', 'totalPacketSize (bytes)', 'throughput(Gbps)'])
         writer.writerows(results)
 
-    print(f"处理完成，结果已保存到 {output_csv}")
+    print(f"Saved per-port throughput results to {output_csv}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

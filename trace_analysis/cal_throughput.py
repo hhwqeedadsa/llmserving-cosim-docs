@@ -82,6 +82,7 @@ def process_files(directory, output_csv):
     with open(output_csv, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['nodeId', 'portId', 'type', 'startTimestamp (us)', 'completesTimestamp (us)', 'totalPacketSize (bytes)', 'throughput(Gbps)'])
+        writer.writerows(results)
 
     print(f"Saved per-port throughput results to {output_csv}")
 

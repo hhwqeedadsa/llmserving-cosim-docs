@@ -55,14 +55,14 @@ class NetworkSimulationGraph(nx.Graph):
         self.route_table_2port = None
 
     # 基础节点/边 API（forward_delay 等属性原样保留，不做单位转换）
-    def add_netisim_host(self, node_id, forward_delay="1300ns", **attr):
+    def add_netisim_host(self, node_id, forward_delay="1ns", **attr):
         self.host_ids.append(node_id)
-        validate_with_unit("forward_delay", forward_delay, VALID_TIME_UNIT, "1300ns")
+        validate_with_unit("forward_delay", forward_delay, VALID_TIME_UNIT, "1ns")
         return super().add_node(node_id, type="host", forward_delay=forward_delay, **attr)
 
-    def add_netisim_node(self, node_id, forward_delay="1300ns", **attr):
+    def add_netisim_node(self, node_id, forward_delay="1ns", **attr):
         self.node_ids.append(node_id)
-        validate_with_unit("forward_delay", forward_delay, VALID_TIME_UNIT, "1300ns")
+        validate_with_unit("forward_delay", forward_delay, VALID_TIME_UNIT, "1ns")
         return super().add_node(node_id, type="node", forward_delay=forward_delay, **attr)
 
     def add_netisim_edge(self, u, v, bandwidth="200Gbps", delay="20ns", edge_count=1, **attr):

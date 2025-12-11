@@ -8,6 +8,7 @@ def parse_file(file_path):
     total_packet_size = 0
     first_timestamp = None
     last_timestamp = None
+    first_packet_size = 0
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -19,8 +20,14 @@ def parse_file(file_path):
 
                 if first_timestamp is None:
                     first_timestamp = timestamp
+                    first_packet_size = packet_size
                 last_timestamp = timestamp
                 total_packet_size += packet_size
+
+    # Subtract the size of the first packet to align with the time interval (T_last - T_first)
+    # which represents the transmission time for (N-1) packets.
+    if total_packet_size > 0:
+        total_packet_size -= first_packet_size
 
     return first_timestamp, last_timestamp, total_packet_size
 
@@ -28,6 +35,7 @@ def parse_file_tx(file_path):
     total_packet_size = 0
     first_timestamp = None
     last_timestamp = None
+    last_packet_size = 0
 
     with open(file_path, 'r') as file:
         for line in file:
@@ -40,7 +48,13 @@ def parse_file_tx(file_path):
                 if first_timestamp is None:
                     first_timestamp = timestamp
                 last_timestamp = timestamp
+                last_packet_size = packet_size
                 total_packet_size += packet_size
+
+    # Subtract the size of the last packet to align with the time interval (T_last - T_first)
+    # Since Tx timestamp is "Start of Transmission", the interval covers P_1 to P_{N-1}.
+    if total_packet_size > 0:
+        total_packet_size -= last_packet_size
 
     return first_timestamp, last_timestamp, total_packet_size
 

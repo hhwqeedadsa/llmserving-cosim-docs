@@ -55,8 +55,8 @@ def parse_file_name(file_name):
 
 def process_files(directory, output_csv):
     results = []
-    typename_tx = "transmit"
-    typename_rx = "receive"
+    typename_tx = "Tx"
+    typename_rx = "Rx"
     
     for filename in os.listdir(directory):
         if re.match(r'PortTrace_node_\d+_port_\d+\.tr', filename):
@@ -78,6 +78,9 @@ def process_files(directory, output_csv):
                 else:
                     average_rate = 0
                 results.append((node_id, port_id, typename_tx, first_timestamp_tx, last_timestamp_tx, total_packet_size_tx, average_rate))
+
+    # Sort results by nodeId and portId
+    results.sort(key=lambda x: (x[0], x[1]))
 
     with open(output_csv, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)

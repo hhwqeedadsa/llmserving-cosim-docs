@@ -80,7 +80,7 @@ def process_files(directory, output_csv):
             if first_timestamp is not None and last_timestamp is not None:
                 time_diff = last_timestamp - first_timestamp
                 if time_diff > 0:
-                    average_rate = round((((total_packet_size*8)/ (1000 ** 3)) / (time_diff/1000000)), 4)
+                    average_rate = round((((total_packet_size*8)/ (1000 ** 3)) / (time_diff/1000000)), 2)
                 else:
                     average_rate = 0
                 results.append((node_id, port_id, typename_rx, first_timestamp, last_timestamp, total_packet_size, average_rate))
@@ -88,7 +88,7 @@ def process_files(directory, output_csv):
             if first_timestamp_tx is not None and last_timestamp_tx is not None:
                 time_diff = last_timestamp_tx - first_timestamp_tx
                 if time_diff > 0:
-                    average_rate = round((((total_packet_size_tx*8)/ (1000 ** 3)) / (time_diff/1000000)), 4)
+                    average_rate = round((((total_packet_size_tx*8)/ (1000 ** 3)) / (time_diff/1000000)), 2)
                 else:
                     average_rate = 0
                 results.append((node_id, port_id, typename_tx, first_timestamp_tx, last_timestamp_tx, total_packet_size_tx, average_rate))
@@ -98,7 +98,7 @@ def process_files(directory, output_csv):
 
     with open(output_csv, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['nodeId', 'portId', 'type', 'startTimestamp (us)', 'completesTimestamp (us)', 'totalPacketSize (bytes)', 'throughput(Gbps)'])
+        writer.writerow(['nodeId', 'portId', 'type', 'startTimestamp (us)', 'completesTimestamp (us)', 'TotalBytes', 'throughput(Gbps)'])
         writer.writerows(results)
 
     print(f"Saved per-port throughput results to {output_csv}")

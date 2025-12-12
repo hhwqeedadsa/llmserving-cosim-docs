@@ -1,4 +1,4 @@
-# XCCL Traffic Maker
+# Collective Communication Traffic Maker
 
 A tool suite for generating collective communication traffic patterns and schedules for simulation and analysis.
 

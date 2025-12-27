@@ -6,6 +6,8 @@ A tool suite for generating collective communication traffic patterns and schedu
 
 The traffic maker generates `traffic.csv` files that describe RDMA operations for various collective communication algorithms (AllReduce, All-to-All). It supports multiple algorithm implementations and allows fine-grained control over communication parameters.
 
+The `build_traffic.py` entry point can generate traffic patterns corresponding to common HCCL collective operators (for example, AllReduce variants and All-to-All variants), making it easy to simulate typical HCCL workloads.
+
 ## Quick Start
 
 ### Build Traffic (Main CLI)

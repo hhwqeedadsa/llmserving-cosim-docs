@@ -22,7 +22,7 @@ This submodule provides the **Python toolchain** for `scratch/` cases:
 	- `network_topology.pdf` (optional via `--pdf`)
 
 ### Traffic generation
-The `traffic_maker/build_traffic.py` tool can generate traffic patterns corresponding to common HCCL collective operators (for example, AllReduce and All-to-All), which makes it straightforward to simulate typical HCCL workloads.
+The `traffic_maker/build_traffic.py` [Link](./traffic_maker/README.md) tool can generate traffic patterns corresponding to common HCCL collective operators (for example, AllReduce and All-to-All), which makes it straightforward to simulate typical HCCL workloads.
 
 - `traffic_maker/build_traffic.py` — writes a timestamped folder under `./output/` (or `--output-dir`), containing:
   - `traffic.csv`

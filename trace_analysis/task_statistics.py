@@ -102,7 +102,7 @@ def process_files_to_csv(input_folder,csv_file, output_csv, pattern="*.tr"):
     merged_data = []
     for task_id in task_data:
         task_Data = task_data[task_id]
-        packe_Data= filterData[task_id]
+        packe_Data= filterData.get(task_id, {'First Packet Sends': None, 'Last Packet ACKs': None})
         # 使用字典推导式获取特定事件的timestamp
         timestamps = {
             item['event']: item['timestamp']
@@ -131,15 +131,25 @@ def process_files_to_csv(input_folder,csv_file, output_csv, pattern="*.tr"):
     df['taskThroughput(Gbps)'] = None
 
     # 遍历任务详细信息列表
+    missing_packet_info_count = 0
+    total_tasks = len(merged_data)
+    
     for task in merged_data:
         task_id = int(task['Task ID'])
         task_start_time = float(task['Task Start Time'])
         task_end_time = float(task['Task End Time'])
-        first_packet_sends = float(task['First Packet Sends'])
-        if (task['Last Packet ACKs'] == None):
-            last_packet_ACKs = 0
+        
+        if task['First Packet Sends'] is None:
+            first_packet_sends = 0.0
+            missing_packet_info_count += 1
+        else:
+            first_packet_sends = float(task['First Packet Sends'])
+
+        if task['Last Packet ACKs'] is None:
+            last_packet_ACKs = 0.0
         else:
             last_packet_ACKs = float(task['Last Packet ACKs'])
+            
         task_throughput = round((((df['dataSize(Byte)']*8)/ (1000 ** 3)) / ((task_end_time - task_start_time)/1000000)), 4)
 
         # 将新数据添加到DataFrame中
@@ -148,8 +158,16 @@ def process_files_to_csv(input_folder,csv_file, output_csv, pattern="*.tr"):
         df.loc[df['taskId'] == task_id, 'firstPacketSends(us)'] = first_packet_sends
         df.loc[df['taskId'] == task_id, 'lastPacketACKs(us)'] = last_packet_ACKs
         df.loc[df['taskId'] == task_id, 'taskThroughput(Gbps)'] = task_throughput
+    
     # 保存修改后的DataFrame到新的CSV文件
     df.to_csv(output_csv, index=False)
+    
+    print(f"Stats: Processed {total_tasks} tasks.")
+    if missing_packet_info_count > 0:
+        print(f"Note: {missing_packet_info_count}/{total_tasks} tasks missing packet timestamps (First Packet Sends / Last Packet ACKs).")
+        print("      This is expected if UB_PACKET_TRACE_ENABLE is set to 'false'.")
+    else:
+        print("Stats: All tasks have complete packet timestamp info.")
 
 
 if __name__ == "__main__":

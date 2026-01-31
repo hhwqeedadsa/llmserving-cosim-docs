@@ -101,7 +101,11 @@ def process_files(directory, output_csv):
         writer.writerow(['nodeId', 'portId', 'type', 'startTimestamp (us)', 'completesTimestamp (us)', 'TotalBytes', 'throughput(Gbps)'])
         writer.writerows(results)
 
-    print(f"Saved per-port throughput results to {output_csv}")
+    print(f"Stats: Generated throughput metrics for {len(results)} port-directions.")
+    if len(results) == 0:
+        print("Note: No port throughput data found. This is expected if UB_PORT_TRACE_ENABLE is set to 'false'.")
+    else:
+        print(f"Saved per-port throughput results to {output_csv}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

@@ -12,6 +12,7 @@
   --muted: #586576;
   --line: #d6dee5;
   --accent: #005fb8;
+  --accent-soft: #e9f2ff;
 }
 
 * {
@@ -567,6 +568,18 @@ async function loadUnifiedFolder() {
   setIngestStatus(`已加载: ${loadedParts.join(" ; ")}${suffix}`, notes.length > 0);
 }
 
+function reportInitError(viewLabel, error) {
+  const reason = error?.message ?? String(error);
+  const message = `${viewLabel}初始化失败: ${reason}`;
+  const current = String(refs.ingestStatus.textContent ?? "").trim();
+  if (!current || current === "等待选择文件夹") {
+    setIngestStatus(message, true);
+  } else if (!current.includes(message)) {
+    setIngestStatus(`${current} | ${message}`, true);
+  }
+  console.error(`[visual-workbench] ${viewLabel} init failed`, error);
+}
+
 function init() {
   frames.dashboard.srcdoc = decodeBase64Utf8(DASHBOARD_B64);
   frames.topology.srcdoc = decodeBase64Utf8(TOPOLOGY_B64);
@@ -579,8 +592,8 @@ function init() {
   });
 
   // Apply unified shell style to embedded pages as soon as their APIs are ready.
-  getDashboardApi().catch(() => {});
-  getTopologyApi().catch(() => {});
+  getDashboardApi().catch((error) => reportInitError("性能视图", error));
+  getTopologyApi().catch((error) => reportInitError("拓扑视图", error));
   setIngestStatus("等待选择文件夹");
 }
 

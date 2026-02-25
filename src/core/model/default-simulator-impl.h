@@ -78,6 +78,10 @@ class DefaultSimulatorImpl : public SimulatorImpl
     uint32_t GetContext() const override;
     uint64_t GetEventCount() const override;
 
+    void PreRun(); 
+    void RunOneEvent();
+    void PostRun();
+    
   private:
     void DoDispose() override;
 

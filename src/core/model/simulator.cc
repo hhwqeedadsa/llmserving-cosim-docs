@@ -32,6 +32,8 @@
 
 #include "ns3/core-config.h"
 
+#include "default-simulator-impl.h" 
+
 #include <cmath>
 #include <fstream>
 #include <iomanip>
@@ -181,6 +183,34 @@ Simulator::Run()
     Time::ClearMarkedTimes();
     GetImpl()->Run();
 }
+
+void
+Simulator::PreRun()
+{
+    auto* impl = GetImpl();
+    auto* d = dynamic_cast<DefaultSimulatorImpl*>(impl);
+    NS_ASSERT_MSG(d != nullptr, "Simulator::PreRun is only available with DefaultSimulatorImpl");
+    d->PreRun();
+}
+
+void
+Simulator::RunOneEvent()
+{
+    auto* impl = GetImpl();
+    auto* d = dynamic_cast<DefaultSimulatorImpl*>(impl);
+    NS_ASSERT_MSG(d != nullptr, "Simulator::RunOneEvent is only available with DefaultSimulatorImpl");
+    d->RunOneEvent();
+}
+
+void
+Simulator::PostRun()
+{
+    auto* impl = GetImpl();
+    auto* d = dynamic_cast<DefaultSimulatorImpl*>(impl);
+    NS_ASSERT_MSG(d != nullptr, "Simulator::PostRun is only available with DefaultSimulatorImpl");
+    d->PostRun();
+}
+
 
 void
 Simulator::Stop()

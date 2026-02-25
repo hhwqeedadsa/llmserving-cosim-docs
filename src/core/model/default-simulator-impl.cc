@@ -203,6 +203,30 @@ DefaultSimulatorImpl::Run()
 }
 
 void
+DefaultSimulatorImpl::PreRun()
+{
+    NS_LOG_FUNCTION(this);
+    // Set the current threadId as the main threadId
+    m_mainThreadId = std::this_thread::get_id();
+    ProcessEventsWithContext();
+    m_stop = false;
+}
+
+void
+DefaultSimulatorImpl::RunOneEvent()
+{
+    NS_LOG_FUNCTION(this);
+    ProcessOneEvent();
+}
+
+void
+DefaultSimulatorImpl::PostRun()
+{   
+    NS_LOG_FUNCTION(this);
+    NS_ASSERT(!m_events->IsEmpty() || m_unscheduledEvents == 0);
+}
+
+void
 DefaultSimulatorImpl::Stop()
 {
     NS_LOG_FUNCTION(this);

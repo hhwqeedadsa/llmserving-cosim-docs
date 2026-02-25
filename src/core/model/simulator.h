@@ -147,6 +147,13 @@ class Simulator
      *     is greater than or equal to the stop time.
      */
     static void Run();
+    /**
+     * 
+     * Used in astra-sim to run only one events.
+     */
+    static void PreRun();
+    static void RunOneEvent();
+    static void PostRun();
 
     /**
      * Tell the Simulator the calling event should be the last one

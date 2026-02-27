@@ -13,6 +13,10 @@
   --line: #d6dee5;
   --accent: #005fb8;
   --accent-soft: #e9f2ff;
+  --btn-height: 30px;
+  --btn-radius: 8px;
+  --btn-font-size: 12px;
+  --btn-pad-x: 12px;
 }
 
 * {
@@ -49,10 +53,8 @@ body {
 }
 
 .head {
-  position: sticky;
-  top: 8px;
-  z-index: 50;
-  padding: 8px 10px;
+  position: static;
+  padding: 7px 9px;
 }
 
 .head h1 {
@@ -62,52 +64,68 @@ body {
 }
 
 .head p {
-  margin: 2px 0 0;
+  margin: 1px 0 0;
   font-size: 11px;
   color: var(--muted);
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 6px;
+  gap: 6px;
+  flex-wrap: nowrap;
+  margin-top: 0;
   padding: 0;
 }
 
-.ingest {
-  margin-top: 6px;
-  padding-top: 6px;
-  border-top: 1px solid var(--line);
+.head-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 4px;
 }
 
-.ingest-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 6px 10px;
-  align-items: end;
+.head-main {
+  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .ingest-title {
   margin: 0;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: #2c4154;
+  white-space: nowrap;
 }
 
 .ingest-subtitle {
-  margin: 2px 0 0;
+  margin: 0;
   font-size: 11px;
-  line-height: 1.25;
+  line-height: 1.2;
   color: var(--muted);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ingest-inline {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 6px;
+  flex: 1 1 auto;
+  justify-content: flex-end;
 }
 
 .ingest-controls {
   display: flex;
   gap: 6px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
+  min-width: 0;
 }
 
 #folderInput {
@@ -115,13 +133,21 @@ body {
 }
 
 .upload-btn,
-.load-btn {
+.load-btn,
+.tab-btn {
   border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 5px 10px;
-  font-size: 11px;
+  border-radius: var(--btn-radius);
+  min-height: var(--btn-height);
+  padding: 0 var(--btn-pad-x);
+  font-size: var(--btn-font-size);
   font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  flex: 0 0 auto;
 }
 
 .upload-btn {
@@ -137,21 +163,16 @@ body {
 }
 
 .ingest-status {
-  margin-top: 5px;
+  margin: 0;
   font-size: 11px;
-  line-height: 1.2;
+  line-height: 1.15;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .tab-btn {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-size: 11px;
-  font-weight: 600;
   color: #29465f;
   background: #f7fbff;
-  cursor: pointer;
 }
 
 .tab-btn.active {
@@ -187,12 +208,35 @@ body {
     grid-template-rows: auto minmax(720px, 1fr);
   }
 
-  .ingest-row {
-    grid-template-columns: 1fr;
-    align-items: start;
+  .head-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .head-main {
+    width: 100%;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+
+  .ingest-inline {
+    width: 100%;
+    margin-right: 0;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    order: 3;
+  }
+
+  .ingest-subtitle {
+    overflow: visible;
+    white-space: normal;
   }
 
   .ingest-controls {
+    width: 100%;
+    flex-wrap: wrap;
     justify-content: flex-start;
   }
 }
@@ -203,25 +247,24 @@ body {
       <header class="card head">
         <h1>ns-3-ub Visual Workbench</h1>
         <p>流级性能分析与拓扑可视化</p>
-        <nav class="tabs" aria-label="页面切换">
-          <button id="tabDashboard" class="tab-btn active" type="button">性能视图</button>
-          <button id="tabTopology" class="tab-btn" type="button">拓扑视图</button>
-        </nav>
-
-        <section class="ingest">
-          <div class="ingest-row">
-            <div>
-              <p class="ingest-title">数据导入</p>
-              <p class="ingest-subtitle">选择仿真输出目录, 自动识别 task_statistics.csv、node.csv、topology.csv</p>
-            </div>
-            <div class="ingest-controls">
-              <label class="upload-btn" for="folderInput">选择文件夹</label>
-              <input id="folderInput" type="file" webkitdirectory directory multiple />
-              <button id="loadFolderBtn" class="load-btn" type="button">加载数据</button>
-            </div>
+        <div class="head-toolbar">
+          <div class="head-main">
+            <nav class="tabs" aria-label="页面切换">
+              <button id="tabDashboard" class="tab-btn active" type="button">性能视图</button>
+              <button id="tabTopology" class="tab-btn" type="button">拓扑视图</button>
+            </nav>
           </div>
-          <div id="ingestStatus" class="ingest-status">等待选择文件夹</div>
-        </section>
+          <div class="ingest-controls">
+            <div class="ingest-inline">
+              <span class="ingest-title">数据导入</span>
+              <span class="ingest-subtitle">选择仿真输出目录, 自动识别 task_statistics.csv、node.csv、topology.csv</span>
+              <span id="ingestStatus" class="ingest-status">等待选择文件夹</span>
+            </div>
+            <label class="upload-btn" for="folderInput">选择文件夹</label>
+            <input id="folderInput" type="file" webkitdirectory directory multiple />
+            <button id="loadFolderBtn" class="load-btn" type="button">加载数据</button>
+          </div>
+        </div>
       </header>
 
       <section class="frames">
@@ -394,6 +437,11 @@ function applyUnifiedVisualSystem(win) {
         --muted: #586576 !important;
         --line: #d6dee5 !important;
         --accent: #005fb8 !important;
+        --accent-soft: #e9f2ff !important;
+        --btn-height: 30px !important;
+        --btn-radius: 8px !important;
+        --btn-font-size: 12px !important;
+        --btn-pad-x: 12px !important;
       }
       html, body {
         font-family: "IBM Plex Sans", "Noto Sans", "Segoe UI", sans-serif !important;
@@ -407,10 +455,35 @@ function applyUnifiedVisualSystem(win) {
       .button, .tool-btn, .chip {
         font-family: inherit !important;
       }
-      button, .button, .tool-btn {
-        border-radius: 8px !important;
-        font-size: 12px !important;
+      button, .button, .tool-btn, .timeline-tool-btn, .tab-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: var(--btn-height) !important;
+        padding: 0 var(--btn-pad-x) !important;
+        border-radius: var(--btn-radius) !important;
+        border: 1px solid var(--line) !important;
+        background: #f7fbff !important;
+        color: #29465f !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+        font-size: var(--btn-font-size) !important;
         font-weight: 600 !important;
+      }
+      button.primary, .button.primary, button.active, .button.active, .tab-btn.active {
+        color: #fff !important;
+        background: var(--accent) !important;
+        border-color: var(--accent) !important;
+      }
+      button.ghost, .button.ghost {
+        color: #1b5188 !important;
+        background: var(--accent-soft) !important;
+        border-color: #c8def8 !important;
+      }
+      button:disabled, .button:disabled, .tool-btn:disabled {
+        opacity: 0.55 !important;
+        cursor: not-allowed !important;
       }
       input, select, textarea {
         border-radius: 8px !important;
@@ -443,12 +516,89 @@ function streamlineDashboardFrame(win) {
       .hero { display: none !important; }
       .layout { padding-top: 0 !important; }
       .filters { top: var(--sticky-toolbar-top) !important; }
+      .filters {
+        padding: 8px 10px !important;
+      }
+      #resetFiltersBtn,
+      #parentToggleFiltersBtn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: var(--btn-height) !important;
+        min-width: 88px !important;
+        padding: 0 var(--btn-pad-x) !important;
+        border-radius: var(--btn-radius) !important;
+        border: 1px solid #c8def8 !important;
+        background: var(--accent-soft) !important;
+        color: #1b5188 !important;
+        font-size: var(--btn-font-size) !important;
+        font-weight: 600 !important;
+        line-height: 1 !important;
+        white-space: nowrap !important;
+      }
+      .filters.parent-filters-collapsed .filter-grid {
+        display: none !important;
+      }
+      .filter-head {
+        margin-bottom: 6px !important;
+        align-items: center !important;
+      }
+      .filter-grid {
+        gap: 6px !important;
+      }
+      .filter-item p {
+        margin: 0 0 2px !important;
+      }
+      .filter-input {
+        padding: 5px 7px !important;
+      }
+      .range-wrap {
+        gap: 4px !important;
+      }
       .detail-card { top: var(--sticky-detail-top) !important; }
     `
   );
   if (typeof win.syncStickyLayoutVars === "function") {
     win.syncStickyLayoutVars();
   }
+}
+
+function setupDashboardFilterToolbar(win) {
+  const doc = win.document;
+  const filtersSection = doc.querySelector(".filters");
+  const filterHead = filtersSection?.querySelector(".filter-head");
+  const actions = filterHead?.querySelector(".filter-head-actions");
+  if (!filtersSection || !filterHead || !actions) {
+    return;
+  }
+
+  let toggleBtn = doc.getElementById("parentToggleFiltersBtn");
+  if (!toggleBtn) {
+    toggleBtn = doc.createElement("button");
+    toggleBtn.id = "parentToggleFiltersBtn";
+    toggleBtn.type = "button";
+    toggleBtn.className = "button ghost filter-reset-btn parent-filter-toggle-btn";
+    actions.appendChild(toggleBtn);
+  }
+
+  const syncCollapsedState = (collapsed) => {
+    filtersSection.classList.toggle("parent-filters-collapsed", collapsed);
+    toggleBtn.textContent = collapsed ? "展开筛选" : "收起筛选";
+    toggleBtn.setAttribute("aria-expanded", String(!collapsed));
+    if (typeof win.syncStickyLayoutVars === "function") {
+      win.syncStickyLayoutVars();
+    }
+  };
+
+  if (toggleBtn.dataset.bound !== "1") {
+    toggleBtn.addEventListener("click", () => {
+      const collapsed = !filtersSection.classList.contains("parent-filters-collapsed");
+      syncCollapsedState(collapsed);
+    });
+    toggleBtn.dataset.bound = "1";
+  }
+
+  syncCollapsedState(filtersSection.classList.contains("parent-filters-collapsed"));
 }
 
 function streamlineTopologyFrame(win) {
@@ -493,6 +643,7 @@ async function getDashboardApi() {
   );
   applyUnifiedVisualSystem(win);
   streamlineDashboardFrame(win);
+  setupDashboardFilterToolbar(win);
   frameApiCache.dashboard = win;
   return win;
 }

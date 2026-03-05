@@ -42,10 +42,12 @@ The `traffic_maker/build_traffic.py` tool  [（README）](./traffic_maker/README
 
 Prerequisite: Python 3.10+.
 
-Install third-party dependencies via requirements file:
+Install third-party dependencies with `uv` and the requirements file:
 
 ```bash
-python3 -m pip install --user -r requirements.txt
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
 ```
 
 Dependencies (for reference): pandas, numpy, matplotlib, seaborn, networkx.

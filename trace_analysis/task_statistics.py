@@ -44,10 +44,13 @@ def filterRedundantData(data):
         # 遍历每个事件
         for event in events:
             if event['event'] == 'First Packet Sends':
-                if first_packet_sends is None:
-                    first_packet_sends = float(event['timestamp'])
+                timestamp = float(event['timestamp'])
+                if first_packet_sends is None or timestamp < first_packet_sends:
+                    first_packet_sends = timestamp
             elif event['event'] == 'Last Packet ACKs':
-                last_packet_acks = float(event['timestamp'])
+                timestamp = float(event['timestamp'])
+                if last_packet_acks is None or timestamp > last_packet_acks:
+                    last_packet_acks = timestamp
 
         # 将结果存储在结果字典中
         result[task_id] = {

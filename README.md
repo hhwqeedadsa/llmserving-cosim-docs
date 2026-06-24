@@ -30,6 +30,7 @@ The `traffic_maker/build_traffic.py` tool  [（README）](./traffic_maker/README
   - `traffic.csv`
   - `traffic_matrix.png`
   - `traffic_matrix.csv`
+- `traffic_maker/simai_flow_to_traffic.py` — converts SimAI MockNCCL flow exports into ns-3-ub `traffic.csv`. See [SimAI flow workflow](./traffic_maker/SIMAI_FLOW_WORKFLOW.md).
 
 ### Trace analysis
 - `trace_analysis/parse_trace.py` — runs the two scripts below using the current Python interpreter.
@@ -56,8 +57,6 @@ Dependencies (for reference): pandas, numpy, matplotlib, seaborn, networkx.
 
 ### Trace analysis
 Run the parser on a case directory. It expects `runlog/` and a case-level `traffic.csv`, and writes results into `output/` by default.
-
-Note: the current scripts treat `case_dir` as a string prefix; pass a path ending with `/`.
 
 ```bash
 python3 trace_analysis/parse_trace.py <case_dir> [true|false]

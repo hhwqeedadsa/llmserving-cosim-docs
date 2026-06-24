@@ -85,6 +85,43 @@ Example output directory: `output/20250212T143022_8_4_1048576_ar_ring_d0/traffic
 
 ---
 
+### SimAI Flow Converter
+
+`simai_flow_to_traffic.py` converts SimAI MockNCCL flow exports into an ns-3-ub `traffic.csv`.
+
+For the complete end-to-end workflow, including SimAI export, rank mapping, phase mapping, case setup, and ns-3-ub execution, see [SIMAI_FLOW_WORKFLOW.md](./SIMAI_FLOW_WORKFLOW.md).
+
+First run SimAI with flow export enabled:
+
+```bash
+AS_FLOW_EXPORT=/tmp/simai_flows.jsonl ./bin/SimAI_simulator ...
+```
+
+Then convert:
+
+```bash
+python simai_flow_to_traffic.py /tmp/simai_flows.jsonl \
+  -o /tmp/traffic.csv \
+  --host-count 8
+```
+
+Useful options:
+
+- `--rank-map rank_map.csv`: optional CSV with `simai_rank,ub_node` columns. Without it, SimAI rank IDs are used as ns-3-ub host IDs.
+- `--phase-mode level`: default; group each DAG level into one ns-3-ub phase.
+- `--phase-mode flow`: give every SimAI flow its own phase for the most precise dependency representation.
+- `--allow-overlap-collectives`: do not add an ordering dependency between successive exported collectives.
+
+The converter writes the standard ns-3-ub header:
+
+```csv
+taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases
+```
+
+SimAI NVLS flows may contain NVSwitch pseudo endpoints. Because ns-3-ub `traffic.csv` tasks are host-to-host operations, pass `--host-count` to fail early if an exported endpoint is not a valid host ID.
+
+---
+
 ## Algorithm __main__ Features
 
 Each algorithm module can be run standalone to visualize its schedule and communication pattern. Use `PYTHONPATH=.` and the `-m` flag to ensure proper module import.

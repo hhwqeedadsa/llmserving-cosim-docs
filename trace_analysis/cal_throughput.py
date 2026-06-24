@@ -111,15 +111,15 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("python3 cal_throughput.py output_dir")
         sys.exit(1)
+    case_dir = sys.argv[1]
     if len(sys.argv[2]) > 0 and sys.argv[2].lower() == 'true' :
-        output_dir = sys.argv[1] +"test"  # 输入文件夹路径
+        output_dir = os.path.join(case_dir, "test")  # 输入文件夹路径
     else :
-        output_dir = sys.argv[1] +"output"  # 输入文件夹路径
+        output_dir = os.path.join(case_dir, "output")  # 输入文件夹路径
     os.makedirs(output_dir, exist_ok=True)
-    directory =  sys.argv[1] +'runlog'  # 替换为您的文件夹路径
+    directory = os.path.join(case_dir, "runlog")  # 替换为您的文件夹路径
     if len(sys.argv[2]) > 0 and sys.argv[2].lower() == 'true' :
-        output_csv =  sys.argv[1] + 'test/throughput.csv'
+        output_csv = os.path.join(case_dir, "test", "throughput.csv")
     else :
-        output_csv =  sys.argv[1] + 'output/throughput.csv'
+        output_csv = os.path.join(case_dir, "output", "throughput.csv")
     process_files(directory, output_csv)
-

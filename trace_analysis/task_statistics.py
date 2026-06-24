@@ -3,7 +3,6 @@ import os
 import csv
 from glob import glob
 import re
-import pandas as pd
 import sys
 
 # 定义字段提取函数
@@ -122,16 +121,28 @@ def process_files_to_csv(input_folder,csv_file, output_csv, pattern="*.tr"):
         }
         merged_data.append(merged_entry)
 
-    # 读取CSV文件
-    #csv_file = 'file.csv'  # 替换为traffic-config.csv
-    df = pd.read_csv(csv_file, delimiter=',')
+    with open(csv_file, newline='') as f:
+        reader = csv.DictReader(f)
+        fieldnames = list(reader.fieldnames or [])
+        rows = list(reader)
 
-    # 确保DataFrame中存在新列
-    df['taskStartTime(us)'] = None
-    df['taskCompletesTime(us)'] = None
-    df['firstPacketSends(us)'] = None
-    df['lastPacketACKs(us)'] = None
-    df['taskThroughput(Gbps)'] = None
+    added_columns = [
+        'taskStartTime(us)',
+        'taskCompletesTime(us)',
+        'firstPacketSends(us)',
+        'lastPacketACKs(us)',
+        'taskThroughput(Gbps)',
+    ]
+    for column in added_columns:
+        if column not in fieldnames:
+            fieldnames.append(column)
+
+    rows_by_task = {}
+    for row in rows:
+        try:
+            rows_by_task[int(row['taskId'])] = row
+        except (KeyError, ValueError):
+            continue
 
     # 遍历任务详细信息列表
     missing_packet_info_count = 0
@@ -152,18 +163,25 @@ def process_files_to_csv(input_folder,csv_file, output_csv, pattern="*.tr"):
             last_packet_ACKs = 0.0
         else:
             last_packet_ACKs = float(task['Last Packet ACKs'])
-            
-        task_throughput = round((((df['dataSize(Byte)']*8)/ (1000 ** 3)) / ((task_end_time - task_start_time)/1000000)), 4)
 
-        # 将新数据添加到DataFrame中
-        df.loc[df['taskId'] == task_id, 'taskStartTime(us)'] = task_start_time
-        df.loc[df['taskId'] == task_id, 'taskCompletesTime(us)'] = task_end_time
-        df.loc[df['taskId'] == task_id, 'firstPacketSends(us)'] = first_packet_sends
-        df.loc[df['taskId'] == task_id, 'lastPacketACKs(us)'] = last_packet_ACKs
-        df.loc[df['taskId'] == task_id, 'taskThroughput(Gbps)'] = task_throughput
+        row = rows_by_task.get(task_id)
+        if row is None:
+            continue
+        duration_us = task_end_time - task_start_time
+        data_size = int(row['dataSize(Byte)'])
+        task_throughput = round((data_size * 8 / 1000) / duration_us, 4) if duration_us > 0 else 0
+
+        row['taskStartTime(us)'] = task_start_time
+        row['taskCompletesTime(us)'] = task_end_time
+        row['firstPacketSends(us)'] = first_packet_sends
+        row['lastPacketACKs(us)'] = last_packet_ACKs
+        row['taskThroughput(Gbps)'] = task_throughput
     
     # 保存修改后的DataFrame到新的CSV文件
-    df.to_csv(output_csv, index=False)
+    with open(output_csv, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
     
     print(f"Stats: Processed {total_tasks} tasks.")
     if missing_packet_info_count > 0:
@@ -178,18 +196,19 @@ if __name__ == "__main__":
         print("python3 task_statistics.py traffic.csv")
         sys.exit(1)
 
-    input_dir = sys.argv[1] +"runlog"  # 输入文件夹路径
+    case_dir = sys.argv[1]
+    input_dir = os.path.join(case_dir, "runlog")  # 输入文件夹路径
     if len(sys.argv[2]) > 0 and sys.argv[2].lower() == 'true' :
-        output_file = sys.argv[1] + "test/task_statistics.csv"  # 输出CSV路径
+        output_file = os.path.join(case_dir, "test", "task_statistics.csv")  # 输出CSV路径
     else:
-        output_file = sys.argv[1] + "output/task_statistics.csv"  # 输出CSV路径
-    traffic_file = sys.argv[1] + "/traffic.csv"
+        output_file = os.path.join(case_dir, "output", "task_statistics.csv")  # 输出CSV路径
+    traffic_file = os.path.join(case_dir, "traffic.csv")
     # 创建输入文件夹（如果不存在）
     os.makedirs(input_dir, exist_ok=True)
     if len(sys.argv[2]) > 0 and sys.argv[2].lower() == 'true' :
-        output_dir = sys.argv[1] +"test"  # 输入文件夹路径
+        output_dir = os.path.join(case_dir, "test")  # 输入文件夹路径
     else:
-        output_dir = sys.argv[1] +"output"  # 输入文件夹路径
+        output_dir = os.path.join(case_dir, "output")  # 输入文件夹路径
     os.makedirs(output_dir, exist_ok=True)
     
     process_files_to_csv(input_dir, traffic_file,output_file)

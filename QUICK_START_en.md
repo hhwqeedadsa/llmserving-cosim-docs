@@ -78,28 +78,34 @@ Tip: If you use an agent that supports repo-local skills, this repository provid
 ## Build
 
 ```bash
-# Configure build environment
-./ns3 configure
+# Use Python 3.12 for the ns-3 launcher to avoid Homebrew Python 3.14 argparse compatibility issues; keep upstream ./ns3 unchanged.
+# One build may use -j for speed; do not start multiple build/test build tasks at once
+BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
 
-# Compile project
-./ns3 build
+# Configure only modules required by UB simulations
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
+
+# Build the UB simulation entry and its dependencies
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 ```
+
+If you need to develop or validate other ns-3 modules, use a full configuration without `--enable-modules`.
 
 ### (Optional) Enable Unison multi-threaded simulation
 
 To enable Unison for ns-3 multi-threaded parallel simulation (MTP), add `--enable-mtp` during configuration (you may also enable examples):
 
 ```bash
-./ns3 configure --enable-mtp --enable-examples
-./ns3 build
+python3.12 ./ns3 configure --enable-modules=unified-bus --enable-mtp --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 
 # Use --mtp-threads to enable multi-threading at runtime (must be >= 2)
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
 Note: Enabling parallel simulation usually also requires calling `MtpInterface::Enable(...)` in your simulation program (guarded by `#ifdef NS3_MTP`). See [UNISON_README.md](UNISON_README.md) for details.
 
-Tip: The recommended entry is `scratch/ub-quick-example`; if examples are enabled, `src/unified-bus/examples/ub-quick-example` is also available.
+Tip: The recommended entry is `scratch/ub-quick-example`; if you additionally configure with `--enable-examples --filter-module-examples-and-tests=unified-bus`, `src/unified-bus/examples/ub-quick-example` is also available.
 
 ## Run a Minimal Example
 
@@ -111,7 +117,7 @@ Tip: The recommended entry is `scratch/ub-quick-example`; if examples are enable
 python3 -m pip install --user -r scratch/ns-3-ub-tools/requirements.txt
 
 # Run small example and trigger trace analysis
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
 
 # Verify output
 ls scratch/2nodes_single-tp/output/
@@ -126,36 +132,36 @@ The following are the available use case directories and corresponding run comma
 
 - 2 nodes (single TP):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
   ```
 
 - 2 nodes (multiple TP):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_multiple-tp'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_multiple-tp'
   ```
 
 - 2 nodes (packet spray):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_packet-spray'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_packet-spray'
   ```
 
 - 2D FullMesh 4x4 (multipath All-to-All):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
   # Enable multi-threading acceleration (requires --enable-mtp compilation)
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a --mtp-threads=8'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a --mtp-threads=8'
   ```
 
 - 2D FullMesh 4x4 (hierarchical broadcast):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-hierarchical_broadcast'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-hierarchical_broadcast'
   ```
 
 - Clos (32 hosts / 4 leafs / 8 spines, pod2pod):
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
   # Multi-threading recommended for large topologies
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
   ```
 
 Note: Some large-scale use cases take a long time to run. Please use `--mtp-threads=8` to enable multi-threading (requires `--enable-mtp` compilation).
@@ -164,7 +170,7 @@ Note: Some large-scale use cases take a long time to run. Please use `--mtp-thre
 
 ```bash
 # Run complete example, including Python post-processing
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
 
 # Expected output:
 [01:23:37]:Run case: scratch/2dfm4x4-multipath_a2a

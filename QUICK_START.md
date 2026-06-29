@@ -78,32 +78,38 @@ conda install pandas matplotlib seaborn
 ## 配置与编译
 
 ```bash
-# 配置构建环境
-./ns3 configure
+# 使用 Python 3.12 运行 ns-3 launcher，避免 Homebrew Python 3.14 的 argparse 兼容问题；不修改上游 ./ns3 脚本。
+# 单个 build 可用 -j 加速；不要同时启动多个 build/test 构建任务
+BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
 
-# 编译项目
-./ns3 build
+# 配置 UB 仿真所需模块
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
+
+# 编译 UB 仿真入口及其依赖
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 ```
+
+如果需要开发或验证 ns-3 其他模块，再使用不带 `--enable-modules` 的全量配置。
 
 ### （可选）启用 Unison 多线程并行仿真
 
 如需启用 Unison for ns-3 的多线程并行仿真（MTP），请在配置阶段加入 `--enable-mtp`（可同时启用示例）：
 
 ```bash
-./ns3 configure --enable-mtp --enable-examples
-./ns3 build
+python3.12 ./ns3 configure --enable-modules=unified-bus --enable-mtp --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 
 # 运行时可通过 --mtp-threads 参数启用多线程（需 >= 2）
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
 说明：启用并行仿真通常还需要在仿真程序中调用 `MtpInterface::Enable(...)`（并用 `#ifdef NS3_MTP` 保护）；更多用法与注意事项请参阅 [UNISON_README.md](UNISON_README.md)。
 
-提示：默认推荐使用 `scratch/ub-quick-example`；如已启用 examples，也可以使用 `src/unified-bus/examples/ub-quick-example`。
+提示：默认推荐使用 `scratch/ub-quick-example`；如额外启用 `--enable-examples --filter-module-examples-and-tests=unified-bus`，也可以使用 `src/unified-bus/examples/ub-quick-example`。
 
 ## 运行简单示例
 
-`ub-quick-example` 会读取 case 目录中的配置文件（如 `topology.csv`、`traffic.csv` 等），自动创建 unified-bus 场景并运行仿真。推荐命令形式为 `./ns3 run 'scratch/ub-quick-example --case-path=...'`。
+`ub-quick-example` 会读取 case 目录中的配置文件（如 `topology.csv`、`traffic.csv` 等），自动创建 unified-bus 场景并运行仿真。完成上面的单目标编译后，推荐命令形式为 `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=...'`。
 
 ```bash
 # 如使用 Conda，请确保其 bin 在 PATH 前（或先激活环境）
@@ -113,7 +119,7 @@ conda install pandas matplotlib seaborn
 python3 -m pip install --user -r scratch/ns-3-ub-tools/requirements.txt
 
 # 运行小示例并触发 trace 分析
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
 
 # 验证输出
 ls scratch/2nodes_single-tp/output/
@@ -128,36 +134,36 @@ ls scratch/2nodes_single-tp/output/
 
 - 2 节点（单 TP）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
   ```
 
 - 2 节点（多 TP）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_multiple-tp'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_multiple-tp'
   ```
 
 - 2 节点（包喷洒）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_packet-spray'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_packet-spray'
   ```
 
 - 2D FullMesh 4x4（多路径 All-to-All）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
   # 启用多线程加速（需 --enable-mtp 编译）
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a --mtp-threads=8'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a --mtp-threads=8'
   ```
 
 - 2D FullMesh 4x4（分层广播）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-hierarchical_broadcast'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-hierarchical_broadcast'
   ```
 
 - Clos（32 hosts / 4 leafs / 8 spines, pod2pod）：
   ```bash
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
   # 大型拓扑建议使用多线程
-  ./ns3 run 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
   ```
 
 说明：部分大型用例运行时间较长，可使用 `--mtp-threads=8` 启用多线程加速（需 `--enable-mtp` 编译）。
@@ -166,7 +172,7 @@ ls scratch/2nodes_single-tp/output/
 
 ```bash
 # 运行完整示例，包含 Python 后处理
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2dfm4x4-multipath_a2a'
 
 # 预期输出：
 [01:23:37]:Run case: scratch/2dfm4x4-multipath_a2a

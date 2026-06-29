@@ -4,8 +4,41 @@
 
 This document describes:
 - The case directory layout and configuration file semantics (schema, constraints, and legal values).
-- How `./ns3 run 'scratch/ub-quick-example --case-path=...'` consumes these files to build an ns-3 simulation and schedule traffic.
+- How `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=...'` consumes these files to run a prepared ns-3 simulation and schedule traffic.
 - In most cases you **do not** need to write these configuration files from scratch; you can use the Python tools in `scratch/ns-3-ub-tools/` to generate them (see https://gitcode.com/open-usim/ns-3-ub-tools). Of course, you can also author the TXT/CSV files manually following the schemas below.
+
+---
+
+## Build once before running cases
+
+Prepare the UB-only simulation entry before running cases.
+
+```bash
+BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
+```
+
+After this, run cases with `--no-build`:
+
+```bash
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+```
+
+For Unison/MTP runs, configure the same UB-only build with MTP enabled:
+
+```bash
+python3.12 ./ns3 configure --enable-modules=unified-bus --enable-mtp --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
+```
+
+If you are reusing a workspace that previously configured a full ns-3 build, examples, tests, MPI, or MTP, you can explicitly reset those old configure choices:
+
+```bash
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --disable-tests --disable-mpi --disable-mtp --disable-werror -d release -G Ninja
+```
+
+If you need to reset old configure choices, use the explicit reset form above. If you do not need that reset, use the shorter UB-only configure command at the start of this section.
 
 ---
 
@@ -516,23 +549,23 @@ Examples:
 
 ```bash
 # List all registered TypeIds (you can pipe through grep Ub)
-./ns3 run 'scratch/ub-quick-example --PrintTypeIds'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintTypeIds'
 
 # Show attributes for a specific component
-./ns3 run 'scratch/ub-quick-example --PrintAttributes=ns3::UbPort'
-./ns3 run 'scratch/ub-quick-example --PrintAttributes=ns3::UbLink'
-./ns3 run 'scratch/ub-quick-example --PrintAttributes=ns3::UbTransportChannel'
-./ns3 run 'scratch/ub-quick-example --PrintAttributes=ns3::UbSwitchAllocator'
-./ns3 run 'scratch/ub-quick-example --PrintAttributes=ns3::UbApp'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintAttributes=ns3::UbPort'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintAttributes=ns3::UbLink'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintAttributes=ns3::UbTransportChannel'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintAttributes=ns3::UbSwitchAllocator'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintAttributes=ns3::UbApp'
 
 # Print global default paths (useful when writing network_attribute.txt)
-./ns3 run 'scratch/ub-quick-example --PrintGlobals'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintGlobals'
 
 # Print Unified Bus globals with type metadata
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --PrintUbGlobals'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --PrintUbGlobals'
 
 # General help for supported flags
-./ns3 run 'scratch/ub-quick-example --PrintHelp'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --PrintHelp'
 ```
 
 Note: You can run the same inspection flags against other runnable ns-3 programs/examples. This avoids relying on doxygen and guarantees you see exactly what your build exposes.

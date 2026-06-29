@@ -18,7 +18,7 @@ You can find each unison-enabled ns-3 version via `unison-*` tags.
 The quickest way to get started is to type the command
 
 ```shell
-./ns3 configure --enable-mtp --enable-examples
+python3.12 ./ns3 configure --enable-mtp --enable-examples
 ```
 
 > The build profile is set to default (which uses `-O2 -g` compiler flags) in this case.
@@ -30,9 +30,9 @@ You can verify Unison is enabled by checking whether `Multithreaded Simulation :
 Now, let's build and run a DCTCP example with default sequential simulation and parallel simulation (using 4 threads) respectively:
 
 ```shell
-./ns3 build dctcp-example dctcp-example-mtp
-time ./ns3 run dctcp-example
-time ./ns3 run dctcp-example-mtp
+python3.12 ./ns3 build dctcp-example dctcp-example-mtp
+time python3.12 ./ns3 run dctcp-example
+time python3.12 ./ns3 run dctcp-example-mtp
 ```
 
 The simulation should finish in 4-5 minutes for `dctcp-example` and 1-2 minutes for `dctcp-example-mtp`, depending on your hardware and your build profile.
@@ -82,10 +82,10 @@ We also provide several detailed examples for Unison, traditional MPI parallel s
 
 | Name | Location | Required configuration flags | Running commands |
 | - | - | - | - |
-| fat-tree-mtp | src/mtp/examples/fat-tree-mtp.cc | `--enable-mtp --enable-examples` without `--enable-mpi` | `./ns3 run "fat-tree-mtp --thread=4"` |
-| fat-tree-mpi | src/mpi/examples/fat-tree-mpi.cc | `--enable-mpi --enable-examples` without `--enable-mtp` | `./ns3 run fat-tree-mpi --command-template "mpirun -np 4 %s"` |
-| fat-tree-hybrid | src/mpi/examples/fat-tree-hybrid.cc | `--enable-mtp --enable-mpi --enable-examples` | `./ns3 run fat-tree-hybrid --command-template "mpirun -np 2 %s --thread=2"` |
-| ub-quick-example | scratch/ub-quick-example.cc | local: default configure/build; local MTP: `--enable-mtp`; MPI reject boundary: `--enable-mpi`; MPI+MTP reject boundary: `--enable-mpi --enable-mtp` | local: `./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`; local MTP: `./ns3 run 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=2'`; MPI reject boundary: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example-default --case-path=scratch/ub-mpi-minimal --test`; MPI+MTP reject boundary: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example-default --case-path=scratch/ub-mpi-minimal --mtp-threads=2 --test` |
+| fat-tree-mtp | src/mtp/examples/fat-tree-mtp.cc | `--enable-mtp --enable-examples` without `--enable-mpi` | `python3.12 ./ns3 run "fat-tree-mtp --thread=4"` |
+| fat-tree-mpi | src/mpi/examples/fat-tree-mpi.cc | `--enable-mpi --enable-examples` without `--enable-mtp` | `python3.12 ./ns3 run fat-tree-mpi --command-template "mpirun -np 4 %s"` |
+| fat-tree-hybrid | src/mpi/examples/fat-tree-hybrid.cc | `--enable-mtp --enable-mpi --enable-examples` | `python3.12 ./ns3 run fat-tree-hybrid --command-template "mpirun -np 2 %s --thread=2"` |
+| ub-quick-example | scratch/ub-quick-example.cc | local: `python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja` then `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`; local MTP: add `--enable-mtp`; MPI reject boundary: `--enable-mpi`; MPI+MTP reject boundary: `--enable-mpi --enable-mtp` | local: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`; local MTP: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=2'`; MPI reject boundary: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example-default --case-path=scratch/ub-mpi-minimal --test`; MPI+MTP reject boundary: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example-default --case-path=scratch/ub-mpi-minimal --mtp-threads=2 --test` |
 | ub-mtp-remote-tp-regression | src/unified-bus/examples/ub-mtp-remote-tp-regression.cc | `--enable-mtp --enable-mpi --enable-examples` | regression-only binary; exercised by `build/utils/ns3.44-test-runner-default --suite=mpi-example-ub-mtp-remote-tp-regression-np2 --verbose` |
 
 Feel free to explore these examples, compare code changes and adjust the `-np` and `--thread` arguments.
@@ -93,6 +93,8 @@ Feel free to explore these examples, compare code changes and adjust the `-np` a
 ### Unified-bus config MPI notes
 
 For config-driven unified-bus runs, use `scratch/ub-quick-example` as the default entry. If you prefer the example binary, `src/unified-bus/examples/ub-quick-example.cc` provides the same CLI after enabling examples. See also `docs/ub-quick-example.md`.
+
+For a reused workspace that needs to reset previous full ns-3, examples, tests, MPI, or MTP configure choices, explicitly add `--disable-examples --disable-tests --disable-mpi --disable-mtp` to return to local UB-only mode. If no reset is needed, use the shorter local configure command shown in the table above.
 
 For config-driven unified-bus MPI runs, keep the following rules explicit:
 

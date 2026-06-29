@@ -474,8 +474,8 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     CommandLine cmd;
     cmd.Usage("Unified-bus config-driven user entry.\n"
               "Typical usage:\n"
-              "  recommended: ./ns3 run 'scratch/ub-quick-example --case-path=<case-dir>'\n"
-              "  example:     ./ns3 run 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n"
+              "  recommended: python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=<case-dir>'\n"
+              "  example:     python3.12 ./ns3 run --no-build 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n"
               "  MPI note:    traffic.csv / UbTrafficGen is single-process only in the current version.\n");
     cmd.AddValue("test", "Enable regression-test style output", options.test);
     cmd.AddValue("mtp-threads",

@@ -130,9 +130,10 @@ class OpenUSimStageSkillDocsTest(unittest.TestCase):
             "`scratch/2nodes_single-tp` exists",
             "`git submodule update --init --recursive`",
             "`python3 -m pip install --user -r scratch/ns-3-ub-tools/requirements.txt`",
-            "`./ns3 configure`",
-            "`./ns3 build`",
-            "`./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`",
+            "`python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --disable-tests --disable-mpi --disable-mtp --disable-werror -d release -G Ninja`",
+            "`BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}`",
+            '`python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`',
+            "`python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`",
         ):
             self.assertIn(marker, welcome_text)
 

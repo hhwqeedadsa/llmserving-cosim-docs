@@ -149,13 +149,14 @@ When the user clearly wants to start or run the project, help execute the bounde
 
 - `git submodule update --init --recursive`
 - `python3 -m pip install --user -r scratch/ns-3-ub-tools/requirements.txt`
-- `./ns3 configure`
-- `./ns3 build`
-- `./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`
+- `python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --disable-tests --disable-mpi --disable-mtp --disable-werror -d release -G Ninja`
+- `BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}`
+- `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`
+- `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`
 
 When the user needs current Unified Bus parameter/default guidance, initialize a runtime parameter catalog and reuse it instead of reciting a fixed table:
 
-- this runtime catalog is backed by `./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --PrintTypeIds'`
+- this runtime catalog is backed by `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --PrintTypeIds'`
 - it queries per-component attributes via `--ClassName=...`
 - it queries Unified Bus globals via `--PrintUbGlobals`
 - treat the generated project parameter catalog as the current baseline until it is refreshed
@@ -226,17 +227,16 @@ ns-3-ub/
 
 ### 首次配置
 ```bash
-./ns3 configure --enable-asserts --enable-examples --enable-tests --disable-werror -d release -G Ninja
+BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --disable-tests --disable-mpi --disable-mtp --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 ```
 
 ### 快速验证（推荐）
-开发时只需运行场景验证，`./ns3 run` 会自动按需构建所需模块：
+开发时先按上面命令构建 `ub-quick-example`，后续场景验证直接复用已构建产物：
 ```bash
-# 运行场景（自动构建依赖）
-./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
-
-# 后续运行（复用已构建产物）
-./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+# 运行场景（复用已构建产物）
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
 ```
 
 ### 模块级构建（可选）
@@ -257,9 +257,10 @@ ninja -C cmake-cache test-runner
 ### 全量构建与测试（必要时）
 
 **构建说明**：
-- `./ns3 build`（无参数）= 构建所有模块
-- `./ns3 run '<program>'` = 按需构建所需目标及其依赖，然后执行
-- `./ns3 run --no-build` = 不触发构建，直接运行已编译的程序
+- `python3.12 ./ns3 build`（无参数）= 构建所有模块
+- `python3.12 ./ns3 run '<program>'` = 按需构建所需目标及其依赖，然后执行
+- `python3.12 ./ns3 run --no-build` = 不触发构建，直接运行已编译的程序
+- UB 仿真开发默认使用 `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`，避免全量构建；单个 build 可以用 `-jN` 加速，但不要同时启动多个 build/test 构建任务。
 
 **仅以下情况需要全量构建**：
 - 修改了 `src/core/` 等基础模块
@@ -269,7 +270,7 @@ ninja -C cmake-cache test-runner
 
 ```bash
 # 全量构建所有模块
-./ns3 build
+python3.12 ./ns3 build
 
 # 全量测试
 ./test.py
@@ -298,7 +299,7 @@ Conventional Commit: `type(scope): subject`
 ## ANTI-PATTERNS
 
 - ❌ 开发时进行不必要的全量构建/测试（浪费资源，用模块级代替）
-- ❌ <IMPORTANT>电脑性能有限，永远不要并行build！build任务和测试任务分离，build必须串行！</IMPORTANT>
+- ❌ <IMPORTANT>电脑性能有限，不要同时启动多个 build/test 构建任务；单个 build 内部可以用 `-jN` 加速。</IMPORTANT>
 
 # Repository Notes
 

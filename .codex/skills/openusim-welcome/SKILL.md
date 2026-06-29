@@ -59,9 +59,10 @@ Report result concisely:
 Available startup commands (only list the ones actually needed):
 - `git submodule update --init --recursive` — pulls external dependencies, may download significant data
 - `python3 -m pip install --user -r scratch/ns-3-ub-tools/requirements.txt` — installs Python packages
-- `./ns3 configure` — configures the build system
-- `./ns3 build` — compiles the simulator, may take several minutes
-- `./ns3 run 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'` — runs the smoke test case
+- `python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --disable-tests --disable-mpi --disable-mtp --disable-werror -d release -G Ninja` — configures only the Unified Bus dependency closure and resets previous full ns-3, examples, tests, MPI, or MTP configure choices when needed
+- `BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}` — sets parallelism for one active build task
+- `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example` — compiles the UB quick-example target and its dependency closure
+- `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'` — runs the smoke test case without triggering another build
 
 **Do NOT:**
 - Check files or read docs during Phase 1

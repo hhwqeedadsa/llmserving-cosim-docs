@@ -27,6 +27,8 @@
 #include "ns3/simulator-impl.h"
 #include "ns3/string.h"
 
+#include <utility>
+
 namespace ns3
 {
 
@@ -136,6 +138,21 @@ MpiInterface::SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint3
 {
     NS_ASSERT(g_parallelCommunicationInterface);
     g_parallelCommunicationInterface->SendPacket(p, rxTime, node, dev);
+}
+
+void
+MpiInterface::SendTaskCompletion(uint32_t taskId, const Time& completionVisibleTs, uint32_t rank)
+{
+    NS_ASSERT(g_parallelCommunicationInterface);
+    g_parallelCommunicationInterface->SendTaskCompletion(taskId, completionVisibleTs, rank);
+}
+
+void
+MpiInterface::SetTaskCompletionHandler(
+    ParallelCommunicationInterface::TaskCompletionHandler handler)
+{
+    NS_ASSERT(g_parallelCommunicationInterface);
+    g_parallelCommunicationInterface->SetTaskCompletionHandler(std::move(handler));
 }
 
 void

@@ -18,6 +18,8 @@
 #include "ns3/nstime.h"
 #include "ns3/packet.h"
 
+#include "parallel-communication-interface.h"
+
 #include <mpi.h>
 
 namespace ns3
@@ -132,6 +134,25 @@ class MpiInterface
      * Serialize and send a packet to the specified node and net device
      */
     static void SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint32_t dev);
+
+    /**
+     * @brief Send a traffic DAG task-completion visibility notification to a rank.
+     *
+     * @param taskId completed task id
+     * @param completionVisibleTs simulator timestamp when the completion becomes dependency-visible
+     * @param rank destination MPI rank
+     */
+    static void SendTaskCompletion(uint32_t taskId,
+                                   const Time& completionVisibleTs,
+                                   uint32_t rank);
+
+    /**
+     * @brief Register callback used when a task-completion notification becomes visible.
+     *
+     * @param handler callback invoked at the received completion visibility timestamp
+     */
+    static void SetTaskCompletionHandler(
+        ParallelCommunicationInterface::TaskCompletionHandler handler);
 
     /**
      * @brief Add an upper bound to the effective MPI lookahead.

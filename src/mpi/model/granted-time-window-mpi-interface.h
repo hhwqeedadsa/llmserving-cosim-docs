@@ -98,6 +98,10 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
     void Enable(MPI_Comm communicator) override;
     void Disable() override;
     void SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint32_t dev) override;
+    void SendTaskCompletion(uint32_t taskId,
+                            const Time& completionVisibleTs,
+                            uint32_t rank) override;
+    void SetTaskCompletionHandler(TaskCompletionHandler handler) override;
     MPI_Comm GetCommunicator() override;
 
   private:
@@ -126,6 +130,16 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
      * @return transmitted count in packets
      */
     static uint32_t GetTxCount();
+
+    struct TaskCompletionWireMessage
+    {
+        uint32_t taskId;
+        uint64_t completionVisibleTs;
+    };
+
+    static void ReceiveTaskCompletionMessages();
+    static void DispatchTaskCompletion(uint32_t taskId);
+    static void ScheduleTaskCompletion(uint32_t taskId, Time completionVisibleTs);
 
     /** System ID (rank) for this task. */
     static uint32_t g_sid;
@@ -161,6 +175,9 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
 
     /** Did ns-3 create the communicator?  Have to free it. */
     static bool g_freeCommunicator;
+
+    static TaskCompletionHandler g_taskCompletionHandler;
+    static constexpr int TASK_COMPLETION_MPI_TAG = 77;
 
 #ifdef NS3_MTP
     static std::atomic<bool> g_sending;

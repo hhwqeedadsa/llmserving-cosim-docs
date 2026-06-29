@@ -44,6 +44,8 @@
 #include <functional>
 #include <iostream>
 #include <limits>
+#include <map>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
@@ -7910,9 +7912,11 @@ namespace
 bool
 HasQuickExampleBinary(const std::filesystem::path& repoRoot)
 {
-    return std::filesystem::exists(
+    return std::filesystem::exists(repoRoot / "build/scratch/ns3.44-ub-quick-example") ||
+           std::filesystem::exists(
                repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example-default") ||
-           std::filesystem::exists(repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example");
+           std::filesystem::exists(
+               repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example");
 }
 
 std::filesystem::path
@@ -7940,6 +7944,7 @@ std::filesystem::path
 LocateQuickExampleBinary(const std::filesystem::path& repoRoot)
 {
     const std::vector<std::filesystem::path> candidates = {
+        "build/scratch/ns3.44-ub-quick-example",
         "build/src/unified-bus/examples/ns3.44-ub-quick-example",
         "build/src/unified-bus/examples/ns3.44-ub-quick-example-default",
     };
@@ -8128,6 +8133,59 @@ ReplaceInFile(const std::filesystem::path& filePath,
 // The old ub-local-hybrid-minimal fixture was removed as a non-core sample, so
 // local single-thread quick-example tests reuse the maintained 2-node case.
 constexpr const char* kLocalSingleThreadQuickExampleCase = "scratch/2nodes_single-tp";
+
+struct TaskTimes
+{
+    uint64_t startNs{0};
+    uint64_t finishNs{0};
+    bool hasStart{false};
+    bool hasFinish{false};
+};
+
+std::map<uint32_t, TaskTimes>
+ExtractApplicationTaskTimes(const std::string& output)
+{
+    std::map<uint32_t, TaskTimes> taskTimes;
+    const std::regex taskTimePattern(
+        R"(\[APPLICATION INFO\].*taskId:\s*([0-9]+)(?:\s*,\s*|\s+)(start|finish)\s+time:\s*([0-9]+)ns)");
+
+    std::smatch match;
+    std::string::const_iterator searchStart = output.cbegin();
+    while (std::regex_search(searchStart, output.cend(), match, taskTimePattern))
+    {
+        const uint32_t taskId = static_cast<uint32_t>(std::stoul(match[1].str()));
+        const uint64_t timeNs = static_cast<uint64_t>(std::stoull(match[3].str()));
+        TaskTimes& times = taskTimes[taskId];
+        if (match[2].str() == "start")
+        {
+            times.startNs = timeNs;
+            times.hasStart = true;
+        }
+        else
+        {
+            times.finishNs = timeNs;
+            times.hasFinish = true;
+        }
+        searchStart = match.suffix().first;
+    }
+
+    return taskTimes;
+}
+
+bool
+HasDependencyVisibilityTaskTimes(const std::map<uint32_t, TaskTimes>& taskTimes)
+{
+    const bool hasTask0 = taskTimes.count(0) == 1;
+    const bool hasTask1 = taskTimes.count(1) == 1;
+    if (!hasTask0 || !hasTask1)
+    {
+        return false;
+    }
+
+    const bool hasTask0Finish = taskTimes.at(0).hasFinish;
+    const bool hasTask1Start = taskTimes.at(1).hasStart;
+    return hasTask0Finish && hasTask1Start;
+}
 
 std::pair<int, std::string>
 RunQuickExampleAbsoluteCaseCommand(const std::string& testFile,
@@ -8806,7 +8864,154 @@ class UbQuickExampleLocalDependentDagMtpRedSystemTest : public TestCase
     }
 };
 
+class UbQuickExampleLocalDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleLocalDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example local dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,0,1,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "local dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            return;
+        }
+        const auto taskTimes = ExtractApplicationTaskTimes(output);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 20 + 10),
+                              true,
+                              "dependent task should start after finish, visibility delay, and "
+                              "task delay");
+    }
+};
+
+class UbQuickExampleMtpDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMtpDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example MTP dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "MTP dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            return;
+        }
+        const auto taskTimes = ExtractApplicationTaskTimes(output);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 20 + 10),
+                              true,
+                              "dependent task should start after finish, visibility delay, and "
+                              "task delay");
+    }
+};
+
 #ifdef NS3_MPI
+class UbQuickExampleMpiDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMpiDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example MPI dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "MPI dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            return;
+        }
+        const auto taskTimes = ExtractApplicationTaskTimes(output);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 20 + 10),
+                              true,
+                              "dependent task should start after finish, visibility delay, and "
+                              "task delay");
+    }
+};
+
 class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
 {
   public:
@@ -8910,10 +9115,16 @@ class UbQuickExampleSystemTestSuite : public TestSuite
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalDependentDagMtpRedSystemTest(),
                     TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleLocalDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleMtpDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
 #ifdef NS3_MTP
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
 #endif
 #ifdef NS3_MPI
+        AddTestCase(new UbQuickExampleMpiDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleSpoofedMpiEnvSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects MPI minimal case",
                                                     "scratch/ub-mpi-minimal",

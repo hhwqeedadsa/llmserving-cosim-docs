@@ -9,6 +9,11 @@
 #include "ub-app.h"
 #include "ub-utils.h"
 
+#include <algorithm>
+#include <fstream>
+#include <tuple>
+#include <utility>
+
 #ifdef NS3_MPI
 #include "ns3/mpi-interface.h"
 #endif
@@ -35,19 +40,8 @@ UbTrafficGen::~UbTrafficGen()
 {
 }
 
-bool
-UbTrafficGen::IsMultiProcessRuntimeUnsupported()
-{
-#ifdef NS3_MPI
-    return MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1;
-#else
-    return false;
-#endif
-}
-
 void UbTrafficGen::AddTask(TrafficRecord record)
 {
-    NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
     uint32_t taskId = record.taskId;
     if (m_tasks.find(taskId) != m_tasks.end()) {
@@ -79,7 +73,6 @@ void UbTrafficGen::AddTask(TrafficRecord record)
 void
 UbTrafficGen::SetPhaseDepend(uint32_t phaseId, uint32_t taskId)
 {
-    NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
     m_dependOnPhasesToTaskId[phaseId].insert(taskId);
 }
@@ -90,9 +83,8 @@ TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
     auto it = m_tasks.find(taskId);
     if (it != m_tasks.end()) {
         return it->second;
-    } else {
-        NS_ASSERT_MSG(0, "Can't find task from TrafficRecord.");
     }
+    NS_ABORT_MSG("Can't find task from TrafficRecord.");
 }
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
@@ -157,6 +149,94 @@ UbTrafficGen::ObserveRemoteLinkDelay(Time delay)
 }
 
 void
+UbTrafficGen::EnableCanonicalOutput(std::string path, uint32_t rank)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_canonicalOutputEnabled = true;
+    m_canonicalOutputPath = std::move(path);
+    m_canonicalRank = rank;
+    m_canonicalEvents.clear();
+}
+
+void
+UbTrafficGen::RecordCanonicalEvent(const std::string& type, const TrafficRecord& task)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!m_canonicalOutputEnabled || !ShouldRecordCanonicalEventLocked(task)) {
+        return;
+    }
+
+    m_canonicalEvents.push_back(CanonicalEvent{
+        static_cast<uint64_t>(Simulator::Now().GetNanoSeconds()),
+        type,
+        static_cast<uint32_t>(task.taskId),
+        static_cast<uint32_t>(task.sourceNode),
+        static_cast<uint32_t>(task.destNode),
+    });
+}
+
+void
+UbTrafficGen::RecordCanonicalCompletionLocked(uint32_t taskId)
+{
+    if (!m_canonicalOutputEnabled) {
+        return;
+    }
+
+    auto taskIt = m_tasks.find(taskId);
+    NS_ABORT_MSG_IF(taskIt == m_tasks.end(), "Unknown taskId in canonical completion");
+    if (!ShouldRecordCanonicalEventLocked(taskIt->second)) {
+        return;
+    }
+
+    m_canonicalEvents.push_back(CanonicalEvent{
+        static_cast<uint64_t>(Simulator::Now().GetNanoSeconds()),
+        "COMPLETE_VISIBLE",
+        taskId,
+        static_cast<uint32_t>(taskIt->second.sourceNode),
+        static_cast<uint32_t>(taskIt->second.destNode),
+    });
+}
+
+bool
+UbTrafficGen::ShouldRecordCanonicalEventLocked(const TrafficRecord& task) const
+{
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1) {
+        Ptr<Node> sourceNode = NodeList::GetNode(task.sourceNode);
+        return UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) == m_canonicalRank;
+    }
+#endif
+    return true;
+}
+
+void
+UbTrafficGen::WriteCanonicalOutput() const
+{
+    std::vector<CanonicalEvent> events;
+    std::string outputPath;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        if (!m_canonicalOutputEnabled) {
+            return;
+        }
+        events = m_canonicalEvents;
+        outputPath = m_canonicalOutputPath + ".rank" + std::to_string(m_canonicalRank) + ".txt";
+    }
+
+    std::sort(events.begin(), events.end(), [](const CanonicalEvent& lhs, const CanonicalEvent& rhs) {
+        return std::tie(lhs.timeNs, lhs.type, lhs.taskId, lhs.sourceNode, lhs.destNode) <
+               std::tie(rhs.timeNs, rhs.type, rhs.taskId, rhs.sourceNode, rhs.destNode);
+    });
+
+    std::ofstream output(outputPath);
+    NS_ABORT_MSG_IF(!output.is_open(), "cannot open canonical output file: " << outputPath);
+    for (const auto& event : events) {
+        output << event.timeNs << ',' << event.type << ',' << event.taskId << ','
+               << event.sourceNode << ',' << event.destNode << '\n';
+    }
+}
+
+void
 UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
 {
     std::vector<TrafficRecord> readyTasks;
@@ -170,6 +250,7 @@ UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
         }
 
         stateIt->second = TaskState::COMPLETED;
+        RecordCanonicalCompletionLocked(taskId);
         NS_LOG_DEBUG("Task " << taskId << " completion visible");
 
         auto dependentIt = m_dependents.find(taskId);
@@ -248,18 +329,44 @@ void UbTrafficGen::ScheduleNextTasks()
 
 std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
 {
+#ifdef NS3_MPI
+    const bool filterByOwner = MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1;
+    uint32_t currentRank = 0;
+    if (filterByOwner) {
+        currentRank = MpiInterface::GetSystemId();
+    }
+#else
+    const bool filterByOwner = false;
+    const uint32_t currentRank = 0;
+#endif
+    return CollectReadyTasksLocked(currentRank, filterByOwner);
+}
+
+std::vector<TrafficRecord>
+UbTrafficGen::CollectReadyTasksLocked(uint32_t currentRank, bool filterByOwner)
+{
     std::vector<TrafficRecord> readyTasks;
     for (auto it = m_readyTasks.begin(); it != m_readyTasks.end();) {
         uint32_t taskId = *it;
         auto stateIt = m_taskStates.find(taskId);
-        if (stateIt != m_taskStates.end() && stateIt->second == TaskState::READY) {
-            stateIt->second = TaskState::RUNNING;
-            auto taskIt = m_tasks.find(taskId);
-            if (taskIt != m_tasks.end()) {
-                readyTasks.push_back(taskIt->second);
+        auto taskIt = m_tasks.find(taskId);
+        if (stateIt != m_taskStates.end() && stateIt->second == TaskState::READY &&
+            taskIt != m_tasks.end()) {
+            const bool ownedByCurrentRank =
+                !filterByOwner ||
+                UbUtils::ExtractMpiRank(NodeList::GetNode(taskIt->second.sourceNode)->GetSystemId()) ==
+                    currentRank;
+            if (!ownedByCurrentRank) {
+                ++it;
+                continue;
             }
+
+            stateIt->second = TaskState::RUNNING;
+            readyTasks.push_back(taskIt->second);
+            it = m_readyTasks.erase(it);
+            continue;
         }
-        it = m_readyTasks.erase(it);
+        ++it;
     }
     return readyTasks;
 }
@@ -293,6 +400,18 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
     const Time now = Simulator::Now();
     NS_ABORT_MSG_IF(completionVisibleTs < now,
                     "task completion visibility timestamp is earlier than Simulator::Now()");
+
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1) {
+        for (uint32_t rank = 0; rank < MpiInterface::GetSize(); ++rank) {
+            if (rank == MpiInterface::GetSystemId()) {
+                continue;
+            }
+            MpiInterface::SendTaskCompletion(taskId, completionVisibleTs, rank);
+        }
+    }
+#endif
+
     Simulator::Schedule(completionVisibleTs - now,
                         &UbTrafficGen::ApplyTaskCompletion,
                         this,
@@ -311,14 +430,37 @@ void UbTrafficGen::ScheduleTasks(const std::vector<TrafficRecord>& tasks)
         if (!task.delay.empty()) {
             taskDelay = Time(task.delay);
         }
-        Simulator::ScheduleWithContext(app->GetNode()->GetId(), taskDelay, &UbApp::SendTraffic, app, task);
+        Simulator::ScheduleWithContext(app->GetNode()->GetId(),
+                                       taskDelay,
+                                       &UbTrafficGen::StartTask,
+                                       this,
+                                       app,
+                                       task);
         NS_LOG_DEBUG("Scheduled task " << task.taskId);
     }
+}
+
+void
+UbTrafficGen::StartTask(Ptr<UbApp> app, TrafficRecord task)
+{
+    RecordCanonicalEvent("START", task);
+    app->SendTraffic(task);
 }
 
 void UbTrafficGen::OnTaskCompleted(uint32_t taskId)
 {
     MarkTaskCompleted(taskId);
+}
+
+void
+UbTrafficGen::RegisterMpiTaskCompletionHandler()
+{
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1) {
+        MpiInterface::SetTaskCompletionHandler(
+            [this](uint32_t taskId) { this->ApplyTaskCompletion(taskId); });
+    }
+#endif
 }
 
 } // namespace ns3

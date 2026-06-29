@@ -7,7 +7,6 @@
  */
 
 #include "ns3/example-as-test.h"
-#include "ns3/ub-traffic-gen.h"
 
 #include <cstdlib>
 #include <fstream>
@@ -162,10 +161,10 @@ class MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestSuite : public Test
     }
 };
 
-class MpiUbQuickExampleRejectTestCase : public TestCase
+class MpiUbQuickExampleRunTestCase : public TestCase
 {
   public:
-    MpiUbQuickExampleRejectTestCase(const std::string& name, const std::string& args)
+    MpiUbQuickExampleRunTestCase(const std::string& name, const std::string& args)
         : TestCase(name),
           m_args(args)
     {
@@ -187,25 +186,25 @@ class MpiUbQuickExampleRejectTestCase : public TestCase
         buffer << input.rdbuf();
         const std::string output = buffer.str();
 
-        NS_TEST_ASSERT_MSG_NE(status,
+        NS_TEST_ASSERT_MSG_EQ(status,
                               0,
-                              "MPI quick-example case should be rejected in this branch");
-        NS_TEST_ASSERT_MSG_NE(output.find(UbTrafficGen::GetMultiProcessUnsupportedMessage()),
+                              "MPI quick-example case should run successfully");
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 00000 : PASSED"),
                               std::string::npos,
-                              "MPI quick-example case should explain the unsupported UbTrafficGen runtime");
+                              "MPI quick-example case should report PASSED");
     }
 
   private:
     std::string m_args;
 };
 
-class MpiUbQuickExampleRejectTestSuite : public TestSuite
+class MpiUbQuickExampleRunTestSuite : public TestSuite
 {
   public:
-    MpiUbQuickExampleRejectTestSuite(const std::string& name, const std::string& args)
+    MpiUbQuickExampleRunTestSuite(const std::string& name, const std::string& args)
         : TestSuite(name, Type::SYSTEM)
     {
-        AddTestCase(new MpiUbQuickExampleRejectTestCase(name, args), TestCase::Duration::QUICK);
+        AddTestCase(new MpiUbQuickExampleRunTestCase(name, args), TestCase::Duration::QUICK);
     }
 };
 
@@ -238,19 +237,19 @@ static MpiTestSuite g_mpiSimple2("mpi-example-simple-2",
                                  NS_TEST_SOURCEDIR,
                                  2);
 static MpiTestSuite g_mpiThird2("mpi-example-third-2", "third-distributed", NS_TEST_SOURCEDIR, 2);
-static MpiUbQuickExampleRejectTestSuite g_mpiUbConfigSmoke2(
-    "mpi-example-ub-quick-example-reject-mpi-minimal-2",
+static MpiUbQuickExampleRunTestSuite g_mpiUbConfigSmoke2(
+    "mpi-example-ub-quick-example-run-mpi-minimal-2",
     "--case-path=scratch/ub-mpi-minimal --stop-ms=50");
 
 #ifdef NS3_MTP
-static MpiUbQuickExampleRejectTestSuite g_mpiUbConfigHybridSmoke2(
-    "mpi-example-ub-quick-example-reject-hybrid-minimal-2",
+static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridSmoke2(
+    "mpi-example-ub-quick-example-run-hybrid-minimal-2",
     "--case-path=scratch/ub-mpi-minimal --mtp-threads=2 --stop-ms=50");
-static MpiUbQuickExampleRejectTestSuite g_mpiUbConfigHybridLdst2(
-    "mpi-example-ub-quick-example-reject-hybrid-ldst-2",
+static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridLdst2(
+    "mpi-example-ub-quick-example-run-hybrid-ldst-2",
     "--case-path=scratch/ub-mpi-minimal --mtp-threads=2 --stop-ms=50");
-static MpiUbQuickExampleRejectTestSuite g_mpiUbConfigHybridMultiRemote2(
-    "mpi-example-ub-quick-example-reject-hybrid-multi-remote-2",
+static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridMultiRemote2(
+    "mpi-example-ub-quick-example-run-hybrid-multi-remote-2",
     "--case-path=scratch/ub-mpi-minimal --mtp-threads=2 --stop-ms=50");
 static MpiTestSuite g_mpiUbRemoteTpRegressionNp2(
     "mpi-example-ub-mtp-remote-tp-regression-np2",

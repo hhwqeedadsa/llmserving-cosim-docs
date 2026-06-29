@@ -7,6 +7,7 @@
 #include <set>
 #include <mutex>
 #include <optional>
+#include <string>
 #include "ns3/application.h"
 #include "ns3/event-id.h"
 #include "ns3/nstime.h"
@@ -41,16 +42,6 @@ public:
     UbTrafficGen();
     virtual ~UbTrafficGen();
 
-    static bool IsMultiProcessRuntimeUnsupported();
-
-    static inline std::string GetMultiProcessUnsupportedMessage()
-    {
-        return "UbTrafficGen does not support MPI multi-process usage in this branch. "
-               "Supported: unified-bus multi-process data path and UbTrafficGen multithreading. "
-               "Unsupported: distributed/operator-style synchronization via traffic.csv. "
-               "Use local quick-example runs or build distributed coordination separately.";
-    }
-
     void AddTask(TrafficRecord record);
 
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
@@ -70,6 +61,12 @@ public:
     void ObserveRemoteLinkDelay(Time delay);
 
     void ApplyTaskCompletion(uint32_t taskId);
+
+    void RegisterMpiTaskCompletionHandler();
+
+    void EnableCanonicalOutput(std::string path, uint32_t rank);
+
+    void WriteCanonicalOutput() const;
 
     bool IsCompleted() const;
 
@@ -93,6 +90,23 @@ public:
         COMPLETED
     };
 
+    struct CanonicalEvent
+    {
+        uint64_t timeNs = 0;
+        std::string type;
+        uint32_t taskId = 0;
+        uint32_t sourceNode = 0;
+        uint32_t destNode = 0;
+    };
+
+    void RecordCanonicalEvent(const std::string& type, const TrafficRecord& task);
+
+    void RecordCanonicalCompletionLocked(uint32_t taskId);
+
+    bool ShouldRecordCanonicalEventLocked(const TrafficRecord& task) const;
+
+    void StartTask(Ptr<UbApp> app, TrafficRecord task);
+
     map<std::string, TaOpcode> TaOpcodeMap = {
         {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
         {"URMA_READ", TaOpcode::TA_OPCODE_READ},
@@ -108,8 +122,14 @@ public:
     std::map<uint32_t, set<uint32_t>> m_dependOnPhasesToTaskId{};
     std::optional<Time> m_dependencyVisibilityDelay{};
     std::optional<Time> m_minRemoteLinkDelay{};
+    bool m_canonicalOutputEnabled = false;
+    std::string m_canonicalOutputPath;
+    uint32_t m_canonicalRank = 0;
+    std::vector<CanonicalEvent> m_canonicalEvents;
 
     std::vector<TrafficRecord> CollectReadyTasksLocked();
+
+    std::vector<TrafficRecord> CollectReadyTasksLocked(uint32_t currentRank, bool filterByOwner);
 
     void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
 

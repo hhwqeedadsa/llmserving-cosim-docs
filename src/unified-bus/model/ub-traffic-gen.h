@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <set>
 #include <mutex>
+#include <cstdint>
 #include "ns3/application.h"
 #include "ns3/event-id.h"
 #include "ns3/ptr.h"
@@ -15,6 +16,8 @@
 #include "ns3/ub-ldst-api.h"
 #include "ub-tp-connection-manager.h"
 #include "ub-network-address.h"
+
+class UbTrafficGenPhaseDependencyMemoryTest;
 
 using namespace utils;
 namespace ns3 {
@@ -72,11 +75,19 @@ public:
     void ScheduleNextTasks();
 
   private:
+    friend class ::UbTrafficGenPhaseDependencyMemoryTest;
+
     enum class TaskState {
         PENDING,
         READY,
         RUNNING,
         COMPLETED
+    };
+
+    struct PhaseState {
+        uint32_t totalTasks{0};
+        uint32_t completedTasks{0};
+        std::set<uint32_t> dependentTasks{};
     };
 
     map<std::string, TaOpcode> TaOpcodeMap = {
@@ -87,15 +98,21 @@ public:
     };
 
     std::unordered_map<uint32_t, TrafficRecord> m_tasks{};
-    std::unordered_map<uint32_t, std::set<uint32_t>> m_dependencies{};
-    std::unordered_map<uint32_t, std::set<uint32_t>> m_dependents{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
+    std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
+    std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
+    std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::set<uint32_t> m_readyTasks{};
-    std::map<uint32_t, set<uint32_t>> m_dependOnPhasesToTaskId{};
 
     std::vector<TrafficRecord> CollectReadyTasksLocked();
 
     void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
+
+    void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    uint64_t GetDependencyReferenceCountForTesting() const;
+
+    uint32_t GetPendingPhaseCountForTesting(uint32_t taskId) const;
 
     mutable std::mutex m_mutex;
 };

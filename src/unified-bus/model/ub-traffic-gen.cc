@@ -55,25 +55,30 @@ void UbTrafficGen::AddTask(TrafficRecord record)
         return;
     }
     m_tasks[taskId] = record;
-    for (const auto &dependId : record.dependOnPhases) {
-        m_dependencies[taskId].insert(m_dependOnPhasesToTaskId[dependId].begin(),
-            m_dependOnPhasesToTaskId[dependId].end());
+    RegisterTaskPhaseLocked(record.phaseId, taskId);
+
+    uint32_t pendingPhaseCount = 0;
+    std::set<uint32_t> uniqueDependencyPhases;
+    for (const auto& dependPhaseId : record.dependOnPhases) {
+        auto& phaseState = m_phaseStates[dependPhaseId];
+        const bool inserted = uniqueDependencyPhases.insert(dependPhaseId).second;
+        if (inserted && phaseState.completedTasks < phaseState.totalTasks) {
+            phaseState.dependentTasks.insert(taskId);
+            ++pendingPhaseCount;
+        }
     }
+    m_pendingPhaseCounts[taskId] = pendingPhaseCount;
 
     // 设置初始状态
-    if (m_dependencies[taskId].empty()) {
+    if (pendingPhaseCount == 0) {
         m_taskStates[taskId] = TaskState::READY;
         m_readyTasks.insert(taskId);
     } else {
         m_taskStates[taskId] = TaskState::PENDING;
     }
 
-    // 建立反向依赖映射
-    for (uint32_t depId : m_dependencies[taskId]) {
-        m_dependents[depId].insert(taskId);
-    }
-
-    NS_LOG_DEBUG("Added task " << taskId << " with " << m_dependencies[taskId].size() << " dependencies");
+    NS_LOG_DEBUG("Added task " << taskId << " with " << uniqueDependencyPhases.size()
+                               << " phase dependencies");
 }
 
 void
@@ -81,7 +86,20 @@ UbTrafficGen::SetPhaseDepend(uint32_t phaseId, uint32_t taskId)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
-    m_dependOnPhasesToTaskId[phaseId].insert(taskId);
+    RegisterTaskPhaseLocked(phaseId, taskId);
+}
+
+void
+UbTrafficGen::RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId)
+{
+    auto existingPhaseIt = m_taskPhaseIds.find(taskId);
+    if (existingPhaseIt != m_taskPhaseIds.end()) {
+        return;
+    }
+
+    m_taskPhaseIds[taskId] = phaseId;
+    auto& phaseState = m_phaseStates[phaseId];
+    ++phaseState.totalTasks;
 }
 
 TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
@@ -109,31 +127,32 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
         stateIt->second = TaskState::COMPLETED;
         NS_LOG_DEBUG("Task " << taskId << " completed");
 
-        auto dependentIt = m_dependents.find(taskId);
-        if (dependentIt != m_dependents.end()) {
-            for (uint32_t dependentId : dependentIt->second) {
-                auto dependentStateIt = m_taskStates.find(dependentId);
-                if (dependentStateIt == m_taskStates.end() ||
-                    dependentStateIt->second != TaskState::PENDING) {
-                    continue;
-                }
+        auto phaseIt = m_taskPhaseIds.find(taskId);
+        if (phaseIt != m_taskPhaseIds.end()) {
+            auto phaseStateIt = m_phaseStates.find(phaseIt->second);
+            if (phaseStateIt != m_phaseStates.end()) {
+                ++phaseStateIt->second.completedTasks;
 
-                bool allDepsCompleted = true;
-                auto depIt = m_dependencies.find(dependentId);
-                if (depIt != m_dependencies.end()) {
-                    for (uint32_t depId : depIt->second) {
-                        auto depStateIt = m_taskStates.find(depId);
-                        if (depStateIt == m_taskStates.end() ||
-                            depStateIt->second != TaskState::COMPLETED) {
-                            allDepsCompleted = false;
-                            break;
+                if (phaseStateIt->second.completedTasks >= phaseStateIt->second.totalTasks) {
+                    for (uint32_t dependentId : phaseStateIt->second.dependentTasks) {
+                        auto dependentStateIt = m_taskStates.find(dependentId);
+                        if (dependentStateIt == m_taskStates.end() ||
+                            dependentStateIt->second != TaskState::PENDING) {
+                            continue;
+                        }
+
+                        auto pendingIt = m_pendingPhaseCounts.find(dependentId);
+                        if (pendingIt == m_pendingPhaseCounts.end() || pendingIt->second == 0) {
+                            continue;
+                        }
+
+                        --pendingIt->second;
+                        if (pendingIt->second == 0) {
+                            dependentStateIt->second = TaskState::READY;
+                            m_readyTasks.insert(dependentId);
                         }
                     }
-                }
-
-                if (allDepsCompleted) {
-                    dependentStateIt->second = TaskState::READY;
-                    m_readyTasks.insert(dependentId);
+                    phaseStateIt->second.dependentTasks.clear();
                 }
             }
         }
@@ -171,6 +190,28 @@ uint32_t UbTrafficGen::GetCompletedTaskCount() const
         }
     }
     return completedTasks;
+}
+
+uint64_t
+UbTrafficGen::GetDependencyReferenceCountForTesting() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    uint64_t referenceCount = 0;
+    for (const auto& phaseState : m_phaseStates) {
+        referenceCount += phaseState.second.dependentTasks.size();
+    }
+    return referenceCount;
+}
+
+uint32_t
+UbTrafficGen::GetPendingPhaseCountForTesting(uint32_t taskId) const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    auto pendingIt = m_pendingPhaseCounts.find(taskId);
+    if (pendingIt == m_pendingPhaseCounts.end()) {
+        return 0;
+    }
+    return pendingIt->second;
 }
 
 void UbTrafficGen::ScheduleNextTasks()

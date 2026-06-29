@@ -575,6 +575,74 @@ void UbFunctionalityTest::DoRun()
     NS_LOG_INFO("All basic tests completed successfully");
 }
 
+class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
+{
+  public:
+    UbTrafficGenPhaseDependencyMemoryTest()
+        : TestCase("UnifiedBus - traffic generator keeps phase dependency memory linear")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        constexpr uint32_t kTasksPerPhase = 256;
+        constexpr uint32_t kDependencyPhase = 10;
+        constexpr uint32_t kDependentPhase = 20;
+
+        for (uint32_t taskId = 0; taskId < kTasksPerPhase; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.phaseId = kDependencyPhase;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        for (uint32_t taskId = kTasksPerPhase; taskId < 2 * kTasksPerPhase; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.phaseId = kDependentPhase;
+            record.dependOnPhases.push_back(kDependencyPhase);
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        const uint64_t materializedTaskReferences =
+            static_cast<uint64_t>(kTasksPerPhase) * kTasksPerPhase;
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetDependencyReferenceCountForTesting(),
+                              kTasksPerPhase,
+                              "phase DAG should store one reverse reference per dependent task");
+        NS_TEST_ASSERT_MSG_LT(gen.GetDependencyReferenceCountForTesting(),
+                              materializedTaskReferences,
+                              "phase DAG must not expand one phase dependency into all task edges");
+
+        gen.ScheduleNextTasks();
+        gen.MarkTaskCompleted(0);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
+                              1u,
+                              "dependent phase should wait until every task in the previous phase "
+                              "completes");
+
+        for (uint32_t taskId = 1; taskId < kTasksPerPhase; ++taskId)
+        {
+            gen.MarkTaskCompleted(taskId);
+        }
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
+                              0u,
+                              "dependent phase should become ready only after the whole previous "
+                              "phase completes");
+        Simulator::Destroy();
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7434,6 +7502,9 @@ class UbRuntimeToolsTestSuite : public TestSuite
 UbTestSuite::UbTestSuite()
     : TestSuite("unified-bus", Type::UNIT)
 {
+    AddTestCase(new UbFunctionalityTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenPhaseDependencyMemoryTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnCnpHeaderRoundTripTest(), TestCase::Duration::QUICK);

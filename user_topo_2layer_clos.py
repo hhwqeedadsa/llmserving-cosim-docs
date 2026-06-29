@@ -2,25 +2,11 @@ import net_sim_builder as netsim
 import networkx as nx
 
 
-# step4: 生成路由表
-
-def all_simple_paths(G, source, target):
-    try:
-        # 这里你可以在networkx库中寻找适合的寻路函数。
-        # 调用networkx库的all_simple_paths函数，可以获得跳数<=cutoff值的所有不成环路径。
-        paths = nx.all_simple_paths(G, source, target, cutoff=2)
-    except nx.NetworkXNoPath:
-        paths = []
-    return paths
-
 def all_shortest_paths(G, source, target):
     try:
-        # 这里你可以在networkx库中寻找适合的寻路函数。
-        # 调用networkx库的all_shortest_path函数，可以获得所有最短路径。
-        paths = nx.all_shortest_paths(G, source, target)
+        return nx.all_shortest_paths(G, source, target)
     except nx.NetworkXNoPath:
-        paths = []
-    return paths
+        return []
 
 if __name__ == '__main__':
     graph = netsim.NetworkSimulationGraph()
@@ -64,8 +50,7 @@ if __name__ == '__main__':
     # step3: 生成配置文件
     # step3.1: build_graph_config会生成一系列中间数据
     graph.build_graph_config()
-    # step3.2: gen_route_table 寻路并生成路由表
-    graph.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
-    # step3.3: 配置 TP Channel，当前TP Channel的配置策略是基于路由表项，每一条表项对应一个路径，每个路径对应多个优先级
-    graph.config_transport_channel(priority_list = [7, 8])
-    graph.write_config()
+    # step3.2: 默认生成通用压缩路由表
+    graph.gen_compressed_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
+    # step3.3: 使用 on-demand TP，避免预生成 host-pair transport_channel.csv
+    graph.write_config(include_transport=False)

@@ -1,6 +1,7 @@
 import os
 import re
 import time
+import csv
 from collections import defaultdict
 from itertools import groupby
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -21,8 +22,181 @@ def _process_path_chunk(graph, path_finding_algo, node_pairs):
             pass
     return paths
 
+_SPARSE_ROUTE_WORKER_GRAPH = None
+_SPARSE_ROUTE_WORKER_ALGO = None
+
+def _init_sparse_route_worker(graph, path_finding_algo):
+    global _SPARSE_ROUTE_WORKER_GRAPH
+    global _SPARSE_ROUTE_WORKER_ALGO
+    _SPARSE_ROUTE_WORKER_GRAPH = graph
+    _SPARSE_ROUTE_WORKER_ALGO = path_finding_algo
+
+def _process_sparse_route_chunk(node_pairs):
+    graph = _SPARSE_ROUTE_WORKER_GRAPH
+    path_finding_algo = _SPARSE_ROUTE_WORKER_ALGO
+    if graph is None or path_finding_algo is None:
+        raise RuntimeError("sparse route worker is not initialized")
+
+    route_table = graph.init_sparse_routing_table()
+    for src, dst in node_pairs:
+        try:
+            for path in path_finding_algo(graph, src, dst):
+                graph.add_path_to_sparse_route_table(route_table, path)
+        except nx.exception.NetworkXNoPath:
+            pass
+    return {key: dict(value) for key, value in route_table.items()}
+
 VALID_BANDWIDTH_UNIT = {"bps", "Kbps", "Mbps", "Gbps", "Tbps"}
 VALID_TIME_UNIT = {"ns", "us", "ms", "s"}
+
+def parse_id_range(value):
+    value = str(value).strip()
+    if not value:
+        raise ValueError("range field must not be empty")
+    if ".." not in value:
+        parsed = int(value)
+        return parsed, parsed
+    start, end = value.split("..", 1)
+    start = int(start)
+    end = int(end)
+    if start > end:
+        raise ValueError(f"range start must not exceed end: {value}")
+    return start, end
+
+def parse_range_start(value):
+    return parse_id_range(value)[0]
+
+def _format_range_value(start, end):
+    return str(start) if start == end else f"{start}..{end}"
+
+def _ranges_overlap(left_start, left_end, right_start, right_end):
+    return left_start <= right_end and right_start <= left_end
+
+def _normalize_route_value(outports_text, metrics_text, row_num):
+    outports = tuple(int(value) for value in outports_text.split())
+    metrics = tuple(int(value) for value in metrics_text.split())
+    if len(outports) != len(metrics):
+        raise ValueError(f"第{row_num}行 outPorts 与 metrics 数量不一致")
+    if not outports:
+        raise ValueError(f"第{row_num}行必须包含至少一个 outPort/metric")
+
+    metric_by_port = {}
+    for outport, metric in zip(outports, metrics):
+        old_metric = metric_by_port.get(outport)
+        if old_metric is not None and old_metric != metric:
+            raise ValueError(f"第{row_num}行 outPort {outport} 同时配置了多个 metric")
+        metric_by_port[outport] = metric
+    return tuple(sorted(metric_by_port.items()))
+
+def _read_route_table_rows(route_table_csv_path):
+    with open(route_table_csv_path, "r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        expected_headers = {"nodeId", "dstNodeId", "dstPortId", "outPorts", "metrics"}
+        if reader.fieldnames is None or not expected_headers.issubset(set(reader.fieldnames)):
+            missing = expected_headers - set(reader.fieldnames or [])
+            raise ValueError(f"CSV文件缺少必要的列: {missing}")
+
+        for row_num, row in enumerate(reader, start=2):
+            node_start, node_end = parse_id_range(row["nodeId"])
+            dst_start, dst_end = parse_id_range(row["dstNodeId"])
+            dst_port = int(str(row["dstPortId"]).strip())
+            value = _normalize_route_value(row["outPorts"], row["metrics"], row_num)
+            yield {
+                "row_num": row_num,
+                "node_start": node_start,
+                "node_end": node_end,
+                "dst_start": dst_start,
+                "dst_end": dst_end,
+                "dst_port": dst_port,
+                "value": value,
+                "is_range": node_start != node_end or dst_start != dst_end,
+            }
+
+def validate_route_table_no_conflicts(route_table_csv_path):
+    rows_by_port = defaultdict(list)
+    for row in _read_route_table_rows(route_table_csv_path):
+        if not row["is_range"]:
+            continue
+        rows_by_port[row["dst_port"]].append(row)
+
+    for dst_port, rows in rows_by_port.items():
+        active = []
+        for row in sorted(rows, key=lambda item: (item["node_start"], item["node_end"], item["dst_start"])):
+            active = [item for item in active if item["node_end"] >= row["node_start"]]
+            for other in active:
+                if other["value"] == row["value"]:
+                    continue
+                if _ranges_overlap(other["dst_start"], other["dst_end"], row["dst_start"], row["dst_end"]):
+                    node_overlap = (
+                        max(other["node_start"], row["node_start"]),
+                        min(other["node_end"], row["node_end"]),
+                    )
+                    dst_overlap = (
+                        max(other["dst_start"], row["dst_start"]),
+                        min(other["dst_end"], row["dst_end"]),
+                    )
+                    raise ValueError(
+                        "压缩路由存在冲突覆盖: "
+                        f"第{other['row_num']}行与第{row['row_num']}行 "
+                        f"在 nodeId={_format_range_value(*node_overlap)}, "
+                        f"dstNodeId={_format_range_value(*dst_overlap)}, "
+                        f"dstPortId={dst_port} 上配置了不同的 outPorts/metrics"
+                    )
+            active.append(row)
+    return True
+
+def _merge_intervals(intervals):
+    intervals = sorted(intervals)
+    if not intervals:
+        return []
+
+    merged = []
+    start, end = intervals[0]
+    for next_start, next_end in intervals[1:]:
+        if next_start <= end + 1:
+            end = max(end, next_end)
+            continue
+        merged.append((start, end))
+        start, end = next_start, next_end
+    merged.append((start, end))
+    return merged
+
+def _remove_single_value_from_intervals(intervals, value):
+    result = []
+    for start, end in intervals:
+        if value < start or value > end:
+            result.append((start, end))
+            continue
+        if start <= value - 1:
+            result.append((start, value - 1))
+        if value + 1 <= end:
+            result.append((value + 1, end))
+    return result
+
+def _missing_intervals(expected, covered):
+    covered = _merge_intervals(covered)
+    missing = []
+    covered_index = 0
+
+    for expected_start, expected_end in expected:
+        cursor = expected_start
+        while covered_index < len(covered) and covered[covered_index][1] < cursor:
+            covered_index += 1
+
+        probe = covered_index
+        while probe < len(covered) and covered[probe][0] <= expected_end:
+            covered_start, covered_end = covered[probe]
+            if covered_start > cursor:
+                missing.append((cursor, min(expected_end, covered_start - 1)))
+            cursor = max(cursor, covered_end + 1)
+            if cursor > expected_end:
+                break
+            probe += 1
+
+        if cursor <= expected_end:
+            missing.append((cursor, expected_end))
+
+    return missing
 
 def validate_with_unit(name, value, allowed_units, example):
         ok = isinstance(value, str) and re.match(r'^\s*\d+(\.\d+)?\s*[A-Za-z]+\s*$', value or "")
@@ -48,7 +222,7 @@ class NetworkSimulationGraph(nx.Graph):
         self.host_ids = []
         self.node_ids = []
 
-        # 下一跳端口表: next_hop_ports[this_node][neighbor] = [port1, port2, ...]
+        # 下一跳端口表: next_hop_ports[(this_node, neighbor)] = [port1, port2, ...]
         self.next_hop_ports = []
 
         # 路由表: route_table_2port[node_id][dst_id] = set((out_port, metric, dst_port))
@@ -124,8 +298,8 @@ class NetworkSimulationGraph(nx.Graph):
             # is_switch: host=0, switch=1
             self.port_list.append((1 - self.node_is_host(node_id), t_port_num))
 
-        # 链路展开为端口映射与 link_infos（带单位字符串原样携带）
-        topo_edges = []
+        # 链路展开为端口映射、link_infos 与稀疏邻居端口索引。
+        self.next_hop_ports = defaultdict(list)
         for u, v in self.edges:
             edge_count = int(self.edges[u, v]["edge_count"])
             bw = self.edges[u, v]["bandwidth"]  # 字符串，如 '400Gbps'
@@ -133,20 +307,15 @@ class NetworkSimulationGraph(nx.Graph):
             for _ in range(edge_count):
                 u_port = port_conn_count[u]
                 v_port = port_conn_count[v]
-                topo_edges.append((u, u_port, v, v_port))
 
                 self.link_port[(u, v, u_port)] = [v_port]
                 self.link_port[(v, u, v_port)] = [u_port]
+                self.next_hop_ports[(u, v)].append(u_port)
+                self.next_hop_ports[(v, u)].append(v_port)
 
                 port_conn_count[u] += 1
                 port_conn_count[v] += 1
                 self.link_infos.append((u, u_port, v, v_port, bw, dl))
-
-        # 构建邻居->本端口 映射
-        self.next_hop_ports = [[[] for _ in range(total_node_num)] for _ in range(total_node_num)]
-        for sn, sp, dn, dp in topo_edges:
-            self.next_hop_ports[sn][dn].append(sp)
-            self.next_hop_ports[dn][sn].append(dp)
 
         os.makedirs(self.output_dir, exist_ok=True)
 
@@ -155,9 +324,42 @@ class NetworkSimulationGraph(nx.Graph):
         total_node_num = self.get_total_num()
         self.route_table_2port = [[set() for _ in range(total_node_num)] for _ in range(total_node_num)]
 
+    def init_sparse_routing_table(self):
+        return defaultdict(dict)
+
     # 查询端口
     def get_link_ports(self, this_node, next_hop):
-        return self.next_hop_ports[this_node][next_hop]
+        return self.next_hop_ports.get((this_node, next_hop), [])
+
+    def _format_range(self, start, end):
+        return str(start) if start == end else f"{start}..{end}"
+
+    def _iter_consecutive_ranges(self, values):
+        values = sorted(set(values))
+        if not values:
+            return
+        start = prev = values[0]
+        for value in values[1:]:
+            if value != prev + 1:
+                yield start, prev
+                start = value
+            prev = value
+        yield start, prev
+
+    def _iter_host_pairs(self, nodes):
+        for index, src in enumerate(nodes):
+            for next_index in range(index + 1, len(nodes)):
+                yield src, nodes[next_index]
+
+    def _iter_host_pair_chunks(self, nodes, chunk_size):
+        chunk = []
+        for pair in self._iter_host_pairs(nodes):
+            chunk.append(pair)
+            if len(chunk) >= chunk_size:
+                yield chunk
+                chunk = []
+        if chunk:
+            yield chunk
 
     # 写入一条路由表项（带 ECMP 与最短度量合并）
     def set_route_table(self, curr_node, next_hop_node, node_before_dst, dst, metric):
@@ -234,6 +436,104 @@ class NetworkSimulationGraph(nx.Graph):
                     if existing_route[1] > metric:
                         route_set.remove(existing_route)
                         route_set.add((out_port, metric, dst_port))
+
+    def set_sparse_route_table(self, route_table, curr_node, next_hop_node, node_before_dst, dst, metric):
+        dst_ports = self.get_link_ports(dst, node_before_dst)
+        for dst_port in dst_ports:
+            next_hop_ports = (
+                self.link_port[(dst, node_before_dst, dst_port)]
+                if next_hop_node == dst
+                else self.get_link_ports(curr_node, next_hop_node)
+            )
+
+            route_key = (curr_node, dst, dst_port)
+            outport_metrics = route_table[route_key]
+            for out_port in next_hop_ports:
+                old_metric = outport_metrics.get(out_port)
+                if old_metric is None or old_metric > metric:
+                    outport_metrics[out_port] = metric
+
+    def add_path_to_sparse_route_table(self, route_table, path):
+        if not path:
+            return
+        src, dst = path[0], path[-1]
+        for i, node_id in enumerate(path):
+            if i >= 1:
+                self.set_sparse_route_table(curr_node=node_id,
+                                            route_table=route_table,
+                                            next_hop_node=path[i - 1],
+                                            node_before_dst=path[1],
+                                            dst=src,
+                                            metric=i)
+            if i < len(path) - 1:
+                self.set_sparse_route_table(curr_node=node_id,
+                                            route_table=route_table,
+                                            next_hop_node=path[i + 1],
+                                            node_before_dst=path[-2],
+                                            dst=dst,
+                                            metric=len(path) - i - 1)
+
+    def merge_sparse_route_table(self, route_table, route_delta):
+        for route_key, outport_metrics in route_delta.items():
+            target = route_table[route_key]
+            for out_port, metric in outport_metrics.items():
+                old_metric = target.get(out_port)
+                if old_metric is None or old_metric > metric:
+                    target[out_port] = metric
+
+    def compressed_route_rows(self, route_table, host_router=True):
+        by_node_signature = defaultdict(list)
+
+        for (node_id, dst_id, dst_port), outport_metrics in route_table.items():
+            if self.node_is_host(node_id) and not host_router:
+                continue
+            sorted_ports = sorted(outport_metrics.items())
+            outports = tuple(port for port, _ in sorted_ports)
+            metrics = tuple(metric for _, metric in sorted_ports)
+            by_node_signature[(node_id, dst_port, outports, metrics)].append(dst_id)
+
+        dst_range_rows = []
+        for (node_id, dst_port, outports, metrics), dst_ids in by_node_signature.items():
+            outports_text = " ".join(map(str, outports))
+            metrics_text = " ".join(map(str, metrics))
+            for dst_start, dst_end in self._iter_consecutive_ranges(dst_ids):
+                dst_range_rows.append((node_id,
+                                       self._format_range(dst_start, dst_end),
+                                       dst_port,
+                                       outports_text,
+                                       metrics_text))
+
+        by_row_signature = defaultdict(list)
+        for node_id, dst_range, dst_port, outports_text, metrics_text in dst_range_rows:
+            by_row_signature[(dst_range, dst_port, outports_text, metrics_text)].append(node_id)
+
+        rows = []
+        for (dst_range, dst_port, outports_text, metrics_text), node_ids in by_row_signature.items():
+            for node_start, node_end in self._iter_consecutive_ranges(node_ids):
+                rows.append((self._format_range(node_start, node_end),
+                             dst_range,
+                             dst_port,
+                             outports_text,
+                             metrics_text))
+        return sorted(rows, key=lambda row: (parse_range_start(row[0]), parse_range_start(row[1]), int(row[2])))
+
+    def write_compressed_route_table_to_csv(self, route_table, host_router=True):
+        rows = self.compressed_route_rows(route_table, host_router=host_router)
+        os.makedirs(self.output_dir, exist_ok=True)
+        filename = os.path.join(self.output_dir, "routing_table.csv")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write("nodeId,dstNodeId,dstPortId,outPorts,metrics\n")
+            for row in tqdm(rows, desc="写入压缩路由CSV"):
+                f.write(",".join(map(str, row)) + "\n")
+        print(f"压缩路由表文件: {os.path.abspath(filename)}")
+        validate_route_table_no_conflicts(os.path.abspath(filename))
+        check_route_table_connectivity(os.path.abspath(filename))
+        return rows
+
+    def _should_write_transport_channel(self):
+        if getattr(self, "_route_table_requires_on_demand_tp", False):
+            raise ValueError("compressed route generation requires write_config(include_transport=False)")
+        return True
 
     # 生成全网路由（按 host-host 最短路径，支持并行）
     def gen_route_table(self, write_file=True, host_router=True, path_finding_algo=nx.all_shortest_paths, multiple_workers=1):
@@ -333,6 +633,70 @@ class NetworkSimulationGraph(nx.Graph):
 
         if write_file:
             self.write_route_table_to_csv(host_router=host_router)
+        self._route_table_requires_on_demand_tp = False
+
+    def gen_compressed_route_table(self,
+                                   write_file=True,
+                                   host_router=True,
+                                   path_finding_algo=nx.all_shortest_paths,
+                                   multiple_workers=1,
+                                   chunk_size=4096):
+        """
+        使用 streaming 寻路生成通用压缩路由表。
+
+        该方法不保存全量 path 列表，也不创建 N x N dense 路由矩阵。
+        它先写入稀疏 route table，再按连续 nodeId/dstNodeId range 合并相同规则。
+        当 multiple_workers > 1 时，path_finding_algo 必须是多进程可 pickle 的顶层函数。
+        """
+        if self.next_hop_ports == []:
+            self.build_graph_config()
+
+        route_table = self.init_sparse_routing_table()
+        nodes = list(self.host_ids)
+        total_pairs = len(nodes) * (len(nodes) - 1) // 2
+
+        if multiple_workers and multiple_workers > 1 and total_pairs > 0:
+            chunk_size = max(1, int(chunk_size))
+            max_pending = max(1, multiple_workers * 2)
+            pending = {}
+            chunk_iter = self._iter_host_pair_chunks(nodes, chunk_size)
+            gcopy = self
+
+            print(f"使用多进程压缩路由生成，worker数量 {multiple_workers}, chunk_size {chunk_size}:")
+            with ProcessPoolExecutor(max_workers=multiple_workers,
+                                     initializer=_init_sparse_route_worker,
+                                     initargs=(gcopy, path_finding_algo)) as executor:
+                with tqdm(total=total_pairs, desc="计算并写入压缩路由") as progress:
+                    exhausted = False
+                    while pending or not exhausted:
+                        while not exhausted and len(pending) < max_pending:
+                            try:
+                                chunk = next(chunk_iter)
+                            except StopIteration:
+                                exhausted = True
+                                break
+                            pending[executor.submit(_process_sparse_route_chunk, chunk)] = len(chunk)
+
+                        for fut in as_completed(pending):
+                            processed_pairs = pending.pop(fut)
+                            route_delta = fut.result()
+                            self.merge_sparse_route_table(route_table, route_delta)
+                            progress.update(processed_pairs)
+                            break
+        else:
+            for src, dst in tqdm(self._iter_host_pairs(nodes), total=total_pairs, desc="计算并写入压缩路由"):
+                try:
+                    for path in path_finding_algo(self, src, dst):
+                        self.add_path_to_sparse_route_table(route_table, path)
+                except nx.exception.NetworkXNoPath:
+                    pass
+
+        if write_file:
+            rows = self.write_compressed_route_table_to_csv(route_table, host_router=host_router)
+            self._route_table_requires_on_demand_tp = True
+            return rows
+        self._route_table_requires_on_demand_tp = True
+        return self.compressed_route_rows(route_table, host_router=host_router)
 
     # 实际写出 CSV，并填充 route_dict4tp 供 ns3_config 使用
     def write_route_table_to_csv(self, host_router=False):
@@ -366,7 +730,102 @@ class NetworkSimulationGraph(nx.Graph):
         
         check_route_table_connectivity(os.path.abspath(filename))
 
-    def write_config(self):
+    def gen_2layer_clos_compressed_route_table(self, host_num, leaf_sw_num, write_file=True):
+        """
+        生成两层 Clos 的压缩路由表。
+
+        节点编号必须符合仓库模板：
+        - host: 0..host_num-1
+        - leaf: host_num..host_num+leaf_sw_num-1
+        - spine: host_num+leaf_sw_num..host_num+leaf_sw_num+spine_sw_num-1
+
+        输出格式复用 routing_table.csv，但 dstNodeId 支持 a..b 范围。
+        该路径避免枚举所有 host-pair shortest paths。
+        """
+        if host_num <= 0 or leaf_sw_num <= 0:
+            raise ValueError("host_num and leaf_sw_num must be positive")
+        if host_num % leaf_sw_num != 0:
+            raise ValueError("host_num must be divisible by leaf_sw_num for 2-layer Clos")
+        if self.next_hop_ports == []:
+            self.build_graph_config()
+
+        spine_sw_num = host_num // leaf_sw_num
+        host_per_leaf = host_num // leaf_sw_num
+        leaf_base = host_num
+        spine_base = host_num + leaf_sw_num
+        expected_total = host_num + leaf_sw_num + spine_sw_num
+        if self.get_total_num() != expected_total:
+            raise ValueError(
+                f"graph node count {self.get_total_num()} does not match 2-layer Clos expected {expected_total}"
+            )
+
+        def ports_to_space(port_values):
+            return " ".join(str(port) for port in port_values)
+
+        def metrics_to_space(metric_values):
+            return " ".join(str(metric) for metric in metric_values)
+
+        rows = []
+
+        # Host: any non-self destination leaves via its single uplink to leaf.
+        for host_id in range(host_num):
+            leaf_idx = host_id // host_per_leaf
+            leaf_id = leaf_base + leaf_idx
+            local_start = leaf_idx * host_per_leaf
+            local_end = local_start + host_per_leaf - 1
+            uplink_ports = self.get_link_ports(host_id, leaf_id)
+            if local_start > 0:
+                rows.append((host_id, f"0..{local_start - 1}", 0, ports_to_space(uplink_ports), metrics_to_space([4] * len(uplink_ports))))
+            if local_start < host_id:
+                rows.append((host_id, f"{local_start}..{host_id - 1}", 0, ports_to_space(uplink_ports), metrics_to_space([2] * len(uplink_ports))))
+            if host_id < local_end:
+                rows.append((host_id, f"{host_id + 1}..{local_end}", 0, ports_to_space(uplink_ports), metrics_to_space([2] * len(uplink_ports))))
+            if local_end + 1 < host_num:
+                rows.append((host_id, f"{local_end + 1}..{host_num - 1}", 0, ports_to_space(uplink_ports), metrics_to_space([4] * len(uplink_ports))))
+
+        # Leaf: local hosts direct, remote hosts through all spines.
+        for leaf_idx in range(leaf_sw_num):
+            leaf_id = leaf_base + leaf_idx
+            local_start = leaf_idx * host_per_leaf
+            local_end = local_start + host_per_leaf - 1
+            for host_id in range(local_start, local_end + 1):
+                local_ports = self.get_link_ports(leaf_id, host_id)
+                rows.append((leaf_id, host_id, 0, ports_to_space(local_ports), metrics_to_space([1] * len(local_ports))))
+
+            spine_ports = []
+            for spine_idx in range(spine_sw_num):
+                spine_id = spine_base + spine_idx
+                spine_ports.extend(self.get_link_ports(leaf_id, spine_id))
+            if local_start > 0:
+                rows.append((leaf_id, f"0..{local_start - 1}", 0, ports_to_space(spine_ports), metrics_to_space([3] * len(spine_ports))))
+            if local_end + 1 < host_num:
+                rows.append((leaf_id, f"{local_end + 1}..{host_num - 1}", 0, ports_to_space(spine_ports), metrics_to_space([3] * len(spine_ports))))
+
+        # Spine: each host range descends to its owning leaf.
+        for spine_idx in range(spine_sw_num):
+            spine_id = spine_base + spine_idx
+            for leaf_idx in range(leaf_sw_num):
+                leaf_id = leaf_base + leaf_idx
+                host_start = leaf_idx * host_per_leaf
+                host_end = host_start + host_per_leaf - 1
+                down_ports = self.get_link_ports(spine_id, leaf_id)
+                rows.append((spine_id, f"{host_start}..{host_end}", 0, ports_to_space(down_ports), metrics_to_space([2] * len(down_ports))))
+
+        if write_file:
+            os.makedirs(self.output_dir, exist_ok=True)
+            filename = os.path.join(self.output_dir, "routing_table.csv")
+            with open(filename, "w", encoding="utf-8") as f:
+                f.write("nodeId,dstNodeId,dstPortId,outPorts,metrics\n")
+                for row in rows:
+                    f.write(",".join(map(str, row)) + "\n")
+            print(f"压缩路由表文件: {os.path.abspath(filename)}")
+            validate_route_table_no_conflicts(os.path.abspath(filename))
+            check_route_table_connectivity(os.path.abspath(filename))
+
+        self._route_table_requires_on_demand_tp = True
+        return rows
+
+    def write_config(self, include_transport=True):
         print("开始生成配置文件...")
         os.makedirs(self.output_dir, exist_ok=True)
         
@@ -378,8 +837,10 @@ class NetworkSimulationGraph(nx.Graph):
         }
 
         # 生成 transport_channel.csv
-        print("生成TP Channel配置...")
-        self._write_transport_channel_csv(files['transport'])
+        if include_transport:
+            self._should_write_transport_channel()
+            print("生成TP Channel配置...")
+            self._write_transport_channel_csv(files['transport'])
         
         # 生成 node.csv - 优化范围合并逻辑
         print("生成节点配置...")
@@ -565,7 +1026,6 @@ def check_route_table_connectivity(route_table_csv_path):
     路由表检查完成: ✓ 所有节点都有完整的host路由
     True
     """
-    import csv
     from collections import defaultdict
     
     if not os.path.exists(route_table_csv_path):
@@ -574,38 +1034,27 @@ def check_route_table_connectivity(route_table_csv_path):
     print(f"开始检查路由表完整性...")
     print(f"路由表文件: {route_table_csv_path}")
     
-    # 读取路由表并统计
-    node_routes = defaultdict(set)  # node_id -> set of dst_host_ids
+    validate_route_table_no_conflicts(route_table_csv_path)
+
+    # 读取路由表并统计。按源节点保存 dstNodeId 区间，避免把压缩路由完全展开。
+    node_route_intervals = defaultdict(list)  # node_id -> [(dst_start, dst_end), ...]
     all_nodes = set()
-    all_hosts = set()
+    host_intervals = []
     
     try:
-        with open(route_table_csv_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            expected_headers = {'nodeId', 'dstNodeId', 'dstPortId', 'outPorts', 'metrics'}
-            
-            if not expected_headers.issubset(set(reader.fieldnames)):
-                raise ValueError(f"CSV文件缺少必要的列: {expected_headers - set(reader.fieldnames)}")
-            
-            for row_num, row in enumerate(reader, start=2):  # 从第2行开始（第1行是header）
-                try:
-                    node_id = int(row['nodeId'])
-                    dst_node_id = int(row['dstNodeId'])
-                    
-                    all_nodes.add(node_id)
-                    all_hosts.add(dst_node_id)  # 路由表中的目标都是host
-                    node_routes[node_id].add(dst_node_id)
-                    
-                except ValueError as e:
-                    print(f"警告: 第{row_num}行数据格式错误: {e}")
-                    continue
-                    
+        for row in _read_route_table_rows(route_table_csv_path):
+            host_intervals.append((row["dst_start"], row["dst_end"]))
+            for node_id in range(row["node_start"], row["node_end"] + 1):
+                all_nodes.add(node_id)
+                node_route_intervals[node_id].append((row["dst_start"], row["dst_end"]))
     except Exception as e:
         raise ValueError(f"读取CSV文件时发生错误: {e}")
+
+    host_intervals = _merge_intervals(host_intervals)
     
     # 统计信息
     total_nodes = len(all_nodes)
-    total_hosts = len(all_hosts)
+    total_hosts = sum(end - start + 1 for start, end in host_intervals)
     print(f"发现 {total_nodes} 个节点, {total_hosts} 个host节点")
     
     # 检查每个节点的路由完整性
@@ -613,10 +1062,13 @@ def check_route_table_connectivity(route_table_csv_path):
     complete_nodes = 0
     
     for node_id in sorted(all_nodes):
-        node_host_routes = node_routes[node_id]
         # host节点不需要到自己的路由
-        expected_hosts = all_hosts - {node_id} if node_id in all_hosts else all_hosts
-        missing_hosts = expected_hosts - node_host_routes
+        expected_intervals = (
+            _remove_single_value_from_intervals(host_intervals, node_id)
+            if any(start <= node_id <= end for start, end in host_intervals)
+            else host_intervals
+        )
+        missing_hosts = _missing_intervals(expected_intervals, node_route_intervals[node_id])
         
         if not missing_hosts:
             complete_nodes += 1
@@ -631,9 +1083,10 @@ def check_route_table_connectivity(route_table_csv_path):
     if missing_routes:
         print(f"\n缺失路由详情:")
         for node_id, missing_hosts in missing_routes[:10]:  # 最多显示10个
-            missing_list = sorted(list(missing_hosts))
+            missing_list = [_format_range_value(start, end) for start, end in missing_hosts]
+            missing_count = sum(end - start + 1 for start, end in missing_hosts)
             if len(missing_list) > 5:
-                missing_str = f"{missing_list[:5]}... (共{len(missing_list)}个)"
+                missing_str = f"{missing_list[:5]}... (共{missing_count}个)"
             else:
                 missing_str = str(missing_list)
             print(f"  节点 {node_id}: 缺失到host {missing_str} 的路由")

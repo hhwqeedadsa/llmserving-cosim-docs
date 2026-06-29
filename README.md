@@ -12,11 +12,12 @@ This submodule provides the **Python toolchain** for `scratch/` cases:
 - `net_sim_builder.py` — generates the following files under `./output/<timestamp>/` by default:
 	- `node.csv`
 	- `topology.csv`
-	- `routing_table.csv` (written by `gen_route_table()` when `write_file=True`, which is the default)
-	- `transport_channel.csv` (built from the generated routes and configured priorities)
+	- `routing_table.csv` (written by `gen_compressed_route_table()` or `gen_route_table()` when `write_file=True`, which is the default)
+	- `transport_channel.csv` (optional; only built for explicit precomputed TP generation)
 
-	Generation order (as used in the example scripts): call `build_graph_config()` → `gen_route_table()` → `config_transport_channel()` → `write_config()`.
-- `user_topo_example.py`, `user_topo_2layer_clos.py`, `user_topo_4x4_2DFM.py` — example topology definitions that drive `net_sim_builder.py`; they generate the same CSV set above.
+	Default generation order as used in the example scripts: call `build_graph_config()` → `gen_compressed_route_table()` → `write_config(include_transport=False)`.
+	Use `gen_route_table()` → `config_transport_channel()` → `write_config(include_transport=True)` only when exact per-destination route rows and precomputed `transport_channel.csv` are explicitly required. For large two-layer Clos cases, `gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)` is an optional specialized path. Both compressed paths emit range-compressed `routing_table.csv` rows and require on-demand TP creation instead of precomputing host-pair paths and `transport_channel.csv`.
+- `user_topo_example.py`, `user_topo_2layer_clos.py`, `user_topo_4x4_2DFM.py` — example topology definitions that drive `net_sim_builder.py`; by default they generate `node.csv`, `topology.csv`, and compressed `routing_table.csv`.
 - `topo_plot.py` — reads `node.csv` + `topology.csv` from the input directory and writes:
 	- `network_topology.png` (always)
 	- `network_topology.pdf` (optional via `--pdf`)

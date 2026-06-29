@@ -61,9 +61,7 @@ if __name__ == '__main__':
    
     # step3: 生成配置文件,build_graph_config会生成一系列中间数据,最终生成dcn2.0_config.xml文件
     graph.build_graph_config()
-    # step3.2: gen_route_table 寻路并生成路由表
-    graph.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
-    # step3.3: 配置 TP Channel，当前TP Channel的配置策略是基于路由表项，每一条表项对应一个路径，每个路径对应多个优先级
-    graph.config_transport_channel(priority_list = [7])
-    # step3.4: 写入所有配置文件
-    graph.write_config()
+    # step3.2: 默认生成通用压缩路由表
+    graph.gen_compressed_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
+    # step3.3: 使用 on-demand TP，避免预生成 host-pair transport_channel.csv
+    graph.write_config(include_transport=False)

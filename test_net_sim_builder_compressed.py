@@ -205,6 +205,32 @@ class CompressedRouteTableTest(unittest.TestCase):
             specialized_csv = tmpdir / "specialized" / "routing_table.csv"
             self.assertEqual(expanded_route_map(specialized_csv), expanded_route_map(exact_csv))
 
+    def test_generic_compressed_clos_routes_match_exact_routes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmpdir = Path(tmp)
+            host_num = 8
+            leaf_sw_num = 2
+
+            exact = build_two_layer_clos_graph(host_num, leaf_sw_num)
+            exact.output_dir = str(tmpdir / "exact")
+            exact.build_graph_config()
+            exact.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=1)
+
+            generic = build_two_layer_clos_graph(host_num, leaf_sw_num)
+            generic.output_dir = str(tmpdir / "generic")
+            generic.build_graph_config()
+            generic.gen_compressed_route_table(
+                path_finding_algo=all_shortest_paths,
+                multiple_workers=2,
+                chunk_size=4,
+            )
+            generic.write_config(include_transport=False)
+
+            exact_csv = tmpdir / "exact" / "routing_table.csv"
+            generic_csv = tmpdir / "generic" / "routing_table.csv"
+            self.assertEqual(expanded_route_map(generic_csv), expanded_route_map(exact_csv))
+            self.assertFalse((tmpdir / "generic" / "transport_channel.csv").exists())
+
 
 if __name__ == "__main__":
     unittest.main()

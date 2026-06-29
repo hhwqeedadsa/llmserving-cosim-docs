@@ -1896,11 +1896,38 @@ void UbUtils::SetRecord(int fieldCount, string field, TrafficRecord &record)
 vector<TrafficRecord> UbUtils::LoadTrafficConfig(const string &filename)
 {
     vector<TrafficRecord> records;
-    PrintTimestamp("[traffic] Load " + DisplayFilename(filename));
+    ForEachTrafficRecordInternal(filename, "Load", [&](const TrafficRecord& record) {
+        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
+        records.push_back(record);
+    });
+    return records;
+}
+
+void
+UbUtils::ForEachTrafficRecord(const string& filename,
+                              const std::function<void(const TrafficRecord&)>& callback)
+{
+    ForEachTrafficRecordInternal(filename, "Load", callback);
+}
+
+void
+UbUtils::RegisterTrafficPhaseDependencies(const string& filename)
+{
+    ForEachTrafficRecordInternal(filename, "Index phase dependencies from", [](const TrafficRecord& record) {
+        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
+    });
+}
+
+void
+UbUtils::ForEachTrafficRecordInternal(const string& filename,
+                                      const string& action,
+                                      const std::function<void(const TrafficRecord&)>& callback)
+{
+    PrintTimestamp("[traffic] " + action + " " + DisplayFilename(filename));
     ifstream file(filename);
     if (!file.is_open()) {
         NS_ASSERT_MSG(0, "Can not open File: " << filename);
-        return records;
+        return;
     }
     string line;
     getline(file, line);  // 跳过标题行
@@ -1919,11 +1946,9 @@ vector<TrafficRecord> UbUtils::LoadTrafficConfig(const string &filename)
             SetRecord(fieldCount, field, record);
             fieldCount++;
         }
-        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
-        records.push_back(record);
+        callback(record);
     }
     file.close();
-    return records;
 }
 
 // 从TXT文件加载配置

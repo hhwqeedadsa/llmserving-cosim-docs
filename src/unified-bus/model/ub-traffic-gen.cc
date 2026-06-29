@@ -63,7 +63,7 @@ void UbTrafficGen::AddTask(TrafficRecord record)
         auto& phaseState = m_phaseStates[dependPhaseId];
         const bool inserted = uniqueDependencyPhases.insert(dependPhaseId).second;
         if (inserted && phaseState.completedTasks < phaseState.totalTasks) {
-            phaseState.dependentTasks.insert(taskId);
+            phaseState.dependentTasks.push_back(taskId);
             ++pendingPhaseCount;
         }
     }

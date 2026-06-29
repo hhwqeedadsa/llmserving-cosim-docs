@@ -415,7 +415,8 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
                                    uint32_t mpiRank)
 {
-    auto trafficData = UbUtils::Get()->LoadTrafficConfig(configPath + "/traffic.csv");
+    const std::string trafficPath = configPath + "/traffic.csv";
+    UbUtils::Get()->RegisterTrafficPhaseDependencies(trafficPath);
     if (UbUtils::Get()->IsFaultEnabled())
     {
         UbUtils::Get()->InitFaultMoudle(configPath + "/fault.csv");
@@ -423,13 +424,12 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
 
     uint32_t localTaskCount = 0;
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
-    for (const auto& record : trafficData)
-    {
+    UbUtils::Get()->ForEachTrafficRecord(trafficPath, [&](const TrafficRecord& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
         if (activateLocalOwnedTasksOnly &&
             UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) != mpiRank)
         {
-            continue;
+            return;
         }
 
         if (sourceNode->GetNApplications() == 0)
@@ -440,7 +440,7 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
         }
         UbTrafficGen::Get()->AddTask(record);
         ++localTaskCount;
-    }
+    });
 
     UbTrafficGen::Get()->ScheduleNextTasks();
     UbUtils::Get()->PrintTimestamp("[traffic] Scheduled local tasks: " +

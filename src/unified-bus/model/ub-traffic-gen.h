@@ -87,7 +87,7 @@ public:
     struct PhaseState {
         uint32_t totalTasks{0};
         uint32_t completedTasks{0};
-        std::set<uint32_t> dependentTasks{};
+        std::vector<uint32_t> dependentTasks{};
     };
 
     map<std::string, TaOpcode> TaOpcodeMap = {

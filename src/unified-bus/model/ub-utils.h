@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <functional>
 #include <map>
 #include <fstream>
 #include <mutex>
@@ -67,6 +68,13 @@ public:
 
     // Loads traffic records and initializes phase-dependency state in UbTrafficGen.
     std::vector<TrafficRecord> LoadTrafficConfig(const std::string &filename);
+
+    // Streams traffic records without retaining a full vector in memory.
+    void ForEachTrafficRecord(const std::string& filename,
+                              const std::function<void(const TrafficRecord&)>& callback);
+
+    // Pre-registers phase membership before streaming AddTask calls.
+    void RegisterTrafficPhaseDependencies(const std::string& filename);
 
     void CreateTopo(const std::string &filename);
 
@@ -361,6 +369,10 @@ private:
     static std::string Among(std::string s, std::string ts);
 
     void SetRecord(int fieldCount, std::string field, TrafficRecord &record);
+
+    void ForEachTrafficRecordInternal(const std::string& filename,
+                                      const std::string& action,
+                                      const std::function<void(const TrafficRecord&)>& callback);
 
     static void PrintTraceInfo(const std::string& fileName, const std::string& info);
 

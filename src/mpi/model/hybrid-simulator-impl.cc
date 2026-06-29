@@ -89,6 +89,28 @@ HybridSimulatorImpl::GetTypeId()
 }
 
 void
+HybridSimulatorImpl::BoundLookAhead(Time lookAhead)
+{
+    if (lookAhead.IsStrictlyPositive())
+    {
+        NS_LOG_FUNCTION(this << lookAhead);
+        if (m_minLookahead == TimeStep(0))
+        {
+            m_minLookahead = lookAhead;
+        }
+        else
+        {
+            m_minLookahead = Min(m_minLookahead, lookAhead);
+        }
+    }
+    else
+    {
+        NS_LOG_WARN("attempted to set hybrid lookahead bound to a non-positive time: "
+                    << lookAhead);
+    }
+}
+
+void
 HybridSimulatorImpl::Destroy()
 {
     while (!m_destroyEvents.empty())

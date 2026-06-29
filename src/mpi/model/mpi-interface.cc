@@ -14,11 +14,17 @@
 
 #include "mpi-interface.h"
 
+#include "distributed-simulator-impl.h"
 #include "granted-time-window-mpi-interface.h"
+#ifdef NS3_MTP
+#include "hybrid-simulator-impl.h"
+#endif
 #include "null-message-mpi-interface.h"
 
 #include "ns3/global-value.h"
 #include "ns3/log.h"
+#include "ns3/simulator.h"
+#include "ns3/simulator-impl.h"
 #include "ns3/string.h"
 
 namespace ns3
@@ -130,6 +136,25 @@ MpiInterface::SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint3
 {
     NS_ASSERT(g_parallelCommunicationInterface);
     g_parallelCommunicationInterface->SendPacket(p, rxTime, node, dev);
+}
+
+void
+MpiInterface::BoundLookAhead(Time lookAhead)
+{
+    Ptr<SimulatorImpl> impl = Simulator::GetImplementation();
+    if (Ptr<DistributedSimulatorImpl> distributed = DynamicCast<DistributedSimulatorImpl>(impl))
+    {
+        distributed->BoundLookAhead(lookAhead);
+        return;
+    }
+#ifdef NS3_MTP
+    if (Ptr<HybridSimulatorImpl> hybrid = DynamicCast<HybridSimulatorImpl>(impl))
+    {
+        hybrid->BoundLookAhead(lookAhead);
+        return;
+    }
+#endif
+    NS_LOG_WARN("attempted to bind MPI lookahead while using a non-MPI simulator implementation");
 }
 
 MPI_Comm

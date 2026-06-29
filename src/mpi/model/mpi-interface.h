@@ -134,6 +134,16 @@ class MpiInterface
     static void SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint32_t dev);
 
     /**
+     * @brief Add an upper bound to the effective MPI lookahead.
+     *
+     * This is used when a non-packet control-plane event has its own visibility delay
+     * and must participate in the same conservative synchronization window.
+     *
+     * @param lookAhead maximum lookahead; must be positive.
+     */
+    static void BoundLookAhead(Time lookAhead);
+
+    /**
      * @brief Return the communicator used to run ns-3.
      *
      * The communicator returned will be MPI_COMM_WORLD if Enable (int*

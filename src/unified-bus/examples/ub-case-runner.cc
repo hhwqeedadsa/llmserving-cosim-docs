@@ -441,6 +441,24 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
     }
 }
 
+void ApplyDependencyVisibilityLookaheadBound()
+{
+    if (!UbTrafficGen::Get()->HasDependencyVisibilityDelay())
+    {
+        return;
+    }
+
+    const Time delay = UbTrafficGen::Get()->GetDependencyVisibilityDelay();
+    if (!delay.IsStrictlyPositive())
+    {
+        return;
+    }
+
+#ifdef NS3_MPI
+    MpiInterface::BoundLookAhead(delay);
+#endif
+}
+
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
                                    uint32_t mpiRank)
@@ -628,6 +646,7 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     UbUtils::ResetRuntimeDropDiagnostics();
     BuildScenarioFromConfig(options.configPath);
     ConfigureTrafficDependencyVisibility(options);
+    ApplyDependencyVisibilityLookaheadBound();
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
     ActivateTrafficFromConfig(options.configPath, runtime.enableMpi, runtime.mpiRank);

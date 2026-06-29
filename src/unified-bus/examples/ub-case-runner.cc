@@ -5,6 +5,8 @@
 #include "ns3/command-line.h"
 #include "ns3/node-list.h"
 #include "ns3/ub-app.h"
+#include "ns3/ub-link.h"
+#include "ns3/ub-port.h"
 #include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-transport.h"
 #include "ns3/ub-utils.h"
@@ -43,6 +45,7 @@ struct QuickExampleOptions
     uint32_t stopMs = 0;
     uint32_t rngRun = 10;
     std::string configPath;
+    std::string dependencyVisibilityDelay;
 };
 
 struct DropAbortState
@@ -411,6 +414,33 @@ void BuildScenarioFromConfig(const std::string& configPath)
     UbUtils::Get()->TopoTraceConnect();
 }
 
+void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
+{
+    if (!options.dependencyVisibilityDelay.empty())
+    {
+        UbTrafficGen::Get()->SetDependencyVisibilityDelay(Time(options.dependencyVisibilityDelay));
+    }
+
+    for (uint32_t nodeIndex = 0; nodeIndex < NodeList::GetNNodes(); ++nodeIndex)
+    {
+        Ptr<Node> node = NodeList::GetNode(nodeIndex);
+        for (uint32_t deviceIndex = 0; deviceIndex < node->GetNDevices(); ++deviceIndex)
+        {
+            Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(deviceIndex));
+            if (port == nullptr)
+            {
+                continue;
+            }
+
+            Ptr<UbLink> link = DynamicCast<UbLink>(port->GetChannel());
+            if (link != nullptr && link->IsRemote())
+            {
+                UbTrafficGen::Get()->ObserveRemoteLinkDelay(link->GetDelay());
+            }
+        }
+    }
+}
+
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
                                    uint32_t mpiRank)
@@ -442,6 +472,7 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
         ++localTaskCount;
     }
 
+    UbTrafficGen::Get()->ValidateDependencyVisibilityDelay();
     UbTrafficGen::Get()->ScheduleNextTasks();
     UbUtils::Get()->PrintTimestamp("[traffic] Scheduled local tasks: " +
                                    std::to_string(localTaskCount));
@@ -486,6 +517,9 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
                  casePathArg);
     cmd.AddValue("stop-ms", "Optional simulation stop time in milliseconds", options.stopMs);
     cmd.AddValue("rng-run", "Random seed value passed to RngSeedManager::SetSeed", options.rngRun);
+    cmd.AddValue("dependency-visibility-delay",
+                 "Delay before a completed traffic task becomes visible to dependent tasks",
+                 options.dependencyVisibilityDelay);
     cmd.AddNonOption("casePath",
                      "Required unified-bus case directory when --case-path is omitted",
                      positionalCasePath);
@@ -593,6 +627,7 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
     BuildScenarioFromConfig(options.configPath);
+    ConfigureTrafficDependencyVisibility(options);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
     ActivateTrafficFromConfig(options.configPath, runtime.enableMpi, runtime.mpiRank);

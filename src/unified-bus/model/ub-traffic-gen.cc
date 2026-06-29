@@ -97,7 +97,7 @@ TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
 {
-    std::vector<TrafficRecord> readyTasks;
+    Time completionVisibleTs;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -106,8 +106,71 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
             return;
         }
 
+        completionVisibleTs = Simulator::Now() + ResolveCompletionVisibleDelayLocked();
+    }
+
+    ScheduleTaskCompletionVisibility(taskId, completionVisibleTs);
+}
+
+void
+UbTrafficGen::SetDependencyVisibilityDelay(Time delay)
+{
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "dependency visibility delay must be non-negative");
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_dependencyVisibilityDelay = delay;
+}
+
+bool
+UbTrafficGen::HasDependencyVisibilityDelay() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_dependencyVisibilityDelay.has_value() || m_minRemoteLinkDelay.has_value();
+}
+
+Time
+UbTrafficGen::GetDependencyVisibilityDelay() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return ResolveCompletionVisibleDelayLocked();
+}
+
+void
+UbTrafficGen::ValidateDependencyVisibilityDelay() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    NS_ABORT_MSG_IF(
+        HasDependenciesLocked() && !m_dependencyVisibilityDelay.has_value() &&
+            !m_minRemoteLinkDelay.has_value(),
+        "traffic.csv contains task dependencies but no dependency visibility delay is available. "
+        "Pass --dependency-visibility-delay=<Time> or add remote link.");
+}
+
+void
+UbTrafficGen::ObserveRemoteLinkDelay(Time delay)
+{
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(), "remote link delay must be non-negative");
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!m_minRemoteLinkDelay.has_value() || delay < *m_minRemoteLinkDelay) {
+        m_minRemoteLinkDelay = delay;
+    }
+}
+
+void
+UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
+{
+    std::vector<TrafficRecord> readyTasks;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
+        auto stateIt = m_taskStates.find(taskId);
+        NS_ABORT_MSG_IF(stateIt == m_taskStates.end(), "Unknown completed taskId " << taskId);
+        if (stateIt->second == TaskState::COMPLETED) {
+            return;
+        }
+
         stateIt->second = TaskState::COMPLETED;
-        NS_LOG_DEBUG("Task " << taskId << " completed");
+        NS_LOG_DEBUG("Task " << taskId << " completion visible");
 
         auto dependentIt = m_dependents.find(taskId);
         if (dependentIt != m_dependents.end()) {
@@ -199,6 +262,41 @@ std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
         it = m_readyTasks.erase(it);
     }
     return readyTasks;
+}
+
+bool
+UbTrafficGen::HasDependenciesLocked() const
+{
+    for (const auto& dependencyPair : m_dependencies) {
+        if (!dependencyPair.second.empty()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Time
+UbTrafficGen::ResolveCompletionVisibleDelayLocked() const
+{
+    if (m_dependencyVisibilityDelay.has_value()) {
+        return *m_dependencyVisibilityDelay;
+    }
+    if (m_minRemoteLinkDelay.has_value()) {
+        return *m_minRemoteLinkDelay;
+    }
+    return Time(0);
+}
+
+void
+UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionVisibleTs)
+{
+    const Time now = Simulator::Now();
+    NS_ABORT_MSG_IF(completionVisibleTs < now,
+                    "task completion visibility timestamp is earlier than Simulator::Now()");
+    Simulator::Schedule(completionVisibleTs - now,
+                        &UbTrafficGen::ApplyTaskCompletion,
+                        this,
+                        taskId);
 }
 
 void UbTrafficGen::ScheduleTasks(const std::vector<TrafficRecord>& tasks)

@@ -8674,7 +8674,8 @@ class UbQuickExampleLocalDependentDagSingleThreadSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=1 --test",
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 
@@ -8774,7 +8775,8 @@ class UbQuickExampleLocalWriteThenReadSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=1 --test",
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 
@@ -8850,7 +8852,8 @@ class UbQuickExampleLocalDependentDagMtpRedSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=2 --test",
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 

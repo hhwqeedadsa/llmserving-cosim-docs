@@ -6,8 +6,10 @@
 #include <unordered_map>
 #include <set>
 #include <mutex>
+#include <optional>
 #include "ns3/application.h"
 #include "ns3/event-id.h"
+#include "ns3/nstime.h"
 #include "ns3/ptr.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/ub-datatype.h"
@@ -57,6 +59,18 @@ public:
 
     void MarkTaskCompleted(uint32_t taskId);
 
+    void SetDependencyVisibilityDelay(Time delay);
+
+    bool HasDependencyVisibilityDelay() const;
+
+    Time GetDependencyVisibilityDelay() const;
+
+    void ValidateDependencyVisibilityDelay() const;
+
+    void ObserveRemoteLinkDelay(Time delay);
+
+    void ApplyTaskCompletion(uint32_t taskId);
+
     bool IsCompleted() const;
 
     uint32_t GetCompletedTaskCount() const;
@@ -92,10 +106,18 @@ public:
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
     std::set<uint32_t> m_readyTasks{};
     std::map<uint32_t, set<uint32_t>> m_dependOnPhasesToTaskId{};
+    std::optional<Time> m_dependencyVisibilityDelay{};
+    std::optional<Time> m_minRemoteLinkDelay{};
 
     std::vector<TrafficRecord> CollectReadyTasksLocked();
 
     void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
+
+    bool HasDependenciesLocked() const;
+
+    Time ResolveCompletionVisibleDelayLocked() const;
+
+    void ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionVisibleTs);
 
     mutable std::mutex m_mutex;
 };

@@ -7,6 +7,8 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
+#include <map>
 #include <sstream>
 #ifdef NS3_MPI
 #include "ub-remote-link.h"
@@ -56,6 +58,145 @@ std::string
 DisplayFilename(const std::string& filename)
 {
     return std::filesystem::path(filename).filename().string();
+}
+
+std::pair<uint32_t, uint32_t>
+ParseUint32RangeField(const std::string& field)
+{
+    const size_t dotPos = field.find("..");
+    if (dotPos == std::string::npos)
+    {
+        const uint32_t value = static_cast<uint32_t>(std::stoul(field));
+        return {value, value};
+    }
+
+    const uint32_t start = static_cast<uint32_t>(std::stoul(field.substr(0, dotPos)));
+    const uint32_t end = static_cast<uint32_t>(std::stoul(field.substr(dotPos + 2)));
+    NS_ABORT_MSG_IF(start > end, "invalid numeric range: " << field);
+    return {start, end};
+}
+
+std::string
+FormatUint32Range(uint32_t start, uint32_t end)
+{
+    if (start == end)
+    {
+        return std::to_string(start);
+    }
+    return std::to_string(start) + ".." + std::to_string(end);
+}
+
+bool
+RangesOverlap(uint32_t leftStart, uint32_t leftEnd, uint32_t rightStart, uint32_t rightEnd)
+{
+    return leftStart <= rightEnd && rightStart <= leftEnd;
+}
+
+using RouteValueSignature = std::vector<std::pair<uint16_t, uint32_t>>;
+
+RouteValueSignature
+NormalizeRouteValue(const std::vector<uint16_t>& outports,
+                    const std::vector<uint32_t>& metrics,
+                    uint32_t rowNumber)
+{
+    NS_ABORT_MSG_IF(outports.size() != metrics.size(),
+                    "routing_table.csv row " << rowNumber
+                                             << " outports size not equal metrics size");
+    NS_ABORT_MSG_IF(outports.empty(),
+                    "routing_table.csv row " << rowNumber
+                                             << " must contain at least one outPort/metric pair");
+
+    std::map<uint16_t, uint32_t> metricByPort;
+    for (auto index = 0u; index < outports.size(); ++index)
+    {
+        auto [it, inserted] = metricByPort.emplace(outports[index], metrics[index]);
+        NS_ABORT_MSG_IF(!inserted && it->second != metrics[index],
+                        "routing_table.csv row "
+                            << rowNumber << " configures outPort " << outports[index]
+                            << " with multiple metrics");
+    }
+
+    RouteValueSignature value;
+    value.reserve(metricByPort.size());
+    for (const auto& [outport, metric] : metricByPort)
+    {
+        value.emplace_back(outport, metric);
+    }
+    return value;
+}
+
+struct RouteRangeCsvRow
+{
+    uint32_t rowNumber;
+    uint32_t nodeStart;
+    uint32_t nodeEnd;
+    uint32_t destStart;
+    uint32_t destEnd;
+    uint32_t destPort;
+    RouteValueSignature value;
+};
+
+void
+ValidateRouteRangeRowsNoConflicts(const std::vector<RouteRangeCsvRow>& rows)
+{
+    std::map<uint32_t, std::vector<const RouteRangeCsvRow*> > rowsByDestPort;
+    for (const auto& row : rows)
+    {
+        rowsByDestPort[row.destPort].push_back(&row);
+    }
+
+    for (auto& [destPort, portRows] : rowsByDestPort)
+    {
+        std::sort(portRows.begin(),
+                  portRows.end(),
+                  [](const RouteRangeCsvRow* left, const RouteRangeCsvRow* right) {
+                      if (left->nodeStart != right->nodeStart)
+                      {
+                          return left->nodeStart < right->nodeStart;
+                      }
+                      if (left->nodeEnd != right->nodeEnd)
+                      {
+                          return left->nodeEnd < right->nodeEnd;
+                      }
+                      return left->destStart < right->destStart;
+                  });
+
+        std::vector<const RouteRangeCsvRow*> activeRows;
+        for (const auto* row : portRows)
+        {
+            activeRows.erase(std::remove_if(activeRows.begin(),
+                                            activeRows.end(),
+                                            [row](const RouteRangeCsvRow* active) {
+                                                return active->nodeEnd < row->nodeStart;
+                                            }),
+                             activeRows.end());
+
+            for (const auto* active : activeRows)
+            {
+                if (active->value == row->value)
+                {
+                    continue;
+                }
+                if (!RangesOverlap(active->destStart, active->destEnd, row->destStart, row->destEnd))
+                {
+                    continue;
+                }
+
+                const uint32_t nodeOverlapStart = std::max(active->nodeStart, row->nodeStart);
+                const uint32_t nodeOverlapEnd = std::min(active->nodeEnd, row->nodeEnd);
+                const uint32_t destOverlapStart = std::max(active->destStart, row->destStart);
+                const uint32_t destOverlapEnd = std::min(active->destEnd, row->destEnd);
+                NS_ABORT_MSG("routing_table.csv compressed route conflict between rows "
+                             << active->rowNumber << " and " << row->rowNumber
+                             << " at nodeId="
+                             << FormatUint32Range(nodeOverlapStart, nodeOverlapEnd)
+                             << ", dstNodeId="
+                             << FormatUint32Range(destOverlapStart, destOverlapEnd)
+                             << ", dstPortId=" << destPort);
+            }
+            activeRows.push_back(row);
+        }
+    }
 }
 
 bool
@@ -1508,19 +1649,23 @@ void UbUtils::AddRoutingTable(const string &filename)
         NS_ASSERT_MSG(0, "Can not open File: " << filename);
     }
 
-    uint32_t node_id;
-    uint32_t destip;
+    uint32_t nodeStart;
+    uint32_t nodeEnd;
+    uint32_t destStart;
+    uint32_t destEnd;
     uint32_t destport;
     uint32_t outport;
     uint32_t metric;
+    uint32_t rowNumber = 1;
     std::string line;
     std::vector<uint16_t> outports;
-    std::vector<uint16_t> metrics;
+    std::vector<uint32_t> metrics;
+    std::vector<RouteRangeCsvRow> rangeRows;
 
     std::unordered_map<uint32_t, std::unordered_map<uint32_t, std::map<uint32_t, std::vector<uint16_t>>>> rtTable;
     getline(file, line);
     while (std::getline(file, line)) {
-        std::vector<std::string> row;
+        ++rowNumber;
         std::stringstream ss(line);
 
         // 跳过空行、#开头行、纯空格行
@@ -1529,9 +1674,9 @@ void UbUtils::AddRoutingTable(const string &filename)
         }
         std::string cell;
         std::getline(ss, cell, ',');
-        node_id = static_cast<uint32_t>(std::stoi(cell));
+        std::tie(nodeStart, nodeEnd) = ParseUint32RangeField(cell);
         std::getline(ss, cell, ',');
-        destip = static_cast<uint32_t>(std::stoi(cell));
+        std::tie(destStart, destEnd) = ParseUint32RangeField(cell);
         std::getline(ss, cell, ',');
         destport = static_cast<uint32_t>(std::stoi(cell));
         std::getline(ss, cell, ',');
@@ -1547,14 +1692,54 @@ void UbUtils::AddRoutingTable(const string &filename)
         while (sMetrics >> metric) {
             metrics.push_back(metric);
         }
-        if (outports.size() != metrics.size()) {
-            NS_ASSERT_MSG(0, "outports size not equal metrics size!" << filename);
+        const auto routeValue = NormalizeRouteValue(outports, metrics, rowNumber);
+        const bool isRangeRoute = nodeStart != nodeEnd || destStart != destEnd;
+        if (!isRangeRoute) {
+            Ipv4Address ip_node = NodeIdToIp(destStart);
+            Ipv4Address ip_nodePort = NodeIdToIp(destStart, destport);
+            for (auto i = 0u; i < outports.size(); i++) {
+                rtTable[nodeStart][ip_node.Get()][metrics[i]].push_back(outports[i]);
+                rtTable[nodeStart][ip_nodePort.Get()][metrics[i]].push_back(outports[i]);
+            }
+            continue;
         }
-        Ipv4Address ip_node = NodeIdToIp(destip);
-        Ipv4Address ip_nodePort = NodeIdToIp(destip, destport);
-        for (auto i = 0u; i < outports.size(); i++) {
-            rtTable[node_id][ip_node.Get()][metrics[i]].push_back(outports[i]);
-            rtTable[node_id][ip_nodePort.Get()][metrics[i]].push_back(outports[i]);
+
+        rangeRows.push_back(RouteRangeCsvRow{rowNumber,
+                                             nodeStart,
+                                             nodeEnd,
+                                             destStart,
+                                             destEnd,
+                                             destport,
+                                             routeValue});
+    }
+    ValidateRouteRangeRowsNoConflicts(rangeRows);
+    for (const auto& row : rangeRows) {
+        const uint32_t nodeStart = row.nodeStart;
+        const uint32_t nodeEnd = row.nodeEnd;
+        const uint32_t destStart = row.destStart;
+        const uint32_t destEnd = row.destEnd;
+        const uint32_t destport = row.destPort;
+        for (uint32_t nodeId = nodeStart;; ++nodeId) {
+            auto rt = NodeList::GetNode(nodeId)->GetObject<ns3::UbSwitch>()->GetRoutingProcess();
+            const auto minMetricIt =
+                std::min_element(row.value.begin(),
+                                 row.value.end(),
+                                 [](const auto& left, const auto& right) {
+                                     return left.second < right.second;
+                                 });
+            NS_ASSERT_MSG(minMetricIt != row.value.end(), "compressed route row must contain metrics");
+            const uint32_t shortestMetric = minMetricIt->second;
+            for (const auto& [outport, metric] : row.value) {
+                std::vector<uint16_t> outPortGroup = {outport};
+                if (metric == shortestMetric) {
+                    rt->AddShortestRouteRange(destStart, destEnd, destport, outPortGroup);
+                } else {
+                    rt->AddOtherRouteRange(destStart, destEnd, destport, outPortGroup);
+                }
+            }
+            if (nodeId == nodeEnd) {
+                break;
+            }
         }
     }
     for (auto &nodert : rtTable) {

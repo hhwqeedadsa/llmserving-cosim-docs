@@ -240,14 +240,14 @@ The generated `generate_topology.py` should use different bandwidth/delay values
 
 | Topology family | Recommended max hosts | Notes |
 |-----------------|----------------------|-------|
-| `ring` | ~1000 | Route generation is O(N²) |
+| `ring` | ~1000 | Prefer generic compressed route generation; route search remains O(N²) |
 | `full-mesh` | ~100 | Link count is O(N²); route table and transport_channel.csv grow quickly |
 | `nd-full-mesh` | ~256 (e.g. 16×16) | Same concern as full-mesh |
-| `clos-spine-leaf` | ~10000 | Route generation with `multiple_workers=4+` is manageable; main bottleneck is all-pairs shortest paths |
+| `clos-spine-leaf` | ~10000 | Use compressed Clos route generation; avoid all-pairs shortest paths and precomputed TP mappings |
 | `clos-fat-tree` | ~10000 | Same as clos-spine-leaf with derived parameters |
-| `custom-graph` | Depends on density | Sparse graphs scale better; dense graphs hit O(N²) routing |
+| `custom-graph` | Depends on density | Sparse graphs should use generic compressed route generation; dense graphs still hit O(N²) routing |
 
-For topologies beyond ~1000 hosts, warn the user that route generation may take minutes to tens of minutes. Suggest increasing `multiple_workers` (e.g. 8 or 16) for large graphs. For topologies beyond ~10000 hosts, expect significant memory usage for routing tables and CSV files.
+For topologies beyond ~1000 hosts, warn the user that route search may take minutes to tens of minutes. For two-layer Clos, use the specialized compressed route generator. For non-Clos sparse topologies, use `gen_compressed_route_table(...)` and on-demand TP creation; it avoids storing all paths and avoids dense route matrices, but it cannot remove the inherent host-pair path-search cost.
 
 ### Parameter constraint validation
 
@@ -293,9 +293,8 @@ graph.add_netisim_edge(u, v, bandwidth='400Gbps', delay='20ns', edge_count=1)
 
 # Generate config files
 graph.build_graph_config()
-graph.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
-graph.config_transport_channel(priority_list=[7, 8])
-graph.write_config()
+graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)
+graph.write_config(include_transport=False)
 ```
 
 ### Common parameters
@@ -306,6 +305,9 @@ graph.write_config()
 - `priority_list`: TP priority list, e.g. `[7, 8]`
 - `path_finding_algo`: routing algorithm function, default `nx.all_shortest_paths`
 - `multiple_workers`: parallel workers for routing, e.g. `4`
+- `gen_compressed_route_table(path_finding_algo=...)`: generic streaming route generator; emits compressed `a..b` ranges where identical route rules occur and avoids storing all paths or a dense route matrix.
+- `gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)`: preferred two-layer Clos route generator; emits compressed `a..b` destination ranges and avoids all host-pair path enumeration.
+- `write_config(include_transport=False)`: write node/topology without `transport_channel.csv`; recommended with compressed routes and on-demand TP generation for large cases.
 
 ### Node numbering constraint
 
@@ -332,13 +334,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "scratch/ns-3-ub-tools"))
 
 import net_sim_builder as netsim
-import networkx as nx
-
-def all_shortest_paths(G, source, target):
-    try:
-        return nx.all_shortest_paths(G, source, target)
-    except nx.NetworkXNoPath:
-        return []
 
 if __name__ == '__main__':
     graph = netsim.NetworkSimulationGraph()
@@ -376,9 +371,8 @@ if __name__ == '__main__':
 
     # Generate config files
     graph.build_graph_config()
-    graph.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
-    graph.config_transport_channel(priority_list=[7, 8])
-    graph.write_config()
+    graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)
+    graph.write_config(include_transport=False)
 ```
 
 ### Pattern: `nd-full-mesh`

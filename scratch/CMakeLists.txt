@@ -77,13 +77,28 @@ endfunction()
 file(GLOB single_source_file_scratches CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/[^.]*.cc)
 list(REMOVE_ITEM single_source_file_scratches ${CMAKE_CURRENT_SOURCE_DIR}/ub-quick-example.cc)
 
+set(ub_quick_example_libraries
+    ${libunified-bus}
+    ${libcore}
+    ${libconfig-store}
+    ${libpoint-to-point}
+)
+
+if(${ENABLE_MTP})
+  list(APPEND ub_quick_example_libraries ${libmtp})
+endif()
+
+if(${ENABLE_MPI})
+  list(APPEND ub_quick_example_libraries ${libmpi})
+endif()
+
 build_exec(
         EXECNAME ub-quick-example
         EXECNAME_PREFIX scratch_
         SOURCE_FILES
           ${CMAKE_CURRENT_SOURCE_DIR}/ub-quick-example.cc
           ${PROJECT_SOURCE_DIR}/src/unified-bus/examples/ub-case-runner.cc
-        LIBRARIES_TO_LINK "${ns3-libs}" "${ns3-contrib-libs}"
+        LIBRARIES_TO_LINK ${ub_quick_example_libraries}
         EXECUTABLE_DIRECTORY_PATH ${CMAKE_OUTPUT_DIRECTORY}/scratch/
 )
 

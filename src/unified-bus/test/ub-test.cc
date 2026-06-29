@@ -795,6 +795,84 @@ public:
     }
 };
 
+class UbRoutingProcessRangeRouteTest : public TestCase
+{
+public:
+    UbRoutingProcessRangeRouteTest()
+        : TestCase("UnifiedBus - routing process resolves compressed destination ranges")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<UbRoutingProcess> routing = CreateObject<UbRoutingProcess>();
+        std::vector<uint16_t> rangePorts = {2, 3};
+        std::vector<uint16_t> exactPorts = {7};
+
+        routing->AddShortestRouteRange(100, 199, rangePorts);
+        routing->AddShortestRoute(NodeIdToIp(123).Get(), exactPorts);
+
+        std::vector<uint16_t> outPorts;
+        routing->GetShortestOutPorts(NodeIdToIp(101).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 2u, "range route should resolve inner host");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "range route should preserve first output port");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[1], 3u, "range route should preserve second output port");
+
+        routing->GetShortestOutPorts(NodeIdToIp(101, 0).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 2u, "range route should resolve port-scoped host IP");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "port-scoped range route should preserve first output port");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[1], 3u, "port-scoped range route should preserve second output port");
+
+        outPorts = routing->GetAllOutPorts(NodeIdToIp(101, 0).Get());
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 2u, "all route lookup should include range ports");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "all route lookup should preserve first range port");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[1], 3u, "all route lookup should preserve second range port");
+
+        routing->GetShortestOutPorts(NodeIdToIp(123).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 1u, "exact route should override range route");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 7u, "exact route should keep configured output port");
+
+        routing->GetShortestOutPorts(NodeIdToIp(250).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.empty(), true, "outside range should not resolve");
+
+        Ptr<UbRoutingProcess> overlapRouting = CreateObject<UbRoutingProcess>();
+        overlapRouting->AddShortestRouteRange(100, 199, std::vector<uint16_t>{2});
+        overlapRouting->AddShortestRouteRange(150, 160, std::vector<uint16_t>{3});
+
+        overlapRouting->GetShortestOutPorts(NodeIdToIp(149).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 1u, "overlap route should keep prefix range");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "overlap route should keep original prefix port");
+
+        overlapRouting->GetShortestOutPorts(NodeIdToIp(150).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 2u, "overlap route should merge inner range ports");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "overlap route should keep existing inner port");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[1], 3u, "overlap route should add new inner port");
+
+        overlapRouting->GetShortestOutPorts(NodeIdToIp(161).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 1u, "overlap route should keep suffix range");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 2u, "overlap route should keep original suffix port");
+
+        Ptr<UbRoutingProcess> portRouting = CreateObject<UbRoutingProcess>();
+        portRouting->AddShortestRouteRange(100, 199, 2, std::vector<uint16_t>{9});
+        portRouting->AddShortestRouteRange(100, 199, 0, std::vector<uint16_t>{4});
+
+        portRouting->GetShortestOutPorts(NodeIdToIp(101, 2).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 1u, "port-specific range route should resolve matching port");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 9u, "port-specific range route should keep matching port route");
+
+        portRouting->GetShortestOutPorts(NodeIdToIp(101, 0).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(), 1u, "port 0 range should not use port 2 route");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 4u, "port 0 range should use default node route");
+
+        portRouting->GetShortestOutPorts(NodeIdToIp(101).Get(), outPorts);
+        NS_TEST_ASSERT_MSG_EQ(outPorts.size(),
+                              2u,
+                              "primary node IP should aggregate all destination-port range routes");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[0], 4u, "primary node IP should include port 0 route");
+        NS_TEST_ASSERT_MSG_EQ(outPorts[1], 9u, "primary node IP should include port 2 route");
+    }
+};
+
 class UbDcqcnCnpHeaderRoundTripTest : public TestCase
 {
 public:
@@ -7414,6 +7492,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbTransportTpsackCcReportsRetransmitBytesOnceTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnCnpOpcodeIsValidTransportOpcodeTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbRoutingProcessRangeRouteTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnSwitchDoesNotRemarkMarkedFecnTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnSenderCutsRateOnCnpTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnCnpDoesNotAdvanceAckStateTest(), TestCase::Duration::QUICK);

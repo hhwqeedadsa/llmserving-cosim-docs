@@ -54,13 +54,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "scratch/ns-3-ub-tools"))
 
 import net_sim_builder as netsim
-import networkx as nx
-
-def all_shortest_paths(G, source, target):
-    try:
-        return nx.all_shortest_paths(G, source, target)
-    except nx.NetworkXNoPath:
-        return []
 
 if __name__ == '__main__':
     graph = netsim.NetworkSimulationGraph()
@@ -98,9 +91,8 @@ if __name__ == '__main__':
 
     # Generate config files
     graph.build_graph_config()
-    graph.gen_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
-    graph.config_transport_channel(priority_list=[7, 8])
-    graph.write_config()
+    graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)
+    graph.write_config(include_transport=False)
 ```
 
 **Then run:**
@@ -259,16 +251,19 @@ If the user requests a value for an enum parameter, verify it against the C++ so
 
 - `routing_algorithm` maps to `default ns3::UbRoutingProcess::RoutingAlgorithm "..."`
 - `use_shortest_paths` maps to the corresponding shortest-path toggles in the case attributes
-- `path_source = auto-path-finder` means the topology script should call `graph.gen_route_table(...)`
+- `path_source = auto-path-finder` means the topology script should call `graph.gen_compressed_route_table(...)` for large or non-template sparse cases; keep `graph.gen_route_table(...)` for small cases that explicitly need exact routes plus precomputed transport channels.
+- For `clos-spine-leaf` and `clos-fat-tree`, prefer `graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)` instead of generic path enumeration; it emits range-compressed `routing_table.csv` entries and avoids host-pair path explosion.
 - `path_source = manual-route-table` means the topology script should use `graph.set_route_table(...)` for bounded route entries or directly write `routing_table.csv`
+
+`routing_table.csv` supports compressed ranges in `nodeId` and `dstNodeId` using `a..b`. Runtime exact routes win over range routes. Range routes match port-scoped destination IPs by converting the packet destination IP back to node ID and then checking the destination-port bucket. The generic compressed generator compresses each `dstPortId` independently; conflicting overlapping range rows for the same `dstPortId` are rejected when they produce different outPorts/metrics.
 
 When the user asks for a non-template topology but provides bounded node/link facts, use the `custom-graph` pattern from `topology-options.md` instead of rejecting the request.
 
 ## Transport Channel Mode Slot → Case Expectations
 
 - Default to `on-demand`; do not ask the user to preconfigure TP mappings unless they explicitly want fixed TP ids / priorities / endpoint pairs.
-- `precomputed`: topology generation should call `config_transport_channel(...)` and the case checker should require `transport_channel.csv`
-- `on-demand`: `transport_channel.csv` may be omitted; the case checker must not fail solely because that file is absent
+- `precomputed`: topology generation should call `config_transport_channel(...)` and `graph.write_config(include_transport=True)`; the case checker should require `transport_channel.csv`
+- `on-demand`: `transport_channel.csv` may be omitted; topology generation should call `graph.write_config(include_transport=False)` so large cases do not precompute host-pair TP mappings. Compressed route generators require this mode.
 
 ## Observability Slot → Observability Overrides
 
@@ -295,7 +290,7 @@ Refer to `trace-observability.md` for tier semantics and safe wording constraint
 ## Execution
 
 ```bash
-./ns3 run 'scratch/ub-quick-example --case-path={case_dir}'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path={case_dir}'
 ```
 
 Optional runtime switches (not part of experiment definition):

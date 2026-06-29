@@ -34,6 +34,13 @@
 
 🧩 **UB Config-Driven Entry**: See [scratch/README.md](scratch/README.md)
 
+```bash
+BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
+python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
+```
+
 ## Project Overview
 
 `ns-3-UB` is an ns-3 simulation module built based on the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh). It implements the protocol frameworks and stack including the function layer, transaction layer, transport layer, network layer, and data link layer defined in the UB Base Specification. This project aims to provide a simulation platform for protocol innovation, network architecture exploration, and research on network algorithms such as congestion control, flow control, load balancing, and routing algorithms.

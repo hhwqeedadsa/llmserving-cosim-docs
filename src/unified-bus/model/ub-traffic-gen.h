@@ -18,6 +18,7 @@
 #include "ub-network-address.h"
 
 class UbTrafficGenPhaseDependencyMemoryTest;
+class UbTrafficGenSparseTaskIdFallbackTest;
 
 using namespace utils;
 namespace ns3 {
@@ -76,6 +77,7 @@ public:
 
   private:
     friend class ::UbTrafficGenPhaseDependencyMemoryTest;
+    friend class ::UbTrafficGenSparseTaskIdFallbackTest;
 
     enum class TaskState {
         PENDING,
@@ -101,6 +103,11 @@ public:
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
     std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
     std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
+    bool m_useDenseTaskState{true};
+    std::vector<uint8_t> m_denseTaskPresent{};
+    std::vector<TaskState> m_denseTaskStates{};
+    std::vector<uint32_t> m_denseTaskPhaseIds{};
+    std::vector<uint32_t> m_densePendingPhaseCounts{};
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::set<uint32_t> m_readyTasks{};
 
@@ -109,6 +116,26 @@ public:
     void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    void SwitchDenseTaskStateToMapLocked();
+
+    bool HasTaskStateLocked(uint32_t taskId) const;
+
+    TaskState* FindTaskStateLocked(uint32_t taskId);
+
+    void SetTaskStateLocked(uint32_t taskId, TaskState state);
+
+    uint32_t* FindTaskPhaseLocked(uint32_t taskId);
+
+    bool HasTaskPhaseLocked(uint32_t taskId) const;
+
+    void SetTaskPhaseLocked(uint32_t taskId, uint32_t phaseId);
+
+    uint32_t GetPendingPhaseCountLocked(uint32_t taskId) const;
+
+    bool DecrementPendingPhaseCountLocked(uint32_t taskId);
+
+    void SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count);
 
     uint64_t GetDependencyReferenceCountForTesting() const;
 

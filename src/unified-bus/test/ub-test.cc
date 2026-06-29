@@ -643,6 +643,51 @@ class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
     }
 };
 
+class UbTrafficGenSparseTaskIdFallbackTest : public TestCase
+{
+  public:
+    UbTrafficGenSparseTaskIdFallbackTest()
+        : TestCase("UnifiedBus - traffic generator preserves dependencies for sparse task ids")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+
+        TrafficRecord dependency;
+        dependency.taskId = 0;
+        dependency.sourceNode = 0;
+        dependency.phaseId = 10;
+        gen.SetPhaseDepend(dependency.phaseId, dependency.taskId);
+        gen.AddTask(dependency);
+
+        TrafficRecord dependent;
+        dependent.taskId = 10;
+        dependent.sourceNode = 0;
+        dependent.phaseId = 20;
+        dependent.dependOnPhases.push_back(10);
+        gen.SetPhaseDepend(dependent.phaseId, dependent.taskId);
+        gen.AddTask(dependent);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(dependent.taskId),
+                              1u,
+                              "sparse dependent task should wait for its dependency phase");
+
+        gen.ScheduleNextTasks();
+        gen.MarkTaskCompleted(dependency.taskId);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(dependent.taskId),
+                              0u,
+                              "sparse dependent task should be released after dependency phase "
+                              "completes");
+        Simulator::Destroy();
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7504,6 +7549,7 @@ UbTestSuite::UbTestSuite()
 {
     AddTestCase(new UbFunctionalityTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenPhaseDependencyMemoryTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenSparseTaskIdFallbackTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);

@@ -54,6 +54,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "scratch/ns-3-ub-tools"))
 
 import net_sim_builder as netsim
+import networkx as nx
+
+def all_shortest_paths(G, source, target):
+    try:
+        return nx.all_shortest_paths(G, source, target)
+    except nx.NetworkXNoPath:
+        return []
 
 if __name__ == '__main__':
     graph = netsim.NetworkSimulationGraph()
@@ -91,7 +98,7 @@ if __name__ == '__main__':
 
     # Generate config files
     graph.build_graph_config()
-    graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)
+    graph.gen_compressed_route_table(path_finding_algo=all_shortest_paths, multiple_workers=4)
     graph.write_config(include_transport=False)
 ```
 
@@ -251,11 +258,12 @@ If the user requests a value for an enum parameter, verify it against the C++ so
 
 - `routing_algorithm` maps to `default ns3::UbRoutingProcess::RoutingAlgorithm "..."`
 - `use_shortest_paths` maps to the corresponding shortest-path toggles in the case attributes
-- `path_source = auto-path-finder` means the topology script should call `graph.gen_compressed_route_table(...)` for large or non-template sparse cases; keep `graph.gen_route_table(...)` for small cases that explicitly need exact routes plus precomputed transport channels.
-- For `clos-spine-leaf` and `clos-fat-tree`, prefer `graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)` instead of generic path enumeration; it emits range-compressed `routing_table.csv` entries and avoids host-pair path explosion.
+- `path_source = auto-path-finder` means the topology script should call `graph.gen_compressed_route_table(...)` by default for new cases.
+- `graph.gen_route_table(...)` is only for cases that explicitly need exact per-destination rows plus precomputed transport channels.
+- `graph.gen_2layer_clos_compressed_route_table(host_num, leaf_sw_num)` is an explicit two-layer Clos optimization, not the default new-case path.
 - `path_source = manual-route-table` means the topology script should use `graph.set_route_table(...)` for bounded route entries or directly write `routing_table.csv`
 
-`routing_table.csv` supports compressed ranges in `nodeId` and `dstNodeId` using `a..b`. Runtime exact routes win over range routes. Range routes match port-scoped destination IPs by converting the packet destination IP back to node ID and then checking the destination-port bucket. The generic compressed generator compresses each `dstPortId` independently; conflicting overlapping range rows for the same `dstPortId` are rejected when they produce different outPorts/metrics.
+`routing_table.csv` supports compressed ranges in `nodeId` and `dstNodeId` using `a..b`. Runtime exact routes win over range routes. Range routes match port-scoped destination IPs by converting the packet destination IP back to node ID, while still using `dstPortId` as part of the route key. The generic compressed generator compresses each `dstPortId` independently and rejects conflicting range overlaps instead of silently choosing one route.
 
 When the user asks for a non-template topology but provides bounded node/link facts, use the `custom-graph` pattern from `topology-options.md` instead of rejecting the request.
 

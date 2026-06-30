@@ -10,6 +10,7 @@
 #include <limits>
 #include <map>
 #include <sstream>
+#include <string_view>
 #ifdef NS3_MPI
 #include "ub-remote-link.h"
 #include "ns3/mpi-interface.h"
@@ -74,6 +75,99 @@ ParseUint32Field(const std::string& line, size_t valueStart, size_t valueEnd)
         value = value * 10 + digit;
     }
     return value;
+}
+
+uint32_t
+ParseUint32Field(std::string_view field)
+{
+    NS_ABORT_MSG_IF(field.empty(), "Missing uint32 field in traffic.csv");
+    uint32_t value = 0;
+    for (char c : field)
+    {
+        NS_ABORT_MSG_IF(c < '0' || c > '9', "Invalid uint32 field in traffic.csv");
+        const uint32_t digit = static_cast<uint32_t>(c - '0');
+        NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
+                        "traffic.csv uint32 field overflow");
+        value = value * 10 + digit;
+    }
+    return value;
+}
+
+std::string_view
+TrimField(std::string_view field)
+{
+    while (!field.empty() && (field.front() == ' ' || field.front() == '\t'))
+    {
+        field.remove_prefix(1);
+    }
+    while (!field.empty() && (field.back() == ' ' || field.back() == '\t'))
+    {
+        field.remove_suffix(1);
+    }
+    return field;
+}
+
+void
+AppendDependencyPhases(std::string_view field, TrafficRecord& record)
+{
+    while (!field.empty())
+    {
+        while (!field.empty() &&
+               (field.front() == ' ' || field.front() == '\t' || field.front() == '\r'))
+        {
+            field.remove_prefix(1);
+        }
+        if (field.empty())
+        {
+            break;
+        }
+
+        size_t tokenEnd = 0;
+        while (tokenEnd < field.size() && field[tokenEnd] != ' ' && field[tokenEnd] != '\t' &&
+               field[tokenEnd] != '\r')
+        {
+            ++tokenEnd;
+        }
+
+        record.dependOnPhases.push_back(ParseUint32Field(field.substr(0, tokenEnd)));
+        field.remove_prefix(tokenEnd);
+    }
+}
+
+void
+SetTrafficRecordField(int fieldCount, std::string_view rawField, TrafficRecord& record)
+{
+    const std::string_view field = TrimField(rawField);
+    switch (fieldCount)
+    {
+    case 0:
+        record.taskId = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 1:
+        record.sourceNode = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 2:
+        record.destNode = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 3:
+        record.dataSize = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 4:
+        record.opType.assign(field.data(), field.size());
+        break;
+    case 5:
+        record.priority = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 6:
+        record.delay.assign(field.data(), field.size());
+        break;
+    case 7:
+        record.phaseId = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 8:
+        AppendDependencyPhases(field, record);
+        break;
+    }
 }
 
 std::pair<uint32_t, uint32_t>
@@ -2029,19 +2123,29 @@ UbUtils::ForEachTrafficRecordInternal(const string& filename,
     string line;
     getline(file, line);  // 跳过标题行
     while (getline(file, line)) {
-        stringstream ss(line);
         if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
             continue;
         }
-        string field;
+
         TrafficRecord record;
         int fieldCount = 0;
-        while (getline(ss, field, ',')) {
-            // 去除字段前后的空格
-            field.erase(0, field.find_first_not_of(" \t"));
-            field.erase(field.find_last_not_of(" \t") + 1);
-            SetRecord(fieldCount, field, record);
-            fieldCount++;
+        size_t fieldStart = 0;
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            SetTrafficRecordField(fieldCount,
+                                  std::string_view(line).substr(fieldStart,
+                                                                fieldEnd - fieldStart),
+                                  record);
+            ++fieldCount;
+
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
         }
         callback(record);
     }

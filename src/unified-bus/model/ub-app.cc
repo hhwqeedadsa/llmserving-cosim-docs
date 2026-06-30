@@ -77,6 +77,11 @@ void UbApp::DoDispose(void)
 
 void UbApp::SendTraffic(TrafficRecord record)
 {
+    NS_ABORT_MSG_IF(record.priority < 0 ||
+                        static_cast<uint32_t>(record.priority) > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+
     UbTrafficGen::RuntimeTask task;
     task.taskId = static_cast<uint32_t>(record.taskId);
     task.sourceNode = static_cast<uint32_t>(record.sourceNode);

@@ -284,6 +284,11 @@ UbTrafficGen::RegisterSourceAppDuringInitialLoad(uint32_t sourceNode, Ptr<UbApp>
 UbTrafficGen::RuntimeTask
 UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
 {
+    NS_ABORT_MSG_IF(record.priority < 0 ||
+                        static_cast<uint32_t>(record.priority) > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+
     RuntimeTask task;
     task.taskId = static_cast<uint32_t>(record.taskId);
     task.sourceNode = static_cast<uint32_t>(record.sourceNode);
@@ -300,6 +305,10 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
 UbTrafficGen::RuntimeTask
 UbTrafficGen::ConvertToRuntimeTask(const TrafficRecordView& record)
 {
+    NS_ABORT_MSG_IF(record.priority > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+
     RuntimeTask task;
     task.taskId = record.taskId;
     task.sourceNode = record.sourceNode;

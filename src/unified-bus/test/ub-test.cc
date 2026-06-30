@@ -598,6 +598,11 @@ class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
             TrafficRecord record;
             record.taskId = taskId;
             record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
             record.phaseId = kDependencyPhase;
             gen.SetPhaseDepend(record.phaseId, record.taskId);
             gen.AddTask(record);
@@ -608,6 +613,11 @@ class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
             TrafficRecord record;
             record.taskId = taskId;
             record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
             record.phaseId = kDependentPhase;
             record.dependOnPhases.push_back(kDependencyPhase);
             gen.SetPhaseDepend(record.phaseId, record.taskId);
@@ -661,6 +671,11 @@ class UbTrafficGenSparseTaskIdFallbackTest : public TestCase
         TrafficRecord dependency;
         dependency.taskId = 0;
         dependency.sourceNode = 0;
+        dependency.destNode = 0;
+        dependency.dataSize = 64;
+        dependency.opType = "URMA_WRITE";
+        dependency.priority = 1;
+        dependency.delay = "0ns";
         dependency.phaseId = 10;
         gen.SetPhaseDepend(dependency.phaseId, dependency.taskId);
         gen.AddTask(dependency);
@@ -668,6 +683,11 @@ class UbTrafficGenSparseTaskIdFallbackTest : public TestCase
         TrafficRecord dependent;
         dependent.taskId = 10;
         dependent.sourceNode = 0;
+        dependent.destNode = 0;
+        dependent.dataSize = 64;
+        dependent.opType = "URMA_WRITE";
+        dependent.priority = 1;
+        dependent.delay = "0ns";
         dependent.phaseId = 20;
         dependent.dependOnPhases.push_back(10);
         gen.SetPhaseDepend(dependent.phaseId, dependent.taskId);
@@ -9205,6 +9225,39 @@ class UbQuickExampleLocalDependentDagMtpRedSystemTest : public TestCase
     }
 };
 
+class UbQuickExampleInvalidTrafficPrioritySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleInvalidTrafficPrioritySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example rejects out-of-range traffic priority")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,256,10ns,10,\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test",
+                                               "",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "out-of-range traffic priority should fail the run");
+        NS_TEST_ASSERT_MSG_NE(output.find("Invalid priority field in traffic.csv"),
+                              std::string::npos,
+                              "traffic priority diagnostic should name the invalid field");
+    }
+};
+
 #ifdef NS3_MPI
 class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
 {
@@ -9308,6 +9361,8 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleLocalDependentDagSingleThreadSystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalDependentDagMtpRedSystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleInvalidTrafficPrioritySystemTest(),
                     TestCase::Duration::QUICK);
 #ifdef NS3_MTP
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);

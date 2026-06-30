@@ -95,6 +95,16 @@ ParseUint32Field(std::string_view field)
     return value;
 }
 
+uint8_t
+ParseTrafficPriorityField(std::string_view field)
+{
+    const uint32_t priority = ParseUint32Field(field);
+    NS_ABORT_MSG_IF(priority > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+    return static_cast<uint8_t>(priority);
+}
+
 std::string_view
 TrimField(std::string_view field)
 {
@@ -158,7 +168,7 @@ SetTrafficRecordField(int fieldCount, std::string_view rawField, TrafficRecord& 
         record.opType.assign(field.data(), field.size());
         break;
     case 5:
-        record.priority = static_cast<int>(ParseUint32Field(field));
+        record.priority = static_cast<int>(ParseTrafficPriorityField(field));
         break;
     case 6:
         record.delay.assign(field.data(), field.size());
@@ -396,7 +406,7 @@ SetTrafficRecordViewField(int fieldCount, std::string_view rawField, TrafficReco
         record.opType = field;
         break;
     case 5:
-        record.priority = static_cast<uint8_t>(ParseUint32Field(field));
+        record.priority = ParseTrafficPriorityField(field);
         break;
     case 6:
         record.delay = field;
@@ -2020,7 +2030,7 @@ void UbUtils::SetRecord(int fieldCount, string field, TrafficRecord &record)
             record.opType = field;
             break;
         case FIELDCOUNT::PRIORITY:
-            record.priority = stoi(field);
+            record.priority = static_cast<int>(ParseTrafficPriorityField(field));
             break;
         case FIELDCOUNT::DELAY:
             record.delay = field;

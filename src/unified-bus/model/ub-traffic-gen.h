@@ -20,6 +20,7 @@
 class UbTrafficGenPhaseDependencyMemoryTest;
 class UbTrafficGenSparseTaskIdFallbackTest;
 class UbTrafficGenReserveHintTest;
+class UbTrafficGenDenseTaskStoreTest;
 
 using namespace utils;
 namespace ns3 {
@@ -82,6 +83,7 @@ public:
     friend class ::UbTrafficGenPhaseDependencyMemoryTest;
     friend class ::UbTrafficGenSparseTaskIdFallbackTest;
     friend class ::UbTrafficGenReserveHintTest;
+    friend class ::UbTrafficGenDenseTaskStoreTest;
 
     enum class TaskState {
         PENDING,
@@ -104,6 +106,9 @@ public:
     };
 
     std::unordered_map<uint32_t, TrafficRecord> m_tasks{};
+    bool m_useDenseTaskStore{true};
+    std::vector<uint8_t> m_denseTaskStorePresent{};
+    std::vector<TrafficRecord> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
     std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
     std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
@@ -120,6 +125,16 @@ public:
     void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    void SwitchDenseTaskStoreToMapLocked();
+
+    bool HasTaskLocked(uint32_t taskId) const;
+
+    TrafficRecord* FindTaskLocked(uint32_t taskId);
+
+    const TrafficRecord* FindTaskLocked(uint32_t taskId) const;
+
+    bool SetTaskLocked(const TrafficRecord& record);
 
     void SwitchDenseTaskStateToMapLocked();
 
@@ -144,6 +159,10 @@ public:
     uint64_t GetDependencyReferenceCountForTesting() const;
 
     uint32_t GetPendingPhaseCountForTesting(uint32_t taskId) const;
+
+    bool IsUsingDenseTaskStoreForTesting() const;
+
+    uint32_t GetStoredTaskCountForTesting() const;
 
     mutable std::mutex m_mutex;
 };

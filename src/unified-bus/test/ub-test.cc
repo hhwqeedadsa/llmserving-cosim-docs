@@ -736,6 +736,47 @@ class UbTrafficGenReserveHintTest : public TestCase
     }
 };
 
+class UbTrafficGenDenseTaskStoreTest : public TestCase
+{
+  public:
+    UbTrafficGenDenseTaskStoreTest()
+        : TestCase("UnifiedBus - traffic generator stores contiguous tasks densely")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(2, 1);
+
+        for (uint32_t taskId = 0; taskId < 2; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = taskId + 1;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetStoredTaskCountForTesting(),
+                              2u,
+                              "two tasks should be stored");
+        NS_TEST_ASSERT_MSG_EQ(gen.IsUsingDenseTaskStoreForTesting(),
+                              true,
+                              "contiguous task ids should use dense task store");
+        Simulator::Destroy();
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7599,6 +7640,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbTrafficGenPhaseDependencyMemoryTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenSparseTaskIdFallbackTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenReserveHintTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenDenseTaskStoreTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);

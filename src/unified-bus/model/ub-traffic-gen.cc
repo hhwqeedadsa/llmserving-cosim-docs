@@ -52,11 +52,10 @@ void UbTrafficGen::AddTask(TrafficRecord record)
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
     uint32_t taskId = record.taskId;
-    if (m_tasks.find(taskId) != m_tasks.end()) {
+    if (!SetTaskLocked(record)) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
-    m_tasks[taskId] = record;
     RegisterTaskPhaseLocked(record.phaseId, taskId);
 
     uint32_t pendingPhaseCount = 0;
@@ -105,11 +104,98 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
 
     if (maxTaskId != std::numeric_limits<uint32_t>::max()) {
         const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
+        m_denseTaskStorePresent.reserve(denseReserve);
+        m_denseTasks.reserve(denseReserve);
         m_denseTaskPresent.reserve(denseReserve);
         m_denseTaskStates.reserve(denseReserve);
         m_denseTaskPhaseIds.reserve(denseReserve);
         m_densePendingPhaseCounts.reserve(denseReserve);
     }
+}
+
+void
+UbTrafficGen::SwitchDenseTaskStoreToMapLocked()
+{
+    if (!m_useDenseTaskStore) {
+        return;
+    }
+
+    for (uint32_t taskId = 0; taskId < m_denseTaskStorePresent.size(); ++taskId) {
+        if (m_denseTaskStorePresent[taskId] != 0) {
+            m_tasks[taskId] = m_denseTasks[taskId];
+        }
+    }
+
+    m_denseTaskStorePresent.clear();
+    m_denseTasks.clear();
+    m_useDenseTaskStore = false;
+}
+
+bool
+UbTrafficGen::HasTaskLocked(uint32_t taskId) const
+{
+    if (m_useDenseTaskStore) {
+        return taskId < m_denseTaskStorePresent.size() && m_denseTaskStorePresent[taskId] != 0;
+    }
+    return m_tasks.find(taskId) != m_tasks.end();
+}
+
+TrafficRecord*
+UbTrafficGen::FindTaskLocked(uint32_t taskId)
+{
+    if (m_useDenseTaskStore) {
+        if (taskId >= m_denseTaskStorePresent.size() ||
+            m_denseTaskStorePresent[taskId] == 0) {
+            return nullptr;
+        }
+        return &m_denseTasks[taskId];
+    }
+
+    auto taskIt = m_tasks.find(taskId);
+    if (taskIt == m_tasks.end()) {
+        return nullptr;
+    }
+    return &taskIt->second;
+}
+
+const TrafficRecord*
+UbTrafficGen::FindTaskLocked(uint32_t taskId) const
+{
+    if (m_useDenseTaskStore) {
+        if (taskId >= m_denseTaskStorePresent.size() ||
+            m_denseTaskStorePresent[taskId] == 0) {
+            return nullptr;
+        }
+        return &m_denseTasks[taskId];
+    }
+
+    auto taskIt = m_tasks.find(taskId);
+    if (taskIt == m_tasks.end()) {
+        return nullptr;
+    }
+    return &taskIt->second;
+}
+
+bool
+UbTrafficGen::SetTaskLocked(const TrafficRecord& record)
+{
+    const uint32_t taskId = record.taskId;
+    if (HasTaskLocked(taskId)) {
+        return false;
+    }
+
+    if (m_useDenseTaskStore) {
+        if (taskId == m_denseTaskStorePresent.size()) {
+            m_denseTaskStorePresent.push_back(1);
+            m_denseTasks.push_back(record);
+            return true;
+        }
+
+        SwitchDenseTaskStoreToMapLocked();
+    }
+
+    m_tasks[taskId] = record;
+    return true;
 }
 
 void
@@ -309,9 +395,9 @@ UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
 TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    auto it = m_tasks.find(taskId);
-    NS_ABORT_MSG_IF(it == m_tasks.end(), "Can't find task from TrafficRecord.");
-    return it->second;
+    const TrafficRecord* task = FindTaskLocked(taskId);
+    NS_ABORT_MSG_IF(task == nullptr, "Can't find task from TrafficRecord.");
+    return *task;
 }
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
@@ -427,6 +513,30 @@ UbTrafficGen::GetPendingPhaseCountForTesting(uint32_t taskId) const
     return GetPendingPhaseCountLocked(taskId);
 }
 
+bool
+UbTrafficGen::IsUsingDenseTaskStoreForTesting() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    return m_useDenseTaskStore;
+}
+
+uint32_t
+UbTrafficGen::GetStoredTaskCountForTesting() const
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    if (!m_useDenseTaskStore) {
+        return static_cast<uint32_t>(m_tasks.size());
+    }
+
+    uint32_t count = 0;
+    for (uint8_t present : m_denseTaskStorePresent) {
+        if (present != 0) {
+            ++count;
+        }
+    }
+    return count;
+}
+
 void UbTrafficGen::ScheduleNextTasks()
 {
     std::vector<TrafficRecord> readyTasks;
@@ -445,9 +555,9 @@ std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
         TaskState* state = FindTaskStateLocked(taskId);
         if (state != nullptr && *state == TaskState::READY) {
             *state = TaskState::RUNNING;
-            auto taskIt = m_tasks.find(taskId);
-            if (taskIt != m_tasks.end()) {
-                readyTasks.push_back(taskIt->second);
+            TrafficRecord* task = FindTaskLocked(taskId);
+            if (task != nullptr) {
+                readyTasks.push_back(*task);
             }
         }
         it = m_readyTasks.erase(it);

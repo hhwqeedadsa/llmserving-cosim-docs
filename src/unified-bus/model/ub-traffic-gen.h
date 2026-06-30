@@ -166,7 +166,6 @@ public:
     bool m_readyTasksSorted{true};
     std::vector<Ptr<UbApp>> m_sourceApps{};
     std::unordered_map<std::string, Time> m_delayParseCache{};
-    std::unordered_map<std::string, RuntimeTaskOp> m_opParseCache{};
 
     ReadyTaskBatch CollectReadyTaskBatchLocked();
 

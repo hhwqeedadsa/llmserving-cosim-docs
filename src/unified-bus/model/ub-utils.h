@@ -79,6 +79,7 @@ public:
     void ForEachTrafficRecord(const std::string& filename,
                               const std::function<void(const TrafficRecord&)>& callback);
 
+    // Callback-only row view; string_view fields must not be stored after callback return.
     void ForEachTrafficRecordView(const std::string& filename,
                                   const std::function<void(const TrafficRecordView&)>& callback);
 

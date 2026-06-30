@@ -68,7 +68,8 @@ ParseUint32Field(const std::string& line, size_t valueStart, size_t valueEnd)
     for (size_t pos = valueStart; pos < valueEnd; ++pos)
     {
         const char c = line[pos];
-        NS_ABORT_MSG_IF(c < '0' || c > '9', "Invalid uint32 field in traffic.csv");
+        NS_ABORT_MSG_IF(c < '0' || c > '9',
+                        "Invalid uint32 field in traffic.csv; signed values are not supported");
         const uint32_t digit = static_cast<uint32_t>(c - '0');
         NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
                         "traffic.csv uint32 field overflow");
@@ -84,7 +85,8 @@ ParseUint32Field(std::string_view field)
     uint32_t value = 0;
     for (char c : field)
     {
-        NS_ABORT_MSG_IF(c < '0' || c > '9', "Invalid uint32 field in traffic.csv");
+        NS_ABORT_MSG_IF(c < '0' || c > '9',
+                        "Invalid uint32 field in traffic.csv; signed values are not supported");
         const uint32_t digit = static_cast<uint32_t>(c - '0');
         NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
                         "traffic.csv uint32 field overflow");

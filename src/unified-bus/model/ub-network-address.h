@@ -29,6 +29,7 @@ struct TrafficRecord
     vector<uint32_t> dependOnPhases;
 };
 
+// Lightweight CSV row view. string_view fields are valid only during the parser callback.
 struct TrafficRecordView
 {
     uint32_t taskId{0};

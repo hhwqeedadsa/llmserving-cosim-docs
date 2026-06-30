@@ -89,7 +89,11 @@ public:
 
     void AddTask(const TrafficRecord& record);
 
+    void AddTaskDuringInitialLoad(const TrafficRecord& record);
+
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
+
+    void SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId);
 
     void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
 
@@ -163,6 +167,8 @@ public:
     void ScheduleTasks(const std::vector<RuntimeTask>& tasks);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    void AddTaskLocked(const TrafficRecord& record);
 
     void AddReadyTaskLocked(uint32_t taskId);
 

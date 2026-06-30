@@ -441,7 +441,7 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
             sourceNode->AddApplication(client);
             UbUtils::Get()->ClientTraceConnect(record.sourceNode);
         }
-        UbTrafficGen::Get()->AddTask(record);
+        UbTrafficGen::Get()->AddTaskDuringInitialLoad(record);
         ++localTaskCount;
     });
 

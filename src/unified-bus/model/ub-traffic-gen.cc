@@ -51,6 +51,19 @@ void UbTrafficGen::AddTask(const TrafficRecord& record)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
+    AddTaskLocked(record);
+}
+
+void
+UbTrafficGen::AddTaskDuringInitialLoad(const TrafficRecord& record)
+{
+    NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
+    AddTaskLocked(record);
+}
+
+void
+UbTrafficGen::AddTaskLocked(const TrafficRecord& record)
+{
     uint32_t taskId = record.taskId;
     if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
@@ -100,6 +113,13 @@ UbTrafficGen::SetPhaseDepend(uint32_t phaseId, uint32_t taskId)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
+    RegisterTaskPhaseLocked(phaseId, taskId);
+}
+
+void
+UbTrafficGen::SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId)
+{
+    NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     RegisterTaskPhaseLocked(phaseId, taskId);
 }
 

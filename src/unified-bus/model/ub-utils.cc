@@ -2031,7 +2031,7 @@ UbUtils::RegisterTrafficPhaseDependenciesAndGetStats(const string& filename)
 {
     TrafficLoadStats stats;
     ForEachTrafficPhaseIndexRecord(filename, [&](uint32_t taskId, uint32_t phaseId) {
-        UbTrafficGen::Get()->SetPhaseDepend(phaseId, taskId);
+        UbTrafficGen::Get()->SetPhaseDependDuringInitialLoad(phaseId, taskId);
         ++stats.recordCount;
         stats.maxTaskId = std::max<uint32_t>(stats.maxTaskId, taskId);
     });

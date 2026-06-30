@@ -97,6 +97,8 @@ public:
 
     void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
 
+    void RegisterSourceAppDuringInitialLoad(uint32_t sourceNode, Ptr<UbApp> app);
+
     TaskCleanupInfo GetTaskCleanupInfoById(uint32_t taskId);
 
     void MarkTaskCompleted(uint32_t taskId);
@@ -137,6 +139,12 @@ public:
         std::vector<uint32_t> dependentTasks{};
     };
 
+    struct ReadyTaskBatch
+    {
+        std::vector<RuntimeTask> tasks{};
+        std::vector<Ptr<UbApp>> sourceApps{};
+    };
+
     std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
     bool m_useDenseTaskStore{true};
     std::vector<uint8_t> m_denseTaskStorePresent{};
@@ -152,12 +160,13 @@ public:
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::vector<uint32_t> m_readyTasks{};
     bool m_readyTasksSorted{true};
+    std::vector<Ptr<UbApp>> m_sourceApps{};
     std::unordered_map<std::string, Time> m_delayParseCache{};
     std::unordered_map<std::string, RuntimeTaskOp> m_opParseCache{};
 
-    std::vector<RuntimeTask> CollectReadyTasksLocked();
+    ReadyTaskBatch CollectReadyTaskBatchLocked();
 
-    void ScheduleTasks(const std::vector<RuntimeTask>& tasks);
+    void ScheduleTasks(const ReadyTaskBatch& batch);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 
@@ -172,6 +181,8 @@ public:
     static bool TryParseIntegerDelay(const std::string& delay, Time* out);
 
     RuntimeTaskOp ParseOpLocked(const std::string& opType);
+
+    Ptr<UbApp> GetSourceAppLocked(uint32_t sourceNode) const;
 
     void SwitchDenseTaskStoreToMapLocked();
 

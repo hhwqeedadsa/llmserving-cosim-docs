@@ -147,6 +147,15 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
     }
 }
 
+void
+UbTrafficGen::RegisterSourceAppDuringInitialLoad(uint32_t sourceNode, Ptr<UbApp> app)
+{
+    if (sourceNode >= m_sourceApps.size()) {
+        m_sourceApps.resize(static_cast<size_t>(sourceNode) + 1);
+    }
+    m_sourceApps[sourceNode] = app;
+}
+
 UbTrafficGen::RuntimeTask
 UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
 {
@@ -178,6 +187,15 @@ UbTrafficGen::ParseOpLocked(const std::string& opType)
         return RuntimeTaskOp::MEM_LOAD;
     }
     return RuntimeTaskOp::UNKNOWN;
+}
+
+Ptr<UbApp>
+UbTrafficGen::GetSourceAppLocked(uint32_t sourceNode) const
+{
+    if (sourceNode >= m_sourceApps.size()) {
+        return nullptr;
+    }
+    return m_sourceApps[sourceNode];
 }
 
 Time
@@ -565,7 +583,7 @@ UbTrafficGen::GetTaskCleanupInfoById(uint32_t taskId)
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
 {
-    std::vector<RuntimeTask> readyTasks;
+    ReadyTaskBatch readyBatch;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -600,10 +618,10 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
             }
         }
 
-        readyTasks = CollectReadyTasksLocked();
+        readyBatch = CollectReadyTaskBatchLocked();
     }
 
-    ScheduleTasks(readyTasks);
+    ScheduleTasks(readyBatch);
 
     if (IsCompleted()) {
         NS_LOG_DEBUG("[APPLICATION INFO] All tasks completed");
@@ -712,15 +730,16 @@ UbTrafficGen::CollectReadyTaskIdsForTesting()
 
 void UbTrafficGen::ScheduleNextTasks()
 {
-    std::vector<RuntimeTask> readyTasks;
+    ReadyTaskBatch readyBatch;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        readyTasks = CollectReadyTasksLocked();
+        readyBatch = CollectReadyTaskBatchLocked();
     }
-    ScheduleTasks(readyTasks);
+    ScheduleTasks(readyBatch);
 }
 
-std::vector<UbTrafficGen::RuntimeTask> UbTrafficGen::CollectReadyTasksLocked()
+UbTrafficGen::ReadyTaskBatch
+UbTrafficGen::CollectReadyTaskBatchLocked()
 {
     if (!m_readyTasksSorted) {
         std::sort(m_readyTasks.begin(), m_readyTasks.end());
@@ -729,31 +748,37 @@ std::vector<UbTrafficGen::RuntimeTask> UbTrafficGen::CollectReadyTasksLocked()
         m_readyTasksSorted = true;
     }
 
-    std::vector<RuntimeTask> readyTasks;
-    readyTasks.reserve(m_readyTasks.size());
+    ReadyTaskBatch batch;
+    batch.tasks.reserve(m_readyTasks.size());
+    batch.sourceApps.reserve(m_readyTasks.size());
     for (uint32_t taskId : m_readyTasks) {
         TaskState* state = FindTaskStateLocked(taskId);
         if (state != nullptr && *state == TaskState::READY) {
             *state = TaskState::RUNNING;
             RuntimeTask* task = FindTaskLocked(taskId);
             if (task != nullptr) {
-                readyTasks.push_back(*task);
+                batch.tasks.push_back(*task);
+                batch.sourceApps.push_back(GetSourceAppLocked(task->sourceNode));
             }
         }
     }
     m_readyTasks.clear();
     m_readyTasksSorted = true;
-    return readyTasks;
+    return batch;
 }
 
-void UbTrafficGen::ScheduleTasks(const std::vector<RuntimeTask>& tasks)
+void UbTrafficGen::ScheduleTasks(const ReadyTaskBatch& batch)
 {
-    for (const auto& task : tasks) {
+    for (size_t index = 0; index < batch.tasks.size(); ++index) {
+        const auto& task = batch.tasks[index];
         if (task.priority == 0) {
             NS_LOG_WARN("It is strongly recommended not to set the task priority to 0. " <<
                         "Priority level 0 is reserved for control frames.");
         }
-        auto app = DynamicCast<UbApp>(NodeList::GetNode(task.sourceNode)->GetApplication(0));
+        Ptr<UbApp> app = index < batch.sourceApps.size() ? batch.sourceApps[index] : nullptr;
+        if (app == nullptr) {
+            app = DynamicCast<UbApp>(NodeList::GetNode(task.sourceNode)->GetApplication(0));
+        }
         Simulator::ScheduleWithContext(app->GetNode()->GetId(),
                                        task.delay,
                                        static_cast<void (UbApp::*)(RuntimeTask)>(&UbApp::SendTraffic),

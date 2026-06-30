@@ -426,6 +426,7 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
     }
 
     uint32_t localTaskCount = 0;
+    std::vector<Ptr<UbApp>> sourceApps;
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
     UbUtils::Get()->ForEachTrafficRecord(trafficPath, [&](const TrafficRecord& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
@@ -435,11 +436,25 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
             return;
         }
 
-        if (sourceNode->GetNApplications() == 0)
+        if (static_cast<size_t>(record.sourceNode) >= sourceApps.size())
         {
-            Ptr<UbApp> client = CreateObject<UbApp>();
-            sourceNode->AddApplication(client);
-            UbUtils::Get()->ClientTraceConnect(record.sourceNode);
+            sourceApps.resize(static_cast<size_t>(record.sourceNode) + 1);
+        }
+
+        Ptr<UbApp>& client = sourceApps[record.sourceNode];
+        if (client == nullptr)
+        {
+            if (sourceNode->GetNApplications() == 0)
+            {
+                client = CreateObject<UbApp>();
+                sourceNode->AddApplication(client);
+                UbUtils::Get()->ClientTraceConnect(record.sourceNode);
+            }
+            else
+            {
+                client = DynamicCast<UbApp>(sourceNode->GetApplication(0));
+            }
+            UbTrafficGen::Get()->RegisterSourceAppDuringInitialLoad(record.sourceNode, client);
         }
         UbTrafficGen::Get()->AddTaskDuringInitialLoad(record);
         ++localTaskCount;

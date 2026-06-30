@@ -13,6 +13,7 @@
 #include "ns3/ub-ldst-api.h"
 #include "ub-tp-connection-manager.h"
 #include "ub-network-address.h"
+#include "ub-traffic-gen.h"
 #include "ns3/random-variable-stream.h"
 
 using namespace utils;
@@ -29,6 +30,7 @@ public:
     virtual ~UbApp();
 
     void SendTraffic(TrafficRecord record);
+    void SendTraffic(UbTrafficGen::RuntimeTask task);
     void SendTrafficForTest(TrafficRecord record);
 
     void SetNode(Ptr<Node> node); // 设置当前节点

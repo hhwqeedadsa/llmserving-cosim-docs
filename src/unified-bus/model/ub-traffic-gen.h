@@ -46,6 +46,33 @@ public:
     UbTrafficGen();
     virtual ~UbTrafficGen();
 
+    enum class RuntimeTaskOp : uint8_t
+    {
+        UNKNOWN,
+        URMA_WRITE,
+        URMA_READ,
+        MEM_STORE,
+        MEM_LOAD
+    };
+
+    struct RuntimeTask
+    {
+        uint32_t taskId{0};
+        uint32_t sourceNode{0};
+        uint32_t destNode{0};
+        uint32_t dataSize{0};
+        uint8_t priority{0};
+        RuntimeTaskOp op{RuntimeTaskOp::UNKNOWN};
+        Time delay{Time(0)};
+    };
+
+    struct TaskCleanupInfo
+    {
+        uint32_t sourceNode{0};
+        uint32_t destNode{0};
+        uint8_t priority{0};
+    };
+
     static bool IsMultiProcessRuntimeUnsupported();
 
     static inline std::string GetMultiProcessUnsupportedMessage()
@@ -62,7 +89,7 @@ public:
 
     void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
 
-    TrafficRecord GetTaskById(uint32_t taskId);
+    TaskCleanupInfo GetTaskCleanupInfoById(uint32_t taskId);
 
     void MarkTaskCompleted(uint32_t taskId);
 
@@ -100,18 +127,6 @@ public:
         std::vector<uint32_t> dependentTasks{};
     };
 
-    struct RuntimeTask
-    {
-        int taskId{0};
-        int sourceNode{0};
-        int destNode{0};
-        int dataSize{0};
-        std::string opType{};
-        int priority{0};
-        std::string delay{};
-        int phaseId{0};
-    };
-
     map<std::string, TaOpcode> TaOpcodeMap = {
         {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
         {"URMA_READ", TaOpcode::TA_OPCODE_READ},
@@ -134,15 +149,13 @@ public:
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::set<uint32_t> m_readyTasks{};
 
-    std::vector<TrafficRecord> CollectReadyTasksLocked();
+    std::vector<RuntimeTask> CollectReadyTasksLocked();
 
-    void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
+    void ScheduleTasks(const std::vector<RuntimeTask>& tasks);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 
     RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record) const;
-
-    TrafficRecord ConvertToTrafficRecord(const RuntimeTask& task) const;
 
     void SwitchDenseTaskStoreToMapLocked();
 

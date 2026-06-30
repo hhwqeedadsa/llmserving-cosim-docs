@@ -120,30 +120,26 @@ UbTrafficGen::RuntimeTask
 UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record) const
 {
     RuntimeTask task;
-    task.taskId = record.taskId;
-    task.sourceNode = record.sourceNode;
-    task.destNode = record.destNode;
-    task.dataSize = record.dataSize;
-    task.opType = record.opType;
-    task.priority = record.priority;
-    task.delay = record.delay;
-    task.phaseId = record.phaseId;
-    return task;
-}
+    task.taskId = static_cast<uint32_t>(record.taskId);
+    task.sourceNode = static_cast<uint32_t>(record.sourceNode);
+    task.destNode = static_cast<uint32_t>(record.destNode);
+    task.dataSize = static_cast<uint32_t>(record.dataSize);
+    task.priority = static_cast<uint8_t>(record.priority);
+    task.delay = record.delay.empty() ? Time(0) : Time(record.delay);
 
-TrafficRecord
-UbTrafficGen::ConvertToTrafficRecord(const RuntimeTask& task) const
-{
-    TrafficRecord record;
-    record.taskId = task.taskId;
-    record.sourceNode = task.sourceNode;
-    record.destNode = task.destNode;
-    record.dataSize = task.dataSize;
-    record.opType = task.opType;
-    record.priority = task.priority;
-    record.delay = task.delay;
-    record.phaseId = task.phaseId;
-    return record;
+    if (record.opType == "URMA_WRITE") {
+        task.op = RuntimeTaskOp::URMA_WRITE;
+    } else if (record.opType == "URMA_READ") {
+        task.op = RuntimeTaskOp::URMA_READ;
+    } else if (record.opType == "MEM_STORE") {
+        task.op = RuntimeTaskOp::MEM_STORE;
+    } else if (record.opType == "MEM_LOAD") {
+        task.op = RuntimeTaskOp::MEM_LOAD;
+    } else {
+        task.op = RuntimeTaskOp::UNKNOWN;
+    }
+
+    return task;
 }
 
 void
@@ -425,17 +421,22 @@ UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
     m_pendingPhaseCounts[taskId] = count;
 }
 
-TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
+UbTrafficGen::TaskCleanupInfo
+UbTrafficGen::GetTaskCleanupInfoById(uint32_t taskId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     const RuntimeTask* task = FindTaskLocked(taskId);
     NS_ABORT_MSG_IF(task == nullptr, "Can't find task from TrafficRecord.");
-    return ConvertToTrafficRecord(*task);
+    TaskCleanupInfo info;
+    info.sourceNode = task->sourceNode;
+    info.destNode = task->destNode;
+    info.priority = task->priority;
+    return info;
 }
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
 {
-    std::vector<TrafficRecord> readyTasks;
+    std::vector<RuntimeTask> readyTasks;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -572,7 +573,7 @@ UbTrafficGen::GetStoredTaskCountForTesting() const
 
 void UbTrafficGen::ScheduleNextTasks()
 {
-    std::vector<TrafficRecord> readyTasks;
+    std::vector<RuntimeTask> readyTasks;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         readyTasks = CollectReadyTasksLocked();
@@ -580,9 +581,9 @@ void UbTrafficGen::ScheduleNextTasks()
     ScheduleTasks(readyTasks);
 }
 
-std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
+std::vector<UbTrafficGen::RuntimeTask> UbTrafficGen::CollectReadyTasksLocked()
 {
-    std::vector<TrafficRecord> readyTasks;
+    std::vector<RuntimeTask> readyTasks;
     for (auto it = m_readyTasks.begin(); it != m_readyTasks.end();) {
         uint32_t taskId = *it;
         TaskState* state = FindTaskStateLocked(taskId);
@@ -590,7 +591,7 @@ std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
             *state = TaskState::RUNNING;
             RuntimeTask* task = FindTaskLocked(taskId);
             if (task != nullptr) {
-                readyTasks.push_back(ConvertToTrafficRecord(*task));
+                readyTasks.push_back(*task);
             }
         }
         it = m_readyTasks.erase(it);
@@ -598,7 +599,7 @@ std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
     return readyTasks;
 }
 
-void UbTrafficGen::ScheduleTasks(const std::vector<TrafficRecord>& tasks)
+void UbTrafficGen::ScheduleTasks(const std::vector<RuntimeTask>& tasks)
 {
     for (const auto& task : tasks) {
         if (task.priority == 0) {
@@ -606,11 +607,11 @@ void UbTrafficGen::ScheduleTasks(const std::vector<TrafficRecord>& tasks)
                         "Priority level 0 is reserved for control frames.");
         }
         auto app = DynamicCast<UbApp>(NodeList::GetNode(task.sourceNode)->GetApplication(0));
-        Time taskDelay = Time(0);
-        if (!task.delay.empty()) {
-            taskDelay = Time(task.delay);
-        }
-        Simulator::ScheduleWithContext(app->GetNode()->GetId(), taskDelay, &UbApp::SendTraffic, app, task);
+        Simulator::ScheduleWithContext(app->GetNode()->GetId(),
+                                       task.delay,
+                                       static_cast<void (UbApp::*)(RuntimeTask)>(&UbApp::SendTraffic),
+                                       app,
+                                       task);
         NS_LOG_DEBUG("Scheduled task " << task.taskId);
     }
 }

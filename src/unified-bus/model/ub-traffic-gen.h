@@ -21,6 +21,7 @@ class UbTrafficGenPhaseDependencyMemoryTest;
 class UbTrafficGenSparseTaskIdFallbackTest;
 class UbTrafficGenReserveHintTest;
 class UbTrafficGenDenseTaskStoreTest;
+class UbTrafficGenDuplicateDependencyPhaseTest;
 
 using namespace utils;
 namespace ns3 {
@@ -84,6 +85,7 @@ public:
     friend class ::UbTrafficGenSparseTaskIdFallbackTest;
     friend class ::UbTrafficGenReserveHintTest;
     friend class ::UbTrafficGenDenseTaskStoreTest;
+    friend class ::UbTrafficGenDuplicateDependencyPhaseTest;
 
     enum class TaskState {
         PENDING,
@@ -98,6 +100,18 @@ public:
         std::vector<uint32_t> dependentTasks{};
     };
 
+    struct RuntimeTask
+    {
+        int taskId{0};
+        int sourceNode{0};
+        int destNode{0};
+        int dataSize{0};
+        std::string opType{};
+        int priority{0};
+        std::string delay{};
+        int phaseId{0};
+    };
+
     map<std::string, TaOpcode> TaOpcodeMap = {
         {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
         {"URMA_READ", TaOpcode::TA_OPCODE_READ},
@@ -105,10 +119,10 @@ public:
         {"MEM_LOAD", TaOpcode::TA_OPCODE_READ}
     };
 
-    std::unordered_map<uint32_t, TrafficRecord> m_tasks{};
+    std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
     bool m_useDenseTaskStore{true};
     std::vector<uint8_t> m_denseTaskStorePresent{};
-    std::vector<TrafficRecord> m_denseTasks{};
+    std::vector<RuntimeTask> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
     std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
     std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
@@ -126,15 +140,19 @@ public:
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 
+    RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record) const;
+
+    TrafficRecord ConvertToTrafficRecord(const RuntimeTask& task) const;
+
     void SwitchDenseTaskStoreToMapLocked();
 
     bool HasTaskLocked(uint32_t taskId) const;
 
-    TrafficRecord* FindTaskLocked(uint32_t taskId);
+    RuntimeTask* FindTaskLocked(uint32_t taskId);
 
-    const TrafficRecord* FindTaskLocked(uint32_t taskId) const;
+    const RuntimeTask* FindTaskLocked(uint32_t taskId) const;
 
-    bool SetTaskLocked(const TrafficRecord& record);
+    bool SetTaskLocked(RuntimeTask task);
 
     void SwitchDenseTaskStateToMapLocked();
 

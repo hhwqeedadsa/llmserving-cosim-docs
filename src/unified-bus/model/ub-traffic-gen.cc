@@ -52,7 +52,7 @@ void UbTrafficGen::AddTask(TrafficRecord record)
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
     uint32_t taskId = record.taskId;
-    if (!SetTaskLocked(record)) {
+    if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
@@ -113,6 +113,36 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
     }
 }
 
+UbTrafficGen::RuntimeTask
+UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record) const
+{
+    RuntimeTask task;
+    task.taskId = record.taskId;
+    task.sourceNode = record.sourceNode;
+    task.destNode = record.destNode;
+    task.dataSize = record.dataSize;
+    task.opType = record.opType;
+    task.priority = record.priority;
+    task.delay = record.delay;
+    task.phaseId = record.phaseId;
+    return task;
+}
+
+TrafficRecord
+UbTrafficGen::ConvertToTrafficRecord(const RuntimeTask& task) const
+{
+    TrafficRecord record;
+    record.taskId = task.taskId;
+    record.sourceNode = task.sourceNode;
+    record.destNode = task.destNode;
+    record.dataSize = task.dataSize;
+    record.opType = task.opType;
+    record.priority = task.priority;
+    record.delay = task.delay;
+    record.phaseId = task.phaseId;
+    return record;
+}
+
 void
 UbTrafficGen::SwitchDenseTaskStoreToMapLocked()
 {
@@ -140,7 +170,7 @@ UbTrafficGen::HasTaskLocked(uint32_t taskId) const
     return m_tasks.find(taskId) != m_tasks.end();
 }
 
-TrafficRecord*
+UbTrafficGen::RuntimeTask*
 UbTrafficGen::FindTaskLocked(uint32_t taskId)
 {
     if (m_useDenseTaskStore) {
@@ -158,7 +188,7 @@ UbTrafficGen::FindTaskLocked(uint32_t taskId)
     return &taskIt->second;
 }
 
-const TrafficRecord*
+const UbTrafficGen::RuntimeTask*
 UbTrafficGen::FindTaskLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskStore) {
@@ -177,9 +207,9 @@ UbTrafficGen::FindTaskLocked(uint32_t taskId) const
 }
 
 bool
-UbTrafficGen::SetTaskLocked(const TrafficRecord& record)
+UbTrafficGen::SetTaskLocked(RuntimeTask task)
 {
-    const uint32_t taskId = record.taskId;
+    const uint32_t taskId = task.taskId;
     if (HasTaskLocked(taskId)) {
         return false;
     }
@@ -187,14 +217,14 @@ UbTrafficGen::SetTaskLocked(const TrafficRecord& record)
     if (m_useDenseTaskStore) {
         if (taskId == m_denseTaskStorePresent.size()) {
             m_denseTaskStorePresent.push_back(1);
-            m_denseTasks.push_back(record);
+            m_denseTasks.push_back(task);
             return true;
         }
 
         SwitchDenseTaskStoreToMapLocked();
     }
 
-    m_tasks[taskId] = record;
+    m_tasks[taskId] = task;
     return true;
 }
 
@@ -395,9 +425,9 @@ UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
 TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    const TrafficRecord* task = FindTaskLocked(taskId);
+    const RuntimeTask* task = FindTaskLocked(taskId);
     NS_ABORT_MSG_IF(task == nullptr, "Can't find task from TrafficRecord.");
-    return *task;
+    return ConvertToTrafficRecord(*task);
 }
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
@@ -555,9 +585,9 @@ std::vector<TrafficRecord> UbTrafficGen::CollectReadyTasksLocked()
         TaskState* state = FindTaskStateLocked(taskId);
         if (state != nullptr && *state == TaskState::READY) {
             *state = TaskState::RUNNING;
-            TrafficRecord* task = FindTaskLocked(taskId);
+            RuntimeTask* task = FindTaskLocked(taskId);
             if (task != nullptr) {
-                readyTasks.push_back(*task);
+                readyTasks.push_back(ConvertToTrafficRecord(*task));
             }
         }
         it = m_readyTasks.erase(it);

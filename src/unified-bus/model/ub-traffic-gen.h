@@ -19,6 +19,7 @@
 
 class UbTrafficGenPhaseDependencyMemoryTest;
 class UbTrafficGenSparseTaskIdFallbackTest;
+class UbTrafficGenReserveHintTest;
 
 using namespace utils;
 namespace ns3 {
@@ -57,6 +58,8 @@ public:
 
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
 
+    void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
+
     TrafficRecord GetTaskById(uint32_t taskId);
 
     void MarkTaskCompleted(uint32_t taskId);
@@ -78,6 +81,7 @@ public:
   private:
     friend class ::UbTrafficGenPhaseDependencyMemoryTest;
     friend class ::UbTrafficGenSparseTaskIdFallbackTest;
+    friend class ::UbTrafficGenReserveHintTest;
 
     enum class TaskState {
         PENDING,

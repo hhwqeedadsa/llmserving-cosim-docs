@@ -1913,9 +1913,24 @@ UbUtils::ForEachTrafficRecord(const string& filename,
 void
 UbUtils::RegisterTrafficPhaseDependencies(const string& filename)
 {
-    ForEachTrafficRecordInternal(filename, "Index phase dependencies from", [](const TrafficRecord& record) {
-        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
-    });
+    (void)RegisterTrafficPhaseDependenciesAndGetStats(filename);
+}
+
+UbUtils::TrafficLoadStats
+UbUtils::RegisterTrafficPhaseDependenciesAndGetStats(const string& filename)
+{
+    TrafficLoadStats stats;
+    ForEachTrafficRecordInternal(filename,
+                                 "Index phase dependencies from",
+                                 [&](const TrafficRecord& record) {
+                                     UbTrafficGen::Get()->SetPhaseDepend(record.phaseId,
+                                                                         record.taskId);
+                                     ++stats.recordCount;
+                                     stats.maxTaskId = std::max<uint32_t>(
+                                         stats.maxTaskId,
+                                         static_cast<uint32_t>(record.taskId));
+                                 });
+    return stats;
 }
 
 void

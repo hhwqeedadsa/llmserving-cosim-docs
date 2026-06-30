@@ -69,12 +69,20 @@ public:
     // Loads traffic records and initializes phase-dependency state in UbTrafficGen.
     std::vector<TrafficRecord> LoadTrafficConfig(const std::string &filename);
 
+    struct TrafficLoadStats
+    {
+        uint64_t recordCount{0};
+        uint32_t maxTaskId{0};
+    };
+
     // Streams traffic records without retaining a full vector in memory.
     void ForEachTrafficRecord(const std::string& filename,
                               const std::function<void(const TrafficRecord&)>& callback);
 
     // Pre-registers phase membership before streaming AddTask calls.
     void RegisterTrafficPhaseDependencies(const std::string& filename);
+
+    TrafficLoadStats RegisterTrafficPhaseDependenciesAndGetStats(const std::string& filename);
 
     void CreateTopo(const std::string &filename);
 

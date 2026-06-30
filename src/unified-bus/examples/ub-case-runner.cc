@@ -416,7 +416,10 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    uint32_t mpiRank)
 {
     const std::string trafficPath = configPath + "/traffic.csv";
-    UbUtils::Get()->RegisterTrafficPhaseDependencies(trafficPath);
+    const auto trafficStats =
+        UbUtils::Get()->RegisterTrafficPhaseDependenciesAndGetStats(trafficPath);
+    UbTrafficGen::Get()->ReserveTasksForTraffic(trafficStats.recordCount,
+                                                trafficStats.maxTaskId);
     if (UbUtils::Get()->IsFaultEnabled())
     {
         UbUtils::Get()->InitFaultMoudle(configPath + "/fault.csv");

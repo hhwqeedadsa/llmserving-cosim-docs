@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ub-traffic-gen.h"
+#include <algorithm>
+#include <limits>
 #include "ns3/log.h"
 #include "ns3/simulator.h"
 #include "ns3/uinteger.h"
@@ -87,6 +89,27 @@ UbTrafficGen::SetPhaseDepend(uint32_t phaseId, uint32_t taskId)
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
     RegisterTaskPhaseLocked(phaseId, taskId);
+}
+
+void
+UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    const auto reserveCount = static_cast<size_t>(std::min<uint64_t>(
+        recordCount, static_cast<uint64_t>(std::numeric_limits<size_t>::max())));
+    m_tasks.reserve(reserveCount);
+    m_taskStates.reserve(reserveCount);
+    m_taskPhaseIds.reserve(reserveCount);
+    m_pendingPhaseCounts.reserve(reserveCount);
+    m_phaseStates.reserve(reserveCount);
+
+    if (maxTaskId != std::numeric_limits<uint32_t>::max()) {
+        const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
+        m_denseTaskPresent.reserve(denseReserve);
+        m_denseTaskStates.reserve(denseReserve);
+        m_denseTaskPhaseIds.reserve(denseReserve);
+        m_densePendingPhaseCounts.reserve(denseReserve);
+    }
 }
 
 void

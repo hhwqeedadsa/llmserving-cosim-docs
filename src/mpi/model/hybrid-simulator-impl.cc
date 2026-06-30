@@ -49,6 +49,17 @@ NS_LOG_COMPONENT_DEFINE("HybridSimulatorImpl");
 
 NS_OBJECT_ENSURE_REGISTERED(HybridSimulatorImpl);
 
+namespace
+{
+
+uint32_t
+GetHybridRank(uint32_t systemId)
+{
+    return systemId >> 16 == 0 ? systemId : systemId & 0xffff;
+}
+
+} // namespace
+
 HybridSimulatorImpl::HybridSimulatorImpl()
 {
     NS_LOG_FUNCTION(this);
@@ -460,7 +471,7 @@ HybridSimulatorImpl::Partition()
                     {
                         Ptr<Node> remote = channel->GetDevice(j)->GetNode();
                         // if it's not visited, and not remote, add it to the current partition
-                        if (!visited[remote->GetId()] && node->GetSystemId() == m_myId)
+                        if (!visited[remote->GetId()] && GetHybridRank(remote->GetSystemId()) == m_myId)
                         {
                             q.push(remote);
                         }

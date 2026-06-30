@@ -36,7 +36,7 @@
 #include <atomic>
 #include <chrono>
 #include <map>
-#include <tuple>
+#include <mutex>
 #include <vector>
 
 namespace ns3
@@ -51,6 +51,12 @@ class LogicalProcess
   public:
     /** Default constructor */
     LogicalProcess();
+
+    /** Copy constructor */
+    LogicalProcess(const LogicalProcess& other);
+
+    /** Copy assignment operator */
+    LogicalProcess& operator=(const LogicalProcess& other);
 
     /** Destructor */
     ~LogicalProcess();
@@ -140,12 +146,12 @@ class LogicalProcess
 
     inline bool isLocalFinished() const
     {
-        return m_stop || m_events->IsEmpty();
+        return m_stop.load(std::memory_order_acquire) || m_events->IsEmpty();
     }
 
     inline void Stop()
     {
-        m_stop = true;
+        m_stop.store(true, std::memory_order_release);
     }
 
     inline Time Now() const
@@ -174,9 +180,18 @@ class LogicalProcess
     }
 
   private:
+    struct RemoteEvent
+    {
+        uint64_t targetTs;
+        uint64_t senderTs;
+        uint32_t senderSystemId;
+        uint32_t senderUid;
+        Scheduler::Event event;
+    };
+
     uint32_t m_systemId;
     uint32_t m_systemCount;
-    bool m_stop;
+    std::atomic<bool> m_stop;
     uint32_t m_uid;
     uint32_t m_currentContext;
     uint32_t m_currentUid;
@@ -186,8 +201,8 @@ class LogicalProcess
     Ptr<Scheduler> m_events;
     Time m_lookAhead;
 
-    std::map<uint32_t, std::vector<std::tuple<uint64_t, uint32_t, uint32_t, Scheduler::Event>>>
-        m_mailbox; // event message mail box
+    mutable std::mutex m_mailboxMutex;
+    std::map<uint32_t, std::vector<RemoteEvent>> m_mailbox; // event message mail box
     std::chrono::nanoseconds::rep m_executionTime;
 };
 

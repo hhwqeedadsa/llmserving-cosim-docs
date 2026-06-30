@@ -32,6 +32,7 @@
 #include "ns3/simulator.h"
 
 #include <algorithm>
+#include <tuple>
 
 namespace ns3
 {
@@ -49,13 +50,61 @@ LogicalProcess::LogicalProcess()
       m_eventCount(0),
       m_pendingEventCount(0),
       m_events(nullptr),
-      m_lookAhead(TimeStep(0))
+      m_lookAhead(TimeStep(0)),
+      m_executionTime(0)
 {
+}
+
+LogicalProcess::LogicalProcess(const LogicalProcess& other)
+    : m_systemId(other.m_systemId),
+      m_systemCount(other.m_systemCount),
+      m_stop(other.m_stop.load(std::memory_order_acquire)),
+      m_uid(other.m_uid),
+      m_currentContext(other.m_currentContext),
+      m_currentUid(other.m_currentUid),
+      m_currentTs(other.m_currentTs),
+      m_eventCount(other.m_eventCount),
+      m_pendingEventCount(other.m_pendingEventCount),
+      m_events(other.m_events),
+      m_lookAhead(other.m_lookAhead),
+      m_mailbox(other.m_mailbox),
+      m_executionTime(other.m_executionTime)
+{
+}
+
+LogicalProcess&
+LogicalProcess::operator=(const LogicalProcess& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    m_systemId = other.m_systemId;
+    m_systemCount = other.m_systemCount;
+    m_stop.store(other.m_stop.load(std::memory_order_acquire), std::memory_order_release);
+    m_uid = other.m_uid;
+    m_currentContext = other.m_currentContext;
+    m_currentUid = other.m_currentUid;
+    m_currentTs = other.m_currentTs;
+    m_eventCount = other.m_eventCount;
+    m_pendingEventCount = other.m_pendingEventCount;
+    m_events = other.m_events;
+    m_lookAhead = other.m_lookAhead;
+    m_mailbox = other.m_mailbox;
+    m_executionTime = other.m_executionTime;
+
+    return *this;
 }
 
 LogicalProcess::~LogicalProcess()
 {
     NS_LOG_INFO("system " << m_systemId << " finished with event count " << m_eventCount);
+
+    if (m_events == nullptr)
+    {
+        return;
+    }
 
     // if others hold references to event list, do not unref events
     if (m_events->GetReferenceCount() == 1)
@@ -73,6 +122,7 @@ LogicalProcess::Enable(const uint32_t systemId, const uint32_t systemCount)
 {
     m_systemId = systemId;
     m_systemCount = systemCount;
+    m_stop.store(false, std::memory_order_release);
 }
 
 void
@@ -153,20 +203,36 @@ LogicalProcess::ReceiveMessages()
 {
     NS_LOG_FUNCTION(this);
 
-    m_pendingEventCount = 0;
-    for (auto& item : m_mailbox)
+    std::vector<RemoteEvent> remoteEvents;
     {
-        auto& queue = item.second;
-        std::sort(queue.begin(), queue.end(), std::greater<>());
-        while (!queue.empty())
+        std::lock_guard<std::mutex> lock(m_mailboxMutex);
+        for (auto& [_, queue] : m_mailbox)
         {
-            auto& evWithTs = queue.back();
-            Scheduler::Event& ev = std::get<3>(evWithTs);
-            ev.key.m_uid = m_uid++;
-            m_events->Insert(ev);
-            queue.pop_back();
-            m_pendingEventCount++;
+            remoteEvents.insert(remoteEvents.end(), queue.begin(), queue.end());
+            queue.clear();
         }
+    }
+
+    std::sort(remoteEvents.begin(),
+              remoteEvents.end(),
+              [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
+                  return std::tie(lhs.targetTs,
+                                  lhs.senderTs,
+                                  lhs.senderSystemId,
+                                  lhs.senderUid) <
+                         std::tie(rhs.targetTs,
+                                  rhs.senderTs,
+                                  rhs.senderSystemId,
+                                  rhs.senderUid);
+              });
+
+    m_pendingEventCount = 0;
+    for (auto& remoteEvent : remoteEvents)
+    {
+        Scheduler::Event& ev = remoteEvent.event;
+        ev.key.m_uid = m_uid++;
+        m_events->Insert(ev);
+        m_pendingEventCount++;
     }
 }
 
@@ -249,7 +315,14 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
     else
     {
         ev.key.m_uid = EventId::UID::INVALID;
-        remote->m_mailbox[m_systemId].emplace_back(m_currentTs, m_systemId, m_uid, ev);
+        std::lock_guard<std::mutex> lock(remote->m_mailboxMutex);
+        remote->m_mailbox[m_systemId].push_back(RemoteEvent{
+            ev.key.m_ts,
+            m_currentTs,
+            m_systemId,
+            m_uid++,
+            ev,
+        });
     }
 }
 
@@ -318,7 +391,7 @@ LogicalProcess::SetScheduler(ObjectFactory schedulerFactory)
 Time
 LogicalProcess::Next() const
 {
-    if (m_stop || m_events->IsEmpty())
+    if (m_stop.load(std::memory_order_acquire) || m_events->IsEmpty())
     {
         return Time::Max();
     }

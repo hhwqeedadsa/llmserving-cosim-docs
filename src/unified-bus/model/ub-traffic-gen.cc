@@ -133,7 +133,6 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
     if (recordCount > 0 && maxTaskId != std::numeric_limits<uint32_t>::max() &&
         static_cast<uint64_t>(maxTaskId) + 1 == recordCount) {
         const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
-        m_denseTaskStorePresent.reserve(denseReserve);
         m_denseTasks.reserve(denseReserve);
         m_denseTaskPresent.reserve(denseReserve);
         m_denseTaskStates.reserve(denseReserve);
@@ -287,13 +286,10 @@ UbTrafficGen::SwitchDenseTaskStoreToMapLocked()
         return;
     }
 
-    for (uint32_t taskId = 0; taskId < m_denseTaskStorePresent.size(); ++taskId) {
-        if (m_denseTaskStorePresent[taskId] != 0) {
-            m_tasks[taskId] = m_denseTasks[taskId];
-        }
+    for (uint32_t taskId = 0; taskId < m_denseTasks.size(); ++taskId) {
+        m_tasks[taskId] = m_denseTasks[taskId];
     }
 
-    m_denseTaskStorePresent.clear();
     m_denseTasks.clear();
     m_useDenseTaskStore = false;
 }
@@ -302,7 +298,7 @@ bool
 UbTrafficGen::HasTaskLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskStore) {
-        return taskId < m_denseTaskStorePresent.size() && m_denseTaskStorePresent[taskId] != 0;
+        return taskId < m_denseTasks.size();
     }
     return m_tasks.find(taskId) != m_tasks.end();
 }
@@ -311,8 +307,7 @@ UbTrafficGen::RuntimeTask*
 UbTrafficGen::FindTaskLocked(uint32_t taskId)
 {
     if (m_useDenseTaskStore) {
-        if (taskId >= m_denseTaskStorePresent.size() ||
-            m_denseTaskStorePresent[taskId] == 0) {
+        if (taskId >= m_denseTasks.size()) {
             return nullptr;
         }
         return &m_denseTasks[taskId];
@@ -329,8 +324,7 @@ const UbTrafficGen::RuntimeTask*
 UbTrafficGen::FindTaskLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskStore) {
-        if (taskId >= m_denseTaskStorePresent.size() ||
-            m_denseTaskStorePresent[taskId] == 0) {
+        if (taskId >= m_denseTasks.size()) {
             return nullptr;
         }
         return &m_denseTasks[taskId];
@@ -352,8 +346,7 @@ UbTrafficGen::SetTaskLocked(RuntimeTask task)
     }
 
     if (m_useDenseTaskStore) {
-        if (taskId == m_denseTaskStorePresent.size()) {
-            m_denseTaskStorePresent.push_back(1);
+        if (taskId == m_denseTasks.size()) {
             m_denseTasks.push_back(task);
             return true;
         }
@@ -709,13 +702,7 @@ UbTrafficGen::GetStoredTaskCountForTesting() const
         return static_cast<uint32_t>(m_tasks.size());
     }
 
-    uint32_t count = 0;
-    for (uint8_t present : m_denseTaskStorePresent) {
-        if (present != 0) {
-            ++count;
-        }
-    }
-    return count;
+    return static_cast<uint32_t>(m_denseTasks.size());
 }
 
 std::vector<uint32_t>

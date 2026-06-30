@@ -147,7 +147,6 @@ public:
 
     std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
     bool m_useDenseTaskStore{true};
-    std::vector<uint8_t> m_denseTaskStorePresent{};
     std::vector<RuntimeTask> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
     std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};

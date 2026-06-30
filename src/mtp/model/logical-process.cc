@@ -39,6 +39,21 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("LogicalProcess");
 
+namespace
+{
+
+uint32_t
+GetLocalSystemId(uint32_t systemId)
+{
+#ifdef NS3_MPI
+    return systemId >> 16;
+#else
+    return systemId;
+#endif
+}
+
+} // namespace
+
 LogicalProcess::LogicalProcess()
     : m_systemId(0),
       m_systemCount(0),
@@ -177,7 +192,8 @@ LogicalProcess::CalculateLookAhead()
                     remoteNode = (channel->GetDevice(0))->GetNode();
                 }
                 // if it's not remote, don't consider it
-                if (remoteNode->GetSystemId() == m_systemId)
+                const uint32_t remoteSystemId = GetLocalSystemId(remoteNode->GetSystemId());
+                if (remoteSystemId == m_systemId)
                 {
                     continue;
                 }
@@ -190,7 +206,7 @@ LogicalProcess::CalculateLookAhead()
                     m_lookAhead = delay.Get();
                 }
                 // add the neighbour to the mailbox
-                m_mailbox[remoteNode->GetSystemId()];
+                m_mailbox[remoteSystemId];
             }
         }
     }
@@ -203,36 +219,38 @@ LogicalProcess::ReceiveMessages()
 {
     NS_LOG_FUNCTION(this);
 
-    std::vector<RemoteEvent> remoteEvents;
+    m_pendingEventCount = 0;
     {
         std::lock_guard<std::mutex> lock(m_mailboxMutex);
         for (auto& [_, queue] : m_mailbox)
         {
-            remoteEvents.insert(remoteEvents.end(), queue.begin(), queue.end());
-            queue.clear();
+            // Keep legacy per-sender UID assignment order; global ordering changes tie-breaks for
+            // same-timestamp remote events and breaks byte-for-byte MTP output compatibility.
+            if (queue.size() > 1)
+            {
+                std::sort(queue.begin(),
+                          queue.end(),
+                          [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
+                              return std::tie(lhs.senderTs,
+                                              lhs.senderSystemId,
+                                              lhs.senderUid,
+                                              lhs.event) >
+                                     std::tie(rhs.senderTs,
+                                              rhs.senderSystemId,
+                                              rhs.senderUid,
+                                              rhs.event);
+                          });
+            }
+            while (!queue.empty())
+            {
+                RemoteEvent& remoteEvent = queue.back();
+                Scheduler::Event& ev = remoteEvent.event;
+                ev.key.m_uid = m_uid++;
+                m_events->Insert(ev);
+                m_pendingEventCount++;
+                queue.pop_back();
+            }
         }
-    }
-
-    std::sort(remoteEvents.begin(),
-              remoteEvents.end(),
-              [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
-                  return std::tie(lhs.targetTs,
-                                  lhs.senderTs,
-                                  lhs.senderSystemId,
-                                  lhs.senderUid) <
-                         std::tie(rhs.targetTs,
-                                  rhs.senderTs,
-                                  rhs.senderSystemId,
-                                  rhs.senderUid);
-              });
-
-    m_pendingEventCount = 0;
-    for (auto& remoteEvent : remoteEvents)
-    {
-        Scheduler::Event& ev = remoteEvent.event;
-        ev.key.m_uid = m_uid++;
-        m_events->Insert(ev);
-        m_pendingEventCount++;
     }
 }
 
@@ -320,7 +338,9 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
             ev.key.m_ts,
             m_currentTs,
             m_systemId,
-            m_uid++,
+            // Preserve legacy remote-event tie-breaks; incrementing this changes same-time task
+            // completion order in existing MTP scenarios.
+            m_uid,
             ev,
         });
     }

@@ -33,11 +33,32 @@
 
 #include <algorithm>
 #include <cmath>
+#include <thread>
+#if defined(__x86_64__) || defined(__i386__)
+#include <immintrin.h>
+#endif
 
 namespace ns3
 {
 
 NS_LOG_COMPONENT_DEFINE("MtpInterface");
+
+namespace
+{
+
+inline void
+CpuRelax()
+{
+#if defined(__x86_64__) || defined(__i386__)
+    _mm_pause();
+#elif defined(__aarch64__) || defined(__arm__)
+    __asm__ __volatile__("yield" ::: "memory");
+#else
+    std::this_thread::yield();
+#endif
+}
+
+} // namespace
 
 void
 MtpInterface::Enable()
@@ -171,6 +192,9 @@ MtpInterface::Disable()
     g_systemCount = 0;
     g_sortFunc = nullptr;
     g_globalFinished.store(false, std::memory_order_release);
+    g_recvMsgStage.store(false, std::memory_order_release);
+    g_systemIndex.store(0, std::memory_order_release);
+    g_finishedSystemCount.store(0, std::memory_order_release);
     delete[] g_systems;
     delete[] g_threads;
     delete[] g_sortedSystemIndices;
@@ -240,6 +264,7 @@ MtpInterface::ProcessOneRound()
     // logical process barriar synchronization
     while (g_finishedSystemCount.load(std::memory_order_acquire) != g_systemCount)
     {
+        CpuRelax();
     };
 
     // stage 2: process the public LP
@@ -264,6 +289,7 @@ MtpInterface::ProcessOneRound()
     // logical process barriar synchronization
     while (g_finishedSystemCount.load(std::memory_order_acquire) != g_systemCount)
     {
+        CpuRelax();
     };
 }
 
@@ -331,8 +357,10 @@ MtpInterface::ThreadFunc(void* arg)
         uint32_t index = g_systemIndex.fetch_add(1, std::memory_order_acquire);
         if (index >= g_systemCount)
         {
-            while (g_systemIndex.load(std::memory_order_acquire) >= g_systemCount)
+            while (!g_globalFinished.load(std::memory_order_acquire) &&
+                   g_systemIndex.load(std::memory_order_acquire) >= g_systemCount)
             {
+                CpuRelax();
             };
             continue;
         }

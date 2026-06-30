@@ -137,13 +137,6 @@ public:
         std::vector<uint32_t> dependentTasks{};
     };
 
-    map<std::string, TaOpcode> TaOpcodeMap = {
-        {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
-        {"URMA_READ", TaOpcode::TA_OPCODE_READ},
-        {"MEM_STORE", TaOpcode::TA_OPCODE_WRITE},
-        {"MEM_LOAD", TaOpcode::TA_OPCODE_READ}
-    };
-
     std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
     bool m_useDenseTaskStore{true};
     std::vector<uint8_t> m_denseTaskStorePresent{};

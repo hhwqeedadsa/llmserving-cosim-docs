@@ -72,13 +72,6 @@ private:
     void WriteNotifyTaskStarts(uint32_t nodeId, uint32_t jettyNum, uint32_t baseTaskId);
     void WriteNotifyTaskCompletes(uint32_t nodeId, uint32_t jettyNum, uint32_t baseTaskId);
 
-    map<std::string, TaOpcode> TaOpcodeMap = {
-        {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
-        {"URMA_READ", TaOpcode::TA_OPCODE_READ},
-        {"MEM_STORE", TaOpcode::TA_OPCODE_WRITE},
-        {"MEM_LOAD", TaOpcode::TA_OPCODE_READ}
-    };
-
     // 控制器
     bool m_multiPathEnable = false;
 

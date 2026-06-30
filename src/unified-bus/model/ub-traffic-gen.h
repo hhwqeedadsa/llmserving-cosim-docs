@@ -84,6 +84,8 @@ public:
                "Use local quick-example runs or build distributed coordination separately.";
     }
 
+    static constexpr std::size_t kMaxDelayParseCacheEntries = 4096;
+
     void AddTask(TrafficRecord record);
 
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
@@ -151,6 +153,7 @@ public:
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::vector<uint32_t> m_readyTasks{};
     bool m_readyTasksSorted{true};
+    std::unordered_map<std::string, Time> m_delayParseCache{};
 
     std::vector<RuntimeTask> CollectReadyTasksLocked();
 
@@ -160,7 +163,9 @@ public:
 
     void AddReadyTaskLocked(uint32_t taskId);
 
-    RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record) const;
+    RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record);
+
+    Time ParseDelayLocked(const std::string& delay);
 
     void SwitchDenseTaskStoreToMapLocked();
 

@@ -117,7 +117,7 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
 }
 
 UbTrafficGen::RuntimeTask
-UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record) const
+UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
 {
     RuntimeTask task;
     task.taskId = static_cast<uint32_t>(record.taskId);
@@ -125,7 +125,7 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record) const
     task.destNode = static_cast<uint32_t>(record.destNode);
     task.dataSize = static_cast<uint32_t>(record.dataSize);
     task.priority = static_cast<uint8_t>(record.priority);
-    task.delay = record.delay.empty() ? Time(0) : Time(record.delay);
+    task.delay = ParseDelayLocked(record.delay);
 
     if (record.opType == "URMA_WRITE") {
         task.op = RuntimeTaskOp::URMA_WRITE;
@@ -140,6 +140,25 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record) const
     }
 
     return task;
+}
+
+Time
+UbTrafficGen::ParseDelayLocked(const std::string& delay)
+{
+    if (delay.empty()) {
+        return Time(0);
+    }
+
+    auto cacheIt = m_delayParseCache.find(delay);
+    if (cacheIt != m_delayParseCache.end()) {
+        return cacheIt->second;
+    }
+
+    Time parsed(delay);
+    if (m_delayParseCache.size() < kMaxDelayParseCacheEntries) {
+        m_delayParseCache.emplace(delay, parsed);
+    }
+    return parsed;
 }
 
 void

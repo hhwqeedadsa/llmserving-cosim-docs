@@ -22,6 +22,7 @@ class UbTrafficGenSparseTaskIdFallbackTest;
 class UbTrafficGenReserveHintTest;
 class UbTrafficGenDenseTaskStoreTest;
 class UbTrafficGenDuplicateDependencyPhaseTest;
+class UbTrafficGenRecordViewDependencyTest;
 class UbTrafficGenReadyOrderTest;
 class UbTrafficGenIntegerDelayParserTest;
 
@@ -92,6 +93,8 @@ public:
 
     void AddTaskDuringInitialLoad(const TrafficRecord& record);
 
+    void AddTaskDuringInitialLoad(const TrafficRecordView& record);
+
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
 
     void SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId);
@@ -126,6 +129,7 @@ public:
     friend class ::UbTrafficGenReserveHintTest;
     friend class ::UbTrafficGenDenseTaskStoreTest;
     friend class ::UbTrafficGenDuplicateDependencyPhaseTest;
+    friend class ::UbTrafficGenRecordViewDependencyTest;
     friend class ::UbTrafficGenReadyOrderTest;
     friend class ::UbTrafficGenIntegerDelayParserTest;
 
@@ -172,15 +176,25 @@ public:
 
     void AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed);
 
+    void AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIndexed);
+
     void AddReadyTaskLocked(uint32_t taskId);
 
     RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record);
 
+    RuntimeTask ConvertToRuntimeTask(const TrafficRecordView& record);
+
     Time ParseDelayLocked(const std::string& delay);
+
+    Time ParseDelayLocked(std::string_view delay);
 
     static bool TryParseIntegerDelay(const std::string& delay, Time* out);
 
+    static bool TryParseIntegerDelay(std::string_view delay, Time* out);
+
     RuntimeTaskOp ParseOpLocked(const std::string& opType);
+
+    RuntimeTaskOp ParseOpLocked(std::string_view opType);
 
     Ptr<UbApp> GetSourceAppLocked(uint32_t sourceNode) const;
 

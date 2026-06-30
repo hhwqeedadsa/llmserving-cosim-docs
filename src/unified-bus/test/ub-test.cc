@@ -824,6 +824,77 @@ class UbTrafficGenDuplicateDependencyPhaseTest : public TestCase
     }
 };
 
+class UbTrafficGenRecordViewDependencyTest : public TestCase
+{
+  public:
+    UbTrafficGenRecordViewDependencyTest()
+        : TestCase("UnifiedBus - traffic generator record view matches dependency semantics")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(3, 2);
+        gen.RegisterPhaseTaskDuringInitialLoad(10);
+        gen.RegisterPhaseTaskDuringInitialLoad(20);
+        gen.RegisterPhaseTaskDuringInitialLoad(30);
+
+        TrafficRecordView first;
+        first.taskId = 0;
+        first.sourceNode = 0;
+        first.destNode = 0;
+        first.dataSize = 64;
+        first.opType = "URMA_WRITE";
+        first.priority = 1;
+        first.delay = "0ns";
+        first.phaseId = 10;
+        gen.AddTaskDuringInitialLoad(first);
+
+        TrafficRecordView second;
+        second.taskId = 1;
+        second.sourceNode = 0;
+        second.destNode = 0;
+        second.dataSize = 64;
+        second.opType = "URMA_WRITE";
+        second.priority = 1;
+        second.delay = "0ns";
+        second.phaseId = 20;
+        gen.AddTaskDuringInitialLoad(second);
+
+        TrafficRecordView dependent;
+        dependent.taskId = 2;
+        dependent.sourceNode = 0;
+        dependent.destNode = 0;
+        dependent.dataSize = 64;
+        dependent.opType = "URMA_WRITE";
+        dependent.priority = 1;
+        dependent.delay = "0ns";
+        dependent.phaseId = 30;
+        dependent.dependOnPhases = "10  10\t20";
+        gen.AddTaskDuringInitialLoad(dependent);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              2u,
+                              "record view should deduplicate repeated dependency phases");
+
+        gen.ScheduleNextTasks();
+        gen.MarkTaskCompleted(0);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              1u,
+                              "record view dependent task should still wait for the second phase");
+
+        gen.MarkTaskCompleted(1);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              0u,
+                              "record view dependent task should release after all phases complete");
+        Simulator::Destroy();
+    }
+};
+
 class UbTrafficGenReadyOrderTest : public TestCase
 {
   public:
@@ -886,7 +957,8 @@ class UbTrafficGenIntegerDelayParserTest : public TestCase
         }
 
         Time parsed;
-        NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay("1.5ms", &parsed),
+        NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay(std::string_view("1.5ms"),
+                                                                 &parsed),
                               false,
                               "fractional delay should fall back to Time(string)");
     }
@@ -7757,6 +7829,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbTrafficGenReserveHintTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenDenseTaskStoreTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenDuplicateDependencyPhaseTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenRecordViewDependencyTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenReadyOrderTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenIntegerDelayParserTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);

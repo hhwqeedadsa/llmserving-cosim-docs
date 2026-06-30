@@ -428,7 +428,7 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
     uint32_t localTaskCount = 0;
     std::vector<Ptr<UbApp>> sourceApps;
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
-    UbUtils::Get()->ForEachTrafficRecord(trafficPath, [&](const TrafficRecord& record) {
+    UbUtils::Get()->ForEachTrafficRecordView(trafficPath, [&](const TrafficRecordView& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
         if (activateLocalOwnedTasksOnly &&
             UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) != mpiRank)

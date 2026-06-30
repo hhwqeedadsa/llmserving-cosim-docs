@@ -79,6 +79,9 @@ public:
     void ForEachTrafficRecord(const std::string& filename,
                               const std::function<void(const TrafficRecord&)>& callback);
 
+    void ForEachTrafficRecordView(const std::string& filename,
+                                  const std::function<void(const TrafficRecordView&)>& callback);
+
     // Pre-registers phase membership before streaming AddTask calls.
     void RegisterTrafficPhaseDependencies(const std::string& filename);
 
@@ -381,6 +384,11 @@ private:
     void ForEachTrafficRecordInternal(const std::string& filename,
                                       const std::string& action,
                                       const std::function<void(const TrafficRecord&)>& callback);
+
+    void ForEachTrafficRecordViewInternal(
+        const std::string& filename,
+        const std::string& action,
+        const std::function<void(const TrafficRecordView&)>& callback);
 
     void ForEachTrafficPhaseIndexRecord(const std::string& filename,
                                         const std::function<void(uint32_t, uint32_t)>& callback);

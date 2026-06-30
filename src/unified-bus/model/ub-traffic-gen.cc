@@ -15,6 +15,50 @@
 #include "ns3/mpi-interface.h"
 #endif
 
+namespace
+{
+uint32_t
+ParseUint32Token(std::string_view field)
+{
+    NS_ABORT_MSG_IF(field.empty(), "Missing uint32 field in traffic.csv");
+    uint32_t value = 0;
+    for (char c : field)
+    {
+        NS_ABORT_MSG_IF(c < '0' || c > '9', "Invalid uint32 field in traffic.csv");
+        const uint32_t digit = static_cast<uint32_t>(c - '0');
+        NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
+                        "traffic.csv uint32 field overflow");
+        value = value * 10 + digit;
+    }
+    return value;
+}
+
+bool
+ReadNextDependencyPhase(std::string_view* field, uint32_t* phaseId)
+{
+    while (!field->empty() &&
+           (field->front() == ' ' || field->front() == '\t' || field->front() == '\r'))
+    {
+        field->remove_prefix(1);
+    }
+    if (field->empty())
+    {
+        return false;
+    }
+
+    size_t tokenEnd = 0;
+    while (tokenEnd < field->size() && (*field)[tokenEnd] != ' ' && (*field)[tokenEnd] != '\t' &&
+           (*field)[tokenEnd] != '\r')
+    {
+        ++tokenEnd;
+    }
+
+    *phaseId = ParseUint32Token(field->substr(0, tokenEnd));
+    field->remove_prefix(tokenEnd);
+    return true;
+}
+} // namespace
+
 namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE("UbTrafficGen");
@@ -62,6 +106,13 @@ UbTrafficGen::AddTaskDuringInitialLoad(const TrafficRecord& record)
 }
 
 void
+UbTrafficGen::AddTaskDuringInitialLoad(const TrafficRecordView& record)
+{
+    NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
+    AddTaskLocked(record, true);
+}
+
+void
 UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed)
 {
     uint32_t taskId = record.taskId;
@@ -99,6 +150,73 @@ UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexe
     SetPendingPhaseCountLocked(taskId, pendingPhaseCount);
 
     // 设置初始状态
+    if (pendingPhaseCount == 0) {
+        SetTaskStateLocked(taskId, TaskState::READY);
+        AddReadyTaskLocked(taskId);
+    } else {
+        SetTaskStateLocked(taskId, TaskState::PENDING);
+    }
+
+    NS_LOG_DEBUG("Added task " << taskId << " with " << uniqueDependencyPhaseCount
+                               << " phase dependencies");
+}
+
+void
+UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIndexed)
+{
+    const uint32_t taskId = record.taskId;
+    if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
+        NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
+        return;
+    }
+    if (!phaseAlreadyIndexed) {
+        RegisterTaskPhaseLocked(record.phaseId, taskId);
+    }
+
+    uint32_t pendingPhaseCount = 0;
+    const auto addDependencyPhase = [&](uint32_t dependPhaseId) {
+        auto& phaseState = m_phaseStates[dependPhaseId];
+        if (phaseState.completedTasks < phaseState.totalTasks) {
+            phaseState.dependentTasks.push_back(taskId);
+            ++pendingPhaseCount;
+        }
+    };
+
+    uint32_t firstDependencyPhase = 0;
+    bool hasFirstDependencyPhase = false;
+    std::vector<uint32_t> uniqueDependencyPhases;
+    std::string_view dependencyField = record.dependOnPhases;
+    uint32_t dependencyPhase = 0;
+    while (ReadNextDependencyPhase(&dependencyField, &dependencyPhase)) {
+        if (!hasFirstDependencyPhase) {
+            firstDependencyPhase = dependencyPhase;
+            hasFirstDependencyPhase = true;
+            continue;
+        }
+        if (uniqueDependencyPhases.empty()) {
+            uniqueDependencyPhases.reserve(4);
+            uniqueDependencyPhases.push_back(firstDependencyPhase);
+        }
+        uniqueDependencyPhases.push_back(dependencyPhase);
+    }
+
+    uint32_t uniqueDependencyPhaseCount = 0;
+    if (!uniqueDependencyPhases.empty()) {
+        std::sort(uniqueDependencyPhases.begin(), uniqueDependencyPhases.end());
+        uniqueDependencyPhases.erase(std::unique(uniqueDependencyPhases.begin(),
+                                                 uniqueDependencyPhases.end()),
+                                     uniqueDependencyPhases.end());
+        uniqueDependencyPhaseCount = static_cast<uint32_t>(uniqueDependencyPhases.size());
+        for (const auto& dependPhaseId : uniqueDependencyPhases) {
+            addDependencyPhase(dependPhaseId);
+        }
+    } else if (hasFirstDependencyPhase) {
+        uniqueDependencyPhaseCount = 1;
+        addDependencyPhase(firstDependencyPhase);
+    }
+
+    SetPendingPhaseCountLocked(taskId, pendingPhaseCount);
+
     if (pendingPhaseCount == 0) {
         SetTaskStateLocked(taskId, TaskState::READY);
         AddReadyTaskLocked(taskId);
@@ -178,8 +296,30 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
     return task;
 }
 
+UbTrafficGen::RuntimeTask
+UbTrafficGen::ConvertToRuntimeTask(const TrafficRecordView& record)
+{
+    RuntimeTask task;
+    task.taskId = record.taskId;
+    task.sourceNode = record.sourceNode;
+    task.destNode = record.destNode;
+    task.dataSize = record.dataSize;
+    task.phaseId = record.phaseId;
+    task.priority = record.priority;
+    task.delay = ParseDelayLocked(record.delay);
+    task.op = ParseOpLocked(record.opType);
+
+    return task;
+}
+
 UbTrafficGen::RuntimeTaskOp
 UbTrafficGen::ParseOpLocked(const std::string& opType)
+{
+    return ParseOpLocked(std::string_view(opType));
+}
+
+UbTrafficGen::RuntimeTaskOp
+UbTrafficGen::ParseOpLocked(std::string_view opType)
 {
     if (opType == "URMA_WRITE") {
         return RuntimeTaskOp::URMA_WRITE;
@@ -208,6 +348,12 @@ UbTrafficGen::GetSourceAppLocked(uint32_t sourceNode) const
 Time
 UbTrafficGen::ParseDelayLocked(const std::string& delay)
 {
+    return ParseDelayLocked(std::string_view(delay));
+}
+
+Time
+UbTrafficGen::ParseDelayLocked(std::string_view delay)
+{
     if (delay.empty()) {
         return Time(0);
     }
@@ -221,20 +367,27 @@ UbTrafficGen::ParseDelayLocked(const std::string& delay)
         return parsed;
     }
 
-    auto cacheIt = m_delayParseCache.find(delay);
+    std::string delayString(delay);
+    auto cacheIt = m_delayParseCache.find(delayString);
     if (cacheIt != m_delayParseCache.end()) {
         return cacheIt->second;
     }
 
-    parsed = Time(delay);
+    parsed = Time(delayString);
     if (m_delayParseCache.size() < kMaxDelayParseCacheEntries) {
-        m_delayParseCache.emplace(delay, parsed);
+        m_delayParseCache.emplace(std::move(delayString), parsed);
     }
     return parsed;
 }
 
 bool
 UbTrafficGen::TryParseIntegerDelay(const std::string& delay, Time* out)
+{
+    return TryParseIntegerDelay(std::string_view(delay), out);
+}
+
+bool
+UbTrafficGen::TryParseIntegerDelay(std::string_view delay, Time* out)
 {
     if (delay.empty() || out == nullptr) {
         return false;

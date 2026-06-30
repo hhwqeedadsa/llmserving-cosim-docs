@@ -373,6 +373,42 @@ CreateConfigStoreInput(const std::string& filename, uint32_t& rewrittenAliasLine
 }
 
 void
+SetTrafficRecordViewField(int fieldCount, std::string_view rawField, TrafficRecordView& record)
+{
+    const std::string_view field = TrimField(rawField);
+    switch (fieldCount)
+    {
+    case 0:
+        record.taskId = ParseUint32Field(field);
+        break;
+    case 1:
+        record.sourceNode = ParseUint32Field(field);
+        break;
+    case 2:
+        record.destNode = ParseUint32Field(field);
+        break;
+    case 3:
+        record.dataSize = ParseUint32Field(field);
+        break;
+    case 4:
+        record.opType = field;
+        break;
+    case 5:
+        record.priority = static_cast<uint8_t>(ParseUint32Field(field));
+        break;
+    case 6:
+        record.delay = field;
+        break;
+    case 7:
+        record.phaseId = ParseUint32Field(field);
+        break;
+    case 8:
+        record.dependOnPhases = field;
+        break;
+    }
+}
+
+void
 ValidateLegacyNetworkAttributeKeys(const std::string& filename)
 {
     std::ifstream file(filename.c_str());
@@ -2021,6 +2057,13 @@ UbUtils::ForEachTrafficRecord(const string& filename,
 }
 
 void
+UbUtils::ForEachTrafficRecordView(const string& filename,
+                                  const std::function<void(const TrafficRecordView&)>& callback)
+{
+    ForEachTrafficRecordViewInternal(filename, "Load", callback);
+}
+
+void
 UbUtils::RegisterTrafficPhaseDependencies(const string& filename)
 {
     (void)RegisterTrafficPhaseDependenciesAndGetStats(filename);
@@ -2122,12 +2165,22 @@ UbUtils::ForEachTrafficRecordInternal(const string& filename,
     }
     string line;
     getline(file, line);  // 跳过标题行
+    TrafficRecord record;
     while (getline(file, line)) {
         if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
             continue;
         }
 
-        TrafficRecord record;
+        record.taskId = 0;
+        record.sourceNode = 0;
+        record.destNode = 0;
+        record.dataSize = 0;
+        record.opType.clear();
+        record.priority = 0;
+        record.delay.clear();
+        record.phaseId = 0;
+        record.dependOnPhases.clear();
+
         int fieldCount = 0;
         size_t fieldStart = 0;
         while (fieldStart <= line.size()) {
@@ -2140,6 +2193,50 @@ UbUtils::ForEachTrafficRecordInternal(const string& filename,
                                   std::string_view(line).substr(fieldStart,
                                                                 fieldEnd - fieldStart),
                                   record);
+            ++fieldCount;
+
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
+        }
+        callback(record);
+    }
+    file.close();
+}
+
+void
+UbUtils::ForEachTrafficRecordViewInternal(
+    const string& filename,
+    const string& action,
+    const std::function<void(const TrafficRecordView&)>& callback)
+{
+    PrintTimestamp("[traffic] " + action + " " + DisplayFilename(filename));
+    ifstream file(filename);
+    if (!file.is_open()) {
+        NS_ASSERT_MSG(0, "Can not open File: " << filename);
+        return;
+    }
+    string line;
+    getline(file, line);  // 跳过标题行
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
+            continue;
+        }
+
+        TrafficRecordView record;
+        int fieldCount = 0;
+        size_t fieldStart = 0;
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            SetTrafficRecordViewField(fieldCount,
+                                      std::string_view(line).substr(fieldStart,
+                                                                    fieldEnd - fieldStart),
+                                      record);
             ++fieldCount;
 
             if (fieldEnd == line.size()) {

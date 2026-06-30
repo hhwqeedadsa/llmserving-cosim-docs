@@ -23,6 +23,7 @@ class UbTrafficGenReserveHintTest;
 class UbTrafficGenDenseTaskStoreTest;
 class UbTrafficGenDuplicateDependencyPhaseTest;
 class UbTrafficGenReadyOrderTest;
+class UbTrafficGenIntegerDelayParserTest;
 
 using namespace utils;
 namespace ns3 {
@@ -117,6 +118,7 @@ public:
     friend class ::UbTrafficGenDenseTaskStoreTest;
     friend class ::UbTrafficGenDuplicateDependencyPhaseTest;
     friend class ::UbTrafficGenReadyOrderTest;
+    friend class ::UbTrafficGenIntegerDelayParserTest;
 
     enum class TaskState {
         PENDING,
@@ -166,6 +168,8 @@ public:
     RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record);
 
     Time ParseDelayLocked(const std::string& delay);
+
+    static bool TryParseIntegerDelay(const std::string& delay, Time* out);
 
     void SwitchDenseTaskStoreToMapLocked();
 

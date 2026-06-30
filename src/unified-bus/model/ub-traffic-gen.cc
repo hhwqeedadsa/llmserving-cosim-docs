@@ -154,11 +154,67 @@ UbTrafficGen::ParseDelayLocked(const std::string& delay)
         return cacheIt->second;
     }
 
-    Time parsed(delay);
+    Time parsed;
+    if (!TryParseIntegerDelay(delay, &parsed)) {
+        parsed = Time(delay);
+    }
     if (m_delayParseCache.size() < kMaxDelayParseCacheEntries) {
         m_delayParseCache.emplace(delay, parsed);
     }
     return parsed;
+}
+
+bool
+UbTrafficGen::TryParseIntegerDelay(const std::string& delay, Time* out)
+{
+    if (delay.empty() || out == nullptr) {
+        return false;
+    }
+
+    uint64_t value = 0;
+    std::size_t pos = 0;
+    for (; pos < delay.size(); ++pos) {
+        const char c = delay[pos];
+        if (c < '0' || c > '9') {
+            break;
+        }
+        const uint64_t digit = static_cast<uint64_t>(c - '0');
+        if (value > (std::numeric_limits<uint64_t>::max() - digit) / 10) {
+            return false;
+        }
+        value = value * 10 + digit;
+    }
+
+    if (pos == 0) {
+        return false;
+    }
+
+    const std::string unit = delay.substr(pos);
+    if (unit.empty() || unit == "s") {
+        *out = Time::FromInteger(value, Time::S);
+    } else if (unit == "ms") {
+        *out = Time::FromInteger(value, Time::MS);
+    } else if (unit == "us") {
+        *out = Time::FromInteger(value, Time::US);
+    } else if (unit == "ns") {
+        *out = Time::FromInteger(value, Time::NS);
+    } else if (unit == "ps") {
+        *out = Time::FromInteger(value, Time::PS);
+    } else if (unit == "fs") {
+        *out = Time::FromInteger(value, Time::FS);
+    } else if (unit == "min") {
+        *out = Time::FromInteger(value, Time::MIN);
+    } else if (unit == "h") {
+        *out = Time::FromInteger(value, Time::H);
+    } else if (unit == "d") {
+        *out = Time::FromInteger(value, Time::D);
+    } else if (unit == "y") {
+        *out = Time::FromInteger(value, Time::Y);
+    } else {
+        return false;
+    }
+
+    return true;
 }
 
 void

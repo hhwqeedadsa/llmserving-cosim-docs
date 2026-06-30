@@ -864,6 +864,34 @@ class UbTrafficGenReadyOrderTest : public TestCase
     }
 };
 
+class UbTrafficGenIntegerDelayParserTest : public TestCase
+{
+  public:
+    UbTrafficGenIntegerDelayParserTest()
+        : TestCase("UnifiedBus - traffic generator integer delay fast parser matches Time")
+    {
+    }
+
+    void DoRun() override
+    {
+        for (const std::string& delay : {"0ns", "10ns", "7us", "3ms", "2s", "1min"})
+        {
+            Time parsed;
+            NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay(delay, &parsed),
+                                  true,
+                                  "integer delay should use fast parser");
+            NS_TEST_ASSERT_MSG_EQ(parsed.GetTimeStep(),
+                                  Time(delay).GetTimeStep(),
+                                  "fast parsed delay should match Time(string)");
+        }
+
+        Time parsed;
+        NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay("1.5ms", &parsed),
+                              false,
+                              "fractional delay should fall back to Time(string)");
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7730,6 +7758,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbTrafficGenDenseTaskStoreTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenDuplicateDependencyPhaseTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenReadyOrderTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenIntegerDelayParserTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);

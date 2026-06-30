@@ -60,6 +60,22 @@ DisplayFilename(const std::string& filename)
     return std::filesystem::path(filename).filename().string();
 }
 
+uint32_t
+ParseUint32Field(const std::string& line, size_t valueStart, size_t valueEnd)
+{
+    uint32_t value = 0;
+    for (size_t pos = valueStart; pos < valueEnd; ++pos)
+    {
+        const char c = line[pos];
+        NS_ABORT_MSG_IF(c < '0' || c > '9', "Invalid uint32 field in traffic.csv");
+        const uint32_t digit = static_cast<uint32_t>(c - '0');
+        NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
+                        "traffic.csv uint32 field overflow");
+        value = value * 10 + digit;
+    }
+    return value;
+}
+
 std::pair<uint32_t, uint32_t>
 ParseUint32RangeField(const std::string& field)
 {
@@ -1920,17 +1936,83 @@ UbUtils::TrafficLoadStats
 UbUtils::RegisterTrafficPhaseDependenciesAndGetStats(const string& filename)
 {
     TrafficLoadStats stats;
-    ForEachTrafficRecordInternal(filename,
-                                 "Index phase dependencies from",
-                                 [&](const TrafficRecord& record) {
-                                     UbTrafficGen::Get()->SetPhaseDepend(record.phaseId,
-                                                                         record.taskId);
-                                     ++stats.recordCount;
-                                     stats.maxTaskId = std::max<uint32_t>(
-                                         stats.maxTaskId,
-                                         static_cast<uint32_t>(record.taskId));
-                                 });
+    ForEachTrafficPhaseIndexRecord(filename, [&](uint32_t taskId, uint32_t phaseId) {
+        UbTrafficGen::Get()->SetPhaseDepend(phaseId, taskId);
+        ++stats.recordCount;
+        stats.maxTaskId = std::max<uint32_t>(stats.maxTaskId, taskId);
+    });
     return stats;
+}
+
+void
+UbUtils::ForEachTrafficPhaseIndexRecord(const string& filename,
+                                        const std::function<void(uint32_t, uint32_t)>& callback)
+{
+    PrintTimestamp("[traffic] Index phase dependencies from " + DisplayFilename(filename));
+    ifstream file(filename);
+    if (!file.is_open()) {
+        NS_ASSERT_MSG(0, "Can not open File: " << filename);
+        return;
+    }
+
+    string line;
+    getline(file, line);
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
+            continue;
+        }
+
+        uint32_t taskId = 0;
+        uint32_t phaseId = 0;
+        int fieldCount = 0;
+        size_t fieldStart = 0;
+        bool hasTaskId = false;
+        bool hasPhaseId = false;
+
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            if (fieldCount == static_cast<int>(FIELDCOUNT::TASKID) ||
+                fieldCount == static_cast<int>(FIELDCOUNT::PHASEID)) {
+                size_t valueStart = fieldStart;
+                while (valueStart < fieldEnd &&
+                       (line[valueStart] == ' ' || line[valueStart] == '\t')) {
+                    ++valueStart;
+                }
+                size_t valueEnd = fieldEnd;
+                while (valueEnd > valueStart &&
+                       (line[valueEnd - 1] == ' ' || line[valueEnd - 1] == '\t')) {
+                    --valueEnd;
+                }
+                if (valueStart < valueEnd) {
+                    const uint32_t value = ParseUint32Field(line, valueStart, valueEnd);
+                    if (fieldCount == static_cast<int>(FIELDCOUNT::TASKID)) {
+                        taskId = value;
+                        hasTaskId = true;
+                    } else {
+                        phaseId = value;
+                        hasPhaseId = true;
+                    }
+                }
+            }
+
+            if (hasTaskId && hasPhaseId) {
+                break;
+            }
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
+            ++fieldCount;
+        }
+
+        if (hasTaskId && hasPhaseId) {
+            callback(taskId, phaseId);
+        }
+    }
 }
 
 void

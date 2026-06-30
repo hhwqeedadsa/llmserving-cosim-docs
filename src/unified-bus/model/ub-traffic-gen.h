@@ -87,7 +87,7 @@ public:
 
     static constexpr std::size_t kMaxDelayParseCacheEntries = 4096;
 
-    void AddTask(TrafficRecord record);
+    void AddTask(const TrafficRecord& record);
 
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
 

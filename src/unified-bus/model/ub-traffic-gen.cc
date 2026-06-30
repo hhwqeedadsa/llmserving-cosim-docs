@@ -47,7 +47,7 @@ UbTrafficGen::IsMultiProcessRuntimeUnsupported()
 #endif
 }
 
-void UbTrafficGen::AddTask(TrafficRecord record)
+void UbTrafficGen::AddTask(const TrafficRecord& record)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -59,16 +59,26 @@ void UbTrafficGen::AddTask(TrafficRecord record)
     RegisterTaskPhaseLocked(record.phaseId, taskId);
 
     uint32_t pendingPhaseCount = 0;
-    std::vector<uint32_t> uniqueDependencyPhases = record.dependOnPhases;
-    std::sort(uniqueDependencyPhases.begin(), uniqueDependencyPhases.end());
-    uniqueDependencyPhases.erase(std::unique(uniqueDependencyPhases.begin(),
-                                             uniqueDependencyPhases.end()),
-                                 uniqueDependencyPhases.end());
-    for (const auto& dependPhaseId : uniqueDependencyPhases) {
+    const auto addDependencyPhase = [&](uint32_t dependPhaseId) {
         auto& phaseState = m_phaseStates[dependPhaseId];
         if (phaseState.completedTasks < phaseState.totalTasks) {
             phaseState.dependentTasks.push_back(taskId);
             ++pendingPhaseCount;
+        }
+    };
+
+    uint32_t uniqueDependencyPhaseCount = static_cast<uint32_t>(record.dependOnPhases.size());
+    if (record.dependOnPhases.size() == 1) {
+        addDependencyPhase(record.dependOnPhases[0]);
+    } else if (record.dependOnPhases.size() > 1) {
+        std::vector<uint32_t> uniqueDependencyPhases = record.dependOnPhases;
+        std::sort(uniqueDependencyPhases.begin(), uniqueDependencyPhases.end());
+        uniqueDependencyPhases.erase(std::unique(uniqueDependencyPhases.begin(),
+                                                 uniqueDependencyPhases.end()),
+                                     uniqueDependencyPhases.end());
+        uniqueDependencyPhaseCount = static_cast<uint32_t>(uniqueDependencyPhases.size());
+        for (const auto& dependPhaseId : uniqueDependencyPhases) {
+            addDependencyPhase(dependPhaseId);
         }
     }
     SetPendingPhaseCountLocked(taskId, pendingPhaseCount);
@@ -81,7 +91,7 @@ void UbTrafficGen::AddTask(TrafficRecord record)
         SetTaskStateLocked(taskId, TaskState::PENDING);
     }
 
-    NS_LOG_DEBUG("Added task " << taskId << " with " << uniqueDependencyPhases.size()
+    NS_LOG_DEBUG("Added task " << taskId << " with " << uniqueDependencyPhaseCount
                                << " phase dependencies");
 }
 
@@ -99,13 +109,9 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
     std::lock_guard<std::mutex> lock(m_mutex);
     const auto reserveCount = static_cast<size_t>(std::min<uint64_t>(
         recordCount, static_cast<uint64_t>(std::numeric_limits<size_t>::max())));
-    m_tasks.reserve(reserveCount);
-    m_taskStates.reserve(reserveCount);
-    m_taskPhaseIds.reserve(reserveCount);
-    m_pendingPhaseCounts.reserve(reserveCount);
-    m_phaseStates.reserve(reserveCount);
 
-    if (maxTaskId != std::numeric_limits<uint32_t>::max()) {
+    if (recordCount > 0 && maxTaskId != std::numeric_limits<uint32_t>::max() &&
+        static_cast<uint64_t>(maxTaskId) + 1 == recordCount) {
         const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
         m_denseTaskStorePresent.reserve(denseReserve);
         m_denseTasks.reserve(denseReserve);
@@ -113,6 +119,11 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
         m_denseTaskStates.reserve(denseReserve);
         m_denseTaskPhaseIds.reserve(denseReserve);
         m_densePendingPhaseCounts.reserve(denseReserve);
+    } else {
+        m_tasks.reserve(reserveCount);
+        m_taskStates.reserve(reserveCount);
+        m_taskPhaseIds.reserve(reserveCount);
+        m_pendingPhaseCounts.reserve(reserveCount);
     }
 }
 
@@ -134,24 +145,19 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
 UbTrafficGen::RuntimeTaskOp
 UbTrafficGen::ParseOpLocked(const std::string& opType)
 {
-    auto cacheIt = m_opParseCache.find(opType);
-    if (cacheIt != m_opParseCache.end()) {
-        return cacheIt->second;
-    }
-
-    RuntimeTaskOp op = RuntimeTaskOp::UNKNOWN;
     if (opType == "URMA_WRITE") {
-        op = RuntimeTaskOp::URMA_WRITE;
-    } else if (opType == "URMA_READ") {
-        op = RuntimeTaskOp::URMA_READ;
-    } else if (opType == "MEM_STORE") {
-        op = RuntimeTaskOp::MEM_STORE;
-    } else if (opType == "MEM_LOAD") {
-        op = RuntimeTaskOp::MEM_LOAD;
+        return RuntimeTaskOp::URMA_WRITE;
     }
-
-    m_opParseCache.emplace(opType, op);
-    return op;
+    if (opType == "URMA_READ") {
+        return RuntimeTaskOp::URMA_READ;
+    }
+    if (opType == "MEM_STORE") {
+        return RuntimeTaskOp::MEM_STORE;
+    }
+    if (opType == "MEM_LOAD") {
+        return RuntimeTaskOp::MEM_LOAD;
+    }
+    return RuntimeTaskOp::UNKNOWN;
 }
 
 Time
@@ -160,16 +166,22 @@ UbTrafficGen::ParseDelayLocked(const std::string& delay)
     if (delay.empty()) {
         return Time(0);
     }
+    if (delay == "0" || delay == "0s" || delay == "0ms" || delay == "0us" || delay == "0ns" ||
+        delay == "0ps" || delay == "0fs") {
+        return Time(0);
+    }
+
+    Time parsed;
+    if (TryParseIntegerDelay(delay, &parsed)) {
+        return parsed;
+    }
 
     auto cacheIt = m_delayParseCache.find(delay);
     if (cacheIt != m_delayParseCache.end()) {
         return cacheIt->second;
     }
 
-    Time parsed;
-    if (!TryParseIntegerDelay(delay, &parsed)) {
-        parsed = Time(delay);
-    }
+    parsed = Time(delay);
     if (m_delayParseCache.size() < kMaxDelayParseCacheEntries) {
         m_delayParseCache.emplace(delay, parsed);
     }
@@ -201,26 +213,27 @@ UbTrafficGen::TryParseIntegerDelay(const std::string& delay, Time* out)
         return false;
     }
 
-    const std::string unit = delay.substr(pos);
-    if (unit.empty() || unit == "s") {
+    const char* unit = delay.data() + pos;
+    const std::size_t unitLength = delay.size() - pos;
+    if (unitLength == 0 || (unitLength == 1 && unit[0] == 's')) {
         *out = Time::FromInteger(value, Time::S);
-    } else if (unit == "ms") {
+    } else if (unitLength == 2 && unit[0] == 'm' && unit[1] == 's') {
         *out = Time::FromInteger(value, Time::MS);
-    } else if (unit == "us") {
+    } else if (unitLength == 2 && unit[0] == 'u' && unit[1] == 's') {
         *out = Time::FromInteger(value, Time::US);
-    } else if (unit == "ns") {
+    } else if (unitLength == 2 && unit[0] == 'n' && unit[1] == 's') {
         *out = Time::FromInteger(value, Time::NS);
-    } else if (unit == "ps") {
+    } else if (unitLength == 2 && unit[0] == 'p' && unit[1] == 's') {
         *out = Time::FromInteger(value, Time::PS);
-    } else if (unit == "fs") {
+    } else if (unitLength == 2 && unit[0] == 'f' && unit[1] == 's') {
         *out = Time::FromInteger(value, Time::FS);
-    } else if (unit == "min") {
+    } else if (unitLength == 3 && unit[0] == 'm' && unit[1] == 'i' && unit[2] == 'n') {
         *out = Time::FromInteger(value, Time::MIN);
-    } else if (unit == "h") {
+    } else if (unitLength == 1 && unit[0] == 'h') {
         *out = Time::FromInteger(value, Time::H);
-    } else if (unit == "d") {
+    } else if (unitLength == 1 && unit[0] == 'd') {
         *out = Time::FromInteger(value, Time::D);
-    } else if (unit == "y") {
+    } else if (unitLength == 1 && unit[0] == 'y') {
         *out = Time::FromInteger(value, Time::Y);
     } else {
         return false;

@@ -382,6 +382,9 @@ private:
                                       const std::string& action,
                                       const std::function<void(const TrafficRecord&)>& callback);
 
+    void ForEachTrafficPhaseIndexRecord(const std::string& filename,
+                                        const std::function<void(uint32_t, uint32_t)>& callback);
+
     static void PrintTraceInfo(const std::string& fileName, const std::string& info);
 
     static void PrintTraceInfoNoTs(const std::string& fileName, const std::string& info);

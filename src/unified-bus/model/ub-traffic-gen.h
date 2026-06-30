@@ -22,6 +22,7 @@ class UbTrafficGenSparseTaskIdFallbackTest;
 class UbTrafficGenReserveHintTest;
 class UbTrafficGenDenseTaskStoreTest;
 class UbTrafficGenDuplicateDependencyPhaseTest;
+class UbTrafficGenReadyOrderTest;
 
 using namespace utils;
 namespace ns3 {
@@ -113,6 +114,7 @@ public:
     friend class ::UbTrafficGenReserveHintTest;
     friend class ::UbTrafficGenDenseTaskStoreTest;
     friend class ::UbTrafficGenDuplicateDependencyPhaseTest;
+    friend class ::UbTrafficGenReadyOrderTest;
 
     enum class TaskState {
         PENDING,
@@ -147,13 +149,16 @@ public:
     std::vector<uint32_t> m_denseTaskPhaseIds{};
     std::vector<uint32_t> m_densePendingPhaseCounts{};
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
-    std::set<uint32_t> m_readyTasks{};
+    std::vector<uint32_t> m_readyTasks{};
+    bool m_readyTasksSorted{true};
 
     std::vector<RuntimeTask> CollectReadyTasksLocked();
 
     void ScheduleTasks(const std::vector<RuntimeTask>& tasks);
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    void AddReadyTaskLocked(uint32_t taskId);
 
     RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record) const;
 
@@ -194,6 +199,8 @@ public:
     bool IsUsingDenseTaskStoreForTesting() const;
 
     uint32_t GetStoredTaskCountForTesting() const;
+
+    std::vector<uint32_t> CollectReadyTaskIdsForTesting();
 
     mutable std::mutex m_mutex;
 };

@@ -76,7 +76,7 @@ void UbTrafficGen::AddTask(TrafficRecord record)
     // 设置初始状态
     if (pendingPhaseCount == 0) {
         SetTaskStateLocked(taskId, TaskState::READY);
-        m_readyTasks.insert(taskId);
+        AddReadyTaskLocked(taskId);
     } else {
         SetTaskStateLocked(taskId, TaskState::PENDING);
     }
@@ -237,6 +237,15 @@ UbTrafficGen::RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId)
     SetTaskPhaseLocked(taskId, phaseId);
     auto& phaseState = m_phaseStates[phaseId];
     ++phaseState.totalTasks;
+}
+
+void
+UbTrafficGen::AddReadyTaskLocked(uint32_t taskId)
+{
+    if (!m_readyTasks.empty() && taskId < m_readyTasks.back()) {
+        m_readyTasksSorted = false;
+    }
+    m_readyTasks.push_back(taskId);
 }
 
 void
@@ -463,7 +472,7 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
 
                         if (DecrementPendingPhaseCountLocked(dependentId)) {
                             *dependentState = TaskState::READY;
-                            m_readyTasks.insert(dependentId);
+                            AddReadyTaskLocked(dependentId);
                         }
                     }
                     phaseStateIt->second.dependentTasks.clear();
@@ -571,6 +580,16 @@ UbTrafficGen::GetStoredTaskCountForTesting() const
     return count;
 }
 
+std::vector<uint32_t>
+UbTrafficGen::CollectReadyTaskIdsForTesting()
+{
+    std::lock_guard<std::mutex> lock(m_mutex);
+    std::vector<uint32_t> ids = m_readyTasks;
+    std::sort(ids.begin(), ids.end());
+    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+    return ids;
+}
+
 void UbTrafficGen::ScheduleNextTasks()
 {
     std::vector<RuntimeTask> readyTasks;
@@ -583,9 +602,16 @@ void UbTrafficGen::ScheduleNextTasks()
 
 std::vector<UbTrafficGen::RuntimeTask> UbTrafficGen::CollectReadyTasksLocked()
 {
+    if (!m_readyTasksSorted) {
+        std::sort(m_readyTasks.begin(), m_readyTasks.end());
+        m_readyTasks.erase(std::unique(m_readyTasks.begin(), m_readyTasks.end()),
+                           m_readyTasks.end());
+        m_readyTasksSorted = true;
+    }
+
     std::vector<RuntimeTask> readyTasks;
-    for (auto it = m_readyTasks.begin(); it != m_readyTasks.end();) {
-        uint32_t taskId = *it;
+    readyTasks.reserve(m_readyTasks.size());
+    for (uint32_t taskId : m_readyTasks) {
         TaskState* state = FindTaskStateLocked(taskId);
         if (state != nullptr && *state == TaskState::READY) {
             *state = TaskState::RUNNING;
@@ -594,8 +620,9 @@ std::vector<UbTrafficGen::RuntimeTask> UbTrafficGen::CollectReadyTasksLocked()
                 readyTasks.push_back(*task);
             }
         }
-        it = m_readyTasks.erase(it);
     }
+    m_readyTasks.clear();
+    m_readyTasksSorted = true;
     return readyTasks;
 }
 

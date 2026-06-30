@@ -824,6 +824,46 @@ class UbTrafficGenDuplicateDependencyPhaseTest : public TestCase
     }
 };
 
+class UbTrafficGenReadyOrderTest : public TestCase
+{
+  public:
+    UbTrafficGenReadyOrderTest()
+        : TestCase("UnifiedBus - ready task collection preserves ascending task order")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(3, 2);
+
+        for (uint32_t taskId = 0; taskId < 3; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = taskId + 1;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        const auto readyIds = gen.CollectReadyTaskIdsForTesting();
+        NS_TEST_ASSERT_MSG_EQ(readyIds.size(), 3u, "three ready tasks should be collected");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[0], 0u, "first ready task should be task 0");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[1], 1u, "second ready task should be task 1");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[2], 2u, "third ready task should be task 2");
+        Simulator::Destroy();
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7689,6 +7729,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbTrafficGenReserveHintTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenDenseTaskStoreTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficGenDuplicateDependencyPhaseTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenReadyOrderTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);

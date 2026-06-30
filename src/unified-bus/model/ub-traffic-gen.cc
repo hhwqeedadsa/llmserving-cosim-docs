@@ -126,20 +126,32 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
     task.dataSize = static_cast<uint32_t>(record.dataSize);
     task.priority = static_cast<uint8_t>(record.priority);
     task.delay = ParseDelayLocked(record.delay);
-
-    if (record.opType == "URMA_WRITE") {
-        task.op = RuntimeTaskOp::URMA_WRITE;
-    } else if (record.opType == "URMA_READ") {
-        task.op = RuntimeTaskOp::URMA_READ;
-    } else if (record.opType == "MEM_STORE") {
-        task.op = RuntimeTaskOp::MEM_STORE;
-    } else if (record.opType == "MEM_LOAD") {
-        task.op = RuntimeTaskOp::MEM_LOAD;
-    } else {
-        task.op = RuntimeTaskOp::UNKNOWN;
-    }
+    task.op = ParseOpLocked(record.opType);
 
     return task;
+}
+
+UbTrafficGen::RuntimeTaskOp
+UbTrafficGen::ParseOpLocked(const std::string& opType)
+{
+    auto cacheIt = m_opParseCache.find(opType);
+    if (cacheIt != m_opParseCache.end()) {
+        return cacheIt->second;
+    }
+
+    RuntimeTaskOp op = RuntimeTaskOp::UNKNOWN;
+    if (opType == "URMA_WRITE") {
+        op = RuntimeTaskOp::URMA_WRITE;
+    } else if (opType == "URMA_READ") {
+        op = RuntimeTaskOp::URMA_READ;
+    } else if (opType == "MEM_STORE") {
+        op = RuntimeTaskOp::MEM_STORE;
+    } else if (opType == "MEM_LOAD") {
+        op = RuntimeTaskOp::MEM_LOAD;
+    }
+
+    m_opParseCache.emplace(opType, op);
+    return op;
 }
 
 Time

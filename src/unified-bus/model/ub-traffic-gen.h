@@ -156,6 +156,7 @@ public:
     std::vector<uint32_t> m_readyTasks{};
     bool m_readyTasksSorted{true};
     std::unordered_map<std::string, Time> m_delayParseCache{};
+    std::unordered_map<std::string, RuntimeTaskOp> m_opParseCache{};
 
     std::vector<RuntimeTask> CollectReadyTasksLocked();
 
@@ -170,6 +171,8 @@ public:
     Time ParseDelayLocked(const std::string& delay);
 
     static bool TryParseIntegerDelay(const std::string& delay, Time* out);
+
+    RuntimeTaskOp ParseOpLocked(const std::string& opType);
 
     void SwitchDenseTaskStoreToMapLocked();
 

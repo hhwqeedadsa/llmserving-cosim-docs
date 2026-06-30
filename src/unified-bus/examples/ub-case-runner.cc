@@ -214,29 +214,38 @@ void CheckExampleProcess()
     Simulator::Stop();
 }
 
-MpiLaunchProbe ProbeMpiWorld(int* argc, char*** argv)
+MpiLaunchProbe ProbeMpiWorld(int* argc, char*** argv, uint32_t mtpThreads)
 {
     MpiLaunchProbe probe;
 #ifdef NS3_MPI
+    const int requestedThreadLevel =
+        mtpThreads > 1 ? MPI_THREAD_SERIALIZED : MPI_THREAD_SINGLE;
+    int providedThreadLevel = MPI_THREAD_SINGLE;
     int initialized = 0;
     MPI_Initialized(&initialized);
     if (!initialized)
     {
-        int provided = MPI_THREAD_SINGLE;
-        const int rc = MPI_Init_thread(argc, argv, MPI_THREAD_SINGLE, &provided);
+        const int rc = MPI_Init_thread(argc, argv, requestedThreadLevel, &providedThreadLevel);
         NS_ABORT_MSG_IF(rc != MPI_SUCCESS, "MPI_Init_thread failed while probing quick-entry runtime");
         probe.initializedHere = true;
+    }
+    else
+    {
+        MPI_Query_thread(&providedThreadLevel);
     }
 
     int mpiRank = 0;
     int mpiSize = 1;
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
+    NS_ABORT_MSG_IF(mpiSize > 1 && mtpThreads > 1 && providedThreadLevel < MPI_THREAD_SERIALIZED,
+                    "MPI runtime does not provide the requested thread level");
     probe.rank = static_cast<uint32_t>(mpiRank);
     probe.size = static_cast<uint32_t>(mpiSize);
 #else
     (void)argc;
     (void)argv;
+    (void)mtpThreads;
 #endif
     return probe;
 }
@@ -421,11 +430,6 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
 
 void ApplyDependencyVisibilityLookaheadBound(const RuntimeSelection& runtime)
 {
-#ifdef NS3_MPI
-    if (!runtime.enableMpi)
-    {
-        return;
-    }
     if (!UbTrafficGen::Get()->HasDependencyVisibilityDelay())
     {
         return;
@@ -437,7 +441,22 @@ void ApplyDependencyVisibilityLookaheadBound(const RuntimeSelection& runtime)
         return;
     }
 
+#ifdef NS3_MTP
+    if (ModeUsesMtp(runtime.mode))
+    {
+        MtpInterface::BoundLookAhead(delay);
+    }
+#endif
+
+#ifdef NS3_MPI
+    if (!runtime.enableMpi)
+    {
+        return;
+    }
+
     MpiInterface::BoundLookAhead(delay);
+#else
+    (void)runtime;
 #endif
 }
 
@@ -451,7 +470,8 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
 
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
-                                   uint32_t mpiRank)
+                                   uint32_t mpiRank,
+                                   bool requirePositiveDependencyVisibilityDelay)
 {
     auto trafficData = UbUtils::Get()->LoadTrafficConfig(configPath + "/traffic.csv");
     if (UbUtils::Get()->IsFaultEnabled())
@@ -481,12 +501,29 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
         }
     }
 
-    UbTrafficGen::Get()->ValidateDependencyVisibilityDelay();
+    UbTrafficGen::Get()->ValidateDependencyVisibilityDelay(
+        requirePositiveDependencyVisibilityDelay);
     UbTrafficGen::Get()->ScheduleNextTasks();
     UbUtils::Get()->PrintTimestamp("[traffic] Scheduled local tasks: " +
                                    std::to_string(localTaskCount));
     CheckExampleProcess();
     return localTaskCount;
+}
+
+void ShutdownRuntime(const RuntimeSelection& runtime)
+{
+    Simulator::Destroy();
+#ifdef NS3_MPI
+    // Simulator::Destroy() lets the simulator implementation release MPI receive
+    // buffers. MpiInterface::Disable() owns the duplicated communicator and MPI
+    // finalization state.
+    if (runtime.enableMpi && MpiInterface::IsEnabled())
+    {
+        MpiInterface::Disable();
+    }
+#else
+    (void)runtime;
+#endif
 }
 
 bool HandleAttributeQuery(int argc, char* argv[])
@@ -652,7 +689,10 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     ConfigureCanonicalOutput(options, runtime);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
-    ActivateTrafficFromConfig(options.configPath, runtime.enableMpi, runtime.mpiRank);
+    ActivateTrafficFromConfig(options.configPath,
+                              runtime.enableMpi,
+                              runtime.mpiRank,
+                              runtime.enableMpi || ModeUsesMtp(runtime.mode));
     if (options.stopMs > 0)
     {
         Simulator::Stop(MilliSeconds(options.stopMs));
@@ -662,13 +702,7 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
 
     UbUtils::Get()->Destroy();
     UbTrafficGen::Get()->WriteCanonicalOutput();
-    Simulator::Destroy();
-#ifdef NS3_MPI
-    if (runtime.enableMpi && MpiInterface::IsEnabled())
-    {
-        MpiInterface::Disable();
-    }
-#endif
+    ShutdownRuntime(runtime);
 
     UbUtils::Get()->PrintTimestamp("[run] Simulation finished.");
     timing.traceStart = std::chrono::high_resolution_clock::now();
@@ -718,7 +752,7 @@ int RunUbCaseRunner(int argc, char* argv[])
     }
 
     QuickExampleOptions options = ParseOptions(argc, argv);
-    MpiLaunchProbe mpiProbe = ProbeMpiWorld(&argc, &argv);
+    MpiLaunchProbe mpiProbe = ProbeMpiWorld(&argc, &argv, options.mtpThreads);
     if (mpiProbe.size <= 1)
     {
         FinalizeMpiProbeIfNeeded(mpiProbe);

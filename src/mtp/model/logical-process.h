@@ -73,6 +73,7 @@ class LogicalProcess
      * @brief Receive events sent by other logical processes in the previous round.
      */
     void ReceiveMessages();
+    void BoundLookAhead(Time lookAhead);
 
     /**
      * @brief Process all events in the current round.

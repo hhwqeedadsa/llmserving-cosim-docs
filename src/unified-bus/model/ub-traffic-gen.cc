@@ -17,6 +17,9 @@
 #ifdef NS3_MPI
 #include "ns3/mpi-interface.h"
 #endif
+#ifdef NS3_MTP
+#include "ns3/mtp-interface.h"
+#endif
 
 namespace ns3 {
 
@@ -90,6 +93,7 @@ TrafficRecord UbTrafficGen::GetTaskById(uint32_t taskId)
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
 {
     Time completionVisibleTs;
+    bool needsDependencyControlPlane = false;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -98,7 +102,22 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
             return;
         }
 
-        completionVisibleTs = Simulator::Now() + ResolveCompletionVisibleDelayLocked();
+        const Time delay = ResolveCompletionVisibleDelayLocked();
+        completionVisibleTs = Simulator::Now() + delay;
+        auto dependentIt = m_dependents.find(taskId);
+        needsDependencyControlPlane =
+            (dependentIt != m_dependents.end() && !dependentIt->second.empty()) ||
+            delay.IsStrictlyPositive();
+    }
+
+    if (!needsDependencyControlPlane) {
+#ifdef NS3_MPI
+        if (!MpiInterface::IsEnabled() || MpiInterface::GetSize() <= 1)
+#endif
+        {
+            Simulator::ScheduleNow(&UbTrafficGen::ApplyTaskCompletion, this, taskId);
+            return;
+        }
     }
 
     ScheduleTaskCompletionVisibility(taskId, completionVisibleTs);
@@ -128,14 +147,18 @@ UbTrafficGen::GetDependencyVisibilityDelay() const
 }
 
 void
-UbTrafficGen::ValidateDependencyVisibilityDelay() const
+UbTrafficGen::ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) const
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    NS_ABORT_MSG_IF(
-        HasDependenciesLocked() && !m_dependencyVisibilityDelay.has_value() &&
-            !m_minRemoteLinkDelay.has_value(),
-        "traffic.csv contains task dependencies but no dependency visibility delay is available. "
-        "Pass --dependency-visibility-delay=<Time> or add remote link.");
+    if (!HasDependenciesLocked()) {
+        return;
+    }
+
+    NS_ABORT_MSG_IF(!m_dependencyVisibilityDelay.has_value() && !m_minRemoteLinkDelay.has_value(),
+                    "traffic.csv contains task dependencies but no dependency visibility delay is "
+                    "available. Pass --dependency-visibility-delay=<Time> or add remote link.");
+    NS_ABORT_MSG_IF(requireStrictlyPositive && !ResolveCompletionVisibleDelayLocked().IsStrictlyPositive(),
+                    "parallel traffic.csv dependencies require a positive dependency visibility delay.");
 }
 
 void
@@ -409,6 +432,14 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
             }
             MpiInterface::SendTaskCompletion(taskId, completionVisibleTs, rank);
         }
+    }
+#endif
+
+#ifdef NS3_MTP
+    if (MtpInterface::isPartitioned()) {
+        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
+                                       [this, taskId]() { ApplyTaskCompletion(taskId); });
+        return;
     }
 #endif
 

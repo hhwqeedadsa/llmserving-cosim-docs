@@ -102,6 +102,10 @@ HybridSimulatorImpl::BoundLookAhead(Time lookAhead)
         {
             m_minLookahead = Min(m_minLookahead, lookAhead);
         }
+        if (MtpInterface::isPartitioned())
+        {
+            MtpInterface::BoundLookAhead(lookAhead);
+        }
     }
     else
     {

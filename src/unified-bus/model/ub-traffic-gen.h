@@ -56,7 +56,7 @@ public:
 
     Time GetDependencyVisibilityDelay() const;
 
-    void ValidateDependencyVisibilityDelay() const;
+    void ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) const;
 
     void ObserveRemoteLinkDelay(Time delay);
 

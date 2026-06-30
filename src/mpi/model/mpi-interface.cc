@@ -21,6 +21,7 @@
 #endif
 #include "null-message-mpi-interface.h"
 
+#include "ns3/abort.h"
 #include "ns3/global-value.h"
 #include "ns3/log.h"
 #include "ns3/simulator.h"
@@ -171,7 +172,9 @@ MpiInterface::BoundLookAhead(Time lookAhead)
         return;
     }
 #endif
-    NS_LOG_WARN("attempted to bind MPI lookahead while using a non-MPI simulator implementation");
+    NS_ABORT_MSG_IF(IsEnabled(),
+                    "attempted to bind MPI lookahead while using a non-MPI simulator implementation");
+    NS_LOG_WARN("attempted to bind MPI lookahead without an enabled MPI runtime");
 }
 
 MPI_Comm

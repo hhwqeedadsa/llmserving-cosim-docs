@@ -80,8 +80,8 @@ uint32_t GrantedTimeWindowMpiInterface::g_rxCount = 0;
 uint32_t GrantedTimeWindowMpiInterface::g_txCount = 0;
 std::list<SentBuffer> GrantedTimeWindowMpiInterface::g_pendingTx;
 
-MPI_Request* GrantedTimeWindowMpiInterface::g_requests;
-char** GrantedTimeWindowMpiInterface::g_pRxBuffers;
+MPI_Request* GrantedTimeWindowMpiInterface::g_requests = nullptr;
+char** GrantedTimeWindowMpiInterface::g_pRxBuffers = nullptr;
 MPI_Comm GrantedTimeWindowMpiInterface::g_communicator = MPI_COMM_WORLD;
 bool GrantedTimeWindowMpiInterface::g_freeCommunicator = false;
 ParallelCommunicationInterface::TaskCompletionHandler
@@ -104,14 +104,21 @@ GrantedTimeWindowMpiInterface::Destroy()
 {
     NS_LOG_FUNCTION(this);
 
-    for (uint32_t i = 0; i < GetSize(); ++i)
+    if (g_pRxBuffers != nullptr)
     {
-        delete[] g_pRxBuffers[i];
+        for (uint32_t i = 0; i < GetSize(); ++i)
+        {
+            delete[] g_pRxBuffers[i];
+        }
+        delete[] g_pRxBuffers;
+        g_pRxBuffers = nullptr;
     }
-    delete[] g_pRxBuffers;
+
     delete[] g_requests;
+    g_requests = nullptr;
 
     g_pendingTx.clear();
+    g_taskCompletionHandler = nullptr;
 }
 
 uint32_t
@@ -428,10 +435,9 @@ GrantedTimeWindowMpiInterface::ScheduleTaskCompletion(uint32_t taskId, Time comp
 #ifdef NS3_MTP
     if (MtpInterface::isEnabled())
     {
-        MtpInterface::GetSystem(0)->ScheduleAt(
-            Simulator::NO_CONTEXT,
-            completionVisibleTs,
-            MakeEvent(&GrantedTimeWindowMpiInterface::DispatchTaskCompletion, taskId));
+        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
+                                       &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
+                                       taskId);
         return;
     }
 #endif

@@ -170,6 +170,7 @@ MtpInterface::Disable()
     g_threadCount = 0;
     g_systemCount = 0;
     g_sortFunc = nullptr;
+    g_lookAheadBound = TimeStep(0);
     g_globalFinished = false;
     delete[] g_systems;
     delete[] g_threads;
@@ -320,6 +321,30 @@ MtpInterface::CalculateLookAhead()
     for (uint32_t i = 1; i <= g_systemCount; i++)
     {
         g_systems[i].CalculateLookAhead();
+        if (g_lookAheadBound.IsStrictlyPositive())
+        {
+            g_systems[i].BoundLookAhead(g_lookAheadBound);
+        }
+    }
+}
+
+void
+MtpInterface::BoundLookAhead(Time lookAhead)
+{
+    if (!lookAhead.IsStrictlyPositive())
+    {
+        NS_LOG_WARN("attempted to set MTP lookahead bound to a non-positive time: " << lookAhead);
+        return;
+    }
+
+    if (!g_lookAheadBound.IsStrictlyPositive() || lookAhead < g_lookAheadBound)
+    {
+        g_lookAheadBound = lookAhead;
+    }
+
+    for (uint32_t i = 1; i <= g_systemCount; i++)
+    {
+        g_systems[i].BoundLookAhead(lookAhead);
     }
 }
 
@@ -408,6 +433,8 @@ uint32_t MtpInterface::g_round = 0;
 Time MtpInterface::g_smallestTime = TimeStep(0);
 
 Time MtpInterface::g_nextPublicTime = TimeStep(0);
+
+Time MtpInterface::g_lookAheadBound = TimeStep(0);
 
 bool MtpInterface::g_recvMsgStage = false;
 

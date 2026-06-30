@@ -210,6 +210,11 @@ class MtpInterface
     static void CalculateLookAhead();
 
     /**
+     * @brief Add an upper bound to every worker LP lookahead.
+     */
+    static void BoundLookAhead(Time lookAhead);
+
+    /**
      * @brief Get the running logical process of the current thread.
      *
      * @return The curretly running logical process of the
@@ -318,9 +323,9 @@ class MtpInterface
      */
     template <
         typename FUNC,
-        typename std::enable_if<!std::is_convertible<FUNC, Ptr<EventImpl>>::value, int>::type,
+        typename std::enable_if<!std::is_convertible<FUNC, Ptr<EventImpl>>::value, int>::type = 0,
         typename std::enable_if<!std::is_function<typename std::remove_pointer<FUNC>::type>::value,
-                                int>::type,
+                                int>::type = 0,
         typename... Ts>
     inline static void ScheduleGlobal(FUNC f, Ts&&... args)
     {
@@ -340,6 +345,39 @@ class MtpInterface
         g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
                                 Min(g_smallestTime, g_nextPublicTime),
                                 MakeEvent(f, std::forward<Ts>(args)...));
+    }
+
+    /**
+     * @brief Schedule a control-plane event on the public LP at an absolute time.
+     *
+     * Public-LP delivery gives local MTP and hybrid MPI/MTP control events the
+     * same serialization point instead of tying them to whichever worker LP is
+     * executing when the control event is created.
+     */
+    template <
+        typename FUNC,
+        typename std::enable_if<!std::is_convertible<FUNC, Ptr<EventImpl>>::value, int>::type = 0,
+        typename std::enable_if<!std::is_function<typename std::remove_pointer<FUNC>::type>::value,
+                                int>::type = 0,
+        typename... Ts>
+    inline static void ScheduleGlobalAt(const Time& time, FUNC f, Ts&&... args)
+    {
+        CriticalSection cs;
+        NS_ABORT_MSG_IF(time < g_systems[0].Now(),
+                        "control-plane event time is earlier than public LP");
+        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT, time, MakeEvent(f, std::forward<Ts>(args)...));
+    }
+
+    /**
+     * @brief Schedule a control-plane event on the public LP at an absolute time.
+     */
+    template <typename... Us, typename... Ts>
+    inline static void ScheduleGlobalAt(const Time& time, void (*f)(Us...), Ts&&... args)
+    {
+        CriticalSection cs;
+        NS_ABORT_MSG_IF(time < g_systems[0].Now(),
+                        "control-plane event time is earlier than public LP");
+        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT, time, MakeEvent(f, std::forward<Ts>(args)...));
     }
 
   private:
@@ -388,6 +426,7 @@ class MtpInterface
     static uint32_t g_round;
     static Time g_smallestTime;
     static Time g_nextPublicTime;
+    static Time g_lookAheadBound;
     static bool g_recvMsgStage;
     static bool g_globalFinished;
     static bool g_enabled;

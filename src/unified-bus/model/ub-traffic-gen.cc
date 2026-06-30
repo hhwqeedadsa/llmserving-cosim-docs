@@ -59,11 +59,14 @@ void UbTrafficGen::AddTask(TrafficRecord record)
     RegisterTaskPhaseLocked(record.phaseId, taskId);
 
     uint32_t pendingPhaseCount = 0;
-    std::set<uint32_t> uniqueDependencyPhases;
-    for (const auto& dependPhaseId : record.dependOnPhases) {
+    std::vector<uint32_t> uniqueDependencyPhases = record.dependOnPhases;
+    std::sort(uniqueDependencyPhases.begin(), uniqueDependencyPhases.end());
+    uniqueDependencyPhases.erase(std::unique(uniqueDependencyPhases.begin(),
+                                             uniqueDependencyPhases.end()),
+                                 uniqueDependencyPhases.end());
+    for (const auto& dependPhaseId : uniqueDependencyPhases) {
         auto& phaseState = m_phaseStates[dependPhaseId];
-        const bool inserted = uniqueDependencyPhases.insert(dependPhaseId).second;
-        if (inserted && phaseState.completedTasks < phaseState.totalTasks) {
+        if (phaseState.completedTasks < phaseState.totalTasks) {
             phaseState.dependentTasks.push_back(taskId);
             ++pendingPhaseCount;
         }

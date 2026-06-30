@@ -14,7 +14,6 @@
 #include "ub-tp-connection-manager.h"
 #include "ub-network-address.h"
 #include "ub-traffic-gen.h"
-#include "ns3/random-variable-stream.h"
 
 using namespace utils;
 namespace ns3 {
@@ -81,8 +80,6 @@ private:
     Ptr<Node> m_node;              // 当前节点
 
     uint32_t m_jettyNum = 0;       // 当前节点维护的jettynum,不会重复
-
-    Ptr<UniformRandomVariable> m_random;
 
 };
 

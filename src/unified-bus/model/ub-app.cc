@@ -54,9 +54,6 @@ TypeId UbApp::GetTypeId(void)
 
 UbApp::UbApp()
 {
-    m_random = CreateObject<UniformRandomVariable>();
-    m_random->SetAttribute("Min", DoubleValue(0.0));
-    m_random->SetAttribute("Max", DoubleValue(1.0));
 }
 
 UbApp::~UbApp()

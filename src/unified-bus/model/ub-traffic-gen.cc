@@ -51,25 +51,27 @@ void UbTrafficGen::AddTask(const TrafficRecord& record)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
     std::lock_guard<std::mutex> lock(m_mutex);
-    AddTaskLocked(record);
+    AddTaskLocked(record, false);
 }
 
 void
 UbTrafficGen::AddTaskDuringInitialLoad(const TrafficRecord& record)
 {
     NS_ABORT_MSG_IF(IsMultiProcessRuntimeUnsupported(), GetMultiProcessUnsupportedMessage());
-    AddTaskLocked(record);
+    AddTaskLocked(record, true);
 }
 
 void
-UbTrafficGen::AddTaskLocked(const TrafficRecord& record)
+UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed)
 {
     uint32_t taskId = record.taskId;
     if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
-    RegisterTaskPhaseLocked(record.phaseId, taskId);
+    if (!phaseAlreadyIndexed) {
+        RegisterTaskPhaseLocked(record.phaseId, taskId);
+    }
 
     uint32_t pendingPhaseCount = 0;
     const auto addDependencyPhase = [&](uint32_t dependPhaseId) {
@@ -124,6 +126,13 @@ UbTrafficGen::SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId)
 }
 
 void
+UbTrafficGen::RegisterPhaseTaskDuringInitialLoad(uint32_t phaseId)
+{
+    auto& phaseState = m_phaseStates[phaseId];
+    ++phaseState.totalTasks;
+}
+
+void
 UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -135,7 +144,6 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
         const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
         m_denseTasks.reserve(denseReserve);
         m_denseTaskStates.reserve(denseReserve);
-        m_denseTaskPhaseIds.reserve(denseReserve);
         m_densePendingPhaseCounts.reserve(denseReserve);
     } else {
         m_tasks.reserve(reserveCount);
@@ -162,6 +170,7 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
     task.sourceNode = static_cast<uint32_t>(record.sourceNode);
     task.destNode = static_cast<uint32_t>(record.destNode);
     task.dataSize = static_cast<uint32_t>(record.dataSize);
+    task.phaseId = static_cast<uint32_t>(record.phaseId);
     task.priority = static_cast<uint8_t>(record.priority);
     task.delay = ParseDelayLocked(record.delay);
     task.op = ParseOpLocked(record.opType);
@@ -387,12 +396,14 @@ UbTrafficGen::SwitchDenseTaskStateToMapLocked()
 
     for (uint32_t taskId = 0; taskId < m_denseTaskStates.size(); ++taskId) {
         m_taskStates[taskId] = m_denseTaskStates[taskId];
-        m_taskPhaseIds[taskId] = m_denseTaskPhaseIds[taskId];
         m_pendingPhaseCounts[taskId] = m_densePendingPhaseCounts[taskId];
+        const RuntimeTask* task = FindTaskLocked(taskId);
+        if (task != nullptr) {
+            m_taskPhaseIds.emplace(taskId, task->phaseId);
+        }
     }
 
     m_denseTaskStates.clear();
-    m_denseTaskPhaseIds.clear();
     m_densePendingPhaseCounts.clear();
     m_useDenseTaskState = false;
 }
@@ -429,7 +440,6 @@ UbTrafficGen::SetTaskStateLocked(uint32_t taskId, TaskState state)
     if (m_useDenseTaskState) {
         if (taskId == m_denseTaskStates.size()) {
             m_denseTaskStates.push_back(state);
-            m_denseTaskPhaseIds.push_back(0);
             m_densePendingPhaseCounts.push_back(0);
             return;
         }
@@ -445,51 +455,15 @@ UbTrafficGen::SetTaskStateLocked(uint32_t taskId, TaskState state)
     m_taskStates[taskId] = state;
 }
 
-uint32_t*
-UbTrafficGen::FindTaskPhaseLocked(uint32_t taskId)
-{
-    if (m_useDenseTaskState) {
-        if (taskId >= m_denseTaskStates.size()) {
-            return nullptr;
-        }
-        return &m_denseTaskPhaseIds[taskId];
-    }
-
-    auto phaseIt = m_taskPhaseIds.find(taskId);
-    if (phaseIt == m_taskPhaseIds.end()) {
-        return nullptr;
-    }
-    return &phaseIt->second;
-}
-
 bool
 UbTrafficGen::HasTaskPhaseLocked(uint32_t taskId) const
 {
-    if (m_useDenseTaskState) {
-        return taskId < m_denseTaskStates.size();
-    }
     return m_taskPhaseIds.find(taskId) != m_taskPhaseIds.end();
 }
 
 void
 UbTrafficGen::SetTaskPhaseLocked(uint32_t taskId, uint32_t phaseId)
 {
-    if (m_useDenseTaskState) {
-        if (taskId == m_denseTaskStates.size()) {
-            m_denseTaskStates.push_back(TaskState::PENDING);
-            m_denseTaskPhaseIds.push_back(phaseId);
-            m_densePendingPhaseCounts.push_back(0);
-            return;
-        }
-
-        if (taskId < m_denseTaskStates.size()) {
-            m_denseTaskPhaseIds[taskId] = phaseId;
-            return;
-        }
-
-        SwitchDenseTaskStateToMapLocked();
-    }
-
     m_taskPhaseIds[taskId] = phaseId;
 }
 
@@ -536,7 +510,6 @@ UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
     if (m_useDenseTaskState) {
         if (taskId == m_denseTaskStates.size()) {
             m_denseTaskStates.push_back(TaskState::PENDING);
-            m_denseTaskPhaseIds.push_back(0);
             m_densePendingPhaseCounts.push_back(count);
             return;
         }
@@ -579,9 +552,22 @@ void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
         *state = TaskState::COMPLETED;
         NS_LOG_DEBUG("Task " << taskId << " completed");
 
-        uint32_t* phaseId = FindTaskPhaseLocked(taskId);
-        if (phaseId != nullptr) {
-            auto phaseStateIt = m_phaseStates.find(*phaseId);
+        bool hasPhaseId = false;
+        uint32_t phaseId = 0;
+        const RuntimeTask* completedTask = FindTaskLocked(taskId);
+        if (completedTask != nullptr) {
+            phaseId = completedTask->phaseId;
+            hasPhaseId = true;
+        } else {
+            const auto phaseIt = m_taskPhaseIds.find(taskId);
+            if (phaseIt != m_taskPhaseIds.end()) {
+                phaseId = phaseIt->second;
+                hasPhaseId = true;
+            }
+        }
+
+        if (hasPhaseId) {
+            auto phaseStateIt = m_phaseStates.find(phaseId);
             if (phaseStateIt != m_phaseStates.end()) {
                 ++phaseStateIt->second.completedTasks;
 

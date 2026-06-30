@@ -63,6 +63,7 @@ public:
         uint32_t sourceNode{0};
         uint32_t destNode{0};
         uint32_t dataSize{0};
+        uint32_t phaseId{0};
         uint8_t priority{0};
         RuntimeTaskOp op{RuntimeTaskOp::UNKNOWN};
         Time delay{Time(0)};
@@ -94,6 +95,8 @@ public:
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
 
     void SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId);
+
+    void RegisterPhaseTaskDuringInitialLoad(uint32_t phaseId);
 
     void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
 
@@ -153,7 +156,6 @@ public:
     std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
     bool m_useDenseTaskState{true};
     std::vector<TaskState> m_denseTaskStates{};
-    std::vector<uint32_t> m_denseTaskPhaseIds{};
     std::vector<uint32_t> m_densePendingPhaseCounts{};
     std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
     std::vector<uint32_t> m_readyTasks{};
@@ -168,7 +170,7 @@ public:
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 
-    void AddTaskLocked(const TrafficRecord& record);
+    void AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed);
 
     void AddReadyTaskLocked(uint32_t taskId);
 
@@ -199,8 +201,6 @@ public:
     TaskState* FindTaskStateLocked(uint32_t taskId);
 
     void SetTaskStateLocked(uint32_t taskId, TaskState state);
-
-    uint32_t* FindTaskPhaseLocked(uint32_t taskId);
 
     bool HasTaskPhaseLocked(uint32_t taskId) const;
 

@@ -152,7 +152,6 @@ public:
     std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
     std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
     bool m_useDenseTaskState{true};
-    std::vector<uint8_t> m_denseTaskPresent{};
     std::vector<TaskState> m_denseTaskStates{};
     std::vector<uint32_t> m_denseTaskPhaseIds{};
     std::vector<uint32_t> m_densePendingPhaseCounts{};

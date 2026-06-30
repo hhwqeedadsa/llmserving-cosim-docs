@@ -134,7 +134,6 @@ UbTrafficGen::ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId)
         static_cast<uint64_t>(maxTaskId) + 1 == recordCount) {
         const auto denseReserve = static_cast<size_t>(maxTaskId) + 1;
         m_denseTasks.reserve(denseReserve);
-        m_denseTaskPresent.reserve(denseReserve);
         m_denseTaskStates.reserve(denseReserve);
         m_denseTaskPhaseIds.reserve(denseReserve);
         m_densePendingPhaseCounts.reserve(denseReserve);
@@ -386,16 +385,12 @@ UbTrafficGen::SwitchDenseTaskStateToMapLocked()
         return;
     }
 
-    for (uint32_t taskId = 0; taskId < m_denseTaskPresent.size(); ++taskId) {
-        if (m_denseTaskPresent[taskId] == 0) {
-            continue;
-        }
+    for (uint32_t taskId = 0; taskId < m_denseTaskStates.size(); ++taskId) {
         m_taskStates[taskId] = m_denseTaskStates[taskId];
         m_taskPhaseIds[taskId] = m_denseTaskPhaseIds[taskId];
         m_pendingPhaseCounts[taskId] = m_densePendingPhaseCounts[taskId];
     }
 
-    m_denseTaskPresent.clear();
     m_denseTaskStates.clear();
     m_denseTaskPhaseIds.clear();
     m_densePendingPhaseCounts.clear();
@@ -406,7 +401,7 @@ bool
 UbTrafficGen::HasTaskStateLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskState) {
-        return taskId < m_denseTaskPresent.size() && m_denseTaskPresent[taskId] != 0;
+        return taskId < m_denseTaskStates.size();
     }
     return m_taskStates.find(taskId) != m_taskStates.end();
 }
@@ -415,7 +410,7 @@ UbTrafficGen::TaskState*
 UbTrafficGen::FindTaskStateLocked(uint32_t taskId)
 {
     if (m_useDenseTaskState) {
-        if (taskId >= m_denseTaskPresent.size() || m_denseTaskPresent[taskId] == 0) {
+        if (taskId >= m_denseTaskStates.size()) {
             return nullptr;
         }
         return &m_denseTaskStates[taskId];
@@ -432,15 +427,14 @@ void
 UbTrafficGen::SetTaskStateLocked(uint32_t taskId, TaskState state)
 {
     if (m_useDenseTaskState) {
-        if (taskId == m_denseTaskPresent.size()) {
-            m_denseTaskPresent.push_back(1);
+        if (taskId == m_denseTaskStates.size()) {
             m_denseTaskStates.push_back(state);
             m_denseTaskPhaseIds.push_back(0);
             m_densePendingPhaseCounts.push_back(0);
             return;
         }
 
-        if (taskId < m_denseTaskPresent.size() && m_denseTaskPresent[taskId] != 0) {
+        if (taskId < m_denseTaskStates.size()) {
             m_denseTaskStates[taskId] = state;
             return;
         }
@@ -455,7 +449,7 @@ uint32_t*
 UbTrafficGen::FindTaskPhaseLocked(uint32_t taskId)
 {
     if (m_useDenseTaskState) {
-        if (taskId >= m_denseTaskPresent.size() || m_denseTaskPresent[taskId] == 0) {
+        if (taskId >= m_denseTaskStates.size()) {
             return nullptr;
         }
         return &m_denseTaskPhaseIds[taskId];
@@ -472,7 +466,7 @@ bool
 UbTrafficGen::HasTaskPhaseLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskState) {
-        return taskId < m_denseTaskPresent.size() && m_denseTaskPresent[taskId] != 0;
+        return taskId < m_denseTaskStates.size();
     }
     return m_taskPhaseIds.find(taskId) != m_taskPhaseIds.end();
 }
@@ -481,15 +475,14 @@ void
 UbTrafficGen::SetTaskPhaseLocked(uint32_t taskId, uint32_t phaseId)
 {
     if (m_useDenseTaskState) {
-        if (taskId == m_denseTaskPresent.size()) {
-            m_denseTaskPresent.push_back(1);
+        if (taskId == m_denseTaskStates.size()) {
             m_denseTaskStates.push_back(TaskState::PENDING);
             m_denseTaskPhaseIds.push_back(phaseId);
             m_densePendingPhaseCounts.push_back(0);
             return;
         }
 
-        if (taskId < m_denseTaskPresent.size() && m_denseTaskPresent[taskId] != 0) {
+        if (taskId < m_denseTaskStates.size()) {
             m_denseTaskPhaseIds[taskId] = phaseId;
             return;
         }
@@ -504,7 +497,7 @@ uint32_t
 UbTrafficGen::GetPendingPhaseCountLocked(uint32_t taskId) const
 {
     if (m_useDenseTaskState) {
-        if (taskId >= m_denseTaskPresent.size() || m_denseTaskPresent[taskId] == 0) {
+        if (taskId >= m_denseTaskStates.size()) {
             return 0;
         }
         return m_densePendingPhaseCounts[taskId];
@@ -521,8 +514,7 @@ bool
 UbTrafficGen::DecrementPendingPhaseCountLocked(uint32_t taskId)
 {
     if (m_useDenseTaskState) {
-        if (taskId >= m_denseTaskPresent.size() || m_denseTaskPresent[taskId] == 0 ||
-            m_densePendingPhaseCounts[taskId] == 0) {
+        if (taskId >= m_denseTaskStates.size() || m_densePendingPhaseCounts[taskId] == 0) {
             return false;
         }
         --m_densePendingPhaseCounts[taskId];
@@ -542,15 +534,14 @@ void
 UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
 {
     if (m_useDenseTaskState) {
-        if (taskId == m_denseTaskPresent.size()) {
-            m_denseTaskPresent.push_back(1);
+        if (taskId == m_denseTaskStates.size()) {
             m_denseTaskStates.push_back(TaskState::PENDING);
             m_denseTaskPhaseIds.push_back(0);
             m_densePendingPhaseCounts.push_back(count);
             return;
         }
 
-        if (taskId < m_denseTaskPresent.size() && m_denseTaskPresent[taskId] != 0) {
+        if (taskId < m_denseTaskStates.size()) {
             m_densePendingPhaseCounts[taskId] = count;
             return;
         }
@@ -625,9 +616,8 @@ bool UbTrafficGen::IsCompleted() const
 {
     std::lock_guard<std::mutex> lock(m_mutex);
     if (m_useDenseTaskState) {
-        for (uint32_t taskId = 0; taskId < m_denseTaskPresent.size(); ++taskId) {
-            if (m_denseTaskPresent[taskId] != 0 &&
-                m_denseTaskStates[taskId] != TaskState::COMPLETED) {
+        for (const TaskState state : m_denseTaskStates) {
+            if (state != TaskState::COMPLETED) {
                 return false;
             }
         }
@@ -648,10 +638,9 @@ uint32_t UbTrafficGen::GetCompletedTaskCount() const
     uint32_t completedTasks = 0;
     if (m_useDenseTaskState)
     {
-        for (uint32_t taskId = 0; taskId < m_denseTaskPresent.size(); ++taskId)
+        for (const TaskState state : m_denseTaskStates)
         {
-            if (m_denseTaskPresent[taskId] != 0 &&
-                m_denseTaskStates[taskId] == TaskState::COMPLETED)
+            if (state == TaskState::COMPLETED)
             {
                 ++completedTasks;
             }

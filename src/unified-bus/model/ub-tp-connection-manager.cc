@@ -4,7 +4,14 @@
 #include "ns3/node-list.h"
 #include "ns3/ub-utils.h"
 
+#include <mutex>
+
 namespace {
+
+// Dynamic TP establishment mutates both endpoint connection managers and controllers.
+// Under MTP these endpoint events may run on different LPs at the same simulation time,
+// so the whole control-plane transaction must be serialized.
+std::mutex g_tpConnectionControlLock;
 
 void CreateDeviceTpOnNode(uint32_t nodeId,
                           uint32_t src,
@@ -15,6 +22,7 @@ void CreateDeviceTpOnNode(uint32_t nodeId,
                           uint32_t srcTpn,
                           uint32_t dstTpn)
 {
+    std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
     auto controller = ns3::NodeList::GetNode(nodeId)->GetObject<ns3::UbController>();
     NS_ASSERT_MSG(controller != nullptr, "UbController not found on target node");
     auto congestionCtrl = ns3::UbCongestionControl::Create(ns3::UB_DEVICE);
@@ -114,6 +122,7 @@ std::vector<uint32_t> TpConnectionManager::GetTpns(GetTpnRuleT ruler,
                                 uint32_t peerPort,
                                 uint32_t priority)
 {
+    std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
     std::vector<std::pair<uint32_t, uint32_t>> resWithMetrics;
     std::vector<uint32_t> tpns;
     uint32_t minMetrics = UINT32_MAX;
@@ -624,6 +633,7 @@ void TpConnectionManager::RemoveUselessTps(uint32_t jettyNum, uint32_t src, uint
     if (!m_removeUselessTp) { // 仅在开启了删除无用tp模式下才进行此操作
         return;
     }
+    std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
     auto ctrl = NodeList::GetNode(src)->GetObject<UbController>();
     auto sendTa = ctrl->GetUbTransaction();
     // 事务层删除与该jetty绑定的tp记录

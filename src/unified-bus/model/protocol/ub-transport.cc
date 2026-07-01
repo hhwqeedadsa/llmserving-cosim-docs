@@ -937,14 +937,9 @@ Ptr<Packet> UbTransportChannel::GenDataPacket(Ptr<UbWqeSegment> wqeSegment,
     TpHeader.SetPsn(UbTpPsnSequence::ToWire(m_psnSndNxt));
     TpHeader.SetTpMsn(UbTpMsnSequence::ToWire(wqeSegment->GetTpMsn()));
     p->AddHeader(TpHeader);
-    // add udp header
-    if (m_usePacketSpray) {
-        if (m_lbHashSalt == UINT16_MAX) {
-            m_lbHashSalt = 0;
-        } else {
-            m_lbHashSalt++;
-        }
-    }
+    // Packet-spray hashing must be derived from packet identity, not from the order in which
+    // worker threads happen to call this function.
+    m_lbHashSalt = m_usePacketSpray ? UbTpPsnSequence::ToWire(m_psnSndNxt) : 0;
     UbPort::AddUdpHeader(p, this);
     // add ipv4 header
     UbPort::AddIpv4Header(p, this);

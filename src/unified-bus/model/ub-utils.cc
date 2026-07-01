@@ -10,6 +10,7 @@
 #include <limits>
 #include <map>
 #include <sstream>
+#include <string_view>
 #ifdef NS3_MPI
 #include "ub-remote-link.h"
 #include "ns3/mpi-interface.h"
@@ -58,6 +59,127 @@ std::string
 DisplayFilename(const std::string& filename)
 {
     return std::filesystem::path(filename).filename().string();
+}
+
+uint32_t
+ParseUint32Field(const std::string& line, size_t valueStart, size_t valueEnd)
+{
+    uint32_t value = 0;
+    for (size_t pos = valueStart; pos < valueEnd; ++pos)
+    {
+        const char c = line[pos];
+        NS_ABORT_MSG_IF(c < '0' || c > '9',
+                        "Invalid uint32 field in traffic.csv; signed values are not supported");
+        const uint32_t digit = static_cast<uint32_t>(c - '0');
+        NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
+                        "traffic.csv uint32 field overflow");
+        value = value * 10 + digit;
+    }
+    return value;
+}
+
+uint32_t
+ParseUint32Field(std::string_view field)
+{
+    NS_ABORT_MSG_IF(field.empty(), "Missing uint32 field in traffic.csv");
+    uint32_t value = 0;
+    for (char c : field)
+    {
+        NS_ABORT_MSG_IF(c < '0' || c > '9',
+                        "Invalid uint32 field in traffic.csv; signed values are not supported");
+        const uint32_t digit = static_cast<uint32_t>(c - '0');
+        NS_ABORT_MSG_IF(value > (std::numeric_limits<uint32_t>::max() - digit) / 10,
+                        "traffic.csv uint32 field overflow");
+        value = value * 10 + digit;
+    }
+    return value;
+}
+
+uint8_t
+ParseTrafficPriorityField(std::string_view field)
+{
+    const uint32_t priority = ParseUint32Field(field);
+    NS_ABORT_MSG_IF(priority > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+    return static_cast<uint8_t>(priority);
+}
+
+std::string_view
+TrimField(std::string_view field)
+{
+    while (!field.empty() && (field.front() == ' ' || field.front() == '\t'))
+    {
+        field.remove_prefix(1);
+    }
+    while (!field.empty() && (field.back() == ' ' || field.back() == '\t'))
+    {
+        field.remove_suffix(1);
+    }
+    return field;
+}
+
+void
+AppendDependencyPhases(std::string_view field, TrafficRecord& record)
+{
+    while (!field.empty())
+    {
+        while (!field.empty() &&
+               (field.front() == ' ' || field.front() == '\t' || field.front() == '\r'))
+        {
+            field.remove_prefix(1);
+        }
+        if (field.empty())
+        {
+            break;
+        }
+
+        size_t tokenEnd = 0;
+        while (tokenEnd < field.size() && field[tokenEnd] != ' ' && field[tokenEnd] != '\t' &&
+               field[tokenEnd] != '\r')
+        {
+            ++tokenEnd;
+        }
+
+        record.dependOnPhases.push_back(ParseUint32Field(field.substr(0, tokenEnd)));
+        field.remove_prefix(tokenEnd);
+    }
+}
+
+void
+SetTrafficRecordField(int fieldCount, std::string_view rawField, TrafficRecord& record)
+{
+    const std::string_view field = TrimField(rawField);
+    switch (fieldCount)
+    {
+    case 0:
+        record.taskId = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 1:
+        record.sourceNode = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 2:
+        record.destNode = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 3:
+        record.dataSize = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 4:
+        record.opType.assign(field.data(), field.size());
+        break;
+    case 5:
+        record.priority = static_cast<int>(ParseTrafficPriorityField(field));
+        break;
+    case 6:
+        record.delay.assign(field.data(), field.size());
+        break;
+    case 7:
+        record.phaseId = static_cast<int>(ParseUint32Field(field));
+        break;
+    case 8:
+        AppendDependencyPhases(field, record);
+        break;
+    }
 }
 
 std::pair<uint32_t, uint32_t>
@@ -260,6 +382,42 @@ CreateConfigStoreInput(const std::string& filename, uint32_t& rewrittenAliasLine
     NS_ASSERT_MSG(output.good(), "Can not create rewritten config file: " << rewrittenPath);
     output << rewritten.str();
     return rewrittenPath.string();
+}
+
+void
+SetTrafficRecordViewField(int fieldCount, std::string_view rawField, TrafficRecordView& record)
+{
+    const std::string_view field = TrimField(rawField);
+    switch (fieldCount)
+    {
+    case 0:
+        record.taskId = ParseUint32Field(field);
+        break;
+    case 1:
+        record.sourceNode = ParseUint32Field(field);
+        break;
+    case 2:
+        record.destNode = ParseUint32Field(field);
+        break;
+    case 3:
+        record.dataSize = ParseUint32Field(field);
+        break;
+    case 4:
+        record.opType = field;
+        break;
+    case 5:
+        record.priority = ParseTrafficPriorityField(field);
+        break;
+    case 6:
+        record.delay = field;
+        break;
+    case 7:
+        record.phaseId = ParseUint32Field(field);
+        break;
+    case 8:
+        record.dependOnPhases = field;
+        break;
+    }
 }
 
 void
@@ -1872,7 +2030,7 @@ void UbUtils::SetRecord(int fieldCount, string field, TrafficRecord &record)
             record.opType = field;
             break;
         case FIELDCOUNT::PRIORITY:
-            record.priority = stoi(field);
+            record.priority = static_cast<int>(ParseTrafficPriorityField(field));
             break;
         case FIELDCOUNT::DELAY:
             record.delay = field;
@@ -1896,34 +2054,211 @@ void UbUtils::SetRecord(int fieldCount, string field, TrafficRecord &record)
 vector<TrafficRecord> UbUtils::LoadTrafficConfig(const string &filename)
 {
     vector<TrafficRecord> records;
-    PrintTimestamp("[traffic] Load " + DisplayFilename(filename));
+    ForEachTrafficRecordInternal(filename, "Load", [&](const TrafficRecord& record) {
+        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
+        records.push_back(record);
+    });
+    return records;
+}
+
+void
+UbUtils::ForEachTrafficRecord(const string& filename,
+                              const std::function<void(const TrafficRecord&)>& callback)
+{
+    ForEachTrafficRecordInternal(filename, "Load", callback);
+}
+
+void
+UbUtils::ForEachTrafficRecordView(const string& filename,
+                                  const std::function<void(const TrafficRecordView&)>& callback)
+{
+    ForEachTrafficRecordViewInternal(filename, "Load", callback);
+}
+
+void
+UbUtils::RegisterTrafficPhaseDependencies(const string& filename)
+{
+    (void)RegisterTrafficPhaseDependenciesAndGetStats(filename);
+}
+
+UbUtils::TrafficLoadStats
+UbUtils::RegisterTrafficPhaseDependenciesAndGetStats(const string& filename)
+{
+    TrafficLoadStats stats;
+    ForEachTrafficPhaseIndexRecord(filename, [&](uint32_t taskId, uint32_t phaseId) {
+        UbTrafficGen::Get()->RegisterPhaseTaskDuringInitialLoad(phaseId);
+        ++stats.recordCount;
+        stats.maxTaskId = std::max<uint32_t>(stats.maxTaskId, taskId);
+    });
+    return stats;
+}
+
+void
+UbUtils::ForEachTrafficPhaseIndexRecord(const string& filename,
+                                        const std::function<void(uint32_t, uint32_t)>& callback)
+{
+    PrintTimestamp("[traffic] Index phase dependencies from " + DisplayFilename(filename));
     ifstream file(filename);
     if (!file.is_open()) {
         NS_ASSERT_MSG(0, "Can not open File: " << filename);
-        return records;
+        return;
+    }
+
+    string line;
+    getline(file, line);
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
+            continue;
+        }
+
+        uint32_t taskId = 0;
+        uint32_t phaseId = 0;
+        int fieldCount = 0;
+        size_t fieldStart = 0;
+        bool hasTaskId = false;
+        bool hasPhaseId = false;
+
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            if (fieldCount == static_cast<int>(FIELDCOUNT::TASKID) ||
+                fieldCount == static_cast<int>(FIELDCOUNT::PHASEID)) {
+                size_t valueStart = fieldStart;
+                while (valueStart < fieldEnd &&
+                       (line[valueStart] == ' ' || line[valueStart] == '\t')) {
+                    ++valueStart;
+                }
+                size_t valueEnd = fieldEnd;
+                while (valueEnd > valueStart &&
+                       (line[valueEnd - 1] == ' ' || line[valueEnd - 1] == '\t')) {
+                    --valueEnd;
+                }
+                if (valueStart < valueEnd) {
+                    const uint32_t value = ParseUint32Field(line, valueStart, valueEnd);
+                    if (fieldCount == static_cast<int>(FIELDCOUNT::TASKID)) {
+                        taskId = value;
+                        hasTaskId = true;
+                    } else {
+                        phaseId = value;
+                        hasPhaseId = true;
+                    }
+                }
+            }
+
+            if (hasTaskId && hasPhaseId) {
+                break;
+            }
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
+            ++fieldCount;
+        }
+
+        if (hasTaskId && hasPhaseId) {
+            callback(taskId, phaseId);
+        }
+    }
+}
+
+void
+UbUtils::ForEachTrafficRecordInternal(const string& filename,
+                                      const string& action,
+                                      const std::function<void(const TrafficRecord&)>& callback)
+{
+    PrintTimestamp("[traffic] " + action + " " + DisplayFilename(filename));
+    ifstream file(filename);
+    if (!file.is_open()) {
+        NS_ASSERT_MSG(0, "Can not open File: " << filename);
+        return;
+    }
+    string line;
+    getline(file, line);  // 跳过标题行
+    TrafficRecord record;
+    while (getline(file, line)) {
+        if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
+            continue;
+        }
+
+        record.taskId = 0;
+        record.sourceNode = 0;
+        record.destNode = 0;
+        record.dataSize = 0;
+        record.opType.clear();
+        record.priority = 0;
+        record.delay.clear();
+        record.phaseId = 0;
+        record.dependOnPhases.clear();
+
+        int fieldCount = 0;
+        size_t fieldStart = 0;
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            SetTrafficRecordField(fieldCount,
+                                  std::string_view(line).substr(fieldStart,
+                                                                fieldEnd - fieldStart),
+                                  record);
+            ++fieldCount;
+
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
+        }
+        callback(record);
+    }
+    file.close();
+}
+
+void
+UbUtils::ForEachTrafficRecordViewInternal(
+    const string& filename,
+    const string& action,
+    const std::function<void(const TrafficRecordView&)>& callback)
+{
+    PrintTimestamp("[traffic] " + action + " " + DisplayFilename(filename));
+    ifstream file(filename);
+    if (!file.is_open()) {
+        NS_ASSERT_MSG(0, "Can not open File: " << filename);
+        return;
     }
     string line;
     getline(file, line);  // 跳过标题行
     while (getline(file, line)) {
-        stringstream ss(line);
         if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
             continue;
         }
-        string field;
-        TrafficRecord record;
+
+        TrafficRecordView record;
         int fieldCount = 0;
-        while (getline(ss, field, ',')) {
-            // 去除字段前后的空格
-            field.erase(0, field.find_first_not_of(" \t"));
-            field.erase(field.find_last_not_of(" \t") + 1);
-            SetRecord(fieldCount, field, record);
-            fieldCount++;
+        size_t fieldStart = 0;
+        while (fieldStart <= line.size()) {
+            size_t fieldEnd = line.find(',', fieldStart);
+            if (fieldEnd == string::npos) {
+                fieldEnd = line.size();
+            }
+
+            SetTrafficRecordViewField(fieldCount,
+                                      std::string_view(line).substr(fieldStart,
+                                                                    fieldEnd - fieldStart),
+                                      record);
+            ++fieldCount;
+
+            if (fieldEnd == line.size()) {
+                break;
+            }
+            fieldStart = fieldEnd + 1;
         }
-        UbTrafficGen::Get()->SetPhaseDepend(record.phaseId, record.taskId);
-        records.push_back(record);
+        callback(record);
     }
     file.close();
-    return records;
 }
 
 // 从TXT文件加载配置

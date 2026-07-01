@@ -32,11 +32,27 @@
 #include "ns3/simulator.h"
 
 #include <algorithm>
+#include <tuple>
 
 namespace ns3
 {
 
 NS_LOG_COMPONENT_DEFINE("LogicalProcess");
+
+namespace
+{
+
+uint32_t
+GetLocalSystemId(uint32_t systemId)
+{
+#ifdef NS3_MPI
+    return systemId >> 16;
+#else
+    return systemId;
+#endif
+}
+
+} // namespace
 
 LogicalProcess::LogicalProcess()
     : m_systemId(0),
@@ -49,13 +65,61 @@ LogicalProcess::LogicalProcess()
       m_eventCount(0),
       m_pendingEventCount(0),
       m_events(nullptr),
-      m_lookAhead(TimeStep(0))
+      m_lookAhead(TimeStep(0)),
+      m_executionTime(0)
 {
+}
+
+LogicalProcess::LogicalProcess(const LogicalProcess& other)
+    : m_systemId(other.m_systemId),
+      m_systemCount(other.m_systemCount),
+      m_stop(other.m_stop.load(std::memory_order_acquire)),
+      m_uid(other.m_uid),
+      m_currentContext(other.m_currentContext),
+      m_currentUid(other.m_currentUid),
+      m_currentTs(other.m_currentTs),
+      m_eventCount(other.m_eventCount),
+      m_pendingEventCount(other.m_pendingEventCount),
+      m_events(other.m_events),
+      m_lookAhead(other.m_lookAhead),
+      m_mailbox(other.m_mailbox),
+      m_executionTime(other.m_executionTime)
+{
+}
+
+LogicalProcess&
+LogicalProcess::operator=(const LogicalProcess& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    m_systemId = other.m_systemId;
+    m_systemCount = other.m_systemCount;
+    m_stop.store(other.m_stop.load(std::memory_order_acquire), std::memory_order_release);
+    m_uid = other.m_uid;
+    m_currentContext = other.m_currentContext;
+    m_currentUid = other.m_currentUid;
+    m_currentTs = other.m_currentTs;
+    m_eventCount = other.m_eventCount;
+    m_pendingEventCount = other.m_pendingEventCount;
+    m_events = other.m_events;
+    m_lookAhead = other.m_lookAhead;
+    m_mailbox = other.m_mailbox;
+    m_executionTime = other.m_executionTime;
+
+    return *this;
 }
 
 LogicalProcess::~LogicalProcess()
 {
     NS_LOG_INFO("system " << m_systemId << " finished with event count " << m_eventCount);
+
+    if (m_events == nullptr)
+    {
+        return;
+    }
 
     // if others hold references to event list, do not unref events
     if (m_events->GetReferenceCount() == 1)
@@ -73,6 +137,7 @@ LogicalProcess::Enable(const uint32_t systemId, const uint32_t systemCount)
 {
     m_systemId = systemId;
     m_systemCount = systemCount;
+    m_stop.store(false, std::memory_order_release);
 }
 
 void
@@ -127,7 +192,8 @@ LogicalProcess::CalculateLookAhead()
                     remoteNode = (channel->GetDevice(0))->GetNode();
                 }
                 // if it's not remote, don't consider it
-                if (remoteNode->GetSystemId() == m_systemId)
+                const uint32_t remoteSystemId = GetLocalSystemId(remoteNode->GetSystemId());
+                if (remoteSystemId == m_systemId)
                 {
                     continue;
                 }
@@ -140,7 +206,7 @@ LogicalProcess::CalculateLookAhead()
                     m_lookAhead = delay.Get();
                 }
                 // add the neighbour to the mailbox
-                m_mailbox[remoteNode->GetSystemId()];
+                m_mailbox[remoteSystemId];
             }
         }
     }
@@ -154,18 +220,36 @@ LogicalProcess::ReceiveMessages()
     NS_LOG_FUNCTION(this);
 
     m_pendingEventCount = 0;
-    for (auto& item : m_mailbox)
     {
-        auto& queue = item.second;
-        std::sort(queue.begin(), queue.end(), std::greater<>());
-        while (!queue.empty())
+        std::lock_guard<std::mutex> lock(m_mailboxMutex);
+        for (auto& [_, queue] : m_mailbox)
         {
-            auto& evWithTs = queue.back();
-            Scheduler::Event& ev = std::get<3>(evWithTs);
-            ev.key.m_uid = m_uid++;
-            m_events->Insert(ev);
-            queue.pop_back();
-            m_pendingEventCount++;
+            // Keep legacy per-sender UID assignment order; global ordering changes tie-breaks for
+            // same-timestamp remote events and breaks byte-for-byte MTP output compatibility.
+            if (queue.size() > 1)
+            {
+                std::sort(queue.begin(),
+                          queue.end(),
+                          [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
+                              return std::tie(lhs.senderTs,
+                                              lhs.senderSystemId,
+                                              lhs.senderUid,
+                                              lhs.event) >
+                                     std::tie(rhs.senderTs,
+                                              rhs.senderSystemId,
+                                              rhs.senderUid,
+                                              rhs.event);
+                          });
+            }
+            while (!queue.empty())
+            {
+                RemoteEvent& remoteEvent = queue.back();
+                Scheduler::Event& ev = remoteEvent.event;
+                ev.key.m_uid = m_uid++;
+                m_events->Insert(ev);
+                m_pendingEventCount++;
+                queue.pop_back();
+            }
         }
     }
 }
@@ -249,7 +333,16 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
     else
     {
         ev.key.m_uid = EventId::UID::INVALID;
-        remote->m_mailbox[m_systemId].emplace_back(m_currentTs, m_systemId, m_uid, ev);
+        std::lock_guard<std::mutex> lock(remote->m_mailboxMutex);
+        remote->m_mailbox[m_systemId].push_back(RemoteEvent{
+            ev.key.m_ts,
+            m_currentTs,
+            m_systemId,
+            // Preserve legacy remote-event tie-breaks; incrementing this changes same-time task
+            // completion order in existing MTP scenarios.
+            m_uid,
+            ev,
+        });
     }
 }
 
@@ -318,7 +411,7 @@ LogicalProcess::SetScheduler(ObjectFactory schedulerFactory)
 Time
 LogicalProcess::Next() const
 {
-    if (m_stop || m_events->IsEmpty())
+    if (m_stop.load(std::memory_order_acquire) || m_events->IsEmpty())
     {
         return Time::Max();
     }

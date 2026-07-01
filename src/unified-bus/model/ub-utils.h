@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <functional>
 #include <map>
 #include <fstream>
 #include <mutex>
@@ -67,6 +68,25 @@ public:
 
     // Loads traffic records and initializes phase-dependency state in UbTrafficGen.
     std::vector<TrafficRecord> LoadTrafficConfig(const std::string &filename);
+
+    struct TrafficLoadStats
+    {
+        uint64_t recordCount{0};
+        uint32_t maxTaskId{0};
+    };
+
+    // Streams traffic records without retaining a full vector in memory.
+    void ForEachTrafficRecord(const std::string& filename,
+                              const std::function<void(const TrafficRecord&)>& callback);
+
+    // Callback-only row view; string_view fields must not be stored after callback return.
+    void ForEachTrafficRecordView(const std::string& filename,
+                                  const std::function<void(const TrafficRecordView&)>& callback);
+
+    // Pre-registers phase membership before streaming AddTask calls.
+    void RegisterTrafficPhaseDependencies(const std::string& filename);
+
+    TrafficLoadStats RegisterTrafficPhaseDependenciesAndGetStats(const std::string& filename);
 
     void CreateTopo(const std::string &filename);
 
@@ -361,6 +381,18 @@ private:
     static std::string Among(std::string s, std::string ts);
 
     void SetRecord(int fieldCount, std::string field, TrafficRecord &record);
+
+    void ForEachTrafficRecordInternal(const std::string& filename,
+                                      const std::string& action,
+                                      const std::function<void(const TrafficRecord&)>& callback);
+
+    void ForEachTrafficRecordViewInternal(
+        const std::string& filename,
+        const std::string& action,
+        const std::function<void(const TrafficRecordView&)>& callback);
+
+    void ForEachTrafficPhaseIndexRecord(const std::string& filename,
+                                        const std::function<void(uint32_t, uint32_t)>& callback);
 
     static void PrintTraceInfo(const std::string& fileName, const std::string& info);
 

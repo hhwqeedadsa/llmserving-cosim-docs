@@ -33,11 +33,32 @@
 
 #include <algorithm>
 #include <cmath>
+#include <thread>
+#if defined(__x86_64__) || defined(__i386__)
+#include <immintrin.h>
+#endif
 
 namespace ns3
 {
 
 NS_LOG_COMPONENT_DEFINE("MtpInterface");
+
+namespace
+{
+
+inline void
+CpuRelax()
+{
+#if defined(__x86_64__) || defined(__i386__)
+    _mm_pause();
+#elif defined(__aarch64__) || defined(__arm__)
+    __asm__ __volatile__("yield" ::: "memory");
+#else
+    std::this_thread::yield();
+#endif
+}
+
+} // namespace
 
 void
 MtpInterface::Enable()
@@ -170,7 +191,10 @@ MtpInterface::Disable()
     g_threadCount = 0;
     g_systemCount = 0;
     g_sortFunc = nullptr;
-    g_globalFinished = false;
+    g_globalFinished.store(false, std::memory_order_release);
+    g_recvMsgStage.store(false, std::memory_order_release);
+    g_systemIndex.store(0, std::memory_order_release);
+    g_finishedSystemCount.store(0, std::memory_order_release);
     delete[] g_systems;
     delete[] g_threads;
     delete[] g_sortedSystemIndices;
@@ -180,7 +204,7 @@ void
 MtpInterface::Run()
 {
     RunBefore();
-    while (!g_globalFinished)
+    while (!g_globalFinished.load(std::memory_order_acquire))
     {
         ProcessOneRound();
         CalculateSmallestTime();
@@ -221,7 +245,7 @@ MtpInterface::ProcessOneRound()
     }
 
     // stage 1: process events
-    g_recvMsgStage = false;
+    g_recvMsgStage.store(false, std::memory_order_release);
     g_finishedSystemCount.store(0, std::memory_order_relaxed);
     g_systemIndex.store(0, std::memory_order_release);
     // main thread also needs to process an LP to reduce an extra thread overhead
@@ -240,13 +264,14 @@ MtpInterface::ProcessOneRound()
     // logical process barriar synchronization
     while (g_finishedSystemCount.load(std::memory_order_acquire) != g_systemCount)
     {
+        CpuRelax();
     };
 
     // stage 2: process the public LP
     g_systems[0].ProcessOneRound();
 
     // stage 3: receive messages
-    g_recvMsgStage = true;
+    g_recvMsgStage.store(true, std::memory_order_release);
     g_finishedSystemCount.store(0, std::memory_order_relaxed);
     g_systemIndex.store(0, std::memory_order_release);
     while (true)
@@ -264,6 +289,7 @@ MtpInterface::ProcessOneRound()
     // logical process barriar synchronization
     while (g_finishedSystemCount.load(std::memory_order_acquire) != g_systemCount)
     {
+        CpuRelax();
     };
 }
 
@@ -288,7 +314,7 @@ MtpInterface::CalculateSmallestTime()
     {
         globalFinished &= g_systems[i].isLocalFinished();
     }
-    g_globalFinished = globalFinished;
+    g_globalFinished.store(globalFinished, std::memory_order_release);
 }
 
 void
@@ -326,18 +352,20 @@ MtpInterface::CalculateLookAhead()
 void*
 MtpInterface::ThreadFunc(void* arg)
 {
-    while (!g_globalFinished)
+    while (!g_globalFinished.load(std::memory_order_acquire))
     {
         uint32_t index = g_systemIndex.fetch_add(1, std::memory_order_acquire);
         if (index >= g_systemCount)
         {
-            while (g_systemIndex.load(std::memory_order_acquire) >= g_systemCount)
+            while (!g_globalFinished.load(std::memory_order_acquire) &&
+                   g_systemIndex.load(std::memory_order_acquire) >= g_systemCount)
             {
+                CpuRelax();
             };
             continue;
         }
         LogicalProcess* system = &g_systems[g_sortedSystemIndices[index]];
-        if (g_recvMsgStage)
+        if (g_recvMsgStage.load(std::memory_order_acquire))
         {
             system->ReceiveMessages();
         }
@@ -353,25 +381,33 @@ MtpInterface::ThreadFunc(void* arg)
 bool
 MtpInterface::SortByExecutionTime(const uint32_t& i, const uint32_t& j)
 {
-    return g_systems[i].GetExecutionTime() > g_systems[j].GetExecutionTime();
+    auto lhs = g_systems[i].GetExecutionTime();
+    auto rhs = g_systems[j].GetExecutionTime();
+    return lhs == rhs ? i < j : lhs > rhs;
 }
 
 bool
 MtpInterface::SortByEventCount(const uint32_t& i, const uint32_t& j)
 {
-    return g_systems[i].GetEventCount() > g_systems[j].GetEventCount();
+    auto lhs = g_systems[i].GetEventCount();
+    auto rhs = g_systems[j].GetEventCount();
+    return lhs == rhs ? i < j : lhs > rhs;
 }
 
 bool
 MtpInterface::SortByPendingEventCount(const uint32_t& i, const uint32_t& j)
 {
-    return g_systems[i].GetPendingEventCount() > g_systems[j].GetPendingEventCount();
+    auto lhs = g_systems[i].GetPendingEventCount();
+    auto rhs = g_systems[j].GetPendingEventCount();
+    return lhs == rhs ? i < j : lhs > rhs;
 }
 
 bool
 MtpInterface::SortBySimulationTime(const uint32_t& i, const uint32_t& j)
 {
-    return g_systems[i].Now() > g_systems[j].Now();
+    auto lhs = g_systems[i].Now();
+    auto rhs = g_systems[j].Now();
+    return lhs == rhs ? i < j : lhs > rhs;
 }
 
 bool (*MtpInterface::g_sortFunc)(const uint32_t&, const uint32_t&) = nullptr;
@@ -409,9 +445,9 @@ Time MtpInterface::g_smallestTime = TimeStep(0);
 
 Time MtpInterface::g_nextPublicTime = TimeStep(0);
 
-bool MtpInterface::g_recvMsgStage = false;
+std::atomic<bool> MtpInterface::g_recvMsgStage(false);
 
-bool MtpInterface::g_globalFinished = false;
+std::atomic<bool> MtpInterface::g_globalFinished(false);
 
 bool MtpInterface::g_enabled = false;
 

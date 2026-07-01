@@ -54,9 +54,6 @@ TypeId UbApp::GetTypeId(void)
 
 UbApp::UbApp()
 {
-    m_random = CreateObject<UniformRandomVariable>();
-    m_random->SetAttribute("Min", DoubleValue(0.0));
-    m_random->SetAttribute("Max", DoubleValue(1.0));
 }
 
 UbApp::~UbApp()
@@ -80,27 +77,60 @@ void UbApp::DoDispose(void)
 
 void UbApp::SendTraffic(TrafficRecord record)
 {
-    if (record.priority == 0) {
+    NS_ABORT_MSG_IF(record.priority < 0 ||
+                        static_cast<uint32_t>(record.priority) > UB_PRIORITY_MAX,
+                    "Invalid priority field in traffic.csv; valid range is 0.."
+                        << static_cast<uint32_t>(UB_PRIORITY_MAX));
+
+    UbTrafficGen::RuntimeTask task;
+    task.taskId = static_cast<uint32_t>(record.taskId);
+    task.sourceNode = static_cast<uint32_t>(record.sourceNode);
+    task.destNode = static_cast<uint32_t>(record.destNode);
+    task.dataSize = static_cast<uint32_t>(record.dataSize);
+    task.priority = static_cast<uint8_t>(record.priority);
+    task.delay = record.delay.empty() ? Time(0) : Time(record.delay);
+    if (record.opType == "URMA_WRITE") {
+        task.op = UbTrafficGen::RuntimeTaskOp::URMA_WRITE;
+    } else if (record.opType == "URMA_READ") {
+        task.op = UbTrafficGen::RuntimeTaskOp::URMA_READ;
+    } else if (record.opType == "MEM_STORE") {
+        task.op = UbTrafficGen::RuntimeTaskOp::MEM_STORE;
+    } else if (record.opType == "MEM_LOAD") {
+        task.op = UbTrafficGen::RuntimeTaskOp::MEM_LOAD;
+    } else {
+        NS_ASSERT_MSG(0, "TaOpcode Not Exist");
+    }
+    SendTraffic(task);
+}
+
+void UbApp::SendTraffic(UbTrafficGen::RuntimeTask task)
+{
+    if (task.priority == 0) {
         NS_LOG_DEBUG("Task uses the highest priority, not recommended.");
     }
 
-    if (record.opType == "MEM_STORE" || record.opType == "MEM_LOAD") {
+    if (task.op == UbTrafficGen::RuntimeTaskOp::MEM_STORE ||
+        task.op == UbTrafficGen::RuntimeTaskOp::MEM_LOAD) {
         // 内存语义发送
         UbMemOperationType type = UbMemOperationType::STORE;
-        if (record.opType == "MEM_STORE") {
-            type = UbMemOperationType::STORE;
-        } else if (record.opType == "MEM_LOAD") {
+        if (task.op == UbTrafficGen::RuntimeTaskOp::MEM_LOAD) {
             type = UbMemOperationType::LOAD;
         }
         auto ldstInstance = GetNode()->GetObject<UbLdstInstance>();
-        Ptr<UbFunction> ubFunc = GetNode()->GetObject<UbController>()->GetUbFunction();
         SetFinishCallback(MakeCallback(&UbApp::OnMemTaskCompleted, this), ldstInstance);
-        NS_LOG_INFO("MEM Task Starts, taskId: " << record.taskId);
-        MemTaskStartsNotify(GetNode()->GetId(), record.taskId);
+        NS_LOG_INFO("MEM Task Starts, taskId: " << task.taskId);
+        MemTaskStartsNotify(GetNode()->GetId(), task.taskId);
         std::vector<uint32_t> threadIds = {0, 1};
-        ldstInstance->HandleLdstTask(record.sourceNode, record.destNode, record.dataSize,
-                          record.taskId, record.priority, type, threadIds, 0);
-    } else if (record.opType == "URMA_WRITE" || record.opType == "URMA_READ") {
+        ldstInstance->HandleLdstTask(task.sourceNode,
+                                     task.destNode,
+                                     task.dataSize,
+                                     task.taskId,
+                                     task.priority,
+                                     type,
+                                     threadIds,
+                                     0);
+    } else if (task.op == UbTrafficGen::RuntimeTaskOp::URMA_WRITE ||
+               task.op == UbTrafficGen::RuntimeTaskOp::URMA_READ) {
         // URMA发送
         Ptr<UbFunction> ubFunc = GetNode()->GetObject<UbController>()->GetUbFunction();
         Ptr<UbTransaction> ubTa = GetNode()->GetObject<UbController>()->GetUbTransaction();
@@ -109,23 +139,24 @@ void UbApp::SendTraffic(TrafficRecord record)
             NS_LOG_ERROR("Jetty already exists");
             return;
         }
-        ubFunc->CreateJetty(record.sourceNode, record.destNode, m_jettyNum);
+        ubFunc->CreateJetty(task.sourceNode, task.destNode, m_jettyNum);
         vector<uint32_t> tpns = GetNode()->GetObject<UbController>()->GetTpConnManager()->GetTpns(
-            m_getTpnRule, m_useShortestPaths, m_multiPathEnable, record.sourceNode,
-            record.destNode, UINT32_MAX, UINT32_MAX, record.priority);
-        bool bindRst = ubTa->JettyBindTp(record.sourceNode, record.destNode, m_jettyNum, m_multiPathEnable, tpns);
+            m_getTpnRule, m_useShortestPaths, m_multiPathEnable, task.sourceNode,
+            task.destNode, UINT32_MAX, UINT32_MAX, task.priority);
+        bool bindRst = ubTa->JettyBindTp(task.sourceNode, task.destNode, m_jettyNum, m_multiPathEnable, tpns);
         if (bindRst) {
             Ptr<UbJetty> curr_jetty = ubFunc->GetJetty(m_jettyNum);
             SetFinishCallback(MakeCallback(&UbApp::OnTaskCompleted, this), curr_jetty);
-            NS_LOG_INFO("WQE Starts, jettyNum: " << m_jettyNum << " taskId: " << record.taskId);
-            NS_LOG_INFO("Src: " << record.sourceNode << " Dst: " << record.destNode);
-            WqeTaskStartsNotify(GetNode()->GetId(), m_jettyNum, record.taskId);
-            NS_LOG_INFO("[APPLICATION INFO] taskId: " << record.taskId << ",start time:" <<
+            NS_LOG_INFO("WQE Starts, jettyNum: " << m_jettyNum << " taskId: " << task.taskId);
+            NS_LOG_INFO("Src: " << task.sourceNode << " Dst: " << task.destNode);
+            WqeTaskStartsNotify(GetNode()->GetId(), m_jettyNum, task.taskId);
+            NS_LOG_INFO("[APPLICATION INFO] taskId: " << task.taskId << ",start time:" <<
                 Simulator::Now().GetNanoSeconds() << "ns");
-            NS_ASSERT_MSG(TaOpcodeMap.find(record.opType) != TaOpcodeMap.end(), "TaOpcode Not Exist");
-            TaOpcode type = TaOpcodeMap[record.opType];
+            TaOpcode type = task.op == UbTrafficGen::RuntimeTaskOp::URMA_READ
+                                ? TaOpcode::TA_OPCODE_READ
+                                : TaOpcode::TA_OPCODE_WRITE;
             Ptr<UbWqe> wqe =
-                ubFunc->CreateWqe(record.sourceNode, record.destNode, record.dataSize, record.taskId, type);
+                ubFunc->CreateWqe(task.sourceNode, task.destNode, task.dataSize, task.taskId, type);
             ubFunc->PushWqeToJetty(wqe, m_jettyNum);
         }
         m_jettyNum++; // m_jettyNum 在client里是唯一的，不重复的
@@ -141,9 +172,9 @@ void UbApp::OnTaskCompleted(uint32_t taskId, uint32_t jettyNum)
     WqeTaskCompletesNotify(GetNode()->GetId(), jettyNum, taskId);
     NS_LOG_INFO("[APPLICATION INFO] taskId: " << taskId << ",finish time:" << Simulator::Now().GetNanoSeconds() << "ns");
     // 删除无用tp
-    TrafficRecord record = UbTrafficGen::Get()->GetTaskById(taskId);
-    GetNode()->GetObject<UbController>()->GetTpConnManager()->RemoveUselessTps(jettyNum,
-        record.sourceNode, record.destNode, record.priority);
+    auto cleanup = UbTrafficGen::Get()->GetTaskCleanupInfoById(taskId);
+    GetNode()->GetObject<UbController>()->GetTpConnManager()->RemoveUselessTps(
+        jettyNum, cleanup.sourceNode, cleanup.destNode, cleanup.priority);
     UbTrafficGen::Get()->OnTaskCompleted(taskId);
 }
 

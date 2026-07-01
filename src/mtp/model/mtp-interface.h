@@ -310,7 +310,7 @@ class MtpInterface
      */
     inline static bool isFinished()
     {
-        return g_globalFinished;
+        return g_globalFinished.load(std::memory_order_acquire);
     }
 
     /**
@@ -388,8 +388,8 @@ class MtpInterface
     static uint32_t g_round;
     static Time g_smallestTime;
     static Time g_nextPublicTime;
-    static bool g_recvMsgStage;
-    static bool g_globalFinished;
+    static std::atomic<bool> g_recvMsgStage;
+    static std::atomic<bool> g_globalFinished;
     static bool g_enabled;
 
     static pthread_key_t g_key;

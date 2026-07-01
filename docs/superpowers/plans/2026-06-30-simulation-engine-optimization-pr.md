@@ -1,20 +1,20 @@
 # 仿真引擎优化 PR 说明
 
-## 🚀 一眼看重点
+## 先看数字 🚀
 
-这次优化主要解决 `trafficgen` 在大规模 traffic 下的 DAG 依赖爆炸问题，同时合入 MTP 多线程路径的调度与自旋优化。先把最直观的收益放前面：
+这几个数最能说明这次改动的收益：
 
-| 重点指标 | main | 当前分支 | 效果 |
+| 指标 | main | 当前分支 | 结果 |
 |---|---:|---:|---:|
-| 🧠 1k allreduce ring 峰值 RSS | 2,556,657,664 B | 199,294,976 B | 只剩约 7.8%，内存下降约 92.2% |
+| 🧠 1k allreduce ring 峰值 RSS | 2,556,657,664 B | 199,294,976 B | 内存下降约 92.2% |
 | ⚡ 1k allreduce ring 总 probe 耗时 | 103.44s | 0.77s | 约 134x 加速 |
-| 🔥 AddTask 依赖构建耗时 | 101.589s | 已并入 0.77s 总耗时 | DAG 热点基本消掉 |
-| 📦 1k traffic records | 1,998,000 | 1,998,000 | 输入规模一致 |
-| 🔗 phase 依赖引用数 | 1,997,000 | 1,997,000 | 语义一致，不靠删依赖取巧 |
-| ✅ 复杂 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
-| 🧵 MTP 4 线程 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
+| AddTask 依赖构建耗时 | 101.589s | 已并入 0.77s 总耗时 | 原来的主要热点基本消失 |
+| 1k traffic records | 1,998,000 | 1,998,000 | 输入规模一致 |
+| phase 依赖引用数 | 1,997,000 | 1,997,000 | 语义一致，不靠删依赖取巧 |
+| 复杂 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
+| MTP 4 线程 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
 
-一句话版本：原来 1k allreduce ring 在 `AddTask` 上花了 100s 以上、RSS 超过 2.5GB；现在同一份 traffic 载入和建模整体不到 1s，RSS 约 190MB，同时 simple/Clos、单线程/MTP/MPI fail-fast 路径都和 main 做过对比验证。
+原来的 1k allreduce ring 主要卡在 `AddTask`：光依赖构建就用了 100s 以上，RSS 超过 2.5GB。现在同一份 traffic 的载入和建模整体不到 1s，RSS 约 190MB。输入 records 和 phase 依赖引用数都没变，省下来的部分来自运行期建模方式，不是把依赖删掉了。
 
 ## 改动范围
 

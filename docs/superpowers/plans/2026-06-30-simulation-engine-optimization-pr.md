@@ -4,17 +4,20 @@
 
 这几个数最能说明这次改动的收益：
 
-| 指标 | main | 当前分支 | 结果 |
+| 指标 | 对照 | 结果 | 变化 |
 |---|---:|---:|---:|
 | 🧠 1k allreduce ring 峰值 RSS | 2,556,657,664 B | 199,294,976 B | 内存下降约 92.2% |
 | ⚡ 1k allreduce ring 总 probe 耗时 | 103.44s | 0.77s | 约 134x 加速 |
 | AddTask 依赖构建耗时 | 101.589s | 已并入 0.77s 总耗时 | 原来的主要热点基本消失 |
+| 🧵 256 host Clos 随机跨 leaf，20k 流，MTP8 run 阶段 | 单线程 13.31s | MTP8 4.96s | 约 2.69x 加速 |
 | 1k traffic records | 1,998,000 | 1,998,000 | 输入规模一致 |
 | phase 依赖引用数 | 1,997,000 | 1,997,000 | 语义一致，不靠删依赖取巧 |
 | 复杂 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
 | MTP 4 线程 Clos 业务输出 | main baseline | 当前分支 | 字节级 MATCH |
 
 原来的 1k allreduce ring 主要卡在 `AddTask`：光依赖构建就用了 100s 以上，RSS 超过 2.5GB。现在同一份 traffic 的载入和建模整体不到 1s，RSS 约 190MB。输入 records 和 phase 依赖引用数都没变，省下来的部分来自运行期建模方式，不是把依赖删掉了。
+
+小规模 MTP case 里启动和 trace 成本占比太高，差异不明显。补了一组更重的 256 host Clos 随机跨 leaf 流量后，MTP8 的 run 阶段从 13.31s 降到 4.96s，能看出多线程调度收益。
 
 ## 改动范围
 
@@ -91,6 +94,40 @@ MTP runlog 的原始 DIFF 只出现在 `AllPacketTrace_*` 的 `Uid:` 字段：
 | `scratch/clos_32hosts-4leafs-8spines_pod2pod` | 138 | 32 | 0 |
 
 说明：这个 `Uid:` 是 ns-3 `Packet::GetUid()` 的进程内全局计数，MTP 调度下本身不适合作为业务等价判断字段。`test/task_statistics.csv` 和 `test/throughput.csv` 均为字节级一致。
+
+## 复杂 MTP 补测
+
+原来的 `2nodes` 和 32 host Clos case 太小，MTP 差异容易被启动、配置读取、trace 写入和 trace 解析盖住。为避免只看固定成本，这里补了一个 256 host 两层 Clos：
+
+- 拓扑：256 host，16 leaf，16 spine，链路 400Gbps / 20ns
+- workload：20,000 条随机跨 leaf `URMA_WRITE`，每条 64KB，无 phase 依赖
+- 计时方式：关闭 trace 和 parse，只看仿真调度 run 阶段
+- 测试对象：main `dcb3c99` 与 PR HEAD `b12d398`
+
+| 模式 | main run | 当前分支 run | main total | 当前分支 total | main RSS | 当前 RSS | 结论 |
+|---|---:|---:|---:|---:|---:|---:|---|
+| 单线程 | 12.620566s | 13.312636s | 12.703508s | 13.410281s | 1,236,303,872 B | 1,216,282,624 B | 同量级，当前分支略慢 |
+| MTP 8 线程 | 5.149204s | 4.956796s | 5.243586s | 5.040523s | 1,381,974,016 B | 1,353,809,920 B | 当前分支 MTP8 快约 3.7%，RSS 低约 2.0% |
+| 当前分支：单线程 vs MTP8 | 13.312636s | 4.956796s | 13.410281s | 5.040523s | 1,216,282,624 B | 1,353,809,920 B | MTP8 run 阶段约 2.69x 加速 |
+
+这组数主要说明两点。第一，小 case 看不出 MTP 效果不代表 MTP 没效果，20k 随机跨 leaf 流量下 run 阶段差异已经很明显。第二，本 PR 相比 main 的 MTP8 改动收益是小幅收益，不是 2.69x 的来源；2.69x 是“当前分支单线程”和“当前分支 MTP8”的对比。
+
+另补一组 trace-on 的字节级一致性验证：
+
+- 拓扑：同样是 256 host Clos
+- workload：2,000 条随机跨 leaf `URMA_WRITE`，每条 64KB
+- trace：开启常规 task / packet / port trace 和 parse，关闭 `UB_RECORD_PKT_TRACE`，避免 `AllPacketTrace_*` 的 `Uid` 噪声
+- 模式：main MTP8 vs 当前分支 MTP8
+
+| 输出 | 结果 |
+|---|---|
+| `test/` | MATCH，2 个文件字节级一致 |
+| `runlog/` | MATCH，1,568 个文件字节级一致 |
+| `output/` | MATCH，无输出文件差异 |
+
+这组 trace-on case 的性能不是本 PR 的性能主张：main run 0.902286s，当前分支 run 1.126618s。它只用于确认复杂 MTP 路径没有破坏输出。
+
+50k 随机跨 leaf 流也试过，但 main 的 MTP8 进入长时间 no-progress 段，日志膨胀且没有在合理时间内完成，所以没有把它作为 PR 性能数据。
 
 ## 验证命令
 

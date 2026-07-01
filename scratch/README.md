@@ -280,6 +280,12 @@ Examples:
 2,1,0,1 2 3,3 3 3
 ```
 
+Compressed range rows:
+- `nodeId` and `dstNodeId` may also use an inclusive `a..b` range, for example `10..25`.
+- A range row is semantically equivalent to the expanded per-`nodeId`, per-`dstNodeId` rows with the same `dstPortId`, `outPorts`, and `metrics`.
+- Overlapping range rows are accepted only when they describe the same outport/metric set. Conflicting overlaps fail during `routing_table.csv` loading.
+- For large generated cases, combine compressed routing rows with automatic TP generation when possible. A fully materialized `transport_channel.csv` can still dominate startup memory and time.
+
 UB stores outports per destination grouped by metric. The group with the smallest metric is installed as “shortest”; other groups are installed as “other”. If `UseShortestPaths` is `true` (see below), selection is made from the shortest group; otherwise selection may consider all outports defined for that destination.
 
 Note — destination-port aware lookup with fallback:
@@ -362,6 +368,11 @@ Recommendation: Generate `traffic.csv` (e.g., all-to-all, RDMA-like patterns, co
 - `delay` — schedule offset relative to simulation start (Time).
 - `phaseId` — integer phase tag; tasks with the same phase can run concurrently.
 - `dependOnPhases` — optional list (space-separated) of phase IDs that must complete before this task’s phase starts.
+
+Numeric field rules:
+- `taskId`, `sourceNode`, `destNode`, `dataSize(Byte)`, `priority`, `phaseId`, and each `dependOnPhases` token are parsed as unsigned decimal integers.
+- Signed spellings such as `-1` and `+1` are not accepted.
+- `priority` must be within `0..(UB_PRIORITY_NUM-1)`; with the default build this is `0..15`. Out-of-range values fail fast while loading `traffic.csv`.
 
 Examples:
 ```

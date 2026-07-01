@@ -6,8 +6,10 @@
 #include <unordered_map>
 #include <set>
 #include <mutex>
+#include <cstdint>
 #include <optional>
 #include <string>
+#include <string_view>
 #include "ns3/application.h"
 #include "ns3/event-id.h"
 #include "ns3/nstime.h"
@@ -18,6 +20,15 @@
 #include "ns3/ub-ldst-api.h"
 #include "ub-tp-connection-manager.h"
 #include "ub-network-address.h"
+
+class UbTrafficGenPhaseDependencyMemoryTest;
+class UbTrafficGenSparseTaskIdFallbackTest;
+class UbTrafficGenReserveHintTest;
+class UbTrafficGenDenseTaskStoreTest;
+class UbTrafficGenDuplicateDependencyPhaseTest;
+class UbTrafficGenRecordViewDependencyTest;
+class UbTrafficGenReadyOrderTest;
+class UbTrafficGenIntegerDelayParserTest;
 
 using namespace utils;
 namespace ns3 {
@@ -42,11 +53,61 @@ public:
     UbTrafficGen();
     virtual ~UbTrafficGen();
 
-    void AddTask(TrafficRecord record);
+    enum class RuntimeTaskOp : uint8_t
+    {
+        UNKNOWN,
+        URMA_WRITE,
+        URMA_READ,
+        MEM_STORE,
+        MEM_LOAD
+    };
+
+    struct RuntimeTask
+    {
+        uint32_t taskId{0};
+        uint32_t sourceNode{0};
+        uint32_t destNode{0};
+        uint32_t dataSize{0};
+        uint32_t phaseId{0};
+        uint8_t priority{0};
+        RuntimeTaskOp op{RuntimeTaskOp::UNKNOWN};
+        Time delay{Time(0)};
+    };
+
+    struct TaskCleanupInfo
+    {
+        uint32_t sourceNode{0};
+        uint32_t destNode{0};
+        uint8_t priority{0};
+    };
+
+    static bool IsMultiProcessRuntimeUnsupported();
+
+    static inline std::string GetMultiProcessUnsupportedMessage()
+    {
+        return "UbTrafficGen supports MPI multi-process traffic DAG usage when dependency "
+               "visibility is configured for parallel runs.";
+    }
+
+    static constexpr std::size_t kMaxDelayParseCacheEntries = 4096;
+
+    void AddTask(const TrafficRecord& record);
+
+    void AddTaskDuringInitialLoad(const TrafficRecord& record);
+
+    void AddTaskDuringInitialLoad(const TrafficRecordView& record);
 
     void SetPhaseDepend(uint32_t phaseId, uint32_t taskId);
 
-    TrafficRecord GetTaskById(uint32_t taskId);
+    void SetPhaseDependDuringInitialLoad(uint32_t phaseId, uint32_t taskId);
+
+    void RegisterPhaseTaskDuringInitialLoad(uint32_t phaseId);
+
+    void ReserveTasksForTraffic(uint64_t recordCount, uint32_t maxTaskId);
+
+    void RegisterSourceAppDuringInitialLoad(uint32_t sourceNode, Ptr<UbApp> app);
+
+    TaskCleanupInfo GetTaskCleanupInfoById(uint32_t taskId);
 
     void MarkTaskCompleted(uint32_t taskId);
 
@@ -83,6 +144,15 @@ public:
     void ScheduleNextTasks();
 
   private:
+    friend class ::UbTrafficGenPhaseDependencyMemoryTest;
+    friend class ::UbTrafficGenSparseTaskIdFallbackTest;
+    friend class ::UbTrafficGenReserveHintTest;
+    friend class ::UbTrafficGenDenseTaskStoreTest;
+    friend class ::UbTrafficGenDuplicateDependencyPhaseTest;
+    friend class ::UbTrafficGenRecordViewDependencyTest;
+    friend class ::UbTrafficGenReadyOrderTest;
+    friend class ::UbTrafficGenIntegerDelayParserTest;
+
     enum class TaskState {
         PENDING,
         READY,
@@ -99,27 +169,40 @@ public:
         uint32_t destNode = 0;
     };
 
-    void RecordCanonicalEvent(const std::string& type, const TrafficRecord& task);
-
-    void RecordCanonicalCompletionLocked(uint32_t taskId);
-
-    bool ShouldRecordCanonicalEventLocked(const TrafficRecord& task) const;
-
-    void StartTask(Ptr<UbApp> app, TrafficRecord task);
-
-    map<std::string, TaOpcode> TaOpcodeMap = {
-        {"URMA_WRITE", TaOpcode::TA_OPCODE_WRITE},
-        {"URMA_READ", TaOpcode::TA_OPCODE_READ},
-        {"MEM_STORE", TaOpcode::TA_OPCODE_WRITE},
-        {"MEM_LOAD", TaOpcode::TA_OPCODE_READ}
+    struct PhaseState {
+        uint32_t totalTasks{0};
+        uint32_t completedTasks{0};
+        std::vector<uint32_t> dependentTasks{};
     };
 
-    std::unordered_map<uint32_t, TrafficRecord> m_tasks{};
-    std::unordered_map<uint32_t, std::set<uint32_t>> m_dependencies{};
-    std::unordered_map<uint32_t, std::set<uint32_t>> m_dependents{};
+    void RecordCanonicalEvent(const std::string& type, const RuntimeTask& task);
+
+    void RecordCanonicalCompletionLocked(const RuntimeTask& task);
+
+    bool ShouldRecordCanonicalEventLocked(const RuntimeTask& task) const;
+
+    void StartTask(Ptr<UbApp> app, RuntimeTask task);
+
+    struct ReadyTaskBatch
+    {
+        std::vector<RuntimeTask> tasks{};
+        std::vector<Ptr<UbApp>> sourceApps{};
+    };
+
+    std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
+    bool m_useDenseTaskStore{true};
+    std::vector<RuntimeTask> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
-    std::set<uint32_t> m_readyTasks{};
-    std::map<uint32_t, set<uint32_t>> m_dependOnPhasesToTaskId{};
+    std::unordered_map<uint32_t, uint32_t> m_taskPhaseIds{};
+    std::unordered_map<uint32_t, uint32_t> m_pendingPhaseCounts{};
+    bool m_useDenseTaskState{true};
+    std::vector<TaskState> m_denseTaskStates{};
+    std::vector<uint32_t> m_densePendingPhaseCounts{};
+    std::unordered_map<uint32_t, PhaseState> m_phaseStates{};
+    std::vector<uint32_t> m_readyTasks{};
+    bool m_readyTasksSorted{true};
+    std::vector<Ptr<UbApp>> m_sourceApps{};
+    std::unordered_map<std::string, Time> m_delayParseCache{};
     std::optional<Time> m_dependencyVisibilityDelay{};
     std::optional<Time> m_minRemoteLinkDelay{};
     bool m_canonicalOutputEnabled = false;
@@ -127,11 +210,73 @@ public:
     uint32_t m_canonicalRank = 0;
     std::vector<CanonicalEvent> m_canonicalEvents;
 
-    std::vector<TrafficRecord> CollectReadyTasksLocked();
+    ReadyTaskBatch CollectReadyTaskBatchLocked();
 
-    std::vector<TrafficRecord> CollectReadyTasksLocked(uint32_t currentRank, bool filterByOwner);
+    void ScheduleTasks(const ReadyTaskBatch& batch);
 
-    void ScheduleTasks(const std::vector<TrafficRecord>& tasks);
+    void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
+
+    void AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed);
+
+    void AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIndexed);
+
+    void AddReadyTaskLocked(uint32_t taskId);
+
+    RuntimeTask ConvertToRuntimeTask(const TrafficRecord& record);
+
+    RuntimeTask ConvertToRuntimeTask(const TrafficRecordView& record);
+
+    Time ParseDelayLocked(const std::string& delay);
+
+    Time ParseDelayLocked(std::string_view delay);
+
+    static bool TryParseIntegerDelay(const std::string& delay, Time* out);
+
+    static bool TryParseIntegerDelay(std::string_view delay, Time* out);
+
+    RuntimeTaskOp ParseOpLocked(const std::string& opType);
+
+    RuntimeTaskOp ParseOpLocked(std::string_view opType);
+
+    Ptr<UbApp> GetSourceAppLocked(uint32_t sourceNode) const;
+
+    void SwitchDenseTaskStoreToMapLocked();
+
+    bool HasTaskLocked(uint32_t taskId) const;
+
+    RuntimeTask* FindTaskLocked(uint32_t taskId);
+
+    const RuntimeTask* FindTaskLocked(uint32_t taskId) const;
+
+    bool SetTaskLocked(RuntimeTask task);
+
+    void SwitchDenseTaskStateToMapLocked();
+
+    bool HasTaskStateLocked(uint32_t taskId) const;
+
+    TaskState* FindTaskStateLocked(uint32_t taskId);
+
+    void SetTaskStateLocked(uint32_t taskId, TaskState state);
+
+    bool HasTaskPhaseLocked(uint32_t taskId) const;
+
+    void SetTaskPhaseLocked(uint32_t taskId, uint32_t phaseId);
+
+    uint32_t GetPendingPhaseCountLocked(uint32_t taskId) const;
+
+    bool DecrementPendingPhaseCountLocked(uint32_t taskId);
+
+    void SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count);
+
+    uint64_t GetDependencyReferenceCountForTesting() const;
+
+    uint32_t GetPendingPhaseCountForTesting(uint32_t taskId) const;
+
+    bool IsUsingDenseTaskStoreForTesting() const;
+
+    uint32_t GetStoredTaskCountForTesting() const;
+
+    std::vector<uint32_t> CollectReadyTaskIdsForTesting();
 
     bool HasDependenciesLocked() const;
 

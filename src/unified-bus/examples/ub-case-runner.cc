@@ -473,33 +473,52 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    uint32_t mpiRank,
                                    bool requirePositiveDependencyVisibilityDelay)
 {
-    auto trafficData = UbUtils::Get()->LoadTrafficConfig(configPath + "/traffic.csv");
+    const std::string trafficPath = configPath + "/traffic.csv";
+    const auto trafficStats =
+        UbUtils::Get()->RegisterTrafficPhaseDependenciesAndGetStats(trafficPath);
+    UbTrafficGen::Get()->ReserveTasksForTraffic(trafficStats.recordCount,
+                                                trafficStats.maxTaskId);
     if (UbUtils::Get()->IsFaultEnabled())
     {
         UbUtils::Get()->InitFaultMoudle(configPath + "/fault.csv");
     }
 
     uint32_t localTaskCount = 0;
+    std::vector<Ptr<UbApp>> sourceApps;
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
-    for (const auto& record : trafficData)
-    {
+    UbUtils::Get()->ForEachTrafficRecordView(trafficPath, [&](const TrafficRecordView& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
         const bool localOwned =
             !activateLocalOwnedTasksOnly ||
             UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) == mpiRank;
 
-        if (localOwned && sourceNode->GetNApplications() == 0)
-        {
-            Ptr<UbApp> client = CreateObject<UbApp>();
-            sourceNode->AddApplication(client);
-            UbUtils::Get()->ClientTraceConnect(record.sourceNode);
-        }
-        UbTrafficGen::Get()->AddTask(record);
         if (localOwned)
         {
+            if (static_cast<size_t>(record.sourceNode) >= sourceApps.size())
+            {
+                sourceApps.resize(static_cast<size_t>(record.sourceNode) + 1);
+            }
+
+            Ptr<UbApp>& client = sourceApps[record.sourceNode];
+            if (client == nullptr)
+            {
+                if (sourceNode->GetNApplications() == 0)
+                {
+                    client = CreateObject<UbApp>();
+                    sourceNode->AddApplication(client);
+                    UbUtils::Get()->ClientTraceConnect(record.sourceNode);
+                }
+                else
+                {
+                    client = DynamicCast<UbApp>(sourceNode->GetApplication(0));
+                }
+                UbTrafficGen::Get()->RegisterSourceAppDuringInitialLoad(record.sourceNode, client);
+            }
             ++localTaskCount;
         }
-    }
+
+        UbTrafficGen::Get()->AddTaskDuringInitialLoad(record);
+    });
 
     UbTrafficGen::Get()->ValidateDependencyVisibilityDelay(
         requirePositiveDependencyVisibilityDelay);

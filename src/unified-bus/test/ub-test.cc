@@ -577,6 +577,415 @@ void UbFunctionalityTest::DoRun()
     NS_LOG_INFO("All basic tests completed successfully");
 }
 
+class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
+{
+  public:
+    UbTrafficGenPhaseDependencyMemoryTest()
+        : TestCase("UnifiedBus - traffic generator keeps phase dependency memory linear")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        constexpr uint32_t kTasksPerPhase = 256;
+        constexpr uint32_t kDependencyPhase = 10;
+        constexpr uint32_t kDependentPhase = 20;
+
+        for (uint32_t taskId = 0; taskId < kTasksPerPhase; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = kDependencyPhase;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        for (uint32_t taskId = kTasksPerPhase; taskId < 2 * kTasksPerPhase; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = kDependentPhase;
+            record.dependOnPhases.push_back(kDependencyPhase);
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        const uint64_t materializedTaskReferences =
+            static_cast<uint64_t>(kTasksPerPhase) * kTasksPerPhase;
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetDependencyReferenceCountForTesting(),
+                              kTasksPerPhase,
+                              "phase DAG should store one reverse reference per dependent task");
+        NS_TEST_ASSERT_MSG_LT(gen.GetDependencyReferenceCountForTesting(),
+                              materializedTaskReferences,
+                              "phase DAG must not expand one phase dependency into all task edges");
+
+        gen.ScheduleNextTasks();
+        gen.ApplyTaskCompletion(0);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
+                              1u,
+                              "dependent phase should wait until every task in the previous phase "
+                              "completes");
+
+        for (uint32_t taskId = 1; taskId < kTasksPerPhase; ++taskId)
+        {
+            gen.ApplyTaskCompletion(taskId);
+        }
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
+                              0u,
+                              "dependent phase should become ready only after the whole previous "
+                              "phase completes");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenSparseTaskIdFallbackTest : public TestCase
+{
+  public:
+    UbTrafficGenSparseTaskIdFallbackTest()
+        : TestCase("UnifiedBus - traffic generator preserves dependencies for sparse task ids")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+
+        TrafficRecord dependency;
+        dependency.taskId = 0;
+        dependency.sourceNode = 0;
+        dependency.destNode = 0;
+        dependency.dataSize = 64;
+        dependency.opType = "URMA_WRITE";
+        dependency.priority = 1;
+        dependency.delay = "0ns";
+        dependency.phaseId = 10;
+        gen.SetPhaseDepend(dependency.phaseId, dependency.taskId);
+        gen.AddTask(dependency);
+
+        TrafficRecord dependent;
+        dependent.taskId = 10;
+        dependent.sourceNode = 0;
+        dependent.destNode = 0;
+        dependent.dataSize = 64;
+        dependent.opType = "URMA_WRITE";
+        dependent.priority = 1;
+        dependent.delay = "0ns";
+        dependent.phaseId = 20;
+        dependent.dependOnPhases.push_back(10);
+        gen.SetPhaseDepend(dependent.phaseId, dependent.taskId);
+        gen.AddTask(dependent);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(dependent.taskId),
+                              1u,
+                              "sparse dependent task should wait for its dependency phase");
+
+        gen.ScheduleNextTasks();
+        gen.ApplyTaskCompletion(dependency.taskId);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(dependent.taskId),
+                              0u,
+                              "sparse dependent task should be released after dependency phase "
+                              "completes");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenReserveHintTest : public TestCase
+{
+  public:
+    UbTrafficGenReserveHintTest()
+        : TestCase("UnifiedBus - traffic generator accepts reserve hints without behavior change")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(3, 2);
+
+        TrafficRecord first;
+        first.taskId = 0;
+        first.sourceNode = 0;
+        first.destNode = 0;
+        first.dataSize = 64;
+        first.opType = "URMA_WRITE";
+        first.priority = 1;
+        first.delay = "0ns";
+        first.phaseId = 1;
+        gen.SetPhaseDepend(first.phaseId, first.taskId);
+        gen.AddTask(first);
+
+        TrafficRecord second;
+        second.taskId = 1;
+        second.sourceNode = 0;
+        second.destNode = 0;
+        second.dataSize = 64;
+        second.opType = "URMA_WRITE";
+        second.priority = 1;
+        second.delay = "0ns";
+        second.phaseId = 2;
+        second.dependOnPhases.push_back(1);
+        gen.SetPhaseDepend(second.phaseId, second.taskId);
+        gen.AddTask(second);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(1),
+                              1u,
+                              "reserve hints must not change dependency activation");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenDenseTaskStoreTest : public TestCase
+{
+  public:
+    UbTrafficGenDenseTaskStoreTest()
+        : TestCase("UnifiedBus - traffic generator stores contiguous tasks densely")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(2, 1);
+
+        for (uint32_t taskId = 0; taskId < 2; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = taskId + 1;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetStoredTaskCountForTesting(),
+                              2u,
+                              "two tasks should be stored");
+        NS_TEST_ASSERT_MSG_EQ(gen.IsUsingDenseTaskStoreForTesting(),
+                              true,
+                              "contiguous task ids should use dense task store");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenDuplicateDependencyPhaseTest : public TestCase
+{
+  public:
+    UbTrafficGenDuplicateDependencyPhaseTest()
+        : TestCase("UnifiedBus - duplicate dependency phases count once")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+
+        TrafficRecord dependency;
+        dependency.taskId = 0;
+        dependency.sourceNode = 0;
+        dependency.destNode = 0;
+        dependency.dataSize = 64;
+        dependency.opType = "URMA_WRITE";
+        dependency.priority = 1;
+        dependency.delay = "0ns";
+        dependency.phaseId = 10;
+        gen.SetPhaseDepend(dependency.phaseId, dependency.taskId);
+        gen.AddTask(dependency);
+
+        TrafficRecord dependent;
+        dependent.taskId = 1;
+        dependent.sourceNode = 0;
+        dependent.destNode = 0;
+        dependent.dataSize = 64;
+        dependent.opType = "URMA_WRITE";
+        dependent.priority = 1;
+        dependent.delay = "0ns";
+        dependent.phaseId = 20;
+        dependent.dependOnPhases = {10, 10, 10};
+        gen.SetPhaseDepend(dependent.phaseId, dependent.taskId);
+        gen.AddTask(dependent);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(1),
+                              1u,
+                              "duplicate references to one phase should count as one dependency");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenRecordViewDependencyTest : public TestCase
+{
+  public:
+    UbTrafficGenRecordViewDependencyTest()
+        : TestCase("UnifiedBus - traffic generator record view matches dependency semantics")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(3, 2);
+        gen.RegisterPhaseTaskDuringInitialLoad(10);
+        gen.RegisterPhaseTaskDuringInitialLoad(20);
+        gen.RegisterPhaseTaskDuringInitialLoad(30);
+
+        TrafficRecordView first;
+        first.taskId = 0;
+        first.sourceNode = 0;
+        first.destNode = 0;
+        first.dataSize = 64;
+        first.opType = "URMA_WRITE";
+        first.priority = 1;
+        first.delay = "0ns";
+        first.phaseId = 10;
+        gen.AddTaskDuringInitialLoad(first);
+
+        TrafficRecordView second;
+        second.taskId = 1;
+        second.sourceNode = 0;
+        second.destNode = 0;
+        second.dataSize = 64;
+        second.opType = "URMA_WRITE";
+        second.priority = 1;
+        second.delay = "0ns";
+        second.phaseId = 20;
+        gen.AddTaskDuringInitialLoad(second);
+
+        TrafficRecordView dependent;
+        dependent.taskId = 2;
+        dependent.sourceNode = 0;
+        dependent.destNode = 0;
+        dependent.dataSize = 64;
+        dependent.opType = "URMA_WRITE";
+        dependent.priority = 1;
+        dependent.delay = "0ns";
+        dependent.phaseId = 30;
+        dependent.dependOnPhases = "10  10\t20";
+        gen.AddTaskDuringInitialLoad(dependent);
+
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              2u,
+                              "record view should deduplicate repeated dependency phases");
+
+        gen.ScheduleNextTasks();
+        gen.ApplyTaskCompletion(0);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              1u,
+                              "record view dependent task should still wait for the second phase");
+
+        gen.ApplyTaskCompletion(1);
+        NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
+                              0u,
+                              "record view dependent task should release after all phases complete");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenReadyOrderTest : public TestCase
+{
+  public:
+    UbTrafficGenReadyOrderTest()
+        : TestCase("UnifiedBus - ready task collection preserves ascending task order")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        node->AddApplication(CreateObject<UbApp>());
+
+        UbTrafficGen gen;
+        gen.ReserveTasksForTraffic(3, 2);
+
+        for (uint32_t taskId = 0; taskId < 3; ++taskId)
+        {
+            TrafficRecord record;
+            record.taskId = taskId;
+            record.sourceNode = 0;
+            record.destNode = 0;
+            record.dataSize = 64;
+            record.opType = "URMA_WRITE";
+            record.priority = 1;
+            record.delay = "0ns";
+            record.phaseId = taskId + 1;
+            gen.SetPhaseDepend(record.phaseId, record.taskId);
+            gen.AddTask(record);
+        }
+
+        const auto readyIds = gen.CollectReadyTaskIdsForTesting();
+        NS_TEST_ASSERT_MSG_EQ(readyIds.size(), 3u, "three ready tasks should be collected");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[0], 0u, "first ready task should be task 0");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[1], 1u, "second ready task should be task 1");
+        NS_TEST_ASSERT_MSG_EQ(readyIds[2], 2u, "third ready task should be task 2");
+        Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenIntegerDelayParserTest : public TestCase
+{
+  public:
+    UbTrafficGenIntegerDelayParserTest()
+        : TestCase("UnifiedBus - traffic generator integer delay fast parser matches Time")
+    {
+    }
+
+    void DoRun() override
+    {
+        for (const std::string& delay : {"0ns", "10ns", "7us", "3ms", "2s", "1min"})
+        {
+            Time parsed;
+            NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay(delay, &parsed),
+                                  true,
+                                  "integer delay should use fast parser");
+            NS_TEST_ASSERT_MSG_EQ(parsed.GetTimeStep(),
+                                  Time(delay).GetTimeStep(),
+                                  "fast parsed delay should match Time(string)");
+        }
+
+        Time parsed;
+        NS_TEST_ASSERT_MSG_EQ(UbTrafficGen::TryParseIntegerDelay(std::string_view("1.5ms"),
+                                                                 &parsed),
+                              false,
+                              "fractional delay should fall back to Time(string)");
+    }
+};
+
 class UbDcqcnFactoryCreatesHostAndSwitchTest : public TestCase
 {
 public:
@@ -7436,6 +7845,16 @@ class UbRuntimeToolsTestSuite : public TestSuite
 UbTestSuite::UbTestSuite()
     : TestSuite("unified-bus", Type::UNIT)
 {
+    AddTestCase(new UbFunctionalityTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenPhaseDependencyMemoryTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenSparseTaskIdFallbackTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenReserveHintTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenDenseTaskStoreTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenDuplicateDependencyPhaseTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenRecordViewDependencyTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenReadyOrderTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenIntegerDelayParserTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbDcqcnFactoryCreatesHostAndSwitchTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnHostAckCeTphDefaultTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCaqmHostRttUsesSmoothedEstimateTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbDcqcnCnpHeaderRoundTripTest(), TestCase::Duration::QUICK);
@@ -9025,6 +9444,39 @@ class UbQuickExampleLocalDependentDagMtpRedSystemTest : public TestCase
     }
 };
 
+class UbQuickExampleInvalidTrafficPrioritySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleInvalidTrafficPrioritySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example rejects out-of-range traffic priority")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,256,10ns,10,\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test",
+                                               "",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "out-of-range traffic priority should fail the run");
+        NS_TEST_ASSERT_MSG_NE(output.find("Invalid priority field in traffic.csv"),
+                              std::string::npos,
+                              "traffic priority diagnostic should name the invalid field");
+    }
+};
+
 class UbQuickExampleLocalDependencyVisibilityDelaySystemTest : public TestCase
 {
   public:
@@ -9554,6 +10006,8 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleLocalDependentDagSingleThreadSystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalDependentDagMtpRedSystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleInvalidTrafficPrioritySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);

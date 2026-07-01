@@ -78,8 +78,8 @@ conda install pandas matplotlib seaborn
 ## 配置与编译
 
 ```bash
-# 使用 Python 3.12 运行 ns-3 launcher，避免 Homebrew Python 3.14 的 argparse 兼容问题；不修改上游 ./ns3 脚本。
-# 单个 build 可用 -j 加速；不要同时启动多个 build/test 构建任务
+# 已知问题：ns-3 launcher（./ns3）与 Python 3.14 存在 argparse 兼容问题，建议用 python3.12 运行。
+# 单个 build 可用 -j 加速；不要同时启动多个 build/test 构建任务。
 BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
 
 # 配置 UB 仿真所需模块

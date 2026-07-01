@@ -6,14 +6,14 @@
   <a href="https://gitcode.com/open-usim/ns-3-ub">GitCode</a> |
   <a href="QUICK_START.md">Quick Start</a> |
   <a href="scratch/README.md">Case Guide</a> |
-  <a href="RELEASE_NOTES_UB.md#release-121">Release Notes</a> |
+  <a href="RELEASE_NOTES_UB.md#release-130">Release Notes</a> |
   <a href="README_en.md">English</a>
 </p>
 
 <p align="center">
   <a href="https://gitcode.com/open-usim/ns-3-ub"><img src="https://img.shields.io/static/v1?label=GitCode&message=open-usim%2Fns-3-ub&color=C71D23&logo=git&logoColor=white" alt="GitCode repository"></a>
   <a href="https://www.unifiedbus.com"><img src="https://img.shields.io/static/v1?label=spec&message=UnifiedBus&color=111827" alt="UnifiedBus specification"></a>
-  <a href="RELEASE_NOTES_UB.md#release-121"><img src="https://img.shields.io/static/v1?label=release&message=1.2.1&color=6F42C1" alt="Release 1.2.1"></a>
+  <a href="RELEASE_NOTES_UB.md#release-130"><img src="https://img.shields.io/static/v1?label=release&message=1.3.0&color=6F42C1" alt="Release 1.3.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/static/v1?label=license&message=GPL-2.0&color=97CA00" alt="GPL-2.0 license"></a>
 </p>
 
@@ -22,24 +22,18 @@
   <a href="scratch/ns-3-ub-tools"><img src="https://img.shields.io/static/v1?label=tools&message=Python&color=3776AB&logo=python&logoColor=white" alt="Python tools"></a>
   <a href="https://www.nsnam.org/releases/ns-3-44/"><img src="https://img.shields.io/static/v1?label=ns-3&message=3.44&color=00A0E9" alt="ns-3.44"></a>
   <a href="CMakeLists.txt"><img src="https://img.shields.io/static/v1?label=build&message=CMake%20%2B%20Ninja&color=064F8C&logo=cmake&logoColor=white" alt="CMake and Ninja build"></a>
-  <a href="UNISON_README.md"><img src="https://img.shields.io/static/v1?label=parallel&message=Unison&color=FF8C00" alt="Unison parallel simulation"></a>
+  <a href="UNISON_README.md"><img src="https://img.shields.io/static/v1?label=parallel&message=Unison%20%2B%20MPI&color=FF8C00" alt="Unison and MPI parallel simulation"></a>
 </p>
 
 <p align="center">
-  🎉 <strong>[NEW] 2026/04 版本 1.2.1 已发布</strong> 🎉<br>
-  本次更新完成拥塞控制、流量控制统一 hook 架构重构，现已支持 DCQCN 与 C-AQM 拥塞控制算法，以及 CBFC 与 PFC 流量控制算法；更多细节见 <a href="RELEASE_NOTES_UB.md#release-121">发布说明</a>
+  <strong>Release 1.3.0</strong> · 2026 年 7 月<br>
+  RTP 可靠传输 · MPI/MTP Traffic DAG · 大规模路由压缩 · 引擎效率提升<br>
+  <a href="RELEASE_NOTES_UB.md#release-130">完整发布说明 →</a>
 </p>
 
-🚀 **快速开始**: [QUICK_START.md](QUICK_START.md)
+**快速开始**: [QUICK_START.md](QUICK_START.md)
 
-🧩 **UB 配置驱动入口**: 参见 [scratch/README.md](scratch/README.md)
-
-```bash
-BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
-python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
-python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
-```
+**场景入口**: [scratch/README.md](scratch/README.md)
 
 > 本项目基于 ns-3.44 构建。详细的平台支持、安装步骤、系统要求及编译选项，请参阅 [ns-3.44 文档](https://www.nsnam.org/releases/ns-3-44/documentation/)、[安装指南](https://www.nsnam.org/docs/release/3.44/installation/singlehtml/) 及 [ns-3.44 源码](https://gitlab.com/nsnam/ns-3-dev/-/tree/ns-3.44?ref_type=tags)。
 >
@@ -47,16 +41,16 @@ python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2n
 
 ## 项目概述
 
-`ns-3-UB` 是基于[灵衢基础规范](https://www.unifiedbus.com/zh)构建的 ns-3 仿真模块，实现了灵衢基础规范中功能层、事务层、传输层、网络层和数据链路层的协议框架与配套算法。本项目旨在为协议创新、网络架构探索以及拥塞控制、流量控制、负载均衡、路由算法等网络算法研究提供仿真平台。
+`ns-3-UB` 是基于[灵衢基础规范](https://www.unifiedbus.com/zh)的 ns-3 仿真模块，实现了功能层、事务层、传输层、网络层和数据链路层的协议框架与配套算法，可用于协议研究、网络架构探索以及拥塞控制、流量控制、负载均衡、路由算法等方向的仿真验证。
 
 > 本项目力求与灵衢基础规范保持一致，但仿真实现与规范之间仍可能存在差异。请以灵衢基础规范为权威参考。
 
-`ns-3-UB` 可用于研究基于 UB 协议的：
-- 面向流量模式亲和、低成本、高可靠的创新拓扑架构。
-- 集合通信算子与流量编排算法的优化技术。
-- 在总线内存事务成网的场景下，新的事务层保序与可靠性技术。
-- 面向超节点网络的新内存语义传输控制技术。
-- 创新的自适应路由、负载均衡、拥塞控制和 QoS 优化算法。
+`ns-3-UB` 可用于研究：
+- 面向流量亲和、低成本、高可靠的拓扑架构。
+- 集合通信算子与流量编排算法。
+- 总线内存事务成网场景下的事务层保序与可靠性。
+- 超节点网络的内存语义传输控制。
+- 自适应路由、负载均衡、拥塞控制和 QoS 优化算法。
 
 > 本项目针对规范未指明的策略与算法（如交换机建模方式、路由选择、拥塞标记、缓冲与仲裁策略等）提供可插拔的“参考实现”。这些实现不属于灵衢基础规范的一部分，仅作为示例与基线方案，用户可按需替换或禁用。
 >
@@ -284,13 +278,12 @@ UB 模块是基于灵衢基础规范实现的仿真组件：
   month = {10},
   title = {{ns-3-UB: UnifiedBus Network Simulation Framework}},
   url = {https://gitcode.com/open-usim/ns-3-ub},
-  version = {1.0.0},
-  year = {2025}
+  version = {1.3.0},
+  year = {2026}
 }
 ```
-<a href='https://mapmyvisitors.com/web/1c1da'  title='Visit tracker'><img src='https://mapmyvisitors.com/map.png?cl=ffffff&w=a&t=tt&d=Ctk3Fz1wWGpnv9Or15k53KwUJ5GPcNoSRETpXtl4GF4&co=2d78ad&ct=ffffff'/></a>
 
 ## 答疑交流
-欢迎加入OpenUSim仿真答疑交流微信群
+欢迎加入 OpenUSim 仿真答疑交流微信群
 
 <img src="https://raw.gitcode.com/user-images/assets/7654616/3bf9d8d1-8287-4a65-8b00-7b4eddcab515/微信图片_20260401112429_2_163.jpg" width="300" height="300" alt="Logo">

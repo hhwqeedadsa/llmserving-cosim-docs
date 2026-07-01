@@ -58,6 +58,10 @@ class NullMessageMpiInterface : public ParallelCommunicationInterface, Object
     void Enable(MPI_Comm communicator) override;
     void Disable() override;
     void SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint32_t dev) override;
+    void SendTaskCompletion(uint32_t taskId,
+                            const Time& completionVisibleTs,
+                            uint32_t rank) override;
+    void SetTaskCompletionHandler(TaskCompletionHandler handler) override;
     MPI_Comm GetCommunicator() override;
 
   private:

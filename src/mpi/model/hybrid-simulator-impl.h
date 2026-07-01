@@ -75,6 +75,15 @@ class HybridSimulatorImpl : public SimulatorImpl
     uint32_t GetContext() const override;
     uint64_t GetEventCount() const override;
 
+    /**
+     * Add an additional upper bound to the hybrid MPI lookahead.
+     *
+     * The method may be invoked more than once; the minimum positive bound is used.
+     *
+     * @param lookAhead maximum lookahead, must be positive.
+     */
+    void BoundLookAhead(Time lookAhead);
+
   private:
     // Inherited from Object
     void DoDispose() override;

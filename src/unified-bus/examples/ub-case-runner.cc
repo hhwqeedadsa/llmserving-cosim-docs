@@ -5,6 +5,8 @@
 #include "ns3/command-line.h"
 #include "ns3/node-list.h"
 #include "ns3/ub-app.h"
+#include "ns3/ub-link.h"
+#include "ns3/ub-port.h"
 #include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-transport.h"
 #include "ns3/ub-utils.h"
@@ -43,6 +45,8 @@ struct QuickExampleOptions
     uint32_t stopMs = 0;
     uint32_t rngRun = 10;
     std::string configPath;
+    std::string dependencyVisibilityDelay;
+    std::string canonicalOutputPath;
 };
 
 struct DropAbortState
@@ -210,29 +214,38 @@ void CheckExampleProcess()
     Simulator::Stop();
 }
 
-MpiLaunchProbe ProbeMpiWorld(int* argc, char*** argv)
+MpiLaunchProbe ProbeMpiWorld(int* argc, char*** argv, uint32_t mtpThreads)
 {
     MpiLaunchProbe probe;
 #ifdef NS3_MPI
+    const int requestedThreadLevel =
+        mtpThreads > 1 ? MPI_THREAD_SERIALIZED : MPI_THREAD_SINGLE;
+    int providedThreadLevel = MPI_THREAD_SINGLE;
     int initialized = 0;
     MPI_Initialized(&initialized);
     if (!initialized)
     {
-        int provided = MPI_THREAD_SINGLE;
-        const int rc = MPI_Init_thread(argc, argv, MPI_THREAD_SINGLE, &provided);
+        const int rc = MPI_Init_thread(argc, argv, requestedThreadLevel, &providedThreadLevel);
         NS_ABORT_MSG_IF(rc != MPI_SUCCESS, "MPI_Init_thread failed while probing quick-entry runtime");
         probe.initializedHere = true;
+    }
+    else
+    {
+        MPI_Query_thread(&providedThreadLevel);
     }
 
     int mpiRank = 0;
     int mpiSize = 1;
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
+    NS_ABORT_MSG_IF(mpiSize > 1 && mtpThreads > 1 && providedThreadLevel < MPI_THREAD_SERIALIZED,
+                    "MPI runtime does not provide the requested thread level");
     probe.rank = static_cast<uint32_t>(mpiRank);
     probe.size = static_cast<uint32_t>(mpiSize);
 #else
     (void)argc;
     (void)argv;
+    (void)mtpThreads;
 #endif
     return probe;
 }
@@ -260,29 +273,6 @@ void FinalizeMpiProbeIfNeeded(MpiLaunchProbe& probe)
 bool IsMtpRequested(uint32_t mtpThreads)
 {
     return mtpThreads > 1;
-}
-
-int ReportUnsupportedTrafficGenMpi()
-{
-    std::cerr << UbTrafficGen::GetMultiProcessUnsupportedMessage() << std::endl;
-#ifdef NS3_MPI
-    if (MpiInterface::IsEnabled())
-    {
-        MpiInterface::Disable();
-    }
-    else
-    {
-        int initialized = 0;
-        int finalized = 0;
-        MPI_Initialized(&initialized);
-        MPI_Finalized(&finalized);
-        if (initialized && !finalized)
-        {
-            MPI_Finalize();
-        }
-    }
-#endif
-    return 1;
 }
 
 RuntimeSelection::Mode ResolveRuntimeMode(bool enableMpi, uint32_t mtpThreads)
@@ -411,9 +401,77 @@ void BuildScenarioFromConfig(const std::string& configPath)
     UbUtils::Get()->TopoTraceConnect();
 }
 
+void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
+{
+    if (!options.dependencyVisibilityDelay.empty())
+    {
+        UbTrafficGen::Get()->SetDependencyVisibilityDelay(Time(options.dependencyVisibilityDelay));
+    }
+
+    for (uint32_t nodeIndex = 0; nodeIndex < NodeList::GetNNodes(); ++nodeIndex)
+    {
+        Ptr<Node> node = NodeList::GetNode(nodeIndex);
+        for (uint32_t deviceIndex = 0; deviceIndex < node->GetNDevices(); ++deviceIndex)
+        {
+            Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(deviceIndex));
+            if (port == nullptr)
+            {
+                continue;
+            }
+
+            Ptr<UbLink> link = DynamicCast<UbLink>(port->GetChannel());
+            if (link != nullptr && link->IsRemote())
+            {
+                UbTrafficGen::Get()->ObserveRemoteLinkDelay(link->GetDelay());
+            }
+        }
+    }
+}
+
+void ApplyDependencyVisibilityLookaheadBound(const RuntimeSelection& runtime)
+{
+    if (!UbTrafficGen::Get()->HasDependencyVisibilityDelay())
+    {
+        return;
+    }
+
+    const Time delay = UbTrafficGen::Get()->GetDependencyVisibilityDelay();
+    if (!delay.IsStrictlyPositive())
+    {
+        return;
+    }
+
+#ifdef NS3_MTP
+    if (ModeUsesMtp(runtime.mode))
+    {
+        MtpInterface::BoundLookAhead(delay);
+    }
+#endif
+
+#ifdef NS3_MPI
+    if (!runtime.enableMpi)
+    {
+        return;
+    }
+
+    MpiInterface::BoundLookAhead(delay);
+#else
+    (void)runtime;
+#endif
+}
+
+void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeSelection& runtime)
+{
+    if (!options.canonicalOutputPath.empty())
+    {
+        UbTrafficGen::Get()->EnableCanonicalOutput(options.canonicalOutputPath, runtime.mpiRank);
+    }
+}
+
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
-                                   uint32_t mpiRank)
+                                   uint32_t mpiRank,
+                                   bool requirePositiveDependencyVisibilityDelay)
 {
     const std::string trafficPath = configPath + "/traffic.csv";
     const auto trafficStats =
@@ -430,41 +488,61 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
     UbUtils::Get()->ForEachTrafficRecordView(trafficPath, [&](const TrafficRecordView& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
-        if (activateLocalOwnedTasksOnly &&
-            UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) != mpiRank)
+        const bool localOwned =
+            !activateLocalOwnedTasksOnly ||
+            UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) == mpiRank;
+
+        if (localOwned)
         {
-            return;
+            if (static_cast<size_t>(record.sourceNode) >= sourceApps.size())
+            {
+                sourceApps.resize(static_cast<size_t>(record.sourceNode) + 1);
+            }
+
+            Ptr<UbApp>& client = sourceApps[record.sourceNode];
+            if (client == nullptr)
+            {
+                if (sourceNode->GetNApplications() == 0)
+                {
+                    client = CreateObject<UbApp>();
+                    sourceNode->AddApplication(client);
+                    UbUtils::Get()->ClientTraceConnect(record.sourceNode);
+                }
+                else
+                {
+                    client = DynamicCast<UbApp>(sourceNode->GetApplication(0));
+                }
+                UbTrafficGen::Get()->RegisterSourceAppDuringInitialLoad(record.sourceNode, client);
+            }
+            ++localTaskCount;
         }
 
-        if (static_cast<size_t>(record.sourceNode) >= sourceApps.size())
-        {
-            sourceApps.resize(static_cast<size_t>(record.sourceNode) + 1);
-        }
-
-        Ptr<UbApp>& client = sourceApps[record.sourceNode];
-        if (client == nullptr)
-        {
-            if (sourceNode->GetNApplications() == 0)
-            {
-                client = CreateObject<UbApp>();
-                sourceNode->AddApplication(client);
-                UbUtils::Get()->ClientTraceConnect(record.sourceNode);
-            }
-            else
-            {
-                client = DynamicCast<UbApp>(sourceNode->GetApplication(0));
-            }
-            UbTrafficGen::Get()->RegisterSourceAppDuringInitialLoad(record.sourceNode, client);
-        }
         UbTrafficGen::Get()->AddTaskDuringInitialLoad(record);
-        ++localTaskCount;
     });
 
+    UbTrafficGen::Get()->ValidateDependencyVisibilityDelay(
+        requirePositiveDependencyVisibilityDelay);
     UbTrafficGen::Get()->ScheduleNextTasks();
     UbUtils::Get()->PrintTimestamp("[traffic] Scheduled local tasks: " +
                                    std::to_string(localTaskCount));
     CheckExampleProcess();
     return localTaskCount;
+}
+
+void ShutdownRuntime(const RuntimeSelection& runtime)
+{
+    Simulator::Destroy();
+#ifdef NS3_MPI
+    // Simulator::Destroy() lets the simulator implementation release MPI receive
+    // buffers. MpiInterface::Disable() owns the duplicated communicator and MPI
+    // finalization state.
+    if (runtime.enableMpi && MpiInterface::IsEnabled())
+    {
+        MpiInterface::Disable();
+    }
+#else
+    (void)runtime;
+#endif
 }
 
 bool HandleAttributeQuery(int argc, char* argv[])
@@ -493,8 +571,7 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.Usage("Unified-bus config-driven user entry.\n"
               "Typical usage:\n"
               "  recommended: python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=<case-dir>'\n"
-              "  example:     python3.12 ./ns3 run --no-build 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n"
-              "  MPI note:    traffic.csv / UbTrafficGen is single-process only in the current version.\n");
+              "  example:     python3.12 ./ns3 run --no-build 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n");
     cmd.AddValue("test", "Enable regression-test style output", options.test);
     cmd.AddValue("mtp-threads",
                  "Number of MTP threads (0-1 to disable, >=2 to enable)",
@@ -504,6 +581,12 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
                  casePathArg);
     cmd.AddValue("stop-ms", "Optional simulation stop time in milliseconds", options.stopMs);
     cmd.AddValue("rng-run", "Random seed value passed to RngSeedManager::SetSeed", options.rngRun);
+    cmd.AddValue("dependency-visibility-delay",
+                 "Delay before a completed traffic task becomes visible to dependent tasks",
+                 options.dependencyVisibilityDelay);
+    cmd.AddValue("canonical-output",
+                 "Write deterministic UbTrafficGen canonical events to this output basename",
+                 options.canonicalOutputPath);
     cmd.AddNonOption("casePath",
                      "Required unified-bus case directory when --case-path is omitted",
                      positionalCasePath);
@@ -558,19 +641,28 @@ void EnableExampleLogging()
     LogComponentEnable("TpConnectionManager", LOG_LEVEL_WARN);
 }
 
-RuntimeSelection PrepareRuntime(int* argc, char*** argv, const QuickExampleOptions& options)
+RuntimeSelection PrepareRuntime(int* argc,
+                                char*** argv,
+                                const QuickExampleOptions& options,
+                                const MpiLaunchProbe& mpiProbe)
 {
     RuntimeSelection runtime;
+    runtime.enableMpi = mpiProbe.size > 1;
+#ifndef NS3_MPI
     runtime.enableMpi = false;
+#endif
     runtime.mode = ResolveRuntimeMode(runtime.enableMpi, options.mtpThreads);
     PrepareSimulatorMode(runtime, options.mtpThreads);
 
 #ifdef NS3_MPI
     if (runtime.enableMpi)
     {
-        MpiInterface::Enable(argc, argv);
+        MpiInterface::Enable(MPI_COMM_WORLD);
         runtime.mpiRank = MpiInterface::GetSystemId();
+        UbTrafficGen::Get()->RegisterMpiTaskCompletionHandler();
     }
+    (void)argc;
+    (void)argv;
 #else
     (void)argc;
     (void)argv;
@@ -611,9 +703,15 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
     BuildScenarioFromConfig(options.configPath);
+    ConfigureTrafficDependencyVisibility(options);
+    ApplyDependencyVisibilityLookaheadBound(runtime);
+    ConfigureCanonicalOutput(options, runtime);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
-    ActivateTrafficFromConfig(options.configPath, runtime.enableMpi, runtime.mpiRank);
+    ActivateTrafficFromConfig(options.configPath,
+                              runtime.enableMpi,
+                              runtime.mpiRank,
+                              runtime.enableMpi || ModeUsesMtp(runtime.mode));
     if (options.stopMs > 0)
     {
         Simulator::Stop(MilliSeconds(options.stopMs));
@@ -622,13 +720,8 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     timing.simulationEnd = std::chrono::high_resolution_clock::now();
 
     UbUtils::Get()->Destroy();
-    Simulator::Destroy();
-#ifdef NS3_MPI
-    if (runtime.enableMpi && MpiInterface::IsEnabled())
-    {
-        MpiInterface::Disable();
-    }
-#endif
+    UbTrafficGen::Get()->WriteCanonicalOutput();
+    ShutdownRuntime(runtime);
 
     UbUtils::Get()->PrintTimestamp("[run] Simulation finished.");
     timing.traceStart = std::chrono::high_resolution_clock::now();
@@ -678,20 +771,16 @@ int RunUbCaseRunner(int argc, char* argv[])
     }
 
     QuickExampleOptions options = ParseOptions(argc, argv);
-    MpiLaunchProbe mpiProbe = ProbeMpiWorld(&argc, &argv);
-    if (mpiProbe.size > 1)
+    MpiLaunchProbe mpiProbe = ProbeMpiWorld(&argc, &argv, options.mtpThreads);
+    if (mpiProbe.size <= 1)
     {
-        return ReportUnsupportedTrafficGenMpi();
+        FinalizeMpiProbeIfNeeded(mpiProbe);
     }
-    FinalizeMpiProbeIfNeeded(mpiProbe);
     const auto programStart = std::chrono::high_resolution_clock::now();
-    RuntimeSelection runtime = PrepareRuntime(&argc, &argv, options);
-    if (runtime.enableMpi)
-    {
-        return ReportUnsupportedTrafficGenMpi();
-    }
+    RuntimeSelection runtime = PrepareRuntime(&argc, &argv, options, mpiProbe);
     PhaseTiming timing = RunScenario(options, runtime, programStart);
     ReportResult(options, runtime, timing);
+    FinalizeMpiProbeIfNeeded(mpiProbe);
     return GetDropAbortState().triggered ? 1 : 0;
 }
 

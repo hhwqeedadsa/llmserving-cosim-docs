@@ -255,6 +255,15 @@ LogicalProcess::ReceiveMessages()
 }
 
 void
+LogicalProcess::BoundLookAhead(Time lookAhead)
+{
+    if (lookAhead.IsStrictlyPositive() && lookAhead < m_lookAhead)
+    {
+        m_lookAhead = lookAhead;
+    }
+}
+
+void
 LogicalProcess::ProcessOneRound()
 {
     NS_LOG_FUNCTION(this);

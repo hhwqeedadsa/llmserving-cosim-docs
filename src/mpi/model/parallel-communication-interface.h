@@ -22,6 +22,7 @@
 #include "ns3/packet.h"
 
 #include <list>
+#include <functional>
 #include <mpi.h>
 #include <stdint.h>
 
@@ -47,6 +48,8 @@ namespace ns3
 class ParallelCommunicationInterface
 {
   public:
+    using TaskCompletionHandler = std::function<void(uint32_t taskId)>;
+
     /**
      * Destructor
      */
@@ -86,6 +89,16 @@ class ParallelCommunicationInterface
      * @copydoc MpiInterface::SendPacket
      */
     virtual void SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t node, uint32_t dev) = 0;
+    /**
+     * @copydoc MpiInterface::SendTaskCompletion
+     */
+    virtual void SendTaskCompletion(uint32_t taskId,
+                                    const Time& completionVisibleTs,
+                                    uint32_t rank) = 0;
+    /**
+     * @copydoc MpiInterface::SetTaskCompletionHandler
+     */
+    virtual void SetTaskCompletionHandler(TaskCompletionHandler handler) = 0;
     /**
      * @copydoc MpiInterface::GetCommunicator
      */

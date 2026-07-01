@@ -292,6 +292,17 @@ NullMessageMpiInterface::SendPacket(Ptr<Packet> p, const Time& rxTime, uint32_t 
 }
 
 void
+NullMessageMpiInterface::SendTaskCompletion(uint32_t, const Time&, uint32_t)
+{
+    NS_ABORT_MSG("TaskCompletionMessage is not implemented for NullMessageMpiInterface");
+}
+
+void
+NullMessageMpiInterface::SetTaskCompletionHandler(TaskCompletionHandler)
+{
+}
+
+void
 NullMessageMpiInterface::SendNullMessage(const Time& guarantee_update,
                                          Ptr<RemoteChannelBundle> bundle)
 {

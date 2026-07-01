@@ -29,10 +29,12 @@
 #include "ns3/mtp-interface.h"
 #endif
 
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <list>
 #include <mpi.h>
+#include <utility>
 
 namespace ns3
 {
@@ -78,10 +80,12 @@ uint32_t GrantedTimeWindowMpiInterface::g_rxCount = 0;
 uint32_t GrantedTimeWindowMpiInterface::g_txCount = 0;
 std::list<SentBuffer> GrantedTimeWindowMpiInterface::g_pendingTx;
 
-MPI_Request* GrantedTimeWindowMpiInterface::g_requests;
-char** GrantedTimeWindowMpiInterface::g_pRxBuffers;
+MPI_Request* GrantedTimeWindowMpiInterface::g_requests = nullptr;
+char** GrantedTimeWindowMpiInterface::g_pRxBuffers = nullptr;
 MPI_Comm GrantedTimeWindowMpiInterface::g_communicator = MPI_COMM_WORLD;
 bool GrantedTimeWindowMpiInterface::g_freeCommunicator = false;
+ParallelCommunicationInterface::TaskCompletionHandler
+    GrantedTimeWindowMpiInterface::g_taskCompletionHandler;
 
 #ifdef NS3_MTP
 std::atomic<bool> GrantedTimeWindowMpiInterface::g_sending(false);
@@ -100,14 +104,21 @@ GrantedTimeWindowMpiInterface::Destroy()
 {
     NS_LOG_FUNCTION(this);
 
-    for (uint32_t i = 0; i < GetSize(); ++i)
+    if (g_pRxBuffers != nullptr)
     {
-        delete[] g_pRxBuffers[i];
+        for (uint32_t i = 0; i < GetSize(); ++i)
+        {
+            delete[] g_pRxBuffers[i];
+        }
+        delete[] g_pRxBuffers;
+        g_pRxBuffers = nullptr;
     }
-    delete[] g_pRxBuffers;
+
     delete[] g_requests;
+    g_requests = nullptr;
 
     g_pendingTx.clear();
+    g_taskCompletionHandler = nullptr;
 }
 
 uint32_t
@@ -258,6 +269,52 @@ GrantedTimeWindowMpiInterface::SendPacket(Ptr<Packet> p,
 }
 
 void
+GrantedTimeWindowMpiInterface::SetTaskCompletionHandler(TaskCompletionHandler handler)
+{
+    g_taskCompletionHandler = std::move(handler);
+}
+
+void
+GrantedTimeWindowMpiInterface::SendTaskCompletion(uint32_t taskId,
+                                                  const Time& completionVisibleTs,
+                                                  uint32_t rank)
+{
+    NS_LOG_FUNCTION(this << taskId << completionVisibleTs.GetTimeStep() << rank);
+    NS_ASSERT(g_enabled);
+
+#ifdef NS3_MTP
+    while (g_sending.exchange(true, std::memory_order_acquire))
+    {
+    };
+#endif
+
+    SentBuffer sendBuf;
+    g_pendingTx.push_back(sendBuf);
+    auto i = g_pendingTx.rbegin();
+
+    auto buffer = new uint8_t[sizeof(TaskCompletionWireMessage)];
+    i->SetBuffer(buffer);
+    const TaskCompletionWireMessage message{
+        taskId,
+        static_cast<uint64_t>(completionVisibleTs.GetInteger()),
+    };
+    std::memcpy(buffer, &message, sizeof(message));
+
+    MPI_Isend(reinterpret_cast<void*>(i->GetBuffer()),
+              sizeof(TaskCompletionWireMessage),
+              MPI_CHAR,
+              rank,
+              TASK_COMPLETION_MPI_TAG,
+              g_communicator,
+              i->GetRequest());
+    g_txCount++;
+
+#ifdef NS3_MTP
+    g_sending.store(false, std::memory_order_release);
+#endif
+}
+
+void
 GrantedTimeWindowMpiInterface::ReceiveMessages()
 {
     NS_LOG_FUNCTION_NOARGS();
@@ -339,6 +396,65 @@ GrantedTimeWindowMpiInterface::ReceiveMessages()
                   g_communicator,
                   &g_requests[index]);
     }
+
+    ReceiveTaskCompletionMessages();
+}
+
+void
+GrantedTimeWindowMpiInterface::ReceiveTaskCompletionMessages()
+{
+    while (true)
+    {
+        int flag = 0;
+        MPI_Status status;
+        MPI_Iprobe(MPI_ANY_SOURCE, TASK_COMPLETION_MPI_TAG, g_communicator, &flag, &status);
+        if (!flag)
+        {
+            break;
+        }
+
+        uint8_t buffer[sizeof(TaskCompletionWireMessage)];
+        MPI_Recv(buffer,
+                 sizeof(buffer),
+                 MPI_CHAR,
+                 status.MPI_SOURCE,
+                 TASK_COMPLETION_MPI_TAG,
+                 g_communicator,
+                 MPI_STATUS_IGNORE);
+        g_rxCount++;
+
+        TaskCompletionWireMessage message{};
+        std::memcpy(&message, buffer, sizeof(message));
+        ScheduleTaskCompletion(message.taskId, Time(message.completionVisibleTs));
+    }
+}
+
+void
+GrantedTimeWindowMpiInterface::ScheduleTaskCompletion(uint32_t taskId, Time completionVisibleTs)
+{
+#ifdef NS3_MTP
+    if (MtpInterface::isEnabled())
+    {
+        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
+                                       &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
+                                       taskId);
+        return;
+    }
+#endif
+
+    NS_ABORT_MSG_IF(completionVisibleTs < Simulator::Now(),
+                    "TaskCompletionMessage visibility time is earlier than Simulator::Now()");
+    Simulator::Schedule(completionVisibleTs - Simulator::Now(),
+                        &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
+                        taskId);
+}
+
+void
+GrantedTimeWindowMpiInterface::DispatchTaskCompletion(uint32_t taskId)
+{
+    NS_ABORT_MSG_IF(!g_taskCompletionHandler,
+                    "TaskCompletionMessage received before handler registration");
+    g_taskCompletionHandler(taskId);
 }
 
 void

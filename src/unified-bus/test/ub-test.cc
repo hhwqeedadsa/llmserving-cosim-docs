@@ -44,6 +44,8 @@
 #include <functional>
 #include <iostream>
 #include <limits>
+#include <map>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 #include <thread>
@@ -635,7 +637,7 @@ class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
                               "phase DAG must not expand one phase dependency into all task edges");
 
         gen.ScheduleNextTasks();
-        gen.MarkTaskCompleted(0);
+        gen.ApplyTaskCompletion(0);
         NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
                               1u,
                               "dependent phase should wait until every task in the previous phase "
@@ -643,7 +645,7 @@ class UbTrafficGenPhaseDependencyMemoryTest : public TestCase
 
         for (uint32_t taskId = 1; taskId < kTasksPerPhase; ++taskId)
         {
-            gen.MarkTaskCompleted(taskId);
+            gen.ApplyTaskCompletion(taskId);
         }
         NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(kTasksPerPhase),
                               0u,
@@ -698,7 +700,7 @@ class UbTrafficGenSparseTaskIdFallbackTest : public TestCase
                               "sparse dependent task should wait for its dependency phase");
 
         gen.ScheduleNextTasks();
-        gen.MarkTaskCompleted(dependency.taskId);
+        gen.ApplyTaskCompletion(dependency.taskId);
 
         NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(dependent.taskId),
                               0u,
@@ -902,12 +904,12 @@ class UbTrafficGenRecordViewDependencyTest : public TestCase
                               "record view should deduplicate repeated dependency phases");
 
         gen.ScheduleNextTasks();
-        gen.MarkTaskCompleted(0);
+        gen.ApplyTaskCompletion(0);
         NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
                               1u,
                               "record view dependent task should still wait for the second phase");
 
-        gen.MarkTaskCompleted(1);
+        gen.ApplyTaskCompletion(1);
         NS_TEST_ASSERT_MSG_EQ(gen.GetPendingPhaseCountForTesting(2),
                               0u,
                               "record view dependent task should release after all phases complete");
@@ -8313,9 +8315,6 @@ class UbQuickExampleSpoofedMpiEnvSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(status,
                               0,
                               "spoofed MPI environment without launcher should stay on local runtime");
-        NS_TEST_ASSERT_MSG_EQ(output.find(UbTrafficGen::GetMultiProcessUnsupportedMessage()),
-                              std::string::npos,
-                              "spoofed MPI environment should not trigger the multi-process rejection");
         NS_TEST_ASSERT_MSG_NE(output.find("TEST : 00000 : PASSED"),
                               std::string::npos,
                               "spoofed MPI environment case should still complete locally");
@@ -8329,9 +8328,11 @@ namespace
 bool
 HasQuickExampleBinary(const std::filesystem::path& repoRoot)
 {
-    return std::filesystem::exists(
+    return std::filesystem::exists(repoRoot / "build/scratch/ns3.44-ub-quick-example") ||
+           std::filesystem::exists(
                repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example-default") ||
-           std::filesystem::exists(repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example");
+           std::filesystem::exists(
+               repoRoot / "build/src/unified-bus/examples/ns3.44-ub-quick-example");
 }
 
 std::filesystem::path
@@ -8359,6 +8360,7 @@ std::filesystem::path
 LocateQuickExampleBinary(const std::filesystem::path& repoRoot)
 {
     const std::vector<std::filesystem::path> candidates = {
+        "build/scratch/ns3.44-ub-quick-example",
         "build/src/unified-bus/examples/ns3.44-ub-quick-example",
         "build/src/unified-bus/examples/ns3.44-ub-quick-example-default",
     };
@@ -8465,6 +8467,14 @@ NormalizeTestPath(const std::filesystem::path& path)
 }
 
 std::filesystem::path
+CreateSafeTempBasename(const std::string& prefix)
+{
+    const auto uniqueSuffix =
+        std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
+    return (std::filesystem::temp_directory_path() / (prefix + "-" + uniqueSuffix)).lexically_normal();
+}
+
+std::filesystem::path
 CopyCaseDirWithoutFile(const std::string& sourceCasePathRelative, const std::string& omittedFilename)
 {
     namespace fs = std::filesystem;
@@ -8547,6 +8557,212 @@ ReplaceInFile(const std::filesystem::path& filePath,
 // The old ub-local-hybrid-minimal fixture was removed as a non-core sample, so
 // local single-thread quick-example tests reuse the maintained 2-node case.
 constexpr const char* kLocalSingleThreadQuickExampleCase = "scratch/2nodes_single-tp";
+
+struct TaskTimes
+{
+    uint64_t startNs{0};
+    uint64_t finishNs{0};
+    bool hasStart{false};
+    bool hasFinish{false};
+};
+
+std::vector<std::string>
+SplitCsvLine(const std::string& line)
+{
+    std::vector<std::string> fields;
+    std::stringstream input(line);
+    std::string field;
+    while (std::getline(input, field, ','))
+    {
+        fields.push_back(field);
+    }
+    return fields;
+}
+
+std::map<uint32_t, TaskTimes>
+ReadTaskStatisticsTimes(const std::filesystem::path& caseDir)
+{
+    std::map<uint32_t, TaskTimes> taskTimes;
+    std::ifstream input(caseDir / "test" / "task_statistics.csv");
+    if (!input.is_open())
+    {
+        return taskTimes;
+    }
+
+    std::string header;
+    if (!std::getline(input, header))
+    {
+        return taskTimes;
+    }
+    const std::vector<std::string> columns = SplitCsvLine(header);
+    auto columnIndex = [&](const std::string& name) -> std::optional<std::size_t> {
+        auto it = std::find(columns.begin(), columns.end(), name);
+        if (it == columns.end())
+        {
+            return std::nullopt;
+        }
+        return static_cast<std::size_t>(std::distance(columns.begin(), it));
+    };
+
+    const auto taskIdIndex = columnIndex("taskId");
+    const auto startIndex = columnIndex("taskStartTime(us)");
+    const auto finishIndex = columnIndex("taskCompletesTime(us)");
+    if (!taskIdIndex || !startIndex || !finishIndex)
+    {
+        return taskTimes;
+    }
+
+    std::string line;
+    while (std::getline(input, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+        const std::vector<std::string> fields = SplitCsvLine(line);
+        if (fields.size() <= std::max({*taskIdIndex, *startIndex, *finishIndex}))
+        {
+            continue;
+        }
+
+        const uint32_t taskId = static_cast<uint32_t>(std::stoul(fields[*taskIdIndex]));
+        TaskTimes& times = taskTimes[taskId];
+        times.startNs = static_cast<uint64_t>(std::stod(fields[*startIndex]) * 1000.0);
+        times.finishNs = static_cast<uint64_t>(std::stod(fields[*finishIndex]) * 1000.0);
+        times.hasStart = true;
+        times.hasFinish = true;
+    }
+
+    return taskTimes;
+}
+
+bool
+HasDependencyVisibilityTaskTimes(const std::map<uint32_t, TaskTimes>& taskTimes)
+{
+    const bool hasTask0 = taskTimes.count(0) == 1;
+    const bool hasTask1 = taskTimes.count(1) == 1;
+    if (!hasTask0 || !hasTask1)
+    {
+        return false;
+    }
+
+    const bool hasTask0Finish = taskTimes.at(0).hasFinish;
+    const bool hasTask1Start = taskTimes.at(1).hasStart;
+    return hasTask0Finish && hasTask1Start;
+}
+
+std::string
+ReadCanonicalBytes(const std::filesystem::path& basePath)
+{
+    std::vector<std::string> lines;
+    const std::filesystem::path parent = basePath.parent_path();
+    const std::string prefix = basePath.filename().string() + ".rank";
+    for (const auto& entry : std::filesystem::directory_iterator(parent))
+    {
+        const std::string filename = entry.path().filename().string();
+        if (filename.rfind(prefix, 0) != 0)
+        {
+            continue;
+        }
+
+        std::ifstream input(entry.path());
+        std::string line;
+        while (std::getline(input, line))
+        {
+            if (!line.empty())
+            {
+                lines.push_back(line);
+            }
+        }
+    }
+
+    std::sort(lines.begin(), lines.end());
+    std::ostringstream output;
+    for (const auto& line : lines)
+    {
+        output << line << '\n';
+    }
+    return output.str();
+}
+
+std::size_t
+CountNonEmptyLines(const std::string& text)
+{
+    std::size_t count = 0;
+    std::istringstream input(text);
+    std::string line;
+    while (std::getline(input, line))
+    {
+        if (!line.empty())
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+void
+WriteCanonicalClosNodeFile(const std::filesystem::path& caseDir, bool splitRanks)
+{
+    std::ofstream output(caseDir / "node.csv", std::ios::trunc);
+    if (!output.is_open())
+    {
+        throw std::runtime_error("failed to open CLOS node.csv for rewrite");
+    }
+
+    output << "nodeId,nodeType,portNum,forwardDelay,systemId\n";
+    for (uint32_t nodeId = 0; nodeId < 32; ++nodeId)
+    {
+        const uint32_t rank = splitRanks && nodeId >= 16 ? 1 : 0;
+        output << nodeId << ",DEVICE,1,1ns," << rank << "\n";
+    }
+    for (uint32_t nodeId = 32; nodeId < 36; ++nodeId)
+    {
+        const uint32_t rank = splitRanks && nodeId >= 34 ? 1 : 0;
+        output << nodeId << ",SWITCH,16,1ns," << rank << "\n";
+    }
+    for (uint32_t nodeId = 36; nodeId < 44; ++nodeId)
+    {
+        const uint32_t rank = splitRanks && nodeId >= 40 ? 1 : 0;
+        output << nodeId << ",SWITCH,4,1ns," << rank << "\n";
+    }
+}
+
+std::map<uint32_t, TaskTimes>
+ExtractCanonicalTaskTimes(const std::string& canonicalBytes)
+{
+    std::map<uint32_t, TaskTimes> taskTimes;
+    std::istringstream input(canonicalBytes);
+    std::string line;
+    while (std::getline(input, line))
+    {
+        if (line.empty())
+        {
+            continue;
+        }
+        const std::vector<std::string> fields = SplitCsvLine(line);
+        if (fields.size() < 5)
+        {
+            continue;
+        }
+
+        const uint64_t timeNs = static_cast<uint64_t>(std::stoull(fields[0]));
+        const std::string& type = fields[1];
+        const uint32_t taskId = static_cast<uint32_t>(std::stoul(fields[2]));
+        TaskTimes& times = taskTimes[taskId];
+        if (type == "START")
+        {
+            times.startNs = timeNs;
+            times.hasStart = true;
+        }
+        else if (type == "COMPLETE_VISIBLE")
+        {
+            times.finishNs = timeNs;
+            times.hasFinish = true;
+        }
+    }
+    return taskTimes;
+}
 
 std::pair<int, std::string>
 RunQuickExampleAbsoluteCaseCommand(const std::string& testFile,
@@ -8688,9 +8904,9 @@ class UbQuickExampleHelpTextSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(output.find("Typical usage:"),
                               std::string::npos,
                               "help text should include quick-example usage guidance");
-        NS_TEST_ASSERT_MSG_NE(output.find("traffic.csv / UbTrafficGen is single-process only"),
+        NS_TEST_ASSERT_MSG_EQ(output.find("traffic.csv / UbTrafficGen is single-process only"),
                               std::string::npos,
-                              "help text should explain the MPI TrafficGen boundary");
+                              "help text should not advertise the removed MPI TrafficGen boundary");
     }
 };
 
@@ -9035,7 +9251,8 @@ class UbQuickExampleLocalDependentDagSingleThreadSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=1 --test",
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 
@@ -9135,7 +9352,8 @@ class UbQuickExampleLocalWriteThenReadSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=1 --test",
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 
@@ -9211,7 +9429,8 @@ class UbQuickExampleLocalDependentDagMtpRedSystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=2 --test",
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns",
                                                "",
                                                caseDir);
 
@@ -9258,12 +9477,11 @@ class UbQuickExampleInvalidTrafficPrioritySystemTest : public TestCase
     }
 };
 
-#ifdef NS3_MPI
-class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
+class UbQuickExampleLocalDependencyVisibilityDelaySystemTest : public TestCase
 {
   public:
-    UbQuickExampleMpiCrossRankPhaseDependencySystemTest()
-        : TestCase("UnifiedBus - ub-quick-example rejects cross-rank phase dependency under MPI")
+    UbQuickExampleLocalDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example local dependency visibility delay applies")
     {
     }
 
@@ -9272,24 +9490,446 @@ class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string trafficCsv =
             "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
-            "0,0,3,4096,URMA_WRITE,7,10ns,10,\n"
-            "1,3,0,4096,URMA_WRITE,7,10ns,20,10\n";
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,0,1,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "",
+                                               caseDir);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "local dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            std::error_code ec;
+            std::filesystem::remove_all(caseDir, ec);
+            return;
+        }
+        const auto taskTimes = ReadTaskStatisticsTimes(caseDir);
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 20 + 10),
+                              true,
+                              "dependent task should start after finish, visibility delay, and "
+                              "task delay");
+    }
+};
+
+class UbQuickExampleMtpDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMtpDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example MTP dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "",
+                                               caseDir);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "MTP dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            std::error_code ec;
+            std::filesystem::remove_all(caseDir, ec);
+            return;
+        }
+        const auto taskTimes = ReadTaskStatisticsTimes(caseDir);
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 20 + 10),
+                              true,
+                              "dependent task should start after finish, visibility delay, and "
+                              "task delay");
+    }
+};
+
+#ifdef NS3_MTP
+class UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example rejects zero MTP dependency visibility delay")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile(kLocalSingleThreadQuickExampleCase, trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=0ns",
+                                               "",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "zero-delay MTP dependency DAG should be rejected");
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("parallel traffic.csv dependencies require a positive dependency visibility delay"),
+            std::string::npos,
+            "zero-delay MTP dependency DAG should explain the positive-delay requirement");
+    }
+};
+#endif
+
+#ifdef NS3_MPI
+class UbQuickExampleMpiDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMpiDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example MPI dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+        const std::filesystem::path canonicalBase =
+            CreateSafeTempBasename("ub-mpi-dependency-canonical");
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   canonicalBase.string() + "\"",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "MPI dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            std::error_code ec;
+            std::filesystem::remove_all(caseDir, ec);
+            return;
+        }
+        const std::string canonicalBytes = ReadCanonicalBytes(canonicalBase);
+        const auto taskTimes = ExtractCanonicalTaskTimes(canonicalBytes);
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 10),
+                              true,
+                              "dependent task should start after dependency visibility and task delay");
+    }
+};
+
+class UbQuickExampleMpiZeroDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMpiZeroDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example rejects zero MPI dependency visibility delay")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
         const std::filesystem::path caseDir =
             CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=2 --stop-ms=1 --test",
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=0ns",
                                                "mpirun -np 2",
                                                caseDir);
 
         std::error_code ec;
         std::filesystem::remove_all(caseDir, ec);
 
-        NS_TEST_ASSERT_MSG_NE(status, 0, "MPI cross-rank dependent DAG command should be rejected");
-        NS_TEST_ASSERT_MSG_NE(output.find(UbTrafficGen::GetMultiProcessUnsupportedMessage()),
+        NS_TEST_ASSERT_MSG_NE(status, 0, "zero-delay MPI dependency DAG should be rejected");
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("parallel traffic.csv dependencies require a positive dependency visibility delay"),
+            std::string::npos,
+            "zero-delay MPI dependency DAG should explain the positive-delay requirement");
+    }
+};
+
+class UbQuickExampleHybridDependencyVisibilityDelaySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleHybridDependencyVisibilityDelaySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example hybrid dependency visibility delay applies")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+        const std::filesystem::path canonicalBase =
+            CreateSafeTempBasename("ub-hybrid-dependency-canonical");
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   canonicalBase.string() + "\"",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        NS_TEST_ASSERT_MSG_EQ(status,
+                              0,
+                              "hybrid dependency visibility delay case should exit successfully");
+        if (status != 0)
+        {
+            std::error_code ec;
+            std::filesystem::remove_all(caseDir, ec);
+            return;
+        }
+        const std::string canonicalBytes = ReadCanonicalBytes(canonicalBase);
+        const auto taskTimes = ExtractCanonicalTaskTimes(canonicalBytes);
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+        const bool hasTaskTimes = HasDependencyVisibilityTaskTimes(taskTimes);
+        NS_TEST_ASSERT_MSG_EQ(hasTaskTimes, true, "hybrid dependent tasks should have start/finish times");
+        if (!hasTaskTimes)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_EQ((taskTimes.at(1).startNs >= taskTimes.at(0).finishNs + 10),
+                              true,
+                              "hybrid dependent task should start after visibility and task delay");
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 00000 : PASSED"),
                               std::string::npos,
-                              "cross-rank phase dependency should print the unsupported-runtime message");
+                              "hybrid dependency visibility delay case should report PASSED");
+    }
+};
+
+class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMpiCrossRankPhaseDependencySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example runs cross-rank phase dependency under MPI")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,1,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,0,4096,URMA_WRITE,7,10ns,20,10\n";
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "MPI cross-rank dependent DAG command should complete");
+        if (status != 0)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 00000 : PASSED"),
+                              std::string::npos,
+                              "MPI cross-rank dependent DAG should report PASSED");
+    }
+};
+
+class UbQuickExampleCanonicalOutputMatchesMpiSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleCanonicalOutputMatchesMpiSystemTest()
+        : TestCase("UnifiedBus - canonical output matches local, MTP, MPI, and hybrid DAG runs")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        constexpr std::size_t kTaskCount = 16;
+        const std::string trafficCsv =
+            "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,delay,phaseId,dependOnPhases\n"
+            "0,0,16,4096,URMA_WRITE,7,10ns,10,\n"
+            "1,1,17,4096,URMA_WRITE,7,10ns,11,\n"
+            "2,16,0,4096,URMA_WRITE,7,10ns,12,\n"
+            "3,17,1,4096,URMA_WRITE,7,10ns,13,\n"
+            "4,2,18,4096,URMA_WRITE,7,10ns,20,10 11\n"
+            "5,18,2,4096,URMA_WRITE,7,10ns,21,12 13\n"
+            "6,3,19,4096,URMA_WRITE,7,10ns,22,10 12\n"
+            "7,19,3,4096,URMA_WRITE,7,10ns,23,11 13\n"
+            "8,4,20,4096,URMA_WRITE,7,10ns,30,20 21\n"
+            "9,20,4,4096,URMA_WRITE,7,10ns,31,22 23\n"
+            "10,5,21,4096,URMA_WRITE,7,10ns,32,20 23\n"
+            "11,21,5,4096,URMA_WRITE,7,10ns,33,21 22\n"
+            "12,6,22,4096,URMA_WRITE,7,10ns,40,30 31\n"
+            "13,22,6,4096,URMA_WRITE,7,10ns,41,32 33\n"
+            "14,7,23,4096,URMA_WRITE,7,10ns,42,30 33\n"
+            "15,23,7,4096,URMA_WRITE,7,10ns,43,31 32\n";
+
+        const std::filesystem::path localCase =
+            CopyCaseDirWithTrafficFile("scratch/clos_32hosts-4leafs-8spines_pod2pod", trafficCsv);
+        const std::filesystem::path mtpCase =
+            CopyCaseDirWithTrafficFile("scratch/clos_32hosts-4leafs-8spines_pod2pod", trafficCsv);
+        const std::filesystem::path mpiCase =
+            CopyCaseDirWithTrafficFile("scratch/clos_32hosts-4leafs-8spines_pod2pod", trafficCsv);
+        const std::filesystem::path hybridCase =
+            CopyCaseDirWithTrafficFile("scratch/clos_32hosts-4leafs-8spines_pod2pod", trafficCsv);
+        WriteCanonicalClosNodeFile(localCase, false);
+        WriteCanonicalClosNodeFile(mtpCase, false);
+        WriteCanonicalClosNodeFile(mpiCase, true);
+        WriteCanonicalClosNodeFile(hybridCase, true);
+
+        const std::filesystem::path localBase =
+            CreateSafeTempBasename("ub-canonical-local");
+        const std::filesystem::path mtpBase =
+            CreateSafeTempBasename("ub-canonical-mtp");
+        const std::filesystem::path mpiBase =
+            CreateSafeTempBasename("ub-canonical-mpi");
+        const std::filesystem::path hybridBase =
+            CreateSafeTempBasename("ub-canonical-hybrid");
+
+        auto [localStatus, localOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-local.log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   localBase.string() + "\"",
+                                               "",
+                                               localCase);
+        auto [mtpStatus, mtpOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-mtp.log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   mtpBase.string() + "\"",
+                                               "",
+                                               mtpCase);
+        auto [mpiStatus, mpiOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-mpi.log"),
+                                               "--mtp-threads=1 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   mpiBase.string() + "\"",
+                                               "mpirun -np 2",
+                                               mpiCase);
+        auto [hybridStatus, hybridOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-hybrid.log"),
+                                               "--mtp-threads=2 --test "
+                                               "--dependency-visibility-delay=20ns "
+                                               "--canonical-output=\"" +
+                                                   hybridBase.string() + "\"",
+                                               "mpirun -np 2",
+                                               hybridCase);
+
+        const std::string localBytes = ReadCanonicalBytes(localBase);
+        const std::string mtpBytes = ReadCanonicalBytes(mtpBase);
+        const std::string mpiBytes = ReadCanonicalBytes(mpiBase);
+        const std::string hybridBytes = ReadCanonicalBytes(hybridBase);
+
+        std::error_code ec;
+        std::filesystem::remove_all(localCase, ec);
+        std::filesystem::remove_all(mtpCase, ec);
+        std::filesystem::remove_all(mpiCase, ec);
+        std::filesystem::remove_all(hybridCase, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(localStatus, 0, "local canonical run should pass");
+        NS_TEST_ASSERT_MSG_EQ(mtpStatus, 0, "MTP canonical run should pass");
+        NS_TEST_ASSERT_MSG_EQ(mpiStatus, 0, "MPI canonical run should pass");
+        NS_TEST_ASSERT_MSG_EQ(hybridStatus, 0, "hybrid canonical run should pass");
+        const bool localPassed = localOutput.find("TEST : 00000 : PASSED") != std::string::npos;
+        const bool mtpPassed = mtpOutput.find("TEST : 00000 : PASSED") != std::string::npos;
+        const bool mpiPassed = mpiOutput.find("TEST : 00000 : PASSED") != std::string::npos;
+        const bool hybridPassed =
+            hybridOutput.find("TEST : 00000 : PASSED") != std::string::npos;
+        NS_TEST_ASSERT_MSG_EQ(localPassed, true, "local canonical run should print PASSED");
+        NS_TEST_ASSERT_MSG_EQ(mtpPassed, true, "MTP canonical run should print PASSED");
+        NS_TEST_ASSERT_MSG_EQ(mpiPassed, true, "MPI canonical run should print PASSED");
+        NS_TEST_ASSERT_MSG_EQ(hybridPassed, true, "hybrid canonical run should print PASSED");
+        NS_TEST_ASSERT_MSG_EQ(localBytes.empty(), false, "canonical output should not be empty");
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(localBytes),
+                              kTaskCount * 2,
+                              "canonical output should contain START and COMPLETE_VISIBLE per task");
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(mtpBytes),
+                              kTaskCount * 2,
+                              "MTP canonical output should contain every task event");
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(mpiBytes),
+                              kTaskCount * 2,
+                              "MPI canonical output should contain every task event");
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(hybridBytes),
+                              kTaskCount * 2,
+                              "hybrid canonical output should contain every task event");
+        NS_TEST_ASSERT_MSG_EQ(localBytes, mtpBytes, "local and MTP canonical output bytes should match");
+        NS_TEST_ASSERT_MSG_EQ(localBytes, mpiBytes, "local and MPI canonical output bytes should match");
+        NS_TEST_ASSERT_MSG_EQ(localBytes,
+                              hybridBytes,
+                              "local and hybrid canonical output bytes should match");
     }
 };
 
@@ -9308,16 +9948,21 @@ class UbQuickExampleMpiSystemTest : public TestCase
     void DoRun() override
     {
         SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string args = m_extraArgs.empty() ? "--test" : m_extraArgs + " --test";
         auto [status, output] =
             RunQuickExampleCommand(CreateTempDirFilename(GetName() + ".log"),
-                                   m_extraArgs,
+                                   args,
                                    "mpirun -np 2",
                                    m_casePathRelative);
 
-        NS_TEST_ASSERT_MSG_NE(status, 0, "ub-quick-example MPI invocation should be rejected");
-        NS_TEST_ASSERT_MSG_NE(output.find(UbTrafficGen::GetMultiProcessUnsupportedMessage()),
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "ub-quick-example MPI invocation should complete");
+        if (status != 0)
+        {
+            return;
+        }
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 00000 : PASSED"),
                               std::string::npos,
-                              "MPI quick-example should explain the unsupported UbTrafficGen runtime");
+                              "MPI quick-example should report PASSED");
     }
 
   private:
@@ -9364,28 +10009,42 @@ class UbQuickExampleSystemTestSuite : public TestSuite
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleInvalidTrafficPrioritySystemTest(),
                     TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleLocalDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleMtpDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
 #ifdef NS3_MTP
+        AddTestCase(new UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
 #endif
 #ifdef NS3_MPI
+        AddTestCase(new UbQuickExampleMpiDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleMpiZeroDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleHybridDependencyVisibilityDelaySystemTest(),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleCanonicalOutputMatchesMpiSystemTest(),
+                    TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleSpoofedMpiEnvSystemTest(), TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects MPI minimal case",
+        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example runs MPI minimal case",
                                                     "scratch/ub-mpi-minimal",
                                                     ""),
                     TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects MPI mtp-threads=1 case",
+        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example runs MPI mtp-threads=1 case",
                                                     "scratch/ub-mpi-minimal",
                                                     "--mtp-threads=1"),
                     TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects hybrid minimal case",
+        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example runs hybrid minimal case",
                                                     "scratch/ub-mpi-minimal",
                                                     "--mtp-threads=2"),
                     TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects hybrid ldst case",
+        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example runs hybrid ldst case",
                                                     "scratch/ub-mpi-minimal",
                                                     "--mtp-threads=2"),
                     TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example rejects hybrid multi-remote case",
+        AddTestCase(new UbQuickExampleMpiSystemTest("UnifiedBus - ub-quick-example runs hybrid multi-remote case",
                                                     "scratch/ub-mpi-minimal",
                                                     "--mtp-threads=2"),
                     TestCase::Duration::QUICK);

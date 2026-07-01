@@ -2,6 +2,104 @@
 
 **Language**: [English](RELEASE_NOTES_UB_en.md) | [中文](RELEASE_NOTES_UB.md)
 
+## Release 1.3.0
+
+**Release Date**: July 2026
+
+### Simulation Features
+
+- **Enhanced RTP reliable transport modeling**: Added selective retransmission support, including static / dynamic RTO modes, fast selective retransmission, selective MarkPSN, and SACK / NAK feedback handling. Retransmission remains an explicit opt-in capability, so existing no-retransmission cases are not silently changed.
+- **RTP loss and fault-injection validation**: Added a representative `retrans_fault.csv` case and deterministic fault-injection path for reproducing DATA / ACK / SACK loss, delay, and recovery behavior.
+- **MPI / MTP Traffic DAG semantics**: TrafficGen DAGs now extend from single-process cases to local MTP, MPI, and MPI+MTP hybrid modes. Task completion messages can propagate across ranks, and dependency visibility is bound to MPI lookahead, keeping dependent traffic workloads semantically consistent across threaded, multi-process, and hybrid runs.
+- **Large-scale routing model expression**: Simulation cases can use range-based compressed route tables for large rule sets, and newly generated cases default to the generic compressed route path. This targets 1K-host and larger topologies where repeated routing rules would otherwise expand into million-line CSV files.
+- **Parallel semantic consistency validation**: Added a canonical output path for comparing task completion results across local, MTP, MPI, and hybrid modes, making it easier to catch semantic drift in parallel execution.
+
+### Simulation Engine Efficiency
+
+- **TrafficGen initial load optimization**: Reworked traffic record parsing, opcode / delay parse caching, source app caching, and runtime task storage to reduce CPU and memory overhead during large `traffic.csv` load and activation.
+- **Traffic DAG state storage optimization**: Replaced high-overhead presence bitmap / dense helper structures with compact task state and vector-based dependency storage, reducing resident memory for large DAG workloads.
+- **Parallel runtime scheduling optimization**: Tuned ready-task collection, phase-id storage, cross-rank completion visibility, and MTP event ordering to reduce run-phase time for no-trace large workloads.
+- **Compressed route loading optimization**: Reduced route file size, route-load memory pressure, and parse time so large Clos cases are no longer dominated by expanded routing CSV cost.
+
+### Key Validation Metrics
+
+The following data was collected with trace and parse disabled, using medians from repeated runs. Efficiency comparisons use `749a09f` as the baseline and `a5a519e` as this release.
+
+<table>
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Validation Item</th>
+      <th>Test Scenario</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Simulation feature</td>
+      <td>Four-mode output consistency</td>
+      <td>32-host Clos, 16-task fan-in / fan-out DAG; canonical output compared across local, MTP, MPI, and hybrid modes.</td>
+      <td>
+        <ul>
+          <li>All four modes produced identical output.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Engine efficiency</td>
+      <td>1K-host Clos compressed route table</td>
+      <td><code>clos_1024h_32l_32s</code>; expanded route compared with compressed route.</td>
+      <td>
+        <ul>
+          <li>Route file reduced 177.61x: 21.56 MB -> 121.36 KB.</li>
+          <li>RSS dropped 44.81%: 1.021 GB -> 563.4 MB.</li>
+          <li>Simulation run phase sped up 5.70x: 1959.6 ms -> 344.1 ms.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Engine efficiency</td>
+      <td>Multi-threaded performance (MTP, 4 threads, vs baseline <code>749a09f</code>)</td>
+      <td>32-host Clos with 20,000 independent <code>URMA_WRITE</code> tasks.</td>
+      <td>
+        <ul>
+          <li>Wall time sped up 1.26x: 7.980 s -> 6.350 s.</li>
+          <li>Simulation run phase sped up 1.26x: 7805 ms -> 6214 ms.</li>
+          <li>RSS dropped 3.86%: 466.0 MB -> 448.0 MB.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>Engine efficiency</td>
+      <td>Single-thread performance (local, vs baseline <code>749a09f</code>)</td>
+      <td>Same workload, local mode.</td>
+      <td>
+        <ul>
+          <li>Wall time sped up 1.10x: 14.776 s -> 13.452 s.</li>
+          <li>Simulation run phase sped up 1.09x: 14502 ms -> 13313 ms.</li>
+          <li>RSS was effectively unchanged: 428.0 MB -> 427.6 MB.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### Compatibility and Migration
+
+- `traffic.csv` files with dependencies need a dependency visibility delay in MPI / hybrid mode, ensuring cross-rank completion visibility does not violate lookahead constraints.
+- When `EnableRetrans=false`, `ub-quick-example` now fails fast on real packet drops. Experiments that intentionally validate loss recovery should explicitly enable `EnableRetrans` and choose an appropriate `RetransmissionMode`.
+- `SelectiveAckBitmapBits=0` means AUTO; the runtime selects the feedback width needed to cover the receiver-side out-of-order evidence window. Use `EnableFastSelectiveRetrans` carefully when packet spray or other multipath routing may reorder packets.
+
+### Fixes and Documentation
+
+- Fixed logical-sequence wrap handling in comparisons and window checks.
+- Fixed Traffic DAG dependency maintenance, task activation, and priority-field validation in the parallel runtime.
+- Fixed DCQCN boundary marking so packets above `kmax` are marked deterministically.
+- Fixed route hash salting so packet-spray path selection is isolated per node.
+- Updated Quick Start, scratch case documentation, and the `ns-3-ub-tools` submodule to clarify UB-only focused builds, `--no-build` runs, route ranges, and traffic numeric field semantics.
+
+---
+
 ## Release 1.2.1
 
 **Release Date**: April 2026

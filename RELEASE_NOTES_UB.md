@@ -2,6 +2,104 @@
 
 **语言**: [English](RELEASE_NOTES_UB_en.md) | [中文](RELEASE_NOTES_UB.md)
 
+## Release 1.3.0
+
+**发布日期**: 2026 年 7 月
+
+### 仿真功能
+
+- **RTP 可靠传输**：新增选择性重传，覆盖静态/动态 RTO、快速选择性重传、Selective MarkPSN 以及 SACK/NAK 反馈处理。重传需显式开启（opt-in），不开时所有 case 行为与之前一致。
+- **RTP 丢包与故障注入**：`retrans_fault.csv` 提供故障注入用例，可精确复现 DATA/ACK/SACK 等关键包的丢失、延迟与恢复行为。
+- **MPI / MTP Traffic DAG**：TrafficGen DAG 从单进程扩展到了 MTP、MPI 和 MPI+MTP hybrid 三种模式。任务完成通知可跨 rank 传播，依赖可见性与 MPI lookahead 绑定，带依赖的 workload 在多线程、多进程、混合模式下行为一致。
+- **大规模路由压缩**：支持用 range-based 压缩路由表描述大规模规则，新增 case 默认走压缩路径。1K-host 及以上拓扑不用再把重复的路由规则展开成百万行 CSV。
+- **并行输出一致性校验**：新增 canonical 输出路径，对比 local、MTP、MPI、hybrid 四种模式的任务完成结果，方便发现并行运行导致的结果漂移。
+
+### 仿真引擎效率提升
+
+- **TrafficGen 启动加速**：重写了 traffic 记录解析、opcode/delay 缓存、source app cache 和 runtime task 结构，大规模 `traffic.csv` 读入和激活阶段的 CPU 与内存开销明显下降。
+- **Traffic DAG 内存优化**：task 状态改用紧凑存储，依赖关系换成 vector-based 结构，替代原来开销较大的 presence bitmap 和 dense 辅助结构，DAG workload 常驻内存大幅减少。
+- **并行调度加速**：调整了 ready task 收集、phase id 存储、跨 rank completion 可见性及 MTP 事件排序，无 trace 的大规模 workload 的 run 阶段耗时明显缩短。
+- **压缩路由加载优化**：路由文件体积大幅减小，同时加载阶段的内存峰值和解析时间也降下来了，Clos 大 case 不再被路由 CSV 展开拖慢。
+
+### 关键验证指标
+
+以下数据均关闭 trace 和 parse，每项重复运行取中位数。效率对比基线为 `749a09f`，本版本提交为 `a5a519e`。
+
+<table>
+  <thead>
+    <tr>
+      <th>类别</th>
+      <th>验证项</th>
+      <th>测试场景</th>
+      <th>结果</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>仿真功能</td>
+      <td>四模式输出一致性</td>
+      <td>32-host Clos、16-task fan-in / fan-out DAG；local、MTP、MPI、hybrid 四种模式 canonical 输出对比。</td>
+      <td>
+        <ul>
+          <li>四种模式输出完全一致。</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>引擎效率</td>
+      <td>1K-host Clos 压缩路由表</td>
+      <td><code>clos_1024h_32l_32s</code>；expanded route 对比 compressed route。</td>
+      <td>
+        <ul>
+          <li>route 文件缩小 177.61x：21.56 MB -> 121.36 KB。</li>
+          <li>RSS 下降 44.81%：1.021 GB -> 563.4 MB。</li>
+          <li>仿真 run 阶段加速 5.70x：1959.6 ms -> 344.1 ms。</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>引擎效率</td>
+      <td>多线程性能（MTP，4 线程，vs 基线 <code>749a09f</code>）</td>
+      <td>32-host Clos，20,000 条独立 <code>URMA_WRITE</code>。</td>
+      <td>
+        <ul>
+          <li>wall time 加速 1.26x：7.980 s -> 6.350 s。</li>
+          <li>仿真 run 阶段加速 1.26x：7805 ms -> 6214 ms。</li>
+          <li>RSS 下降 3.86%：466.0 MB -> 448.0 MB。</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>引擎效率</td>
+      <td>单线程性能（local，vs 基线 <code>749a09f</code>）</td>
+      <td>同上，local 模式。</td>
+      <td>
+        <ul>
+          <li>wall time 加速 1.10x：14.776 s -> 13.452 s。</li>
+          <li>仿真 run 阶段加速 1.09x：14502 ms -> 13313 ms。</li>
+          <li>RSS 基本持平：428.0 MB -> 427.6 MB。</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+### 兼容性与迁移
+
+- 带依赖的 `traffic.csv` 在 MPI / hybrid 模式下，跨 rank 任务完成的通知可见时间受 lookahead 约束，需据此设置依赖可见性延迟。
+- `EnableRetrans=false` 时发生丢包，`ub-quick-example` 会直接 fail-fast。验证丢包恢复需要显式开启 `EnableRetrans` 并选好 `RetransmissionMode`。
+- `SelectiveAckBitmapBits=0` 即 AUTO，运行时自动根据接收端乱序窗口确定 ack bitmap 编码位数。如果环境中存在 packet spray 或多路径乱序，建议开启 `EnableFastSelectiveRetrans`。
+
+### 修复与文档
+
+- 修复序列号 wrap 时的比较和窗口判断问题。
+- 修复 Traffic DAG 并行运行时依赖维护、任务激活和优先级字段校验的问题。
+- 修复 DCQCN 阈值边界标记，高于 `kmax` 的报文现在能正确标记。
+- 修复路由 hash salt，不同节点的 packet spray 路径选择不再互相干扰。
+- 更新 Quick Start、scratch case 文档和 `ns-3-ub-tools` 子模块，明确了 UB-only focused build 方式、`--no-build` 运行方式、路由范围和 traffic 数值字段含义。
+
+---
+
 ## Release 1.2.1
 
 **发布日期**: 2026 年 4 月

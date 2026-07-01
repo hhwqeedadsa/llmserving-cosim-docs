@@ -118,7 +118,7 @@ class OpenUSimRunScriptsTest(unittest.TestCase):
             case_dir = Path(temp_dir) / "case"
             case_dir.mkdir()
             (case_dir / "network_attribute.txt").write_text("", encoding="utf-8")
-            report = case_checker.check_case_files(case_dir, transport_channel_mode="on_demand")
+            report = case_checker.check_case_files(case_dir, transport_channel_mode="on-demand")
             self.assertEqual(report["status"], "missing_files")
             self.assertIn("node.csv", report["missing_files"])
             self.assertNotIn("transport_channel.csv", report["missing_files"])

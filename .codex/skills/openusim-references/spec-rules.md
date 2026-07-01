@@ -1,16 +1,32 @@
 # Spec Rules
 
 <reference-hint>
-<use-when>Use this reference when writing or updating `experiment-spec.md`.</use-when>
-<focus>The shared experiment artifact, required slots, and handoff-safe spec structure.</focus>
-<keywords>experiment-spec.md, planning, handoff, slots, validation</keywords>
+<use-when>Use this reference when writing or updating OpenUSim experiment package artifacts.</use-when>
+<focus>Shared package artifacts, required slots, and handoff-safe spec structure.</focus>
+<keywords>experiment-spec.md, experiment-plan.md, matrix.yaml, command-manifest.yaml, run-ledger.md, planning</keywords>
 </reference-hint>
+
+## Contents
+
+- Core rule
+- Natural-language intent resolution
+- Write-back timing
+- Planning modes
+- Single-case minimal template
+- Experiment-group minimal template
+- Planning inputs
+- Old case rule
+- Parameter naming rule
+- Parameter value validation rule
+- Readiness rule
 
 ## Core rule
 
-- `experiment-spec.md` is the only shared artifact across stage skills.
-- It is the current experiment description, not a chat log.
-- It must contain enough facts for the next stage skill to continue without hidden session memory.
+- OpenUSim stage skills share package artifacts, not hidden chat memory.
+- `experiment-spec.md` remains the per-case source of truth.
+- `experiment-group` packages add `experiment-plan.md`, `matrix.yaml`, `command-manifest.yaml`, and `run-ledger.md` at the package root.
+- These files describe the current experiment package, not a chat log.
+- They must contain enough facts for the next stage skill to continue without hidden session memory.
 
 ## Natural-language intent resolution — cross-slot principle
 
@@ -44,12 +60,23 @@ Write back only when:
 
 Do not rewrite the whole spec on every turn.
 
-## Minimal template
+## Planning modes
 
-Use a small stable structure so every stage skill can find the same facts quickly:
+Use `single-case` for one runnable OpenUSim case.
+
+Use `experiment-group` when one claim spans a control/treatment matrix, parameter sweep, A/B comparison, sensitivity study, or checkpointed batch run.
+
+Do not encode a multi-case comparison only as prose in one `experiment-spec.md`; preserve the matrix and run ledger at package level.
+
+## Single-case minimal template
+
+Use a small stable per-case structure so every stage skill can find the same facts quickly:
 
 ```md
 # Experiment Spec
+
+## Planning Mode
+- `single-case`
 
 ## Goal
 - what the user wants to learn
@@ -62,7 +89,7 @@ Use a small stable structure so every stage skill can find the same facts quickl
 ## Topology Realization
 - `supported-family` or `custom-graph`
 - bounded node/link facts if the topology is custom
-- output materialization notes needed by run stage
+- case artifact generation notes needed by run stage
 
 ## Workload
 - chosen workload family or reference traffic file
@@ -92,6 +119,7 @@ Use a small stable structure so every stage skill can find the same facts quickl
 ## Execution Record
 - actual case path
 - actual run command
+- return code and status
 - produced output artifacts
 - unresolved explicit run errors
 
@@ -107,18 +135,133 @@ Use a small stable structure so every stage skill can find the same facts quickl
 Use empty sections only when the next stage clearly needs that slot.
 Do not turn the spec into a transcript or a turn-by-turn checklist.
 
+## Experiment-group minimal template
+
+Use this package shape:
+
+```text
+scratch/<experiment-slug>/
+  experiment-plan.md
+  matrix.yaml
+  command-manifest.yaml
+  run-ledger.md
+  cases/
+    <case-id>/
+      experiment-spec.md
+```
+
+`experiment-plan.md` must include:
+
+```md
+# Experiment Plan
+
+## Planning Mode
+- `experiment-group`
+
+## Claim
+- one-sentence question or hypothesis
+
+## Simulator Boundary
+- what OpenUSim can and cannot prove for this claim
+
+## Control And Treatments
+- control case id and why it is fair
+- treatment case ids
+- changed_variable for each block
+- fixed_controls that must remain unchanged
+
+## Prediction And Falsification
+- prediction
+- reason
+- falsification_signal
+- evidence_plan
+
+## Checkpoint Policy
+- checkpoint_policy
+- `pause_for_user` or `continue_full_matrix`
+- any `manual_approval_gate: true` checkpoint
+
+## Artifact Contract
+- required case inputs
+- required run outputs
+- metric names, source labels, and proxy boundaries
+
+## Analysis Notes
+- prediction-vs-actual summary
+- mismatch investigations
+- limitations and next bounded planning decision
+```
+
+`matrix.yaml` must include one row per case:
+
+```yaml
+- case_id:
+  block_id:
+  role: control | treatment
+  case_dir:
+  changed_variable:
+  fixed_controls:
+  prediction:
+  reason:
+  falsification_signal:
+  metric_checks:
+  expected_artifacts:
+  parallel_group:
+  checkpoint_ids:
+```
+
+`command-manifest.yaml` must include:
+
+```yaml
+commands:
+  - case_id:
+    phase: generate | run | summarize
+    command:
+    cwd:
+    output_dir:
+    expected_artifacts:
+```
+
+`run-ledger.md` must preserve:
+
+```md
+# Run Ledger
+
+## Environment
+- repo root
+- branch and dirty status
+- runtime and runner entrypoint
+
+## Checkpoint Decisions
+- checkpoint policy confirmation
+- user decisions
+
+## Case Status
+- case_id
+- status: pending | running | success | failed | skipped | paused_for_user
+- command
+- return code
+- timing
+- artifact inventory
+- failure category
+- retryability
+- interim observations
+```
+
 ## Planning inputs
 
 The planning surface must leave these durable facts before run handoff:
 
+- planning mode: `single-case` or `experiment-group`
 - experiment goal
 - topology choice
 - topology realization mode
 - routing intent
 - workload choice
 - network parameter overrides
-- transport channel mode (default to `on-demand` unless the user explicitly requests preconfigured TP mappings)
+- transport channel mode (default to `on-demand` unless the user explicitly requests precomputed TP mappings)
 - observability choice
+- for `experiment-group`: claim, control, treatments, changed variable, fixed controls, prediction, reason, falsification signal, evidence plan, artifact contract, and checkpoint policy
 - explicit approval to generate or run
 
 ## Old case rule
@@ -146,11 +289,13 @@ The skill-layer toolchain validates parameter **keys** against the runtime catal
 
 `ready for run` means:
 
+- planning mode is explicit
 - topology is concrete enough to generate with repo-native tools
-- topology realization mode is explicit enough to produce case-root CSVs
+- topology realization mode is explicit enough to produce case-directory CSVs
 - routing intent is explicit enough to choose auto or manual route generation
 - workload is concrete enough to generate with repo-native tools
 - main parameter choices are concrete enough for `network_attribute.txt`
 - transport channel mode is chosen explicitly or defaults to `on-demand`
 - observability mode is chosen
+- for `experiment-group`, `matrix.yaml`, `command-manifest.yaml`, and `run-ledger.md` exist and the matrix rows contain predictions and expected artifacts
 - explicit run approval has been given

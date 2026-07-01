@@ -6,6 +6,18 @@
 <keywords>topology, ring, clos, fat-tree, custom-graph, planning</keywords>
 </reference-hint>
 
+## Contents
+
+- Core Principle
+- Recommended choice format
+- Supported Topology Families
+- Natural-language and image topology decomposition
+- Scale guidance
+- Parameter constraint validation
+- Mapping rule
+- `net_sim_builder.py` Library Interface
+- Generation Patterns
+
 ## Core Principle
 
 **Always generate a new Python script** that calls `net_sim_builder.py` library. Do NOT copy or modify existing example scripts. Example scripts (`user_topo_*.py`) are code templates for reference only, not reusable tools.

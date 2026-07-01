@@ -70,7 +70,7 @@ class OpenUSimRunExperimentHelpersTest(unittest.TestCase):
             ):
                 (case_dir / filename).write_text("stub\n", encoding="utf-8")
 
-            result = check_case_files(case_dir, transport_channel_mode="on_demand")
+            result = check_case_files(case_dir, transport_channel_mode="on-demand")
             self.assertEqual(result["status"], "ok")
 
     def test_check_case_files_defaults_to_on_demand(self):
@@ -87,3 +87,12 @@ class OpenUSimRunExperimentHelpersTest(unittest.TestCase):
 
             result = check_case_files(case_dir)
             self.assertEqual(result["status"], "ok")
+
+    def test_check_case_files_rejects_legacy_on_demand_spelling(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            case_dir = Path(tmpdir)
+
+            with self.assertRaises(ValueError) as ctx:
+                check_case_files(case_dir, transport_channel_mode="on_demand")
+
+            self.assertIn("Unsupported transport_channel_mode", str(ctx.exception))

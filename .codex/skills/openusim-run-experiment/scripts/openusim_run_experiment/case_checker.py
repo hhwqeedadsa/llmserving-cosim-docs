@@ -11,11 +11,25 @@ BASE_REQUIRED_FILES = (
     "traffic.csv",
 )
 
+TRANSPORT_CHANNEL_MODE_ON_DEMAND = "on-demand"
+TRANSPORT_CHANNEL_MODE_PRECOMPUTED = "precomputed"
+TRANSPORT_CHANNEL_MODES = frozenset(
+    {
+        TRANSPORT_CHANNEL_MODE_ON_DEMAND,
+        TRANSPORT_CHANNEL_MODE_PRECOMPUTED,
+    }
+)
 
-def check_case_files(case_dir: Path, transport_channel_mode: str = "on_demand") -> dict:
+
+def check_case_files(
+    case_dir: Path, transport_channel_mode: str = TRANSPORT_CHANNEL_MODE_ON_DEMAND
+) -> dict:
+    if transport_channel_mode not in TRANSPORT_CHANNEL_MODES:
+        raise ValueError(f"Unsupported transport_channel_mode: {transport_channel_mode}")
+
     case_dir = Path(case_dir)
     required_files = list(BASE_REQUIRED_FILES)
-    if transport_channel_mode != "on_demand":
+    if transport_channel_mode == TRANSPORT_CHANNEL_MODE_PRECOMPUTED:
         required_files.append("transport_channel.csv")
 
     missing_files = [name for name in required_files if not (case_dir / name).is_file()]

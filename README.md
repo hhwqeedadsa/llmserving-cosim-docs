@@ -258,13 +258,17 @@ UB 模块是基于灵衢基础规范实现的仿真组件：
 
 ### 4. OpenUSim Skills（仓库内置）
 
-本仓库在 `.codex/skills/` 目录下维护一组 OpenUSim Skills，为基于 `ns-3-ub` 的实验工作流提供分阶段的 Agent 辅助能力：
+本仓库在 `.codex/skills/` 目录下维护一组 OpenUSim Skills，用于配合 Agent 规划、运行和分析 `ns-3-ub` 仿真。
 
-- `openusim-welcome`：面向仓库可用性确认与启动状态判断，帮助 Agent 先建立当前工作树、构建产物与工具链是否就绪的事实基础
-- `openusim-plan-experiment`：面向实验定义与规格收敛，帮助 Agent 把自然语言目标整理成可执行的实验描述
-- `openusim-run-experiment`：面向 case 生成、配置补全、执行与显式运行错误处理，帮助 Agent 落地一次实际仿真
-- `openusim-analyze-results`：面向结果解释、异常现象分析与后续迭代建议，帮助 Agent 将仿真输出转化为可判断的结论
-- `openusim-capture-insights`：面向稳定根因、通用 insight 与解释口径沉淀，帮助 Agent 在用户同意后将高价值结论写成知识卡并复用
+这些 skills 既支持单次仿真，也支持 A/B 对比、参数 sweep 和控制变量实验。对比类实验会先定下 baseline、待比较配置、固定控制项、预期结果和证据来源，再生成和运行 case。
+
+阶段包括：
+
+- `openusim-welcome`：检查当前工作树、构建产物和工具链是否可用
+- `openusim-plan-experiment`：把自然语言目标整理成可执行的仿真方案
+- `openusim-run-experiment`：生成 case、补齐配置、执行仿真，并记录明确的运行错误；对比类实验只执行规划好的用例集合
+- `openusim-analyze-results`：解释输出、分析异常，并给出下一轮实验建议；对比类实验会按预期与实测结果对照 baseline 和待比较配置
+- `openusim-capture-insights`：在用户同意后，把已经确认的根因或通用判断写成知识卡
 
 上述 Skills 与主仓代码及 `ns-3-ub-tools` 子模块紧密耦合，随仓库统一维护。
 

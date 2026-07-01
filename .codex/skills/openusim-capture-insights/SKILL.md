@@ -1,6 +1,6 @@
 ---
 name: openusim-capture-insights
-description: Use when OpenUSim work has produced a verified bug root cause, reusable simulation insight, or stable interpretation rule worth preserving as a reusable knowledge card.
+description: Use when a verified OpenUSim root cause, reusable insight, or stable interpretation rule should become a knowledge card.
 ---
 
 # OpenUSim Capture Insights
@@ -30,6 +30,8 @@ Do not write a card for:
 Do not use this skill for ordinary run summaries, one-off notes, or unfinished analysis.
 
 ## The Process
+
+Completion criterion: the user-approved insight is either written into a non-duplicate knowledge card or rejected as not stable/reusable enough, with the reason reported.
 
 1. Check whether the conclusion is stable, reusable, and worth preserving.
 2. Scan existing cards in `../openusim-references/` through their `<reference-hint>` blocks first.
@@ -69,7 +71,7 @@ Do not use this skill for ordinary run summaries, one-off notes, or unfinished a
 - The material belongs in an existing card but the correct target is still unclear.
 - The user has not yet agreed to write the card.
 
-## Handover
+## Handoff
 
 Stay in this skill when:
 

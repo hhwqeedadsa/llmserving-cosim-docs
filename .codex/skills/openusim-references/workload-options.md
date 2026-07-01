@@ -6,6 +6,16 @@
 <keywords>workload, traffic.csv, allreduce, p2p, schema, planning</keywords>
 </reference-hint>
 
+## Contents
+
+- Recommended choice format
+- traffic.csv Schema
+- Supported planning modes
+- `custom-traffic-skeleton`
+- `all2allv_maker.py`
+- Mapping rule
+- CLI Interface
+
 ## Recommended choice format
 
 - `1:` recommended workload A

@@ -250,15 +250,19 @@ Provides the complete network simulation workflow to support:
 
 ### 4. OpenUSim Skills (Repository-Bundled)
 
-This repository maintains a set of OpenUSim Skills under `.codex/skills/`, providing stage-by-stage agent assistance for the `ns-3-ub` experiment workflow:
+This repository includes OpenUSim skills under `.codex/skills/` for planning, running, and reviewing `ns-3-ub` simulations.
 
-- `openusim-welcome`: focuses on repository readiness and startup-state verification, giving the agent a grounded view of whether the current working tree, build outputs, and toolchain are usable
-- `openusim-plan-experiment`: focuses on experiment definition and specification convergence, turning a natural-language goal into an executable experiment description
-- `openusim-run-experiment`: focuses on case generation, configuration completion, execution, and explicit runtime-error handling for an actual simulation run
-- `openusim-analyze-results`: focuses on result interpretation, anomaly analysis, and next-step recommendations so simulation outputs become usable conclusions
-- `openusim-capture-insights`: focuses on preserving stable root causes, reusable insights, and durable interpretation rules as knowledge cards after the user agrees
+They cover smoke runs, old-case reproduction, one-off debugging, A/B comparisons, parameter sweeps, and controlled-variable studies. For comparisons, the plan records the baseline, compared configurations, fixed controls, prediction, and evidence source before cases are generated.
 
-These skills are tightly coupled with the main repository and the `ns-3-ub-tools` submodule, and are maintained in-tree accordingly.
+Included skills:
+
+- `openusim-welcome`: checks whether the current worktree, build outputs, and toolchain are usable
+- `openusim-plan-experiment`: turns a natural-language goal into a runnable simulation plan
+- `openusim-run-experiment`: generates cases, completes configuration, runs simulations, and records explicit runtime errors
+- `openusim-analyze-results`: interprets outputs, investigates failures, compares expected and observed results, and suggests the next run
+- `openusim-capture-insights`: with user approval, writes confirmed root causes or reusable judgments as knowledge cards
+
+These skills depend on this repository and the `ns-3-ub-tools` submodule, so they are maintained in-tree.
 
 ## License
 

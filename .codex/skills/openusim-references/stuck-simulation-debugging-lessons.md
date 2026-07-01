@@ -6,6 +6,17 @@
 <keywords>卡住, 跑不完, ACK 不回来, completion, trace overhead, slow</keywords>
 </reference-hint>
 
+## Contents
+
+- Core Experience
+- Key Questions
+- Diagnostic Ladder
+- Practical Rules
+- General Lessons from the Two UB128 Cases
+- Safe Wording
+- Unsafe Wording
+- Related References
+
 ## Core Experience
 
 不要先问“它是不是死锁了”，先问“哪一层已经不再前进，哪一层还在前进”。

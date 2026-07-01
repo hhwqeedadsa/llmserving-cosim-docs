@@ -73,7 +73,7 @@ conda install pandas matplotlib seaborn
 
 说明： 请在运行 `trace_analysis/parse_trace.py` 前通过 `requirements.txt` 预先安装所需第三方包。
 
-提示：如果你使用支持 repo-local skill 的 Agent，本仓库在 ` .codex/skills/ ` 下提供分阶段 OpenUSim skills。它们会先基于本页与 `README.md` 检查仓库启动状态，再通过 `openusim-welcome`、`openusim-plan-experiment`、`openusim-run-experiment` 和 `openusim-analyze-results` 帮助完成实验定义、case 生成、仿真执行与结果分析；当分析已经形成稳定根因或通用 insight 时，还可以在用户同意后通过 `openusim-capture-insights` 将其沉淀为知识卡。这些 skills 依赖当前 `ns-3-ub` 工作树与 `scratch/ns-3-ub-tools/`，不作为独立 submodule 维护。
+提示：如果你使用支持 repo-local skill 的 Agent，本仓库在 ` .codex/skills/ ` 下提供 OpenUSim skills。它们会先按本页和 `README.md` 检查启动状态，再处理实验定义、case 生成、仿真执行和结果分析。普通 smoke run、旧 case 复现、单次调试、A/B 对比、参数 sweep 和控制变量实验都可以走这套流程；对比类实验会先定下 baseline、待比较配置、固定控制项、预期结果和证据来源。分析得到稳定根因或通用判断后，也可以在用户同意后写成知识卡。这些 skills 依赖当前 `ns-3-ub` 工作树与 `scratch/ns-3-ub-tools/`，不作为独立 submodule 维护。
 
 ## 配置与编译
 

@@ -1,9 +1,8 @@
 ---
 name: openusim-welcome
 description: >
-  MANDATORY entry point for this project. If there is even a 1% chance the user wants to use
-  this repository, invoke this skill first. Phase 1 is a lightweight greeting with zero side
-  effects. Phase 2 (repo check) only runs after the user confirms they want to proceed.
+  Use when the user might use this ns-3-ub repository, start OpenUSim, run a smoke case, or ask
+  whether the local repo is ready.
 ---
 
 # OpenUSim Welcome
@@ -23,6 +22,8 @@ You MUST invoke this skill before any other openusim skill (`openusim-plan-exper
 Do not use this skill to define experiment details or interpret simulation results.
 
 ## The Process
+
+Completion criterion: either the user is let through for a non-simulation task, or repo readiness is reported from the documented startup facts and the next stage is explicit.
 
 ### Phase 1 — Lightweight Greeting (zero side effects)
 
@@ -78,7 +79,7 @@ Available startup commands (only list the ones actually needed):
 - Quick Start commands fail and the error is not self-explanatory.
 - The user asks for experiment design before the repo readiness question is settled.
 
-## Handover
+## Handoff
 
 Stay in this skill when:
 

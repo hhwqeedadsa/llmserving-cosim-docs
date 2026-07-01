@@ -6,6 +6,18 @@
 <keywords>spec, toolchain, net_sim_builder.py, build_traffic.py, run stage</keywords>
 </reference-hint>
 
+## Contents
+
+- Core Principle
+- Topology Slot -> Topology Generation
+- Workload Slot -> Traffic Generation
+- Network Overrides Slot -> network_attribute.txt
+- Routing Intent Slot -> Route Generation
+- Transport Channel Mode Slot -> Case Expectations
+- Observability Slot -> Observability Overrides
+- Execution
+- Spec Parameter Name Convention
+
 ## Core Principle
 
 **Always generate a new Python script** in the case directory that calls `net_sim_builder.py` library. Do NOT copy or modify existing example scripts (`user_topo_*.py`). These are code templates for reference only, not reusable tools.
@@ -19,7 +31,7 @@
 3. **Generate a new script** `{case_dir}/generate_topology.py`:
    - Copy the complete pattern from `topology-options.md`
    - Substitute spec parameters (host_num, leaf_sw_num, etc.)
-   - Set `graph.output_dir = str(Path(case_dir)) + "/"` so CSVs land directly in the case root
+   - Set `graph.output_dir = str(Path(case_dir)) + "/"` so CSVs land directly in the case directory
    - Adjust bandwidth/delay if specified in Network Overrides
    - Adjust priority_list if specified in Network Overrides
 4. **Run the script:** `python3 {case_dir}/generate_topology.py`
@@ -31,7 +43,7 @@
 - **Do NOT** run `net_sim_builder.py` directly (it's a library, not a CLI)
 - **Do NOT** reuse scripts across cases (each case gets its own generated script)
 - **Always** use the complete pattern from `topology-options.md`, not abbreviated code
-- **Always** materialize generated CSVs into `{case_dir}/`, not an extra timestamped output directory
+- **Always** write generated CSVs into `{case_dir}/`, not an extra timestamped output directory
 
 ### Example
 
@@ -269,7 +281,7 @@ When the user asks for a non-template topology but provides bounded node/link fa
 
 ## Transport Channel Mode Slot → Case Expectations
 
-- Default to `on-demand`; do not ask the user to preconfigure TP mappings unless they explicitly want fixed TP ids / priorities / endpoint pairs.
+- Default to `on-demand`; do not ask the user to precompute TP mappings unless they explicitly want fixed TP ids / priorities / endpoint pairs.
 - `precomputed`: topology generation should call `config_transport_channel(...)` and `graph.write_config(include_transport=True)`; the case checker should require `transport_channel.csv`
 - `on-demand`: `transport_channel.csv` may be omitted; topology generation should call `graph.write_config(include_transport=False)` so large cases do not precompute host-pair TP mappings. Compressed route generators require this mode.
 

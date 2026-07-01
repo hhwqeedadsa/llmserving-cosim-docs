@@ -20,9 +20,9 @@ It is not a fifth stage in the normal experiment flow. Use it only after analysi
 When the user wants help with Unified Bus / OpenUSim work in this repository, route by stage:
 
 - use `openusim-welcome` for repo initialization, readiness, and bounded Quick Start smoke runs
-- use `openusim-plan-experiment` for experiment definition and clarification
-- use `openusim-run-experiment` for case generation, execution, and explicit run errors
-- use `openusim-analyze-results` for result interpretation and likely-cause analysis
+- use `openusim-plan-experiment` for single-case or experiment-group definition and clarification
+- use `openusim-run-experiment` for case artifact generation, command-manifest execution, run-ledger updates, and explicit run errors
+- use `openusim-analyze-results` for result interpretation, prediction-vs-actual comparison, and likely-cause analysis
 
 Do not route the user into legacy `openusim-*` skills unless the user explicitly asks to inspect or modify that legacy multi-skill system.
 
@@ -83,16 +83,35 @@ Classify the user's first meaningful OpenUSim request into one of these shapes:
 - `broad`: the user only says they want to run or design a simulation
 - `semi-specified`: the user already gives some combination of goal, topology, workload, or key parameter intent
 - `reference-based`: the user gives an old case path, `traffic.csv`, or another bounded reference artifact
+- `experiment-group`: the user asks for A/B comparison, baseline vs treatment, parameter sweep, controlled-variable impact, sensitivity study, or "which configuration is better"
 
 Handling rules:
 
 - for `broad`, ask what the user wants to learn from the simulation
 - for `semi-specified`, bind the user-provided facts first, then ask only the most blocking unresolved decision
 - for `reference-based`, summarize the known reference facts first, then ask what to keep or change
+- for `experiment-group`, bind the comparison intent first, then ask for the smallest missing scientific decision: claim, control, changed variable, metric, or checkpoint policy
 - if the user says `2-layer Clos`, `leaf-spine`, or `spine-leaf`, bind that directly as `clos-spine-leaf`
 - only ask `clos-spine-leaf` vs `clos-fat-tree` when the user explicitly says `fat-tree`, gives `k`, or the wording is genuinely ambiguous
 
 Do not ignore already-provided facts by falling back to a generic intake template.
+
+## Planning Modes
+
+OpenUSim planning has two planning modes:
+
+- `single-case`: one runnable OpenUSim case, backed by one `experiment-spec.md`
+- `experiment-group`: one controlled experiment package, backed by `experiment-plan.md`, `matrix.yaml`, `command-manifest.yaml`, `run-ledger.md`, and `cases/<case-id>/experiment-spec.md`
+
+Use `single-case` for smoke runs, old-case reproduction, failed-case debugging, or one concrete topology/workload/parameter combination.
+
+Use `experiment-group` for A/B comparisons, baseline/treatment studies, parameter sweeps, controlled-variable studies, and "which configuration is better" questions.
+
+For `experiment-group`:
+
+- plan must define claim, control, treatments, changed variable, fixed controls, prediction, falsification signal, evidence plan, artifact contract, and checkpoint policy before run handoff
+- run must execute only the planned matrix and command manifest; it must not invent cases, predictions, commands, or output directories
+- analysis must use prediction-vs-actual and keep failed, skipped, paused, negative, and inconclusive cases visible
 
 ## Question Granularity
 
@@ -113,6 +132,12 @@ Only generate or run a case after:
 - the goal is stable enough to summarize
 - the user has confirmed the main topology/workload/parameter choices
 - the user gives explicit approval for generation or execution
+
+For `experiment-group`, only generate or run after:
+
+- the claim and control/treatment relationship are stable
+- the main changed variable and fixed controls are explicit
+- prediction, falsification signal, evidence plan, artifact contract, and checkpoint policy are recorded
 
 If the user asks to generate or run before this gate is satisfied:
 
@@ -174,6 +199,7 @@ Current required card:
 - for throughput evidence and line-rate interpretation: `.codex/skills/openusim-references/throughput-evidence.md`
 - for spec-to-toolchain mapping: `.codex/skills/openusim-references/spec-to-toolchain.md`
 - for queue backpressure vs topology capacity: `.codex/skills/openusim-references/queue-backpressure-vs-topology.md`
+- for controlled experiment groups, package contracts, run ledgers, and prediction-vs-actual analysis: `.codex/skills/openusim-references/controlled-experiment-method.md`
 
 ## Skill Reference Maintenance
 
@@ -184,6 +210,7 @@ Affected mappings:
 - `net_sim_builder.py` API → `topology-options.md`, `spec-to-toolchain.md`
 - `build_traffic.py` CLI → `workload-options.md`, `spec-to-toolchain.md`
 - `trace_analysis/*.py` → `throughput-evidence.md`, `spec-to-toolchain.md`
+- experiment package artifact schema or controlled-variable workflow → `spec-rules.md`, `controlled-experiment-method.md`, `test_skill_docs.py`
 - `src/unified-bus/model/ub-utils.h` trace GlobalValue definition → `network_attribute_writer.py` `_OBSERVABILITY_PRESETS`, `trace-observability.md`
 - `src/unified-bus/model/ub-utils.h` + `src/unified-bus/model/ub-datatype.cc` + `src/unified-bus/model/protocol/ub-congestion-control.cc` UB GlobalValue definitions → `network_attribute_writer.py` `_FALLBACK_UB_GLOBAL_KEYS`
 - `src/unified-bus/model/ub-app.h` + `src/unified-bus/model/ub-traffic-gen.h` `TaOpcodeMap` → `workload-options.md` valid opType table

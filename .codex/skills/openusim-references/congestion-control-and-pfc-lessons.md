@@ -6,6 +6,20 @@
 <keywords>DCQCN, ECN, CNP, PFC, CBFC, headroom, dynamic threshold, overshoot, retransmission</keywords>
 </reference-hint>
 
+## Contents
+
+- Core Judgment
+- First-Principles Model
+- What A Queue Spike Means
+- Why Line-Rate Start Makes PFC Hard To Avoid
+- PFC Modes In This Repo
+- Shared Template For Comparing PFC Algorithms
+- Headroom Semantics
+- Dynamic PFC Configuration Rules
+- When A Run Should Stop Early
+- CBFC vs PFC
+- Practical Experiment Advice
+
 ## Core Judgment
 
 先把这几个问题拆开，不要混成一句“DCQCN 不对”：

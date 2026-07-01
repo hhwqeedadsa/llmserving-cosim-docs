@@ -6,6 +6,17 @@
 <keywords>CBFC, CbfcCtrlCrdRtrThldCell, CbfcRetCellGrainControlPacket, credit return, control frame, Crd_Ack Block, threshold, tuning</keywords>
 </reference-hint>
 
+## Contents
+
+- Core Judgment
+- What The Threshold Protects
+- First-Principles Tuning Model
+- Repo Default Rule
+- Safe Tuning Rules
+- Safe Wording
+- Unsafe Wording
+- Practical Use
+
 ## Core Judgment
 
 `CbfcCtrlCrdRtrThldCell` is not a generic "credit low-watermark".

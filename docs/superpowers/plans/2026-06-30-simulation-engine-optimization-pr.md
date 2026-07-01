@@ -127,6 +127,15 @@ MTP runlog 的原始 DIFF 只出现在 `AllPacketTrace_*` 的 `Uid:` 字段：
 
 这组 trace-on case 的性能不是本 PR 的性能主张：main run 0.902286s，当前分支 run 1.126618s。它只用于确认复杂 MTP 路径没有破坏输出。
 
+同一组 20k no-trace 性能 case 也做了标准输出对比。no-trace 下不会生成业务 `test/` 或 `runlog/` 文件，比较对象就是 stdout/stderr：
+
+| 模式 | raw stdout | 归一化后 stdout | 核心流程输出 | 说明 |
+|---|---|---|---|---|
+| 单线程 | DIFF | DIFF | MATCH | raw 差异来自时间戳、case 绝对路径、耗时数字、当前分支新增 phase-index 日志；归一化后只剩 `Load traffic.csv` / `Activate clients` 日志顺序变化 |
+| MTP 8 线程 | DIFF | DIFF | MATCH | 差异原因同单线程；`TEST : 00000 : PASSED`、setup 流程、traffic 数量、run 完成状态一致 |
+
+这里没有把 raw stdout 作为字节级一致要求。当前分支的两遍流式读取会先建立 phase index，再做实际 task load，日志顺序和 main 不一样；这是实现路径变化，不是业务输出变化。
+
 50k 随机跨 leaf 流也试过，但 main 的 MTP8 进入长时间 no-progress 段，日志膨胀且没有在合理时间内完成，所以没有把它作为 PR 性能数据。
 
 ## 验证命令

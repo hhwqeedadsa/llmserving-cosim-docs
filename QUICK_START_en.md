@@ -78,8 +78,8 @@ Tip: If you use an agent that supports repo-local skills, this repository provid
 ## Build
 
 ```bash
-# Use Python 3.12 for the ns-3 launcher to avoid Homebrew Python 3.14 argparse compatibility issues; keep upstream ./ns3 unchanged.
-# One build may use -j for speed; do not start multiple build/test build tasks at once
+# Known issue: the ns-3 launcher (./ns3) is incompatible with Python 3.14 (argparse); use python3.12 to run it.
+# One build may use -j for speed; do not start multiple build/test tasks at once.
 BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
 
 # Configure only modules required by UB simulations

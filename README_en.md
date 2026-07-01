@@ -6,14 +6,14 @@
   <a href="https://gitcode.com/open-usim/ns-3-ub">GitCode</a> |
   <a href="QUICK_START_en.md">Quick Start</a> |
   <a href="scratch/README.md">Case Guide</a> |
-  <a href="RELEASE_NOTES_UB_en.md#release-121">Release Notes</a> |
+  <a href="RELEASE_NOTES_UB_en.md#release-130">Release Notes</a> |
   <a href="README.md">中文</a>
 </p>
 
 <p align="center">
   <a href="https://gitcode.com/open-usim/ns-3-ub"><img src="https://img.shields.io/static/v1?label=GitCode&message=open-usim%2Fns-3-ub&color=C71D23&logo=git&logoColor=white" alt="GitCode repository"></a>
   <a href="https://www.unifiedbus.com"><img src="https://img.shields.io/static/v1?label=spec&message=UnifiedBus&color=111827" alt="UnifiedBus specification"></a>
-  <a href="RELEASE_NOTES_UB_en.md#release-121"><img src="https://img.shields.io/static/v1?label=release&message=1.2.1&color=6F42C1" alt="Release 1.2.1"></a>
+  <a href="RELEASE_NOTES_UB_en.md#release-130"><img src="https://img.shields.io/static/v1?label=release&message=1.3.0&color=6F42C1" alt="Release 1.3.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/static/v1?label=license&message=GPL-2.0&color=97CA00" alt="GPL-2.0 license"></a>
 </p>
 
@@ -22,37 +22,31 @@
   <a href="scratch/ns-3-ub-tools"><img src="https://img.shields.io/static/v1?label=tools&message=Python&color=3776AB&logo=python&logoColor=white" alt="Python tools"></a>
   <a href="https://www.nsnam.org/releases/ns-3-44/"><img src="https://img.shields.io/static/v1?label=ns-3&message=3.44&color=00A0E9" alt="ns-3.44"></a>
   <a href="CMakeLists.txt"><img src="https://img.shields.io/static/v1?label=build&message=CMake%20%2B%20Ninja&color=064F8C&logo=cmake&logoColor=white" alt="CMake and Ninja build"></a>
-  <a href="UNISON_README.md"><img src="https://img.shields.io/static/v1?label=parallel&message=Unison&color=FF8C00" alt="Unison parallel simulation"></a>
+  <a href="UNISON_README.md"><img src="https://img.shields.io/static/v1?label=parallel&message=Unison%20%2B%20MPI&color=FF8C00" alt="Unison and MPI parallel simulation"></a>
 </p>
 
 <p align="center">
-  🎉 <strong>[NEW] Version 1.2.1 Released (April 2026)</strong> 🎉<br>
-  This update completes the unified hook architecture refactor for congestion control and flow control, with support for DCQCN and C-AQM congestion control plus CBFC and PFC flow control; see <a href="RELEASE_NOTES_UB_en.md#release-121">Release Notes</a> for details
+  <strong>Release 1.3.0</strong> · July 2026<br>
+  RTP reliable transport · MPI/MTP Traffic DAG · Route compression · Engine performance<br>
+  <a href="RELEASE_NOTES_UB_en.md#release-130">Full release notes →</a>
 </p>
 
-🚀 **Quick Start**: [QUICK_START_en.md](QUICK_START_en.md)
+**Quick Start**: [QUICK_START_en.md](QUICK_START_en.md)
 
-🧩 **UB Config-Driven Entry**: See [scratch/README.md](scratch/README.md)
-
-```bash
-BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
-python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja
-python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'
-```
+**Case Entry**: [scratch/README.md](scratch/README.md)
 
 ## Project Overview
 
-`ns-3-UB` is an ns-3 simulation module built based on the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh). It implements the protocol frameworks and stack including the function layer, transaction layer, transport layer, network layer, and data link layer defined in the UB Base Specification. This project aims to provide a simulation platform for protocol innovation, network architecture exploration, and research on network algorithms such as congestion control, flow control, load balancing, and routing algorithms.
+`ns-3-UB` is an ns-3 simulation module based on the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh). It implements the protocol stack including the function, transaction, transport, network, and data link layers defined in the specification, and can be used for protocol research, network architecture exploration, and simulation of congestion control, flow control, load balancing, and routing algorithms.
 
-> **Note**: The English version of the UB specification is currently in "Coming Soon" status. Although every effort has been made to align with the UB Base Specification, differences still exist. Please refer to the UB Base Specification as the authoritative guide.
+> **Note**: The English version of the UB specification is currently in "Coming Soon" status. Every effort has been made to align with the UB Base Specification, but differences may still exist. Please refer to the UB Base Specification as the authoritative guide.
 
-`ns-3-UB` can be used as a simulation tool for UB-based research, including but not limited to:
-- Topology innovations to achieve traffic pattern affinity, low-cost and/or high reliability.
-- Optimizations for collective communication operators and traffic engineering algorithms.
--	New techniques to define and ensure the transaction layer ordering and achieve higher reliability.
--	New transport techniques for memory semantics in a SuperPoD.
--	Innovations in other research areas like adaptive routing, load balancing, congestion control, and QoS optimization algorithms.
+`ns-3-UB` can be used to study:
+- Topology designs targeting traffic affinity, low cost, and high reliability.
+- Collective communication operators and traffic engineering algorithms.
+- Transaction layer ordering and reliability in bus-coherent memory transaction networks.
+- Memory-semantic transport in SuperPoD networks.
+- Adaptive routing, load balancing, congestion control, and QoS optimization.
 
 
 > This project provides pluggable "reference implementations" for policies/algorithms not specified in the UB Base Specification (such as switch modeling, route selection, congestion marking, buffering, and arbitration, etc.). These reference implementations are not part of the UB Base Specification and serve solely as examples and baselines; users may replace or disable them as needed.
@@ -276,8 +270,7 @@ This project follows the ns-3 license agreement, GPL v2. See the `LICENSE` file 
   month = {10},
   title = {{ns-3-UB: UnifiedBus Network Simulation Framework}},
   url = {https://gitcode.com/open-usim/ns-3-ub},
-  version = {1.0.0},
-  year = {2025}
+  version = {1.3.0},
+  year = {2026}
 }
 ```
-<a href='https://mapmyvisitors.com/web/1c1da'  title='Visit tracker'><img src='https://mapmyvisitors.com/map.png?cl=ffffff&w=a&t=tt&d=Ctk3Fz1wWGpnv9Or15k53KwUJ5GPcNoSRETpXtl4GF4&co=2d78ad&ct=ffffff'/></a>

@@ -21,6 +21,18 @@
 - **并行调度加速**：调整了 ready task 收集、phase id 存储、跨 rank completion 可见性及 MTP 事件排序，无 trace 的大规模 workload 的 run 阶段耗时明显缩短。
 - **压缩路由加载优化**：路由文件体积大幅减小，同时加载阶段的内存峰值和解析时间也降下来了，Clos 大 case 不再被路由 CSV 展开拖慢。
 
+### Agent Skills
+
+仓库内置的 OpenUSim Skills 是 5 个分阶段 Agent 辅助流程，覆盖一次 UB 仿真实验的完整生命周期：
+
+- **welcome**：检查仓库、工具链和构建产物是否就绪。
+- **plan-experiment**：把自然语言目标整理成可执行的实验描述，支持单 case 和对比组两种模式。
+- **run-experiment**：根据实验描述生成 case、配置、仿真执行和显式失败处理。
+- **analyze-results**：解读仿真输出，对比预期目标，定位异常原因。
+- **capture-insights**：将稳定的根因或通用结论沉淀为知识卡，供后续复用。
+
+本次新增**对比组实验模式**：A/B 对比、参数扫描、控制变量等实验要求在生成 case 前写好预测和判断标准，跑完后按预测-vs-实际归类（`matched` / `mismatched` / `inconclusive`），避免跑完再补原因。运行和分析阶段各司其职，不再混在一起。
+
 ### 关键验证指标
 
 以下数据均关闭 trace 和 parse，每项重复运行取中位数。效率对比基线为 `749a09f`，本版本提交为 `a5a519e`。

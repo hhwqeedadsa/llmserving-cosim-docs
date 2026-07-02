@@ -21,6 +21,18 @@
 - **Parallel runtime scheduling optimization**: Tuned ready-task collection, phase-id storage, cross-rank completion visibility, and MTP event ordering to reduce run-phase time for no-trace large workloads.
 - **Compressed route loading optimization**: Reduced route file size, route-load memory pressure, and parse time so large Clos cases are no longer dominated by expanded routing CSV cost.
 
+### Agent Skills
+
+The in-repo OpenUSim Skills are a staged workflow of 5 agent flows covering the full UB simulation lifecycle:
+
+- **welcome**: checks repo, toolchain, and build artifacts.
+- **plan-experiment**: turns a natural-language goal into an executable experiment description.
+- **run-experiment**: generates case files, configuration, execution, and explicit failure handling.
+- **analyze-results**: interprets simulation outputs against the experiment goal.
+- **capture-insights**: preserves verified root causes and reusable conclusions as knowledge cards.
+
+This release adds a **comparison group mode** for A/B comparisons, parameter sweeps, and controlled-variable studies. Predictions and success criteria are registered before case generation; results are classified as `matched` / `mismatched` / `inconclusive` against those predictions, preventing post-hoc reasoning. Run and analysis stages are separated.
+
 ### Key Validation Metrics
 
 The following data was collected with trace and parse disabled, using medians from repeated runs. Efficiency comparisons use `749a09f` as the baseline and `a5a519e` as this release.

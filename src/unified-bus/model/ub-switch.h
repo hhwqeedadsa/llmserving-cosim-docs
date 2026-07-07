@@ -4,8 +4,6 @@
 
 #include <optional>
 #include <vector>
-#include <unordered_map>
-#include <queue>
 #include "ns3/ub-routing-process.h"
 #include "ns3/ub-queue-manager.h"
 #include "ns3/node.h"
@@ -28,8 +26,6 @@ enum class FcType {
     PFC_DYNAMIC_PAPER,
     NONE  // No flow control
 };
-
-using VirtualOutputQueue_t = std::vector<std::vector<std::vector<Ptr<UbPacketQueue>>>>;
 
 typedef enum {
     UB_SWITCH,
@@ -94,6 +90,8 @@ public:
     void RegisterTpWithAllocator(Ptr<UbIngressQueue> tp, uint32_t outPort, uint32_t priority);
     void PushPacketToVoq(Ptr<Packet> p, uint32_t outPort, uint32_t priority, uint32_t inPort);
     static bool IsValidVoqIndices(uint32_t outPort, uint32_t priority, uint32_t inPort, uint32_t portsNum, uint32_t vlNum);
+    uint64_t GetAllocatedVoqCountForTest() const;
+    bool HasVoqForTest(uint32_t outPort, uint32_t priority, uint32_t inPort) const;
     void RemoveTpFromAllocator(Ptr<UbIngressQueue> tp);
     Ptr<UbSwitchAllocator> GetAllocator();
     Ipv4Address GetNodeIpv4Addr(){return m_Ipv4Addr;}
@@ -144,10 +142,28 @@ private:
 
     TracedCallback<uint32_t, UbTransportHeader> m_traceLastPacketTraversesNotify;
 
+    using VirtualOutputQueueGroupKey = uint64_t;
+
+    struct VirtualOutputQueueEntry
+    {
+        uint32_t inPort;
+        Ptr<UbPacketQueue> queue;
+    };
+
+    struct VirtualOutputQueueStorage
+    {
+        std::vector<std::vector<VirtualOutputQueueEntry>> groups;
+    };
+
     void LastPacketTraversesNotify(uint32_t nodeId, UbTransportHeader ubTpHeader);
 
     void VoqInit();
-    void RegisterVoqsWithAllocator();
+    Ptr<UbPacketQueue> GetOrCreateVoq(uint32_t outPort, uint32_t priority, uint32_t inPort);
+    VirtualOutputQueueGroupKey BuildVoqGroupKey(uint32_t outPort, uint32_t priority) const;
+    const Ptr<UbPacketQueue>* FindVoqSlot(VirtualOutputQueueGroupKey groupKey,
+                                          uint32_t inPort) const;
+    Ptr<UbPacketQueue>* GetOrCreateVoqSlot(VirtualOutputQueueGroupKey groupKey,
+                                           uint32_t inPort);
     void ReceivePacket(Ptr<UbPort> port, Ptr<Packet> p);
 
     UbPacketType_t GetPacketType(Ptr<Packet> packet);
@@ -174,7 +190,7 @@ private:
     uint32_t m_portsNum = 1025;
     Ptr<UbSwitchAllocator> m_allocator;
     uint32_t m_vlNum = 16;
-    VirtualOutputQueue_t m_voq; // virtualOutputQueue[outport][priority][inport]
+    VirtualOutputQueueStorage m_voq; // on-demand VOQ groups keyed by outPort/priority
     Ptr<UbRoutingProcess> m_routingProcess;   // Router Model
 
     Ipv4Address m_Ipv4Addr;

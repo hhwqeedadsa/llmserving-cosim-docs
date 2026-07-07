@@ -28,6 +28,7 @@
 #include "ns3/ub-port.h"
 #include "ns3/ub-queue-manager.h"
 #include "ns3/ub-routing-process.h"
+#include "ns3/ub-small-fifo-queue.h"
 #include "ns3/ub-sliding-bitmap-window.h"
 #include "ns3/ub-switch.h"
 #include "ns3/ub-tag.h"
@@ -117,6 +118,77 @@ InitNode(Ptr<Node> node, UbNodeType_t nodeType, uint32_t portCount)
     Ptr<UbCongestionControl> congestionCtrl = UbCongestionControl::Create(UB_SWITCH);
     congestionCtrl->OnSwitchAttached(sw);
 }
+
+class UbTestIngressQueue : public UbIngressQueue
+{
+  public:
+    static TypeId GetTypeId(void)
+    {
+        static TypeId tid = TypeId("ns3::UbTestIngressQueue")
+                                .SetParent<UbIngressQueue>()
+                                .SetGroupName("UnifiedBus")
+                                .AddConstructor<UbTestIngressQueue>();
+        return tid;
+    }
+
+    void PushPacket(uint32_t size)
+    {
+        if (m_packets.empty())
+        {
+            m_headArrivalTime = Simulator::Now();
+        }
+        m_packets.push_back(Create<Packet>(size));
+    }
+
+    bool IsEmpty() override
+    {
+        return m_packets.empty();
+    }
+
+    bool IsLimited() override
+    {
+        return m_limited;
+    }
+
+    Ptr<Packet> GetNextPacket() override
+    {
+        if (m_packets.empty())
+        {
+            return nullptr;
+        }
+        Ptr<Packet> packet = m_packets.front();
+        m_packets.erase(m_packets.begin());
+        if (!m_packets.empty())
+        {
+            m_headArrivalTime = Simulator::Now();
+        }
+        return packet;
+    }
+
+    uint32_t GetNextPacketSize() override
+    {
+        if (m_packets.empty())
+        {
+            return 0;
+        }
+        return m_packets.front()->GetSize();
+    }
+
+    IngressQueueType GetIngressQueueType() override
+    {
+        return m_queueType;
+    }
+
+    void SetLimited(bool limited)
+    {
+        m_limited = limited;
+    }
+
+  private:
+    std::vector<Ptr<Packet>> m_packets;
+    bool m_limited{false};
+    IngressQueueType m_queueType{IngressQueueType::TP};
+};
 
 void
 AddShortestRoute(Ptr<Node> node, uint32_t destNodeId, uint32_t destPortId, uint16_t outPort)
@@ -7791,6 +7863,384 @@ class UbRoundRobinAllocatorSeedsDifferentInitialPhasesPerOutPortTest : public Te
     }
 };
 
+class UbSwitchCreatesVoqsOnDemandTest : public TestCase
+{
+  public:
+    UbSwitchCreatesVoqsOnDemandTest()
+        : TestCase("UnifiedBus - UbSwitch creates VOQs only when packets arrive")
+    {
+    }
+
+    void DoRun() override
+    {
+        Config::Reset();
+
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_SWITCH, 4);
+
+        Ptr<UbSwitch> sw = node->GetObject<UbSwitch>();
+        NS_TEST_ASSERT_MSG_EQ(sw->GetAllocatedVoqCountForTest(),
+                              0u,
+                              "Switch initialization should not allocate all VOQs eagerly");
+
+        constexpr uint32_t kOutPort = 2;
+        constexpr uint32_t kPriority = 1;
+        constexpr uint32_t kInPort = 3;
+        constexpr uint32_t kUnusedInPort = 1;
+        NS_TEST_ASSERT_MSG_EQ(sw->HasVoqForTest(kOutPort, kPriority, kUnusedInPort),
+                              false,
+                              "Checking an unused key should not allocate a VOQ");
+
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, kPriority, kInPort);
+
+        NS_TEST_ASSERT_MSG_EQ(sw->HasVoqForTest(kOutPort, kPriority, kInPort),
+                              true,
+                              "Pushing a packet should allocate the addressed VOQ");
+        NS_TEST_ASSERT_MSG_EQ(sw->HasVoqForTest(kOutPort, kPriority, kUnusedInPort),
+                              false,
+                              "Allocating one VOQ should not materialize neighboring keys");
+        NS_TEST_ASSERT_MSG_EQ(sw->GetAllocatedVoqCountForTest(),
+                              1u,
+                              "Only the addressed VOQ should be allocated");
+
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, kPriority, kInPort);
+        NS_TEST_ASSERT_MSG_EQ(sw->GetAllocatedVoqCountForTest(),
+                              1u,
+                              "Reusing the same VOQ should not allocate a duplicate queue");
+        NS_TEST_ASSERT_MSG_EQ(sw->HasVoqForTest(kOutPort, kPriority, kUnusedInPort),
+                              false,
+                              "Repeated pushes to one VOQ should leave other keys unmaterialized");
+
+        constexpr uint32_t kOtherKeyOutPort = 1;
+        constexpr uint32_t kOtherKeyPriority = 1;
+        constexpr uint32_t kOtherKeyInPort = 0;
+        sw->PushPacketToVoq(
+            Create<Packet>(64), kOtherKeyOutPort, kOtherKeyPriority, kOtherKeyInPort);
+        NS_TEST_ASSERT_MSG_EQ(sw->HasVoqForTest(kOtherKeyOutPort,
+                                                kOtherKeyPriority,
+                                                kOtherKeyInPort),
+                              true,
+                              "A distinct on-demand VOQ key should be addressable");
+        NS_TEST_ASSERT_MSG_EQ(sw->GetAllocatedVoqCountForTest(),
+                              2u,
+                              "Allocating a VOQ in another group should allocate only that VOQ");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbVoqAllocatorPreservesIngressQueueSlotPhaseTest : public TestCase
+{
+  public:
+    UbVoqAllocatorPreservesIngressQueueSlotPhaseTest()
+        : TestCase("UnifiedBus - VOQ allocator preserves ingress queue slot phase")
+    {
+    }
+
+    void DoRun() override
+    {
+        Config::Reset();
+
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_SWITCH, 4);
+
+        Ptr<UbSwitch> sw = node->GetObject<UbSwitch>();
+        Ptr<UbRoundRobinAllocator> allocator = DynamicCast<UbRoundRobinAllocator>(sw->GetAllocator());
+        NS_TEST_ASSERT_MSG_NE(allocator, nullptr, "Default switch allocator should be round robin");
+
+        constexpr uint32_t kOutPort = 2;
+        constexpr uint32_t kPriority = 1;
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, kPriority, 1);
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, kPriority, 3);
+
+        Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(kOutPort));
+        Ptr<UbIngressQueue> selected = allocator->SelectNextIngressQueue(port);
+
+        NS_TEST_ASSERT_MSG_NE(selected, nullptr, "Materialized on-demand VOQs should be selectable");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              3u,
+                              "RR phase should be computed over ingress queue slots");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbDwrrAllocatorPreservesIngressQueueSlotsAcrossVlTest : public TestCase
+{
+  public:
+    UbDwrrAllocatorPreservesIngressQueueSlotsAcrossVlTest()
+        : TestCase("UnifiedBus - DWRR allocator preserves ingress queue slots across VLs")
+    {
+    }
+
+    void DoRun() override
+    {
+        Config::Reset();
+        Config::SetDefault("ns3::UbSwitch::FlowControl", EnumValue(FcType::NONE));
+        Config::SetDefault("ns3::UbSwitch::VlScheduler", StringValue("DWRR"));
+
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_SWITCH, 4);
+
+        Ptr<UbSwitch> sw = node->GetObject<UbSwitch>();
+        Ptr<UbDwrrAllocator> allocator = DynamicCast<UbDwrrAllocator>(sw->GetAllocator());
+        NS_TEST_ASSERT_MSG_NE(allocator, nullptr, "Switch allocator should be DWRR");
+
+        constexpr uint32_t kOutPort = 2;
+        Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(kOutPort));
+
+        uint8_t credits[16] = {};
+        credits[0] = 1;
+        sw->SendControlFrame(UbDataLink::GenControlCreditPacket(credits), kOutPort);
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, 1, 1);
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, 1, 3);
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, 2, 0);
+
+        Ptr<UbIngressQueue> selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_NE(selected, nullptr, "DWRR should select the control VL first");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetIngressPriority(),
+                              0u,
+                              "VL0 control queue should keep its DWRR turn");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              kOutPort,
+                              "Control frames use the output port as their ingress queue slot");
+        NS_TEST_ASSERT_MSG_EQ(selected->IsControlFrame(),
+                              true,
+                              "Selected VL0 queue should retain control-frame identity");
+
+        selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_NE(selected, nullptr, "DWRR should advance from VL0 to VL1");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetIngressPriority(),
+                              1u,
+                              "The second DWRR turn should inspect VL1");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              3u,
+                              "VL1 should start from the stable ingress queue slot after outPort phase");
+
+        selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_NE(selected, nullptr, "DWRR should advance from VL1 to VL2");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetIngressPriority(),
+                              2u,
+                              "The third DWRR turn should inspect VL2");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              0u,
+                              "VL2 should wrap to the available ingress queue slot");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest : public TestCase
+{
+  public:
+    UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest()
+        : TestCase("UnifiedBus - DWRR allocator keeps non-VOQ queues after VOQ slots")
+    {
+    }
+
+    void DoRun() override
+    {
+        Config::Reset();
+        Config::SetDefault("ns3::UbSwitch::FlowControl", EnumValue(FcType::NONE));
+        Config::SetDefault("ns3::UbSwitch::VlScheduler", StringValue("DWRR"));
+
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_SWITCH, 4);
+
+        Ptr<UbSwitch> sw = node->GetObject<UbSwitch>();
+        Ptr<UbDwrrAllocator> allocator = DynamicCast<UbDwrrAllocator>(sw->GetAllocator());
+        NS_TEST_ASSERT_MSG_NE(allocator, nullptr, "Switch allocator should be DWRR");
+
+        constexpr uint32_t kOutPort = 2;
+        constexpr uint32_t kPriority = 3;
+        Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(kOutPort));
+
+        Ptr<UbTestIngressQueue> limitedTp = CreateObject<UbTestIngressQueue>();
+        limitedTp->PushPacket(64);
+        limitedTp->SetLimited(true);
+        sw->RegisterTpWithAllocator(limitedTp, kOutPort, kPriority);
+
+        Ptr<UbTestIngressQueue> readyTp = CreateObject<UbTestIngressQueue>();
+        readyTp->PushPacket(64);
+        sw->RegisterTpWithAllocator(readyTp, kOutPort, kPriority);
+
+        Ptr<UbIngressQueue> selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_EQ(selected,
+                              DynamicCast<UbIngressQueue>(readyTp),
+                              "DWRR should skip a limited non-VOQ queue and choose the next non-VOQ slot");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetIngressPriority(),
+                              kPriority,
+                              "Selected non-VOQ queue should stay in the requested VL");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              kOutPort,
+                              "TP queues use the output port as their ingress identity");
+
+        sw->PushPacketToVoq(Create<Packet>(64), kOutPort, kPriority, 3);
+
+        selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_NE(selected, nullptr, "A later materialized VOQ should be selectable");
+        NS_TEST_ASSERT_MSG_EQ(static_cast<int>(selected->GetIngressQueueType()),
+                              static_cast<int>(IngressQueueType::VOQ),
+                              "VOQ slots should stay before non-VOQ queue slots");
+        NS_TEST_ASSERT_MSG_EQ(selected->GetInPortId(),
+                              3u,
+                              "The materialized VOQ should retain its ingress port slot");
+
+        selected = allocator->SelectNextIngressQueue(port);
+        NS_TEST_ASSERT_MSG_EQ(selected,
+                              DynamicCast<UbIngressQueue>(readyTp),
+                              "After the VOQ slot, DWRR should still skip the limited TP and wrap to ready TP");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbPacketQueueInlineStoragePreservesFifoTest : public TestCase
+{
+  public:
+    UbPacketQueueInlineStoragePreservesFifoTest()
+        : TestCase("UnifiedBus - UbPacketQueue inline storage preserves FIFO")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<UbPacketQueue> queue = CreateObject<UbPacketQueue>();
+        queue->SetInPortId(0);
+        queue->SetOutPortId(1);
+        queue->SetIngressPriority(1);
+
+        NS_TEST_ASSERT_MSG_EQ(queue->IsEmpty(), true, "New packet queue should be empty");
+
+        Simulator::Schedule(NanoSeconds(10), [queue]() { queue->Push(Create<Packet>(101)); });
+        Simulator::Schedule(NanoSeconds(20), [queue]() { queue->Push(Create<Packet>(202)); });
+        Simulator::Schedule(NanoSeconds(30), [queue]() { queue->Push(Create<Packet>(303)); });
+        Simulator::Run();
+
+        NS_TEST_ASSERT_MSG_EQ(queue->IsEmpty(), false, "Scheduled pushed packets should be visible");
+        NS_TEST_ASSERT_MSG_EQ(queue->Front()->GetSize(),
+                              101u,
+                              "Inline front packet should be readable");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetNextPacketSize(),
+                              101u,
+                              "Allocator size pre-check should read the inline front packet");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetHeadArrivalTime(),
+                              NanoSeconds(10),
+                              "Head arrival time should be the first packet arrival time");
+
+        queue->Pop();
+        NS_TEST_ASSERT_MSG_EQ(queue->Front()->GetSize(),
+                              202u,
+                              "Direct Pop should promote the first overflow packet");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetNextPacketSize(),
+                              202u,
+                              "Allocator size pre-check should read the promoted overflow packet");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetHeadArrivalTime(),
+                              NanoSeconds(30),
+                              "Promoting an overflow packet should preserve the old Pop timestamp contract");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetNextPacket()->GetSize(),
+                              202u,
+                              "Second pop should return the first overflow packet");
+        NS_TEST_ASSERT_MSG_EQ(queue->GetNextPacket()->GetSize(),
+                              303u,
+                              "Third pop should return the second overflow packet");
+        NS_TEST_ASSERT_MSG_EQ(queue->IsEmpty(), true, "Queue should be empty after all pops");
+
+        queue->Push(Create<Packet>(404));
+        NS_TEST_ASSERT_MSG_EQ(queue->GetNextPacket()->GetSize(),
+                              404u,
+                              "Queue should be reusable after draining");
+        NS_TEST_ASSERT_MSG_EQ(queue->IsEmpty(), true, "Queue should drain after reuse");
+
+        Simulator::Destroy();
+    }
+};
+
+class UbSmallFifoQueueReleasesHeapWhenDrainedTest : public TestCase
+{
+  public:
+    UbSmallFifoQueueReleasesHeapWhenDrainedTest()
+        : TestCase("UnifiedBus - UbSmallFifoQueue keeps small FIFO inline and releases heap")
+    {
+    }
+
+    void DoRun() override
+    {
+        UbSmallFifoQueue<uint32_t, 2> queue;
+
+        NS_TEST_ASSERT_MSG_EQ(queue.empty(), true, "New small FIFO should be empty");
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              false,
+                              "New small FIFO should start in inline storage");
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::HeapCapacity(queue),
+                              0u,
+                              "New small FIFO should not allocate heap storage");
+
+        queue.push(1);
+        queue.push(2);
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              false,
+                              "Inline capacity should not allocate heap storage");
+        NS_TEST_ASSERT_MSG_EQ(queue.front(), 1u, "FIFO front should be the oldest inline item");
+
+        queue.pop();
+        queue.push(3);
+        NS_TEST_ASSERT_MSG_EQ(queue.front(), 2u, "Inline ring wrap should preserve FIFO order");
+        queue.pop();
+        NS_TEST_ASSERT_MSG_EQ(queue.front(), 3u, "Wrapped inline item should remain readable");
+        queue.pop();
+        NS_TEST_ASSERT_MSG_EQ(queue.empty(), true, "Inline-only queue should drain cleanly");
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              false,
+                              "Drained inline-only queue should still use inline storage");
+
+        queue.push(10);
+        queue.push(20);
+        queue.push(30);
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              true,
+                              "Exceeding inline capacity should promote to heap ring storage");
+        NS_TEST_ASSERT_MSG_GT(UbSmallFifoQueueTestAccess::HeapCapacity(queue),
+                              0u,
+                              "Promoted queue should own heap storage");
+
+        NS_TEST_ASSERT_MSG_EQ(queue.front(), 10u, "Heap queue should retain FIFO order");
+        queue.pop();
+        queue.pop();
+        queue.push(40);
+        queue.push(50);
+        queue.push(60);
+
+        NS_TEST_ASSERT_MSG_EQ(queue.size(), 4u, "Heap ring should track wrapped size");
+        const std::array<uint32_t, 4> expected = {30, 40, 50, 60};
+        for (uint32_t value : expected)
+        {
+            NS_TEST_ASSERT_MSG_EQ(queue.front(),
+                                  value,
+                                  "Heap ring wrap should preserve FIFO order");
+            queue.pop();
+        }
+
+        NS_TEST_ASSERT_MSG_EQ(queue.empty(), true, "Queue should be empty after draining heap");
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              false,
+                              "Draining a heap-backed queue should return to inline storage");
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::HeapCapacity(queue),
+                              0u,
+                              "Draining a heap-backed queue should release heap capacity");
+
+        queue.push(70);
+        NS_TEST_ASSERT_MSG_EQ(UbSmallFifoQueueTestAccess::IsUsingHeap(queue),
+                              false,
+                              "Reuse after draining should start inline again");
+        NS_TEST_ASSERT_MSG_EQ(queue.front(), 70u, "Queue should be reusable after heap release");
+    }
+};
+
 /**
  * @brief Unified-bus test suite
  */
@@ -7840,6 +8290,12 @@ class UbRuntimeToolsTestSuite : public TestSuite
 {
   public:
     UbRuntimeToolsTestSuite();
+};
+
+class UbSwitchVoqTestSuite : public TestSuite
+{
+  public:
+    UbSwitchVoqTestSuite();
 };
 
 UbTestSuite::UbTestSuite()
@@ -7969,6 +8425,14 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbSlidingBitmapWindowReusesSlotsWithoutGhostMarksTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbBusyPortArrivalPrefetchesNextPacketTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbSwitchCreatesVoqsOnDemandTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbVoqAllocatorPreservesIngressQueueSlotPhaseTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbDwrrAllocatorPreservesIngressQueueSlotsAcrossVlTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbPacketQueueInlineStoragePreservesFifoTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbSmallFifoQueueReleasesHeapWhenDrainedTest(), TestCase::Duration::QUICK);
 #ifndef _WIN32
     AddTestCase(new UbDataPacketHeaderRejectsPriorityZeroTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSendControlFrameRejectsDataPacketTest(), TestCase::Duration::QUICK);
@@ -8176,6 +8640,23 @@ UbRuntimeToolsTestSuite::UbRuntimeToolsTestSuite()
 }
 
 static UbRuntimeToolsTestSuite g_ubRuntimeToolsTestSuite;
+
+UbSwitchVoqTestSuite::UbSwitchVoqTestSuite()
+    : TestSuite("unified-bus-switch-voq", Type::UNIT)
+{
+    AddTestCase(new UbRoundRobinAllocatorSeedsDifferentInitialPhasesPerOutPortTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbSwitchCreatesVoqsOnDemandTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbVoqAllocatorPreservesIngressQueueSlotPhaseTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbDwrrAllocatorPreservesIngressQueueSlotsAcrossVlTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbPacketQueueInlineStoragePreservesFifoTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbSmallFifoQueueReleasesHeapWhenDrainedTest(), TestCase::Duration::QUICK);
+}
+
+static UbSwitchVoqTestSuite g_ubSwitchVoqTestSuite;
 
 class UbRetransCongestionControlRegressionTestSuite : public TestSuite
 {

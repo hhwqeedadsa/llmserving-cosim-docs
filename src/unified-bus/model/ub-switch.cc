@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include <iostream>
+#include <limits>
 #include "ns3/ipv4.h"
 #include "ns3/packet.h"
 #include "ns3/flow-id-tag.h"
@@ -201,7 +202,6 @@ void UbSwitch::InitAllocator(Ptr<Node> node)
     m_allocator->SetNodeId(node->GetId());
     m_allocator->Init();
     VoqInit();
-    RegisterVoqsWithAllocator();
 }
 
 void UbSwitch::InitQueueManager(Ptr<Node> node)
@@ -244,7 +244,7 @@ void UbSwitch::DoDispose()
     m_queueManager = nullptr;
     m_congestionCtrl = nullptr;
     m_allocator = nullptr;
-    m_voq.clear();
+    m_voq.groups.clear();
     m_routingProcess = nullptr;
 }
 
@@ -260,21 +260,6 @@ void UbSwitch::InitNodePortsFlowControl()
         Ptr<UbPort> port = DynamicCast<ns3::UbPort>(GetObject<Node>()->GetDevice(pidx));
         ApplyLocalPortFlowControlConfig(port);
         port->CreateAndInitFc(m_flowControlType);
-    }
-}
-
-/**
- * @brief 将初始化后的vop放入调度算法中
- */
-void UbSwitch::RegisterVoqsWithAllocator()
-{
-    for (uint32_t i = 0; i < m_portsNum; i++) {
-        for (uint32_t j = 0; j < m_vlNum; j++) {
-            for (uint32_t k = 0 ; k < m_portsNum; k++) { // voq
-                auto ingressQ = m_voq[i][j][k];
-                m_allocator->RegisterUbIngressQueue(ingressQ, i, j);
-            }
-        }
     }
 }
 
@@ -321,28 +306,11 @@ Ptr<UbSwitchAllocator> UbSwitch::GetAllocator()
  */
 void UbSwitch::VoqInit()
 {
-    uint32_t outPortIdx = 0;
-    uint32_t priorityIdx = 0;
-    uint32_t inPortIdx = 0;
-    m_voq.resize(m_portsNum);
-    for (auto &i : m_voq) {
-        priorityIdx = 0;
-        i.resize(m_vlNum);
-        for (auto &j : i) {
-            inPortIdx = 0;
-            for (uint32_t k = 0; k < m_portsNum; k++) {
-                auto q = CreateObject<UbPacketQueue>();
-                q->SetOutPortId(outPortIdx);
-                q->SetIngressPriority(priorityIdx);
-                q->SetInPortId(inPortIdx); // tp不使用inport
-                q->SetInPortId(k);
-                j.push_back(q);
-                inPortIdx++;
-            }
-            priorityIdx++;
-        }
-        outPortIdx++;
-    }
+    const auto groupCount =
+        static_cast<VirtualOutputQueueGroupKey>(m_portsNum) * m_vlNum;
+    NS_ASSERT_MSG(groupCount <= std::numeric_limits<size_t>::max(), "VOQ group count too large");
+    m_voq.groups.clear();
+    m_voq.groups.resize(static_cast<size_t>(groupCount));
 }
 
 /**
@@ -350,15 +318,92 @@ void UbSwitch::VoqInit()
  */
 void UbSwitch::PushPacketToVoq(Ptr<Packet> p, uint32_t outPort, uint32_t priority, uint32_t inPort)
 {
+    GetOrCreateVoq(outPort, priority, inPort)->Push(p);
+}
+
+Ptr<UbPacketQueue> UbSwitch::GetOrCreateVoq(uint32_t outPort, uint32_t priority, uint32_t inPort)
+{
     if (!IsValidVoqIndices(outPort, priority, inPort, m_portsNum, m_vlNum)) {
         NS_ASSERT_MSG(0, "Invalid VOQ indices (outPort, priority, inPort)!");
     }
-    m_voq[outPort][priority][inPort]->Push(p);
+    const auto groupKey = BuildVoqGroupKey(outPort, priority);
+    Ptr<UbPacketQueue>* slot = GetOrCreateVoqSlot(groupKey, inPort);
+    if (*slot != nullptr) {
+        return *slot;
+    }
+
+    Ptr<UbPacketQueue> voq = CreateObject<UbPacketQueue>();
+    voq->SetOutPortId(outPort);
+    voq->SetIngressPriority(priority);
+    voq->SetInPortId(inPort);
+    m_allocator->RegisterUbIngressQueue(voq, outPort, priority);
+    *slot = voq;
+    return voq;
+}
+
+UbSwitch::VirtualOutputQueueGroupKey
+UbSwitch::BuildVoqGroupKey(uint32_t outPort, uint32_t priority) const
+{
+    return static_cast<VirtualOutputQueueGroupKey>(outPort) * m_vlNum + priority;
+}
+
+const Ptr<UbPacketQueue>*
+UbSwitch::FindVoqSlot(UbSwitch::VirtualOutputQueueGroupKey groupKey, uint32_t inPort) const
+{
+    if (groupKey >= m_voq.groups.size()) {
+        return nullptr;
+    }
+
+    const auto& group = m_voq.groups[static_cast<size_t>(groupKey)];
+    for (const auto& entry : group) {
+        if (entry.inPort == inPort) {
+            return &entry.queue;
+        }
+    }
+    return nullptr;
+}
+
+Ptr<UbPacketQueue>*
+UbSwitch::GetOrCreateVoqSlot(UbSwitch::VirtualOutputQueueGroupKey groupKey, uint32_t inPort)
+{
+    NS_ASSERT_MSG(groupKey < m_voq.groups.size(), "VOQ group key is out of range");
+
+    auto& group = m_voq.groups[static_cast<size_t>(groupKey)];
+    for (auto& entry : group) {
+        if (entry.inPort == inPort) {
+            return &entry.queue;
+        }
+    }
+
+    group.push_back({inPort, nullptr});
+    return &group.back().queue;
 }
 
 bool UbSwitch::IsValidVoqIndices(uint32_t outPort, uint32_t priority, uint32_t inPort, uint32_t portsNum, uint32_t vlNum)
 {
     return outPort < portsNum && priority < vlNum && inPort < portsNum;
+}
+
+uint64_t UbSwitch::GetAllocatedVoqCountForTest() const
+{
+    uint64_t count = 0;
+    for (const auto& group : m_voq.groups) {
+        for (const auto& entry : group) {
+            if (entry.queue != nullptr) {
+                ++count;
+            }
+        }
+    }
+    return count;
+}
+
+bool UbSwitch::HasVoqForTest(uint32_t outPort, uint32_t priority, uint32_t inPort) const
+{
+    if (!IsValidVoqIndices(outPort, priority, inPort, m_portsNum, m_vlNum)) {
+        return false;
+    }
+    const Ptr<UbPacketQueue>* slot = FindVoqSlot(BuildVoqGroupKey(outPort, priority), inPort);
+    return slot != nullptr && *slot != nullptr;
 }
 
 UbPacketType_t UbSwitch::GetPacketType(Ptr<Packet> packet)
@@ -700,7 +745,8 @@ void UbSwitch::SendPacket(Ptr<Packet> packet, uint32_t inPort, uint32_t outPort,
     Ptr<UbPort> recvPort = DynamicCast<ns3::UbPort>(node->GetDevice(inPort));
     UbPacketType_t packetType = GetPacketType(packet);
 
-    m_voq[outPort][priority][inPort]->Push(packet);
+    Ptr<UbPacketQueue> voq = GetOrCreateVoq(outPort, priority, inPort);
+    voq->Push(packet);
 
     m_queueManager->PushToVoq(inPort, outPort, priority, packet->GetSize());
 
@@ -713,7 +759,7 @@ void UbSwitch::SendPacket(Ptr<Packet> packet, uint32_t inPort, uint32_t outPort,
     if (packetType != UB_CONTROL_FRAME && IsPFCEnable()) {
         recvPort->GetFlowControl()->OnIngressEnqueued(
             MakeIngressFlowControlEventContext(packet,
-                                               m_voq[outPort][priority][inPort],
+                                               voq,
                                                inPort,
                                                outPort,
                                                priority));

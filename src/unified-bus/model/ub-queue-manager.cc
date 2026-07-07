@@ -62,7 +62,7 @@ bool UbIngressQueue::IsGeneratedDataPacket()
 /*----------------------------------------- UbPacketQueue ----------------------------------------------*/
 bool UbPacketQueue::IsEmpty()
 {
-    return m_queue.empty();
+    return m_packetCount == 0;
 }
 
 UbPacketQueue::UbPacketQueue()
@@ -75,12 +75,16 @@ UbPacketQueue::~UbPacketQueue()
 
 Ptr<Packet> UbPacketQueue::GetNextPacket()
 {
-    auto p = m_queue.front();
-    m_queue.pop();
-    if (!m_queue.empty()) {
-        m_headArrivalTime = Simulator::Now();
-    }
+    auto p = Front();
+    Pop();
     return p;
+}
+
+Ptr<Packet>
+UbPacketQueue::Front()
+{
+    NS_ASSERT_MSG(m_packetCount > 0, "Cannot read the front of an empty UbPacketQueue");
+    return m_frontPacket;
 }
 
 TypeId UbPacketQueue::GetTypeId(void)
@@ -95,6 +99,35 @@ TypeId UbPacketQueue::GetTypeId(void)
 IngressQueueType UbPacketQueue::GetIngressQueueType()
 {
     return m_ingressQueueType;
+}
+
+void
+UbPacketQueue::Push(Ptr<Packet> p)
+{
+    if (m_packetCount == 0) {
+        m_headArrivalTime = Simulator::Now();
+        m_frontPacket = p;
+    } else {
+        m_overflowQueue.push(p);
+    }
+    ++m_packetCount;
+}
+
+void
+UbPacketQueue::Pop()
+{
+    NS_ASSERT_MSG(m_packetCount > 0, "Cannot pop from an empty UbPacketQueue");
+
+    if (m_packetCount == 1) {
+        m_frontPacket = nullptr;
+        m_packetCount = 0;
+        return;
+    }
+
+    m_frontPacket = m_overflowQueue.front();
+    m_overflowQueue.pop();
+    --m_packetCount;
+    m_headArrivalTime = Simulator::Now();
 }
 
 uint32_t UbPacketQueue::GetNextPacketSize()

@@ -58,6 +58,7 @@ build_lib(
 	model/ub-link.h
 	model/ub-modulo-sequence.h
 	model/ub-port.h
+	model/ub-small-fifo-queue.h
 	model/ub-sliding-bitmap-window.h
 	model/ub-switch.h
 	model/protocol/ub-transaction.h

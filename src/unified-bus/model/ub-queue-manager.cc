@@ -160,6 +160,10 @@ TypeId UbQueueManager::GetTypeId(void)
         "Current total out-port VOQ occupancy in bytes after an update.",
         MakeTraceSourceAccessor(&UbQueueManager::m_traceOutPortBufferBytes),
         "ns3::UbQueueManager::OutPortBufferBytes")
+        .AddTraceSource("IngressQueueOccupancyBytes",
+        "Current ingress queue occupancy in bytes after an update.",
+        MakeTraceSourceAccessor(&UbQueueManager::m_traceIngressQueueOccupancyBytes),
+        "ns3::TracedCallback::Uint32Uint32Uint64")
         .AddAttribute("ReservePerQueueBytes",
         "Per-queue reserve in bytes. Queue means one ingress (port, VL) queue.",
         UintegerValue(DEFAULT_RESERVE_PER_QUEUE_BYTES),
@@ -204,6 +208,8 @@ void UbQueueManager::Init()
 
     m_inPortBuffer.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
     m_outPortBuffer.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
+    m_inPortProcessingBytes.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
+    m_outPortProcessingBytes.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
     m_totalOutPortVoqBufferedBytes.assign(m_portsNum, 0);
     m_hdrmBytes.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
     m_ingressControlBytes.assign(m_portsNum, std::vector<uint64_t>(m_vlNum, 0));
@@ -212,6 +218,7 @@ void UbQueueManager::Init()
     m_sharedUsedBytes = 0;
     m_totalVoqBufferedBytes = 0;
     m_totalEgressBufferedBytes = 0;
+    m_totalProcessingBytes = 0;
     m_totalHeadroomBytes = static_cast<uint64_t>(m_headroomPerPortBytes) * m_portsNum;
     m_totalReservedBytes = static_cast<uint64_t>(m_reservePerQueueBytes) * m_vlNum * m_portsNum;
 
@@ -299,6 +306,7 @@ void UbQueueManager::PushToVoq(uint32_t inPort, uint32_t outPort,
     m_outPortBuffer[outPort][priority] += pSize;
     m_totalVoqBufferedBytes += pSize;
     m_totalOutPortVoqBufferedBytes[outPort] += pSize;
+    m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
     m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
 
     NS_LOG_DEBUG("PushToVoq: inPort=" << inPort << " outPort=" << outPort
@@ -335,12 +343,55 @@ void UbQueueManager::PopFromVoq(uint32_t inPort, uint32_t outPort,
                   "Out-port VOQ total accounting underflow");
     m_totalOutPortVoqBufferedBytes[outPort] -= pSize;
     m_outPortBuffer[outPort][priority] -= pSize;
+    m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
     m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
 
     NS_LOG_DEBUG("PopFromVoq: inPort=" << inPort << " outPort=" << outPort
                  << " pri=" << priority << " size=" << pSize
                  << " | inPortBuf=" << m_inPortBuffer[inPort][priority]
                  << " outPortBuf=" << m_outPortBuffer[outPort][priority]);
+}
+
+void
+UbQueueManager::PushToInPortProcessing(uint32_t inPort,
+                                       uint32_t outPort,
+                                       uint32_t priority,
+                                       uint32_t pSize)
+{
+    NS_ASSERT_MSG(!IsLocallyGeneratedControlFrame(inPort, outPort, priority),
+                  "In-port processing is only for forwarded data packets");
+
+    UpdateIngressAdmission(inPort, priority, pSize);
+    m_inPortProcessingBytes[inPort][priority] += pSize;
+    m_outPortProcessingBytes[outPort][priority] += pSize;
+    m_totalProcessingBytes += pSize;
+    m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
+    m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
+}
+
+void
+UbQueueManager::MoveInPortProcessingToVoq(uint32_t inPort,
+                                          uint32_t outPort,
+                                          uint32_t priority,
+                                          uint32_t pSize)
+{
+    NS_ASSERT_MSG(!IsLocallyGeneratedControlFrame(inPort, outPort, priority),
+                  "In-port processing is only for forwarded data packets");
+    NS_ASSERT_MSG(m_inPortProcessingBytes[inPort][priority] >= pSize,
+                  "In-port processing accounting underflow");
+    NS_ASSERT_MSG(m_outPortProcessingBytes[outPort][priority] >= pSize,
+                  "Out-port processing accounting underflow");
+    NS_ASSERT_MSG(m_totalProcessingBytes >= pSize,
+                  "Total processing accounting underflow");
+
+    m_inPortProcessingBytes[inPort][priority] -= pSize;
+    m_outPortProcessingBytes[outPort][priority] -= pSize;
+    m_totalProcessingBytes -= pSize;
+    m_outPortBuffer[outPort][priority] += pSize;
+    m_totalVoqBufferedBytes += pSize;
+    m_totalOutPortVoqBufferedBytes[outPort] += pSize;
+    m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
+    m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
 }
 
 // ========== 查询接口：InPort视图 ==========
@@ -363,12 +414,16 @@ uint64_t UbQueueManager::GetPortIngressNonHeadroomBytes(uint32_t inPort) const
 
 uint64_t UbQueueManager::GetOutPortBufferUsed(uint32_t outPort, uint32_t priority)
 {
-    return m_outPortBuffer[outPort][priority];
+    return m_outPortBuffer[outPort][priority] + m_outPortProcessingBytes[outPort][priority];
 }
 
 uint64_t UbQueueManager::GetTotalOutPortBufferUsed(uint32_t outPort) const
 {
-    return m_totalOutPortVoqBufferedBytes[outPort];
+    uint64_t processingBytes = 0;
+    for (uint32_t priority = 0; priority < m_vlNum; ++priority) {
+        processingBytes += m_outPortProcessingBytes[outPort][priority];
+    }
+    return m_totalOutPortVoqBufferedBytes[outPort] + processingBytes;
 }
 
 void UbQueueManager::SetReservePerQueueBytes(uint32_t size)
@@ -486,7 +541,7 @@ uint64_t UbQueueManager::GetPaperResumeThresholdBytes(uint64_t totalBufferedByte
 
 uint64_t UbQueueManager::GetSwitchTotalBufferedBytes() const
 {
-    return m_totalVoqBufferedBytes + m_totalEgressBufferedBytes;
+    return m_totalVoqBufferedBytes + m_totalProcessingBytes + m_totalEgressBufferedBytes;
 }
 
 uint64_t UbQueueManager::GetIngressAdmissionThresholdBytes(uint32_t, uint32_t) const

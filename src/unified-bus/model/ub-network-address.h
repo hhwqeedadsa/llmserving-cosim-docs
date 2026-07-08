@@ -27,6 +27,10 @@ struct TrafficRecord
     string delay;
     int phaseId;
     vector<uint32_t> dependOnPhases;
+    uint32_t srcEntityId = 0;
+    uint32_t dstEntityId = 0;
+    bool hasSrcEntityId{false};
+    bool hasDstEntityId{false};
 };
 
 // Lightweight CSV row view. string_view fields are valid only during the parser callback.
@@ -41,6 +45,10 @@ struct TrafficRecordView
     std::string_view delay{};
     uint32_t phaseId{0};
     std::string_view dependOnPhases{};
+    uint32_t srcEntityId{0};
+    uint32_t dstEntityId{0};
+    bool hasSrcEntityId{false};
+    bool hasDstEntityId{false};
 };
 
 constexpr long DEFAULT_PORT_BUFFER_SIZE = 2097152;

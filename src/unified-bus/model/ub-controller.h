@@ -7,9 +7,11 @@
 #include <map>
 #include <unordered_map>
 #include "ub-datatype.h"
+#include "ns3/callback.h"
 #include "ns3/ub-switch-allocator.h"
 #include "protocol/ub-function.h"
 #include "protocol/ub-datalink.h"
+#include "protocol/ub-ctp.h"
 #include "ns3/ub-tp-connection-manager.h"
 
 
@@ -124,6 +126,23 @@ public:
 
     Ptr<UbTransaction> GetUbTransaction();
 
+    Ptr<UbCtpTransportService> GetCtpTransportService();
+    Ptr<UbCtpTransportService> PeekCtpTransportService() const;
+    using CtpPacketTimingCallback = Callback<void,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t,
+                                             uint32_t>;
+    void SetCtpPacketTimingTraceCallbacks(CtpPacketTimingCallback firstPacketSendsCallback,
+                                          CtpPacketTimingCallback lastPacketAcksCallback);
+
     /**
      * @brief 1.每个controller创建一个Function
      */
@@ -147,6 +166,7 @@ public:
     Ptr<UbTransportChannel> GetTpByTpn(uint32_t tpn);
 
     std::map<uint32_t, Ptr<UbTransportChannel>> GetTpnMap() const;
+    uint32_t GetTransportCountForTest() const { return m_numToTp.size(); }
 
     void SetTpConnManager(Ptr<TpConnectionManager> conn)
     {
@@ -171,6 +191,9 @@ public:
 private:
     Ptr<UbFunction> m_function; // 功能层
     Ptr<UbTransaction> m_transaction; // 事务层
+    Ptr<UbCtpTransportService> m_ctpTransportService;
+    CtpPacketTimingCallback m_ctpFirstPacketSendsCallback;
+    CtpPacketTimingCallback m_ctpLastPacketAcksCallback;
     // Resource storage
     std::map<uint32_t, Ptr<UbTransportChannel>> m_numToTp{};   // 协议规定TPH中的TP number，在生成TP时，赋值为m_transports_count
     uint32_t m_transportsCount{0}; // increment only，用于标识tpn

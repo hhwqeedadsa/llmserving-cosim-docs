@@ -28,7 +28,7 @@ struct LegacyNetworkAttributeKey
     const char* note;
 };
 
-constexpr std::array<LegacyNetworkAttributeKey, 4> kLegacyNetworkAttributeKeys = {{
+constexpr std::array<LegacyNetworkAttributeKey, 6> kLegacyNetworkAttributeKeys = {{
     {"ns3::UbQueueManager::ResumeOffset",
      "ns3::UbQueueManager::DynamicPfcResumeGapBytes",
      "DynamicPfcResumeGapBytes is the current dynamic-PFC XON/XOFF resume gap."},
@@ -41,6 +41,12 @@ constexpr std::array<LegacyNetworkAttributeKey, 4> kLegacyNetworkAttributeKeys =
     {"ns3::UbApiThread::",
      "ns3::UbLdstThread::",
      "LD/ST thread attributes moved to the UbLdstThread TypeId."},
+    {"ns3::UbJetty::UbInflightMax",
+     "ns3::UbJetty::UbJettyInflightMax",
+     "Jetty inflight control was renamed."},
+    {"ns3::UbCtpTransportService::MaxOutstandingTransactions",
+     "ns3::UbJetty::UbJettyInflightMax",
+     "CTP no longer owns a separate send-admission window; outstanding back-pressure belongs to Jetty."},
 }};
 
 struct NetworkAttributeAlias
@@ -130,6 +136,68 @@ TrimFieldCopy(std::string_view field)
     return std::string(field.data(), field.size());
 }
 
+std::vector<std::string>
+SplitCsvRow(const std::string& line)
+{
+    std::vector<std::string> fields;
+    std::stringstream ss(line);
+    std::string field;
+    while (std::getline(ss, field, ','))
+    {
+        fields.push_back(TrimFieldCopy(field));
+    }
+    if (!line.empty() && line.back() == ',')
+    {
+        fields.emplace_back();
+    }
+    return fields;
+}
+
+std::map<std::string, std::size_t>
+BuildCsvHeaderIndex(const std::vector<std::string>& header)
+{
+    std::map<std::string, std::size_t> index;
+    for (std::size_t i = 0; i < header.size(); ++i)
+    {
+        index.emplace(header[i], i);
+    }
+    return index;
+}
+
+std::string
+GetRequiredCsvField(const std::vector<std::string>& fields,
+                    const std::map<std::string, std::size_t>& headerIndex,
+                    const std::string& column,
+                    const std::string& filename)
+{
+    const auto it = headerIndex.find(column);
+    NS_ABORT_MSG_IF(it == headerIndex.end(),
+                    DisplayFilename(filename) << " missing required column: " << column);
+    NS_ABORT_MSG_IF(it->second >= fields.size(),
+                    DisplayFilename(filename) << " row missing required field: " << column);
+    return fields[it->second];
+}
+
+std::string
+GetOptionalCsvField(const std::vector<std::string>& fields,
+                    const std::map<std::string, std::size_t>& headerIndex,
+                    const std::string& column)
+{
+    const auto it = headerIndex.find(column);
+    if (it == headerIndex.end() || it->second >= fields.size())
+    {
+        return "";
+    }
+    return fields[it->second];
+}
+
+bool
+IsLegacyNodeForwardDelayHeader(const std::vector<std::string>& header)
+{
+    return header.size() == 4 && header[0] == "nodeId" && header[1] == "nodeType" &&
+           header[2] == "portNum" && header[3] == "forwardDelay";
+}
+
 void
 AppendDependencyPhases(std::string_view field, TrafficRecord& record)
 {
@@ -189,6 +257,14 @@ SetTrafficRecordField(int fieldCount, std::string_view rawField, TrafficRecord& 
         break;
     case 8:
         AppendDependencyPhases(field, record);
+        break;
+    case 9:
+        record.srcEntityId = field.empty() ? 0 : ParseUint32Field(field);
+        record.hasSrcEntityId = true;
+        break;
+    case 10:
+        record.dstEntityId = field.empty() ? 0 : ParseUint32Field(field);
+        record.hasDstEntityId = true;
         break;
     }
 }
@@ -427,6 +503,14 @@ SetTrafficRecordViewField(int fieldCount, std::string_view rawField, TrafficReco
         break;
     case 8:
         record.dependOnPhases = field;
+        break;
+    case 9:
+        record.srcEntityId = field.empty() ? 0 : ParseUint32Field(field);
+        record.hasSrcEntityId = true;
+        break;
+    case 10:
+        record.dstEntityId = field.empty() ? 0 : ParseUint32Field(field);
+        record.hasDstEntityId = true;
         break;
     }
 }
@@ -971,6 +1055,58 @@ inline void UbUtils::TpLastPacketReceivesNotify(
     std::ostringstream oss;
     oss << "Last Packet Receives,srcTpn: " << srcTpn << " destTpn: " << dstTpn << " tpMsn: " << tpMsn
         << " psn: " << psn << " inportId: " << dPort << " lastPacket: 1";
+    string info = oss.str();
+    string fileName = trace_path + "runlog/PacketTrace_node_" + to_string(nodeId) + ".tr";
+    PrintTraceInfo(fileName, info);
+}
+
+inline void
+UbUtils::CtpFirstPacketSendsNotify(uint32_t nodeId,
+                                   uint32_t taskId,
+                                   uint32_t srcNodeId,
+                                   uint32_t dstNodeId,
+                                   uint32_t srcEntityId,
+                                   uint32_t dstEntityId,
+                                   uint32_t vl,
+                                   uint32_t taSsn,
+                                   uint32_t outPort,
+                                   uint32_t payloadBytes,
+                                   uint32_t opcode)
+{
+    std::ostringstream oss;
+    oss << "First Packet Sends, taskId: " << taskId << " transport: CTP"
+        << " srcNode: " << srcNodeId << " dstNode: " << dstNodeId
+        << " srcEntity: " << srcEntityId << " dstEntity: " << dstEntityId
+        << " vl: " << vl << " taSsn: " << taSsn << " outPort: " << outPort
+        << " payloadBytes: " << payloadBytes << " taOpcode: " << opcode << " lastPacket: 0";
+    string info = oss.str();
+    string fileName = trace_path + "runlog/PacketTrace_node_" + to_string(nodeId) + ".tr";
+    PrintTraceInfo(fileName, info);
+}
+
+inline void
+UbUtils::CtpLastPacketACKsNotify(uint32_t nodeId,
+                                 uint32_t taskId,
+                                 uint32_t srcNodeId,
+                                 uint32_t dstNodeId,
+                                 uint32_t srcEntityId,
+                                 uint32_t dstEntityId,
+                                 uint32_t vl,
+                                 uint32_t taSsn,
+                                 uint32_t outPort,
+                                 uint32_t payloadBytes,
+                                 uint32_t opcode)
+{
+    std::ostringstream oss;
+    oss << "Last Packet ACKs, taskId: " << taskId << " transport: CTP"
+        << " srcNode: " << srcNodeId << " dstNode: " << dstNodeId
+        << " srcEntity: " << srcEntityId << " dstEntity: " << dstEntityId
+        << " vl: " << vl << " taSsn: " << taSsn;
+    if (outPort != UINT32_MAX)
+    {
+        oss << " outPort: " << outPort;
+    }
+    oss << " payloadBytes: " << payloadBytes << " taOpcode: " << opcode << " lastPacket: 1";
     string info = oss.str();
     string fileName = trace_path + "runlog/PacketTrace_node_" + to_string(nodeId) + ".tr";
     PrintTraceInfo(fileName, info);
@@ -1553,6 +1689,23 @@ inline void UbUtils::QueueVoqNotify(uint32_t nodeId, uint32_t portId, uint64_t v
     PrintTraceInfo(fileName, info);
 }
 
+inline void
+UbUtils::QueueIngressOccupancyNotify(uint32_t nodeId,
+                                     uint32_t inPort,
+                                     uint32_t priority,
+                                     uint64_t bytes)
+{
+    std::ostringstream oss;
+    oss << "Queue Update, source: ingress"
+        << " inPort: " << inPort
+        << " priority: " << priority
+        << " bytes: " << bytes;
+    string info = oss.str();
+    string fileName =
+        trace_path + "runlog/QueueTrace_node_" + to_string(nodeId) + "_port_" + to_string(inPort) + ".tr";
+    PrintTraceInfo(fileName, info);
+}
+
 inline void UbUtils::QueueEgressEnqueueNotify(uint32_t nodeId,
                                               uint32_t portId,
                                               Ptr<const Packet> packet,
@@ -1736,41 +1889,35 @@ void UbUtils::CreateNode(const string &filename)
         NS_ASSERT_MSG(0, "Can not open File: " << filename);
     }
     string line;
-    // 跳过标题行
-    getline(file, line);
+    NS_ABORT_MSG_IF(!getline(file, line), "node.csv must include a header");
+    const std::vector<std::string> header = SplitCsvRow(line);
+    const std::map<std::string, std::size_t> headerIndex = BuildCsvHeaderIndex(header);
+    const bool legacyForwardDelayIsAllocationDelay = IsLegacyNodeForwardDelayHeader(header);
     while (getline(file, line)) {
         // 跳过空行、#开头行、纯空格行
         if (line.empty() || line[0] == '#' || line.find_first_not_of(" \t") == string::npos) {
             continue;
         }
-        stringstream ss(line);
-        string nodeIdStr;
-        string nodeTypeStr;
-        string portNumStr;
-        string forwardDelay;
-        string systemIdStr;
-        // 解析CSV行
-        getline(ss, nodeIdStr, ',');
-        getline(ss, nodeTypeStr, ',');
-        getline(ss, portNumStr, ',');
-        getline(ss, forwardDelay, ',');
-        getline(ss, systemIdStr);
-
-        nodeIdStr = TrimFieldCopy(nodeIdStr);
-        nodeTypeStr = TrimFieldCopy(nodeTypeStr);
-        portNumStr = TrimFieldCopy(portNumStr);
-        forwardDelay = TrimFieldCopy(forwardDelay);
-        systemIdStr = TrimFieldCopy(systemIdStr);
+        const std::vector<std::string> fields = SplitCsvRow(line);
 
         NodeEle nodeEle = {};
-        nodeEle.nodeIdStr = nodeIdStr;
-        nodeEle.nodeTypeStr = nodeTypeStr;
-        nodeEle.portNumStr = portNumStr;
-        nodeEle.forwardDelay = forwardDelay;
-        nodeEle.systemIdStr = systemIdStr;
+        nodeEle.nodeIdStr = GetRequiredCsvField(fields, headerIndex, "nodeId", filename);
+        nodeEle.nodeTypeStr = GetRequiredCsvField(fields, headerIndex, "nodeType", filename);
+        nodeEle.portNumStr = GetRequiredCsvField(fields, headerIndex, "portNum", filename);
+        if (legacyForwardDelayIsAllocationDelay)
+        {
+            nodeEle.forwardDelay = "";
+            nodeEle.allocationDelay = GetOptionalCsvField(fields, headerIndex, "forwardDelay");
+        }
+        else
+        {
+            nodeEle.forwardDelay = GetOptionalCsvField(fields, headerIndex, "forwardDelay");
+            nodeEle.allocationDelay = GetOptionalCsvField(fields, headerIndex, "allocationDelay");
+        }
+        nodeEle.systemIdStr = GetOptionalCsvField(fields, headerIndex, "systemId");
 
         // 解析节点ID（范围 or 单个节点）
-        ParseNodeRange(nodeIdStr, nodeEle);
+        ParseNodeRange(nodeEle.nodeIdStr, nodeEle);
     }
     file.close();
     // 创建节点
@@ -1779,6 +1926,7 @@ void UbUtils::CreateNode(const string &filename)
         string nodeTypeStr = it.second.nodeTypeStr;
         string portNumStr = it.second.portNumStr;
         string forwardDelay = it.second.forwardDelay;
+        string allocationDelay = it.second.allocationDelay;
         string systemIdStr = it.second.systemIdStr;
         int portNum = stoi(portNumStr);
         uint32_t systemId = systemIdStr.empty() ? 0 : static_cast<uint32_t>(stoul(systemIdStr));
@@ -1808,8 +1956,11 @@ void UbUtils::CreateNode(const string &filename)
         auto cc = UbCongestionControl::Create(UB_SWITCH);
         cc->OnSwitchAttached(sw);
         if (!forwardDelay.empty()) {
+            sw->SetAttribute("InPortProcessingDelay", StringValue(forwardDelay));
+        }
+        if (!allocationDelay.empty()) {
             auto allocator = sw->GetAllocator();
-            allocator->SetAttribute("AllocationTime", StringValue(forwardDelay));
+            allocator->SetAttribute("AllocationTime", StringValue(allocationDelay));
         }
     }
 }
@@ -2209,6 +2360,10 @@ UbUtils::ForEachTrafficRecordInternal(const string& filename,
         record.delay.clear();
         record.phaseId = 0;
         record.dependOnPhases.clear();
+        record.srcEntityId = 0;
+        record.dstEntityId = 0;
+        record.hasSrcEntityId = false;
+        record.hasDstEntityId = false;
 
         int fieldCount = 0;
         size_t fieldStart = 0;
@@ -2229,6 +2384,9 @@ UbUtils::ForEachTrafficRecordInternal(const string& filename,
             }
             fieldStart = fieldEnd + 1;
         }
+        NS_ABORT_MSG_IF(
+            fieldCount != 9 && fieldCount != 11,
+            "traffic.csv row must have 9 base fields or 11 fields with srcEntityId,dstEntityId");
         callback(record);
     }
     file.close();
@@ -2273,6 +2431,9 @@ UbUtils::ForEachTrafficRecordViewInternal(
             }
             fieldStart = fieldEnd + 1;
         }
+        NS_ABORT_MSG_IF(
+            fieldCount != 9 && fieldCount != 11,
+            "traffic.csv row must have 9 base fields or 11 fields with srcEntityId,dstEntityId");
         callback(record);
     }
     file.close();
@@ -2411,6 +2572,27 @@ void UbUtils::TopoTraceConnect()
                 auto ldstApi = ubCtrl->GetUbFunction()->GetUbLdstApi();
                 ldstApi->TraceConnectWithoutContext("LdstRecvNotify", MakeCallback(LdstRecvNotify));
             }
+            if (PacketTraceEnable) {
+                ubCtrl->SetCtpPacketTimingTraceCallbacks(MakeCallback(CtpFirstPacketSendsNotify),
+                                                         MakeCallback(CtpLastPacketACKsNotify));
+            }
+        }
+
+        if (queueTraceEnabled) {
+            uint32_t DevicesNum = node->GetNDevices();
+            for (uint32_t i = 0; i < DevicesNum; i++) {
+                Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(i));
+                if (port) {
+                    port->GetUbQueue()->TraceConnectWithoutContext(
+                        "UbEnqueue",
+                        MakeBoundCallback(&UbUtils::QueueEgressEnqueueNotify, node->GetId(), i));
+                    port->GetUbQueue()->TraceConnectWithoutContext(
+                        "UbDequeue",
+                        MakeBoundCallback(&UbUtils::QueueEgressDequeueNotify, node->GetId(), i));
+                } else {
+                    NS_ASSERT_MSG(0, "port is null");
+                }
+            }
         }
 
         if (PortTraceEnable) {
@@ -2420,14 +2602,6 @@ void UbUtils::TopoTraceConnect()
                 if (port) {
                     port->TraceConnectWithoutContext("PortTxNotify", MakeCallback(PortTxNotify));
                     port->TraceConnectWithoutContext("PortRxNotify", MakeCallback(PortRxNotify));
-                    if (queueTraceEnabled) {
-                        port->GetUbQueue()->TraceConnectWithoutContext(
-                            "UbEnqueue",
-                            MakeBoundCallback(&UbUtils::QueueEgressEnqueueNotify, node->GetId(), i));
-                        port->GetUbQueue()->TraceConnectWithoutContext(
-                            "UbDequeue",
-                            MakeBoundCallback(&UbUtils::QueueEgressDequeueNotify, node->GetId(), i));
-                    }
                 } else {
                     NS_ASSERT_MSG(0, "port is null");
                 }
@@ -2438,6 +2612,9 @@ void UbUtils::TopoTraceConnect()
             sw->GetQueueManager()->TraceConnectWithoutContext(
                 "OutPortBufferBytes",
                 MakeBoundCallback(&UbUtils::QueueVoqNotify, node->GetId()));
+            sw->GetQueueManager()->TraceConnectWithoutContext(
+                "IngressQueueOccupancyBytes",
+                MakeBoundCallback(&UbUtils::QueueIngressOccupancyNotify, node->GetId()));
         }
     }
 

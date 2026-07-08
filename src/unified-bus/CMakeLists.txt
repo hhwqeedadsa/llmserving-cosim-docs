@@ -32,6 +32,7 @@ build_lib(
 	model/protocol/ub-datalink.cc
 	model/ub-datatype.cc
 	model/protocol/ub-header.cc
+	model/protocol/ub-ctp.cc
 	model/ub-link.cc
 	model/ub-port.cc
 	model/ub-tag.cc
@@ -62,6 +63,7 @@ build_lib(
 	model/protocol/ub-datalink.h
 	model/ub-datatype.h
 	model/protocol/ub-header.h
+	model/protocol/ub-ctp.h
 	model/ub-link.h
 	model/ub-modulo-sequence.h
 	model/ub-port.h

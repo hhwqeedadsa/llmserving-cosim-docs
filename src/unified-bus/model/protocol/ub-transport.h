@@ -257,6 +257,8 @@ public:
 
     uint32_t GetWqeSegmentVecSize() { return m_wqeSegmentVector.size(); }
     uint32_t GetActiveSendSegmentCount() const;
+    uint32_t GetOutstandingUnackedSegmentCount() const;
+    bool CanScheduleAnotherSegment() const;
 
     Ptr<UbCongestionControl> GetCongestionCtrlForTest() const { return m_congestionCtrl; }
     void SetCongestionControlForTest(Ptr<UbCongestionControl> cc) { m_congestionCtrl = cc; }

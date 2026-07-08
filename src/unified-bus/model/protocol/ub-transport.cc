@@ -31,6 +31,8 @@ using UbTpPsnSequence = UbModuloSequence<24, uint64_t>;
 using UbTpMsnSequence = UbModuloSequence<24, uint64_t>;
 using UbTaSsnSequence = UbModuloSequence<16, uint32_t>;
 
+constexpr uint32_t kShallowPipelineActiveSendDepth = 2;
+
 bool
 IsZeroPayloadReadRequest(const Ptr<UbWqeSegment>& segment)
 {
@@ -731,8 +733,8 @@ UbTransportChannel::AdvanceNewDataSendState(const NewDataSendContext& ctx,
         m_retrans->StartTimerIfNeeded();
     }
 
-    // Shallow pipeline keeps at most two active segments capable of sending new data.
-    if (ctx.segment->IsSentCompleted() && GetActiveSendSegmentCount() < 2) {
+    // Shallow pipeline keeps a small active and unacked segment budget.
+    if (ctx.segment->IsSentCompleted() && CanScheduleAnotherSegment()) {
         ApplyNextWqeSegment();
     }
     if (HasPendingTransmitWork()) {
@@ -1389,8 +1391,7 @@ UbTransportChannel::CompleteAckedWqeSegments(const TransportResponseContext& ctx
         }
 
         m_wqeSegmentVector.erase(m_wqeSegmentVector.begin() + i);
-        // Shallow pipeline counts only active segments that can still send new data.
-        if (GetActiveSendSegmentCount() < 2) {
+        if (CanScheduleAnotherSegment()) {
             ApplyNextWqeSegment();
         }
     }
@@ -1944,6 +1945,22 @@ uint32_t UbTransportChannel::GetActiveSendSegmentCount() const
         }
     }
     return activeCount;
+}
+
+uint32_t UbTransportChannel::GetOutstandingUnackedSegmentCount() const
+{
+    uint32_t outstandingCount = 0;
+    for (const Ptr<UbWqeSegment>& segment : m_wqeSegmentVector) {
+        if (segment != nullptr) {
+            ++outstandingCount;
+        }
+    }
+    return outstandingCount;
+}
+
+bool UbTransportChannel::CanScheduleAnotherSegment() const
+{
+    return GetActiveSendSegmentCount() < kShallowPipelineActiveSendDepth;
 }
 
 bool

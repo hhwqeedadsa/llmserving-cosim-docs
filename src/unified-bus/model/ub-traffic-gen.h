@@ -29,6 +29,7 @@ class UbTrafficGenDuplicateDependencyPhaseTest;
 class UbTrafficGenRecordViewDependencyTest;
 class UbTrafficGenReadyOrderTest;
 class UbTrafficGenIntegerDelayParserTest;
+class UbTrafficGenRuntimeTaskEntityFieldsTest;
 
 using namespace utils;
 namespace ns3 {
@@ -72,6 +73,10 @@ public:
         uint8_t priority{0};
         RuntimeTaskOp op{RuntimeTaskOp::UNKNOWN};
         Time delay{Time(0)};
+        uint32_t srcEntityId{0};
+        uint32_t dstEntityId{0};
+        bool hasSrcEntityId{false};
+        bool hasDstEntityId{false};
     };
 
     struct TaskCleanupInfo
@@ -152,6 +157,7 @@ public:
     friend class ::UbTrafficGenRecordViewDependencyTest;
     friend class ::UbTrafficGenReadyOrderTest;
     friend class ::UbTrafficGenIntegerDelayParserTest;
+    friend class ::UbTrafficGenRuntimeTaskEntityFieldsTest;
 
     enum class TaskState {
         PENDING,

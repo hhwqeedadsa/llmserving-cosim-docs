@@ -1,6 +1,7 @@
 set(mpi_sources)
 set(mpi_headers)
 set(mpi_libraries)
+set(mtp_libraries)
 
 if(${ENABLE_MPI})
   set(mpi_sources
@@ -12,6 +13,12 @@ if(${ENABLE_MPI})
   set(mpi_libraries
       ${libmpi}
       MPI::MPI_CXX
+  )
+endif()
+
+if(${ENABLE_MTP})
+  set(mtp_libraries
+      ${libmtp}
   )
 endif()
 
@@ -85,6 +92,7 @@ build_lib(
                     ${libapplications}
                     ${libpoint-to-point}
                     ${libconfig-store}
+                    ${mtp_libraries}
                     ${mpi_libraries}
   TEST_SOURCES test/ub-test.cc
 )

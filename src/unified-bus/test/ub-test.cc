@@ -5204,6 +5204,67 @@ class UbCreateNodeSystemIdTest : public TestCase
     }
 };
 
+class UbCsvCrLfTrimTest : public TestCase
+{
+  public:
+    UbCsvCrLfTrimTest()
+        : TestCase("UnifiedBus - CSV readers trim CRLF line endings from fields")
+    {
+    }
+
+    void DoRun() override
+    {
+        namespace fs = std::filesystem;
+
+        const uint32_t beforeNodes = NodeList::GetNNodes();
+        auto uniqueSuffix = std::to_string(
+            std::chrono::steady_clock::now().time_since_epoch().count());
+        fs::path caseDir = fs::temp_directory_path() / ("ub-csv-crlf-test-" + uniqueSuffix);
+        std::error_code ec;
+        fs::remove_all(caseDir, ec);
+        ec.clear();
+        fs::create_directories(caseDir, ec);
+        NS_TEST_ASSERT_MSG_EQ(ec.value(), 0, "Temporary case directory creation should succeed");
+
+        const uint32_t node0Id = beforeNodes;
+        const uint32_t node1Id = beforeNodes + 1;
+
+        fs::path nodePath = caseDir / "node.csv";
+        std::ofstream nodeFile(nodePath.string());
+        nodeFile << "nodeId,nodeType,portNum,forwardDelay\r\n";
+        nodeFile << node0Id << ",DEVICE,1,7ns\r\n";
+        nodeFile << node1Id << ",SWITCH,1,11ns\r\n";
+        nodeFile.close();
+
+        fs::path topoPath = caseDir / "topology.csv";
+        std::ofstream topoFile(topoPath.string());
+        topoFile << "nodeId1,portId1,nodeId2,portId2,bandwidth,delay\r\n";
+        topoFile << node0Id << ",0," << node1Id << ",0,400Gbps,13ns\r\n";
+        topoFile.close();
+
+        utils::UbUtils::Get()->CreateNode(nodePath.string());
+        utils::UbUtils::Get()->CreateTopo(topoPath.string());
+
+        Ptr<Node> n0 = NodeList::GetNode(node0Id);
+        Ptr<Node> n1 = NodeList::GetNode(node1Id);
+        Ptr<UbSwitch> sw1 = n1->GetObject<UbSwitch>();
+        TimeValue allocationTime;
+        sw1->GetAllocator()->GetAttribute("AllocationTime", allocationTime);
+        NS_TEST_ASSERT_MSG_EQ(allocationTime.Get(),
+                              NanoSeconds(11),
+                              "CreateNode should trim CRLF from forwardDelay");
+
+        Ptr<UbPort> p0 = DynamicCast<UbPort>(n0->GetDevice(0));
+        Ptr<UbLink> link = DynamicCast<UbLink>(p0->GetChannel());
+        NS_TEST_ASSERT_MSG_NE(link, nullptr, "CreateTopo should create a local UbLink");
+        NS_TEST_ASSERT_MSG_EQ(link->GetDelay(),
+                              NanoSeconds(13),
+                              "CreateTopo should trim CRLF from link delay");
+
+        fs::remove_all(caseDir, ec);
+    }
+};
+
 class UbSwitchFlowControlModeAttributeTest : public TestCase
 {
   public:
@@ -8401,6 +8462,7 @@ UbTestSuite::UbTestSuite()
     AddTestCase(new UbSameMpiRankHelperTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSystemOwnedByRankHelperTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCreateNodeSystemIdTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbCsvCrLfTrimTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSwitchFlowControlModeAttributeTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSwitchLocalRuntimeConfigTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbControlFrameUsesDedicatedAccountingTest(), TestCase::Duration::QUICK);
@@ -8624,6 +8686,7 @@ UbRuntimeToolsTestSuite::UbRuntimeToolsTestSuite()
     AddTestCase(new UbSameMpiRankHelperTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSystemOwnedByRankHelperTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbCreateNodeSystemIdTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbCsvCrLfTrimTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSwitchLocalRuntimeConfigTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSlidingBitmapWindowAdvancesWithoutLosingOutOfOrderMarksTest(),
                 TestCase::Duration::QUICK);

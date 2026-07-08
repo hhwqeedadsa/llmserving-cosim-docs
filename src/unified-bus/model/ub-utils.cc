@@ -108,15 +108,26 @@ ParseTrafficPriorityField(std::string_view field)
 std::string_view
 TrimField(std::string_view field)
 {
-    while (!field.empty() && (field.front() == ' ' || field.front() == '\t'))
+    while (!field.empty() &&
+           (field.front() == ' ' || field.front() == '\t' || field.front() == '\r' ||
+            field.front() == '\n'))
     {
         field.remove_prefix(1);
     }
-    while (!field.empty() && (field.back() == ' ' || field.back() == '\t'))
+    while (!field.empty() &&
+           (field.back() == ' ' || field.back() == '\t' || field.back() == '\r' ||
+            field.back() == '\n'))
     {
         field.remove_suffix(1);
     }
     return field;
+}
+
+std::string
+TrimFieldCopy(std::string_view field)
+{
+    field = TrimField(field);
+    return std::string(field.data(), field.size());
 }
 
 void
@@ -1666,17 +1677,17 @@ void UbUtils::CreateTopo(const string &filename)
         string delay;
         string bandwidth;
         getline(ss, cell, ',');
-        node1 = static_cast<uint32_t>(stoi(cell));
+        node1 = static_cast<uint32_t>(stoi(TrimFieldCopy(cell)));
         getline(ss, cell, ',');
-        port1 = static_cast<uint32_t>(stoi(cell));
+        port1 = static_cast<uint32_t>(stoi(TrimFieldCopy(cell)));
         getline(ss, cell, ',');
-        node2 = static_cast<uint32_t>(stoi(cell));
+        node2 = static_cast<uint32_t>(stoi(TrimFieldCopy(cell)));
         getline(ss, cell, ',');
-        port2 = static_cast<uint32_t>(stoi(cell));
+        port2 = static_cast<uint32_t>(stoi(TrimFieldCopy(cell)));
         getline(ss, cell, ',');
-        bandwidth = cell;
+        bandwidth = TrimFieldCopy(cell);
         getline(ss, cell, ',');
-        delay = cell;
+        delay = TrimFieldCopy(cell);
         Ptr<Node> n1 = NodeList::GetNode(node1);
         Ptr<Node> n2 = NodeList::GetNode(node2);
 
@@ -1744,6 +1755,12 @@ void UbUtils::CreateNode(const string &filename)
         getline(ss, portNumStr, ',');
         getline(ss, forwardDelay, ',');
         getline(ss, systemIdStr);
+
+        nodeIdStr = TrimFieldCopy(nodeIdStr);
+        nodeTypeStr = TrimFieldCopy(nodeTypeStr);
+        portNumStr = TrimFieldCopy(portNumStr);
+        forwardDelay = TrimFieldCopy(forwardDelay);
+        systemIdStr = TrimFieldCopy(systemIdStr);
 
         NodeEle nodeEle = {};
         nodeEle.nodeIdStr = nodeIdStr;

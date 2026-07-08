@@ -298,6 +298,10 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
     task.priority = static_cast<uint8_t>(record.priority);
     task.delay = ParseDelayLocked(record.delay);
     task.op = ParseOpLocked(record.opType);
+    task.srcEntityId = record.srcEntityId;
+    task.dstEntityId = record.dstEntityId;
+    task.hasSrcEntityId = record.hasSrcEntityId;
+    task.hasDstEntityId = record.hasDstEntityId;
 
     return task;
 }
@@ -318,6 +322,10 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecordView& record)
     task.priority = record.priority;
     task.delay = ParseDelayLocked(record.delay);
     task.op = ParseOpLocked(record.opType);
+    task.srcEntityId = record.srcEntityId;
+    task.dstEntityId = record.dstEntityId;
+    task.hasSrcEntityId = record.hasSrcEntityId;
+    task.hasDstEntityId = record.hasDstEntityId;
 
     return task;
 }

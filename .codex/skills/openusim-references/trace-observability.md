@@ -25,6 +25,9 @@ Do not hardcode switch names in experiment specs or agent logic.
 - `minimal` trace reduces observability compared with `balanced` or `detailed`.
 - `trace/debug` mode is an attribute overlay on `network_attribute.txt`, not a separate simulation result.
 - `UB_QUEUE_TRACE_ENABLE` gates queue trace files such as `QueueTrace_*` from queue events and periodic sampling.
+- `UB_PACKET_TRACE_ENABLE` gates packet timing files such as `PacketTrace_node_*.tr`,
+  including CTP first-send and last-ACK rows.
+- `QueueTrace_*` can include ingress queue occupancy rows with the `ingress` marker when `UB_QUEUE_TRACE_ENABLE` is enabled.
 - `UB_FLOW_CONTROL_TRACE_ENABLE` gates algorithm-emitted flow-control trace files such as `PfcTrace_*`, `PfcDynamicTrace_*`, and `CbfcTrace_*`.
 - `UB_CONGESTION_CONTROL_TRACE_ENABLE` gates algorithm-emitted congestion-control trace files such as `DcqcnMarkTrace_*`, `DcqcnCnpTrace_*`, `DcqcnSenderTrace_*`, `CaqmAckTrace_*`, and `CaqmSenderTrace_*`.
 - These category gates default to `false`, so experiments must opt in explicitly when these files are needed.

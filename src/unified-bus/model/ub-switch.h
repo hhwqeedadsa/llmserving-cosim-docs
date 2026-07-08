@@ -4,6 +4,7 @@
 
 #include <optional>
 #include <vector>
+#include "ns3/nstime.h"
 #include "ns3/ub-routing-process.h"
 #include "ns3/ub-queue-manager.h"
 #include "ns3/node.h"
@@ -36,6 +37,7 @@ typedef enum {
     UB_CONTROL_FRAME = 1,
     UB_URMA_DATA_PACKET,
     UB_LDST_DATA_PACKET,
+    UB_CTP_DATA_PACKET,
     UNKOWN_TYPE
 } UbPacketType_t;
 
@@ -57,6 +59,17 @@ struct ParsedLdstHeaders {
     UbDatalinkPacketHeader datalinkPacketHeader;
     UbCna16NetworkHeader cna16NetworkHeader;
     UbDummyTransactionHeader dummyTransactionHeader;  // Compatible with both Compact and CompactAck
+};
+
+/**
+ * @brief Parsed CTP packet headers used by switch dispatch/routing.
+ */
+struct ParsedCtpHeaders {
+    UbDatalinkPacketHeader datalinkPacketHeader;
+    UbCna16NetworkHeader cna16NetworkHeader;
+    UbCna24NetworkHeader cna24NetworkHeader;
+    UbCtpHeader ctpHeader;
+    bool isCna24{false};
 };
 
 /**
@@ -118,6 +131,13 @@ public:
     Ptr<UbQueueManager> GetQueueManager();    // Queue Manage Unit
     void SendPacket(Ptr<Packet> p, uint32_t inPort, uint32_t outPort, uint32_t priority);
     void SendControlFrame(Ptr<Packet> packet, uint32_t portId);
+    UbPacketType_t GetPacketTypeForTest(Ptr<Packet> packet) { return GetPacketType(packet); }
+    RoutingKey GetLdstRoutingKeyForTest(Ptr<Packet> packet);
+    RoutingKey GetCtpRoutingKeyForTest(Ptr<Packet> packet);
+    uint32_t GetVoqPacketCountForTest(uint32_t outPort, uint32_t priority, uint32_t inPort) const;
+
+protected:
+    UbPacketType_t GetPacketType(Ptr<Packet> packet);
 
 private:
     struct BufferOverrideConfig {
@@ -166,18 +186,38 @@ private:
                                            uint32_t inPort);
     void ReceivePacket(Ptr<UbPort> port, Ptr<Packet> p);
 
-    UbPacketType_t GetPacketType(Ptr<Packet> packet);
     void HandleURMADataPacket(Ptr<UbPort> port, Ptr<Packet> packet);
     void HandleLdstDataPacket(Ptr<UbPort> port, Ptr<Packet> packet);
+    void HandleCtpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet);
     bool SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedURMAHeaders &headers);
     bool SinkLdstDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedLdstHeaders &headers);
+    bool SinkCtpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedCtpHeaders &headers);
     void ParseURMAPacketHeader(Ptr<Packet> packet, ParsedURMAHeaders &headers);
     void ParseLdstPacketHeader(Ptr<Packet> packet, ParsedLdstHeaders &headers);
+    void ParseCtpPacketHeader(Ptr<Packet> packet, ParsedCtpHeaders &headers);
     void GetURMARoutingKey(const ParsedURMAHeaders &headers, RoutingKey &rtKey);
     void GetLdstRoutingKey(const ParsedLdstHeaders &headers, RoutingKey &rtKey);
+    void GetCtpRoutingKey(const ParsedCtpHeaders &headers, RoutingKey &rtKey);
     void ForwardDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedURMAHeaders &headers);
     void ForwardDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedLdstHeaders &headers);
+    void ForwardDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const ParsedCtpHeaders &headers);
     void ForceShortestPathRouting(Ptr<Packet> packet, const UbDatalinkPacketHeader &parsedHeader);
+    void ForwardDataPacketAfterAdmission(Ptr<Packet> packet,
+                                         uint32_t inPort,
+                                         uint32_t outPort,
+                                         uint32_t priority);
+    void CompleteInPortProcessing(Ptr<Packet> packet,
+                                  uint32_t inPort,
+                                  uint32_t outPort,
+                                  uint32_t priority);
+    void MoveInPortProcessingToVoq(Ptr<Packet> packet,
+                                   uint32_t inPort,
+                                   uint32_t outPort,
+                                   uint32_t priority);
+    void FinalizeForwardedPacketEnqueue(Ptr<Packet> packet,
+                                        uint32_t inPort,
+                                        uint32_t outPort,
+                                        uint32_t priority);
     void InitAllocator(Ptr<Node> node);
     void InitQueueManager(Ptr<Node> node);
     void InitRoutingProcess(Ptr<Node> node);
@@ -190,6 +230,8 @@ private:
     uint32_t m_portsNum = 1025;
     Ptr<UbSwitchAllocator> m_allocator;
     uint32_t m_vlNum = 16;
+    Time m_inPortProcessingDelay {NanoSeconds(0)};
+    std::vector<EventId> m_inPortProcessingEvents;
     VirtualOutputQueueStorage m_voq; // on-demand VOQ groups keyed by outPort/priority
     Ptr<UbRoutingProcess> m_routingProcess;   // Router Model
 

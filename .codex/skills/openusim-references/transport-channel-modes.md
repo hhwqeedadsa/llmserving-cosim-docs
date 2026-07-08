@@ -13,6 +13,13 @@
 - The user-facing default should be `on-demand`; only switch to `precomputed` transport channels when the user clearly asks to pin TP mappings ahead of time.
 - A light case-file gate should require `transport_channel.csv` only when the chosen execution path is `precomputed`.
 
+## RTP vs CTP
+
+- `RTP`: TP Channel / TPG semantics. RTP uses TPN, PSN, TPACK/TPNAK/TPSACK, and RTP retransmission.
+- `CTP`: Entity/VL semantics. CTP uses CTPH without SrcTPN/DstTPN/PSN. CTP traffic
+  does not use RTP TP mappings from `transport_channel.csv`, though case files may
+  still include that file for setup or comparison.
+
 ## Non-Implications
 
 - Do not claim that `on-demand` transport setup is invalid just because `transport_channel.csv` is absent.

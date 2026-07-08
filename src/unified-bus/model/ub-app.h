@@ -4,6 +4,8 @@
 
 #include <vector>
 #include <set>
+#include <map>
+#include <tuple>
 #include "ns3/application.h"
 #include "ns3/event-id.h"
 #include "ns3/ptr.h"
@@ -31,8 +33,24 @@ public:
     void SendTraffic(TrafficRecord record);
     void SendTraffic(UbTrafficGen::RuntimeTask task);
     void SendTrafficForTest(TrafficRecord record);
+    void SendCtpUrmaTraffic(TrafficRecord record);
+    void SendCtpUrmaTraffic(UbTrafficGen::RuntimeTask task);
+    Ptr<UbJetty> GetOrCreateCtpBoundJetty(uint32_t sourceNode,
+                                          uint32_t destNode,
+                                          uint32_t srcEntityId,
+                                          uint32_t dstEntityId,
+                                          uint8_t vl,
+                                          uint32_t* jettyNum);
+    Ptr<UbJetty> GetOrCreateCtpUnboundJetty(uint32_t sourceNode,
+                                            uint32_t srcEntityId,
+                                            uint8_t vl,
+                                            uint32_t* jettyNum);
 
     void SetNode(Ptr<Node> node); // 设置当前节点
+
+    void SetTransportMode(TransportMode mode);
+    void SetLocalEntityId(uint32_t localEntityId);
+    void SetPeerEntityId(uint32_t peerEntityId);
 
     void SetGetTpnRule(GetTpnRuleT type)
     {
@@ -42,6 +60,11 @@ public:
     void SetUseShortestPaths(bool useShortestPaths)
     {
         m_useShortestPaths = useShortestPaths;
+    }
+
+    void SetUsePacketSpray(bool usePacketSpray)
+    {
+        m_usePacketSpray = usePacketSpray;
     }
 
     /**
@@ -76,10 +99,18 @@ private:
 
     GetTpnRuleT m_getTpnRule = GetTpnRuleT::BY_PEERNODE_PRIORITY;
     bool m_useShortestPaths = true;
+    bool m_usePacketSpray = false;
+    bool m_ctpUseUnboundSourceJetty = false;
+    std::map<std::tuple<uint32_t, uint32_t, uint32_t, uint32_t, uint8_t>, uint32_t>
+        m_ctpBoundJettyByFullKey;
+    std::map<std::tuple<uint32_t, uint32_t, uint8_t>, uint32_t> m_ctpUnboundJettyBySourceEntityVl;
 
     Ptr<Node> m_node;              // 当前节点
 
     uint32_t m_jettyNum = 0;       // 当前节点维护的jettynum,不会重复
+    TransportMode m_transportMode{TransportMode::RTP};
+    uint32_t m_localEntityId{0};
+    uint32_t m_peerEntityId{0};
 
 };
 

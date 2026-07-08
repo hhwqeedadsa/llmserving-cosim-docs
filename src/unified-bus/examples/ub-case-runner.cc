@@ -571,7 +571,9 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.Usage("Unified-bus config-driven user entry.\n"
               "Typical usage:\n"
               "  recommended: python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=<case-dir>'\n"
-              "  example:     python3.12 ./ns3 run --no-build 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n");
+              "  example:     python3.12 ./ns3 run --no-build 'src/unified-bus/examples/ub-quick-example --case-path=<case-dir>'\n"
+              "  node.csv:    allocationDelay maps to AllocationTime; forwardDelay maps to "
+              "InPortProcessingDelay; legacy 4-column forwardDelay maps to AllocationTime.\n");
     cmd.AddValue("test", "Enable regression-test style output", options.test);
     cmd.AddValue("mtp-threads",
                  "Number of MTP threads (0-1 to disable, >=2 to enable)",
@@ -698,6 +700,9 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     EnableExampleLogging();
 
     UbUtils::Get()->PrintTimestamp("[case] Run case: " + options.configPath);
+    UbUtils::Get()->PrintTimestamp(
+        "[case] node.csv delay fields: allocationDelay -> AllocationTime; "
+        "forwardDelay -> InPortProcessingDelay; legacy 4-column forwardDelay -> AllocationTime.");
     RngSeedManager::SetSeed(options.rngRun);
 
     timing.simulationStart = std::chrono::high_resolution_clock::now();

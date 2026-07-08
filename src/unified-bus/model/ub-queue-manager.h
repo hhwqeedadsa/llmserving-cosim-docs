@@ -187,6 +187,8 @@ public:
      * @brief 包离开VOQ时调用（同时更新双视图）
      */
     void PopFromVoq(uint32_t inPort, uint32_t outPort, uint32_t priority, uint32_t pSize);
+    void PushToInPortProcessing(uint32_t inPort, uint32_t outPort, uint32_t priority, uint32_t pSize);
+    void MoveInPortProcessingToVoq(uint32_t inPort, uint32_t outPort, uint32_t priority, uint32_t pSize);
     
     // ========== 查询接口：InPort视图（用于流控） ==========
     
@@ -246,6 +248,9 @@ private:
     // 双视图统计（同一个包在VOQ中，但从两个维度统计）
     DarrayU64 m_inPortBuffer;   // [inPort][priority] - 用于流控
     DarrayU64 m_outPortBuffer;  // [outPort][priority] - 用于路由和拥塞控制
+    DarrayU64 m_inPortProcessingBytes;   // [inPort][priority]
+    DarrayU64 m_outPortProcessingBytes;  // [outPort][priority]
+    uint64_t m_totalProcessingBytes {0};
 
     // 三层 buffer 状态
     uint64_t m_sharedPoolBytes {DEFAULT_SHARED_POOL_BYTES};
@@ -265,6 +270,7 @@ private:
     DarrayU64 m_outPortControlBytes; // [outPort][priority] control-frame occupancy outside data-plane admission
     Ptr<Node> m_ownerNode;
     TracedCallback<uint32_t, uint64_t> m_traceOutPortBufferBytes;
+    TracedCallback<uint32_t, uint32_t, uint64_t> m_traceIngressQueueOccupancyBytes;
 };
 } // namespace ns3
 

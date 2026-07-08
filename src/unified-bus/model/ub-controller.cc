@@ -241,6 +241,49 @@ Ptr<UbTransaction> UbController::GetUbTransaction()
     return m_transaction;
 }
 
+Ptr<UbCtpTransportService> UbController::GetCtpTransportService()
+{
+    if (m_ctpTransportService == nullptr)
+    {
+        m_ctpTransportService = CreateObject<UbCtpTransportService>();
+        m_ctpTransportService->SetNode(GetObject<Node>());
+        if (!m_ctpFirstPacketSendsCallback.IsNull())
+        {
+            m_ctpTransportService->TraceConnectWithoutContext("FirstPacketSendsNotify",
+                                                              m_ctpFirstPacketSendsCallback);
+        }
+        if (!m_ctpLastPacketAcksCallback.IsNull())
+        {
+            m_ctpTransportService->TraceConnectWithoutContext("LastPacketACKsNotify",
+                                                              m_ctpLastPacketAcksCallback);
+        }
+    }
+    return m_ctpTransportService;
+}
+
+Ptr<UbCtpTransportService> UbController::PeekCtpTransportService() const
+{
+    return m_ctpTransportService;
+}
+
+void
+UbController::SetCtpPacketTimingTraceCallbacks(CtpPacketTimingCallback firstPacketSendsCallback,
+                                               CtpPacketTimingCallback lastPacketAcksCallback)
+{
+    m_ctpFirstPacketSendsCallback = firstPacketSendsCallback;
+    m_ctpLastPacketAcksCallback = lastPacketAcksCallback;
+    if (m_ctpTransportService != nullptr && !m_ctpFirstPacketSendsCallback.IsNull())
+    {
+        m_ctpTransportService->TraceConnectWithoutContext("FirstPacketSendsNotify",
+                                                          m_ctpFirstPacketSendsCallback);
+    }
+    if (m_ctpTransportService != nullptr && !m_ctpLastPacketAcksCallback.IsNull())
+    {
+        m_ctpTransportService->TraceConnectWithoutContext("LastPacketACKsNotify",
+                                                          m_ctpLastPacketAcksCallback);
+    }
+}
+
 std::map<uint32_t, Ptr<UbTransportChannel>> UbController::GetTpnMap() const
 {
     return m_numToTp;

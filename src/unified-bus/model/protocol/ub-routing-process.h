@@ -22,6 +22,7 @@ struct RoutingKey {
     uint8_t priority;    // 优先级
     bool useShortestPath;
     bool usePacketSpray;
+    bool hashIncludesTransportPorts{false};
 };
 
 /**

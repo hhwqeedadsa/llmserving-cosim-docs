@@ -22,6 +22,14 @@
 
 **Always generate a new Python script** in the case directory that calls `net_sim_builder.py` library. Do NOT copy or modify existing example scripts (`user_topo_*.py`). These are code templates for reference only, not reusable tools.
 
+## Node Delay Fields
+
+- `node.csv` `forwardDelay` maps to `ns3::UbSwitch::InPortProcessingDelay`.
+- `node.csv` `allocationDelay` maps to `ns3::UbSwitchAllocator::AllocationTime`.
+- `forwardDelay` is fixed non-blocking in-port processing latency after route/output are known and before a forwarded packet becomes visible in VOQ to the allocator.
+- `allocationDelay` is allocator arbitration latency. It is the only CSV field that overrides `AllocationTime`.
+- Do not use `forwardDelay` to model allocator scheduling delay.
+
 ## Topology Slot → Topology Generation
 
 ### Process
@@ -284,6 +292,8 @@ When the user asks for a non-template topology but provides bounded node/link fa
 - Default to `on-demand`; do not ask the user to precompute TP mappings unless they explicitly want fixed TP ids / priorities / endpoint pairs.
 - `precomputed`: topology generation should call `config_transport_channel(...)` and `graph.write_config(include_transport=True)`; the case checker should require `transport_channel.csv`
 - `on-demand`: `transport_channel.csv` may be omitted; topology generation should call `graph.write_config(include_transport=False)` so large cases do not precompute host-pair TP mappings. Compressed route generators require this mode.
+- `TransportMode=CTP`: `traffic.csv` may include optional `srcEntityId,dstEntityId`; missing values default to `0`.
+- CTP multipath is entity based and should not be represented by multiple TP rows.
 
 ## Observability Slot → Observability Overrides
 

@@ -47,7 +47,7 @@ If you need to reset old configure choices, use the explicit reset form above. I
 Each case directory under `scratch/` usually contains:
 
 - `network_attribute.txt` — Global defaults and feature toggles set via ns-3 Attributes and project-level globals.
-- `node.csv` — Node inventory: devices and switches with port counts and (optional) forwarding delay.
+- `node.csv` — Node inventory: devices and switches with port counts and optional per-node delay fields.
 - `topology.csv` — L2 links between ports, with bandwidth and propagation delay.
 - `routing_table.csv` — Per-node forwarding rules for a given destination and destination-port.
 - `transport_channel.csv` — Transport Path Numbers (TPNs) and priorities between endpoints and ports.
@@ -217,27 +217,30 @@ Legal values and discovery:
 
 Schema:
 ```
-nodeId,nodeType,portNum[,forwardDelay]
+nodeId,nodeType,portNum[,forwardDelay[,allocationDelay[,systemId]]]
 ```
 - `nodeId` — integer or range `a..b`, inclusive.
 - `nodeType` — `DEVICE` (end host) or `SWITCH`.
 - `portNum` — number of ports on the node.
-- `forwardDelay` — optional per-node forwarding delay (Time). If absent, defaults from attributes apply.
+- `forwardDelay` — optional per-node in-port processing delay (Time). It maps to `InPortProcessingDelay`.
+- `allocationDelay` — optional per-node allocator arbitration delay (Time). It maps to `AllocationTime`.
+- `systemId` — optional ns-3 MPI system ID. If absent, it defaults to `0`.
 
 Examples:
 ```
-0..1,DEVICE,1,1ns
-2..3,SWITCH,4,1ns
+0..1,DEVICE,1,,1ns
+2..3,SWITCH,4,10ns,1ns
 ```
 
 Notes on `forwardDelay`:
-- **Meaning**: the optional fourth column `forwardDelay` sets the **arbitration latency** (scheduling delay) for the node's internal switch allocator.
-- **Code mapping**: when present, `UbUtils::CreateNode()` applies this value by calling `allocator->SetAttribute("AllocationTime", StringValue(forwardDelay));`.
-- **Mechanism**: In `UbRoundRobinAllocator::TriggerAllocator`, this time is used to schedule the `AllocateNextPacket` event (`Simulator::Schedule(m_allocationTime, ...)`). This simulates the hardware processing time required for the arbiter to select which ingress queue's packet gets to transmit to an egress port.
+- **Meaning**: `forwardDelay` sets fixed non-blocking in-port processing latency after route/output are known and before the packet becomes visible in VOQ to the allocator.
+- **Code mapping**: when present, `UbUtils::CreateNode()` applies this value as `UbSwitch::InPortProcessingDelay`.
+- **Mechanism**: this delay is non-serial. Bytes are visible to existing ingress/outPort/switch-total buffer queries during processing, but the allocator cannot schedule the packet until processing completes.
 - **Scope**: Applies to both `SWITCH` nodes and `DEVICE` nodes.
 - **Format**: use ns-3 Time literals (e.g. `10ns`, `1us`, `1ms`).
-- **Example**: `0,SWITCH,4,10ns` sets the switch allocator `AllocationTime` to `10ns` for node `0`.
-- **Inspecting at runtime**: run your case with `--PrintAttributes=ns3::UbSwitchAllocator` to see the attribute and its current/default value.
+- **Example**: `0,SWITCH,4,10ns,` sets `InPortProcessingDelay` to `10ns` for node `0`.
+- **Allocator delay**: use `allocationDelay`, e.g. `0,SWITCH,4,,10ns` sets allocator `AllocationTime` to `10ns`.
+- **Inspecting at runtime**: run your case with `--ClassName=ns3::UbSwitch --AttributeName=InPortProcessingDelay` or `--ClassName=ns3::UbSwitchAllocator --AttributeName=AllocationTime`.
 
 ---
 
@@ -339,6 +342,17 @@ If `transport_channel.csv` is missing or empty, or if no matching TP is found fo
   - **CSV Configuration (Pre-instantiated)**: The simulator reads `transport_channel.csv` at startup and **immediately creates all TP objects** defined in it. In large-scale topologies (e.g., thousands of nodes), this file can be huge, and creating millions of TP objects upfront consumes significant memory and initialization time, even for TPs that may never carry traffic.
   - **Automatic Generation (On-demand)**: TPs are created dynamically only when a traffic task actually requires them. This avoids the overhead of parsing a massive CSV and instantiating unused TPs, making it **highly recommended** for large-scale simulations to reduce initialization time and memory usage.
 
+### TransportMode and CTP
+
+`ns3::UbApp::TransportMode` defaults to `RTP`. In `RTP` mode, `transport_channel.csv`
+uses existing TP Channel / TPG behavior.
+
+In `CTP` mode, CTP traffic does not use RTP TP mappings from `transport_channel.csv`.
+The file may still be present and loaded during setup, but CTP does not create RTP TP
+channels and does not use TPN, PSN, TPACK, TPNAK, TPSACK, or end-to-end RTP retransmission.
+Optional `traffic.csv` fields `srcEntityId` and `dstEntityId` select CTP entities; missing
+fields default to `0`.
+
 ### TPN in the code (what it does and how to set it)
 
 - TPN is an integer identifier written into packet headers and used to index `UbTransportChannel` objects via per-port maps in controllers.
@@ -384,6 +398,7 @@ Examples:
 
 Current URMA read/write constraints in `traffic.csv`:
 - `URMA_WRITE` and `URMA_READ` do not require extra CSV columns for remote address, token, local address, or read offset in this iteration.
+- In `CTP` mode, `URMA_WRITE` and `URMA_READ` may use optional trailing `srcEntityId,dstEntityId` columns. Missing values default to entity `0`.
 - `URMA_WRITE` and `URMA_READ` complete on transaction responses (`TAACK` / `READ_RESPONSE`), not when the request's TP ACK arrives.
 - Only the ROI success path is modeled for URMA read/write at the transaction layer right now; other service modes are rejected explicitly.
 - `URMA_READ` is sliced at the TA layer. Each read request slice sends exactly one TP request packet with zero wire payload; the logical slice length is carried in `MAETAH.Length`.
@@ -444,9 +459,9 @@ network_attribute.txt
   global UB_PYTHON_SCRIPT_PATH "scratch/ns-3-ub-tools/trace_analysis/parse_trace.py"
 
 node.csv
-  nodeId,nodeType,portNum,forwardDelay
-  0..1,DEVICE,1,1ns
-  2..3,SWITCH,4,1ns
+  nodeId,nodeType,portNum,forwardDelay,allocationDelay
+  0..1,DEVICE,1,,1ns
+  2..3,SWITCH,4,10ns,1ns
 
 topology.csv
   nodeId1,portId1,nodeId2,portId2,bandwidth,delay
@@ -480,7 +495,7 @@ The shipped case `scratch/2nodes_single-tp` keeps `UB_QUEUE_TRACE_ENABLE`, `UB_F
 
 ## Network modeling notes (from code)
 
-- Link rate and packet size determine transmission time; `ns3::UbLink::Delay` adds propagation delay; switch arbitration is driven by `ns3::UbSwitchAllocator::AllocationTime`.
+- Link rate and packet size determine transmission time; `ns3::UbLink::Delay` adds propagation delay; `forwardDelay` maps to `ns3::UbSwitch::InPortProcessingDelay`, while `allocationDelay` drives `ns3::UbSwitchAllocator::AllocationTime`.
 - IFG: `ns3::UbPort::UbInterframeGap` (set to `0ns` to disable spacing).
 - Queue/buffer: `ns3::UbQueueManager::BufferSize` bounds ingress/egress accounting used by the switch.
 - Path choice: `UseShortestPaths` influences which outport sets are considered; `UsePacketSpray` toggles per-packet load-balance usage in headers and routing.

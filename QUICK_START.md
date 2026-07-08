@@ -103,7 +103,7 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
-说明：启用并行仿真通常还需要在仿真程序中调用 `MtpInterface::Enable(...)`（并用 `#ifdef NS3_MTP` 保护）；更多用法与注意事项请参阅 [UNISON_README.md](UNISON_README.md)。
+说明：启用并行仿真通常还需要在仿真程序中调用 `MtpInterface::Enable(...)`（并用 `#ifdef NS3_MTP` 保护）。如果当前构建未启用 `--enable-mtp`，运行时传入 `--mtp-threads>=2` 会直接报错退出。更多用法与注意事项请参阅 [UNISON_README.md](UNISON_README.md)。
 
 提示：默认推荐使用 `scratch/ub-quick-example`；如额外启用 `--enable-examples --filter-module-examples-and-tests=unified-bus`，也可以使用 `src/unified-bus/examples/ub-quick-example`。
 

@@ -679,8 +679,9 @@ RuntimeSelection PrepareRuntime(int* argc,
 #ifndef NS3_MTP
         else
         {
-            std::cerr << "[WARNING] MTP requested but not compiled. Reconfigure with --enable-mtp"
+            std::cerr << "[ERROR] MTP requested but not compiled. Reconfigure with --enable-mtp"
                       << std::endl;
+            std::exit(1);
         }
 #endif
     }

@@ -8836,6 +8836,35 @@ class UbQuickExampleLocalMtpSystemTest : public TestCase
                               "ub-quick-example local MTP mode should not touch MPI before MPI_Init");
     }
 };
+#else
+class UbQuickExampleMtpRequestedWithoutMtpSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMtpRequestedWithoutMtpSystemTest()
+        : TestCase("UnifiedBus - ub-quick-example rejects MTP request when MTP is not compiled")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        auto [status, output] =
+            RunQuickExampleCommand(CreateTempDirFilename("ub-quick-example-no-mtp-request.log"),
+                                   "--mtp-threads=2",
+                                   "",
+                                   "scratch/2nodes_single-tp");
+
+        NS_TEST_ASSERT_MSG_NE(status,
+                              0,
+                              "ub-quick-example should reject MTP requests when not compiled with MTP");
+        NS_TEST_ASSERT_MSG_NE(output.find("[ERROR] MTP requested but not compiled"),
+                              std::string::npos,
+                              "ub-quick-example should print a clear no-MTP build error");
+        NS_TEST_ASSERT_MSG_EQ(output.find("[case] Run case:"),
+                              std::string::npos,
+                              "ub-quick-example should fail before starting the case");
+    }
+};
 #endif
 
 #ifdef NS3_MPI
@@ -10561,6 +10590,9 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
+#else
+        AddTestCase(new UbQuickExampleMtpRequestedWithoutMtpSystemTest(),
+                    TestCase::Duration::QUICK);
 #endif
 #ifdef NS3_MPI
         AddTestCase(new UbQuickExampleMpiDependencyVisibilityDelaySystemTest(),

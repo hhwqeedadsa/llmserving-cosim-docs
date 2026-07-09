@@ -36,6 +36,14 @@ _Avoid_: simulation case, topology
 The collection of UB switches and UB links inside a UB domain.
 _Avoid_: whole system, workload
 
+**UB port**:
+The physical and data-link endpoint on a UBPU that connects to a peer UB port through a UB link.
+_Avoid_: UDP port, transport endpoint
+
+**UB link**:
+A full-duplex point-to-point connection between two UB ports.
+_Avoid_: route, transport channel
+
 **UB processing unit (UBPU)**:
 A processing unit that supports the UB protocol stack and implements device-specific functions.
 _Avoid_: host unless the discussion is simulator node placement
@@ -206,6 +214,22 @@ _Avoid_: WQE, transaction operation
 The numeric identifier carried in transport headers and used by ns-3-UB case files to identify TP channels.
 _Avoid_: route id
 
+**TP channel key**:
+The stable field set used by the simulator to identify a TP channel endpoint, including the communicating nodes, concrete ports, priority, and selected path identity.
+_Avoid_: random TPN, first-touch TPN
+
+**TP reservation**:
+The pre-traffic resource preparation step that assigns TPNs to TP channel keys before packets are released.
+_Avoid_: packet-time TP negotiation
+
+**Reserved TPN**:
+A TPN already assigned to a TP channel key for the local node, even if the local TP channel object has not been created yet.
+_Avoid_: planned TPN, missing TP
+
+**Invalid TPN**:
+A TPN observed at a node that cannot be validated against the node's TP channel keys. Invalid TPNs are simulator errors, not prompts to create TP channels.
+_Avoid_: unknown TPN, lazy TP
+
 **Reliable transport (RTP)**:
 The transport mode that provides end-to-end reliable, duplication-free service.
 _Avoid_: ROI
@@ -275,6 +299,22 @@ _Avoid_: source node id
 **Destination CNA (DCNA)**:
 The destination compact network address in a CNA-based network header.
 _Avoid_: destination node id
+
+**Port network address**:
+A UB network address assigned to a UB Controller port. The address may be represented by a compact network address or by an IP address format network header.
+_Avoid_: UDP port
+
+**Primary CNA**:
+A compact network address assigned to a UB Controller as a whole.
+_Avoid_: port address
+
+**Port CNA**:
+A compact network address assigned to a UB Controller port.
+_Avoid_: UDP port, queue id
+
+**IP address format network header**:
+A UB network-header format that carries a standard IP packet after UB network-layer fields.
+_Avoid_: Port CNA
 
 **Service level (SL)**:
 The network-layer priority value that maps onto virtual lanes.

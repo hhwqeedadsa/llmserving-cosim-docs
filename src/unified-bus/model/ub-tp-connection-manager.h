@@ -10,6 +10,12 @@
 #include "ns3/log.h"
 #include "ns3/random-variable-stream.h"
 #include <mutex>
+
+namespace ns3
+{
+class UbController;
+}
+
 namespace utils {
 /**
  * @brief tp-config.csv 中定义的数据结构
@@ -118,6 +124,9 @@ public:
     // 获取与该tp相关的conn，所有优先级
     Connection GetConnection(uint32_t tpn, uint32_t src, uint32_t dst);
 
+    // 查询本节点本地 TPN 对应的 reservation。返回的 Connection 按本节点视角排列。
+    bool TryGetLocalConnection(uint32_t localNodeId, uint32_t localTpn, Connection& connection) const;
+
     // 清空指定节点的连接
     void ClearNodeConnections(uint32_t nodeId);
 
@@ -134,6 +143,10 @@ public:
         return m_removeUselessTp;
     }
 private:
+    friend class ns3::UbController;
+
+    static std::mutex g_tpConnectionControlLock;
+
     uint32_t ReserveNextTpnLocked();
 
     // 为指定节点建立各种索引
@@ -171,6 +184,9 @@ private:
 
     // 索引5: (localNodeId, peerNodeId, localPort, peerPort) -> connections
     std::map<std::tuple<uint32_t, uint32_t, uint32_t, uint32_t>, std::vector<Connection>> m_bothPortsIndex;
+
+    // 索引6: (localNodeId, localTpn) -> connection
+    std::map<std::pair<uint32_t, uint32_t>, Connection> m_localTpnIndex;
 
     std::set<uint32_t> m_tpnList;
     std::set<uint32_t> m_reservedTpnList;

@@ -680,13 +680,19 @@ bool UbSwitch::SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const Pars
     }
 
     uint32_t dstTpn = headers.transportHeader.GetDestTpn();
-    auto targetTp = GetObject<UbController>()->GetTpByTpn(dstTpn);
+    Ptr<UbController> controller = GetObject<UbController>();
+    auto targetTp = controller->GetTpByTpn(dstTpn);
     if (targetTp == nullptr) {
-        if (GetObject<UbController>()->GetTpConnManager()->IsTpRemoveMode()) {
+        targetTp = controller->CreateReservedTpEndpoint(dstTpn);
+    }
+    if (targetTp == nullptr) {
+        if (controller->GetTpConnManager()->IsTpRemoveMode()) {
             NS_LOG_WARN("Auto remove tp mode, drop this packet.");
             return true;
         } else {
-            NS_ASSERT_MSG(0, "Port Cannot Get Tp By Tpn! node=" << GetObject<Node>()->GetId() << " dstTpn=" << dstTpn << " packetUid=" << packet->GetUid());
+            NS_ABORT_MSG("Received unreserved TP number. node="
+                         << GetObject<Node>()->GetId() << " dstTpn=" << dstTpn
+                         << " packetUid=" << packet->GetUid());
         }
     }
     if (UbTransportChannel::IsTransportResponseOpcode(headers.transportHeader.GetTPOpcode())) {

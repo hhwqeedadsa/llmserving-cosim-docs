@@ -39,6 +39,7 @@
 
 #include <atomic>
 #include <array>
+#include <barrier>
 #include <chrono>
 #include <csignal>
 #include <cstdlib>
@@ -8425,6 +8426,342 @@ class UbCreateTpPreloadInstancesTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(c1->IsTPExists(22), true, "Destination-side TP should be preloaded from config");
 
         fs::remove_all(caseDir, ec);
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbCreateTpUsesPerPortIpTest : public TestCase
+{
+  public:
+    UbCreateTpUsesPerPortIpTest()
+        : TestCase("UnifiedBus - CreateTp uses per-port IP addresses")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> sender = CreateObject<Node>(0);
+        Ptr<Node> receiver = CreateObject<Node>(0);
+        InitNode(sender, UB_DEVICE, 3);
+        InitNode(receiver, UB_DEVICE, 2);
+
+        Ptr<UbController> controller = sender->GetObject<UbController>();
+        Ptr<UbCongestionControl> cc = UbCongestionControl::Create(UB_DEVICE);
+        const uint8_t senderPort = 2;
+        const uint8_t receiverPort = 1;
+        const uint32_t senderTpn = 1101;
+        const uint32_t receiverTpn = 2201;
+
+        controller->CreateTp(sender->GetId(),
+                             receiver->GetId(),
+                             senderPort,
+                             receiverPort,
+                             kUrmaWriteRegressionPriority,
+                             senderTpn,
+                             receiverTpn,
+                             cc);
+
+        Ptr<UbTransportChannel> tp = controller->GetTpByTpn(senderTpn);
+        NS_TEST_ASSERT_MSG_NE(tp, nullptr, "Created TP should be visible by TPN");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetSip(),
+                              NodeIdToIp(sender->GetId(), senderPort),
+                              "Source IP should encode the UB source port");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetDip(),
+                              NodeIdToIp(receiver->GetId(), receiverPort),
+                              "Destination IP should encode the UB destination port");
+        NS_TEST_ASSERT_MSG_NE(tp->GetSip(),
+                              NodeIdToIp(sender->GetId(), 0),
+                              "Source IP should not collapse to the node-level/default port IP");
+        NS_TEST_ASSERT_MSG_NE(tp->GetDip(),
+                              NodeIdToIp(receiver->GetId(), 0),
+                              "Destination IP should not collapse to the node-level/default port IP");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetSport(),
+                              static_cast<uint16_t>(senderPort),
+                              "TP source port metadata should remain the UB port id");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetDport(),
+                              static_cast<uint16_t>(receiverPort),
+                              "TP destination port metadata should remain the UB port id");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbControllerMissingTpnLookupDoesNotInsertTest : public TestCase
+{
+  public:
+    UbControllerMissingTpnLookupDoesNotInsertTest()
+        : TestCase("UnifiedBus - missing TPN lookup does not insert a null TP")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_DEVICE, 1);
+
+        Ptr<UbController> controller = node->GetObject<UbController>();
+        const uint32_t missingTpn = 9999;
+        const uint32_t beforeCount = controller->GetTransportCountForTest();
+
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTpByTpn(missingTpn),
+                              nullptr,
+                              "Missing TPN lookup should return nullptr");
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTransportCountForTest(),
+                              beforeCount,
+                              "Missing TPN lookup should not mutate the TP map");
+        NS_TEST_ASSERT_MSG_EQ(controller->IsTPExists(missingTpn),
+                              false,
+                              "Missing TPN lookup should not create an existing TPN marker");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestCase
+{
+  public:
+    UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest()
+        : TestCase("UnifiedBus - traffic-driven TP reservation leaves receiver TP lazy")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        std::vector<uint32_t> senderTpns =
+            senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                    true,
+                                                    false,
+                                                    topo.sender->GetId(),
+                                                    topo.receiver->GetId(),
+                                                    UINT32_MAX,
+                                                    UINT32_MAX,
+                                                    kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(senderTpns.size(), 1u, "Single-path reservation should pick one sender TPN");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->IsTPExists(senderTpns[0]),
+                              true,
+                              "Sender endpoint should be materialized by TP resolution");
+
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver reservation should be visible in the local manager");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpn),
+                              false,
+                              "Receiver endpoint should not be materialized before packet arrival");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbReservedReceiverTpnMaterializesLocallyTest : public TestCase
+{
+  public:
+    UbReservedReceiverTpnMaterializesLocallyTest()
+        : TestCase("UnifiedBus - reserved receiver TPN materializes locally")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                true,
+                                                false,
+                                                topo.sender->GetId(),
+                                                topo.receiver->GetId(),
+                                                UINT32_MAX,
+                                                UINT32_MAX,
+                                                kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(), 1u, "Receiver should have one reserved local TPN");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+
+        Ptr<UbTransportChannel> receiverTp = receiverCtrl->CreateReservedTpEndpoint(receiverTpn);
+        NS_TEST_ASSERT_MSG_NE(receiverTp, nullptr, "Reserved receiver TPN should create a local endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpn),
+                              true,
+                              "Materialized reserved TPN should be visible in the receiver controller");
+        NS_TEST_ASSERT_MSG_EQ(receiverTp->GetSip(),
+                              NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+                              "Receiver local endpoint source IP should encode the receiver UB port");
+        NS_TEST_ASSERT_MSG_EQ(receiverTp->GetDip(),
+                              NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
+                              "Receiver local endpoint destination IP should encode the sender UB port");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
+{
+  public:
+    UbConcurrentReservedReceiverTpnMaterializationTest()
+        : TestCase("UnifiedBus - concurrent reserved receiver TPN materialization is idempotent")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                true,
+                                                false,
+                                                topo.sender->GetId(),
+                                                topo.receiver->GetId(),
+                                                UINT32_MAX,
+                                                UINT32_MAX,
+                                                kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(), 1u, "Receiver should have one reserved local TPN");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+
+        constexpr std::size_t kConcurrentCallCount = 16;
+        std::barrier startBarrier(static_cast<std::ptrdiff_t>(kConcurrentCallCount));
+        std::vector<Ptr<UbTransportChannel>> results(kConcurrentCallCount);
+        std::vector<std::thread> workers;
+        workers.reserve(kConcurrentCallCount);
+        for (std::size_t index = 0; index < kConcurrentCallCount; ++index)
+        {
+            workers.emplace_back([&, index]() {
+                startBarrier.arrive_and_wait();
+                results[index] = receiverCtrl->CreateReservedTpEndpoint(receiverTpn);
+            });
+        }
+        for (auto& worker : workers)
+        {
+            worker.join();
+        }
+
+        Ptr<UbTransportChannel> materialized = receiverCtrl->GetTpByTpn(receiverTpn);
+        NS_TEST_ASSERT_MSG_NE(materialized, nullptr, "Concurrent materialization should create the receiver TP");
+        for (const auto& result : results)
+        {
+            NS_TEST_ASSERT_MSG_EQ(result,
+                                  materialized,
+                                  "All concurrent callers should observe the same receiver TP");
+        }
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTransportCountForTest(),
+                              1u,
+                              "Concurrent materialization should count exactly one receiver TP");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbRepeatedTpResolutionReusesReservationTest : public TestCase
+{
+  public:
+    UbRepeatedTpResolutionReusesReservationTest()
+        : TestCase("UnifiedBus - repeated TP resolution reuses reservation")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        auto resolveTpns = [&]() {
+            return senderCtrl->GetTpConnManager()->GetTpns(
+                utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                true,
+                false,
+                topo.sender->GetId(),
+                topo.receiver->GetId(),
+                UINT32_MAX,
+                UINT32_MAX,
+                kUrmaWriteRegressionPriority);
+        };
+
+        std::vector<uint32_t> firstTpns = resolveTpns();
+        const size_t senderConnectionCount = senderCtrl->GetTpConnManager()->GetConnectionCount();
+        const size_t receiverConnectionCount = receiverCtrl->GetTpConnManager()->GetConnectionCount();
+        const uint32_t senderTransportCount = senderCtrl->GetTransportCountForTest();
+        const uint32_t receiverTransportCount = receiverCtrl->GetTransportCountForTest();
+
+        std::vector<uint32_t> secondTpns = resolveTpns();
+
+        NS_TEST_ASSERT_MSG_EQ(firstTpns.size(),
+                              secondTpns.size(),
+                              "Repeated TP resolution should return the same number of TPNs");
+        NS_TEST_ASSERT_MSG_EQ(firstTpns.empty(), false, "First TP resolution should return a TPN");
+        NS_TEST_ASSERT_MSG_EQ(firstTpns[0],
+                              secondTpns[0],
+                              "Repeated TP resolution for the same peer and priority should reuse TPNs");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->GetTpConnManager()->GetConnectionCount(),
+                              senderConnectionCount,
+                              "Repeated TP resolution should not add sender connection records");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTpConnManager()->GetConnectionCount(),
+                              receiverConnectionCount,
+                              "Repeated TP resolution should not add receiver connection records");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->GetTransportCountForTest(),
+                              senderTransportCount,
+                              "Repeated TP resolution should reuse the sender endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTransportCountForTest(),
+                              receiverTransportCount,
+                              "Repeated TP resolution should not materialize receiver endpoints");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbUnreservedReceiverTpnDoesNotMaterializeTest : public TestCase
+{
+  public:
+    UbUnreservedReceiverTpnDoesNotMaterializeTest()
+        : TestCase("UnifiedBus - unreserved receiver TPN does not materialize")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_DEVICE, 1);
+
+        Ptr<UbController> controller = node->GetObject<UbController>();
+        const uint32_t unreservedTpn = 9090;
+        const uint32_t beforeCount = controller->GetTransportCountForTest();
+
+        NS_TEST_ASSERT_MSG_EQ(controller->CreateReservedTpEndpoint(unreservedTpn),
+                              nullptr,
+                              "Unreserved TPN should not create a local endpoint");
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTransportCountForTest(),
+                              beforeCount,
+                              "Unreserved TPN materialization attempt should not mutate TP map");
+        NS_TEST_ASSERT_MSG_EQ(controller->IsTPExists(unreservedTpn),
+                              false,
+                              "Unreserved TPN should remain absent");
+
+        Simulator::Destroy();
+        Config::Reset();
     }
 };
 
@@ -11353,6 +11690,12 @@ class UbCreateNodeDelayMappingTestSuite : public TestSuite
     UbCreateNodeDelayMappingTestSuite();
 };
 
+class UbTpReservationTestSuite : public TestSuite
+{
+  public:
+    UbTpReservationTestSuite();
+};
+
 UbTestSuite::UbTestSuite()
     : TestSuite("unified-bus", Type::UNIT)
 {
@@ -11593,6 +11936,21 @@ UbTestSuite::UbTestSuite()
 
 // Register the test suite
 static UbTestSuite g_ubTestSuite;
+
+UbTpReservationTestSuite::UbTpReservationTestSuite()
+    : TestSuite("unified-bus-tp-reservation", Type::UNIT)
+{
+    AddTestCase(new UbCreateTpUsesPerPortIpTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbControllerMissingTpnLookupDoesNotInsertTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbReservedReceiverTpnMaterializesLocallyTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbRepeatedTpResolutionReusesReservationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbUnreservedReceiverTpnDoesNotMaterializeTest(), TestCase::Duration::QUICK);
+}
+
+static UbTpReservationTestSuite g_ubTpReservationTestSuite;
 
 UbWireFormatTestSuite::UbWireFormatTestSuite()
     : TestSuite("unified-bus-wire-format", Type::UNIT)

@@ -54,7 +54,11 @@ UbController::~UbController()
 
 Ptr<UbTransportChannel> UbController::GetTpByTpn(uint32_t tpn)
 {
-    return m_numToTp[tpn];
+    auto it = m_numToTp.find(tpn);
+    if (it == m_numToTp.end()) {
+        return nullptr;
+    }
+    return it->second;
 }
 
 // Transport channel management
@@ -79,8 +83,8 @@ bool UbController::CreateTp(uint32_t src, uint32_t dest, uint8_t sport,
         currentNode = CreateObject<Node> ();
     }
 
-    Ipv4Address sip = NodeIdToIp(src);
-    Ipv4Address dip = NodeIdToIp(dest);
+    Ipv4Address sip = NodeIdToIp(src, sport);
+    Ipv4Address dip = NodeIdToIp(dest, dport);
 
     Ptr<UbTransportChannel> tp = CreateObject<UbTransportChannel>();
     tp->SetUbTransport(currentNode->GetId(), src, dest, srcTpn, dstTpn, 0, static_cast<uint8_t>(priority),
@@ -93,6 +97,36 @@ bool UbController::CreateTp(uint32_t src, uint32_t dest, uint8_t sport,
     utils::UbUtils::Get()->SingleTpTraceConnect(src, srcTpn);
     NS_LOG_DEBUG("Created transport channel success");
     return true;
+}
+
+Ptr<UbTransportChannel> UbController::CreateReservedTpEndpoint(uint32_t tpn)
+{
+    std::lock_guard<std::mutex> controlLock(TpConnectionManager::g_tpConnectionControlLock);
+    Ptr<UbTransportChannel> existingTp = GetTpByTpn(tpn);
+    if (existingTp != nullptr) {
+        return existingTp;
+    }
+
+    Ptr<Node> currentNode = GetObject<Node>();
+    NS_ASSERT_MSG(currentNode != nullptr, "Reserved TP endpoint requires an attached node");
+    NS_ASSERT_MSG(m_transaction != nullptr, "Reserved TP endpoint requires UbTransaction");
+    NS_ASSERT_MSG(m_tpnConn != nullptr, "Reserved TP endpoint requires TpConnectionManager");
+
+    Connection conn;
+    if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), tpn, conn)) {
+        return nullptr;
+    }
+
+    auto congestionCtrl = UbCongestionControl::Create(UB_DEVICE);
+    CreateTp(conn.node1,
+             conn.node2,
+             conn.port1,
+             conn.port2,
+             static_cast<UbPriority>(conn.priority),
+             conn.tpn1,
+             conn.tpn2,
+             congestionCtrl);
+    return GetTpByTpn(tpn);
 }
 
 Ptr<UbTransportChannel> UbController::GetTp(uint32_t tpn)

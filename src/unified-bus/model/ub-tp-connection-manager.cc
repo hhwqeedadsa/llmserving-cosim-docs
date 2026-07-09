@@ -4,45 +4,14 @@
 #include "ns3/node-list.h"
 #include "ns3/ub-utils.h"
 
-#include <mutex>
-
-namespace {
-
-// Dynamic TP establishment mutates both endpoint connection managers and controllers.
-// Under MTP these endpoint events may run on different LPs at the same simulation time,
-// so the whole control-plane transaction must be serialized.
-std::mutex g_tpConnectionControlLock;
-
-void CreateDeviceTpOnNode(uint32_t nodeId,
-                          uint32_t src,
-                          uint32_t dest,
-                          uint8_t sport,
-                          uint8_t dport,
-                          uint32_t priority,
-                          uint32_t srcTpn,
-                          uint32_t dstTpn)
-{
-    std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
-    auto controller = ns3::NodeList::GetNode(nodeId)->GetObject<ns3::UbController>();
-    NS_ASSERT_MSG(controller != nullptr, "UbController not found on target node");
-    auto congestionCtrl = ns3::UbCongestionControl::Create(ns3::UB_DEVICE);
-    controller->CreateTp(src,
-                         dest,
-                         sport,
-                         dport,
-                         static_cast<ns3::UbPriority>(priority),
-                         srcTpn,
-                         dstTpn,
-                         congestionCtrl);
-}
-
-}
-
 using namespace ns3;
 namespace utils {
 
 NS_LOG_COMPONENT_DEFINE("TpConnectionManager");
 NS_OBJECT_ENSURE_REGISTERED(TpConnectionManager);
+
+// Dynamic TP lifecycle operations may touch both endpoint LPs and must share one lock.
+std::mutex TpConnectionManager::g_tpConnectionControlLock;
 
 TypeId TpConnectionManager::GetTypeId()
 {
@@ -371,6 +340,19 @@ Connection TpConnectionManager::GetConnection(uint32_t tpn, uint32_t src, uint32
     return connection;
 }
 
+bool TpConnectionManager::TryGetLocalConnection(uint32_t localNodeId,
+                                                uint32_t localTpn,
+                                                Connection& connection) const
+{
+    std::lock_guard<std::mutex> lock(m_stateLock);
+    auto it = m_localTpnIndex.find({localNodeId, localTpn});
+    if (it == m_localTpnIndex.end()) {
+        return false;
+    }
+    connection = it->second;
+    return true;
+}
+
 // 清空指定节点的连接
 void TpConnectionManager::ClearNodeConnections(uint32_t nodeId)
 {
@@ -398,6 +380,7 @@ void TpConnectionManager::Clear()
     m_peerNodePriorityIndex.clear();
     m_peerNodeLocalPortIndex.clear();
     m_bothPortsIndex.clear();
+    m_localTpnIndex.clear();
     m_tpnList.clear();
     m_reservedTpnList.clear();
 }
@@ -448,6 +431,9 @@ void TpConnectionManager::BuildIndexesForNode(uint32_t localNodeId, Connection c
     // 索引5: 对端节点+本端端口+对端端口
     m_bothPortsIndex[{localNodeId, peerNodeId, localPort, peerPort}].push_back(conn);
 
+    // 索引6: 本地 TPN
+    m_localTpnIndex[{localNodeId, localTpn}] = conn;
+
     if (m_reservedTpnList.erase(localTpn) == 0) {
         NS_ASSERT_MSG(m_tpnList.find(localTpn) == m_tpnList.end(), "Tpn already exists!");
     }
@@ -485,6 +471,14 @@ void TpConnectionManager::ClearNodeFromIndexes(uint32_t nodeId)
     for (auto it = m_bothPortsIndex.begin(); it != m_bothPortsIndex.end();) {
         if (std::get<0>(it->first) == nodeId) {
             it = m_bothPortsIndex.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    for (auto it = m_localTpnIndex.begin(); it != m_localTpnIndex.end();) {
+        if (it->first.first == nodeId) {
+            it = m_localTpnIndex.erase(it);
         } else {
             ++it;
         }
@@ -565,22 +559,10 @@ std::vector<uint32_t> TpConnectionManager::CreateNewTps(uint32_t src, uint32_t d
 uint32_t TpConnectionManager::CreateNewTp(Connection conn)
 {
     Ptr<ns3::UbController> sendCtrl = NodeList::GetNode(conn.node1)->GetObject<ns3::UbController>();
-    Ptr<ns3::UbController> recvCtrl = NodeList::GetNode(conn.node2)->GetObject<ns3::UbController>();
 
     auto sendHostCaqm = UbCongestionControl::Create(UB_DEVICE);
     sendCtrl->CreateTp(conn.node1, conn.node2, conn.port1, conn.port2,
                        conn.priority, conn.tpn1, conn.tpn2, sendHostCaqm);
-    Simulator::ScheduleWithContext(conn.node2,
-                                   Time(0),
-                                   &CreateDeviceTpOnNode,
-                                   conn.node2,
-                                   conn.node2,
-                                   conn.node1,
-                                   conn.port2,
-                                   conn.port1,
-                                   conn.priority,
-                                   conn.tpn2,
-                                   conn.tpn1);
     return conn.tpn1;
 }
 
@@ -606,24 +588,10 @@ std::vector<uint32_t> TpConnectionManager::ReconstructTPs(std::vector<uint32_t> 
 uint32_t TpConnectionManager::ReconstructTp(Connection conn)
 {
     Ptr<UbController> sendCtrl = NodeList::GetNode(conn.node1)->GetObject<UbController>();
-    Ptr<UbController> recvCtrl = NodeList::GetNode(conn.node2)->GetObject<UbController>();
     if (!sendCtrl->IsTPExists(conn.tpn1)) { // 不存在，创建
         auto sendHostCaqm = UbCongestionControl::Create(UB_DEVICE);
         sendCtrl->CreateTp(conn.node1, conn.node2, conn.port1, conn.port2,
                            conn.priority, conn.tpn1, conn.tpn2, sendHostCaqm);
-    }
-    if (!recvCtrl->IsTPExists(conn.tpn2)) {
-        Simulator::ScheduleWithContext(conn.node2,
-                                       Time(0),
-                                       &CreateDeviceTpOnNode,
-                                       conn.node2,
-                                       conn.node2,
-                                       conn.node1,
-                                       conn.port2,
-                                       conn.port1,
-                                       conn.priority,
-                                       conn.tpn2,
-                                       conn.tpn1);
     }
     return conn.tpn1;
 }

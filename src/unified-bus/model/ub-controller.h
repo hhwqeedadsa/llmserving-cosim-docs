@@ -165,6 +165,13 @@ public:
      */
     Ptr<UbTransportChannel> GetTpByTpn(uint32_t tpn);
 
+    /**
+     * @brief Create a local TP endpoint from a reserved local TPN.
+     * @param tpn Local transport number.
+     * @return Pointer to the local TP endpoint, or nullptr if the TPN is not reserved locally.
+     */
+    Ptr<UbTransportChannel> CreateReservedTpEndpoint(uint32_t tpn);
+
     std::map<uint32_t, Ptr<UbTransportChannel>> GetTpnMap() const;
     uint32_t GetTransportCountForTest() const { return m_numToTp.size(); }
 

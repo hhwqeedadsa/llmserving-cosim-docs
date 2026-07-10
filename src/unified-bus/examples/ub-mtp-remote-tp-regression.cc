@@ -205,6 +205,7 @@ BuildTpTopology()
     topo.switch0DevicePort->Attach(leftLink);
 
     topo.remoteLink = CreateObject<UbRemoteLink>();
+    topo.remoteLink->SetAttribute("Delay", TimeValue(NanoSeconds(10)));
     topo.switch0RemotePort->Attach(topo.remoteLink);
     topo.switch1RemotePort->Attach(topo.remoteLink);
     topo.switch0RemotePort->EnableMpiReceive();

@@ -103,7 +103,7 @@ For config-driven unified-bus MPI runs, keep the following rules explicit:
 - Traffic DAG dependencies in MPI, local MTP, or MPI+MTP require a positive `--dependency-visibility-delay=<Time>` unless a positive delay is derived from remote links. Use the same value when comparing local and parallel runs byte-for-byte.
 
 - `node.csv` should provide an explicit `systemId` column for multi-process placement. In single-process compatibility mode, omitted `systemId` still defaults to `0`.
-- In `MTP+MPI` hybrid runs, `node.csv` still uses the MPI-rank ownership value in `systemId`. Do not pre-pack the high 16 bits in config; `HybridSimulatorImpl` assigns packed local-system ids at runtime.
+- In `MTP+MPI` hybrid runs, `node.csv` still uses the MPI-rank ownership value in `systemId`. Do not pre-pack a local LP id into that field. MTP tracks node-to-local-LP ownership separately at runtime.
 - `topology.csv` may connect endpoints on different MPI ranks. Local vs. remote channel selection is decided by the builder from endpoint placement; config files do not choose link type directly.
 - `transport_channel.csv` describes TP connectivity metadata between endpoints. It is not an instruction to create remote-side TP objects on the current rank.
 

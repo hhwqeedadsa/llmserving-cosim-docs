@@ -49,17 +49,6 @@ NS_LOG_COMPONENT_DEFINE("HybridSimulatorImpl");
 
 NS_OBJECT_ENSURE_REGISTERED(HybridSimulatorImpl);
 
-namespace
-{
-
-uint32_t
-GetHybridRank(uint32_t systemId)
-{
-    return systemId >> 16 == 0 ? systemId : systemId & 0xffff;
-}
-
-} // namespace
-
 HybridSimulatorImpl::HybridSimulatorImpl()
 {
     NS_LOG_FUNCTION(this);
@@ -120,8 +109,8 @@ HybridSimulatorImpl::BoundLookAhead(Time lookAhead)
     }
     else
     {
-        NS_LOG_WARN("attempted to set hybrid lookahead bound to a non-positive time: "
-                    << lookAhead);
+        NS_LOG_WARN(
+            "attempted to set hybrid lookahead bound to a non-positive time: " << lookAhead);
     }
 }
 
@@ -193,7 +182,7 @@ HybridSimulatorImpl::ScheduleWithContext(uint32_t context, const Time& delay, Ev
     else
     {
         LogicalProcess* remote =
-            MtpInterface::GetSystem(NodeList::GetNode(context)->GetSystemId() >> 16);
+            MtpInterface::GetSystem(MtpInterface::RequireNodeLocalLpId(context));
         MtpInterface::GetSystem()->ScheduleWithContext(remote, context, delay, event);
     }
 }
@@ -406,7 +395,8 @@ void
 HybridSimulatorImpl::Partition()
 {
     NS_LOG_FUNCTION(this);
-    uint32_t localSystemId = 0;
+    MtpInterface::ClearNodeLocalLpIds();
+    uint32_t localLpId = 0;
     NodeContainer nodes = NodeContainer::GetGlobal();
     bool* visited = new bool[nodes.GetN()]{false};
     std::queue<Ptr<Node>> q;
@@ -454,24 +444,23 @@ HybridSimulatorImpl::Partition()
         NS_LOG_INFO("Min lookahead is set to " << m_minLookahead);
     }
 
-    // perform a BFS on the whole network topo to assign each node a localSystemId
+    // perform a BFS on the whole network topology to assign each local node to a worker LP
     for (auto it = nodes.Begin(); it != nodes.End(); it++)
     {
         Ptr<Node> node = *it;
         if (!visited[node->GetId()] && node->GetSystemId() == m_myId)
         {
             q.push(node);
-            localSystemId++;
+            localLpId++;
             while (!q.empty())
             {
                 // pop from BFS queue
                 node = q.front();
                 q.pop();
                 visited[node->GetId()] = true;
-                // assign this node the current localSystemId
-                node->SetSystemId(localSystemId << 16 | m_myId);
-                NS_LOG_INFO("node " << node->GetId() << " is set to local system "
-                                    << localSystemId);
+                // assign this node to the current worker LP
+                MtpInterface::SetNodeLocalLpId(node->GetId(), localLpId);
+                NS_LOG_INFO("node " << node->GetId() << " is set to local LP " << localLpId);
 
                 for (uint32_t i = 0; i < node->GetNDevices(); i++)
                 {
@@ -497,7 +486,7 @@ HybridSimulatorImpl::Partition()
                     {
                         Ptr<Node> remote = channel->GetDevice(j)->GetNode();
                         // if it's not visited, and not remote, add it to the current partition
-                        if (!visited[remote->GetId()] && GetHybridRank(remote->GetSystemId()) == m_myId)
+                        if (!visited[remote->GetId()] && remote->GetSystemId() == m_myId)
                         {
                             q.push(remote);
                         }
@@ -509,7 +498,7 @@ HybridSimulatorImpl::Partition()
     delete[] visited;
 
     // after the partition, we finally know the system count (# of LPs)
-    const uint32_t systemCount = localSystemId;
+    const uint32_t systemCount = localLpId;
     const uint32_t threadCount = std::min(m_maxThreads, systemCount);
     NS_LOG_INFO("Partition done! " << systemCount << " systems share " << threadCount
                                    << " threads");
@@ -543,10 +532,18 @@ HybridSimulatorImpl::Partition()
         // they have to be invoked now rather than parallelly executed
         if (ev.key.m_ts == 0)
         {
-            MtpInterface::GetSystem(ev.key.m_context == Simulator::NO_CONTEXT
-                                        ? 0
-                                        : NodeList::GetNode(ev.key.m_context)->GetSystemId() >> 16)
-                ->InvokeNow(ev);
+            uint32_t targetLpId = 0;
+            if (ev.key.m_context != Simulator::NO_CONTEXT)
+            {
+                const auto localLpId = MtpInterface::FindNodeLocalLpId(ev.key.m_context);
+                NS_ABORT_MSG_IF(
+                    !localLpId && NodeList::GetNode(ev.key.m_context)->GetSystemId() == m_myId,
+                    "MTP local LP mapping is missing for local node " << ev.key.m_context);
+                // Every MPI rank builds the full topology. Initialization events for nodes owned
+                // by another rank stay serialized on the public LP without implying ownership.
+                targetLpId = localLpId.value_or(0);
+            }
+            MtpInterface::GetSystem(targetLpId)->InvokeNow(ev);
         }
         else if (ev.key.m_context == Simulator::NO_CONTEXT)
         {

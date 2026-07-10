@@ -39,21 +39,6 @@ namespace ns3
 
 NS_LOG_COMPONENT_DEFINE("LogicalProcess");
 
-namespace
-{
-
-uint32_t
-GetLocalSystemId(uint32_t systemId)
-{
-#ifdef NS3_MPI
-    return systemId >> 16;
-#else
-    return systemId;
-#endif
-}
-
-} // namespace
-
 LogicalProcess::LogicalProcess()
     : m_systemId(0),
       m_systemCount(0),
@@ -155,19 +140,11 @@ LogicalProcess::CalculateLookAhead()
         NodeContainer c = NodeContainer::GetGlobal();
         for (auto iter = c.Begin(); iter != c.End(); ++iter)
         {
-#ifdef NS3_MPI
-            // for hybrid simulation, the left 16-bit indicates local system ID,
-            // and the right 16-bit indicates global system ID (MPI rank)
-            if (((*iter)->GetSystemId() >> 16) != m_systemId)
+            const auto localLpId = MtpInterface::FindNodeLocalLpId((*iter)->GetId());
+            if (!localLpId || *localLpId != m_systemId)
             {
                 continue;
             }
-#else
-            if ((*iter)->GetSystemId() != m_systemId)
-            {
-                continue;
-            }
-#endif
             for (uint32_t i = 0; i < (*iter)->GetNDevices(); ++i)
             {
                 Ptr<NetDevice> localNetDevice = (*iter)->GetDevice(i);
@@ -192,8 +169,8 @@ LogicalProcess::CalculateLookAhead()
                     remoteNode = (channel->GetDevice(0))->GetNode();
                 }
                 // if it's not remote, don't consider it
-                const uint32_t remoteSystemId = GetLocalSystemId(remoteNode->GetSystemId());
-                if (remoteSystemId == m_systemId)
+                const auto remoteLpId = MtpInterface::FindNodeLocalLpId(remoteNode->GetId());
+                if (!remoteLpId || *remoteLpId == m_systemId)
                 {
                     continue;
                 }
@@ -206,7 +183,7 @@ LogicalProcess::CalculateLookAhead()
                     m_lookAhead = delay.Get();
                 }
                 // add the neighbour to the mailbox
-                m_mailbox[remoteSystemId];
+                m_mailbox[*remoteLpId];
             }
         }
     }

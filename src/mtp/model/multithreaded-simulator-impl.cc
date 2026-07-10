@@ -138,7 +138,13 @@ MultithreadedSimulatorImpl::ScheduleWithContext(uint32_t context,
                                                 EventImpl* event)
 {
     NS_LOG_FUNCTION(this << context << delay.GetTimeStep() << event);
-    LogicalProcess* remote = MtpInterface::GetSystem(NodeList::GetNode(context)->GetSystemId());
+    if (MtpInterface::GetSize() == 1)
+    {
+        LogicalProcess* local = MtpInterface::GetSystem();
+        local->ScheduleWithContext(local, context, delay, event);
+        return;
+    }
+    LogicalProcess* remote = MtpInterface::GetSystem(MtpInterface::RequireNodeLocalLpId(context));
     MtpInterface::GetSystem()->ScheduleWithContext(remote, context, delay, event);
 }
 
@@ -297,7 +303,8 @@ void
 MultithreadedSimulatorImpl::Partition()
 {
     NS_LOG_FUNCTION(this);
-    uint32_t systemId = 0;
+    MtpInterface::ClearNodeLocalLpIds();
+    uint32_t localLpId = 0;
     const NodeContainer nodes = NodeContainer::GetGlobal();
     bool* visited = new bool[nodes.GetN()]{false};
     std::queue<Ptr<Node>> q;
@@ -349,16 +356,16 @@ MultithreadedSimulatorImpl::Partition()
         if (!visited[node->GetId()])
         {
             q.push(node);
-            systemId++;
+            localLpId++;
             while (!q.empty())
             {
                 // pop from BFS queue
                 node = q.front();
                 q.pop();
                 visited[node->GetId()] = true;
-                // assign this node the current systemId
-                node->SetSystemId(systemId);
-                NS_LOG_INFO("node " << node->GetId() << " is set to system " << systemId);
+                // assign this node to the current worker LP
+                MtpInterface::SetNodeLocalLpId(node->GetId(), localLpId);
+                NS_LOG_INFO("node " << node->GetId() << " is set to local LP " << localLpId);
 
                 for (uint32_t i = 0; i < node->GetNDevices(); i++)
                 {
@@ -396,7 +403,7 @@ MultithreadedSimulatorImpl::Partition()
     delete[] visited;
 
     // after the partition, we finally know the system count (# of LPs)
-    const uint32_t systemCount = systemId;
+    const uint32_t systemCount = localLpId;
     const uint32_t threadCount = std::min(m_maxThreads, systemCount);
     NS_LOG_INFO("Partition done! " << systemCount << " systems share " << threadCount
                                    << " threads");
@@ -430,10 +437,10 @@ MultithreadedSimulatorImpl::Partition()
         // they have to be invoked now rather than parallelly executed
         if (ev.key.m_ts == 0)
         {
-            MtpInterface::GetSystem(ev.key.m_context == Simulator::NO_CONTEXT
-                                        ? 0
-                                        : NodeList::GetNode(ev.key.m_context)->GetSystemId())
-                ->InvokeNow(ev);
+            const uint32_t localLpId = ev.key.m_context == Simulator::NO_CONTEXT
+                                           ? 0
+                                           : MtpInterface::RequireNodeLocalLpId(ev.key.m_context);
+            MtpInterface::GetSystem(localLpId)->InvokeNow(ev);
         }
         else if (ev.key.m_context == Simulator::NO_CONTEXT)
         {

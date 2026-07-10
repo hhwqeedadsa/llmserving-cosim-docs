@@ -28,11 +28,14 @@
 #include "ns3/assert.h"
 #include "ns3/config.h"
 #include "ns3/log.h"
+#include "ns3/node-list.h"
+#include "ns3/node.h"
 #include "ns3/string.h"
 #include "ns3/uinteger.h"
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <thread>
 #if defined(__x86_64__) || defined(__i386__)
 #include <immintrin.h>
@@ -45,6 +48,8 @@ NS_LOG_COMPONENT_DEFINE("MtpInterface");
 
 namespace
 {
+
+constexpr uint32_t INVALID_NODE_LOCAL_LP_ID = std::numeric_limits<uint32_t>::max();
 
 inline void
 CpuRelax()
@@ -98,6 +103,7 @@ MtpInterface::Enable(const uint32_t threadCount, const uint32_t systemCount)
     // set size
     g_threadCount = threadCount;
     g_systemCount = systemCount;
+    g_manualPartition = systemCount > 0;
 
     // allocate systems
     g_systems = new LogicalProcess[g_systemCount + 1]; // include the public LP
@@ -146,6 +152,7 @@ MtpInterface::Enable(const uint32_t threadCount, const uint32_t systemCount)
 void
 MtpInterface::EnableNew(const uint32_t newSystemCount)
 {
+    g_manualPartition = false;
     const LogicalProcess* oldSystems = g_systems;
     g_systems = new LogicalProcess[g_systemCount + newSystemCount + 1];
     for (uint32_t i = 0; i <= g_systemCount; i++)
@@ -192,6 +199,8 @@ MtpInterface::Disable()
     g_systemCount = 0;
     g_sortFunc = nullptr;
     g_lookAheadBound = TimeStep(0);
+    g_nodeLocalLpIds.clear();
+    g_manualPartition = false;
     g_globalFinished.store(false, std::memory_order_release);
     g_recvMsgStage.store(false, std::memory_order_release);
     g_systemIndex.store(0, std::memory_order_release);
@@ -216,6 +225,10 @@ MtpInterface::Run()
 void
 MtpInterface::RunBefore()
 {
+    if (g_manualPartition)
+    {
+        InitializeManualNodeLocalLpIds();
+    }
     CalculateLookAhead();
 
     // LP index for sorting & holding worker threads
@@ -339,6 +352,71 @@ bool
 MtpInterface::isPartitioned()
 {
     return g_threadCount != 0;
+}
+
+void
+MtpInterface::ClearNodeLocalLpIds()
+{
+    g_nodeLocalLpIds.clear();
+}
+
+void
+MtpInterface::SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId)
+{
+    NS_ABORT_MSG_IF(localLpId == 0, "MTP worker LP 0 cannot own node " << nodeId);
+    if (nodeId >= g_nodeLocalLpIds.size())
+    {
+        g_nodeLocalLpIds.resize(nodeId + 1, INVALID_NODE_LOCAL_LP_ID);
+    }
+    g_nodeLocalLpIds[nodeId] = localLpId;
+}
+
+std::optional<uint32_t>
+MtpInterface::FindNodeLocalLpId(uint32_t nodeId)
+{
+    if (nodeId >= g_nodeLocalLpIds.size() || g_nodeLocalLpIds[nodeId] == INVALID_NODE_LOCAL_LP_ID)
+    {
+        return std::nullopt;
+    }
+    return g_nodeLocalLpIds[nodeId];
+}
+
+uint32_t
+MtpInterface::RequireNodeLocalLpId(uint32_t nodeId)
+{
+    auto localLpId = FindNodeLocalLpId(nodeId);
+    if (!localLpId && g_manualPartition)
+    {
+        InitializeManualNodeLocalLpId(nodeId);
+        localLpId = FindNodeLocalLpId(nodeId);
+    }
+    NS_ABORT_MSG_IF(!localLpId, "MTP local LP mapping is missing for node " << nodeId);
+    NS_ABORT_MSG_IF(*localLpId == 0 || *localLpId > g_systemCount,
+                    "MTP local LP mapping for node " << nodeId << " is outside worker LP range [1, "
+                                                     << g_systemCount << "]: " << *localLpId);
+    return *localLpId;
+}
+
+void
+MtpInterface::InitializeManualNodeLocalLpId(uint32_t nodeId)
+{
+    // NodeList::Add schedules initialization before Node::m_id receives the returned index.
+    NS_ABORT_MSG_IF(nodeId >= NodeList::GetNNodes(), "MTP node " << nodeId << " does not exist");
+    const uint32_t localLpId = NodeList::GetNode(nodeId)->GetSystemId();
+    NS_ABORT_MSG_IF(localLpId == 0 || localLpId > g_systemCount,
+                    "MTP local LP mapping is missing for node "
+                        << nodeId << ": manual partition requires Node::systemId in [1, "
+                        << g_systemCount << "], got " << localLpId);
+    SetNodeLocalLpId(nodeId, localLpId);
+}
+
+void
+MtpInterface::InitializeManualNodeLocalLpIds()
+{
+    for (uint32_t nodeId = 0; nodeId < NodeList::GetNNodes(); ++nodeId)
+    {
+        InitializeManualNodeLocalLpId(nodeId);
+    }
 }
 
 void
@@ -472,9 +550,13 @@ Time MtpInterface::g_nextPublicTime = TimeStep(0);
 
 Time MtpInterface::g_lookAheadBound = TimeStep(0);
 
+std::vector<uint32_t> MtpInterface::g_nodeLocalLpIds;
+
 std::atomic<bool> MtpInterface::g_recvMsgStage(false);
 
 std::atomic<bool> MtpInterface::g_globalFinished(false);
+
+bool MtpInterface::g_manualPartition = false;
 
 bool MtpInterface::g_enabled = false;
 

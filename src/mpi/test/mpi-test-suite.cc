@@ -9,8 +9,10 @@
 #include "ns3/example-as-test.h"
 
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <utility>
 
 using namespace ns3;
 
@@ -207,6 +209,63 @@ class MpiUbQuickExampleRunTestSuite : public TestSuite
         AddTestCase(new MpiUbQuickExampleRunTestCase(name, args), TestCase::Duration::QUICK);
     }
 };
+
+#ifdef NS3_MTP
+std::pair<int, std::string>
+RunHybridMtpExample(const std::string& testFile, const std::string& program)
+{
+    const std::filesystem::path repoRoot = PROJECT_SOURCE_PATH;
+    const std::string pythonCommand =
+        std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
+    const std::string command =
+        "cd \"" + repoRoot.string() + "\" && " + pythonCommand + " ./ns3 run " + program +
+        " --no-build --command-template=\"mpiexec -n 2 %s --test\" > \"" + testFile +
+        "\" 2>&1";
+
+    const int status = std::system(command.c_str());
+    std::ifstream input(testFile);
+    std::stringstream buffer;
+    buffer << input.rdbuf();
+    return {status, buffer.str()};
+}
+
+class HybridLinkDelayOrderingSystemTestCase : public TestCase
+{
+  public:
+    HybridLinkDelayOrderingSystemTestCase()
+        : TestCase("Hybrid MPI MTP - cross-rank link delay preserves event order")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/mpi/examples/hybrid-link-delay-ordering");
+
+        NS_TEST_ASSERT_MSG_EQ(
+            status,
+            0,
+            "cross-rank receive must execute before a later local event: " << output);
+        NS_TEST_ASSERT_MSG_EQ(output.find("regressed=1"),
+                              std::string::npos,
+                              "hybrid MPI/MTP must not move simulation time backwards: " << output);
+    }
+};
+
+class HybridLinkDelayOrderingSystemTestSuite : public TestSuite
+{
+  public:
+    HybridLinkDelayOrderingSystemTestSuite()
+        : TestSuite("mpi-hybrid-link-delay-ordering", Type::SYSTEM)
+    {
+        AddTestCase(new HybridLinkDelayOrderingSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridLinkDelayOrderingSystemTestSuite g_hybridLinkDelayOrdering;
+#endif
 
 /* Tests using SimpleDistributedSimulatorImpl */
 static MpiTestSuite g_mpiNms2("mpi-example-nms-2", "nms-p2p-nix-distributed", NS_TEST_SOURCEDIR, 2);

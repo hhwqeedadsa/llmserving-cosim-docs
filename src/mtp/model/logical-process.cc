@@ -173,7 +173,7 @@ LogicalProcess::CalculateLookAhead()
                 }
                 // if it's not remote, don't consider it
                 const auto remoteLpId = MtpInterface::FindNodeLocalLpId(remoteNode->GetId());
-                if (!remoteLpId || *remoteLpId == m_systemId)
+                if (remoteLpId && *remoteLpId == m_systemId)
                 {
                     continue;
                 }
@@ -186,8 +186,12 @@ LogicalProcess::CalculateLookAhead()
                 {
                     m_lookAhead = delay.Get();
                 }
-                // add the neighbour to the mailbox
-                m_mailbox[*remoteLpId];
+                // A node on another MPI rank has no local mailbox, but its link delay still
+                // constrains how far this LP may advance.
+                if (remoteLpId)
+                {
+                    m_mailbox[*remoteLpId];
+                }
             }
         }
         NS_ABORT_MSG_IF(hasRemoteNeighbor && !m_lookAhead.IsStrictlyPositive(),

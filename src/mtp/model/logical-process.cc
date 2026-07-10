@@ -28,6 +28,7 @@
 #include "mtp-interface.h"
 
 #include "ns3/channel.h"
+#include "ns3/fatal-error.h"
 #include "ns3/node-container.h"
 #include "ns3/simulator.h"
 
@@ -138,6 +139,7 @@ LogicalProcess::CalculateLookAhead()
     else
     {
         m_lookAhead = Time::Max() / 2 - TimeStep(1);
+        bool hasRemoteNeighbor = false;
         NodeContainer c = NodeContainer::GetGlobal();
         for (auto iter = c.Begin(); iter != c.End(); ++iter)
         {
@@ -175,6 +177,7 @@ LogicalProcess::CalculateLookAhead()
                 {
                     continue;
                 }
+                hasRemoteNeighbor = true;
                 // compare delay on the channel with current value of m_lookAhead.
                 // if delay on channel is smaller, make it the new lookAhead.
                 TimeValue delay;
@@ -187,6 +190,9 @@ LogicalProcess::CalculateLookAhead()
                 m_mailbox[*remoteLpId];
             }
         }
+        NS_ABORT_MSG_IF(hasRemoteNeighbor && !m_lookAhead.IsStrictlyPositive(),
+                        "MTP lookahead is not positive for system "
+                            << m_systemId << " with at least one remote neighbor");
     }
 
     NS_LOG_INFO("lookahead of system " << m_systemId << " is set to " << m_lookAhead.GetTimeStep());
@@ -225,6 +231,13 @@ LogicalProcess::ReceiveMessages()
 
     for (RemoteEvent& remoteEvent : pendingEvents)
     {
+        NS_ABORT_MSG_IF(remoteEvent.targetTs < m_currentTs,
+                        "MTP received a remote event from the past: targetSystemId="
+                            << m_systemId << " senderSystemId=" << remoteEvent.senderSystemId
+                            << " targetTs=" << remoteEvent.targetTs
+                            << " currentTs=" << m_currentTs
+                            << " senderTs=" << remoteEvent.senderTs
+                            << " lookAhead=" << m_lookAhead.GetTimeStep());
         Scheduler::Event& ev = remoteEvent.event;
         ev.key.m_uid = m_uid++;
         m_events->Insert(ev);

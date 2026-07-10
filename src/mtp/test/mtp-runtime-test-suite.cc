@@ -110,9 +110,11 @@ class MtpRemoteEventOrderingSystemTestCase : public TestCase
             RunMtpExample(testFile, "src/mtp/examples/mtp-remote-event-ordering");
 
         NS_TEST_ASSERT_MSG_EQ(status, 0, "same-time remote events must run: " << output);
-        NS_TEST_ASSERT_MSG_NE(output.find("order=12 wrong-lp=0"),
+        NS_TEST_ASSERT_MSG_NE(output.find("order=11,12,21,22, wrong-lp=0"),
                               std::string::npos,
-                              "remote events must preserve sender order on LP 2: " << output);
+                              "remote events must preserve cross-sender and sender-local order on "
+                              "LP 3: "
+                                  << output);
     }
 };
 
@@ -132,10 +134,11 @@ class MtpOrderedGlobalEventsSystemTestCase : public TestCase
 
         NS_TEST_ASSERT_MSG_EQ(status, 0, "keyed public events must run: " << output);
         NS_TEST_ASSERT_MSG_NE(
-            output.find("TEST : 0 : PASSED batches=100 wrong-lp=0 public-followup=1"),
+            output.find("TEST : 0 : PASSED concurrent=100 staggered=100 wrong-lp=0 "
+                        "public-followup=1"),
             std::string::npos,
-            "staggered batches and public follow-ups must execute on the public LP in stable key "
-            "order: "
+            "concurrent and staggered batches plus public follow-ups must execute on the public "
+            "LP in stable key order: "
                 << output);
     }
 };

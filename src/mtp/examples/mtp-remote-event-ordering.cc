@@ -6,7 +6,7 @@
  * @file
  * @ingroup mtp
  *
- * Verify stable ordering for same-time remote events from one worker LP.
+ * Verify stable ordering for same-time remote events from multiple worker LPs.
  */
 
 #include "ns3/core-module.h"
@@ -27,15 +27,15 @@ bool g_wrongLp = false;
 void
 ReceiveValue(uint32_t value)
 {
-    g_wrongLp |= Simulator::GetSystemId() != 2;
+    g_wrongLp |= Simulator::GetSystemId() != 3;
     g_receivedValues.push_back(value);
 }
 
 void
-SendSameTimeEvents(uint32_t receiverNodeId)
+SendSameTimeEvents(uint32_t receiverNodeId, uint32_t firstValue)
 {
-    Simulator::ScheduleWithContext(receiverNodeId, NanoSeconds(10), &ReceiveValue, 1);
-    Simulator::ScheduleWithContext(receiverNodeId, NanoSeconds(10), &ReceiveValue, 2);
+    Simulator::ScheduleWithContext(receiverNodeId, NanoSeconds(10), &ReceiveValue, firstValue);
+    Simulator::ScheduleWithContext(receiverNodeId, NanoSeconds(10), &ReceiveValue, firstValue + 1);
 }
 
 } // namespace
@@ -48,25 +48,34 @@ main(int argc, char* argv[])
     cmd.AddValue("test", "Print regression-test output", testing);
     cmd.Parse(argc, argv);
 
-    MtpInterface::Enable(2, 2);
-    NodeContainer sender;
-    sender.Create(1, 1);
+    MtpInterface::Enable(3, 3);
+    NodeContainer lowIdSender;
+    lowIdSender.Create(1, 1);
+    NodeContainer highIdSender;
+    highIdSender.Create(1, 2);
     NodeContainer receiver;
-    receiver.Create(1, 2);
+    receiver.Create(1, 3);
 
-    Simulator::ScheduleWithContext(sender.Get(0)->GetId(),
+    Simulator::ScheduleWithContext(lowIdSender.Get(0)->GetId(),
                                    NanoSeconds(1),
                                    &SendSameTimeEvents,
-                                   receiver.Get(0)->GetId());
+                                   receiver.Get(0)->GetId(),
+                                   11);
+    Simulator::ScheduleWithContext(highIdSender.Get(0)->GetId(),
+                                   NanoSeconds(1),
+                                   &SendSameTimeEvents,
+                                   receiver.Get(0)->GetId(),
+                                   21);
     Simulator::Run();
 
-    const bool passed = !g_wrongLp && g_receivedValues == std::vector<uint32_t>{1, 2};
+    const bool passed =
+        !g_wrongLp && g_receivedValues == std::vector<uint32_t>{11, 12, 21, 22};
     if (testing)
     {
         std::cout << "TEST : 0 : " << (passed ? "PASSED" : "FAILED") << " order=";
         for (uint32_t value : g_receivedValues)
         {
-            std::cout << value;
+            std::cout << value << ',';
         }
         std::cout << " wrong-lp=" << g_wrongLp << std::endl;
     }

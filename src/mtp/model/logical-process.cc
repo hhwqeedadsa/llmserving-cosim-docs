@@ -32,6 +32,7 @@
 #include "ns3/simulator.h"
 
 #include <algorithm>
+#include <iterator>
 #include <tuple>
 
 namespace ns3
@@ -197,37 +198,37 @@ LogicalProcess::ReceiveMessages()
     NS_LOG_FUNCTION(this);
 
     m_pendingEventCount = 0;
+    std::vector<RemoteEvent> pendingEvents;
     {
         std::lock_guard<std::mutex> lock(m_mailboxMutex);
+        size_t pendingEventCount = 0;
+        for (const auto& [_, queue] : m_mailbox)
+        {
+            pendingEventCount += queue.size();
+        }
+        pendingEvents.reserve(pendingEventCount);
         for (auto& [_, queue] : m_mailbox)
         {
-            // Keep legacy per-sender UID assignment order; global ordering changes tie-breaks for
-            // same-timestamp remote events and breaks byte-for-byte MTP output compatibility.
-            if (queue.size() > 1)
-            {
-                std::sort(queue.begin(),
-                          queue.end(),
-                          [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
-                              return std::tie(lhs.senderTs,
-                                              lhs.senderSystemId,
-                                              lhs.senderUid,
-                                              lhs.event) >
-                                     std::tie(rhs.senderTs,
-                                              rhs.senderSystemId,
-                                              rhs.senderUid,
-                                              rhs.event);
-                          });
-            }
-            while (!queue.empty())
-            {
-                RemoteEvent& remoteEvent = queue.back();
-                Scheduler::Event& ev = remoteEvent.event;
-                ev.key.m_uid = m_uid++;
-                m_events->Insert(ev);
-                m_pendingEventCount++;
-                queue.pop_back();
-            }
+            pendingEvents.insert(pendingEvents.end(),
+                                 std::make_move_iterator(queue.begin()),
+                                 std::make_move_iterator(queue.end()));
+            queue.clear();
         }
+    }
+
+    std::sort(pendingEvents.begin(),
+              pendingEvents.end(),
+              [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
+                  return std::tie(lhs.targetTs, lhs.senderTs, lhs.senderSystemId, lhs.senderUid) <
+                         std::tie(rhs.targetTs, rhs.senderTs, rhs.senderSystemId, rhs.senderUid);
+              });
+
+    for (RemoteEvent& remoteEvent : pendingEvents)
+    {
+        Scheduler::Event& ev = remoteEvent.event;
+        ev.key.m_uid = m_uid++;
+        m_events->Insert(ev);
+        m_pendingEventCount++;
     }
 }
 
@@ -319,14 +320,13 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
     else
     {
         ev.key.m_uid = EventId::UID::INVALID;
+        uint32_t senderUid = m_uid++;
         std::lock_guard<std::mutex> lock(remote->m_mailboxMutex);
         remote->m_mailbox[m_systemId].push_back(RemoteEvent{
             ev.key.m_ts,
             m_currentTs,
             m_systemId,
-            // Preserve legacy remote-event tie-breaks; incrementing this changes same-time task
-            // completion order in existing MTP scenarios.
-            m_uid,
+            senderUid,
             ev,
         });
     }

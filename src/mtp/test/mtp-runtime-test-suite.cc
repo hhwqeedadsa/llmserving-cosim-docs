@@ -92,6 +92,27 @@ class MtpManualPartitionValidSystemTestCase : public TestCase
     }
 };
 
+class MtpRemoteEventOrderingSystemTestCase : public TestCase
+{
+  public:
+    MtpRemoteEventOrderingSystemTestCase()
+        : TestCase("MTP - same-time remote events preserve sender order")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunMtpExample(testFile, "src/mtp/examples/mtp-remote-event-ordering");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "same-time remote events must run: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("order=12 wrong-lp=0"),
+                              std::string::npos,
+                              "remote events must preserve sender order on LP 2: " << output);
+    }
+};
+
 class MtpManualPartitionValidationSystemTestSuite : public TestSuite
 {
   public:
@@ -109,4 +130,15 @@ class MtpManualPartitionValidationSystemTestSuite : public TestSuite
 
 MtpManualPartitionValidationSystemTestSuite g_manualPartitionValidation;
 
+class MtpRemoteEventOrderingSystemTestSuite : public TestSuite
+{
+  public:
+    MtpRemoteEventOrderingSystemTestSuite()
+        : TestSuite("mtp-remote-event-ordering", Type::SYSTEM)
+    {
+        AddTestCase(new MtpRemoteEventOrderingSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+MtpRemoteEventOrderingSystemTestSuite g_remoteEventOrdering;
 } // namespace

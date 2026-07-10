@@ -14112,14 +14112,13 @@ class UbQuickExampleMtpDependencyVisibilityDelaySystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=2 --test "
-                                               "--dependency-visibility-delay=20ns",
+                                               "--mtp-threads=2 --test",
                                                "",
                                                caseDir);
 
         NS_TEST_ASSERT_MSG_EQ(status,
                               0,
-                              "MTP dependency visibility delay case should exit successfully");
+                              "MTP dependency visibility delay should be inferred from UB links");
         if (status != 0)
         {
             std::error_code ec;

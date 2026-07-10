@@ -100,8 +100,7 @@ MPI 多进程：
 
 ```bash
 mpirun -np 2 build/scratch/ns3.44-ub-quick-example \
-  --case-path=scratch/ub-mpi-minimal \
-  --dependency-visibility-delay=20ns
+  --case-path=scratch/ub-mpi-minimal
 ```
 
 MPI + 多线程：
@@ -109,8 +108,7 @@ MPI + 多线程：
 ```bash
 mpirun -np 2 build/scratch/ns3.44-ub-quick-example \
   --case-path=scratch/ub-mpi-minimal \
-  --mtp-threads=2 \
-  --dependency-visibility-delay=20ns
+  --mtp-threads=2
 ```
 
 `-np` 表示 MPI 进程数。在混合模式中，`--mtp-threads` 对每个进程分别生效。例如，`-np 2` 和 `--mtp-threads=4` 表示两个进程，每个进程使用四个工作线程。
@@ -131,15 +129,17 @@ mpirun -np 2 build/scratch/ns3.44-ub-quick-example \
 
 ## 配置 task 依赖
 
-如果 `traffic.csv` 使用 phase 依赖，并行运行时应显式设置一个正的可见延迟：
+如果 `traffic.csv` 使用 phase 依赖，并行运行会根据 UB 链路时延自动选择一个保守的正可见延迟，并用它约束并行同步步长。通常不需要额外配置。
+
+如需固定实验参数，可以显式覆盖自动值：
 
 ```text
 --dependency-visibility-delay=<Time>
 ```
 
-一个 task 完成后，依赖它的 task 会在该延迟之后看到完成状态。这个参数使跨线程或跨进程的依赖时序具有明确含义。
+一个 task 完成后，依赖它的 task 会在该延迟之后看到完成状态。显式值在并行运行中必须大于零。
 
-对比单线程与并行结果时，两边应使用相同的值。部分 case 可以从跨进程 link delay 推导出正值，但显式配置更容易复现和记录。
+显式覆盖主要用于需要固定该参数的对照实验。对比单线程与并行结果时，两边应使用相同的显式值。
 
 ## 对比单线程与并行结果
 
@@ -194,7 +194,7 @@ window 没有适用于所有 workload 的通用推荐值。应使用能够满足
 | --- | --- |
 | 传入 `--mtp-threads` 后提示 MTP 不可用 | 使用 `--enable-mtp` 重新配置并构建用户入口 |
 | `mpirun` 无法启动程序 | 检查 MPI 环境，并确认配置时使用了 `--enable-mpi` |
-| 带依赖的 traffic case 在仿真前退出 | 设置正的 `--dependency-visibility-delay` |
+| 带依赖的 traffic case 在仿真前退出 | 确认相关 UB 链路具有正时延；必要时显式设置正的 `--dependency-visibility-delay` |
 | 节点被分配给不存在的进程 | 确认每个 `systemId` 都小于 `-np` 的值 |
 | 单线程与并行输出不同 | 检查 case 文件、依赖延迟、两个 offset window、seed 和其他模型参数是否一致 |
 | 日志提示多个对象获得相同 offset | 只有在实验能够接受更大时间改动时，才增大对应 window |

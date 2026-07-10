@@ -465,13 +465,15 @@ BuildScenarioFromConfig(const QuickExampleOptions& options, const RuntimeSelecti
     }
 }
 
-void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
+void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
+                                          const RuntimeSelection& runtime)
 {
     if (!options.dependencyVisibilityDelay.empty())
     {
         UbTrafficGen::Get()->SetDependencyVisibilityDelay(Time(options.dependencyVisibilityDelay));
     }
 
+    const bool usePositiveLocalLinkDelays = ModeUsesMtp(runtime.mode);
     for (uint32_t nodeIndex = 0; nodeIndex < NodeList::GetNNodes(); ++nodeIndex)
     {
         Ptr<Node> node = NodeList::GetNode(nodeIndex);
@@ -484,9 +486,16 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
             }
 
             Ptr<UbLink> link = DynamicCast<UbLink>(port->GetChannel());
-            if (link != nullptr && link->IsRemote())
+            if (link == nullptr)
             {
-                UbTrafficGen::Get()->ObserveRemoteLinkDelay(link->GetDelay());
+                continue;
+            }
+
+            const Time delay = link->GetDelay();
+            if (link->IsRemote() ||
+                (usePositiveLocalLinkDelays && delay.IsStrictlyPositive()))
+            {
+                UbTrafficGen::Get()->ObserveRemoteLinkDelay(delay);
             }
         }
     }
@@ -692,7 +701,7 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.AddValue("stop-ms", "Optional simulation stop time in milliseconds", options.stopMs);
     cmd.AddValue("rng-run", "Random seed value passed to RngSeedManager::SetSeed", options.rngRun);
     cmd.AddValue("dependency-visibility-delay",
-                 "Delay before a completed traffic task becomes visible to dependent tasks",
+                 "Advanced override for the dependency visibility delay inferred from UB links",
                  options.dependencyVisibilityDelay);
     cmd.AddValue("initial-task-start-offset-window",
                  "Add one deterministic per-source start offset to tasks with no phase "
@@ -834,7 +843,7 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
     BuildScenarioFromConfig(options, runtime);
-    ConfigureTrafficDependencyVisibility(options);
+    ConfigureTrafficDependencyVisibility(options, runtime);
     ApplyDependencyVisibilityLookaheadBound(runtime);
     ConfigureCanonicalOutput(options, runtime);
     ConfigureInitialTaskStartOffset(options, runtime);

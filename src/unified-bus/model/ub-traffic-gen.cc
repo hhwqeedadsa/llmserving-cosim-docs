@@ -783,7 +783,8 @@ UbTrafficGen::ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) co
 
     NS_ABORT_MSG_IF(!m_dependencyVisibilityDelay.has_value() && !m_minRemoteLinkDelay.has_value(),
                     "traffic.csv contains task dependencies but no dependency visibility delay is "
-                    "available. Pass --dependency-visibility-delay=<Time> or add remote link.");
+                    "available. Configure a positive UB link delay or pass "
+                    "--dependency-visibility-delay=<Time>.");
     NS_ABORT_MSG_IF(requireStrictlyPositive && !ResolveCompletionVisibleDelayLocked().IsStrictlyPositive(),
                     "parallel traffic.csv dependencies require a positive dependency visibility delay.");
 }

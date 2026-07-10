@@ -8861,6 +8861,42 @@ class UbInboundTpChannelKeyValidationTest : public TestCase
         ExpectMismatchAbort(Mismatch::PRIORITY, "Mismatched priority");
     }
 };
+
+class UbUnknownInboundTpnFailsWithAutoRemoveTest : public TestCase
+{
+  public:
+    UbUnknownInboundTpnFailsWithAutoRemoveTest()
+        : TestCase("UnifiedBus - auto-remove mode does not hide an unknown inbound TPN")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        const int status = RunInChildProcess([]() {
+            LocalTpTopology topo = BuildLocalTpTopology();
+            Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+            receiverCtrl->GetTpConnManager()->SetAttribute("RemoveUselessTp",
+                                                           BooleanValue(true));
+
+            Ptr<Packet> packet = BuildInboundTpPacket(
+                topo,
+                1234,
+                9090,
+                NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
+                NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+                kUrmaWriteRegressionPriority);
+            topo.receiver->GetObject<UbSwitch>()->SwitchHandlePacket(topo.receiverPort, packet);
+        });
+
+        NS_TEST_ASSERT_MSG_EQ(WIFSIGNALED(status),
+                              1,
+                              "Unknown inbound TPN should abort even in auto-remove mode");
+        NS_TEST_ASSERT_MSG_EQ(WTERMSIG(status),
+                              SIGABRT,
+                              "Unknown inbound TPN should fail with SIGABRT");
+    }
+};
 #endif
 
 class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
@@ -12205,6 +12241,7 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
     AddTestCase(new UbReservedReceiverTpnMaterializesLocallyTest(), TestCase::Duration::QUICK);
 #ifndef _WIN32
     AddTestCase(new UbInboundTpChannelKeyValidationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbUnknownInboundTpnFailsWithAutoRemoveTest(), TestCase::Duration::QUICK);
 #endif
     AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbRepeatedTpResolutionReusesReservationTest(), TestCase::Duration::QUICK);

@@ -168,6 +168,8 @@ public:
      */
     uint32_t GetTpn() const { return m_tpn; }
 
+    uint32_t GetDestTpn() const { return m_dstTpn; }
+
     /**
      * @brief Get size parameter
      * @return Size parameter

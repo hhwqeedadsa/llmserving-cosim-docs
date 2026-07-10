@@ -172,6 +172,16 @@ public:
      */
     Ptr<UbTransportChannel> CreateReservedTpEndpoint(uint32_t tpn);
 
+    /**
+     * @brief Resolve an inbound TP only when the packet matches its local channel key.
+     * @return The existing or newly materialized local endpoint, or nullptr on mismatch.
+     */
+    Ptr<UbTransportChannel> ResolveInboundTp(uint32_t srcTpn,
+                                             uint32_t dstTpn,
+                                             Ipv4Address sourceIp,
+                                             Ipv4Address destinationIp,
+                                             UbPriority priority);
+
     std::map<uint32_t, Ptr<UbTransportChannel>> GetTpnMap() const;
     uint32_t GetTransportCountForTest() const { return m_numToTp.size(); }
 
@@ -196,6 +206,8 @@ public:
         }
     }
 private:
+    Ptr<UbTransportChannel> CreateReservedTpEndpointLocked(uint32_t tpn);
+
     Ptr<UbFunction> m_function; // 功能层
     Ptr<UbTransaction> m_transaction; // 事务层
     Ptr<UbCtpTransportService> m_ctpTransportService;

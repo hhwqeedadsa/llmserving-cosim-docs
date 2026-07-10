@@ -102,6 +102,11 @@ bool UbController::CreateTp(uint32_t src, uint32_t dest, uint8_t sport,
 Ptr<UbTransportChannel> UbController::CreateReservedTpEndpoint(uint32_t tpn)
 {
     std::lock_guard<std::mutex> controlLock(TpConnectionManager::g_tpConnectionControlLock);
+    return CreateReservedTpEndpointLocked(tpn);
+}
+
+Ptr<UbTransportChannel> UbController::CreateReservedTpEndpointLocked(uint32_t tpn)
+{
     Ptr<UbTransportChannel> existingTp = GetTpByTpn(tpn);
     if (existingTp != nullptr) {
         return existingTp;
@@ -127,6 +132,47 @@ Ptr<UbTransportChannel> UbController::CreateReservedTpEndpoint(uint32_t tpn)
              conn.tpn2,
              congestionCtrl);
     return GetTpByTpn(tpn);
+}
+
+Ptr<UbTransportChannel>
+UbController::ResolveInboundTp(uint32_t srcTpn,
+                               uint32_t dstTpn,
+                               Ipv4Address sourceIp,
+                               Ipv4Address destinationIp,
+                               UbPriority priority)
+{
+    std::lock_guard<std::mutex> controlLock(TpConnectionManager::g_tpConnectionControlLock);
+    Ptr<UbTransportChannel> targetTp = GetTpByTpn(dstTpn);
+
+    uint32_t expectedSrcTpn;
+    Ipv4Address expectedSourceIp;
+    Ipv4Address expectedDestinationIp;
+    UbPriority expectedPriority;
+    if (targetTp != nullptr) {
+        expectedSrcTpn = targetTp->GetDestTpn();
+        expectedSourceIp = targetTp->GetDip();
+        expectedDestinationIp = targetTp->GetSip();
+        expectedPriority = static_cast<UbPriority>(targetTp->GetPriority());
+    } else {
+        Ptr<Node> currentNode = GetObject<Node>();
+        NS_ASSERT_MSG(currentNode != nullptr, "Inbound TP resolution requires an attached node");
+
+        Connection conn;
+        if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), dstTpn, conn)) {
+            return nullptr;
+        }
+        expectedSrcTpn = conn.tpn2;
+        expectedSourceIp = NodeIdToIp(conn.node2, conn.port2);
+        expectedDestinationIp = NodeIdToIp(conn.node1, conn.port1);
+        expectedPriority = static_cast<UbPriority>(conn.priority);
+    }
+
+    if (srcTpn != expectedSrcTpn || sourceIp != expectedSourceIp ||
+        destinationIp != expectedDestinationIp || priority != expectedPriority) {
+        return nullptr;
+    }
+
+    return targetTp != nullptr ? targetTp : CreateReservedTpEndpointLocked(dstTpn);
 }
 
 Ptr<UbTransportChannel> UbController::GetTp(uint32_t tpn)

@@ -679,19 +679,26 @@ bool UbSwitch::SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const Pars
                                                headers.datalinkPacketHeader.GetPacketVL()));
     }
 
+    const uint32_t srcTpn = headers.transportHeader.GetSrcTpn();
     uint32_t dstTpn = headers.transportHeader.GetDestTpn();
     Ptr<UbController> controller = GetObject<UbController>();
-    auto targetTp = controller->GetTpByTpn(dstTpn);
-    if (targetTp == nullptr) {
-        targetTp = controller->CreateReservedTpEndpoint(dstTpn);
-    }
+    auto targetTp = controller->ResolveInboundTp(srcTpn,
+                                                 dstTpn,
+                                                 headers.ipv4Header.GetSource(),
+                                                 headers.ipv4Header.GetDestination(),
+                                                 headers.datalinkPacketHeader.GetPacketVL());
     if (targetTp == nullptr) {
         if (controller->GetTpConnManager()->IsTpRemoveMode()) {
             NS_LOG_WARN("Auto remove tp mode, drop this packet.");
             return true;
         } else {
-            NS_ABORT_MSG("Received unreserved TP number. node="
-                         << GetObject<Node>()->GetId() << " dstTpn=" << dstTpn
+            NS_ABORT_MSG("Received unreserved or mismatched TP channel key. node="
+                         << GetObject<Node>()->GetId() << " srcTpn=" << srcTpn
+                         << " dstTpn=" << dstTpn
+                         << " sourceIp=" << headers.ipv4Header.GetSource()
+                         << " destinationIp=" << headers.ipv4Header.GetDestination()
+                         << " priority="
+                         << static_cast<uint32_t>(headers.datalinkPacketHeader.GetPacketVL())
                          << " packetUid=" << packet->GetUid());
         }
     }

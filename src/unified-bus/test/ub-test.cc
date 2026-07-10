@@ -472,6 +472,52 @@ BuildReceiverDataPacket(const LocalTpTopology& topo, uint32_t psn, bool lastPack
     return BuildReceiverDataPacketWithSequences(topo, psn, lastPacket, 0, 7);
 }
 
+Ptr<Packet>
+BuildInboundTpPacket(const LocalTpTopology& topo,
+                     uint32_t srcTpn,
+                     uint32_t dstTpn,
+                     Ipv4Address sourceIp,
+                     Ipv4Address destinationIp,
+                     uint8_t priority)
+{
+    Ptr<Packet> packet = Create<Packet>(16);
+    packet->AddPacketTag(UbFlowTag(kUrmaWriteRegressionTaskId, 16));
+
+    UbMAExtTah maHeader;
+    maHeader.SetLength(16);
+    packet->AddHeader(maHeader);
+
+    UbTransactionHeader transactionHeader;
+    transactionHeader.SetTaOpcode(TaOpcode::TA_OPCODE_WRITE);
+    transactionHeader.SetIniTaSsn(0);
+    transactionHeader.SetIniRcId(0);
+    packet->AddHeader(transactionHeader);
+
+    UbTransportHeader transportHeader;
+    transportHeader.SetTPOpcode(TpOpcode::TP_OPCODE_RELIABLE_TA);
+    transportHeader.SetSrcTpn(srcTpn);
+    transportHeader.SetDestTpn(dstTpn);
+    transportHeader.SetPsn(0);
+    transportHeader.SetTpMsn(0);
+    transportHeader.SetLastPacket(true);
+    packet->AddHeader(transportHeader);
+
+    UbPort::AddUdpHeader(packet, 0, topo.receiverPort->GetIfIndex());
+    UbPort::AddIpv4Header(packet, sourceIp, destinationIp);
+
+    UbIpBasedNetworkHeader networkHeader;
+    packet->AddHeader(networkHeader);
+    UbDataLink::GenPacketHeader(packet,
+                                false,
+                                false,
+                                priority,
+                                priority,
+                                false,
+                                true,
+                                UbDatalinkHeaderConfig::PACKET_IPV4);
+    return packet;
+}
+
 struct DecodedReceiverAck
 {
     UbTransportHeader tpHeader;
@@ -8708,6 +8754,115 @@ class UbReservedReceiverTpnMaterializesLocallyTest : public TestCase
     }
 };
 
+#ifndef _WIN32
+class UbInboundTpChannelKeyValidationTest : public TestCase
+{
+  public:
+    UbInboundTpChannelKeyValidationTest()
+        : TestCase("UnifiedBus - inbound RTP packet must match the reserved channel key")
+    {
+    }
+
+  private:
+    enum class Mismatch
+    {
+        NONE,
+        SOURCE_TPN,
+        PEER_NODE,
+        PEER_PORT,
+        LOCAL_PORT,
+        PRIORITY,
+    };
+
+    static void SendInboundPacket(Mismatch mismatch)
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(
+            true,
+            topo.sender->GetId(),
+            topo.receiver->GetId(),
+            kUrmaWriteRegressionPriority);
+
+        const auto senderTpns = senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.sender->GetId(),
+            topo.receiver->GetId(),
+            kUrmaWriteRegressionPriority);
+        const auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_ABORT_MSG_IF(senderTpns.size() != 1 || receiverTpns.size() != 1,
+                        "Expected one reserved TP pair");
+
+        uint32_t srcTpn = senderTpns[0].first;
+        const uint32_t dstTpn = receiverTpns[0].first;
+        Ipv4Address sourceIp =
+            NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex());
+        Ipv4Address destinationIp =
+            NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex());
+        uint8_t priority = kUrmaWriteRegressionPriority;
+
+        switch (mismatch)
+        {
+        case Mismatch::SOURCE_TPN:
+            ++srcTpn;
+            break;
+        case Mismatch::PEER_NODE:
+            sourceIp = NodeIdToIp(topo.switch0->GetId(), topo.senderPort->GetIfIndex());
+            break;
+        case Mismatch::PEER_PORT:
+            sourceIp = NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex() + 1);
+            break;
+        case Mismatch::LOCAL_PORT:
+            destinationIp =
+                NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex() + 1);
+            break;
+        case Mismatch::PRIORITY:
+            priority = static_cast<uint8_t>(kUrmaWriteRegressionPriority - 1);
+            break;
+        case Mismatch::NONE:
+            break;
+        }
+
+        Ptr<Packet> packet = BuildInboundTpPacket(topo,
+                                                  srcTpn,
+                                                  dstTpn,
+                                                  sourceIp,
+                                                  destinationIp,
+                                                  priority);
+        topo.receiver->GetObject<UbSwitch>()->SwitchHandlePacket(topo.receiverPort, packet);
+        NS_ABORT_MSG_IF(!receiverCtrl->IsTPExists(dstTpn),
+                        "Valid inbound packet did not materialize its receiver TP");
+    }
+
+    void ExpectMismatchAbort(Mismatch mismatch, const std::string& description)
+    {
+        const int status = RunInChildProcess([mismatch]() { SendInboundPacket(mismatch); });
+        NS_TEST_ASSERT_MSG_EQ(WIFSIGNALED(status), 1, description << " should abort");
+        NS_TEST_ASSERT_MSG_EQ(WTERMSIG(status),
+                              SIGABRT,
+                              description << " should fail with SIGABRT");
+    }
+
+    void DoRun() override
+    {
+        const int validStatus = RunInChildProcess([]() { SendInboundPacket(Mismatch::NONE); });
+        NS_TEST_ASSERT_MSG_EQ(WIFEXITED(validStatus), 1, "Matching channel key should not abort");
+        NS_TEST_ASSERT_MSG_EQ(WEXITSTATUS(validStatus),
+                              0,
+                              "Matching channel key should materialize the receiver TP");
+
+        ExpectMismatchAbort(Mismatch::SOURCE_TPN, "Mismatched source TPN");
+        ExpectMismatchAbort(Mismatch::PEER_NODE, "Mismatched peer node");
+        ExpectMismatchAbort(Mismatch::PEER_PORT, "Mismatched peer port");
+        ExpectMismatchAbort(Mismatch::LOCAL_PORT, "Mismatched local port");
+        ExpectMismatchAbort(Mismatch::PRIORITY, "Mismatched priority");
+    }
+};
+#endif
+
 class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
 {
   public:
@@ -12048,6 +12203,9 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
     AddTestCase(new UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbReservedReceiverTpnMaterializesLocallyTest(), TestCase::Duration::QUICK);
+#ifndef _WIN32
+    AddTestCase(new UbInboundTpChannelKeyValidationTest(), TestCase::Duration::QUICK);
+#endif
     AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbRepeatedTpResolutionReusesReservationTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbUnreservedReceiverTpnDoesNotMaterializeTest(), TestCase::Duration::QUICK);

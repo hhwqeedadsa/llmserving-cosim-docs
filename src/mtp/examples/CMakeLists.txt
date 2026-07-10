@@ -6,6 +6,13 @@ build_lib_example(
 )
 
 build_lib_example(
+  NAME mtp-past-event-validation
+  SOURCE_FILES mtp-past-event-validation.cc
+  LIBRARIES_TO_LINK
+    ${libmtp}
+)
+
+build_lib_example(
   NAME mtp-remote-event-ordering
   SOURCE_FILES mtp-remote-event-ordering.cc
   LIBRARIES_TO_LINK

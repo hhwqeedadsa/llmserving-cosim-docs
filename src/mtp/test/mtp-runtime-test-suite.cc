@@ -46,17 +46,19 @@ class MtpExpectedFailureSystemTestCase : public TestCase
   public:
     MtpExpectedFailureSystemTestCase(const std::string& name,
                                      const std::string& program,
-                                     const std::string& expectedDiagnostic)
+                                     const std::string& expectedDiagnostic,
+                                     const std::string& arguments = "")
         : TestCase(name),
           m_program(program),
-          m_expectedDiagnostic(expectedDiagnostic)
+          m_expectedDiagnostic(expectedDiagnostic),
+          m_arguments(arguments)
     {
     }
 
     void DoRun() override
     {
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
-        const auto [status, output] = RunMtpExample(testFile, m_program);
+        const auto [status, output] = RunMtpExample(testFile, m_program, m_arguments);
 
         NS_TEST_ASSERT_MSG_NE(status, 0, "invalid MTP runtime input must fail fast");
         NS_TEST_ASSERT_MSG_NE(output.find(m_expectedDiagnostic),
@@ -67,6 +69,7 @@ class MtpExpectedFailureSystemTestCase : public TestCase
   private:
     std::string m_program;
     std::string m_expectedDiagnostic;
+    std::string m_arguments;
 };
 
 class MtpManualPartitionValidSystemTestCase : public TestCase
@@ -113,6 +116,29 @@ class MtpRemoteEventOrderingSystemTestCase : public TestCase
     }
 };
 
+class MtpSameTimeAbsoluteEventSystemTestCase : public TestCase
+{
+  public:
+    MtpSameTimeAbsoluteEventSystemTestCase()
+        : TestCase("MTP - absolute-time delivery accepts the current LP time")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunMtpExample(testFile,
+                          "src/mtp/examples/mtp-past-event-validation",
+                          "--same-time");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "current-time absolute event must run: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("event-time-ns=10"),
+                              std::string::npos,
+                              "absolute event must execute at 10ns: " << output);
+    }
+};
+
 class MtpManualPartitionValidationSystemTestSuite : public TestSuite
 {
   public:
@@ -141,4 +167,28 @@ class MtpRemoteEventOrderingSystemTestSuite : public TestSuite
 };
 
 MtpRemoteEventOrderingSystemTestSuite g_remoteEventOrdering;
+
+class MtpPastEventValidationSystemTestSuite : public TestSuite
+{
+  public:
+    MtpPastEventValidationSystemTestSuite()
+        : TestSuite("mtp-past-event-validation", Type::SYSTEM)
+    {
+        AddTestCase(new MtpSameTimeAbsoluteEventSystemTestCase(), TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - absolute-time delivery rejects a past event",
+                        "src/mtp/examples/mtp-past-event-validation",
+                        "MTP cannot schedule an event in the past"),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - remote mailbox rejects an event from the past",
+                        "src/mtp/examples/mtp-past-event-validation",
+                        "MTP received a remote event from the past",
+                        "--remote-past"),
+                    TestCase::Duration::QUICK);
+    }
+};
+
+MtpPastEventValidationSystemTestSuite g_pastEventValidation;
+
 } // namespace

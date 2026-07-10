@@ -48,8 +48,9 @@ struct QuickExampleOptions
     uint32_t rngRun = 10;
     std::string configPath;
     std::string dependencyVisibilityDelay;
-    std::string taskStartJitterWindow = "off";
-    uint32_t taskStartJitterSeed = 1;
+    std::string initialTaskStartOffsetWindow = "0ps";
+    std::string linkDelayOffsetWindow = "0ps";
+    uint32_t timingOffsetSeed = 1;
     std::string canonicalOutputPath;
 };
 
@@ -363,6 +364,40 @@ std::string NormalizeCasePath(const std::string& path)
     return std::filesystem::absolute(std::filesystem::path(path)).lexically_normal().string();
 }
 
+std::string
+Lowercase(std::string value)
+{
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+    return value;
+}
+
+bool
+IsDisabledOffsetWindow(const std::string& value)
+{
+    const std::string normalized = Lowercase(value);
+    return normalized.empty() || normalized == "off" || normalized == "none" ||
+           normalized == "false" || normalized == "0";
+}
+
+Time
+ParseOffsetWindow(const std::string& value, const char* optionName)
+{
+    if (IsDisabledOffsetWindow(value))
+    {
+        return Time(0);
+    }
+
+    const Time window(value);
+    if (window.IsStrictlyNegative())
+    {
+        std::cerr << optionName << " must be non-negative" << std::endl;
+        std::exit(1);
+    }
+    return window;
+}
+
 void ValidateCasePathOrExit(const std::string& configPath)
 {
     static const std::array<const char*, 5> kRequiredCaseFiles = {"network_attribute.txt",
@@ -394,15 +429,40 @@ void ValidateCasePathOrExit(const std::string& configPath)
     }
 }
 
-void BuildScenarioFromConfig(const std::string& configPath)
+void
+BuildScenarioFromConfig(const QuickExampleOptions& options, const RuntimeSelection& runtime)
 {
+    const std::string& configPath = options.configPath;
+    const Time linkOffsetWindow =
+        ParseOffsetWindow(options.linkDelayOffsetWindow, "--link-delay-offset-window");
     UbUtils::Get()->SetComponentsAttribute(configPath + "/network_attribute.txt");
     UbUtils::Get()->CreateTraceDir();
     UbUtils::Get()->CreateNode(configPath + "/node.csv");
-    UbUtils::Get()->CreateTopo(configPath + "/topology.csv");
+    const auto offsetStats = UbUtils::Get()->CreateTopo(configPath + "/topology.csv",
+                                                        linkOffsetWindow,
+                                                        options.timingOffsetSeed);
     UbUtils::Get()->AddRoutingTable(configPath + "/routing_table.csv");
     UbUtils::Get()->CreateTp(configPath + "/transport_channel.csv");
     UbUtils::Get()->TopoTraceConnect();
+
+    const bool shouldPrint = !runtime.enableMpi || runtime.mpiRank == 0;
+    if (shouldPrint && linkOffsetWindow.IsStrictlyPositive())
+    {
+        std::cout << "[INFO] Link delay offset enabled: window=" << options.linkDelayOffsetWindow
+                  << ", seed=" << options.timingOffsetSeed
+                  << ", positive-links=" << offsetStats.positiveLinkCount
+                  << ", zero-delay-links-preserved=" << offsetStats.zeroDelayLinkCount
+                  << ", occupied-slots=" << offsetStats.occupiedSlotCount
+                  << ", collisions=" << offsetStats.slotCollisionCount
+                  << ", max-slot-occupancy=" << offsetStats.maxSlotOccupancy << "." << std::endl;
+    }
+    else if (shouldPrint && ModeUsesMtp(runtime.mode))
+    {
+        std::cout << "[INFO] Link delay offset is off (default). Enable the deterministic "
+                     "positive-link workaround with --link-delay-offset-window=<Time> and record "
+                     "--timing-offset-seed."
+                  << std::endl;
+    }
 }
 
 void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
@@ -473,35 +533,32 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
 }
 
 void
-ConfigureTaskStartJitter(const QuickExampleOptions& options, const RuntimeSelection& runtime)
+ConfigureInitialTaskStartOffset(const QuickExampleOptions& options,
+                                const RuntimeSelection& runtime)
 {
-    std::string window = options.taskStartJitterWindow;
-    std::transform(window.begin(), window.end(), window.begin(), [](unsigned char c) {
-        return static_cast<char>(std::tolower(c));
-    });
+    const Time offsetWindow = ParseOffsetWindow(options.initialTaskStartOffsetWindow,
+                                                "--initial-task-start-offset-window");
 
     const bool shouldPrint = !runtime.enableMpi || runtime.mpiRank == 0;
-    if (window.empty() || window == "off" || window == "none" || window == "false" ||
-        window == "0" || window == "0ps")
+    if (offsetWindow.IsZero())
     {
-        UbTrafficGen::Get()->SetTaskStartJitterWindow(Time(0), options.taskStartJitterSeed);
+        UbTrafficGen::Get()->SetInitialTaskStartOffsetWindow(Time(0), options.timingOffsetSeed);
         if (shouldPrint && ModeUsesMtp(runtime.mode))
         {
-            std::cout << "[INFO] Task start jitter is off (default). It only spreads multiple "
-                         "ready tasks from the same source. Enable it with "
-                         "--task-start-jitter-window=<Time> and record --task-start-jitter-seed."
+            std::cout << "[INFO] Initial task start offset is off (default). Enable it with "
+                         "--initial-task-start-offset-window=<Time> and record "
+                         "--timing-offset-seed."
                       << std::endl;
         }
         return;
     }
 
-    UbTrafficGen::Get()->SetTaskStartJitterWindow(Time(options.taskStartJitterWindow),
-                                                  options.taskStartJitterSeed);
+    UbTrafficGen::Get()->SetInitialTaskStartOffsetWindow(offsetWindow, options.timingOffsetSeed);
     if (shouldPrint)
     {
-        std::cout << "[INFO] Task start jitter enabled: window=" << options.taskStartJitterWindow
-                  << ", seed=" << options.taskStartJitterSeed << ", scope=same-source ready tasks."
-                  << std::endl;
+        std::cout << "[INFO] Initial task start offset enabled: window="
+                  << options.initialTaskStartOffsetWindow << ", seed=" << options.timingOffsetSeed
+                  << "." << std::endl;
     }
 }
 
@@ -637,14 +694,19 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.AddValue("dependency-visibility-delay",
                  "Delay before a completed traffic task becomes visible to dependent tasks",
                  options.dependencyVisibilityDelay);
-    cmd.AddValue("task-start-jitter-window",
-                 "Deterministically spread same-source traffic tasks that become ready together "
-                 "within this time window; use off to disable (default: off)",
-                 options.taskStartJitterWindow);
-    cmd.AddValue("task-start-jitter-seed",
-                 "Advanced: seed for deterministic task start jitter slot assignment "
-                 "(default: 1)",
-                 options.taskStartJitterSeed);
+    cmd.AddValue("initial-task-start-offset-window",
+                 "Add one deterministic per-source start offset to tasks with no phase "
+                 "dependencies within this half-open window; use 0ps or off to disable "
+                 "(default: 0ps)",
+                 options.initialTaskStartOffsetWindow);
+    cmd.AddValue("link-delay-offset-window",
+                 "Advanced workaround: add a deterministic per-link offset to positive topology "
+                 "delays within this half-open window; use 0ps or off to disable (default: 0ps)",
+                 options.linkDelayOffsetWindow);
+    cmd.AddValue("timing-offset-seed",
+                 "Advanced: shared seed for deterministic initial-task and link-delay offset "
+                 "assignment (default: 1)",
+                 options.timingOffsetSeed);
     cmd.AddValue("canonical-output",
                  "Write deterministic UbTrafficGen canonical events to this output basename",
                  options.canonicalOutputPath);
@@ -652,7 +714,6 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
                      "Required unified-bus case directory when --case-path is omitted",
                      positionalCasePath);
     cmd.Parse(argc, argv);
-
     if (!casePathArg.empty() && !positionalCasePath.empty() &&
         NormalizeCasePath(casePathArg) != NormalizeCasePath(positionalCasePath))
     {
@@ -772,11 +833,11 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
 
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
-    BuildScenarioFromConfig(options.configPath);
+    BuildScenarioFromConfig(options, runtime);
     ConfigureTrafficDependencyVisibility(options);
     ApplyDependencyVisibilityLookaheadBound(runtime);
     ConfigureCanonicalOutput(options, runtime);
-    ConfigureTaskStartJitter(options, runtime);
+    ConfigureInitialTaskStartOffset(options, runtime);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
     ActivateTrafficFromConfig(options.configPath,

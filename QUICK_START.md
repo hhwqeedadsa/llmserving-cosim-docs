@@ -103,17 +103,19 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
-MTP 是并行运行方式。同步集合通信 DAG 里，很多 task 可能在同一仿真时刻变为 ready；这时 single 和 MTP 的事件顺序不一定相同，输出可能不同。默认运行不会改动 task start 时间；如果同一 source 同批释放多个 ready task，可以显式打开 task start jitter：
+MTP 是并行运行方式。同步集合通信 DAG 里，很多 task 可能在同一仿真时刻变为 ready；即使初始 task wave 已打散，来自不同 LP 的事件也可能在后续 link 上再次同时汇合。single 和 MTP 对这些同时间戳事件不承诺复刻同一个全局 UID 顺序。初始 task start offset 和 link delay offset 都默认关闭，需要时可显式打开：
 
 MTP 会按稳定 sender key 排序跨 LP mailbox 事件，traffic task completion 也会按 taskId key 排序。任意并发提交到公共 LP 的其他同时间戳 callback 不承诺运行间顺序，也不保证复刻 single 的全局 UID 顺序。正式使用前应对目标 workload 比较 canonical 输出或业务指标，并预先定义可接受的偏差；不要从其他 case 外推统一阈值。
 
 ```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1'
 ```
 
-`--task-start-jitter-window` 是每个 source 独立使用的打散窗口，不是给每个 task 固定加同一个延迟。slot 从零偏移开始，只有一个 ready task 的 source 不会被平移，不同 source 仍可并发。如果同一批次中每个 source 都只有一个 ready task，这个开关不会改变任务时间，也不能给跨 source 的启动波排序。窗口和 seed 都属于实验参数；不同 seed 可能得到不同的完成时间。`scratch/mtp_task_jitter_demo` 是公开的小型回归用例：它在修复前的 `main` 上能复现漂移，当前修复后即使关闭 jitter 也已一致；打开 jitter 仍可观察不同 seed 对任务释放和完成时间的影响。
+`--initial-task-start-offset-window` 只修改原始 `dependOnPhases` 为空的初始 task。每个 source 使用一个由 seed 和 source node 决定的固定 offset，同一 source 的初始 task 共用该 offset，dependent task 不加 offset。窗口是半开区间 `[0, window)`；slot 碰撞时运行会报告 source 数、已占 slot、碰撞数和最大占用。
 
-MTP 启动时会提示 jitter 当前是否关闭；显式启用后会打印实际 window 和 seed，便于把运行参数和结果一起记录。
+`--link-delay-offset-window` 在 topology 创建时为每条正延迟物理 link 固定计算一次 `[0, window)` offset，identity 由规范化后的两端 node/port 和 seed 决定；它不是每包调用的运行时随机数。`0ns` link 保持不变，避免破坏 MTP 的零延迟邻居同 LP 约束。运行会打印正延迟 link 数、保留的零延迟 link 数、已占 slot、碰撞数和最大占用。亚纳秒窗口适合做去同步诊断，`8ps` 只是已验证示例，不是通用默认值。
+
+`--timing-offset-seed` 同时控制两种 offset；两者使用不同哈希域，不会共享同一 identity 空间。这两个窗口都会改变模型时间，属于 workaround。single/MTP 对比必须使用完全相同的两个 window 和 seed。多 seed 可以降低所选 offset ensemble 汇总指标的 Monte Carlo 不确定性，但不能消除 task-level 模型偏差，也不能恢复 offset 关闭时的轨迹；5 个 seed 只适合 pilot，正式统计建议使用 15--20 个独立 seed 并报告 mean、SD 和置信区间。
 
 说明：启用并行仿真通常还需要在仿真程序中调用 `MtpInterface::Enable(...)`（并用 `#ifdef NS3_MTP` 保护）。如果当前构建未启用 `--enable-mtp`，运行时传入 `--mtp-threads>=2` 会直接报错退出。更多用法与注意事项请参阅 [UNISON_README.md](UNISON_README.md)。
 
@@ -178,10 +180,10 @@ ls scratch/2nodes_single-tp/output/
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
   ```
 
-- MTP task start jitter 复现用例（8-host 合成集合通信）：
+- MTP timing offset 复现用例（8-host 合成集合通信）：
   ```bash
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns'
-  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1'
   ```
 
 说明：部分大型用例运行时间较长，可使用 `--mtp-threads=8` 启用多线程加速（需 `--enable-mtp` 编译）。

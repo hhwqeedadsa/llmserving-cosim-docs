@@ -14,6 +14,7 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <tuple>
 #include <utility>
@@ -28,7 +29,7 @@
 namespace
 {
 uint64_t
-MixTaskJitterHash(uint64_t value)
+MixTaskStartOffsetHash(uint64_t value)
 {
     value += 0x9e3779b97f4a7c15ULL;
     value = (value ^ (value >> 30)) * 0xbf58476d1ce4e5b9ULL;
@@ -135,6 +136,10 @@ UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexe
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
+    if (record.dependOnPhases.empty())
+    {
+        m_initialTaskIds.insert(taskId);
+    }
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
     }
@@ -185,6 +190,10 @@ UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIn
     {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
+    }
+    if (record.dependOnPhases.empty())
+    {
+        m_initialTaskIds.insert(taskId);
     }
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
@@ -790,12 +799,13 @@ UbTrafficGen::ObserveRemoteLinkDelay(Time delay)
 }
 
 void
-UbTrafficGen::SetTaskStartJitterWindow(Time window, uint32_t seed)
+UbTrafficGen::SetInitialTaskStartOffsetWindow(Time window, uint32_t seed)
 {
-    NS_ABORT_MSG_IF(window.IsStrictlyNegative(), "task start jitter window must be non-negative");
+    NS_ABORT_MSG_IF(window.IsStrictlyNegative(),
+                    "initial task start offset window must be non-negative");
     std::lock_guard<std::mutex> lock(m_mutex);
-    m_taskStartJitterWindow = window;
-    m_taskStartJitterSeed = seed;
+    m_initialTaskStartOffsetWindow = window;
+    m_initialTaskStartOffsetSeed = seed;
 }
 
 void
@@ -1140,89 +1150,73 @@ UbTrafficGen::ResolveCompletionVisibleDelayLocked() const
 }
 
 uint64_t
-UbTrafficGen::GetTaskStartJitterHash(const RuntimeTask& task, uint32_t seed) const
+UbTrafficGen::GetInitialTaskSourceOffsetHash(uint32_t sourceNode, uint32_t seed) const
 {
-    uint64_t hash = MixTaskJitterHash(seed);
-    hash = MixTaskJitterHash(hash ^ task.phaseId);
-    hash = MixTaskJitterHash(hash ^ task.sourceNode);
-    return MixTaskJitterHash(hash ^ task.taskId);
+    uint64_t hash =
+        MixTaskStartOffsetHash(static_cast<uint64_t>(seed) ^ 0x726f6f742d66726fULL);
+    return MixTaskStartOffsetHash(hash ^ sourceNode);
 }
 
 std::vector<Time>
-UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
+UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
 {
-    std::vector<Time> jitters(batch.tasks.size(), Time(0));
-    Time jitterWindow;
-    uint32_t jitterSeed;
+    std::vector<Time> offsets(batch.tasks.size(), Time(0));
+    Time offsetWindow;
+    uint32_t offsetSeed;
+    std::unordered_set<uint32_t> initialTaskIds;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
-        jitterWindow = m_taskStartJitterWindow;
-        jitterSeed = m_taskStartJitterSeed;
+        offsetWindow = m_initialTaskStartOffsetWindow;
+        offsetSeed = m_initialTaskStartOffsetSeed;
+        initialTaskIds = m_initialTaskIds;
     }
 
-    const int64_t maxSteps = jitterWindow.GetTimeStep();
-    if (maxSteps <= 0 || batch.tasks.size() <= 1)
+    const int64_t maxSteps = offsetWindow.GetTimeStep();
+    if (maxSteps <= 0)
     {
-        return jitters;
+        return offsets;
     }
 
-    struct UbTaskStartJitterCandidate
+    const auto slotCount = static_cast<uint64_t>(maxSteps);
+    std::unordered_map<uint32_t, uint64_t> sourceSlots;
+    for (const auto& task : batch.tasks)
     {
-        uint64_t hash{0};
-        uint32_t phaseId{0};
-        uint32_t sourceNode{0};
-        uint32_t taskId{0};
-        size_t index{0};
-    };
+        if (initialTaskIds.contains(task.taskId))
+        {
+            sourceSlots.try_emplace(task.sourceNode,
+                                    GetInitialTaskSourceOffsetHash(task.sourceNode, offsetSeed) %
+                                        slotCount);
+        }
+    }
 
-    std::vector<UbTaskStartJitterCandidate> candidates;
-    candidates.reserve(batch.tasks.size());
+    std::unordered_map<uint64_t, size_t> slotOccupancy;
+    size_t maxSlotOccupancy = 0;
+    for (const auto& [sourceNode, slot] : sourceSlots)
+    {
+        (void)sourceNode;
+        maxSlotOccupancy = std::max(maxSlotOccupancy, ++slotOccupancy[slot]);
+    }
+
     for (size_t index = 0; index < batch.tasks.size(); ++index)
     {
         const auto& task = batch.tasks[index];
-        candidates.push_back(UbTaskStartJitterCandidate{
-            GetTaskStartJitterHash(task, jitterSeed),
-            task.phaseId,
-            task.sourceNode,
-            task.taskId,
-            index,
-        });
-    }
-    std::sort(candidates.begin(), candidates.end(), [](const auto& lhs, const auto& rhs) {
-        return std::tie(lhs.sourceNode, lhs.hash, lhs.phaseId, lhs.taskId, lhs.index) <
-               std::tie(rhs.sourceNode, rhs.hash, rhs.phaseId, rhs.taskId, rhs.index);
-    });
-
-    const auto slotCount = static_cast<uint64_t>(maxSteps);
-    size_t maxSourceGroupSize = 0;
-    for (auto groupBegin = candidates.begin(); groupBegin != candidates.end();)
-    {
-        auto groupEnd =
-            std::find_if(groupBegin, candidates.end(), [groupBegin](const auto& candidate) {
-                return candidate.sourceNode != groupBegin->sourceNode;
-            });
-
-        const auto groupSize = static_cast<size_t>(std::distance(groupBegin, groupEnd));
-        maxSourceGroupSize = std::max(maxSourceGroupSize, groupSize);
-        uint64_t sourceSlot = 0;
-        for (auto candidate = groupBegin; candidate != groupEnd; ++candidate, ++sourceSlot)
+        if (initialTaskIds.contains(task.taskId))
         {
-            const auto jitterSteps = static_cast<int64_t>(sourceSlot % slotCount);
-            jitters[candidate->index] = TimeStep(jitterSteps);
+            offsets[index] = TimeStep(static_cast<int64_t>(sourceSlots.at(task.sourceNode)));
         }
-
-        groupBegin = groupEnd;
     }
 
-    if (maxSourceGroupSize > slotCount)
+    const size_t collisionCount = sourceSlots.size() - slotOccupancy.size();
+    if (collisionCount > 0)
     {
-        NS_LOG_WARN("task-start-jitter-window provides only "
-                    << slotCount << " unique time slots per traffic source for up to "
-                    << maxSourceGroupSize
-                    << " same-source ready tasks; some task starts may still share a timestamp");
+        std::cerr << "[WARNING] Initial task start offsets mapped " << sourceSlots.size()
+                  << " unique sources into " << slotCount
+                  << " slots: occupied-slots=" << slotOccupancy.size()
+                  << ", collisions=" << collisionCount
+                  << ", max-slot-occupancy=" << maxSlotOccupancy
+                  << "; some initial tasks still share a timestamp" << std::endl;
     }
-
-    return jitters;
+    return offsets;
 }
 
 void
@@ -1260,7 +1254,7 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
 
 void UbTrafficGen::ScheduleTasks(const ReadyTaskBatch& batch)
 {
-    const auto taskStartJitters = GetTaskStartJitters(batch);
+    const auto initialTaskStartOffsets = GetInitialTaskStartOffsets(batch);
     for (size_t index = 0; index < batch.tasks.size(); ++index) {
         const auto& task = batch.tasks[index];
         if (task.priority == 0) {
@@ -1274,7 +1268,7 @@ void UbTrafficGen::ScheduleTasks(const ReadyTaskBatch& batch)
         NS_ABORT_MSG_IF(app == nullptr, "No UbApp registered for traffic task source node "
                                             << task.sourceNode);
         Simulator::ScheduleWithContext(app->GetNode()->GetId(),
-                                       task.delay + taskStartJitters[index],
+                                       task.delay + initialTaskStartOffsets[index],
                                        &UbTrafficGen::StartTask,
                                        this,
                                        app,

@@ -1022,6 +1022,18 @@ class UbTrafficGenRuntimeTaskEntityFieldsTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(task.hasDstEntityId,
                               true,
                               "runtime task should preserve destination entity presence");
+        gen.AddTaskDuringInitialLoad(record);
+        NS_TEST_ASSERT_MSG_EQ(gen.m_initialTaskIds.contains(record.taskId),
+                              true,
+                              "an empty dependency field should record an initial task");
+
+        record.taskId = 10;
+        record.dependOnPhases = "3";
+        task = gen.ConvertToRuntimeTask(record);
+        gen.AddTaskDuringInitialLoad(record);
+        NS_TEST_ASSERT_MSG_EQ(gen.m_initialTaskIds.contains(record.taskId),
+                              false,
+                              "a non-empty dependency field should not record an initial task");
     }
 };
 
@@ -1640,11 +1652,11 @@ class UbTrafficGenReadyOrderTest : public TestCase
     }
 };
 
-class UbTrafficGenTaskStartJitterTest : public TestCase
+class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
 {
   public:
-    UbTrafficGenTaskStartJitterTest()
-        : TestCase("UnifiedBus - task start jitter is deterministic and source-local")
+    UbTrafficGenInitialTaskStartOffsetTest()
+        : TestCase("UnifiedBus - initial task start offsets are deterministic by source")
     {
     }
 
@@ -1659,58 +1671,136 @@ class UbTrafficGenTaskStartJitterTest : public TestCase
         };
 
         UbTrafficGen gen;
-        UbTrafficGen::ReadyTaskBatch differentSources;
-        differentSources.tasks = {makeTask(10, 2), makeTask(20, 7), makeTask(30, 11)};
+        UbTrafficGen::ReadyTaskBatch batch;
+        batch.tasks = {
+            makeTask(100, 2),
+            makeTask(101, 7),
+            makeTask(102, 11),
+            makeTask(103, 2),
+            makeTask(104, 13),
+        };
+        gen.m_initialTaskIds = {100, 101, 102, 103};
 
-        gen.SetTaskStartJitterWindow(Time(0), 1);
-        const auto disabled = gen.GetTaskStartJitters(differentSources);
-        for (const auto& jitter : disabled)
+        gen.SetInitialTaskStartOffsetWindow(Time(0), 1);
+        const auto disabled = gen.GetInitialTaskStartOffsets(batch);
+        for (const auto& offset : disabled)
         {
-            NS_TEST_ASSERT_MSG_EQ(jitter.GetTimeStep(),
-                                  0,
-                                  "disabled task start jitter should not change task time");
-        }
-
-        gen.SetTaskStartJitterWindow(NanoSeconds(8), 1);
-        const auto sourceLocal = gen.GetTaskStartJitters(differentSources);
-        for (const auto& jitter : sourceLocal)
-        {
-            NS_TEST_ASSERT_MSG_EQ(jitter.GetTimeStep(),
-                                  0,
-                                  "different sources should reuse the same jitter window");
+            NS_TEST_ASSERT_MSG_EQ(offset,
+                                  Time(0),
+                                  "disabled initial task offset should preserve task time");
         }
 
-        UbTrafficGen::ReadyTaskBatch sameSource;
-        for (uint32_t taskId = 0; taskId < 8; ++taskId)
-        {
-            sameSource.tasks.push_back(makeTask(taskId, 7));
-        }
-
-        const auto seedOne = gen.GetTaskStartJitters(sameSource);
-        std::vector<int64_t> seedOneSteps;
-        seedOneSteps.reserve(seedOne.size());
-        for (const auto& jitter : seedOne)
-        {
-            seedOneSteps.push_back(jitter.GetTimeStep());
-        }
-        std::sort(seedOneSteps.begin(), seedOneSteps.end());
-        for (size_t index = 0; index < seedOneSteps.size(); ++index)
-        {
-            NS_TEST_ASSERT_MSG_EQ(seedOneSteps[index],
-                                  static_cast<int64_t>(index),
-                                  "same-source tasks should use unique slots when the window fits");
-        }
-
-        gen.SetTaskStartJitterWindow(NanoSeconds(8), 2);
-        const auto seedTwo = gen.GetTaskStartJitters(sameSource);
-        bool seedChangesOrder = false;
-        for (size_t index = 0; index < seedOne.size(); ++index)
-        {
-            seedChangesOrder |= seedOne[index] != seedTwo[index];
-        }
-        NS_TEST_ASSERT_MSG_EQ(seedChangesOrder,
+        gen.SetInitialTaskStartOffsetWindow(NanoSeconds(32), 1);
+        const auto seedOne = gen.GetInitialTaskStartOffsets(batch);
+        const auto seedOneRepeat = gen.GetInitialTaskStartOffsets(batch);
+        NS_TEST_ASSERT_MSG_EQ((seedOne == seedOneRepeat),
                               true,
-                              "changing the jitter seed should change same-source task order");
+                              "initial task offsets should repeat exactly for the same seed");
+        NS_TEST_ASSERT_MSG_EQ(seedOne[0],
+                              seedOne[3],
+                              "initial tasks from one source should share one offset");
+        NS_TEST_ASSERT_MSG_EQ(seedOne[4],
+                              Time(0),
+                              "dependent tasks should not receive an initial task offset");
+        for (size_t index = 0; index < 4; ++index)
+        {
+            NS_TEST_ASSERT_MSG_EQ(seedOne[index].IsStrictlyNegative(),
+                                  false,
+                                  "initial task offsets should be non-negative");
+            NS_TEST_ASSERT_MSG_EQ((seedOne[index] < NanoSeconds(32)),
+                                  true,
+                                  "initial task offsets should stay inside the configured window");
+        }
+
+        gen.SetInitialTaskStartOffsetWindow(NanoSeconds(32), 2);
+        const auto seedTwo = gen.GetInitialTaskStartOffsets(batch);
+        bool seedChangesOffsets = false;
+        for (size_t index = 0; index < 4; ++index)
+        {
+            seedChangesOffsets |= seedOne[index] != seedTwo[index];
+        }
+        NS_TEST_ASSERT_MSG_EQ(seedChangesOffsets,
+                              true,
+                              "changing the seed should change at least one source offset");
+
+        UbTrafficGen::ReadyTaskBatch collidingTasks;
+        collidingTasks.tasks = {makeTask(200, 21), makeTask(201, 22)};
+        gen.m_initialTaskIds = {200, 201};
+        gen.SetInitialTaskStartOffsetWindow(TimeStep(1), 1);
+        std::ostringstream warning;
+        std::streambuf* previousStderr = std::cerr.rdbuf(warning.rdbuf());
+        (void)gen.GetInitialTaskStartOffsets(collidingTasks);
+        std::cerr.rdbuf(previousStderr);
+        NS_TEST_ASSERT_MSG_NE(warning.str().find("collisions=1"),
+                              std::string::npos,
+                              "initial task offset collisions should be visible in release builds");
+    }
+};
+
+class UbLinkDelayOffsetTest : public TestCase
+{
+  public:
+    UbLinkDelayOffsetTest()
+        : TestCase("UnifiedBus - link delay offsets are deterministic by stable endpoint identity")
+    {
+    }
+
+    void DoRun() override
+    {
+        const Time window = NanoSeconds(8);
+        const auto getDelay = [&](uint32_t seed,
+                                  uint32_t node1,
+                                  uint32_t port1,
+                                  uint32_t node2,
+                                  uint32_t port2,
+                                  Time baseDelay = NanoSeconds(20)) {
+            return utils::UbUtils::ResolveLinkDelayWithOffset(baseDelay,
+                                                              window,
+                                                              seed,
+                                                              node1,
+                                                              port1,
+                                                              node2,
+                                                              port2);
+        };
+
+        const Time forward = getDelay(1, 2, 3, 7, 5);
+        const Time reverse = getDelay(1, 7, 5, 2, 3);
+        NS_TEST_ASSERT_MSG_EQ(forward,
+                              reverse,
+                              "reversing one physical link should preserve its delay offset");
+        NS_TEST_ASSERT_MSG_EQ((forward >= NanoSeconds(20)),
+                              true,
+                              "link offset should never reduce the configured base delay");
+        NS_TEST_ASSERT_MSG_EQ((forward < NanoSeconds(28)),
+                              true,
+                              "link offset should stay inside the configured half-open window");
+        NS_TEST_ASSERT_MSG_EQ(getDelay(1, 2, 3, 7, 5),
+                              forward,
+                              "the same seed and link identity should repeat exactly");
+
+        const std::array<std::array<uint32_t, 4>, 4> links{{
+            {{2, 3, 7, 5}},
+            {{2, 4, 9, 1}},
+            {{11, 0, 20, 6}},
+            {{13, 7, 17, 2}},
+        }};
+        bool seedChangesOffset = false;
+        for (const auto& link : links)
+        {
+            seedChangesOffset |= getDelay(1, link[0], link[1], link[2], link[3]) !=
+                                 getDelay(2, link[0], link[1], link[2], link[3]);
+        }
+        NS_TEST_ASSERT_MSG_EQ(seedChangesOffset,
+                              true,
+                              "changing the seed should change at least one link offset");
+        NS_TEST_ASSERT_MSG_EQ(
+            utils::UbUtils::ResolveLinkDelayWithOffset(Time(0), window, 1, 2, 3, 7, 5),
+            Time(0),
+            "zero-delay links should retain the MTP co-location boundary");
+        NS_TEST_ASSERT_MSG_EQ(
+            utils::UbUtils::ResolveLinkDelayWithOffset(NanoSeconds(20), Time(0), 1, 2, 3, 7, 5),
+            NanoSeconds(20),
+            "a zero offset window should preserve the configured delay");
     }
 };
 
@@ -11990,10 +12080,16 @@ class UbTpReservationTestSuite : public TestSuite
     UbTpReservationTestSuite();
 };
 
-class UbTaskStartJitterTestSuite : public TestSuite
+class UbInitialTaskStartOffsetTestSuite : public TestSuite
 {
   public:
-    UbTaskStartJitterTestSuite();
+    UbInitialTaskStartOffsetTestSuite();
+};
+
+class UbLinkDelayOffsetTestSuite : public TestSuite
+{
+  public:
+    UbLinkDelayOffsetTestSuite();
 };
 
 UbTestSuite::UbTestSuite()
@@ -12257,13 +12353,21 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
 
 static UbTpReservationTestSuite g_ubTpReservationTestSuite;
 
-UbTaskStartJitterTestSuite::UbTaskStartJitterTestSuite()
-    : TestSuite("unified-bus-task-start-jitter", Type::UNIT)
+UbInitialTaskStartOffsetTestSuite::UbInitialTaskStartOffsetTestSuite()
+    : TestSuite("unified-bus-initial-task-start-offset", Type::UNIT)
 {
-    AddTestCase(new UbTrafficGenTaskStartJitterTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficGenInitialTaskStartOffsetTest(), TestCase::Duration::QUICK);
 }
 
-static UbTaskStartJitterTestSuite g_ubTaskStartJitterTestSuite;
+static UbInitialTaskStartOffsetTestSuite g_ubInitialTaskStartOffsetTestSuite;
+
+UbLinkDelayOffsetTestSuite::UbLinkDelayOffsetTestSuite()
+    : TestSuite("unified-bus-link-delay-offset", Type::UNIT)
+{
+    AddTestCase(new UbLinkDelayOffsetTest(), TestCase::Duration::QUICK);
+}
+
+static UbLinkDelayOffsetTestSuite g_ubLinkDelayOffsetTestSuite;
 
 UbWireFormatTestSuite::UbWireFormatTestSuite()
     : TestSuite("unified-bus-wire-format", Type::UNIT)
@@ -13262,6 +13366,18 @@ class UbQuickExampleHelpTextSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(output.find("Typical usage:"),
                               std::string::npos,
                               "help text should include quick-example usage guidance");
+        NS_TEST_ASSERT_MSG_NE(output.find("initial-task-start-offset-window"),
+                              std::string::npos,
+                              "help text should expose the initial task offset window");
+        NS_TEST_ASSERT_MSG_NE(output.find("link-delay-offset-window"),
+                              std::string::npos,
+                              "help text should expose the link delay offset window");
+        NS_TEST_ASSERT_MSG_NE(output.find("timing-offset-seed"),
+                              std::string::npos,
+                              "help text should expose the shared timing offset seed");
+        NS_TEST_ASSERT_MSG_EQ(output.find("task-start-jitter-scope"),
+                              std::string::npos,
+                              "help text should not expose the removed task offset mode");
         NS_TEST_ASSERT_MSG_EQ(output.find("traffic.csv / UbTrafficGen is single-process only"),
                               std::string::npos,
                               "help text should not advertise the removed MPI TrafficGen boundary");
@@ -14420,11 +14536,11 @@ class UbQuickExampleMpiSystemTest : public TestCase
 };
 #endif
 
-class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
+class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
 {
   public:
-    UbQuickExampleTaskJitterRegressionSystemTest()
-        : TestCase("UnifiedBus - task jitter regression is stable across single and MTP")
+    UbQuickExampleTimingOffsetRegressionSystemTest()
+        : TestCase("UnifiedBus - timing offset regression is stable across single and MTP")
     {
     }
 
@@ -14441,7 +14557,7 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
 
         const auto run = [&](const std::string& label, const std::string& args) {
             const std::filesystem::path canonicalBase =
-                CreateSafeTempBasename("ub-task-jitter-" + label);
+                CreateSafeTempBasename("ub-timing-offset-" + label);
             auto [status, output] =
                 RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-" + label + ".log"),
                                        args +
@@ -14453,24 +14569,32 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
             return RunResult{status, std::move(output), ReadCanonicalBytes(canonicalBase)};
         };
 
-        const RunResult noJitterSingle = run("no-jitter-single", "--mtp-threads=1");
-        const RunResult noJitterMtp = run("no-jitter-mtp", "--mtp-threads=4");
+        const RunResult noOffsetSingle = run("no-offset-single", "--mtp-threads=1");
+        const RunResult noOffsetMtp = run("no-offset-mtp", "--mtp-threads=4");
         const RunResult seedOneSingle = run("seed-1-single",
-                                            "--mtp-threads=1 --task-start-jitter-window=1ns "
-                                            "--task-start-jitter-seed=1");
+                                            "--mtp-threads=1 "
+                                            "--initial-task-start-offset-window=32ps "
+                                            "--link-delay-offset-window=8ps "
+                                            "--timing-offset-seed=1");
         const RunResult seedOneMtp = run("seed-1-mtp",
-                                         "--mtp-threads=4 --task-start-jitter-window=1ns "
-                                         "--task-start-jitter-seed=1");
+                                         "--mtp-threads=4 "
+                                         "--initial-task-start-offset-window=32ps "
+                                         "--link-delay-offset-window=8ps "
+                                         "--timing-offset-seed=1");
         const RunResult seedTwoSingle = run("seed-2-single",
-                                            "--mtp-threads=1 --task-start-jitter-window=1ns "
-                                            "--task-start-jitter-seed=2");
+                                            "--mtp-threads=1 "
+                                            "--initial-task-start-offset-window=32ps "
+                                            "--link-delay-offset-window=8ps "
+                                            "--timing-offset-seed=2");
         const RunResult seedTwoMtp = run("seed-2-mtp",
-                                         "--mtp-threads=4 --task-start-jitter-window=1ns "
-                                         "--task-start-jitter-seed=2");
+                                         "--mtp-threads=4 "
+                                         "--initial-task-start-offset-window=32ps "
+                                         "--link-delay-offset-window=8ps "
+                                         "--timing-offset-seed=2");
 
         const std::array<std::pair<const char*, const RunResult*>, 6> results{{
-            {"no-jitter single", &noJitterSingle},
-            {"no-jitter MTP", &noJitterMtp},
+            {"no-offset single", &noOffsetSingle},
+            {"no-offset MTP", &noOffsetMtp},
             {"seed 1 single", &seedOneSingle},
             {"seed 1 MTP", &seedOneMtp},
             {"seed 2 single", &seedTwoSingle},
@@ -14484,12 +14608,12 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
                                   label << " run should report PASSED");
         }
 
-        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(noJitterSingle.canonical),
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(noOffsetSingle.canonical),
                               48u,
                               "regression output should contain two events for each task");
-        NS_TEST_ASSERT_MSG_EQ(noJitterSingle.canonical,
-                              noJitterMtp.canonical,
-                              "runtime fixes should stabilize the no-jitter regression case");
+        NS_TEST_ASSERT_MSG_EQ(noOffsetSingle.canonical,
+                              noOffsetMtp.canonical,
+                              "runtime fixes should stabilize the no-offset regression case");
         NS_TEST_ASSERT_MSG_EQ(seedOneSingle.canonical,
                               seedOneMtp.canonical,
                               "seed 1 should be stable across single and MTP");
@@ -14499,16 +14623,23 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(seedOneSingle.canonical,
                               seedTwoSingle.canonical,
                               "different seeds should produce different release schedules");
-        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Task start jitter is off (default)"),
-                              std::string::npos,
-                              "MTP should guide users when task jitter is disabled");
-        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Arbitrary simultaneous public callbacks"),
+        NS_TEST_ASSERT_MSG_NE(
+            noOffsetMtp.output.find("Initial task start offset is off (default)"),
+            std::string::npos,
+            "MTP should guide users when initial task offsets are disabled");
+        NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("Arbitrary simultaneous public callbacks"),
                               std::string::npos,
                               "MTP should report its public-callback ordering boundary");
         NS_TEST_ASSERT_MSG_NE(
-            seedOneMtp.output.find("Task start jitter enabled: window=1ns, seed=1"),
+            seedOneMtp.output.find(
+                "Initial task start offset enabled: window=32ps, seed=1"),
             std::string::npos,
-            "enabled jitter should report its window and seed");
+            "enabled initial task offset should report its window and shared seed");
+        NS_TEST_ASSERT_MSG_NE(
+            seedOneMtp.output.find(
+                "Link delay offset enabled: window=8ps, seed=1, positive-links="),
+            std::string::npos,
+            "enabled link delay offset should report its window and shared seed");
     }
 };
 
@@ -14561,7 +14692,8 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleTaskJitterRegressionSystemTest(), TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleTimingOffsetRegressionSystemTest(),
+                    TestCase::Duration::QUICK);
 #else
         AddTestCase(new UbQuickExampleMtpRequestedWithoutMtpSystemTest(),
                     TestCase::Duration::QUICK);

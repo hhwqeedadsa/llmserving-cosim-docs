@@ -107,30 +107,44 @@ For config-driven unified-bus MPI runs, keep the following rules explicit:
 - `topology.csv` may connect endpoints on different MPI ranks. Local vs. remote channel selection is decided by the builder from endpoint placement; config files do not choose link type directly.
 - `transport_channel.csv` describes TP connectivity metadata between endpoints. It is not an instruction to create remote-side TP objects on the current rank.
 
-### Traffic task start jitter for MTP comparisons
+### Deterministic de-synchronization for MTP comparisons
 
 Config-driven UB traffic can expose same-timestamp ordering differences when many tasks become ready together. This is common in synchronized collective DAGs: a root wave starts at the same model time, and early packet or completion events can differ between single-thread and MTP runs.
 
 MTP sorts cross-LP mailbox events by stable sender keys and traffic task completions by taskId. Other same-time callbacks submitted concurrently to the public LP have no run-to-run ordering guarantee, and MTP does not provide sequential global-UID equivalence. Validate canonical output or domain metrics for each workload and define its acceptance criteria before relying on MTP results. There is no universal tolerance implied by the public regression below.
 
-`ub-quick-example` leaves task starts unchanged by default. When one source releases multiple ready tasks together, use:
+`ub-quick-example` leaves task starts and topology delays unchanged by default. It exposes two opt-in offset windows and one shared seed:
 
 ```bash
---task-start-jitter-window=<Time> --task-start-jitter-seed=<uint32>
+--initial-task-start-offset-window=<Time> \
+--link-delay-offset-window=<Time> \
+--timing-offset-seed=<uint32>
 ```
 
-`off` disables the feature. A time value enables a deterministic spread window. Slot assignment is stable across single-thread and MTP runs. Each source independently reuses the full window, and that source's ready tasks are ordered by seed and task identity from zero offset. A source with one ready task is unchanged. Tasks from different sources may keep the same timestamp and remain concurrent.
+`0ps` or `off` disables either window. A positive time value enables deterministic slots in the half-open interval `[0, window)`. Slot assignment is stable across single-thread and MTP runs and does not depend on runtime callback order.
 
-If every source contributes at most one task to a ready batch, jitter is a no-op. It does not order that cross-source release wave.
+`--initial-task-start-offset-window` affects only initial tasks whose original `dependOnPhases` field is empty. All initial tasks from one source receive one offset derived from the shared seed and source node; dependent tasks receive zero offset. Sources may hash to the same slot. The run reports the number of unique sources, occupied slots, collisions, and maximum slot occupancy when collisions occur.
 
-The window is not a fixed delay applied to every task. It is a per-source tie-break window. In `ub-quick-example`, time resolution is ps, so `1ns` gives each source `1000` time slots. To avoid same-source collisions, the window needs at least as many slots as the largest same-source ready batch. Different sources intentionally reuse slots. Some networks may still need a larger window because packet-level events can meet again at the same timestamp after serialization or switch allocation.
+`--link-delay-offset-window` computes one static offset for each positive-delay physical link while `topology.csv` is loaded. The shared seed and canonicalized pair of endpoint node/port identities determine the offset, so every packet on the same bidirectional link sees the same adjusted propagation delay. This is intentionally not a per-packet RNG. Original `0ns` links remain zero to preserve the MTP rule that zero-delay neighbors share one LP. The run reports positive links, preserved zero-delay links, occupied slots, collisions, and maximum occupancy. The task and link mechanisms use different hash domains.
 
-Treat the window and seed as experiment parameters. Different seeds can produce different valid trajectories. The small public case `scratch/mtp_task_jitter_demo` is generated with `scratch/ns-3-ub-tools`; run it with `--dependency-visibility-delay=10ns` because the case has phase dependencies. In the validation for this change:
+In `ub-quick-example`, time resolution is ps. A defensive phase60 setting that has been exercised is:
 
-- the `origin/main` baseline differs between no-jitter single and MTP 4-thread runs
-- the final branch is byte-identical for no-jitter single vs MTP because the runtime ordering and LP ownership defects are fixed
-- with a `1ns` window, seed 1 and seed 2 are each byte-identical between single and MTP
-- seed 1 vs seed 2 differs in 20 of 48 canonical lines, so the seed still changes the simulated release schedule
+```bash
+--initial-task-start-offset-window=32ps \
+--link-delay-offset-window=8ps \
+--timing-offset-seed=1
+```
+
+These values are not universal. The initial-task-only ablation was already sufficient to make the observed phase60 single/MTP4 evidence byte-identical. The link offset remains useful as a second defensive layer against later cross-LP timestamp reconvergence, not as proof of a separate root cause.
+
+Treat both windows and the shared seed as experiment parameters. Different seeds are different valid simulated trajectories. Paired single/MTP comparisons must use identical settings. Multiple seeds reduce Monte Carlo uncertainty for aggregate metrics under this offset ensemble, but they do not remove per-task model bias or recover the offset-disabled trajectory. Five seeds are a pilot; formal reporting should normally use 15--20 independent seeds with mean, SD, and confidence intervals.
+
+The small public case `scratch/mtp_task_jitter_demo` is generated with `scratch/ns-3-ub-tools`; run it with `--dependency-visibility-delay=10ns` because the case has phase dependencies. In the validation for this change:
+
+- the `origin/main` baseline differs between offset-disabled single and MTP 4-thread runs
+- the final branch is byte-identical with offsets disabled because the runtime ordering and LP ownership defects are fixed
+- with initial-task `32ps` and positive-link `8ps`, seed 1 and seed 2 are each byte-identical between single and MTP
+- seed 1 and seed 2 produce different canonical hashes, so the seed changes the simulated trajectory
 
 ## Running Evaluations
 

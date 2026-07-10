@@ -2,24 +2,27 @@
 #ifndef UB_TRAFFIC_GEN_H
 #define UB_TRAFFIC_GEN_H
 
-#include <vector>
-#include <unordered_map>
-#include <set>
-#include <mutex>
-#include <cstdint>
-#include <optional>
-#include <string>
-#include <string_view>
+#include "ub-network-address.h"
+#include "ub-tp-connection-manager.h"
+
 #include "ns3/application.h"
 #include "ns3/event-id.h"
+#include "ns3/ipv4-address.h"
 #include "ns3/nstime.h"
 #include "ns3/ptr.h"
-#include "ns3/ipv4-address.h"
-#include "ns3/ub-datatype.h"
 #include "ns3/ub-controller.h"
+#include "ns3/ub-datatype.h"
 #include "ns3/ub-ldst-api.h"
-#include "ub-tp-connection-manager.h"
-#include "ub-network-address.h"
+
+#include <cstdint>
+#include <mutex>
+#include <optional>
+#include <set>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 class UbTrafficGenPhaseDependencyMemoryTest;
 class UbTrafficGenSparseTaskIdFallbackTest;
@@ -30,7 +33,7 @@ class UbTrafficGenRecordViewDependencyTest;
 class UbTrafficGenReadyOrderTest;
 class UbTrafficGenIntegerDelayParserTest;
 class UbTrafficGenRuntimeTaskEntityFieldsTest;
-class UbTrafficGenTaskStartJitterTest;
+class UbTrafficGenInitialTaskStartOffsetTest;
 
 using namespace utils;
 namespace ns3 {
@@ -128,11 +131,11 @@ public:
     void ObserveRemoteLinkDelay(Time delay);
 
     /**
-     * @brief Configure deterministic source-local task start jitter.
-     * @param window Maximum source-local jitter window; zero disables jitter.
-     * @param seed Seed used to order ready tasks within each source.
+     * @brief Configure deterministic start offsets for tasks without phase dependencies.
+     * @param window Half-open offset window; zero disables offsets.
+     * @param seed Seed used for deterministic slot assignment.
      */
-    void SetTaskStartJitterWindow(Time window, uint32_t seed);
+    void SetInitialTaskStartOffsetWindow(Time window, uint32_t seed);
 
     void ApplyTaskCompletion(uint32_t taskId);
 
@@ -166,7 +169,7 @@ public:
     friend class ::UbTrafficGenReadyOrderTest;
     friend class ::UbTrafficGenIntegerDelayParserTest;
     friend class ::UbTrafficGenRuntimeTaskEntityFieldsTest;
-    friend class ::UbTrafficGenTaskStartJitterTest;
+    friend class ::UbTrafficGenInitialTaskStartOffsetTest;
 
     enum class TaskState {
         PENDING,
@@ -205,6 +208,7 @@ public:
     };
 
     std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
+    std::unordered_set<uint32_t> m_initialTaskIds{};
     bool m_useDenseTaskStore{true};
     std::vector<RuntimeTask> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
@@ -224,16 +228,16 @@ public:
     std::string m_canonicalOutputPath;
     uint32_t m_canonicalRank = 0;
     std::vector<CanonicalEvent> m_canonicalEvents;
-    Time m_taskStartJitterWindow{Time(0)};
-    uint32_t m_taskStartJitterSeed{1};
+    Time m_initialTaskStartOffsetWindow{Time(0)};
+    uint32_t m_initialTaskStartOffsetSeed{1};
 
     ReadyTaskBatch CollectReadyTaskBatchLocked();
 
     void ScheduleTasks(const ReadyTaskBatch& batch);
 
-    uint64_t GetTaskStartJitterHash(const RuntimeTask& task, uint32_t seed) const;
+    uint64_t GetInitialTaskSourceOffsetHash(uint32_t sourceNode, uint32_t seed) const;
 
-    std::vector<Time> GetTaskStartJitters(const ReadyTaskBatch& batch) const;
+    std::vector<Time> GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const;
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 

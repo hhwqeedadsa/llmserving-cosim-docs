@@ -71,7 +71,13 @@ public:
                                   uint32_t peerPort = UINT32_MAX,
                                   uint32_t priority = UINT32_MAX);
 
-    // Reserve connection records without materializing either TP endpoint.
+    /**
+     * @brief Reserve connection records without materializing either TP endpoint.
+     * @param useShortestPath Whether reserved paths must use shortest routes.
+     * @param localNodeId Local node identifier.
+     * @param peerNodeId Peer node identifier.
+     * @param priority Traffic priority associated with the reservation.
+     */
     void ReserveTpnsForTraffic(bool useShortestPath,
                                uint32_t localNodeId,
                                uint32_t peerNodeId,
@@ -130,7 +136,13 @@ public:
     // 获取与该tp相关的conn，所有优先级
     Connection GetConnection(uint32_t tpn, uint32_t src, uint32_t dst);
 
-    // 查询本节点本地 TPN 对应的 reservation。返回的 Connection 按本节点视角排列。
+    /**
+     * @brief Find a reservation by the local node and local TPN.
+     * @param localNodeId Local node identifier.
+     * @param localTpn Locally assigned transport path number.
+     * @param connection Output connection arranged from the local node's perspective.
+     * @return True when a matching reservation exists.
+     */
     bool TryGetLocalConnection(uint32_t localNodeId, uint32_t localTpn, Connection& connection) const;
 
     // 清空指定节点的连接

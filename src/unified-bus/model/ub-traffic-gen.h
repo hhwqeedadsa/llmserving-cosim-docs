@@ -127,6 +127,11 @@ public:
 
     void ObserveRemoteLinkDelay(Time delay);
 
+    /**
+     * @brief Configure deterministic source-local task start jitter.
+     * @param window Maximum source-local jitter window; zero disables jitter.
+     * @param seed Seed used to order ready tasks within each source.
+     */
     void SetTaskStartJitterWindow(Time window, uint32_t seed);
 
     void ApplyTaskCompletion(uint32_t taskId);

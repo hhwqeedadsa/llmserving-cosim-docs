@@ -1160,7 +1160,7 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
     if (maxSteps <= 0 || batch.tasks.size() <= 1) {
         return jitters;
     }
-    struct JitterCandidate
+    struct UbTaskStartJitterCandidate
     {
         uint64_t hash{0};
         uint32_t phaseId{0};
@@ -1169,11 +1169,11 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
         size_t index{0};
     };
 
-    std::vector<JitterCandidate> candidates;
+    std::vector<UbTaskStartJitterCandidate> candidates;
     candidates.reserve(batch.tasks.size());
     for (size_t index = 0; index < batch.tasks.size(); ++index) {
         const auto& task = batch.tasks[index];
-        candidates.push_back(JitterCandidate{
+        candidates.push_back(UbTaskStartJitterCandidate{
             GetTaskStartJitterHash(task, jitterSeed),
             task.phaseId,
             task.sourceNode,

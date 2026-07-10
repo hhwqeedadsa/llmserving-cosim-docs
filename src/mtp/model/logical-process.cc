@@ -308,15 +308,16 @@ LogicalProcess::Schedule(const Time& delay, EventImpl* event)
 void
 LogicalProcess::ScheduleAt(const uint32_t context, const Time& time, EventImpl* event)
 {
-    NS_ABORT_MSG_IF(time.GetTimeStep() < m_currentTs,
+    const int64_t targetTs = time.GetTimeStep();
+    NS_ABORT_MSG_IF(targetTs < 0 || static_cast<uint64_t>(targetTs) < m_currentTs,
                     "MTP cannot schedule an event in the past: targetLpId="
-                        << m_systemId << " context=" << context
-                        << " targetTs=" << time.GetTimeStep() << " currentTs=" << m_currentTs);
+                        << m_systemId << " context=" << context << " targetTs=" << targetTs
+                        << " currentTs=" << m_currentTs);
 
     Scheduler::Event ev;
 
     ev.impl = event;
-    ev.key.m_ts = time.GetTimeStep();
+    ev.key.m_ts = static_cast<uint64_t>(targetTs);
     ev.key.m_context = context;
     ev.key.m_uid = m_uid++;
     m_events->Insert(ev);

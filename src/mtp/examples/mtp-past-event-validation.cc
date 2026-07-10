@@ -61,6 +61,7 @@ main(int argc, char* argv[])
     bool testing = false;
     bool sameTime = false;
     bool remotePast = false;
+    bool negativeTime = false;
     CommandLine cmd(__FILE__);
     cmd.AddValue("test", "Print regression-test output", testing);
     cmd.AddValue("same-time",
@@ -69,9 +70,14 @@ main(int argc, char* argv[])
     cmd.AddValue("remote-past",
                  "Send a remote event behind the receiver LP's current time",
                  remotePast);
+    cmd.AddValue("negative-time",
+                 "Schedule the absolute-time event at a negative time",
+                 negativeTime);
     cmd.Parse(argc, argv);
 
     NS_ABORT_MSG_IF(sameTime && remotePast, "same-time and remote-past are mutually exclusive");
+    NS_ABORT_MSG_IF(negativeTime && (sameTime || remotePast),
+                    "negative-time is mutually exclusive with same-time and remote-past");
     if (remotePast)
     {
         MtpInterface::Enable(1, 2);
@@ -96,11 +102,12 @@ main(int argc, char* argv[])
         NodeContainer nodes;
         nodes.Create(1, 1);
 
-        Simulator::ScheduleWithContext(nodes.Get(0)->GetId(),
-                                       TimeStep(0),
-                                       &ScheduleLateDelivery,
-                                       nodes.Get(0)->GetId(),
-                                       sameTime ? NanoSeconds(10) : NanoSeconds(5));
+        Simulator::ScheduleWithContext(
+            nodes.Get(0)->GetId(),
+            TimeStep(0),
+            &ScheduleLateDelivery,
+            nodes.Get(0)->GetId(),
+            negativeTime ? Time(-1) : (sameTime ? NanoSeconds(10) : NanoSeconds(5)));
     }
     Simulator::Run();
 

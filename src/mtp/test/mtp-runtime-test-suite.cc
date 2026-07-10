@@ -214,6 +214,12 @@ class MtpPastEventValidationSystemTestSuite : public TestSuite
                         "MTP cannot schedule an event in the past"),
                     TestCase::Duration::QUICK);
         AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - absolute-time delivery rejects a negative event time",
+                        "src/mtp/examples/mtp-past-event-validation",
+                        "targetTs=-1",
+                        "--negative-time"),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
                         "MTP - remote mailbox rejects an event from the past",
                         "src/mtp/examples/mtp-past-event-validation",
                         "MTP received a remote event from the past",

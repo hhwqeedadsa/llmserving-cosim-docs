@@ -103,23 +103,7 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
-Synchronized collective DAGs can make many tasks ready at the same model timestamp. Events from different LPs can also reconverge at one timestamp after the initial task wave has been offset. Initial task start offsets and link delay offsets are both disabled by default and can be enabled explicitly for controlled comparisons:
-
-MTP sorts cross-LP mailbox events by stable sender keys and traffic task completions by taskId. Other same-time callbacks submitted concurrently to the public LP have no run-to-run ordering guarantee, and MTP does not reproduce the sequential scheduler's global UID order. Compare canonical output or domain metrics for the target workload and define acceptance criteria before using the result; do not infer one universal tolerance from another case.
-
-```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1'
-```
-
-`--initial-task-start-offset-window` affects only initial tasks whose original `dependOnPhases` field is empty. Each source receives one fixed offset derived from the seed and source node; initial tasks from that source share it, while dependent tasks receive no offset. The window is half-open `[0, window)`. The run reports source and slot counts when assignments collide.
-
-`--link-delay-offset-window` computes one fixed `[0, window)` offset for each positive-delay physical link when the topology is built. The normalized endpoint node/port identity and seed determine the offset; no packet-path runtime RNG is involved. `0ns` links remain unchanged so MTP's zero-delay-neighbor co-location boundary is preserved. The run reports positive and preserved zero-delay links, occupied slots, collisions, and maximum occupancy. Sub-nanosecond windows are intended for de-synchronization experiments; `8ps` is a validated example, not a universal default.
-
-`--timing-offset-seed` controls both offset mechanisms; separate hash domains keep their identities independent. Both windows perturb model time and are workarounds. Paired single/MTP runs must use identical windows and seeds. Multiple seeds reduce Monte Carlo uncertainty for aggregate statistics under the selected offset ensemble; they do not remove task-level model bias or recover the offset-disabled trajectory. Five seeds are a pilot. Formal statistics should normally use 15--20 independent seeds and report the mean, SD, and confidence interval.
-
-Note: Enabling parallel simulation usually also requires calling `MtpInterface::Enable(...)` in your simulation program (guarded by `#ifdef NS3_MTP`). See [UNISON_README.md](UNISON_README.md) for details.
-
-Tip: The recommended entry is `scratch/ub-quick-example`; if you additionally configure with `--enable-examples --filter-module-examples-and-tests=unified-bus`, `src/unified-bus/examples/ub-quick-example` is also available.
+See [UNISON_README.md](UNISON_README.md) for additional MTP usage, behavioral boundaries, and diagnostic options.
 
 ## Run a Minimal Example
 
@@ -176,12 +160,6 @@ The following are the available use case directories and corresponding run comma
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
   # Multi-threading recommended for large topologies
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
-  ```
-
-- MTP timing offset regression (8-host synthetic collective):
-  ```bash
-  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns'
-  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1'
   ```
 
 Note: Some large-scale use cases take a long time to run. Please use `--mtp-threads=8` to enable multi-threading (requires `--enable-mtp` compilation).

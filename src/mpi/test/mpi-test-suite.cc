@@ -22,8 +22,7 @@ namespace
 std::string
 GetPythonCommand()
 {
-    return std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12"
-                                                                    : "python3";
+    return std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
 }
 
 } // namespace
@@ -142,7 +141,8 @@ class MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestCase : public TestC
     {
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
-        const std::string command = GetPythonCommand() +
+        const std::string command =
+            GetPythonCommand() +
             " ./ns3 run src/unified-bus/examples/ub-mtp-remote-tp-regression --no-build "
             "--command-template=\"mpiexec -n 2 %s --test --mode=interceptor\" > " +
             testFile + " 2>&1";
@@ -188,7 +188,8 @@ class MpiUbQuickExampleRunTestCase : public TestCase
     {
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
-        const std::string command = GetPythonCommand() +
+        const std::string command =
+            GetPythonCommand() +
             " ./ns3 run src/unified-bus/examples/ub-quick-example --no-build "
             "--command-template=\"mpiexec -n 2 %s --test " +
             m_args + "\" > " + testFile + " 2>&1";
@@ -300,10 +301,10 @@ class HybridZeroDelayLinkSystemTestCase : public TestCase
                                 "--link-delay=0ns");
 
         NS_TEST_ASSERT_MSG_NE(status, 0, "cross-rank zero-delay link must fail fast");
-        NS_TEST_ASSERT_MSG_NE(output.find("MTP lookahead is not positive"),
-                              std::string::npos,
-                              "failure must report the non-positive lookahead invariant: "
-                                  << output);
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("MTP lookahead is not positive"),
+            std::string::npos,
+            "failure must report the non-positive lookahead invariant: " << output);
     }
 };
 

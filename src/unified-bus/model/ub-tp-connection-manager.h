@@ -143,7 +143,9 @@ public:
      * @param connection Output connection arranged from the local node's perspective.
      * @return True when a matching reservation exists.
      */
-    bool TryGetLocalConnection(uint32_t localNodeId, uint32_t localTpn, Connection& connection) const;
+    bool TryGetLocalConnection(uint32_t localNodeId,
+                               uint32_t localTpn,
+                               Connection& connection) const;
 
     // 清空指定节点的连接
     void ClearNodeConnections(uint32_t nodeId);
@@ -161,30 +163,34 @@ public:
         return m_removeUselessTp;
     }
 private:
-    friend class ns3::UbController;
+  friend class ns3::UbController;
 
-    static std::mutex g_tpConnectionControlLock;
+  static std::mutex g_tpConnectionControlLock;
 
-    uint32_t ReserveNextTpnLocked();
+  uint32_t ReserveNextTpnLocked();
 
-    // 为指定节点建立各种索引
-    void BuildIndexesForNode(uint32_t localNodeId, Connection conn);
+  // 为指定节点建立各种索引
+  void BuildIndexesForNode(uint32_t localNodeId, Connection conn);
 
-    // 从索引中清理指定节点
-    void ClearNodeFromIndexes(uint32_t nodeId);
+  // 从索引中清理指定节点
+  void ClearNodeFromIndexes(uint32_t nodeId);
 
-    // Reserve new TP connection records and return their local TPN/metric pairs.
-    std::vector<std::pair<uint32_t, uint32_t>> ReserveNewTpConnections(
-        uint32_t src,
-        uint32_t dst,
-        uint32_t priority,
-        bool useShortestPath);
+  // Reserve new TP connection records and return their local TPN/metric pairs.
+  std::vector<std::pair<uint32_t, uint32_t>> ReserveNewTpConnections(uint32_t src,
+                                                                     uint32_t dst,
+                                                                     uint32_t priority,
+                                                                     bool useShortestPath);
 
-    // 重建tp对
-    std::vector<uint32_t> ReconstructTPs(std::vector<uint32_t> tpns, uint32_t src, uint32_t dst, uint32_t priority,
-        bool useShortestPath, bool useMultiPath);
+  // 重建tp对
+  std::vector<uint32_t> ReconstructTPs(std::vector<uint32_t> tpns,
+                                       uint32_t src,
+                                       uint32_t dst,
+                                       uint32_t priority,
+                                       bool useShortestPath,
+                                       bool useMultiPath);
 
-    uint32_t ReconstructTp(Connection conn);
+  uint32_t ReconstructTp(Connection conn);
+
 private:
     // 主存储：所有连接
     std::vector<Connection> m_allConnections;

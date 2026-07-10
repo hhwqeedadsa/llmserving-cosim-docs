@@ -68,8 +68,7 @@ main(int argc, char* argv[])
                                    21);
     Simulator::Run();
 
-    const bool passed =
-        !g_wrongLp && g_receivedValues == std::vector<uint32_t>{11, 12, 21, 22};
+    const bool passed = !g_wrongLp && g_receivedValues == std::vector<uint32_t>{11, 12, 21, 22};
     if (testing)
     {
         std::cout << "TEST : 0 : " << (passed ? "PASSED" : "FAILED") << " order=";

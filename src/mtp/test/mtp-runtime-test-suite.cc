@@ -25,9 +25,8 @@ RunMtpExample(const std::string& testFile,
     const std::string pythonCommand =
         std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
 
-    std::string command = "cd \"" + repoRoot.string() + "\" && " + pythonCommand +
-                          " ./ns3 run " + program +
-                          " --no-build --command-template=\"%s --test";
+    std::string command = "cd \"" + repoRoot.string() + "\" && " + pythonCommand + " ./ns3 run " +
+                          program + " --no-build --command-template=\"%s --test";
     if (!arguments.empty())
     {
         command += " " + arguments;
@@ -84,9 +83,7 @@ class MtpManualPartitionValidSystemTestCase : public TestCase
     {
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
         const auto [status, output] =
-            RunMtpExample(testFile,
-                          "src/mtp/examples/mtp-manual-partition-validation",
-                          "--valid");
+            RunMtpExample(testFile, "src/mtp/examples/mtp-manual-partition-validation", "--valid");
 
         NS_TEST_ASSERT_MSG_EQ(status, 0, "valid manual MTP partition must run: " << output);
         NS_TEST_ASSERT_MSG_NE(output.find("lp=1"),
@@ -155,9 +152,7 @@ class MtpSameTimeAbsoluteEventSystemTestCase : public TestCase
     {
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
         const auto [status, output] =
-            RunMtpExample(testFile,
-                          "src/mtp/examples/mtp-past-event-validation",
-                          "--same-time");
+            RunMtpExample(testFile, "src/mtp/examples/mtp-past-event-validation", "--same-time");
 
         NS_TEST_ASSERT_MSG_EQ(status, 0, "current-time absolute event must run: " << output);
         NS_TEST_ASSERT_MSG_NE(output.find("event-time-ns=10"),

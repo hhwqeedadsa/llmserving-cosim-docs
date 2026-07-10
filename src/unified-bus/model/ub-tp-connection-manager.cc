@@ -114,11 +114,10 @@ std::vector<uint32_t> TpConnectionManager::GetTpns(GetTpnRuleT ruler,
         default:
             break;
     }
-    if (resWithMetrics.empty()) {
-        resWithMetrics = ReserveNewTpConnections(localNodeId,
-                                                 peerNodeId,
-                                                 priority,
-                                                 useShortestPath);
+    if (resWithMetrics.empty())
+    {
+        resWithMetrics =
+            ReserveNewTpConnections(localNodeId, peerNodeId, priority, useShortestPath);
     }
 
     for (auto p : resWithMetrics) {
@@ -132,12 +131,7 @@ std::vector<uint32_t> TpConnectionManager::GetTpns(GetTpnRuleT ruler,
         }
     }
     NS_ABORT_MSG_IF(tpns.empty(), "Could not reserve a TP connection for the requested traffic");
-    return ReconstructTPs(tpns,
-                          localNodeId,
-                          peerNodeId,
-                          priority,
-                          useShortestPath,
-                          useMultiPath);
+    return ReconstructTPs(tpns, localNodeId, peerNodeId, priority, useShortestPath, useMultiPath);
 }
 
 void
@@ -147,7 +141,8 @@ TpConnectionManager::ReserveTpnsForTraffic(bool useShortestPath,
                                            uint32_t priority)
 {
     std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
-    if (!GetTpnsByPeerNodePriority(localNodeId, peerNodeId, priority).empty()) {
+    if (!GetTpnsByPeerNodePriority(localNodeId, peerNodeId, priority).empty())
+    {
         return;
     }
     ReserveNewTpConnections(localNodeId, peerNodeId, priority, useShortestPath);
@@ -362,13 +357,15 @@ Connection TpConnectionManager::GetConnection(uint32_t tpn, uint32_t src, uint32
     return connection;
 }
 
-bool TpConnectionManager::TryGetLocalConnection(uint32_t localNodeId,
-                                                uint32_t localTpn,
-                                                Connection& connection) const
+bool
+TpConnectionManager::TryGetLocalConnection(uint32_t localNodeId,
+                                           uint32_t localTpn,
+                                           Connection& connection) const
 {
     std::lock_guard<std::mutex> lock(m_stateLock);
     auto it = m_localTpnIndex.find({localNodeId, localTpn});
-    if (it == m_localTpnIndex.end()) {
+    if (it == m_localTpnIndex.end())
+    {
         return false;
     }
     connection = it->second;
@@ -498,10 +495,14 @@ void TpConnectionManager::ClearNodeFromIndexes(uint32_t nodeId)
         }
     }
 
-    for (auto it = m_localTpnIndex.begin(); it != m_localTpnIndex.end();) {
-        if (it->first.first == nodeId) {
+    for (auto it = m_localTpnIndex.begin(); it != m_localTpnIndex.end();)
+    {
+        if (it->first.first == nodeId)
+        {
             it = m_localTpnIndex.erase(it);
-        } else {
+        }
+        else
+        {
             ++it;
         }
     }

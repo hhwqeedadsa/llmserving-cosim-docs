@@ -1,18 +1,20 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ub-traffic-gen.h"
-#include <algorithm>
-#include <limits>
-#include "ns3/log.h"
-#include "ns3/node-list.h"
-#include "ns3/simulator.h"
-#include "ns3/uinteger.h"
-#include "ns3/callback.h"
-#include "ns3/ub-datatype.h"
-#include "ns3/ub-function.h"
+
 #include "ub-app.h"
 #include "ub-utils.h"
 
+#include "ns3/callback.h"
+#include "ns3/log.h"
+#include "ns3/node-list.h"
+#include "ns3/simulator.h"
+#include "ns3/ub-datatype.h"
+#include "ns3/ub-function.h"
+#include "ns3/uinteger.h"
+
+#include <algorithm>
 #include <fstream>
+#include <limits>
 #include <tuple>
 #include <utility>
 
@@ -128,7 +130,8 @@ UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexe
 {
     uint32_t taskId = record.taskId;
     RuntimeTask task = ConvertToRuntimeTask(record);
-    if (!SetTaskLocked(task)) {
+    if (!SetTaskLocked(task))
+    {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
@@ -178,7 +181,8 @@ UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIn
 {
     const uint32_t taskId = record.taskId;
     RuntimeTask task = ConvertToRuntimeTask(record);
-    if (!SetTaskLocked(task)) {
+    if (!SetTaskLocked(task))
+    {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
@@ -1157,9 +1161,11 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
     }
 
     const int64_t maxSteps = jitterWindow.GetTimeStep();
-    if (maxSteps <= 0 || batch.tasks.size() <= 1) {
+    if (maxSteps <= 0 || batch.tasks.size() <= 1)
+    {
         return jitters;
     }
+
     struct UbTaskStartJitterCandidate
     {
         uint64_t hash{0};
@@ -1171,7 +1177,8 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
 
     std::vector<UbTaskStartJitterCandidate> candidates;
     candidates.reserve(batch.tasks.size());
-    for (size_t index = 0; index < batch.tasks.size(); ++index) {
+    for (size_t index = 0; index < batch.tasks.size(); ++index)
+    {
         const auto& task = batch.tasks[index];
         candidates.push_back(UbTaskStartJitterCandidate{
             GetTaskStartJitterHash(task, jitterSeed),
@@ -1188,15 +1195,18 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
 
     const auto slotCount = static_cast<uint64_t>(maxSteps);
     size_t maxSourceGroupSize = 0;
-    for (auto groupBegin = candidates.begin(); groupBegin != candidates.end();) {
-        auto groupEnd = std::find_if(groupBegin, candidates.end(), [groupBegin](const auto& candidate) {
-            return candidate.sourceNode != groupBegin->sourceNode;
-        });
+    for (auto groupBegin = candidates.begin(); groupBegin != candidates.end();)
+    {
+        auto groupEnd =
+            std::find_if(groupBegin, candidates.end(), [groupBegin](const auto& candidate) {
+                return candidate.sourceNode != groupBegin->sourceNode;
+            });
 
         const auto groupSize = static_cast<size_t>(std::distance(groupBegin, groupEnd));
         maxSourceGroupSize = std::max(maxSourceGroupSize, groupSize);
         uint64_t sourceSlot = 0;
-        for (auto candidate = groupBegin; candidate != groupEnd; ++candidate, ++sourceSlot) {
+        for (auto candidate = groupBegin; candidate != groupEnd; ++candidate, ++sourceSlot)
+        {
             const auto jitterSteps = static_cast<int64_t>(sourceSlot % slotCount);
             jitters[candidate->index] = TimeStep(jitterSteps);
         }
@@ -1204,7 +1214,8 @@ UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
         groupBegin = groupEnd;
     }
 
-    if (maxSourceGroupSize > slotCount) {
+    if (maxSourceGroupSize > slotCount)
+    {
         NS_LOG_WARN("task-start-jitter-window provides only "
                     << slotCount << " unique time slots per traffic source for up to "
                     << maxSourceGroupSize
@@ -1234,10 +1245,9 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
 
 #ifdef NS3_MTP
     if (MtpInterface::isPartitioned()) {
-        MtpInterface::ScheduleGlobalAtOrdered(
-            completionVisibleTs,
-            taskId,
-            [this, taskId]() { ApplyTaskCompletion(taskId); });
+        MtpInterface::ScheduleGlobalAtOrdered(completionVisibleTs, taskId, [this, taskId]() {
+            ApplyTaskCompletion(taskId);
+        });
         return;
     }
 #endif

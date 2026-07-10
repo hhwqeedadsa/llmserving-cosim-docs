@@ -64,8 +64,8 @@ main(int argc, char* argv[])
     const bool passed = g_firstLpId != 0 && g_firstLpId == g_secondLpId;
     if (testing)
     {
-        std::cout << "TEST : 0 : " << (passed ? "PASSED" : "FAILED")
-                  << " first-lp=" << g_firstLpId << " second-lp=" << g_secondLpId << std::endl;
+        std::cout << "TEST : 0 : " << (passed ? "PASSED" : "FAILED") << " first-lp=" << g_firstLpId
+                  << " second-lp=" << g_secondLpId << std::endl;
     }
 
     Simulator::Destroy();

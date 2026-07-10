@@ -123,8 +123,7 @@ main(int argc, char* argv[])
 
     Simulator::Run();
 
-    bool passed = !g_wrongLp && g_publicFollowupRan &&
-                  g_received.size() == kTotalBatchCount * 2;
+    bool passed = !g_wrongLp && g_publicFollowupRan && g_received.size() == kTotalBatchCount * 2;
     for (uint32_t batch = 0; passed && batch < kTotalBatchCount; ++batch)
     {
         passed &= g_received[batch * 2] == std::make_pair(batch, 1u);

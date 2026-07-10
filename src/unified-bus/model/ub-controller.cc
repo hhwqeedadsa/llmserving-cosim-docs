@@ -55,7 +55,8 @@ UbController::~UbController()
 Ptr<UbTransportChannel> UbController::GetTpByTpn(uint32_t tpn)
 {
     auto it = m_numToTp.find(tpn);
-    if (it == m_numToTp.end()) {
+    if (it == m_numToTp.end())
+    {
         return nullptr;
     }
     return it->second;
@@ -99,16 +100,19 @@ bool UbController::CreateTp(uint32_t src, uint32_t dest, uint8_t sport,
     return true;
 }
 
-Ptr<UbTransportChannel> UbController::CreateReservedTpEndpoint(uint32_t tpn)
+Ptr<UbTransportChannel>
+UbController::CreateReservedTpEndpoint(uint32_t tpn)
 {
     std::lock_guard<std::mutex> controlLock(TpConnectionManager::g_tpConnectionControlLock);
     return CreateReservedTpEndpointLocked(tpn);
 }
 
-Ptr<UbTransportChannel> UbController::CreateReservedTpEndpointLocked(uint32_t tpn)
+Ptr<UbTransportChannel>
+UbController::CreateReservedTpEndpointLocked(uint32_t tpn)
 {
     Ptr<UbTransportChannel> existingTp = GetTpByTpn(tpn);
-    if (existingTp != nullptr) {
+    if (existingTp != nullptr)
+    {
         return existingTp;
     }
 
@@ -118,7 +122,8 @@ Ptr<UbTransportChannel> UbController::CreateReservedTpEndpointLocked(uint32_t tp
     NS_ASSERT_MSG(m_tpnConn != nullptr, "Reserved TP endpoint requires TpConnectionManager");
 
     Connection conn;
-    if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), tpn, conn)) {
+    if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), tpn, conn))
+    {
         return nullptr;
     }
 
@@ -148,17 +153,21 @@ UbController::ResolveInboundTp(uint32_t srcTpn,
     Ipv4Address expectedSourceIp;
     Ipv4Address expectedDestinationIp;
     UbPriority expectedPriority;
-    if (targetTp != nullptr) {
+    if (targetTp != nullptr)
+    {
         expectedSrcTpn = targetTp->GetDestTpn();
         expectedSourceIp = targetTp->GetDip();
         expectedDestinationIp = targetTp->GetSip();
         expectedPriority = static_cast<UbPriority>(targetTp->GetPriority());
-    } else {
+    }
+    else
+    {
         Ptr<Node> currentNode = GetObject<Node>();
         NS_ASSERT_MSG(currentNode != nullptr, "Inbound TP resolution requires an attached node");
 
         Connection conn;
-        if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), dstTpn, conn)) {
+        if (!m_tpnConn->TryGetLocalConnection(currentNode->GetId(), dstTpn, conn))
+        {
             return nullptr;
         }
         expectedSrcTpn = conn.tpn2;
@@ -168,7 +177,8 @@ UbController::ResolveInboundTp(uint32_t srcTpn,
     }
 
     if (srcTpn != expectedSrcTpn || sourceIp != expectedSourceIp ||
-        destinationIp != expectedDestinationIp || priority != expectedPriority) {
+        destinationIp != expectedDestinationIp || priority != expectedPriority)
+    {
         return nullptr;
     }
 

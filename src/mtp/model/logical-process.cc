@@ -238,8 +238,7 @@ LogicalProcess::ReceiveMessages()
         NS_ABORT_MSG_IF(remoteEvent.targetTs < m_currentTs,
                         "MTP received a remote event from the past: targetSystemId="
                             << m_systemId << " senderSystemId=" << remoteEvent.senderSystemId
-                            << " targetTs=" << remoteEvent.targetTs
-                            << " currentTs=" << m_currentTs
+                            << " targetTs=" << remoteEvent.targetTs << " currentTs=" << m_currentTs
                             << " senderTs=" << remoteEvent.senderTs
                             << " lookAhead=" << m_lookAhead.GetTimeStep());
         Scheduler::Event& ev = remoteEvent.event;

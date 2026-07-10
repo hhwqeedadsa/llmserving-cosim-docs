@@ -472,7 +472,8 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
     }
 }
 
-void ConfigureTaskStartJitter(const QuickExampleOptions& options, const RuntimeSelection& runtime)
+void
+ConfigureTaskStartJitter(const QuickExampleOptions& options, const RuntimeSelection& runtime)
 {
     std::string window = options.taskStartJitterWindow;
     std::transform(window.begin(), window.end(), window.begin(), [](unsigned char c) {
@@ -498,9 +499,9 @@ void ConfigureTaskStartJitter(const QuickExampleOptions& options, const RuntimeS
                                                   options.taskStartJitterSeed);
     if (shouldPrint)
     {
-        std::cout << "[INFO] Task start jitter enabled: window="
-                  << options.taskStartJitterWindow << ", seed=" << options.taskStartJitterSeed
-                  << ", scope=same-source ready tasks." << std::endl;
+        std::cout << "[INFO] Task start jitter enabled: window=" << options.taskStartJitterWindow
+                  << ", seed=" << options.taskStartJitterSeed << ", scope=same-source ready tasks."
+                  << std::endl;
     }
 }
 

@@ -689,11 +689,9 @@ bool UbSwitch::SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const Pars
                                                  headers.datalinkPacketHeader.GetPacketVL());
     if (targetTp == nullptr) {
         NS_ABORT_MSG("Received unreserved or mismatched TP channel key. node="
-                     << GetObject<Node>()->GetId() << " srcTpn=" << srcTpn
-                     << " dstTpn=" << dstTpn
+                     << GetObject<Node>()->GetId() << " srcTpn=" << srcTpn << " dstTpn=" << dstTpn
                      << " sourceIp=" << headers.ipv4Header.GetSource()
-                     << " destinationIp=" << headers.ipv4Header.GetDestination()
-                     << " priority="
+                     << " destinationIp=" << headers.ipv4Header.GetDestination() << " priority="
                      << static_cast<uint32_t>(headers.datalinkPacketHeader.GetPacketVL())
                      << " packetUid=" << packet->GetUid());
     }

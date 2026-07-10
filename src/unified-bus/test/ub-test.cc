@@ -7,20 +7,19 @@
  * including basic object creation, configuration, and core features.
  */
 
+#include "ns3/config.h"
+#include "ns3/data-rate.h"
+#include "ns3/log.h"
+#include "ns3/node-container.h"
+#include "ns3/rng-seed-manager.h"
+#include "ns3/simulator.h"
 #include "ns3/test.h"
 #include "ns3/ub-app.h"
-#include "ns3/ub-ctp.h"
-#include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-caqm.h"
-#include "ns3/log.h"
-#include "ns3/simulator.h"
-#include "ns3/config.h"
-#include "ns3/rng-seed-manager.h"
-#include "ns3/node-container.h"
-#include "ns3/ub-utils.h"
-#include "ns3/ub-controller.h"
 #include "ns3/ub-congestion-control.h"
-#include "ns3/data-rate.h"
+#include "ns3/ub-controller.h"
+#include "ns3/ub-ctp.h"
+#include "ns3/ub-datalink.h"
 #include "ns3/ub-dcqcn.h"
 #include "ns3/ub-flow-control.h"
 #include "ns3/ub-function.h"
@@ -29,17 +28,18 @@
 #include "ns3/ub-port.h"
 #include "ns3/ub-queue-manager.h"
 #include "ns3/ub-routing-process.h"
-#include "ns3/ub-small-fifo-queue.h"
 #include "ns3/ub-sliding-bitmap-window.h"
-#include "ns3/ub-switch.h"
+#include "ns3/ub-small-fifo-queue.h"
 #include "ns3/ub-switch-allocator.h"
+#include "ns3/ub-switch.h"
 #include "ns3/ub-tag.h"
+#include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-transaction.h"
-#include "ns3/ub-datalink.h"
+#include "ns3/ub-utils.h"
 
 #include <algorithm>
-#include <atomic>
 #include <array>
+#include <atomic>
 #include <barrier>
 #include <chrono>
 #include <csignal>
@@ -8594,9 +8594,10 @@ class UbCreateTpUsesPerPortIpTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(tp->GetSip(),
                               NodeIdToIp(sender->GetId(), 0),
                               "Source IP should not collapse to the node-level/default port IP");
-        NS_TEST_ASSERT_MSG_NE(tp->GetDip(),
-                              NodeIdToIp(receiver->GetId(), 0),
-                              "Destination IP should not collapse to the node-level/default port IP");
+        NS_TEST_ASSERT_MSG_NE(
+            tp->GetDip(),
+            NodeIdToIp(receiver->GetId(), 0),
+            "Destination IP should not collapse to the node-level/default port IP");
         NS_TEST_ASSERT_MSG_EQ(tp->GetSport(),
                               static_cast<uint16_t>(senderPort),
                               "TP source port metadata should remain the UB port id");
@@ -8655,15 +8656,14 @@ class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestC
         Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
         Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
 
-        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(
-            true,
-            topo.sender->GetId(),
-            topo.receiver->GetId(),
-            kUrmaWriteRegressionPriority);
-        auto reservedSenderTpns = senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
-            topo.sender->GetId(),
-            topo.receiver->GetId(),
-            kUrmaWriteRegressionPriority);
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(true,
+                                                              topo.sender->GetId(),
+                                                              topo.receiver->GetId(),
+                                                              kUrmaWriteRegressionPriority);
+        auto reservedSenderTpns =
+            senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(topo.sender->GetId(),
+                                                                      topo.receiver->GetId(),
+                                                                      kUrmaWriteRegressionPriority);
         auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
             topo.receiver->GetId(),
             topo.sender->GetId(),
@@ -8690,7 +8690,9 @@ class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestC
                                                     UINT32_MAX,
                                                     UINT32_MAX,
                                                     kUrmaWriteRegressionPriority);
-        NS_TEST_ASSERT_MSG_EQ(senderTpns.size(), 1u, "Single-path reservation should pick one sender TPN");
+        NS_TEST_ASSERT_MSG_EQ(senderTpns.size(),
+                              1u,
+                              "Single-path reservation should pick one sender TPN");
         NS_TEST_ASSERT_MSG_EQ(senderCtrl->IsTPExists(senderTpns[0]),
                               true,
                               "Sender endpoint should be materialized by TP resolution");
@@ -8734,20 +8736,27 @@ class UbReservedReceiverTpnMaterializesLocallyTest : public TestCase
             topo.receiver->GetId(),
             topo.sender->GetId(),
             kUrmaWriteRegressionPriority);
-        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(), 1u, "Receiver should have one reserved local TPN");
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver should have one reserved local TPN");
         const uint32_t receiverTpn = receiverTpns[0].first;
 
         Ptr<UbTransportChannel> receiverTp = receiverCtrl->CreateReservedTpEndpoint(receiverTpn);
-        NS_TEST_ASSERT_MSG_NE(receiverTp, nullptr, "Reserved receiver TPN should create a local endpoint");
-        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpn),
-                              true,
-                              "Materialized reserved TPN should be visible in the receiver controller");
-        NS_TEST_ASSERT_MSG_EQ(receiverTp->GetSip(),
-                              NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
-                              "Receiver local endpoint source IP should encode the receiver UB port");
-        NS_TEST_ASSERT_MSG_EQ(receiverTp->GetDip(),
-                              NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
-                              "Receiver local endpoint destination IP should encode the sender UB port");
+        NS_TEST_ASSERT_MSG_NE(receiverTp,
+                              nullptr,
+                              "Reserved receiver TPN should create a local endpoint");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverCtrl->IsTPExists(receiverTpn),
+            true,
+            "Materialized reserved TPN should be visible in the receiver controller");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverTp->GetSip(),
+            NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+            "Receiver local endpoint source IP should encode the receiver UB port");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverTp->GetDip(),
+            NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
+            "Receiver local endpoint destination IP should encode the sender UB port");
 
         Simulator::Destroy();
         Config::Reset();
@@ -8779,16 +8788,15 @@ class UbInboundTpChannelKeyValidationTest : public TestCase
         LocalTpTopology topo = BuildLocalTpTopology();
         Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
         Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
-        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(
-            true,
-            topo.sender->GetId(),
-            topo.receiver->GetId(),
-            kUrmaWriteRegressionPriority);
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(true,
+                                                              topo.sender->GetId(),
+                                                              topo.receiver->GetId(),
+                                                              kUrmaWriteRegressionPriority);
 
-        const auto senderTpns = senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
-            topo.sender->GetId(),
-            topo.receiver->GetId(),
-            kUrmaWriteRegressionPriority);
+        const auto senderTpns =
+            senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(topo.sender->GetId(),
+                                                                      topo.receiver->GetId(),
+                                                                      kUrmaWriteRegressionPriority);
         const auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
             topo.receiver->GetId(),
             topo.sender->GetId(),
@@ -8798,8 +8806,7 @@ class UbInboundTpChannelKeyValidationTest : public TestCase
 
         uint32_t srcTpn = senderTpns[0].first;
         const uint32_t dstTpn = receiverTpns[0].first;
-        Ipv4Address sourceIp =
-            NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex());
+        Ipv4Address sourceIp = NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex());
         Ipv4Address destinationIp =
             NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex());
         uint8_t priority = kUrmaWriteRegressionPriority;
@@ -8816,8 +8823,7 @@ class UbInboundTpChannelKeyValidationTest : public TestCase
             sourceIp = NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex() + 1);
             break;
         case Mismatch::LOCAL_PORT:
-            destinationIp =
-                NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex() + 1);
+            destinationIp = NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex() + 1);
             break;
         case Mismatch::PRIORITY:
             priority = static_cast<uint8_t>(kUrmaWriteRegressionPriority - 1);
@@ -8826,12 +8832,8 @@ class UbInboundTpChannelKeyValidationTest : public TestCase
             break;
         }
 
-        Ptr<Packet> packet = BuildInboundTpPacket(topo,
-                                                  srcTpn,
-                                                  dstTpn,
-                                                  sourceIp,
-                                                  destinationIp,
-                                                  priority);
+        Ptr<Packet> packet =
+            BuildInboundTpPacket(topo, srcTpn, dstTpn, sourceIp, destinationIp, priority);
         topo.receiver->GetObject<UbSwitch>()->SwitchHandlePacket(topo.receiverPort, packet);
         NS_ABORT_MSG_IF(!receiverCtrl->IsTPExists(dstTpn),
                         "Valid inbound packet did not materialize its receiver TP");
@@ -8876,8 +8878,7 @@ class UbUnknownInboundTpnFailsWithAutoRemoveTest : public TestCase
         const int status = RunInChildProcess([]() {
             LocalTpTopology topo = BuildLocalTpTopology();
             Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
-            receiverCtrl->GetTpConnManager()->SetAttribute("RemoveUselessTp",
-                                                           BooleanValue(true));
+            receiverCtrl->GetTpConnManager()->SetAttribute("RemoveUselessTp", BooleanValue(true));
 
             Ptr<Packet> packet = BuildInboundTpPacket(
                 topo,
@@ -8925,7 +8926,9 @@ class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
             topo.receiver->GetId(),
             topo.sender->GetId(),
             kUrmaWriteRegressionPriority);
-        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(), 1u, "Receiver should have one reserved local TPN");
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver should have one reserved local TPN");
         const uint32_t receiverTpn = receiverTpns[0].first;
 
         constexpr std::size_t kConcurrentCallCount = 16;
@@ -8946,7 +8949,9 @@ class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
         }
 
         Ptr<UbTransportChannel> materialized = receiverCtrl->GetTpByTpn(receiverTpn);
-        NS_TEST_ASSERT_MSG_NE(materialized, nullptr, "Concurrent materialization should create the receiver TP");
+        NS_TEST_ASSERT_MSG_NE(materialized,
+                              nullptr,
+                              "Concurrent materialization should create the receiver TP");
         for (const auto& result : results)
         {
             NS_TEST_ASSERT_MSG_EQ(result,
@@ -8977,20 +8982,20 @@ class UbRepeatedTpResolutionReusesReservationTest : public TestCase
         Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
 
         auto resolveTpns = [&]() {
-            return senderCtrl->GetTpConnManager()->GetTpns(
-                utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
-                true,
-                false,
-                topo.sender->GetId(),
-                topo.receiver->GetId(),
-                UINT32_MAX,
-                UINT32_MAX,
-                kUrmaWriteRegressionPriority);
+            return senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                           true,
+                                                           false,
+                                                           topo.sender->GetId(),
+                                                           topo.receiver->GetId(),
+                                                           UINT32_MAX,
+                                                           UINT32_MAX,
+                                                           kUrmaWriteRegressionPriority);
         };
 
         std::vector<uint32_t> firstTpns = resolveTpns();
         const size_t senderConnectionCount = senderCtrl->GetTpConnManager()->GetConnectionCount();
-        const size_t receiverConnectionCount = receiverCtrl->GetTpConnManager()->GetConnectionCount();
+        const size_t receiverConnectionCount =
+            receiverCtrl->GetTpConnManager()->GetConnectionCount();
         const uint32_t senderTransportCount = senderCtrl->GetTransportCountForTest();
         const uint32_t receiverTransportCount = receiverCtrl->GetTransportCountForTest();
 
@@ -9000,9 +9005,10 @@ class UbRepeatedTpResolutionReusesReservationTest : public TestCase
                               secondTpns.size(),
                               "Repeated TP resolution should return the same number of TPNs");
         NS_TEST_ASSERT_MSG_EQ(firstTpns.empty(), false, "First TP resolution should return a TPN");
-        NS_TEST_ASSERT_MSG_EQ(firstTpns[0],
-                              secondTpns[0],
-                              "Repeated TP resolution for the same peer and priority should reuse TPNs");
+        NS_TEST_ASSERT_MSG_EQ(
+            firstTpns[0],
+            secondTpns[0],
+            "Repeated TP resolution for the same peer and priority should reuse TPNs");
         NS_TEST_ASSERT_MSG_EQ(senderCtrl->GetTpConnManager()->GetConnectionCount(),
                               senderConnectionCount,
                               "Repeated TP resolution should not add sender connection records");
@@ -12243,7 +12249,8 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
     AddTestCase(new UbInboundTpChannelKeyValidationTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbUnknownInboundTpnFailsWithAutoRemoveTest(), TestCase::Duration::QUICK);
 #endif
-    AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(),
+                TestCase::Duration::QUICK);
     AddTestCase(new UbRepeatedTpResolutionReusesReservationTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbUnreservedReceiverTpnDoesNotMaterializeTest(), TestCase::Duration::QUICK);
 }
@@ -14424,19 +14431,22 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
     void DoRun() override
     {
         SetDataDir(NS_TEST_SOURCEDIR);
+
         struct RunResult
         {
             int status{0};
             std::string output;
             std::string canonical;
         };
+
         const auto run = [&](const std::string& label, const std::string& args) {
             const std::filesystem::path canonicalBase =
                 CreateSafeTempBasename("ub-task-jitter-" + label);
             auto [status, output] =
                 RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-" + label + ".log"),
-                                       args + " --test --dependency-visibility-delay=10ns "
-                                              "--canonical-output=\"" +
+                                       args +
+                                           " --test --dependency-visibility-delay=10ns "
+                                           "--canonical-output=\"" +
                                            canonicalBase.string() + "\"",
                                        "",
                                        "scratch/mtp_task_jitter_demo");
@@ -14445,18 +14455,18 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
 
         const RunResult noJitterSingle = run("no-jitter-single", "--mtp-threads=1");
         const RunResult noJitterMtp = run("no-jitter-mtp", "--mtp-threads=4");
-        const RunResult seedOneSingle =
-            run("seed-1-single", "--mtp-threads=1 --task-start-jitter-window=1ns "
-                                 "--task-start-jitter-seed=1");
-        const RunResult seedOneMtp =
-            run("seed-1-mtp", "--mtp-threads=4 --task-start-jitter-window=1ns "
-                              "--task-start-jitter-seed=1");
-        const RunResult seedTwoSingle =
-            run("seed-2-single", "--mtp-threads=1 --task-start-jitter-window=1ns "
-                                 "--task-start-jitter-seed=2");
-        const RunResult seedTwoMtp =
-            run("seed-2-mtp", "--mtp-threads=4 --task-start-jitter-window=1ns "
-                              "--task-start-jitter-seed=2");
+        const RunResult seedOneSingle = run("seed-1-single",
+                                            "--mtp-threads=1 --task-start-jitter-window=1ns "
+                                            "--task-start-jitter-seed=1");
+        const RunResult seedOneMtp = run("seed-1-mtp",
+                                         "--mtp-threads=4 --task-start-jitter-window=1ns "
+                                         "--task-start-jitter-seed=1");
+        const RunResult seedTwoSingle = run("seed-2-single",
+                                            "--mtp-threads=1 --task-start-jitter-window=1ns "
+                                            "--task-start-jitter-seed=2");
+        const RunResult seedTwoMtp = run("seed-2-mtp",
+                                         "--mtp-threads=4 --task-start-jitter-window=1ns "
+                                         "--task-start-jitter-seed=2");
 
         const std::array<std::pair<const char*, const RunResult*>, 6> results{{
             {"no-jitter single", &noJitterSingle},
@@ -14495,9 +14505,10 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Arbitrary simultaneous public callbacks"),
                               std::string::npos,
                               "MTP should report its public-callback ordering boundary");
-        NS_TEST_ASSERT_MSG_NE(seedOneMtp.output.find("Task start jitter enabled: window=1ns, seed=1"),
-                              std::string::npos,
-                              "enabled jitter should report its window and seed");
+        NS_TEST_ASSERT_MSG_NE(
+            seedOneMtp.output.find("Task start jitter enabled: window=1ns, seed=1"),
+            std::string::npos,
+            "enabled jitter should report its window and seed");
     }
 };
 
@@ -14511,8 +14522,7 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMissingCaseDirSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMissingCaseFileSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleHelpTextSystemTest(), TestCase::Duration::QUICK);
-        AddTestCase(new UbQuickExampleRuntimeCatalogQuerySystemTest(),
-                    TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleRuntimeCatalogQuerySystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalSingleThreadSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickScratchLegacyAliasSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleSameCasePathSystemTest(), TestCase::Duration::QUICK);

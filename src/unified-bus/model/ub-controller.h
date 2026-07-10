@@ -206,31 +206,34 @@ public:
         }
     }
 private:
-    Ptr<UbTransportChannel> CreateReservedTpEndpointLocked(uint32_t tpn);
+  Ptr<UbTransportChannel> CreateReservedTpEndpointLocked(uint32_t tpn);
 
-    Ptr<UbFunction> m_function; // 功能层
-    Ptr<UbTransaction> m_transaction; // 事务层
-    Ptr<UbCtpTransportService> m_ctpTransportService;
-    CtpPacketTimingCallback m_ctpFirstPacketSendsCallback;
-    CtpPacketTimingCallback m_ctpLastPacketAcksCallback;
-    // Resource storage
-    std::map<uint32_t, Ptr<UbTransportChannel>> m_numToTp{};   // 协议规定TPH中的TP number，在生成TP时，赋值为m_transports_count
-    uint32_t m_transportsCount{0}; // increment only，用于标识tpn
-    std::map<TpgTag, Ptr<UbTransportGroup>> m_tpGroups{};
-    std::map<uint64_t, Ptr<UbPort>> m_ports{};
-    Ptr<UbDataLink> m_datalink = nullptr;
+  Ptr<UbFunction> m_function;       // 功能层
+  Ptr<UbTransaction> m_transaction; // 事务层
+  Ptr<UbCtpTransportService> m_ctpTransportService;
+  CtpPacketTimingCallback m_ctpFirstPacketSendsCallback;
+  CtpPacketTimingCallback m_ctpLastPacketAcksCallback;
+  // Resource storage
+  std::map<uint32_t, Ptr<UbTransportChannel>>
+      m_numToTp{}; // 协议规定TPH中的TP number，在生成TP时，赋值为m_transports_count
+  uint32_t m_transportsCount{0}; // increment only，用于标识tpn
+  std::map<TpgTag, Ptr<UbTransportGroup>> m_tpGroups{};
+  std::map<uint64_t, Ptr<UbPort>> m_ports{};
+  Ptr<UbDataLink> m_datalink = nullptr;
 
-    std::unordered_map<uint32_t, std::vector<Ptr<UbPort>>> m_destinationToPortsMap{};
-    std::unordered_map<uint32_t, std::vector<std::pair<uint8_t, uint8_t>>> m_destinationToPortPairMap{};
-    // src:0 dst:1
-    // ub-config 0->1: p0-p0 p1-p1
-    std::map<std::vector<std::pair<uint8_t, uint8_t>>, uint8_t> m_portPairsToIter{};
-    std::vector<std::vector<std::vector<uint32_t>>> m_dstPriToTp{}; // level_0 dst_node, level_1 priority, level_2 tpns
-    std::vector<std::vector<uint8_t>> m_dstPriToTpRrIndex{}; // level_0 dst_node, level_1 priority, level_2 iteration
+  std::unordered_map<uint32_t, std::vector<Ptr<UbPort>>> m_destinationToPortsMap{};
+  std::unordered_map<uint32_t, std::vector<std::pair<uint8_t, uint8_t>>>
+      m_destinationToPortPairMap{};
+  // src:0 dst:1
+  // ub-config 0->1: p0-p0 p1-p1
+  std::map<std::vector<std::pair<uint8_t, uint8_t>>, uint8_t> m_portPairsToIter{};
+  std::vector<std::vector<std::vector<uint32_t>>>
+      m_dstPriToTp{}; // level_0 dst_node, level_1 priority, level_2 tpns
+  std::vector<std::vector<uint8_t>>
+      m_dstPriToTpRrIndex{}; // level_0 dst_node, level_1 priority, level_2 iteration
 
-    Ptr<TpConnectionManager> m_tpnConn; // 当前节点维护的tpnConn
-    uint32_t m_activeSenderFlowCount{0};
-
+  Ptr<TpConnectionManager> m_tpnConn; // 当前节点维护的tpnConn
+  uint32_t m_activeSenderFlowCount{0};
 };
 
 } // namespace ns3

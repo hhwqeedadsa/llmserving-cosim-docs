@@ -172,7 +172,10 @@ public:
      * @brief Get the destination transport path number.
      * @return Destination TPN carried by this transport endpoint.
      */
-    uint32_t GetDestTpn() const { return m_dstTpn; }
+    uint32_t GetDestTpn() const
+    {
+        return m_dstTpn;
+    }
 
     /**
      * @brief Get size parameter

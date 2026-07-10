@@ -521,9 +521,22 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
 
     uint32_t localTaskCount = 0;
     std::vector<Ptr<UbApp>> sourceApps;
+    Ptr<UbApp> appDefaults = CreateObject<UbApp>();
+    const bool reserveRtpConnections = appDefaults->GetTransportMode() == TransportMode::RTP;
+    const bool useShortestPaths = appDefaults->GetUseShortestPaths();
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
     UbUtils::Get()->ForEachTrafficRecordView(trafficPath, [&](const TrafficRecordView& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
+        if (reserveRtpConnections &&
+            (record.opType == "URMA_WRITE" || record.opType == "URMA_READ"))
+        {
+            sourceNode->GetObject<UbController>()->GetTpConnManager()->ReserveTpnsForTraffic(
+                useShortestPaths,
+                record.sourceNode,
+                record.destNode,
+                record.priority);
+        }
+
         const bool localOwned =
             !activateLocalOwnedTasksOnly ||
             UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) == mpiRank;

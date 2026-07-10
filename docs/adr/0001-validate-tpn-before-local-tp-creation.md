@@ -25,7 +25,7 @@ RTP/URMA packets in ns-3-UB use the IP address format network header, not CNA he
 Keep TP reservation separate from TP object materialization:
 
 1. Keep explicit `transport_channel.csv` as a reservation input. Each row records the two local endpoint views of one TP channel. Loading this file may still preload local TP objects for owned endpoints.
-2. For traffic-driven automatic setup, continue to reserve TP channel records when the sender first resolves TP choices, but do not create the peer endpoint through a remote zero-delay simulator event.
+2. For traffic-driven automatic setup, every process reserves the same TP channel records while loading `traffic.csv`, before any task is scheduled. Reservation does not materialize either endpoint; the source owner creates its sender endpoint when the task resolves TP choices, and the receiver owner creates its endpoint locally on first valid packet arrival.
 3. When a receiver sees a packet for a missing local TPN, look up that TPN in its local TP connection manager. If the TPN is reserved for the local node, create only the local endpoint object in that node's controller and process the packet. If the TPN is not reserved, fail the simulation.
 4. Use the IP source and destination addresses carried by RTP/URMA packets as the network-address evidence for UB ports. Do not infer UB port identity from UDP source or destination ports.
 5. Keep automatic reservation bounded by unique channel records, not by every traffic row. Repeated traffic rows for the same peer and priority should reuse the same reserved channel records.
@@ -37,6 +37,7 @@ This avoids precreating every TP object, while also removing the MTP-unsafe remo
 - `UbController::CreateTp` uses `NodeIdToIp(node, port)` for RTP/URMA source and destination IP addresses.
 - Explicit `transport_channel.csv` loading preloads both endpoint TP objects when the endpoints are locally owned.
 - Traffic-driven TP resolution creates the sender endpoint and reserves the receiver endpoint, but does not materialize the receiver endpoint before packet arrival.
+- MPI and hybrid runs without `transport_channel.csv` establish identical receiver reservations on every rank before traffic starts.
 - A reserved receiver TPN can be materialized locally on the receiver and then becomes visible through `GetTpByTpn`.
 - An unreserved receiver TPN remains an error instead of falling back to local or remote TP creation.
 - Looking up a missing TPN does not mutate the controller's TPN map by inserting a null entry.

@@ -2136,7 +2136,8 @@ void UbUtils::CreateTp(const string &filename)
     ifstream file(filename);
     if (!file.is_open()) { // 没有TP文件则使用实时创建TP模式
         PrintTimestamp("[setup] Skip " + DisplayFilename(filename) +
-                       " (not found; TP channels will be created on demand).");
+                       " (not found; traffic will reserve TP connections before endpoints "
+                       "materialize on demand).");
         return ;
     }
     PrintTimestamp("[setup] Load " + DisplayFilename(filename));

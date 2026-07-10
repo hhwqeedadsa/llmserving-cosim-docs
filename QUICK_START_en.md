@@ -215,7 +215,7 @@ Each use case directory typically contains the following files (format can refer
 - `node.csv` - Node definitions
 - `topology.csv` - Topology connections
 - `routing_table.csv` - Routing table
-- `transport_channel.csv` - Transport channels
+- `transport_channel.csv` - Optional explicit RTP channels; omitted channels are reserved while traffic loads
 - `traffic.csv` - Traffic definitions
 
 For the `ub-quick-example` entry, configuration semantics, and commands, see [scratch/README.md](scratch/README.md).

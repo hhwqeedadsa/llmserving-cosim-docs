@@ -52,6 +52,16 @@ public:
     void SetLocalEntityId(uint32_t localEntityId);
     void SetPeerEntityId(uint32_t peerEntityId);
 
+    TransportMode GetTransportMode() const
+    {
+        return m_transportMode;
+    }
+
+    bool GetUseShortestPaths() const
+    {
+        return m_useShortestPaths;
+    }
+
     void SetGetTpnRule(GetTpnRuleT type)
     {
         m_getTpnRule = type;

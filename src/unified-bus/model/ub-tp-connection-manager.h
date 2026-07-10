@@ -71,6 +71,12 @@ public:
                                   uint32_t peerPort = UINT32_MAX,
                                   uint32_t priority = UINT32_MAX);
 
+    // Reserve connection records without materializing either TP endpoint.
+    void ReserveTpnsForTraffic(bool useShortestPath,
+                               uint32_t localNodeId,
+                               uint32_t peerNodeId,
+                               uint32_t priority);
+
     // 1. 获取节点相关的所有连接
     std::vector<Connection> GetNodeConnections(uint32_t nodeId) const;
 
@@ -155,15 +161,16 @@ private:
     // 从索引中清理指定节点
     void ClearNodeFromIndexes(uint32_t nodeId);
 
-    // 创建新的tp对
-    std::vector<uint32_t> CreateNewTps(uint32_t src, uint32_t dst, uint32_t priority,
-        bool useShortestPath, bool useMultiPath);
+    // Reserve new TP connection records and return their local TPN/metric pairs.
+    std::vector<std::pair<uint32_t, uint32_t>> ReserveNewTpConnections(
+        uint32_t src,
+        uint32_t dst,
+        uint32_t priority,
+        bool useShortestPath);
 
     // 重建tp对
     std::vector<uint32_t> ReconstructTPs(std::vector<uint32_t> tpns, uint32_t src, uint32_t dst, uint32_t priority,
         bool useShortestPath, bool useMultiPath);
-
-    uint32_t CreateNewTp(Connection conn);
 
     uint32_t ReconstructTp(Connection conn);
 private:

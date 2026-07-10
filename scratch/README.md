@@ -50,7 +50,7 @@ Each case directory under `scratch/` usually contains:
 - `node.csv` — Node inventory: devices and switches with port counts and optional per-node delay fields.
 - `topology.csv` — L2 links between ports, with bandwidth and propagation delay.
 - `routing_table.csv` — Per-node forwarding rules for a given destination and destination-port.
-- `transport_channel.csv` — Transport Path Numbers (TPNs) and priorities between endpoints and ports.
+- `transport_channel.csv` — Optional explicit Transport Path Numbers (TPNs) and priorities between endpoints and ports.
 - `traffic.csv` — Application-level tasks (ops, size, priority, dependency, timing).
 - `fault.csv` — Optional, only if faults are enabled (see `UB_FAULT_ENABLE`).
 
@@ -63,8 +63,8 @@ The entry program (`scratch/ub-quick-example`, or `src/unified-bus/examples/ub-q
 2) `node.csv` → `UbUtils::CreateNode`
 3) `topology.csv` → `UbUtils::CreateTopo`
 4) `routing_table.csv` → `UbUtils::AddRoutingTable`
-5) `transport_channel.csv` → `UbUtils::CreateTp`
-6) `traffic.csv` → `UbUtils::LoadTrafficConfig` → schedule tasks
+5) optional `transport_channel.csv` → `UbUtils::CreateTp`
+6) `traffic.csv` → reserve missing RTP connection records on every process → schedule tasks
 
 ---
 
@@ -326,21 +326,21 @@ Constraints and tips:
 
 ### Automatic TP Generation (Optional)
 
-If `transport_channel.csv` is missing or empty, or if no matching TP is found for a specific traffic task, the simulator (specifically `UbApp`) will attempt to automatically generate TP configurations on demand.
+If `transport_channel.csv` is missing or has no matching channel for a traffic row, the config-driven runner automatically reserves RTP connection records from the routing table on every process while loading `traffic.csv`. This happens before any task is scheduled, so MPI and hybrid receiver ranks have the same reservation state before the first packet arrives.
 
 - **Mechanism**:
   1. It queries the routing table (`UbRoutingProcess`) to find all reachable paths from source to destination.
   2. It respects the `UseShortestPaths` attribute (default `true`) to filter for shortest paths or allow non-shortest ones.
-  3. If `EnableMultiPath` (in `UbApp`) is `true`, it creates TPs for **all** discovered paths.
-  4. If `EnableMultiPath` is `false`, it **randomly selects one** path to create a single TP.
-  5. TPNs are automatically assigned.
+  3. It assigns TPN pairs and stores the same connection records on both endpoint views without creating either TP object.
+  4. When the source task starts, `EnableMultiPath=true` materializes all selected sender endpoints; otherwise the source randomly selects and materializes one sender endpoint.
+  5. The receiver validates the incoming channel key against its reservation and materializes only its local endpoint on the first valid packet.
 
 - **Usage**:
   This is useful for simple scenarios where manual TP configuration is tedious. You can simply omit this file. However, for complex scenarios requiring specific TP mappings, fixed path selection, or specific multi-path policies, providing this file is recommended.
 
 - **Performance Note**:
   - **CSV Configuration (Pre-instantiated)**: The simulator reads `transport_channel.csv` at startup and **immediately creates all TP objects** defined in it. In large-scale topologies (e.g., thousands of nodes), this file can be huge, and creating millions of TP objects upfront consumes significant memory and initialization time, even for TPs that may never carry traffic.
-  - **Automatic Generation (On-demand)**: TPs are created dynamically only when a traffic task actually requires them. This avoids the overhead of parsing a massive CSV and instantiating unused TPs, making it **highly recommended** for large-scale simulations to reduce initialization time and memory usage.
+  - **Automatic Reservation + Local Materialization**: Connection records are reserved before traffic, but TP objects are created locally only when the sender uses a path or the receiver accepts its first valid packet. This avoids a massive CSV and avoids instantiating unused TP objects, making it **highly recommended** for large-scale simulations.
 
 ### TransportMode and CTP
 
@@ -362,7 +362,7 @@ fields default to `0`.
 TP channel and TP group in code:
 - A TP channel is the UB transport-layer shared path that the transaction layer uses. In code it is `ns3::UbTransportChannel`, created by `UbController::CreateTp(...)` and stored in a per-port TPN map (`m_numToTp`; see `UbController::GetTp/GetTpnMap`). Endpoints are fixed at creation: source/destination node IDs and ports, priority, and the `(srcTpn,dstTpn)` pair are passed to `UbTransportChannel::SetUbTransport(...)` inside `CreateTp`.
 - A jetty (function layer context) can be bound to multiple TP channels to form a TP group for multipath. In code (`UbApp::SendTraffic`), after `UbFunction::CreateJetty(...)`, the app collects candidate TPNs from `TpConnectionManager` and calls `UbFunction::jettyBindTp(src,dest,jettyNum,multiPath,tpns)`. When `multiPath` is true, `jettyBindTp` looks up each TP by TPN (`UbController::GetTp`) and calls `UbTransportChannel::CreateTpJettyRelationship(...)` for each; the vector is recorded in `UbFunction::m_jettyTpGroup[jettyNum]`.
-- Control-plane establishment of TPs (negotiation/bring-up) is not modeled: the simulator instantiates TP channels directly from `transport_channel.csv` in `UbUtils::CreateTp(...)`. For administrative procedures, refer to the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh); they are currently outside this simulator’s scope.
+- Control-plane negotiation/bring-up is not modeled. Explicit rows are loaded by `UbUtils::CreateTp(...)`; otherwise the config-driven traffic loader reserves connection records before tasks start and each endpoint materializes locally when needed. For administrative procedures, refer to the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh); they are currently outside this simulator’s scope.
 
 ---
 

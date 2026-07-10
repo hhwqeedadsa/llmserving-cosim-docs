@@ -8609,6 +8609,32 @@ class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestC
         Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
         Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
 
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(
+            true,
+            topo.sender->GetId(),
+            topo.receiver->GetId(),
+            kUrmaWriteRegressionPriority);
+        auto reservedSenderTpns = senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.sender->GetId(),
+            topo.receiver->GetId(),
+            kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(reservedSenderTpns.size(),
+                              1u,
+                              "Traffic load should reserve one sender TPN");
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Traffic load should reserve one receiver TPN");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->IsTPExists(reservedSenderTpns[0].first),
+                              false,
+                              "Reservation should not materialize the sender endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpns[0].first),
+                              false,
+                              "Reservation should not materialize the receiver endpoint");
+
         std::vector<uint32_t> senderTpns =
             senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
                                                     true,
@@ -8623,10 +8649,6 @@ class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestC
                               true,
                               "Sender endpoint should be materialized by TP resolution");
 
-        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
-            topo.receiver->GetId(),
-            topo.sender->GetId(),
-            kUrmaWriteRegressionPriority);
         NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
                               1u,
                               "Receiver reservation should be visible in the local manager");

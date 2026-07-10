@@ -20,6 +20,13 @@ build_lib_example(
 )
 
 build_lib_example(
+  NAME mtp-ordered-global-events
+  SOURCE_FILES mtp-ordered-global-events.cc
+  LIBRARIES_TO_LINK
+    ${libmtp}
+)
+
+build_lib_example(
   NAME mtp-zero-delay-partition
   SOURCE_FILES mtp-zero-delay-partition.cc
   LIBRARIES_TO_LINK

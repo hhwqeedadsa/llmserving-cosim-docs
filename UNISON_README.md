@@ -111,7 +111,7 @@ For config-driven unified-bus MPI runs, keep the following rules explicit:
 
 Config-driven UB traffic can expose same-timestamp ordering differences when many tasks become ready together. This is common in synchronized collective DAGs: a root wave starts at the same model time, and early packet or completion events can differ between single-thread and MTP runs.
 
-MTP provides reproducible ordering under its mailbox and LP rules, not sequential global-UID equivalence for simultaneous events. Validate canonical output or domain metrics for each workload and define its acceptance criteria before relying on MTP results. There is no universal tolerance implied by the public regression below.
+MTP sorts cross-LP mailbox events by stable sender keys and traffic task completions by taskId. Other same-time callbacks submitted concurrently to the public LP have no run-to-run ordering guarantee, and MTP does not provide sequential global-UID equivalence. Validate canonical output or domain metrics for each workload and define its acceptance criteria before relying on MTP results. There is no universal tolerance implied by the public regression below.
 
 `ub-quick-example` leaves task starts unchanged by default. When one source releases multiple ready tasks together, use:
 

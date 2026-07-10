@@ -105,7 +105,7 @@ python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2n
 
 MTP 是并行运行方式。同步集合通信 DAG 里，很多 task 可能在同一仿真时刻变为 ready；这时 single 和 MTP 的事件顺序不一定相同，输出可能不同。默认运行不会改动 task start 时间；如果同一 source 同批释放多个 ready task，可以显式打开 task start jitter：
 
-MTP 按其 mailbox 和 LP 规则提供可复现顺序，但不保证同时间戳事件复刻 single 的全局 UID 顺序。正式使用前应对目标 workload 比较 canonical 输出或业务指标，并预先定义可接受的偏差；不要从其他 case 外推统一阈值。
+MTP 会按稳定 sender key 排序跨 LP mailbox 事件，traffic task completion 也会按 taskId key 排序。任意并发提交到公共 LP 的其他同时间戳 callback 不承诺运行间顺序，也不保证复刻 single 的全局 UID 顺序。正式使用前应对目标 workload 比较 canonical 输出或业务指标，并预先定义可接受的偏差；不要从其他 case 外推统一阈值。
 
 ```bash
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'

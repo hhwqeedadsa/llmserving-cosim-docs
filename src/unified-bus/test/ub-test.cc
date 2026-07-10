@@ -14446,9 +14446,9 @@ class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Task start jitter is off (default)"),
                               std::string::npos,
                               "MTP should guide users when task jitter is disabled");
-        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("simultaneous events may not match sequential"),
+        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Arbitrary simultaneous public callbacks"),
                               std::string::npos,
-                              "MTP should report its simultaneous-event equivalence boundary");
+                              "MTP should report its public-callback ordering boundary");
         NS_TEST_ASSERT_MSG_NE(seedOneMtp.output.find("Task start jitter enabled: window=1ns, seed=1"),
                               std::string::npos,
                               "enabled jitter should report its window and seed");

@@ -1234,8 +1234,10 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
 
 #ifdef NS3_MTP
     if (MtpInterface::isPartitioned()) {
-        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
-                                       [this, taskId]() { ApplyTaskCompletion(taskId); });
+        MtpInterface::ScheduleGlobalAtOrdered(
+            completionVisibleTs,
+            taskId,
+            [this, taskId]() { ApplyTaskCompletion(taskId); });
         return;
     }
 #endif

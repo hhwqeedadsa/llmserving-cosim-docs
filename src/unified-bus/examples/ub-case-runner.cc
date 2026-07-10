@@ -734,9 +734,10 @@ RuntimeSelection PrepareRuntime(int* argc,
             std::cout << "[INFO] MTP enabled with " << options.mtpThreads << " threads."
                       << (runtime.enableMpi ? " (hybrid MPI mode)." : " (local mode).")
                       << std::endl;
-            std::cout << "[INFO] MTP is deterministic for its defined ordering, but simultaneous "
-                         "events may not match sequential global UID order. Compare canonical or "
-                         "domain metrics and define workload-specific acceptance criteria."
+            std::cout << "[INFO] MTP deterministically orders cross-LP mailbox events and keyed "
+                         "task completions. Arbitrary simultaneous public callbacks and sequential "
+                         "global UID order are not guaranteed. Compare canonical or domain metrics "
+                         "and define workload-specific acceptance criteria."
                       << std::endl;
         }
 #ifndef NS3_MTP

@@ -105,7 +105,7 @@ python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2n
 
 Synchronized collective DAGs can make many tasks ready at the same model timestamp. Task starts are unchanged by default. When one source releases multiple ready tasks together, you can explicitly spread them inside a deterministic window:
 
-MTP provides reproducible ordering under its mailbox and LP rules, but simultaneous events are not guaranteed to reproduce the sequential scheduler's global UID order. Compare canonical output or domain metrics for the target workload and define acceptance criteria before using the result; do not infer one universal tolerance from another case.
+MTP sorts cross-LP mailbox events by stable sender keys and traffic task completions by taskId. Other same-time callbacks submitted concurrently to the public LP have no run-to-run ordering guarantee, and MTP does not reproduce the sequential scheduler's global UID order. Compare canonical output or domain metrics for the target workload and define acceptance criteria before using the result; do not infer one universal tolerance from another case.
 
 ```bash
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'

@@ -116,6 +116,30 @@ class MtpRemoteEventOrderingSystemTestCase : public TestCase
     }
 };
 
+class MtpOrderedGlobalEventsSystemTestCase : public TestCase
+{
+  public:
+    MtpOrderedGlobalEventsSystemTestCase()
+        : TestCase("MTP - keyed public events have stable cross-LP ordering")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunMtpExample(testFile, "src/mtp/examples/mtp-ordered-global-events");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "keyed public events must run: " << output);
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("TEST : 0 : PASSED batches=100 wrong-lp=0 public-followup=1"),
+            std::string::npos,
+            "staggered batches and public follow-ups must execute on the public LP in stable key "
+            "order: "
+                << output);
+    }
+};
+
 class MtpSameTimeAbsoluteEventSystemTestCase : public TestCase
 {
   public:
@@ -167,6 +191,18 @@ class MtpRemoteEventOrderingSystemTestSuite : public TestSuite
 };
 
 MtpRemoteEventOrderingSystemTestSuite g_remoteEventOrdering;
+
+class MtpOrderedGlobalEventsSystemTestSuite : public TestSuite
+{
+  public:
+    MtpOrderedGlobalEventsSystemTestSuite()
+        : TestSuite("mtp-ordered-global-events", Type::SYSTEM)
+    {
+        AddTestCase(new MtpOrderedGlobalEventsSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+MtpOrderedGlobalEventsSystemTestSuite g_orderedGlobalEvents;
 
 class MtpZeroDelayPartitionSystemTestCase : public TestCase
 {

@@ -431,9 +431,11 @@ GrantedTimeWindowMpiInterface::ScheduleTaskCompletion(uint32_t taskId, Time comp
 #ifdef NS3_MTP
     if (MtpInterface::isEnabled())
     {
-        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
-                                       &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
-                                       taskId);
+        MtpInterface::ScheduleGlobalAtOrdered(
+            completionVisibleTs,
+            taskId,
+            &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
+            taskId);
         return;
     }
 #endif

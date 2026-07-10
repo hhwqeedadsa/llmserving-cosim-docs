@@ -83,12 +83,15 @@ ScheduleMarker()
 int
 main(int argc, char* argv[])
 {
+    Time::SetResolution(Time::PS);
+
     bool testing = false;
+    Time linkDelay = NanoSeconds(5);
     CommandLine cmd(__FILE__);
     cmd.AddValue("test", "Print regression-test output", testing);
+    cmd.AddValue("link-delay", "Cross-rank point-to-point channel delay", linkDelay);
     cmd.Parse(argc, argv);
 
-    Time::SetResolution(Time::PS);
     MtpInterface::Enable(2);
     MpiInterface::Enable(&argc, &argv);
 
@@ -106,7 +109,7 @@ main(int argc, char* argv[])
 
     PointToPointHelper link;
     link.SetDeviceAttribute("DataRate", StringValue("400Gbps"));
-    link.SetChannelAttribute("Delay", StringValue("5ns"));
+    link.SetChannelAttribute("Delay", TimeValue(linkDelay));
     NetDeviceContainer devices = link.Install(nodes);
     devices.Get(1)->SetReceiveCallback(MakeCallback(&ReceivePacket));
 

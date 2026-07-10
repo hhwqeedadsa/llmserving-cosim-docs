@@ -212,15 +212,21 @@ class MpiUbQuickExampleRunTestSuite : public TestSuite
 
 #ifdef NS3_MTP
 std::pair<int, std::string>
-RunHybridMtpExample(const std::string& testFile, const std::string& program)
+RunHybridMtpExample(const std::string& testFile,
+                    const std::string& program,
+                    const std::string& arguments = "")
 {
     const std::filesystem::path repoRoot = PROJECT_SOURCE_PATH;
     const std::string pythonCommand =
         std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
-    const std::string command =
-        "cd \"" + repoRoot.string() + "\" && " + pythonCommand + " ./ns3 run " + program +
-        " --no-build --command-template=\"mpiexec -n 2 %s --test\" > \"" + testFile +
-        "\" 2>&1";
+    std::string command = "cd \"" + repoRoot.string() + "\" && " + pythonCommand +
+                          " ./ns3 run " + program +
+                          " --no-build --command-template=\"mpiexec -n 2 %s --test";
+    if (!arguments.empty())
+    {
+        command += " " + arguments;
+    }
+    command += "\" > \"" + testFile + "\" 2>&1";
 
     const int status = std::system(command.c_str());
     std::ifstream input(testFile);
@@ -265,6 +271,43 @@ class HybridLinkDelayOrderingSystemTestSuite : public TestSuite
 };
 
 static HybridLinkDelayOrderingSystemTestSuite g_hybridLinkDelayOrdering;
+
+class HybridZeroDelayLinkSystemTestCase : public TestCase
+{
+  public:
+    HybridZeroDelayLinkSystemTestCase()
+        : TestCase("Hybrid MPI MTP - cross-rank zero-delay link fails fast")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile,
+                                "src/mpi/examples/hybrid-link-delay-ordering",
+                                "--link-delay=0ns");
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "cross-rank zero-delay link must fail fast");
+        NS_TEST_ASSERT_MSG_NE(output.find("MTP lookahead is not positive"),
+                              std::string::npos,
+                              "failure must report the non-positive lookahead invariant: "
+                                  << output);
+    }
+};
+
+class HybridZeroDelayLinkSystemTestSuite : public TestSuite
+{
+  public:
+    HybridZeroDelayLinkSystemTestSuite()
+        : TestSuite("mpi-hybrid-zero-delay-link", Type::SYSTEM)
+    {
+        AddTestCase(new HybridZeroDelayLinkSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridZeroDelayLinkSystemTestSuite g_hybridZeroDelayLink;
 
 class HybridPrescheduledNodeEventSystemTestCase : public TestCase
 {

@@ -380,8 +380,9 @@ MultithreadedSimulatorImpl::Partition()
                     {
                         TimeValue delay;
                         channel->GetAttribute("Delay", delay);
-                        // if delay is below threshold, do not cut-off
-                        if (delay.Get() >= m_minLookahead)
+                        // A partition cut must provide positive lookahead. Keep zero-delay
+                        // neighbors together even when the configured threshold is zero.
+                        if (delay.Get().IsStrictlyPositive() && delay.Get() >= m_minLookahead)
                         {
                             continue;
                         }

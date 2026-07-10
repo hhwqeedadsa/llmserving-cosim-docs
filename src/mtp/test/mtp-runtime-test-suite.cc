@@ -168,6 +168,39 @@ class MtpRemoteEventOrderingSystemTestSuite : public TestSuite
 
 MtpRemoteEventOrderingSystemTestSuite g_remoteEventOrdering;
 
+class MtpZeroDelayPartitionSystemTestCase : public TestCase
+{
+  public:
+    MtpZeroDelayPartitionSystemTestCase()
+        : TestCase("MTP - zero-delay neighbors stay on the same worker LP")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunMtpExample(testFile, "src/mtp/examples/mtp-zero-delay-partition");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "zero-delay partition case must run: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 0 : PASSED"),
+                              std::string::npos,
+                              "zero-delay neighbors must share a non-public worker LP: " << output);
+    }
+};
+
+class MtpZeroDelayPartitionSystemTestSuite : public TestSuite
+{
+  public:
+    MtpZeroDelayPartitionSystemTestSuite()
+        : TestSuite("mtp-zero-delay-partition", Type::SYSTEM)
+    {
+        AddTestCase(new MtpZeroDelayPartitionSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+MtpZeroDelayPartitionSystemTestSuite g_zeroDelayPartition;
+
 class MtpPastEventValidationSystemTestSuite : public TestSuite
 {
   public:

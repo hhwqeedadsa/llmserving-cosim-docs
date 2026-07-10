@@ -20,6 +20,14 @@ build_lib_example(
 )
 
 build_lib_example(
+  NAME mtp-zero-delay-partition
+  SOURCE_FILES mtp-zero-delay-partition.cc
+  LIBRARIES_TO_LINK
+    ${libmtp}
+    ${libpoint-to-point}
+)
+
+build_lib_example(
   NAME simple-mtp
   SOURCE_FILES simple-mtp.cc
   LIBRARIES_TO_LINK

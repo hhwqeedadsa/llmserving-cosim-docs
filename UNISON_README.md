@@ -78,73 +78,19 @@ In addition to the DCTCP example, you can find other adapted examples in `exampl
 Meanwhile, Unison also supports manual partition, and you can find a minimal example in `src/mtp/examples/simple-mtp.cc`
 For hybrid simulation with MPI, you can find a minimal example in `src/mpi/examples/simple-hybrid.cc`.
 
-We also provide several detailed examples for Unison, traditional MPI parallel simulation, hybrid simulation, and unified-bus config-driven runs:
+We also provide several detailed examples for Unison, traditional MPI parallel simulation, and hybrid simulation:
 
 | Name | Location | Required configuration flags | Running commands |
 | - | - | - | - |
 | fat-tree-mtp | src/mtp/examples/fat-tree-mtp.cc | `--enable-mtp --enable-examples` without `--enable-mpi` | `python3.12 ./ns3 run "fat-tree-mtp --thread=4"` |
 | fat-tree-mpi | src/mpi/examples/fat-tree-mpi.cc | `--enable-mpi --enable-examples` without `--enable-mtp` | `python3.12 ./ns3 run fat-tree-mpi --command-template "mpirun -np 4 %s"` |
 | fat-tree-hybrid | src/mpi/examples/fat-tree-hybrid.cc | `--enable-mtp --enable-mpi --enable-examples` | `python3.12 ./ns3 run fat-tree-hybrid --command-template "mpirun -np 2 %s --thread=2"` |
-| ub-quick-example | scratch/ub-quick-example.cc | local: `python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja` then `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`; local MTP: add `--enable-mtp`; MPI: add `--enable-mpi`; MPI+MTP: add `--enable-mpi --enable-mtp` | local: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`; local MTP: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=2 --dependency-visibility-delay=20ns'`; MPI: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example --case-path=scratch/ub-mpi-minimal --test --dependency-visibility-delay=20ns`; MPI+MTP: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example --case-path=scratch/ub-mpi-minimal --mtp-threads=2 --test --dependency-visibility-delay=20ns` |
-| ub-mtp-remote-tp-regression | src/unified-bus/examples/ub-mtp-remote-tp-regression.cc | `--enable-mtp --enable-mpi --enable-examples` | regression-only binary; exercised by `build/utils/ns3.44-test-runner-default --suite=mpi-example-ub-mtp-remote-tp-regression-np2 --verbose` |
 
 Feel free to explore these examples, compare code changes and adjust the `-np` and `--thread` arguments.
 
-### Unified-bus config MPI notes
+### Unified Bus parallel simulation
 
-For config-driven unified-bus runs, use `scratch/ub-quick-example` as the default entry. If you prefer the example binary, `src/unified-bus/examples/ub-quick-example.cc` provides the same CLI after enabling examples. See also `docs/ub-quick-example.md`.
-
-For a reused workspace that needs to reset previous full ns-3, examples, tests, MPI, or MTP configure choices, explicitly add `--disable-examples --disable-tests --disable-mpi --disable-mtp` to return to local UB-only mode. If no reset is needed, use the shorter local configure command shown in the table above.
-
-For config-driven unified-bus MPI runs, keep the following rules explicit:
-
-- `UbTrafficGen` / `traffic.csv` supports MPI multi-process mode. A task is owned by the MPI rank of its `sourceNode`; all ranks load the full traffic DAG, but each rank starts only its owned tasks.
-- `dependOnPhases` in a parallel runtime uses distributed dependency visibility, not single-process immediate visibility. A completed task becomes dependency-visible at `completionTs + dependency-visibility-delay`, and that visibility is propagated as an MPI control message when ranks differ.
-- Traffic DAG dependencies in MPI, local MTP, or MPI+MTP require a positive `--dependency-visibility-delay=<Time>` unless a positive delay is derived from remote links. Use the same value when comparing local and parallel runs byte-for-byte.
-
-- `node.csv` should provide an explicit `systemId` column for multi-process placement. In single-process compatibility mode, omitted `systemId` still defaults to `0`.
-- In `MTP+MPI` hybrid runs, `node.csv` still uses the MPI-rank ownership value in `systemId`. Do not pre-pack a local LP id into that field. MTP tracks node-to-local-LP ownership separately at runtime.
-- `topology.csv` may connect endpoints on different MPI ranks. Local vs. remote channel selection is decided by the builder from endpoint placement; config files do not choose link type directly.
-- `transport_channel.csv` describes TP connectivity metadata between endpoints. It is not an instruction to create remote-side TP objects on the current rank.
-
-### Deterministic de-synchronization for MTP comparisons
-
-Config-driven UB traffic can expose same-timestamp ordering differences when many tasks become ready together. This is common in synchronized collective DAGs: a root wave starts at the same model time, and early packet or completion events can differ between single-thread and MTP runs.
-
-MTP sorts cross-LP mailbox events by stable sender keys and traffic task completions by taskId. Other same-time callbacks submitted concurrently to the public LP have no run-to-run ordering guarantee, and MTP does not provide sequential global-UID equivalence. Validate canonical output or domain metrics for each workload and define its acceptance criteria before relying on MTP results. There is no universal tolerance implied by the public regression below.
-
-`ub-quick-example` leaves task starts and topology delays unchanged by default. It exposes two opt-in offset windows and one shared seed:
-
-```bash
---initial-task-start-offset-window=<Time> \
---link-delay-offset-window=<Time> \
---timing-offset-seed=<uint32>
-```
-
-`0ps` or `off` disables either window. A positive time value enables deterministic slots in the half-open interval `[0, window)`. Slot assignment is stable across single-thread and MTP runs and does not depend on runtime callback order.
-
-`--initial-task-start-offset-window` affects only initial tasks whose original `dependOnPhases` field is empty. All initial tasks from one source receive one offset derived from the shared seed and source node; dependent tasks receive zero offset. Sources may hash to the same slot. The run reports the number of unique sources, occupied slots, collisions, and maximum slot occupancy when collisions occur.
-
-`--link-delay-offset-window` computes one static offset for each positive-delay physical link while `topology.csv` is loaded. The shared seed and canonicalized pair of endpoint node/port identities determine the offset, so every packet on the same bidirectional link sees the same adjusted propagation delay. This is intentionally not a per-packet RNG. Original `0ns` links remain zero to preserve the MTP rule that zero-delay neighbors share one LP. The run reports positive links, preserved zero-delay links, occupied slots, collisions, and maximum occupancy. The task and link mechanisms use different hash domains.
-
-In `ub-quick-example`, time resolution is ps. A defensive phase60 setting that has been exercised is:
-
-```bash
---initial-task-start-offset-window=32ps \
---link-delay-offset-window=8ps \
---timing-offset-seed=1
-```
-
-These values are not universal. The initial-task-only ablation was already sufficient to make the observed phase60 single/MTP4 evidence byte-identical. The link offset remains useful as a second defensive layer against later cross-LP timestamp reconvergence, not as proof of a separate root cause.
-
-Treat both windows and the shared seed as experiment parameters. Different seeds are different valid simulated trajectories. Paired single/MTP comparisons must use identical settings. Multiple seeds reduce Monte Carlo uncertainty for aggregate metrics under this offset ensemble, but they do not remove per-task model bias or recover the offset-disabled trajectory. Five seeds are a pilot; formal reporting should normally use 15--20 independent seeds with mean, SD, and confidence intervals.
-
-The small public case `scratch/mtp_task_jitter_demo` is generated with `scratch/ns-3-ub-tools`; run it with `--dependency-visibility-delay=10ns` because the case has phase dependencies. In the validation for this change:
-
-- the `origin/main` baseline differs between offset-disabled single and MTP 4-thread runs
-- the final branch is byte-identical with offsets disabled because the runtime ordering and LP ownership defects are fixed
-- with initial-task `32ps` and positive-link `8ps`, seed 1 and seed 2 are each byte-identical between single and MTP
-- seed 1 and seed 2 produce different canonical hashes, so the seed changes the simulated trajectory
+For user-oriented instructions covering local runs, multi-threaded runs, MPI multi-process runs, and combined MPI plus multi-threaded runs, see the [Unified Bus Parallel Simulation Guide](UNIFIED_BUS_PARALLEL_SIMULATION.md). It also documents case placement, task dependencies, reproducible timing offsets, result comparison, and common configuration errors.
 
 ## Running Evaluations
 

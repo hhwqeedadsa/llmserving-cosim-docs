@@ -90,7 +90,7 @@ Feel free to explore these examples, compare code changes and adjust the `-np` a
 
 ### UB parallel simulation
 
-For user-oriented instructions covering local runs, multi-threaded runs, MPI multi-process runs, and combined MPI plus multi-threaded runs, see the [UB Parallel Simulation Guide](UB_PARALLEL_SIMULATION.md). It also documents case placement, task dependencies, reproducible timing offsets, result comparison, and common configuration errors.
+For user-oriented instructions covering local runs, multi-threaded runs, MPI multi-process runs, and combined MPI plus multi-threaded runs, see [UB 多线程与多进程仿真指南](UB_PARALLEL_SIMULATION.md). It also explains the purpose of reproducible timing offsets, case placement, task dependencies, result comparison, and common configuration errors.
 
 ## Running Evaluations
 

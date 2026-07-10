@@ -1,6 +1,6 @@
-# Unified Bus Parallel Simulation Guide
+# UB Parallel Simulation Guide
 
-This guide explains how to run config-driven Unified Bus simulations in four modes:
+This guide explains how to run config-driven UB simulations in four modes:
 
 | Mode | Processes | Threads per process | Use when |
 | --- | ---: | ---: | --- |

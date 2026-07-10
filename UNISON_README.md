@@ -107,6 +107,31 @@ For config-driven unified-bus MPI runs, keep the following rules explicit:
 - `topology.csv` may connect endpoints on different MPI ranks. Local vs. remote channel selection is decided by the builder from endpoint placement; config files do not choose link type directly.
 - `transport_channel.csv` describes TP connectivity metadata between endpoints. It is not an instruction to create remote-side TP objects on the current rank.
 
+### Traffic task start jitter for MTP comparisons
+
+Config-driven UB traffic can expose same-timestamp ordering differences when many tasks become ready together. This is common in synchronized collective DAGs: a root wave starts at the same model time, and early packet or completion events can differ between single-thread and MTP runs.
+
+MTP provides reproducible ordering under its mailbox and LP rules, not sequential global-UID equivalence for simultaneous events. Validate canonical output or domain metrics for each workload and define its acceptance criteria before relying on MTP results. There is no universal tolerance implied by the public regression below.
+
+`ub-quick-example` leaves task starts unchanged by default. When one source releases multiple ready tasks together, use:
+
+```bash
+--task-start-jitter-window=<Time> --task-start-jitter-seed=<uint32>
+```
+
+`off` disables the feature. A time value enables a deterministic spread window. Slot assignment is stable across single-thread and MTP runs. Each source independently reuses the full window, and that source's ready tasks are ordered by seed and task identity from zero offset. A source with one ready task is unchanged. Tasks from different sources may keep the same timestamp and remain concurrent.
+
+If every source contributes at most one task to a ready batch, jitter is a no-op. It does not order that cross-source release wave.
+
+The window is not a fixed delay applied to every task. It is a per-source tie-break window. In `ub-quick-example`, time resolution is ps, so `1ns` gives each source `1000` time slots. To avoid same-source collisions, the window needs at least as many slots as the largest same-source ready batch. Different sources intentionally reuse slots. Some networks may still need a larger window because packet-level events can meet again at the same timestamp after serialization or switch allocation.
+
+Treat the window and seed as experiment parameters. Different seeds can produce different valid trajectories. The small public case `scratch/mtp_task_jitter_demo` is generated with `scratch/ns-3-ub-tools`; run it with `--dependency-visibility-delay=10ns` because the case has phase dependencies. In the validation for this change:
+
+- the `origin/main` baseline differs between no-jitter single and MTP 4-thread runs
+- the final branch is byte-identical for no-jitter single vs MTP because the runtime ordering and LP ownership defects are fixed
+- with a `1ns` window, seed 1 and seed 2 are each byte-identical between single and MTP
+- seed 1 vs seed 2 differs in 20 of 48 canonical lines, so the seed still changes the simulated release schedule
+
 ## Running Evaluations
 
 To evaluate Unison, please switch to [unison-evaluations](https://github.com/NASA-NJU/Unison-for-ns-3/tree/unison-evaluations) branch, which is based on ns-3.36.1.

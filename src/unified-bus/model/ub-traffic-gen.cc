@@ -12,7 +12,6 @@
 #include "ub-app.h"
 #include "ub-utils.h"
 
-#include <algorithm>
 #include <fstream>
 #include <tuple>
 #include <utility>
@@ -26,6 +25,15 @@
 
 namespace
 {
+uint64_t
+MixTaskJitterHash(uint64_t value)
+{
+    value += 0x9e3779b97f4a7c15ULL;
+    value = (value ^ (value >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    value = (value ^ (value >> 27)) * 0x94d049bb133111ebULL;
+    return value ^ (value >> 31);
+}
+
 uint32_t
 ParseUint32Token(std::string_view field)
 {
@@ -119,7 +127,8 @@ void
 UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed)
 {
     uint32_t taskId = record.taskId;
-    if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
+    RuntimeTask task = ConvertToRuntimeTask(record);
+    if (!SetTaskLocked(task)) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
@@ -168,7 +177,8 @@ void
 UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIndexed)
 {
     const uint32_t taskId = record.taskId;
-    if (!SetTaskLocked(ConvertToRuntimeTask(record))) {
+    RuntimeTask task = ConvertToRuntimeTask(record);
+    if (!SetTaskLocked(task)) {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
@@ -776,6 +786,15 @@ UbTrafficGen::ObserveRemoteLinkDelay(Time delay)
 }
 
 void
+UbTrafficGen::SetTaskStartJitterWindow(Time window, uint32_t seed)
+{
+    NS_ABORT_MSG_IF(window.IsStrictlyNegative(), "task start jitter window must be non-negative");
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_taskStartJitterWindow = window;
+    m_taskStartJitterSeed = seed;
+}
+
+void
 UbTrafficGen::EnableCanonicalOutput(std::string path, uint32_t rank)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -1116,6 +1135,85 @@ UbTrafficGen::ResolveCompletionVisibleDelayLocked() const
     return Time(0);
 }
 
+uint64_t
+UbTrafficGen::GetTaskStartJitterHash(const RuntimeTask& task, uint32_t seed) const
+{
+    uint64_t hash = MixTaskJitterHash(seed);
+    hash = MixTaskJitterHash(hash ^ task.phaseId);
+    hash = MixTaskJitterHash(hash ^ task.sourceNode);
+    return MixTaskJitterHash(hash ^ task.taskId);
+}
+
+std::vector<Time>
+UbTrafficGen::GetTaskStartJitters(const ReadyTaskBatch& batch) const
+{
+    std::vector<Time> jitters(batch.tasks.size(), Time(0));
+    Time jitterWindow;
+    uint32_t jitterSeed;
+    {
+        std::lock_guard<std::mutex> lock(m_mutex);
+        jitterWindow = m_taskStartJitterWindow;
+        jitterSeed = m_taskStartJitterSeed;
+    }
+
+    const int64_t maxSteps = jitterWindow.GetTimeStep();
+    if (maxSteps <= 0 || batch.tasks.size() <= 1) {
+        return jitters;
+    }
+    struct JitterCandidate
+    {
+        uint64_t hash{0};
+        uint32_t phaseId{0};
+        uint32_t sourceNode{0};
+        uint32_t taskId{0};
+        size_t index{0};
+    };
+
+    std::vector<JitterCandidate> candidates;
+    candidates.reserve(batch.tasks.size());
+    for (size_t index = 0; index < batch.tasks.size(); ++index) {
+        const auto& task = batch.tasks[index];
+        candidates.push_back(JitterCandidate{
+            GetTaskStartJitterHash(task, jitterSeed),
+            task.phaseId,
+            task.sourceNode,
+            task.taskId,
+            index,
+        });
+    }
+    std::sort(candidates.begin(), candidates.end(), [](const auto& lhs, const auto& rhs) {
+        return std::tie(lhs.sourceNode, lhs.hash, lhs.phaseId, lhs.taskId, lhs.index) <
+               std::tie(rhs.sourceNode, rhs.hash, rhs.phaseId, rhs.taskId, rhs.index);
+    });
+
+    const auto slotCount = static_cast<uint64_t>(maxSteps);
+    size_t maxSourceGroupSize = 0;
+    for (auto groupBegin = candidates.begin(); groupBegin != candidates.end();) {
+        auto groupEnd = std::find_if(groupBegin, candidates.end(), [groupBegin](const auto& candidate) {
+            return candidate.sourceNode != groupBegin->sourceNode;
+        });
+
+        const auto groupSize = static_cast<size_t>(std::distance(groupBegin, groupEnd));
+        maxSourceGroupSize = std::max(maxSourceGroupSize, groupSize);
+        uint64_t sourceSlot = 0;
+        for (auto candidate = groupBegin; candidate != groupEnd; ++candidate, ++sourceSlot) {
+            const auto jitterSteps = static_cast<int64_t>(sourceSlot % slotCount);
+            jitters[candidate->index] = TimeStep(jitterSteps);
+        }
+
+        groupBegin = groupEnd;
+    }
+
+    if (maxSourceGroupSize > slotCount) {
+        NS_LOG_WARN("task-start-jitter-window provides only "
+                    << slotCount << " unique time slots per traffic source for up to "
+                    << maxSourceGroupSize
+                    << " same-source ready tasks; some task starts may still share a timestamp");
+    }
+
+    return jitters;
+}
+
 void
 UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionVisibleTs)
 {
@@ -1150,6 +1248,7 @@ UbTrafficGen::ScheduleTaskCompletionVisibility(uint32_t taskId, Time completionV
 
 void UbTrafficGen::ScheduleTasks(const ReadyTaskBatch& batch)
 {
+    const auto taskStartJitters = GetTaskStartJitters(batch);
     for (size_t index = 0; index < batch.tasks.size(); ++index) {
         const auto& task = batch.tasks[index];
         if (task.priority == 0) {
@@ -1163,7 +1262,7 @@ void UbTrafficGen::ScheduleTasks(const ReadyTaskBatch& batch)
         NS_ABORT_MSG_IF(app == nullptr, "No UbApp registered for traffic task source node "
                                             << task.sourceNode);
         Simulator::ScheduleWithContext(app->GetNode()->GetId(),
-                                       task.delay,
+                                       task.delay + taskStartJitters[index],
                                        &UbTrafficGen::StartTask,
                                        this,
                                        app,

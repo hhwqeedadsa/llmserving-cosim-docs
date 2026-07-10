@@ -11,7 +11,9 @@
 #include "ns3/ub-transport.h"
 #include "ns3/ub-utils.h"
 
+#include <algorithm>
 #include <array>
+#include <cctype>
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
@@ -46,6 +48,8 @@ struct QuickExampleOptions
     uint32_t rngRun = 10;
     std::string configPath;
     std::string dependencyVisibilityDelay;
+    std::string taskStartJitterWindow = "off";
+    uint32_t taskStartJitterSeed = 1;
     std::string canonicalOutputPath;
 };
 
@@ -468,6 +472,38 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
     }
 }
 
+void ConfigureTaskStartJitter(const QuickExampleOptions& options, const RuntimeSelection& runtime)
+{
+    std::string window = options.taskStartJitterWindow;
+    std::transform(window.begin(), window.end(), window.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+
+    const bool shouldPrint = !runtime.enableMpi || runtime.mpiRank == 0;
+    if (window.empty() || window == "off" || window == "none" || window == "false" ||
+        window == "0" || window == "0ps")
+    {
+        UbTrafficGen::Get()->SetTaskStartJitterWindow(Time(0), options.taskStartJitterSeed);
+        if (shouldPrint && ModeUsesMtp(runtime.mode))
+        {
+            std::cout << "[INFO] Task start jitter is off (default). It only spreads multiple "
+                         "ready tasks from the same source. Enable it with "
+                         "--task-start-jitter-window=<Time> and record --task-start-jitter-seed."
+                      << std::endl;
+        }
+        return;
+    }
+
+    UbTrafficGen::Get()->SetTaskStartJitterWindow(Time(options.taskStartJitterWindow),
+                                                  options.taskStartJitterSeed);
+    if (shouldPrint)
+    {
+        std::cout << "[INFO] Task start jitter enabled: window="
+                  << options.taskStartJitterWindow << ", seed=" << options.taskStartJitterSeed
+                  << ", scope=same-source ready tasks." << std::endl;
+    }
+}
+
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
                                    uint32_t mpiRank,
@@ -586,6 +622,14 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.AddValue("dependency-visibility-delay",
                  "Delay before a completed traffic task becomes visible to dependent tasks",
                  options.dependencyVisibilityDelay);
+    cmd.AddValue("task-start-jitter-window",
+                 "Deterministically spread same-source traffic tasks that become ready together "
+                 "within this time window; use off to disable (default: off)",
+                 options.taskStartJitterWindow);
+    cmd.AddValue("task-start-jitter-seed",
+                 "Advanced: seed for deterministic task start jitter slot assignment "
+                 "(default: 1)",
+                 options.taskStartJitterSeed);
     cmd.AddValue("canonical-output",
                  "Write deterministic UbTrafficGen canonical events to this output basename",
                  options.canonicalOutputPath);
@@ -677,6 +721,10 @@ RuntimeSelection PrepareRuntime(int* argc,
             std::cout << "[INFO] MTP enabled with " << options.mtpThreads << " threads."
                       << (runtime.enableMpi ? " (hybrid MPI mode)." : " (local mode).")
                       << std::endl;
+            std::cout << "[INFO] MTP is deterministic for its defined ordering, but simultaneous "
+                         "events may not match sequential global UID order. Compare canonical or "
+                         "domain metrics and define workload-specific acceptance criteria."
+                      << std::endl;
         }
 #ifndef NS3_MTP
         else
@@ -712,6 +760,7 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     ConfigureTrafficDependencyVisibility(options);
     ApplyDependencyVisibilityLookaheadBound(runtime);
     ConfigureCanonicalOutput(options, runtime);
+    ConfigureTaskStartJitter(options, runtime);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
     ActivateTrafficFromConfig(options.configPath,

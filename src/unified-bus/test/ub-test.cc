@@ -37,6 +37,7 @@
 #include "ns3/ub-transaction.h"
 #include "ns3/ub-datalink.h"
 
+#include <algorithm>
 #include <atomic>
 #include <array>
 #include <barrier>
@@ -1590,6 +1591,80 @@ class UbTrafficGenReadyOrderTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(readyIds[1], 1u, "second ready task should be task 1");
         NS_TEST_ASSERT_MSG_EQ(readyIds[2], 2u, "third ready task should be task 2");
         Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenTaskStartJitterTest : public TestCase
+{
+  public:
+    UbTrafficGenTaskStartJitterTest()
+        : TestCase("UnifiedBus - task start jitter is deterministic and source-local")
+    {
+    }
+
+    void DoRun() override
+    {
+        const auto makeTask = [](uint32_t taskId, uint32_t sourceNode) {
+            UbTrafficGen::RuntimeTask task;
+            task.taskId = taskId;
+            task.sourceNode = sourceNode;
+            task.phaseId = 1;
+            return task;
+        };
+
+        UbTrafficGen gen;
+        UbTrafficGen::ReadyTaskBatch differentSources;
+        differentSources.tasks = {makeTask(10, 2), makeTask(20, 7), makeTask(30, 11)};
+
+        gen.SetTaskStartJitterWindow(Time(0), 1);
+        const auto disabled = gen.GetTaskStartJitters(differentSources);
+        for (const auto& jitter : disabled)
+        {
+            NS_TEST_ASSERT_MSG_EQ(jitter.GetTimeStep(),
+                                  0,
+                                  "disabled task start jitter should not change task time");
+        }
+
+        gen.SetTaskStartJitterWindow(NanoSeconds(8), 1);
+        const auto sourceLocal = gen.GetTaskStartJitters(differentSources);
+        for (const auto& jitter : sourceLocal)
+        {
+            NS_TEST_ASSERT_MSG_EQ(jitter.GetTimeStep(),
+                                  0,
+                                  "different sources should reuse the same jitter window");
+        }
+
+        UbTrafficGen::ReadyTaskBatch sameSource;
+        for (uint32_t taskId = 0; taskId < 8; ++taskId)
+        {
+            sameSource.tasks.push_back(makeTask(taskId, 7));
+        }
+
+        const auto seedOne = gen.GetTaskStartJitters(sameSource);
+        std::vector<int64_t> seedOneSteps;
+        seedOneSteps.reserve(seedOne.size());
+        for (const auto& jitter : seedOne)
+        {
+            seedOneSteps.push_back(jitter.GetTimeStep());
+        }
+        std::sort(seedOneSteps.begin(), seedOneSteps.end());
+        for (size_t index = 0; index < seedOneSteps.size(); ++index)
+        {
+            NS_TEST_ASSERT_MSG_EQ(seedOneSteps[index],
+                                  static_cast<int64_t>(index),
+                                  "same-source tasks should use unique slots when the window fits");
+        }
+
+        gen.SetTaskStartJitterWindow(NanoSeconds(8), 2);
+        const auto seedTwo = gen.GetTaskStartJitters(sameSource);
+        bool seedChangesOrder = false;
+        for (size_t index = 0; index < seedOne.size(); ++index)
+        {
+            seedChangesOrder |= seedOne[index] != seedTwo[index];
+        }
+        NS_TEST_ASSERT_MSG_EQ(seedChangesOrder,
+                              true,
+                              "changing the jitter seed should change same-source task order");
     }
 };
 
@@ -11696,6 +11771,12 @@ class UbTpReservationTestSuite : public TestSuite
     UbTpReservationTestSuite();
 };
 
+class UbTaskStartJitterTestSuite : public TestSuite
+{
+  public:
+    UbTaskStartJitterTestSuite();
+};
+
 UbTestSuite::UbTestSuite()
     : TestSuite("unified-bus", Type::UNIT)
 {
@@ -11951,6 +12032,14 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
 }
 
 static UbTpReservationTestSuite g_ubTpReservationTestSuite;
+
+UbTaskStartJitterTestSuite::UbTaskStartJitterTestSuite()
+    : TestSuite("unified-bus-task-start-jitter", Type::UNIT)
+{
+    AddTestCase(new UbTrafficGenTaskStartJitterTest(), TestCase::Duration::QUICK);
+}
+
+static UbTaskStartJitterTestSuite g_ubTaskStartJitterTestSuite;
 
 UbWireFormatTestSuite::UbWireFormatTestSuite()
     : TestSuite("unified-bus-wire-format", Type::UNIT)
@@ -14061,6 +14150,94 @@ class UbQuickExampleMpiSystemTest : public TestCase
 };
 #endif
 
+class UbQuickExampleTaskJitterRegressionSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleTaskJitterRegressionSystemTest()
+        : TestCase("UnifiedBus - task jitter regression is stable across single and MTP")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        struct RunResult
+        {
+            int status{0};
+            std::string output;
+            std::string canonical;
+        };
+        const auto run = [&](const std::string& label, const std::string& args) {
+            const std::filesystem::path canonicalBase =
+                CreateSafeTempBasename("ub-task-jitter-" + label);
+            auto [status, output] =
+                RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-" + label + ".log"),
+                                       args + " --test --dependency-visibility-delay=10ns "
+                                              "--canonical-output=\"" +
+                                           canonicalBase.string() + "\"",
+                                       "",
+                                       "scratch/mtp_task_jitter_demo");
+            return RunResult{status, std::move(output), ReadCanonicalBytes(canonicalBase)};
+        };
+
+        const RunResult noJitterSingle = run("no-jitter-single", "--mtp-threads=1");
+        const RunResult noJitterMtp = run("no-jitter-mtp", "--mtp-threads=4");
+        const RunResult seedOneSingle =
+            run("seed-1-single", "--mtp-threads=1 --task-start-jitter-window=1ns "
+                                 "--task-start-jitter-seed=1");
+        const RunResult seedOneMtp =
+            run("seed-1-mtp", "--mtp-threads=4 --task-start-jitter-window=1ns "
+                              "--task-start-jitter-seed=1");
+        const RunResult seedTwoSingle =
+            run("seed-2-single", "--mtp-threads=1 --task-start-jitter-window=1ns "
+                                 "--task-start-jitter-seed=2");
+        const RunResult seedTwoMtp =
+            run("seed-2-mtp", "--mtp-threads=4 --task-start-jitter-window=1ns "
+                              "--task-start-jitter-seed=2");
+
+        const std::array<std::pair<const char*, const RunResult*>, 6> results{{
+            {"no-jitter single", &noJitterSingle},
+            {"no-jitter MTP", &noJitterMtp},
+            {"seed 1 single", &seedOneSingle},
+            {"seed 1 MTP", &seedOneMtp},
+            {"seed 2 single", &seedTwoSingle},
+            {"seed 2 MTP", &seedTwoMtp},
+        }};
+        for (const auto& [label, result] : results)
+        {
+            NS_TEST_ASSERT_MSG_EQ(result->status, 0, label << " run should exit successfully");
+            NS_TEST_ASSERT_MSG_NE(result->output.find("TEST : 00000 : PASSED"),
+                                  std::string::npos,
+                                  label << " run should report PASSED");
+        }
+
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(noJitterSingle.canonical),
+                              48u,
+                              "regression output should contain two events for each task");
+        NS_TEST_ASSERT_MSG_EQ(noJitterSingle.canonical,
+                              noJitterMtp.canonical,
+                              "runtime fixes should stabilize the no-jitter regression case");
+        NS_TEST_ASSERT_MSG_EQ(seedOneSingle.canonical,
+                              seedOneMtp.canonical,
+                              "seed 1 should be stable across single and MTP");
+        NS_TEST_ASSERT_MSG_EQ(seedTwoSingle.canonical,
+                              seedTwoMtp.canonical,
+                              "seed 2 should be stable across single and MTP");
+        NS_TEST_ASSERT_MSG_NE(seedOneSingle.canonical,
+                              seedTwoSingle.canonical,
+                              "different seeds should produce different release schedules");
+        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("Task start jitter is off (default)"),
+                              std::string::npos,
+                              "MTP should guide users when task jitter is disabled");
+        NS_TEST_ASSERT_MSG_NE(noJitterMtp.output.find("simultaneous events may not match sequential"),
+                              std::string::npos,
+                              "MTP should report its simultaneous-event equivalence boundary");
+        NS_TEST_ASSERT_MSG_NE(seedOneMtp.output.find("Task start jitter enabled: window=1ns, seed=1"),
+                              std::string::npos,
+                              "enabled jitter should report its window and seed");
+    }
+};
+
 class UbQuickExampleSystemTestSuite : public TestSuite
 {
   public:
@@ -14109,6 +14286,7 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleTaskJitterRegressionSystemTest(), TestCase::Duration::QUICK);
 #else
         AddTestCase(new UbQuickExampleMtpRequestedWithoutMtpSystemTest(),
                     TestCase::Duration::QUICK);

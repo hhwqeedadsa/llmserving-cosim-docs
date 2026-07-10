@@ -103,6 +103,18 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
+Synchronized collective DAGs can make many tasks ready at the same model timestamp. Task starts are unchanged by default. When one source releases multiple ready tasks together, you can explicitly spread them inside a deterministic window:
+
+MTP provides reproducible ordering under its mailbox and LP rules, but simultaneous events are not guaranteed to reproduce the sequential scheduler's global UID order. Compare canonical output or domain metrics for the target workload and define acceptance criteria before using the result; do not infer one universal tolerance from another case.
+
+```bash
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'
+```
+
+The window is not a fixed delay added to every task. Each source independently reuses zero-based slots in the full window, so a source with one ready task is unchanged and different sources can remain concurrent. If every source has only one task in a ready batch, jitter is a no-op and cannot order that cross-source release wave. The window and seed are experiment parameters, and different seeds may produce different completion times. `scratch/mtp_task_jitter_demo` is a public regression case: it reproduces the original drift on the pre-fix `main` baseline, while the current runtime fixes also make its no-jitter single/MTP outputs match.
+
+MTP startup reports when jitter is off. When jitter is enabled explicitly, the run prints the actual window and seed so they can be recorded with the results.
+
 Note: Enabling parallel simulation usually also requires calling `MtpInterface::Enable(...)` in your simulation program (guarded by `#ifdef NS3_MTP`). See [UNISON_README.md](UNISON_README.md) for details.
 
 Tip: The recommended entry is `scratch/ub-quick-example`; if you additionally configure with `--enable-examples --filter-module-examples-and-tests=unified-bus`, `src/unified-bus/examples/ub-quick-example` is also available.
@@ -162,6 +174,12 @@ The following are the available use case directories and corresponding run comma
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod'
   # Multi-threading recommended for large topologies
   python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=16'
+  ```
+
+- MTP task start jitter regression (8-host synthetic collective):
+  ```bash
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns'
+  python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --task-start-jitter-window=1ns --task-start-jitter-seed=1'
   ```
 
 Note: Some large-scale use cases take a long time to run. Please use `--mtp-threads=8` to enable multi-threading (requires `--enable-mtp` compilation).

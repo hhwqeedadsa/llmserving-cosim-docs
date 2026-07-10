@@ -30,6 +30,7 @@ class UbTrafficGenRecordViewDependencyTest;
 class UbTrafficGenReadyOrderTest;
 class UbTrafficGenIntegerDelayParserTest;
 class UbTrafficGenRuntimeTaskEntityFieldsTest;
+class UbTrafficGenTaskStartJitterTest;
 
 using namespace utils;
 namespace ns3 {
@@ -126,6 +127,8 @@ public:
 
     void ObserveRemoteLinkDelay(Time delay);
 
+    void SetTaskStartJitterWindow(Time window, uint32_t seed);
+
     void ApplyTaskCompletion(uint32_t taskId);
 
     void RegisterMpiTaskCompletionHandler();
@@ -158,6 +161,7 @@ public:
     friend class ::UbTrafficGenReadyOrderTest;
     friend class ::UbTrafficGenIntegerDelayParserTest;
     friend class ::UbTrafficGenRuntimeTaskEntityFieldsTest;
+    friend class ::UbTrafficGenTaskStartJitterTest;
 
     enum class TaskState {
         PENDING,
@@ -215,10 +219,16 @@ public:
     std::string m_canonicalOutputPath;
     uint32_t m_canonicalRank = 0;
     std::vector<CanonicalEvent> m_canonicalEvents;
+    Time m_taskStartJitterWindow{Time(0)};
+    uint32_t m_taskStartJitterSeed{1};
 
     ReadyTaskBatch CollectReadyTaskBatchLocked();
 
     void ScheduleTasks(const ReadyTaskBatch& batch);
+
+    uint64_t GetTaskStartJitterHash(const RuntimeTask& task, uint32_t seed) const;
+
+    std::vector<Time> GetTaskStartJitters(const ReadyTaskBatch& batch) const;
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 

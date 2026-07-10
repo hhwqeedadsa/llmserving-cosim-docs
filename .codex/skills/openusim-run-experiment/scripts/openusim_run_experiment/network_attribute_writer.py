@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 from . import repo_root
@@ -53,7 +54,7 @@ def _run_query(flag: str) -> str:
     current_repo_root = repo_root()
     launcher_path = _ensure_query_prerequisites(current_repo_root)
     result = subprocess.run(
-        [str(launcher_path), "run", _query_command(flag)],
+        [sys.executable, str(launcher_path), "run", _query_command(flag)],
         cwd=current_repo_root,
         capture_output=True,
         text=True,
@@ -134,6 +135,11 @@ def _cache_is_stale(cache_path: Path) -> bool:
     """Return True if the cache is missing or older than the build/ directory."""
     if not cache_path.is_file():
         return True
+    try:
+        if not _read_json(cache_path).get("entries"):
+            return True
+    except (OSError, ValueError, TypeError):
+        return True
     build_dir = repo_root() / "build"
     if not build_dir.is_dir():
         return True
@@ -148,6 +154,8 @@ def load_or_build_parameter_catalog() -> tuple[dict, Path]:
     entries = _runtime_attribute_entries()
     entries.extend(_runtime_global_entries())
     entries = sorted(entries, key=lambda entry: entry["parameter_key"])
+    if not entries:
+        raise RuntimeError("runtime parameter catalog query returned no entries")
     catalog = {
         "source_root": str(repo_root() / QUERY_PROGRAM),
         "extractor_version": "runtime-query-v1",

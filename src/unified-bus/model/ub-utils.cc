@@ -2678,6 +2678,7 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     std::string className;
     std::string attrName;
     std::string globalName;
+    std::string ignoredCasePath;
     bool printUbGlobals = false;
 
     CommandLine cmd;
@@ -2685,6 +2686,8 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     cmd.AddValue("AttributeName", "Target attribute name (optional)", attrName);
     cmd.AddValue("GlobalName", "Target Unified Bus global value name (optional)", globalName);
     cmd.AddValue("PrintUbGlobals", "Print Unified Bus global values with type metadata", printUbGlobals);
+    cmd.AddValue("case-path", "Ignored case path for metadata-only queries", ignoredCasePath);
+    cmd.AddNonOption("casePath", "Ignored case path for metadata-only queries", ignoredCasePath);
     cmd.Parse(argc, argv);
 
     auto isUbGlobal = [](const std::string& name) {
@@ -2693,10 +2696,10 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     auto renderGlobalInfo = [](const GlobalValue& globalValue) {
         StringValue value;
         globalValue.GetValue(value);
-        NS_LOG_UNCOND("Global: " << globalValue.GetName() << "\n"
-                                 << "Description: " << globalValue.GetHelp() << "\n"
-                                 << "DataType: " << globalValue.GetChecker()->GetValueTypeName() << "\n"
-                                 << "Default: " << value.Get());
+        std::cout << "Global: " << globalValue.GetName() << '\n'
+                  << "Description: " << globalValue.GetHelp() << '\n'
+                  << "DataType: " << globalValue.GetChecker()->GetValueTypeName() << '\n'
+                  << "Default: " << value.Get() << std::endl;
     };
 
     if (!globalName.empty()) {
@@ -2706,7 +2709,7 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
                 return true;
             }
         }
-        NS_LOG_UNCOND("Global not found!");
+        std::cout << "Global not found!" << std::endl;
         return true;
     }
 
@@ -2739,21 +2742,22 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     if (!attrName.empty()) {  // attrName not empty
         struct TypeId::AttributeInformation info;
         if (tid.LookupAttributeByName(attrName, &info)) {  // 输出单个属性值
-            NS_LOG_UNCOND("Attribute: " << info.name << "\n"
-                                        << "Description: " << info.help << "\n"
-                                        << "DataType: " << info.checker->GetValueTypeName() << "\n"
-                                        << "Default: " << info.initialValue->SerializeToString(info.checker));
+            std::cout << "Attribute: " << info.name << '\n'
+                      << "Description: " << info.help << '\n'
+                      << "DataType: " << info.checker->GetValueTypeName() << '\n'
+                      << "Default: " << info.initialValue->SerializeToString(info.checker)
+                      << std::endl;
         } else {
-            NS_LOG_UNCOND("Attribute not found!");
+            std::cout << "Attribute not found!" << std::endl;
         }
     } else {  // 输出所有属性
         for (uint32_t i = 0; i < tid.GetAttributeN(); ++i) {
             TypeId::AttributeInformation info = tid.GetAttribute(i);
-            NS_LOG_UNCOND(
-                "Attribute: " << info.name << "\n"
-                              << "Description: " << info.help << "\n"
-                              << "DataType: " << info.checker->GetValueTypeName() << "\n"
-                              << "Default: " << info.initialValue->SerializeToString(info.checker));  // 输出属性信息
+            std::cout << "Attribute: " << info.name << '\n'
+                      << "Description: " << info.help << '\n'
+                      << "DataType: " << info.checker->GetValueTypeName() << '\n'
+                      << "Default: " << info.initialValue->SerializeToString(info.checker)
+                      << std::endl;
         }
     }
     return true;  // 执行完后退出程序

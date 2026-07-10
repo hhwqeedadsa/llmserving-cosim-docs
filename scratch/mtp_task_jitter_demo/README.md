@@ -4,8 +4,10 @@
 
 - 拓扑：8 hosts、4 leaf、2 spines 的两层 Clos。
 - 流量：All-to-All scatter，2 个 4-rank 通信域，`scatter-k=2`，每 rank `1MB`。
+- network attributes：从当前构建的运行时 parameter catalog 写入完整快照。
+- 显式 override：`UbSwitchAllocator::AllocationTime=1ns`、
+  `UbJetty::UbJettyInflightMax=10000`。
 - trace：只保留 task trace，避免 packet/port trace 把示例变重。
-- switch allocator：`ns3::UbSwitchAllocator::AllocationTime=1ns`。
 
 重新生成：
 

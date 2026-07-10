@@ -599,7 +599,8 @@ bool HandleAttributeQuery(int argc, char* argv[])
     for (int i = 1; i < argc; ++i)
     {
         std::string arg(argv[i]);
-        if (arg.find("--ClassName") == 0)
+        if (arg.find("--ClassName") == 0 || arg.find("--GlobalName") == 0 ||
+            arg.find("--PrintUbGlobals") == 0)
         {
             if (UbUtils::Get()->QueryAttributeInfo(argc, argv))
             {

@@ -77,6 +77,35 @@ class OpenUSimRunScriptsTest(unittest.TestCase):
             self.assertGreaterEqual(result["resolved_entry_count"], 3)
             self.assertEqual(result["applied_overrides"]["ns3::UbPort::UbDataRate"], "800Gbps")
 
+    def test_empty_parameter_catalog_cache_is_stale(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            cache_path = Path(temp_dir) / "parameter-catalog.json"
+            cache_path.write_text('{"entries": []}\n', encoding="utf-8")
+            self.assertTrue(network_attribute_writer._cache_is_stale(cache_path))
+
+    def test_parameter_catalog_query_rejects_empty_results(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            cache_path = Path(temp_dir) / "parameter-catalog.json"
+            with (
+                mock.patch.object(
+                    network_attribute_writer,
+                    "_catalog_cache_path",
+                    return_value=cache_path,
+                ),
+                mock.patch.object(
+                    network_attribute_writer,
+                    "_runtime_attribute_entries",
+                    return_value=[],
+                ),
+                mock.patch.object(
+                    network_attribute_writer,
+                    "_runtime_global_entries",
+                    return_value=[],
+                ),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "returned no entries"):
+                    network_attribute_writer.load_or_build_parameter_catalog()
+
     def test_observability_preset_returns_valid_tiers(self):
         for tier in ("minimal", "balanced", "detailed"):
             overrides = network_attribute_writer.observability_preset(tier)

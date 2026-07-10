@@ -13261,6 +13261,52 @@ class UbQuickExampleHelpTextSystemTest : public TestCase
     }
 };
 
+class UbQuickExampleRuntimeCatalogQuerySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleRuntimeCatalogQuerySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example exposes runtime parameter catalog metadata")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        auto [attributeStatus, attributeOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-attribute.log"),
+                                   "--ClassName=ns3::UbPort --AttributeName=UbDataRate",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(attributeStatus,
+                              0,
+                              "runtime attribute query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(attributeOutput.find("Attribute: UbDataRate"),
+                              std::string::npos,
+                              "runtime attribute query should print the requested attribute");
+
+        auto [globalStatus, globalOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-global.log"),
+                                   "--PrintUbGlobals",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(globalStatus,
+                              0,
+                              "runtime Unified Bus global query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(globalOutput.find("Global: UB_TRACE_ENABLE"),
+                              std::string::npos,
+                              "runtime global query should print Unified Bus globals");
+
+        auto [singleGlobalStatus, singleGlobalOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-single-global.log"),
+                                   "--GlobalName=UB_TRACE_ENABLE",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(singleGlobalStatus,
+                              0,
+                              "single runtime Unified Bus global query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(singleGlobalOutput.find("Global: UB_TRACE_ENABLE"),
+                              std::string::npos,
+                              "single runtime global query should print the requested global");
+    }
+};
+
 class UbQuickExampleLocalSingleThreadSystemTest : public TestCase
 {
   public:
@@ -14465,6 +14511,8 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMissingCaseDirSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMissingCaseFileSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleHelpTextSystemTest(), TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleRuntimeCatalogQuerySystemTest(),
+                    TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalSingleThreadSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickScratchLegacyAliasSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleSameCasePathSystemTest(), TestCase::Duration::QUICK);

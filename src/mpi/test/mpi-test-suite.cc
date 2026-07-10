@@ -16,6 +16,18 @@
 
 using namespace ns3;
 
+namespace
+{
+
+std::string
+GetPythonCommand()
+{
+    return std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12"
+                                                                    : "python3";
+}
+
+} // namespace
+
 /**
  * @ingroup mpi-tests
  *
@@ -130,8 +142,8 @@ class MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestCase : public TestC
     {
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
-        const std::string command =
-            "python3 ./ns3 run src/unified-bus/examples/ub-mtp-remote-tp-regression --no-build "
+        const std::string command = GetPythonCommand() +
+            " ./ns3 run src/unified-bus/examples/ub-mtp-remote-tp-regression --no-build "
             "--command-template=\"mpiexec -n 2 %s --test --mode=interceptor\" > " +
             testFile + " 2>&1";
 
@@ -176,8 +188,8 @@ class MpiUbQuickExampleRunTestCase : public TestCase
     {
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
-        const std::string command =
-            "python3 ./ns3 run src/unified-bus/examples/ub-quick-example --no-build "
+        const std::string command = GetPythonCommand() +
+            " ./ns3 run src/unified-bus/examples/ub-quick-example --no-build "
             "--command-template=\"mpiexec -n 2 %s --test " +
             m_args + "\" > " + testFile + " 2>&1";
 
@@ -217,9 +229,7 @@ RunHybridMtpExample(const std::string& testFile,
                     const std::string& arguments = "")
 {
     const std::filesystem::path repoRoot = PROJECT_SOURCE_PATH;
-    const std::string pythonCommand =
-        std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
-    std::string command = "cd \"" + repoRoot.string() + "\" && " + pythonCommand +
+    std::string command = "cd \"" + repoRoot.string() + "\" && " + GetPythonCommand() +
                           " ./ns3 run " + program +
                           " --no-build --command-template=\"mpiexec -n 2 %s --test";
     if (!arguments.empty())

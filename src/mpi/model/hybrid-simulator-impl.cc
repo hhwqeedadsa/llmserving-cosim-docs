@@ -527,31 +527,28 @@ HybridSimulatorImpl::Partition()
     while (!eventsToBeTransferred->IsEmpty())
     {
         Scheduler::Event ev = eventsToBeTransferred->RemoveNext();
+        uint32_t targetLpId = 0;
+        if (ev.key.m_context != Simulator::NO_CONTEXT)
+        {
+            const auto localLpId = MtpInterface::FindNodeLocalLpId(ev.key.m_context);
+            NS_ABORT_MSG_IF(!localLpId &&
+                                NodeList::GetNode(ev.key.m_context)->GetSystemId() == m_myId,
+                            "MTP local LP mapping is missing for local node " << ev.key.m_context);
+            // Every MPI rank builds the full topology. Pre-run events for nodes owned by another
+            // rank stay serialized on the public LP without implying ownership.
+            targetLpId = localLpId.value_or(0);
+        }
         // invoke initialization events (at time 0) by their insertion order
         // since changing the execution order of these events may cause error,
         // they have to be invoked now rather than parallelly executed
         if (ev.key.m_ts == 0)
         {
-            uint32_t targetLpId = 0;
-            if (ev.key.m_context != Simulator::NO_CONTEXT)
-            {
-                const auto localLpId = MtpInterface::FindNodeLocalLpId(ev.key.m_context);
-                NS_ABORT_MSG_IF(
-                    !localLpId && NodeList::GetNode(ev.key.m_context)->GetSystemId() == m_myId,
-                    "MTP local LP mapping is missing for local node " << ev.key.m_context);
-                // Every MPI rank builds the full topology. Initialization events for nodes owned
-                // by another rank stay serialized on the public LP without implying ownership.
-                targetLpId = localLpId.value_or(0);
-            }
             MtpInterface::GetSystem(targetLpId)->InvokeNow(ev);
-        }
-        else if (ev.key.m_context == Simulator::NO_CONTEXT)
-        {
-            Schedule(TimeStep(ev.key.m_ts), ev.impl);
         }
         else
         {
-            ScheduleWithContext(ev.key.m_context, TimeStep(ev.key.m_ts), ev.impl);
+            MtpInterface::GetSystem(targetLpId)
+                ->ScheduleAt(ev.key.m_context, TimeStep(ev.key.m_ts), ev.impl);
         }
     }
 }

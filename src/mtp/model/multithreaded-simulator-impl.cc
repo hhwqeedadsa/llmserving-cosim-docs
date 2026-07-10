@@ -432,23 +432,20 @@ MultithreadedSimulatorImpl::Partition()
     while (!eventsToBeTransferred->IsEmpty())
     {
         Scheduler::Event ev = eventsToBeTransferred->RemoveNext();
+        const uint32_t targetLpId = ev.key.m_context == Simulator::NO_CONTEXT
+                                        ? 0
+                                        : MtpInterface::RequireNodeLocalLpId(ev.key.m_context);
         // invoke initialization events (at time 0) by their insertion order
         // since changing the execution order of these events may cause error,
         // they have to be invoked now rather than parallelly executed
         if (ev.key.m_ts == 0)
         {
-            const uint32_t localLpId = ev.key.m_context == Simulator::NO_CONTEXT
-                                           ? 0
-                                           : MtpInterface::RequireNodeLocalLpId(ev.key.m_context);
-            MtpInterface::GetSystem(localLpId)->InvokeNow(ev);
-        }
-        else if (ev.key.m_context == Simulator::NO_CONTEXT)
-        {
-            Schedule(TimeStep(ev.key.m_ts), ev.impl);
+            MtpInterface::GetSystem(targetLpId)->InvokeNow(ev);
         }
         else
         {
-            ScheduleWithContext(ev.key.m_context, TimeStep(ev.key.m_ts), ev.impl);
+            MtpInterface::GetSystem(targetLpId)
+                ->ScheduleAt(ev.key.m_context, TimeStep(ev.key.m_ts), ev.impl);
         }
     }
 }

@@ -265,6 +265,39 @@ class HybridLinkDelayOrderingSystemTestSuite : public TestSuite
 };
 
 static HybridLinkDelayOrderingSystemTestSuite g_hybridLinkDelayOrdering;
+
+class HybridPrescheduledNodeEventSystemTestCase : public TestCase
+{
+  public:
+    HybridPrescheduledNodeEventSystemTestCase()
+        : TestCase("Hybrid MPI MTP - partition preserves a pre-run node event")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/mpi/examples/hybrid-prescheduled-node-event");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "pre-run node event must execute: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("event-time-ns=10"),
+                              std::string::npos,
+                              "pre-run node event must execute at 10ns: " << output);
+    }
+};
+
+class HybridPrescheduledNodeEventSystemTestSuite : public TestSuite
+{
+  public:
+    HybridPrescheduledNodeEventSystemTestSuite()
+        : TestSuite("mpi-hybrid-prescheduled-node-event", Type::SYSTEM)
+    {
+        AddTestCase(new HybridPrescheduledNodeEventSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridPrescheduledNodeEventSystemTestSuite g_hybridPrescheduledNodeEvent;
 #endif
 
 /* Tests using SimpleDistributedSimulatorImpl */

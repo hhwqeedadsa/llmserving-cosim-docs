@@ -6,7 +6,7 @@
 <keywords>MTP, initial task offset, link delay offset, same timestamp, collective communication, canonical output, seed, reproducibility</keywords>
 </reference-hint>
 
-MTP is a parallel runtime, not a promise that every same-timestamp event will follow the sequential scheduler's global UID order. The runtime gives remote mailbox events a stable sender-side tie-break, orders keyed task completions, and keeps local LP ownership separate from MPI rank. Those rules remove the known races covered by this regression. A workload with a synchronized root frontier can still expose different legal orderings, and events from different LPs can later reconverge at one timestamp.
+MTP is a parallel runtime, not a promise that every same-timestamp event will follow the single-thread scheduler's internal order. The runtime preserves causal ordering and deterministic task completion ordering. Those rules remove the known races covered by this regression. A workload with synchronized initial tasks can still expose different valid orderings, and events processed in parallel can later reach the same destination at one timestamp.
 
 Treat equivalence as a workload-level claim. Compare canonical output or the domain metrics that matter and define acceptance criteria before the run. Do not reuse one case's observed drift as a universal tolerance.
 
@@ -20,9 +20,9 @@ Treat equivalence as a workload-level claim. Compare canonical output or the dom
 
 All offset slots use the half-open interval `[0, window)`. In `ub-quick-example`, time resolution is ps. The mapping is deterministic and does not call an RNG from packet or callback execution paths, so paired single/MTP runs with the same inputs and seed see the same perturbed model.
 
-`--initial-task-start-offset-window` affects only tasks whose original `dependOnPhases` field is empty. Every initial-task source gets one offset derived from the shared seed and source node, and all initial tasks from that source reuse it. Dependent tasks receive zero offset even after all dependencies complete. Sources can collide in the same slot; the run reports unique sources, occupied slots, collisions, and maximum occupancy when that happens.
+`--initial-task-start-offset-window` affects only tasks whose original `dependOnPhases` field is empty. Every initial-task source gets one offset derived from the shared seed and source node, and all initial tasks from that source reuse it. Dependent tasks receive zero offset even after all dependencies complete. Different sources can receive the same offset; the run reports offset reuse and the maximum number of sources sharing one offset.
 
-The link delay offset is not a substitute for the initial task offset when the first difference is already in task `START` order. It is a second defensive layer for later cross-LP timestamp reconvergence. One static offset is assigned to each positive-delay bidirectional physical link from its canonicalized endpoint node/port identities and the shared seed. Every packet on that link sees the same adjusted propagation delay. Original `0ns` links remain zero because MTP uses zero-delay connectivity as an LP co-location boundary. The task and link mechanisms use separate hash domains. The run reports positive links, preserved zero-delay links, occupied slots, collisions, and maximum occupancy.
+The link delay offset is not a substitute for the initial task offset when the first difference is already in task `START` order. It is a second defensive layer for traffic that later arrives at the same destination and time. One static offset is assigned to each positive-delay bidirectional physical link from its endpoint node/port identities and the shared seed. Every packet on that link sees the same adjusted propagation delay. Original `0ns` links remain zero to preserve their existing topology behavior. The task and link mechanisms use separate deterministic mappings. The run reports positive links, preserved zero-delay links, offset reuse, and the maximum number of links sharing one offset.
 
 A phase60 pilot established these boundaries:
 
@@ -35,12 +35,12 @@ A phase60 pilot established these boundaries:
 Use canonical task output first when checking this class of issue:
 
 ```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/mtp_noj_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/mtp_noj_mtp4'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/mtp_noj_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/mtp_noj_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_mtp4'
 ```
 
-`scratch/mtp_task_jitter_demo` is a small public synthetic case generated by `scratch/ns-3-ub-tools`. It reproduced the original offset-disabled single/MTP mismatch on the `origin/main` baseline used by this change. The runtime fixes make its offset-disabled output byte-identical on the final branch, so it is a regression case rather than proof that offsets are always required.
+`scratch/ub_parallel_timing_offset_demo` is a small public synthetic case generated by `scratch/ns-3-ub-tools`. It reproduced the original offset-disabled single/MTP mismatch on the `origin/main` baseline used by this change. The runtime fixes make its offset-disabled output byte-identical on the final branch, so it is a regression case rather than proof that offsets are always required.
 
 Do not present either control as a calibrated physical delay-variation model. Both windows and the shared seed are experiment settings. Pair single/MTP by seed. Multiple independent seeds estimate aggregate behavior under the selected offset distribution and reduce Monte Carlo uncertainty; they do not remove task-level model bias or reconstruct the offset-disabled trajectory. Five seeds are a pilot. Formal statistics should normally use 15--20 seeds and report mean, SD, and a confidence interval.

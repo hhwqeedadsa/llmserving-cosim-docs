@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the public MTP task-start jitter demo case with ns-3-ub-tools."""
+"""Generate the public parallel timing-offset demo case with ns-3-ub-tools."""
 
 import argparse
 import csv
@@ -81,7 +81,7 @@ def build_topology(case_dir: Path, host_count: int, leaf_count: int) -> None:
 
 
 def build_traffic(args: argparse.Namespace, case_dir: Path) -> None:
-    with tempfile.TemporaryDirectory(prefix="mtp-task-jitter-traffic-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="ub-parallel-timing-offset-") as tmp:
         cmd = [
             sys.executable,
             str(TOOLS_DIR / "traffic_maker" / "build_traffic.py"),
@@ -122,7 +122,7 @@ def write_network_attributes(case_dir: Path) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate the public MTP task-start jitter demo case."
+        description="Generate the public parallel timing-offset demo case."
     )
     parser.add_argument("--host-count", type=int, default=8)
     parser.add_argument("--leaf-count", type=int, default=4)

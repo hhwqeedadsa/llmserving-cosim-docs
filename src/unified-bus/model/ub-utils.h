@@ -94,9 +94,9 @@ public:
     {
         uint64_t positiveLinkCount{0};
         uint64_t zeroDelayLinkCount{0};
-        uint64_t occupiedSlotCount{0};
-        uint64_t slotCollisionCount{0};
-        uint64_t maxSlotOccupancy{0};
+        uint64_t distinctOffsetCount{0};
+        uint64_t offsetReuseCount{0};
+        uint64_t maxLinksPerOffset{0};
     };
 
     void CreateTopo(const std::string& filename);

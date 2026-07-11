@@ -136,10 +136,6 @@ UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexe
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
-    if (record.dependOnPhases.empty())
-    {
-        m_initialTaskIds.insert(taskId);
-    }
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
     }
@@ -190,10 +186,6 @@ UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIn
     {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
-    }
-    if (record.dependOnPhases.empty())
-    {
-        m_initialTaskIds.insert(taskId);
     }
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
@@ -325,6 +317,7 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecord& record)
     task.dstEntityId = record.dstEntityId;
     task.hasSrcEntityId = record.hasSrcEntityId;
     task.hasDstEntityId = record.hasDstEntityId;
+    task.hasPhaseDependencies = !record.dependOnPhases.empty();
 
     return task;
 }
@@ -349,6 +342,7 @@ UbTrafficGen::ConvertToRuntimeTask(const TrafficRecordView& record)
     task.dstEntityId = record.dstEntityId;
     task.hasSrcEntityId = record.hasSrcEntityId;
     task.hasDstEntityId = record.hasDstEntityId;
+    task.hasPhaseDependencies = !record.dependOnPhases.empty();
 
     return task;
 }
@@ -759,13 +753,6 @@ UbTrafficGen::SetDependencyVisibilityDelay(Time delay)
     m_dependencyVisibilityDelay = delay;
 }
 
-bool
-UbTrafficGen::HasDependencyVisibilityDelay() const
-{
-    std::lock_guard<std::mutex> lock(m_mutex);
-    return m_dependencyVisibilityDelay.has_value() || m_minRemoteLinkDelay.has_value();
-}
-
 Time
 UbTrafficGen::GetDependencyVisibilityDelay() const
 {
@@ -781,7 +768,8 @@ UbTrafficGen::ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) co
         return;
     }
 
-    NS_ABORT_MSG_IF(!m_dependencyVisibilityDelay.has_value() && !m_minRemoteLinkDelay.has_value(),
+    NS_ABORT_MSG_IF(!m_dependencyVisibilityDelay.has_value() &&
+                        !m_automaticDependencyVisibilityDelay.has_value(),
                     "traffic.csv contains task dependencies but no dependency visibility delay is "
                     "available. Configure a positive UB link delay or pass "
                     "--dependency-visibility-delay=<Time>.");
@@ -790,12 +778,15 @@ UbTrafficGen::ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) co
 }
 
 void
-UbTrafficGen::ObserveRemoteLinkDelay(Time delay)
+UbTrafficGen::ConsiderAutomaticDependencyVisibilityDelay(Time delay)
 {
-    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(), "remote link delay must be non-negative");
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "automatic dependency visibility delay must be non-negative");
     std::lock_guard<std::mutex> lock(m_mutex);
-    if (!m_minRemoteLinkDelay.has_value() || delay < *m_minRemoteLinkDelay) {
-        m_minRemoteLinkDelay = delay;
+    if (!m_automaticDependencyVisibilityDelay.has_value() ||
+        delay < *m_automaticDependencyVisibilityDelay)
+    {
+        m_automaticDependencyVisibilityDelay = delay;
     }
 }
 
@@ -1144,8 +1135,9 @@ UbTrafficGen::ResolveCompletionVisibleDelayLocked() const
     if (m_dependencyVisibilityDelay.has_value()) {
         return *m_dependencyVisibilityDelay;
     }
-    if (m_minRemoteLinkDelay.has_value()) {
-        return *m_minRemoteLinkDelay;
+    if (m_automaticDependencyVisibilityDelay.has_value())
+    {
+        return *m_automaticDependencyVisibilityDelay;
     }
     return Time(0);
 }
@@ -1164,12 +1156,10 @@ UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
     std::vector<Time> offsets(batch.tasks.size(), Time(0));
     Time offsetWindow;
     uint32_t offsetSeed;
-    std::unordered_set<uint32_t> initialTaskIds;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
         offsetWindow = m_initialTaskStartOffsetWindow;
         offsetSeed = m_initialTaskStartOffsetSeed;
-        initialTaskIds = m_initialTaskIds;
     }
 
     const int64_t maxSteps = offsetWindow.GetTimeStep();
@@ -1182,7 +1172,7 @@ UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
     std::unordered_map<uint32_t, uint64_t> sourceSlots;
     for (const auto& task : batch.tasks)
     {
-        if (initialTaskIds.contains(task.taskId))
+        if (!task.hasPhaseDependencies)
         {
             sourceSlots.try_emplace(task.sourceNode,
                                     GetInitialTaskSourceOffsetHash(task.sourceNode, offsetSeed) %
@@ -1201,7 +1191,7 @@ UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
     for (size_t index = 0; index < batch.tasks.size(); ++index)
     {
         const auto& task = batch.tasks[index];
-        if (initialTaskIds.contains(task.taskId))
+        if (!task.hasPhaseDependencies)
         {
             offsets[index] = TimeStep(static_cast<int64_t>(sourceSlots.at(task.sourceNode)));
         }
@@ -1211,10 +1201,9 @@ UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
     if (collisionCount > 0)
     {
         std::cerr << "[WARNING] Initial task start offsets mapped " << sourceSlots.size()
-                  << " unique sources into " << slotCount
-                  << " slots: occupied-slots=" << slotOccupancy.size()
-                  << ", collisions=" << collisionCount
-                  << ", max-slot-occupancy=" << maxSlotOccupancy
+                  << " unique sources to " << slotOccupancy.size()
+                  << " distinct offsets: offset-reuses=" << collisionCount
+                  << ", max-sources-per-offset=" << maxSlotOccupancy
                   << "; some initial tasks still share a timestamp" << std::endl;
     }
     return offsets;

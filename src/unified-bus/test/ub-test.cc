@@ -1022,18 +1022,16 @@ class UbTrafficGenRuntimeTaskEntityFieldsTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(task.hasDstEntityId,
                               true,
                               "runtime task should preserve destination entity presence");
-        gen.AddTaskDuringInitialLoad(record);
-        NS_TEST_ASSERT_MSG_EQ(gen.m_initialTaskIds.contains(record.taskId),
-                              true,
-                              "an empty dependency field should record an initial task");
+        NS_TEST_ASSERT_MSG_EQ(task.hasPhaseDependencies,
+                              false,
+                              "an empty dependency field should mark an initial task");
 
         record.taskId = 10;
         record.dependOnPhases = "3";
         task = gen.ConvertToRuntimeTask(record);
-        gen.AddTaskDuringInitialLoad(record);
-        NS_TEST_ASSERT_MSG_EQ(gen.m_initialTaskIds.contains(record.taskId),
-                              false,
-                              "a non-empty dependency field should not record an initial task");
+        NS_TEST_ASSERT_MSG_EQ(task.hasPhaseDependencies,
+                              true,
+                              "a non-empty dependency field should mark a dependent task");
     }
 };
 
@@ -1662,13 +1660,15 @@ class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
 
     void DoRun() override
     {
-        const auto makeTask = [](uint32_t taskId, uint32_t sourceNode) {
-            UbTrafficGen::RuntimeTask task;
-            task.taskId = taskId;
-            task.sourceNode = sourceNode;
-            task.phaseId = 1;
-            return task;
-        };
+        const auto makeTask =
+            [](uint32_t taskId, uint32_t sourceNode, bool hasDependencies = false) {
+                UbTrafficGen::RuntimeTask task;
+                task.taskId = taskId;
+                task.sourceNode = sourceNode;
+                task.phaseId = 1;
+                task.hasPhaseDependencies = hasDependencies;
+                return task;
+            };
 
         UbTrafficGen gen;
         UbTrafficGen::ReadyTaskBatch batch;
@@ -1677,9 +1677,8 @@ class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
             makeTask(101, 7),
             makeTask(102, 11),
             makeTask(103, 2),
-            makeTask(104, 13),
+            makeTask(104, 13, true),
         };
-        gen.m_initialTaskIds = {100, 101, 102, 103};
 
         gen.SetInitialTaskStartOffsetWindow(Time(0), 1);
         const auto disabled = gen.GetInitialTaskStartOffsets(batch);
@@ -1725,15 +1724,14 @@ class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
 
         UbTrafficGen::ReadyTaskBatch collidingTasks;
         collidingTasks.tasks = {makeTask(200, 21), makeTask(201, 22)};
-        gen.m_initialTaskIds = {200, 201};
         gen.SetInitialTaskStartOffsetWindow(TimeStep(1), 1);
         std::ostringstream warning;
         std::streambuf* previousStderr = std::cerr.rdbuf(warning.rdbuf());
         (void)gen.GetInitialTaskStartOffsets(collidingTasks);
         std::cerr.rdbuf(previousStderr);
-        NS_TEST_ASSERT_MSG_NE(warning.str().find("collisions=1"),
+        NS_TEST_ASSERT_MSG_NE(warning.str().find("offset-reuses=1"),
                               std::string::npos,
-                              "initial task offset collisions should be visible in release builds");
+                              "reused initial task offsets should be visible in release builds");
     }
 };
 
@@ -14564,7 +14562,7 @@ class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
                                            "--canonical-output=\"" +
                                            canonicalBase.string() + "\"",
                                        "",
-                                       "scratch/mtp_task_jitter_demo");
+                                       "scratch/ub_parallel_timing_offset_demo");
             return RunResult{status, std::move(output), ReadCanonicalBytes(canonicalBase)};
         };
 
@@ -14626,9 +14624,9 @@ class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
             noOffsetMtp.output.find("Initial task start offset is off (default)"),
             std::string::npos,
             "MTP should guide users when initial task offsets are disabled");
-        NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("Arbitrary simultaneous public callbacks"),
+        NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("events with the same simulation time"),
                               std::string::npos,
-                              "MTP should report its public-callback ordering boundary");
+                              "MTP should report its same-time event ordering boundary");
         NS_TEST_ASSERT_MSG_NE(
             seedOneMtp.output.find(
                 "Initial task start offset enabled: window=32ps, seed=1"),

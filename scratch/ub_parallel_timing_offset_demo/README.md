@@ -1,4 +1,4 @@
-# MTP deterministic timing offset regression demo
+# Parallel timing offset regression demo
 
 这是一个公开的小型合成用例，用来回归 MTP 同时间戳任务释放问题，并展示 initial task start 与 link delay 两层 deterministic offset 的共享 seed 语义。用例由 `scratch/ns-3-ub-tools` 生成，不包含私有 workload 数据。
 
@@ -12,7 +12,7 @@
 重新生成：
 
 ```bash
-python3.12 scratch/mtp_task_jitter_demo/generate_case.py
+python3.12 scratch/ub_parallel_timing_offset_demo/generate_case.py
 ```
 
 这个 case 有 phase dependency，下面的命令显式使用 `--dependency-visibility-delay=10ns`。
@@ -22,16 +22,16 @@ python3.12 scratch/mtp_task_jitter_demo/generate_case.py
 不开 offset：
 
 ```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/mtp_noj_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/mtp_noj_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/mtp_noj_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/mtp_noj_mtp4'
 diff -q /tmp/mtp_noj_single.rank0.txt /tmp/mtp_noj_mtp4.rank0.txt
 ```
 
 打开 initial task start offset 和 positive-link delay offset：
 
 ```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/mtp_task_jitter_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_mtp4'
 diff -q /tmp/mtp_offset_single.rank0.txt /tmp/mtp_offset_mtp4.rank0.txt
 ```
 

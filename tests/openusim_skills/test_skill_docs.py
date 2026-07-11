@@ -47,8 +47,8 @@ class OpenUSimStageSkillDocsTest(unittest.TestCase):
         ):
             self.assertTrue((repo_root / relative_path).is_file(), msg=relative_path)
 
-    def test_jitter_demo_uses_runtime_parameter_catalog(self):
-        generator = self.read_text("scratch/mtp_task_jitter_demo/generate_case.py")
+    def test_timing_offset_demo_uses_runtime_parameter_catalog(self):
+        generator = self.read_text("scratch/ub_parallel_timing_offset_demo/generate_case.py")
         self.assertIn("network_attribute_writer.write_network_attributes", generator)
         self.assertNotIn("NETWORK_ATTRIBUTES =", generator)
 

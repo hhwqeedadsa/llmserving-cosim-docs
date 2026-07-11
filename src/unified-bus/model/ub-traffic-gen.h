@@ -21,7 +21,6 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
 class UbTrafficGenPhaseDependencyMemoryTest;
@@ -81,6 +80,7 @@ public:
         uint32_t dstEntityId{0};
         bool hasSrcEntityId{false};
         bool hasDstEntityId{false};
+        bool hasPhaseDependencies{false};
     };
 
     struct TaskCleanupInfo
@@ -122,13 +122,11 @@ public:
 
     void SetDependencyVisibilityDelay(Time delay);
 
-    bool HasDependencyVisibilityDelay() const;
-
     Time GetDependencyVisibilityDelay() const;
 
     void ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) const;
 
-    void ObserveRemoteLinkDelay(Time delay);
+    void ConsiderAutomaticDependencyVisibilityDelay(Time delay);
 
     /**
      * @brief Configure deterministic start offsets for tasks without phase dependencies.
@@ -208,7 +206,6 @@ public:
     };
 
     std::unordered_map<uint32_t, RuntimeTask> m_tasks{};
-    std::unordered_set<uint32_t> m_initialTaskIds{};
     bool m_useDenseTaskStore{true};
     std::vector<RuntimeTask> m_denseTasks{};
     std::unordered_map<uint32_t, TaskState> m_taskStates{};
@@ -223,7 +220,7 @@ public:
     std::vector<Ptr<UbApp>> m_sourceApps{};
     std::unordered_map<std::string, Time> m_delayParseCache{};
     std::optional<Time> m_dependencyVisibilityDelay{};
-    std::optional<Time> m_minRemoteLinkDelay{};
+    std::optional<Time> m_automaticDependencyVisibilityDelay{};
     bool m_canonicalOutputEnabled = false;
     std::string m_canonicalOutputPath;
     uint32_t m_canonicalRank = 0;

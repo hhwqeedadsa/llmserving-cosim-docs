@@ -246,6 +246,39 @@ RunHybridMtpExample(const std::string& testFile,
     return {status, buffer.str()};
 }
 
+class MpiRemoteTpRegressionSystemTestCase : public TestCase
+{
+  public:
+    MpiRemoteTpRegressionSystemTestCase()
+        : TestCase("Hybrid MPI MTP - remote TP traffic completes")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/unified-bus/examples/ub-mtp-remote-tp-regression");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "remote TP traffic must complete: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST PASS"),
+                              std::string::npos,
+                              "remote TP traffic must report success: " << output);
+    }
+};
+
+class MpiRemoteTpRegressionSystemTestSuite : public TestSuite
+{
+  public:
+    MpiRemoteTpRegressionSystemTestSuite()
+        : TestSuite("mpi-example-ub-mtp-remote-tp-regression-np2", Type::SYSTEM)
+    {
+        AddTestCase(new MpiRemoteTpRegressionSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static MpiRemoteTpRegressionSystemTestSuite g_mpiRemoteTpRegression;
+
 class HybridLinkDelayOrderingSystemTestCase : public TestCase
 {
   public:
@@ -397,11 +430,6 @@ static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridLdst2(
 static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridMultiRemote2(
     "mpi-example-ub-quick-example-run-hybrid-multi-remote-2",
     "--case-path=scratch/ub-mpi-minimal --mtp-threads=2 --stop-ms=50");
-static MpiTestSuite g_mpiUbRemoteTpRegressionNp2(
-    "mpi-example-ub-mtp-remote-tp-regression-np2",
-    "src/unified-bus/examples/ub-mtp-remote-tp-regression",
-    NS_TEST_SOURCEDIR,
-    2);
 static MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestSuite
     g_mpiUbRemoteTpRegressionDeprecatedInterceptorFailsFast;
 #endif

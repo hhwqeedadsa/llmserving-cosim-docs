@@ -452,9 +452,9 @@ BuildScenarioFromConfig(const QuickExampleOptions& options, const RuntimeSelecti
                   << ", seed=" << options.timingOffsetSeed
                   << ", positive-links=" << offsetStats.positiveLinkCount
                   << ", zero-delay-links-preserved=" << offsetStats.zeroDelayLinkCount
-                  << ", occupied-slots=" << offsetStats.occupiedSlotCount
-                  << ", collisions=" << offsetStats.slotCollisionCount
-                  << ", max-slot-occupancy=" << offsetStats.maxSlotOccupancy << "." << std::endl;
+                  << ", distinct-offsets=" << offsetStats.distinctOffsetCount
+                  << ", offset-reuses=" << offsetStats.offsetReuseCount
+                  << ", max-links-per-offset=" << offsetStats.maxLinksPerOffset << "." << std::endl;
     }
     else if (shouldPrint && ModeUsesMtp(runtime.mode))
     {
@@ -495,7 +495,7 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
             if (link->IsRemote() ||
                 (usePositiveLocalLinkDelays && delay.IsStrictlyPositive()))
             {
-                UbTrafficGen::Get()->ObserveRemoteLinkDelay(delay);
+                UbTrafficGen::Get()->ConsiderAutomaticDependencyVisibilityDelay(delay);
             }
         }
     }
@@ -503,11 +503,6 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
 
 void ApplyDependencyVisibilityLookaheadBound(const RuntimeSelection& runtime)
 {
-    if (!UbTrafficGen::Get()->HasDependencyVisibilityDelay())
-    {
-        return;
-    }
-
     const Time delay = UbTrafficGen::Get()->GetDependencyVisibilityDelay();
     if (!delay.IsStrictlyPositive())
     {
@@ -705,12 +700,12 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
                  options.dependencyVisibilityDelay);
     cmd.AddValue("initial-task-start-offset-window",
                  "Add one deterministic per-source start offset to tasks with no phase "
-                 "dependencies within this half-open window; use 0ps or off to disable "
+                 "dependencies in [0, window); use 0ps or off to disable "
                  "(default: 0ps)",
                  options.initialTaskStartOffsetWindow);
     cmd.AddValue("link-delay-offset-window",
                  "Advanced workaround: add a deterministic per-link offset to positive topology "
-                 "delays within this half-open window; use 0ps or off to disable (default: 0ps)",
+                 "delays in [0, window); use 0ps or off to disable (default: 0ps)",
                  options.linkDelayOffsetWindow);
     cmd.AddValue("timing-offset-seed",
                  "Advanced: shared seed for deterministic initial-task and link-delay offset "
@@ -806,10 +801,10 @@ RuntimeSelection PrepareRuntime(int* argc,
             std::cout << "[INFO] MTP enabled with " << options.mtpThreads << " threads."
                       << (runtime.enableMpi ? " (hybrid MPI mode)." : " (local mode).")
                       << std::endl;
-            std::cout << "[INFO] MTP deterministically orders cross-LP mailbox events and keyed "
-                         "task completions. Arbitrary simultaneous public callbacks and sequential "
-                         "global UID order are not guaranteed. Compare canonical or domain metrics "
-                         "and define workload-specific acceptance criteria."
+            std::cout << "[INFO] Parallel runs preserve causal ordering and deterministic task "
+                         "completion ordering, but events with the same simulation time may be "
+                         "processed in a different order than single-thread runs. Compare task or "
+                         "workload metrics using predefined acceptance criteria."
                       << std::endl;
         }
 #ifndef NS3_MTP

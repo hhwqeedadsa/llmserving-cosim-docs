@@ -1924,8 +1924,8 @@ UbUtils::CreateTopo(const string& filename, Time offsetWindow, uint32_t offsetSe
             if (offsetWindow.IsStrictlyPositive())
             {
                 const int64_t slot = (effectiveDelay - baseDelay).GetTimeStep();
-                offsetStats.maxSlotOccupancy =
-                    std::max(offsetStats.maxSlotOccupancy, ++slotOccupancy[slot]);
+                offsetStats.maxLinksPerOffset =
+                    std::max(offsetStats.maxLinksPerOffset, ++slotOccupancy[slot]);
             }
         }
         CreateUbChannelBetween(p1, p2, effectiveDelay);
@@ -1943,9 +1943,9 @@ UbUtils::CreateTopo(const string& filename, Time offsetWindow, uint32_t offsetSe
 
     if (offsetWindow.IsStrictlyPositive())
     {
-        offsetStats.occupiedSlotCount = slotOccupancy.size();
-        offsetStats.slotCollisionCount =
-            offsetStats.positiveLinkCount - offsetStats.occupiedSlotCount;
+        offsetStats.distinctOffsetCount = slotOccupancy.size();
+        offsetStats.offsetReuseCount =
+            offsetStats.positiveLinkCount - offsetStats.distinctOffsetCount;
     }
     return offsetStats;
 }

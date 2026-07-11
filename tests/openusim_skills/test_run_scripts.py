@@ -113,6 +113,15 @@ class OpenUSimRunScriptsTest(unittest.TestCase):
             self.assertEqual(overrides["UB_TRACE_ENABLE"], "true")
             self.assertEqual(overrides["UB_PARSE_TRACE_ENABLE"], "true")
 
+    def test_runtime_global_query_failure_is_not_silenced(self):
+        with mock.patch.object(
+            network_attribute_writer,
+            "_run_query",
+            side_effect=RuntimeError("global query failed"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "global query failed"):
+                network_attribute_writer._runtime_global_entries()
+
     def test_observability_preset_minimal_disables_heavy_traces(self):
         overrides = network_attribute_writer.observability_preset("minimal")
         self.assertEqual(overrides["UB_PACKET_TRACE_ENABLE"], "false")

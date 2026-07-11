@@ -23,6 +23,8 @@ constexpr uint32_t kJettyNum = 0;
 constexpr uint32_t kTaskId = 1;
 constexpr uint32_t kSenderTpn = 100;
 constexpr uint32_t kReceiverTpn = 200;
+constexpr uint32_t kRemoteLinkDelayNs = 10;
+constexpr uint32_t kTaskStartDelayNs = 10;
 constexpr auto kTpPriority = UB_PRIORITY_DEFAULT;
 
 enum class FlowControlMode
@@ -205,6 +207,9 @@ BuildTpTopology()
     topo.switch0DevicePort->Attach(leftLink);
 
     topo.remoteLink = CreateObject<UbRemoteLink>();
+    // A positive remote-link delay gives the hybrid runtime valid lookahead. This value belongs to
+    // the regression topology and is not a recommended UB link delay.
+    topo.remoteLink->SetAttribute("Delay", TimeValue(NanoSeconds(kRemoteLinkDelayNs)));
     topo.switch0RemotePort->Attach(topo.remoteLink);
     topo.switch1RemotePort->Attach(topo.remoteLink);
     topo.switch0RemotePort->EnableMpiReceive();
@@ -300,7 +305,11 @@ SetupTpMode(uint32_t systemId, const HybridTpTopology& topo, uint32_t flowSize)
 
     if (systemId == 0)
     {
-        Simulator::Schedule(NanoSeconds(10), &PrepareTpFlow, topo.device0, topo.device1->GetId(), flowSize);
+        Simulator::Schedule(NanoSeconds(kTaskStartDelayNs),
+                            &PrepareTpFlow,
+                            topo.device0,
+                            topo.device1->GetId(),
+                            flowSize);
     }
 }
 } // namespace

@@ -50,6 +50,23 @@ build_lib_example(
 
 if(${ENABLE_MTP})
   build_lib_example(
+    NAME hybrid-prescheduled-node-event
+    SOURCE_FILES hybrid-prescheduled-node-event.cc
+    LIBRARIES_TO_LINK
+    ${libmpi}
+    ${libmtp}
+  )
+
+  build_lib_example(
+    NAME hybrid-link-delay-ordering
+    SOURCE_FILES hybrid-link-delay-ordering.cc
+    LIBRARIES_TO_LINK
+    ${libmpi}
+    ${libmtp}
+    ${libpoint-to-point}
+  )
+
+  build_lib_example(
     NAME simple-hybrid
     SOURCE_FILES simple-hybrid.cc
                  mpi-test-fixtures.cc

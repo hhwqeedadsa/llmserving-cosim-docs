@@ -78,34 +78,19 @@ In addition to the DCTCP example, you can find other adapted examples in `exampl
 Meanwhile, Unison also supports manual partition, and you can find a minimal example in `src/mtp/examples/simple-mtp.cc`
 For hybrid simulation with MPI, you can find a minimal example in `src/mpi/examples/simple-hybrid.cc`.
 
-We also provide several detailed examples for Unison, traditional MPI parallel simulation, hybrid simulation, and unified-bus config-driven runs:
+We also provide several detailed examples for Unison, traditional MPI parallel simulation, and hybrid simulation:
 
 | Name | Location | Required configuration flags | Running commands |
 | - | - | - | - |
 | fat-tree-mtp | src/mtp/examples/fat-tree-mtp.cc | `--enable-mtp --enable-examples` without `--enable-mpi` | `python3.12 ./ns3 run "fat-tree-mtp --thread=4"` |
 | fat-tree-mpi | src/mpi/examples/fat-tree-mpi.cc | `--enable-mpi --enable-examples` without `--enable-mtp` | `python3.12 ./ns3 run fat-tree-mpi --command-template "mpirun -np 4 %s"` |
 | fat-tree-hybrid | src/mpi/examples/fat-tree-hybrid.cc | `--enable-mtp --enable-mpi --enable-examples` | `python3.12 ./ns3 run fat-tree-hybrid --command-template "mpirun -np 2 %s --thread=2"` |
-| ub-quick-example | scratch/ub-quick-example.cc | local: `python3.12 ./ns3 configure --enable-modules=unified-bus --disable-werror -d release -G Ninja` then `python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example`; local MTP: add `--enable-mtp`; MPI: add `--enable-mpi`; MPI+MTP: add `--enable-mpi --enable-mtp` | local: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp'`; local MTP: `python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/clos_32hosts-4leafs-8spines_pod2pod --mtp-threads=2 --dependency-visibility-delay=20ns'`; MPI: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example --case-path=scratch/ub-mpi-minimal --test --dependency-visibility-delay=20ns`; MPI+MTP: `mpirun -np 2 build/scratch/ns3.44-ub-quick-example --case-path=scratch/ub-mpi-minimal --mtp-threads=2 --test --dependency-visibility-delay=20ns` |
-| ub-mtp-remote-tp-regression | src/unified-bus/examples/ub-mtp-remote-tp-regression.cc | `--enable-mtp --enable-mpi --enable-examples` | regression-only binary; exercised by `build/utils/ns3.44-test-runner-default --suite=mpi-example-ub-mtp-remote-tp-regression-np2 --verbose` |
 
 Feel free to explore these examples, compare code changes and adjust the `-np` and `--thread` arguments.
 
-### Unified-bus config MPI notes
+### UB parallel simulation
 
-For config-driven unified-bus runs, use `scratch/ub-quick-example` as the default entry. If you prefer the example binary, `src/unified-bus/examples/ub-quick-example.cc` provides the same CLI after enabling examples. See also `docs/ub-quick-example.md`.
-
-For a reused workspace that needs to reset previous full ns-3, examples, tests, MPI, or MTP configure choices, explicitly add `--disable-examples --disable-tests --disable-mpi --disable-mtp` to return to local UB-only mode. If no reset is needed, use the shorter local configure command shown in the table above.
-
-For config-driven unified-bus MPI runs, keep the following rules explicit:
-
-- `UbTrafficGen` / `traffic.csv` supports MPI multi-process mode. A task is owned by the MPI rank of its `sourceNode`; all ranks load the full traffic DAG, but each rank starts only its owned tasks.
-- `dependOnPhases` in a parallel runtime uses distributed dependency visibility, not single-process immediate visibility. A completed task becomes dependency-visible at `completionTs + dependency-visibility-delay`, and that visibility is propagated as an MPI control message when ranks differ.
-- Traffic DAG dependencies in MPI, local MTP, or MPI+MTP require a positive `--dependency-visibility-delay=<Time>` unless a positive delay is derived from remote links. Use the same value when comparing local and parallel runs byte-for-byte.
-
-- `node.csv` should provide an explicit `systemId` column for multi-process placement. In single-process compatibility mode, omitted `systemId` still defaults to `0`.
-- In `MTP+MPI` hybrid runs, `node.csv` still uses the MPI-rank ownership value in `systemId`. Do not pre-pack the high 16 bits in config; `HybridSimulatorImpl` assigns packed local-system ids at runtime.
-- `topology.csv` may connect endpoints on different MPI ranks. Local vs. remote channel selection is decided by the builder from endpoint placement; config files do not choose link type directly.
-- `transport_channel.csv` describes TP connectivity metadata between endpoints. It is not an instruction to create remote-side TP objects on the current rank.
+For user-oriented instructions covering local runs, multi-threaded runs, MPI multi-process runs, and combined MPI plus multi-threaded runs, see [UB 多线程与多进程仿真指南](UB_PARALLEL_SIMULATION.md). It also explains the purpose of reproducible timing offsets, case placement, task dependencies, result comparison, and common configuration errors.
 
 ## Running Evaluations
 

@@ -52,6 +52,24 @@ public:
     void SetLocalEntityId(uint32_t localEntityId);
     void SetPeerEntityId(uint32_t peerEntityId);
 
+    /**
+     * @brief Get the configured transport mode.
+     * @return Transport mode used by this application.
+     */
+    TransportMode GetTransportMode() const
+    {
+        return m_transportMode;
+    }
+
+    /**
+     * @brief Get whether shortest paths are required.
+     * @return True when the application is configured to use shortest paths.
+     */
+    bool GetUseShortestPaths() const
+    {
+        return m_useShortestPaths;
+    }
+
     void SetGetTpnRule(GetTpnRuleT type)
     {
         m_getTpnRule = type;

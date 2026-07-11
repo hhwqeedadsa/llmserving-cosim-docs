@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ub-utils.h"
+
 #include <algorithm>
 #include <array>
 #include <chrono>
@@ -11,6 +12,7 @@
 #include <map>
 #include <sstream>
 #include <string_view>
+#include <unordered_map>
 #ifdef NS3_MPI
 #include "ub-remote-link.h"
 #include "ns3/mpi-interface.h"
@@ -65,6 +67,15 @@ std::string
 DisplayFilename(const std::string& filename)
 {
     return std::filesystem::path(filename).filename().string();
+}
+
+uint64_t
+MixLinkDelayOffsetHash(uint64_t value)
+{
+    value += 0x9e3779b97f4a7c15ULL;
+    value = (value ^ (value >> 30)) * 0xbf58476d1ce4e5b9ULL;
+    value = (value ^ (value >> 27)) * 0x94d049bb133111ebULL;
+    return value ^ (value >> 31);
 }
 
 uint32_t
@@ -587,7 +598,7 @@ PreloadLocalTpIfOwned(Ptr<Node> node,
 }
 
 Ptr<UbLink>
-CreateUbChannelBetween(Ptr<UbPort> p1, Ptr<UbPort> p2, const string& delay)
+CreateUbChannelBetween(Ptr<UbPort> p1, Ptr<UbPort> p2, Time delay)
 {
     Ptr<UbLink> channel;
 #ifdef NS3_MPI
@@ -604,7 +615,7 @@ CreateUbChannelBetween(Ptr<UbPort> p1, Ptr<UbPort> p2, const string& delay)
         channel = CreateObject<UbLink>();
     }
 
-    channel->SetAttribute("Delay", StringValue(delay));
+    channel->SetAttribute("Delay", TimeValue(delay));
     p1->Attach(channel);
     p2->Attach(channel);
     return channel;
@@ -1805,9 +1816,56 @@ inline void UbUtils::SwitchLastPacketTraversesNotify(uint32_t nodeId, UbTranspor
     }
 }
 
-// 读取拓扑文件
-void UbUtils::CreateTopo(const string &filename)
+Time
+UbUtils::ResolveLinkDelayWithOffset(Time baseDelay,
+                                    Time offsetWindow,
+                                    uint32_t offsetSeed,
+                                    uint32_t node1,
+                                    uint32_t port1,
+                                    uint32_t node2,
+                                    uint32_t port2)
 {
+    NS_ABORT_MSG_IF(baseDelay.IsStrictlyNegative(), "link delay must be non-negative");
+    NS_ABORT_MSG_IF(offsetWindow.IsStrictlyNegative(),
+                    "link delay offset window must be non-negative");
+    if (baseDelay.IsZero() || offsetWindow.IsZero())
+    {
+        return baseDelay;
+    }
+
+    std::pair<uint32_t, uint32_t> endpoint1{node1, port1};
+    std::pair<uint32_t, uint32_t> endpoint2{node2, port2};
+    if (endpoint2 < endpoint1)
+    {
+        std::swap(endpoint1, endpoint2);
+    }
+
+    uint64_t hash =
+        MixLinkDelayOffsetHash(static_cast<uint64_t>(offsetSeed) ^ 0x6c696e6b2d646c79ULL);
+    hash = MixLinkDelayOffsetHash(hash ^ endpoint1.first);
+    hash = MixLinkDelayOffsetHash(hash ^ endpoint1.second);
+    hash = MixLinkDelayOffsetHash(hash ^ endpoint2.first);
+    hash = MixLinkDelayOffsetHash(hash ^ endpoint2.second);
+
+    const auto slotCount = static_cast<uint64_t>(offsetWindow.GetTimeStep());
+    return baseDelay + TimeStep(static_cast<int64_t>(hash % slotCount));
+}
+
+// 读取拓扑文件
+void
+UbUtils::CreateTopo(const string& filename)
+{
+    (void)CreateTopo(filename, Time(0), 1);
+}
+
+UbUtils::LinkDelayOffsetStats
+UbUtils::CreateTopo(const string& filename, Time offsetWindow, uint32_t offsetSeed)
+{
+    NS_ABORT_MSG_IF(offsetWindow.IsStrictlyNegative(),
+                    "link delay offset window must be non-negative");
+    LinkDelayOffsetStats offsetStats;
+    std::unordered_map<int64_t, uint64_t> slotOccupancy;
+
     PrintTimestamp("[setup] Load " + DisplayFilename(filename));
     ifstream file(filename);
     if (!file.is_open())
@@ -1848,7 +1906,29 @@ void UbUtils::CreateTopo(const string &filename)
         Ptr<UbPort> p2 = DynamicCast<UbPort>(n2->GetDevice(port2));
         p1->SetDataRate(DataRate(bandwidth));
         p2->SetDataRate(DataRate(bandwidth));
-        CreateUbChannelBetween(p1, p2, delay);
+        const Time baseDelay(delay);
+        const Time effectiveDelay = ResolveLinkDelayWithOffset(baseDelay,
+                                                               offsetWindow,
+                                                               offsetSeed,
+                                                               node1,
+                                                               port1,
+                                                               node2,
+                                                               port2);
+        if (baseDelay.IsZero())
+        {
+            ++offsetStats.zeroDelayLinkCount;
+        }
+        else
+        {
+            ++offsetStats.positiveLinkCount;
+            if (offsetWindow.IsStrictlyPositive())
+            {
+                const int64_t slot = (effectiveDelay - baseDelay).GetTimeStep();
+                offsetStats.maxLinksPerOffset =
+                    std::max(offsetStats.maxLinksPerOffset, ++slotOccupancy[slot]);
+            }
+        }
+        CreateUbChannelBetween(p1, p2, effectiveDelay);
     }
 
     for (auto it = NodeList::Begin(); it != NodeList::End(); ++it) {
@@ -1860,6 +1940,14 @@ void UbUtils::CreateTopo(const string &filename)
         }
     }
     file.close();
+
+    if (offsetWindow.IsStrictlyPositive())
+    {
+        offsetStats.distinctOffsetCount = slotOccupancy.size();
+        offsetStats.offsetReuseCount =
+            offsetStats.positiveLinkCount - offsetStats.distinctOffsetCount;
+    }
+    return offsetStats;
 }
 
 // 解析节点范围（如 "1..4"）
@@ -2136,7 +2224,8 @@ void UbUtils::CreateTp(const string &filename)
     ifstream file(filename);
     if (!file.is_open()) { // 没有TP文件则使用实时创建TP模式
         PrintTimestamp("[setup] Skip " + DisplayFilename(filename) +
-                       " (not found; TP channels will be created on demand).");
+                       " (not found; traffic will reserve TP connections before endpoints "
+                       "materialize on demand).");
         return ;
     }
     PrintTimestamp("[setup] Load " + DisplayFilename(filename));
@@ -2677,6 +2766,7 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     std::string className;
     std::string attrName;
     std::string globalName;
+    std::string ignoredCasePath;
     bool printUbGlobals = false;
 
     CommandLine cmd;
@@ -2684,6 +2774,8 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     cmd.AddValue("AttributeName", "Target attribute name (optional)", attrName);
     cmd.AddValue("GlobalName", "Target Unified Bus global value name (optional)", globalName);
     cmd.AddValue("PrintUbGlobals", "Print Unified Bus global values with type metadata", printUbGlobals);
+    cmd.AddValue("case-path", "Ignored case path for metadata-only queries", ignoredCasePath);
+    cmd.AddNonOption("casePath", "Ignored case path for metadata-only queries", ignoredCasePath);
     cmd.Parse(argc, argv);
 
     auto isUbGlobal = [](const std::string& name) {
@@ -2692,10 +2784,10 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     auto renderGlobalInfo = [](const GlobalValue& globalValue) {
         StringValue value;
         globalValue.GetValue(value);
-        NS_LOG_UNCOND("Global: " << globalValue.GetName() << "\n"
-                                 << "Description: " << globalValue.GetHelp() << "\n"
-                                 << "DataType: " << globalValue.GetChecker()->GetValueTypeName() << "\n"
-                                 << "Default: " << value.Get());
+        std::cout << "Global: " << globalValue.GetName() << '\n'
+                  << "Description: " << globalValue.GetHelp() << '\n'
+                  << "DataType: " << globalValue.GetChecker()->GetValueTypeName() << '\n'
+                  << "Default: " << value.Get() << std::endl;
     };
 
     if (!globalName.empty()) {
@@ -2705,7 +2797,7 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
                 return true;
             }
         }
-        NS_LOG_UNCOND("Global not found!");
+        std::cout << "Global not found!" << std::endl;
         return true;
     }
 
@@ -2738,21 +2830,22 @@ bool UbUtils::QueryAttributeInfo(int argc, char *argv[])
     if (!attrName.empty()) {  // attrName not empty
         struct TypeId::AttributeInformation info;
         if (tid.LookupAttributeByName(attrName, &info)) {  // 输出单个属性值
-            NS_LOG_UNCOND("Attribute: " << info.name << "\n"
-                                        << "Description: " << info.help << "\n"
-                                        << "DataType: " << info.checker->GetValueTypeName() << "\n"
-                                        << "Default: " << info.initialValue->SerializeToString(info.checker));
+            std::cout << "Attribute: " << info.name << '\n'
+                      << "Description: " << info.help << '\n'
+                      << "DataType: " << info.checker->GetValueTypeName() << '\n'
+                      << "Default: " << info.initialValue->SerializeToString(info.checker)
+                      << std::endl;
         } else {
-            NS_LOG_UNCOND("Attribute not found!");
+            std::cout << "Attribute not found!" << std::endl;
         }
     } else {  // 输出所有属性
         for (uint32_t i = 0; i < tid.GetAttributeN(); ++i) {
             TypeId::AttributeInformation info = tid.GetAttribute(i);
-            NS_LOG_UNCOND(
-                "Attribute: " << info.name << "\n"
-                              << "Description: " << info.help << "\n"
-                              << "DataType: " << info.checker->GetValueTypeName() << "\n"
-                              << "Default: " << info.initialValue->SerializeToString(info.checker));  // 输出属性信息
+            std::cout << "Attribute: " << info.name << '\n'
+                      << "Description: " << info.help << '\n'
+                      << "DataType: " << info.checker->GetValueTypeName() << '\n'
+                      << "Default: " << info.initialValue->SerializeToString(info.checker)
+                      << std::endl;
         }
     }
     return true;  // 执行完后退出程序

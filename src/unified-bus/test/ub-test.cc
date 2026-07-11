@@ -7,20 +7,19 @@
  * including basic object creation, configuration, and core features.
  */
 
+#include "ns3/config.h"
+#include "ns3/data-rate.h"
+#include "ns3/log.h"
+#include "ns3/node-container.h"
+#include "ns3/rng-seed-manager.h"
+#include "ns3/simulator.h"
 #include "ns3/test.h"
 #include "ns3/ub-app.h"
-#include "ns3/ub-ctp.h"
-#include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-caqm.h"
-#include "ns3/log.h"
-#include "ns3/simulator.h"
-#include "ns3/config.h"
-#include "ns3/rng-seed-manager.h"
-#include "ns3/node-container.h"
-#include "ns3/ub-utils.h"
-#include "ns3/ub-controller.h"
 #include "ns3/ub-congestion-control.h"
-#include "ns3/data-rate.h"
+#include "ns3/ub-controller.h"
+#include "ns3/ub-ctp.h"
+#include "ns3/ub-datalink.h"
 #include "ns3/ub-dcqcn.h"
 #include "ns3/ub-flow-control.h"
 #include "ns3/ub-function.h"
@@ -29,16 +28,19 @@
 #include "ns3/ub-port.h"
 #include "ns3/ub-queue-manager.h"
 #include "ns3/ub-routing-process.h"
-#include "ns3/ub-small-fifo-queue.h"
 #include "ns3/ub-sliding-bitmap-window.h"
-#include "ns3/ub-switch.h"
+#include "ns3/ub-small-fifo-queue.h"
 #include "ns3/ub-switch-allocator.h"
+#include "ns3/ub-switch.h"
 #include "ns3/ub-tag.h"
+#include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-transaction.h"
-#include "ns3/ub-datalink.h"
+#include "ns3/ub-utils.h"
 
-#include <atomic>
+#include <algorithm>
 #include <array>
+#include <atomic>
+#include <barrier>
 #include <chrono>
 #include <csignal>
 #include <cstdlib>
@@ -378,6 +380,29 @@ InstallStaticTpPair(const LocalTpTopology& topo)
 {
     Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
     Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+    Connection connection{topo.sender->GetId(),
+                          topo.senderPort->GetIfIndex(),
+                          kUrmaWriteRegressionSenderTpn,
+                          topo.receiver->GetId(),
+                          topo.receiverPort->GetIfIndex(),
+                          kUrmaWriteRegressionReceiverTpn,
+                          kUrmaWriteRegressionPriority,
+                          0};
+
+    Connection existingConnection;
+    if (!senderCtrl->GetTpConnManager()->TryGetLocalConnection(topo.sender->GetId(),
+                                                               kUrmaWriteRegressionSenderTpn,
+                                                               existingConnection))
+    {
+        senderCtrl->GetTpConnManager()->AddUnilateralConnection(connection, topo.sender->GetId());
+    }
+    if (!receiverCtrl->GetTpConnManager()->TryGetLocalConnection(topo.receiver->GetId(),
+                                                                 kUrmaWriteRegressionReceiverTpn,
+                                                                 existingConnection))
+    {
+        receiverCtrl->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                  topo.receiver->GetId());
+    }
 
     if (!senderCtrl->IsTPExists(kUrmaWriteRegressionSenderTpn))
     {
@@ -468,6 +493,52 @@ Ptr<Packet>
 BuildReceiverDataPacket(const LocalTpTopology& topo, uint32_t psn, bool lastPacket)
 {
     return BuildReceiverDataPacketWithSequences(topo, psn, lastPacket, 0, 7);
+}
+
+Ptr<Packet>
+BuildInboundTpPacket(const LocalTpTopology& topo,
+                     uint32_t srcTpn,
+                     uint32_t dstTpn,
+                     Ipv4Address sourceIp,
+                     Ipv4Address destinationIp,
+                     uint8_t priority)
+{
+    Ptr<Packet> packet = Create<Packet>(16);
+    packet->AddPacketTag(UbFlowTag(kUrmaWriteRegressionTaskId, 16));
+
+    UbMAExtTah maHeader;
+    maHeader.SetLength(16);
+    packet->AddHeader(maHeader);
+
+    UbTransactionHeader transactionHeader;
+    transactionHeader.SetTaOpcode(TaOpcode::TA_OPCODE_WRITE);
+    transactionHeader.SetIniTaSsn(0);
+    transactionHeader.SetIniRcId(0);
+    packet->AddHeader(transactionHeader);
+
+    UbTransportHeader transportHeader;
+    transportHeader.SetTPOpcode(TpOpcode::TP_OPCODE_RELIABLE_TA);
+    transportHeader.SetSrcTpn(srcTpn);
+    transportHeader.SetDestTpn(dstTpn);
+    transportHeader.SetPsn(0);
+    transportHeader.SetTpMsn(0);
+    transportHeader.SetLastPacket(true);
+    packet->AddHeader(transportHeader);
+
+    UbPort::AddUdpHeader(packet, 0, topo.receiverPort->GetIfIndex());
+    UbPort::AddIpv4Header(packet, sourceIp, destinationIp);
+
+    UbIpBasedNetworkHeader networkHeader;
+    packet->AddHeader(networkHeader);
+    UbDataLink::GenPacketHeader(packet,
+                                false,
+                                false,
+                                priority,
+                                priority,
+                                false,
+                                true,
+                                UbDatalinkHeaderConfig::PACKET_IPV4);
+    return packet;
 }
 
 struct DecodedReceiverAck
@@ -974,6 +1045,16 @@ class UbTrafficGenRuntimeTaskEntityFieldsTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(task.hasDstEntityId,
                               true,
                               "runtime task should preserve destination entity presence");
+        NS_TEST_ASSERT_MSG_EQ(task.hasPhaseDependencies,
+                              false,
+                              "an empty dependency field should mark an initial task");
+
+        record.taskId = 10;
+        record.dependOnPhases = "3";
+        task = gen.ConvertToRuntimeTask(record);
+        NS_TEST_ASSERT_MSG_EQ(task.hasPhaseDependencies,
+                              true,
+                              "a non-empty dependency field should mark a dependent task");
     }
 };
 
@@ -1589,6 +1670,158 @@ class UbTrafficGenReadyOrderTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(readyIds[1], 1u, "second ready task should be task 1");
         NS_TEST_ASSERT_MSG_EQ(readyIds[2], 2u, "third ready task should be task 2");
         Simulator::Destroy();
+    }
+};
+
+class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
+{
+  public:
+    UbTrafficGenInitialTaskStartOffsetTest()
+        : TestCase("UnifiedBus - initial task start offsets are deterministic by source")
+    {
+    }
+
+    void DoRun() override
+    {
+        const auto makeTask =
+            [](uint32_t taskId, uint32_t sourceNode, bool hasDependencies = false) {
+                UbTrafficGen::RuntimeTask task;
+                task.taskId = taskId;
+                task.sourceNode = sourceNode;
+                task.phaseId = 1;
+                task.hasPhaseDependencies = hasDependencies;
+                return task;
+            };
+
+        UbTrafficGen gen;
+        UbTrafficGen::ReadyTaskBatch batch;
+        batch.tasks = {
+            makeTask(100, 2),
+            makeTask(101, 7),
+            makeTask(102, 11),
+            makeTask(103, 2),
+            makeTask(104, 13, true),
+        };
+
+        gen.SetInitialTaskStartOffsetWindow(Time(0), 1);
+        const auto disabled = gen.GetInitialTaskStartOffsets(batch);
+        for (const auto& offset : disabled)
+        {
+            NS_TEST_ASSERT_MSG_EQ(offset,
+                                  Time(0),
+                                  "disabled initial task offset should preserve task time");
+        }
+
+        gen.SetInitialTaskStartOffsetWindow(NanoSeconds(32), 1);
+        const auto seedOne = gen.GetInitialTaskStartOffsets(batch);
+        const auto seedOneRepeat = gen.GetInitialTaskStartOffsets(batch);
+        NS_TEST_ASSERT_MSG_EQ((seedOne == seedOneRepeat),
+                              true,
+                              "initial task offsets should repeat exactly for the same seed");
+        NS_TEST_ASSERT_MSG_EQ(seedOne[0],
+                              seedOne[3],
+                              "initial tasks from one source should share one offset");
+        NS_TEST_ASSERT_MSG_EQ(seedOne[4],
+                              Time(0),
+                              "dependent tasks should not receive an initial task offset");
+        for (size_t index = 0; index < 4; ++index)
+        {
+            NS_TEST_ASSERT_MSG_EQ(seedOne[index].IsStrictlyNegative(),
+                                  false,
+                                  "initial task offsets should be non-negative");
+            NS_TEST_ASSERT_MSG_EQ((seedOne[index] < NanoSeconds(32)),
+                                  true,
+                                  "initial task offsets should stay inside the configured window");
+        }
+
+        gen.SetInitialTaskStartOffsetWindow(NanoSeconds(32), 2);
+        const auto seedTwo = gen.GetInitialTaskStartOffsets(batch);
+        bool seedChangesOffsets = false;
+        for (size_t index = 0; index < 4; ++index)
+        {
+            seedChangesOffsets |= seedOne[index] != seedTwo[index];
+        }
+        NS_TEST_ASSERT_MSG_EQ(seedChangesOffsets,
+                              true,
+                              "changing the seed should change at least one source offset");
+
+        UbTrafficGen::ReadyTaskBatch collidingTasks;
+        collidingTasks.tasks = {makeTask(200, 21), makeTask(201, 22)};
+        gen.SetInitialTaskStartOffsetWindow(TimeStep(1), 1);
+        std::ostringstream warning;
+        std::streambuf* previousStderr = std::cerr.rdbuf(warning.rdbuf());
+        (void)gen.GetInitialTaskStartOffsets(collidingTasks);
+        std::cerr.rdbuf(previousStderr);
+        NS_TEST_ASSERT_MSG_NE(warning.str().find("offset-reuses=1"),
+                              std::string::npos,
+                              "reused initial task offsets should be visible in release builds");
+    }
+};
+
+class UbLinkDelayOffsetTest : public TestCase
+{
+  public:
+    UbLinkDelayOffsetTest()
+        : TestCase("UnifiedBus - link delay offsets are deterministic by stable endpoint identity")
+    {
+    }
+
+    void DoRun() override
+    {
+        const Time window = NanoSeconds(8);
+        const auto getDelay = [&](uint32_t seed,
+                                  uint32_t node1,
+                                  uint32_t port1,
+                                  uint32_t node2,
+                                  uint32_t port2,
+                                  Time baseDelay = NanoSeconds(20)) {
+            return utils::UbUtils::ResolveLinkDelayWithOffset(baseDelay,
+                                                              window,
+                                                              seed,
+                                                              node1,
+                                                              port1,
+                                                              node2,
+                                                              port2);
+        };
+
+        const Time forward = getDelay(1, 2, 3, 7, 5);
+        const Time reverse = getDelay(1, 7, 5, 2, 3);
+        NS_TEST_ASSERT_MSG_EQ(forward,
+                              reverse,
+                              "reversing one physical link should preserve its delay offset");
+        NS_TEST_ASSERT_MSG_EQ((forward >= NanoSeconds(20)),
+                              true,
+                              "link offset should never reduce the configured base delay");
+        NS_TEST_ASSERT_MSG_EQ((forward < NanoSeconds(28)),
+                              true,
+                              "link offset should stay inside the configured half-open window");
+        NS_TEST_ASSERT_MSG_EQ(getDelay(1, 2, 3, 7, 5),
+                              forward,
+                              "the same seed and link identity should repeat exactly");
+
+        const std::array<std::array<uint32_t, 4>, 4> links{{
+            {{2, 3, 7, 5}},
+            {{2, 4, 9, 1}},
+            {{11, 0, 20, 6}},
+            {{13, 7, 17, 2}},
+        }};
+        bool seedChangesOffset = false;
+        for (const auto& link : links)
+        {
+            seedChangesOffset |= getDelay(1, link[0], link[1], link[2], link[3]) !=
+                                 getDelay(2, link[0], link[1], link[2], link[3]);
+        }
+        NS_TEST_ASSERT_MSG_EQ(seedChangesOffset,
+                              true,
+                              "changing the seed should change at least one link offset");
+        NS_TEST_ASSERT_MSG_EQ(
+            utils::UbUtils::ResolveLinkDelayWithOffset(Time(0), window, 1, 2, 3, 7, 5),
+            Time(0),
+            "zero-delay links should retain the MTP co-location boundary");
+        NS_TEST_ASSERT_MSG_EQ(
+            utils::UbUtils::ResolveLinkDelayWithOffset(NanoSeconds(20), Time(0), 1, 2, 3, 7, 5),
+            NanoSeconds(20),
+            "a zero offset window should preserve the configured delay");
     }
 };
 
@@ -3218,7 +3451,9 @@ public:
         Ptr<Packet> packet = BuildTpsackForSender(0, true, false);
         UdpHeader udpHeader;
         packet->AddHeader(udpHeader);
-        UbPort::AddIpv4Header(packet, NodeIdToIp(topo.receiver->GetId()), NodeIdToIp(topo.sender->GetId()));
+        UbPort::AddIpv4Header(packet,
+                              NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+                              NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()));
         UbIpBasedNetworkHeader networkHeader;
         packet->AddHeader(networkHeader);
         UbDataLink::GenPacketHeader(packet,
@@ -8425,6 +8660,515 @@ class UbCreateTpPreloadInstancesTest : public TestCase
         NS_TEST_ASSERT_MSG_EQ(c1->IsTPExists(22), true, "Destination-side TP should be preloaded from config");
 
         fs::remove_all(caseDir, ec);
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbCreateTpUsesPerPortIpTest : public TestCase
+{
+  public:
+    UbCreateTpUsesPerPortIpTest()
+        : TestCase("UnifiedBus - CreateTp uses per-port IP addresses")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> sender = CreateObject<Node>(0);
+        Ptr<Node> receiver = CreateObject<Node>(0);
+        InitNode(sender, UB_DEVICE, 3);
+        InitNode(receiver, UB_DEVICE, 2);
+
+        Ptr<UbController> controller = sender->GetObject<UbController>();
+        Ptr<UbCongestionControl> cc = UbCongestionControl::Create(UB_DEVICE);
+        const uint8_t senderPort = 2;
+        const uint8_t receiverPort = 1;
+        const uint32_t senderTpn = 1101;
+        const uint32_t receiverTpn = 2201;
+
+        controller->CreateTp(sender->GetId(),
+                             receiver->GetId(),
+                             senderPort,
+                             receiverPort,
+                             kUrmaWriteRegressionPriority,
+                             senderTpn,
+                             receiverTpn,
+                             cc);
+
+        Ptr<UbTransportChannel> tp = controller->GetTpByTpn(senderTpn);
+        NS_TEST_ASSERT_MSG_NE(tp, nullptr, "Created TP should be visible by TPN");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetSip(),
+                              NodeIdToIp(sender->GetId(), senderPort),
+                              "Source IP should encode the UB source port");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetDip(),
+                              NodeIdToIp(receiver->GetId(), receiverPort),
+                              "Destination IP should encode the UB destination port");
+        NS_TEST_ASSERT_MSG_NE(tp->GetSip(),
+                              NodeIdToIp(sender->GetId(), 0),
+                              "Source IP should not collapse to the node-level/default port IP");
+        NS_TEST_ASSERT_MSG_NE(
+            tp->GetDip(),
+            NodeIdToIp(receiver->GetId(), 0),
+            "Destination IP should not collapse to the node-level/default port IP");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetSport(),
+                              static_cast<uint16_t>(senderPort),
+                              "TP source port metadata should remain the UB port id");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetDport(),
+                              static_cast<uint16_t>(receiverPort),
+                              "TP destination port metadata should remain the UB port id");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbControllerMissingTpnLookupDoesNotInsertTest : public TestCase
+{
+  public:
+    UbControllerMissingTpnLookupDoesNotInsertTest()
+        : TestCase("UnifiedBus - missing TPN lookup does not insert a null TP")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_DEVICE, 1);
+
+        Ptr<UbController> controller = node->GetObject<UbController>();
+        const uint32_t missingTpn = 9999;
+        const uint32_t beforeCount = controller->GetTransportCountForTest();
+
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTpByTpn(missingTpn),
+                              nullptr,
+                              "Missing TPN lookup should return nullptr");
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTransportCountForTest(),
+                              beforeCount,
+                              "Missing TPN lookup should not mutate the TP map");
+        NS_TEST_ASSERT_MSG_EQ(controller->IsTPExists(missingTpn),
+                              false,
+                              "Missing TPN lookup should not create an existing TPN marker");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestCase
+{
+  public:
+    UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest()
+        : TestCase("UnifiedBus - traffic-driven TP reservation leaves receiver TP lazy")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(true,
+                                                              topo.sender->GetId(),
+                                                              topo.receiver->GetId(),
+                                                              kUrmaWriteRegressionPriority);
+        auto reservedSenderTpns =
+            senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(topo.sender->GetId(),
+                                                                      topo.receiver->GetId(),
+                                                                      kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(reservedSenderTpns.size(),
+                              1u,
+                              "Traffic load should reserve one sender TPN");
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Traffic load should reserve one receiver TPN");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->IsTPExists(reservedSenderTpns[0].first),
+                              false,
+                              "Reservation should not materialize the sender endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpns[0].first),
+                              false,
+                              "Reservation should not materialize the receiver endpoint");
+
+        std::vector<uint32_t> senderTpns =
+            senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                    true,
+                                                    false,
+                                                    topo.sender->GetId(),
+                                                    topo.receiver->GetId(),
+                                                    UINT32_MAX,
+                                                    UINT32_MAX,
+                                                    kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(senderTpns.size(),
+                              1u,
+                              "Single-path reservation should pick one sender TPN");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->IsTPExists(senderTpns[0]),
+                              true,
+                              "Sender endpoint should be materialized by TP resolution");
+
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver reservation should be visible in the local manager");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->IsTPExists(receiverTpn),
+                              false,
+                              "Receiver endpoint should not be materialized before packet arrival");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbReservedReceiverTpnMaterializesLocallyTest : public TestCase
+{
+  public:
+    UbReservedReceiverTpnMaterializesLocallyTest()
+        : TestCase("UnifiedBus - reserved receiver TPN materializes locally")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                true,
+                                                false,
+                                                topo.sender->GetId(),
+                                                topo.receiver->GetId(),
+                                                UINT32_MAX,
+                                                UINT32_MAX,
+                                                kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver should have one reserved local TPN");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+
+        Ptr<UbTransportChannel> receiverTp = receiverCtrl->CreateReservedTpEndpoint(receiverTpn);
+        NS_TEST_ASSERT_MSG_NE(receiverTp,
+                              nullptr,
+                              "Reserved receiver TPN should create a local endpoint");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverCtrl->IsTPExists(receiverTpn),
+            true,
+            "Materialized reserved TPN should be visible in the receiver controller");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverTp->GetSip(),
+            NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+            "Receiver local endpoint source IP should encode the receiver UB port");
+        NS_TEST_ASSERT_MSG_EQ(
+            receiverTp->GetDip(),
+            NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
+            "Receiver local endpoint destination IP should encode the sender UB port");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+#ifndef _WIN32
+class UbInboundTpChannelKeyValidationTest : public TestCase
+{
+  public:
+    UbInboundTpChannelKeyValidationTest()
+        : TestCase("UnifiedBus - inbound RTP packet must match the reserved channel key")
+    {
+    }
+
+  private:
+    enum class Mismatch
+    {
+        NONE,
+        SOURCE_TPN,
+        PEER_NODE,
+        PEER_PORT,
+        LOCAL_PORT,
+        PRIORITY,
+    };
+
+    static void SendInboundPacket(Mismatch mismatch)
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+        senderCtrl->GetTpConnManager()->ReserveTpnsForTraffic(true,
+                                                              topo.sender->GetId(),
+                                                              topo.receiver->GetId(),
+                                                              kUrmaWriteRegressionPriority);
+
+        const auto senderTpns =
+            senderCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(topo.sender->GetId(),
+                                                                      topo.receiver->GetId(),
+                                                                      kUrmaWriteRegressionPriority);
+        const auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_ABORT_MSG_IF(senderTpns.size() != 1 || receiverTpns.size() != 1,
+                        "Expected one reserved TP pair");
+
+        uint32_t srcTpn = senderTpns[0].first;
+        const uint32_t dstTpn = receiverTpns[0].first;
+        Ipv4Address sourceIp = NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex());
+        Ipv4Address destinationIp =
+            NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex());
+        uint8_t priority = kUrmaWriteRegressionPriority;
+
+        switch (mismatch)
+        {
+        case Mismatch::SOURCE_TPN:
+            ++srcTpn;
+            break;
+        case Mismatch::PEER_NODE:
+            sourceIp = NodeIdToIp(topo.switch0->GetId(), topo.senderPort->GetIfIndex());
+            break;
+        case Mismatch::PEER_PORT:
+            sourceIp = NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex() + 1);
+            break;
+        case Mismatch::LOCAL_PORT:
+            destinationIp = NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex() + 1);
+            break;
+        case Mismatch::PRIORITY:
+            priority = static_cast<uint8_t>(kUrmaWriteRegressionPriority - 1);
+            break;
+        case Mismatch::NONE:
+            break;
+        }
+
+        Ptr<Packet> packet =
+            BuildInboundTpPacket(topo, srcTpn, dstTpn, sourceIp, destinationIp, priority);
+        topo.receiver->GetObject<UbSwitch>()->SwitchHandlePacket(topo.receiverPort, packet);
+        NS_ABORT_MSG_IF(!receiverCtrl->IsTPExists(dstTpn),
+                        "Valid inbound packet did not materialize its receiver TP");
+    }
+
+    void ExpectMismatchAbort(Mismatch mismatch, const std::string& description)
+    {
+        const int status = RunInChildProcess([mismatch]() { SendInboundPacket(mismatch); });
+        NS_TEST_ASSERT_MSG_EQ(WIFSIGNALED(status), 1, description << " should abort");
+        NS_TEST_ASSERT_MSG_EQ(WTERMSIG(status),
+                              SIGABRT,
+                              description << " should fail with SIGABRT");
+    }
+
+    void DoRun() override
+    {
+        const int validStatus = RunInChildProcess([]() { SendInboundPacket(Mismatch::NONE); });
+        NS_TEST_ASSERT_MSG_EQ(WIFEXITED(validStatus), 1, "Matching channel key should not abort");
+        NS_TEST_ASSERT_MSG_EQ(WEXITSTATUS(validStatus),
+                              0,
+                              "Matching channel key should materialize the receiver TP");
+
+        ExpectMismatchAbort(Mismatch::SOURCE_TPN, "Mismatched source TPN");
+        ExpectMismatchAbort(Mismatch::PEER_NODE, "Mismatched peer node");
+        ExpectMismatchAbort(Mismatch::PEER_PORT, "Mismatched peer port");
+        ExpectMismatchAbort(Mismatch::LOCAL_PORT, "Mismatched local port");
+        ExpectMismatchAbort(Mismatch::PRIORITY, "Mismatched priority");
+    }
+};
+
+class UbUnknownInboundTpnFailsWithAutoRemoveTest : public TestCase
+{
+  public:
+    UbUnknownInboundTpnFailsWithAutoRemoveTest()
+        : TestCase("UnifiedBus - auto-remove mode does not hide an unknown inbound TPN")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        const int status = RunInChildProcess([]() {
+            LocalTpTopology topo = BuildLocalTpTopology();
+            Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+            receiverCtrl->GetTpConnManager()->SetAttribute("RemoveUselessTp", BooleanValue(true));
+
+            Ptr<Packet> packet = BuildInboundTpPacket(
+                topo,
+                1234,
+                9090,
+                NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()),
+                NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+                kUrmaWriteRegressionPriority);
+            topo.receiver->GetObject<UbSwitch>()->SwitchHandlePacket(topo.receiverPort, packet);
+        });
+
+        NS_TEST_ASSERT_MSG_EQ(WIFSIGNALED(status),
+                              1,
+                              "Unknown inbound TPN should abort even in auto-remove mode");
+        NS_TEST_ASSERT_MSG_EQ(WTERMSIG(status),
+                              SIGABRT,
+                              "Unknown inbound TPN should fail with SIGABRT");
+    }
+};
+#endif
+
+class UbConcurrentReservedReceiverTpnMaterializationTest : public TestCase
+{
+  public:
+    UbConcurrentReservedReceiverTpnMaterializationTest()
+        : TestCase("UnifiedBus - concurrent reserved receiver TPN materialization is idempotent")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                true,
+                                                false,
+                                                topo.sender->GetId(),
+                                                topo.receiver->GetId(),
+                                                UINT32_MAX,
+                                                UINT32_MAX,
+                                                kUrmaWriteRegressionPriority);
+        auto receiverTpns = receiverCtrl->GetTpConnManager()->GetTpnsByPeerNodePriority(
+            topo.receiver->GetId(),
+            topo.sender->GetId(),
+            kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(receiverTpns.size(),
+                              1u,
+                              "Receiver should have one reserved local TPN");
+        const uint32_t receiverTpn = receiverTpns[0].first;
+
+        constexpr std::size_t kConcurrentCallCount = 16;
+        std::barrier startBarrier(static_cast<std::ptrdiff_t>(kConcurrentCallCount));
+        std::vector<Ptr<UbTransportChannel>> results(kConcurrentCallCount);
+        std::vector<std::thread> workers;
+        workers.reserve(kConcurrentCallCount);
+        for (std::size_t index = 0; index < kConcurrentCallCount; ++index)
+        {
+            workers.emplace_back([&, index]() {
+                startBarrier.arrive_and_wait();
+                results[index] = receiverCtrl->CreateReservedTpEndpoint(receiverTpn);
+            });
+        }
+        for (auto& worker : workers)
+        {
+            worker.join();
+        }
+
+        Ptr<UbTransportChannel> materialized = receiverCtrl->GetTpByTpn(receiverTpn);
+        NS_TEST_ASSERT_MSG_NE(materialized,
+                              nullptr,
+                              "Concurrent materialization should create the receiver TP");
+        for (const auto& result : results)
+        {
+            NS_TEST_ASSERT_MSG_EQ(result,
+                                  materialized,
+                                  "All concurrent callers should observe the same receiver TP");
+        }
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTransportCountForTest(),
+                              1u,
+                              "Concurrent materialization should count exactly one receiver TP");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbRepeatedTpResolutionReusesReservationTest : public TestCase
+{
+  public:
+    UbRepeatedTpResolutionReusesReservationTest()
+        : TestCase("UnifiedBus - repeated TP resolution reuses reservation")
+    {
+    }
+
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+
+        auto resolveTpns = [&]() {
+            return senderCtrl->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                           true,
+                                                           false,
+                                                           topo.sender->GetId(),
+                                                           topo.receiver->GetId(),
+                                                           UINT32_MAX,
+                                                           UINT32_MAX,
+                                                           kUrmaWriteRegressionPriority);
+        };
+
+        std::vector<uint32_t> firstTpns = resolveTpns();
+        const size_t senderConnectionCount = senderCtrl->GetTpConnManager()->GetConnectionCount();
+        const size_t receiverConnectionCount =
+            receiverCtrl->GetTpConnManager()->GetConnectionCount();
+        const uint32_t senderTransportCount = senderCtrl->GetTransportCountForTest();
+        const uint32_t receiverTransportCount = receiverCtrl->GetTransportCountForTest();
+
+        std::vector<uint32_t> secondTpns = resolveTpns();
+
+        NS_TEST_ASSERT_MSG_EQ(firstTpns.size(),
+                              secondTpns.size(),
+                              "Repeated TP resolution should return the same number of TPNs");
+        NS_TEST_ASSERT_MSG_EQ(firstTpns.empty(), false, "First TP resolution should return a TPN");
+        NS_TEST_ASSERT_MSG_EQ(
+            firstTpns[0],
+            secondTpns[0],
+            "Repeated TP resolution for the same peer and priority should reuse TPNs");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->GetTpConnManager()->GetConnectionCount(),
+                              senderConnectionCount,
+                              "Repeated TP resolution should not add sender connection records");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTpConnManager()->GetConnectionCount(),
+                              receiverConnectionCount,
+                              "Repeated TP resolution should not add receiver connection records");
+        NS_TEST_ASSERT_MSG_EQ(senderCtrl->GetTransportCountForTest(),
+                              senderTransportCount,
+                              "Repeated TP resolution should reuse the sender endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverCtrl->GetTransportCountForTest(),
+                              receiverTransportCount,
+                              "Repeated TP resolution should not materialize receiver endpoints");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbUnreservedReceiverTpnDoesNotMaterializeTest : public TestCase
+{
+  public:
+    UbUnreservedReceiverTpnDoesNotMaterializeTest()
+        : TestCase("UnifiedBus - unreserved receiver TPN does not materialize")
+    {
+    }
+
+    void DoRun() override
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_DEVICE, 1);
+
+        Ptr<UbController> controller = node->GetObject<UbController>();
+        const uint32_t unreservedTpn = 9090;
+        const uint32_t beforeCount = controller->GetTransportCountForTest();
+
+        NS_TEST_ASSERT_MSG_EQ(controller->CreateReservedTpEndpoint(unreservedTpn),
+                              nullptr,
+                              "Unreserved TPN should not create a local endpoint");
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTransportCountForTest(),
+                              beforeCount,
+                              "Unreserved TPN materialization attempt should not mutate TP map");
+        NS_TEST_ASSERT_MSG_EQ(controller->IsTPExists(unreservedTpn),
+                              false,
+                              "Unreserved TPN should remain absent");
+
+        Simulator::Destroy();
+        Config::Reset();
     }
 };
 
@@ -11353,6 +12097,24 @@ class UbCreateNodeDelayMappingTestSuite : public TestSuite
     UbCreateNodeDelayMappingTestSuite();
 };
 
+class UbTpReservationTestSuite : public TestSuite
+{
+  public:
+    UbTpReservationTestSuite();
+};
+
+class UbInitialTaskStartOffsetTestSuite : public TestSuite
+{
+  public:
+    UbInitialTaskStartOffsetTestSuite();
+};
+
+class UbLinkDelayOffsetTestSuite : public TestSuite
+{
+  public:
+    UbLinkDelayOffsetTestSuite();
+};
+
 UbTestSuite::UbTestSuite()
     : TestSuite("unified-bus", Type::UNIT)
 {
@@ -11593,6 +12355,42 @@ UbTestSuite::UbTestSuite()
 
 // Register the test suite
 static UbTestSuite g_ubTestSuite;
+
+UbTpReservationTestSuite::UbTpReservationTestSuite()
+    : TestSuite("unified-bus-tp-reservation", Type::UNIT)
+{
+    AddTestCase(new UbCreateTpUsesPerPortIpTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbControllerMissingTpnLookupDoesNotInsertTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbReservedReceiverTpnMaterializesLocallyTest(), TestCase::Duration::QUICK);
+#ifndef _WIN32
+    AddTestCase(new UbInboundTpChannelKeyValidationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbUnknownInboundTpnFailsWithAutoRemoveTest(), TestCase::Duration::QUICK);
+#endif
+    AddTestCase(new UbConcurrentReservedReceiverTpnMaterializationTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbRepeatedTpResolutionReusesReservationTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbUnreservedReceiverTpnDoesNotMaterializeTest(), TestCase::Duration::QUICK);
+}
+
+static UbTpReservationTestSuite g_ubTpReservationTestSuite;
+
+UbInitialTaskStartOffsetTestSuite::UbInitialTaskStartOffsetTestSuite()
+    : TestSuite("unified-bus-initial-task-start-offset", Type::UNIT)
+{
+    AddTestCase(new UbTrafficGenInitialTaskStartOffsetTest(), TestCase::Duration::QUICK);
+}
+
+static UbInitialTaskStartOffsetTestSuite g_ubInitialTaskStartOffsetTestSuite;
+
+UbLinkDelayOffsetTestSuite::UbLinkDelayOffsetTestSuite()
+    : TestSuite("unified-bus-link-delay-offset", Type::UNIT)
+{
+    AddTestCase(new UbLinkDelayOffsetTest(), TestCase::Duration::QUICK);
+}
+
+static UbLinkDelayOffsetTestSuite g_ubLinkDelayOffsetTestSuite;
 
 UbWireFormatTestSuite::UbWireFormatTestSuite()
     : TestSuite("unified-bus-wire-format", Type::UNIT)
@@ -12591,9 +13389,64 @@ class UbQuickExampleHelpTextSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(output.find("Typical usage:"),
                               std::string::npos,
                               "help text should include quick-example usage guidance");
+        NS_TEST_ASSERT_MSG_NE(output.find("initial-task-start-offset-window"),
+                              std::string::npos,
+                              "help text should expose the initial task offset window");
+        NS_TEST_ASSERT_MSG_NE(output.find("link-delay-offset-window"),
+                              std::string::npos,
+                              "help text should expose the link delay offset window");
+        NS_TEST_ASSERT_MSG_NE(output.find("timing-offset-seed"),
+                              std::string::npos,
+                              "help text should expose the shared timing offset seed");
         NS_TEST_ASSERT_MSG_EQ(output.find("traffic.csv / UbTrafficGen is single-process only"),
                               std::string::npos,
                               "help text should not advertise the removed MPI TrafficGen boundary");
+    }
+};
+
+class UbQuickExampleRuntimeCatalogQuerySystemTest : public TestCase
+{
+  public:
+    UbQuickExampleRuntimeCatalogQuerySystemTest()
+        : TestCase("UnifiedBus - ub-quick-example exposes runtime parameter catalog metadata")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        auto [attributeStatus, attributeOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-attribute.log"),
+                                   "--ClassName=ns3::UbPort --AttributeName=UbDataRate",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(attributeStatus,
+                              0,
+                              "runtime attribute query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(attributeOutput.find("Attribute: UbDataRate"),
+                              std::string::npos,
+                              "runtime attribute query should print the requested attribute");
+
+        auto [globalStatus, globalOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-global.log"),
+                                   "--PrintUbGlobals",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(globalStatus,
+                              0,
+                              "runtime Unified Bus global query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(globalOutput.find("Global: UB_TRACE_ENABLE"),
+                              std::string::npos,
+                              "runtime global query should print Unified Bus globals");
+
+        auto [singleGlobalStatus, singleGlobalOutput] =
+            RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-single-global.log"),
+                                   "--GlobalName=UB_TRACE_ENABLE",
+                                   "");
+        NS_TEST_ASSERT_MSG_EQ(singleGlobalStatus,
+                              0,
+                              "single runtime Unified Bus global query should exit successfully");
+        NS_TEST_ASSERT_MSG_NE(singleGlobalOutput.find("Global: UB_TRACE_ENABLE"),
+                              std::string::npos,
+                              "single runtime global query should print the requested global");
     }
 };
 
@@ -13279,14 +14132,13 @@ class UbQuickExampleMtpDependencyVisibilityDelaySystemTest : public TestCase
 
         auto [status, output] =
             RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
-                                               "--mtp-threads=2 --test "
-                                               "--dependency-visibility-delay=20ns",
+                                               "--mtp-threads=2 --test",
                                                "",
                                                caseDir);
 
         NS_TEST_ASSERT_MSG_EQ(status,
                               0,
-                              "MTP dependency visibility delay case should exit successfully");
+                              "MTP dependency visibility delay should be inferred from UB links");
         if (status != 0)
         {
             std::error_code ec;
@@ -13701,7 +14553,151 @@ class UbQuickExampleMpiSystemTest : public TestCase
     std::string m_casePathRelative;
     std::string m_extraArgs;
 };
+
+class UbQuickExampleHybridEmptyRankSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleHybridEmptyRankSystemTest()
+        : TestCase("UnifiedBus - hybrid mode rejects an MPI process without owned nodes")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithoutFile("scratch/ub-mpi-minimal", "node.csv");
+        {
+            std::ofstream nodeFile(caseDir / "node.csv");
+            nodeFile << "nodeId,nodeType,portNum,allocationDelay,forwardDelay,systemId\n"
+                        "0,DEVICE,1,1ns,,0\n"
+                        "1,DEVICE,1,1ns,,0\n";
+        }
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "hybrid mode must reject a process without owned nodes");
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("requires every MPI process to own at least one node"),
+            std::string::npos,
+            "hybrid empty-process failure should explain the ownership requirement: " << output);
+    }
+};
 #endif
+
+class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleTimingOffsetRegressionSystemTest()
+        : TestCase("UnifiedBus - timing offset regression is stable across single and MTP")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+
+        struct RunResult
+        {
+            int status{0};
+            std::string output;
+            std::string canonical;
+        };
+
+        const auto run = [&](const std::string& label, const std::string& args) {
+            const std::filesystem::path canonicalBase =
+                CreateSafeTempBasename("ub-timing-offset-" + label);
+            auto [status, output] =
+                RunQuickExampleCommand(CreateTempDirFilename(GetName() + "-" + label + ".log"),
+                                       args +
+                                           " --test --dependency-visibility-delay=10ns "
+                                           "--canonical-output=\"" +
+                                           canonicalBase.string() + "\"",
+                                       "",
+                                       "scratch/ub_parallel_timing_offset_demo");
+            return RunResult{status, std::move(output), ReadCanonicalBytes(canonicalBase)};
+        };
+
+        const RunResult noOffsetSingle = run("no-offset-single", "--mtp-threads=1");
+        const RunResult noOffsetMtp = run("no-offset-mtp", "--mtp-threads=4");
+        const RunResult seedOneSingle = run("seed-1-single",
+                                            "--mtp-threads=1 "
+                                            "--initial-task-start-offset-window=32ps "
+                                            "--link-delay-offset-window=8ps "
+                                            "--timing-offset-seed=1");
+        const RunResult seedOneMtp = run("seed-1-mtp",
+                                         "--mtp-threads=4 "
+                                         "--initial-task-start-offset-window=32ps "
+                                         "--link-delay-offset-window=8ps "
+                                         "--timing-offset-seed=1");
+        const RunResult seedTwoSingle = run("seed-2-single",
+                                            "--mtp-threads=1 "
+                                            "--initial-task-start-offset-window=32ps "
+                                            "--link-delay-offset-window=8ps "
+                                            "--timing-offset-seed=2");
+        const RunResult seedTwoMtp = run("seed-2-mtp",
+                                         "--mtp-threads=4 "
+                                         "--initial-task-start-offset-window=32ps "
+                                         "--link-delay-offset-window=8ps "
+                                         "--timing-offset-seed=2");
+
+        const std::array<std::pair<const char*, const RunResult*>, 6> results{{
+            {"no-offset single", &noOffsetSingle},
+            {"no-offset MTP", &noOffsetMtp},
+            {"seed 1 single", &seedOneSingle},
+            {"seed 1 MTP", &seedOneMtp},
+            {"seed 2 single", &seedTwoSingle},
+            {"seed 2 MTP", &seedTwoMtp},
+        }};
+        for (const auto& [label, result] : results)
+        {
+            NS_TEST_ASSERT_MSG_EQ(result->status, 0, label << " run should exit successfully");
+            NS_TEST_ASSERT_MSG_NE(result->output.find("TEST : 00000 : PASSED"),
+                                  std::string::npos,
+                                  label << " run should report PASSED");
+        }
+
+        NS_TEST_ASSERT_MSG_EQ(CountNonEmptyLines(noOffsetSingle.canonical),
+                              48u,
+                              "regression output should contain two events for each task");
+        NS_TEST_ASSERT_MSG_EQ(noOffsetSingle.canonical,
+                              noOffsetMtp.canonical,
+                              "runtime fixes should stabilize the no-offset regression case");
+        NS_TEST_ASSERT_MSG_EQ(seedOneSingle.canonical,
+                              seedOneMtp.canonical,
+                              "seed 1 should be stable across single and MTP");
+        NS_TEST_ASSERT_MSG_EQ(seedTwoSingle.canonical,
+                              seedTwoMtp.canonical,
+                              "seed 2 should be stable across single and MTP");
+        NS_TEST_ASSERT_MSG_NE(seedOneSingle.canonical,
+                              seedTwoSingle.canonical,
+                              "different seeds should produce different release schedules");
+        NS_TEST_ASSERT_MSG_NE(
+            noOffsetMtp.output.find("Initial task start offset is off (default)"),
+            std::string::npos,
+            "MTP should guide users when initial task offsets are disabled");
+        NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("events with the same simulation time"),
+                              std::string::npos,
+                              "MTP should report its same-time event ordering boundary");
+        NS_TEST_ASSERT_MSG_NE(
+            seedOneMtp.output.find(
+                "Initial task start offset enabled: window=32ps, seed=1"),
+            std::string::npos,
+            "enabled initial task offset should report its window and shared seed");
+        NS_TEST_ASSERT_MSG_NE(
+            seedOneMtp.output.find(
+                "Link delay offset enabled: window=8ps, seed=1, positive-links="),
+            std::string::npos,
+            "enabled link delay offset should report its window and shared seed");
+    }
+};
 
 class UbQuickExampleSystemTestSuite : public TestSuite
 {
@@ -13713,6 +14709,7 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMissingCaseDirSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMissingCaseFileSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleHelpTextSystemTest(), TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleRuntimeCatalogQuerySystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalSingleThreadSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickScratchLegacyAliasSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleSameCasePathSystemTest(), TestCase::Duration::QUICK);
@@ -13751,11 +14748,14 @@ class UbQuickExampleSystemTestSuite : public TestSuite
         AddTestCase(new UbQuickExampleMtpZeroDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleLocalMtpSystemTest(), TestCase::Duration::QUICK);
+        AddTestCase(new UbQuickExampleTimingOffsetRegressionSystemTest(),
+                    TestCase::Duration::QUICK);
 #else
         AddTestCase(new UbQuickExampleMtpRequestedWithoutMtpSystemTest(),
                     TestCase::Duration::QUICK);
 #endif
 #ifdef NS3_MPI
+        AddTestCase(new UbQuickExampleHybridEmptyRankSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMpiDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMpiZeroDependencyVisibilityDelaySystemTest(),

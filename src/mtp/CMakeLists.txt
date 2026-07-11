@@ -1,12 +1,15 @@
 set(example_as_test_suite)
 if(${ENABLE_EXAMPLES})
+  list(APPEND example_as_test_suite
+       test/mtp-runtime-test-suite.cc
+  )
   if(${ENABLE_MPI})
-    set(example_as_test_suite
-        test/hybrid-test-suite.cc
+    list(APPEND example_as_test_suite
+         test/hybrid-test-suite.cc
     )
   else()
-    set(example_as_test_suite
-        test/mtp-test-suite.cc
+    list(APPEND example_as_test_suite
+         test/mtp-test-suite.cc
     )
   endif()
 endif()

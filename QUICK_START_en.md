@@ -103,9 +103,7 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
-Note: Enabling parallel simulation usually also requires calling `MtpInterface::Enable(...)` in your simulation program (guarded by `#ifdef NS3_MTP`). See [UNISON_README.md](UNISON_README.md) for details.
-
-Tip: The recommended entry is `scratch/ub-quick-example`; if you additionally configure with `--enable-examples --filter-module-examples-and-tests=unified-bus`, `src/unified-bus/examples/ub-quick-example` is also available.
+See [UNISON_README.md](UNISON_README.md) for additional MTP usage, behavioral boundaries, and diagnostic options.
 
 ## Run a Minimal Example
 
@@ -197,7 +195,7 @@ Each use case directory typically contains the following files (format can refer
 - `node.csv` - Node definitions
 - `topology.csv` - Topology connections
 - `routing_table.csv` - Routing table
-- `transport_channel.csv` - Transport channels
+- `transport_channel.csv` - Optional explicit RTP channels; omitted channels are reserved while traffic loads
 - `traffic.csv` - Traffic definitions
 
 For the `ub-quick-example` entry, configuration semantics, and commands, see [scratch/README.md](scratch/README.md).

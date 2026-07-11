@@ -28,31 +28,18 @@
 #include "mtp-interface.h"
 
 #include "ns3/channel.h"
+#include "ns3/fatal-error.h"
 #include "ns3/node-container.h"
 #include "ns3/simulator.h"
 
 #include <algorithm>
+#include <iterator>
 #include <tuple>
 
 namespace ns3
 {
 
 NS_LOG_COMPONENT_DEFINE("LogicalProcess");
-
-namespace
-{
-
-uint32_t
-GetLocalSystemId(uint32_t systemId)
-{
-#ifdef NS3_MPI
-    return systemId >> 16;
-#else
-    return systemId;
-#endif
-}
-
-} // namespace
 
 LogicalProcess::LogicalProcess()
     : m_systemId(0),
@@ -152,22 +139,15 @@ LogicalProcess::CalculateLookAhead()
     else
     {
         m_lookAhead = Time::Max() / 2 - TimeStep(1);
+        bool hasRemoteNeighbor = false;
         NodeContainer c = NodeContainer::GetGlobal();
         for (auto iter = c.Begin(); iter != c.End(); ++iter)
         {
-#ifdef NS3_MPI
-            // for hybrid simulation, the left 16-bit indicates local system ID,
-            // and the right 16-bit indicates global system ID (MPI rank)
-            if (((*iter)->GetSystemId() >> 16) != m_systemId)
+            const auto localLpId = MtpInterface::FindNodeLocalLpId((*iter)->GetId());
+            if (!localLpId || *localLpId != m_systemId)
             {
                 continue;
             }
-#else
-            if ((*iter)->GetSystemId() != m_systemId)
-            {
-                continue;
-            }
-#endif
             for (uint32_t i = 0; i < (*iter)->GetNDevices(); ++i)
             {
                 Ptr<NetDevice> localNetDevice = (*iter)->GetDevice(i);
@@ -192,11 +172,12 @@ LogicalProcess::CalculateLookAhead()
                     remoteNode = (channel->GetDevice(0))->GetNode();
                 }
                 // if it's not remote, don't consider it
-                const uint32_t remoteSystemId = GetLocalSystemId(remoteNode->GetSystemId());
-                if (remoteSystemId == m_systemId)
+                const auto remoteLpId = MtpInterface::FindNodeLocalLpId(remoteNode->GetId());
+                if (remoteLpId && *remoteLpId == m_systemId)
                 {
                     continue;
                 }
+                hasRemoteNeighbor = true;
                 // compare delay on the channel with current value of m_lookAhead.
                 // if delay on channel is smaller, make it the new lookAhead.
                 TimeValue delay;
@@ -205,10 +186,17 @@ LogicalProcess::CalculateLookAhead()
                 {
                     m_lookAhead = delay.Get();
                 }
-                // add the neighbour to the mailbox
-                m_mailbox[remoteSystemId];
+                // A node on another MPI rank has no local mailbox, but its link delay still
+                // constrains how far this LP may advance.
+                if (remoteLpId)
+                {
+                    m_mailbox[*remoteLpId];
+                }
             }
         }
+        NS_ABORT_MSG_IF(hasRemoteNeighbor && !m_lookAhead.IsStrictlyPositive(),
+                        "MTP lookahead is not positive for system "
+                            << m_systemId << " with at least one remote neighbor");
     }
 
     NS_LOG_INFO("lookahead of system " << m_systemId << " is set to " << m_lookAhead.GetTimeStep());
@@ -220,37 +208,43 @@ LogicalProcess::ReceiveMessages()
     NS_LOG_FUNCTION(this);
 
     m_pendingEventCount = 0;
+    std::vector<RemoteEvent> pendingEvents;
     {
         std::lock_guard<std::mutex> lock(m_mailboxMutex);
+        size_t pendingEventCount = 0;
+        for (const auto& [_, queue] : m_mailbox)
+        {
+            pendingEventCount += queue.size();
+        }
+        pendingEvents.reserve(pendingEventCount);
         for (auto& [_, queue] : m_mailbox)
         {
-            // Keep legacy per-sender UID assignment order; global ordering changes tie-breaks for
-            // same-timestamp remote events and breaks byte-for-byte MTP output compatibility.
-            if (queue.size() > 1)
-            {
-                std::sort(queue.begin(),
-                          queue.end(),
-                          [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
-                              return std::tie(lhs.senderTs,
-                                              lhs.senderSystemId,
-                                              lhs.senderUid,
-                                              lhs.event) >
-                                     std::tie(rhs.senderTs,
-                                              rhs.senderSystemId,
-                                              rhs.senderUid,
-                                              rhs.event);
-                          });
-            }
-            while (!queue.empty())
-            {
-                RemoteEvent& remoteEvent = queue.back();
-                Scheduler::Event& ev = remoteEvent.event;
-                ev.key.m_uid = m_uid++;
-                m_events->Insert(ev);
-                m_pendingEventCount++;
-                queue.pop_back();
-            }
+            pendingEvents.insert(pendingEvents.end(),
+                                 std::make_move_iterator(queue.begin()),
+                                 std::make_move_iterator(queue.end()));
+            queue.clear();
         }
+    }
+
+    std::sort(pendingEvents.begin(),
+              pendingEvents.end(),
+              [](const RemoteEvent& lhs, const RemoteEvent& rhs) {
+                  return std::tie(lhs.targetTs, lhs.senderTs, lhs.senderSystemId, lhs.senderUid) <
+                         std::tie(rhs.targetTs, rhs.senderTs, rhs.senderSystemId, rhs.senderUid);
+              });
+
+    for (RemoteEvent& remoteEvent : pendingEvents)
+    {
+        NS_ABORT_MSG_IF(remoteEvent.targetTs < m_currentTs,
+                        "MTP received a remote event from the past: targetSystemId="
+                            << m_systemId << " senderSystemId=" << remoteEvent.senderSystemId
+                            << " targetTs=" << remoteEvent.targetTs << " currentTs=" << m_currentTs
+                            << " senderTs=" << remoteEvent.senderTs
+                            << " lookAhead=" << m_lookAhead.GetTimeStep());
+        Scheduler::Event& ev = remoteEvent.event;
+        ev.key.m_uid = m_uid++;
+        m_events->Insert(ev);
+        m_pendingEventCount++;
     }
 }
 
@@ -299,6 +293,9 @@ LogicalProcess::ProcessOneRound()
 EventId
 LogicalProcess::Schedule(const Time& delay, EventImpl* event)
 {
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "MTP cannot schedule an event with a negative delay: targetWorkerPartition="
+                        << m_systemId << " delay=" << delay.GetTimeStep());
     Scheduler::Event ev;
 
     ev.impl = event;
@@ -313,10 +310,16 @@ LogicalProcess::Schedule(const Time& delay, EventImpl* event)
 void
 LogicalProcess::ScheduleAt(const uint32_t context, const Time& time, EventImpl* event)
 {
+    const int64_t targetTs = time.GetTimeStep();
+    NS_ABORT_MSG_IF(targetTs < 0 || static_cast<uint64_t>(targetTs) < m_currentTs,
+                    "MTP cannot schedule an event in the past: targetLpId="
+                        << m_systemId << " context=" << context << " targetTs=" << targetTs
+                        << " currentTs=" << m_currentTs);
+
     Scheduler::Event ev;
 
     ev.impl = event;
-    ev.key.m_ts = time.GetTimeStep();
+    ev.key.m_ts = static_cast<uint64_t>(targetTs);
     ev.key.m_context = context;
     ev.key.m_uid = m_uid++;
     m_events->Insert(ev);
@@ -328,6 +331,10 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
                                     const Time& delay,
                                     EventImpl* event)
 {
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "MTP cannot schedule an event with a negative delay: sourceWorkerPartition="
+                        << m_systemId << " targetWorkerPartition=" << remote->m_systemId
+                        << " context=" << context << " delay=" << delay.GetTimeStep());
     Scheduler::Event ev;
 
     ev.impl = event;
@@ -342,14 +349,13 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
     else
     {
         ev.key.m_uid = EventId::UID::INVALID;
+        uint32_t senderUid = m_uid++;
         std::lock_guard<std::mutex> lock(remote->m_mailboxMutex);
         remote->m_mailbox[m_systemId].push_back(RemoteEvent{
             ev.key.m_ts,
             m_currentTs,
             m_systemId,
-            // Preserve legacy remote-event tie-breaks; incrementing this changes same-time task
-            // completion order in existing MTP scenarios.
-            m_uid,
+            senderUid,
             ev,
         });
     }

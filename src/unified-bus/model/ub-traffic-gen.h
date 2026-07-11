@@ -2,24 +2,26 @@
 #ifndef UB_TRAFFIC_GEN_H
 #define UB_TRAFFIC_GEN_H
 
-#include <vector>
-#include <unordered_map>
-#include <set>
-#include <mutex>
-#include <cstdint>
-#include <optional>
-#include <string>
-#include <string_view>
+#include "ub-network-address.h"
+#include "ub-tp-connection-manager.h"
+
 #include "ns3/application.h"
 #include "ns3/event-id.h"
+#include "ns3/ipv4-address.h"
 #include "ns3/nstime.h"
 #include "ns3/ptr.h"
-#include "ns3/ipv4-address.h"
-#include "ns3/ub-datatype.h"
 #include "ns3/ub-controller.h"
+#include "ns3/ub-datatype.h"
 #include "ns3/ub-ldst-api.h"
-#include "ub-tp-connection-manager.h"
-#include "ub-network-address.h"
+
+#include <cstdint>
+#include <mutex>
+#include <optional>
+#include <set>
+#include <string>
+#include <string_view>
+#include <unordered_map>
+#include <vector>
 
 class UbTrafficGenPhaseDependencyMemoryTest;
 class UbTrafficGenSparseTaskIdFallbackTest;
@@ -30,6 +32,7 @@ class UbTrafficGenRecordViewDependencyTest;
 class UbTrafficGenReadyOrderTest;
 class UbTrafficGenIntegerDelayParserTest;
 class UbTrafficGenRuntimeTaskEntityFieldsTest;
+class UbTrafficGenInitialTaskStartOffsetTest;
 
 using namespace utils;
 namespace ns3 {
@@ -77,6 +80,7 @@ public:
         uint32_t dstEntityId{0};
         bool hasSrcEntityId{false};
         bool hasDstEntityId{false};
+        bool hasPhaseDependencies{false};
     };
 
     struct TaskCleanupInfo
@@ -118,13 +122,18 @@ public:
 
     void SetDependencyVisibilityDelay(Time delay);
 
-    bool HasDependencyVisibilityDelay() const;
-
     Time GetDependencyVisibilityDelay() const;
 
     void ValidateDependencyVisibilityDelay(bool requireStrictlyPositive) const;
 
-    void ObserveRemoteLinkDelay(Time delay);
+    void ConsiderAutomaticDependencyVisibilityDelay(Time delay);
+
+    /**
+     * @brief Configure deterministic start offsets for tasks without phase dependencies.
+     * @param window Half-open offset window; zero disables offsets.
+     * @param seed Seed used for deterministic slot assignment.
+     */
+    void SetInitialTaskStartOffsetWindow(Time window, uint32_t seed);
 
     void ApplyTaskCompletion(uint32_t taskId);
 
@@ -158,6 +167,7 @@ public:
     friend class ::UbTrafficGenReadyOrderTest;
     friend class ::UbTrafficGenIntegerDelayParserTest;
     friend class ::UbTrafficGenRuntimeTaskEntityFieldsTest;
+    friend class ::UbTrafficGenInitialTaskStartOffsetTest;
 
     enum class TaskState {
         PENDING,
@@ -210,15 +220,21 @@ public:
     std::vector<Ptr<UbApp>> m_sourceApps{};
     std::unordered_map<std::string, Time> m_delayParseCache{};
     std::optional<Time> m_dependencyVisibilityDelay{};
-    std::optional<Time> m_minRemoteLinkDelay{};
+    std::optional<Time> m_automaticDependencyVisibilityDelay{};
     bool m_canonicalOutputEnabled = false;
     std::string m_canonicalOutputPath;
     uint32_t m_canonicalRank = 0;
     std::vector<CanonicalEvent> m_canonicalEvents;
+    Time m_initialTaskStartOffsetWindow{Time(0)};
+    uint32_t m_initialTaskStartOffsetSeed{1};
 
     ReadyTaskBatch CollectReadyTaskBatchLocked();
 
     void ScheduleTasks(const ReadyTaskBatch& batch);
+
+    uint64_t GetInitialTaskSourceOffsetHash(uint32_t sourceNode, uint32_t seed) const;
+
+    std::vector<Time> GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const;
 
     void RegisterTaskPhaseLocked(uint32_t phaseId, uint32_t taskId);
 

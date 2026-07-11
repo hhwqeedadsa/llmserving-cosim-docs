@@ -50,7 +50,7 @@ Each case directory under `scratch/` usually contains:
 - `node.csv` — Node inventory: devices and switches with port counts and optional per-node delay fields.
 - `topology.csv` — L2 links between ports, with bandwidth and propagation delay.
 - `routing_table.csv` — Per-node forwarding rules for a given destination and destination-port.
-- `transport_channel.csv` — Transport Path Numbers (TPNs) and priorities between endpoints and ports.
+- `transport_channel.csv` — Optional explicit Transport Path Numbers (TPNs) and priorities between endpoints and ports.
 - `traffic.csv` — Application-level tasks (ops, size, priority, dependency, timing).
 - `fault.csv` — Optional, only if faults are enabled (see `UB_FAULT_ENABLE`).
 
@@ -63,8 +63,8 @@ The entry program (`scratch/ub-quick-example`, or `src/unified-bus/examples/ub-q
 2) `node.csv` → `UbUtils::CreateNode`
 3) `topology.csv` → `UbUtils::CreateTopo`
 4) `routing_table.csv` → `UbUtils::AddRoutingTable`
-5) `transport_channel.csv` → `UbUtils::CreateTp`
-6) `traffic.csv` → `UbUtils::LoadTrafficConfig` → schedule tasks
+5) optional `transport_channel.csv` → `UbUtils::CreateTp`
+6) `traffic.csv` → reserve missing RTP connection records on every process → schedule tasks
 
 ---
 
@@ -129,8 +129,8 @@ Common UB attributes you’ll see (all names below come from `GetTypeId().AddAtt
 - Transport behavior (`ns3::UbTransportChannel`):
   - `UsePacketSpray` (bool)
   - `UseShortestPaths` (bool)
-  - `EnableRetrans`, `InitialRTO`, `MaxRetransAttempts`, `RetransExponentFactor`, `DefaultMaxWqeSegNum`, `DefaultMaxInflightPacketSize`
-  - `RetransmissionMode`, `TpOooThreshold`, `SelectiveAckBitmapBits`, `EnableFastSelectiveRetrans`, `EnableSelectiveMarkPsn`
+  - `EnableRetrans`, `BaseRTO`, `MaxRetransAttempts`, `RetransExponentFactor`, `DefaultMaxWqeSegNum`, `DefaultMaxInflightPacketSize`
+  - `RetransmissionMode`, `TpOooThreshold`, `SelectiveAckBitmapBits`, `EnableFastRetrans`, `EnableSelectiveMarkPsn`
 - Allocator:
   - `ns3::UbSwitchAllocator::AllocationTime` (Time)
 - App & API LD/ST knobs:
@@ -140,7 +140,7 @@ Common UB attributes you’ll see (all names below come from `GetTypeId().AddAtt
 
 ### Upgrading copied cases
 
-If you copied an older `scratch/` case into your own workspace, check `network_attribute.txt` before running it against a newer build. Known legacy keys are rejected before ns-3 `ConfigStore` loads the file so the error points at the migration instead of a generic attribute failure.
+If you copied an older `scratch/` case into your own workspace, check `network_attribute.txt` before running it against a newer build. Recognized transport aliases are translated to current names. Unsupported legacy keys are rejected before ns-3 `ConfigStore` loads the file so the error points at the migration instead of a generic attribute failure.
 
 | Old key or behavior | Current form |
 |---------------------|--------------|
@@ -148,6 +148,8 @@ If you copied an older `scratch/` case into your own workspace, check `network_a
 | `default ns3::UbSwitch::EnableCBFC "true"` | `default ns3::UbSwitch::FlowControl "CBFC"` |
 | `default ns3::UbSwitch::EnablePFC "true"` | Choose `default ns3::UbSwitch::FlowControl "PFC_FIXED"` or `"PFC_DYNAMIC"` |
 | `default ns3::UbApiThread::*` | `default ns3::UbLdstThread::*` |
+| `default ns3::UbTransportChannel::InitialRTO "..."` | `default ns3::UbTransportChannel::BaseRTO "..."` |
+| `default ns3::UbTransportChannel::EnableFastSelectiveRetrans "..."` | `default ns3::UbTransportChannel::EnableFastRetrans "..."` |
 | Depend on old `CbfcRetCellGrainControlPacket` default | Set `default ns3::UbPort::CbfcRetCellGrainControlPacket "1"` explicitly to reproduce older behavior; current repo default is `32` |
 | Need `QueueTrace_*` files | Set `global UB_QUEUE_TRACE_ENABLE "true"` |
 | Need `PfcTrace_*` or `CbfcTrace_*` files | Set `global UB_FLOW_CONTROL_TRACE_ENABLE "true"` |
@@ -167,14 +169,14 @@ default ns3::UbTransportChannel::RetransmissionMode "SELECTIVE"
 `SelectiveAckBitmapBits` defaults to `0`, which means AUTO. AUTO chooses the
 smallest SAETPH-supported feedback width covering `min(TpOooThreshold, 1024)`.
 `TpOooThreshold` is the endpoint out-of-order receive evidence capacity in PSNs;
-it is not a private receive-buffer implementation name. `EnableFastSelectiveRetrans`
+it is not a private receive-buffer implementation name. `EnableFastRetrans`
 defaults to `false` and should generally stay disabled when packet-spray or other
 multipath routing may reorder packets. For a controlled non-reordering experiment,
 advanced settings may be written explicitly:
 
 ```text
 default ns3::UbTransportChannel::SelectiveAckBitmapBits "64"
-default ns3::UbTransportChannel::EnableFastSelectiveRetrans "true"
+default ns3::UbTransportChannel::EnableFastRetrans "true"
 default ns3::UbTransportChannel::EnableSelectiveMarkPsn "true"
 ```
 
@@ -326,21 +328,21 @@ Constraints and tips:
 
 ### Automatic TP Generation (Optional)
 
-If `transport_channel.csv` is missing or empty, or if no matching TP is found for a specific traffic task, the simulator (specifically `UbApp`) will attempt to automatically generate TP configurations on demand.
+If `transport_channel.csv` is missing or has no matching channel for a traffic row, the config-driven runner automatically reserves RTP connection records from the routing table on every process while loading `traffic.csv`. This happens before any task is scheduled, so MPI and hybrid receiver ranks have the same reservation state before the first packet arrives.
 
 - **Mechanism**:
   1. It queries the routing table (`UbRoutingProcess`) to find all reachable paths from source to destination.
   2. It respects the `UseShortestPaths` attribute (default `true`) to filter for shortest paths or allow non-shortest ones.
-  3. If `EnableMultiPath` (in `UbApp`) is `true`, it creates TPs for **all** discovered paths.
-  4. If `EnableMultiPath` is `false`, it **randomly selects one** path to create a single TP.
-  5. TPNs are automatically assigned.
+  3. It assigns TPN pairs and stores the same connection records on both endpoint views without creating either TP object.
+  4. When the source task starts, `EnableMultiPath=true` materializes all selected sender endpoints; otherwise the source randomly selects and materializes one sender endpoint.
+  5. The receiver validates the incoming channel key against its reservation and materializes only its local endpoint on the first valid packet.
 
 - **Usage**:
   This is useful for simple scenarios where manual TP configuration is tedious. You can simply omit this file. However, for complex scenarios requiring specific TP mappings, fixed path selection, or specific multi-path policies, providing this file is recommended.
 
 - **Performance Note**:
   - **CSV Configuration (Pre-instantiated)**: The simulator reads `transport_channel.csv` at startup and **immediately creates all TP objects** defined in it. In large-scale topologies (e.g., thousands of nodes), this file can be huge, and creating millions of TP objects upfront consumes significant memory and initialization time, even for TPs that may never carry traffic.
-  - **Automatic Generation (On-demand)**: TPs are created dynamically only when a traffic task actually requires them. This avoids the overhead of parsing a massive CSV and instantiating unused TPs, making it **highly recommended** for large-scale simulations to reduce initialization time and memory usage.
+  - **Automatic Reservation + Local Materialization**: Connection records are reserved before traffic, but TP objects are created locally only when the sender uses a path or the receiver accepts its first valid packet. This avoids a massive CSV and avoids instantiating unused TP objects, making it **highly recommended** for large-scale simulations.
 
 ### TransportMode and CTP
 
@@ -362,7 +364,7 @@ fields default to `0`.
 TP channel and TP group in code:
 - A TP channel is the UB transport-layer shared path that the transaction layer uses. In code it is `ns3::UbTransportChannel`, created by `UbController::CreateTp(...)` and stored in a per-port TPN map (`m_numToTp`; see `UbController::GetTp/GetTpnMap`). Endpoints are fixed at creation: source/destination node IDs and ports, priority, and the `(srcTpn,dstTpn)` pair are passed to `UbTransportChannel::SetUbTransport(...)` inside `CreateTp`.
 - A jetty (function layer context) can be bound to multiple TP channels to form a TP group for multipath. In code (`UbApp::SendTraffic`), after `UbFunction::CreateJetty(...)`, the app collects candidate TPNs from `TpConnectionManager` and calls `UbFunction::jettyBindTp(src,dest,jettyNum,multiPath,tpns)`. When `multiPath` is true, `jettyBindTp` looks up each TP by TPN (`UbController::GetTp`) and calls `UbTransportChannel::CreateTpJettyRelationship(...)` for each; the vector is recorded in `UbFunction::m_jettyTpGroup[jettyNum]`.
-- Control-plane establishment of TPs (negotiation/bring-up) is not modeled: the simulator instantiates TP channels directly from `transport_channel.csv` in `UbUtils::CreateTp(...)`. For administrative procedures, refer to the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh); they are currently outside this simulator’s scope.
+- Control-plane negotiation/bring-up is not modeled. Explicit rows are loaded by `UbUtils::CreateTp(...)`; otherwise the config-driven traffic loader reserves connection records before tasks start and each endpoint materializes locally when needed. For administrative procedures, refer to the [UnifiedBus (UB) Base Specification](https://www.unifiedbus.com/zh); they are currently outside this simulator’s scope.
 
 ---
 
@@ -516,7 +518,7 @@ Place these in `network_attribute.txt` as needed (values shown are examples take
 - Transport toggles
   - `default ns3::UbTransportChannel::UsePacketSpray "false"`
   - `default ns3::UbTransportChannel::UseShortestPaths "true"`
-  - Retransmission knobs (if used): `EnableRetrans`, `InitialRTO`, `MaxRetransAttempts`, ...
+  - Retransmission knobs (if used): `EnableRetrans`, `BaseRTO`, `MaxRetransAttempts`, ...
 - Application multipath
   - `default ns3::UbApp::EnableMultiPath "false"`
 - LD/ST API threads

@@ -9,10 +9,23 @@
 #include "ns3/example-as-test.h"
 
 #include <cstdlib>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <utility>
 
 using namespace ns3;
+
+namespace
+{
+
+std::string
+GetPythonCommand()
+{
+    return std::system("command -v python3.12 >/dev/null 2>&1") == 0 ? "python3.12" : "python3";
+}
+
+} // namespace
 
 /**
  * @ingroup mpi-tests
@@ -129,7 +142,8 @@ class MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestCase : public TestC
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
         const std::string command =
-            "python3 ./ns3 run src/unified-bus/examples/ub-mtp-remote-tp-regression --no-build "
+            GetPythonCommand() +
+            " ./ns3 run src/unified-bus/examples/ub-mtp-remote-tp-regression --no-build "
             "--command-template=\"mpiexec -n 2 %s --test --mode=interceptor\" > " +
             testFile + " 2>&1";
 
@@ -175,7 +189,8 @@ class MpiUbQuickExampleRunTestCase : public TestCase
         SetDataDir(NS_TEST_SOURCEDIR);
         const std::string testFile = CreateTempDirFilename(GetName() + ".log");
         const std::string command =
-            "python3 ./ns3 run src/unified-bus/examples/ub-quick-example --no-build "
+            GetPythonCommand() +
+            " ./ns3 run src/unified-bus/examples/ub-quick-example --no-build "
             "--command-template=\"mpiexec -n 2 %s --test " +
             m_args + "\" > " + testFile + " 2>&1";
 
@@ -207,6 +222,170 @@ class MpiUbQuickExampleRunTestSuite : public TestSuite
         AddTestCase(new MpiUbQuickExampleRunTestCase(name, args), TestCase::Duration::QUICK);
     }
 };
+
+#ifdef NS3_MTP
+std::pair<int, std::string>
+RunHybridMtpExample(const std::string& testFile,
+                    const std::string& program,
+                    const std::string& arguments = "")
+{
+    const std::filesystem::path repoRoot = PROJECT_SOURCE_PATH;
+    std::string command = "cd \"" + repoRoot.string() + "\" && " + GetPythonCommand() +
+                          " ./ns3 run " + program +
+                          " --no-build --command-template=\"mpiexec -n 2 %s --test";
+    if (!arguments.empty())
+    {
+        command += " " + arguments;
+    }
+    command += "\" > \"" + testFile + "\" 2>&1";
+
+    const int status = std::system(command.c_str());
+    std::ifstream input(testFile);
+    std::stringstream buffer;
+    buffer << input.rdbuf();
+    return {status, buffer.str()};
+}
+
+class MpiRemoteTpRegressionSystemTestCase : public TestCase
+{
+  public:
+    MpiRemoteTpRegressionSystemTestCase()
+        : TestCase("Hybrid MPI MTP - remote TP traffic completes")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/unified-bus/examples/ub-mtp-remote-tp-regression");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "remote TP traffic must complete: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("TEST PASS"),
+                              std::string::npos,
+                              "remote TP traffic must report success: " << output);
+    }
+};
+
+class MpiRemoteTpRegressionSystemTestSuite : public TestSuite
+{
+  public:
+    MpiRemoteTpRegressionSystemTestSuite()
+        : TestSuite("mpi-example-ub-mtp-remote-tp-regression-np2", Type::SYSTEM)
+    {
+        AddTestCase(new MpiRemoteTpRegressionSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static MpiRemoteTpRegressionSystemTestSuite g_mpiRemoteTpRegression;
+
+class HybridLinkDelayOrderingSystemTestCase : public TestCase
+{
+  public:
+    HybridLinkDelayOrderingSystemTestCase()
+        : TestCase("Hybrid MPI MTP - cross-rank link delay preserves event order")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/mpi/examples/hybrid-link-delay-ordering");
+
+        NS_TEST_ASSERT_MSG_EQ(
+            status,
+            0,
+            "cross-rank receive must execute before a later local event: " << output);
+        NS_TEST_ASSERT_MSG_EQ(output.find("regressed=1"),
+                              std::string::npos,
+                              "hybrid MPI/MTP must not move simulation time backwards: " << output);
+    }
+};
+
+class HybridLinkDelayOrderingSystemTestSuite : public TestSuite
+{
+  public:
+    HybridLinkDelayOrderingSystemTestSuite()
+        : TestSuite("mpi-hybrid-link-delay-ordering", Type::SYSTEM)
+    {
+        AddTestCase(new HybridLinkDelayOrderingSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridLinkDelayOrderingSystemTestSuite g_hybridLinkDelayOrdering;
+
+class HybridZeroDelayLinkSystemTestCase : public TestCase
+{
+  public:
+    HybridZeroDelayLinkSystemTestCase()
+        : TestCase("Hybrid MPI MTP - cross-rank zero-delay link fails fast")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile,
+                                "src/mpi/examples/hybrid-link-delay-ordering",
+                                "--link-delay=0ns");
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "cross-rank zero-delay link must fail fast");
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("MTP lookahead is not positive"),
+            std::string::npos,
+            "failure must report the non-positive lookahead invariant: " << output);
+    }
+};
+
+class HybridZeroDelayLinkSystemTestSuite : public TestSuite
+{
+  public:
+    HybridZeroDelayLinkSystemTestSuite()
+        : TestSuite("mpi-hybrid-zero-delay-link", Type::SYSTEM)
+    {
+        AddTestCase(new HybridZeroDelayLinkSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridZeroDelayLinkSystemTestSuite g_hybridZeroDelayLink;
+
+class HybridPrescheduledNodeEventSystemTestCase : public TestCase
+{
+  public:
+    HybridPrescheduledNodeEventSystemTestCase()
+        : TestCase("Hybrid MPI MTP - partition preserves a pre-run node event")
+    {
+    }
+
+    void DoRun() override
+    {
+        const std::string testFile = CreateTempDirFilename(GetName() + ".log");
+        const auto [status, output] =
+            RunHybridMtpExample(testFile, "src/mpi/examples/hybrid-prescheduled-node-event");
+
+        NS_TEST_ASSERT_MSG_EQ(status, 0, "pre-run node event must execute: " << output);
+        NS_TEST_ASSERT_MSG_NE(output.find("event-time-ns=10"),
+                              std::string::npos,
+                              "pre-run node event must execute at 10ns: " << output);
+    }
+};
+
+class HybridPrescheduledNodeEventSystemTestSuite : public TestSuite
+{
+  public:
+    HybridPrescheduledNodeEventSystemTestSuite()
+        : TestSuite("mpi-hybrid-prescheduled-node-event", Type::SYSTEM)
+    {
+        AddTestCase(new HybridPrescheduledNodeEventSystemTestCase(), TestCase::Duration::QUICK);
+    }
+};
+
+static HybridPrescheduledNodeEventSystemTestSuite g_hybridPrescheduledNodeEvent;
+#endif
 
 /* Tests using SimpleDistributedSimulatorImpl */
 static MpiTestSuite g_mpiNms2("mpi-example-nms-2", "nms-p2p-nix-distributed", NS_TEST_SOURCEDIR, 2);
@@ -251,11 +430,6 @@ static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridLdst2(
 static MpiUbQuickExampleRunTestSuite g_mpiUbConfigHybridMultiRemote2(
     "mpi-example-ub-quick-example-run-hybrid-multi-remote-2",
     "--case-path=scratch/ub-mpi-minimal --mtp-threads=2 --stop-ms=50");
-static MpiTestSuite g_mpiUbRemoteTpRegressionNp2(
-    "mpi-example-ub-mtp-remote-tp-regression-np2",
-    "src/unified-bus/examples/ub-mtp-remote-tp-regression",
-    NS_TEST_SOURCEDIR,
-    2);
 static MpiRemoteTpRegressionDeprecatedInterceptorFailsFastTestSuite
     g_mpiUbRemoteTpRegressionDeprecatedInterceptorFailsFast;
 #endif

@@ -35,6 +35,8 @@
 #include "ns3/enum.h"
 #include "ns3/ub-fault.h"
 
+class UbLinkDelayOffsetTest;
+
 namespace utils {
 class UbTraceFileConcurrencyTest;
 class UbQueueSamplerEventRetentionTest;
@@ -88,7 +90,20 @@ public:
 
     TrafficLoadStats RegisterTrafficPhaseDependenciesAndGetStats(const std::string& filename);
 
-    void CreateTopo(const std::string &filename);
+    struct LinkDelayOffsetStats
+    {
+        uint64_t positiveLinkCount{0};
+        uint64_t zeroDelayLinkCount{0};
+        uint64_t distinctOffsetCount{0};
+        uint64_t offsetReuseCount{0};
+        uint64_t maxLinksPerOffset{0};
+    };
+
+    void CreateTopo(const std::string& filename);
+
+    LinkDelayOffsetStats CreateTopo(const std::string& filename,
+                                    ns3::Time offsetWindow,
+                                    uint32_t offsetSeed);
 
     void AddRoutingTable(const std::string &filename);
 
@@ -228,6 +243,15 @@ public:
 private:
     friend class ::utils::UbTraceFileConcurrencyTest;
     friend class ::utils::UbQueueSamplerEventRetentionTest;
+    friend class ::UbLinkDelayOffsetTest;
+
+    static ns3::Time ResolveLinkDelayWithOffset(ns3::Time baseDelay,
+                                                ns3::Time offsetWindow,
+                                                uint32_t offsetSeed,
+                                                uint32_t node1,
+                                                uint32_t port1,
+                                                uint32_t node2,
+                                                uint32_t port2);
 
     struct TraceFileState
     {

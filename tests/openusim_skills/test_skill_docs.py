@@ -47,6 +47,11 @@ class OpenUSimStageSkillDocsTest(unittest.TestCase):
         ):
             self.assertTrue((repo_root / relative_path).is_file(), msg=relative_path)
 
+    def test_timing_offset_demo_uses_runtime_parameter_catalog(self):
+        generator = self.read_text("scratch/ub_parallel_timing_offset_demo/generate_case.py")
+        self.assertIn("network_attribute_writer.write_network_attributes", generator)
+        self.assertNotIn("NETWORK_ATTRIBUTES =", generator)
+
     def test_stage_skill_descriptions_are_trigger_only(self):
         for path in self.skill_files():
             text = path.read_text(encoding="utf-8")

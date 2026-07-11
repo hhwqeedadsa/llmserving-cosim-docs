@@ -103,9 +103,7 @@ python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/2nodes_single-tp --mtp-threads=8'
 ```
 
-说明：启用并行仿真通常还需要在仿真程序中调用 `MtpInterface::Enable(...)`（并用 `#ifdef NS3_MTP` 保护）。如果当前构建未启用 `--enable-mtp`，运行时传入 `--mtp-threads>=2` 会直接报错退出。更多用法与注意事项请参阅 [UNISON_README.md](UNISON_README.md)。
-
-提示：默认推荐使用 `scratch/ub-quick-example`；如额外启用 `--enable-examples --filter-module-examples-and-tests=unified-bus`，也可以使用 `src/unified-bus/examples/ub-quick-example`。
+更多 MTP 用法、行为边界和诊断参数请参阅 [UNISON_README.md](UNISON_README.md)。
 
 ## 运行简单示例
 
@@ -199,7 +197,7 @@ ls scratch/2dfm4x4-multipath_a2a/output/
 - `node.csv` - 节点定义
 - `topology.csv` - 拓扑连接
 - `routing_table.csv` - 路由表
-- `transport_channel.csv` - 传输通道
+- `transport_channel.csv` - 可选的显式 RTP 传输通道；省略时会在流量加载阶段自动预留
 - `traffic.csv` - 流量定义
 
 有关 `ub-quick-example` 的入口说明、配置文件格式与典型命令，请参见 [scratch/README.md](scratch/README.md)。

@@ -248,11 +248,7 @@ GrantedTimeWindowMpiInterface::SendPacket(Ptr<Packet> p,
 
     // Find the system id for the destination node
     Ptr<Node> destNode = NodeList::GetNode(node);
-#ifdef NS3_MTP
-    uint32_t nodeSysId = destNode->GetSystemId() & 0xFFFF;
-#else
     uint32_t nodeSysId = destNode->GetSystemId();
-#endif
 
     MPI_Isend(reinterpret_cast<void*>(i->GetBuffer()),
               serializedSize + 16,
@@ -368,7 +364,7 @@ GrantedTimeWindowMpiInterface::ReceiveMessages()
 #ifdef NS3_MTP
         if (MtpInterface::isEnabled())
         {
-            MtpInterface::GetSystem(pNode->GetSystemId() >> 16)
+            MtpInterface::GetSystem(MtpInterface::RequireNodeLocalLpId(pNode->GetId()))
                 ->ScheduleAt(pNode->GetId(), rxTime, MakeEvent(&MpiReceiver::Receive, pMpiRec, p));
         }
         else
@@ -435,9 +431,11 @@ GrantedTimeWindowMpiInterface::ScheduleTaskCompletion(uint32_t taskId, Time comp
 #ifdef NS3_MTP
     if (MtpInterface::isEnabled())
     {
-        MtpInterface::ScheduleGlobalAt(completionVisibleTs,
-                                       &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
-                                       taskId);
+        MtpInterface::ScheduleGlobalAtOrdered(
+            completionVisibleTs,
+            taskId,
+            &GrantedTimeWindowMpiInterface::DispatchTaskCompletion,
+            taskId);
         return;
     }
 #endif

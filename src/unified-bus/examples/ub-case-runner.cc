@@ -11,7 +11,9 @@
 #include "ns3/ub-transport.h"
 #include "ns3/ub-utils.h"
 
+#include <algorithm>
 #include <array>
+#include <cctype>
 #include <chrono>
 #include <cstdlib>
 #include <ctime>
@@ -46,6 +48,9 @@ struct QuickExampleOptions
     uint32_t rngRun = 10;
     std::string configPath;
     std::string dependencyVisibilityDelay;
+    std::string initialTaskStartOffsetWindow = "0ps";
+    std::string linkDelayOffsetWindow = "0ps";
+    uint32_t timingOffsetSeed = 1;
     std::string canonicalOutputPath;
 };
 
@@ -359,6 +364,40 @@ std::string NormalizeCasePath(const std::string& path)
     return std::filesystem::absolute(std::filesystem::path(path)).lexically_normal().string();
 }
 
+std::string
+Lowercase(std::string value)
+{
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char c) {
+        return static_cast<char>(std::tolower(c));
+    });
+    return value;
+}
+
+bool
+IsDisabledOffsetWindow(const std::string& value)
+{
+    const std::string normalized = Lowercase(value);
+    return normalized.empty() || normalized == "off" || normalized == "none" ||
+           normalized == "false" || normalized == "0";
+}
+
+Time
+ParseOffsetWindow(const std::string& value, const char* optionName)
+{
+    if (IsDisabledOffsetWindow(value))
+    {
+        return Time(0);
+    }
+
+    const Time window(value);
+    if (window.IsStrictlyNegative())
+    {
+        std::cerr << optionName << " must be non-negative" << std::endl;
+        std::exit(1);
+    }
+    return window;
+}
+
 void ValidateCasePathOrExit(const std::string& configPath)
 {
     static const std::array<const char*, 5> kRequiredCaseFiles = {"network_attribute.txt",
@@ -390,24 +429,51 @@ void ValidateCasePathOrExit(const std::string& configPath)
     }
 }
 
-void BuildScenarioFromConfig(const std::string& configPath)
+void
+BuildScenarioFromConfig(const QuickExampleOptions& options, const RuntimeSelection& runtime)
 {
+    const std::string& configPath = options.configPath;
+    const Time linkOffsetWindow =
+        ParseOffsetWindow(options.linkDelayOffsetWindow, "--link-delay-offset-window");
     UbUtils::Get()->SetComponentsAttribute(configPath + "/network_attribute.txt");
     UbUtils::Get()->CreateTraceDir();
     UbUtils::Get()->CreateNode(configPath + "/node.csv");
-    UbUtils::Get()->CreateTopo(configPath + "/topology.csv");
+    const auto offsetStats = UbUtils::Get()->CreateTopo(configPath + "/topology.csv",
+                                                        linkOffsetWindow,
+                                                        options.timingOffsetSeed);
     UbUtils::Get()->AddRoutingTable(configPath + "/routing_table.csv");
     UbUtils::Get()->CreateTp(configPath + "/transport_channel.csv");
     UbUtils::Get()->TopoTraceConnect();
+
+    const bool shouldPrint = !runtime.enableMpi || runtime.mpiRank == 0;
+    if (shouldPrint && linkOffsetWindow.IsStrictlyPositive())
+    {
+        std::cout << "[INFO] Link delay offset enabled: window=" << options.linkDelayOffsetWindow
+                  << ", seed=" << options.timingOffsetSeed
+                  << ", positive-links=" << offsetStats.positiveLinkCount
+                  << ", zero-delay-links-preserved=" << offsetStats.zeroDelayLinkCount
+                  << ", distinct-offsets=" << offsetStats.distinctOffsetCount
+                  << ", offset-reuses=" << offsetStats.offsetReuseCount
+                  << ", max-links-per-offset=" << offsetStats.maxLinksPerOffset << "." << std::endl;
+    }
+    else if (shouldPrint && ModeUsesMtp(runtime.mode))
+    {
+        std::cout << "[INFO] Link delay offset is off (default). Enable the deterministic "
+                     "positive-link workaround with --link-delay-offset-window=<Time> and record "
+                     "--timing-offset-seed."
+                  << std::endl;
+    }
 }
 
-void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
+void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
+                                          const RuntimeSelection& runtime)
 {
     if (!options.dependencyVisibilityDelay.empty())
     {
         UbTrafficGen::Get()->SetDependencyVisibilityDelay(Time(options.dependencyVisibilityDelay));
     }
 
+    const bool usePositiveLocalLinkDelays = ModeUsesMtp(runtime.mode);
     for (uint32_t nodeIndex = 0; nodeIndex < NodeList::GetNNodes(); ++nodeIndex)
     {
         Ptr<Node> node = NodeList::GetNode(nodeIndex);
@@ -420,9 +486,16 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
             }
 
             Ptr<UbLink> link = DynamicCast<UbLink>(port->GetChannel());
-            if (link != nullptr && link->IsRemote())
+            if (link == nullptr)
             {
-                UbTrafficGen::Get()->ObserveRemoteLinkDelay(link->GetDelay());
+                continue;
+            }
+
+            const Time delay = link->GetDelay();
+            if (link->IsRemote() ||
+                (usePositiveLocalLinkDelays && delay.IsStrictlyPositive()))
+            {
+                UbTrafficGen::Get()->ConsiderAutomaticDependencyVisibilityDelay(delay);
             }
         }
     }
@@ -430,11 +503,6 @@ void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options)
 
 void ApplyDependencyVisibilityLookaheadBound(const RuntimeSelection& runtime)
 {
-    if (!UbTrafficGen::Get()->HasDependencyVisibilityDelay())
-    {
-        return;
-    }
-
     const Time delay = UbTrafficGen::Get()->GetDependencyVisibilityDelay();
     if (!delay.IsStrictlyPositive())
     {
@@ -468,6 +536,36 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
     }
 }
 
+void
+ConfigureInitialTaskStartOffset(const QuickExampleOptions& options,
+                                const RuntimeSelection& runtime)
+{
+    const Time offsetWindow = ParseOffsetWindow(options.initialTaskStartOffsetWindow,
+                                                "--initial-task-start-offset-window");
+
+    const bool shouldPrint = !runtime.enableMpi || runtime.mpiRank == 0;
+    if (offsetWindow.IsZero())
+    {
+        UbTrafficGen::Get()->SetInitialTaskStartOffsetWindow(Time(0), options.timingOffsetSeed);
+        if (shouldPrint && ModeUsesMtp(runtime.mode))
+        {
+            std::cout << "[INFO] Initial task start offset is off (default). Enable it with "
+                         "--initial-task-start-offset-window=<Time> and record "
+                         "--timing-offset-seed."
+                      << std::endl;
+        }
+        return;
+    }
+
+    UbTrafficGen::Get()->SetInitialTaskStartOffsetWindow(offsetWindow, options.timingOffsetSeed);
+    if (shouldPrint)
+    {
+        std::cout << "[INFO] Initial task start offset enabled: window="
+                  << options.initialTaskStartOffsetWindow << ", seed=" << options.timingOffsetSeed
+                  << "." << std::endl;
+    }
+}
+
 uint32_t ActivateTrafficFromConfig(const std::string& configPath,
                                    bool activateLocalOwnedTasksOnly,
                                    uint32_t mpiRank,
@@ -485,9 +583,22 @@ uint32_t ActivateTrafficFromConfig(const std::string& configPath,
 
     uint32_t localTaskCount = 0;
     std::vector<Ptr<UbApp>> sourceApps;
+    Ptr<UbApp> appDefaults = CreateObject<UbApp>();
+    const bool reserveRtpConnections = appDefaults->GetTransportMode() == TransportMode::RTP;
+    const bool useShortestPaths = appDefaults->GetUseShortestPaths();
     UbUtils::Get()->PrintTimestamp("[traffic] Activate clients and enqueue tasks.");
     UbUtils::Get()->ForEachTrafficRecordView(trafficPath, [&](const TrafficRecordView& record) {
         Ptr<Node> sourceNode = NodeList::GetNode(record.sourceNode);
+        if (reserveRtpConnections &&
+            (record.opType == "URMA_WRITE" || record.opType == "URMA_READ"))
+        {
+            sourceNode->GetObject<UbController>()->GetTpConnManager()->ReserveTpnsForTraffic(
+                useShortestPaths,
+                record.sourceNode,
+                record.destNode,
+                record.priority);
+        }
+
         const bool localOwned =
             !activateLocalOwnedTasksOnly ||
             UbUtils::ExtractMpiRank(sourceNode->GetSystemId()) == mpiRank;
@@ -550,7 +661,8 @@ bool HandleAttributeQuery(int argc, char* argv[])
     for (int i = 1; i < argc; ++i)
     {
         std::string arg(argv[i]);
-        if (arg.find("--ClassName") == 0)
+        if (arg.find("--ClassName") == 0 || arg.find("--GlobalName") == 0 ||
+            arg.find("--PrintUbGlobals") == 0)
         {
             if (UbUtils::Get()->QueryAttributeInfo(argc, argv))
             {
@@ -584,8 +696,21 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
     cmd.AddValue("stop-ms", "Optional simulation stop time in milliseconds", options.stopMs);
     cmd.AddValue("rng-run", "Random seed value passed to RngSeedManager::SetSeed", options.rngRun);
     cmd.AddValue("dependency-visibility-delay",
-                 "Delay before a completed traffic task becomes visible to dependent tasks",
+                 "Advanced override for the dependency visibility delay inferred from UB links",
                  options.dependencyVisibilityDelay);
+    cmd.AddValue("initial-task-start-offset-window",
+                 "Add one deterministic per-source start offset to tasks with no phase "
+                 "dependencies in [0, window); use 0ps or off to disable "
+                 "(default: 0ps)",
+                 options.initialTaskStartOffsetWindow);
+    cmd.AddValue("link-delay-offset-window",
+                 "Advanced workaround: add a deterministic per-link offset to positive topology "
+                 "delays in [0, window); use 0ps or off to disable (default: 0ps)",
+                 options.linkDelayOffsetWindow);
+    cmd.AddValue("timing-offset-seed",
+                 "Advanced: shared seed for deterministic initial-task and link-delay offset "
+                 "assignment (default: 1)",
+                 options.timingOffsetSeed);
     cmd.AddValue("canonical-output",
                  "Write deterministic UbTrafficGen canonical events to this output basename",
                  options.canonicalOutputPath);
@@ -593,7 +718,6 @@ QuickExampleOptions ParseOptions(int argc, char* argv[])
                      "Required unified-bus case directory when --case-path is omitted",
                      positionalCasePath);
     cmd.Parse(argc, argv);
-
     if (!casePathArg.empty() && !positionalCasePath.empty() &&
         NormalizeCasePath(casePathArg) != NormalizeCasePath(positionalCasePath))
     {
@@ -677,6 +801,11 @@ RuntimeSelection PrepareRuntime(int* argc,
             std::cout << "[INFO] MTP enabled with " << options.mtpThreads << " threads."
                       << (runtime.enableMpi ? " (hybrid MPI mode)." : " (local mode).")
                       << std::endl;
+            std::cout << "[INFO] Parallel runs preserve causal ordering and deterministic task "
+                         "completion ordering, but events with the same simulation time may be "
+                         "processed in a different order than single-thread runs. Compare task or "
+                         "workload metrics using predefined acceptance criteria."
+                      << std::endl;
         }
 #ifndef NS3_MTP
         else
@@ -708,10 +837,11 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
 
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
-    BuildScenarioFromConfig(options.configPath);
-    ConfigureTrafficDependencyVisibility(options);
+    BuildScenarioFromConfig(options, runtime);
+    ConfigureTrafficDependencyVisibility(options, runtime);
     ApplyDependencyVisibilityLookaheadBound(runtime);
     ConfigureCanonicalOutput(options, runtime);
+    ConfigureInitialTaskStartOffset(options, runtime);
     ResetDropAbortState();
     GetDropAbortState().retransEnabled = IsRetransEnabledForRun();
     ActivateTrafficFromConfig(options.configPath,

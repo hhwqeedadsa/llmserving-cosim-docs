@@ -33,7 +33,10 @@
 #include "ns3/nstime.h"
 #include "ns3/simulator.h"
 
+#include <mutex>
+#include <optional>
 #include <pthread.h>
+#include <vector>
 
 namespace ns3
 {
@@ -215,6 +218,20 @@ class MtpInterface
     static void BoundLookAhead(Time lookAhead);
 
     /**
+     * @brief Find the local MTP LP that owns a node.
+     *
+     * A node on another MPI rank has no local LP and returns std::nullopt.
+     */
+    static std::optional<uint32_t> FindNodeLocalLpId(uint32_t nodeId);
+
+    /**
+     * @brief Get the local MTP LP that must own a locally scheduled node.
+     *
+     * Aborts when the node has no valid local worker LP mapping.
+     */
+    static uint32_t RequireNodeLocalLpId(uint32_t nodeId);
+
+    /**
      * @brief Get the running logical process of the current thread.
      *
      * @return The curretly running logical process of the
@@ -365,7 +382,9 @@ class MtpInterface
         CriticalSection cs;
         NS_ABORT_MSG_IF(time < g_systems[0].Now(),
                         "control-plane event time is earlier than public LP");
-        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT, time, MakeEvent(f, std::forward<Ts>(args)...));
+        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
+                                time,
+                                MakeEvent(f, std::forward<Ts>(args)...));
     }
 
     /**
@@ -377,10 +396,78 @@ class MtpInterface
         CriticalSection cs;
         NS_ABORT_MSG_IF(time < g_systems[0].Now(),
                         "control-plane event time is earlier than public LP");
-        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT, time, MakeEvent(f, std::forward<Ts>(args)...));
+        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
+                                time,
+                                MakeEvent(f, std::forward<Ts>(args)...));
+    }
+
+    /**
+     * @brief Queue a same-time public-LP event under a stable application ordering key.
+     *
+     * Events at a target time are held until every worker LP has advanced through that time,
+     * then sorted by absolute time and order key before receiving public-LP UIDs. Equal keys are
+     * equivalent and have no relative-order guarantee.
+     */
+    template <
+        typename FUNC,
+        typename std::enable_if<!std::is_convertible<FUNC, Ptr<EventImpl>>::value, int>::type = 0,
+        typename std::enable_if<!std::is_function<typename std::remove_pointer<FUNC>::type>::value,
+                                int>::type = 0,
+        typename... Ts>
+    inline static void ScheduleGlobalAtOrdered(const Time& time,
+                                               uint64_t orderKey,
+                                               FUNC f,
+                                               Ts&&... args)
+    {
+        EnqueueOrderedGlobalEvent(time, orderKey, MakeEvent(f, std::forward<Ts>(args)...));
+    }
+
+    /**
+     * @brief Queue a function-pointer public-LP event under a stable application ordering key.
+     */
+    template <typename... Us, typename... Ts>
+    inline static void ScheduleGlobalAtOrdered(const Time& time,
+                                               uint64_t orderKey,
+                                               void (*f)(Us...),
+                                               Ts&&... args)
+    {
+        EnqueueOrderedGlobalEvent(time, orderKey, MakeEvent(f, std::forward<Ts>(args)...));
     }
 
   private:
+    friend class HybridSimulatorImpl;
+    friend class MultithreadedSimulatorImpl;
+
+    struct OrderedGlobalEvent
+    {
+        int64_t targetTs;
+        uint64_t orderKey;
+        EventImpl* event;
+    };
+
+    static void EnqueueOrderedGlobalEvent(const Time& time, uint64_t orderKey, EventImpl* event);
+
+    static void FlushOrderedGlobalEvents(const Time& throughTime);
+
+    /** Clear node ownership while partitioning is still mutable. */
+    static void ClearNodeLocalLpIds();
+
+    /** Record one node owner while partitioning is still mutable. */
+    static void SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId);
+
+    /** Freeze node ownership before worker threads start reading it. */
+    static void FreezeNodeLocalLpIds();
+
+    /**
+     * @brief Import and validate one legacy manual-partition Node::systemId value.
+     */
+    static void InitializeManualNodeLocalLpId(uint32_t nodeId);
+
+    /**
+     * @brief Import and validate the legacy manual-partition Node::systemId values.
+     */
+    static void InitializeManualNodeLocalLpIds();
+
     /**
      * @brief The actual function each thread will run.
      *
@@ -427,12 +514,17 @@ class MtpInterface
     static Time g_smallestTime;
     static Time g_nextPublicTime;
     static Time g_lookAheadBound;
+    static std::vector<uint32_t> g_nodeLocalLpIds;
+    static bool g_nodeLocalLpIdsFrozen;
     static std::atomic<bool> g_recvMsgStage;
     static std::atomic<bool> g_globalFinished;
+    static bool g_manualPartition;
     static bool g_enabled;
 
     static pthread_key_t g_key;
     static std::atomic<bool> g_inCriticalSection;
+    static std::mutex g_orderedGlobalEventsMutex;
+    static std::vector<OrderedGlobalEvent> g_orderedGlobalEvents;
 };
 
 } // namespace ns3

@@ -28,12 +28,17 @@
 #include "ns3/assert.h"
 #include "ns3/config.h"
 #include "ns3/log.h"
+#include "ns3/node-list.h"
+#include "ns3/node.h"
 #include "ns3/string.h"
 #include "ns3/uinteger.h"
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
+#include <limits>
 #include <thread>
+#include <tuple>
 #if defined(__x86_64__) || defined(__i386__)
 #include <immintrin.h>
 #endif
@@ -45,6 +50,8 @@ NS_LOG_COMPONENT_DEFINE("MtpInterface");
 
 namespace
 {
+
+constexpr uint32_t INVALID_NODE_LOCAL_LP_ID = std::numeric_limits<uint32_t>::max();
 
 inline void
 CpuRelax()
@@ -63,6 +70,7 @@ CpuRelax()
 void
 MtpInterface::Enable()
 {
+    g_nodeLocalLpIdsFrozen = false;
 #ifdef NS3_MPI
     GlobalValue::Bind("SimulatorImplementationType", StringValue("ns3::HybridSimulatorImpl"));
 #else
@@ -98,6 +106,8 @@ MtpInterface::Enable(const uint32_t threadCount, const uint32_t systemCount)
     // set size
     g_threadCount = threadCount;
     g_systemCount = systemCount;
+    g_manualPartition = systemCount > 0;
+    g_nodeLocalLpIdsFrozen = false;
 
     // allocate systems
     g_systems = new LogicalProcess[g_systemCount + 1]; // include the public LP
@@ -146,6 +156,7 @@ MtpInterface::Enable(const uint32_t threadCount, const uint32_t systemCount)
 void
 MtpInterface::EnableNew(const uint32_t newSystemCount)
 {
+    g_manualPartition = false;
     const LogicalProcess* oldSystems = g_systems;
     g_systems = new LogicalProcess[g_systemCount + newSystemCount + 1];
     for (uint32_t i = 0; i <= g_systemCount; i++)
@@ -192,10 +203,21 @@ MtpInterface::Disable()
     g_systemCount = 0;
     g_sortFunc = nullptr;
     g_lookAheadBound = TimeStep(0);
+    g_nodeLocalLpIds.clear();
+    g_nodeLocalLpIdsFrozen = false;
+    g_manualPartition = false;
     g_globalFinished.store(false, std::memory_order_release);
     g_recvMsgStage.store(false, std::memory_order_release);
     g_systemIndex.store(0, std::memory_order_release);
     g_finishedSystemCount.store(0, std::memory_order_release);
+    {
+        std::lock_guard<std::mutex> lock(g_orderedGlobalEventsMutex);
+        for (auto& orderedEvent : g_orderedGlobalEvents)
+        {
+            orderedEvent.event->Unref();
+        }
+        g_orderedGlobalEvents.clear();
+    }
     delete[] g_systems;
     delete[] g_threads;
     delete[] g_sortedSystemIndices;
@@ -216,6 +238,11 @@ MtpInterface::Run()
 void
 MtpInterface::RunBefore()
 {
+    if (g_manualPartition)
+    {
+        InitializeManualNodeLocalLpIds();
+    }
+    FreezeNodeLocalLpIds();
     CalculateLookAhead();
 
     // LP index for sorting & holding worker threads
@@ -269,6 +296,7 @@ MtpInterface::ProcessOneRound()
     };
 
     // stage 2: process the public LP
+    FlushOrderedGlobalEvents(g_smallestTime);
     g_systems[0].ProcessOneRound();
 
     // stage 3: receive messages
@@ -295,8 +323,63 @@ MtpInterface::ProcessOneRound()
 }
 
 void
+MtpInterface::EnqueueOrderedGlobalEvent(const Time& time, uint64_t orderKey, EventImpl* event)
+{
+    const int64_t targetTs = time.GetTimeStep();
+    NS_ABORT_MSG_IF(targetTs < 0 || time < g_systems[0].Now() || time < GetSystem()->Now(),
+                    "ordered public event time is earlier than its submitting or public LP");
+
+    std::lock_guard<std::mutex> lock(g_orderedGlobalEventsMutex);
+    g_orderedGlobalEvents.push_back({targetTs, orderKey, event});
+}
+
+void
+MtpInterface::FlushOrderedGlobalEvents(const Time& throughTime)
+{
+    std::vector<OrderedGlobalEvent> pendingEvents;
+    {
+        std::lock_guard<std::mutex> lock(g_orderedGlobalEventsMutex);
+        std::sort(g_orderedGlobalEvents.begin(),
+                  g_orderedGlobalEvents.end(),
+                  [](const OrderedGlobalEvent& lhs, const OrderedGlobalEvent& rhs) {
+                      return std::tie(lhs.targetTs, lhs.orderKey) <
+                             std::tie(rhs.targetTs, rhs.orderKey);
+                  });
+        const int64_t throughTs = throughTime.GetTimeStep();
+        const auto firstFutureEvent = std::find_if(
+            g_orderedGlobalEvents.begin(),
+            g_orderedGlobalEvents.end(),
+            [throughTs](const OrderedGlobalEvent& event) { return event.targetTs > throughTs; });
+        pendingEvents.insert(pendingEvents.end(),
+                             std::make_move_iterator(g_orderedGlobalEvents.begin()),
+                             std::make_move_iterator(firstFutureEvent));
+        g_orderedGlobalEvents.erase(g_orderedGlobalEvents.begin(), firstFutureEvent);
+    }
+
+    for (auto& orderedEvent : pendingEvents)
+    {
+        g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
+                                TimeStep(orderedEvent.targetTs),
+                                orderedEvent.event);
+    }
+}
+
+void
 MtpInterface::CalculateSmallestTime()
 {
+    std::optional<Time> nextOrderedGlobalTime;
+    {
+        std::lock_guard<std::mutex> lock(g_orderedGlobalEventsMutex);
+        for (const auto& orderedEvent : g_orderedGlobalEvents)
+        {
+            const Time targetTime = TimeStep(orderedEvent.targetTs);
+            if (!nextOrderedGlobalTime || targetTime < *nextOrderedGlobalTime)
+            {
+                nextOrderedGlobalTime = targetTime;
+            }
+        }
+    }
+
     // update smallest time
     g_smallestTime = Time::Max() / 2;
     for (uint32_t i = 0; i <= g_systemCount; i++)
@@ -308,9 +391,14 @@ MtpInterface::CalculateSmallestTime()
         }
     }
     g_nextPublicTime = g_systems[0].Next();
+    if (nextOrderedGlobalTime)
+    {
+        g_smallestTime = Min(g_smallestTime, *nextOrderedGlobalTime);
+        g_nextPublicTime = Min(g_nextPublicTime, *nextOrderedGlobalTime);
+    }
 
     // test if global finished
-    bool globalFinished = true;
+    bool globalFinished = !nextOrderedGlobalTime.has_value();
     for (uint32_t i = 0; i <= g_systemCount; i++)
     {
         globalFinished &= g_systems[i].isLocalFinished();
@@ -339,6 +427,81 @@ bool
 MtpInterface::isPartitioned()
 {
     return g_threadCount != 0;
+}
+
+void
+MtpInterface::ClearNodeLocalLpIds()
+{
+    NS_ABORT_MSG_IF(g_nodeLocalLpIdsFrozen, "MTP worker partition ownership is already frozen");
+    g_nodeLocalLpIds.clear();
+}
+
+void
+MtpInterface::SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId)
+{
+    NS_ABORT_MSG_IF(g_nodeLocalLpIdsFrozen, "MTP worker partition ownership is already frozen");
+    NS_ABORT_MSG_IF(localLpId == 0, "MTP worker partition 0 cannot own node " << nodeId);
+    if (nodeId >= g_nodeLocalLpIds.size())
+    {
+        g_nodeLocalLpIds.resize(nodeId + 1, INVALID_NODE_LOCAL_LP_ID);
+    }
+    g_nodeLocalLpIds[nodeId] = localLpId;
+}
+
+void
+MtpInterface::FreezeNodeLocalLpIds()
+{
+    g_nodeLocalLpIdsFrozen = true;
+}
+
+std::optional<uint32_t>
+MtpInterface::FindNodeLocalLpId(uint32_t nodeId)
+{
+    if (nodeId >= g_nodeLocalLpIds.size() || g_nodeLocalLpIds[nodeId] == INVALID_NODE_LOCAL_LP_ID)
+    {
+        return std::nullopt;
+    }
+    return g_nodeLocalLpIds[nodeId];
+}
+
+uint32_t
+MtpInterface::RequireNodeLocalLpId(uint32_t nodeId)
+{
+    auto localLpId = FindNodeLocalLpId(nodeId);
+    if (!localLpId && g_manualPartition && !g_nodeLocalLpIdsFrozen)
+    {
+        InitializeManualNodeLocalLpId(nodeId);
+        localLpId = FindNodeLocalLpId(nodeId);
+    }
+    NS_ABORT_MSG_IF(!localLpId,
+                    "MTP worker partition ownership is missing for node "
+                        << nodeId << "; ownership is fixed before simulation starts");
+    NS_ABORT_MSG_IF(*localLpId == 0 || *localLpId > g_systemCount,
+                    "MTP worker partition for node " << nodeId << " is outside range [1, "
+                                                     << g_systemCount << "]: " << *localLpId);
+    return *localLpId;
+}
+
+void
+MtpInterface::InitializeManualNodeLocalLpId(uint32_t nodeId)
+{
+    // NodeList::Add schedules initialization before Node::m_id receives the returned index.
+    NS_ABORT_MSG_IF(nodeId >= NodeList::GetNNodes(), "MTP node " << nodeId << " does not exist");
+    const uint32_t localLpId = NodeList::GetNode(nodeId)->GetSystemId();
+    NS_ABORT_MSG_IF(localLpId == 0 || localLpId > g_systemCount,
+                    "MTP worker partition ownership is missing for node "
+                        << nodeId << ": manual partition requires Node::systemId in [1, "
+                        << g_systemCount << "], got " << localLpId);
+    SetNodeLocalLpId(nodeId, localLpId);
+}
+
+void
+MtpInterface::InitializeManualNodeLocalLpIds()
+{
+    for (uint32_t nodeId = 0; nodeId < NodeList::GetNNodes(); ++nodeId)
+    {
+        InitializeManualNodeLocalLpId(nodeId);
+    }
 }
 
 void
@@ -472,14 +635,24 @@ Time MtpInterface::g_nextPublicTime = TimeStep(0);
 
 Time MtpInterface::g_lookAheadBound = TimeStep(0);
 
+std::vector<uint32_t> MtpInterface::g_nodeLocalLpIds;
+
+bool MtpInterface::g_nodeLocalLpIdsFrozen = false;
+
 std::atomic<bool> MtpInterface::g_recvMsgStage(false);
 
 std::atomic<bool> MtpInterface::g_globalFinished(false);
+
+bool MtpInterface::g_manualPartition = false;
 
 bool MtpInterface::g_enabled = false;
 
 pthread_key_t MtpInterface::g_key;
 
 std::atomic<bool> MtpInterface::g_inCriticalSection(false);
+
+std::mutex MtpInterface::g_orderedGlobalEventsMutex;
+
+std::vector<MtpInterface::OrderedGlobalEvent> MtpInterface::g_orderedGlobalEvents;
 
 } // namespace ns3

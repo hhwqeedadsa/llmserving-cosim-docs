@@ -54,7 +54,6 @@ class NullMessageMpiInterface : public ParallelCommunicationInterface, Object
     uint32_t GetSystemId() override;
     uint32_t GetSize() override;
     bool IsEnabled() override;
-    bool SupportsControlEvents() const override;
     void Enable(int* pargc, char*** pargv) override;
     void Enable(MPI_Comm communicator) override;
     void Disable() override;
@@ -63,12 +62,6 @@ class NullMessageMpiInterface : public ParallelCommunicationInterface, Object
                             const Time& completionVisibleTs,
                             uint32_t rank) override;
     void SetTaskCompletionHandler(TaskCompletionHandler handler) override;
-    void SendControlEvent(uint32_t eventType,
-                          const ControlEventPayload& payload,
-                          const Time& visibleTime,
-                          uint32_t targetNode,
-                          uint32_t rank) override;
-    void SetControlEventHandler(uint32_t eventType, ControlEventHandler handler) override;
     MPI_Comm GetCommunicator() override;
 
   private:

@@ -556,10 +556,6 @@ void UbTransportChannel::DoDispose()
     m_inboundTpMsnReferences.clear();
     m_inboundTaSsnReferences.clear();
     m_bufferedInboundPackets.clear();
-    if (m_congestionCtrl != nullptr)
-    {
-        m_congestionCtrl->OnTpDetached();
-    }
     m_congestionCtrl = nullptr;
     m_recvPsnWindow.Resize(0);
 }
@@ -592,7 +588,6 @@ UbTransportChannel::PopQueuedPacket(std::queue<Ptr<Packet>>& packetQ)
     if (HasPendingTransmitWork()) {
         m_headArrivalTime = Simulator::Now();
     }
-    NotifyReclamationStateChanged();
     return packet;
 }
 
@@ -1507,25 +1502,8 @@ void UbTransportChannel::RecvTpAck(Ptr<Packet> p)
     }
 
     FinalizeTransportAckProgress(ctx, previousSndUna);
-    NotifyReclamationStateChanged();
 }
 
-void
-UbTransportChannel::SetReclamationStateChangedCallback(Callback<void, uint32_t> callback)
-{
-    m_reclamationStateChangedCallback = callback;
-}
-
-void
-UbTransportChannel::NotifyReclamationStateChanged()
-{
-    if (!m_reclamationStateChangedCallback.IsNull())
-    {
-        const auto callback = m_reclamationStateChangedCallback;
-        const uint32_t tpn = m_tpn;
-        Simulator::ScheduleNow([callback, tpn]() { callback(tpn); });
-    }
-}
 
 void UbTransportChannel::SetUbTransport(uint32_t nodeId,
                                         uint32_t src,
@@ -2057,27 +2035,6 @@ void UbTransportChannel::ApplyNextWqeSegment()
 bool UbTransportChannel::IsEmpty()
 {
     return !HasPendingTransmitWork();
-}
-
-bool
-UbTransportChannel::IsSafeToReclaim() const
-{
-    return m_ackQ.empty() && m_cnpQ.empty() && m_wqeSegmentVector.empty() &&
-           m_remoteRequest.empty() && m_inboundTaUnits.empty() &&
-           m_bufferedInboundPackets.empty() && m_psnSndUna == m_psnSndNxt &&
-           (m_retrans == nullptr || !m_retrans->HasTimerRunning()) &&
-           (m_congestionCtrl == nullptr || !m_congestionCtrl->HasPendingTransportWork());
-}
-
-void
-UbTransportChannel::PrepareForDestruction()
-{
-    m_reclamationStateChangedCallback = Callback<void, uint32_t>();
-    if (m_congestionCtrl != nullptr)
-    {
-        m_congestionCtrl->OnTpDetached();
-        m_congestionCtrl = nullptr;
-    }
 }
 
 bool UbTransportChannel::HasPendingTransmitWork()

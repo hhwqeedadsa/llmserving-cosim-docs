@@ -61,18 +61,6 @@ public:
      **/
     void DestroyTp(uint32_t tpn);
 
-    /**
-     * @brief Reclaim a local transport channel only after its protocol and transaction work drains.
-     * @return True when the channel is absent or was reclaimed; false while it is still busy.
-     */
-    bool TryReclaimIdleTransportChannel(uint32_t tpn);
-
-    /**
-     * @brief Notify the channel manager that local state affecting reclamation has changed.
-     * @param tpn Local transport channel number.
-     */
-    void NotifyTransportChannelStateChanged(uint32_t tpn);
-
     // Transport channel Group management
     /**
      * @brief Create a new transport channel group
@@ -227,7 +215,7 @@ private:
   CtpPacketTimingCallback m_ctpLastPacketAcksCallback;
   // Resource storage
   std::map<uint32_t, Ptr<UbTransportChannel>>
-      m_numToTp{};               // 协议规定TPH中的TP number，在生成TP时，赋值为m_transports_count
+      m_numToTp{}; // 协议规定TPH中的TP number，在生成TP时，赋值为m_transports_count
   uint32_t m_transportsCount{0}; // increment only，用于标识tpn
   std::map<TpgTag, Ptr<UbTransportGroup>> m_tpGroups{};
   std::map<uint64_t, Ptr<UbPort>> m_ports{};

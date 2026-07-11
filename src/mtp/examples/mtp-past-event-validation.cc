@@ -65,10 +65,10 @@ main(int argc, char* argv[])
     CommandLine cmd(__FILE__);
     cmd.AddValue("test", "Print regression-test output", testing);
     cmd.AddValue("same-time",
-                 "Schedule the absolute-time event at the worker partition's current time",
+                 "Schedule the absolute-time event at the LP's current time",
                  sameTime);
     cmd.AddValue("remote-past",
-                 "Send a remote event behind the receiver worker partition's current time",
+                 "Send a remote event behind the receiver LP's current time",
                  remotePast);
     cmd.AddValue("negative-time",
                  "Schedule the absolute-time event at a negative time",

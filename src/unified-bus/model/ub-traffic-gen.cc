@@ -131,13 +131,11 @@ UbTrafficGen::AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexe
 {
     uint32_t taskId = record.taskId;
     RuntimeTask task = ConvertToRuntimeTask(record);
-    ConfigureTransportUseTrackingFromTaskLocked(task);
     if (!SetTaskLocked(task))
     {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
-    RegisterTaskTransportUseLocked(task);
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
     }
@@ -184,13 +182,11 @@ UbTrafficGen::AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIn
 {
     const uint32_t taskId = record.taskId;
     RuntimeTask task = ConvertToRuntimeTask(record);
-    ConfigureTransportUseTrackingFromTaskLocked(task);
     if (!SetTaskLocked(task))
     {
         NS_LOG_ERROR("TaskId " << taskId << " already exists, cannot add duplicate task!");
         return;
     }
-    RegisterTaskTransportUseLocked(task);
     if (!phaseAlreadyIndexed) {
         RegisterTaskPhaseLocked(record.phaseId, taskId);
     }
@@ -717,113 +713,17 @@ UbTrafficGen::SetPendingPhaseCountLocked(uint32_t taskId, uint32_t count)
     m_pendingPhaseCounts[taskId] = count;
 }
 
-void
-UbTrafficGen::RegisterTaskTransportUseLocked(const RuntimeTask& task)
-{
-    if (m_transportUseTrackingEnabled &&
-        (task.op == RuntimeTaskOp::URMA_WRITE || task.op == RuntimeTaskOp::URMA_READ))
-    {
-        ++m_remainingTransportTaskUses[GetTransportConnectionUseKey(task)];
-    }
-}
-
-UbTrafficGen::TransportConnectionUseKey
-UbTrafficGen::GetTransportConnectionUseKey(const RuntimeTask& task)
-{
-    const auto [firstNode, secondNode] = std::minmax(task.sourceNode, task.destNode);
-    return {firstNode, secondNode, task.priority};
-}
-
-void
-UbTrafficGen::SetTransportUseTrackingEnabled(bool enabled)
+UbTrafficGen::TaskCleanupInfo
+UbTrafficGen::GetTaskCleanupInfoById(uint32_t taskId)
 {
     std::lock_guard<std::mutex> lock(m_mutex);
-    NS_ABORT_MSG_IF((!m_denseTasks.empty() || !m_tasks.empty()) &&
-                        enabled != m_transportUseTrackingEnabled,
-                    "Transport use tracking must be configured before traffic tasks are loaded");
-    if (enabled)
-    {
-        ValidateTransportUseTrackingRuntime();
-    }
-    m_transportUseTrackingEnabled = enabled;
-    m_transportUseTrackingExplicitlyConfigured = true;
-    if (!enabled)
-    {
-        m_remainingTransportTaskUses.clear();
-    }
-}
-
-UbTrafficGen::TransportUseCompletion
-UbTrafficGen::ReleaseTaskTransportUseLocked(const RuntimeTask& task)
-{
-    TransportUseCompletion info;
-    info.sourceNode = task.sourceNode;
-    info.destNode = task.destNode;
-    info.priority = task.priority;
-    if (!m_transportUseTrackingEnabled ||
-        (task.op != RuntimeTaskOp::URMA_WRITE && task.op != RuntimeTaskOp::URMA_READ))
-    {
-        return info;
-    }
-
-    const auto key = GetTransportConnectionUseKey(task);
-    auto remaining = m_remainingTransportTaskUses.find(key);
-    NS_ABORT_MSG_IF(remaining == m_remainingTransportTaskUses.end() || remaining->second == 0,
-                    "Transport task-use accounting is missing for taskId " << task.taskId);
-    --remaining->second;
-    if (remaining->second == 0)
-    {
-        m_remainingTransportTaskUses.erase(remaining);
-        info.isLastPlannedUse = true;
-    }
+    const RuntimeTask* task = FindTaskLocked(taskId);
+    NS_ABORT_MSG_IF(task == nullptr, "Can't find task from TrafficRecord.");
+    TaskCleanupInfo info;
+    info.sourceNode = task->sourceNode;
+    info.destNode = task->destNode;
+    info.priority = task->priority;
     return info;
-}
-
-void
-UbTrafficGen::ConfigureTransportUseTrackingFromTaskLocked(const RuntimeTask& task)
-{
-    if (m_transportUseTrackingExplicitlyConfigured || m_transportUseTrackingEnabled)
-    {
-        return;
-    }
-
-    bool reclamationEnabled = false;
-    for (uint32_t nodeId : {task.sourceNode, task.destNode})
-    {
-        if (nodeId >= NodeList::GetNNodes())
-        {
-            continue;
-        }
-        Ptr<UbController> controller = NodeList::GetNode(nodeId)->GetObject<UbController>();
-        if (controller != nullptr && controller->GetTpConnManager() != nullptr &&
-            controller->GetTpConnManager()->IsIdleTransportChannelReclamationEnabled())
-        {
-            reclamationEnabled = true;
-            break;
-        }
-    }
-
-    if (!reclamationEnabled)
-    {
-        return;
-    }
-
-    NS_ABORT_MSG_IF(!m_denseTasks.empty() || !m_tasks.empty(),
-                    "Idle transport channel reclamation must be enabled before traffic tasks are "
-                    "loaded");
-    ValidateTransportUseTrackingRuntime();
-    m_transportUseTrackingEnabled = true;
-}
-
-void
-UbTrafficGen::ValidateTransportUseTrackingRuntime()
-{
-#ifdef NS3_MPI
-    NS_ABORT_MSG_IF(MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1 &&
-                        !MpiInterface::SupportsControlEvents(),
-                    "Idle transport channel reclamation is not supported by the selected MPI "
-                    "runtime");
-#endif
 }
 
 void UbTrafficGen::MarkTaskCompleted(uint32_t taskId)
@@ -990,7 +890,6 @@ void
 UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
 {
     ReadyTaskBatch readyBatch;
-    TransportUseCompletion transportUseCompletion;
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
@@ -1003,7 +902,6 @@ UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
         const RuntimeTask* completedTask = FindTaskLocked(taskId);
         NS_ABORT_MSG_IF(completedTask == nullptr, "Unknown completed taskId " << taskId);
 
-        transportUseCompletion = ReleaseTaskTransportUseLocked(*completedTask);
         *state = TaskState::COMPLETED;
         RecordCanonicalCompletionLocked(*completedTask);
         NS_LOG_DEBUG("Task " << taskId << " completion visible");
@@ -1047,13 +945,6 @@ UbTrafficGen::ApplyTaskCompletion(uint32_t taskId)
     }
 
     ScheduleTasks(readyBatch);
-    if (transportUseCompletion.isLastPlannedUse)
-    {
-        TpConnectionManager::ScheduleIdleTransportChannelReclamation(
-            transportUseCompletion.sourceNode,
-            transportUseCompletion.destNode,
-            transportUseCompletion.priority);
-    }
 
     if (IsCompleted()) {
         NS_LOG_DEBUG("[APPLICATION INFO] All tasks completed");
@@ -1254,7 +1145,8 @@ UbTrafficGen::ResolveCompletionVisibleDelayLocked() const
 uint64_t
 UbTrafficGen::GetInitialTaskSourceOffsetHash(uint32_t sourceNode, uint32_t seed) const
 {
-    uint64_t hash = MixTaskStartOffsetHash(static_cast<uint64_t>(seed) ^ 0x726f6f742d66726fULL);
+    uint64_t hash =
+        MixTaskStartOffsetHash(static_cast<uint64_t>(seed) ^ 0x726f6f742d66726fULL);
     return MixTaskStartOffsetHash(hash ^ sourceNode);
 }
 
@@ -1310,7 +1202,7 @@ UbTrafficGen::GetInitialTaskStartOffsets(const ReadyTaskBatch& batch) const
     {
         std::cerr << "[WARNING] Initial task start offsets mapped " << sourceSlots.size()
                   << " unique sources to " << slotOccupancy.size()
-                  << " distinct offsets: shared-offset-assignments=" << collisionCount
+                  << " distinct offsets: offset-reuses=" << collisionCount
                   << ", max-sources-per-offset=" << maxSlotOccupancy
                   << "; some initial tasks still share a timestamp" << std::endl;
     }

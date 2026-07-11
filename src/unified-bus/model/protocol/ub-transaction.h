@@ -90,20 +90,12 @@ namespace ns3 {
         // 判断本地tp是否处于使用状态
         bool IsTpInUse(uint32_t tpn);
 
-        /**
-         * @brief Return whether transaction state still requires a transport channel.
-         * @param tpn Local transport channel number.
-         * @return True while a Jetty or queued transaction still references the channel.
-         */
-        bool HasPendingTransportWork(uint32_t tpn) const;
+        // 判断与本地tp配对的远程tp是否处于使用状态
+        bool IsPeerTpInUse(uint32_t tpn);
 
-        /**
-         * @brief Return transport channels no longer referenced by any Jetty.
-         * @return Local transport channel numbers with no Jetty reference.
-         */
-        std::vector<uint32_t> GetUnreferencedTransportChannelNumbers();
+        std::vector<uint32_t> GetUselessTpns();
+    private:
 
-      private:
         void DoDispose() override;
 
         void ScheduleWqeSegment(Ptr<UbTransportChannel> tp);

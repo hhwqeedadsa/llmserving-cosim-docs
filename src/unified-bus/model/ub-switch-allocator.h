@@ -40,55 +40,25 @@ public:
     void CheckDeadlock();
 
 protected:
-  /**
-   * @brief A selected ingress queue and its stable slot in the allocator input array.
-   */
-  struct IngressCandidate
-  {
-      Ptr<UbIngressQueue> queue;
-      uint32_t ingressQueueSlot;
-  };
+    struct IngressCandidate
+    {
+        Ptr<UbIngressQueue> queue;
+        uint32_t ingressQueueSlot;
+    };
 
-  /**
-   * @brief Return the number of ingress queue slots for an egress port and priority.
-   * @param outPort Egress port index.
-   * @param priority Virtual-lane priority.
-   * @return Number of registered ingress queue slots.
-   */
-  uint32_t GetIngressQueueSlotCount(uint32_t outPort, uint32_t priority) const;
+    uint32_t GetIngressQueueSlotCount(uint32_t outPort, uint32_t priority) const;
+    std::optional<IngressCandidate> FindNextEligibleIngressQueue(uint32_t outPort,
+                                                                 uint32_t priority,
+                                                                 uint32_t startIngressQueueSlot,
+                                                                 Ptr<UbPort> egressPort) const;
 
-  /**
-   * @brief Find the next queue eligible to send through an egress port.
-   * @param outPort Egress port index.
-   * @param priority Virtual-lane priority.
-   * @param startIngressQueueSlot First slot considered by the search.
-   * @param egressPort Egress port used to evaluate flow-control eligibility.
-   * @return The eligible queue and its slot, or no value when none is eligible.
-   */
-  std::optional<IngressCandidate> FindNextEligibleIngressQueue(uint32_t outPort,
-                                                               uint32_t priority,
-                                                               uint32_t startIngressQueueSlot,
-                                                               Ptr<UbPort> egressPort) const;
-
-  /**
-   * @brief Adjust derived allocator state after an ingress queue is removed.
-   * @param outPort Egress port index.
-   * @param priority Virtual-lane priority.
-   * @param removedSlot Slot removed from the allocator input array.
-   * @param remainingSlotCount Number of slots remaining after removal.
-   */
-  virtual void OnIngressQueueRemoved(uint32_t outPort,
-                                     uint32_t priority,
-                                     uint32_t removedSlot,
-                                     uint32_t remainingSlotCount);
-
-  Time m_allocationTime;
-  uint32_t m_nodeId;
-  IngressSource_t m_ingressSources;
-  EgressStatus_t m_egressStatus;
-  std::vector<bool> m_isRunning;
-  std::vector<bool> m_oneMoreRound;
-  uint32_t m_voqIngressSlotCount = 0;
+    Time m_allocationTime;
+    uint32_t m_nodeId;
+    IngressSource_t m_ingressSources;
+    EgressStatus_t m_egressStatus;
+    std::vector<bool> m_isRunning;	
+    std::vector<bool> m_oneMoreRound;
+    uint32_t m_voqIngressSlotCount = 0;
 };
 
 
@@ -106,12 +76,8 @@ public:
     virtual void AllocateNextPacket(Ptr<UbPort> outPort) override;
 
 private:
-  void OnIngressQueueRemoved(uint32_t outPort,
-                             uint32_t priority,
-                             uint32_t removedSlot,
-                             uint32_t remainingSlotCount) override;
-  std::vector<std::vector<uint32_t>> m_rrIdx;
-  std::vector<std::vector<bool>> m_rrPhaseSeeded;
+    std::vector<std::vector<uint32_t> > m_rrIdx;
+    std::vector<std::vector<bool> > m_rrPhaseSeeded;
 };
 
 
@@ -138,23 +104,19 @@ public:
     void SetQuantum(uint32_t outPort, uint32_t priority, uint32_t quantum);
 
 private:
-  void OnIngressQueueRemoved(uint32_t outPort,
-                             uint32_t priority,
-                             uint32_t removedSlot,
-                             uint32_t remainingSlotCount) override;
-  std::vector<std::vector<uint32_t>> m_rrIdx;
-  std::vector<std::vector<bool>> m_rrPhaseSeeded;
-  std::vector<std::vector<uint32_t>> m_quantum;
-  std::vector<std::vector<uint32_t>> m_deficit;
-  std::vector<uint32_t> m_currVlIdx;
+    std::vector<std::vector<uint32_t> > m_rrIdx;
+    std::vector<std::vector<bool> > m_rrPhaseSeeded;
+    std::vector<std::vector<uint32_t> > m_quantum;
+    std::vector<std::vector<uint32_t> > m_deficit;
+    std::vector<uint32_t> m_currVlIdx;
 
-  // 记录最近一次在某个 VLAN 下选中的 ingress queue slot，用于额度不足时回滚 m_rrIdx
-  std::vector<std::vector<uint32_t>> m_lastSelectedIngressQueueSlot;
+    // 记录最近一次在某个 VLAN 下选中的 ingress queue slot，用于额度不足时回滚 m_rrIdx
+    std::vector<std::vector<uint32_t> > m_lastSelectedIngressQueueSlot;
 
-  uint32_t m_defaultQuantum;
-  std::string m_vlQuantumsStr;
-  void ApplyDefaultQuantum();
-  void ParseAndApplyVlQuantums(const std::string& s);
+    uint32_t    m_defaultQuantum;
+    std::string m_vlQuantumsStr;
+    void ApplyDefaultQuantum();
+    void ParseAndApplyVlQuantums(const std::string& s);
 };
 
 } /* namespace ns3 */

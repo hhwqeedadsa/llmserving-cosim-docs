@@ -49,8 +49,6 @@ public:
                                         uint32_t psn,
                                         UbCongestionExtTph header) override;
     void OnSenderTransportIdle() override;
-    bool HasPendingTransportWork() const override;
-    void OnTpDetached() override;
 
     DataRate GetCurrentRateForTest() const { return m_currentRate; }
     DataRate GetTargetRateForTest() const { return m_targetRate; }

@@ -82,11 +82,6 @@ class MpiInterface
      */
     static bool IsEnabled();
     /**
-     * @brief Return whether the selected MPI runtime can carry timestamped control events.
-     * @return True when control events are supported.
-     */
-    static bool SupportsControlEvents();
-    /**
      * @brief Setup the parallel communication interface.
      *
      * There are two ways to setup the communications interface.  This
@@ -158,28 +153,6 @@ class MpiInterface
      */
     static void SetTaskCompletionHandler(
         ParallelCommunicationInterface::TaskCompletionHandler handler);
-
-    /**
-     * @brief Send a typed control event to a remote rank at a simulation timestamp.
-     * @param eventType Application-defined control-event type.
-     * @param payload Fixed-size event payload.
-     * @param visibleTime Simulation timestamp when the event becomes visible.
-     * @param targetNode Node that owns the receiving event context.
-     * @param rank Destination MPI rank.
-     */
-    static void SendControlEvent(uint32_t eventType,
-                                 const ParallelCommunicationInterface::ControlEventPayload& payload,
-                                 const Time& visibleTime,
-                                 uint32_t targetNode,
-                                 uint32_t rank);
-
-    /**
-     * @brief Register a handler for one control-event type.
-     * @param eventType Application-defined control-event type.
-     * @param handler Callback invoked when a matching event becomes visible.
-     */
-    static void SetControlEventHandler(uint32_t eventType,
-                                       ParallelCommunicationInterface::ControlEventHandler handler);
 
     /**
      * @brief Add an upper bound to the effective MPI lookahead.

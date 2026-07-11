@@ -15,12 +15,11 @@
 #include "ns3/ub-ldst-api.h"
 
 #include <cstdint>
-#include <map>
 #include <mutex>
 #include <optional>
+#include <set>
 #include <string>
 #include <string_view>
-#include <tuple>
 #include <unordered_map>
 #include <vector>
 
@@ -84,6 +83,13 @@ public:
         bool hasPhaseDependencies{false};
     };
 
+    struct TaskCleanupInfo
+    {
+        uint32_t sourceNode{0};
+        uint32_t destNode{0};
+        uint8_t priority{0};
+    };
+
     static bool IsMultiProcessRuntimeUnsupported();
 
     static inline std::string GetMultiProcessUnsupportedMessage()
@@ -110,11 +116,7 @@ public:
 
     void RegisterSourceAppDuringInitialLoad(uint32_t sourceNode, Ptr<UbApp> app);
 
-    /**
-     * @brief Enable planned transport-channel use tracking before traffic is loaded.
-     * @param enabled True to track RTP task uses for idle-channel reclamation.
-     */
-    void SetTransportUseTrackingEnabled(bool enabled);
+    TaskCleanupInfo GetTaskCleanupInfoById(uint32_t taskId);
 
     void MarkTaskCompleted(uint32_t taskId);
 
@@ -189,16 +191,6 @@ public:
         std::vector<uint32_t> dependentTasks{};
     };
 
-    using TransportConnectionUseKey = std::tuple<uint32_t, uint32_t, uint8_t>;
-
-    struct TransportUseCompletion
-    {
-        uint32_t sourceNode{0};
-        uint32_t destNode{0};
-        uint8_t priority{0};
-        bool isLastPlannedUse{false};
-    };
-
     void RecordCanonicalEvent(const std::string& type, const RuntimeTask& task);
 
     void RecordCanonicalCompletionLocked(const RuntimeTask& task);
@@ -235,9 +227,6 @@ public:
     std::vector<CanonicalEvent> m_canonicalEvents;
     Time m_initialTaskStartOffsetWindow{Time(0)};
     uint32_t m_initialTaskStartOffsetSeed{1};
-    bool m_transportUseTrackingEnabled{false};
-    bool m_transportUseTrackingExplicitlyConfigured{false};
-    std::map<TransportConnectionUseKey, uint32_t> m_remainingTransportTaskUses;
 
     ReadyTaskBatch CollectReadyTaskBatchLocked();
 
@@ -252,16 +241,6 @@ public:
     void AddTaskLocked(const TrafficRecord& record, bool phaseAlreadyIndexed);
 
     void AddTaskLocked(const TrafficRecordView& record, bool phaseAlreadyIndexed);
-
-    void RegisterTaskTransportUseLocked(const RuntimeTask& task);
-
-    TransportUseCompletion ReleaseTaskTransportUseLocked(const RuntimeTask& task);
-
-    void ConfigureTransportUseTrackingFromTaskLocked(const RuntimeTask& task);
-
-    static void ValidateTransportUseTrackingRuntime();
-
-    static TransportConnectionUseKey GetTransportConnectionUseKey(const RuntimeTask& task);
 
     void AddReadyTaskLocked(uint32_t taskId);
 

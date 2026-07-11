@@ -38,7 +38,7 @@ main(int argc, char* argv[])
     bool valid = false;
     CommandLine cmd(__FILE__);
     cmd.AddValue("test", "Print regression-test output", testing);
-    cmd.AddValue("valid", "Assign the node to MTP worker partition 1", valid);
+    cmd.AddValue("valid", "Assign the node to worker LP 1", valid);
     cmd.Parse(argc, argv);
 
     MtpInterface::Enable(1, 1);

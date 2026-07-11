@@ -460,8 +460,7 @@ HybridSimulatorImpl::Partition()
                 visited[node->GetId()] = true;
                 // assign this node to the current worker LP
                 MtpInterface::SetNodeLocalLpId(node->GetId(), localLpId);
-                NS_LOG_INFO("node " << node->GetId() << " is assigned to MTP worker partition "
-                                    << localLpId);
+                NS_LOG_INFO("node " << node->GetId() << " is set to local LP " << localLpId);
 
                 for (uint32_t i = 0; i < node->GetNDevices(); i++)
                 {
@@ -533,9 +532,9 @@ HybridSimulatorImpl::Partition()
         if (ev.key.m_context != Simulator::NO_CONTEXT)
         {
             const auto localLpId = MtpInterface::FindNodeLocalLpId(ev.key.m_context);
-            NS_ABORT_MSG_IF(
-                !localLpId && NodeList::GetNode(ev.key.m_context)->GetSystemId() == m_myId,
-                "MTP worker partition mapping is missing for local node " << ev.key.m_context);
+            NS_ABORT_MSG_IF(!localLpId &&
+                                NodeList::GetNode(ev.key.m_context)->GetSystemId() == m_myId,
+                            "MTP local LP mapping is missing for local node " << ev.key.m_context);
             // Every MPI rank builds the full topology. Pre-run events for nodes owned by another
             // rank stay serialized on the public LP without implying ownership.
             targetLpId = localLpId.value_or(0);

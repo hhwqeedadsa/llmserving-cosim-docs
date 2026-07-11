@@ -90,8 +90,6 @@ bool UbController::CreateTp(uint32_t src, uint32_t dest, uint8_t sport,
     Ptr<UbTransportChannel> tp = CreateObject<UbTransportChannel>();
     tp->SetUbTransport(currentNode->GetId(), src, dest, srcTpn, dstTpn, 0, static_cast<uint8_t>(priority),
                        static_cast<uint16_t>(sport), static_cast<uint16_t>(dport), sip, dip, congestionCtrl);
-    tp->SetReclamationStateChangedCallback(
-        MakeCallback(&UbController::NotifyTransportChannelStateChanged, this));
     m_transaction->TpInit(tp);
     m_numToTp[srcTpn] = tp;
     m_transportsCount++;
@@ -201,52 +199,13 @@ Ptr<UbTransportChannel> UbController::GetTp(uint32_t tpn)
 
 void UbController::DestroyTp(uint32_t tpn)
 {
-    auto it = m_numToTp.find(tpn);
-    if (it == m_numToTp.end())
-    {
-        return;
-    }
-
-    Ptr<UbTransportChannel> tp = it->second;
-    tp->PrepareForDestruction();
     // 算法中删除tp记录
-    GetObject<Node>()->GetObject<UbSwitch>()->RemoveTpFromAllocator(tp);
+    GetObject<Node>()->GetObject<UbSwitch>()->RemoveTpFromAllocator(m_numToTp[tpn]);
     // 事务层删除tp记录
     m_transaction->TpDeinit(tpn);
     // 删除本地记录
-    m_numToTp.erase(it);
-    if (m_transportsCount > 0)
-    {
-        --m_transportsCount;
-    }
-}
-
-bool
-UbController::TryReclaimIdleTransportChannel(uint32_t tpn)
-{
-    Ptr<UbTransportChannel> tp = GetTpByTpn(tpn);
-    if (tp == nullptr)
-    {
-        return true;
-    }
-    if (!tp->IsSafeToReclaim() || m_transaction->IsTpInUse(tpn) ||
-        m_transaction->HasPendingTransportWork(tpn))
-    {
-        return false;
-    }
-
-    DestroyTp(tpn);
-    return true;
-}
-
-void
-UbController::NotifyTransportChannelStateChanged(uint32_t tpn)
-{
-    Ptr<Node> node = GetObject<Node>();
-    if (node != nullptr && m_tpnConn != nullptr)
-    {
-        m_tpnConn->NotifyTransportChannelStateChanged(node->GetId(), tpn);
-    }
+    m_numToTp.erase(tpn);
+    m_transportsCount--;
 }
 
 // Transport channel Group management

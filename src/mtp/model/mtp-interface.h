@@ -391,7 +391,7 @@ class MtpInterface
     {
         CriticalSection cs;
         NS_ABORT_MSG_IF(time < g_systems[0].Now(),
-                        "control event time is earlier than the shared event queue");
+                        "control-plane event time is earlier than public LP");
         g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
                                 time,
                                 MakeEvent(f, std::forward<Ts>(args)...));
@@ -405,7 +405,7 @@ class MtpInterface
     {
         CriticalSection cs;
         NS_ABORT_MSG_IF(time < g_systems[0].Now(),
-                        "control event time is earlier than the shared event queue");
+                        "control-plane event time is earlier than public LP");
         g_systems[0].ScheduleAt(Simulator::NO_CONTEXT,
                                 time,
                                 MakeEvent(f, std::forward<Ts>(args)...));

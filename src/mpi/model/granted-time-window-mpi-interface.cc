@@ -86,8 +86,6 @@ MPI_Comm GrantedTimeWindowMpiInterface::g_communicator = MPI_COMM_WORLD;
 bool GrantedTimeWindowMpiInterface::g_freeCommunicator = false;
 ParallelCommunicationInterface::TaskCompletionHandler
     GrantedTimeWindowMpiInterface::g_taskCompletionHandler;
-std::map<uint32_t, ParallelCommunicationInterface::ControlEventHandler>
-    GrantedTimeWindowMpiInterface::g_controlEventHandlers;
 
 #ifdef NS3_MTP
 std::atomic<bool> GrantedTimeWindowMpiInterface::g_sending(false);
@@ -121,7 +119,6 @@ GrantedTimeWindowMpiInterface::Destroy()
 
     g_pendingTx.clear();
     g_taskCompletionHandler = nullptr;
-    g_controlEventHandlers.clear();
 }
 
 uint32_t
@@ -156,12 +153,6 @@ bool
 GrantedTimeWindowMpiInterface::IsEnabled()
 {
     return g_enabled;
-}
-
-bool
-GrantedTimeWindowMpiInterface::SupportsControlEvents() const
-{
-    return true;
 }
 
 MPI_Comm
@@ -320,63 +311,6 @@ GrantedTimeWindowMpiInterface::SendTaskCompletion(uint32_t taskId,
 }
 
 void
-GrantedTimeWindowMpiInterface::SetControlEventHandler(uint32_t eventType,
-                                                      ControlEventHandler handler)
-{
-    if (handler)
-    {
-        g_controlEventHandlers[eventType] = std::move(handler);
-    }
-    else
-    {
-        g_controlEventHandlers.erase(eventType);
-    }
-}
-
-void
-GrantedTimeWindowMpiInterface::SendControlEvent(uint32_t eventType,
-                                                const ControlEventPayload& payload,
-                                                const Time& visibleTime,
-                                                uint32_t targetNode,
-                                                uint32_t rank)
-{
-    NS_LOG_FUNCTION(this << eventType << visibleTime.GetTimeStep() << targetNode << rank);
-    NS_ASSERT(g_enabled);
-
-#ifdef NS3_MTP
-    while (g_sending.exchange(true, std::memory_order_acquire))
-    {
-    }
-#endif
-
-    SentBuffer sendBuffer;
-    g_pendingTx.push_back(sendBuffer);
-    auto pending = g_pendingTx.rbegin();
-    auto buffer = new uint8_t[sizeof(ControlEventWireMessage)];
-    pending->SetBuffer(buffer);
-    const ControlEventWireMessage message{
-        eventType,
-        targetNode,
-        static_cast<uint64_t>(visibleTime.GetInteger()),
-        payload,
-    };
-    std::memcpy(buffer, &message, sizeof(message));
-
-    MPI_Isend(reinterpret_cast<void*>(pending->GetBuffer()),
-              sizeof(ControlEventWireMessage),
-              MPI_CHAR,
-              rank,
-              CONTROL_EVENT_MPI_TAG,
-              g_communicator,
-              pending->GetRequest());
-    g_txCount++;
-
-#ifdef NS3_MTP
-    g_sending.store(false, std::memory_order_release);
-#endif
-}
-
-void
 GrantedTimeWindowMpiInterface::ReceiveMessages()
 {
     NS_LOG_FUNCTION_NOARGS();
@@ -460,69 +394,6 @@ GrantedTimeWindowMpiInterface::ReceiveMessages()
     }
 
     ReceiveTaskCompletionMessages();
-    ReceiveControlEvents();
-}
-
-void
-GrantedTimeWindowMpiInterface::ReceiveControlEvents()
-{
-    while (true)
-    {
-        int flag = 0;
-        MPI_Status status;
-        MPI_Iprobe(MPI_ANY_SOURCE, CONTROL_EVENT_MPI_TAG, g_communicator, &flag, &status);
-        if (!flag)
-        {
-            break;
-        }
-
-        uint8_t buffer[sizeof(ControlEventWireMessage)];
-        MPI_Recv(buffer,
-                 sizeof(buffer),
-                 MPI_CHAR,
-                 status.MPI_SOURCE,
-                 CONTROL_EVENT_MPI_TAG,
-                 g_communicator,
-                 MPI_STATUS_IGNORE);
-        g_rxCount++;
-
-        ControlEventWireMessage message{};
-        std::memcpy(&message, buffer, sizeof(message));
-        ScheduleControlEvent(message);
-    }
-}
-
-void
-GrantedTimeWindowMpiInterface::ScheduleControlEvent(ControlEventWireMessage message)
-{
-    const Time visibleTime(message.visibleTime);
-    NS_ABORT_MSG_IF(visibleTime < Simulator::Now(),
-                    "Control event visibility time is earlier than Simulator::Now()");
-#ifdef NS3_MTP
-    if (MtpInterface::isEnabled())
-    {
-        MtpInterface::GetSystem(MtpInterface::RequireNodeLocalLpId(message.targetNode))
-            ->ScheduleAt(message.targetNode,
-                         visibleTime,
-                         MakeEvent(&GrantedTimeWindowMpiInterface::DispatchControlEvent, message));
-        return;
-    }
-#endif
-
-    Simulator::ScheduleWithContext(message.targetNode,
-                                   visibleTime - Simulator::Now(),
-                                   &GrantedTimeWindowMpiInterface::DispatchControlEvent,
-                                   message);
-}
-
-void
-GrantedTimeWindowMpiInterface::DispatchControlEvent(ControlEventWireMessage message)
-{
-    auto handler = g_controlEventHandlers.find(message.eventType);
-    NS_ABORT_MSG_IF(
-        handler == g_controlEventHandlers.end() || !handler->second,
-        "Control event received before handler registration: type=" << message.eventType);
-    handler->second(message.eventType, message.targetNode, message.payload);
 }
 
 void

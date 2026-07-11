@@ -160,64 +160,6 @@ bool IsRetransEnabledForRun()
     return value.Get();
 }
 
-bool
-IsIdleTransportChannelReclamationConfigured()
-{
-    Ptr<UbApp> appDefaults = CreateObject<UbApp>();
-    Ptr<TpConnectionManager> managerDefaults = CreateObject<TpConnectionManager>();
-    return appDefaults->GetTransportMode() == TransportMode::RTP &&
-           managerDefaults->IsIdleTransportChannelReclamationEnabled();
-}
-
-bool
-ConfigureIdleTransportChannelReclamation(const RuntimeSelection& runtime)
-{
-    const bool enabled = IsIdleTransportChannelReclamationConfigured();
-#ifdef NS3_MPI
-    NS_ABORT_MSG_IF(runtime.enableMpi && enabled && !MpiInterface::SupportsControlEvents(),
-                    "Idle transport channel reclamation is not supported by the selected MPI "
-                    "runtime; use the granted-time-window MPI runtime or disable "
-                    "ns3::TpConnectionManager::EnableIdleTransportChannelReclamation");
-#else
-    (void)runtime;
-#endif
-    if (!enabled)
-    {
-        UbTrafficGen::Get()->SetTransportUseTrackingEnabled(false);
-    }
-    return enabled;
-}
-
-void
-ReportRemainingTransportChannels(const RuntimeSelection& runtime, bool reclamationEnabled)
-{
-    if (!reclamationEnabled)
-    {
-        return;
-    }
-
-    uint32_t remaining = 0;
-    for (uint32_t nodeId = 0; nodeId < NodeList::GetNNodes(); ++nodeId)
-    {
-        Ptr<Node> node = NodeList::GetNode(nodeId);
-#ifdef NS3_MPI
-        if (runtime.enableMpi &&
-            !UbUtils::IsSystemOwnedByRank(node->GetSystemId(), runtime.mpiRank))
-        {
-            continue;
-        }
-#endif
-        Ptr<UbController> controller = node->GetObject<UbController>();
-        if (controller != nullptr)
-        {
-            remaining += static_cast<uint32_t>(controller->GetTpnMap().size());
-        }
-    }
-    std::ostringstream result;
-    result << "TRANSPORT CHANNELS : rank=" << runtime.mpiRank << " : remaining=" << remaining;
-    std::cout << result.str() << std::endl;
-}
-
 void CheckDropWithoutRetrans(std::ostringstream& oss)
 {
     auto& state = GetDropAbortState();
@@ -508,34 +450,27 @@ BuildScenarioFromConfig(const QuickExampleOptions& options, const RuntimeSelecti
     {
         std::cout << "[INFO] Link delay offset enabled: window=" << options.linkDelayOffsetWindow
                   << ", seed=" << options.timingOffsetSeed
-                  << ", adjusted-links=" << offsetStats.positiveLinkCount
+                  << ", positive-links=" << offsetStats.positiveLinkCount
                   << ", zero-delay-links-preserved=" << offsetStats.zeroDelayLinkCount
                   << ", distinct-offsets=" << offsetStats.distinctOffsetCount
-                  << ", shared-offset-assignments=" << offsetStats.offsetReuseCount
+                  << ", offset-reuses=" << offsetStats.offsetReuseCount
                   << ", max-links-per-offset=" << offsetStats.maxLinksPerOffset << "." << std::endl;
     }
     else if (shouldPrint && ModeUsesMtp(runtime.mode))
     {
-        std::cout << "[INFO] Link delay offset is off (default). Enable deterministic link delay "
-                     "offsets with --link-delay-offset-window=<Time> and record "
+        std::cout << "[INFO] Link delay offset is off (default). Enable the deterministic "
+                     "positive-link workaround with --link-delay-offset-window=<Time> and record "
                      "--timing-offset-seed."
                   << std::endl;
     }
 }
 
-void
-ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
-                                     const RuntimeSelection& runtime)
+void ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
+                                          const RuntimeSelection& runtime)
 {
     if (!options.dependencyVisibilityDelay.empty())
     {
         UbTrafficGen::Get()->SetDependencyVisibilityDelay(Time(options.dependencyVisibilityDelay));
-    }
-
-    if (runtime.mode == RuntimeSelection::Mode::LocalSingle &&
-        options.dependencyVisibilityDelay.empty())
-    {
-        UbTrafficGen::Get()->ConsiderAutomaticDependencyVisibilityDelay(TimeStep(0));
     }
 
     const bool usePositiveLocalLinkDelays = ModeUsesMtp(runtime.mode);
@@ -557,7 +492,8 @@ ConfigureTrafficDependencyVisibility(const QuickExampleOptions& options,
             }
 
             const Time delay = link->GetDelay();
-            if (link->IsRemote() || (usePositiveLocalLinkDelays && delay.IsStrictlyPositive()))
+            if (link->IsRemote() ||
+                (usePositiveLocalLinkDelays && delay.IsStrictlyPositive()))
             {
                 UbTrafficGen::Get()->ConsiderAutomaticDependencyVisibilityDelay(delay);
             }
@@ -601,7 +537,8 @@ void ConfigureCanonicalOutput(const QuickExampleOptions& options, const RuntimeS
 }
 
 void
-ConfigureInitialTaskStartOffset(const QuickExampleOptions& options, const RuntimeSelection& runtime)
+ConfigureInitialTaskStartOffset(const QuickExampleOptions& options,
+                                const RuntimeSelection& runtime)
 {
     const Time offsetWindow = ParseOffsetWindow(options.initialTaskStartOffsetWindow,
                                                 "--initial-task-start-offset-window");
@@ -901,8 +838,6 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     timing.simulationStart = std::chrono::high_resolution_clock::now();
     UbUtils::ResetRuntimeDropDiagnostics();
     BuildScenarioFromConfig(options, runtime);
-    const bool idleTransportChannelReclamationEnabled =
-        ConfigureIdleTransportChannelReclamation(runtime);
     ConfigureTrafficDependencyVisibility(options, runtime);
     ApplyDependencyVisibilityLookaheadBound(runtime);
     ConfigureCanonicalOutput(options, runtime);
@@ -919,11 +854,6 @@ PhaseTiming RunScenario(const QuickExampleOptions& options,
     }
     Simulator::Run();
     timing.simulationEnd = std::chrono::high_resolution_clock::now();
-
-    if (options.test)
-    {
-        ReportRemainingTransportChannels(runtime, idleTransportChannelReclamationEnabled);
-    }
 
     UbUtils::Get()->Destroy();
     UbTrafficGen::Get()->WriteCanonicalOutput();

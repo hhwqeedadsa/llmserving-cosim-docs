@@ -654,15 +654,13 @@ void UbTransaction::DoDispose()
     Object::DoDispose();
 }
 
-std::vector<uint32_t>
-UbTransaction::GetUnreferencedTransportChannelNumbers()
+std::vector<uint32_t> UbTransaction::GetUselessTpns()
 {
     std::vector<uint32_t> tpns;
-    // Peer ownership is coordinated by TpConnectionManager; transaction state is local only.
+    // 遍历tp，找出所有本地和对端都不再使用的tp
     for (auto it = m_tpnMap.begin(); it != m_tpnMap.end(); it++) {
         uint32_t tpn = it->first;
-        if (!IsTpInUse(tpn))
-        {
+        if (!IsTpInUse(tpn) && !IsPeerTpInUse(tpn)) {
             tpns.push_back(tpn);
         }
     }
@@ -681,16 +679,15 @@ bool UbTransaction::IsTpInUse(uint32_t tpn)
     return (it->second.size() != 0);
 }
 
-bool
-UbTransaction::HasPendingTransportWork(uint32_t tpn) const
+bool UbTransaction::IsPeerTpInUse(uint32_t tpn)
 {
-    auto scheduling = m_tpSchedulingStatus.find(tpn);
-    if (scheduling != m_tpSchedulingStatus.end() && scheduling->second)
-    {
-        return true;
-    }
-    auto remoteRequests = m_tpRelatedRemoteRequests.find(tpn);
-    return remoteRequests != m_tpRelatedRemoteRequests.end() && !remoteRequests->second.empty();
+    auto localTpIt = m_tpnMap.find(tpn);
+    NS_ASSERT_MSG(localTpIt != m_tpnMap.end(), "can't find local tpn");
+    auto localTp = localTpIt->second;
+    uint32_t dst = localTp->GetDest();
+    uint32_t dstTpn = localTp->GetDstTpn();
+    auto peerTa = NodeList::GetNode(dst)->GetObject<UbController>()->GetUbTransaction();
+    return peerTa->IsTpInUse(dstTpn);
 }
 
 } // namespace ns3

@@ -168,11 +168,11 @@ class MtpManualPartitionValidationSystemTestSuite : public TestSuite
         : TestSuite("mtp-manual-partition-validation", Type::SYSTEM)
     {
         AddTestCase(new MtpManualPartitionValidSystemTestCase(), TestCase::Duration::QUICK);
-        AddTestCase(new MtpExpectedFailureSystemTestCase(
-                        "MTP - manual partition rejects an unmapped node",
-                        "src/mtp/examples/mtp-manual-partition-validation",
-                        "MTP worker partition mapping is missing for node"),
-                    TestCase::Duration::QUICK);
+        AddTestCase(
+            new MtpExpectedFailureSystemTestCase("MTP - manual partition rejects an unmapped node",
+                                                 "src/mtp/examples/mtp-manual-partition-validation",
+                                                 "MTP local LP mapping is missing for node"),
+            TestCase::Duration::QUICK);
     }
 };
 

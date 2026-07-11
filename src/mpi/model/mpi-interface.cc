@@ -83,13 +83,6 @@ MpiInterface::IsEnabled()
     }
 }
 
-bool
-MpiInterface::SupportsControlEvents()
-{
-    return g_parallelCommunicationInterface &&
-           g_parallelCommunicationInterface->SupportsControlEvents();
-}
-
 void
 MpiInterface::SetParallelSimulatorImpl()
 {
@@ -161,29 +154,6 @@ MpiInterface::SetTaskCompletionHandler(
 {
     NS_ASSERT(g_parallelCommunicationInterface);
     g_parallelCommunicationInterface->SetTaskCompletionHandler(std::move(handler));
-}
-
-void
-MpiInterface::SendControlEvent(uint32_t eventType,
-                               const ParallelCommunicationInterface::ControlEventPayload& payload,
-                               const Time& visibleTime,
-                               uint32_t targetNode,
-                               uint32_t rank)
-{
-    NS_ASSERT(g_parallelCommunicationInterface);
-    g_parallelCommunicationInterface->SendControlEvent(eventType,
-                                                       payload,
-                                                       visibleTime,
-                                                       targetNode,
-                                                       rank);
-}
-
-void
-MpiInterface::SetControlEventHandler(uint32_t eventType,
-                                     ParallelCommunicationInterface::ControlEventHandler handler)
-{
-    NS_ASSERT(g_parallelCommunicationInterface);
-    g_parallelCommunicationInterface->SetControlEventHandler(eventType, std::move(handler));
 }
 
 void

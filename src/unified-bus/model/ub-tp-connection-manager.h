@@ -14,8 +14,7 @@
 namespace ns3
 {
 class UbController;
-class UbTrafficGen;
-} // namespace ns3
+}
 
 namespace utils {
 /**
@@ -154,107 +153,21 @@ public:
     // 清空所有连接
     void Clear();
 
-    /**
-     * @brief Remove local transport-channel references held by a completed Jetty.
-     * @param localNodeId Node that owns the Jetty and transport endpoints.
-     * @param jettyNum Completed Jetty number.
-     */
-    void ReleaseJettyTransportChannelReferences(uint32_t localNodeId, uint32_t jettyNum);
-
-    /**
-     * @brief Request reclamation of idle local channels for one peer and priority.
-     * @param localNodeId Node that owns the local transport endpoints.
-     * @param peerNodeId Peer node of the planned connection.
-     * @param priority Traffic priority of the planned connection.
-     */
-    void RequestIdleTransportChannelReclamation(uint32_t localNodeId,
-                                                uint32_t peerNodeId,
-                                                uint32_t priority);
-
-    /**
-     * @brief Start owner-coordinated reclamation for one local transport endpoint.
-     * @param localNodeId Node that owns the endpoint.
-     * @param localTpn Local transport channel number.
-     */
-    void RequestTransportChannelReclamation(uint32_t localNodeId, uint32_t localTpn);
-
-    /**
-     * @brief Retry a pending reclamation after local protocol state changes.
-     * @param localNodeId Node that owns the endpoint.
-     * @param localTpn Local transport channel number.
-     */
-    void NotifyTransportChannelStateChanged(uint32_t localNodeId, uint32_t localTpn);
+    // 删除无用tp
+    void RemoveUselessTps(uint32_t jettyNum, uint32_t src, uint32_t dst, uint32_t priority);
 
     uint32_t GetNextTpn();
 
-    /**
-     * @brief Return whether canonical or legacy configuration enables idle-channel reclamation.
-     * @return True when idle RTP transport channels should be reclaimed.
-     */
-    bool IsIdleTransportChannelReclamationEnabled() const
+    bool IsTpRemoveMode()
     {
-        return m_enableIdleTransportChannelReclamation || m_removeUselessTpLegacy;
+        return m_removeUselessTp;
     }
 private:
   friend class ns3::UbController;
-  friend class ns3::UbTrafficGen;
 
   static std::mutex g_tpConnectionControlLock;
 
   uint32_t ReserveNextTpnLocked();
-
-  struct TransportChannelReclamation
-  {
-      enum class Role
-      {
-          INITIATOR,
-          RESPONDER,
-      };
-
-      uint32_t peerNodeId{0};
-      uint32_t peerTpn{0};
-      uint64_t requestId{0};
-      Role role{Role::RESPONDER};
-      bool localEndpointReclaimed{false};
-      bool peerEndpointReclaimed{false};
-  };
-
-  static void ReceiveTransportChannelReclamationRequest(uint32_t localNodeId,
-                                                        uint32_t localTpn,
-                                                        uint32_t peerNodeId,
-                                                        uint32_t peerTpn,
-                                                        uint64_t requestId);
-  static void ReceiveTransportChannelPeerDrained(uint32_t localNodeId,
-                                                 uint32_t localTpn,
-                                                 uint64_t requestId);
-  static void ReceiveTransportChannelReclamationComplete(uint32_t localNodeId,
-                                                         uint32_t localTpn,
-                                                         uint64_t requestId);
-  static void ReceiveTransportChannelReclamationConfirmed(uint32_t localNodeId,
-                                                          uint32_t localTpn,
-                                                          uint64_t requestId);
-  static void ScheduleTransportChannelReclamationRequest(uint32_t localNodeId,
-                                                         uint32_t localTpn,
-                                                         uint32_t peerNodeId,
-                                                         uint32_t peerTpn,
-                                                         uint64_t requestId);
-  static void ScheduleTransportChannelControlEvent(uint32_t eventType,
-                                                   uint32_t localNodeId,
-                                                   uint32_t localTpn,
-                                                   uint64_t requestId);
-  static Time GetReclamationVisibilityDelay(uint32_t targetNodeId);
-  static void ScheduleIdleTransportChannelReclamation(uint32_t sourceNode,
-                                                      uint32_t destNode,
-                                                      uint8_t priority);
-  static void RequestIdleTransportChannelReclamationAtOwner(uint32_t localNodeId,
-                                                            uint32_t peerNodeId,
-                                                            uint8_t priority);
-  static bool IsPreferredReclamationInitiator(uint32_t localNodeId,
-                                              uint32_t localTpn,
-                                              uint32_t peerNodeId,
-                                              uint32_t peerTpn);
-  void TryAdvanceTransportChannelReclamation(uint32_t localNodeId, uint32_t localTpn);
-  uint64_t AllocateReclamationRequestIdLocked(uint32_t localNodeId);
 
   // 为指定节点建立各种索引
   void BuildIndexesForNode(uint32_t localNodeId, Connection conn);
@@ -307,18 +220,9 @@ private:
 
     Ptr<UniformRandomVariable> m_random;
 
-    bool m_enableIdleTransportChannelReclamation = false;
-    bool m_removeUselessTpLegacy = false;
-
-    std::map<uint32_t, TransportChannelReclamation> m_transportChannelReclamations;
-    uint32_t m_nextReclamationSequence{1};
+    bool m_removeUselessTp = false;
 
     mutable std::mutex m_stateLock;
-
-    static constexpr uint32_t TRANSPORT_RECLAMATION_REQUEST_EVENT = 0x55420001;
-    static constexpr uint32_t TRANSPORT_PEER_DRAINED_EVENT = 0x55420002;
-    static constexpr uint32_t TRANSPORT_RECLAMATION_COMPLETE_EVENT = 0x55420003;
-    static constexpr uint32_t TRANSPORT_RECLAMATION_CONFIRMED_EVENT = 0x55420004;
 };
 
 } // namespace utils

@@ -344,18 +344,6 @@ If `transport_channel.csv` is missing or has no matching channel for a traffic r
   - **CSV Configuration (Pre-instantiated)**: The simulator reads `transport_channel.csv` at startup and **immediately creates all TP objects** defined in it. In large-scale topologies (e.g., thousands of nodes), this file can be huge, and creating millions of TP objects upfront consumes significant memory and initialization time, even for TPs that may never carry traffic.
   - **Automatic Reservation + Local Materialization**: Connection records are reserved before traffic, but TP objects are created locally only when the sender uses a path or the receiver accepts its first valid packet. This avoids a massive CSV and avoids instantiating unused TP objects, making it **highly recommended** for large-scale simulations.
 
-### Idle Transport Channel Reclamation (Optional)
-
-RTP endpoint objects normally remain materialized until the simulation ends. Cases that use many different channels over time can release endpoint state after all planned uses and protocol work have drained:
-
-```text
-default ns3::TpConnectionManager::EnableIdleTransportChannelReclamation "true"
-```
-
-The default is `false`, so existing cases retain their previous lifecycle. Reclamation keeps the reserved connection record and can materialize the endpoint again when later traffic uses it. It is most useful when completed channels would otherwise accumulate; workloads with many simultaneously active channels may see less memory benefit and some control-event overhead.
-
-The released `RemoveUselessTp` attribute remains a legacy alias. New cases should use `EnableIdleTransportChannelReclamation`. Null Message MPI does not support the required control events and reports an explicit error if reclamation is enabled.
-
 ### TransportMode and CTP
 
 `ns3::UbApp::TransportMode` defaults to `RTP`. In `RTP` mode, `transport_channel.csv`

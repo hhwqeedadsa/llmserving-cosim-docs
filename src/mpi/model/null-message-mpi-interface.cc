@@ -176,12 +176,6 @@ NullMessageMpiInterface::IsEnabled()
     return g_enabled;
 }
 
-bool
-NullMessageMpiInterface::SupportsControlEvents() const
-{
-    return false;
-}
-
 void
 NullMessageMpiInterface::Enable(int* pargc, char*** pargv)
 {
@@ -305,21 +299,6 @@ NullMessageMpiInterface::SendTaskCompletion(uint32_t, const Time&, uint32_t)
 
 void
 NullMessageMpiInterface::SetTaskCompletionHandler(TaskCompletionHandler)
-{
-}
-
-void
-NullMessageMpiInterface::SendControlEvent(uint32_t,
-                                          const ControlEventPayload&,
-                                          const Time&,
-                                          uint32_t,
-                                          uint32_t)
-{
-    NS_ABORT_MSG("Control events are not implemented for NullMessageMpiInterface");
-}
-
-void
-NullMessageMpiInterface::SetControlEventHandler(uint32_t, ControlEventHandler)
 {
 }
 

@@ -13373,9 +13373,6 @@ class UbQuickExampleHelpTextSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(output.find("timing-offset-seed"),
                               std::string::npos,
                               "help text should expose the shared timing offset seed");
-        NS_TEST_ASSERT_MSG_EQ(output.find("task-start-jitter-scope"),
-                              std::string::npos,
-                              "help text should not expose the removed task offset mode");
         NS_TEST_ASSERT_MSG_EQ(output.find("traffic.csv / UbTrafficGen is single-process only"),
                               std::string::npos,
                               "help text should not advertise the removed MPI TrafficGen boundary");

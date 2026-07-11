@@ -129,8 +129,8 @@ Common UB attributes you’ll see (all names below come from `GetTypeId().AddAtt
 - Transport behavior (`ns3::UbTransportChannel`):
   - `UsePacketSpray` (bool)
   - `UseShortestPaths` (bool)
-  - `EnableRetrans`, `InitialRTO`, `MaxRetransAttempts`, `RetransExponentFactor`, `DefaultMaxWqeSegNum`, `DefaultMaxInflightPacketSize`
-  - `RetransmissionMode`, `TpOooThreshold`, `SelectiveAckBitmapBits`, `EnableFastSelectiveRetrans`, `EnableSelectiveMarkPsn`
+  - `EnableRetrans`, `BaseRTO`, `MaxRetransAttempts`, `RetransExponentFactor`, `DefaultMaxWqeSegNum`, `DefaultMaxInflightPacketSize`
+  - `RetransmissionMode`, `TpOooThreshold`, `SelectiveAckBitmapBits`, `EnableFastRetrans`, `EnableSelectiveMarkPsn`
 - Allocator:
   - `ns3::UbSwitchAllocator::AllocationTime` (Time)
 - App & API LD/ST knobs:
@@ -140,7 +140,7 @@ Common UB attributes you’ll see (all names below come from `GetTypeId().AddAtt
 
 ### Upgrading copied cases
 
-If you copied an older `scratch/` case into your own workspace, check `network_attribute.txt` before running it against a newer build. Known legacy keys are rejected before ns-3 `ConfigStore` loads the file so the error points at the migration instead of a generic attribute failure.
+If you copied an older `scratch/` case into your own workspace, check `network_attribute.txt` before running it against a newer build. Recognized transport aliases are translated to current names. Unsupported legacy keys are rejected before ns-3 `ConfigStore` loads the file so the error points at the migration instead of a generic attribute failure.
 
 | Old key or behavior | Current form |
 |---------------------|--------------|
@@ -148,6 +148,8 @@ If you copied an older `scratch/` case into your own workspace, check `network_a
 | `default ns3::UbSwitch::EnableCBFC "true"` | `default ns3::UbSwitch::FlowControl "CBFC"` |
 | `default ns3::UbSwitch::EnablePFC "true"` | Choose `default ns3::UbSwitch::FlowControl "PFC_FIXED"` or `"PFC_DYNAMIC"` |
 | `default ns3::UbApiThread::*` | `default ns3::UbLdstThread::*` |
+| `default ns3::UbTransportChannel::InitialRTO "..."` | `default ns3::UbTransportChannel::BaseRTO "..."` |
+| `default ns3::UbTransportChannel::EnableFastSelectiveRetrans "..."` | `default ns3::UbTransportChannel::EnableFastRetrans "..."` |
 | Depend on old `CbfcRetCellGrainControlPacket` default | Set `default ns3::UbPort::CbfcRetCellGrainControlPacket "1"` explicitly to reproduce older behavior; current repo default is `32` |
 | Need `QueueTrace_*` files | Set `global UB_QUEUE_TRACE_ENABLE "true"` |
 | Need `PfcTrace_*` or `CbfcTrace_*` files | Set `global UB_FLOW_CONTROL_TRACE_ENABLE "true"` |
@@ -167,14 +169,14 @@ default ns3::UbTransportChannel::RetransmissionMode "SELECTIVE"
 `SelectiveAckBitmapBits` defaults to `0`, which means AUTO. AUTO chooses the
 smallest SAETPH-supported feedback width covering `min(TpOooThreshold, 1024)`.
 `TpOooThreshold` is the endpoint out-of-order receive evidence capacity in PSNs;
-it is not a private receive-buffer implementation name. `EnableFastSelectiveRetrans`
+it is not a private receive-buffer implementation name. `EnableFastRetrans`
 defaults to `false` and should generally stay disabled when packet-spray or other
 multipath routing may reorder packets. For a controlled non-reordering experiment,
 advanced settings may be written explicitly:
 
 ```text
 default ns3::UbTransportChannel::SelectiveAckBitmapBits "64"
-default ns3::UbTransportChannel::EnableFastSelectiveRetrans "true"
+default ns3::UbTransportChannel::EnableFastRetrans "true"
 default ns3::UbTransportChannel::EnableSelectiveMarkPsn "true"
 ```
 
@@ -516,7 +518,7 @@ Place these in `network_attribute.txt` as needed (values shown are examples take
 - Transport toggles
   - `default ns3::UbTransportChannel::UsePacketSpray "false"`
   - `default ns3::UbTransportChannel::UseShortestPaths "true"`
-  - Retransmission knobs (if used): `EnableRetrans`, `InitialRTO`, `MaxRetransAttempts`, ...
+  - Retransmission knobs (if used): `EnableRetrans`, `BaseRTO`, `MaxRetransAttempts`, ...
 - Application multipath
   - `default ns3::UbApp::EnableMultiPath "false"`
 - LD/ST API threads

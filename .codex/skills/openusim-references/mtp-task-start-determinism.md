@@ -2,7 +2,7 @@
 
 <reference-hint>
 <use-when>Use this reference when comparing single-thread and MTP OpenUSim runs, especially for synchronized traffic DAGs or collective communication workloads.</use-when>
-<focus>How same-timestamp task release and later cross-LP reconvergence can make MTP output differ from single-thread output, how deterministic timing-offset workarounds behave, and where they stop.</focus>
+<focus>How same-timestamp task release and later traffic convergence across parallel partitions can make MTP output differ from single-thread output, how deterministic timing-offset workarounds behave, and where they stop.</focus>
 <keywords>MTP, initial task offset, link delay offset, same timestamp, collective communication, canonical output, seed, reproducibility</keywords>
 </reference-hint>
 
@@ -24,23 +24,23 @@ All offset slots use the half-open interval `[0, window)`. In `ub-quick-example`
 
 The link delay offset is not a substitute for the initial task offset when the first difference is already in task `START` order. It is a second defensive layer for traffic that later arrives at the same destination and time. One static offset is assigned to each positive-delay bidirectional physical link from its endpoint node/port identities and the shared seed. Every packet on that link sees the same adjusted propagation delay. Original `0ns` links remain zero to preserve their existing topology behavior. The task and link mechanisms use separate deterministic mappings. The run reports positive links, preserved zero-delay links, offset reuse, and the maximum number of links sharing one offset.
 
-A phase60 pilot established these boundaries:
+Interpret the controls within these general boundaries:
 
-- 228 initial tasks from 228 distinct sources all started at `10ns`; the former same-source offset behavior was a no-op.
-- an initial-task `32ps` window by itself made single/MTP4 canonical output, `task_statistics.csv`, and all 228 task traces byte-identical for the tested seed.
-- initial-task `32ps` plus positive-link `8ps` stayed byte-identical for all five paired seeds.
-- the link layer was not necessary for the observed phase60 mismatch, but it is retained as an optional defense against later reconvergence.
-- offsets changed task-level model trajectories relative to the offset-disabled run, so equality between runtimes does not establish physical accuracy.
+- A window contains a finite number of slots at the current time resolution. When multiple sources or links map to the same slot, some same-timestamp events remain.
+- The initial-task control addresses ties at workload start. It does not address traffic that converges again later in the run.
+- The link control addresses later convergence. It does not repair differences that already appeared in initial task ordering.
+- Neither control guarantees equivalent output for every workload or seed.
+- Offsets change task-level model trajectories relative to an offset-disabled run, so equality between runtimes does not establish physical accuracy.
 
 Use canonical task output first when checking this class of issue:
 
 ```bash
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/mtp_noj_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/mtp_noj_mtp4'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_single'
-python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/mtp_offset_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --canonical-output=/tmp/offset_off_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --canonical-output=/tmp/offset_off_mtp4'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/offset_on_single'
+python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/ub_parallel_timing_offset_demo --dependency-visibility-delay=10ns --mtp-threads=4 --initial-task-start-offset-window=32ps --link-delay-offset-window=8ps --timing-offset-seed=1 --canonical-output=/tmp/offset_on_mtp4'
 ```
 
-`scratch/ub_parallel_timing_offset_demo` is a small public synthetic case generated by `scratch/ns-3-ub-tools`. It reproduced the original offset-disabled single/MTP mismatch on the `origin/main` baseline used by this change. The runtime fixes make its offset-disabled output byte-identical on the final branch, so it is a regression case rather than proof that offsets are always required.
+`scratch/ub_parallel_timing_offset_demo` is a small public synthetic case generated by `scratch/ns-3-ub-tools`. Use it to exercise the timing-offset interface and compare canonical output. Its result is a regression check for that case, not proof that offsets are always required.
 
-Do not present either control as a calibrated physical delay-variation model. Both windows and the shared seed are experiment settings. Pair single/MTP by seed. Multiple independent seeds estimate aggregate behavior under the selected offset distribution and reduce Monte Carlo uncertainty; they do not remove task-level model bias or reconstruct the offset-disabled trajectory. Five seeds are a pilot. Formal statistics should normally use 15--20 seeds and report mean, SD, and a confidence interval.
+Do not present either control as a calibrated physical delay-variation model. Both windows and the shared seed are experiment settings. Pair single/MTP by seed. Multiple independent seeds estimate aggregate behavior under the selected offset distribution and reduce Monte Carlo uncertainty; they do not remove task-level model bias or reconstruct the offset-disabled trajectory. Choose the sample count from the required precision and report the mean, standard deviation, and a confidence interval.

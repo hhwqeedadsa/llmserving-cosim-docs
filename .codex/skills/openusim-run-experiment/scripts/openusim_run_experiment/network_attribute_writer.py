@@ -51,6 +51,7 @@ def _ensure_query_prerequisites(current_repo_root: Path) -> Path:
 
 
 def _run_query(flag: str) -> str:
+    """Run an ns-3 metadata query with the Python executable that launched this tool."""
     current_repo_root = repo_root()
     launcher_path = _ensure_query_prerequisites(current_repo_root)
     result = subprocess.run(

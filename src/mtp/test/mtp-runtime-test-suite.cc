@@ -75,7 +75,7 @@ class MtpManualPartitionValidSystemTestCase : public TestCase
 {
   public:
     MtpManualPartitionValidSystemTestCase()
-        : TestCase("MTP - manual partition schedules a node on its worker LP")
+        : TestCase("MTP - manual partition schedules a node on its worker partition")
     {
     }
 
@@ -88,7 +88,7 @@ class MtpManualPartitionValidSystemTestCase : public TestCase
         NS_TEST_ASSERT_MSG_EQ(status, 0, "valid manual MTP partition must run: " << output);
         NS_TEST_ASSERT_MSG_NE(output.find("lp=1"),
                               std::string::npos,
-                              "node event must execute on worker LP 1: " << output);
+                              "node event must execute on worker partition 1: " << output);
     }
 };
 
@@ -168,11 +168,11 @@ class MtpManualPartitionValidationSystemTestSuite : public TestSuite
         : TestSuite("mtp-manual-partition-validation", Type::SYSTEM)
     {
         AddTestCase(new MtpManualPartitionValidSystemTestCase(), TestCase::Duration::QUICK);
-        AddTestCase(
-            new MtpExpectedFailureSystemTestCase("MTP - manual partition rejects an unmapped node",
-                                                 "src/mtp/examples/mtp-manual-partition-validation",
-                                                 "MTP local LP mapping is missing for node"),
-            TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - manual partition rejects an unmapped node",
+                        "src/mtp/examples/mtp-manual-partition-validation",
+                        "MTP worker partition ownership is missing for node"),
+                    TestCase::Duration::QUICK);
     }
 };
 
@@ -206,7 +206,7 @@ class MtpZeroDelayPartitionSystemTestCase : public TestCase
 {
   public:
     MtpZeroDelayPartitionSystemTestCase()
-        : TestCase("MTP - zero-delay neighbors stay on the same worker LP")
+        : TestCase("MTP - zero-delay neighbors stay in one worker partition")
     {
     }
 
@@ -217,9 +217,10 @@ class MtpZeroDelayPartitionSystemTestCase : public TestCase
             RunMtpExample(testFile, "src/mtp/examples/mtp-zero-delay-partition");
 
         NS_TEST_ASSERT_MSG_EQ(status, 0, "zero-delay partition case must run: " << output);
-        NS_TEST_ASSERT_MSG_NE(output.find("TEST : 0 : PASSED"),
-                              std::string::npos,
-                              "zero-delay neighbors must share a non-public worker LP: " << output);
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("TEST : 0 : PASSED"),
+            std::string::npos,
+            "zero-delay neighbors must share a non-public worker partition: " << output);
     }
 };
 
@@ -258,6 +259,18 @@ class MtpPastEventValidationSystemTestSuite : public TestSuite
                         "src/mtp/examples/mtp-past-event-validation",
                         "MTP received a remote event from the past",
                         "--remote-past"),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - local relative scheduling rejects a negative delay",
+                        "src/mtp/examples/mtp-past-event-validation",
+                        "MTP cannot schedule an event with a negative delay",
+                        "--negative-local-delay"),
+                    TestCase::Duration::QUICK);
+        AddTestCase(new MtpExpectedFailureSystemTestCase(
+                        "MTP - remote relative scheduling rejects a negative delay",
+                        "src/mtp/examples/mtp-past-event-validation",
+                        "MTP cannot schedule an event with a negative delay",
+                        "--negative-remote-delay"),
                     TestCase::Duration::QUICK);
     }
 };

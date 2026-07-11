@@ -39,7 +39,7 @@ link delay offset 的目的是降低来自不同进程或不同路径的流量�
 
 共享 seed 的目的是让单线程、多线程和多进程运行得到相同的 offset 分配，从而能够进行可重复的配对比较。
 
-它们都默认关闭。只有当目标 workload 对同时操作的处理顺序敏感，并且实验明确接受这种小幅时间调整时，才需要启用它们。这些参数仅用于增强实验的可重复性。
+两个 offset window 默认关闭。seed 默认是 `1`，只有至少一个 window 开启时才影响 offset 分配。只有当目标 workload 对同时操作的处理顺序敏感，并且实验明确接受这种小幅时间调整时，才需要启用 offset。
 
 ## 配置与构建
 
@@ -73,7 +73,7 @@ python3.12 ./ns3 configure --enable-modules=unified-bus --disable-examples --dis
 
 ```bash
 BUILD_JOBS=${BUILD_JOBS:-$(python3.12 -c 'import os; print(os.cpu_count() or 1)')}
-python3.12 ./ns3 build -j "$BUILD_JOBS" scratch/ub-quick-example
+python3.12 ./ns3 build -j "$BUILD_JOBS" ub-quick-example
 ```
 
 使用 MPI 模式前，需要安装能够提供 `mpirun` 的 MPI 运行环境。
@@ -125,6 +125,8 @@ mpirun -np 2 build/scratch/ns3.44-ub-quick-example \
 
 最大的 `systemId` 必须小于 `mpirun -np` 指定的进程数。
 
+MPI + 多线程模式要求每个启动的 MPI 进程至少拥有一个节点。如果某个进程没有节点，程序会在分区阶段明确退出；此时应减少 `-np`，或调整 `node.csv` 中的 `systemId` 分配。
+
 ## 配置 task 依赖
 
 如果 `traffic.csv` 使用 phase 依赖，并行运行会根据 UB 链路时延自动选择一个保守的正可见延迟，并用它约束并行同步步长。通常不需要额外配置。
@@ -156,7 +158,7 @@ python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=<case-dir>
 
 当大量 task 在同一仿真时刻启动，或者多条路径的流量在同一时刻到达一个节点时，可以使用小幅、确定性的 timing offset，降低结果对同时操作顺序的敏感性。
 
-三个参数默认关闭：
+两个 offset window 默认关闭；seed 默认是 `1`，仅在至少一个 window 开启时生效：
 
 ```text
 --initial-task-start-offset-window=<Time>

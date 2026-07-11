@@ -293,6 +293,9 @@ LogicalProcess::ProcessOneRound()
 EventId
 LogicalProcess::Schedule(const Time& delay, EventImpl* event)
 {
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "MTP cannot schedule an event with a negative delay: targetWorkerPartition="
+                        << m_systemId << " delay=" << delay.GetTimeStep());
     Scheduler::Event ev;
 
     ev.impl = event;
@@ -328,6 +331,10 @@ LogicalProcess::ScheduleWithContext(LogicalProcess* remote,
                                     const Time& delay,
                                     EventImpl* event)
 {
+    NS_ABORT_MSG_IF(delay.IsStrictlyNegative(),
+                    "MTP cannot schedule an event with a negative delay: sourceWorkerPartition="
+                        << m_systemId << " targetWorkerPartition=" << remote->m_systemId
+                        << " context=" << context << " delay=" << delay.GetTimeStep());
     Scheduler::Event ev;
 
     ev.impl = event;

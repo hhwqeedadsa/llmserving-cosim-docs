@@ -14553,6 +14553,43 @@ class UbQuickExampleMpiSystemTest : public TestCase
     std::string m_casePathRelative;
     std::string m_extraArgs;
 };
+
+class UbQuickExampleHybridEmptyRankSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleHybridEmptyRankSystemTest()
+        : TestCase("UnifiedBus - hybrid mode rejects an MPI process without owned nodes")
+    {
+    }
+
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::filesystem::path caseDir =
+            CopyCaseDirWithoutFile("scratch/ub-mpi-minimal", "node.csv");
+        {
+            std::ofstream nodeFile(caseDir / "node.csv");
+            nodeFile << "nodeId,nodeType,portNum,allocationDelay,forwardDelay,systemId\n"
+                        "0,DEVICE,1,1ns,,0\n"
+                        "1,DEVICE,1,1ns,,0\n";
+        }
+
+        auto [status, output] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + ".log"),
+                                               "--mtp-threads=2 --test",
+                                               "mpirun -np 2",
+                                               caseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(caseDir, ec);
+
+        NS_TEST_ASSERT_MSG_NE(status, 0, "hybrid mode must reject a process without owned nodes");
+        NS_TEST_ASSERT_MSG_NE(
+            output.find("requires every MPI process to own at least one node"),
+            std::string::npos,
+            "hybrid empty-process failure should explain the ownership requirement: " << output);
+    }
+};
 #endif
 
 class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
@@ -14718,6 +14755,7 @@ class UbQuickExampleSystemTestSuite : public TestSuite
                     TestCase::Duration::QUICK);
 #endif
 #ifdef NS3_MPI
+        AddTestCase(new UbQuickExampleHybridEmptyRankSystemTest(), TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMpiDependencyVisibilityDelaySystemTest(),
                     TestCase::Duration::QUICK);
         AddTestCase(new UbQuickExampleMpiZeroDependencyVisibilityDelaySystemTest(),

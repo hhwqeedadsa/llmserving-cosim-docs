@@ -218,16 +218,6 @@ class MtpInterface
     static void BoundLookAhead(Time lookAhead);
 
     /**
-     * @brief Clear node-to-local-LP ownership tracked by MTP.
-     */
-    static void ClearNodeLocalLpIds();
-
-    /**
-     * @brief Record the local MTP LP that owns a node.
-     */
-    static void SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId);
-
-    /**
      * @brief Find the local MTP LP that owns a node.
      *
      * A node on another MPI rank has no local LP and returns std::nullopt.
@@ -445,6 +435,9 @@ class MtpInterface
     }
 
   private:
+    friend class HybridSimulatorImpl;
+    friend class MultithreadedSimulatorImpl;
+
     struct OrderedGlobalEvent
     {
         int64_t targetTs;
@@ -455,6 +448,15 @@ class MtpInterface
     static void EnqueueOrderedGlobalEvent(const Time& time, uint64_t orderKey, EventImpl* event);
 
     static void FlushOrderedGlobalEvents(const Time& throughTime);
+
+    /** Clear node ownership while partitioning is still mutable. */
+    static void ClearNodeLocalLpIds();
+
+    /** Record one node owner while partitioning is still mutable. */
+    static void SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId);
+
+    /** Freeze node ownership before worker threads start reading it. */
+    static void FreezeNodeLocalLpIds();
 
     /**
      * @brief Import and validate one legacy manual-partition Node::systemId value.
@@ -513,6 +515,7 @@ class MtpInterface
     static Time g_nextPublicTime;
     static Time g_lookAheadBound;
     static std::vector<uint32_t> g_nodeLocalLpIds;
+    static bool g_nodeLocalLpIdsFrozen;
     static std::atomic<bool> g_recvMsgStage;
     static std::atomic<bool> g_globalFinished;
     static bool g_manualPartition;

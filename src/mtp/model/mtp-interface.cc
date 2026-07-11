@@ -70,6 +70,7 @@ CpuRelax()
 void
 MtpInterface::Enable()
 {
+    g_nodeLocalLpIdsFrozen = false;
 #ifdef NS3_MPI
     GlobalValue::Bind("SimulatorImplementationType", StringValue("ns3::HybridSimulatorImpl"));
 #else
@@ -106,6 +107,7 @@ MtpInterface::Enable(const uint32_t threadCount, const uint32_t systemCount)
     g_threadCount = threadCount;
     g_systemCount = systemCount;
     g_manualPartition = systemCount > 0;
+    g_nodeLocalLpIdsFrozen = false;
 
     // allocate systems
     g_systems = new LogicalProcess[g_systemCount + 1]; // include the public LP
@@ -202,6 +204,7 @@ MtpInterface::Disable()
     g_sortFunc = nullptr;
     g_lookAheadBound = TimeStep(0);
     g_nodeLocalLpIds.clear();
+    g_nodeLocalLpIdsFrozen = false;
     g_manualPartition = false;
     g_globalFinished.store(false, std::memory_order_release);
     g_recvMsgStage.store(false, std::memory_order_release);
@@ -239,6 +242,7 @@ MtpInterface::RunBefore()
     {
         InitializeManualNodeLocalLpIds();
     }
+    FreezeNodeLocalLpIds();
     CalculateLookAhead();
 
     // LP index for sorting & holding worker threads
@@ -428,18 +432,26 @@ MtpInterface::isPartitioned()
 void
 MtpInterface::ClearNodeLocalLpIds()
 {
+    NS_ABORT_MSG_IF(g_nodeLocalLpIdsFrozen, "MTP worker partition ownership is already frozen");
     g_nodeLocalLpIds.clear();
 }
 
 void
 MtpInterface::SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId)
 {
-    NS_ABORT_MSG_IF(localLpId == 0, "MTP worker LP 0 cannot own node " << nodeId);
+    NS_ABORT_MSG_IF(g_nodeLocalLpIdsFrozen, "MTP worker partition ownership is already frozen");
+    NS_ABORT_MSG_IF(localLpId == 0, "MTP worker partition 0 cannot own node " << nodeId);
     if (nodeId >= g_nodeLocalLpIds.size())
     {
         g_nodeLocalLpIds.resize(nodeId + 1, INVALID_NODE_LOCAL_LP_ID);
     }
     g_nodeLocalLpIds[nodeId] = localLpId;
+}
+
+void
+MtpInterface::FreezeNodeLocalLpIds()
+{
+    g_nodeLocalLpIdsFrozen = true;
 }
 
 std::optional<uint32_t>
@@ -456,14 +468,16 @@ uint32_t
 MtpInterface::RequireNodeLocalLpId(uint32_t nodeId)
 {
     auto localLpId = FindNodeLocalLpId(nodeId);
-    if (!localLpId && g_manualPartition)
+    if (!localLpId && g_manualPartition && !g_nodeLocalLpIdsFrozen)
     {
         InitializeManualNodeLocalLpId(nodeId);
         localLpId = FindNodeLocalLpId(nodeId);
     }
-    NS_ABORT_MSG_IF(!localLpId, "MTP local LP mapping is missing for node " << nodeId);
+    NS_ABORT_MSG_IF(!localLpId,
+                    "MTP worker partition ownership is missing for node "
+                        << nodeId << "; ownership is fixed before simulation starts");
     NS_ABORT_MSG_IF(*localLpId == 0 || *localLpId > g_systemCount,
-                    "MTP local LP mapping for node " << nodeId << " is outside worker LP range [1, "
+                    "MTP worker partition for node " << nodeId << " is outside range [1, "
                                                      << g_systemCount << "]: " << *localLpId);
     return *localLpId;
 }
@@ -475,7 +489,7 @@ MtpInterface::InitializeManualNodeLocalLpId(uint32_t nodeId)
     NS_ABORT_MSG_IF(nodeId >= NodeList::GetNNodes(), "MTP node " << nodeId << " does not exist");
     const uint32_t localLpId = NodeList::GetNode(nodeId)->GetSystemId();
     NS_ABORT_MSG_IF(localLpId == 0 || localLpId > g_systemCount,
-                    "MTP local LP mapping is missing for node "
+                    "MTP worker partition ownership is missing for node "
                         << nodeId << ": manual partition requires Node::systemId in [1, "
                         << g_systemCount << "], got " << localLpId);
     SetNodeLocalLpId(nodeId, localLpId);
@@ -622,6 +636,8 @@ Time MtpInterface::g_nextPublicTime = TimeStep(0);
 Time MtpInterface::g_lookAheadBound = TimeStep(0);
 
 std::vector<uint32_t> MtpInterface::g_nodeLocalLpIds;
+
+bool MtpInterface::g_nodeLocalLpIdsFrozen = false;
 
 std::atomic<bool> MtpInterface::g_recvMsgStage(false);
 

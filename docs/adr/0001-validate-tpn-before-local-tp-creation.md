@@ -41,7 +41,7 @@ This avoids precreating every TP object, while also removing the MTP-unsafe remo
 - MPI and hybrid runs without `transport_channel.csv` establish identical receiver reservations on every rank before traffic starts.
 - A reserved receiver TPN can be materialized locally on the receiver and then becomes visible through `GetTpByTpn`.
 - An unreserved receiver TPN remains an error instead of falling back to local or remote TP creation.
-- `RemoveUselessTp` only reclaims idle channels after task completion; it does not turn an unknown inbound TPN into a silent drop.
+- The legacy, default-disabled `RemoveUselessTp` option does not relax inbound TPN validation or turn an unknown TPN into a silent drop.
 - A packet with a reserved destination TPN but a mismatched peer TPN, per-port IP address, or priority remains an error and does not materialize a receiver endpoint.
 - Looking up a missing TPN does not mutate the controller's TPN map by inserting a null entry.
 - UDP source and destination ports are not used as UB port identity in the RTP/URMA validation path.

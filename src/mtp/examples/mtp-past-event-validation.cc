@@ -49,6 +49,18 @@ SendZeroDelayRemoteEvent(uint32_t receiverNodeId)
 }
 
 void
+ScheduleNegativeLocalDelay()
+{
+    Simulator::Schedule(Time(-1), &RunAbsoluteTimeEvent);
+}
+
+void
+SendNegativeDelayRemoteEvent(uint32_t receiverNodeId)
+{
+    Simulator::ScheduleWithContext(receiverNodeId, Time(-1), &RunAbsoluteTimeEvent);
+}
+
+void
 AdvanceReceiverTime()
 {
 }
@@ -62,6 +74,8 @@ main(int argc, char* argv[])
     bool sameTime = false;
     bool remotePast = false;
     bool negativeTime = false;
+    bool negativeLocalDelay = false;
+    bool negativeRemoteDelay = false;
     CommandLine cmd(__FILE__);
     cmd.AddValue("test", "Print regression-test output", testing);
     cmd.AddValue("same-time",
@@ -73,12 +87,20 @@ main(int argc, char* argv[])
     cmd.AddValue("negative-time",
                  "Schedule the absolute-time event at a negative time",
                  negativeTime);
+    cmd.AddValue("negative-local-delay",
+                 "Schedule a local event with a negative relative delay",
+                 negativeLocalDelay);
+    cmd.AddValue("negative-remote-delay",
+                 "Schedule a remote event with a negative relative delay",
+                 negativeRemoteDelay);
     cmd.Parse(argc, argv);
 
-    NS_ABORT_MSG_IF(sameTime && remotePast, "same-time and remote-past are mutually exclusive");
-    NS_ABORT_MSG_IF(negativeTime && (sameTime || remotePast),
-                    "negative-time is mutually exclusive with same-time and remote-past");
-    if (remotePast)
+    const uint32_t selectedModes =
+        static_cast<uint32_t>(sameTime) + static_cast<uint32_t>(remotePast) +
+        static_cast<uint32_t>(negativeTime) + static_cast<uint32_t>(negativeLocalDelay) +
+        static_cast<uint32_t>(negativeRemoteDelay);
+    NS_ABORT_MSG_IF(selectedModes > 1, "validation modes are mutually exclusive");
+    if (remotePast || negativeRemoteDelay)
     {
         MtpInterface::Enable(1, 2);
         NodeContainer sender;
@@ -88,10 +110,20 @@ main(int argc, char* argv[])
 
         // With no modeled link between these LPs, a zero-delay cross-LP event violates lookahead.
         // LP 2 reaches 5ns before it receives the event produced by LP 1 at 1ns.
-        Simulator::ScheduleWithContext(sender.Get(0)->GetId(),
-                                       NanoSeconds(1),
-                                       &SendZeroDelayRemoteEvent,
-                                       receiver.Get(0)->GetId());
+        if (negativeRemoteDelay)
+        {
+            Simulator::ScheduleWithContext(sender.Get(0)->GetId(),
+                                           NanoSeconds(1),
+                                           &SendNegativeDelayRemoteEvent,
+                                           receiver.Get(0)->GetId());
+        }
+        else
+        {
+            Simulator::ScheduleWithContext(sender.Get(0)->GetId(),
+                                           NanoSeconds(1),
+                                           &SendZeroDelayRemoteEvent,
+                                           receiver.Get(0)->GetId());
+        }
         Simulator::ScheduleWithContext(receiver.Get(0)->GetId(),
                                        NanoSeconds(5),
                                        &AdvanceReceiverTime);
@@ -102,16 +134,25 @@ main(int argc, char* argv[])
         NodeContainer nodes;
         nodes.Create(1, 1);
 
-        Simulator::ScheduleWithContext(
-            nodes.Get(0)->GetId(),
-            TimeStep(0),
-            &ScheduleLateDelivery,
-            nodes.Get(0)->GetId(),
-            negativeTime ? Time(-1) : (sameTime ? NanoSeconds(10) : NanoSeconds(5)));
+        if (negativeLocalDelay)
+        {
+            Simulator::ScheduleWithContext(nodes.Get(0)->GetId(),
+                                           TimeStep(0),
+                                           &ScheduleNegativeLocalDelay);
+        }
+        else
+        {
+            Simulator::ScheduleWithContext(
+                nodes.Get(0)->GetId(),
+                TimeStep(0),
+                &ScheduleLateDelivery,
+                nodes.Get(0)->GetId(),
+                negativeTime ? Time(-1) : (sameTime ? NanoSeconds(10) : NanoSeconds(5)));
+        }
     }
     Simulator::Run();
 
-    const bool passed = !remotePast && sameTime && g_eventTimeNs == 10;
+    const bool passed = selectedModes == 1 && sameTime && g_eventTimeNs == 10;
     if (testing)
     {
         std::cout << "TEST : 0 : " << (passed ? "PASSED" : "FAILED")

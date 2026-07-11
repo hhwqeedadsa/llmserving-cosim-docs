@@ -365,7 +365,8 @@ MultithreadedSimulatorImpl::Partition()
                 visited[node->GetId()] = true;
                 // assign this node to the current worker LP
                 MtpInterface::SetNodeLocalLpId(node->GetId(), localLpId);
-                NS_LOG_INFO("node " << node->GetId() << " is set to local LP " << localLpId);
+                NS_LOG_INFO("node " << node->GetId() << " is assigned to MTP worker partition "
+                                    << localLpId);
 
                 for (uint32_t i = 0; i < node->GetNDevices(); i++)
                 {

@@ -1,8 +1,16 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ns3/ub-tp-connection-manager.h"
-#include "ns3/ub-controller.h"
+
 #include "ns3/node-list.h"
+#include "ns3/ub-controller.h"
+#include "ns3/ub-traffic-gen.h"
 #include "ns3/ub-utils.h"
+#ifdef NS3_MPI
+#include "ns3/mpi-interface.h"
+#endif
+#ifdef NS3_MTP
+#include "ns3/mtp-interface.h"
+#endif
 
 using namespace ns3;
 namespace utils {
@@ -15,14 +23,22 @@ std::mutex TpConnectionManager::g_tpConnectionControlLock;
 
 TypeId TpConnectionManager::GetTypeId()
 {
-    static TypeId tid = TypeId("ns3::TpConnectionManager")
-        .SetParent<Object>()
-        .SetGroupName("UnifiedBus")
-        .AddAttribute("RemoveUselessTp",
-                      "Automatically destroy idle transport channels that have completed all WQE segments.",
-                      BooleanValue(false),
-                      MakeBooleanAccessor(&TpConnectionManager::m_removeUselessTp),
-                      MakeBooleanChecker());
+    static TypeId tid =
+        TypeId("ns3::TpConnectionManager")
+            .SetParent<Object>()
+            .SetGroupName("UnifiedBus")
+            .AddAttribute(
+                "EnableIdleTransportChannelReclamation",
+                "Reclaim idle RTP transport channel endpoints after all planned tasks and "
+                "protocol work for the connection have completed.",
+                BooleanValue(false),
+                MakeBooleanAccessor(&TpConnectionManager::m_enableIdleTransportChannelReclamation),
+                MakeBooleanChecker())
+            .AddAttribute("RemoveUselessTp",
+                          "Legacy alias for EnableIdleTransportChannelReclamation.",
+                          BooleanValue(false),
+                          MakeBooleanAccessor(&TpConnectionManager::m_removeUselessTpLegacy),
+                          MakeBooleanChecker());
     return tid;
 }
 
@@ -31,6 +47,49 @@ TpConnectionManager::TpConnectionManager()
     m_random = CreateObject<UniformRandomVariable>();
     m_random->SetAttribute("Min", DoubleValue(0.0));
     m_random->SetAttribute("Max", DoubleValue(1.0));
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled())
+    {
+        MpiInterface::SetControlEventHandler(
+            TRANSPORT_RECLAMATION_REQUEST_EVENT,
+            [](uint32_t,
+               uint32_t targetNode,
+               const ParallelCommunicationInterface::ControlEventPayload& payload) {
+                ReceiveTransportChannelReclamationRequest(targetNode,
+                                                          static_cast<uint32_t>(payload[0]),
+                                                          static_cast<uint32_t>(payload[1]),
+                                                          static_cast<uint32_t>(payload[2]),
+                                                          payload[3]);
+            });
+        MpiInterface::SetControlEventHandler(
+            TRANSPORT_PEER_DRAINED_EVENT,
+            [](uint32_t,
+               uint32_t targetNode,
+               const ParallelCommunicationInterface::ControlEventPayload& payload) {
+                ReceiveTransportChannelPeerDrained(targetNode,
+                                                   static_cast<uint32_t>(payload[0]),
+                                                   payload[1]);
+            });
+        MpiInterface::SetControlEventHandler(
+            TRANSPORT_RECLAMATION_COMPLETE_EVENT,
+            [](uint32_t,
+               uint32_t targetNode,
+               const ParallelCommunicationInterface::ControlEventPayload& payload) {
+                ReceiveTransportChannelReclamationComplete(targetNode,
+                                                           static_cast<uint32_t>(payload[0]),
+                                                           payload[1]);
+            });
+        MpiInterface::SetControlEventHandler(
+            TRANSPORT_RECLAMATION_CONFIRMED_EVENT,
+            [](uint32_t,
+               uint32_t targetNode,
+               const ParallelCommunicationInterface::ControlEventPayload& payload) {
+                ReceiveTransportChannelReclamationConfirmed(targetNode,
+                                                            static_cast<uint32_t>(payload[0]),
+                                                            payload[1]);
+            });
+    }
+#endif
 }
 
 TpConnectionManager::~TpConnectionManager()
@@ -131,6 +190,17 @@ std::vector<uint32_t> TpConnectionManager::GetTpns(GetTpnRuleT ruler,
         }
     }
     NS_ABORT_MSG_IF(tpns.empty(), "Could not reserve a TP connection for the requested traffic");
+    {
+        std::lock_guard<std::mutex> lock(m_stateLock);
+        for (uint32_t tpn : tpns)
+        {
+            NS_ABORT_MSG_IF(
+                m_transportChannelReclamations.find(tpn) != m_transportChannelReclamations.end(),
+                "Transport channel " << tpn << " on node " << localNodeId
+                                     << " is being reclaimed; a dynamically added task cannot "
+                                        "reuse it until reclamation completes");
+        }
+    }
     return ReconstructTPs(tpns, localNodeId, peerNodeId, priority, useShortestPath, useMultiPath);
 }
 
@@ -598,24 +668,475 @@ uint32_t TpConnectionManager::ReconstructTp(Connection conn)
     return conn.tpn1;
 }
 
-void TpConnectionManager::RemoveUselessTps(uint32_t jettyNum, uint32_t src, uint32_t dst, uint32_t priority)
+void
+TpConnectionManager::ReleaseJettyTransportChannelReferences(uint32_t localNodeId, uint32_t jettyNum)
 {
-    if (!m_removeUselessTp) { // 仅在开启了删除无用tp模式下才进行此操作
+    if (!IsIdleTransportChannelReclamationEnabled())
+    {
         return;
     }
     std::lock_guard<std::mutex> controlLock(g_tpConnectionControlLock);
-    auto ctrl = NodeList::GetNode(src)->GetObject<UbController>();
-    auto sendTa = ctrl->GetUbTransaction();
-    // 事务层删除与该jetty绑定的tp记录
-    sendTa->DestroyJettyTpMap(jettyNum);
-    // 获取当前已经没有jetty与之绑定的tp
-    auto tpns = sendTa->GetUselessTpns();
-    for (uint32_t i = 0; i < tpns.size(); i++) {
-        ctrl->DestroyTp(tpns[i]);
-        Connection conn = GetConnection(tpns[i], src, dst);
-        NodeList::GetNode(dst)->GetObject<UbController>()->DestroyTp(conn.tpn2);
-        NS_LOG_DEBUG("Delete node: " << src << " tpn: " << tpns[i] <<
-                        " node: " << dst << " tpn:" << conn.tpn2);
+    auto controller = NodeList::GetNode(localNodeId)->GetObject<UbController>();
+    controller->GetUbTransaction()->DestroyJettyTpMap(jettyNum);
+}
+
+void
+TpConnectionManager::ScheduleIdleTransportChannelReclamation(uint32_t sourceNode,
+                                                             uint32_t destNode,
+                                                             uint8_t priority)
+{
+    const auto scheduleAtOwner = [priority](uint32_t localNodeId, uint32_t peerNodeId) {
+#ifdef NS3_MPI
+        if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1 &&
+            !UbUtils::IsSystemOwnedByRank(NodeList::GetNode(localNodeId)->GetSystemId(),
+                                          MpiInterface::GetSystemId()))
+        {
+            return;
+        }
+#endif
+        Simulator::ScheduleWithContext(
+            localNodeId,
+            GetReclamationVisibilityDelay(localNodeId),
+            &TpConnectionManager::RequestIdleTransportChannelReclamationAtOwner,
+            localNodeId,
+            peerNodeId,
+            priority);
+    };
+
+    scheduleAtOwner(sourceNode, destNode);
+    if (destNode != sourceNode)
+    {
+        scheduleAtOwner(destNode, sourceNode);
+    }
+}
+
+void
+TpConnectionManager::RequestIdleTransportChannelReclamationAtOwner(uint32_t localNodeId,
+                                                                   uint32_t peerNodeId,
+                                                                   uint8_t priority)
+{
+    Ptr<UbController> controller = NodeList::GetNode(localNodeId)->GetObject<UbController>();
+    NS_ABORT_MSG_IF(controller == nullptr,
+                    "Idle transport channel reclamation requires a UB controller on node "
+                        << localNodeId);
+    controller->GetTpConnManager()->RequestIdleTransportChannelReclamation(localNodeId,
+                                                                           peerNodeId,
+                                                                           priority);
+}
+
+void
+TpConnectionManager::RequestIdleTransportChannelReclamation(uint32_t localNodeId,
+                                                            uint32_t peerNodeId,
+                                                            uint32_t priority)
+{
+    if (!IsIdleTransportChannelReclamationEnabled())
+    {
+        return;
+    }
+
+    Ptr<UbController> controller = NodeList::GetNode(localNodeId)->GetObject<UbController>();
+    const auto unreferencedTpns =
+        controller->GetUbTransaction()->GetUnreferencedTransportChannelNumbers();
+    const auto plannedTpns = GetTpnsByPeerNodePriority(localNodeId, peerNodeId, priority);
+    std::set<uint32_t> plannedTpnSet;
+    for (const auto& [tpn, metrics] : plannedTpns)
+    {
+        (void)metrics;
+        plannedTpnSet.insert(tpn);
+    }
+
+    for (uint32_t tpn : unreferencedTpns)
+    {
+        if (plannedTpnSet.contains(tpn))
+        {
+            RequestTransportChannelReclamation(localNodeId, tpn);
+            NS_LOG_DEBUG("Requested idle transport channel reclamation on node " << localNodeId
+                                                                                 << " tpn " << tpn);
+        }
+    }
+}
+
+void
+TpConnectionManager::RequestTransportChannelReclamation(uint32_t localNodeId, uint32_t localTpn)
+{
+    Connection connection;
+    NS_ABORT_MSG_IF(!TryGetLocalConnection(localNodeId, localTpn, connection),
+                    "Cannot reclaim transport channel without a local reservation: node="
+                        << localNodeId << " tpn=" << localTpn);
+
+    bool sendRequest = false;
+    uint64_t requestId = 0;
+    {
+        std::lock_guard<std::mutex> lock(m_stateLock);
+        auto it = m_transportChannelReclamations.find(localTpn);
+        if (it == m_transportChannelReclamations.end())
+        {
+            requestId = AllocateReclamationRequestIdLocked(localNodeId);
+            m_transportChannelReclamations.emplace(
+                localTpn,
+                TransportChannelReclamation{connection.node2,
+                                            connection.tpn2,
+                                            requestId,
+                                            TransportChannelReclamation::Role::INITIATOR,
+                                            false,
+                                            false});
+            sendRequest = true;
+        }
+        else if (it->second.role == TransportChannelReclamation::Role::RESPONDER &&
+                 IsPreferredReclamationInitiator(localNodeId,
+                                                 localTpn,
+                                                 it->second.peerNodeId,
+                                                 it->second.peerTpn))
+        {
+            NS_ABORT_MSG_IF(it->second.localEndpointReclaimed,
+                            "Transport channel cannot become the reclamation initiator after its "
+                            "local endpoint has been reclaimed");
+            it->second.requestId = AllocateReclamationRequestIdLocked(localNodeId);
+            it->second.role = TransportChannelReclamation::Role::INITIATOR;
+            it->second.peerEndpointReclaimed = false;
+            sendRequest = true;
+            requestId = it->second.requestId;
+        }
+        else
+        {
+            requestId = it->second.requestId;
+        }
+    }
+
+    if (sendRequest)
+    {
+        ScheduleTransportChannelReclamationRequest(connection.node2,
+                                                   connection.tpn2,
+                                                   localNodeId,
+                                                   localTpn,
+                                                   requestId);
+    }
+    TryAdvanceTransportChannelReclamation(localNodeId, localTpn);
+}
+
+void
+TpConnectionManager::NotifyTransportChannelStateChanged(uint32_t localNodeId, uint32_t localTpn)
+{
+    TryAdvanceTransportChannelReclamation(localNodeId, localTpn);
+}
+
+void
+TpConnectionManager::ReceiveTransportChannelReclamationRequest(uint32_t localNodeId,
+                                                               uint32_t localTpn,
+                                                               uint32_t peerNodeId,
+                                                               uint32_t peerTpn,
+                                                               uint64_t requestId)
+{
+    Ptr<TpConnectionManager> manager =
+        NodeList::GetNode(localNodeId)->GetObject<UbController>()->GetTpConnManager();
+    {
+        std::lock_guard<std::mutex> lock(manager->m_stateLock);
+        auto [it, inserted] = manager->m_transportChannelReclamations.emplace(
+            localTpn,
+            TransportChannelReclamation{peerNodeId,
+                                        peerTpn,
+                                        requestId,
+                                        TransportChannelReclamation::Role::RESPONDER,
+                                        false,
+                                        false});
+        if (!inserted)
+        {
+            NS_ABORT_MSG_IF(it->second.peerNodeId != peerNodeId || it->second.peerTpn != peerTpn,
+                            "Transport channel reclamation peer does not match its reservation");
+            if (it->second.role == TransportChannelReclamation::Role::INITIATOR)
+            {
+                if (IsPreferredReclamationInitiator(localNodeId, localTpn, peerNodeId, peerTpn))
+                {
+                    return;
+                }
+                it->second.requestId = requestId;
+                it->second.role = TransportChannelReclamation::Role::RESPONDER;
+                it->second.peerEndpointReclaimed = false;
+            }
+            else if (it->second.requestId != requestId)
+            {
+                return;
+            }
+        }
+    }
+    manager->TryAdvanceTransportChannelReclamation(localNodeId, localTpn);
+}
+
+void
+TpConnectionManager::ReceiveTransportChannelPeerDrained(uint32_t localNodeId,
+                                                        uint32_t localTpn,
+                                                        uint64_t requestId)
+{
+    Ptr<TpConnectionManager> manager =
+        NodeList::GetNode(localNodeId)->GetObject<UbController>()->GetTpConnManager();
+    {
+        std::lock_guard<std::mutex> lock(manager->m_stateLock);
+        auto it = manager->m_transportChannelReclamations.find(localTpn);
+        if (it == manager->m_transportChannelReclamations.end())
+        {
+            return;
+        }
+        if (it->second.requestId != requestId)
+        {
+            return;
+        }
+        NS_ABORT_MSG_IF(it->second.role != TransportChannelReclamation::Role::INITIATOR,
+                        "Peer-drained confirmation arrived at the non-initiating endpoint");
+        it->second.peerEndpointReclaimed = true;
+    }
+    manager->TryAdvanceTransportChannelReclamation(localNodeId, localTpn);
+}
+
+void
+TpConnectionManager::ReceiveTransportChannelReclamationComplete(uint32_t localNodeId,
+                                                                uint32_t localTpn,
+                                                                uint64_t requestId)
+{
+    Ptr<TpConnectionManager> manager =
+        NodeList::GetNode(localNodeId)->GetObject<UbController>()->GetTpConnManager();
+    uint32_t peerNodeId = 0;
+    uint32_t peerTpn = 0;
+    {
+        std::lock_guard<std::mutex> lock(manager->m_stateLock);
+        auto it = manager->m_transportChannelReclamations.find(localTpn);
+        if (it == manager->m_transportChannelReclamations.end() ||
+            it->second.requestId != requestId)
+        {
+            return;
+        }
+        NS_ABORT_MSG_IF(it->second.role != TransportChannelReclamation::Role::RESPONDER ||
+                            !it->second.localEndpointReclaimed,
+                        "Transport channel reclamation completed before the responding endpoint "
+                        "was reclaimed");
+        peerNodeId = it->second.peerNodeId;
+        peerTpn = it->second.peerTpn;
+        manager->m_transportChannelReclamations.erase(it);
+    }
+    ScheduleTransportChannelControlEvent(TRANSPORT_RECLAMATION_CONFIRMED_EVENT,
+                                         peerNodeId,
+                                         peerTpn,
+                                         requestId);
+}
+
+void
+TpConnectionManager::ReceiveTransportChannelReclamationConfirmed(uint32_t localNodeId,
+                                                                 uint32_t localTpn,
+                                                                 uint64_t requestId)
+{
+    Ptr<TpConnectionManager> manager =
+        NodeList::GetNode(localNodeId)->GetObject<UbController>()->GetTpConnManager();
+    std::lock_guard<std::mutex> lock(manager->m_stateLock);
+    auto it = manager->m_transportChannelReclamations.find(localTpn);
+    if (it == manager->m_transportChannelReclamations.end() || it->second.requestId != requestId)
+    {
+        return;
+    }
+    NS_ABORT_MSG_IF(it->second.role != TransportChannelReclamation::Role::INITIATOR ||
+                        !it->second.localEndpointReclaimed,
+                    "Transport channel reclamation confirmation arrived before the initiating "
+                    "endpoint was reclaimed");
+    manager->m_transportChannelReclamations.erase(it);
+}
+
+void
+TpConnectionManager::ScheduleTransportChannelReclamationRequest(uint32_t localNodeId,
+                                                                uint32_t localTpn,
+                                                                uint32_t peerNodeId,
+                                                                uint32_t peerTpn,
+                                                                uint64_t requestId)
+{
+    const Time delay = GetReclamationVisibilityDelay(localNodeId);
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1)
+    {
+        const uint32_t targetRank =
+            UbUtils::ExtractMpiRank(NodeList::GetNode(localNodeId)->GetSystemId());
+        if (targetRank != MpiInterface::GetSystemId())
+        {
+            MpiInterface::SendControlEvent(TRANSPORT_RECLAMATION_REQUEST_EVENT,
+                                           {localTpn, peerNodeId, peerTpn, requestId},
+                                           Simulator::Now() + delay,
+                                           localNodeId,
+                                           targetRank);
+            return;
+        }
+    }
+#endif
+    Simulator::ScheduleWithContext(localNodeId,
+                                   delay,
+                                   &TpConnectionManager::ReceiveTransportChannelReclamationRequest,
+                                   localNodeId,
+                                   localTpn,
+                                   peerNodeId,
+                                   peerTpn,
+                                   requestId);
+}
+
+void
+TpConnectionManager::ScheduleTransportChannelControlEvent(uint32_t eventType,
+                                                          uint32_t localNodeId,
+                                                          uint32_t localTpn,
+                                                          uint64_t requestId)
+{
+    const Time delay = GetReclamationVisibilityDelay(localNodeId);
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1)
+    {
+        const uint32_t targetRank =
+            UbUtils::ExtractMpiRank(NodeList::GetNode(localNodeId)->GetSystemId());
+        if (targetRank != MpiInterface::GetSystemId())
+        {
+            MpiInterface::SendControlEvent(eventType,
+                                           {localTpn, requestId, 0, 0},
+                                           Simulator::Now() + delay,
+                                           localNodeId,
+                                           targetRank);
+            return;
+        }
+    }
+#endif
+    if (eventType == TRANSPORT_PEER_DRAINED_EVENT)
+    {
+        Simulator::ScheduleWithContext(localNodeId,
+                                       delay,
+                                       &TpConnectionManager::ReceiveTransportChannelPeerDrained,
+                                       localNodeId,
+                                       localTpn,
+                                       requestId);
+    }
+    else if (eventType == TRANSPORT_RECLAMATION_COMPLETE_EVENT)
+    {
+        Simulator::ScheduleWithContext(
+            localNodeId,
+            delay,
+            &TpConnectionManager::ReceiveTransportChannelReclamationComplete,
+            localNodeId,
+            localTpn,
+            requestId);
+    }
+    else
+    {
+        NS_ASSERT(eventType == TRANSPORT_RECLAMATION_CONFIRMED_EVENT);
+        Simulator::ScheduleWithContext(
+            localNodeId,
+            delay,
+            &TpConnectionManager::ReceiveTransportChannelReclamationConfirmed,
+            localNodeId,
+            localTpn,
+            requestId);
+    }
+}
+
+Time
+TpConnectionManager::GetReclamationVisibilityDelay(uint32_t targetNodeId)
+{
+    bool crossesExecutionOwner = false;
+#ifdef NS3_MPI
+    if (MpiInterface::IsEnabled() && MpiInterface::GetSize() > 1)
+    {
+        const uint32_t targetRank =
+            UbUtils::ExtractMpiRank(NodeList::GetNode(targetNodeId)->GetSystemId());
+        crossesExecutionOwner = targetRank != MpiInterface::GetSystemId();
+    }
+#endif
+#ifdef NS3_MTP
+    if (!crossesExecutionOwner && MtpInterface::isPartitioned())
+    {
+        const auto targetLp = MtpInterface::FindNodeLocalLpId(targetNodeId);
+        crossesExecutionOwner = targetLp.has_value() && MtpInterface::GetSystem() != nullptr &&
+                                *targetLp != MtpInterface::GetSystem()->GetSystemId();
+    }
+#endif
+    if (!crossesExecutionOwner)
+    {
+        return TimeStep(0);
+    }
+
+    const Time delay = UbTrafficGen::Get()->GetDependencyVisibilityDelay();
+    NS_ABORT_MSG_IF(!delay.IsStrictlyPositive(),
+                    "Transport channel reclamation across execution owners requires a positive "
+                    "visibility delay inferred from UB links");
+    return delay;
+}
+
+bool
+TpConnectionManager::IsPreferredReclamationInitiator(uint32_t localNodeId,
+                                                     uint32_t localTpn,
+                                                     uint32_t peerNodeId,
+                                                     uint32_t peerTpn)
+{
+    return std::tie(localNodeId, localTpn) < std::tie(peerNodeId, peerTpn);
+}
+
+uint64_t
+TpConnectionManager::AllocateReclamationRequestIdLocked(uint32_t localNodeId)
+{
+    const uint64_t requestId =
+        (static_cast<uint64_t>(localNodeId) << 32) | m_nextReclamationSequence;
+    ++m_nextReclamationSequence;
+    NS_ABORT_MSG_IF(m_nextReclamationSequence == 0,
+                    "Transport channel reclamation request sequence exhausted");
+    return requestId;
+}
+
+void
+TpConnectionManager::TryAdvanceTransportChannelReclamation(uint32_t localNodeId, uint32_t localTpn)
+{
+    TransportChannelReclamation reclamation;
+    {
+        std::lock_guard<std::mutex> lock(m_stateLock);
+        auto it = m_transportChannelReclamations.find(localTpn);
+        if (it == m_transportChannelReclamations.end())
+        {
+            return;
+        }
+        reclamation = it->second;
+    }
+
+    if (reclamation.role == TransportChannelReclamation::Role::INITIATOR &&
+        !reclamation.peerEndpointReclaimed)
+    {
+        return;
+    }
+    if (reclamation.localEndpointReclaimed)
+    {
+        return;
+    }
+
+    Ptr<UbController> controller = NodeList::GetNode(localNodeId)->GetObject<UbController>();
+    if (!controller->TryReclaimIdleTransportChannel(localTpn))
+    {
+        return;
+    }
+
+    bool stateUpdated = false;
+    {
+        std::lock_guard<std::mutex> lock(m_stateLock);
+        auto it = m_transportChannelReclamations.find(localTpn);
+        if (it != m_transportChannelReclamations.end() &&
+            it->second.requestId == reclamation.requestId)
+        {
+            it->second.localEndpointReclaimed = true;
+            stateUpdated = true;
+        }
+    }
+    if (!stateUpdated)
+    {
+        return;
+    }
+    if (reclamation.role == TransportChannelReclamation::Role::RESPONDER)
+    {
+        ScheduleTransportChannelControlEvent(TRANSPORT_PEER_DRAINED_EVENT,
+                                             reclamation.peerNodeId,
+                                             reclamation.peerTpn,
+                                             reclamation.requestId);
+    }
+    else
+    {
+        ScheduleTransportChannelControlEvent(TRANSPORT_RECLAMATION_COMPLETE_EVENT,
+                                             reclamation.peerNodeId,
+                                             reclamation.peerTpn,
+                                             reclamation.requestId);
     }
 }
 

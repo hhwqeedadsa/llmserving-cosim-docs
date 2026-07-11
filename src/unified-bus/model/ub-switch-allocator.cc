@@ -229,9 +229,40 @@ void UbSwitchAllocator::CheckDeadlock()
 
 void UbSwitchAllocator::UnregisterUbIngressQueue(Ptr<UbIngressQueue> ingressQueue, uint32_t outPort, uint32_t priority)
 {
-    m_ingressSources[outPort][priority].erase(
-        std::remove(m_ingressSources[outPort][priority].begin(), m_ingressSources[outPort][priority].end(), ingressQueue),
-        m_ingressSources[outPort][priority].end());
+    auto& queues = m_ingressSources[outPort][priority];
+    uint32_t nonVoqOrdinal = 0;
+    auto found = queues.end();
+    uint32_t removedSlot = 0;
+    for (auto it = queues.begin(); it != queues.end(); ++it)
+    {
+        if (*it == ingressQueue)
+        {
+            found = it;
+            removedSlot = (*it)->GetIngressQueueType() == IngressQueueType::VOQ
+                              ? (*it)->GetInPortId()
+                              : m_voqIngressSlotCount + nonVoqOrdinal;
+            break;
+        }
+        if ((*it)->GetIngressQueueType() != IngressQueueType::VOQ)
+        {
+            ++nonVoqOrdinal;
+        }
+    }
+    if (found == queues.end())
+    {
+        return;
+    }
+
+    queues.erase(found);
+    OnIngressQueueRemoved(outPort,
+                          priority,
+                          removedSlot,
+                          GetIngressQueueSlotCount(outPort, priority));
+}
+
+void
+UbSwitchAllocator::OnIngressQueueRemoved(uint32_t, uint32_t, uint32_t, uint32_t)
+{
 }
 
 void UbSwitchAllocator::RegisterEgressStauts(uint32_t portsNum)
@@ -365,6 +396,23 @@ Ptr<UbIngressQueue> UbRoundRobinAllocator::SelectNextIngressQueue(Ptr<UbPort> ou
     return nullptr;
 }
 
+void
+UbRoundRobinAllocator::OnIngressQueueRemoved(uint32_t outPort,
+                                             uint32_t priority,
+                                             uint32_t removedSlot,
+                                             uint32_t remainingSlotCount)
+{
+    if (!m_rrPhaseSeeded[outPort][priority] || remainingSlotCount == 0)
+    {
+        return;
+    }
+    uint32_t& nextSlot = m_rrIdx[outPort][priority];
+    if (nextSlot > removedSlot)
+    {
+        --nextSlot;
+    }
+    nextSlot %= remainingSlotCount;
+}
 
 /*-----------------------------------------UbDwrrAllocator----------------------------------------------*/
 
@@ -484,6 +532,31 @@ Ptr<UbIngressQueue> UbDwrrAllocator::SelectNextIngressQueue(Ptr<UbPort> outPort)
     }
 
     return nullptr;
+}
+
+void
+UbDwrrAllocator::OnIngressQueueRemoved(uint32_t outPort,
+                                       uint32_t priority,
+                                       uint32_t removedSlot,
+                                       uint32_t remainingSlotCount)
+{
+    if (!m_rrPhaseSeeded[outPort][priority] || remainingSlotCount == 0)
+    {
+        return;
+    }
+    uint32_t& nextSlot = m_rrIdx[outPort][priority];
+    if (nextSlot > removedSlot)
+    {
+        --nextSlot;
+    }
+    nextSlot %= remainingSlotCount;
+
+    uint32_t& lastSelected = m_lastSelectedIngressQueueSlot[outPort][priority];
+    if (lastSelected > removedSlot)
+    {
+        --lastSelected;
+    }
+    lastSelected %= remainingSlotCount;
 }
 
 void UbDwrrAllocator::AllocateNextPacket(Ptr<UbPort> outPort)

@@ -21,8 +21,9 @@
 #include "ns3/object.h"
 #include "ns3/packet.h"
 
-#include <list>
+#include <array>
 #include <functional>
+#include <list>
 #include <mpi.h>
 #include <stdint.h>
 
@@ -49,6 +50,11 @@ class ParallelCommunicationInterface
 {
   public:
     using TaskCompletionHandler = std::function<void(uint32_t taskId)>;
+    /** Fixed-size, transport-neutral payload for timestamped MPI control events. */
+    using ControlEventPayload = std::array<uint64_t, 4>;
+    /** Handler receives the event type, target node, and decoded fixed-size payload. */
+    using ControlEventHandler = std::function<
+        void(uint32_t eventType, uint32_t targetNode, const ControlEventPayload& payload)>;
 
     /**
      * Destructor
@@ -73,6 +79,10 @@ class ParallelCommunicationInterface
      * @copydoc MpiInterface::IsEnabled
      */
     virtual bool IsEnabled() = 0;
+    /**
+     * @copydoc MpiInterface::SupportsControlEvents
+     */
+    virtual bool SupportsControlEvents() const = 0;
     /**
      * @copydoc MpiInterface::Enable(int* pargc,char*** pargv)
      */
@@ -99,6 +109,18 @@ class ParallelCommunicationInterface
      * @copydoc MpiInterface::SetTaskCompletionHandler
      */
     virtual void SetTaskCompletionHandler(TaskCompletionHandler handler) = 0;
+    /**
+     * @copydoc MpiInterface::SendControlEvent
+     */
+    virtual void SendControlEvent(uint32_t eventType,
+                                  const ControlEventPayload& payload,
+                                  const Time& visibleTime,
+                                  uint32_t targetNode,
+                                  uint32_t rank) = 0;
+    /**
+     * @copydoc MpiInterface::SetControlEventHandler
+     */
+    virtual void SetControlEventHandler(uint32_t eventType, ControlEventHandler handler) = 0;
     /**
      * @copydoc MpiInterface::GetCommunicator
      */

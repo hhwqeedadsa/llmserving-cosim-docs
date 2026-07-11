@@ -23,6 +23,7 @@
 
 #include <atomic>
 #include <list>
+#include <map>
 #include <mpi.h>
 #include <stdint.h>
 
@@ -94,6 +95,7 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
     uint32_t GetSystemId() override;
     uint32_t GetSize() override;
     bool IsEnabled() override;
+    bool SupportsControlEvents() const override;
     void Enable(int* pargc, char*** pargv) override;
     void Enable(MPI_Comm communicator) override;
     void Disable() override;
@@ -102,6 +104,12 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
                             const Time& completionVisibleTs,
                             uint32_t rank) override;
     void SetTaskCompletionHandler(TaskCompletionHandler handler) override;
+    void SendControlEvent(uint32_t eventType,
+                          const ControlEventPayload& payload,
+                          const Time& visibleTime,
+                          uint32_t targetNode,
+                          uint32_t rank) override;
+    void SetControlEventHandler(uint32_t eventType, ControlEventHandler handler) override;
     MPI_Comm GetCommunicator() override;
 
   private:
@@ -137,9 +145,20 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
         uint64_t completionVisibleTs;
     };
 
+    struct ControlEventWireMessage
+    {
+        uint32_t eventType;
+        uint32_t targetNode;
+        uint64_t visibleTime;
+        ControlEventPayload payload;
+    };
+
     static void ReceiveTaskCompletionMessages();
     static void DispatchTaskCompletion(uint32_t taskId);
     static void ScheduleTaskCompletion(uint32_t taskId, Time completionVisibleTs);
+    static void ReceiveControlEvents();
+    static void ScheduleControlEvent(ControlEventWireMessage message);
+    static void DispatchControlEvent(ControlEventWireMessage message);
 
     /** System ID (rank) for this task. */
     static uint32_t g_sid;
@@ -177,7 +196,9 @@ class GrantedTimeWindowMpiInterface : public ParallelCommunicationInterface, Obj
     static bool g_freeCommunicator;
 
     static TaskCompletionHandler g_taskCompletionHandler;
+    static std::map<uint32_t, ControlEventHandler> g_controlEventHandlers;
     static constexpr int TASK_COMPLETION_MPI_TAG = 77;
+    static constexpr int CONTROL_EVENT_MPI_TAG = 78;
 
 #ifdef NS3_MTP
     static std::atomic<bool> g_sending;

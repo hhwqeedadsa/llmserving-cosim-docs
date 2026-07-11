@@ -390,10 +390,11 @@ void UbApp::OnTaskCompleted(uint32_t taskId, uint32_t jettyNum)
     NS_LOG_INFO("[APPLICATION INFO] taskId: " << taskId << ",finish time:" << Simulator::Now().GetNanoSeconds() << "ns");
     if (m_transportMode == TransportMode::RTP)
     {
-        // 删除无用tp
-        auto cleanup = UbTrafficGen::Get()->GetTaskCleanupInfoById(taskId);
-        GetNode()->GetObject<UbController>()->GetTpConnManager()->RemoveUselessTps(
-            jettyNum, cleanup.sourceNode, cleanup.destNode, cleanup.priority);
+        Ptr<TpConnectionManager> manager = GetNode()->GetObject<UbController>()->GetTpConnManager();
+        if (manager->IsIdleTransportChannelReclamationEnabled())
+        {
+            manager->ReleaseJettyTransportChannelReferences(GetNode()->GetId(), jettyNum);
+        }
     }
     UbTrafficGen::Get()->OnTaskCompleted(taskId);
 }

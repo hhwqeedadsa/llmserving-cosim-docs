@@ -380,6 +380,29 @@ InstallStaticTpPair(const LocalTpTopology& topo)
 {
     Ptr<UbController> senderCtrl = topo.sender->GetObject<UbController>();
     Ptr<UbController> receiverCtrl = topo.receiver->GetObject<UbController>();
+    Connection connection{topo.sender->GetId(),
+                          topo.senderPort->GetIfIndex(),
+                          kUrmaWriteRegressionSenderTpn,
+                          topo.receiver->GetId(),
+                          topo.receiverPort->GetIfIndex(),
+                          kUrmaWriteRegressionReceiverTpn,
+                          kUrmaWriteRegressionPriority,
+                          0};
+
+    Connection existingConnection;
+    if (!senderCtrl->GetTpConnManager()->TryGetLocalConnection(topo.sender->GetId(),
+                                                               kUrmaWriteRegressionSenderTpn,
+                                                               existingConnection))
+    {
+        senderCtrl->GetTpConnManager()->AddUnilateralConnection(connection, topo.sender->GetId());
+    }
+    if (!receiverCtrl->GetTpConnManager()->TryGetLocalConnection(topo.receiver->GetId(),
+                                                                 kUrmaWriteRegressionReceiverTpn,
+                                                                 existingConnection))
+    {
+        receiverCtrl->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                  topo.receiver->GetId());
+    }
 
     if (!senderCtrl->IsTPExists(kUrmaWriteRegressionSenderTpn))
     {
@@ -1729,7 +1752,7 @@ class UbTrafficGenInitialTaskStartOffsetTest : public TestCase
         std::streambuf* previousStderr = std::cerr.rdbuf(warning.rdbuf());
         (void)gen.GetInitialTaskStartOffsets(collidingTasks);
         std::cerr.rdbuf(previousStderr);
-        NS_TEST_ASSERT_MSG_NE(warning.str().find("offset-reuses=1"),
+        NS_TEST_ASSERT_MSG_NE(warning.str().find("shared-offset-assignments=1"),
                               std::string::npos,
                               "reused initial task offsets should be visible in release builds");
     }
@@ -2922,6 +2945,91 @@ public:
     }
 };
 
+class UbTransportReclamationWaitsForControlPacketsTest : public TestCase
+{
+  public:
+    UbTransportReclamationWaitsForControlPacketsTest()
+        : TestCase("UnifiedBus - transport reclamation waits for queued control packets")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        Ptr<UbTransportChannel> tp = CreateObject<UbTransportChannel>();
+
+        NS_TEST_ASSERT_MSG_EQ(tp->IsSafeToReclaim(),
+                              true,
+                              "A newly created transport endpoint should be reclaimable");
+
+        tp->EnqueueAckForTest(Create<Packet>(1));
+        NS_TEST_ASSERT_MSG_EQ(tp->IsSafeToReclaim(),
+                              false,
+                              "A queued ACK must keep the transport endpoint alive");
+        tp->PopAckForTest();
+        NS_TEST_ASSERT_MSG_EQ(
+            tp->IsSafeToReclaim(),
+            true,
+            "The transport endpoint should become reclaimable after its ACK drains");
+
+        tp->EnqueueCnpForTest(Create<Packet>(1));
+        NS_TEST_ASSERT_MSG_EQ(tp->IsSafeToReclaim(),
+                              false,
+                              "A queued CNP must keep the transport endpoint alive");
+        tp->GetNextPacketForTest();
+        NS_TEST_ASSERT_MSG_EQ(
+            tp->IsSafeToReclaim(),
+            true,
+            "The transport endpoint should become reclaimable after its CNP drains");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbTransportReclamationWaitsForReliableStateTest : public TestCase
+{
+  public:
+    UbTransportReclamationWaitsForReliableStateTest()
+        : TestCase("UnifiedBus - transport reclamation waits for reliable send state")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        Config::Reset();
+        UseSelectiveRetransmissionForTest();
+
+        LocalTpTopology topo = BuildLocalTpTopology();
+        InstallStaticTpPair(topo);
+        Ptr<UbTransportChannel> senderTp =
+            topo.sender->GetObject<UbController>()->GetTpByTpn(kUrmaWriteRegressionSenderTpn);
+
+        senderTp->SetPsnSndUnaForTest(10);
+        senderTp->RetainSentPsnForTest(10, 64);
+        NS_TEST_ASSERT_MSG_EQ(senderTp->IsSafeToReclaim(),
+                              false,
+                              "An unacknowledged reliable packet must keep the endpoint alive");
+
+        senderTp->RecvTpAck(BuildTpackForSender(10));
+        NS_TEST_ASSERT_MSG_EQ(
+            senderTp->IsSafeToReclaim(),
+            true,
+            "The endpoint should become reclaimable after reliable state is acknowledged");
+
+        Ptr<UbWqeSegment> pendingSegment = CreateObject<UbWqeSegment>();
+        pendingSegment->SetSize(64);
+        senderTp->PushWqeSegment(pendingSegment);
+        NS_TEST_ASSERT_MSG_EQ(senderTp->IsSafeToReclaim(),
+                              false,
+                              "A pending WQE segment must keep the transport endpoint alive");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
 class UbAckWithoutCetphCarriesNoCetphHeaderTest : public TestCase
 {
 public:
@@ -3428,7 +3536,9 @@ public:
         Ptr<Packet> packet = BuildTpsackForSender(0, true, false);
         UdpHeader udpHeader;
         packet->AddHeader(udpHeader);
-        UbPort::AddIpv4Header(packet, NodeIdToIp(topo.receiver->GetId()), NodeIdToIp(topo.sender->GetId()));
+        UbPort::AddIpv4Header(packet,
+                              NodeIdToIp(topo.receiver->GetId(), topo.receiverPort->GetIfIndex()),
+                              NodeIdToIp(topo.sender->GetId(), topo.senderPort->GetIfIndex()));
         UbIpBasedNetworkHeader networkHeader;
         packet->AddHeader(networkHeader);
         UbDataLink::GenPacketHeader(packet,
@@ -5337,6 +5447,10 @@ public:
         NS_TEST_ASSERT_MSG_EQ(rxTp->GetInboundTaUnitCountForTest(),
                               2u,
                               "same low wire TPMSN values after wrap should not collide in inbound TA map");
+        rxTp->PopAckForTest();
+        NS_TEST_ASSERT_MSG_EQ(rxTp->IsSafeToReclaim(),
+                              false,
+                              "Incomplete inbound transaction units must keep the endpoint alive");
 
         Simulator::Destroy();
         Config::Reset();
@@ -8730,6 +8844,231 @@ class UbControllerMissingTpnLookupDoesNotInsertTest : public TestCase
     }
 };
 
+class UbControllerReclaimsOnlyIdleTransportChannelTest : public TestCase
+{
+  public:
+    UbControllerReclaimsOnlyIdleTransportChannelTest()
+        : TestCase("UnifiedBus - controller reclaims only an idle local transport channel")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        InstallStaticTpPair(topo);
+        Ptr<UbController> controller = topo.sender->GetObject<UbController>();
+        Ptr<UbTransportChannel> tp = controller->GetTpByTpn(kUrmaWriteRegressionSenderTpn);
+
+        tp->EnqueueAckForTest(Create<Packet>(1));
+        NS_TEST_ASSERT_MSG_EQ(
+            controller->TryReclaimIdleTransportChannel(kUrmaWriteRegressionSenderTpn),
+            false,
+            "The controller must not reclaim a transport channel with a queued ACK");
+        NS_TEST_ASSERT_MSG_NE(controller->GetTpByTpn(kUrmaWriteRegressionSenderTpn),
+                              nullptr,
+                              "A busy transport channel must remain registered locally");
+
+        tp->PopAckForTest();
+        NS_TEST_ASSERT_MSG_EQ(
+            controller->TryReclaimIdleTransportChannel(kUrmaWriteRegressionSenderTpn),
+            true,
+            "The controller should reclaim a transport channel after it drains");
+        NS_TEST_ASSERT_MSG_EQ(controller->GetTpByTpn(kUrmaWriteRegressionSenderTpn),
+                              nullptr,
+                              "A reclaimed transport channel must leave the local controller map");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbTransportChannelReclamationReleasesDcqcnReferencesTest : public TestCase
+{
+  public:
+    UbTransportChannelReclamationReleasesDcqcnReferencesTest()
+        : TestCase("UnifiedBus - transport channel reclamation releases DCQCN references")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        Config::Reset();
+        GlobalValue::Bind("UB_CC_ENABLED", BooleanValue(true));
+        GlobalValue::Bind("UB_CC_ALGO", EnumValue(CongestionCtrlAlgo::DCQCN));
+
+        LocalTpTopology topo = BuildLocalTpTopology();
+        InstallStaticTpPair(topo);
+        Ptr<UbController> controller = topo.sender->GetObject<UbController>();
+        Ptr<UbTransportChannel> tp = controller->GetTpByTpn(kUrmaWriteRegressionSenderTpn);
+
+        NS_TEST_ASSERT_MSG_EQ(
+            controller->TryReclaimIdleTransportChannel(kUrmaWriteRegressionSenderTpn),
+            true,
+            "An idle DCQCN transport endpoint should be reclaimable");
+        NS_TEST_ASSERT_MSG_EQ(tp->GetReferenceCount(),
+                              1u,
+                              "Reclamation should break the DCQCN-to-transport reference cycle");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbTransportChannelReclamationAttributeCompatibilityTest : public TestCase
+{
+  public:
+    UbTransportChannelReclamationAttributeCompatibilityTest()
+        : TestCase(
+              "UnifiedBus - transport channel reclamation accepts canonical and legacy attributes")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        Ptr<TpConnectionManager> canonical = CreateObject<TpConnectionManager>();
+        canonical->SetAttribute("EnableIdleTransportChannelReclamation", BooleanValue(true));
+        NS_TEST_ASSERT_MSG_EQ(canonical->IsIdleTransportChannelReclamationEnabled(),
+                              true,
+                              "The canonical reclamation attribute should enable the feature");
+
+        Ptr<TpConnectionManager> legacy = CreateObject<TpConnectionManager>();
+        legacy->SetAttribute("RemoveUselessTp", BooleanValue(true));
+        NS_TEST_ASSERT_MSG_EQ(legacy->IsIdleTransportChannelReclamationEnabled(),
+                              true,
+                              "The released legacy attribute should remain compatible");
+    }
+};
+
+class UbTransportChannelReclamationUsesOwnerLocalHandshakeTest : public TestCase
+{
+  public:
+    UbTransportChannelReclamationUsesOwnerLocalHandshakeTest()
+        : TestCase("UnifiedBus - transport channel reclamation uses an owner-local handshake")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        InstallStaticTpPair(topo);
+        Ptr<UbController> senderController = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverController = topo.receiver->GetObject<UbController>();
+        Ptr<UbTransportChannel> receiverTp =
+            receiverController->GetTpByTpn(kUrmaWriteRegressionReceiverTpn);
+        Connection connection{topo.sender->GetId(),
+                              topo.senderPort->GetIfIndex(),
+                              kUrmaWriteRegressionSenderTpn,
+                              topo.receiver->GetId(),
+                              topo.receiverPort->GetIfIndex(),
+                              kUrmaWriteRegressionReceiverTpn,
+                              kUrmaWriteRegressionPriority,
+                              0};
+        senderController->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                      topo.sender->GetId());
+        receiverController->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                        topo.receiver->GetId());
+
+        receiverTp->EnqueueAckForTest(Create<Packet>(1));
+        senderController->GetTpConnManager()->RequestTransportChannelReclamation(
+            topo.sender->GetId(),
+            kUrmaWriteRegressionSenderTpn);
+        Simulator::Stop(NanoSeconds(1));
+        Simulator::Run();
+
+        NS_TEST_ASSERT_MSG_NE(senderController->GetTpByTpn(kUrmaWriteRegressionSenderTpn),
+                              nullptr,
+                              "The source endpoint must wait for peer-drained confirmation");
+        NS_TEST_ASSERT_MSG_NE(receiverController->GetTpByTpn(kUrmaWriteRegressionReceiverTpn),
+                              nullptr,
+                              "The target endpoint must remain while its ACK queue is busy");
+
+        receiverTp->PopAckForTest();
+        Simulator::Stop(NanoSeconds(1));
+        Simulator::Run();
+
+        NS_TEST_ASSERT_MSG_EQ(receiverController->GetTpByTpn(kUrmaWriteRegressionReceiverTpn),
+                              nullptr,
+                              "The target owner should reclaim its endpoint after it drains");
+        NS_TEST_ASSERT_MSG_EQ(
+            senderController->GetTpByTpn(kUrmaWriteRegressionSenderTpn),
+            nullptr,
+            "The source owner should reclaim its endpoint after peer confirmation");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
+class UbConcurrentTransportChannelReclamationRequestsConvergeTest : public TestCase
+{
+  public:
+    UbConcurrentTransportChannelReclamationRequestsConvergeTest()
+        : TestCase("UnifiedBus - concurrent transport channel reclamation requests converge")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        LocalTpTopology topo = BuildLocalTpTopology();
+        InstallStaticTpPair(topo);
+        Ptr<UbController> senderController = topo.sender->GetObject<UbController>();
+        Ptr<UbController> receiverController = topo.receiver->GetObject<UbController>();
+        Connection connection{topo.sender->GetId(),
+                              topo.senderPort->GetIfIndex(),
+                              kUrmaWriteRegressionSenderTpn,
+                              topo.receiver->GetId(),
+                              topo.receiverPort->GetIfIndex(),
+                              kUrmaWriteRegressionReceiverTpn,
+                              kUrmaWriteRegressionPriority,
+                              0};
+        senderController->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                      topo.sender->GetId());
+        receiverController->GetTpConnManager()->AddUnilateralConnection(connection,
+                                                                        topo.receiver->GetId());
+
+        senderController->GetTpConnManager()->RequestTransportChannelReclamation(
+            topo.sender->GetId(),
+            kUrmaWriteRegressionSenderTpn);
+        receiverController->GetTpConnManager()->RequestTransportChannelReclamation(
+            topo.receiver->GetId(),
+            kUrmaWriteRegressionReceiverTpn);
+        Simulator::Stop(NanoSeconds(1));
+        Simulator::Run();
+
+        NS_TEST_ASSERT_MSG_EQ(senderController->GetTpByTpn(kUrmaWriteRegressionSenderTpn),
+                              nullptr,
+                              "Concurrent requests should reclaim the sender endpoint");
+        NS_TEST_ASSERT_MSG_EQ(receiverController->GetTpByTpn(kUrmaWriteRegressionReceiverTpn),
+                              nullptr,
+                              "Concurrent requests should reclaim the receiver endpoint");
+
+        const auto recreatedTpns =
+            senderController->GetTpConnManager()->GetTpns(utils::GetTpnRuleT::BY_PEERNODE_PRIORITY,
+                                                          true,
+                                                          false,
+                                                          topo.sender->GetId(),
+                                                          topo.receiver->GetId(),
+                                                          UINT32_MAX,
+                                                          UINT32_MAX,
+                                                          kUrmaWriteRegressionPriority);
+        NS_TEST_ASSERT_MSG_EQ(
+            recreatedTpns.size(),
+            1u,
+            "A completed reclamation should allow the reserved connection to be reused");
+        NS_TEST_ASSERT_MSG_NE(senderController->GetTpByTpn(recreatedTpns[0]),
+                              nullptr,
+                              "Connection reuse should recreate the local transport endpoint");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+};
+
 class UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest : public TestCase
 {
   public:
@@ -8956,7 +9295,7 @@ class UbUnknownInboundTpnFailsWithAutoRemoveTest : public TestCase
 {
   public:
     UbUnknownInboundTpnFailsWithAutoRemoveTest()
-        : TestCase("UnifiedBus - auto-remove mode does not hide an unknown inbound TPN")
+        : TestCase("UnifiedBus - legacy idle reclamation does not hide an invalid inbound TPN")
     {
     }
 
@@ -8980,7 +9319,7 @@ class UbUnknownInboundTpnFailsWithAutoRemoveTest : public TestCase
 
         NS_TEST_ASSERT_MSG_EQ(WIFSIGNALED(status),
                               1,
-                              "Unknown inbound TPN should abort even in auto-remove mode");
+                              "Invalid inbound TPN should abort with the legacy reclamation alias");
         NS_TEST_ASSERT_MSG_EQ(WTERMSIG(status),
                               SIGABRT,
                               "Unknown inbound TPN should fail with SIGABRT");
@@ -9159,8 +9498,8 @@ class UbTraceDirSetupTest : public TestCase
     {
         namespace fs = std::filesystem;
 
-        auto uniqueSuffix = std::to_string(
-            std::chrono::steady_clock::now().time_since_epoch().count());
+        auto uniqueSuffix =
+            std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
         fs::path caseDir = fs::temp_directory_path() / ("ub-trace-dir-test-" + uniqueSuffix);
         std::error_code ec;
         fs::remove_all(caseDir, ec);
@@ -9171,7 +9510,9 @@ class UbTraceDirSetupTest : public TestCase
         fs::path configPath = caseDir / "network_attribute.txt";
         std::string tracePath = utils::UbUtils::PrepareTraceDir(configPath.string());
 
-        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog"), true, "runlog directory should be created");
+        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog"),
+                              true,
+                              "runlog directory should be created");
         NS_TEST_ASSERT_MSG_EQ(tracePath.empty(), false, "Returned trace path should not be empty");
 
         std::ofstream staleFile((caseDir / "runlog" / "stale.tr").string());
@@ -9179,8 +9520,12 @@ class UbTraceDirSetupTest : public TestCase
         staleFile.close();
 
         tracePath = utils::UbUtils::PrepareTraceDir(configPath.string());
-        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog" / "stale.tr"), false, "Existing runlog contents should be removed");
-        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog"), true, "runlog directory should be recreated");
+        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog" / "stale.tr"),
+                              false,
+                              "Existing runlog contents should be removed");
+        NS_TEST_ASSERT_MSG_EQ(fs::exists(caseDir / "runlog"),
+                              true,
+                              "runlog directory should be recreated");
 
         fs::remove_all(caseDir, ec);
     }
@@ -9190,7 +9535,8 @@ class UbAlgorithmTraceGateDefaultOffTest : public TestCase
 {
   public:
     UbAlgorithmTraceGateDefaultOffTest()
-        : TestCase("UnifiedBus - algorithm trace files stay off by default even when trace path exists")
+        : TestCase(
+              "UnifiedBus - algorithm trace files stay off by default even when trace path exists")
     {
     }
 
@@ -9235,7 +9581,8 @@ class UbAlgorithmTraceCategoryGateTest : public TestCase
 {
   public:
     UbAlgorithmTraceCategoryGateTest()
-        : TestCase("UnifiedBus - algorithm trace category gates independently control flow and congestion traces")
+        : TestCase("UnifiedBus - algorithm trace category gates independently control flow and "
+                   "congestion traces")
     {
     }
 
@@ -10259,6 +10606,61 @@ class UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest : public TestCase
 
         Simulator::Destroy();
         Config::Reset();
+    }
+};
+
+class UbAllocatorPreservesNextTransportQueueAfterRemovalTest : public TestCase
+{
+  public:
+    UbAllocatorPreservesNextTransportQueueAfterRemovalTest()
+        : TestCase("UnifiedBus - allocator preserves the next transport queue after removal")
+    {
+    }
+
+  private:
+    template <typename Allocator>
+    void VerifyScheduler(const std::string& schedulerName)
+    {
+        Ptr<Node> node = CreateObject<Node>(0);
+        InitNode(node, UB_SWITCH, 1);
+        Ptr<UbSwitch> sw = node->GetObject<UbSwitch>();
+        Ptr<Allocator> allocator = DynamicCast<Allocator>(sw->GetAllocator());
+        NS_TEST_ASSERT_MSG_NE(allocator, nullptr, schedulerName << " allocator should be active");
+
+        constexpr uint32_t kOutPort = 0;
+        constexpr uint32_t kPriority = 3;
+        Ptr<UbPort> port = DynamicCast<UbPort>(node->GetDevice(kOutPort));
+        Ptr<UbTestIngressQueue> first = CreateObject<UbTestIngressQueue>();
+        Ptr<UbTestIngressQueue> second = CreateObject<UbTestIngressQueue>();
+        Ptr<UbTestIngressQueue> third = CreateObject<UbTestIngressQueue>();
+        first->PushPacket(64);
+        second->PushPacket(64);
+        third->PushPacket(64);
+        sw->RegisterTpWithAllocator(first, kOutPort, kPriority);
+        sw->RegisterTpWithAllocator(second, kOutPort, kPriority);
+        sw->RegisterTpWithAllocator(third, kOutPort, kPriority);
+
+        NS_TEST_ASSERT_MSG_EQ(allocator->SelectNextIngressQueue(port),
+                              DynamicCast<UbIngressQueue>(first),
+                              schedulerName
+                                  << " should initially select the first transport queue");
+        sw->RemoveTpFromAllocator(first);
+        NS_TEST_ASSERT_MSG_EQ(
+            allocator->SelectNextIngressQueue(port),
+            DynamicCast<UbIngressQueue>(second),
+            schedulerName << " should preserve the logical next queue after ordinal compaction");
+
+        Simulator::Destroy();
+        Config::Reset();
+    }
+
+    void DoRun() override
+    {
+        Config::Reset();
+        VerifyScheduler<UbRoundRobinAllocator>("Round robin");
+
+        Config::SetDefault("ns3::UbSwitch::VlScheduler", StringValue("DWRR"));
+        VerifyScheduler<UbDwrrAllocator>("DWRR");
     }
 };
 
@@ -12336,6 +12738,15 @@ UbTpReservationTestSuite::UbTpReservationTestSuite()
 {
     AddTestCase(new UbCreateTpUsesPerPortIpTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbControllerMissingTpnLookupDoesNotInsertTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbControllerReclaimsOnlyIdleTransportChannelTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTransportChannelReclamationReleasesDcqcnReferencesTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbTransportChannelReclamationAttributeCompatibilityTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbTransportChannelReclamationUsesOwnerLocalHandshakeTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbConcurrentTransportChannelReclamationRequestsConvergeTest(),
+                TestCase::Duration::QUICK);
     AddTestCase(new UbTrafficDrivenReservationDoesNotRemoteCreateReceiverTpTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbReservedReceiverTpnMaterializesLocallyTest(), TestCase::Duration::QUICK);
@@ -12435,6 +12846,8 @@ UbTransportPipelineTestSuite::UbTransportPipelineTestSuite()
 {
     AddTestCase(new UbTransportShallowPipelineIgnoresUnackedSegmentsTest(),
                 TestCase::Duration::QUICK);
+    AddTestCase(new UbTransportReclamationWaitsForControlPacketsTest(), TestCase::Duration::QUICK);
+    AddTestCase(new UbTransportReclamationWaitsForReliableStateTest(), TestCase::Duration::QUICK);
 }
 
 static UbTransportPipelineTestSuite g_ubTransportPipelineTestSuite;
@@ -12589,6 +13002,8 @@ UbSwitchVoqTestSuite::UbSwitchVoqTestSuite()
     AddTestCase(new UbDwrrAllocatorPreservesIngressQueueSlotsAcrossVlTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbDwrrAllocatorKeepsNonVoqQueuesAfterVoqSlotsTest(),
+                TestCase::Duration::QUICK);
+    AddTestCase(new UbAllocatorPreservesNextTransportQueueAfterRemovalTest(),
                 TestCase::Duration::QUICK);
     AddTestCase(new UbPacketQueueInlineStoragePreservesFifoTest(), TestCase::Duration::QUICK);
     AddTestCase(new UbSmallFifoQueueReleasesHeapWhenDrainedTest(), TestCase::Duration::QUICK);
@@ -14322,6 +14737,116 @@ class UbQuickExampleHybridDependencyVisibilityDelaySystemTest : public TestCase
     }
 };
 
+class UbQuickExampleMpiIdleTransportChannelReclamationSystemTest : public TestCase
+{
+  public:
+    UbQuickExampleMpiIdleTransportChannelReclamationSystemTest()
+        : TestCase("UnifiedBus - MPI safely reclaims idle transport channels")
+    {
+    }
+
+  private:
+    void DoRun() override
+    {
+        SetDataDir(NS_TEST_SOURCEDIR);
+        const std::string trafficCsv = "taskId,sourceNode,destNode,dataSize(Byte),opType,priority,"
+                                       "delay,phaseId,dependOnPhases\n"
+                                       "0,0,1,2097152,URMA_WRITE,7,10ns,0,\n"
+                                       "1,1,0,2097152,URMA_WRITE,7,10ns,1,0\n"
+                                       "2,0,1,524288,URMA_READ,7,10ns,2,1\n"
+                                       "3,1,0,524288,URMA_WRITE,7,10ns,3,2\n";
+        const std::filesystem::path localCaseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+        const std::filesystem::path mpiCaseDir =
+            CopyCaseDirWithTrafficFile("scratch/ub-mpi-minimal", trafficCsv);
+
+        {
+            std::ofstream localNodes(localCaseDir / "node.csv", std::ios::trunc);
+            localNodes << "nodeId,nodeType,portNum,allocationDelay,forwardDelay,systemId\n"
+                          "0,DEVICE,1,1ns,,0\n"
+                          "1,DEVICE,1,1ns,,0\n";
+        }
+
+        for (const auto& caseDir : {localCaseDir, mpiCaseDir})
+        {
+            std::ofstream attributes(caseDir / "network_attribute.txt", std::ios::app);
+            attributes
+                << "\ndefault ns3::TpConnectionManager::EnableIdleTransportChannelReclamation "
+                   "\"true\"\n"
+                   "default ns3::UbTransportChannel::EnableRetrans \"true\"\n"
+                   "global UB_CC_ALGO \"DCQCN\"\n"
+                   "global UB_CC_ENABLED \"true\"\n";
+        }
+
+        auto [localStatus, localOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-local.log"),
+                                               "--mtp-threads=1 --test",
+                                               "",
+                                               localCaseDir);
+        auto [mtpStatus, mtpOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-mtp.log"),
+                                               "--mtp-threads=2 --test",
+                                               "",
+                                               localCaseDir);
+        auto [mpiStatus, mpiOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-mpi.log"),
+                                               "--mtp-threads=1 --test",
+                                               "mpirun -np 2",
+                                               mpiCaseDir);
+        auto [hybridStatus, hybridOutput] =
+            RunQuickExampleAbsoluteCaseCommand(CreateTempDirFilename(GetName() + "-hybrid.log"),
+                                               "--mtp-threads=2 --test",
+                                               "mpirun -np 2",
+                                               mpiCaseDir);
+
+        std::error_code ec;
+        std::filesystem::remove_all(localCaseDir, ec);
+        ec.clear();
+        std::filesystem::remove_all(mpiCaseDir, ec);
+
+        NS_TEST_ASSERT_MSG_EQ(localStatus,
+                              0,
+                              "Local transport channel reclamation should complete");
+        NS_TEST_ASSERT_MSG_EQ(mtpStatus, 0, "MTP transport channel reclamation should complete");
+        NS_TEST_ASSERT_MSG_EQ(mpiStatus, 0, "MPI transport channel reclamation should complete");
+        NS_TEST_ASSERT_MSG_EQ(hybridStatus,
+                              0,
+                              "Hybrid transport channel reclamation should complete");
+        NS_TEST_ASSERT_MSG_NE(localOutput.find("TEST : 00000 : PASSED"),
+                              std::string::npos,
+                              "Local transport channel reclamation should report PASSED");
+        NS_TEST_ASSERT_MSG_NE(mtpOutput.find("TEST : 00000 : PASSED"),
+                              std::string::npos,
+                              "MTP transport channel reclamation should report PASSED");
+        NS_TEST_ASSERT_MSG_NE(mpiOutput.find("TEST : 00000 : PASSED"),
+                              std::string::npos,
+                              "MPI automatic transport channel reclamation should report PASSED");
+        NS_TEST_ASSERT_MSG_NE(hybridOutput.find("TEST : 00000 : PASSED"),
+                              std::string::npos,
+                              "Hybrid transport channel reclamation should report PASSED");
+        const std::string rankZeroReclamation = "TRANSPORT CHANNELS : rank=0 : remaining=0";
+        const std::string rankOneReclamation = "TRANSPORT CHANNELS : rank=1 : remaining=0";
+        NS_TEST_ASSERT_MSG_NE(localOutput.find(rankZeroReclamation),
+                              std::string::npos,
+                              "Local reclamation should leave no transport channels");
+        NS_TEST_ASSERT_MSG_NE(mtpOutput.find(rankZeroReclamation),
+                              std::string::npos,
+                              "MTP reclamation should leave no transport channels");
+        NS_TEST_ASSERT_MSG_NE(mpiOutput.find(rankZeroReclamation),
+                              std::string::npos,
+                              "MPI rank 0 should reclaim its transport channels");
+        NS_TEST_ASSERT_MSG_NE(mpiOutput.find(rankOneReclamation),
+                              std::string::npos,
+                              "MPI rank 1 should reclaim its transport channels");
+        NS_TEST_ASSERT_MSG_NE(hybridOutput.find(rankZeroReclamation),
+                              std::string::npos,
+                              "Hybrid rank 0 should reclaim its transport channels");
+        NS_TEST_ASSERT_MSG_NE(hybridOutput.find(rankOneReclamation),
+                              std::string::npos,
+                              "Hybrid rank 1 should reclaim its transport channels");
+    }
+};
+
 class UbQuickExampleMpiCrossRankPhaseDependencySystemTest : public TestCase
 {
   public:
@@ -14617,23 +15142,20 @@ class UbQuickExampleTimingOffsetRegressionSystemTest : public TestCase
         NS_TEST_ASSERT_MSG_NE(seedOneSingle.canonical,
                               seedTwoSingle.canonical,
                               "different seeds should produce different release schedules");
-        NS_TEST_ASSERT_MSG_NE(
-            noOffsetMtp.output.find("Initial task start offset is off (default)"),
-            std::string::npos,
-            "MTP should guide users when initial task offsets are disabled");
+        NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("Initial task start offset is off (default)"),
+                              std::string::npos,
+                              "MTP should guide users when initial task offsets are disabled");
         NS_TEST_ASSERT_MSG_NE(noOffsetMtp.output.find("events with the same simulation time"),
                               std::string::npos,
                               "MTP should report its same-time event ordering boundary");
         NS_TEST_ASSERT_MSG_NE(
-            seedOneMtp.output.find(
-                "Initial task start offset enabled: window=32ps, seed=1"),
+            seedOneMtp.output.find("Initial task start offset enabled: window=32ps, seed=1"),
             std::string::npos,
             "enabled initial task offset should report its window and shared seed");
-        NS_TEST_ASSERT_MSG_NE(
-            seedOneMtp.output.find(
-                "Link delay offset enabled: window=8ps, seed=1, positive-links="),
-            std::string::npos,
-            "enabled link delay offset should report its window and shared seed");
+        NS_TEST_ASSERT_MSG_NE(seedOneMtp.output.find(
+                                  "Link delay offset enabled: window=8ps, seed=1, adjusted-links="),
+                              std::string::npos,
+                              "enabled link delay offset should report its window and shared seed");
     }
 };
 
@@ -14729,6 +15251,22 @@ class UbQuickExampleSystemTestSuite : public TestSuite
 };
 
 static UbQuickExampleSystemTestSuite g_ubQuickExampleSystemTestSuite;
+
+#ifdef NS3_MPI
+class UbIdleTransportChannelReclamationSystemTestSuite : public TestSuite
+{
+  public:
+    UbIdleTransportChannelReclamationSystemTestSuite()
+        : TestSuite("unified-bus-idle-tp-reclamation", Type::SYSTEM)
+    {
+        AddTestCase(new UbQuickExampleMpiIdleTransportChannelReclamationSystemTest(),
+                    TestCase::Duration::QUICK);
+    }
+};
+
+static UbIdleTransportChannelReclamationSystemTestSuite
+    g_ubIdleTransportChannelReclamationSystemTestSuite;
+#endif
 
 class UbQuickExampleSmokeTestSuite : public TestSuite
 {

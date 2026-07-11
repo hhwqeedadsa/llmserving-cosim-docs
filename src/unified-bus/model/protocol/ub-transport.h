@@ -93,6 +93,23 @@ public:
     bool IsEmpty() override;
     bool IsLimited() override;
 
+    /**
+     * @brief Return whether this local transport endpoint has no work that requires it to stay
+     * alive.
+     */
+    bool IsSafeToReclaim() const;
+
+    /**
+     * @brief Detach endpoint-owned collaborators before removing this channel from its owner.
+     */
+    void PrepareForDestruction();
+
+    /**
+     * @brief Set the callback invoked when this endpoint may have become reclaimable.
+     * @param callback Callback receiving the local transport channel number.
+     */
+    void SetReclamationStateChangedCallback(Callback<void, uint32_t> callback);
+
     Ptr<Packet> GenDataPacket(Ptr<UbWqeSegment> wqeSegment,
                               uint32_t payloadSize,
                               uint32_t wireLengthBytes,
@@ -465,6 +482,7 @@ private:
                                       uint64_t psnEnd,
                                       AckResponseContext& response);
     void CompleteInboundTaUnits(const std::vector<Ptr<UbWqeSegment>>& completedTaUnits);
+    void NotifyReclamationStateChanged();
 
     TracedCallback<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> m_traceFirstPacketSendsNotify;
     TracedCallback<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> m_traceLastPacketSendsNotify;
@@ -547,6 +565,7 @@ private:
     IngressQueueType m_ingressQueueType = IngressQueueType::TP; // Transport channel queue type (TP)
 
     bool m_pktTraceEnabled = false;
+    Callback<void, uint32_t> m_reclamationStateChangedCallback;
 };
 
 /**

@@ -161,15 +161,28 @@ UbHostDcqcn::IsCcLimited(uint32_t bytes)
 void
 UbHostDcqcn::DoDispose()
 {
+    OnTpDetached();
+    Object::DoDispose();
+}
+
+bool
+UbHostDcqcn::HasPendingTransportWork() const
+{
+    return m_pendingMarked || m_pendingCnpEvent.IsPending();
+}
+
+void
+UbHostDcqcn::OnTpDetached()
+{
     m_pendingCnpEvent.Cancel();
     m_rateIncreaseEvent.Cancel();
     m_alphaEvent.Cancel();
     m_pacingWakeupEvent.Cancel();
     ReleaseHostActiveFlow();
 
+    m_pendingMarked = false;
     m_tp = nullptr;
     m_port = nullptr;
-    Object::DoDispose();
 }
 
 void

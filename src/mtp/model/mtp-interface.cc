@@ -323,7 +323,8 @@ MtpInterface::EnqueueOrderedGlobalEvent(const Time& time, uint64_t orderKey, Eve
 {
     const int64_t targetTs = time.GetTimeStep();
     NS_ABORT_MSG_IF(targetTs < 0 || time < g_systems[0].Now() || time < GetSystem()->Now(),
-                    "ordered public event time is earlier than its submitting or public LP");
+                    "ordered shared event time is earlier than its submitting worker or shared "
+                    "event queue");
 
     std::lock_guard<std::mutex> lock(g_orderedGlobalEventsMutex);
     g_orderedGlobalEvents.push_back({targetTs, orderKey, event});
@@ -434,7 +435,7 @@ MtpInterface::ClearNodeLocalLpIds()
 void
 MtpInterface::SetNodeLocalLpId(uint32_t nodeId, uint32_t localLpId)
 {
-    NS_ABORT_MSG_IF(localLpId == 0, "MTP worker LP 0 cannot own node " << nodeId);
+    NS_ABORT_MSG_IF(localLpId == 0, "MTP shared event queue cannot own node " << nodeId);
     if (nodeId >= g_nodeLocalLpIds.size())
     {
         g_nodeLocalLpIds.resize(nodeId + 1, INVALID_NODE_LOCAL_LP_ID);
@@ -461,9 +462,9 @@ MtpInterface::RequireNodeLocalLpId(uint32_t nodeId)
         InitializeManualNodeLocalLpId(nodeId);
         localLpId = FindNodeLocalLpId(nodeId);
     }
-    NS_ABORT_MSG_IF(!localLpId, "MTP local LP mapping is missing for node " << nodeId);
+    NS_ABORT_MSG_IF(!localLpId, "MTP worker partition mapping is missing for node " << nodeId);
     NS_ABORT_MSG_IF(*localLpId == 0 || *localLpId > g_systemCount,
-                    "MTP local LP mapping for node " << nodeId << " is outside worker LP range [1, "
+                    "MTP worker partition for node " << nodeId << " is outside valid range [1, "
                                                      << g_systemCount << "]: " << *localLpId);
     return *localLpId;
 }
@@ -475,8 +476,8 @@ MtpInterface::InitializeManualNodeLocalLpId(uint32_t nodeId)
     NS_ABORT_MSG_IF(nodeId >= NodeList::GetNNodes(), "MTP node " << nodeId << " does not exist");
     const uint32_t localLpId = NodeList::GetNode(nodeId)->GetSystemId();
     NS_ABORT_MSG_IF(localLpId == 0 || localLpId > g_systemCount,
-                    "MTP local LP mapping is missing for node "
-                        << nodeId << ": manual partition requires Node::systemId in [1, "
+                    "MTP worker partition mapping is missing for node "
+                        << nodeId << ": manual partition requires node systemId in [1, "
                         << g_systemCount << "], got " << localLpId);
     SetNodeLocalLpId(nodeId, localLpId);
 }

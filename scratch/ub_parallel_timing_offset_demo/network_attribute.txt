@@ -1,4 +1,4 @@
-default ns3::TpConnectionManager::RemoveUselessTp "false"
+default ns3::TpConnectionManager::EnableIdleTransportChannelReclamation "false"
 default ns3::UbApp::CtpUseUnboundSourceJetty "false"
 default ns3::UbApp::EnableMultiPath "false"
 default ns3::UbApp::LocalEntityId "0"

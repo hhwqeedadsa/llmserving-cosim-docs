@@ -97,6 +97,22 @@ public:
     // 发送端TP在发送工作清空后进入空闲态
     virtual void OnSenderTransportIdle() {}
 
+    /**
+     * @brief Return whether congestion-control work still requires the attached TP endpoint.
+     * @return True while timers, deferred feedback, or other channel work remains.
+     */
+    virtual bool HasPendingTransportWork() const
+    {
+        return false;
+    }
+
+    /**
+     * @brief Cancel endpoint-specific work and release references before channel destruction.
+     */
+    virtual void OnTpDetached()
+    {
+    }
+
     // 绑定switch，初始化参数
     virtual void OnSwitchAttached(Ptr<UbSwitch> sw);
 

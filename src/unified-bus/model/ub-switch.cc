@@ -695,7 +695,8 @@ bool UbSwitch::SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const Pars
                      << static_cast<uint32_t>(headers.datalinkPacketHeader.GetPacketVL())
                      << " packetUid=" << packet->GetUid());
     }
-    if (UbTransportChannel::IsTransportResponseOpcode(headers.transportHeader.GetTPOpcode())) {
+    const uint8_t tpOpcode = headers.transportHeader.GetTPOpcode();
+    if (UbTransportChannel::IsTransportResponseOpcode(tpOpcode)) {
         NS_LOG_DEBUG("[UbPort recv] is ACK");
         UbDatalinkPacketHeader tempDlHeader;
         UbIpBasedNetworkHeader tempNetHeader;
@@ -706,8 +707,12 @@ bool UbSwitch::SinkTpDataPacket(Ptr<UbPort> port, Ptr<Packet> packet, const Pars
         packet->RemoveHeader(tempIpv4Header);
         packet->RemoveHeader(tempUdpHeader);
         targetTp->RecvTpAck(packet);
-    } else {
+    } else if (tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_UNRELIABLE_TA) ||
+               tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_RELIABLE_TA)) {
         targetTp->RecvDataPacket(packet);
+    } else {
+        NS_LOG_WARN("Dropping reserved transport opcode " << static_cast<uint32_t>(tpOpcode));
+        utils::UbUtils::RecordRuntimePacketDrop("reserved transport opcode");
     }
     return true;
 }

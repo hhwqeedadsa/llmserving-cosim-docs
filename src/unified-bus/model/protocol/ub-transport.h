@@ -331,6 +331,7 @@ public:
     uint64_t GetPsnSndNxt() const;
     void SetPsnSndNxt(uint64_t psn);
     uint64_t GetPsnRecvNxt() const;
+    uint32_t GetGbnRetransmissionProgressBytesFromPsn(uint64_t psn) const;
     void ResetSegmentSendProgressFromPsn(uint64_t psn);
     void TriggerTransportTransmit();
     bool IsCcLimitedForRetransmission(uint32_t payloadBytes) const;
@@ -380,6 +381,7 @@ private:
     struct AckResponseContext
     {
         TpOpcode opcode{TpOpcode::TP_OPCODE_ACK_WITHOUT_CETPH};
+        uint8_t rspSt{0};
         uint64_t psn{0};
         bool selectiveAck{false};
         std::optional<UbSelectiveAckExtTph> selectiveAckHeader;

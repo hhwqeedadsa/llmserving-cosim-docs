@@ -129,9 +129,7 @@ enum class TpOpcode : uint8_t {
     TP_OPCODE_RELIABLE_TA = 0x1,        // 可靠TA数据包（典型数据包）
     TP_OPCODE_ACK_WITHOUT_CETPH = 0x2,  // 不带CETPH的TP ACK（典型ACK）
     TP_OPCODE_ACK_WITH_CETPH = 0x3,     // 带CETPH的TP ACK
-    // TODO(retrans): 按 UB Base Spec 2.0 对齐 TPNAK 的报文字段编码。
-    // 规范中 0x4 为 Reserved，普通 TPNAK 应表示为 TPOpcode=0x2 且 RSPST=3'b011。
-    TP_OPCODE_NAK_WITHOUT_CETPH = 0x4,  // 不带CETPH的TP NAK
+    TP_OPCODE_RESERVED1 = 0x4,          // 保留
     TP_OPCODE_SACK_WITHOUT_CETPH = 0x5, // 不带CETPH的TP SACK
     TP_OPCODE_SACK_WITH_CETPH = 0x6,    // 带CETPH的TP SACK
     TP_OPCODE_RESERVED2 = 0x7,          // 保留

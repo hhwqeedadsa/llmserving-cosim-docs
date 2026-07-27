@@ -337,7 +337,6 @@ UbTransportChannel::IsTransportResponseOpcode(uint8_t opcode)
 {
     return opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_ACK_WITHOUT_CETPH) ||
            opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_ACK_WITH_CETPH) ||
-           opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_NAK_WITHOUT_CETPH) ||
            opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_SACK_WITHOUT_CETPH) ||
            opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_SACK_WITH_CETPH) ||
            opcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_CNP);
@@ -1187,7 +1186,9 @@ UbTransportChannel::ParseTransportResponsePacket(Ptr<Packet> packet,
                    ctx.opcode == TpOpcode::TP_OPCODE_SACK_WITH_CETPH;
     ctx.hasSaetph = ctx.opcode == TpOpcode::TP_OPCODE_SACK_WITHOUT_CETPH ||
                     ctx.opcode == TpOpcode::TP_OPCODE_SACK_WITH_CETPH;
-    ctx.isTpnak = ctx.opcode == TpOpcode::TP_OPCODE_NAK_WITHOUT_CETPH;
+    ctx.isTpnak = (ctx.opcode == TpOpcode::TP_OPCODE_ACK_WITHOUT_CETPH ||
+                   ctx.opcode == TpOpcode::TP_OPCODE_ACK_WITH_CETPH) &&
+                  ctx.transportHeader.GetRspSt() == 3;
 
     if (ctx.isCnp) {
         packet->RemoveHeader(ctx.cnpHeader);
@@ -1262,10 +1263,27 @@ UbTransportChannel::HandleReceivedTpNak(const TransportResponseContext& ctx)
     }
 
     if (!IsRetransEnabled()) {
+        if (ctx.hasCetph) {
+            m_congestionCtrl->OnSenderCongestionNotification(TpOpcode::TP_OPCODE_ACK_WITH_CETPH,
+                                                             UbTpPsnSequence::ToWire(nakPsn),
+                                                             ctx.congestionHeader);
+        }
         return true;
     }
 
     const UbRetransAckResult ackResult = m_retrans->OnTransportNak(ctx.transportHeader);
+    if (ctx.hasCetph) {
+        if (ackResult.triggerTransmit) {
+            m_congestionCtrl->OnSenderCongestionNotification(TpOpcode::TP_OPCODE_ACK_WITH_CETPH,
+                                                             UbTpPsnSequence::ToWire(nakPsn),
+                                                             ctx.congestionHeader,
+                                                             ackResult.retransmitBytes);
+        } else {
+            m_congestionCtrl->OnSenderCongestionNotification(TpOpcode::TP_OPCODE_ACK_WITH_CETPH,
+                                                             UbTpPsnSequence::ToWire(nakPsn),
+                                                             ctx.congestionHeader);
+        }
+    }
     if (ackResult.triggerTransmit) {
         TriggerTransportTransmit();
     }
@@ -1595,7 +1613,7 @@ UbTransportChannel::BuildTransportResponsePacket(const ReceivedDataPacketContext
 
     UbTransportHeader tpHeader = ctx.transportHeader;
     tpHeader.SetTPOpcode(response.opcode);
-    tpHeader.SetRspSt(0);
+    tpHeader.SetRspSt(response.rspSt);
     tpHeader.SetRspInfo(0);
     tpHeader.SetPsn(UbTpPsnSequence::ToWire(response.psn));
     tpHeader.SetSrcTpn(m_tpn);
@@ -1670,7 +1688,12 @@ UbTransportChannel::HandleImmediateRetransReceiveDecision(
 
     AckResponseContext response;
     response.opcode = decision.responseOpcode;
+    response.rspSt = 3;
     response.psn = decision.responsePsn;
+    if (response.opcode == TpOpcode::TP_OPCODE_ACK_WITH_CETPH) {
+        response.congestionHeader =
+            m_congestionCtrl->OnReceiverPrepareAckCongestionHeader(0, 0);
+    }
     Ptr<Packet> responsePacket = BuildTransportResponsePacket(ctx, response);
     EnqueueTransportResponse(responsePacket, "tpnak", response.psn);
     return true;
@@ -1896,6 +1919,31 @@ void UbTransportChannel::RecvDataPacket(Ptr<Packet> p)
     Ptr<Packet> responsePacket = BuildTransportResponsePacket(ctx, response);
     EnqueueTransportResponse(responsePacket, "ack", response.psn);
     CompleteInboundTaUnits(completedTaUnits);
+}
+
+uint32_t
+UbTransportChannel::GetGbnRetransmissionProgressBytesFromPsn(uint64_t psn) const
+{
+    uint64_t retransmitBytes = 0;
+    for (const Ptr<UbWqeSegment>& segment : m_wqeSegmentVector) {
+        if (segment == nullptr) {
+            continue;
+        }
+        const uint64_t segmentStart = segment->GetPsnStart();
+        const uint64_t segmentEnd = segmentStart + segment->GetPsnSize();
+        const uint64_t overlapStart = std::max(psn, segmentStart);
+        const uint64_t overlapEnd = std::min(m_psnSndNxt, segmentEnd);
+        if (overlapStart >= overlapEnd) {
+            continue;
+        }
+        const uint64_t segmentBytes = GetTotalProgressBytes(segment);
+        const uint64_t startOffset =
+            std::min(segmentBytes, (overlapStart - segmentStart) * UB_MTU_BYTE);
+        const uint64_t endOffset =
+            std::min(segmentBytes, (overlapEnd - segmentStart) * UB_MTU_BYTE);
+        retransmitBytes += endOffset - startOffset;
+    }
+    return static_cast<uint32_t>(std::min<uint64_t>(retransmitBytes, UINT32_MAX));
 }
 
 void

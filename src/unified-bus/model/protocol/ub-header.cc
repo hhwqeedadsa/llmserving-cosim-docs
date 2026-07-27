@@ -1269,7 +1269,13 @@ uint8_t UbTransportHeader::GetRspInfo() const
 // Check validity methods
 bool UbTransportHeader::IsValidOpcode() const
 {
-    return m_tpOpcode <= static_cast<uint8_t>(TpOpcode::TP_OPCODE_CNP);
+    return m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_UNRELIABLE_TA) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_RELIABLE_TA) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_ACK_WITHOUT_CETPH) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_ACK_WITH_CETPH) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_SACK_WITHOUT_CETPH) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_SACK_WITH_CETPH) ||
+           m_tpOpcode == static_cast<uint8_t>(TpOpcode::TP_OPCODE_CNP);
 }
 
 bool UbTransportHeader::IsValidNLP() const

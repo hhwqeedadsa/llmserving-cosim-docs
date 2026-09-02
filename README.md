@@ -289,4 +289,5 @@ UB 模块是基于灵衢基础规范实现的仿真组件：
 
 ## 答疑交流
 欢迎加入 OpenUSim 仿真答疑交流微信群
-<img src="https://raw.gitcode.com/user-images/assets/7654616/396d66ee-2ca6-45d4-a2e8-1b58278a3908/image.png" width="300" height="300" alt="Logo">
+
+<img src="https://raw.gitcode.com/user-images/assets/7654616/90d47292-616f-4d34-9cf0-6ba5cf6cf8ac/image.png" width="300" height="300" alt="Logo">

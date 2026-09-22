@@ -1,0 +1,257 @@
+:root {
+  --cosim-blue: #2563eb;
+  --cosim-green: #059669;
+  --cosim-orange: #d97706;
+  --cosim-purple: #7c3aed;
+}
+
+body[data-theme="dark"] {
+  --cosim-blue: #60a5fa;
+  --cosim-green: #34d399;
+  --cosim-orange: #fbbf24;
+  --cosim-purple: #a78bfa;
+}
+
+.comparison-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 1.5rem 0 2rem;
+}
+
+.comparison-strip > div,
+.pipeline-node,
+.explorer-summary > div {
+  border: 1px solid var(--color-foreground-border);
+  border-radius: 0.45rem;
+  background: var(--color-background-secondary);
+}
+
+.comparison-strip > div {
+  padding: 1rem;
+}
+
+.comparison-strip strong,
+.comparison-strip span,
+.pipeline-node b,
+.pipeline-node span {
+  display: block;
+}
+
+.comparison-strip span,
+.pipeline-node span {
+  color: var(--color-foreground-secondary);
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0.45rem;
+  margin: 1.4rem 0 2rem;
+}
+
+.pipeline-node {
+  flex: 1 1 0;
+  padding: 0.7rem;
+  min-width: 7rem;
+}
+
+.pipeline-arrow {
+  align-self: center;
+  color: var(--color-foreground-secondary);
+  font-weight: 700;
+}
+
+.lifecycle {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  counter-reset: life;
+}
+
+.lifecycle li {
+  counter-increment: life;
+  padding: 0.85rem;
+  border-left: 0.25rem solid var(--cosim-blue);
+  background: var(--color-background-secondary);
+}
+
+.lifecycle li::before {
+  content: counter(life) ".";
+  color: var(--cosim-blue);
+  font-weight: 700;
+  margin-right: 0.4rem;
+}
+
+.lifecycle span {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--color-foreground-secondary);
+  font-size: 0.9rem;
+}
+
+.lineage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 1.2rem 0 1.8rem;
+}
+
+.lineage span {
+  padding: 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-foreground-border);
+  font-family: var(--font-stack--monospace);
+  font-size: 0.82rem;
+}
+
+.lineage i {
+  color: var(--color-foreground-secondary);
+  font-style: normal;
+}
+
+.run-explorer {
+  margin: 1rem 0 2rem;
+}
+
+.explorer-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.explorer-summary > div {
+  padding: 0.75rem;
+}
+
+.explorer-summary b,
+.explorer-summary span {
+  display: block;
+}
+
+.explorer-summary b {
+  font-size: 1.18rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.explorer-summary span {
+  color: var(--color-foreground-secondary);
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.explorer-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.explorer-controls label {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.explorer-controls select {
+  color: var(--color-foreground-primary);
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-foreground-border);
+  border-radius: 0.3rem;
+  padding: 0.35rem;
+}
+
+.chart-host {
+  width: 100%;
+  min-height: 260px;
+  border: 1px solid var(--color-foreground-border);
+  border-radius: 0.35rem;
+  background: var(--color-background-primary);
+}
+
+.chart-host svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.chart-axis,
+.chart-grid {
+  stroke: var(--color-foreground-border);
+  stroke-width: 1;
+}
+
+.chart-grid {
+  opacity: 0.45;
+}
+
+.chart-label {
+  fill: var(--color-foreground-secondary);
+  font-size: 11px;
+}
+
+.port-line {
+  fill: none;
+  stroke: var(--cosim-blue);
+  stroke-width: 2;
+}
+
+.hist-bar {
+  fill: var(--cosim-purple);
+  opacity: 0.78;
+}
+
+.p95-line {
+  stroke: var(--cosim-orange);
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.table-scroll th,
+.table-scroll td {
+  padding: 0.45rem;
+  border-bottom: 1px solid var(--color-foreground-border);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-scroll th:first-child,
+.table-scroll td:first-child {
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .comparison-strip,
+  .lifecycle {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline {
+    flex-direction: column;
+  }
+
+  .pipeline-arrow {
+    transform: rotate(90deg);
+  }
+
+  .explorer-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+

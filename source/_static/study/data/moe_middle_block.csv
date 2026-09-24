@@ -1,0 +1,23 @@
+event_id,resource,resource_id,start_us,end_us,duration_us,event_type,op,src,dst,bytes,evidence,notes
+llm-0530,GPU,GPU0,15330.8085,15333.3575,2.549,compute,layernorm_289,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0531,GPU,GPU1,15330.8085,15333.3575,2.549,compute,layernorm_289,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0532,GPU,GPU0,15333.3575,15344.1305,10.773,compute,qkv_proj_290,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0533,GPU,GPU1,15333.3575,15344.1305,10.773,compute,qkv_proj_290,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0534,GPU,GPU0,15344.1305,15347.3625,3.232,compute,qk_norm_291,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0535,GPU,GPU1,15344.1305,15347.3625,3.232,compute,qk_norm_291,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0536,GPU,GPU0,15347.3625,15349.3355,1.973,compute,rotary_emb_292,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0537,GPU,GPU1,15347.3625,15349.3355,1.973,compute,rotary_emb_292,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0538,GPU,GPU0,15349.3355,15357.3675,8.032,compute,attention_293,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0539,GPU,GPU1,15349.3355,15357.3675,8.032,compute,attention_293,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0540,GPU,GPU0,15357.3675,15367.1385,9.771,compute,o_proj_294,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0541,GPU,GPU1,15357.3675,15367.1385,9.771,compute,o_proj_294,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0542,NIC,NIC0,15367.1385,15438.158869,71.020369,communication,ALLREDUCE,"0,1","0,1",524288,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.
+llm-0543,NIC,NIC1,15367.1385,15438.158869,71.020369,communication,ALLREDUCE,"0,1","0,1",524288,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.
+llm-0544,GPU,GPU0,15438.158869,15440.707869,2.549,compute,layernorm_295,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0545,GPU,GPU1,15438.158869,15440.707869,2.549,compute,layernorm_295,,,,profiled_gpu_latency,Duration is the per-layer value emitted by LLMServingSim's profile lookup.
+llm-0546,NIC,NIC0,15440.707869,15477.217461,36.509592,communication,ALLGATHER,"0,1","0,1",278528,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.
+llm-0547,NIC,NIC1,15440.707869,15477.217461,36.509592,communication,ALLGATHER,"0,1","0,1",278528,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.
+llm-0548,GPU,GPU0,15477.217461,15933.954461,456.737,compute,expert_297,,,,profiled_gpu_latency,Expert branch is rank-local and runs in parallel with the other EP rank.
+llm-0549,GPU,GPU1,15477.217461,15933.954461,456.737,compute,expert_299,,,,profiled_gpu_latency,Expert branch is rank-local and runs in parallel with the other EP rank.
+llm-0550,NIC,NIC0,15933.954461,15969.464646,35.510185,communication,REDUCESCATTER,"0,1","0,1",524288,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.
+llm-0551,NIC,NIC1,15933.954461,15969.464646,35.510185,communication,REDUCESCATTER,"0,1","0,1",524288,astra_batch_residual_weighted_by_ring_model,Per-op time is reconstructed; the raw text trace contains bytes/type but no timestamps.

@@ -1,0 +1,8 @@
+order,phase,compute_us,comm_op,bytes,analytical_comm_us,group,group_size,evidence
+0,expert_compute,7956,ALLGATHER,1572864,4,TP,2,SimAI analytical
+1,tp_dispatch,0,ALLTOALL,25165824,53,TP,2,SimAI analytical
+2,ep_dispatch,0,ALLTOALL_EP,100663296,1592,EP,16,SimAI analytical
+3,expert_input_gather,0,ALLGATHER,201326592,297,TP,2,SimAI analytical
+4,expert_output_scatter,0,REDUCESCATTER,201326592,297,TP,2,SimAI analytical
+5,ep_combine,0,ALLTOALL_EP,100663296,1592,EP,16,SimAI analytical
+6,tp_combine,0,ALLTOALL,25165824,53,TP,2,SimAI analytical

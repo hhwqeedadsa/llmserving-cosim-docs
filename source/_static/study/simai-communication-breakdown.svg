@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 470" role="img" aria-labelledby="title desc">
+  <title id="title">SimAI 通信域分解</title>
+  <desc id="desc">DP、DP_EP、TP 和 EP 的暴露通信时间。</desc>
+  <rect width="1180" height="470" fill="#ffffff"/>
+  <style>
+    text { font-family: Inter, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; fill: #18212f; }
+    .title { font-size: 24px; font-weight: 700; }
+    .subtitle { font-size: 14px; fill: #5f6b7a; }
+    .axis { font-size: 12px; fill: #5f6b7a; }
+    .label { font-size: 13px; }
+    .value { font-size: 13px; font-weight: 700; }
+    .small { font-size: 11px; fill: #5f6b7a; }
+    .grid { stroke: #d9e0e8; stroke-width: 1; }
+  </style>
+  <text x="60" y="42" class="title">SimAI 暴露通信时间按并行域分类</text><text x="60" y="67" class="subtitle">条长为 exposed communication time（μs）；右侧百分比以全部暴露通信 2,656,839 μs 为分母。</text><text x="220" y="147" text-anchor="end" class="label">DP</text><rect x="245" y="120" width="26.06" height="38" rx="3" fill="#2563eb"/><text x="283.06" y="145" class="value">40,332 μs  ·  1.5%</text><text x="220" y="219" text-anchor="end" class="label">DP_EP</text><rect x="245" y="192" width="689.34" height="38" rx="3" fill="#d97706"/><text x="946.34" y="217" class="value">1,067,010 μs  ·  40.2%</text><text x="220" y="291" text-anchor="end" class="label">TP</text><rect x="245" y="264" width="211.06" height="38" rx="3" fill="#7c3aed"/><text x="468.06" y="289" class="value">326,686 μs  ·  12.3%</text><text x="220" y="363" text-anchor="end" class="label">EP</text><rect x="245" y="336" width="790.00" height="38" rx="3" fill="#059669"/><text x="1047.00" y="361" class="value">1,222,811 μs  ·  46.0%</text><line x1="245" y1="98" x2="245" y2="406" class="grid"/><text x="60" y="445" class="small">EP + DP_EP = 2,289,821 μs，占暴露通信 86.2%。</text>
+</svg>

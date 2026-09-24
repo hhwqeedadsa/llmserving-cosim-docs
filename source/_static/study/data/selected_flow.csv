@@ -1,0 +1,11 @@
+task_id,packet,psn,stage,timestamp_us,src,dst,payload_bytes,evidence
+0,first_data_packet,0,source_nic_tx,0.001,0,1,4096,ns3_per_hop_packet_trace
+0,first_data_packet,0,switch_ingress_arrival,0.104,0,1,4096,ns3_per_hop_packet_trace
+0,first_data_packet,0,switch_egress_tx,0.198,0,1,4096,ns3_per_hop_packet_trace
+0,first_data_packet,0,destination_nic_rx,0.302,0,1,4096,ns3_per_hop_packet_trace
+0,last_data_packet,131,source_nic_tx,74.907,0,1,4096,ns3_per_hop_packet_trace
+0,last_data_packet,131,switch_ingress_arrival,75.01,0,1,4096,ns3_per_hop_packet_trace
+0,last_data_packet,131,switch_egress_tx,75.277,0,1,4096,ns3_per_hop_packet_trace
+0,last_data_packet,131,destination_nic_rx,75.381,0,1,4096,ns3_per_hop_packet_trace
+0,flow,,wqe_complete,76.5138,0,1,524288,ns3_task_trace
+0,flow,,last_packet_ack_envelope,76.56952,0,1,524288,ns3_packet_trace_summary

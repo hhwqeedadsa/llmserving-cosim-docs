@@ -4,6 +4,10 @@
 可视化应服务于一个明确问题。不要把所有字段堆进同一张 dashboard；先从“服务是否异常”、
 “哪条传输形成尾部”、“在哪个端口竞争”、“属于哪个操作”逐层下钻。
 
+完整的 SimAI / LLMServingSim / SimCCL / ns-3 静态实验图、逐图数据来源、物理量、单位和
+证据边界见 :doc:`simai-llmservingsim-study`。本页保留运行目录的交互下钻方法，两者用途不同：
+静态实验图用于报告和复核，交互浏览器用于探索单次联合框架运行。
+
 实际运行数据浏览器
 ------------------
 
@@ -126,4 +130,3 @@ Observed-only 与 truth-assisted 两种界面
 * ``clock_alignment_error``：算法推定对齐与 truth clock model 的残差。
 
 其中利用率必须使用对应方向链路速率，不能把 payload bytes 与 wire bandwidth 混算。
-

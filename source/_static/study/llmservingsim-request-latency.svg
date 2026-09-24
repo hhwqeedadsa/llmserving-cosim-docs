@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 540" role="img" aria-labelledby="title desc">
+  <title id="title">LLMServingSim 请求级延迟</title>
+  <desc id="desc">Dense 与 MoE 场景的 TTFT 和 TPOT。</desc>
+  <rect width="1080" height="540" fill="#ffffff"/>
+  <style>
+    text { font-family: Inter, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; fill: #18212f; }
+    .title { font-size: 24px; font-weight: 700; }
+    .subtitle { font-size: 14px; fill: #5f6b7a; }
+    .axis { font-size: 12px; fill: #5f6b7a; }
+    .label { font-size: 13px; }
+    .value { font-size: 13px; font-weight: 700; }
+    .small { font-size: 11px; fill: #5f6b7a; }
+    .grid { stroke: #d9e0e8; stroke-width: 1; }
+  </style>
+  <text x="60" y="42" class="title">LLMServingSim 请求级延迟</text><text x="60" y="67" class="subtitle">同一请求规模：input 128 tokens、output 4 tokens；柱高为 simulator 输出的 TTFT / TPOT（ms）。</text><line x1="105" y1="425.00" x2="975" y2="425.00" class="grid"/><text x="93" y="429.00" text-anchor="end" class="axis">0</text><line x1="105" y1="379.29" x2="975" y2="379.29" class="grid"/><text x="93" y="383.29" text-anchor="end" class="axis">5</text><line x1="105" y1="333.57" x2="975" y2="333.57" class="grid"/><text x="93" y="337.57" text-anchor="end" class="axis">10</text><line x1="105" y1="287.86" x2="975" y2="287.86" class="grid"/><text x="93" y="291.86" text-anchor="end" class="axis">15</text><line x1="105" y1="242.14" x2="975" y2="242.14" class="grid"/><text x="93" y="246.14" text-anchor="end" class="axis">20</text><line x1="105" y1="196.43" x2="975" y2="196.43" class="grid"/><text x="93" y="200.43" text-anchor="end" class="axis">25</text><line x1="105" y1="150.71" x2="975" y2="150.71" class="grid"/><text x="93" y="154.71" text-anchor="end" class="axis">30</text><line x1="105" y1="105.00" x2="975" y2="105.00" class="grid"/><text x="93" y="109.00" text-anchor="end" class="axis">35</text><rect x="245" y="309.81" width="58" height="115.19" fill="#2563eb"/><text x="274" y="300.81" text-anchor="middle" class="value">12.598</text><text x="274" y="448" text-anchor="middle" class="axis">TTFT</text><rect x="325" y="322.04" width="58" height="102.96" fill="#d97706"/><text x="354" y="313.04" text-anchor="middle" class="value">11.262</text><text x="354" y="448" text-anchor="middle" class="axis">TPOT</text><text x="299" y="479" text-anchor="middle" class="label">Dense · 1 GPU</text><rect x="680" y="142.60" width="58" height="282.40" fill="#2563eb"/><text x="709" y="133.60" text-anchor="middle" class="value">30.887</text><text x="709" y="448" text-anchor="middle" class="axis">TTFT</text><rect x="760" y="351.13" width="58" height="73.87" fill="#d97706"/><text x="789" y="342.13" text-anchor="middle" class="value">8.080</text><text x="789" y="448" text-anchor="middle" class="axis">TPOT</text><text x="734" y="479" text-anchor="middle" class="label">MoE · TP2/EP2</text><text x="28" y="285" transform="rotate(-90 28 285)" class="axis">request latency (ms)</text><circle cx="105" cy="500" r="6" fill="#2563eb"/><text x="120" y="505" class="small">TTFT：到首 token</text><circle cx="285" cy="500" r="6" fill="#d97706"/><text x="300" y="505" class="small">TPOT：后续 token 平均间隔</text><text x="615" y="505" class="small">两者语义不同，不相加。</text>
+</svg>

@@ -1,0 +1,10 @@
+artifact,source,evidence_class,can_conclude,cannot_conclude
+SimAI/example/workload_analytical.txt,SimAI workload,scenario input,parallel groups; ordered compute/collective declarations; requested bytes,actual GPU kernel timing; actual network latency
+round06-fullEndToEnd.csv,SimAI analytical,analytical model,modeled per-layer compute/collective time; exposed communication totals,packet queuing; congestion; real hardware timing
+ncclFlowModel_detailed_flows.csv,SimCCL v2.30,structural flow,P2P endpoints and payload sizes for the selected collective,flow completion time; congestion; trustworthy prev_flow_ids dependency semantics
+llmservingsim_moe_a2a/requests.csv,LLMServingSim,simulator output,request TTFT/TPOT/end time for this run,hardware measurement; per-collective timestamps
+instance0_batch0.txt,LLMServingSim,profile-derived trace,layer compute lookup values; emitted collective type and bytes,network route; exact per-collective start/end
+llmservingsim_events.csv,local analysis,reconstructed timeline,one coherent GPU/NIC phase alignment that matches TTFT,measured or directly emitted per-collective timing
+task_statistics.csv,ns-3-ub,simulated flow timing,task start/completion; packet envelope; simulated task throughput,real fabric FCT or calibrated A100 timing
+throughput.csv,ns-3-ub,simulated NIC timing,per-port Rx/Tx active interval; bytes; throughput,GPU compute utilization; real NIC counters
+AllPacketTrace_PKT_node_0.tr,ns-3-ub,simulated per-hop trace,selected packet path and hop timestamps,real packet capture

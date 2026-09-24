@@ -1,0 +1,87 @@
+{
+  "study": "round06-simai-llmservingsim-ns3",
+  "simai": {
+    "gpus": 9216,
+    "layers": 1789,
+    "compute_us": 4542795,
+    "exposed_comm_us": 2656839,
+    "bubble_us": 345984,
+    "total_us": 7545619,
+    "comm_domains_us": {
+      "DP": 40332,
+      "DP_EP": 1067010,
+      "TP": 326686,
+      "EP": 1222811
+    }
+  },
+  "llmservingsim": {
+    "dense": {
+      "model": "meta-llama/Llama-3.1-8B",
+      "ttft_ms": 12.59848,
+      "tpot_ms": 11.261569,
+      "end_ms": 46.383187
+    },
+    "moe": {
+      "model": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+      "ttft_ms": 30.887345,
+      "tpot_ms": 8.080022,
+      "end_ms": 55.127411,
+      "compute_per_rank_ms": 24.021418,
+      "communication_residual_ms": 6.865927
+    }
+  },
+  "ns3": {
+    "tasks": 56,
+    "total_payload_bytes": 29360128,
+    "flow_duration_us": {
+      "min": 75.74122,
+      "median": 76.56802,
+      "mean": 76.56095035714286,
+      "max": 77.16234
+    },
+    "task_completion_us": {
+      "min": 76.42172,
+      "max": 77.12982
+    },
+    "nic_port_throughput_gbps": {
+      "min": 394.55,
+      "mean": 395.55625,
+      "max": 397.6
+    },
+    "selected_task": 0,
+    "selected_src": 0,
+    "selected_dst": 1,
+    "selected_bytes": 524288,
+    "selected_task_complete_us": 76.5138,
+    "selected_last_packet_ack_us": 76.56952,
+    "event_count": 1120
+  },
+  "input_hashes": {
+    "simai_summary": "b64f3ddddd00666f58a10b18268d4b322d8fe823522c6ff941d087cbf334f874",
+    "simai_slice": "e15959c6da5880d120027838aceb1a97b51a6c878d2e74e491dd330dd335d64a",
+    "simccl_flows": "b80a7de68b54011fa9d2579e2e6ca470698aeaa5ed0a3d0f248c413e2a78339f",
+    "dense_requests": "518c59ff7bcfcc7c5a5e2cf4017ae766d7c478e7816e337ea6d16ebe3e4676e3",
+    "moe_requests": "9ca4d341cd28c2241552d9bfa360e73c8b2f1f7b47aee3f72121e02e03676c4d",
+    "middle_block": "9ee04ead540c194231e3b05b63b2b21f39064eaa66a540f933c2bf30b778f4ae",
+    "ns3_flows": "2001ae9c6d2605d0ab791ff1cd4fede81a3515fcda4eab5be36d801e893f2f26",
+    "ns3_nics": "138d5b23826b4b74872c992f938ef8b0ea7ac03498c717f03ca7ccd7e1e6c4ab",
+    "selected_flow": "7bccf5a365587f2458a727ea6b542c797ba301055110f5ff76ea9460c19035b0",
+    "evidence": "2666424cc4e905e2cbe8486cd88ac5f97ce4845a0855403902da6f6c05072ada",
+    "ns3_summary": "46533c18d4fe32dcbef06443d96ebca13db161a39dcf915db040381c1f287e60",
+    "llm_summary": "899e2472fd32ad98fd606f039108390bc2616231e81cc031f2c5fb6cdd40ebac"
+  },
+  "source_files": {
+    "simai_summary": "experiments/simai_analytical/results/round06-fullEndToEnd.csv",
+    "simai_slice": "analysis/simai_representative_slice.csv",
+    "simccl_flows": "experiments/simccl_alltoall_8rank/ncclFlowModel_detailed_flows.csv",
+    "dense_requests": "experiments/llmservingsim_dense/requests.csv",
+    "moe_requests": "experiments/llmservingsim_moe_a2a/requests.csv",
+    "middle_block": "analysis/llmservingsim_middle_block_events.csv",
+    "ns3_flows": "analysis/ns3_flow_events.csv",
+    "ns3_nics": "analysis/ns3_nic_summary.csv",
+    "selected_flow": "analysis/selected_flow_profile.csv",
+    "evidence": "analysis/evidence_ledger.csv",
+    "ns3_summary": "analysis/ns3_summary.json",
+    "llm_summary": "analysis/llmservingsim_summary.json"
+  }
+}

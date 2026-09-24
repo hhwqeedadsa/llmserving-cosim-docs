@@ -43,6 +43,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
    communication
    observability
+   simai-llmservingsim-study
    visualization
 
 .. toctree::
@@ -69,4 +70,3 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 示例运行 ``m5_t12`` 完成 7 个请求，包含 392 个 rank 侧操作记录、368 条传输，
 仿真结束于 629,673 ns。该运行使用合成路由、参考计算 Profile 和
 ``direct_rank_dedup_v1`` 参考通信模板，因此适合说明数据链路与竞争，不适合声明真实硬件绝对性能。
-

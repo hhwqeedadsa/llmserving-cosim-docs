@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 390" role="img" aria-labelledby="title desc">
+  <title id="title">SimAI 全局时间构成</title>
+  <desc id="desc">计算、暴露通信和流水线气泡在总模拟时间中的占比。</desc>
+  <rect width="1280" height="390" fill="#ffffff"/>
+  <style>
+    text { font-family: Inter, "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; fill: #18212f; }
+    .title { font-size: 24px; font-weight: 700; }
+    .subtitle { font-size: 14px; fill: #5f6b7a; }
+    .axis { font-size: 12px; fill: #5f6b7a; }
+    .label { font-size: 13px; }
+    .value { font-size: 13px; font-weight: 700; }
+    .small { font-size: 11px; fill: #5f6b7a; }
+    .grid { stroke: #d9e0e8; stroke-width: 1; }
+  </style>
+  <text x="60" y="42" class="title">SimAI 9,216-GPU 全局时间构成</text><text x="60" y="67" class="subtitle">总模拟时间 7,545,619 μs；堆叠段长度按占比编码。</text><rect x="70.00" y="125" width="686.33" height="72" fill="#2563eb"/><text x="413.17" y="156" text-anchor="middle" fill="#ffffff" style="font-size:14px;font-weight:700">Compute</text><text x="413.17" y="179" text-anchor="middle" fill="#ffffff" style="font-size:13px">60.20%</text><rect x="756.33" y="125" width="401.40" height="72" fill="#d97706"/><text x="957.03" y="156" text-anchor="middle" fill="#ffffff" style="font-size:14px;font-weight:700">Exposed communication</text><text x="957.03" y="179" text-anchor="middle" fill="#ffffff" style="font-size:13px">35.21%</text><rect x="1157.73" y="125" width="52.27" height="72" fill="#7c3aed"/><line x1="1183.86" y1="125" x2="1183.86" y2="94" stroke="#7c3aed" stroke-width="2"/><text x="1179.86" y="88" text-anchor="end" class="value">Pipeline bubble · 4.59%</text><circle cx="80" cy="250" r="7" fill="#2563eb"/><text x="96" y="255" class="label">Compute</text><text x="96" y="281" class="value">4,542,795 μs</text><circle cx="475" cy="250" r="7" fill="#d97706"/><text x="491" y="255" class="label">Exposed communication</text><text x="491" y="281" class="value">2,656,839 μs</text><circle cx="870" cy="250" r="7" fill="#7c3aed"/><text x="886" y="255" class="label">Pipeline bubble</text><text x="886" y="281" class="value">345,984 μs</text><text x="70" y="345" class="small">分析模型输出；物理量为模拟关键路径时间，不是 9,216 台 GPU 的时间求和，也不是墙钟运行时间。</text>
+</svg>

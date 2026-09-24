@@ -25,6 +25,160 @@ LLMServingSim 回答请求级指标和 layer trace，再用 SimCCL 将 collectiv
   collective 类型和字节来自 trace，但 collective 单操作时长是 TTFT residual 按 ring
   权重重建的，只适合 phase 对齐。
 
+研究要求对照与完成情况
+----------------------
+
+本轮不是把 SimAI、LLMServingSim 和 ns-3 的结果放在一起展示就结束，而是按研究问题把
+它们连接成五层证据链：
+
+.. code-block:: text
+
+   SimAI workload 与 analytical result
+       → LLMServingSim request / layer trace
+       → SimCCL collective-to-P2P 展开
+       → ns-3 task / packet / port trace
+       → GPU、NIC、flow、packet 统一事件流
+
+.. list-table:: 原始研究要求与交付物
+   :header-rows: 1
+   :widths: 26 45 29
+
+   * - 研究要求
+     - 本轮完成内容
+     - 报告证据
+   * - SimAI 及 workload 的 pros / cons
+     - 梳理 workload 可表达的层、并行组、依赖、compute 和 collective，并运行 9,216-GPU workload
+     - 图 1--4、第二节
+   * - LLMServingSim 必要实验
+     - 运行 dense 单 GPU 与 TP2/EP2 MoE 请求，提取 TTFT、TPOT、layer compute 和 collective 结构
+     - 图 6、第四节
+   * - 中间时间切片和 collective profile
+     - 选择 transformer block 24，按 GPU0/NIC0/GPU1/NIC1 四个观测点展开
+     - 图 7、``moe_middle_block.csv``
+   * - 给 ns-3 的真实场景流怎样获得
+     - 定义 canonical flow schema，跑通 SimCCL→traffic→ns-3，并提出 framework/NCCL/NIC 三层采集方案
+     - 图 1、5、8--10、第六节
+   * - 网络图、计算图和统一事件流
+     - 分别提供计算、collective、rank-pair、逐流、逐 NIC、逐包视图，并统一事件字段
+     - 图 2--11
+
+SimAI 与 workload：回答大规模构成，而非包级拥塞
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SimAI workload 可以表达层间依赖、TP/EP/DP/PP 并行组、forward/weight-gradient/
+input-gradient compute time，以及 collective 类型和字节数。它的优势是能用紧凑输入快速研究
+数千 GPU 的并行策略，把总时间拆成 compute、exposed communication 和 pipeline bubble；
+SimCCL 又能补出 ``src_rank、dst_rank、bytes``，便于挑选关键通信阶段进入 ns-3。
+
+它的限制同样明确：workload 是模型输入，不是 runtime trace；analytical backend 看不到
+queue、buffer、PFC/CC、路由冲突或 head-of-line blocking；SimCCL 只给流结构，不给拥塞后的
+flow completion time。因此 analytical collective duration 不能直接写成 ns-3 的测量时延。
+
+9,216-GPU、1,789 层 workload 的总模拟时间为 7,545,619 μs，其中 compute 为
+4,542,795 μs、exposed communication 为 2,656,839 μs、bubble 为 345,984 μs。
+通信域中 DP/DP_EP/TP/EP 分别为 40,332/1,067,010/326,686/1,222,811 μs；
+EP 与 DP_EP 合计占暴露通信的 86.2%，因此 MoE/EP 是优先进入 packet-level slice 的对象。
+
+代表性 SimAI MoE layer slice 进一步保留两个不同物理量：expert compute 为 7,956 μs；
+TP AllToAll 为 25,165,824 B、analytical 53 μs；EP AllToAll 为 100,663,296 B、
+analytical 1,592 μs；201,326,592 B 的 AllGather/ReduceScatter 各为 analytical 297 μs。
+图 4 将 time 与 bytes 分成两个坐标系，避免把通信量误当作通信时间。
+
+LLMServingSim：先确认请求级结果，再下钻 layer trace
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+必要实验包含两个互补场景：
+
+* Dense 单 GPU：``Llama-3.1-8B``、输入 128 tokens、输出 4 tokens；TTFT 为
+  12.598480 ms、TPOT 为 11.261569 ms、request end 为 46.383187 ms。
+* 2-GPU MoE：``Qwen3-30B-A3B-Instruct-2507``、TP=2、EP=2、同样为 128+4 tokens；
+  TTFT 为 30.887345 ms、TPOT 为 8.080022 ms、request end 为 55.127411 ms。
+
+MoE prefill 中，每个 GPU 的 profile-derived compute 为 24.021418 ms；
+``TTFT - compute`` 得到 6.865927 ms communication residual。实际 trace 统计到 48 次
+AllReduce（总参数 bytes 25,165,824）、48 次 AllGather（总 13,369,344 B）和 48 次
+ReduceScatter（总 25,165,824 B）。源码 docstring 虽描述 AllToAll，本次实际
+``_emit_moe_block()`` 使用默认 ``allgather_reducescatter`` backend，因此报告始终以实际
+trace 中的 AR/AG/RS 为准。
+
+中间 block：观察一个 GPU/NIC 通信—计算切片的真实粒度
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+选择 transformer block 24，是为了观察 prefill 中部的稳定 layer pattern，而不是初始化或
+收尾边界。四条共轴 lane 分别是 GPU0、NIC0、GPU1、NIC1。该 block 的顺序为：
+
+.. code-block:: text
+
+   GPU0/GPU1: LayerNorm → QKV → QK norm → Rotary → Attention → O projection
+   NIC0/NIC1: AllReduce 524,288 B
+   GPU0/GPU1: LayerNorm
+   NIC0/NIC1: AllGather 278,528 B
+   GPU0/GPU1: expert_297 / expert_299 并行计算
+   NIC0/NIC1: ReduceScatter 524,288 B
+
+其中 attention 前六段依次为 2.549、10.773、3.232、1.973、8.032、9.771 μs；
+GPU0 的 ``expert_297`` 和 GPU1 的 ``expert_299`` 各运行 456.737 μs。GPU 时间是
+profile-derived；collective 类型和 bytes 来自 trace。由于文本 trace 没有逐 collective
+start/end，图 7 中 AR≈71.020 μs、AG≈36.510 μs、RS≈35.510 μs 是将 TTFT residual
+按 ring 权重分配得到的 reconstructed time，只用于 phase 对齐，不能称为测量值。
+
+从 collective 到 ns-3：先生成结构流，再得到网络时间
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ns-3 不能只接收“这一层是 AllToAll”，也不应接收 SimAI 已经算好的 collective duration。
+网络输入至少需要 ``collective_id、phase_id、op、group_id、src_rank、dst_rank、bytes、
+launch_offset_ns、dependency_ids、request/batch/layer id、rank_to_host_mapping`` 和
+``evidence_source``。再将 rank 映射到 ns-3 node、bytes 映射到 task payload、launch offset
+映射到 delay、dependency 映射到 phase/DAG。
+
+本轮用 SimCCL 将一个 8-rank、4 MiB AllToAll 展开为 ``8×7=56`` 条非自身流：每条
+524,288 B，总 payload 29,360,128 B，每 rank 收发各 3,670,016 B。随后跑通
+``SimCCL CSV → ns-3 traffic → URMA_WRITE task → packet/switch/ACK trace``。56/56 task
+完成，first-packet-send 到 last-packet-ACK 的 envelope 最小/中位/平均/最大分别为
+75.741/76.568/76.561/77.162 μs。
+
+“真实场景流”应逐步替换模型证据：framework/NVTX 提供 request、layer、collective 和 tensor
+语义；NCCL runtime/net-plugin instrumentation 提供真实 ``channel、peer、bytes、timestamp``；
+NIC telemetry 或 packet capture 提供 port bytes/rate、packet/FCT 和协议校准。三层通过稳定
+correlation id、rank→host→NIC→port 映射和跨 rank 时钟同步闭合。
+
+从多打多到单条 flow：不同观测点回答不同问题
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SimCCL rank-pair 矩阵回答 AllToAll 中“谁发给谁、发多少”，但没有时间。ns-3 flow timeline
+进一步回答每条 ``src→dst`` 流的仿真 envelope；NIC 图回答每个设备收发方向的
+active-window throughput；packet profile 则回答一条流在 NIC 和交换机各 hook 的事件时间。
+
+以 task 0 ``NIC0→NIC1``、512 KiB 为例：首个 4 KiB 包在 0.001 μs 从 NIC0 发出，
+0.104 μs 到 switch ingress，0.198 μs 从 switch egress 发出，0.302 μs 到 NIC1；
+最后一个数据包在 74.907 μs 发出、75.381 μs 到达。WQE complete 为 76.51380 μs，
+last-packet-ACK envelope 为 76.56952 μs。图 10 使用 0–0.35 μs 和 74.5–77.0 μs
+两个放大窗口，既显示首包逐跳差异，也保留末包和两种完成语义。
+
+统一事件流：把通信阶段、资源和证据放在同一 schema 中
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+统一事件字段为：
+
+.. code-block:: text
+
+   event_id, scenario, source, phase,
+   resource, resource_id,
+   start_us, end_us, duration_us,
+   event_type, op, src, dst, bytes,
+   evidence, notes
+
+它可以同时容纳 GPU compute、collective、P2P flow、packet milestone、WQE completion 和
+ACK completion。因此一次下钻可以从 request latency 到 block phase，再到 rank-pair、NIC、
+flow 和 packet，同时回答“哪个 GPU 在跑什么、哪个 NIC 在通信、通信原语是什么、谁发给谁、
+payload 多大、仿真耗时多少”。每个事件仍保留 evidence 字段，避免把 profile、重建和仿真时间
+混写成实机测量。
+
+当前完成的是分析链、数据粒度和事件模型的闭环；尚缺 A100 实机网络 trace、真实 NCCL
+channel/peer schedule 和目标 fabric 校准。本次 LLMServingSim GPU profile 来自 RTXPRO6000，
+ns-3 case 也是代表性单交换机 400 Gbps 拓扑。下一步应先做固定 8-GPU calibration case，
+同时采集 framework、NCCL 和 NIC 三层证据，再扩展仿真规模。
+
 一、方法与证据分类
 ------------------
 

@@ -5,8 +5,9 @@ SimAI、LLMServingSim 与 ns-3 实验报告
    :description: SimAI 和 LLMServingSim 的优缺点、必要实验、代表性 GPU/NIC 时间切片，以及从 collective 到 ns-3 逐流 trace 的证据分级报告。
 
 本章给出一条可复核的分析链：先用 SimAI 回答大规模并行策略的时间构成，用
-LLMServingSim 回答请求级指标和 layer trace，再用 SimCCL 将 collective 展开为
-``src → dst`` 流，最后交给 ns-3-UB 得到逐流、逐 NIC 和逐包事件。所有结果按
+LLMServingSim 回答请求级指标和 layer trace，再用 SimCCL 或显式 collective algorithm
+projection 将 collective 展开为 ``src → dst`` 流，最后交给 ns-3-UB 得到逐流、逐 NIC
+和逐包事件。所有结果按
 **输入、Profile、分析模型、结构展开、服务仿真、时间重建、网络仿真** 分类；
 本轮没有把任何仿真值写成 A100/NVLink 实机测量值。
 
@@ -21,9 +22,9 @@ LLMServingSim 回答请求级指标和 layer trace，再用 SimCCL 将 collectiv
   ``AllReduce + AllGather + ReduceScatter``。本章以实际 trace 为准。
 * 8-rank、4 MiB AllToAll 被 SimCCL 展开为 56 条 512 KiB 流。ns-3-UB 中 56/56
   task 完成，逐流 packet-envelope 中位数为 76.568 μs。
-* 中间 block 已整理为 GPU0/NIC0/GPU1/NIC1 共轴事件流；GPU 时间来自 profile，
-  collective 类型和字节来自 trace，但 collective 单操作时长是 TTFT residual 按 ring
-  权重重建的，只适合 phase 对齐。
+* 中间 block 已完成同一通信的端到端闭环：Block 24 的 AR/AG/RS 被展开为 8 条双向 flow，
+  ns-3-UB 中 8/8 task 完成；组合后的 task-complete 时间为 520.639360 μs，并能继续下钻到
+  task 4 的 68 个 data packet、逐跳 delay 和 29,607 B 最大 traced queue occupancy。
 
 研究要求对照与完成情况
 ----------------------
@@ -53,11 +54,11 @@ LLMServingSim 回答请求级指标和 layer trace，再用 SimCCL 将 collectiv
      - 运行 dense 单 GPU 与 TP2/EP2 MoE 请求，提取 TTFT、TPOT、layer compute 和 collective 结构
      - 图 6、第四节
    * - 中间时间切片和 collective profile
-     - 选择 transformer block 24，按 GPU0/NIC0/GPU1/NIC1 四个观测点展开
-     - 图 7、``moe_middle_block.csv``
+     - 选择 transformer block 24，按 GPU0/NIC0/GPU1/NIC1 四个观测点展开，并闭环到同一组 ns-3 flow/packet
+     - 图 7、Block 24 端到端闭环图、``block24_*`` 快照
    * - 给 ns-3 的真实场景流怎样获得
-     - 定义 canonical flow schema，跑通 SimCCL→traffic→ns-3，并提出 framework/NCCL/NIC 三层采集方案
-     - 图 1、5、8--10、第六节
+     - 定义 canonical flow schema；用 ``collective_id→flow_id→task_id→packet`` 跑通 Block 24，并提出 framework/NCCL/NIC 三层采集方案
+     - 图 1、5、8--10、Block 24 lineage、第六节
    * - 网络图、计算图和统一事件流
      - 分别提供计算、collective、rank-pair、逐流、逐 NIC、逐包视图，并统一事件字段
      - 图 2--11
@@ -131,11 +132,17 @@ launch_offset_ns、dependency_ids、request/batch/layer id、rank_to_host_mappin
 ``evidence_source``。再将 rank 映射到 ns-3 node、bytes 映射到 task payload、launch offset
 映射到 delay、dependency 映射到 phase/DAG。
 
-本轮用 SimCCL 将一个 8-rank、4 MiB AllToAll 展开为 ``8×7=56`` 条非自身流：每条
+第一轮用 SimCCL 将一个 8-rank、4 MiB AllToAll 展开为 ``8×7=56`` 条非自身流：每条
 524,288 B，总 payload 29,360,128 B，每 rank 收发各 3,670,016 B。随后跑通
 ``SimCCL CSV → ns-3 traffic → URMA_WRITE task → packet/switch/ACK trace``。56/56 task
 完成，first-packet-send 到 last-packet-ACK 的 envelope 最小/中位/平均/最大分别为
 75.741/76.568/76.561/77.162 μs。
+
+第二轮进一步使用 LLMServingSim 的 **同一个 Block 24**：2-rank AllReduce 被拆为
+reduce-scatter/allgather 两阶段，MoE AllGather 和 ReduceScatter 各拆为双向 flow，共 8 个
+task、2,129,920 B。``flow_manifest.csv`` 保留 request/batch/block/collective/stage/flow/task
+关联，ns-3 8/8 task 完成，因而这组 packet/hop 证据可以直接归属到 Block 24，而不再借用
+独立 AllToAll case。
 
 “真实场景流”应逐步替换模型证据：framework/NVTX 提供 request、layer、collective 和 tensor
 语义；NCCL runtime/net-plugin instrumentation 提供真实 ``channel、peer、bytes、timestamp``；
@@ -368,23 +375,91 @@ ns-3 case 也是代表性单交换机 400 Gbps 拓扑。下一步应先做固定
 :证据类型: GPU 段为 ``profile-derived``；collective 段为 ``reconstructed timeline``，按 ``TTFT - profile compute`` residual 与 ring 权重分配。
 :解释边界: AR≈71.020 μs、AG≈36.510 μs、RS≈35.510 μs 不是原 trace 时间戳或网络实测，只用于一个满足总 TTFT 的无 overlap phase 对齐。
 
-.. warning:: 严格的端到端边界
+.. important:: 2026-09-26 端到端闭环更新
 
-   图 7 的 block 24 来自 LLMServingSim MoE trace；图 8--10 的逐流和逐包数据来自独立的
-   8-rank、4 MiB SimCCL AllToAll microcase。两者展示了相邻分析层能够达到的粒度，但不是
-   同一个 collective 的直接因果链。当前不能把 56 条 AllToAll 流解释成 block 24 的
-   AR/AG/RS。完整闭环方案见 :doc:`daily/2026-09-26`。
+   图 7 保留第一轮 reconstructed timeline，便于说明源 trace 缺 timestamp 的边界；新增的
+   Block 24 图则使用同一组 AR/AG/RS 的 ns-3 task/packet/hop 证据。图 8--10 的 8-rank
+   AllToAll 仍是独立多 peer baseline，不再被解释成 Block 24 的直接通信。
 
 .. important::
 
    本次实际 ``_emit_moe_block()`` 使用 vLLM 默认 ``allgather_reducescatter`` backend。
    因此图 7 不按 docstring 写成 AllToAll。若切换 backend，必须重新读取 trace，不能沿用本图。
 
-五、ns-3-UB：逐流、NIC 与逐包观测
----------------------------------
+Block 24 的端到端闭环
+~~~~~~~~~~~~~~~~~~~~~~
 
-网络 case 使用 8 个单 NIC device、一个 8-port switch、400 Gbps 链路、20 ns propagation、
-deterministic shortest path 和 URMA_WRITE 投影。它用于验证数据粒度和竞争链路，不是
+.. figure:: _static/study/block24-trace-lineage.svg
+   :alt: Block 24 从 collective id 到 flow task packet 的关联链
+   :align: center
+   :class: study-figure
+
+   **Block 24 数据血缘。** ``collective_id → flow_id → task_id → packet key`` 让网络事件能够
+   回到 request/batch/block 和 collective stage，而不是只保留匿名流量。
+
+:数据来源: LLMServingSim Block 24 event、``flow_manifest.csv``、``traffic.csv`` 和 ns-3 runlog 的字段合同。
+:物理量与单位: 关联关系，无数值物理量和单位。
+:证据类型: 方法图；collective 为 trace-derived，rank-pair 为 algorithmic projection，时间为 ns3-simulated。
+:解释边界: 源 trace 没有 NCCL backend flow；图中的 2-rank ring 是可复核投影，不是 runtime 抓包。
+
+.. figure:: _static/study/block24-unified-timeline.svg
+   :alt: Block 24 在两个 GPU 和两个 NIC 上的端到端时间线
+   :align: center
+   :class: study-figure
+
+   **同一个 block 的四观测点。** GPU0/GPU1 显示 profile-derived compute，NIC0/NIC1 显示
+   本次 ns-3 中的双向 AR/AG/RS task；最终 task completion 为 520.639360 μs。
+
+:数据来源: ``source/_static/study/data/block24_unified_events.csv``。
+:物理量与单位: 相对 block 起点时间和 event duration，单位 μs。
+:证据类型: GPU 为 profile-derived；NIC 为 ns3-simulated；阶段结构为 trace + 2-rank ring projection。
+:解释边界: phase 依赖采用 20 ns completion visibility，compute gap 在依赖可见后施加；不代表真实 GPU/NIC overlap。
+
+.. figure:: _static/study/block24-flow-profile.svg
+   :alt: Block 24 八条双向 flow 的 payload WQE FCT 和 ACK envelope
+   :align: center
+   :class: study-figure
+
+   **谁到谁、发多少、耗时多少。** 8/8 task 完成；WQE FCT 为 6.126120–6.526760 μs，
+   红点另保留 first-packet→last-ACK envelope，避免混淆完成语义。
+
+:数据来源: ``source/_static/study/data/block24_task_profile.csv``，按 task ID 连接 manifest 与 ``task_statistics.csv``。
+:物理量与单位: flow payload（KiB）和 duration（μs）。
+:证据类型: 方向/bytes 为 trace-derived + projected；FCT/envelope 为 ns3-simulated。
+:解释边界: 同 phase 的两个方向并行，不能相加；URMA_WRITE 是传输投影。
+
+.. figure:: _static/study/block24-task4-packet-hops.svg
+   :alt: Block 24 task 4 的 68 个数据包逐跳延迟分解
+   :align: center
+   :class: study-figure
+
+   **task 4 下钻到 68 个 4 KiB 包。** source→switch 和 switch→destination 各为
+   103–104 ns；switch dwell 为 10–518 ns，forward latency 为 217–725 ns。
+
+:数据来源: ``block24_packet_profile.csv``、``AllPacketTrace_PKT_node_0.tr`` 和 ``QueueTrace_node_2_port_1.tr``。
+:物理量与单位: 单包逐段 forward latency（ns）、相对 task 时间（μs）和最大 queue occupancy（B）。
+:证据类型: ns3-simulated packet/hop/queue trace。
+:解释边界: per-hop timestamp 量化到整数 ns；queue occupancy 不是硬件 counter；WQE complete 与 last ACK 是不同事件。
+
+.. figure:: _static/study/block24-duration-comparison.svg
+   :alt: Block 24 重建时间与 ns-3 组合时间的比较
+   :align: center
+   :class: study-figure
+
+   **模型假设对 duration 的影响。** 旧重建 block span 为 638.656146 μs，新组合值为
+   520.639360 μs，少 118.016786 μs（18.4789%）。
+
+:数据来源: ``block24_duration_comparison.csv`` 和 ``block24_summary.json``。
+:物理量与单位: collective/Block duration，单位 μs。
+:证据类型: 橙柱 reconstructed；蓝柱 ns3-simulated，Block 蓝柱另含 profile-derived compute。
+:解释边界: 原模型为 16 GB/s + 20 μs/step，新模型为 400 Gbps + 20 ns/link；差值是模型口径差异，不是硬件误差。
+
+五、ns-3-UB baseline：8-rank 逐流、NIC 与逐包观测
+-------------------------------------------------
+
+本节保留第一轮独立 baseline：8 个单 NIC device、一个 8-port switch、400 Gbps 链路、
+20 ns propagation、deterministic shortest path 和 URMA_WRITE 投影。它用于观察 56 条
+AllToAll flow 的多 peer 竞争，补充上面的 2-rank Block 24 闭环；两者回答不同问题，均不是
 A100 NVLink/NVSwitch 的校准模型。
 
 逐流时间
@@ -503,7 +578,7 @@ launch offset 映射到 delay，依赖映射到 phase/DAG；拓扑、路由和�
 :解释边界: 列不是从左到右的“可信度排名”；Profile、分析、结构和仿真回答的是不同问题，不能互相冒充。
 
 当前可以确认的是：数据合同能从 collective 闭合到 packet，能把计算与网络放到共轴事件流，
-也能在具体仿真参数下得到逐流与逐跳时间。当前不能确认的是：A100 的真实 kernel 时间、NCCL
+而且 Block 24 已用同一组 AR/AG/RS 在具体仿真参数下得到逐流与逐跳时间。当前不能确认的是：A100 的真实 kernel 时间、NCCL
 真实 channel/peer schedule、真实 fabric 的 queue/FCT，以及大规模 workload 在 packet simulator
 中的可承受性。
 
@@ -515,6 +590,7 @@ launch offset 映射到 delay，依赖映射到 phase/DAG；拓扑、路由和�
 .. code-block:: bash
 
    .venv/bin/python tools/build_study_figures.py
+   .venv/bin/python tools/build_block24_figures.py
    .venv/bin/sphinx-build -b html source build/html
 
 若本机存在第 06 轮完整实验目录，可刷新快照并重建：
@@ -523,6 +599,13 @@ launch offset 映射到 delay，依赖映射到 phase/DAG；拓扑、路由和�
 
    .venv/bin/python tools/build_study_figures.py \
      --analysis-dir /path/to/第06轮_SimAI与LLMServingSim_trace分析_20260924
+
+若存在第 07 轮 Block 24 分析目录，可刷新同 collective 闭环快照：
+
+.. code-block:: bash
+
+   .venv/bin/python tools/build_block24_figures.py \
+     --analysis-dir /path/to/第07轮_Block24端到端collective_profile_20260926/analysis
 
 ``source/_static/study/data/study_summary.json`` 保存原始输入相对路径和 SHA-256；因此图中的数字
 可以追溯到具体 artifact，而不依赖网页中的手写常量。

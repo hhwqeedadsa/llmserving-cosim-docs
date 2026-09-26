@@ -16,8 +16,8 @@
      - 主题
      - 主要交付
    * - :doc:`2026-09-26`
-     - 实验代表性复核与时间切片解释
-     - 明确 block 24 的观测粒度，以及它与独立 ns-3 AllToAll case 尚未端到端闭合的边界
+     - Block 24 端到端 collective profile
+     - 将同一组 AR/AG/RS 闭环到 8 条 ns-3 flow、68-packet 逐跳 profile，并给出五张证据图
    * - :doc:`2026-09-24`
      - SimAI、LLMServingSim、SimCCL、ns-3 第一轮实验
      - 跑通 analytical→trace→flow→packet 分析链，生成 11 张证据分级图
@@ -43,4 +43,3 @@
 
 页面按日期组织不等于按日期复制完整专题报告。重复出现的方法和长期结论只在专题页维护，
 每日条目使用 :doc:`../simai-llmservingsim-study` 等链接指向权威版本。
-

@@ -1,0 +1,25 @@
+event_id,request_id,batch_id,block_id,source,evidence,resource,resource_id,event_type,op,algorithm_stage,start_us,end_us,duration_us,collective_id,flow_id,task_id,src_rank,dst_rank,bytes,notes
+profile-llm-0530,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,layernorm_289,,0.0,2.549,2.549,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0531,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,layernorm_289,,0.0,2.549,2.549,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0532,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,qkv_proj_290,,2.549,13.322,10.773,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0533,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,qkv_proj_290,,2.549,13.322,10.773,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0534,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,qk_norm_291,,13.322,16.554,3.232,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0535,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,qk_norm_291,,13.322,16.554,3.232,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0536,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,rotary_emb_292,,16.554,18.527,1.973,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0537,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,rotary_emb_292,,16.554,18.527,1.973,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0538,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,attention_293,,18.527,26.559,8.032,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0539,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,attention_293,,18.527,26.559,8.032,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0540,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU0,compute,o_proj_294,,26.559,36.33,9.771,,,,,,,Start rebuilt relative to Block 24 origin.
+profile-llm-0541,req0,batch0,block24,LLMServingSim,profile_derived_gpu_latency,GPU,GPU1,compute,o_proj_294,,26.559,36.33,9.771,,,,,,,Start rebuilt relative to Block 24 origin.
+ns3-task-0,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC0,flow,AllReduce,reduce_scatter,36.33,42.47284,6.14284,req0.batch0.block24.allreduce.rs,flow0,0,0,1,262144,URMA_WRITE is a transport projection; timing is simulated.
+ns3-task-1,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC1,flow,AllReduce,reduce_scatter,36.33,42.46364,6.13364,req0.batch0.block24.allreduce.rs,flow1,1,1,0,262144,URMA_WRITE is a transport projection; timing is simulated.
+ns3-task-2,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC0,flow,AllReduce,allgather,42.49284,48.63376,6.14092,req0.batch0.block24.allreduce.ag,flow2,2,0,1,262144,URMA_WRITE is a transport projection; timing is simulated.
+ns3-task-3,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC1,flow,AllReduce,allgather,42.49284,48.62456,6.13172,req0.batch0.block24.allreduce.ag,flow3,3,1,0,262144,URMA_WRITE is a transport projection; timing is simulated.
+profile-layernorm-gpu0,req0,batch0,block24,LLMServingSim+ns3-compose,profile_duration_composed_after_ns3_phase,GPU,GPU0,compute,layernorm_295,,48.65376,51.20276,2.549,,,,,,,Starts after phase-1 task completion becomes visible (20 ns).
+profile-layernorm-gpu1,req0,batch0,block24,LLMServingSim+ns3-compose,profile_duration_composed_after_ns3_phase,GPU,GPU1,compute,layernorm_295,,48.65376,51.20276,2.549,,,,,,,Starts after phase-1 task completion becomes visible (20 ns).
+ns3-task-4,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC0,flow,AllGather,ring_exchange,51.20276,57.7028,6.50004,req0.batch0.block24.moe_allgather,flow4,4,0,1,278528,URMA_WRITE is a transport projection; timing is simulated.
+ns3-task-5,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC1,flow,AllGather,ring_exchange,51.20276,57.72952,6.52676,req0.batch0.block24.moe_allgather,flow5,5,1,0,278528,URMA_WRITE is a transport projection; timing is simulated.
+profile-expert-gpu0,req0,batch0,block24,LLMServingSim+ns3-compose,profile_duration_composed_after_ns3_phase,GPU,GPU0,compute,expert_297,,57.74952,514.48652,456.737,,,,,,,Starts after phase-2 task completion becomes visible (20 ns).
+profile-expert-gpu1,req0,batch0,block24,LLMServingSim+ns3-compose,profile_duration_composed_after_ns3_phase,GPU,GPU1,compute,expert_299,,57.74952,514.48652,456.737,,,,,,,Starts after phase-2 task completion becomes visible (20 ns).
+ns3-task-6,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC0,flow,ReduceScatter,ring_exchange,514.48652,520.61264,6.12612,req0.batch0.block24.moe_reducescatter,flow6,6,0,1,262144,URMA_WRITE is a transport projection; timing is simulated.
+ns3-task-7,req0,batch0,block24,ns-3-ub,ns3_task_completion,NIC,NIC1,flow,ReduceScatter,ring_exchange,514.48652,520.63936,6.15284,req0.batch0.block24.moe_reducescatter,flow7,7,1,0,262144,URMA_WRITE is a transport projection; timing is simulated.

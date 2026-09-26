@@ -1,0 +1,9 @@
+node_id,port_id,direction,start_us,end_us,wire_bytes,full_slice_average_gbps,configured_rate_gbps,full_slice_utilization,evidence
+0,0,Rx,36.54796,520.69284,1099783,18.17,400,0.045425,ns3_port_trace_full_active_span
+0,0,Tx,36.331,520.61364,1103895,18.24,400,0.0456,ns3_port_trace_full_active_span
+1,0,Rx,36.54796,520.66902,1099783,18.17,400,0.045425,ns3_port_trace_full_active_span
+1,0,Tx,36.331,520.64036,1103895,18.23,400,0.045575,ns3_port_trace_full_active_span
+2,0,Rx,36.43448,520.63488,1099783,18.17,400,0.045425,ns3_port_trace_full_active_span
+2,0,Tx,36.44448,520.6716,1103895,18.24,400,0.0456,ns3_port_trace_full_active_span
+2,1,Rx,36.43448,520.6616,1099783,18.17,400,0.045425,ns3_port_trace_full_active_span
+2,1,Tx,36.44448,520.64778,1103895,18.24,400,0.0456,ns3_port_trace_full_active_span

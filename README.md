@@ -59,6 +59,19 @@ make html
 
 每张图在报告正文中均标注数据来源、物理量与单位、证据类型和不可推导的结论。
 
+Block 24 同 collective 的五张端到端图使用独立的精简快照，可离线重建：
+
+```bash
+.venv/bin/python tools/build_block24_figures.py
+```
+
+如需从第 07 轮完整 profile 刷新快照：
+
+```bash
+.venv/bin/python tools/build_block24_figures.py \
+  --analysis-dir /path/to/第07轮_Block24端到端collective_profile_20260926/analysis
+```
+
 ## 每日研究记录
 
 网站使用“每日记录 + 专题报告”两层组织：

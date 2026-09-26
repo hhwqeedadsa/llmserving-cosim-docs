@@ -7,9 +7,10 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
 .. admonition:: 最新研究进展 · 2026-09-26
 
-   已完成现有实验代表性复核，并将 transformer block 24 的中间时间切片拆到
-   GPU、NIC、collective 和证据类型。详见 :doc:`daily/2026-09-26`；全部每日记录见
-   :doc:`daily/index`。
+   已将同一个 transformer block 24 的 AllReduce、AllGather、ReduceScatter 闭环到
+   ns-3 task、packet、switch hop、queue 和 port trace：8/8 task 完成，组合时间为
+   520.639360 μs，并对 task 4 的 68 个数据包逐跳 profile。详见
+   :doc:`daily/2026-09-26`；全部每日记录见 :doc:`daily/index`。
 
 .. raw:: html
 

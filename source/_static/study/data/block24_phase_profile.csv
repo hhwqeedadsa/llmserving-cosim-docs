@@ -1,0 +1,5 @@
+phase_id,collective_op,algorithm_stage,collective_id,depends_on_phase,flow_count,payload_bytes,phase_start_us,phase_complete_us,phase_duration_us,packet_start_us,packet_ack_us,packet_envelope_us,evidence
+0,AllReduce,reduce_scatter,req0.batch0.block24.allreduce.rs,,2,524288,36.33,42.47284,6.14284,36.331,42.51712,6.18612,ns3_simulated_phase
+1,AllReduce,allgather,req0.batch0.block24.allreduce.ag,0,2,524288,42.49284,48.63376,6.14092,42.4935,48.68422,6.19072,ns3_simulated_phase
+2,AllGather,ring_exchange,req0.batch0.block24.moe_allgather,1,2,557056,51.20276,57.72952,6.52676,51.20376,57.783,6.57924,ns3_simulated_phase
+3,ReduceScatter,ring_exchange,req0.batch0.block24.moe_reducescatter,2,2,524288,514.48652,520.63936,6.15284,514.48752,520.69284,6.20532,ns3_simulated_phase

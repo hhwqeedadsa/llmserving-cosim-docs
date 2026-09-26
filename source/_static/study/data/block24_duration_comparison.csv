@@ -1,0 +1,4 @@
+collective_op,llmservingsim_reconstructed_us,ns3_simulated_us,delta_us,ratio_ns3_to_reconstructed,reconstructed_evidence,ns3_evidence
+ALLREDUCE,71.020369,12.30376,58.716609,0.173243,ttft_residual_weighted_by_ring_model,task_completion_timeline
+ALLGATHER,36.509592,6.52676,29.982832,0.178768,ttft_residual_weighted_by_ring_model,task_completion_timeline
+REDUCESCATTER,35.510185,6.15284,29.357345,0.17327,ttft_residual_weighted_by_ring_model,task_completion_timeline

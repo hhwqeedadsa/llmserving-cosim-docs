@@ -1,0 +1,131 @@
+{
+  "identity": {
+    "request_id": "req0",
+    "batch_id": "batch0",
+    "block_id": "block24"
+  },
+  "case": {
+    "topology": "2 hosts + 1 switch",
+    "configured_rate_gbps": 400,
+    "link_delay_ns": 20,
+    "dependency_visibility_ns": 20,
+    "transport_projection": "URMA_WRITE",
+    "transport_channel_mode": "on-demand"
+  },
+  "invariants": {
+    "tasks_completed": 8,
+    "phases": 4,
+    "total_payload_bytes": 2129920,
+    "payload_bytes_per_direction": 1064960,
+    "selected_task_data_packets": 68,
+    "selected_task_packet_payload_bytes": 278528,
+    "drop_or_deadlock_markers_in_trace": 0,
+    "dependency_gaps_us": {
+      "1": 0.02,
+      "2": 2.569,
+      "3": 456.757
+    }
+  },
+  "block_timing_us": {
+    "llmservingsim_reconstructed": 638.656146,
+    "ns3_composed_task_complete": 520.63936,
+    "difference": 118.016786,
+    "reduction_fraction": 0.184789,
+    "last_packet_ack": 520.69284
+  },
+  "task_fct_us": {
+    "min": 6.12612,
+    "median": 6.1418800000000005,
+    "mean": 6.23186,
+    "max": 6.52676
+  },
+  "packet_envelope_us": {
+    "min": 6.17958,
+    "median": 6.18842,
+    "mean": 6.283675,
+    "max": 6.57924
+  },
+  "selected_task": {
+    "task_id": 4,
+    "collective_id": "req0.batch0.block24.moe_allgather",
+    "src_rank": 0,
+    "dst_rank": 1,
+    "payload_bytes": 278528,
+    "task_start_us": 51.20276,
+    "task_complete_us": 57.7028,
+    "task_fct_us": 6.50004,
+    "last_packet_ack_us": 57.76918,
+    "packet_envelope_us": 6.56542,
+    "data_packets": 68,
+    "wqe_segments": 5,
+    "forward_hop_ns": {
+      "source_to_switch": {
+        "min": 103.0,
+        "median": 103.0,
+        "mean": 103.48529411764706,
+        "max": 104.0
+      },
+      "switch_dwell": {
+        "min": 10.0,
+        "median": 255.0,
+        "mean": 250.61764705882354,
+        "max": 518.0
+      },
+      "switch_to_destination": {
+        "min": 103.0,
+        "median": 103.0,
+        "mean": 103.47058823529412,
+        "max": 104.0
+      },
+      "end_to_end": {
+        "min": 217.0,
+        "median": 462.5,
+        "mean": 457.5735294117647,
+        "max": 725.0
+      }
+    },
+    "max_switch_queue_bytes": 29607,
+    "max_switch_queue_time_us": 56.942
+  },
+  "duration_comparison": [
+    {
+      "collective_op": "ALLREDUCE",
+      "llmservingsim_reconstructed_us": 71.020369,
+      "ns3_simulated_us": 12.30376,
+      "delta_us": 58.716609,
+      "ratio_ns3_to_reconstructed": 0.173243,
+      "reconstructed_evidence": "ttft_residual_weighted_by_ring_model",
+      "ns3_evidence": "task_completion_timeline"
+    },
+    {
+      "collective_op": "ALLGATHER",
+      "llmservingsim_reconstructed_us": 36.509592,
+      "ns3_simulated_us": 6.52676,
+      "delta_us": 29.982832,
+      "ratio_ns3_to_reconstructed": 0.178768,
+      "reconstructed_evidence": "ttft_residual_weighted_by_ring_model",
+      "ns3_evidence": "task_completion_timeline"
+    },
+    {
+      "collective_op": "REDUCESCATTER",
+      "llmservingsim_reconstructed_us": 35.510185,
+      "ns3_simulated_us": 6.15284,
+      "delta_us": 29.357345,
+      "ratio_ns3_to_reconstructed": 0.17327,
+      "reconstructed_evidence": "ttft_residual_weighted_by_ring_model",
+      "ns3_evidence": "task_completion_timeline"
+    }
+  ],
+  "evidence_boundaries": [
+    "LLMServingSim GPU durations are profile-derived, not measured on A100.",
+    "Two-rank ring flows are an algorithmic projection because backend flows are absent from the source trace.",
+    "ns-3 task/packet/hop/port timing is simulated for this configured fabric.",
+    "Full-slice port throughput includes long compute gaps and is not a line-rate utilization claim."
+  ],
+  "input_sha256": {
+    "llm_events": "9ee04ead540c194231e3b05b63b2b21f39064eaa66a540f933c2bf30b778f4ae",
+    "flow_manifest": "522f29df9236bfedc337b35b07cf81cd47bde0a5c1cd1e3e761afa053e06d786",
+    "task_statistics": "222a19fe166fc5e2517b41a1692fd5ced25cf1d14969ac7a9581c8a07ea69fac",
+    "throughput": "9e33ef6c0aa246b943764c40c9697d8272f763724afc7073b4fd640ded7ffea0"
+  }
+}

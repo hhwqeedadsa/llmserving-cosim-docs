@@ -1,5 +1,19 @@
-2026-09-26：Block 24 端到端 collective profile
-=================================================
+2026-09-26：Block 24 闭环与 AIDC 推理长尾调研
+===============================================
+
+当日追加：顶会调研与创新工作
+----------------------------
+
+在 Block 24 闭环之后，继续审计了 SIGCOMM、INFOCOM、NSDI、OSDI、SOSP、MLSys 等会议的
+55 项工作，并与四卡 A100、SimAI、LLMServingSim、Frontier 和 ns-3 证据逐项对照。结论是：
+“再做一个带 ns-3 后端的仿真器”不足以构成创新，真正空白集中在 serving semantic
+attribution、完整 ``src-dst`` 矩阵导致的非单调 tail、多保真 P95/P99 不确定性，以及从
+collective risk 到 TTFT/TPOT/SLO goodput 的闭环。
+
+本次新增三项共享 event schema 的可证伪工作：跨层可观测与根因诊断、矩阵感知的多保真
+MoE 长尾仿真、面向 P99/SLO 的风险感知 collective 控制。完整文献分类、与 SIGCOMM 2026
+工作的重复性审计、假设、baseline、指标和失败条件见 :doc:`../aidc-inference-tail-survey`；
+可评审 Markdown 原稿和 55 项 CSV 账本保存在仓库 ``research/`` 目录。
 
 当日结论
 --------

@@ -7,6 +7,7 @@
 - 通信需求如何展开、竞争并形成尾时延；
 - `observed/`、`truth/`、中间图与服务指标的可视化方法；
 - SimAI/LLMServingSim 的必要实验、代表性 GPU/NIC 时间切片，以及 SimCCL→ns-3 逐流证据链；
+- 55 项 AIDC 推理测量/优化/仿真工作审计，以及三项可证伪传输长尾研究设计；
 - 三套系统之间的能力增量、减量、粒度、限制与规模上限；
 - 已验证结论与尚未校准部分的证据等级。
 
@@ -97,6 +98,7 @@ source/                 Sphinx 文档源文件
 source/daily/           按 UTC 日期维护的每日研究记录
 source/_static/         样式、交互图脚本与示例数据快照
 source/_static/study/   研究报告 SVG 与精简证据快照
+research/               Markdown 调研报告与结构化文献账本
 tools/                  从标准 run/实验目录生成可视化快照
 build/html/             构建后的网页
 ```

@@ -5,6 +5,12 @@ LLM Serving、ASTRA-sim 与 MoE-UB 联合仿真
 LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步把非均匀 MoE/P-D
 通信展开到 UB 协议网络，并增加端网观测和独立真值。
 
+.. admonition:: 最新研究进展 · 2026-09-26
+
+   已完成现有实验代表性复核，并将 transformer block 24 的中间时间切片拆到
+   GPU、NIC、collective 和证据类型。详见 :doc:`daily/2026-09-26`；全部每日记录见
+   :doc:`daily/index`。
+
 .. raw:: html
 
    <div class="comparison-strip" aria-label="三个系统的核心定位">
@@ -31,6 +37,12 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
 .. toctree::
    :maxdepth: 2
+   :caption: 每日研究记录
+
+   daily/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: 系统与数据
 
    architecture
@@ -39,10 +51,15 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
 .. toctree::
    :maxdepth: 2
-   :caption: 竞争、观测与可视化
+   :caption: 竞争与观测
 
    communication
    observability
+
+.. toctree::
+   :maxdepth: 2
+   :caption: 专题研究与可视化
+
    simai-llmservingsim-study
    visualization
 

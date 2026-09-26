@@ -368,6 +368,13 @@ ns-3 case 也是代表性单交换机 400 Gbps 拓扑。下一步应先做固定
 :证据类型: GPU 段为 ``profile-derived``；collective 段为 ``reconstructed timeline``，按 ``TTFT - profile compute`` residual 与 ring 权重分配。
 :解释边界: AR≈71.020 μs、AG≈36.510 μs、RS≈35.510 μs 不是原 trace 时间戳或网络实测，只用于一个满足总 TTFT 的无 overlap phase 对齐。
 
+.. warning:: 严格的端到端边界
+
+   图 7 的 block 24 来自 LLMServingSim MoE trace；图 8--10 的逐流和逐包数据来自独立的
+   8-rank、4 MiB SimCCL AllToAll microcase。两者展示了相邻分析层能够达到的粒度，但不是
+   同一个 collective 的直接因果链。当前不能把 56 条 AllToAll 流解释成 block 24 的
+   AR/AG/RS。完整闭环方案见 :doc:`daily/2026-09-26`。
+
 .. important::
 
    本次实际 ``_emit_moe_block()`` 使用 vLLM 默认 ``allgather_reducescatter`` backend。

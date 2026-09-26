@@ -59,10 +59,29 @@ make html
 
 每张图在报告正文中均标注数据来源、物理量与单位、证据类型和不可推导的结论。
 
+## 每日研究记录
+
+网站使用“每日记录 + 专题报告”两层组织：
+
+- `source/daily/YYYY-MM-DD.rst` 记录当天问题、实验、证据、验证结果和下一步；
+- `source/daily/index.rst` 按日期倒序维护索引；
+- 跨日期的方法和长期结论继续维护在专题页，避免每日页面复制后产生多个冲突版本。
+
+每日完成工作后执行：
+
+```bash
+.venv/bin/sphinx-build -W --keep-going -b html source build/html
+.venv/bin/sphinx-build -W --keep-going -b linkcheck source build/linkcheck
+git diff --check
+```
+
+验证通过后再提交并推送到 `main`，由 GitHub Actions 部署 Pages。
+
 ## 目录
 
 ```text
 source/                 Sphinx 文档源文件
+source/daily/           按 UTC 日期维护的每日研究记录
 source/_static/         样式、交互图脚本与示例数据快照
 source/_static/study/   研究报告 SVG 与精简证据快照
 tools/                  从标准 run/实验目录生成可视化快照

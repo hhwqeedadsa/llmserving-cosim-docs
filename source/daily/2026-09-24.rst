@@ -1,0 +1,69 @@
+2026-09-24：第一轮仿真分析链
+================================
+
+当日目标
+--------
+
+研究 SimAI 及 workload 的优缺点，运行 LLMServingSim 必要实验，选择一个中间 MoE block
+观察 GPU/NIC 粒度，并验证 collective 能否展开为 ns-3 所需的逐源—目的流。
+
+完成的实验
+----------
+
+.. list-table:: 当日实验及用途
+   :header-rows: 1
+   :widths: 27 30 43
+
+   * - 实验
+     - 配置
+     - 回答的问题
+   * - SimAI micro sanity
+     - 8 GPU，16/64 MiB AllReduce
+     - analytical 模型是否呈现带宽主导的 4× 大小—时间关系
+   * - SimAI 大规模 workload
+     - 9,216 GPU，1,789 层
+     - compute、exposed communication、bubble 和通信域构成
+   * - LLMServingSim dense
+     - Llama-3.1-8B，单 GPU，128+4 tokens
+     - 基础 TTFT/TPOT 和 request completion 路径
+   * - LLMServingSim MoE
+     - Qwen3-30B-A3B，TP=2、EP=2，128+4 tokens
+     - MoE layer profile、实际 collective backend 和中间时间切片
+   * - SimCCL AllToAll
+     - 8 rank，4 MiB collective
+     - collective 如何展开为 ``src、dst、bytes``
+   * - ns-3-UB microcase
+     - 8 NIC、单交换机、400 Gbps
+     - 逐流、逐 NIC、逐包和完成语义的可观测粒度
+
+关键结果
+--------
+
+* SimAI 总模拟时间为 7,545,619 μs；compute 60.20%、exposed communication 35.21%、
+  bubble 4.59%。EP 与 DP_EP 合计占暴露通信 86.2%。
+* Dense 单 GPU 的 TTFT/TPOT 为 12.598/11.262 ms；2-GPU MoE 为
+  30.887/8.080 ms。
+* MoE docstring 描述 AllToAll，但实际默认 trace 是
+  ``AllReduce + AllGather + ReduceScatter``。
+* SimCCL 将 8-rank AllToAll 展开为 56 条 512 KiB 流，总 payload 28 MiB。
+* ns-3 中 56/56 task 完成，flow packet-envelope 中位数为 76.568 μs，device NIC
+  active-window throughput 平均约 395.56 Gbps。
+* task 0 的最后数据包到达、WQE completion 和 last-packet ACK 是三个不同事件，不能合并
+  成一个“通信完成时间”。
+
+当日产物
+--------
+
+* 完整专题报告：:doc:`../simai-llmservingsim-study`；
+* 可视化与下钻方法：:doc:`../visualization`；
+* 11 张静态 SVG：``source/_static/study/``；
+* 精简证据快照：``source/_static/study/data/``；
+* 可复现制图脚本：``tools/build_study_figures.py``。
+
+证据边界
+--------
+
+当日工作证明了数据链、字节守恒和观测粒度可行，但没有 A100 实机网络测量。LLMServingSim
+GPU profile 来自 RTXPRO6000；collective 单操作时间是 reconstructed；SimCCL flow 是
+structural；ns-3 时间来自代表性单交换机模型。以上结果不能直接外推为生产集群性能。
+

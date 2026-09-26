@@ -7,7 +7,7 @@
 - 通信需求如何展开、竞争并形成尾时延；
 - `observed/`、`truth/`、中间图与服务指标的可视化方法；
 - SimAI/LLMServingSim 的必要实验、代表性 GPU/NIC 时间切片，以及 SimCCL→ns-3 逐流证据链；
-- 55 项 AIDC 推理测量/优化/仿真工作审计，以及三项可证伪传输长尾研究设计；
+- 96 项 AIDC 推理测量/优化/仿真工作审计、检索协议，以及三项可证伪传输长尾研究设计；
 - 三套系统之间的能力增量、减量、粒度、限制与规模上限；
 - 已验证结论与尚未校准部分的证据等级。
 
@@ -64,6 +64,12 @@ Block 24 同 collective 的五张端到端图使用独立的精简快照，可�
 
 ```bash
 .venv/bin/python tools/build_block24_figures.py
+```
+
+文献会议覆盖图由结构化账本确定性生成：
+
+```bash
+.venv/bin/python tools/build_literature_figures.py
 ```
 
 如需从第 07 轮完整 profile 刷新快照：

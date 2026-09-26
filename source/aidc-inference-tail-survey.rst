@@ -1,10 +1,11 @@
 AIDC 推理测量、仿真与传输长尾
 ==================================
 
-本页将 55 项顶会论文、四卡 A100 校准、SimAI/LLMServingSim 实验和 Block 24
+本页将 96 项顶会论文、四卡 A100 校准、SimAI/LLMServingSim 实验和 Block 24
 逐包闭环放进同一证据框架。完整可下载/评审版本为
 :download:`Markdown 主报告 <../research/aidc-inference-tail-survey.md>`，逐篇字段见
-:download:`文献账本 CSV <../research/literature_ledger.csv>`。
+:download:`文献账本 CSV <../research/literature_ledger.csv>`，检索范围、关键词和排除规则见
+:download:`检索协议 <../research/search-protocol.md>`。
 
 结论
 ----
@@ -21,7 +22,19 @@ AIDC 推理测量、仿真与传输长尾
 文献分类
 --------
 
-.. list-table:: 55 项工作形成的五类版图
+.. figure:: _static/study/literature-venue-coverage.svg
+   :alt: 96 项文献按会议和研究对象分类的堆叠条形图
+   :align: center
+   :class: study-figure
+
+   **会议覆盖不是简单凑数量。** 主会包括 SIGCOMM 31、INFOCOM 9、NSDI 12、OSDI 10、
+   SOSP 5、MLSys 9、SC 10 和 ISCA 2 项；workshop/poster 明确单列。
+
+:数据来源: ``research/literature_ledger.csv``，由 ``tools/build_literature_figures.py`` 确定性生成。
+:物理量与单位: 横轴和段内数字均为纳入账本的论文数量（篇）；颜色区分推理服务/运行时、测量/仿真和网络/collective。
+:证据边界: 数量表示本课题检索覆盖，不表示会议质量或会议全部产出；统计截止 2026-09-26。
+
+.. list-table:: 96 项工作形成的五类版图
    :header-rows: 1
    :widths: 20 39 41
 
@@ -29,24 +42,26 @@ AIDC 推理测量、仿真与传输长尾
      - 代表工作
      - 本课题仍缺的能力
    * - 服务调度与内存
-     - Orca、vLLM、DistServe、Sarathi、Llumnix、Parrot、Mooncake
+     - Orca、vLLM、DistServe、Sarathi、SOLA、JITServe、NanoFlow、Hetis
      - collective/flow/queue 对 request 尾部的因果归属
    * - KV 与推理网络
      - CacheGen、HACK、ARK、KVServe、DualPath、Turbo、GIGANETS
      - MoE EP 动态矩阵与同步长尾
    * - 仿真与 workload
-     - SimAI、LLMServingSim、Vidur、Frontier、Wormhole、Arcadia、ServeGen
+     - SimAI、LLMServingSim 2.0、Vidur、Frontier、Calculon、Wormhole、Arcadia、ServeGen
      - runtime flow 真值、跨保真尾部校准和不确定性
    * - collective/EP 优化
-     - SGLB、ResCCL、SyCCL、UBEP、EPIC、Odin、PReCCL、Theseus、OptCCL
+     - SGLB、COMET、UBEP、EPIC、Odin、PReCCL、Theseus、OptCCL、hZCCL
      - 从 request/expert 风险到 SLO 目标的接口
    * - 网络测量与诊断
-     - R-Pingmesh、Hawkeye、RDMATracer、Anytest、INSERT、Weir、Lark
+     - LLM-Pilot、Mycroft、R-Pingmesh、Hawkeye、RDMATracer、Anytest、INSERT、Weir
      - 与 layer、collective、expert、request 的稳定 correlation
 
-INFOCOM 的直接 AIDC LLM 推理工作少于 SIGCOMM，主要贡献集中在 RDMA telemetry、RNIC cache、
-packet scheduling、in-network aggregation 和 distributed emulation 等支撑原语；核心 LLM 服务
-与 AI 网络工作在近年的 SIGCOMM、NSDI、OSDI 中更集中。
+INFOCOM 除 RDMA telemetry、RNIC cache、packet scheduling 和 distributed emulation 外，已有
+Mell、Online Context Caching 和 serverless MoE deployment 等直接推理工作。MLSys 已覆盖 SiDA、
+SOLA、ThunderServe、Seesaw、FlashInfer 和 COMET；SC 已覆盖 LLM-Pilot、PipeInfer、Hetis、
+gLLM、Diff-MoE 和 resilience measurement。故不能再把创新描述为一般 serving scheduler、
+MoE overlap、inference benchmark 或“有网络后端的仿真器”。
 
 本地实验与代表性
 ----------------
@@ -153,6 +168,12 @@ AllReduce、MoE AllGather、rank-local expert 和 ReduceScatter。选择依据�
      - risk-aware collective 目标比 mean/bytes-only 提高 SLO goodput
      - SGLB、Odin、Theseus、EPIC、UBEP
      - 只损失平均吞吐而不改善 SLO goodput
+
+最优先的可拆分科学问题是：构建 routing-skew × message-size × peer-count phase diagram，验证
+“中度倾斜最差”是否能在 runtime channel trace 中重现；随后用三源观测区分 endpoint、GPU 同步
+和 fabric queue，再用误差/不确定性触发 representative-slice 的逐包下钻。SOLA、JITServe、
+FastServe 已经覆盖 SLO/抢占调度，因此工作 C 必须证明新的 collective P99/CVaR 风险信号确实
+提高端到端 SLO goodput，而不是再实现一个通用调度器。
 
 与 SIGCOMM 2026 的边界必须写清：UBEP/EPIC 已覆盖 EP 通信优化，Odin 已覆盖 A2A CC，
 PReCCL 已覆盖遥测驱动重分配，Theseus/OptCCL 已覆盖 schedule 切换/合成，Nüwa/Arcadia/

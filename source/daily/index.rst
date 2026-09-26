@@ -17,7 +17,7 @@
      - 主要交付
    * - :doc:`2026-09-26`
      - Block 24 闭环与 AIDC 推理长尾调研
-     - 同一组 AR/AG/RS 下钻到逐包，并审计 55 项工作、形成三项可证伪创新主线
+     - 同一组 AR/AG/RS 下钻到逐包，并审计 96 项工作、形成三项可证伪创新主线
    * - :doc:`2026-09-24`
      - SimAI、LLMServingSim、SimCCL、ns-3 第一轮实验
      - 跑通 analytical→trace→flow→packet 分析链，生成 11 张证据分级图

@@ -1,8 +1,9 @@
 # AIDC 推理测量、仿真与传输长尾：调研、实验证据与创新工作设计
 
-日期：2026-09-26  
-范围：SIGCOMM、INFOCOM、NSDI、OSDI、SOSP、MLSys、FAST、ISCA、IISWC 及紧邻工作  
-结构化文献表：[literature_ledger.csv](literature_ledger.csv)（55 项）
+- 日期：2026-09-26
+- 范围：SIGCOMM、INFOCOM、NSDI、OSDI、SOSP、MLSys、SC、FAST、ISCA、ISPASS、IISWC 及紧邻工作
+- 结构化文献表：[literature_ledger.csv](literature_ledger.csv)（96 项）
+- 检索与纳入规则：[search-protocol.md](search-protocol.md)
 
 ## 摘要
 
@@ -47,7 +48,19 @@ TTFT/TPOT/P99/SLO goodput 的长尾；又怎样在可承受的仿真成本下反
 
 ## 2. 文献版图
 
-### 2.1 按研究对象分类
+### 2.1 检索覆盖，而不是只列熟悉论文
+
+![Literature venue coverage](../source/_static/study/literature-venue-coverage.svg)
+
+**图 1：96 项文献按会议和研究对象分类。**
+数据来源：`research/literature_ledger.csv`；由 `tools/build_literature_figures.py` 确定性生成。
+物理量：横轴和段内数字均为纳入账本的论文数量（篇）；颜色区分推理服务/运行时、测量/仿真、
+网络/collective。
+证据边界：数量表示本课题检索覆盖，不表示会议质量或各会议全部产出；SC Workshop 与
+SIGCOMM Poster 单列，未混入主会。完整检索词、纳入/排除规则和剩余边界见
+[search-protocol.md](search-protocol.md)。
+
+### 2.2 按研究对象分类
 
 ```mermaid
 flowchart LR
@@ -67,22 +80,22 @@ flowchart LR
   X ==> M
 ```
 
-**图 1：文献覆盖与归属断层。**  
-数据来源：本报告的 55 项文献账本；节点表示论文的主要测量/优化对象。  
-物理量：本图不编码数值，表达语义层、collective 层、flow/packet 层和服务指标之间的关联。  
+**图 2：文献覆盖与归属断层。**
+数据来源：本报告的 96 项文献账本；节点表示论文的主要测量/优化对象。
+物理量：本图不编码数值，表达语义层、collective 层、flow/packet 层和服务指标之间的关联。
 证据边界：一篇论文可能跨多层；图中只标其主要贡献，不表示其他层完全缺失。
 
-### 2.2 五类工作及其边界
+### 2.3 五类工作及其边界
 
 | 类别 | 代表工作 | 已经解决 | 对本课题仍缺 |
 |---|---|---|---|
-| 服务调度与内存 | Orca、vLLM、DistServe、Sarathi-Serve、Llumnix、Parrot、Splitwise、Mooncake | continuous batching、KV 管理、PD 分离、迁移和 SLO goodput | collective/flow/queue 对某个 request 尾部的因果归属 |
+| 服务调度与内存 | Orca、vLLM、DistServe、Sarathi、SOLA、JITServe、NanoFlow、LoongServe、Hetis | batching、KV 管理、PD 分离、动态并行、抢占和 SLO goodput | collective/flow/queue 对某个 request 尾部的因果归属 |
 | KV/推理网络 | CacheGen、HACK、ARK、KVServe、DualPath、Turbo、GIGANETS | KV 压缩、路由碰撞、存储 I/O、网内聚合和架构协同 | MoE EP 的动态 `src-dst` 矩阵与同步尾部 |
-| 仿真与 workload | SimAI、LLMServingSim、Vidur、Frontier、Wormhole、Arcadia、Phantora、ServeGen、DistriAI、Nüwa | 请求/算子/flow/packet 多种保真度和大规模执行 | runtime flow 真值、跨保真尾部校准及不确定性 |
-| collective/EP 优化 | TE-CCL、MCCS、SGLB、ResCCL、SyCCL、UBEP、EPIC、Odin、PReCCL、Theseus、OptCCL | 调度、负载均衡、A2A CC、遥测和 schedule 切换 | 从 request/expert 风险到控制目标的统一接口 |
-| 网络测量与诊断 | R-Pingmesh、Hawkeye、RDMATracer、Anytest、INSERT、Weir、Lark | path/PFC/RDMA/RNIC/queue 的监控与诊断 | 与 layer、collective、expert、request 的稳定 correlation |
+| 仿真与 workload | SimAI、LLMServingSim 2.0、Vidur、Frontier、Calculon、Wormhole、Arcadia、ServeGen、DistriAI、Nüwa | 请求/算子/flow/packet 多种保真度和大规模执行 | runtime flow 真值、跨保真尾部校准及不确定性 |
+| collective/EP 优化 | TE-CCL、SGLB、COMET、UBEP、EPIC、Odin、PReCCL、Theseus、OptCCL、hZCCL | 调度、压缩、重叠、A2A CC、遥测和 schedule 切换 | 从 request/expert 风险到控制目标的统一接口 |
+| 网络测量与诊断 | LLM-Pilot、Mycroft、R-Pingmesh、Hawkeye、RDMATracer、Anytest、INSERT、Weir | service/collective/path/PFC/RDMA/RNIC 的测量与诊断 | 与 layer、expert、packet queue、request SLO 的完整稳定 correlation |
 
-### 2.3 按会议观察
+### 2.4 按会议观察
 
 - **SIGCOMM** 近三年最集中：2024 年偏 AI fabric、RoCE、collective 调度与监控；2025 年进入
   MoE 服务、KV 压缩、光电 fabric 和 collective resource scheduling；2026 年进一步出现 EP
@@ -90,10 +103,15 @@ flowchart LR
 - **NSDI/OSDI/SOSP** 更关注端到端系统语义、调度、模拟框架和可部署性。SimAI、Arcadia、
   Wormhole、Phantora 说明“有网络后端的模拟平台”本身已拥挤；DistServe、Sarathi 等则说明最终
   指标必须回到 TTFT/TPOT/SLO goodput。
-- **INFOCOM** 直接以 AIDC LLM 推理为中心的论文少于 SIGCOMM，相关工作更多是 RDMA telemetry、
-  RNIC cache、packet scheduling、in-network aggregation 和大规模 emulation 等支撑原语。
-- **MLSys/IISWC/PACMI** 提供 Vidur、LLMServingSim、Frontier 这类 workload/profile-driven
-  工具，适合当实验骨架，而不是直接作为创新点。
+- **INFOCOM** 除 RDMA telemetry、RNIC cache、packet scheduling 和 emulation 外，已经出现
+  Mell、Online Context Caching、serverless MoE deployment 等直接 LLM/MoE serving 工作；因此不能再
+  概括为只有网络支撑原语，但其 AIDC fabric/collective 密度仍低于 SIGCOMM。
+- **MLSys** 已覆盖 SiDA、SOLA、ThunderServe、Seesaw、FlashInfer、COMET 等 MoE serving、SLO、
+  动态并行和 compute-communication overlap；新的工作必须明确不重复一般 serving scheduler 或 overlap。
+- **SC** 从 DeepSpeed-Inference、Calculon 扩展到 LLM-Pilot、PipeInfer、Hetis、gLLM、Diff-MoE 和
+  resilience measurement，说明 HPC 社区同时覆盖测量、运行时、异构并行和 MoE 缓存。
+- **IISWC/ISPASS/PACMI** 提供 LLMServingSim、LLMServingSim 2.0、Frontier 这类 profile-driven
+  仿真骨架，适合作为实验平台，而不是直接作为创新点。
 
 ## 3. 当前到底跑了哪些实验，是否有代表性
 
@@ -154,9 +172,9 @@ ReduceScatter。邻近 block 的结构重复，选择依据是位置和结构，
 
 ![Block 24 trace lineage](../source/_static/study/block24-trace-lineage.svg)
 
-**图 2：同一 collective 的数据血缘。**  
-数据来源：LLMServingSim block 24 event、`flow_manifest.csv`、ns-3 `traffic.csv` 和 runlog。  
-物理量：本图不编码数值，表达 `collective_id → flow_id → task_id → packet PSN/port event` 的关联。  
+**图 3：同一 collective 的数据血缘。**
+数据来源：LLMServingSim block 24 event、`flow_manifest.csv`、ns-3 `traffic.csv` 和 runlog。
+物理量：本图不编码数值，表达 `collective_id → flow_id → task_id → packet PSN/port event` 的关联。
 证据类型：collective 为 trace-derived；flow 为 two-rank-ring algorithm-projected；task 以后为
 ns3-simulated。箭头不表示已得到真实 NCCL channel schedule。
 
@@ -164,7 +182,7 @@ ns3-simulated。箭头不表示已得到真实 NCCL channel schedule。
 
 ![Block 24 unified timeline](../source/_static/study/block24-unified-timeline.svg)
 
-**图 3：GPU0/NIC0/GPU1/NIC1 共轴时间线。**  
+**图 4：GPU0/NIC0/GPU1/NIC1 共轴时间线。**
 数据来源：`block24_unified_events.csv`；GPU duration 来自 LLMServingSim profile，NIC task
 start/complete 来自 ns-3 TaskTrace。  
 物理量：横轴为相对 block 24 起点的时间（μs），条宽是 operation/WQE duration（μs）。  
@@ -187,7 +205,7 @@ start/complete 来自 ns-3 TaskTrace。
 
 ![Block 24 flow profile](../source/_static/study/block24-flow-profile.svg)
 
-**图 4：8 条 rank-pair flow 的方向、payload 和完成口径。**  
+**图 5：8 条 rank-pair flow 的方向、payload 和完成口径。**
 数据来源：`block24_task_profile.csv`，由 flow manifest 与 ns-3 task statistics 按 `task_id` 连接。  
 物理量：纵轴为 duration（μs）；柱为 WQE start→complete，点为 first-packet→last-ACK；标签给出
 方向和 payload（KiB）。  
@@ -204,7 +222,7 @@ packet envelope 对应为 6.180/6.188/6.284/6.579 μs。
 
 ![Task 4 packet hops](../source/_static/study/block24-task4-packet-hops.svg)
 
-**图 5：task 4 的逐包逐跳 profile。**  
+**图 6：task 4 的逐包逐跳 profile。**
 数据来源：`block24_packet_profile.csv`、AllPacketTrace、QueueTrace 和 task parser。  
 物理量：上图为 source→switch、switch dwell、switch→destination 的 forward latency（ns）；下图为
 相对 task start 的事件时间（μs）；queue occupancy 为 B。  
@@ -301,7 +319,7 @@ endpoint timestamp 更准确地归属 TPOT/P99 尾部。
 | 要素 | 设计 |
 |---|---|
 | 原型 | NVTX/correlation + NCCL net-plugin hook + NIC/IB telemetry + canonical event schema |
-| Baseline | Nsight/NCCL logs、R-Pingmesh、Hawkeye、RDMATracer、Taking the Pulse、PReCCL |
+| Baseline | Nsight/NCCL logs、LLM-Pilot、Mycroft、R-Pingmesh、Hawkeye、RDMATracer、Taking the Pulse、PReCCL |
 | 数据 | 本地 A100 replay、可控注入 queue/PFC/endpoint contention、真实 serving trace |
 | 指标 | root-cause precision/recall、timestamp error、bytes conservation、overhead、可覆盖事件比例 |
 | 可证伪条件 | 跨层关联不能显著优于 endpoint-only/network-only；或 instrumentation 开销破坏 workload |
@@ -315,7 +333,7 @@ endpoint timestamp 更准确地归属 TPOT/P99 尾部。
 | 要素 | 设计 |
 |---|---|
 | 原型 | analytical 快扫 → flow-event 仿真 → 触发式 ns-3 packet 下钻；三层共享 event ID |
-| Baseline | SimAI/ASTRA analytical、LLMServingSim、Frontier、m3、全量 ns-3、Wormhole |
+| Baseline | SimAI/ASTRA analytical、LLMServingSim 2.0、Frontier、Calculon、m3、全量 ns-3、Wormhole |
 | 数据 | balanced/hot/Zipf/真实 gate 矩阵；EP=2/4/8 与多节点；不同 K、batch、chunk、CC |
 | 指标 | mean/P95/P99 error、分位数置信区间、rank order、runtime/memory、下钻比例 |
 | 可证伪条件 | 完整矩阵对尾部无额外解释力；或 packet slice 不能改善尾部分位数且成本无优势 |
@@ -329,7 +347,7 @@ chunk/channel、compression 之间联合选择，能提高 SLO goodput，即使�
 | 要素 | 设计 |
 |---|---|
 | 原型 | 工作 B 的 risk oracle + LLMServingSim request scheduler + 可切换 collective/route 控制器 |
-| Baseline | balanced routing、bytes-only、SGLB、Odin、Theseus、EPIC/UBEP 可复现策略 |
+| Baseline | balanced routing、bytes-only、SOLA、JITServe、FastServe、SGLB、Odin、Theseus、EPIC/UBEP 可复现策略 |
 | 数据 | BurstGPT/ServeGen 请求流 + synthetic/real gate 矩阵 + 背景流和故障注入 |
 | 指标 | TTFT/TPOT P95/P99、SLO attainment/goodput、平均吞吐、公平性、控制开销 |
 | 可证伪条件 | 风险控制只牺牲平均吞吐而不改善 SLO goodput；或收益完全由现有 A2A CC 解释 |
@@ -347,9 +365,9 @@ flowchart LR
   E --> C
 ```
 
-**图 6：三项工作闭环。**  
-数据来源：本报告的研究空白审计和当前实验接口。  
-物理量：不编码数值；箭头表示校准数据、风险预测和在线反馈。  
+**图 7：三项工作闭环。**
+数据来源：本报告的研究空白审计和当前实验接口。
+物理量：不编码数值；箭头表示校准数据、风险预测和在线反馈。
 证据边界：这是待验证研究设计，不是已实现系统或性能结果。
 
 ## 10. 与 2026 年近期工作的重复性审计
@@ -362,6 +380,20 @@ flowchart LR
 | Theseus / OptCCL | runtime schedule 切换和最优合成 | “动态选择 collective schedule” | 用可解释的尾部风险信号选择，并落到 TPOT/P99 |
 | Nüwa / Arcadia / Wormhole | 大规模控制面、跨层平台、包仿真加速 | “可扩展 AI 网络仿真平台” | representative-slice 选择、跨保真不确定性、生产流重建 |
 | Taking the Pulse | endpoint timestamp 诊断 | “用端点时间诊断 collective” | 联合 net-plugin/NIC/queue 真值及 request/collective correlation |
+| Mycroft | collective dependency tracing | “追踪 collective 依赖” | 推理 request/expert 语义、网络队列真值和 SLO 归属 |
+| COMET | MoE 计算通信细粒度重叠 | “细粒度 overlap MoE” | 非单调传输长尾的测量/预测与风险控制，而非 kernel overlap 本身 |
+| SOLA / JITServe / FastServe | SLO、请求不确定性和抢占调度 | “SLO-aware serving scheduler” | 将可解释的 collective P99/CVaR 作为新风险输入并做端到端因果验证 |
+| LLM-Pilot / LLM-Inference-Bench | 推理配置表征和 benchmark | “做 LLM inference benchmark” | request→collective→packet 的归属、运行时流真值和多保真尾部模型 |
+
+### 10.1 可拆分创新点的优先级
+
+| 优先级 | 科学问题 | 最小可验证产物 | 最大风险 | 建议归属 |
+|---:|---|---|---|---|
+| 1 | 为什么中度倾斜可能比极端倾斜更慢 | routing-skew × size × peer-count phase diagram；runtime channel trace | 现象只在 SHM/EP=2 出现 | 工作 B 的核心机制论文 |
+| 2 | endpoint、GPU 同步与 fabric queue 各贡献多少尾部 | 三源同时采集和受控故障注入的 root-cause confusion matrix | NCCL/IB timestamp 无法可靠关联 | 工作 A 的核心系统论文 |
+| 3 | 何时需要从 flow 模型下钻到 packet | 以误差/不确定性触发的 representative-slice/importance sampler | 触发规则不能优于随机采样 | 工作 B 的可扩展性贡献 |
+| 4 | collective risk 是否真正影响请求 SLO | mean-only、P99/CVaR、oracle 三种 controller 的 SLO goodput 对比 | 网络风险被计算/排队噪声淹没 | 工作 C 的端到端贡献 |
+| 5 | 能否联合 router 语义和网络预算压缩 activation | expert criticality-aware bytes/precision/path control | 与 KV 压缩、EPIC/UBEP 重叠 | 工作 C 的扩展方向 |
 
 ## 11. 下一步最小实验集
 

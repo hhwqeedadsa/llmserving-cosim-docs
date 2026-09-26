@@ -8,7 +8,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 .. admonition:: 最新研究进展 · 2026-09-26
 
    已将同一个 transformer block 24 的 AllReduce、AllGather、ReduceScatter 闭环到
-   ns-3 task、packet、switch hop、queue 和 port trace；并完成 55 项 AIDC 推理测量、
+   ns-3 task、packet、switch hop、queue 和 port trace；并完成 96 项 AIDC 推理测量、
    仿真与优化工作审计，形成三项可证伪研究主线。详见
    :doc:`daily/2026-09-26`、:doc:`aidc-inference-tail-survey`；全部每日记录见
    :doc:`daily/index`。

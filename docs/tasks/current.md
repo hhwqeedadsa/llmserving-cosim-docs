@@ -2,11 +2,11 @@
 
 任务编号 `m0-1-llmservingsim-native-baseline`
 
-状态 `in_progress`
+状态 `completed`
 
 范围：M0.1 的一个小型 LLMServingSim 原生样例复现。
 
-执行授权：用户已于 2026-09-27 确认开始下一项 LLMServingSim 原生样例任务。缺失软件的安装仍按根目录约定单独取得授权；本次确认不表示允许升级依赖或修改上游源码。
+执行授权：用户已于 2026-09-27 确认开始本任务，并随后明确允许安装已列出的 Protobuf 系统软件、项目虚拟环境中的 Python/Chakra 依赖及其必要构建依赖。无需再次确认这些安装；不升级已有系统软件，不修改上游源码或固定提交。
 
 前置状态：`repo-local-check` 已完成；UB 原生样例的构建、两次运行和后处理验收记录已本地提交为 `88bed688b9e629e18dd95d0a8c32fd4855075d60`，未推送。旧任务说明与结果保留在该提交和环境记录中。
 
@@ -59,4 +59,18 @@
 
 2026-09-27，已读取范围相关文档、锁定样例与上游参照，主仓库起点为 `88bed68`，相关依赖工作区干净。任务切换说明单独本地提交；本次用户已明确开始，因此不再重复请求执行确认。
 
-初步依赖检查发现系统缺少 `protoc` 和 Protobuf C++ 开发头文件，Python 缺少 protobuf、Chakra、pyinstrument 及 Chakra 打包依赖。尚未安装软件或执行仿真，安装方案与实际检查证据保存在 `runs/m0-1-llmservingsim-native-baseline-20260927T094128Z/`，后续结果追加于此。
+初步依赖检查发现系统缺少 `protoc` 和 Protobuf C++ 开发头文件，Python 缺少 protobuf、Chakra、pyinstrument 及 Chakra 打包依赖。该阶段尚未安装软件或执行仿真，安装方案与实际检查证据保存在 `runs/m0-1-llmservingsim-native-baseline-20260927T094128Z/`，本次后续日志也保存在同一目录。
+
+任务说明已本地提交为 `46659d2`，未推送。预检与依赖检查均退出 0；输入为 10 个请求、120 个输入 token、591 个输出 token。系统安装预演仅新增 5 个 Protobuf 包，无已有软件升级或删除；`python3.12-venv` 已安装，Python 依赖拟放入 `.venv/llmservingsim-native/`。具体事实已写入环境记录。
+
+预检阶段曾停止在依赖安装前，状态为 `blocked`。用户回复“允许，继续吧”后，恢复为 `in_progress` 并完成安装、构建与运行验收，现标记为 `completed`。
+
+实际安装了 5 个 Protobuf 系统包，没有升级或删除已有系统包；Python 新增依赖安装在项目专用虚拟环境。固定源码的 Chakra LLM 转换器导入检查通过，安装后的转换器源码校验值与锁定文件相同；没有安装本任务不使用的 Chakra 扩展工具依赖。完整版本及命令见 `docs/environment.md`。
+
+使用原 CMake 配置以 8 路并行构建 `AstraSim_Analytical_Congestion_Unaware`，配置与 118 步构建均退出 0；生成前端所需的原生兼容符号链接。两次服务运行均退出 0，并报告所有请求退出：各完成 10 个请求、120 个输入 token、591 个输出 token，时钟均为 1663996645 ns，与上游 `single` 参照完全相同。
+
+逐请求编号、token 数、到达/结束时间、延迟及 ITL 核验通过，两份 `requests.csv` 均与上游 `outputs/example_single_run.csv` 逐字节一致。每次保留 150 个结果文件，包括 146 份 Chakra 图和三份生成配置。
+
+首次全文件字节比较退出 1（`verify-results.json`），失败证据和原断言保留。后续解码核验退出 0（`audit-graph-metadata.json`）：请求 CSV 和三份配置完全一致，146 份图只在 `GlobalMetadata.input_file` 的本次目录名不同；42631 个执行节点的原始字节相同，所有依赖引用有效。来源路径差异不参与 ASTRA 执行，已按源码与逐文件证据解释，没有改写原始图或上游参照。
+
+结束前依赖检查退出 0，13 个依赖仍在固定提交且源码工作区干净；原始输入与参照校验值均未变。按持续授权整理完成记录并本地提交、不推送，停止在本任务验收完成处。M0.1 的两项原生起步样例现均已完成；M0.2 回归、M0.3 联合构建和目标硬件校准未执行，下一项任务仍待用户确认。

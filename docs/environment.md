@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 已完成独立沙箱诊断、`repo-local-check`、M0.1 的 UB、LLMServingSim 两项原生样例及 M0.2 所选 8 项上游回归。13 个依赖仓库静态检查通过；两项样例分别构建并重复运行通过。用户授权后为 LLMServingSim 安装了 Protobuf 系统依赖，新增 Python 依赖放在项目专用虚拟环境，未升级已有系统软件。M0.2 复用该环境：8 项时钟回归通过，112 个请求内部一致性通过；同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。
+目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 已完成独立沙箱诊断、`repo-local-check`、M0.1 两项原生样例、M0.2 所选 8 项上游回归和 M0.3 联合构建边界确认，M0 已完成。13 个依赖仓库静态检查通过；两项样例分别构建并重复运行通过。用户授权后为 LLMServingSim 安装了 Protobuf 系统依赖，新增 Python 依赖放在项目专用虚拟环境，未升级已有系统软件。M0.2 与 M0.3 复用该环境：8 项时钟回归、112 个请求内部一致性及联合链接审计通过；同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。联合探针没有执行仿真事件。
 
 | 项目 | 当前记录 |
 |---|---|
@@ -18,7 +18,8 @@
 | UB 原生样例 | `scratch/2nodes_single-tp` 构建及两次相同输入运行通过，四个任务均完成，后处理独立复核通过 |
 | LLMServingSim 原生样例 | `single` 两次均完成 10 个请求；时钟 1663996645 ns、逐请求 CSV 均匹配上游，图的来源路径差异已核验 |
 | M0.2 上游回归 | 所选 8 项时钟全部匹配；请求核验通过，1 份不适用的上游 CSV 已定位来源，未运行全套回归 |
-| 联合编译与仿真 | 未实现、未执行 |
+| M0.3 联合编译与链接 | 445 步构建通过；ASTRA 52 个核心对象全部链接，运行时 10 个 ns-3 模块全部来自本次 UB 构建 |
+| 联合仿真 | 尚未实现 COMP、时间适配及 UB 业务收发；链接探针不执行仿真事件 |
 
 本机 Python 3.12.3 已确认。UB 任务中的 `ns3` 启动器拒绝 root 会话，实际通过的是锁定版本文档提供的直接 CMake 入口及生成的样例程序；启动器原命令的失败记录保留在下文。
 
@@ -386,3 +387,98 @@ env PYTHON=/root/moe-ub-cosim/runs/m0-2-upstream-regressions-20260927T103119Z/py
 | `git diff --check` | 0；文档差异格式检查通过 | `final-diff-check.json` |
 
 本任务完成了规定的相关上游回归与失败原因记录，没有更改任何仿真行为或上游参照。技术规范、依赖锁文件和所有子模块保持原样。完成记录仅本地提交，不推送；停止在 M0.2，M0.3 联合构建及目标硬件校准未执行，下一任务仍由用户确认。
+
+## 2026-09-27：m0-3-joint-build-boundary
+
+用户确认开始 M0.3，主仓库起点为 `cc2f03246252ef117b243bae69486f303b94b7db`，任务说明单独提交为 `132e7f2`。开始时主仓库与 13 个依赖工作区干净。LLMServingSim、ASTRA、Chakra、UB 分别保持 `a4053bc1161872420e1e0607cb3409ef659b828e`、`d3469945c50410cac2e727c9ab627670c965db2a`、`30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7`、`581bf28a90740def0e79eafe5423af838c6f687d`；其他依赖仍按原 gitlink 检出。
+
+本次新增 [联合链接探针](../scripts/m0_joint_build/README.md)，验证 ASTRA 核心、Chakra 读取组件和 UB 的构建及链接边界。复用现有 GCC/G++ 13.3.0、CMake 3.28.3、Ninja 1.11.1、C++ Protobuf/protoc 3.21.12，不安装软件、不下载依赖、不修改上游源码。CMake 的 whole-archive 特性要求至少 3.24，本次只验证上述实际版本组合。
+
+日志目录为 `runs/m0-3-joint-build-boundary-20260927T104500Z/`，下文日志名均相对于此目录。`record.py` 保存完整参数、工作目录、UTC 起止时间、实际退出码及 stdout/stderr。构建目录为 `build/m0-joint-build/`。这些目录均被 Git 忽略，提交中仅保存代码与必要结果记录。
+
+### 构建方式与实际命令
+
+ns-3-UB 是 CMake 主项目。`CMAKE_PROJECT_NS3_INCLUDE` 加载本次 `inject.cmake`，先加入 ASTRA 根库，再延迟到 UB 模块建立后创建探针。ASTRA 的 `AstraSim` 静态目标包含 52 个对象：45 个 ASTRA 内部源文件、6 个 Chakra/protobuf 源文件及 1 个解析内存模型源文件。没有加载 `build/astra_analytical`、`network_frontend/` 或 `extern/network_backend/` 下的构建入口。
+
+Chakra 的 6 个源文件为 `schema/protobuf/et_def.pb.cc`、`src/feeder/et_feeder.cpp`、`et_feeder_node.cpp`、`json_node.cpp`、`wrapper_node.cpp` 和 `src/third_party/utils/protoio.cc`。复用 M0.1 用固定 schema 生成的 C++ 文件；每个只编译一次。解析内存模型 `AnalyticalMemory.cc` 属于核心依赖，不是解析网络后端。
+
+以下命令工作目录均为主仓库根目录。第一次实际配置使用完整参数，退出 1；修正本次 CMake 后，保持缓存参数的第三次配置退出 0，原因见后文。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m0-joint-build -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/scripts/m0_joint_build/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m0-joint-build/output \
+  -DNS3_ENABLED_MODULES=unified-bus \
+  -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF \
+  -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF \
+  -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF \
+  -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake -S third_party/ns-3-ub -B build/m0-joint-build
+cmake --build build/m0-joint-build --target m0-joint-link-probe --parallel 8
+```
+
+构建退出 0，UTC 10:50:59 至 10:52:32 完成 445 个步骤，其中 431 条编译命令。只启动一个构建，最多 8 路并行；未构建样例、测试或其他后端。编译日志有 31 条 Chakra `std::binary_function` 弃用警告，未修补上游或新增抑制选项。CMake 提醒自定义输出目录位于 UB 源码树外，可能影响部分上游测试；本任务明确使用独立输出，只验证探针，不宣称上游测试已运行。
+
+| 对象 | 实际 C++ 选项与编译单元数 |
+|---|---|
+| UB 与探针 | `-std=c++20`，370 个 |
+| ASTRA（含 Chakra/内存模型）与 fmt | `-std=gnu++17`，52 + 2 个 |
+| spdlog | `-std=c++17`，7 个 |
+
+全部使用同一 GCC 13.3.0，release 选项为 `-O3 -DNDEBUG`，未覆盖 `_GLIBCXX_USE_CXX11_ABI`。UB 沿用原 release 的断言及日志关闭设置；探针使用显式条件和异常核验，不依赖 release 下失效的 C++ `assert`。ASTRA 依赖固定 fmt 11.0.2、spdlog 1.14.1 和系统 Protobuf；`SPDLOG_FMT_EXTERNAL=OFF` 保留上游 spdlog 的内置 fmt 选择，同时 ASTRA 仍链接单独的 fmt 库。本次构建、链接和运行证明该组合可用，不推广到其他编译器或标准库。
+
+探针和最终审计实际命令如下，分别退出 0，超时保护未触发，探针 stderr 为空：
+
+```bash
+timeout --kill-after=5s 30s build/m0-joint-build/output/m0/ns3.44-m0-joint-link-probe \
+  runs/m0-3-joint-build-boundary-20260927T104500Z/probe.et
+python3 scripts/m0_joint_build/audit.py \
+  --build-dir build/m0-joint-build \
+  --run-log runs/m0-3-joint-build-boundary-20260927T104500Z/probe.stdout.log \
+  --output-dir runs/m0-3-joint-build-boundary-20260927T104500Z/audit-final
+```
+
+输入是探针构造的一个 `METADATA_NODE`（id 7，名称 `m0-metadata-only`），带 `GlobalMetadata.version=m0-link-probe`；它不包含计算时长或通信业务。程序写入新文件后用原 ETFeeder 读取并移除该节点，核对无剩余节点；构造一个 NPU 的 HardwareResource，核对初始在途计数均为 0；核对 `ns3::UbApp` 类型及初始时钟 0 ns。源码没有调度事件或调用 `Simulator::Run`，输出 `simulation_events_executed=0` 与 `PASS: link and reader probe only`。
+
+### 链接与实际装载的证据
+
+审计读取 `ninja -t commands m0-joint-link-probe`、静态库成员、link map、`nm` 符号、ELF `NEEDED` 及探针用 `dl_iterate_phdr` 报告的实际装载路径。没有仅凭目录名或单次 `ldd` 判断。UB 设置编译命令导出的时间晚于 ASTRA 目标建立，因此 `compile_commands.json` 不能单独代表全部源文件；完整 Ninja 目标命令已另行保存。
+
+链接命令以 `--push-state,--whole-archive` / `--pop-state` 包围 `libAstraSim.a`。全部 52 个成员在 link map 中均标记由 whole-archive 引入；Sys、Workload、Chakra 读取器关键符号实际存在于程序，ASTRA 静态库中没有 ns-3 符号定义。全部编译来源中没有 ASTRA 网络前端、其他网络后端或其内置 ns-3。
+
+实际装载的 10 个 ns-3 模块为 applications、bridge、config-store、core、internet、network、point-to-point、stats、traffic-control、unified-bus。其真实路径全部位于 `build/m0-joint-build/output/lib/`，文件名均为 `libns3.44-<模块>.so`。没有装载 UB 原生 `build/` 或 ASTRA 的另一套 ns-3。其余文件库为系统的 protobuf、libstdc++、libm、libgcc_s、libc、libz 和动态加载器；ASTRA、fmt 与 spdlog 静态链接。
+
+`audit-final/summary.json` 保存实际库路径、SHA-256、源文件及工具版本；`compiled-sources.json` 保存每个编译单元的完整命令、标准和源码校验值；`commands.json` 及各 stdout/stderr 保留审计所执行的命令与退出状态。`build-evidence/` 归档 CMake 缓存、52 项源文件清单、目标事实和 link map，`build-evidence.json` 保存其校验值。
+
+| 产物 | SHA-256 |
+|---|---|
+| `output/m0/ns3.44-m0-joint-link-probe` | `375b21aae80cd98abc7c263a4f4f37142a68011e68657b814be39fd59cd4cc97` |
+| `cosim-m0/lib/libAstraSim.a` | `023054d8f7b46eae21fcc2276008ee62f62ae5a5da338479f7a952cb695ed6c7` |
+| `cosim-m0/link.map` | `cf7865e9252faaa2dd5c1b585708a69b7d7b4364a6d6dcb996cfda0032dc3adb` |
+
+### 初次失败、修正与独立缓存核对
+
+第一次配置把 `add_subdirectory` 放入 CMake 延迟调用，被 CMake 拒绝（`configure.json`，退出 1）；改为早期加入 ASTRA、延迟阶段只包含探针定义后，第二次配置因本次代码误判 UB 目标为 `libunified-bus` 而退出 1（`configure-retry.json`）。锁定 UB 的目标实际为 `unified-bus`，别名为 `ns3::unified-bus`；修正检查后 `configure-final.json` 退出 0。前两版文件分别保留于 `attempt-1/`、`attempt-2/`。
+
+初次审计把 GNU whole-archive 的结束形式限定为 `--no-whole-archive`，但 CMake 实际使用 `--pop-state` 恢复先前状态，因而退出 1（`audit.json`）。原脚本保留为 `audit-initial.py`；修正为检查实际成对参数，并逐项核对全部归档成员均由 whole-archive 引入。link map 中的相对路径同时按构建目录解析。最终 `audit-final.json` 退出 0；没有删除构建边界检查或修改任何仿真预期。
+
+为排除旧缓存依赖，用最终代码重新执行上述完整配置命令，仅将 `-B` 改为 `build/m0-joint-build/fresh-config`、输出目录改为该目录下的 `output`，退出 0（`configure-clean.json`）。未再次编译。两份 `ninja -t commands` 各有 445 条命令；首次替换各自绝对构建前缀后的逐字比较退出 1（`verify-clean-config.json`，差异保留于 `clean-recipe.diff`）。
+
+逐参数核验确认 431 条编译命令完全相同，唯一差异是 10 个 UB 库链接命令的 RPATH 尾部冒号从 31 个变成 18 个：新构建目录多了 13 个字符，原始 RPATH 参数总长度不变，库目录、源文件、编译选项及其余链接参数一致。独立核验 `audit_clean_recipe.py` 退出 0，逐项差异见 `clean-recipe-audit.json`。原逐字比较仍保留为失败，不将两份命令描述为字节一致。
+
+### 原生基线保护与结束检查
+
+配置前备份 UB 忽略的 `.lock-ns3_linux_build`，并记录两项原生程序、10 个原生 UB 库、两个已生成 schema 文件及启动锁共 15 个文件的 SHA-256（`baseline-artifacts.json`、`native-ns3-lock.backup`）。UB 每次配置都会重写该启动锁；先核对新锁对应本次已知输出目录，再保存新锁并恢复原文件。主构建后与全新缓存配置后分别执行恢复，两次均确认 15 个文件校验值不变。未清理原生产物或改动原生缓存。
+
+| 实际命令或步骤（工作目录为主仓库根目录） | 退出状态 | 记录 |
+|---|---|---|
+| 开始与结束 `bash scripts/check_deps.sh` | 均为 0；13 个依赖版本与已检查源码状态一致 | `dependency-before.json`、`dependency-final.json` |
+| 保留参数的最终 CMake 配置 / 探针目标构建 / 探针运行 | 均为 0 | `configure-final.json`、`build.json`、`probe.json` |
+| 上述最终链接审计 | 0 | `audit-final.json` |
+| 最终代码全新缓存配置 | 0 | `configure-clean.json` |
+| `python3 <日志目录>/verify_clean_config.py` | 1；上述 RPATH 填充差异 | `verify-clean-config.json` |
+| `python3 <日志目录>/audit_clean_recipe.py` | 0；逐参数确认唯一差异 | `audit-clean-recipe.json` |
+| `python3 <日志目录>/restore_native.py` 与 `restore_after_clean.py` | 均为 0；恢复锁并核对 15 个文件 | `restore-native.json`、`restore-after-clean.json` |
+
+本任务确认了本机固定依赖组合的构建、链接、元数据读写与初始状态。没有运行联合计算图、COMP 或 UB 业务传输，没有实现时间转换、服务调度或 CCL 模型，也没有完成目标硬件校准。技术规范、锁文件、子模块指针和源码均未修改。整理完成记录后仅本地提交，不推送；停止在 M0.3，下一项 M1.1 的 1,000 ns COMP 等待用户确认。

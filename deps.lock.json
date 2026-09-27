@@ -1,0 +1,156 @@
+{
+  "schema_version": "moe-ub-deps/1",
+  "recorded_date": "2026-09-27",
+  "specification": {
+    "path": "docs/moe_ub_cosim_dev_v0.2.md",
+    "version": "v0.2",
+    "git_blob_sha": "3f90d5c8f0754be3f6e755f443c9d0c412b2fa1e",
+    "sha256": "58d06f24f8ce7d81df902ca516f47e2566ab1bb673d83f184807da6382d99e3c"
+  },
+  "verification": {
+    "method": "github_parent_metadata",
+    "local_initialization": "not_run",
+    "dependency_check_script": "not_run",
+    "native_baselines": "not_run",
+    "joint_build": "not_run",
+    "recursive_inventory": "observed_parent_gitlinks_only",
+    "notes": "下列提交来自固定版本及其父仓库 gitlink。更深层依赖继续由父提交锁定，完整初始化与远端可获取性尚未验证。GitCode 配套工具只核对了父仓库指针，未拉取。"
+  },
+  "environment": {
+    "platform": "native-linux",
+    "status": "not_verified",
+    "distribution": null,
+    "architecture": null,
+    "git_version": null,
+    "python_version": null,
+    "compiler": null,
+    "cmake_version": null,
+    "build_options": null,
+    "record_path": "docs/environment.md"
+  },
+  "dependencies": [
+    {
+      "name": "LLMServingSim",
+      "path": "third_party/LLMServingSim",
+      "parent_path": ".",
+      "submodule_path": "third_party/LLMServingSim",
+      "clone_url": "https://github.com/casys-kaist/LLMServingSim.git",
+      "upstream_url": "https://github.com/casys-kaist/LLMServingSim.git",
+      "baseline_commit": "a4053bc1161872420e1e0607cb3409ef659b828e",
+      "checkout_commit": "a4053bc1161872420e1e0607cb3409ef659b828e",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ns-3-UB",
+      "path": "third_party/ns-3-ub",
+      "parent_path": ".",
+      "submodule_path": "third_party/ns-3-ub",
+      "clone_url": "https://github.com/baoy21/ns-3-ub.git",
+      "upstream_url": "https://github.com/baoy21/ns-3-ub.git",
+      "baseline_commit": "581bf28a90740def0e79eafe5423af838c6f687d",
+      "checkout_commit": "581bf28a90740def0e79eafe5423af838c6f687d",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ASTRA-sim",
+      "path": "third_party/LLMServingSim/astra-sim",
+      "parent_path": "third_party/LLMServingSim",
+      "submodule_path": "astra-sim",
+      "clone_url": "https://github.com/casys-kaist/astra-sim.git",
+      "upstream_url": "https://github.com/casys-kaist/astra-sim.git",
+      "baseline_commit": "d3469945c50410cac2e727c9ab627670c965db2a",
+      "checkout_commit": "d3469945c50410cac2e727c9ab627670c965db2a",
+      "project_patch_commits": []
+    },
+    {
+      "name": "Chakra",
+      "path": "third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/graph_frontend/chakra",
+      "clone_url": "https://github.com/casys-kaist/chakra.git",
+      "upstream_url": "https://github.com/casys-kaist/chakra.git",
+      "baseline_commit": "30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7",
+      "checkout_commit": "30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7",
+      "project_patch_commits": []
+    },
+    {
+      "name": "fmt",
+      "path": "third_party/LLMServingSim/astra-sim/extern/helper/fmt",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/helper/fmt",
+      "clone_url": "https://github.com/fmtlib/fmt.git",
+      "upstream_url": "https://github.com/fmtlib/fmt.git",
+      "baseline_commit": "7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7",
+      "checkout_commit": "7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7",
+      "project_patch_commits": []
+    },
+    {
+      "name": "spdlog",
+      "path": "third_party/LLMServingSim/astra-sim/extern/helper/spdlog",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/helper/spdlog",
+      "clone_url": "https://github.com/gabime/spdlog.git",
+      "upstream_url": "https://github.com/gabime/spdlog.git",
+      "baseline_commit": "63f0875000bf90867aa7c76a831bd834cb7d4b5e",
+      "checkout_commit": "63f0875000bf90867aa7c76a831bd834cb7d4b5e",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ASTRA-original-ns3-backend",
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/network_backend/ns-3",
+      "clone_url": "https://github.com/casys-kaist/astra-network-ns3.git",
+      "upstream_url": "https://github.com/casys-kaist/astra-network-ns3.git",
+      "baseline_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "checkout_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "project_patch_commits": [],
+      "usage": "upstream_baseline_only_not_linked_into_joint_backend"
+    },
+    {
+      "name": "csg-htsim",
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/network_backend/csg-htsim",
+      "clone_url": "https://github.com/Broadcom/csg-htsim.git",
+      "upstream_url": "https://github.com/Broadcom/csg-htsim.git",
+      "baseline_commit": "67cbbbb1cccdbddc400803414127d044ecd55290",
+      "checkout_commit": "67cbbbb1cccdbddc400803414127d044ecd55290",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ASTRA-analytical-network",
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/analytical",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/network_backend/analytical",
+      "clone_url": "https://github.com/casys-kaist/astra-network-analytical.git",
+      "upstream_url": "https://github.com/casys-kaist/astra-network-analytical.git",
+      "baseline_commit": "5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e",
+      "checkout_commit": "5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ASTRA-analytical-memory",
+      "path": "third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical",
+      "parent_path": "third_party/LLMServingSim/astra-sim",
+      "submodule_path": "extern/memory_backend/analytical",
+      "clone_url": "https://github.com/casys-kaist/astra-memory-analytical.git",
+      "upstream_url": "https://github.com/casys-kaist/astra-memory-analytical.git",
+      "baseline_commit": "62313ef09abaf6a9764d13e2684ca61247def14b",
+      "checkout_commit": "62313ef09abaf6a9764d13e2684ca61247def14b",
+      "project_patch_commits": []
+    },
+    {
+      "name": "ns-3-ub-tools",
+      "path": "third_party/ns-3-ub/scratch/ns-3-ub-tools",
+      "parent_path": "third_party/ns-3-ub",
+      "submodule_path": "scratch/ns-3-ub-tools",
+      "clone_url": "https://gitcode.com/open-usim/ns-3-ub-tools.git",
+      "upstream_url": "https://gitcode.com/open-usim/ns-3-ub-tools.git",
+      "baseline_commit": "2afc7202f88c132b63c38e8c7dcfc08505b13bb2",
+      "checkout_commit": "2afc7202f88c132b63c38e8c7dcfc08505b13bb2",
+      "project_patch_commits": [],
+      "availability": "parent_pointer_verified_remote_fetch_not_tested"
+    }
+  ]
+}

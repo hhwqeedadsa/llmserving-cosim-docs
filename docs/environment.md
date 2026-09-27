@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 已完成独立沙箱诊断、`repo-local-check` 及 M0.1 的 UB、LLMServingSim 两项原生样例。13 个依赖仓库静态检查通过；两项样例分别构建并重复运行通过。用户授权后为 LLMServingSim 安装了 Protobuf 系统依赖，新增 Python 依赖放在项目专用虚拟环境，未升级已有系统软件。
+目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 已完成独立沙箱诊断、`repo-local-check`、M0.1 的 UB、LLMServingSim 两项原生样例及 M0.2 所选 8 项上游回归。13 个依赖仓库静态检查通过；两项样例分别构建并重复运行通过。用户授权后为 LLMServingSim 安装了 Protobuf 系统依赖，新增 Python 依赖放在项目专用虚拟环境，未升级已有系统软件。M0.2 复用该环境：8 项时钟回归通过，112 个请求内部一致性通过；同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。
 
 | 项目 | 当前记录 |
 |---|---|
@@ -17,6 +17,7 @@
 | `check_deps.sh` 本地结果 | 已执行，退出 0；11 项显式依赖及 2 项更深层依赖通过检查 |
 | UB 原生样例 | `scratch/2nodes_single-tp` 构建及两次相同输入运行通过，四个任务均完成，后处理独立复核通过 |
 | LLMServingSim 原生样例 | `single` 两次均完成 10 个请求；时钟 1663996645 ns、逐请求 CSV 均匹配上游，图的来源路径差异已核验 |
+| M0.2 上游回归 | 所选 8 项时钟全部匹配；请求核验通过，1 份不适用的上游 CSV 已定位来源，未运行全套回归 |
 | 联合编译与仿真 | 未实现、未执行 |
 
 本机 Python 3.12.3 已确认。UB 任务中的 `ns3` 启动器拒绝 root 会话，实际通过的是锁定版本文档提供的直接 CMake 入口及生成的样例程序；启动器原命令的失败记录保留在下文。
@@ -294,3 +295,94 @@ timeout --kill-after=10s 180s /root/moe-ub-cosim/.venv/llmservingsim-native/bin/
 结束前 `bash scripts/check_deps.sh` 退出 0（`dependency-final.json`），13 个依赖的固定提交、gitlink 和已检查源码状态一致；所有子模块源码工作区干净。`git diff --check` 与 `git submodule status --recursive` 均退出 0（`final-diff-check.json`、`final-submodules.json`）。原输入、性能表、上游参照、技术规范和锁文件均未修改。构建、protobuf 生成文件、虚拟环境及运行归档保留在各自忽略路径中。
 
 本次只提交任务、环境和 README 的实际完成记录，不推送。M0.1 的 UB 和 LLMServingSim 原生起步样例均已完成；原生数值作为后续回归参照，不能代替 M0.2 回归、M0.3 联合构建或模型校准。停止在本任务 `completed`，下一项由用户确认。
+
+## 2026-09-27：m0-2-upstream-regressions
+
+用户确认开始 M0.2。主仓库起点为 `7da6b6763553fcffb5fc6c6027403035790c43bd`，任务说明单独本地提交为 `4b96d06`；开始时主仓库及 13 个依赖工作区干净。LLMServingSim、ASTRA-sim、Chakra 分别仍为 `a4053bc1161872420e1e0607cb3409ef659b828e`、`d3469945c50410cac2e727c9ab627670c965db2a`、`30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7`，UB 与其他 gitlink 未变。
+
+本次只执行锁定 `serving/validate.sh` 的 8 个相关场景。复用 `.venv/llmservingsim-native/` 和 M0.1 的 analytical 程序，没有新增软件、构建或下载。Python/Chakra 导入及转换器源码校验通过，版本与前一记录相同；后端 SHA-256 仍为 `a5ea8e84ad0f6c354218a009adebd534d0ade1caefb965b4788ef651463a7b70`。
+
+日志目录为 `runs/m0-2-upstream-regressions-20260927T103119Z/`，以下路径以此为基准。记录工具 `record.py` 保存真实退出码、完整参数、工作目录、UTC 起止时间和 stdout/stderr；`scenarios/<场景>/command.json` 另保存实际 Python 调用与各场景退出码。
+
+### 输入与实际命令
+
+预检读取原脚本中的参数，归档 38 个文件、10206627 字节，含 7 份集群配置、两份模型描述、对应架构 YAML、RTXPRO6000 bf16/tp1 与所需 tp2 性能数据、3 份请求文件、脚本及参照；逐文件 SHA-256 和 CSV 表头/行数见 `preflight-manifest.json`，原文件在 `original-inputs/`。表中集群名均省略 `configs/cluster/` 前缀和 `.json` 后缀。
+
+| 场景 | 集群配置 | 请求文件 / 取前几条 |
+|---|---|---|
+| `moe` | `single_node_moe_single_instance` | `example_trace.jsonl` / 10 |
+| `moe_dp_ep` | `single_node_moe_dp_ep_instance` | `example_trace.jsonl` / 10 |
+| `pd` | `single_node_pd_instance` | `example_trace.jsonl` / 10 |
+| `moe_pd` | `single_node_moe_pd_instance` | `example_trace.jsonl` / 10 |
+| `dp_pp_uneven` | `single_node_dp_pp_instance` | `sharegpt-llama-3.1-8b-300-sps10.jsonl` / 50 |
+| `moe_dp_pp_uneven` | `single_node_moe_dp_pp_instance` | `sharegpt-qwen3-30b-a3b-300-sps10.jsonl` / 2 |
+| `moe_dp_tp_pp_uneven` | `single_node_moe_dp_tp_pp_instance` | 同上 / 10 |
+| `moe_dp_ep_uneven` | `single_node_moe_dp_ep_instance` | 同上 / 10 |
+
+请求文件均在锁定仓库的 `workloads/` 中。沿用上游 `--dtype bfloat16 --block-size 16 --log-level WARNING`，analytical 为原默认后端。保留原生 `LOAD` 请求分配、`BALANCED` 专家路由、block-copy、组批及缓存设置；这些原生近似不作为本项目真实专家路由或目标硬件校准依据。带 TP/PP 的场景用于检查已有代码，不扩大本项目首版功能范围。
+
+实际回归命令工作目录为 `third_party/LLMServingSim/`，退出 0：
+
+```bash
+env PYTHON=/root/moe-ub-cosim/runs/m0-2-upstream-regressions-20260927T103119Z/python-capture \
+  LOG_DIR=/root/moe-ub-cosim/runs/m0-2-upstream-regressions-20260927T103119Z/upstream \
+  TIMEOUT=180 bash serving/validate.sh \
+  moe moe_dp_ep pd moe_pd dp_pp_uneven moe_dp_pp_uneven moe_dp_tp_pp_uneven moe_dp_ep_uneven
+```
+
+`python-capture` 先核对收到的参数与预检中的原脚本参数完全一致，再调用项目虚拟环境 Python，只追加以下记录选项：`--inputs-root <本次日志目录>/scenarios/<场景>/inputs --output <本次日志目录>/scenarios/<场景>/requests.csv --keep-inputs`。run ID 保留原 `validate_<场景>`。脚本按其内部顺序逐项执行，每项 `timeout 180`；没有传 `--update`，显式场景选择跳过 bench 精度阶段。上游源码、示例输出和固定参照均未覆盖。
+
+### 实际结果与产物
+
+回归于 UTC 10:34:02 至 10:36:50 执行，原脚本报告 `Behaviour: 8/8 scenarios match their baselines.`。8 个子进程均退出 0，全部出现 `All Request Has Been Exited`，无超时或日志中的错误、警告消息。下表时钟均与 `serving/validate-baselines.txt` 完全相同。
+
+| 场景 | 完成请求数 | 输入 / 输出 token | 仿真时钟（ns） | 保留执行图数 |
+|---|---:|---:|---:|---:|
+| `moe` | 10 | 120 / 591 | 1945309759 | 310 |
+| `moe_dp_ep` | 10 | 120 / 591 | 1479062704 | 346 |
+| `pd` | 10 | 120 / 591 | 1661784496 | 167 |
+| `moe_pd` | 10 | 120 / 591 | 2081236210 | 226 |
+| `dp_pp_uneven` | 50 | 46957 / 33805 | 14403280459 | 7900 |
+| `moe_dp_pp_uneven` | 2 | 3489 / 1304 | 6225124056 | 4272 |
+| `moe_dp_tp_pp_uneven` | 10 | 10469 / 6705 | 9595091395 | 12992 |
+| `moe_dp_ep_uneven` | 10 | 10469 / 6705 | 9991090353 | 1670 |
+
+总计 112 个请求，71864 个输入 token、50883 个输出 token。核验了请求编号无遗漏或重复，token 数、模型与到达时间符合原输入，结束时间不晚于总时钟，延迟等于结束减到达，排队时间不超过 TTFT，ITL 数量等于输出 token 数减一，ITL 总和加 TTFT 等于延迟，TPOT 的整除关系正确。两项 P/D 的 CSV 各有 10 条最终记录，均在 decode 实例 1；prefill 实例不另计为完成请求，这与 `scheduler.py:353` 的交接及 `save_output()` 的保存逻辑一致。
+
+| 忙闲不均场景 | 实例 0：请求数 / 最后请求完成（ns） | 实例 1：请求数 / 最后请求完成（ns） |
+|---|---:|---:|
+| `dp_pp_uneven` | 25 / 13916025386 | 25 / 14402280459 |
+| `moe_dp_pp_uneven` | 1 / 2107878605 | 1 / 6224124056 |
+| `moe_dp_tp_pp_uneven` | 5 / 9510805607 | 5 / 9594091395 |
+| `moe_dp_ep_uneven` | 5 / 9906680159 | 5 / 9990090353 |
+
+这四项实际结果证明成员请求完成时间不一致时，所选原生样例仍正常退出。上游 `serving/__main__.py:733` 附近的 dummy 分支及 `:1116` 附近的组退出条件解释其同步方式；本次 WARNING 级日志没有逐次记录 dummy 创建，不能据此宣称已独立验证每次 dummy 的生命周期。
+
+每个场景保存一份请求 CSV、network/system/memory 三份生成配置及执行图，共 27915 个文件、357635606 字节，其中图 27883 份。每场景的逐文件大小与 SHA-256 在 `<场景>-files.json`，统计在 `verification-summary.json`。没有修改或清理原始结果。
+
+### 同名上游 CSV 的来源不一致
+
+`verify_results.py` 在全部时钟、请求字段与输入校验通过后，报告唯一错误：`moe_dp_ep: per-request CSV differs from upstream example`，退出 1。完整检查条件、失败结果与日志保留，不将该记录改为通过。
+
+原因是初次核验按同名文件选择了不适用的比较对象。`serving/run.sh:65-68` 和 `serving/validate.sh:126` 使用 `example_trace.jsonl` 的 10 条独立请求，但锁定 `outputs/example_moe_dp_ep_run.csv` 实际有 20 条记录。后续 `audit_reference.py` 逐项确认它们对应 `swe-bench-qwen3-30b-a3b-50-sps0.2.jsonl` 第一会话 `astropy__astropy-12907-run0`：全部 20 次调用的输入/输出 token 相同，首到达为 4059740 ns，后续到达均等于上次完成时间加对应工具等待。该 CSV 最后请求结束为 36550191391 ns；锁定回归另有 `agentic_moe_dp_ep 36551191391` 的独立时钟参照。
+
+来源核验退出 0，详见 `reference-audit.json` 与 `reference-history.txt`；只读取既有会话数据，没有运行 agentic 场景。该请求文件另归档并记录 SHA-256 `2f7cb044b4e45ef05b7d05337a6a947094fb3e44bc0ef0753d3566ffbab8591b`。原 CSV 的 SHA-256 保持 `85fb5c213d093239ca0e95e8fbd93462ccc319d31241e50326bed8254157eb88`；本次 10 请求 CSV 为 `e8bfc749afe9c1e9b490ee2f96bd02c6d36c90b5c76834f92b14811ccab374c3`。
+
+因此，`moe_dp_ep` 的时钟与输入/输出完整性已通过，但没有匹配本次输入的上游逐请求 CSV 可供对照。建议后续单独修正上游示例输出与生成命令的对应关系，本次保留上游文件。`moe` 和 `pd` 两份 CSV 与适用的上游文件逐字节一致，SHA-256 分别为 `05bf06d18e1e746e6a451b488fe212d327fa6278d2e9c3213547f05953bde149`、`321e2c281447e00aeee699cec32d60abf0145e7e7b9397775aea7849580d0e44`。其余五个场景没有同名上游 CSV，记录时钟回归和请求内部一致性，不宣称逐请求数值已与独立参照一致。
+
+### 检查记录与停止位置
+
+除上述回归命令外，下表命令均在主仓库根目录执行，脚本路径前缀为本次日志目录。
+
+| 实际命令 | 退出码与结果 | 命令记录 |
+|---|---|---|
+| `bash scripts/check_deps.sh` | 0；开始时 13 个依赖一致 | `dependency-before.json` |
+| `.venv/llmservingsim-native/bin/python <日志目录>/verify_runtime.py` | 0；环境与固定转换器一致 | `runtime-check.json` |
+| `python3 <日志目录>/preflight.py` | 0；归档输入，核对后端与参数 | `preflight.json` |
+| 上述原 `serving/validate.sh` 选择命令 | 0；8/8 时钟回归，各场景也均退出 0 | `upstream-regressions.json`、`scenarios/*/command.json` |
+| `python3 <日志目录>/verify_results.py` | 1；请求核验通过，唯一失败是上述不适用的 CSV 比较 | `verify-results.json` |
+| `python3 <日志目录>/audit_reference.py` | 0；核对 20 次调用来源及到达链，复核输入与程序未变 | `audit-reference.json` |
+| `bash scripts/check_deps.sh` | 0；结束前 13 个依赖源码、提交与 gitlink 一致 | `dependency-final.json` |
+| `git diff --check` | 0；文档差异格式检查通过 | `final-diff-check.json` |
+
+本任务完成了规定的相关上游回归与失败原因记录，没有更改任何仿真行为或上游参照。技术规范、依赖锁文件和所有子模块保持原样。完成记录仅本地提交，不推送；停止在 M0.2，M0.3 联合构建及目标硬件校准未执行，下一任务仍由用户确认。

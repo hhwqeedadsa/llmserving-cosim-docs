@@ -4,6 +4,8 @@
 #include "ns3/ub-app.h"
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include <stdexcept>
 
 namespace
@@ -19,6 +21,64 @@ template <class Exception, class F> void Reject(F action)
     throw std::runtime_error("Invalid transfer call was accepted");
 }
 void RecordCompletion(void* data) { ++*static_cast<unsigned*>(data); }
+struct CallbackTimes { std::vector<uint64_t> values; };
+void RecordTime(void* arg)
+{
+    static_cast<CallbackTimes*>(arg)->values.push_back(ns3::Simulator::Now().GetNanoSeconds());
+}
+void CompletionCase(uint64_t receive_start, uint64_t transaction_time)
+{
+    CallbackTimes sends, receives;
+    unsigned retired = 0;
+    moe_ub::WriteCompletion state("graph=original transfer=42 send_node=1 recv_node=2", 100,
+                                  [&]() { ++retired; });
+    state.RegisterSend(RecordTime, &sends);
+    ns3::Simulator::Schedule(ns3::NanoSeconds(receive_start), [&]() {
+        state.RegisterReceive(RecordTime, &receives);
+        Check(receives.values.empty(), "RECV callback reentered registration");
+    });
+    ns3::Simulator::Schedule(ns3::NanoSeconds(10), [&]() {
+        state.WriteCommitted(7, 1, 40); // Out-of-order TA units are still unique data.
+        state.WriteCommitted(7, 1, 40);
+        Reject<std::logic_error>([&]() { state.WriteCommitted(7, 1, 41); });
+        Reject<std::logic_error>([&]() { state.WriteCommitted(7, 2, 61); });
+        Reject<std::logic_error>([&]() { state.WriteCommitted(7, 2, 0); });
+        Check(state.CommittedBytes() == 40 && !state.DataReadyNs(), "Partial/duplicate write completed RECV");
+    });
+    ns3::Simulator::Schedule(ns3::NanoSeconds(20), [&]() {
+        state.WriteCommitted(7, 0, 60);
+        state.WriteCommitted(7, 0, 60);
+        Check(receives.values.empty(), "Data-ready callback ran inline");
+    });
+    ns3::Simulator::Schedule(ns3::NanoSeconds(transaction_time), [&]() {
+        state.TransactionDone();
+        Check(sends.values.empty(), "SEND callback ran inline");
+        Reject<std::logic_error>([&]() { state.TransactionDone(); });
+    });
+    ns3::Simulator::Schedule(ns3::NanoSeconds(35), [&]() {
+        Check(state.Active() == (receive_start > 35), "Late RECV state did not survive transaction completion");
+    });
+    ns3::Simulator::Run();
+    Check(sends.values == std::vector<uint64_t>{transaction_time}, "SEND waited on wrong event");
+    Check(receives.values == std::vector<uint64_t>{std::max(receive_start, uint64_t{20})},
+          "RECV waited on source completion or traveled backwards in time");
+    Check(state.DataReadyNs() == 20 && state.TransactionDoneNs() == transaction_time &&
+          !state.Active() && retired == 1 && state.CommittedBytes() == 100 &&
+          state.CommittedSegments() == 2 && !state.ReceiverWaiting(), "Final record or cleanup is wrong");
+    // A new graph may reuse local node IDs, but old events must identify the old transfer.
+    moe_ub::WriteCompletion next("graph=next transfer=43 send_node=1 recv_node=2", 100, {});
+    try { state.WriteCommitted(7, 0, 60); throw std::runtime_error("Stale write accepted"); }
+    catch (const std::logic_error& error) {
+        Check(std::string(error.what()).find("graph=original transfer=42") != std::string::npos,
+              "Stale diagnostic lost graph/transfer identity");
+    }
+    Reject<std::logic_error>([&]() { state.RegisterReceive(RecordTime, &receives); });
+    Reject<std::logic_error>([&]() { state.RegisterSend(RecordTime, &sends); });
+    Reject<std::logic_error>([&]() { state.TransactionDone(); });
+    Check(next.CommittedBytes() == 0 && next.Active(), "Old event changed new graph");
+    ns3::Simulator::Destroy();
+}
+
 }
 
 int main()
@@ -76,6 +136,22 @@ int main()
         }
         ns3::Simulator::Run();
         ns3::Simulator::Destroy();
+        CompletionCase(0, 30);  // RECV registered before data.
+        CompletionCase(15, 30); // SEND and partial data before RECV.
+        CompletionCase(50, 30); // Late RECV after both real milestones.
+        CompletionCase(0, 5);   // Independent event ordering, deliberately synthetic.
+        unsigned cancelled = 0;
+        {
+            moe_ub::WriteCompletion abandoned("graph=cancel transfer=44", 1, {});
+            abandoned.RegisterSend(RecordCompletion, &cancelled);
+            abandoned.RegisterReceive(RecordCompletion, &cancelled);
+            abandoned.WriteCommitted(0, 0, 1);
+            abandoned.TransactionDone();
+        }
+        ns3::Simulator::Run();
+        Check(cancelled == 0, "Destroyed completion state delivered queued callbacks");
+        ns3::Simulator::Destroy();
+        std::cout << "PASS: independent completion times, partial/duplicate writes, late RECV, retirement, stale identity;\n";
         std::cout << "PASS: descriptor bounds, matching, datatype, duplicate calls, async submission and cancellation\n";
         return 0;
     }

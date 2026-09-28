@@ -1,10 +1,11 @@
 {
-  "schema_version": "moe-ub-write/1",
+  "schema_version": "moe-ub-write/2",
   "start_ns": 10,
   "bytes": 409600,
   "transfer_id": 4294967319,
   "task_id": 7,
   "tag": 17,
-  "receive_first": true,
-  "reclaim_tps": false
+  "reclaim_tps": false,
+  "receive_start_ns": 0,
+  "receive_compute_ns": 1000
 }

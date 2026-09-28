@@ -13,6 +13,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/cosim_compute.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
     cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
@@ -23,6 +24,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/time_adapter_test.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
   IGNORE_PCH)
@@ -32,6 +34,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/cosim_write.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
     cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
@@ -42,6 +45,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/write_adapter_test.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
   IGNORE_PCH)

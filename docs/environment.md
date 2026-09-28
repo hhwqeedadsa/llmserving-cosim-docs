@@ -687,3 +687,90 @@ CSV 检查器先复制输入到新的 reference/patched 目录，再分别从 UB
 `csv-phase.json` 在运行保留原版时收到 SIGABRT（子进程 -6，检查器 1），原入口明确要求为含 phase 依赖的 CSV 提供 dependency visibility delay。为原版与补丁版同时显式设置 1 ns 后，完整比较通过。`m0-probe.json` 因首次遗漏必要的新图输出路径而返回 1；补齐参数的 `m0-probe-with-graph.json` 与后续审计均返回 0。这些失败记录不删除、不计为通过。
 
 本轮校准状态仍为 `unvalidated_reference`。没有完成目标端 data_ready、ASTRA RECV 图、晚到接收回调、正式观测导出、M2 发送调度或真实模型校准；没有运行全部上游测试、MPI/MTP 或全部内存语义场景。CSV 与 CTP 回归只证明所列输入保持结果，不代表整个 UB 功能面已穷尽验证。停止在 M1.2，M1.3 仍待用户确认。
+
+## 2026-09-28：m1-3-receive-ready
+
+M1.3 已完成实际目标端数据就绪、独立收发回调与双端 ASTRA 图执行。主仓库起点 `d4f272e`，任务说明提交 `7405f9e`。开始时 13 个依赖检出与工作区检查通过。UB 从锁定 `2d5509b` 建立 task/m1-3-receive-ready，仅修改事务层两个文件，补丁 `2713a38cd42376c655ceb26b80507d65677c0653` 已本地提交，cosim 快进到该提交。父仓库更新 UB gitlink、checkout_commit 与补丁清单；原始 baseline_commit 和其他依赖保持不变。没有推送、下载、安装或修改全局配置。
+
+证据根目录为 `runs/m1-3-receive-ready-20260928T121101Z/`（以下记为 L）。每项命令由审阅过的 record.py 保存 cwd、argv、UTC 起止、退出码与 stdout/stderr；集成目录另有 commands.json、输入、Chakra 图、原始跟踪、summary 和校验值。新构建目录为 build/m1-receive/；原生、M0、M1.1、M1.2 构建均保留。
+
+### 接收事件依据和实现边界
+
+已沿 `src/unified-bus/model/protocol/ub-transport.cc` 的 RecvDataPacket 核对：原 NotifyLastPacketReceived 在去重之前，不能用于整份业务数据就绪。实际有效数据经过 HandleRepeatedDataPacket、UpdateReceiveWindowAndCollectCompletedTa，再由 TrackInboundTaPacket 按连续 PSN 重组完整 TA 单元。CompleteInboundTaUnits 将完整单元送入 UbTransaction::HandleInboundTaUnit；WRITE 执行 ExecuteRemoteWriteAndBuildAck。
+
+补丁在 `ub-transaction.cc` 更新 m_memoryStore 后、构造原事务 ACK 前增加 RemoteWriteCommitted TraceSource。通知使用 Ptr<const UbWqeSegment>，不修改包、时延、优先级或路径。通知大小代表一个重组分段；目标 GetWqeSize 也是该分段大小，不能当作原始整份 WQE 大小。审阅片段保存在 L/receive-event-source.txt，最终集成来源哈希在 write-check/compiled-sources.json。
+
+UbWriteTransfer 筛选固定 taskId 与端点，WriteCompletion 对原 Jetty/TA 序号去重、累计有效字节，达到描述中的业务量后记录 data_ready。RECV 在 ScheduleNow 完成，SEND 独立由原执行器 transaction_done 完成。未登记 RECV 时保留已到达状态，源事务结束不能删除它；晚到登记使用当前时间。两侧回调返回后删除匹配上下文与分段表、清空借用回调参数、断开目标观察并释放应用引用，保留不可变身份、字节计数和完成时刻。
+
+当前写输入为 `moe-ub-write/2`：用 receive_start_ns 代替 receive_first，并明确接收后的 receive_compute_ns。源图为 SEND，目标图为 RECV→COMP；两个原 ASTRA Sys 独立激活，未修改 ASTRA 源码。旧版输入明确拒绝，M1.2 历史输入保存在旧日志与 Git 历史。计算入口的原 schema 不变。
+
+### 配置、构建和实际命令
+
+以下命令均从主仓库根目录执行；配置和有效构建退出 0，记录为 configure.json、build-targets.json。仍只运行一个构建，最多 8 路并行。没有启用全部上游测试或 MPI/MTP。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m1-receive -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m1-receive/output \
+  -DNS3_ENABLED_MODULES=unified-bus \
+  -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF \
+  -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF \
+  -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF \
+  -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m1-receive --parallel 8 --target cosim-write cosim-write-test \
+  cosim-time-test cosim-compute m0-joint-link-probe scratch_ub-quick-example
+L=runs/m1-3-receive-ready-20260928T121101Z
+build/m1-receive/output/cosim/ns3.44-cosim-write-test
+build/m1-receive/output/cosim/ns3.44-cosim-time-test
+build/m1-receive/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+python3 tests/integration/check_write.py --build-dir build/m1-receive --output-dir "$L/write-check"
+python3 tests/integration/check_compute.py --build-dir build/m1-receive --output-dir "$L/compute-check"
+python3 tests/integration/check_csv_regression.py \
+  --binary build/m1-receive/output/scratch/ns3.44-ub-quick-example \
+  --reference-binary third_party/ns-3-ub/build/scratch/ns3.44-ub-quick-example \
+  --output-dir "$L/csv-native"
+python3 tests/integration/check_csv_regression.py \
+  --binary build/m1-receive/output/scratch/ns3.44-ub-quick-example \
+  --reference-binary third_party/ns-3-ub/build/scratch/ns3.44-ub-quick-example \
+  --case-dir runs/m1-2-write-transfer-20260928T090505Z/phase-case \
+  --dependency-visibility-delay 1ns --output-dir "$L/csv-phase"
+python3 tests/integration/check_csv_regression.py \
+  --binary build/m1-receive/output/scratch/ns3.44-ub-quick-example \
+  --reference-binary third_party/ns-3-ub/build/scratch/ns3.44-ub-quick-example \
+  --case-dir third_party/ns-3-ub/scratch/rtp-ctp-micro-ctp-write --output-dir "$L/csv-ctp"
+build/m1-receive/output/m0/ns3.44-m0-joint-link-probe "$L/m0-probe.et"
+python3 scripts/m0_joint_build/audit.py --build-dir build/m1-receive \
+  --run-log "$L/m0-probe.stdout.log" --output-dir "$L/m0-audit"
+python3 "$L/restore_baselines.py"
+```
+
+命令均实际执行并退出 0；重跑检查应改用新输出目录。CSV 检查器从 UB 根目录执行保留原版和新二进制，输入复制到各自运行目录，显式重验两个原统计脚本的退出码。phase 使用 M1.2 已保存的四任务输入，两份二进制均显式传入 1 ns 依赖可见延迟。
+
+### 实际结果
+
+| 检查 | 结果 | 日志记录 |
+|---|---|---|
+| 完成与接口单元 | 四组独立事件时序、部分/乱序分段、重复累计拒绝、晚到接收、过期身份、回调取消及原接口边界通过 | write-unit.json |
+| 真实双端图六例 | 各一份 WQE、两侧各一次回调、RECV 后计算时刻正确、上下文释放 | write-integration.json、write-check/summary.json |
+| 输入检查 | 十项非法输入及一次覆盖目录均按预期返回 1，检查器返回 0 | write-check/commands.json |
+| 时间与计算回归 | 时间边界和精度拒绝通过；四项计算仍在 1000、1037、1、37 ns 完成 | time-unit.json、time-resolution.json、compute-check.json |
+| 原 CSV RTP 四任务 | 1,638,400 字节，39 个跟踪和统计文件逐字节一致 | csv-native.json、csv-native/comparison.json |
+| CSV phase 依赖 | 同四任务，39 个文件逐字节一致 | csv-phase.json、csv-phase/comparison.json |
+| 原 CTP 小例 | 一个 64 字节写任务，18 个文件逐字节一致 | csv-ctp.json、csv-ctp/comparison.json |
+| M0/计算/写程序链接 | 全部 52 个 ASTRA 核心对象；仅本轮构建的 10 个 UB ns-3 库，排除其他网络后端 | m0-audit.json、两个集成目录的编译来源与 summary |
+| 原生锁及旧产物 | 恢复启动锁，54 个旧产物大小及 SHA-256 不变 | restore-baselines.json、baseline-verification.json |
+
+409,600 字节主例从 10 ns 开始，目标提交六个 65,536 字节分段和一个 16,384 字节分段，时间依次为 1,561、2,889、4,217、5,546、6,874、8,202、8,534 ns。data_ready 和 RECV 为 8,534 ns，原 ASTRA 日志中的后继 COMP 也在该时刻 issue，至 9,534 ns 完成。源 WQE、transaction_done、SEND 和源图完成仍为 8,622 ns，与 M1.2 一致。没有用源端完成或测试上限反推接收时间。
+
+先接收在 0 ns 登记，先发送例在 30 ns 登记接收，两者实际数据与源完成时刻相同。晚到接收及晚到接收加 TP 回收在 20,000 ns 登记，当时源事务已完成，等待状态仍保留；回调在当前 20,000 ns 执行，计算至 21,000 ns 完成。1 字节例 data_ready/RECV 为 100 ns、源完成为 188 ns，计算至 1,100 ns 完成。所有例两端图完成、收发槽及执行器上下文清空，通知断开；默认 TP 两端各保留 2 个，原回收属性开启时各剩 0 个。CSV 完成计数均为 0。
+
+单元使用人为事件时间检验数据/事务独立性：数据在 20 ns 收齐，事务分别在 30 ns 或 5 ns 完成，晚到登记为 50 ns；发送和接收各自等待对应事件，不内联重入。重复观察不重复累计，冲突或超量分段拒绝。退役后旧事件报原 graph/transfer 身份，不影响复用局部节点号的新测试状态。这些是完成逻辑单元证据，不当作真实网络重传集成证据。
+
+### 失败和未验证范围
+
+首次构建 build.json 返回 1：命令误用短目标名 ub-quick-example，Ninja 在编译前报告 unknown target。核对生成目标后使用 scratch_ub-quick-example，build-targets.json 的 471 步构建退出 0。没有改断言或预期。配置保留已知的源码树外输出目录提示；构建保留上游警告，没有本轮编译错误。
+
+联合功能入口仍使用 start_ns 后 1 ms 的测试上限，以处理 UB 永久周期死锁检查；实际完成、后续事件执行和清理必须另外通过，不把上限当作通信时间。m_memoryStore 的原模型仅记录模拟地址与大小，未模拟张量内容和完整硬件内存一致性。当前只有一份不可变写任务，没有做丢包恢复集成、跨图 taskId 复用、全套上游测试、正式端口观测、完整服务终止或真实校准。校准状态仍为 unvalidated_reference。
+
+本轮停止在 M1.3 completed，M1.4 等待用户确认；提交后主仓库与 13 个依赖的最终检查记录位于 L/dependency-final.json，Git 状态另存 L/final-status.json 和 L/final-ub-status.json。

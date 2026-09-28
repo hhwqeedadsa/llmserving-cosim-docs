@@ -63,6 +63,7 @@ void UbWriteTransfer::Send(int rank, uint64_t bytes, int type, int dst, int tag,
 {
     Validate(rank, dst, bytes, type, tag, callback);
     completion_.RegisterSend(callback, arg);
+    send_start_ns_ = ns3::Simulator::Now().GetNanoSeconds();
     // Only explicit API values and the descriptor are retained; never sim_request*.
     submit_event_ = ns3::Simulator::ScheduleNow([this]() {
         auto controller = ns3::NodeList::GetNode(descriptor_.dst_rank)->GetObject<ns3::UbController>();
@@ -93,6 +94,7 @@ void UbWriteTransfer::Receive(int rank, uint64_t bytes, int type, int src, int t
 {
     Validate(src, rank, bytes, type, tag, callback);
     completion_.RegisterReceive(callback, arg);
+    receive_start_ns_ = ns3::Simulator::Now().GetNanoSeconds();
 }
 
 std::string UbWriteTransfer::Identity() const

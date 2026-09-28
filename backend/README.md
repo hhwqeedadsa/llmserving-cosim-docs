@@ -7,7 +7,7 @@
 本机已构建的程序调用形式：
 
 ```text
-build/m1-receive/output/cosim/ns3.44-cosim-compute INPUT.json SYSTEM.json NEW_RUN_DIR
+build/m1-observation/output/cosim/ns3.44-cosim-compute INPUT.json SYSTEM.json NEW_RUN_DIR
 ```
 
 功能输入见 [comp_1000ns.json](../fixtures/m1_compute/comp_1000ns.json)，ASTRA 配置见 [system.json](../fixtures/m1_compute/system.json)。运行目录必须不存在，其父目录必须已存在。程序保存输入副本、生成的 `compute.0.et`、ASTRA 执行日志和 `result.json`，不覆盖已有运行。
@@ -27,7 +27,7 @@ build/m1-receive/output/cosim/ns3.44-cosim-compute INPUT.json SYSTEM.json NEW_RU
 从主仓库根目录运行已构建入口（最后一个参数必须为新目录）：
 
 ```bash
-build/m1-receive/output/cosim/ns3.44-cosim-write \
+build/m1-observation/output/cosim/ns3.44-cosim-write \
   fixtures/m1_transfer/single_write.json fixtures/m1_compute/system.json \
   third_party/ns-3-ub/scratch/2nodes_single-tp runs/my-write
 ```
@@ -48,4 +48,41 @@ UB 原交换机永久周期调度死锁检查，测试入口在 `start_ns + 1,00
 
 `cosim-write-test` 检查描述边界、接口匹配和独立完成状态机；其中人为指定的完成时刻只用于时序单元验证。`check_write.py` 运行真实 UB 的先接收、先发送、晚到接收、一字节及 TP 回收场景，并交叉检查有效写入通知、WQE 跟踪、ASTRA 原始 issue/callback 日志、两端图完成及上下文清理。`check_csv_regression.py` 使用保留的原版二进制核对原生结果，不会自行检出、升级或重编译依赖。
 
-构建和实际检查结果见 [M1.3 环境记录](../docs/environment.md#2026-09-28m1-3-receive-ready)。本步不包含正式端口观测、持续服务调度或模型校准；完整服务终止属于后续任务。
+构建和实际检查结果见 [M1.3 环境记录](../docs/environment.md#2026-09-28m1-3-receive-ready)。本节说明收发完成语义，新增的最小端口观测见下节。持续服务调度、完整服务终止和模型校准属于后续任务。
+
+## M1.4 端口计数与内部来源
+
+在原写入口追加可选观测配置；省略它时保持 M1.3 的运行方式：
+
+```bash
+build/m1-observation/output/cosim/ns3.44-cosim-write \
+  fixtures/m1_transfer/single_write.json fixtures/m1_compute/system.json \
+  third_party/ns-3-ub/scratch/2nodes_single-tp runs/my-observed-write \
+  fixtures/m1_transfer/observation.json
+```
+
+[observation.json](../fixtures/m1_transfer/observation.json) 选择交换机 3 的端口 0、egress 方向，在本地 `[0, 30000)` ns 内生成 1000 ns 窗口。窗口半开，最后一个可以不足整周期，无包窗口输出零。配置严格检查字段、正周期、有效区间和真实交换端口，本步最多 4096 个窗口。`record_provenance: false` 保留相同观测，关闭来源侧表和 truth 文件；它不改变业务输入。
+
+计数复用 `UbPort::TraComEventNotify`：源码虽以完成事件命名，通知实际在通道 `TransmitStart` 成功后立即发出，参数 Time 是到完成的持续时间。本程序在通知当时计入 `Packet::GetSize()`，不把时间移到发送末尾，也不使用尝试发送前的旧 PortTxNotify。没有新增采样事件。累计总量另与原端口 GetTxBytes 的增量核对；不存在于包中的物理编码和 FEC 字节不计入。
+
+源 Jetty 从当前 WQE 的真实进度保存 TA 分段的任务偏移。TP 构造 WRITE 数据包后，通过 `WritePacketCreated` 被动通知给出任务偏移、包内载荷偏移和载荷长度。后端以已有 Packet UID 建立侧表，处理端口发送事件时只读包副本，核对实际 RTP/TA 头和已有 FlowTag。未增加包头或包标签，不用操作身份改变优先级、选路或协议时间。来源开启时，未知 WRITE 来源或不匹配的范围明确报错。当前 UID 对应针对不会额外分片/合并的单任务 RTP 路径；不声称覆盖其他协议。
+
+有效字节范围统一为半开区间。整包计数含业务载荷、数据包协议头和完整控制包；TP ACK、TA ACK 的载体字节以及信用帧不会因携带任务标签而获得业务归属。每次过端口都计数，来源侧表不会把重复经过的包从计数中去重。唯一交付量仍取 M1.3 的目标有效写入记录，不与多次经过或全网累计量混用。当前合成写无应用元数据，`payload_bytes` 与 `business_payload_bytes` 数值相等，两个字段仍分开保存。
+
+| 文件 | 内容与用途 |
+|---|---|
+| observed/public_config.json | 本次最小输出版本、端口、计数口径、本地观测区间和采样周期 |
+| observed/port_counters.jsonl | 每个本地窗口的整包字节及包数，含零窗口 |
+| observed/endpoint_ops.jsonl | rank 内记录号、SEND/RECV 执行开始和各自完成时刻 |
+| truth/operation_registry.jsonl | 合成操作、图节点与 rank 内端侧记录的对应 |
+| truth/transfer_registry.jsonl | 操作、64 位传输号、UB 任务号、端点和有效数据范围 |
+| truth/packet_ranges.jsonl | 所选端口实际经过的数据包及任务/包内字节范围，仅用于本步核验 |
+| truth/port_byte_truth.jsonl | 每窗业务数据、应用元数据、数据包协议开销、控制包字节的分项 |
+| truth/clock_models.json | 内部时钟模型；本步偏移和漂移均为零 |
+| observation-audit.json | 内部测试计数及序列化包与发送时刻的 FNV-1a 指纹 |
+
+端侧开始取自 ASTRA 调用实际进入适配器的时刻，完成取自传回 ASTRA 的对应回调；集成检查与原 ASTRA issue/callback 日志逐项核对。不能拿首包或末包时间代替它们。`observed/` 不含全局 operation_id、transfer_id、UB task_id、图节点号或时钟变换参数。现有 result.json、原始网络/ASTRA 日志、truth 和 audit 都是内部调试证据，不能作为关联方法可读输入。本轮文件是最小测试输出，M5 再落实规范中的完整目录、CSV、manifest、多设备时钟和研究导出。
+
+`cosim-observation-test` 检查窗口边界、零窗口、控制包载体排除、包副本不改线速字节、精确范围及重复经过的计数。`tests/integration/check_observation.py` 检查 7 种场景、来源开/关/不挂观测共 21 次成功运行，以及 10 种非法配置；包含 1 字节、65,537 字节尾块、5,000 字节 TA 分段、晚到 RECV 加 TP 回收、反向纯控制端口和裁剪窗口。每组比较原生跟踪、ASTRA 执行、图、完成及资源状态，开关来源时观测文件与序列化包/时刻指纹相同。
+
+标准 409,600 字节例的选定端口累计 417,834 字节：业务 409,600、数据包协议开销 7,800、控制包 434；data_ready 仍为 8,534 ns、SEND 完成仍为 8,622 ns。实际命令和保留的失败记录见 [M1.4 环境记录](../docs/environment.md#2026-09-28m1-4-port-provenance)。没有做真实丢包/重传集成、完整上游测试或硬件校准；当前校准状态仍为 unvalidated_reference。

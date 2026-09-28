@@ -47,6 +47,8 @@ class UbWriteTransfer
     std::optional<uint64_t> TransactionDoneNs() const { return completion_.TransactionDoneNs(); }
     std::optional<uint64_t> SendDoneNs() const { return completion_.SendDoneNs(); }
     bool ObservingTarget() const { return target_ != nullptr; }
+    std::optional<uint64_t> SendStartNs() const { return send_start_ns_; }
+    std::optional<uint64_t> ReceiveStartNs() const { return receive_start_ns_; }
 
   private:
     void Validate(int src, int dst, uint64_t bytes, int type, int tag,
@@ -60,5 +62,6 @@ class UbWriteTransfer
     WriteCompletion completion_;
     ns3::EventId submit_event_;
     uint64_t submitted_tasks_ = 0;
+    std::optional<uint64_t> send_start_ns_, receive_start_ns_;
 };
 }

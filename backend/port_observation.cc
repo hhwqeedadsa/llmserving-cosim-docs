@@ -1,0 +1,261 @@
+#include "port_observation.hh"
+
+#include "ns3/ipv4-header.h"
+#include "ns3/udp-header.h"
+#include "ns3/ub-header.h"
+#include "ns3/ub-tag.h"
+#include "ns3/ub-switch.h"
+#include "ns3/node-list.h"
+#include "ns3/simulator.h"
+
+#include <algorithm>
+#include <filesystem>
+#include <fstream>
+#include <set>
+#include <stdexcept>
+
+namespace moe_ub
+{
+namespace
+{
+using Json = nlohmann::json;
+void Require(bool condition, const char* message)
+{
+    if (!condition) throw std::runtime_error(message);
+}
+uint64_t Unsigned(const Json& j, const char* key, uint64_t max)
+{
+    Require(j.at(key).is_number_unsigned() && j.at(key).get<uint64_t>() <= max,
+            "Invalid observation unsigned field");
+    return j.at(key).get<uint64_t>();
+}
+void Save(const std::string& path, const Json& value, bool lines = false)
+{
+    std::ofstream stream(path);
+    if (lines) for (const auto& row : value) stream << row.dump() << '\n';
+    else stream << value.dump(2) << '\n';
+    stream.close();
+    Require(bool(stream), "Cannot write observation output");
+}
+template<class Header> void Remove(ns3::Ptr<ns3::Packet> packet, Header& header)
+{
+    Require(packet->GetSize() >= header.GetSerializedSize(), "Truncated packet at observation point");
+    packet->RemoveHeader(header);
+}
+void Created(std::shared_ptr<PayloadLedger> ledger, ns3::Ptr<const ns3::Packet> packet,
+             uint32_t task, uint64_t task_begin, uint32_t packet_begin, uint32_t bytes)
+{
+    ledger->Created(packet, task, task_begin, packet_begin, bytes);
+}
+}
+
+ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
+{
+    std::set<std::string> keys;
+    for (auto it = input.begin(); it != input.end(); ++it) keys.insert(it.key());
+    Require(keys == std::set<std::string>{"schema_version", "switch_id", "port_id",
+                "window_start_ns", "window_end_ns", "window_period_ns", "record_provenance"} &&
+            input.at("schema_version") == "moe-ub-port-observation/1" &&
+            input.at("record_provenance").is_boolean(), "Unsupported observation schema or fields");
+    ObservationConfig c{static_cast<uint32_t>(Unsigned(input, "switch_id", UINT32_MAX)),
+        static_cast<uint32_t>(Unsigned(input, "port_id", UINT32_MAX)),
+        Unsigned(input, "window_start_ns", stop_ns), Unsigned(input, "window_end_ns", stop_ns),
+        Unsigned(input, "window_period_ns", stop_ns), input.at("record_provenance").get<bool>()};
+    Require(c.start_ns < c.end_ns && c.period_ns > 0, "Invalid observation interval or period");
+    Require((c.end_ns - c.start_ns - 1) / c.period_ns < 4096,
+            "M1 observation supports at most 4096 windows");
+    return c;
+}
+
+PortWindows::PortWindows(ObservationConfig config) : config_(config)
+{
+    Require(config.start_ns < config.end_ns && config.period_ns > 0 &&
+            (config.end_ns - config.start_ns - 1) / config.period_ns < 4096,
+            "Invalid port window bounds");
+    rows_.resize((config.end_ns - config.start_ns - 1) / config.period_ns + 1);
+}
+void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business)
+{
+    Require(business <= whole, "Payload exceeds packet size");
+    if (time_ns < config_.start_ns || time_ns >= config_.end_ns) return;
+    auto& row = rows_.at((time_ns - config_.start_ns) / config_.period_ns);
+    ++row.packets;
+    row.whole += whole;
+    row.business += business;
+    if (business) row.overhead += whole - business;
+    else row.control += whole;
+}
+
+uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet)
+{
+    auto copy = packet->Copy();
+    ns3::UbDatalinkHeader dl;
+    Require(copy->GetSize() >= dl.GetSerializedSize(), "Missing datalink header");
+    copy->PeekHeader(dl);
+    if (dl.IsControlCreditHeader()) return 0;
+    Require(dl.IsPacketIpv4Header(), "M1 observer only accepts RTP/IPv4 or credit frames");
+    ns3::UbDatalinkPacketHeader packet_header;
+    ns3::UbIpBasedNetworkHeader network;
+    ns3::Ipv4Header ip;
+    ns3::UdpHeader udp;
+    ns3::UbTransportHeader tp;
+    Remove(copy, packet_header); Remove(copy, network); Remove(copy, ip);
+    Remove(copy, udp); Remove(copy, tp);
+    if (ns3::UbTransportChannel::IsTransportResponseOpcode(tp.GetTPOpcode())) return 0;
+    Require(tp.GetTPOpcode() == 1, "Unknown RTP packet opcode");
+    ns3::UbTransactionHeader ta;
+    Remove(copy, ta);
+    if (ta.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_TRANSACTION_ACK)) return 0;
+    Require(ta.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_WRITE),
+            "M1 observer only accepts WRITE data or acknowledgments");
+    ns3::UbMAExtTah ext;
+    Remove(copy, ext);
+    Require(copy->GetSize() > 0, "Empty WRITE payload");
+    return copy->GetSize();
+}
+
+void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
+                           uint64_t task_begin, uint32_t packet_begin, uint32_t bytes)
+{
+    Require(task == descriptor_.task_id && bytes > 0 && task_begin <= descriptor_.bytes &&
+            bytes <= descriptor_.bytes - task_begin && packet_begin <= packet->GetSize() &&
+            bytes == packet->GetSize() - packet_begin, "Invalid WRITE provenance range or task");
+    PayloadRange value{task_begin, packet_begin, bytes, packet->GetSize()};
+    auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
+    Require(inserted || it->second == value, "Conflicting packet provenance");
+}
+PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const
+{
+    auto it = ranges_.find(packet->GetUid());
+    Require(it != ranges_.end(), "WRITE packet has no source provenance");
+    const auto& range = it->second;
+    ns3::UbFlowTag tag;
+    Require(packet->PeekPacketTag(tag) && tag.GetFlowId() == descriptor_.task_id &&
+            tag.GetFlowSize() == descriptor_.bytes &&
+            range.packet_size == packet->GetSize() && range.bytes == payload_bytes,
+            "WRITE packet does not match registered payload range");
+    return range;
+}
+
+PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descriptor,
+                                ns3::Ptr<ns3::UbController> source)
+    : config_(config), descriptor_(std::move(descriptor)), windows_(config), source_(source)
+{
+    Require(config_.switch_id < ns3::NodeList::GetNNodes(), "Observation switch does not exist");
+    auto node = ns3::NodeList::GetNode(config_.switch_id);
+    auto sw = node->GetObject<ns3::UbSwitch>();
+    Require(sw && sw->GetNodeType() == ns3::UB_SWITCH && config_.port_id < node->GetNDevices(),
+            "Observation point must be an existing switch port");
+    port_ = ns3::DynamicCast<ns3::UbPort>(node->GetDevice(config_.port_id));
+    Require(port_ != nullptr, "Observation device is not a UB port");
+    initial_tx_bytes_ = port_->GetTxBytes();
+    if (config_.provenance)
+    {
+        ledger_ = std::make_shared<PayloadLedger>(descriptor_);
+        // Keep no TP references: native reclamation owns their lifetime. The bound
+        // ledger, not this observer, remains valid if a removed TP outlives its map entry.
+        for (const auto& [id, tp] : source_->GetTpnMap())
+            Require(tp->TraceConnectWithoutContext("WritePacketCreated",
+                        ns3::MakeBoundCallback(Created, ledger_)), "Cannot observe WRITE packet creation");
+    }
+    Require(port_->TraceConnectWithoutContext("TraComEventNotify",
+                ns3::MakeCallback(&PortObservation::PacketStart, this)), "Cannot observe port starts");
+}
+PortObservation::~PortObservation()
+{
+    if (port_) port_->TraceDisconnectWithoutContext("TraComEventNotify",
+        ns3::MakeCallback(&PortObservation::PacketStart, this));
+    if (ledger_) for (const auto& [id, tp] : source_->GetTpnMap())
+        tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
+}
+void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay)
+{
+    // Despite the native trace name, this fires NOW after TransmitStart succeeds.
+    // completion_delay is a duration; do not move the observation to packet end.
+    (void)completion_delay;
+    const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
+    const auto whole = packet->GetSize();
+    const auto business = WritePayloadBytes(packet);
+    windows_.Add(now, whole, business);
+    all_bytes_ += whole; ++all_packets_;
+    // Validation fingerprint of actual serialized bytes AND packet start times.
+    auto hash_byte = [this](uint8_t b) { fingerprint_ = (fingerprint_ ^ b) * 1099511628211ULL; };
+    for (auto value : {now, static_cast<uint64_t>(whole)})
+        for (unsigned i = 0; i < 8; ++i) hash_byte((value >> (8 * i)) & 255);
+    std::vector<uint8_t> wire(whole);
+    packet->CopyData(wire.data(), whole);
+    for (auto b : wire) hash_byte(b);
+    if (ledger_ && business)
+    {
+        const auto range = ledger_->Lookup(packet, business);
+        if (now >= config_.start_ns && now < config_.end_ns)
+            packet_ranges_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
+                {"ub_task_id", descriptor_.task_id}, {"transfer_id", descriptor_.transfer_id},
+                {"operation_id", descriptor_.graph_id + "/write"},
+                {"task_byte_range", {range.task_begin, range.task_begin + range.bytes}},
+                {"packet_byte_range", {range.packet_begin, range.packet_begin + range.bytes}},
+                {"counted_packet_bytes", whole}});
+    }
+}
+
+void PortObservation::Export(const UbWriteTransfer& transfer) const
+{
+    Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
+    const auto& completion = transfer.Completion();
+    Require(transfer.SendStartNs() && transfer.ReceiveStartNs() &&
+            completion.SendDoneNs() && completion.ReceiveDoneNs(), "Missing endpoint execution record");
+    std::filesystem::create_directory("observed");
+    Save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
+        {"counter_location", "egress_packet_start"}, {"byte_semantics", "packet_get_size"},
+        {"switch_id", config_.switch_id}, {"port_id", config_.port_id}, {"direction", "egress"},
+        {"observation_start_local_ns", config_.start_ns}, {"observation_end_local_ns", config_.end_ns},
+        {"window_period_ns", config_.period_ns}, {"clock_resolution_ns", 1}});
+    Json observed = Json::array(), truth = Json::array();
+    for (size_t i = 0; i < windows_.Rows().size(); ++i)
+    {
+        const auto& row = windows_.Rows()[i];
+        const auto start = config_.start_ns + i * config_.period_ns;
+        const auto end = start + std::min(config_.period_ns, config_.end_ns - start);
+        observed.push_back({{"switch_id", config_.switch_id}, {"port_id", config_.port_id},
+            {"direction", "egress"}, {"local_window_start_ns", start}, {"local_window_end_ns", end},
+            {"counted_packets", row.packets}, {"counted_packet_bytes", row.whole}});
+        truth.push_back({{"window_start_sim_ns", start}, {"window_end_sim_ns", end},
+            {"business_payload_bytes", row.business}, {"application_metadata_bytes", 0},
+            {"data_protocol_overhead_bytes", row.overhead}, {"control_packet_bytes", row.control},
+            {"unattributed_bytes", 0}});
+    }
+    Save("observed/port_counters.jsonl", observed, true);
+    Save("observed/endpoint_ops.jsonl", Json::array({
+        {{"rank_id", descriptor_.src_rank}, {"local_record_id", 1}, {"kind", "write_send"},
+         {"start_local_ns", *transfer.SendStartNs()}, {"end_local_ns", *completion.SendDoneNs()}},
+        {{"rank_id", descriptor_.dst_rank}, {"local_record_id", 1}, {"kind", "write_receive"},
+         {"start_local_ns", *transfer.ReceiveStartNs()}, {"end_local_ns", *completion.ReceiveDoneNs()}}
+    }), true);
+    Save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
+        {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
+        {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
+        {"wire_and_time_fnv1a64", fingerprint_}});
+    if (!ledger_) return;
+    std::filesystem::create_directory("truth");
+    Save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
+        {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},
+        {"switch_ids", {config_.switch_id}}, {"rank_ids", {descriptor_.src_rank, descriptor_.dst_rank}}});
+    const auto operation = descriptor_.graph_id + "/write";
+    Save("truth/operation_registry.jsonl", Json::array({{
+        {"operation_id", operation}, {"graph_id", descriptor_.graph_id}, {"op_type", "synthetic_write"},
+        {"source", "functional_fixture"}, {"calibration_status", "unvalidated_reference"},
+        {"endpoint_records", {{{"rank_id", descriptor_.src_rank}, {"local_record_id", 1},
+                                {"et_node_id", descriptor_.send_node_id}},
+                               {{"rank_id", descriptor_.dst_rank}, {"local_record_id", 1},
+                                {"et_node_id", descriptor_.recv_node_id}}}}}}), true);
+    Save("truth/transfer_registry.jsonl", Json::array({{
+        {"transfer_id", descriptor_.transfer_id}, {"operation_id", operation},
+        {"ub_task_id", descriptor_.task_id}, {"src_rank", descriptor_.src_rank},
+        {"dst_rank", descriptor_.dst_rank}, {"payload_bytes", descriptor_.bytes},
+        {"business_payload_bytes", descriptor_.bytes}, {"application_metadata_bytes", 0},
+        {"task_byte_range", {0, descriptor_.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
+        {"priority", 7}, {"chunk_id", 0}}}), true);
+    Save("truth/packet_ranges.jsonl", packet_ranges_, true);
+    Save("truth/port_byte_truth.jsonl", truth, true);
+}
+}

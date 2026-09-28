@@ -774,3 +774,82 @@ python3 "$L/restore_baselines.py"
 联合功能入口仍使用 start_ns 后 1 ms 的测试上限，以处理 UB 永久周期死锁检查；实际完成、后续事件执行和清理必须另外通过，不把上限当作通信时间。m_memoryStore 的原模型仅记录模拟地址与大小，未模拟张量内容和完整硬件内存一致性。当前只有一份不可变写任务，没有做丢包恢复集成、跨图 taskId 复用、全套上游测试、正式端口观测、完整服务终止或真实校准。校准状态仍为 unvalidated_reference。
 
 本轮停止在 M1.3 completed，M1.4 等待用户确认；提交后主仓库与 13 个依赖的最终检查记录位于 L/dependency-final.json，Git 状态另存 L/final-status.json 和 L/final-ub-status.json。
+
+## 2026-09-28：m1-4-port-provenance
+
+用户确认继续 M1.4，并将当前会话切换为 Full access。沿用已授权的本地提交流程，不推送。任务说明提交 ec1053c；开始时父仓库 cdca5ff、UB 2713a38 和其他依赖工作区干净，dependency-before.json 检查 13 个依赖通过。UB 在 task/m1-4-port-provenance 上增加四文件、22 行被动来源补丁，提交为 1ba722217ef94716a07a56a2388be2c7dddd8e0b，cosim 已快进到该提交。baseline_commit 和其他依赖、远端不变。
+
+本节日志根为 `runs/m1-4-port-provenance-20260928T130407Z/`，下文简记 L。record.py 经审阅后复用，每个命令保存 cwd、完整 argv、UTC 起止、退出状态和 stdout/stderr；集成检查的 commands.json 继续保存每个子进程。生成输入、图、配置、原始日志和核验结果保留在对应目录，不提交 Git。没有安装软件或下载数据。
+
+### 实现与计数依据
+
+当前写入口保留 moe-ub-write/2，追加可选 OBSERVATION.json，不配置时保留既有行为。端口计数挂在现有 TraComEventNotify；已核对 UbPort 普通和 detached 发送路径，此通知发生在通道 TransmitStart 成功之后、发送完成之前，通知参数为持续时间。原 PortTxNotify 在通道尝试之前发出，因此没有用它作为成功发送计数的实现。计入 GetSize 整包字节，并与原 GetTxBytes 增量独立核对。
+
+Jetty 在更新 WQE 已发送进度前保存真实任务偏移，TP 构造 WRITE request 包后被动报告任务/包内载荷范围。侧表使用已有 Packet UID，读取包副本和已有 FlowTag，不新增包字段、Tag、传输或定时事件。观察器不持有 TP 对象，原 TP 回收仍按原协议执行；已移出控制器的 TP 即使延迟销毁，绑定侧表也不依赖观察器对象地址。控制包完整计入观测但无业务来源行，未知/冲突来源明确报错。这里只覆盖无额外分片合并的单任务 RTP 写路径。
+
+observed 中保存半开本地窗口、零窗口以及逐 rank 的真实 ASTRA SEND/RECV 开始和完成；开始来自适配器实际调用，完成来自各自回调，与原 ASTRA issue/callback 日志交叉核对。operation_id、transfer_id、UB task_id、图节点和包内范围放在 truth，时钟偏移及漂移的零值也仅在 truth 中保存。observation-audit.json 和原 result.json 均是内部功能证据，不属于关联输入。本轮仅有测试所需输出，未宣称完成 M5 的正式导出格式。
+
+### 配置、构建与实际命令
+
+以下均从 /root/moe-ub-cosim 执行。新建 build/m1-observation，一次构建最多 8 路；保护并保留既有原生、M0 和 M1.1 至 M1.3 构建。
+
+```bash
+M14_LOG=runs/m1-4-port-provenance-20260928T130407Z
+cmake -S third_party/ns-3-ub -B build/m1-observation -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m1-observation/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m1-observation --parallel 8 --target \
+  cosim-write cosim-write-test cosim-observation-test cosim-time-test \
+  cosim-compute m0-joint-link-probe scratch_ub-quick-example
+build/m1-observation/output/cosim/ns3.44-cosim-observation-test
+python3 tests/integration/check_observation.py --build-dir build/m1-observation \
+  --output-dir "$M14_LOG/observation-check-final"
+python3 tests/integration/check_write.py --build-dir build/m1-observation \
+  --output-dir "$M14_LOG/write-check-final"
+python3 tests/integration/check_compute.py --build-dir build/m1-observation \
+  --output-dir "$M14_LOG/compute-check"
+build/m1-observation/output/cosim/ns3.44-cosim-write-test
+build/m1-observation/output/cosim/ns3.44-cosim-time-test
+build/m1-observation/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+build/m1-observation/output/m0/ns3.44-m0-joint-link-probe "$M14_LOG/m0-probe.et"
+python3 scripts/m0_joint_build/audit.py --build-dir build/m1-observation \
+  --run-log "$M14_LOG/m0-probe.stdout.log" --output-dir "$M14_LOG/m0-audit"
+```
+
+原 CSV 使用 check_csv_regression.py，--binary 为 build/m1-observation/output/scratch/ns3.44-ub-quick-example，--reference-binary 为 third_party/ns-3-ub/build/scratch/ns3.44-ub-quick-example。默认 2nodes_single-tp 输出至 L/csv-regression；phase 例加 --case-dir runs/m1-2-write-transfer-20260928T090505Z/phase-case 和 --dependency-visibility-delay 1ns，输出至 L/csv-phase；CTP 例加 --case-dir third_party/ns-3-ub/scratch/rtp-ctp-micro-ctp-write，输出至 L/csv-ctp。完整 argv 分别见 csv-regression.json、csv-phase.json、csv-ctp.json。
+
+### 实际结果
+
+| 检查 | 实际结果 | L 内证据 |
+|---|---|---|
+| 观测单元 | 半开边界、末尾短窗口、空窗口、TP/TA ACK 排除、包副本不改字节、尾部范围、未知/冲突拒绝、重复经过不去重，退出 0 | observation-unit-final.json |
+| 观测集成 | 7 组 × 来源开/关/不挂观测 = 21 次成功运行；10 种非法配置按预期退出 1，检查脚本退出 0 | observation-check-final/summary.json、commands.json |
+| 写回归 | 六项真实双端写例通过；10 项非法输入及一次目录覆盖拒绝；最终二进制链接边界通过 | write-check-final.json、write-check-final/summary.json |
+| 时间/计算 | 时间接口及错误精度拒绝通过；四项计算和五项非法计算输入通过 | time-unit.json、time-wrong-resolution.json、compute-check.json |
+| 原 CSV RTP | 四任务、1,638,400 字节，39 个结果文件逐字节一致 | csv-regression/comparison.json |
+| CSV phase 依赖 | 四任务、39 个结果文件逐字节一致 | csv-phase/comparison.json |
+| 原 CTP | 一个 64 字节写，18 个结果文件逐字节一致 | csv-ctp/comparison.json |
+| 联合链接 | M0、计算及最终写程序均有全部 52 个 ASTRA 对象，仅装载本轮 10 个 UB ns-3 库 | m0-audit/、compute-check/、write-check-final/ |
+| 原生保护 | 启动锁按备份恢复，71 个旧产物大小和 SHA-256 不变，退出 0 | restore-baselines.json、baseline-verification.json |
+
+标准例是 409,600 字节、10 ns 发起。交换机 3 的端口 0 共计 107 个成功发送包、417,834 字节，其中 409,600 为业务有效数据、7,800 为数据包协议开销、434 为控制包；分项逐窗相加等于观测整包量。100 个数据包的来源范围无缝覆盖 `[0,409600)`，唯一目标写入仍为 409,600。观测区间 `[0,30000)` ns 的 30 个窗口全部输出，含 21 个零窗口。实际 data_ready/RECV 为 8,534 ns、SEND 为 8,622 ns，与此前一致。
+
+反向交换机 2 端口 0 的 109 个包、6,833 字节均计作控制包，业务字节和来源数据行均为零。1 字节例得到 141 整包字节、100/188 ns 的 data_ready/SEND；65,537 字节跨 TA 尾块例范围覆盖精确，数据就绪/发送完成为 1,562/1,652 ns。另将原生 TaSegmentBytes 配为 5,000，得到 14 个真实目标分段、27 个业务包，范围仍覆盖 65,537 字节，证明偏移并非固定 65,536 字节推算。晚到 RECV 加 TP 回收仍在 20,000 ns 完成接收回调，两端 TP 数各归零。
+
+每组来源开、关和不挂观测的 27 个原生跟踪文件 SHA-256、Chakra 图、完整结果状态及去除墙钟前缀的 ASTRA 执行日志一致；来源开关还保持 observed 三文件逐字节相同，以及实际序列化包/发送时刻的 FNV-1a 指纹相同。改选反向端口或裁剪统计区间也不改变同输入的执行结果。指纹仅用于测试比对，不用作安全校验或操作身份。
+
+### 保留的失败与限制
+
+首轮 build.json 退出 1：新单元测试的辅助函数名 Packet 与上游头暴露的 ns3::Packet 名称冲突。仅将辅助函数改名为 MakeTestPacket，build-fixed.json 退出 0；原失败日志保留。审阅输出边界时又将公开配置中的 identity 时钟说明移至 truth，明确本地窗口字段；build-observation-final.json、observation-unit-final.json、observation-check-final.json 和 write-check-final.json 验证最终版本均退出 0。没有删除断言、降低预期或修改技术定义。
+
+配置仍有已记录的源码树外输出目录提示，构建有上游弃用等警告。没有执行完整上游测试、实际丢包/重传集成、非 RTP 观测、多任务/多图服务或非零时钟实验。单元中的重复包计数不替代真实重传集成。原生 CTP 回归只确认补丁不改变它的行为，不表示联合观测支持 CTP。
+
+本步仍是 unvalidated_reference 的合成功能验证，无应用元数据，无真实激活张量/硬件校准依据。联合入口继续由原有 1 ms 测试上限结束，通信时刻取实际事件。来源开关只关闭来源侧表和 truth，本来已有的内部 result 与原生调试日志仍保留，不能误当作公开算法输入。
+
+M1.4 完成，停止在本任务；M2.1 等待用户确认。父仓库按持续授权本地提交；提交后执行 bash scripts/check_deps.sh，记录保存在 L/dependency-final.json，最终主仓库和 UB 状态保存在 L/final-status.json、L/final-ub-status.json。

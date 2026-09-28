@@ -1,6 +1,7 @@
 #include "astra_logging.hh"
 #include "ub_network_adapter.hh"
 #include "ub_write_transfer.hh"
+#include "port_observation.hh"
 
 #include "astra-sim/system/Sys.hh"
 #include "et_def.pb.h"
@@ -115,8 +116,8 @@ int main(int argc, char** argv)
 {
     try
     {
-        if (argc != 5)
-            throw std::invalid_argument("Usage: cosim-write INPUT.json SYSTEM.json UB_CASE NEW_RUN_DIR");
+        if (argc != 5 && argc != 6)
+            throw std::invalid_argument("Usage: cosim-write INPUT.json SYSTEM.json UB_CASE NEW_RUN_DIR [OBSERVATION.json]");
         const auto input = ReadJson(fs::absolute(argv[1]));
         const auto system_config = ReadJson(fs::absolute(argv[2]));
         const auto ub_case = fs::absolute(argv[3]);
@@ -131,6 +132,9 @@ int main(int argc, char** argv)
         constexpr uint64_t horizon_ns = 1000000;
         const auto start = Number(input, "start_ns",
                                   std::numeric_limits<int64_t>::max() - horizon_ns);
+        std::optional<moe_ub::ObservationConfig> observation_config;
+        if (argc == 6) observation_config = moe_ub::ObservationConfig::Parse(
+            ReadJson(fs::absolute(argv[5])), start + horizon_ns);
         const auto receive_start = Number(input, "receive_start_ns", start + horizon_ns - 1);
         const auto compute_ns = Number(input, "receive_compute_ns", start + horizon_ns - receive_start - 1);
         if (compute_ns == 0) throw std::invalid_argument("Require positive receive computation");
@@ -202,6 +206,9 @@ int main(int argc, char** argv)
         moe_ub::InitializeAstraLogging();
         {
             moe_ub::UbWriteTransfer transfer(descriptor, app);
+            std::unique_ptr<moe_ub::PortObservation> observation;
+            if (observation_config) observation = std::make_unique<moe_ub::PortObservation>(
+                *observation_config, descriptor, source_ctrl);
             moe_ub::UbNetworkAdapter sender(0, [&](uint64_t now) {
                 report["source_graph_completions_ns"].push_back(now);
                 report["context_active_at_source_finish"] = transfer.Completion().Active();
@@ -270,6 +277,7 @@ int main(int argc, char** argv)
                     report["jetty_resources_released"] = false;
             }
             dl_iterate_phdr(RecordLibrary, &report["loaded_libraries"]);
+            if (observation) observation->Export(transfer);
             // Both graphs and physical UB work must finish before normal teardown.
         }
         utils->Destroy();

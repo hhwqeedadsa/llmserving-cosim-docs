@@ -53,6 +53,7 @@ class PayloadLedger
   public:
     explicit PayloadLedger(WriteDescriptor descriptor) : PayloadLedger(std::vector<WriteDescriptor>{std::move(descriptor)}) {}
     explicit PayloadLedger(const std::vector<WriteDescriptor>& descriptors);
+    void Register(const std::vector<WriteDescriptor>& descriptors);
     void Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task, uint64_t task_begin,
                  uint32_t packet_begin, uint32_t bytes);
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
@@ -74,6 +75,7 @@ class PortObservation
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
+    void Register(const std::vector<WriteDescriptor>& descriptors);
     void Export(const UbWriteTransfer& transfer) const;
     void Export(const std::vector<const UbWriteTransfer*>& transfers,
                 const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry) const;

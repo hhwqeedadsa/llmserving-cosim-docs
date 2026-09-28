@@ -147,3 +147,20 @@ foreach(target cosim-sequence cosim-lifecycle-test)
   target_link_options(${target} PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m2/${target}-link.map")
 endforeach()
 target_compile_definitions(cosim-lifecycle-test PRIVATE COSIM_LIFECYCLE_TEST)
+
+build_exec(
+  EXECNAME cosim-service
+  SOURCE_FILES
+    "${CMAKE_CURRENT_LIST_DIR}/cosim_service.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
+  LIBRARIES_TO_LINK cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-service PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-service PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m3")
+target_link_options(cosim-service PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m3/service-link.map")

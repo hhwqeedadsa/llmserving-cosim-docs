@@ -116,9 +116,15 @@ uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet)
 
 PayloadLedger::PayloadLedger(const std::vector<WriteDescriptor>& descriptors)
 {
+    Register(descriptors);
+}
+void PayloadLedger::Register(const std::vector<WriteDescriptor>& descriptors)
+{
+    auto checked = descriptors_;
     for (const auto& d : descriptors)
-        Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
+        Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
                 "Duplicate or invalid UB task identity in provenance registry");
+    descriptors_.swap(checked);
 }
 
 void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
@@ -186,6 +192,15 @@ PortObservation::~PortObservation()
         ns3::MakeCallback(&PortObservation::PacketStart, this));
     if (ledger_) for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
         tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
+}
+void PortObservation::Register(const std::vector<WriteDescriptor>& descriptors)
+{
+    auto checked = descriptors_;
+    for (const auto& d : descriptors)
+        Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
+                "Duplicate or invalid observation task identity");
+    if (ledger_) ledger_->Register(descriptors);
+    descriptors_.swap(checked);
 }
 void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay)
 {

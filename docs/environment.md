@@ -1250,3 +1250,104 @@ sequence-final/commands.json 记录生成器对子目录 0/、1/ 的编码、五
 comm_tag 继续限制为 1～499999999，以避开锁定 NATIVE 路径的标签重映射；达到已验证上界时明确报错，不截断，不宣称完整正 31 位空间可用。固定两步、四 rank、正计算和零应用元数据限制保持；本步不覆盖 M3 的零业务初始化决策、动态请求、空闲组唤醒、多组共享瓶颈、零 Token 成员或服务退出协议，也没有真实路由或模型校准。
 
 停止在 M2.4 completed。ASTRA、LLMServingSim 和父仓库由内向外本地提交，不推送。父仓库提交后的依赖检查保存为 L/dependency-final.json，主仓库和三个相关子模块状态保存为 final-*.json。M2 固定图功能步骤已经完成，M3.1 等待用户确认。
+
+## 2026-09-28：m3-1-service-loop
+
+用户确认执行 M3.1。M2.4 已在 116fb15 保存，新任务说明提交 1784b1d；开始时主仓库、LLMServingSim 0038df8、ASTRA e2a14f5、UB 1ba7222 工作区干净，13 项依赖检查通过。本轮日志根为 `runs/m3-1-service-loop-20260928T155309Z/`，下文记为 L。record.py 保存 cwd、argv、起止 UTC、退出码与原始 stdout/stderr；集成目录的 commands.json 记录实际子进程命令与输入。没有修改依赖源码、gitlink 或锁文件，没有安装、下载、初始化、改变远端或推送。
+
+### 服务和执行行为
+
+新增 moe_ub_cosim.service 与 cosim-service。前端导入锁定 LLMServingSim 的真实 Scheduler/Request/Batch，使用 add_decode 登记给定就绪的 KV，以 schedule 选择每轮请求，通过 add_done 更新完成状态。没有复制调度器或改变它的计数规则：num_computed_tokens 在调度时推进，num_tokens_reached 在完成时推进。四个请求初始已有的生成 Token 数分别为 1、2、3、4，本次各执行三个解码步；逐请求状态保存在 service_result.json。
+
+通信和固定计算仍由已验证的 M2 单层生成器产生，Top-2、专家放置、向量和分块、单 SEND 槽不变。每轮根据实际 Batch 和请求 Token 下标导出新图；运行内 graph/wave/operation、transfer/UB task/tag 不复用。后端先创建全部对象，以四份仅含 Chakra 元数据的图完成零业务初始化，再在 0 ns 发首次 DECIDE。图装载、传输登记与按 rank 激活沿用 M2.4 接口，全部 rank 完成后才通知 WAVE_DONE。前端使用绝对 now_ns，不累加独立运行结果。
+
+后端 stdout 的原文件描述符仅用于 cosim/1 JSONL，上游 cout/printf 日志重定向至 stderr。前端保存双方协议消息，核对 run/decision/time 与完成图身份，并报告错误或子进程退出。读取使用有壁钟时限的分段管道读取，不完整行也不会无限阻塞。next_wakeup_ns 必须为 null、input_exhausted 必须为 true；动态到达尚未执行。
+
+来源侧表可按轮原子追加，历史包范围不丢失。正常服务完成后仍检查所有图和传输上下文、实际链路包开始/到达计数、端口状态与队列；收尾探测只在前端完成后安排，业务运行中的监听只计数。网络空闲才停止，随后刷新统计、解除观察、销毁事件与对象。原生分配器的周期巡检不再使已完成服务继续运行。
+
+### 实际命令与构建
+
+除原生前端命令外，cwd 均为 /root/moe-ub-cosim。使用既有虚拟环境和 protoc，所有联合产物写入本轮独立目录，最多八路编译。
+
+```bash
+M31_LOG=runs/m3-1-service-loop-20260928T155309Z
+cmake -S third_party/ns-3-ub -B build/m3-service-loop -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m3-service-loop/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m3-service-loop --target \
+  cosim-service cosim-layer cosim-layer-delay-test cosim-sequence cosim-lifecycle-test \
+  cosim-observation-test cosim-send-slots-test cosim-compute cosim-time-test \
+  cosim-write cosim-write-test m0-joint-link-probe --parallel 8
+cmake --build build/m3-service-loop --target cosim-service cosim-observation-test --parallel 8
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*_test.py'
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_service.py \
+  --build-dir build/m3-service-loop --output-dir "$M31_LOG/service-drain-audit"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_sequence.py \
+  --build-dir build/m3-service-loop --output-dir "$M31_LOG/sequence-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m3-service-loop --output-dir "$M31_LOG/layer-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_variants.py \
+  --build-dir build/m3-service-loop --output-dir "$M31_LOG/variants-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m3-service-loop --output-dir "$M31_LOG/delay-regression"
+python3 tests/integration/check_compute.py --build-dir build/m3-service-loop --output-dir "$M31_LOG/compute-regression"
+python3 tests/integration/check_write.py --build-dir build/m3-service-loop --output-dir "$M31_LOG/write-regression"
+python3 tests/integration/check_observation.py --build-dir build/m3-service-loop --output-dir "$M31_LOG/observation-regression"
+build/m3-service-loop/output/cosim/ns3.44-cosim-observation-test
+python3 "$M31_LOG/restore_baselines.py"
+```
+
+配置和首次 512 步构建通过。退出逻辑修复后 build-drain.json 两步增量构建通过；补充侧表检查与观测追加单元后 build-final.json 四步构建通过。最终审查进一步核对每条 TP 的待发送队列与未确认段，build-drain-audit.json 两步构建和 service-drain-audit 复验通过，业务及收尾时刻均未改变；所有列出的回归也通过。继续保留源码树外 UB 输出目录提示和上游 std::binary_function 弃用警告。
+
+原生前端未重新编译、未改动源文件。为验证仍能运行原流程，执行 serving/validate.sh 中 single 与 moe_dp_ep 两项的原参数，增加本轮独立输入和 CSV 输出目录；直接运行命令，保留输入，未执行全套脚本或更改基线。两条命令 cwd 为 /root/moe-ub-cosim/third_party/LLMServingSim：
+
+```bash
+env PYTHONPATH=. /root/moe-ub-cosim/.venv/llmservingsim-native/bin/python -m serving \
+  --dtype bfloat16 --block-size 16 --log-level WARNING \
+  --cluster-config configs/cluster/single_node_single_instance.json \
+  --dataset workloads/example_trace.jsonl --num-reqs 10 --run-id m3-1-native-single \
+  --inputs-root /root/moe-ub-cosim/runs/m3-1-service-loop-20260928T155309Z/native-single-inputs --keep-inputs \
+  --output /root/moe-ub-cosim/runs/m3-1-service-loop-20260928T155309Z/native-single.csv
+env PYTHONPATH=. /root/moe-ub-cosim/.venv/llmservingsim-native/bin/python -m serving \
+  --dtype bfloat16 --block-size 16 --log-level WARNING \
+  --cluster-config configs/cluster/single_node_moe_dp_ep_instance.json \
+  --dataset workloads/example_trace.jsonl --num-reqs 10 --run-id m3-1-native-moe-ep \
+  --inputs-root /root/moe-ub-cosim/runs/m3-1-service-loop-20260928T155309Z/native-moe-ep-inputs --keep-inputs \
+  --output /root/moe-ub-cosim/runs/m3-1-service-loop-20260928T155309Z/native-moe-ep.csv
+```
+
+### 检查结果
+
+| 检查 | 实际结果 | L 内记录 |
+|---|---|---|
+| Python 单元 | 15 项通过，含既有 12 项、真实调度器计数与完成、八种超范围/坏服务输入及不完整协议行的限时退出 | python-unit-final.json |
+| 三轮服务 | 四个请求各推进三次并 FINISHED，四次 DECIDE/COMMIT、12 次 schedule，共 42 次真实写、344064 字节 | service-drain-audit.json、service-drain-audit/on/service_result.json |
+| 原执行层证据 | 144 个节点、288 条原始 issue/callback，全部依赖、局部计算耗时、收发事件与全组完成核对通过 | service-drain-audit/on/execution/ 与各轮 graphs/ |
+| 时延反馈 | 仅把 rank 1 链路传播从 20 ns 改为 2020 ns，三轮完成时刻随实际 UB 事件变化 | service-drain-audit/slow、slow-network |
+| 被动观测 | 来源开/关/不挂观测与重复运行的业务事件、33 份原生网络跟踪一致；三个观测运行的 observed 与包/时刻指纹一致 | service-drain-audit/summary.json |
+| 壁钟暂停 | 每次 COMMIT 前暂停 30 ms，四次后端消息及全部业务结果与基线一致 | service-drain-audit/paused、paused.protocol.json |
+| 网络收尾 | 缩短最终两个 COMP 至各 1 ns，并设置真实端口间隔 500 ns；服务在 83685 ns 结束，504 次链路发送/到达均收尾后在 84207 ns 退出 | service-drain-audit/tail |
+| 错误诊断 | EOF、非法 JSON、决策号/时刻/run 不符、未来唤醒、没有提交工作、错误路径、末 rank 坏图均返回 1；不部分装载业务图。前端捕获 /bin/false 子进程退出 | service-drain-audit/rejected-*、child-failure |
+| 来源追加 | 新图登记保留旧包范围；批量中有重复身份时不部分追加 | observation-unit.json |
+| M2 回归 | 单层、给定事件及真实延迟、去重/分块/双槽、固定两轮和旧回调检查通过 | layer/delay/variants/sequence-regression |
+| M1 回归 | 四个计算用例、六次真实写、21 次观测及对应错误输入检查通过 | compute/write/observation-regression |
+| 原生服务 | single=1663996645 ns，moe_dp_ep=1479062704 ns，均与 serving/validate-baselines.txt 精确一致，各完成十个请求 | native-single.json、native-moe-ep.json、native-clock-comparison.json |
+| 链接与旧产物 | 联合服务含全部 52 个 ASTRA 核心对象，实际仅装载本次 UB 的十个 ns-3 库；原生启动锁恢复，192 份旧产物大小和 SHA-256 不变；25 份执行源码与最终测试哈希一致 | service-drain-audit/summary.json、restore-baselines.json、final-audit.json |
+
+基线三轮提交时刻为 0、21552、43145 ns，完成时刻为 21552、43145、64738 ns；每轮仅在四个 rank 全部完成后推进服务。增加链路延迟后三轮分别在 33470、66940、100410 ns 完成，输入 Token 和路由不变。完成时间不是导出器预设或独立运行时长相加。
+
+所选交换机 4 端口 2 三轮累计 54 个包、77517 整包字节，其中业务 73728、数据协议开销 1404、控制 2385，应用元数据与未归属字节均零。24 条端侧局部记录、六个内部操作覆盖三个图；observed 不包含 graph/operation/transfer/request/Token 身份。逐窗口整包计数与原 UB PortTrace 完全相符。
+
+### 保留的失败、边界和停止位置
+
+首次 service-check.json 返回 1，原三轮已经完成，但后端收到最终 COMMIT 后试图让 ns-3 自然耗尽事件，等待 60 秒超时。源码定位至 ub-switch-allocator.cc 的 Init()/CheckDeadlock()：即使网络空闲也每 10 ms 重复登记巡检。修复为服务完成后核对真实链路发送/到达、端口与队列，再停止并通过对象/Simulator 销毁剩余巡检事件，没有修改协议或按固定时刻冒充完成。原失败的协议、日志与 manifest 保留于 service-check/on/。service-check-2.json 及包含额外收尾测试的 service-drain-audit.json 均返回 0，没有未解决失败。
+
+本步仍是 fixture/unvalidated_reference：单 EP 组、四 rank、给定就绪 KV、预先到达的短请求、每 rank 每轮一个 Token，参考单层计算和通信模板。请求剩余步数须相同，支持 2～32 步；本机功能输入为三步。未验证完整模型性能、真实路由、硬件校准、动态到达、多组竞争、零 Token 成员、P/D 或丢包重传。未运行全套 serving/validate.sh 和 CSV 场景；本轮没有修改依赖源码，两个相关原生场景和联合回归已通过。comm_tag 保持已验证的 1～499999999 范围。
+
+停止在 M3.1 completed，下一项 M3.2 等待用户确认。代码、说明和任务记录只在主仓库本地提交，不推送。提交后的依赖检查保存在 L/dependency-final.json，主仓库及相关子模块状态保存在 final-*.json。

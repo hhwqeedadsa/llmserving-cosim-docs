@@ -19,12 +19,9 @@ def write_message(stream, message):
     stream.write(body)
 
 
-def export_plan(plan, output):
-    validate_plan(plan)
+def _schema(output):
     root = Path(__file__).resolve().parents[2]
     schema = root / 'third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra/schema/protobuf/et_def.proto'
-    output = Path(output).resolve()
-    output.mkdir(exist_ok=False)
     generated = output / 'schema'
     generated.mkdir()
     command = ['protoc', '-I', str(schema.parent), '--python_out=' + str(generated), str(schema)]
@@ -36,6 +33,25 @@ def export_plan(plan, output):
     spec = importlib.util.spec_from_file_location('et_def_pb2', generated / 'et_def_pb2.py')
     proto = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(proto)
+    return proto, schema
+
+
+def export_bootstrap(output):
+    """Metadata-only Chakra graphs: no nodes, business work, or elapsed time."""
+    output = Path(output).resolve()
+    output.mkdir(exist_ok=False)
+    proto, _ = _schema(output)
+    for rank in range(4):
+        with (output / f'layer.{rank}.et').open('xb') as stream:
+            write_message(stream, proto.GlobalMetadata(version='moe-ub-bootstrap/1'))
+    return output
+
+
+def export_plan(plan, output):
+    validate_plan(plan)
+    output = Path(output).resolve()
+    output.mkdir(exist_ok=False)
+    proto, schema = _schema(output)
     transfers = {t['transfer_id']: t for t in plan['transfers']}
     for graph in plan['rank_graphs']:
         with (output / f"layer.{graph['rank_id']}.et").open('xb') as stream:

@@ -82,6 +82,18 @@ int main()
               "port counters must count repeated payload occurrences");
         Reject([&] { ledger.Created(data, 7, 0, begin, 1); });
         Reject([&] { ledger.Created(data, 8, 65536, begin, 1); });
+        moe_ub::WriteDescriptor next{4294967320ULL, 8, "next-graph", 1, 2, 0, 1, 18, 65537};
+        // A later duplicate must not partially append the earlier valid entry.
+        Reject([&] { ledger.Register({next, {4294967319ULL, 7, "unit", 1, 2, 0, 1, 17, 65537}}); });
+        Reject([&] { ledger.Created(data, 8, 65536, begin, 1); });
+        ledger.Register({next});
+        auto next_packet = MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE, 1);
+        ns3::UbFlowTag old_tag;
+        next_packet->RemovePacketTag(old_tag);
+        next_packet->AddPacketTag(ns3::UbFlowTag(8, 65537));
+        ledger.Created(next_packet, 8, 65536, begin, 1);
+        Check(ledger.Lookup(next_packet, 1).task_id == 8 && ledger.Lookup(data, 1).task_id == 7,
+              "appending graph provenance lost or confused existing packet ranges");
         Reject([&] { ledger.Created(data, 7, 65537, begin, 1); });
         Reject([&] { ledger.Lookup(copy, 2); });
         copy->RemoveAtEnd(1);

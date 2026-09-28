@@ -115,7 +115,7 @@ UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找�
 
 `tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
 
-以上是 M2.1 的原始验收范围，后续 M2.2～M2.4 检查见下文；动态服务和模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
+以上是 M2.1 的原始验收范围，后续 M2.2～M3.1 检查见下文；模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
 
 ## M2.2 等待与延迟反馈
 
@@ -132,7 +132,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 规范的专家计算 26000/38000 ns，以及最后必要输入推迟后的 30000/42000 ns 已通过；本地发送较晚时必须等待，非关键和其他 rank 输入较晚时不会额外阻塞 rank 2。真实链路传播延迟对照中，rank 2 专家开始从 5877 移至 11629 ns，均早于全组 Dispatch 最晚完成。变化由实际 UB 事件产生，不能当作链路延迟与整图耗时的一般比例。
 
-[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3/M2.4 的后续验收见下文；动态服务尚未实现，模型仍未校准。
+[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3～M3.1 的后续验收见下文；模型仍未校准。
 
 ## M2.3 去重、分块与发送槽
 
@@ -180,3 +180,32 @@ ASTRA 的新接口仅在 bind_graph 后启用。load_graph 不发任务，activa
 cosim-lifecycle-test 是独立测试目标：使用同一真实网络执行，额外注入五个已退休的第一轮回调并尝试非法提交；不向 cosim-sequence 提供故障或替身开关。非法动作被拒绝，正常业务事件、33 份网络跟踪及观测与对照一致。测试结束保留借用回调释放、资源归零和原生路径结果。
 
 本步仍限固定四 rank、正计算、零应用元数据和两轮；不实现动态请求或 M3 调度协议。comm_tag 继续采用原已验证的 1～499999999 范围以避开 NATIVE 重映射，编号耗尽时失败且分配状态不变；没有宣称完整正 31 位空间均可用。实际场景与未验证范围见 [输入说明](../fixtures/m2_sequence/README.md)。
+
+## M3.1 单 EP 组服务入口
+
+`python -m moe_ub_cosim.service` 直接使用锁定 LLMServingSim 的 Scheduler、Request、Batch 和 KV 分配接口，调用 M2 图生成器；`cosim-service` 复用原 ASTRA 执行层、图生命周期接口和 UB 适配器。这是联合运行的新入口，上游 `python -m serving` 仍使用原生流程。本步未修改子模块源码或提交指针。
+
+在已按本步环境记录配置的构建目录中运行，输出目录须为新目录：
+
+```bash
+cmake --build build/m3-service-loop --target cosim-service --parallel 8
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
+  --input fixtures/m3_service/service.json --layer fixtures/m2_single_layer/layer.json \
+  --backend build/m3-service-loop/output/cosim/ns3.44-cosim-service \
+  --system fixtures/m1_compute/system.json --network fixtures/m2_single_layer/network \
+  --observation fixtures/m2_single_layer/observation.json --output-dir runs/my-service
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_service.py \
+  --build-dir build/m3-service-loop --output-dir runs/my-service-check
+```
+
+本机完整配置命令及日志见 [M3.1 环境记录](../docs/environment.md#2026-09-28m3-1-service-loop)。`--observation` 可省略；前端默认壁钟等待上限为 60 秒、仿真失败上限为 1000000 ns，超限报告失败，不作为正常服务完成时间。
+
+后端先创建全部执行和网络对象，用仅含元数据的四份 Chakra 图完成 0 ns 初始化；没有业务节点、包或端侧操作。后端 stdout 只输出 cosim/1 DECIDE 消息，前端返回匹配的 COMMIT。收到 WAVE_DONE 后，前端把 current_ns 设置为后端绝对时间，通过 add_done 更新请求，然后调用 schedule 选择下一轮批次；图按这次实际选中的请求及其 Token 下标生成。等待 Python 的现实时间不计入仿真。
+
+后端每轮先检查四份图和侧表、身份及 rank 空闲条件，全部装载并登记后才按 rank 顺序激活。rank 完成消息汇聚为全组 WAVE_DONE；接收登记不产生额外写任务。四个 Sys、应用、控制器、连接和 ns-3 时间线跨轮保留。前端结束后还核对 UB 事务、实际链路包到达和端口队列；有包或端口发送未收尾则继续处理实际事件，收尾完成后停止并销毁剩余巡检定时事件。不会等待原生分配器的周期死锁巡检自行消失。
+
+输出中的 input.json/layer.json 是输入副本；graphs 保存各次实际决策生成的图与计划，bootstrap 保存零业务初始化图。protocol.jsonl 保存双方消息；service_result.json 保存逐请求初值、调度前后和完成后状态；execution/result.json、原 ASTRA 日志和 UB 跟踪用于核验实际事件。manifest.json 保存命令、调度器来源、给定 KV/路由/计算范围和正常或失败状态。以上均是内部功能验证资料；可选的 execution/observed 与 execution/truth 继续遵守观测和内部真值的访问边界，不声称已经实现 M5 的正式研究输出。
+
+验收覆盖三轮共 42 次 UB 写、344064 业务字节、144 个节点的 288 条原始执行事件，四个请求分别从不同 Token 下标推进三次并结束。基线完成时间为 64738 ns；仅增加 rank 1 链路传播时延后为 100410 ns，下一次服务决策跟随实际 UB 完成。来源开/关/不挂观测、重复执行以及每次回复前暂停 30 ms 的运行保留相同业务时刻；改变端口间隔的收尾测试确认服务结束后仍会等网络空闲。EOF、非法消息、编号/时间不符、未来唤醒、缺少工作、错误路径和末 rank 坏图被拒绝；子进程失败及不完整行的等待超时可报告。
+
+当前只实现一个四 rank EP 组、预先到达且 KV 给定就绪的请求，每 rank 每轮一个 Token。通信模板和正计算限制沿用 M2，next_wakeup_ns 必须为 null；M3.2 的动态到达与独立组、M3.4 的零 Token rank 尚未实现。它仍是未校准的单层功能模型，不是完整模型服务性能结果。具体初始长度见 [服务样例](../fixtures/m3_service/README.md)。

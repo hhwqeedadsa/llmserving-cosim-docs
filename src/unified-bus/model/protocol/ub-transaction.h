@@ -44,6 +44,8 @@ namespace ns3 {
         bool JettyBindTp(uint32_t src, uint32_t dest, uint32_t jettyNum, bool multiPath, std::vector<uint32_t> tpns);
 
         void DestroyJettyTpMap(uint32_t jettyNum);
+        void ReleaseCompletedJetty(uint32_t jettyNum);
+        bool HasJettyState(uint32_t jettyNum) const;
 
         const std::vector<Ptr<UbTransportChannel>> GetJettyRelatedTpVec(uint32_t jettyNum);
 

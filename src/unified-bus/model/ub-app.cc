@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ub-app.h"
+#include "ub-transfer-executor.h"
+#include <stdexcept>
 #include "ns3/enum.h"
 #include "ns3/log.h"
 #include "ns3/simulator.h"
@@ -83,7 +85,7 @@ TypeId UbApp::GetTypeId(void)
     return tid;
 }
 
-UbApp::UbApp()
+UbApp::UbApp() : m_executor(std::make_unique<UbTransferExecutor>(*this))
 {
 }
 
@@ -103,6 +105,7 @@ void UbApp::SetFinishCallback(Callback<void, uint32_t> cb, Ptr<UbLdstInstance> u
 
 void UbApp::DoDispose(void)
 {
+    m_executor.reset();
     Application::DoDispose();
 }
 
@@ -186,6 +189,12 @@ UbApp::SendCtpUrmaTraffic(TrafficRecord record)
 
 void
 UbApp::SendCtpUrmaTraffic(UbTrafficGen::RuntimeTask task)
+{
+    m_executor->Submit(task, [](uint32_t id) { UbTrafficGen::Get()->OnTaskCompleted(id); }, true);
+}
+
+void
+UbApp::ExecuteCtpUrmaTraffic(UbTrafficGen::RuntimeTask task)
 {
     NS_ABORT_MSG_IF(task.op != UbTrafficGen::RuntimeTaskOp::URMA_WRITE &&
                         task.op != UbTrafficGen::RuntimeTaskOp::URMA_READ,
@@ -314,7 +323,17 @@ UbApp::GetOrCreateCtpUnboundJetty(uint32_t sourceNode,
     return jetty;
 }
 
+UbTransferExecutor& UbApp::GetTransferExecutor()
+{
+    return *m_executor;
+}
+
 void UbApp::SendTraffic(UbTrafficGen::RuntimeTask task)
+{
+    m_executor->Submit(task, [](uint32_t id) { UbTrafficGen::Get()->OnTaskCompleted(id); });
+}
+
+void UbApp::ExecuteTraffic(UbTrafficGen::RuntimeTask task)
 {
     if (task.priority == 0) {
         NS_LOG_DEBUG("Task uses the highest priority, not recommended.");
@@ -344,7 +363,7 @@ void UbApp::SendTraffic(UbTrafficGen::RuntimeTask task)
                task.op == UbTrafficGen::RuntimeTaskOp::URMA_READ) {
         if (m_transportMode == TransportMode::CTP)
         {
-            SendCtpUrmaTraffic(task);
+            ExecuteCtpUrmaTraffic(task);
             return;
         }
 
@@ -353,8 +372,7 @@ void UbApp::SendTraffic(UbTrafficGen::RuntimeTask task)
         Ptr<UbTransaction> ubTa = GetNode()->GetObject<UbController>()->GetUbTransaction();
         bool jettyExist = ubFunc->IsJettyExists(m_jettyNum);
         if (jettyExist) {
-            NS_LOG_ERROR("Jetty already exists");
-            return;
+            throw std::logic_error("Jetty already exists");
         }
         ubFunc->CreateJetty(task.sourceNode, task.destNode, m_jettyNum);
         vector<uint32_t> tpns = GetNode()->GetObject<UbController>()->GetTpConnManager()->GetTpns(
@@ -376,6 +394,11 @@ void UbApp::SendTraffic(UbTrafficGen::RuntimeTask task)
                 ubFunc->CreateWqe(task.sourceNode, task.destNode, task.dataSize, task.taskId, type);
             ubFunc->PushWqeToJetty(wqe, m_jettyNum);
         }
+        else
+        {
+            ubFunc->DestroyJetty(m_jettyNum);
+            throw std::runtime_error("Failed to bind UB Jetty to transport channels");
+        }
         m_jettyNum++; // m_jettyNum 在client里是唯一的，不重复的
     } else {
             NS_ASSERT_MSG(0, "TaOpcode Not Exist");
@@ -388,14 +411,7 @@ void UbApp::OnTaskCompleted(uint32_t taskId, uint32_t jettyNum)
     NS_LOG_INFO("WQE Completes, jettyNum: " << jettyNum << " taskId: " << taskId);
     WqeTaskCompletesNotify(GetNode()->GetId(), jettyNum, taskId);
     NS_LOG_INFO("[APPLICATION INFO] taskId: " << taskId << ",finish time:" << Simulator::Now().GetNanoSeconds() << "ns");
-    if (m_transportMode == TransportMode::RTP)
-    {
-        // 删除无用tp
-        auto cleanup = UbTrafficGen::Get()->GetTaskCleanupInfoById(taskId);
-        GetNode()->GetObject<UbController>()->GetTpConnManager()->RemoveUselessTps(
-            jettyNum, cleanup.sourceNode, cleanup.destNode, cleanup.priority);
-    }
-    UbTrafficGen::Get()->OnTaskCompleted(taskId);
+    m_executor->Complete(taskId, jettyNum);
 }
 
 void UbApp::OnTestTaskCompleted(uint32_t taskId, uint32_t jettyNum)
@@ -414,7 +430,7 @@ void UbApp::OnMemTaskCompleted(uint32_t taskId)
     NS_LOG_INFO("MEM Task Completes, taskId: " << taskId);
     MemTaskCompletesNotify(GetNode()->GetId(), taskId);
     NS_LOG_INFO("[APPLICATION INFO] taskId: " << taskId << ",finish time:" << Simulator::Now().GetNanoSeconds() << "ns");
-    UbTrafficGen::Get()->OnTaskCompleted(taskId);
+    m_executor->CompleteMemory(taskId);
 }
 
 void UbApp::MemTaskStartsNotify(uint32_t nodeId, uint32_t taskId)

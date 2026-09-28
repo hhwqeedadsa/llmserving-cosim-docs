@@ -3,6 +3,7 @@
 #define UB_APP_H
 
 #include <vector>
+#include <memory>
 #include <set>
 #include <map>
 #include <tuple>
@@ -19,6 +20,7 @@
 
 using namespace utils;
 namespace ns3 {
+class UbTransferExecutor;
 
 /**
  * @brief 任务图应用,管理多个wqe任务及依赖关系
@@ -29,6 +31,8 @@ public:
 
     UbApp();
     virtual ~UbApp();
+
+    UbTransferExecutor& GetTransferExecutor();
 
     void SendTraffic(TrafficRecord record);
     void SendTraffic(UbTrafficGen::RuntimeTask task);
@@ -100,6 +104,11 @@ protected:
     void DoDispose(void) override;
 
 private:
+    friend class UbTransferExecutor;
+    void ExecuteTraffic(UbTrafficGen::RuntimeTask task);
+    void ExecuteCtpUrmaTraffic(UbTrafficGen::RuntimeTask task);
+    std::unique_ptr<UbTransferExecutor> m_executor;
+
     TracedCallback<uint32_t, uint32_t> m_traceMemTaskStartsNotify;
     TracedCallback<uint32_t, uint32_t> m_traceMemTaskCompletesNotify;
     TracedCallback<uint32_t, uint32_t, uint32_t> m_traceWqeTaskStartsNotify;

@@ -28,6 +28,7 @@ build_lib(
     ${mpi_sources}
 	model/ub-traffic-gen.cc
 	model/ub-app.cc
+    model/ub-transfer-executor.cc
     model/ub-controller.cc
 	model/protocol/ub-datalink.cc
 	model/ub-datatype.cc
@@ -59,6 +60,7 @@ build_lib(
     ${mpi_headers}
 	model/ub-traffic-gen.h
 	model/ub-app.h
+    model/ub-transfer-executor.h
     model/ub-controller.h
 	model/protocol/ub-datalink.h
 	model/ub-datatype.h

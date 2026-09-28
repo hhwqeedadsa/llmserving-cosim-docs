@@ -151,6 +151,33 @@ void UbTransaction::DestroyJettyTpMap(uint32_t jettyNum)
     }
 }
 
+void UbTransaction::ReleaseCompletedJetty(uint32_t jettyNum)
+{
+    const auto ordered = m_jettyOrderedWqe.find(jettyNum);
+    NS_ABORT_MSG_IF(ordered != m_jettyOrderedWqe.end() && !ordered->second.empty(),
+                    "Cannot release a Jetty with unfinished ordered WQEs");
+    DestroyJettyTpMap(jettyNum);
+    m_serviceMode.erase(jettyNum);
+    m_jettyOrderedWqe.erase(jettyNum);
+}
+
+bool UbTransaction::HasJettyState(uint32_t jettyNum) const
+{
+    if (m_jettyTpGroup.contains(jettyNum) || m_jettyTpNextIndex.contains(jettyNum) ||
+        m_serviceMode.contains(jettyNum) || m_jettyOrderedWqe.contains(jettyNum))
+    {
+        return true;
+    }
+    for (const auto& [tpn, jetties] : m_tpRelatedJetties)
+    {
+        for (const auto& jetty : jetties)
+        {
+            if (jetty->GetJettyNum() == jettyNum) return true;
+        }
+    }
+    return false;
+}
+
 const std::vector<Ptr<UbTransportChannel>> UbTransaction::GetJettyRelatedTpVec(uint32_t jettyNum)
 {
     NS_LOG_DEBUG(this);

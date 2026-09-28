@@ -15,6 +15,7 @@ LICENSE file in the root directory of this source tree.
 #include <json/json.hpp>
 
 #include <iostream>
+#include <stdexcept>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -122,6 +123,13 @@ void Workload::issue_dep_free_nodes() {
 
 void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
     auto logger = LoggerFactory::get_logger("workload");
+    if (!graph_id_.empty()) {
+        if (!graph_active_ || (node->type() != ChakraNodeType::COMP_NODE &&
+            node->type() != ChakraNodeType::COMM_SEND_NODE && node->type() != ChakraNodeType::COMM_RECV_NODE) ||
+            !active_nodes_.insert(node->id()).second) {
+            throw std::logic_error("Invalid node issue in managed graph " + graph_id_);
+        }
+    }
     if (sys->replay_only) {
         hw_resource->occupy(node);
         issue_replay(node);
@@ -131,10 +139,10 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
             (node->type() == ChakraNodeType::PIM_COMP_NODE)) {
             if (sys->trace_enabled) {
                 logger->debug("issue,sys->id={}, tick={}, node->id={}, "
-                              "node->name={}, node->type={}",
+                              "node->name={}, node->type={}{}",
                               sys->id, Sys::boostedTick(), node->id(),
                               node->name(),
-                              static_cast<uint64_t>(node->type()));
+                              static_cast<uint64_t>(node->type()), graph_log_suffix());
             }
             issue_mem(node);
         } else if (node->is_cpu_op() ||
@@ -145,10 +153,10 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
             } else {
                 if (sys->trace_enabled) {
                     logger->debug("issue,sys->id={}, tick={}, node->id={}, "
-                                  "node->name={}, node->type={}",
+                                  "node->name={}, node->type={}{}",
                                   sys->id, Sys::boostedTick(), node->id(),
                                   node->name(),
-                                  static_cast<uint64_t>(node->type()));
+                                  static_cast<uint64_t>(node->type()), graph_log_suffix());
                 }
                 issue_comp(node);
             }
@@ -159,10 +167,10 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
             if (sys->trace_enabled) {
                 if (sys->trace_enabled) {
                     logger->debug("issue,sys->id={}, tick={}, node->id={}, "
-                                  "node->name={}, node->type={}",
+                                  "node->name={}, node->type={}{}",
                                   sys->id, Sys::boostedTick(), node->id(),
                                   node->name(),
-                                  static_cast<uint64_t>(node->type()));
+                                  static_cast<uint64_t>(node->type()), graph_log_suffix());
                 }
             }
             issue_comm(node);
@@ -175,6 +183,7 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
 void Workload::issue_replay(shared_ptr<Chakra::ETFeederNode> node) {
     WorkloadLayerHandlerData* wlhd = new WorkloadLayerHandlerData;
     wlhd->node_id = node->id();
+    wlhd->graph_id = graph_id_;
     uint64_t runtime = 1ul;
     if (node->runtime() != 0ul) {
         // chakra runtimes are in microseconds and we should convert it into
@@ -211,6 +220,7 @@ void Workload::issue_mem(shared_ptr<Chakra::ETFeederNode> node) {
     wlhd->sys_id = sys->id;
     wlhd->workload = this;
     wlhd->node_id = node->id();
+    wlhd->graph_id = graph_id_;
     wlhd->device_id = node->tensor_device();
     if (node->type() == ChakraNodeType::PIM_COMP_NODE) { // pim implementation
         wlhd->pim_enabled = true;
@@ -248,6 +258,7 @@ void Workload::issue_comp(shared_ptr<Chakra::ETFeederNode> node) {
     if (sys->roofline_enabled) {
         WorkloadLayerHandlerData* wlhd = new WorkloadLayerHandlerData;
         wlhd->node_id = node->id();
+        wlhd->graph_id = graph_id_;
 
         double operational_intensity = static_cast<double>(node->num_ops()) /
                                        static_cast<double>(node->tensor_size());
@@ -366,6 +377,8 @@ void Workload::issue_comm(shared_ptr<Chakra::ETFeederNode> node) {
         sehd->callable = this;
         sehd->wlhd = new WorkloadLayerHandlerData;
         sehd->wlhd->node_id = node->id();
+        sehd->wlhd->graph_id = graph_id_;
+        sehd->wlhd->comm_tag = node->comm_tag();
         sehd->event = EventType::PacketSent;
         sys->front_end_sim_send(0, Sys::dummy_data, node->comm_size(), UINT8,
                                 node->comm_dst(), node->comm_tag(), &snd_req,
@@ -376,6 +389,8 @@ void Workload::issue_comm(shared_ptr<Chakra::ETFeederNode> node) {
         RecvPacketEventHandlerData* rcehd = new RecvPacketEventHandlerData;
         rcehd->wlhd = new WorkloadLayerHandlerData;
         rcehd->wlhd->node_id = node->id();
+        rcehd->wlhd->graph_id = graph_id_;
+        rcehd->wlhd->comm_tag = node->comm_tag();
         rcehd->workload = this;
         rcehd->event = EventType::PacketReceived;
         sys->front_end_sim_recv(0, Sys::dummy_data, node->comm_size(), UINT8,
@@ -395,6 +410,24 @@ void Workload::skip_invalid(shared_ptr<Chakra::ETFeederNode> node) {
 }
 
 void Workload::call(EventType event, CallData* data) {
+    if (!graph_id_.empty()) {
+        if (event == EventType::CollectiveCommunicationFinished)
+            throw std::logic_error("Collective callback in managed point-to-point graph");
+        if (data) {
+            auto* context = static_cast<WorkloadLayerHandlerData*>(data);
+            if (context->graph_id != graph_id_ || !graph_active_ ||
+                !active_nodes_.erase(context->node_id)) {
+                LoggerFactory::get_logger("workload")->warn(
+                    "stale_callback,graph_id={}, active_graph_id={}, rank={}, node={}, comm_tag={}",
+                    context->graph_id, graph_id_, sys->id, context->node_id, context->comm_tag);
+                ++stale_callbacks_;
+                delete context;
+                return;
+            }
+        } else if (!graph_active_) {
+            throw std::logic_error("Graph must be explicitly activated: " + graph_id_);
+        }
+    }
     if (is_finished) {
         return;
     }
@@ -408,9 +441,9 @@ void Workload::call(EventType event, CallData* data) {
         if (sys->trace_enabled) {
             LoggerFactory::get_logger("workload")
                 ->debug("callback,sys->id={}, tick={}, node->id={}, "
-                        "node->name={}, node->type={}",
+                        "node->name={}, node->type={}{}",
                         sys->id, Sys::boostedTick(), node->id(), node->name(),
-                        static_cast<uint64_t>(node->type()));
+                        static_cast<uint64_t>(node->type()), graph_log_suffix());
         }
 
         hw_resource->release(node);
@@ -436,9 +469,9 @@ void Workload::call(EventType event, CallData* data) {
             if (sys->trace_enabled) {
                 LoggerFactory::get_logger("workload")
                     ->debug("callback,sys->id={}, tick={}, node->id={}, "
-                            "node->name={}, node->type={}",
+                            "node->name={}, node->type={}{}",
                             sys->id, Sys::boostedTick(), node->id(),
-                            node->name(), static_cast<uint64_t>(node->type()));
+                            node->name(), static_cast<uint64_t>(node->type()), graph_log_suffix());
             }
 
             hw_resource->release(node);
@@ -471,6 +504,11 @@ void Workload::call(EventType event, CallData* data) {
         } else {
             // wait for the new workload command
             // should be fired by parent controller
+            if (!graph_id_.empty()) {
+                if (!active_nodes_.empty()) throw std::logic_error("Graph still has active callbacks");
+                graph_active_ = false;
+                is_finished = true;
+            }
             sys->comm_NI->sim_notify_finished();
             is_finished = true;
         }
@@ -480,6 +518,7 @@ void Workload::call(EventType event, CallData* data) {
 void Workload::add_workload(const std::string& new_filename,
                             const std::vector<Sys*>& systems) {
 
+    if (!graph_id_.empty()) throw std::logic_error("Use two-phase graph loading in joint mode");
     // add new workload filename to pending workloads in managed systems
     for (auto* managed_sys : systems) {
         if (managed_sys == nullptr || managed_sys->workload == nullptr) {
@@ -544,6 +583,7 @@ void Workload::add_workload(const std::string& new_filename,
 
 void Workload::sleep_workload(const std::vector<Sys*>& systems) {
 
+    if (!graph_id_.empty()) throw std::logic_error("Use two-phase graph loading in joint mode");
     // add new workload filename to pending workloads in managed systems
     for (auto* managed_sys : systems) {
         if (managed_sys == nullptr || managed_sys->workload == nullptr) {
@@ -555,6 +595,50 @@ void Workload::sleep_workload(const std::vector<Sys*>& systems) {
     }
     // sleep myself
     is_sleep = true;
+}
+
+std::string Workload::graph_log_suffix() const {
+    return graph_id_.empty() ? "" : ", graph_id=" + graph_id_;
+}
+
+void Workload::bind_graph(const std::string& graph_id) {
+    if (graph_id.empty() || !graph_id_.empty() || sys->pending_events != 0 ||
+        hw_resource->num_in_flight_cpu_ops || hw_resource->num_in_flight_gpu_comp_ops ||
+        hw_resource->num_in_flight_gpu_comm_ops || !pending_workloads.empty())
+        throw std::logic_error("Cannot bind initial graph identity");
+    graph_id_ = graph_id;
+    used_graph_ids_.insert(graph_id);
+    LoggerFactory::get_logger("workload")->debug("graph_load,rank={}, tick={}, graph_id={}",
+        sys->id, Sys::boostedTick(), graph_id_);
+}
+
+bool Workload::can_load_graph() const {
+    return !graph_id_.empty() && is_finished && !graph_active_ && active_nodes_.empty() &&
+        !et_feeder->hasNodesToIssue() && sys->pending_events == 0 && pending_workloads.empty() &&
+        !hw_resource->num_in_flight_cpu_ops && !hw_resource->num_in_flight_gpu_comp_ops &&
+        !hw_resource->num_in_flight_gpu_comm_ops;
+}
+
+void Workload::load_graph(std::unique_ptr<ETFeeder> feeder, const std::string& graph_id) {
+    if (!can_load_graph() || !feeder || graph_id.empty() || used_graph_ids_.count(graph_id))
+        throw std::logic_error("Cannot replace in-flight graph or reuse graph identity: " + graph_id);
+    used_graph_ids_.insert(graph_id);
+    delete et_feeder;
+    et_feeder = feeder.release();
+    graph_id_ = graph_id;
+    ++iteration;
+    is_finished = false;
+    LoggerFactory::get_logger("workload")->debug("graph_load,rank={}, tick={}, graph_id={}",
+        sys->id, Sys::boostedTick(), graph_id_);
+}
+
+void Workload::activate_graph() {
+    if (graph_id_.empty() || graph_active_ || is_finished)
+        throw std::logic_error("Graph is not ready for activation: " + graph_id_);
+    graph_active_ = true;
+    LoggerFactory::get_logger("workload")->debug("graph_activate,rank={}, tick={}, graph_id={}",
+        sys->id, Sys::boostedTick(), graph_id_);
+    fire();
 }
 
 void Workload::fire() {

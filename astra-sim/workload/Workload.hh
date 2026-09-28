@@ -10,6 +10,7 @@ LICENSE file in the root directory of this source tree.
 #include <string>
 #include <unordered_map>
 #include <queue>
+#include <unordered_set>
 
 #include "astra-sim/system/Callable.hh"
 #include "astra-sim/system/CommunicatorGroup.hh"
@@ -45,6 +46,16 @@ class Workload : public Callable {
     void add_workload(const std::string& new_filename, const std::vector<Sys*>& systems);
     void sleep_workload(const std::vector<Sys*>& systems);
 
+    // Opt-in joint execution: callers prepare every rank before installing any.
+    void bind_graph(const std::string& graph_id);
+    bool can_load_graph() const;
+    bool has_graph_id(const std::string& id) const { return used_graph_ids_.count(id) != 0; }
+    void load_graph(std::unique_ptr<Chakra::ETFeeder> feeder, const std::string& graph_id);
+    void activate_graph();
+    const std::string& graph_id() const { return graph_id_; }
+    bool graph_active() const { return graph_active_; }
+    uint64_t stale_callbacks() const { return stale_callbacks_; }
+
     // stats
     void report();
 
@@ -60,6 +71,15 @@ class Workload : public Callable {
 
     bool is_sleep;
     std::queue<std::string> pending_workloads;
+
+  private:
+    std::string graph_id_;
+    std::unordered_set<std::string> used_graph_ids_;
+    std::unordered_set<uint64_t> active_nodes_;
+    bool graph_active_ = false;
+    uint64_t stale_callbacks_ = 0;
+    std::string graph_log_suffix() const;
+
 };
 
 }  // namespace AstraSim

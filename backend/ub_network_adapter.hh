@@ -7,13 +7,13 @@
 
 namespace moe_ub
 {
-// M1.1 implements time and graph completion only. Network calls fail explicitly.
+class UbWriteTransfer;
 class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
 {
   public:
     using Finished = std::function<void(uint64_t now_ns)>;
 
-    UbNetworkAdapter(int rank, Finished finished);
+    UbNetworkAdapter(int rank, Finished finished, UbWriteTransfer* transfer = nullptr);
     BackendType get_backend_type() override;
     AstraSim::timespec_t sim_get_time() override;
     void sim_schedule(AstraSim::timespec_t delta, void (*callback)(void*), void* arg) override;
@@ -28,6 +28,7 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
 
   private:
     Finished finished_;
+    UbWriteTransfer* transfer_;
     uint64_t scheduled_events_ = 0;
     uint64_t executed_callbacks_ = 0;
 };

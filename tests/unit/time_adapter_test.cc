@@ -95,10 +95,10 @@ int main(int argc, char** argv)
         Reject<std::overflow_error>([&]() { schedule(max_ns + 1); }, "Overflow accepted");
         Reject<std::logic_error>(
             [&]() { adapter.sim_send(nullptr, 1, AstraSim::UINT8, 1, 0, nullptr,
-                                     Record, &context); }, "SEND unexpectedly implemented");
+                                     Record, &context); }, "SEND accepted without a transfer descriptor");
         Reject<std::logic_error>(
             [&]() { adapter.sim_recv(nullptr, 1, AstraSim::UINT8, 1, 0, nullptr,
-                                     Record, &context); }, "RECV unexpectedly implemented");
+                                     Record, &context); }, "RECV accepted without a transfer descriptor");
         ns3::Simulator::Schedule(ns3::NanoSeconds(10), [&]() {
             Check(adapter.sim_get_time().time_val == 10, "Absolute time is wrong");
             schedule(5);

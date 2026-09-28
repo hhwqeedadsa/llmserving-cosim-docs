@@ -1,4 +1,5 @@
 #include "ub_network_adapter.hh"
+#include "ub_write_transfer.hh"
 
 #include "ns3/simulator.h"
 
@@ -26,8 +27,8 @@ int64_t NowNs()
 }
 }
 
-UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished)
-    : AstraNetworkAPI(rank), finished_(std::move(finished))
+UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished, UbWriteTransfer* transfer)
+    : AstraNetworkAPI(rank), finished_(std::move(finished)), transfer_(transfer)
 {
     static_assert(std::numeric_limits<long double>::digits >= 63,
                   "ASTRA time must represent every signed 64-bit nanosecond value");
@@ -77,15 +78,19 @@ void UbNetworkAdapter::sim_notify_finished()
     finished_(static_cast<uint64_t>(NowNs()));
 }
 
-int UbNetworkAdapter::sim_send(void*, uint64_t, int, int, int, AstraSim::sim_request*,
-                              void (*)(void*), void*)
+int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag,
+                              AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
-    throw std::logic_error("UB SEND is not implemented in M1.1");
+    if (!transfer_) throw std::logic_error("No UB transfer descriptor configured for SEND");
+    transfer_->Send(rank, count, type, dst, tag, callback, arg);
+    return 0;
 }
 
-int UbNetworkAdapter::sim_recv(void*, uint64_t, int, int, int, AstraSim::sim_request*,
-                              void (*)(void*), void*)
+int UbNetworkAdapter::sim_recv(void*, uint64_t count, int type, int src, int tag,
+                              AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
-    throw std::logic_error("UB RECV is not implemented in M1.1");
+    if (!transfer_) throw std::logic_error("No UB transfer descriptor configured for RECV");
+    transfer_->Receive(rank, count, type, src, tag, callback, arg);
+    return 0;
 }
 }

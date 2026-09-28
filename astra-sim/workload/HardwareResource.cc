@@ -6,12 +6,20 @@ LICENSE file in the root directory of this source tree.
 // TODO: HardwareResource.cc should be moved to the system layer.
 
 #include "astra-sim/workload/HardwareResource.hh"
+#include <stdexcept>
 
 using namespace std;
 using namespace AstraSim;
 using namespace Chakra;
 
 typedef ChakraProtoMsg::NodeType ChakraNodeType;
+
+void HardwareResource::configure_p2p_send_slots(uint32_t slots) {
+    if (slots == 0 || num_in_flight_gpu_comm_ops != 0 || !p2p_sends.empty()) {
+        throw std::invalid_argument("P2P slots require a positive limit and idle communication resources");
+    }
+    p2p_send_slots = slots;
+}
 
 HardwareResource::HardwareResource(uint32_t num_npus)
     : num_npus(num_npus),
@@ -34,6 +42,14 @@ HardwareResource::HardwareResource(uint32_t num_npus)
 }
 
 void HardwareResource::occupy(const shared_ptr<Chakra::ETFeederNode> node) {
+    if (p2p_send_slots && !node->is_cpu_op() && node->type() == ChakraNodeType::COMM_SEND_NODE) {
+        if (!is_available(node) || !p2p_sends.insert(node->id()).second) {
+            throw std::logic_error("P2P SEND has no free slot or is already in flight");
+        }
+        ++num_in_flight_gpu_comm_ops;
+        ++num_gpu_comms;
+        return;
+    }
     if (node->is_cpu_op()) {
         assert(num_in_flight_cpu_ops == 0);
         ++num_in_flight_cpu_ops;
@@ -62,6 +78,13 @@ void HardwareResource::occupy(const shared_ptr<Chakra::ETFeederNode> node) {
 }
 
 void HardwareResource::release(const shared_ptr<Chakra::ETFeederNode> node) {
+    if (p2p_send_slots && !node->is_cpu_op() && node->type() == ChakraNodeType::COMM_SEND_NODE) {
+        if (p2p_sends.erase(node->id()) != 1 || num_in_flight_gpu_comm_ops == 0) {
+            throw std::logic_error("P2P SEND release does not match an occupied slot");
+        }
+        --num_in_flight_gpu_comm_ops;
+        return;
+    }
     if (node->is_cpu_op()) {
         --num_in_flight_cpu_ops;
         assert(num_in_flight_cpu_ops == 0);
@@ -85,6 +108,12 @@ void HardwareResource::release(const shared_ptr<Chakra::ETFeederNode> node) {
 
 bool HardwareResource::is_available(
     const shared_ptr<Chakra::ETFeederNode> node) const {
+    if (p2p_send_slots && !node->is_cpu_op() && node->type() == ChakraNodeType::COMM_SEND_NODE) {
+        // An original collective still exclusively owns the communication
+        // resource. RECV continues through the original slot-free path.
+        return num_in_flight_gpu_comm_ops == p2p_sends.size() &&
+               p2p_sends.size() < p2p_send_slots && p2p_sends.count(node->id()) == 0;
+    }
     if (node->is_cpu_op()) {
         if (num_in_flight_cpu_ops == 0) {
             return true;

@@ -9,6 +9,7 @@ LICENSE file in the root directory of this source tree.
 #define __HARDWARE_RESOURCE_HH__
 
 #include <cstdint>
+#include <unordered_set>
 
 #include "extern/graph_frontend/chakra/src/feeder/et_feeder.h"
 
@@ -21,6 +22,10 @@ class HardwareResource {
     void release(const std::shared_ptr<Chakra::ETFeederNode> node);
     bool is_available(const std::shared_ptr<Chakra::ETFeederNode> node) const;
     void report();
+    // Opt-in for explicit point-to-point graphs. Default collective/native
+    // scheduling retains the original single communication resource.
+    void configure_p2p_send_slots(uint32_t slots);
+    uint32_t active_p2p_sends() const { return p2p_sends.size(); }
 
     std::shared_ptr<Chakra::ETFeederNode> cpu_ops_node;
     std::shared_ptr<Chakra::ETFeederNode> gpu_ops_node;
@@ -38,6 +43,10 @@ class HardwareResource {
     uint64_t tics_cpu_ops;
     uint64_t tics_gpu_ops;
     uint64_t tics_gpu_comms;
+
+  private:
+    uint32_t p2p_send_slots = 0;
+    std::unordered_set<uint64_t> p2p_sends;
 };
 
 }  // namespace AstraSim

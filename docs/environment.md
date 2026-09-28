@@ -2,7 +2,7 @@
 
 ## 当前状态
 
-目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 已完成独立沙箱诊断、`repo-local-check`、M0.1 两项原生样例、M0.2 所选 8 项上游回归和 M0.3 联合构建边界确认，M0 已完成。13 个依赖仓库静态检查通过；两项样例分别构建并重复运行通过。用户授权后为 LLMServingSim 安装了 Protobuf 系统依赖，新增 Python 依赖放在项目专用虚拟环境，未升级已有系统软件。M0.2 与 M0.3 复用该环境：8 项时钟回归、112 个请求内部一致性及联合链接审计通过；同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。联合探针没有执行仿真事件。
+目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 完成独立沙箱诊断、`repo-local-check` 和 M0；2026-09-28 完成 M1.1 的单节点计算与时间检查。13 个依赖仓库静态检查通过；M0 两项样例分别构建并重复运行通过，8 项时钟回归和 112 个请求内部一致性通过，同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。M1.1 复用现有依赖，由 ns-3 实际执行 ASTRA COMP 的完成事件。尚未实现 UB 业务收发和服务调度。
 
 | 项目 | 当前记录 |
 |---|---|
@@ -19,7 +19,8 @@
 | LLMServingSim 原生样例 | `single` 两次均完成 10 个请求；时钟 1663996645 ns、逐请求 CSV 均匹配上游，图的来源路径差异已核验 |
 | M0.2 上游回归 | 所选 8 项时钟全部匹配；请求核验通过，1 份不适用的上游 CSV 已定位来源，未运行全套回归 |
 | M0.3 联合编译与链接 | 445 步构建通过；ASTRA 52 个核心对象全部链接，运行时 10 个 ns-3 模块全部来自本次 UB 构建 |
-| 联合仿真 | 尚未实现 COMP、时间适配及 UB 业务收发；链接探针不执行仿真事件 |
+| M1.1 计算与时间 | 1,000 ns COMP 经 ASTRA 原路径在 ns-3 时间上完成；非零起点、1 ns、零耗时及边界检查通过 |
+| 后续联合仿真 | UB 业务收发、服务调度尚未实现；M1 整体未完成 |
 
 本机 Python 3.12.3 已确认。UB 任务中的 `ns3` 启动器拒绝 root 会话，实际通过的是锁定版本文档提供的直接 CMake 入口及生成的样例程序；启动器原命令的失败记录保留在下文。
 
@@ -482,3 +483,106 @@ python3 scripts/m0_joint_build/audit.py \
 | `python3 <日志目录>/restore_native.py` 与 `restore_after_clean.py` | 均为 0；恢复锁并核对 15 个文件 | `restore-native.json`、`restore-after-clean.json` |
 
 本任务确认了本机固定依赖组合的构建、链接、元数据读写与初始状态。没有运行联合计算图、COMP 或 UB 业务传输，没有实现时间转换、服务调度或 CCL 模型，也没有完成目标硬件校准。技术规范、锁文件、子模块指针和源码均未修改。整理完成记录后仅本地提交，不推送；停止在 M0.3，下一项 M1.1 的 1,000 ns COMP 等待用户确认。
+
+## 2026-09-28：m1-1-compute-time
+
+用户确认执行 M1.1，主仓库起点为 `925f54a261067369638b07535f4f1fe4ad0d4cd1`，任务说明单独提交为 `6005ce2`。开始时主仓库和 13 个依赖工作区干净，依赖仍为上一节的固定提交。复用本机 GCC 13.3.0、CMake 3.28.3、Ninja 1.11.1、Protobuf 3.21.12，没有安装、升级、下载或改动依赖源码。
+
+本次新增 [单节点计算程序](../backend/README.md)、时间适配器、日志桥接、两份小型输入及单元/集成检查。程序保留 ASTRA Sys、Workload、HardwareResource 的原计算路径，由 UB 所用 ns-3 事件队列实际触发完成。M1.1 已通过，M1 整体尚未完成；没有创建业务网络拓扑或发起传输。
+
+本机日志目录为 `runs/m1-1-compute-time-20260928T083610Z/`，以下日志名相对此目录。`record.py` 记录完整参数、工作目录、UTC 起止时间、真实退出码和 stdout/stderr；集成检查的每次程序调用另记于 `integration/commands.json`。构建产物在 `build/m1-compute/`。日志、缓存和产物均不提交 Git。
+
+### 时间接口与锁定源码事实
+
+Chakra `schema/protobuf/et_def.proto:144` 将字段命名为 `duration_micros`，但本分支 `src/feeder/et_feeder_node.cpp:10` 直接把它作为 runtime；ASTRA `Workload.cc:178-190` 明确保留“changed chakra to return nanoseconds”注释并取消乘 1,000。`Sys.cc:611-640` 以 NS 单位交给 `sim_schedule`，`boostedTick():566-579` 读取 `sim_get_time`，`CLOCK_PERIOD=1` 表示 1 ns。本程序的 `duration_ns` 在写入该字段时保持原值，不重复进行单位换算。
+
+上游字段名与实际语义不一致，若按名称再乘 1,000，主例就会被误计为 1,000,000 ns。建议在所有本项目输入边界明确使用纳秒并注明固定分支语义；本轮不修改 schema。另查到 LLMServingSim `serving/core/trace_generator.py:265-266` 使用 `round()` 和至少 1 ns 的下限，与规范第 4.2 节正耗时向上取整、零保持零的要求不同。本轮不调用该 profile 读取路径，显式整数输入不受影响；以后接入 profile 时须在本项目输入规范化处处理，并保留原生基线，不能把上游转换直接当作已满足本项目规则。
+
+时间适配器只接受锁定 Sys 的 NS 单位，检查非负且有限，向上取整后再检查 `now + duration <= INT64_MAX`，最后调用 `Simulator::Schedule`。返回的当前时间直接来自 `Simulator::Now()`，使用 long double 保留纳秒整数精度；编译时要求其有效二进制位至少为 63。没有 analytical 网络时间队列。完成通知回传当前时间，不调用 `Simulator::Stop`。SEND/RECV 当前明确抛出未实现错误，单元检查已确认不会伪造通信完成。
+
+### 配置、构建与实际运行
+
+工作目录均为主仓库根目录。ns-3-UB 仍为 CMake 主项目，新的 `backend/inject.cmake` 包含未修改的 M0 构建入口，再加入计算目标。首次完整配置退出 0：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m1-compute -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m1-compute/output \
+  -DNS3_ENABLED_MODULES=unified-bus \
+  -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF \
+  -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF \
+  -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF \
+  -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m1-compute \
+  --target cosim-compute cosim-time-test m0-joint-link-probe --parallel 8
+```
+
+构建命令前三次退出 1，均为本次日志头接入问题，具体原因见后文。修正后同一构建命令于 UTC 08:48:32 至 08:49:58 退出 0，完成剩余 395 个步骤；最终三个目标共对应 453 条 Ninja 构建命令。单元测试进程划分修正后，仅重建 `cosim-time-test`，2 个步骤退出 0。没有同时运行多个构建，最多 8 路并行。CMake 的源码树外输出警告及上游弃用警告保留，未关闭额外检查或修改上游头文件。
+
+计算程序实际包含 433 个编译单元：371 个 C++20（UB 与本次入口/时间适配器）、54 个 GNU C++17（ASTRA 的 52 个对象和 fmt 的 2 个对象）、8 个 C++17（spdlog 的 7 个对象和本次日志桥接）。沿用同一 GCC/libstdc++、`-O3 -DNDEBUG`，没有覆盖 ABI 宏。C++ 检查使用显式条件，单元测试使用抛异常的检查函数，不依赖 release 下禁用的断言。
+
+实际检查命令如下，修正后的全部检查退出 0：
+
+```bash
+timeout --kill-after=5s 30s build/m1-compute/output/cosim/ns3.44-cosim-time-test
+timeout --kill-after=5s 30s build/m1-compute/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+python3 tests/integration/check_compute.py \
+  --build-dir build/m1-compute \
+  --output-dir runs/m1-1-compute-time-20260928T083610Z/integration
+timeout --kill-after=5s 30s build/m1-compute/output/m0/ns3.44-m0-joint-link-probe \
+  runs/m1-1-compute-time-20260928T083610Z/m0-probe.et
+python3 scripts/m0_joint_build/audit.py \
+  --build-dir build/m1-compute \
+  --run-log runs/m1-1-compute-time-20260928T083610Z/m0-probe.stdout.log \
+  --output-dir runs/m1-1-compute-time-20260928T083610Z/m0-audit
+```
+
+集成检查逐项执行 `timeout --kill-after=5s 30s <计算程序> <输入.json> fixtures/m1_compute/system.json <新运行目录>`，完整绝对路径在 `integration/commands.json`。基准输入为 `fixtures/m1_compute/comp_1000ns.json`；变体仅改变起点或持续时间，各自输入原文保留。配置显式关闭 roofline、全图 replay-only 和共享内存总线。程序每次生成一个 rank 0、id 1 的 COMP，`is_cpu_op=false`、`num_ops=0`，不含通信或内存节点。使用空内存 API 列表，不调用解析内存模型计时。
+
+### 实际结果
+
+| 用例 | 起点 ns | 输入 runtime ns | 完成 ns | ASTRA 调度/执行完成回调数 |
+|---|---:|---:|---:|---:|
+| `comp-1000ns` | 0 | 1000 | 1000 | 1 / 1 |
+| `offset-1000ns` | 37 | 1000 | 1037 | 1 / 1 |
+| `comp-1ns` | 0 | 1 | 1 | 1 / 1 |
+| `zero-comp` | 37 | 0 | 37 | 0 / 0 |
+
+四例均正常退出且 stderr 为空，完成通知均只有一次。正耗时用例的计算资源在发起后为 1，完成后 CPU、计算和通信三个在途计数均为 0；计算耗时累计等于输入值，节点、ASTRA 待处理事件及事件桶均清空。零耗时按锁定 `Workload::skip_invalid` 直接移除，不占资源、不增加 1 ns。独立脚本同时核对 result、Chakra reader 读回值和原 ASTRA 日志；主例的真实记录为 `issue ... tick=0 ... node->id=1` 与 `callback ... tick=1000 ... node->id=1`。
+
+集成检查还确认负数、非整数纳秒输入、未知 schema、单值溢出、起点加持续时间溢出和覆盖已有运行目录共六项调用被拒绝，进程均退出 1，错误消息匹配；已有运行文件校验值不变。它们是预期的拒绝测试，不是失败的功能用例。
+
+时间单元检查实际回调时刻为 `[0, 1, 2, 15]`，对应 0、0.125、1.125 ns，以及在 10 ns 发起的 5 ns 相对延时；检查 0 ns 回调不在调用栈内同步执行。完成通知在 10 ns 上报后，15 ns 事件仍继续执行。负数、NaN、无穷、非 NS 单位、空回调及溢出被拒绝。独立一次事件精确到达 `9223372036854775807 ns`，再加 1 ns 被拒绝；另一进程以 PS 精度启动，适配器明确拒绝。
+
+计算程序链接审计确认全部 52 个 ASTRA 对象均由 whole-archive 引入，源文件和 link map 不含其他网络后端。四例实际装载的 10 个 ns-3 模块均在本次 `build/m1-compute/output/lib/`；M0 原探针和原审计规则也通过。`integration/compiled-sources.json`、`summary.json` 与 `build-evidence/` 保存实际编译参数、源文件/库校验值、link map、缓存和完整目标命令。
+
+| 产物 | SHA-256 |
+|---|---|
+| 计算程序 | `729b9f128a194f3f82f7e7070f0abb08e5032f7446e63a79a918ec765ab7333a` |
+| 最终时间单元程序 | `ad8e8e12047b1b00b007730f465cf4340fcac5e41406f2393173fe0fd92b9c72` |
+| 基准 1,000 ns Chakra 图 | `0355b8c5667bbadc7a431b6c63595f36fcbfd1c12522ef8e99962dd1604fb670` |
+| ASTRA 功能配置 | `5e323e19d327ba40afa7073cca6d9df5fbbfd28aafae94ba250c4289ed9360c3` |
+
+### 失败记录与修正依据
+
+第一次编译找不到 `Logging.hh:6` 所包含的 `spdlog_setup/conf.h`，其目录在 ASTRA CMake 中仅为 PRIVATE。补充本目标头文件目录后，第二次编译暴露两个问题：日志配置头引入 `syslog.h`，其中 `LOG_INFO` 与 ns-3 `src/core/model/log.h:92` 的枚举名冲突；日志配置代码的无命名空间 `format()` 在 C++20 下与 `std::format` 发生重载歧义。第三次构建已隔离头文件，仍因 C++20 歧义退出 1。最终将独立日志桥接按 ASTRA 的 C++17 编译，仅通过两项普通函数供 C++20 入口调用，构建通过。三个版本分别保留在 `attempt-1/` 至 `attempt-3/`，没有修改或抑制上游定义。
+
+初次时间单元程序收到 SIGSEGV，原命令记录返回 `-11`。用 `timeout --kill-after=5s 30s stdbuf -oL <原单元程序>` 复现，确认前面的时间和整数边界检查均已通过，崩溃位于同进程第二次 `Time::SetResolution`。锁定 ns-3 `src/core/model/time.cc:365-391` 的 `ConvertTimes` 首次使用后将登记表清空并置空；其接口只允许初始化时设置一次，测试在 `Simulator::Run` 之后重设精度违反该约束。本次只修正测试组织：PS 精度拒绝检查用 `--wrong-resolution` 独立进程执行，保留相同拒绝条件。原源文件和二进制在 `time-test-attempt-1/`；两个最终进程均退出 0。计算程序本身始终只在初始化时设置一次精度。
+
+| 实际步骤或命令 | 退出状态 | 记录 |
+|---|---|---|
+| 完整 CMake 配置 | 0 | `configure.json` |
+| 同一目标构建命令的三次初始尝试 | 1、1、1 | `build.json`、`build-retry.json`、`build-final.json` |
+| 使用 C++17 日志桥接后的构建 | 0 | `build-logging-bridge.json` |
+| 初次时间单元检查及无缓冲复现 | -11、-11，SIGSEGV | `time-unit.json`、`time-unit-unbuffered.json` |
+| `cmake --build build/m1-compute --target cosim-time-test --parallel 8` | 0 | `rebuild-time-test.json` |
+| 最终时间单元 / 错误精度独立进程 | 均为 0 | `time-unit-final.json`、`wrong-resolution.json` |
+| 四项计算、六项拒绝及实际计算程序链接核验 | 0 | `compute-integration.json`、`integration/commands.json` |
+| 原 M0 探针 / 原链接审计 | 均为 0 | `m0-probe.json`、`m0-audit.json` |
+| `python3 <日志目录>/preflight.py` / `restore_native.py` | 均为 0 | `preflight.json`、`restore-native.json` |
+| 开始及结束 `bash scripts/check_deps.sh` | 均为 0，13 个依赖一致 | `dependency-before.json`、`dependency-final.json` |
+
+配置前记录并核对 27 个原生及 M0 关键产物，备份 UB 启动锁；结束时先确认新锁对应本轮输出目录，再保存本轮锁并恢复原锁，27 项 SHA-256 全部未变。没有清理历史产物、改变原生工作区或更新 gitlink。
+
+本轮结果仅证明合成 COMP 的执行与时间接口正确。`compute_source=synthetic_fixed_duration`、`calibration_status=unvalidated_reference` 明确标记其来源与校准状态。尚未实现 UB 写任务、接收等待及两侧完成事件，也未验证服务调度或真实计算数据。完成记录仅本地提交，不推送；停止在 M1.1，下一项 M1.2 仍待用户确认。

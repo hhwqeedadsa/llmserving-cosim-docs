@@ -43,13 +43,30 @@ UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished,
         throw std::invalid_argument("A nonnegative rank and completion handler are required");
     }
     NowNs();
+    RegisterTransfers(transfers);
+}
+
+void UbNetworkAdapter::CheckTransfers(const std::vector<UbWriteTransfer*>& transfers) const
+{
+    auto keys = transfers_;
     for (auto* transfer : transfers)
     {
         if (!transfer) throw std::invalid_argument("Null UB transfer descriptor");
         const auto& d = transfer->Descriptor();
         if (d.src_rank != rank && d.dst_rank != rank) continue;
-        if (!transfers_.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer).second)
+        if (!keys.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer).second)
             throw std::invalid_argument("Duplicate UB SEND/RECV matching key");
+    }
+}
+
+void UbNetworkAdapter::RegisterTransfers(const std::vector<UbWriteTransfer*>& transfers)
+{
+    CheckTransfers(transfers);
+    for (auto* transfer : transfers)
+    {
+        const auto& d = transfer->Descriptor();
+        if (d.src_rank == rank || d.dst_rank == rank)
+            transfers_.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer);
     }
 }
 

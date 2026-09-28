@@ -1,5 +1,11 @@
 #include "astra_logging.hh"
 #include "layer_plan.hh"
+#include "graph_sequence.hh"
+#ifdef COSIM_LIFECYCLE_TEST
+#include "astra-sim/system/WorkloadLayerHandlerData.hh"
+#include "astra-sim/system/SendPacketEventHandlerData.hh"
+#include "astra-sim/system/RecvPacketEventHandlerData.hh"
+#endif
 #include "port_observation.hh"
 #include "ub_network_adapter.hh"
 
@@ -63,10 +69,18 @@ int main(int argc, char** argv)
 {
     try
     {
-        Require(argc == 6, "Usage: cosim-layer PLAN_DIR SYSTEM.json UB_CASE OBSERVATION.json|- NEW_RUN_DIR");
+        Require(argc == 6, "Usage: " + fs::path(argv[0]).filename().string() +
+                " PLAN_OR_SEQUENCE_DIR SYSTEM.json UB_CASE OBSERVATION.json|- NEW_RUN_DIR");
         auto plan_dir = fs::absolute(argv[1]);
         // Validate every graph before creating the run directory or any network.
-        const auto plan = moe_ub::LoadLayerPlan(plan_dir);
+#ifdef COSIM_SEQUENCE
+        constexpr bool sequence = true;
+#else
+        constexpr bool sequence = false;
+#endif
+        auto plans = sequence ? moe_ub::LoadGraphSequence(plan_dir) :
+            std::vector<moe_ub::LayerPlan>{moe_ub::LoadLayerPlan(plan_dir)};
+        const auto& plan = plans.front();
         const auto send_slots = plan.data.at("send_slots_per_rank").get<unsigned>();
         const auto system_config = ReadJson(fs::absolute(argv[2]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
@@ -84,9 +98,16 @@ int main(int argc, char** argv)
         fs::current_path(run_dir);
         fs::create_directory("network");
         for (const auto& name : files) fs::copy_file(network / name, fs::path("network") / name);
-        for (int rank = 0; rank < 4; ++rank)
-            fs::copy_file(plan_dir / ("layer." + std::to_string(rank) + ".et"), "layer." + std::to_string(rank) + ".et");
-        std::ofstream("plan.json") << plan.data.dump(2) << '\n';
+        for (size_t step = 0; step < plans.size(); ++step)
+        {
+            const auto source = sequence ? plan_dir / std::to_string(step) : plan_dir;
+            const auto destination = sequence ? fs::path(std::to_string(step)) : fs::path(".");
+            if (sequence) fs::create_directory(destination);
+            for (int rank = 0; rank < 4; ++rank)
+                fs::copy_file(source / ("layer." + std::to_string(rank) + ".et"),
+                              destination / ("layer." + std::to_string(rank) + ".et"));
+            std::ofstream(destination / "plan.json") << plans[step].data.dump(2) << '\n';
+        }
         std::ofstream("system.json") << system_config.dump(2) << '\n';
         ns3::Time::SetResolution(ns3::Time::NS);
         ns3::RngSeedManager::SetSeed(10);
@@ -109,6 +130,15 @@ int main(int argc, char** argv)
             {"active_wqes", {0, 0, 0, 0}}, {"peak_wqes", {0, 0, 0, 0}},
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}, {"later_event_executed", false}, {"test_stop_ns", stop}};
+        size_t current_step = 0;
+        if (sequence)
+        {
+            report["schema_version"] = "moe-ub-sequence-result/1";
+            report["graph_loads"] = Json::array();
+            report["step_submissions"] = Json::array();
+            report["boundary_resources"] = Json::array();
+            report["network_initializations"] = 1;
+        }
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank = 0; rank < 4; ++rank)
@@ -128,33 +158,153 @@ int main(int argc, char** argv)
         moe_ub::InitializeAstraLogging();
         {
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
-            std::vector<moe_ub::UbWriteTransfer*> registry;
             std::vector<const moe_ub::UbWriteTransfer*> export_registry;
-            for (const auto& d : plan.descriptors)
+            std::vector<std::vector<moe_ub::UbWriteTransfer*>> step_transfers(plans.size());
+            std::vector<moe_ub::WriteDescriptor> descriptors;
+            for (size_t step = 0; step < plans.size(); ++step)
+            for (const auto& d : plans[step].descriptors)
             {
                 transfers.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(d.src_rank)));
-                registry.push_back(transfers.back().get()); export_registry.push_back(transfers.back().get());
+                export_registry.push_back(transfers.back().get());
+                step_transfers[step].push_back(transfers.back().get()); descriptors.push_back(d);
             }
             std::unique_ptr<moe_ub::PortObservation> observation;
-            if (config) observation = std::make_unique<moe_ub::PortObservation>(*config, plan.descriptors, controllers);
+            if (config) observation = std::make_unique<moe_ub::PortObservation>(*config, descriptors, controllers);
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
+            std::function<void()> advance;
+            auto identity = [&]() { return plans.at(current_step).data.at("graph_id"); };
+            auto activate = [&]() {
+                for (int rank = 0; rank < 4; ++rank)
+                {
+                    Json event = {{"rank_id", rank}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}};
+                    if (sequence) event["graph_id"] = identity();
+                    report["activation_order"].push_back(event);
+                    if (sequence) systems[rank]->workload->activate_graph();
+                    else systems[rank]->workload->fire();
+                }
+            };
             for (int rank = 0; rank < 4; ++rank)
             {
                 adapters.push_back(std::make_unique<moe_ub::UbNetworkAdapter>(rank, [&, rank](uint64_t now) {
-                    report["graph_completions"].push_back({{"rank_id", rank}, {"time_ns", now}});
-                }, registry));
-                systems.push_back(std::make_unique<AstraSim::Sys>(rank, "layer", "empty", "system.json",
+                    Json done = {{"rank_id", rank}, {"time_ns", now}};
+                    if (sequence) done["graph_id"] = systems[rank]->workload->graph_id();
+                    report["graph_completions"].push_back(done);
+                    if (sequence && report["graph_completions"].size() == 4)
+                        ns3::Simulator::ScheduleNow([&]() { advance(); });
+                }, sequence ? std::vector<moe_ub::UbWriteTransfer*>{} : step_transfers[0]));
+                systems.push_back(std::make_unique<AstraSim::Sys>(rank, sequence ? "0/layer" : "layer", "empty", "system.json",
                     std::vector<AstraSim::AstraMemoryAPI*>{}, adapters.back().get(),
                     std::vector<int>{4}, std::vector<int>{1}, 1.0, 1.0, false));
                 systems.back()->workload->hw_resource->configure_p2p_send_slots(send_slots);
+                if (sequence)
+                {
+                    systems.back()->workload->bind_graph(plan.data.at("graph_id"));
+                    report["graph_loads"].push_back({{"rank_id", rank}, {"graph_id", identity()}, {"time_ns", 0}});
+                }
             }
+            if (sequence)
+                for (auto& adapter : adapters) adapter->RegisterTransfers(step_transfers[0]);
             report["loaded_ranks_before_activation"] = systems.size();
-            for (int rank = 0; rank < 4; ++rank)
-                ns3::Simulator::Schedule(ns3::NanoSeconds(ready), [&, rank]() {
-                    report["activation_order"].push_back({{"rank_id", rank}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
-                    systems[rank]->workload->fire();
-                });
+            if (sequence) report["step_submissions"].push_back({{"graph_id", identity()}, {"time_ns", ready}});
+            advance = [&]() {
+                const auto now = ns3::Simulator::Now().GetNanoSeconds();
+                for (int rank = 0; rank < 4; ++rank)
+                {
+                    Require(systems[rank]->workload->can_load_graph() &&
+                            apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                            "Cannot advance before all graph work has retired");
+                    Require(controllers[rank] == ns3::NodeList::GetNode(rank)->GetObject<ns3::UbController>() &&
+                            apps[rank]->GetNode() == ns3::NodeList::GetNode(rank), "Network object changed");
+                    report["boundary_resources"].push_back({{"rank_id", rank}, {"time_ns", now},
+                        {"old_graph_id", identity()}, {"pending_events", systems[rank]->pending_events},
+                        {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()},
+                        {"same_network_objects", true}, {"iteration", systems[rank]->workload->iteration}});
+                }
+                for (auto* transfer : step_transfers[0])
+                    Require(!transfer->Completion().Active() && !transfer->ObservingTarget(), "Old transfer still active");
+#ifdef COSIM_LIFECYCLE_TEST
+                // Corrupt only this test run's final rank, then restore the exact
+                // bytes after proving the group has not been partially installed.
+                std::ifstream graph_input("1/layer.3.et", std::ios::binary);
+                const std::string saved((std::istreambuf_iterator<char>(graph_input)), {});
+                graph_input.close();
+                std::ofstream("1/layer.3.et", std::ios::binary).put(char(0x80));
+                bool rejected = false;
+                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]); }
+                catch (const std::exception& e) { rejected = true; report["atomic_rejection"] = e.what(); }
+                Require(rejected, "Malformed final rank was accepted");
+                std::ofstream("1/layer.3.et", std::ios::binary).write(saved.data(), saved.size());
+                for (const auto& sys : systems)
+                    Require(sys->workload->graph_id() == identity() && sys->workload->can_load_graph(), "Partial graph install");
+                rejected = false;
+                try { moe_ub::InstallNextGraph(plans[0], "0", systems, adapters, step_transfers[0]); }
+                catch (const std::exception& e) { rejected = true; report["reuse_rejection"] = e.what(); }
+                Require(rejected, "Retired graph identity was accepted");
+#endif
+                moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]);
+                current_step = 1;
+                plans[1].data["ready_ns"] = now;
+                plans[1].data["input"]["ready_ns"] = now;
+                std::ofstream("1/plan.json") << plans[1].data.dump(2) << '\n';
+                report["step_submissions"].push_back({{"graph_id", identity()}, {"time_ns", now}});
+                for (int rank = 0; rank < 4; ++rank)
+                    report["graph_loads"].push_back({{"rank_id", rank}, {"graph_id", identity()}, {"time_ns", now}});
+                activate();
+#ifdef COSIM_LIFECYCLE_TEST
+                // Fresh copies of retired callback identities exercise the same
+                // Workload / Sys dispatch paths without borrowing freed memory.
+                for (const auto& node : plan.data.at("rank_graphs")[0].at("nodes"))
+                {
+                    auto kind = node.at("kind").get<std::string>();
+                    if (node.at("node_id") != 1 && kind == "COMP") continue;
+                    if (kind != "COMP" && node.at("name").get<std::string>().find("dispatch-") != 0) continue;
+                    const auto delay = kind == "COMP" ? 10 : plan.data.at("input").at("compute_profile_ns").at("attention_route_pack").get<uint64_t>() + 1;
+                    ns3::Simulator::Schedule(ns3::NanoSeconds(delay), [&, node, kind]() {
+                        auto* context = new AstraSim::WorkloadLayerHandlerData;
+                        context->graph_id = plan.data.at("graph_id"); context->node_id = node.at("node_id");
+                        if (kind == "COMP") systems[0]->workload->call(AstraSim::EventType::General, context);
+                        else
+                        {
+                            for (const auto& d : plan.descriptors)
+                                if (d.transfer_id == node.at("transfer_id")) context->comm_tag = d.tag;
+                            if (kind == "SEND")
+                            {
+                                auto* event = new AstraSim::SendPacketEventHandlerData;
+                                event->sys_id = 0; event->event = AstraSim::EventType::PacketSent;
+                                event->callable = systems[0]->workload; event->wlhd = context;
+                                AstraSim::Sys::handleEvent(event);
+                            }
+                            else
+                            {
+                                auto* event = new AstraSim::RecvPacketEventHandlerData;
+                                event->sys_id = 0; event->event = AstraSim::EventType::PacketReceived;
+                                event->workload = systems[0]->workload; event->wlhd = context;
+                                AstraSim::Sys::handleEvent(event);
+                            }
+                        }
+                    });
+                }
+#endif
+            };
+#ifdef COSIM_LIFECYCLE_TEST
+            bool unactivated_rejected = false;
+            try { systems[0]->workload->fire(); }
+            catch (const std::exception& e) { unactivated_rejected = true; report["unactivated_rejection"] = e.what(); }
+            Require(unactivated_rejected, "Unactivated graph fired");
+#endif
+            ns3::Simulator::Schedule(ns3::NanoSeconds(ready), activate);
+#ifdef COSIM_LIFECYCLE_TEST
+            ns3::Simulator::Schedule(ns3::NanoSeconds(ready + 1), [&]() {
+                unsigned rejected = 0;
+                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]); }
+                catch (const std::exception& e) { ++rejected; report["busy_rejection"] = e.what(); }
+                try { systems[0]->workload->activate_graph(); }
+                catch (const std::exception& e) { ++rejected; report["activation_rejection"] = e.what(); }
+                Require(rejected == 2, "Expected busy replacement and duplicate activation rejection");
+                for (const auto& sys : systems) Require(sys->workload->graph_id() == identity(), "Partial replacement");
+            });
+#endif
             ns3::Simulator::Schedule(ns3::NanoSeconds(ready + 500000), [&]() { report["later_event_executed"] = true; });
             ns3::Simulator::Stop(ns3::NanoSeconds(stop));
             ns3::Simulator::Run();
@@ -174,6 +324,7 @@ int main(int argc, char** argv)
                     {"transaction_done_ns", *done.TransactionDoneNs()}, {"send_done_ns", *done.SendDoneNs()},
                     {"receive_done_ns", *done.ReceiveDoneNs()}, {"committed_bytes", done.CommittedBytes()},
                     {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}});
+                if (sequence) report["transfers"].back()["graph_id"] = d.graph_id;
             }
             for (int rank = 0; rank < 4; ++rank)
             {
@@ -189,6 +340,11 @@ int main(int argc, char** argv)
                         state["cpu_slots"] == 0 && state["compute_slots"] == 0 && state["send_slots"] == 0 &&
                         state["pending_events"] == 0 && state["pending_tasks"] == 0, "Unfinished rank " + std::to_string(rank));
                 Require(hardware->active_p2p_sends() == 0, "Unreleased point-to-point send slot");
+                if (sequence)
+                {
+                    state["stale_callbacks"] = workload->stale_callbacks();
+                    state["graph_id"] = workload->graph_id(); state["iteration"] = workload->iteration;
+                }
                 report["rank_resources"].push_back(state);
             }
             for (const auto& event : report["wqe_starts"])
@@ -197,15 +353,37 @@ int main(int argc, char** argv)
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
-            Require(report["graph_completions"].size() == 4 && report["wqe_starts"].size() == transfers.size() &&
+            Require(report["graph_completions"].size() == 4 * plans.size() && report["wqe_starts"].size() == transfers.size() &&
                     report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json::array({0,0,0,0}) &&
                     report["csv_completed_tasks"] == 0, "Layer completion invariant failed");
             for (const auto& peak : report["peak_wqes"])
                 Require(peak > 0 && peak <= send_slots, "Layer SEND slot limit exceeded");
             moe_ub::FlushAstraLogging();
-            report["node_execution"] = moe_ub::ReadLayerExecution(plan, "log/log.log");
-            if (observation) observation->Export(export_registry,
-                moe_ub::LayerEndpointOperations(plan, report["node_execution"]), moe_ub::LayerOperationRegistry(plan));
+            Json endpoints = Json::array(), operations = Json::array();
+            report["node_execution"] = Json::array();
+            for (size_t step = 0; step < plans.size(); ++step)
+            {
+                auto execution = moe_ub::ReadLayerExecution(plans[step], "log/log.log", sequence);
+                auto local = moe_ub::LayerEndpointOperations(plans[step], execution);
+                auto semantic = moe_ub::LayerOperationRegistry(plans[step]);
+                for (auto& event : execution)
+                {
+                    if (sequence) event["graph_id"] = plans[step].data.at("graph_id");
+                    report["node_execution"].push_back(event);
+                }
+                for (auto& record : local)
+                {
+                    record["local_record_id"] = record.at("local_record_id").get<unsigned>() + 2 * step;
+                    endpoints.push_back(record);
+                }
+                for (auto& operation : semantic)
+                {
+                    for (auto& record : operation["endpoint_records"])
+                        record["local_record_id"] = record.at("local_record_id").get<unsigned>() + 2 * step;
+                    operations.push_back(operation);
+                }
+            }
+            if (observation) observation->Export(export_registry, endpoints, operations);
             dl_iterate_phdr(Library, &report["loaded_libraries"]);
         }
         utils->Destroy(); ns3::Simulator::Destroy(); moe_ub::ShutdownAstraLogging();

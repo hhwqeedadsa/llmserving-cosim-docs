@@ -115,7 +115,7 @@ UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找�
 
 `tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
 
-以上是 M2.1 的原始验收范围，后续 M2.2/M2.3 检查见下文；动态服务、多张连续图和模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
+以上是 M2.1 的原始验收范围，后续 M2.2～M2.4 检查见下文；动态服务和模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
 
 ## M2.2 等待与延迟反馈
 
@@ -132,7 +132,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 规范的专家计算 26000/38000 ns，以及最后必要输入推迟后的 30000/42000 ns 已通过；本地发送较晚时必须等待，非关键和其他 rank 输入较晚时不会额外阻塞 rank 2。真实链路传播延迟对照中，rank 2 专家开始从 5877 移至 11629 ns，均早于全组 Dispatch 最晚完成。变化由实际 UB 事件产生，不能当作链路延迟与整图耗时的一般比例。
 
-[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3 的后续验收见下文；连续图或动态服务尚未实现，模型仍未校准。
+[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3/M2.4 的后续验收见下文；动态服务尚未实现，模型仍未校准。
 
 ## M2.3 去重、分块与发送槽
 
@@ -153,3 +153,30 @@ build/m2-chunks-slots/output/cosim/ns3.44-cosim-send-slots-test
 去重后实际为十二次写、98304 字节、2/1/4/1 份专家输入。3072 字节分块后为四十二次写、114688 字节、2/2/3/1 份专家输入；改成两槽后图和字节不变，四 rank 的 SEND/WQE 峰值从 1 增至 2。三种输入的来源开/关/不挂观测结果一致，原 ASTRA 事件、收发回调、资源释放和端口分项均通过。样例定义见 [输入说明](../fixtures/m2_variants/README.md)。
 
 M2.1/M2.2、M1 写/观测/时间/计算及单套 ns-3 链接回归通过。`check_native_collective.py` 在独立 analytical 构建中比较补丁前后默认资源行为：八 rank、十六个集合通信节点的 64 条执行事件与完成时刻相同；该原生后端未链接进联合程序。实际命令、保留的检查失败及停止位置见 [M2.3 环境记录](../docs/environment.md#2026-09-28m2-3-chunks-slots)。
+
+
+## M2.4 连续两张固定图
+
+`moe_ub_cosim.sequence` 将两份明确给定的解码输入导出为 0/、1/ 下的计划与四 rank Chakra 图，以及 sequence.json。RunIdentities 在本次运行内统一分配 transfer_id、UB task_id 和 comm_tag；图/操作身份也不得重复。局部 node_id 可复用，第二轮 Token 索引加一。输入中的 ready_ns 均为零，表示尚未提交的固定步骤；实际第二轮提交时间由第一轮完成事件决定，运行目录 1/plan.json 保存该绝对时刻。
+
+已验证的调用如下，两个输出目录须尚不存在。构建配置与完整回归命令见 [M2.4 环境记录](../docs/environment.md#2026-09-28m2-4-graph-lifecycle)。
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.sequence \
+  --input fixtures/m2_sequence/two_steps.json --output-dir runs/my-sequence-plan
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-sequence \
+  runs/my-sequence-plan fixtures/m1_compute/system.json fixtures/m2_single_layer/network \
+  fixtures/m2_single_layer/observation.json runs/my-sequence-run
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_sequence.py \
+  --build-dir build/m2-graph-lifecycle --output-dir runs/my-sequence-check
+```
+
+cosim-sequence 复用 cosim-layer 的真实执行代码，入口只接受两张固定图。启动前校验两组图和运行内身份；提交时先核对四 rank 已完成，再检查并准备全部 feeder，装载全部图，登记该轮传输，最后按 rank 顺序激活。首轮同样先装载全部 rank，再登记传输并激活。四个 Sys、应用、UB 控制器、网络与时间线始终保留。提前声明传输来源不提交 UB 任务，SEND 仍须由 ASTRA 依赖派发后提交一次实际写。
+
+ASTRA 的新接口仅在 bind_graph 后启用。load_graph 不发任务，activate_graph 才执行；忙时装载、身份复用、未激活就 fire 和重复激活均报错。回调保存 graph_id、node_id 和通信匹配 tag，UB 描述侧表对应唯一传输；在查找节点和释放资源前识别过期回调，日志保存旧图、当前图、rank、node 和 tag。默认原生行为保留，本轮 ASTRA 补丁为 e2a14f5，LLMServingSim gitlink 提交为 0038df8，仍仅本地保存。
+
+正常两轮共 28 次 UB 写、229376 业务字节，96 个节点产生 192 条实际 issue/callback。第二轮在 21552 ns 提交，全组在 43145 ns 完成。观测窗口贯穿两轮，端侧局部记录号为每 rank 的 1～4；图/操作/传输对应保留在内部文件，observed 不新增全局身份。来源开/关/不挂观测及重复执行一致。
+
+cosim-lifecycle-test 是独立测试目标：使用同一真实网络执行，额外注入五个已退休的第一轮回调并尝试非法提交；不向 cosim-sequence 提供故障或替身开关。非法动作被拒绝，正常业务事件、33 份网络跟踪及观测与对照一致。测试结束保留借用回调释放、资源归零和原生路径结果。
+
+本步仍限固定四 rank、正计算、零应用元数据和两轮；不实现动态请求或 M3 调度协议。comm_tag 继续采用原已验证的 1～499999999 范围以避开 NATIVE 重映射，编号耗尽时失败且分配状态不变；没有宣称完整正 31 位空间均可用。实际场景与未验证范围见 [输入说明](../fixtures/m2_sequence/README.md)。

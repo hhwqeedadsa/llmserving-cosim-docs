@@ -73,7 +73,7 @@ def validate_config(c):
     require(sorted(ranks) == c['rank_ids'], 'M2.1 requires one local Token per rank')
 
 
-def build_plan(config):
+def build_plan(config, identities=None):
     validate_config(config)
     c = deepcopy(config)
     operations = [dict(operation_id=f"{c['wave_id']}.L{c['layer_id']}.{kind}", kind=kind,
@@ -157,6 +157,8 @@ def build_plan(config):
         calibration_status='unvalidated_reference', sender_completion='transaction_done',
         send_slots_per_rank=c['send_slots_per_rank'], operations=operations, transfers=transfers, rank_graphs=rank_graphs,
         expert_input_counts=[len(v) for v in expert_inputs], input=c)
+    if identities is not None:
+        identities.assign(plan)
     validate_plan(plan)
     return plan
 
@@ -223,3 +225,32 @@ def validate_plan(plan):
                         node['node_id'] == t[side + '_node_id'], 'Communication identity mismatch')
                 pairs[node['transfer_id'], side] += 1
     require(all(pairs[t, side] == 1 for t in transfers for side in ('send', 'recv')), 'Missing or duplicate SEND/RECV')
+
+
+class RunIdentities:
+    """Allocate bounded run identities atomically; local graph node ids stay local."""
+    def __init__(self, transfer=2**32 + 100, task=100, tag=100):
+        self.transfer, self.task, self.tag = transfer, task, tag
+        self.graphs, self.operations = set(), set()
+
+    def assign(self, plan):
+        count = len(plan['transfers'])
+        operations = {op['operation_id'] for op in plan['operations']}
+        require(plan['graph_id'] not in self.graphs, 'Reused graph_id')
+        require(not self.operations & operations, 'Reused operation_id')
+        for start, maximum, name in ((self.transfer, 2**64 - 1, 'transfer_id'),
+                                      (self.task, 2**32 - 1, 'ub_task_id'),
+                                      (self.tag, 499999999, 'comm_tag')):
+            integer(start, name, 1, maximum)
+            require(count <= maximum - start + 1, name + ' allocator exhausted')
+        mapping = {}
+        for index, transfer in enumerate(plan['transfers']):
+            mapping[transfer['transfer_id']] = self.transfer + index
+            transfer.update(transfer_id=self.transfer + index, ub_task_id=self.task + index,
+                            comm_tag=self.tag + index)
+        for graph in plan['rank_graphs']:
+            for node in graph['nodes']:
+                if 'transfer_id' in node:
+                    node['transfer_id'] = mapping[node['transfer_id']]
+        self.transfer += count; self.task += count; self.tag += count
+        self.graphs.add(plan['graph_id']); self.operations.update(operations)

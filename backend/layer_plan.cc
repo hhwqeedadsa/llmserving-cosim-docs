@@ -243,7 +243,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     return plan;
 }
 
-Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path)
+Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path, bool graph_identity)
 {
     std::ifstream stream(path);
     Require(bool(stream), "missing ASTRA execution log");
@@ -254,6 +254,12 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
     {
         std::smatch match;
         if (!std::regex_search(line, match, pattern)) continue;
+        if (graph_identity)
+        {
+            const auto marker = line.find(", graph_id=");
+            Require(marker != std::string::npos, "missing execution graph identity");
+            if (line.substr(marker + 11) != plan.data.at("graph_id").get<std::string>()) continue;
+        }
         const auto key = std::make_pair(std::stoi(match[2]), std::stoull(match[4]));
         Require(plan.nodes.contains(key), "execution references unknown node");
         auto field = match[1] == "issue" ? "start_ns" : "end_ns";

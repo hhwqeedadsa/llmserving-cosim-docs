@@ -82,6 +82,7 @@ build_exec(
   EXECNAME cosim-layer
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/cosim_layer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"
     "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
@@ -126,3 +127,23 @@ build_exec(
   IGNORE_PCH)
 set_target_properties(cosim-send-slots-test PROPERTIES
   CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+
+foreach(target cosim-sequence cosim-lifecycle-test)
+  build_exec(
+    EXECNAME ${target}
+    SOURCE_FILES
+      "${CMAKE_CURRENT_LIST_DIR}/cosim_layer.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+      "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
+    LIBRARIES_TO_LINK cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
+    EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+  set_target_properties(${target} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+  target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+  target_compile_definitions(${target} PRIVATE COSIM_SEQUENCE)
+  target_link_options(${target} PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m2/${target}-link.map")
+endforeach()
+target_compile_definitions(cosim-lifecycle-test PRIVATE COSIM_LIFECYCLE_TEST)

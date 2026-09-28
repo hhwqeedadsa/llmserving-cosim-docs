@@ -1144,3 +1144,109 @@ python3 "$M23_LOG/restore_baselines.py"
 没有未解决失败。继续保留源码树外 UB 输出目录提示和上游 std::binary_function 弃用警告。未执行全套上游 serving/CSV 测试；本步未修改 serving 或 UB，已执行直接受影响的默认资源、原生集合及联合回归，旧产物全部保留。未运行大向量真实传输、零计算/零 Token 成员、丢包重传、连续图、动态服务或硬件校准。校准状态仍为 unvalidated_reference。
 
 本轮停止在 M2.3 completed；M2.4 等待用户确认。ASTRA、LLMServingSim 和父仓库按由内向外顺序本地提交，不推送；父仓库提交后的依赖检查记录为 L/dependency-final.json，主仓库、LLMServingSim、ASTRA 与 UB 状态另存 final-*.json。
+
+## 2026-09-28：m2-4-graph-lifecycle
+
+用户确认执行 M2.4。旧任务已经在 f8d7be3 提交，新任务说明提交 ed85f98；开始时主仓库、ASTRA 3f72d0a、LLMServingSim 47b3a21、UB 1ba7222 工作区干净，13 项依赖检查通过。本轮日志根 `runs/m2-4-graph-lifecycle-20260928T151643Z/`，下文记为 L。record.py 保存每条命令的 cwd、argv、起止 UTC、退出码和原始 stdout/stderr，集成目录 commands.json 保存逐次生成、实际执行和错误输入命令。
+
+### 行为、身份与依赖补丁
+
+新增固定两步生成器 moe_ub_cosim.sequence 和真实入口 cosim-sequence。两步都显式给出 A～D 路由，Token 索引从 9 增至 10，局部 node_id 复用。RunIdentities 检查图和操作身份不重复，并统一分配本次运行内的传输编号；第一步 UB task_id/comm_tag 为 100～113，第二步为 114～127，transfer_id 在对应数值上加 2^32。局部计算图的结构与耗时不变，每步十四次写、114688 业务字节、2/2/3/1 份专家输入。
+
+第一步使用构造函数装载初始业务图。全部四 rank 装载后才登记该轮传输并按 rank 顺序激活；没有交互式前端或首次调度消息。第一步四个完成回调全部到达后，经 ScheduleNow 在同一时刻检查资源、校验第二步全部图、准备全部 feeder，再装载、登记和激活。四个 Sys、UbApp、控制器与 UB 网络对象保持不变，传输任务仍只在 ASTRA SEND 派发时提交。第二步输入 ready_ns=0 表示固定步骤尚未提交，运行目录 1/plan.json 写入实际绝对提交时刻。
+
+原 ASTRA add_workload() 将逐 rank 装载与 fire 混在一起，回调也只保存局部节点号。新增 opt-in bind_graph/load_graph/activate_graph，在途或历史图身份不能重新装载，未激活的图不能 fire，活动图不能重复激活。WorkloadLayerHandlerData 保存图身份与通信 tag；Workload 在查找局部节点或释放资源前拒绝旧图、非活动图或已结束节点的回调，并报告旧图、当前图、rank、node、tag。通信 tag 与 UbWriteTransfer 的不可变描述共同定位传输。默认未启用该接口时保留原生行为和日志格式。
+
+原 ASTRA 日志在显式图模式下附带 graph_id，并记录实际 load/activate。导出器按图身份读取原 issue/callback，避免同一局部节点号串到下一图。端侧每 rank 的记录号为 1～4，内部 operation_registry 指明两步对应，observed 不新增全局图、传输、请求或 Token 身份。单层入口和 M1 入口仍可运行。
+
+从锁定提交创建 task/m2-4-graph-lifecycle 本地分支。全部检查后，ASTRA 的 Workload.hh/.cc、WorkloadLayerHandlerData.hh 提交 e2a14f55d9a45db8f3831bda7035af3e191e4bb7；LLMServingSim 的 gitlink 随后提交 0038df80f1a46cd7b1cd73616f739e374c11c3e4。父仓库更新 gitlink、checkout_commit 和 project_patch_commits，保留原 baseline_commit、来源及之前补丁。UB、Chakra 和其他依赖源码没有修改。
+
+没有推送、创建 fork、改变远端或仓库可见性；ASTRA/LLMServingSim 的项目补丁仍仅本地保存，当前记录的远端不能视为已可取回这些提交。没有初始化、升级、安装软件、下载模型或修改全局配置。
+
+### 构建与实际命令
+
+以下命令 cwd 均为 /root/moe-ub-cosim，使用已有虚拟环境和 protoc。联合构建目录 build/m2-graph-lifecycle/；默认原生入口在独立 build/m2-graph-lifecycle-native/ 构建。一次一个构建，最多八路并行。
+
+```bash
+M24_LOG=runs/m2-4-graph-lifecycle-20260928T151643Z
+cmake -S third_party/ns-3-ub -B build/m2-graph-lifecycle -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m2-graph-lifecycle/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m2-graph-lifecycle --parallel 8 --target \
+  cosim-sequence cosim-lifecycle-test cosim-layer cosim-layer-delay-test cosim-send-slots-test \
+  cosim-write cosim-write-test cosim-observation-test cosim-compute cosim-time-test m0-joint-link-probe
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/unit/sequence_plan_test.py
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/unit/layer_plan_test.py
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_sequence.py \
+  --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/sequence-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/layer-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/delay-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_variants.py \
+  --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/variants-final"
+python3 tests/integration/check_write.py --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/write-regression"
+python3 tests/integration/check_observation.py --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/observation-regression"
+python3 tests/integration/check_compute.py --build-dir build/m2-graph-lifecycle --output-dir "$M24_LOG/compute-regression"
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-send-slots-test
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-write-test
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-observation-test
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-time-test
+build/m2-graph-lifecycle/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+cmake -S third_party/LLMServingSim/astra-sim/build/astra_analytical \
+  -B build/m2-graph-lifecycle-native -DBUILDTARGET=congestion_unaware -G Ninja
+cmake --build build/m2-graph-lifecycle-native --target AstraSim_Analytical_Congestion_Unaware --parallel 8
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_native_collective.py \
+  --patched-binary build/m2-graph-lifecycle-native/bin/AstraSim_Analytical_Congestion_Unaware \
+  --output-dir "$M24_LOG/native-collective"
+build/m2-graph-lifecycle/output/m0/ns3.44-m0-joint-link-probe "$M24_LOG/m0-probe.et"
+python3 scripts/m0_joint_build/audit.py --build-dir build/m2-graph-lifecycle \
+  --run-log "$M24_LOG/m0-probe.stdout.log" --output-dir "$M24_LOG/m0-audit"
+python3 "$M24_LOG/restore_baselines.py"
+```
+
+联合首次构建 504 步通过。加入实际 load/activate 日志与故障检查后，build-lifecycle.json 的 46 步增量构建通过；最后审查将首轮描述登记移到四 rank 全部装载之后，build-final.json 的六步构建通过，随后重新运行 sequence-final、layer-final、delay-final、variants-final。最终代码哈希与测试记录一致。原 native 构建为 118 步；未将 analytical 库链接进联合程序。
+
+sequence-final/commands.json 记录生成器对子目录 0/、1/ 的编码、五次真实执行，以及十二种坏输入和输出覆盖拒绝。每份导出保留 generation.json、schema/compiler.json、原计划和四份图。原 native 对照采用 rt_template 的网络/system 参数，生成八 rank 的两个独立 AllReduce 与前后 COMP，保留 stdin 的七行 done/一行 exit 和每个程序的实际命令；未执行带清理动作的原 run.sh。
+
+### 验收结果
+
+| 检查 | 实际结果 | L 内记录 |
+|---|---|---|
+| 编号与两步输入单元 | 四项通过，身份不复用、局部号复用、下一 Token 步、边界耗尽且状态不变 | sequence-unit.json |
+| 原计划单元与发送资源 | 八项原计划单元及默认/集合、一槽/两槽、RECV、乱序释放检查通过 | plan-unit.json、send-slots-unit.json |
+| 连续两步 | 来源开/关/不挂观测、重复运行、旧回调注入，共五次执行；每次 28 次真实写、229376 字节 | sequence-final.json、对应 summary.json |
+| 图生命周期负向检查 | 未激活执行、重复激活、忙时替换、已用图身份、运行中损坏第二轮末 rank 全部拒绝；无部分装载 | sequence-final/stale/result.json、原 ASTRA 日志 |
+| 整组启动前拒绝 | 十二种坏输入及旧输出覆盖；跨图重复身份用各自合法且配套的图验证 | sequence-final/commands.json |
+| M2.1/M2.2/M2.3 回归 | 三种单层来源模式、五组给定事件、两组真实延迟、九次去重/分块/双槽变体及相应负向检查通过 | layer-final、delay-final、variants-final |
+| M1 回归 | 六个实际写、21 次观测、四个计算用例，时间/写/观测单元与错误输入拒绝通过 | write/observation/compute-regression 及相应 unit.json |
+| 默认原生集合通信 | 八 rank、十六个集合节点、64 条事件和完整执行日志与旧程序一致，每 rank 237560 ns 完成 | native-collective.json、对应 summary.json |
+| 联合链接范围 | cosim-sequence 和 cosim-lifecycle-test 均包含全部 52 个 ASTRA 对象，实际只装载本次 UB 的十个 ns-3 库 | sequence-final 的命令、link.map 核验及 m0-audit/ |
+| 旧产物保护 | 原生启动锁已恢复，155 个旧产物大小与 SHA-256 不变 | restore-baselines.json、baseline-verification.json |
+
+两轮的实际时间如下，均为 ns-3 绝对纳秒。第一轮部分 rank 提前完成时没有替换图；第二轮在全组完成时刻提交，不加入固定步进。
+
+| 图 | 提交/激活 | rank 0 完成 | rank 1 完成 | rank 2 完成 | rank 3 完成 |
+|---|---:|---:|---:|---:|---:|
+| g.m24.0 | 0 | 21168 | 21506 | 21552 | 17675 |
+| g.m24.1 | 21552 | 42761 | 43099 | 43145 | 39268 |
+
+两轮共 96 个节点，原日志 192 条 issue/callback；每轮专家计算仍为 8000/8000/12000/4000 ns，全部局部等待由对应真实 UB 事件独立核对。两轮的实际历时分别为 21552 与 21593 ns，没有将独立运行耗时累加来计算第二轮。测试边界仍为 1000000 ns，500000 ns 的较晚事件执行，证明图完成没有直接终止仿真；这些测试时刻不是服务完成时刻或新的通信等待。
+
+五个旧回调来自第一轮 rank 0 的一个 COMP、两个 SEND、两个 RECV；测试在第二轮的计算和通信期间通过 Workload 或 Sys::handleEvent 正常入口送入新分配的旧身份上下文，没有访问已释放指针，也没有伪造 UB 数据完成。日志记录五条 stale_callback，当前图保持 g.m24.1。除预期的错误诊断和计数外，全部业务节点、收发时刻、WQE、目标提交、33 份原生网络跟踪与正常执行一致。四 rank 最后均 finished，图/槽/执行器任务/借用回调清空，源 Jetty 已释放，TP 数仍为每 rank 三条，CSV 完成计数为零。
+
+所选交换机 4 端口 2 的连续观测共 36 个包、51678 整包字节，分项为业务 49152、数据协议开销 936、控制 1590、应用元数据及未归属字节均零，包/时刻指纹为 6220457999441248563。100 个连续窗口逐项守恒，每个经过该端口的传输范围从 0 覆盖至 8192。来源开关不改变 observed 或序列化包/时刻；不挂观测的业务和原生跟踪也相同。端侧十六条记录的局部编号唯一，四个内部操作分别关联两步。
+
+### 限制与停止位置
+
+本轮列出的构建、正向执行和检查命令均返回 0；负向输入按预期返回 1，没有未解决测试失败。继续保留源码树外 UB 输出目录提示及上游 std::binary_function 弃用警告。原生集合对照仅证明本次默认路径回归，未执行全套 serving 或 CSV 场景；相应原生旧产物保留。
+
+comm_tag 继续限制为 1～499999999，以避开锁定 NATIVE 路径的标签重映射；达到已验证上界时明确报错，不截断，不宣称完整正 31 位空间可用。固定两步、四 rank、正计算和零应用元数据限制保持；本步不覆盖 M3 的零业务初始化决策、动态请求、空闲组唤醒、多组共享瓶颈、零 Token 成员或服务退出协议，也没有真实路由或模型校准。
+
+停止在 M2.4 completed。ASTRA、LLMServingSim 和父仓库由内向外本地提交，不推送。父仓库提交后的依赖检查保存为 L/dependency-final.json，主仓库和三个相关子模块状态保存为 final-*.json。M2 固定图功能步骤已经完成，M3.1 等待用户确认。

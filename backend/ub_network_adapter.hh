@@ -27,6 +27,8 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
     int sim_recv(void*, uint64_t, int, int, int, AstraSim::sim_request*,
                  void (*)(void*), void*) override;
 
+    void CheckTransfers(const std::vector<UbWriteTransfer*>& transfers) const;
+    void RegisterTransfers(const std::vector<UbWriteTransfer*>& transfers);
     uint64_t ScheduledEvents() const { return scheduled_events_; }
     uint64_t ExecutedCallbacks() const { return executed_callbacks_; }
 

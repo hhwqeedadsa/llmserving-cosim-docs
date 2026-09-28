@@ -21,7 +21,7 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def check_execution(plan, report, run, check_rank2_ahead=True):
+def check_execution(plan, report, run, check_rank2_ahead=True, graph_id=None):
     """Use transfer event evidence to derive local waits, independently of deps."""
     nodes = {(g['rank_id'], n['node_id']): n for g in plan['rank_graphs'] for n in g['nodes']}
     actual = {(n['rank_id'], n['node_id']): n for n in report['node_execution']}
@@ -29,7 +29,7 @@ def check_execution(plan, report, run, check_rank2_ahead=True):
     assert set(actual) == set(nodes) and len(actual) == 20 + 2 * len(plan['transfers'])
     assert set(transfers) == {t['transfer_id'] for t in plan['transfers']}
     assert report['loaded_ranks_before_activation'] == 4
-    assert report['activation_order'] == [dict(rank_id=r, time_ns=0) for r in range(4)]
+    assert report['activation_order'] == [dict(rank_id=r, time_ns=plan['ready_ns']) for r in range(4)]
     assert len(report['graph_completions']) == 4
     assert sum(t['committed_bytes'] for t in transfers.values()) == sum(t['payload_bytes'] for t in plan['transfers'])
     for t in plan['transfers']:
@@ -76,6 +76,8 @@ def check_execution(plan, report, run, check_rank2_ahead=True):
         assert all(actual[key]['start_ns'] >= actual[key[0], d]['end_ns'] for d in node['deps'])
     # Read the original executor log as well, not just the driver's JSON export.
     raw = (run / 'log/log.log').read_text()
+    if graph_id is not None:
+        raw = '\n'.join(line for line in raw.splitlines() if line.endswith(', graph_id=' + graph_id))
     events = re.findall(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+),', raw)
     assert len(events) == 2 * len(nodes) and len({(e, r, n) for e, r, _, n in events}) == 2 * len(nodes)
     active, peak, concurrent_receive = [0] * 4, [0] * 4, 0

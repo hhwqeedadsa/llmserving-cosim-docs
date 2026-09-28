@@ -468,6 +468,8 @@ private:
                                       AckResponseContext& response);
     void CompleteInboundTaUnits(const std::vector<Ptr<UbWqeSegment>>& completedTaUnits);
 
+    // Packet identity, task id, task offset, packet payload offset, payload bytes.
+    TracedCallback<Ptr<const Packet>, uint32_t, uint64_t, uint32_t, uint32_t> m_writePacketCreated;
     TracedCallback<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> m_traceFirstPacketSendsNotify;
     TracedCallback<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> m_traceLastPacketSendsNotify;
     TracedCallback<uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t> m_traceLastPacketACKsNotify;

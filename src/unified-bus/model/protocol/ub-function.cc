@@ -310,6 +310,7 @@ Ptr<UbWqeSegment> UbJetty::GetNextWqeSegment()
     Ptr<UbWqeSegment> segment = GenWqeSegment(currentWqe, segmentSize);
     segment->SetTaskId(currentWqe->GetWqeId());
     segment->SetWqeSize(currentWqe->GetSize());
+    segment->SetTaskByteOffset(currentWqe->GetSize() - currentWqe->GetBytesLeft());
     currentWqe->UpdateSentBytes(segmentSize);
     IncreaseTaSsnSndNxt(); // 更新下一个待发送的分段序号
 

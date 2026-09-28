@@ -291,6 +291,10 @@ TypeId UbTransportChannel::GetTypeId(void)
                       BooleanValue(true),
                       MakeBooleanAccessor(&UbTransportChannel::m_useShortestPaths),
                       MakeBooleanChecker())
+        .AddTraceSource("WritePacketCreated",
+                        "Passive WRITE request payload provenance, before transmission.",
+                        MakeTraceSourceAccessor(&UbTransportChannel::m_writePacketCreated),
+                        "ns3::UbTransportChannel::WritePacketCreated")
         .AddTraceSource("FirstPacketSendsNotify",
                         "Fires when the first packet of a WQE segment is sent.",
                         MakeTraceSourceAccessor(&UbTransportChannel::m_traceFirstPacketSendsNotify),
@@ -951,6 +955,14 @@ Ptr<Packet> UbTransportChannel::GenDataPacket(Ptr<UbWqeSegment> wqeSegment,
     // add dl header
     UbDataLink::GenPacketHeader(p, false, false, m_priority, m_priority, m_usePacketSpray,
                                 m_useShortestPaths, UbDatalinkHeaderConfig::PACKET_IPV4);
+    if (wqeSegment->GetType() == TaOpcode::TA_OPCODE_WRITE &&
+        wqeSegment->GetSegmentKind() == UbTransactionSegmentKind::REQUEST &&
+        wqeSegment->HasTaskByteOffset() && payloadSize > 0)
+    {
+        m_writePacketCreated(p, wqeSegment->GetTaskId(),
+            wqeSegment->GetTaskByteOffset() + wqeSegment->GetSize() - wqeSegment->GetBytesLeft(),
+            p->GetSize() - payloadSize, payloadSize);
+    }
     return p;
 }
 

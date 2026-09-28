@@ -886,6 +886,11 @@ class UbWqeSegment : public Object {
 public:
     static TypeId GetTypeId(void);
 
+    // Internal provenance only: never serialized or used for transport decisions.
+    void SetTaskByteOffset(uint64_t offset) { m_taskByteOffset = offset; m_hasTaskByteOffset = true; }
+    bool HasTaskByteOffset() const { return m_hasTaskByteOffset; }
+    uint64_t GetTaskByteOffset() const { return m_taskByteOffset; }
+
     // ========== 构造函数 ==========
     UbWqeSegment()
     {
@@ -1340,6 +1345,8 @@ private:
     uint32_t m_size{0};                             // 分段数据大小 (字节)
     UbPriority m_priority{UB_PRIORITY_DEFAULT};     // 分段优先级
     uint32_t m_taskId{0};                           // 流的任务ID
+    uint64_t m_taskByteOffset{0};
+    bool m_hasTaskByteOffset{false};
     uint32_t m_wqeSize{0};                          // 所属WQE的size
     OrderType m_orderType{OrderType::ORDER_NO};     // 所属WQE的order类型
     uint32_t m_tpn; // 当前WqeSegment由哪一个TP进行传输

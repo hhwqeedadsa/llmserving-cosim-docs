@@ -24,6 +24,7 @@ struct WriteDescriptor
     int dst_rank;
     int tag;
     uint64_t bytes;
+    std::string operation_id{}; // Empty only for the original single-WRITE fixture.
 };
 
 class UbWriteTransfer

@@ -28,7 +28,13 @@ int64_t NowNs()
 }
 
 UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished, UbWriteTransfer* transfer)
-    : AstraNetworkAPI(rank), finished_(std::move(finished)), transfer_(transfer)
+    : UbNetworkAdapter(rank, std::move(finished),
+        transfer ? std::vector<UbWriteTransfer*>{transfer} : std::vector<UbWriteTransfer*>{})
+{}
+
+UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished,
+                                 const std::vector<UbWriteTransfer*>& transfers)
+    : AstraNetworkAPI(rank), finished_(std::move(finished))
 {
     static_assert(std::numeric_limits<long double>::digits >= 63,
                   "ASTRA time must represent every signed 64-bit nanosecond value");
@@ -37,6 +43,14 @@ UbNetworkAdapter::UbNetworkAdapter(int rank, Finished finished, UbWriteTransfer*
         throw std::invalid_argument("A nonnegative rank and completion handler are required");
     }
     NowNs();
+    for (auto* transfer : transfers)
+    {
+        if (!transfer) throw std::invalid_argument("Null UB transfer descriptor");
+        const auto& d = transfer->Descriptor();
+        if (d.src_rank != rank && d.dst_rank != rank) continue;
+        if (!transfers_.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer).second)
+            throw std::invalid_argument("Duplicate UB SEND/RECV matching key");
+    }
 }
 
 AstraSim::AstraNetworkAPI::BackendType UbNetworkAdapter::get_backend_type()
@@ -81,16 +95,20 @@ void UbNetworkAdapter::sim_notify_finished()
 int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag,
                               AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
-    if (!transfer_) throw std::logic_error("No UB transfer descriptor configured for SEND");
-    transfer_->Send(rank, count, type, dst, tag, callback, arg);
+    auto it = transfers_.find({rank, dst, tag});
+    if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for SEND");
+    if (it == transfers_.end()) throw std::invalid_argument("SEND matching key is not in the UB transfer registry");
+    it->second->Send(rank, count, type, dst, tag, callback, arg);
     return 0;
 }
 
 int UbNetworkAdapter::sim_recv(void*, uint64_t count, int type, int src, int tag,
                               AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
-    if (!transfer_) throw std::logic_error("No UB transfer descriptor configured for RECV");
-    transfer_->Receive(rank, count, type, src, tag, callback, arg);
+    auto it = transfers_.find({src, rank, tag});
+    if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for RECV");
+    if (it == transfers_.end()) throw std::invalid_argument("RECV matching key is not in the UB transfer registry");
+    it->second->Receive(rank, count, type, src, tag, callback, arg);
     return 0;
 }
 }

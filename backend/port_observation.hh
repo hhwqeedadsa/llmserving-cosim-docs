@@ -42,7 +42,7 @@ class PortWindows
 struct PayloadRange
 {
     uint64_t task_begin;
-    uint32_t packet_begin, bytes, packet_size;
+    uint32_t packet_begin, bytes, packet_size, task_id;
     bool operator==(const PayloadRange&) const = default;
 };
 
@@ -51,12 +51,13 @@ struct PayloadRange
 class PayloadLedger
 {
   public:
-    explicit PayloadLedger(WriteDescriptor descriptor) : descriptor_(std::move(descriptor)) {}
+    explicit PayloadLedger(WriteDescriptor descriptor) : PayloadLedger(std::vector<WriteDescriptor>{std::move(descriptor)}) {}
+    explicit PayloadLedger(const std::vector<WriteDescriptor>& descriptors);
     void Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task, uint64_t task_begin,
                  uint32_t packet_begin, uint32_t bytes);
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
   private:
-    WriteDescriptor descriptor_;
+    std::map<uint32_t, WriteDescriptor> descriptors_;
     std::map<uint64_t, PayloadRange> ranges_;
 };
 
@@ -68,16 +69,20 @@ class PortObservation
   public:
     PortObservation(ObservationConfig config, WriteDescriptor descriptor,
                     ns3::Ptr<ns3::UbController> source);
+    PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
+                    std::vector<ns3::Ptr<ns3::UbController>> sources);
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
     void Export(const UbWriteTransfer& transfer) const;
+    void Export(const std::vector<const UbWriteTransfer*>& transfers,
+                const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry) const;
   private:
     void PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay);
     ObservationConfig config_;
-    WriteDescriptor descriptor_;
+    std::map<uint32_t, WriteDescriptor> descriptors_;
     PortWindows windows_;
-    ns3::Ptr<ns3::UbController> source_;
+    std::vector<ns3::Ptr<ns3::UbController>> sources_;
     ns3::Ptr<ns3::UbPort> port_;
     std::shared_ptr<PayloadLedger> ledger_;
     uint64_t initial_tx_bytes_ = 0, all_bytes_ = 0, all_packets_ = 0;

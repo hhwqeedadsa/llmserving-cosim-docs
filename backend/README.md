@@ -1,4 +1,4 @@
-# M1 最小联合程序
+# 最小联合执行程序
 
 本目录的 `cosim-compute` 用锁定 ASTRA 的 Sys、Workload、HardwareResource 和 Chakra reader 执行一个合成 COMP。计算完成回调由 ns-3-UB 的事件队列触发。`cosim-write` 执行实际 ASTRA SEND、RECV 及其后续 COMP；只有 SEND 提交一份 UB 写事务。未配置传输描述的计算适配器仍拒绝收发。
 
@@ -86,3 +86,33 @@ build/m1-observation/output/cosim/ns3.44-cosim-write \
 `cosim-observation-test` 检查窗口边界、零窗口、控制包载体排除、包副本不改线速字节、精确范围及重复经过的计数。`tests/integration/check_observation.py` 检查 7 种场景、来源开/关/不挂观测共 21 次成功运行，以及 10 种非法配置；包含 1 字节、65,537 字节尾块、5,000 字节 TA 分段、晚到 RECV 加 TP 回收、反向纯控制端口和裁剪窗口。每组比较原生跟踪、ASTRA 执行、图、完成及资源状态，开关来源时观测文件与序列化包/时刻指纹相同。
 
 标准 409,600 字节例的选定端口累计 417,834 字节：业务 409,600、数据包协议开销 7,800、控制包 434；data_ready 仍为 8,534 ns、SEND 完成仍为 8,622 ns。实际命令和保留的失败记录见 [M1.4 环境记录](../docs/environment.md#2026-09-28m1-4-port-provenance)。没有做真实丢包/重传集成、完整上游测试或硬件校准；当前校准状态仍为 unvalidated_reference。
+
+## M2.1 固定四 rank 单层
+
+生成器从 [layer.json](../fixtures/m2_single_layer/layer.json) 中的 Token、专家放置和固定计算 profile 构造 ExecutionPlan，校验后导出四份 Chakra 图。来源逐条保留请求、Token、专家及输入数组中的 source_record_index。生成计划只包含任务、字节和依赖，不包含预测的通信完成时刻。
+
+以下命令已在本机对应入口验证。两个输出目录必须尚不存在，父目录必须存在；使用已有 Python 环境，不需要安装软件：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.generate \
+  --input fixtures/m2_single_layer/layer.json --output-dir runs/my-layer-plan
+build/m2-single-layer/output/cosim/ns3.44-cosim-layer \
+  runs/my-layer-plan fixtures/m1_compute/system.json fixtures/m2_single_layer/network \
+  fixtures/m2_single_layer/observation.json runs/my-layer-run
+```
+
+生成器在新输出目录用本机 protoc 从锁定 Chakra 的 et_def.proto 生成 Python 编码模块，然后以长度前缀 protobuf 写入 layer.0.et 至 layer.3.et。保留 plan.json、generation.json 的 schema、计划和图哈希以及 schema/compiler.json 的编译命令和结果。不会复用依赖目录中旧的未跟踪 et_def_pb2.py。当前系统 Python 没有 protobuf，已有 .venv/llmservingsim-native/ 中的 protobuf 可以执行导出。
+
+cosim-layer 的参数依次是计划目录、ASTRA system.json、网络目录、观测配置和新运行目录；以 `-` 替代观测配置可不挂观测。后端在创建运行目录和网络前，核对所有计划字段、收发配对、唯一身份、局部依赖、发送顺序，并逐个读取四份实际 protobuf 文件，检查它们与计划一致。全部通过后创建同一网络、登记全部传输、装载四个 Sys，最后按 rank 顺序在同一 ready_ns 激活。
+
+UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找不可变描述，M1 的单传输入口仍可使用。M2.1 每条任务继续复用 UbWriteTransfer 的真实数据就绪、事务完成、异步回调与清理路径。锁定 ASTRA 的 HardwareResource 已有一个 SEND 槽，RECV 不占该槽；本轮没有修改 ASTRA、LLMServingSim 或 UB 源码及版本。
+
+图中 SEND 按操作内目的 rank 排序。专家计算等待本 rank 的 Dispatch 发送完成、接收就绪和本地输入；本地 Combine 的发送、接收及解包合并全部完成后才执行后继 COMP。固定例有 28 个通信节点和 20 个计算节点，共 48 个节点。局部耗时、网络配置及输入边界见 [样例说明](../fixtures/m2_single_layer/README.md)。当前保留 tag 小于 500000000 的已验证范围，超界明确拒绝，以避开锁定 ASTRA NATIVE 路径的标签重映射。
+
+端侧输出为四个 rank 各自的 Dispatch/Combine 两条记录，共八条。为保留当前步骤的最小实现，结束时先刷新 ASTRA 日志，再读取其原始 issue/callback 记录：Dispatch 从准备完成到专家计算开始，当前固定图中后者已核对等于本地 Dispatch 条件最晚完成；Combine 从本地专家结果处理完成到最终解包合并完成。记录缺失、重复或依赖矛盾会报错，不从网络包推测时刻。当前入口要求 trace-enabled=1 和正计算耗时，不把未记录的零时间节点当成已验证阶段标记。
+
+来源侧表扩展为按 UB task_id 区分十四条传输；端口仍复用 M1 的成功发送计数位置。observed 中只含局部操作号、端侧本地时刻和端口窗口，两个全局操作号、跨 rank 对应、传输号和有效范围保存在 truth。完整 plan.json、result.json、ASTRA/网络日志和 observation-audit.json 都是内部调试证据。
+
+`tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
+
+本步没有实现动态服务前端或多个连续图，不声称完成 M2.2 的延迟注入、M2.3 的分块/多槽变体或模型校准。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。

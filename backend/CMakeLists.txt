@@ -77,3 +77,23 @@ file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/cosim-m1/write-target.txt" CONTENT
 "write=$<TARGET_FILE:cosim-write>
 write_test=$<TARGET_FILE:cosim-write-test>
 ")
+
+build_exec(
+  EXECNAME cosim-layer
+  SOURCE_FILES
+    "${CMAKE_CURRENT_LIST_DIR}/cosim_layer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
+  LIBRARIES_TO_LINK
+    cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
+  IGNORE_PCH)
+set_target_properties(cosim-layer PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-layer PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m2")
+target_link_options(cosim-layer PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m2/layer-link.map")
+file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/cosim-m2/target-facts.txt" CONTENT
+"layer=$<TARGET_FILE:cosim-layer>")

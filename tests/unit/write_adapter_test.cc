@@ -104,6 +104,29 @@ int main()
         invalid.bytes = 0;
         Reject<std::invalid_argument>([&]() { moe_ub::UbWriteTransfer transfer(invalid, app); });
         {
+            auto other = descriptor;
+            ++other.transfer_id; ++other.task_id; ++other.tag;
+            moe_ub::UbWriteTransfer first(descriptor, app), second(other, app);
+            std::vector<moe_ub::UbWriteTransfer*> registry{&first, &second};
+            moe_ub::UbNetworkAdapter sender(0, [](uint64_t) {}, registry);
+            moe_ub::UbNetworkAdapter receiver(1, [](uint64_t) {}, registry);
+            Reject<std::invalid_argument>([&]() {
+                moe_ub::UbNetworkAdapter duplicate(0, [](uint64_t) {},
+                    std::vector<moe_ub::UbWriteTransfer*>{&first, &first});
+            });
+            unsigned callbacks = 0;
+            receiver.sim_recv(nullptr, other.bytes, AstraSim::UINT8, 0, other.tag, nullptr,
+                              RecordCompletion, &callbacks);
+            Check(second.ReceiverWaiting() && !first.ReceiverWaiting(), "Multi-transfer receive matched the wrong tag");
+            sender.sim_send(nullptr, descriptor.bytes, AstraSim::UINT8, 1, descriptor.tag, nullptr,
+                            RecordCompletion, &callbacks);
+            sender.sim_send(nullptr, other.bytes, AstraSim::UINT8, 1, other.tag, nullptr,
+                            RecordCompletion, &callbacks);
+            Check(callbacks == 0 && first.SubmittedTasks() == 0 && second.SubmittedTasks() == 0,
+                  "Multi-transfer SEND ran before returning");
+            // Scope exit cancels these unsubmitted tasks; this is a matching unit test.
+        }
+        {
             moe_ub::UbWriteTransfer transfer(descriptor, app);
             moe_ub::UbNetworkAdapter sender(0, [](uint64_t) {}, &transfer);
             moe_ub::UbNetworkAdapter receiver(1, [](uint64_t) {}, &transfer);

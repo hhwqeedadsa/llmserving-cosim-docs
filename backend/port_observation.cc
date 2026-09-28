@@ -114,13 +114,23 @@ uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet)
     return copy->GetSize();
 }
 
+PayloadLedger::PayloadLedger(const std::vector<WriteDescriptor>& descriptors)
+{
+    for (const auto& d : descriptors)
+        Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
+                "Duplicate or invalid UB task identity in provenance registry");
+}
+
 void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
                            uint64_t task_begin, uint32_t packet_begin, uint32_t bytes)
 {
-    Require(task == descriptor_.task_id && bytes > 0 && task_begin <= descriptor_.bytes &&
-            bytes <= descriptor_.bytes - task_begin && packet_begin <= packet->GetSize() &&
+    auto descriptor = descriptors_.find(task);
+    Require(descriptor != descriptors_.end(), "Unknown WRITE task provenance");
+    const auto& d = descriptor->second;
+    Require(bytes > 0 && task_begin <= d.bytes &&
+            bytes <= d.bytes - task_begin && packet_begin <= packet->GetSize() &&
             bytes == packet->GetSize() - packet_begin, "Invalid WRITE provenance range or task");
-    PayloadRange value{task_begin, packet_begin, bytes, packet->GetSize()};
+    PayloadRange value{task_begin, packet_begin, bytes, packet->GetSize(), task};
     auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
     Require(inserted || it->second == value, "Conflicting packet provenance");
 }
@@ -130,8 +140,9 @@ PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t 
     Require(it != ranges_.end(), "WRITE packet has no source provenance");
     const auto& range = it->second;
     ns3::UbFlowTag tag;
-    Require(packet->PeekPacketTag(tag) && tag.GetFlowId() == descriptor_.task_id &&
-            tag.GetFlowSize() == descriptor_.bytes &&
+    const auto& d = descriptors_.at(range.task_id);
+    Require(packet->PeekPacketTag(tag) && tag.GetFlowId() == d.task_id &&
+            tag.GetFlowSize() == d.bytes &&
             range.packet_size == packet->GetSize() && range.bytes == payload_bytes,
             "WRITE packet does not match registered payload range");
     return range;
@@ -139,8 +150,16 @@ PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t 
 
 PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descriptor,
                                 ns3::Ptr<ns3::UbController> source)
-    : config_(config), descriptor_(std::move(descriptor)), windows_(config), source_(source)
+    : PortObservation(config, std::vector<WriteDescriptor>{std::move(descriptor)}, {source})
+{}
+
+PortObservation::PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
+                                std::vector<ns3::Ptr<ns3::UbController>> sources)
+    : config_(config), windows_(config), sources_(std::move(sources))
 {
+    for (const auto& d : descriptors)
+        Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
+                "Duplicate or invalid observation task identity");
     Require(config_.switch_id < ns3::NodeList::GetNNodes(), "Observation switch does not exist");
     auto node = ns3::NodeList::GetNode(config_.switch_id);
     auto sw = node->GetObject<ns3::UbSwitch>();
@@ -151,10 +170,10 @@ PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descr
     initial_tx_bytes_ = port_->GetTxBytes();
     if (config_.provenance)
     {
-        ledger_ = std::make_shared<PayloadLedger>(descriptor_);
+        ledger_ = std::make_shared<PayloadLedger>(descriptors);
         // Keep no TP references: native reclamation owns their lifetime. The bound
         // ledger, not this observer, remains valid if a removed TP outlives its map entry.
-        for (const auto& [id, tp] : source_->GetTpnMap())
+        for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
             Require(tp->TraceConnectWithoutContext("WritePacketCreated",
                         ns3::MakeBoundCallback(Created, ledger_)), "Cannot observe WRITE packet creation");
     }
@@ -165,7 +184,7 @@ PortObservation::~PortObservation()
 {
     if (port_) port_->TraceDisconnectWithoutContext("TraComEventNotify",
         ns3::MakeCallback(&PortObservation::PacketStart, this));
-    if (ledger_) for (const auto& [id, tp] : source_->GetTpnMap())
+    if (ledger_) for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
         tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
 }
 void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay)
@@ -188,10 +207,11 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     if (ledger_ && business)
     {
         const auto range = ledger_->Lookup(packet, business);
+        const auto& descriptor = descriptors_.at(range.task_id);
         if (now >= config_.start_ns && now < config_.end_ns)
             packet_ranges_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
-                {"ub_task_id", descriptor_.task_id}, {"transfer_id", descriptor_.transfer_id},
-                {"operation_id", descriptor_.graph_id + "/write"},
+                {"ub_task_id", descriptor.task_id}, {"transfer_id", descriptor.transfer_id},
+                {"operation_id", descriptor.operation_id.empty() ? descriptor.graph_id + "/write" : descriptor.operation_id},
                 {"task_byte_range", {range.task_begin, range.task_begin + range.bytes}},
                 {"packet_byte_range", {range.packet_begin, range.packet_begin + range.bytes}},
                 {"counted_packet_bytes", whole}});
@@ -200,10 +220,29 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
 
 void PortObservation::Export(const UbWriteTransfer& transfer) const
 {
-    Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
+    const auto& d = transfer.Descriptor();
     const auto& completion = transfer.Completion();
     Require(transfer.SendStartNs() && transfer.ReceiveStartNs() &&
             completion.SendDoneNs() && completion.ReceiveDoneNs(), "Missing endpoint execution record");
+    Json endpoints = Json::array({
+        {{"rank_id", d.src_rank}, {"local_record_id", 1}, {"kind", "write_send"},
+         {"start_local_ns", *transfer.SendStartNs()}, {"end_local_ns", *completion.SendDoneNs()}},
+        {{"rank_id", d.dst_rank}, {"local_record_id", 1}, {"kind", "write_receive"},
+         {"start_local_ns", *transfer.ReceiveStartNs()}, {"end_local_ns", *completion.ReceiveDoneNs()}}
+    });
+    Json operations = Json::array({{
+        {"operation_id", d.graph_id + "/write"}, {"graph_id", d.graph_id}, {"op_type", "synthetic_write"},
+        {"source", "functional_fixture"}, {"calibration_status", "unvalidated_reference"},
+        {"endpoint_records", {{{"rank_id", d.src_rank}, {"local_record_id", 1}, {"et_node_id", d.send_node_id}},
+                               {{"rank_id", d.dst_rank}, {"local_record_id", 1}, {"et_node_id", d.recv_node_id}}}}}});
+    Export({&transfer}, endpoints, operations);
+}
+
+void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfers,
+                             const Json& endpoint_ops, const Json& operation_registry) const
+{
+    Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
+    Require(transfers.size() == descriptors_.size(), "Observation export transfer count mismatch");
     std::filesystem::create_directory("observed");
     Save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
         {"counter_location", "egress_packet_start"}, {"byte_semantics", "packet_get_size"},
@@ -225,36 +264,32 @@ void PortObservation::Export(const UbWriteTransfer& transfer) const
             {"unattributed_bytes", 0}});
     }
     Save("observed/port_counters.jsonl", observed, true);
-    Save("observed/endpoint_ops.jsonl", Json::array({
-        {{"rank_id", descriptor_.src_rank}, {"local_record_id", 1}, {"kind", "write_send"},
-         {"start_local_ns", *transfer.SendStartNs()}, {"end_local_ns", *completion.SendDoneNs()}},
-        {{"rank_id", descriptor_.dst_rank}, {"local_record_id", 1}, {"kind", "write_receive"},
-         {"start_local_ns", *transfer.ReceiveStartNs()}, {"end_local_ns", *completion.ReceiveDoneNs()}}
-    }), true);
+    Save("observed/endpoint_ops.jsonl", endpoint_ops, true);
     Save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
         {"wire_and_time_fnv1a64", fingerprint_}});
     if (!ledger_) return;
     std::filesystem::create_directory("truth");
+    std::set<int> ranks;
+    Json registry = Json::array();
+    for (const auto* transfer : transfers)
+    {
+        const auto& d = transfer->Descriptor();
+        Require(!transfer->Completion().Active(), "Unfinished transfer in provenance export");
+        ranks.insert(d.src_rank); ranks.insert(d.dst_rank);
+        registry.push_back({{"transfer_id", d.transfer_id},
+            {"operation_id", d.operation_id.empty() ? d.graph_id + "/write" : d.operation_id},
+            {"ub_task_id", d.task_id}, {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+            {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
+            {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
+            {"priority", 7}, {"chunk_id", 0}});
+    }
     Save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
         {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},
-        {"switch_ids", {config_.switch_id}}, {"rank_ids", {descriptor_.src_rank, descriptor_.dst_rank}}});
-    const auto operation = descriptor_.graph_id + "/write";
-    Save("truth/operation_registry.jsonl", Json::array({{
-        {"operation_id", operation}, {"graph_id", descriptor_.graph_id}, {"op_type", "synthetic_write"},
-        {"source", "functional_fixture"}, {"calibration_status", "unvalidated_reference"},
-        {"endpoint_records", {{{"rank_id", descriptor_.src_rank}, {"local_record_id", 1},
-                                {"et_node_id", descriptor_.send_node_id}},
-                               {{"rank_id", descriptor_.dst_rank}, {"local_record_id", 1},
-                                {"et_node_id", descriptor_.recv_node_id}}}}}}), true);
-    Save("truth/transfer_registry.jsonl", Json::array({{
-        {"transfer_id", descriptor_.transfer_id}, {"operation_id", operation},
-        {"ub_task_id", descriptor_.task_id}, {"src_rank", descriptor_.src_rank},
-        {"dst_rank", descriptor_.dst_rank}, {"payload_bytes", descriptor_.bytes},
-        {"business_payload_bytes", descriptor_.bytes}, {"application_metadata_bytes", 0},
-        {"task_byte_range", {0, descriptor_.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
-        {"priority", 7}, {"chunk_id", 0}}}), true);
+        {"switch_ids", {config_.switch_id}}, {"rank_ids", ranks}});
+    Save("truth/operation_registry.jsonl", operation_registry, true);
+    Save("truth/transfer_registry.jsonl", registry, true);
     Save("truth/packet_ranges.jsonl", packet_ranges_, true);
     Save("truth/port_byte_truth.jsonl", truth, true);
 }

@@ -1,0 +1,270 @@
+#include "layer_plan.hh"
+#include "et_def.pb.h"
+
+#include <fstream>
+#include <limits>
+#include <regex>
+#include <set>
+#include <stdexcept>
+
+namespace moe_ub
+{
+namespace
+{
+using Json = nlohmann::json;
+void Require(bool ok, const std::string& message)
+{
+    if (!ok) throw std::runtime_error("Layer plan: " + message);
+}
+uint64_t Number(const Json& value, const std::string& field, uint64_t maximum = UINT64_MAX)
+{
+    Require(value.is_number_unsigned() && value.get<uint64_t>() <= maximum, "invalid unsigned " + field);
+    return value.get<uint64_t>();
+}
+std::set<uint64_t> Ids(const Json& values)
+{
+    Require(values.is_array(), "expected dependency array");
+    std::set<uint64_t> result;
+    for (const auto& value : values) Require(result.insert(Number(value, "dependency")).second, "duplicate dependency");
+    return result;
+}
+template<class Message> bool ReadMessage(std::istream& input, Message& message)
+{
+    int first = input.get();
+    if (first == EOF) { Require(input.eof(), "graph read error"); return false; }
+    uint32_t length = 0;
+    for (unsigned i = 0; i < 5; ++i)
+    {
+        const int byte = i == 0 ? first : input.get();
+        Require(byte != EOF && (i != 4 || byte < 16), "invalid graph message length");
+        length |= static_cast<uint32_t>(byte & 127) << (7 * i);
+        if (!(byte & 128))
+        {
+            Require(length > 0 && length <= 1024 * 1024, "graph message size outside bounded fixture");
+            std::string body(length, '\0');
+            input.read(body.data(), length);
+            Require(input.gcount() == length && message.ParseFromString(body), "truncated or malformed graph message");
+            return true;
+        }
+    }
+    throw std::runtime_error("Layer plan: oversized graph varint");
+}
+void CheckGraph(const std::filesystem::path& path, const Json& graph,
+                const std::map<uint64_t, Json>& transfers)
+{
+    std::ifstream input(path, std::ios::binary);
+    Require(bool(input), "missing graph " + path.string());
+    ChakraProtoMsg::GlobalMetadata metadata;
+    Require(ReadMessage(input, metadata) && metadata.version() == "moe-ub-execution-plan/1", "graph metadata mismatch");
+    for (const auto& n : graph.at("nodes"))
+    {
+        ChakraProtoMsg::Node node;
+        Require(ReadMessage(input, node), "missing graph node");
+        Require(node.id() == n.at("node_id") && node.name() == n.at("name") && node.ctrl_deps_size() == 0 &&
+                std::vector<uint64_t>(node.data_deps().begin(), node.data_deps().end()) == n.at("deps").get<std::vector<uint64_t>>(),
+                "graph node identity/dependencies differ from plan");
+        std::map<std::string, ChakraProtoMsg::AttributeProto> attrs;
+        for (const auto& attr : node.attr()) Require(attrs.emplace(attr.name(), attr).second, "duplicate graph attribute");
+        Require(attrs.contains("is_cpu_op") && attrs.at("is_cpu_op").has_bool_val() &&
+                !attrs.at("is_cpu_op").bool_val(), "graph resource mismatch");
+        if (n.at("kind") == "COMP")
+            Require(node.type() == ChakraProtoMsg::COMP_NODE && node.duration_micros() == n.at("duration_ns") &&
+                    attrs.size() == 1, "compute graph differs from plan");
+        else
+        {
+            const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
+            Require(node.type() == (n.at("kind") == "SEND" ? ChakraProtoMsg::COMM_SEND_NODE : ChakraProtoMsg::COMM_RECV_NODE) &&
+                    node.duration_micros() == 0 && attrs.size() == 5, "communication graph type mismatch");
+            Require(attrs.contains("comm_size") && attrs.at("comm_size").has_int64_val() &&
+                    attrs.at("comm_size").int64_val() == t.at("payload_bytes").get<int64_t>(), "graph payload differs from plan");
+            for (const auto& [name, field] : std::vector<std::pair<std::string, std::string>>{
+                     {"comm_src", "src_rank"}, {"comm_dst", "dst_rank"}, {"comm_tag", "comm_tag"}})
+                Require(attrs.contains(name) && attrs.at(name).has_int32_val() &&
+                        attrs.at(name).int32_val() == t.at(field).get<int>(), "graph matching key differs from plan");
+        }
+    }
+    ChakraProtoMsg::Node extra;
+    Require(!ReadMessage(input, extra), "extra graph node");
+}
+}
+LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
+{
+    std::ifstream stream(directory / "plan.json");
+    Require(bool(stream), "missing plan.json");
+    LayerPlan plan{Json::parse(stream), {}, {}};
+    const auto& p = plan.data;
+    Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
+            p.at("rank_ids") == Json::array({0, 1, 2, 3}) && p.at("rank_to_ub_node") == p.at("rank_ids") &&
+            p.at("send_slots_per_rank") == 1 && p.at("communication_template") == "direct_rank_dedup_v1" &&
+            p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
+    Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
+    const auto graph_id = p.at("graph_id").get<std::string>();
+    Require(!graph_id.empty(), "empty graph id");
+    std::map<std::string, std::string> operations;
+    for (const auto& op : p.at("operations"))
+    {
+        const auto kind = op.at("kind").get<std::string>();
+        Require((kind == "dispatch" || kind == "combine") && op.at("participants") == p.at("rank_ids") &&
+                operations.emplace(op.at("operation_id").get<std::string>(), kind).second, "invalid operation registry");
+    }
+    Require(operations.size() == 2 && p.at("operations")[0].at("kind") == "dispatch" &&
+            p.at("operations")[1].at("kind") == "combine", "require Dispatch and Combine operations");
+    std::map<uint64_t, Json> transfers;
+    std::set<uint64_t> tasks, tags;
+    Require(p.at("transfers").is_array() && !p.at("transfers").empty(), "empty transfer set");
+    for (const auto& t : p.at("transfers"))
+    {
+        const auto id = Number(t.at("transfer_id"), "transfer_id");
+        const auto task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
+        const auto tag = Number(t.at("comm_tag"), "comm_tag", 499999999);
+        const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", UINT32_MAX);
+        const auto src = Number(t.at("src_rank"), "src_rank", 3), dst = Number(t.at("dst_rank"), "dst_rank", 3);
+        const auto operation = t.at("operation_id").get<std::string>();
+        Require(id > 0 && tag > 0 && bytes > 0 && src != dst && transfers.emplace(id, t).second &&
+                tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");
+        Require(operations.contains(operation) && operations.at(operation) == t.at("kind") &&
+                t.at("business_payload_bytes") == bytes && t.at("application_metadata_bytes") == 0 &&
+                t.at("task_byte_range") == Json::array({0, bytes}) && t.at("chunk_index") == 0 &&
+                t.at("priority") == 7 && t.at("transport_profile_id") == "urma-write-rtp-default", "invalid provenance/profile");
+        plan.descriptors.push_back({id, task, graph_id,
+            Number(t.at("send_node_id"), "send_node_id"), Number(t.at("recv_node_id"), "recv_node_id"),
+            static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation});
+    }
+    Require(p.at("rank_graphs").size() == 4, "missing rank graph");
+    std::map<std::pair<uint64_t, std::string>, unsigned> pairs;
+    for (int rank = 0; rank < 4; ++rank)
+    {
+        const auto& graph = p.at("rank_graphs")[rank];
+        Require(graph.at("rank_id") == rank, "rank graph order/mapping mismatch");
+        std::set<uint64_t> seen;
+        std::map<uint64_t, Json> local;
+        for (const auto& n : graph.at("nodes"))
+        {
+            const auto id = Number(n.at("node_id"), "node_id");
+            Require(id > 0 && n.at("rank_id") == rank && !seen.contains(id), "duplicate node or wrong rank");
+            for (auto dep : Ids(n.at("deps"))) Require(seen.contains(dep), "nonlocal, cyclic or unordered dependency");
+            seen.insert(id); local.emplace(id, n); plan.nodes.emplace(std::make_pair(rank, id), n);
+            if (n.at("kind") == "COMP")
+            {
+                Require(Number(n.at("duration_ns"), "duration_ns", INT64_MAX - p.at("ready_ns").get<uint64_t>()) > 0,
+                        "M2.1 requires positive computation durations");
+                Require(n.at("resource_id") == "gpu_compute", "unknown compute resource");
+            }
+            else
+            {
+                const auto kind = n.at("kind").get<std::string>();
+                Require(kind == "SEND" || kind == "RECV", "unsupported node type");
+                const auto id_transfer = Number(n.at("transfer_id"), "node transfer_id");
+                Require(transfers.contains(id_transfer), "unknown node transfer");
+                const auto& t = transfers.at(id_transfer);
+                const auto side = kind == "SEND" ? "send" : "recv";
+                Require(t.at(kind == "SEND" ? "src_rank" : "dst_rank") == rank &&
+                        t.at(std::string(side) + "_node_id") == id, "mismatched SEND/RECV identity");
+                ++pairs[{id_transfer, side}];
+            }
+        }
+        const auto& phase = graph.at("phase_nodes");
+        std::set<uint64_t> phase_ids;
+        for (const auto& field : {"prepare", "expert", "local_merge", "finish", "next_layer"})
+        {
+            auto id = Number(phase.at(field), "phase node");
+            Require(local.contains(id) && local.at(id).at("kind") == "COMP" && phase_ids.insert(id).second,
+                    "invalid phase node");
+        }
+        Require(phase_ids.size() == 5, "missing phase node");
+        auto id = [&](const char* key) { return phase.at(key).get<uint64_t>(); };
+        std::set<uint64_t> dispatch{id("prepare")}, combine{id("local_merge")};
+        std::map<std::string, int> previous_destination;
+        for (const auto& [node_id, n] : local)
+        {
+            if (n.at("kind") == "COMP") { Require(phase_ids.contains(node_id), "unexpected compute node"); continue; }
+            const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
+            bool first = t.at("kind") == "dispatch";
+            Require(Ids(n.at("deps")) == std::set<uint64_t>{id(first ? "prepare" : "local_merge")}, "communication template dependency mismatch");
+            (first ? dispatch : combine).insert(node_id);
+            if (n.at("kind") == "SEND")
+            {
+                auto kind = t.at("kind").get<std::string>();
+                auto dst = t.at("dst_rank").get<int>();
+                Require(!previous_destination.contains(kind) || previous_destination.at(kind) < dst, "SEND order is not by destination");
+                previous_destination[kind] = dst;
+            }
+        }
+        Require(Ids(local.at(id("prepare")).at("deps")).empty() &&
+                Ids(local.at(id("expert")).at("deps")) == dispatch &&
+                Ids(local.at(id("local_merge")).at("deps")) == std::set<uint64_t>{id("expert")} &&
+                Ids(local.at(id("finish")).at("deps")) == combine &&
+                Ids(local.at(id("next_layer")).at("deps")) == std::set<uint64_t>{id("finish")}, "local phase dependency mismatch");
+        const auto path = directory / ("layer." + std::to_string(rank) + ".et");
+        try { CheckGraph(path, graph, transfers); }
+        catch (const std::exception& error)
+        {
+            throw std::runtime_error(path.string() + ": " + error.what());
+        }
+    }
+    for (const auto& [id, t] : transfers)
+        Require(pairs[{id, "send"}] == 1 && pairs[{id, "recv"}] == 1, "missing/duplicate SEND/RECV pair");
+    return plan;
+}
+
+Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path)
+{
+    std::ifstream stream(path);
+    Require(bool(stream), "missing ASTRA execution log");
+    std::regex pattern("(issue|callback),sys->id=([0-9]+), tick=([0-9]+), node->id=([0-9]+),");
+    std::map<std::pair<int, uint64_t>, Json> events;
+    std::string line;
+    while (std::getline(stream, line))
+    {
+        std::smatch match;
+        if (!std::regex_search(line, match, pattern)) continue;
+        const auto key = std::make_pair(std::stoi(match[2]), std::stoull(match[4]));
+        Require(plan.nodes.contains(key), "execution references unknown node");
+        auto field = match[1] == "issue" ? "start_ns" : "end_ns";
+        Require(!events[key].contains(field), "duplicate ASTRA execution event");
+        events[key][field] = std::stoull(match[3]);
+    }
+    Json result = Json::array();
+    for (const auto& [key, node] : plan.nodes)
+    {
+        auto record = events.at(key);
+        Require(record.contains("start_ns") && record.contains("end_ns") && record["end_ns"] >= record["start_ns"], "incomplete node execution");
+        if (node.at("kind") == "COMP") Require(record["end_ns"].get<uint64_t>() - record["start_ns"].get<uint64_t>() == node.at("duration_ns"), "compute duration mismatch");
+        for (const auto& dep : node.at("deps"))
+            Require(record["start_ns"] >= events.at({key.first, dep.get<uint64_t>()}).at("end_ns"), "execution violated local dependency");
+        record["rank_id"] = key.first; record["node_id"] = key.second; record["kind"] = node.at("kind");
+        result.push_back(record);
+    }
+    return result;
+}
+Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
+{
+    std::map<std::pair<int, uint64_t>, Json> nodes;
+    for (const auto& event : execution) nodes[{event.at("rank_id"), event.at("node_id")}] = event;
+    Json endpoints = Json::array();
+    for (const auto& graph : plan.data.at("rank_graphs"))
+    {
+        int rank = graph.at("rank_id");
+        const auto& p = graph.at("phase_nodes");
+        auto time = [&](const char* node, const char* field) { return nodes.at({rank, p.at(node).get<uint64_t>()}).at(field); };
+        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "dispatch"},
+            {"start_local_ns", time("prepare", "end_ns")}, {"end_local_ns", time("expert", "start_ns")}});
+        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 2}, {"kind", "combine"},
+            {"start_local_ns", time("local_merge", "end_ns")}, {"end_local_ns", time("finish", "end_ns")}});
+    }
+    return endpoints;
+}
+Json LayerOperationRegistry(const LayerPlan& plan)
+{
+    Json result = plan.data.at("operations");
+    for (auto& operation : result)
+    {
+        operation["graph_id"] = plan.data.at("graph_id");
+        operation["endpoint_records"] = Json::array();
+        for (int rank = 0; rank < 4; ++rank)
+            operation["endpoint_records"].push_back({{"rank_id", rank},
+                {"local_record_id", operation.at("kind") == "dispatch" ? 1 : 2}});
+    }
+    return result;
+}
+}

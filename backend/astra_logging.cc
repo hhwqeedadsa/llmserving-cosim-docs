@@ -14,4 +14,9 @@ void ShutdownAstraLogging()
 {
     AstraSim::LoggerFactory::shutdown();
 }
+
+void FlushAstraLogging()
+{
+    spdlog::apply_all([](std::shared_ptr<spdlog::logger> logger) { logger->flush(); });
+}
 }

@@ -853,3 +853,105 @@ python3 scripts/m0_joint_build/audit.py --build-dir build/m1-observation \
 本步仍是 unvalidated_reference 的合成功能验证，无应用元数据，无真实激活张量/硬件校准依据。联合入口继续由原有 1 ms 测试上限结束，通信时刻取实际事件。来源开关只关闭来源侧表和 truth，本来已有的内部 result 与原生调试日志仍保留，不能误当作公开算法输入。
 
 M1.4 完成，停止在本任务；M2.1 等待用户确认。父仓库按持续授权本地提交；提交后执行 bash scripts/check_deps.sh，记录保存在 L/dependency-final.json，最终主仓库和 UB 状态保存在 L/final-status.json、L/final-ub-status.json。
+
+## 2026-09-28：m2-1-single-layer
+
+用户确认执行 M2.1。开始时父仓库 dd034a2、UB 1ba7222、LLMServingSim 及递归依赖工作区干净，dependency-before.json 检查 13 项依赖通过。M1.4 已提交后才切换任务，任务说明提交为 30f9b70。全程沿用 Full access 和本地提交授权，没有推送、安装、下载或修改全局配置。
+
+日志根为 `runs/m2-1-single-layer-20260928T133604Z/`，下文记为 L。经审阅复用的 record.py 保存实际 cwd、argv、UTC 起止、退出状态和 stdout/stderr；集成目录内 commands.json 保存各子进程。旧任务记录、原生启动锁及 89 个旧构建关键产物的大小和 SHA-256 已在开始时备份。运行结果和生成的 protobuf 模块只留在忽略目录中。
+
+### 实现与输入来源
+
+新增 python/moe_ub_cosim/，从固定四 rank Token/专家输入构造 ExecutionPlan，校验后导出四份 Chakra 图。当前采用 direct_rank_dedup_v1、单块、单槽、零应用元数据。Dispatch 按 Token 的远端目的 rank 汇总，Combine 按返回结果独立生成；专家计算输入单独累计，保留 rank 2 上 C 的本地专家 4 输入。来源保存原输入数组的 source_record_index、请求、规范化 Token/层号和专家集合。
+
+固定输入导出两个操作 D.w0.L7.dispatch/combine、十四条各 8192 字节的传输、一对一的 SEND/RECV 及二十个计算节点，共 48 个节点。每 rank 的计算为 5000 ns 准备、每份专家输入 4000 ns、1000 ns 专家结果处理、1000 ns Combine 解包合并和 1000 ns 后继检查计算。专家输入份数为 2、2、3、1，因此专家计算分别为 8000、8000、12000、4000 ns。耗时均为显式合成假设。
+
+系统 python3 未提供 google.protobuf；使用已有 .venv/llmservingsim-native/ 中的 protobuf 7.36.2。生成器调用已安装的 protoc 3.21.12，直接从锁定 Chakra et_def.proto 在每次新输出目录生成编码模块，并保存命令/返回状态。实际输出已由后端的 protobuf 校验和锁定 ASTRA Chakra reader 两次读取，未复用依赖目录中旧的未跟踪 et_def_pb2.py。
+
+新增 cosim-layer 读取并核对计划、四份二进制图、收发配对、身份与局部依赖；所有图验证通过后才创建运行目录和网络。随后登记全部传输、构造四个 Sys，再按 rank 顺序在 ready_ns=0 激活。UbNetworkAdapter 增加按 (src_rank,dst_rank,comm_tag) 查找多传输描述，仍复用 M1 的独立数据就绪/事务完成/异步回调与资源释放。M1 的单传输入口保留。
+
+已核对锁定 HardwareResource.cc：SEND 使用单个 GPU 通信槽，RECV 的 occupy/release 不占该槽，发送忙碌时仍可登记接收。本步不需要 ASTRA 或其他依赖补丁；全部依赖源码、版本、gitlink、锁文件和远端保持不变。网络样例使用四端点经单交换机连接，链路 400 Gbps、20 ns；为事先挂接来源通知，固定预建六对 RTP 连接并保留，每 rank 三个 TP。
+
+最小端口观察器扩展为按 UB task_id 查找多个来源范围，通知位置和计数语义沿用 M1.4。端侧逻辑阶段使用刷新后的原 ASTRA issue/callback 记录导出，缺失或重复记录明确失败；本步要求 trace-enabled=1 和正计算耗时。只使用端侧原始执行事件，没有用网络首末包推算调用时刻。观测中仍只保留 rank 内记录号；全局操作、传输、图和时钟参数保留在内部输出。
+
+### 构建与实际命令
+
+所有下列命令的 cwd 均为 /root/moe-ub-cosim。构建目录为 build/m2-single-layer/，一次一个构建、最多 8 路并行；未使用或重配旧构建目录。
+
+```bash
+M21_LOG=runs/m2-1-single-layer-20260928T133604Z
+cmake -S third_party/ns-3-ub -B build/m2-single-layer -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m2-single-layer/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m2-single-layer --parallel 8 --target \
+  cosim-layer cosim-write cosim-write-test cosim-observation-test \
+  cosim-time-test cosim-compute m0-joint-link-probe
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.generate \
+  --input fixtures/m2_single_layer/layer.json --output-dir "$M21_LOG/generated"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/unit/layer_plan_test.py
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m2-single-layer --output-dir "$M21_LOG/layer-check-final"
+python3 tests/integration/check_write.py --build-dir build/m2-single-layer \
+  --output-dir "$M21_LOG/write-check"
+python3 tests/integration/check_observation.py --build-dir build/m2-single-layer \
+  --output-dir "$M21_LOG/observation-check"
+python3 tests/integration/check_compute.py --build-dir build/m2-single-layer \
+  --output-dir "$M21_LOG/compute-check"
+build/m2-single-layer/output/cosim/ns3.44-cosim-write-test
+build/m2-single-layer/output/cosim/ns3.44-cosim-observation-test
+build/m2-single-layer/output/cosim/ns3.44-cosim-time-test
+build/m2-single-layer/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+build/m2-single-layer/output/m0/ns3.44-m0-joint-link-probe "$M21_LOG/m0-probe.et"
+python3 scripts/m0_joint_build/audit.py --build-dir build/m2-single-layer \
+  --run-log "$M21_LOG/m0-probe.stdout.log" --output-dir "$M21_LOG/m0-audit"
+```
+
+单次首跑的完整命令在 L/layer-smoke.json：cosim-layer 参数为 L/generated、fixtures/m1_compute/system.json、fixtures/m2_single_layer/network、fixtures/m2_single_layer/observation.json、L/layer-smoke，外层 timeout 为 30s、kill-after=5s。新集成检查保留所有实际输入副本和三次执行的命令。
+
+### 实际结果
+
+| 检查 | 结果 | L 内证据 |
+|---|---|---|
+| 首次全目标构建 | 479 步，退出 0；输入边界和诊断增补后的增量构建也退出 0 | configure.json、build.json、build-final.json、build-diagnostics.json |
+| 生成器单元 | 五项测试通过，覆盖固定矩阵、八份专家输入、局部依赖、确定性、19 种非法配置及 11 种坏计划 | plan-unit-final.json |
+| M2.1 真实执行 | 来源开/关/不挂观测三次通过，十四份 UB 写共交付 114688 字节，四图完成 | layer-check-final/summary.json、on/result.json |
+| ASTRA 执行核对 | 48 个节点各有一次 issue/callback，共 96 条；固定计算耗时和本地前驱均正确 | on/log/log.log、on/result.json 的 node_execution |
+| 发送资源 | 原 ASTRA 执行日志及原 WQE 事件两处核对，每 rank 最大在途 SEND/WQE 均为 1；发送占槽时 RECV 仍能登记 | layer-check-final/ 及 write-unit-final.json |
+| 开关无扰动 | 三次运行的 33 个原生跟踪文件、图、完整执行/资源结果和去墙钟前缀的 ASTRA 日志一致；来源开关时 observed 和包/时刻指纹一致 | layer-check-final/commands.json、summary.json |
+| 整组拒绝 | 12 种错误计划/图及一次覆盖既有目录按预期返回 1，检查脚本返回 0；坏计划/图均未创建运行目录 | layer-check-final/commands.json |
+| M1 写回归 | 六例真实收发、十种非法输入及覆盖拒绝、最终资源释放通过 | write-check.json、write-check/summary.json |
+| M1 观测回归 | 七组开/关/不挂观测共 21 次运行、十种非法配置及来源范围检查通过 | observation-check.json、observation-check/summary.json |
+| M1 时间/计算 | 时间接口和错误精度拒绝、四项实际计算及五项非法计算输入通过 | time-unit.json、time-wrong-resolution.json、compute-check.json |
+| 链接边界 | M0、计算、写、单层入口均包含全部 52 个 ASTRA 核心对象，只装载本轮 10 个 UB ns-3 库 | m0-audit/、各集成检查的 compiled-sources.json 与 summary.json |
+| 旧产物保护 | 原生启动锁恢复，89 个旧产物大小及 SHA-256 不变，退出 0 | restore-baselines.json、baseline-verification.json |
+
+四个 rank 的实际时间如下，单位 ns。这些值仅来自本次事件执行，不用于生成通信耗时。
+
+| rank | Dispatch 开始/完成 | 专家计算开始/完成 | Combine 开始/完成 | 图完成 |
+|---|---|---|---|---:|
+| 0 | 5000 / 5923 | 5923 / 13923 | 14923 / 20168 | 21168 |
+| 1 | 5000 / 5840 | 5840 / 13840 | 14840 / 20506 | 21506 |
+| 2 | 5000 / 5877 | 5877 / 17877 | 18877 / 20552 | 21552 |
+| 3 | 5000 / 5842 | 5842 / 9842 | 10842 / 16675 | 17675 |
+
+端侧输出四个 rank 各有 Dispatch/Combine 两条记录。Dispatch 完成记录取专家计算实际开始，在本固定图中核对为所有必要本地条件的最晚完成；Combine 完成还包括最后的 1000 ns 解包合并。后继 COMP 再运行 1000 ns。所有四个图已预先装载，激活顺序 0、1、2、3，激活时刻均为 0。
+
+十四条传输两侧各回调一次，每条唯一交付 8192 字节，源 Jetty/事务状态、适配器传输上下文和各 rank 槽/事件最终清空，CSV 完成计数为 0。保留的 TP 每 rank 为 3，不将它们误记为未完成业务。
+
+选定交换机 4 端口 2 共计 18 个成功发送包、25839 字节，其中业务 24576、数据包协议开销 468、完整控制包 795。六个业务包的范围分别覆盖 Dispatch 0→2、1→2 和 Combine 3→2 的 [0,8192)。100 个本地半开窗口全部输出，各窗分项相加等于整包计数。该端口只经过三条入向业务，其业务总量对应这三条任务；十四条任务的全局唯一交付量另按目标提交核对。
+
+### 未验证范围与停止位置
+
+本轮正式构建和验证没有未解决失败。非法输入用例的返回 1 是预期拒绝，原始 stderr 保留。配置继续有源码树外输出目录提示，构建有上游 std::binary_function 等弃用警告；没有通过关闭本轮断言、改变预期或修改技术规范绕过失败。
+
+依赖源码未改动，本轮没有重复构建原 CSV 入口或运行其原生全集；原有 M1.4 CSV RTP/phase/CTP 对照记录和二进制保留。没有进行 M2.2 的给定完成时刻替身和指定延迟传播实验，也没有运行 M2.3 去重/分块/多槽变体、M2.4 连续图、动态服务、真实丢包重传或硬件校准。M2.1 当前明确限制为正计算、单块单槽、零应用元数据和单张四 rank 图。
+
+与 M1 一样，功能入口仍在 ready_ns 后 1 ms 的测试上限停止，rank 完成不会直接终止仿真；实际完成和资源释放在上限前单独验证。模型状态仍为 unvalidated_reference，不把合成图运行成功当作真实模型或硬件校准。
+
+本轮停止在 M2.1 completed，M2.2 等待用户确认。按持续授权整理记录并本地提交；提交后依赖检查记录在 L/dependency-final.json，最终主仓库及 UB 状态在 L/final-status.json、L/final-ub-status.json。

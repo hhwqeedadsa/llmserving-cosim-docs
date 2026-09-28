@@ -4,6 +4,9 @@
 
 #include <cstdint>
 #include <functional>
+#include <map>
+#include <tuple>
+#include <vector>
 
 namespace moe_ub
 {
@@ -14,6 +17,7 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
     using Finished = std::function<void(uint64_t now_ns)>;
 
     UbNetworkAdapter(int rank, Finished finished, UbWriteTransfer* transfer = nullptr);
+    UbNetworkAdapter(int rank, Finished finished, const std::vector<UbWriteTransfer*>& transfers);
     BackendType get_backend_type() override;
     AstraSim::timespec_t sim_get_time() override;
     void sim_schedule(AstraSim::timespec_t delta, void (*callback)(void*), void* arg) override;
@@ -28,7 +32,7 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
 
   private:
     Finished finished_;
-    UbWriteTransfer* transfer_;
+    std::map<std::tuple<int, int, int>, UbWriteTransfer*> transfers_;
     uint64_t scheduled_events_ = 0;
     uint64_t executed_callbacks_ = 0;
 };

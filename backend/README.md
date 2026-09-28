@@ -116,3 +116,20 @@ UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找�
 `tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
 
 本步没有实现动态服务前端或多个连续图，不声称完成 M2.2 的延迟注入、M2.3 的分块/多槽变体或模型校准。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
+
+## M2.2 等待与延迟反馈
+
+新增专用测试目标 `cosim-layer-delay-test`，复用原 ASTRA 执行层、UbNetworkAdapter 的 ns-3 时间接口和 WriteCompletion；SEND/RECV 用给定事件替身驱动，测试中不创建 UB 网络对象。`cosim-layer` 继续只使用真实 UB，没有替身开关或预设通信时间。
+
+完整检查命令如下，输出目录须为新目录；构建配置记录在本步环境记录中：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m2-delay-feedback --output-dir runs/my-delay-check
+```
+
+脚本生成一组四 rank 图，执行五组给定事件及两组真实 UB 对照。每次根据传输事件独立计算全部必要本地条件的最晚时刻，再与原 ASTRA 的 96 条 issue/callback 及结果核对；检查固定计算耗时、Combine 前驱、发送槽、回调和最终资源释放。所有运行的二进制图哈希相同。给定事件专用入口的参数为 `PLAN_DIR SYSTEM.json EVENTS.json NEW_RUN_DIR`，完整调用保存在检查输出的 commands.json 中。
+
+规范的专家计算 26000/38000 ns，以及最后必要输入推迟后的 30000/42000 ns 已通过；本地发送较晚时必须等待，非关键和其他 rank 输入较晚时不会额外阻塞 rank 2。真实链路传播延迟对照中，rank 2 专家开始从 5877 移至 11629 ns，均早于全组 Dispatch 最晚完成。变化由实际 UB 事件产生，不能当作链路延迟与整图耗时的一般比例。
+
+[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。尚未执行 M2.3、连续图或动态服务，模型仍未校准。

@@ -955,3 +955,86 @@ python3 scripts/m0_joint_build/audit.py --build-dir build/m2-single-layer \
 与 M1 一样，功能入口仍在 ready_ns 后 1 ms 的测试上限停止，rank 完成不会直接终止仿真；实际完成和资源释放在上限前单独验证。模型状态仍为 unvalidated_reference，不把合成图运行成功当作真实模型或硬件校准。
 
 本轮停止在 M2.1 completed，M2.2 等待用户确认。按持续授权整理记录并本地提交；提交后依赖检查记录在 L/dependency-final.json，最终主仓库及 UB 状态在 L/final-status.json、L/final-ub-status.json。
+
+## 2026-09-28：m2-2-delay-feedback
+
+用户确认执行 M2.2。开始时主仓库 0a3bfc2、UB 1ba7222、LLMServingSim 及递归依赖工作区干净，dependency-before.json 的 13 项依赖检查通过；旧任务已提交后才切换，任务说明提交 38f8095。依赖源码、版本、gitlink、锁文件和远端均未修改，没有安装、下载、修改全局配置或推送。
+
+日志根为 `runs/m2-2-delay-feedback-20260928T142324Z/`，下文记为 L。复用并审阅 record.py，保存每项命令的 cwd、完整 argv、UTC 起止、退出状态、stdout/stderr；集成目录的 commands.json 保存各子进程。旧任务记录和原生启动锁已备份，107 个旧产物保存大小与 SHA-256。运行目录、生成图和原始日志不提交 Git。
+
+### 实现与核验依据
+
+仅新增专用测试目标 cosim-layer-delay-test、tests/integration/layer_delay_driver.cc、check_delay.py 和 fixtures/m2_delay_feedback/ 输入说明。backend/CMakeLists.txt 增加测试目标；生产图生成器、cosim-layer、UbNetworkAdapter、UbWriteTransfer、WriteCompletion 和观察器源码均未改动。
+
+给定事件替身使用原 ASTRA 的四个 Sys 和实际 Chakra 图，组合复用 UbNetworkAdapter 的 ns-3 时间/事件调度接口，使用原 WriteCompletion 分别交付数据和事务完成。只有 SEND 登记后才安排给定事件，RECV 只登记等待；不创建 UB 网络对象，输出明确标记 event_source=test_double、network_nodes=0。它不向 ExecutionPlan 写预测时间，也不能作为 cosim-layer 的运行选项。
+
+五组替身检查复用完全相同的四份图，每组只改变一个给定事件。图中准备计算 5000 ns，rank 2 专家计算 12000 ns、局部结果处理 1000 ns、最终 Combine 解包合并和后继 COMP 各 1000 ns。检查脚本从每条传输的独立事件构造必要本地条件，再与原 ASTRA 执行记录核对，不仅依据图的 deps 自证。四 rank 的 48 个节点均各有一次 issue/callback，计算耗时、局部前驱、单 SEND 槽和占槽时 RECV 仍可登记均通过。
+
+真实执行复用 M2.1 生产入口和网络，第二例仅将 rank 1 与交换机 4 之间物理链路传播延迟由 20 ns 改为 2020 ns。该变化作用于经过该链路的所有包；没有按操作身份修改包、优先级、路径或时延。程序从实际 RemoteWriteCommitted 和 WQE 完成分别核对接收/发送回调。所有给定事件与真实运行的图哈希一致，计划按 JSON 结构比较一致。
+
+### 构建与实际命令
+
+下列命令 cwd 均为 /root/moe-ub-cosim。一次一个构建，最多 8 路并行，使用新目录 build/m2-delay-feedback/；此前的构建目录未重配或覆盖。
+
+```bash
+M22_LOG=runs/m2-2-delay-feedback-20260928T142324Z
+cmake -S third_party/ns-3-ub -B build/m2-delay-feedback -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m2-delay-feedback/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m2-delay-feedback --parallel 8 --target cosim-layer cosim-layer-delay-test
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m2-delay-feedback --output-dir "$M22_LOG/delay-verified"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m2-delay-feedback --output-dir "$M22_LOG/layer-regression"
+python3 "$M22_LOG/restore_baselines.py"
+```
+
+实际生成命令由 check_delay.py 记录：已有 .venv/llmservingsim-native/bin/python 执行 -m moe_ub_cosim.generate，输入为本次 input.json，输出 generated/。生成器从锁定 proto 用已有 protoc 编码，schema/compiler.json 保存其命令与结果。每次替身调用为 cosim-layer-delay-test generated SYSTEM.json given-*.json NEW_RUN_DIR；真实调用为 cosim-layer generated SYSTEM.json UB_CASE - NEW_RUN_DIR。仿真子进程均使用 timeout --kill-after=5s 30s，完整绝对路径与输入副本保存在 commands.json 和各目录。
+
+### 实际结果
+
+| 检查 | 结果 | L 内记录 |
+|---|---|---|
+| 首次配置/构建 | 459 步，退出 0；随后测试错误诊断及注释修正的增量构建退出 0 | configure.json、build.json、build-diagnostic.json、build-final.json |
+| 延迟反馈最终检查 | 五组给定事件、两组真实 UB、十项错误/覆盖拒绝全部通过，退出 0 | delay-verified.json、delay-verified/summary.json |
+| M2.1 回归 | 来源开/关/不挂观测三次执行及十三项错误图/覆盖拒绝通过，退出 0 | layer-regression.json、layer-regression/summary.json |
+| 链接范围 | 专用替身和真实入口各包含全部 52 个 ASTRA 核心对象，实际装载单套 10 个本次 UB ns-3 库 | 两项集成的 compiled-sources.json、summary.json 与构建 link.map |
+| 旧产物保护 | 原生启动锁恢复；最终增量构建后 107 个旧产物大小、SHA-256 仍一致 | restore-baselines.json、baseline-verification.json、baseline-final.json |
+
+rank 2 的专家开始/结束和局部结果处理结束如下，单位 ns。最后一列是本次全组 Dispatch 最晚完成，用于核对没有额外屏障；没有把该统计值插入图依赖。
+
+| 用例 | 专家开始 | 专家结束 | 局部结果处理结束/首个 Combine SEND | 全组 Dispatch 最晚完成 |
+|---|---:|---:|---:|---:|
+| 给定事件基准 | 26000 | 38000 | 39000 | 56000 |
+| 1→2 数据就绪从 26000 改为 30000 | 30000 | 42000 | 43000 | 56000 |
+| 2→3 事务完成从 18000 改为 34000 | 34000 | 46000 | 47000 | 56000 |
+| 0→2 数据就绪从 20000 改为 24000 | 26000 | 38000 | 39000 | 56000 |
+| 3→1 数据就绪从 50000 改为 54000 | 26000 | 38000 | 39000 | 56000 |
+| 真实 UB 基准 | 5877 | 17877 | 18877 | 5923 |
+| 真实 UB 链路延迟对照 | 11629 | 23629 | 24629 | 13675 |
+
+最后一份必要输入推迟 4000 ns 时，专家计算和首次 Combine SEND 同样推迟 4000 ns；但替身中 rank 2 的 Combine 仍等待 70000 ns 的 3→2 接收，最终合并仍为 71000 ns，后继计算仍为 72000 ns。该例明确区分局部依赖响应与整图完成时刻。无关输入对照使 rank 1 专家开始从 50000 移至 54000 ns，而 rank 2 不变；本地 SEND 对照则使 rank 2 必须等到 34000 ns。
+
+真实 UB 基准中 rank 2 的必要条件分别为：本地输入 5000、0→2 接收 5877、1→2 接收 5794、2→3 发送完成 5337 ns。链路对照变为 5000、9629、11629、5337 ns；因此专家开始/结束及局部结果处理均推迟 5752 ns，实际最后必要输入为 1→2。此变化包含网络协议、单发送槽和前序事务的影响，不等同于单链路增加的 2000 ns。rank 2 图完成从 21552 移到 31387 ns，也不等于专家计算的位移。
+
+两次真实 UB 均为十四次业务写、114688 唯一交付字节，每条源/目标各一次回调，目标提交与实际 WQE 完成分别匹配，CSV 完成计数为 0。每 rank 最大在途 SEND/WQE 为 1，最终图、借用回调、传输上下文、计算/发送槽、事件和执行器任务清空。五组替身同样完成四图及全部收发，但其模拟提交字节仅证明状态机行为，不计为真实网络证据。
+
+M2.1 回归保留原图完成时刻 21168、21506、21552、17675 ns；来源开关/不挂观测的 33 个原生跟踪文件、图和执行/资源结果相同，选定端口仍为 18 个包、25839 字节，FNV-1a 包/时刻指纹仍为 15435793776749377513。生产路径未修改，因此不重复 M1 全部用例或上游原生全集；其此前日志与产物均保留。
+
+### 保留的失败与未验证范围
+
+首次 delay-check.json 返回 1：脚本错误地比较 Python 与 C++ 重写后的 plan.json 原始哈希。两者仅对象键顺序不同；改为比较完整解析结构，四份二进制图仍逐字节比较 SHA-256，没有改变图、字节、依赖或时序预期。原输出保留在 L/delay-check/。
+
+第二次 delay-check-final.json 返回 1：五组替身、两组真实执行和静态拒绝已经通过，但过期事件的具体错误只出现在原 ASTRA 日志，外层 stderr 仅报 incomplete test transfer。锁定 Sys.cc 的 call_events 捕获回调异常后只记录、不向外重抛；专用测试适配器现在保留首次原始错误，运行结束后将其明确报告为失败，不修改上游。后续 delay-validation.json 和最终 delay-verified.json 均退出 0；两次失败的 stderr、命令和输入保留，没有删除断言或降低验收。
+
+最终十项预期拒绝包括八种静态事件表错误、一次事件早于 SEND 的运行时错误及一次覆盖已有目录。静态错误在创建运行目录前拒绝；运行时错误保留输入和 ASTRA 日志，不产生成功 result.json；覆盖拒绝保持既有输出不变。预期返回 1 的子进程与检查脚本返回 0 分开记录。
+
+没有未解决失败。配置仍有源码树外输出提示，编译仍有上游 std::binary_function 弃用警告。当前仍是未校准的固定四 rank、单块单槽参考功能验证；没有 M2.3 去重/分块/多槽变体、M2.4 连续图、M3 动态服务、真实丢包重传或硬件校准。
+
+本轮停止在 M2.2 completed；M2.3 等待用户确认。按持续授权本地提交，不推送；提交后的 13 项依赖检查记录为 L/dependency-final.json，主仓库和 UB 最终状态为 L/final-status.json、L/final-ub-status.json。

@@ -25,6 +25,9 @@ struct WriteDescriptor
     int tag;
     uint64_t bytes;
     std::string operation_id{}; // Empty only for the original single-WRITE fixture.
+    uint32_t chunk_index = 0;
+    uint64_t pair_byte_offset = 0;
+    uint64_t pair_payload_bytes = 0; // Zero only for the original single-WRITE fixture.
 };
 
 class UbWriteTransfer

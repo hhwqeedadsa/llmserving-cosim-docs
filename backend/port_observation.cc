@@ -283,7 +283,12 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"ub_task_id", d.task_id}, {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
             {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
             {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
-            {"priority", 7}, {"chunk_id", 0}});
+            {"priority", 7}, {"chunk_id", d.chunk_index}});
+        if (!d.operation_id.empty())
+        {
+            registry.back()["pair_byte_range"] = {d.pair_byte_offset, d.pair_byte_offset + d.bytes};
+            registry.back()["pair_payload_bytes"] = d.pair_payload_bytes;
+        }
     }
     Save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
         {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},

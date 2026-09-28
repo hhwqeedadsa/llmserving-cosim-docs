@@ -115,7 +115,7 @@ UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找�
 
 `tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
 
-本步没有实现动态服务前端或多个连续图，不声称完成 M2.2 的延迟注入、M2.3 的分块/多槽变体或模型校准。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
+以上是 M2.1 的原始验收范围，后续 M2.2/M2.3 检查见下文；动态服务、多张连续图和模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
 
 ## M2.2 等待与延迟反馈
 
@@ -132,4 +132,24 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 规范的专家计算 26000/38000 ns，以及最后必要输入推迟后的 30000/42000 ns 已通过；本地发送较晚时必须等待，非关键和其他 rank 输入较晚时不会额外阻塞 rank 2。真实链路传播延迟对照中，rank 2 专家开始从 5877 移至 11629 ns，均早于全组 Dispatch 最晚完成。变化由实际 UB 事件产生，不能当作链路延迟与整图耗时的一般比例。
 
-[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。尚未执行 M2.3、连续图或动态服务，模型仍未校准。
+[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3 的后续验收见下文；连续图或动态服务尚未实现，模型仍未校准。
+
+## M2.3 去重、分块与发送槽
+
+生成器现按 chunk_bytes 将有向向量分成独立 UB 写任务，末块保留真实字节数。前后端都检查块编号、完整向量范围、尾块、来源和配对；task_byte_range 始终是块内范围，pair_byte_range/pair_payload_bytes 标识原向量位置与总长。内部 transfer_registry 输出相应 chunk_id 和向量范围，observed 不增加隐藏身份。生成器复制输入后再构图，后续修改配置不会改变已经生成的计划。
+
+联合入口从计划读取 send_slots_per_rank，在四 rank 激活前调用 ASTRA 的 configure_p2p_send_slots。该显式配置仅作用于点对点 SEND；按节点身份占用和释放，乱序完成可释放对应槽。RECV 不占槽，原集合通信继续独占原通信资源。未启用时走原始单槽路径，M1 和原 native 入口保持默认行为。HardwareResource.hh/.cc 补丁及其单元测试已在 ASTRA 本地提交 3f72d0a，LLMServingSim gitlink 提交为 47b3a21；尚未发布到维护远端。
+
+以下完整检查已执行，输出目录必须尚不存在：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_variants.py \
+  --build-dir build/m2-chunks-slots --output-dir runs/my-variant-check
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-send-slots-test
+```
+
+单独运行某份输入时，继续使用生成器和 cosim-layer：输入可选 fixtures/m2_variants/dedup.json、chunks.json、two_slots.json，真实执行程序使用 build/m2-chunks-slots/output/cosim/ns3.44-cosim-layer。参数顺序与 M2.1 相同。本步支持一槽或两槽、最多 4096 条传输；计算和元数据的已有约束不变。单块不得超过 2^32−1 字节，大向量分块的边界仅有生成/校验证据。
+
+去重后实际为十二次写、98304 字节、2/1/4/1 份专家输入。3072 字节分块后为四十二次写、114688 字节、2/2/3/1 份专家输入；改成两槽后图和字节不变，四 rank 的 SEND/WQE 峰值从 1 增至 2。三种输入的来源开/关/不挂观测结果一致，原 ASTRA 事件、收发回调、资源释放和端口分项均通过。样例定义见 [输入说明](../fixtures/m2_variants/README.md)。
+
+M2.1/M2.2、M1 写/观测/时间/计算及单套 ns-3 链接回归通过。`check_native_collective.py` 在独立 analytical 构建中比较补丁前后默认资源行为：八 rank、十六个集合通信节点的 64 条执行事件与完成时刻相同；该原生后端未链接进联合程序。实际命令、保留的检查失败及停止位置见 [M2.3 环境记录](../docs/environment.md#2026-09-28m2-3-chunks-slots)。

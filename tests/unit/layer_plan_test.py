@@ -60,8 +60,8 @@ class LayerPlanTest(unittest.TestCase):
 
     def test_invalid_inputs(self):
         variants = [('schema_version', 'bad'), ('hidden_dim', -1), ('hidden_dim', 2**32),
-                    ('dispatch_element_bytes', 0), ('send_slots_per_rank', 2),
-                    ('application_metadata_bytes', 1), ('chunk_bytes', 3072), ('ready_ns', 2**63),
+                    ('dispatch_element_bytes', 0), ('send_slots_per_rank', 3),
+                    ('application_metadata_bytes', 1), ('chunk_bytes', 0), ('ready_ns', 2**63),
                     ('top_k', True), ('template', 'invented'), ('rank_ids', [False, 1, 2, 3]),
                     ('expert_placement', [0] * 8)]
         for field, value in variants:
@@ -92,6 +92,57 @@ class LayerPlanTest(unittest.TestCase):
             bad = deepcopy(self.plan); change(bad)
             with self.assertRaises(ValueError):
                 validate_plan(bad)
+
+    def test_dedup_keeps_both_experts(self):
+        self.config['tokens'][0]['expert_ids'] = [4, 5]
+        plan = build_plan(self.config)
+        self.assertEqual(plan['expert_input_counts'], [2, 1, 4, 1])
+        self.assertEqual(len(plan['transfers']), 12)
+        self.assertEqual(sum(t['payload_bytes'] for t in plan['transfers']), 98304)
+        dispatch = [t for t in plan['transfers'] if t['kind'] == 'dispatch' and t['src_rank'] == 0]
+        self.assertEqual(len(dispatch), 1)
+        self.assertEqual((dispatch[0]['dst_rank'], dispatch[0]['payload_bytes']), (2, 8192))
+        self.assertEqual(dispatch[0]['sources'][0]['expert_ids'], [4, 5])
+        expert = next(n for n in plan['rank_graphs'][2]['nodes'] if n['name'] == 'expert-compute')
+        self.assertEqual(expert['duration_ns'], 16000)
+        self.assertCountEqual([(v['request_id'], v['expert_id']) for v in expert['expert_inputs']],
+                              [('A', 4), ('A', 5), ('B', 5), ('C', 4)])
+
+    def test_chunks_and_send_slots(self):
+        self.config['chunk_bytes'] = 3072
+        one = build_plan(self.config)
+        self.assertEqual(len(one['transfers']), 42)
+        self.assertEqual(sum(t['payload_bytes'] for t in one['transfers']), 114688)
+        self.assertEqual(one['expert_input_counts'], [2, 2, 3, 1])
+        for start in range(0, 42, 3):
+            parts = one['transfers'][start:start + 3]
+            self.assertEqual([p['payload_bytes'] for p in parts], [3072, 3072, 2048])
+            self.assertEqual([p['chunk_index'] for p in parts], [0, 1, 2])
+            self.assertEqual([p['pair_byte_range'] for p in parts], [[0, 3072], [3072, 6144], [6144, 8192]])
+            self.assertTrue(all(p['sources'] == parts[0]['sources'] for p in parts))
+        self.assertEqual(sum(len(g['nodes']) for g in one['rank_graphs']), 104)
+        self.config['send_slots_per_rank'] = 2
+        two = build_plan(self.config)
+        validate_plan(one)  # Later fixture edits must not mutate an earlier plan.
+        self.assertEqual(one['input']['send_slots_per_rank'], 1)
+        self.assertEqual(one['rank_graphs'], two['rank_graphs'])
+        self.assertEqual(one['transfers'], two['transfers'])
+        for field, value in [('chunk_index', 1), ('pair_byte_range', [1, 3073]),
+                             ('pair_payload_bytes', 8193), ('payload_bytes', 3071)]:
+            bad = deepcopy(one); bad['transfers'][0][field] = value
+            with self.subTest(field=field), self.assertRaises(ValueError): validate_plan(bad)
+        bad = deepcopy(one); bad['transfers'][2]['sources'] = deepcopy(bad['transfers'][2]['sources'])
+        bad['transfers'][2]['sources'][0]['expert_ids'] = [7]
+        with self.assertRaises(ValueError): validate_plan(bad)
+
+    def test_chunk_size_boundary(self):
+        self.config['hidden_dim'] = 2**31
+        self.config['chunk_bytes'] = 2**32 - 1
+        plan = build_plan(self.config)
+        self.assertEqual([t['payload_bytes'] for t in plan['transfers'][:2]], [2**32 - 1, 1])
+        self.assertEqual(plan['transfers'][1]['pair_byte_range'], [2**32 - 1, 2**32])
+        self.config['chunk_bytes'] = 2**32
+        with self.assertRaises(ValueError): build_plan(self.config)
 
 
 if __name__ == '__main__':

@@ -67,6 +67,7 @@ int main(int argc, char** argv)
         auto plan_dir = fs::absolute(argv[1]);
         // Validate every graph before creating the run directory or any network.
         const auto plan = moe_ub::LoadLayerPlan(plan_dir);
+        const auto send_slots = plan.data.at("send_slots_per_rank").get<unsigned>();
         const auto system_config = ReadJson(fs::absolute(argv[2]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
                 system_config.at("trace-enabled") == 1, "Layer fixture requires original ASTRA execution and trace");
@@ -146,6 +147,7 @@ int main(int argc, char** argv)
                 systems.push_back(std::make_unique<AstraSim::Sys>(rank, "layer", "empty", "system.json",
                     std::vector<AstraSim::AstraMemoryAPI*>{}, adapters.back().get(),
                     std::vector<int>{4}, std::vector<int>{1}, 1.0, 1.0, false));
+                systems.back()->workload->hw_resource->configure_p2p_send_slots(send_slots);
             }
             report["loaded_ranks_before_activation"] = systems.size();
             for (int rank = 0; rank < 4; ++rank)
@@ -186,6 +188,7 @@ int main(int argc, char** argv)
                 Require(state["finished"] == true && state["remaining_nodes"] == false &&
                         state["cpu_slots"] == 0 && state["compute_slots"] == 0 && state["send_slots"] == 0 &&
                         state["pending_events"] == 0 && state["pending_tasks"] == 0, "Unfinished rank " + std::to_string(rank));
+                Require(hardware->active_p2p_sends() == 0, "Unreleased point-to-point send slot");
                 report["rank_resources"].push_back(state);
             }
             for (const auto& event : report["wqe_starts"])
@@ -196,8 +199,9 @@ int main(int argc, char** argv)
             }
             Require(report["graph_completions"].size() == 4 && report["wqe_starts"].size() == transfers.size() &&
                     report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json::array({0,0,0,0}) &&
-                    report["peak_wqes"] == Json::array({1,1,1,1}) && report["csv_completed_tasks"] == 0,
-                    "Layer completion/one-send-slot invariant failed");
+                    report["csv_completed_tasks"] == 0, "Layer completion invariant failed");
+            for (const auto& peak : report["peak_wqes"])
+                Require(peak > 0 && peak <= send_slots, "Layer SEND slot limit exceeded");
             moe_ub::FlushAstraLogging();
             report["node_execution"] = moe_ub::ReadLayerExecution(plan, "log/log.log");
             if (observation) observation->Export(export_registry,

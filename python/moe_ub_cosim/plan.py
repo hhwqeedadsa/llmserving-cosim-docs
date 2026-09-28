@@ -1,9 +1,11 @@
 """The single-layer direct_rank_dedup_v1 reference model; no execution scheduler."""
 from collections import Counter, defaultdict
+from copy import deepcopy
 
 
 MAX_TASK_BYTES = 2**32 - 1
 MAX_TIME_NS = 2**63 - 1
+MAX_TRANSFERS = 4096  # Explicit bound for this small functional graph driver.
 
 
 def require(condition, message):
@@ -30,7 +32,7 @@ def validate_config(c):
     for field in ('rank_ids', 'rank_to_ub_node'):
         require(all(type(rank) is int for rank in c[field]), f'Invalid integer {field}')
     require(c['template'] == 'direct_rank_dedup_v1', 'Unsupported communication template')
-    integer(c['send_slots_per_rank'], 'send_slots_per_rank', 1, 1)
+    integer(c['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     integer(c['application_metadata_bytes'], 'application_metadata_bytes', 0, 0)
     integer(c['top_k'], 'top_k', 2, 2)
     integer(c['ready_ns'], 'ready_ns', 0, MAX_TIME_NS - 1000000)
@@ -38,7 +40,7 @@ def validate_config(c):
     integer(c['hidden_dim'], 'hidden_dim', 1)
     for field in ('dispatch_element_bytes', 'combine_element_bytes'):
         integer(c[field], field, 1, 16)
-        integer(c['hidden_dim'] * c[field], field + ' vector bytes', 1, MAX_TASK_BYTES)
+        integer(c['hidden_dim'] * c[field], field + ' vector bytes', 1, MAX_TIME_NS)
     integer(c['chunk_bytes'], 'chunk_bytes', 1, MAX_TASK_BYTES)
     placement = c['expert_placement']
     require(isinstance(placement, list) and len(placement) == 8, 'Require eight expert placements')
@@ -73,7 +75,7 @@ def validate_config(c):
 
 def build_plan(config):
     validate_config(config)
-    c = config
+    c = deepcopy(config)
     operations = [dict(operation_id=f"{c['wave_id']}.L{c['layer_id']}.{kind}", kind=kind,
                        service_id=c['service_id'], role=c['role'], wave_id=c['wave_id'],
                        layer_id=c['layer_id'], group_id=c['group_id'], participants=c['rank_ids'])
@@ -100,14 +102,18 @@ def build_plan(config):
         matrix = remote if op['kind'] == 'dispatch' else {(dst, src): v for (src, dst), v in remote.items()}
         for (src, dst), sources in sorted(matrix.items()):
             body = len(sources) * c['hidden_dim'] * c[op['kind'] + '_element_bytes']
-            integer(body, 'single UB payload', 1, MAX_TASK_BYTES)
-            require(body <= c['chunk_bytes'], 'M2.1 accepts one chunk per pair; chunking is a later task')
-            ordinal = len(transfers)
-            transfers.append(dict(transfer_id=2**32 + 100 + ordinal, ub_task_id=100 + ordinal,
-                comm_tag=100 + ordinal, operation_id=op['operation_id'], kind=op['kind'],
-                src_rank=src, dst_rank=dst, payload_bytes=body, business_payload_bytes=body,
-                application_metadata_bytes=0, chunk_index=0, task_byte_range=[0, body],
-                transport_profile_id='urma-write-rtp-default', priority=7, sources=sources))
+            integer(body, 'directed vector bytes', 1, MAX_TIME_NS)
+            count = (body + c['chunk_bytes'] - 1) // c['chunk_bytes']
+            require(len(transfers) + count <= MAX_TRANSFERS, 'Functional plan exceeds 4096 transfers')
+            for index, offset in enumerate(range(0, body, c['chunk_bytes'])):
+                size = min(c['chunk_bytes'], body - offset)
+                ordinal = len(transfers)
+                transfers.append(dict(transfer_id=2**32 + 100 + ordinal, ub_task_id=100 + ordinal,
+                    comm_tag=100 + ordinal, operation_id=op['operation_id'], kind=op['kind'],
+                    src_rank=src, dst_rank=dst, payload_bytes=size, business_payload_bytes=size,
+                    application_metadata_bytes=0, chunk_index=index, task_byte_range=[0, size],
+                    pair_byte_range=[offset, offset + size], pair_payload_bytes=body,
+                    transport_profile_id='urma-write-rtp-default', priority=7, sources=sources))
     rank_graphs = []
     for rank in c['rank_ids']:
         nodes = []
@@ -149,8 +155,8 @@ def build_plan(config):
         communication_template=c['template'], communication_profile_basis='reference_model',
         compute_source='synthetic_fixed_duration', route_source='explicit_synthetic_fixture',
         calibration_status='unvalidated_reference', sender_completion='transaction_done',
-        send_slots_per_rank=1, operations=operations, transfers=transfers, rank_graphs=rank_graphs,
-        expert_input_counts=[len(v) for v in expert_inputs], input=config)
+        send_slots_per_rank=c['send_slots_per_rank'], operations=operations, transfers=transfers, rank_graphs=rank_graphs,
+        expert_input_counts=[len(v) for v in expert_inputs], input=c)
     validate_plan(plan)
     return plan
 
@@ -159,13 +165,15 @@ def validate_plan(plan):
     require(plan['schema_version'] == 'moe-ub-execution-plan/1', 'Unsupported plan schema')
     ranks = plan['rank_ids']
     require(ranks == [0, 1, 2, 3] and plan['rank_to_ub_node'] == ranks, 'Invalid rank mapping')
-    require(plan['send_slots_per_rank'] == 1, 'M2.1 requires one send slot')
+    integer(plan['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
+    validate_config(plan['input'])
+    require(plan['send_slots_per_rank'] == plan['input']['send_slots_per_rank'], 'Send slot configuration mismatch')
     operations = {op['operation_id']: op for op in plan['operations']}
     require(len(operations) == len(plan['operations']) == 2, 'Duplicate or missing operation')
     for op in operations.values():
         require(op['participants'] == ranks, 'Operation participants mismatch')
     transfers = {t['transfer_id']: t for t in plan['transfers']}
-    require(len(transfers) == len(plan['transfers']), 'Duplicate transfer identity')
+    require(0 < len(transfers) == len(plan['transfers']) <= MAX_TRANSFERS, 'Duplicate/missing/too many transfers')
     for field in ('comm_tag', 'ub_task_id'):
         require(len({t[field] for t in transfers.values()}) == len(transfers), f'Duplicate {field}')
     for t in transfers.values():
@@ -177,8 +185,23 @@ def validate_plan(plan):
         require(t['src_rank'] in ranks and t['dst_rank'] in ranks and t['src_rank'] != t['dst_rank'], 'Invalid transfer endpoints')
         require(t['operation_id'] in operations and t['kind'] == operations[t['operation_id']]['kind'], 'Unknown operation')
         require(t['business_payload_bytes'] == t['payload_bytes'] and t['application_metadata_bytes'] == 0 and
-                t['task_byte_range'] == [0, t['payload_bytes']] and t['chunk_index'] == 0 and
+                t['task_byte_range'] == [0, t['payload_bytes']] and
                 t['priority'] == 7 and t['transport_profile_id'] == 'urma-write-rtp-default', 'Invalid payload/profile')
+    grouped = defaultdict(list)
+    for t in transfers.values():
+        integer(t['chunk_index'], 'chunk_index', 0, MAX_TRANSFERS - 1)
+        grouped[t['operation_id'], t['src_rank'], t['dst_rank']].append(t)
+    for parts in grouped.values():
+        first = parts[0]
+        expected = len(first['sources']) * plan['input']['hidden_dim'] * plan['input'][first['kind'] + '_element_bytes']
+        offset = 0
+        for index, t in enumerate(parts):
+            size = min(plan['input']['chunk_bytes'], expected - offset)
+            require(size > 0 and t['chunk_index'] == index and t['payload_bytes'] == size and
+                    t['pair_payload_bytes'] == expected and t['pair_byte_range'] == [offset, offset + size] and
+                    t['sources'] == first['sources'], 'Invalid chunk sequence, range, tail or source')
+            offset += size
+        require(offset == expected, 'Incomplete directed vector')
     require([g['rank_id'] for g in plan['rank_graphs']] == ranks, 'Missing rank graph')
     pairs = Counter()
     for graph in plan['rank_graphs']:

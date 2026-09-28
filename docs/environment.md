@@ -1038,3 +1038,109 @@ M2.1 回归保留原图完成时刻 21168、21506、21552、17675 ns；来源开
 没有未解决失败。配置仍有源码树外输出提示，编译仍有上游 std::binary_function 弃用警告。当前仍是未校准的固定四 rank、单块单槽参考功能验证；没有 M2.3 去重/分块/多槽变体、M2.4 连续图、M3 动态服务、真实丢包重传或硬件校准。
 
 本轮停止在 M2.2 completed；M2.3 等待用户确认。按持续授权本地提交，不推送；提交后的 13 项依赖检查记录为 L/dependency-final.json，主仓库和 UB 最终状态为 L/final-status.json、L/final-ub-status.json。
+
+## 2026-09-28：m2-3-chunks-slots
+
+用户确认执行 M2.3。开始时主仓库 5023358、ASTRA d346994、LLMServingSim a4053bc、UB 1ba7222 工作区干净，13 项依赖检查通过；旧任务已提交后才切换，任务说明提交 b11e0fe。日志根为 `runs/m2-3-chunks-slots-20260928T144612Z/`，下文记为 L。复用经审阅的 record.py 保存命令、cwd、UTC 起止、退出码及 stdout/stderr；集成目录 commands.json 保存逐次生成/仿真命令和原始输出。
+
+### 修改与依赖保存
+
+生成器按 chunk_bytes 拆分每个有向向量，保留真实尾块，分配独立 transfer_id、UB task_id、comm_tag 和 SEND/RECV。来源仍是原 Token/专家及逻辑操作；task_byte_range 为块内范围，新增 pair_byte_range/pair_payload_bytes 表示原向量位置和总量。前后端均检查连续编号、完整范围、真实尾块及一致来源；后端在启动前核对图和计划。专家计算输入份数不乘以块数。输入在生成前复制，后续修改配置不会改变已有计划。
+
+参考生成逻辑已有同目的 rank 去重，本步新增实际变体核验。向量总长可以超过单个 UB 任务上界，但每块仍须在 uint32 范围；单元测试生成 2^32 字节向量的 2^32−1/1 字节两块，不实际执行该大流量。为限制功能图规模，最多 4096 条传输；本步只接受一个或两个 SEND 槽。零应用元数据、每 rank 正计算、四 rank 身份映射等已有边界保留。
+
+ASTRA 原 HardwareResource 在 occupy/release/is_available 中固定一个通信槽，无法从已有参数增至两槽。已从锁定提交建立本地 task/m2-3-send-slots 分支，增加 configure_p2p_send_slots：联合入口激活前显式配置，点对点 SEND 按节点身份登记、释放，支持乱序完成。RECV 不占槽，原通信总计数继续参与完成判断；默认不开启新分支，集合通信继续独占原资源。没有修改 Workload、网络后端或 UB 协议。
+
+通过全部检查后，ASTRA 源码和 tests/cosim/send_slots_test.cc 先提交为 3f72d0af113f468ec8031a1037685464b47e9535；LLMServingSim 的 ASTRA gitlink 再提交为 47b3a219da6151207f6c21256a6dc63a9e6c4830。父仓库更新对应 gitlink、checkout_commit 与 project_patch_commits，保留原 baseline_commit。两个本地仓库的 Git 身份按用户已提供的 baoy21 / baoy21@mails.tsinghua.edu.cn 设置，没有修改全局配置。
+
+本轮仅本地提交：ASTRA/LLMServingSim 的 origin 仍为原来源，没有创建 fork、修改远端或推送；本地补丁尚未发布到可取回的维护远端，不能声称从现有远端已经能复现新增提交。发布步骤仍需另行处理。UB 及其工具、Chakra 等其他依赖源码和版本未变。没有安装软件、初始化依赖或下载模型/数据。
+
+### 构建与实际命令
+
+所有下列命令 cwd 为 /root/moe-ub-cosim。联合构建为 build/m2-chunks-slots/；为核对默认资源规则，另用 build/m2-chunks-slots-native/ 构建原 analytical 入口。两次构建先后执行，最多八路并行。analytical 仅作独立原生回归，没有链接进联合程序。
+
+```bash
+M23_LOG=runs/m2-3-chunks-slots-20260928T144612Z
+cmake -S third_party/ns-3-ub -B build/m2-chunks-slots -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m2-chunks-slots/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m2-chunks-slots --parallel 8 --target \
+  cosim-layer cosim-layer-delay-test cosim-send-slots-test cosim-write cosim-write-test \
+  cosim-observation-test cosim-compute cosim-time-test m0-joint-link-probe
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/unit/layer_plan_test.py
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-send-slots-test
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_variants.py \
+  --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/variants"
+cmake -S third_party/LLMServingSim/astra-sim/build/astra_analytical \
+  -B build/m2-chunks-slots-native -DBUILDTARGET=congestion_unaware -G Ninja
+cmake --build build/m2-chunks-slots-native --target AstraSim_Analytical_Congestion_Unaware --parallel 8
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_native_collective.py \
+  --patched-binary build/m2-chunks-slots-native/bin/AstraSim_Analytical_Congestion_Unaware \
+  --output-dir "$M23_LOG/native-collective-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/layer-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/delay-regression"
+python3 tests/integration/check_write.py --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/write-regression"
+python3 tests/integration/check_observation.py --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/observation-regression"
+python3 tests/integration/check_compute.py --build-dir build/m2-chunks-slots --output-dir "$M23_LOG/compute-regression"
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-write-test
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-observation-test
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-time-test
+build/m2-chunks-slots/output/cosim/ns3.44-cosim-time-test --wrong-resolution
+build/m2-chunks-slots/output/m0/ns3.44-m0-joint-link-probe "$M23_LOG/m0-probe.et"
+python3 scripts/m0_joint_build/audit.py --build-dir build/m2-chunks-slots \
+  --run-log "$M23_LOG/m0-probe.stdout.log" --output-dir "$M23_LOG/m0-audit"
+python3 "$M23_LOG/restore_baselines.py"
+```
+
+每个变体的生成器调用、输入和三次真实执行在 L/variants/commands.json。继续使用已有虚拟环境和 protoc，从锁定 proto 生成本次编码模块。原生集合通信检查在自己的运行目录分别执行旧二进制与本次新二进制，显式传入八个 end-npu-ids 和七行 done/一行 exit；cwd、stdin 及完整 argv 均保存在 native-collective-final/commands.json。没有运行带清理命令的原 rt_template/run.sh，也未使用其中已过时的 remote-memory 参数。
+
+### 实际结果
+
+| 检查 | 结果 | L 内记录 |
+|---|---|---|
+| 联合配置/构建 | 487 步，退出 0 | configure.json、build.json |
+| 原生 analytical 配置/构建 | 118 步，退出 0 | native-configure.json、native-build.json |
+| 生成器单元 | 八项测试通过，含去重、分块/尾块、输入快照、大小边界及错误配置/计划 | plan-unit-verified.json |
+| 发送资源单元 | 默认/集合资源、一槽/两槽、RECV、忙时改配置拒绝、重复/错误释放及乱序完成通过 | send-slots-unit.json |
+| M2.3 变体 | 三种输入各来源开/关/不挂观测，共九次真实执行；十一种坏计划在启动前拒绝 | variants.json、variants/summary.json |
+| 默认原生集合通信 | 补丁前/后八 rank、十六个集合节点及十六个计算节点；64 条事件、完整执行日志和八份完成记录相同 | native-collective-final.json、对应 summary.json |
+| M2.1 回归 | 三次来源模式及十三项错误/覆盖拒绝通过，原完成时刻保持 | layer-regression.json |
+| M2.2 回归 | 五组给定事件、两组真实 UB 和十项错误/覆盖拒绝通过 | delay-regression.json |
+| M1 写与观测 | 六个真实写用例、21 次观测及相应非法输入拒绝通过 | write-regression.json、observation-regression.json |
+| M1 时间/计算 | 四个计算用例、时间单位/溢出/异步回调、错误精度与相关单元通过 | compute-regression.json、write-unit.json、observation-unit.json、time-unit.json、time-wrong-resolution.json |
+| 联合链接范围 | 全部 52 个 ASTRA 对象，实际装载单套 10 个本次 UB ns-3 库 | m0-audit/ 及各集成审计 |
+| 旧产物保护 | 原生启动锁恢复，120 个旧产物大小和 SHA-256 不变 | restore-baselines.json、baseline-verification.json |
+
+按验收顺序，实际业务量和图完成时间如下，时间单位 ns。分块与发送槽变化允许改变执行曲线，不将这些结果写入通信模型作为固定时间。
+
+| 输入 | UB 写数 / 业务字节 | 专家输入份数 | 每 rank SEND/WQE 峰值 | rank 0/1/2/3 图完成 |
+|---|---|---|---|---|
+| dedup | 12 / 98304 | 2、1、4、1 | 1、1、1、1 | 25003 / 25341 / 25387 / 17090 |
+| chunks | 42 / 114688 | 2、2、3、1 | 1、1、1、1 | 21805 / 22409 / 22455 / 18477 |
+| two_slots | 42 / 114688 | 2、2、3、1 | 2、2、2、2 | 21196 / 21473 / 21519 / 17621 |
+
+去重保留 A 的专家 4 和 5 两份计算，rank 2 的专家耗时为 16000 ns。分块后三个块依次覆盖 [0,3072)、[3072,6144)、[6144,8192)，各块 UB 任务内范围从零开始，专家计算仍为 8000/8000/12000/4000 ns。单槽与两槽的传输描述和四份图逐字节相同，只有槽参数改变。ASTRA 的 208 条 issue/callback 验证分块图 104 个节点，SEND 顺序为目的 rank、分块索引；实际 WQE 另核对并发和每条事务完成。
+
+每种输入的三次运行结果、图、去墙钟前缀 ASTRA 日志及 33 个原生跟踪文件相同；开关来源还保持 observed 文件与实际序列化包/时刻指纹相同。每条业务恰好一次 UB 提交和目标写入，两侧各回调一次；最终图、发送/计算槽、借用回调、传输上下文、执行器任务和源 Jetty 资源清空，CSV 完成计数为零。
+
+所选交换机 4 端口 2，去重例为 18 个包、25839 字节，分项为业务 24576、数据协议开销 468、控制 795。两种分块例均为 36 个包、27105 字节，分项为业务 24576、数据协议开销 702、控制 1827。各窗守恒，实际包范围完整覆盖经过该端口的各块；来源指向正确操作及原向量位置，没有把块内偏移误当向量偏移。
+
+独立原生对照使用 rt_template 的八 rank Ring 网络及集合算法参数，生成两个依赖同一准备 COMP 的 1 MiB AllReduce，再运行后继 COMP。旧、新程序每个 rank 都在 237560 ns 完成，集合之间保持原单槽串行行为，64 条执行事件及完整去墙钟前缀日志相同。没有把这一原生 analytical 执行当作 UB 网络或硬件真实性证据。
+
+### 保留的失败与未验证范围
+
+第一次 native-collective.json 返回 1：原始 stdout 中异步 spdlog 与直接 cout 的输出交错不同。检查时确认全部 64 条 issue/callback、八份完成时刻和完整 ASTRA 日志已经一致；问题只在 stdout 文本顺序。脚本现比较完整执行日志和解析后的完成记录，仍验证原生退出握手、零 stderr、无残留图，原始 stdout/stderr 不改写。native-collective-final.json 返回 0；首次失败保留在 L/native-collective/，未更改时刻或资源预期。
+
+代码检查还发现旧生成器保存输入对象引用，修改配置可能影响此前计划。已改为复制输入，并在单元中验证修改槽配置后旧计划仍有效；这不改变任务语义或计算/通信时间。
+
+没有未解决失败。继续保留源码树外 UB 输出目录提示和上游 std::binary_function 弃用警告。未执行全套上游 serving/CSV 测试；本步未修改 serving 或 UB，已执行直接受影响的默认资源、原生集合及联合回归，旧产物全部保留。未运行大向量真实传输、零计算/零 Token 成员、丢包重传、连续图、动态服务或硬件校准。校准状态仍为 unvalidated_reference。
+
+本轮停止在 M2.3 completed；M2.4 等待用户确认。ASTRA、LLMServingSim 和父仓库按由内向外顺序本地提交，不推送；父仓库提交后的依赖检查记录为 L/dependency-final.json，主仓库、LLMServingSim、ASTRA 与 UB 状态另存 final-*.json。

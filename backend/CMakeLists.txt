@@ -117,3 +117,12 @@ set_target_properties(cosim-layer-delay-test PROPERTIES
 target_include_directories(cosim-layer-delay-test PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 target_link_options(cosim-layer-delay-test PRIVATE
   "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m2/delay-test-link.map")
+
+build_exec(
+  EXECNAME cosim-send-slots-test
+  SOURCE_FILES "${ASTRA_ROOT}/tests/cosim/send_slots_test.cc"
+  LIBRARIES_TO_LINK AstraSim
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
+  IGNORE_PCH)
+set_target_properties(cosim-send-slots-test PROPERTIES
+  CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)

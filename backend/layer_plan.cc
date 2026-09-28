@@ -95,8 +95,13 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     const auto& p = plan.data;
     Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
             p.at("rank_ids") == Json::array({0, 1, 2, 3}) && p.at("rank_to_ub_node") == p.at("rank_ids") &&
-            p.at("send_slots_per_rank") == 1 && p.at("communication_template") == "direct_rank_dedup_v1" &&
+            p.at("communication_template") == "direct_rank_dedup_v1" &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
+    const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
+    const auto& input = p.at("input");
+    Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
+    const auto chunk_bytes = Number(input.at("chunk_bytes"), "chunk_bytes", UINT32_MAX);
+    Require(chunk_bytes > 0, "zero chunk limit");
     Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
     const auto graph_id = p.at("graph_id").get<std::string>();
     Require(!graph_id.empty(), "empty graph id");
@@ -111,7 +116,8 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
             p.at("operations")[1].at("kind") == "combine", "require Dispatch and Combine operations");
     std::map<uint64_t, Json> transfers;
     std::set<uint64_t> tasks, tags;
-    Require(p.at("transfers").is_array() && !p.at("transfers").empty(), "empty transfer set");
+    Require(p.at("transfers").is_array() && !p.at("transfers").empty() && p.at("transfers").size() <= 4096, "empty/oversized transfer set");
+    std::map<std::tuple<std::string, uint64_t, uint64_t>, std::vector<Json>> chunks;
     for (const auto& t : p.at("transfers"))
     {
         const auto id = Number(t.at("transfer_id"), "transfer_id");
@@ -124,11 +130,41 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
                 tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");
         Require(operations.contains(operation) && operations.at(operation) == t.at("kind") &&
                 t.at("business_payload_bytes") == bytes && t.at("application_metadata_bytes") == 0 &&
-                t.at("task_byte_range") == Json::array({0, bytes}) && t.at("chunk_index") == 0 &&
+                t.at("task_byte_range") == Json::array({0, bytes}) &&
                 t.at("priority") == 7 && t.at("transport_profile_id") == "urma-write-rtp-default", "invalid provenance/profile");
+        const auto chunk = Number(t.at("chunk_index"), "chunk_index", 4095);
+        const auto total = Number(t.at("pair_payload_bytes"), "pair_payload_bytes", INT64_MAX);
+        const auto& range = t.at("pair_byte_range");
+        Require(range.is_array() && range.size() == 2, "invalid pair range");
+        const auto begin = Number(range[0], "pair begin", total), end = Number(range[1], "pair end", total);
+        Require(total > 0 && end >= begin && end - begin == bytes && bytes <= chunk_bytes,
+                "invalid chunk range/size");
+        chunks[{operation, src, dst}].push_back(t);
         plan.descriptors.push_back({id, task, graph_id,
             Number(t.at("send_node_id"), "send_node_id"), Number(t.at("recv_node_id"), "recv_node_id"),
-            static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation});
+            static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation,
+            static_cast<uint32_t>(chunk), begin, total});
+    }
+    for (const auto& [key, parts] : chunks)
+    {
+        const auto& first = parts.front();
+        const auto kind = first.at("kind").get<std::string>();
+        const auto hidden = Number(input.at("hidden_dim"), "hidden_dim", INT64_MAX);
+        const auto element = Number(input.at(kind + "_element_bytes"), "element bytes", 16);
+        const auto& sources = first.at("sources");
+        Require(hidden > 0 && element > 0 && sources.is_array() && !sources.empty() &&
+                sources.size() <= 4 && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
+        const auto expected = hidden * element * sources.size();
+        uint64_t offset = 0, index = 0;
+        for (const auto& part : parts)
+        {
+            const auto size = std::min(chunk_bytes, expected - offset);
+            Require(size > 0 && part.at("chunk_index") == index++ && part.at("payload_bytes") == size &&
+                    part.at("pair_payload_bytes") == expected && part.at("pair_byte_range") == Json::array({offset, offset + size}) &&
+                    part.at("sources") == sources, "invalid chunk order, tail, range or source");
+            offset += size;
+        }
+        Require(offset == expected, "incomplete directed vector");
     }
     Require(p.at("rank_graphs").size() == 4, "missing rank graph");
     std::map<std::pair<uint64_t, std::string>, unsigned> pairs;
@@ -174,7 +210,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         Require(phase_ids.size() == 5, "missing phase node");
         auto id = [&](const char* key) { return phase.at(key).get<uint64_t>(); };
         std::set<uint64_t> dispatch{id("prepare")}, combine{id("local_merge")};
-        std::map<std::string, int> previous_destination;
+        std::map<std::string, std::pair<int, uint64_t>> previous_send;
         for (const auto& [node_id, n] : local)
         {
             if (n.at("kind") == "COMP") { Require(phase_ids.contains(node_id), "unexpected compute node"); continue; }
@@ -185,9 +221,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
             if (n.at("kind") == "SEND")
             {
                 auto kind = t.at("kind").get<std::string>();
-                auto dst = t.at("dst_rank").get<int>();
-                Require(!previous_destination.contains(kind) || previous_destination.at(kind) < dst, "SEND order is not by destination");
-                previous_destination[kind] = dst;
+                auto order = std::make_pair(t.at("dst_rank").get<int>(), t.at("chunk_index").get<uint64_t>());
+                Require(!previous_send.contains(kind) || previous_send.at(kind) < order, "SEND order is not by destination/chunk");
+                previous_send[kind] = order;
             }
         }
         Require(Ids(local.at(id("prepare")).at("deps")).empty() &&

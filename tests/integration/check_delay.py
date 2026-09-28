@@ -21,17 +21,17 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def check_execution(plan, report, run):
+def check_execution(plan, report, run, check_rank2_ahead=True):
     """Use transfer event evidence to derive local waits, independently of deps."""
     nodes = {(g['rank_id'], n['node_id']): n for g in plan['rank_graphs'] for n in g['nodes']}
     actual = {(n['rank_id'], n['node_id']): n for n in report['node_execution']}
     transfers = {t['transfer_id']: t for t in report['transfers']}
-    assert set(actual) == set(nodes) and len(actual) == 48
+    assert set(actual) == set(nodes) and len(actual) == 20 + 2 * len(plan['transfers'])
     assert set(transfers) == {t['transfer_id'] for t in plan['transfers']}
     assert report['loaded_ranks_before_activation'] == 4
     assert report['activation_order'] == [dict(rank_id=r, time_ns=0) for r in range(4)]
     assert len(report['graph_completions']) == 4
-    assert sum(t['committed_bytes'] for t in transfers.values()) == 114688
+    assert sum(t['committed_bytes'] for t in transfers.values()) == sum(t['payload_bytes'] for t in plan['transfers'])
     for t in plan['transfers']:
         got = transfers[t['transfer_id']]
         assert got['send_callbacks'] == got['receive_callbacks'] == 1 and not got['context_active']
@@ -77,7 +77,7 @@ def check_execution(plan, report, run):
     # Read the original executor log as well, not just the driver's JSON export.
     raw = (run / 'log/log.log').read_text()
     events = re.findall(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+),', raw)
-    assert len(events) == 96 and len({(e, r, n) for e, r, _, n in events}) == 96
+    assert len(events) == 2 * len(nodes) and len({(e, r, n) for e, r, _, n in events}) == 2 * len(nodes)
     active, peak, concurrent_receive = [0] * 4, [0] * 4, 0
     for event, rank, time, node_id in events:
         rank, time, node_id = int(rank), int(time), int(node_id)
@@ -87,13 +87,14 @@ def check_execution(plan, report, run):
             concurrent_receive += 1
         if nodes[key]['kind'] == 'SEND':
             active[rank] += 1 if event == 'issue' else -1
-            assert 0 <= active[rank] <= 1
+            assert 0 <= active[rank] <= plan['send_slots_per_rank']
             peak[rank] = max(peak[rank], active[rank])
-    assert active == [0] * 4 and peak == [1] * 4 and concurrent_receive > 0
+    assert active == [0] * 4 and all(0 < p <= plan['send_slots_per_rank'] for p in peak) and concurrent_receive > 0
     assert not (run / 'log/err.log').read_text()
     latest_dispatch = max(p['expert_start_ns'] for p in phases)
-    assert phases[2]['expert_start_ns'] < latest_dispatch, 'rank 2 must not wait for a global Dispatch barrier'
-    return dict(ranks=phases, global_dispatch_done_ns=latest_dispatch)
+    if check_rank2_ahead:
+        assert phases[2]['expert_start_ns'] < latest_dispatch, 'rank 2 must not wait for a global Dispatch barrier'
+    return dict(ranks=phases, global_dispatch_done_ns=latest_dispatch, peak_sends=peak)
 
 
 def main():

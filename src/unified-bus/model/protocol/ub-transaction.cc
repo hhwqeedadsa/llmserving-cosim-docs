@@ -17,7 +17,11 @@ TypeId UbTransaction::GetTypeId(void)
 {
     static TypeId tid = TypeId("ns3::UbTransaction")
         .SetParent<Object>()
-        .SetGroupName("UnifiedBus");
+        .SetGroupName("UnifiedBus")
+        .AddTraceSource("RemoteWriteCommitted",
+                        "Effective target write committed, before building its transaction ACK",
+                        MakeTraceSourceAccessor(&UbTransaction::m_remoteWriteCommitted),
+                        "ns3::UbTransaction::RemoteWriteCommittedCallback");
     return tid;
 }
 
@@ -460,6 +464,7 @@ Ptr<UbWqeSegment> UbTransaction::ExecuteRemoteWriteAndBuildAck(uint32_t localTpn
 
     const uint64_t address = DeriveRemoteAddress(request);
     m_memoryStore[std::make_pair(m_nodeId, address)] = request->GetSize();
+    m_remoteWriteCommitted(request);
 
     Ptr<UbWqeSegment> response = CreateObject<UbWqeSegment>();
     response->SetSrc(m_nodeId);

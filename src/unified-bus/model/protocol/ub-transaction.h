@@ -9,6 +9,7 @@
 #include "ns3/ub-network-address.h"
 #include "ns3/random-variable-stream.h"
 #include "ns3/callback.h"
+#include "ns3/traced-callback.h"
 
 namespace ns3 {
     /**
@@ -32,6 +33,7 @@ namespace ns3 {
     public:
 
         static TypeId GetTypeId(void);
+        typedef void (*RemoteWriteCommittedCallback)(Ptr<const UbWqeSegment> segment);
 
         UbTransaction();
         UbTransaction(Ptr<Node> node);
@@ -145,6 +147,9 @@ namespace ns3 {
         // 每个jetty存储wqe的id顺序
         std::map<uint32_t, std::vector<uint32_t>> m_jettyOrderedWqe;
         std::map<std::pair<uint32_t, uint64_t>, uint32_t> m_memoryStore;
+        // One effective transaction-unit write, after transport reassembly/deduplication.
+        // The segment size is not the size of the entire originating WQE.
+        TracedCallback<Ptr<const UbWqeSegment>> m_remoteWriteCommitted;
     };
 
 } // namespace ns3

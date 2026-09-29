@@ -1,0 +1,3 @@
+candidate,dp,tp,ep,logical_rank_product,model_experts,experts_per_ep_rank,intended_question,astra_mapping,ns3_mapping,intra_device_or_node_bw,intra_supernode_bw,external_fabric_bw,evidence,boundary
+DP3-EP128,3,1,128,384,128,1,one expert owner per EP rank with three replicas,3x128 logical dimensions; placement policy still required,map 384 logical ranks to measured NPU/NIC/fabric tiers,TBD,TBD,TBD,design-hypothesis,384 ranks do not change the model from 128 experts to 384 experts
+DP3-TP2-EP64,3,2,64,384,128,2,trade TP traffic against a smaller EP group,3x2x64 logical dimensions; placement policy still required,separate TP-local and EP-cross-tier links after calibration,TBD,TBD,TBD,design-hypothesis,no official Huawei bandwidth or measured latency has been inserted

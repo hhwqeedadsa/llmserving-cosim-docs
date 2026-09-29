@@ -7,6 +7,7 @@
 - 通信需求如何展开、竞争并形成尾时延；
 - `observed/`、`truth/`、中间图与服务指标的可视化方法；
 - SimAI/LLMServingSim 的必要实验、代表性 GPU/NIC 时间切片，以及 SimCCL→ns-3 逐流证据链；
+- Qwen3 MoE 的 6 组输入/输出规模实验、Block 24 的 11 组网络竞争实验、trace/CCL 路径和 384 NPU 候选映射；
 - 96 项 AIDC 推理测量/优化/仿真工作审计、检索协议，以及三项可证伪传输长尾研究设计；
 - 三套系统之间的能力增量、减量、粒度、限制与规模上限；
 - 已验证结论与尚未校准部分的证据等级。
@@ -105,6 +106,7 @@ source/daily/           按 UTC 日期维护的每日研究记录
 source/_static/         样式、交互图脚本与示例数据快照
 source/_static/study/   研究报告 SVG 与精简证据快照
 research/               Markdown 调研报告与结构化文献账本
+research/round09/       2026-09-29 请求规模与网络竞争 CSV 证据包
 tools/                  从标准 run/实验目录生成可视化快照
 build/html/             构建后的网页
 ```

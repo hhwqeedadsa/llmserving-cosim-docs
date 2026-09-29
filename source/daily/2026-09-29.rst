@@ -1,0 +1,90 @@
+2026-09-29：模型、硬件、Trace 与网络竞争
+============================================
+
+当日问题
+--------
+
+今天集中回答五个问题：模型和输入规模如何改变服务时延；当前使用的 GPU Profile 和不同
+位置带宽到底是什么；Block 24 在网络竞争下怎样变化；LLMServingSim 的 trace/CCL 如何
+生成可供 ns-3 使用的流；384 NPU 如何建立不虚构带宽的可调映射。
+
+当日实验
+--------
+
+1. 完成 Qwen3-30B-A3B、TP=2、EP=2 的 6 组 LLMServingSim sweep：输入
+   128/1024/4096 × 输出 4/32，使用 RTXPRO6000 Profile 和 ASTRA analytical
+   16 GB/s、20 μs 网络。
+2. 完成 Block 24 的 11 组 ns-3-UB 控制实验：方向/流类型 4 组、竞争字节比 4 组、
+   目的端倾斜 3 组。11/11 case 成功，全部 task 均有完成和 packet/ACK 时间戳。
+3. 建立模型、硬件、trace lineage、CCL 代码路径、384 NPU 映射和证据总账；生成 7 张
+   标明数据来源、物理量、单位、证据等级和解释边界的图。
+
+关键结果
+--------
+
+* TTFT 为 30.887/60.947/202.702 ms（input 128/1024/4096）；同一输入的 4/32-token
+  输出具有相同 TTFT。4096 prompt 超过 2048-token budget，出现 98.214 ms queue delay。
+* 同向 EP 竞争使目标 FCT +96.65%，反向 EP 仅 +2.15%；方向比“是否存在等量流”更重要。
+* 25/50/75/100% 同向竞争 bytes 下，目标 FCT 为 28.922/34.609/40.291/45.683 μs，
+  在当前控制条件下近似线性。
+* 固定总 bytes 和 task 数时，balanced/Zipf/hot phase 为 23.991/44.586/88.935 μs；
+  目的端热点使局部 access link 和 queue 主导阶段尾部。
+* EP+KV case 的目标流 FCT 为 46.978 μs，而 phase 为 66.012 μs；目标流损伤与整个阶段
+  被大流拖尾必须分开报告。
+
+.. figure:: ../_static/round09/llmservingsim-input-output-sweep.svg
+   :alt: 2026年9月29日LLMServingSim输入输出规模结果
+   :align: center
+   :class: study-figure
+
+   **请求规模实验。** 输入长度主要影响 TTFT，输出长度主要通过 TPOT 累积请求完成时间。
+
+:数据来源: ``research/round09/llmservingsim_input_sweep.csv``。
+:物理量与单位: input/output tokens，TTFT/TPOT/request latency（ms）。
+:证据类型: ``simulator-output + profile-derived + analytical``。
+:解释边界: RTXPRO6000 Profile，不是 A100/NPU 实测。
+
+.. figure:: ../_static/round09/block24-direction-contention.svg
+   :alt: 2026年9月29日Block24方向和类型竞争实验
+   :align: center
+   :class: study-figure
+
+   **方向与类型实验。** 同向 EP 接近翻倍，反向 EP 接近 control；更大的 KV proxy
+   主要拉长 phase tail。
+
+:数据来源: ``research/round09/network_contention_summary.csv`` 的 ``a0--a3``。
+:物理量与单位: 目标 flow FCT / phase completion（μs）、最大 queue（KiB）。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: 100/400 Gbps 受控拓扑，不是生产硬件校准。
+
+Trace 与 CCL 结论
+---------------------
+
+LLMServingSim 直接提供 request/batch/block、profile operator time、collective type、logical
+bytes、dependency 和 involved dimension；没有真实 CCL peer/channel/chunk 或 packet queue。
+默认 ``allgather_reducescatter`` backend 将 MoE dispatch/combine 生成 AllGather/ReduceScatter，
+Chakra 编码为 ``COMM_COLL_NODE``，ASTRA 按 ``ring + localBWAware`` 执行。当前通过显式
+ring 投影生成 ``src/dst/bytes/dependency``，再进入 ns-3；最细可见 4 KiB packet、hop、
+queue 和 port。
+
+384 NPU 边界
+------------
+
+建立了 ``DP3 × EP128`` 和 ``DP3 × TP2 × EP64`` 两个候选逻辑映射。模型仍是 128
+experts；384 是 rank 数。设备/节点内、超节点内、超节点外带宽与时延全部保持 ``TBD``，
+等待官方规格或实测，当前不把 100/400 Gbps case 称为华为超节点仿真。
+
+当日交付
+--------
+
+* 专题页：:doc:`../model-hardware-trace-contention`
+* 可复核 Markdown 和 CSV：仓库 ``research/round09/``
+* 7 张图：仓库 ``source/_static/round09/``
+* 本地完整 11-case 原始实验包、逐 task、packet、queue 和 port trace
+
+未完成项
+--------
+
+本轮没有 A100 或 384 NPU 新实测，没有真实 NCCL/HCCL/DeepEP channel schedule，也没有
+生产 fabric telemetry。下一步在多节点环境复验相同消息规模、peer 数、方向和热点矩阵，
+形成 ``仿真 → 真机 → 校准 → 再预测`` 闭环。

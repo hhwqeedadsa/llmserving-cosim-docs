@@ -5,13 +5,12 @@ LLM Serving、ASTRA-sim 与 MoE-UB 联合仿真
 LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步把非均匀 MoE/P-D
 通信展开到 UB 协议网络，并增加端网观测和独立真值。
 
-.. admonition:: 最新研究进展 · 2026-09-26
+.. admonition:: 最新研究进展 · 2026-09-29
 
-   已将同一个 transformer block 24 的 AllReduce、AllGather、ReduceScatter 闭环到
-   ns-3 task、packet、switch hop、queue 和 port trace；并完成 96 项 AIDC 推理测量、
-   仿真与优化工作审计，形成三项可证伪研究主线。详见
-   :doc:`daily/2026-09-26`、:doc:`aidc-inference-tail-survey`；全部每日记录见
-   :doc:`daily/index`。
+   已完成 Qwen3 MoE 的 6 组输入/输出规模实验和 Block 24 的 11 组网络竞争实验，
+   区分目标流 FCT 与 phase tail，并建立模型、GPU/NPU、不同位置带宽、trace lineage、
+   CCL 路径和 384 NPU 候选映射。详见 :doc:`daily/2026-09-29`、
+   :doc:`model-hardware-trace-contention`；全部每日记录见 :doc:`daily/index`。
 
 .. raw:: html
 
@@ -63,6 +62,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
    :caption: 专题研究与可视化
 
    simai-llmservingsim-study
+   model-hardware-trace-contention
    aidc-inference-tail-survey
    visualization
 

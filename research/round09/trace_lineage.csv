@@ -1,0 +1,11 @@
+level,producer,record,identity_key,direct_fields,time_semantics,evidence,feeds_ns3,missing_at_this_level
+1,dataset + router,request,instance_id/request_id,"arrival,input_tokens,output_tokens,model",arrival and request completion,scenario-input/simulator-output,no,operator and peer traffic
+2,LLMServingSim scheduler,batch,instance_id/batch_id,"prefill chunk,decode tokens,request membership",scheduler iteration,trace-derived,indirect,rank-pair schedule
+3,trace_generator,transformer block,batch_id/block_id,operator order and dependencies,profile duration per operator,profile-derived/trace-derived,indirect,collective timestamps
+4,trace_generator + Chakra,operator/collective,ET node id,"comm_type,logical_bytes,involved_dim,dependency",compute duration; collective completion returned by ASTRA,trace-derived/analytical,collective semantic input,real NCCL/HCCL peer/channel/chunk
+5,ASTRA collective algorithm or explicit projection,collective phase,collective_id/phase_id,algorithm stage and dependency,algorithm schedule,algorithm-projected,yes,runtime-selected algorithm and channel
+6,collective-to-flow adapter,peer flow,flow_id,"src,dst,bytes,release,dependency",flow release/dependency,algorithm-projected,yes: traffic.csv,packet queue outcome
+7,OpenUSim/ns-3-UB,UB task/WQE,task_id/WQE id,"opcode,priority,phase,start,complete",discrete-event simulated time,ns3-simulated,native,real NIC firmware behavior
+8,OpenUSim/ns-3-UB,WQE segment,task_id/segment,segment bytes and issue order,simulated issue/complete,ns3-simulated,native,measured NIC descriptor timing
+9,OpenUSim/ns-3-UB,4-KiB packet,task_id/PSN,"packet bytes,send,ACK",packet timestamps,ns3-simulated,native,hardware packet capture
+10,OpenUSim/ns-3-UB,hop/queue/port,node_id/port_id/PSN,"ingress,egress,occupancy,throughput",per-hop/queue update time,ns3-simulated/trace-derived,output,real switch counters and clock alignment

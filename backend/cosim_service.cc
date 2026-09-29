@@ -309,7 +309,7 @@ int main(int argc, char** argv)
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
             std::vector<moe_ub::LayerPlan> plans;
-            std::set<std::string> graphs, waves, seen_operations;
+            std::set<std::string> graphs, waves, seen_operations, kv_graphs;
             std::set<uint64_t> transfer_ids, tasks, tags;
             std::map<size_t, uint64_t> completed_groups;
             ns3::EventId wakeup;
@@ -338,8 +338,21 @@ int main(int argc, char** argv)
                         {"graph_id", group.graph}});
                     if (group.completed.size() == group.ranks.size())
                     {
-                        Require(completed_groups.emplace(owner[rank], now).second, "Duplicate group completion");
-                        request_decision();
+                        // A KV graph reserves both EP groups until all members
+                        // finish. Never expose a receive-only group as available.
+                        size_t first = groups.size();
+                        bool all = true;
+                        for (size_t i = 0; i < groups.size(); ++i)
+                            if (groups[i].graph == group.graph)
+                            {
+                                first = std::min(first, i);
+                                all = all && groups[i].completed.size() == groups[i].ranks.size();
+                            }
+                        if (all)
+                        {
+                            Require(completed_groups.emplace(first, now).second, "Duplicate graph completion");
+                            request_decision();
+                        }
                     }
                 }));
                 systems.push_back(std::make_unique<AstraSim::Sys>(rank, (shared / "bootstrap/layer").string(),
@@ -391,17 +404,22 @@ int main(int argc, char** argv)
                 {
                     auto& group = groups[index];
                     Require(finished == now, "Deferred group completion changed absolute time");
-                    for (int rank : group.ranks)
-                        Require(systems[rank]->workload->can_load_graph() &&
-                                apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
-                                "Group completion before graph work retired");
+                    for (const auto& participant : groups)
+                        if (participant.graph == group.graph)
+                            for (int rank : participant.ranks)
+                                Require(systems[rank]->workload->can_load_graph() &&
+                                        apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                                        "Graph completion before participant work retired");
                     for (const auto& transfer : transfers)
                         if (transfer->Descriptor().graph_id == group.graph)
                             Require(!transfer->Completion().Active() && !transfer->ObservingTarget(),
                                     "Completed group still has an active transfer");
-                    completed.push_back({{"kind", "WAVE_DONE"}, {"graph_id", group.graph},
+                    const auto done_graph = group.graph;
+                    completed.push_back({{"kind", kv_graphs.count(done_graph) ? "KV_DONE" : "WAVE_DONE"}, {"graph_id", done_graph},
                         {"wave_id", group.wave}, {"finished_ns", finished}});
-                    group.graph.clear(); group.wave.clear(); group.completed.clear();
+                    for (auto& participant : groups)
+                        if (participant.graph == done_graph)
+                        { participant.graph.clear(); participant.wave.clear(); participant.completed.clear(); }
                 }
                 completed_groups.clear();
                 for (int rank = 0; rank < rank_count; ++rank)
@@ -469,12 +487,17 @@ int main(int argc, char** argv)
                     for (const auto& [key, value] : submission.items()) keys.insert(key);
                     Require(keys == std::set<std::string>{"graph_id", "wave_id", "rank_ids", "workload_prefix", "semantic_manifest"},
                             "Invalid submission fields");
-                    auto group_it = std::find_if(groups.begin(), groups.end(), [&](const auto& g) {
-                        return submission.at("rank_ids") == g.config.at("rank_ids");
-                    });
-                    Require(group_it != groups.end() && group_it->graph.empty(), "Unknown or busy EP group submission");
-                    auto& group = *group_it;
-                    for (const auto& rank : submission.at("rank_ids")) Require(rank.is_number_unsigned(), "Invalid rank type");
+                    const auto& selected_ranks = submission.at("rank_ids");
+                    Require(selected_ranks.is_array(), "Invalid submission rank array");
+                    for (const auto& rank : selected_ranks) Require(rank.is_number_unsigned(), "Invalid rank type");
+                    std::vector<size_t> selected;
+                    for (size_t i = 0; i < groups.size(); ++i)
+                        if (selected_ranks == groups[i].config.at("rank_ids")) selected.push_back(i);
+                    if (selected.empty() && groups.size() == 2 && selected_ranks == Json::array({0,1,2,3,4,5,6,7}))
+                        selected = {0,1};
+                    Require(!selected.empty(), "Unknown EP group submission");
+                    for (auto i : selected) Require(groups[i].graph.empty(), "Unknown or busy EP group submission");
+                    auto& group = groups[selected.front()];
                     const auto graph = submission.at("graph_id").get<std::string>();
                     const auto wave = submission.at("wave_id").get<std::string>();
                     Require(std::regex_match(graph, std::regex("[A-Za-z0-9_.-]+")) && graph != "_bootstrap" &&
@@ -501,12 +524,29 @@ int main(int argc, char** argv)
                             plan.data.at("input").at("ready_ns").is_number_unsigned() &&
                             plan.data.at("ready_ns") == now && plan.data.at("input").at("ready_ns") == now,
                             "Submission identity/time differs from plan");
-                    Require(plan.data.at("rank_ids") == submission.at("rank_ids") &&
+                    Require(plan.data.at("rank_ids") == selected_ranks, "Plan members differ from submission");
+                    const bool kv = plan.data.at("communication_template") == "kv_direct_v1";
+                    if (kv)
+                    {
+                        Require(selected.size() == 2, "KV handoff must reserve both complete EP groups");
+                        for (const auto* side : {"source_group", "destination_group"})
+                        {
+                            const auto& declared = plan.data.at("input").at(side);
+                            Require(std::any_of(groups.begin(), groups.end(), [&](const auto& g) {
+                                return declared.at("group_id") == g.config.at("group_id") &&
+                                    declared.at("rank_ids") == g.config.at("rank_ids");
+                            }), "KV group differs from deployment");
+                        }
+                    }
+                    else
+                    {
+                        Require(selected.size() == 1 &&
                             plan.data.at("input").at("group_id") == group.config.at("group_id") &&
                             plan.data.at("input").at("expert_placement") == group.config.at("expert_placement"),
                             "Plan group/placement differs from deployment");
-                    for (const auto& op : plan.data.at("operations"))
-                        Require(op.at("group_id") == group.config.at("group_id"), "Operation group differs from deployment");
+                        for (const auto& op : plan.data.at("operations"))
+                            Require(op.at("group_id") == group.config.at("group_id"), "Operation group differs from deployment");
+                    }
                     const auto slots = plan.data.at("send_slots_per_rank").get<unsigned>();
                     Require(send_slots == 0 || slots == send_slots, "Cannot change send slots during a run");
                     for (const auto& op : plan.data.at("operations"))
@@ -535,12 +575,14 @@ int main(int argc, char** argv)
                     for (auto& transfer : prepared)
                     { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
                     plans.push_back(std::move(plan));
-                    group.graph = graph; group.wave = wave; group.completed.clear();
+                    if (kv) kv_graphs.insert(graph);
+                    for (auto i : selected)
+                    { groups[i].graph = graph; groups[i].wave = wave; groups[i].completed.clear(); }
                     stage = "activating_graph:" + graph;
                     report["step_submissions"].push_back({{"graph_id", graph}, {"wave_id", wave}, {"time_ns", now}});
-                    for (int rank : group.ranks)
+                    for (int rank : selected_ranks)
                         report["graph_loads"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
-                    for (int rank : group.ranks)
+                    for (int rank : selected_ranks)
                     {
                         report["activation_order"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
 #ifdef COSIM_SERVICE_DEADLOCK_TEST
@@ -649,7 +691,9 @@ int main(int argc, char** argv)
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
-            Require(report["graph_completions"].size() == 4 * plans.size() && report["wqe_starts"].size() == transfers.size() &&
+            size_t expected_completions = 0;
+            for (const auto& plan : plans) expected_completions += plan.data.at("rank_ids").size();
+            Require(report["graph_completions"].size() == expected_completions && report["wqe_starts"].size() == transfers.size() &&
                     report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
                     report["csv_completed_tasks"] == 0, "Service completion invariant failed");
             for (const auto& peak : report["peak_wqes"])

@@ -23,8 +23,8 @@ def check_sparse_graph(plan, report, execution):
         destinations = {plan['input']['expert_placement'][e] for e in token['expert_ids']}
         for expert in token['expert_ids']: expert_counts[plan['input']['expert_placement'][expert]] += 1
         for dst in destinations - {token['src_rank']}:
-            expected['dispatch',token['src_rank'],dst] += 8192
-            expected['combine',dst,token['src_rank']] += 8192
+            expected['dispatch',token['src_rank'],dst] += plan['input']['hidden_dim']*plan['input']['dispatch_element_bytes']
+            expected['combine',dst,token['src_rank']] += plan['input']['hidden_dim']*plan['input']['combine_element_bytes']
     actual = Counter()
     for t in plan['transfers']: actual[t['kind'],t['src_rank'],t['dst_rank']] += t['payload_bytes']
     assert actual == expected
@@ -47,7 +47,7 @@ def check_sparse_graph(plan, report, execution):
     for graph in plan['rank_graphs']:
         rank, phase = graph['rank_id'], graph['phase_nodes']
         local = [t for t in tokens if t['src_rank']==rank]
-        assert next(b for b in plan['instance_batches'] if b['rank_id']==rank)['request_ids'] == [t['request_id'] for t in local]
+        assert next(b for b in plan['instance_batches'] if b['rank_id']==rank)['request_ids'] == list(dict.fromkeys(t['request_id'] for t in local))
         def compute(key, duration, start):
             if duration == 0:
                 assert phase[key] is None

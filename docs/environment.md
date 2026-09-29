@@ -1700,3 +1700,79 @@ delay-regression 初次在读取原始执行日志时报 map::at，进程退出�
 L/final_audit.py 恢复原生 UB launcher lock，核对 263 个此前产物的大小和 SHA-256；检查最终测试记录的实现源码哈希、输入、52 个 ASTRA 核心对象与本构建唯一一套 10 个 UB ns-3 库。最终依赖、差异和提交后的 Git 状态分别记录在 L/dependency-final.json、L/diff-check.json、L/git-final.json。未重跑原生 LLMServingSim 性能样例；旧产物未变不代表本轮做了性能验证。
 
 本步完成 T09 与当前范围的 T11/T14 扩展，M3 的动态服务功能验收结束。范围仍限合成单层、一或两个四成员组、已就绪 KV、每 rank 每轮最多一个真实 Token；P/D、真实数据、容量争用、丢包恢复和模型校准未验证。停止在 M3.4 completed，按持续授权只创建本地提交、不推送；M4.1 等待用户确认。
+
+
+## 2026-09-29：m4-1-pd-handoff
+
+用户要求继续 M4.1。上一项 M3.4 结果提交为 `2eec9a8`，本步任务说明提交为 `c7b274d`。开始时 main 干净、比 origin/main 多八个提交；13 项依赖检查通过。LLMServingSim `9aed949`、ASTRA `e2a14f5`、UB `1ba7222` 及全部递归依赖保持不变。本次只修改根仓库实现、测试、合成输入和文档，没有安装、下载、初始化、改全局配置或推送。
+
+日志根为 `runs/m4-1-pd-handoff-20260929T025813Z/`，以下记为 L。L/record.py 保存每条命令的 cwd、完整 argv、UTC 起止时间、退出码与 stdout/stderr；集成目录 commands.json 保存实际子进程参数和状态，失败用例保留输入和错误。命令工作目录均为 `/root/moe-ub-cosim`，继续使用现有 Linux、GCC/CMake/Ninja 和 `.venv/llmservingsim-native`。
+
+### 实现边界与独立构建
+
+新增根前端 PdService 与 KV 图生成/校验，服务入口按明确 schema 选择。合成小模型为 `cosim_tiny_moe`，一层、八专家 Top-2、hidden 256、intermediate 512、MHA 八头各 32 维、TP=PP=1。P 组 rank 0～3、D 组 rank 4～7；请求只有一个，四个 prompt Token、三个输出 Token，attention/KV 源和目标分别为 rank 0/4。预填充和解码路由均在输入中逐 Token 给出，不从解码数据推造预填充。
+
+原生 Scheduler 的 prefill 分支在批次完成时自动释放源缓存，并依赖原生流式 KV 接收语义。根联合前端改用它的 colocated 批次接口，保留真实调度、请求进度、内存模型和块池，在 P 完成后显式暂停该组。先预留 D 块，再提交覆盖两组的 KV 图；后端校验八份图及分片，全部装载后激活。全部成员、接收回调和源事务完成后才发送一个 KV_DONE、释放两组，前端再释放 P 块并让 D.add_decode 复用目标块。未修改上游，也没有调用原生解析 KV 流量生成器或重复计时。
+
+每 rank 总预算 4194304 字节，原生 MemoryModel 权重 2233856 字节，工作区 65536 字节、通信缓冲 8192 字节，剩余 KV 池为 115 个 BF16 块、每块 16384 字节（16 Token）。两侧各占一个块，有效数据只取四个已计算 Token：`1 × 2(K/V) × 4 × 8 × 32 × 2 = 4096` 字节，K、V 各按 768/768/512 分块。只改 KV 为 fp8 时，传输为 2048 字节、块为 8192 字节；计算、权重和 EP 激活 dtype 不变。发送端等待 transaction_done，接收端等待 data_ready，两者独立保留。源缓存释放采用较晚的交接完成边界。
+
+网络沿用八 NPU/两交换机结构，在新样例中显式增加 0/4 的路由和双向 TP（两侧 TPN=4），不修改旧样例。KV 经 `0 → 8 → 4`，本次没有 KV 与第三个独立组竞争。计算仍复用五阶段固定功能 profile，`next_layer` 是沿用的阶段名，不表示增加模型层数；本步没有逐算子或数值前向验证。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m4-pd-handoff -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m4-pd-handoff/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m4-pd-handoff --target \
+  cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence \
+  cosim-lifecycle-test cosim-layer-delay-test cosim-time-test cosim-write-test \
+  cosim-compute cosim-write cosim-logging-test --parallel 8
+```
+
+configure、build 均退出 0，共 521 个构建步骤。只有一个构建进程，最多八个并行作业；保留上游 binary_function 弃用警告和独立输出目录提示。原生输出未覆盖。
+
+### 验收与回归
+
+下表实际命令统一为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m4-pd-handoff --output-dir L/记录名`，十一项均退出 0，各 summary.json 为 passed。
+
+| 脚本名 | 记录名 | 实际检查 |
+|---|---|---|
+| check_pd_handoff.py | pd-final | 七次正常运行、十一项预期失败；单请求完整 P/KV/D 生命周期 |
+| check_service.py | service-final | 七次运行、九项协议拒绝及子进程异常；三轮仍为 21552/43145/64738 ns |
+| check_dynamic_service.py | dynamic-regression | 九次运行、十项拒绝；双组九轮仍为 129517 ns |
+| check_shared_bottleneck.py | shared-regression | 七次独立/重叠/延后及观测对照；重叠六轮仍为 264523 ns |
+| check_service_boundaries.py | boundaries-regression | 七次运行、七项故障；稀疏 45502 ns、不均匀请求 59263 ns |
+| check_layer.py | layer-regression | 三次运行、十三项拒绝；十四次写、114688 字节 |
+| check_sequence.py | sequence-regression | 五次运行、十二项拒绝；28 次写、229376 字节 |
+| check_variants.py | variants-regression | 九次运行、十一项拒绝；去重/分块/双槽为 12/42/42 次写 |
+| check_delay.py | delay-regression | 五次给定事件、两次真实 UB、十项拒绝；必要输入推迟仍传到计算 |
+| check_observation.py | observation-regression | 七种输入共 21 次运行、十项拒绝；来源开关不改变原生网络执行 |
+| check_compute.py | compute-regression | 四次计算、六项拒绝；绝对时间、资源释放与链接回归 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 在 python-unit 和 python-unit-final 均为 29 项通过，其中六项新增检查覆盖真实调度与容量生命周期、字节/块区别、坏分片、布局拒绝、容量超限及未来到达前不分配缓存。`build/m4-pd-handoff/output/cosim/ns3.44-cosim-time-test`、同一命令加 `--wrong-resolution`、`build/m4-pd-handoff/output/cosim/ns3.44-cosim-write-test` 均退出 0，分别记录在 time-unit、time-resolution、write-unit。logging-test 本次构建但没有单独重跑；原生性能样例未重跑。
+
+| P/D 输入 | P 完成（ns） | KV 最后数据就绪（ns） | KV 最后事务完成 / D 开始（ns） | 请求完成（ns） | KV 有效字节 |
+|---|---:|---:|---:|---:|---:|
+| on/off/absent/repeat，各一次 | 40159 | 40830 | 40876 | 69994 | 4096 |
+| 仅 rank 4 链路从 20 ns 改为 2020 ns | 40159 | 62830 | 64876 | 101792 | 4096 |
+| 仅 KV dtype 改为 fp8 | 40159 | 40564 | 40610 | 69728 | 2048 |
+| 仅到达时刻改为 9000 ns | 49159 | 49830 | 49876 | 78994 | 4096 |
+
+基线四份逻辑图为 P、KV、D、D，各包含 4/8/4/4 个成员图，共 20 次真实写、11264 业务字节；fp8 为 18 次写、9216 字节。预填充实际处理 Token 0～3，两个解码步处理 Token 4/5，生成三个输出 Token，TTFT 40159 ns、ITL 13835/16000 ns。最后一个输出无需再次作为输入计算，因此最终 computed=6、reached=7。每份传输逐项对应真实 target write、ASTRA issue/callback、一次 UB 任务及各一次收发回调。KV 空成员在交接开始完成，源图在最后事务完成、目标图在最后数据就绪完成，后端仍等两组全部结束。
+
+目标容量预留、交接提交和交接完成三个快照中，两端均保留 16384 字节 KV；D 尚无 running/inflight。源释放后 D 复用同一目标块，没有再次分配或报入解析传输流量。结束时请求、图、槽位、KV 块及网络数据全部清空，已发送包与到达包数一致。延迟用例 P 完成不变，KV 事务和 D 开始同时后移 24000 ns，ITL 随实际网络反馈变化。来源开/关、不挂观测及重复运行的协议、业务结果、图与原生网络日志一致；端侧记录没有隐藏身份，端口整包分类守恒。原服务收尾回归仍从服务完成 83685 ns 等待至网络排空 84207 ns。
+
+十一项故障包括四项前端拒绝（不兼容布局、策略、dtype、超过 D 组总容量）、六项后端拒绝（KV 大小、Q、重复范围、最后成员 rank 7 图损坏、缺少完整组、忙碌组交接）和一次真实后端信号终止。坏 KV 图均在交接激活前退出 1；最后成员损坏仍未激活任何 KV 成员。信号用例在真实后端产生 40876 ns 的 KV_DONE、尚未交给前端时终止后端并保留 -15，前端失败快照仍是 KV_INFLIGHT、两侧各占一个块，没有 service_result 成功记录；不声称信号退出执行了 C++ 正常清理。
+
+### 审计与停止位置
+
+初次 pd-check 的七次运行、十项拒绝均通过。随后增加模型副本、失败时的内存快照及信号退出检查，pd-final 完整通过，并重新执行服务回归和全部 Python 单元。其余变更后的相关回归均通过。本轮没有编译或仿真检查的非预期失败，故障矩阵中的非零退出均是明确构造的预期结果。
+
+`python3 L/final_audit.py`（记录 final-audit）退出 0：恢复原生 UB launcher lock，核对 288 个旧产物的大小和 SHA-256 全部不变；pd-final、service-final、shared-regression 的 93 项源码/输入哈希与当前文件一致，程序包含 52 个 ASTRA 核心对象，只加载本构建的 10 个 UB ns-3 库。核对源码和旧产物不代替目标硬件性能验证。提交前后的依赖、差异和 Git 状态分别保存到 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json 与 L/git-final.json。
+
+M4.1 完成 T10 的单次交接部分，并扩展当前范围的 T11/T12/T14。合成模型、路由及计算参数仍标记 unvalidated_reference；多请求交接排队、当前空闲容量争用、KV 与独立组竞争、真实模型数据、MLA/布局转换及校准尚未验证。停止在 M4.1 completed，按持续授权本地提交、不推送；M4.2 等待用户确认。

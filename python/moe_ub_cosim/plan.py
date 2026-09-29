@@ -27,8 +27,8 @@ def validate_config(c):
     require(set(c) == expected and c['schema_version'] == 'moe-ub-layer-fixture/1', 'Unsupported fixture schema/fields')
     for key in ('graph_id', 'wave_id', 'service_id', 'group_id'):
         require(isinstance(c[key], str) and bool(c[key]), f'Empty {key}')
-    require(c['role'] == 'D' and c['rank_ids'] == c['rank_to_ub_node'],
-            'Require identity UB mapping and role D')
+    require(c['role'] in ('P', 'D') and c['rank_ids'] == c['rank_to_ub_node'],
+            'Require identity UB mapping and role P/D')
     require(isinstance(c['rank_ids'], list) and len(c['rank_ids']) == 4, 'Require four group members')
     for field in ('rank_ids', 'rank_to_ub_node'):
         require(all(type(rank) is int and 0 <= rank < 8 for rank in c[field]), f'Invalid integer {field}')
@@ -53,9 +53,10 @@ def validate_config(c):
     require(set(profile) == {'attention_route_pack', 'expert_per_input', 'expert_local_merge',
                              'combine_unpack_merge', 'next_layer'}, 'Unsupported compute profile fields')
     for key, duration in profile.items():
-        integer(duration, key, 1, (MAX_TIME_NS - c['ready_ns']) // 16)
+        integer(duration, key, 1, (MAX_TIME_NS - c['ready_ns']) // (32 if c['role'] == 'P' else 16))
     tokens = c['tokens']
-    require(isinstance(tokens, list) and 1 <= len(tokens) <= 4, 'Require 1..4 explicit Token records')
+    require(isinstance(tokens, list) and 1 <= len(tokens) <= (16 if c['role'] == 'P' else 4),
+            'Token count outside bounded P/D graph')
     ranks, identities = [], set()
     for token in tokens:
         require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
@@ -63,7 +64,8 @@ def validate_config(c):
         require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
         integer(token['src_rank'], 'Token src_rank', 0, 7)
         integer(token['token_index'], 'Token token_index')
-        require(token['phase'] == 'decode' and token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
+        require(token['phase'] == ('prefill' if c['role'] == 'P' else 'decode') and
+                token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
         experts = token['expert_ids']
         require(isinstance(experts, list) and len(experts) == c['top_k'], 'Missing or wrong Top-K route')
         for expert in experts:
@@ -73,7 +75,7 @@ def validate_config(c):
         require(identity not in identities, 'Duplicate Token identity')
         identities.add(identity)
         ranks.append(token['src_rank'])
-    require(len(set(ranks)) == len(ranks) and set(ranks) <= set(c['rank_ids']),
+    require((c['role'] == 'P' or len(set(ranks)) == len(ranks)) and set(ranks) <= set(c['rank_ids']),
             'Require at most one local Token per group rank')
 
 
@@ -161,7 +163,7 @@ def build_plan(config, identities=None):
             expert=expert, local_merge=local_merge, finish=finish, next_layer=next_layer)))
     plan = dict(schema_version='moe-ub-execution-plan/1', graph_id=c['graph_id'], wave_id=c['wave_id'],
         rank_ids=c['rank_ids'], rank_to_ub_node=c['rank_to_ub_node'], ready_ns=c['ready_ns'],
-        instance_batches=[dict(rank_id=r, request_ids=[t['request_id'] for t in c['tokens'] if t['src_rank'] == r])
+        instance_batches=[dict(rank_id=r, request_ids=list(dict.fromkeys(t['request_id'] for t in c['tokens'] if t['src_rank'] == r)))
                           for r in c['rank_ids']],
         communication_template=c['template'], communication_profile_basis='reference_model',
         compute_source='synthetic_fixed_duration', route_source='explicit_synthetic_fixture',
@@ -175,6 +177,9 @@ def build_plan(config, identities=None):
 
 
 def validate_plan(plan):
+    if plan.get('communication_template') == 'kv_direct_v1':
+        from .kv_plan import validate_kv_plan
+        return validate_kv_plan(plan)
     require(plan['schema_version'] == 'moe-ub-execution-plan/1', 'Unsupported plan schema')
     ranks = plan['rank_ids']
     require(ranks == plan['input']['rank_ids'] and plan['rank_to_ub_node'] == ranks, 'Invalid rank mapping')

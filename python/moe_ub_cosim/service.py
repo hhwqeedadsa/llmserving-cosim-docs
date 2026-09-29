@@ -244,7 +244,12 @@ class Service:
 
 def run(args):
     config, layer = json.loads(args.input.read_text()), json.loads(args.layer.read_text())
-    service = Service(config, layer)
+    pd = config.get('schema_version') == 'moe-ub-pd-fixture/1'
+    if pd:
+        from .pd_service import PdService
+        service = PdService(config, layer)
+    else:
+        service = Service(config, layer)
     output = args.output_dir.resolve()
     output.mkdir(exist_ok=False)
     (output / 'graphs').mkdir()
@@ -252,12 +257,15 @@ def run(args):
     save(output / 'deployment.json', dict(schema_version='moe-ub-service-deployment/1', groups=service.groups))
     save(output / 'input.json', config)
     save(output / 'layer.json', layer)
+    if pd:
+        save(output / 'model.json', service.model)
     command = [str(args.backend.resolve()), config['run_id'], str(output), str(args.system.resolve()),
                str(args.network.resolve()), '-' if args.observation is None else str(args.observation.resolve()),
                str(output / 'execution'), str(args.max_simulation_ns)]
     manifest = dict(schema_version='moe-ub-service-run/1', mode='fixture', entry_mode='service',
         calibration_status='unvalidated_reference', routing_source='explicit_synthetic_per_token',
-        kv_source='given_ready_at_arrival', compute_scope='single_layer_functional_profile',
+        kv_source='synthetic_prefill_then_ub_handoff' if pd else 'given_ready_at_arrival',
+        compute_scope='single_layer_functional_profile',
         scheduler_source='third_party/LLMServingSim/serving/core/scheduler.py',
         scheduler_sha256=hashlib.sha256((LLM / 'serving/core/scheduler.py').read_bytes()).hexdigest(),
         command=command, cwd=str(ROOT), started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -293,14 +301,16 @@ def run(args):
             arrivals=service.arrivals, decision_state=service.decisions,
             pending=[len(service.pending[r]) for r in service.ranks],
             waiting=[len(s.waiting) for s in service.schedulers], running=[len(s.running) for s in service.schedulers],
-            inflight=[len(s.inflight) for s in service.schedulers], done=[len(s.done) for s in service.schedulers]))
+            inflight=[len(s.inflight) for s in service.schedulers], done=[len(s.done) for s in service.schedulers],
+            **(service.result_fields() if pd else {})))
     except Exception as error:
         manifest['error'] = str(error)
         save(output / 'failure.json', dict(normal_exit=False, error=str(error),
             now_ns=service.current_ns, decision_id=service.decision_id,
             active_graphs={g:w['graph_id'] for g,w in service.waves.items()},
             requests=service.snapshot(), pending={r:[q.id for q in service.pending[r]] for r in service.ranks},
-            future_request_ids=[r.id for r in service.future], backend_log='backend.stderr.log'))
+            future_request_ids=[r.id for r in service.future], backend_log='backend.stderr.log',
+            **(service.result_fields() if pd else {})))
         raise
     finally:
         if child is not None:

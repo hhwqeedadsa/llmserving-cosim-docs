@@ -16,6 +16,9 @@ struct LayerPlan
     std::map<std::pair<int, uint64_t>, nlohmann::json> nodes;
 };
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
+LayerPlan LoadKvPlan(const std::filesystem::path& directory, const nlohmann::json& data);
+void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& graph,
+                    const std::map<uint64_t, nlohmann::json>& transfers);
 // Consume the original ASTRA execution records after flushing its logger.
 // This is a bounded diagnostic export, not an inference from network packets.
 nlohmann::json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& log, bool graph_identity = false);

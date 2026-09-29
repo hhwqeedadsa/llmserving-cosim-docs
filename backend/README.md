@@ -272,3 +272,28 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 死锁检查在真实事件后于同一仿真时刻触发：没有未来唤醒、计算/适配器事件、待提交或回调事件、UB 待执行任务及网络数据，而图仍等待时，立即报告位置。仍有 UB 任务或网络状态但无法前进时，仿真时间上限报告失败和资源快照，不将其称为已证明死锁；没有固定轮询或固定通信时间。独立 cosim-service-deadlock-test 只用于遗漏一个成员激活的故障检查，正式程序没有这种配置开关。
 
 ASTRA 日志使用固定依赖的单线程异步写入。根仓库日志桥接层在导出前等待队列中的 flush 完成，专项测试阻塞写线程核对等待与完整记录；这种主机同步不推进仿真时钟。M1/M2 及 M3.1～M3.3 回归通过，子模块源码和版本不变。以上仍为未校准的单层合成验证，不包含 P/D、真实路由、容量争用或丢包恢复。
+
+## M4.1 单请求预填充与 KV 交接
+
+同一个服务入口新增 `moe-ub-pd-fixture/1` 输入，执行一个合成请求的预填充、一次 KV 交接和后续解码。P/D 各有四个 EP 成员、两组不重叠，交接时两组均可提交。模型明确为一层 `cosim_tiny_moe`、MHA、TP=PP=1；模型、独立 KV dtype、显式源/目的 rank、缓存布局和每 rank 内存预算见 [P/D 样例](../fixtures/m4_pd_handoff/README.md)。
+
+LLMServingSim 的原生 `pd_type="prefill"` 会把流式 KV 纳入原批次并自动释放源缓存，与本步独立交接图的边界不同。根前端使用其 `colocated` Scheduler 完成正常批次，保留真实 Request、MemoryModel 和 KV 池，在 P 完成后明确暂停 P 调度。目标容量先分配；后端原子校验八份 KV 图，再全部装载、登记和激活。只有所有成员、接收和源事务均完成，才经 `cosim/1` 的 `KV_DONE` 同时释放两组。前端据此释放 P 缓存、调用 D 的 `add_decode` 复用预留，并开始下一步。没有修改依赖或调用原生解析 KV 流量生成器。
+
+按 [M4.1 环境记录](../docs/environment.md#2026-09-29m4-1-pd-handoff) 配置并构建 `build/m4-pd-handoff` 后，可从根目录运行以下已验证入口，输出目录须不存在：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
+  --input fixtures/m4_pd_handoff/service.json --layer fixtures/m4_pd_handoff/layer.json \
+  --backend build/m4-pd-handoff/output/cosim/ns3.44-cosim-service \
+  --system fixtures/m1_compute/system.json --network fixtures/m4_pd_handoff/network \
+  --observation fixtures/m4_pd_handoff/observation.json --output-dir runs/my-pd-handoff
+
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_pd_handoff.py \
+  --build-dir build/m4-pd-handoff --output-dir runs/my-pd-check
+```
+
+`model.json` 保存本次模型副本，`service_result.json` 增加预填充/KV/解码轮次及权重、工作区、缓冲区、KV 块和队列的生命周期快照；失败时相同快照写入前端 `failure.json`。KV 的 ExecutionPlan 和 Chakra 图沿用 `graphs/gN/`，逐分片明确 K/V、Token/头范围、字节范围与运行内身份。新增 `KV_TRANSFER` 端侧记录仍不带内部操作、请求或传输身份；来源信息只在 truth 下保存。
+
+默认四 Token 的有效 BF16 KV 为 4096 字节，分六次真实 UB 写，源/目标各占一个 16384 字节容量块。P 在 40159 ns 完成，KV 最后数据于 40830 ns 就绪，最后事务于 40876 ns 完成，D 同时开始；请求在 69994 ns 结束。增大目标链路时延后，KV 事务及 D 开始均后移 24000 ns。七次正常运行、十一项预期失败、29 项 Python 单元及受影响的 M1～M3 回归通过。
+
+当前计算仍复用单层五阶段合成功能 profile；`next_layer` 字段是沿用的阶段名称，不代表本例增加了第二层，也不表示逐算子或数值前向已验证。模型、路由和时序均未校准。本步只完成 T10 的单次交接部分；多请求交接排队和 KV 与独立组竞争留在 M4.2，未提前实现。

@@ -87,12 +87,19 @@ void CheckGraph(const std::filesystem::path& path, const Json& graph,
     Require(!ReadMessage(input, extra), "extra graph node");
 }
 }
+void CheckPlanGraph(const std::filesystem::path& path, const Json& graph,
+                    const std::map<uint64_t, Json>& transfers)
+{
+    try { CheckGraph(path, graph, transfers); }
+    catch (const std::exception& error) { throw std::runtime_error(path.string() + ": " + error.what()); }
+}
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 {
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
     LayerPlan plan{Json::parse(stream), {}, {}};
     const auto& p = plan.data;
+    if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);
     Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
             p.at("rank_to_ub_node") == p.at("rank_ids") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
@@ -115,13 +122,17 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     for (int rank : members) { local_tokens[rank] = 0; expert_inputs[rank] = 0; }
     const auto& tokens = input.at("tokens");
     const auto& placement = input.at("expert_placement");
-    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= 4 &&
+    const bool prefill = input.at("role") == "P";
+    Require(prefill || input.at("role") == "D", "invalid execution role");
+    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (prefill ? 16 : 4) &&
             placement.is_array() && placement.size() == 8, "invalid Token/placement set");
     for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", 7)), "expert outside group");
     for (const auto& token : tokens)
     {
         const int rank = Number(token.at("src_rank"), "Token rank", 7);
-        Require(members.contains(rank) && ++local_tokens[rank] == 1, "repeated or nonmember local Token");
+        Require(members.contains(rank), "nonmember local Token");
+        Require(++local_tokens[rank] == 1 || prefill, "repeated local decode Token");
+        Require(token.at("phase") == (prefill ? "prefill" : "decode"), "Token phase mismatch");
         const auto& experts = token.at("expert_ids");
         Require(experts.is_array() && experts.size() == 2 && experts[0] != experts[1], "invalid Top-K route");
         for (const auto& expert : experts) ++expert_inputs[placement.at(Number(expert, "expert", 7)).get<int>()];
@@ -130,7 +141,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     for (int rank : members)
     {
         Json requests = Json::array();
-        for (const auto& token : tokens) if (token.at("src_rank") == rank) requests.push_back(token.at("request_id"));
+        for (const auto& token : tokens)
+            if (token.at("src_rank") == rank && std::find(requests.begin(), requests.end(), token.at("request_id")) == requests.end())
+                requests.push_back(token.at("request_id"));
         batches.push_back({{"rank_id", rank}, {"request_ids", requests}});
         counts.push_back(expert_inputs[rank]);
     }
@@ -203,7 +216,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         const auto element = Number(input.at(kind + "_element_bytes"), "element bytes", 16);
         const auto& sources = first.at("sources");
         Require(hidden > 0 && element > 0 && sources.is_array() && !sources.empty() &&
-                sources.size() <= 4 && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
+                sources.size() <= (prefill ? 16 : 4) && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
         const auto expected = hidden * element * sources.size();
         actual_pairs[{kind, first.at("src_rank").get<uint64_t>(), first.at("dst_rank").get<uint64_t>()}] = sources.size();
         uint64_t offset = 0, index = 0;
@@ -351,6 +364,18 @@ Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
     std::map<std::pair<int, uint64_t>, Json> nodes;
     for (const auto& event : execution) nodes[{event.at("rank_id"), event.at("node_id")}] = event;
     Json endpoints = Json::array();
+    if (plan.data.at("communication_template") == "kv_direct_v1")
+    {
+        for (const int rank : plan.data.at("rank_ids"))
+        {
+            uint64_t end = plan.data.at("ready_ns");
+            for (const auto& event : execution)
+                if (event.at("rank_id") == rank) end = std::max(end, event.at("end_ns").get<uint64_t>());
+            endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "KV_TRANSFER"},
+                {"start_local_ns", plan.data.at("ready_ns")}, {"end_local_ns", end}});
+        }
+        return endpoints;
+    }
     for (const auto& graph : plan.data.at("rank_graphs"))
     {
         int rank = graph.at("rank_id");
@@ -388,7 +413,7 @@ Json LayerOperationRegistry(const LayerPlan& plan)
         operation["endpoint_records"] = Json::array();
         for (const int rank : plan.data.at("rank_ids"))
             operation["endpoint_records"].push_back({{"rank_id", rank},
-                {"local_record_id", operation.at("kind") == "dispatch" ? 1 : 2}});
+                {"local_record_id", operation.at("kind") == "combine" ? 2 : 1}});
     }
     return result;
 }

@@ -2,6 +2,10 @@
 
 ## 当前状态
 
+截至 2026-09-29，M0、M1、M2 和 M3.1 的分步检查已完成，当前开发能力与限制见 README 和下文各阶段记录。`publish-maintenance-repos` 已将主仓库 `main` 及 ASTRA、UB、LLMServingSim 的 `cosim` 推送到 `baoy21` 的四个私有仓库，维护地址与固定指针已保存；独立目录已从远端取回全部 13 个固定依赖，并通过依赖检查与来源核验。此次发布不改变执行代码，也不代表新机器构建、全模型性能或校准已验证。M3.2 尚未开始。
+
+## M1.1 完成时的环境概览（历史）
+
 目标开发环境为原生 Linux，本机是 LXC 容器中的 Linux。2026-09-27 完成独立沙箱诊断、`repo-local-check` 和 M0；2026-09-28 完成 M1.1 的单节点计算与时间检查。13 个依赖仓库静态检查通过；M0 两项样例分别构建并重复运行通过，8 项时钟回归和 112 个请求内部一致性通过，同名 MoE 示例 CSV 的工作负载错配及原比较失败已记录。M1.1 复用现有依赖，由 ns-3 实际执行 ASTRA COMP 的完成事件。尚未实现 UB 业务收发和服务调度。
 
 | 项目 | 当前记录 |
@@ -1351,3 +1355,81 @@ env PYTHONPATH=. /root/moe-ub-cosim/.venv/llmservingsim-native/bin/python -m ser
 本步仍是 fixture/unvalidated_reference：单 EP 组、四 rank、给定就绪 KV、预先到达的短请求、每 rank 每轮一个 Token，参考单层计算和通信模板。请求剩余步数须相同，支持 2～32 步；本机功能输入为三步。未验证完整模型性能、真实路由、硬件校准、动态到达、多组竞争、零 Token 成员、P/D 或丢包重传。未运行全套 serving/validate.sh 和 CSV 场景；本轮没有修改依赖源码，两个相关原生场景和联合回归已通过。comm_tag 保持已验证的 1～499999999 范围。
 
 停止在 M3.1 completed，下一项 M3.2 等待用户确认。代码、说明和任务记录只在主仓库本地提交，不推送。提交后的依赖检查保存在 L/dependency-final.json，主仓库及相关子模块状态保存在 final-*.json。
+
+
+## 2026-09-28～29：维护仓库发布与远端源码获取
+
+任务 `publish-maintenance-repos`，用户明确确认创建必要维护仓库并按由内向外的顺序推送。开始时主仓库为 `4fdc41695d8686637492416a40cfd648880771e0`，工作区及所有子模块干净，13 项依赖检查通过。M3.1 验收保留在上节；本次不运行 M3.2。
+
+### 维护位置与修改范围
+
+| 仓库 | 发布分支 | 固定提交 | 可见性 |
+|---|---|---|---|
+| `baoy21/astra-sim` | `cosim` | `e2a14f55d9a45db8f3831bda7035af3e191e4bb7` | 新建 private 维护副本 |
+| `baoy21/ns-3-ub` | `cosim` | `1ba722217ef94716a07a56a2388be2c7dddd8e0b` | 既有 private，未改变 |
+| `baoy21/LLMServingSim` | `cosim` | `9aed949c8e66fd1424d48365af64bfc0fe0b2ed1` | 新建 private 维护副本 |
+| `baoy21/moe-ub-cosim` | `main` | `e3a2f2eea18f5515d434ea9cc7f2ffaba785095e`（地址与指针提交；其后仅整理本任务文档） | 既有 private，未改变 |
+
+ASTRA 与 LLMServingSim 建立私有维护副本，完整保留被推送分支的已有提交历史和许可证，不是 GitHub fork 网络中的公开 fork。两者本机 `upstream` 保留 `casys-kaist` 原来源，`origin` 指向 `baoy21` 维护仓库；`cosim` 跟踪 `origin/cosim`。已有 UB 使用原来的维护仓库，`main` 仍为原始基线 `581bf28`；未推送或移动其默认分支。新副本首个发布分支为 `cosim`，GitHub 默认分支也为 `cosim`。
+
+LLMServingSim 的新提交只将 `.gitmodules` 中 ASTRA URL 改为 `https://github.com/baoy21/astra-sim.git`，ASTRA gitlink 不变。主仓库修改 `.gitmodules` 的 LLMServingSim URL、该子模块 gitlink 与锁文件两项 `clone_url`、LLMServingSim `checkout_commit`/补丁列表；所有 `baseline_commit`、`upstream_url`、其他依赖提交和执行源码不变。锁文件准备期的环境与验证说明按开发管理约定保留，当前远端验证事实记录于本节。
+
+### 命令、日志与实际结果
+
+以下相对工作目录以 `/root/moe-ub-cosim` 为根，`L` 表示 `runs/publish-maintenance-20260928T163038Z/`。日志为本机忽略产物；`record.py` 保存 cwd、命令、开始/结束时间、退出码及原始 stdout/stderr。三个子模块和主仓库的首次推送输出由执行工具捕获后保存在对应 `push-*.json`；凭证未写入日志或 Git。
+
+| 工作目录 / 输入 / 实际命令 | 结果 | L 内记录 |
+|---|---|---|
+| 根目录，`bash scripts/check_deps.sh`（开始状态） | 退出 0，13 个依赖一致 | `initial-deps.json` |
+| 根目录，`python3 L/prepare_repositories.py`，认证账号 `baoy21`，两个仓库参数 `private=true, auto_init=false` | 退出 0，GitHub 两次创建均返回 HTTP 201，写权限与 private 核验通过 | `prepare-repositories.json`、`maintenance-repository-metadata.json` |
+| ASTRA / LLM 目录，`git switch -c cosim <原固定 SHA>`、`git remote rename origin upstream`、`git remote add origin <维护 URL>` | 均退出 0 | `astra-cosim.json`、`astra-upstream.json`、`astra-origin.json` 及对应 `llm-*.json` |
+| 根目录，`git submodule sync --recursive` | 退出 0，本机 URL 配置与文件同步 | `sync-remotes.json` |
+| ASTRA、UB、LLM 依次执行 `git push -u origin cosim`，然后根目录 `git push origin main` | 均退出 0；三个新建 cosim 分支，根 main 从 `925f54a` 快进到 `e3a2f2e` | `push-astra.json`、`push-ub.json`、`push-llm.json`、`push-root.json` |
+| 各依赖目录，`git ls-remote origin refs/heads/cosim` | 均退出 0，远端 SHA 与上表一致 | `remote-astra.json`、`remote-ub.json`、`remote-llm.json` |
+| 根目录，地址提交后的 `bash scripts/check_deps.sh` | 退出 0，13 个依赖一致 | `local-deps.json` |
+| 根目录，`python3 L/audit_publication.py` | 退出 0，发布修改范围、原始基线及执行源码保留核验通过 | `scope-audit.json` |
+
+独立验证命令为：
+
+```bash
+git clone --recurse-submodules https://github.com/baoy21/moe-ub-cosim.git \
+  runs/publish-maintenance-20260928T163038Z/fresh-clone
+```
+
+该命令直接从声明的 HTTPS 远端取回主仓库与递归依赖，不使用本机对象库或 `--reference`，也不使用 `--remote`。下载原生 ns-3 后端完整历史耗时较长，本机已有包及索引约 173 MiB；为缩短获取时间，向本任务克隆进程发送 SIGINT，保留 `fresh-clone.json`（子进程退出 -2，记录工具退出 130）及原始输出。此时尚未完成所有固定版本检出，不把首次克隆记为通过。
+
+随后在根目录执行以下命令，继续限制尚未完成依赖的历史深度；其完整源码和目标 SHA 仍由同一 gitlink 指定：
+
+```bash
+git -C runs/publish-maintenance-20260928T163038Z/fresh-clone \
+  submodule update --init --recursive --depth 1
+```
+
+首次继续初始化返回 128，诊断为原生 ns-3 未完成下载留下的仓库缺少当前 revision，见 `fresh-submodules-limited.json`。确认没有本任务克隆进程继续写入后，将该验证目录内的 ns-3 工作树及 Git 元数据分别移至 `L/interrupted-ns3-worktree/` 和 `L/interrupted-ns3-git/` 保留；没有删除其他目录或改变地址。相同初始化命令的残留日志显示已完成原生 ns-3 与 UB 检出，并开始 GitCode 工具下载；其 stdout/stderr 保留为 `fresh-submodules-retry.*.log`，但未生成结束状态 JSON，因此不推定退出码。2026-09-29 恢复时确认已无相关下载进程，事实保存在 `resume-state-20260929.json`。
+
+### 2026-09-29 恢复与最终检查
+
+恢复后的首次依赖检查返回 1（`resumed-clone-deps.json`）：Chakra、内存 analytical、网络 analytical 三个仓库已有正确 HEAD，但中断发生在工作树展开之前，索引为空、状态仅为删除；网络 analytical 的两个更深层依赖尚未初始化，GitCode 仓库尚无 HEAD。这些都位于本任务的独立验证目录。
+
+先核对三个仓库的固定 SHA、空索引以及工作目录中只有 `.git`，再执行 `git restore --source=HEAD --staged --worktree -- .` 展开已从远端下载的对象，没有覆盖开发目录或其他人的修改。之后补齐两个深层依赖，从 GitCode 原地址直接获取并检出锁定工具提交。没有使用替代源或本机 Git 对象。
+
+| 工作目录 / 实际命令 | 结果 | L 内记录 |
+|---|---|---|
+| 根目录，`python3 L/restore_clone_checkouts.py`，内部对三个已核对的空工作树执行上述 restore | 退出 0，三个固定版本完整展开 | `restore-clone-checkouts.json` |
+| 验证目录的网络 analytical 中，`timeout 300 git -c http.lowSpeedLimit=1 -c http.lowSpeedTime=30 submodule update --init --recursive --depth 1` | 退出 0，googletest 与 yaml-cpp 按父 gitlink 检出 | `analytical-deps.json` |
+| 验证目录的 GitCode 工具中，`timeout 300 git -c http.lowSpeedLimit=1 -c http.lowSpeedTime=30 fetch --depth 1 origin 2afc7202f88c132b63c38e8c7dcfc08505b13bb2`，然后 `git checkout --detach 2afc7202f88c132b63c38e8c7dcfc08505b13bb2` | 均退出 0 | `gitcode-fixed-fetch.json`、`gitcode-fixed-checkout.json` |
+| 验证目录根，`git submodule update --init --recursive --depth 1` | 退出 0，所有递归依赖完成 | `fresh-submodules-final.json` |
+| 验证目录根，`bash scripts/check_deps.sh` | 退出 0，全部 13 项通过 | `fresh-deps.json` |
+| 根目录，`python3 L/audit_publication.py L/fresh-clone` | 退出 0，验证目录及 13 个依赖均干净，无对象库 alternates；所有远端为 HTTPS，基线和执行源码保留 | `fresh-scope-audit.json` |
+| 开发目录根，`bash scripts/check_deps.sh` | 退出 0，全部 13 项通过；仅提示待提交的三份发布文档 | `resumed-local-deps.json` |
+| 四个开发仓库，`git ls-remote origin refs/heads/main` 或 `refs/heads/cosim` | 最终均退出 0，四个远端 SHA 与上表一致 | `resumed-remote-root.json`、`resumed-remote-astra.json`、`resumed-remote-ub-retry.json`、`resumed-remote-llm-retry.json` |
+
+远端复查时 UB 曾返回认证失败（128），同地址重试通过；LLM 首次复查未及时返回，结束该只读进程（-15，记录工具 143）后，增加命令超时重试通过。原输出分别保留于 `resumed-remote-ub.json` 和 `resumed-remote-llm.json`，未修改全局认证或网络配置。
+
+最终结论是从声明远端获得了完整固定源码并通过 13 项递归检查；初次完整历史克隆被中断，其后对部分辅助仓库采用有限历史并恢复检出。没有把一次未完成的 clone 命令报告为成功。发布验收已通过，收尾仅提交、推送本任务三份文档并核对最终远端状态。
+
+### 限制与停止位置
+
+最初沙箱内的远端检查无法连接已配置代理，Git 暂存/提交因 `.git/index.lock` 只读失败；使用授权的沙箱外执行后通过。没有因此改写全局网络或认证配置。四个仓库保持 private，新克隆需要对四个仓库均有读取权限；公共上游及 GitCode 还需各自网络可达。
+
+本次只验证源码发布和固定依赖获取，不重复构建或仿真，不包含本机 `build/`、`runs/`、虚拟环境或外部模型数据。M3.1 的功能验证仍以上节记录为准。本次发布验收完成，停止在 `publish-maintenance-repos`；下一项 M3.2 仍由用户确认；以后开发任务默认仅自动本地提交，推送继续单独授权。

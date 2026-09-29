@@ -28,7 +28,7 @@ M3.1 已完成：联合服务入口调用 LLMServingSim 的真实调度对象，
 
 ## 在 Linux 上开始
 
-使用具有本私有仓库访问权限的 Git 凭证。以下命令用于新克隆；当前开发机已完成后两项初始化与检查，这两项命令本身不执行构建或仿真。
+使用具有主仓库以及 `baoy21/LLMServingSim`、`baoy21/astra-sim`、`baoy21/ns-3-ub` 四个私有仓库访问权限的 Git 凭证。以下命令用于新克隆；初始化与依赖检查本身不执行构建或仿真。
 
 ```bash
 git clone https://github.com/baoy21/moe-ub-cosim.git
@@ -38,13 +38,13 @@ git submodule update --init --recursive
 bash scripts/check_deps.sh
 ```
 
-ASTRA 与 LLMServingSim 的项目补丁目前仅本地保存，尚未发布到记录的维护远端；新克隆能否取回这些补丁仍未验证，不能把本机通过等同于远端已可复现。
+截至 M3.1 的提交已按 ASTRA、UB、LLMServingSim、主仓库的顺序推送。三个依赖的项目补丁保存在各自维护仓库的 `cosim` 分支，主仓库保存在 `main`；ASTRA 和 LLMServingSim 的本机 `upstream` 保留原始来源。`.gitmodules` 和 `deps.lock.json` 已记录维护地址，实际版本仍由父仓库 gitlink 固定，未升级基线。2026-09-29 已在独立目录从远端取回全部 13 个固定依赖，依赖检查通过，且未借用本机对象库。部分辅助依赖采用有限历史下载，中断恢复和实际检查见 [环境记录](docs/environment.md)。
 
 初始化使用父仓库记录的提交，不使用 `--remote`。ns-3-UB 的 `scratch/ns-3-ub-tools` 来自 GitCode；若拉取失败，保留具体报错，不自行换源或升级版本。原生基线可能保留 ASTRA 自带的其他网络后端源码；后续联合程序仍只能链接 ns-3-UB 一套 ns-3。
 
 `check_deps.sh` 只读取 Git 状态和锁文件，不联网、不切换版本、不编译。返回 0 仅表示它检查的版本和工作区状态一致，不表示依赖可编译或仿真正确。脚本状态及检查范围见 [开发管理说明](docs/development.md)。
 
-从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。M3.1 的单 EP 组服务检查已通过，当前任务文件保留验收结果；下一项 M3.2 的动态到达与忙闲组调度仍待用户确认。每个任务完成且验证通过后，代码助手整理记录并本地提交，不推送；下一项任务仍由用户确认。
+从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。M3.1 的单 EP 组服务检查已通过，验收记录见环境记录和 Git 历史；当前任务记录维护仓库发布的完成结果，M3.2 的动态到达与忙闲组调度仍待用户确认。以后每个开发任务完成且验证通过后，代码助手整理记录并本地提交；推送仍需单独授权，下一项任务仍由用户确认。
 
 ## 目录建立顺序
 

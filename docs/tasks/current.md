@@ -2,7 +2,7 @@
 
 任务编号 `publish-maintenance-repos`
 
-状态 `in_progress`
+状态 `completed`
 
 范围：按用户 2026-09-28 对发布方案的确认，将截至 M3.1 的主仓库和子模块提交保存到 GitHub。M3.1 已在 `4fdc416` 完成本地提交，验收记录保留在 Git 历史和 `docs/environment.md`；本任务不开始 M3.2。
 
@@ -26,4 +26,10 @@
 
 ## 实际结果
 
-开始时主仓库和所有子模块工作区干净，13 项依赖检查通过。主仓库 `main` 为 `4fdc41695d8686637492416a40cfd648880771e0`，远端 `main` 为 `925f54a261067369638b07535f4f1fe4ad0d4cd1`。GitHub 已确认 `baoy21` 对主仓库和 UB 有写权限，两者均为 private。维护副本创建、推送和独立克隆尚未完成。
+2026-09-29 完成发布验收。新建 `baoy21/astra-sim` 和 `baoy21/LLMServingSim` 两个私有维护副本，保留本机原上游为 `upstream`。ASTRA、UB、LLMServingSim 依次推送至 `cosim`，主仓库推送至 `main`；四个仓库均为 private。各远端 SHA 已核对。
+
+ASTRA 保持 `e2a14f5`、UB 保持 `1ba7222`；LLMServingSim 新增地址配置提交 `9aed949`，仅修改 ASTRA URL。主仓库地址、锁文件和 gitlink 提交为 `e3a2f2e`，其后仅整理本任务文档。原始基线、其他依赖提交、执行源码和既有功能验收不变。
+
+独立目录从记录的 HTTPS 远端取回全部 13 个固定依赖，本地与验证目录的 `check_deps.sh` 均返回 0；验证目录及子模块干净，无本机对象库 alternates。初次克隆下载完整历史时被主动中断，其后使用有限历史补齐辅助依赖；用户中断后残留的空工作树及 GitCode 未完成检出已恢复。中断、失败和复验原始输出均保留，详见 `docs/environment.md` 及 `runs/publish-maintenance-20260928T163038Z/`。
+
+本次只检查源码发布与获取，未在新环境重做编译或仿真，不代表模型校准或新功能验收。README 已更新私有仓库访问要求与当前获取结果。最终整理提交并推送本任务文档，停止在本任务；M3.2 尚未开始，仍由用户确认。后续开发继续默认仅自动本地提交，不自动推送。

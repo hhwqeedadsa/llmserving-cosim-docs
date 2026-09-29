@@ -6,7 +6,7 @@ import io
 import json
 from pathlib import Path
 
-from .plan import integer, require
+from .plan import integer, require, validate_config
 from .service import LLM, ROOT, validate_service
 
 MODEL = 'mistralai/Mixtral-8x7B-v0.1'
@@ -82,14 +82,15 @@ def audit_model(ref, layer, memory, dtype):
         full_model_execution_validated=False, target_deployment_validated=False)
 
 
-def import_routes(spec, requests, layer):
+def import_routes(spec, requests, layer, layer_ids=None):
     require(set(spec) == {'file', 'kind', 'model', 'index_convention', 'description'}, 'Invalid route source fields')
     require(spec['kind'] in ('synthetic', 'measured') and spec['model'] == MODEL and
             spec['index_convention'] == 'absolute_input_position' and
             isinstance(spec['description'], str) and spec['description'].strip(), 'Unsupported route source')
     _, content = read_verified(spec['file'])
-    expected = {(str(r['request_id']), r['generated_tokens']-1+i, layer['layer_id'])
-                for r in requests for i in range(r['decode_steps'])}
+    selected = [layer['layer_id']] if layer_ids is None else layer_ids
+    expected = {(str(r['request_id']), r['generated_tokens']-1+i, layer_id)
+                for r in requests for i in range(r['decode_steps']) for layer_id in selected}
     by_id = {str(r['request_id']): r for r in requests}
     rows, indices = {}, set()
     for line_no, line in enumerate(content.decode('utf-8').splitlines(), 1):
@@ -159,8 +160,10 @@ def import_compute(spec, dtype, layer):
 
 
 def load_inputs(config, layer):
-    require(set(config) == {'schema_version','run_id','model','model_file','dtype','memory','requests','routes','compute'} and
-            config['schema_version'] == 'moe-ub-data-service/1' and config['model'] == MODEL,
+    multi = config.get('schema_version') == 'moe-ub-multilayer-service/1'
+    fields = {'schema_version','run_id','model','model_file','dtype','memory','requests','routes','compute'}
+    require(set(config) == fields | ({'layer_profiles'} if multi else set()) and
+            config['schema_version'] in ('moe-ub-data-service/1','moe-ub-multilayer-service/1') and config['model'] == MODEL,
             'Unsupported data service config')
     requests = config['requests']
     require(isinstance(requests, list) and 1 <= len(requests) <= 64, 'Require 1..64 data requests')
@@ -175,8 +178,34 @@ def load_inputs(config, layer):
                 'Invalid request identity/rank/context/range')
         ids.add(r['request_id'])
     audit = audit_model(config['model_file'], layer, config['memory'], config['dtype'])
-    routes = import_routes(config['routes'], requests, layer)
-    profile, compute = import_compute(config['compute'], config['dtype'], layer)
+    selected = [layer['layer_id']]
+    if multi:
+        rows = config['layer_profiles']
+        require(isinstance(rows,list) and 2 <= len(rows) <= 32 and
+                all(set(r)=={'layer_id','compute_profile_ns'} for r in rows), 'Invalid layer profiles')
+        selected = [r['layer_id'] for r in rows]
+        require(all(type(i) is int and 0<=i<32 for i in selected) and selected[0]==layer['layer_id'] and
+                selected==list(range(selected[0],selected[0]+len(rows))), 'Invalid consecutive layer order')
+        require(config['compute']=={'kind':'fixed_reference'}, 'Multilayer requires explicit per-layer reference compute')
+        profile = {}
+        for row in rows:
+            candidate = deepcopy(layer)
+            candidate.update(layer_id=row['layer_id'],compute_profile_ns=row['compute_profile_ns'])
+            for token in candidate['tokens']:token['layer_id']=row['layer_id']
+            validate_config(candidate)
+            require(row['compute_profile_ns']['next_layer']==0, 'Multilayer must omit synthetic next_layer work')
+            profile[row['layer_id']] = deepcopy(row['compute_profile_ns'])
+        audit.update(execution_scope='consecutive_moe_layer_segment',executed_layer_ids=selected,
+            unexecuted_layer_ids=[i for i in range(32) if i not in selected],
+            communication_buffer_minimum_bytes=audit['communication_buffer_minimum_bytes']*len(rows))
+        require(config['memory']['communication_buffer_bytes']>=audit['communication_buffer_minimum_bytes'],
+                'Communication buffer below multilayer graph bound')
+        compute = dict(kind='per_layer_fixed_reference',layer_profiles=deepcopy(rows),
+            scope='consecutive_moe_layer_segment',next_layer_policy='omitted_actual_next_layer_dependency',
+            calibration_status='unvalidated_reference',target_profile_available=False)
+    else:
+        profile, compute = import_compute(config['compute'], config['dtype'], layer)
+    routes = import_routes(config['routes'], requests, layer, selected)
     legacy = dict(schema_version='moe-ub-service-fixture/1', run_id=config['run_id'], mode='fixture',
         execution=dict(entry_mode='service'), model=MODEL,
         npu_memory_gib=(config['memory']['device_bytes']+2**30-1)//2**30, requests=[])

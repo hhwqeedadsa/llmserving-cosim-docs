@@ -1985,3 +1985,78 @@ research-integration-corrected 在 PD 用例失败：误用了不含 0→4 TP �
 final-audit 恢复本轮 CMake 覆盖的原生 launcher lock，329 个旧产物大小与 SHA-256 不变，275 项最终源码/输入摘要匹配通过记录。核对全部 52 个 ASTRA 核心对象、实际装载的唯一 10 个 ns-3 库均来自新 UB 构建；清单三个计数位置和输入摘要准确。依赖检查仍为 13 项，提交前后的差异与 Git 状态保存在 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json、L/git-final.json。没有重跑原生性能样例，旧产物未变与功能测试不能替代模型校准。
 
 M5.1 当前范围验收完成，按持续授权本地提交、不推送，停止在 M5.1 completed。M5.2 尚未开始，仍需用户确认。真实专家路由、目标 NPU profile、完整多层执行和目标通信校准尚未验证；所有用途均保持 unvalidated_reference，未实现关联算法。
+
+
+## 2026-09-29：m5-2-multilayer-continuous
+
+用户确认开始 M5.2。M5.1 完成提交 5751cce，M5.2 任务说明提交 a779d3b；开始时主仓库与相关子模块工作区干净。依赖仍为 LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222，13 个固定递归提交不变。本轮只改根图生成、计划校验、数据服务、端侧事件导出、研究清单和对应测试/文档；未修改依赖、锁文件或规范，没有安装、下载数据或修改全局配置。
+
+日志根 `runs/m5-2-multilayer-20260929T063002Z/` 以下记为 L，cwd 均为 `/root/moe-ub-cosim`。L/record.py 保存实际 argv、UTC 起止、退出码与 stdout/stderr，各集成目录 commands.json 保存子命令，失败后端重放另存 stdin.jsonl。新建 build/m5-multilayer，最多八个构建作业；旧构建产物不覆盖。configure 与 build-corrected 实际命令均退出 0：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m5-multilayer -G Ninja -DCMAKE_BUILD_TYPE=release -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m5-multilayer/output -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m5-multilayer --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test cosim-layer-delay-test cosim-time-test cosim-write-test cosim-observation-test cosim-compute cosim-write --parallel 8
+```
+
+首次 build 在本轮新增 C++ 代码中失败：set<string>::insert 接收 JSON 值时重载歧义。明确调用 get<string>() 后 build-corrected 剩余 503 步完成；原失败日志保留，未改变验证条件或依赖。锁定 Chakra 的 binary_function 弃用等警告仍保留。最终后端 SHA-256 为 0f4fadf51793290236d25899c6a7e8e5221ffa31223975be79929d9a2e3767c2。
+
+### 实现范围与模型依据
+
+原 DataService 每次 Token 只生成一层，不能用它的三步单层结果代替多层。新增 moe-ub-multilayer-service/1，在已有模型/容量核对、请求队列和真实 Scheduler 上导入连续层段。一个解码步生成一份多层计划和每 rank 一张 Chakra 图；全部层完成才调用一次 add_done，不在层间重新组批、握手或初始化网络。
+
+层间只连接本 rank 前层末节点到下一层根节点，空层传递之前的末节点集合。旧 next_layer 参考耗时在多层配置中强制为零并省略节点，由实际下一层计算衔接；其他四个阶段仍为显式正参考值，不计固定网络等待。单层校验允许 next_layer=0 表示省略，原单层输入与原时刻保持不变。
+
+Python 合并局部节点号、分配运行内唯一传输/任务/tag，保存逐层计划、输入和来源。新增 C++ 多层校验逐层复用原单层语义检查，再独立重建全部映射和本地边界，比较合并图及所有 Chakra 文件，校验通过后才原子装载和激活。分层计划只用于审计，实际执行的是合并图。坏层序、跨层重号或末 rank 坏图不能让前面 rank 提前执行。
+
+端侧记录按每 rank/每层的实际 ASTRA phase_nodes 与层入口前驱产生，不从包倒推；跨层、跨图记录号独立绑定，正式观测继续使用 M5.1 的本地编号和本地时钟。研究清单明确 executed_layer_ids、latency_scope 与 full_model_execution_validated，全局层/图/源记录不进入 observed。
+
+主样例使用已核对的实际 Mixtral 结构、一个四成员 EP 组、第 6/7/8 层及四个给定 KV 请求，每请求三个解码步骤。四个请求规范化解码起点分别为 1、2、0、1；routes.jsonl 的 36 条记录各自包含请求、绝对 Token 位置、层和 source_index 4000～4035。导入保留文件摘要、源行号及原位置，按本次实际批次逐层消费且不补缺项。业务来源下标以所属层的 route_records 为范围，另有 layer_id 区分；服务历史的 tokens 保留调度器绝对位置，层计划 tokens 使用解码索引。
+
+没有取得新的真实专家轨迹，本样例手工声明远端参考、同目的 rank 去重、本地专家三张表，并在三步按层轮换 A-B-C / B-C-A / C-A-B。运行时分别读每层记录，不复制首层。各层采用明确的固定参考计算，未外推历史 H100 profile，未加载模型权重或执行数值前向。容量沿用完整 32 层权重/KV 审计；通信缓冲按层数保守扩大下界，实际原生池和预算仍逐次核对。
+
+### 实测与检查命令
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.research run --config fixtures/m5_multilayer/run.json --backend build/m5-multilayer/output/cosim/ns3.44-cosim-service --output-dir L/research-smoke` 退出 0，实际 193789 ns 完成。此前 python-smoke 只检查前端首步生成和十二条路由消费，不作为真实仿真结果。新增完整命令与字段见 [M5.2 样例](../fixtures/m5_multilayer/README.md)。
+
+以下集成检查统一使用 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m5-multilayer --output-dir L/记录名`，全部实际退出 0：
+
+| 脚本 | 记录名 | 范围 |
+|---|---|---|
+| check_multilayer.py | multilayer-integration | 八次研究运行、无观测对照、十项拒绝，逐层依赖/来源/实际完成/端侧与端口 |
+| check_layer.py | layer-regression | 原单层十四次写、专家输入及原子图校验 |
+| check_sequence.py | sequence-regression | 两步图生命周期、旧回调、来源无扰动 |
+| check_variants.py | variants-regression | 去重、分块、发送槽 |
+| check_delay.py | delay-regression | 给定事件与真实 UB 依赖反馈 |
+| check_service.py | service-regression | 调度/协议/延迟反馈，三步 64738 ns |
+| check_dynamic_service.py | dynamic-regression | 动态到达和独立组，129517 ns |
+| check_shared_bottleneck.py | shared-regression | 共享网络七个对照，重叠 264523 ns |
+| check_service_boundaries.py | boundaries-regression | 稀疏/不均匀/纯本地/空输入与故障 |
+| check_pd_handoff.py | pd-regression | P/D 单次交接，原就绪/完成/解码时刻保持一致 |
+| check_pd_queue.py | queue-regression | FIFO、容量等待及第三组竞争 |
+| check_data_inputs.py | data-regression | M4.3 单层三阶段，64738/54900/303633 ns |
+| check_research_export.py | observation-regression | M5.1 九个正常研究运行、无观测对照和十五项拒绝 |
+| check_observation.py | m1-observation-regression | 原单端口 21 次运行、十项拒绝，实际整包计数 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 在 python-unit 中 51 项通过；`-p multilayer_test.py` 在 multilayer-unit 中新增六项通过。包含局部跨层依赖、空 rank/空层连续性、逐层路由完整性、错误 profile、重复身份与编号耗尽时状态不变。
+
+| 多层用例 | 层数 / 组批轮数 | 源路由数 | 写次数 | 唯一业务字节 | 完成（ns） |
+|---|---:|---:|---:|---:|---:|
+| on / repeat / off / zero | 3 / 3 | 36 | 78 | 638976 | 193789 |
+| 仅 rank 1 接入传播时延改为 2020 ns | 3 / 3 | 36 | 78 | 638976 | 256536 |
+| 两请求，第二请求 1000 ns 到达 | 3 / 4 | 18 | 42 | 344064 | 216871 |
+| 分块上限 3072 字节 | 3 / 3 | 36 | 234 | 638976 | 199717 |
+| 第 0～31 层、每请求两步 | 32 / 2 | 256 | 558 | 4571136 | 1367802 |
+
+主例各层对应的 14/12/0 次业务写随步轮换，每步交付 212992 字节；全部 Token/层/专家与源记录逐条核对。本地专家计入计算而不产生写，分块仅改变写次数和网络过程，不复制专家计算。全部请求恰好消费三步，完成时刻为 64310、128538、193789 ns；相应间隔为 64310、64228、65251 ns。主例 18 个内部操作对应 72 条端侧记录、2004 个窗口，其中 1961 个为零。
+
+五处实测层间重叠证明没有新增全组屏障，例如首步下一层最早于 16675 ns 开始，而前层全组最晚在 20552 ns 结束。网络延迟仅变 rank 1 链路，其图/业务量不变，首个完整 Token 由 64310 ns 后移至 86274 ns，下一步提交随之移动，最终增加 62747 ns。稀疏例第二请求先排队，完成四轮组批后两个请求各自完成三步；零 Token 成员保留必要专家工作。
+
+相同输入重复、来源开关、零时钟及无观测运行的业务图、协议、前端/后端结果和原生网络日志完全一致；on/off/repeat 的三个 observed 文件摘要一致。独立 Fraction 时钟算式核对逐层端侧事件，Decimal 解析原生端口发送 trace 再重算每窗整包与业务归属。所有路由恰好消费一次，唯一交付、端口整包分类与操作归属分别通过；请求/KV/执行资源/任务/链路队列在正常结束前全部清空。
+
+十项预期拒绝为缺路由、重复路由、错层、层序错误、保留 next_layer 占位，以及后端跨层依赖损坏、跨层 tag 重号、层序倒置、末 rank Chakra 截断和 10000 ns 仿真上限。前五项在后端创建前失败；后端四种结构错误在 0 ns 被拒绝且 g0 无实际执行，超限在 10000 ns 保存未完成传输并报错。没有通过删除断言、补路由或固定通信耗时绕过。
+
+### 审计与停止位置
+
+final-audit 恢复本轮 CMake 覆盖的原生 launcher lock，361 个原生与旧联合产物大小/摘要未变，331 项最终源码/输入摘要匹配通过记录。全部 52 个 ASTRA 核心对象保留，实际只装载新构建的一套 10 个 UB ns-3 库。固定依赖检查、差异和提交后 Git 状态保存在 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json、L/git-final.json。没有重跑原生性能样例，也没有改动子模块提交。
+
+M5.2 的多层连续功能数据管线验收完成，本地提交、不推送，停止在 M5.2 completed。32 层测试覆盖全部 MoE 块的依赖与通信，但没有 embedding/输出头等完整模型算子图、真实路由和目标 NPU profile；仍保留 full_model_execution_validated=false、multilayer_segment_iterations_not_full_model_ITL_or_TTFT 与 unvalidated_reference。M5.3 目标通信行为核对尚未开始，仍需用户确认。

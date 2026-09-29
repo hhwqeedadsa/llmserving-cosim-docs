@@ -8,6 +8,7 @@ from .service import Service
 
 class DataService(Service):
     def __init__(self, config, layer):
+        self.multilayer = config.get('schema_version') == 'moe-ub-multilayer-service/1'
         self.data_config = deepcopy(config)
         legacy, self.routes, self.profile, self.evidence = load_inputs(config, layer)
         self.consumed = set()
@@ -40,10 +41,12 @@ class DataService(Service):
             source = self.inputs[row['request_id']]
             row['completed_segment_steps'] = len(row['intertoken_latencies_ns'])
             row['next_route_decode_index'] = source['generated_tokens']-1 + row['completed_segment_steps']
-            row['execution_scope'] = 'single_selected_moe_layer'
+            row['execution_scope'] = self.evidence['model']['execution_scope']
         return rows
 
     def make_plan(self, candidate):
+        if self.multilayer:
+            return self.make_multilayer_plan(candidate)
         records = []
         for token in candidate['tokens']:
             source = self.inputs[int(token['request_id'])]
@@ -64,6 +67,32 @@ class DataService(Service):
                 model_file=self.data_config['model_file'], route_records=records,
                 compute=self.evidence['compute'], execution_scope='single_selected_moe_layer'))
         self.consumed.update((r['request_id'],r['token_index'],r['layer_id']) for r in records)
+        return plan
+
+    def make_multilayer_plan(self, candidate):
+        from .multilayer import build_multilayer
+        configs, provenance, consumed = [], [], set()
+        for layer_id in self.evidence['model']['executed_layer_ids']:
+            current=deepcopy(candidate);current.update(layer_id=layer_id,compute_profile_ns=deepcopy(self.profile[layer_id]))
+            records=[]
+            for token in current['tokens']:
+                source=self.inputs[int(token['request_id'])];original=token['token_index']
+                index=original-source['prompt_tokens'];key=token['request_id'],index,layer_id
+                require(key in self.routes and key not in self.consumed and key not in consumed,
+                        'Multilayer route missing or consumed twice')
+                record=self.routes[key]
+                require(record['source_token_index']==original, 'Scheduler and multilayer route position disagree')
+                token.update(token_index=index,layer_id=layer_id,expert_ids=record['expert_ids'])
+                records.append(deepcopy(record));consumed.add(key)
+            configs.append(current);provenance.append(records)
+        plan=build_multilayer(configs,self.identities,provenance)
+        plan.update(route_source=self.data_config['routes']['kind']+'_indexed_file',
+            compute_source=self.evidence['compute']['kind'],input_provenance=dict(
+                model_file=self.data_config['model_file'],
+                route_records=[record for records in provenance for record in records],
+                source_record_index_scope='within_layer_route_records',
+                compute=self.evidence['compute'],execution_scope='consecutive_moe_layer_segment'))
+        self.consumed.update(consumed)
         return plan
 
     def result_fields(self):
@@ -90,9 +119,10 @@ class DataService(Service):
 
     def manifest_fields(self):
         return dict(routing_source=self.data_config['routes']['kind']+'_indexed_file',
-            compute_source=self.evidence['compute']['kind'], compute_scope='single_selected_moe_layer',
+            compute_source=self.evidence['compute']['kind'], compute_scope=self.evidence['model']['execution_scope'],
             executed_layer_ids=self.evidence['model']['executed_layer_ids'],
-            latency_scope='selected_layer_iterations_only_not_full_model_ITL_or_TTFT',
+            latency_scope=('multilayer_segment_iterations_not_full_model_ITL_or_TTFT' if self.multilayer else
+                           'selected_layer_iterations_only_not_full_model_ITL_or_TTFT'),
             model_source='locked_actual_model_config', full_model_execution_validated=False,
             route_data_is_synthetic=self.data_config['routes']['kind']=='synthetic',
             target_profile_available=False, communication_calibration_status='unvalidated_reference')

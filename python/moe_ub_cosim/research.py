@@ -61,7 +61,7 @@ def snapshot_inputs(config, paths, directory):
     for name in NETWORK_FILES:shutil.copyfile(paths['network']/name,directory/'network'/name)
     # Keep referenced evidence with the run as well as the original path/hash.
     refs={}
-    if service.get('schema_version')=='moe-ub-data-service/1':
+    if service.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1'):
         refs['model.json']=service['model_file']['path'];refs['routes.jsonl']=service['routes']['file']['path']
         if 'file' in service['compute']:refs['compute.csv']=service['compute']['file']['path']
     elif 'model_config' in service:refs['model.json']=service['model_config']
@@ -131,6 +131,9 @@ def run(config_path, backend, output, timeout=60):
             byte_semantics='ns3_packet_get_size_excludes_unmodeled_physical_overhead',
             routing_source=service_manifest['routing_source'],kv_source=service_manifest['kv_source'],
             compute_scope=service_manifest['compute_scope'],
+            latency_scope=service_manifest.get('latency_scope',service_manifest['compute_scope']),
+            executed_layer_ids=service_manifest.get('executed_layer_ids',sorted({op['layer_id'] for p in plans for op in p['operations'] if 'layer_id' in op})),
+            full_model_execution_validated=service_manifest.get('full_model_execution_validated',False),
             compute_sources=sorted({p.get('compute_source','none') for p in plans}),
             compute_data_evidence='logs/raw-run/input_evidence.json' if (raw/'input_evidence.json').exists() else 'inputs/layer.json',
             communication_templates=sorted({p['communication_template'] for p in plans}),

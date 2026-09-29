@@ -1,0 +1,93 @@
+{
+  "schema_version": "moe-ub-layer-fixture/1",
+  "graph_id": "g-m2-1",
+  "wave_id": "D.w0",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 6,
+  "rank_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "rank_to_ub_node": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "hidden_dim": 4096,
+  "top_k": 2,
+  "dispatch_element_bytes": 2,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 8192,
+  "send_slots_per_rank": 1,
+  "template": "direct_rank_dedup_v1",
+  "expert_placement": [
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3
+  ],
+  "tokens": [
+    {
+      "request_id": "A",
+      "src_rank": 0,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 6,
+      "expert_ids": [
+        2,
+        4
+      ]
+    },
+    {
+      "request_id": "B",
+      "src_rank": 1,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 6,
+      "expert_ids": [
+        0,
+        5
+      ]
+    },
+    {
+      "request_id": "C",
+      "src_rank": 2,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 6,
+      "expert_ids": [
+        4,
+        6
+      ]
+    },
+    {
+      "request_id": "D",
+      "src_rank": 3,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 6,
+      "expert_ids": [
+        1,
+        3
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 5000,
+    "expert_per_input": 4000,
+    "expert_local_merge": 1000,
+    "combine_unpack_merge": 1000,
+    "next_layer": 0
+  }
+}

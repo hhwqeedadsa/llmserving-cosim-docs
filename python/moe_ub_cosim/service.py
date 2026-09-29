@@ -252,7 +252,7 @@ def run(args):
     config, layer = json.loads(args.input.read_text()), json.loads(args.layer.read_text())
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
-    data = config.get('schema_version') == 'moe-ub-data-service/1'
+    data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
     if data:
         from .data_service import DataService
         service = DataService(config, layer)

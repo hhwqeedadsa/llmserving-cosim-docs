@@ -97,9 +97,19 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 {
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
-    LayerPlan plan{Json::parse(stream), {}, {}};
-    const auto& p = plan.data;
+    const auto p = Json::parse(stream);
+    if (p.at("schema_version") == "moe-ub-multilayer-plan/1") return LoadMultilayerPlan(directory, p);
     if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);
+    auto plan = ValidateLayerPlan(p);
+    std::map<uint64_t, Json> transfers;
+    for (const auto& t : p.at("transfers")) transfers.emplace(t.at("transfer_id"), t);
+    for (const auto& graph : p.at("rank_graphs"))
+        CheckPlanGraph(directory / ("layer." + std::to_string(graph.at("rank_id").get<int>()) + ".et"), graph, transfers);
+    return plan;
+}
+LayerPlan ValidateLayerPlan(const Json& p)
+{
+    LayerPlan plan{p, {}, {}};
     Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
             p.at("rank_to_ub_node") == p.at("rank_ids") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
@@ -271,8 +281,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         auto compute = [&](const char* field, const char* profile, uint64_t count,
                            const std::set<uint64_t>& deps) -> std::set<uint64_t> {
             const auto duration = Number(input.at("compute_profile_ns").at(profile), "compute profile", INT64_MAX);
-            Require(duration > 0 && (!count || duration <= uint64_t(INT64_MAX) / count), "invalid compute profile");
-            if (!count)
+            Require((duration > 0 || std::string(field) == "next_layer") &&
+                    (!count || duration <= uint64_t(INT64_MAX) / count), "invalid compute profile");
+            if (!count || !duration)
             {
                 Require(phase.at(field).is_null(), "absent work must not have a compute node");
                 return deps;
@@ -311,12 +322,6 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         compute("next_layer", "next_layer", local_tokens[rank], ready);
         for (const auto& [id, n] : local)
             if (n.at("kind") == "COMP") Require(phase_ids.contains(id), "unexpected compute node");
-        const auto path = directory / ("layer." + std::to_string(rank) + ".et");
-        try { CheckGraph(path, graph, transfers); }
-        catch (const std::exception& error)
-        {
-            throw std::runtime_error(path.string() + ": " + error.what());
-        }
     }
     for (const auto& [id, t] : transfers)
         Require(pairs[{id, "send"}] == 1 && pairs[{id, "recv"}] == 1, "missing/duplicate SEND/RECV pair");
@@ -361,6 +366,31 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
 }
 Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
 {
+    if (plan.data.at("schema_version") == "moe-ub-multilayer-plan/1")
+    {
+        Json result = Json::array();
+        for (size_t index = 0; index < plan.data.at("layers").size(); ++index)
+        {
+            auto data = plan.data.at("layers")[index];
+            data["transfers"] = Json::array(); data["rank_graphs"] = Json::array();
+            std::set<std::string> operations;
+            for (const auto& op : data.at("operations")) operations.insert(op.at("operation_id").get<std::string>());
+            for (const auto& transfer : plan.data.at("transfers"))
+                if (operations.contains(transfer.at("operation_id").get<std::string>())) data["transfers"].push_back(transfer);
+            for (const auto& graph : plan.data.at("rank_graphs"))
+            {
+                const auto& phase = graph.at("layer_phases")[index];
+                data["rank_graphs"].push_back({{"rank_id", graph.at("rank_id")},
+                    {"phase_nodes", phase.at("phase_nodes")}, {"entry_deps", phase.at("entry_deps")}});
+            }
+            for (auto row : LayerEndpointOperations(LayerPlan{data, {}, {}}, execution))
+            {
+                row["local_record_id"] = row.at("local_record_id").get<uint64_t>() + 2 * index;
+                result.push_back(row);
+            }
+        }
+        return result;
+    }
     std::map<std::pair<int, uint64_t>, Json> nodes;
     for (const auto& event : execution) nodes[{event.at("rank_id"), event.at("node_id")}] = event;
     Json endpoints = Json::array();
@@ -393,7 +423,11 @@ Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
                                 .at("end_ns").get<uint64_t>());
             return earliest;
         };
-        const auto prepared = end("prepare", plan.data.at("ready_ns"));
+        uint64_t ready = plan.data.at("ready_ns");
+        if (graph.contains("entry_deps"))
+            for (const auto& dep : graph.at("entry_deps"))
+                ready = std::max(ready, nodes.at({rank, dep.get<uint64_t>()}).at("end_ns").get<uint64_t>());
+        const auto prepared = end("prepare", ready);
         const auto dispatched = communication_end("dispatch", prepared);
         const auto merged = end("local_merge", end("expert", dispatched));
         const auto finished = end("finish", communication_end("combine", merged));
@@ -409,11 +443,19 @@ Json LayerOperationRegistry(const LayerPlan& plan)
     Json result = plan.data.at("operations");
     for (auto& operation : result)
     {
+        uint64_t offset = 0;
+        if (plan.data.contains("executed_layer_ids"))
+        {
+            const auto& ids = plan.data.at("executed_layer_ids");
+            const auto found = std::find(ids.begin(), ids.end(), operation.at("layer_id"));
+            Require(found != ids.end(), "operation outside executed layers");
+            offset = 2 * std::distance(ids.begin(), found);
+        }
         operation["graph_id"] = plan.data.at("graph_id");
         operation["endpoint_records"] = Json::array();
         for (const int rank : plan.data.at("rank_ids"))
             operation["endpoint_records"].push_back({{"rank_id", rank},
-                {"local_record_id", operation.at("kind") == "combine" ? 2 : 1}});
+                {"local_record_id", offset + (operation.at("kind") == "combine" ? 2 : 1)}});
     }
     return result;
 }

@@ -53,7 +53,8 @@ def validate_config(c):
     require(set(profile) == {'attention_route_pack', 'expert_per_input', 'expert_local_merge',
                              'combine_unpack_merge', 'next_layer'}, 'Unsupported compute profile fields')
     for key, duration in profile.items():
-        integer(duration, key, 1, (MAX_TIME_NS - c['ready_ns']) // (32 if c['role'] == 'P' else 16))
+        integer(duration, key, 0 if key == 'next_layer' else 1,
+                (MAX_TIME_NS - c['ready_ns']) // (32 if c['role'] == 'P' else 16))
     tokens = c['tokens']
     require(isinstance(tokens, list) and 1 <= len(tokens) <= (16 if c['role'] == 'P' else 4),
             'Token count outside bounded P/D graph')
@@ -177,6 +178,9 @@ def build_plan(config, identities=None):
 
 
 def validate_plan(plan):
+    if plan.get('schema_version') == 'moe-ub-multilayer-plan/1':
+        from .multilayer import validate_multilayer
+        return validate_multilayer(plan)
     if plan.get('communication_template') == 'kv_direct_v1':
         from .kv_plan import validate_kv_plan
         return validate_kv_plan(plan)
@@ -279,5 +283,18 @@ class RunIdentities:
             for node in graph['nodes']:
                 if 'transfer_id' in node:
                     node['transfer_id'] = mapping[node['transfer_id']]
+        # Layer components retain local node ids, but use the same run-wide
+        # transfer/task/tag identities as the composed executable graph.
+        if 'layers' in plan:
+            assigned = {t['transfer_id']: t for t in plan['transfers']}
+            for layer in plan['layers']:
+                for transfer in layer['transfers']:
+                    current = assigned[mapping[transfer['transfer_id']]]
+                    for key in ('transfer_id', 'ub_task_id', 'comm_tag'):
+                        transfer[key] = current[key]
+                for graph in layer['rank_graphs']:
+                    for node in graph['nodes']:
+                        if 'transfer_id' in node:
+                            node['transfer_id'] = mapping[node['transfer_id']]
         self.transfer += count; self.task += count; self.tag += count
         self.graphs.add(plan['graph_id']); self.operations.update(operations)

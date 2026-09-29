@@ -330,3 +330,16 @@ Python 为所有 rank 与被观测交换机校验唯一时钟，使用整数 ppb
 根 `observed/` 只含端侧五字段、端口窗口 CSV 与白名单静态配置。操作/传输身份、逐 Token 或 KV 范围、图、全局时刻和时钟参数保留在 truth、graphs 和其他内部资料。`validate-observed` 仅访问三个观测文件；`validate-run` 读取内部原始事件、重建输出并检查文件摘要、唯一交付、整包分类与操作归属。原服务输出存于 logs/raw-run，包括其中的旧格式 observed 子目录；这些原始内部资料不能交给关联方法。
 
 最终双组样例生成 48 条端侧记录、276 个窗口（151 个零窗口），业务仍为 84 次写、688128 字节、264523 ns。来源开/关的观测完全一致；改变时钟或采样区间、重复执行及不挂观测，业务图、协议、ASTRA/UB 时刻和原生网络日志保持相同。九次正常研究运行、一次无观测对照、十五项预期失败、45 项 Python 单元以及受影响的 M1～M4 回归通过。校准状态仍为 unvalidated_reference，完整多层与目标通信校准留待后续任务确认。
+
+
+## M5.2 多层连续图
+
+`moe-ub-multilayer-service/1` 在已有 DataService 中逐层读取路由和参考计算，调用单层生成器后合并为一份 `moe-ub-multilayer-plan/1`。每 rank 一张 Chakra 图包含选定层，各层根节点只依赖本 rank 前层末节点；空层传递此前依赖，真实下一层替代旧 next_layer 参考计算。全部层执行完后才完成一个服务 Token，同一后端与网络跨层、跨步保留。
+
+单层后端校验拆为内存语义检查与 Chakra 文件检查，原入口行为保留。新增 multilayer_plan.cc 逐层调用原语义检查，独立重建节点/传输映射及本地边界，对全部文件校验后才装载和激活。来源侧表保存逐层计划，只有合并图进入 ASTRA。局部节点号在层间移位，操作/传输/UB 任务/匹配 tag 在同一运行内不重复；层序、Token 连续性、计算和共享配置不符时拒绝。
+
+端侧输出按每层的实际 phase_nodes 与 entry_deps 取 ASTRA 时间，内部记录号为每层预留两个位置，再跨图累加；M5.1 正式导出继续独立按 rank 重排本地编号。没有新增观测字段，图、层和源索引只存在于内部资料。研究清单另明确 executed_layer_ids、latency_scope 和 full_model_execution_validated，避免把完整收尾误写成完整模型性能验证。
+
+按 [M5.2 环境记录](../docs/environment.md#2026-09-29m5-2-multilayer-continuous) 构建 build/m5-multilayer 后，使用 [连续样例](../fixtures/m5_multilayer/README.md) 的已验证 run、validate-run、validate-observed 和集成测试命令。三个层、三个解码步为 78 次写、638976 字节、193789 ns；实际存在本 rank 下一层已开始而远端前层尚未结束的时段。八次研究运行、无观测对照、十项拒绝和相关旧入口回归通过。
+
+多层范围仍限一个四成员组、给定就绪 KV 解码、明确的连续 MoE 层和参考阶段耗时。32 层两步验证 558 次写、4571136 字节，但没有 embedding/输出头完整算子图、真实路由或目标 NPU profile。P/D 保持 M4 的单层功能范围；完整模型时延与目标通信行为仍未校准。

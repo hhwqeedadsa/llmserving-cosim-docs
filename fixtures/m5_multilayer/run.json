@@ -1,0 +1,63 @@
+{
+  "schema_version": "moe-ub-research-run/1",
+  "run_id": "m5-2-multilayer",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "inputs": {
+    "service": "fixtures/m5_multilayer/service.json",
+    "layer": "fixtures/m5_multilayer/layer.json",
+    "system": "fixtures/m1_compute/system.json",
+    "network": "fixtures/m2_single_layer/network"
+  },
+  "observation": {
+    "record_provenance": true,
+    "clocks": [
+      {
+        "device_type": "rank",
+        "device_id": 0,
+        "offset_ns": -12000,
+        "drift_ppb": 10000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 1,
+        "offset_ns": -10700,
+        "drift_ppb": -20000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 2,
+        "offset_ns": -9400,
+        "drift_ppb": 30000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 3,
+        "offset_ns": -8100,
+        "drift_ppb": -40000
+      },
+      {
+        "device_type": "switch",
+        "device_id": 4,
+        "offset_ns": -8000,
+        "drift_ppb": 250000
+      }
+    ],
+    "switches": [
+      {
+        "switch_id": 4,
+        "port_ids": [
+          0,
+          2
+        ],
+        "start_local_ns": -7333,
+        "end_local_ns": 5000321,
+        "period_ns": 5000
+      }
+    ]
+  },
+  "max_simulation_ns": 10000000,
+  "seed": 10
+}

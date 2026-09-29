@@ -729,6 +729,7 @@ int main(int argc, char** argv)
             moe_ub::FlushAstraLogging();
             Json endpoints = Json::array(), operations = Json::array();
             report["node_execution"] = Json::array();
+            uint64_t endpoint_offset = 0;
             for (size_t step = 0; step < plans.size(); ++step)
             {
                 auto execution = moe_ub::ReadLayerExecution(plans[step], "log/log.log", true);
@@ -741,15 +742,16 @@ int main(int argc, char** argv)
                 }
                 for (auto& record : local)
                 {
-                    record["local_record_id"] = record.at("local_record_id").get<unsigned>() + 2 * step;
+                    record["local_record_id"] = record.at("local_record_id").get<uint64_t>() + endpoint_offset;
                     endpoints.push_back(record);
                 }
                 for (auto& operation : semantic)
                 {
                     for (auto& record : operation["endpoint_records"])
-                        record["local_record_id"] = record.at("local_record_id").get<unsigned>() + 2 * step;
+                        record["local_record_id"] = record.at("local_record_id").get<uint64_t>() + endpoint_offset;
                     operations.push_back(operation);
                 }
+                endpoint_offset += plans[step].data.contains("layers") ? 2 * plans[step].data.at("layers").size() : 2;
             }
             for (size_t index = 0; index < observations.size(); ++index)
             {

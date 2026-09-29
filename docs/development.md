@@ -57,7 +57,23 @@ M1 再创建最小 `backend/` 和相应测试；M2 再增加 `python/moe_ub_cosi
 
 主仓库只直接记录 `third_party/LLMServingSim` 和 `third_party/ns-3-ub`。ASTRA 由 LLMServingSim 的 gitlink 固定，Chakra 由 ASTRA 的 gitlink 固定。不在主仓库另外复制一份 ASTRA 或 Chakra。
 
-`deps.lock.json` 显式记录四个核心组件和准备时从父仓库读到的辅助 gitlink。更深层依赖继续由固定父提交中的 gitlink 决定。`repo-local-check` 已完成 13 个依赖仓库的递归初始化与静态检查，包括 GitCode 上的 UB 配套工具；这只确认本次源码获取和检出状态，不证明构建或仿真可用。锁文件中的准备期检查描述保留，后续实际运行结果写入 `environment.md`。
+每个子模块都是独立 Git 仓库；直接父仓库在 `.gitmodules` 中记录地址，用 gitlink 记录精确提交号，子模块内部源码需从它自己的远端获取。层级更深时继续应用同一规则。
+
+`deps.lock.json` 显式记录 11 项依赖；另有 googletest、yaml-cpp 两项更深层依赖，由固定 analytical 网络后端的 gitlink 决定。检查脚本递归覆盖全部 13 项。`repo-local-check` 已完成首次递归初始化；2026-09-28～29 的发布任务又在独立目录从远端取回全部固定源码并检查通过，包括 GitCode 配套工具。源码获取与版本一致不代表构建或仿真通过。锁文件中的准备期检查描述保留，后续实际运行结果写入 `environment.md`。
+
+截至该次发布，递归结构及维护范围如下：
+
+| 依赖仓库 | 直接父仓库 | 本项目的处理 |
+|---|---|---|
+| LLMServingSim | 主仓库 | 有 ASTRA gitlink 和地址修改，使用维护副本 |
+| ns-3-UB | 主仓库 | 有执行与观测源码补丁，使用维护仓库 |
+| ASTRA-sim | LLMServingSim | 有发送槽和图生命周期源码补丁，使用维护副本 |
+| Chakra、fmt、spdlog | ASTRA-sim | 沿用原上游固定提交，无本项目补丁 |
+| analytical 内存后端、analytical 网络后端、csg-htsim、原生 ns-3 后端 | ASTRA-sim | 沿用原上游固定提交，无本项目补丁 |
+| googletest、yaml-cpp | analytical 网络后端 | 沿用原上游固定提交，无本项目补丁 |
+| ns-3-ub-tools | ns-3-UB | 沿用 GitCode 原仓库固定提交，无本项目补丁 |
+
+三个有项目提交的依赖已发布到维护仓库，另外十个仍从各自原上游获取。以后是否修改某项依赖取决于当前任务需要，按第 4 节处理；本次未为全部上游另建镜像。
 
 初始化命令为：
 
@@ -77,9 +93,24 @@ M0 保持上游源码不变，先分别检查环境、命令和依赖。若必�
 
 维护阶段约定 `upstream` 指原来源，`origin` 指项目可写维护仓库，`cosim` 保存已检查的项目修改，短期 `task/...` 分支保存本轮工作。M0 直接从上游克隆时，`origin` 仍可以是原上游；此时只读，不为了命名统一提前改变远端。
 
-子模块通常检出为 detached HEAD，修改前先从锁定提交建立分支。远端来源改变时，父仓库 `.gitmodules` 与锁文件中的 `clone_url` 一起更新；只改本机 remote 不会让其他克隆知道新来源。`upstream_url` 继续记录原始来源。
+2026-09-28～29 已使用以下四个私有仓库完成发布；精确版本以各父仓库 gitlink 和锁文件为准：
+
+| 仓库 | 当前发布位置 | 分支 |
+|---|---|---|
+| 主仓库 | `baoy21/moe-ub-cosim` | `main` |
+| LLMServingSim | `baoy21/LLMServingSim` | `cosim` |
+| ASTRA-sim | `baoy21/astra-sim` | `cosim` |
+| ns-3-UB | `baoy21/ns-3-ub` | `cosim` |
+
+本开发目录的 LLMServingSim、ASTRA 已将原 `casys-kaist` 地址保留为 `upstream`，`origin` 指向上述维护副本。UB 的维护地址与锁文件中的原始来源均为 `baoy21/ns-3-ub`，本机保留 `origin`，没有另建同地址的 `upstream`。
+
+新克隆不会继承这些本机 remote 配置和工作分支：递归初始化后的子模块通常只有 `origin`，并在父仓库指定提交上处于 detached HEAD。需要读取原上游时依据锁文件的 `upstream_url` 配置本机远端；需要修改时从当前锁定提交建立任务分支。不要直接切到远端 `cosim` 最新位置来代替固定版本初始化。新克隆访问四个私有仓库需要相应读取权限，另外十个依赖继续访问各自上游。
+
+远端来源改变时，父仓库 `.gitmodules` 与锁文件中的 `clone_url` 一起更新；只改本机 remote 不会让其他克隆知道新来源。`upstream_url` 继续记录原始来源。
 
 一次 ASTRA 修改的保存顺序为：先在 ASTRA 提交源码与测试，再在 LLMServingSim 提交 ASTRA gitlink，最后在主仓库提交 LLMServingSim gitlink、锁文件和本项目相关测试。修改 UB 时，先提交 UB，再更新主仓库。
+
+更深层依赖也逐层处理。例如需要修改 Chakra 时，先在获准的维护仓库保存 Chakra 提交，再依次更新 ASTRA、LLMServingSim、主仓库的子模块指针；若地址变化，修改其直接父仓库的 `.gitmodules` 和根锁文件的相应来源记录。所有层级均从锁定版本开始，不因建立维护副本而升级依赖。
 
 发布时同样由内向外推送。父仓库引用的子提交必须能从记录的维护远端取回。工作区中的未提交源码不能作为已保存的可复现版本，主仓库的一次普通提交也不会自动保存子仓库内部修改。
 

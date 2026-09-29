@@ -1426,10 +1426,30 @@ git -C runs/publish-maintenance-20260928T163038Z/fresh-clone \
 
 远端复查时 UB 曾返回认证失败（128），同地址重试通过；LLM 首次复查未及时返回，结束该只读进程（-15，记录工具 143）后，增加命令超时重试通过。原输出分别保留于 `resumed-remote-ub.json` 和 `resumed-remote-llm.json`，未修改全局认证或网络配置。
 
-最终结论是从声明远端获得了完整固定源码并通过 13 项递归检查；初次完整历史克隆被中断，其后对部分辅助仓库采用有限历史并恢复检出。没有把一次未完成的 clone 命令报告为成功。发布验收已通过，收尾仅提交、推送本任务三份文档并核对最终远端状态。
+最终结论是从声明远端获得了完整固定源码并通过 13 项递归检查；初次完整历史克隆被中断，其后对部分辅助仓库采用有限历史并恢复检出。没有把一次未完成的 clone 命令报告为成功。收尾三份文档已在 `c116cddf6780731fff9e7cf5839f7c1786b33001` 提交并推送，最终 `origin/main` 与之相同；验证克隆已通过 `fetch --no-recurse-submodules origin main` 和 `merge --ff-only origin/main` 快进到同一提交。`final-push.json`、`clone-final-docs-fetch.json`、`clone-final-docs-merge.json`、`final-clone-audit.json`、`final-root-remote.json` 均记录退出 0，最后一次来源与工作区核验通过。
 
 ### 限制与停止位置
 
 最初沙箱内的远端检查无法连接已配置代理，Git 暂存/提交因 `.git/index.lock` 只读失败；使用授权的沙箱外执行后通过。没有因此改写全局网络或认证配置。四个仓库保持 private，新克隆需要对四个仓库均有读取权限；公共上游及 GitCode 还需各自网络可达。
 
 本次只验证源码发布和固定依赖获取，不重复构建或仿真，不包含本机 `build/`、`runs/`、虚拟环境或外部模型数据。M3.1 的功能验证仍以上节记录为准。本次发布验收完成，停止在 `publish-maintenance-repos`；下一项 M3.2 仍由用户确认；以后开发任务默认仅自动本地提交，推送继续单独授权。
+
+
+## 2026-09-29：发布后的文档复核
+
+任务 `docs-post-publish-review`，依据用户对本次 Git 操作文档的复核请求。开始于已发布的 `c116cdd`，主仓库和全部子模块工作区干净。本次只修改 README、backend/README、开发管理说明、环境记录和当前任务；不改源码、锁文件、子模块地址或指针，不重新发布。
+
+修正 backend/README 中 M2.3、M2.4 仍称补丁仅本地保存的两处说明，保留原功能提交号并说明已纳入 cosim 发布历史。开发管理说明补充 13 项依赖的直接父仓库、三项项目维护依赖与十项原上游依赖的区别，以及新克隆通常只有 origin、子模块处于 detached HEAD、本机 upstream 和工作分支不会自动传递的事实。现有验证克隆的 remote/分支状态已只读核对。README 增加相应入口，上一节补齐最终发布提交 c116cdd 与收尾日志。AGENTS.md 的约束、技术规范的基线、bootstrap.md 和锁文件准备期记录均继续有效，保持原文。
+
+日志目录 `runs/docs-post-publish-review-20260929T012133Z/` 保存命令、cwd、退出码和原始输出；除注明外，工作目录均为主仓库根目录。这里仅引用已保存的发布证据，没有重新联网验证远端。
+
+| 实际检查 | 结果 | 日志 |
+|---|---|---|
+| `bash scripts/check_deps.sh` | 退出 0，13 项固定依赖一致，子模块干净；根目录仅有待提交文档 | `deps-check.json` |
+| `git diff --exit-code c116cdd -- .gitmodules deps.lock.json third_party` | 退出 0，发布配置和指针未改 | `published-configuration-unchanged.json` |
+| `git submodule status --recursive` | 退出 0，13 个依赖均在父仓库指定提交 | `recursive-pins.json` |
+| 在 ASTRA 执行 `git log --oneline d346994..HEAD`，在 LLMServingSim 执行 `git log --oneline a4053bc..HEAD` | 均退出 0，文档中的历史补丁包含在当前固定版本中 | `patch-history-astra.json`、`patch-history-llm.json` |
+| 核对新增本地链接的文件、开发说明第 3/4 节标题；`rg` 检查 backend/README 的两处旧表述 | 链接目标存在；旧表述无匹配，rg 退出 1 为预期结果 | `doc-link-targets.json`、`stale-backend-statements.json` |
+| `git diff --check` | 退出 0，差异格式检查通过 | `final-diff-check.json` |
+
+本次是文档修正，无需重跑构建或仿真。完成差异审阅和格式检查后本地提交，不推送；停止在本次复核，M3.2 尚未开始。

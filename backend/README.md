@@ -138,7 +138,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 生成器现按 chunk_bytes 将有向向量分成独立 UB 写任务，末块保留真实字节数。前后端都检查块编号、完整向量范围、尾块、来源和配对；task_byte_range 始终是块内范围，pair_byte_range/pair_payload_bytes 标识原向量位置与总长。内部 transfer_registry 输出相应 chunk_id 和向量范围，observed 不增加隐藏身份。生成器复制输入后再构图，后续修改配置不会改变已经生成的计划。
 
-联合入口从计划读取 send_slots_per_rank，在四 rank 激活前调用 ASTRA 的 configure_p2p_send_slots。该显式配置仅作用于点对点 SEND；按节点身份占用和释放，乱序完成可释放对应槽。RECV 不占槽，原集合通信继续独占原通信资源。未启用时走原始单槽路径，M1 和原 native 入口保持默认行为。HardwareResource.hh/.cc 补丁及其单元测试已在 ASTRA 本地提交 3f72d0a，LLMServingSim gitlink 提交为 47b3a21；尚未发布到维护远端。
+联合入口从计划读取 send_slots_per_rank，在四 rank 激活前调用 ASTRA 的 configure_p2p_send_slots。该显式配置仅作用于点对点 SEND；按节点身份占用和释放，乱序完成可释放对应槽。RECV 不占槽，原集合通信继续独占原通信资源。未启用时走原始单槽路径，M1 和原 native 入口保持默认行为。HardwareResource.hh/.cc 补丁及其单元测试在 ASTRA 提交 3f72d0a，对应的 LLMServingSim gitlink 提交为 47b3a21。这两个历史提交已包含在各自维护仓库的 cosim 分支中，于 2026-09-28～29 完成发布和远端获取验证；当前采用版本见根目录 deps.lock.json。
 
 以下完整检查已执行，输出目录必须尚不存在：
 
@@ -173,7 +173,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 cosim-sequence 复用 cosim-layer 的真实执行代码，入口只接受两张固定图。启动前校验两组图和运行内身份；提交时先核对四 rank 已完成，再检查并准备全部 feeder，装载全部图，登记该轮传输，最后按 rank 顺序激活。首轮同样先装载全部 rank，再登记传输并激活。四个 Sys、应用、UB 控制器、网络与时间线始终保留。提前声明传输来源不提交 UB 任务，SEND 仍须由 ASTRA 依赖派发后提交一次实际写。
 
-ASTRA 的新接口仅在 bind_graph 后启用。load_graph 不发任务，activate_graph 才执行；忙时装载、身份复用、未激活就 fire 和重复激活均报错。回调保存 graph_id、node_id 和通信匹配 tag，UB 描述侧表对应唯一传输；在查找节点和释放资源前识别过期回调，日志保存旧图、当前图、rank、node 和 tag。默认原生行为保留，本轮 ASTRA 补丁为 e2a14f5，LLMServingSim gitlink 提交为 0038df8，仍仅本地保存。
+ASTRA 的新接口仅在 bind_graph 后启用。load_graph 不发任务，activate_graph 才执行；忙时装载、身份复用、未激活就 fire 和重复激活均报错。回调保存 graph_id、node_id 和通信匹配 tag，UB 描述侧表对应唯一传输；在查找节点和释放资源前识别过期回调，日志保存旧图、当前图、rank、node 和 tag。默认原生行为保留，本轮 ASTRA 补丁为 e2a14f5，对应的 LLMServingSim gitlink 提交为 0038df8。相关提交已发布到各自维护仓库的 cosim 分支；LLMServingSim 随后的 9aed949 仅更新 ASTRA 维护地址，ASTRA 仍固定在 e2a14f5。发布位置与独立获取结果见[开发管理说明](../docs/development.md#4-上游修改怎样保存)和[环境记录](../docs/environment.md)。
 
 正常两轮共 28 次 UB 写、229376 业务字节，96 个节点产生 192 条实际 issue/callback。第二轮在 21552 ns 提交，全组在 43145 ns 完成。观测窗口贯穿两轮，端侧局部记录号为每 rank 的 1～4；图/操作/传输对应保留在内部文件，observed 不新增全局身份。来源开/关/不挂观测及重复执行一致。
 

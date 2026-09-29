@@ -37,3 +37,5 @@
 日志在 `runs/m5-2-multilayer-20260929T063002Z/`，实际命令和结果见 [环境记录](../environment.md#2026-09-29m5-2-multilayer-continuous)；入口与来源范围见 [连续样例](../../fixtures/m5_multilayer/README.md)。没有取得真实专家轨迹或目标 profile；32 层用例仍只覆盖 MoE 块，不包含完整模型算子与目标时延校准。只报告功能数据管线完成，full_model_execution_validated 保持 false。
 
 按持续授权本地提交，不推送。停止在 M5.2 completed；M5.3 尚未开始，仍需用户确认。
+
+2026-09-29 用户确认继续以完成 v0.2 为主要目标。真实专家路由采集、A100 计算测量及热点负载建模另记于 [后续版本候选事项](../future_iterations.md)，待 v0.3 等版本评估。本次仅整理该安排，未执行新增功能，未启动 M5.3。

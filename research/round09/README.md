@@ -7,6 +7,7 @@ This directory contains the reviewable summaries for the 2026-09-29 model, hardw
 - `network_contention_summary.csv`: 11 controlled ns-3-UB cases.
 - `network_contention_tasks.csv`: per-task flow results.
 - `network_core_bandwidth_timeseries.csv`: per-flow core-link data bandwidth in 0.25-µs bins.
+- `network_core_packet_events.csv`: exact core-egress interval, serialization time, and wire bytes for every data packet.
 - `network_core_queue_timeseries.csv`: core-port queue state in 0.25-µs bins plus the raw-trace peak.
 - `network_temporal_task_windows.csv`: task start/completion and first-packet/last-ACK windows.
 - `destination_access_bandwidth_timeseries.csv`: per-destination access-port bandwidth in 0.25-µs bins.

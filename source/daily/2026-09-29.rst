@@ -33,6 +33,8 @@
   被大流拖尾必须分开报告。
 * 0.25-μs 时间序列显示：同向 EP/KV 共享同一个 100 Gbps 方向；反向 EP 同时占用
   ``+100/-100 Gbps`` 两个全双工方向。EP+KV 的核心队列峰值为 668.6 KiB。
+* 五层事件显微镜进一步下探到 333.92-ns 的满包序列化区间，并把逐包交替、带宽、
+  队列、累计 wire bytes、数据完成和 last-ACK 对齐到同一时间轴。
 
 .. figure:: ../_static/round09/llmservingsim-input-output-sweep.svg
    :alt: 2026年9月29日LLMServingSim输入输出规模结果

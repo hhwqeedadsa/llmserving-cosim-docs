@@ -290,18 +290,20 @@ KV case 在 target 完成后继续占用链路到 66 μs。
    :align: center
    :class: study-figure
 
-   **图 6：同向 EP+KV 的带宽、核心队列和完成事件共轴。** 上图是每条 flow 的数据
-   带宽，中图是 switch 8 / port 4 的 ``VOQ + egress`` occupancy，下图是 first-packet
-   到 last-ACK 的 task window。
+   **图 6：同向 EP+KV 的五层微秒级事件显微镜。** 从上到下为精确逐包序列化、
+   0.25-μs 带宽、核心端口队列、累计 wire bytes，以及从首包到数据完成和 last-ACK
+   的 task 生命周期。
 
-:数据来源: ``network_core_bandwidth_timeseries.csv``、``network_core_queue_timeseries.csv``、``network_temporal_task_windows.csv``。
-:物理量与单位: data bandwidth（Gbps）、queue occupancy（KiB）、task/ACK 时间（μs）。
+:数据来源: ns-3 ``AllPacketTrace``、``PortTrace``、``QueueTrace`` 和 ``task_statistics.csv``；汇总为 ``network_core_packet_events.csv`` 与三份 ``network_*_timeseries.csv``。
+:物理量与单位: packet serialization（ns/μs）、data bandwidth（Gbps）、queue/cumulative wire bytes（KiB）、task/ACK 时间（μs）。
 :证据类型: ``ns3-simulated/trace-derived``。
-:解释边界: queue 是仿真状态，不是交换机 buffer counter；task window 不是 GPU kernel 时间。
+:解释边界: 逐包调度和 queue 是仿真状态，不是硬件抓包或交换机 buffer counter；task window 不是 GPU kernel 时间。
 
-400 Gbps host access 的两条流同时涌入 100 Gbps core，队列在 10.7805 μs 达到原始
-trace 峰值 684,598 B（668.6 KiB）。目标 ACK 为 46.979 μs；随后 KV proxy 继续独占
-链路，并把 phase ACK 推到 66.013 μs。
+目标流/KV 分别有 68/128 个 data packet；每个 4,174-B wire 满包在 100 Gbps core 上
+占用 333.92 ns。两条流先逐包交替；目标最后一包在 45.194 μs 离开 core，KV 随后
+单独排空到 65.603 μs。队列在 10.7805 μs 达到 668.6 KiB；目标/phase ACK 为
+46.979/66.013 μs。累计 277.2/521.8 KiB wire bytes 与 272/512 KiB payload 的差额
+来自 packet overhead。
 
 .. figure:: _static/round09/destination-access-bandwidth-timeseries.svg
    :alt: 均衡Zipf热点目的端分布下四个access端口的微秒级带宽

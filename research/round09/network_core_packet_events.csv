@@ -1,0 +1,537 @@
+case_id,case_label,task_id,flow_kind,direction,src,dst,uid,psn,payload_bytes,wire_bytes,packet_start_us,serialization_us,packet_end_us,link_capacity_gbps,evidence
+a0-target-only,仅目标流,0,target,L2R,0,4,0,0,4096,4174,0.114480,0.333920,0.448400,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,1,1,4096,4174,0.448400,0.333920,0.782320,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,2,2,4096,4174,0.782320,0.333920,1.116240,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,3,3,4096,4174,1.116240,0.333920,1.450160,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,4,4,4096,4174,1.450160,0.333920,1.784080,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,5,5,4096,4174,1.784080,0.333920,2.118000,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,6,6,4096,4174,2.118000,0.333920,2.451920,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,7,7,4096,4174,2.451920,0.333920,2.785840,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,8,8,4096,4174,2.785840,0.333920,3.119760,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,10,9,4096,4174,3.119760,0.333920,3.453680,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,11,10,4096,4174,3.453680,0.333920,3.787600,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,12,11,4096,4174,3.787600,0.333920,4.121520,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,13,12,4096,4174,4.121520,0.333920,4.455440,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,15,13,4096,4174,4.455440,0.333920,4.789360,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,16,14,4096,4174,4.789360,0.333920,5.123280,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,17,15,4096,4174,5.123280,0.333920,5.457200,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,18,16,4096,4174,5.457200,0.333920,5.791120,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,20,17,4096,4174,5.791120,0.333920,6.125040,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,21,18,4096,4174,6.125040,0.333920,6.458960,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,22,19,4096,4174,6.458960,0.333920,6.792880,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,23,20,4096,4174,6.792880,0.333920,7.126800,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,25,21,4096,4174,7.126800,0.333920,7.460720,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,26,22,4096,4174,7.460720,0.333920,7.794640,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,27,23,4096,4174,7.794640,0.333920,8.128560,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,28,24,4096,4174,8.128560,0.333920,8.462480,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,30,25,4096,4174,8.462480,0.333920,8.796400,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,31,26,4096,4174,8.796400,0.333920,9.130320,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,32,27,4096,4174,9.130320,0.333920,9.464240,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,33,28,4096,4174,9.464240,0.333920,9.798160,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,35,29,4096,4174,9.798160,0.333920,10.132080,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,36,30,4096,4174,10.132080,0.333920,10.466000,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,37,31,4096,4174,10.466000,0.333920,10.799920,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,38,32,4096,4174,10.799920,0.333920,11.133840,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,40,33,4096,4174,11.133840,0.333920,11.467760,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,41,34,4096,4174,11.467760,0.333920,11.801680,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,42,35,4096,4174,11.801680,0.333920,12.135600,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,43,36,4096,4174,12.135600,0.333920,12.469520,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,45,37,4096,4174,12.469520,0.333920,12.803440,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,46,38,4096,4174,12.803440,0.333920,13.137360,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,47,39,4096,4174,13.137360,0.333920,13.471280,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,48,40,4096,4174,13.471280,0.333920,13.805200,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,50,41,4096,4174,13.805200,0.333920,14.139120,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,51,42,4096,4174,14.139120,0.333920,14.473040,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,52,43,4096,4174,14.473040,0.333920,14.806960,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,53,44,4096,4174,14.806960,0.333920,15.140880,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,55,45,4096,4174,15.140880,0.333920,15.474800,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,56,46,4096,4174,15.474800,0.333920,15.808720,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,57,47,4096,4174,15.808720,0.333920,16.142640,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,58,48,4096,4174,16.142640,0.333920,16.476560,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,60,49,4096,4174,16.476560,0.333920,16.810480,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,61,50,4096,4174,16.810480,0.333920,17.144400,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,62,51,4096,4174,17.144400,0.333920,17.478320,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,63,52,4096,4174,17.478320,0.333920,17.812240,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,65,53,4096,4174,17.812240,0.333920,18.146160,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,66,54,4096,4174,18.146160,0.333920,18.480080,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,67,55,4096,4174,18.480080,0.333920,18.814000,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,68,56,4096,4174,18.814000,0.333920,19.147920,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,70,57,4096,4174,19.147920,0.333920,19.481840,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,71,58,4096,4174,19.481840,0.333920,19.815760,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,72,59,4096,4174,19.815760,0.333920,20.149680,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,73,60,4096,4174,20.149680,0.333920,20.483600,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,75,61,4096,4174,20.483600,0.333920,20.817520,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,76,62,4096,4174,20.817520,0.333920,21.151440,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,77,63,4096,4174,21.151440,0.333920,21.485360,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,78,64,4096,4174,21.485360,0.333920,21.819280,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,80,65,4096,4174,21.819280,0.333920,22.153200,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,81,66,4096,4174,22.153200,0.333920,22.487120,100.000000,ns3-simulated/trace-derived
+a0-target-only,仅目标流,0,target,L2R,0,4,82,67,4096,4174,22.487120,0.333920,22.821040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,0,0,4096,4174,0.114480,0.333920,0.448400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,2,1,4096,4174,0.782320,0.333920,1.116240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,4,2,4096,4174,1.450160,0.333920,1.784080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,6,3,4096,4174,2.118000,0.333920,2.451920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,8,4,4096,4174,2.785840,0.333920,3.119760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,10,5,4096,4174,3.453680,0.333920,3.787600,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,12,6,4096,4174,4.121520,0.333920,4.455440,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,14,7,4096,4174,4.789360,0.333920,5.123280,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,16,8,4096,4174,5.457200,0.333920,5.791120,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,19,9,4096,4174,6.125040,0.333920,6.458960,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,21,10,4096,4174,6.792880,0.333920,7.126800,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,23,11,4096,4174,7.460720,0.333920,7.794640,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,25,12,4096,4174,8.128560,0.333920,8.462480,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,28,13,4096,4174,8.796400,0.333920,9.130320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,30,14,4096,4174,9.464240,0.333920,9.798160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,32,15,4096,4174,10.132080,0.333920,10.466000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,34,16,4096,4174,10.799920,0.333920,11.133840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,37,17,4096,4174,11.467760,0.333920,11.801680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,39,18,4096,4174,12.135600,0.333920,12.469520,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,41,19,4096,4174,12.803440,0.333920,13.137360,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,43,20,4096,4174,13.471280,0.333920,13.805200,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,46,21,4096,4174,14.139120,0.333920,14.473040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,48,22,4096,4174,14.806960,0.333920,15.140880,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,50,23,4096,4174,15.474800,0.333920,15.808720,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,52,24,4096,4174,16.142640,0.333920,16.476560,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,55,25,4096,4174,16.810480,0.333920,17.144400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,57,26,4096,4174,17.478320,0.333920,17.812240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,59,27,4096,4174,18.146160,0.333920,18.480080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,61,28,4096,4174,18.814000,0.333920,19.147920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,64,29,4096,4174,19.481840,0.333920,19.815760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,66,30,4096,4174,20.149680,0.333920,20.483600,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,68,31,4096,4174,20.817520,0.333920,21.151440,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,70,32,4096,4174,21.485360,0.333920,21.819280,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,73,33,4096,4174,22.153200,0.333920,22.487120,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,75,34,4096,4174,22.821040,0.333920,23.154960,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,77,35,4096,4174,23.488880,0.333920,23.822800,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,79,36,4096,4174,24.156720,0.333920,24.490640,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,82,37,4096,4174,24.824560,0.333920,25.158480,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,84,38,4096,4174,25.492400,0.333920,25.826320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,86,39,4096,4174,26.160240,0.333920,26.494160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,88,40,4096,4174,26.828080,0.333920,27.162000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,91,41,4096,4174,27.495920,0.333920,27.829840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,93,42,4096,4174,28.163760,0.333920,28.497680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,95,43,4096,4174,28.831600,0.333920,29.165520,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,97,44,4096,4174,29.499440,0.333920,29.833360,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,100,45,4096,4174,30.167280,0.333920,30.501200,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,102,46,4096,4174,30.835120,0.333920,31.169040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,104,47,4096,4174,31.502960,0.333920,31.836880,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,106,48,4096,4174,32.170800,0.333920,32.504720,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,109,49,4096,4174,32.838640,0.333920,33.172560,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,111,50,4096,4174,33.506480,0.333920,33.840400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,113,51,4096,4174,34.174320,0.333920,34.508240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,115,52,4096,4174,34.842160,0.333920,35.176080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,118,53,4096,4174,35.510000,0.333920,35.843920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,120,54,4096,4174,36.177840,0.333920,36.511760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,122,55,4096,4174,36.845680,0.333920,37.179600,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,124,56,4096,4174,37.513520,0.333920,37.847440,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,127,57,4096,4174,38.181360,0.333920,38.515280,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,129,58,4096,4174,38.849200,0.333920,39.183120,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,131,59,4096,4174,39.517040,0.333920,39.850960,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,133,60,4096,4174,40.184880,0.333920,40.518800,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,136,61,4096,4174,40.852720,0.333920,41.186640,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,138,62,4096,4174,41.520560,0.333920,41.854480,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,140,63,4096,4174,42.188400,0.333920,42.522320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,142,64,4096,4174,42.856240,0.333920,43.190160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,145,65,4096,4174,43.524080,0.333920,43.858000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,147,66,4096,4174,44.191920,0.333920,44.525840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,0,target,L2R,0,4,149,67,4096,4174,44.859760,0.333920,45.193680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,1,0,4096,4174,0.448400,0.333920,0.782320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,3,1,4096,4174,1.116240,0.333920,1.450160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,5,2,4096,4174,1.784080,0.333920,2.118000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,7,3,4096,4174,2.451920,0.333920,2.785840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,9,4,4096,4174,3.119760,0.333920,3.453680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,11,5,4096,4174,3.787600,0.333920,4.121520,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,13,6,4096,4174,4.455440,0.333920,4.789360,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,15,7,4096,4174,5.123280,0.333920,5.457200,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,17,8,4096,4174,5.791120,0.333920,6.125040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,20,9,4096,4174,6.458960,0.333920,6.792880,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,22,10,4096,4174,7.126800,0.333920,7.460720,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,24,11,4096,4174,7.794640,0.333920,8.128560,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,26,12,4096,4174,8.462480,0.333920,8.796400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,29,13,4096,4174,9.130320,0.333920,9.464240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,31,14,4096,4174,9.798160,0.333920,10.132080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,33,15,4096,4174,10.466000,0.333920,10.799920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,35,16,4096,4174,11.133840,0.333920,11.467760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,38,17,4096,4174,11.801680,0.333920,12.135600,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,40,18,4096,4174,12.469520,0.333920,12.803440,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,42,19,4096,4174,13.137360,0.333920,13.471280,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,44,20,4096,4174,13.805200,0.333920,14.139120,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,47,21,4096,4174,14.473040,0.333920,14.806960,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,49,22,4096,4174,15.140880,0.333920,15.474800,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,51,23,4096,4174,15.808720,0.333920,16.142640,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,53,24,4096,4174,16.476560,0.333920,16.810480,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,56,25,4096,4174,17.144400,0.333920,17.478320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,58,26,4096,4174,17.812240,0.333920,18.146160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,60,27,4096,4174,18.480080,0.333920,18.814000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,62,28,4096,4174,19.147920,0.333920,19.481840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,65,29,4096,4174,19.815760,0.333920,20.149680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,67,30,4096,4174,20.483600,0.333920,20.817520,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,69,31,4096,4174,21.151440,0.333920,21.485360,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,71,32,4096,4174,21.819280,0.333920,22.153200,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,74,33,4096,4174,22.487120,0.333920,22.821040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,76,34,4096,4174,23.154960,0.333920,23.488880,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,78,35,4096,4174,23.822800,0.333920,24.156720,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,80,36,4096,4174,24.490640,0.333920,24.824560,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,83,37,4096,4174,25.158480,0.333920,25.492400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,85,38,4096,4174,25.826320,0.333920,26.160240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,87,39,4096,4174,26.494160,0.333920,26.828080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,89,40,4096,4174,27.162000,0.333920,27.495920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,92,41,4096,4174,27.829840,0.333920,28.163760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,94,42,4096,4174,28.497680,0.333920,28.831600,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,96,43,4096,4174,29.165520,0.333920,29.499440,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,98,44,4096,4174,29.833360,0.333920,30.167280,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,101,45,4096,4174,30.501200,0.333920,30.835120,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,103,46,4096,4174,31.169040,0.333920,31.502960,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,105,47,4096,4174,31.836880,0.333920,32.170800,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,107,48,4096,4174,32.504720,0.333920,32.838640,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,110,49,4096,4174,33.172560,0.333920,33.506480,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,112,50,4096,4174,33.840400,0.333920,34.174320,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,114,51,4096,4174,34.508240,0.333920,34.842160,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,116,52,4096,4174,35.176080,0.333920,35.510000,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,119,53,4096,4174,35.843920,0.333920,36.177840,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,121,54,4096,4174,36.511760,0.333920,36.845680,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,123,55,4096,4174,37.179600,0.333920,37.513520,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,125,56,4096,4174,37.847440,0.333920,38.181360,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,128,57,4096,4174,38.515280,0.333920,38.849200,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,130,58,4096,4174,39.183120,0.333920,39.517040,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,132,59,4096,4174,39.850960,0.333920,40.184880,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,134,60,4096,4174,40.518800,0.333920,40.852720,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,137,61,4096,4174,41.186640,0.333920,41.520560,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,139,62,4096,4174,41.854480,0.333920,42.188400,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,141,63,4096,4174,42.522320,0.333920,42.856240,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,143,64,4096,4174,43.190160,0.333920,43.524080,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,146,65,4096,4174,43.858000,0.333920,44.191920,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,148,66,4096,4174,44.525840,0.333920,44.859760,100.000000,ns3-simulated/trace-derived
+a1-ep-same,同向 EP,1,ep_competitor,L2R,1,5,150,67,4096,4174,45.193680,0.333920,45.527600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,0,0,4096,4174,0.114480,0.333920,0.448400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,2,1,4096,4174,0.448400,0.333920,0.782320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,4,2,4096,4174,0.782320,0.333920,1.116240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,6,3,4096,4174,1.126240,0.333920,1.460160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,8,4,4096,4174,1.465120,0.333920,1.799040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,10,5,4096,4174,1.809040,0.333920,2.142960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,12,6,4096,4174,2.147920,0.333920,2.481840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,14,7,4096,4174,2.491840,0.333920,2.825760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,16,8,4096,4174,2.830720,0.333920,3.164640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,20,9,4096,4174,3.174640,0.333920,3.508560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,22,10,4096,4174,3.513520,0.333920,3.847440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,24,11,4096,4174,3.857440,0.333920,4.191360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,26,12,4096,4174,4.196320,0.333920,4.530240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,30,13,4096,4174,4.540240,0.333920,4.874160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,32,14,4096,4174,4.879120,0.333920,5.213040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,34,15,4096,4174,5.223040,0.333920,5.556960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,36,16,4096,4174,5.561920,0.333920,5.895840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,40,17,4096,4174,5.905840,0.333920,6.239760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,42,18,4096,4174,6.244720,0.333920,6.578640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,44,19,4096,4174,6.588640,0.333920,6.922560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,46,20,4096,4174,6.927520,0.333920,7.261440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,50,21,4096,4174,7.271440,0.333920,7.605360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,52,22,4096,4174,7.610320,0.333920,7.944240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,54,23,4096,4174,7.954240,0.333920,8.288160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,56,24,4096,4174,8.293120,0.333920,8.627040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,60,25,4096,4174,8.637040,0.333920,8.970960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,62,26,4096,4174,8.975920,0.333920,9.309840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,64,27,4096,4174,9.319840,0.333920,9.653760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,66,28,4096,4174,9.658720,0.333920,9.992640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,70,29,4096,4174,10.002640,0.333920,10.336560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,72,30,4096,4174,10.341520,0.333920,10.675440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,74,31,4096,4174,10.685440,0.333920,11.019360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,76,32,4096,4174,11.024320,0.333920,11.358240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,80,33,4096,4174,11.368240,0.333920,11.702160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,82,34,4096,4174,11.707120,0.333920,12.041040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,84,35,4096,4174,12.051040,0.333920,12.384960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,86,36,4096,4174,12.391280,0.333920,12.725200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,90,37,4096,4174,12.735200,0.333920,13.069120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,92,38,4096,4174,13.074080,0.333920,13.408000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,94,39,4096,4174,13.418000,0.333920,13.751920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,96,40,4096,4174,13.756880,0.333920,14.090800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,100,41,4096,4174,14.100800,0.333920,14.434720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,102,42,4096,4174,14.439680,0.333920,14.773600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,104,43,4096,4174,14.783600,0.333920,15.117520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,106,44,4096,4174,15.122480,0.333920,15.456400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,110,45,4096,4174,15.466400,0.333920,15.800320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,112,46,4096,4174,15.805280,0.333920,16.139200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,114,47,4096,4174,16.149200,0.333920,16.483120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,116,48,4096,4174,16.488080,0.333920,16.822000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,118,49,4096,4174,16.832000,0.333920,17.165920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,122,50,4096,4174,17.170880,0.333920,17.504800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,124,51,4096,4174,17.514800,0.333920,17.848720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,126,52,4096,4174,17.853680,0.333920,18.187600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,128,53,4096,4174,18.207600,0.333920,18.541520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,132,54,4096,4174,18.546480,0.333920,18.880400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,134,55,4096,4174,18.890400,0.333920,19.224320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,136,56,4096,4174,19.229280,0.333920,19.563200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,138,57,4096,4174,19.573200,0.333920,19.907120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,142,58,4096,4174,19.912080,0.333920,20.246000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,144,59,4096,4174,20.256000,0.333920,20.589920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,146,60,4096,4174,20.594880,0.333920,20.928800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,148,61,4096,4174,20.938800,0.333920,21.272720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,152,62,4096,4174,21.277680,0.333920,21.611600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,154,63,4096,4174,21.621600,0.333920,21.955520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,156,64,4096,4174,21.960480,0.333920,22.294400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,158,65,4096,4174,22.304400,0.333920,22.638320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,162,66,4096,4174,22.643280,0.333920,22.977200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,0,target,L2R,0,4,164,67,4096,4174,22.987200,0.333920,23.321120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,1,0,4096,4174,0.114480,0.333920,0.448400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,3,1,4096,4174,0.448400,0.333920,0.782320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,5,2,4096,4174,0.782320,0.333920,1.116240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,7,3,4096,4174,1.126240,0.333920,1.460160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,9,4,4096,4174,1.465120,0.333920,1.799040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,11,5,4096,4174,1.809040,0.333920,2.142960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,13,6,4096,4174,2.147920,0.333920,2.481840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,15,7,4096,4174,2.491840,0.333920,2.825760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,17,8,4096,4174,2.830720,0.333920,3.164640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,21,9,4096,4174,3.174640,0.333920,3.508560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,23,10,4096,4174,3.513520,0.333920,3.847440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,25,11,4096,4174,3.857440,0.333920,4.191360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,27,12,4096,4174,4.196320,0.333920,4.530240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,31,13,4096,4174,4.540240,0.333920,4.874160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,33,14,4096,4174,4.879120,0.333920,5.213040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,35,15,4096,4174,5.223040,0.333920,5.556960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,37,16,4096,4174,5.561920,0.333920,5.895840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,41,17,4096,4174,5.905840,0.333920,6.239760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,43,18,4096,4174,6.244720,0.333920,6.578640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,45,19,4096,4174,6.588640,0.333920,6.922560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,47,20,4096,4174,6.927520,0.333920,7.261440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,51,21,4096,4174,7.271440,0.333920,7.605360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,53,22,4096,4174,7.610320,0.333920,7.944240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,55,23,4096,4174,7.954240,0.333920,8.288160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,57,24,4096,4174,8.293120,0.333920,8.627040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,61,25,4096,4174,8.637040,0.333920,8.970960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,63,26,4096,4174,8.975920,0.333920,9.309840,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,65,27,4096,4174,9.319840,0.333920,9.653760,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,67,28,4096,4174,9.658720,0.333920,9.992640,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,71,29,4096,4174,10.002640,0.333920,10.336560,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,73,30,4096,4174,10.341520,0.333920,10.675440,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,75,31,4096,4174,10.685440,0.333920,11.019360,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,77,32,4096,4174,11.024320,0.333920,11.358240,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,81,33,4096,4174,11.368240,0.333920,11.702160,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,83,34,4096,4174,11.707120,0.333920,12.041040,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,85,35,4096,4174,12.051040,0.333920,12.384960,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,87,36,4096,4174,12.391280,0.333920,12.725200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,91,37,4096,4174,12.735200,0.333920,13.069120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,93,38,4096,4174,13.074080,0.333920,13.408000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,95,39,4096,4174,13.418000,0.333920,13.751920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,97,40,4096,4174,13.756880,0.333920,14.090800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,101,41,4096,4174,14.100800,0.333920,14.434720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,103,42,4096,4174,14.439680,0.333920,14.773600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,105,43,4096,4174,14.783600,0.333920,15.117520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,107,44,4096,4174,15.122480,0.333920,15.456400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,111,45,4096,4174,15.466400,0.333920,15.800320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,113,46,4096,4174,15.805280,0.333920,16.139200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,115,47,4096,4174,16.149200,0.333920,16.483120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,117,48,4096,4174,16.488080,0.333920,16.822000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,119,49,4096,4174,16.832000,0.333920,17.165920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,123,50,4096,4174,17.170880,0.333920,17.504800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,125,51,4096,4174,17.514800,0.333920,17.848720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,127,52,4096,4174,17.853680,0.333920,18.187600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,129,53,4096,4174,18.207600,0.333920,18.541520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,133,54,4096,4174,18.546480,0.333920,18.880400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,135,55,4096,4174,18.890400,0.333920,19.224320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,137,56,4096,4174,19.229280,0.333920,19.563200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,139,57,4096,4174,19.573200,0.333920,19.907120,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,143,58,4096,4174,19.912080,0.333920,20.246000,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,145,59,4096,4174,20.256000,0.333920,20.589920,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,147,60,4096,4174,20.594880,0.333920,20.928800,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,149,61,4096,4174,20.938800,0.333920,21.272720,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,153,62,4096,4174,21.277680,0.333920,21.611600,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,155,63,4096,4174,21.621600,0.333920,21.955520,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,157,64,4096,4174,21.960480,0.333920,22.294400,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,159,65,4096,4174,22.304400,0.333920,22.638320,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,163,66,4096,4174,22.643280,0.333920,22.977200,100.000000,ns3-simulated/trace-derived
+a2-ep-reverse,反向 EP,1,reverse_ep,R2L,5,1,165,67,4096,4174,22.987200,0.333920,23.321120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,0,0,4096,4174,0.114480,0.333920,0.448400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,2,1,4096,4174,0.782320,0.333920,1.116240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,4,2,4096,4174,1.450160,0.333920,1.784080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,6,3,4096,4174,2.118000,0.333920,2.451920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,8,4,4096,4174,2.785840,0.333920,3.119760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,10,5,4096,4174,3.453680,0.333920,3.787600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,12,6,4096,4174,4.121520,0.333920,4.455440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,14,7,4096,4174,4.789360,0.333920,5.123280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,16,8,4096,4174,5.457200,0.333920,5.791120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,19,9,4096,4174,6.125040,0.333920,6.458960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,21,10,4096,4174,6.792880,0.333920,7.126800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,23,11,4096,4174,7.460720,0.333920,7.794640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,25,12,4096,4174,8.128560,0.333920,8.462480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,28,13,4096,4174,8.796400,0.333920,9.130320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,30,14,4096,4174,9.464240,0.333920,9.798160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,32,15,4096,4174,10.132080,0.333920,10.466000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,34,16,4096,4174,10.799920,0.333920,11.133840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,37,17,4096,4174,11.467760,0.333920,11.801680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,39,18,4096,4174,12.135600,0.333920,12.469520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,41,19,4096,4174,12.803440,0.333920,13.137360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,43,20,4096,4174,13.471280,0.333920,13.805200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,46,21,4096,4174,14.139120,0.333920,14.473040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,48,22,4096,4174,14.806960,0.333920,15.140880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,50,23,4096,4174,15.474800,0.333920,15.808720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,52,24,4096,4174,16.142640,0.333920,16.476560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,55,25,4096,4174,16.810480,0.333920,17.144400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,57,26,4096,4174,17.478320,0.333920,17.812240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,59,27,4096,4174,18.146160,0.333920,18.480080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,61,28,4096,4174,18.814000,0.333920,19.147920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,64,29,4096,4174,19.481840,0.333920,19.815760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,66,30,4096,4174,20.149680,0.333920,20.483600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,68,31,4096,4174,20.817520,0.333920,21.151440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,70,32,4096,4174,21.485360,0.333920,21.819280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,73,33,4096,4174,22.153200,0.333920,22.487120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,75,34,4096,4174,22.821040,0.333920,23.154960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,77,35,4096,4174,23.488880,0.333920,23.822800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,79,36,4096,4174,24.156720,0.333920,24.490640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,82,37,4096,4174,24.824560,0.333920,25.158480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,84,38,4096,4174,25.492400,0.333920,25.826320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,86,39,4096,4174,26.160240,0.333920,26.494160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,88,40,4096,4174,26.828080,0.333920,27.162000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,91,41,4096,4174,27.495920,0.333920,27.829840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,93,42,4096,4174,28.163760,0.333920,28.497680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,95,43,4096,4174,28.831600,0.333920,29.165520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,97,44,4096,4174,29.499440,0.333920,29.833360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,100,45,4096,4174,30.167280,0.333920,30.501200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,102,46,4096,4174,30.835120,0.333920,31.169040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,104,47,4096,4174,31.502960,0.333920,31.836880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,106,48,4096,4174,32.170800,0.333920,32.504720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,109,49,4096,4174,32.838640,0.333920,33.172560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,111,50,4096,4174,33.506480,0.333920,33.840400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,113,51,4096,4174,34.174320,0.333920,34.508240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,115,52,4096,4174,34.842160,0.333920,35.176080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,118,53,4096,4174,35.510000,0.333920,35.843920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,120,54,4096,4174,36.177840,0.333920,36.511760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,122,55,4096,4174,36.845680,0.333920,37.179600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,124,56,4096,4174,37.513520,0.333920,37.847440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,127,57,4096,4174,38.181360,0.333920,38.515280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,129,58,4096,4174,38.849200,0.333920,39.183120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,131,59,4096,4174,39.517040,0.333920,39.850960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,133,60,4096,4174,40.184880,0.333920,40.518800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,136,61,4096,4174,40.852720,0.333920,41.186640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,138,62,4096,4174,41.520560,0.333920,41.854480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,140,63,4096,4174,42.188400,0.333920,42.522320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,142,64,4096,4174,42.856240,0.333920,43.190160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,145,65,4096,4174,43.524080,0.333920,43.858000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,147,66,4096,4174,44.191920,0.333920,44.525840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,0,target,L2R,0,4,149,67,4096,4174,44.859760,0.333920,45.193680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,1,0,4096,4174,0.448400,0.333920,0.782320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,3,1,4096,4174,1.116240,0.333920,1.450160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,5,2,4096,4174,1.784080,0.333920,2.118000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,7,3,4096,4174,2.451920,0.333920,2.785840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,9,4,4096,4174,3.119760,0.333920,3.453680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,11,5,4096,4174,3.787600,0.333920,4.121520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,13,6,4096,4174,4.455440,0.333920,4.789360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,15,7,4096,4174,5.123280,0.333920,5.457200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,17,8,4096,4174,5.791120,0.333920,6.125040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,20,9,4096,4174,6.458960,0.333920,6.792880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,22,10,4096,4174,7.126800,0.333920,7.460720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,24,11,4096,4174,7.794640,0.333920,8.128560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,26,12,4096,4174,8.462480,0.333920,8.796400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,29,13,4096,4174,9.130320,0.333920,9.464240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,31,14,4096,4174,9.798160,0.333920,10.132080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,33,15,4096,4174,10.466000,0.333920,10.799920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,35,16,4096,4174,11.133840,0.333920,11.467760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,38,17,4096,4174,11.801680,0.333920,12.135600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,40,18,4096,4174,12.469520,0.333920,12.803440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,42,19,4096,4174,13.137360,0.333920,13.471280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,44,20,4096,4174,13.805200,0.333920,14.139120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,47,21,4096,4174,14.473040,0.333920,14.806960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,49,22,4096,4174,15.140880,0.333920,15.474800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,51,23,4096,4174,15.808720,0.333920,16.142640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,53,24,4096,4174,16.476560,0.333920,16.810480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,56,25,4096,4174,17.144400,0.333920,17.478320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,58,26,4096,4174,17.812240,0.333920,18.146160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,60,27,4096,4174,18.480080,0.333920,18.814000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,62,28,4096,4174,19.147920,0.333920,19.481840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,65,29,4096,4174,19.815760,0.333920,20.149680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,67,30,4096,4174,20.483600,0.333920,20.817520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,69,31,4096,4174,21.151440,0.333920,21.485360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,71,32,4096,4174,21.819280,0.333920,22.153200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,74,33,4096,4174,22.487120,0.333920,22.821040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,76,34,4096,4174,23.154960,0.333920,23.488880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,78,35,4096,4174,23.822800,0.333920,24.156720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,80,36,4096,4174,24.490640,0.333920,24.824560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,83,37,4096,4174,25.158480,0.333920,25.492400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,85,38,4096,4174,25.826320,0.333920,26.160240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,87,39,4096,4174,26.494160,0.333920,26.828080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,89,40,4096,4174,27.162000,0.333920,27.495920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,92,41,4096,4174,27.829840,0.333920,28.163760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,94,42,4096,4174,28.497680,0.333920,28.831600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,96,43,4096,4174,29.165520,0.333920,29.499440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,98,44,4096,4174,29.833360,0.333920,30.167280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,101,45,4096,4174,30.501200,0.333920,30.835120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,103,46,4096,4174,31.169040,0.333920,31.502960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,105,47,4096,4174,31.836880,0.333920,32.170800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,107,48,4096,4174,32.504720,0.333920,32.838640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,110,49,4096,4174,33.172560,0.333920,33.506480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,112,50,4096,4174,33.840400,0.333920,34.174320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,114,51,4096,4174,34.508240,0.333920,34.842160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,116,52,4096,4174,35.176080,0.333920,35.510000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,119,53,4096,4174,35.843920,0.333920,36.177840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,121,54,4096,4174,36.511760,0.333920,36.845680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,123,55,4096,4174,37.179600,0.333920,37.513520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,125,56,4096,4174,37.847440,0.333920,38.181360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,128,57,4096,4174,38.515280,0.333920,38.849200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,130,58,4096,4174,39.183120,0.333920,39.517040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,132,59,4096,4174,39.850960,0.333920,40.184880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,134,60,4096,4174,40.518800,0.333920,40.852720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,137,61,4096,4174,41.186640,0.333920,41.520560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,139,62,4096,4174,41.854480,0.333920,42.188400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,141,63,4096,4174,42.522320,0.333920,42.856240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,143,64,4096,4174,43.190160,0.333920,43.524080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,146,65,4096,4174,43.858000,0.333920,44.191920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,148,66,4096,4174,44.525840,0.333920,44.859760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,150,67,4096,4174,45.193680,0.333920,45.527600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,151,68,4096,4174,45.537600,0.333920,45.871520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,153,69,4096,4174,45.876480,0.333920,46.210400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,154,70,4096,4174,46.220400,0.333920,46.554320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,155,71,4096,4174,46.559280,0.333920,46.893200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,156,72,4096,4174,46.903200,0.333920,47.237120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,158,73,4096,4174,47.237120,0.333920,47.571040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,159,74,4096,4174,47.571040,0.333920,47.904960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,160,75,4096,4174,47.904960,0.333920,48.238880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,161,76,4096,4174,48.238880,0.333920,48.572800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,163,77,4096,4174,48.572800,0.333920,48.906720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,164,78,4096,4174,48.906720,0.333920,49.240640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,165,79,4096,4174,49.240640,0.333920,49.574560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,166,80,4096,4174,49.574560,0.333920,49.908480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,168,81,4096,4174,49.908480,0.333920,50.242400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,169,82,4096,4174,50.242400,0.333920,50.576320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,170,83,4096,4174,50.576320,0.333920,50.910240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,171,84,4096,4174,50.910240,0.333920,51.244160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,173,85,4096,4174,51.244160,0.333920,51.578080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,174,86,4096,4174,51.578080,0.333920,51.912000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,175,87,4096,4174,51.912000,0.333920,52.245920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,176,88,4096,4174,52.245920,0.333920,52.579840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,178,89,4096,4174,52.579840,0.333920,52.913760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,179,90,4096,4174,52.913760,0.333920,53.247680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,180,91,4096,4174,53.247680,0.333920,53.581600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,181,92,4096,4174,53.581600,0.333920,53.915520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,183,93,4096,4174,53.915520,0.333920,54.249440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,184,94,4096,4174,54.249440,0.333920,54.583360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,185,95,4096,4174,54.583360,0.333920,54.917280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,186,96,4096,4174,54.917280,0.333920,55.251200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,188,97,4096,4174,55.251200,0.333920,55.585120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,189,98,4096,4174,55.585120,0.333920,55.919040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,190,99,4096,4174,55.919040,0.333920,56.252960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,191,100,4096,4174,56.252960,0.333920,56.586880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,193,101,4096,4174,56.586880,0.333920,56.920800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,194,102,4096,4174,56.920800,0.333920,57.254720,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,195,103,4096,4174,57.254720,0.333920,57.588640,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,196,104,4096,4174,57.588640,0.333920,57.922560,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,198,105,4096,4174,57.922560,0.333920,58.256480,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,199,106,4096,4174,58.256480,0.333920,58.590400,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,200,107,4096,4174,58.590400,0.333920,58.924320,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,201,108,4096,4174,58.924320,0.333920,59.258240,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,203,109,4096,4174,59.258240,0.333920,59.592160,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,204,110,4096,4174,59.592160,0.333920,59.926080,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,205,111,4096,4174,59.926080,0.333920,60.260000,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,206,112,4096,4174,60.260000,0.333920,60.593920,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,208,113,4096,4174,60.593920,0.333920,60.927840,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,209,114,4096,4174,60.927840,0.333920,61.261760,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,210,115,4096,4174,61.261760,0.333920,61.595680,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,211,116,4096,4174,61.595680,0.333920,61.929600,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,213,117,4096,4174,61.929600,0.333920,62.263520,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,214,118,4096,4174,62.263520,0.333920,62.597440,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,215,119,4096,4174,62.597440,0.333920,62.931360,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,216,120,4096,4174,62.931360,0.333920,63.265280,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,218,121,4096,4174,63.265280,0.333920,63.599200,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,219,122,4096,4174,63.599200,0.333920,63.933120,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,220,123,4096,4174,63.933120,0.333920,64.267040,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,221,124,4096,4174,64.267040,0.333920,64.600960,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,223,125,4096,4174,64.600960,0.333920,64.934880,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,224,126,4096,4174,64.934880,0.333920,65.268800,100.000000,ns3-simulated/trace-derived
+a3-ep-kv,同向 KV,1,kv_competitor,L2R,1,5,225,127,4096,4174,65.268800,0.333920,65.602720,100.000000,ns3-simulated/trace-derived

@@ -154,14 +154,14 @@ Block A/B 使用 8 hosts、2 switches：host access 为 400 Gbps，两个交换�
 
 ![EP KV 微秒级事件剖面](../../source/_static/round09/block24-ep-kv-microsecond-profile.svg)
 
-**图 6：同向 EP+KV 的带宽、核心端口队列和 flow 完成事件共轴。** 上图显示目标与 KV 如何在 100 Gbps 链路上交替占用；中图是 switch 8 / port 4 的 `VOQ + egress` occupancy；下图是两个 task 的 first-packet 到 last-ACK 窗口。
+**图 6：同向 EP+KV 的五层微秒级事件显微镜。** 从上到下依次为精确逐包序列化、0.25-µs 带宽、核心端口队列、累计 wire bytes，以及从首包到数据完成和 last-ACK 的 task 生命周期。
 
-- 数据来源：`network_core_bandwidth_timeseries.csv`、`network_core_queue_timeseries.csv` 和 `network_temporal_task_windows.csv`。
-- 物理量与单位：data bandwidth（Gbps）、queue occupancy（KiB）、task/ACK 时间（µs）。
+- 数据来源：ns-3 `AllPacketTrace`、`PortTrace`、`QueueTrace` 和 `task_statistics.csv`，汇总为 `network_core_packet_events.csv`、`network_core_bandwidth_timeseries.csv`、`network_core_queue_timeseries.csv` 和 `network_temporal_task_windows.csv`。
+- 物理量与单位：逐包序列化区间（ns/µs）、data bandwidth（Gbps）、queue occupancy 和累计 wire bytes（KiB）、task/ACK 时间（µs）。
 - 证据类型：全部为当前配置的 `ns3-simulated/trace-derived`。
-- 不能证明：queue 是仿真队列状态，不是交换机硬件 buffer counter；flow window 不是 GPU kernel 时间。
+- 不能证明：逐包调度和 queue 都是仿真状态，不是硬件抓包或交换机 buffer counter；task window 也不是 GPU kernel 时间。
 
-竞争流从 400 Gbps host access 同时涌入 100 Gbps core，使核心队列在 10.7805 µs 达到原始 trace 峰值 684,598 B（668.6 KiB），随后随 core 持续满载而下降。目标 ACK 在 46.979 µs 到达，但 KV proxy 继续独占链路并把 phase ACK 推到 66.013 µs。这张图把“目标流受损”和“阶段尾部被 KV 拖长”在同一时间轴上分开了。
+目标流有 68 个 data packet，KV 有 128 个；每个 4,174-B wire 满包在 100 Gbps core 上占用 333.92 ns。两条流先逐包交替，目标最后一个包在 45.194 µs 离开核心链路；KV 随后单独排空到 65.603 µs。竞争流从 400 Gbps host access 同时涌入 100 Gbps core，使队列在 10.7805 µs 达到 684,598 B（668.6 KiB）；目标 ACK 在 46.979 µs 到达，phase ACK 为 66.013 µs。累计曲线最终为 277.2 KiB 和 521.8 KiB wire bytes，高于 272/512 KiB payload 的差额来自 packet overhead。
 
 ![目的端带宽随时间变化](../../source/_static/round09/destination-access-bandwidth-timeseries.svg)
 

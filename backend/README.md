@@ -208,13 +208,13 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 验收覆盖三轮共 42 次 UB 写、344064 业务字节、144 个节点的 288 条原始执行事件，四个请求分别从不同 Token 下标推进三次并结束。基线完成时间为 64738 ns；仅增加 rank 1 链路传播时延后为 100410 ns，下一次服务决策跟随实际 UB 完成。来源开/关/不挂观测、重复执行以及每次回复前暂停 30 ms 的运行保留相同业务时刻；改变端口间隔的收尾测试确认服务结束后仍会等网络空闲。EOF、非法消息、编号/时间不符、输入耗尽却含未来唤醒、缺少工作、错误路径和末 rank 坏图被拒绝；子进程失败及不完整行的等待超时可报告。
 
-以上为 M3.1 单组基线，该样例的 next_wakeup_ns 为 null。M3.2 已增加下述动态到达和第二组；四 rank 正计算、每 rank 每轮一个 Token 的限制继续保留，M3.4 的零 Token rank 尚未实现。它仍是未校准的单层功能模型，不是完整模型服务性能结果。具体初始长度见 [服务样例](../fixtures/m3_service/README.md)。
+以上为 M3.1 单组基线，该样例的 next_wakeup_ns 为 null。M3.2 已增加下述动态到达和第二组；M3.4 已按下文允许零 Token 成员。它仍是未校准的单层功能模型，不是完整模型服务性能结果。具体初始长度见 [服务样例](../fixtures/m3_service/README.md)。
 
 ## M3.2 动态到达与独立组
 
 服务前端按绝对 `arrival_ns` 接纳请求，后端在同一 ns-3 事件队列登记 `next_wakeup_ns`。每次 COMMIT 替换此前的外部唤醒；图提前完成时重登记剩余到达时刻，全空闲时直接推进到下一次到达。后端按显式 EP 组维护在途图和完成集合，单个成员提前结束不会释放整个组，也不会阻挡另一个空闲组提交。
 
-新请求到达忙碌组只更新前端 `pending` 队列，不调用该组的 schedule 或替换图。组上的旧请求全部结束后，才经原 Scheduler.add_decode 接纳下一批给定 KV 请求；每个请求的下一步路由和图仍根据真实批次生成。输入限定一或两个四成员组、每批四成员同时到达且剩余步数一致、每 rank 每轮一个 Token。具体容量与输入边界见 [动态输入说明](../fixtures/m3_dynamic_arrivals/README.md)。
+新请求到达忙碌组只更新前端 `pending` 队列，不调用该组的 schedule 或替换图。M3.2 基线在组上的旧请求全部结束后，经原 Scheduler.add_decode 接纳下一批给定 KV 请求；每个请求的下一步路由和图仍根据真实批次生成。M3.2 的输入限定一或两个四成员组、每批四成员同时到达且剩余步数一致、每 rank 每轮一个 Token；M3.4 放开后的范围见下文。具体容量与输入边界见 [动态输入说明](../fixtures/m3_dynamic_arrivals/README.md)。
 
 使用 [M3.2 环境记录](../docs/environment.md#2026-09-29m3-2-dynamic-arrivals) 中配置的独立构建目录，输出目录必须不存在：
 
@@ -250,3 +250,25 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 `PortObservation` 在已有成功发送事件之外读取原生物理出口 FIFO 入队/出队事件，输出执行目录中的 `egress-queue-audit.jsonl`。每条含事件、仿真纳秒、包 UID、整包字节、事件后的排队字节；发送开始另含原生发送时长决定的 `busy_until_ns`。它是内部审计，不进入 `observed/`，不添加包标签、改写报文或登记仿真事件。来源关闭仍保留该审计，不挂观测则不生成；各模式的业务时间、协议与原生网络跟踪一致。
 
 该 FIFO 不包含 VOQ、信用等待或当前正在发送的包。其峰值不必随竞争增加：本次重叠峰值 4174 字节，独立运行峰值分别为 4174/4236 字节；两组平均 FIFO 等待及累计排队量增加，连续忙碌时间增长。内部包来源按窗口分组，逐项核对端口聚合字节，不把隐藏身份加入观测。具体矩阵与结果见 [样例说明](../fixtures/m3_shared_bottleneck/README.md)。结论限于此未校准功能输入，未验证 M3.4 的完整边界与故障。
+
+
+## M3.4 服务边界与故障记录
+
+服务输入现在允许 0～64 个请求，每个请求有 1～32 步显式路由，分别指定到达时刻。保留一或两个四成员 EP 组、给定已就绪 KV、每 rank 每轮最多一个真实 Token。组空闲时，仅给本地 Scheduler 已空的 rank 按 FIFO 接纳一个等待请求；其他成员可以继续旧请求。组执行期间，新到达请求只排队，成员提前完成仍须等整组完成，才可调度下一轮。
+
+每轮仍校验并装载全部四份图。没有本地 Token 的成员不生成 attention/打包、Combine 解包合并或下一层计算；有远端专家输入时仍执行接收、专家计算、局部合并及发送结果。没有专家输入则省略相应计算，保留必要收发依赖。完全空闲成员的图只有元数据，阶段节点为 null，在激活时完成；不调用虚构请求的 schedule/add_done。纯本地专家计算不产生网络写，空请求服务在 0 ns 正常结束。
+
+使用 [M3.4 环境记录](../docs/environment.md#2026-09-29m3-4-service-boundaries) 中的独立构建配置，运行以下已验证入口，输出目录须不存在：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_service_boundaries.py \
+  --build-dir build/m3-service-boundaries --output-dir runs/my-boundaries-check
+```
+
+[边界输入](../fixtures/m3_service_boundaries/README.md) 覆盖稀疏参与、不同到达与步数、另一组先结束、纯本地和空输入，逐 Token 检查真实图和 UB 写。稀疏三轮共六次写、49152 业务字节，于 45502 ns 完成；不均匀请求共五轮，于 59263 ns 完成。观测开启、关闭、不挂载及重复运行保留相同协议、业务时刻与原生网络日志。input_exhausted 不代替 service_finished，服务完成仍等实际链路包与队列排空。
+
+运行中可捕获的异常输出 execution/failure.json，含阶段、决策号、时间、最后提交、组/图/rank、待完成传输和网络资源。前端 failure.json 保存尚未完成的请求、队列和图，manifest.json 保留后端实际退出码；EOF 时先回收已终止子进程，避免清理动作覆盖其退出原因。后端被信号直接终止时只能保存前端状态和现有日志，不声称 C++ 已正常清理。
+
+死锁检查在真实事件后于同一仿真时刻触发：没有未来唤醒、计算/适配器事件、待提交或回调事件、UB 待执行任务及网络数据，而图仍等待时，立即报告位置。仍有 UB 任务或网络状态但无法前进时，仿真时间上限报告失败和资源快照，不将其称为已证明死锁；没有固定轮询或固定通信时间。独立 cosim-service-deadlock-test 只用于遗漏一个成员激活的故障检查，正式程序没有这种配置开关。
+
+ASTRA 日志使用固定依赖的单线程异步写入。根仓库日志桥接层在导出前等待队列中的 flush 完成，专项测试阻塞写线程核对等待与完整记录；这种主机同步不推进仿真时钟。M1/M2 及 M3.1～M3.3 回归通过，子模块源码和版本不变。以上仍为未校准的单层合成验证，不包含 P/D、真实路由、容量争用或丢包恢复。

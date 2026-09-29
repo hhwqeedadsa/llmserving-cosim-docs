@@ -55,7 +55,7 @@ def validate_config(c):
     for key, duration in profile.items():
         integer(duration, key, 1, (MAX_TIME_NS - c['ready_ns']) // 16)
     tokens = c['tokens']
-    require(isinstance(tokens, list) and len(tokens) == 4, 'M2.1 requires four explicit Token records')
+    require(isinstance(tokens, list) and 1 <= len(tokens) <= 4, 'Require 1..4 explicit Token records')
     ranks, identities = [], set()
     for token in tokens:
         require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
@@ -73,7 +73,8 @@ def validate_config(c):
         require(identity not in identities, 'Duplicate Token identity')
         identities.add(identity)
         ranks.append(token['src_rank'])
-    require(sorted(ranks) == c['rank_ids'], 'M2.1 requires one local Token per rank')
+    require(len(set(ranks)) == len(ranks) and set(ranks) <= set(c['rank_ids']),
+            'Require at most one local Token per group rank')
 
 
 def build_plan(config, identities=None):
@@ -99,7 +100,6 @@ def build_plan(config, identities=None):
                 remote[token['src_rank'], dst].append(dict(request_id=token['request_id'],
                     phase=token['phase'], token_index=token['token_index'], source_record_index=source_index,
                     layer_id=token['layer_id'], expert_ids=sorted(experts)))
-    require(all(expert_inputs.values()), 'M2.1 requires positive expert work on every rank')
     transfers = []
     for op in operations:
         matrix = remote if op['kind'] == 'dispatch' else {(dst, src): v for (src, dst), v in remote.items()}
@@ -121,13 +121,15 @@ def build_plan(config, identities=None):
     for rank in c['rank_ids']:
         nodes = []
         def comp(name, duration, deps, inputs=None):
+            if duration == 0:
+                return None  # No dummy work or zero-duration compute event.
             node = dict(node_id=len(nodes) + 1, rank_id=rank, kind='COMP', name=name,
                         duration_ns=duration, resource_id='gpu_compute', deps=list(deps))
             if inputs is not None:
                 node['expert_inputs'] = inputs
             nodes.append(node)
             return node['node_id']
-        def communication(kind, predecessor):
+        def communication(kind, predecessors):
             ids = []
             for direction in ('SEND', 'RECV'):
                 mine = sorted((t for t in transfers if t['kind'] == kind and
@@ -137,24 +139,30 @@ def build_plan(config, identities=None):
                     node_id = len(nodes) + 1
                     nodes.append(dict(node_id=node_id, rank_id=rank, kind=direction,
                         name=f"{kind}-{direction.lower()}-{t['src_rank']}-{t['dst_rank']}",
-                        transfer_id=t['transfer_id'], deps=[predecessor]))
+                        transfer_id=t['transfer_id'], deps=list(predecessors)))
                     t['send_node_id' if direction == 'SEND' else 'recv_node_id'] = node_id
                     ids.append(node_id)
             return ids
         profile = c['compute_profile_ns']
-        prepare = comp('attention-route-pack', profile['attention_route_pack'], [])
-        dispatch = communication('dispatch', prepare)
+        local_tokens = sum(t['src_rank'] == rank for t in c['tokens'])
+        prepare = comp('attention-route-pack', local_tokens * profile['attention_route_pack'], [])
+        prepared = [prepare] if prepare is not None else []
+        dispatch = communication('dispatch', prepared)
         expert = comp('expert-compute', len(expert_inputs[rank]) * profile['expert_per_input'],
-                      [prepare] + dispatch, expert_inputs[rank])
-        local_merge = comp('expert-local-merge', profile['expert_local_merge'], [expert])
-        combine = communication('combine', local_merge)
-        finish = comp('combine-unpack-merge', profile['combine_unpack_merge'], [local_merge] + combine)
-        next_layer = comp('next-layer', profile['next_layer'], [finish])
+                      prepared + dispatch, expert_inputs[rank])
+        computed = [expert] if expert is not None else prepared + dispatch
+        local_merge = comp('expert-local-merge', bool(expert_inputs[rank]) * profile['expert_local_merge'], computed)
+        merged = [local_merge] if local_merge is not None else computed
+        combine = communication('combine', merged)
+        finish = comp('combine-unpack-merge', local_tokens * profile['combine_unpack_merge'], merged + combine)
+        finished = [finish] if finish is not None else merged + combine
+        next_layer = comp('next-layer', local_tokens * profile['next_layer'], finished)
         rank_graphs.append(dict(rank_id=rank, nodes=nodes, phase_nodes=dict(prepare=prepare,
             expert=expert, local_merge=local_merge, finish=finish, next_layer=next_layer)))
     plan = dict(schema_version='moe-ub-execution-plan/1', graph_id=c['graph_id'], wave_id=c['wave_id'],
         rank_ids=c['rank_ids'], rank_to_ub_node=c['rank_to_ub_node'], ready_ns=c['ready_ns'],
-        instance_batches=[dict(rank_id=t['src_rank'], request_ids=[t['request_id']]) for t in c['tokens']],
+        instance_batches=[dict(rank_id=r, request_ids=[t['request_id'] for t in c['tokens'] if t['src_rank'] == r])
+                          for r in c['rank_ids']],
         communication_template=c['template'], communication_profile_basis='reference_model',
         compute_source='synthetic_fixed_duration', route_source='explicit_synthetic_fixture',
         calibration_status='unvalidated_reference', sender_completion='transaction_done',
@@ -178,7 +186,7 @@ def validate_plan(plan):
     for op in operations.values():
         require(op['participants'] == ranks, 'Operation participants mismatch')
     transfers = {t['transfer_id']: t for t in plan['transfers']}
-    require(0 < len(transfers) == len(plan['transfers']) <= MAX_TRANSFERS, 'Duplicate/missing/too many transfers')
+    require(len(transfers) == len(plan['transfers']) <= MAX_TRANSFERS, 'Duplicate/too many transfers')
     for field in ('comm_tag', 'ub_task_id'):
         require(len({t[field] for t in transfers.values()}) == len(transfers), f'Duplicate {field}')
     for t in transfers.values():
@@ -196,6 +204,17 @@ def validate_plan(plan):
     for t in transfers.values():
         integer(t['chunk_index'], 'chunk_index', 0, MAX_TRANSFERS - 1)
         grouped[t['operation_id'], t['src_rank'], t['dst_rank']].append(t)
+    expected_pairs = Counter()
+    for token in plan['input']['tokens']:
+        src = token['src_rank']
+        for dst in {plan['input']['expert_placement'][e] for e in token['expert_ids']} - {src}:
+            expected_pairs['dispatch', src, dst] += 1
+            expected_pairs['combine', dst, src] += 1
+    actual_pairs = {(parts[0]['kind'], src, dst): parts for (_, src, dst), parts in grouped.items()}
+    require(set(actual_pairs) == set(expected_pairs), 'Transfer set differs from Token routes')
+    for key, parts in actual_pairs.items():
+        require(sum(t['payload_bytes'] for t in parts) == expected_pairs[key] * plan['input']['hidden_dim'] *
+                plan['input'][key[0] + '_element_bytes'], 'Transfer bytes differ from Token routes')
     for parts in grouped.values():
         first = parts[0]
         expected = len(first['sources']) * plan['input']['hidden_dim'] * plan['input'][first['kind'] + '_element_bytes']

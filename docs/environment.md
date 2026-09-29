@@ -1617,3 +1617,86 @@ shared-check-2 的七次仿真均成功，汇总断言错误要求重叠物理 F
 final_audit.py 恢复原生 UB launcher lock，并核对 244 个旧产物/生成文件的大小和 SHA-256，全部未变。实现源码与三个最终集成所记录的哈希相符。链接审计仍有全部 52 个 ASTRA 核心对象、且只加载本次构建的 10 个 UB ns-3 库。未重跑原生 LLMServingSim 性能样例，旧产物核对不代替本轮性能验证。
 
 本轮仅验证未校准合成单层的共享链路效应；没有扩展任意不均匀请求、零 Token 成员、完整死锁/故障、P/D、真实路由或模型校准。停止在 M3.3 completed，按持续授权本地提交、不推送；M3.4 等待用户确认。提交后的依赖检查和主仓库/相关子模块状态保存在 L/dependency-final.json 与 L/git-final.json。
+
+
+## 2026-09-29：m3-4-service-boundaries
+
+用户确认开始 M3.4，上一项 M3.3 的结果在 1cf1308，任务说明提交 76596d0。开始时 main 干净、比 origin/main 多六个提交，13 项依赖检查通过。LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222 及递归版本不变。本次只修改根仓库的必要实现、测试、合成输入和记录，没有安装、下载、初始化、改全局配置或推送。
+
+日志根为 `runs/m3-4-service-boundaries-20260929T022511Z/`，下文记为 L。L/record.py 为每项命令保存 cwd、完整 argv、UTC 时间、退出码、stdout/stderr；集成目录 commands.json 进一步保存子进程命令与输入，协议失败输入亦保留。除日志专项单元外，命令工作目录均为 `/root/moe-ub-cosim`，使用原有 Linux、GCC/CMake/Ninja 和 `.venv/llmservingsim-native`。
+
+### 实现与构建
+
+Python 服务放开同时到达、等步数的四请求限制，允许空服务和 1～32 步请求。每 rank 每轮最多一个真实 Token；整组空闲时给本地 Scheduler 已空的成员接纳一个等待请求，其他成员继续自己的旧请求。无本地 Token 不调用虚构 batch 的 schedule/add_done，但仍提交全部成员图并处理远端专家工作。没有实际工作的阶段节点为 null，图中不生成零耗时填充 COMP；完全空闲图只有元数据。Python 和 C++ 从真实 Token 路由核对传输集合和字节，零传输只用于没有远端数据的情况。
+
+后端在真实执行事件后检查没有未来业务事件的等待，保存组、图、rank、传输和网络资源位置。UB 已接纳但尚未形成端口流量的任务仍算待执行工作；这类状态或网络未排空而无法推进时由显式仿真上限报告失败。正式程序没有测试故障开关。前端保存异常时的请求/队列/图，EOF 回收已退出进程后记录实际退出码。根日志桥接层等待异步日志 flush 队列完成后再读取执行记录，不推进仿真时间。依赖源码没有修改。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m3-service-boundaries -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m3-service-boundaries/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m3-service-boundaries --target \
+  cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence \
+  cosim-lifecycle-test cosim-layer-delay-test cosim-time-test cosim-write-test \
+  cosim-compute cosim-write --parallel 8
+cmake --build build/m3-service-boundaries --target \
+  cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence \
+  cosim-lifecycle-test cosim-layer-delay-test cosim-compute cosim-write \
+  cosim-logging-test --parallel 8
+```
+
+独立构建不覆盖旧输出，任何时刻只运行一个构建，最多八个编译作业。configure、build-2、build-pending-ub、build-flush-2 均退出 0；初次 build 与 build-flush 的编译失败见下文。保留上游 binary_function 弃用警告和 ns-3 独立输出目录提示。
+
+### 最终检查与服务边界
+
+以下集成检查的实际命令统一为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m3-service-boundaries --output-dir L/记录名`。表中十项最终命令均退出 0，summary.json 均为 passed；输入、运行数、原始日志与拒绝原因保存在对应目录。
+
+| 脚本名 | 记录名 | 检查结果 |
+|---|---|---|
+| check_service_boundaries.py | boundaries-final | 七次正常运行、七项预期故障 |
+| check_service.py | service-final | 七次正常运行、九项协议拒绝及子进程故障；原三步时刻 21552/43145/64738 ns |
+| check_dynamic_service.py | dynamic-final | 九次运行、十项拒绝；原双组九轮 129517 ns |
+| check_shared_bottleneck.py | shared-final | 七次共享网络对照；重叠六轮仍为 264523 ns |
+| check_layer.py | layer-final | 三次运行、十三项拒绝；十四次写、114688 字节 |
+| check_sequence.py | sequence-final | 五次运行、十二项拒绝；28 次写、229376 字节，旧回调隔离 |
+| check_variants.py | variants-final | 九次运行、十一项拒绝；去重/分块/双发送槽仍为 12/42/42 次写 |
+| check_delay.py | delay-final | 五次给定事件、两次真实 UB、十项拒绝；26/38 us 与 30/42 us 依赖反馈不变 |
+| check_observation.py | observation-final | 七种输入共 21 次运行、十项坏配置；原写 8534/8622 ns 数据/事务时刻 |
+| check_compute.py | compute-final | 四次计算、六项拒绝；绝对时间、资源释放与唯一链接 |
+
+另执行 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v`，python-unit-verified 记录 23 项通过。`build/m3-service-boundaries/output/cosim/ns3.44-cosim-time-test`、同一命令加 `--wrong-resolution`、`build/m3-service-boundaries/output/cosim/ns3.44-cosim-write-test` 均退出 0，记录为 time-unit、time-resolution、write-unit。新增日志专项在 L/logging-unit 目录运行 `timeout 20s /root/moe-ub-cosim/build/m3-service-boundaries/output/cosim/ns3.44-cosim-logging-test`，退出 0：阻塞异步写线程时 flush 不提前返回，放行后执行记录已写入文件。
+
+| 新边界输入 | 轮数 / 真实写 / 业务字节 | 实际结束（ns） |
+|---|---|---:|
+| sparse，来源开/关/不挂观测/重复各一次 | 每次 3 / 6 / 49152 | 45502 |
+| uneven，四个不等长请求、两组 | 5 / 16 / 131072 | 59263 |
+| local-only，一个本地请求 | 1 / 0 / 0 | 16000 |
+| empty，无请求 | 0 / 0 / 0 | 0 |
+
+sparse 的请求仅在 rank 0，三步路由 [2,4]、[0,1]、[6,7]，分别在 12920、28920、45502 ns 完成。第一步 rank 1/2 没有本地 Token，仍分别执行 RECV、4000 ns 专家计算、1000 ns 局部合并、SEND；rank 3 空图在激活时完成。第二步只有 rank 0 本地工作、没有业务包。第三步此前空闲的 rank 3 执行两个专家，同 rank 去重后输入与结果各一份。每个真实 Token、专家计数、局部阶段时刻、原始 ASTRA issue/callback 和收发次数均核对。
+
+uneven 的 ep0 rank 0 请求执行三步，rank 1 请求在 5200 ns 到达、执行一步，另一个 rank 0 请求在 5500 ns 排队、执行一步。四轮实际请求集合为 [101]、[101,102]、[101]、[201]，完成于 12920、30343、43263、59263 ns。ep1 独立本地请求在 16000 ns 完成，不阻挡 ep0。仅对六次真实 Token 调用调度；ITL 包括本请求实际排队时间。已耗尽外部输入时仍继续执行，最终全部请求、图、任务、槽位和网络数据归零。
+
+七项故障分别为：初始 EOF（0 ns）、首轮完成后的 EOF（12920 ns）、未结束前端既无工作又无未来唤醒（0 ns）、损坏空成员 rank 3 的图（0 ns、全部激活前拒绝）、独立测试目标遗漏一个成员激活（19513 ns）、仿真上限（5200 ns），以及真实后端完成首轮但通知尚未转交时被 SIGTERM 终止。前六项后端退出 1，最后一项保留 -15；均没有伪造 service_result 成功。死锁快照含 rank 3 未登记 SEND、其他 rank 对应 RECV 等待及空网络状态。上限快照保留尚未完成任务，不声称这种状态已被证明死锁；信号终止也不声称执行了 C++ 正常清理。
+
+来源开/关/不挂观测和重复运行的协议、业务结果、生成图及原生网络日志一致；端侧文件没有内部身份，逐窗口字节分类守恒。既有收尾用例仍在 83685 ns 服务结束后等到 84207 ns 网络排空。M3.3 原共享排队、完成变化和下一步调度反馈仍通过。
+
+### 保留的失败与修复
+
+初次 build 退出 1：将 JSON 直接传入 std::set::insert 导致重载歧义，改为显式 uint64_t 转换。初次 python-unit 有一项新测试把局部合并耗时误写成 700 ns，而未改动的输入为 1000 ns；按输入修正该测试常量。此前针对四请求同时到达、正专家工作和至少两步的拒绝用例，因本步明确允许这些场景，改为检查负到达、空路由和非法成员；原合法基线及传输/依赖断言保留。
+
+boundaries-check 首次在 5000 ns 误报死锁：UB 已接纳任务，但尚未进入端口发送。检查加入原生任务执行器的 pending 计数后，boundaries-check-2 全部通过。这个失败还暴露 EOF 后 waitpid 尚未就绪时清理动作可能把真实退出 1 改记为 -9，前端已在 EOF 后有限等待进程退出；最终故障测试分别核对 1 与 -15。
+
+delay-regression 初次在读取原始执行日志时报 map::at，进程退出后的文件却包含全部 48 个节点的完成事件。检查固定 LoggerFactory 确认它采用单线程异步日志，原 FlushAstraLogging 只入队 flush、不等落盘；未改源码的 delay-regression-2 虽通过，仍不能排除这条竞态。根桥接层新增同队列的完成屏障，并用阻塞日志线程的单元验证。其测试目标首次 build-flush 缺少 extern/helper 头路径，build-flush-2 补齐后通过。最后十项集成都用修复后的构建重跑并通过，没有删除执行记录检查、放宽预期时间或改成固定通信耗时。
+
+### 产物与停止位置
+
+L/final_audit.py 恢复原生 UB launcher lock，核对 263 个此前产物的大小和 SHA-256；检查最终测试记录的实现源码哈希、输入、52 个 ASTRA 核心对象与本构建唯一一套 10 个 UB ns-3 库。最终依赖、差异和提交后的 Git 状态分别记录在 L/dependency-final.json、L/diff-check.json、L/git-final.json。未重跑原生 LLMServingSim 性能样例；旧产物未变不代表本轮做了性能验证。
+
+本步完成 T09 与当前范围的 T11/T14 扩展，M3 的动态服务功能验收结束。范围仍限合成单层、一或两个四成员组、已就绪 KV、每 rank 每轮最多一个真实 Token；P/D、真实数据、容量争用、丢包恢复和模型校准未验证。停止在 M3.4 completed，按持续授权只创建本地提交、不推送；M4.1 等待用户确认。

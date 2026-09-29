@@ -84,14 +84,14 @@ class DynamicServiceTest(unittest.TestCase):
             response = service.decide(self.message(service, 0, list(range(8))), out)
             self.assertEqual(response['submissions'][0]['rank_ids'], [0,2,4,6])
 
-    def test_reject_overlap_bad_mapping_and_incomplete_cohort(self):
+    def test_reject_overlap_bad_mapping_and_invalid_request(self):
         cases = []
         c = deepcopy(self.config); c['groups'][1] = deepcopy(c['groups'][0]); cases.append(c)
         c = deepcopy(self.config); c['groups'][1]['rank_to_ub_node'][0] = 0; cases.append(c)
         c = deepcopy(self.config); c['groups'][1]['rank_ids'][0] = True; cases.append(c)
         c = deepcopy(self.config); c['groups'][1]['expert_placement'][0] = 0; cases.append(c)
-        c = deepcopy(self.config); c['requests'][-1]['arrival_ns'] += 1; cases.append(c)
-        c = deepcopy(self.config); c['requests'][-1]['decode_routes'].pop(); cases.append(c)
+        c = deepcopy(self.config); c['requests'][-1]['arrival_ns'] = True; cases.append(c)
+        c = deepcopy(self.config); c['requests'][-1]['decode_routes'] = []; cases.append(c)
         for c in cases:
             with self.subTest(config=c), self.assertRaises(ValueError):
                 validate_service(c, self.layer)

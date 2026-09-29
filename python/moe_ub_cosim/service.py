@@ -31,7 +31,14 @@ def read_line(child, selector, buffer, timeout):
         remaining = deadline - time.monotonic()
         require(remaining > 0 and selector.select(remaining), 'Timed out waiting for backend DECIDE')
         chunk = os.read(child.stdout.fileno(), 65536)
-        require(bool(chunk), f'Backend EOF before service finished (exit={child.poll()}); see backend.stderr.log')
+        if not chunk:
+            # Pipe EOF can precede waitpid readiness. Reap a terminating child
+            # before error cleanup, instead of replacing its real exit with -9.
+            try:
+                code = child.wait(timeout=min(remaining, 1.0))
+            except subprocess.TimeoutExpired:
+                code = None
+            raise ValueError(f'Backend EOF before service finished (exit={code}); see backend.stderr.log')
         buffer.extend(chunk)
     end = buffer.index(b'\n') + 1
     line = bytes(buffer[:end]).decode('utf-8')
@@ -86,8 +93,8 @@ def validate_service(config, layer):
             owners[rank] = group
     require(sorted(owners) == list(range(4 * len(groups))), 'Service ranks must cover 0..N-1')
     requests = config['requests']
-    require(isinstance(requests, list) and 4 <= len(requests) <= 64, 'Require 4..64 requests')
-    ids, cohorts = set(), {}
+    require(isinstance(requests, list) and len(requests) <= 64, 'Require 0..64 requests')
+    ids = set()
     for request in requests:
         require(set(request) == {'request_id', 'rank_id', 'arrival_ns', 'prompt_tokens',
                                  'generated_tokens', 'decode_routes'}, 'Unsupported request fields')
@@ -95,25 +102,18 @@ def validate_service(config, layer):
         require(identity not in ids, 'Duplicate request_id')
         ids.add(identity)
         rank = integer(request['rank_id'], 'rank_id', 0, len(owners) - 1)
-        arrival = integer(request['arrival_ns'], 'arrival_ns', 0, 2**63 - 1000001)
+        integer(request['arrival_ns'], 'arrival_ns', 0, 2**63 - 1000001)
         integer(request['prompt_tokens'], 'prompt_tokens', 1, 32768)
         integer(request['generated_tokens'], 'generated_tokens', 1, 32768)
         routes = request['decode_routes']
-        require(isinstance(routes, list) and 2 <= len(routes) <= 32, 'Require 2..32 explicit decode routes')
+        require(isinstance(routes, list) and 1 <= len(routes) <= 32, 'Require 1..32 explicit decode routes')
         require(request['prompt_tokens'] + request['generated_tokens'] + len(routes) <= 32768,
                 'Request exceeds model context')
-        cohorts.setdefault((owners[rank]['group_id'], arrival), []).append(request)
-    for (name, arrival), cohort in cohorts.items():
-        group = next(g for g in groups if g['group_id'] == name)
-        cohort.sort(key=lambda r: r['rank_id'])
-        require([r['rank_id'] for r in cohort] == group['rank_ids'] and
-                len({len(r['decode_routes']) for r in cohort}) == 1,
-                'M3.2 requires simultaneous four-rank cohorts with equal remaining steps')
-        for step in range(len(cohort[0]['decode_routes'])):
-            candidate = group_layer(layer, group)
-            candidate['tokens'] = [dict(request_id=str(r['request_id']), src_rank=r['rank_id'],
-                phase='decode', token_index=r['prompt_tokens'] + r['generated_tokens'] - 1 + step,
-                layer_id=layer['layer_id'], expert_ids=r['decode_routes'][step]) for r in cohort]
+        for step, experts in enumerate(routes):
+            candidate = group_layer(layer, owners[rank])
+            candidate['tokens'] = [dict(request_id=str(identity), src_rank=rank,
+                phase='decode', token_index=request['prompt_tokens'] + request['generated_tokens'] - 1 + step,
+                layer_id=layer['layer_id'], expert_ids=experts)]
             build_plan(candidate)
 
 
@@ -203,20 +203,18 @@ class Service:
             name, ranks = group['group_id'], group['rank_ids']
             if name in self.waves:
                 continue
-            empty = [self.schedulers[r].is_request_empty() for r in ranks]
-            require(all(empty) or not any(empty), 'Partial EP group requires M3.4')
-            if all(empty):
-                if not any(self.pending[r] for r in ranks):
-                    continue
-                require(all(self.pending[r] for r in ranks), 'Incomplete ready-KV cohort')
-                for rank in ranks:
+            for rank in ranks:
+                if self.schedulers[rank].is_request_empty() and self.pending[rank]:
                     self.schedulers[rank].add_decode(self.pending[rank].pop(0))
+            active = [r for r in ranks if not self.schedulers[r].is_request_empty()]
+            if not active:
+                continue
             before = self.snapshot()
-            batches = {r: self.schedulers[r].schedule(now, r) for r in ranks}
-            self.scheduler_calls += len(ranks)
+            batches = {r: self.schedulers[r].schedule(now, r) for r in active}
+            self.scheduler_calls += len(active)
             require(all(b is not None and len(b.requests) == b.num_decode == 1 and
                         b.num_prefill == 0 and b.scheduled_tokens == {b.requests[0].id: 1}
-                        for b in batches.values()), 'Require one real decode Token on every group rank')
+                        for b in batches.values()), 'Ready-KV scheduler cannot produce one real Token; no progress')
             step = len(self.history)
             graph, wave = f'g{step}', f'D.w{step}'
             candidate = group_layer(self.layer, group)
@@ -298,6 +296,11 @@ def run(args):
             inflight=[len(s.inflight) for s in service.schedulers], done=[len(s.done) for s in service.schedulers]))
     except Exception as error:
         manifest['error'] = str(error)
+        save(output / 'failure.json', dict(normal_exit=False, error=str(error),
+            now_ns=service.current_ns, decision_id=service.decision_id,
+            active_graphs={g:w['graph_id'] for g,w in service.waves.items()},
+            requests=service.snapshot(), pending={r:[q.id for q in service.pending[r]] for r in service.ranks},
+            future_request_ids=[r.id for r in service.future], backend_log='backend.stderr.log'))
         raise
     finally:
         if child is not None:

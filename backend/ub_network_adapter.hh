@@ -31,9 +31,11 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
     void RegisterTransfers(const std::vector<UbWriteTransfer*>& transfers);
     uint64_t ScheduledEvents() const { return scheduled_events_; }
     uint64_t ExecutedCallbacks() const { return executed_callbacks_; }
+    void SetProgressCallback(std::function<void()> callback) { progress_ = std::move(callback); }
 
   private:
     Finished finished_;
+    std::function<void()> progress_;
     std::map<std::tuple<int, int, int>, UbWriteTransfer*> transfers_;
     uint64_t scheduled_events_ = 0;
     uint64_t executed_callbacks_ = 0;

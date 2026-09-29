@@ -111,6 +111,31 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
             "input rank mapping mismatch");
     const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
     const auto& input = p.at("input");
+    std::map<int, uint64_t> local_tokens, expert_inputs;
+    for (int rank : members) { local_tokens[rank] = 0; expert_inputs[rank] = 0; }
+    const auto& tokens = input.at("tokens");
+    const auto& placement = input.at("expert_placement");
+    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= 4 &&
+            placement.is_array() && placement.size() == 8, "invalid Token/placement set");
+    for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", 7)), "expert outside group");
+    for (const auto& token : tokens)
+    {
+        const int rank = Number(token.at("src_rank"), "Token rank", 7);
+        Require(members.contains(rank) && ++local_tokens[rank] == 1, "repeated or nonmember local Token");
+        const auto& experts = token.at("expert_ids");
+        Require(experts.is_array() && experts.size() == 2 && experts[0] != experts[1], "invalid Top-K route");
+        for (const auto& expert : experts) ++expert_inputs[placement.at(Number(expert, "expert", 7)).get<int>()];
+    }
+    Json batches = Json::array(), counts = Json::array();
+    for (int rank : members)
+    {
+        Json requests = Json::array();
+        for (const auto& token : tokens) if (token.at("src_rank") == rank) requests.push_back(token.at("request_id"));
+        batches.push_back({{"rank_id", rank}, {"request_ids", requests}});
+        counts.push_back(expert_inputs[rank]);
+    }
+    Require(p.at("instance_batches") == batches && p.at("expert_input_counts") == counts,
+            "Token participation/expert counts mismatch");
     Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
     const auto chunk_bytes = Number(input.at("chunk_bytes"), "chunk_bytes", UINT32_MAX);
     Require(chunk_bytes > 0, "zero chunk limit");
@@ -128,8 +153,21 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
             p.at("operations")[1].at("kind") == "combine", "require Dispatch and Combine operations");
     std::map<uint64_t, Json> transfers;
     std::set<uint64_t> tasks, tags;
-    Require(p.at("transfers").is_array() && !p.at("transfers").empty() && p.at("transfers").size() <= 4096, "empty/oversized transfer set");
+    Require(p.at("transfers").is_array() && p.at("transfers").size() <= 4096, "invalid/oversized transfer set");
     std::map<std::tuple<std::string, uint64_t, uint64_t>, std::vector<Json>> chunks;
+    std::map<std::tuple<std::string, uint64_t, uint64_t>, uint64_t> expected_pairs, actual_pairs;
+    for (const auto& token : tokens)
+    {
+        const auto src = token.at("src_rank").get<uint64_t>();
+        std::set<uint64_t> destinations;
+        for (const auto& expert : token.at("expert_ids")) destinations.insert(placement.at(expert.get<size_t>()).get<uint64_t>());
+        destinations.erase(src);
+        for (auto dst : destinations)
+        {
+            ++expected_pairs[{"dispatch", src, dst}];
+            ++expected_pairs[{"combine", dst, src}];
+        }
+    }
     for (const auto& t : p.at("transfers"))
     {
         const auto id = Number(t.at("transfer_id"), "transfer_id");
@@ -167,6 +205,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         Require(hidden > 0 && element > 0 && sources.is_array() && !sources.empty() &&
                 sources.size() <= 4 && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
         const auto expected = hidden * element * sources.size();
+        actual_pairs[{kind, first.at("src_rank").get<uint64_t>(), first.at("dst_rank").get<uint64_t>()}] = sources.size();
         uint64_t offset = 0, index = 0;
         for (const auto& part : parts)
         {
@@ -178,6 +217,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         }
         Require(offset == expected, "incomplete directed vector");
     }
+    Require(actual_pairs == expected_pairs, "transfer set/bytes differ from Token routes");
     Require(p.at("rank_graphs").size() == 4, "missing rank graph");
     std::map<std::pair<uint64_t, std::string>, unsigned> pairs;
     for (size_t index = 0; index < ranks.size(); ++index)
@@ -196,7 +236,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
             if (n.at("kind") == "COMP")
             {
                 Require(Number(n.at("duration_ns"), "duration_ns", INT64_MAX - p.at("ready_ns").get<uint64_t>()) > 0,
-                        "M2.1 requires positive computation durations");
+                        "computation nodes require positive durations; omit absent work");
                 Require(n.at("resource_id") == "gpu_compute", "unknown compute resource");
             }
             else
@@ -214,36 +254,50 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         }
         const auto& phase = graph.at("phase_nodes");
         std::set<uint64_t> phase_ids;
-        for (const auto& field : {"prepare", "expert", "local_merge", "finish", "next_layer"})
-        {
-            auto id = Number(phase.at(field), "phase node");
-            Require(local.contains(id) && local.at(id).at("kind") == "COMP" && phase_ids.insert(id).second,
-                    "invalid phase node");
-        }
-        Require(phase_ids.size() == 5, "missing phase node");
-        auto id = [&](const char* key) { return phase.at(key).get<uint64_t>(); };
-        std::set<uint64_t> dispatch{id("prepare")}, combine{id("local_merge")};
-        std::map<std::string, std::pair<int, uint64_t>> previous_send;
-        for (const auto& [node_id, n] : local)
-        {
-            if (n.at("kind") == "COMP") { Require(phase_ids.contains(node_id), "unexpected compute node"); continue; }
-            const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
-            bool first = t.at("kind") == "dispatch";
-            Require(Ids(n.at("deps")) == std::set<uint64_t>{id(first ? "prepare" : "local_merge")}, "communication template dependency mismatch");
-            (first ? dispatch : combine).insert(node_id);
-            if (n.at("kind") == "SEND")
+        Require(phase.size() == 5, "invalid phase fields");
+        auto compute = [&](const char* field, const char* profile, uint64_t count,
+                           const std::set<uint64_t>& deps) -> std::set<uint64_t> {
+            const auto duration = Number(input.at("compute_profile_ns").at(profile), "compute profile", INT64_MAX);
+            Require(duration > 0 && (!count || duration <= uint64_t(INT64_MAX) / count), "invalid compute profile");
+            if (!count)
             {
-                auto kind = t.at("kind").get<std::string>();
-                auto order = std::make_pair(t.at("dst_rank").get<int>(), t.at("chunk_index").get<uint64_t>());
-                Require(!previous_send.contains(kind) || previous_send.at(kind) < order, "SEND order is not by destination/chunk");
-                previous_send[kind] = order;
+                Require(phase.at(field).is_null(), "absent work must not have a compute node");
+                return deps;
             }
-        }
-        Require(Ids(local.at(id("prepare")).at("deps")).empty() &&
-                Ids(local.at(id("expert")).at("deps")) == dispatch &&
-                Ids(local.at(id("local_merge")).at("deps")) == std::set<uint64_t>{id("expert")} &&
-                Ids(local.at(id("finish")).at("deps")) == combine &&
-                Ids(local.at(id("next_layer")).at("deps")) == std::set<uint64_t>{id("finish")}, "local phase dependency mismatch");
+            const auto id = Number(phase.at(field), "phase node");
+            Require(local.contains(id) && local.at(id).at("kind") == "COMP" && phase_ids.insert(id).second &&
+                    local.at(id).at("duration_ns") == duration * count && Ids(local.at(id).at("deps")) == deps,
+                    "compute phase work/duration/dependency mismatch");
+            return {id};
+        };
+        std::map<std::string, std::pair<int, uint64_t>> previous_send;
+        auto communicate = [&](const char* kind, const std::set<uint64_t>& deps) {
+            auto completed = deps;
+            for (const auto& [node_id, n] : local)
+            {
+                if (n.at("kind") == "COMP") continue;
+                const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
+                if (t.at("kind") != kind) continue;
+                Require(Ids(n.at("deps")) == deps, "communication template dependency mismatch");
+                completed.insert(node_id);
+                if (n.at("kind") == "SEND")
+                {
+                    auto order = std::make_pair(t.at("dst_rank").get<int>(), t.at("chunk_index").get<uint64_t>());
+                    Require(!previous_send.contains(kind) || previous_send.at(kind) < order, "SEND order is not by destination/chunk");
+                    previous_send[kind] = order;
+                }
+            }
+            return completed;
+        };
+        auto ready = compute("prepare", "attention_route_pack", local_tokens[rank], {});
+        ready = communicate("dispatch", ready);
+        ready = compute("expert", "expert_per_input", expert_inputs[rank], ready);
+        ready = compute("local_merge", "expert_local_merge", expert_inputs[rank] ? 1 : 0, ready);
+        ready = communicate("combine", ready);
+        ready = compute("finish", "combine_unpack_merge", local_tokens[rank], ready);
+        compute("next_layer", "next_layer", local_tokens[rank], ready);
+        for (const auto& [id, n] : local)
+            if (n.at("kind") == "COMP") Require(phase_ids.contains(id), "unexpected compute node");
         const auto path = directory / ("layer." + std::to_string(rank) + ".et");
         try { CheckGraph(path, graph, transfers); }
         catch (const std::exception& error)
@@ -301,11 +355,27 @@ Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
     {
         int rank = graph.at("rank_id");
         const auto& p = graph.at("phase_nodes");
-        auto time = [&](const char* node, const char* field) { return nodes.at({rank, p.at(node).get<uint64_t>()}).at(field); };
+        auto end = [&](const char* phase, uint64_t fallback) {
+            return p.at(phase).is_null() ? fallback :
+                nodes.at({rank, p.at(phase).get<uint64_t>()}).at("end_ns").get<uint64_t>();
+        };
+        auto communication_end = [&](const char* kind, uint64_t earliest) {
+            for (const auto& transfer : plan.data.at("transfers"))
+                if (transfer.at("kind") == kind)
+                    for (const auto& side : {"send", "recv"})
+                        if (transfer.at(std::string(side) == "send" ? "src_rank" : "dst_rank") == rank)
+                            earliest = std::max(earliest, nodes.at({rank, transfer.at(std::string(side) + "_node_id").get<uint64_t>()})
+                                .at("end_ns").get<uint64_t>());
+            return earliest;
+        };
+        const auto prepared = end("prepare", plan.data.at("ready_ns"));
+        const auto dispatched = communication_end("dispatch", prepared);
+        const auto merged = end("local_merge", end("expert", dispatched));
+        const auto finished = end("finish", communication_end("combine", merged));
         endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "dispatch"},
-            {"start_local_ns", time("prepare", "end_ns")}, {"end_local_ns", time("expert", "start_ns")}});
+            {"start_local_ns", prepared}, {"end_local_ns", dispatched}});
         endpoints.push_back({{"rank_id", rank}, {"local_record_id", 2}, {"kind", "combine"},
-            {"start_local_ns", time("local_merge", "end_ns")}, {"end_local_ns", time("finish", "end_ns")}});
+            {"start_local_ns", merged}, {"end_local_ns", finished}});
     }
     return endpoints;
 }

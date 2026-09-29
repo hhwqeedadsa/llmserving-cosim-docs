@@ -100,13 +100,16 @@ void UbNetworkAdapter::sim_schedule(AstraSim::timespec_t delta,
     ns3::Simulator::Schedule(ns3::NanoSeconds(duration), [this, callback, arg]() {
         ++executed_callbacks_;
         callback(arg);
+        if (progress_) progress_();
     });
     ++scheduled_events_;
+    if (progress_) progress_();
 }
 
 void UbNetworkAdapter::sim_notify_finished()
 {
     finished_(static_cast<uint64_t>(NowNs()));
+    if (progress_) progress_();
 }
 
 int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag,
@@ -116,6 +119,7 @@ int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag
     if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for SEND");
     if (it == transfers_.end()) throw std::invalid_argument("SEND matching key is not in the UB transfer registry");
     it->second->Send(rank, count, type, dst, tag, callback, arg);
+    if (progress_) progress_();
     return 0;
 }
 
@@ -126,6 +130,7 @@ int UbNetworkAdapter::sim_recv(void*, uint64_t count, int type, int src, int tag
     if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for RECV");
     if (it == transfers_.end()) throw std::invalid_argument("RECV matching key is not in the UB transfer registry");
     it->second->Receive(rank, count, type, src, tag, callback, arg);
+    if (progress_) progress_();
     return 0;
 }
 }

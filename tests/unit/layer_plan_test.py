@@ -63,7 +63,7 @@ class LayerPlanTest(unittest.TestCase):
                     ('dispatch_element_bytes', 0), ('send_slots_per_rank', 3),
                     ('application_metadata_bytes', 1), ('chunk_bytes', 0), ('ready_ns', 2**63),
                     ('top_k', True), ('template', 'invented'), ('rank_ids', [False, 1, 2, 3]),
-                    ('expert_placement', [0] * 8)]
+                    ('expert_placement', [9] * 8)]
         for field, value in variants:
             with self.subTest(field=field, value=value):
                 bad = deepcopy(self.config); bad[field] = value

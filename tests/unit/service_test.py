@@ -52,11 +52,11 @@ class ServiceTest(unittest.TestCase):
         cases = []
         def change(callback):
             value = deepcopy(self.config); callback(value); cases.append(value)
-        change(lambda c: c['requests'][0].update(arrival_ns=1))
+        change(lambda c: c['requests'][0].update(arrival_ns=-1))
         change(lambda c: c['requests'][0].update(generated_tokens=0))
-        change(lambda c: c['requests'][0].update(rank_id=1))
+        change(lambda c: c['requests'][0].update(rank_id=4))
         change(lambda c: c['requests'][0].update(request_id=102))
-        change(lambda c: c['requests'][0]['decode_routes'].pop())
+        change(lambda c: c['requests'][0]['decode_routes'].clear())
         change(lambda c: c['requests'][0]['decode_routes'][0].__setitem__(1, 2))
         change(lambda c: c.update(mode='research'))
         change(lambda c: c.update(execution={'entry_mode': 'other'}))

@@ -155,6 +155,21 @@ class NetworkDrain
     }
     uint64_t StartedPackets() const { return started_; }
     uint64_t ArrivedPackets() const { return arrived_; }
+    void SetProgressCallback(std::function<void()> callback) { progress_ = std::move(callback); }
+    Json Snapshot() const
+    {
+        Json queues = Json::array();
+        for (const auto& port : ports_)
+        {
+            const auto buffered = port->GetNode()->GetObject<ns3::UbSwitch>()->GetQueueManager()
+                ->GetTotalOutPortBufferUsed(port->GetIfIndex());
+            if (port->IsBusy() || buffered || !port->GetUbQueue()->IsEmpty())
+                queues.push_back({{"node", port->GetNode()->GetId()}, {"port", port->GetIfIndex()},
+                    {"busy", port->IsBusy()}, {"buffered_bytes", buffered},
+                    {"egress_bytes", port->GetUbQueue()->GetCurrentBytes()}});
+        }
+        return {{"idle", Idle()}, {"started_packets", started_}, {"arrived_packets", arrived_}, {"ports", queues}};
+    }
     void Finish(std::function<void()> callback)
     {
         finished_ = std::move(callback);
@@ -165,6 +180,7 @@ class NetworkDrain
   private:
     void Probe()
     {
+        if (progress_) progress_();
         if (finished_ && !stopped_ && Idle()) { stopped_ = true; finished_(); }
     }
     void ProbeAfter(ns3::Time delay)
@@ -177,17 +193,19 @@ class NetworkDrain
     {
         ++started_;
         last_port_completion_ = std::max(last_port_completion_, ns3::Simulator::Now() + completion);
-        if (finished_) ProbeAfter(completion);
+        if (finished_ || progress_) ProbeAfter(completion);
+        if (progress_) progress_();
     }
     void Arrived(ns3::Ptr<ns3::Packet>)
     {
         Require(++arrived_ <= started_, "Arrival without successful link transmission");
-        if (finished_) ns3::Simulator::ScheduleNow([this]() { Probe(); });
+        if (finished_ || progress_) ns3::Simulator::ScheduleNow([this]() { Probe(); });
     }
     std::vector<ns3::Ptr<ns3::UbPort>> ports_;
     uint64_t started_ = 0, arrived_ = 0;
     ns3::Time last_port_completion_;
     std::function<void()> finished_;
+    std::function<void()> progress_;
     bool stopped_ = false;
 };
 }
@@ -299,6 +317,8 @@ int main(int argc, char** argv)
             unsigned bootstrap_done = 0, send_slots = 0;
             uint64_t decision_id = 0;
             bool bootstrap = true, service_finished = false;
+            std::string stage = "bootstrap";
+            Json last_commit;
             std::function<void()> decide;
             auto request_decision = [&]() {
                 if (!decision_pending)
@@ -338,7 +358,31 @@ int main(int argc, char** argv)
             auto watchdog = ns3::Simulator::Schedule(ns3::NanoSeconds(max_ns), []() {
                 throw std::runtime_error("Service exceeded max_simulation_ns");
             });
+            // Check only after actual execution progress, at the same ns time.
+            // Native recurring diagnostics are not business progress. Outstanding
+            // network state remains protected by the explicit failure bound.
+            bool probe_pending = false;
+            auto progress = [&]() {
+                if (probe_pending) return;
+                probe_pending = true;
+                ns3::Simulator::ScheduleNow([&]() { ns3::Simulator::ScheduleNow([&]() {
+                    probe_pending = false;
+                    if (service_finished || decision_pending || wakeup.IsPending() || !drain.Idle()) return;
+                    for (const auto& adapter : adapters)
+                        if (adapter->ScheduledEvents() != adapter->ExecutedCallbacks()) return;
+                    // UB may have accepted a task whose deferred WQE work has
+                    // not reached a TP or port yet. It is still business work.
+                    for (const auto& app : apps)
+                        if (app->GetTransferExecutor().GetPendingCount() != 0) return;
+                    for (const auto& transfer : transfers) if (transfer->HasPendingEvents()) return;
+                    if (std::any_of(groups.begin(), groups.end(), [](const auto& g) { return !g.graph.empty(); }))
+                        throw std::runtime_error("Service deadlock: active graph waits without a business event or future wakeup; see failure.json");
+                }); });
+            };
+            for (auto& adapter : adapters) adapter->SetProgressCallback(progress);
+            drain.SetProgressCallback(progress);
             decide = [&]() {
+                stage = "waiting_for_commit";
                 decision_pending = false;
                 const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
                 Json completed = Json::array(), available = Json::array();
@@ -381,6 +425,8 @@ int main(int argc, char** argv)
                 std::string line;
                 Require(bool(std::getline(std::cin, line)), "Frontend EOF while waiting for COMMIT");
                 const auto commit = Json::parse(line);
+                last_commit = commit;
+                stage = "validating_commit";
                 std::set<std::string> keys;
                 for (const auto& [key, value] : commit.items()) keys.insert(key);
                 Require(keys == std::set<std::string>{"schema_version", "type", "run_id", "decision_id", "now_ns",
@@ -418,6 +464,7 @@ int main(int argc, char** argv)
                 Require(commit.at("submissions").size() <= groups.size(), "Too many group submissions");
                 for (const auto& submission : commit.at("submissions"))
                 {
+                    stage = "validating_submission";
                     keys.clear();
                     for (const auto& [key, value] : submission.items()) keys.insert(key);
                     Require(keys == std::set<std::string>{"graph_id", "wave_id", "rank_ids", "workload_prefix", "semantic_manifest"},
@@ -489,23 +536,70 @@ int main(int argc, char** argv)
                     { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
                     plans.push_back(std::move(plan));
                     group.graph = graph; group.wave = wave; group.completed.clear();
+                    stage = "activating_graph:" + graph;
                     report["step_submissions"].push_back({{"graph_id", graph}, {"wave_id", wave}, {"time_ns", now}});
                     for (int rank : group.ranks)
                         report["graph_loads"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
                     for (int rank : group.ranks)
                     {
                         report["activation_order"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
+#ifdef COSIM_SERVICE_DEADLOCK_TEST
+                        // Deliberately leave one participant unactivated, only in
+                        // the separate failure-test target after full validation.
+                        if (plans.size() == 1 && rank == group.ranks.back()) continue;
+#endif
                         systems[rank]->workload->activate_graph();
                     }
                 }
                 Require(!next.is_null() || std::any_of(groups.begin(), groups.end(),
                     [](const auto& g) { return !g.graph.empty(); }),
                     "Service deadlock: unfinished frontend, no active group and no future wakeup");
+                stage = "executing";
+                progress();
             };
             // Initial decision is an event after every Sys, adapter and UB object exists.
             request_decision();
-            ns3::Simulator::Run();
-            Require(service_finished, "Event queue ended with unfinished service");
+            try
+            {
+                ns3::Simulator::Run();
+                Require(service_finished, "Event queue ended with unfinished service");
+            }
+            catch (const std::exception& error)
+            {
+                Json failure = {{"normal_exit", false}, {"error", error.what()}, {"stage", stage},
+                    {"now_ns", ns3::Simulator::Now().GetNanoSeconds()}, {"decision_id", decision_id},
+                    {"last_commit", last_commit}, {"future_wakeup_pending", wakeup.IsPending()},
+                    {"groups", Json::array()}, {"ranks", Json::array()}, {"transfers", Json::array()},
+                    {"network", drain.Snapshot()}};
+                for (const auto& group : groups)
+                    failure["groups"].push_back({{"group_id", group.config.at("group_id")}, {"graph_id", group.graph},
+                        {"wave_id", group.wave}, {"completed_ranks", group.completed}});
+                for (int rank = 0; rank < rank_count; ++rank)
+                {
+                    const auto* workload = systems[rank]->workload;
+                    failure["ranks"].push_back({{"rank_id", rank}, {"graph_id", workload->graph_id()},
+                        {"finished", workload->is_finished}, {"remaining_nodes", workload->et_feeder->hasNodesToIssue()},
+                        {"compute_slots", workload->hw_resource->num_in_flight_gpu_comp_ops},
+                        {"send_slots", workload->hw_resource->num_in_flight_gpu_comm_ops},
+                        {"pending_events", systems[rank]->pending_events},
+                        {"pending_adapter_events", adapters[rank]->ScheduledEvents() - adapters[rank]->ExecutedCallbacks()},
+                        {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()}});
+                }
+                for (const auto& transfer : transfers)
+                {
+                    if (!transfer->Completion().Active()) continue;
+                    const auto& d = transfer->Descriptor();
+                    failure["transfers"].push_back({{"graph_id", d.graph_id}, {"transfer_id", d.transfer_id},
+                        {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank}, {"send_node_id", d.send_node_id},
+                        {"recv_node_id", d.recv_node_id}, {"send_registered", bool(transfer->SendStartNs())},
+                        {"receive_registered", bool(transfer->ReceiveStartNs())},
+                        {"send_callbacks", transfer->SendCallbacks()}, {"receive_callbacks", transfer->Completion().ReceiveCallbacks()},
+                        {"pending_callback_or_submit", transfer->HasPendingEvents()}});
+                }
+                std::ofstream("failure.json") << failure.dump(2) << '\n';
+                moe_ub::FlushAstraLogging();
+                throw;
+            }
             Require(drain.Idle(), "Service stopped with link data or queued packets");
             report["network_drain"] = {{"started_packets", drain.StartedPackets()},
                 {"arrived_packets", drain.ArrivedPackets()}, {"idle", true}};

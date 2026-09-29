@@ -35,6 +35,7 @@ class WriteCompletion
     std::optional<uint64_t> TransactionDoneNs() const { return transaction_done_ns_; }
     std::optional<uint64_t> SendDoneNs() const { return send_done_ns_; }
     std::optional<uint64_t> ReceiveDoneNs() const { return receive_done_ns_; }
+    bool HasPendingEvents() const { return send_event_.IsPending() || receive_event_.IsPending(); }
 
   private:
     struct CallbackSlot

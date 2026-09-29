@@ -53,6 +53,7 @@ class UbWriteTransfer
     bool ObservingTarget() const { return target_ != nullptr; }
     std::optional<uint64_t> SendStartNs() const { return send_start_ns_; }
     std::optional<uint64_t> ReceiveStartNs() const { return receive_start_ns_; }
+    bool HasPendingEvents() const { return submit_event_.IsPending() || completion_.HasPendingEvents(); }
 
   private:
     void Validate(int src, int dst, uint64_t bytes, int type, int tag,

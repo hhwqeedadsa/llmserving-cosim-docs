@@ -29,7 +29,7 @@ def signature(plan):
     return dict(input=source, transfers=transfers, graphs=graphs, expert_inputs=plan['expert_input_counts'])
 
 
-def audit_queue(path):
+def audit_queue(path, bandwidth_gbps=10, switch_id=8, port_id=4):
     """Reconstruct the native physical FIFO and successful serialization spans."""
     events = rows(path / 'egress-queue-audit.jsonl')
     pending, starts, waits = deque(), [], []
@@ -51,17 +51,17 @@ def audit_queue(path):
             assert event['event'] == 'tx_start' and dequeued is not None
             assert (event['packet_uid'],size,now) == (dequeued['packet_uid'],dequeued['bytes'],dequeued['dequeue_ns'])
             assert event['busy_until_ns'] > now
-            # 10 Gbit/s, nanosecond resolution, zero interframe gap in this fixture.
+            # Integer Gbit/s, nanosecond resolution, zero interframe gap.
             # DataRate -> Time(int64x64_t) rounds to the nearest nanosecond.
-            assert event['busy_until_ns'] - now == (size * 8 + 5) // 10
+            assert event['busy_until_ns'] - now == (size * 8 + bandwidth_gbps // 2) // bandwidth_gbps
             assert not starts or now >= starts[-1]['busy_until_ns']
             starts.append(event); waits.append(dequeued); dequeued = None
         assert used >= 0 and used == event['queue_bytes']
     assert not pending and dequeued is None and used == 0
     assert len(events) == len(starts) * 3
     assert area == sum(p['wait_ns'] * p['bytes'] for p in waits)
-    native = (path / 'network/runlog/PortTrace_node_8_port_4.tr').read_text()
-    tx = [(int(Decimal(t)*1000),int(n)) for t,n in re.findall(r'\[([\d.]+)us\] Port Tx, port ID: 4 PacketSize: (\d+)',native)]
+    native = (path / f'network/runlog/PortTrace_node_{switch_id}_port_{port_id}.tr').read_text()
+    tx = [(int(Decimal(t)*1000),int(n)) for t,n in re.findall(rf'\[([\d.]+)us\] Port Tx, port ID: {port_id} PacketSize: (\d+)',native)]
     assert tx == [(e['time_ns'],e['packet_bytes']) for e in starts]
     audit = read(path / 'observation-audit.json')
     assert len(starts) == audit['all_successful_start_packets']

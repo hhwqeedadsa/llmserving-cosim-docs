@@ -110,7 +110,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     int previous = -1;
     for (const auto& value : ranks)
     {
-        const int rank = Number(value, "rank_id", 7);
+        const int rank = Number(value, "rank_id", 11);
         Require(rank > previous && members.insert(rank).second, "unordered or repeated rank");
         previous = rank;
     }
@@ -126,10 +126,10 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     Require(prefill || input.at("role") == "D", "invalid execution role");
     Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (prefill ? 16 : 4) &&
             placement.is_array() && placement.size() == 8, "invalid Token/placement set");
-    for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", 7)), "expert outside group");
+    for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", 11)), "expert outside group");
     for (const auto& token : tokens)
     {
-        const int rank = Number(token.at("src_rank"), "Token rank", 7);
+        const int rank = Number(token.at("src_rank"), "Token rank", 11);
         Require(members.contains(rank), "nonmember local Token");
         Require(++local_tokens[rank] == 1 || prefill, "repeated local decode Token");
         Require(token.at("phase") == (prefill ? "prefill" : "decode"), "Token phase mismatch");
@@ -187,7 +187,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         const auto task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
         const auto tag = Number(t.at("comm_tag"), "comm_tag", 499999999);
         const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", UINT32_MAX);
-        const auto src = Number(t.at("src_rank"), "src_rank", 7), dst = Number(t.at("dst_rank"), "dst_rank", 7);
+        const auto src = Number(t.at("src_rank"), "src_rank", 11), dst = Number(t.at("dst_rank"), "dst_rank", 11);
         const auto operation = t.at("operation_id").get<std::string>();
         Require(id > 0 && tag > 0 && bytes > 0 && src != dst && members.contains(src) && members.contains(dst) && transfers.emplace(id, t).second &&
                 tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");

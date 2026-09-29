@@ -49,7 +49,7 @@ std::vector<Group> LoadGroups(const fs::path& shared)
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
     Require(deployment.size() == 2 && deployment.at("schema_version") == "moe-ub-service-deployment/1" &&
             deployment.at("groups").is_array() && deployment.at("groups").size() >= 1 &&
-            deployment.at("groups").size() <= 2, "Invalid service deployment");
+            deployment.at("groups").size() <= 3, "Invalid service deployment");
     std::vector<Group> groups;
     std::set<int> members;
     std::set<std::string> names;
@@ -65,7 +65,7 @@ std::vector<Group> LoadGroups(const fs::path& shared)
         int previous = -1;
         for (const auto& value : config.at("rank_ids"))
         {
-            Require(value.is_number_unsigned() && value.get<uint64_t>() < 8, "Invalid group rank");
+            Require(value.is_number_unsigned() && value.get<uint64_t>() < 12, "Invalid group rank");
             int rank = value;
             Require(rank > previous && members.insert(rank).second, "Repeated, overlapping or unordered group rank");
             previous = rank; ranks.push_back(rank);
@@ -491,11 +491,18 @@ int main(int argc, char** argv)
                     Require(selected_ranks.is_array(), "Invalid submission rank array");
                     for (const auto& rank : selected_ranks) Require(rank.is_number_unsigned(), "Invalid rank type");
                     std::vector<size_t> selected;
+                    std::vector<int> covered;
                     for (size_t i = 0; i < groups.size(); ++i)
-                        if (selected_ranks == groups[i].config.at("rank_ids")) selected.push_back(i);
-                    if (selected.empty() && groups.size() == 2 && selected_ranks == Json::array({0,1,2,3,4,5,6,7}))
-                        selected = {0,1};
-                    Require(!selected.empty(), "Unknown EP group submission");
+                        if (std::all_of(groups[i].ranks.begin(), groups[i].ranks.end(), [&](int rank) {
+                            return std::find(selected_ranks.begin(), selected_ranks.end(), rank) != selected_ranks.end();
+                        }))
+                        {
+                            selected.push_back(i);
+                            covered.insert(covered.end(), groups[i].ranks.begin(), groups[i].ranks.end());
+                        }
+                    std::sort(covered.begin(), covered.end());
+                    Require(!selected.empty() && selected.size() <= 2 && selected_ranks == Json(covered),
+                            "Unknown or partial EP group submission");
                     for (auto i : selected) Require(groups[i].graph.empty(), "Unknown or busy EP group submission");
                     auto& group = groups[selected.front()];
                     const auto graph = submission.at("graph_id").get<std::string>();

@@ -1776,3 +1776,81 @@ configure、build 均退出 0，共 521 个构建步骤。只有一个构建进�
 `python3 L/final_audit.py`（记录 final-audit）退出 0：恢复原生 UB launcher lock，核对 288 个旧产物的大小和 SHA-256 全部不变；pd-final、service-final、shared-regression 的 93 项源码/输入哈希与当前文件一致，程序包含 52 个 ASTRA 核心对象，只加载本构建的 10 个 UB ns-3 库。核对源码和旧产物不代替目标硬件性能验证。提交前后的依赖、差异和 Git 状态分别保存到 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json 与 L/git-final.json。
 
 M4.1 完成 T10 的单次交接部分，并扩展当前范围的 T11/T12/T14。合成模型、路由及计算参数仍标记 unvalidated_reference；多请求交接排队、当前空闲容量争用、KV 与独立组竞争、真实模型数据、MLA/布局转换及校准尚未验证。停止在 M4.1 completed，按持续授权本地提交、不推送；M4.2 等待用户确认。
+
+## 2026-09-29：m4-2-pd-queue
+
+用户授权按顺序完成 M4.2、M4.3，分别验证并本地提交，不推送。M4.1 完成提交 aef846e，本步任务说明 8d2bfb5；开始时主仓库干净、比 origin/main 多十个提交。LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222 和其余递归依赖不变。没有安装、下载、初始化依赖或修改全局配置。
+
+日志根 `runs/m4-2-pd-queue-20260929T032759Z/` 以下记为 L。所有命令 cwd 为 `/root/moe-ub-cosim`，L/record.py 为每条命令保存完整 argv、UTC 起止、退出码及 stdout/stderr；集成目录 commands.json 记录各子进程和输入，异常输入、错误及已有日志保留。
+
+### 改动与构建
+
+新增根前端 QueuedPdService，复用原生请求、批次与块池，实现 FIFO 交接。P 完成后保留源 KV 和整个 P 组，D 在边界优先处理能预留容量的队首；不足时继续已有解码释放容量，不被待交接图占用。目标容量预留覆盖到最后一个解码输入所需的块，防止已接纳请求因后续增长被抢占；实际传输仅包含已经计算的 prompt KV。KV_DONE 后释放源、D 复用目标块，全部源交接完成后 P 才开始新一轮。当前最多八个 P/D 请求及八个独立组请求，P 每轮最多 16 Token，解码每 rank 每步一个 Token。
+
+联合后端扩展到三个四成员组、十二个 rank，通过显式成员并集识别两个交接组，不把所有部署成员都卷入 KV 图。KV 图仍全部校验、装载后激活，完成通知只释放参与组，第三组图、网络与队列保留。原 M3、M4.1 前端继续使用原 schema 和边界。唯一变化的既有检查辅助函数是 audit_queue 增加带宽/端口参数，默认仍是 M3.3 的 10 Gbps、8:4。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m4-pd-queue -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m4-pd-queue/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m4-pd-queue --target \
+  cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence \
+  cosim-lifecycle-test cosim-layer-delay-test cosim-time-test cosim-write-test \
+  cosim-compute cosim-write --parallel 8
+```
+
+configure、build 均退出 0，共 519 步；使用一个独立构建、最多八个编译作业。上游弃用警告和独立输出目录提示保留。
+
+### 真实交接队列与竞争
+
+模型复用 M4.1 的合成单层 tiny MoE。P 请求 501/502 各有八个 prompt Token，在 rank 0/2 进行本地专家预填充，121000 ns 同时完成；同时完成按请求编号入队。D 目标 rank 5 只有一个 16384 字节容量块（总预算 2323968，权重 2233856，工作区 65536，通信缓冲 8192）。每请求实际 KV 为 8192 字节，K/V 各按 3072/1024 分块；没有把未来容量或块填充字节放入网络。
+
+十二 NPU 的偶/奇 rank 分别接交换机 12/13，接入 400 Gbps，交换机间 1 Gbps，链路 20 ns。rank 8/10 的独立请求在 115000 ns 到达，各执行三步；KV 与其 Dispatch 共享 12:6 出口。来源开关、控制类别和优先级均沿用原默认配置。
+
+| 场景 | 写次数 / 业务字节 | 首个 KV 完成与 D 开始（ns） | 服务完成（ns） |
+|---|---|---:|---:|
+| queue，仅 P/D | 16 / 20480 | 195784 | 365024 |
+| independent，仅独立组 | 24 / 12288 | 不适用 | 257656 |
+| overlap；另有 off/absent/repeat 各一次 | 40 / 32768 | 221927 | 427163 |
+| staggered，独立组到达改为 600000 ns | 40 / 32768 | 195784 | 742656 |
+| roomy，仅 P/D，目标增加一块 | 16 / 20480 | 195784；首个 D 等第二交接至 271002 | 365458 |
+| late，仅 P/D，130000 ns 新到达第三请求 | 24 / 30720 | 195784 | 560808 |
+
+queue 第二请求在 P 保留期间等待，D 第一个请求于 243012 ns 结束释放块，第二交接同时开始，于 317796 ns 完成。overlap 第一个 KV 完成和 D 开始比独立 P/D 后移 26143 ns，第二交接到 279599 ns 才能开始。roomy 在两次交接之间不启动 D 图，验证有空间时的边界优先规则；其总耗时略高，未假定增加容量必然降低延迟。late 的第三请求在忙碌 P 组排队，到第二交接完成 317796 ns 才开始预填充，与此时独立的 D 解码可同时运行。
+
+原生 EP 业务包 UID 1 在 120035 ns 入队、124754 ns 出队，跨越 121000 ns 的 KV 图启动。KV 包在选定物理 FIFO 的平均等待从 345.25 ns 增为 1545.75 ns；逐包重建与原生 Port Tx、总字节和排队面积相符。该 FIFO 不包含 VOQ、信用等待等全部排队。逐窗 KV/EP 有效字节混合、传输起止及 D 反馈均保存；错开无 KV/EP 混合窗口且 P/D 时刻恢复 queue。来源开启、关闭、不挂观测与重复的业务、协议和原生网络日志相同。
+
+### 验收、修正与审计
+
+以下命令统一为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m4-pd-queue --output-dir L/记录名`，十二项最终命令均退出 0，summary.json 为 passed：
+
+| 脚本 | 记录名 | 范围 |
+|---|---|---|
+| check_pd_queue.py | queue-verified | 九次正常运行、八项拒绝，FIFO/容量/共享竞争与指标 |
+| check_pd_handoff.py | pd-regression | 七次正常运行、十一项失败，M4.1 原时刻不变 |
+| check_service.py | service-regression | 七次运行、九项协议拒绝及子进程失败；三轮 64738 ns |
+| check_dynamic_service.py | dynamic-regression | 九次运行、十项拒绝；双组九轮 129517 ns |
+| check_shared_bottleneck.py | shared-regression | 七次对照；共享六轮 264523 ns |
+| check_service_boundaries.py | boundaries-regression | 七次正常、七项故障；稀疏 45502 ns、不均匀 59263 ns |
+| check_layer.py | layer-regression | 三次正常、十三项拒绝；十四次写 114688 字节 |
+| check_sequence.py | sequence-regression | 五次正常、十二项拒绝；28 次写 229376 字节 |
+| check_variants.py | variants-regression | 九次正常、十一项拒绝；12/42/42 次写 |
+| check_delay.py | delay-regression | 五次给定事件、两次真实 UB、十项拒绝 |
+| check_observation.py | observation-regression | 21 次正常、十项拒绝；原生网络无扰动 |
+| check_compute.py | compute-regression | 四次计算、六项拒绝及唯一链接 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 最终 python-unit-verified 记录 33 项通过。`build/m4-pd-queue/output/cosim/ns3.44-cosim-time-test`、加 `--wrong-resolution`、以及 `ns3.44-cosim-write-test` 分别在 time-unit、time-resolution、write-unit 退出 0。
+
+初次 queue-check 的网络、容量和 FIFO 检查通过，但审阅原生 Request/add_done 后发现新前端错误使用 is_init=False 创建了预填充请求，TTFT 为 -1、首次 prefill 完成被记入 ITL。修正为 P/D 请求 is_init=True，独立组给定 KV 请求继续 False；新增 TTFT、ITL 数量及绝对时刻断言。queue-final 与后续 queue-verified 均通过，原有网络时刻完全不变。最终容量拒绝用例改为真实的单请求长度超过目标总块数，直接覆盖接纳前检查，而不是只让内存预算小到无法创建一个块。此前日志完整保留，没有修改业务耗时或放宽断言。
+
+八项拒绝为请求超容量、组映射错误、身份重复、通信缓冲不足，以及坏 KV 字节、rank 7 图损坏、部分组、忙碌组交接。前四项在启动后端前失败，后四项退出 1、KV 图未激活；已有交接中信号退出检查由 M4.1 回归覆盖。所有成功运行都核对真实写/回调次数、实际 Token、容量守恒、唯一身份、图不重叠占 rank、网络排空和来源隔离。
+
+final-audit 恢复原生 launcher lock，313 个旧产物大小/SHA-256 未变，核对最终实现与输入哈希、全部 52 个 ASTRA 核心对象及唯一一套 10 个 UB ns-3 库。依赖检查覆盖 13 项；提交前后结果与 Git 状态记录在 L/dependency-precommit.json、L/dependency-final.json、L/git-final.json。未重跑原生性能样例，不把功能正确当作模型校准。
+
+M4.2 完成并按持续授权本地提交、不推送。用户已确认整个 M4 的顺序执行，下一步切换 M4.3；本步没有真实路由、目标 profile、缓存转换或 P/D 组内异步重叠。

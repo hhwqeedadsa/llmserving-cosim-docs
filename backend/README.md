@@ -297,3 +297,23 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 默认四 Token 的有效 BF16 KV 为 4096 字节，分六次真实 UB 写，源/目标各占一个 16384 字节容量块。P 在 40159 ns 完成，KV 最后数据于 40830 ns 就绪，最后事务于 40876 ns 完成，D 同时开始；请求在 69994 ns 结束。增大目标链路时延后，KV 事务及 D 开始均后移 24000 ns。七次正常运行、十一项预期失败、29 项 Python 单元及受影响的 M1～M3 回归通过。
 
 当前计算仍复用单层五阶段合成功能 profile；`next_layer` 字段是沿用的阶段名称，不代表本例增加了第二层，也不表示逐算子或数值前向已验证。模型、路由和时序均未校准。本步只完成 T10 的单次交接部分；多请求交接排队和 KV 与独立组竞争留在 M4.2，未提前实现。
+
+## M4.2 交接队列与第三组竞争
+
+服务入口增加 `moe-ub-pd-queue-fixture/1`，管理最多八个 P/D 请求及八个独立组的给定 KV 请求。三个组分别使用 rank 0～3、4～7、8～11；后端按显式成员集合识别一个计算组或两个交接组，确认所有成员空闲后才装载图，第三组保留原执行上下文与网络对象。旧 M3 和 M4.1 输入继续使用原前端。
+
+待交接请求在 P 完成时按 FIFO 入队，同一轮完成按请求编号排序。队首在两组可提交且 D 容量充足时优先处理；容量不足时源 KV 和 P 组保留，D 继续解码释放容量。目标按请求剩余生存期所需块预留，避免后续增长引起抢占，只有实际已计算 KV 进入网络。KV_DONE 后释放源并让 D 复用目标块；所有源交接完成后 P 才恢复新一轮。请求、块池、批次仍由锁定的 LLMServingSim 对象维护。
+
+按 [M4.2 环境记录](../docs/environment.md#2026-09-29m4-2-pd-queue) 构建 `build/m4-pd-queue`，从根目录运行以下入口，输出目录须不存在：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
+  --input fixtures/m4_pd_queue/service.json --layer fixtures/m4_pd_queue/layer.json \
+  --backend build/m4-pd-queue/output/cosim/ns3.44-cosim-service \
+  --system fixtures/m1_compute/system.json --network fixtures/m4_pd_queue/network \
+  --observation fixtures/m4_pd_queue/observation.json --output-dir runs/my-pd-queue
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_pd_queue.py \
+  --build-dir build/m4-pd-queue --output-dir runs/my-pd-queue-check
+```
+
+[样例](../fixtures/m4_pd_queue/README.md) 比较 P/D 单独、独立组单独、共享链路重叠、错开、增加容量和忙碌期间到达。真实重叠使首个 KV 完成及 D 开始均后移 26143 ns；同一 EP 业务包跨 KV 图启动保留在队列中。九次正常运行、八项拒绝、33 项 Python 单元及 M1～M4.1 回归通过。记录仍是未校准合成单层，组内异步计算、布局转换及真实输入不在本步内。

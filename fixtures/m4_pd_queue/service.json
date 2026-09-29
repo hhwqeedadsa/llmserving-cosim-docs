@@ -1,0 +1,286 @@
+{
+  "schema_version": "moe-ub-pd-queue-fixture/1",
+  "run_id": "m4-2-queue",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "model_config": "fixtures/m4_pd_handoff/model.json",
+  "groups": [
+    {
+      "group_id": "p0",
+      "rank_ids": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "rank_to_ub_node": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "expert_placement": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3
+      ]
+    },
+    {
+      "group_id": "d0",
+      "rank_ids": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "rank_to_ub_node": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "expert_placement": [
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        7
+      ]
+    },
+    {
+      "group_id": "ep0",
+      "rank_ids": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "rank_to_ub_node": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "expert_placement": [
+        8,
+        8,
+        9,
+        9,
+        10,
+        10,
+        11,
+        11
+      ]
+    }
+  ],
+  "npu_memory_bytes": [
+    4194304,
+    4194304,
+    4194304,
+    4194304,
+    4194304,
+    2323968,
+    4194304,
+    4194304,
+    4194304,
+    4194304,
+    4194304,
+    4194304
+  ],
+  "workspace_bytes": [
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536,
+    65536
+  ],
+  "communication_buffer_bytes": [
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192,
+    8192
+  ],
+  "block_size": 16,
+  "weight_dtype": "bfloat16",
+  "compute_dtype": "bfloat16",
+  "kv_dtype": "bfloat16",
+  "source_layout": "layer-kv-token-head-dim-tp1",
+  "destination_layout": "layer-kv-token-head-dim-tp1",
+  "kv_chunk_bytes": 3072,
+  "kv_handoff_policy": "between_iterations",
+  "requests": [
+    {
+      "request_id": 501,
+      "arrival_ns": 0,
+      "prompt_tokens": 8,
+      "output_tokens": 3,
+      "prefill_rank": 0,
+      "decode_rank": 5,
+      "prefill_routes": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "decode_routes": [
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "request_id": 502,
+      "arrival_ns": 0,
+      "prompt_tokens": 8,
+      "output_tokens": 3,
+      "prefill_rank": 2,
+      "decode_rank": 5,
+      "prefill_routes": [
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "decode_routes": [
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ],
+  "independent_requests": [
+    {
+      "request_id": 609,
+      "rank_id": 8,
+      "arrival_ns": 115000,
+      "prompt_tokens": 8,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ]
+    },
+    {
+      "request_id": 611,
+      "rank_id": 10,
+      "arrival_ns": 115000,
+      "prompt_tokens": 8,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          6
+        ]
+      ]
+    }
+  ]
+}

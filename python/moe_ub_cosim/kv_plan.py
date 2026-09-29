@@ -36,11 +36,11 @@ def validate_kv_input(c):
         require(isinstance(group['group_id'], str) and bool(group['group_id']), 'Invalid KV group identity')
         ranks = group['rank_ids']
         require(isinstance(ranks, list) and len(ranks) == 4 and
-            all(type(r) is int and 0 <= r < 8 for r in ranks) and ranks == sorted(set(ranks)), 'Invalid KV members')
-        integer(c[endpoint], endpoint, 0, 7)
+            all(type(r) is int and 0 <= r < 12 for r in ranks) and ranks == sorted(set(ranks)), 'Invalid KV members')
+        integer(c[endpoint], endpoint, 0, 11)
         require(c[endpoint] in ranks, 'KV endpoint outside its group')
         members.extend(ranks)
-    require(sorted(members) == list(range(8)) and c['source_group']['group_id'] !=
+    require(len(set(members)) == 8 and c['source_group']['group_id'] !=
         c['destination_group']['group_id'], 'KV groups overlap or have repeated identity')
     integer(c['chunk_bytes'], 'KV chunk_bytes', 1, MAX_TASK_BYTES)
     integer(c['send_slots_per_rank'], 'KV send slots', 1, 2)
@@ -52,7 +52,7 @@ def build_kv_plan(config, identities=None):
     model, tokens = c['model'], c['token_range'][1]
     element = 2 if c['kv_dtype'] == 'bfloat16' else 1
     size = tokens * model['num_key_value_heads'] * model['head_dim'] * element
-    ranks = list(range(8))
+    ranks = sorted(c['source_group']['rank_ids'] + c['destination_group']['rank_ids'])
     operation = dict(operation_id=c['wave_id'] + '.KV_TRANSFER', kind='KV_TRANSFER',
         service_id=c['service_id'], role='P/D', wave_id=c['wave_id'], layer_id=0,
         group_id=c['source_group']['group_id'] + '->' + c['destination_group']['group_id'], participants=ranks)

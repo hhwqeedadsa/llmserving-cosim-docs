@@ -244,8 +244,12 @@ class Service:
 
 def run(args):
     config, layer = json.loads(args.input.read_text()), json.loads(args.layer.read_text())
-    pd = config.get('schema_version') == 'moe-ub-pd-fixture/1'
-    if pd:
+    queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
+    pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
+    if queued:
+        from .pd_queue_service import QueuedPdService
+        service = QueuedPdService(config, layer)
+    elif pd:
         from .pd_service import PdService
         service = PdService(config, layer)
     else:

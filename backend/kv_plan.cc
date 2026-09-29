@@ -56,18 +56,18 @@ LayerPlan LoadKvPlan(const std::filesystem::path& directory, const Json& data)
         int previous = -1;
         for (const auto& value : group.at("rank_ids"))
         {
-            const int rank = Number(value, 0, 7, "group rank");
+            const int rank = Number(value, 0, 11, "group rank");
             Require(rank > previous && members.insert(rank).second, "overlapping/unordered group"); previous = rank;
         }
     }
     Require(members.size() == 8 && c.at("source_group").at("group_id") != c.at("destination_group").at("group_id"),
             "invalid P/D groups");
-    const int src = Number(c.at("src_rank"), 0, 7, "source rank"), dst = Number(c.at("dst_rank"), 0, 7, "destination rank");
+    const int src = Number(c.at("src_rank"), 0, 11, "source rank"), dst = Number(c.at("dst_rank"), 0, 11, "destination rank");
     const auto source_ranks = c.at("source_group").at("rank_ids").get<std::vector<int>>();
     const auto destination_ranks = c.at("destination_group").at("rank_ids").get<std::vector<int>>();
     Require(std::find(source_ranks.begin(), source_ranks.end(), src) != source_ranks.end() &&
             std::find(destination_ranks.begin(), destination_ranks.end(), dst) != destination_ranks.end(), "endpoint outside group");
-    const Json ranks = Json::array({0,1,2,3,4,5,6,7});
+    const Json ranks = std::vector<int>(members.begin(), members.end());
     Require(data.at("rank_ids") == ranks && data.at("rank_to_ub_node") == ranks, "invalid mapping");
     const auto wave = c.at("wave_id").get<std::string>(), graph = c.at("graph_id").get<std::string>();
     const auto op_id = wave + ".KV_TRANSFER";
@@ -108,12 +108,14 @@ LayerPlan LoadKvPlan(const std::filesystem::path& directory, const Json& data)
                 static_cast<int>(tag), size, op_id, static_cast<uint32_t>(ordinal), begin, 2*bytes});
         }
     Require(data.at("rank_graphs").size() == 8 && data.at("instance_batches").size() == 8, "missing handoff members");
-    for (int rank = 0; rank < 8; ++rank)
+    size_t member_index = 0;
+    for (int rank : members)
     {
-        const auto& g = data.at("rank_graphs")[rank];
+        const auto index = member_index++;
+        const auto& g = data.at("rank_graphs")[index];
         Json requests = Json::array();
         if (rank == src || rank == dst) requests.push_back(c.at("request_id"));
-        Require(data.at("instance_batches")[rank] == Json({{"rank_id",rank},{"request_ids",requests}}), "batch mismatch");
+        Require(data.at("instance_batches")[index] == Json({{"rank_id",rank},{"request_ids",requests}}), "batch mismatch");
         Require(g.at("rank_id") == rank && g.at("nodes").is_array() &&
             g.at("nodes").size() == ((rank == src || rank == dst) ? count : 0), "invalid member graph");
         for (size_t i = 0; i < g.at("nodes").size(); ++i)

@@ -1908,3 +1908,80 @@ compute-smoke 初次命令错误地使用了不存在的简写后端路径（sys
 首次 final-audit 正确发现：补记 profiler 从配置构造权重、CSV 无层身份两项来源字段后，六份较早回归的全源码摘要已经过时。保留该失败，重新执行六项回归及单元检查（*-verified），确认最终源码对应实际通过的结果。随后 final-audit-verified 检查 329 个旧产物大小和 SHA-256 未变，原生 launcher lock 未变，最终数据检查记录的源文件/输入摘要匹配；52 个 ASTRA 核心对象和本次已验证 M4.2 构建的唯一 10 个 UB ns-3 库保持一致。依赖检查仍覆盖 13 项，差异和最终 Git 状态记录在 L/diff-check.json、L/dependency-final.json、L/git-final.json。本步没有重跑原生性能样例，旧产物核对不代替性能验证。
 
 M4.3 当前数据导入与部分参考数据替换验收完成，按授权本地提交、不推送。实际专家路由、目标 NPU profile、完整多层执行和目标通信校准仍未验证，不能把本步称为真实部署复现。停止在 M4.3 completed；用户授权的 M4 顺序执行到此结束，M5 未开始。
+
+
+## 2026-09-29：m5-1-observation-export
+
+用户确认开始 M5.1；M4.3 完成提交 ed5239f，M5.1 任务说明提交 91b0b77。开始时主仓库与相关子模块干净，依赖仍为 LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222，全部 13 个递归依赖保持固定提交。本步只修改根后端的被动采集、Python 研究导出、输入、测试与文档；没有改依赖源码、gitlink 或锁文件，没有安装、下载模型数据或修改全局配置。
+
+日志根 `runs/m5-1-observation-20260929T055735Z/` 以下记为 L，命令 cwd 均为 `/root/moe-ub-cosim`。L/record.py 保存完整 argv、UTC 起止、退出码、stdout/stderr；集成目录的 commands.json 另记实际输入及全部子命令。新建 build/m5-observation，保留旧原生和联合构建。以下配置和构建实际退出 0，对应 configure、build 记录：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m5-observation -G Ninja -DCMAKE_BUILD_TYPE=release -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m5-observation/output -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m5-observation --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test cosim-layer-delay-test cosim-time-test cosim-write-test cosim-observation-test cosim-compute cosim-write --parallel 8
+```
+
+首次构建 522 步，锁定依赖的 deprecated binary_function 等编译警告保留。之后仅增加后端实际 RNG 参数记录，`cmake --build build/m5-observation --target cosim-service cosim-service-deadlock-test --parallel 8` 在 build-rng-record 中四步完成，退出 0。最终 service 二进制 SHA-256 为 4c4da8573b98990aa43ba0ffdca020a4e2409503ecdbe4ed18b0b81a28776817。
+
+### 采集、时钟和输出
+
+原 service 入口新增多端口观测参数列表，沿用已有 PortObservation 的实际发送开始挂接点，同时采集 8:0、8:4、9:4 三个出口。后端内部 packet-events.jsonl 保留全局时刻、包 UID、整包和业务字节；原单端口格式不变。没有额外仿真事件、包标签或业务传输。ASTRA 原始阶段产生端侧开始/完成记录，输出时才转换设备时间，各 rank 独立从 1 编号。
+
+Python 的时钟为 `((1000000000 + drift_ppb) * t_ns) // 1000000000 + offset_ns`，全程整数 floor；offset 和本地结果为有符号 64 位，漂移限制为 -999999999～1000000000 ppb，量化后非递减。每个 rank 与被观测交换机恰好一个模型，交换机各端口共用；本地半开观测区间在全局 0～max_simulation_ns 的变换范围内，正周期、最多 16 个端口及每端口 4096 窗口。只生成声明区间，保留零值与尾部不足整周期的窗口，采样起点不等于隐式全局零点。
+
+新增实际入口为 `python -m moe_ub_cosim.research run/validate-run/validate-observed`，配置和命令见 [M5.1 输入说明](../fixtures/m5_observation/README.md)。当前配置只接受 service，复用已有普通 EP、P/D 和数据服务；seed 固定 10，记录并核对后端实际 seed=10/run=1，不声称支持其他 seed。mode=fixture/research 只说明用途。
+
+正式目录为 manifest、inputs、graphs、observed、truth、metrics、logs。只有根 observed 的三个文件可供关联算法读取：端侧五字段、实际整包端口窗口 CSV、严格白名单的静态配置。真实逐 Token/KV 来源、图/操作/传输身份、全局时刻和时钟参数只进入内部资料。旧服务输出及每端口早期格式均在 logs/raw-run 内，属于内部记录。
+
+truth 记录操作到本地端侧编号的绑定、业务传输/实际完成事件、正业务字节的操作—端口—本地窗归属以及设备时钟。record_provenance=false 时操作/传输/归属文件为空记录，CSV 保留表头，归属校验记为 disabled；不声称已检查来源。metrics 分开检查唯一交付与每窗整包分类总和，来源打开时每个业务包必须有匹配的任务/包内范围。控制包只贡献整包计数，不虚构业务归属；多端口业务经过量不等同于唯一交付。
+
+manifest 记录项目和 13 个依赖提交、源码/后端/输入/产物摘要、实际随机设置、单位、计数位置、模板、完成语义、分块/并发、时钟文件与计算数据范围。validate-run 重建输出核对内部数据，validate-observed 只读三个观测文件，拒绝额外字段/文件、符号链接及缺失/重复/乱序窗口。测试将 observed 单独复制并限制文件读取位置后通过；这是访问契约，不是操作系统权限隔离。
+
+### 实测与回归
+
+最终所有测试使用以下形式，退出 0；各行给出实际脚本和输出记录名：
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m5-observation --output-dir L/记录名`
+
+| 脚本 | 记录名 | 检查范围 |
+|---|---|---|
+| check_research_export.py | research-checked | 九次正常研究运行、一次无观测对照、十五项预期失败；精确本地时钟、窗口、真值与访问边界 |
+| check_observation.py | observation-regression | 原单端口 21 次运行、十项拒绝，整包计数和业务范围 |
+| check_layer.py | layer-regression | 十四次真实写、八份专家输入及图原子拒绝 |
+| check_sequence.py | sequence-regression | 连续两轮、旧回调、来源无扰动 |
+| check_variants.py | variants-regression | 去重、分块、单双发送槽，12/42/42 次写 |
+| check_delay.py | delay-regression | 五次给定事件、两次真实 UB、十项拒绝 |
+| check_compute.py | compute-regression | 四次计算、六项拒绝及链接边界 |
+| check_service.py | service-regression | 实际调度、协议/故障、延迟反馈，64738 ns |
+| check_dynamic_service.py | dynamic-regression | 忙碌到达排队、组间独立及唤醒，129517 ns |
+| check_shared_bottleneck.py | shared-regression | 七次竞争/错开对照，重叠 264523 ns |
+| check_service_boundaries.py | boundaries-regression | 稀疏、零 Token、空输入、退出及死锁位置 |
+| check_pd_handoff.py | pd-regression | 七次正常、十一项故障，P/KV/D 原时刻一致 |
+| check_pd_queue.py | queue-regression | 九次正常、八项拒绝，容量、FIFO 与第三组竞争 |
+| check_data_inputs.py | data-regression | 六次正常、六项拒绝，三阶段输入与逐项替换 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 在 python-unit-final 中 45 项通过，含六项新增时钟/窗口/访问检查；clock-unit 也单独通过。`build/m5-observation/output/cosim/ns3.44-cosim-observation-test` 在 observation-unit 退出 0。
+
+| 最终研究用例 | 完成（ns） | 写次数 | 唯一业务字节 | 端侧记录 | 窗口 / 零窗口 |
+|---|---:|---:|---:|---:|---:|
+| 双组共享网络 on/off/repeat | 264523 | 84 | 688128 | 48 | 276 / 151 |
+| 零偏移零漂移 | 264523 | 84 | 688128 | 48 | 274 / 151 |
+| 裁剪观测区间 | 264523 | 84 | 688128 | 48 | 81 / 65 |
+| 实际首包恰好落边界 | 264523 | 84 | 688128 | 48 | 76 / 37 |
+| P/D 与 KV 交接 | 69994 | 20 | 11264 | 32 | 276 / 263 |
+| 空服务 | 0 | 0 | 0 | 0 | 276 / 276 |
+| M4.3 compute-stage，mode=research | 303633 | 28 | 229376 | 24 | 101 / 94 |
+
+独立 Fraction 算式核对所有端侧时间与原始 ASTRA 节点事件，包含负本地时刻及大于 2^53 的单元边界；Decimal 解析原生 Port Tx 日志与内部包事件逐条一致，再独立计算每窗整包和业务归属。真实边界用例将首包精确放在第二窗口起点，前窗口 0 包、后一窗口 1 包。来源开/关、零时钟、裁剪/边界、重复和不挂观测的业务图、协议、ASTRA 时刻与原生网络日志一致；on/off/repeat 的三个正式 observed 文件摘要相同。
+
+十五项拒绝含八个坏配置（非单调/溢出/缺失或重复时钟、重复端口、零周期、越界区间、无效物理端口）、四类坏观测（缺窗、隐藏端侧身份、隐藏时钟字段、额外文件）及三类内部损坏（产物摘要变化、错误操作绑定、丢失包来源）。后两项主动更新损坏文件的 manifest 摘要以单独检查语义验证，仍明确失败；未知物理端口保留失败 manifest 和日志，不能输出正常零流量。
+
+### 失败原因、产物审计与停止位置
+
+research-smoke 的初始采样起点等于时钟偏移，276 个窗口含 154 个零值；随后将起点独立设为 -7333/18539 ns，最终为 151 个零值，两版业务均为 264523 ns。research-integration 首次比较误把 Python 字节码时间戳和 protoc 输出目录当成业务图差异；检查脚本改为逐项比较 Chakra/计划/生成与 schema 源码，单独只归一化编译记录中的本次输出路径，保留业务内容断言。
+
+research-integration-corrected 在 PD 用例失败：误用了不含 0→4 TP 的 M3 网络，后端在 40159 ns 报 Could not reserve a TP connection 并信号退出。用例改为已有 M4.1 网络（相同拓扑且明确提供该 TP），不在运行时补连接或改用替身。research-verified 的空服务已成功导出，但测试直接打开不存在的原生端口 trace 失败；原生 trace 按事件创建，测试现仅在明确空请求、零目标写、零事件且原生计数为零时接受其不存在，非空缺日志仍失败。上述失败记录均保留。research-final 正常通过后补充三项内部损坏校验，最终 research-checked 全部通过，没有改变业务时间或删除失败断言。
+
+final-audit 恢复本轮 CMake 覆盖的原生 launcher lock，329 个旧产物大小与 SHA-256 不变，275 项最终源码/输入摘要匹配通过记录。核对全部 52 个 ASTRA 核心对象、实际装载的唯一 10 个 ns-3 库均来自新 UB 构建；清单三个计数位置和输入摘要准确。依赖检查仍为 13 项，提交前后的差异与 Git 状态保存在 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json、L/git-final.json。没有重跑原生性能样例，旧产物未变与功能测试不能替代模型校准。
+
+M5.1 当前范围验收完成，按持续授权本地提交、不推送，停止在 M5.1 completed。M5.2 尚未开始，仍需用户确认。真实专家路由、目标 NPU profile、完整多层执行和目标通信校准尚未验证；所有用途均保持 unvalidated_reference，未实现关联算法。

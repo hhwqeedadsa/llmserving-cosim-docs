@@ -160,8 +160,9 @@ PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descr
 {}
 
 PortObservation::PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
-                                std::vector<ns3::Ptr<ns3::UbController>> sources)
-    : config_(config), windows_(config), sources_(std::move(sources))
+                                std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events)
+    : config_(config), windows_(config), sources_(std::move(sources)),
+      retain_packet_events_(retain_packet_events)
 {
     for (const auto& d : descriptors)
         Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
@@ -235,6 +236,9 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     queue_events_.back()["busy_until_ns"] = now + completion_delay.GetNanoSeconds();
     const auto whole = packet->GetSize();
     const auto business = WritePayloadBytes(packet);
+    if (retain_packet_events_)
+        packet_events_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
+            {"counted_packet_bytes", whole}, {"business_payload_bytes", business}});
     windows_.Add(now, whole, business);
     all_bytes_ += whole; ++all_packets_;
     // Validation fingerprint of actual serialized bytes AND packet start times.
@@ -279,12 +283,17 @@ void PortObservation::Export(const UbWriteTransfer& transfer) const
 }
 
 void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfers,
-                             const Json& endpoint_ops, const Json& operation_registry) const
+                             const Json& endpoint_ops, const Json& operation_registry,
+                             const std::string& directory) const
 {
+    const std::filesystem::path base(directory);
+    auto save = [&](const std::string& name, const Json& value, bool lines = false) {
+        Save((base / name).string(), value, lines);
+    };
     Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
     Require(transfers.size() == descriptors_.size(), "Observation export transfer count mismatch");
-    std::filesystem::create_directory("observed");
-    Save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
+    std::filesystem::create_directories(base / "observed");
+    save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
         {"counter_location", "egress_packet_start"}, {"byte_semantics", "packet_get_size"},
         {"switch_id", config_.switch_id}, {"port_id", config_.port_id}, {"direction", "egress"},
         {"observation_start_local_ns", config_.start_ns}, {"observation_end_local_ns", config_.end_ns},
@@ -303,15 +312,16 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"data_protocol_overhead_bytes", row.overhead}, {"control_packet_bytes", row.control},
             {"unattributed_bytes", 0}});
     }
-    Save("observed/port_counters.jsonl", observed, true);
-    Save("observed/endpoint_ops.jsonl", endpoint_ops, true);
-    Save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
+    save("observed/port_counters.jsonl", observed, true);
+    save("observed/endpoint_ops.jsonl", endpoint_ops, true);
+    save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
         {"wire_and_time_fnv1a64", fingerprint_}});
-    Save("egress-queue-audit.jsonl", queue_events_, true);
+    save("egress-queue-audit.jsonl", queue_events_, true);
+    if (retain_packet_events_) save("packet-events.jsonl", packet_events_, true);
     if (!ledger_) return;
-    std::filesystem::create_directory("truth");
+    std::filesystem::create_directory(base / "truth");
     std::set<int> ranks;
     Json registry = Json::array();
     for (const auto* transfer : transfers)
@@ -331,12 +341,12 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             registry.back()["pair_payload_bytes"] = d.pair_payload_bytes;
         }
     }
-    Save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
+    save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
         {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},
         {"switch_ids", {config_.switch_id}}, {"rank_ids", ranks}});
-    Save("truth/operation_registry.jsonl", operation_registry, true);
-    Save("truth/transfer_registry.jsonl", registry, true);
-    Save("truth/packet_ranges.jsonl", packet_ranges_, true);
-    Save("truth/port_byte_truth.jsonl", truth, true);
+    save("truth/operation_registry.jsonl", operation_registry, true);
+    save("truth/transfer_registry.jsonl", registry, true);
+    save("truth/packet_ranges.jsonl", packet_ranges_, true);
+    save("truth/port_byte_truth.jsonl", truth, true);
 }
 }

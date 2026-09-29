@@ -239,9 +239,28 @@ int main(int argc, char** argv)
         Require(std::regex_match(bound, std::regex("[0-9]+")), "Invalid simulation bound");
         const auto max_ns = std::stoull(bound);
         Require(max_ns > 0 && max_ns <= INT64_MAX, "Invalid simulation bound");
-        std::optional<moe_ub::ObservationConfig> config;
+        std::vector<moe_ub::ObservationConfig> observation_configs;
+        bool multiple_ports = false;
         if (std::string(argv[5]) != "-")
-            config = moe_ub::ObservationConfig::Parse(ReadJson(fs::absolute(argv[5])), max_ns);
+        {
+            const auto input = ReadJson(fs::absolute(argv[5]));
+            multiple_ports = input.at("schema_version") == "moe-ub-port-observation-set/1";
+            if (multiple_ports)
+            {
+                Require(input.size() == 2 && input.at("ports").is_array() &&
+                        !input.at("ports").empty() && input.at("ports").size() <= 16,
+                        "Observation set requires 1..16 ports");
+                std::set<std::pair<uint32_t, uint32_t>> points;
+                for (const auto& port : input.at("ports"))
+                {
+                    const auto config = moe_ub::ObservationConfig::Parse(port, max_ns);
+                    Require(points.emplace(config.switch_id, config.port_id).second,
+                            "Duplicate observation port");
+                    observation_configs.push_back(config);
+                }
+            }
+            else observation_configs.push_back(moe_ub::ObservationConfig::Parse(input, max_ns));
+        }
         const std::vector<std::string> files = {"network_attribute.txt", "node.csv", "topology.csv",
             "routing_table.csv", "transport_channel.csv"};
         for (const auto& name : files) Require(fs::is_regular_file(network / name), "Missing network file " + name);
@@ -274,6 +293,7 @@ int main(int argc, char** argv)
         utils->TopoTraceConnect();
         Json report = {{"schema_version", "moe-ub-service-result/1"},
             {"calibration_status", "unvalidated_reference"}, {"sender_completion", "transaction_done"},
+            {"random", {{"seed", ns3::RngSeedManager::GetSeed()}, {"run", ns3::RngSeedManager::GetRun()}}},
             {"network_initializations", 1}, {"graph_completions", Json::array()},
             {"activation_order", Json::array()}, {"graph_loads", Json::array()},
             {"step_submissions", Json::array()}, {"boundary_resources", Json::array()},
@@ -303,9 +323,10 @@ int main(int argc, char** argv)
             NetworkDrain drain;
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
             std::vector<const moe_ub::UbWriteTransfer*> export_registry;
-            std::unique_ptr<moe_ub::PortObservation> observation;
-            if (config) observation = std::make_unique<moe_ub::PortObservation>(*config,
-                std::vector<moe_ub::WriteDescriptor>{}, controllers);
+            std::vector<std::unique_ptr<moe_ub::PortObservation>> observations;
+            for (const auto& config : observation_configs)
+                observations.push_back(std::make_unique<moe_ub::PortObservation>(config,
+                    std::vector<moe_ub::WriteDescriptor>{}, controllers, multiple_ports));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
             std::vector<moe_ub::LayerPlan> plans;
@@ -571,7 +592,7 @@ int main(int argc, char** argv)
                         pointers.push_back(prepared.back().get());
                     }
                     moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers);
-                    if (observation) observation->Register(plan.descriptors);
+                    for (const auto& observation : observations) observation->Register(plan.descriptors);
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
                     send_slots = slots;
@@ -730,7 +751,13 @@ int main(int argc, char** argv)
                     operations.push_back(operation);
                 }
             }
-            if (observation) observation->Export(export_registry, endpoints, operations);
+            for (size_t index = 0; index < observations.size(); ++index)
+            {
+                const auto& config = observation_configs[index];
+                const auto directory = multiple_ports ? "ports/" + std::to_string(config.switch_id) +
+                    "-" + std::to_string(config.port_id) : ".";
+                observations[index]->Export(export_registry, endpoints, operations, directory);
+            }
             dl_iterate_phdr(Library, &report["loaded_libraries"]);
         }
         utils->Destroy(); ns3::Simulator::Destroy(); moe_ub::ShutdownAstraLogging();

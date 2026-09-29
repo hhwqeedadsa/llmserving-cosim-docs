@@ -1,0 +1,102 @@
+{
+  "schema_version": "moe-ub-research-run/1",
+  "run_id": "m5-1-observation",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "inputs": {
+    "service": "fixtures/m3_shared_bottleneck/service.json",
+    "layer": "fixtures/m2_single_layer/layer.json",
+    "system": "fixtures/m1_compute/system.json",
+    "network": "fixtures/m3_shared_bottleneck/network"
+  },
+  "observation": {
+    "record_provenance": true,
+    "clocks": [
+      {
+        "device_type": "rank",
+        "device_id": 0,
+        "offset_ns": -12000,
+        "drift_ppb": 10000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 1,
+        "offset_ns": -10700,
+        "drift_ppb": -20000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 2,
+        "offset_ns": -9400,
+        "drift_ppb": 30000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 3,
+        "offset_ns": -8100,
+        "drift_ppb": -40000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 4,
+        "offset_ns": -6800,
+        "drift_ppb": 50000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 5,
+        "offset_ns": -5500,
+        "drift_ppb": -60000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 6,
+        "offset_ns": -4200,
+        "drift_ppb": 70000
+      },
+      {
+        "device_type": "rank",
+        "device_id": 7,
+        "offset_ns": -2900,
+        "drift_ppb": -80000
+      },
+      {
+        "device_type": "switch",
+        "device_id": 8,
+        "offset_ns": -8000,
+        "drift_ppb": 250000
+      },
+      {
+        "device_type": "switch",
+        "device_id": 9,
+        "offset_ns": 17000,
+        "drift_ppb": -125000
+      }
+    ],
+    "switches": [
+      {
+        "switch_id": 8,
+        "port_ids": [
+          0,
+          4
+        ],
+        "start_local_ns": -7333,
+        "end_local_ns": 499321,
+        "period_ns": 5000
+      },
+      {
+        "switch_id": 9,
+        "port_ids": [
+          4
+        ],
+        "start_local_ns": 18539,
+        "end_local_ns": 520321,
+        "period_ns": 7000
+      }
+    ]
+  },
+  "max_simulation_ns": 1000000,
+  "seed": 10
+}

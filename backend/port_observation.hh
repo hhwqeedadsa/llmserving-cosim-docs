@@ -71,14 +71,15 @@ class PortObservation
     PortObservation(ObservationConfig config, WriteDescriptor descriptor,
                     ns3::Ptr<ns3::UbController> source);
     PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
-                    std::vector<ns3::Ptr<ns3::UbController>> sources);
+                    std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events = false);
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
     void Register(const std::vector<WriteDescriptor>& descriptors);
     void Export(const UbWriteTransfer& transfer) const;
     void Export(const std::vector<const UbWriteTransfer*>& transfers,
-                const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry) const;
+                const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry,
+                const std::string& directory = ".") const;
   private:
     void PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay);
     void Enqueued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes);
@@ -93,6 +94,9 @@ class PortObservation
     uint64_t initial_tx_bytes_ = 0, all_bytes_ = 0, all_packets_ = 0;
     uint64_t fingerprint_ = 14695981039346656037ULL;
     nlohmann::json packet_ranges_ = nlohmann::json::array();
+    bool retain_packet_events_ = false;
+    // Internal input to local-clock export, never a research observation file.
+    nlohmann::json packet_events_ = nlohmann::json::array();
     // Internal validation only: physical egress FIFO, excluding VOQs and the
     // packet already serializing on the link. No sampling events or packet tags.
     nlohmann::json queue_events_ = nlohmann::json::array();

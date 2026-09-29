@@ -204,7 +204,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 后端每轮先检查四份图和侧表、身份及 rank 空闲条件，全部装载并登记后才按 rank 顺序激活。rank 完成消息汇聚为全组 WAVE_DONE；接收登记不产生额外写任务。四个 Sys、应用、控制器、连接和 ns-3 时间线跨轮保留。前端结束后还核对 UB 事务、实际链路包到达和端口队列；有包或端口发送未收尾则继续处理实际事件，收尾完成后停止并销毁剩余巡检定时事件。不会等待原生分配器的周期死锁巡检自行消失。
 
-输出中的 input.json/layer.json 是输入副本；graphs 保存各次实际决策生成的图与计划，bootstrap 保存零业务初始化图。protocol.jsonl 保存双方消息；service_result.json 保存逐请求初值、调度前后和完成后状态；execution/result.json、原 ASTRA 日志和 UB 跟踪用于核验实际事件。manifest.json 保存命令、调度器来源、给定 KV/路由/计算范围和正常或失败状态。以上均是内部功能验证资料；可选的 execution/observed 与 execution/truth 继续遵守观测和内部真值的访问边界，不声称已经实现 M5 的正式研究输出。
+输出中的 input.json/layer.json 是输入副本；graphs 保存各次实际决策生成的图与计划，bootstrap 保存零业务初始化图。protocol.jsonl 保存双方消息；service_result.json 保存逐请求初值、调度前后和完成后状态；execution/result.json、原 ASTRA 日志和 UB 跟踪用于核验实际事件。manifest.json 保存命令、调度器来源、给定 KV/路由/计算范围和正常或失败状态。以上均是原服务入口的内部功能验证资料；可选的 execution/observed 与 execution/truth 保留早期调试格式。正式研究输出由下文 M5.1 入口生成。
 
 验收覆盖三轮共 42 次 UB 写、344064 业务字节、144 个节点的 288 条原始执行事件，四个请求分别从不同 Token 下标推进三次并结束。基线完成时间为 64738 ns；仅增加 rank 1 链路传播时延后为 100410 ns，下一次服务决策跟随实际 UB 完成。来源开/关/不挂观测、重复执行以及每次回复前暂停 30 ms 的运行保留相同业务时刻；改变端口间隔的收尾测试确认服务结束后仍会等网络空闲。EOF、非法消息、编号/时间不符、输入耗尽却含未来唤醒、缺少工作、错误路径和末 rank 坏图被拒绝；子进程失败及不完整行的等待超时可报告。
 
@@ -317,3 +317,16 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 ```
 
 [样例](../fixtures/m4_pd_queue/README.md) 比较 P/D 单独、独立组单独、共享链路重叠、错开、增加容量和忙碌期间到达。真实重叠使首个 KV 完成及 D 开始均后移 26143 ns；同一 EP 业务包跨 KV 图启动保留在队列中。九次正常运行、八项拒绝、33 项 Python 单元及 M1～M4.1 回归通过。记录仍是未校准合成单层，组内异步计算、布局转换及真实输入不在本步内。
+
+
+## M5.1 多端口采集与本地时钟输出
+
+`python -m moe_ub_cosim.research run` 读取 `moe-ub-research-run/1` 配置，调用已有服务入口及 `cosim-service`，在执行结束后生成规范第 10.6 节的研究目录。它接受现有普通 EP、P/D 和数据服务输入；入口仍限 service，没有增加模型层数或另一套执行引擎。配置、字段、三个实际命令和完整限制见 [研究输出样例](../fixtures/m5_observation/README.md)，构建及本机日志见 [M5.1 环境记录](../docs/environment.md#2026-09-29m5-1-observation-export)。
+
+后端观测参数新增 `moe-ub-port-observation-set/1`，只含 schema_version 与 ports 列表；列表每项使用原单端口配置，最多 16 个不同的 switch/port。每个挂接点被动保留实际发送开始时间、包 UID、整包与业务字节到 `execution/ports/<switch>-<port>/packet-events.jsonl`，并沿用原端口计数和来源侧表。输入中的单端口 v1 和 `-` 继续保留原路径与语义。执行结果另记录实际 RNG seed/run，不改变随机设置。
+
+Python 为所有 rank 与被观测交换机校验唯一时钟，使用整数 ppb 和向下取整转换实际 ASTRA 阶段/端口事件。设备时钟和本地窗口不进入后端调度参数，不发包、不改变包内容、路径、优先级或仿真事件。按本地半开区间逐窗输出，包含零值和不足整周期的尾窗；端侧 local_record_id 在各 rank 内重新连续编号，不编码全局步号。
+
+根 `observed/` 只含端侧五字段、端口窗口 CSV 与白名单静态配置。操作/传输身份、逐 Token 或 KV 范围、图、全局时刻和时钟参数保留在 truth、graphs 和其他内部资料。`validate-observed` 仅访问三个观测文件；`validate-run` 读取内部原始事件、重建输出并检查文件摘要、唯一交付、整包分类与操作归属。原服务输出存于 logs/raw-run，包括其中的旧格式 observed 子目录；这些原始内部资料不能交给关联方法。
+
+最终双组样例生成 48 条端侧记录、276 个窗口（151 个零窗口），业务仍为 84 次写、688128 字节、264523 ns。来源开/关的观测完全一致；改变时钟或采样区间、重复执行及不挂观测，业务图、协议、ASTRA/UB 时刻和原生网络日志保持相同。九次正常研究运行、一次无观测对照、十五项预期失败、45 项 Python 单元以及受影响的 M1～M4 回归通过。校准状态仍为 unvalidated_reference，完整多层与目标通信校准留待后续任务确认。

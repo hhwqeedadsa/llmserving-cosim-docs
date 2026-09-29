@@ -1,0 +1,170 @@
+"""Integer local clocks and the closed, observed-only research input contract."""
+import csv
+import json
+from pathlib import Path
+
+from .plan import integer, require
+
+I64_MIN, I64_MAX = -(2**63), 2**63-1
+PPB = 10**9
+ENDPOINT_FIELDS = ('rank_id','local_record_id','kind','start_local_ns','end_local_ns')
+PORT_FIELDS = ('switch_id','port_id','direction','local_window_start_ns','local_window_end_ns',
+               'counted_packets','counted_packet_bytes')
+ATTRIBUTION_FIELDS = ('operation_id','switch_id','port_id','direction','local_window_start_ns',
+                      'local_window_end_ns','business_payload_bytes')
+WINDOW_CONFIG_FIELDS = {'switch_id','port_id','direction','start_local_ns','end_local_ns','period_ns'}
+PUBLIC_FIELDS = {'schema_version','endpoint_schema','port_schema','rank_ids','ports','time_unit',
+                 'byte_semantics','counter_location','clock_resolution_ns','endpoint_fields'}
+
+
+def local_time(global_ns, clock):
+    integer(global_ns,'global time',0,I64_MAX)
+    value = ((PPB + clock['drift_ppb'])*global_ns)//PPB + clock['offset_ns']
+    return integer(value,'local clock result',I64_MIN,I64_MAX)
+
+
+def windows(port):
+    start,end,period=port['start_local_ns'],port['end_local_ns'],port['period_ns']
+    for left in range(start,end,period):
+        yield left,min(left+period,end)
+
+
+def validate_observation(config, ranks, max_ns):
+    require(set(config)=={'clocks','switches','record_provenance'} and
+            type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
+    require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
+            1<=len(config['switches'])<=16,'Require observed switches and device clocks')
+    clocks={}
+    for clock in config['clocks']:
+        require(set(clock)=={'device_type','device_id','offset_ns','drift_ppb'} and
+                clock['device_type'] in ('rank','switch'),'Invalid clock fields/device type')
+        integer(clock['device_id'],'clock device_id',0,2**32-1)
+        integer(clock['offset_ns'],'clock offset_ns',I64_MIN,I64_MAX)
+        integer(clock['drift_ppb'],'clock drift_ppb',-PPB+1,PPB)
+        key=clock['device_type'],clock['device_id']
+        require(key not in clocks,'Duplicate device clock')
+        local_time(0,clock);local_time(max_ns,clock)
+        clocks[key]=clock
+    ports=[];switches=set()
+    for group in config['switches']:
+        require(set(group)=={'switch_id','port_ids','start_local_ns','end_local_ns','period_ns'},'Invalid switch sampling fields')
+        switch=integer(group['switch_id'],'switch_id',0,2**32-1)
+        require(switch not in switches and ('switch',switch) in clocks,'Duplicate switch or missing switch clock')
+        switches.add(switch)
+        require(isinstance(group['port_ids'],list) and 1<=len(group['port_ids'])<=16,'Invalid observed ports')
+        for port in group['port_ids']:integer(port,'port_id',0,2**32-1)
+        require(len(set(group['port_ids']))==len(group['port_ids']),'Duplicate observation port')
+        integer(group['start_local_ns'],'window start',I64_MIN,I64_MAX)
+        integer(group['end_local_ns'],'window end',I64_MIN,I64_MAX)
+        integer(group['period_ns'],'window period',1,I64_MAX)
+        clock=clocks['switch',switch]
+        require(local_time(0,clock)<=group['start_local_ns']<group['end_local_ns']<=local_time(max_ns,clock),
+                'Local observation interval outside simulated time bounds')
+        require((group['end_local_ns']-group['start_local_ns']-1)//group['period_ns']<4096,'Too many observation windows')
+        for port in group['port_ids']:
+            ports.append(dict(switch_id=switch,port_id=port,direction='egress',
+                **{k:group[k] for k in ('start_local_ns','end_local_ns','period_ns')}))
+    require(1<=len(ports)<=16,'Require 1..16 distinct observation ports')
+    require(set(clocks)=={('rank',r) for r in ranks}|{('switch',s) for s in switches},
+            'Missing or unexpected rank/switch clocks')
+    return clocks,sorted(ports,key=lambda p:(p['switch_id'],p['port_id']))
+
+
+def backend_observation(config, ranks, max_ns):
+    _,ports=validate_observation(config,ranks,max_ns)
+    # Capture successful starts throughout the simulation. Local clocks are
+    # deliberately absent from the backend input and its event scheduler.
+    return dict(schema_version='moe-ub-port-observation-set/1',ports=[dict(
+        schema_version='moe-ub-port-observation/1',switch_id=p['switch_id'],port_id=p['port_id'],
+        window_start_ns=0,window_end_ns=max_ns,window_period_ns=max_ns,
+        record_provenance=config['record_provenance']) for p in ports])
+
+
+def public_config(ranks, ports):
+    return dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
+        port_schema='moe-ub-port-windows/1',rank_ids=ranks,ports=ports,time_unit='ns',
+        byte_semantics='ns3_packet_get_size',counter_location='egress_packet_start',clock_resolution_ns=1,
+        endpoint_fields=list(ENDPOINT_FIELDS))
+
+
+def json_lines(path):
+    lines=path.read_text().splitlines()
+    require(all(line.strip() for line in lines),'Blank JSONL record')
+    return [json.loads(line) for line in lines]
+
+
+def write_lines(path, rows):
+    path.write_text(''.join(json.dumps(row,sort_keys=True)+'\n' for row in rows))
+
+
+def write_csv(path, fields, rows):
+    with path.open('w',newline='') as stream:
+        writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader();writer.writerows(rows)
+
+
+def read_csv(path, fields, text_fields=('direction',)):
+    with path.open(newline='') as stream:
+        reader=csv.DictReader(stream)
+        require(reader.fieldnames==list(fields),'Unexpected CSV fields')
+        result=[]
+        for row in reader:
+            require(set(row)==set(fields) and all(v is not None for v in row.values()),'Malformed CSV row')
+            for key,value in row.items():
+                if key not in text_fields:
+                    number=int(value);require(str(number)==value,'Noncanonical CSV integer')
+                    row[key]=number
+            result.append(row)
+        return result
+
+
+def validate_observed(directory):
+    """Read only these three files. No graph, manifest, clock model, or truth access."""
+    directory=Path(directory)
+    require(directory.is_dir() and not directory.is_symlink(),'Observed directory must be a real directory')
+    expected={'public_config.json','endpoint_ops.jsonl','port_windows.csv'}
+    require({p.name for p in directory.iterdir()}==expected,'Missing or unexpected observed file')
+    require(all((directory/name).is_file() and not (directory/name).is_symlink() for name in expected),
+            'Observed symlinks/non-files are forbidden')
+    public=json.loads((directory/'public_config.json').read_text())
+    require(set(public)==PUBLIC_FIELDS and public['schema_version']=='moe-ub-observed/1' and
+        public['endpoint_schema']=='moe-ub-endpoint-ops/1' and public['port_schema']=='moe-ub-port-windows/1' and
+        public['endpoint_fields']==list(ENDPOINT_FIELDS) and public['time_unit']=='ns' and
+        public['byte_semantics']=='ns3_packet_get_size' and public['counter_location']=='egress_packet_start' and
+        type(public['clock_resolution_ns']) is int and public['clock_resolution_ns']==1,'Invalid public field whitelist')
+    ranks=public['rank_ids']
+    require(isinstance(ranks,list) and 1<=len(ranks)<=12 and ranks==sorted(set(ranks)) and
+            all(type(r) is int and 0<=r<12 for r in ranks),'Invalid public ranks')
+    port_configs=public['ports'];points=set();expected_windows=[]
+    require(isinstance(port_configs,list) and 1<=len(port_configs)<=16,'Invalid public port list')
+    for p in port_configs:
+        require(set(p)==WINDOW_CONFIG_FIELDS and p['direction']=='egress','Invalid public port fields')
+        integer(p['switch_id'],'switch_id',0,2**32-1);integer(p['port_id'],'port_id',0,2**32-1)
+        integer(p['start_local_ns'],'start_local_ns',I64_MIN,I64_MAX)
+        integer(p['end_local_ns'],'end_local_ns',I64_MIN,I64_MAX)
+        integer(p['period_ns'],'period_ns',1,I64_MAX)
+        point=p['switch_id'],p['port_id']
+        require(point not in points and p['start_local_ns']<p['end_local_ns'] and
+            (p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']<4096,'Invalid or duplicate public sampling interval')
+        points.add(point)
+        expected_windows.extend((p['switch_id'],p['port_id'],'egress',a,b) for a,b in windows(p))
+    ports=read_csv(directory/'port_windows.csv',PORT_FIELDS)
+    require([tuple(r[k] for k in PORT_FIELDS[:5]) for r in ports]==expected_windows,
+            'Missing, duplicated or reordered port windows (missing is not zero)')
+    for row in ports:
+        integer(row['counted_packets'],'counted_packets',0,2**64-1)
+        integer(row['counted_packet_bytes'],'counted_packet_bytes',0,2**64-1)
+        require((row['counted_packets']==0)==(row['counted_packet_bytes']==0) and
+                row['counted_packets']<=row['counted_packet_bytes'],'Invalid packet/byte counts')
+    endpoints=json_lines(directory/'endpoint_ops.jsonl');last={r:(0,I64_MIN) for r in ranks}
+    for row in endpoints:
+        require(set(row)==set(ENDPOINT_FIELDS) and type(row['rank_id']) is int and row['rank_id'] in last and
+                row['kind'] in ('dispatch','combine','KV_TRANSFER'),'Invalid endpoint field whitelist')
+        integer(row['local_record_id'],'local_record_id',1)
+        integer(row['start_local_ns'],'start_local_ns',I64_MIN,I64_MAX)
+        integer(row['end_local_ns'],'end_local_ns',row['start_local_ns'],I64_MAX)
+        number,time=last[row['rank_id']]
+        require(row['local_record_id']==number+1 and row['start_local_ns']>=time,'Invalid local endpoint sequence')
+        last[row['rank_id']]=row['local_record_id'],row['start_local_ns']
+    return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=len(endpoints),
+                port_windows=len(ports),zero_windows=sum(r['counted_packets']==0 for r in ports),
+                access_scope='observed_only')

@@ -2102,3 +2102,27 @@ M5.2 的多层连续功能数据管线验收完成，本地提交、不推送，
 实际输入仍为合成路由 `synthetic_indexed_file` 与逐层固定计算 `per_layer_fixed_reference`，执行范围为连续 MoE 层片段。没有目标库执行轨迹、专家数值前向或设备测量；阶段时序、端口时窗、端侧计算和硬件校准均保持未验证，未拟合参数或预设误差阈值。模型继续记录 `reference_model`、`unvalidated_reference` 与 `full_model_execution_validated=false`。
 
 M5.3 按上述范围验收完成，按持续授权本地提交、不推送，停止在 M5.3 completed。v0.2 的编号任务按各自范围完成；F01/F02/F03/F04 留待后续版本确认，未开始采集、GPU 测量、多请求批处理或具体通信库复现。
+
+## 2026-09-29：发布截至 M5.3 的最新版
+
+用户明确要求将最新版推送到 GitHub。起点为 M5.3 完成提交 `b033a2c19d3c1d740277e1f254f25c8443e95888`，主仓库及子模块工作区干净，main 比上次发布的 `c116cddf6780731fff9e7cf5839f7c1786b33001` 多 21 个提交。旧任务记录已经提交，本次发布说明另存于 `420be920a3b7503e3fbed01adf45f811eea94d63`。
+
+本轮范围为既有维护仓库的普通快进发布与必要文档，不升级依赖、不改源码或可见性、不创建新仓库。开发结果仍限 M5.3 已说明的未校准参考模型。本段以 R 表示 `runs/publish-v02-20260929`，L 表示 R/logs。临时命令记录器 `/tmp/moe_publish_v02_run.py` 保存每条实际 argv、cwd、起止 UTC、退出码及 stdout/stderr 路径，格式为 `L/<标签>.json` 与同名 `.stdout.log` / `.stderr.log`。
+
+| 检查或操作 | 工作目录与实际命令 | 结果与日志标签 |
+|---|---|---|
+| 固定依赖 | 根目录，`bash scripts/check_deps.sh` | 退出 0，13 个检出一致；deps-pre |
+| 主仓库原远端 | 根目录，`git ls-remote --exit-code origin refs/heads/main` | 首次退出 128；同命令重试退出 0，确认为 c116cdd；remote-root-before / remote-root-retry |
+| ASTRA 远端 | third_party/LLMServingSim/astra-sim，`git ls-remote --exit-code origin refs/heads/cosim` | 退出 0，e2a14f55d9a45db8f3831bda7035af3e191e4bb7；remote-astra-before |
+| UB 远端 | third_party/ns-3-ub，同上 cosim 查询 | 首次退出 128；重试退出 0，1ba722217ef94716a07a56a2388be2c7dddd8e0b；remote-ub-before / remote-ub-retry |
+| LLMServingSim 远端 | third_party/LLMServingSim，同上 cosim 查询 | 退出 0，9aed949c8e66fd1424d48365af64bfc0fe0b2ed1；remote-llm-before |
+| 发布配置未变 | 根目录，`git diff --exit-code c116cddf6780731fff9e7cf5839f7c1786b33001 b033a2c19d3c1d740277e1f254f25c8443e95888 -- .gitmodules deps.lock.json third_party` | 退出 0；pins-unchanged |
+| 快进关系 | 根目录，`git merge-base --is-ancestor c116cddf6780731fff9e7cf5839f7c1786b33001 b033a2c19d3c1d740277e1f254f25c8443e95888` | 退出 0；fast-forward-check |
+| 主仓库成果推送 | 根目录，`git push --recurse-submodules=check origin b033a2c19d3c1d740277e1f254f25c8443e95888:refs/heads/main` | 退出 0，c116cdd → b033a2c；push-v02-code |
+| 成果远端核验 | 根目录，`git ls-remote --exit-code origin refs/heads/main` | 退出 0，b033a2c19d3c1d740277e1f254f25c8443e95888；remote-root-code |
+
+两次首次失败均为 GitHub 返回 Invalid username or token，未将其误报为通过；使用相同远端和查询命令重试后成功。没有显示或写入凭证，没有修改认证配置。主仓库和三个维护依赖均无可执行的 pre-push hook。
+
+三个维护子仓库已在 GitHub cosim 保存所需提交，本次没有新的子模块提交或推送。其余十个递归上游版本与先前发布相同；没有重新查询全部上游远端或再次完整克隆，源码可获取性沿用本日首次发布的独立检出证据。本轮再次确认了本地 13 个依赖状态、父仓库指针及三个维护分支在线状态。
+
+README 同步截至 M5.3 的发布范围，当前任务保存发布结果。发布说明及收尾记录随主仓库 main 一并推送；准确收尾提交、远端一致性与干净工作区由 `R/final-state.json` 保存，对应的记录提交、推送与最终检查日志为 `records-commit`、`push-records`、`remote-root-final`、`deps-final` 和 `final-state`。本轮不重复构建或仿真，不将 build、runs、虚拟环境、下载源码或外部数据加入 Git。停止在本次发布完成，后续功能仍需用户确认，后续推送仍需单独授权。

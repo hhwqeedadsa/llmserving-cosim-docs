@@ -56,7 +56,7 @@ git submodule update --init --recursive
 bash scripts/check_deps.sh
 ```
 
-截至 M3.1 的提交已按 ASTRA、UB、LLMServingSim、主仓库的顺序推送。三个依赖的项目补丁保存在各自维护仓库的 `cosim` 分支，主仓库保存在 `main`；ASTRA 和 LLMServingSim 的本机 `upstream` 保留原始来源。`.gitmodules` 和 `deps.lock.json` 已记录维护地址，实际版本仍由父仓库 gitlink 固定，未升级基线。2026-09-29 已在独立目录从远端取回全部 13 个固定依赖，依赖检查通过，且未借用本机对象库。部分辅助依赖采用有限历史下载，中断恢复和实际检查见 [环境记录](docs/environment.md)。
+2026-09-29 已将截至 M5.3 的成果（`b033a2c`）及发布记录推送到主仓库 `main`。三个依赖的项目补丁已在首次发布时由内向外保存到各自维护仓库的 `cosim` 分支；本次在线核对与固定提交相同，无需再次推送子模块。ASTRA 和 LLMServingSim 的本机 `upstream` 保留原始来源。`.gitmodules` 和 `deps.lock.json` 已记录维护地址，实际版本仍由父仓库 gitlink 固定，未升级基线。当天首次发布曾在独立目录从远端取回全部 13 个固定依赖并检查通过，未借用本机对象库；本次未重复完整克隆。部分辅助依赖采用有限历史下载，中断恢复和两次发布的实际检查见 [环境记录](docs/environment.md)。
 
 初始化使用父仓库记录的提交，不使用 `--remote`。ns-3-UB 的 `scratch/ns-3-ub-tools` 来自 GitCode；若拉取失败，保留具体报错，不自行换源或升级版本。原生基线可能保留 ASTRA 自带的其他网络后端源码；后续联合程序仍只能链接 ns-3-UB 一套 ns-3。
 

@@ -2060,3 +2060,45 @@ Python 合并局部节点号、分配运行内唯一传输/任务/tag，保存�
 final-audit 恢复本轮 CMake 覆盖的原生 launcher lock，361 个原生与旧联合产物大小/摘要未变，331 项最终源码/输入摘要匹配通过记录。全部 52 个 ASTRA 核心对象保留，实际只装载新构建的一套 10 个 UB ns-3 库。固定依赖检查、差异和提交后 Git 状态保存在 L/dependency-precommit.json、L/diff-check.json、L/dependency-final.json、L/git-final.json。没有重跑原生性能样例，也没有改动子模块提交。
 
 M5.2 的多层连续功能数据管线验收完成，本地提交、不推送，停止在 M5.2 completed。32 层测试覆盖全部 MoE 块的依赖与通信，但没有 embedding/输出头等完整模型算子图、真实路由和目标 NPU profile；仍保留 full_model_execution_validated=false、multilayer_segment_iterations_not_full_model_ITL_or_TTFT 与 unvalidated_reference。M5.3 目标通信行为核对尚未开始，仍需用户确认。
+
+## 2026-09-29：M5.3 目标通信源码核对与参考运行
+
+用户确认优先完成 v0.2，并将多请求连续批处理、具体集合通信库复现加入后续候选清单。旧完成记录已保存，候选项 F03/F04 与 M5.3 开始说明提交为 `2275ff23abfdee13bfef64c883644847b4aa58ee`。本轮只新增审计资料、独立检查器和文档，没有修改运行源码、技术规范、依赖锁或 gitlink。
+
+工作目录均为 `/root/moe-ub-cosim`。本段以 R 表示 `runs/m5-3-model-audit-20260929`，L 表示 R/logs。该目录中的原始资料按既有规则不提交 Git；固定审计输入在 `fixtures/m5_model_audit/audit.json`，中文结论在 [模型核对记录](model_validation.md)。
+
+### 来源与运行版本
+
+目标为官方 DeepEP v1.2.1，提交 `9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee`，单机四 rank、8 专家、Top-K=2、hidden=4096、BF16 普通 Dispatch/Combine。全部调用参数和排除项保存在审计输入，不代表实测设备配置。
+
+取得 `https://api.github.com/repos/deepseek-ai/DeepEP/tags` 与固定提交的 `/git/trees/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee?recursive=1` 元数据，保存在 R/sources/deepep-tags.json 和 deepep-tree.json。首次 tags 请求因沙箱无法连接配置的代理退出 7，获准使用 curl 网络权限后重试退出 0，tree 请求退出 0；没有更换源码来源或版本。此次中断发生于元数据读取期间，继续后取回源文件。
+
+13 个小型公开文件共 253461 字节，逐个使用 `curl --fail --silent --show-error --location --max-time 40 <固定 raw URL> -o <R/sources/deepep/相对路径>`，全部退出 0。每个实际 argv、cwd、退出状态及最初失败原因在 R/sources/fetch-record.json；来源文件包含 LICENSE、README、Python API、C++/CUDA 布局/通信/事件/缓冲代码及上游单机测试。审计保存每份文件的 SHA-256、Git blob SHA-1、大小与固定 URL；Git blob 与上述 tree 一致。源代码只阅读，没有导入、编译或执行上游测试。
+
+参考运行使用既有 `build/m5-multilayer/output/cosim/ns3.44-cosim-service`，SHA-256 为 `0f4fadf51793290236d25899c6a7e8e5221ffa31223975be79929d9a2e3767c2`；本轮没有重新构建。运行清单记录主仓库 `2275ff2`、13 个依赖提交和完整输入/源码摘要。LLMServingSim `9aed949c8e66fd1424d48365af64bfc0fe0b2ed1`、ASTRA `e2a14f55d9a45db8f3831bda7035af3e191e4bb7`、UB `1ba722217ef94716a07a56a2388be2c7dddd8e0b` 均未改变；实际仍只装载该构建的一套 10 个 UB ns-3 库。
+
+### 实际命令与检查结果
+
+命令由本任务临时记录器 `/tmp/moe_m53_run.py` 在根目录执行，环境 `PYTHONPATH=python`。记录器不改变被测代码，将准确 argv、cwd、起止 UTC、退出状态、stdout/stderr 路径保存为 `L/<标签>.command.json`，两个输出流分别保存为同名 `.stdout.log` / `.stderr.log`。下表是实际被执行命令；Python 为 `.venv/llmservingsim-native/bin/python`。
+
+| 标签 | 命令与输入 | 退出状态 / 结果位置 |
+|---|---|---|
+| deps-pre | `bash scripts/check_deps.sh` | 0，13 个检出一致 |
+| multilayer-regression | `PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_multilayer.py --build-dir build/m5-multilayer --output-dir runs/m5-3-model-audit-20260929/multilayer-regression`；输入从 fixtures/m5_multilayer/run.json 及其 service/layer/routes 构造各对照 | 0，R/multilayer-regression/summary.json；每条子命令在同目录 commands.json 与对应 stdout/stderr 日志 |
+| model-audit | `PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_model_audit.py --source-dir runs/m5-3-model-audit-20260929/sources/deepep --regression-dir runs/m5-3-model-audit-20260929/multilayer-regression --output-dir runs/m5-3-model-audit-20260929/audit-check` | 0，首次独立布局核对；R/audit-check/result.json |
+| model-audit-final | 上一条相同命令，仅 output-dir 改为 `runs/m5-3-model-audit-20260929/audit-final`；增加 Config 字段引用并更正本地函数定位后的最终记录 | 0，R/audit-final/result.json，摘要绑定最终审计文件和检查器 |
+| deps-final | `bash scripts/check_deps.sh` | 0，13 个子模块版本和源码状态一致；根仓库本任务文档/审计改动按脚本规则报告 |
+
+`check_multilayer.py` 的 8 次研究运行、1 次无观测服务运行和 10 项预期拒绝通过。正常主例/重复/来源关闭/零时钟/无观测均在 193789 ns 完成；主例 78 次写、638976 业务字节、36 条源路由、72 条端侧记录、2004 个窗口。传播时延对照为 256536 ns，稀疏请求为 216871 ns/344064 字节，3072 字节分块为 199717 ns/234 次写/638976 字节，32 层两步为 1367802 ns/558 次写/4571136 字节。
+
+回归逐项核对实际 UB 交付、数据就绪/事务完成/接收回调、局部阶段和跨层依赖、资源排空、被动观测与端口来源守恒。10 项错误各退出 1 属于预期拒绝，原因在 summary.json 和子命令日志：五个前端输入错误、四个后端图错误和一次仿真时间上限。没有修改这些预期结果。此次没有重跑全部原生和旧阶段回归；运行源码未变，选择已有连续多层回归覆盖当前证据链。
+
+新增检查器校验 13 个目标文件及本地审阅文件摘要、八项证据引用和分离的验证状态。独立 CPU 布尔 rank 掩码覆盖 117 个参考计划与空布局算式；8 次研究运行的 130 个层实例逐一比较专家输入、矩阵、实际交付与全部产物摘要。基础例 7 个远端行，去重例 6 个；主运行共 39 个远端行和 18 个本地行，业务字节 638976。目标额外元数据按源码逻辑存储推导为 Dispatch 1092、Combine 156 字节，不是 NVLink 实测或 UB 已模拟的开销。
+
+### 有效范围与停止位置
+
+八项行为源码核对完成；去重与业务向量量有依据，回传量以调用者局部加权合并为条件。索引/权重元数据、通道分块、环形缓冲、通知屏障与流事件等和参考执行存在差异。各项证据及其影响见 model_validation.md，没有通过改变 direct_rank_dedup_v1 或插入猜测控制流量来弥合差异。
+
+实际输入仍为合成路由 `synthetic_indexed_file` 与逐层固定计算 `per_layer_fixed_reference`，执行范围为连续 MoE 层片段。没有目标库执行轨迹、专家数值前向或设备测量；阶段时序、端口时窗、端侧计算和硬件校准均保持未验证，未拟合参数或预设误差阈值。模型继续记录 `reference_model`、`unvalidated_reference` 与 `full_model_execution_validated=false`。
+
+M5.3 按上述范围验收完成，按持续授权本地提交、不推送，停止在 M5.3 completed。v0.2 的编号任务按各自范围完成；F01/F02/F03/F04 留待后续版本确认，未开始采集、GPU 测量、多请求批处理或具体通信库复现。

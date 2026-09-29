@@ -1,0 +1,526 @@
+{
+  "schema_version": "moe-ub-target-audit/1",
+  "audit_id": "m5-3-deepep-v1.2.1-intranode",
+  "target": {
+    "name": "DeepEP",
+    "tag": "v1.2.1",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "repository": "https://github.com/deepseek-ai/DeepEP",
+    "source_basis": "pinned_source_review_only",
+    "call_config": {
+      "mode": "normal_intranode",
+      "num_ranks": 4,
+      "num_experts": 8,
+      "top_k": 2,
+      "hidden": 4096,
+      "expert_placement": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3
+      ],
+      "x_dtype": "bfloat16",
+      "combine_dtype": "bfloat16",
+      "topk_idx_dtype": "int64",
+      "topk_weights_dtype": "float32",
+      "dispatch_handle": null,
+      "combine_handle": "handle_from_this_dispatch",
+      "combine_topk_weights": null,
+      "bias": null,
+      "expert_alignment": 1,
+      "num_worst_tokens": 0,
+      "async_finish": false,
+      "previous_event": null,
+      "allocate_on_comm_stream": false,
+      "low_latency_mode": false,
+      "num_nvl_bytes": 134217728,
+      "num_rdma_bytes": 0,
+      "num_sms": 20,
+      "dispatch_config": [
+        20,
+        6,
+        256,
+        6,
+        128
+      ],
+      "combine_config": [
+        20,
+        9,
+        256,
+        6,
+        128
+      ],
+      "transport_precondition": "four GPUs mutually visible via NVLink; not a statement about this host",
+      "caller_contract": "local expert outputs weighted and merged into one row per dispatched token/destination before combine; not measured",
+      "config_representation": "Config constructor arguments; RDMA receive count 128 rounds to 132 internally and is unused in the selected intranode path"
+    },
+    "excluded_paths": [
+      "internode",
+      "low_latency",
+      "FP8",
+      "cached_dispatch",
+      "async_overlap",
+      "GPU execution",
+      "numeric model forward",
+      "initialization timing"
+    ]
+  },
+  "source_files": [
+    {
+      "path": "LICENSE",
+      "bytes": 1065,
+      "sha256": "6c73a30c14a2938abaa6afe98ebb19e6d81dac5bd4ace0cb05c61c20afa37b85",
+      "git_blob_sha1": "5c48bdc9f6ef95f725096ff5434012da927b516f",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/LICENSE"
+    },
+    {
+      "path": "README.md",
+      "bytes": 19320,
+      "sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+      "git_blob_sha1": "211cace8dcaef15b8b2784ccfd179331e2d488df",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/README.md"
+    },
+    {
+      "path": "csrc/config.hpp",
+      "bytes": 9689,
+      "sha256": "e8f6b8de088901ea5a4a812c7d43cc6dfd9ae5dcf7294c5bf8d6502cbcb465cb",
+      "git_blob_sha1": "5c9119898ee708de0c7c9a7d4c18c09b04ac3357",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/config.hpp"
+    },
+    {
+      "path": "csrc/deep_ep.cpp",
+      "bytes": 76678,
+      "sha256": "de03cc5b5e2d05b3dc521ab1bfd419f3d94bfaa5385ee3c05e0052295a6e138d",
+      "git_blob_sha1": "0789cd58509ebbe06cf20ab0078821b8aaa2f68e",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp"
+    },
+    {
+      "path": "csrc/event.hpp",
+      "bytes": 1103,
+      "sha256": "6ebd65e0e8aacd11d1271f8b5d124fc735e1eafc63a1c9370e79e19a9239063c",
+      "git_blob_sha1": "a93444d161f1cadd86c9af848a84aa5dde5c0cc1",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/event.hpp"
+    },
+    {
+      "path": "csrc/kernels/buffer.cuh",
+      "bytes": 4987,
+      "sha256": "33f3a10ef0d6ba0728613b3ce08d019d0846403810e9abee8124e4715bd6245a",
+      "git_blob_sha1": "7c243d3c2e565f1e7f33d4c5c5f857199a2c8c15",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/buffer.cuh"
+    },
+    {
+      "path": "csrc/kernels/configs.cuh",
+      "bytes": 1722,
+      "sha256": "59abbe9119a9b494aed9f605e3326af536e677b3e6855b9444e41f7576e34490",
+      "git_blob_sha1": "a7b960bdcf78d4075dc10e86fe3a33962dbea09f",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/configs.cuh"
+    },
+    {
+      "path": "csrc/kernels/intranode.cu",
+      "bytes": 48881,
+      "sha256": "3ed695b9ad2ac7dcf893631d94c84d635ead384ee47ed1d7f05b1cb4f9fcbb2b",
+      "git_blob_sha1": "bff0e4526c7fb8f998a615bf79cdd08004c21114",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/intranode.cu"
+    },
+    {
+      "path": "csrc/kernels/layout.cu",
+      "bytes": 6494,
+      "sha256": "a67b604f155eb2348043085fff259ac0569c950c28fbd995ec5d80422df2ead4",
+      "git_blob_sha1": "f2cfc6f48b1cbec7a3ab853c99bb5d4c4f9dee64",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/layout.cu"
+    },
+    {
+      "path": "csrc/kernels/utils.cuh",
+      "bytes": 23281,
+      "sha256": "e192d4a083b97c0800f2f4cf892ad23271c4b4fa729df64e3be5666fb460ec07",
+      "git_blob_sha1": "594bff395674924a8de9ce4a42d4f199d298568a",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/utils.cuh"
+    },
+    {
+      "path": "deep_ep/buffer.py",
+      "bytes": 40263,
+      "sha256": "e1be2065c2fddacf8c88adc303c22cbc642f27930efd98a81716d2fc2bebd94c",
+      "git_blob_sha1": "505e9b8087c1570696b78324424183a52cf018e4",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/deep_ep/buffer.py"
+    },
+    {
+      "path": "deep_ep/utils.py",
+      "bytes": 3861,
+      "sha256": "e60e4da066fccd7bf42372b81976de1f753ca3dc7229390b06de1aec24b39b2f",
+      "git_blob_sha1": "b84e17594ff874540624377dbd018b867e3cd505",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/deep_ep/utils.py"
+    },
+    {
+      "path": "tests/test_intranode.py",
+      "bytes": 16117,
+      "sha256": "dbab4dab6bb0076defc747d6359c33b151d3333d89ae96d0505cc1684eb29f3f",
+      "git_blob_sha1": "cd26f68f737f9c931b0e9a07135c3c8f9ec4f442",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/tests/test_intranode.py"
+    }
+  ],
+  "source_references": {
+    "layout": {
+      "path": "csrc/kernels/layout.cu",
+      "line_start": 17,
+      "line_end": 105
+    },
+    "api": {
+      "path": "deep_ep/buffer.py",
+      "line_start": 276,
+      "line_end": 432
+    },
+    "config": {
+      "path": "deep_ep/buffer.py",
+      "line_start": 220,
+      "line_end": 273
+    },
+    "init": {
+      "path": "deep_ep/buffer.py",
+      "line_start": 30,
+      "line_end": 125
+    },
+    "notify": {
+      "path": "csrc/kernels/intranode.cu",
+      "line_start": 11,
+      "line_end": 103
+    },
+    "dispatch": {
+      "path": "csrc/kernels/intranode.cu",
+      "line_start": 164,
+      "line_end": 457
+    },
+    "combine_notify": {
+      "path": "csrc/kernels/intranode.cu",
+      "line_start": 509,
+      "line_end": 556
+    },
+    "combine": {
+      "path": "csrc/kernels/intranode.cu",
+      "line_start": 577,
+      "line_end": 876
+    },
+    "dispatch_runtime": {
+      "path": "csrc/deep_ep.cpp",
+      "line_start": 387,
+      "line_end": 539
+    },
+    "combine_runtime": {
+      "path": "csrc/deep_ep.cpp",
+      "line_start": 543,
+      "line_end": 650
+    },
+    "event": {
+      "path": "csrc/event.hpp",
+      "line_start": 6,
+      "line_end": 40
+    },
+    "barrier": {
+      "path": "csrc/kernels/utils.cuh",
+      "line_start": 487,
+      "line_end": 518
+    },
+    "channel_partition": {
+      "path": "csrc/kernels/utils.cuh",
+      "line_start": 410,
+      "line_end": 415
+    },
+    "upstream_test": {
+      "path": "tests/test_intranode.py",
+      "line_start": 39,
+      "line_end": 64
+    },
+    "config_fields": {
+      "path": "csrc/config.hpp",
+      "line_start": 18,
+      "line_end": 42
+    }
+  },
+  "local_files": [
+    {
+      "path": "python/moe_ub_cosim/plan.py",
+      "sha256": "432a4910199e302a285fd39d8c88cc8e5986ff7fbc38eb50036500e69edb345b"
+    },
+    {
+      "path": "python/moe_ub_cosim/data_inputs.py",
+      "sha256": "2bf3a2c4a7f260bb656cd94a2d811265d82f3142ba926b8338db79d379669d5b"
+    },
+    {
+      "path": "python/moe_ub_cosim/multilayer.py",
+      "sha256": "a809a4f6fa14b9594dc8c27d590768d819d55395502d30049567ca1e5027b20a"
+    },
+    {
+      "path": "python/moe_ub_cosim/service.py",
+      "sha256": "d0f5fe2223f7efe0a610e9b3304ec8484e86eaea541e44f5e89b9b019155906a"
+    },
+    {
+      "path": "python/moe_ub_cosim/research.py",
+      "sha256": "132702e52fa2d52ee26e12daf5ea6634671513db5fc8f3549383c10740224a95"
+    },
+    {
+      "path": "backend/layer_plan.cc",
+      "sha256": "74dbe9a3e80a4ab51d081382d58066338ba7f75eb97946f8995beabb9bda03b3"
+    },
+    {
+      "path": "backend/ub_write_transfer.cc",
+      "sha256": "77360a60beeb01f66009e972025a9559d47e377c41432e098c102a244734a7de"
+    },
+    {
+      "path": "backend/write_completion.cc",
+      "sha256": "d6efe548393413dc5ad8bf7cf2b345d5391ccf9cc32665ca1a3dcd5ae56c5751"
+    },
+    {
+      "path": "fixtures/m5_multilayer/run.json",
+      "sha256": "caea09c657892032ca9942aff1129d388f036ff230a976c27ddc1df9189bbb4f"
+    },
+    {
+      "path": "fixtures/m5_multilayer/service.json",
+      "sha256": "5427fe4a50e36baaff1470cbb12fae48085ccdcb03b877d46f89ccb60752d58d"
+    },
+    {
+      "path": "fixtures/m5_multilayer/layer.json",
+      "sha256": "0c5c53d059626148fd3e6a62087c0be71136dff719e2c7d3447d6e6b6057e3f5"
+    },
+    {
+      "path": "fixtures/m5_multilayer/routes.jsonl",
+      "sha256": "8d0c0a6ee83df90c163016a435633e0918126b3ecbb1fa7a1f261a4e31edd734"
+    },
+    {
+      "path": "tests/integration/check_multilayer.py",
+      "sha256": "cddfbd19cad44f4cd76334b512a3fcdbecbabf2017d33e20773168602fa7c67d"
+    },
+    {
+      "path": "docs/moe_ub_cosim_dev_v0.2.md",
+      "sha256": "58d06f24f8ce7d81df902ca516f47e2566ab1bb673d83f184807da6382d99e3c"
+    },
+    {
+      "path": "deps.lock.json",
+      "sha256": "c79c7d5b028fe4fe4f96dd16ad8c43d5dc85d7515bdf22097e29189832e3036b"
+    }
+  ],
+  "reference": {
+    "template": "direct_rank_dedup_v1",
+    "communication_profile_basis": "reference_model",
+    "research_config": "fixtures/m5_multilayer/run.json",
+    "dtype": "float16",
+    "dtype_comparison": "equal byte width only; no numerical equivalence claim",
+    "route_source": "explicit_synthetic",
+    "compute_source": "per_layer_fixed_reference",
+    "execution_scope": "consecutive_moe_layer_segment",
+    "full_model_execution_validated": false
+  },
+  "facets": [
+    {
+      "id": "participants",
+      "source_review": "reviewed",
+      "comparison": "partial_match",
+      "evidence": [
+        "init",
+        "notify",
+        "dispatch"
+      ],
+      "target": "All four ranks call the collective, including ranks with no local tokens; counts and channel offsets still synchronize.",
+      "reference": "Reference ranks with no local token execute required remote expert work; a wholly empty rank graph has no target notification or barrier traffic.",
+      "limit": "Zero-token target execution was not run; reference T09 is not evidence of target runtime correctness.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: rank_graphs for all participants; absent local tokens omit preparation"
+        }
+      ]
+    },
+    {
+      "id": "data_representation",
+      "source_review": "reviewed",
+      "comparison": "known_difference",
+      "evidence": [
+        "api",
+        "dispatch",
+        "combine"
+      ],
+      "target": "BF16 vectors have 8192 bytes at hidden=4096. Uncached dispatch writes int32 source index, two int64 expert IDs and two FP32 weights per destination row. Combine with topk_weights=None still writes int32 source index.",
+      "reference": "Reference sample declares FP16, the same two-byte width, and zero application metadata. It simulates no numeric tensor values.",
+      "limit": "Only cross-rank activation/result byte counts are compared. Logical metadata stores, protocol/control traffic and NVLink on-wire bytes are distinct quantities.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: body and zero application_metadata_bytes"
+        },
+        {
+          "path": "python/moe_ub_cosim/data_inputs.py",
+          "location": "model/route dtype validation"
+        }
+      ]
+    },
+    {
+      "id": "replication_aggregation",
+      "source_review": "reviewed",
+      "comparison": "partial_match",
+      "evidence": [
+        "layout",
+        "api",
+        "combine"
+      ],
+      "target": "Layout counts each token once per destination rank but once per selected expert. Combine consumes one row per dispatched token/rank and adds rank contributions without applying gate weights.",
+      "reference": "Reference deduplicates by destination rank, retains all expert work and models a local weighted-merge phase before returning one vector.",
+      "limit": "Matching return-vector counts assumes the caller weights and merges its local expert outputs into the dispatch row layout. That caller and numerical aggregation are not validated.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: by_rank, expert_inputs, remote and expert-local-merge"
+        }
+      ]
+    },
+    {
+      "id": "peers",
+      "source_review": "reviewed",
+      "comparison": "partial_match",
+      "evidence": [
+        "api",
+        "dispatch",
+        "combine"
+      ],
+      "target": "Selected intranode path directly addresses peer buffers; self-rank rows are processed locally. No intermediate GPU forwarding is used in this path.",
+      "reference": "Reference generates direct remote rank pairs and omits local network transfers; it uses URMA WRITE/RTP over UB switches.",
+      "limit": "Matching endpoints do not make NVLink memory operations equivalent to UB packets; internode and low-latency paths are outside scope.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: remote rank pairs"
+        },
+        {
+          "path": "backend/ub_write_transfer.cc",
+          "location": "UB task creation and endpoint mapping"
+        }
+      ]
+    },
+    {
+      "id": "chunk_order",
+      "source_review": "reviewed",
+      "comparison": "known_difference",
+      "evidence": [
+        "config",
+        "channel_partition",
+        "dispatch",
+        "combine"
+      ],
+      "target": "Twenty SMs define ten channels. Token ranges are split by channel; dispatch/combine send chunks of at most 6/9 tokens per channel and peer with 256-token receive buffers.",
+      "reference": "Reference chunks a directed byte segment at chunk_bytes=8192 (or 3072 in regression), and orders SENDs by destination and chunk index.",
+      "limit": "There is no correspondence between token chunks, byte chunks and UB packet sizes, nor a validated global inter-channel send order.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: byte ranges and sorted communication nodes"
+        }
+      ]
+    },
+    {
+      "id": "concurrency_buffers",
+      "source_review": "reviewed",
+      "comparison": "known_difference",
+      "evidence": [
+        "config",
+        "dispatch",
+        "combine",
+        "dispatch_runtime",
+        "config_fields"
+      ],
+      "target": "Peer/channel ring-buffer reuse depends on receiver head progress; senders publish tails after writes. Channels occupy GPU SMs.",
+      "reference": "Reference has one or two rank-wide SEND slots released by send_done=transaction_done, plus UB protocol constraints.",
+      "limit": "Reference slots do not model target channels, ring occupancy or SM/HBM contention; buffer sizes cannot be interchanged.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "send_slots_per_rank"
+        },
+        {
+          "path": "backend/ub_write_transfer.cc",
+          "location": "sender completion callback"
+        },
+        {
+          "path": "backend/write_completion.cc",
+          "location": "separate data and transaction state"
+        }
+      ]
+    },
+    {
+      "id": "synchronization_completion",
+      "source_review": "reviewed",
+      "comparison": "known_difference",
+      "evidence": [
+        "notify",
+        "combine_notify",
+        "barrier",
+        "dispatch_runtime",
+        "combine_runtime",
+        "event"
+      ],
+      "target": "Dispatch and combine notifications contain group barriers. With async_finish=False, compute stream waits for the communication stream; Python return is not a GPU completion timestamp.",
+      "reference": "Reference waits on required local sends/receives and processing, has no target group notification barrier, and distinguishes receive data_ready from sender transaction_done.",
+      "limit": "Reference stage events have no established mapping to target kernel/stream events; stage timing and port windows cannot be compared yet.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: local phase dependencies"
+        },
+        {
+          "path": "backend/write_completion.cc",
+          "location": "WriteCommitted (data_ready) and TransactionDone"
+        },
+        {
+          "path": "python/moe_ub_cosim/multilayer.py",
+          "location": "rank-local consecutive layer composition"
+        }
+      ]
+    },
+    {
+      "id": "endpoint_processing",
+      "source_review": "reviewed",
+      "comparison": "unverified",
+      "evidence": [
+        "layout",
+        "dispatch",
+        "combine",
+        "dispatch_runtime"
+      ],
+      "target": "Layout, buffer copies, index transformations and reduction execute in target CUDA/host code; expert GEMMs and local weighting belong to the caller.",
+      "reference": "Reference phases have per-layer fixed durations; expert cost is rank input-pair count times expert_per_input.",
+      "limit": "No matching target profile or caller execution was obtained. Packing/reduction durations, overlap and double-counting against a future profile need separate validation.",
+      "local_evidence": [
+        {
+          "path": "python/moe_ub_cosim/plan.py",
+          "location": "build_plan: COMP durations"
+        },
+        {
+          "path": "fixtures/m5_multilayer/service.json",
+          "location": "per-layer fixed compute profiles"
+        }
+      ]
+    }
+  ],
+  "byte_contract": {
+    "vector_bytes": 8192,
+    "dispatch_metadata_per_destination_row": 28,
+    "combine_metadata_per_destination_row": 4,
+    "metadata_basis": "logical source-code buffer stores; excludes coordination, physical transactions, padding and protocol overhead",
+    "diagonal": "local buffer traffic excluded from cross-rank business bytes",
+    "control_wire_bytes": null
+  },
+  "validation": {
+    "source_review_complete": true,
+    "target_runtime_executed": false,
+    "target_behavior_reproduced": false,
+    "target_stage_timing": "unverified",
+    "target_port_windows": "unverified",
+    "target_device_compute": "unverified",
+    "calibration_status": "unvalidated_reference",
+    "parameter_fitting_performed": false,
+    "thresholds": null,
+    "threshold_policy": "Specify event mapping, timestamp accuracy, sample windows and separate byte/time/port criteria before fitting when target measurements become available.",
+    "numerical_aggregation": "unverified"
+  },
+  "effective_scope": "Functional reference experiments with explicitly synthetic routes, reference compute and UB network; not performance prediction for DeepEP, NVLink or a calibrated NPU deployment."
+}

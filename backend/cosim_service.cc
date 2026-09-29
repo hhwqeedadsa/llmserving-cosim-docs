@@ -7,6 +7,7 @@
 #include "ns3/ub-transfer-executor.h"
 #include "ns3/ub-utils.h"
 
+#include <algorithm>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
@@ -31,6 +32,55 @@ Json ReadJson(const fs::path& path)
     std::ifstream stream(path);
     Require(bool(stream), "Cannot open " + path.string());
     return Json::parse(stream);
+}
+struct Group
+{
+    Json config;
+    std::vector<int> ranks;
+    std::string graph, wave;
+    std::set<int> completed;
+};
+std::vector<Group> LoadGroups(const fs::path& shared)
+{
+    // Compatibility for the original direct cosim-service protocol fixtures.
+    Json deployment = {{"schema_version", "moe-ub-service-deployment/1"}, {"groups", Json::array({
+        {{"group_id", "ep0"}, {"rank_ids", {0u,1u,2u,3u}}, {"rank_to_ub_node", {0u,1u,2u,3u}},
+         {"expert_placement", {0,0,1,1,2,2,3,3}}}})}};
+    if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
+    Require(deployment.size() == 2 && deployment.at("schema_version") == "moe-ub-service-deployment/1" &&
+            deployment.at("groups").is_array() && deployment.at("groups").size() >= 1 &&
+            deployment.at("groups").size() <= 2, "Invalid service deployment");
+    std::vector<Group> groups;
+    std::set<int> members;
+    std::set<std::string> names;
+    for (const auto& config : deployment.at("groups"))
+    {
+        const auto name = config.at("group_id").get<std::string>();
+        Require(config.size() == 4 && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
+                names.insert(name).second && config.at("rank_ids").is_array() &&
+                config.at("rank_ids").size() == 4 && config.at("rank_ids") == config.at("rank_to_ub_node"),
+                "Invalid EP group declaration");
+        std::vector<int> ranks;
+        Json placement = Json::array();
+        int previous = -1;
+        for (const auto& value : config.at("rank_ids"))
+        {
+            Require(value.is_number_unsigned() && value.get<uint64_t>() < 8, "Invalid group rank");
+            int rank = value;
+            Require(rank > previous && members.insert(rank).second, "Repeated, overlapping or unordered group rank");
+            previous = rank; ranks.push_back(rank);
+            placement.push_back(rank); placement.push_back(rank);
+        }
+        for (const auto& value : config.at("rank_to_ub_node")) Require(value.is_number_unsigned(), "Invalid UB mapping");
+        Require(config.at("expert_placement") == placement, "Invalid expert placement");
+        groups.push_back({config, ranks, {}, {}, {}});
+    }
+    for (size_t rank = 0; rank < members.size(); ++rank)
+        Require(members.count(rank), "Deployment ranks must cover 0..N-1");
+    std::sort(groups.begin(), groups.end(), [](const auto& a, const auto& b) {
+        return a.config.at("group_id").template get<std::string>() < b.config.at("group_id").template get<std::string>();
+    });
+    return groups;
 }
 void WqeStart(Json* report, uint32_t node, uint32_t jetty, uint32_t task)
 {
@@ -157,6 +207,11 @@ int main(int argc, char** argv)
         const std::string run_id = argv[1];
         Require(std::regex_match(run_id, std::regex("[A-Za-z0-9_.-]+")), "Invalid run identity");
         const auto shared = fs::canonical(argv[2]);
+        auto groups = LoadGroups(shared);
+        const int rank_count = 4 * groups.size();
+        std::vector<size_t> owner(rank_count);
+        for (size_t index = 0; index < groups.size(); ++index)
+            for (int rank : groups[index].ranks) owner[rank] = index;
         const auto system_config = ReadJson(fs::absolute(argv[3]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
                 system_config.at("trace-enabled") == 1, "Service requires original ASTRA execution and trace");
@@ -173,7 +228,7 @@ int main(int argc, char** argv)
             "routing_table.csv", "transport_channel.csv"};
         for (const auto& name : files) Require(fs::is_regular_file(network / name), "Missing network file " + name);
         // Preflight every bootstrap before constructing any Sys or network.
-        for (int rank = 0; rank < 4; ++rank)
+        for (int rank = 0; rank < rank_count; ++rank)
         {
             Chakra::ETFeeder empty((shared / "bootstrap" / ("layer." + std::to_string(rank) + ".et")).string());
             Require(!empty.hasNodesToIssue(), "Bootstrap must have zero nodes");
@@ -189,7 +244,7 @@ int main(int argc, char** argv)
         utils->SetComponentsAttribute("network/network_attribute.txt");
         ns3::BooleanValue cc;
         ns3::GlobalValue::GetValueByName("UB_CC_ENABLED", cc);
-        Require(!cc.Get(), "M3.1 fixture requires CC disabled (no perpetual CC timers)");
+        Require(!cc.Get(), "Service fixture requires CC disabled (no perpetual CC timers)");
         ns3::GlobalValue::Bind("UB_QUEUE_TRACE_ENABLE", ns3::BooleanValue(false));
         ns3::GlobalValue::Bind("UB_PARSE_TRACE_ENABLE", ns3::BooleanValue(false));
         ns3::Config::SetDefault("ns3::TpConnectionManager::RemoveUselessTp", ns3::BooleanValue(false));
@@ -206,12 +261,12 @@ int main(int argc, char** argv)
             {"step_submissions", Json::array()}, {"boundary_resources", Json::array()},
             {"wqe_starts", Json::array()}, {"wqe_completions", Json::array()},
             {"target_writes", Json::array()}, {"transfers", Json::array()},
-            {"active_wqes", {0, 0, 0, 0}}, {"peak_wqes", {0, 0, 0, 0}},
+            {"active_wqes", std::vector<unsigned>(rank_count, 0)}, {"peak_wqes", std::vector<unsigned>(rank_count, 0)},
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}};
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
-        for (int rank = 0; rank < 4; ++rank)
+        for (int rank = 0; rank < rank_count; ++rank)
         {
             auto node = ns3::NodeList::GetNode(rank);
             auto controller = node->GetObject<ns3::UbController>();
@@ -238,27 +293,42 @@ int main(int argc, char** argv)
             std::vector<moe_ub::LayerPlan> plans;
             std::set<std::string> graphs, waves, seen_operations;
             std::set<uint64_t> transfer_ids, tasks, tags;
-            std::set<int> completed_ranks;
+            std::map<size_t, uint64_t> completed_groups;
+            ns3::EventId wakeup;
+            bool decision_pending = false;
             unsigned bootstrap_done = 0, send_slots = 0;
             uint64_t decision_id = 0;
             bool bootstrap = true, service_finished = false;
             std::function<void()> decide;
-            for (int rank = 0; rank < 4; ++rank)
+            auto request_decision = [&]() {
+                if (!decision_pending)
+                {
+                    decision_pending = true;
+                    ns3::Simulator::ScheduleNow([&]() { decide(); });
+                }
+            };
+            for (int rank = 0; rank < rank_count; ++rank)
             {
                 adapters.push_back(std::make_unique<moe_ub::UbNetworkAdapter>(rank, [&, rank](uint64_t now) {
                     if (bootstrap) { ++bootstrap_done; return; }
-                    Require(completed_ranks.insert(rank).second, "Duplicate rank completion");
+                    auto& group = groups[owner[rank]];
+                    Require(!group.graph.empty() && group.completed.insert(rank).second &&
+                            systems[rank]->workload->graph_id() == group.graph, "Unexpected rank completion");
                     report["graph_completions"].push_back({{"rank_id", rank}, {"time_ns", now},
-                        {"graph_id", systems[rank]->workload->graph_id()}});
-                    if (completed_ranks.size() == 4) ns3::Simulator::ScheduleNow([&]() { decide(); });
+                        {"graph_id", group.graph}});
+                    if (group.completed.size() == group.ranks.size())
+                    {
+                        Require(completed_groups.emplace(owner[rank], now).second, "Duplicate group completion");
+                        request_decision();
+                    }
                 }));
                 systems.push_back(std::make_unique<AstraSim::Sys>(rank, (shared / "bootstrap/layer").string(),
                     "empty", "system.json", std::vector<AstraSim::AstraMemoryAPI*>{}, adapters.back().get(),
-                    std::vector<int>{4}, std::vector<int>{1}, 1.0, 1.0, false));
+                    std::vector<int>{rank_count}, std::vector<int>{1}, 1.0, 1.0, false));
                 systems.back()->workload->bind_graph("_bootstrap");
             }
             for (auto& sys : systems) sys->workload->activate_graph();
-            Require(bootstrap_done == 4 && ns3::Simulator::Now().GetNanoSeconds() == 0 &&
+            Require(bootstrap_done == unsigned(rank_count) && ns3::Simulator::Now().GetNanoSeconds() == 0 &&
                     report["wqe_starts"].empty() && drain.StartedPackets() == 0,
                     "Bootstrap generated work or advanced time");
             bootstrap = false;
@@ -269,27 +339,43 @@ int main(int argc, char** argv)
                 throw std::runtime_error("Service exceeded max_simulation_ns");
             });
             decide = [&]() {
+                decision_pending = false;
                 const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
-                for (int rank = 0; rank < 4; ++rank)
+                Json completed = Json::array(), available = Json::array();
+                // groups are ordered by group_id; one completion per group's wave.
+                for (const auto& [index, finished] : completed_groups)
                 {
-                    Require(systems[rank]->workload->can_load_graph() &&
-                            apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
-                            "Decision before all graph work retired");
+                    auto& group = groups[index];
+                    Require(finished == now, "Deferred group completion changed absolute time");
+                    for (int rank : group.ranks)
+                        Require(systems[rank]->workload->can_load_graph() &&
+                                apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                                "Group completion before graph work retired");
+                    for (const auto& transfer : transfers)
+                        if (transfer->Descriptor().graph_id == group.graph)
+                            Require(!transfer->Completion().Active() && !transfer->ObservingTarget(),
+                                    "Completed group still has an active transfer");
+                    completed.push_back({{"kind", "WAVE_DONE"}, {"graph_id", group.graph},
+                        {"wave_id", group.wave}, {"finished_ns", finished}});
+                    group.graph.clear(); group.wave.clear(); group.completed.clear();
+                }
+                completed_groups.clear();
+                for (int rank = 0; rank < rank_count; ++rank)
+                {
                     Require(controllers[rank] == ns3::NodeList::GetNode(rank)->GetObject<ns3::UbController>() &&
                             apps[rank]->GetNode() == ns3::NodeList::GetNode(rank), "Network object changed");
+                    if (!groups[owner[rank]].graph.empty()) continue;
+                    Require(systems[rank]->workload->can_load_graph() &&
+                            apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                            "Idle group has pending work");
+                    available.push_back(rank);
                     report["boundary_resources"].push_back({{"rank_id", rank}, {"time_ns", now},
                         {"pending_events", systems[rank]->pending_events}, {"pending_tasks", 0},
                         {"same_network_objects", true}});
                 }
-                for (const auto& transfer : transfers)
-                    Require(!transfer->Completion().Active() && !transfer->ObservingTarget(), "Retired transfer still active");
-                Json completed = Json::array();
-                if (!plans.empty()) completed.push_back({{"kind", "WAVE_DONE"},
-                    {"graph_id", plans.back().data.at("graph_id")}, {"wave_id", plans.back().data.at("wave_id")},
-                    {"finished_ns", now}});
                 const Json message = {{"schema_version", "cosim/1"}, {"type", "DECIDE"}, {"run_id", run_id},
                     {"decision_id", decision_id}, {"now_ns", now}, {"completed", completed},
-                    {"available_rank_ids", {0, 1, 2, 3}}};
+                    {"available_rank_ids", available}};
                 Require(std::fprintf(protocol.get(), "%s\n", message.dump().c_str()) > 0 &&
                         std::fflush(protocol.get()) == 0, "Cannot send DECIDE");
                 std::string line;
@@ -303,14 +389,25 @@ int main(int argc, char** argv)
                     commit.at("run_id") == run_id && commit.at("decision_id").is_number_unsigned() &&
                     commit.at("decision_id") == decision_id && commit.at("now_ns").is_number_unsigned() &&
                     commit.at("now_ns") == now, "Mismatched COMMIT envelope, decision or absolute time");
-                Require(commit.at("next_wakeup_ns").is_null() && commit.at("input_exhausted").is_boolean() &&
-                    commit.at("input_exhausted") == true && commit.at("service_finished").is_boolean() &&
-                    commit.at("submissions").is_array(), "M3.1 requires exhausted input and no external wakeup");
+                Require(commit.at("input_exhausted").is_boolean() && commit.at("service_finished").is_boolean() &&
+                        commit.at("submissions").is_array(), "Invalid service flags/submissions");
+                const auto& next = commit.at("next_wakeup_ns");
+                Require(next.is_null() || (next.is_number_unsigned() && next.get<uint64_t>() > now &&
+                        next.get<uint64_t>() < uint64_t(INT64_MAX)), "Wakeup must be a future absolute ns time");
+                Require(!commit.at("input_exhausted").get<bool>() || next.is_null(), "Exhausted input has future wakeup");
+                Require(commit.at("input_exhausted").get<bool>() || !next.is_null(), "Future input needs its next arrival");
+                // Each COMMIT replaces the previous external wakeup; graph completion
+                // never loses or duplicates a pending arrival.
+                ns3::Simulator::Remove(wakeup);
+                if (!next.is_null()) wakeup = ns3::Simulator::Schedule(
+                    ns3::NanoSeconds(next.get<uint64_t>() - now), request_decision);
                 ++decision_id;
                 service_finished = commit.at("service_finished").get<bool>();
                 if (service_finished)
                 {
-                    Require(commit.at("submissions").empty(), "Finished service cannot submit more graphs");
+                    Require(commit.at("submissions").empty() && next.is_null() && commit.at("input_exhausted") == true &&
+                            std::all_of(groups.begin(), groups.end(), [](const auto& g) { return g.graph.empty(); }),
+                            "Finished service still has input, submissions or active groups");
                     report["service_finished_ns"] = now;
                     drain.Finish([&]() {
                         ns3::Simulator::Remove(watchdog);
@@ -318,80 +415,95 @@ int main(int argc, char** argv)
                     });
                     return;
                 }
-                Require(commit.at("submissions").size() == 1, "M3.1 requires one active EP group submission");
-                const auto& submission = commit.at("submissions")[0];
-                keys.clear();
-                for (const auto& [key, value] : submission.items()) keys.insert(key);
-                Require(keys == std::set<std::string>{"graph_id", "wave_id", "rank_ids", "workload_prefix", "semantic_manifest"},
-                        "Invalid submission fields");
-                Require(submission.at("rank_ids") == Json::array({0, 1, 2, 3}), "Wrong submission ranks");
-                for (const auto& rank : submission.at("rank_ids")) Require(rank.is_number_unsigned(), "Invalid rank type");
-                const auto graph = submission.at("graph_id").get<std::string>();
-                const auto wave = submission.at("wave_id").get<std::string>();
-                Require(std::regex_match(graph, std::regex("[A-Za-z0-9_.-]+")) && graph != "_bootstrap" &&
-                        !graphs.count(graph) && !waves.count(wave), "Invalid or reused graph/wave identity");
-                auto resolve = [&](const char* field) {
-                    fs::path relative(submission.at(field).get<std::string>());
-                    Require(relative.is_relative() && !relative.empty(), "Submission path must be relative");
-                    auto path = fs::canonical(shared / relative);
-                    const auto within = path.lexically_relative(shared);
-                    Require(!within.empty() && *within.begin() != "..", "Submission path escapes shared directory");
-                    return path;
-                };
-                const auto semantic = resolve("semantic_manifest");
-                // The prefix itself is not a file. Resolve its existing parent first.
-                fs::path prefix(submission.at("workload_prefix").get<std::string>());
-                Require(prefix.is_relative() && prefix.filename() == "layer" &&
-                        fs::canonical(shared / prefix.parent_path()) == semantic.parent_path() &&
-                        semantic.filename() == "plan.json", "Workload and semantic manifest disagree");
-                const auto directory = semantic.parent_path();
-                auto plan = moe_ub::LoadLayerPlan(directory);
-                Require(plan.data.at("graph_id") == graph && plan.data.at("wave_id") == wave &&
-                        plan.data.at("input").at("graph_id") == graph &&
-                        plan.data.at("input").at("wave_id") == wave &&
-                        plan.data.at("input").at("ready_ns").is_number_unsigned() &&
-                        plan.data.at("ready_ns") == now && plan.data.at("input").at("ready_ns") == now,
-                        "Submission identity/time differs from plan");
-                const auto slots = plan.data.at("send_slots_per_rank").get<unsigned>();
-                Require(send_slots == 0 || slots == send_slots, "Cannot change send slots during a run");
-                for (const auto& op : plan.data.at("operations"))
-                    Require(op.at("wave_id") == wave &&
-                            !seen_operations.count(op.at("operation_id").get<std::string>()),
-                            "Operation has wrong wave or reused identity");
-                for (const auto& d : plan.descriptors)
-                    Require(!transfer_ids.count(d.transfer_id) && !tasks.count(d.task_id) && !tags.count(d.tag),
-                            "Reused transfer, UB task or comm_tag");
-                std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> prepared;
-                std::vector<moe_ub::UbWriteTransfer*> pointers;
-                for (const auto& d : plan.descriptors)
+                Require(commit.at("submissions").size() <= groups.size(), "Too many group submissions");
+                for (const auto& submission : commit.at("submissions"))
                 {
-                    prepared.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(d.src_rank)));
-                    pointers.push_back(prepared.back().get());
+                    keys.clear();
+                    for (const auto& [key, value] : submission.items()) keys.insert(key);
+                    Require(keys == std::set<std::string>{"graph_id", "wave_id", "rank_ids", "workload_prefix", "semantic_manifest"},
+                            "Invalid submission fields");
+                    auto group_it = std::find_if(groups.begin(), groups.end(), [&](const auto& g) {
+                        return submission.at("rank_ids") == g.config.at("rank_ids");
+                    });
+                    Require(group_it != groups.end() && group_it->graph.empty(), "Unknown or busy EP group submission");
+                    auto& group = *group_it;
+                    for (const auto& rank : submission.at("rank_ids")) Require(rank.is_number_unsigned(), "Invalid rank type");
+                    const auto graph = submission.at("graph_id").get<std::string>();
+                    const auto wave = submission.at("wave_id").get<std::string>();
+                    Require(std::regex_match(graph, std::regex("[A-Za-z0-9_.-]+")) && graph != "_bootstrap" &&
+                            !graphs.count(graph) && !waves.count(wave), "Invalid or reused graph/wave identity");
+                    auto resolve = [&](const char* field) {
+                        fs::path relative(submission.at(field).get<std::string>());
+                        Require(relative.is_relative() && !relative.empty(), "Submission path must be relative");
+                        auto path = fs::canonical(shared / relative);
+                        const auto within = path.lexically_relative(shared);
+                        Require(!within.empty() && *within.begin() != "..", "Submission path escapes shared directory");
+                        return path;
+                    };
+                    const auto semantic = resolve("semantic_manifest");
+                    // The prefix itself is not a file. Resolve its existing parent first.
+                    fs::path prefix(submission.at("workload_prefix").get<std::string>());
+                    Require(prefix.is_relative() && prefix.filename() == "layer" &&
+                            fs::canonical(shared / prefix.parent_path()) == semantic.parent_path() &&
+                            semantic.filename() == "plan.json", "Workload and semantic manifest disagree");
+                    const auto directory = semantic.parent_path();
+                    auto plan = moe_ub::LoadLayerPlan(directory);
+                    Require(plan.data.at("graph_id") == graph && plan.data.at("wave_id") == wave &&
+                            plan.data.at("input").at("graph_id") == graph &&
+                            plan.data.at("input").at("wave_id") == wave &&
+                            plan.data.at("input").at("ready_ns").is_number_unsigned() &&
+                            plan.data.at("ready_ns") == now && plan.data.at("input").at("ready_ns") == now,
+                            "Submission identity/time differs from plan");
+                    Require(plan.data.at("rank_ids") == submission.at("rank_ids") &&
+                            plan.data.at("input").at("group_id") == group.config.at("group_id") &&
+                            plan.data.at("input").at("expert_placement") == group.config.at("expert_placement"),
+                            "Plan group/placement differs from deployment");
+                    for (const auto& op : plan.data.at("operations"))
+                        Require(op.at("group_id") == group.config.at("group_id"), "Operation group differs from deployment");
+                    const auto slots = plan.data.at("send_slots_per_rank").get<unsigned>();
+                    Require(send_slots == 0 || slots == send_slots, "Cannot change send slots during a run");
+                    for (const auto& op : plan.data.at("operations"))
+                        Require(op.at("wave_id") == wave &&
+                                !seen_operations.count(op.at("operation_id").get<std::string>()),
+                                "Operation has wrong wave or reused identity");
+                    for (const auto& d : plan.descriptors)
+                        Require(!transfer_ids.count(d.transfer_id) && !tasks.count(d.task_id) && !tags.count(d.tag),
+                                "Reused transfer, UB task or comm_tag");
+                    std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> prepared;
+                    std::vector<moe_ub::UbWriteTransfer*> pointers;
+                    for (const auto& d : plan.descriptors)
+                    {
+                        prepared.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(d.src_rank)));
+                        pointers.push_back(prepared.back().get());
+                    }
+                    moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers);
+                    if (observation) observation->Register(plan.descriptors);
+                    if (!send_slots)
+                        for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
+                    send_slots = slots;
+                    graphs.insert(graph); waves.insert(wave);
+                    for (const auto& op : plan.data.at("operations")) seen_operations.insert(op.at("operation_id").get<std::string>());
+                    for (const auto& d : plan.descriptors)
+                    { transfer_ids.insert(d.transfer_id); tasks.insert(d.task_id); tags.insert(d.tag); }
+                    for (auto& transfer : prepared)
+                    { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
+                    plans.push_back(std::move(plan));
+                    group.graph = graph; group.wave = wave; group.completed.clear();
+                    report["step_submissions"].push_back({{"graph_id", graph}, {"wave_id", wave}, {"time_ns", now}});
+                    for (int rank : group.ranks)
+                        report["graph_loads"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
+                    for (int rank : group.ranks)
+                    {
+                        report["activation_order"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
+                        systems[rank]->workload->activate_graph();
+                    }
                 }
-                moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers);
-                if (observation) observation->Register(plan.descriptors);
-                if (!send_slots)
-                    for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
-                send_slots = slots;
-                graphs.insert(graph); waves.insert(wave);
-                for (const auto& op : plan.data.at("operations")) seen_operations.insert(op.at("operation_id").get<std::string>());
-                for (const auto& d : plan.descriptors)
-                { transfer_ids.insert(d.transfer_id); tasks.insert(d.task_id); tags.insert(d.tag); }
-                for (auto& transfer : prepared)
-                { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
-                plans.push_back(std::move(plan));
-                completed_ranks.clear();
-                report["step_submissions"].push_back({{"graph_id", graph}, {"wave_id", wave}, {"time_ns", now}});
-                for (int rank = 0; rank < 4; ++rank)
-                    report["graph_loads"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
-                for (int rank = 0; rank < 4; ++rank)
-                {
-                    report["activation_order"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
-                    systems[rank]->workload->activate_graph();
-                }
+                Require(!next.is_null() || std::any_of(groups.begin(), groups.end(),
+                    [](const auto& g) { return !g.graph.empty(); }),
+                    "Service deadlock: unfinished frontend, no active group and no future wakeup");
             };
             // Initial decision is an event after every Sys, adapter and UB object exists.
-            ns3::Simulator::ScheduleNow([&]() { decide(); });
+            request_decision();
             ns3::Simulator::Run();
             Require(service_finished, "Event queue ended with unfinished service");
             Require(drain.Idle(), "Service stopped with link data or queued packets");
@@ -417,7 +529,7 @@ int main(int argc, char** argv)
                     {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}});
                 report["transfers"].back()["graph_id"] = d.graph_id;
             }
-            for (int rank = 0; rank < 4; ++rank)
+            for (int rank = 0; rank < rank_count; ++rank)
             {
                 const auto* workload = systems[rank]->workload;
                 const auto* hardware = workload->hw_resource;
@@ -444,7 +556,7 @@ int main(int argc, char** argv)
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
             Require(report["graph_completions"].size() == 4 * plans.size() && report["wqe_starts"].size() == transfers.size() &&
-                    report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json::array({0,0,0,0}) &&
+                    report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
                     report["csv_completed_tasks"] == 0, "Service completion invariant failed");
             for (const auto& peak : report["peak_wqes"])
                 Require(peak <= send_slots, "Layer SEND slot limit exceeded");

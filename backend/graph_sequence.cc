@@ -27,6 +27,7 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
     for (const auto& plan : plans)
     {
         const auto& p = plan.data;
+        Require(p.at("rank_ids") == Json::array({0, 1, 2, 3}), "fixed sequence requires ranks 0..3");
         auto graph = p.at("graph_id").get<std::string>();
         Require(std::regex_match(graph, std::regex("[A-Za-z0-9_.-]+")) && graphs.insert(graph).second &&
             waves.insert(p.at("wave_id").get<std::string>()).second, "reused/invalid graph or wave identity");
@@ -63,12 +64,14 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
     const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
     const std::vector<UbWriteTransfer*>& transfers)
 {
-    Require(systems.size() == 4 && adapters.size() == 4, "missing rank objects");
+    Require(systems.size() == adapters.size(), "missing rank objects");
+    const auto ranks = plan.data.at("rank_ids").get<std::vector<int>>();
+    for (int rank : ranks) Require(rank >= 0 && size_t(rank) < systems.size(), "missing group rank object");
     const auto checked = LoadLayerPlan(directory);
     Require(checked.data == plan.data, "plan changed since validation");
     const auto graph = plan.data.at("graph_id").get<std::string>();
     std::vector<std::unique_ptr<Chakra::ETFeeder>> prepared;
-    for (int rank = 0; rank < 4; ++rank)
+    for (int rank : ranks)
     {
         Require(systems[rank]->workload->can_load_graph() && !systems[rank]->workload->has_graph_id(graph),
                 "rank " + std::to_string(rank) + " has an in-flight graph or reused identity");
@@ -77,8 +80,9 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
             (directory / ("layer." + std::to_string(rank) + ".et")).string()));
     }
     // Nothing above starts tasks or replaces an existing feeder.
-    for (int rank = 0; rank < 4; ++rank)
-        systems[rank]->workload->load_graph(std::move(prepared[rank]), graph);
-    for (int rank = 0; rank < 4; ++rank) adapters[rank]->RegisterTransfers(transfers);
+    size_t index = 0;
+    for (int rank : ranks)
+        systems[rank]->workload->load_graph(std::move(prepared[index++]), graph);
+    for (int rank : ranks) adapters[rank]->RegisterTransfers(transfers);
 }
 }

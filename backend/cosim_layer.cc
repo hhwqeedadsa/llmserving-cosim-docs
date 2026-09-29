@@ -81,6 +81,7 @@ int main(int argc, char** argv)
         auto plans = sequence ? moe_ub::LoadGraphSequence(plan_dir) :
             std::vector<moe_ub::LayerPlan>{moe_ub::LoadLayerPlan(plan_dir)};
         const auto& plan = plans.front();
+        Require(plan.data.at("rank_ids") == Json::array({0, 1, 2, 3}), "Fixed layer driver requires ranks 0..3");
         const auto send_slots = plan.data.at("send_slots_per_rank").get<unsigned>();
         const auto system_config = ReadJson(fs::absolute(argv[2]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&

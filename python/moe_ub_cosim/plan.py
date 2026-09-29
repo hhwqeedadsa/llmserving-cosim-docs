@@ -27,10 +27,12 @@ def validate_config(c):
     require(set(c) == expected and c['schema_version'] == 'moe-ub-layer-fixture/1', 'Unsupported fixture schema/fields')
     for key in ('graph_id', 'wave_id', 'service_id', 'group_id'):
         require(isinstance(c[key], str) and bool(c[key]), f'Empty {key}')
-    require(c['role'] == 'D' and c['rank_ids'] == c['rank_to_ub_node'] == [0, 1, 2, 3],
-            'M2.1 requires four ranks with identity UB mapping and role D')
+    require(c['role'] == 'D' and c['rank_ids'] == c['rank_to_ub_node'],
+            'Require identity UB mapping and role D')
+    require(isinstance(c['rank_ids'], list) and len(c['rank_ids']) == 4, 'Require four group members')
     for field in ('rank_ids', 'rank_to_ub_node'):
-        require(all(type(rank) is int for rank in c[field]), f'Invalid integer {field}')
+        require(all(type(rank) is int and 0 <= rank < 8 for rank in c[field]), f'Invalid integer {field}')
+    require(c['rank_ids'] == sorted(set(c['rank_ids'])), 'Group members must be distinct and sorted')
     require(c['template'] == 'direct_rank_dedup_v1', 'Unsupported communication template')
     integer(c['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     integer(c['application_metadata_bytes'], 'application_metadata_bytes', 0, 0)
@@ -45,7 +47,8 @@ def validate_config(c):
     placement = c['expert_placement']
     require(isinstance(placement, list) and len(placement) == 8, 'Require eight expert placements')
     for rank in placement:
-        integer(rank, 'expert placement rank', 0, 3)
+        integer(rank, 'expert placement rank', 0, 7)
+        require(rank in c['rank_ids'], 'Expert is outside its EP group')
     profile = c['compute_profile_ns']
     require(set(profile) == {'attention_route_pack', 'expert_per_input', 'expert_local_merge',
                              'combine_unpack_merge', 'next_layer'}, 'Unsupported compute profile fields')
@@ -58,7 +61,7 @@ def validate_config(c):
         require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
                 'Unsupported Token fields')
         require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
-        integer(token['src_rank'], 'Token src_rank', 0, 3)
+        integer(token['src_rank'], 'Token src_rank', 0, 7)
         integer(token['token_index'], 'Token token_index')
         require(token['phase'] == 'decode' and token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
         experts = token['expert_ids']
@@ -80,7 +83,7 @@ def build_plan(config, identities=None):
                        service_id=c['service_id'], role=c['role'], wave_id=c['wave_id'],
                        layer_id=c['layer_id'], group_id=c['group_id'], participants=c['rank_ids'])
                   for kind in ('dispatch', 'combine')]
-    expert_inputs = [[] for _ in c['rank_ids']]
+    expert_inputs = {rank: [] for rank in c['rank_ids']}
     remote = defaultdict(list)
     for source_index, token in enumerate(c['tokens']):
         by_rank = defaultdict(list)
@@ -96,7 +99,7 @@ def build_plan(config, identities=None):
                 remote[token['src_rank'], dst].append(dict(request_id=token['request_id'],
                     phase=token['phase'], token_index=token['token_index'], source_record_index=source_index,
                     layer_id=token['layer_id'], expert_ids=sorted(experts)))
-    require(all(expert_inputs), 'M2.1 requires positive expert work on every rank')
+    require(all(expert_inputs.values()), 'M2.1 requires positive expert work on every rank')
     transfers = []
     for op in operations:
         matrix = remote if op['kind'] == 'dispatch' else {(dst, src): v for (src, dst), v in remote.items()}
@@ -156,7 +159,7 @@ def build_plan(config, identities=None):
         compute_source='synthetic_fixed_duration', route_source='explicit_synthetic_fixture',
         calibration_status='unvalidated_reference', sender_completion='transaction_done',
         send_slots_per_rank=c['send_slots_per_rank'], operations=operations, transfers=transfers, rank_graphs=rank_graphs,
-        expert_input_counts=[len(v) for v in expert_inputs], input=c)
+        expert_input_counts=[len(v) for v in expert_inputs.values()], input=c)
     if identities is not None:
         identities.assign(plan)
     validate_plan(plan)
@@ -166,7 +169,7 @@ def build_plan(config, identities=None):
 def validate_plan(plan):
     require(plan['schema_version'] == 'moe-ub-execution-plan/1', 'Unsupported plan schema')
     ranks = plan['rank_ids']
-    require(ranks == [0, 1, 2, 3] and plan['rank_to_ub_node'] == ranks, 'Invalid rank mapping')
+    require(ranks == plan['input']['rank_ids'] and plan['rank_to_ub_node'] == ranks, 'Invalid rank mapping')
     integer(plan['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     validate_config(plan['input'])
     require(plan['send_slots_per_rank'] == plan['input']['send_slots_per_rank'], 'Send slot configuration mismatch')

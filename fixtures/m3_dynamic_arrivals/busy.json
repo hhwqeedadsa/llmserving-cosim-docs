@@ -1,0 +1,180 @@
+{
+  "schema_version": "moe-ub-service-fixture/1",
+  "run_id": "m3-2-busy-group",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "model": "mistralai/Mixtral-8x7B-v0.1",
+  "npu_memory_gib": 80,
+  "requests": [
+    {
+      "request_id": 101,
+      "rank_id": 0,
+      "arrival_ns": 0,
+      "prompt_tokens": 8,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          4
+        ]
+      ]
+    },
+    {
+      "request_id": 102,
+      "rank_id": 1,
+      "arrival_ns": 0,
+      "prompt_tokens": 12,
+      "generated_tokens": 2,
+      "decode_routes": [
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ]
+    },
+    {
+      "request_id": 103,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "prompt_tokens": 16,
+      "generated_tokens": 3,
+      "decode_routes": [
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          6
+        ]
+      ]
+    },
+    {
+      "request_id": 104,
+      "rank_id": 3,
+      "arrival_ns": 0,
+      "prompt_tokens": 20,
+      "generated_tokens": 4,
+      "decode_routes": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "request_id": 201,
+      "rank_id": 0,
+      "arrival_ns": 5200,
+      "prompt_tokens": 8,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          4
+        ]
+      ]
+    },
+    {
+      "request_id": 202,
+      "rank_id": 1,
+      "arrival_ns": 5200,
+      "prompt_tokens": 12,
+      "generated_tokens": 2,
+      "decode_routes": [
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          5
+        ]
+      ]
+    },
+    {
+      "request_id": 203,
+      "rank_id": 2,
+      "arrival_ns": 5200,
+      "prompt_tokens": 16,
+      "generated_tokens": 3,
+      "decode_routes": [
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          6
+        ]
+      ]
+    },
+    {
+      "request_id": 204,
+      "rank_id": 3,
+      "arrival_ns": 5200,
+      "prompt_tokens": 20,
+      "generated_tokens": 4,
+      "decode_routes": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    }
+  ]
+}

@@ -1453,3 +1453,88 @@ git -C runs/publish-maintenance-20260928T163038Z/fresh-clone \
 | `git diff --check` | 退出 0，差异格式检查通过 | `final-diff-check.json` |
 
 本次是文档修正，无需重跑构建或仿真。完成差异审阅和格式检查后本地提交，不推送；停止在本次复核，M3.2 尚未开始。
+
+## 2026-09-29：m3-2-dynamic-arrivals
+
+用户确认开始 M3.2。上一项文档复核已在 75b38b4 保存；本任务说明提交 31afa33。开始时工作区干净，main 有两个尚未推送的文档提交；13 项依赖检查通过。本轮只改根仓库代码、输入、测试及说明，LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222 与全部递归固定版本不变。没有安装、下载、初始化、修改全局配置或推送。
+
+本轮日志根为 `runs/m3-2-dynamic-arrivals-20260929T013834Z/`，下文记为 L。record.py 保存各命令的 cwd、argv、起止 UTC、退出码和原始 stdout/stderr；各集成目录的 commands.json 保存实际子进程、输入和退出码，故障重放另存实际协议消息。下面命令均从 `/root/moe-ub-cosim` 执行。
+
+### 实现和功能输入
+
+Python 服务增加按 rank 保存的已就绪 KV 待接纳队列，按组管理在途 wave。请求只在实际 arrival_ns 到达时进入 pending；忙碌组不调用 schedule，也不替换图。原请求结束后，组上下一批请求才经原 Scheduler.add_decode 接纳并分配目标 KV 块，再由真实 schedule 返回单请求、单 Token 批次。首个 ITL 从本次到达开始计时，包含排队，首次完成前 latest_completion_ns 为 null；不声称测量完整模型的 TTFT/TPOT。
+
+后端在一套 ns-3 事件队列中登记下一次外部到达，每条 COMMIT 替换此前的唤醒。每组的四个 rank 都结束后，才释放组并发送 WAVE_DONE；另一组可同时保持在途。完成通知按显式组编号汇总，已收集的同刻事件合并决策。每组先校验全部图、侧表、传输、成员和空闲状态，再全部装载和登记，最后激活。所有组共享同一次网络初始化及原有控制器、连接、队列和端口状态。前端完成后仍等待实际事务、链路包与端口排空。
+
+`deployment.json` 明确记录组、rank、UB node 和专家放置。当前功能边界为一或两个四成员 EP 组，成员互不重叠，全体 rank 覆盖 0～N-1，UB node 恒等映射，每成员两个专家；每组同刻四个请求组成一批且剩余步数相同，每请求 2～32 步、运行最多 64 个请求。不带 groups 的 M3.1 服务输入继续可用；旧式后端直接调用不提供 deployment.json 时采用原四 rank ep0。图生成器和装载器按显式成员处理 rank，固定 M2 驱动仍限制 0～3。
+
+新增 busy.json 和 two_groups.json。前者沿用 M2 网络；后者含八个 NPU 和两个四端口交换域，每组各接一个交换机，400 Gbps、20 ns，其 network_attribute.txt 与 M2 文件逐字一致。两域在同一仿真内执行，本轮没有共享瓶颈实验。通信、路由和计算仍是既有单层合成功能输入，calibration_status 保持 unvalidated_reference。
+
+### 实际命令与结果位置
+
+```bash
+M32_LOG=runs/m3-2-dynamic-arrivals-20260929T013834Z
+cmake -S third_party/ns-3-ub -B build/m3-dynamic-arrivals -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m3-dynamic-arrivals/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m3-dynamic-arrivals --target \
+  cosim-service cosim-layer cosim-sequence cosim-lifecycle-test cosim-send-slots-test \
+  cosim-layer-delay-test cosim-observation-test cosim-compute cosim-time-test \
+  cosim-write cosim-write-test m0-joint-link-probe --parallel 8
+cmake --build build/m3-dynamic-arrivals --target cosim-service --parallel 8
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_dynamic_service.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/dynamic-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_service.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/service-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_sequence.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/sequence-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/layer-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_variants.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/variants-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_delay.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/delay-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_compute.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir "$M32_LOG/compute-regression"
+python3 "$M32_LOG/final_audit.py"
+bash scripts/check_deps.sh
+git diff --check
+```
+
+配置及构建均退出 0，保留上游 Chakra 的 binary_function 弃用警告和独立输出目录提示。没有改变编译语言或引入其他 ASTRA 网络后端。最后运行的 Python 单元、动态集成、单组服务、M2 连续图/单层/去重分块发送槽/延迟、M1 计算检查均退出 0；证据分别在同名命令 JSON 与目录 summary.json。上面的 cosim-observation-test、cosim-time-test、cosim-write-test 三个 C++ 辅助单元目标只构建，不能将构建成功算作本轮执行了其全部单测。
+
+### 验收数据
+
+19 项 Python 单元通过，其中新增四项验证排队不改变在途 Batch、精确到达、同刻完成排序、显式交错成员以及非法成员/输入。交错编号在前端和图导出层验证；本次真实网络集成使用两个连续四 rank 组。
+
+| 动态场景 | 实际行为 | 最终时刻 |
+|---|---|---:|
+| 单组忙碌时到达 | 5200 ns 时原写在途，201～204 只排队；旧请求三步完成后在 64738 ns 接纳新批次 | 129517 ns |
+| 第二空闲组到达 | ep1 在 5500 ns 开始，此时 ep0 原写仍在途，ep0 首轮到 21552 ns 才完成；ep1 三轮在 27052、48645、70238 ns 完成 | 129517 ns |
+| 全空闲后到达 | 初始不提交图，直接在 9000 ns 到达并开始，无固定步长轮询 | 73738 ns |
+| 远期到达重登记 | 100000 ns 的到达跨越三次旧图完成，保持一次接纳；旧工作于 64738 ns 完成后直接推进 | 164779 ns |
+| 到达与完成同刻 | 新批次于首轮结束的 21552 ns 到达，只接纳一次，不回溯修改已开始图 | 129517 ns |
+| 两组同刻到达 | 两组在 0 ns 都提交，三次共同完成按组顺序汇报，共四次决策 | 64738 ns |
+
+动态套件共九次正常运行，包括双组来源开、关、不挂观测及重复执行。双组业务结果、协议、逐请求进度和原生端口跟踪一致；可观测文件在来源开关间一致，端侧记录跨组跨轮不冲突。双组九轮有 126 次真实写、1032192 业务字节、432 个 ASTRA 节点；每份传输只有一份任务和各一次收发回调，局部节点执行时间逐一由实际传输完成及计算前驱核验。十二个请求结束，pending、running、inflight、发送/计算资源、回调及 UB 待执行任务清空，实际发出和到达包计数相等。
+
+十项动态非法提交按预期退出 1：忙碌组替换、在途时声称服务结束、过去/当前/布尔/小数/溢出唤醒、部分组提交、重复图身份、第二组末 rank 损坏。后者在另一组执行期间拒绝第二组全部图，没有先启动第二组的部分 rank。原 M3.1 七次正常运行、九项非法协议和子进程异常回归通过，三轮仍为 21552、43145、64738 ns；增加网络传播时延后仍为 100410 ns；网络收尾仍在服务 83685 ns 结束之后等到 84207 ns 排空。
+
+M2 连续图、单层、去重/分块/发送槽、延迟反馈与 M1 计算回归均通过。链接检查仍为完整 52 个 ASTRA 核心对象及单套 10 个 UB ns-3 动态库；动态八 rank 进程也只装入本次目录的这套库。final_audit.py 已恢复原生 UB launcher lock，并逐项核对 218 个旧构建/原生产物及生成协议文件的大小与 SHA-256，全部未改变；本轮未重跑 LLMServingSim 原生服务性能样例。最终功能检查记录的实现源码哈希与当前源码相符。
+
+### 保留的失败和停止范围
+
+第一次 dynamic-check 在“6000 ns 到达时仍有写在途”的断言失败。实际首轮 Dispatch 为 5000～5923 ns，6000 ns 处于计算阶段；排队行为本身已执行。保留日志，将人工到达输入改到 5200/5500 ns，使测试确实覆盖实际 UB 写在途窗口，未修改网络或计算时间，也未删除在途断言；dynamic-check-2 和 dynamic-final 通过。
+
+第一次 m31-regression 的旧式输入缺少 deployment.json，后端内置默认 rank 的 C++ JSON 字面量为 signed，而验证要求 unsigned，导致在首条 DECIDE 前错误拒绝。改为明确 unsigned 字面量，未放宽外部输入检查；build-legacy-deployment、m31-regression-final 和 service-final 通过。失败日志和原始输入继续保留。
+
+待接纳的给定 KV 不占目标 Scheduler 块池，本轮没有研究外部 KV 存放、容量不足或迁移。每轮仍要求组内四个真实 Token，任意不均匀到达/结束、零 Token 成员及完整故障死锁覆盖留给 M3.4；共享瓶颈和完成变化传到后续调度的对比留给 M3.3。没有增加模型层、真实路由、P/D 或硬件校准。
+
+本任务在 M3.2 completed 停止，按持续授权只本地提交，不推送，不自动开始 M3.3。提交后的 13 项依赖检查与各仓库状态保存在 L/dependency-final.json 和 L/git-final.json。

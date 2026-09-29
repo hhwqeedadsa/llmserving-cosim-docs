@@ -36,12 +36,12 @@ def _schema(output):
     return proto, schema
 
 
-def export_bootstrap(output):
+def export_bootstrap(output, ranks=range(4)):
     """Metadata-only Chakra graphs: no nodes, business work, or elapsed time."""
     output = Path(output).resolve()
     output.mkdir(exist_ok=False)
     proto, _ = _schema(output)
-    for rank in range(4):
+    for rank in ranks:
         with (output / f'layer.{rank}.et').open('xb') as stream:
             write_message(stream, proto.GlobalMetadata(version='moe-ub-bootstrap/1'))
     return output

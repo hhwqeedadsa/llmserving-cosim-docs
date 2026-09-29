@@ -136,6 +136,7 @@ int main(int argc, char** argv)
         Require(argc == 5, "usage: cosim-layer-delay-test PLAN_DIR SYSTEM.json EVENTS.json NEW_RUN_DIR");
         auto plan_dir = fs::absolute(argv[1]), run = fs::absolute(argv[4]);
         const auto plan = moe_ub::LoadLayerPlan(plan_dir);
+        Require(plan.data.at("rank_ids") == Json::array({0, 1, 2, 3}), "Delay driver requires ranks 0..3");
         const auto system = Read(fs::absolute(argv[2])), schedule = Read(fs::absolute(argv[3]));
         Require(system.at("roofline-enabled") == 0 && system.at("replay-only") == 0 &&
                 system.at("trace-enabled") == 1, "original ASTRA execution/trace required");

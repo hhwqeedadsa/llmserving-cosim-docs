@@ -29,7 +29,7 @@ def check_execution(plan, report, run, check_rank2_ahead=True, graph_id=None):
     assert set(actual) == set(nodes) and len(actual) == 20 + 2 * len(plan['transfers'])
     assert set(transfers) == {t['transfer_id'] for t in plan['transfers']}
     assert report['loaded_ranks_before_activation'] == 4
-    assert report['activation_order'] == [dict(rank_id=r, time_ns=plan['ready_ns']) for r in range(4)]
+    assert report['activation_order'] == [dict(rank_id=r, time_ns=plan['ready_ns']) for r in plan['rank_ids']]
     assert len(report['graph_completions']) == 4
     assert sum(t['committed_bytes'] for t in transfers.values()) == sum(t['payload_bytes'] for t in plan['transfers'])
     for t in plan['transfers']:
@@ -80,7 +80,7 @@ def check_execution(plan, report, run, check_rank2_ahead=True, graph_id=None):
         raw = '\n'.join(line for line in raw.splitlines() if line.endswith(', graph_id=' + graph_id))
     events = re.findall(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+),', raw)
     assert len(events) == 2 * len(nodes) and len({(e, r, n) for e, r, _, n in events}) == 2 * len(nodes)
-    active, peak, concurrent_receive = [0] * 4, [0] * 4, 0
+    active, peak, concurrent_receive = [0] * (max(plan['rank_ids']) + 1), [0] * (max(plan['rank_ids']) + 1), 0
     for event, rank, time, node_id in events:
         rank, time, node_id = int(rank), int(time), int(node_id)
         key = rank, node_id
@@ -91,7 +91,7 @@ def check_execution(plan, report, run, check_rank2_ahead=True, graph_id=None):
             active[rank] += 1 if event == 'issue' else -1
             assert 0 <= active[rank] <= plan['send_slots_per_rank']
             peak[rank] = max(peak[rank], active[rank])
-    assert active == [0] * 4 and all(0 < p <= plan['send_slots_per_rank'] for p in peak) and concurrent_receive > 0
+    assert not any(active) and all(0 < peak[r] <= plan['send_slots_per_rank'] for r in plan['rank_ids']) and concurrent_receive > 0
     assert not (run / 'log/err.log').read_text()
     latest_dispatch = max(p['expert_start_ns'] for p in phases)
     if check_rank2_ahead:

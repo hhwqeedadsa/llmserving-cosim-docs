@@ -94,9 +94,21 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     LayerPlan plan{Json::parse(stream), {}, {}};
     const auto& p = plan.data;
     Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
-            p.at("rank_ids") == Json::array({0, 1, 2, 3}) && p.at("rank_to_ub_node") == p.at("rank_ids") &&
+            p.at("rank_to_ub_node") == p.at("rank_ids") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
+    const auto& ranks = p.at("rank_ids");
+    Require(ranks.is_array() && ranks.size() == 4, "require four explicit group members");
+    std::set<int> members;
+    int previous = -1;
+    for (const auto& value : ranks)
+    {
+        const int rank = Number(value, "rank_id", 7);
+        Require(rank > previous && members.insert(rank).second, "unordered or repeated rank");
+        previous = rank;
+    }
+    Require(p.at("input").at("rank_ids") == ranks && p.at("input").at("rank_to_ub_node") == ranks,
+            "input rank mapping mismatch");
     const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
     const auto& input = p.at("input");
     Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
@@ -124,9 +136,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         const auto task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
         const auto tag = Number(t.at("comm_tag"), "comm_tag", 499999999);
         const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", UINT32_MAX);
-        const auto src = Number(t.at("src_rank"), "src_rank", 3), dst = Number(t.at("dst_rank"), "dst_rank", 3);
+        const auto src = Number(t.at("src_rank"), "src_rank", 7), dst = Number(t.at("dst_rank"), "dst_rank", 7);
         const auto operation = t.at("operation_id").get<std::string>();
-        Require(id > 0 && tag > 0 && bytes > 0 && src != dst && transfers.emplace(id, t).second &&
+        Require(id > 0 && tag > 0 && bytes > 0 && src != dst && members.contains(src) && members.contains(dst) && transfers.emplace(id, t).second &&
                 tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");
         Require(operations.contains(operation) && operations.at(operation) == t.at("kind") &&
                 t.at("business_payload_bytes") == bytes && t.at("application_metadata_bytes") == 0 &&
@@ -168,9 +180,10 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     }
     Require(p.at("rank_graphs").size() == 4, "missing rank graph");
     std::map<std::pair<uint64_t, std::string>, unsigned> pairs;
-    for (int rank = 0; rank < 4; ++rank)
+    for (size_t index = 0; index < ranks.size(); ++index)
     {
-        const auto& graph = p.at("rank_graphs")[rank];
+        const int rank = ranks[index];
+        const auto& graph = p.at("rank_graphs")[index];
         Require(graph.at("rank_id") == rank, "rank graph order/mapping mismatch");
         std::set<uint64_t> seen;
         std::map<uint64_t, Json> local;
@@ -303,7 +316,7 @@ Json LayerOperationRegistry(const LayerPlan& plan)
     {
         operation["graph_id"] = plan.data.at("graph_id");
         operation["endpoint_records"] = Json::array();
-        for (int rank = 0; rank < 4; ++rank)
+        for (const int rank : plan.data.at("rank_ids"))
             operation["endpoint_records"].push_back({{"rank_id", rank},
                 {"local_record_id", operation.at("kind") == "dispatch" ? 1 : 2}});
     }

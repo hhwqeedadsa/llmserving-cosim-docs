@@ -115,7 +115,7 @@ UbNetworkAdapter 的多传输入口按 `(src_rank, dst_rank, comm_tag)` 查找�
 
 `tests/unit/layer_plan_test.py` 核对矩阵、八份专家输入、局部依赖、身份与边界；`tests/integration/check_layer.py` 运行来源开/关/不挂观测，检查原 ASTRA 的 96 条 issue/callback、十四份真实 UB 写、每 rank 最多一个 SEND 及发送在途时 RECV 仍能登记，并拒绝损坏图和不一致计划。M2.1 的指定场景中 rank 0～3 分别在 21168、21506、21552、17675 ns 完成；这组数值是实际运行结果，不写入生成器或后端作为预设通信时间。
 
-以上是 M2.1 的原始验收范围，后续 M2.2～M3.1 检查见下文；模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
+以上是 M2.1 的原始验收范围，后续 M2.2～M3.2 检查见下文；模型校准尚未完成。完整命令和实际结果见 [M2.1 环境记录](../docs/environment.md#2026-09-28m2-1-single-layer)。
 
 ## M2.2 等待与延迟反馈
 
@@ -132,7 +132,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 规范的专家计算 26000/38000 ns，以及最后必要输入推迟后的 30000/42000 ns 已通过；本地发送较晚时必须等待，非关键和其他 rank 输入较晚时不会额外阻塞 rank 2。真实链路传播延迟对照中，rank 2 专家开始从 5877 移至 11629 ns，均早于全组 Dispatch 最晚完成。变化由实际 UB 事件产生，不能当作链路延迟与整图耗时的一般比例。
 
-[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3～M3.1 的后续验收见下文；模型仍未校准。
+[事件输入说明](../fixtures/m2_delay_feedback/README.md) 列出每项对照。输出含原始日志、给定事件、网络副本、图、每个子进程状态以及 summary.json 中的逐 rank 等待依据；这些都是内部测试证据。十项非法输入/覆盖拒绝、M2.1 的来源开关与错误图回归、52 个 ASTRA 对象及单套 10 个 UB ns-3 库检查通过。实际命令和两次已解决的检查失败见 [M2.2 环境记录](../docs/environment.md#2026-09-28m2-2-delay-feedback)。M2.3～M3.2 的后续验收见下文；模型仍未校准。
 
 ## M2.3 去重、分块与发送槽
 
@@ -206,6 +206,30 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 输出中的 input.json/layer.json 是输入副本；graphs 保存各次实际决策生成的图与计划，bootstrap 保存零业务初始化图。protocol.jsonl 保存双方消息；service_result.json 保存逐请求初值、调度前后和完成后状态；execution/result.json、原 ASTRA 日志和 UB 跟踪用于核验实际事件。manifest.json 保存命令、调度器来源、给定 KV/路由/计算范围和正常或失败状态。以上均是内部功能验证资料；可选的 execution/observed 与 execution/truth 继续遵守观测和内部真值的访问边界，不声称已经实现 M5 的正式研究输出。
 
-验收覆盖三轮共 42 次 UB 写、344064 业务字节、144 个节点的 288 条原始执行事件，四个请求分别从不同 Token 下标推进三次并结束。基线完成时间为 64738 ns；仅增加 rank 1 链路传播时延后为 100410 ns，下一次服务决策跟随实际 UB 完成。来源开/关/不挂观测、重复执行以及每次回复前暂停 30 ms 的运行保留相同业务时刻；改变端口间隔的收尾测试确认服务结束后仍会等网络空闲。EOF、非法消息、编号/时间不符、未来唤醒、缺少工作、错误路径和末 rank 坏图被拒绝；子进程失败及不完整行的等待超时可报告。
+验收覆盖三轮共 42 次 UB 写、344064 业务字节、144 个节点的 288 条原始执行事件，四个请求分别从不同 Token 下标推进三次并结束。基线完成时间为 64738 ns；仅增加 rank 1 链路传播时延后为 100410 ns，下一次服务决策跟随实际 UB 完成。来源开/关/不挂观测、重复执行以及每次回复前暂停 30 ms 的运行保留相同业务时刻；改变端口间隔的收尾测试确认服务结束后仍会等网络空闲。EOF、非法消息、编号/时间不符、输入耗尽却含未来唤醒、缺少工作、错误路径和末 rank 坏图被拒绝；子进程失败及不完整行的等待超时可报告。
 
-当前只实现一个四 rank EP 组、预先到达且 KV 给定就绪的请求，每 rank 每轮一个 Token。通信模板和正计算限制沿用 M2，next_wakeup_ns 必须为 null；M3.2 的动态到达与独立组、M3.4 的零 Token rank 尚未实现。它仍是未校准的单层功能模型，不是完整模型服务性能结果。具体初始长度见 [服务样例](../fixtures/m3_service/README.md)。
+以上为 M3.1 单组基线，该样例的 next_wakeup_ns 为 null。M3.2 已增加下述动态到达和第二组；四 rank 正计算、每 rank 每轮一个 Token 的限制继续保留，M3.4 的零 Token rank 尚未实现。它仍是未校准的单层功能模型，不是完整模型服务性能结果。具体初始长度见 [服务样例](../fixtures/m3_service/README.md)。
+
+## M3.2 动态到达与独立组
+
+服务前端按绝对 `arrival_ns` 接纳请求，后端在同一 ns-3 事件队列登记 `next_wakeup_ns`。每次 COMMIT 替换此前的外部唤醒；图提前完成时重登记剩余到达时刻，全空闲时直接推进到下一次到达。后端按显式 EP 组维护在途图和完成集合，单个成员提前结束不会释放整个组，也不会阻挡另一个空闲组提交。
+
+新请求到达忙碌组只更新前端 `pending` 队列，不调用该组的 schedule 或替换图。组上的旧请求全部结束后，才经原 Scheduler.add_decode 接纳下一批给定 KV 请求；每个请求的下一步路由和图仍根据真实批次生成。输入限定一或两个四成员组、每批四成员同时到达且剩余步数一致、每 rank 每轮一个 Token。具体容量与输入边界见 [动态输入说明](../fixtures/m3_dynamic_arrivals/README.md)。
+
+使用 [M3.2 环境记录](../docs/environment.md#2026-09-29m3-2-dynamic-arrivals) 中配置的独立构建目录，输出目录必须不存在：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
+  --input fixtures/m3_dynamic_arrivals/two_groups.json --layer fixtures/m2_single_layer/layer.json \
+  --backend build/m3-dynamic-arrivals/output/cosim/ns3.44-cosim-service \
+  --system fixtures/m1_compute/system.json --network fixtures/m3_dynamic_arrivals/network \
+  --observation fixtures/m3_dynamic_arrivals/observation.json --output-dir runs/my-dynamic-service
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_dynamic_service.py \
+  --build-dir build/m3-dynamic-arrivals --output-dir runs/my-dynamic-check
+```
+
+`deployment.json` 保存组、rank、UB node 与专家放置，C++ 在创建执行对象前读取。前端仍接受不带 groups 的 M3.1 输入；直接调用后端且不提供 deployment.json 时，仅采用原四 rank ep0 定义。可用 rank 按整个组报告，后端仍先校验一组全部图和侧表、再全部装载和登记、最后激活；旧组的 UB 对象和未完成事务继续存在。`service_result.json` 增加实际到达、各次决策后的排队请求和在途图记录；`pending` 与上游调度器内部 waiting 分开记录。
+
+实测在 5200 ns 给忙碌组排队，5500 ns 启动第二组，此时第一组仍有真实 UB 写在途。双组共九轮，126 次写、1032192 业务字节，最终在 129517 ns 完成并排空网络。来源开关和不挂观测保留相同业务结果。M3.1、固定单层、连续图、去重/分块/发送槽及延迟反馈回归通过；本轮没有修改依赖。
+
+两个组的功能输入使用同一仿真内的两个交换域，没有共享端口；共享瓶颈效应留在 M3.3。模型仍为未校准的合成单层，M3.4 完整边界覆盖、P/D 和真实数据未在本轮实现。

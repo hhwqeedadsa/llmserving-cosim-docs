@@ -8,8 +8,8 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 .. admonition:: 最新研究进展 · 2026-09-29
 
    已完成 Qwen3 MoE 的 6 组输入/输出规模实验和 Block 24 的 11 组网络竞争实验，
-   区分目标流 FCT 与 phase tail，并建立模型、GPU/NPU、不同位置带宽、trace lineage、
-   CCL 路径和 384 NPU 候选映射。详见 :doc:`daily/2026-09-29`、
+   新增 0.25-μs 的逐流带宽、队列和目的端口时间序列，区分目标流 FCT 与 phase tail，
+   并建立模型、GPU/NPU、不同位置带宽、trace lineage、CCL 路径和 384 NPU 候选映射。详见 :doc:`daily/2026-09-29`、
    :doc:`model-hardware-trace-contention`；全部每日记录见 :doc:`daily/index`。
 
 .. raw:: html

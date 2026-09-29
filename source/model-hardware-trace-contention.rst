@@ -261,6 +261,65 @@ balanced/Zipf/hot 的 phase 为 23.991/44.586/88.935 μs，最大队列为
 21,366/261,488/813,689 B。结果说明总通信量相同不代表 tail 相同，局部目的端 access
 link 可以成为真正瓶颈。
 
+微秒级流量与带宽占用
+~~~~~~~~~~~~~~~~~~~~
+
+FCT 只给出最终耗时。为了看到“每个微秒链路被谁占用”，本页进一步读取 data packet 的
+精确端口 egress 时间和 wire size，把每包在 100 Gbps 链路上的序列化区间与 0.25 μs
+时间分箱求交。它不是按 packet 起点简单计数，因此单方向不会因 bin 边界虚假超过容量。
+
+.. figure:: _static/round09/block24-core-bandwidth-timeseries.svg
+   :alt: 四种竞争场景中100Gbps核心链路的微秒级流量和带宽占用
+   :align: center
+   :class: study-figure
+
+   **图 5：四个竞争 case 的核心链路时间序列。** 正值是左到右，负值是右到左；
+   目标 AllGather 与 EP/KV 竞争流用不同颜色堆叠，并标出 target/phase last-ACK。
+
+:数据来源: ns-3 ``AllPacketTrace`` 的 task 身份、``PortTrace_node_8/9_port_4.tr`` 的精确 egress 时间；汇总为 ``research/round09/network_core_bandwidth_timeseries.csv``。
+:物理量与单位: 横轴为仿真时间（μs）；纵轴为 0.25-μs bin 内 data-packet wire bandwidth（Gbps）；4096-B payload 对应 4174-B wire packet。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: 不含小尺寸 ACK/control 带宽；100 Gbps 是代表性 core 参数；0.25 μs 是显示分辨率，不是事件精度。
+
+仅目标流约占满一个方向 23 μs；同向 EP 的两条流交替分享同一个 100 Gbps 方向，持续到
+约 46 μs；反向 EP 同时占用 ``+100/-100 Gbps`` 两个全双工方向，目标流几乎不变；
+KV case 在 target 完成后继续占用链路到 66 μs。
+
+.. figure:: _static/round09/block24-ep-kv-microsecond-profile.svg
+   :alt: EP和KV同向竞争的微秒级带宽队列与task完成事件
+   :align: center
+   :class: study-figure
+
+   **图 6：同向 EP+KV 的带宽、核心队列和完成事件共轴。** 上图是每条 flow 的数据
+   带宽，中图是 switch 8 / port 4 的 ``VOQ + egress`` occupancy，下图是 first-packet
+   到 last-ACK 的 task window。
+
+:数据来源: ``network_core_bandwidth_timeseries.csv``、``network_core_queue_timeseries.csv``、``network_temporal_task_windows.csv``。
+:物理量与单位: data bandwidth（Gbps）、queue occupancy（KiB）、task/ACK 时间（μs）。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: queue 是仿真状态，不是交换机 buffer counter；task window 不是 GPU kernel 时间。
+
+400 Gbps host access 的两条流同时涌入 100 Gbps core，队列在 10.7805 μs 达到原始
+trace 峰值 684,598 B（668.6 KiB）。目标 ACK 为 46.979 μs；随后 KV proxy 继续独占
+链路，并把 phase ACK 推到 66.013 μs。
+
+.. figure:: _static/round09/destination-access-bandwidth-timeseries.svg
+   :alt: 均衡Zipf热点目的端分布下四个access端口的微秒级带宽
+   :align: center
+   :class: study-figure
+
+   **图 7：相同总 bytes 下，四个目的端口的带宽随时间变化。** 堆叠面积是 dst4--dst7，
+   黑线是四个独立 100 Gbps access ports 的合计数据带宽。
+
+:数据来源: 目的端 ``PortTrace`` 的精确 egress 时间和 packet/task mapping；``research/round09/destination_access_bandwidth_timeseries.csv``。
+:物理量与单位: 横轴为时间（μs）；纵轴为 per-destination 和 aggregate data bandwidth（Gbps），0.25 μs 分箱。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: 目的端份额是控制变量，不是实测 token histogram；总带宽是四端口之和，不是一条 400 Gbps 链路。
+
+balanced/Zipf/hot 在 phase 内的平均合计带宽为 378.4/203.7/102.1 Gbps，即约
+3.78/2.04/1.02 个并行目的端口。热点 case 并不是链路本身变慢，而是绝大多数流量只能
+串行经过一个 100 Gbps 目的端口，其余端口很快空闲。
+
 四、代表性中间时间切片
 ----------------------
 
@@ -273,7 +332,7 @@ MoE dispatch、rank-local expert 和 combine，并且邻近 block 结构重复�
    :align: center
    :class: study-figure
 
-   **图 5：GPU0/NIC0/GPU1/NIC1 的统一事件流。** 两个 expert compute 各 456.737 μs
+   **图 8：GPU0/NIC0/GPU1/NIC1 的统一事件流。** 两个 expert compute 各 456.737 μs
    并行；NIC lane 显示 AllReduce、AllGather 和 ReduceScatter 的方向、payload 和 task 时间。
 
 :数据来源: round-07 ``block24_unified_events.csv``，本轮复用同一语义切片作为竞争 probe。
@@ -304,7 +363,7 @@ core 竞争、反向流、KV proxy 和热点目的端中，补上“网络竞争
    :align: center
    :class: study-figure
 
-   **图 6：服务语义到离散事件网络的粒度阶梯。** 当前最细为逐 packet、逐 hop、逐
+   **图 9：服务语义到离散事件网络的粒度阶梯。** 当前最细为逐 packet、逐 hop、逐
    queue/port，但上游 peer flow 仍需显式算法投影。
 
 :数据来源: ``research/round09/trace_lineage.csv``。
@@ -354,7 +413,7 @@ channel、怎样切 chunk、GPU kernel/NIC 如何 overlap。代码路径与边�
    :align: center
    :class: study-figure
 
-   **图 7：384 个逻辑 NPU ranks 的两个实验入口。** ``DP3 × EP128`` 让每个 EP rank
+   **图 10：384 个逻辑 NPU ranks 的两个实验入口。** ``DP3 × EP128`` 让每个 EP rank
    管一个 expert；``DP3 × TP2 × EP64`` 让每个 EP rank 管两个 experts，并增加 TP 通信。
 
 :数据来源: ``research/round09/huawei_384_mapping.csv``。

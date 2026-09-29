@@ -137,13 +137,50 @@ Block A/B 使用 8 hosts、2 switches：host access 为 400 Gbps，两个交换�
 
 均衡、Zipf 和 97% 热点的 phase 分别为 23.991、44.586、88.935 µs，最大队列分别为 21,366、261,488、813,689 B。总字节没变却产生 3.71 倍 phase 差异，说明仅用“总通信量”预测 MoE 尾时延会漏掉目的端局部瓶颈。
 
+### 4.5 微秒级流量、带宽占用和队列事件
+
+前面的 FCT 柱状图回答“最后慢了多少”，下面的时间序列回答“每一个微秒里链路被谁占用、队列怎样形成”。带宽采用 0.25 µs 时间分箱：读取每个 data packet 在核心端口的精确 egress 时间和 wire size，将其 100 Gbps 序列化区间与每个分箱求交，而不是简单把 packet 起点落入某个 bin。这样单方向占用不会因分箱边界虚假超过链路容量。
+
+![核心链路微秒级带宽](../../source/_static/round09/block24-core-bandwidth-timeseries.svg)
+
+**图 5：四个竞争 case 的 100 Gbps 核心链路微秒级占用。** 正值是左到右，负值是右到左；蓝色为目标 AllGather，橙/紫/红分别为同向 EP、反向 EP 和 KV proxy。
+
+- 数据来源：ns-3 `AllPacketTrace` 的 task/peer 身份、`PortTrace_node_8/9_port_4.tr` 的精确 egress 时间，汇总为 `analysis/network_core_bandwidth_timeseries.csv`。
+- 物理量与单位：横轴为仿真时间（µs）；纵轴为 0.25-µs bin 内 data-packet wire bandwidth（Gbps）。每个 4096-B payload 按 PortTrace 的 4174-B wire packet 计算。
+- 证据类型：`ns3-simulated/trace-derived`。
+- 不能证明：不含小尺寸 ACK/control 带宽；100 Gbps 是当前代表性 core 参数，不是硬件 counter；0.25 µs 是显示分辨率，不是 ns-3 事件精度。
+
+图中可以直接看到：仅目标流约占满一个方向 23 µs；同向 EP 让两条流交替分享同一个 100 Gbps 方向，持续时间延长到约 46 µs；反向 EP 同时占用 `+100/-100 Gbps` 两个全双工方向，因此目标流几乎不变；KV case 在目标流结束后仍由更大的 KV 流继续占用链路到 66 µs。
+
+![EP KV 微秒级事件剖面](../../source/_static/round09/block24-ep-kv-microsecond-profile.svg)
+
+**图 6：同向 EP+KV 的带宽、核心端口队列和 flow 完成事件共轴。** 上图显示目标与 KV 如何在 100 Gbps 链路上交替占用；中图是 switch 8 / port 4 的 `VOQ + egress` occupancy；下图是两个 task 的 first-packet 到 last-ACK 窗口。
+
+- 数据来源：`network_core_bandwidth_timeseries.csv`、`network_core_queue_timeseries.csv` 和 `network_temporal_task_windows.csv`。
+- 物理量与单位：data bandwidth（Gbps）、queue occupancy（KiB）、task/ACK 时间（µs）。
+- 证据类型：全部为当前配置的 `ns3-simulated/trace-derived`。
+- 不能证明：queue 是仿真队列状态，不是交换机硬件 buffer counter；flow window 不是 GPU kernel 时间。
+
+竞争流从 400 Gbps host access 同时涌入 100 Gbps core，使核心队列在 10.7805 µs 达到原始 trace 峰值 684,598 B（668.6 KiB），随后随 core 持续满载而下降。目标 ACK 在 46.979 µs 到达，但 KV proxy 继续独占链路并把 phase ACK 推到 66.013 µs。这张图把“目标流受损”和“阶段尾部被 KV 拖长”在同一时间轴上分开了。
+
+![目的端带宽随时间变化](../../source/_static/round09/destination-access-bandwidth-timeseries.svg)
+
+**图 7：相同总字节下，四个 100 Gbps 目的端 access ports 的带宽随时间变化。** 堆叠面积分别是 dst4–dst7，黑线是四端口总带宽。
+
+- 数据来源：目的端 `PortTrace` 的精确 egress 时间和 packet task mapping，汇总为 `analysis/destination_access_bandwidth_timeseries.csv`。
+- 物理量与单位：横轴为仿真时间（µs）；纵轴为四个目的端口各自及合计 data bandwidth（Gbps），0.25 µs 分箱。
+- 证据类型：`ns3-simulated/trace-derived`。
+- 不能证明：目的端份额是控制变量，不是实测 router token histogram；总带宽是四个独立端口的和，不是一条 400 Gbps 物理链路。
+
+均衡分布在 phase 内平均利用 378.4 Gbps，约等于 3.78 个并行目的端口；Zipf 降为 203.7 Gbps（2.04 个端口）；97% 热点只有 102.1 Gbps（1.02 个端口）。因此热点 case 不是“链路变慢”，而是绝大多数流量只能串行经过一个 100 Gbps 目的端口，其余三个端口很快空闲。
+
 ## 5. 代表性 Block 24 时间切片
 
 Block 24 不是一个 batch，也不是一个请求；它是 **request 0 / batch 0 的 prefill 中，48 个 transformer blocks 的第 24 个中间 block**。选择它有四个理由：位于执行中部，避开初始化和输出边界；包含 attention、TP AllReduce、MoE dispatch、expert compute 和 combine；GPU 与 NIC 都有事件；邻近 block 结构重复，选择依据不是先看结果再挑样本。
 
 ![Block 24 GPU NIC 时间线](../../source/_static/round09/block24-gpu-nic-timeline.svg)
 
-**图 5：GPU0、NIC0、GPU1、NIC1 的统一时间线。** dense attention 后进行 AllReduce，再做 LayerNorm 和 MoE AllGather；两个 GPU 上的 expert compute 各 456.737 µs 并行，最后进行 ReduceScatter。
+**图 8：GPU0、NIC0、GPU1、NIC1 的统一时间线。** dense attention 后进行 AllReduce，再做 LayerNorm 和 MoE AllGather；两个 GPU 上的 expert compute 各 456.737 µs 并行，最后进行 ReduceScatter。
 
 - 数据来源：第07轮 `analysis/block24_unified_events.csv`；本轮复用同一可核查切片作为竞争实验的语义源。
 - 物理量与单位：横轴为相对 Block 24 起点的组合时间（µs）；条宽为 GPU operation 或 NIC task duration；NIC 标签给出 payload（KiB）和方向。
@@ -167,7 +204,7 @@ AllGather 的一条代表性 peer flow 是 `0 → 1, 278,528 B`。在第07轮无
 
 ![Trace 粒度阶梯](../../source/_static/round09/trace-granularity-ladder.svg)
 
-**图 6：从 request 到 packet/queue 的粒度阶梯。** 上层保留服务和模型语义，中间层把 collective 变成算法 phase 和 peer flow，下层给出 UB task/WQE、packet、hop、queue 和 port。
+**图 9：从 request 到 packet/queue 的粒度阶梯。** 上层保留服务和模型语义，中间层把 collective 变成算法 phase 和 peer flow，下层给出 UB task/WQE、packet、hop、queue 和 port。
 
 - 数据来源：`analysis/trace_lineage.csv`。
 - 物理量与单位：本图表达数据层级、字段和关联键，不编码数值物理量，因此无单位。
@@ -212,7 +249,7 @@ LLMServingSim 本身不调用真实 NCCL/HCCL 数据面。它的路径是：
 
 ![华为 384 逻辑映射](../../source/_static/round09/huawei-384-logical-mapping.svg)
 
-**图 7：384 个逻辑 NPU rank 的两种候选映射。** 方案 A 为 `DP3 × EP128`，每个 EP rank 对应一个 expert；方案 B 为 `DP3 × TP2 × EP64`，每个 EP rank 对应两个 experts，用更小的 EP group 换取 TP 通信。
+**图 10：384 个逻辑 NPU rank 的两种候选映射。** 方案 A 为 `DP3 × EP128`，每个 EP rank 对应一个 expert；方案 B 为 `DP3 × TP2 × EP64`，每个 EP rank 对应两个 experts，用更小的 EP group 换取 TP 通信。
 
 - 数据来源：`analysis/huawei_384_mapping.csv`。
 - 物理量与单位：DP/TP/EP rank 数和 expert 数，单位均为 count。

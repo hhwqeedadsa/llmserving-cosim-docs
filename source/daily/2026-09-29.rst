@@ -16,7 +16,7 @@
    16 GB/s、20 μs 网络。
 2. 完成 Block 24 的 11 组 ns-3-UB 控制实验：方向/流类型 4 组、竞争字节比 4 组、
    目的端倾斜 3 组。11/11 case 成功，全部 task 均有完成和 packet/ACK 时间戳。
-3. 建立模型、硬件、trace lineage、CCL 代码路径、384 NPU 映射和证据总账；生成 7 张
+3. 建立模型、硬件、trace lineage、CCL 代码路径、384 NPU 映射和证据总账；生成 10 张
    标明数据来源、物理量、单位、证据等级和解释边界的图。
 
 关键结果
@@ -31,6 +31,8 @@
   目的端热点使局部 access link 和 queue 主导阶段尾部。
 * EP+KV case 的目标流 FCT 为 46.978 μs，而 phase 为 66.012 μs；目标流损伤与整个阶段
   被大流拖尾必须分开报告。
+* 0.25-μs 时间序列显示：同向 EP/KV 共享同一个 100 Gbps 方向；反向 EP 同时占用
+  ``+100/-100 Gbps`` 两个全双工方向。EP+KV 的核心队列峰值为 668.6 KiB。
 
 .. figure:: ../_static/round09/llmservingsim-input-output-sweep.svg
    :alt: 2026年9月29日LLMServingSim输入输出规模结果
@@ -57,6 +59,18 @@
 :证据类型: ``ns3-simulated/trace-derived``。
 :解释边界: 100/400 Gbps 受控拓扑，不是生产硬件校准。
 
+.. figure:: ../_static/round09/block24-core-bandwidth-timeseries.svg
+   :alt: Block24核心链路微秒级带宽时间序列
+   :align: center
+   :class: study-figure
+
+   **微秒级链路占用。** 同向竞争延长同一方向的满载时间，反向竞争由全双工另一方向承载。
+
+:数据来源: ns-3 ``AllPacketTrace + PortTrace``；``research/round09/network_core_bandwidth_timeseries.csv``。
+:物理量与单位: 0.25-μs bin 内 data-packet wire bandwidth（Gbps）和仿真时间（μs）。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: 不含 ACK/control 带宽；100 Gbps 不是实机 counter。
+
 Trace 与 CCL 结论
 ---------------------
 
@@ -79,7 +93,7 @@ experts；384 是 rank 数。设备/节点内、超节点内、超节点外带�
 
 * 专题页：:doc:`../model-hardware-trace-contention`
 * 可复核 Markdown 和 CSV：仓库 ``research/round09/``
-* 7 张图：仓库 ``source/_static/round09/``
+* 10 张图：仓库 ``source/_static/round09/``
 * 本地完整 11-case 原始实验包、逐 task、packet、queue 和 port trace
 
 未完成项

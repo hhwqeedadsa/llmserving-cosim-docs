@@ -1,0 +1,8 @@
+task_id,src,dst,payload_bytes,task_start_us,task_complete_us,first_packet_us,last_ack_us,case_id,case_label,flow_kind,evidence
+0,0,4,278528,0.000000,23.113300,0.001000,23.231740,a0-target-only,仅目标流,target,ns3-simulated/trace-derived
+0,0,4,278528,0.000000,45.485940,0.001000,45.683800,a1-ep-same,同向 EP,target,ns3-simulated/trace-derived
+1,1,5,278528,0.000000,45.819860,0.001000,45.938300,a1-ep-same,同向 EP,ep_competitor,ns3-simulated/trace-derived
+0,0,4,278528,0.000000,23.613380,0.001000,23.731820,a2-ep-reverse,反向 EP,target,ns3-simulated/trace-derived
+1,5,1,278528,0.000000,23.613380,0.001000,23.731820,a2-ep-reverse,反向 EP,reverse_ep,ns3-simulated/trace-derived
+0,0,4,278528,0.000000,45.485940,0.001000,46.979400,a3-ep-kv,同向 KV,target,ns3-simulated/trace-derived
+1,1,5,524288,0.000000,65.894980,0.001000,66.013420,a3-ep-kv,同向 KV,kv_competitor,ns3-simulated/trace-derived

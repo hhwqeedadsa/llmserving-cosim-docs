@@ -1538,3 +1538,82 @@ M2 连续图、单层、去重/分块/发送槽、延迟反馈与 M1 计算回�
 待接纳的给定 KV 不占目标 Scheduler 块池，本轮没有研究外部 KV 存放、容量不足或迁移。每轮仍要求组内四个真实 Token，任意不均匀到达/结束、零 Token 成员及完整故障死锁覆盖留给 M3.4；共享瓶颈和完成变化传到后续调度的对比留给 M3.3。没有增加模型层、真实路由、P/D 或硬件校准。
 
 本任务在 M3.2 completed 停止，按持续授权只本地提交，不推送，不自动开始 M3.3。提交后的 13 项依赖检查与各仓库状态保存在 L/dependency-final.json 和 L/git-final.json。
+
+## 2026-09-29：m3-3-shared-bottleneck
+
+用户确认开始 M3.3，上一项 M3.2 已在 d098af6 保存，本任务说明提交 55c8407。开始时 main 工作区干净，比 origin/main 多四个本地提交；13 项依赖检查通过。LLMServingSim 9aed949、ASTRA e2a14f5、UB 1ba7222 及全部递归固定版本不变。本轮只增加根仓库的共享路径输入、内部出口审计、集成检查与文档，没有安装、下载、初始化、改全局配置或推送。
+
+日志根为 `runs/m3-3-shared-bottleneck-20260929T020246Z/`，下文记为 L。record.py 保存各命令的 cwd、argv、UTC 起止、退出码及原始 stdout/stderr；各集成目录的 commands.json 保存实际输入和子进程记录。命令均从 `/root/moe-ub-cosim` 执行，使用既有原生 Linux、GCC/CMake/Ninja 与 `.venv/llmservingsim-native` 环境。
+
+### 实现与实际命令
+
+沿用 M3.2 服务调度及真实 ASTRA/UB 执行，不改变完成回调或计算时长。新输入保留每组四成员、八专家、每成员一 Token、三步解码、8192 字节分块和单发送槽。偶数 NPU 接交换机 8，奇数接交换机 9；400 Gbps 接入链路汇入端口 4 之间的 10 Gbps 链路，传播时延均为 20 ns。组 ep0 在 0 ns 到达，ep1 在 5500 ns 到达；分别运行仍保留另一组四个空闲 NPU，错开对照只把 ep1 到达改到 500000 ns。请求、路由、专家、计算、端点、字节与局部依赖逐轮一致。
+
+根后端 PortObservation 读取原生 UbEnqueue、UbDequeue 和已有成功发送事件，输出内部 egress-queue-audit.jsonl。入队/出队记录含 UID、时间、整包大小和事件后字节数；发送事件另记录由原生完成时长决定的 busy_until_ns。无新增仿真事件或包标签，观测字段不变。物理出口 FIFO 不含 VOQ、信用等待与正在发送的包，不能当作全路径排队。
+
+```bash
+M33_LOG=runs/m3-3-shared-bottleneck-20260929T020246Z
+cmake -S third_party/ns-3-ub -B build/m3-shared-bottleneck -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m3-shared-bottleneck/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m3-shared-bottleneck --target \
+  cosim-service cosim-observation-test cosim-write cosim-write-test cosim-layer --parallel 8
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_shared_bottleneck.py \
+  --build-dir build/m3-shared-bottleneck --output-dir "$M33_LOG/shared-final"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_dynamic_service.py \
+  --build-dir build/m3-shared-bottleneck --output-dir "$M33_LOG/dynamic-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_service.py \
+  --build-dir build/m3-shared-bottleneck --output-dir "$M33_LOG/service-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_layer.py \
+  --build-dir build/m3-shared-bottleneck --output-dir "$M33_LOG/layer-regression"
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_observation.py \
+  --build-dir build/m3-shared-bottleneck --output-dir "$M33_LOG/observation-regression"
+build/m3-shared-bottleneck/output/cosim/ns3.44-cosim-observation-test
+python3 "$M33_LOG/final_audit.py"
+bash scripts/check_deps.sh
+git diff --check
+```
+
+配置与一次构建均退出 0，保留上游 Chakra binary_function 弃用警告和独立输出目录提示。最后的共享瓶颈、Python 单元、动态/单组服务、单层、观测回归和 C++ 观测单元均退出 0；结果在同名命令 JSON、原始日志及集成 summary.json 中。cosim-write-test 仅构建，未作为独立单元执行；cosim-write 的真实事务由观测套件执行。
+
+### 共享网络与调度反馈证据
+
+shared-final 共七次运行：solo-a、solo-b、overlap、staggered、overlap-off、overlap-absent、overlap-repeat。每次只初始化一次网络、八个 NPU 的零业务图在 0 ns 完成。两组重叠实际六轮、84 次写、688128 业务字节；每份写只有一个任务、一次接收和发送回调。八个请求结束，发送/计算资源、前端队列、在途任务归零，实际链路发送与到达计数相等。全部局部前驱、真实 issue/callback 和计算耗时通过既有 check_execution 核对。
+
+| EP 组与步骤 | 独立完成（ns） | 重叠完成（ns） | 推迟（ns） |
+|---|---:|---:|---:|
+| ep0 第 1 步 | 55038 | 85934 | 30896 |
+| ep0 第 2 步 | 110076 | 175244 | 65168 |
+| ep0 第 3 步 | 165114 | 264460 | 99346 |
+| ep1 第 1 步 | 56717 | 85997 | 29280 |
+| ep1 第 2 步 | 107934 | 175181 | 67247 |
+| ep1 第 3 步 | 159151 | 264523 | 105372 |
+
+首轮专家计算开始推迟 ep0 为 13506～25936 ns、ep1 为 8394～31570 ns，详细记录在 ep0/ep1.compute-feedback.json。下一轮提交等于本组真实 WAVE_DONE；第二组无须等待第一组结束。summary.json 保存首轮 28 条传输的独立/重叠发送开始、接收完成、事务完成和时长变化。两组都存在事务耗时增加，也有不变或缩短的传输，未假设平均带宽或每条传输必然变慢。
+
+ep0 的 UID 2 业务包在 5106 ns 入队、8444 ns 出队，跨越 ep1 在 5500 ns 的首次图提交；同时有 ep0 写仍在途。该包不是事后重建，原生队列与网络对象在边界继续存在。8:4 出口恰好包含全部偶数到奇数 rank 的业务传输，逐包范围完整覆盖对应任务。十个 5000 ns 窗口内含两组业务，例如 [15000,20000) 各贡献 4096 字节。内部按来源分组后逐窗与业务真值相等，业务、元数据、协议开销、控制及未归属字节总和与端口聚合计数相等；隐藏身份只用于内部核验。
+
+物理 FIFO 面积按相邻事件间排队字节积分，并独立用每包等待时间乘整包大小核对。独立 ep0/ep1 为 210914259/172012812 byte·ns，重叠为 536015450，超过前两者之和；业务包平均等待由 1663.6/1341.7 ns 增为 2007.067/2233.533 ns。最长连续发送从 13732/13682 ns 增为 27564 ns。峰值却为独立 4174/4236 字节、重叠 4174 字节，不能把此预取 FIFO 的峰值当作所有入口积压。
+
+错开时 ep0 仍在 165114 ns 完成，ep1 从 500000 ns 开始，在 665114 ns 完成。所有 ep0 事务及此前进入出口的包均在 ep1 开始前完成，两组没有混合业务窗口。ep1 三轮耗时降至 165114 ns，重叠时为 259023 ns。错开网络保留此前 ep0 的仲裁、流控等状态，因此没有断言其耗时等于新建网络独立 ep1 的 153651 ns；本步未进一步归因这 11463 ns 差值。
+
+来源开/关、不挂观测与重复运行的 service_result、执行结果、协议及全部原生网络日志一致；来源开关间的端侧和聚合端口文件、内部 FIFO 审计也一致。内部审计未产生可测的仿真行为变化。
+
+### 回归、检查失败与停止范围
+
+19 项 Python 单元与 C++ 观测单元通过。M3.2 九次正常运行和十项拒绝检查通过，双组三轮加排队请求仍于 129517 ns 完成。M3.1 七次正常运行、九项拒绝和子进程异常检查通过，原三轮时刻仍为 21552/43145/64738 ns，延迟对照 100410 ns，网络收尾仍从服务 83685 ns 等到 84207 ns。M2 单层三次运行及十三项坏输入检查通过。观测七种输入的 21 次运行、十项坏配置均通过，原正常写的数据就绪/事务完成仍为 8534/8622 ns。
+
+初次 shared-check 退出 1：检查用整数除法截断 10 Gbps 序列化时间，将 62 字节包预期为 49 ns；锁定源码 DataRate::CalculateBitsTxTime 经 Time(int64x64_t) 的 Round 得到 50 ns。依据源码把检查公式改为最近纳秒取整，未改网络实现。
+
+shared-check-2 的七次仿真均成功，汇总断言错误要求重叠物理 FIFO 峰值大于独立峰值，退出 1。UbPort::DequeuePacket/TriggerTransmit 在出口空时触发仲裁预取，UbRoundRobinAllocator 从入口队列搬入包；该 FIFO 不代表所有排队。保留失败及峰值数据，修正这个额外的检查假设：逐包重建不变，使用累计排队量大于两组独立之和、两组实际平均等待增加，并新增首轮逐传输时长比较。规范的共享路径、旧包保留、完成与下一轮反馈要求全部保留；没有改变输入或业务实现以规避失败。shared-final 完整通过。
+
+final_audit.py 恢复原生 UB launcher lock，并核对 244 个旧产物/生成文件的大小和 SHA-256，全部未变。实现源码与三个最终集成所记录的哈希相符。链接审计仍有全部 52 个 ASTRA 核心对象、且只加载本次构建的 10 个 UB ns-3 库。未重跑原生 LLMServingSim 性能样例，旧产物核对不代替本轮性能验证。
+
+本轮仅验证未校准合成单层的共享链路效应；没有扩展任意不均匀请求、零 Token 成员、完整死锁/故障、P/D、真实路由或模型校准。停止在 M3.3 completed，按持续授权本地提交、不推送；M3.4 等待用户确认。提交后的依赖检查和主仓库/相关子模块状态保存在 L/dependency-final.json 与 L/git-final.json。

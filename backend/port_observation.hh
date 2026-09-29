@@ -81,6 +81,9 @@ class PortObservation
                 const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry) const;
   private:
     void PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay);
+    void Enqueued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes);
+    void Dequeued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes);
+    void QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes);
     ObservationConfig config_;
     std::map<uint32_t, WriteDescriptor> descriptors_;
     PortWindows windows_;
@@ -90,5 +93,8 @@ class PortObservation
     uint64_t initial_tx_bytes_ = 0, all_bytes_ = 0, all_packets_ = 0;
     uint64_t fingerprint_ = 14695981039346656037ULL;
     nlohmann::json packet_ranges_ = nlohmann::json::array();
+    // Internal validation only: physical egress FIFO, excluding VOQs and the
+    // packet already serializing on the link. No sampling events or packet tags.
+    nlohmann::json queue_events_ = nlohmann::json::array();
 };
 }

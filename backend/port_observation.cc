@@ -185,11 +185,22 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
     }
     Require(port_->TraceConnectWithoutContext("TraComEventNotify",
                 ns3::MakeCallback(&PortObservation::PacketStart, this)), "Cannot observe port starts");
+    Require(port_->GetUbQueue()->TraceConnectWithoutContext("UbEnqueue",
+                ns3::MakeCallback(&PortObservation::Enqueued, this)) &&
+            port_->GetUbQueue()->TraceConnectWithoutContext("UbDequeue",
+                ns3::MakeCallback(&PortObservation::Dequeued, this)), "Cannot observe egress queue");
 }
 PortObservation::~PortObservation()
 {
-    if (port_) port_->TraceDisconnectWithoutContext("TraComEventNotify",
-        ns3::MakeCallback(&PortObservation::PacketStart, this));
+    if (port_)
+    {
+        port_->TraceDisconnectWithoutContext("TraComEventNotify",
+            ns3::MakeCallback(&PortObservation::PacketStart, this));
+        port_->GetUbQueue()->TraceDisconnectWithoutContext("UbEnqueue",
+            ns3::MakeCallback(&PortObservation::Enqueued, this));
+        port_->GetUbQueue()->TraceDisconnectWithoutContext("UbDequeue",
+            ns3::MakeCallback(&PortObservation::Dequeued, this));
+    }
     if (ledger_) for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
         tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
 }
@@ -202,12 +213,26 @@ void PortObservation::Register(const std::vector<WriteDescriptor>& descriptors)
     if (ledger_) ledger_->Register(descriptors);
     descriptors_.swap(checked);
 }
+void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes)
+{
+    queue_events_.push_back({{"event", event}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()},
+        {"packet_uid", packet->GetUid()}, {"packet_bytes", packet->GetSize()}, {"queue_bytes", queue_bytes}});
+}
+void PortObservation::Enqueued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes)
+{
+    QueueEvent("enqueue", packet, queue_bytes);
+}
+void PortObservation::Dequeued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes)
+{
+    QueueEvent("dequeue", packet, queue_bytes);
+}
 void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay)
 {
     // Despite the native trace name, this fires NOW after TransmitStart succeeds.
     // completion_delay is a duration; do not move the observation to packet end.
-    (void)completion_delay;
     const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
+    QueueEvent("tx_start", packet, port_->GetUbQueue()->GetCurrentBytes());
+    queue_events_.back()["busy_until_ns"] = now + completion_delay.GetNanoSeconds();
     const auto whole = packet->GetSize();
     const auto business = WritePayloadBytes(packet);
     windows_.Add(now, whole, business);
@@ -284,6 +309,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
         {"wire_and_time_fnv1a64", fingerprint_}});
+    Save("egress-queue-audit.jsonl", queue_events_, true);
     if (!ledger_) return;
     std::filesystem::create_directory("truth");
     std::set<int> ranks;

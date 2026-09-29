@@ -1854,3 +1854,57 @@ queue 第二请求在 P 保留期间等待，D 第一个请求于 243012 ns 结�
 final-audit 恢复原生 launcher lock，313 个旧产物大小/SHA-256 未变，核对最终实现与输入哈希、全部 52 个 ASTRA 核心对象及唯一一套 10 个 UB ns-3 库。依赖检查覆盖 13 项；提交前后结果与 Git 状态记录在 L/dependency-precommit.json、L/dependency-final.json、L/git-final.json。未重跑原生性能样例，不把功能正确当作模型校准。
 
 M4.2 完成并按持续授权本地提交、不推送。用户已确认整个 M4 的顺序执行，下一步切换 M4.3；本步没有真实路由、目标 profile、缓存转换或 P/D 组内异步重叠。
+
+## 2026-09-29：m4-3-data-inputs
+
+按用户本次授权继续 M4.3。M4.2 完成提交 43a984f，M4.3 任务说明提交 5deef58；开始时主仓库及 LLMServingSim、ASTRA、UB 工作区干净。依赖仍为 9aed949 / e2a14f5 / 1ba7222，其余递归提交不变。本步只改根 Python 前端、输入、测试与记录，没有改后端、依赖或锁文件，没有安装、下载模型/数据或修改全局配置。
+
+日志根 `runs/m4-3-data-inputs-20260929T035216Z/` 以下记为 L。命令 cwd 均为 `/root/moe-ub-cosim`。L/record.py 保存完整 argv、UTC 起止、退出状态和 stdout/stderr；各集成目录 commands.json 保存子命令及输入。复用 `build/m4-pd-queue/output/cosim/ns3.44-cosim-service`，本步没有重新编译；结束检查原生及联合旧产物的大小、摘要和实际链接库。
+
+### 材料与实现范围
+
+在本地固定材料中找到实际 Mixtral-8x7B-v0.1 配置、架构 YAML 和 H100 历史 TP1 非 attention CSV。没有找到实际专家选择轨迹；请求 JSONL 的 Token/长度字段不能替代专家路由。已询问外部材料位置，本轮未取得额外数据，因此连续片段明确使用手工合成记录，P/D 仍保留小型合成模型。
+
+新增 DataService 和数据适配模块，复用已有真实 Scheduler 与服务图提交流程。原 Service 只提取原样的调度器创建和图生成方法，新 schema 才选择新的容量和数据校验。依次使用 model-stage、route-stage、compute-stage 三个输入；其余配置保持相同。执行仍为真实第 7 层的单层片段，完整 32 层只做结构及容量核对；清单明确 full_model_execution_validated=false、latency_scope=selected_layer_iterations_only_not_full_model_ITL_or_TTFT。
+
+模型审计保留原配置和摘要、32 个 MoE 层的位置、八专家 Top-2、GQA 32/8 头与 128 head_dim、EP4/TP1/PP1 放置。每 rank 复制共享权重并持有每层两个专家，完整权重 25759850496 字节，完整模型 KV 为 131072 字节/Token、2097152 字节/16-Token 块。每设备预算 85899345920 字节，工作区 1073741824，通信缓冲 1048576，KV 28164 块，剩余 516096 字节不能组成整块；独立算式与真实原生池一致。每个请求在启动前检查剩余生命周期容量，每次 DECIDE 检查实际使用，最大实际占用两块，结束 KV 全释放。工作区为假设预算，未验证目标设备实际可部署性。
+
+路由导入要求确切文件摘要、声明来源、模型和索引口径，恰好覆盖所选层各请求的连续片段。按 source_token_index 减 prompt_tokens 规范化解码索引，保留源文件行号、source_index 和原 Token 位置；非零起点单测也通过。每条记录只消费一次，缺失/重复/错误 phase、层或专家均拒绝，不补齐或复制路由。输入证据在 input_evidence.json，实际图的 input_provenance 保存本轮消费记录，传输的 source_record_index 对应同序 Token/route_records。内部来源不改变业务包。
+
+历史 CSV 的 dtype 未独立写在文件中。审阅其 profiler 源码确认 float16、从配置初始化模型、没有加载 checkpoint；设备名称来自固定 H100 路径，缺少逐次硬件环境及层身份。因此记录为历史形状参考，不能称为目标 NPU profile。三个阶段均显式 FP16；原配置 BF16 另行保留。
+
+只引用 input=1、kv_cache=0、TP1 的六个不读取 KV 上下文的算子：input_layernorm、Q/K/V/O 投影、post_layernorm，CSV 行 3/4/5/6/8/9，总计 82911 ns。输入 `[1,4096]`，K/V 输出 `[1,1024]`；每 rank 每轮恰好一个 Token，错误 dtype、缺行和重复键拒绝。prepare 替换为该和加 5000 ns 的显式剩余参考值，共 87911 ns，不重复保留旧阶段或添加访存时间。attention、RoPE、路由/打包、专家与合并等仍用功能参数；没有引用不匹配的 TP4 attention，也没有外推或换算 NPU。三个来源状态独立记录，calibration_status 始终 unvalidated_reference。
+
+### 实测和命令
+
+以下统一为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本名 --build-dir build/m4-pd-queue --output-dir L/记录名`，最终均退出 0：
+
+| 脚本 | 记录名 | 结果 |
+|---|---|---|
+| check_data_inputs.py | data-verified | 六次正常、六项预期拒绝；三阶段与开关/重复检查 |
+| check_pd_handoff.py | pd-verified | M4.1 七次正常、十一项故障通过，原时刻一致 |
+| check_pd_queue.py | queue-verified | M4.2 九次正常、八项拒绝，原队列/竞争时刻一致 |
+| check_service.py | service-verified | 三轮、协议和延迟反馈，64738 ns |
+| check_dynamic_service.py | dynamic-verified | 双组九轮、动态到达，129517 ns |
+| check_shared_bottleneck.py | shared-verified | 七次共享对照，重叠 264523 ns |
+| check_service_boundaries.py | boundaries-verified | 稀疏、不均匀、空输入和故障均通过 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 在 python-unit 和 python-unit-verified 中均为 39 项通过，新增六项包含数个输入拒绝子例。data-unit 为仅六项新增检查，退出 0。profile 精确查表缺行和重复行测试在单测中替换读取结果，没有改依赖 CSV。
+
+| 数据阶段 | 写次数 | 业务字节 | 片段完成（ns） |
+|---|---:|---:|---:|
+| 实际模型审计，固定重复路由，固定计算 | 42 | 344064 | 64738 |
+| 仅改为逐步变化的连续合成路由 | 28 | 229376 | 54900 |
+| 仅替换六项计算数据及声明剩余值 | 28 | 229376 | 303633 |
+
+模型、容量、请求、部署和网络保持相同；第一轮路由相同，后两轮目的 rank 去重及本地专家比例改变，减少真实业务写。计算阶段全部操作、Token 和传输身份/字节不变，仅 prepare 计算增加 82911 ns/轮，完成恰好增加 `3 × 82911 = 248733` ns。六次运行均有同一套真实 UB 网络、正确 ASTRA 依赖及实际回调；请求和源索引逐步对应，最后已发送网络数据全部到达。来源开、关、不挂观测及重复的图、前端结果、协议、后端结果和原生网络日志相同；开/关的端侧及端口观测相同。
+
+六项真实 CLI 拒绝为路由摘要错误、FP16 profile 配 BF16、模型/预留后容量不足、片段长度与路由多项、来源模型不匹配、通信缓冲不足，均在后端运行前明确失败。单元还检查缺失、重复、错误层/phase/专家/源索引、模型尺寸与 profile 缺项等。
+
+### 错误保留、审计与停止位置
+
+compute-smoke 初次命令错误地使用了不存在的简写后端路径（system/network 参数路径也需更正），Popen 退出 1，未启动仿真；failure.json 和命令日志保留。compute-smoke-corrected 使用实际 output/cosim 二进制、m1_compute/system.json 和 network 目录后退出 0，完成 303633 ns。首次 data-integration 的 model 仿真和业务断言通过，但检查脚本引用了不存在的 observations/port_windows.jsonl；按已有 observed 输出目录修正为全部观测文件摘要后，data-integration-corrected 和 data-verified 全部通过。没有删除业务断言或修改预期时刻来绕过失败。
+
+首次 final-audit 正确发现：补记 profiler 从配置构造权重、CSV 无层身份两项来源字段后，六份较早回归的全源码摘要已经过时。保留该失败，重新执行六项回归及单元检查（*-verified），确认最终源码对应实际通过的结果。随后 final-audit-verified 检查 329 个旧产物大小和 SHA-256 未变，原生 launcher lock 未变，最终数据检查记录的源文件/输入摘要匹配；52 个 ASTRA 核心对象和本次已验证 M4.2 构建的唯一 10 个 UB ns-3 库保持一致。依赖检查仍覆盖 13 项，差异和最终 Git 状态记录在 L/diff-check.json、L/dependency-final.json、L/git-final.json。本步没有重跑原生性能样例，旧产物核对不代替性能验证。
+
+M4.3 当前数据导入与部分参考数据替换验收完成，按授权本地提交、不推送。实际专家路由、目标 NPU profile、完整多层执行和目标通信校准仍未验证，不能把本步称为真实部署复现。停止在 M4.3 completed；用户授权的 M4 顺序执行到此结束，M5 未开始。

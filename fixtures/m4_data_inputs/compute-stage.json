@@ -1,0 +1,68 @@
+{
+  "schema_version": "moe-ub-data-service/1",
+  "run_id": "m4-3-data",
+  "model": "mistralai/Mixtral-8x7B-v0.1",
+  "model_file": {
+    "path": "third_party/LLMServingSim/configs/model/mistralai/Mixtral-8x7B-v0.1.json",
+    "sha256": "9d56d04b36d0fd12ff54ae4c5bac769cc176e254e64ff71144614b6318b40793"
+  },
+  "dtype": "float16",
+  "memory": {
+    "device_bytes": 85899345920,
+    "workspace_bytes": 1073741824,
+    "communication_buffer_bytes": 1048576,
+    "block_size": 16
+  },
+  "requests": [
+    {
+      "request_id": 701,
+      "rank_id": 0,
+      "arrival_ns": 0,
+      "prompt_tokens": 8,
+      "generated_tokens": 1,
+      "decode_steps": 3
+    },
+    {
+      "request_id": 702,
+      "rank_id": 1,
+      "arrival_ns": 0,
+      "prompt_tokens": 12,
+      "generated_tokens": 1,
+      "decode_steps": 3
+    },
+    {
+      "request_id": 703,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "prompt_tokens": 16,
+      "generated_tokens": 1,
+      "decode_steps": 3
+    },
+    {
+      "request_id": 704,
+      "rank_id": 3,
+      "arrival_ns": 0,
+      "prompt_tokens": 20,
+      "generated_tokens": 1,
+      "decode_steps": 3
+    }
+  ],
+  "routes": {
+    "file": {
+      "path": "fixtures/m4_data_inputs/continuous.jsonl",
+      "sha256": "9bc90db68f46fb1405c6f6cb28c8d5e17f5be3d18c31fed23722209f8a1c9567"
+    },
+    "kind": "synthetic",
+    "model": "mistralai/Mixtral-8x7B-v0.1",
+    "index_convention": "absolute_input_position",
+    "description": "Hand-authored functional route records; no model forward pass or dataset source."
+  },
+  "compute": {
+    "kind": "h100_fp16_dense_reference",
+    "file": {
+      "path": "third_party/LLMServingSim/profiler/v0/perf_models/H100/mistralai/Mixtral-8x7B-v0.1/tp1/layers.csv",
+      "sha256": "bb708b8efb185a4fa95317277d3568bca9c12e8446f2420bc7f71d264c7d462d"
+    },
+    "prepare_residual_ns": 5000
+  }
+}

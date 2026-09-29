@@ -122,7 +122,6 @@ class Service:
     def __init__(self, config, layer):
         validate_service(config, layer)
         sys.path.insert(0, str(LLM))
-        from serving.core.scheduler import Scheduler
         from serving.core.request import Request
 
         self.config, self.layer = config, layer
@@ -132,9 +131,7 @@ class Service:
         self.identities = RunIdentities()
         self.current_ns = self.decision_id = self.scheduler_calls = 0
         self.waves, self.history, self.arrivals, self.decisions = {}, [], [], []
-        self.schedulers = [Scheduler(config['model'], 0, rank, 1, 1, 1, 1, 1,
-            config['npu_memory_gib'], 0, rank, 'decode', 16, 16, len(config['requests']),
-            False, False, None, None, ep_size=4) for rank in self.ranks]
+        self.schedulers = self.make_schedulers()
         self.pending = {rank: [] for rank in self.ranks}
         self.inputs = {r['request_id']: r for r in config['requests']}
         self.requests = []
@@ -148,6 +145,15 @@ class Service:
             self.requests.append(request)
         self.future = list(self.requests)
         self.initial = self.snapshot()
+
+    def make_schedulers(self):
+        from serving.core.scheduler import Scheduler
+        return [Scheduler(self.config['model'], 0, rank, 1, 1, 1, 1, 1,
+            self.config['npu_memory_gib'], 0, rank, 'decode', 16, 16, len(self.config['requests']),
+            False, False, None, None, ep_size=4) for rank in self.ranks]
+
+    def make_plan(self, candidate):
+        return build_plan(candidate, self.identities)
 
     def snapshot(self):
         return [dict(request_id=r.id, rank_id=self.inputs[r.id]['rank_id'], status=r.status.name,
@@ -226,7 +232,7 @@ class Service:
                 offset = index - (source['prompt_tokens'] + source['generated_tokens'] - 1)
                 candidate['tokens'].append(dict(request_id=str(request.id), src_rank=rank, phase='decode',
                     token_index=index, layer_id=candidate['layer_id'], expert_ids=source['decode_routes'][offset]))
-            export_plan(build_plan(candidate, self.identities), directory / 'graphs' / graph)
+            export_plan(self.make_plan(candidate), directory / 'graphs' / graph)
             self.waves[name] = dict(graph_id=graph, wave_id=wave, batches=batches, history_index=step)
             self.history.append(dict(graph_id=graph, wave_id=wave, group_id=name, rank_ids=ranks,
                 submitted_ns=now, before=before, scheduled=self.snapshot(),
@@ -246,7 +252,11 @@ def run(args):
     config, layer = json.loads(args.input.read_text()), json.loads(args.layer.read_text())
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
-    if queued:
+    data = config.get('schema_version') == 'moe-ub-data-service/1'
+    if data:
+        from .data_service import DataService
+        service = DataService(config, layer)
+    elif queued:
         from .pd_queue_service import QueuedPdService
         service = QueuedPdService(config, layer)
     elif pd:
@@ -263,6 +273,8 @@ def run(args):
     save(output / 'layer.json', layer)
     if pd:
         save(output / 'model.json', service.model)
+    if data:
+        save(output / 'input_evidence.json', service.evidence)
     command = [str(args.backend.resolve()), config['run_id'], str(output), str(args.system.resolve()),
                str(args.network.resolve()), '-' if args.observation is None else str(args.observation.resolve()),
                str(output / 'execution'), str(args.max_simulation_ns)]
@@ -274,6 +286,8 @@ def run(args):
         scheduler_sha256=hashlib.sha256((LLM / 'serving/core/scheduler.py').read_bytes()).hexdigest(),
         command=command, cwd=str(ROOT), started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         normal_exit=False)
+    if data:
+        manifest.update(service.manifest_fields())
     save(output / 'manifest.json', manifest)
     child = None
     try:
@@ -306,7 +320,7 @@ def run(args):
             pending=[len(service.pending[r]) for r in service.ranks],
             waiting=[len(s.waiting) for s in service.schedulers], running=[len(s.running) for s in service.schedulers],
             inflight=[len(s.inflight) for s in service.schedulers], done=[len(s.done) for s in service.schedulers],
-            **(service.result_fields() if pd else {})))
+            **(service.result_fields() if pd or data else {})))
     except Exception as error:
         manifest['error'] = str(error)
         save(output / 'failure.json', dict(normal_exit=False, error=str(error),
@@ -314,7 +328,7 @@ def run(args):
             active_graphs={g:w['graph_id'] for g,w in service.waves.items()},
             requests=service.snapshot(), pending={r:[q.id for q in service.pending[r]] for r in service.ranks},
             future_request_ids=[r.id for r in service.future], backend_log='backend.stderr.log',
-            **(service.result_fields() if pd else {})))
+            **(service.result_fields() if pd or data else {})))
         raise
     finally:
         if child is not None:

@@ -1,0 +1,11 @@
+wave_id,wave_label,release_us,task_count,l2r_payload_bytes,r2l_payload_bytes,phase_last_ack_us,wave_duration_us,target_fct_us,evidence
+0,目标基线,20.000000,1,278528,0,43.231740,23.230740,23.230740,ns3-simulated/trace-derived
+1,同向 EP,110.000000,2,557056,0,155.938300,45.937300,45.937300,ns3-simulated/trace-derived
+2,反向 EP,220.000000,2,278528,278528,243.731820,23.730820,23.730820,ns3-simulated/trace-derived
+3,同向 KV,330.000000,2,802816,0,396.013420,66.012420,47.312320,ns3-simulated/trace-derived
+4,四 peer dispatch,470.000000,4,278528,0,493.231740,23.230740,,ns3-simulated/trace-derived
+5,50% EP,560.000000,2,417792,0,594.609980,34.608980,34.608980,ns3-simulated/trace-derived
+6,KV + 反向 EP,670.000000,3,802816,278528,736.602420,66.601420,43.111360,ns3-simulated/trace-derived
+7,目标基线,820.000000,1,278528,0,843.231740,23.230740,23.230740,ns3-simulated/trace-derived
+8,同向 EP,900.000000,2,557056,0,945.938300,45.937300,45.937300,ns3-simulated/trace-derived
+9,KV drain,1020.000000,1,524288,0,1063.276940,43.275940,,ns3-simulated/trace-derived

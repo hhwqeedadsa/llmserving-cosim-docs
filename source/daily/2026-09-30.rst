@@ -1,0 +1,63 @@
+2026-09-30：长时间网络竞争与流量波形
+=======================================
+
+当日问题
+--------
+
+1. 两交换机代表性网络中，竞争具体发生在哪个端口和方向？
+2. 如何从 70 μs 单次切片扩展到有明显波峰波谷的毫秒级网络传输图？
+
+当日实验
+--------
+
+在原 400-Gbps access / 100-Gbps core 拓扑上运行 1.1 ms 的受控 replay：20 个 task
+组成 10 个 release waves，覆盖目标基线、同向 EP、反向 EP、同向 KV、四 peer
+dispatch、50% EP 和 KV+反向 EP。20/20 task 完成，1,302 个 data packet 均获得完整
+core egress/serialization 时间。
+
+.. figure:: ../_static/round10/shared-bottleneck-contention-topology.svg
+   :alt: 2026年9月30日共享瓶颈竞争拓扑
+   :align: center
+   :class: study-figure
+
+   **竞争位置。** 同向流共享 switch 8 / port 4 的 L→R 发送时隙；反向流走独立方向。
+
+:数据来源: ``research/round10/experiments/`` 的 topology、routing 和 traffic 输入。
+:物理量与单位: link capacity（Gbps）、flow direction、queue location。
+:证据类型: ``ns3-input-config/design-schematic``。
+:解释边界: 代表性拓扑，不是实机测量。
+
+.. figure:: ../_static/round10/long-window-network-traffic-waves.svg
+   :alt: 2026年9月30日长时间网络带宽队列波形
+   :align: center
+   :class: study-figure
+
+   **长窗口流量。** 10 个通信 wave 形成带宽和队列波峰，wave 之间回落到零。
+
+:数据来源: ns-3 packet/port/queue/task traces；``research/round10/long_window_*.csv``。
+:物理量与单位: data bandwidth（Gbps）、queue occupancy（KiB）、task window（μs）。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: release schedule 是受控合成 replay，不是生产请求 trace；链路未经硬件校准。
+
+关键结果
+--------
+
+* 同向 EP wave 的目标 FCT 为 45.937 μs，基线为 23.231 μs；反向 EP 为
+  23.731 μs。
+* 单方向 5-μs bin 最大带宽为 L→R 100.0 Gbps、R→L 98.203 Gbps，满足容量守恒。
+* L→R/R→L raw queue 峰值为 670.3/208.4 KiB。
+* 长图按 5 μs 聚合带宽、按 1 μs采样队列；底层仍保留 333.92-ns 满包序列化事件。
+
+当日交付
+--------
+
+* 专题页：:doc:`../long-window-network-contention`
+* Markdown、CSV 和实验输入：仓库 ``research/round10/``
+* 本地完整 ns-3 packet、port、queue、task 与 ACK trace
+
+未完成项
+--------
+
+当前波形证明仿真能够表达长窗口突发和方向竞争，但 release schedule 仍为合成控制变量。
+下一步应接入 LLMServingSim scheduler 导出的真实 request/batch release 序列，再用真实
+IB/RoCE/UB telemetry 校准波峰高度、持续时间和队列阈值。

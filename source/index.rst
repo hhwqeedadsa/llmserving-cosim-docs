@@ -5,12 +5,13 @@ LLM Serving、ASTRA-sim 与 MoE-UB 联合仿真
 LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步把非均匀 MoE/P-D
 通信展开到 UB 协议网络，并增加端网观测和独立真值。
 
-.. admonition:: 最新研究进展 · 2026-09-29
+.. admonition:: 最新研究进展 · 2026-09-30
 
-   已完成 Qwen3 MoE 的 6 组输入/输出规模实验和 Block 24 的 11 组网络竞争实验，
-   新增 333.92-ns 逐包序列化事件，以及 0.25-μs 的逐流带宽、队列和目的端口时间序列，区分目标流 FCT 与 phase tail，
-   并建立模型、GPU/NPU、不同位置带宽、trace lineage、CCL 路径和 384 NPU 候选映射。详见 :doc:`daily/2026-09-29`、
-   :doc:`model-hardware-trace-contention`；全部每日记录见 :doc:`daily/index`。
+   新增 1.1 ms 长窗口 ns-3 replay：20 个 task、10 个通信 wave、1,302 个 data packet，
+   把核心链路带宽、方向、队列和 task/ACK 窗口对齐，形成可见波峰和空闲波谷；同时明确
+   同向竞争发生在 switch 8 / port 4，反向流走独立全双工方向。详见
+   :doc:`daily/2026-09-30`、:doc:`long-window-network-contention`；前一轮模型、trace、
+   CCL 和 384 NPU 调研见 :doc:`model-hardware-trace-contention`。
 
 .. raw:: html
 
@@ -63,6 +64,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
    simai-llmservingsim-study
    model-hardware-trace-contention
+   long-window-network-contention
    aidc-inference-tail-survey
    visualization
 

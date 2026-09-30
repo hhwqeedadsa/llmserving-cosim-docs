@@ -53,6 +53,19 @@
 - 证据类型：`ns3-simulated/trace-derived`。
 - 不能证明：不含 ACK/control 小包带宽；黑线是显示用移动平均；流量到达模式不是生产 trace；链路速率未经真实硬件校准。
 
+### 3.1 两个代表性波峰的微秒级放大
+
+![W1 W2 波峰放大](../../source/_static/round10/zoomed-w1-w2-contention-peaks.svg)
+
+**图 3：W1 同向 EP 与 W2 反向 EP 的 0.25-µs 放大对照。** 两个 wave 都包含一个 278,528-B 目标流和一个 278,528-B EP 流，只改变 EP 的方向。横坐标是相对各自 release 的仿真时间（µs）；标题同时给出全局 110–165 µs 和 220–275 µs 窗口。
+
+- 数据来源：`long_window_packet_events.csv`、`zoom_w1_w2_bandwidth_timeseries.csv`、`zoom_w1_w2_queue_timeseries.csv` 和 `long_window_task_windows.csv`。
+- 物理量与单位：0.25-µs bin data wire bandwidth（Gbps）、0.25-µs queue occupancy（KiB）、333.92-ns packet serialization，以及相对 release 时间（µs）。
+- 证据类型：`ns3-simulated/trace-derived`。
+- 不能证明：带宽只含 data packet；队列是仿真状态；两个 peak 来自受控 replay，不是实机流量抓包。
+
+左侧 W1 中，目标和 EP 的 packet 在同一个 L→R core 方向交替序列化，二者合计保持 100 Gbps，峰持续到约 46 µs；L→R 队列在 release 后 5.875 µs 达到 481.0 KiB。右侧 W2 中，目标和 EP 分别在 L→R/R→L 两个方向同时接近 100 Gbps，每个方向的 packet 可连续发送，两个任务约 23.732 µs 完成；两个方向的队列峰值均约 208.1 KiB。
+
 ## 4. 主要发现
 
 1. **波峰对应通信 wave，波谷对应计算或请求间空档的网络空闲窗口。** 5-µs 原始带宽在活跃期接近 100 Gbps；25-µs 移动平均把短突发组织成更清楚的波形。

@@ -47,7 +47,30 @@ EP、KV payload 分别复用 Block 24 的 278,528 B、139,264/278,528 B 和 524,
 :证据类型: ``ns3-simulated/trace-derived``。
 :解释边界: 不含 ACK/control 小包带宽；黑线是显示用移动平均；release schedule 是受控合成 replay，不是生产流量 trace；链路速率未经硬件校准。
 
-三、图中能读出的结论
+三、两个波峰的微秒级放大
+------------------------
+
+.. figure:: _static/round10/zoomed-w1-w2-contention-peaks.svg
+   :alt: W1同向EP和W2反向EP波峰的微秒级带宽队列与逐包对照
+   :align: center
+   :class: study-figure
+
+   **图 3：W1 同向 EP 与 W2 反向 EP 的放大对照。** 两个 wave 的目标/竞争流均为
+   278,528 B，只改变竞争方向；横轴为相对 wave release 的仿真时间（μs），标题同时
+   标出全局 110--165 μs 和 220--275 μs 窗口。
+
+:数据来源: ``long_window_packet_events.csv``、``zoom_w1_w2_bandwidth_timeseries.csv``、``zoom_w1_w2_queue_timeseries.csv`` 和 ``long_window_task_windows.csv``。
+:物理量与单位: 0.25-μs bin data wire bandwidth（Gbps）、0.25-μs queue occupancy（KiB）、333.92-ns packet serialization、relative time（μs）。
+:证据类型: ``ns3-simulated/trace-derived``。
+:解释边界: 只统计 data packet；queue 是仿真状态；所选 peak 不是实机流量抓包。
+
+W1 中，目标和 EP 在同一个 L→R 方向逐包交替，合计保持 100 Gbps，目标 ACK 为
+45.938 μs；L→R queue 在 release 后 5.875 μs 达到 481.0 KiB。W2 中，两条流分别
+使用 L→R/R→L，两个方向可同时接近 100 Gbps，目标 ACK 为 23.732 μs；两个方向的
+queue 峰值均约 208.1 KiB。底部逐包条带显示：W1 的每条流隔包获得时隙，W2 的两条流
+在各自方向连续发送。
+
+四、图中能读出的结论
 --------------------
 
 * 波峰对应网络通信 wave，波谷对应网络空闲区间。5-μs 原始带宽在活跃期接近
@@ -61,7 +84,7 @@ EP、KV payload 分别复用 Block 24 的 278,528 B、139,264/278,528 B 和 524,
 * 图按 5/1 μs 展示带宽/队列以保持长窗口可读性；底层仍保留 1,302 个 packet 的
   精确 egress 和序列化区间，单个 4,174-B 满包占用 333.92 ns。
 
-四、如何使用这张图
+五、如何使用这些图
 ------------------
 
 长窗口图适合回答“何时忙、何时空、哪类通信正在占用网络”。若要回答“某个变量造成了

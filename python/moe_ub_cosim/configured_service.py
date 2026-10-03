@@ -13,6 +13,8 @@ from .service import Service, group_layer
 def validate_configured_inputs(config, layer):
     operator_profile = layer.get('operator_profile')
     if operator_profile is not None:
+        require(config['model_spec'].get('schema_version') == 'moe-ub-model/1',
+                'MLA compute requires explicit reference costs; GQA operator profiles do not cover MLA/quantized weights')
         from .operator_profile import validate_profile
         validate_profile(operator_profile, layer)
         domain = operator_profile['domain']; model = config['model_spec']
@@ -263,4 +265,7 @@ class ConfiguredService(Service):
         if 'operator_profile' in self.layer:
             result.update(compute_source=self.layer['operator_profile']['basis']+'_with_reference_residual',
                           target_profile_available=False)
+        if self.evidence['model']['model']['schema_version'] == 'moe-ub-model/2':
+            result.update(capacity_model_schema='moe-ub-model/2', kv_layout='absorbed_latent_rope',
+                          mla_kernel_validated=False, quantized_kernels_executed=False)
         return result

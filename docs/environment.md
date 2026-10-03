@@ -2764,3 +2764,60 @@ R/audit/audit.json 的完整权重形状账目包含 61 层（3 dense、58 MoE�
 真实小型复查仍为 305 次 UB 写、120316 B 载荷、131530 ns，R/cann-smoke/service_result.json 与 execution/result.json 分别和 runs/v03-cann-behavior/service-first 的结果完全相同；十个 ns-3 库仍全部来自 M10 构建，网络正常排空。生产源码未改，因此复用前步完整单元/集成/链接验收，不重复编译或扩大回归。R/final-audit.json 记录源码与合同摘要、12575 份旧产物及原生锁原样未变；本步不需要恢复启动锁。
 
 审计结论与代码位置见 [target_readiness.md](target_readiness.md)：当前参考实验继续使用已选 WRITE/RTP，原生 LD/ST 未启用、不是前置阻塞；下一首要实现是 MLA/量化权重容量及原生 KV 接纳。审计完成后本地提交，再将唯一下一实现任务置为 pending，等待用户确认，不推送、不自动开发。完整模型计算、目标图/观测规模、拓扑和足够独立真实样本仍待后续；M10 整体未完成，校准状态不变。
+
+## 2026-10-03：M10 MLA/量化权重容量与原生 KV 接纳
+
+用户确认后执行 `v03-mla-model-capacity`，起点 `9c487ed`、工作区干净。依次读取开发说明、当前任务、v0.3 §4.1/4.3/4.4/4.8/6、v0.2 §9 和目标参考合同。新增独立 model/2 MLA 存储及容量审计，model/1 GQA 含义不变；小模型审计结果进入已有 ConfiguredScheduler/ConfiguredMemory 的原生唯一块池，原生 Scheduler 与 KV 实现未修改。完整 dense/shared 库存可以离线核算，执行层继续拒绝 dense/selected shared expert 和不匹配的 GQA/A100 profile。
+
+本节 cwd 均为 `/root/moe-ub-cosim`；R=`runs/v03-mla-model-capacity`，L=`R/logs`，P=`.venv/llmservingsim-native/bin/python`。审阅后复用 `R/record.py`；每条记录包含实际 argv/cwd/UTC 起止/退出码及 stdout/stderr 路径。未安装软件、修改全局配置、下载权重/轨迹或调用 GPU；未改规范、后端、子模块、锁文件或 gitlink。后端沿用已验证的 `build/m10-cann-behavior/output/cosim/ns3.44-cosim-service`，无需重新构建。
+
+### 命令与结果
+
+下表 P/R/L 均按上文展开；外层记录方式为 `python3 R/record.py 标签 实际命令`。全部最终检查退出 0；集成内部非法输入的退出 1 为显式预期，逐条记录在各输出目录 commands.json。
+
+| 实际命令 | 标签及结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final，13 个递归固定依赖匹配、工作区干净。 |
+| `python3 R/baseline.py` | baseline，记录 12575 份旧 `.o/.a/.so/ns3.44-cosim*` 产物及一份原生启动锁摘要。 |
+| `python3 R/fixtures.py` | fixtures，生成显式小型及 R1 容量输入，不调用被测函数产生预期。 |
+| `python3 R/routes.py` | synthetic-routes，人工路由专家 3→5，固定新摘要并声明 synthetic_test。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.capacity_audit --input fixtures/m10_mla_capacity/toy-capacity.json --output R/toy-audit.json` | toy-audit，独立双 rank 手算核对；早期报告在调整纯离线 compute_validation 文案之前。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.capacity_audit --input fixtures/m10_mla_capacity/r1-capacity.json --output R/r1-final.json` | r1-final，完整 128 rank 库存，scope=capacity_only、compute_validation=not_executed，未创建执行图。初次 r1-audit 报告另保留。 |
+| `env PYTHONPATH=python P scripts/audit_target_contract.py --source-dir runs/v03-target-contract/source --output-dir R/target-crosscheck` | target-crosscheck，沿用前步独立公式和已有固定源文件；七项旧 schema/执行限制拒绝仍成立。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p '*test.py' -v` | unit-all，102 项通过，包括新增 7 项 MLA 测试。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p mla_capacity_test.py -v` | unit-mla-first、unit-mla-final，分别 6/7 项；最终新路由夹具与量化/非量化算式均通过。 |
+| `env PYTHONPATH=python P tests/integration/check_mla_capacity.py --build-dir build/m10-cann-behavior --output-dir R/mla-ub-final` | mla-ub-final，七次实际服务命令全部退出 0。 |
+| `env PYTHONPATH=python P R/reject.py` | reject-inputs，七项 MLA 错误输入在创建运行目录/启动后端之前退出 1，检查脚本退出 0。 |
+| `python3 R/final_audit.py` | final-audit，19 类 tensor ×128 rank 与旧独立审计逐项比较；源结构与固定 R1 配置匹配；受保护产物和启动锁全部未变。 |
+
+最终 unit-all 使用的生产代码与提交版本一致；其运行后只增加观察夹具的跨芯片专家选择，最终 unit-mla-final 与 mla-ub-final 再核验该变更。`R/final-audit.json` 记录最终代码、测试、夹具摘要、源文件与报告摘要；源码注释/文档不替代运行结果。
+
+### 独立算式与真实接纳结果
+
+手算 H=8 双层 MLA 的 rank 2/7 分别有一/两个 routed expert，另有本地 shared expert，权重为 1748/1908 B（含 448/512 B scale）。KV/token=16 B、block=64 B；KV dtype 改 FP32 后四块变两块，绑定头或改 BF16 非量化矩阵的权重差值分别核验。错误维度、布局、scale/zero point/padding、dtype、重复 rank、shared 结构、整数溢出、无可用块、host 块上限等均拒绝。CLI 的输入/输出与服务输入分离，不允许借离线库存标志执行未实现层。
+
+完整 R1 的 61 层按 3 dense+58 MoE、每 rank 两个 routed/一个 shared expert、全部 MLA 投影/norm、embedding/head/router/修正和 scale 计算。128 个 rank 的 19 类 tensor 形状、副本、参数、张量字节和 scale 均匹配旧独立审计，权重张量 24400011264 B、scale 24624384 B、合计 24424635648 B/rank；压缩 BF16 latent+RoPE KV/token=70272 B，16 Token 块=1124352 B。条件 device=64000000000 B、workspace=4294967296 B、通信=3954809344 B 时可容纳 27861 个完整块。通信仍是离线声明的预算，并未生成/验证完整 R1 通信图。
+
+小型参考模型每 rank 权重 10408520 B、KV/token=384 B、block=1536 B，workspace=4096 B，三层通信预算=6304512 B；未执行的 dense 0 仍计容量。默认八块，七请求、两组三层服务共 36 条路由/72 份贡献，305 次 UB 写、120316 B 总载荷（113664 B 业务），完成于 131530 ns。三块预算时等待至释放后接纳，八轮、377 次写、143142 ns；业务字节不变，增加的轮次计数消息被真实发送。两个各需两块的请求占四块，没有对它们合并取整。
+
+同一 device 预算下，MLA 五个投影由 BF16 存储改 INT8+输出通道 FP32 scale，权重减少 2836736 B，块数从 3 变 1849，实际首轮请求从 [201] 变 [201,202]，KV 等待消失；计算阶段参考成本没有随存储假设伪装成实测 INT8 算子。慢网 1 Gbps 为 1214814 ns，业务/总载荷不变，本组后续提交随 UB 实际完成后移。
+
+最终窗口对照传输 61440 B 跨芯片业务：window-resident 为 244 次写、67568 B 载荷、82614 ns；window-wait 为 316 次写、69872 B 载荷、100610 ns。Token 预算为 1 时，rank 20 首次仅调度 401，但 401/402 同时驻留且分别占 1/2 块；402 未计算仍占 KV。全部七请求结束为 OBSERVATION_ENDED，target=null、eos_known=false、done=0，恰好一次 observation_cleanup，无正常 release；容量收紧时 cleanup 后同一边界接纳下一个请求。所有场景坚持唯一池、账目守恒、一个网络实例、实际数据就绪/事务完成/发送回调，结束清空 KV 并排空网络。
+
+### 开发期问题与受影响回归
+
+首次 `mla-ub-first` 的七种对照通过，但复查发现其观察夹具沿用专家 0..3，恰好都位于同芯片，跨芯片只有计数状态。为加强业务数据覆盖，增加 `business_bytes>0` 断言并构造专家 3→5 的合成输入；第一次内联构造脚本（python3 标准输入，退出 1）遇到 dense 层显式 null，抛出 TypeError，尚未写入任何路由文件或 manifest。随后启动的 `mla-ub`（退出 1）使用旧夹具，正确触发新增业务字节断言，日志在 L/mla-ub.*，没有改变断言或降低预期。
+
+修复后的 R/routes.py 只跳过规范明确的 dense null，对 MoE ID 进行映射，固定新文件摘要，仍声明 synthetic_test。最终 mla-ub-final 全部通过。原中间目录和失败记录保留，未清理未知文件、修改预期数值或用固定网络耗时代替 UB。
+
+五套旧回归脚本及原预期未改。统一命令为 `env PYTHONPATH=python P tests/integration/check_NAME.py --build-dir build/m10-cann-behavior --output-dir R/标签`；evidence_service 另加 `--measured-profile runs/v03-route-compute-evidence/a100-profile.json`，只复用既有 A100 小形状表，不测量、不用于 MLA。
+
+| NAME / 标签 | 子命令数（成功 / 预期拒绝） | 检查结果 |
+|---|---:|---|
+| service_model_capacity / regression-capacity | 15（6 / 9） | GQA/MHA、稀疏映射、最终 KV 预留与观测不变。 |
+| continuous_batching / regression-batching | 26（15 / 11） | 连续批次、未选驻留容量、回调与释放通过。 |
+| composed_service / regression-composed | 26（15 / 11） | 多层多组共享执行、来源与资源边界通过。 |
+| evidence_service / regression-evidence | 27（19 / 8） | 窗口退出、已知目标和既有计算表使用通过。 |
+| cann_behavior / regression-cann | 25（17 / 8） | CANN 字节、贡献、依赖、观测/真值与实际 UB 回归通过。 |
+
+本任务已完成，记录与代码本地提交，不推送；当前任务停在 completed，不自动进入下一项。完整 R1 只完成容量核算，小型 MLA 只执行既有 MoE 图和参考阶段成本，未执行/校准 MLA 或量化内核；完整 61 层计算图、dense/shared 执行、目标规模图/观测、CM384 拓扑与足够真实路由仍待后续确认任务。M10 整体未完成。

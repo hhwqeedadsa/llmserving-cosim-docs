@@ -191,7 +191,7 @@ class ComposedService(ConfiguredService):
                     route_records_expected=len(self.expected_routes))
 
     def manifest_fields(self):
-        return dict(compute_scope='consecutive_moe_layer_segment',compute_source=(
+        result = dict(compute_scope='consecutive_moe_layer_segment',compute_source=(
             'operator_profiles_with_reference_residual' if any('operator_profile' in l for ls in self.templates.values() for l in ls)
             else 'fixed_reference'),
             groups={name:dict(executed_layer_ids=e['model']['executed_layer_ids'],model_spec_sha256=e['model_spec_sha256'])
@@ -201,3 +201,7 @@ class ComposedService(ConfiguredService):
             route_data_is_synthetic=True,batching='iteration_boundary_ready_kv_decode',
             admission_policy='fcfs_final_kv_reservation',
             adapter_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+        if any(e['model']['model']['schema_version'] == 'moe-ub-model/2' for e in self.evidence['groups'].values()):
+            result.update(capacity_model_schema='moe-ub-model/2', kv_layout='absorbed_latent_rope',
+                          mla_kernel_validated=False, quantized_kernels_executed=False)
+        return result

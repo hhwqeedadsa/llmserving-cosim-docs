@@ -1,0 +1,147 @@
+{
+  "schema_version": "moe-ub-capacity-input/1",
+  "model_spec": {
+    "schema_version": "moe-ub-model/2",
+    "name": "synthetic/mla-hand-count-8",
+    "architecture": "bias_free_mla_rmsnorm_gated_ffn",
+    "source": {
+      "kind": "synthetic",
+      "description": "Synthetic MLA storage inventory; fixed reference MoE segment costs, no MLA/INT8 kernel validation"
+    },
+    "hidden_size": 8,
+    "vocab_size": 16,
+    "max_position_embeddings": 128,
+    "tp": 1,
+    "pp": 1,
+    "attention": {
+      "num_heads": 2,
+      "q_lora_rank": 4,
+      "kv_lora_rank": 2,
+      "qk_nope_head_dim": 2,
+      "qk_rope_head_dim": 2,
+      "v_head_dim": 2
+    },
+    "dtypes": {
+      "compute": "bfloat16",
+      "kv": "bfloat16",
+      "dispatch": "int8",
+      "combine": "bfloat16"
+    },
+    "tie_word_embeddings": false,
+    "layers": [
+      {
+        "layer_id": 0,
+        "kind": "dense",
+        "intermediate_size": 6
+      },
+      {
+        "layer_id": 1,
+        "kind": "moe",
+        "intermediate_size": 4,
+        "num_experts": 3,
+        "top_k": 2,
+        "expert_placement": [
+          2,
+          7,
+          7
+        ],
+        "shared_experts": 1,
+        "shared_intermediate_size": 2,
+        "router_correction_bias": true
+      }
+    ],
+    "kv_cache": {
+      "layout": "absorbed_latent_rope",
+      "quantization": "none",
+      "padding_bytes_per_token": 0
+    },
+    "weight_storage": {
+      "mla": {
+        "dtype": "int8",
+        "quantization": "symmetric_per_output_channel",
+        "scale_dtype": "float32",
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "dense_ffn": {
+        "dtype": "int8",
+        "quantization": "symmetric_per_output_channel",
+        "scale_dtype": "float32",
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "routed_experts": {
+        "dtype": "int8",
+        "quantization": "symmetric_per_output_channel",
+        "scale_dtype": "float32",
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "shared_experts": {
+        "dtype": "int8",
+        "quantization": "symmetric_per_output_channel",
+        "scale_dtype": "float32",
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "embedding": {
+        "dtype": "bfloat16",
+        "quantization": "none",
+        "scale_dtype": null,
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "lm_head": {
+        "dtype": "bfloat16",
+        "quantization": "none",
+        "scale_dtype": null,
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "norm": {
+        "dtype": "bfloat16",
+        "quantization": "none",
+        "scale_dtype": null,
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "router": {
+        "dtype": "float32",
+        "quantization": "none",
+        "scale_dtype": null,
+        "zero_point": 0,
+        "padding_bytes": 0
+      },
+      "router_correction": {
+        "dtype": "float32",
+        "quantization": "none",
+        "scale_dtype": null,
+        "zero_point": 0,
+        "padding_bytes": 0
+      }
+    }
+  },
+  "rank_ids": [
+    2,
+    7
+  ],
+  "memory": {
+    "capacity_scope": "rank_endpoint",
+    "block_size": 4,
+    "max_kv_blocks_per_rank": 4,
+    "ranks": [
+      {
+        "rank_id": 2,
+        "device_bytes": 2236,
+        "workspace_bytes": 104,
+        "communication_buffer_bytes": 128
+      },
+      {
+        "rank_id": 7,
+        "device_bytes": 2396,
+        "workspace_bytes": 104,
+        "communication_buffer_bytes": 128
+      }
+    ]
+  }
+}

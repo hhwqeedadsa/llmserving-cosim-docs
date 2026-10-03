@@ -16,6 +16,9 @@ def fields(value, expected, name):
 
 
 def audit_capacity(model, memory, layer):
+    if isinstance(model, dict) and model.get('schema_version') == 'moe-ub-model/2':
+        from .mla_capacity import audit_execution_capacity
+        return audit_execution_capacity(model, memory, layer)
     fields(model, 'schema_version name architecture source hidden_size vocab_size max_position_embeddings '
            'tp pp attention dtypes tie_word_embeddings layers', 'model')
     require(model['schema_version'] == 'moe-ub-model/1' and
@@ -98,15 +101,7 @@ def audit_capacity(model, memory, layer):
     require(isinstance(budgets, list) and len(budgets) == len(ranks), 'Missing rank memory budgets')
     bpt = 2*k*d*len(layers)*kv_bytes  # EP partitions experts, never this request's KV.
     block_bytes = integer(bpt*block_size, 'kv_block_bytes', 1, I64)
-    # Retain every remote dispatch and partial result vector at once, plus all
-    # configured send/receive chunk slots, even if the supplied routes are local.
-    remote = min(layer['top_k'], len(ranks)-1)
-    batch = batch_limit(layer) if layer['schema_version'] == 'moe-ub-layer-fixture/3' else 1
-    minimum_buffer = max(batch*len(ranks)*remote*h*(layer['dispatch_element_bytes']+layer['combine_element_bytes']),
-                         2*layer['send_slots_per_rank']*layer['chunk_bytes'])
-    if layer['template']=='cann_a3_v850_fullmesh_v1':
-        from .cann import buffers
-        minimum_buffer=max(minimum_buffer,buffers(layer)['total_bytes'])
+    minimum_buffer = communication_minimum(layer)
     audit = []
     for rank, budget in zip(ranks, budgets):
         fields(budget, 'rank_id device_bytes workspace_bytes communication_buffer_bytes', 'rank memory')
@@ -132,3 +127,17 @@ def audit_capacity(model, memory, layer):
                 communication_buffer_minimum_bytes=minimum_buffer, ranks=audit,
                 memory_basis='analytical_declared_structure_and_static_placement',
                 full_model_execution_validated=False, target_deployment_validated=False)
+
+
+def communication_minimum(layer):
+    """Retain remote vectors and configured slots even for all-local routes."""
+    ranks = layer['rank_ids']
+    remote = min(layer['top_k'], len(ranks)-1)
+    batch = batch_limit(layer) if layer['schema_version'] == 'moe-ub-layer-fixture/3' else 1
+    minimum = max(batch*len(ranks)*remote*layer['hidden_dim']*
+                  (layer['dispatch_element_bytes']+layer['combine_element_bytes']),
+                  2*layer['send_slots_per_rank']*layer['chunk_bytes'])
+    if layer['template'] == 'cann_a3_v850_fullmesh_v1':
+        from .cann import buffers
+        minimum = max(minimum, buffers(layer)['total_bytes'])
+    return minimum

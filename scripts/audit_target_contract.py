@@ -105,8 +105,9 @@ def audit(reference, source_dir):
         files.append(dict(file_id=file['file_id'],sha256=item['sha256'],prompt_tokens=prompt,
             available_decode_steps=len(data)-1,decode_layer_records=records,eligible_window64=len(data)-1>=64,
             window64_reserved_tokens=align(prompt+64,block),window64_kv_bytes=reservation))
-    # Exercise actual rejection paths on small fixtures without disguising R1
-    # as a supported GQA runtime or creating a full-size target execution.
+    # The first two probes deliberately retain legacy model/1: MLA and INT8
+    # cannot be smuggled into GQA. Model/2 now has a separate capacity contract.
+    # Remaining probes concern execution limits, not capacity-only acceptance.
     rejections={};small=read(ROOT/'fixtures/m10_cann/service.json');layer=read(ROOT/'fixtures/m10_cann/layers.json')['groups'][0]['layers'][0]
     model0=small['groups'][0]['model_spec'];memory0=small['groups'][0]['memory']
     def rejected(name,fragment,call):
@@ -158,7 +159,7 @@ def main():
     result=audit(read(args.reference),args.source_dir)
     result['reference_sha256']=sha(args.reference);result['audit_script_sha256']=sha(Path(__file__))
     (out/'audit.json').write_text(json.dumps(result,indent=2)+'\n')
-    print('PASS: pinned structural sources, conditional R1 inventory, MLA KV, route availability and seven current rejection paths')
+    print('PASS: pinned sources, conditional R1 inventory/KV, routes and seven legacy-schema/execution rejections')
     print('Target execution ready: false; no full-target simulation performed')
 
 

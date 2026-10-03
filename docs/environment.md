@@ -2126,3 +2126,18 @@ M5.3 按上述范围验收完成，按持续授权本地提交、不推送，停
 三个维护子仓库已在 GitHub cosim 保存所需提交，本次没有新的子模块提交或推送。其余十个递归上游版本与先前发布相同；没有重新查询全部上游远端或再次完整克隆，源码可获取性沿用本日首次发布的独立检出证据。本轮再次确认了本地 13 个依赖状态、父仓库指针及三个维护分支在线状态。
 
 README 同步截至 M5.3 的发布范围，当前任务保存发布结果。发布说明及收尾记录随主仓库 main 一并推送；准确收尾提交、远端一致性与干净工作区由 `R/final-state.json` 保存，对应的记录提交、推送与最终检查日志为 `records-commit`、`push-records`、`remote-root-final`、`deps-final` 和 `final-state`。本轮不重复构建或仿真，不将 build、runs、虚拟环境、下载源码或外部数据加入 Git。停止在本次发布完成，后续功能仍需用户确认，后续推送仍需单独授权。
+
+## 2026-10-03：v0.3 里程碑编号整理
+
+用户要求按 M0 至 M5 的方式划分下一阶段，且不再细分。起点为已同步的主仓库 `5880cbde68b10cebae0e6247864ff35899fce740`，工作区干净。本轮将 v0.3 原五个阶段依次命名为 M6 至 M10，同步增量规范、后续事项和当前任务中的引用，不新增下级编号或子任务清单。既定交付内容、技术行为和验收要求不变；已有 `v03-01-execution-parameters` 归属 M6，仍为 `pending`，其单层执行范围不代表整个 M6。
+
+检查工作目录为 `/root/moe-ub-cosim`，记录位于 `runs/v03-milestone-labels-20261003/`。每项的 `.json` 保存实际 argv、cwd、起止时间、退出状态及同名 `.stdout.log`、`.stderr.log` 路径。
+
+| 检查 | 实际命令与输入 | 退出状态与记录标签 |
+|---|---|---|
+| 固定依赖 | `bash scripts/check_deps.sh` | 0；13 个依赖版本及源码状态一致，主仓库文档修改按规则提示；`dependencies` |
+| 修改边界 | `git diff --exit-code -- AGENTS.md docs/development.md docs/moe_ub_cosim_dev_v0.2.md docs/scenarios python backend tests fixtures scripts deps.lock.json .gitmodules third_party` | 0；列出的规则、技术基线、场景、源码、测试及依赖未变；`implementation-unchanged` |
+| 编号引用 | `rg -n 'M[6-9]\|M10' docs/moe_ub_cosim_dev_v0.3.md docs/future_iterations.md docs/tasks/current.md`，并人工核对完整差异 | 0；五个里程碑和 F01 至 F04 的对应关系一致；`milestone-references` |
+| 差异格式 | `git diff --check` | 0；`diff-check` |
+
+本轮仅修改上述三份文档及本记录，不执行构建或仿真，不将文档检查计为功能验收。按持续授权本地提交、不推送；停止在编号整理完成，M6 功能实现等待用户确认开始。

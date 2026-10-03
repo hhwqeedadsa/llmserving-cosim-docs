@@ -1,0 +1,60 @@
+{
+  "schema_version": "moe-ub-layer-fixture/1",
+  "graph_id": "g-m6-ep2",
+  "wave_id": "D.w0",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 0,
+  "rank_ids": [
+    4,
+    10
+  ],
+  "rank_to_ub_node": [
+    1,
+    3
+  ],
+  "hidden_dim": 32,
+  "top_k": 1,
+  "dispatch_element_bytes": 2,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 256,
+  "send_slots_per_rank": 1,
+  "template": "direct_rank_dedup_v1",
+  "expert_placement": [
+    4,
+    4,
+    10
+  ],
+  "tokens": [
+    {
+      "request_id": "A",
+      "src_rank": 4,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 0,
+      "expert_ids": [
+        2
+      ]
+    },
+    {
+      "request_id": "B",
+      "src_rank": 10,
+      "phase": "decode",
+      "token_index": 9,
+      "layer_id": 0,
+      "expert_ids": [
+        2
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 5000,
+    "expert_per_input": 4000,
+    "expert_local_merge": 1000,
+    "combine_unpack_merge": 1000,
+    "next_layer": 0
+  }
+}

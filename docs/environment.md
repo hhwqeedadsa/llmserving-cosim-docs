@@ -2184,3 +2184,62 @@ cmake --build build/m6-execution-parameters --target cosim-layer cosim-sequence 
 `python3 runs/v03-01-execution-parameters/audit.py` 在 final-audit 中退出 0：恢复本轮 CMake 改写的原生启动锁，308 个旧产物的 SHA-256 未变，最终通过记录中的源码摘要匹配；链接核验仍为 52 个 ASTRA 核心对象和唯一一套 10 个 UB ns-3 库。`bash scripts/check_deps.sh` 在 deps-final 中退出 0，13 个固定依赖一致，无子模块源码、gitlink、锁文件或来源修改。未重跑原生性能样例，未安装软件或下载模型/数据。
 
 按持续授权整理记录并本地提交、不推送。当前任务置为 completed 后停止；M6 的模型与容量、部署本地性和场景输入适配仍待确认。当前路由与计算仍为合成参考，模型未校准，完整 CM384/R1 目标规模未运行。
+
+## 2026-10-03：M6 服务模型与容量参数化
+
+当前范围为 `v03-service-model-capacity`，属于 M6。起始实现提交 `3e98d9e42c13e675ac26351c1ff992690aafe10a`；旧任务已完成提交后，按用户确认在 `a03561b` 保存新任务说明并开始。主仓库 Git 身份为用户已提供的 baoy21 / baoy21@mails.tsinghua.edu.cn。本轮只改主仓库，不推送、不升级依赖，不进行模型下载、系统安装或全局配置变更。
+
+新增 `moe-ub-configured-service/1`、`moe-ub-model/1` 与主仓库模型/容量初始化适配。声明模型的全部层用于容量核算，专家权重按每层实际落在 rank 上的数量计算，另计共享权重、workspace 与通信缓冲区。支持的声明结构是无 bias GQA/MHA、RMSNorm、门控 FFN；其他结构不套用此公式。KV 按本 rank 本地请求的完整层缓存计算，不除以 EP；接纳前预留到 `output - 1`，预留不改变 computed/reached 进度。原 Scheduler 的 `schedule/add_decode/add_done`、Request、BlockPool 和 TieredKVCacheManager 保留，容量适配只初始化参数与唯一块池，没有修改依赖或 monkeypatch。
+
+`cosim-service` 的成员、应用挂接、控制器及回调改按逻辑 rank 与 UB 映射查找，不再固定四成员和恒等映射。组间也拒绝重复 rank 或重复端点；每轮计划与部署逐一核对。UB 实际事务、data_ready/send_done、图装载及网络排空继续使用原执行语义。
+
+### 实际构建与日志
+
+所有命令 cwd 为 `/root/moe-ub-cosim`。任务日志根 `runs/v03-service-model-capacity/`；`logs/<label>.json` 保存 argv、cwd、UTC 起止和退出状态，配套 `.stdout.log/.stderr.log` 保存输出。各集成目录的 `commands.json` 保存每个子进程及输入路径，生成输入、协议记录、ASTRA/UB 原始日志及预期失败均保留。依赖开始检查 label 为 `deps-start`，退出 0，13 个检出与锁文件/gitlink 一致。
+
+审阅 `backend/inject.cmake`、`backend/CMakeLists.txt`、`scripts/m0_joint_build/` 后配置独立目录，命令如下，label `configure` 退出 0：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m6-service-model-capacity -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m6-service-model-capacity/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m6-service-model-capacity \
+  --target cosim-service cosim-service-deadlock-test --parallel 8
+```
+
+首次构建 466 项完成，label `build` 退出 0。审阅中将无 deployment 文件时兼容输入的专家编号显式写为 unsigned，以满足新增类型检查；同一构建命令再次退出 0，label `build-fallback-fix`。兼容输入经过旧服务的实际协议拒绝回归。只构建受影响的服务入口及其故障测试目标。
+
+### 实际验证
+
+Python 使用 `.venv/llmservingsim-native/bin/python` 和 `PYTHONPATH=python`。下表命令中 `PY` 表示 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python`，`B` 表示 `build/m6-service-model-capacity`，`R` 表示 `runs/v03-service-model-capacity`，只为表格简写，完整 argv 见对应 JSON。所有表列检查入口退出 0；内部预期失败的真实退出状态另存，不能将它们理解为正常运行。
+
+| 日志 label | 实际命令（根目录） | 结果 |
+|---|---|---|
+| `unit-final` | `PY -m unittest discover -s tests/unit -p '*test.py' -v` | 61 项通过；新模型的 5 项测试含 25 个非法结构/容量/输入变体。 |
+| `model-final` | `PY tests/integration/check_service_model_capacity.py --build-dir B --output-dir R/parameters-final` | 6 次真实运行、9 项预期拒绝。 |
+| `service` | `PY tests/integration/check_service.py --build-dir B --output-dir R/service` | 7 次实际运行、9 项协议拒绝及子进程失败传播通过；三轮 42 次写、344064 字节、64738 ns，延迟对照 100410 ns。链接检查仍为 52 个 ASTRA 核心对象、10 个本次 UB ns-3 动态库。 |
+| `dynamic` | `PY tests/integration/check_dynamic_service.py --build-dir B --output-dir R/dynamic` | 9 次运行、10 项拒绝通过；双组独立推进、执行中到达排队及同刻到达保持。 |
+| `boundaries` | `PY tests/integration/check_service_boundaries.py --build-dir B --output-dir R/boundaries` | 7 次运行、7 项失败检查通过；稀疏/纯本地/空服务、EOF、未激活成员与截止检查保持。 |
+| `pd` | `PY tests/integration/check_pd_handoff.py --build-dir B --output-dir R/pd` | 7 次运行、11 项失败检查通过；基线 P 完成 40159、KV 数据就绪 40830、事务完成及 D 开始 40876、服务完成 69994 ns。故障代理仅终止其自己启动的测试子进程，源 KV 未提前释放。 |
+| `pd-queue` | `PY tests/integration/check_pd_queue.py --build-dir B --output-dir R/pd-queue` | 三组共十二 rank 的 9 次运行、8 项拒绝通过；已有 KV 容量等待、源端保留与共享队列不变，重叠流量使首个 KV 完成延后 26143 ns。 |
+| `multilayer` | `PY tests/integration/check_multilayer.py --build-dir B --output-dir R/multilayer` | 8 次研究运行、1 次无观测运行、10 项失败检查通过；三层三轮 78 次写、638976 字节、193789 ns，既有 32 层两轮回归仍为 558 次写、4571136 字节、1367802 ns。 |
+
+`unit-initial`、`unit-all`、`model-integration` 也退出 0，保留初次检查记录。随后补充 dtype 非字符串格式的拒绝，重跑上述 `unit-final` 与 `model-final`；旧共享入口回归所执行代码未再修改。最终源码摘要见各 summary 及 `audit.json`，记录不把先前运行伪写为最终再次执行。
+
+GQA 输入来自 `fixtures/m6_service_model/gqa-service.json` 与 `gqa-layer.json`：完整三层 H=64 模型包括稠密层、五专家 MoE 层和另一个含共享专家的 MoE 层，只执行中间层。rank 2/7/12 映射到 UB 3/0/2，权重独立核算为 255872/280448/231296 字节；每 KV Token 为 384 字节，每块四 Token，容量 3/3/2 块。六轮完成时刻为 19202、38404、57606、72712、87818、102924 ns，共 24 次写、4608 字节；rank 12 无本地请求仍完成专家工作。来源开启、关闭和不挂观测的执行与容量结果一致，来源开/关的公开观测相同。
+
+请求 101、102 在 0 ns 接纳，分别预留到最后输入而不增加原计算进度。102 在 57606 ns 结束释放，101 在 72712 ns 结束释放；1000 ns 到达的请求 103 此时才接纳，102924 ns 结束。记录清楚区分这是当前单请求序列槽的排队，以及已保留的旧 P/D 多请求容量等待测试。新配置入口尚未实现 M7 的同 rank 连续组批。
+
+MHA 输入 H=32、共享 embedding/head、FP32 权重、FP8 KV 字节口径，逻辑 rank 4/10 映射到 UB 1/3。权重为 74496/49920 字节，每 KV Token 为 64 字节，八 Token 一块；两轮 4 次写、256 字节、22192 ns。容量降到一块且保留两步时，初始上下文虽能容纳，最后输入需求仍为两块，因此在启动后端前拒绝；只剩一步时最后输入长度八恰好占一块，实际一轮两次写、128 字节、11096 ns。空服务在 0 ns 正常结束。后端另外独立拒绝重复/不存在/交换机端点、映射不符、放置不符或组外专家、重复/溢出 rank，拒绝时未发起业务传输。
+
+### 产物保护与未覆盖范围
+
+`baseline.json` 在本轮配置前保存原生启动锁和 9074 个已有构建产物的 SHA256。`audit.py` 只恢复这次备份的 UB 原生启动锁，并逐一核对旧产物与测试结果、受测源码摘要；本轮实际审计退出 0，9074 个摘要全部一致，启动锁已恢复，结果保存在 `audit.json`。`deps-final` 再次检查 13 个依赖通过；最终差异与本地提交日志保存在同一 `logs/` 下。本轮不清理旧运行或构建产物。
+
+当前容量是声明式结构的解析核算，工作区为用户参考预留，FP8 未建模设备特有 scale/对齐存储，计算仍为显式参考阶段耗时。没有把模型结构事实、真实路由或硬件校准互相替代。新入口限一个 EP 组、一层 MoE、每 rank 同时一个请求；模型其他层只计容量，稠密层与共享专家没有伪造成该执行层。MLA、目标模型算子组合、连续组批、同芯片本地性、场景 YAML 适配和完整 CM384/R1 场景没有在本轮完成。旧输入的原有限制保留；新 schema 尚未适配研究导出入口。后续范围继续由用户确认。

@@ -120,7 +120,7 @@ def validate_service(config, layer):
 class Service:
     """Ready-KV arrival queues feed real schedulers only when their EP group is idle."""
     def __init__(self, config, layer):
-        validate_service(config, layer)
+        self.validate_inputs(config, layer)
         sys.path.insert(0, str(LLM))
         from serving.core.request import Request
 
@@ -132,6 +132,7 @@ class Service:
         self.current_ns = self.decision_id = self.scheduler_calls = 0
         self.waves, self.history, self.arrivals, self.decisions = {}, [], [], []
         self.schedulers = self.make_schedulers()
+        self.scheduler_by_rank = dict(zip(self.ranks, self.schedulers))
         self.pending = {rank: [] for rank in self.ranks}
         self.inputs = {r['request_id']: r for r in config['requests']}
         self.requests = []
@@ -145,6 +146,17 @@ class Service:
             self.requests.append(request)
         self.future = list(self.requests)
         self.initial = self.snapshot()
+
+    def validate_inputs(self, config, layer):
+        validate_service(config, layer)
+
+    def admit_pending(self, rank):
+        scheduler = self.scheduler_by_rank[rank]
+        if scheduler.is_request_empty() and self.pending[rank]:
+            scheduler.add_decode(self.pending[rank].pop(0))
+
+    def record_completion(self, rank, finished_requests, now):
+        pass
 
     def make_schedulers(self):
         from serving.core.scheduler import Scheduler
@@ -187,9 +199,10 @@ class Service:
         for name in finished_groups:
             wave = self.waves.pop(name)
             for rank, batch in wave['batches'].items():
-                sched = self.schedulers[rank]
-                prompt, generated, _ = sched.add_done(batch.batch_id + 1, rank, now)
+                sched = self.scheduler_by_rank[rank]
+                prompt, generated, finished = sched.add_done(batch.batch_id + 1, rank, now)
                 require(prompt == 0 and generated == 1 and not sched.inflight, 'Decode completion mismatch')
+                self.record_completion(rank, finished, now)
             self.history[wave['history_index']].update(finished_ns=now, after=self.snapshot())
         self.current_ns = now  # Absolute UB time, never accumulated batch durations.
         while self.future and self.future[0].arrival <= now:
@@ -210,13 +223,12 @@ class Service:
             if name in self.waves:
                 continue
             for rank in ranks:
-                if self.schedulers[rank].is_request_empty() and self.pending[rank]:
-                    self.schedulers[rank].add_decode(self.pending[rank].pop(0))
-            active = [r for r in ranks if not self.schedulers[r].is_request_empty()]
+                self.admit_pending(rank)
+            active = [r for r in ranks if not self.scheduler_by_rank[r].is_request_empty()]
             if not active:
                 continue
             before = self.snapshot()
-            batches = {r: self.schedulers[r].schedule(now, r) for r in active}
+            batches = {r: self.scheduler_by_rank[r].schedule(now, r) for r in active}
             self.scheduler_calls += len(active)
             require(all(b is not None and len(b.requests) == b.num_decode == 1 and
                         b.num_prefill == 0 and b.scheduled_tokens == {b.requests[0].id: 1}
@@ -253,7 +265,11 @@ def run(args):
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
-    if data:
+    configured = config.get('schema_version') == 'moe-ub-configured-service/1'
+    if configured:
+        from .configured_service import ConfiguredService
+        service = ConfiguredService(config, layer)
+    elif data:
         from .data_service import DataService
         service = DataService(config, layer)
     elif queued:
@@ -273,7 +289,7 @@ def run(args):
     save(output / 'layer.json', layer)
     if pd:
         save(output / 'model.json', service.model)
-    if data:
+    if data or configured:
         save(output / 'input_evidence.json', service.evidence)
     command = [str(args.backend.resolve()), config['run_id'], str(output), str(args.system.resolve()),
                str(args.network.resolve()), '-' if args.observation is None else str(args.observation.resolve()),
@@ -286,7 +302,7 @@ def run(args):
         scheduler_sha256=hashlib.sha256((LLM / 'serving/core/scheduler.py').read_bytes()).hexdigest(),
         command=command, cwd=str(ROOT), started_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         normal_exit=False)
-    if data:
+    if data or configured:
         manifest.update(service.manifest_fields())
     save(output / 'manifest.json', manifest)
     child = None
@@ -320,7 +336,7 @@ def run(args):
             pending=[len(service.pending[r]) for r in service.ranks],
             waiting=[len(s.waiting) for s in service.schedulers], running=[len(s.running) for s in service.schedulers],
             inflight=[len(s.inflight) for s in service.schedulers], done=[len(s.done) for s in service.schedulers],
-            **(service.result_fields() if pd or data else {})))
+            **(service.result_fields() if pd or data or configured else {})))
     except Exception as error:
         manifest['error'] = str(error)
         save(output / 'failure.json', dict(normal_exit=False, error=str(error),
@@ -328,7 +344,7 @@ def run(args):
             active_graphs={g:w['graph_id'] for g,w in service.waves.items()},
             requests=service.snapshot(), pending={r:[q.id for q in service.pending[r]] for r in service.ranks},
             future_request_ids=[r.id for r in service.future], backend_log='backend.stderr.log',
-            **(service.result_fields() if pd or data else {})))
+            **(service.result_fields() if pd or data or configured else {})))
         raise
     finally:
         if child is not None:

@@ -14,6 +14,8 @@
 #include <iostream>
 #include <link.h>
 #include <memory>
+#include <map>
+#include <limits>
 #include <regex>
 #include <set>
 #include <stdexcept>
@@ -45,58 +47,62 @@ std::vector<Group> LoadGroups(const fs::path& shared)
     // Compatibility for the original direct cosim-service protocol fixtures.
     Json deployment = {{"schema_version", "moe-ub-service-deployment/1"}, {"groups", Json::array({
         {{"group_id", "ep0"}, {"rank_ids", {0u,1u,2u,3u}}, {"rank_to_ub_node", {0u,1u,2u,3u}},
-         {"expert_placement", {0,0,1,1,2,2,3,3}}}})}};
+         {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
     Require(deployment.size() == 2 && deployment.at("schema_version") == "moe-ub-service-deployment/1" &&
-            deployment.at("groups").is_array() && deployment.at("groups").size() >= 1 &&
-            deployment.at("groups").size() <= 3, "Invalid service deployment");
+            deployment.at("groups").is_array() && !deployment.at("groups").empty(), "Invalid service deployment");
     std::vector<Group> groups;
     std::set<int> members;
+    std::set<uint32_t> nodes;
     std::set<std::string> names;
     for (const auto& config : deployment.at("groups"))
     {
         const auto name = config.at("group_id").get<std::string>();
         Require(config.size() == 4 && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
                 names.insert(name).second && config.at("rank_ids").is_array() &&
-                config.at("rank_ids").size() == 4 && config.at("rank_ids") == config.at("rank_to_ub_node"),
+                !config.at("rank_ids").empty() && config.at("rank_to_ub_node").is_array() &&
+                config.at("rank_ids").size() == config.at("rank_to_ub_node").size(),
                 "Invalid EP group declaration");
         std::vector<int> ranks;
-        Json placement = Json::array();
         int previous = -1;
         for (const auto& value : config.at("rank_ids"))
         {
-            Require(value.is_number_unsigned() && value.get<uint64_t>() < 12, "Invalid group rank");
+            Require(value.is_number_unsigned() && value.get<uint64_t>() < INT32_MAX, "Invalid group rank");
             int rank = value;
             Require(rank > previous && members.insert(rank).second, "Repeated, overlapping or unordered group rank");
             previous = rank; ranks.push_back(rank);
-            placement.push_back(rank); placement.push_back(rank);
         }
-        for (const auto& value : config.at("rank_to_ub_node")) Require(value.is_number_unsigned(), "Invalid UB mapping");
-        Require(config.at("expert_placement") == placement, "Invalid expert placement");
+        for (const auto& value : config.at("rank_to_ub_node"))
+            Require(value.is_number_unsigned() && value.get<uint64_t>() <= UINT32_MAX &&
+                    nodes.insert(value.get<uint32_t>()).second, "Invalid or overlapping UB mapping");
+        Require(config.at("expert_placement").is_array() && !config.at("expert_placement").empty(),
+                "Empty expert placement");
+        for (const auto& value : config.at("expert_placement"))
+            Require(value.is_number_unsigned() && value.get<uint64_t>() < INT32_MAX &&
+                    std::find(ranks.begin(), ranks.end(), value.get<int>()) != ranks.end(),
+                    "Expert outside group");
         groups.push_back({config, ranks, {}, {}, {}});
     }
-    for (size_t rank = 0; rank < members.size(); ++rank)
-        Require(members.count(rank), "Deployment ranks must cover 0..N-1");
     std::sort(groups.begin(), groups.end(), [](const auto& a, const auto& b) {
         return a.config.at("group_id").template get<std::string>() < b.config.at("group_id").template get<std::string>();
     });
     return groups;
 }
-void WqeStart(Json* report, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
 {
     report->at("wqe_starts").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
-    auto active = report->at("active_wqes").at(node).get<unsigned>() + 1;
-    (*report)["active_wqes"][node] = active;
-    (*report)["peak_wqes"][node] = std::max(active, report->at("peak_wqes").at(node).get<unsigned>());
+    auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>() + 1;
+    (*report)["active_wqes"][indices->at(node)] = active;
+    (*report)["peak_wqes"][indices->at(node)] = std::max(active, report->at("peak_wqes").at(indices->at(node)).get<unsigned>());
 }
-void WqeEnd(Json* report, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeEnd(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
 {
     report->at("wqe_completions").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
-    auto active = report->at("active_wqes").at(node).get<unsigned>();
+    auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>();
     Require(active > 0, "Unexpected WQE completion");
-    (*report)["active_wqes"][node] = active - 1;
+    (*report)["active_wqes"][indices->at(node)] = active - 1;
 }
 void TargetWrite(Json* writes, ns3::Ptr<const ns3::UbWqeSegment> segment)
 {
@@ -226,10 +232,24 @@ int main(int argc, char** argv)
         Require(std::regex_match(run_id, std::regex("[A-Za-z0-9_.-]+")), "Invalid run identity");
         const auto shared = fs::canonical(argv[2]);
         auto groups = LoadGroups(shared);
-        const int rank_count = 4 * groups.size();
-        std::vector<size_t> owner(rank_count);
+        std::map<int, size_t> owner, rank_index;
+        std::map<int, uint32_t> rank_node;
+        std::map<uint32_t, size_t> node_index;
         for (size_t index = 0; index < groups.size(); ++index)
-            for (int rank : groups[index].ranks) owner[rank] = index;
+            for (size_t i = 0; i < groups[index].ranks.size(); ++i)
+            {
+                const int rank = groups[index].ranks[i];
+                owner[rank] = index;
+                rank_node[rank] = groups[index].config.at("rank_to_ub_node").at(i);
+            }
+        std::vector<int> ranks;
+        std::vector<uint32_t> nodes;
+        for (const auto& [rank, node] : rank_node)
+        {
+            rank_index[rank] = ranks.size(); node_index[node] = ranks.size();
+            ranks.push_back(rank); nodes.push_back(node);
+        }
+        const size_t rank_count = ranks.size();
         const auto system_config = ReadJson(fs::absolute(argv[3]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
                 system_config.at("trace-enabled") == 1, "Service requires original ASTRA execution and trace");
@@ -265,7 +285,7 @@ int main(int argc, char** argv)
             "routing_table.csv", "transport_channel.csv"};
         for (const auto& name : files) Require(fs::is_regular_file(network / name), "Missing network file " + name);
         // Preflight every bootstrap before constructing any Sys or network.
-        for (int rank = 0; rank < rank_count; ++rank)
+        for (int rank : ranks)
         {
             Chakra::ETFeeder empty((shared / "bootstrap" / ("layer." + std::to_string(rank) + ".et")).string());
             Require(!empty.hasNodesToIssue(), "Bootstrap must have zero nodes");
@@ -287,6 +307,12 @@ int main(int argc, char** argv)
         ns3::Config::SetDefault("ns3::TpConnectionManager::RemoveUselessTp", ns3::BooleanValue(false));
         utils->CreateTraceDir();
         utils->CreateNode("network/node.csv");
+        for (uint32_t node : nodes)
+        {
+            Require(node < ns3::NodeList::GetNNodes(), "Mapped UB endpoint does not exist");
+            Require(ns3::NodeList::GetNode(node)->GetObject<ns3::UbController>() != nullptr,
+                    "Mapped UB node is not a compute endpoint");
+        }
         utils->CreateTopo("network/topology.csv");
         utils->AddRoutingTable("network/routing_table.csv");
         utils->CreateTp("network/transport_channel.csv");
@@ -294,6 +320,7 @@ int main(int argc, char** argv)
         Json report = {{"schema_version", "moe-ub-service-result/1"},
             {"calibration_status", "unvalidated_reference"}, {"sender_completion", "transaction_done"},
             {"random", {{"seed", ns3::RngSeedManager::GetSeed()}, {"run", ns3::RngSeedManager::GetRun()}}},
+            {"rank_ids", ranks}, {"rank_to_ub_node", nodes},
             {"network_initializations", 1}, {"graph_completions", Json::array()},
             {"activation_order", Json::array()}, {"graph_loads", Json::array()},
             {"step_submissions", Json::array()}, {"boundary_resources", Json::array()},
@@ -304,17 +331,17 @@ int main(int argc, char** argv)
             {"loaded_libraries", Json::array()}};
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
-        for (int rank = 0; rank < rank_count; ++rank)
+        for (int rank : ranks)
         {
-            auto node = ns3::NodeList::GetNode(rank);
+            auto node = ns3::NodeList::GetNode(rank_node.at(rank));
             auto controller = node->GetObject<ns3::UbController>();
             Require(controller != nullptr, "Rank needs a UB endpoint");
             controllers.push_back(controller);
             report["initial_tp_counts"].push_back(controller->GetTransportCountForTest());
             auto app = ns3::CreateObject<ns3::UbApp>();
-            node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank);
-            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report)) &&
-                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report)) &&
+            node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank_node.at(rank));
+            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &node_index)) &&
+                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &node_index)) &&
                     controller->GetUbTransaction()->TraceConnectWithoutContext("RemoteWriteCommitted",
                         ns3::MakeBoundCallback(TargetWrite, &report["target_writes"])), "Cannot attach execution traces");
         }
@@ -348,13 +375,13 @@ int main(int argc, char** argv)
                     ns3::Simulator::ScheduleNow([&]() { decide(); });
                 }
             };
-            for (int rank = 0; rank < rank_count; ++rank)
+            for (int rank : ranks)
             {
                 adapters.push_back(std::make_unique<moe_ub::UbNetworkAdapter>(rank, [&, rank](uint64_t now) {
                     if (bootstrap) { ++bootstrap_done; return; }
                     auto& group = groups[owner[rank]];
                     Require(!group.graph.empty() && group.completed.insert(rank).second &&
-                            systems[rank]->workload->graph_id() == group.graph, "Unexpected rank completion");
+                            systems.at(rank_index.at(rank))->workload->graph_id() == group.graph, "Unexpected rank completion");
                     report["graph_completions"].push_back({{"rank_id", rank}, {"time_ns", now},
                         {"graph_id", group.graph}});
                     if (group.completed.size() == group.ranks.size())
@@ -378,7 +405,7 @@ int main(int argc, char** argv)
                 }));
                 systems.push_back(std::make_unique<AstraSim::Sys>(rank, (shared / "bootstrap/layer").string(),
                     "empty", "system.json", std::vector<AstraSim::AstraMemoryAPI*>{}, adapters.back().get(),
-                    std::vector<int>{rank_count}, std::vector<int>{1}, 1.0, 1.0, false));
+                    std::vector<int>{ranks.back()+1}, std::vector<int>{1}, 1.0, 1.0, false));
                 systems.back()->workload->bind_graph("_bootstrap");
             }
             for (auto& sys : systems) sys->workload->activate_graph();
@@ -428,8 +455,8 @@ int main(int argc, char** argv)
                     for (const auto& participant : groups)
                         if (participant.graph == group.graph)
                             for (int rank : participant.ranks)
-                                Require(systems[rank]->workload->can_load_graph() &&
-                                        apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                                Require(systems.at(rank_index.at(rank))->workload->can_load_graph() &&
+                                        apps.at(rank_index.at(rank))->GetTransferExecutor().GetPendingCount() == 0,
                                         "Graph completion before participant work retired");
                     for (const auto& transfer : transfers)
                         if (transfer->Descriptor().graph_id == group.graph)
@@ -443,17 +470,17 @@ int main(int argc, char** argv)
                         { participant.graph.clear(); participant.wave.clear(); participant.completed.clear(); }
                 }
                 completed_groups.clear();
-                for (int rank = 0; rank < rank_count; ++rank)
+                for (int rank : ranks)
                 {
-                    Require(controllers[rank] == ns3::NodeList::GetNode(rank)->GetObject<ns3::UbController>() &&
-                            apps[rank]->GetNode() == ns3::NodeList::GetNode(rank), "Network object changed");
+                    Require(controllers.at(rank_index.at(rank)) == ns3::NodeList::GetNode(rank_node.at(rank))->GetObject<ns3::UbController>() &&
+                            apps.at(rank_index.at(rank))->GetNode() == ns3::NodeList::GetNode(rank_node.at(rank)), "Network object changed");
                     if (!groups[owner[rank]].graph.empty()) continue;
-                    Require(systems[rank]->workload->can_load_graph() &&
-                            apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                    Require(systems.at(rank_index.at(rank))->workload->can_load_graph() &&
+                            apps.at(rank_index.at(rank))->GetTransferExecutor().GetPendingCount() == 0,
                             "Idle group has pending work");
                     available.push_back(rank);
                     report["boundary_resources"].push_back({{"rank_id", rank}, {"time_ns", now},
-                        {"pending_events", systems[rank]->pending_events}, {"pending_tasks", 0},
+                        {"pending_events", systems.at(rank_index.at(rank))->pending_events}, {"pending_tasks", 0},
                         {"same_network_objects", true}});
                 }
                 const Json message = {{"schema_version", "cosim/1"}, {"type", "DECIDE"}, {"run_id", run_id},
@@ -553,8 +580,9 @@ int main(int argc, char** argv)
                             plan.data.at("ready_ns") == now && plan.data.at("input").at("ready_ns") == now,
                             "Submission identity/time differs from plan");
                     Require(plan.data.at("rank_ids") == selected_ranks, "Plan members differ from submission");
-                    // Service deployment remains identity-mapped until its own adaptation task.
-                    Require(plan.data.at("rank_to_ub_node") == selected_ranks,
+                    Json selected_nodes = Json::array();
+                    for (int rank : covered) selected_nodes.push_back(rank_node.at(rank));
+                    Require(plan.data.at("rank_to_ub_node") == selected_nodes,
                             "Service plan mapping differs from current deployment");
                     const bool kv = plan.data.at("communication_template") == "kv_direct_v1";
                     if (kv)
@@ -591,7 +619,7 @@ int main(int argc, char** argv)
                     std::vector<moe_ub::UbWriteTransfer*> pointers;
                     for (const auto& d : plan.descriptors)
                     {
-                        prepared.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(d.src_rank)));
+                        prepared.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(rank_index.at(d.src_rank))));
                         pointers.push_back(prepared.back().get());
                     }
                     moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers);
@@ -621,7 +649,7 @@ int main(int argc, char** argv)
                         // the separate failure-test target after full validation.
                         if (plans.size() == 1 && rank == group.ranks.back()) continue;
 #endif
-                        systems[rank]->workload->activate_graph();
+                        systems.at(rank_index.at(rank))->workload->activate_graph();
                     }
                 }
                 Require(!next.is_null() || std::any_of(groups.begin(), groups.end(),
@@ -647,23 +675,24 @@ int main(int argc, char** argv)
                 for (const auto& group : groups)
                     failure["groups"].push_back({{"group_id", group.config.at("group_id")}, {"graph_id", group.graph},
                         {"wave_id", group.wave}, {"completed_ranks", group.completed}});
-                for (int rank = 0; rank < rank_count; ++rank)
+                for (int rank : ranks)
                 {
-                    const auto* workload = systems[rank]->workload;
+                    const auto* workload = systems.at(rank_index.at(rank))->workload;
                     failure["ranks"].push_back({{"rank_id", rank}, {"graph_id", workload->graph_id()},
                         {"finished", workload->is_finished}, {"remaining_nodes", workload->et_feeder->hasNodesToIssue()},
                         {"compute_slots", workload->hw_resource->num_in_flight_gpu_comp_ops},
                         {"send_slots", workload->hw_resource->num_in_flight_gpu_comm_ops},
-                        {"pending_events", systems[rank]->pending_events},
-                        {"pending_adapter_events", adapters[rank]->ScheduledEvents() - adapters[rank]->ExecutedCallbacks()},
-                        {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()}});
+                        {"pending_events", systems.at(rank_index.at(rank))->pending_events},
+                        {"pending_adapter_events", adapters.at(rank_index.at(rank))->ScheduledEvents() - adapters.at(rank_index.at(rank))->ExecutedCallbacks()},
+                        {"pending_tasks", apps.at(rank_index.at(rank))->GetTransferExecutor().GetPendingCount()}});
                 }
                 for (const auto& transfer : transfers)
                 {
                     if (!transfer->Completion().Active()) continue;
                     const auto& d = transfer->Descriptor();
                     failure["transfers"].push_back({{"graph_id", d.graph_id}, {"transfer_id", d.transfer_id},
-                        {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank}, {"send_node_id", d.send_node_id},
+                        {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+                    {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"send_node_id", d.send_node_id},
                         {"recv_node_id", d.recv_node_id}, {"send_registered", bool(transfer->SendStartNs())},
                         {"receive_registered", bool(transfer->ReceiveStartNs())},
                         {"send_callbacks", transfer->SendCallbacks()}, {"receive_callbacks", transfer->Completion().ReceiveCallbacks()},
@@ -687,7 +716,8 @@ int main(int argc, char** argv)
                 Require(!done.Active() && done.SendCallbacks() == 1 && done.ReceiveCallbacks() == 1 &&
                         done.CommittedBytes() == d.bytes && !transfer->ObservingTarget(), "Incomplete layer transfer " + std::to_string(d.transfer_id));
                 report["transfers"].push_back({{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
-                    {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank}, {"bytes", d.bytes},
+                    {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+                    {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"bytes", d.bytes},
                     {"submitted_tasks", transfer->SubmittedTasks()}, {"send_callbacks", done.SendCallbacks()},
                     {"receive_callbacks", done.ReceiveCallbacks()}, {"send_start_ns", *transfer->SendStartNs()},
                     {"receive_start_ns", *transfer->ReceiveStartNs()}, {"data_ready_ns", *done.DataReadyNs()},
@@ -696,16 +726,16 @@ int main(int argc, char** argv)
                     {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}});
                 report["transfers"].back()["graph_id"] = d.graph_id;
             }
-            for (int rank = 0; rank < rank_count; ++rank)
+            for (int rank : ranks)
             {
-                const auto* workload = systems[rank]->workload;
+                const auto* workload = systems.at(rank_index.at(rank))->workload;
                 const auto* hardware = workload->hw_resource;
                 Json state = {{"rank_id", rank}, {"finished", workload->is_finished},
                     {"remaining_nodes", workload->et_feeder->hasNodesToIssue()},
                     {"cpu_slots", hardware->num_in_flight_cpu_ops}, {"compute_slots", hardware->num_in_flight_gpu_comp_ops},
-                    {"send_slots", hardware->num_in_flight_gpu_comm_ops}, {"pending_events", systems[rank]->pending_events},
-                    {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()},
-                    {"tp_count", controllers[rank]->GetTransportCountForTest()}};
+                    {"send_slots", hardware->num_in_flight_gpu_comm_ops}, {"pending_events", systems.at(rank_index.at(rank))->pending_events},
+                    {"pending_tasks", apps.at(rank_index.at(rank))->GetTransferExecutor().GetPendingCount()},
+                    {"tp_count", controllers.at(rank_index.at(rank))->GetTransportCountForTest()}};
                 Require(state["finished"] == true && state["remaining_nodes"] == false &&
                         state["cpu_slots"] == 0 && state["compute_slots"] == 0 && state["send_slots"] == 0 &&
                         state["pending_events"] == 0 && state["pending_tasks"] == 0, "Unfinished rank " + std::to_string(rank));
@@ -718,7 +748,7 @@ int main(int argc, char** argv)
             }
             for (const auto& event : report["wqe_starts"])
             {
-                auto ctrl = controllers.at(event.at("node").get<unsigned>());
+                auto ctrl = controllers.at(node_index.at(event.at("node").get<uint32_t>()));
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }

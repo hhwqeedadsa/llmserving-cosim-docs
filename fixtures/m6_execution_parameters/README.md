@@ -1,6 +1,6 @@
 # M6 单层执行参数对照
 
-本目录验证 M6 当前的单层、固定轮次执行参数化。输入仍使用 `moe-ub-layer-fixture/1`；专家数由 `expert_placement` 长度确定，专家编号为该数组索引。`rank_ids` 为非空、升序且唯一的逻辑 rank，`rank_to_ub_node` 按相同位置给出一一对应的真实 UB 计算端点，不要求同号。
+本目录验证 M6 首项的单层、固定轮次执行参数化。输入仍使用 `moe-ub-layer-fixture/1`；专家数由 `expert_placement` 长度确定，专家编号为该数组索引。`rank_ids` 为非空、升序且唯一的逻辑 rank，`rank_to_ub_node` 按相同位置给出一一对应的真实 UB 计算端点，不要求同号。
 
 | 输入 | EP / 专家数 / Top-K | 逻辑 rank → UB 节点 | 独立预期 |
 |---|---|---|---|
@@ -29,4 +29,4 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 执行结果的 `rank_ids`、`rank_to_ub_node` 说明数组顺序；`active_wqes`、`peak_wqes`、`initial_tp_counts` 按逻辑成员顺序排列，WQE/目标写事件中的节点号仍为物理 UB 节点。传输结果及内部真值另存 `src_ub_node`、`dst_ub_node`，端侧操作继续使用逻辑 rank。`observed/` 不增加内部传输身份。
 
-服务模型与容量、同芯片不同 rank 的本地路径、场景 YAML 适配仍属于 M6 后续范围；服务入口暂保留原部署限制，不因单层校验放宽而接受不同端点映射。
+后续已新增[服务模型与容量参数入口](../m6_service_model/README.md)，在单层服务中验证了逐 rank 容量与非恒等端点映射；旧 schema 的限制保留。同芯片不同 rank 的本地路径和场景 YAML 适配仍未实现，M6 整体尚未完成。

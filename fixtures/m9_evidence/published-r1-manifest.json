@@ -1,0 +1,416 @@
+{
+  "schema_version": "moe-ub-route-manifest/1",
+  "source": {
+    "kind": "published_model_trace",
+    "dataset_id": "core12345/MoE_expert_selection_trace",
+    "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "awq_4bit",
+    "usage_terms": "Authenticated existing account grant; gated auto access requires contact-sharing consent. Pinned dataset card requests paper citation; no explicit license field is provided. No new terms accepted by the agent.",
+    "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision",
+      "license",
+      "collector_hardware",
+      "activation_dtype",
+      "request_eos_reason"
+    ]
+  },
+  "model": {
+    "name": "deepseek-ai/DeepSeek-R1",
+    "hidden_dim": 7168,
+    "num_layers": 61,
+    "routing_precision": "awq_4bit"
+  },
+  "layers": [
+    {
+      "layer_id": 0,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 1,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 2,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 3,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 4,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 5,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 6,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 7,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 8,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 9,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 10,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 11,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 12,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 13,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 14,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 15,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 16,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 17,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 18,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 19,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 20,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 21,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 22,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 23,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 24,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 25,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 26,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 27,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 28,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 29,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 30,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 31,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 32,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 33,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 34,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 35,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 36,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 37,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 38,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 39,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 40,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 41,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 42,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 43,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 44,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 45,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 46,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 47,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 48,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 49,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 50,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 51,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 52,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 53,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 54,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 55,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 56,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 57,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 58,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 59,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    },
+    {
+      "layer_id": 60,
+      "kind": "moe",
+      "num_experts": 256,
+      "top_k": 8
+    }
+  ],
+  "files": [
+    {
+      "file_id": "r1-0",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra/0.json",
+      "file": {
+        "path": "data/m9-route-evidence/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra/0.json",
+        "sha256": "eb34107bacbd9eae88e475952e08d2beb4ea898e3fbf6d11165555023833e238"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "r1-1",
+      "original_path": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra/1.json",
+      "file": {
+        "path": "data/m9-route-evidence/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra/1.json",
+        "sha256": "2034f7ce869e57d0c145c8ae560fc08cb9a05273338e70f93249ff928d392ddd"
+      },
+      "format": "token_layer_map_v1"
+    }
+  ]
+}

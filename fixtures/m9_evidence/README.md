@@ -1,13 +1,13 @@
 # M9 路由来源、观察片段与算子耗时
 
-本目录全部路由和 `profile-test.json` 都是人工功能输入，不是真实模型轨迹或 GPU 测量。复用 M8 的两个 EP 组、三层 MoE、七请求和完整模型容量，改为分别声明路由来源、观察窗口和未知请求目标。当前所选公开原文件下载受限，真实路由导入验收尚未完成，详见 [当前任务](../../docs/tasks/current.md) 和 [环境记录](../../docs/environment.md)。
+本目录 `routes/*.json` 和 `profile-test.json` 是人工功能输入；`published-r1-*.json` 仅保存真实来源文件的元数据、摘要和选择清单，原文件留在忽略的 data 目录。人工服务复用 M8 的两组、三层、七请求及完整模型容量，验证来源、窗口和未知目标；真实 R1 对照另验证导入与 routed 专家通信重放。M9 已按此范围完成，详见 [当前任务](../../docs/tasks/current.md) 和 [环境记录](../../docs/environment.md)。
 
 ## 输入与索引
 
 | 文件 | 含义 |
 |---|---|
 | `manifest.json` | `moe-ub-route-manifest/1`：来源、模型/层清单、原始路径及各文件 SHA-256。 |
-| `routes/*.json` | `token_layer_map_v1` 功能格式：外层数组按执行入口排列，每项以层号字符串为键；dense 为 null，MoE 为 Token × Top-K 数组。入口 0 为完整 prompt，入口 1 起每层恰好一行 decode。此格式尚未用发布方原文件验证。 |
+| `routes/*.json` | `token_layer_map_v1` 的人工输入：外层数组按执行入口排列，每项以层号字符串为键；dense 为 null，MoE 为 Token × Top-K 数组。入口 0 为完整 prompt，入口 1 起每层恰好一行 decode。已用下文两份原文件核验该格式。 |
 | `service.json` | `moe-ub-evidence-service/1`，包含请求为空的 M8 服务模板、带摘要的 manifest 引用、逐请求选择范围和空的计算 profile 列表。使用原参考计算。 |
 | `profiled-service.json` | 对每组每层提供 `compute_profiles[].file` 摘要引用，使用人工 profile。 |
 | `profile-test.json` | `moe-ub-operator-profile/1`，`basis=synthetic_test`，仅检查查表、替换和拒绝行为。 |
@@ -72,3 +72,23 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 ```
 
 2026-10-03 实测文件为 `runs/v03-route-compute-evidence/a100-profile.json`，对应复查在同目录 evidence-final，共 15 次执行、8 项预期拒绝通过。两组层段使用实测表后结束于 3608806 ns，业务仍为 124 次写、31744 字节；七请求均只退出观察。另两次等总量对照中 `[4,0]`、`[2,2]` 的实测及仿真专家节点时长分别为 52327、102196 ns，通信均为 6144 字节。原始测量含 eager 发射间隙，不能视为纯矩阵内核时间或生产库性能；网络与未测阶段仍保留参考状态。测量文件、样本和软件安装报告保留在忽略目录，未提交 Git。
+
+## 已取得的真实 R1-AWQ 轨迹
+
+用户在本机登录并取得访问后，从 [数据集固定修订](https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf) 下载 cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra 下的 0.json、1.json，以及数据卡，共约 4 MB。凭据仅用于该 Hub 的认证请求，没有写入源码、日志或 Git。未下载模型权重或整个数据集。
+
+`published-r1-manifest.json` 固定这两份原文件的路径与 SHA-256；`published-r1-selection.json` 固定数据卡、[R1 结构配置](https://huggingface.co/deepseek-ai/DeepSeek-R1/blob/56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad/config.json)摘要及检查片段。结构配置只是 H=7168、61 层、前三层 dense、256 routed 专家和 Top-8 的依据，不是发布者采集时的权重版本。数据卡报告 AWQ 4bit，实际采集权重/软件修订、设备、激活精度和 EOS 原因仍未知；它不是 CM384 INT8 同条件路由。
+
+两文件均为 129 个外层入口，prompt 分别为 26、37 个 Token，随后各有 128 个 Decode 入口。逐个检查全部 prefill/Decode 记录的层清单、行数、8 个互异专家及 0～255 范围。CLI 导出的 `2×128×58=14848` 条 Decode 层记录与独立读取原文件的结果完全一致，不把入口 0 当 Decode，不由文件末尾推断 EOS。
+
+小型执行选择层 3、4、5：请求 801 消费文件 0 的入口 1、2（绝对输入位置 26、27）；请求 802 消费文件 1 的入口 3、4（位置 39、40）。两请求同在 rank 2，组成两个固定批次；专家按 `(expert_id + layer_id - 3) % 3` 放到 rank `[2,7,12]`，保留原始专家编号和全部 96 份专家输入。向量为显式参考的 float16、14336 字节，fabric chunk=4096，发送槽=2；同 chip 路径沿用 M8 声明。
+
+测试驱动只在既有 cosim/1 完成边界提交 M8 multilayer-plan/2，不另建网络或调度器。两轮在同一 UB 网络中执行，第二轮由第一轮真实 WAVE_DONE 推进。四次执行（来源开、关、不挂观测、1 Gbit/s 降速）均通过：基准 78 次写、315392 fabric 业务字节、12 次本地交付，边界为 0/147462/270334 ns；降速后为 0/1425546/2614912 ns。来源开关不改执行，逐记录消费、逐专家输入、业务矩阵、实际收发回调、依赖、原生队列及结束排空分别核对。重复源文件、越界窗口和错误模型维度均拒绝。
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_published_routes.py \
+  --build-dir build/m9-route-compute-evidence \
+  --output-dir runs/my-published-route-check
+```
+
+该命令要求清单中已获准下载的文件位于指定 data 路径且摘要一致，缺失时明确失败，不自动登录或下载。实际结果在 runs/v03-route-compute-evidence/published-routes。此重放不是完整 R1 服务，不验证其 MLA、shared expert、完整权重/KV 容量或生产到达过程；其模型计算使用声明参考值。A100 小算子表因维度不同未用于 R1。原生 Scheduler、观察窗口及唯一 KV 池已在上文配置服务检查中验证，不能据此宣称完整 R1 的组合运行已完成。

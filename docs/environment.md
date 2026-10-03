@@ -2524,7 +2524,7 @@ L/pd_handoff-final、L/pd_queue-final、L/research_export-final 的回归发现�
 
 M8 在已声明的连续 MoE 层段范围内完成。完整模型容量包含未执行 dense 层，输出明确区分完整容量和局部执行；真实路由、计算 profile、MLA、多层 P/D、完整 CM384/R1/CANN 行为及目标硬件校准未在本轮完成。路由仍为合成、计算仍为参考，`unvalidated_reference` 不变。本轮整理记录后本地提交，不推送；停在 M8，下一项 M9 等待用户确认。
 
-## 2026-10-03：M9 路由片段与计算依据（真实数据访问受阻）
+## 2026-10-03：M9 路由片段与计算依据（首次验收，真实数据访问受阻）
 
 工作目录 `/root/moe-ub-cosim`，M8 基线 `25c252b`，M9 任务说明 `10e0286`。下文 R 为 `runs/v03-route-compute-evidence`，L 为 `R/logs`；记录器保存实际 argv、cwd、开始/结束时间、退出状态和 stdout/stderr，既有日志与失败目录保留。源码仅改主仓库，固定子模块只读。
 
@@ -2600,4 +2600,56 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 `bash scripts/check_deps.sh` 的 L/deps-initial.json、L/deps-final.json 均退出 0，13 个依赖的固定版本及源码状态一致。未修改子模块源码、gitlink 或锁文件。
 
-M9 已验证的代码、人工输入和测量方法保存本地；外部文件、安装报告及实测原始结果保留在忽略目录。真实专家原文件尚未取得，M9 不标记整体完成；恢复时先取得合法数据访问或本地原文件，固定版本并核验实际结构与逐记录索引，再补真实来源验收。不自动开始 M10，不推送。
+本阶段停止时，M9 已验证的代码、人工输入和测量方法保存本地；外部文件、安装报告及实测原始结果保留在忽略目录。真实专家原文件尚未取得，因此未标记整体完成；随后保存为本地进度提交 `81bfc41`。登录后的恢复结果见下节，没有自动开始 M10 或推送。
+
+## 2026-10-03：M9 恢复真实数据访问与验收
+
+用户完成本机 Hugging Face 登录后要求重新检查，账户认证及实际文件下载成功。仍以 `/root/moe-ub-cosim` 为 cwd，沿用上节 R/L 和记录器。凭据由本机标准缓存读取，仅用于 Hugging Face 认证请求；跨域下载重定向不携带认证头，没有将凭据写入命令行、输出或 Git。本轮不申请访问或接受条款，不下载模型权重及整个数据集，不安装软件或改动固定依赖。
+
+### 实际取得的来源
+
+数据集固定修订为 `27febb7b2d24169560a9f6f83d38eb53f94916cf`，接口返回 gated=auto。两份轨迹与数据卡共约 4 MB，保存在忽略目录 `data/m9-route-evidence/<修订>/`。下表的轨迹相对路径均从 cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra 起算。
+
+| 文件 | 字节数 | SHA-256 |
+|---|---:|---|
+| 0.json | 1922982 | eb34107bacbd9eae88e475952e08d2beb4ea898e3fbf6d11165555023833e238 |
+| 1.json | 2046738 | 2034f7ce869e57d0c145c8ae560fc08cb9a05273338e70f93249ff928d392ddd |
+| 数据卡 README.md | 5984 | fdda34b32358d13804976dea8229d2e1b2b8f05df7e2a87336effbdf311009fd |
+| deepseek-r1-config.json | 1660 | 79ddea672a62e95d3f0be27be434375538e1988975971cffcf87c96c1de84a65 |
+
+结构配置来自 deepseek-ai/DeepSeek-R1 的固定修订 `56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad`，仅用于核对 H=7168、61 层、前三层 dense、256 routed 专家与 Top-8，不视作发布者采集时的权重修订。来源报告 R1-AWQ 4bit；采集权重/软件修订、设备、激活精度、EOS 原因和明确许可字段仍未知，不能视为目标 INT8 同条件输入。
+
+仅将元数据写入 fixtures/m9_evidence/published-r1-manifest.json 和 published-r1-selection.json，分别固定来源与选择，摘要为 `43a17f0be71b2cb3870fb05d84cd8ed88b5053a7e336f91b1ddffb14e28ff8ed`、`84ae0989a2e226ff91fc60010978f8e361827781b06d34057362bb59b0859d0f`。原始专家数组与规范化输出均留在忽略目录。
+
+### 命令、输入与结果
+
+下表各命令实际 cwd 均为仓库根；日志索引为 L/记录名.json，包含完整 argv、退出状态及 stdout/stderr 路径。下载与审计辅助脚本位于本机 R，执行前已审阅；可复用的真实路由检查提交到 tests/integration。
+
+| 实际命令（R 为本节路径缩写） | 记录名 | 退出状态与结果 |
+|---|---|---|
+| `python3 R/check_logged_access.py` | logged-access | 1；认证成功，默认仓库元数据超过脚本 4 MiB 上限，未判作权限错误。 |
+| `python3 R/check_logged_access_v2.py` | logged-access-v2 | 0；改为仅请求 sha/gated 元数据，取得数据卡和 0.json，实际下载成功。 |
+| `python3 R/download_pair.py` | route-pair-download | 0；取得 1.json 和公开的结构配置，固定所有摘要。 |
+| `python3 R/prepare_published_manifest.py` | published-manifest | 0；依据实际文件和结构生成来源/选择清单。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_published_routes.py --build-dir build/m9-route-compute-evidence --output-dir R/published-routes` | published-routes | 0；全部源记录、四次联合执行和三项非法选择拒绝通过。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py'` | python-published | 0；89 项通过。 |
+| `python3 R/audit_published.py` | audit-published | 0；新旧输入、运行时代码及产物摘要核对通过。 |
+| `bash scripts/check_deps.sh` | deps-published | 0；13 个固定依赖版本和源码状态一致。 |
+
+原始失败输出保留。第二次访问仅缩小仓库元数据响应，没有改变数据源或关闭文件摘要校验。两轨迹各有 129 个入口，prompt 分别为 26/37 个 Token，后续各有 128 个 Decode 入口。检查全部层、行数、Top-8 互异及专家范围；生产 CLI 导出的 14848 条 Decode 层记录与独立扫描原始数组的结果逐条一致。
+
+选择请求 801 的入口 1/2 和请求 802 的入口 3/4，绝对 Token 位置分别为 26/27、39/40，均在 rank 2；层 3/4/5 共 12 条记录、96 份专家输入。保留原始专家编号，固定放置到 rank [2,7,12]，沿用 M8 同 chip 声明和参考计算；激活 float16 是明确选定的参考精度，不冒充采集精度。
+
+测试驱动复用 M8 图生成器、deployment/4 和 cosim/1 接口，只在实际 WAVE_DONE 后提交下一固定批次，每次运行只有一份 UB 网络。逐条核对路由只消费一次、专家负载、业务矩阵、计算时长与依赖、实际收发回调、原生队列和最终资源排空。请求目标保持 null，不从两步窗口或文件末尾推断 EOS。子命令保存在 R/published-routes/commands.json，各次协议保存在对应 protocol.jsonl。
+
+| 实际对照 | 迭代边界 ns | 业务结果 |
+|---|---|---|
+| 来源开 / 关 / 不挂观测 | 0 / 147462 / 270334 | 三次执行结果和协议一致；各 78 次写、315392 fabric 业务字节、12 次本地交付，来源开/关 observed 文件相同。 |
+| 链路降到 1 Gbit/s | 0 / 1425546 / 2614912 | 业务量不变，下一轮提交随真实网络完成推迟。 |
+| 非法选择 | 未启动仿真 | 重用来源文件、越界窗口和错误模型维度均拒绝。 |
+
+### 审计与停止位置
+
+R/audit-published.json 确认此前受检的 112 个源码文件全部未变，11538 个旧构建产物和原生启动锁共 11539 个保护项摘要一致；四次新执行装载的十个 ns-3 库均来自 M9 独立构建。A100 profile 摘要仍为 `6416aa09e0e677134ef6facfd46dbeabc026e3eff70201ec2be9e98f5de50ffb`。本轮没有改动生产代码，因此复用此前 17 套集成检查及链接审计，不重复构建；重新运行单元测试和新增真实来源验收。L/deps-published.json 退出 0，13 个固定依赖未变，未修改子模块源码、gitlink 或锁文件。
+
+M9 完成本步的真实数据导入与计算依据验收。真实 R1 检查仅是 routed 层通信重放，没有用 GQA 替代其 MLA，没有验证完整 R1 的 shared expert、容量或原生调度组合；原生 Scheduler、窗口退出与唯一 KV 池分别已有配置服务验收。A100 小算子维度不同，未套用于 R1；目标 CM384/INT8/CANN 校准仍为 unvalidated_reference。整理记录后本地提交，不推送，停在 M9，M10 仍需用户确认。

@@ -398,4 +398,4 @@ configured-service/3 引用 layer-segments/1，各组分别声明完整模型容
 
 layer/3 的可选 operator_profile 使用实际上下文列表和逐专家输入向量精确查表。C++ 独立重算 domain、原始样本中位数、形状、零工作、节点时间及依赖，部署合同继续固定每层 profile；范围外输入明确拒绝。专家实测项替换旧线性项，attention 实测项与明确的准备残差相加，网络等待仍只来自本次 UB 事件。旧输入没有此字段时保留原行为。
 
-格式、功能命令、测量范围及真实数据访问缺项见 [M9 说明](../fixtures/m9_evidence/README.md)。人工路由/耗时表用于功能检查，A100 测量和目标 NPU 校准分别记录；M9 整体验收状态以 [current.md](../docs/tasks/current.md) 为准。
+格式、功能命令、测量范围及真实来源文件清单见 [M9 说明](../fixtures/m9_evidence/README.md)。两份 R1-AWQ 文件已核验，选定路由经过同一后端的两批次、三层实际 UB 重放；该对照仅含 routed 层通信与参考计算，不验证完整 R1 的 MLA、共享专家或容量。人工服务检查、真实路由、A100 测量和目标 NPU 校准分别记录；M9 整体验收状态以 [current.md](../docs/tasks/current.md) 为准。

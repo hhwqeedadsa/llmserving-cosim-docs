@@ -106,9 +106,9 @@ Config 中的 6/9 是各通道、对端的发送 Token 块上限，256 是接收
 | 状态项 | M9 本次结果 |
 |---|---|
 | 路由消费、窗口退出与 KV 记账 | 人工来源文件的功能检查及实际 UB 执行通过；未知目标不改为窗口长度。 |
-| 真实专家路由 | 未取得；候选公开 gated 数据集原文件匿名下载返回 401，实际原始布局未核验。 |
+| 真实专家路由 | 用户登录后取得固定版本的两份 R1-AWQ 原文件；14848 条 Decode 层记录逐条核验，选定 12 条、96 份专家输入经过四次实际 UB 对照。采集环境未知项、AWQ 与目标 INT8 的差异保留。 |
 | A100 算子依据 | 上述 22 项实际测量并用于仿真；包括 eager 发射间隙，非生产 grouped/融合内核或完整模型。 |
 | 未测阶段、通信行为、完整模型及目标 NPU | prepare 残差/局部合并等仍为参考；DeepEP/CANN 未执行，R1/MLA 和 CM384 规模尚未验证。 |
 | 校准状态 | `unvalidated_reference` 不变；不以 A100 小算子或合成输入替代目标硬件同条件校准。 |
 
-M9 仍未整体验收完成；当前阻塞及恢复位置见 [current.md](tasks/current.md)，完整命令及结果见 [environment.md](environment.md)。
+M9 已完成本步的真实数据导入和算子依据验收，文件与选择清单见 [M9 说明](../fixtures/m9_evidence/README.md)。真实 R1 对照是选定 routed 层的通信重放，使用参考计算，不含原生服务容量验证；没有把小型 GQA 容量/算子表改名为 R1。完整 R1/MLA/shared expert 及目标部署组合仍未实现或验证。当前停止位置见 [current.md](tasks/current.md)，完整命令及结果见 [environment.md](environment.md)。

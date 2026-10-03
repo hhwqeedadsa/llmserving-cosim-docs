@@ -2733,3 +2733,34 @@ evidence-final 使用已有 22 行 A100 表，不重新测量；published-final 
 `python3 R/audit.py`（L/audit-final.json）退出 0：12041 份旧构建产物摘要未变，一份原生启动锁从已验证备份恢复；libAstraSim.a 的 52 个核心对象全部进入联合链接，实际装载的 10 个 ns-3 库全部来自 build/m10-cann-behavior/output/lib，没有其他 ASTRA 网络后端。固定 CANN 提交及八文件摘要再次匹配，源码 checkout 干净。源码、测试、夹具最终摘要及检查记录在 R/audit.json；主仓库依赖锁和全部子模块未改。
 
 本小步完成，整理记录后本地提交、不推送，下一步仍由用户确认。当前仅执行源码适配的声明式 CANN 行为和 URMA_WRITE/RTP 参考事务；逻辑 lane、保守缓冲/归约屏障及局部耗时仍是近似。未执行或校准原生 CANN/NPU，未将 A100 小算子或合成小模型改名为 R1；原生事务对应、完整 R1/MLA/shared expert 及 CM384/128 rank 目标规模检查仍未完成，M10 整体保持未完成。
+
+## 2026-10-03：M10 目标参考合同与实现缺项核对
+
+用户确认继续后，执行上次 current.md 指定的事务选择与模型缺项核对，任务 v03-target-contract-audit。起点 14c1c8f、工作区干净，任务说明提交 e7d646a。本步只新增离线审计脚本/参考合同及文档，生产前后端、规范、依赖、模型文件均未修改，不实施完整模型或新事务模式。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，R=runs/v03-target-contract、L=R/logs。审阅后复用 R/record.py，JSON 保存实际 argv、cwd、UTC 起止、退出状态及 stdout/stderr；实际命令如下，均退出 0。
+
+| 命令 | 标签/结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | deps-initial、deps-final；13 个固定依赖匹配。 |
+| `python3 R/baseline.py` | baseline；保护 12575 份已有构建产物和一份原生启动锁。 |
+| `git ls-remote https://github.com/deepseek-ai/DeepSeek-V3.git refs/heads/main` | source-revision；固定提交 9b4e9788e4a3a731f7567338ed15d3ec549ce03b。 |
+| `python3 R/fetch_source.py` | source-download；从上述固定提交的 raw.githubusercontent.com URL 读取 inference/model.py、LICENSE-CODE，单文件上限 256 KiB；实际分别为 32831、1064 B。完整 URL/摘要见 R/source.json。 |
+| `python3 R/prepare_reference.py` | prepare-reference；生成 fixtures/m10_target_contract/reference.json，保留 selected_reference 与非执行状态。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python scripts/audit_target_contract.py --source-dir R/source --output-dir R/audit` | contract-audit；离线算式、源摘要、14848 条 Decode 层记录与七项实际拒绝通过。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service --input fixtures/m10_cann/service.json --layer fixtures/m10_cann/layers.json --backend build/m10-cann-behavior/output/cosim/ns3.44-cosim-service --system fixtures/m1_compute/system.json --network fixtures/m3_shared_bottleneck/network --observation fixtures/m3_shared_bottleneck/observation.json --output-dir R/cann-smoke` | cann-smoke；复用已有构建，完成真实小型 ASTRA/UB 服务。 |
+| `python3 R/final_audit.py` | final-audit；生产与依赖未变、全部受保护文件一致、联合结果与上一阶段相同输入完全一致。 |
+
+没有下载模型权重或新的轨迹，没有使用 GPU、安装软件、修改全局配置、重新构建或执行外部源码。新取得的 DeepSeek-V3 文件只用于核对 R1 所采用结构的投影/FFN 形状、LoRA norm、路由修正向量以及 absorbed MLA 的 latent+RoPE 缓存；版本、摘要和适用范围保存在参考合同。没有将该实现的 TP/EP 绑定、FP8 算子或其软件版本宣称为本场景原生运行。
+
+R/audit/audit.json 的完整权重形状账目包含 61 层（3 dense、58 MoE）、每 rank 两个 routed/一个 shared expert、embedding、独立 lm_head、norm/router/路由修正。参考存储为主要矩阵对称 INT8+每输出通道 FP32 scale，非量化类型逐组件列出：权重 24400011264 B、scale 24624384 B，合计 24424635648 B/rank；参数总量排除 MTP、包括路由修正，为 671026419200。
+
+参考 BF16 压缩 MLA KV 为每 Token `61*(512+64)*2=70272 B`，每 16 Token 块 1124352 B；没有套用 GQA 的多头 K/V 公式。选定 64 GB 条件预算、4 GiB kernel/runtime reserve、逐层 64 MiB 数据窗口+1 MiB 状态窗口+28928 B staging，并按 58 层保守求和，条件剩余 KV 为 31325587712 B、27861 个整块。这些仅为显式参考政策的离线结果，不是服务已接入、权重已加载、实际可分配 HBM 已测或部署已证明。
+
+七项调用现有验证器的拒绝分别为 MLA 架构、INT8 权重、所选层 shared expert、dense 层执行、一个小输入产生超过 4096 条 transfer、17 个观测端口和 4097 个窗口。另独立计数证明目标 128 rank 时，每层仅 Dispatch 状态就有 32512 条非同 rank 交付（同 chip 256、跨 chip 32256），58 层为 1885696 条，尚不含向量和 Combine；未生成该目标图或据此宣称实际内存耗尽。目标端口选择、采样时域、全 fabric 多平面路由与记录开销仍需后续验证。
+
+两份既有真实路由文件的摘要、61 层格式、所有专家 ID/Top-8 与 14848 条 Decode 层记录再次核验。prompt=26/37，各 128 步，window64 按块预留分别为 6746112/7870464 B；两者符合最小步数，但 manifest 只有两个独立请求，不足目标的 1024 个。未扫描完整数据集，未重复样本补数量，未发起扩大下载。
+
+真实小型复查仍为 305 次 UB 写、120316 B 载荷、131530 ns，R/cann-smoke/service_result.json 与 execution/result.json 分别和 runs/v03-cann-behavior/service-first 的结果完全相同；十个 ns-3 库仍全部来自 M10 构建，网络正常排空。生产源码未改，因此复用前步完整单元/集成/链接验收，不重复编译或扩大回归。R/final-audit.json 记录源码与合同摘要、12575 份旧产物及原生锁原样未变；本步不需要恢复启动锁。
+
+审计结论与代码位置见 [target_readiness.md](target_readiness.md)：当前参考实验继续使用已选 WRITE/RTP，原生 LD/ST 未启用、不是前置阻塞；下一首要实现是 MLA/量化权重容量及原生 KV 接纳。审计完成后本地提交，再将唯一下一实现任务置为 pending，等待用户确认，不推送、不自动开发。完整模型计算、目标图/观测规模、拓扑和足够独立真实样本仍待后续；M10 整体未完成，校准状态不变。

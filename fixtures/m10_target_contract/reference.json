@@ -1,0 +1,150 @@
+{
+  "schema_version": "moe-ub-target-contract-audit/1",
+  "kind": "offline_reference_contract",
+  "runtime_configuration": false,
+  "formal_run_ready": false,
+  "hardware_calibration": "unvalidated_reference",
+  "reference_policy_id": "r1_tp1_ep128_row_int8_compressed_mla_bf16_v1",
+  "scenario_path": "docs/scenarios/cm384_deepseek_r1_decode_v0.1.yaml",
+  "scenario_sha256": "f0b214a731632f0dbd5e8916d20cb9a33f5fc63fa92b593557f0598b5ea2449f",
+  "structural_config": {
+    "source_url": "https://huggingface.co/deepseek-ai/DeepSeek-R1/resolve/56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad/config.json",
+    "path": "data/m9-route-evidence/27febb7b2d24169560a9f6f83d38eb53f94916cf/deepseek-r1-config.json",
+    "bytes": 1660,
+    "sha256": "79ddea672a62e95d3f0be27be434375538e1988975971cffcf87c96c1de84a65"
+  },
+  "structural_implementation_sources": [
+    {
+      "repository": "https://github.com/deepseek-ai/DeepSeek-V3",
+      "revision": "9b4e9788e4a3a731f7567338ed15d3ec549ce03b",
+      "path": "inference/model.py",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/9b4e9788e4a3a731f7567338ed15d3ec549ce03b/inference/model.py",
+      "bytes": 32831,
+      "sha256": "fdb7995bc234badbf0011b5af8cf391be94343abc51305428cb9a04452116f02"
+    },
+    {
+      "repository": "https://github.com/deepseek-ai/DeepSeek-V3",
+      "revision": "9b4e9788e4a3a731f7567338ed15d3ec549ce03b",
+      "path": "LICENSE-CODE",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepSeek-V3/9b4e9788e4a3a731f7567338ed15d3ec549ce03b/LICENSE-CODE",
+      "bytes": 1064,
+      "sha256": "1c8f573e830ca9b3ebfeb7ace1823146e22b66f99ee223840e7637c9e745e1c7"
+    }
+  ],
+  "source_scope": "DeepSeek-V3 tensor shapes and absorbed MLA cache only; not a R1 NPU runtime, kernel or quantization policy",
+  "deployment": {
+    "ep": 128,
+    "tp": 1,
+    "pp": 1,
+    "dies_per_chip": 2,
+    "local_routed_experts": 2,
+    "local_shared_experts": 1
+  },
+  "weight_storage": {
+    "basis": "selected_reference_not_deployed_checkpoint",
+    "linear_matrices": [
+      "mla_q_a",
+      "mla_q_b",
+      "mla_kv_a",
+      "mla_kv_b",
+      "mla_o",
+      "dense_ffn",
+      "routed_expert_ffn",
+      "shared_expert_ffn"
+    ],
+    "matrix_dtype": "int8",
+    "scale_dtype": "float32",
+    "scale_axis": "output_channel",
+    "symmetric": true,
+    "zero_point_bytes": 0,
+    "matrix_storage_padding_bytes": 0,
+    "embedding_dtype": "bfloat16",
+    "lm_head_dtype": "bfloat16",
+    "norm_dtype": "bfloat16",
+    "router_dtype": "float32",
+    "routing_correction_dtype": "float32",
+    "tied_embedding": false,
+    "mtp_included": false,
+    "qualification": "Storage arithmetic, not loaded weights or a validated W8A8 kernel; activation quantization temporaries are workspace."
+  },
+  "kv": {
+    "basis": "selected_reference",
+    "layout": "absorbed_latent_plus_shared_rope",
+    "latent_dtype": "bfloat16",
+    "rope_dtype": "bfloat16",
+    "quantization": "none",
+    "block_tokens": 16,
+    "alignment_padding_bytes": 0,
+    "reservation": "complete_observation_window_per_request",
+    "qualification": "Cache only; RoPE tables, temporary dequantized matrices and runtime metadata charged to explicit workspace reserve."
+  },
+  "memory": {
+    "basis": "selected_reference_not_measured_allocatable_HBM",
+    "device_bytes_per_rank": 64000000000,
+    "kernel_and_runtime_reserve_bytes_per_rank": 4294967296,
+    "cann_data_window_bytes_per_layer": 67108864,
+    "cann_state_window_bytes_per_layer": 1048576,
+    "cann_reference_lanes": 2,
+    "communication_reuse": "sum_all_58_layer_windows_conservative_no_cross_layer_alias",
+    "qualification": "Conditional budget, not proof that a runtime or hardware fits; no HBM bandwidth contention model."
+  },
+  "transactions": {
+    "profile": "urma_write_rtp_reference",
+    "roles": {
+      "dispatch_data": {
+        "programming_model": "URMA",
+        "operation": "WRITE",
+        "transport": "RTP",
+        "initiator": "data_owner",
+        "payload_direction": "initiator_to_target",
+        "receiver_ready": "RemoteWriteCommitted",
+        "sender_release": "transaction_done"
+      },
+      "dispatch_count_status": {
+        "programming_model": "URMA",
+        "operation": "WRITE",
+        "transport": "RTP",
+        "initiator": "data_owner",
+        "payload_direction": "initiator_to_target",
+        "receiver_ready": "RemoteWriteCommitted",
+        "sender_release": "transaction_done"
+      },
+      "combine_data": {
+        "programming_model": "URMA",
+        "operation": "WRITE",
+        "transport": "RTP",
+        "initiator": "data_owner",
+        "payload_direction": "initiator_to_target",
+        "receiver_ready": "RemoteWriteCommitted",
+        "sender_release": "transaction_done"
+      },
+      "combine_completion_status": {
+        "programming_model": "URMA",
+        "operation": "WRITE",
+        "transport": "RTP",
+        "initiator": "data_owner",
+        "payload_direction": "initiator_to_target",
+        "receiver_ready": "RemoteWriteCommitted",
+        "sender_release": "transaction_done"
+      }
+    },
+    "native_MTE_LDST_equivalence": false,
+    "inactive": [
+      "URMA_READ_RTP",
+      "URMA_READ_CTP",
+      "URMA_WRITE_CTP",
+      "MEM_LOAD",
+      "MEM_STORE",
+      "XCCL"
+    ]
+  },
+  "route_manifest": {
+    "path": "fixtures/m9_evidence/published-r1-manifest.json",
+    "sha256": "43a17f0be71b2cb3870fb05d84cd8ed88b5053a7e336f91b1ddffb14e28ff8ed"
+  },
+  "limits": {
+    "missing_route_files_may_not_be_repeated": true,
+    "complete_target_execution_not_started": true,
+    "declared_reference_costs_not_hardware_measurements": true
+  }
+}

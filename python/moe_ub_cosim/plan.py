@@ -48,6 +48,7 @@ def integer(value, field, minimum=0, maximum=MAX_TIME_NS):
 
 
 def validate_config(c):
+    cann = c.get('template') == 'cann_a3_v850_fullmesh_v1'
     expected = {'schema_version', 'graph_id', 'wave_id', 'service_id', 'role', 'group_id', 'ready_ns',
                 'layer_id', 'rank_ids', 'rank_to_ub_node', 'hidden_dim', 'top_k',
                 'dispatch_element_bytes', 'combine_element_bytes', 'application_metadata_bytes',
@@ -57,7 +58,8 @@ def validate_config(c):
     physical = c.get('schema_version') == 'moe-ub-layer-fixture/2' or (batched and 'deployment' in c)
     require(set(c) == expected | ({'deployment'} if physical else set()) |
             ({'batch_limits', 'compute_dtypes'} if batched else set()) |
-            ({'operator_profile'} if batched and 'operator_profile' in c else set()) and
+            ({'operator_profile'} if batched and 'operator_profile' in c else set()) |
+            ({'cann_profile'} if cann and batched else set()) and
             c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),
             'Unsupported fixture schema/fields')
     if batched:
@@ -65,7 +67,7 @@ def validate_config(c):
         require(c['role'] == 'D', 'Batched layer requires ready-KV decode')
         dtypes = c['compute_dtypes']
         require(isinstance(dtypes, dict) and set(dtypes) == {'compute', 'kv', 'dispatch', 'combine'}, 'Invalid compute dtypes')
-        sizes = dict(float16=2, bfloat16=2, float32=4)
+        sizes = dict(float16=2, bfloat16=2, float32=4, **({'int8':1} if cann else {}))
         require(all(isinstance(v, str) for v in dtypes.values()) and
                 all(dtypes[k] in sizes for k in ('compute','dispatch','combine')) and
                 dtypes['kv'] in dict(sizes, fp8=1), 'Invalid compute dtype')
@@ -84,7 +86,7 @@ def validate_config(c):
     require(c['rank_ids'] == sorted(set(c['rank_ids'])), 'Group members must be distinct and sorted')
     if physical:
         validate_deployment(c['deployment'], c['rank_ids'])
-    require(c['template'] == 'direct_rank_dedup_v1', 'Unsupported communication template')
+    require(cann or c['template'] == 'direct_rank_dedup_v1', 'Unsupported communication template')
     integer(c['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     integer(c['application_metadata_bytes'], 'application_metadata_bytes', 0, 0)
     integer(c['ready_ns'], 'ready_ns', 0, MAX_TIME_NS - 1000000)
@@ -104,7 +106,7 @@ def validate_config(c):
     require(set(profile) == {'attention_route_pack', 'expert_per_input', 'expert_local_merge',
                              'combine_unpack_merge', 'next_layer'}, 'Unsupported compute profile fields')
     for key, duration in profile.items():
-        integer(duration, key, 0 if key == 'next_layer' else 1,
+        integer(duration, key, 0 if key == 'next_layer' or (cann and key == 'expert_local_merge') else 1,
                 MAX_TIME_NS - c['ready_ns'])
     tokens = c['tokens']
     require(isinstance(tokens, list) and 1 <= len(tokens) <= (MAX_BATCH_TOKENS if batched else 16 if c['role'] == 'P' else len(c['rank_ids'])),
@@ -134,6 +136,10 @@ def validate_config(c):
     if batched:
         require(all(n <= limit for n in local_counts.values()), 'Batch exceeds rank sequence/token budget')
         require(len({t['request_id'] for t in tokens}) == len(tokens), 'Decode request appears more than once in this layer iteration')
+    if cann:
+        from .cann import validate_config as validate_cann
+        validate_cann(c)
+        return
     expert_counts = Counter(placement[e] for token in tokens for e in token['expert_ids'])
     from .operator_profile import durations
     measured = durations(c)
@@ -154,6 +160,9 @@ def validate_config(c):
 
 def build_plan(config, identities=None, *, _validate=True):
     validate_config(config)
+    if config['template'] == 'cann_a3_v850_fullmesh_v1':
+        from .cann import build_plan as build_cann
+        return build_cann(config, identities, _validate=_validate)
     c = deepcopy(config)
     from .operator_profile import durations
     measured = durations(c)
@@ -293,6 +302,9 @@ def validate_plan(plan):
     if plan.get('communication_template') == 'kv_direct_v1':
         from .kv_plan import validate_kv_plan
         return validate_kv_plan(plan)
+    if plan.get('communication_template') == 'cann_a3_v850_fullmesh_v1':
+        from .cann import validate_plan as validate_cann
+        return validate_cann(plan)
     batched = plan.get('schema_version') == 'moe-ub-execution-plan/3'
     physical = plan.get('schema_version') == 'moe-ub-execution-plan/2' or (batched and 'deployment' in plan)
     require(plan['schema_version'] in ('moe-ub-execution-plan/1', 'moe-ub-execution-plan/2', 'moe-ub-execution-plan/3'), 'Unsupported plan schema')

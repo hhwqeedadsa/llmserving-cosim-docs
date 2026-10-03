@@ -57,6 +57,13 @@ int main()
               rows[1].whole == 40 && rows[2].whole == 0 && rows[2].packets == 0 &&
               rows[3].whole == 10, "half-open windows, categories or zero window");
         Reject([&] { windows.Add(10, 1, 2); });
+        moe_ub::PortWindows layout({3, 0, 0, 10, 10, false});
+        layout.Add(0, 200, 100, 16, 28);
+        layout.Add(1, 80, 0, 32, 0); // application status is WRITE data, not a protocol ACK
+        const auto& classified = layout.Rows()[0];
+        Check(classified.business == 100 && classified.metadata == 48 && classified.padding == 28 &&
+              classified.overhead == 104 && classified.control == 0, "application bytes mixed with business/protocol control");
+        Reject([&] { layout.Add(0, 20, 10, 8, 3); });
         auto data = MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE, 1);
         std::vector<uint8_t> before(data->GetSize()), after(data->GetSize());
         data->CopyData(before.data(), before.size());

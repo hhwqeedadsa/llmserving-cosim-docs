@@ -112,3 +112,19 @@ Config 中的 6/9 是各通道、对端的发送 Token 块上限，256 是接收
 | 校准状态 | `unvalidated_reference` 不变；不以 A100 小算子或合成输入替代目标硬件同条件校准。 |
 
 M9 已完成本步的真实数据导入和算子依据验收，文件与选择清单见 [M9 说明](../fixtures/m9_evidence/README.md)。真实 R1 对照是选定 routed 层的通信重放，使用参考计算，不含原生服务容量验证；没有把小型 GQA 容量/算子表改名为 R1。完整 R1/MLA/shared expert 及目标部署组合仍未实现或验证。当前停止位置见 [current.md](tasks/current.md)，完整命令及结果见 [environment.md](environment.md)。
+
+## 2026-10-03：M10 CANN 小型行为依据
+
+固定 [CANN ops-transformer v8.5.0 提交](https://gitcode.com/cann/ops-transformer/tree/6ead121aded45355043b502756b6592fd7c30b14)，选择 A3 的 DispatchV2/CombineV2 fullmesh_v1、TP=1、动态 INT8 Dispatch 与非量化 BF16 Combine。文件摘要、具体函数与调用限制、字节公式及近似在 [M10 说明](../fixtures/m10_cann/README.md)，不改写以上 DeepEP 历史核对结果。
+
+| 项目 | 本步依据与结果 |
+|---|---|
+| 贡献复制、返回与归约 | 按每 Token×专家贡献建模，同 rank 多专家不去重；返回独立向量及完成标志，Token 所属 rank 归约。Python/C++ 独立计划核对及实际执行通过，不验证张量数值。 |
+| 数据、元数据与填充 | 按源码实际复制长度计算 scale/三元组/状态，不把 512 B 窗口地址步长等同传输长度。非对齐 H=1025、17 B 分块的实际包内分类和来源检查通过。 |
+| 依赖与同步 | 区分本地核同步、每目标计数就绪、数据完成及源资源回收；真实 UB 事件推进专家计算/层段/下一批。13 次服务及 2 次单层执行检查通过。 |
+| 并发与缓冲 | 源码均衡分核、Combine 核内旋转和 host 窗口下界已表达；lane 数、每 lane transaction_done 串行、保守整图复用和逐 rank 整阶段归约等待为参考近似。未验证原生双窗口/MTE 流水时序。 |
+| 事务和端侧耗时 | 明确采用 URMA_WRITE/RTP 参考映射，不能等同原生 MTE/LDST。量化准备、重排、打包、归约及原计算均声明参考耗时；未套用不匹配的 M9 A100 表。 |
+| 真实数据与目标运行 | 本步路由为合成非均匀小样例；M9 真实 R1 路由和 A100 表的旧回归另行通过，不等于已用于本 CANN 配置。原生 CANN/NPU 没有执行。 |
+| 整体状态 | `runtime_adapted` 表示固定源码行为已转为本平台计划，仍为 `unvalidated_reference`，`target_runtime_executed=false`；完整 R1/MLA、CM384 和 128 rank 未验收，M10 未整体完成。 |
+
+没有拟合时延参数或设置硬件误差阈值。当前可验证的是本步明确声明的参考执行及字节/依赖一致性，不能据此预测目标 NPU 性能。

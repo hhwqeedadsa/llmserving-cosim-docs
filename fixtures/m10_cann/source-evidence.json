@@ -1,0 +1,66 @@
+{
+  "repository": "https://gitcode.com/cann/ops-transformer",
+  "tag": "v8.5.0",
+  "revision": "6ead121aded45355043b502756b6592fd7c30b14",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "cb282ac2b66d7d6734c3fb354db792b28cf23ab29fbc16d5cfd8bd542bedeb1e",
+      "bytes": 5278
+    },
+    {
+      "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.cpp",
+      "sha256": "37fa7102ec975cc304891c9313a5b4305f018d9164ecb9199cba4bdc0b2dba21",
+      "bytes": 11274
+    },
+    {
+      "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.h",
+      "sha256": "cd6592894c268a83fd682b164920e3cbad672f79faafc2fa07e02df848947c18",
+      "bytes": 75738
+    },
+    {
+      "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_v2_base.h",
+      "sha256": "9e5e0ae58b11f65256132fbe4f34ee5211d7018ff6a4c204002e5d1e7d0b0cb8",
+      "bytes": 3589
+    },
+    {
+      "path": "mc2/moe_distribute_dispatch_v2/op_host/op_tiling/moe_distribute_dispatch_v2_tiling.cpp",
+      "sha256": "4e1c875b2d078aadeec16f3421cb2853100dab132ecf383c669c3d2ee94ef773",
+      "bytes": 92118
+    },
+    {
+      "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.cpp",
+      "sha256": "176af6e47526071dc57cf4e98701ec1327b41ea122d8a23c029decb96ec8ef95",
+      "bytes": 6828
+    },
+    {
+      "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+      "sha256": "82ef8554a8a311f30d73cef3398b9846f5f40a7a6a821d6f037d93fcf4f4f274",
+      "bytes": 68608
+    },
+    {
+      "path": "mc2/moe_distribute_combine_v2/op_host/op_tiling/moe_distribute_combine_v2_tiling.cpp",
+      "sha256": "69be2c748ec80f6a2dd79238dce14c41cbee78e0af1a8b9bb8d230a56ee57300",
+      "bytes": 103538
+    }
+  ],
+  "selected_call": {
+    "architecture": "A3",
+    "dispatch": "MoeDistributeDispatchV2",
+    "combine": "MoeDistributeCombineV2",
+    "comm_alg": "fullmesh_v1",
+    "tp_world_size": 1,
+    "dispatch_quant_mode": 2,
+    "combine_quant_mode": 0,
+    "smooth_scales": false,
+    "shared_expert_num": 0,
+    "shared_expert_rank_num": 0,
+    "expert_shard_type": 0,
+    "elastic_info": false,
+    "special_experts": false,
+    "active_mask": "prefix-active within configured equal slots"
+  },
+  "transport_mapping": "URMA_WRITE/RTP reference; no claim of native MTE/LDST equivalence",
+  "local_cost_basis": "selected_reference",
+  "calibration_status": "unvalidated_reference"
+}

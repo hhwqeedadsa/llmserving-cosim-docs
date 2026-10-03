@@ -24,7 +24,7 @@ struct ObservationConfig
 
 struct ByteCounts
 {
-    uint64_t packets = 0, whole = 0, business = 0, control = 0, overhead = 0;
+    uint64_t packets = 0, whole = 0, business = 0, control = 0, overhead = 0, metadata = 0, padding = 0;
 };
 
 // No sampling events: bucket successful starts, and emit every configured window.
@@ -32,7 +32,7 @@ class PortWindows
 {
   public:
     explicit PortWindows(ObservationConfig config);
-    void Add(uint64_t time_ns, uint32_t whole, uint32_t business);
+    void Add(uint64_t time_ns, uint32_t whole, uint32_t business, uint32_t metadata = 0, uint32_t padding = 0);
     const std::vector<ByteCounts>& Rows() const { return rows_; }
   private:
     ObservationConfig config_;
@@ -95,6 +95,7 @@ class PortObservation
     uint64_t fingerprint_ = 14695981039346656037ULL;
     nlohmann::json packet_ranges_ = nlohmann::json::array();
     bool retain_packet_events_ = false;
+    bool segmented_payload_ = false;
     // Internal input to local-clock export, never a research observation file.
     nlohmann::json packet_events_ = nlohmann::json::array();
     // Internal validation only: physical egress FIFO, excluding VOQs and the

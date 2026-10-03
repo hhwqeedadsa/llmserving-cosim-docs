@@ -146,10 +146,11 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 LayerPlan ValidateLayerPlan(const Json& p)
 {
     LayerPlan plan{p, {}, {}, {}};
+    const bool cann = p.at("communication_template") == "cann_a3_v850_fullmesh_v1";
     const bool batched = p.at("schema_version") == "moe-ub-execution-plan/3";
     const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2" || (batched && p.contains("deployment"));
     Require((batched || physical || p.at("schema_version") == "moe-ub-execution-plan/1") &&
-            p.at("communication_template") == "direct_rank_dedup_v1" &&
+            (cann || p.at("communication_template") == "direct_rank_dedup_v1") &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
     const auto& ranks = p.at("rank_ids");
     Require(ranks.is_array() && !ranks.empty(), "require nonempty explicit group members");
@@ -209,7 +210,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
     Require(top_k > 0, "Top-K must be positive");
     const auto layer_id = Number(input.at("layer_id"), "layer_id", INT32_MAX);
     const auto hidden = Number(input.at("hidden_dim"), "hidden_dim", INT64_MAX);
-    Require(hidden > 0 && input.at("template") == "direct_rank_dedup_v1" &&
+    Require(hidden > 0 && input.at("template") == p.at("communication_template") &&
             Number(input.at("application_metadata_bytes"), "application metadata", 0) == 0,
             "invalid input vector/template/metadata");
     for (const auto* field : {"dispatch_element_bytes", "combine_element_bytes"})
@@ -259,13 +260,14 @@ LayerPlan ValidateLayerPlan(const Json& p)
     if (batched)
     {
         const auto& dtypes = input.at("compute_dtypes");
-        const std::map<std::string, unsigned> sizes = {{"float16",2},{"bfloat16",2},{"float32",4},{"fp8",1}};
+        const std::map<std::string, unsigned> sizes = {{"float16",2},{"bfloat16",2},{"float32",4},{"fp8",1},{"int8",1}};
         Require(dtypes.is_object() && dtypes.size() == 4, "invalid compute dtypes");
         for (const std::string key : {"compute", "kv", "dispatch", "combine"})
         {
             Require(dtypes.at(key).is_string(), "non-string compute dtype");
             const auto type = dtypes.at(key).get<std::string>();
-            Require(sizes.contains(type) && (key == "kv" || type != "fp8"), "unsupported compute dtype");
+            Require(sizes.contains(type) && (key == "kv" || type != "fp8") &&
+                    (type != "int8" || (cann && key == "dispatch")), "unsupported compute dtype");
             if (key == "dispatch" || key == "combine")
                 Require(input.at(key + "_element_bytes") == sizes.at(type), "compute dtype/vector mismatch");
         }
@@ -304,6 +306,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
     const auto ready = Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
     Require(input.at("ready_ns") == ready && input.at("graph_id") == p.at("graph_id") &&
             input.at("wave_id") == p.at("wave_id"), "input graph identity/ready mismatch");
+    if (cann) return ValidateCannPlan(p);
     for (int rank : members)
     {
         uint64_t total = 0;
@@ -675,7 +678,7 @@ Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
             for (const auto& dep : graph.at("entry_deps"))
                 ready = std::max(ready, nodes.at({rank, dep.get<uint64_t>()}).at("end_ns").get<uint64_t>());
         const auto prepared = end("prepare", ready);
-        const auto dispatched = communication_end("dispatch", prepared);
+        const auto dispatched = p.contains("dispatch_reorder") ? end("dispatch_reorder", prepared) : communication_end("dispatch", prepared);
         const auto merged = end("local_merge", end("expert", dispatched));
         const auto finished = end("finish", communication_end("combine", merged));
         endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "dispatch"},

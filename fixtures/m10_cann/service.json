@@ -1,0 +1,478 @@
+{
+  "schema_version": "moe-ub-configured-service/3",
+  "run_id": "m10-cann",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "model": "synthetic/gqa-cann-1024",
+  "groups": [
+    {
+      "group_id": "ep0",
+      "model_spec": {
+        "schema_version": "moe-ub-model/1",
+        "name": "synthetic/gqa-cann-1024",
+        "architecture": "bias_free_gqa_rmsnorm_gated_ffn",
+        "source": {
+          "kind": "synthetic",
+          "description": "Synthetic GQA capacity with three routed layers; CANN behavior only, not R1 or hardware calibration"
+        },
+        "hidden_size": 1024,
+        "vocab_size": 512,
+        "max_position_embeddings": 128,
+        "tp": 1,
+        "pp": 1,
+        "attention": {
+          "num_heads": 16,
+          "num_kv_heads": 2,
+          "head_dim": 64
+        },
+        "dtypes": {
+          "weights": "bfloat16",
+          "compute": "bfloat16",
+          "kv": "bfloat16",
+          "dispatch": "int8",
+          "combine": "bfloat16"
+        },
+        "tie_word_embeddings": true,
+        "layers": [
+          {
+            "layer_id": 0,
+            "kind": "dense",
+            "intermediate_size": 512
+          },
+          {
+            "layer_id": 1,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              2,
+              2,
+              7,
+              7,
+              12,
+              12
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          },
+          {
+            "layer_id": 2,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              2,
+              2,
+              7,
+              7,
+              12,
+              12
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          },
+          {
+            "layer_id": 3,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              2,
+              2,
+              7,
+              7,
+              12,
+              12
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          }
+        ]
+      },
+      "memory": {
+        "capacity_scope": "rank_endpoint",
+        "block_size": 4,
+        "max_kv_blocks_per_rank": 1024,
+        "ranks": [
+          {
+            "rank_id": 2,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          },
+          {
+            "rank_id": 7,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          },
+          {
+            "rank_id": 12,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          }
+        ]
+      },
+      "scheduling": {
+        "max_num_seqs": 2,
+        "max_num_batched_tokens": 2
+      }
+    },
+    {
+      "group_id": "ep1",
+      "model_spec": {
+        "schema_version": "moe-ub-model/1",
+        "name": "synthetic/gqa-cann-1024",
+        "architecture": "bias_free_gqa_rmsnorm_gated_ffn",
+        "source": {
+          "kind": "synthetic",
+          "description": "Synthetic GQA capacity with three routed layers; CANN behavior only, not R1 or hardware calibration"
+        },
+        "hidden_size": 1024,
+        "vocab_size": 512,
+        "max_position_embeddings": 128,
+        "tp": 1,
+        "pp": 1,
+        "attention": {
+          "num_heads": 16,
+          "num_kv_heads": 2,
+          "head_dim": 64
+        },
+        "dtypes": {
+          "weights": "bfloat16",
+          "compute": "bfloat16",
+          "kv": "bfloat16",
+          "dispatch": "int8",
+          "combine": "bfloat16"
+        },
+        "tie_word_embeddings": true,
+        "layers": [
+          {
+            "layer_id": 0,
+            "kind": "dense",
+            "intermediate_size": 512
+          },
+          {
+            "layer_id": 1,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              20,
+              20,
+              25,
+              25,
+              30,
+              30
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          },
+          {
+            "layer_id": 2,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              20,
+              20,
+              25,
+              25,
+              30,
+              30
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          },
+          {
+            "layer_id": 3,
+            "kind": "moe",
+            "intermediate_size": 256,
+            "num_experts": 6,
+            "top_k": 2,
+            "expert_placement": [
+              20,
+              20,
+              25,
+              25,
+              30,
+              30
+            ],
+            "shared_experts": 0,
+            "shared_intermediate_size": 0
+          }
+        ]
+      },
+      "memory": {
+        "capacity_scope": "rank_endpoint",
+        "block_size": 4,
+        "max_kv_blocks_per_rank": 1024,
+        "ranks": [
+          {
+            "rank_id": 20,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          },
+          {
+            "rank_id": 25,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          },
+          {
+            "rank_id": 30,
+            "device_bytes": 38935296,
+            "workspace_bytes": 4096,
+            "communication_buffer_bytes": 6304512
+          }
+        ]
+      },
+      "scheduling": {
+        "max_num_seqs": 2,
+        "max_num_batched_tokens": 2
+      }
+    }
+  ],
+  "requests": [
+    {
+      "request_id": 201,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "prompt_tokens": 2,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            0,
+            4
+          ],
+          "2": [
+            0,
+            2
+          ],
+          "3": [
+            0,
+            2
+          ]
+        },
+        {
+          "1": [
+            2,
+            5
+          ],
+          "2": [
+            2,
+            4
+          ],
+          "3": [
+            2,
+            4
+          ]
+        },
+        {
+          "1": [
+            4,
+            5
+          ],
+          "2": [
+            0,
+            4
+          ],
+          "3": [
+            0,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 202,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "prompt_tokens": 5,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            2,
+            5
+          ],
+          "2": [
+            4,
+            5
+          ],
+          "3": [
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 203,
+      "rank_id": 2,
+      "arrival_ns": 1000,
+      "prompt_tokens": 7,
+      "generated_tokens": 2,
+      "decode_routes": [
+        {
+          "1": [
+            0,
+            5
+          ],
+          "2": [
+            0,
+            5
+          ],
+          "3": [
+            0,
+            4
+          ]
+        },
+        {
+          "1": [
+            2,
+            4
+          ],
+          "2": [
+            2,
+            5
+          ],
+          "3": [
+            2,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 204,
+      "rank_id": 7,
+      "arrival_ns": 0,
+      "prompt_tokens": 1,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            0,
+            5
+          ],
+          "2": [
+            0,
+            5
+          ],
+          "3": [
+            0,
+            4
+          ]
+        },
+        {
+          "1": [
+            2,
+            4
+          ],
+          "2": [
+            2,
+            5
+          ],
+          "3": [
+            2,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 401,
+      "rank_id": 20,
+      "arrival_ns": 600,
+      "prompt_tokens": 2,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            0,
+            4
+          ],
+          "2": [
+            0,
+            2
+          ],
+          "3": [
+            0,
+            2
+          ]
+        },
+        {
+          "1": [
+            2,
+            5
+          ],
+          "2": [
+            2,
+            4
+          ],
+          "3": [
+            2,
+            4
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 402,
+      "rank_id": 20,
+      "arrival_ns": 600,
+      "prompt_tokens": 5,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            2,
+            5
+          ],
+          "2": [
+            4,
+            5
+          ],
+          "3": [
+            4,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "request_id": 404,
+      "rank_id": 25,
+      "arrival_ns": 600,
+      "prompt_tokens": 1,
+      "generated_tokens": 1,
+      "decode_routes": [
+        {
+          "1": [
+            0,
+            5
+          ],
+          "2": [
+            0,
+            5
+          ],
+          "3": [
+            0,
+            4
+          ]
+        }
+      ]
+    }
+  ]
+}

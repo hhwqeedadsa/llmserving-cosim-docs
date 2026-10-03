@@ -25,6 +25,14 @@ def export_records(raw, observation, ranks, max_ns):
         for op in plan['operations']:
             require(op['operation_id'] not in operations_by_id,'Duplicate planned operation')
             operations_by_id[op['operation_id']]=op
+    local_planned={k:v for k,v in planned.items() if 'ub_task_id' not in v}
+    local_actual={t['transfer_id']:t for t in report.get('local_deliveries',[])}
+    require(set(local_actual)==set(local_planned),'Local delivery registry mismatch')
+    for tid,t in local_planned.items():
+        x=local_actual[tid]
+        require(x['payload_bytes']==t['payload_bytes'] and x['send_callbacks']==x['recv_callbacks']==1 and not x['active'],
+                'Local delivery conservation failed')
+    planned={k:v for k,v in planned.items() if 'ub_task_id' in v}
     actual={t['transfer_id']:t for t in report['transfers']}
     require(len(actual)==len(report['transfers']) and set(actual)==set(planned),'Unique transfer registry mismatch')
     delivered=Counter()
@@ -32,7 +40,7 @@ def export_records(raw, observation, ranks, max_ns):
     require(set(delivered)=={t['ub_task_id'] for t in planned.values()},'Unexpected unique target write')
     for tid,t in planned.items():
         x=actual[tid]
-        require(x['bytes']==x['committed_bytes']==delivered[t['ub_task_id']]==t['business_payload_bytes'] and
+        require(x['bytes']==x['committed_bytes']==delivered[t['ub_task_id']]==t['payload_bytes'] and
                 x['submitted_tasks']==x['send_callbacks']==x['receive_callbacks']==1 and not x['context_active'],
                 'Unique delivery or callback conservation failed')
     total_business=sum(t['business_payload_bytes'] for t in planned.values())
@@ -84,32 +92,46 @@ def export_records(raw, observation, ranks, max_ns):
         per_class=[dict(business_payload_bytes=0,application_metadata_bytes=0,data_protocol_overhead_bytes=0,
                         control_packet_bytes=0,unattributed_bytes=0) for _ in bucket]
         events=json_lines(directory/'packet-events.jsonl');native=read(directory/'observation-audit.json')
+        if any('padding_bytes' in e for e in events):
+            for kind in per_class:kind['padding_bytes']=0
         require(len(events)==native['all_successful_start_packets'] and
                 sum(e['counted_packet_bytes'] for e in events)==native['all_successful_start_bytes']==native['native_tx_bytes_delta'],
                 'Raw port events differ from native counters')
         business_events=Counter();previous=0
         for event in events:
-            require(set(event)=={'sim_time_ns','packet_uid','counted_packet_bytes','business_payload_bytes'},'Invalid packet event')
+            require(set(event) in ({'sim_time_ns','packet_uid','counted_packet_bytes','business_payload_bytes'},
+                {'sim_time_ns','packet_uid','counted_packet_bytes','business_payload_bytes','application_metadata_bytes','padding_bytes'}),'Invalid packet event')
             time=integer(event['sim_time_ns'],'packet global time',previous,max_ns);previous=time
             whole=integer(event['counted_packet_bytes'],'packet bytes',1,2**32-1)
             business=integer(event['business_payload_bytes'],'business bytes',0,whole)
-            if business:business_events[time,event['packet_uid'],whole,business]+=1
+            metadata=integer(event.get('application_metadata_bytes',0),'metadata bytes',0,whole-business)
+            padding=integer(event.get('padding_bytes',0),'padding bytes',0,whole-business-metadata)
+            if business:business_events[time,event['packet_uid'],whole]+=business
             local=local_time(time,clock)
             if not port['start_local_ns']<=local<port['end_local_ns']:continue
             index=(local-port['start_local_ns'])//port['period_ns']
             row=bucket[index];row['counted_packets']+=1;row['counted_packet_bytes']+=whole
             kind=per_class[index]
             kind['business_payload_bytes']+=business
-            kind['data_protocol_overhead_bytes' if business else 'control_packet_bytes']+=whole-business
+            kind['application_metadata_bytes']+=metadata
+            if 'padding_bytes' in kind:kind['padding_bytes']+=padding
+            payload=business+metadata+padding
+            kind['data_protocol_overhead_bytes' if payload else 'control_packet_bytes']+=whole-payload
         attributed=Counter();classified=Counter()
         if provenance:
+            covered={}
             for event in json_lines(directory/'truth/packet_ranges.jsonl'):
                 require(event['transfer_id'] in planned,'Unknown packet transfer')
                 t=planned[event['transfer_id']];a,b=event['task_byte_range'];c,d=event['packet_byte_range']
                 require(event['operation_id']==t['operation_id'] and event['ub_task_id']==t['ub_task_id'] and
-                    0<=a<b<=t['payload_bytes'] and 0<c<d==event['counted_packet_bytes'] and b-a==d-c,
+                    0<=a<b<=t['payload_bytes'] and 0<c<d<=event['counted_packet_bytes'] and b-a==d-c,
                     'Incorrect packet/task business byte range')
-                classified[event['sim_time_ns'],event['packet_uid'],event['counted_packet_bytes'],b-a]+=1
+                regions=t.get('payload_regions',[dict(begin=0,end=t['payload_bytes'],kind='business')])
+                require(any(r['kind']=='business' and r['begin']<=a<b<=r['end'] for r in regions),
+                        'Metadata or padding was attributed as business data')
+                key=event['sim_time_ns'],event['packet_uid'],event['counted_packet_bytes']
+                require(not any(c<y and x<d for x,y in covered.get(key,[])), 'Duplicate packet business range')
+                covered.setdefault(key,[]).append((c,d));classified[key]+=b-a
                 local=local_time(event['sim_time_ns'],clock)
                 if port['start_local_ns']<=local<port['end_local_ns']:
                     index=(local-port['start_local_ns'])//port['period_ns']

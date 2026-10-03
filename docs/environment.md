@@ -2653,3 +2653,83 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 R/audit-published.json 确认此前受检的 112 个源码文件全部未变，11538 个旧构建产物和原生启动锁共 11539 个保护项摘要一致；四次新执行装载的十个 ns-3 库均来自 M9 独立构建。A100 profile 摘要仍为 `6416aa09e0e677134ef6facfd46dbeabc026e3eff70201ec2be9e98f5de50ffb`。本轮没有改动生产代码，因此复用此前 17 套集成检查及链接审计，不重复构建；重新运行单元测试和新增真实来源验收。L/deps-published.json 退出 0，13 个固定依赖未变，未修改子模块源码、gitlink 或锁文件。
 
 M9 完成本步的真实数据导入与计算依据验收。真实 R1 检查仅是 routed 层通信重放，没有用 GQA 替代其 MLA，没有验证完整 R1 的 shared expert、容量或原生调度组合；原生 Scheduler、窗口退出与唯一 KV 池分别已有配置服务验收。A100 小算子维度不同，未套用于 R1；目标 CM384/INT8/CANN 校准仍为 unvalidated_reference。整理记录后本地提交，不推送，停在 M9，M10 仍需用户确认。
+
+## 2026-10-03：M10 固定 CANN 路径的小型行为验收
+
+### 任务与环境
+
+用户确认开始 M10。按当前步骤范围，先完成 `v03-cann-behavior`，不把小型行为检查等同完整目标规模验收。起点为 M9 本地提交 3246f27，工作区干净；任务说明提交为 5863d50。主仓库、13 个固定依赖、根 AGENTS.md、development/current、v0.3 对应章节及继承的 v0.2 行为均已核对，目标目录没有其他适用 agent 文件。子模块只读，未升级或初始化依赖。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，记 R=runs/v03-cann-behavior、L=R/logs；只是路径缩写。经审阅的 R/record.py 保存实际 argv、cwd、UTC 起止、退出状态及 stdout/stderr 文件；集成目录的 commands.json 另存输入和逐次子命令。原始源码、输出及失败证据保留在忽略目录，没有进入 Git。
+
+没有安装系统软件、修改全局配置或下载模型/轨迹数据。公开 CANN 文件仅用于读取，不编译、不执行，不加入 deps.lock.json。固定证据见 fixtures/m10_cann/source-evidence.json：ops-transformer v8.5.0 的 tag 对象为 9efe27c941bc0dbb271c0d3a34a82021b031f0c1，实际提交为 6ead121aded45355043b502756b6592fd7c30b14，八个文件（含 LICENSE）保存大小与摘要。
+
+| 实际命令 | 日志标签 | 退出及结果 |
+|---|---|---|
+| `bash scripts/check_deps.sh` | deps-initial、deps-final | 均 0，13 个固定提交匹配。 |
+| `python3 R/baseline.py` | baseline | 0，保护 12041 份旧构建产物及一份原生启动锁。 |
+| `git clone --depth 1 --filter=blob:none --sparse --branch v8.5.0 https://gitcode.com/cann/ops-transformer.git R/cann-source` | cann-source-clone | 0，只读浅克隆固定源码。 |
+| `git -C R/cann-source sparse-checkout set mc2/moe_distribute_dispatch_v2 mc2/moe_distribute_combine_v2 mc2/common` | cann-source-select | 0，选择对应文件，没有构建该仓库。 |
+
+### 独立构建与功能检查
+
+L/configure.json 退出 0，实际配置命令如下；生成目录与以前各阶段隔离。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m10-cann-behavior -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m10-cann-behavior/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+
+cmake --build build/m10-cann-behavior --target cosim-service cosim-service-deadlock-test \
+  cosim-layer cosim-sequence cosim-lifecycle-test cosim-observation-test \
+  cosim-write cosim-write-test cosim-layer-delay-test -j 8
+```
+
+初次 build 与最终增量 build-final 均退出 0；初次构建完成 534 个目标。最终只修正 CANN Combine 的源 EP 排序表达，不改变已排序输入的结果。没有把其他网络后端编入联合程序。
+
+| 实际命令/输入 | 日志标签 | 退出及结果 |
+|---|---|---|
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` | python-final | 0，95 项通过；包含 6 项 CANN 布局、依赖、拒绝及容量检查。 |
+| `build/m10-cann-behavior/output/cosim/ns3.44-cosim-observation-test` | observation-unit | 0，业务/元数据/填充、协议控制及窗口边界检查通过。 |
+| `build/m10-cann-behavior/output/cosim/ns3.44-cosim-write-test` | write-unit | 0，写事务匹配、重复/迟到完成及资源回收检查通过。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service --input fixtures/m10_cann/service.json --layer fixtures/m10_cann/layers.json --backend build/m10-cann-behavior/output/cosim/ns3.44-cosim-service --system fixtures/m1_compute/system.json --network fixtures/m3_shared_bottleneck/network --observation fixtures/m3_shared_bottleneck/observation.json --output-dir R/service-first` | service-first | 0，首次实际联合执行成功。 |
+| `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_cann_behavior.py --build-dir build/m10-cann-behavior --output-dir R/cann-final` | cann-final | 0，13 次服务、2 次单层执行、2 次图生成、8 项预期拒绝，共 25 条子命令。 |
+
+CANN 基准为两组三层、七请求、五轮、36 条逐层路由及 72 份专家贡献：同 rank 14、同 chip 21、跨 chip 37；多个专家命中同一目的 rank 的五处输入仍各自复制。126 次零计数发布保留。305 次实际 UB 写交付 120316 B，其中业务 113664 B、元数据 5616 B、填充 1036 B，另有 123 次同 chip 交付；全部 WQE/回调唯一，结束资源归零并排空网络。
+
+基准完成于 131530 ns；独立 ep0/ep1 分别为 99513/52604 ns，共享运行两组首轮完成及下一轮提交均后移。10 Gbps 改 1 Gbps 后为 1214814 ns、字节相同；原生 FIFO 重建的 queue_byte_ns 从 11686030 增至 121197223。chunk=257 时写次数为 638、字节不变、176178 ns；一个发送槽为 143044 ns、峰值 WQE≤1；一个参考 lane 为 144155 ns；局部成本×100 为 475621 ns。全部同 chip 时无 UB 写，354 次本地交付和全部专家贡献保留，完成于 13330 ns。
+
+源记录开、关、不挂观测的服务结果、实际事件及原生网络日志相同，来源开/关公开观测相同。场景 YAML 正常运行的结果与基准一致。端侧 Dispatch 区间包含重排，Combine 包含归约；十处后层提前于其他 rank 前层结束，未添加全 rank 逐层屏障。按 1 μs 和 10 μs 重采样后归属总量不变，公开输出不含内部来源。
+
+H=1025、两专家同目的 rank 的检查按 chunk=1024/17 分别执行 20/382 次写。两者都是 6150 B 业务、352 B 元数据、118 B 填充；端口 8/4 分别观察业务 2050 B、元数据 160 B、填充 118 B。包内业务范围不含 scale、三元组或填充；32 B 状态不被向量分块参数拆分。三个前端配置和五个 C++ 计划篡改均拒绝，后端拒绝时 now_ns=0 且 transfers 为空。
+
+### 开发失败与受影响回归
+
+首次 cann-integration（退出 1）发现旧 observed 校验仍要求 rank∈[0,11]，而执行层与本场景使用非连续编号 2、7、12、20、25、30。依据 v0.3 §3 的参数化要求，将公开 rank 校验改为与 ExecutionPlan 同一整数范围，保留非空、唯一、有序及类型检查；未增加公开字段。cann-integration-v2（退出 1）在已完成的单层运行上误用了服务结果的 normal_exit/network_drain 字段；改为检查该驱动实际具有的全部图完成、迟后事件、活动 WQE、回调和资源归零字段。失败日志保留，未修改业务预期数值或删除依赖断言；最终 cann-final 通过。
+
+旧回归统一命令为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_NAME.py --build-dir build/m10-cann-behavior --output-dir R/NAME-final`。以下 16 套均退出 0，原脚本及预期未改，各目录 summary.json、commands.json 和 L/NAME-final.json 保存实际输入、子命令和预期拒绝：composed_service、continuous_batching、scenario_backend、service_model_capacity、deployment_locality、execution_parameters、sequence、service、dynamic_service、service_boundaries、pd_handoff、pd_queue、multilayer、research_export、shared_bottleneck、data_inputs。外层 `python3 R/verify.py` 的 regressions-final 退出 0。
+
+另外两套既有验收实际运行并退出 0：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_evidence_service.py \
+  --build-dir build/m10-cann-behavior --output-dir runs/v03-cann-behavior/evidence-final \
+  --measured-profile runs/v03-route-compute-evidence/a100-profile.json
+
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_published_routes.py \
+  --build-dir build/m10-cann-behavior --output-dir runs/v03-cann-behavior/published-final
+```
+
+evidence-final 使用已有 22 行 A100 表，不重新测量；published-final 使用已有固定版本的真实 R1-AWQ 本地文件，不新增下载。分别保留 M9 的窗口退出/精确形状使用与真实来源逐条核对。上述旧 16 套部分运行先于 rank 白名单修复；按最终 observation.py 另行完整重跑 check_research_export.py，输出 R/research-export-ranks、日志同名，退出 0。新 CANN 导出和最终 95 项单元测试也使用最终版本。R/audit.json 逐项标记这一已复验的后续差异；其余生产代码摘要一致。
+
+### 最终审计与停止位置
+
+`python3 R/audit.py`（L/audit-final.json）退出 0：12041 份旧构建产物摘要未变，一份原生启动锁从已验证备份恢复；libAstraSim.a 的 52 个核心对象全部进入联合链接，实际装载的 10 个 ns-3 库全部来自 build/m10-cann-behavior/output/lib，没有其他 ASTRA 网络后端。固定 CANN 提交及八文件摘要再次匹配，源码 checkout 干净。源码、测试、夹具最终摘要及检查记录在 R/audit.json；主仓库依赖锁和全部子模块未改。
+
+本小步完成，整理记录后本地提交、不推送，下一步仍由用户确认。当前仅执行源码适配的声明式 CANN 行为和 URMA_WRITE/RTP 参考事务；逻辑 lane、保守缓冲/归约屏障及局部耗时仍是近似。未执行或校准原生 CANN/NPU，未将 A100 小算子或合成小模型改名为 R1；原生事务对应、完整 R1/MLA/shared expert 及 CM384/128 rank 目标规模检查仍未完成，M10 整体保持未完成。

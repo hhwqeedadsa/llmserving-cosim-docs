@@ -399,3 +399,13 @@ configured-service/3 引用 layer-segments/1，各组分别声明完整模型容
 layer/3 的可选 operator_profile 使用实际上下文列表和逐专家输入向量精确查表。C++ 独立重算 domain、原始样本中位数、形状、零工作、节点时间及依赖，部署合同继续固定每层 profile；范围外输入明确拒绝。专家实测项替换旧线性项，attention 实测项与明确的准备残差相加，网络等待仍只来自本次 UB 事件。旧输入没有此字段时保留原行为。
 
 格式、功能命令、测量范围及真实来源文件清单见 [M9 说明](../fixtures/m9_evidence/README.md)。两份 R1-AWQ 文件已核验，选定路由经过同一后端的两批次、三层实际 UB 重放；该对照仅含 routed 层通信与参考计算，不验证完整 R1 的 MLA、共享专家或容量。人工服务检查、真实路由、A100 测量和目标 NPU 校准分别记录；M9 整体验收状态以 [current.md](../docs/tasks/current.md) 为准。
+
+## M10 固定 CANN 路径的小型执行
+
+layer/3 可选择 `cann_a3_v850_fullmesh_v1` 和固定 revision 的 cann_profile。Python 生成逐专家数据和状态消息，C++ 的 cann_plan.cc 独立重建贡献、布局、缓冲及全部依赖；子层校验继续用于 multilayer-plan/2 和 deployment/4，不新增服务调度器或网络实例。场景 YAML 仍显式选择已有 WRITE/RTP profile。
+
+同 chip 不同 rank 保留本地交付，跨 chip 消息按各自实际复制长度分块。Dispatch 计数发布等待本 rank 数据发送完成；专家计算等待数据/计数及重排，Combine 每份结果之后发布标志；每 lane 及发送槽等源事务完成才回收。端侧 Dispatch 结束包含新重排阶段，Combine 结束包含 Token 所属 rank 的归约。局部屏障不会扩展为全 rank 逐层屏障。
+
+WriteDescriptor 可携带业务、应用元数据和填充的分段范围。观测始终被动读取任务至包的偏移，仅业务区间进入操作归属；来源关闭时仍正确分类原始载荷，不把状态 WRITE 算作协议控制包。旧计划的整个载荷仍为业务。研究导出兼容本地交付，并取消旧 0～11 rank 编号白名单，与执行计划范围一致，公开字段不增加内部身份。
+
+源码、参考近似、缓冲公式、限制、实际命令和检查见 [M10 样例](../fixtures/m10_cann/README.md)。未执行 CANN/NPU，不支持原生 MTE/LDST 等价声明；当前模板拒绝阶段/形状不匹配的 operator_profile。完整 M10 和目标规模验收尚未完成。

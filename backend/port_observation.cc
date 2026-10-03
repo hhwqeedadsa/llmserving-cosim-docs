@@ -74,15 +74,17 @@ PortWindows::PortWindows(ObservationConfig config) : config_(config)
             "Invalid port window bounds");
     rows_.resize((config.end_ns - config.start_ns - 1) / config.period_ns + 1);
 }
-void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business)
+void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business, uint32_t metadata, uint32_t padding)
 {
-    Require(business <= whole, "Payload exceeds packet size");
+    const uint64_t payload = uint64_t(business) + metadata + padding;
+    Require(payload <= whole, "Payload exceeds packet size");
     if (time_ns < config_.start_ns || time_ns >= config_.end_ns) return;
     auto& row = rows_.at((time_ns - config_.start_ns) / config_.period_ns);
     ++row.packets;
     row.whole += whole;
     row.business += business;
-    if (business) row.overhead += whole - business;
+    row.metadata += metadata; row.padding += padding;
+    if (payload) row.overhead += whole - payload;
     else row.control += whole;
 }
 
@@ -165,8 +167,11 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
       retain_packet_events_(retain_packet_events)
 {
     for (const auto& d : descriptors)
+    {
         Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
                 "Duplicate or invalid observation task identity");
+        segmented_payload_ |= d.payload_regions.has_value();
+    }
     Require(config_.switch_id < ns3::NodeList::GetNNodes(), "Observation switch does not exist");
     auto node = ns3::NodeList::GetNode(config_.switch_id);
     auto sw = node->GetObject<ns3::UbSwitch>();
@@ -175,7 +180,8 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
     port_ = ns3::DynamicCast<ns3::UbPort>(node->GetDevice(config_.port_id));
     Require(port_ != nullptr, "Observation device is not a UB port");
     initial_tx_bytes_ = port_->GetTxBytes();
-    if (config_.provenance)
+    // Byte layout is needed even with source attribution disabled. This passive
+    // ledger never changes the packet or schedules a simulation event.
     {
         ledger_ = std::make_shared<PayloadLedger>(descriptors);
         // Keep no TP references: native reclamation owns their lifetime. The bound
@@ -209,8 +215,11 @@ void PortObservation::Register(const std::vector<WriteDescriptor>& descriptors)
 {
     auto checked = descriptors_;
     for (const auto& d : descriptors)
+    {
         Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
                 "Duplicate or invalid observation task identity");
+        segmented_payload_ |= d.payload_regions.has_value();
+    }
     if (ledger_) ledger_->Register(descriptors);
     descriptors_.swap(checked);
 }
@@ -235,11 +244,41 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     QueueEvent("tx_start", packet, port_->GetUbQueue()->GetCurrentBytes());
     queue_events_.back()["busy_until_ns"] = now + completion_delay.GetNanoSeconds();
     const auto whole = packet->GetSize();
-    const auto business = WritePayloadBytes(packet);
+    const auto payload = WritePayloadBytes(packet);
+    uint32_t business = payload, metadata = 0, padding = 0;
+    std::optional<PayloadRange> packet_range;
+    if (payload)
+    {
+        packet_range = ledger_->Lookup(packet, payload);
+        const auto& range = *packet_range;
+        const auto& descriptor = descriptors_.at(range.task_id);
+        if (descriptor.payload_regions)
+        {
+            business = 0;
+            for (const auto& region : *descriptor.payload_regions)
+            {
+                const auto a = std::max(region.begin, range.task_begin);
+                const auto b = std::min(region.end, range.task_begin + range.bytes);
+                if (a >= b) continue;
+                if (region.kind == "business") business += b-a;
+                else if (region.kind == "metadata") metadata += b-a;
+                else if (region.kind == "padding") padding += b-a;
+                else Require(false, "Unknown payload region");
+            }
+            Require(business + metadata + padding == payload, "Incomplete packet byte classification");
+        }
+    }
     if (retain_packet_events_)
+    {
         packet_events_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
             {"counted_packet_bytes", whole}, {"business_payload_bytes", business}});
-    windows_.Add(now, whole, business);
+        if (segmented_payload_)
+        {
+            packet_events_.back()["application_metadata_bytes"] = metadata;
+            packet_events_.back()["padding_bytes"] = padding;
+        }
+    }
+    windows_.Add(now, whole, business, metadata, padding);
     all_bytes_ += whole; ++all_packets_;
     // Validation fingerprint of actual serialized bytes AND packet start times.
     auto hash_byte = [this](uint8_t b) { fingerprint_ = (fingerprint_ ^ b) * 1099511628211ULL; };
@@ -248,17 +287,23 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     std::vector<uint8_t> wire(whole);
     packet->CopyData(wire.data(), whole);
     for (auto b : wire) hash_byte(b);
-    if (ledger_ && business)
+    if (config_.provenance && business)
     {
-        const auto range = ledger_->Lookup(packet, business);
+        const auto range = *packet_range;
         const auto& descriptor = descriptors_.at(range.task_id);
-        if (now >= config_.start_ns && now < config_.end_ns)
+        auto regions = descriptor.payload_regions.value_or(std::vector<PayloadRegion>{{0, descriptor.bytes, "business"}});
+        for (const auto& region : regions)
+        {
+            if (region.kind != "business") continue;
+            const auto a = std::max(region.begin, range.task_begin), b = std::min(region.end, range.task_begin + range.bytes);
+            if (a >= b || now < config_.start_ns || now >= config_.end_ns) continue;
             packet_ranges_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
                 {"ub_task_id", descriptor.task_id}, {"transfer_id", descriptor.transfer_id},
                 {"operation_id", descriptor.operation_id.empty() ? descriptor.graph_id + "/write" : descriptor.operation_id},
-                {"task_byte_range", {range.task_begin, range.task_begin + range.bytes}},
-                {"packet_byte_range", {range.packet_begin, range.packet_begin + range.bytes}},
+                {"task_byte_range", {a, b}},
+                {"packet_byte_range", {range.packet_begin + a-range.task_begin, range.packet_begin + b-range.task_begin}},
                 {"counted_packet_bytes", whole}});
+        }
     }
 }
 
@@ -308,9 +353,10 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"direction", "egress"}, {"local_window_start_ns", start}, {"local_window_end_ns", end},
             {"counted_packets", row.packets}, {"counted_packet_bytes", row.whole}});
         truth.push_back({{"window_start_sim_ns", start}, {"window_end_sim_ns", end},
-            {"business_payload_bytes", row.business}, {"application_metadata_bytes", 0},
+            {"business_payload_bytes", row.business}, {"application_metadata_bytes", row.metadata},
             {"data_protocol_overhead_bytes", row.overhead}, {"control_packet_bytes", row.control},
             {"unattributed_bytes", 0}});
+        if (segmented_payload_) truth.back()["padding_bytes"] = row.padding;
     }
     save("observed/port_counters.jsonl", observed, true);
     save("observed/endpoint_ops.jsonl", endpoint_ops, true);
@@ -320,7 +366,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         {"wire_and_time_fnv1a64", fingerprint_}});
     save("egress-queue-audit.jsonl", queue_events_, true);
     if (retain_packet_events_) save("packet-events.jsonl", packet_events_, true);
-    if (!ledger_) return;
+    if (!config_.provenance) return;
     std::filesystem::create_directory(base / "truth");
     std::set<int> ranks;
     Json registry = Json::array();
@@ -336,6 +382,22 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
             {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
             {"priority", 7}, {"chunk_id", d.chunk_index}});
+        if (d.payload_regions)
+        {
+            uint64_t business = 0, metadata = 0, padding = 0;
+            Json regions = Json::array();
+            for (const auto& r : *d.payload_regions)
+            {
+                if (r.kind == "business") business += r.end-r.begin;
+                else if (r.kind == "metadata") metadata += r.end-r.begin;
+                else padding += r.end-r.begin;
+                regions.push_back({{"begin",r.begin},{"end",r.end},{"kind",r.kind}});
+            }
+            registry.back()["business_payload_bytes"] = business;
+            registry.back()["application_metadata_bytes"] = metadata;
+            registry.back()["padding_bytes"] = padding;
+            registry.back()["payload_regions"] = regions;
+        }
         if (!d.operation_id.empty())
         {
             registry.back()["pair_byte_range"] = {d.pair_byte_offset, d.pair_byte_offset + d.bytes};

@@ -3,7 +3,7 @@ import csv
 import json
 from pathlib import Path
 
-from .plan import integer, require
+from .plan import integer, require, MAX_RANK_ID
 
 I64_MIN, I64_MAX = -(2**63), 2**63-1
 PPB = 10**9
@@ -132,8 +132,9 @@ def validate_observed(directory):
         public['byte_semantics']=='ns3_packet_get_size' and public['counter_location']=='egress_packet_start' and
         type(public['clock_resolution_ns']) is int and public['clock_resolution_ns']==1,'Invalid public field whitelist')
     ranks=public['rank_ids']
-    require(isinstance(ranks,list) and 1<=len(ranks)<=12 and ranks==sorted(set(ranks)) and
-            all(type(r) is int and 0<=r<12 for r in ranks),'Invalid public ranks')
+    require(isinstance(ranks,list) and bool(ranks) and
+            all(type(r) is int and 0<=r<=MAX_RANK_ID for r in ranks) and
+            ranks==sorted(set(ranks)),'Invalid public ranks')
     port_configs=public['ports'];points=set();expected_windows=[]
     require(isinstance(port_configs,list) and 1<=len(port_configs)<=16,'Invalid public port list')
     for p in port_configs:

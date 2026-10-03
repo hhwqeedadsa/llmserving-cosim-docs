@@ -198,7 +198,8 @@ void BackendConfig::Apply() const
 }
 void BackendConfig::CheckPlan(const Json& plan) const
 {
-    Require(plan.at("communication_template") == "direct_rank_dedup_v1", "scenario requires direct rank template");
+    Require(plan.at("communication_template") == "direct_rank_dedup_v1" ||
+            plan.at("communication_template") == "cann_a3_v850_fullmesh_v1", "scenario requires a supported WRITE/RTP template");
     if (plan.contains("layers"))
     {
         Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2", "scenario requires configured layer segment");

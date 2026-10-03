@@ -38,14 +38,15 @@ def audit_capacity(model, memory, layer):
     d = integer(a['head_dim'], 'head_dim', 1, I64)
     require(q % k == 0 and q*d == h, 'Invalid GQA dimensions')
     dt = model['dtypes']
+    vector_bytes = dict(DTYPE_BYTES, **({'int8':1} if layer['template']=='cann_a3_v850_fullmesh_v1' else {}))
     fields(dt, 'weights compute kv dispatch combine', 'dtypes')
     require(all(isinstance(value, str) for value in dt.values()) and
-            all(dt[key] in DTYPE_BYTES for key in ('weights', 'compute', 'dispatch', 'combine')) and
+            all(dt[key] in DTYPE_BYTES for key in ('weights', 'compute', 'combine')) and dt['dispatch'] in vector_bytes and
             dt['kv'] in dict(DTYPE_BYTES, fp8=1), 'Unsupported model dtype')
     w = DTYPE_BYTES[dt['weights']]
     kv_bytes = dict(DTYPE_BYTES, fp8=1)[dt['kv']]
     require(h == layer['hidden_dim'] and
-            DTYPE_BYTES[dt['dispatch']] == layer['dispatch_element_bytes'] and
+            vector_bytes[dt['dispatch']] == layer['dispatch_element_bytes'] and
             DTYPE_BYTES[dt['combine']] == layer['combine_element_bytes'], 'Model and execution dimensions/dtypes differ')
     ranks = layer['rank_ids']
     layers = model['layers']
@@ -103,6 +104,9 @@ def audit_capacity(model, memory, layer):
     batch = batch_limit(layer) if layer['schema_version'] == 'moe-ub-layer-fixture/3' else 1
     minimum_buffer = max(batch*len(ranks)*remote*h*(layer['dispatch_element_bytes']+layer['combine_element_bytes']),
                          2*layer['send_slots_per_rank']*layer['chunk_bytes'])
+    if layer['template']=='cann_a3_v850_fullmesh_v1':
+        from .cann import buffers
+        minimum_buffer=max(minimum_buffer,buffers(layer)['total_bytes'])
     audit = []
     for rank, budget in zip(ranks, budgets):
         fields(budget, 'rank_id device_bytes workspace_bytes communication_buffer_bytes', 'rank memory')

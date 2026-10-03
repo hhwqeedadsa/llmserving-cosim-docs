@@ -7,11 +7,17 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace ns3 { class UbApp; class UbTransaction; class UbWqeSegment; }
 
 namespace moe_ub
 {
+struct PayloadRegion
+{
+    uint64_t begin, end;
+    std::string kind;
+};
 // M1 binds one descriptor to two rank adapters. No CSV phase state is involved.
 struct WriteDescriptor
 {
@@ -29,6 +35,8 @@ struct WriteDescriptor
     uint64_t pair_byte_offset = 0;
     uint64_t pair_payload_bytes = 0; // Zero only for the original single-WRITE fixture.
     std::optional<uint32_t> src_ub_node{}, dst_ub_node{};
+    // Absent on legacy plans: their entire task is useful vector/KV data.
+    std::optional<std::vector<PayloadRegion>> payload_regions{};
     // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.
     uint32_t SourceNode() const { return src_ub_node.value_or(static_cast<uint32_t>(src_rank)); }
     uint32_t DestinationNode() const { return dst_ub_node.value_or(static_cast<uint32_t>(dst_rank)); }

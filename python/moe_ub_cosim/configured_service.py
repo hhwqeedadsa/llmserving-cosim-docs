@@ -9,77 +9,81 @@ from .plan import batch_limit, build_plan, integer, require, validate_config
 from .service import Service, group_layer
 
 
+def validate_configured_inputs(config, layer):
+    fields(config, 'schema_version run_id mode execution model model_spec memory scheduling groups requests',
+           'configured service')
+    batched = config['schema_version'] == 'moe-ub-configured-service/2'
+    require(config['schema_version'] in ('moe-ub-configured-service/1','moe-ub-configured-service/2') and config['mode'] == 'fixture' and
+            config['execution'] == {'entry_mode': 'service'}, 'Unsupported configured service mode/schema')
+    require((layer['schema_version'] == 'moe-ub-layer-fixture/3') == batched, 'Service/layer batching schema mismatch')
+    require(isinstance(config['run_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', config['run_id']),
+            'Invalid run_id')
+    validate_config(layer)
+    groups = config['groups']
+    require(isinstance(groups, list) and len(groups) == 1, 'Configured service currently executes one EP group')
+    group = groups[0]
+    fields(group, 'group_id rank_ids rank_to_ub_node expert_placement' +
+           (' deployment' if 'deployment' in layer else ''), 'group')
+    require(all(group[k] == layer[k] for k in group), 'Service group and selected layer differ')
+    require(isinstance(group['group_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', group['group_id']),
+            'Invalid group_id')
+    validate_config(group_layer(layer, group))
+    audit = audit_capacity(config['model_spec'], config['memory'], layer)
+    require(config['model'] == config['model_spec']['name'], 'Service/model identity mismatch')
+    fields(config['scheduling'], 'max_num_seqs max_num_batched_tokens', 'scheduling')
+    maximum = config['model_spec']['max_position_embeddings']
+    if batched:
+        require(config['scheduling'] == layer['batch_limits'], 'Service/layer batch limits differ')
+        batch_limit(layer)
+        require(layer['compute_dtypes'] == {k:config['model_spec']['dtypes'][k] for k in layer['compute_dtypes']},
+                'Model and batch compute dtypes differ')
+    else:
+        integer(config['scheduling']['max_num_seqs'], 'max_num_seqs (current single-request boundary)', 1, 1)
+        integer(config['scheduling']['max_num_batched_tokens'], 'max_num_batched_tokens', 1, maximum)
+    requests = config['requests']
+    require(isinstance(requests, list), 'Requests must be a list')
+    ids = set()
+    by_rank = {r['rank_id']: r for r in audit['ranks']}
+    block_size = config['memory']['block_size']
+    requirements = []
+    for source in requests:
+        fields(source, 'request_id rank_id arrival_ns prompt_tokens generated_tokens decode_routes', 'request')
+        identity = integer(source['request_id'], 'request_id', 0, I64)
+        require(identity not in ids, 'Duplicate request_id')
+        ids.add(identity)
+        rank = integer(source['rank_id'], 'rank_id', 0, 2**31-2)
+        require(rank in by_rank, 'Unknown request rank')
+        integer(source['arrival_ns'], 'arrival_ns', 0, I64-1000001)
+        integer(source['prompt_tokens'], 'prompt_tokens', 1, maximum)
+        integer(source['generated_tokens'], 'generated_tokens', 1, maximum)
+        routes = source['decode_routes']
+        require(isinstance(routes, list) and routes, 'Require explicit nonempty decode routes')
+        target = source['prompt_tokens'] + source['generated_tokens'] + len(routes)
+        require(target <= maximum, 'Request exceeds declared model context')
+        needed = (target-1+block_size-1)//block_size
+        require(needed <= by_rank[rank]['kv_capacity_blocks'],
+                f'Request {identity}: final KV demand {needed} blocks exceeds rank {rank} total KV capacity')
+        requirements.append(dict(request_id=identity, rank_id=rank, target_tokens=target,
+                                 reserved_kv_tokens=target-1, reserved_kv_blocks=needed))
+        for step, experts in enumerate(routes):
+            candidate = group_layer(layer, group)
+            candidate['tokens'] = [dict(request_id=str(identity), src_rank=rank, phase='decode',
+                token_index=source['prompt_tokens']+source['generated_tokens']-1+step,
+                layer_id=layer['layer_id'], expert_ids=experts)]
+            build_plan(candidate)
+    digest = hashlib.sha256(json.dumps(config['model_spec'], sort_keys=True,
+                                      separators=(',', ':')).encode()).hexdigest()
+    evidence = dict(model=audit, model_spec_sha256=digest,
+                         reservation_policy='final_input_output_minus_one', requests=requirements,
+                         scheduler_initialization='root_configured_scheduler_adapter',
+                         compute_source='fixed_reference', calibration_status='unvalidated_reference')
+    return dict(batched=batched, audit_by_rank=by_rank,
+                requirements={r['request_id']: r for r in requirements}, evidence=evidence)
+
+
 class ConfiguredService(Service):
     def validate_inputs(self, config, layer):
-        fields(config, 'schema_version run_id mode execution model model_spec memory scheduling groups requests',
-               'configured service')
-        self.batched = config['schema_version'] == 'moe-ub-configured-service/2'
-        require(config['schema_version'] in ('moe-ub-configured-service/1','moe-ub-configured-service/2') and config['mode'] == 'fixture' and
-                config['execution'] == {'entry_mode': 'service'}, 'Unsupported configured service mode/schema')
-        require((layer['schema_version'] == 'moe-ub-layer-fixture/3') == self.batched, 'Service/layer batching schema mismatch')
-        require(isinstance(config['run_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', config['run_id']),
-                'Invalid run_id')
-        validate_config(layer)
-        groups = config['groups']
-        require(isinstance(groups, list) and len(groups) == 1, 'Configured service currently executes one EP group')
-        group = groups[0]
-        fields(group, 'group_id rank_ids rank_to_ub_node expert_placement' +
-               (' deployment' if 'deployment' in layer else ''), 'group')
-        require(all(group[k] == layer[k] for k in group), 'Service group and selected layer differ')
-        require(isinstance(group['group_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', group['group_id']),
-                'Invalid group_id')
-        validate_config(group_layer(layer, group))
-        audit = audit_capacity(config['model_spec'], config['memory'], layer)
-        require(config['model'] == config['model_spec']['name'], 'Service/model identity mismatch')
-        fields(config['scheduling'], 'max_num_seqs max_num_batched_tokens', 'scheduling')
-        maximum = config['model_spec']['max_position_embeddings']
-        if self.batched:
-            require(config['scheduling'] == layer['batch_limits'], 'Service/layer batch limits differ')
-            batch_limit(layer)
-            require(layer['compute_dtypes'] == {k:config['model_spec']['dtypes'][k] for k in layer['compute_dtypes']},
-                    'Model and batch compute dtypes differ')
-        else:
-            integer(config['scheduling']['max_num_seqs'], 'max_num_seqs (current single-request boundary)', 1, 1)
-            integer(config['scheduling']['max_num_batched_tokens'], 'max_num_batched_tokens', 1, maximum)
-        requests = config['requests']
-        require(isinstance(requests, list), 'Requests must be a list')
-        ids = set()
-        by_rank = {r['rank_id']: r for r in audit['ranks']}
-        block_size = config['memory']['block_size']
-        requirements = []
-        for source in requests:
-            fields(source, 'request_id rank_id arrival_ns prompt_tokens generated_tokens decode_routes', 'request')
-            identity = integer(source['request_id'], 'request_id', 0, I64)
-            require(identity not in ids, 'Duplicate request_id')
-            ids.add(identity)
-            rank = integer(source['rank_id'], 'rank_id', 0, 2**31-2)
-            require(rank in by_rank, 'Unknown request rank')
-            integer(source['arrival_ns'], 'arrival_ns', 0, I64-1000001)
-            integer(source['prompt_tokens'], 'prompt_tokens', 1, maximum)
-            integer(source['generated_tokens'], 'generated_tokens', 1, maximum)
-            routes = source['decode_routes']
-            require(isinstance(routes, list) and routes, 'Require explicit nonempty decode routes')
-            target = source['prompt_tokens'] + source['generated_tokens'] + len(routes)
-            require(target <= maximum, 'Request exceeds declared model context')
-            needed = (target-1+block_size-1)//block_size
-            require(needed <= by_rank[rank]['kv_capacity_blocks'],
-                    f'Request {identity}: final KV demand {needed} blocks exceeds rank {rank} total KV capacity')
-            requirements.append(dict(request_id=identity, rank_id=rank, target_tokens=target,
-                                     reserved_kv_tokens=target-1, reserved_kv_blocks=needed))
-            for step, experts in enumerate(routes):
-                candidate = group_layer(layer, group)
-                candidate['tokens'] = [dict(request_id=str(identity), src_rank=rank, phase='decode',
-                    token_index=source['prompt_tokens']+source['generated_tokens']-1+step,
-                    layer_id=layer['layer_id'], expert_ids=experts)]
-                build_plan(candidate)
-        self.audit_by_rank = by_rank
-        self.requirements = {r['request_id']: r for r in requirements}
-        digest = hashlib.sha256(json.dumps(config['model_spec'], sort_keys=True,
-                                          separators=(',', ':')).encode()).hexdigest()
-        self.evidence = dict(model=audit, model_spec_sha256=digest,
-                             reservation_policy='final_input_output_minus_one', requests=requirements,
-                             scheduler_initialization='root_configured_scheduler_adapter',
-                             compute_source='fixed_reference', calibration_status='unvalidated_reference')
+        self.__dict__.update(validate_configured_inputs(config, layer))
         self.memory_events = []
         self.batch_events = []
         self.completed_ids = set()
@@ -155,7 +159,8 @@ class ConfiguredService(Service):
     def validate_batch(self, rank, batch):
         if not self.batched:
             return super().validate_batch(rank, batch)
-        require(batch is not None and 1 <= len(batch.requests) <= batch_limit(self.layer), 'Empty or over-budget decode batch')
+        require(batch is not None and 1 <= len(batch.requests) <= min(self.scheduler_by_rank[rank].max_num_seqs,
+                self.scheduler_by_rank[rank].max_num_batched_tokens), 'Empty or over-budget decode batch')
         ids = [r.id for r in batch.requests]
         require(len(set(ids)) == len(ids) and batch.num_decode == len(ids) and batch.num_prefill == 0 and
                 batch.scheduled_tokens == {rid:1 for rid in ids}, 'Invalid per-request scheduled_tokens')

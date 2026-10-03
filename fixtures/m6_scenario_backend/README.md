@@ -2,7 +2,7 @@
 
 `reference.yaml` 引用已有小型 GQA 服务、一个选定 MoE 层和四端点交换网络，从 CM384/R1 参考规格中只导入 `ns3_backend.reference_attributes/reference_globals` 及按角色选择的事务 profile。它不执行参考规格中的模型、384 芯片拓扑或 CANN 流程；原 `moe-ub-scenario-reference/0.1` 文件仍不能直接作为可执行输入。
 
-入口沿用同一配置服务、ASTRA 图和 UB 网络。本目录旧 schema 样例的执行边界是一组、一个选定层、每 rank 同时一个请求；路由和计算耗时来自人工参考输入，状态为 `unvalidated_reference`。M7 已另行验证引用 service/2 与 layer/3 的[连续批处理输入](../m7_continuous_batching/README.md)，不改变本目录样例的原行为。
+入口沿用同一配置服务、ASTRA 图和 UB 网络。本目录旧 schema 样例的执行边界是一组、一个选定层、每 rank 同时一个请求；路由和计算耗时来自人工参考输入，状态为 `unvalidated_reference`。M7 已另行验证引用 service/2 与 layer/3 的[连续批处理输入](../m7_continuous_batching/README.md)，M8 又验证 service/3 与 layer-segments/1 的[多组层段输入](../m8_composed_service/README.md)，不改变本目录样例的原行为。
 
 ## 已验证命令
 
@@ -32,7 +32,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 | 字段 | 含义 |
 |---|---|
 | `scenario_id/basis` | 运行身份；当前依据只能为 `selected_reference`。 |
-| `service/layer/system` | configured-service/1 配 layer/1、layer/2，或 configured-service/2 配 layer/3，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
+| `service/layer/system` | configured-service/1 配 layer/1、layer/2，configured-service/2 配 layer/3，或 configured-service/3 配 layer-segments/1，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
 | `backend.reference_file` | 原参考规格。只读取上述后端段，所选 profile 必须完整；未选候选允许缺项。 |
 | `backend.profile_by_role` | 显式选择 `dispatch/combine`，当前均要求 URMA WRITE/RTP、数据拥有方发起、RemoteWriteCommitted 就绪、事务完成释放发送槽。 |
 | `backend.attributes/globals` | 原生完整键名和标量值；未知名称、类型/单位错误或矛盾的固定约束报错。带单位时间使用 `10ns` 等字符串，带宽属性使用 `224Gbps` 等原生格式；生效值按原生序列化形式保存。 |
@@ -48,6 +48,8 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 节点/链路另有更高优先级的 CSV 实例覆盖：读取原案例的连通关系，使用 `network.defaults` 替换其全部速率和时间，再应用 `nodes/links`。不会继承原案例的 `network_attribute.txt`，也不会把原 CSV 中的时间当作最终生效值。节点连续编号、全部声明端口连接、无环单路径及映射端点对的双向预建通道在解析时核对。本入口不验证多平面、ECMP/喷洒、READ、CTP 或 native LD/ST。
 
+多组层段输入要求预建通道覆盖每组内的端点对，独立组之间不产生业务通信，因此不要求组间端点两两建通道。`resolution.json` 的 `transport_channel_required_groups` 保存这一检查范围；各组仍共享同一物理拓扑及队列。execution 的 chunk/发送槽应用到所有层并重新检查容量和完整层段。
+
 ## 生效记录
 
 后端的 `--backend-catalog` 从运行时 TypeId 和 GlobalValue 枚举，当前构建共 96 个 UB 属性、21 个 UB 全局值；包含延迟注册的原生工具全局值和出口队列类型，不另维护默认值表。目录记录 UB 提交和编译常量；`--check-backend FILE` 再用原生 checker 校验并规范化。目录不匹配当前构建时拒绝执行。CMake 在配置时记录 UB 提交，依赖变更后应重新配置；当前任务没有变更依赖。
@@ -56,6 +58,8 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 - `resolution.json` 保存导入范围、输入摘要、固定依赖、二进制及适配器摘要、网络覆盖、三个分包口径、RNG/观测输入和完成状态。运行后补记实际执行目录中四份 CSV 的摘要。
 - `run/execution/effective_backend.json` 读取实际 switch、allocator、routing、queue、port、application、connection manager、TP 的属性，包括继承属性；读取实际链路速率/延迟和节点时间，核对所选值与实例覆盖一致。还核对实际全局值。Jetty 动态创建，其 TA 和 inflight 值在每个 WQE 启动回调时核对并写入 `result.json`。
 - 全量目录中存在 CTP、CC、native LD/ST 等未启用属性，只表示其默认/配置值可追溯，不表示这些模式执行过或已校准。实际对象列表、激活 profile 和任务结果分别记录；同芯片本地交付沿用独立本地回调，不计为 WRITE。
+
+新 backend.json 路径的原生 PortTrace 在 `run/execution/runlog`；沿用 TXT 的旧服务在 `execution/network/runlog`。两者的队列检查都对照实际原生发送记录，位置差异不表示缺少 trace。
 
 集合 chunk 决定 UB 任务数，TA segment 决定每个任务的远端写提交分段，TP 最大数据载荷决定包级切分。三者不能互换。队列容量、信用值和 inflight 上限仍会影响执行；不保证任意合法数值都足以完成某个负载，耗尽、丢包或超时按既有失败检查报告，不降级为固定通信时间。
 

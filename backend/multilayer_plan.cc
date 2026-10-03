@@ -12,9 +12,10 @@ void Require(bool condition, const std::string& message)
 {
     if (!condition) throw std::runtime_error("Multilayer plan: " + message);
 }
-Json Common(Json input)
+Json Common(Json input, bool batched)
 {
     for (const auto* key : {"layer_id", "tokens", "compute_profile_ns", "schema_version"}) input.erase(key);
+    if (batched) { input.erase("expert_placement"); input.erase("top_k"); }
     return input;
 }
 Json TokenKeys(const Json& layer)
@@ -28,18 +29,21 @@ Json TokenKeys(const Json& layer)
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json& p)
 {
     const auto& layers = p.at("layers");
-    Require(layers.is_array() && layers.size() >= 2 && layers.size() <= 32, "require 2..32 layers");
+    const bool batched = p.at("schema_version") == "moe-ub-multilayer-plan/2";
+    Require(layers.is_array() && layers.size() >= (batched ? 1 : 2) && layers.size() <= (batched ? 128 : 32),
+            "layer count exceeds composition budget");
     const auto& first = layers[0];
-    const auto common = Common(first.at("input"));
+    const auto common = Common(first.at("input"), batched);
     Json expected = first;
-    expected["schema_version"] = "moe-ub-multilayer-plan/1";
+    expected["schema_version"] = batched ? "moe-ub-multilayer-plan/2" : "moe-ub-multilayer-plan/1";
     expected["layers"] = layers;
     expected["executed_layer_ids"] = Json::array();
     expected["input"] = common;
-    expected["input"]["schema_version"] = "moe-ub-multilayer-input/1";
+    expected["input"]["schema_version"] = batched ? "moe-ub-multilayer-input/2" : "moe-ub-multilayer-input/1";
     expected["operations"] = Json::array(); expected["transfers"] = Json::array();
     expected["rank_graphs"] = Json::array(); expected["expert_input_counts"] = Json::array();
     expected.erase("input_provenance");
+    if (batched) { expected.erase("compute_inputs"); expected.erase("contributions"); }
     std::map<int, std::vector<uint64_t>> previous;
     for (const int rank : first.at("rank_ids"))
     {
@@ -53,17 +57,17 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
     uint64_t layer_index = 0;
     for (const auto& layer : layers)
     {
-        Require(layer.at("schema_version") == "moe-ub-execution-plan/1",
-                "physical deployment is not yet implemented for multilayer composition");
+        Require(layer.at("schema_version") == (batched ? "moe-ub-execution-plan/3" : "moe-ub-execution-plan/1"),
+                "mixed or unsupported layer composition schema");
         const auto checked = ValidateLayerPlan(layer);
         const auto& input = layer.at("input");
-        Require(input.at("layer_id").is_number_unsigned() && input.at("layer_id").get<uint64_t>() < 32,
+        Require(input.at("layer_id").is_number_unsigned() && input.at("layer_id").get<uint64_t>() <= (batched ? INT32_MAX : 31),
                 "invalid layer id");
         const auto id = input.at("layer_id").get<uint64_t>();
         Require(id == first.at("input").at("layer_id").get<uint64_t>() + layer_index++, "nonconsecutive layer order");
         Require(input.at("role") == "D" && input.at("compute_profile_ns").at("next_layer") == 0,
                 "multilayer decode must omit synthetic next_layer work");
-        Require(Common(input) == common && TokenKeys(layer) == TokenKeys(first), "shared configuration/Token continuity mismatch");
+        Require(Common(input, batched) == common && TokenKeys(layer) == TokenKeys(first), "shared configuration/Token continuity mismatch");
         for (const auto* key : {"graph_id", "wave_id", "rank_ids", "rank_to_ub_node", "ready_ns", "instance_batches",
                                "send_slots_per_rank", "communication_template", "sender_completion"})
             Require(layer.at(key) == first.at(key), std::string("identity/configuration mismatch: ") + key);
@@ -79,7 +83,8 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
         for (auto transfer : layer.at("transfers"))
         {
             for (const auto* key : {"transfer_id", "ub_task_id", "comm_tag"})
-                Require(identities[key].insert(transfer.at(key).get<uint64_t>()).second, std::string("duplicate ") + key);
+                if (transfer.contains(key))
+                    Require(identities[key].insert(transfer.at(key).get<uint64_t>()).second, std::string("duplicate ") + key);
             transfer["send_node_id"] = transfer.at("send_node_id").get<uint64_t>() + offsets.at(transfer.at("src_rank"));
             transfer["recv_node_id"] = transfer.at("recv_node_id").get<uint64_t>() + offsets.at(transfer.at("dst_rank"));
             expected["transfers"].push_back(transfer);
@@ -89,6 +94,12 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
             descriptor.send_node_id += offsets.at(descriptor.src_rank);
             descriptor.recv_node_id += offsets.at(descriptor.dst_rank);
             result.descriptors.push_back(descriptor);
+        }
+        for (auto descriptor : checked.local_descriptors)
+        {
+            descriptor.send_node_id += offsets.at(descriptor.src_rank);
+            descriptor.recv_node_id += offsets.at(descriptor.dst_rank);
+            result.local_descriptors.push_back(descriptor);
         }
         for (size_t i = 0; i < layer.at("rank_graphs").size(); ++i)
         {
@@ -113,8 +124,14 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
             if (terminal.empty()) terminal = entry;
             auto phases = source.at("phase_nodes");
             for (auto& [name, value] : phases.items()) if (!value.is_null()) value = value.get<uint64_t>() + offset;
-            target["layer_phases"].push_back({{"layer_id", id}, {"entry_deps", entry},
-                {"terminal_nodes", terminal}, {"phase_nodes", phases}});
+            Json phase = {{"layer_id", id}, {"entry_deps", entry}, {"terminal_nodes", terminal}, {"phase_nodes", phases}};
+            if (source.contains("local_prepare_nodes"))
+            {
+                phase["local_prepare_nodes"] = source.at("local_prepare_nodes");
+                for (auto& [name, value] : phase["local_prepare_nodes"].items())
+                    if (!value.is_null()) value = value.get<uint64_t>() + offset;
+            }
+            target["layer_phases"].push_back(phase);
             previous[rank] = terminal;
             expected["expert_input_counts"][i] = expected["expert_input_counts"][i].get<uint64_t>() +
                 layer.at("expert_input_counts")[i].get<uint64_t>();

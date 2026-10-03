@@ -198,7 +198,12 @@ void BackendConfig::Apply() const
 }
 void BackendConfig::CheckPlan(const Json& plan) const
 {
-    Require(plan.at("communication_template") == "direct_rank_dedup_v1" && !plan.contains("layers"), "scenario requires selected single layer");
+    Require(plan.at("communication_template") == "direct_rank_dedup_v1", "scenario requires direct rank template");
+    if (plan.contains("layers"))
+    {
+        Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2", "scenario requires configured layer segment");
+        for (const auto& layer : plan.at("layers")) CheckPlan(layer);
+    }
     for (const auto* key : {"chunk_bytes", "send_slots_per_rank"})
         Require(plan.at("input").at(key) == input_.at("execution").at(key), "plan differs from effective execution " + std::string(key));
     Require(plan.at("sender_completion") == "transaction_done", "invalid sender completion");

@@ -51,11 +51,13 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
          {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
     const bool batched = deployment.at("schema_version") == "moe-ub-service-deployment/3";
-    Require(deployment.size() == (batched ? 3 : 2) && (batched || deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
+    const bool composed = deployment.at("schema_version") == "moe-ub-service-deployment/4";
+    Require(deployment.size() == (batched ? 3 : 2) && (composed || batched || deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
             deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
             deployment.at("groups").is_array() && !deployment.at("groups").empty(), "Invalid service deployment");
     const bool physical = deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
-        (batched && deployment.at("groups").at(0).contains("deployment"));
+        ((batched || composed) && deployment.at("groups").at(0).contains("deployment"));
+    Require(!composed || deployment.at("groups").size() <= 64, "Service exceeds host group budget");
     if (batched)
     {
         batch_limits = deployment.at("batch_limits");
@@ -66,10 +68,12 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
     std::set<int> members;
     std::set<uint32_t> nodes;
     std::set<std::string> names;
+    std::set<std::string> dies;
+    std::map<std::string, std::string> chips;
     for (const auto& config : deployment.at("groups"))
     {
         const auto name = config.at("group_id").get<std::string>();
-        Require(config.size() == (physical ? 5 : 4) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
+        Require(config.size() == (physical ? 5 : 4) + (composed ? 2 : 0) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
                 names.insert(name).second && config.at("rank_ids").is_array() &&
                 !config.at("rank_ids").empty() && config.at("rank_to_ub_node").is_array() &&
                 config.at("rank_ids").size() == config.at("rank_to_ub_node").size(),
@@ -93,10 +97,38 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
                     std::find(ranks.begin(), ranks.end(), value.get<int>()) != ranks.end(),
                     "Expert outside group");
         Require(config.contains("deployment") == physical, "Service deployment schema mismatch");
-        if (physical) moe_ub::ValidateDeployment(config.at("deployment"), config.at("rank_ids"));
+        if (physical)
+        {
+            moe_ub::ValidateDeployment(config.at("deployment"), config.at("rank_ids"));
+            for (const auto& row : config.at("deployment").at("ranks"))
+            {
+                Require(dies.insert(row.at("die_id").get<std::string>()).second, "Repeated global die across groups");
+                const auto [it, added] = chips.emplace(row.at("chip_id").get<std::string>(), row.at("server_id").get<std::string>());
+                Require(added || it->second == row.at("server_id"), "Global chip spans multiple servers");
+            }
+        }
+        if (composed)
+        {
+            moe_ub::ValidateBatchLimits(config.at("batch_limits"));
+            const auto& layers = config.at("layer_configs");
+            Require(layers.is_array() && !layers.empty() && layers.size() <= 128, "Invalid declared layer segment");
+            uint64_t index = 0;
+            for (const auto& layer : layers)
+            {
+                Require(layer.at("schema_version") == "moe-ub-layer-fixture/3" &&
+                        layer.at("layer_id").is_number_unsigned() && layer.at("layer_id").get<uint64_t>() <= INT32_MAX &&
+                        layer.at("layer_id").get<uint64_t>() == layers[0].at("layer_id").get<uint64_t>() + index++ &&
+                        layer.at("batch_limits") == config.at("batch_limits") && layer.at("group_id") == name &&
+                        layer.at("rank_ids") == config.at("rank_ids") && layer.at("rank_to_ub_node") == config.at("rank_to_ub_node"),
+                        "Invalid static layer declaration");
+                Require(layer.contains("deployment") == physical &&
+                        (!physical || layer.at("deployment") == config.at("deployment")), "Static layer locality mismatch");
+            }
+            Require(layers[0].at("expert_placement") == config.at("expert_placement"), "First layer placement mismatch");
+        }
         groups.push_back({config, ranks, {}, {}, {}});
     }
-    Require(!physical || groups.size() == 1, "Physical service currently requires one group");
+    Require(!physical || composed || groups.size() == 1, "Physical service currently requires one group");
     std::sort(groups.begin(), groups.end(), [](const auto& a, const auto& b) {
         return a.config.at("group_id").template get<std::string>() < b.config.at("group_id").template get<std::string>();
     });
@@ -621,6 +653,21 @@ int main(int argc, char** argv)
                             "Plan/service batching schema mismatch");
                     if (!batch_limits.is_null())
                         Require(plan.data.at("batch_limits") == batch_limits, "Batch limits changed during run");
+                    const bool composed = group.config.contains("layer_configs");
+                    Require((plan.data.at("schema_version") == "moe-ub-multilayer-plan/2") == composed,
+                            "Plan/service layer-segment schema mismatch");
+                    if (composed)
+                    {
+                        Require(selected.size() == 1 && plan.data.at("batch_limits") == group.config.at("batch_limits") &&
+                                plan.data.at("layers").size() == group.config.at("layer_configs").size(),
+                                "Layer segment or batch limits changed during run");
+                        for (size_t i = 0; i < plan.data.at("layers").size(); ++i)
+                        {
+                            Json current = plan.data.at("layers")[i].at("input");
+                            for (const auto* field : {"graph_id", "wave_id", "ready_ns", "tokens"}) current.erase(field);
+                            Require(current == group.config.at("layer_configs")[i], "Static layer configuration changed during run");
+                        }
+                    }
                     if (backend_config) backend_config->CheckPlan(plan.data);
                     Require(plan.data.at("graph_id") == graph && plan.data.at("wave_id") == wave &&
                             plan.data.at("input").at("graph_id") == graph &&
@@ -653,7 +700,7 @@ int main(int argc, char** argv)
                     {
                         Require(selected.size() == 1 &&
                             plan.data.at("input").at("group_id") == group.config.at("group_id") &&
-                            plan.data.at("input").at("expert_placement") == group.config.at("expert_placement"),
+                            (composed || plan.data.at("input").at("expert_placement") == group.config.at("expert_placement")),
                             "Plan group/placement differs from deployment");
                         for (const auto& op : plan.data.at("operations"))
                             Require(op.at("group_id") == group.config.at("group_id"), "Operation group differs from deployment");

@@ -2441,3 +2441,85 @@ L/batching-integration 漏设 PYTHONPATH，系统 Python 找不到主仓库模�
 `python3 R/audit.py` 对应 L/audit.json，退出 0：10532 个旧构建产物摘要未变，恢复已备份的 `.lock-ns3_linux_build`，最终测试代码摘要一致。服务链接 52 个 ASTRA 核心对象，实际装载的十个 ns-3 库全来自 build/m7-continuous-batching/output/lib，没有编入其他后端。`bash scripts/check_deps.sh` 的 L/deps-initial.json 与 L/deps-final.json 均退出 0，13 个固定依赖源码和 gitlink 未变。
 
 M7 在当前一组、一个选定层的范围内完成。路由仍为合成数据、计算为线性参考、硬件未校准；完整模型性能及目标 CM384/CANN 场景未验证。本轮整理记录、本地提交，不推送；M8 多层、多请求、多组组合待用户确认，未开始。
+
+## 2026-10-03：M8 多层、多请求、多组联合执行
+
+用户确认继续 M8，基线为 `e785680`，任务说明提交于 `1eae15e`。本轮修改主仓库服务适配、组合计划、后端校验及小型样例/检查；13 个固定依赖、gitlink 和锁文件未变。使用现有 Linux 工具链及 `.venv/llmservingsim-native`，未安装软件、修改全局配置、初始化升级依赖或下载模型/数据。
+
+以下实际命令 cwd 均为 `/root/moe-ub-cosim`。记 `R=runs/v03-composed-service`、`L=R/logs`，只是本节路径缩写。已审阅的 R/record.py 保存 argv、cwd、开始/结束 UTC、退出状态和 stdout/stderr 路径，各集成目录的 commands.json 另记子命令及输入。原始输出和开发失败均留在忽略目录。
+
+### 实现与独立构建
+
+configured-service/3 和 layer-segments/1 声明同模型结构、同连续 MoE 层段的多个独立组，各组可配置不同放置、容量和批次预算。生成 deployment/4 和 multilayer-plan/2；同组一次选批在各层保持请求与 Token 位置，完整层段结束后才完成一次迭代。合并图只增加 rank 本地层间依赖，旧队列与 UB 对象跨组启动、跨轮保留。同 chip 交付的描述与回调随局部节点号一起组合，不生成 UB task。后端逐层重建图并检查固定配置；端侧操作按实际逐层节点取时间。
+
+前端拆出配置/容量纯校验，复用原生 Scheduler 和每 rank 唯一 KV 池。权重与 KV 按完整模型核算；通信缓冲取选定各层保守界之和，覆盖不同 rank 所处层不同时的重叠。场景入口向每层应用 chunk/发送槽，并按各独立组检查必需预建通道。旧单层、普通服务、P/D、研究导出和多层输入保留原行为。
+
+先运行 R/baseline.py 保存 11035 个旧构建产物摘要及原生启动锁。配置与构建分别为 L/configure.json、L/build.json，均退出 0；开发中后续两次构建 L/build-current.json、L/build-endpoints.json 也退出 0。最终二进制来自最后一次构建：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m8-composed-service -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m8-composed-service/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m8-composed-service \
+  --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test -j 8
+```
+
+### 最终检查命令与结果
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py'` 对应 L/python-verified.json，退出 0，77 项通过。新增五项覆盖完整容量/层段缓冲、给定边界下的独立组与逐 Token 进度、KV 暂时等待、各组独立预算以及非法组合。给定时间的单元测试不替代下列真实 UB 执行。
+
+下表每行均实际执行 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本 --build-dir build/m8-composed-service --output-dir R/记录名`，退出 0。summary.json 位于各 R/记录名，外层命令与输出索引为 L/记录名.json。表中全部最终结果对应同一份最终代码，早期通过或失败的目录未覆盖。
+
+| 脚本 | 记录名 | 实际检查 |
+|---|---|---|
+| check_composed_service.py | composed_service-verified | 15 次正常执行、11 项预期拒绝；两组、三层、多请求、真实队列与逐层来源。 |
+| check_continuous_batching.py | continuous_batching-verified | 15 次 M7 运行、11 项拒绝。 |
+| check_scenario_backend.py | scenario_backend-verified | 11 次场景运行、24 项拒绝。 |
+| check_service_model_capacity.py | service_model_capacity-verified | 6 次原配置服务运行、9 项拒绝。 |
+| check_deployment_locality.py | deployment_locality-verified | 14 次本地性运行、9 项拒绝。 |
+| check_execution_parameters.py | execution_parameters-verified | 9 次固定图参数对照、13 项拒绝。 |
+| check_sequence.py | sequence-verified | 5 次连续图运行、12 项拒绝及生命周期检查。 |
+| check_service.py | service-verified | 7 次普通服务运行、9 项拒绝及尾部排空。 |
+| check_dynamic_service.py | dynamic_service-verified | 9 次动态到达运行、10 项拒绝。 |
+| check_service_boundaries.py | service_boundaries-verified | 7 次边界运行、7 项拒绝。 |
+| check_pd_handoff.py | pd_handoff-verified | 7 次 P/D 运行、11 项拒绝。 |
+| check_pd_queue.py | pd_queue-verified | 9 次交接队列运行、8 项拒绝。 |
+| check_multilayer.py | multilayer-verified | 8 次旧多层研究运行、1 次不挂观测、10 项拒绝。 |
+| check_research_export.py | research_export-verified | 9 次旧研究运行、1 次不挂观测、15 项拒绝。 |
+| check_shared_bottleneck.py | shared_bottleneck-verified | 7 次原共享瓶颈/来源开关对照。 |
+
+专项输入及独立容量/字节计算依据见 fixtures/m8_composed_service/README.md。service-first 也实际执行了该目录 service.json、layers.json，配合 M1 system、M3 共享瓶颈网络和观测；L/service-first.json 退出 0。最终派生输入、网络、场景 YAML、预算及非法图均保存在 R/composed_service-verified。
+
+| 对照 | 实际结果 |
+|---|---|
+| 重叠基准 | 两组三层，ep0 三轮、ep1 两轮；七请求生成 12 个 Token、逐层消费 36 条合成路由，124 次真实写交付 31744 业务字节，38 次同 chip 交付，39951 ns 完成。 |
+| 独立组与层 | ep0 在 18442 ns 开第二轮，ep1 首轮到 19752 ns 才结束；后者第二轮在 ep0 第二轮的 29731 ns 结束前启动。首轮存在第二层 6284 ns 开始、远端第一层 7874 ns 才结束的交叠，逐节点依赖及计算槽无冲突。 |
+| 共享网络因果 | 单独运行两组首轮分别为 11570/12170 ns，重叠为 18442/19752 ns，逐组工作内容不变。交换机 8 端口 4 有 334 字节包在 497 ns 入队、763 ns 出队，跨第二组 600 ns 启动；原生 PortTrace、成功发送与队列积分一致。瓶颈降至 1 Gbit/s 后完成 339142 ns，两组后续提交均推迟。 |
+| 容量与预算 | rank 2 为五块时实际 ABD、ACD、AC；减为四块后 ABD、AD、A、C、C，A 释放后接纳 C。ep1 Token 预算为 1 时仅选 EG，F 驻留但不推进且继续计 KV。单独降低 ep0 序列预算也按配置执行，各组预算不相互覆盖。 |
+| 本地性与边界 | 同 rank 不传输，同 chip 不进入 fabric；移除 chip 声明后变为 200 次写、51200 字节、零本地交付。空输入在 0 ns 结束；迟到 C 在 500000 ns 才启动；只选第二层正常结束。所有请求/KV、计算/发送槽、事件及网络尾部排空。 |
+| 场景与观测 | M6 YAML 入口得到相同三层执行。来源开/关/不挂观测的执行与协议结果一致，开/关 observed 文件一致；逐层端侧时间、业务/整包/控制字节独立核对。 |
+| 拒绝检查 | 前端六项拒绝涵盖层路由、组间映射、放置、层段缓冲、最终 KV 和缺少组内通道；后端五项涵盖边界、上下文、跨层重复 tag、静态放置与层序，均在 0 ns 且无业务传输。 |
+
+### 开发中失败与处理
+
+L/frontend-first 发现空的 local_prepare_nodes 值为 null，组合移位时不能直接加偏移；Python/C++ 改为保留 null，仅移动实际节点号，frontend-second 和后续真实执行通过。
+
+L/composed-integration 与 v2 的新检查分别误把本地交付限制为 fabric chunk、使用了本地记录没有的 send_done_ns 字段；按已有本地合同校验单份完整 pair，以及 send_callback_ns/recv_callback_ns 和 `max(ready_ns, recv_registered_ns)`。v3 对空输入错误要求存在原生 PortTrace 文件，改为核验空队列事件和零成功发送。业务量、依赖、回调和非空运行的原生 trace 断言均保留。
+
+L/composed-integration-v4 发现场景解析原先要求全部组的端点两两预建通道。独立 EP 组之间没有业务传输，现明确检查每组端点对的通道覆盖，同时继续核对所有已声明通道的实际路由；新增缺少组内通道的拒绝对照，没有跳过通道检查。
+
+L/composed-integration-v5 与 L/composed-final 已完成场景仿真，但检查读取了错误的原生日志目录。读取锁定 UB 源码确认 backend.json 路径将 trace 写在 execution/runlog，旧 TXT 路径在 execution/network/runlog。队列审计增加显式目录参数，新场景使用实际目录；没有修改 UB、关闭 trace 或删除对照。临时尝试打开已有 trace 开关无助于路径问题，最终未保留该配置变更。composed-final-v2 随后通过全部 15/11 项。
+
+L/pd_handoff-final、L/pd_queue-final、L/research_export-final 的回归发现新入口错误调用旧 PdService/QueuedPdService 并不存在的 deployment 方法。恢复旧 schema 原有部署文件生成路径，仅组合服务调用新方法；最终重新执行上表全部 15 套，代码摘要一致且全部通过。上述失败及首次成功输出均保留，没有改用固定网络时间或修改旧行为预期。
+
+### 产物与停止位置
+
+`python3 R/audit.py` 对应 L/audit.json，退出 0：11035 个旧构建产物摘要未变，恢复已备份的 `.lock-ns3_linux_build`，最终测试的代码摘要一致。链接审计确认 52 个 ASTRA 核心对象全部进入服务，实际装载的十个 ns-3 库均来自 build/m8-composed-service/output/lib，没有编入其他后端。`bash scripts/check_deps.sh` 的 L/deps-initial.json、L/deps-final.json 均退出 0，13 个固定依赖一致且源码未变。
+
+M8 在已声明的连续 MoE 层段范围内完成。完整模型容量包含未执行 dense 层，输出明确区分完整容量和局部执行；真实路由、计算 profile、MLA、多层 P/D、完整 CM384/R1/CANN 行为及目标硬件校准未在本轮完成。路由仍为合成、计算仍为参考，`unvalidated_reference` 不变。本轮整理记录后本地提交，不推送；停在 M8，下一项 M9 等待用户确认。

@@ -29,7 +29,7 @@ def signature(plan):
     return dict(input=source, transfers=transfers, graphs=graphs, expert_inputs=plan['expert_input_counts'])
 
 
-def audit_queue(path, bandwidth_gbps=10, switch_id=8, port_id=4):
+def audit_queue(path, bandwidth_gbps=10, switch_id=8, port_id=4, native_directory=None):
     """Reconstruct the native physical FIFO and successful serialization spans."""
     events = rows(path / 'egress-queue-audit.jsonl')
     pending, starts, waits = deque(), [], []
@@ -60,7 +60,8 @@ def audit_queue(path, bandwidth_gbps=10, switch_id=8, port_id=4):
     assert not pending and dequeued is None and used == 0
     assert len(events) == len(starts) * 3
     assert area == sum(p['wait_ns'] * p['bytes'] for p in waits)
-    native = (path / f'network/runlog/PortTrace_node_{switch_id}_port_{port_id}.tr').read_text()
+    native_directory = path / 'network/runlog' if native_directory is None else native_directory
+    native = (native_directory / f'PortTrace_node_{switch_id}_port_{port_id}.tr').read_text()
     tx = [(int(Decimal(t)*1000),int(n)) for t,n in re.findall(rf'\[([\d.]+)us\] Port Tx, port ID: {port_id} PacketSize: (\d+)',native)]
     assert tx == [(e['time_ns'],e['packet_bytes']) for e in starts]
     audit = read(path / 'observation-audit.json')

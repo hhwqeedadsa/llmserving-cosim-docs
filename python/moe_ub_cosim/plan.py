@@ -270,7 +270,7 @@ def build_plan(config, identities=None, *, _validate=True):
 
 
 def validate_plan(plan):
-    if plan.get('schema_version') == 'moe-ub-multilayer-plan/1':
+    if plan.get('schema_version') in ('moe-ub-multilayer-plan/1','moe-ub-multilayer-plan/2'):
         from .multilayer import validate_multilayer
         return validate_multilayer(plan)
     if plan.get('communication_template') == 'kv_direct_v1':
@@ -424,7 +424,8 @@ class RunIdentities:
                 for transfer in layer['transfers']:
                     current = assigned[mapping[transfer['transfer_id']]]
                     for key in ('transfer_id', 'ub_task_id', 'comm_tag'):
-                        transfer[key] = current[key]
+                        if key in current:
+                            transfer[key] = current[key]
                 for graph in layer['rank_graphs']:
                     for node in graph['nodes']:
                         if 'transfer_id' in node:

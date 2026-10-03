@@ -122,7 +122,9 @@ def validate_service(config, layer):
 class Service:
     """Ready-KV arrival queues feed real schedulers only when their EP group is idle."""
     def __init__(self, config, layer):
-        self.validate_inputs(config, layer)
+        prepared = self.validate_inputs(config, layer)
+        if prepared is not None:
+            config, layer = prepared
         sys.path.insert(0, str(LLM))
         from serving.core.request import Request
 
@@ -275,11 +277,14 @@ def run(args):
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
-    configured = config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
-    batched = config.get('schema_version') == 'moe-ub-configured-service/2'
+    composed = config.get('schema_version') == 'moe-ub-configured-service/3'
+    configured = composed or config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
     require(layer.get('schema_version') not in ('moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3') or configured,
             'Physical deployment currently requires the configured service entry')
-    if configured:
+    if composed:
+        from .composed_service import ComposedService
+        service = ComposedService(config, layer)
+    elif configured:
         from .configured_service import ConfiguredService
         service = ConfiguredService(config, layer)
     elif data:
@@ -297,10 +302,15 @@ def run(args):
     output.mkdir(exist_ok=False)
     (output / 'graphs').mkdir()
     export_bootstrap(output / 'bootstrap', service.ranks)
-    deployment = dict(schema_version='moe-ub-service-deployment/3' if batched else
-        'moe-ub-service-deployment/2' if 'deployment' in layer else 'moe-ub-service-deployment/1', groups=service.groups)
-    if batched:
-        deployment['batch_limits'] = layer['batch_limits']
+    if composed:
+        deployment = service.deployment()
+    else:
+        batched = config.get('schema_version') == 'moe-ub-configured-service/2'
+        deployment = dict(schema_version='moe-ub-service-deployment/3' if batched else
+            'moe-ub-service-deployment/2' if 'deployment' in layer else 'moe-ub-service-deployment/1',
+            groups=service.groups)
+        if batched:
+            deployment['batch_limits'] = layer['batch_limits']
     save(output / 'deployment.json', deployment)
     save(output / 'input.json', config)
     save(output / 'layer.json', layer)

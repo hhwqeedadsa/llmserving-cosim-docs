@@ -132,7 +132,8 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
     const auto p = Json::parse(stream);
-    if (p.at("schema_version") == "moe-ub-multilayer-plan/1") return LoadMultilayerPlan(directory, p);
+    if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
+        return LoadMultilayerPlan(directory, p);
     if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);
     auto plan = ValidateLayerPlan(p);
     std::map<uint64_t, Json> transfers;
@@ -583,7 +584,7 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
 }
 Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
 {
-    if (plan.data.at("schema_version") == "moe-ub-multilayer-plan/1")
+    if (plan.data.at("schema_version") == "moe-ub-multilayer-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/2")
     {
         Json result = Json::array();
         for (size_t index = 0; index < plan.data.at("layers").size(); ++index)

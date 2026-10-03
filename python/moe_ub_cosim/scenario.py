@@ -78,7 +78,7 @@ def csv_uint(value, label):
     return integer(int(value), label, 0, 2**32-1)
 
 
-def resolve_network(config, directory, ranks, mapping):
+def resolve_network(config, directory, ranks, mapping, endpoint_groups=None):
     fields(config, 'case_path plane_id defaults nodes links', 'network')
     require(isinstance(config['plane_id'], str) and config['plane_id'], 'Explicit single plane identity required')
     defaults = config['defaults']
@@ -159,7 +159,10 @@ def resolve_network(config, directory, ranks, mapping):
                 require(current != src or port == srcport, 'Channel source port differs from route')
                 current, incoming = ports[current,port]
             require(incoming == dstport, 'Route reaches wrong destination port')
-    require(all(tuple(sorted((a,b))) in pairs for a in mapping for b in mapping if a!=b),
+    domains = [mapping] if endpoint_groups is None else endpoint_groups
+    require(all(domains) and sorted(n for group in domains for n in group)==sorted(mapping),
+            'Channel domains must partition mapped endpoints')
+    require(all(tuple(sorted((a,b))) in pairs for group in domains for a in group for b in group if a!=b),
             'Precreated channels must cover mapped endpoint pairs')
     topology = dict(nodes=[nodes[k] for k in sorted(nodes)],links=[links[k] for k in sorted(links)])
     return base, topology, routes, channels
@@ -196,18 +199,27 @@ def prepare(input_path, backend_binary, output):
     paths={k:(directory/config[k]).resolve() for k in ('service','layer','system')}
     require(all(p.is_file() for p in paths.values()), 'Missing scenario input')
     service=json.loads(paths['service'].read_text());layer=json.loads(paths['layer'].read_text())
-    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2'),
+    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2','moe-ub-configured-service/3'),
             'Scenario requires configured service')
     fields(config['execution'],'chunk_bytes send_slots_per_rank seed run','execution')
     execution=config['execution']
     integer(execution['chunk_bytes'],'chunk_bytes',1,2**32-1);integer(execution['send_slots_per_rank'],'send slots',1,2)
     integer(execution['seed'],'seed',1,2**32-1);integer(execution['run'],'run',1)
     integer(config['max_simulation_ns'],'max_simulation_ns',1)
-    layer.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])
-    validate_config(layer)
     # The scope/capacity checks happen before a backend process can execute work.
-    from .configured_service import ConfiguredService
-    ConfiguredService(service,layer)
+    composed = service['schema_version']=='moe-ub-configured-service/3'
+    if composed:
+        from .composed_service import ComposedService
+        for group in layer['groups']:
+            for current in group['layers']:
+                current.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])
+        frontend=ComposedService(service,layer)
+    else:
+        from .configured_service import ConfiguredService
+        layer.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])
+        validate_config(layer)
+        frontend=ConfiguredService(service,layer)
+    mapping={r:n for group in frontend.groups for r,n in zip(group['rank_ids'],group['rank_to_ub_node'])}
     selection=config['backend']
     fields(selection,'reference_file profile_by_role attributes globals tp_max_data_payload_bytes transport_channel_setup','backend selection')
     reference=(directory/selection['reference_file']).resolve();reference_data=read_yaml(reference)
@@ -220,7 +232,8 @@ def prepare(input_path, backend_binary, output):
         chosen=ref['transaction_profiles'][name]
         require(isinstance(chosen,dict) and all(k in chosen for k in PROFILE_FIELDS),'Active profile is not implemented')
         profiles[role]={k:chosen[k] for k in PROFILE_FIELDS}
-    base,topology,routes,channels=resolve_network(config['network'],directory,layer['rank_ids'],layer['rank_to_ub_node'])
+    domains=[group['rank_to_ub_node'] for group in frontend.groups] if composed else None
+    base,topology,routes,channels=resolve_network(config['network'],directory,frontend.ranks,[mapping[r] for r in frontend.ranks],domains)
     output.mkdir(parents=True,exist_ok=False)
     commands=[]
     def invoke(label,argv):
@@ -269,7 +282,8 @@ def prepare(input_path, backend_binary, output):
     source_paths=[input_path,reference,*paths.values(),*(base/name for name in NETWORK_FILES),ROOT/'deps.lock.json']
     manifest=dict(schema_version='moe-ub-scenario-resolution/1',scenario_id=config['scenario_id'],
         state='resolved_not_executed',calibration_status='unvalidated_reference',
-        execution_scope=('configured_single_group_single_moe_layer_continuous_batching'
+        execution_scope=('configured_groups_moe_layer_segment_continuous_batching' if composed else
+            'configured_single_group_single_moe_layer_continuous_batching'
             if service['schema_version']=='moe-ub-configured-service/2' else
             'configured_single_group_single_moe_layer_one_request_per_rank'),
         imported_reference_sections=['ns3_backend.reference_attributes','ns3_backend.reference_globals','ns3_backend.transaction_profiles'],
@@ -286,6 +300,9 @@ def prepare(input_path, backend_binary, output):
             ta_segment_bytes=int(resolved['attributes']['ns3::UbJetty::TaSegmentBytes']),
             tp_max_data_payload_bytes=resolved['tp_max_data_payload_bytes'],tp_payload_source='compiled_UB_MTU_BYTE'),
         observation=config['observation'])
+    if composed:
+        manifest['transport_channel_required_groups']=[dict(group_id=g['group_id'],rank_to_ub_node=g['rank_to_ub_node'])
+                                                      for g in frontend.groups]
     save(output/'resolution.json',manifest)
     args=argparse.Namespace(input=output/'service.json',layer=output/'layer.json',backend=backend_binary,
         system=output/'system.json',network=output/'network',observation=observation,output_dir=output/'run',

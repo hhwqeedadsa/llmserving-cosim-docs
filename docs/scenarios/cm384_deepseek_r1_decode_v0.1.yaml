@@ -1,0 +1,688 @@
+# CM384 / DeepSeek-R1 / Decode / EP128 场景规格，v0.1 修订 2
+# 此文件仍不是当前 CLI 的可执行输入。配置选择、实现验证、硬件校准分开。
+# 芯片内两 die 互联不进入网络仿真；参考参数不是 CM384 真机测量。
+schema_version: moe-ub-scenario-reference/0.1
+kind: scenario_specification
+scenario_id: cm384_r1_d128_reference
+status: reference_scenario_with_separate_configuration_implementation_and_calibration_status
+executable_with_current_simulator: false
+hardware_calibration_status: unvalidated_reference
+replication_scope: deployment_anchored_decode_reference
+description_zh: 以华为公开的 D128 部署规模和 UBEP 的完整 R1 128-rank 案例为业务依据，采用用户已选定的 CANN EP 行为基线。研究范围为跨芯片 Scale-Up 网络；芯片内两 die
+  之间的互联不进入网络仿真。公开事实、研究参考参数、软件实现状态和硬件校准状态分别记录。
+evidence_convention:
+  source_ids_resolve_under: sources
+  section_basis_applies_unless_overridden: true
+  unreported_values_must_not_inherit_current_simulator_defaults: true
+  null_semantics: 尚未选定或取得；只检查当前激活 profile 所需字段，不把全部未知细节都作为运行前置条件。
+  selected_reference: 为可重复仿真选择的参考设置，不声称是 CM384 原部署实测值。
+scope:
+  basis: selected
+  phase: decode
+  decode_instances: 1
+  model_execution: all_61_transformer_blocks
+  include_embedding_and_lm_head: true
+  initial_state:
+    model_weights_resident: true
+    prompt_kv_resident: true
+    first_generated_token_available: true
+    kv_transfer_traffic_in_window: false
+  prefill_execution_in_window: false
+  prefill_decode_coexecution: false
+  attention_expert_disaggregation: false
+  unrelated_background_traffic: false
+  arrival_time_semantics: decode_ready_time
+  primary_metrics:
+  - routed_expert_load_by_layer_and_rank
+  - dispatch_and_combine_latency
+  - port_traffic_and_queue_occupancy
+  - flow_control_stall_and_dependency_wait
+  - modeled_decode_iteration_latency
+  metric_boundary_zh: Decode 窗口从 KV 已就绪开始。请求原始到达、Prefill 和 KV 搬运不在计时范围； 本场景不提供原始 TTFT。达到观察窗口终点不等于真实请求结束。
+  scaleup_network_boundary: inter_chip_ub_fabric
+  intra_chip_die_interconnect_mode: excluded_from_network_simulation
+  local_contributions_and_dependencies_preserved: true
+  intra_chip_local_timing: 仅在需要执行时序时并入端侧参考/profile，不建立芯片内链路、包或端口计数。
+deployment:
+  basis: reported
+  source: xdeepserve_v6
+  source_section:
+  - '2.1'
+  - '2.2'
+  - '3'
+  - '7.2'
+  reported_serving_engine: FlowServe
+  reported_communication_library: XCCL
+  reported_decode_servers: 8
+  attention_data_parallel_size: 128
+  routed_expert_parallel_size: 128
+  ranks:
+    unit: npu_die
+    world_size: 128
+    same_rank_set_for_attention_dp_and_expert_ep: true
+    physical_chips:
+      value: 64
+      basis: derived
+    dies_per_chip: 2
+    chips_per_server: 8
+    dies_per_server:
+      value: 16
+      basis: derived
+  source_qualification_zh: xDeepServe 提供 D128 的部署规模，UBEP 提供 R1/CANN EP 的对照背景。FlowServe/XCCL 是来源实例的信息，不是本场景选定的通信实现；逐算子
+    TP、batch 和优化开关仍是明确的研究选择。
+  execution_choices:
+    basis: selected
+    pipeline_parallel_size: 1
+    tensor_parallel_by_component:
+      mla_prologue: 1
+      attention: 1
+      attention_output_projection: 1
+      dense_ffn: 1
+      routed_expert: 1
+      shared_expert: 1
+      embedding_and_lm_head: 1
+    microbatches_per_iteration: 1
+    max_inflight_iterations_per_rank: 1
+    multi_token_prediction: false
+    dynamic_expert_load_balancing: false
+    redundant_routed_expert_replicas: 0
+    kernel_schedule_profile: stage_dependencies_plus_local_cost_profile
+    qualification_zh: 上述 TP=1、PP=1 和关闭优化项用于首个研究基线，不代表线上 D128 原值。 本地计算、通信重叠与资源占用须由后续 schedule/profile 明确。
+model:
+  basis: reported
+  source: deepseek_r1_config
+  model_id: deepseek-ai/DeepSeek-R1
+  model_variant: full_moe
+  model_weight_revision: null
+  config_revision: 56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad
+  hidden_size: 7168
+  num_transformer_blocks: 61
+  dense_ffn:
+    layer_ids_zero_based:
+    - 0
+    - 1
+    - 2
+    intermediate_size: 18432
+  moe:
+    layer_ids_zero_based_inclusive:
+    - 3
+    - 60
+    num_layers:
+      value: 58
+      basis: derived
+    routed_experts_per_layer: 256
+    shared_experts_per_layer: 1
+    routed_top_k: 8
+    expert_intermediate_size: 2048
+    routing_groups: 8
+    topk_groups: 4
+    routing_source_of_truth:
+      value: per_token_trace_expert_ids
+      basis: selected
+  mla:
+    num_attention_heads: 128
+    q_lora_rank: 1536
+    kv_lora_rank: 512
+    qk_nope_head_dim: 128
+    qk_rope_head_dim: 64
+    v_head_dim: 128
+  vocab_size: 129280
+  tie_word_embeddings: false
+  target_execution_precision:
+    basis: selected
+    supporting_source: ubep_v2
+    matrix_multiplication_target: W8A8
+    non_quantized_tensor_dtype: bfloat16
+    exact_quantization_policy: null
+    qualification_zh: W8A8 不能替代逐算子精度与量化方案。模型原始 FP8 权重格式、 路由采集的 AWQ4 精度和本实验目标 INT8 执行分别记录。
+placement:
+  basis: selected
+  logical_to_physical_rank:
+    active_fabric_server_ids:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    server_id_formula: floor(rank / 16)
+    chip_id_within_server_formula: floor((rank % 16) / 2)
+    die_id_within_chip_formula: rank % 2
+    qualification_zh: 这是确定性的实验编号，不是论文公开的物理设备编号。
+  routed_experts:
+    scope: per_moe_layer
+    local_experts_per_rank: 2
+    expert_ids_formula: '[2 * rank, 2 * rank + 1]'
+    same_mapping_across_layers: true
+    qualification_zh: 每 rank 两个 routed experts 有 UBEP 依据；具体专家 ID、相邻放置、 跨层相同映射为本研究选择。
+  shared_expert:
+    replicas_per_layer: 128
+    replicas_per_rank_per_layer: 1
+    execution: local_to_token_owner
+    included_in_compute_and_memory: true
+    cross_rank_traffic: false
+    dedicated_shared_expert_ranks: 0
+  local_non_expert_weights: replicated_per_rank
+  transfer_classification:
+    basis: selected
+    chip_identity: (server_id, chip_id_within_server)
+    same_rank: local_contribution
+    different_ranks_same_chip: local_contribution_no_ns3_transfer
+    different_chips: scaleup_network_transfer
+    expert_load_and_combine_contributions: all_contributions_preserved
+fabric:
+  basis: reported
+  source: cloudmatrix_infer_v2
+  source_section: '3.3'
+  numerical_profile_status: historical_public_reference
+  version_qualification_zh: v2 披露下列具体数值。v3 保留拓扑描述但删除了多项具体带宽/容量数值； 因而它们不是本实验已测量校准的现网参数，也不是 UBEP 试验机逐项确认值。
+  units:
+    link_rate: bit_per_second_per_direction
+    link_bandwidth: byte_per_second_per_direction
+    memory_bandwidth: byte_per_second
+    time: nanosecond
+    capacity_unit_qualification: 文献标称 GB；精确可分配字节另行确认。
+  physical_server_count: 48
+  physical_chips_per_server: 8
+  dies_per_chip: 2
+  active_servers:
+    value: 8
+    basis: selected
+  topology:
+    switching_tiers: 2
+    independent_ub_planes: 7
+    die_ports_per_plane: 1
+    l1_switches_per_server: 7
+    l2_switch_chips_per_plane: 16
+    l2_ports_per_switch_chip: 48
+    l1_uplinks_to_l2_per_plane: 16
+    l1_to_l2_connectivity: each_l1_to_every_l2_in_its_plane
+    preserve_full_fabric_with_inactive_endpoints:
+      value: true
+      basis: selected
+  bandwidth:
+    die_ub_port_bits_per_second: 224000000000
+    die_ub_port_bytes_per_second:
+      value: 28000000000
+      basis: derived
+    die_ub_aggregate_bytes_per_second:
+      value: 196000000000
+      basis: derived
+    l1_uplink_aggregate_bytes_per_second: 448000000000
+    hbm_bytes_per_second_per_die: 1600000000000
+  capacity:
+    hbm_nominal_GB_per_die: 64
+    hbm_allocatable_bytes_per_die: null
+  modeling_constraints_zh:
+  - 只为跨芯片传输建立 Scale-Up 包、链路、队列和端口计数；芯片内贡献在本地处理。
+  - 保留 7 个平面的端口和队列。
+  - 跨服务器路径经过源 L1、L2、目标 L1。
+  - 来源中的端到端访存延迟不能直接作为每链路传播延迟。
+  reference_timing:
+    basis: selected_reference
+    source: joint_m2_network
+    die_to_l1_propagation_ns: 20
+    l1_to_l2_propagation_ns: 20
+    switch_allocation_delay_ns: 1
+    switch_input_processing_delay_ns: 0
+    qualification_zh: 20 ns 和 1 ns 源于现有小型样例；将其用于目标拓扑是研究参考选择，不是 CM384 测量。
+  calibration_pending:
+    measured_link_and_switch_delays: null
+    measured_hbm_effective_bandwidth_and_contention: null
+    qualification_zh: 校准值未取得不阻止声明清楚的参考参数实验；不能将其结果标成已校准绝对性能。
+communication:
+  basis: selected
+  selected_library_baseline: CANN_EP_MC2
+  target_behavior_model: cann_moe_dispatch_combine_reference
+  implementation_status: pending
+  evidence_sources:
+  - ubep_v2
+  - ops_transformer_source
+  - cann_dispatch_v2_api
+  - cann_combine_v2_api
+  exact_kernel_release_or_source_revision: null
+  revision_resolution_stage: source_selection_now_not_after_v03
+  fidelity_scope: communication_partners_bytes_dependencies_granularity_concurrency_and_completion
+  dispatch_stage_order:
+  - local_prepare
+  - transfer_token_expert_contributions
+  - data_visibility_before_flag_and_count_publication
+  - receive_state_verification
+  - offset_and_local_reorder
+  - expert_input_ready
+  synchronization_scope_zh: 按被选实现的依赖作用域建模；AIV SyncAll 不直接替换成额外的 128-rank 同时起止屏障。
+  required_behavior:
+    expert_contribution_and_replication_rule: explicit_profile_required
+    same_token_same_rank_dedup: determined_by_selected_cann_path_not_inherited_from_direct_rank_dedup_v1
+    combine_grouping_and_reduction: explicit_profile_required
+    remote_data_visible_before_consumption: true
+    source_resource_release_separate_from_receiver_data_ready: true
+    network_control_messages_and_zero_count_state: preserve_when_required_by_selected_algorithm
+    finite_send_resources_and_buffer_reuse: explicit_profile_required
+  payload_choices:
+    basis: selected
+    dispatch_vector_dtype: int8
+    dispatch_useful_bytes_per_vector: 7168
+    combine_vector_dtype: bfloat16
+    combine_useful_bytes_per_vector: 14336
+    qualification_zh: 这里是单个向量的有效数据字节，不是每 token 总网络流量。 专家贡献复制、同 rank 去重/归约、scale、索引、对齐和包头另行计算。
+  message_layout:
+    scale_and_alignment_profile: null
+    control_message_bytes_and_frequency_profile: null
+    resolution_stage: choose_from_source_or_declare_reference_now
+    useful_vector_bytes_are_not_wire_bytes: true
+  reference_execution_parameters:
+    basis: selected_reference
+    source: joint_m2_layer
+    chunk_bytes: 8192
+    send_slots_per_rank: 1
+    dispatch_and_combine_ordering: deterministic_order_declared_in_behavior_template
+    local_cost_model: shape_dependent_stage_cost_profile
+    local_cost_profile: null
+    local_cost_profile_resolution: 可现在选择并注明参考范围；无需逐条执行量化、重排、AIV/MTE 指令。
+    qualification_zh: 此处给出研究参考分块和并发，不将其标为 CANN 真机值。
+  abstracted_details:
+  - 量化数值计算与具体向量指令
+  - 完整 AIV/MTE 状态机与寄存器分配
+  - 本地轮询的逐次指令执行
+  abstraction_condition_zh: 相关细节对网络启动时刻、有限并发、同步和可见完成的影响由阶段依赖及局部 profile 保留。
+  xccl_reference:
+    enabled: false
+    source: xdeepserve_v6
+    purpose: 接收端拉取机制的后续独立对照；不作为 CANN 基线运行前置条件。
+  current_simulator_reference:
+    template: direct_rank_dedup_v1
+    target_equivalence: false
+  simccl:
+    role: optional_collective_graph_generator_or_design_reference
+    adoption: not_added_as_dependency
+    existing_uniform_alltoall_is_moe_dispatch: false
+    reuse_boundary: 若局部复用，转换流与依赖到现有执行图，继续由 ns-3-UB 的完成事件推进。
+route_source:
+  basis: reported
+  source: r1_expert_trace
+  dataset_id: core12345/MoE_expert_selection_trace
+  collector_model_id: cognitivecomputations/DeepSeek-R1-AWQ
+  collector_precision: awq_4bit
+  collector_model_is_full_r1: true
+  access: gated_publication
+  raw_files_acquired: false
+  raw_schema_verified: false
+  dataset_revision: null
+  collector_model_revision: null
+  collector_runtime_revision: null
+  dataset_usage_terms_record: null
+  selected_file_manifest: null
+  manifest_sha256: null
+  trace_record_layout:
+    basis: reported
+    outer_entry_0: prefill_expert_ids_for_all_prompt_tokens
+    outer_entries_1_plus: one_decode_forward_per_entry
+    dense_layer_expert_ids: null
+    decode_length_limit_reported: 128
+  import_rules:
+    basis: selected
+    prompt_tokens_P: number of token rows in entry 0, layer 3; cross-check all MoE layers
+    available_decode_records_R: len(outer_array) - 1
+    initial_computed_kv_tokens: P
+    initial_tokens_reached: P + 1
+    first_observed_decode_step: local decode_step=0 consumes source entry 1
+    decode_entry_j_input_token_index: P + j - 1, for j >= 1
+    decode_entry_j_kv_tokens_after_forward: P + j
+    skip_prefill_network_and_compute: true
+    preserve_request_token_layer_order: true
+    require_eight_distinct_expert_ids_in_range_0_255: true
+    require_valid_records_for_every_executed_moe_layer_and_step: true
+    dense_layers_do_not_generate_routed_traffic: true
+    infer_eos_from_end_of_file: false
+    repeat_pad_or_stitch_route_records: false
+    qualification_zh: 128 是数据卡所述采集上限，不保证每文件有 128 个纯 Decode 记录。 该数据是真实模型执行路由，但不是 CM384 INT8 部署同条件采集的路由， 也不含完整线上到达过程、批次编排或可靠
+      EOS 原因。
+workload:
+  primary_profile: d128_b8_window64
+  basis: selected
+  profiles:
+    d128_b8_window64:
+      purpose: controlled_decode_network_observation
+      logical_benchmark_subset: mmlu
+      eligible_trace_min_decode_records: 64
+      selection_method: deterministic_sha256_order_of_seed_and_relative_file_path
+      selection_seed: 0
+      target_unique_request_count: 1024
+      require_enough_eligible_files_before_run: true
+      request_to_rank: manifest_index % 128
+      decode_ready_time_ns: 0
+      prompt_length: actual_value_from_each_selected_trace
+      max_active_requests_per_rank: 8
+      max_decode_tokens_per_rank_per_iteration: 8
+      initial_resident_request_kv_per_rank: 8
+      observed_decode_steps_per_request: 64
+      warmup_decode_steps: 0
+      refill_during_window: false
+      stop_reason: observation_window_end
+      stop_only_after_all_observed_steps_really_complete: true
+      do_not_mark_request_done_or_rewrite_target_output_length: true
+      cleanup_traffic_outside_observation_window: true
+      completed_kv_tokens_per_request_at_window_end: P + 64
+      tokens_reached_per_request_at_window_end: P + 65
+      initial_prefill_generated_token_excluded_from_decode_output_count: true
+      eos_or_request_completion_claim: false
+      steady_state_performance_claim: false
+      selection_bias_zh: 筛选至少 64 个 Decode 记录，结果仅代表该筛选后的 MMLU 子集。
+    d128_b8_fragment_refill:
+      enabled_by_default: false
+      purpose: continuous_batching_under_declared_synthetic_fragment_workload
+      logical_benchmark_subset: mmlu
+      eligible_trace_min_decode_records: 1
+      selection_method: deterministic_sha256_order_of_seed_and_relative_file_path
+      selection_seed: 0
+      target_unique_request_count: 2048
+      require_enough_eligible_files_before_run: true
+      request_to_rank: manifest_index % 128
+      decode_ready_time_ns: 0
+      max_active_requests_per_rank: 8
+      max_decode_tokens_per_rank_per_iteration: 8
+      initial_resident_request_kv_per_rank: 16
+      queue_policy: per_rank_fifo_in_manifest_order
+      refill_boundary: next_local_batch_selection_after_fragment_retirement
+      fragment_steps: min(available_decode_records_R, 128)
+      retirement_reason: trace_boundary_censored
+      charge_kv_for_pending_resident_requests: true
+      record_boundary_is_artificial_workload_end: true
+      eos_or_production_completion_claim: false
+      qualification_zh: 全部 2048 条在 t0 已具备 KV，必须对每 rank 16 条请求计入初始 KV， 而不是只计 8 active；容量通过后才运行。文件结束处补入新片段是显式 构造的连续组批负载，不能据此宣称复现生产
+        QPS 或完整推理长度分布。
+  serving_rules:
+    one_token_per_active_request_per_iteration_without_mtp: true
+    batch_changes_only_at_batch_selection_boundary: true
+    no_request_migration_across_ranks: true
+    per_request_next_token_waits_for_previous_token_completion: true
+    retain_fabric_state_across_layers_and_iterations: true
+    never_use_capacity_padding_as_real_token_traffic: true
+compute_and_memory:
+  basis: profile_to_select_now
+  target_hardware: Ascend_910C_die
+  target_operator_profile: null
+  profile_manifest_and_sha256: null
+  required_profile_inputs:
+  - layer_and_operator_type
+  - precision_and_kernel_variant
+  - actual_batch_token_count
+  - per_request_context_length
+  - per_expert_token_count_vector
+  - tensor_parallel_by_component
+  - local_copy_quantization_and_shared_compute
+  dependency_requirements:
+    include_dense_blocks_and_shared_expert: true
+    both_shared_and_routed_contributions_ready_before_next_block: true
+    include_embedding_output_head_and_sampling_for_decode_latency: true
+  kv_cache:
+    architecture: MLA
+    exact_cache_layout: null
+    dtype_and_quantization: null
+    allocation_block_tokens:
+      value: 16
+      basis: selected_reference
+    per_request_reserved_capacity_rule: 预留完整观察片段所需的 KV，直到该片段退出；窗口停止与真实 EOS 区分。
+    qualification_zh: 使用 MLA 实际压缩缓存布局核算；不能直接按普通多头注意力 num_key_value_heads * head_dim * K/V 的公式估算。
+  allocation:
+    model_weight_and_quantization_bytes_per_rank: null
+    communication_workspace_bytes_per_rank: null
+    kernel_workspace_and_runtime_reserve_bytes_per_rank: null
+    kv_bytes_for_active_and_resident_pending_requests: null
+    admission_requires_total_bytes_within_allocatable_hbm: true
+  profile_policy: measured_or_published_when_matched_otherwise_declared_reference_with_sensitivity
+  per_instruction_simulation_required: false
+  target_hardware_calibration_required_for_reference_network_experiments: false
+readiness:
+  formal_run_ready: false
+  configuration_work_can_start_now: true
+  reference_parameter_set_present: true
+  current_remaining_blocks:
+  - 获取并核对真实路由文件与足够合格样本
+  - 固定 CANN 行为模板的贡献/字节/同步规则及局部参考 profile
+  - 完成选定场景的参数贯穿、多请求、多层及观测规模验证
+  - 同芯片不同 rank 的本地贡献与依赖处理，保证不漏专家工作且不生成 Scale-Up 包
+  not_global_prerequisites:
+  - 逐条复刻 AIV/MTE 指令
+  - 公开资料未提供的全部芯片内部参数
+  - XCCL 完整源码
+  - 真机校准所有参考参数
+  validation:
+  - 小型样例的贡献、字节和依赖独立核算
+  - 共享链路延迟/排队扰动能够反馈到相关接收、计算和后续批次
+  - 在研究使用的采样窗口下检查 chunk、并发及局部耗时的敏感性
+  claim_scope: 参考参数实验的功能正确性、路由真实性与真实硬件校准程度分别报告。
+sources:
+  xdeepserve_v6:
+    title: Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod
+    url: https://arxiv.org/html/2508.02520v6
+    scope: D128 部署骨架 §7.2；XCCL colocated MoE 协议 §3.2
+  ubep_v2:
+    title: 'UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods'
+    url: https://arxiv.org/html/2607.06202v2
+    scope: 完整 R1 参数与 W8A8；§5.5 的 128 ranks、两专家/rank；独立部署证据
+  cloudmatrix_infer_v2:
+    title: Serving Large Language Models on Huawei CloudMatrix384
+    url: https://arxiv.org/html/2506.12708v2
+    scope: §3.3 的历史硬件参考数值；不采用其 EP320 解码实例作为本案例
+  cloudmatrix_infer_v3:
+    url: https://arxiv.org/html/2506.12708v3
+    scope: 版本对照；保留拓扑但删除多项具体硬件数值
+  deepseek_r1_config:
+    url: https://huggingface.co/deepseek-ai/DeepSeek-R1/blob/56d4cbbb4d29f4355bab4b9a39ccb717a14ad5ad/config.json
+    scope: 已固定结构配置版本；实际目标量化权重仍须单独固定
+  r1_expert_trace:
+    url: https://huggingface.co/datasets/core12345/MoE_expert_selection_trace
+    scope: 模型身份、采集精度、公开格式与访问状态
+  r1_awq_config:
+    url: https://huggingface.co/QuixiAI/DeepSeek-R1-AWQ/blob/main/config.json
+    scope: 完整 MoE R1 的 AWQ 模型结构辅助核对
+  hccl_source:
+    url: https://gitcode.com/cann/hccl
+  ops_transformer_source:
+    url: https://gitcode.com/cann/ops-transformer
+  cann_dispatch_v2_api:
+    url: https://www.hiascend.com/document/detail/en/canncommercial/850/API/aolapi/context/ops-transformer/aclnnMoeDistributeDispatchV2.md
+    scope: 当前可查 API 示例；不代表 xDeepServe 历史部署的软件版本
+  cann_combine_v2_api:
+    url: https://www.hiascend.com/document/detail/en/canncommercial/850/API/aolapi/context/ops-transformer/aclnnMoeDistributeCombineV2.md
+  huawei_deployment_guide_repository:
+    url: https://gitcode.com/ascend-tribe/ascend-inference-cluster
+    scope: 官方部署指南入口；其它实例的 TP/EP 不自动并入本场景
+  ns3_ub_datatype:
+    url: https://github.com/baoy21/ns-3-ub/blob/1ba722217ef94716a07a56a2388be2c7dddd8e0b/src/unified-bus/model/ub-datatype.h
+    scope: TP 载荷与 TA 缺省分段常量
+  ns3_ub_function:
+    url: https://github.com/baoy21/ns-3-ub/blob/1ba722217ef94716a07a56a2388be2c7dddd8e0b/src/unified-bus/model/protocol/ub-function.cc
+    scope: UbJetty::TaSegmentBytes 等实际可配置属性
+  joint_m2_network:
+    url: https://github.com/baoy21/moe-ub-cosim/tree/ac52387def022c81d291465e7897ffffaec6079a/fixtures/m2_single_layer/network
+    scope: 小型样例参考参数，不是 CM384 实测
+  joint_m2_layer:
+    url: https://github.com/baoy21/moe-ub-cosim/blob/ac52387def022c81d291465e7897ffffaec6079a/fixtures/m2_single_layer/layer.json
+    scope: 8 KiB chunk、单发送槽参考设置
+  joint_current_task:
+    url: https://github.com/baoy21/moe-ub-cosim/blob/ac52387def022c81d291465e7897ffffaec6079a/docs/tasks/current.md
+    scope: 当前任务的 URMA_WRITE/RTP 边界
+  simccl_reference:
+    url: https://github.com/aliyun/SimCCL/tree/fd7cd57d16f9bd42e3ccb70911c977e18ec294b9
+    scope: 独立生成通信流与依赖的设计参考；不是 CANN/UB 事务模型
+  ns3_ub_app:
+    url: https://github.com/baoy21/ns-3-ub/blob/1ba722217ef94716a07a56a2388be2c7dddd8e0b/src/unified-bus/model/ub-app.cc
+    scope: URMA TransportMode、独立 native LD/ST 路径、多路径配置
+  ns3_ub_queues:
+    url: https://github.com/baoy21/ns-3-ub/blob/1ba722217ef94716a07a56a2388be2c7dddd8e0b/src/unified-bus/model/ub-queue-manager.cc
+    scope: 保留/共享/headroom 队列参数
+  ns3_ub_port:
+    url: https://github.com/baoy21/ns-3-ub/blob/1ba722217ef94716a07a56a2388be2c7dddd8e0b/src/unified-bus/model/ub-port.cc
+    scope: credit 和 egress 资源参数
+revision: 2
+parameter_resolution:
+  independent_of_v03: true
+  choose_or_retrieve_now:
+  - 场景范围、访问方式与事务 profile、模型与放置、通信行为抽象
+  - 按锁定后端选定链路、路由、队列、流控、分段与端点资源参数
+  - 通信源码/文献版本与数据访问、trace manifest
+  - 参考局部耗时与 KV/工作区预算；无实测时声明参考范围
+  derive_from_selected_inputs:
+  - 每 Token 向量字节、逐专家贡献、逐源目的流量、消息分块
+  - 真实 prompt 长度、实际可用 decode 步、文件校验值
+  verify_when_implemented:
+  - 配置真正贯穿计划、事务生成、执行完成和观测
+  - 128-rank、多请求、多层与观察窗口的联合执行
+  - 新事务 profile 的就绪/完成、回收和包字节归属
+  hardware_calibration_is_separate: true
+  hardware_calibration_required_for: 声称复现真实硬件绝对时延或容量极限时
+  reference_experiments_allowed_after: 当前 profile 参数完整且功能/因果/观测验证通过后
+  not_required_for_this_study:
+  - 逐指令 AIV/MTE 仿真
+  - 寄存器和片内缓存微结构
+  - 芯片内 die 互联协议
+ns3_backend:
+  basis: selected_reference
+  repository: https://github.com/baoy21/ns-3-ub
+  revision: 1ba722217ef94716a07a56a2388be2c7dddd8e0b
+  configuration_is_current_cli_schema: false
+  source:
+  - ns3_ub_datatype
+  - ns3_ub_function
+  - joint_m2_network
+  - joint_current_task
+  one_shared_ns3_instance_and_clock: true
+  time_resolution_ns: 1
+  transaction_profile_for_bringup: urma_write_rtp_reference
+  transaction_profiles:
+    urma_write_rtp_reference:
+      programming_model: URMA
+      operation: WRITE
+      transport: RTP
+      initiator: data_owner
+      payload_direction: initiator_to_target
+      joint_support: implemented_for_existing_reference_cases
+      receiver_ready: RemoteWriteCommitted
+      sender_release: transaction_done_callback
+      cann_native_transaction_equivalence: not_claimed
+    urma_read_rtp_candidate:
+      programming_model: URMA
+      operation: READ
+      transport: RTP
+      initiator: data_consumer
+      payload_direction: target_to_initiator
+      joint_support: adapter_completion_and_observation_pending
+    urma_ctp_candidates:
+      programming_model: URMA
+      operations:
+      - READ
+      - WRITE
+      transport: CTP
+      joint_support: not_integrated
+      select_only_if_required_by_experiment: true
+    native_ldst_candidates:
+      programming_model: native_LDST
+      operations:
+      - MEM_LOAD
+      - MEM_STORE
+      wire_packet_class: PACKET_UB_MEM
+      transport_mode_attribute_applies: false
+      MEM_LOAD_initiator: data_consumer
+      MEM_STORE_initiator: data_owner
+      joint_support: adapter_completion_and_observation_pending
+      qualification_zh: 锁定实现的 UbApp::TransportMode 用于 URMA RTP/CTP；MEM_LOAD/STORE 走独立 UbLdstApi 路径，不应标成 LDST+CTP。
+      MEM_LOAD_completion: 完整响应数据可供发起端消费；joint 事件映射待接入验证。
+      MEM_STORE_completion: 区分远端数据可消费与反向事务 ACK；joint 事件映射待接入验证。
+  transaction_selection_scope: 按传输角色选择操作；数据和元数据允许采用不同 profile，不能只用一个全局 read/write 开关。
+  reference_attributes:
+    ns3::UbSwitch::FlowControl: CBFC
+    ns3::UbSwitch::VlScheduler: SP
+    ns3::UbRoutingProcess::RoutingAlgorithm: HASH
+    ns3::UbApp::EnableMultiPath: false
+    ns3::UbApp::UseShortestPaths: true
+    ns3::UbApp::UsePacketSpray: false
+    ns3::UbTransportChannel::UsePacketSpray: false
+    ns3::UbTransportChannel::UseShortestPaths: true
+    ns3::UbJetty::TaSegmentBytes: 65536
+    ns3::UbJetty::UbJettyInflightMax: 10000
+    ns3::UbTransportChannel::DefaultMaxWqeSegNum: 1000
+    ns3::UbTransportChannel::DefaultMaxInflightPacketSize: 1000
+    ns3::UbTransportChannel::EnableRetrans: false
+    ns3::UbPort::UbInterframeGap: 0ns
+    ns3::UbPort::CbfcFlitLenByte: 20
+    ns3::UbPort::CbfcFlitsPerCell: 8
+    ns3::UbPort::CbfcRetCellGrainDataPacket: 4
+    ns3::UbPort::CbfcRetCellGrainControlPacket: 32
+    ns3::UbPort::CbfcCtrlCrdRtrThldCell: 1024
+    ns3::UbPort::CbfcInitCreditCell: 6553
+    ns3::UbQueueManager::ReservePerQueueBytes: 1048576
+    ns3::UbQueueManager::SharedPoolBytes: 0
+    ns3::UbQueueManager::HeadroomPerPortBytes: 0
+    ns3::UbQueueManager::AlphaShift: 1
+    ns3::UbEgressQueue::MaxEgressBytes: 524288
+    ns3::UbJetty::JettyOooAckThreshold: 2048
+  reference_globals:
+    UB_CC_ENABLED: false
+    UB_CC_ALGO: CAQM
+    UB_FAULT_ENABLE: false
+    UB_PRIORITY_NUM: 16
+    UB_VL_NUM: 16
+  inactive_settings_zh: 关闭 CC 时 CAQM 算法名不表示其在运行；关闭故障与重传不表示完成了相关模式验收。
+  packetization:
+    collective_chunk_bytes: 8192
+    ta_segment_bytes: 65536
+    tp_max_data_payload_bytes: 4096
+    tp_payload_size_source: UB_MTU_BYTE_compile_time_constant
+    tp_payload_size_runtime_configurable_in_current_revision: false
+    qualification_zh: 集合分块、TA 分段、TP 包载荷分别记录；URMA/RTP 的数值不能自动套给 native LD/ST。
+  native_ldst_reference_parameters:
+    enabled: false
+    ns3::UbLdstInstance::ThreadNum: 10
+    ns3::UbLdstThread::LoadRequestSize: 64
+    ns3::UbLdstThread::LoadResponseSize: 512
+    ns3::UbLdstThread::StoreRequestSize: 512
+    ns3::UbLdstThread::LoadOutstanding: 64
+    ns3::UbLdstThread::StoreOutstanding: 64
+    basis: selected_reference_from_m2_fixture
+    ThreadNum_qualification: m2 样例显式取 10，源码默认 48；UbApp 当前每项任务只传线程 0、1，不能将实例线程数直接等同于任务并发。
+  topology_overrides:
+    ub_link_rate_bits_per_second_per_direction: 224000000000
+    source: fabric.bandwidth.die_ub_port_bits_per_second
+    per_link_delay: fabric.reference_timing
+    per_switch_allocation_delay: fabric.reference_timing
+    precedence: 最终节点/链路覆盖值必须写入 resolved config，不能只记录 TypeId 缺省值。
+  transport_channel_setup: precreated
+  on_demand_channel_status: 原生后端支持不等于联合观测已接入；当前 joint 依赖预先存在的通道与来源挂点。
+  routing_qualification_zh: 当前参考选择 HASH/最短路且关闭 packet spray；它不是 CM384 原部署路由结论。改为多平面喷洒应单独记录路径表、channel 创建和最终生效开关并验证观测。
+  must_verify_on_new_profile:
+  - read/write 请求发起者、数据方向与最终可消费事件
+  - 控制包、数据包和重传的实际字节与归属
+  - 当前仅面向 RTP WRITE/ACK 的观测解析扩展
+  - 事务完成与端点/发送槽回收
+  reference_attribute_origin: 沿用已核对的 m2 network_attribute 输入；该文件未显式设置的 SP、HASH、SharedPool/Headroom/egress 等项取锁定后端源码默认。均为参考设置。
+  routing_attribute_semantics:
+    EnableMultiPath: 绑定多个候选源端口的 TP 给 Jetty
+    UbTransportChannel_UsePacketSpray: RTP 在已有候选路由间逐包选择
+    UbApp_UsePacketSpray: 锁定版本传给 CTP service，不控制 RTP spray
+    physical_planes: 由外部拓扑与路由/通道表提供，开关本身不产生多平面
+observation:
+  basis: selected_reference
+  counter_location: external_switch_egress_packet_start
+  network_scope: inter_chip_scaleup_ports_only
+  sampling_period_ns: 1000
+  window_interval: half_open
+  window_end: primary_decode_observation_window_end
+  clock_resolution_ns: 1
+  baseline_clock_offset_ns: 0
+  baseline_clock_drift_ppb: 0
+  clock_model_qualification: 首版参考时钟；跨设备偏移/漂移实验使用独立配置。
+  observed_switch_port_selector: explicit_list_derived_from_target_topology
+  record_provenance: true
+  provenance_is_input_to_mapping_algorithm: false
+  byte_counters:
+  - wire_packet_bytes
+  - control_bytes
+  - unique_payload_bytes
+  rng_seed: 1
+  rng_run: 1
+  scale_and_window_limit_verification: v0.3 需验证目标端口数和窗口数；当前小样例的校验上限不表示目标案例已支持。

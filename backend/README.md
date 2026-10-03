@@ -373,3 +373,11 @@ layer v2 显式声明 die/chip/server 归属及本地准备参考时间。计划
 新增 `python -m moe_ub_cosim.scenario resolve|run` 小型场景入口，引用现有配置服务和显式网络，选择参考规格中的 WRITE/RTP 参数。`cosim-service --backend-catalog` 从当前注册的 TypeId/GlobalValue 导出目录，`--check-backend FILE` 校验完整选择；新网络目录的 `backend.json` 替代 TXT 加载路径。没有该文件的旧案例仍执行原入口。
 
 运行前读取实际网络对象属性与节点/链路覆盖并核对，动态 Jetty 的 TA/inflight 在 WQE 创建时核对。结果分别保存集合 chunk、TA 段与 TP 编译常量、参数来源、实际对象、RNG、观测和固定依赖。只接受现有 URMA WRITE/RTP 的就绪与资源释放语义；READ、CTP、native LD/ST、CC/故障/重传及未经验证的多路径/喷洒选择均拒绝。范围、覆盖顺序、实际检查和命令见[场景样例](../fixtures/m6_scenario_backend/README.md)。
+
+## M7 同 rank 多请求连续批处理
+
+`moe-ub-configured-service/2` 配合 layer/3，在一组、一个选定 MoE 层内执行多请求纯 Decode。空闲迭代边界按 FCFS 和序列/KV 预算接纳，原 Scheduler 按 Token 预算选批；真实 UB 轮次完成后逐请求推进、完成和释放。暂时不足时等待，未选中的驻留请求仍占 KV，无法最终容纳的请求在启动前拒绝。
+
+新后端部署为 `moe-ub-service-deployment/3`，携带一次运行固定的 batch_limits。`moe-ub-execution-plan/3` 保存逐请求上下文、dtype、批次规模和逐专家输入量；C++ 独立重建并检查，同一请求不能在一轮重复出现。图仍按真实批次生成，发送端只提交一份业务传输，接收端只登记等待；每 rank 一张活动图、一个计算槽及原 WRITE/RTP 完成语义均保留。
+
+旧 schema 的单请求限制继续生效。新 schema 的来源记录不改变业务字节或时序，物理部署可保留同芯片路径；场景 YAML 可以引用新配置。线性参考耗时仍不随上下文长度或相同总量下的专家分布变化，不能视为目标计算模型校准。输入、预算、手算预期、实际 15 次运行与 11 项拒绝检查见[M7 样例](../fixtures/m7_continuous_batching/README.md)。多层、多组与多请求的组合留给 M8。

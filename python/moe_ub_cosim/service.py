@@ -160,6 +160,17 @@ class Service:
     def record_completion(self, rank, finished_requests, now):
         pass
 
+    def validate_batch(self, rank, batch):
+        require(batch is not None and len(batch.requests) == batch.num_decode == 1 and
+                batch.num_prefill == 0 and batch.scheduled_tokens == {batch.requests[0].id: 1},
+                'Ready-KV scheduler cannot produce one real Token; no progress')
+
+    def complete_batch(self, rank, batch, now):
+        sched = self.scheduler_by_rank[rank]
+        prompt, generated, finished = sched.add_done(batch.batch_id + 1, rank, now)
+        require(prompt == 0 and generated == 1 and not sched.inflight, 'Decode completion mismatch')
+        self.record_completion(rank, finished, now)
+
     def make_schedulers(self):
         from serving.core.scheduler import Scheduler
         return [Scheduler(self.config['model'], 0, rank, 1, 1, 1, 1, 1,
@@ -201,10 +212,7 @@ class Service:
         for name in finished_groups:
             wave = self.waves.pop(name)
             for rank, batch in wave['batches'].items():
-                sched = self.scheduler_by_rank[rank]
-                prompt, generated, finished = sched.add_done(batch.batch_id + 1, rank, now)
-                require(prompt == 0 and generated == 1 and not sched.inflight, 'Decode completion mismatch')
-                self.record_completion(rank, finished, now)
+                self.complete_batch(rank, batch, now)
             self.history[wave['history_index']].update(finished_ns=now, after=self.snapshot())
         self.current_ns = now  # Absolute UB time, never accumulated batch durations.
         while self.future and self.future[0].arrival <= now:
@@ -232,20 +240,20 @@ class Service:
             before = self.snapshot()
             batches = {r: self.scheduler_by_rank[r].schedule(now, r) for r in active}
             self.scheduler_calls += len(active)
-            require(all(b is not None and len(b.requests) == b.num_decode == 1 and
-                        b.num_prefill == 0 and b.scheduled_tokens == {b.requests[0].id: 1}
-                        for b in batches.values()), 'Ready-KV scheduler cannot produce one real Token; no progress')
+            for rank, batch in batches.items():
+                self.validate_batch(rank, batch)
             step = len(self.history)
             graph, wave = f'g{step}', f'D.w{step}'
             candidate = group_layer(self.layer, group)
             candidate.update(graph_id=graph, wave_id=wave, ready_ns=now, tokens=[])
             for rank, batch in batches.items():
-                request = batch.requests[0]
-                index = request.num_computed_tokens - 1  # schedule() already advanced this count.
-                source = self.inputs[request.id]
-                offset = index - (source['prompt_tokens'] + source['generated_tokens'] - 1)
-                candidate['tokens'].append(dict(request_id=str(request.id), src_rank=rank, phase='decode',
-                    token_index=index, layer_id=candidate['layer_id'], expert_ids=source['decode_routes'][offset]))
+                for request in batch.requests:
+                    index = request.num_computed_tokens - 1  # schedule() already advanced this count.
+                    source = self.inputs[request.id]
+                    offset = index - (source['prompt_tokens'] + source['generated_tokens'] - 1)
+                    require(0 <= offset < len(source['decode_routes']), 'Decode route index outside request')
+                    candidate['tokens'].append(dict(request_id=str(request.id), src_rank=rank, phase='decode',
+                        token_index=index, layer_id=candidate['layer_id'], expert_ids=source['decode_routes'][offset]))
             export_plan(self.make_plan(candidate), directory / 'graphs' / graph)
             self.waves[name] = dict(graph_id=graph, wave_id=wave, batches=batches, history_index=step)
             self.history.append(dict(graph_id=graph, wave_id=wave, group_id=name, rank_ids=ranks,
@@ -267,8 +275,9 @@ def run(args):
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
-    configured = config.get('schema_version') == 'moe-ub-configured-service/1'
-    require(layer.get('schema_version') != 'moe-ub-layer-fixture/2' or configured,
+    configured = config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
+    batched = config.get('schema_version') == 'moe-ub-configured-service/2'
+    require(layer.get('schema_version') not in ('moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3') or configured,
             'Physical deployment currently requires the configured service entry')
     if configured:
         from .configured_service import ConfiguredService
@@ -288,8 +297,11 @@ def run(args):
     output.mkdir(exist_ok=False)
     (output / 'graphs').mkdir()
     export_bootstrap(output / 'bootstrap', service.ranks)
-    save(output / 'deployment.json', dict(schema_version='moe-ub-service-deployment/2'
-        if 'deployment' in layer else 'moe-ub-service-deployment/1', groups=service.groups))
+    deployment = dict(schema_version='moe-ub-service-deployment/3' if batched else
+        'moe-ub-service-deployment/2' if 'deployment' in layer else 'moe-ub-service-deployment/1', groups=service.groups)
+    if batched:
+        deployment['batch_limits'] = layer['batch_limits']
+    save(output / 'deployment.json', deployment)
     save(output / 'input.json', config)
     save(output / 'layer.json', layer)
     if pd:

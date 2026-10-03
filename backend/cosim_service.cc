@@ -43,16 +43,25 @@ struct Group
     std::string graph, wave;
     std::set<int> completed;
 };
-std::vector<Group> LoadGroups(const fs::path& shared)
+std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
 {
     // Compatibility for the original direct cosim-service protocol fixtures.
     Json deployment = {{"schema_version", "moe-ub-service-deployment/1"}, {"groups", Json::array({
         {{"group_id", "ep0"}, {"rank_ids", {0u,1u,2u,3u}}, {"rank_to_ub_node", {0u,1u,2u,3u}},
          {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
-    const bool physical = deployment.at("schema_version") == "moe-ub-service-deployment/2";
-    Require(deployment.size() == 2 && (physical || deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
+    const bool batched = deployment.at("schema_version") == "moe-ub-service-deployment/3";
+    Require(deployment.size() == (batched ? 3 : 2) && (batched || deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
+            deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
             deployment.at("groups").is_array() && !deployment.at("groups").empty(), "Invalid service deployment");
+    const bool physical = deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
+        (batched && deployment.at("groups").at(0).contains("deployment"));
+    if (batched)
+    {
+        batch_limits = deployment.at("batch_limits");
+        moe_ub::ValidateBatchLimits(batch_limits);
+        Require(deployment.at("groups").size() == 1, "Batched service currently requires one group");
+    }
     std::vector<Group> groups;
     std::set<int> members;
     std::set<uint32_t> nodes;
@@ -254,7 +263,8 @@ int main(int argc, char** argv)
         const std::string run_id = argv[1];
         Require(std::regex_match(run_id, std::regex("[A-Za-z0-9_.-]+")), "Invalid run identity");
         const auto shared = fs::canonical(argv[2]);
-        auto groups = LoadGroups(shared);
+        Json batch_limits;
+        auto groups = LoadGroups(shared, batch_limits);
         std::map<int, size_t> owner, rank_index;
         std::map<int, uint32_t> rank_node;
         std::map<uint32_t, size_t> node_index;
@@ -607,6 +617,10 @@ int main(int argc, char** argv)
                             semantic.filename() == "plan.json", "Workload and semantic manifest disagree");
                     const auto directory = semantic.parent_path();
                     auto plan = moe_ub::LoadLayerPlan(directory);
+                    Require((plan.data.at("schema_version") == "moe-ub-execution-plan/3") == !batch_limits.is_null(),
+                            "Plan/service batching schema mismatch");
+                    if (!batch_limits.is_null())
+                        Require(plan.data.at("batch_limits") == batch_limits, "Batch limits changed during run");
                     if (backend_config) backend_config->CheckPlan(plan.data);
                     Require(plan.data.at("graph_id") == graph && plan.data.at("wave_id") == wave &&
                             plan.data.at("input").at("graph_id") == graph &&

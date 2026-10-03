@@ -89,7 +89,7 @@ def main():
     except (ValueError, KeyError, TypeError) as error:
         parser.error(f'{args.input}: {error}')
     path = export_plan(plan, args.output_dir)
-    if plan['schema_version'] == 'moe-ub-execution-plan/2':
+    if 'deployment' in plan:
         fabric = [t for t in plan['transfers'] if 'ub_task_id' in t]
         print(f"Generated {len(fabric)} fabric writes / {sum(t['payload_bytes'] for t in fabric)} fabric bytes, "
               f"{len(plan['transfers'])-len(fabric)} local deliveries at {path}")

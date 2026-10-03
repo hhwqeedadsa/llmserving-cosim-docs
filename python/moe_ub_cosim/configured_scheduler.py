@@ -41,10 +41,10 @@ class ConfiguredMemory(MemoryModel):
 
 
 class ConfiguredScheduler(Scheduler):
-    def __init__(self, model, audit, block_size, token_budget, request_count):
+    def __init__(self, model, audit, block_size, token_budget, request_count, max_num_seqs=1):
         self.model, self.config = model['name'], model
         self.node_id = self.instance_id = self.start_npu = audit['rank_id']
-        self.max_num_seqs = 1  # Explicit current-task execution boundary.
+        self.max_num_seqs = max_num_seqs
         self.max_num_batched_tokens = token_budget
         self.long_prefill_token_threshold = 0
         self.num_npus = self.tp_size = self.pp_size = 1

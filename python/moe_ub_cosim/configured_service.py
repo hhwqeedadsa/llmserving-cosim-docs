@@ -1,11 +1,11 @@
-"""Declared model capacity and endpoint mapping on the one-request decode service."""
+"""Declared model capacity and conservative ready-KV decode admission."""
 import hashlib
 import json
 from pathlib import Path
 import re
 
 from .model_capacity import audit_capacity, fields, I64
-from .plan import build_plan, integer, require, validate_config
+from .plan import batch_limit, build_plan, integer, require, validate_config
 from .service import Service, group_layer
 
 
@@ -13,8 +13,10 @@ class ConfiguredService(Service):
     def validate_inputs(self, config, layer):
         fields(config, 'schema_version run_id mode execution model model_spec memory scheduling groups requests',
                'configured service')
-        require(config['schema_version'] == 'moe-ub-configured-service/1' and config['mode'] == 'fixture' and
+        self.batched = config['schema_version'] == 'moe-ub-configured-service/2'
+        require(config['schema_version'] in ('moe-ub-configured-service/1','moe-ub-configured-service/2') and config['mode'] == 'fixture' and
                 config['execution'] == {'entry_mode': 'service'}, 'Unsupported configured service mode/schema')
+        require((layer['schema_version'] == 'moe-ub-layer-fixture/3') == self.batched, 'Service/layer batching schema mismatch')
         require(isinstance(config['run_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', config['run_id']),
                 'Invalid run_id')
         validate_config(layer)
@@ -30,9 +32,15 @@ class ConfiguredService(Service):
         audit = audit_capacity(config['model_spec'], config['memory'], layer)
         require(config['model'] == config['model_spec']['name'], 'Service/model identity mismatch')
         fields(config['scheduling'], 'max_num_seqs max_num_batched_tokens', 'scheduling')
-        integer(config['scheduling']['max_num_seqs'], 'max_num_seqs (current single-request boundary)', 1, 1)
         maximum = config['model_spec']['max_position_embeddings']
-        integer(config['scheduling']['max_num_batched_tokens'], 'max_num_batched_tokens', 1, maximum)
+        if self.batched:
+            require(config['scheduling'] == layer['batch_limits'], 'Service/layer batch limits differ')
+            batch_limit(layer)
+            require(layer['compute_dtypes'] == {k:config['model_spec']['dtypes'][k] for k in layer['compute_dtypes']},
+                    'Model and batch compute dtypes differ')
+        else:
+            integer(config['scheduling']['max_num_seqs'], 'max_num_seqs (current single-request boundary)', 1, 1)
+            integer(config['scheduling']['max_num_batched_tokens'], 'max_num_batched_tokens', 1, maximum)
         requests = config['requests']
         require(isinstance(requests, list), 'Requests must be a list')
         ids = set()
@@ -73,12 +81,14 @@ class ConfiguredService(Service):
                              scheduler_initialization='root_configured_scheduler_adapter',
                              compute_source='fixed_reference', calibration_status='unvalidated_reference')
         self.memory_events = []
+        self.batch_events = []
+        self.completed_ids = set()
 
     def make_schedulers(self):
         from .configured_scheduler import ConfiguredScheduler
         return [ConfiguredScheduler(self.config['model_spec'], self.audit_by_rank[r],
                 self.config['memory']['block_size'], self.config['scheduling']['max_num_batched_tokens'],
-                len(self.config['requests'])) for r in self.ranks]
+                len(self.config['requests']), self.config['scheduling']['max_num_seqs']) for r in self.ranks]
 
     def memory_snapshot(self):
         result = []
@@ -93,6 +103,11 @@ class ConfiguredService(Service):
                     'Unmodeled preemption or recompute')
             resident = {str(rid): len(blocks) for rid, blocks in scheduler.kv.req_to_blocks.items()}
             require(sum(resident.values()) == pool.used_blocks, 'KV reservation and pool occupancy disagree')
+            if self.batched:
+                require(set(resident) == {str(r.id) for r in scheduler.running} and not scheduler.waiting,
+                        'Resident requests differ from the single KV ledger')
+                require(all(len(blocks) == self.requirements[rid]['reserved_kv_blocks']
+                            for rid, blocks in scheduler.kv.req_to_blocks.items()), 'Final KV reservation changed')
             result.append(dict(rank_id=rank, weight_bytes=a['weight_bytes'], non_kv_bytes=a['non_kv_bytes'],
                 kv_capacity_blocks=pool.num_blocks, free_blocks=pool.get_num_free_blocks(),
                 kv_used_bytes=pool.used_bytes(), used_bytes=scheduler.memory.npu_used,
@@ -101,12 +116,31 @@ class ConfiguredService(Service):
 
     def admit_pending(self, rank):
         scheduler = self.scheduler_by_rank[rank]
+        if self.batched:
+            require(not scheduler.inflight, 'Cannot admit during an active rank batch')
+            while self.pending[rank]:
+                request = self.pending[rank][0]
+                needed = self.requirements[request.id]['reserved_kv_blocks']
+                reason = 'sequence_budget' if len(scheduler.running) >= scheduler.max_num_seqs else (
+                    'kv_capacity' if scheduler.kv.npu_pool.get_num_free_blocks() < needed else None)
+                if reason:
+                    self.memory_events.append(dict(event='wait', reason=reason, time_ns=self.current_ns,
+                        request_id=request.id, ranks=self.memory_snapshot()))
+                    require(bool(scheduler.running), 'Idle rank cannot admit a request that fits its total capacity')
+                    break  # FCFS admission; no bypass of the waiting head.
+                self.reserve_request(rank, request)
+            return
         if not scheduler.is_request_empty() or not self.pending[rank]:
             return
         request = self.pending[rank][0]
         required = self.requirements[request.id]
         require(scheduler.kv.npu_pool.get_num_free_blocks() >= required['reserved_kv_blocks'],
                 'Idle single-request rank retained KV reservations')
+        self.reserve_request(rank, request)
+
+    def reserve_request(self, rank, request):
+        scheduler = self.scheduler_by_rank[rank]
+        required = self.requirements[request.id]
         before = request.num_computed_tokens, request.num_tokens_reached
         allocated = scheduler.kv.allocate_slots(request, request.output-1-request.num_computed_tokens)
         require(allocated is not None, 'Checked final KV reservation failed')
@@ -118,6 +152,43 @@ class ConfiguredService(Service):
             num_computed_tokens=request.num_computed_tokens, num_tokens_reached=request.num_tokens_reached,
             reserved_kv_tokens=required['reserved_kv_tokens'], ranks=self.memory_snapshot()))
 
+    def validate_batch(self, rank, batch):
+        if not self.batched:
+            return super().validate_batch(rank, batch)
+        require(batch is not None and 1 <= len(batch.requests) <= batch_limit(self.layer), 'Empty or over-budget decode batch')
+        ids = [r.id for r in batch.requests]
+        require(len(set(ids)) == len(ids) and batch.num_decode == len(ids) and batch.num_prefill == 0 and
+                batch.scheduled_tokens == {rid:1 for rid in ids}, 'Invalid per-request scheduled_tokens')
+        require(batch.q_list == [1]*len(ids) and batch.k_list == [r.num_computed_tokens-1 for r in batch.requests] and
+                all(r.num_computed_tokens == r.num_tokens_reached < r.output for r in batch.requests) and
+                batch.load == batch.evict == batch.write_through == batch.pd_kv_send_tokens == 0,
+                'Decode batch changed progress or introduced unmodeled work')
+        self.batch_events.append(dict(event='scheduled', time_ns=self.current_ns, rank_id=rank,
+            batch_id=batch.batch_id, scheduled_tokens=dict(batch.scheduled_tokens),
+            request_ids=ids, context_tokens=[k+1 for k in batch.k_list],
+            resident_request_ids=[r.id for r in self.scheduler_by_rank[rank].running],
+            ranks=self.memory_snapshot()))
+
+    def complete_batch(self, rank, batch, now):
+        if not self.batched:
+            return super().complete_batch(rank, batch, now)
+        scheduler = self.scheduler_by_rank[rank]
+        before = {r.id:(r.num_computed_tokens,r.num_tokens_reached,len(r.itl)) for r in self.requests}
+        expected = {r.id for r in batch.requests if r.num_tokens_reached+1 == r.output}
+        prompt, generated, finished = scheduler.add_done(batch.batch_id+1, rank, now)
+        require(prompt == 0 and generated == sum(batch.scheduled_tokens.values()) == len(batch.requests) and
+                not scheduler.inflight and {r.id for r in finished} == expected and len(finished) == len(expected),
+                'Per-request completion mismatch')
+        for request in self.requests:
+            computed, reached, count = before[request.id]
+            selected = request.id in batch.scheduled_tokens
+            require(request.num_computed_tokens == computed and request.num_tokens_reached == reached+int(selected) and
+                    len(request.itl) == count+int(selected), 'Unscheduled request advanced or scheduled request lost progress')
+        self.record_completion(rank, finished, now)
+        self.batch_events.append(dict(event='completed', time_ns=now, rank_id=rank,
+            batch_id=batch.batch_id, generated_tokens=generated, request_ids=[r.id for r in batch.requests],
+            finished_request_ids=[r.id for r in finished], ranks=self.memory_snapshot()))
+
     def make_plan(self, candidate):
         plan = super().make_plan(candidate)
         plan['input_provenance'] = dict(model_spec_sha256=self.evidence['model_spec_sha256'],
@@ -127,6 +198,8 @@ class ConfiguredService(Service):
 
     def record_completion(self, rank, finished_requests, now):
         for request in finished_requests:
+            require(request.id not in self.completed_ids, 'Repeated request completion')
+            self.completed_ids.add(request.id)
             require(request.id not in self.scheduler_by_rank[rank].kv.req_to_blocks,
                     'Completed request retains reserved KV')
             self.memory_events.append(dict(event='release', time_ns=now, request_id=request.id,
@@ -138,14 +211,18 @@ class ConfiguredService(Service):
         self.memory_events.append(dict(event='boundary', time_ns=self.current_ns, ranks=snapshot))
         if response['service_finished']:
             require(all(not r['request_blocks'] and r['kv_used_bytes'] == 0 for r in snapshot), 'KV leak at service end')
+            require(self.completed_ids == set(self.inputs), 'Service ended with unfinished request accounting')
         return response
 
     def result_fields(self):
-        return dict(input_evidence='input_evidence.json', memory_events=self.memory_events,
-                    memory_final=self.memory_snapshot())
+        fields = dict(input_evidence='input_evidence.json', memory_events=self.memory_events,
+                      memory_final=self.memory_snapshot())
+        if self.batched:
+            fields['batch_events'] = self.batch_events
+        return fields
 
     def manifest_fields(self):
-        return dict(model_source=self.config['model_spec']['source']['kind'],
+        result = dict(model_source=self.config['model_spec']['source']['kind'],
             model_spec_sha256=self.evidence['model_spec_sha256'],
             compute_scope='single_selected_moe_layer', compute_source='fixed_reference',
             executed_layer_ids=self.evidence['model']['executed_layer_ids'],
@@ -155,3 +232,7 @@ class ConfiguredService(Service):
             memory_basis=self.evidence['model']['memory_basis'],
             scheduler_adapter_sha256=hashlib.sha256((Path(__file__).parent /
                                                    'configured_scheduler.py').read_bytes()).hexdigest())
+        if self.batched:
+            result.update(batching='iteration_boundary_ready_kv_decode',
+                          batch_limits=self.config['scheduling'], admission_policy='fcfs_final_kv_reservation')
+        return result

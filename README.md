@@ -40,7 +40,7 @@ M5.3 已完成 DeepEP v1.2.1 单机四 rank 普通路径的八项行为核对，
 | [当前任务](docs/tasks/current.md) | 本次允许做什么、怎样检查、何时停止 |
 | [环境记录](docs/environment.md) | 本地实际确认的环境和命令，未确认项留空 |
 | [模型核对记录](docs/model_validation.md) | M5.3 目标源码依据、行为差异及未验证范围 |
-| [后续版本候选事项](docs/future_iterations.md) | 真实路由、A100 测量、多请求批处理和具体通信库复现，尚未开始 |
+| [后续版本候选事项](docs/future_iterations.md) | 讨论中增加的事项及其与 v0.3 里程碑的对应关系 |
 | [仓库准备记录](docs/bootstrap.md) | 本次远端准备的范围、依据和未执行检查 |
 | [依赖锁文件](deps.lock.json) | 上游基线、实际采用提交和递归依赖记录 |
 
@@ -66,7 +66,9 @@ bash scripts/check_deps.sh
 
 从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。v0.2 的编号任务已按各自范围完成。M6 已完成[单层固定轮次执行参数化](fixtures/m6_execution_parameters/README.md)、[服务模型与容量参数化](fixtures/m6_service_model/README.md)、[部署本地性分类](fixtures/m6_locality/README.md)及[场景 YAML 与 WRITE/RTP 后端参数适配](fixtures/m6_scenario_backend/README.md)。场景参数进入实际图、UB 对象和完成反馈，记录原生默认值、覆盖来源和实例生效值；不兼容事务模式明确拒绝。按既定里程碑范围，M6 验收完成。
 
-当前配置服务仍为一组、一个选定 MoE 层、每 rank 同时一个请求；MLA、完整 CM384/R1/CANN 场景、连续组批与硬件校准尚未完成。下一项为 M7 同 rank 多请求连续批处理，等待用户确认。真实数据、目标行为复现与校准状态分别记录。每个开发任务完成且验证通过后，代码助手整理记录并本地提交；推送仍需单独授权，下一项任务仍由用户确认。
+M7 已完成[同 rank 多请求连续批处理](fixtures/m7_continuous_batching/README.md)：新配置在迭代完成边界按序列、Token 与 KV 预算接纳和调度请求，每个选中请求推进一个 Token。实际 ASTRA/UB 验证 AB、AC、AC 三轮，六个 Token 共 6 次写、512 业务字节；KV 暂时不足时等待释放，未选中的驻留请求继续计容量。旧 schema 保留原行为。
+
+新配置服务仍限一组、一个选定 MoE 层；多请求与多层、多组的组合属于下一项 M8，等待用户确认。真实路由、MLA、完整 CM384/R1/CANN 场景与硬件校准尚未完成。真实数据、目标行为复现与校准状态分别记录。每个开发任务完成且验证通过后，代码助手整理记录并本地提交；推送仍需单独授权，下一项任务仍由用户确认。
 
 ## 目录建立顺序
 

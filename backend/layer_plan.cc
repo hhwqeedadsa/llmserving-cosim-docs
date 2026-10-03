@@ -93,6 +93,14 @@ void CheckPlanGraph(const std::filesystem::path& path, const Json& graph,
     try { CheckGraph(path, graph, transfers); }
     catch (const std::exception& error) { throw std::runtime_error(path.string() + ": " + error.what()); }
 }
+uint64_t ValidateBatchLimits(const Json& limits)
+{
+    Require(limits.is_object() && limits.size() == 2, "invalid batch limits");
+    const auto sequences = Number(limits.at("max_num_seqs"), "batch sequence budget", 4096);
+    const auto tokens = Number(limits.at("max_num_batched_tokens"), "batch Token budget", 4096);
+    Require(sequences > 0 && tokens > 0, "zero batch budget");
+    return std::min(sequences, tokens);
+}
 void ValidateDeployment(const Json& deployment, const Json& ranks)
 {
     Require(deployment.is_object() && deployment.size() == 3 &&
@@ -136,8 +144,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 LayerPlan ValidateLayerPlan(const Json& p)
 {
     LayerPlan plan{p, {}, {}, {}};
-    const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2";
-    Require((physical || p.at("schema_version") == "moe-ub-execution-plan/1") &&
+    const bool batched = p.at("schema_version") == "moe-ub-execution-plan/3";
+    const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2" || (batched && p.contains("deployment"));
+    Require((batched || physical || p.at("schema_version") == "moe-ub-execution-plan/1") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
     const auto& ranks = p.at("rank_ids");
@@ -164,7 +173,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
             "input rank mapping mismatch");
     const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
     const auto& input = p.at("input");
-    Require(input.at("schema_version") == (physical ? "moe-ub-layer-fixture/2" : "moe-ub-layer-fixture/1") &&
+    Require(input.at("schema_version") == (batched ? "moe-ub-layer-fixture/3" : physical ? "moe-ub-layer-fixture/2" : "moe-ub-layer-fixture/1") &&
             input.contains("deployment") == physical && p.contains("deployment") == physical,
             "plan/input deployment schema mismatch");
     std::map<int, std::string> chips;
@@ -182,7 +191,16 @@ LayerPlan ValidateLayerPlan(const Json& p)
     const auto& placement = input.at("expert_placement");
     const bool prefill = input.at("role") == "P";
     Require(prefill || input.at("role") == "D", "invalid execution role");
-    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (prefill ? 16 : ranks.size()) &&
+    Require(input.contains("batch_limits") == batched && p.contains("batch_limits") == batched &&
+            input.contains("compute_dtypes") == batched && p.contains("compute_inputs") == batched,
+            "batching fields/schema mismatch");
+    uint64_t batch_limit = 1;
+    if (batched)
+    {
+        Require(!prefill && p.at("batch_limits") == input.at("batch_limits"), "batch role/limits mismatch");
+        batch_limit = ValidateBatchLimits(input.at("batch_limits"));
+    }
+    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (batched ? 4096 : prefill ? 16 : ranks.size()) &&
             placement.is_array() && !placement.empty(), "invalid Token/placement set");
     for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", INT32_MAX - 1)), "expert outside group");
     const auto top_k = Number(input.at("top_k"), "top_k", placement.size());
@@ -198,11 +216,14 @@ LayerPlan ValidateLayerPlan(const Json& p)
         Require(element > 0 && hidden <= uint64_t(INT64_MAX) / element, "vector byte overflow");
     }
     std::set<std::tuple<std::string, std::string, uint64_t, uint64_t>> token_ids;
+    std::set<std::string> batch_requests;
+    std::map<uint64_t, uint64_t> per_expert;
     for (const auto& token : tokens)
     {
         const int rank = Number(token.at("src_rank"), "Token rank", INT32_MAX - 1);
         Require(members.contains(rank), "nonmember local Token");
-        Require(++local_tokens[rank] == 1 || prefill, "repeated local decode Token");
+        ++local_tokens[rank];
+        Require(prefill || local_tokens[rank] <= batch_limit, "repeated local decode Token or exceeded batch budget");
         Require(token.at("phase") == (prefill ? "prefill" : "decode"), "Token phase mismatch");
         const auto& experts = token.at("expert_ids");
         Require(experts.is_array() && experts.size() == top_k, "invalid Top-K route");
@@ -212,8 +233,10 @@ LayerPlan ValidateLayerPlan(const Json& p)
             const auto id = Number(expert, "expert", placement.size() - 1);
             Require(selected.insert(id).second, "duplicate expert choice");
             ++expert_inputs[placement.at(id).get<int>()];
+            ++per_expert[id];
         }
         const auto request = token.at("request_id").get<std::string>();
+        Require(!batched || batch_requests.insert(request).second, "decode request repeated in this iteration");
         Require(!request.empty() && Number(token.at("layer_id"), "Token layer_id", INT32_MAX) == layer_id &&
                 token_ids.emplace(request, token.at("phase").get<std::string>(),
                     Number(token.at("token_index"), "Token index", INT64_MAX), layer_id).second,
@@ -231,6 +254,38 @@ LayerPlan ValidateLayerPlan(const Json& p)
     }
     Require(p.at("instance_batches") == batches && p.at("expert_input_counts") == counts,
             "Token participation/expert counts mismatch");
+    if (batched)
+    {
+        const auto& dtypes = input.at("compute_dtypes");
+        const std::map<std::string, unsigned> sizes = {{"float16",2},{"bfloat16",2},{"float32",4},{"fp8",1}};
+        Require(dtypes.is_object() && dtypes.size() == 4, "invalid compute dtypes");
+        for (const std::string key : {"compute", "kv", "dispatch", "combine"})
+        {
+            Require(dtypes.at(key).is_string(), "non-string compute dtype");
+            const auto type = dtypes.at(key).get<std::string>();
+            Require(sizes.contains(type) && (key == "kv" || type != "fp8"), "unsupported compute dtype");
+            if (key == "dispatch" || key == "combine")
+                Require(input.at(key + "_element_bytes") == sizes.at(type), "compute dtype/vector mismatch");
+        }
+        Json shapes = Json::array();
+        for (int rank : members)
+        {
+            Json requests = Json::array(), experts = Json::array();
+            for (const auto& token : tokens)
+                if (token.at("src_rank") == rank)
+                {
+                    const auto index = Number(token.at("token_index"), "batch context", INT64_MAX - 1);
+                    requests.push_back({{"request_id", token.at("request_id")}, {"token_index",index},
+                        {"context_tokens",index+1}, {"query_tokens",1}});
+                }
+            for (size_t e = 0; e < placement.size(); ++e)
+                if (placement[e] == rank) experts.push_back({{"expert_id",e}, {"input_tokens",per_expert[e]}});
+            shapes.push_back({{"rank_id",rank}, {"requests",requests}, {"batch_size",requests.size()}, {"expert_inputs",experts}});
+        }
+        const Json expected = {{"basis","linear_reference_per_token_and_expert_input"}, {"context_sensitive",false},
+            {"expert_distribution_sensitive",false}, {"hidden_dim",hidden}, {"dtypes",dtypes}, {"ranks",shapes}};
+        Require(p.at("compute_inputs") == expected, "batch compute shapes differ from Tokens/experts");
+    }
     Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
     const auto chunk_bytes = Number(input.at("chunk_bytes"), "chunk_bytes", UINT32_MAX);
     Require(chunk_bytes > 0, "zero chunk limit");

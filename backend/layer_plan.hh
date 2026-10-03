@@ -18,6 +18,7 @@ struct LayerPlan
     std::vector<LocalDescriptor> local_descriptors;
 };
 void ValidateDeployment(const nlohmann::json& deployment, const nlohmann::json& ranks);
+uint64_t ValidateBatchLimits(const nlohmann::json& limits);
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
 LayerPlan ValidateLayerPlan(const nlohmann::json& data);
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);

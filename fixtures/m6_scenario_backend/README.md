@@ -2,7 +2,7 @@
 
 `reference.yaml` 引用已有小型 GQA 服务、一个选定 MoE 层和四端点交换网络，从 CM384/R1 参考规格中只导入 `ns3_backend.reference_attributes/reference_globals` 及按角色选择的事务 profile。它不执行参考规格中的模型、384 芯片拓扑或 CANN 流程；原 `moe-ub-scenario-reference/0.1` 文件仍不能直接作为可执行输入。
 
-入口沿用同一配置服务、ASTRA 图和 UB 网络。执行边界仍是一组、一个选定层、每 rank 同时一个请求；路由和计算耗时来自人工参考输入，状态为 `unvalidated_reference`。
+入口沿用同一配置服务、ASTRA 图和 UB 网络。本目录旧 schema 样例的执行边界是一组、一个选定层、每 rank 同时一个请求；路由和计算耗时来自人工参考输入，状态为 `unvalidated_reference`。M7 已另行验证引用 service/2 与 layer/3 的[连续批处理输入](../m7_continuous_batching/README.md)，不改变本目录样例的原行为。
 
 ## 已验证命令
 
@@ -32,7 +32,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 | 字段 | 含义 |
 |---|---|
 | `scenario_id/basis` | 运行身份；当前依据只能为 `selected_reference`。 |
-| `service/layer/system` | 已有 configured-service、layer v1/v2 与 ASTRA system JSON；模型、专家放置、容量和映射仍按原合同校验。 |
+| `service/layer/system` | configured-service/1 配 layer/1、layer/2，或 configured-service/2 配 layer/3，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
 | `backend.reference_file` | 原参考规格。只读取上述后端段，所选 profile 必须完整；未选候选允许缺项。 |
 | `backend.profile_by_role` | 显式选择 `dispatch/combine`，当前均要求 URMA WRITE/RTP、数据拥有方发起、RemoteWriteCommitted 就绪、事务完成释放发送槽。 |
 | `backend.attributes/globals` | 原生完整键名和标量值；未知名称、类型/单位错误或矛盾的固定约束报错。带单位时间使用 `10ns` 等字符串，带宽属性使用 `224Gbps` 等原生格式；生效值按原生序列化形式保存。 |

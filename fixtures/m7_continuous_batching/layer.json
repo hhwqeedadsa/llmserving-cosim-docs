@@ -1,0 +1,70 @@
+{
+  "schema_version": "moe-ub-layer-fixture/3",
+  "graph_id": "g-m7-abc",
+  "wave_id": "D.w0",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 0,
+  "rank_ids": [
+    4,
+    10
+  ],
+  "rank_to_ub_node": [
+    1,
+    3
+  ],
+  "hidden_dim": 32,
+  "top_k": 1,
+  "dispatch_element_bytes": 2,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 256,
+  "send_slots_per_rank": 1,
+  "template": "direct_rank_dedup_v1",
+  "expert_placement": [
+    4,
+    4,
+    10
+  ],
+  "tokens": [
+    {
+      "request_id": "201",
+      "src_rank": 4,
+      "phase": "decode",
+      "token_index": 2,
+      "layer_id": 0,
+      "expert_ids": [
+        2
+      ]
+    },
+    {
+      "request_id": "202",
+      "src_rank": 4,
+      "phase": "decode",
+      "token_index": 5,
+      "layer_id": 0,
+      "expert_ids": [
+        2
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 5000,
+    "expert_per_input": 4000,
+    "expert_local_merge": 1000,
+    "combine_unpack_merge": 1000,
+    "next_layer": 0
+  },
+  "batch_limits": {
+    "max_num_seqs": 2,
+    "max_num_batched_tokens": 2
+  },
+  "compute_dtypes": {
+    "compute": "float16",
+    "kv": "fp8",
+    "dispatch": "float16",
+    "combine": "float16"
+  }
+}

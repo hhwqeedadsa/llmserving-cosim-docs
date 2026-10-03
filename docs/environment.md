@@ -2366,3 +2366,78 @@ L/scenario-integration 与 L/scenario-integration-v2 在新增大向量测试中
 `python3 R/audit.py` 对应 L/audit.json，退出 0：10062 个旧构建产物摘要未变，恢复备份的 `.lock-ns3_linux_build`，核对最终八套集成的代码摘要；服务链接 52 个 ASTRA 核心对象，实际装载十个 ns-3 库均来自 `build/m6-scenario-backend/output/lib`。`bash scripts/check_deps.sh` 对应 L/deps-final.json，退出 0，全部 13 个依赖与固定版本一致。任务生成的构建、日志、输入和备份留在忽略目录。
 
 本步补齐 M6 表中场景后端参数适配的交付范围，M6 按既定里程碑验收完成。当前配置服务仍只执行一组、一层、每 rank 同时一个请求；真实路由、MLA、目标完整模型/CANN/CM384 行为和硬件校准未在本轮完成，`unvalidated_reference` 不变。本轮整理记录后本地提交，不推送；下一项 M7 同 rank 多请求连续批处理待用户确认，尚未开始。
+
+## 2026-10-03：M7 同 rank 多请求连续批处理
+
+用户确认开始 M7，基线为 `a3bdf90`，任务说明先提交于 `6d6ce57`。本轮仅修改主仓库适配、计划验证、小型样例及相关记录；锁定 Scheduler 已有多请求批次选择和完成逻辑，因而没有修改子模块。使用现有原生 Linux 工具链、`.venv/llmservingsim-native` 及其 protobuf/PyYAML；未安装软件、修改全局配置、下载模型或初始化升级依赖。
+
+以下命令 cwd 均为 `/root/moe-ub-cosim`。记 `R=runs/v03-continuous-batching`、`L=R/logs`；这些是本节路径缩写。`R/record.py` 保存各次实际 argv、cwd、开始/结束 UTC、退出状态和 stdout/stderr 路径；各集成目录的 commands.json 另记逐次输入与子命令。运行、构建、备份和摘要留在忽略目录。
+
+### 实现与独立构建
+
+configured-service/2 与 layer/3 显式开启批次，服务保存 deployment/3，生成 execution-plan/3；旧 schema 继续原行为。新批次仍是一组、一个选定 MoE 层、每 rank 一张活动图和一个计算槽。根适配预留最终输入 KV，原生 Scheduler 选批和逐请求完成；暂时不足的队首等待容量，未选中的驻留请求仍计入唯一块池。图保存实际请求上下文、dtype 和逐专家输入量，C++ 独立核验；参考计算仍按本地 Token 数与本 rank 专家输入总量线性计时，未增加上下文或专家分布性能模型。
+
+先保存旧产物摘要和原生启动锁，实际执行的配置与构建如下，分别记录为 L/configure.json、L/build.json，均退出 0：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m7-continuous-batching -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m7-continuous-batching/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m7-continuous-batching \
+  --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test -j 8
+```
+
+### 检查命令与结果
+
+实际单元命令 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py'`，L/python-units.json 退出 0，72 项通过。其中新增五项分别验证 A/B/C 的路由和进度、KV 等待、驻留但未选中的容量、逐专家形状/跨请求向量，以及非法输入；给定边界时间的单元测试与真实 UB 集成分别记录。
+
+下表每行实际命令均为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/脚本 --build-dir build/m7-continuous-batching --output-dir R/记录名`；均退出 0。该行 summary.json 位于 R/记录名，外层命令记录为 L/记录名.json。
+
+| 脚本 | 记录名 | 实际检查 |
+|---|---|---|
+| check_continuous_batching.py | batching-final | 15 次正常执行、11 项预期拒绝；独立业务量、逐请求进度和 KV 生命周期。 |
+| check_scenario_backend.py | scenario-final | 11 次旧场景运行、24 项拒绝，WRITE/RTP 参数和完成反馈。 |
+| check_service_model_capacity.py | service-model-final | 6 次原配置服务运行、9 项拒绝，旧单请求和完整模型容量。 |
+| check_deployment_locality.py | locality-final | 14 次单层/连续图/服务本地性运行、9 项拒绝。 |
+| check_execution_parameters.py | execution_parameters-final | 9 次固定图参数对照、13 项拒绝；原 14 次写、114688 字节保持。 |
+| check_sequence.py | sequence-final | 5 次连续图运行、12 项拒绝及生命周期检查。 |
+| check_service.py | service-final | 7 次普通服务运行、9 项拒绝，实际完成与排空。 |
+| check_dynamic_service.py | dynamic_service-final | 9 次动态到达运行、10 项拒绝。 |
+| check_service_boundaries.py | service_boundaries-final | 7 次边界运行、7 项拒绝，空输入/稀疏成员/故障快照。 |
+| check_pd_handoff.py | pd_handoff-final | 7 次 P/D 运行、11 项拒绝。 |
+| check_pd_queue.py | pd_queue-final | 9 次交接队列运行、8 项拒绝。 |
+| check_multilayer.py | multilayer-final | 8 次研究运行、1 次不挂观测运行、10 项拒绝。 |
+| check_research_export.py | research_export-final | 旧研究导出、隔离观测及 15 项错误数据检查。 |
+| check_shared_bottleneck.py | shared_bottleneck-final | 7 次双组共享竞争与来源开关对照。 |
+
+专项固定输入位于 fixtures/m7_continuous_batching/service.json、layer.json；派生预算、网络、本地性及错误输入均保存在 R/batching-final。输入值和计算依据详见该样例 README。
+
+| 对照 | 实际结果 |
+|---|---|
+| A/B/C | 剩余 3/1/2 Token，C 于 1000 ns 在首轮中到达；实际 AB、AC、AC，完成 21100/38196/55292 ns。逐请求 reached 为 6/7/11，每批生成 2，共 6 次写、512 业务字节；B 先释放，A/C 最后一轮释放。 |
+| KV 暂时不足 | rank 4 三块减为两块，批次为 AB、A、A、C、C，65292 ns 结束；A 继续执行，释放后才接纳 C，无重算或抢占。 |
+| 两个预算 | max_num_seqs=1/max_num_batched_tokens=2 时每 rank 只有一个驻留请求；3/1、四块容量且同刻到达时，首轮驻留 A/B/C 占 1/1/2 块，只推进 A。两者均依次 A、A、A、B、C、C，完成 66384 ns。 |
+| 批次和分块 | 不均匀两 rank 批次为 2/1，单轮 384 字节；减去一个请求后 256 字节。ABC 的 chunk 从 256 减到 32，UB 写从 6 增至 16，仍为 512 字节，完成 56196 ns。 |
+| 真实网络反馈 | 400 Gbit/s、20 ns 改为 1 Gbit/s、2000 ns，数据就绪、依赖计算和下一轮启动推迟，整体完成变为 105978 ns；字节和批次成员保持。 |
+| 本地性 | 纯同 rank 的 ABC 没有 UB 写或发送包。另一个 Top-3 三请求单轮混合本地性输入，4 次真实写、1152 字节、4 次同芯片交付，完成 25360 ns；专家贡献保留。 |
+| 到达和结束 | 空输入在 0 ns 结束；C 改为 500000 ns 到达时，空闲后的下一轮恰在该时刻启动，522096 ns 完成。所有请求结束，KV 和计算/发送/事件资源归零。 |
+| 场景/观测 | 新 schema 通过 M6 YAML 参数入口真实运行；来源开启、关闭和不挂观测的服务/执行结果一致，开关的 observed 文件逐字节一致；整包、业务与控制字节分别核对。 |
+| 独立拒绝 | 前端拒绝不可能的最终 KV、预算、缓冲、路由和新旧 schema 混用；后端独立拒绝重复请求、伪造形状、预算超额/中途改变、合并请求来源及篡改计算耗时，失败均在 0 ns、业务写提交前。 |
+
+### 开发中失败与处理
+
+L/batching-unit 首次运行时，新增 Token 预算为 1 的单元输入仍保留两个占位 Token，被层配置验证拒绝。把该测试层的占位 Token 改为一个后，L/batching-unit-v2 五项通过；实际三请求输入和驻留/选中断言未删改。
+
+L/batching-integration 漏设 PYTHONPATH，系统 Python 找不到主仓库模块；L/batching-integration-v2 加入路径后仍使用系统 Python，缺少 protobuf。随后改用现有 `.venv/llmservingsim-native/bin/python`，未安装新依赖。L/batching-integration-v3 所有正常运行均通过，但最后一项拒绝检查把错误消息写成 computation，后端实际报告 compute phase work/duration/dependency mismatch；修正检查的准确消息，保留其退出码、0 ns 和无传输断言。最终 batching-final 还加入实际分块和纯本地对照，通过 15 次正常执行及 11 项预期拒绝。上述失败目录和日志均保留。
+
+### 产物与停止位置
+
+`python3 R/audit.py` 对应 L/audit.json，退出 0：10532 个旧构建产物摘要未变，恢复已备份的 `.lock-ns3_linux_build`，最终测试代码摘要一致。服务链接 52 个 ASTRA 核心对象，实际装载的十个 ns-3 库全来自 build/m7-continuous-batching/output/lib，没有编入其他后端。`bash scripts/check_deps.sh` 的 L/deps-initial.json 与 L/deps-final.json 均退出 0，13 个固定依赖源码和 gitlink 未变。
+
+M7 在当前一组、一个选定层的范围内完成。路由仍为合成数据、计算为线性参考、硬件未校准；完整模型性能及目标 CM384/CANN 场景未验证。本轮整理记录、本地提交，不推送；M8 多层、多请求、多组组合待用户确认，未开始。

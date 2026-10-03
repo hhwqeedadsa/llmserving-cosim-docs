@@ -1,0 +1,140 @@
+{
+  "schema_version": "moe-ub-configured-service/2",
+  "run_id": "m7-abc",
+  "mode": "fixture",
+  "execution": {
+    "entry_mode": "service"
+  },
+  "model": "synthetic/mha-tied-32",
+  "model_spec": {
+    "schema_version": "moe-ub-model/1",
+    "name": "synthetic/mha-tied-32",
+    "architecture": "bias_free_gqa_rmsnorm_gated_ffn",
+    "source": {
+      "kind": "synthetic",
+      "description": "Tied-weight single-layer functional model with FP8 KV byte accounting only"
+    },
+    "hidden_size": 32,
+    "vocab_size": 64,
+    "max_position_embeddings": 128,
+    "tp": 1,
+    "pp": 1,
+    "attention": {
+      "num_heads": 2,
+      "num_kv_heads": 2,
+      "head_dim": 16
+    },
+    "dtypes": {
+      "weights": "float32",
+      "compute": "float16",
+      "kv": "fp8",
+      "dispatch": "float16",
+      "combine": "float16"
+    },
+    "tie_word_embeddings": true,
+    "layers": [
+      {
+        "layer_id": 0,
+        "kind": "moe",
+        "intermediate_size": 64,
+        "num_experts": 3,
+        "top_k": 1,
+        "expert_placement": [
+          4,
+          4,
+          10
+        ],
+        "shared_experts": 0,
+        "shared_intermediate_size": 0
+      }
+    ]
+  },
+  "memory": {
+    "capacity_scope": "rank_endpoint",
+    "block_size": 8,
+    "max_kv_blocks_per_rank": 1024,
+    "ranks": [
+      {
+        "rank_id": 4,
+        "device_bytes": 78080,
+        "workspace_bytes": 1024,
+        "communication_buffer_bytes": 1024
+      },
+      {
+        "rank_id": 10,
+        "device_bytes": 52992,
+        "workspace_bytes": 1024,
+        "communication_buffer_bytes": 1024
+      }
+    ]
+  },
+  "scheduling": {
+    "max_num_seqs": 2,
+    "max_num_batched_tokens": 2
+  },
+  "groups": [
+    {
+      "group_id": "ep0",
+      "rank_ids": [
+        4,
+        10
+      ],
+      "rank_to_ub_node": [
+        1,
+        3
+      ],
+      "expert_placement": [
+        4,
+        4,
+        10
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "request_id": 201,
+      "rank_id": 4,
+      "arrival_ns": 0,
+      "prompt_tokens": 2,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2
+        ],
+        [
+          0
+        ],
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "request_id": 202,
+      "rank_id": 4,
+      "arrival_ns": 0,
+      "prompt_tokens": 5,
+      "generated_tokens": 1,
+      "decode_routes": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "request_id": 203,
+      "rank_id": 4,
+      "arrival_ns": 1000,
+      "prompt_tokens": 7,
+      "generated_tokens": 2,
+      "decode_routes": [
+        [
+          2
+        ],
+        [
+          1
+        ]
+      ]
+    }
+  ]
+}

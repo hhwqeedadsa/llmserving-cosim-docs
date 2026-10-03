@@ -196,7 +196,8 @@ def prepare(input_path, backend_binary, output):
     paths={k:(directory/config[k]).resolve() for k in ('service','layer','system')}
     require(all(p.is_file() for p in paths.values()), 'Missing scenario input')
     service=json.loads(paths['service'].read_text());layer=json.loads(paths['layer'].read_text())
-    require(service.get('schema_version')=='moe-ub-configured-service/1', 'Scenario requires configured service')
+    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2'),
+            'Scenario requires configured service')
     fields(config['execution'],'chunk_bytes send_slots_per_rank seed run','execution')
     execution=config['execution']
     integer(execution['chunk_bytes'],'chunk_bytes',1,2**32-1);integer(execution['send_slots_per_rank'],'send slots',1,2)
@@ -268,7 +269,9 @@ def prepare(input_path, backend_binary, output):
     source_paths=[input_path,reference,*paths.values(),*(base/name for name in NETWORK_FILES),ROOT/'deps.lock.json']
     manifest=dict(schema_version='moe-ub-scenario-resolution/1',scenario_id=config['scenario_id'],
         state='resolved_not_executed',calibration_status='unvalidated_reference',
-        execution_scope='configured_single_group_single_moe_layer_one_request_per_rank',
+        execution_scope=('configured_single_group_single_moe_layer_continuous_batching'
+            if service['schema_version']=='moe-ub-configured-service/2' else
+            'configured_single_group_single_moe_layer_one_request_per_rank'),
         imported_reference_sections=['ns3_backend.reference_attributes','ns3_backend.reference_globals','ns3_backend.transaction_profiles'],
         reference_model_and_target_topology_imported=False,target_replication_claimed=False,
         plane_id=config['network']['plane_id'],network_override_order=['base_case_connectivity','scenario_network_defaults','scenario_node_link_overrides'],

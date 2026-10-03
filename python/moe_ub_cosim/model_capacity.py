@@ -5,7 +5,7 @@ or hardware calibration. Dense and routed/shared FFNs use three gated matrices.
 """
 from copy import deepcopy
 
-from .plan import integer, require
+from .plan import batch_limit, integer, require
 
 I64 = 2**63 - 1
 DTYPE_BYTES = {'float16': 2, 'bfloat16': 2, 'float32': 4}
@@ -100,7 +100,8 @@ def audit_capacity(model, memory, layer):
     # Retain every remote dispatch and partial result vector at once, plus all
     # configured send/receive chunk slots, even if the supplied routes are local.
     remote = min(layer['top_k'], len(ranks)-1)
-    minimum_buffer = max(len(ranks)*remote*h*(layer['dispatch_element_bytes']+layer['combine_element_bytes']),
+    batch = batch_limit(layer) if layer['schema_version'] == 'moe-ub-layer-fixture/3' else 1
+    minimum_buffer = max(batch*len(ranks)*remote*h*(layer['dispatch_element_bytes']+layer['combine_element_bytes']),
                          2*layer['send_slots_per_rank']*layer['chunk_bytes'])
     audit = []
     for rank, budget in zip(ranks, budgets):

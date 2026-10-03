@@ -8,6 +8,32 @@ MAX_TASK_BYTES = 2**32 - 1
 MAX_TIME_NS = 2**63 - 1
 MAX_RANK_ID = 2**31 - 2  # ASTRA uses signed int ranks and allocates id + 1 entries.
 MAX_TRANSFERS = 4096  # Explicit bound for this small functional graph driver.
+MAX_BATCH_TOKENS = 4096  # Host-side functional graph budget, not an EP restriction.
+
+
+def batch_limit(config):
+    limits = config['batch_limits']
+    require(isinstance(limits, dict) and set(limits) == {'max_num_seqs', 'max_num_batched_tokens'},
+            'Invalid batch limits')
+    for name, value in limits.items():
+        integer(value, name, 1, MAX_BATCH_TOKENS)
+    return min(limits.values())
+
+
+def compute_inputs(config):
+    """Shapes passed to the explicitly selected linear reference calculation."""
+    experts = Counter(e for token in config['tokens'] for e in token['expert_ids'])
+    return dict(basis='linear_reference_per_token_and_expert_input',
+        context_sensitive=False, expert_distribution_sensitive=False,
+        hidden_dim=config['hidden_dim'], dtypes=deepcopy(config['compute_dtypes']),
+        ranks=[dict(rank_id=r,
+            requests=[dict(request_id=t['request_id'], token_index=t['token_index'],
+                           context_tokens=t['token_index']+1, query_tokens=1)
+                      for t in config['tokens'] if t['src_rank'] == r],
+            batch_size=sum(t['src_rank'] == r for t in config['tokens']),
+            expert_inputs=[dict(expert_id=e, input_tokens=experts[e])
+                           for e, owner in enumerate(config['expert_placement']) if owner == r])
+            for r in config['rank_ids']])
 
 
 def require(condition, message):
@@ -26,9 +52,22 @@ def validate_config(c):
                 'dispatch_element_bytes', 'combine_element_bytes', 'application_metadata_bytes',
                 'chunk_bytes', 'send_slots_per_rank', 'template', 'expert_placement', 'tokens',
                 'compute_profile_ns'}
-    physical = c.get('schema_version') == 'moe-ub-layer-fixture/2'
-    require(set(c) == expected | ({'deployment'} if physical else set()) and
-            c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2'), 'Unsupported fixture schema/fields')
+    batched = c.get('schema_version') == 'moe-ub-layer-fixture/3'
+    physical = c.get('schema_version') == 'moe-ub-layer-fixture/2' or (batched and 'deployment' in c)
+    require(set(c) == expected | ({'deployment'} if physical else set()) |
+            ({'batch_limits', 'compute_dtypes'} if batched else set()) and
+            c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),
+            'Unsupported fixture schema/fields')
+    if batched:
+        limit = batch_limit(c)
+        require(c['role'] == 'D', 'Batched layer requires ready-KV decode')
+        dtypes = c['compute_dtypes']
+        require(isinstance(dtypes, dict) and set(dtypes) == {'compute', 'kv', 'dispatch', 'combine'}, 'Invalid compute dtypes')
+        sizes = dict(float16=2, bfloat16=2, float32=4)
+        require(all(isinstance(v, str) for v in dtypes.values()) and
+                all(dtypes[k] in sizes for k in ('compute','dispatch','combine')) and
+                dtypes['kv'] in dict(sizes, fp8=1), 'Invalid compute dtype')
+        require(all(sizes[dtypes[k]] == c[k+'_element_bytes'] for k in ('dispatch','combine')), 'Compute dtype/vector mismatch')
     for key in ('graph_id', 'wave_id', 'service_id', 'group_id'):
         require(isinstance(c[key], str) and bool(c[key]), f'Empty {key}')
     require(c['role'] in ('P', 'D'), 'Require role P/D')
@@ -66,7 +105,7 @@ def validate_config(c):
         integer(duration, key, 0 if key == 'next_layer' else 1,
                 MAX_TIME_NS - c['ready_ns'])
     tokens = c['tokens']
-    require(isinstance(tokens, list) and 1 <= len(tokens) <= (16 if c['role'] == 'P' else len(c['rank_ids'])),
+    require(isinstance(tokens, list) and 1 <= len(tokens) <= (MAX_BATCH_TOKENS if batched else 16 if c['role'] == 'P' else len(c['rank_ids'])),
             'Token count outside bounded P/D graph')
     ranks, identities = [], set()
     for token in tokens:
@@ -74,7 +113,7 @@ def validate_config(c):
                 'Unsupported Token fields')
         require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
         integer(token['src_rank'], 'Token src_rank', 0, MAX_RANK_ID)
-        integer(token['token_index'], 'Token token_index')
+        integer(token['token_index'], 'Token token_index', 0, MAX_TIME_NS-1 if batched else MAX_TIME_NS)
         integer(token['layer_id'], 'Token layer_id', 0, 2**31 - 1)
         require(token['phase'] == ('prefill' if c['role'] == 'P' else 'decode') and
                 token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
@@ -87,9 +126,12 @@ def validate_config(c):
         require(identity not in identities, 'Duplicate Token identity')
         identities.add(identity)
         ranks.append(token['src_rank'])
-    require((c['role'] == 'P' or len(set(ranks)) == len(ranks)) and set(ranks) <= set(c['rank_ids']),
+    require((batched or c['role'] == 'P' or len(set(ranks)) == len(ranks)) and set(ranks) <= set(c['rank_ids']),
             'Require at most one local Token per group rank')
     local_counts = Counter(ranks)
+    if batched:
+        require(all(n <= limit for n in local_counts.values()), 'Batch exceeds rank sequence/token budget')
+        require(len({t['request_id'] for t in tokens}) == len(tokens), 'Decode request appears more than once in this layer iteration')
     expert_counts = Counter(placement[e] for token in tokens for e in token['expert_ids'])
     for rank in c['rank_ids']:
         duration = (local_counts[rank] * sum(profile[k] for k in
@@ -204,7 +246,8 @@ def build_plan(config, identities=None, *, _validate=True):
             expert=expert, local_merge=local_merge, finish=finish, next_layer=next_layer)))
         if 'deployment' in c:
             rank_graphs[-1]['local_prepare_nodes'] = local_prepares
-    plan = dict(schema_version='moe-ub-execution-plan/2' if 'deployment' in c else 'moe-ub-execution-plan/1', graph_id=c['graph_id'], wave_id=c['wave_id'],
+    plan = dict(schema_version='moe-ub-execution-plan/3' if c['schema_version']=='moe-ub-layer-fixture/3' else
+                'moe-ub-execution-plan/2' if 'deployment' in c else 'moe-ub-execution-plan/1', graph_id=c['graph_id'], wave_id=c['wave_id'],
         rank_ids=c['rank_ids'], rank_to_ub_node=c['rank_to_ub_node'], ready_ns=c['ready_ns'],
         instance_batches=[dict(rank_id=r, request_ids=list(dict.fromkeys(t['request_id'] for t in c['tokens'] if t['src_rank'] == r)))
                           for r in c['rank_ids']],
@@ -216,6 +259,9 @@ def build_plan(config, identities=None, *, _validate=True):
     if 'deployment' in c:
         plan['deployment'] = deepcopy(c['deployment'])
         plan['contributions'] = contributions(c)
+    if c['schema_version'] == 'moe-ub-layer-fixture/3':
+        plan['batch_limits'] = deepcopy(c['batch_limits'])
+        plan['compute_inputs'] = compute_inputs(c)
     if identities is not None:
         identities.assign(plan)
     if _validate:
@@ -230,14 +276,20 @@ def validate_plan(plan):
     if plan.get('communication_template') == 'kv_direct_v1':
         from .kv_plan import validate_kv_plan
         return validate_kv_plan(plan)
-    physical = plan.get('schema_version') == 'moe-ub-execution-plan/2'
-    require(plan['schema_version'] in ('moe-ub-execution-plan/1', 'moe-ub-execution-plan/2'), 'Unsupported plan schema')
-    require(physical == (plan['input']['schema_version'] == 'moe-ub-layer-fixture/2'), 'Plan/input schema mismatch')
+    batched = plan.get('schema_version') == 'moe-ub-execution-plan/3'
+    physical = plan.get('schema_version') == 'moe-ub-execution-plan/2' or (batched and 'deployment' in plan)
+    require(plan['schema_version'] in ('moe-ub-execution-plan/1', 'moe-ub-execution-plan/2', 'moe-ub-execution-plan/3'), 'Unsupported plan schema')
+    require(plan['input']['schema_version'] == ('moe-ub-layer-fixture/3' if batched else
+            'moe-ub-layer-fixture/2' if physical else 'moe-ub-layer-fixture/1') and
+            physical == ('deployment' in plan['input']), 'Plan/input schema mismatch')
     ranks = plan['rank_ids']
     require(ranks == plan['input']['rank_ids'] and
             plan['rank_to_ub_node'] == plan['input']['rank_to_ub_node'], 'Invalid rank mapping')
     integer(plan['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     validate_config(plan['input'])
+    if batched:
+        require(plan['batch_limits'] == plan['input']['batch_limits'] and
+                plan['compute_inputs'] == compute_inputs(plan['input']), 'Batch limits or compute inputs mismatch')
     require(plan['send_slots_per_rank'] == plan['input']['send_slots_per_rank'], 'Send slot configuration mismatch')
     operations = {op['operation_id']: op for op in plan['operations']}
     require(len(operations) == len(plan['operations']) == 2, 'Duplicate or missing operation')
@@ -319,7 +371,7 @@ def validate_plan(plan):
                 pairs[node['transfer_id'], side] += 1
     require(all(pairs[t, side] == 1 for t in transfers for side in ('send', 'recv')), 'Missing or duplicate SEND/RECV')
 
-    if physical:
+    if physical or batched:
         expected = build_plan(plan['input'], _validate=False)
         mapping = {}
         for actual, canonical in zip(plan['transfers'], expected['transfers']):
@@ -331,8 +383,8 @@ def validate_plan(plan):
             for node in graph['nodes']:
                 if 'transfer_id' in node:
                     node['transfer_id'] = mapping[node['transfer_id']]
-        for key in ('deployment', 'contributions', 'transfers', 'rank_graphs', 'expert_input_counts'):
-            require(plan[key] == expected[key], 'Physical plan mismatch: ' + key)
+        for key in ('transfers', 'rank_graphs', 'expert_input_counts') + (('deployment', 'contributions') if physical else ()):
+            require(plan[key] == expected[key], 'Canonical plan mismatch: ' + key)
 
 
 class RunIdentities:

@@ -1,4 +1,4 @@
-"""Generate one checked ExecutionPlan and four locked-schema Chakra files."""
+"""Generate one checked ExecutionPlan and one locked-schema Chakra file per rank."""
 import argparse
 import hashlib
 import importlib.util

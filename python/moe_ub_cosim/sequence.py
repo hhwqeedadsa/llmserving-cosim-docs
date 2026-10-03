@@ -21,6 +21,7 @@ def build_sequence(config):
     require(first['ready_ns'] == 0 and first['wave_id'] != second['wave_id'], 'Require distinct zero-ready waves')
     for plan in plans:
         require(re.fullmatch(r'[A-Za-z0-9_.-]+', plan['graph_id']), 'Invalid graph_id for execution log')
+    require(len(first['tokens']) == len(second['tokens']), 'Changed fixed-step Token count')
     for old, new in zip(first['tokens'], second['tokens']):
         require(all(old[key] == new[key] for key in old if key not in ('token_index', 'expert_ids')) and
                 new['token_index'] == old['token_index'] + 1, 'Require the same requests at the next decode step')

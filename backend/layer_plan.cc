@@ -111,20 +111,29 @@ LayerPlan ValidateLayerPlan(const Json& p)
 {
     LayerPlan plan{p, {}, {}};
     Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
-            p.at("rank_to_ub_node") == p.at("rank_ids") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
     const auto& ranks = p.at("rank_ids");
-    Require(ranks.is_array() && ranks.size() == 4, "require four explicit group members");
+    Require(ranks.is_array() && !ranks.empty(), "require nonempty explicit group members");
     std::set<int> members;
     int previous = -1;
     for (const auto& value : ranks)
     {
-        const int rank = Number(value, "rank_id", 11);
+        const int rank = Number(value, "rank_id", INT32_MAX - 1);
         Require(rank > previous && members.insert(rank).second, "unordered or repeated rank");
         previous = rank;
     }
-    Require(p.at("input").at("rank_ids") == ranks && p.at("input").at("rank_to_ub_node") == ranks,
+    const auto& mapping = p.at("rank_to_ub_node");
+    Require(mapping.is_array() && mapping.size() == ranks.size(), "incomplete UB mapping");
+    std::map<int, uint32_t> endpoints;
+    std::set<uint32_t> unique_endpoints;
+    for (size_t i = 0; i < ranks.size(); ++i)
+    {
+        const auto node = Number(mapping[i], "UB node", UINT32_MAX);
+        Require(unique_endpoints.insert(node).second, "duplicate UB endpoint");
+        endpoints.emplace(ranks[i].get<int>(), node);
+    }
+    Require(p.at("input").at("rank_ids") == ranks && p.at("input").at("rank_to_ub_node") == mapping,
             "input rank mapping mismatch");
     const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
     const auto& input = p.at("input");
@@ -134,18 +143,42 @@ LayerPlan ValidateLayerPlan(const Json& p)
     const auto& placement = input.at("expert_placement");
     const bool prefill = input.at("role") == "P";
     Require(prefill || input.at("role") == "D", "invalid execution role");
-    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (prefill ? 16 : 4) &&
-            placement.is_array() && placement.size() == 8, "invalid Token/placement set");
-    for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", 11)), "expert outside group");
+    Require(tokens.is_array() && tokens.size() >= 1 && tokens.size() <= (prefill ? 16 : ranks.size()) &&
+            placement.is_array() && !placement.empty(), "invalid Token/placement set");
+    for (const auto& value : placement) Require(members.contains(Number(value, "expert rank", INT32_MAX - 1)), "expert outside group");
+    const auto top_k = Number(input.at("top_k"), "top_k", placement.size());
+    Require(top_k > 0, "Top-K must be positive");
+    const auto layer_id = Number(input.at("layer_id"), "layer_id", INT32_MAX);
+    const auto hidden = Number(input.at("hidden_dim"), "hidden_dim", INT64_MAX);
+    Require(hidden > 0 && input.at("template") == "direct_rank_dedup_v1" &&
+            Number(input.at("application_metadata_bytes"), "application metadata", 0) == 0,
+            "invalid input vector/template/metadata");
+    for (const auto* field : {"dispatch_element_bytes", "combine_element_bytes"})
+    {
+        const auto element = Number(input.at(field), field, 16);
+        Require(element > 0 && hidden <= uint64_t(INT64_MAX) / element, "vector byte overflow");
+    }
+    std::set<std::tuple<std::string, std::string, uint64_t, uint64_t>> token_ids;
     for (const auto& token : tokens)
     {
-        const int rank = Number(token.at("src_rank"), "Token rank", 11);
+        const int rank = Number(token.at("src_rank"), "Token rank", INT32_MAX - 1);
         Require(members.contains(rank), "nonmember local Token");
         Require(++local_tokens[rank] == 1 || prefill, "repeated local decode Token");
         Require(token.at("phase") == (prefill ? "prefill" : "decode"), "Token phase mismatch");
         const auto& experts = token.at("expert_ids");
-        Require(experts.is_array() && experts.size() == 2 && experts[0] != experts[1], "invalid Top-K route");
-        for (const auto& expert : experts) ++expert_inputs[placement.at(Number(expert, "expert", 7)).get<int>()];
+        Require(experts.is_array() && experts.size() == top_k, "invalid Top-K route");
+        std::set<uint64_t> selected;
+        for (const auto& expert : experts)
+        {
+            const auto id = Number(expert, "expert", placement.size() - 1);
+            Require(selected.insert(id).second, "duplicate expert choice");
+            ++expert_inputs[placement.at(id).get<int>()];
+        }
+        const auto request = token.at("request_id").get<std::string>();
+        Require(!request.empty() && Number(token.at("layer_id"), "Token layer_id", INT32_MAX) == layer_id &&
+                token_ids.emplace(request, token.at("phase").get<std::string>(),
+                    Number(token.at("token_index"), "Token index", INT64_MAX), layer_id).second,
+                "invalid or duplicate Token identity");
     }
     Json batches = Json::array(), counts = Json::array();
     for (int rank : members)
@@ -162,7 +195,25 @@ LayerPlan ValidateLayerPlan(const Json& p)
     Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
     const auto chunk_bytes = Number(input.at("chunk_bytes"), "chunk_bytes", UINT32_MAX);
     Require(chunk_bytes > 0, "zero chunk limit");
-    Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
+    const auto ready = Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
+    Require(input.at("ready_ns") == ready && input.at("graph_id") == p.at("graph_id") &&
+            input.at("wave_id") == p.at("wave_id"), "input graph identity/ready mismatch");
+    for (int rank : members)
+    {
+        uint64_t total = 0;
+        for (const auto* field : {"attention_route_pack", "expert_per_input", "expert_local_merge",
+                                 "combine_unpack_merge", "next_layer"})
+        {
+            const std::string name(field);
+            const auto duration = Number(input.at("compute_profile_ns").at(field), field, INT64_MAX - ready);
+            Require(duration > 0 || name == "next_layer", "nonpositive compute profile");
+            const auto count = name == "expert_per_input" ? expert_inputs[rank] :
+                name == "expert_local_merge" ? uint64_t(expert_inputs[rank] != 0) : local_tokens[rank];
+            Require(!count || duration <= (uint64_t(INT64_MAX) - ready - total) / count,
+                    "rank computation duration overflow");
+            total += count * duration;
+        }
+    }
     const auto graph_id = p.at("graph_id").get<std::string>();
     Require(!graph_id.empty(), "empty graph id");
     std::map<std::string, std::string> operations;
@@ -179,16 +230,27 @@ LayerPlan ValidateLayerPlan(const Json& p)
     Require(p.at("transfers").is_array() && p.at("transfers").size() <= 4096, "invalid/oversized transfer set");
     std::map<std::tuple<std::string, uint64_t, uint64_t>, std::vector<Json>> chunks;
     std::map<std::tuple<std::string, uint64_t, uint64_t>, uint64_t> expected_pairs, actual_pairs;
-    for (const auto& token : tokens)
+    std::map<std::tuple<std::string, uint64_t, uint64_t>, Json> expected_sources;
+    for (size_t record = 0; record < tokens.size(); ++record)
     {
+        const auto& token = tokens[record];
         const auto src = token.at("src_rank").get<uint64_t>();
-        std::set<uint64_t> destinations;
-        for (const auto& expert : token.at("expert_ids")) destinations.insert(placement.at(expert.get<size_t>()).get<uint64_t>());
+        std::map<uint64_t, std::set<uint64_t>> destinations;
+        for (const auto& expert : token.at("expert_ids"))
+            destinations[placement.at(expert.get<size_t>()).get<uint64_t>()].insert(expert.get<uint64_t>());
         destinations.erase(src);
-        for (auto dst : destinations)
+        for (const auto& [dst, experts] : destinations)
         {
-            ++expected_pairs[{"dispatch", src, dst}];
-            ++expected_pairs[{"combine", dst, src}];
+            const Json source = {{"request_id", token.at("request_id")}, {"phase", token.at("phase")},
+                {"token_index", token.at("token_index")}, {"source_record_index", record},
+                {"layer_id", token.at("layer_id")}, {"expert_ids", experts}};
+            for (const auto& key : {std::make_tuple(std::string("dispatch"), src, dst),
+                                   std::make_tuple(std::string("combine"), dst, src)})
+            {
+                ++expected_pairs[key];
+                if (!expected_sources.contains(key)) expected_sources[key] = Json::array();
+                expected_sources[key].push_back(source);
+            }
         }
     }
     for (const auto& t : p.at("transfers"))
@@ -197,7 +259,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
         const auto task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
         const auto tag = Number(t.at("comm_tag"), "comm_tag", 499999999);
         const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", UINT32_MAX);
-        const auto src = Number(t.at("src_rank"), "src_rank", 11), dst = Number(t.at("dst_rank"), "dst_rank", 11);
+        const auto src = Number(t.at("src_rank"), "src_rank", INT32_MAX - 1), dst = Number(t.at("dst_rank"), "dst_rank", INT32_MAX - 1);
         const auto operation = t.at("operation_id").get<std::string>();
         Require(id > 0 && tag > 0 && bytes > 0 && src != dst && members.contains(src) && members.contains(dst) && transfers.emplace(id, t).second &&
                 tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");
@@ -216,7 +278,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
         plan.descriptors.push_back({id, task, graph_id,
             Number(t.at("send_node_id"), "send_node_id"), Number(t.at("recv_node_id"), "recv_node_id"),
             static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation,
-            static_cast<uint32_t>(chunk), begin, total});
+            static_cast<uint32_t>(chunk), begin, total, endpoints.at(src), endpoints.at(dst)});
     }
     for (const auto& [key, parts] : chunks)
     {
@@ -226,7 +288,11 @@ LayerPlan ValidateLayerPlan(const Json& p)
         const auto element = Number(input.at(kind + "_element_bytes"), "element bytes", 16);
         const auto& sources = first.at("sources");
         Require(hidden > 0 && element > 0 && sources.is_array() && !sources.empty() &&
-                sources.size() <= (prefill ? 16 : 4) && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
+                sources.size() <= tokens.size() && hidden <= uint64_t(INT64_MAX) / element / sources.size(), "invalid vector sources/size");
+        const auto pair_key = std::make_tuple(kind, first.at("src_rank").get<uint64_t>(),
+                                             first.at("dst_rank").get<uint64_t>());
+        Require(expected_sources.contains(pair_key) && sources == expected_sources.at(pair_key),
+                "transfer sources differ from Token routes");
         const auto expected = hidden * element * sources.size();
         actual_pairs[{kind, first.at("src_rank").get<uint64_t>(), first.at("dst_rank").get<uint64_t>()}] = sources.size();
         uint64_t offset = 0, index = 0;
@@ -241,7 +307,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
         Require(offset == expected, "incomplete directed vector");
     }
     Require(actual_pairs == expected_pairs, "transfer set/bytes differ from Token routes");
-    Require(p.at("rank_graphs").size() == 4, "missing rank graph");
+    Require(p.at("rank_graphs").is_array() && p.at("rank_graphs").size() == ranks.size(), "missing rank graph");
     std::map<std::pair<uint64_t, std::string>, unsigned> pairs;
     for (size_t index = 0; index < ranks.size(); ++index)
     {

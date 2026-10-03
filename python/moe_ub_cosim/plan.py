@@ -5,6 +5,7 @@ from copy import deepcopy
 
 MAX_TASK_BYTES = 2**32 - 1
 MAX_TIME_NS = 2**63 - 1
+MAX_RANK_ID = 2**31 - 2  # ASTRA uses signed int ranks and allocates id + 1 entries.
 MAX_TRANSFERS = 4096  # Explicit bound for this small functional graph driver.
 
 
@@ -27,16 +28,19 @@ def validate_config(c):
     require(set(c) == expected and c['schema_version'] == 'moe-ub-layer-fixture/1', 'Unsupported fixture schema/fields')
     for key in ('graph_id', 'wave_id', 'service_id', 'group_id'):
         require(isinstance(c[key], str) and bool(c[key]), f'Empty {key}')
-    require(c['role'] in ('P', 'D') and c['rank_ids'] == c['rank_to_ub_node'],
-            'Require identity UB mapping and role P/D')
-    require(isinstance(c['rank_ids'], list) and len(c['rank_ids']) == 4, 'Require four group members')
-    for field in ('rank_ids', 'rank_to_ub_node'):
-        require(all(type(rank) is int and 0 <= rank < 12 for rank in c[field]), f'Invalid integer {field}')
+    require(c['role'] in ('P', 'D'), 'Require role P/D')
+    require(isinstance(c['rank_ids'], list) and bool(c['rank_ids']), 'Require nonempty group members')
+    require(isinstance(c['rank_to_ub_node'], list) and
+            len(c['rank_to_ub_node']) == len(c['rank_ids']), 'Incomplete UB mapping')
+    for rank in c['rank_ids']:
+        integer(rank, 'rank_id', 0, MAX_RANK_ID)
+    for node in c['rank_to_ub_node']:
+        integer(node, 'UB node', 0, 2**32 - 1)
+    require(len(set(c['rank_to_ub_node'])) == len(c['rank_ids']), 'Duplicate UB endpoint')
     require(c['rank_ids'] == sorted(set(c['rank_ids'])), 'Group members must be distinct and sorted')
     require(c['template'] == 'direct_rank_dedup_v1', 'Unsupported communication template')
     integer(c['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     integer(c['application_metadata_bytes'], 'application_metadata_bytes', 0, 0)
-    integer(c['top_k'], 'top_k', 2, 2)
     integer(c['ready_ns'], 'ready_ns', 0, MAX_TIME_NS - 1000000)
     integer(c['layer_id'], 'layer_id', 0, 2**31 - 1)
     integer(c['hidden_dim'], 'hidden_dim', 1)
@@ -45,26 +49,28 @@ def validate_config(c):
         integer(c['hidden_dim'] * c[field], field + ' vector bytes', 1, MAX_TIME_NS)
     integer(c['chunk_bytes'], 'chunk_bytes', 1, MAX_TASK_BYTES)
     placement = c['expert_placement']
-    require(isinstance(placement, list) and len(placement) == 8, 'Require eight expert placements')
+    require(isinstance(placement, list) and bool(placement), 'Require nonempty expert placement')
+    integer(c['top_k'], 'top_k', 1, len(placement))
     for rank in placement:
-        integer(rank, 'expert placement rank', 0, 11)
+        integer(rank, 'expert placement rank', 0, MAX_RANK_ID)
         require(rank in c['rank_ids'], 'Expert is outside its EP group')
     profile = c['compute_profile_ns']
     require(set(profile) == {'attention_route_pack', 'expert_per_input', 'expert_local_merge',
                              'combine_unpack_merge', 'next_layer'}, 'Unsupported compute profile fields')
     for key, duration in profile.items():
         integer(duration, key, 0 if key == 'next_layer' else 1,
-                (MAX_TIME_NS - c['ready_ns']) // (32 if c['role'] == 'P' else 16))
+                MAX_TIME_NS - c['ready_ns'])
     tokens = c['tokens']
-    require(isinstance(tokens, list) and 1 <= len(tokens) <= (16 if c['role'] == 'P' else 4),
+    require(isinstance(tokens, list) and 1 <= len(tokens) <= (16 if c['role'] == 'P' else len(c['rank_ids'])),
             'Token count outside bounded P/D graph')
     ranks, identities = [], set()
     for token in tokens:
         require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
                 'Unsupported Token fields')
         require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
-        integer(token['src_rank'], 'Token src_rank', 0, 11)
+        integer(token['src_rank'], 'Token src_rank', 0, MAX_RANK_ID)
         integer(token['token_index'], 'Token token_index')
+        integer(token['layer_id'], 'Token layer_id', 0, 2**31 - 1)
         require(token['phase'] == ('prefill' if c['role'] == 'P' else 'decode') and
                 token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
         experts = token['expert_ids']
@@ -78,6 +84,14 @@ def validate_config(c):
         ranks.append(token['src_rank'])
     require((c['role'] == 'P' or len(set(ranks)) == len(ranks)) and set(ranks) <= set(c['rank_ids']),
             'Require at most one local Token per group rank')
+    local_counts = Counter(ranks)
+    expert_counts = Counter(placement[e] for token in tokens for e in token['expert_ids'])
+    for rank in c['rank_ids']:
+        duration = (local_counts[rank] * sum(profile[k] for k in
+                    ('attention_route_pack', 'combine_unpack_merge', 'next_layer')) +
+                    expert_counts[rank] * profile['expert_per_input'] +
+                    bool(expert_counts[rank]) * profile['expert_local_merge'])
+        integer(duration, 'rank computation duration', 0, MAX_TIME_NS - c['ready_ns'])
 
 
 def build_plan(config, identities=None):
@@ -186,7 +200,8 @@ def validate_plan(plan):
         return validate_kv_plan(plan)
     require(plan['schema_version'] == 'moe-ub-execution-plan/1', 'Unsupported plan schema')
     ranks = plan['rank_ids']
-    require(ranks == plan['input']['rank_ids'] and plan['rank_to_ub_node'] == ranks, 'Invalid rank mapping')
+    require(ranks == plan['input']['rank_ids'] and
+            plan['rank_to_ub_node'] == plan['input']['rank_to_ub_node'], 'Invalid rank mapping')
     integer(plan['send_slots_per_rank'], 'send_slots_per_rank', 1, 2)
     validate_config(plan['input'])
     require(plan['send_slots_per_rank'] == plan['input']['send_slots_per_rank'], 'Send slot configuration mismatch')
@@ -214,14 +229,20 @@ def validate_plan(plan):
         integer(t['chunk_index'], 'chunk_index', 0, MAX_TRANSFERS - 1)
         grouped[t['operation_id'], t['src_rank'], t['dst_rank']].append(t)
     expected_pairs = Counter()
-    for token in plan['input']['tokens']:
+    expected_sources = defaultdict(list)
+    for record, token in enumerate(plan['input']['tokens']):
         src = token['src_rank']
         for dst in {plan['input']['expert_placement'][e] for e in token['expert_ids']} - {src}:
-            expected_pairs['dispatch', src, dst] += 1
-            expected_pairs['combine', dst, src] += 1
+            source = {key: token[key] for key in ('request_id', 'phase', 'token_index', 'layer_id')}
+            source.update(source_record_index=record, expert_ids=sorted(
+                e for e in token['expert_ids'] if plan['input']['expert_placement'][e] == dst))
+            for key in [('dispatch', src, dst), ('combine', dst, src)]:
+                expected_pairs[key] += 1
+                expected_sources[key].append(source)
     actual_pairs = {(parts[0]['kind'], src, dst): parts for (_, src, dst), parts in grouped.items()}
     require(set(actual_pairs) == set(expected_pairs), 'Transfer set differs from Token routes')
     for key, parts in actual_pairs.items():
+        require(parts[0]['sources'] == expected_sources[key], 'Transfer sources differ from Token routes')
         require(sum(t['payload_bytes'] for t in parts) == expected_pairs[key] * plan['input']['hidden_dim'] *
                 plan['input'][key[0] + '_element_bytes'], 'Transfer bytes differ from Token routes')
     for parts in grouped.values():

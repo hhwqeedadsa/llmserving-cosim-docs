@@ -28,9 +28,10 @@ UbWriteTransfer::UbWriteTransfer(WriteDescriptor descriptor, ns3::Ptr<ns3::UbApp
     }
     if (!source_ || !source_->GetNode() || descriptor_.src_rank < 0 ||
         descriptor_.dst_rank < 0 || descriptor_.src_rank == descriptor_.dst_rank ||
-        static_cast<uint32_t>(descriptor_.dst_rank) >= ns3::NodeList::GetNNodes() ||
+        descriptor_.DestinationNode() >= ns3::NodeList::GetNNodes() ||
+        descriptor_.SourceNode() == descriptor_.DestinationNode() ||
         descriptor_.tag < 0 || descriptor_.bytes == 0 || descriptor_.graph_id.empty() ||
-        source_->GetNode()->GetId() != static_cast<uint32_t>(descriptor_.src_rank) ||
+        source_->GetNode()->GetId() != descriptor_.SourceNode() ||
         source_->GetTransportMode() != ns3::TransportMode::RTP)
     {
         throw std::invalid_argument("M1 requires a nonempty RTP write between distinct mapped ranks");
@@ -66,7 +67,7 @@ void UbWriteTransfer::Send(int rank, uint64_t bytes, int type, int dst, int tag,
     send_start_ns_ = ns3::Simulator::Now().GetNanoSeconds();
     // Only explicit API values and the descriptor are retained; never sim_request*.
     submit_event_ = ns3::Simulator::ScheduleNow([this]() {
-        auto controller = ns3::NodeList::GetNode(descriptor_.dst_rank)->GetObject<ns3::UbController>();
+        auto controller = ns3::NodeList::GetNode(descriptor_.DestinationNode())->GetObject<ns3::UbController>();
         if (!controller) throw std::runtime_error(Identity() + ": target has no UB controller");
         target_ = controller->GetUbTransaction();
         if (!target_ || !target_->TraceConnectWithoutContext("RemoteWriteCommitted",
@@ -74,8 +75,8 @@ void UbWriteTransfer::Send(int rank, uint64_t bytes, int type, int dst, int tag,
             throw std::runtime_error(Identity() + ": cannot observe target writes");
         ns3::UbTrafficGen::RuntimeTask task;
         task.taskId = static_cast<uint32_t>(descriptor_.task_id);
-        task.sourceNode = static_cast<uint32_t>(descriptor_.src_rank);
-        task.destNode = static_cast<uint32_t>(descriptor_.dst_rank);
+        task.sourceNode = descriptor_.SourceNode();
+        task.destNode = descriptor_.DestinationNode();
         task.dataSize = static_cast<uint32_t>(descriptor_.bytes);
         task.priority = 7; // Same fixed business priority as the native baseline.
         task.op = ns3::UbTrafficGen::RuntimeTaskOp::URMA_WRITE;
@@ -108,8 +109,8 @@ void UbWriteTransfer::ObserveWrite(ns3::Ptr<const ns3::UbWqeSegment> segment)
 {
     // The observer does not own packets or change transport/application state.
     if (segment->GetTaskId() != descriptor_.task_id ||
-        segment->GetSrc() != static_cast<uint32_t>(descriptor_.src_rank) ||
-        segment->GetDest() != static_cast<uint32_t>(descriptor_.dst_rank)) return;
+        segment->GetSrc() != descriptor_.SourceNode() ||
+        segment->GetDest() != descriptor_.DestinationNode()) return;
     if (segment->GetType() != ns3::TaOpcode::TA_OPCODE_WRITE ||
         segment->GetSegmentKind() != ns3::UbTransactionSegmentKind::REQUEST)
         throw std::logic_error(Identity() + ": unexpected target write metadata");

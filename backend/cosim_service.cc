@@ -553,6 +553,9 @@ int main(int argc, char** argv)
                             plan.data.at("ready_ns") == now && plan.data.at("input").at("ready_ns") == now,
                             "Submission identity/time differs from plan");
                     Require(plan.data.at("rank_ids") == selected_ranks, "Plan members differ from submission");
+                    // Service deployment remains identity-mapped until its own adaptation task.
+                    Require(plan.data.at("rank_to_ub_node") == selected_ranks,
+                            "Service plan mapping differs from current deployment");
                     const bool kv = plan.data.at("communication_template") == "kv_direct_v1";
                     if (kv)
                     {

@@ -2141,3 +2141,46 @@ README 同步截至 M5.3 的发布范围，当前任务保存发布结果。发�
 | 差异格式 | `git diff --check` | 0；`diff-check` |
 
 本轮仅修改上述三份文档及本记录，不执行构建或仿真，不将文档检查计为功能验收。按持续授权本地提交、不推送；停止在编号整理完成，M6 功能实现等待用户确认开始。
+
+
+## 2026-10-03：M6 单层固定轮次执行参数化
+
+用户确认开始 M6，本轮按已经准备的 `v03-01-execution-parameters` 执行。起点为 `a3cf678ff5c8869e9d143b5c315bc8ce43a2c1bd`，主仓库工作区干净，main 比 origin/main 多一个文档提交。任务限定单层固定轮次，不将本次完成记为整个 M6 完成。
+
+Python 计划与 C++ 语义校验从显式成员、专家放置长度、Top-K 和端点映射读取参数；补充实际逐 rank 计算量的溢出检查，以及来源 Token/专家与传输侧表的一致性核验。UB 传输描述保存独立物理端点，真实提交、目标完成过滤和应用/观测挂接使用该映射，图匹配键与端侧操作仍使用逻辑 rank。固定两轮入口按实际成员装载与回收。服务入口保留原部署边界并明确拒绝与其不同的映射；本轮没有扩展服务模型、容量、同芯片本地路径或场景 YAML 导入。
+
+### 构建及日志
+
+工作目录均为 `/root/moe-ub-cosim`；以下 R 表示 `runs/v03-01-execution-parameters`，L 表示 R/logs。R/record.py 保存每条实际 argv、cwd、起止 UTC、退出状态和 stdout/stderr 到 `L/<标签>.json` 及同名日志。集成检查的子命令另存各输出目录的 commands.json。起始固定依赖检查 deps-before 退出 0，13 个检出一致。
+
+新建 `build/m6-execution-parameters`，configure、build、build-current、build-final 均退出 0。后两次仅增量编译审阅过程中补充的来源校验、空闲成员发送检查和服务部署拒绝，未覆盖旧构建目录。实际配置与最终构建命令为：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m6-execution-parameters -G Ninja -DCMAKE_BUILD_TYPE=release -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m6-execution-parameters/output -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m6-execution-parameters --target cosim-layer cosim-sequence cosim-lifecycle-test cosim-layer-delay-test cosim-write-test cosim-observation-test cosim-write cosim-service --parallel 8
+```
+
+下表集成检查均使用 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/<脚本> --build-dir build/m6-execution-parameters --output-dir runs/v03-01-execution-parameters/<标签>`，全部退出 0。主要输入为脚本列出的 fixtures；新增人工参数输入位于 `fixtures/m6_execution_parameters/ep2.json`、ep3.json，复用原 m2_single_layer 网络。
+
+| 标签 / 脚本 | 实际结果 |
+|---|---|
+| parameters-final / check_execution_parameters.py | 9 次运行、13 项预期拒绝通过，含非恒等映射、非连续逻辑编号、来源开/关/不挂观测、无本地 Token 的专家成员、全空闲成员、纯本地工作及两轮执行。 |
+| layer-final / check_layer.py | 3 次真实运行、13 项非法输入/覆盖拒绝通过；原输入仍为 14 次写、114688 业务字节、48 个 ASTRA 节点。 |
+| sequence-final / check_sequence.py | 5 次真实运行及非法图/身份与覆盖拒绝通过；原两轮 28 次写、229376 字节，忙碌替换、原子装载和旧回调拒绝保持。 |
+| delay-regression / check_delay.py | 5 次给定事件、2 次真实 UB 运行及 10 项预期拒绝通过；网络延迟实际移动依赖计算。给定事件部分继续明确标为测试替身。 |
+| pd-regression / check_pd_handoff.py | 7 次正常运行、11 项预期失败通过；主例 P 完成 40159 ns，KV 数据就绪 40830 ns、事务完成/D 开始 40876 ns，请求结束 69994 ns。 |
+| multilayer-regression / check_multilayer.py | 8 次研究运行、1 次无观测运行、10 项预期失败通过；主例 78 次写、638976 字节、193789 ns，原 32 层回归为 558 次写、4571136 字节。 |
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py' -v` 在 python-parameters 中通过 56 项，包含五项新增参数检查。`build/m6-execution-parameters/output/cosim/ns3.44-cosim-write-test` 与同目录的 ns3.44-cosim-observation-test 分别在 write-unit、observation-unit 中退出 0，覆盖晚到 RECV、独立完成、重复/过期事件、资源释放与端口字节口径。早期 python-initial、parameters、layer-regression、sequence-regression 也通过；执行入口新增最终检查后，对相应集成检查重新运行，最终证据以上表为准。
+
+### 新参数结果与有效范围
+
+三成员样例使用逻辑 rank `[2,7,12]`、UB 节点 `[3,0,2]`、五专家及 Top-3，专家输入为 `[2,3,1]`。非均匀放置保留本地输入和同目的 rank 去重，Dispatch/Combine 采用不同元素字节数和 1500 字节分块，真实执行 15 次写、18432 字节，最后图完成于 20604 ns。两成员样例为逻辑 rank `[4,10]`、UB 节点 `[1,3]`、三专家及 Top-1，专家输入 `[0,2]`，3 次写、1536 字节，最后图完成于 16291 ns。来源开/关/不挂观测的执行结果相同。
+
+新增全空闲 rank 20 映射节点 1，其空图在 0 ns 完成，不创建填充计算或业务写；单 rank 本地样例在 12000 ns 完成，业务写为零。非恒等映射的连续两轮共 30 次写、36864 字节，第二轮由第一轮实际完成时刻推进，一份网络及其对象保留。端口来源核验按物理目的节点筛选实际传输，内部注册表同时保留逻辑 rank 和 UB 节点；没有把新身份字段放入 observed。
+
+13 项新增拒绝覆盖重复/缺失/越界映射、交换机或不存在的端点、rank 范围、专家放置与 Top-K、重复或非法专家、计算/字节溢出和伪造来源。端点类型与存在性在 UB 节点创建后、图激活前拒绝，其余侧表错误在创建运行目录前拒绝；没有发起业务传输。所有预期失败的具体 stderr 和退出码保留，未降低预期结果。
+
+`python3 runs/v03-01-execution-parameters/audit.py` 在 final-audit 中退出 0：恢复本轮 CMake 改写的原生启动锁，308 个旧产物的 SHA-256 未变，最终通过记录中的源码摘要匹配；链接核验仍为 52 个 ASTRA 核心对象和唯一一套 10 个 UB ns-3 库。`bash scripts/check_deps.sh` 在 deps-final 中退出 0，13 个固定依赖一致，无子模块源码、gitlink、锁文件或来源修改。未重跑原生性能样例，未安装软件或下载模型/数据。
+
+按持续授权整理记录并本地提交、不推送。当前任务置为 completed 后停止；M6 的模型与容量、部署本地性和场景输入适配仍待确认。当前路由与计算仍为合成参考，模型未校准，完整 CM384/R1 目标规模未运行。

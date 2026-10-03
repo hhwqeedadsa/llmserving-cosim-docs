@@ -332,6 +332,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         registry.push_back({{"transfer_id", d.transfer_id},
             {"operation_id", d.operation_id.empty() ? d.graph_id + "/write" : d.operation_id},
             {"ub_task_id", d.task_id}, {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+            {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()},
             {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
             {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
             {"priority", 7}, {"chunk_id", d.chunk_index}});

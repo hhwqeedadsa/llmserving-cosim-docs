@@ -36,21 +36,21 @@ Json ReadJson(const fs::path& path)
     Require(bool(stream), "Cannot open " + path.string());
     return Json::parse(stream);
 }
-void WqeStart(Json* report, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
 {
     report->at("wqe_starts").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
-    auto active = report->at("active_wqes").at(node).get<unsigned>() + 1;
-    (*report)["active_wqes"][node] = active;
-    (*report)["peak_wqes"][node] = std::max(active, report->at("peak_wqes").at(node).get<unsigned>());
+    auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>() + 1;
+    (*report)["active_wqes"][indices->at(node)] = active;
+    (*report)["peak_wqes"][indices->at(node)] = std::max(active, report->at("peak_wqes").at(indices->at(node)).get<unsigned>());
 }
-void WqeEnd(Json* report, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeEnd(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
 {
     report->at("wqe_completions").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
-    auto active = report->at("active_wqes").at(node).get<unsigned>();
+    auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>();
     Require(active > 0, "Unexpected WQE completion");
-    (*report)["active_wqes"][node] = active - 1;
+    (*report)["active_wqes"][indices->at(node)] = active - 1;
 }
 void TargetWrite(Json* writes, ns3::Ptr<const ns3::UbWqeSegment> segment)
 {
@@ -81,7 +81,15 @@ int main(int argc, char** argv)
         auto plans = sequence ? moe_ub::LoadGraphSequence(plan_dir) :
             std::vector<moe_ub::LayerPlan>{moe_ub::LoadLayerPlan(plan_dir)};
         const auto& plan = plans.front();
-        Require(plan.data.at("rank_ids") == Json::array({0, 1, 2, 3}), "Fixed layer driver requires ranks 0..3");
+        const auto ranks = plan.data.at("rank_ids").get<std::vector<int>>();
+        const auto nodes = plan.data.at("rank_to_ub_node").get<std::vector<uint32_t>>();
+        std::map<int, size_t> rank_index;
+        std::map<uint32_t, size_t> node_index;
+        for (size_t i = 0; i < ranks.size(); ++i)
+        {
+            rank_index.emplace(ranks[i], i);
+            node_index.emplace(nodes[i], i);
+        }
         const auto send_slots = plan.data.at("send_slots_per_rank").get<unsigned>();
         const auto system_config = ReadJson(fs::absolute(argv[2]));
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
@@ -104,7 +112,7 @@ int main(int argc, char** argv)
             const auto source = sequence ? plan_dir / std::to_string(step) : plan_dir;
             const auto destination = sequence ? fs::path(std::to_string(step)) : fs::path(".");
             if (sequence) fs::create_directory(destination);
-            for (int rank = 0; rank < 4; ++rank)
+            for (int rank : ranks)
                 fs::copy_file(source / ("layer." + std::to_string(rank) + ".et"),
                               destination / ("layer." + std::to_string(rank) + ".et"));
             std::ofstream(destination / "plan.json") << plans[step].data.dump(2) << '\n';
@@ -119,6 +127,14 @@ int main(int argc, char** argv)
         ns3::Config::SetDefault("ns3::TpConnectionManager::RemoveUselessTp", ns3::BooleanValue(false));
         utils->CreateTraceDir();
         utils->CreateNode("network/node.csv");
+        // Validate every member, including idle ranks, before graph activation.
+        for (uint32_t node_id : nodes)
+        {
+            Require(node_id < ns3::NodeList::GetNNodes(), "Mapped UB endpoint does not exist");
+            auto node = ns3::NodeList::GetNode(node_id);
+            Require(node->GetObject<ns3::UbController>() != nullptr,
+                    "Mapped UB node is not a compute endpoint");
+        }
         utils->CreateTopo("network/topology.csv");
         utils->AddRoutingTable("network/routing_table.csv");
         utils->CreateTp("network/transport_channel.csv");
@@ -128,7 +144,8 @@ int main(int argc, char** argv)
             {"graph_completions", Json::array()}, {"activation_order", Json::array()},
             {"wqe_starts", Json::array()}, {"wqe_completions", Json::array()},
             {"target_writes", Json::array()}, {"transfers", Json::array()},
-            {"active_wqes", {0, 0, 0, 0}}, {"peak_wqes", {0, 0, 0, 0}},
+            {"rank_ids", ranks}, {"rank_to_ub_node", nodes},
+            {"active_wqes", std::vector<unsigned>(ranks.size(), 0)}, {"peak_wqes", std::vector<unsigned>(ranks.size(), 0)},
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}, {"later_event_executed", false}, {"test_stop_ns", stop}};
         size_t current_step = 0;
@@ -142,17 +159,17 @@ int main(int argc, char** argv)
         }
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
-        for (int rank = 0; rank < 4; ++rank)
+        for (int rank : ranks)
         {
-            auto node = ns3::NodeList::GetNode(rank);
+            auto node = ns3::NodeList::GetNode(nodes.at(rank_index.at(rank)));
             auto controller = node->GetObject<ns3::UbController>();
             Require(controller != nullptr, "Rank needs a UB endpoint");
             controllers.push_back(controller);
             report["initial_tp_counts"].push_back(controller->GetTransportCountForTest());
             auto app = ns3::CreateObject<ns3::UbApp>();
-            node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank);
-            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report)) &&
-                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report)) &&
+            node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(nodes.at(rank_index.at(rank)));
+            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &node_index)) &&
+                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &node_index)) &&
                     controller->GetUbTransaction()->TraceConnectWithoutContext("RemoteWriteCommitted",
                         ns3::MakeBoundCallback(TargetWrite, &report["target_writes"])), "Cannot attach layer execution traces");
         }
@@ -165,7 +182,7 @@ int main(int argc, char** argv)
             for (size_t step = 0; step < plans.size(); ++step)
             for (const auto& d : plans[step].descriptors)
             {
-                transfers.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(d.src_rank)));
+                transfers.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(rank_index.at(d.src_rank))));
                 export_registry.push_back(transfers.back().get());
                 step_transfers[step].push_back(transfers.back().get()); descriptors.push_back(d);
             }
@@ -176,27 +193,27 @@ int main(int argc, char** argv)
             std::function<void()> advance;
             auto identity = [&]() { return plans.at(current_step).data.at("graph_id"); };
             auto activate = [&]() {
-                for (int rank = 0; rank < 4; ++rank)
+                for (int rank : ranks)
                 {
                     Json event = {{"rank_id", rank}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}};
                     if (sequence) event["graph_id"] = identity();
                     report["activation_order"].push_back(event);
-                    if (sequence) systems[rank]->workload->activate_graph();
-                    else systems[rank]->workload->fire();
+                    if (sequence) systems[rank_index.at(rank)]->workload->activate_graph();
+                    else systems[rank_index.at(rank)]->workload->fire();
                 }
             };
-            for (int rank = 0; rank < 4; ++rank)
+            for (int rank : ranks)
             {
                 adapters.push_back(std::make_unique<moe_ub::UbNetworkAdapter>(rank, [&, rank](uint64_t now) {
                     Json done = {{"rank_id", rank}, {"time_ns", now}};
-                    if (sequence) done["graph_id"] = systems[rank]->workload->graph_id();
+                    if (sequence) done["graph_id"] = systems[rank_index.at(rank)]->workload->graph_id();
                     report["graph_completions"].push_back(done);
-                    if (sequence && report["graph_completions"].size() == 4)
+                    if (sequence && report["graph_completions"].size() == ranks.size())
                         ns3::Simulator::ScheduleNow([&]() { advance(); });
                 }, sequence ? std::vector<moe_ub::UbWriteTransfer*>{} : step_transfers[0]));
                 systems.push_back(std::make_unique<AstraSim::Sys>(rank, sequence ? "0/layer" : "layer", "empty", "system.json",
                     std::vector<AstraSim::AstraMemoryAPI*>{}, adapters.back().get(),
-                    std::vector<int>{4}, std::vector<int>{1}, 1.0, 1.0, false));
+                    std::vector<int>{ranks.back() + 1}, std::vector<int>{1}, 1.0, 1.0, false));
                 systems.back()->workload->hw_resource->configure_p2p_send_slots(send_slots);
                 if (sequence)
                 {
@@ -210,32 +227,33 @@ int main(int argc, char** argv)
             if (sequence) report["step_submissions"].push_back({{"graph_id", identity()}, {"time_ns", ready}});
             advance = [&]() {
                 const auto now = ns3::Simulator::Now().GetNanoSeconds();
-                for (int rank = 0; rank < 4; ++rank)
+                for (int rank : ranks)
                 {
-                    Require(systems[rank]->workload->can_load_graph() &&
-                            apps[rank]->GetTransferExecutor().GetPendingCount() == 0,
+                    Require(systems[rank_index.at(rank)]->workload->can_load_graph() &&
+                            apps[rank_index.at(rank)]->GetTransferExecutor().GetPendingCount() == 0,
                             "Cannot advance before all graph work has retired");
-                    Require(controllers[rank] == ns3::NodeList::GetNode(rank)->GetObject<ns3::UbController>() &&
-                            apps[rank]->GetNode() == ns3::NodeList::GetNode(rank), "Network object changed");
+                    Require(controllers[rank_index.at(rank)] == ns3::NodeList::GetNode(nodes.at(rank_index.at(rank)))->GetObject<ns3::UbController>() &&
+                            apps[rank_index.at(rank)]->GetNode() == ns3::NodeList::GetNode(nodes.at(rank_index.at(rank))), "Network object changed");
                     report["boundary_resources"].push_back({{"rank_id", rank}, {"time_ns", now},
-                        {"old_graph_id", identity()}, {"pending_events", systems[rank]->pending_events},
-                        {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()},
-                        {"same_network_objects", true}, {"iteration", systems[rank]->workload->iteration}});
+                        {"old_graph_id", identity()}, {"pending_events", systems[rank_index.at(rank)]->pending_events},
+                        {"pending_tasks", apps[rank_index.at(rank)]->GetTransferExecutor().GetPendingCount()},
+                        {"same_network_objects", true}, {"iteration", systems[rank_index.at(rank)]->workload->iteration}});
                 }
                 for (auto* transfer : step_transfers[0])
                     Require(!transfer->Completion().Active() && !transfer->ObservingTarget(), "Old transfer still active");
 #ifdef COSIM_LIFECYCLE_TEST
                 // Corrupt only this test run's final rank, then restore the exact
                 // bytes after proving the group has not been partially installed.
-                std::ifstream graph_input("1/layer.3.et", std::ios::binary);
+                const auto last_graph = "1/layer." + std::to_string(ranks.back()) + ".et";
+                std::ifstream graph_input(last_graph, std::ios::binary);
                 const std::string saved((std::istreambuf_iterator<char>(graph_input)), {});
                 graph_input.close();
-                std::ofstream("1/layer.3.et", std::ios::binary).put(char(0x80));
+                std::ofstream(last_graph, std::ios::binary).put(char(0x80));
                 bool rejected = false;
                 try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]); }
                 catch (const std::exception& e) { rejected = true; report["atomic_rejection"] = e.what(); }
                 Require(rejected, "Malformed final rank was accepted");
-                std::ofstream("1/layer.3.et", std::ios::binary).write(saved.data(), saved.size());
+                std::ofstream(last_graph, std::ios::binary).write(saved.data(), saved.size());
                 for (const auto& sys : systems)
                     Require(sys->workload->graph_id() == identity() && sys->workload->can_load_graph(), "Partial graph install");
                 rejected = false;
@@ -249,7 +267,7 @@ int main(int argc, char** argv)
                 plans[1].data["input"]["ready_ns"] = now;
                 std::ofstream("1/plan.json") << plans[1].data.dump(2) << '\n';
                 report["step_submissions"].push_back({{"graph_id", identity()}, {"time_ns", now}});
-                for (int rank = 0; rank < 4; ++rank)
+                for (int rank : ranks)
                     report["graph_loads"].push_back({{"rank_id", rank}, {"graph_id", identity()}, {"time_ns", now}});
                 activate();
 #ifdef COSIM_LIFECYCLE_TEST
@@ -272,14 +290,14 @@ int main(int argc, char** argv)
                             if (kind == "SEND")
                             {
                                 auto* event = new AstraSim::SendPacketEventHandlerData;
-                                event->sys_id = 0; event->event = AstraSim::EventType::PacketSent;
+                                event->sys_id = ranks.front(); event->event = AstraSim::EventType::PacketSent;
                                 event->callable = systems[0]->workload; event->wlhd = context;
                                 AstraSim::Sys::handleEvent(event);
                             }
                             else
                             {
                                 auto* event = new AstraSim::RecvPacketEventHandlerData;
-                                event->sys_id = 0; event->event = AstraSim::EventType::PacketReceived;
+                                event->sys_id = ranks.front(); event->event = AstraSim::EventType::PacketReceived;
                                 event->workload = systems[0]->workload; event->wlhd = context;
                                 AstraSim::Sys::handleEvent(event);
                             }
@@ -318,7 +336,8 @@ int main(int argc, char** argv)
                 Require(!done.Active() && done.SendCallbacks() == 1 && done.ReceiveCallbacks() == 1 &&
                         done.CommittedBytes() == d.bytes && !transfer->ObservingTarget(), "Incomplete layer transfer " + std::to_string(d.transfer_id));
                 report["transfers"].push_back({{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
-                    {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank}, {"bytes", d.bytes},
+                    {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+                    {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"bytes", d.bytes},
                     {"submitted_tasks", transfer->SubmittedTasks()}, {"send_callbacks", done.SendCallbacks()},
                     {"receive_callbacks", done.ReceiveCallbacks()}, {"send_start_ns", *transfer->SendStartNs()},
                     {"receive_start_ns", *transfer->ReceiveStartNs()}, {"data_ready_ns", *done.DataReadyNs()},
@@ -327,16 +346,16 @@ int main(int argc, char** argv)
                     {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}});
                 if (sequence) report["transfers"].back()["graph_id"] = d.graph_id;
             }
-            for (int rank = 0; rank < 4; ++rank)
+            for (int rank : ranks)
             {
-                const auto* workload = systems[rank]->workload;
+                const auto* workload = systems[rank_index.at(rank)]->workload;
                 const auto* hardware = workload->hw_resource;
                 Json state = {{"rank_id", rank}, {"finished", workload->is_finished},
                     {"remaining_nodes", workload->et_feeder->hasNodesToIssue()},
                     {"cpu_slots", hardware->num_in_flight_cpu_ops}, {"compute_slots", hardware->num_in_flight_gpu_comp_ops},
-                    {"send_slots", hardware->num_in_flight_gpu_comm_ops}, {"pending_events", systems[rank]->pending_events},
-                    {"pending_tasks", apps[rank]->GetTransferExecutor().GetPendingCount()},
-                    {"tp_count", controllers[rank]->GetTransportCountForTest()}};
+                    {"send_slots", hardware->num_in_flight_gpu_comm_ops}, {"pending_events", systems[rank_index.at(rank)]->pending_events},
+                    {"pending_tasks", apps[rank_index.at(rank)]->GetTransferExecutor().GetPendingCount()},
+                    {"tp_count", controllers[rank_index.at(rank)]->GetTransportCountForTest()}};
                 Require(state["finished"] == true && state["remaining_nodes"] == false &&
                         state["cpu_slots"] == 0 && state["compute_slots"] == 0 && state["send_slots"] == 0 &&
                         state["pending_events"] == 0 && state["pending_tasks"] == 0, "Unfinished rank " + std::to_string(rank));
@@ -350,15 +369,21 @@ int main(int argc, char** argv)
             }
             for (const auto& event : report["wqe_starts"])
             {
-                auto ctrl = controllers.at(event.at("node").get<unsigned>());
+                auto ctrl = controllers.at(node_index.at(event.at("node").get<unsigned>()));
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
-            Require(report["graph_completions"].size() == 4 * plans.size() && report["wqe_starts"].size() == transfers.size() &&
-                    report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json::array({0,0,0,0}) &&
+            Require(report["graph_completions"].size() == ranks.size() * plans.size() && report["wqe_starts"].size() == transfers.size() &&
+                    report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json(std::vector<unsigned>(ranks.size(), 0)) &&
                     report["csv_completed_tasks"] == 0, "Layer completion invariant failed");
-            for (const auto& peak : report["peak_wqes"])
-                Require(peak > 0 && peak <= send_slots, "Layer SEND slot limit exceeded");
+            for (size_t i = 0; i < ranks.size(); ++i)
+            {
+                const auto peak = report["peak_wqes"][i].get<unsigned>();
+                const bool has_send = std::any_of(descriptors.begin(), descriptors.end(),
+                    [&](const auto& d) { return d.src_rank == ranks[i]; });
+                Require(peak <= send_slots && (peak > 0) == has_send,
+                        "Layer SEND activity or slot limit mismatch");
+            }
             moe_ub::FlushAstraLogging();
             Json endpoints = Json::array(), operations = Json::array();
             report["node_execution"] = Json::array();

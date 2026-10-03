@@ -27,7 +27,6 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
     for (const auto& plan : plans)
     {
         const auto& p = plan.data;
-        Require(p.at("rank_ids") == Json::array({0, 1, 2, 3}), "fixed sequence requires ranks 0..3");
         auto graph = p.at("graph_id").get<std::string>();
         Require(std::regex_match(graph, std::regex("[A-Za-z0-9_.-]+")) && graphs.insert(graph).second &&
             waves.insert(p.at("wave_id").get<std::string>()).second, "reused/invalid graph or wave identity");
@@ -47,8 +46,8 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
     for (const auto& [key, value] : first.items())
         if (key != "graph_id" && key != "wave_id" && key != "tokens")
             Require(value == second.at(key), "changed shared configuration: " + key);
-    Require(first.at("tokens").size() == 4 && second.at("tokens").size() == 4, "require four Token records");
-    for (int i = 0; i < 4; ++i)
+    Require(first.at("tokens").size() == second.at("tokens").size(), "changed fixed-step Token count");
+    for (size_t i = 0; i < first.at("tokens").size(); ++i)
     {
         const auto& old = first.at("tokens")[i]; const auto& next = second.at("tokens")[i];
         Require(old.at("token_index").is_number_unsigned() && old.at("token_index").get<uint64_t>() < INT64_MAX &&
@@ -66,23 +65,27 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
 {
     Require(systems.size() == adapters.size(), "missing rank objects");
     const auto ranks = plan.data.at("rank_ids").get<std::vector<int>>();
-    for (int rank : ranks) Require(rank >= 0 && size_t(rank) < systems.size(), "missing group rank object");
+    std::map<int, size_t> rank_index;
+    for (size_t i = 0; i < systems.size(); ++i)
+        Require(systems[i] && adapters[i] && rank_index.emplace(systems[i]->id, i).second,
+                "missing or duplicate rank object");
+    for (int rank : ranks) Require(rank_index.contains(rank), "missing group rank object");
     const auto checked = LoadLayerPlan(directory);
     Require(checked.data == plan.data, "plan changed since validation");
     const auto graph = plan.data.at("graph_id").get<std::string>();
     std::vector<std::unique_ptr<Chakra::ETFeeder>> prepared;
     for (int rank : ranks)
     {
-        Require(systems[rank]->workload->can_load_graph() && !systems[rank]->workload->has_graph_id(graph),
+        Require(systems[rank_index.at(rank)]->workload->can_load_graph() && !systems[rank_index.at(rank)]->workload->has_graph_id(graph),
                 "rank " + std::to_string(rank) + " has an in-flight graph or reused identity");
-        adapters[rank]->CheckTransfers(transfers);
+        adapters[rank_index.at(rank)]->CheckTransfers(transfers);
         prepared.push_back(std::make_unique<Chakra::ETFeeder>(
             (directory / ("layer." + std::to_string(rank) + ".et")).string()));
     }
     // Nothing above starts tasks or replaces an existing feeder.
     size_t index = 0;
     for (int rank : ranks)
-        systems[rank]->workload->load_graph(std::move(prepared[index++]), graph);
-    for (int rank : ranks) adapters[rank]->RegisterTransfers(transfers);
+        systems[rank_index.at(rank)]->workload->load_graph(std::move(prepared[index++]), graph);
+    for (int rank : ranks) adapters[rank_index.at(rank)]->RegisterTransfers(transfers);
 }
 }

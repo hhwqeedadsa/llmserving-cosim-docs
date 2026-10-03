@@ -28,6 +28,10 @@ struct WriteDescriptor
     uint32_t chunk_index = 0;
     uint64_t pair_byte_offset = 0;
     uint64_t pair_payload_bytes = 0; // Zero only for the original single-WRITE fixture.
+    std::optional<uint32_t> src_ub_node{}, dst_ub_node{};
+    // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.
+    uint32_t SourceNode() const { return src_ub_node.value_or(static_cast<uint32_t>(src_rank)); }
+    uint32_t DestinationNode() const { return dst_ub_node.value_or(static_cast<uint32_t>(dst_rank)); }
 };
 
 class UbWriteTransfer

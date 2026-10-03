@@ -21,7 +21,8 @@ class ConfiguredService(Service):
         groups = config['groups']
         require(isinstance(groups, list) and len(groups) == 1, 'Configured service currently executes one EP group')
         group = groups[0]
-        fields(group, 'group_id rank_ids rank_to_ub_node expert_placement', 'group')
+        fields(group, 'group_id rank_ids rank_to_ub_node expert_placement' +
+               (' deployment' if 'deployment' in layer else ''), 'group')
         require(all(group[k] == layer[k] for k in group), 'Service group and selected layer differ')
         require(isinstance(group['group_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', group['group_id']),
                 'Invalid group_id')

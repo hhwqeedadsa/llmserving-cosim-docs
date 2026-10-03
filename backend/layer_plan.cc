@@ -93,6 +93,32 @@ void CheckPlanGraph(const std::filesystem::path& path, const Json& graph,
     try { CheckGraph(path, graph, transfers); }
     catch (const std::exception& error) { throw std::runtime_error(path.string() + ": " + error.what()); }
 }
+void ValidateDeployment(const Json& deployment, const Json& ranks)
+{
+    Require(deployment.is_object() && deployment.size() == 3 &&
+            deployment.at("network_scope") == "cross_chip", "invalid deployment/scope");
+    const auto& entries = deployment.at("ranks");
+    Require(entries.is_array() && entries.size() == ranks.size(), "incomplete physical ownership");
+    std::set<std::string> dies;
+    std::map<std::string, std::string> chips;
+    for (size_t i = 0; i < entries.size(); ++i)
+    {
+        const auto& entry = entries[i];
+        Require(entry.is_object() && entry.size() == 4 && entry.at("rank_id") == ranks[i],
+                "physical rank order/fields mismatch");
+        Number(entry.at("rank_id"), "physical rank", INT32_MAX - 1);
+        for (const auto* key : {"die_id", "chip_id", "server_id"})
+            Require(entry.at(key).is_string() && !entry.at(key).get<std::string>().empty(), "empty physical identity");
+        Require(dies.insert(entry.at("die_id").get<std::string>()).second, "duplicate global die identity");
+        const auto chip = entry.at("chip_id").get<std::string>(), server = entry.at("server_id").get<std::string>();
+        const auto [it, added] = chips.emplace(chip, server);
+        Require(added || it->second == server, "global chip belongs to multiple servers");
+    }
+    const auto& profile = deployment.at("local_prepare_ns_per_vector");
+    Require(profile.is_object() && profile.size() == 2, "invalid local prepare profile");
+    for (const auto* kind : {"dispatch", "combine"}) Number(profile.at(kind), "local prepare time", INT64_MAX);
+}
+
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 {
     std::ifstream stream(directory / "plan.json");
@@ -109,8 +135,9 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 }
 LayerPlan ValidateLayerPlan(const Json& p)
 {
-    LayerPlan plan{p, {}, {}};
-    Require(p.at("schema_version") == "moe-ub-execution-plan/1" &&
+    LayerPlan plan{p, {}, {}, {}};
+    const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2";
+    Require((physical || p.at("schema_version") == "moe-ub-execution-plan/1") &&
             p.at("communication_template") == "direct_rank_dedup_v1" &&
             p.at("sender_completion") == "transaction_done", "unsupported schema, mapping or template");
     const auto& ranks = p.at("rank_ids");
@@ -137,6 +164,18 @@ LayerPlan ValidateLayerPlan(const Json& p)
             "input rank mapping mismatch");
     const auto slots = Number(p.at("send_slots_per_rank"), "send slots", 2);
     const auto& input = p.at("input");
+    Require(input.at("schema_version") == (physical ? "moe-ub-layer-fixture/2" : "moe-ub-layer-fixture/1") &&
+            input.contains("deployment") == physical && p.contains("deployment") == physical,
+            "plan/input deployment schema mismatch");
+    std::map<int, std::string> chips;
+    if (physical)
+    {
+        ValidateDeployment(input.at("deployment"), ranks);
+        Require(p.at("deployment") == input.at("deployment"), "plan/input deployment mismatch");
+        for (const auto& entry : input.at("deployment").at("ranks"))
+            chips.emplace(entry.at("rank_id").get<int>(), entry.at("chip_id").get<std::string>());
+    }
+    auto same_chip = [&](int src, int dst) { return physical && src != dst && chips.at(src) == chips.at(dst); };
     std::map<int, uint64_t> local_tokens, expert_inputs;
     for (int rank : members) { local_tokens[rank] = 0; expert_inputs[rank] = 0; }
     const auto& tokens = input.at("tokens");
@@ -213,6 +252,23 @@ LayerPlan ValidateLayerPlan(const Json& p)
                     "rank computation duration overflow");
             total += count * duration;
         }
+        if (physical)
+            for (const std::string kind : {"dispatch", "combine"})
+            {
+                uint64_t count = 0;
+                for (const auto& token : tokens)
+                {
+                    const int src = token.at("src_rank");
+                    std::set<int> destinations;
+                    for (const auto& expert : token.at("expert_ids")) destinations.insert(placement.at(expert.get<size_t>()).get<int>());
+                    for (int dst : destinations)
+                        if (same_chip(src, dst) && (kind == "dispatch" ? src : dst) == rank) ++count;
+                }
+                const auto duration = Number(input.at("deployment").at("local_prepare_ns_per_vector").at(kind), "local prepare", INT64_MAX);
+                Require(!count || duration <= (uint64_t(INT64_MAX) - ready - total) / count,
+                        "local preparation duration overflow");
+                total += count * duration;
+            }
     }
     const auto graph_id = p.at("graph_id").get<std::string>();
     Require(!graph_id.empty(), "empty graph id");
@@ -231,6 +287,7 @@ LayerPlan ValidateLayerPlan(const Json& p)
     std::map<std::tuple<std::string, uint64_t, uint64_t>, std::vector<Json>> chunks;
     std::map<std::tuple<std::string, uint64_t, uint64_t>, uint64_t> expected_pairs, actual_pairs;
     std::map<std::tuple<std::string, uint64_t, uint64_t>, Json> expected_sources;
+    Json contributions = Json::array();
     for (size_t record = 0; record < tokens.size(); ++record)
     {
         const auto& token = tokens[record];
@@ -238,6 +295,12 @@ LayerPlan ValidateLayerPlan(const Json& p)
         std::map<uint64_t, std::set<uint64_t>> destinations;
         for (const auto& expert : token.at("expert_ids"))
             destinations[placement.at(expert.get<size_t>()).get<uint64_t>()].insert(expert.get<uint64_t>());
+        if (physical)
+            for (const auto& [dst, experts] : destinations)
+                contributions.push_back({{"source_record_index", record}, {"src_rank", src}, {"dst_rank", dst},
+                    {"expert_ids", experts}, {"locality", src == dst ? "same_rank" : same_chip(src, dst) ? "same_chip" : "cross_chip"},
+                    {"dispatch_bytes", hidden * input.at("dispatch_element_bytes").get<uint64_t>()},
+                    {"combine_bytes", hidden * input.at("combine_element_bytes").get<uint64_t>()}});
         destinations.erase(src);
         for (const auto& [dst, experts] : destinations)
         {
@@ -253,29 +316,39 @@ LayerPlan ValidateLayerPlan(const Json& p)
             }
         }
     }
+    if (physical) Require(p.at("contributions") == contributions, "contribution locality/routes mismatch");
     for (const auto& t : p.at("transfers"))
     {
         const auto id = Number(t.at("transfer_id"), "transfer_id");
-        const auto task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
         const auto tag = Number(t.at("comm_tag"), "comm_tag", 499999999);
-        const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", UINT32_MAX);
         const auto src = Number(t.at("src_rank"), "src_rank", INT32_MAX - 1), dst = Number(t.at("dst_rank"), "dst_rank", INT32_MAX - 1);
+        Require(members.contains(src) && members.contains(dst), "delivery endpoint outside group");
+        const bool local = same_chip(src, dst);
+        const auto bytes = Number(t.at("payload_bytes"), "payload_bytes", local ? INT64_MAX : UINT32_MAX);
+        uint64_t task = 0;
+        if (local) Require(!t.contains("ub_task_id"), "local delivery has UB task");
+        else { task = Number(t.at("ub_task_id"), "ub_task_id", UINT32_MAX);
+               Require(tasks.insert(task).second, "duplicate UB task"); }
         const auto operation = t.at("operation_id").get<std::string>();
         Require(id > 0 && tag > 0 && bytes > 0 && src != dst && members.contains(src) && members.contains(dst) && transfers.emplace(id, t).second &&
-                tasks.insert(task).second && tags.insert(tag).second, "invalid/duplicate transfer identity or size");
+                tags.insert(tag).second, "invalid/duplicate transfer identity or size");
         Require(operations.contains(operation) && operations.at(operation) == t.at("kind") &&
                 t.at("business_payload_bytes") == bytes && t.at("application_metadata_bytes") == 0 &&
-                t.at("task_byte_range") == Json::array({0, bytes}) &&
-                t.at("priority") == 7 && t.at("transport_profile_id") == "urma-write-rtp-default", "invalid provenance/profile");
+                t.at("task_byte_range") == (local ? Json(nullptr) : Json::array({0, bytes})) &&
+                t.at("priority") == (local ? Json(nullptr) : Json(7)) &&
+                t.at("transport_profile_id") == (local ? "same-chip-local-reference" : "urma-write-rtp-default"), "invalid provenance/profile");
         const auto chunk = Number(t.at("chunk_index"), "chunk_index", 4095);
         const auto total = Number(t.at("pair_payload_bytes"), "pair_payload_bytes", INT64_MAX);
         const auto& range = t.at("pair_byte_range");
         Require(range.is_array() && range.size() == 2, "invalid pair range");
         const auto begin = Number(range[0], "pair begin", total), end = Number(range[1], "pair end", total);
-        Require(total > 0 && end >= begin && end - begin == bytes && bytes <= chunk_bytes,
+        Require(total > 0 && end >= begin && end - begin == bytes && (local ? chunk == 0 && begin == 0 && bytes == total : bytes <= chunk_bytes),
                 "invalid chunk range/size");
         chunks[{operation, src, dst}].push_back(t);
-        plan.descriptors.push_back({id, task, graph_id,
+        if (local) plan.local_descriptors.push_back({id, graph_id,
+            Number(t.at("send_node_id"), "send_node_id"), Number(t.at("recv_node_id"), "recv_node_id"),
+            static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation});
+        else plan.descriptors.push_back({id, task, graph_id,
             Number(t.at("send_node_id"), "send_node_id"), Number(t.at("recv_node_id"), "recv_node_id"),
             static_cast<int>(src), static_cast<int>(dst), static_cast<int>(tag), bytes, operation,
             static_cast<uint32_t>(chunk), begin, total, endpoints.at(src), endpoints.at(dst)});
@@ -298,7 +371,8 @@ LayerPlan ValidateLayerPlan(const Json& p)
         uint64_t offset = 0, index = 0;
         for (const auto& part : parts)
         {
-            const auto size = std::min(chunk_bytes, expected - offset);
+            const auto limit = first.at("transport_profile_id") == "same-chip-local-reference" ? expected : chunk_bytes;
+            const auto size = std::min(limit, expected - offset);
             Require(size > 0 && part.at("chunk_index") == index++ && part.at("payload_bytes") == size &&
                     part.at("pair_payload_bytes") == expected && part.at("pair_byte_range") == Json::array({offset, offset + size}) &&
                     part.at("sources") == sources, "invalid chunk order, tail, range or source");
@@ -363,12 +437,34 @@ LayerPlan ValidateLayerPlan(const Json& p)
         std::map<std::string, std::pair<int, uint64_t>> previous_send;
         auto communicate = [&](const char* kind, const std::set<uint64_t>& deps) {
             auto completed = deps;
+            auto local_ready = deps;
+            if (physical)
+            {
+                const auto& prepares = graph.at("local_prepare_nodes");
+                Require(prepares.is_object() && prepares.size() == 2, "invalid local prepare fields");
+                uint64_t count = 0;
+                for (const auto& [id, t] : transfers)
+                    if (t.at("src_rank") == rank && t.at("kind") == kind && t.at("transport_profile_id") == "same-chip-local-reference")
+                        count += t.at("sources").size();
+                const auto duration = Number(input.at("deployment").at("local_prepare_ns_per_vector").at(kind), "local profile", INT64_MAX);
+                Require(!count || duration <= uint64_t(INT64_MAX) / count, "local prepare overflow");
+                if (!count || !duration) Require(prepares.at(kind).is_null(), "unexpected local prepare work");
+                else
+                {
+                    const auto id = Number(prepares.at(kind), "local prepare node");
+                    Require(local.contains(id) && local.at(id).at("kind") == "COMP" && phase_ids.insert(id).second &&
+                            local.at(id).at("duration_ns") == duration * count && Ids(local.at(id).at("deps")) == deps,
+                            "local prepare duration/dependency mismatch");
+                    local_ready = {id};
+                }
+            }
             for (const auto& [node_id, n] : local)
             {
                 if (n.at("kind") == "COMP") continue;
                 const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
                 if (t.at("kind") != kind) continue;
-                Require(Ids(n.at("deps")) == deps, "communication template dependency mismatch");
+                const auto& expected_deps = n.at("kind") == "SEND" && t.at("transport_profile_id") == "same-chip-local-reference" ? local_ready : deps;
+                Require(Ids(n.at("deps")) == expected_deps, "communication template dependency mismatch");
                 completed.insert(node_id);
                 if (n.at("kind") == "SEND")
                 {

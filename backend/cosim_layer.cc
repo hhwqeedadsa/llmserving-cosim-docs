@@ -176,6 +176,14 @@ int main(int argc, char** argv)
         moe_ub::InitializeAstraLogging();
         {
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
+            std::vector<std::unique_ptr<moe_ub::LocalDelivery>> local_deliveries;
+            std::vector<std::vector<moe_ub::LocalDelivery*>> step_local(plans.size());
+            for (size_t step = 0; step < plans.size(); ++step)
+                for (const auto& d : plans[step].local_descriptors)
+                {
+                    local_deliveries.push_back(std::make_unique<moe_ub::LocalDelivery>(d));
+                    step_local[step].push_back(local_deliveries.back().get());
+                }
             std::vector<const moe_ub::UbWriteTransfer*> export_registry;
             std::vector<std::vector<moe_ub::UbWriteTransfer*>> step_transfers(plans.size());
             std::vector<moe_ub::WriteDescriptor> descriptors;
@@ -223,6 +231,7 @@ int main(int argc, char** argv)
             }
             if (sequence)
                 for (auto& adapter : adapters) adapter->RegisterTransfers(step_transfers[0]);
+            for (auto& adapter : adapters) adapter->RegisterLocalDeliveries(step_local[0]);
             report["loaded_ranks_before_activation"] = systems.size();
             if (sequence) report["step_submissions"].push_back({{"graph_id", identity()}, {"time_ns", ready}});
             advance = [&]() {
@@ -241,6 +250,8 @@ int main(int argc, char** argv)
                 }
                 for (auto* transfer : step_transfers[0])
                     Require(!transfer->Completion().Active() && !transfer->ObservingTarget(), "Old transfer still active");
+                for (auto* delivery : step_local[0])
+                    Require(!delivery->Active() && !delivery->HasPendingEvents(), "Old local delivery still active");
 #ifdef COSIM_LIFECYCLE_TEST
                 // Corrupt only this test run's final rank, then restore the exact
                 // bytes after proving the group has not been partially installed.
@@ -250,7 +261,7 @@ int main(int argc, char** argv)
                 graph_input.close();
                 std::ofstream(last_graph, std::ios::binary).put(char(0x80));
                 bool rejected = false;
-                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]); }
+                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1], step_local[1]); }
                 catch (const std::exception& e) { rejected = true; report["atomic_rejection"] = e.what(); }
                 Require(rejected, "Malformed final rank was accepted");
                 std::ofstream(last_graph, std::ios::binary).write(saved.data(), saved.size());
@@ -261,7 +272,7 @@ int main(int argc, char** argv)
                 catch (const std::exception& e) { rejected = true; report["reuse_rejection"] = e.what(); }
                 Require(rejected, "Retired graph identity was accepted");
 #endif
-                moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]);
+                moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1], step_local[1]);
                 current_step = 1;
                 plans[1].data["ready_ns"] = now;
                 plans[1].data["input"]["ready_ns"] = now;
@@ -316,7 +327,7 @@ int main(int argc, char** argv)
 #ifdef COSIM_LIFECYCLE_TEST
             ns3::Simulator::Schedule(ns3::NanoSeconds(ready + 1), [&]() {
                 unsigned rejected = 0;
-                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1]); }
+                try { moe_ub::InstallNextGraph(plans[1], "1", systems, adapters, step_transfers[1], step_local[1]); }
                 catch (const std::exception& e) { ++rejected; report["busy_rejection"] = e.what(); }
                 try { systems[0]->workload->activate_graph(); }
                 catch (const std::exception& e) { ++rejected; report["activation_rejection"] = e.what(); }
@@ -328,6 +339,12 @@ int main(int argc, char** argv)
             ns3::Simulator::Stop(ns3::NanoSeconds(stop));
             ns3::Simulator::Run();
             report["simulation_end_ns"] = ns3::Simulator::Now().GetNanoSeconds();
+            report["local_deliveries"] = Json::array();
+            for (const auto& delivery : local_deliveries)
+            {
+                Require(!delivery->Active() && !delivery->HasPendingEvents(), "Incomplete local delivery");
+                report["local_deliveries"].push_back(delivery->Result());
+            }
             report["csv_completed_tasks"] = ns3::UbTrafficGen::Get()->GetCompletedTaskCount();
             for (const auto& transfer : transfers)
             {

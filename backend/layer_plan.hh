@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ub_write_transfer.hh"
+#include "local_delivery.hh"
 #include "extern/helper/json/json.hpp"
 #include <filesystem>
 #include <map>
@@ -14,7 +15,9 @@ struct LayerPlan
     nlohmann::json data;
     std::vector<WriteDescriptor> descriptors;
     std::map<std::pair<int, uint64_t>, nlohmann::json> nodes;
+    std::vector<LocalDescriptor> local_descriptors;
 };
+void ValidateDeployment(const nlohmann::json& deployment, const nlohmann::json& ranks);
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
 LayerPlan ValidateLayerPlan(const nlohmann::json& data);
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);

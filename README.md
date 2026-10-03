@@ -64,7 +64,7 @@ bash scripts/check_deps.sh
 
 `check_deps.sh` 只读取 Git 状态和锁文件，不联网、不切换版本、不编译。返回 0 仅表示它检查的版本和工作区状态一致，不表示依赖可编译或仿真正确。脚本状态及检查范围见 [开发管理说明](docs/development.md)。
 
-从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。v0.2 的编号任务已按各自范围完成。M6 已完成[单层固定轮次执行参数化](fixtures/m6_execution_parameters/README.md)，并新增[服务模型与容量参数入口](fixtures/m6_service_model/README.md)：声明 GQA/MHA 模型完整层结构，按实际专家放置核算逐 rank 权重，接纳前预留最终输入所需 KV；单层服务已使用不同 EP 成员与非恒等 UB 映射实际执行。当前仍为每 rank 一个请求、一个选定 MoE 层；MLA、部署本地性和场景输入适配等尚未完成，M6 整体未结束。真实数据、目标行为复现与校准状态分别记录。每个开发任务完成且验证通过后，代码助手整理记录并本地提交；推送仍需单独授权，下一项任务仍由用户确认。
+从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。v0.2 的编号任务已按各自范围完成。M6 已完成[单层固定轮次执行参数化](fixtures/m6_execution_parameters/README.md)，并新增[服务模型与容量参数入口](fixtures/m6_service_model/README.md)：声明 GQA/MHA 模型完整层结构，按实际专家放置核算逐 rank 权重，接纳前预留最终输入所需 KV；单层服务已使用不同 EP 成员与非恒等 UB 映射实际执行。现已完成[部署本地性分类](fixtures/m6_locality/README.md)：显式区分同 rank、同芯片不同 rank 和跨芯片贡献，同芯片交付通过本地准备计算与完成回调推进，只有跨芯片创建 UB 写事务。当前仍为每 rank 一个请求、一个选定 MoE 层；MLA、场景输入与后端参数适配等尚未完成，M6 整体未结束。真实数据、目标行为复现与校准状态分别记录。每个开发任务完成且验证通过后，代码助手整理记录并本地提交；推送仍需单独授权，下一项任务仍由用户确认。
 
 ## 目录建立顺序
 

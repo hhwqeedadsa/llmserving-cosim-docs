@@ -11,5 +11,6 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
 void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& directory,
     const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
     const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
-    const std::vector<UbWriteTransfer*>& transfers);
+    const std::vector<UbWriteTransfer*>& transfers,
+    const std::vector<LocalDelivery*>& local = {});
 }

@@ -39,6 +39,8 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
         for (const auto& d : plan.descriptors)
             Require(ids.insert(d.transfer_id).second && tasks.insert(d.task_id).second && tags.insert(d.tag).second,
                     "reused transfer, UB task or comm_tag");
+        for (const auto& d : plan.local_descriptors)
+            Require(ids.insert(d.transfer_id).second && tags.insert(d.tag).second, "reused local transfer/tag");
     }
     const auto& first = plans[0].data.at("input");
     const auto& second = plans[1].data.at("input");
@@ -61,7 +63,7 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
 void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& directory,
     const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
     const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
-    const std::vector<UbWriteTransfer*>& transfers)
+    const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local)
 {
     Require(systems.size() == adapters.size(), "missing rank objects");
     const auto ranks = plan.data.at("rank_ids").get<std::vector<int>>();
@@ -79,6 +81,7 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
         Require(systems[rank_index.at(rank)]->workload->can_load_graph() && !systems[rank_index.at(rank)]->workload->has_graph_id(graph),
                 "rank " + std::to_string(rank) + " has an in-flight graph or reused identity");
         adapters[rank_index.at(rank)]->CheckTransfers(transfers);
+        adapters[rank_index.at(rank)]->CheckLocalDeliveries(local, transfers);
         prepared.push_back(std::make_unique<Chakra::ETFeeder>(
             (directory / ("layer." + std::to_string(rank) + ".et")).string()));
     }
@@ -86,6 +89,10 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
     size_t index = 0;
     for (int rank : ranks)
         systems[rank_index.at(rank)]->workload->load_graph(std::move(prepared[index++]), graph);
-    for (int rank : ranks) adapters[rank_index.at(rank)]->RegisterTransfers(transfers);
+    for (int rank : ranks)
+    {
+        adapters[rank_index.at(rank)]->RegisterTransfers(transfers);
+        adapters[rank_index.at(rank)]->RegisterLocalDeliveries(local);
+    }
 }
 }

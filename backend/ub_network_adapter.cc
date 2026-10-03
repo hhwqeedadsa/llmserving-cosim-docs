@@ -1,5 +1,7 @@
 #include "ub_network_adapter.hh"
 #include "ub_write_transfer.hh"
+#include "local_delivery.hh"
+#include <set>
 
 #include "ns3/simulator.h"
 
@@ -54,6 +56,8 @@ void UbNetworkAdapter::CheckTransfers(const std::vector<UbWriteTransfer*>& trans
         if (!transfer) throw std::invalid_argument("Null UB transfer descriptor");
         const auto& d = transfer->Descriptor();
         if (d.src_rank != rank && d.dst_rank != rank) continue;
+        if (local_.contains({d.src_rank, d.dst_rank, d.tag}))
+            throw std::invalid_argument("UB/local matching key collision");
         if (!keys.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer).second)
             throw std::invalid_argument("Duplicate UB SEND/RECV matching key");
     }
@@ -67,6 +71,39 @@ void UbNetworkAdapter::RegisterTransfers(const std::vector<UbWriteTransfer*>& tr
         const auto& d = transfer->Descriptor();
         if (d.src_rank == rank || d.dst_rank == rank)
             transfers_.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), transfer);
+    }
+}
+
+void UbNetworkAdapter::CheckLocalDeliveries(const std::vector<LocalDelivery*>& local,
+                                           const std::vector<UbWriteTransfer*>& incoming) const
+{
+    std::set<std::tuple<int, int, int>> keys;
+    for (const auto& [key, value] : transfers_) keys.insert(key);
+    for (const auto& [key, value] : local_) keys.insert(key);
+    for (auto* transfer : incoming)
+    {
+        if (!transfer) throw std::invalid_argument("Null UB descriptor");
+        const auto& d = transfer->Descriptor();
+        if (d.src_rank == rank || d.dst_rank == rank)
+            if (!keys.insert({d.src_rank, d.dst_rank, d.tag}).second)
+                throw std::invalid_argument("Duplicate incoming delivery key");
+    }
+    for (auto* delivery : local)
+    {
+        if (!delivery) throw std::invalid_argument("Null local descriptor");
+        const auto& d = delivery->Descriptor();
+        if (d.src_rank == rank || d.dst_rank == rank)
+            if (!keys.insert({d.src_rank, d.dst_rank, d.tag}).second)
+                throw std::invalid_argument("Duplicate local delivery key");
+    }
+}
+void UbNetworkAdapter::RegisterLocalDeliveries(const std::vector<LocalDelivery*>& local)
+{
+    CheckLocalDeliveries(local);
+    for (auto* delivery : local)
+    {
+        const auto& d = delivery->Descriptor();
+        if (d.src_rank == rank || d.dst_rank == rank) local_.emplace(std::make_tuple(d.src_rank, d.dst_rank, d.tag), delivery);
     }
 }
 
@@ -115,6 +152,12 @@ void UbNetworkAdapter::sim_notify_finished()
 int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag,
                               AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
+    if (auto it = local_.find({rank, dst, tag}); it != local_.end())
+    {
+        it->second->Send(rank, count, type, dst, tag, callback, arg);
+        if (progress_) progress_();
+        return 0;
+    }
     auto it = transfers_.find({rank, dst, tag});
     if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for SEND");
     if (it == transfers_.end()) throw std::invalid_argument("SEND matching key is not in the UB transfer registry");
@@ -126,6 +169,12 @@ int UbNetworkAdapter::sim_send(void*, uint64_t count, int type, int dst, int tag
 int UbNetworkAdapter::sim_recv(void*, uint64_t count, int type, int src, int tag,
                               AstraSim::sim_request*, void (*callback)(void*), void* arg)
 {
+    if (auto it = local_.find({src, rank, tag}); it != local_.end())
+    {
+        it->second->Receive(rank, count, type, src, tag, callback, arg);
+        if (progress_) progress_();
+        return 0;
+    }
     auto it = transfers_.find({src, rank, tag});
     if (transfers_.empty()) throw std::logic_error("No UB transfer descriptor configured for RECV");
     if (it == transfers_.end()) throw std::invalid_argument("RECV matching key is not in the UB transfer registry");

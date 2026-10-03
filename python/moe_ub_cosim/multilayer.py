@@ -68,6 +68,8 @@ def compose_layers(layers):
 
 
 def build_multilayer(configs, identities, provenance):
+    require(all(c.get("schema_version") == "moe-ub-layer-fixture/1" for c in configs),
+            "Physical deployment is not yet implemented for multilayer composition")
     layers=[];ordinal=1
     for config,records in zip(configs,provenance):
         child=build_plan(config)

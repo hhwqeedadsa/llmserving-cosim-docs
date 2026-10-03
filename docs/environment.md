@@ -2243,3 +2243,58 @@ MHA 输入 H=32、共享 embedding/head、FP32 权重、FP8 KV 字节口径，�
 `baseline.json` 在本轮配置前保存原生启动锁和 9074 个已有构建产物的 SHA256。`audit.py` 只恢复这次备份的 UB 原生启动锁，并逐一核对旧产物与测试结果、受测源码摘要；本轮实际审计退出 0，9074 个摘要全部一致，启动锁已恢复，结果保存在 `audit.json`。`deps-final` 再次检查 13 个依赖通过；最终差异与本地提交日志保存在同一 `logs/` 下。本轮不清理旧运行或构建产物。
 
 当前容量是声明式结构的解析核算，工作区为用户参考预留，FP8 未建模设备特有 scale/对齐存储，计算仍为显式参考阶段耗时。没有把模型结构事实、真实路由或硬件校准互相替代。新入口限一个 EP 组、一层 MoE、每 rank 同时一个请求；模型其他层只计容量，稠密层与共享专家没有伪造成该执行层。MLA、目标模型算子组合、连续组批、同芯片本地性、场景 YAML 适配和完整 CM384/R1 场景没有在本轮完成。旧输入的原有限制保留；新 schema 尚未适配研究导出入口。后续范围继续由用户确认。
+
+## 2026-10-03：M6 部署本地性分类
+
+用户确认继续，起点为已完成服务模型任务的 `cf2b9dae627f8aa930ada25c8389a617d894a156`，主仓库工作区干净；任务说明先提交于 `28bd58b`。本轮没有修改子模块、gitlink、锁文件或技术规范。新增 layer/plan v2 及后端 deployment v2，显式声明全局 die/chip/server 归属；旧 layer v1 保留全部跨 rank 使用 UB 的行为。
+
+同芯片跨 rank 的准备时间进入源 rank 的 COMP 节点，之后由独立 LocalDelivery 发布数据并通过 ns-3 当前时刻事件完成双方回调，早到和晚到 RECV 都只完成一次。没有 WQE、目标写提交或伪造的 TransactionDone。跨芯片仍使用原 UB WRITE/RTP；所有专家输入和 Combine 贡献保留。单层、固定两轮与一组一层的配置服务已实现此路径，P/D、旧来源入口及跨层组合明确保留原输入范围。
+
+### 实际命令与日志
+
+工作目录均为 `/root/moe-ub-cosim`。以下 R 为 `runs/v03-deployment-locality`，L 为 R/logs；`R/record.py` 保存完整 argv、cwd、起止时间、退出状态和 stdout/stderr，集成目录另有 commands.json。初始两条辅助脚本启动误用了系统未提供的 `python`，退出 127；改用 `python3` 后执行正常，没有安装软件或修改全局 Python。首次和最终编译均成功，没有仿真失败后修改预期值的情况。
+
+独立配置命令（L/configure.json，退出 0）：
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m6-deployment-locality -G Ninja -DCMAKE_BUILD_TYPE=release -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m6-deployment-locality/output -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m6-deployment-locality --target cosim-layer cosim-sequence cosim-service cosim-service-deadlock-test cosim-local-test cosim-time-test cosim-write-test cosim-observation-test -j 8
+cmake --build build/m6-deployment-locality --target cosim-layer cosim-sequence cosim-service cosim-service-deadlock-test cosim-lifecycle-test -j 8
+```
+
+两次 build 对应 L/build.json 与 L/build-final.json，均退出 0；第二次加入旧生命周期测试目标，并编译多层入口对未实现的新本地性 schema 的显式拒绝。全程只使用新构建目录。
+
+Python 命令为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py'`；L/python-unit-initial 为旧 61 项通过，L/python-unit-locality 为增加六项本地性检查后的 67 项通过。C++ 命令分别为 `build/m6-deployment-locality/output/cosim/ns3.44-cosim-local-test`、`ns3.44-cosim-time-test`、`ns3.44-cosim-write-test`、`ns3.44-cosim-observation-test`，四项同目录执行均退出 0，对应 L/local-unit、time-unit、write-unit、observation-unit。新单元覆盖早到/晚到接收、非同步重入、重复登记、类型/字节匹配、仅一次回调与回收。
+
+下列集成命令均使用 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/<脚本> --build-dir build/m6-deployment-locality --output-dir R/<目录>`，完整命令保存在同名 L/标签.json；全部退出 0。
+
+| 日志标签 / 目录 | 脚本 | 实际结果 |
+|---|---|---|
+| locality-final | check_deployment_locality.py | 14 次正常运行、9 项后端拒绝；此前 locality-integration / locality 也通过，最终版补核对独立计算槽、原容量及真正的本地时间溢出拒绝。 |
+| execution-parameters | check_execution_parameters.py | 原 EP3/EP2/空闲成员/同 rank/固定两轮与 13 项拒绝通过。 |
+| sequence | check_sequence.py | 原两轮和生命周期故障测试五次运行、12 项拒绝通过，28 次写交付 229376 字节。 |
+| service-model | check_service_model_capacity.py | 原 GQA/MHA 六次运行、九项拒绝通过；GQA 仍为 24 次写、4608 字节、102924 ns。 |
+| boundaries | check_service_boundaries.py | 七次运行及七项故障检查通过。 |
+| service | check_service.py | 七次运行和原协议拒绝通过；三轮 42 次写、344064 字节、64738 ns。 |
+| dynamic | check_dynamic_service.py | 九次运行及十项拒绝通过，两组仍在同一网络推进。 |
+| pd | check_pd_handoff.py | 七次运行及十一项拒绝通过。 |
+| pd-queue | check_pd_queue.py | 九次运行及八项拒绝通过，共享链路使 KV 完成后移 26143 ns。 |
+| multilayer | check_multilayer.py | 八次研究运行、一次无观测对照及十项拒绝通过，原三层与 32 层范围不变。 |
+
+### 新路径的实际证据
+
+`R/locality-final/summary.json` 保存汇总，逐次命令、输入、计划、结果及观测留在同目录。`fixtures/m6_locality/` 的小输入提供独立手算依据，字段与完成条件见[样例说明](../fixtures/m6_locality/README.md)。
+
+| 对照 | 实际结果 |
+|---|---|
+| 三类混合 | 四 Token、12 份专家输入，逐 rank 为 2/5/3/2；去重后同 rank / 同芯片 / 跨芯片贡献为 4/2/5。两阶段产生 4 次本地交付、10 次 UB 写、1280 fabric 业务字节，1376 ns 完成。 |
+| 纯本地及因果反馈 | 同芯片两个专家去重为每阶段一份向量；两次本地交付，零 UB 写、零目标写提交、零被观测端口字节，750 ns 完成。准备增加 1000 ns 后消费者及完成时间均后移 1000 ns。 |
+| 零参考成本及同 rank | 显式零准备成本仍保留两次本地交付依赖，570 ns 完成；同 rank 对照无交付节点，同为 570 ns。 |
+| 固定两轮 | 局部图节点号复用，四个本地交付身份不重复；第二轮由第一轮在 750 ns 的实际完成触发，最终 1500 ns，无 UB 写。 |
+| 配置服务 | 六轮 18 次本地交付、6 次 UB 写、1152 fabric 字节、103158 ns。增加本地准备使下一轮提交后移，最终 133080 ns；仅保留第一个请求时四轮八次本地交付、60720 ns，网络发送/到达包计数均为零。 |
+| 资源与观测 | 同芯片的独立 rank 可同时计算，同 rank 计算区间不重叠；权重 255872/280448/231296 字节与 KV 3/3/2 块不变，结束全部释放。混合单层与服务的来源开/关/不挂观测执行完全一致；来源侧表只记录实际 fabric 写。 |
+| 拒绝 | 缺失本地依赖、伪造本地 UB task、错误分类、降级 schema、删除交付、重复 die、同一全局芯片跨服务器、本地准备时间溢出和计划改变既定部署均被拒绝；后者在 0 ns、业务激活前终止。 |
+
+R/audit.py（L/audit.json，退出 0）核验 9540 个旧构建产物摘要未变，恢复本次备份的原生 `.lock-ns3_linux_build`；核验当前集成源码摘要、全部测试状态及链接边界。单层、两轮、服务均链接 52 个 ASTRA 核心对象，实际装载的十个 ns-3 动态库都来自本次 UB 构建。`bash scripts/check_deps.sh` 的最终记录为 L/deps-final.json，退出 0，13 个依赖检出与固定版本一致。构建、日志和备份留在忽略目录，没有清理旧产物。
+
+当前仍是一组、一个选定 MoE 层、每 rank 同时一个请求的配置服务，时间与路由均为未校准参考输入；没有执行完整 CM384/R1、真实路由或硬件测量。M6 整体未完成，下一项建议继续场景 YAML 与实际后端 WRITE/RTP 参数适配，仍等待用户确认。

@@ -12,6 +12,7 @@ from .service import LLM, group_layer
 
 
 def validate_queue(config, layer):
+    require(layer.get("schema_version") == "moe-ub-layer-fixture/1", "P/D currently requires layer schema 1")
     require(config.get('schema_version') == 'moe-ub-pd-queue-fixture/1', 'Unsupported queued P/D schema')
     require(isinstance(config.get('requests'), list) and len(config['requests']) <= 8 and
             isinstance(config.get('independent_requests'), list) and len(config['independent_requests']) <= 8,

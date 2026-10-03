@@ -1,0 +1,90 @@
+{
+  "schema_version": "moe-ub-layer-fixture/2",
+  "graph_id": "g-locality",
+  "wave_id": "D.locality0",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 0,
+  "rank_ids": [
+    2,
+    5,
+    9,
+    12
+  ],
+  "rank_to_ub_node": [
+    2,
+    0,
+    3,
+    1
+  ],
+  "hidden_dim": 64,
+  "top_k": 2,
+  "dispatch_element_bytes": 2,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 1024,
+  "send_slots_per_rank": 2,
+  "template": "direct_rank_dedup_v1",
+  "expert_placement": [
+    2,
+    5,
+    5,
+    9,
+    12
+  ],
+  "tokens": [
+    {
+      "request_id": "0",
+      "src_rank": 2,
+      "phase": "decode",
+      "token_index": 0,
+      "layer_id": 0,
+      "expert_ids": [
+        1,
+        2
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 100,
+    "expert_per_input": 200,
+    "expert_local_merge": 30,
+    "combine_unpack_merge": 40,
+    "next_layer": 0
+  },
+  "deployment": {
+    "network_scope": "cross_chip",
+    "ranks": [
+      {
+        "rank_id": 2,
+        "die_id": "die-2",
+        "chip_id": "server0.chip0",
+        "server_id": "server0"
+      },
+      {
+        "rank_id": 5,
+        "die_id": "die-5",
+        "chip_id": "server0.chip0",
+        "server_id": "server0"
+      },
+      {
+        "rank_id": 9,
+        "die_id": "die-9",
+        "chip_id": "server1.chip0",
+        "server_id": "server1"
+      },
+      {
+        "rank_id": 12,
+        "die_id": "die-12",
+        "chip_id": "server1.chip0",
+        "server_id": "server1"
+      }
+    ],
+    "local_prepare_ns_per_vector": {
+      "dispatch": 70,
+      "combine": 110
+    }
+  }
+}

@@ -11,6 +11,7 @@
 namespace moe_ub
 {
 class UbWriteTransfer;
+class LocalDelivery;
 class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
 {
   public:
@@ -28,6 +29,9 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
                  void (*)(void*), void*) override;
 
     void CheckTransfers(const std::vector<UbWriteTransfer*>& transfers) const;
+    void CheckLocalDeliveries(const std::vector<LocalDelivery*>& local,
+                              const std::vector<UbWriteTransfer*>& incoming = {}) const;
+    void RegisterLocalDeliveries(const std::vector<LocalDelivery*>& local);
     void RegisterTransfers(const std::vector<UbWriteTransfer*>& transfers);
     uint64_t ScheduledEvents() const { return scheduled_events_; }
     uint64_t ExecutedCallbacks() const { return executed_callbacks_; }
@@ -37,6 +41,7 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
     Finished finished_;
     std::function<void()> progress_;
     std::map<std::tuple<int, int, int>, UbWriteTransfer*> transfers_;
+    std::map<std::tuple<int, int, int>, LocalDelivery*> local_;
     uint64_t scheduled_events_ = 0;
     uint64_t executed_callbacks_ = 0;
 };

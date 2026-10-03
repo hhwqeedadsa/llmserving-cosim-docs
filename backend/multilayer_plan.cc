@@ -53,6 +53,8 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
     uint64_t layer_index = 0;
     for (const auto& layer : layers)
     {
+        Require(layer.at("schema_version") == "moe-ub-execution-plan/1",
+                "physical deployment is not yet implemented for multilayer composition");
         const auto checked = ValidateLayerPlan(layer);
         const auto& input = layer.at("input");
         Require(input.at("layer_id").is_number_unsigned() && input.at("layer_id").get<uint64_t>() < 32,

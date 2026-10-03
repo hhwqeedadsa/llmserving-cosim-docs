@@ -49,7 +49,8 @@ std::vector<Group> LoadGroups(const fs::path& shared)
         {{"group_id", "ep0"}, {"rank_ids", {0u,1u,2u,3u}}, {"rank_to_ub_node", {0u,1u,2u,3u}},
          {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
-    Require(deployment.size() == 2 && deployment.at("schema_version") == "moe-ub-service-deployment/1" &&
+    const bool physical = deployment.at("schema_version") == "moe-ub-service-deployment/2";
+    Require(deployment.size() == 2 && (physical || deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
             deployment.at("groups").is_array() && !deployment.at("groups").empty(), "Invalid service deployment");
     std::vector<Group> groups;
     std::set<int> members;
@@ -58,7 +59,7 @@ std::vector<Group> LoadGroups(const fs::path& shared)
     for (const auto& config : deployment.at("groups"))
     {
         const auto name = config.at("group_id").get<std::string>();
-        Require(config.size() == 4 && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
+        Require(config.size() == (physical ? 5 : 4) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
                 names.insert(name).second && config.at("rank_ids").is_array() &&
                 !config.at("rank_ids").empty() && config.at("rank_to_ub_node").is_array() &&
                 config.at("rank_ids").size() == config.at("rank_to_ub_node").size(),
@@ -81,8 +82,11 @@ std::vector<Group> LoadGroups(const fs::path& shared)
             Require(value.is_number_unsigned() && value.get<uint64_t>() < INT32_MAX &&
                     std::find(ranks.begin(), ranks.end(), value.get<int>()) != ranks.end(),
                     "Expert outside group");
+        Require(config.contains("deployment") == physical, "Service deployment schema mismatch");
+        if (physical) moe_ub::ValidateDeployment(config.at("deployment"), config.at("rank_ids"));
         groups.push_back({config, ranks, {}, {}, {}});
     }
+    Require(!physical || groups.size() == 1, "Physical service currently requires one group");
     std::sort(groups.begin(), groups.end(), [](const auto& a, const auto& b) {
         return a.config.at("group_id").template get<std::string>() < b.config.at("group_id").template get<std::string>();
     });
@@ -349,6 +353,7 @@ int main(int argc, char** argv)
         {
             NetworkDrain drain;
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
+            std::vector<std::unique_ptr<moe_ub::LocalDelivery>> local_deliveries;
             std::vector<const moe_ub::UbWriteTransfer*> export_registry;
             std::vector<std::unique_ptr<moe_ub::PortObservation>> observations;
             for (const auto& config : observation_configs)
@@ -436,6 +441,7 @@ int main(int argc, char** argv)
                     for (const auto& app : apps)
                         if (app->GetTransferExecutor().GetPendingCount() != 0) return;
                     for (const auto& transfer : transfers) if (transfer->HasPendingEvents()) return;
+                    for (const auto& delivery : local_deliveries) if (delivery->HasPendingEvents()) return;
                     if (std::any_of(groups.begin(), groups.end(), [](const auto& g) { return !g.graph.empty(); }))
                         throw std::runtime_error("Service deadlock: active graph waits without a business event or future wakeup; see failure.json");
                 }); });
@@ -462,6 +468,9 @@ int main(int argc, char** argv)
                         if (transfer->Descriptor().graph_id == group.graph)
                             Require(!transfer->Completion().Active() && !transfer->ObservingTarget(),
                                     "Completed group still has an active transfer");
+                    for (const auto& delivery : local_deliveries)
+                        if (delivery->Descriptor().graph_id == group.graph)
+                            Require(!delivery->Active() && !delivery->HasPendingEvents(), "Completed group retains local delivery");
                     const auto done_graph = group.graph;
                     completed.push_back({{"kind", kv_graphs.count(done_graph) ? "KV_DONE" : "WAVE_DONE"}, {"graph_id", done_graph},
                         {"wave_id", group.wave}, {"finished_ns", finished}});
@@ -584,6 +593,9 @@ int main(int argc, char** argv)
                     for (int rank : covered) selected_nodes.push_back(rank_node.at(rank));
                     Require(plan.data.at("rank_to_ub_node") == selected_nodes,
                             "Service plan mapping differs from current deployment");
+                    Require(plan.data.contains("deployment") == group.config.contains("deployment"), "Plan/deployment locality schema mismatch");
+                    if (group.config.contains("deployment"))
+                        Require(plan.data.at("deployment") == group.config.at("deployment"), "Physical deployment changed during run");
                     const bool kv = plan.data.at("communication_template") == "kv_direct_v1";
                     if (kv)
                     {
@@ -622,7 +634,15 @@ int main(int argc, char** argv)
                         prepared.push_back(std::make_unique<moe_ub::UbWriteTransfer>(d, apps.at(rank_index.at(d.src_rank))));
                         pointers.push_back(prepared.back().get());
                     }
-                    moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers);
+                    std::vector<std::unique_ptr<moe_ub::LocalDelivery>> prepared_local;
+                    std::vector<moe_ub::LocalDelivery*> local_pointers;
+                    for (const auto& d : plan.local_descriptors)
+                    {
+                        Require(!transfer_ids.count(d.transfer_id) && !tags.count(d.tag), "Reused local transfer/tag");
+                        prepared_local.push_back(std::make_unique<moe_ub::LocalDelivery>(d));
+                        local_pointers.push_back(prepared_local.back().get());
+                    }
+                    moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers, local_pointers);
                     for (const auto& observation : observations) observation->Register(plan.descriptors);
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
@@ -633,6 +653,9 @@ int main(int argc, char** argv)
                     { transfer_ids.insert(d.transfer_id); tasks.insert(d.task_id); tags.insert(d.tag); }
                     for (auto& transfer : prepared)
                     { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
+                    for (const auto& d : plan.local_descriptors)
+                    { transfer_ids.insert(d.transfer_id); tags.insert(d.tag); }
+                    for (auto& delivery : prepared_local) local_deliveries.push_back(std::move(delivery));
                     plans.push_back(std::move(plan));
                     if (kv) kv_graphs.insert(graph);
                     for (auto i : selected)
@@ -698,9 +721,18 @@ int main(int argc, char** argv)
                         {"send_callbacks", transfer->SendCallbacks()}, {"receive_callbacks", transfer->Completion().ReceiveCallbacks()},
                         {"pending_callback_or_submit", transfer->HasPendingEvents()}});
                 }
+                failure["local_deliveries"] = Json::array();
+                for (const auto& delivery : local_deliveries)
+                    if (delivery->Active()) failure["local_deliveries"].push_back(delivery->Result());
                 std::ofstream("failure.json") << failure.dump(2) << '\n';
                 moe_ub::FlushAstraLogging();
                 throw;
+            }
+            report["local_deliveries"] = Json::array();
+            for (const auto& delivery : local_deliveries)
+            {
+                Require(!delivery->Active() && !delivery->HasPendingEvents(), "Incomplete local delivery");
+                report["local_deliveries"].push_back(delivery->Result());
             }
             Require(drain.Idle(), "Service stopped with link data or queued packets");
             report["network_drain"] = {{"started_packets", drain.StartedPackets()},

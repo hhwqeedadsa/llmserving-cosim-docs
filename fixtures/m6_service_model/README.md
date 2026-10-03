@@ -61,3 +61,6 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 ```
 
 旧 `moe-ub-service-fixture/1`、数据、多层、P/D schema 保留原模型与范围，未自动迁移到新配置。当前入口使用 `service` CLI；完整场景 YAML 和新的模型容量 schema 尚未组合到研究导出入口。
+
+
+后续部署本地性任务已为该配置服务增加 layer v2：group 同时声明全局 die/chip/server 归属及本地准备时间，后端按固定部署区分本地交付与 UB 写。模型容量仍按独立 rank 核算，详见[本地性样例](../m6_locality/README.md)。本目录的原 layer v1 输入继续保持原行为。

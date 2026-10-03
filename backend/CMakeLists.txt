@@ -21,6 +21,7 @@ build_exec(
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/cosim_compute.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
@@ -32,6 +33,7 @@ build_exec(
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/time_adapter_test.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
@@ -43,6 +45,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/cosim_write.cc"
     "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
@@ -54,6 +57,7 @@ build_exec(
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/write_adapter_test.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
@@ -97,6 +101,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/kv_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
@@ -120,6 +125,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/multilayer_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/kv_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK
@@ -152,6 +158,7 @@ foreach(target cosim-sequence cosim-lifecycle-test)
     "${CMAKE_CURRENT_LIST_DIR}/kv_plan.cc"
       "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
       "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
       "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
       "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
     LIBRARIES_TO_LINK cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
@@ -174,6 +181,7 @@ build_exec(
     "${CMAKE_CURRENT_LIST_DIR}/kv_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
     "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
   LIBRARIES_TO_LINK cosim-astra-logging "$<LINK_LIBRARY:WHOLE_ARCHIVE,AstraSim>" ${libunified-bus} ${libcore}
@@ -184,3 +192,15 @@ endforeach()
 target_compile_definitions(cosim-service-deadlock-test PRIVATE COSIM_SERVICE_DEADLOCK_TEST)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m3")
 target_link_options(cosim-service PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m3/service-link.map")
+
+build_exec(
+  EXECNAME cosim-local-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/local_delivery_test.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/local_delivery.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_network_adapter.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/ub_write_transfer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/write_completion.cc"
+  LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-local-test PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-local-test PRIVATE "${CMAKE_CURRENT_LIST_DIR}")

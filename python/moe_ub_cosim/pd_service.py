@@ -11,6 +11,7 @@ from .service import LLM, ROOT, group_layer
 
 
 def validate_pd(config, layer):
+    require(layer.get("schema_version") == "moe-ub-layer-fixture/1", "P/D currently requires layer schema 1")
     fields = {'schema_version', 'run_id', 'mode', 'execution', 'model_config', 'groups', 'request',
         'npu_memory_bytes', 'workspace_bytes', 'communication_buffer_bytes', 'block_size',
         'weight_dtype', 'compute_dtype', 'kv_dtype', 'source_layout', 'destination_layout',

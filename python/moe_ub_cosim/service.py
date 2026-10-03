@@ -60,6 +60,8 @@ def group_layer(layer, group):
 
 
 def validate_service(config, layer):
+    require(layer.get("schema_version") == "moe-ub-layer-fixture/1",
+            "Legacy service requires layer schema 1; use configured service for physical deployment")
     fields = {'schema_version', 'run_id', 'mode', 'execution', 'model', 'npu_memory_gib', 'requests'}
     require(set(config) in (fields, fields | {'groups'}), 'Unsupported service fields')
     require(config['schema_version'] == 'moe-ub-service-fixture/1' and config['mode'] == 'fixture',
@@ -266,6 +268,8 @@ def run(args):
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
     configured = config.get('schema_version') == 'moe-ub-configured-service/1'
+    require(layer.get('schema_version') != 'moe-ub-layer-fixture/2' or configured,
+            'Physical deployment currently requires the configured service entry')
     if configured:
         from .configured_service import ConfiguredService
         service = ConfiguredService(config, layer)
@@ -284,7 +288,8 @@ def run(args):
     output.mkdir(exist_ok=False)
     (output / 'graphs').mkdir()
     export_bootstrap(output / 'bootstrap', service.ranks)
-    save(output / 'deployment.json', dict(schema_version='moe-ub-service-deployment/1', groups=service.groups))
+    save(output / 'deployment.json', dict(schema_version='moe-ub-service-deployment/2'
+        if 'deployment' in layer else 'moe-ub-service-deployment/1', groups=service.groups))
     save(output / 'input.json', config)
     save(output / 'layer.json', layer)
     if pd:

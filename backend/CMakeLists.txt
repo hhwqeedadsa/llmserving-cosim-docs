@@ -170,11 +170,14 @@ foreach(target cosim-sequence cosim-lifecycle-test)
 endforeach()
 target_compile_definitions(cosim-lifecycle-test PRIVATE COSIM_LIFECYCLE_TEST)
 
+execute_process(COMMAND git rev-parse HEAD WORKING_DIRECTORY "${COSIM_ROOT}/third_party/ns-3-ub"
+  OUTPUT_VARIABLE COSIM_UB_REVISION OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ERROR_IS_FATAL ANY)
 foreach(target cosim-service cosim-service-deadlock-test)
 build_exec(
   EXECNAME ${target}
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/cosim_service.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/backend_config.cc"
     "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"
     "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/multilayer_plan.cc"
@@ -188,6 +191,7 @@ build_exec(
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
 set_target_properties(${target} PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+target_compile_definitions(${target} PRIVATE COSIM_UB_REVISION="${COSIM_UB_REVISION}")
 endforeach()
 target_compile_definitions(cosim-service-deadlock-test PRIVATE COSIM_SERVICE_DEADLOCK_TEST)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m3")

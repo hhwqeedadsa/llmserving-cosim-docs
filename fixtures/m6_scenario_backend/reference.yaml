@@ -1,0 +1,40 @@
+schema_version: moe-ub-scenario-run/1
+scenario_id: m6-small-write-rtp
+basis: selected_reference
+service: ../m6_locality/service.json
+layer: ../m6_locality/service-layer.json
+system: ../m1_compute/system.json
+backend:
+  reference_file: ../../docs/scenarios/cm384_deepseek_r1_decode_v0.1.yaml
+  profile_by_role:
+    dispatch: urma_write_rtp_reference
+    combine: urma_write_rtp_reference
+  attributes:
+    ns3::UbSwitchAllocator::AllocationTime: 10ns
+  globals: {}
+  tp_max_data_payload_bytes: 4096
+  transport_channel_setup: precreated
+network:
+  case_path: ../m2_single_layer/network
+  plane_id: synthetic-single-plane
+  defaults:
+    rate_bps: 224000000000
+    delay_ns: 20
+    allocation_ns: 1
+    forward_ns: 0
+  nodes: []
+  links: []
+execution:
+  chunk_bytes: 1024
+  send_slots_per_rank: 2
+  seed: 1
+  run: 1
+observation:
+  schema_version: moe-ub-port-observation/1
+  switch_id: 4
+  port_id: 2
+  window_start_ns: 0
+  window_end_ns: 1000000
+  window_period_ns: 1000
+  record_provenance: true
+max_simulation_ns: 10000000

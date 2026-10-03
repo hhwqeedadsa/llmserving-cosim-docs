@@ -351,7 +351,7 @@ Python 为所有 rank 与被观测交换机校验唯一时钟，使用整数 ppb
 
 逻辑 rank 保留在 Chakra 匹配键、图和端侧操作中，实际 UB 提交和目标完成过滤使用映射后的节点号。无本地 Token 的 rank 可以执行远端专家工作；无 Token、无专家工作的成员使用空图正常完成。原单层参考输入及连续图生命周期语义保留。
 
-新增参数对照、独立字节核算、已验证命令和保留边界见 [M6 样例](../fixtures/m6_execution_parameters/README.md)。该首项任务限单层固定轮次；后续服务参数化结果见下节，M6 整体尚未完成。
+新增参数对照、独立字节核算、已验证命令和保留边界见 [M6 样例](../fixtures/m6_execution_parameters/README.md)。该首项任务限单层固定轮次；后续服务、本地性及场景参数化结果见下文。
 
 ## M6 服务模型与容量参数化
 
@@ -367,3 +367,9 @@ Python 为所有 rank 与被观测交换机校验唯一时钟，使用整数 ppb
 layer v2 显式声明 die/chip/server 归属及本地准备参考时间。计划加载器从路由独立重建三类贡献，核对本地准备计算和交付依赖；`UbNetworkAdapter` 分别登记真实 UB 写与 `LocalDelivery`。后者没有 UB app/task，源准备计算完成后发布数据，通过 ns-3 同时刻排队的回调完成双方等待，晚到 RECV 仍只完成一次。
 
 单层、固定两轮和配置服务均已执行验证；部署在一次运行内固定，本地交付参与图回收与死锁检查。运行结果新增 `local_deliveries`，`transfers` 和端口来源侧表继续只含实际 UB 写。样例、字段版本、完成条件、手算结果和命令见[本地性说明](../fixtures/m6_locality/README.md)。旧服务/P/D/多层保持原输入边界，完整场景与硬件校准尚未完成。
+
+## M6 场景与后端参数适配
+
+新增 `python -m moe_ub_cosim.scenario resolve|run` 小型场景入口，引用现有配置服务和显式网络，选择参考规格中的 WRITE/RTP 参数。`cosim-service --backend-catalog` 从当前注册的 TypeId/GlobalValue 导出目录，`--check-backend FILE` 校验完整选择；新网络目录的 `backend.json` 替代 TXT 加载路径。没有该文件的旧案例仍执行原入口。
+
+运行前读取实际网络对象属性与节点/链路覆盖并核对，动态 Jetty 的 TA/inflight 在 WQE 创建时核对。结果分别保存集合 chunk、TA 段与 TP 编译常量、参数来源、实际对象、RNG、观测和固定依赖。只接受现有 URMA WRITE/RTP 的就绪与资源释放语义；READ、CTP、native LD/ST、CC/故障/重传及未经验证的多路径/喷洒选择均拒绝。范围、覆盖顺序、实际检查和命令见[场景样例](../fixtures/m6_scenario_backend/README.md)。

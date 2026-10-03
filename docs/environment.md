@@ -2298,3 +2298,71 @@ Python 命令为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m
 R/audit.py（L/audit.json，退出 0）核验 9540 个旧构建产物摘要未变，恢复本次备份的原生 `.lock-ns3_linux_build`；核验当前集成源码摘要、全部测试状态及链接边界。单层、两轮、服务均链接 52 个 ASTRA 核心对象，实际装载的十个 ns-3 动态库都来自本次 UB 构建。`bash scripts/check_deps.sh` 的最终记录为 L/deps-final.json，退出 0，13 个依赖检出与固定版本一致。构建、日志和备份留在忽略目录，没有清理旧产物。
 
 当前仍是一组、一个选定 MoE 层、每 rank 同时一个请求的配置服务，时间与路由均为未校准参考输入；没有执行完整 CM384/R1、真实路由或硬件测量。M6 整体未完成，下一项建议继续场景 YAML 与实际后端 WRITE/RTP 参数适配，仍等待用户确认。
+
+## 2026-10-03：M6 场景 YAML 与后端参数适配
+
+用户确认开始，起点为部署本地性任务 `b4792824e1c079a768510fb8d7fd1f2507a10032`，工作区干净；任务说明先提交于 `6c34ed1`。本轮只修改主仓库，13 个依赖保持锁定提交。新增 `moe-ub-scenario-run/1`，引用既有 configured-service、单层和显式网络，导入所选参考后端段；原 CM384/R1 YAML 保持参考规格，不声称完整场景可执行。使用现有虚拟环境 PyYAML 6.0.1，没有安装软件、修改全局配置或下载模型。
+
+原生运行时目录现有 96 项 UB 属性、21 项 UB 全局值。部分全局值由 UbUtils 单例构造时注册，UbEgressQueue 类型需显式调用原生 GetTypeId；默认值全部来自注册信息。解析后由原生 checker 规范化，联合约束独立列出。新路径使用 backend.json，TXT 仅作完整配置审计副本；旧入口没有该文件时继续原配置流程。运行时核对继承属性、实际节点与链路覆盖、全局值，以及 WQE 启动时动态 Jetty 的 TA/inflight，不能只把 YAML 选择抄到结果。
+
+### 实际命令与日志
+
+工作目录 `/root/moe-ub-cosim`，下文 R 为 `runs/v03-scenario-backend`，L 为 R/logs。`R/record.py` 保存每条完整 argv、cwd、起止 UTC、退出状态与 stdout/stderr；集成目录有逐条 commands.json，场景目录有 resolve_commands.json 和 run/manifest.json。所有旧构建产物保留，仅使用新独立目录。
+
+```bash
+cmake -S third_party/ns-3-ub -B build/m6-scenario-backend -G Ninja \
+  -DCMAKE_BUILD_TYPE=release \
+  -DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake \
+  -DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m6-scenario-backend/output \
+  -DNS3_ENABLED_MODULES=unified-bus -DNS3_EXAMPLES=OFF -DNS3_TESTS=OFF \
+  -DNS3_MPI=OFF -DNS3_MTP=OFF -DNS3_ASSERT=OFF -DNS3_LOG=OFF \
+  -DNS3_WARNINGS_AS_ERRORS=OFF -DNS3_NATIVE_OPTIMIZATIONS=OFF -DNS3_CCACHE=OFF \
+  -DNS3_PRECOMPILE_HEADERS=OFF -DNS3_FETCH_OPTIONAL_COMPONENTS=OFF \
+  -DNS3_NETANIM=OFF -DNS3_CPM=OFF -DNS3_VCPKG=OFF
+cmake --build build/m6-scenario-backend --target cosim-service cosim-service-deadlock-test -j 8
+
+env PYTHONPATH=python .venv/llmservingsim-native/bin/python \
+  -m unittest discover -s tests/unit -p '*test.py'
+```
+
+配置记录 L/configure.json，退出 0；最终编译 L/build-final.json，退出 0；Python 记录 L/python-units.json，67 项通过。此前同一 build 命令的 build-current、build-catalog、build-queue-catalog、build-live-validation、build-inherited、build-safe-time 也退出 0；首次 L/build 失败及原因见下文。没有重新构建旧目录或运行上游独立仿真来拼接结果。
+
+场景实际直接命令为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.scenario run --input fixtures/m6_scenario_backend/reference.yaml --backend build/m6-scenario-backend/output/cosim/ns3.44-cosim-service --output-dir R/sixth`，L/scenario-sixth.json 退出 0。最终验收使用下表脚本；统一命令为 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/<脚本> --build-dir build/m6-scenario-backend --output-dir R/<标签>`，L 中同名 JSON 保存精确命令。全部退出 0。
+
+| 标签 / 目录 | 脚本 | 实际结果 |
+|---|---|---|
+| scenario-final | check_scenario_backend.py | 11 次真实运行、1 次仅解析、24 项拒绝；目录、实例覆盖、分段/分包、槽位、因果反馈、观测无扰动和本地交付通过。 |
+| service-model-final | check_service_model_capacity.py | 6 次运行、9 项拒绝；逐 rank 容量、稀疏映射与完整回收保持。 |
+| service-final | check_service.py | 7 次运行、9 项拒绝及 EOF 边界通过。 |
+| dynamic-service-final | check_dynamic_service.py | 9 次运行、10 项拒绝；动态到达和共享网络保持。 |
+| service-boundaries-final | check_service_boundaries.py | 7 次运行、7 项故障检查，包括新构建的 deadlock-test 目标。 |
+| pd-handoff-final | check_pd_handoff.py | 7 次运行、11 项拒绝；KV 目标预留与事务完成保持。 |
+| pd-queue-final | check_pd_queue.py | 9 次运行、8 项拒绝；容量等待、FIFO 和第三组竞争保持。 |
+| multilayer-final | check_multilayer.py | 8 次研究运行、1 次不挂观测、10 项拒绝；逐层因果与研究输出保持。 |
+
+较早的 scenario-integration-v3 及七套无 `-final` 后缀的旧入口回归也通过。后来补充负信用值拒绝、解析子进程原始日志及执行 CSV 摘要，再以最终构建完成上述八套检查；没有删除断言或改变旧案例预期。
+
+### 执行证据
+
+| 对照 | 实际结果 |
+|---|---|
+| 参数来源与实例覆盖 | 全部属性从运行时目录出发，按 reference/scenario/joint constraint 记录来源链；默认仲裁 10 ns，实际节点 CSV 为 1 ns，读取对象证实覆盖。单节点 200 ns 仲裁、30 ns 转发及单链路 12 Gbit/s、500 ns 覆盖与实际一致；出口队列、TP/Jetty 额度及 RNG seed=7/run=3 也核对实际值。 |
+| 基准 | 224 Gbit/s、20 ns，六轮 6 次写、1152 业务字节、6 段目标提交、18 次同芯片交付，完成 103188 ns。 |
+| 网络扰动 | 全链路 1 Gbit/s 完成 118290 ns；延迟 2000 ns 完成 126948 ns。数据就绪、rank 12 依赖计算和第二轮提交均后移，业务字节与完成回调数不变。 |
+| 三种分包口径 | TA=64 时 6 次写变为 18 段；chunk=64 时变为 18 次写，发送槽 2/1 的实际 WQE 峰值分别 2/1，完成 103191/103488 ns。隐藏维度 4096 的合成模型声明独立充足预算，用 chunk=8192 执行 9 次写、73728 字节、9 段，所观测数据包有效载荷均为编译常量 4096 字节，完成 104487 ns。 |
+| 本地性与观测 | 来源开/关/不挂观测的服务与后端执行结果一致，开/关的 observed 文件逐字节一致；内部包/业务/控制字节核算通过。纯同芯片请求四轮八次交付、60720 ns，UB 写与端口发送包均为零。 |
+| 错误配置 | READ、CTP、native LD/ST、多路径/喷洒、CC、故障、重传、未知属性、TP 常量冲突、按需通道、非正资源、负信用、非法时间/速率、缓冲预算、重复键、旧目录及错误槽位均被拒绝。后端还独立拒绝 READ profile；解析后的 CSV 被改变时，在图激活前拒绝实例不一致。 |
+
+### 开发中失败与处理
+
+首次编译 L/build 在新增导出代码使用了不存在的 UbController::GetNode，改用聚合的 Node 对象后通过。L/scenario-first 的 8192 字节 chunk 超出原小模型通信缓冲预算，被既有容量检查拒绝；小样例改用原预算内的显式 1024 字节，没有改变容量公式或原参考规格。L/scenario-second 因延迟注册的出口队列不在目录而失败，随后注册其原生 TypeId。
+
+L/scenario-third/fourth 在校验固定约束时遇到临时 JSON 的 items 代理生命周期错误，错误消息又触发 Python 的 UTF-8 解码异常；改用存续的 catalog 对象遍历，并让解析子进程保存原始 stdout/stderr、退出/超时状态。fourth 在修复构建结束前启动，仍执行旧二进制；后续等待编译成功后再验收。L/scenario-fifth 的实例读取漏掉继承的 AllocationTime，改为沿 TypeId 父链读取；sixth 正常运行。失败输出均保留，没有改为固定网络时间。
+
+L/scenario-integration 与 L/scenario-integration-v2 在新增大向量测试中，分别因所声明通信缓冲不足、KV 块数超过显式主机预算被拒绝；测试模型补充 1 MiB 通信缓冲和 65536 块预算后按原公式校验，scenario-integration-v3 通过。此处调整的是新增测试输入的显式资源预算，不截断 KV、不更改检查预期；普通小样例预算未变。
+
+### 产物与停止位置
+
+`python3 R/audit.py` 对应 L/audit.json，退出 0：10062 个旧构建产物摘要未变，恢复备份的 `.lock-ns3_linux_build`，核对最终八套集成的代码摘要；服务链接 52 个 ASTRA 核心对象，实际装载十个 ns-3 库均来自 `build/m6-scenario-backend/output/lib`。`bash scripts/check_deps.sh` 对应 L/deps-final.json，退出 0，全部 13 个依赖与固定版本一致。任务生成的构建、日志、输入和备份留在忽略目录。
+
+本步补齐 M6 表中场景后端参数适配的交付范围，M6 按既定里程碑验收完成。当前配置服务仍只执行一组、一层、每 rank 同时一个请求；真实路由、MLA、目标完整模型/CANN/CM384 行为和硬件校准未在本轮完成，`unvalidated_reference` 不变。本轮整理记录后本地提交，不推送；下一项 M7 同 rank 多请求连续批处理待用户确认，尚未开始。

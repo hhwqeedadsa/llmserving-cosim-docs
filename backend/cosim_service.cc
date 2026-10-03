@@ -1,4 +1,5 @@
 #include "astra_logging.hh"
+#include "backend_config.hh"
 #include "graph_sequence.hh"
 #include "port_observation.hh"
 #include "ns3/simulator.h"
@@ -92,10 +93,24 @@ std::vector<Group> LoadGroups(const fs::path& shared)
     });
     return groups;
 }
-void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices,
+              const moe_ub::BackendConfig* backend, uint32_t node, uint32_t jetty, uint32_t task)
 {
     report->at("wqe_starts").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
+    if (backend)
+    {
+        auto live = ns3::NodeList::GetNode(node)->GetObject<ns3::UbController>()->GetUbFunction()->GetJetty(jetty);
+        Require(bool(live), "Missing live Jetty at WQE start");
+        ns3::UintegerValue inflight;
+        live->GetAttribute("UbJettyInflightMax", inflight);
+        const auto& attributes = backend->Data().at("attributes");
+        Require(live->GetTaSegmentBytes() == std::stoull(attributes.at("ns3::UbJetty::TaSegmentBytes").get<std::string>()) &&
+                inflight.Get() == std::stoull(attributes.at("ns3::UbJetty::UbJettyInflightMax").get<std::string>()),
+                "Live Jetty differs from backend configuration");
+        report->at("wqe_starts").back()["ta_segment_bytes"] = live->GetTaSegmentBytes();
+        report->at("wqe_starts").back()["jetty_inflight_max"] = inflight.Get();
+    }
     auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>() + 1;
     (*report)["active_wqes"][indices->at(node)] = active;
     (*report)["peak_wqes"][indices->at(node)] = std::max(active, report->at("peak_wqes").at(indices->at(node)).get<unsigned>());
@@ -227,6 +242,10 @@ int main(int argc, char** argv)
     std::unique_ptr<FILE, decltype(close_file)> protocol(nullptr, close_file);
     try
     {
+        if (argc == 2 && std::string(argv[1]) == "--backend-catalog")
+        { std::cout << moe_ub::BackendCatalog().dump(2) << '\n'; return 0; }
+        if (argc == 3 && std::string(argv[1]) == "--check-backend")
+        { moe_ub::BackendConfig config(ReadJson(argv[2])); std::cout << config.Data().dump(2) << '\n'; return 0; }
         Require(argc == 8, "Usage: cosim-service RUN_ID SHARED_DIR SYSTEM.json UB_CASE OBSERVATION.json|- NEW_RUN_DIR MAX_NS");
         const int fd = dup(STDOUT_FILENO);
         Require(fd >= 0 && dup2(STDERR_FILENO, STDOUT_FILENO) >= 0, "Cannot reserve protocol stdout");
@@ -258,6 +277,7 @@ int main(int argc, char** argv)
         Require(system_config.at("roofline-enabled") == 0 && system_config.at("replay-only") == 0 &&
                 system_config.at("trace-enabled") == 1, "Service requires original ASTRA execution and trace");
         const auto network = fs::absolute(argv[4]);
+        const auto backend_config = moe_ub::BackendConfig::Load(network);
         const auto run_dir = fs::absolute(argv[6]);
         const std::string bound = argv[7];
         Require(std::regex_match(bound, std::regex("[0-9]+")), "Invalid simulation bound");
@@ -301,8 +321,10 @@ int main(int argc, char** argv)
         std::ofstream("system.json") << system_config.dump(2) << '\n';
         ns3::Time::SetResolution(ns3::Time::NS);
         ns3::RngSeedManager::SetSeed(10);
+        if (backend_config) backend_config->Apply();
         auto* utils = utils::UbUtils::Get();
-        utils->SetComponentsAttribute("network/network_attribute.txt");
+        if (!backend_config) utils->SetComponentsAttribute("network/network_attribute.txt");
+        else std::ofstream("network/backend.json") << backend_config->Data().dump(2) << '\n';
         ns3::BooleanValue cc;
         ns3::GlobalValue::GetValueByName("UB_CC_ENABLED", cc);
         Require(!cc.Get(), "Service fixture requires CC disabled (no perpetual CC timers)");
@@ -333,6 +355,7 @@ int main(int argc, char** argv)
             {"active_wqes", std::vector<unsigned>(rank_count, 0)}, {"peak_wqes", std::vector<unsigned>(rank_count, 0)},
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}};
+        if (backend_config) report["backend_parameters_active"] = true;
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank : ranks)
@@ -344,11 +367,13 @@ int main(int argc, char** argv)
             report["initial_tp_counts"].push_back(controller->GetTransportCountForTest());
             auto app = ns3::CreateObject<ns3::UbApp>();
             node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank_node.at(rank));
-            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &node_index)) &&
+            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &node_index,
+                    backend_config ? &*backend_config : nullptr)) &&
                     app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &node_index)) &&
                     controller->GetUbTransaction()->TraceConnectWithoutContext("RemoteWriteCommitted",
                         ns3::MakeBoundCallback(TargetWrite, &report["target_writes"])), "Cannot attach execution traces");
         }
+        if (backend_config) backend_config->WriteEffective(controllers, apps);
         moe_ub::InitializeAstraLogging();
         {
             NetworkDrain drain;
@@ -582,6 +607,7 @@ int main(int argc, char** argv)
                             semantic.filename() == "plan.json", "Workload and semantic manifest disagree");
                     const auto directory = semantic.parent_path();
                     auto plan = moe_ub::LoadLayerPlan(directory);
+                    if (backend_config) backend_config->CheckPlan(plan.data);
                     Require(plan.data.at("graph_id") == graph && plan.data.at("wave_id") == wave &&
                             plan.data.at("input").at("graph_id") == graph &&
                             plan.data.at("input").at("wave_id") == wave &&

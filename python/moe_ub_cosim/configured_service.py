@@ -3,6 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+from copy import deepcopy
 
 from .model_capacity import audit_capacity, fields, I64
 from .plan import batch_limit, build_plan, integer, require, validate_config
@@ -10,6 +11,20 @@ from .service import Service, group_layer
 
 
 def validate_configured_inputs(config, layer):
+    operator_profile = layer.get('operator_profile')
+    if operator_profile is not None:
+        from .operator_profile import validate_profile
+        validate_profile(operator_profile, layer)
+        domain = operator_profile['domain']; model = config['model_spec']
+        require(domain['intermediate_dim'] == model['layers'][layer['layer_id']]['intermediate_size'] and
+                all(domain[k] == model['attention'][k] for k in ('num_heads', 'num_kv_heads', 'head_dim')),
+                'Operator profile differs from model structure')
+        require(domain['dtype'] == model['dtypes']['weights'],
+                'Operator profile differs from model weight dtype')
+        # Placeholder and individual route checks are not actual scheduled batches.
+        # Validate their routing independently; exact profile coverage is checked
+        # when the real selected batch is constructed.
+        layer = deepcopy(layer); layer.pop('operator_profile')
     fields(config, 'schema_version run_id mode execution model model_spec memory scheduling groups requests',
            'configured service')
     batched = config['schema_version'] == 'moe-ub-configured-service/2'
@@ -76,7 +91,9 @@ def validate_configured_inputs(config, layer):
     evidence = dict(model=audit, model_spec_sha256=digest,
                          reservation_policy='final_input_output_minus_one', requests=requirements,
                          scheduler_initialization='root_configured_scheduler_adapter',
-                         compute_source='fixed_reference', calibration_status='unvalidated_reference')
+                         compute_source=(operator_profile['basis']+'_with_reference_residual'
+                                         if operator_profile is not None else 'fixed_reference'),
+                         calibration_status='unvalidated_reference')
     return dict(batched=batched, audit_by_rank=by_rank,
                 requirements={r['request_id']: r for r in requirements}, evidence=evidence)
 
@@ -146,7 +163,7 @@ class ConfiguredService(Service):
         scheduler = self.scheduler_by_rank[rank]
         required = self.requirements[request.id]
         before = request.num_computed_tokens, request.num_tokens_reached
-        allocated = scheduler.kv.allocate_slots(request, request.output-1-request.num_computed_tokens)
+        allocated = scheduler.kv.allocate_slots(request, required['reserved_kv_tokens']-request.num_computed_tokens)
         require(allocated is not None, 'Checked final KV reservation failed')
         scheduler.add_decode(request)  # Reuses reserved blocks; does not allocate a second ledger.
         require(before == (request.num_computed_tokens, request.num_tokens_reached),
@@ -197,7 +214,7 @@ class ConfiguredService(Service):
     def make_plan(self, candidate):
         plan = super().make_plan(candidate)
         plan['input_provenance'] = dict(model_spec_sha256=self.evidence['model_spec_sha256'],
-            executed_layer_ids=self.evidence['model']['executed_layer_ids'], compute_source='fixed_reference',
+            executed_layer_ids=self.evidence['model']['executed_layer_ids'], compute_source=self.evidence['compute_source'],
             execution_scope='single_selected_moe_layer', calibration_status='unvalidated_reference')
         return plan
 
@@ -216,8 +233,11 @@ class ConfiguredService(Service):
         self.memory_events.append(dict(event='boundary', time_ns=self.current_ns, ranks=snapshot))
         if response['service_finished']:
             require(all(not r['request_blocks'] and r['kv_used_bytes'] == 0 for r in snapshot), 'KV leak at service end')
-            require(self.completed_ids == set(self.inputs), 'Service ended with unfinished request accounting')
+            self.validate_finished()
         return response
+
+    def validate_finished(self):
+        require(self.completed_ids == set(self.inputs), 'Service ended with unfinished request accounting')
 
     def result_fields(self):
         fields = dict(input_evidence='input_evidence.json', memory_events=self.memory_events,
@@ -240,4 +260,7 @@ class ConfiguredService(Service):
         if self.batched:
             result.update(batching='iteration_boundary_ready_kv_decode',
                           batch_limits=self.config['scheduling'], admission_policy='fcfs_final_kv_reservation')
+        if 'operator_profile' in self.layer:
+            result.update(compute_source=self.layer['operator_profile']['basis']+'_with_reference_residual',
+                          target_profile_available=False)
         return result

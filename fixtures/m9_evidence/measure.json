@@ -1,0 +1,160 @@
+{
+  "schema_version": "moe-ub-operator-measurement-input/1",
+  "domain": {
+    "hidden_dim": 256,
+    "intermediate_dim": 256,
+    "dtype": "float16",
+    "num_heads": 4,
+    "num_kv_heads": 2,
+    "head_dim": 64,
+    "tp": 1
+  },
+  "shapes": [
+    {
+      "operator": "attention_decode",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3,
+        3
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3,
+        6
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        4
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        4,
+        9
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        5
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        5,
+        10
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        6
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        9
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        10
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        0,
+        1
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        0,
+        4
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        0
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        1
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        2
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2,
+        1
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2,
+        2
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        4
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        4,
+        0
+      ]
+    }
+  ],
+  "seed": 21,
+  "max_tensor_bytes": 1073741824
+}

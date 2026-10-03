@@ -391,3 +391,11 @@ configured-service/3 引用 layer-segments/1，各组分别声明完整模型容
 端侧记录从每层的实际节点与本地依赖读取时间；来源信息不进入业务包。场景入口对所有层应用 chunk/发送槽配置，并要求预建通道覆盖每组成员对。通信缓冲按各层保守界求和，覆盖不同 rank 处于不同层的情形；KV 仍使用每 rank 唯一原生块池。
 
 两个三成员组、三层、七请求的真实共享网络运行及 15 项正常对照、11 项拒绝检查见[M8 样例](../fixtures/m8_composed_service/README.md)。本步限相同模型结构、相同连续 MoE 层段的就绪 KV Decode；完整容量与选定执行范围分别记录。真实路由、计算 profile 和完整目标场景未在本步完成。
+
+## M9 观察片段与算子 profile
+
+`moe-ub-evidence-service/1` 从带摘要的路由 manifest 选择每请求连续片段，复用 M8 多组层段、原生 Scheduler 和唯一 KV 池。请求真实目标未知时输出 null；片段结束经过实际完成回调后记录 OBSERVATION_ENDED 及单独的 KV 清理，不伪造 EOS、正常请求完成或完整模型 latency。service_finished 只表示声明的观察工作负载及网络排空结束。
+
+layer/3 的可选 operator_profile 使用实际上下文列表和逐专家输入向量精确查表。C++ 独立重算 domain、原始样本中位数、形状、零工作、节点时间及依赖，部署合同继续固定每层 profile；范围外输入明确拒绝。专家实测项替换旧线性项，attention 实测项与明确的准备残差相加，网络等待仍只来自本次 UB 事件。旧输入没有此字段时保留原行为。
+
+格式、功能命令、测量范围及真实数据访问缺项见 [M9 说明](../fixtures/m9_evidence/README.md)。人工路由/耗时表用于功能检查，A100 测量和目标 NPU 校准分别记录；M9 整体验收状态以 [current.md](../docs/tasks/current.md) 为准。

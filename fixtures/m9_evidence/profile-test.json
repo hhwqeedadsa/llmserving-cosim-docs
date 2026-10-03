@@ -1,0 +1,302 @@
+{
+  "schema_version": "moe-ub-operator-profile/1",
+  "basis": "synthetic_test",
+  "domain": {
+    "hidden_dim": 256,
+    "intermediate_dim": 256,
+    "dtype": "float16",
+    "num_heads": 4,
+    "num_kv_heads": 2,
+    "head_dim": 64,
+    "tp": 1
+  },
+  "rows": [
+    {
+      "operator": "attention_decode",
+      "shape": [
+        2
+      ],
+      "duration_ns": 1020,
+      "samples_ns": [
+        1019,
+        1020,
+        1021
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3
+      ],
+      "duration_ns": 1030,
+      "samples_ns": [
+        1029,
+        1030,
+        1031
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3,
+        3
+      ],
+      "duration_ns": 1060,
+      "samples_ns": [
+        1059,
+        1060,
+        1061
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        3,
+        6
+      ],
+      "duration_ns": 1090,
+      "samples_ns": [
+        1089,
+        1090,
+        1091
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        4
+      ],
+      "duration_ns": 1040,
+      "samples_ns": [
+        1039,
+        1040,
+        1041
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        4,
+        9
+      ],
+      "duration_ns": 1130,
+      "samples_ns": [
+        1129,
+        1130,
+        1131
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        5
+      ],
+      "duration_ns": 1050,
+      "samples_ns": [
+        1049,
+        1050,
+        1051
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        5,
+        10
+      ],
+      "duration_ns": 1150,
+      "samples_ns": [
+        1149,
+        1150,
+        1151
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        6
+      ],
+      "duration_ns": 1060,
+      "samples_ns": [
+        1059,
+        1060,
+        1061
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        9
+      ],
+      "duration_ns": 1090,
+      "samples_ns": [
+        1089,
+        1090,
+        1091
+      ]
+    },
+    {
+      "operator": "attention_decode",
+      "shape": [
+        10
+      ],
+      "duration_ns": 1100,
+      "samples_ns": [
+        1099,
+        1100,
+        1101
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        0,
+        1
+      ],
+      "duration_ns": 1100,
+      "samples_ns": [
+        1099,
+        1100,
+        1101
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        0,
+        4
+      ],
+      "duration_ns": 1400,
+      "samples_ns": [
+        1399,
+        1400,
+        1401
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1
+      ],
+      "duration_ns": 1100,
+      "samples_ns": [
+        1099,
+        1100,
+        1101
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        0
+      ],
+      "duration_ns": 1100,
+      "samples_ns": [
+        1099,
+        1100,
+        1101
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        1
+      ],
+      "duration_ns": 2200,
+      "samples_ns": [
+        2199,
+        2200,
+        2201
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        1,
+        2
+      ],
+      "duration_ns": 2300,
+      "samples_ns": [
+        2299,
+        2300,
+        2301
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2
+      ],
+      "duration_ns": 1200,
+      "samples_ns": [
+        1199,
+        1200,
+        1201
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2,
+        1
+      ],
+      "duration_ns": 2300,
+      "samples_ns": [
+        2299,
+        2300,
+        2301
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        2,
+        2
+      ],
+      "duration_ns": 2400,
+      "samples_ns": [
+        2399,
+        2400,
+        2401
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        4
+      ],
+      "duration_ns": 1400,
+      "samples_ns": [
+        1399,
+        1400,
+        1401
+      ]
+    },
+    {
+      "operator": "expert_ffn",
+      "shape": [
+        4,
+        0
+      ],
+      "duration_ns": 1400,
+      "samples_ns": [
+        1399,
+        1400,
+        1401
+      ]
+    }
+  ],
+  "device": {
+    "name": "functional-test"
+  },
+  "software": {
+    "name": "synthetic"
+  },
+  "measurement": {
+    "implementation": "torch_eager_serial_gated_ffn_and_sdpa_v1",
+    "statistic": "ceil_median_ns",
+    "out_of_domain": "reject"
+  }
+}

@@ -143,13 +143,16 @@ class Service:
         for source in sorted(config['requests'], key=lambda r: (r['arrival_ns'], r['rank_id'], r['request_id'])):
             reached = source['prompt_tokens'] + source['generated_tokens']
             request = Request(source['request_id'], config['model'], source['prompt_tokens'],
-                reached + len(source['decode_routes']), source['arrival_ns'], source['rank_id'], is_init=False)
+                self.request_target(source), source['arrival_ns'], source['rank_id'], is_init=False)
             request.num_tokens_reached = reached
             request.num_computed_tokens = reached - 1
             request.recent_end = source['arrival_ns']  # Ready-KV observation starts at arrival.
             self.requests.append(request)
         self.future = list(self.requests)
         self.initial = self.snapshot()
+
+    def request_target(self, source):
+        return source['prompt_tokens'] + source['generated_tokens'] + len(source['decode_routes'])
 
     def validate_inputs(self, config, layer):
         validate_service(config, layer)
@@ -277,11 +280,15 @@ def run(args):
     queued = config.get('schema_version') == 'moe-ub-pd-queue-fixture/1'
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
-    composed = config.get('schema_version') == 'moe-ub-configured-service/3'
+    evidence = config.get('schema_version') == 'moe-ub-evidence-service/1'
+    composed = evidence or config.get('schema_version') == 'moe-ub-configured-service/3'
     configured = composed or config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
     require(layer.get('schema_version') not in ('moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3') or configured,
             'Physical deployment currently requires the configured service entry')
-    if composed:
+    if evidence:
+        from .evidence_service import EvidenceService
+        service = EvidenceService(config, layer)
+    elif composed:
         from .composed_service import ComposedService
         service = ComposedService(config, layer)
     elif configured:

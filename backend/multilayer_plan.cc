@@ -15,7 +15,7 @@ void Require(bool condition, const std::string& message)
 Json Common(Json input, bool batched)
 {
     for (const auto* key : {"layer_id", "tokens", "compute_profile_ns", "schema_version"}) input.erase(key);
-    if (batched) { input.erase("expert_placement"); input.erase("top_k"); }
+    if (batched) { input.erase("expert_placement"); input.erase("top_k"); input.erase("operator_profile"); }
     return input;
 }
 Json TokenKeys(const Json& layer)
@@ -43,7 +43,7 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
     expected["operations"] = Json::array(); expected["transfers"] = Json::array();
     expected["rank_graphs"] = Json::array(); expected["expert_input_counts"] = Json::array();
     expected.erase("input_provenance");
-    if (batched) { expected.erase("compute_inputs"); expected.erase("contributions"); }
+    if (batched) { expected.erase("compute_inputs"); expected.erase("contributions"); expected.erase("compute_evaluation"); }
     std::map<int, std::vector<uint64_t>> previous;
     for (const int rank : first.at("rank_ids"))
     {

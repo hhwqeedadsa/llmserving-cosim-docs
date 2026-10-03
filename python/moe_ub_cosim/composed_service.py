@@ -95,7 +95,9 @@ class ComposedService(ConfiguredService):
                     normalized['requests'].extend(local_requests)
             # Validate full composition, including placeholder Token continuity,
             # before creating schedulers or starting any backend process.
-            build_multilayer(layers,RunIdentities(),[[] for _ in layers])
+            routing_layers=deepcopy(layers)
+            for layer in routing_layers:layer.pop('operator_profile',None)
+            build_multilayer(routing_layers,RunIdentities(),[[] for _ in layers])
             signature=model_structure(group['model_spec'])
             require(structure is None or structure==signature, 'Heterogeneous model structures are not implemented')
             structure=signature
@@ -119,6 +121,11 @@ class ComposedService(ConfiguredService):
                 unexecuted_layer_ids=[l['layer_id'] for l in group['model_spec']['layers'] if l['layer_id'] not in layer_ids],
                 communication_buffer_minimum_bytes=sum(bounds),layer_communication_buffer_bounds=bounds)
             self.evidence['groups'][name]=first_state['evidence']
+            profiled_layers=[l['layer_id'] for l in layers if 'operator_profile' in l]
+            if profiled_layers:
+                self.evidence['groups'][name].update(compute_source='operator_profiles_with_reference_residual',
+                                                    profiled_layer_ids=profiled_layers)
+                self.evidence['compute_source']='operator_profiles_with_reference_residual'
             self.audit_by_rank.update(first_state['audit_by_rank'])
             self.requirements.update(first_state['requirements'])
             for rank in group_ranks:self.policies[rank]=deepcopy(group)
@@ -160,6 +167,9 @@ class ComposedService(ConfiguredService):
             route_records=[record for records in provenance for record in records],
             execution_scope='consecutive_moe_layer_segment',compute_source='fixed_reference',
             calibration_status='unvalidated_reference')
+        if any('operator_profile' in c for c in configs):
+            plan['input_provenance']['compute_source']='operator_profiles_with_reference_residual'
+            plan['compute_source']='operator_profiles_with_reference_residual'
         self.consumed.update(consumed)
         return plan
 
@@ -181,7 +191,9 @@ class ComposedService(ConfiguredService):
                     route_records_expected=len(self.expected_routes))
 
     def manifest_fields(self):
-        return dict(compute_scope='consecutive_moe_layer_segment',compute_source='fixed_reference',
+        return dict(compute_scope='consecutive_moe_layer_segment',compute_source=(
+            'operator_profiles_with_reference_residual' if any('operator_profile' in l for ls in self.templates.values() for l in ls)
+            else 'fixed_reference'),
             groups={name:dict(executed_layer_ids=e['model']['executed_layer_ids'],model_spec_sha256=e['model_spec_sha256'])
                     for name,e in self.evidence['groups'].items()},
             latency_scope='layer_segment_iterations_not_full_model_ITL_or_TTFT',

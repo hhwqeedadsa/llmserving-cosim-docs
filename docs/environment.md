@@ -2523,3 +2523,81 @@ L/pd_handoff-final、L/pd_queue-final、L/research_export-final 的回归发现�
 `python3 R/audit.py` 对应 L/audit.json，退出 0：11035 个旧构建产物摘要未变，恢复已备份的 `.lock-ns3_linux_build`，最终测试的代码摘要一致。链接审计确认 52 个 ASTRA 核心对象全部进入服务，实际装载的十个 ns-3 库均来自 build/m8-composed-service/output/lib，没有编入其他后端。`bash scripts/check_deps.sh` 的 L/deps-initial.json、L/deps-final.json 均退出 0，13 个固定依赖一致且源码未变。
 
 M8 在已声明的连续 MoE 层段范围内完成。完整模型容量包含未执行 dense 层，输出明确区分完整容量和局部执行；真实路由、计算 profile、MLA、多层 P/D、完整 CM384/R1/CANN 行为及目标硬件校准未在本轮完成。路由仍为合成、计算仍为参考，`unvalidated_reference` 不变。本轮整理记录后本地提交，不推送；停在 M8，下一项 M9 等待用户确认。
+
+## 2026-10-03：M9 路由片段与计算依据（真实数据访问受阻）
+
+工作目录 `/root/moe-ub-cosim`，M8 基线 `25c252b`，M9 任务说明 `10e0286`。下文 R 为 `runs/v03-route-compute-evidence`，L 为 `R/logs`；记录器保存实际 argv、cwd、开始/结束时间、退出状态和 stdout/stderr，既有日志与失败目录保留。源码仅改主仓库，固定子模块只读。
+
+### 数据访问与导入边界
+
+候选是公开可见的 [core12345/MoE_expert_selection_trace](https://huggingface.co/datasets/core12345/MoE_expert_selection_trace)。2026-10-03 对文件目录的匿名 HTTP 请求为 200；对 `cognitivecomputations/DeepSeek-R1-AWQ/mmlu/abstract_algebra/0.json` 的匿名 resolve GET 返回 401，响应要求获准访问并登录。目录报告文件大小 1922982 字节，但未取得原文件内容。命令 `python3 R/probe_dataset_access.py` 对应 L/dataset-access.json，探测正常退出 0，HTTP 结果及时间另存 R/dataset-access.json；退出 0 表示完成探测，不表示下载成功。
+
+公开页面、文件列表与可匿名下载不是同一权限。HF 的 [gated 数据集说明](https://huggingface.co/docs/hub/datasets-gated) 要求账户获准及认证，hf CLI 也受此约束。本轮未申请访问、接受账户条件、下载模型或整个数据集，没有存储令牌。需要已获准账户的本机登录或合法取得的本地文件后，才能固定原文件修订、摘要、实际布局及选择清单。发布方未披露的采集环境继续记未知。
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.route_evidence --manifest fixtures/m9_evidence/manifest.json --output-dir R/import-functional-routes` 对应 L/import-functional-routes.json，退出 0。七份人工文件共导出 39 条 decode 层记录，服务显式选择其中 36 条。CLI 验证的是本项目 token_layer_map_v1 合同，尚未证明发布方原文件符合该格式；不能把人工输入标为真实模型路由。原始数组入口 0 为 prefill、入口 1 起为 decode 的候选解释仍需原文件核验。
+
+### 构建与非 GPU 检查
+
+配置入口为 `cmake -S third_party/ns-3-ub -B build/m9-route-compute-evidence -G Ninja`，release、根仓库 backend/inject.cmake，输出指向本次 build 下 output。其余开关与 M8 同一联合构建边界，完整实际 argv 保存在 L/configure.json，退出 0。`cmake --build build/m9-route-compute-evidence --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test -j 8` 对应 L/build.json，退出 0。
+
+`env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m unittest discover -s tests/unit -p '*test.py'` 对应 L/python-final.json，退出 0，89 项通过。新增 12 项覆盖观察终点、真实/未知目标、窗口 KV、来源摘要/索引、非法专家、精确形状及统计量、模型维度和节点耗时篡改。给定完成时间的单元测试不替代实际网络执行。
+
+回归统一执行 `env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_NAME.py --build-dir build/m9-route-compute-evidence --output-dir R/NAME-final`。以下 16 个 NAME 全部退出 0，各自 summary.json、commands.json 及 L/NAME-final.json 保留输入、子命令及拒绝对照：composed_service、continuous_batching、scenario_backend、service_model_capacity、deployment_locality、execution_parameters、sequence、service、dynamic_service、service_boundaries、pd_handoff、pd_queue、multilayer、research_export、shared_bottleneck、data_inputs。外层 `python3 R/verify.py` 的 L/regressions-final.json 退出 0。
+
+`check_evidence_service.py` 的 evidence-distributions-v2 检查退出 0，十次片段服务和两次专家分布执行、八项预期拒绝通过；最终带 GPU 表的检查另记下节。基准仍为两组三层、七请求、12 次 Token 推进、36 条来源记录、124 次真实写和 31744 业务字节。原参考耗时为 39951 ns，人工表为 63256 ns；七请求都只结束观察，正常完成数为零。将请求 201 的真实目标设为 100 后仍只观察至 6；请求 202 真实目标设为 7 时只有它正常完成。KV 缩减、Token 预算、短窗口、场景 YAML 及来源开/关/不挂观测均通过。
+
+将瓶颈从 10 降至 1 Gbit/s，人工表运行结束变为 356759 ns，两组的后续提交推迟；实际队列、原生 PortTrace、数据就绪与事务完成分别核对。来源记录开关不改变协议及执行结果。四份专家输入按 `[4,0]` 或 `[2,2]` 分布时，通信对端、6144 业务字节不变，真实 ASTRA 节点分别执行人工表的 1400/2400 ns。摘要、越界窗口、过短目标、错误 profile 摘要在前端拒绝；节点耗时、求值结果、统计量及缺形状在后端 0 ns 且无业务传输时拒绝。
+
+### 开发中失败
+
+L/window-unit.json 的首轮检查错误地把“文件内容相同”等同于“重复源请求”。不同请求可以选择完全相同的专家，现按规范核对实际路径、原始文件身份及每文件单次分配，继续拒绝同一源请求被重复使用；window-unit-v2 及最终检查通过。
+
+L/profile-unit.json 暴露测试输入缺少 `[3,3]` 上下文和 `[4]` 专家形状。将这些形状明确加入人工表及待测输入，没有开启线性外推或回退。profile-unit-v2 及最终检查通过。
+
+L/evidence-distributions.json 的新增固定图对照误读取仅服务结果才有的 normal_exit。改为检查固定图现有的三个 rank 完成、无剩余节点、空计算/发送资源及实际传输，evidence-distributions-v2 通过；保留逐节点时间、等总量不同分布及等通信量断言。
+
+### A100 实测与最终联合执行
+
+六张 A100 初查均空闲；实际测量使用 GPU 0 NVIDIA A100 80GB PCIe、compute capability 8.0、驱动 610.43.02。L/gpu-before.json、L/gpu-after.json 的 nvidia-smi 查询均退出 0，前后 GPU 0 都为 4 MiB、0% 利用率。没有修改驱动、频率、电源策略或全局环境。
+
+系统与原仿真 venv 无 torch。本次 `python3 -m venv --system-site-packages .venv/m9-profile`（L/profile-venv.json）及以下隔离安装（L/install-profile-torch.json）退出 0：
+
+```bash
+.venv/m9-profile/bin/python -m pip install --disable-pip-version-check --no-input \
+  --index-url https://download.pytorch.org/whl/cu126 torch==2.8.0 \
+  --report runs/v03-route-compute-evidence/profile-install.json
+```
+
+采用 [PyTorch 官方版本安装说明](https://pytorch.org/get-started/previous-versions/) 的 2.8.0/cu126 组合。实际 torch 为 2.8.0+cu126、CUDA runtime 12.6、Python 3.12.3；安装报告固定本次所有分发版本与下载摘要，`pip freeze --local` 的 L/profile-freeze.json 退出 0。既有仿真 venv 未改，未安装系统包、下载模型或接受受限数据条件。
+
+```bash
+PYTHONPATH=python .venv/m9-profile/bin/python scripts/measure_operators.py \
+  --input fixtures/m9_evidence/measure.json \
+  --output runs/v03-route-compute-evidence/a100-profile.json --device 0
+
+PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_evidence_service.py \
+  --build-dir build/m9-route-compute-evidence \
+  --output-dir runs/v03-route-compute-evidence/evidence-final \
+  --measured-profile runs/v03-route-compute-evidence/a100-profile.json
+```
+
+两条命令对应 L/measure-a100.json、L/evidence-final.json，均退出 0。profile 的 SHA-256 为 `6416aa09e0e677134ef6facfd46dbeabc026e3eff70201ec2be9e98f5de50ffb`；原始 22×11 个样本、seed 21、预热 20 次、每样本内部重复 10 次及脚本/输入摘要完整保留。测量张量的 H/F 为 256，Q/KV heads 为 4/2，head_dim 为 64，dtype 为 float16，TP=1。权重、计算与 KV 精度不符均拒绝。实际计时包含 CUDA 执行及 eager 发射间隙，不包含分配/初始化、通信等待、量化或分布式同步。
+
+最终 M9 共 15 次正常执行、8 项预期拒绝通过；11 次为服务（包括 A100 表），4 次为相同总输入的专家分布对照。A100 服务显式使用 10000000 ns 仿真上限和观测结束时间，实际于 3608806 ns 结束，124 次写、31744 业务字节、36 条逐层路由均守恒。七请求均为观察结束而非正常完成；每个实际计算节点与所选原始表行一致，范围外推次数零。
+
+| A100 算子与形状 | 本次 ceil-median ns | 验证范围 |
+|---|---:|---|
+| attention_decode `[3]` | 151348 | 单请求 GQA SDPA MATH，含发射间隙。 |
+| attention_decode `[3,3]` | 295936 | 两请求串行；不是生产批量 attention。 |
+| expert_ffn `[4,0]` | 52327 | 一个非空专家、四份输入；实际图节点时长相同。 |
+| expert_ffn `[2,2]` | 102196 | 两专家串行、各两份输入；实际图节点时长相同。 |
+
+后两项对应实际通信均为 6144 字节，区别来自专家分布的算子执行方式。结果不能推广为“热点必然更慢”，也不是完整模型或目标 NPU 校准。其余准备残差、局部合并及同 chip 处理继续明确使用参考值，通信等待仍由本次 UB 完成事件产生。
+
+### 最终审计与停止位置
+
+`python3 R/audit.py` 的 L/audit.json 退出 0：11538 个旧产物摘要不变，原生 `.lock-ns3_linux_build` 已从本次备份恢复；89 项 Python 测试、17 套集成检查（M9 加 16 套回归）的最终源码摘要一致。52 个 ASTRA 核心对象全部进入服务，实际装载的十个 ns-3 库只来自 build/m9-route-compute-evidence/output/lib，没有编入其他后端。实测 profile 的输入/脚本摘要、22 行及原始重复样本再次核对通过。
+
+`bash scripts/check_deps.sh` 的 L/deps-initial.json、L/deps-final.json 均退出 0，13 个依赖的固定版本及源码状态一致。未修改子模块源码、gitlink 或锁文件。
+
+M9 已验证的代码、人工输入和测量方法保存本地；外部文件、安装报告及实测原始结果保留在忽略目录。真实专家原文件尚未取得，M9 不标记整体完成；恢复时先取得合法数据访问或本地原文件，固定版本并核验实际结构与逐记录索引，再补真实来源验收。不自动开始 M10，不推送。

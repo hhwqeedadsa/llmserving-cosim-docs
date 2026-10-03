@@ -21,10 +21,11 @@ def batch_limit(config):
 
 
 def compute_inputs(config):
-    """Shapes passed to the explicitly selected linear reference calculation."""
+    """Actual shapes passed to the selected reference or operator profile."""
     experts = Counter(e for token in config['tokens'] for e in token['expert_ids'])
-    return dict(basis='linear_reference_per_token_and_expert_input',
-        context_sensitive=False, expert_distribution_sensitive=False,
+    profiled = 'operator_profile' in config
+    return dict(basis='exact_operator_profile_with_reference_residual' if profiled else 'linear_reference_per_token_and_expert_input',
+        context_sensitive=profiled, expert_distribution_sensitive=profiled,
         hidden_dim=config['hidden_dim'], dtypes=deepcopy(config['compute_dtypes']),
         ranks=[dict(rank_id=r,
             requests=[dict(request_id=t['request_id'], token_index=t['token_index'],
@@ -55,7 +56,8 @@ def validate_config(c):
     batched = c.get('schema_version') == 'moe-ub-layer-fixture/3'
     physical = c.get('schema_version') == 'moe-ub-layer-fixture/2' or (batched and 'deployment' in c)
     require(set(c) == expected | ({'deployment'} if physical else set()) |
-            ({'batch_limits', 'compute_dtypes'} if batched else set()) and
+            ({'batch_limits', 'compute_dtypes'} if batched else set()) |
+            ({'operator_profile'} if batched and 'operator_profile' in c else set()) and
             c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),
             'Unsupported fixture schema/fields')
     if batched:
@@ -133,11 +135,15 @@ def validate_config(c):
         require(all(n <= limit for n in local_counts.values()), 'Batch exceeds rank sequence/token budget')
         require(len({t['request_id'] for t in tokens}) == len(tokens), 'Decode request appears more than once in this layer iteration')
     expert_counts = Counter(placement[e] for token in tokens for e in token['expert_ids'])
+    from .operator_profile import durations
+    measured = durations(c)
     for rank in c['rank_ids']:
         duration = (local_counts[rank] * sum(profile[k] for k in
                     ('attention_route_pack', 'combine_unpack_merge', 'next_layer')) +
                     expert_counts[rank] * profile['expert_per_input'] +
                     bool(expert_counts[rank]) * profile['expert_local_merge'])
+        if measured:
+            duration += measured[rank]['attention_decode']['duration_ns'] + measured[rank]['expert_ffn']['duration_ns'] - expert_counts[rank]*profile['expert_per_input']
         if physical:
             for kind in ('dispatch', 'combine'):
                 count = sum(e['locality'] == 'same_chip' and e['src_rank' if kind == 'dispatch' else 'dst_rank'] == rank
@@ -149,6 +155,8 @@ def validate_config(c):
 def build_plan(config, identities=None, *, _validate=True):
     validate_config(config)
     c = deepcopy(config)
+    from .operator_profile import durations
+    measured = durations(c)
     operations = [dict(operation_id=f"{c['wave_id']}.L{c['layer_id']}.{kind}", kind=kind,
                        service_id=c['service_id'], role=c['role'], wave_id=c['wave_id'],
                        layer_id=c['layer_id'], group_id=c['group_id'], participants=c['rank_ids'])
@@ -230,10 +238,15 @@ def build_plan(config, identities=None, *, _validate=True):
             return ids
         profile = c['compute_profile_ns']
         local_tokens = sum(t['src_rank'] == rank for t in c['tokens'])
-        prepare = comp('attention-route-pack', local_tokens * profile['attention_route_pack'], [])
+        prepare_ns = local_tokens * profile['attention_route_pack']
+        expert_ns = len(expert_inputs[rank]) * profile['expert_per_input']
+        if measured:
+            prepare_ns += measured[rank]['attention_decode']['duration_ns']
+            expert_ns = measured[rank]['expert_ffn']['duration_ns']
+        prepare = comp('attention-route-pack', prepare_ns, [])
         prepared = [prepare] if prepare is not None else []
         dispatch = communication('dispatch', prepared)
-        expert = comp('expert-compute', len(expert_inputs[rank]) * profile['expert_per_input'],
+        expert = comp('expert-compute', expert_ns,
                       prepared + dispatch, expert_inputs[rank])
         computed = [expert] if expert is not None else prepared + dispatch
         local_merge = comp('expert-local-merge', bool(expert_inputs[rank]) * profile['expert_local_merge'], computed)
@@ -262,6 +275,10 @@ def build_plan(config, identities=None, *, _validate=True):
     if c['schema_version'] == 'moe-ub-layer-fixture/3':
         plan['batch_limits'] = deepcopy(c['batch_limits'])
         plan['compute_inputs'] = compute_inputs(c)
+    if measured:
+        from .operator_profile import evaluate
+        plan['compute_evaluation'] = evaluate(c)
+        plan['compute_source'] = c['operator_profile']['basis']+'_with_reference_residual'
     if identities is not None:
         identities.assign(plan)
     if _validate:
@@ -290,6 +307,10 @@ def validate_plan(plan):
     if batched:
         require(plan['batch_limits'] == plan['input']['batch_limits'] and
                 plan['compute_inputs'] == compute_inputs(plan['input']), 'Batch limits or compute inputs mismatch')
+    require(('compute_evaluation' in plan) == ('operator_profile' in plan['input']), 'Profile evaluation missing or unexpected')
+    if 'operator_profile' in plan['input']:
+        from .operator_profile import evaluate
+        require(plan['compute_evaluation'] == evaluate(plan['input']), 'Operator profile evaluation mismatch')
     require(plan['send_slots_per_rank'] == plan['input']['send_slots_per_rank'], 'Send slot configuration mismatch')
     operations = {op['operation_id']: op for op in plan['operations']}
     require(len(operations) == len(plan['operations']) == 2, 'Duplicate or missing operation')

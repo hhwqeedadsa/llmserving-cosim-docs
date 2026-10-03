@@ -1,0 +1,115 @@
+{
+  "schema_version": "moe-ub-route-manifest/1",
+  "source": {
+    "kind": "synthetic_test",
+    "dataset_id": "repo/m9-functional-routes",
+    "dataset_revision": "fixture-v1",
+    "collector_model_id": "synthetic/gqa-segment-256",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "float16",
+    "usage_terms": "repo-owned synthetic functional input",
+    "source_url": "fixtures/m9_evidence/routes",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision"
+    ]
+  },
+  "model": {
+    "name": "synthetic/gqa-segment-256",
+    "hidden_dim": 256,
+    "num_layers": 4,
+    "routing_precision": "float16"
+  },
+  "layers": [
+    {
+      "layer_id": 0,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 1,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    },
+    {
+      "layer_id": 2,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    },
+    {
+      "layer_id": 3,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    }
+  ],
+  "files": [
+    {
+      "file_id": "201",
+      "original_path": "synthetic/201.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/201.json",
+        "sha256": "c30522d047830a4da604e358678afa32fb50caa6182b3fedea938248307a151a"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "202",
+      "original_path": "synthetic/202.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/202.json",
+        "sha256": "36b39a9ab3a5a2d723168b0d6c038c20dbd62b88c273c20f00649c27031c39e9"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "203",
+      "original_path": "synthetic/203.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/203.json",
+        "sha256": "fa62c826deca802b34cd9aeedb72e6cd274bbb7b3b9ee003a4773bb403d12630"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "204",
+      "original_path": "synthetic/204.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/204.json",
+        "sha256": "559e800ce46a5d8024ebaf1564bfaecf24f657eb6720c7b3e0753d8effefac80"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "401",
+      "original_path": "synthetic/401.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/401.json",
+        "sha256": "cf9d28b7890feb4016a20176b6dd58b1abf090cd716ed06344d6a3187673d8f2"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "402",
+      "original_path": "synthetic/402.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/402.json",
+        "sha256": "36b39a9ab3a5a2d723168b0d6c038c20dbd62b88c273c20f00649c27031c39e9"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "404",
+      "original_path": "synthetic/404.json",
+      "file": {
+        "path": "fixtures/m9_evidence/routes/404.json",
+        "sha256": "16145c2731ce46ced0b38be11e286955933cf8a6fa51d18be27f5c94c30c3fc2"
+      },
+      "format": "token_layer_map_v1"
+    }
+  ]
+}

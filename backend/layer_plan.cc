@@ -1,4 +1,5 @@
 #include "layer_plan.hh"
+#include "operator_profile.hh"
 #include "et_def.pb.h"
 
 #include <fstream>
@@ -283,9 +284,19 @@ LayerPlan ValidateLayerPlan(const Json& p)
                 if (placement[e] == rank) experts.push_back({{"expert_id",e}, {"input_tokens",per_expert[e]}});
             shapes.push_back({{"rank_id",rank}, {"requests",requests}, {"batch_size",requests.size()}, {"expert_inputs",experts}});
         }
-        const Json expected = {{"basis","linear_reference_per_token_and_expert_input"}, {"context_sensitive",false},
-            {"expert_distribution_sensitive",false}, {"hidden_dim",hidden}, {"dtypes",dtypes}, {"ranks",shapes}};
+        const bool profiled = input.contains("operator_profile");
+        const Json expected = {{"basis",profiled ? "exact_operator_profile_with_reference_residual" : "linear_reference_per_token_and_expert_input"},
+            {"context_sensitive",profiled}, {"expert_distribution_sensitive",profiled},
+            {"hidden_dim",hidden}, {"dtypes",dtypes}, {"ranks",shapes}};
         Require(p.at("compute_inputs") == expected, "batch compute shapes differ from Tokens/experts");
+    }
+    Require(input.contains("operator_profile") == p.contains("compute_evaluation"), "profile evaluation missing or unexpected");
+    std::map<int, Json> measured;
+    if (input.contains("operator_profile"))
+    {
+        const auto evaluation = EvaluateOperatorProfile(input);
+        Require(evaluation == p.at("compute_evaluation"), "operator profile evaluation mismatch");
+        for (const auto& row : evaluation.at("ranks")) measured[row.at("rank_id").get<int>()] = row.at("operators");
     }
     Require(slots > 0 && p.at("send_slots_per_rank") == input.at("send_slots_per_rank"), "send slot configuration mismatch");
     const auto chunk_bytes = Number(input.at("chunk_bytes"), "chunk_bytes", UINT32_MAX);
@@ -306,7 +317,19 @@ LayerPlan ValidateLayerPlan(const Json& p)
                 name == "expert_local_merge" ? uint64_t(expert_inputs[rank] != 0) : local_tokens[rank];
             Require(!count || duration <= (uint64_t(INT64_MAX) - ready - total) / count,
                     "rank computation duration overflow");
-            total += count * duration;
+            uint64_t work = count * duration;
+            if (!measured.empty())
+            {
+                if (name == "expert_per_input") work = measured.at(rank).at("expert_ffn").at("duration_ns");
+                if (name == "attention_route_pack")
+                {
+                    const uint64_t attention = measured.at(rank).at("attention_decode").at("duration_ns");
+                    Require(attention <= uint64_t(INT64_MAX)-ready-total-work, "profile duration overflow");
+                    work += attention;
+                }
+            }
+            Require(work <= uint64_t(INT64_MAX)-ready-total, "profile total overflow");
+            total += work;
         }
         if (physical)
             for (const std::string kind : {"dispatch", "combine"})
@@ -479,14 +502,20 @@ LayerPlan ValidateLayerPlan(const Json& p)
             const auto duration = Number(input.at("compute_profile_ns").at(profile), "compute profile", INT64_MAX);
             Require((duration > 0 || std::string(field) == "next_layer") &&
                     (!count || duration <= uint64_t(INT64_MAX) / count), "invalid compute profile");
-            if (!count || !duration)
+            uint64_t work = count * duration;
+            if (!measured.empty())
+            {
+                if (std::string(field) == "expert") work = measured.at(rank).at("expert_ffn").at("duration_ns");
+                if (std::string(field) == "prepare") work += measured.at(rank).at("attention_decode").at("duration_ns").get<uint64_t>();
+            }
+            if (!work)
             {
                 Require(phase.at(field).is_null(), "absent work must not have a compute node");
                 return deps;
             }
             const auto id = Number(phase.at(field), "phase node");
             Require(local.contains(id) && local.at(id).at("kind") == "COMP" && phase_ids.insert(id).second &&
-                    local.at(id).at("duration_ns") == duration * count && Ids(local.at(id).at("deps")) == deps,
+                    local.at(id).at("duration_ns") == work && Ids(local.at(id).at("deps")) == deps,
                     "compute phase work/duration/dependency mismatch");
             return {id};
         };

@@ -1,0 +1,357 @@
+{
+  "schema_version": "moe-ub-evidence-service/1",
+  "run_id": "m9-evidence",
+  "service": {
+    "schema_version": "moe-ub-configured-service/3",
+    "run_id": "m9-evidence",
+    "mode": "fixture",
+    "execution": {
+      "entry_mode": "service"
+    },
+    "model": "synthetic/gqa-segment-256",
+    "groups": [
+      {
+        "group_id": "ep0",
+        "model_spec": {
+          "schema_version": "moe-ub-model/1",
+          "name": "synthetic/gqa-segment-256",
+          "architecture": "bias_free_gqa_rmsnorm_gated_ffn",
+          "source": {
+            "kind": "synthetic",
+            "description": "Four-layer GQA inventory; execute three consecutive MoE layers only"
+          },
+          "hidden_size": 256,
+          "vocab_size": 512,
+          "max_position_embeddings": 128,
+          "tp": 1,
+          "pp": 1,
+          "attention": {
+            "num_heads": 4,
+            "num_kv_heads": 2,
+            "head_dim": 64
+          },
+          "dtypes": {
+            "weights": "float16",
+            "compute": "float16",
+            "kv": "float16",
+            "dispatch": "float16",
+            "combine": "float16"
+          },
+          "tie_word_embeddings": true,
+          "layers": [
+            {
+              "layer_id": 0,
+              "kind": "dense",
+              "intermediate_size": 512
+            },
+            {
+              "layer_id": 1,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                2,
+                7,
+                12,
+                12
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            },
+            {
+              "layer_id": 2,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                12,
+                2,
+                7,
+                12
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            },
+            {
+              "layer_id": 3,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                7,
+                12,
+                2,
+                12
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            }
+          ]
+        },
+        "memory": {
+          "capacity_scope": "rank_endpoint",
+          "block_size": 4,
+          "max_kv_blocks_per_rank": 1024,
+          "ranks": [
+            {
+              "rank_id": 2,
+              "device_bytes": 3906048,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            },
+            {
+              "rank_id": 7,
+              "device_bytes": 3881472,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            },
+            {
+              "rank_id": 12,
+              "device_bytes": 5061120,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            }
+          ]
+        },
+        "scheduling": {
+          "max_num_seqs": 2,
+          "max_num_batched_tokens": 2
+        }
+      },
+      {
+        "group_id": "ep1",
+        "model_spec": {
+          "schema_version": "moe-ub-model/1",
+          "name": "synthetic/gqa-segment-256",
+          "architecture": "bias_free_gqa_rmsnorm_gated_ffn",
+          "source": {
+            "kind": "synthetic",
+            "description": "Four-layer GQA inventory; execute three consecutive MoE layers only"
+          },
+          "hidden_size": 256,
+          "vocab_size": 512,
+          "max_position_embeddings": 128,
+          "tp": 1,
+          "pp": 1,
+          "attention": {
+            "num_heads": 4,
+            "num_kv_heads": 2,
+            "head_dim": 64
+          },
+          "dtypes": {
+            "weights": "float16",
+            "compute": "float16",
+            "kv": "float16",
+            "dispatch": "float16",
+            "combine": "float16"
+          },
+          "tie_word_embeddings": true,
+          "layers": [
+            {
+              "layer_id": 0,
+              "kind": "dense",
+              "intermediate_size": 512
+            },
+            {
+              "layer_id": 1,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                20,
+                25,
+                30,
+                30
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            },
+            {
+              "layer_id": 2,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                30,
+                20,
+                25,
+                30
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            },
+            {
+              "layer_id": 3,
+              "kind": "moe",
+              "intermediate_size": 256,
+              "num_experts": 4,
+              "top_k": 2,
+              "expert_placement": [
+                25,
+                30,
+                20,
+                30
+              ],
+              "shared_experts": 0,
+              "shared_intermediate_size": 0
+            }
+          ]
+        },
+        "memory": {
+          "capacity_scope": "rank_endpoint",
+          "block_size": 4,
+          "max_kv_blocks_per_rank": 1024,
+          "ranks": [
+            {
+              "rank_id": 20,
+              "device_bytes": 3906048,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            },
+            {
+              "rank_id": 25,
+              "device_bytes": 3881472,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            },
+            {
+              "rank_id": 30,
+              "device_bytes": 5061120,
+              "workspace_bytes": 4096,
+              "communication_buffer_bytes": 49152
+            }
+          ]
+        },
+        "scheduling": {
+          "max_num_seqs": 2,
+          "max_num_batched_tokens": 2
+        }
+      }
+    ],
+    "requests": []
+  },
+  "route_manifest": {
+    "path": "fixtures/m9_evidence/manifest.json",
+    "sha256": "4226303644b03ea747490013c424995ee8af655c086cf4485a5be5896764aec3"
+  },
+  "requests": [
+    {
+      "request_id": 201,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "file_id": "201",
+      "first_decode_entry": 1,
+      "decode_steps": 3,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 202,
+      "rank_id": 2,
+      "arrival_ns": 0,
+      "file_id": "202",
+      "first_decode_entry": 1,
+      "decode_steps": 1,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 203,
+      "rank_id": 2,
+      "arrival_ns": 1000,
+      "file_id": "203",
+      "first_decode_entry": 2,
+      "decode_steps": 2,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 204,
+      "rank_id": 7,
+      "arrival_ns": 0,
+      "file_id": "204",
+      "first_decode_entry": 1,
+      "decode_steps": 2,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 401,
+      "rank_id": 20,
+      "arrival_ns": 600,
+      "file_id": "401",
+      "first_decode_entry": 1,
+      "decode_steps": 2,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 402,
+      "rank_id": 20,
+      "arrival_ns": 600,
+      "file_id": "402",
+      "first_decode_entry": 1,
+      "decode_steps": 1,
+      "target_total_tokens": null
+    },
+    {
+      "request_id": 404,
+      "rank_id": 25,
+      "arrival_ns": 600,
+      "file_id": "404",
+      "first_decode_entry": 1,
+      "decode_steps": 1,
+      "target_total_tokens": null
+    }
+  ],
+  "compute_profiles": [
+    {
+      "group_id": "ep0",
+      "layer_id": 1,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    },
+    {
+      "group_id": "ep0",
+      "layer_id": 2,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    },
+    {
+      "group_id": "ep0",
+      "layer_id": 3,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    },
+    {
+      "group_id": "ep1",
+      "layer_id": 1,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    },
+    {
+      "group_id": "ep1",
+      "layer_id": 2,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    },
+    {
+      "group_id": "ep1",
+      "layer_id": 3,
+      "file": {
+        "path": "fixtures/m9_evidence/profile-test.json",
+        "sha256": "b95dd8e15472ce87d09bfa4ba500cb6b57928d22e7bb1ecfcbad620e55f8d882"
+      }
+    }
+  ]
+}

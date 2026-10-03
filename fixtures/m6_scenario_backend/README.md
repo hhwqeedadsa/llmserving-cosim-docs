@@ -32,7 +32,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 | 字段 | 含义 |
 |---|---|
 | `scenario_id/basis` | 运行身份；当前依据只能为 `selected_reference`。 |
-| `service/layer/system` | configured-service/1 配 layer/1、layer/2，configured-service/2 配 layer/3，或 configured-service/3 配 layer-segments/1，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
+| `service/layer/system` | configured-service/1 配 layer/1、layer/2，configured-service/2 配 layer/3，configured-service/3 或 evidence-service/1 配 layer-segments/1，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
 | `backend.reference_file` | 原参考规格。只读取上述后端段，所选 profile 必须完整；未选候选允许缺项。 |
 | `backend.profile_by_role` | 显式选择 `dispatch/combine`，当前均要求 URMA WRITE/RTP、数据拥有方发起、RemoteWriteCommitted 就绪、事务完成释放发送槽。 |
 | `backend.attributes/globals` | 原生完整键名和标量值；未知名称、类型/单位错误或矛盾的固定约束报错。带单位时间使用 `10ns` 等字符串，带宽属性使用 `224Gbps` 等原生格式；生效值按原生序列化形式保存。 |

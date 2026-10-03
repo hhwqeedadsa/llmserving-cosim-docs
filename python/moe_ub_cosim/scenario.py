@@ -199,7 +199,7 @@ def prepare(input_path, backend_binary, output):
     paths={k:(directory/config[k]).resolve() for k in ('service','layer','system')}
     require(all(p.is_file() for p in paths.values()), 'Missing scenario input')
     service=json.loads(paths['service'].read_text());layer=json.loads(paths['layer'].read_text())
-    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2','moe-ub-configured-service/3'),
+    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2','moe-ub-configured-service/3','moe-ub-evidence-service/1'),
             'Scenario requires configured service')
     fields(config['execution'],'chunk_bytes send_slots_per_rank seed run','execution')
     execution=config['execution']
@@ -207,13 +207,18 @@ def prepare(input_path, backend_binary, output):
     integer(execution['seed'],'seed',1,2**32-1);integer(execution['run'],'run',1)
     integer(config['max_simulation_ns'],'max_simulation_ns',1)
     # The scope/capacity checks happen before a backend process can execute work.
-    composed = service['schema_version']=='moe-ub-configured-service/3'
+    evidence = service['schema_version']=='moe-ub-evidence-service/1'
+    composed = evidence or service['schema_version']=='moe-ub-configured-service/3'
     if composed:
         from .composed_service import ComposedService
         for group in layer['groups']:
             for current in group['layers']:
                 current.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])
-        frontend=ComposedService(service,layer)
+        if evidence:
+            from .evidence_service import EvidenceService
+            frontend=EvidenceService(service,layer)
+        else:
+            frontend=ComposedService(service,layer)
     else:
         from .configured_service import ConfiguredService
         layer.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])

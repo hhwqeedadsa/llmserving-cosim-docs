@@ -9,7 +9,7 @@ MAX_SEGMENT_LAYERS = 128  # Explicit host-side graph budget; target scale is unv
 def common_input(layer):
     variable = {'layer_id', 'tokens', 'compute_profile_ns', 'schema_version'}
     if layer['schema_version'] == 'moe-ub-execution-plan/3':
-        variable |= {'expert_placement', 'top_k'}
+        variable |= {'expert_placement', 'top_k', 'operator_profile'}
     return {k:v for k,v in layer['input'].items() if k not in variable}
 
 
@@ -37,6 +37,7 @@ def compose_layers(layers):
         # Shapes and physical contributions are layer-specific, kept in layers.
         merged.pop('compute_inputs', None)
         merged.pop('contributions', None)
+        merged.pop('compute_evaluation', None)
     previous = {r:[] for r in ranks}
     identities = {k:set() for k in ('transfer_id','ub_task_id','comm_tag')}
     operations = set()

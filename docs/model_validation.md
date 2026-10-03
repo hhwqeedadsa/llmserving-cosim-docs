@@ -1,5 +1,7 @@
 # M5.3：目标通信行为核对
 
+以下 M5.3 章节保留 2026-09-29 的历史结论；2026-10-03 的 M9 算子测量补充见文末，不改写当时的未验证状态。
+
 2026-09-29，本轮完成了 **DeepEP v1.2.1 单机普通 Dispatch/Combine 路径的源码核对**，以及现有参考模型的业务字节和连续运行检查。没有运行 DeepEP，没有取得目标设备测量或通信轨迹。`direct_rank_dedup_v1` 仍为 `reference_model`，校准状态仍为 `unvalidated_reference`。
 
 固定来源、摘要、配置、八项结论及本地证据保存在 [audit.json](../fixtures/m5_model_audit/audit.json)，检查入口见 [复查说明](../fixtures/m5_model_audit/README.md)。本记录按规范第 6.2、6.7、9.2、13.7、13.9 节区分源码依据、功能测试和目标系统验证；未改变技术定义或运行规则。
@@ -94,3 +96,19 @@ Config 中的 6/9 是各通道、对端的发送 Token 块上限，256 是接收
 [barrier]: https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/utils.cuh#L487-L518
 [partition]: https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/kernels/utils.cuh#L410-L415
 [dispatch-runtime]: https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/csrc/deep_ep.cpp#L387-L539
+
+## 2026-10-03：M9 算子依据补充
+
+在 NVIDIA A100 80GB PCIe、PyTorch 2.8.0+cu126/CUDA 12.6 上实际测量了 22 项 H=F=256、float16 的串行 gated FFN 与 GQA SDPA MATH 形状。CUDA Event 原始重复样本、完整方法及软件/脚本/输入摘要在 runs/v03-route-compute-evidence/a100-profile.json；入口、精确适用范围和参考残差见 [M9 说明](../fixtures/m9_evidence/README.md)。输入/权重为 seed 21 的随机算子张量，没有采集模型路由。
+
+实际 ASTRA/UB 执行按本次上下文和逐专家输入向量使用表值，C++ 独立重算及篡改拒绝通过。同总量 `[4,0]`/`[2,2]` 的专家测量及仿真节点分别为 52327/102196 ns，通信量相同；该方向取决于当前串行实现，不表示所有专家热点都会更快或更慢。未覆盖形状拒绝，不做峰值算力折算或静默线性外推。
+
+| 状态项 | M9 本次结果 |
+|---|---|
+| 路由消费、窗口退出与 KV 记账 | 人工来源文件的功能检查及实际 UB 执行通过；未知目标不改为窗口长度。 |
+| 真实专家路由 | 未取得；候选公开 gated 数据集原文件匿名下载返回 401，实际原始布局未核验。 |
+| A100 算子依据 | 上述 22 项实际测量并用于仿真；包括 eager 发射间隙，非生产 grouped/融合内核或完整模型。 |
+| 未测阶段、通信行为、完整模型及目标 NPU | prepare 残差/局部合并等仍为参考；DeepEP/CANN 未执行，R1/MLA 和 CM384 规模尚未验证。 |
+| 校准状态 | `unvalidated_reference` 不变；不以 A100 小算子或合成输入替代目标硬件同条件校准。 |
+
+M9 仍未整体验收完成；当前阻塞及恢复位置见 [current.md](tasks/current.md)，完整命令及结果见 [environment.md](environment.md)。

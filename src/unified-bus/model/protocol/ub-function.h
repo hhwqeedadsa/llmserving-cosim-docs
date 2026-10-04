@@ -43,6 +43,7 @@ namespace ns3 {
         Ptr<UbTransaction> GetUbTransaction();
 
         bool IsJettyExists(uint32_t jettyNum);
+        uint64_t GetJettyCount() const { return m_numToJetty.size(); }
 
         Ptr<UbJetty> GetJetty(uint32_t jettyNum);
 

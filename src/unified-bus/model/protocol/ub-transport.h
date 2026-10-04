@@ -269,6 +269,14 @@ public:
     uint32_t GetOutstandingUnackedSegmentCount() const;
     bool CanScheduleAnotherSegment() const;
 
+    // Only for an owner that has drained the physical network and destroyed
+    // every participating Jetty. Subsequent work must use fresh Jetty contexts.
+    // TP/PSN counters and their wrap references remain continuous.
+    uint64_t GetInboundTaReferenceCount() const { return m_inboundTaSsnReferences.size(); }
+    uint64_t GetInboundTpReferenceCount() const { return m_inboundTpMsnReferences.size(); }
+    bool CanRetireInboundTaReferences() const;
+    bool RetireInboundTaReferences();
+
     Ptr<UbCongestionControl> GetCongestionCtrlForTest() const { return m_congestionCtrl; }
     void SetCongestionControlForTest(Ptr<UbCongestionControl> cc) { m_congestionCtrl = cc; }
     void EnqueueAckForTest(Ptr<Packet> p) { m_ackQ.push(p); }

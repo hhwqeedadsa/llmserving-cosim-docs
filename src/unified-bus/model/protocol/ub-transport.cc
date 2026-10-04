@@ -966,6 +966,21 @@ Ptr<Packet> UbTransportChannel::GenDataPacket(Ptr<UbWqeSegment> wqeSegment,
     return p;
 }
 
+bool UbTransportChannel::CanRetireInboundTaReferences() const
+{
+    return m_inboundTaUnits.empty() && m_bufferedInboundPackets.empty() &&
+        m_remoteRequest.empty() && m_wqeSegmentVector.empty() && m_ackQ.empty() &&
+        m_cnpQ.empty() && GetActiveSendSegmentCount() == 0 &&
+        GetOutstandingUnackedSegmentCount() == 0;
+}
+
+bool UbTransportChannel::RetireInboundTaReferences()
+{
+    if (!CanRetireInboundTaReferences()) return false;
+    m_inboundTaSsnReferences.clear();
+    return true;
+}
+
 Ptr<UbWqeSegment> UbTransportChannel::TrackInboundTaPacket(const UbTransportHeader& tpHeader,
                                                            const UbTransactionHeader& taHeader,
                                                            uint32_t resLenBytes,

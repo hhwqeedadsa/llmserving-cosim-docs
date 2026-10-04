@@ -7,7 +7,7 @@ No native CANN code is executed. Source evidence and approximations are in docs.
 from collections import Counter
 from copy import deepcopy
 
-from .locality import locality, LOCAL_PROFILE, FABRIC_PROFILE
+from .locality import LOCAL_PROFILE, FABRIC_PROFILE
 from .plan import integer, require, batch_limit, compute_inputs, MAX_TIME_NS
 
 TEMPLATE = 'cann_a3_v850_fullmesh_v1'
@@ -78,16 +78,26 @@ def build_plan(config, identities=None, *, _validate=True):
     from .resources import cann_usage, check_graph, actual_usage
     usage=check_graph(cann_usage(config),config.get('resource_budget'))
     c=deepcopy(config);ranks=c['rank_ids'];h=c['hidden_dim'];cp=c['cann_profile'];lanes=cp['aiv_lanes']
+    positions={rank:i for i,rank in enumerate(ranks)}
+    chips={row['rank_id']:row['chip_id'] for row in c.get('deployment',{}).get('ranks',[])}
+    def rank_locality(src,dst):
+        if src==dst:return 'same_rank'
+        return 'same_chip' if chips and chips[src]==chips[dst] else 'cross_chip'
     ops=[dict(operation_id=f"{c['wave_id']}.L{c['layer_id']}.{kind}",kind=kind,
         service_id=c['service_id'],role=c['role'],wave_id=c['wave_id'],layer_id=c['layer_id'],
         group_id=c['group_id'],participants=ranks) for kind in ('dispatch','combine')]
     opids={o['kind']:o['operation_id'] for o in ops}
-    contrib=[]
+    contrib=[];by_source={r:[] for r in ranks};by_destination={r:[] for r in ranks}
+    source_expert_counts=Counter();near_source=Counter();near_destination=Counter()
     for i,t in enumerate(c['tokens']):
         for k,e in enumerate(t['expert_ids']):
             dst=c['expert_placement'][e]
-            contrib.append(dict(source_record_index=i,topk_index=k,expert_id=e,
-                src_rank=t['src_rank'],dst_rank=dst,locality=locality(c,t['src_rank'],dst)))
+            x=dict(source_record_index=i,topk_index=k,expert_id=e,
+                src_rank=t['src_rank'],dst_rank=dst,locality=rank_locality(t['src_rank'],dst))
+            contrib.append(x);by_source[t['src_rank']].append(x);by_destination[dst].append(x)
+            source_expert_counts[t['src_rank'],e]+=1
+            if x['locality']=='same_chip':
+                near_source[t['src_rank']]+=1;near_destination[dst]+=1
     counts=Counter(x['dst_rank'] for x in contrib);local=Counter(t['src_rank'] for t in c['tokens'])
     messages=[]
     def add(kind,role,src,dst,lane,source=None,expert=None,count=None):
@@ -112,22 +122,26 @@ def build_plan(config, identities=None, *, _validate=True):
         if expert is not None:message.update(expert_id=expert,token_count=count)
         messages.append(message)
     for rank in ranks:
-        for lane,x in split([x for x in contrib if x['src_rank']==rank],lanes):
+        for lane,x in split(by_source[rank],lanes):
             add('dispatch','data',rank,x['dst_rank'],lane,x)
     for rank in ranks:
         for lane,e in split(list(range(len(c['expert_placement']))),lanes):
             add('dispatch','status',rank,c['expert_placement'][e],lane,expert=e,
-                count=sum(x['src_rank']==rank and x['expert_id']==e for x in contrib))
+                count=source_expert_counts[rank,e])
     for rank in ranks:
         # LocalWindowCopy orders local expert, source EP rank, then source Token.
-        items=sorted((x for x in contrib if x['dst_rank']==rank),
-                     key=lambda x:(x['expert_id'],ranks.index(x['src_rank']),x['source_record_index']))
-        for lane,x in split(items,lanes,ranks.index(rank)):
+        items=sorted(by_destination[rank],
+                     key=lambda x:(x['expert_id'],positions[x['src_rank']],x['source_record_index']))
+        for lane,x in split(items,lanes,positions[rank]):
             add('combine','data',rank,x['src_rank'],lane,x)
             add('combine','status',rank,x['src_rank'],lane,x)
     transfers=[]
+    # Append references in original transfer order. Index traversal must retain
+    # filtering order, including data-before-status and per-lane dependencies.
+    outgoing={kind:{r:[] for r in ranks} for kind in ('dispatch','combine')}
+    incoming={kind:{r:[] for r in ranks} for kind in ('dispatch','combine')}
     for m in messages:
-        same_chip=locality(c,m['src_rank'],m['dst_rank'])=='same_chip'
+        same_chip=rank_locality(m['src_rank'],m['dst_rank'])=='same_chip'
         # Status writes remain one 32-byte store, never split by vector chunks.
         limit=m['payload_bytes'] if same_chip or m['message_role']=='status' else c['chunk_bytes']
         for chunk,begin in enumerate(range(0,m['payload_bytes'],limit)):
@@ -148,6 +162,8 @@ def build_plan(config, identities=None, *, _validate=True):
             if 'expert_id' in m:t.update(expert_id=m['expert_id'],token_count=m['token_count'])
             if not same_chip:t['ub_task_id']=100+ordinal
             transfers.append(t)
+            outgoing[t['kind']][t['src_rank']].append(t)
+            incoming[t['kind']][t['dst_rank']].append(t)
     require(len(transfers)==usage['transfers'],'CANN preflight transfer count mismatch')
     graphs=[]
     for rank in ranks:
@@ -166,8 +182,7 @@ def build_plan(config, identities=None, *, _validate=True):
             return node
         def sends(kind,deps,local_ready):
             done=[];lane_last={};data_done=[]
-            for t in transfers:
-                if t['kind']!=kind or t['src_rank']!=rank:continue
+            for t in outgoing[kind][rank]:
                 before=list(deps)
                 if t['transport_profile_id']==LOCAL_PROFILE:before+=local_ready
                 if t['lane'] in lane_last:before.append(lane_last[t['lane']])
@@ -176,12 +191,12 @@ def build_plan(config, identities=None, *, _validate=True):
                 if t['message_role']=='data':data_done.append(node)
             return done
         def receives(kind,deps):
-            return [comm(t,'RECV',deps) for t in transfers if t['kind']==kind and t['dst_rank']==rank]
+            return [comm(t,'RECV',deps) for t in incoming[kind][rank]]
         prepare=comp('attention-route-quant-pack',local[rank]*profile['attention_route_pack'],[])
         ready=[] if prepare is None else [prepare]
         local_prepares={}
         def local_prepare(kind,deps):
-            n=sum(x['locality']=='same_chip' and x['src_rank' if kind=='dispatch' else 'dst_rank']==rank for x in contrib)
+            n=(near_source if kind=='dispatch' else near_destination)[rank]
             work=n*c.get('deployment',{}).get('local_prepare_ns_per_vector',{}).get(kind,0)
             node=comp(kind+'-local-prepare',work,deps);local_prepares[kind]=node
             return [] if node is None else [node]

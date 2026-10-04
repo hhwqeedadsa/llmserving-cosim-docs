@@ -1,0 +1,540 @@
+{
+  "schema_version": "moe-ub-cann-indexing-result/1",
+  "baseline_commit": "f9b3751e5bdb14793a3424acb129313262c25c6e",
+  "task_definition_commit": "416d07b",
+  "source_hashes": [
+    {
+      "path": "python/moe_ub_cosim/cann.py",
+      "sha256": "7dee3968e09ea8f09ce642dc9593036d8d8e1fe0b64c0065610f0b341469320a"
+    },
+    {
+      "path": "scripts/probe_cann_indexing.py",
+      "sha256": "9d676a0622ee35aea3ece6736469e550ec1a2f1b0b4aac6bf90c7d7cc23893ae"
+    },
+    {
+      "path": "tests/unit/cann_index_test.py",
+      "sha256": "e70955ff784f88c5f02fcbe3fce6bdc0f861da1e709fd4802b2534bee086a8d7"
+    },
+    {
+      "path": "fixtures/m10_cann_indexing/golden.json",
+      "sha256": "27298b2bde3ee44b7ceb62f4999201973dabc60b5c35a1205b904394c4b783a2"
+    }
+  ],
+  "golden_cases": 24,
+  "unit_tests_passed": 22,
+  "host": {
+    "utc": "2026-10-04T06:50:45.228298+00:00",
+    "memory": {
+      "MemTotal": "67108864 kB",
+      "MemAvailable": "62843835 kB",
+      "SwapTotal": "0 kB"
+    },
+    "cgroup_memory_max": "68719476736",
+    "cgroup_memory_current": "36476067840",
+    "cpu_affinity_count": 32,
+    "disk_available_bytes": 6693069856768
+  },
+  "preflight": {
+    "passed": true,
+    "first_layer_plan_equal": true,
+    "input_hashes_unchanged": true,
+    "prepared": {
+      "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+      "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+    },
+    "bundle": {
+      "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+      "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+    },
+    "speedup_one_sample": 8.312629236713377
+  },
+  "first_layer": {
+    "baseline": {
+      "version": "baseline",
+      "source_sha256": "e11d4458d5dd2e14d70df00c22ac68f3c2ac99cc803c1e22a10940b4502877ed",
+      "build_seconds": 34.85126243904233,
+      "plan_sha256": "d93005bbb587d8c5333e4e2a3001350157af53381364e2d5cab8a920121700dd",
+      "usage": {
+        "transfers": 64992,
+        "fabric_transfers": 64556,
+        "local_transfers": 436,
+        "nodes": 130694
+      },
+      "dependency_edges": 2391386,
+      "prepared": {
+        "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+      },
+      "bundle": {
+        "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+        "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+      },
+      "production_validation_enabled": true,
+      "simulation_executed": false
+    },
+    "indexed": {
+      "version": "indexed",
+      "source_sha256": "7dee3968e09ea8f09ce642dc9593036d8d8e1fe0b64c0065610f0b341469320a",
+      "build_seconds": 4.192567892372608,
+      "plan_sha256": "d93005bbb587d8c5333e4e2a3001350157af53381364e2d5cab8a920121700dd",
+      "usage": {
+        "transfers": 64992,
+        "fabric_transfers": 64556,
+        "local_transfers": 436,
+        "nodes": 130694
+      },
+      "dependency_edges": 2391386,
+      "prepared": {
+        "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+      },
+      "bundle": {
+        "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+        "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+      },
+      "production_validation_enabled": true,
+      "simulation_executed": false
+    },
+    "baseline_probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/probe_cann_indexing.py",
+        "baseline",
+        "--output-dir",
+        "runs/v03-cann-indexing/layer-baseline/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T06:48:33.510938+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 654766080,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "process_group": 1795118,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T06:49:13.611182+00:00",
+      "wall_seconds": 40.100259866565466,
+      "max_waited_child_rss_kib": 640700,
+      "artifact_bytes_before_report": 58422
+    },
+    "indexed_probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/probe_cann_indexing.py",
+        "indexed",
+        "--output-dir",
+        "runs/v03-cann-indexing/layer-indexed/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T06:49:42.366572+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 662437888,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "process_group": 1795514,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T06:49:52.051989+00:00",
+      "wall_seconds": 9.685444936156273,
+      "max_waited_child_rss_kib": 646912,
+      "artifact_bytes_before_report": 15247
+    }
+  },
+  "full_round": {
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "target",
+        "--input",
+        "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "--output-dir",
+        "runs/v03-cann-indexing/target/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T06:50:45.314299+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 34359738368,
+        "per_process_address_bytes": 42949672960,
+        "artifact_bytes": 25769803776,
+        "wall_seconds": 900.0
+      },
+      "peak_sampled_group_rss_bytes": 34363543552,
+      "peak_sampled_processes": 1,
+      "status": "rss_limit",
+      "workload_semantics_validated": false,
+      "process_group": 1795873,
+      "child_exit_code": -15,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T07:04:35.953916+00:00",
+      "wall_seconds": 830.639686498791,
+      "max_waited_child_rss_kib": 33558148,
+      "artifact_bytes_before_report": 1235735
+    },
+    "phases": {
+      "path": "runs/v03-cann-indexing/target/work/phases.jsonl",
+      "sha256": "58decc348512ebae074e0a3aefafde395cbfd6bfa6583d9a5e588a8f539c710d"
+    },
+    "completed_moe_layers": 58,
+    "last_completed_layer": 60,
+    "last_completed_at_seconds": 271.18159668520093,
+    "child_counts": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7577414
+    },
+    "child_seconds": {
+      "min": 2.875413926318288,
+      "median": 3.048847463913262,
+      "max": 11.013883328065276
+    },
+    "compositions": [
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 271.24343355745077,
+        "rss_bytes": 11759812608,
+        "call": 1
+      }
+    ],
+    "last_event": {
+      "phase": "composition_begin",
+      "elapsed_seconds": 271.24343355745077,
+      "rss_bytes": 11759812608,
+      "call": 1
+    },
+    "build_completed": false,
+    "export_completed": false,
+    "backend_load_status": "not_started_no_complete_export",
+    "stderr": {
+      "path": "runs/v03-cann-indexing/target/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "cann_regression": {
+    "cases": 13,
+    "padding_cases": {
+      "padding-1024": {
+        "writes": 20,
+        "payload_bytes": 6620,
+        "business_bytes": 6150,
+        "metadata_bytes": 352,
+        "padding_bytes": 118
+      },
+      "padding-17": {
+        "writes": 382,
+        "payload_bytes": 6620,
+        "business_bytes": 6150,
+        "metadata_bytes": 352,
+        "padding_bytes": 118
+      }
+    },
+    "rejections": 8,
+    "cases_summary": {
+      "on": {
+        "finished_ns": 131530,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "off": {
+        "finished_ns": 131530,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "absent": {
+        "finished_ns": 131530,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "ep0": {
+        "finished_ns": 99513,
+        "waves": 3,
+        "writes": 197,
+        "local_deliveries": 72,
+        "bytes": {
+          "payload_bytes": 81004,
+          "business_payload_bytes": 76800,
+          "application_metadata_bytes": 3504,
+          "padding_bytes": 700
+        },
+        "route_records": 24
+      },
+      "ep1": {
+        "finished_ns": 52604,
+        "waves": 2,
+        "writes": 108,
+        "local_deliveries": 51,
+        "bytes": {
+          "payload_bytes": 39312,
+          "business_payload_bytes": 36864,
+          "application_metadata_bytes": 2112,
+          "padding_bytes": 336
+        },
+        "route_records": 12
+      },
+      "slow": {
+        "finished_ns": 1214814,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "chunks": {
+        "finished_ns": 176178,
+        "waves": 5,
+        "writes": 638,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "slots": {
+        "finished_ns": 143044,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "lanes": {
+        "finished_ns": 144155,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "local-costs": {
+        "finished_ns": 475621,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      },
+      "all-local": {
+        "finished_ns": 13330,
+        "waves": 5,
+        "writes": 0,
+        "local_deliveries": 354,
+        "bytes": {},
+        "route_records": 36
+      },
+      "empty": {
+        "finished_ns": 0,
+        "waves": 0,
+        "writes": 0,
+        "local_deliveries": 0,
+        "bytes": {},
+        "route_records": 0
+      },
+      "scenario": {
+        "finished_ns": 131530,
+        "waves": 5,
+        "writes": 305,
+        "local_deliveries": 123,
+        "bytes": {
+          "payload_bytes": 120316,
+          "business_payload_bytes": 113664,
+          "application_metadata_bytes": 5616,
+          "padding_bytes": 1036
+        },
+        "route_records": 36
+      }
+    }
+  },
+  "structure_regression": {
+    "passed": true,
+    "cases": {
+      "61-blocks": {
+        "blocks": 61,
+        "moe_blocks": 58,
+        "nodes": 3102,
+        "writes": 754,
+        "all_transfers": 986,
+        "finished_ns": 315509,
+        "EP": 3,
+        "experts": 6,
+        "hidden_size": 1024
+      },
+      "dense-between": {
+        "blocks": 3,
+        "moe_blocks": 2,
+        "nodes": 114,
+        "writes": 26,
+        "all_transfers": 34,
+        "finished_ns": 10829,
+        "EP": 3,
+        "experts": 6,
+        "hidden_size": 1024
+      }
+    },
+    "target_scale_executed": false
+  },
+  "small_loader": {
+    "passed": true,
+    "loaded": {
+      "fabric_transfers": 39,
+      "load_seconds": 0.012425475,
+      "local_transfers": 12,
+      "network_initialized": false,
+      "nodes": 171,
+      "plan_schema": "moe-ub-full-model-plan/1",
+      "ranks": 3,
+      "schema_version": "moe-ub-plan-load-probe/1",
+      "simulation_executed": false
+    },
+    "expected": {
+      "actual_usage": {
+        "transfers": 51,
+        "fabric_transfers": 39,
+        "local_transfers": 12,
+        "nodes": 171
+      },
+      "plan_bytes": 272891,
+      "dependency_edges": 299,
+      "executed_layer_ids": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ranks": 3,
+      "target_scale_executed": false,
+      "simulation_executed": false
+    },
+    "rejected": [
+      "modified_json_node",
+      "truncated_chakra"
+    ],
+    "target_scale_executed": false
+  },
+  "full_model_graph_comparison": {
+    "four-block": {
+      "files": 5,
+      "hashes": {
+        "plan.json": "20f2295a0710b31714b59512c26de8413dd7212ad78ee20ba9674f7193be4ad5",
+        "generation.json": "eb10c0a5555c4d55694c67cebd3604f08304e2729e939d48b312a4cb959f4d09",
+        "layer.12.et": "54f8a230fbed8e83da98e11bddbac5e37fbde2c646f5c0b6c68920ef1551e4cf",
+        "layer.2.et": "4f724ceead60e8e2f014859562e8a904f7c22e2a2d4b92f653c8e8f602996a39",
+        "layer.7.et": "734f742a8e7a898171e3f7fa0abe8f500fb052e9cbd4267ec231d3c4847ae877"
+      }
+    },
+    "61-block": {
+      "files": 5,
+      "hashes": {
+        "plan.json": "50d00546c881d9c0df399fbd67fe8cdd543b32ef84f6429ae02e443497b7345d",
+        "generation.json": "d33b4dd5dc5693a17e04ec1f20e46f445b819031983f0352211d193787ce855c",
+        "layer.12.et": "3d4b9b6975b6ec9fac336a2cfa2d08eff65284aefe8ac48fc6a75e5f06f1213a",
+        "layer.2.et": "8841fc088f0d5a2edc9b07b50920b71aa834016a78e06e2333980da4a5108eac",
+        "layer.7.et": "7d1f7f83d22a4373200f1594b81c34c212bf9831f54f0a32ae2d5afab4cfe560"
+      }
+    },
+    "dense-between": {
+      "files": 5,
+      "hashes": {
+        "plan.json": "b45c2a1ac1157f6956c91964bed9ab831cba54e0e255b1577cf6bb9f51581620",
+        "generation.json": "d62245ed07f869f138e04ce847227e8ce45ebd93221ed6e15247fd0ce029762d",
+        "layer.12.et": "924efd221ba563b02f37680126115d185150552bbb9fa224759713ced13e0c58",
+        "layer.2.et": "09231d1fec0cacf34dd3c4f7104a31f16dddf66fd3abd0d934d425a567f688c6",
+        "layer.7.et": "1908c9a23b528d4021baaa6f22e6f13e4d7fa463889e62d152b4b361c40852e6"
+      }
+    }
+  },
+  "protection": {
+    "protected_files": 1304,
+    "unchanged": true,
+    "production_cpp_unchanged": true,
+    "no_cpp_rebuild": true,
+    "binaries": {
+      "cosim-service": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-service",
+        "sha256": "ef213af3e6086e69356b8b51759e75e3da8885ec9f42953462db58a7806b93c0",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-layer": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-layer",
+        "sha256": "0345a51946b86c59d816c5742998de66fc002e43b9a4da2dc4222c674a7eed1e",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-plan-load-probe": {
+        "path": "build/m10-full-round-preflight/output/cosim/ns3.44-cosim-plan-load-probe",
+        "sha256": "de6c8e38c30cf020018b1d9ec5248d3a877ace5a4dea80351664242ec486a7fb",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      }
+    }
+  },
+  "initial_test_input_error": "pre-change all-empty graph rejected; valid zero-token-member fixtures and separate all-empty rejection test recorded",
+  "optimization_verified": true,
+  "simulation_executed_at_target_scale": false,
+  "target_run_ready": false,
+  "hardware_calibration": "unvalidated_reference"
+}

@@ -3227,3 +3227,48 @@ RSS 为前端/后端进程组采样合计，可能重复共享页、漏过瞬时
 保留的开发期失败：small-probe 退出 1，新测试将实际 `truncated or malformed graph message` 误写为 `truncated graph message`；真实 C++ 加载器已正确拒绝损坏图。只修正新测试的诊断匹配后，small-probe-final 在新目录通过。目标 wall_limit 保留为本次主要资源结果，未提高预算、删层、换合成路由或绕过校验。
 
 本步按取得受限资源与瓶颈证据的条件完成并本地提交，不推送。下一项候选是减少 CANN 构图重复扫描，保持原图与拒绝规则，再用相同输入/上限复测；尚未实施。完整合并、导出、加载、网络、多轮累计持有与 M10 最终验收仍未完成，硬件校准状态不变。
+
+## 2026-10-04：CANN 构图等价索引与完整首轮复测
+
+任务 `v03-cann-indexing`，生产基线 `f9b3751`，任务说明提交 `416d07b`。所有命令从 `/root/moe-ub-cosim` 执行；本节 `R` 为 `runs/v03-cann-indexing`，`P` 为 `.venv/llmservingsim-native/bin/python`。摘要见[结果](../fixtures/m10_cann_indexing/result.json)，边界与复现见[说明](../fixtures/m10_cann_indexing/README.md)。
+
+生产修改限于 `python/moe_ub_cosim/cann.py`：在一次调用内预建源/专家计数、源/目的贡献列表、阶段与源/目的传输列表、rank 序号及芯片映射。列表存有序引用而非复制记录；生成顺序、零计数、lane 排列、依赖、分块、局部成本、逐 Token 来源均保留。原 Python 重构校验、全模型合并深复制和 C++ 校验未改；无参数或执行后端变化，复用已有二进制，无 C++ 重编译。
+
+### 新旧首层与完整轮结果
+
+修改前由未改的旧实现保存 24 组完整计划摘要，旧 cann.py SHA 为 `e11d4458d5dd2e14d70df00c22ac68f3c2ac99cc803c1e22a10940b4502877ed`；实际变更后全部吻合。案例保留字段/列表顺序，含无 Token 成员、不同部署、rank/批次/专家/Top-K、lane、分块与非对齐 H。22 项相关单元检查通过，原独立贡献/字节/依赖断言和篡改拒绝均保留。
+
+目标首层两次探测串行，限 RSS 8 GiB、地址 12 GiB、产物 1 GiB、300 s。通过 SHA 复用上次 bundle，旧实现从固定本地 Git 读取并再次核验源码 SHA；新旧都调用完整原校验。仅构图时间 34.851262→4.192568 s，单次比值 8.313。外层含加载/摘要/释放总时间 40.100260→9.685445 s，采样峰值 654766080→662437888 B。不能把单个样本的提速推广为所有输入固定倍数，也不能据此声称节省了图驻留内存。
+
+两份首层计划及来源摘要均为 `d93005bbb587d8c5333e4e2a3001350157af53381364e2d5cab8a920121700dd`：64992 次交付、64556 fabric/436 local、130694 节点、2391386 条依赖边。源码 SHA 与 bundle/manifest SHA 在各 worker result.json 内。读取和摘要序列化不计入上述构图区间，但纳入进程总时间/RSS。
+
+目标完整轮开始前：64 GiB 物理/cgroup 限额、无 swap，MemAvailable 62843835 KiB，cgroup memory.current 36476067840 B（含缓存），CPU affinity 32，磁盘可用 6693069856768 B。沿用原首轮 manifest 和 bundle 的摘要，所有固定输入引用复核，不重新保存原始数据；准备路径仍是离线首轮，不代表生产全量 64 步导入器已改变。
+
+完整轮使用与上一任务完全相同的 900 s、RSS 32 GiB、地址 40 GiB、产物 24 GiB、计划 JSON 20 GiB 上限，且不与回归/编译重叠。58 个 MoE 子图于 271.181597 s 返回，逐层计数一致，共 3767694 次交付、7577414 子图节点；完整图还需 77824 外围计算节点。每层返回耗时 min/median/max 为 2.875/3.049/11.014 s，受分配和垃圾回收等整体运行成本影响；同一个前 27 层进度点从旧 899.071 s 降至 128.463 s。
+
+首次 compose 在 271.243434 s 开始，RSS 当时 11759812608 B；830.639686 s 时采样 RSS 达 34363543552 B，状态 rss_limit，监视器 SIGTERM，worker=-15，外层=1，remaining_live_group_pids=[]。略超 32 GiB 阈值约 3.6 MiB 属采样间隔内增长。没有触及时间/地址/输出限额、没有宿主 OOM 或后台残留。完整合并未返回，目标导出和 C++ 加载未执行，不能把 58 个子图完成写成完整模型图成功。停止瞬间未采集 Python 栈；仅将峰值定位到首次合并阶段，不把全部内存增长归给一个未经单独测量的复制语句。
+
+### 实际命令与检查
+
+`python3 R/record.py LABEL COMMAND...` 为已审阅的记录包装，保存实际 argv、cwd、UTC、退出码和 stdout/stderr 到 `R/logs/LABEL.*`。所有最终验证命令退出 0；目标受控停止为预期资源结果，明确退出 1。
+
+| 实际命令 | 标签与结果 |
+|---|---|
+| `env PYTHONPATH=python:tests/unit P R/baseline.py` | baseline-final；生产修改前保存 24 组完整图摘要及 1304 个受保护文件摘要。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest cann_index_test cann_plan_test full_model_test resource_budget_test host_preflight_test full_round_probe_test` | unit；22 项通过。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/layer-baseline --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 1073741824 --wall-seconds 300 -- P scripts/probe_cann_indexing.py baseline --output-dir R/layer-baseline/work` | layer-baseline；实际旧构造器、校验和来源摘要，completed/0。 |
+| 同上，将 `layer-baseline` 换为 `layer-indexed`、worker 模式换为 `indexed` | layer-indexed；新构造器相同输入，completed/0，完整摘要一致。 |
+| `env PYTHONPATH=python P R/preflight.py` | preflight；新旧首层计数/摘要相同，原 bundle、请求、容量、fabric、成本等引用摘要未变，记录本机快照。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/target --rss-bytes 34359738368 --address-bytes 42949672960 --artifact-bytes 25769803776 --wall-seconds 900 -- P -m moe_ub_cosim.full_round_probe target --input runs/v03-full-round-preflight/prepare/work/prepared.json --output-dir R/target/work` | target；rss_limit/外层 1，完整图未生成。阶段在 target/work/phases.jsonl，资源采样在 target/samples.jsonl。 |
+| `env PYTHONPATH=python python3 R/regressions.py` | 顺序执行下列三组，均在目标探测停止后运行。 |
+| `P -m moe_ub_cosim.host_probe --output-dir R/cann-regression --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 10737418240 --wall-seconds 300 -- P tests/integration/check_cann_behavior.py --build-dir build/m10-shared-provenance --output-dir R/cann-regression/work` | cann-regression；13 次服务、2 次分包用例、8 项前端配置/后端计划拒绝通过。各实际后端 argv/输入/退出码在 work/commands.json。 |
+| 同上，将 `cann-regression` 换为 `structure-regression`、脚本换为 `check_full_model_structure.py` | structure-regression；61 块小 EP 和穿插 dense/无 shared 两项真实 UB 完成。 |
+| `P tests/integration/check_full_round_probe.py --build-dir build/m10-full-round-preflight --output-dir R/loader-check` | loader-check；新 Python 生成的小完整图经未改 C++ 加载，修改 JSON/截断 Chakra 被拒绝；子进程自身受限。 |
+| `bash scripts/check_deps.sh`、`python3 R/final_audit.py` | dependencies、final-audit；13 个递归依赖及 1304 个保护文件未变；既有 C++ 源码、三套构建、启动锁、原 M9 两文件、原首轮 bundle/manifest 均保留。三个复用二进制 ldd 均只指向各自目录中的 ns-3-UB。 |
+| `python3 R/report.py` | report；检查所有记录、实际层计数、阶段停止、回归和摘要对照，生成已提交小型报告。 |
+
+CANN 基准仍为 305 次 UB 写、131530 ns，共享网络、慢链路、分块、发送槽、lane、本地成本、全本地、来源开关、空服务及配置入口对照全部通过。非对齐 H 的 chunk=1024/17 两次执行分别为 20/382 次写，业务/元数据/填充独立核对保持。61 块小模型仍为 754 次写/986 次交付/3102 节点、315509 ns；穿插 dense 且无 shared 图为 26 次写/34 次交付/114 节点、10829 ns。与上一任务保留的四块、61 块、穿插 dense 三组 plan.json、generation.json、Chakra 文件共 15 个逐字节相同，见 R/graph-comparison.json。
+
+保留的前期失败：baseline 退出 1，新增有效用例误用了全组零 Token，而原生产图校验一直要求至少一个 Token。未改生产规则，将有效案例改为单请求和多个零 Token 成员，另加全空图拒绝测试；baseline-final 在生产修改前通过后才固定 golden.json。目标 rss_limit 是后续首次合并的受控资源结果，没有更改预算或静默改输入重跑。
+
+本步完成并本地提交、不推送。下一项候选为减少全模型合并中重复存储，保持校验和图语义后复测；本步没有实施。完整合并、导出/加载、目标网络、多轮累计持有及 M10 最终验收仍未完成，硬件校准状态不变。

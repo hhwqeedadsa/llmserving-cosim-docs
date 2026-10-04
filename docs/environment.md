@@ -3188,3 +3188,42 @@ RSS 为前端/后端进程组采样合计，可能重复共享页、漏过瞬时
 历史 fixtures/m10_host_preflight/counts.json、result.json 保持原样；计数脚本仅补充 descriptor_storage_revision=4545074 和历史存储模型标记，避免把旧两表公式套用到当前代码。本步未重新扫描全量原始路由，也未修改图生成器或业务执行规则。
 
 完成共享来源任务后本地提交、不推送并停止。下一项候选为有限额的完整一轮图构造/导出/后端装载检查；完整 fabric、跨轮累计保留、最终观测窗口与产物仍未完成资源验收，M10 整体和硬件校准状态不变。
+
+## 2026-10-04：完整一轮图的受限构造/导出/装载预检
+
+任务 `v03-full-round-preflight`，生产基线 `e148169`，任务说明提交 `3f9d897`。根目录 `/root/moe-ub-cosim`；本节 `R` 为 `runs/v03-full-round-preflight`，`P` 为 `.venv/llmservingsim-native/bin/python`。完整摘要见 [result.json](../fixtures/m10_full_round_preflight/result.json)，说明见[完整一轮预检](../fixtures/m10_full_round_preflight/README.md)。未修改生产构图/仿真函数、子模块或技术规范。
+
+### 输入、预算与实际阶段
+
+本机仍为 64 GiB 物理内存和 cgroup memory.max，无 swap；目标探测前 MemAvailable 为 62617446 KiB，cgroup memory.current 为 36653334528 B（包含缓存），CPU affinity 32，磁盘可用 6693763022848 B。快照在 R/host.json；未将包含可回收缓存的 current 简单视为不可用内存。
+
+沿用固定 1024 文件与主场景请求映射，逐文件 SHA 和完整原始格式核验后只保留首轮 58 层记录，共 59392 条。此离线准备方式不改变生产导入器；全量 64 步导入器原有约 6.1 GiB 峰值仍是单独证据。本次模型结构使用容量参考对象，阶段费用复制已存在的小型正参考值，只测量图分配成本；源 AWQ4/参考 INT8 不匹配、采集修订未知及未校准状态均保留，不把离线 bundle 称为最终服务配置。
+
+准备阶段限 RSS 4 GiB、地址 6 GiB、输出 1 GiB、300 s；实际 38.144 s、采样峰值 428302336 B，completed/0。派生 bundle 为 67825336 B，原始来源和派生逐记录内容均留在忽略目录。首层 Token 与 provenance 对照旧预检相同；全部 58 层独立计数一致，首轮应为 3767694 次交付、7655238 节点。
+
+完整目标构造/导出共用一个进程及 900 s 上限、RSS 32 GiB、地址 40 GiB、输出 24 GiB，计划 JSON 另限 20 GiB。实际 900.469 s 后由监视器 SIGTERM 终止，status=wall_limit，worker=-15，外层命令=1，remaining_live_group_pids=[]。采样峰值 5786435584 B，未触及内存/输出上限，未观察到 OOM。27 个 MoE 子图（layer_id 3～29）已返回，共 1753718 次交付、3526882 节点，每层实际计数与独立结果吻合；各层耗时 30.795～35.586 s，中位数 33.210 s。停止时正在构造 layer_id=30。
+
+全模型 compose 尚未开始，因此没有完整图、没有目标导出、没有目标 C++ 装载，也没有初始化目标网络。5.39 GiB 是不完整构造的采样峰值，不是完整图或完整服务峰值。约 356 s 时进程用户/系统 CPU 分别为 346.89/4.01 s（R/target-cpu-snapshot.json），表明已到达阶段主要在计算。源码显示 CANN 每个 rank/专家状态计数重新扫描全部贡献；每次构造为 128×256×8192 次检查，校验又重建。后续全模型复制/重构尚未实测，不能把全部耗时归为一个未经函数采样测定的热点。
+
+### 实际命令、日志和检查
+
+所有命令从根目录运行，除明确说明的触限/拒绝外均退出 0。`python3 R/record.py LABEL COMMAND...` 记录每条实际 argv、cwd、UTC、退出码和 stdout/stderr，位于 `R/logs/LABEL.{json,stdout.log,stderr.log}`。
+
+| 实际命令或入口 | 标签、输出与结果 |
+|---|---|
+| `python3 R/configure.py` | configure；精确 CMake argv 见 R/logs/configure.json。沿用原 release/Ninja/unified-bus 配置，替换独立目录为 build/m10-full-round-preflight；禁用 examples/tests/MPI/MTP/PCH/自动依赖下载等原有开关。配置与构建均 finally 恢复原启动锁。 |
+| `python3 R/build.py`，内部 `cmake --build build/m10-full-round-preflight --target cosim-plan-load-probe -j 8` | build；451 步成功，新探针调用生产 LoadLayerPlan，不创建网络。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest full_round_probe_test host_probe_test host_preflight_test` | unit；7 项通过，覆盖图不变/恢复包装、真实限额与进程清理、独立计数。 |
+| `env PYTHONPATH=python P tests/integration/check_full_round_probe.py --build-dir build/m10-full-round-preflight --output-dir R/small-check-final` | small-probe-final；四块完整小图构造、导出、加载得到 171 节点/39 fabric/12 local，修改 JSON 与截断 Chakra 均正确拒绝。各子进程另有限额和 commands.json。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/prepare --rss-bytes 4294967296 --address-bytes 6442450944 --artifact-bytes 1073741824 --wall-seconds 300 -- P -m moe_ub_cosim.full_round_probe prepare --input fixtures/m10_full_round_preflight/input.json --output-dir R/prepare/work` | prepare；实际来源核验、独立计数、prepared.json 和忽略目录 bundle，completed/0。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/target --rss-bytes 34359738368 --address-bytes 42949672960 --artifact-bytes 25769803776 --wall-seconds 900 -- P -m moe_ub_cosim.full_round_probe target --input R/prepare/work/prepared.json --output-dir R/target/work` | target-build-export；外层退出 1，wall_limit，非成功完整构图。采样在 target/samples.jsonl，阶段在 target/work/phases.jsonl。无后代残留，依赖完整图的阶段未启动。 |
+| `python3 R/source_audit.py` | source-audit；复核 bundle 摘要、首层来源与全部 58 层计数，并确认离线容量参考名与真实路由身份分开记录。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/regression --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 10737418240 --wall-seconds 300 -- P tests/integration/check_full_model_structure.py --build-dir build/m10-shared-provenance --output-dir R/regression/work` | regression；两个小型真实 UB 场景通过，使用保留的生产后端；目标探测结束后才启动。 |
+| `bash scripts/check_deps.sh`、`python3 R/final_audit.py` | dependencies、final-audit；13 个递归依赖无变化，872 个受保护文件摘要一致、原启动锁精确恢复；ldd 只有新目录中 ns-3-UB 的 10 个库。 |
+| `python3 R/report.py` | report；检查阶段停止位置、部分计数、限额、成功/失败记录和回归/保护证据后生成小型可提交报告。 |
+
+两项真实 UB 回归分别为：61 块、三 rank/六专家/H1024 的合成完整图，3102 节点、754 次写、986 次交付，315509 ns 完成；MoE/dense/MoE 且无 shared expert 图，114 节点、26 次写、34 次交付，10829 ns 完成。逐节点依赖和参考计算时长、每次收发回调、rank 资源清零均通过。它们不是目标 128 rank 图，离线加载探针也不冒充实际执行。
+
+保留的开发期失败：small-probe 退出 1，新测试将实际 `truncated or malformed graph message` 误写为 `truncated graph message`；真实 C++ 加载器已正确拒绝损坏图。只修正新测试的诊断匹配后，small-probe-final 在新目录通过。目标 wall_limit 保留为本次主要资源结果，未提高预算、删层、换合成路由或绕过校验。
+
+本步按取得受限资源与瓶颈证据的条件完成并本地提交，不推送。下一项候选是减少 CANN 构图重复扫描，保持原图与拒绝规则，再用相同输入/上限复测；尚未实施。完整合并、导出、加载、网络、多轮累计持有与 M10 最终验收仍未完成，硬件校准状态不变。

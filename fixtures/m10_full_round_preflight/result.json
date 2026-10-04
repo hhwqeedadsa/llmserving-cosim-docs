@@ -1,0 +1,613 @@
+{
+  "schema_version": "moe-ub-full-round-preflight-result/1",
+  "production_base_commit": "e148169d268de37f9dc13974656645226bc75c28",
+  "task_definition_commit": "3f9d897",
+  "input": {
+    "path": "fixtures/m10_full_round_preflight/input.json",
+    "sha256": "cdc70f5942e1ff473b0be3a4098c2d00b09f7ca1374bddeb2caec6c838e87d65"
+  },
+  "source_hashes": [
+    {
+      "path": "python/moe_ub_cosim/full_round_probe.py",
+      "sha256": "e06b9951a4cfbe523716a9537097bd5b40b697b507e7eb0b66d873c3cbb504dd"
+    },
+    {
+      "path": "python/moe_ub_cosim/full_model.py",
+      "sha256": "a111273227d400b1f4966a29338f7ce3e3e2c9624bf154a54ec752fbc761d4ee"
+    },
+    {
+      "path": "python/moe_ub_cosim/multilayer.py",
+      "sha256": "daa29ad472f52eca653308a7e6d409e1e8cb8d505d9a37b449f717e1ec54f23d"
+    },
+    {
+      "path": "python/moe_ub_cosim/cann.py",
+      "sha256": "e11d4458d5dd2e14d70df00c22ac68f3c2ac99cc803c1e22a10940b4502877ed"
+    },
+    {
+      "path": "python/moe_ub_cosim/plan.py",
+      "sha256": "bf556a211cbdc3d2d459c9602d88151f3c3ada4051a7d6ff95b383489c7183c7"
+    },
+    {
+      "path": "python/moe_ub_cosim/generate.py",
+      "sha256": "1c75651dd49e35ac2aba689f1fe06a3e28c65be3d427229f04c0a69b251e48f7"
+    },
+    {
+      "path": "python/moe_ub_cosim/host_probe.py",
+      "sha256": "d45ae1c74291db0212594da2c24d19bbfdbc3bb344d53aa424328e5cabb64d16"
+    },
+    {
+      "path": "backend/layer_plan.cc",
+      "sha256": "c037018f6b1e5f0c9591e63a57dcc4b721f0755137646d64ccd34fd8c16677d6"
+    },
+    {
+      "path": "backend/full_model_plan.cc",
+      "sha256": "1d7b51479d9324004286e731d67ec48d35b3567312a05ad231e7df60a23e7ae9"
+    },
+    {
+      "path": "scripts/full_round_load_probe.cc",
+      "sha256": "e56ab2f65d49b95e2496a79c2b2cd09717e80eedc022d89eaf5144839c59eb61"
+    },
+    {
+      "path": "backend/CMakeLists.txt",
+      "sha256": "0ac6304d0a9507b9c9c2341f378fe2e0205a1a8a751073a1b634845d0609e825"
+    },
+    {
+      "path": "tests/unit/full_round_probe_test.py",
+      "sha256": "73fe5b234e7f6d317920e14d5f2c263ffe408f26bacc5ece4cf0d9096069c351"
+    },
+    {
+      "path": "tests/integration/check_full_round_probe.py",
+      "sha256": "78e6b99abb7696494376c020ba9d94aa8f5d3f3be5e272e3f222dec534e9f11e"
+    }
+  ],
+  "host": {
+    "utc": "2026-10-04T06:19:41.606863+00:00",
+    "memory": {
+      "MemTotal": "67108864 kB",
+      "MemAvailable": "62617446 kB",
+      "SwapTotal": "0 kB"
+    },
+    "cgroup_memory_max": "68719476736",
+    "cgroup_memory_current": "36653334528",
+    "cpu_affinity_count": 32,
+    "disk_available_bytes": 6693763022848
+  },
+  "scope": {
+    "requests": 1024,
+    "ranks": 128,
+    "requests_per_rank": 8,
+    "decode_entry": 1,
+    "blocks": 61,
+    "moe_blocks": 58,
+    "original_window_steps": 64,
+    "production_full_window_importer_included": false,
+    "network_initialized": false,
+    "target_scale_executed": false,
+    "hardware_calibration": "unvalidated_reference"
+  },
+  "preparation": {
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "prepare",
+        "--input",
+        "fixtures/m10_full_round_preflight/input.json",
+        "--output-dir",
+        "runs/v03-full-round-preflight/prepare/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T06:18:33.321574+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 4294967296,
+        "per_process_address_bytes": 6442450944,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 428302336,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "process_group": 1784535,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T06:19:11.465324+00:00",
+      "wall_seconds": 38.14377872273326,
+      "max_waited_child_rss_kib": 458200,
+      "artifact_bytes_before_report": 67902430
+    },
+    "prepared": {
+      "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+      "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+    },
+    "bundle": {
+      "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+      "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+    },
+    "source_files": 1024,
+    "source_bytes": 2036523373,
+    "selected_records": 59392,
+    "expected_usage": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7655238
+    },
+    "independent_counts": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7655238,
+      "same_rank_contributions": 3713,
+      "same_chip_contributions": 3694,
+      "cross_chip_contributions": 467729,
+      "fabric_business_bytes": 10058044416,
+      "fabric_payload_bytes": 10153458956
+    },
+    "prior_58_layer_counts_rechecked": true
+  },
+  "target": {
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "target",
+        "--input",
+        "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "--output-dir",
+        "runs/v03-full-round-preflight/target/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T06:19:41.748774+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 34359738368,
+        "per_process_address_bytes": 42949672960,
+        "artifact_bytes": 25769803776,
+        "wall_seconds": 900.0
+      },
+      "peak_sampled_group_rss_bytes": 5786435584,
+      "peak_sampled_processes": 1,
+      "status": "wall_limit",
+      "workload_semantics_validated": false,
+      "process_group": 1785007,
+      "child_exit_code": -15,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T06:34:42.217494+00:00",
+      "wall_seconds": 900.4687955863774,
+      "max_waited_child_rss_kib": 5650816,
+      "artifact_bytes_before_report": 1305849
+    },
+    "cpu_snapshot": {
+      "probe_elapsed_seconds": 356.0231884904206,
+      "process_user_cpu_seconds": 346.89,
+      "process_system_cpu_seconds": 4.01,
+      "clock_ticks_per_second": 100
+    },
+    "phases": {
+      "path": "runs/v03-full-round-preflight/target/work/phases.jsonl",
+      "sha256": "83773d50429ee0181814464ee28ebb2848b51c460da5e157359cb1186d42fb77"
+    },
+    "completed_child_layers": 27,
+    "completed_child_layer_ids": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "active_layer_id": 30,
+    "layer_measurements": [
+      {
+        "layer_id": 3,
+        "seconds": 33.28314278461039,
+        "rss_at_return": 463683584,
+        "actual_usage": {
+          "transfers": 64992,
+          "fabric_transfers": 64556,
+          "local_transfers": 436,
+          "nodes": 130694
+        }
+      },
+      {
+        "layer_id": 4,
+        "seconds": 33.21024618111551,
+        "rss_at_return": 665747456,
+        "actual_usage": {
+          "transfers": 64950,
+          "fabric_transfers": 64508,
+          "local_transfers": 442,
+          "nodes": 130614
+        }
+      },
+      {
+        "layer_id": 5,
+        "seconds": 33.328921385109425,
+        "rss_at_return": 861589504,
+        "actual_usage": {
+          "transfers": 65010,
+          "fabric_transfers": 64580,
+          "local_transfers": 430,
+          "nodes": 130736
+        }
+      },
+      {
+        "layer_id": 6,
+        "seconds": 32.54075534828007,
+        "rss_at_return": 1057837056,
+        "actual_usage": {
+          "transfers": 64993,
+          "fabric_transfers": 64536,
+          "local_transfers": 457,
+          "nodes": 130712
+        }
+      },
+      {
+        "layer_id": 7,
+        "seconds": 32.745743833482265,
+        "rss_at_return": 1254682624,
+        "actual_usage": {
+          "transfers": 64939,
+          "fabric_transfers": 64500,
+          "local_transfers": 439,
+          "nodes": 130596
+        }
+      },
+      {
+        "layer_id": 8,
+        "seconds": 33.31343220919371,
+        "rss_at_return": 1452531712,
+        "actual_usage": {
+          "transfers": 64994,
+          "fabric_transfers": 64540,
+          "local_transfers": 454,
+          "nodes": 130704
+        }
+      },
+      {
+        "layer_id": 9,
+        "seconds": 32.61892421916127,
+        "rss_at_return": 1651232768,
+        "actual_usage": {
+          "transfers": 64967,
+          "fabric_transfers": 64564,
+          "local_transfers": 403,
+          "nodes": 130634
+        }
+      },
+      {
+        "layer_id": 10,
+        "seconds": 32.69877042807639,
+        "rss_at_return": 1848000512,
+        "actual_usage": {
+          "transfers": 64918,
+          "fabric_transfers": 64440,
+          "local_transfers": 478,
+          "nodes": 130566
+        }
+      },
+      {
+        "layer_id": 11,
+        "seconds": 33.55276824347675,
+        "rss_at_return": 2045038592,
+        "actual_usage": {
+          "transfers": 64933,
+          "fabric_transfers": 64476,
+          "local_transfers": 457,
+          "nodes": 130594
+        }
+      },
+      {
+        "layer_id": 12,
+        "seconds": 35.278584469109774,
+        "rss_at_return": 2236854272,
+        "actual_usage": {
+          "transfers": 64927,
+          "fabric_transfers": 64440,
+          "local_transfers": 487,
+          "nodes": 130596
+        }
+      },
+      {
+        "layer_id": 13,
+        "seconds": 31.66511806845665,
+        "rss_at_return": 2433003520,
+        "actual_usage": {
+          "transfers": 64919,
+          "fabric_transfers": 64444,
+          "local_transfers": 475,
+          "nodes": 130566
+        }
+      },
+      {
+        "layer_id": 14,
+        "seconds": 33.5727138184011,
+        "rss_at_return": 2635505664,
+        "actual_usage": {
+          "transfers": 64961,
+          "fabric_transfers": 64528,
+          "local_transfers": 433,
+          "nodes": 130630
+        }
+      },
+      {
+        "layer_id": 15,
+        "seconds": 32.72157462127507,
+        "rss_at_return": 2830848000,
+        "actual_usage": {
+          "transfers": 64936,
+          "fabric_transfers": 64500,
+          "local_transfers": 436,
+          "nodes": 130596
+        }
+      },
+      {
+        "layer_id": 16,
+        "seconds": 33.02222721464932,
+        "rss_at_return": 3030499328,
+        "actual_usage": {
+          "transfers": 64989,
+          "fabric_transfers": 64532,
+          "local_transfers": 457,
+          "nodes": 130708
+        }
+      },
+      {
+        "layer_id": 17,
+        "seconds": 34.29221656359732,
+        "rss_at_return": 3229495296,
+        "actual_usage": {
+          "transfers": 64955,
+          "fabric_transfers": 64492,
+          "local_transfers": 463,
+          "nodes": 130636
+        }
+      },
+      {
+        "layer_id": 18,
+        "seconds": 32.199691850692034,
+        "rss_at_return": 3422965760,
+        "actual_usage": {
+          "transfers": 64919,
+          "fabric_transfers": 64480,
+          "local_transfers": 439,
+          "nodes": 130552
+        }
+      },
+      {
+        "layer_id": 19,
+        "seconds": 34.02443945594132,
+        "rss_at_return": 3626041344,
+        "actual_usage": {
+          "transfers": 64925,
+          "fabric_transfers": 64444,
+          "local_transfers": 481,
+          "nodes": 130584
+        }
+      },
+      {
+        "layer_id": 20,
+        "seconds": 30.79543650522828,
+        "rss_at_return": 3818872832,
+        "actual_usage": {
+          "transfers": 64993,
+          "fabric_transfers": 64560,
+          "local_transfers": 433,
+          "nodes": 130696
+        }
+      },
+      {
+        "layer_id": 21,
+        "seconds": 34.39181326329708,
+        "rss_at_return": 4013727744,
+        "actual_usage": {
+          "transfers": 64940,
+          "fabric_transfers": 64468,
+          "local_transfers": 472,
+          "nodes": 130596
+        }
+      },
+      {
+        "layer_id": 22,
+        "seconds": 34.585107408463955,
+        "rss_at_return": 4213678080,
+        "actual_usage": {
+          "transfers": 64954,
+          "fabric_transfers": 64536,
+          "local_transfers": 418,
+          "nodes": 130618
+        }
+      },
+      {
+        "layer_id": 23,
+        "seconds": 30.835293721407652,
+        "rss_at_return": 4409577472,
+        "actual_usage": {
+          "transfers": 64972,
+          "fabric_transfers": 64500,
+          "local_transfers": 472,
+          "nodes": 130678
+        }
+      },
+      {
+        "layer_id": 24,
+        "seconds": 35.56521846726537,
+        "rss_at_return": 4607946752,
+        "actual_usage": {
+          "transfers": 64959,
+          "fabric_transfers": 64532,
+          "local_transfers": 427,
+          "nodes": 130626
+        }
+      },
+      {
+        "layer_id": 25,
+        "seconds": 31.398207699880004,
+        "rss_at_return": 4806713344,
+        "actual_usage": {
+          "transfers": 64957,
+          "fabric_transfers": 64500,
+          "local_transfers": 457,
+          "nodes": 130646
+        }
+      },
+      {
+        "layer_id": 26,
+        "seconds": 35.461130145937204,
+        "rss_at_return": 5003382784,
+        "actual_usage": {
+          "transfers": 64912,
+          "fabric_transfers": 64476,
+          "local_transfers": 436,
+          "nodes": 130538
+        }
+      },
+      {
+        "layer_id": 27,
+        "seconds": 31.74359286017716,
+        "rss_at_return": 5200359424,
+        "actual_usage": {
+          "transfers": 64930,
+          "fabric_transfers": 64500,
+          "local_transfers": 430,
+          "nodes": 130572
+        }
+      },
+      {
+        "layer_id": 28,
+        "seconds": 31.326812399551272,
+        "rss_at_return": 5398462464,
+        "actual_usage": {
+          "transfers": 64950,
+          "fabric_transfers": 64472,
+          "local_transfers": 478,
+          "nodes": 130632
+        }
+      },
+      {
+        "layer_id": 29,
+        "seconds": 35.58649774827063,
+        "rss_at_return": 5599350784,
+        "actual_usage": {
+          "transfers": 64924,
+          "fabric_transfers": 64512,
+          "local_transfers": 412,
+          "nodes": 130562
+        }
+      }
+    ],
+    "build_status": "wall_limit_before_all_children",
+    "composition_status": "not_started",
+    "export_status": "not_started_dependency_build_incomplete",
+    "backend_load_status": "not_started_no_exported_target_graph",
+    "complete_graph_peak_rss_known": false,
+    "oom_observed": false
+  },
+  "small_probe": {
+    "passed": true,
+    "loaded": {
+      "fabric_transfers": 39,
+      "load_seconds": 0.012406164,
+      "local_transfers": 12,
+      "network_initialized": false,
+      "nodes": 171,
+      "plan_schema": "moe-ub-full-model-plan/1",
+      "ranks": 3,
+      "schema_version": "moe-ub-plan-load-probe/1",
+      "simulation_executed": false
+    },
+    "expected": {
+      "actual_usage": {
+        "transfers": 51,
+        "fabric_transfers": 39,
+        "local_transfers": 12,
+        "nodes": 171
+      },
+      "plan_bytes": 272891,
+      "dependency_edges": 299,
+      "executed_layer_ids": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ranks": 3,
+      "target_scale_executed": false,
+      "simulation_executed": false
+    },
+    "rejected": [
+      "modified_json_node",
+      "truncated_chakra"
+    ],
+    "target_scale_executed": false
+  },
+  "real_ub_regression": {
+    "passed": true,
+    "cases": {
+      "61-blocks": {
+        "blocks": 61,
+        "moe_blocks": 58,
+        "nodes": 3102,
+        "writes": 754,
+        "all_transfers": 986,
+        "finished_ns": 315509,
+        "EP": 3,
+        "experts": 6,
+        "hidden_size": 1024
+      },
+      "dense-between": {
+        "blocks": 3,
+        "moe_blocks": 2,
+        "nodes": 114,
+        "writes": 26,
+        "all_transfers": 34,
+        "finished_ns": 10829,
+        "EP": 3,
+        "experts": 6,
+        "hidden_size": 1024
+      }
+    },
+    "target_scale_executed": false
+  },
+  "unit_tests_passed": 7,
+  "protection": {
+    "protected_files": 872,
+    "unchanged": true,
+    "native_launch_lock_restored": true,
+    "binary_sha256": "de6c8e38c30cf020018b1d9ec5248d3a877ace5a4dea80351664242ec486a7fb",
+    "ns3_library_count": 10,
+    "only_isolated_ns3_ub": true
+  },
+  "known_development_failure": {
+    "log": "runs/v03-full-round-preflight/logs/small-probe.json",
+    "reason": "diagnostic substring in new test omitted words or malformed; real loader correctly rejected corrupted graph; final test corrected exact diagnostic"
+  },
+  "next_candidate": "Reduce repeated contribution scans and reconstructed graph work without dropping validation; retest same bounded full round before claiming export/load readiness",
+  "measurement_task_completed": true,
+  "target_run_ready": false
+}

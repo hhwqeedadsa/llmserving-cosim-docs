@@ -1,0 +1,25 @@
+{
+  "schema_version": "moe-ub-full-round-probe/1",
+  "host_input": {
+    "path": "fixtures/m10_host_preflight/input.json",
+    "sha256": "d822f310ca84a48e5fc1a5c8ac3c7399d1d83c1ee4e19488bc1dc7b266ac34db"
+  },
+  "counts": {
+    "path": "fixtures/m10_host_preflight/counts.json",
+    "sha256": "50199907ba8301d693e1de521867ae081df928e038b7f5bbdfbbd3e30227ed4c"
+  },
+  "cost_template": {
+    "path": "fixtures/m10_full_model/service.json",
+    "sha256": "9ed50e8eed36611edfd6a6b92604d9e9e8fa9a39024dbecfed3a605bfe964ada"
+  },
+  "graph_budget": {
+    "schema_version": "moe-ub-graph-resources/1",
+    "max_graph_transfers": 4000000,
+    "max_graph_nodes": 8000000,
+    "max_plan_bytes": 21474836480,
+    "max_run_graphs": 1,
+    "max_run_transfers": 4000000,
+    "max_run_nodes": 8000000
+  },
+  "hardware_calibration": "unvalidated_reference"
+}

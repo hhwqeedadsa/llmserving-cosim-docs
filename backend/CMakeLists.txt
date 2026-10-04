@@ -223,3 +223,18 @@ build_exec(
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
 set_target_properties(cosim-local-test PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 target_include_directories(cosim-local-test PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+
+# Measurement only: invoke the real loader without constructing a UB network.
+build_exec(
+  EXECNAME cosim-plan-load-probe
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../scripts/full_round_load_probe.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/cann_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/multilayer_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/full_model_plan.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/kv_plan.cc"
+  LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-plan-load-probe PROPERTIES
+  CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-plan-load-probe PRIVATE "${CMAKE_CURRENT_LIST_DIR}")

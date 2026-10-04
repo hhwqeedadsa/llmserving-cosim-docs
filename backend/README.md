@@ -415,3 +415,7 @@ WriteDescriptor 可携带业务、应用元数据和填充的分段范围。观�
 `cosim-service` 为一次有观测的运行创建一个 `WriteProvenance`，每轮只登记一次传输。所有端口共享其描述符和包范围账本，源 TP 只监听一次；端口窗口、队列及来源输出独立。旧单端口构造入口内部创建自己的单份账本。共享对象不持有 TP，包回调只持有账本，保留原生 TP 回收与晚到回调安全性。
 
 输入和公共观测 schema 不变。内部 `provenance-audit.json` 与各端口新增资源字段区分物理表条目和逻辑可见数量，不能把各端口 `registered_transfers` 相加当作实际驻留副本数。账本数量预算取各端口最严格值，当前仍累计保留本次运行记录。新旧后端对照及复现入口见[共享来源验收](../fixtures/m10_shared_provenance/README.md)；完整目标资源与多轮回收另行处理。
+
+## 离线图加载测量
+
+`cosim-plan-load-probe GRAPH_DIRECTORY` 调用与服务相同的 `LoadLayerPlan`，保留 JSON、全模型重构和 Chakra 校验，输出实际节点及 fabric/本地描述符数量。它不创建网络或 ASTRA 活动图，也不推进仿真；须由 `moe_ub_cosim.host_probe` 施加宿主资源上限。构建目标为 `cosim-plan-load-probe`，测量与适用边界见[完整一轮预检](../fixtures/m10_full_round_preflight/README.md)。小图成功不能替代目标完整图装载证据。

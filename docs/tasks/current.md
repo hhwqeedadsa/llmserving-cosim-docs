@@ -4,7 +4,7 @@
 
 所属里程碑 **M10 — CANN 通信行为与目标规模验收**
 
-状态 `in_progress`
+状态 `completed`
 
 上一项已完成并提交于 `9db81e8`。2026-10-04 用户授权连续处理剩余资源与效率问题，必要的内部修复、测试、记录和本地提交不逐项等待确认；本任务完成后停止一次，再确认最终目标实验。不推送。
 
@@ -38,7 +38,7 @@
 
 ## 验收结果与停止位置
 
-实现与实际执行检查已通过，仅剩本地提交后的依赖指针审计；当前保持 `in_progress` 至该检查完成。详细命令、输入、退出状态、资源曲线与历史失败见[资源工程记录](../../fixtures/m10_resource_efficiency/README.md)及[最终检查点](../../fixtures/m10_resource_efficiency/checkpoint-final.json)。本节 `R` 指 `runs/v03-resource-efficiency`，`B` 指 `build/m10-resource-efficiency`。
+本任务四项资源验收已通过；实现提交 `3ddcbdb`，UB 子提交 `a9539dd`。提交后 `deps-final` 退出 0，全部 13 个依赖的固定版本和父仓库指针一致。详细命令、输入、退出状态、资源曲线与历史失败见[资源工程记录](../../fixtures/m10_resource_efficiency/README.md)及[最终检查点](../../fixtures/m10_resource_efficiency/checkpoint-final.json)。本节 `R` 指 `runs/v03-resource-efficiency`，`B` 指 `build/m10-resource-efficiency`。
 
 | 验收对象 | 实际结果 |
 |---|---|
@@ -55,4 +55,4 @@ UB 修改只为已排空网络、已销毁的每任务 Jetty 回收 TA 序号历
 
 下一阶段仅准备了[有限预算](../../fixtures/m10_resource_efficiency/final-run-budget.json)和[命令/输入摘要](../../fixtures/m10_resource_efficiency/final-run-inputs.json)，`execution_authorized=false`：64 步线性估计约 6.85 天，含已有证据和临时空间预留约 295 GiB；提议服务/导出分别限 7/2 天、累计 320 GiB、服务采样 RSS 56 GiB/地址 60 GiB。当前任务未按这些提议启动任何最终实验。后续轮次峰值、总时长和压缩比仍需实测；超限必须保留失败，不截断请求、不扩大预算重试。
 
-本任务完成后停在最终 64 步目标实验之前，由用户确认下一阶段；不自动切换任务、不推送。M10 尚未完成。
+本任务已完成，停在最终 64 步目标实验之前，由用户确认下一阶段；未自动切换任务，未推送。M10 尚未完成。

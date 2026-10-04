@@ -2,7 +2,7 @@
   "schema_version": "moe-ub-resource-checkpoint/1",
   "checkpoint": "complete_first_round_export_and_bounded_handoff",
   "resource_engineering_checks_passed": true,
-  "final_dependency_audit_after_root_commit_pending": true,
+  "final_dependency_audit_after_root_commit_pending": false,
   "m10_completed": false,
   "final_64_step_experiment_executed": false,
   "commands": {
@@ -2866,5 +2866,21 @@
       "label": "build-final-revision",
       "reason": "Incremental build did not update the embedded Git revision; explicit configure followed by build-bound-revision and catalog equality checks bound the committed dependency."
     }
-  ]
+  ],
+  "resource_task_completed": true,
+  "final_dependency_audit": {
+    "argv": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-04T16:34:15.838543+00:00",
+    "ended_utc": "2026-10-04T16:34:16.288757+00:00",
+    "exit_code": 0,
+    "stdout": "runs/v03-resource-efficiency/logs/deps-final.stdout.log",
+    "stderr": "runs/v03-resource-efficiency/logs/deps-final.stderr.log"
+  },
+  "implementation_commit": "3ddcbdb",
+  "git_dependency_revision": "a9539ddff9c8713975a50901f922c250cfcf8585",
+  "highest_task_sampled_artifact_bytes": 20238192640
 }

@@ -3000,3 +3000,64 @@ regression-scenario 先于最后一次部署检查增量构建；最后改动只
 开发期失败全部保留：build 因新增 C++ 校验把 JSON 直接传给 set::insert 导致重载歧义，改为明确整数/字符串取值后通过。integration 把研究观测对象直接传给原始后端而缺少 schema，改为使用已有 backend_observation 转换后四组实际运行通过；integration-observation-fix 的队列断言把 tx_start 再当作 dequeue，正确按三种事件核对后修复。integration-queue-fix 的字节期望错误包含本地交付，已改为按既有 ub_task_id 区分真实 fabric 业务，明确核对 113664×3 与 64512 本地字节。integration-byte-fix 只改一层物理归属，先触发原有跨层一致性拒绝；把测试改为各层一致的错误归属后，确认新 fabric 归属检查拒绝。没有改变生产完成条件或放宽合法性检查。
 
 本步完成后整理记录、本地提交、不推送，current.md 停在 completed。完整目标拓扑未与 R1 全图和真实负载组合运行；足够独立真实请求、目标图/来源账本宿主资源及最终规模仍需后续确认。NPU/MLA/量化内核和链路绝对时序未校准，M10 整体仍未完成。
+
+## 2026-10-04：M10 主场景真实请求选择
+
+用户确认继续后执行 `v03-target-route-selection`，任务说明提交 `f1d3ea6`，起点为多平面拓扑提交 `c2fc86d`。依据 v0.3 §3、4.3–4.4、4.6、4.8、6、场景 route_source/d128_b8_window64 与继承的 v0.2 §4.1–4.4/9/10。用户另明确授权：固定修订 MMLU 按 seed=0 顺序最多下载前 1152 份、2252054093 B，取得 1024 份合格文件立即停止。本次未安装软件、下载模型、使用 GPU、修改技术规范或依赖，没有推送。
+
+新增完整目录元数据获取、显式限额下载和不联网的逐文件选择入口，复用原路由格式校验。选择器不保留全部原始 JSON 树；现有执行导入器仍保留完整原始对象，二者的资源证据不能混用。策略、来源 manifest、请求映射、独立摘要及复现说明见 [M10 路由清单](../fixtures/m10_route_selection/README.md)。原始数据和全部候选/检查日志位于忽略目录，Git 只记录来源元数据。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，R=`runs/v03-target-route-selection`，L=`R/logs`，P=`.venv/llmservingsim-native/bin/python`。审阅后复用 R/record.py 和 R/measure.py；记录实际 argv、cwd、UTC 起止、退出码、stdout/stderr，计时 wrapper 另保存 monotonic 墙钟和子进程最大 RSS。除注明外，下表顶层命令均退出 0。
+
+| 实际命令（由 `python3 R/record.py 标签` 包装） | 标签与结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 个固定递归依赖不变。 |
+| `python3 R/baseline.py` | baseline；实际执行前保护复用 build/m10-fabric/output、原生启动锁及原 M9 两份数据，共 434 文件。没有构建。 |
+| `python3 R/fetch_catalog.py` | catalog；初次固定修订目录元数据获取，14 页、13922 JSON；未读取轨迹内容。 |
+| `env PYTHONPATH=python P scripts/fetch_route_catalog.py --source-manifest fixtures/m9_evidence/published-r1-manifest.json --output-dir R/catalog-reproduced-fixed` | catalog-reproduce-fixed；仓库入口重新获取全部目录，与初次完整 files 清单逐项一致。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.route_selection plan --input R/selection.json --output-dir R/plan` | download-plan；授权候选前缀 1152 份/2252054093 B，生成候选清单，不宣称合格。 |
+| `env PYTHONPATH=python P scripts/acquire_route_selection.py --input R/selection.json --output-dir R/acquisition-resume --max-download-bytes 2252054093 --workers 4` | acquire-resume；恢复核验已有文件并继续下载，检查至 1145 份获得 1024 份合格文件后停止。 |
+| `env PYTHONPATH=python python3 R/measure.py R/select-target.time.json P -m moe_ub_cosim.route_selection select --input R/selection.json --output-dir R/selected` | select-target；重新逐文件核验并生成 manifest、requests、逐候选 report。 |
+| `env PYTHONPATH=python python3 R/measure.py R/independent-audit.time.json P tests/integration/check_target_routes.py --input R/selection.json --selection-dir R/selected --output-dir R/audit` | independent-audit；独立检查全部实际候选与请求，不调用被测原始校验器。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p route_selection_test.py -v` | unit-selection-verified、unit-acquisition；先四项选择测试通过，增加下载停止/恢复后五项通过。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p '*_test.py' -v` | unit-all；120 项通过。 |
+| `env PYTHONPATH=python python3 R/measure.py R/selected-routes-ub.time.json P tests/integration/check_published_routes.py --build-dir build/m10-fabric --output-dir R/selected-routes-ub --selection R/audit/smoke-selection.json` | selected-routes-ub；新选来源的四次实际 UB 对照、完整两文件导入及三项非法选择拒绝通过。 |
+| `env PYTHONPATH=python P tests/integration/check_published_routes.py --build-dir build/m10-fabric --output-dir R/regression-published` | regression-published；原 M9 两文件的相同四次执行与三项拒绝保持原预期。 |
+| `python3 R/final_audit.py` | final-audit；434 文件摘要未变，实际十个 ns-3 库均来自复用 build/m10-fabric/output/lib。 |
+| `python3 R/metadata_audit.py` | metadata-audit；归档 JSON 与实际产物逐字节相同，目录重新获取、下载/选择身份与字节一致，缺层位置、忽略规则及两套 UB 结果核对通过，保存 R/completion.json。 |
+
+两个 published-route 集成目录的 commands.json 保存各次导入/后端 argv、UTC 与退出码，protocol.jsonl 保存两轮提交/完成过程。selection 的策略和目录摘要已存入 fixture；重复获取元数据的 checked_utc/页链接可不同，files 清单规范 JSON 摘要均为 `2e1a2c055a3b2254d49aa87c0861fb6860bfc865ff4fcdce91c75bd10e070905`。
+
+### 文件、请求和资源实测
+
+固定数据集修订为 `27febb7b2d24169560a9f6f83d38eb53f94916cf`，子树 `cognitivecomputations/DeepSeek-R1-AWQ/mmlu/`。完整目录有 13922 JSON、源文件总计 27537803179 B；该总量仅为目录元数据，没有全部下载。seed=0 排序前 1024 份为 2004001931 B，授权前 1152 份为 2252054093 B。算法固定为 SHA256(seed 十进制文本、换行、仓库相对路径的 UTF-8)，摘要相同时再按路径排序。
+
+实际检查前 1145 份、2237609796 B，1024 份合格，未读取后七份授权候选。acquire-resume 用时约 826.526 s，复用首次尝试留下的 19 文件/42157000 B，新保存 2195452796 B。这里的字节均为源文件内容大小，不是含 HTTP 协议和失败重试的网络流量计数。全部内容留在本地忽略目录。文件结束不推断 EOS，没有重复文件、填补缺层或拼接不足长度。
+
+独立扫描确认 30 份文件末尾缺层，91 份格式合法但不足 64 个 Decode 入口。缺层如 anatomy/219.json 的入口 128 缺少层 12–60、professional_law/11424.json 的入口 81 缺少层 26–60；即使前 64 步合法，仍排除整份文件。具体首个坏入口/缺层列表在 R/audit/summary.json，全部逐候选结果在 R/selected/report.json。其余未扫描目录的合格率未知。
+
+1024 份合格文件的 prompt 为 1–521、可用 Decode 入口为 65–128；manifest_index 从零起，rank=index%128、request_id=index+1、arrival=0。入口 1–64 对应输入 Token P…P+63，KV 预留 P+64、窗口结束 tokens_reached=P+65，目标总长度保持 null。共 3801088 条选中 Decode 层记录。实际核验的所有合法候选（含短文件）合计 7458336 条完整 Decode 层记录；没有一次性生成目标规模 normalized 路由对象。
+
+沿用既定 70272 B/token、16 token/block 的 MLA 容量参考，逐请求块对齐后每 rank 八请求共 46098432–89948160 B，小于条件 KV 预算 31325587712 B。只说明清单对应的参考算式，不是实际 Scheduler 接纳、实测 HBM 或宿主 RAM。AWQ4 采集精度与目标 INT8 存储参考不匹配，采集权重/runtime 修订未知均保留。
+
+| 实际过程 | 墙钟 s | 最大 RSS KiB | 输出目录字节 |
+|---|---:|---:|---:|
+| 逐文件选择 select-target | 37.872 | 49804 | 1304353 |
+| 独立复核 independent-audit | 32.285 | 49028 | 34161 |
+| 新来源四组小型 UB 集成（含导入） | 1.914 | 41852 | 15464741 |
+
+计时 wrapper 每次新建进程；RSS 为 `resource.getrusage(RUSAGE_CHILDREN).ru_maxrss`，即等待子进程链中的最大单进程峰值，不是并发进程树的总驻留，更不是 HBM。原 M9 回归与新来源集成有时间重叠，墙钟不用于性能比较。候选原始文件字节不含在上述输出目录内。
+
+### 小场景真实消费与边界
+
+从已选 manifest 的索引 0、2 派生两个各含 128 步的源文件，仅为已有固定批测试把它们映射到 rank 2、观察入口 1–2 和层 3–5，保留 request_id 与源身份；主场景原 requests.json 未改写。测试逐条核对 14848 条完整源 Decode 层记录，实际消费 12 条/96 次专家输入，每次完成 84 次真实 UB 写、344064 B 业务和 12 次本地交付。
+
+10 Gbit/s 的两轮实际完成边界为 146762/293224 ns，1 Gbit/s 为 1425542/2851084 ns。下轮提交等待前轮 WAVE_DONE，SEND/RECV 只由实际 UB 数据就绪/事务回调完成。来源开启、关闭及无观测三次执行结果/协议相同，开关两次公共观测逐字节相同；逐包 FIFO、依赖、单份发送与完成、排空和槽位归零通过。原 M9 两文件另回归 78 次写、315392 B、270334 ns 的基准，预期未变。
+
+这是两请求 routed 通信片段及参考计算的消费证据，不是目标 CANN/完整 R1 服务执行。目标全量路由导入、128 rank 全图、来源账本的宿主资源仍需测量；既有 load_manifest/select_routes 仍同时保留原始对象和选中记录。本步未准备 2048 请求 refill 场景，也未校准 NPU、MLA/量化内核或网络绝对时序。
+
+### 开发期失败与停止
+
+失败日志全部保留。首次 acquire 因遇到源文件末尾缺层退出 1；随后按当前任务的筛选要求保留原始文件，将格式错误作为整份候选拒绝并继续授权前缀，原始校验没有放宽。unit-selection 的人工输入错误地按六个专家造数据，而 fixture 声明四个专家；改为四专家范围后 unit-selection-fixed 又暴露摘要篡改用例替换了已不存在的字符，修正为实际存在的字节后 unit-selection-verified 通过。没有修改生产摘要检查或预期筛选次序。catalog-reproduce 把元数据翻页 URL 的 `%2F` 编码误判为不同路径；改为解码后仍严格核对同一 HTTPS 来源和固定目录，catalog-reproduce-fixed 获取完整目录并逐项匹配。
+
+本步完成、整理记录并本地提交，不推送、不自动进入下一任务。完整目标宿主资源预检和最终 R1/CM384 组合验收仍待用户确认；M10 整体未完成。

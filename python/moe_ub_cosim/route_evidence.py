@@ -23,8 +23,7 @@ def read_json(ref):
     return path,json.loads(content, object_pairs_hook=unique_object)
 
 
-def load_manifest(ref):
-    _,manifest = read_json(ref)
+def validate_manifest(manifest):
     fields(manifest,'schema_version source model layers files','route manifest')
     require(manifest['schema_version']=='moe-ub-route-manifest/1','Unsupported route manifest')
     source = manifest['source']
@@ -59,6 +58,40 @@ def load_manifest(ref):
             integer(layer['num_experts'],'route experts',1,2**31-1)
             integer(layer['top_k'],'route Top-K',1,layer['num_experts'])
     files=manifest['files'];require(isinstance(files,list) and 1<=len(files)<=4096,'Invalid route file budget')
+    return manifest
+
+
+def inspect_raw(content,layers):
+    """Selection may inspect a prefill-only file; it remains ineligible for Decode."""
+    return validate_raw(json.loads(content,object_pairs_hook=unique_object),layers,require_decode=False)
+
+
+def validate_raw(raw,layers,require_decode=True):
+    require(isinstance(raw,list) and (2 if require_decode else 1)<=len(raw)<=65537,'Require prefill entry and nonempty decode trace')
+    prompt=None
+    for entry_no,entry in enumerate(raw):
+        require(isinstance(entry,dict) and set(entry)=={str(i) for i in range(len(layers))},
+                'Missing/extra source layer')
+        for layer in layers:
+            value=entry[str(layer['layer_id'])]
+            if layer['kind']=='dense':
+                require(value is None,'Dense source entry must be null');continue
+            require(isinstance(value,list) and value and (entry_no==0 or len(value)==1),
+                    'Decode source must contain one Token row')
+            if entry_no==0:
+                require(prompt is None or prompt==len(value),'Prefill Token count differs across layers');prompt=len(value)
+            for choices in value:
+                require(isinstance(choices,list) and len(choices)==layer['top_k'] and
+                        all(type(e)is int and 0<=e<layer['num_experts'] for e in choices) and
+                        len(set(choices))==len(choices),'Invalid source expert choices')
+    require(prompt is not None, 'Trace has no routed layer')
+    return prompt,len(raw)-1
+
+
+def load_manifest(ref):
+    _,manifest = read_json(ref)
+    validate_manifest(manifest)
+    layers,files=manifest['layers'],manifest['files']
     loaded={};paths=set();origins=set()
     for item in files:
         fields(item,'file_id original_path file format','route file')
@@ -68,24 +101,7 @@ def load_manifest(ref):
         path,raw=read_json(item['file'])
         require(path not in paths and item['original_path'] not in origins,'Repeated raw route file')
         paths.add(path);origins.add(item['original_path'])
-        require(isinstance(raw,list) and 2<=len(raw)<=65537,'Require prefill entry and nonempty decode trace')
-        prompt=None
-        for entry_no,entry in enumerate(raw):
-            require(isinstance(entry,dict) and set(entry)=={str(i) for i in range(len(layers))},
-                    'Missing/extra source layer')
-            for layer in layers:
-                value=entry[str(layer['layer_id'])]
-                if layer['kind']=='dense':
-                    require(value is None,'Dense source entry must be null');continue
-                require(isinstance(value,list) and value and (entry_no==0 or len(value)==1),
-                        'Decode source must contain one Token row')
-                if entry_no==0:
-                    require(prompt is None or prompt==len(value),'Prefill Token count differs across layers');prompt=len(value)
-                for choices in value:
-                    require(isinstance(choices,list) and len(choices)==layer['top_k'] and
-                            all(type(e)is int and 0<=e<layer['num_experts'] for e in choices) and
-                            len(set(choices))==len(choices),'Invalid source expert choices')
-        require(prompt is not None, 'Trace has no routed layer')
+        prompt,_ = validate_raw(raw,layers)
         loaded[item['file_id']]=dict(raw=raw,prompt_tokens=prompt,available_decode_records=len(raw)-1,
             file=deepcopy(item['file']),original_path=item['original_path'])
     return manifest,loaded

@@ -98,10 +98,21 @@ int main()
         Reject([&] { ledger.Created(data, 7, 0, begin, 1); });
         Reject([&] { ledger.Created(data, 8, 65536, begin, 1); });
         moe_ub::WriteDescriptor next{4294967320ULL, 8, "next-graph", 1, 2, 0, 1, 18, 65537};
+        const auto* first_descriptor = &ledger.Descriptor(7);
+        auto segmented = next;
+        segmented.payload_regions = std::vector<moe_ub::PayloadRegion>{{0,65537,"business"}};
+        Reject([&] { ledger.Register({segmented,segmented}); });
+        Check(ledger.TransferCount()==1 && !ledger.HasPayloadRegions(),
+              "failed batch changed count or byte-layout state");
+        auto invalid = next; invalid.task_id = uint64_t{1} << 32;
+        Reject([&] { ledger.Register({next,invalid}); });
+        Check(ledger.TransferCount()==1, "narrowing task id partially registered batch");
         // A later duplicate must not partially append the earlier valid entry.
         Reject([&] { ledger.Register({next, {4294967319ULL, 7, "unit", 1, 2, 0, 1, 17, 65537}}); });
         Reject([&] { ledger.Created(data, 8, 65536, begin, 1); });
         ledger.Register({next});
+        Check(&ledger.Descriptor(7)==first_descriptor && ledger.TransferCount()==2,
+              "appending a graph copied or invalidated the existing descriptor table");
         ledger.SetLimits(1,2);
         Reject([&] { ledger.Register({{4294967321ULL,9,"limit",1,2,0,1,19,1}}); });
         Reject([&] { ledger.Created(MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE,1),7,65536,begin,1); });
@@ -118,6 +129,12 @@ int main()
         Reject([&] { ledger.Lookup(copy, 2); });
         copy->RemoveAtEnd(1);
         Reject([&] { ledger.Lookup(copy, 1); });
+        Reject([&] { ledger.SetLimits(1,2); });
+        ledger.RestrictLimits(2,2);
+        ledger.RestrictLimits(100,100);
+        Reject([&] { ledger.Register({{4294967321ULL,9,"limit",1,2,0,1,19,1}}); });
+        Check(ledger.TransferCount()==2 && ledger.PacketCount()==2 && ledger.CreatedNotifications()==3,
+              "shared limits or failed source events changed stored records");
         std::cout << "PASS: half-open/zero windows, packet parsing, ACK exclusion, exact ranges and diagnostics\n";
         return 0;
     }

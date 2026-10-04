@@ -86,8 +86,22 @@ def main():
                 assert packet['native_tx_bytes_delta']==packet['all_successful_start_bytes']==r['resident_window_rows']==0
                 assert (directory/'packet-events.jsonl').read_bytes()==(directory/'egress-queue-audit.jsonl').read_bytes()==b''
             audits.append(dict(switch=s,port=port,**r,actual_egress_packets=packet['all_successful_start_packets']))
+        shared=run/'execution/provenance-audit.json'
+        if shared.exists():
+            storage=read(shared)
+            assert storage['storage']=='shared_run_ledger' and storage['ledger_instances']==1
+            assert storage['descriptor_tables']==storage['packet_tables']==1
+            assert storage['descriptor_records']==storage['packet_records']==storage['created_notifications']==2400
+            assert storage['port_observers']==len(ports)
+            assert all(r['provenance_storage']=='shared_run_ledger' and
+                       r['owned_descriptor_records']==r['owned_packet_provenance_records']==0 for r in audits)
+        else:
+            # Historical backend: independently audited per-port ownership in
+            # fixtures/m10_host_preflight. Logical counters alone do not prove sharing.
+            storage=dict(storage='historical_per_port_ledgers',descriptor_tables=2*len(ports),packet_tables=len(ports),
+                         descriptor_records=2*len(ports)*2400,packet_records=len(ports)*2400)
         cases[label]=dict(profile=profile,finished_ns=front['finished_ns'],counts=counted_total,
-            ports=audits,registered_records_in_two_maps=2*len(ports)*2400,packet_ledger_rows=len(ports)*2400)
+            ports=audits,provenance_storage=storage)
         print(label,'ports',len(ports),'RSS',profile['peak_sampled_group_rss_bytes'],'completed',front['finished_ns'],flush=True)
     for s,p in ports_all:
         on=out/f'ten/run/execution/ports/{s}-{p}';off=out/f'ten-source-off/run/execution/ports/{s}-{p}'
@@ -95,7 +109,7 @@ def main():
         for name in ('packet-events.jsonl','egress-queue-audit.jsonl'):
             assert sha(on/name)==sha(off/name)
     save(out/'summary.json',dict(passed=True,cases=cases,target_scale_executed=False,
-        result='All ports register all writes and packet UIDs, including ports with no observed traffic; per-port record copies measured explicitly'))
+        result='All ports see all logical writes and packet UIDs; physical shared or historical per-port ownership is reported separately'))
 
 
 if __name__=='__main__':main()

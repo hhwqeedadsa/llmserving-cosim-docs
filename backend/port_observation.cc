@@ -135,11 +135,28 @@ void PayloadLedger::Register(const std::vector<WriteDescriptor>& descriptors)
 {
     Require(descriptors_.size()<=max_transfers_ && descriptors.size()<=max_transfers_-descriptors_.size(),
             "Observation registered transfer budget exceeded");
-    auto checked = descriptors_;
+    // Validate and allocate only the incoming batch. Merge map nodes afterwards,
+    // preserving atomic rejection without copying all preceding graphs.
+    std::map<uint32_t, WriteDescriptor> checked;
+    bool segmented = segmented_payload_;
     for (const auto& d : descriptors)
-        Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
+    {
+        Require(d.task_id <= UINT32_MAX && !descriptors_.contains(d.task_id) && checked.emplace(d.task_id, d).second,
                 "Duplicate or invalid UB task identity in provenance registry");
-    descriptors_.swap(checked);
+        segmented |= d.payload_regions.has_value();
+    }
+    descriptors_.merge(checked);
+    segmented_payload_ = segmented;
+}
+void PayloadLedger::SetLimits(uint64_t packets, uint64_t transfers)
+{
+    Require(ranges_.size()<=packets && descriptors_.size()<=transfers,
+            "Observation provenance already exceeds requested budget");
+    max_packets_=packets; max_transfers_=transfers;
+}
+void PayloadLedger::RestrictLimits(uint64_t packets, uint64_t transfers)
+{
+    SetLimits(std::min(packets,max_packets_),std::min(transfers,max_transfers_));
 }
 
 void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
@@ -155,6 +172,7 @@ void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
     Require(ranges_.contains(packet->GetUid()) || ranges_.size()<max_packets_, "Observation payload ledger packet budget exceeded");
     auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
     Require(inserted || it->second == value, "Conflicting packet provenance");
+    ++created_notifications_;
 }
 PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const
 {
@@ -170,6 +188,35 @@ PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t 
     return range;
 }
 
+WriteProvenance::WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> sources,
+                               const std::vector<WriteDescriptor>& descriptors)
+    : ledger_(std::make_shared<PayloadLedger>(descriptors)), sources_(std::move(sources))
+{
+    // Reject duplicate controllers before attaching any callbacks.
+    std::set<const ns3::UbController*> unique;
+    for (const auto& source : sources_)
+        Require(source && unique.insert(ns3::PeekPointer(source)).second, "Invalid or duplicate provenance source");
+    for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
+    {
+        Require(tp->TraceConnectWithoutContext("WritePacketCreated",
+                    ns3::MakeBoundCallback(Created, ledger_)), "Cannot observe WRITE packet creation");
+        ++source_subscriptions_;
+    }
+}
+WriteProvenance::~WriteProvenance()
+{
+    // Native TP reclamation owns its lifetime. A removed TP may outlive its map
+    // entry; its callback safely retains just the ledger until it is destroyed.
+    for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
+        tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
+}
+Json WriteProvenance::Audit() const
+{
+    return {{"storage", "shared_run_ledger"}, {"descriptor_tables", 1}, {"packet_tables", 1},
+        {"descriptor_records", ledger_->TransferCount()}, {"packet_records", ledger_->PacketCount()},
+        {"source_subscriptions", source_subscriptions_}, {"created_notifications", ledger_->CreatedNotifications()}};
+}
+
 PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descriptor,
                                 ns3::Ptr<ns3::UbController> source)
     : PortObservation(config, std::vector<WriteDescriptor>{std::move(descriptor)}, {source})
@@ -178,12 +225,23 @@ PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descr
 PortObservation::PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
                                 std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events,
                                 const std::filesystem::path& spool_directory)
-    : config_(config), windows_(config), sources_(std::move(sources)),
+    : PortObservation(config, std::make_shared<WriteProvenance>(std::move(sources), descriptors),
+                      retain_packet_events, spool_directory)
+{}
+
+PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
+                                bool retain_packet_events, const std::filesystem::path& spool_directory)
+    : config_(config), windows_(config), provenance_(std::move(provenance)),
       retain_packet_events_(retain_packet_events)
 {
+    Require(provenance_ != nullptr, "Observation needs a provenance ledger");
     if (!config_.resource_budget.is_null())
     {
         ValidateObservationBudget(config_.resource_budget);
+        // All ports see the same logical records. Respect the strictest of their
+        // declared limits, including ports with source attribution disabled.
+        provenance_->RestrictLimits(config_.resource_budget.at("max_ledger_packets"),
+                                   config_.resource_budget.at("max_registered_transfers"));
         Require(!spool_directory.empty(), "Streaming observation needs its output directory");
         spool_directory_=spool_directory;std::filesystem::create_directories(spool_directory_/"observed");
         if(config_.provenance) std::filesystem::create_directories(spool_directory_/"truth");
@@ -193,12 +251,6 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
             streams_[name].open(spool_directory_/name);Require(bool(streams_.at(name)),"Cannot open streaming observation file");
         }
     }
-    for (const auto& d : descriptors)
-    {
-        Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
-                "Duplicate or invalid observation task identity");
-        segmented_payload_ |= d.payload_regions.has_value();
-    }
     Require(config_.switch_id < ns3::NodeList::GetNNodes(), "Observation switch does not exist");
     auto node = ns3::NodeList::GetNode(config_.switch_id);
     auto sw = node->GetObject<ns3::UbSwitch>();
@@ -207,19 +259,6 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
     port_ = ns3::DynamicCast<ns3::UbPort>(node->GetDevice(config_.port_id));
     Require(port_ != nullptr, "Observation device is not a UB port");
     initial_tx_bytes_ = port_->GetTxBytes();
-    // Byte layout is needed even with source attribution disabled. This passive
-    // ledger never changes the packet or schedules a simulation event.
-    {
-        ledger_ = std::make_shared<PayloadLedger>(std::vector<WriteDescriptor>{});
-        if (!config_.resource_budget.is_null())
-            ledger_->SetLimits(config_.resource_budget.at("max_ledger_packets"),config_.resource_budget.at("max_registered_transfers"));
-        ledger_->Register(descriptors);
-        // Keep no TP references: native reclamation owns their lifetime. The bound
-        // ledger, not this observer, remains valid if a removed TP outlives its map entry.
-        for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
-            Require(tp->TraceConnectWithoutContext("WritePacketCreated",
-                        ns3::MakeBoundCallback(Created, ledger_)), "Cannot observe WRITE packet creation");
-    }
     Require(port_->TraceConnectWithoutContext("TraComEventNotify",
                 ns3::MakeCallback(&PortObservation::PacketStart, this)), "Cannot observe port starts");
     Require(port_->GetUbQueue()->TraceConnectWithoutContext("UbEnqueue",
@@ -238,20 +277,6 @@ PortObservation::~PortObservation()
         port_->GetUbQueue()->TraceDisconnectWithoutContext("UbDequeue",
             ns3::MakeCallback(&PortObservation::Dequeued, this));
     }
-    if (ledger_) for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
-        tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
-}
-void PortObservation::Register(const std::vector<WriteDescriptor>& descriptors)
-{
-    auto checked = descriptors_;
-    for (const auto& d : descriptors)
-    {
-        Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
-                "Duplicate or invalid observation task identity");
-        segmented_payload_ |= d.payload_regions.has_value();
-    }
-    if (ledger_) ledger_->Register(descriptors);
-    descriptors_.swap(checked);
 }
 void PortObservation::Record(const std::string& name, Json& memory, const Json& row)
 {
@@ -289,9 +314,9 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     std::optional<PayloadRange> packet_range;
     if (payload)
     {
-        packet_range = ledger_->Lookup(packet, payload);
+        packet_range = provenance_->Ledger().Lookup(packet, payload);
         const auto& range = *packet_range;
-        const auto& descriptor = descriptors_.at(range.task_id);
+        const auto& descriptor = provenance_->Ledger().Descriptor(range.task_id);
         if (descriptor.payload_regions)
         {
             business = 0;
@@ -312,7 +337,7 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     {
         Json event={{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
             {"counted_packet_bytes", whole}, {"business_payload_bytes", business}};
-        if (segmented_payload_)
+        if (provenance_->Ledger().HasPayloadRegions())
         {
             event["application_metadata_bytes"] = metadata;
             event["padding_bytes"] = padding;
@@ -331,7 +356,7 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     if (config_.provenance && business)
     {
         const auto range = *packet_range;
-        const auto& descriptor = descriptors_.at(range.task_id);
+        const auto& descriptor = provenance_->Ledger().Descriptor(range.task_id);
         auto regions = descriptor.payload_regions.value_or(std::vector<PayloadRegion>{{0, descriptor.bytes, "business"}});
         for (const auto& region : regions)
         {
@@ -377,7 +402,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         Save((base / name).string(), value, lines);
     };
     Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
-    Require(transfers.size() == descriptors_.size(), "Observation export transfer count mismatch");
+    Require(transfers.size() == provenance_->Ledger().TransferCount(), "Observation export transfer count mismatch");
     std::filesystem::create_directories(base / "observed");
     save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
         {"counter_location", "egress_packet_start"}, {"byte_semantics", "packet_get_size"},
@@ -406,7 +431,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"business_payload_bytes", row.business}, {"application_metadata_bytes", row.metadata},
             {"data_protocol_overhead_bytes", row.overhead}, {"control_packet_bytes", row.control},
             {"unattributed_bytes", 0}});
-        if (segmented_payload_) truth.back()["padding_bytes"] = row.padding;
+        if (provenance_->Ledger().HasPayloadRegions()) truth.back()["padding_bytes"] = row.padding;
         if(streamed)
         {
             observed_stream<<observed.back().dump()<<'\n';
@@ -425,8 +450,9 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
     if(streamed) save("resource-audit.json",{{"record_storage","streamed_jsonl"},{"event_bytes",event_bytes_},
         {"retained_packet_event_records",packet_events_.size()},{"retained_queue_records",queue_events_.size()},
         {"retained_packet_range_records",packet_ranges_.size()},{"resident_window_rows",windows_.ResidentRows()},
-        {"logical_window_rows",windows_.Count()},{"ledger_packets",ledger_->PacketCount()},
-        {"registered_transfers",descriptors_.size()},{"budget",config_.resource_budget}});
+        {"logical_window_rows",windows_.Count()},{"ledger_packets",provenance_->Ledger().PacketCount()},
+        {"registered_transfers",provenance_->Ledger().TransferCount()},{"budget",config_.resource_budget},
+        {"provenance_storage","shared_run_ledger"},{"owned_descriptor_records",0},{"owned_packet_provenance_records",0}});
     else { save("egress-queue-audit.jsonl", queue_events_, true);
         if (retain_packet_events_) save("packet-events.jsonl", packet_events_, true); }
     if (!config_.provenance) return;

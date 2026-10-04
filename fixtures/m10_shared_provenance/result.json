@@ -1,0 +1,288 @@
+{
+  "schema_version": "moe-ub-shared-provenance-validation/1",
+  "passed": true,
+  "baseline_source_revision": "4545074",
+  "task_description_commit": "84cbfaf",
+  "target_scale_executed": false,
+  "target_run_ready": false,
+  "hardware_calibration": "unvalidated_reference",
+  "scope": "observation-owned descriptors and packet provenance; other plan/executor storage and per-port output remain",
+  "source_hashes": {
+    "backend/CMakeLists.txt": "7ae46f947b98e62ee4c895efd949ef6fc9a5498c1852af2f06885a8caf082ebd",
+    "backend/port_observation.hh": "559c14cfa7234e30ac4360e8a62bf960b6bbaf3918bded1f9c1929eb429c76f6",
+    "backend/port_observation.cc": "88b52f240b4815792409ed2b63fa483c312e5bce99c9ff98ad932b9a3bb58c81",
+    "backend/cosim_service.cc": "98d78bf42ed1138afb0498c88d4ae3e79816b88d18878fba344e8c4c578a69ab",
+    "python/moe_ub_cosim/host_preflight.py": "19689f155c9afc6dc2c786640a66945c45e65e918b607470f5074d924681d6e5",
+    "tests/unit/port_observation_test.cc": "0aed0895adda21190caf78bcc8907dc852261a6d45fff66a845d11c813859c87",
+    "tests/unit/shared_provenance_test.cc": "33bb6167f9ca626f6fe0f943a8a33224ebdb92c183aac79dbbe9383d81fdc996",
+    "tests/integration/check_host_preflight.py": "01c4f81096e964b176a6643cf99b23d578167f0f77266ad9416da9766c64e919",
+    "tests/integration/check_shared_provenance.py": "ba2fd7b844dd69fb3b75801658c456724d005d5280b28f94766d9cc6432ca409",
+    "tests/integration/check_observation.py": "f914f71d4de01a63b9fc096085f1dc02d47b424bf190aaeb05a718f26423d5a0"
+  },
+  "input_hashes": {
+    "fixtures/m10_full_model/service.json": "9ed50e8eed36611edfd6a6b92604d9e9e8fa9a39024dbecfed3a605bfe964ada",
+    "fixtures/m10_full_model/layers.json": "566dff69957540590b3094ac9347bb8c3fe42d4851e3659b51b8f5224b0df217",
+    "fixtures/m10_resources/graph-budget.json": "8a3ea8e76effa6c8caede99b097d27d8c241802e66067050c37e94bad58c6f7c",
+    "fixtures/m10_resources/observation-budget.json": "324efe60086600de61e4e9703f7bda11477a02b2ba3b550946ab19f2cd057712",
+    "fixtures/m3_shared_bottleneck/network/network_attribute.txt": "3d4ec2706b6487df78386cec007863f68aa75812d83178fa2481efea6896b3e3",
+    "fixtures/m3_shared_bottleneck/network/node.csv": "7583867557e7c264a9c0167a063f0058140e062e2f4b3dd743450e0c92303db4",
+    "fixtures/m3_shared_bottleneck/network/routing_table.csv": "ee57e06037eb9f28f1b0e32919f1675413088b1c6549d7cd784263322f7b3bd3",
+    "fixtures/m3_shared_bottleneck/network/topology.csv": "a361f618ac034ea81675c0574791c7de7693fddec24a509d9453b4c6f44d012e",
+    "fixtures/m3_shared_bottleneck/network/transport_channel.csv": "17c2fb8b3b08e66495c3fd638d494b8324dec34c2a158248ce6e278a18dce999"
+  },
+  "backend_hashes": {
+    "before": "1d10bc852fa843290e872b4b2d216d0de85d2fa8a7d0d343489f062e58179e51",
+    "after": "ef213af3e6086e69356b8b51759e75e3da8885ec9f42953462db58a7806b93c0"
+  },
+  "cases": {
+    "one": {
+      "finished_ns": 444075,
+      "identical_artifact_files": 55,
+      "before_storage": {
+        "storage": "historical_per_port_ledgers",
+        "descriptor_tables": 2,
+        "packet_tables": 1,
+        "descriptor_records": 4800,
+        "packet_records": 2400
+      },
+      "after_storage": {
+        "created_notifications": 2400,
+        "descriptor_records": 2400,
+        "descriptor_tables": 1,
+        "ledger_instances": 1,
+        "packet_records": 2400,
+        "packet_tables": 1,
+        "port_observers": 1,
+        "source_subscriptions": 9,
+        "storage": "shared_run_ledger"
+      },
+      "profiles": {
+        "before": {
+          "wall_seconds": 4.789911972358823,
+          "peak_sampled_group_rss_bytes": 226361344,
+          "max_waited_child_rss_kib": 131608,
+          "artifact_bytes_before_report": 36663440
+        },
+        "after": {
+          "wall_seconds": 4.769575813785195,
+          "peak_sampled_group_rss_bytes": 228335616,
+          "max_waited_child_rss_kib": 132600,
+          "artifact_bytes_before_report": 36663915
+        }
+      }
+    },
+    "two": {
+      "finished_ns": 444075,
+      "identical_artifact_files": 66,
+      "before_storage": {
+        "storage": "historical_per_port_ledgers",
+        "descriptor_tables": 4,
+        "packet_tables": 2,
+        "descriptor_records": 9600,
+        "packet_records": 4800
+      },
+      "after_storage": {
+        "created_notifications": 2400,
+        "descriptor_records": 2400,
+        "descriptor_tables": 1,
+        "ledger_instances": 1,
+        "packet_records": 2400,
+        "packet_tables": 1,
+        "port_observers": 2,
+        "source_subscriptions": 9,
+        "storage": "shared_run_ledger"
+      },
+      "profiles": {
+        "before": {
+          "wall_seconds": 4.684101298451424,
+          "peak_sampled_group_rss_bytes": 230617088,
+          "max_waited_child_rss_kib": 133596,
+          "artifact_bytes_before_report": 40843401
+        },
+        "after": {
+          "wall_seconds": 4.962370363995433,
+          "peak_sampled_group_rss_bytes": 226295808,
+          "max_waited_child_rss_kib": 130620,
+          "artifact_bytes_before_report": 40844193
+        }
+      }
+    },
+    "ten": {
+      "finished_ns": 444075,
+      "identical_artifact_files": 154,
+      "before_storage": {
+        "storage": "historical_per_port_ledgers",
+        "descriptor_tables": 20,
+        "packet_tables": 10,
+        "descriptor_records": 48000,
+        "packet_records": 24000
+      },
+      "after_storage": {
+        "created_notifications": 2400,
+        "descriptor_records": 2400,
+        "descriptor_tables": 1,
+        "ledger_instances": 1,
+        "packet_records": 2400,
+        "packet_tables": 1,
+        "port_observers": 10,
+        "source_subscriptions": 9,
+        "storage": "shared_run_ledger"
+      },
+      "profiles": {
+        "before": {
+          "wall_seconds": 5.147077051922679,
+          "peak_sampled_group_rss_bytes": 237088768,
+          "max_waited_child_rss_kib": 140760,
+          "artifact_bytes_before_report": 59825706
+        },
+        "after": {
+          "wall_seconds": 5.169549303129315,
+          "peak_sampled_group_rss_bytes": 229224448,
+          "max_waited_child_rss_kib": 132648,
+          "artifact_bytes_before_report": 59827171
+        }
+      }
+    },
+    "ten-source-off": {
+      "finished_ns": 444075,
+      "identical_artifact_files": 104,
+      "before_storage": {
+        "storage": "historical_per_port_ledgers",
+        "descriptor_tables": 20,
+        "packet_tables": 10,
+        "descriptor_records": 48000,
+        "packet_records": 24000
+      },
+      "after_storage": {
+        "created_notifications": 2400,
+        "descriptor_records": 2400,
+        "descriptor_tables": 1,
+        "ledger_instances": 1,
+        "packet_records": 2400,
+        "packet_tables": 1,
+        "port_observers": 10,
+        "source_subscriptions": 9,
+        "storage": "shared_run_ledger"
+      },
+      "profiles": {
+        "before": {
+          "wall_seconds": 5.252003913745284,
+          "peak_sampled_group_rss_bytes": 235446272,
+          "max_waited_child_rss_kib": 138664,
+          "artifact_bytes_before_report": 44108822
+        },
+        "after": {
+          "wall_seconds": 4.923608455806971,
+          "peak_sampled_group_rss_bytes": 226795520,
+          "max_waited_child_rss_kib": 132620,
+          "artifact_bytes_before_report": 44109499
+        }
+      }
+    }
+  },
+  "lifecycle": {
+    "created_notifications": 2,
+    "descriptor_records": 2,
+    "descriptor_tables": 1,
+    "mapped_tp_callback_disconnected": true,
+    "native_tp_not_retained": true,
+    "network_transfers_executed": false,
+    "packet_records": 2,
+    "packet_tables": 1,
+    "remaining_port_receives_after_peer_destruction": true,
+    "removed_tp_late_callback_validated": true,
+    "shared_owner_released": true,
+    "source_subscriptions": 4,
+    "storage": "shared_run_ledger"
+  },
+  "python_unit_tests": 11,
+  "cpp_test_executables_passed": 2,
+  "regressions": {
+    "observation-final": {
+      "summary": "runs/v03-shared-provenance/regression-observation-final/summary.json",
+      "sha256": "22b638fc83a7d1927028c52387d31f7f214cbd8ad9e55f5c7602be89533f215d",
+      "passed": true
+    },
+    "sequence": {
+      "summary": "runs/v03-shared-provenance/regression-sequence/summary.json",
+      "sha256": "b5006b9ca0ff88407b31bea56c552463ce13b45ab728ed68114fba572c3d48e8",
+      "passed": true
+    },
+    "resources": {
+      "summary": "runs/v03-shared-provenance/regression-resources/summary.json",
+      "sha256": "d0246f873a89a1b2d7529a04bd630b673943fb767b7bb80cf6010895a262ec47",
+      "passed": true
+    },
+    "research": {
+      "summary": "runs/v03-shared-provenance/regression-research/summary.json",
+      "sha256": "6ba223387a40fcc3e91a194fd9bdc8b3b54785bae4931a8fc1da973f8706384e",
+      "passed": true
+    },
+    "fabric": {
+      "summary": "runs/v03-shared-provenance/regression-fabric/summary.json",
+      "sha256": "35921521fb0e81a00771a2e6644edc25e8b4ec120c62b2e6a68adb451b0b3b7a",
+      "passed": true
+    }
+  },
+  "protected": {
+    "protected_files": 434,
+    "unchanged": true,
+    "native_launch_lock_restored": true,
+    "binaries": {
+      "cosim-service": {
+        "binary_sha256": "ef213af3e6086e69356b8b51759e75e3da8885ec9f42953462db58a7806b93c0",
+        "ns3_library_count": 10
+      },
+      "cosim-write": {
+        "binary_sha256": "4d976bfac55884aa27aae64b388dd57ea031f39d8dc3587ba2682b0214bdd708",
+        "ns3_library_count": 10
+      },
+      "cosim-layer": {
+        "binary_sha256": "0345a51946b86c59d816c5742998de66fc002e43b9a4da2dc4222c674a7eed1e",
+        "ns3_library_count": 10
+      },
+      "cosim-sequence": {
+        "binary_sha256": "1d1e35c4bc186e2513f005bd3e1c54ab379051ab6551ccb15e689c803eb05418",
+        "ns3_library_count": 10
+      },
+      "cosim-lifecycle-test": {
+        "binary_sha256": "5b38f0129129f68db0c4fc37a02e7a21c33ba7a5878a8b067231a62a1efaf338",
+        "ns3_library_count": 10
+      },
+      "cosim-observation-test": {
+        "binary_sha256": "c504ace61f012469ae83a3e088cb456fe29811c779bf04a6fa401f414a1311b9",
+        "ns3_library_count": 10
+      },
+      "cosim-provenance-test": {
+        "binary_sha256": "c1e964b31ab70c52c7a574a4b6a32ce4ea9f8674b5b39e37729abcce8bb3a960",
+        "ns3_library_count": 10
+      }
+    }
+  },
+  "successful_log_labels": [
+    "configure",
+    "build",
+    "build-tests-fix",
+    "unit-observation",
+    "unit-lifetime",
+    "comparison-final",
+    "regression-observation-final",
+    "regression-sequence",
+    "regression-resources",
+    "regression-research",
+    "regression-fabric",
+    "unit-host-count",
+    "unit-resource-budget",
+    "unit-observation-export",
+    "final-audit",
+    "dependencies-before",
+    "dependencies-final"
+  ],
+  "limitations": [
+    "Full target graph construction/export/backend load not measured",
+    "Full target network initialization and final windows/output not measured",
+    "Ledger still accumulates across all graphs; no per-round reclamation implemented",
+    "Runtime arbitrary TP materialization/migration not introduced",
+    "Small RSS samples are not a complete-target fit prediction"
+  ]
+}

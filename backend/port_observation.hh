@@ -64,12 +64,39 @@ class PayloadLedger
     void Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task, uint64_t task_begin,
                  uint32_t packet_begin, uint32_t bytes);
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
-    void SetLimits(uint64_t packets, uint64_t transfers) { max_packets_=packets; max_transfers_=transfers; }
+    void SetLimits(uint64_t packets, uint64_t transfers);
+    void RestrictLimits(uint64_t packets, uint64_t transfers);
     size_t PacketCount() const { return ranges_.size(); }
+    size_t TransferCount() const { return descriptors_.size(); }
+    uint64_t CreatedNotifications() const { return created_notifications_; }
+    const WriteDescriptor& Descriptor(uint32_t task) const { return descriptors_.at(task); }
+    bool HasPayloadRegions() const { return segmented_payload_; }
   private:
     std::map<uint32_t, WriteDescriptor> descriptors_;
     std::map<uint64_t, PayloadRange> ranges_;
     uint64_t max_packets_=UINT64_MAX, max_transfers_=UINT64_MAX;
+    uint64_t created_notifications_=0;
+    bool segmented_payload_=false;
+};
+
+// One passive source subscription set and one ledger per observed execution.
+// Ports share this owner; callbacks retain only the ledger, never a port or TP.
+class WriteProvenance
+{
+  public:
+    explicit WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> sources,
+                             const std::vector<WriteDescriptor>& descriptors = {});
+    ~WriteProvenance();
+    WriteProvenance(const WriteProvenance&) = delete;
+    WriteProvenance& operator=(const WriteProvenance&) = delete;
+    void Register(const std::vector<WriteDescriptor>& descriptors) { ledger_->Register(descriptors); }
+    void RestrictLimits(uint64_t packets, uint64_t transfers) { ledger_->RestrictLimits(packets, transfers); }
+    const PayloadLedger& Ledger() const { return *ledger_; }
+    nlohmann::json Audit() const;
+  private:
+    std::shared_ptr<PayloadLedger> ledger_;
+    std::vector<ns3::Ptr<ns3::UbController>> sources_;
+    uint64_t source_subscriptions_=0;
 };
 
 // Returns only WRITE business body bytes. Credit/TP/TA acknowledgments return zero.
@@ -83,10 +110,12 @@ class PortObservation
     PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
                     std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events = false,
                     const std::filesystem::path& spool_directory = {});
+    PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
+                    bool retain_packet_events = false, const std::filesystem::path& spool_directory = {});
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
-    void Register(const std::vector<WriteDescriptor>& descriptors);
+    const WriteProvenance* Provenance() const { return provenance_.get(); }
     void Export(const UbWriteTransfer& transfer) const;
     void Export(const std::vector<const UbWriteTransfer*>& transfers,
                 const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry,
@@ -99,16 +128,13 @@ class PortObservation
                     std::optional<uint64_t> busy_until = {});
     void Record(const std::string& name, nlohmann::json& memory, const nlohmann::json& row);
     ObservationConfig config_;
-    std::map<uint32_t, WriteDescriptor> descriptors_;
     PortWindows windows_;
-    std::vector<ns3::Ptr<ns3::UbController>> sources_;
     ns3::Ptr<ns3::UbPort> port_;
-    std::shared_ptr<PayloadLedger> ledger_;
+    std::shared_ptr<WriteProvenance> provenance_;
     uint64_t initial_tx_bytes_ = 0, all_bytes_ = 0, all_packets_ = 0;
     uint64_t fingerprint_ = 14695981039346656037ULL;
     nlohmann::json packet_ranges_ = nlohmann::json::array();
     bool retain_packet_events_ = false;
-    bool segmented_payload_ = false;
     // Internal input to local-clock export, never a research observation file.
     nlohmann::json packet_events_ = nlohmann::json::array();
     // Internal validation only: physical egress FIFO, excluding VOQs and the

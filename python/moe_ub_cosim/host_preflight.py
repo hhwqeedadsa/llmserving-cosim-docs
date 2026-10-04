@@ -95,13 +95,15 @@ def count_target(config,output):
     totals={k:sum(row[k] for row in per_step) for k in per_step[0] if k!='step'}
     shape=values['fabric']['shape'];devices=shape['servers']*shape['chips_per_server']*shape['dies_per_chip']
     switch_ports=shape['planes']*(devices+2*shape['servers']*shape['l2_per_plane'])
-    # Two separate std::map<uint32_t,WriteDescriptor> per port; count ONLY uint32_t key storage.
-    # This excludes descriptors, tree links, allocation/string storage and all packet ranges.
+    # Preserve the historical preflight's explicitly versioned storage assumption.
+    # Current backends share provenance; these fields reproduce the old blocker,
+    # not a current-backend estimate. Runtime ownership is in provenance-audit.json.
     first_writes=per_step[0]['fabric_transfers'];writes=totals['fabric_transfers']
     report=dict(schema_version='moe-ub-target-host-counts/1',input=config,source_files=1024,source_bytes=source_bytes,
         route_records=1024*64*58,rounds=64,per_round=per_step,total=totals,
         nodes_basis='all reference compute costs positive, local prepare enabled; no calibrated duration implied',
         all_switch_egress_ports=switch_ports,port_inventory_policy='all_target_switch_egress_for_preflight_not_a_hidden_subset',
+        descriptor_storage_revision='4545074',descriptor_storage_model='historical_per_port_copies_not_current_backend',
         descriptor_copies_per_port=2,descriptor_key_bytes=4,
         first_round_all_ports_descriptor_key_lower_bound_bytes=2*4*switch_ports*first_writes,
         run_all_ports_descriptor_key_lower_bound_bytes=2*4*switch_ports*writes,

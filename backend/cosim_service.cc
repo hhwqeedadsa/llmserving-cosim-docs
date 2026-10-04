@@ -450,10 +450,12 @@ int main(int argc, char** argv)
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
             std::vector<std::unique_ptr<moe_ub::LocalDelivery>> local_deliveries;
             std::vector<const moe_ub::UbWriteTransfer*> export_registry;
+            std::shared_ptr<moe_ub::WriteProvenance> provenance;
+            if (!observation_configs.empty()) provenance = std::make_shared<moe_ub::WriteProvenance>(controllers);
             std::vector<std::unique_ptr<moe_ub::PortObservation>> observations;
             for (const auto& config : observation_configs)
                 observations.push_back(std::make_unique<moe_ub::PortObservation>(config,
-                    std::vector<moe_ub::WriteDescriptor>{}, controllers, multiple_ports,
+                    provenance, multiple_ports,
                     config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id))));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
@@ -789,7 +791,7 @@ int main(int argc, char** argv)
                         local_pointers.push_back(prepared_local.back().get());
                     }
                     moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers, local_pointers);
-                    for (const auto& observation : observations) observation->Register(plan.descriptors);
+                    if (provenance) provenance->Register(plan.descriptors);
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
                     send_slots = slots;
@@ -971,6 +973,17 @@ int main(int argc, char** argv)
                 const auto directory = multiple_ports ? "ports/" + std::to_string(config.switch_id) +
                     "-" + std::to_string(config.port_id) : ".";
                 observations[index]->Export(export_registry, endpoints, operations, directory);
+            }
+            if (provenance)
+            {
+                std::set<const moe_ub::WriteProvenance*> owners;
+                for (const auto& observation : observations) owners.insert(observation->Provenance());
+                Require(owners.size() == 1 && *owners.begin() == provenance.get(), "Ports must share run provenance");
+                auto audit = provenance->Audit();
+                audit["ledger_instances"] = owners.size();
+                audit["port_observers"] = observations.size();
+                std::ofstream output("provenance-audit.json"); output << audit.dump(2) << '\n'; output.close();
+                Require(bool(output), "Cannot write provenance resource audit");
             }
             dl_iterate_phdr(Library, &report["loaded_libraries"]);
         }

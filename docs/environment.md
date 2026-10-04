@@ -3126,3 +3126,65 @@ RSS 合计来自同一新进程组的 /proc 每 0.1 s 采样，可能重复计�
 开发期两次集成失败保留日志。observation-integration 将所有出口按 10 Gbit/s 验证串行化，实际接入出口为 400 Gbit/s；改为从原 topology.csv 逐端口读取速率。observation-verified 又错误假定零流量出口也存在原生 PortTrace 文件；固定 UB 在 Tx/Rx 事件发生时才写该文件（ub-utils.cc 的 PortTxNotify/PortRxNotify）。改为有流量端口逐事件核对原生日志，零流量端口严格检查实际原生计数快照为零、事件文件为空、驻留非零窗口为零；没有将缺失文件直接当作零，没有更改生产观测或断言的业务预期。observation-final 四组全部通过。首次集成与 unit-all 有时间重叠，只采用后续独立最终测量作为报告数据。
 
 本步未做执行器重构，完成预检与记录后本地提交、不推送并停止。下一步应共享端口之间的全量传输/包来源账本，保留被动观测和逐端口窗口语义，再测剩余目标资源；等待用户确认。完整 R1/CM384 64 轮联合运行、2048 请求 refill 和硬件校准仍未完成。
+
+## 2026-10-04：v03-shared-provenance
+
+用户确认修复端口间来源副本，任务说明提交 `84cbfaf`，实现基线 `4545074`。本步只改根仓库观测存储及调用、测试和维护记录；完整目标、数据下载、依赖变更和硬件校准均未执行。结果见 [共享来源报告](../fixtures/m10_shared_provenance/README.md)及 result.json。
+
+本节 `R=runs/v03-shared-provenance`，`L=R/logs`，`P=.venv/llmservingsim-native/bin/python`，工作目录 `/root/moe-ub-cosim`。所有表内命令由 `python3 R/record.py 标签 命令及参数` 留存实际 argv/cwd/UTC/退出码/stdout/stderr；集成脚本另保存逐子命令记录。`record.py`、构建包装和保护检查先审阅再运行。
+
+### 修改与构建
+
+`cosim-service` 创建一次 `WriteProvenance`，图装载后只登记一次来源。每个端口通过它查询同一 `PayloadLedger`；取消端口自身的描述符 map、源控制器副本及各自 TP 监听。描述符登记只分配/校验新批次，再合并 map 节点，不复制累计旧表；登记失败不部分写入。字节布局标志也在登记成功后更新。数量预算取全部端口中最严格的声明，来源输出关闭不会取消字节分类所需记录。
+
+源回调仅持有账本，不持有端口、owner 或 TP。最后一个共享 owner 释放时，从仍在控制器表内的 TP 解除监听；移出表但仍存活的 TP 由自身回调保留账本。各端口仍维护原窗口/事件/归属。内部新增 `provenance-audit.json` 记录物理表数量、条目、共享 owner 数及源事件次数；各端口原逻辑计数保留，新增自己拥有的全量副本数为零。公共输出与输入 schema 不变。
+
+使用已有 CMake/Ninja/GCC 和固定源码，配置独立 `build/m10-shared-provenance`，与已验证 `build/m10-fabric` 相同开关：release、`backend/inject.cmake`、独立 output、只启用 unified-bus，关闭 examples/tests/MPI/MTP/assert/log/warnings-as-errors/native-optimizations/ccache/PCH/自动依赖获取/NetAnim/CPM/vcpkg。精确参数见 L/configure.json。配置和后续 CMake 自动重配均通过 finally 恢复开始前 `.lock-ns3_linux_build` 的原始字节。
+
+| 实际命令（省略已定义目录前缀） | 日志标签、结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 项递归依赖通过。 |
+| `python3 R/baseline.py` / `python3 R/final_audit.py` | baseline、final-audit；原 fabric 构建、启动锁和原 M9 两文件共 434 文件摘要不变；新程序仅装载独立目录 ns-3-UB 库。 |
+| `cmake -S third_party/ns-3-ub -B build/m10-shared-provenance -G Ninja ...` | configure；退出 0，完整参数如上。 |
+| `cmake --build build/m10-shared-provenance --target cosim-service cosim-service-deadlock-test cosim-observation-test cosim-write cosim-layer cosim-sequence cosim-lifecycle-test -j 8` | build；525 步完成，退出 0。 |
+| `cmake --build build/m10-shared-provenance --target cosim-observation-test cosim-provenance-test -j 8` | build-tests-fix；新增原生生命周期检查及扩展单元检查编译通过。初次 build-tests 的失败见下文。 |
+| `build/m10-shared-provenance/output/cosim/ns3.44-cosim-observation-test` | unit-observation；窗口、分包来源、重复/非法登记、原子拒绝、旧描述符地址稳定与预算通过。 |
+| `timeout --kill-after=5s 30s build/m10-shared-provenance/output/cosim/ns3.44-cosim-provenance-test third_party/ns-3-ub/scratch/2nodes_single-tp R/lifetime` | unit-lifetime；共享对象、删端口、原生包回调、移出 TP 后晚到回调及解除监听通过。该专项只生成原生包，不执行网络传输。 |
+| `env PYTHONPATH=python P tests/integration/check_shared_provenance.py --baseline-build build/m10-fabric --build-dir build/m10-shared-provenance --output-dir R/comparison-final` | comparison-final；原/新后端各四次真实 UB，全部通过。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p host_preflight_test.py` | unit-host-count；1 项通过。 |
+| 同上，分别使用 `resource_budget_test.py`、`observation_export_test.py` | unit-resource-budget、unit-observation-export；4/6 项通过，合计 11 项相关 Python 单元测试。 |
+| `env PYTHONPATH=python P tests/integration/check_observation.py --build-dir build/m10-shared-provenance --output-dir R/regression-observation-final` | regression-observation-final；21 次成功 WRITE 执行、10 项非法配置拒绝，包括晚到 RECV/TP 原生回收及来源开/关/不挂观测。 |
+| 同一 build 参数，`check_sequence.py --output-dir R/regression-sequence` | regression-sequence；5 次连续图执行，28 次写/229376 B、晚到回调和非法图集合拒绝通过。 |
+| 同一 build 参数，`check_graph_observation_resources.py --output-dir R/regression-resources` | regression-resources；每轮 4716 交付/两轮，旧/流式/来源关闭结果相同，端口各 6001 窗口，11 项预算/计划拒绝通过。 |
+| 同一 build 参数，`check_research_export.py --output-dir R/regression-research` | regression-research；9 次研究运行、1 次不挂观测对照、15 项预期拒绝通过，含 P/D、空输入、时钟与访问隔离。 |
+| 同一 build 参数，`check_target_fabric.py --output-dir R/regression-fabric` | regression-fabric；七平面 47 节点/168 出口，4 次执行及 8 项拒绝通过，保留路径、队列与后续批次反馈。 |
+| `python3 R/report.py` | report；核对成功日志、源摘要、全部比较结果、限额/后代清理、回归及保护结果后生成已提交 result.json。 |
+
+以上最终验收命令均退出 0；拒绝用例的非零子进程状态由测试独立核对，不能当作成功仿真。regressions.py 首次串行汇总保留 observation 的旧提示匹配失败，最终该项用独立新目录复验，其余四套没有重复运行。
+
+### 原/新后端的实际资源对照
+
+沿用宿主预检的三 rank/四块合成模型，两个真实迭代，16 B 分块。原/新各执行 1 出口、2 出口、10 出口及 10 出口来源关闭。每次 2400 次 UB 写、24 本地交付、36864 B 业务、444075 ns，下一轮提交等于前轮实际完成，网络只初始化一次，最终排空、槽/任务/KV 释放。
+
+原描述符条目分别为 4800/9600/48000/48000，新后端均为一张表 2400 条；原包来源为 2400/4800/24000/24000，新后端均为一张表 2400 条。所有端口的逻辑 registered_transfers/ledger_packets 仍各为 2400；五个无流量端口也共享查询，不持有副本。源监听始终 9 个、包创建回调始终 2400 次；服务检查各端口的实际 owner 指针一致。逐组分别核对 55/66/154/104 个图、原生网络、观测、队列、来源文件，字节相同。库路径和编译输出目录单独规范化后核对；未规范化业务身份、时间或包字节。
+
+最终比较串行且不与编译/其他测试重叠，每组由 host_probe 限定采样 RSS 8 GiB、单进程地址 12 GiB、300 s、目录/单文件产物 10 GiB。全部 completed、子进程退出 0、无残留活后代；语义正确性另由集成断言证明。
+
+| 端口/模式 | 原采样 RSS B | 新采样 RSS B | 原墙钟 s | 新墙钟 s |
+|---|---:|---:|---:|---:|
+| 1 | 226361344 | 228335616 | 4.790 | 4.770 |
+| 2 | 230617088 | 226295808 | 4.684 | 4.962 |
+| 10 | 237088768 | 229224448 | 5.147 | 5.170 |
+| 10 来源关闭 | 235446272 | 226795520 | 5.252 | 4.924 |
+
+RSS 为前端/后端进程组采样合计，可能重复共享页、漏过瞬时峰值；小差异不能证明全面提速/内存比例。确定的结论是观测全量来源不再按端口复制。逐端口窗口/事件/输出和图/执行对象开销仍存在；历史 449.6 GiB 下界的端口倍增项已消除，不等于新后端已经通过目标规模。
+
+### 保留的失败、修正与边界
+
+- build-tests 退出 1：新测试辅助函数命名 Packet，与依赖头暴露的 ns3::Packet 歧义；只将测试函数改名 MakeNativePacket，build-tests-fix 通过。
+- comparison 退出 1：新比较器将绝对编译输出目录及 Python pyc 时间戳也当作图业务内容逐字节比较。保存原差异后，沿用既有研究验证的做法，只规范化 compiler.json 的运行目录、排除 pyc；全部 JSON/Chakra/源码和仿真输出仍严格比较。初次测量与少量测试编译重叠，不作为正式资源数据；独立 comparison-final 重新执行八次对照并通过。
+- regression-observation 退出 1：旧测试匹配“4096 windows”，资源预算任务以来生产提示已为“Observation windows exceed configured budget (legacy: 4096)”。baseline-window-diagnostic 实际调用未改的 build/m10-resources 后端，得到相同提示和预期退出 1；基线源码也确认本步未改拒绝逻辑。只修正测试的准确文字，21 次执行/10 项拒绝在 regression-observation-final 全部通过。
+
+历史 fixtures/m10_host_preflight/counts.json、result.json 保持原样；计数脚本仅补充 descriptor_storage_revision=4545074 和历史存储模型标记，避免把旧两表公式套用到当前代码。本步未重新扫描全量原始路由，也未修改图生成器或业务执行规则。
+
+完成共享来源任务后本地提交、不推送并停止。下一项候选为有限额的完整一轮图构造/导出/后端装载检查；完整 fabric、跨轮累计保留、最终观测窗口与产物仍未完成资源验收，M10 整体和硬件校准状态不变。

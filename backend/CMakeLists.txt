@@ -71,7 +71,13 @@ build_exec(
   LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim"
   IGNORE_PCH)
-foreach(target cosim-compute cosim-time-test cosim-write cosim-write-test cosim-observation-test)
+build_exec(
+  EXECNAME cosim-provenance-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/shared_provenance_test.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/port_observation.cc"
+  LIBRARIES_TO_LINK AstraSim ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+foreach(target cosim-compute cosim-time-test cosim-write cosim-write-test cosim-observation-test cosim-provenance-test)
   set_target_properties(${target} PROPERTIES
     CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
   target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_LIST_DIR}")

@@ -193,7 +193,9 @@ def main():
 
     bad = [('zero-period', {'window_period_ns': 0}, 'interval or period'),
            ('empty-window', {'window_end_ns': 0}, 'interval or period'),
-           ('too-many-windows', {'window_period_ns': 1}, '4096 windows'),
+           # Resource-budget support already changed this diagnostic in the
+           # preserved backend; the legacy 4096-window rejection still applies.
+           ('too-many-windows', {'window_period_ns': 1}, 'Observation windows exceed configured budget (legacy: 4096)'),
            ('past-stop', {'window_end_ns': 1000011}, 'unsigned field'),
            ('fractional-period', {'window_period_ns': 0.5}, 'unsigned field'),
            ('bad-switch', {'switch_id': 999}, 'does not exist'),

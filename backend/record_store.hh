@@ -54,6 +54,8 @@ class RecordStore
     std::map<std::string, State> files_;
     std::list<Buffer> buffers_;
     uint64_t bytes_ = 0, buffered_ = 0, peak_buffered_ = 0;
+    std::string empty_source_;
+    uint32_t empty_links_ = 0;
     bool failed_ = false;
 };
 

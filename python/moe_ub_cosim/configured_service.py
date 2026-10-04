@@ -63,6 +63,10 @@ def validate_configured_inputs(config, layer, *, capacity_auditor=audit_capacity
     by_rank = {r['rank_id']: r for r in audit['ranks']}
     block_size = config['memory']['block_size']
     requirements = []
+    route_admission=None
+    if layer['template']=='cann_a3_v850_fullmesh_v1':
+        from .route_admission import CannRouteAdmission
+        route_admission=CannRouteAdmission(layer)
     for source in requests:
         fields(source, 'request_id rank_id arrival_ns prompt_tokens generated_tokens decode_routes', 'request')
         identity = integer(source['request_id'], 'request_id', 0, I64)
@@ -83,11 +87,13 @@ def validate_configured_inputs(config, layer, *, capacity_auditor=audit_capacity
         requirements.append(dict(request_id=identity, rank_id=rank, target_tokens=target,
                                  reserved_kv_tokens=target-1, reserved_kv_blocks=needed))
         for step, experts in enumerate(routes):
-            candidate = group_layer(layer, group)
-            candidate['tokens'] = [dict(request_id=str(identity), src_rank=rank, phase='decode',
+            token=dict(request_id=str(identity), src_rank=rank, phase='decode',
                 token_index=source['prompt_tokens']+source['generated_tokens']-1+step,
-                layer_id=layer['layer_id'], expert_ids=experts)]
-            build_plan(candidate)
+                layer_id=layer['layer_id'], expert_ids=experts)
+            if route_admission is not None:route_admission.check(token)
+            else:
+                candidate = group_layer(layer, group);candidate['tokens']=[token]
+                build_plan(candidate)
     digest = hashlib.sha256(json.dumps(config['model_spec'], sort_keys=True,
                                       separators=(',', ':')).encode()).hexdigest()
     evidence = dict(model=audit, model_spec_sha256=digest,

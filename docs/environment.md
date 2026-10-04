@@ -3439,3 +3439,27 @@ graph 目录留下 layer.0.et 至 layer.5.et（分别为 9169277、9106991、916
 `closed-service/structure/cann/evidence/pd/sequence/registry` 使用新 build/m10-resource-efficiency、8 GiB RSS/12 GiB 地址限制串行通过。封闭加载/准备/安装路径保留原行为；真实一/二/十端口及来源关闭的旧结果对照通过，十端口登记表 10525140→1052514 B，结束时刻 444075 ns 不变。`observation-regression` 验证预算、窗口及流式导出。`unit-checkpoint-load` 为 55 项相关单元测试，退出 0。13 项递归依赖和 1304 个历史保护文件不变；四个二进制各只链接新构建目录的十个 ns-3-UB 动态库。
 
 监测器现跟踪自有进程树及脱离进程组的后代，并以唯一 inode 计量磁盘；保持专用监测进程前提，不并发启动无关子进程。旧构建采样漏计的限制保留为历史说明。失败日志还包括来源文件数测试假设、proto 摘要辅助路径和导入探针容量标签误用，修正后通过；未删除断言或修改来源。此检查点没有清理历史或新生成文件。跨轮计划/传输/来源释放与后处理仍需实现、验证，M10 未完成。
+
+## 2026-10-04：输入、研究导出与目标网络资源检查
+
+R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，cwd 为 `/root/moe-ub-cosim`；下面是连续任务中的实际结果，任务尚未完成。完整命令、退出状态和日志由 R/logs 同名 JSON 保存，重负载仍串行受 48 GiB RSS、56 GiB 地址、3600 s 及累计 20 GiB 磁盘约束。
+
+首次 `target-service-inputs` 完成 58 层全部路由和完整占位图校验后，因通信缓存只预留 3954809344 B、完整层段最低要求 10217324544 B 而退出 1。用户随后确认保留现有公式并增加预留，修订文件为 `fixtures/m10_resource_efficiency/communication-reserve.json`；原合同、原容量输入及失败日志不改。`target-service-reserve` 使用 `P scripts/probe_service_inputs.py --prepared runs/v03-full-round-preflight/prepare/work/prepared.json --communication-reserve fixtures/m10_resource_efficiency/communication-reserve.json --output-dir R/target-service-reserve/work`，在相同监测器下退出 0，约 709.0 s 完成输入步骤，含进程销毁/监测为 730.7 s，峰值 15059116032 B。1024 请求、128 rank、3801088 路由全部验证；没有启动后端。逐层容量审计只保留所需界限后，该阶段 RSS 约 1.06 GB；最终 Python RSS 仍为 6488580096 B，正在验证将占位构图放入独立进程的改善。
+
+`unit-bounded-all` 运行 observation_export、research_storage、transfer_index、record_storage、route_admission、cann_plan、cann_index、full_model、composed_service、evidence_service、resource_budget、mla_capacity 共 52 项单元检查，退出 0。未来 CANN 路由采用共用字段/算术验证，不再为每条路由构造并丢弃完整临时图；实际提交的批次仍执行完整构图和重构校验。`bounded-export` 通过五类旧算法对照，包括时钟偏移/漂移、来源关闭、8/32 轮及损坏目标写入拒绝。新导出保留压缩原始记录、以 32 B/传输临时索引做独立守恒核对，通过后登记并删除索引。
+
+`build-preparation` 重新构建 production service 及单独的资源诊断可执行文件，退出 0；后者停在实际安装及计划记录写出后、业务激活前，明确不生成正常 result.json。`preparation-small` 验证其真实安装路径和停止边界；`record-share` 验证空 gzip 硬链接、封存后禁止追加及限额，均退出 0。`resource-fullmodel`、`resource-cann` 在 8 GiB RSS/12 GiB 地址/300 s 限制下运行原集成脚本通过，原业务依赖和观测预期未改。
+
+完整网络零业务初始化原测 `target-network-init` 和优化后 `target-network-shared-empty` 均退出 0：768 设备、448 交换机、16128 个出口、112896 个有向传输连接；原生 fabric 审计匹配、同一网络正常排空。优化后总过程 57.96 s、采样峰值 3631112192 B；此时间包含增长后的整个任务目录扫描，不能与原 46.21 s 当作纯网络性能对比。`empty-storage-compare` 核对完整 result/effective_backend 以及 96768 份端口元数据，均一致。80644 个空记录文件原实际分配 330317824 B，现以每组至多 32000 个硬链接共享为 3 个 inode、12288 B，节省 330305536 B；逻辑压缩字节仍为 1612880，预算保守按逻辑文件计费。整任务目录扫描按唯一 inode 和实际分配计量。
+
+`deps-input-export` 覆盖 13 个递归依赖，退出 0。独立占位构图的 `unit-isolated-composition` 共 19 项通过，等价输入证据、部署、请求状态一致，错误组合由子进程拒绝并留日志。完整网络与完整首轮共同驻留、独立构图的完整目标驻留测量尚在进行；本节不宣告最终 64 步实验或资源工程验收完成。
+
+### 输入隔离与共同驻留的后续实测
+
+`target-service-isolated` 使用上述输入命令，增加 `--isolated-composition`，退出 0；全输入步骤 719.6 s，含进程退出/监测 759.3 s。独立占位构图期间父进程 RSS 保持约 1.06 GB，最终为 1657196544 B，原路径为 6488580096 B。`isolated-input-comparison.json` 核对 input/layers/deployment/input_evidence/binding 五份文件和 128 份 bootstrap 摘要完全相同。没有启动目标业务，原来源 AWQ4、参考 INT8 容量及计算未校准的声明未变。
+
+`target-combined-preparation` 是完整网络和冻结首轮图共同驻留、未激活业务的诊断，退出 0，整体 895.999 s。7655238 节点、3741764 fabric/25930 local、128 rank、16128 出口均匹配；采样峰值 51354079232 B（47.83 GiB），距 48 GiB 上限仅约 177 MiB，尚未包含真实前台约 1.66 GB 及动态执行开销，因此不判定资源就绪。旧探针对应的源码/二进制摘要另存 R/precompact-source-hashes.json，不与后续构建混用。
+
+随后后台在构造执行对象前封存并读取校验计划传输归档，保留全部内容后释放重复 JSON；安装和来源登记后释放原描述符副本。`build-archive-compaction` 退出 0。`compact-preparation-small` 验证独立诊断与生产主程序，并比较生产主程序 host trace 开/关的完整逻辑结果；`compact-retirement`、`compact-graph-replay`、`compact-bounded-export`、`compact-legacy-fullmodel`、`compact-legacy-cann` 均退出 0。前者保留停止边界，后者均实际执行真实 UB 并检查正常结束；没有修改网络事件、参考结果或子模块。
+
+`target-first-round` 正在上述累计 20 GiB、48 GiB RSS/56 GiB 地址/3600 s 上限下执行。命令为 `P scripts/probe_network_initialization.py --build-dir build/m10-resource-efficiency --input-dir R/target-service-isolated/work --prepared runs/v03-full-round-preflight/prepare/work/prepared.json --prepared-graph R/target-build/work/graph --execute-first-round --output-dir R/target-first-round/work`，完整外层参数在 R/logs/target-first-round.json。启动前的源码/二进制摘要为 R/first-round-source-hashes.json。该协议驱动器仅提交固定 g0，正常排空后退出；不能将其称为完整配置服务或最终 64 步请求已执行。

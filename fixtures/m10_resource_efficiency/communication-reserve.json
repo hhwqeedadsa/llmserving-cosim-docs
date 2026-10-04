@@ -1,0 +1,11 @@
+{
+  "schema_version": "moe-ub-communication-reserve-amendment/1",
+  "authorized_date": "2026-10-04",
+  "basis": "sum_existing_communication_minimum_over_58_layers",
+  "original_bytes_per_rank": 3954809344,
+  "effective_bytes_per_rank": 10217324544,
+  "minimum_bytes_per_layer": 176160768,
+  "layer_count": 58,
+  "device_bytes_per_rank": 64000000000,
+  "qualification": "Conditional conservative reserve; unchanged CANN windows and capacity formula. The extra reserve reduces KV capacity. Not measured HBM usage."
+}

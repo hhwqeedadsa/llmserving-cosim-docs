@@ -648,6 +648,23 @@ Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
             {event.at("start_ns"), event.at("end_ns"), true, true};
     return LayerEndpointOperations(plan, times);
 }
+void CompactArchivedTransfers(LayerPlan& plan)
+{
+    Require(!plan.archived_transfer_data, "transfer data already archived");
+    const auto& operations = plan.data.at("operations");
+    Require(operations.size() <= UINT32_MAX, "too many archived operations");
+    std::map<std::string, uint32_t> indices;
+    for (size_t i = 0; i < operations.size(); ++i)
+        indices.emplace(operations[i].at("operation_id").get<std::string>(), i);
+    for (const auto& transfer : plan.data.at("transfers"))
+        if (transfer.at("kind") == "dispatch" || transfer.at("kind") == "combine")
+            for (const bool send : {true, false})
+                plan.endpoint_nodes.push_back({indices.at(transfer.at("operation_id").get<std::string>()),
+                    transfer.at(send ? "src_rank" : "dst_rank").get<int>(),
+                    transfer.at(send ? "send_node_id" : "recv_node_id").get<uint64_t>()});
+    plan.data.erase("transfers");
+    plan.archived_transfer_data = true;
+}
 Json LayerEndpointOperations(const LayerPlan& plan, const ExecutionTimes& execution)
 {
     Json endpoints = Json::array();
@@ -667,7 +684,14 @@ Json LayerEndpointOperations(const LayerPlan& plan, const ExecutionTimes& execut
     // messages keep their original phase dependencies; only the same dispatch/
     // combine data nodes used by the old endpoint definition enter these maxima.
     std::map<std::pair<std::string, int>, uint64_t> communication;
-    for (const auto& transfer : plan.data.at("transfers"))
+    if (plan.archived_transfer_data)
+        for (const auto& node : plan.endpoint_nodes)
+        {
+            const auto operation = plan.data.at("operations")[node.operation].at("operation_id").get<std::string>();
+            auto& end = communication[{operation, node.rank}];
+            end = std::max(end, execution.at({node.rank, node.node}).end_ns);
+        }
+    else for (const auto& transfer : plan.data.at("transfers"))
         if (transfer.at("kind") == "dispatch" || transfer.at("kind") == "combine")
             for (const bool send : {true, false})
             {

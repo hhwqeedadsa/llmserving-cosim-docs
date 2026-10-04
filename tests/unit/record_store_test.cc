@@ -22,8 +22,14 @@ int main(int argc, char** argv)
             store.Append("port-" + std::to_string(port) + ".jsonl.gz", std::to_string(round) + ":" + std::to_string(port));
     const auto empty = store.Seal("empty.jsonl.gz");
     Check(empty.records == 0 && empty.compressed_bytes > 0);
+    const auto other_empty = store.Seal("other-empty.jsonl.gz");
+    Check(other_empty.records == 0 && other_empty.compressed_bytes == empty.compressed_bytes);
+    Check(fs::equivalent(root / "records" / empty.name, root / "records" / other_empty.name));
+    Check(!fs::equivalent(root / "records" / empty.name, root / "records/port-0.jsonl.gz"));
+    Reject([&] { store.Append(empty.name, "cannot mutate shared empty record"); });
+    Reject([&] { store.Append(other_empty.name, "cannot mutate alias"); });
     const auto files = store.SealAll();
-    Check(files.size() == 24 && store.PeakBufferedBytes() <= 320);
+    Check(files.size() == 25 && store.PeakBufferedBytes() <= 320);
     uint64_t total = 0;
     for (const auto& file : files)
     {

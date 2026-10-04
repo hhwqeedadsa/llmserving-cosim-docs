@@ -47,6 +47,23 @@ def integer(value, field, minimum=0, maximum=MAX_TIME_NS):
     return value
 
 
+def validate_token(c, token):
+    """The same Token contract for complete batches and future route admission."""
+    batched=c.get('schema_version')=='moe-ub-layer-fixture/3'
+    require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
+            'Unsupported Token fields')
+    require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
+    integer(token['src_rank'], 'Token src_rank', 0, MAX_RANK_ID)
+    integer(token['token_index'], 'Token token_index', 0, MAX_TIME_NS-1 if batched else MAX_TIME_NS)
+    integer(token['layer_id'], 'Token layer_id', 0, 2**31 - 1)
+    require(token['phase'] == ('prefill' if c['role'] == 'P' else 'decode') and
+            token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
+    experts = token['expert_ids']
+    require(isinstance(experts, list) and len(experts) == c['top_k'], 'Missing or wrong Top-K route')
+    for expert in experts:integer(expert, 'expert_id', 0, len(c['expert_placement']) - 1)
+    require(len(set(experts)) == len(experts), 'Duplicate expert choice')
+
+
 def validate_config(c):
     cann = c.get('template') == 'cann_a3_v850_fullmesh_v1'
     expected = {'schema_version', 'graph_id', 'wave_id', 'service_id', 'role', 'group_id', 'ready_ns',
@@ -114,19 +131,7 @@ def validate_config(c):
             'Token count outside bounded P/D graph')
     ranks, identities = [], set()
     for token in tokens:
-        require(set(token) == {'request_id', 'src_rank', 'phase', 'token_index', 'layer_id', 'expert_ids'},
-                'Unsupported Token fields')
-        require(isinstance(token['request_id'], str) and bool(token['request_id']), 'Invalid request_id')
-        integer(token['src_rank'], 'Token src_rank', 0, MAX_RANK_ID)
-        integer(token['token_index'], 'Token token_index', 0, MAX_TIME_NS-1 if batched else MAX_TIME_NS)
-        integer(token['layer_id'], 'Token layer_id', 0, 2**31 - 1)
-        require(token['phase'] == ('prefill' if c['role'] == 'P' else 'decode') and
-                token['layer_id'] == c['layer_id'], 'Token phase/layer mismatch')
-        experts = token['expert_ids']
-        require(isinstance(experts, list) and len(experts) == c['top_k'], 'Missing or wrong Top-K route')
-        for expert in experts:
-            integer(expert, 'expert_id', 0, len(placement) - 1)
-        require(len(set(experts)) == len(experts), 'Duplicate expert choice')
+        validate_token(c,token)
         identity = (token['request_id'], token['phase'], token['token_index'], token['layer_id'])
         require(identity not in identities, 'Duplicate Token identity')
         identities.add(identity)

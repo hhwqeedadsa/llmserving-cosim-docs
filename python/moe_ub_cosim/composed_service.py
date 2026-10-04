@@ -86,7 +86,7 @@ class ComposedService(ConfiguredService):
             for request in requests:
                 require(all(isinstance(step,dict) and set(step)=={str(i) for i in layer_ids}
                             for step in request['decode_routes']), 'Incomplete or extra per-layer route')
-            audits=[];first_state=None
+            bounds=[];first_state=None
             for layer in layers:
                 require(layer['rank_ids']==group_ranks and layer['rank_to_ub_node']==group_nodes,
                         'Layer membership/mapping changed within segment')
@@ -100,11 +100,14 @@ class ComposedService(ConfiguredService):
                     model_spec=group['model_spec'], memory=group['memory'], scheduling=group['scheduling'],
                     groups=[declaration], requests=local_requests)
                 state=self.validate_layer(single,layer)
-                audits.append(state['evidence']['model'])
+                bounds.append(state['evidence']['model']['communication_buffer_minimum_bytes'])
                 if first_state is None:
                     first_state=state
                     normalized['groups'].append(declaration)
                     normalized['requests'].extend(local_requests)
+                # Later layers contribute only their conservative buffer bound;
+                # do not keep 58 copies of the complete tensor inventory alive.
+                del state
             # Validate full composition, including placeholder Token continuity,
             # before creating schedulers or starting any backend process.
             routing_layers=deepcopy(layers)
@@ -126,7 +129,6 @@ class ComposedService(ConfiguredService):
             audit=first_state['evidence']['model']
             # Ranks can reach different layers concurrently: retain every layer's
             # conservative communication budget, not just the largest one.
-            bounds=[a['communication_buffer_minimum_bytes'] for a in audits]
             require(all(r['communication_buffer_bytes']>=sum(bounds) for r in audit['ranks']),
                     'Communication buffer below complete layer-segment bound')
             audit.update(execution_scope='consecutive_moe_layer_segment',executed_layer_ids=layer_ids,

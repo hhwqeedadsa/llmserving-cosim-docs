@@ -65,9 +65,22 @@ void RecordStore::Flush(State& state)
     {
         const auto encoded = Compress(text);
         Require(encoded.size() <= max_bytes_ - bytes_, "compressed disk budget exceeded");
-        std::ofstream output(directory_ / state.file.name, std::ios::binary | std::ios::app);
-        output.write(reinterpret_cast<const char*>(encoded.data()), encoded.size()); output.close();
-        Require(bool(output), "cannot write " + state.file.name);
+        // An empty stream is flushed only by Seal/SealAll, under the mutex.
+        // It can never receive another append. Share those immutable inodes,
+        // while conservatively charging the encoded bytes of every reference.
+        if (text.empty() && !empty_source_.empty() && empty_links_ < 32000)
+        {
+            std::filesystem::create_hard_link(directory_ / empty_source_, directory_ / state.file.name);
+            ++empty_links_;
+        }
+        else
+        {
+            std::ofstream output(directory_ / state.file.name, std::ios::binary | std::ios::app);
+            output.write(reinterpret_cast<const char*>(encoded.data()), encoded.size()); output.close();
+            Require(bool(output), "cannot write " + state.file.name);
+            // Bounded groups also avoid the filesystem's hard-link count limit.
+            if (text.empty()) { empty_source_ = state.file.name; empty_links_ = 1; }
+        }
         bytes_ += encoded.size(); state.file.compressed_bytes += encoded.size();
         if (state.buffered)
         {

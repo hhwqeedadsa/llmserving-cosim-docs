@@ -21,6 +21,7 @@ class LoadedGraph
 {
   public:
     explicit LoadedGraph(const std::filesystem::path& directory);
+    void DiscardArchivedTransfers();
     const LayerPlan& Plan() const;
     void Install(const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
         const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,

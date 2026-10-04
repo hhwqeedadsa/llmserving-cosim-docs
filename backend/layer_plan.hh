@@ -24,6 +24,7 @@ struct ExecutionNode
 };
 struct LayerPlan
 {
+    struct EndpointNode { uint32_t operation; int rank; uint64_t node; };
     // Execution retention omits validated child tables and rank node JSON;
     // typed execution nodes/descriptors and the original file remain complete.
     nlohmann::json data;
@@ -32,7 +33,11 @@ struct LayerPlan
     std::vector<LocalDescriptor> local_descriptors;
     nlohmann::json validated_usage = nullptr;
     bool execution_retention = false;
+    bool archived_transfer_data = false;
+    std::vector<EndpointNode> endpoint_nodes;
 };
+// Caller first seals and verifies its lossless planned-transfer archive.
+void CompactArchivedTransfers(LayerPlan& plan);
 enum class PlanRetention { Complete, Execution };
 void ValidateDeployment(const nlohmann::json& deployment, const nlohmann::json& ranks);
 uint64_t ValidateBatchLimits(const nlohmann::json& limits);

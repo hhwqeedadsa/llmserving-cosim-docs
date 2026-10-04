@@ -74,6 +74,22 @@ def split(items, lanes, rotate=0):
         for item in part: yield lane,item
 
 
+def stage_durations(c,local,experts,near_source,near_destination):
+    """Checked arithmetic shared by future-route admission and actual DAGs."""
+    profile=c['compute_profile_ns'];cost=c['cann_profile']['local_cost_ns']
+    prep=c.get('deployment',{}).get('local_prepare_ns_per_vector',{})
+    result=dict(prepare=local*profile['attention_route_pack'],
+        dispatch_local=near_source*prep.get('dispatch',0),
+        reorder=experts*cost['dispatch_reorder_per_input']+len(c['expert_placement'])*cost['status_check'],
+        expert=experts*profile['expert_per_input'],pack=experts*cost['result_pack_per_input'],
+        combine_local=near_destination*prep.get('combine',0),
+        finish=local*(profile['combine_unpack_merge']+c['top_k']*(cost['status_check']+cost['reduction_per_input'])),
+        next_layer=local*profile['next_layer'])
+    for value in result.values():integer(value,'CANN stage duration',0,MAX_TIME_NS-c['ready_ns'])
+    integer(c['ready_ns']+sum(result.values()),'CANN rank time bound')
+    return result
+
+
 def build_plan(config, identities=None, *, _validate=True):
     from .resources import cann_usage, check_graph, actual_usage
     usage=check_graph(cann_usage(config),config.get('resource_budget'))
@@ -167,7 +183,8 @@ def build_plan(config, identities=None, *, _validate=True):
     require(len(transfers)==usage['transfers'],'CANN preflight transfer count mismatch')
     graphs=[]
     for rank in ranks:
-        nodes=[];cost=cp['local_cost_ns'];profile=c['compute_profile_ns']
+        nodes=[]
+        work=stage_durations(c,local[rank],counts[rank],near_source[rank],near_destination[rank])
         def comp(name,work,deps):
             if not work:return None
             integer(work,'CANN stage duration',1,MAX_TIME_NS-c['ready_ns'])
@@ -192,28 +209,24 @@ def build_plan(config, identities=None, *, _validate=True):
             return done
         def receives(kind,deps):
             return [comm(t,'RECV',deps) for t in incoming[kind][rank]]
-        prepare=comp('attention-route-quant-pack',local[rank]*profile['attention_route_pack'],[])
+        prepare=comp('attention-route-quant-pack',work['prepare'],[])
         ready=[] if prepare is None else [prepare]
         local_prepares={}
         def local_prepare(kind,deps):
-            n=(near_source if kind=='dispatch' else near_destination)[rank]
-            work=n*c.get('deployment',{}).get('local_prepare_ns_per_vector',{}).get(kind,0)
-            node=comp(kind+'-local-prepare',work,deps);local_prepares[kind]=node
+            node=comp(kind+'-local-prepare',work[kind+'_local'],deps);local_prepares[kind]=node
             return [] if node is None else [node]
         prep_local=local_prepare('dispatch',ready)
         dispatch=ready+sends('dispatch',ready,prep_local)+receives('dispatch',ready)+prep_local
-        reorder=comp('dispatch-status-check-reorder',counts[rank]*cost['dispatch_reorder_per_input']+
-                     len(c['expert_placement'])*cost['status_check'],dispatch)
-        expert=comp('expert-compute',counts[rank]*profile['expert_per_input'],[reorder])
+        reorder=comp('dispatch-status-check-reorder',work['reorder'],dispatch)
+        expert=comp('expert-compute',work['expert'],[reorder])
         computed=[expert] if expert is not None else [reorder]
-        pack=comp('expert-result-pack',counts[rank]*cost['result_pack_per_input'],computed)
+        pack=comp('expert-result-pack',work['pack'],computed)
         packed=[pack] if pack is not None else computed
         combine_local=local_prepare('combine',packed)
         combine=packed+sends('combine',packed,combine_local)+receives('combine',packed)+combine_local
-        finish=comp('combine-token-weighted-reduction',local[rank]*(profile['combine_unpack_merge']+
-                    c['top_k']*(cost['status_check']+cost['reduction_per_input'])),combine)
+        finish=comp('combine-token-weighted-reduction',work['finish'],combine)
         final=[finish] if finish is not None else combine
-        next_layer=comp('next-layer',local[rank]*profile['next_layer'],final)
+        next_layer=comp('next-layer',work['next_layer'],final)
         integer(c['ready_ns']+sum(n.get('duration_ns',0) for n in nodes),'CANN rank time bound')
         graphs.append(dict(rank_id=rank,nodes=nodes,phase_nodes=dict(prepare=prepare,dispatch_reorder=reorder,
             expert=expert,local_merge=pack,finish=finish,next_layer=next_layer)))

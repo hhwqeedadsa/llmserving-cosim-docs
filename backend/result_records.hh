@@ -69,6 +69,15 @@ class ResultRecords
         if (!store_) return report_.at(field).size();
         const auto found = counts_.find(field); return found == counts_.end() ? 0 : found->second;
     }
+    void SealPlannedTransfers(const std::string& graph, size_t expected)
+    {
+        if (!store_) throw std::runtime_error("Planned archive requires bounded records");
+        const auto name = Name("planned_transfers", graph);
+        const auto file = store_->Seal(name);
+        if (file.records != expected) throw std::runtime_error("Planned transfer archive count mismatch");
+        ReadRecords(store_->Directory(), file, [](const std::string&) {}, policy_.at("max_record_bytes"));
+        sealed_[name] = file;
+    }
     void FinishGraph(const std::string& graph)
     {
         if (!store_) return;

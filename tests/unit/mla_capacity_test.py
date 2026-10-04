@@ -77,6 +77,20 @@ class MlaCapacityTest(unittest.TestCase):
         self.assertEqual([r['weight_bytes'] for r in audit(c)['ranks']],[1492,1652])
         self.assertEqual([r['kv_capacity_blocks'] for r in audit(c)['ranks']],[8,8])
 
+    def test_authorized_target_communication_reserve(self):
+        change=json.loads((ROOT/'fixtures/m10_resource_efficiency/communication-reserve.json').read_text())
+        c=read('r1-capacity.json')
+        self.assertEqual(change['minimum_bytes_per_layer']*change['layer_count'],change['effective_bytes_per_rank'])
+        for rank in c['memory']['ranks']:
+            self.assertEqual(rank['communication_buffer_bytes'],change['original_bytes_per_rank'])
+            self.assertEqual(rank['device_bytes'],change['device_bytes_per_rank'])
+            rank['communication_buffer_bytes']=change['effective_bytes_per_rank']
+        for row in audit(c)['ranks']:
+            self.assertEqual(row['weight_bytes'],24424635648)
+            self.assertEqual(row['non_kv_bytes'],38936927488)
+            self.assertEqual(row['kv_capacity_blocks'],22291)
+            self.assertEqual(row['device_bytes']-row['non_kv_bytes'],25063072512)
+
     def test_unquantized_matrices_remove_scales(self):
         c=read('toy-capacity.json')
         for group in ('mla','dense_ffn','routed_experts','shared_experts'):

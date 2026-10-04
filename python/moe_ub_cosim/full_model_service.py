@@ -9,6 +9,10 @@ from .plan import RunIdentities, require
 
 
 class FullModelService(ComposedService):
+    def __init__(self,config,segments,*,graph_storage=None):
+        self.graph_storage=graph_storage
+        super().__init__(config,segments)
+
     def validate_inputs(self, config, segments):
         fields(config,'schema_version run_id mode execution model groups requests','full model service')
         require(config['schema_version']=='moe-ub-configured-service/4','Unsupported full model service schema')
@@ -54,6 +58,9 @@ class FullModelService(ComposedService):
 
     def check_segment(self, layers, group):
         name=group['group_id']
+        if self.graph_storage is not None:
+            self.graph_storage.check_composition(layers,self.full_models[name],self.full_profiles[name])
+            return
         build_full_model(layers,RunIdentities(),[[] for _ in layers],self.full_models[name],self.full_profiles[name])
 
     def build_iteration(self, configs, provenance):

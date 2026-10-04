@@ -162,6 +162,24 @@ def validate_observed(directory):
     require(all((directory/name).is_file() and not (directory/name).is_symlink() for name in expected),
             'Observed symlinks/non-files are forbidden')
     public=json.loads((directory/'public_config.json').read_text())
+    ranks,port_configs,total_windows=validate_public_config(public)
+    expected_windows=((p['switch_id'],p['port_id'],'egress',a,b) for p in port_configs for a,b in windows(p))
+    port_count=zero_count=0
+    for row,expected_row in zip_longest(iter_csv(directory/'port_windows.csv',PORT_FIELDS),expected_windows):
+        require(row is not None and expected_row is not None and tuple(row[k] for k in PORT_FIELDS[:5])==expected_row,
+                'Missing, duplicated or reordered port windows (missing is not zero)')
+        port_count+=1;zero_count+=row['counted_packets']==0
+        integer(row['counted_packets'],'counted_packets',0,2**64-1)
+        integer(row['counted_packet_bytes'],'counted_packet_bytes',0,2**64-1)
+        require((row['counted_packets']==0)==(row['counted_packet_bytes']==0) and
+                row['counted_packets']<=row['counted_packet_bytes'],'Invalid packet/byte counts')
+    endpoint_count=validate_endpoint_rows(iter_json_lines(directory/'endpoint_ops.jsonl'),ranks)
+    return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=endpoint_count,
+                port_windows=port_count,zero_windows=zero_count,
+                access_scope='observed_only')
+
+
+def validate_public_config(public):
     extended=public.get('schema_version')=='moe-ub-observed/2'
     limits=public.get('limits',dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096))
     require(set(limits)=={'max_ports','max_windows_per_port','max_total_windows'},'Invalid public resource limits')
@@ -189,18 +207,12 @@ def validate_observed(directory):
         points.add(point)
         total_windows+=(p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']+1
     require(total_windows<=limits['max_total_windows'],'Public total window budget exceeded')
-    expected_windows=((p['switch_id'],p['port_id'],'egress',a,b) for p in port_configs for a,b in windows(p))
-    port_count=zero_count=0
-    for row,expected_row in zip_longest(iter_csv(directory/'port_windows.csv',PORT_FIELDS),expected_windows):
-        require(row is not None and expected_row is not None and tuple(row[k] for k in PORT_FIELDS[:5])==expected_row,
-                'Missing, duplicated or reordered port windows (missing is not zero)')
-        port_count+=1;zero_count+=row['counted_packets']==0
-        integer(row['counted_packets'],'counted_packets',0,2**64-1)
-        integer(row['counted_packet_bytes'],'counted_packet_bytes',0,2**64-1)
-        require((row['counted_packets']==0)==(row['counted_packet_bytes']==0) and
-                row['counted_packets']<=row['counted_packet_bytes'],'Invalid packet/byte counts')
+    return ranks,port_configs,total_windows
+
+
+def validate_endpoint_rows(rows,ranks):
     endpoint_count=0;last={r:(0,I64_MIN) for r in ranks}
-    for row in iter_json_lines(directory/'endpoint_ops.jsonl'):
+    for row in rows:
         endpoint_count+=1
         require(set(row)==set(ENDPOINT_FIELDS) and type(row['rank_id']) is int and row['rank_id'] in last and
                 row['kind'] in ('dispatch','combine','KV_TRANSFER'),'Invalid endpoint field whitelist')
@@ -210,6 +222,4 @@ def validate_observed(directory):
         number,time=last[row['rank_id']]
         require(row['local_record_id']==number+1 and row['start_local_ns']>=time,'Invalid local endpoint sequence')
         last[row['rank_id']]=row['local_record_id'],row['start_local_ns']
-    return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=endpoint_count,
-                port_windows=port_count,zero_windows=zero_count,
-                access_scope='observed_only')
+    return endpoint_count

@@ -1,6 +1,6 @@
 # 有限记录存储与跨轮释放
 
-这是 M10 资源工程中已实现的存储接口，不改变业务消息、依赖、完成时刻或研究观测的含义。当前任务仍在推进前台图文件保留和研究导出；本接口的局部通过不是最终目标场景验收。
+这是 M10 资源工程中已实现的存储接口，不改变业务消息、依赖、完成时刻或研究观测的含义。本接口的局部通过不是最终目标场景验收。
 
 ## 入口和文件版本
 
@@ -37,14 +37,36 @@ Python `record_storage.iter_result(execution, field)` 逐条读取新旧结果�
 
 端点/操作/传输登记表通过同一份 `registry-records.json` 引用结果中的字段；各端口仅有清单硬链接，不复制整份表。来源关闭时端口不输出来源字段引用。原始队列、逐包时刻、业务/元数据/填充字节划分均保留，新的存储文件不直接充当研究公共观测。
 
+空 gzip 记录只在封存时建立，之后禁止追加；相同运行中每组最多 32000 份空记录共享同一 inode，以避开文件系统链接数上限。各逻辑文件仍逐份计入压缩预算。完整目标零业务初始化的 80644 份记录由约 315 MiB 实际分配降到 12 KiB，全部后端结果和 96768 份端口元数据与原输出相同。
+
+## 有限研究导出
+
+`PYTHONPATH=python P -m moe_ub_cosim.bounded_export --raw RUN --observation OBS.json --policy POLICY.json --max-simulation-ns N --output-dir NEW` 用于已正常结束的 result/2 服务。P 为项目 Python 环境，RUN 包含 deployment、前台结果和 execution。策略版本为 `moe-ub-research-export-policy/1`，要求正整数 `max_index_bytes`、`max_compressed_bytes`、`max_record_bytes`、`max_endpoint_records`、`max_operations`、`max_layouts`、`max_id_ranges`、`max_graphs`、`cache_rows`。单条原始记录最多 64 MiB。索引和压缩记录分别限额，整个运行及导出目录仍须由外层监测总分配空间。
+
+输出按 observed、truth、metrics 分目录，版本为 `moe-ub-research-storage/1`。每个目录的 storage.json 声明表及 gzip 文件、行数、字节数和 CRC32；所有压缩表均为 JSONL，包括逻辑名以 `.csv` 结尾的窗口表。`research_storage.stored_rows(directory, table)` 逐行读取。公共观测只含原白名单字段，时钟变换和来源保存在 truth；`validate_observed_storage(observed_directory)` 仅访问公共目录。
+
+端口只存非零窗口，公共配置明确声明全部窗口边界，`research_storage.logical_windows(observed_directory)` 可逐行恢复完整窗口，包括空窗口及最后的不完整周期。字节分类同样只存非零窗口，`metrics/validation.json` 明示编码及是否存在填充字段；缺省窗口各分类均为零。这样不会为数十亿空窗口生成 CSV 行。
+
+导出逐条比对计划、实际交付和来源，独立检查目标写入累计字节；每个网络传输临时占用 32 B 的定长磁盘索引。mmap 页面计入宿主 RSS，有限缓存只保留近期访问行，操作与布局表分别有上限。端点记录需要排序，受显式数量上限约束。最终包字节、窗口、来源和交付守恒全部通过后，先保存索引清理摘要，再删除该可再生索引；失败保留原因且不写成功 validation.json。压缩限额包括 gzip 头尾，不包括目录分配块及清单。
+
+已有五类实际 UB 记录与旧导出算法逐字段对照通过，包括本地时钟偏移/漂移、来源关闭、8/32 轮；损坏目标写入校验拒绝。旧导出入口及输出保持不变，不能把旧入口当作新存储格式的完整规模入口。完整目标后处理的运行和磁盘预算仍需结合目标测量确定。
+
 ## 当前验证边界
 
 前台完整模型服务现可显式传入 `--graph-storage POLICY.json`，同时必须使用 `--record-storage`。策略为 `schema_version="moe-ub-graph-storage/1"`，包含正整数 `max_recipe_bytes`（单图原始构图输入）、`max_archive_bytes`（累计归档）和 `max_active_graph_bytes`（活动图）。小型测试分别使用 8/64/64 MiB，不能照搬为目标预算。文件/目录占用按内容与实际分配较大值检查；归档和活动图预算在构图前后及释放后核对，运行中仍需宿主总监测限制峰值。
 
 每轮保存压缩的配置、真实来源记录、模型/费用和运行编号状态，然后由短生命周期 Python 子进程完成构图、原完整校验及紧凑写出。子进程退出并核对摘要后才提交图给后端；前台只回收编号和路由消费状态，不把图留在自己的堆中。后端发出已封存记录的 WAVE_DONE 后，前台复核自己生成的全部文件，先写 `graph-replay/gN/cleanup.json`，再删除这些可再生文件。存在额外文件、文件内容变化或归档损坏时拒绝清理；旧任务和未知路径不受影响。
 
+同一显式选项也把启动前的完整占位图组合校验放入独立进程，保留原完整构图/重构检查；其压缩输入、命令、错误及成功摘要保存在 `graph-replay/input-checks/组名`。这避免已丢弃占位图的 Python 分配空间长期留在服务进程中。没有使用此选项的旧入口继续在原进程校验。
+
 重建命令为 `PYTHONPATH=python P -m moe_ub_cosim.graph_storage replay --archive RUN/graph-replay/gN/archive.json --output-dir NEW_DIRECTORY`，其中 P 为原 Python 环境。重建要求使用记录的源码及固定 proto 修订，重新执行完整校验，并核对 plan、Chakra、预算和 generation 摘要及编号结果。构图工具的诊断文件路径和 Python 缓存不是跨目录字节等价对象，但原文件也逐项登记后才清理。
 
 前台五类真实 UB 对照及 8/32 轮压力已经通过，所有计划紧凑摘要、Chakra 摘要、请求与后端记录相同；结束无活动图。归档原始输入允许重建，不代替仿真产生的记录或研究导出。证据见 [checkpoint-graph.json](../fixtures/m10_resource_efficiency/checkpoint-graph.json)。完整服务输入验证的效率、研究导出及目标组合资源预检仍在进行。
 
 已验证五类小型真实 UB 运行与旧结果及全部逻辑端口记录一致；8/32 轮小模型的图、传输和包来源峰值保持，正常结束清零。日志轮转、gzip 损坏、编号重复、活动对象拒绝释放、晚到匹配、窗口边界和磁盘超限有专项检查。最终结果、实际命令及失败修正记录归入 [资源工程记录](../fixtures/m10_resource_efficiency/README.md)。不能将现有旧导出命令直接当作新存储格式的完整规模入口。
+
+## 激活前的记录归档与资源诊断
+
+开启 record-storage 后，每张图通过全部加载和身份检查，再写出并封存 planned_transfers，完整读取核对记录数、原始字节与 CRC。之后可释放重复的传输 JSON，只留下端点计算所需的数值节点引用；实际执行对象和来源账本持有自己的已验证描述符。安装、来源登记完成后，原描述符数组释放。默认旧结果格式不使用这一释放路径，输入计划和 Chakra 不变。
+
+本地环境变量 `MOE_UB_HOST_PREPARATION_TRACE=1` 使生产服务记录主机准备阶段时间和激活前资源快照，不改变业务激活/完成流程。独立 `cosim-service-resource-probe` 可执行文件在相同准备路径之后、激活之前终止，只用于共同驻留诊断，不生成正常 result.json，也不作为正常结束证明。二者通过小场景对照验证；目标规模测量的最终状态以对应探针记录为准。

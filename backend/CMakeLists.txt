@@ -198,7 +198,7 @@ target_compile_definitions(cosim-lifecycle-test PRIVATE COSIM_LIFECYCLE_TEST)
 
 execute_process(COMMAND git rev-parse HEAD WORKING_DIRECTORY "${COSIM_ROOT}/third_party/ns-3-ub"
   OUTPUT_VARIABLE COSIM_UB_REVISION OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ERROR_IS_FATAL ANY)
-foreach(target cosim-service cosim-service-deadlock-test)
+foreach(target cosim-service cosim-service-deadlock-test cosim-service-resource-probe)
 build_exec(
   EXECNAME ${target}
   SOURCE_FILES
@@ -223,6 +223,7 @@ target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 target_compile_definitions(${target} PRIVATE COSIM_UB_REVISION="${COSIM_UB_REVISION}")
 endforeach()
 target_compile_definitions(cosim-service-deadlock-test PRIVATE COSIM_SERVICE_DEADLOCK_TEST)
+target_compile_definitions(cosim-service-resource-probe PRIVATE COSIM_SERVICE_RESOURCE_PROBE)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m3")
 target_link_options(cosim-service PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m3/service-link.map")
 

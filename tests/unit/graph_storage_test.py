@@ -32,6 +32,27 @@ def service_candidate(evidence=False):
 
 
 class GraphStorageTest(unittest.TestCase):
+    def test_input_composition_isolated_equivalence_and_rejection(self):
+        c,l=fixture();expected=FullModelService(c,l)
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp);(out/'graphs').mkdir();storage=GraphStorage(out,LIMITS,30)
+            actual=FullModelService(c,l,graph_storage=storage)
+            self.assertEqual(actual.evidence,expected.evidence)
+            self.assertEqual(actual.initial,expected.initial)
+            self.assertEqual(actual.deployment(),expected.deployment())
+            for group in c['groups']:
+                slot=out/'graph-replay/input-checks'/group['group_id']
+                self.assertTrue(json.loads((slot/'receipt.json').read_text())['passed'])
+                self.assertEqual(json.loads((slot/'command.json').read_text())['exit_code'],0)
+            bad=deepcopy(l['groups'][0]['layers']);bad[-1]['tokens'][0]['request_id']='changed'
+            with self.assertRaises(ValueError):expected.check_segment(bad,c['groups'][0])
+            # Separate owned output keeps the failed worker's diagnostic files.
+            failure=out/'bad';failure.mkdir();(failure/'graphs').mkdir()
+            broken=GraphStorage(failure,LIMITS,30)
+            with self.assertRaisesRegex(ValueError,'Graph builder failed'):
+                broken.check_composition(bad,c['groups'][0]['model_spec'],c['groups'][0]['full_model_profile'])
+            self.assertFalse((failure/'graph-replay/input-checks'/c['groups'][0]['group_id']/'receipt.json').exists())
+
     def test_closed_recipe_matches_legacy_full_validation_and_bytes(self):
         for evidence in (False,True):
             with self.subTest(evidence=evidence),tempfile.TemporaryDirectory() as tmp:

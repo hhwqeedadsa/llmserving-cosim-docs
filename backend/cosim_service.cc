@@ -15,6 +15,11 @@
 
 #include <algorithm>
 #include <cstdio>
+#include <cstdlib>
+#include <chrono>
+#if defined(__GLIBC__)
+#include <malloc.h>
+#endif
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -40,6 +45,24 @@ Json ReadJson(const fs::path& path)
     std::ifstream stream(path);
     Require(bool(stream), "Cannot open " + path.string());
     return Json::parse(stream);
+}
+bool HostPreparationTrace()
+{
+#ifdef COSIM_SERVICE_RESOURCE_PROBE
+    return true;
+#else
+    const auto* value = std::getenv("MOE_UB_HOST_PREPARATION_TRACE");
+    return value && std::string(value) == "1";
+#endif
+}
+void PreparationStage(const fs::path& run, const std::string& stage)
+{
+    if (!HostPreparationTrace()) return;
+    const auto now = std::chrono::steady_clock::now().time_since_epoch();
+    std::ofstream out(run / "preparation-phases.jsonl", std::ios::app);
+    out << Json({{"stage", stage}, {"steady_seconds", std::chrono::duration<double>(now).count()},
+                 {"simulation_ns", ns3::Simulator::Now().GetNanoSeconds()}}).dump() << '\n';
+    out.close(); Require(bool(out), "Cannot write preparation phase");
 }
 struct Group
 {
@@ -787,7 +810,9 @@ int main(int argc, char** argv)
                     const auto directory = semantic.parent_path();
                     if (!resource_budget.is_null())
                         Require(fs::file_size(directory / "plan.json") <= resource_budget.at("max_plan_bytes").get<uint64_t>(),"Plan exceeds declared max_plan_bytes");
+                    PreparationStage(run_dir, "load_and_prepare_begin");
                     moe_ub::LoadedGraph loaded(directory);
+                    PreparationStage(run_dir, "load_and_prepare_end");
                     const auto& plan = loaded.Plan();
                     Require(moe_ub::resources::Budget(plan.data.at("input"))==resource_budget,"Plan/run resource budget mismatch");
                     if (!resource_budget.is_null())
@@ -862,6 +887,27 @@ int main(int argc, char** argv)
                     for (const auto& d : plan.descriptors)
                         Require(!transfer_ids.count(d.transfer_id) && !tasks.count(d.task_id) && !tags.count(d.tag),
                                 "Reused transfer, UB task or comm_tag");
+                    for (const auto& d : plan.local_descriptors)
+                        Require(!transfer_ids.count(d.transfer_id) && !tags.count(d.tag), "Reused local transfer/tag");
+                    records.BeginGraph(graph);
+                    if (records.Bounded())
+                    {
+                        execution_archive.Register(plan);
+                        endpoint_offsets[graph] = next_endpoint_offset;
+                        next_endpoint_offset += plan.data.contains("layers") ? 2 * plan.data.at("layers").size() : 2;
+                        const auto usage = plan.validated_usage.is_null() ? moe_ub::resources::Actual(plan.data) : plan.validated_usage;
+                        for (const auto& transfer : plan.data.at("transfers")) records.Add("planned_transfers", transfer, graph);
+                        records.SealPlannedTransfers(graph, plan.data.at("transfers").size());
+                        records.Add("plan_summary", {{"graph_id", graph}, {"operations", plan.data.at("operations")},
+                            {"resource_budget", resource_budget}, {"resource_usage", usage}}, graph);
+                        loaded.DiscardArchivedTransfers();
+#if defined(__GLIBC__)
+                        // Return the no-longer-needed JSON allocation pages
+                        // before constructing millions of execution objects.
+                        malloc_trim(0);
+#endif
+                    }
+                    PreparationStage(run_dir, "archived_transfer_json_released");
                     std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> prepared;
                     std::vector<moe_ub::UbWriteTransfer*> pointers;
                     for (const auto& d : plan.descriptors)
@@ -873,23 +919,13 @@ int main(int argc, char** argv)
                     std::vector<moe_ub::LocalDelivery*> local_pointers;
                     for (const auto& d : plan.local_descriptors)
                     {
-                        Require(!transfer_ids.count(d.transfer_id) && !tags.count(d.tag), "Reused local transfer/tag");
                         prepared_local.push_back(std::make_unique<moe_ub::LocalDelivery>(d));
                         local_pointers.push_back(prepared_local.back().get());
                     }
                     loaded.Install(systems, adapters, pointers, local_pointers);
+                    PreparationStage(run_dir, "graph_and_transfers_installed");
                     if (provenance) provenance->Register(plan.descriptors);
-                    records.BeginGraph(graph);
-                    if (records.Bounded())
-                    {
-                        execution_archive.Register(plan);
-                        endpoint_offsets[graph] = next_endpoint_offset;
-                        next_endpoint_offset += plan.data.contains("layers") ? 2 * plan.data.at("layers").size() : 2;
-                        for (const auto& transfer : plan.data.at("transfers")) records.Add("planned_transfers", transfer, graph);
-                        const auto usage = plan.validated_usage.is_null() ? moe_ub::resources::Actual(plan.data) : plan.validated_usage;
-                        records.Add("plan_summary", {{"graph_id", graph}, {"operations", plan.data.at("operations")},
-                            {"resource_budget", resource_budget}, {"resource_usage", usage}}, graph);
-                    }
+                    PreparationStage(run_dir, "provenance_registered");
                     expected_completions += plan.data.at("rank_ids").size();
                     submitted_transfers += plan.descriptors.size();
                     if (!send_slots)
@@ -911,6 +947,9 @@ int main(int argc, char** argv)
                     { transfer_ids.insert(d.transfer_id); tags.insert(d.tag); }
                     for (auto& delivery : prepared_local) local_deliveries.push_back(std::move(delivery));
                     plans.push_back(loaded.ReleasePlan());
+#if defined(__GLIBC__)
+                    if (records.Bounded()) malloc_trim(0);
+#endif
                     peak_plans = std::max(peak_plans, uint64_t(plans.size()));
                     peak_transfers = std::max(peak_transfers, uint64_t(transfers.size()));
                     peak_local = std::max(peak_local, uint64_t(local_deliveries.size()));
@@ -921,6 +960,27 @@ int main(int argc, char** argv)
                     report["step_submissions"].push_back({{"graph_id", graph}, {"wave_id", wave}, {"time_ns", now}});
                     for (int rank : selected_ranks)
                         report["graph_loads"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});
+                    PreparationStage(run_dir, "planned_records_ready");
+                    if (HostPreparationTrace())
+                    {
+                    std::ofstream probe(run_dir / "resource-preparation.json");
+                    probe << Json({{"schema_version", "moe-ub-service-preparation-probe/1"},
+                        {"preparation_completed", true}, {"business_activated", false},
+                        {"normal_service_exit_verified", false}, {"graph_id", graph},
+                        {"ranks", selected_ranks.size()}, {"fabric_transfers", transfers.size()},
+                        {"local_transfers", local_deliveries.size()}, {"observed_ports", observations.size()},
+                        {"validated_nodes", plans.back().nodes.size()},
+                        {"timing_nodes", execution_archive.ResidentNodes()},
+                        {"archived_transfer_data", plans.back().archived_transfer_data},
+                        {"retained_transfer_descriptors", plans.back().descriptors.size()},
+                        {"simulation_ns", now}}).dump(2) << '\n';
+                    probe.close(); Require(bool(probe), "Cannot write preparation probe");
+                    }
+#ifdef COSIM_SERVICE_RESOURCE_PROBE
+                    // No graph is activated. OS process teardown releases this
+                    // isolated resource probe; it is not normal service cleanup.
+                    std::_Exit(0);
+#endif
                     for (int rank : selected_ranks)
                     {
                         report["activation_order"].push_back({{"graph_id", graph}, {"rank_id", rank}, {"time_ns", now}});

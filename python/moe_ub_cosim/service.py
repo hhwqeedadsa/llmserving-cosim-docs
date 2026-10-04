@@ -294,18 +294,26 @@ def run(args):
     configured = composed or config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
     require(layer.get('schema_version') not in ('moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3') or configured,
             'Physical deployment currently requires the configured service entry')
+    output=args.output_dir.resolve();storage=None;options={}
+    if getattr(args,'graph_storage',None) is not None:
+        require(full and getattr(args,'record_storage',None) is not None,
+                'Graph replay storage requires full-model service and bounded backend records')
+        from .graph_storage import GraphStorage
+        output.mkdir(exist_ok=False);(output/'graphs').mkdir()
+        storage=GraphStorage(output,json.loads(args.graph_storage.read_text()),args.wall_timeout_seconds)
+        options['graph_storage']=storage
     if evidence:
         if full:
             from .full_model_service import FullModelEvidenceService as EvidenceService
         else:
             from .evidence_service import EvidenceService
-        service = EvidenceService(config, layer)
+        service = EvidenceService(config, layer, **options)
     elif composed:
         if full:
             from .full_model_service import FullModelService as ComposedService
         else:
             from .composed_service import ComposedService
-        service = ComposedService(config, layer)
+        service = ComposedService(config, layer, **options)
     elif configured:
         from .configured_service import ConfiguredService
         service = ConfiguredService(config, layer)
@@ -320,14 +328,9 @@ def run(args):
         service = PdService(config, layer)
     else:
         service = Service(config, layer)
-    output = args.output_dir.resolve()
-    output.mkdir(exist_ok=False)
-    (output / 'graphs').mkdir()
-    if getattr(args,'graph_storage',None) is not None:
-        require(full and getattr(args,'record_storage',None) is not None,
-                'Graph replay storage requires full-model service and bounded backend records')
-        from .graph_storage import GraphStorage
-        service.graph_storage=GraphStorage(output,json.loads(args.graph_storage.read_text()),args.wall_timeout_seconds)
+    if storage is None:
+        output.mkdir(exist_ok=False)
+        (output / 'graphs').mkdir()
     export_bootstrap(output / 'bootstrap', service.ranks)
     if composed:
         deployment = service.deployment()

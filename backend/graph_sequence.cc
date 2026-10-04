@@ -139,6 +139,11 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
 
 LoadedGraph::LoadedGraph(const std::filesystem::path& directory)
     : plan_(LoadLayerPlan(directory, PlanRetention::Execution)), prepared_(Prepare(plan_, directory)) {}
+void LoadedGraph::DiscardArchivedTransfers()
+{
+    Require(!installed_ && !released_, "archiving an installed/released graph");
+    CompactArchivedTransfers(plan_);
+}
 const LayerPlan& LoadedGraph::Plan() const
 {
     Require(!released_, "loaded graph already released");
@@ -156,6 +161,12 @@ LayerPlan LoadedGraph::ReleasePlan()
 {
     Require(installed_ && !released_, "cannot release an uninstalled or previously released graph");
     released_ = true;
+    if (plan_.archived_transfer_data)
+    {
+        // Execution objects and the provenance ledger own checked descriptors.
+        std::vector<WriteDescriptor>().swap(plan_.descriptors);
+        std::vector<LocalDescriptor>().swap(plan_.local_descriptors);
+    }
     return std::move(plan_);
 }
 }

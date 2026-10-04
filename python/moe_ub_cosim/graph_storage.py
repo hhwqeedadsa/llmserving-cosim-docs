@@ -63,36 +63,53 @@ class GraphStorage:
         require(max(active.values())<=self.limits['max_active_graph_bytes'],'Active graph disk budget exceeded')
         self.peak_active_bytes=max(self.peak_active_bytes,max(active.values()))
 
+    def check_composition(self,layers,model,profile):
+        """Run the same disposable input DAG validation before backend startup."""
+        slot=self.archive/'input-checks'/layers[0]['group_id'];slot.mkdir(parents=True,exist_ok=False)
+        recipe=dict(schema_version='moe-ub-composition-check/1',layers=layers,model=model,profile=profile)
+        path=slot/'recipe.json.gz';self.write_recipe(path,recipe);self.budget()
+        self.worker([sys.executable,'-m','moe_ub_cosim.graph_storage','check-composition','--recipe',str(path.resolve()),
+            '--max-recipe-bytes',str(self.limits['max_recipe_bytes']),
+            '--receipt',str((slot/'receipt.json').resolve())],slot)
+        receipt=json.loads((slot/'receipt.json').read_text())
+        require(receipt['passed'] and receipt['recipe_sha256']==file_sha256(path),'Composition check receipt mismatch')
+        self.budget()
+
+    def write_recipe(self,path,recipe):
+        written=0
+        with path.open('xb') as raw,gzip.GzipFile(fileobj=raw,mode='wb',mtime=0,compresslevel=1) as stream:
+            for part in json.JSONEncoder(separators=(',',':')).iterencode(recipe):
+                data=part.encode();written+=len(data)
+                require(written<=self.limits['max_recipe_bytes'],'Graph recipe byte budget exceeded')
+                stream.write(data)
+        return written
+
+    def worker(self,command,slot):
+        started=datetime.now(timezone.utc).isoformat()
+        with (slot/'stdout.log').open('x') as out,(slot/'stderr.log').open('x') as err:
+            try:code=subprocess.run(command,cwd=ROOT,stdout=out,stderr=err,timeout=self.timeout).returncode
+            except subprocess.TimeoutExpired:code='timeout'
+            save(slot/'command.json',dict(argv=command,cwd=str(ROOT),started_utc=started,
+                ended_utc=datetime.now(timezone.utc).isoformat(),exit_code=code))
+        require(code==0,f'Graph builder failed ({code}); see {slot}/stderr.log')
+
     def generate(self,service,candidate,directory):
         graph=candidate['graph_id']
         require(directory==self.output/'graphs'/graph and graph not in self.active and graph not in self.completed,
                 'Graph storage ownership mismatch')
         recipe,consumed,next_usage=prepare(service,candidate)
         slot=self.archive/graph;slot.mkdir()
-        path=slot/'recipe.json.gz';written=0
+        path=slot/'recipe.json.gz'
         # Limit raw recipe bytes while encoding; recipes contain build inputs,
         # never the large node, transfer or dependency tables.
-        with path.open('xb') as raw,gzip.GzipFile(fileobj=raw,mode='wb',mtime=0,compresslevel=1) as stream:
-            for part in json.JSONEncoder(separators=(',',':')).iterencode(recipe):
-                data=part.encode();written+=len(data)
-                require(written<=self.limits['max_recipe_bytes'],'Graph recipe byte budget exceeded')
-                stream.write(data)
+        written=self.write_recipe(path,recipe)
         self.budget()
         command=[sys.executable,'-m','moe_ub_cosim.graph_storage','build','--recipe',str(path.resolve()),
             '--max-recipe-bytes',str(self.limits['max_recipe_bytes']),'--output-dir',str(directory.resolve()),
             '--receipt',str((slot/'receipt.json').resolve())]
-        started=datetime.now(timezone.utc).isoformat()
         # A fresh process releases its full Python heap before the backend loads
         # the next graph. No service/network process is forked or restarted.
-        with (slot/'stdout.log').open('x') as out,(slot/'stderr.log').open('x') as err:
-            try:
-                result=subprocess.run(command,cwd=ROOT,stdout=out,stderr=err,timeout=self.timeout)
-                code=result.returncode
-            except subprocess.TimeoutExpired:
-                code='timeout'
-            save(slot/'command.json',dict(argv=command,cwd=str(ROOT),started_utc=started,
-                ended_utc=datetime.now(timezone.utc).isoformat(),exit_code=code))
-        require(code==0,f'Graph builder failed ({code}); see graph-replay/{graph}/stderr.log')
+        self.worker(command,slot)
         receipt=json.loads((slot/'receipt.json').read_text())
         require(receipt['graph_id']==graph and receipt['recipe_sha256']==file_sha256(path),
                 'Graph build receipt mismatch')
@@ -155,11 +172,23 @@ def main():
     build.add_argument('--output-dir',type=Path,required=True)
     again=sub.add_parser('replay');again.add_argument('--archive',type=Path,required=True)
     again.add_argument('--output-dir',type=Path,required=True)
+    check=sub.add_parser('check-composition');check.add_argument('--recipe',type=Path,required=True)
+    check.add_argument('--max-recipe-bytes',type=int,required=True);check.add_argument('--receipt',type=Path,required=True)
     args=parser.parse_args()
     if args.action=='build':
         integer(args.max_recipe_bytes,'max_recipe_bytes',1,2**63-1)
         receipt=build_export(read_recipe(args.recipe,args.max_recipe_bytes),args.output_dir)
         save(args.receipt,dict(receipt,recipe_sha256=file_sha256(args.recipe)))
+    elif args.action=='check-composition':
+        from .full_model import build_full_model
+        from .plan import RunIdentities
+        integer(args.max_recipe_bytes,'max_recipe_bytes',1,2**63-1)
+        recipe=read_recipe(args.recipe,args.max_recipe_bytes)
+        fields(recipe,'schema_version layers model profile','composition check')
+        require(recipe['schema_version']=='moe-ub-composition-check/1','Invalid composition check')
+        layers=recipe['layers']
+        build_full_model(layers,RunIdentities(),[[] for _ in layers],recipe['model'],recipe['profile'])
+        save(args.receipt,dict(passed=True,recipe_sha256=file_sha256(args.recipe)))
     else:replay(args.archive,args.output_dir)
 
 

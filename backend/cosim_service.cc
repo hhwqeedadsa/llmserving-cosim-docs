@@ -240,6 +240,9 @@ class NetworkDrain
     NetworkDrain()
     {
         for (auto node = ns3::NodeList::Begin(); node != ns3::NodeList::End(); ++node)
+        {
+            if (const auto controller = (*node)->GetObject<ns3::UbController>())
+                controllers_.push_back(controller);
             for (uint32_t i = 0; i < (*node)->GetNDevices(); ++i)
             {
                 auto port = ns3::DynamicCast<ns3::UbPort>((*node)->GetDevice(i));
@@ -250,6 +253,7 @@ class NetworkDrain
                         port->TraceConnectWithoutContext("PktRcvNotify",
                             ns3::MakeCallback(&NetworkDrain::Arrived, this)), "Cannot observe network drain");
             }
+        }
     }
     ~NetworkDrain()
     {
@@ -267,11 +271,13 @@ class NetworkDrain
             const auto sw = port->GetNode()->GetObject<ns3::UbSwitch>();
             if (port->IsBusy() || !port->GetUbQueue()->IsEmpty() ||
                 sw->GetQueueManager()->GetTotalOutPortBufferUsed(port->GetIfIndex()) != 0) return false;
-            if (const auto controller = port->GetNode()->GetObject<ns3::UbController>())
-                for (const auto& [id, tp] : controller->GetTpnMap())
-                    if (!tp->IsEmpty() || tp->GetActiveSendSegmentCount() != 0 ||
-                        tp->GetOutstandingUnackedSegmentCount() != 0) return false;
         }
+        // A controller's live TP map is independent of which of its ports is
+        // being checked. Query it once per controller, including later TPs.
+        for (const auto& controller : controllers_)
+            for (const auto& [id, tp] : controller->GetTpnMap())
+                if (!tp->IsEmpty() || tp->GetActiveSendSegmentCount() != 0 ||
+                    tp->GetOutstandingUnackedSegmentCount() != 0) return false;
         return true;
     }
     uint64_t StartedPackets() const { return started_; }
@@ -323,6 +329,7 @@ class NetworkDrain
         if (finished_ || progress_) ns3::Simulator::ScheduleNow([this]() { Probe(); });
     }
     std::vector<ns3::Ptr<ns3::UbPort>> ports_;
+    std::vector<ns3::Ptr<ns3::UbController>> controllers_;
     uint64_t started_ = 0, arrived_ = 0;
     ns3::Time last_port_completion_;
     std::function<void()> finished_;
@@ -659,13 +666,17 @@ int main(int argc, char** argv)
                 ns3::Simulator::ScheduleNow([&]() { ns3::Simulator::ScheduleNow([&]() {
                     probe_pending = false;
                     retire_provenance();
-                    if (service_finished || decision_pending || wakeup.IsPending() || !drain.Idle()) return;
+                    if (service_finished || decision_pending || wakeup.IsPending()) return;
                     for (const auto& adapter : adapters)
                         if (adapter->ScheduledEvents() != adapter->ExecutedCallbacks()) return;
                     // UB may have accepted a task whose deferred WQE work has
                     // not reached a TP or port yet. It is still business work.
                     for (const auto& app : apps)
                         if (app->GetTransferExecutor().GetPendingCount() != 0) return;
+                    // These predicates only read state. Pending compute/WQE
+                    // work already disproves deadlock; avoid a full idle fabric
+                    // scan (and live TP-map copies) in that common case.
+                    if (!drain.Idle()) return;
                     for (const auto& transfer : transfers) if (transfer->HasPendingEvents()) return;
                     for (const auto& delivery : local_deliveries) if (delivery->HasPendingEvents()) return;
                     if (std::any_of(groups.begin(), groups.end(), [](const auto& g) { return !g.graph.empty(); }))

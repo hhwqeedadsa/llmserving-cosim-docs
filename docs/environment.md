@@ -3463,3 +3463,17 @@ R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，c
 随后后台在构造执行对象前封存并读取校验计划传输归档，保留全部内容后释放重复 JSON；安装和来源登记后释放原描述符副本。`build-archive-compaction` 退出 0。`compact-preparation-small` 验证独立诊断与生产主程序，并比较生产主程序 host trace 开/关的完整逻辑结果；`compact-retirement`、`compact-graph-replay`、`compact-bounded-export`、`compact-legacy-fullmodel`、`compact-legacy-cann` 均退出 0。前者保留停止边界，后者均实际执行真实 UB 并检查正常结束；没有修改网络事件、参考结果或子模块。
 
 `target-first-round` 正在上述累计 20 GiB、48 GiB RSS/56 GiB 地址/3600 s 上限下执行。命令为 `P scripts/probe_network_initialization.py --build-dir build/m10-resource-efficiency --input-dir R/target-service-isolated/work --prepared runs/v03-full-round-preflight/prepare/work/prepared.json --prepared-graph R/target-build/work/graph --execute-first-round --output-dir R/target-first-round/work`，完整外层参数在 R/logs/target-first-round.json。启动前的源码/二进制摘要为 R/first-round-source-hashes.json。该协议驱动器仅提交固定 g0，正常排空后退出；不能将其称为完整配置服务或最终 64 步请求已执行。
+
+### 首轮执行中的辅助日志增长与受控停止
+
+`target-first-round` 已进入真实 UB 执行，但未完成。全过程采样峰值 46278549504 B（43.10 GiB），低于原共同驻留诊断的 47.83 GiB；激活准备后的进程组 RSS 约 32.2 GiB。加载/准备约 785.2 s，归档并释放传输 JSON 再用约 106.5 s；安装及来源登记后完成激活准备。该时间含新增的完整归档读取核验，不宣称所有阶段提速。
+
+运行中读取尚未封存的 WQE 文件仅作诊断：可见 194698/3741764 次写完成（约 5.2%），此时 runlog 的原生辅助文本日志已为 984923040 B，线性外推约 18.93 GB/首轮。这个外推只是停止依据，不是完整运行实测；连同保留图、研究记录和构建显然无法容纳于累计 20 GiB。已核对受管 PID/命令后发送 SIGTERM，原生退出 -15、驱动器退出 1、监测器 child_failed；整体 1471.774 s，残留进程为空。原因和当时计数保存在 controlled-stop.json、runtime-resource-diagnosis.json，不能记为正常结束。
+
+原 C++ 服务二进制保存为 `build/m10-resource-efficiency/output/cosim/ns3.44-cosim-service-before-idle-opt`，对应 `2d7b089`。随后死锁检查先查询是否仍有已调度计算/WQE，再检查网络空闲；网络空闲检查对同一设备的实时 TP 表只查询一次，不再按该设备每个端口重复复制。检查范围与失败条件不变，不缓存可能增加的 TP 表、不改变事件时间。`build-runtime-costs` 重新编译 production service 和专用 deadlock test，退出 0。
+
+`runtime-costs-equivalence` 调用 `P tests/integration/check_runtime_resources.py --baseline R/closed-service/work/scenario/run --old-backend build/m10-resource-efficiency/output/cosim/ns3.44-cosim-service-before-idle-opt --backend build/m10-resource-efficiency/output/cosim/ns3.44-cosim-service --output-dir R/runtime-costs-equivalence/work`。四组（旧/新检查、辅助日志关、64 MiB 压缩缓冲）均实际完成五轮/305 次写、131279 ns，完整协议、执行记录、逐包/队列/来源和端口审计相同。原生辅助日志 1250980→0 B，研究压缩记录四组同为 134402 B；小图未填满 1 MiB 缓冲，不能据此宣称目标压缩改善。`runtime-boundaries` 和 `runtime-retirement` 分别运行原边界/死锁脚本与五类旧结果对照，均退出 0。
+
+`archive-failed-native` 使用已审阅的 `P R/archive_failed_native.py`，在相同 20 GiB 总预算下将本任务停止探针的 4008 份 `.tr` 文件逐一登记、压缩、重新读取并核验大小/SHA-256，再删除原文件；1037293641→110027897 B。停止前仍有少量进展，因此最终日志字节大于诊断快照。归档和恢复说明保留于 R/target-first-round/native-diagnostics.tar.gz、native-diagnostics-cleanup.json；没有删除历史文件或研究记录。`checkpoint-runtime-costs` 再核对 1304 个保护文件、源码、成功命令、失败原因和归档，退出 0。
+
+复测 `target-first-round-bounded` 在原首轮命令上增加 `--native-diagnostics off --record-buffer-bytes 67108864`。既有后台 globals 显式关闭三类辅助文本诊断，研究记录仍包括全部 16128 出口；64 MiB 是有界压缩缓冲，不是业务缓存。RSS 48 GiB、地址 56 GiB、累计磁盘 20 GiB、单阶段 3600 s 限制不变。此复测仍在进行，源码/二进制绑定于 R/first-round-bounded-source-hashes.json；内部汇总见 [checkpoint-runtime-costs.json](../fixtures/m10_resource_efficiency/checkpoint-runtime-costs.json)。

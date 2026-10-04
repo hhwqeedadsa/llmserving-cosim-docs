@@ -1,4 +1,4 @@
-"""Initialize the complete target fabric and all egress observers, with zero work."""
+"""Measure full-fabric initialization, preparation or one frozen target graph."""
 import argparse
 from copy import deepcopy
 from datetime import datetime,timezone
@@ -25,6 +25,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build-dir',type=Path,required=True);parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--input-dir',type=Path,required=True)
+    parser.add_argument('--native-diagnostics',choices=('keep','off'),default='keep',
+        help='Explicitly disable only native task/packet/port text diagnostics; research observations stay enabled')
+    parser.add_argument('--record-buffer-bytes',type=int,default=2**20)
     parser.add_argument('--prepared',type=Path)
     parser.add_argument('--prepared-graph',type=Path)
     parser.add_argument('--execute-first-round',action='store_true',
@@ -49,6 +52,10 @@ def main():
     assert backend['catalog']==json.loads(catalog.stdout)
     backend.update(scenario_id='m10-full-network-initialization',fabric=spec,topology=topology,
         execution=dict(chunk_bytes=8192,send_slots_per_rank=1,seed=1,run=1))
+    if args.native_diagnostics=='off':
+        for key in ('UB_TASK_TRACE_ENABLE','UB_PACKET_TRACE_ENABLE','UB_PORT_TRACE_ENABLE'):
+            backend['globals'][key]='false'
+            backend['origins']['globals'][key].append(dict(source='explicit_resource_probe_auxiliary_diagnostics',value='false'))
     write_network(out/'network',topology,routes,channels,backend)
     save(out/'fabric-audit.json',audit)
     layers=read(args.input_dir/'layers.json')['groups'][0]['layers']
@@ -66,7 +73,9 @@ def main():
         model_spec=declaration['model_spec'],full_model_profile=declaration['full_model_profile'])
     save(shared/'deployment.json',dict(schema_version='moe-ub-service-deployment/5',groups=[group]))
     export_bootstrap(shared/'bootstrap',ranks)
-    storage=dict(schema_version='moe-ub-record-storage/1',max_compressed_bytes=(3072 if one_round else 2048 if preparation else 128)*2**20,max_buffer_bytes=2**20,max_record_bytes=2**18)
+    storage=dict(schema_version='moe-ub-record-storage/1',max_compressed_bytes=(3072 if one_round else 2048 if preparation else 128)*2**20,max_buffer_bytes=args.record_buffer_bytes,max_record_bytes=2**18)
+    from moe_ub_cosim.record_storage import validate_policy
+    validate_policy(storage)
     save(shared/'record-storage.json',storage)
     switches=[node for node in topology['nodes'] if node['kind']=='SWITCH']
     ports=sum(node['ports'] for node in switches);assert ports==16128
@@ -95,6 +104,7 @@ def main():
     save(out/'scope.json',dict(kind='frozen_first_graph_resource_execution' if one_round else 'graph_preparation_before_activation' if preparation else 'zero_business_network_initialization',
         complete_service_input_validated=False,capacity_budget_not_used=True,
         model_graph_submission_requested=preparation,business_activation_requested=one_round,
+        native_auxiliary_diagnostics=args.native_diagnostics,record_buffer_bytes=args.record_buffer_bytes,
         active_endpoints=len(ranks),inactive_endpoints=audit['counts']['devices']-len(ranks),
         observed_egress_ports=ports,source_backend=dict(path=str(prior),sha256=file_sha256(prior))))
     command=[str(binary),run_id,str(shared),str(root/'fixtures/m1_compute/system.json'),

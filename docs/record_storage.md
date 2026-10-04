@@ -70,3 +70,9 @@ Python `record_storage.iter_result(execution, field)` 逐条读取新旧结果�
 开启 record-storage 后，每张图通过全部加载和身份检查，再写出并封存 planned_transfers，完整读取核对记录数、原始字节与 CRC。之后可释放重复的传输 JSON，只留下端点计算所需的数值节点引用；实际执行对象和来源账本持有自己的已验证描述符。安装、来源登记完成后，原描述符数组释放。默认旧结果格式不使用这一释放路径，输入计划和 Chakra 不变。
 
 本地环境变量 `MOE_UB_HOST_PREPARATION_TRACE=1` 使生产服务记录主机准备阶段时间和激活前资源快照，不改变业务激活/完成流程。独立 `cosim-service-resource-probe` 可执行文件在相同准备路径之后、激活之前终止，只用于共同驻留诊断，不生成正常 result.json，也不作为正常结束证明。二者通过小场景对照验证；目标规模测量的最终状态以对应探针记录为准。
+
+## 原生辅助诊断的显式选择
+
+UB 的 task/packet/port 文本诊断与本平台研究记录分别控制。完整目标首轮试测发现原生辅助日志在约 5.2% 写入完成时已增长到 0.985 GB。资源探针新增 `--native-diagnostics off`，通过既有 backend globals 显式关闭 `UB_TASK_TRACE_ENABLE`、`UB_PACKET_TRACE_ENABLE`、`UB_PORT_TRACE_ENABLE`，并记录参数来源；默认 keep 保留原行为。研究端点、逐包成功发送、队列、来源、目标写入和 ASTRA 原始执行记录均继续记录。生产服务使用相同的既有 backend.json 参数，未增加隐藏环境覆盖。
+
+`--record-buffer-bytes` 只选择已有压缩存储缓冲上限，默认 1 MiB。四组真实 UB 对照验证旧/新空闲扫描、辅助日志开/关以及 1/64 MiB 缓冲下的协议、业务执行和全部研究记录相同。小场景没有填满 1 MiB，因此该对照只证明等价性，目标规模的压缩改善以复测为准。关闭辅助日志不删除已产生的诊断；失败探针的日志经逐文件 SHA-256 核验无损归档后才回收原文件。

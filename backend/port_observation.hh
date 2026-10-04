@@ -102,6 +102,19 @@ class WriteProvenance
 // Returns only WRITE business body bytes. Credit/TP/TA acknowledgments return zero.
 uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet);
 
+// Execution-wide records are identical at every port. Keep one physical copy;
+// existing per-port paths remain readable through hard links on this filesystem.
+struct ObservationRegistry
+{
+    std::filesystem::path directory;
+    std::vector<int> ranks;
+    size_t transfer_count = 0;
+    bool truth = false;
+    static ObservationRegistry Write(const std::vector<const UbWriteTransfer*>& transfers,
+        const nlohmann::json& endpoints, const nlohmann::json& operations,
+        const std::filesystem::path& directory, bool truth);
+};
+
 class PortObservation
 {
   public:
@@ -119,7 +132,8 @@ class PortObservation
     void Export(const UbWriteTransfer& transfer) const;
     void Export(const std::vector<const UbWriteTransfer*>& transfers,
                 const nlohmann::json& endpoint_ops, const nlohmann::json& operation_registry,
-                const std::string& directory = ".") const;
+                const std::string& directory = ".",
+                const ObservationRegistry* registry = nullptr) const;
   private:
     void PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time completion_delay);
     void Enqueued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes);

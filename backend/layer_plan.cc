@@ -1,6 +1,7 @@
 #include "graph_resources.hh"
 #include "layer_plan.hh"
 #include "operator_profile.hh"
+#include "packed_plan_json.hh"
 #include "et_def.pb.h"
 
 #include <fstream>
@@ -136,7 +137,7 @@ void ValidateDeployment(const Json& deployment, const Json& ranks)
     for (const auto* kind : {"dispatch", "combine"}) Number(profile.at(kind), "local prepare time", INT64_MAX);
 }
 
-LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
+LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention retention)
 {
     Json resource_budget = nullptr;
     if (std::filesystem::exists(directory / "graph-resources.json"))
@@ -148,10 +149,15 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     }
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
-    auto p = Json::parse(stream);
+    PackedPlanJson parsed;
+    if (retention == PlanRetention::Execution) parsed = ParsePackedPlanJson(stream);
+    else parsed.data = Json::parse(stream);
+    auto& p = parsed.data;
+    if (p.at("schema_version") != "moe-ub-full-model-plan/1") parsed.Restore();
     Require(resources::Budget(p.at("input")) == resource_budget, "plan/resource budget sidecar mismatch");
     if (!resource_budget.is_null()) resources::Check(resources::Actual(p),resource_budget);
-    if (p.at("schema_version") == "moe-ub-full-model-plan/1") return LoadFullModelPlan(directory, std::move(p));
+    if (p.at("schema_version") == "moe-ub-full-model-plan/1")
+        return LoadFullModelPlan(directory, std::move(p), std::move(parsed.layers));
     if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
         return LoadMultilayerPlan(directory, p);
     if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);

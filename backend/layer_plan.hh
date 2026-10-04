@@ -23,19 +23,25 @@ struct ExecutionNode
 };
 struct LayerPlan
 {
+    // Execution retention omits validated child tables and rank node JSON;
+    // typed execution nodes/descriptors and the original file remain complete.
     nlohmann::json data;
     std::vector<WriteDescriptor> descriptors;
     std::map<std::pair<int, uint64_t>, ExecutionNode> nodes;
     std::vector<LocalDescriptor> local_descriptors;
+    nlohmann::json validated_usage = nullptr;
+    bool execution_retention = false;
 };
+enum class PlanRetention { Complete, Execution };
 void ValidateDeployment(const nlohmann::json& deployment, const nlohmann::json& ranks);
 uint64_t ValidateBatchLimits(const nlohmann::json& limits);
-LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
+LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention retention = PlanRetention::Complete);
 // retain_data only controls returned storage; all semantic checks always run.
 LayerPlan ValidateLayerPlan(const nlohmann::json& data, bool retain_data = true);
 LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true);
 void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
-LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data);
+LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data,
+                          std::vector<std::string> packed_children = {});
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 LayerPlan LoadKvPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& graph,

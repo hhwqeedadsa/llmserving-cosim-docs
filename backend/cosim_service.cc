@@ -702,10 +702,12 @@ int main(int argc, char** argv)
                     const auto directory = semantic.parent_path();
                     if (!resource_budget.is_null())
                         Require(fs::file_size(directory / "plan.json") <= resource_budget.at("max_plan_bytes").get<uint64_t>(),"Plan exceeds declared max_plan_bytes");
-                    auto plan = moe_ub::LoadLayerPlan(directory);
+                    moe_ub::LoadedGraph loaded(directory);
+                    const auto& plan = loaded.Plan();
                     Require(moe_ub::resources::Budget(plan.data.at("input"))==resource_budget,"Plan/run resource budget mismatch");
                     if (!resource_budget.is_null())
-                        resource_used=moe_ub::resources::AddRun(resource_used,moe_ub::resources::Actual(plan.data),resource_budget);
+                        resource_used=moe_ub::resources::AddRun(resource_used,
+                            plan.validated_usage.is_null() ? moe_ub::resources::Actual(plan.data) : plan.validated_usage,resource_budget);
                     Require((plan.data.at("schema_version") == "moe-ub-execution-plan/3") == !batch_limits.is_null(),
                             "Plan/service batching schema mismatch");
                     if (!batch_limits.is_null())
@@ -790,7 +792,7 @@ int main(int argc, char** argv)
                         prepared_local.push_back(std::make_unique<moe_ub::LocalDelivery>(d));
                         local_pointers.push_back(prepared_local.back().get());
                     }
-                    moe_ub::InstallNextGraph(plan, directory, systems, adapters, pointers, local_pointers);
+                    loaded.Install(systems, adapters, pointers, local_pointers);
                     if (provenance) provenance->Register(plan.descriptors);
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
@@ -804,7 +806,7 @@ int main(int argc, char** argv)
                     for (const auto& d : plan.local_descriptors)
                     { transfer_ids.insert(d.transfer_id); tags.insert(d.tag); }
                     for (auto& delivery : prepared_local) local_deliveries.push_back(std::move(delivery));
-                    plans.push_back(std::move(plan));
+                    plans.push_back(loaded.ReleasePlan());
                     if (kv) kv_graphs.insert(graph);
                     for (auto i : selected)
                     { groups[i].graph = graph; groups[i].wave = wave; groups[i].completed.clear(); }
@@ -967,12 +969,17 @@ int main(int argc, char** argv)
                 }
                 endpoint_offset += plans[step].data.contains("layers") ? 2 * plans[step].data.at("layers").size() : 2;
             }
+            std::optional<moe_ub::ObservationRegistry> registry;
+            if (!observations.empty()) registry = moe_ub::ObservationRegistry::Write(
+                export_registry, endpoints, operations, "registry",
+                std::any_of(observation_configs.begin(), observation_configs.end(),
+                    [](const auto& config) { return config.provenance; }));
             for (size_t index = 0; index < observations.size(); ++index)
             {
                 const auto& config = observation_configs[index];
                 const auto directory = multiple_ports ? "ports/" + std::to_string(config.switch_id) +
                     "-" + std::to_string(config.port_id) : ".";
-                observations[index]->Export(export_registry, endpoints, operations, directory);
+                observations[index]->Export(export_registry, endpoints, operations, directory, &*registry);
             }
             if (provenance)
             {

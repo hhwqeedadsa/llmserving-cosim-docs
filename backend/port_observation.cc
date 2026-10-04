@@ -393,9 +393,72 @@ void PortObservation::Export(const UbWriteTransfer& transfer) const
     Export({&transfer}, endpoints, operations);
 }
 
+namespace
+{
+Json TransferRecord(const UbWriteTransfer* transfer)
+{
+    const auto& d = transfer->Descriptor();
+    Require(!transfer->Completion().Active(), "Unfinished transfer in provenance export");
+    Json record = {{"transfer_id", d.transfer_id},
+        {"operation_id", d.operation_id.empty() ? d.graph_id + "/write" : d.operation_id},
+        {"ub_task_id", d.task_id}, {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+        {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()},
+        {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
+        {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
+        {"priority", 7}, {"chunk_id", d.chunk_index}};
+    if (d.payload_regions)
+    {
+        uint64_t business = 0, metadata = 0, padding = 0;
+        Json regions = Json::array();
+        for (const auto& r : *d.payload_regions)
+        {
+            if (r.kind == "business") business += r.end-r.begin;
+            else if (r.kind == "metadata") metadata += r.end-r.begin;
+            else padding += r.end-r.begin;
+            regions.push_back({{"begin",r.begin},{"end",r.end},{"kind",r.kind}});
+        }
+        record["business_payload_bytes"] = business;
+        record["application_metadata_bytes"] = metadata;
+        record["padding_bytes"] = padding;
+        record["payload_regions"] = regions;
+    }
+    if (!d.operation_id.empty())
+    {
+        record["pair_byte_range"] = {d.pair_byte_offset, d.pair_byte_offset + d.bytes};
+        record["pair_payload_bytes"] = d.pair_payload_bytes;
+    }
+    return record;
+}
+}
+
+ObservationRegistry ObservationRegistry::Write(const std::vector<const UbWriteTransfer*>& transfers,
+    const Json& endpoints, const Json& operations, const std::filesystem::path& directory, bool truth)
+{
+    Require(!std::filesystem::exists(directory), "Registry directory already exists");
+    std::filesystem::create_directories(directory);
+    ObservationRegistry result{directory, {}, transfers.size(), truth};
+    Save((directory / "endpoint_ops.jsonl").string(), endpoints, true);
+    if (truth)
+    {
+        Save((directory / "operation_registry.jsonl").string(), operations, true);
+        std::ofstream stream(directory / "transfer_registry.jsonl");
+        std::set<int> ranks;
+        for (const auto* transfer : transfers)
+        {
+            const auto& d = transfer->Descriptor();
+            ranks.insert(d.src_rank); ranks.insert(d.dst_rank);
+            stream << TransferRecord(transfer).dump() << '\n';
+            Require(bool(stream), "Cannot write shared transfer registry");
+        }
+        stream.close(); Require(bool(stream), "Cannot close shared transfer registry");
+        result.ranks.assign(ranks.begin(), ranks.end());
+    }
+    return result;
+}
+
 void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfers,
                              const Json& endpoint_ops, const Json& operation_registry,
-                             const std::string& directory) const
+                             const std::string& directory, const ObservationRegistry* shared_registry) const
 {
     const std::filesystem::path base(directory);
     auto save = [&](const std::string& name, const Json& value, bool lines = false) {
@@ -442,7 +505,13 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
     }
     if(!streamed) save("observed/port_counters.jsonl", observed, true);
     else { observed_stream.close();Require(bool(observed_stream),"Cannot close windows");if(config_.provenance) { truth_stream.close();Require(bool(truth_stream),"Cannot close truth windows"); } }
-    save("observed/endpoint_ops.jsonl", endpoint_ops, true);
+    if (shared_registry)
+    {
+        Require(shared_registry->transfer_count == transfers.size() &&
+                (!config_.provenance || shared_registry->truth), "Shared observation registry mismatch");
+        std::filesystem::create_hard_link(shared_registry->directory / "endpoint_ops.jsonl", base / "observed/endpoint_ops.jsonl");
+    }
+    else save("observed/endpoint_ops.jsonl", endpoint_ops, true);
     save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
@@ -459,45 +528,24 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
     std::filesystem::create_directory(base / "truth");
     std::set<int> ranks;
     Json registry = Json::array();
-    for (const auto* transfer : transfers)
+    if (shared_registry)
+        ranks.insert(shared_registry->ranks.begin(), shared_registry->ranks.end());
+    else for (const auto* transfer : transfers)
     {
-        const auto& d = transfer->Descriptor();
-        Require(!transfer->Completion().Active(), "Unfinished transfer in provenance export");
-        ranks.insert(d.src_rank); ranks.insert(d.dst_rank);
-        registry.push_back({{"transfer_id", d.transfer_id},
-            {"operation_id", d.operation_id.empty() ? d.graph_id + "/write" : d.operation_id},
-            {"ub_task_id", d.task_id}, {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
-            {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()},
-            {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
-            {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
-            {"priority", 7}, {"chunk_id", d.chunk_index}});
-        if (d.payload_regions)
-        {
-            uint64_t business = 0, metadata = 0, padding = 0;
-            Json regions = Json::array();
-            for (const auto& r : *d.payload_regions)
-            {
-                if (r.kind == "business") business += r.end-r.begin;
-                else if (r.kind == "metadata") metadata += r.end-r.begin;
-                else padding += r.end-r.begin;
-                regions.push_back({{"begin",r.begin},{"end",r.end},{"kind",r.kind}});
-            }
-            registry.back()["business_payload_bytes"] = business;
-            registry.back()["application_metadata_bytes"] = metadata;
-            registry.back()["padding_bytes"] = padding;
-            registry.back()["payload_regions"] = regions;
-        }
-        if (!d.operation_id.empty())
-        {
-            registry.back()["pair_byte_range"] = {d.pair_byte_offset, d.pair_byte_offset + d.bytes};
-            registry.back()["pair_payload_bytes"] = d.pair_payload_bytes;
-        }
+        ranks.insert(transfer->Descriptor().src_rank); ranks.insert(transfer->Descriptor().dst_rank);
+        registry.push_back(TransferRecord(transfer));
     }
     save("truth/clock_models.json", {{"schema_version", "moe-ub-m1-truth/1"},
         {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},
         {"switch_ids", {config_.switch_id}}, {"rank_ids", ranks}});
-    save("truth/operation_registry.jsonl", operation_registry, true);
-    save("truth/transfer_registry.jsonl", registry, true);
+    if (shared_registry)
+        for (const auto* name : {"operation_registry.jsonl", "transfer_registry.jsonl"})
+            std::filesystem::create_hard_link(shared_registry->directory / name, base / "truth" / name);
+    else
+    {
+        save("truth/operation_registry.jsonl", operation_registry, true);
+        save("truth/transfer_registry.jsonl", registry, true);
+    }
     if(!streamed) { save("truth/packet_ranges.jsonl", packet_ranges_, true);
         save("truth/port_byte_truth.jsonl", truth, true); }
 }

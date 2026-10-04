@@ -3408,3 +3408,16 @@ graph 目录留下 layer.0.et 至 layer.5.et（分别为 9169277、9106991、916
 新完整图加载器接管唯一解析树，子层全部验证后仅返回描述符，按 rank 与逐传输重构比较；节点执行索引保留类型、耗时、依赖，不复制整份 JSON。CANN 独立检查使用有序索引消除反复扫描。八组新/旧实际加载一致，十二项篡改均拒绝。完整服务、61 块小 EP、dense 穿插及 CANN 真实 UB 回归通过，原小图 JSON/Chakra 损坏拒绝保持；未改变 UB 执行事件。1304 个旧受保护文件摘要未变。
 
 检查点时 R 约 346 MiB、新构建约 100 MiB，未清理任何历史结果。证据见 [checkpoint-io.json](../fixtures/m10_resource_efficiency/checkpoint-io.json)。本任务仍 in_progress；完整目标导出/加载、跨轮持有和观测登记表重复落盘尚未解决，不将此检查点写成资源工程完成或 M10 完成。
+## 2026-10-04：完整首轮加载及输入/登记表资源检查点
+
+本节记录连续资源工程的内部结果，任务仍在进行；详情与命令见 [checkpoint-load.json](../fixtures/m10_resource_efficiency/checkpoint-load.json)。R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，工作目录 `/root/moe-ub-cosim`。重负载串行，累计新产物上限 20 GiB，最低文件系统余量 20 GiB。
+
+`target-build` 复用固定 prepared/bundle，48 GiB RSS、56 GiB 地址、3600 s 上限，完成原 61 块/128 rank/1024 请求首轮构图、完整校验及紧凑导出；7655238 节点、3767694 次交付、138683411 依赖边，plan.json 8091216092 B。构图校验 903.901 s，导出 286.029 s，进程整体 1199.659 s，峰值 RSS 33901703168 B。`target-artifacts-fixed` 逐文件核验生成摘要。没有目标网络执行。
+
+`target-load` 与 `target-parse-only` 在整树解析阶段触及 48 GiB RSS，均受控退出，无残留；诊断模式不做语义校验，不能当作成功加载。逐层内存表示的生产加载器通过 `target-load-retained`：实际加载 682.475605 s，进程整体 704.522821 s，峰值 RSS 34820395008 B，完整计划/Chakra 和全部数量核对通过。目标文件未转存或复制。`loader-retention-chakra` 通过八组旧/新/新持有方式等价、12 种语义损坏及截断 Chakra 拒绝；新 SAX 解析器独立 C++ 单元测试通过。
+
+`target-route-import-fixed` 采用与旧来源探针相同的来源模型结构，完整核验 1024 文件、3801088 条路由，导入 79.715881 s，含逐条原始对照 131.563890 s，峰值 929828864 B。来源 expert 数组 121634816 B、消费位图 475136 B；数据未复制。容量参考标签与来源模型名不同，探针明确未验证两者组合成完整服务配置。
+
+`closed-service/structure/cann/evidence/pd/sequence/registry` 使用新 build/m10-resource-efficiency、8 GiB RSS/12 GiB 地址限制串行通过。封闭加载/准备/安装路径保留原行为；真实一/二/十端口及来源关闭的旧结果对照通过，十端口登记表 10525140→1052514 B，结束时刻 444075 ns 不变。`observation-regression` 验证预算、窗口及流式导出。`unit-checkpoint-load` 为 55 项相关单元测试，退出 0。13 项递归依赖和 1304 个历史保护文件不变；四个二进制各只链接新构建目录的十个 ns-3-UB 动态库。
+
+监测器现跟踪自有进程树及脱离进程组的后代，并以唯一 inode 计量磁盘；保持专用监测进程前提，不并发启动无关子进程。旧构建采样漏计的限制保留为历史说明。失败日志还包括来源文件数测试假设、proto 摘要辅助路径和导入探针容量标签误用，修正后通过；未删除断言或修改来源。此检查点没有清理历史或新生成文件。跨轮计划/传输/来源释放与后处理仍需实现、验证，M10 未完成。

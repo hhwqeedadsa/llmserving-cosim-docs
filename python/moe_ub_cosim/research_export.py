@@ -11,6 +11,13 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def require_same_records(reference, candidate, records, message):
+    # Hard-linked port paths name the same file; parsing each one would multiply
+    # work by the number of observed ports. Independent copies still get the
+    # original complete content check, including copies from older backends.
+    require(reference.samefile(candidate) or json_lines(candidate) == records, message)
+
+
 def export_metadata(raw, observation, ranks, max_ns):
     clocks,ports=validate_observation(observation,ranks,max_ns)
     report=read(raw/'execution/result.json');front=read(raw/'service_result.json')
@@ -60,7 +67,8 @@ def export_metadata(raw, observation, ranks, max_ns):
     raw_dirs=[raw/f"execution/ports/{p['switch_id']}-{p['port_id']}" for p in ports]
     raw_endpoints=json_lines(raw_dirs[0]/'observed/endpoint_ops.jsonl')
     for directory in raw_dirs[1:]:
-        require(json_lines(directory/'observed/endpoint_ops.jsonl')==raw_endpoints,'Port copies disagree on ASTRA endpoints')
+        require_same_records(raw_dirs[0]/'observed/endpoint_ops.jsonl',
+            directory/'observed/endpoint_ops.jsonl',raw_endpoints,'Port copies disagree on ASTRA endpoints')
     mapped={};endpoints=[];counts=Counter()
     for row in sorted(raw_endpoints,key=lambda r:(r['rank_id'],r['start_local_ns'],r['local_record_id'])):
         require(set(row)==set(ENDPOINT_FIELDS) and row['rank_id'] in ranks,'Invalid raw ASTRA endpoint fields')
@@ -80,8 +88,10 @@ def export_metadata(raw, observation, ranks, max_ns):
                 len(operations)==len(operations_by_id),'Operation registry mismatch')
         require({t['transfer_id'] for t in transfers}==set(planned) and len(transfers)==len(planned),'Transfer registry mismatch')
         for directory in raw_dirs[1:]:
-            require(json_lines(directory/'truth/operation_registry.jsonl')==operations and
-                    json_lines(directory/'truth/transfer_registry.jsonl')==transfers,'Port registries disagree')
+            require_same_records(raw_dirs[0]/'truth/operation_registry.jsonl',
+                directory/'truth/operation_registry.jsonl',operations,'Port registries disagree')
+            require_same_records(raw_dirs[0]/'truth/transfer_registry.jsonl',
+                directory/'truth/transfer_registry.jsonl',transfers,'Port registries disagree')
         bound=[]
         for operation in operations:
             for endpoint in operation['endpoint_records']:

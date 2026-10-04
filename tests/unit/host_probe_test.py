@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from moe_ub_cosim.host_probe import probe
+from moe_ub_cosim.host_probe import disk_bytes, probe
 
 
 class HostProbeTest(unittest.TestCase):
@@ -42,6 +42,27 @@ class HostProbeTest(unittest.TestCase):
         code="from pathlib import Path;import time;p=Path('OUTPUT');[(p/str(i)).write_bytes(b'x'*400000) for i in range(4)];time.sleep(4)"
         r,_,_=self.run_case(code)
         self.assertEqual(r['status'],'artifact_limit')
+
+    def test_detached_descendant_is_still_owned(self):
+        code="import subprocess,sys,time; subprocess.Popen([sys.executable,'-c','import time;x=bytearray(48*2**20);time.sleep(60)'],start_new_session=True); time.sleep(60)"
+        r,_,_=self.run_case(code,rss_bytes=40*2**20)
+        self.assertEqual(r['status'],'rss_limit')
+        self.assertGreaterEqual(r['peak_sampled_processes'],2)
+        self.assertEqual(r['rss_scope'],'owned_process_tree_including_detached_descendants')
+
+    def test_hardlinks_count_once_across_roots(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);a=root/'a';b=root/'b';a.mkdir();b.mkdir()
+            (a/'registry').write_bytes(b'x'*8192)
+            (b/'registry').hardlink_to(a/'registry')
+            (b/'alias').symlink_to(a/'registry')
+            self.assertEqual(disk_bytes(root),8192)
+            seen=set()
+            self.assertEqual(disk_bytes(a,seen)+disk_bytes(b,seen),8192)
+            r=probe([sys.executable,'-c','print("ok")'],root/'probe',
+                rss_bytes=128*2**20,address_bytes=256*2**20,artifact_bytes=16000,
+                wall_seconds=5,artifact_roots=[a,b])
+            self.assertEqual(r['status'],'completed')
 
 
 if __name__=='__main__':unittest.main()

@@ -88,27 +88,35 @@ def validate_raw(raw,layers,require_decode=True):
     return prompt,len(raw)-1
 
 
-def load_manifest(ref):
-    _,manifest = read_json(ref)
-    validate_manifest(manifest)
+def iter_sources(manifest):
+    """Verify every manifest file while retaining only the current raw trace."""
     layers,files=manifest['layers'],manifest['files']
-    loaded={};paths=set();origins=set()
+    identities=set();paths=set();origins=set()
     for item in files:
         fields(item,'file_id original_path file format','route file')
-        require(isinstance(item['file_id'],str) and item['file_id'] and item['file_id'] not in loaded and
+        require(isinstance(item['file_id'],str) and item['file_id'] and item['file_id'] not in identities and
                 isinstance(item['original_path'],str) and item['original_path'], 'Duplicate/missing route file identity')
         require(item['format']=='token_layer_map_v1','Unverified/unsupported raw route layout')
         path,raw=read_json(item['file'])
         require(path not in paths and item['original_path'] not in origins,'Repeated raw route file')
         paths.add(path);origins.add(item['original_path'])
         prompt,_ = validate_raw(raw,layers)
-        loaded[item['file_id']]=dict(raw=raw,prompt_tokens=prompt,available_decode_records=len(raw)-1,
+        identities.add(item['file_id'])
+        yield item['file_id'],dict(raw=raw,prompt_tokens=prompt,available_decode_records=len(raw)-1,
             file=deepcopy(item['file']),original_path=item['original_path'])
+
+
+def load_manifest(ref):
+    _,manifest = read_json(ref)
+    validate_manifest(manifest)
+    loaded=dict(iter_sources(manifest))
     return manifest,loaded
 
 
-def select_routes(ref, requests, models, selected_layers):
-    manifest,loaded=load_manifest(ref)
+def select_routes(ref, requests, models, selected_layers, *, compact=False):
+    from .route_records import RouteRecords
+    _,manifest=read_json(ref)
+    validate_manifest(manifest)
     for model in models:
         require(model['name']==manifest['model']['name'] and model['hidden_size']==manifest['model']['hidden_dim'] and
                 len(model['layers'])==manifest['model']['num_layers'],'Route model differs from execution')
@@ -116,11 +124,22 @@ def select_routes(ref, requests, models, selected_layers):
             require(actual['kind']==declared['kind'] and actual['layer_id']==declared['layer_id'] and
                 (actual['kind']=='dense' or all(actual[k]==declared[k] for k in ('num_experts','top_k'))),
                 'Route layer structure/Top-K differs from execution')
-    normalized=[];records={};selections=[];used=set()
-    for request in requests:
+    selected=[]
+    for layer_id in selected_layers:
+        integer(layer_id,'selected layer',0,len(manifest['layers'])-1)
+        require(manifest['layers'][layer_id]['kind']=='moe','Cannot route a dense layer')
+        selected.append(manifest['layers'][layer_id])
+    records=RouteRecords(selected)
+    pending={}
+    for ordinal,request in enumerate(requests):
         fields(request,'request_id rank_id arrival_ns file_id first_decode_entry decode_steps target_total_tokens','observed request')
-        require(request['file_id'] in loaded and request['file_id'] not in used,'Unknown or reused source request file')
-        used.add(request['file_id']);source=loaded[request['file_id']]
+        require(request['file_id'] not in pending,'Unknown or reused source request file')
+        pending[request['file_id']]=ordinal,request
+    normalized=[None]*len(requests);selections=[None]*len(requests)
+    for file_id,source in iter_sources(manifest):
+        # Unselected files are still fully hash/schema checked before this point.
+        if file_id not in pending:continue
+        ordinal,request=pending.pop(file_id)
         first=integer(request['first_decode_entry'],'first source decode entry',1,source['available_decode_records'])
         steps=integer(request['decode_steps'],'observation steps',1,source['available_decode_records']-first+1)
         target=request['target_total_tokens'];end=source['prompt_tokens']+first+steps
@@ -129,42 +148,39 @@ def select_routes(ref, requests, models, selected_layers):
         for entry in range(first,first+steps):
             layer_routes={}
             for layer_id in selected_layers:
-                require(manifest['layers'][layer_id]['kind']=='moe','Cannot route a dense layer')
                 experts=source['raw'][entry][str(layer_id)][0]
-                index=source['prompt_tokens']+entry-1
-                key=str(request['request_id']),index,layer_id
-                require(key not in records,'Duplicate selected route')
-                records[key]=dict(request_id=key[0],phase='decode',token_index=index,layer_id=layer_id,
-                    expert_ids=deepcopy(experts),source_file=deepcopy(source['file']),file_id=request['file_id'],
-                    source_entry=entry,source_layer_id=layer_id,source_token_row=0,
-                    decode_index=entry-1,source_index_convention='entry_0_prefill_entry_1_first_decode')
                 layer_routes[str(layer_id)]=deepcopy(experts)
             routes.append(layer_routes)
-        normalized.append(dict(request_id=request['request_id'],rank_id=request['rank_id'],arrival_ns=request['arrival_ns'],
-            prompt_tokens=source['prompt_tokens'],generated_tokens=first,decode_routes=routes))
-        selections.append(dict(**deepcopy(request),prompt_tokens=source['prompt_tokens'],
+        normalized[ordinal]=dict(request_id=request['request_id'],rank_id=request['rank_id'],arrival_ns=request['arrival_ns'],
+            prompt_tokens=source['prompt_tokens'],generated_tokens=first,decode_routes=routes)
+        records.add(ordinal,request,normalized[ordinal],source)
+        selections[ordinal]=dict(**deepcopy(request),prompt_tokens=source['prompt_tokens'],
             available_decode_records=source['available_decode_records'],
-            reserved_kv_tokens=end-1,observed_tokens_reached=end,source_original_path=source['original_path']))
+            reserved_kv_tokens=end-1,observed_tokens_reached=end,source_original_path=source['original_path'])
+    require(not pending,'Unknown or reused source request file')
     evidence=dict(manifest=deepcopy(ref),source=manifest['source'],route_model=manifest['model'],selections=selections,
         route_data_is_synthetic=manifest['source']['kind']=='synthetic_test',
         target_precision_match=False,infer_eos_from_file_end=False,selection='explicit_file_and_contiguous_entry_range',
         expected_records=len(records))
-    return normalized,records,evidence
+    return normalized,records if compact else dict(records),evidence
 
 
 def main():
     import argparse
+    from .plan_io import file_sha256
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest',type=Path,required=True)
     parser.add_argument('--output-dir',type=Path,required=True)
     args=parser.parse_args()
     ref=dict(path=str(args.manifest.resolve()),sha256=hashlib.sha256(args.manifest.read_bytes()).hexdigest())
-    manifest,files=load_manifest(ref)
+    _,manifest=read_json(ref)
+    validate_manifest(manifest)
     require(not args.output_dir.exists(),'Output directory already exists')
     args.output_dir.mkdir(parents=True)
-    count=0
+    count=0;files=[]
     with (args.output_dir/'normalized_decode.jsonl').open('w') as output:
-        for file_id,source in files.items():
+        for file_id,source in iter_sources(manifest):
+            files.append(dict(file_id=file_id,**{k:v for k,v in source.items() if k!='raw'}))
             for entry in range(1,len(source['raw'])):
                 for layer in manifest['layers']:
                     if layer['kind']=='dense':continue
@@ -174,10 +190,10 @@ def main():
                         source_file=source['file'],source_entry=entry,source_token_row=0)
                     output.write(json.dumps(record)+'\n');count+=1
     report=dict(schema_version='moe-ub-route-import-report/1',manifest=ref,source=manifest['source'],model=manifest['model'],
-        files=[dict(file_id=i,**{k:v for k,v in source.items() if k!='raw'}) for i,source in files.items()],
+        files=files,
         records=count,raw_schema_verified=True,eos_inferred=False,
         real_model_trace_claim=manifest['source']['kind']!='synthetic_test',target_hardware_conditions_validated=False,
-        calibration_status='unvalidated_reference',normalized_sha256=hashlib.sha256((args.output_dir/'normalized_decode.jsonl').read_bytes()).hexdigest())
+        calibration_status='unvalidated_reference',normalized_sha256=file_sha256(args.output_dir/'normalized_decode.jsonl'))
     (args.output_dir/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print('Validated',len(files),'files and',count,'decode layer records; no EOS inference')
 

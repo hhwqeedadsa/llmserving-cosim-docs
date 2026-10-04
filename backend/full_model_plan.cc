@@ -118,9 +118,18 @@ void ValidateFullModelProfile(const Json& model, const Json& profile, const Json
     }
 }
 
-LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
+LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, std::vector<std::string> packed_children)
 {
     LayerPlan result{std::move(data), {}, {}, {}};
+    result.execution_retention = !packed_children.empty();
+    result.validated_usage = resources::Actual(result.data);
+    if (result.execution_retention)
+    {
+        Require(result.data.at("layers").is_array() && result.data.at("layers").size() == packed_children.size(),
+                "packed child count mismatch");
+        result.data["layers"][0] = Json::parse(packed_children[0]);
+        std::string().swap(packed_children[0]);
+    }
     const auto& p = result.data;
     const auto& model = p.at("model_spec"); const auto& profile = p.at("full_model_profile"); const auto& layers = p.at("layers");
     Require(layers.is_array() && !layers.empty() && layers.size() <= 128, "missing communication layers");
@@ -149,9 +158,16 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
     Require(p.at("transfers").is_array(), "composition mismatch: transfers");
     std::map<uint64_t, LayerPlan> children;
     std::map<uint64_t, const Json*> child_data;
+    struct PackedChild { std::vector<std::string> graphs; std::string transfers; };
+    std::map<uint64_t, PackedChild> packed;
     std::set<std::string> operations; std::map<std::string, std::set<uint64_t>> identities;
     for (size_t i = 0; i < layers.size(); ++i)
     {
+        if (result.execution_retention && i)
+        {
+            result.data["layers"][i] = Json::parse(packed_children[i]);
+            std::string().swap(packed_children[i]);
+        }
         const auto& layer = layers[i]; const auto& input = layer.at("input");
         const auto lid = Number(input.at("layer_id"));
         Require(input.at("layer_id") == moe_ids[i] && layer.at("schema_version") == "moe-ub-execution-plan/3" &&
@@ -173,11 +189,25 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
         for (const auto& transfer : layer.at("transfers"))
             for (auto key : {"transfer_id", "ub_task_id", "comm_tag"})
                 if (transfer.contains(key)) Require(identities[key].insert(Number(transfer.at(key))).second, "duplicate transfer identity");
+        if (result.execution_retention)
+        {
+            auto& saved = packed[lid];
+            for (const auto& graph : layer.at("rank_graphs")) saved.graphs.push_back(graph.dump());
+            saved.transfers = layer.at("transfers").dump();
+            // Every child field was validated above. Reconstruction still reads
+            // its exact stored graphs/transfers, one rank/layer at a time.
+            result.data["layers"][i].erase("rank_graphs");
+            result.data["layers"][i].erase("transfers");
+        }
     }
     identities.clear();
     const auto tokens = Tokens(first); const uint64_t ready = Number(first.at("ready_ns"));
     for (const auto& token : tokens) Require(Number(token.at("token_index")) < Number(model.at("max_position_embeddings")), "context exceeds model");
     std::map<std::pair<uint64_t, int>, uint64_t> offsets;
+    std::map<uint64_t, const Json*> graph_transfers;
+    if (result.execution_retention)
+        for (const auto& transfer : p.at("transfers"))
+            graph_transfers.emplace(transfer.at("transfer_id"), &transfer);
     for (size_t ri = 0; ri < ranks.size(); ++ri)
     {
         const int rank = ranks[ri]; uint64_t n = 0, context = 0, total = ready, expert_inputs = 0;
@@ -215,7 +245,14 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
             else
             {
                 const auto branch = previous; const auto routed = comp("router", Product(n, Number(per.at("router"))), branch, lid);
-                const auto& checked = *child_data.at(lid); const auto& child = checked.at("rank_graphs")[ri];
+                const auto& checked = *child_data.at(lid);
+                Json unpacked;
+                if (result.execution_retention)
+                {
+                    unpacked = Json::parse(packed.at(lid).graphs.at(ri));
+                    std::string().swap(packed.at(lid).graphs[ri]);
+                }
+                const auto& child = result.execution_retention ? unpacked : checked.at("rank_graphs")[ri];
                 const uint64_t base = nodes.size(); offsets[{lid, rank}] = base;
                 std::set<uint64_t> used; std::vector<uint64_t> terminal;
                 for (const auto& node : child.at("nodes")) for (const auto& dep : node.at("deps")) used.insert(dep.get<uint64_t>());
@@ -252,14 +289,23 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
         for (auto stage : {"final_norm", "lm_head", "sampling"}) previous = comp(stage, Product(n, Number(profile.at("per_token_ns").at(stage))), previous);
         graph["terminal_nodes"] = previous;
         Require(p.at("rank_graphs")[ri] == graph, "composition mismatch: rank_graphs");
+        if (result.execution_retention)
+            CheckPlanGraph(directory / ("layer." + std::to_string(rank) + ".et"), graph, graph_transfers);
         for (const auto& node : nodes) result.nodes.emplace(std::make_pair(rank, node.at("node_id").get<uint64_t>()), node);
+        if (result.execution_retention) result.data["rank_graphs"][ri].erase("nodes");
         expected["expert_input_counts"].push_back(expert_inputs);
     }
     size_t transfer_index = 0;
     for (const auto& layer : layers)
     {
         const auto lid = Number(layer.at("input").at("layer_id"));
-        for (auto transfer : layer.at("transfers"))
+        Json unpacked;
+        if (result.execution_retention)
+        {
+            unpacked = Json::parse(packed.at(lid).transfers);
+            packed.erase(lid);
+        }
+        for (auto transfer : result.execution_retention ? unpacked : layer.at("transfers"))
         {
             transfer["send_node_id"] = transfer.at("send_node_id").get<uint64_t>() + offsets.at({lid, transfer.at("src_rank").get<int>()});
             transfer["recv_node_id"] = transfer.at("recv_node_id").get<uint64_t>() + offsets.at({lid, transfer.at("dst_rank").get<int>()});
@@ -280,16 +326,18 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
         children.erase(lid);
     }
     Require(transfer_index == p.at("transfers").size(), "composition mismatch: transfers");
-    const auto usage = resources::Actual(p);
+    const auto usage = result.validated_usage;
     const auto budget = resources::Budget(expected.at("input"));
     resources::Check(usage, budget);
     if (!budget.is_null()) expected["resource_usage"] = usage;
     for (const auto& [key, value] : expected.items())
         if (key != "compute_source" && key != "route_source") Require(p.at(key) == value, "composition mismatch: " + key);
-    std::map<uint64_t, const Json*> transfers;
-    for (const auto& transfer : p.at("transfers")) transfers.emplace(transfer.at("transfer_id"), &transfer);
-    for (const auto& graph : p.at("rank_graphs"))
-        CheckPlanGraph(directory / ("layer." + std::to_string(graph.at("rank_id").get<int>()) + ".et"), graph, transfers);
+    if (!result.execution_retention)
+    {
+        for (const auto& transfer : p.at("transfers")) graph_transfers.emplace(transfer.at("transfer_id"), &transfer);
+        for (const auto& graph : p.at("rank_graphs"))
+            CheckPlanGraph(directory / ("layer." + std::to_string(graph.at("rank_id").get<int>()) + ".et"), graph, graph_transfers);
+    }
     return result;
 }
 }

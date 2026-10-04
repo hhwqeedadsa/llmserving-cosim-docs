@@ -3,6 +3,7 @@ import argparse
 from copy import deepcopy
 from datetime import datetime, timezone
 import json
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -18,10 +19,11 @@ def main():
     p.add_argument('--old-loader',type=Path,required=True)
     p.add_argument('--loader',type=Path,required=True)
     p.add_argument('--output-dir',type=Path,required=True)
+    p.add_argument('--execution-retention',action='store_true')
     a=p.parse_args();out=a.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
     commands=[];results={}
-    def run(label,binary,directory,success):
-        argv=[str(binary.resolve()),str(directory)]
+    def run(label,binary,directory,success,*flags):
+        argv=[str(binary.resolve()),str(directory),*flags]
         start=datetime.now(timezone.utc).isoformat()
         r=subprocess.run(argv,capture_output=True,text=True,timeout=90)
         (out/(label+'.stdout.log')).write_text(r.stdout);(out/(label+'.stderr.log')).write_text(r.stderr)
@@ -33,15 +35,22 @@ def main():
             return result
         assert 'Plan load probe failed' in r.stderr,(label,r.stderr)
 
-    first=None
+    first=None;first_directory=None
     for name,bundle in cases():
         plan=build(bundle)
         if first is None:first=plan
         for compact in (False,True):
             label=name+('-compact' if compact else '-pretty');directory=export_plan(plan,out/label,compact=compact)
+            if first_directory is None:first_directory=directory
             old=run(label+'-old',a.old_loader,directory,True)
             new=run(label+'-new',a.loader,directory,True)
             assert old==new,(label,old,new)
+            if a.execution_retention:
+                retained=run(label+'-retained',a.loader,directory,True,'--compare-retention')
+                storage=retained.pop('retention')
+                assert storage['execution'] and storage['complete_load_equal']
+                assert storage['rank_node_json_records']==storage['child_graph_transfer_tables']==0
+                assert retained==old
             results[label]=new
     changes={
         'node-duration':lambda p:p['rank_graphs'][0]['nodes'][0].update(duration_ns=999),
@@ -64,7 +73,21 @@ def main():
         run(label+'-old',a.old_loader,directory,False)
         run(label+'-new',a.loader,directory,False)
         assert 'composition mismatch' in (out/(label+'-new.stderr.log')).read_text() or 'CANN:' in (out/(label+'-new.stderr.log')).read_text()
-    (out/'summary.json').write_text(json.dumps(dict(passed=True,valid=results,rejected=list(changes)),indent=2)+'\n')
+        if a.execution_retention:
+            # This path validates a rank's Chakra graph before discarding its
+            # JSON nodes; supply the unchanged graph while corrupting semantics.
+            for graph in first_directory.glob('layer.*.et'):
+                (directory/graph.name).hardlink_to(graph)
+            run(label+'-retained',a.loader,directory,False,'--execution-retention')
+    damaged=out/'bad-chakra';shutil.copytree(first_directory,damaged)
+    graph=next(damaged.glob('layer.*.et'))
+    graph.write_bytes(graph.read_bytes()[:8])
+    run('chakra-old',a.old_loader,damaged,False)
+    run('chakra-new',a.loader,damaged,False)
+    if a.execution_retention:run('chakra-retained',a.loader,damaged,False,'--execution-retention')
+    (out/'summary.json').write_text(json.dumps(dict(passed=True,valid=results,rejected=list(changes),
+        truncated_chakra_rejected=True,
+        execution_retention_compared=a.execution_retention),indent=2)+'\n')
     print('PASS: eight old/new loads and twelve semantic corruption rejections')
 
 

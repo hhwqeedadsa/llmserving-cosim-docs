@@ -7,6 +7,7 @@ from .configured_service import ConfiguredService, validate_configured_inputs
 from .model_capacity import fields
 from .multilayer import MAX_SEGMENT_LAYERS, build_multilayer
 from .plan import RunIdentities, integer, require
+from .route_records import RouteDomain, RouteUsage
 
 
 def static_layer(layer):
@@ -65,7 +66,8 @@ class ComposedService(ConfiguredService):
             integer(request['rank_id'],'request rank',0,2**31-2)
             require(isinstance(request['decode_routes'],list) and request['decode_routes'], 'Missing decode routes')
 
-        normalized=deepcopy(config);normalized['groups']=[];normalized['requests']=[]
+        normalized={k:deepcopy(v) for k,v in config.items() if k not in ('groups','requests')}
+        normalized['groups']=[];normalized['requests']=[]
         self.audit_by_rank, self.requirements, self.policies = {}, {}, {}
         self.evidence=dict(groups={}, reservation_policy='final_input_output_minus_one',
             compute_source='fixed_reference', calibration_status='unvalidated_reference')
@@ -81,15 +83,16 @@ class ComposedService(ConfiguredService):
             layer_ids=[l['layer_id'] for l in layers]
             require(selected is None or selected==layer_ids, 'Groups must execute the same layer segment')
             selected=layer_ids
+            for request in requests:
+                require(all(isinstance(step,dict) and set(step)=={str(i) for i in layer_ids}
+                            for step in request['decode_routes']), 'Incomplete or extra per-layer route')
             audits=[];first_state=None
             for layer in layers:
                 require(layer['rank_ids']==group_ranks and layer['rank_to_ub_node']==group_nodes,
                         'Layer membership/mapping changed within segment')
-                local_requests=deepcopy(requests)
-                for request in local_requests:
-                    require(all(isinstance(step,dict) and set(step)=={str(i) for i in layer_ids}
-                                for step in request['decode_routes']), 'Incomplete or extra per-layer route')
-                    request['decode_routes']=[step[str(layer['layer_id'])] for step in request['decode_routes']]
+                local_requests=[dict({k:deepcopy(v) for k,v in request.items() if k!='decode_routes'},
+                    decode_routes=[deepcopy(step[str(layer['layer_id'])]) for step in request['decode_routes']])
+                    for request in requests]
                 declaration={k:deepcopy(layer[k]) for k in ('group_id','rank_ids','rank_to_ub_node','expert_placement')}
                 if 'deployment' in layer:declaration['deployment']=deepcopy(layer['deployment'])
                 single=dict(schema_version='moe-ub-configured-service/2', run_id=config['run_id'],
@@ -141,9 +144,8 @@ class ComposedService(ConfiguredService):
         require(all(r['rank_id'] in ranks for r in config['requests']), 'Request outside configured groups')
         self.templates=templates
         self.segment_inputs={r['request_id']:deepcopy(r) for r in config['requests']}
-        self.expected_routes={(str(r['request_id']),r['prompt_tokens']+r['generated_tokens']-1+step,layer_id)
-            for r in config['requests'] for step in range(len(r['decode_routes'])) for layer_id in selected}
-        self.consumed=set()
+        self.expected_routes=RouteDomain(config['requests'],selected)
+        self.consumed=RouteUsage(self.expected_routes)
         self.batched=True;self.memory_events=[];self.batch_events=[];self.completed_ids=set()
         return normalized,deepcopy(templates[names[0]][0])
 

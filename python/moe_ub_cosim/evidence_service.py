@@ -23,7 +23,7 @@ class EvidenceService(ComposedService):
         require(isinstance(config['requests'],list) and config['requests'],'Require observed requests')
         selected=[layer['layer_id'] for layer in layers['groups'][0]['layers']]
         normalized,self.route_records,self.route_evidence=select_routes(config['route_manifest'],config['requests'],
-            [g['model_spec'] for g in service['groups']],selected)
+            [g['model_spec'] for g in service['groups']],selected,compact=True)
         service['requests']=normalized
         self.window_requests={r['request_id']:r for r in config['requests']}
         require(len(self.window_requests)==len(config['requests']),'Duplicate observed request')

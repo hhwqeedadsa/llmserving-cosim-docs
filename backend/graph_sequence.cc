@@ -60,39 +60,102 @@ std::vector<LayerPlan> LoadGraphSequence(const std::filesystem::path& directory)
     return plans;
 }
 
-void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& directory,
+namespace
+{
+void InstallPrepared(const LayerPlan& plan,
     const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
     const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
-    const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local)
+    const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local,
+    std::vector<std::unique_ptr<Chakra::ETFeeder>> prepared)
 {
     Require(systems.size() == adapters.size(), "missing rank objects");
     const auto ranks = plan.data.at("rank_ids").get<std::vector<int>>();
+    Require(prepared.size() == ranks.size(), "missing prepared feeders");
     std::map<int, size_t> rank_index;
     for (size_t i = 0; i < systems.size(); ++i)
         Require(systems[i] && adapters[i] && rank_index.emplace(systems[i]->id, i).second,
                 "missing or duplicate rank object");
-    for (int rank : ranks) Require(rank_index.contains(rank), "missing group rank object");
-    const auto checked = LoadLayerPlan(directory);
-    Require(checked.data == plan.data, "plan changed since validation");
+    std::map<int, std::vector<UbWriteTransfer*>> per_rank;
+    std::map<int, std::vector<LocalDelivery*>> per_rank_local;
+    for (int rank : ranks)
+    {
+        Require(rank_index.contains(rank), "missing group rank object");
+        per_rank[rank]; per_rank_local[rank];
+    }
+    for (auto* transfer : transfers)
+    {
+        Require(transfer != nullptr, "null incoming transfer");
+        const auto& d = transfer->Descriptor();
+        Require(per_rank.contains(d.src_rank) && per_rank.contains(d.dst_rank), "transfer outside graph ranks");
+        per_rank[d.src_rank].push_back(transfer);
+        if (d.dst_rank != d.src_rank) per_rank[d.dst_rank].push_back(transfer);
+    }
+    for (auto* delivery : local)
+    {
+        Require(delivery != nullptr, "null incoming local delivery");
+        const auto& d = delivery->Descriptor();
+        Require(per_rank_local.contains(d.src_rank) && per_rank_local.contains(d.dst_rank), "delivery outside graph ranks");
+        per_rank_local[d.src_rank].push_back(delivery);
+        if (d.dst_rank != d.src_rank) per_rank_local[d.dst_rank].push_back(delivery);
+    }
     const auto graph = plan.data.at("graph_id").get<std::string>();
-    std::vector<std::unique_ptr<Chakra::ETFeeder>> prepared;
     for (int rank : ranks)
     {
         Require(systems[rank_index.at(rank)]->workload->can_load_graph() && !systems[rank_index.at(rank)]->workload->has_graph_id(graph),
                 "rank " + std::to_string(rank) + " has an in-flight graph or reused identity");
-        adapters[rank_index.at(rank)]->CheckTransfers(transfers);
-        adapters[rank_index.at(rank)]->CheckLocalDeliveries(local, transfers);
-        prepared.push_back(std::make_unique<Chakra::ETFeeder>(
-            (directory / ("layer." + std::to_string(rank) + ".et")).string()));
+        adapters[rank_index.at(rank)]->CheckTransfers(per_rank.at(rank));
+        adapters[rank_index.at(rank)]->CheckLocalDeliveries(per_rank_local.at(rank), per_rank.at(rank));
     }
-    // Nothing above starts tasks or replaces an existing feeder.
+    // Nothing above starts tasks or replaces an existing feeder. Partitioning
+    // only removes repeated scans of records irrelevant to a rank.
     size_t index = 0;
     for (int rank : ranks)
         systems[rank_index.at(rank)]->workload->load_graph(std::move(prepared[index++]), graph);
     for (int rank : ranks)
     {
-        adapters[rank_index.at(rank)]->RegisterTransfers(transfers);
-        adapters[rank_index.at(rank)]->RegisterLocalDeliveries(local);
+        adapters[rank_index.at(rank)]->RegisterTransfers(per_rank.at(rank));
+        adapters[rank_index.at(rank)]->RegisterLocalDeliveries(per_rank_local.at(rank));
     }
+}
+std::vector<std::unique_ptr<Chakra::ETFeeder>> Prepare(const LayerPlan& plan, const std::filesystem::path& directory)
+{
+    std::vector<std::unique_ptr<Chakra::ETFeeder>> result;
+    for (const int rank : plan.data.at("rank_ids"))
+        result.push_back(std::make_unique<Chakra::ETFeeder>((directory / ("layer." + std::to_string(rank) + ".et")).string()));
+    return result;
+}
+}
+
+void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& directory,
+    const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
+    const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
+    const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local)
+{
+    Require(!plan.execution_retention, "caller-owned execution metadata is not a complete plan");
+    const auto checked = LoadLayerPlan(directory);
+    Require(checked.data == plan.data, "plan changed since validation");
+    InstallPrepared(plan, systems, adapters, transfers, local, Prepare(plan, directory));
+}
+
+LoadedGraph::LoadedGraph(const std::filesystem::path& directory)
+    : plan_(LoadLayerPlan(directory, PlanRetention::Execution)), prepared_(Prepare(plan_, directory)) {}
+const LayerPlan& LoadedGraph::Plan() const
+{
+    Require(!released_, "loaded graph already released");
+    return plan_;
+}
+void LoadedGraph::Install(const std::vector<std::unique_ptr<AstraSim::Sys>>& systems,
+    const std::vector<std::unique_ptr<UbNetworkAdapter>>& adapters,
+    const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local)
+{
+    Require(!installed_ && !released_, "loaded graph already installed or released");
+    InstallPrepared(plan_, systems, adapters, transfers, local, std::move(prepared_));
+    installed_ = true;
+}
+LayerPlan LoadedGraph::ReleasePlan()
+{
+    Require(installed_ && !released_, "cannot release an uninstalled or previously released graph");
+    released_ = true;
+    return std::move(plan_);
 }
 }

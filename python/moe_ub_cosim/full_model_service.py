@@ -28,7 +28,9 @@ class FullModelService(ComposedService):
         else:
             require(all('resource_budget' not in layer for group in segments['groups'] for layer in group['layers']),
                     'Service layer resource budgets require execution.resource_budget')
-        prepared=deepcopy(config);prepared['schema_version']='moe-ub-configured-service/3'
+        prepared={k:deepcopy(v) for k,v in config.items() if k!='requests'}
+        prepared['requests']=config['requests']  # Parent validates then owns its required copies.
+        prepared['schema_version']='moe-ub-configured-service/3'
         if self.resource_budget is not None:prepared['execution'].pop('resource_budget')
         for group in prepared['groups']:
             fields(group,'group_id model_spec memory scheduling full_model_profile','full model group')

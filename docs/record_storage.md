@@ -39,4 +39,12 @@ Python `record_storage.iter_result(execution, field)` 逐条读取新旧结果�
 
 ## 当前验证边界
 
-已验证五类小型真实 UB 运行与旧结果及全部逻辑端口记录一致；8/32 轮小模型的图、传输和包来源峰值保持，正常结束清零。日志轮转、gzip 损坏、编号重复、活动对象拒绝释放、晚到匹配、窗口边界和磁盘超限有专项检查。最终结果、实际命令及失败修正记录归入 [资源工程记录](../fixtures/m10_resource_efficiency/README.md)。前台原图文件归档与研究导出的规模处理尚在当前任务内继续，不能将现有旧导出命令直接当作新存储格式的完整规模入口。
+前台完整模型服务现可显式传入 `--graph-storage POLICY.json`，同时必须使用 `--record-storage`。策略为 `schema_version="moe-ub-graph-storage/1"`，包含正整数 `max_recipe_bytes`（单图原始构图输入）、`max_archive_bytes`（累计归档）和 `max_active_graph_bytes`（活动图）。小型测试分别使用 8/64/64 MiB，不能照搬为目标预算。文件/目录占用按内容与实际分配较大值检查；归档和活动图预算在构图前后及释放后核对，运行中仍需宿主总监测限制峰值。
+
+每轮保存压缩的配置、真实来源记录、模型/费用和运行编号状态，然后由短生命周期 Python 子进程完成构图、原完整校验及紧凑写出。子进程退出并核对摘要后才提交图给后端；前台只回收编号和路由消费状态，不把图留在自己的堆中。后端发出已封存记录的 WAVE_DONE 后，前台复核自己生成的全部文件，先写 `graph-replay/gN/cleanup.json`，再删除这些可再生文件。存在额外文件、文件内容变化或归档损坏时拒绝清理；旧任务和未知路径不受影响。
+
+重建命令为 `PYTHONPATH=python P -m moe_ub_cosim.graph_storage replay --archive RUN/graph-replay/gN/archive.json --output-dir NEW_DIRECTORY`，其中 P 为原 Python 环境。重建要求使用记录的源码及固定 proto 修订，重新执行完整校验，并核对 plan、Chakra、预算和 generation 摘要及编号结果。构图工具的诊断文件路径和 Python 缓存不是跨目录字节等价对象，但原文件也逐项登记后才清理。
+
+前台五类真实 UB 对照及 8/32 轮压力已经通过，所有计划紧凑摘要、Chakra 摘要、请求与后端记录相同；结束无活动图。归档原始输入允许重建，不代替仿真产生的记录或研究导出。证据见 [checkpoint-graph.json](../fixtures/m10_resource_efficiency/checkpoint-graph.json)。完整服务输入验证的效率、研究导出及目标组合资源预检仍在进行。
+
+已验证五类小型真实 UB 运行与旧结果及全部逻辑端口记录一致；8/32 轮小模型的图、传输和包来源峰值保持，正常结束清零。日志轮转、gzip 损坏、编号重复、活动对象拒绝释放、晚到匹配、窗口边界和磁盘超限有专项检查。最终结果、实际命令及失败修正记录归入 [资源工程记录](../fixtures/m10_resource_efficiency/README.md)。不能将现有旧导出命令直接当作新存储格式的完整规模入口。

@@ -155,7 +155,7 @@ class ComposedService(ConfiguredService):
             self.policies[r]['memory']['block_size'],self.policies[r]['scheduling']['max_num_batched_tokens'],
             len(self.config['requests']),self.policies[r]['scheduling']['max_num_seqs']) for r in self.ranks]
 
-    def make_plan(self, candidate):
+    def iteration_inputs(self, candidate):
         configs,provenance,consumed=[],[],set()
         for template in self.templates[candidate['group_id']]:
             layer=deepcopy(template)
@@ -172,14 +172,23 @@ class ComposedService(ConfiguredService):
                 records.append(dict(request_id=token['request_id'],token_index=token['token_index'],
                     layer_id=token['layer_id'],expert_ids=deepcopy(token['expert_ids']),source_decode_index=offset))
             configs.append(layer);provenance.append(records)
-        plan=self.build_iteration(configs,provenance)
-        plan['input_provenance']=dict(group_id=candidate['group_id'],
+        return configs,provenance,consumed
+
+    def iteration_provenance(self, candidate, configs, provenance):
+        result=dict(group_id=candidate['group_id'],
             model_spec_sha256=self.evidence['groups'][candidate['group_id']]['model_spec_sha256'],
             route_records=[record for records in provenance for record in records],
             execution_scope='consecutive_moe_layer_segment',compute_source='fixed_reference',
             calibration_status='unvalidated_reference')
         if any('operator_profile' in c for c in configs):
-            plan['input_provenance']['compute_source']='operator_profiles_with_reference_residual'
+            result['compute_source']='operator_profiles_with_reference_residual'
+        return result
+
+    def make_plan(self, candidate):
+        configs,provenance,consumed=self.iteration_inputs(candidate)
+        plan=self.build_iteration(configs,provenance)
+        plan['input_provenance']=self.iteration_provenance(candidate,configs,provenance)
+        if any('operator_profile' in c for c in configs):
             plan['compute_source']='operator_profiles_with_reference_residual'
         self.consumed.update(consumed)
         return plan

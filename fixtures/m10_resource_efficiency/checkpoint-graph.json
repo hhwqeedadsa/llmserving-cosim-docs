@@ -1,0 +1,343 @@
+{
+  "schema_version": "moe-ub-resource-checkpoint/1",
+  "checkpoint": "frontend_graph_replay",
+  "resource_task_completed": false,
+  "m10_completed": false,
+  "target_network_executed": false,
+  "protected_files": 1304,
+  "commands": {
+    "unit-graph-storage-fixed": {
+      "argv": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "unittest",
+        "graph_storage_test",
+        "composed_service_test",
+        "full_model_test",
+        "evidence_service_test",
+        "full_model_export_test"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T10:54:26.093311+00:00",
+      "ended_utc": "2026-10-04T10:54:33.400678+00:00",
+      "exit_code": 0,
+      "stdout": "runs/v03-resource-efficiency/logs/unit-graph-storage-fixed.stdout.log",
+      "stderr": "runs/v03-resource-efficiency/logs/unit-graph-storage-fixed.stderr.log"
+    },
+    "graph-replay": {
+      "argv": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.host_probe",
+        "--output-dir",
+        "runs/v03-resource-efficiency/graph-replay",
+        "--rss-bytes",
+        "8589934592",
+        "--address-bytes",
+        "12884901888",
+        "--artifact-bytes",
+        "21474836480",
+        "--artifact-root",
+        "runs/v03-resource-efficiency",
+        "--artifact-root",
+        "build/m10-resource-efficiency",
+        "--min-free-bytes",
+        "21474836480",
+        "--wall-seconds",
+        "1300",
+        "--",
+        ".venv/llmservingsim-native/bin/python",
+        "tests/integration/check_graph_replay.py",
+        "--baseline-dir",
+        "runs/v03-resource-efficiency",
+        "--output-dir",
+        "runs/v03-resource-efficiency/graph-replay/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T10:55:33.077764+00:00",
+      "ended_utc": "2026-10-04T10:55:52.033071+00:00",
+      "exit_code": 0,
+      "stdout": "runs/v03-resource-efficiency/logs/graph-replay.stdout.log",
+      "stderr": "runs/v03-resource-efficiency/logs/graph-replay.stderr.log"
+    }
+  },
+  "probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      ".venv/llmservingsim-native/bin/python",
+      "tests/integration/check_graph_replay.py",
+      "--baseline-dir",
+      "runs/v03-resource-efficiency",
+      "--output-dir",
+      "runs/v03-resource-efficiency/graph-replay/work"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-04T10:55:33.117719+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 21474836480,
+      "wall_seconds": 1300.0
+    },
+    "peak_sampled_group_rss_bytes": 157540352,
+    "peak_sampled_processes": 4,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency"
+    ],
+    "peak_sampled_artifact_bytes": 13101998080,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 13009603675,
+    "peak_sampled_artifact_allocated_bytes": 13101998080,
+    "process_group": 1891582,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-04T10:55:51.998557+00:00",
+    "wall_seconds": 18.88084753602743,
+    "max_waited_child_rss_kib": 77452,
+    "artifact_bytes_before_report": 29664133,
+    "aggregate_artifact_bytes_before_report": 13101998080,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 13009603675,
+      "allocated_bytes": 13101998080
+    }
+  },
+  "equivalence": {
+    "passed": true,
+    "cases": {
+      "closed-service-reference": {
+        "storage": {
+          "schema_version": "moe-ub-graph-storage-result/1",
+          "policy": {
+            "schema_version": "moe-ub-graph-storage/1",
+            "max_recipe_bytes": 8388608,
+            "max_archive_bytes": 67108864,
+            "max_active_graph_bytes": 67108864
+          },
+          "retired_graphs": [
+            "g0",
+            "g1",
+            "g3",
+            "g2",
+            "g4"
+          ],
+          "active_graphs": [],
+          "peak_active_graphs": 2,
+          "peak_active_bytes": 651264,
+          "archive_usage": {
+            "apparent_bytes": 39666,
+            "allocated_bytes": 139264
+          }
+        },
+        "logical_port_rows": 2479,
+        "removed_owned_files": 40,
+        "exact_plan_and_chakra_hashes": true,
+        "request_and_backend_results_identical": true
+      },
+      "closed-service-window": {
+        "storage": {
+          "schema_version": "moe-ub-graph-storage-result/1",
+          "policy": {
+            "schema_version": "moe-ub-graph-storage/1",
+            "max_recipe_bytes": 8388608,
+            "max_archive_bytes": 67108864,
+            "max_active_graph_bytes": 67108864
+          },
+          "retired_graphs": [
+            "g1",
+            "g0",
+            "g2",
+            "g3",
+            "g4",
+            "g5"
+          ],
+          "active_graphs": [],
+          "peak_active_graphs": 2,
+          "peak_active_bytes": 528384,
+          "archive_usage": {
+            "apparent_bytes": 49306,
+            "allocated_bytes": 163840
+          }
+        },
+        "logical_port_rows": 1974,
+        "removed_owned_files": 48,
+        "exact_plan_and_chakra_hashes": true,
+        "request_and_backend_results_identical": true
+      },
+      "closed-service-empty": {
+        "storage": {
+          "schema_version": "moe-ub-graph-storage-result/1",
+          "policy": {
+            "schema_version": "moe-ub-graph-storage/1",
+            "max_recipe_bytes": 8388608,
+            "max_archive_bytes": 67108864,
+            "max_active_graph_bytes": 67108864
+          },
+          "retired_graphs": [],
+          "active_graphs": [],
+          "peak_active_graphs": 0,
+          "peak_active_bytes": 4096,
+          "archive_usage": {
+            "apparent_bytes": 4785,
+            "allocated_bytes": 16384
+          }
+        },
+        "logical_port_rows": 0,
+        "removed_owned_files": 0,
+        "exact_plan_and_chakra_hashes": true,
+        "request_and_backend_results_identical": true
+      },
+      "rounds-8": {
+        "storage": {
+          "schema_version": "moe-ub-graph-storage-result/1",
+          "policy": {
+            "schema_version": "moe-ub-graph-storage/1",
+            "max_recipe_bytes": 8388608,
+            "max_archive_bytes": 67108864,
+            "max_active_graph_bytes": 67108864
+          },
+          "retired_graphs": [
+            "g0",
+            "g1",
+            "g2",
+            "g3",
+            "g4",
+            "g5",
+            "g6",
+            "g7"
+          ],
+          "active_graphs": [],
+          "peak_active_graphs": 1,
+          "peak_active_bytes": 294912,
+          "archive_usage": {
+            "apparent_bytes": 62238,
+            "allocated_bytes": 212992
+          }
+        },
+        "logical_port_rows": 4952,
+        "removed_owned_files": 64,
+        "exact_plan_and_chakra_hashes": true,
+        "request_and_backend_results_identical": true
+      },
+      "rounds-32": {
+        "storage": {
+          "schema_version": "moe-ub-graph-storage-result/1",
+          "policy": {
+            "schema_version": "moe-ub-graph-storage/1",
+            "max_recipe_bytes": 8388608,
+            "max_archive_bytes": 67108864,
+            "max_active_graph_bytes": 67108864
+          },
+          "retired_graphs": [
+            "g0",
+            "g1",
+            "g2",
+            "g3",
+            "g4",
+            "g5",
+            "g6",
+            "g7",
+            "g8",
+            "g9",
+            "g10",
+            "g11",
+            "g12",
+            "g13",
+            "g14",
+            "g15",
+            "g16",
+            "g17",
+            "g18",
+            "g19",
+            "g20",
+            "g21",
+            "g22",
+            "g23",
+            "g24",
+            "g25",
+            "g26",
+            "g27",
+            "g28",
+            "g29",
+            "g30",
+            "g31"
+          ],
+          "active_graphs": [],
+          "peak_active_graphs": 1,
+          "peak_active_bytes": 294912,
+          "archive_usage": {
+            "apparent_bytes": 308601,
+            "allocated_bytes": 843776
+          }
+        },
+        "logical_port_rows": 20128,
+        "removed_owned_files": 256,
+        "exact_plan_and_chakra_hashes": true,
+        "request_and_backend_results_identical": true
+      }
+    },
+    "target_scale_executed": false,
+    "research_export_verified": false
+  },
+  "source_hashes": {
+    "python/moe_ub_cosim/__init__.py": "1d6a880a0e1e7cef41a78db6a7eed7546746ed6e3d4db097c859e635a231801e",
+    "python/moe_ub_cosim/cann.py": "7dee3968e09ea8f09ce642dc9593036d8d8e1fe0b64c0065610f0b341469320a",
+    "python/moe_ub_cosim/capacity_audit.py": "a390d249c19d369f16c4132577e38570e6dafb35fd872f42838766553aa0df2e",
+    "python/moe_ub_cosim/composed_service.py": "ebdde291fd1b248d2bb1ac4dd5d34c00dbc1a963ea1fb4ac2114eec41c4143d1",
+    "python/moe_ub_cosim/configured_scheduler.py": "2e32dbd2515fd32e11ccdb49c704e9a50fb3bdba021078c22cd9c74833319a0f",
+    "python/moe_ub_cosim/configured_service.py": "54d27d554124c666c2f6c7b3a0791c1fd174947ee86bde4a3ffe35c087f19677",
+    "python/moe_ub_cosim/data_inputs.py": "2bf3a2c4a7f260bb656cd94a2d811265d82f3142ba926b8338db79d379669d5b",
+    "python/moe_ub_cosim/data_service.py": "a7f4620d5793070141e36208bfffcfee41fc7606714526a8984e4a4c916fbce6",
+    "python/moe_ub_cosim/evidence_service.py": "b93c3382219ff9c22446510a230da458f0b0bbef42adc3da97917119c2a047d0",
+    "python/moe_ub_cosim/fabric.py": "909020095fe4f42601fc0ac1fec7931c89cf96ffccee28750958e6feee445062",
+    "python/moe_ub_cosim/full_model.py": "984aa942fa60a90e459b2029721a3d13432eba1037861e3c4f2df8ac27871e64",
+    "python/moe_ub_cosim/full_model_recipe.py": "d4a3cdba5635111a54da56ee7b432fb6db9c61b08b02e9e63c23da9135518ff8",
+    "python/moe_ub_cosim/full_model_service.py": "db6832b621a9a583220a3e7530984cb6243e6f5cc2684faacf67f79a18069a22",
+    "python/moe_ub_cosim/full_round_probe.py": "f9cb5dd8dcc8455b5478f96998d0ce9d6de7a8879c368e05b4740a485a4f7270",
+    "python/moe_ub_cosim/generate.py": "f7450e3a8480bdaa56954c94912ea6daeffea39aec93b1e48832eea20b8aea61",
+    "python/moe_ub_cosim/graph_storage.py": "e76a23047e1f57a98a93ae60f683aca24261f3b56fa5626d071e1ed4e6914f64",
+    "python/moe_ub_cosim/host_preflight.py": "19689f155c9afc6dc2c786640a66945c45e65e918b607470f5074d924681d6e5",
+    "python/moe_ub_cosim/host_probe.py": "86f99677a46f7ec40dfd4be234e0ef0e1ce9e1ac945ecd62d10475c8fb9cedd6",
+    "python/moe_ub_cosim/host_processes.py": "8867273cd3ffce8639e2fa4ccb06f997d6ad253af3a7bf927a56278af0725459",
+    "python/moe_ub_cosim/kv_plan.py": "a95432c537ea8cbc0e485615789c80cfb96f55f07597ea92de72c4a35bd178ec",
+    "python/moe_ub_cosim/locality.py": "280e2aeeef4a6ed9f7b39243b8def9bef5617e0a955ce9624000bc4025bc8ac1",
+    "python/moe_ub_cosim/mla_capacity.py": "10e3dcc302661d0105a91cd8cc772a2b03e69e1f213803a50e80bd3c089946a9",
+    "python/moe_ub_cosim/model_capacity.py": "5b3036c7933579b15099755caad35a06319235e504497c6c29547a32e7d4bd43",
+    "python/moe_ub_cosim/multilayer.py": "daa29ad472f52eca653308a7e6d409e1e8cb8d505d9a37b449f717e1ec54f23d",
+    "python/moe_ub_cosim/observation.py": "944d585f8c8c64ab50258ff57ce22fcf044e1e304b53136deef0542568a30e0a",
+    "python/moe_ub_cosim/operator_profile.py": "db58675f6873e402b2b79a3a2f3bc99d6f3add6f1b8840042fd4f3fab7b3a946",
+    "python/moe_ub_cosim/pd_queue_service.py": "4fd83875bf204c18ac0107c50b9ece6d9d30f1b16bf31df407674f557bba3eb8",
+    "python/moe_ub_cosim/pd_service.py": "2d12111f670aa0f035bc415f558e821d2c1008e37ffb52731e26536a7bddcbd7",
+    "python/moe_ub_cosim/plan.py": "bf556a211cbdc3d2d459c9602d88151f3c3ada4051a7d6ff95b383489c7183c7",
+    "python/moe_ub_cosim/plan_io.py": "0518c118b14403eb39898f86cd7ce2c33c9e3ede479dbe1cb089697331170964",
+    "python/moe_ub_cosim/record_storage.py": "75456bd2fcad378731df27c8c23d38085513c4502da758e4547df19cb313ecdb",
+    "python/moe_ub_cosim/research.py": "132702e52fa2d52ee26e12daf5ea6634671513db5fc8f3549383c10740224a95",
+    "python/moe_ub_cosim/research_export.py": "17e58a663a915e243f825a4e81a7e767857d754f0b1a6e0db21d9c29b1779348",
+    "python/moe_ub_cosim/resources.py": "30c9beec4a95f7b2406d87a3bc3c1fa1173fff4f66f2fe467edefdd8b3cb963e",
+    "python/moe_ub_cosim/route_evidence.py": "925b634afd1f364afec8c10a0b29762727e0181bc6060e473ecab8aa45f65f0d",
+    "python/moe_ub_cosim/route_records.py": "1721bd69b91585b4665019b62866cf82179fdd107d5357ef70b59ada95da9cd3",
+    "python/moe_ub_cosim/route_selection.py": "2ca4feb7e3b53eaef34ecd85ee152903eaa26971f03fb300a40be2207bbd0213",
+    "python/moe_ub_cosim/scenario.py": "169317b7e7e9e1af37a1ac6803350ea59bdd17c87d616e2436ad75571a71a3a8",
+    "python/moe_ub_cosim/sequence.py": "57552043f605b60a4820a2c5c826fb4ab9c73b0823db55ca326a3b3e8e369d6a",
+    "python/moe_ub_cosim/service.py": "238fabe1d7020a54bb0922a30aa395c671c53fd012f9e1643c255f4d6cb62358",
+    "python/moe_ub_cosim/streaming_export.py": "e895c3b7b74c8b5488b403e2ef44a68e7ddae43d2cb0025587bded98b98d2ff5",
+    "third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra/schema/protobuf/et_def.proto": "3eb062b4085f32a9d8730986447cf0676cebdd02aac82def5ad2cb3cf9ba595b"
+  },
+  "artifacts": {
+    "apparent_bytes": 13009608144,
+    "allocated_bytes": 13102014464
+  },
+  "retained_failures": [
+    "unit-graph-storage: new recipe validator looked for group_id at plan root instead of input; corrected, all 22 tests passed"
+  ],
+  "remaining": [
+    "full input validation efficiency",
+    "bounded research export",
+    "target network initialization and combined resource budget"
+  ]
+}

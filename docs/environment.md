@@ -1,5 +1,13 @@
 # 环境与运行记录
 
+## 2026-10-04：前台图生命周期与可重建记录
+
+R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，cwd=`/root/moe-ub-cosim`。`env PYTHONPATH=python:tests/unit P -m unittest graph_storage_test composed_service_test full_model_test evidence_service_test full_model_export_test` 共 22 项通过（unit-graph-storage-fixed）；首次新校验器误读 group_id 顶层位置的失败日志保留，修正为原 input.group_id。
+
+`env PYTHONPATH=python P tests/integration/check_graph_replay.py --baseline-dir R --output-dir R/graph-replay/work` 在 host_probe 内执行，RSS 8 GiB、地址 12 GiB、1300 s，任务累计内容/分配 20 GiB 和最低余量 20 GiB；退出 0。五类真实 UB 对照包含双组完整模型、真实来源观察窗口、空服务和 8/32 轮压力。请求结果、全部后端字段和端口逻辑行相同，所有计划紧凑摘要及 Chakra 摘要一致；末轮实际重建，清理仅发生在该轮真实完成后。重建清单含文件、字节、摘要、原因和输入，没有删除旧任务文件。
+
+`env PYTHONPATH=python P R/checkpoint_graph.py` 核对 1304 个保护文件、实际构图源码指纹及累计内容/分配预算。详见 [checkpoint-graph.json](../fixtures/m10_resource_efficiency/checkpoint-graph.json)。此检查点未执行目标网络；完整服务初始化效率和有界研究导出仍待解决。
+
 ## 2026-10-04：记录存储、跨轮释放与实际磁盘分配
 
 连续资源工程内部检查点，未完成 M10。工作目录 `/root/moe-ub-cosim`，R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`。详细实际 argv、cwd、退出状态和日志见 [checkpoint-lifecycle.json](../fixtures/m10_resource_efficiency/checkpoint-lifecycle.json)。所有下列最终命令退出 0，开发期失败及修正原因单独保留。

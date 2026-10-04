@@ -185,6 +185,11 @@ class Service:
     def make_plan(self, candidate):
         return build_plan(candidate, self.identities)
 
+    def export_graph(self, candidate, directory):
+        storage=getattr(self,'graph_storage',None)
+        if storage is None:export_plan(self.make_plan(candidate),directory)
+        else:storage.generate(self,candidate,directory)
+
     def snapshot(self):
         return [dict(request_id=r.id, rank_id=self.inputs[r.id]['rank_id'], status=r.status.name,
             num_computed_tokens=r.num_computed_tokens, num_tokens_reached=r.num_tokens_reached,
@@ -216,6 +221,8 @@ class Service:
                 all(type(r) is int for r in message['available_rank_ids']), 'EP group availability mismatch')
         for name in finished_groups:
             wave = self.waves.pop(name)
+            if getattr(self,'graph_storage',None) is not None:
+                self.graph_storage.retire(wave['graph_id'],now)
             for rank, batch in wave['batches'].items():
                 self.complete_batch(rank, batch, now)
             self.history[wave['history_index']].update(finished_ns=now, after=self.snapshot())
@@ -259,7 +266,7 @@ class Service:
                     require(0 <= offset < len(source['decode_routes']), 'Decode route index outside request')
                     candidate['tokens'].append(dict(request_id=str(request.id), src_rank=rank, phase='decode',
                         token_index=index, layer_id=candidate['layer_id'], expert_ids=source['decode_routes'][offset]))
-            export_plan(self.make_plan(candidate), directory / 'graphs' / graph)
+            self.export_graph(candidate, directory / 'graphs' / graph)
             self.waves[name] = dict(graph_id=graph, wave_id=wave, batches=batches, history_index=step)
             self.history.append(dict(graph_id=graph, wave_id=wave, group_id=name, rank_ids=ranks,
                 submitted_ns=now, before=before, scheduled=self.snapshot(),
@@ -316,6 +323,11 @@ def run(args):
     output = args.output_dir.resolve()
     output.mkdir(exist_ok=False)
     (output / 'graphs').mkdir()
+    if getattr(args,'graph_storage',None) is not None:
+        require(full and getattr(args,'record_storage',None) is not None,
+                'Graph replay storage requires full-model service and bounded backend records')
+        from .graph_storage import GraphStorage
+        service.graph_storage=GraphStorage(output,json.loads(args.graph_storage.read_text()),args.wall_timeout_seconds)
     export_bootstrap(output / 'bootstrap', service.ranks)
     if composed:
         deployment = service.deployment()
@@ -373,6 +385,9 @@ def run(args):
                 code = child.wait(timeout=args.wall_timeout_seconds)
                 require(not buffer and child.stdout.read() == b'', 'Unexpected protocol after final COMMIT')
                 require(code == 0, f'Backend failed with exit {code}; see backend.stderr.log')
+        if getattr(service,'graph_storage',None) is not None:
+            service.graph_storage.finish()
+            manifest['graph_storage']='moe-ub-graph-replay/1'
         manifest['normal_exit'] = True
         if full: manifest['full_model_graph_execution_validated'] = bool(service.history)
         save(output / 'service_result.json', dict(initial=service.initial, waves=service.history,
@@ -414,6 +429,7 @@ def main():
     parser.add_argument('--network', type=Path, required=True)
     parser.add_argument('--observation', type=Path)
     parser.add_argument('--record-storage', type=Path, help='Explicit bounded gzip record policy; emits result/2')
+    parser.add_argument('--graph-storage', type=Path, help='Full-model graph replay policy; requires --record-storage')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--max-simulation-ns', type=int, default=1000000)
     parser.add_argument('--wall-timeout-seconds', type=int, default=60)

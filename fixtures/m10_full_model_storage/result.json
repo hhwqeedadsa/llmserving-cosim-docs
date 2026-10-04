@@ -1,0 +1,598 @@
+{
+  "schema_version": "moe-ub-full-model-storage-result/1",
+  "baseline_commit": "a828c0afbf780574776a4e936310c0777aa6cd5f",
+  "task_definition_commit": "5d33c36",
+  "source_hashes": [
+    {
+      "path": "python/moe_ub_cosim/full_model.py",
+      "sha256": "984aa942fa60a90e459b2029721a3d13432eba1037861e3c4f2df8ac27871e64"
+    },
+    {
+      "path": "scripts/probe_full_model_storage.py",
+      "sha256": "5e32f290c4e97c34063ecf025b085fce3e2115f5790c1dd19cc6b3df58562bfe"
+    },
+    {
+      "path": "tests/unit/full_model_storage_test.py",
+      "sha256": "875642468691a62946b26bdc397f9e2467440e52126e7e151aa0ffc24c738c8f"
+    },
+    {
+      "path": "fixtures/m10_full_model_storage/golden.json",
+      "sha256": "cb41db41817076902b1c8d6e63203bc255bb9034d811d63fa7b89e646a6bcf86"
+    }
+  ],
+  "golden_cases": 4,
+  "unit_tests_passed": 24,
+  "host": {
+    "utc": "2026-10-04T07:29:47.380490+00:00",
+    "memory": {
+      "MemTotal": "67108864 kB",
+      "MemAvailable": "62874129 kB",
+      "SwapTotal": "0 kB"
+    },
+    "cgroup_memory_max": "68719476736",
+    "cgroup_memory_current": "34845593600",
+    "cpu_affinity_count": 32,
+    "disk_available_bytes": 6692714426368
+  },
+  "preflight": {
+    "passed": true,
+    "six_block_plan_equal": true,
+    "input_hashes_unchanged": true,
+    "prepared": {
+      "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+      "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+    },
+    "bundle": {
+      "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+      "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+    }
+  },
+  "six_block_comparison": {
+    "baseline": {
+      "version": "baseline",
+      "source_sha256": "a111273227d400b1f4966a29338f7ce3e3e2c9624bf154a54ec752fbc761d4ee",
+      "build_seconds": 80.34694563038647,
+      "plan_sha256": "b1d57b320f16d8da98623eb47a7d1ca93318707b5ea8f1794fdd975879a69ca3",
+      "usage": {
+        "transfers": 194952,
+        "fabric_transfers": 193644,
+        "local_transfers": 1308,
+        "nodes": 399468
+      },
+      "executed_layer_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "dependency_edges": 7180604,
+      "prepared": {
+        "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+      },
+      "bundle": {
+        "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+        "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+      },
+      "production_validation_enabled": true,
+      "scope": "six-block comparison only",
+      "simulation_executed": false
+    },
+    "optimized": {
+      "version": "optimized",
+      "source_sha256": "984aa942fa60a90e459b2029721a3d13432eba1037861e3c4f2df8ac27871e64",
+      "build_seconds": 45.43709340505302,
+      "plan_sha256": "b1d57b320f16d8da98623eb47a7d1ca93318707b5ea8f1794fdd975879a69ca3",
+      "usage": {
+        "transfers": 194952,
+        "fabric_transfers": 193644,
+        "local_transfers": 1308,
+        "nodes": 399468
+      },
+      "executed_layer_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "dependency_edges": 7180604,
+      "prepared": {
+        "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+      },
+      "bundle": {
+        "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+        "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+      },
+      "production_validation_enabled": true,
+      "scope": "six-block comparison only",
+      "simulation_executed": false
+    },
+    "baseline_probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/probe_full_model_storage.py",
+        "baseline",
+        "--output-dir",
+        "runs/v03-full-model-storage/compare-baseline/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T07:24:53.334758+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 2785492992,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "process_group": 1807379,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T07:26:42.681942+00:00",
+      "wall_seconds": 109.34719936735928,
+      "max_waited_child_rss_kib": 2720208,
+      "artifact_bytes_before_report": 158386
+    },
+    "optimized_probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/probe_full_model_storage.py",
+        "optimized",
+        "--output-dir",
+        "runs/v03-full-model-storage/compare-optimized/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T07:28:04.110163+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 1073741824,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 1874989056,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "process_group": 1808379,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T07:29:17.937318+00:00",
+      "wall_seconds": 73.82723884470761,
+      "max_waited_child_rss_kib": 1831044,
+      "artifact_bytes_before_report": 108078
+    },
+    "speedup_one_sample": 1.768311738476017,
+    "peak_rss_reduction_fraction": 0.32687353320040236
+  },
+  "full_target": {
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "target",
+        "--input",
+        "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "--output-dir",
+        "runs/v03-full-model-storage/target/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T07:29:47.456740+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 34359738368,
+        "per_process_address_bytes": 42949672960,
+        "artifact_bytes": 25769803776,
+        "wall_seconds": 900.0
+      },
+      "peak_sampled_group_rss_bytes": 33905291264,
+      "peak_sampled_processes": 1,
+      "status": "wall_limit",
+      "workload_semantics_validated": false,
+      "process_group": 1808920,
+      "child_exit_code": -15,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T07:44:49.550618+00:00",
+      "wall_seconds": 902.0939449798316,
+      "max_waited_child_rss_kib": 33110636,
+      "artifact_bytes_before_report": 1340699
+    },
+    "completed_children": 58,
+    "child_usage": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7577414
+    },
+    "expected_complete_usage": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7655238
+    },
+    "last_child_end": {
+      "phase": "layer_end",
+      "elapsed_seconds": 266.0254943445325,
+      "rss_bytes": 11762384896,
+      "layer_id": 60,
+      "usage": {
+        "transfers": 64952,
+        "fabric_transfers": 64504,
+        "local_transfers": 448,
+        "nodes": 130624
+      }
+    },
+    "composition_phases": [
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 266.08571891859174,
+        "rss_bytes": 11762384896,
+        "call": 1
+      },
+      {
+        "phase": "composition_end",
+        "elapsed_seconds": 568.0544625036418,
+        "rss_bytes": 22514868224,
+        "call": 1,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      },
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 576.6065806839615,
+        "rss_bytes": 23160745984,
+        "call": 2
+      },
+      {
+        "phase": "composition_end",
+        "elapsed_seconds": 862.3633647914976,
+        "rss_bytes": 33905291264,
+        "call": 2,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      },
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 876.5858337748796,
+        "rss_bytes": 27270627328,
+        "call": 3
+      }
+    ],
+    "final_phase": {
+      "phase": "composition_begin",
+      "elapsed_seconds": 876.5858337748796,
+      "rss_bytes": 27270627328,
+      "call": 3
+    },
+    "build_returned": true,
+    "export_completed": false,
+    "target_load_probe": null,
+    "phases": {
+      "path": "runs/v03-full-model-storage/target/work/phases.jsonl",
+      "sha256": "d3542e3387cd1b5f9b06b48dde08bec8727817b35056146a83a45e90b293c5ae"
+    },
+    "samples": {
+      "path": "runs/v03-full-model-storage/target/samples.jsonl",
+      "sha256": "ee433edb36f1017fa6a5fb474ce9afb72f431e4b21082d76ae10b3d2bbcee13f"
+    }
+  },
+  "regression": {
+    "service": {
+      "passed": true,
+      "cases": {
+        "reference": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "provenance-off": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "shared-slow": {
+          "finished_ns": 1809914,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "sampling-slow": {
+          "finished_ns": 727340,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "tight": {
+          "finished_ns": 148489,
+          "writes": 377,
+          "payload_bytes": 122620,
+          "business_bytes": 113664,
+          "waves": 8,
+          "stage_records": 1008,
+          "empty_stage_records": 546,
+          "shared_last": 0,
+          "routed_last": 33,
+          "layer_overlaps": 6
+        },
+        "window": {
+          "finished_ns": 83098,
+          "writes": 244,
+          "payload_bytes": 67568,
+          "business_bytes": 61440,
+          "waves": 6,
+          "stage_records": 756,
+          "empty_stage_records": 378,
+          "shared_last": 0,
+          "routed_last": 27,
+          "layer_overlaps": 6
+        },
+        "network-slow": {
+          "finished_ns": 1214788,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "scenario": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        }
+      },
+      "failures": {
+        "stage": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "dependency": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "coverage": "cosim-service: Full model: composition mismatch: executed_layer_ids",
+        "cost-domain": "cosim-service: Full model: cost domain differs from model",
+        "declaration": "cosim-service: Full model declaration changed during run",
+        "chakra": "cosim-service: /root/moe-ub-cosim/runs/v03-full-model-storage/service-regression/work/bad-chakra/graphs/g0/layer.2.et: Layer plan: compute graph differs from plan"
+      },
+      "hardware_calibrated": false,
+      "target_scale_executed": false
+    },
+    "structure": {
+      "passed": true,
+      "cases": {
+        "61-blocks": {
+          "blocks": 61,
+          "moe_blocks": 58,
+          "nodes": 3102,
+          "writes": 754,
+          "all_transfers": 986,
+          "finished_ns": 315509,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        },
+        "dense-between": {
+          "blocks": 3,
+          "moe_blocks": 2,
+          "nodes": 114,
+          "writes": 26,
+          "all_transfers": 34,
+          "finished_ns": 10829,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        }
+      },
+      "target_scale_executed": false
+    },
+    "loader": {
+      "passed": true,
+      "loaded": {
+        "fabric_transfers": 39,
+        "load_seconds": 0.011988808,
+        "local_transfers": 12,
+        "network_initialized": false,
+        "nodes": 171,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "expected": {
+        "actual_usage": {
+          "transfers": 51,
+          "fabric_transfers": 39,
+          "local_transfers": 12,
+          "nodes": 171
+        },
+        "plan_bytes": 272891,
+        "dependency_edges": 299,
+        "executed_layer_ids": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "ranks": 3,
+        "target_scale_executed": false,
+        "simulation_executed": false
+      },
+      "rejected": [
+        "modified_json_node",
+        "truncated_chakra"
+      ],
+      "target_scale_executed": false
+    },
+    "byte_identical_graphs": {
+      "four-block": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "20f2295a0710b31714b59512c26de8413dd7212ad78ee20ba9674f7193be4ad5",
+          "generation.json": "eb10c0a5555c4d55694c67cebd3604f08304e2729e939d48b312a4cb959f4d09",
+          "layer.12.et": "54f8a230fbed8e83da98e11bddbac5e37fbde2c646f5c0b6c68920ef1551e4cf",
+          "layer.2.et": "4f724ceead60e8e2f014859562e8a904f7c22e2a2d4b92f653c8e8f602996a39",
+          "layer.7.et": "734f742a8e7a898171e3f7fa0abe8f500fb052e9cbd4267ec231d3c4847ae877"
+        }
+      },
+      "61-block": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "50d00546c881d9c0df399fbd67fe8cdd543b32ef84f6429ae02e443497b7345d",
+          "generation.json": "d33b4dd5dc5693a17e04ec1f20e46f445b819031983f0352211d193787ce855c",
+          "layer.12.et": "3d4b9b6975b6ec9fac336a2cfa2d08eff65284aefe8ac48fc6a75e5f06f1213a",
+          "layer.2.et": "8841fc088f0d5a2edc9b07b50920b71aa834016a78e06e2333980da4a5108eac",
+          "layer.7.et": "7d1f7f83d22a4373200f1594b81c34c212bf9831f54f0a32ae2d5afab4cfe560"
+        }
+      },
+      "dense-between": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "b45c2a1ac1157f6956c91964bed9ab831cba54e0e255b1577cf6bb9f51581620",
+          "generation.json": "d62245ed07f869f138e04ce847227e8ce45ebd93221ed6e15247fd0ce029762d",
+          "layer.12.et": "924efd221ba563b02f37680126115d185150552bbb9fa224759713ced13e0c58",
+          "layer.2.et": "09231d1fec0cacf34dd3c4f7104a31f16dddf66fd3abd0d934d425a567f688c6",
+          "layer.7.et": "1908c9a23b528d4021baaa6f22e6f13e4d7fa463889e62d152b4b361c40852e6"
+        }
+      }
+    }
+  },
+  "protection": {
+    "protected_files": 1304,
+    "unchanged": true,
+    "production_cpp_unchanged": true,
+    "no_cpp_rebuild": true,
+    "binaries": {
+      "cosim-service": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-service",
+        "sha256": "ef213af3e6086e69356b8b51759e75e3da8885ec9f42953462db58a7806b93c0",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-layer": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-layer",
+        "sha256": "0345a51946b86c59d816c5742998de66fc002e43b9a4da2dc4222c674a7eed1e",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-plan-load-probe": {
+        "path": "build/m10-full-round-preflight/output/cosim/ns3.44-cosim-plan-load-probe",
+        "sha256": "de6c8e38c30cf020018b1d9ec5248d3a877ace5a4dea80351664242ec486a7fb",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      }
+    }
+  },
+  "commands": {
+    "baseline-final": {
+      "path": "runs/v03-full-model-storage/logs/baseline-final.json",
+      "sha256": "939d3efda1bee2c12547242f82f16370f039648d37db3c2ccb884bb4ecdff4de"
+    },
+    "baseline-tests": {
+      "path": "runs/v03-full-model-storage/logs/baseline-tests.json",
+      "sha256": "95da4bc46d6f44167ad2ac9bbf7fe2f47fecb06e2dc908d27acbdec9f2ad1e07"
+    },
+    "unit": {
+      "path": "runs/v03-full-model-storage/logs/unit.json",
+      "sha256": "25b189b707c495c342e4a4d0eb85eaecd8ecf245c33732c56c28f550a6890573"
+    },
+    "compare-baseline": {
+      "path": "runs/v03-full-model-storage/logs/compare-baseline.json",
+      "sha256": "e9dcc002f18a6f071fa961c4402502dcadb06640165d7457a8f3f743ac630fe0"
+    },
+    "compare-optimized": {
+      "path": "runs/v03-full-model-storage/logs/compare-optimized.json",
+      "sha256": "906d5ba42a1ad3fad5b49d95708c68c0c37a90be5ed3719c5d865a14ae941e9c"
+    },
+    "preflight": {
+      "path": "runs/v03-full-model-storage/logs/preflight.json",
+      "sha256": "5bb2720d6b44e9f951452a25067b73838241368ed897a27838064ac16489a5b8"
+    },
+    "service-regression": {
+      "path": "runs/v03-full-model-storage/logs/service-regression.json",
+      "sha256": "1327cfb8f640a9e3b997c38a1c1d5f7351bcd360bb15421a4f7fcdae1000c0e5"
+    },
+    "structure-regression": {
+      "path": "runs/v03-full-model-storage/logs/structure-regression.json",
+      "sha256": "0dff23c60266ef9dc156229fa92e42b0b48172702c4703959b78bcdee8d54484"
+    },
+    "loader-check": {
+      "path": "runs/v03-full-model-storage/logs/loader-check.json",
+      "sha256": "d39147b623e25a7419ee77d0718b45a56e81efc9e23ab7fa6f2e84eca985cd7c"
+    },
+    "dependencies": {
+      "path": "runs/v03-full-model-storage/logs/dependencies.json",
+      "sha256": "d189715fb563f3e71f27c58b85db28eca13f2ac764d82b9b830422fcb5cb78b8"
+    },
+    "final-audit": {
+      "path": "runs/v03-full-model-storage/logs/final-audit.json",
+      "sha256": "0ab2c924f92d92bea50aef09a34675156ce862813cfeb5e6439aaed324c9b572"
+    },
+    "baseline": {
+      "path": "runs/v03-full-model-storage/logs/baseline.json",
+      "sha256": "aab82b088d94eae1a79b402ec339ca7c0432ea7c899f5ab6abf0df905d5e9fd3"
+    },
+    "target": {
+      "path": "runs/v03-full-model-storage/logs/target.json",
+      "sha256": "059cb1e725272642a4703d5c0b69948f9914a42c37d79f6125546f79d3c16f64"
+    }
+  },
+  "retained_development_failure": "baseline: synthetic batch required larger declared CANN window; old validation kept",
+  "unchanged": [
+    "all validation/recomposition checks",
+    "schemas and serialization",
+    "CANN behavior",
+    "backend and submodules",
+    "target inputs and limits"
+  ],
+  "hardware_calibration": "unvalidated_reference",
+  "target_network_executed": false,
+  "target_full_service_executed": false
+}

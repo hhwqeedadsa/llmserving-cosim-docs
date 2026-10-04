@@ -57,7 +57,10 @@ def audit_full_capacity(model, memory, layer):
     return result
 
 
-def compose_full_model(layers, model, profile):
+def compose_full_model(layers, model, profile, *, _retain_layers=False):
+    # Public composition copies the caller's children. Internal build owns its
+    # children; validation reads existing children without changing them. Both
+    # may retain that list instead of duplicating it. All checks still run.
     require(isinstance(layers,list) and layers,'Full MoE model requires communication layers')
     first=layers[0];ranks=first['rank_ids']
     validate_model(model,ranks);validate_profile(model,profile)
@@ -87,13 +90,19 @@ def compose_full_model(layers, model, profile):
             for key in ('transfer_id','ub_task_id','comm_tag'):
                 if key in t:
                     require(t[key] not in seen[key],'Duplicate full model '+key);seen[key].add(t[key])
+    del seen
     tokens=token_keys(first)
     require(all(t['token_index']<model['max_position_embeddings'] for t in tokens),'Full model context exceeds model')
-    merged=deepcopy(first)
-    for key in ('input_provenance','compute_inputs','contributions','compute_evaluation','communication_buffers'):merged.pop(key,None)
-    merged.update(schema_version='moe-ub-full-model-plan/1',layers=deepcopy(layers),model_spec=deepcopy(model),
+    removed={'input_provenance','compute_inputs','contributions','compute_evaluation','communication_buffers'}
+    replaced={'schema_version','input','operations','transfers','rank_graphs','expert_input_counts'}
+    # Preserve original key order without copying values immediately discarded
+    # by update (especially the first layer's graph and transfer records).
+    merged={k:None if k in replaced else deepcopy(v) for k,v in first.items() if k not in removed}
+    # Keep merged input detached even when layers are retained: edits must not
+    # silently change the child inputs used by independent reconstruction.
+    merged.update(schema_version='moe-ub-full-model-plan/1',layers=layers if _retain_layers else deepcopy(layers),model_spec=deepcopy(model),
         full_model_profile=deepcopy(profile),executed_layer_ids=ids,communication_layer_ids=moe_ids,
-        input=dict(common,schema_version='moe-ub-full-model-input/1',executed_layer_ids=ids),
+        input=dict(deepcopy(common),schema_version='moe-ub-full-model-input/1',executed_layer_ids=ids),
         operations=[deepcopy(op) for l in layers for op in l['operations']],transfers=[],rank_graphs=[],
         expert_input_counts=[sum(l['expert_input_counts'][i] for l in layers) for i in range(len(ranks))])
     offsets={}
@@ -125,18 +134,22 @@ def compose_full_model(layers, model, profile):
                 branch=list(previous)
                 routed=comp('router',n*per['router'],branch,lid)
                 child=children[lid]['rank_graphs'][ri];base=len(nodes);offsets[lid,rank]=base
+                # One immutable integer per node, reused by its incoming edges.
+                # Dependency lists remain independent mutable lists as before.
+                shifted={node['node_id']:node['node_id']+base for node in child['nodes']}
                 used={d for node in child['nodes'] for d in node['deps']}
-                terminal=[node['node_id']+base for node in child['nodes'] if node['node_id'] not in used] or routed
+                terminal=[shifted[node['node_id']] for node in child['nodes'] if node['node_id'] not in used] or routed
                 for original in child['nodes']:
-                    node=deepcopy(original);node.update(node_id=node['node_id']+base,layer_id=lid,
-                        deps=[d+base for d in node['deps']] if node['deps'] else list(routed))
+                    node={k:None if k=='deps' else deepcopy(v) for k,v in original.items()}
+                    node.update(node_id=shifted[original['node_id']],layer_id=lid,
+                        deps=[shifted[d] for d in original['deps']] if original['deps'] else list(routed))
                     if node['kind']=='COMP' and original['node_id']==child['phase_nodes']['prepare']:
                         node.update(name='dispatch-quant-pack',model_stage='dispatch_quant_pack')
                     nodes.append(node)
                 phase=dict(layer_id=lid,entry_deps=routed,terminal_nodes=terminal,
-                    phase_nodes={k:None if v is None else v+base for k,v in child['phase_nodes'].items()})
+                    phase_nodes={k:None if v is None else shifted[v] for k,v in child['phase_nodes'].items()})
                 if 'local_prepare_nodes' in child:
-                    phase['local_prepare_nodes']={k:None if v is None else v+base for k,v in child['local_prepare_nodes'].items()}
+                    phase['local_prepare_nodes']={k:None if v is None else shifted[v] for k,v in child['local_prepare_nodes'].items()}
                 graph['layer_phases'].append(phase)
                 shared=comp('shared_expert',n*spec['shared_experts']*per['shared_expert'],branch,lid)
                 previous=comp('shared_routed_add',n*per['shared_routed_add'],terminal+shared,lid)
@@ -161,14 +174,14 @@ def build_full_model(configs, identities, provenance, model, profile):
     from .plan import validate_config
     for c in configs:validate_config(c)
     usage=check_graph(full_usage(configs,model),configs[0].get('resource_budget'))
-    plan=compose_full_model(build_children(configs,provenance),model,profile)
+    plan=compose_full_model(build_children(configs,provenance),model,profile,_retain_layers=True)
     require(actual_usage(plan)==usage,'Full model preflight count mismatch')
     identities.assign(plan);validate_full_model(plan)
     return plan
 
 
 def validate_full_model(plan):
-    expected=compose_full_model(plan['layers'],plan['model_spec'],plan['full_model_profile'])
+    expected=compose_full_model(plan['layers'],plan['model_spec'],plan['full_model_profile'],_retain_layers=True)
     for key,value in expected.items():
         if key not in ('compute_source','route_source'):
             require(plan.get(key)==value,'Full model composition mismatch: '+key)

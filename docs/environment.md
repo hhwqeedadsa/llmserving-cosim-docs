@@ -3272,3 +3272,64 @@ CANN 基准仍为 305 次 UB 写、131530 ns，共享网络、慢链路、分块
 保留的前期失败：baseline 退出 1，新增有效用例误用了全组零 Token，而原生产图校验一直要求至少一个 Token。未改生产规则，将有效案例改为单请求和多个零 Token 成员，另加全空图拒绝测试；baseline-final 在生产修改前通过后才固定 golden.json。目标 rss_limit 是后续首次合并的受控资源结果，没有更改预算或静默改输入重跑。
 
 本步完成并本地提交、不推送。下一项候选为减少全模型合并中重复存储，保持校验和图语义后复测；本步没有实施。完整合并、导出/加载、目标网络、多轮累计持有及 M10 最终验收仍未完成，硬件校准状态不变。
+
+## 2026-10-04：全模型合并的存储优化与同预算复测
+
+任务 `v03-full-model-storage`，生产基线 `a828c0a`，任务说明提交 `5d33c36`。根目录 `/root/moe-ub-cosim`；本节 `R` 为 `runs/v03-full-model-storage`，`P` 为 `.venv/llmservingsim-native/bin/python`。实现范围为 `full_model.py` 的复制与持有方式：内部构图保留自己创建的子图，重构校验保留只读子图引用，对外合并继续复制子图；偏移节点编号复用不可变整数，依赖列表和传输来源等可变对象保持独立。合并输入单独复制，避免输入与子图相互联动。没有改变完整重构、逐层校验、身份分配、schema、序列化或后端。
+
+### 基线与六块对照
+
+生产修改前用旧代码保存四组完整图摘要并通过三项所有权/篡改检查。覆盖单 MoE、dense 穿插、无 shared expert、八块/32 请求/小分块、上下文、零 Token 成员、来源与非默认身份。修改后 24 项相关单元测试通过（4.924 s），包含四组旧完整图摘要、原 24 组 CANN 摘要及独立语义断言。调用方输入、对外合并子图和被检图均保持测试要求的隔离/只读行为。
+
+六块资源对照单独使用原首轮 bundle 的前三个 dense 和前三个 MoE，仍为 128 rank/1024 请求，来源相同；不以这个缩小对照替代完整目标。两次探测串行、生产校验均开启，各限 RSS 8 GiB、地址 12 GiB、产物 1 GiB、300 s。旧源码从固定本地 Git 读取，SHA `a111273227d400b1f4966a29338f7ce3e3e2c9624bf154a54ec752fbc761d4ee`；新源码 SHA `984aa942fa60a90e459b2029721a3d13432eba1037861e3c4f2df8ac27871e64`。
+
+| 指标 | 旧实现 | 本步实现 |
+|---|---:|---:|
+| 构图及原重构校验 / s | 80.346946 | 45.437093 |
+| 进程总时间，含读取、摘要与释放 / s | 109.347199 | 73.827239 |
+| 进程组采样峰值 RSS / B | 2785492992 | 1874989056 |
+| 节点 | 399468 | 399468 |
+| 传输，fabric / local | 193644 / 1308 | 193644 / 1308 |
+| 依赖边 | 7180604 | 7180604 |
+
+完整计划（含逐层来源）摘要均为 `b1d57b320f16d8da98623eb47a7d1ca93318707b5ea8f1794fdd975879a69ca3`。两次 completed/0、无残留后代。单次样本峰值下降约 32.7%，构图时间下降约 43.4%；不推广为所有输入的固定比例，也不改变仿真时间或声称目标硬件加速。
+
+保留开发期失败：baseline 退出 1，新增合成大批次误沿用了小输入的 1 MiB CANN 窗口，原代码按 tiling 下界拒绝；仅将测试配置显式窗口改为 8 MiB，baseline-final 在生产修改前重新生成并通过。未改生产断言或预期图来绕过失败。
+
+### 实际命令与日志
+
+`python3 R/record.py LABEL COMMAND...` 保存 argv、cwd、UTC、退出码及 stdout/stderr 到 `R/logs/LABEL.*`。脚本运行前均已审阅。新旧比较的输入摘要、阶段及 RSS 在各自工作目录；原数据不重下载、不复制，历史预检不覆盖。
+
+| 实际命令 | 标签及证据 |
+|---|---|
+| `env PYTHONPATH=python:tests/unit P R/baseline.py` | baseline-final；四组旧完整图摘要与 1304 个受保护文件摘要。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest full_model_storage_test` | baseline-tests；旧生产实现上三项新测试通过。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest full_model_storage_test full_model_test full_round_probe_test resource_budget_test cann_index_test multilayer_test` | unit；24 项通过。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/compare-baseline --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 1073741824 --wall-seconds 300 -- P scripts/probe_full_model_storage.py baseline --output-dir R/compare-baseline/work` | compare-baseline；旧合并器与完整校验，completed/0。 |
+| 同上，将 `compare-baseline` 换为 `compare-optimized`、worker 模式换为 `optimized` | compare-optimized；相同输入和全部校验，completed/0，完整摘要一致。 |
+| `env PYTHONPATH=python P R/preflight.py` | preflight；新旧六块完整图相同，原 manifest/bundle 和原请求、容量、fabric、费用及规范引用摘要复核，保存 host.json。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/target --rss-bytes 34359738368 --address-bytes 42949672960 --artifact-bytes 25769803776 --wall-seconds 900 -- P -m moe_ub_cosim.full_round_probe target --input runs/v03-full-round-preflight/prepare/work/prepared.json --output-dir R/target/work` | target；阶段与资源在 target/work/phases.jsonl、target/samples.jsonl，最终结果见下文。 |
+| `env PYTHONPATH=python python3 R/regressions.py` | 顺序运行下列服务、结构与加载检查；均在完整目标探测结束后启动。 |
+| `P -m moe_ub_cosim.host_probe --output-dir R/service-regression --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 10737418240 --wall-seconds 300 -- P tests/integration/check_full_model.py --build-dir build/m10-shared-provenance --output-dir R/service-regression/work` | service-regression；8 个服务对照、空服务与 6 项后端拒绝通过，实际后端 argv/输入/退出码在 work/commands.json。 |
+| 同上，将 `service-regression` 换为 `structure-regression`、脚本换为 `check_full_model_structure.py` | structure-regression；61 块小 EP、穿插 dense/无 shared 两项真实 UB 通过。 |
+| `P tests/integration/check_full_round_probe.py --build-dir build/m10-full-round-preflight --output-dir R/loader-check` | loader-check；小完整图 C++ 加载及修改 JSON/截断 Chakra 拒绝通过，各子进程另有资源上限。 |
+| `bash scripts/check_deps.sh`、`python3 R/final_audit.py` | dependencies、final-audit；13 个递归依赖及 1304 个受保护文件未变，15 个完整小模型计划/Chakra 相关文件逐字节一致，三个复用二进制 ldd 只有各自目录的一套 ns-3-UB。 |
+| `python3 R/report.py` | report；复核源文件/输入摘要、新旧图、目标阶段和计数、回归及文件保护，生成小型可提交摘要。 |
+
+### 完整目标的实际进展与停止
+
+目标前快照：物理/cgroup 64 GiB、无 swap，MemAvailable 62874129 KiB、cgroup memory.current 34845593600 B（含缓存）、CPU affinity 32、磁盘可用 6692714426368 B。prepared.json SHA `f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615`、bundle SHA `b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14` 与上一项相同。离线首轮准备边界不变，源 AWQ4 与参考 INT8 容量对象不同、采集修订未知和计算未校准状态保留；本步不测全量 64 步导入器。
+
+58 个 MoE 子图于 266.025494 s 全部返回，逐层实际计数匹配；首次合并于 568.054463 s 返回，RSS 22514868224 B。身份分配后的完整重构于 862.363365 s 返回，RSS 33905291264 B；构图内全部逐字段校验及来源声明处理于 876.585305 s 完成。完整图为 7655238 节点、3767694 次交付，其中 3741764 fabric、25930 local，与独立预检一致。与上次首次合并未返回相比，本次实际完成了内存中的目标完整图构造和校验。
+
+导出于 876.585701 s 进入，原 export_plan 在创建目录和写文件前又执行 validate_plan，876.585834 s 开始第三次完整合并。采样时间 900.014651 s 触发 wall_limit，worker SIGTERM/-15，外层退出 1；含进程清理总时间 902.093945 s。采样峰值 33905291264 B（约 31.58 GiB），未触及 32 GiB RSS、40 GiB 地址或输出上限；remaining_live_group_pids=[]，stderr 为空。不是内存触限或宿主 OOM，也没有改预算或输入重跑。
+
+完整导出未返回，目标 JSON/Chakra 未写出，目标 C++ 加载和网络未启动。target/work/built.json 只保存通过构图的计数，不能代替完整计划；进程终止后没有可复用的完整目标图文件。完整首轮构图成功也不等于整个目标服务或最终 M10 验收通过。
+
+### 回归、保护与交接
+
+真实 UB 完整服务基准为 5 轮/305 次写/113664 业务字节、131279 ns。来源关闭输出与开启相同；共享专家费用、sampling 费用、KV 等待、观察窗口退出、慢链路反馈和场景入口对照通过，空服务正确结束。6 项后端篡改拒绝保持。61 块小模型为 754 次写/986 次交付/3102 节点、315509 ns；穿插 dense/无 shared 为 26 次写/34 次交付/114 节点、10829 ns。依赖、计算时长、收发完成及资源清零均核对。
+
+四块、61 块、穿插 dense 三组 plan.json、generation.json 与 Chakra，共 15 个文件与旧产物逐字节一致。小图 C++ 装载为 171 节点/39 fabric/12 local，修改 JSON 和截断 Chakra 均正确拒绝。C++ 源码、已有三套构建、启动锁、原 M9 文件、首轮 bundle/manifest 及依赖未变；本步没有重编译、下载、修改子模块或推送。
+
+[存储优化说明](../fixtures/m10_full_model_storage/README.md)与[结果摘要](../fixtures/m10_full_model_storage/result.json)保存本步证据。本步完成后本地提交并停止。下一项建议处理导出前的重复完整重构，保持校验覆盖和输入隔离后按相同预算复测；尚未实施，等待用户确认。目标导出/加载、完整网络、多轮累计持有、最终参考实验和硬件校准仍未完成。

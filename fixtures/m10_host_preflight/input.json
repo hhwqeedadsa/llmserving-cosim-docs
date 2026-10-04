@@ -1,0 +1,29 @@
+{
+  "schema_version": "moe-ub-host-preflight/1",
+  "manifest": {
+    "path": "fixtures/m10_route_selection/manifest.json",
+    "sha256": "b4fd468ed9b09fe2bd80568737891d0d0e5a32fdf8f83f5e24f8f9fdf77f3cdb"
+  },
+  "requests": {
+    "path": "fixtures/m10_route_selection/requests.json",
+    "sha256": "6171ad1d2b8a53dc687289d7a4f99efeee9b2c061a9de46d81a247d4180b7b31"
+  },
+  "capacity": {
+    "path": "fixtures/m10_mla_capacity/r1-capacity.json",
+    "sha256": "b7c7fd2e04aaaee5713d77eaf27fa206fe5c3aaee97435f5e0b7162939a186ef"
+  },
+  "fabric": {
+    "path": "fixtures/m10_fabric/target.json",
+    "sha256": "cc28fafa41627f803fdce07cd79540975d4efa7a47d8201aa80651497905aad4"
+  },
+  "layer_template": {
+    "path": "fixtures/m10_full_model/layers.json",
+    "sha256": "566dff69957540590b3094ac9347bb8c3fe42d4851e3659b51b8f5224b0df217"
+  },
+  "scenario_contract": {
+    "path": "fixtures/m10_target_contract/reference.json",
+    "sha256": "6bec656b1a0322b2b9ce27b266b1e9747861569d6b5fb61f79f7786cddad4dfe"
+  },
+  "chunk_bytes": 8192,
+  "send_slots_per_rank": 1
+}

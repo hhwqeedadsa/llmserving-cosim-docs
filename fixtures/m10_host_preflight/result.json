@@ -1,0 +1,163 @@
+{
+  "schema_version": "moe-ub-host-preflight-result/1",
+  "preflight_complete": true,
+  "target_run_ready": false,
+  "target_scale_executed": false,
+  "full_target_graph_allocated": false,
+  "full_import_verified": true,
+  "source_baseline": "c894345",
+  "source_files": 1024,
+  "route_records": 3801088,
+  "rounds": 64,
+  "target_counts": {
+    "transfers": 241124521,
+    "fabric_transfers": 239454168,
+    "local_transfers": 1670353,
+    "nodes": 489968326,
+    "same_rank_contributions": 238703,
+    "same_chip_contributions": 240027,
+    "cross_chip_contributions": 29929974,
+    "fabric_business_bytes": 643614160896,
+    "fabric_payload_bytes": 649720335624
+  },
+  "first_round": {
+    "step": 0,
+    "transfers": 3767694,
+    "fabric_transfers": 3741764,
+    "local_transfers": 25930,
+    "nodes": 7655238,
+    "same_rank_contributions": 3713,
+    "same_chip_contributions": 3694,
+    "cross_chip_contributions": 467729,
+    "fabric_business_bytes": 10058044416,
+    "fabric_payload_bytes": 10153458956
+  },
+  "layer_probe": {
+    "actual_usage": {
+      "transfers": 64992,
+      "fabric_transfers": 64556,
+      "local_transfers": 436,
+      "nodes": 130694
+    },
+    "dependency_edges": 2391386,
+    "plan_bytes": 137419998,
+    "target_scale_executed": false,
+    "scope": "one actual target MoE layer, first Decode entry, offline only; excludes full-model composition"
+  },
+  "measurements": {
+    "count-probe": {
+      "wall_seconds": 58.772100526839495,
+      "peak_sampled_group_rss_bytes": 43352064,
+      "max_waited_child_rss_kib": 43360,
+      "artifact_bytes_before_report": 2328059
+    },
+    "import-128": {
+      "wall_seconds": 12.153251027688384,
+      "peak_sampled_group_rss_bytes": 846303232,
+      "max_waited_child_rss_kib": 828516,
+      "artifact_bytes_before_report": 81433
+    },
+    "import-1024": {
+      "wall_seconds": 95.86851244606078,
+      "peak_sampled_group_rss_bytes": 6570782720,
+      "max_waited_child_rss_kib": 6421900,
+      "artifact_bytes_before_report": 599418
+    },
+    "target-layer": {
+      "wall_seconds": 60.21782607585192,
+      "peak_sampled_group_rss_bytes": 545468416,
+      "max_waited_child_rss_kib": 532684,
+      "artifact_bytes_before_report": 153707842
+    },
+    "observation-one": {
+      "wall_seconds": 4.781906861811876,
+      "peak_sampled_group_rss_bytes": 227557376,
+      "max_waited_child_rss_kib": 131644,
+      "artifact_bytes_before_report": 36663377,
+      "registered_records_in_two_maps": 4800,
+      "packet_ledger_rows": 2400,
+      "idle_ports": 0,
+      "finished_ns": 444075
+    },
+    "observation-two": {
+      "wall_seconds": 4.637239005416632,
+      "peak_sampled_group_rss_bytes": 230645760,
+      "max_waited_child_rss_kib": 133664,
+      "artifact_bytes_before_report": 40843375,
+      "registered_records_in_two_maps": 9600,
+      "packet_ledger_rows": 4800,
+      "idle_ports": 0,
+      "finished_ns": 444075
+    },
+    "observation-ten": {
+      "wall_seconds": 5.1638921573758125,
+      "peak_sampled_group_rss_bytes": 237768704,
+      "max_waited_child_rss_kib": 140848,
+      "artifact_bytes_before_report": 59825643,
+      "registered_records_in_two_maps": 48000,
+      "packet_ledger_rows": 24000,
+      "idle_ports": 5,
+      "finished_ns": 444075
+    },
+    "observation-ten-source-off": {
+      "wall_seconds": 4.990518132224679,
+      "peak_sampled_group_rss_bytes": 235409408,
+      "max_waited_child_rss_kib": 140700,
+      "artifact_bytes_before_report": 44108222,
+      "registered_records_in_two_maps": 48000,
+      "packet_ledger_rows": 24000,
+      "idle_ports": 5,
+      "finished_ns": 444075
+    }
+  },
+  "cgroup_memory_max_bytes": 68719476736,
+  "all_target_switch_egress_ports": 16128,
+  "descriptor_key_lower_bounds": [
+    {
+      "ports": 1,
+      "first_round_descriptor_keys_bytes": 29934112,
+      "run_descriptor_keys_bytes": 1915633344
+    },
+    {
+      "ports": 10,
+      "first_round_descriptor_keys_bytes": 299341120,
+      "run_descriptor_keys_bytes": 19156333440
+    },
+    {
+      "ports": 16128,
+      "first_round_descriptor_keys_bytes": 482777358336,
+      "run_descriptor_keys_bytes": 30895334572032
+    }
+  ],
+  "bound_basis": "2 independent std::map<uint32_t,WriteDescriptor> per port; only 4-byte keys counted; descriptors/strings/tree/packets/temp copies excluded",
+  "implementation_hashes": {
+    "backend/port_observation.hh": "8fc7140837fa58f731b65131c96c7a43b923401838f3cead420c0e52e58d3e69",
+    "backend/port_observation.cc": "b2e03125000054d6daac2042a9ae55077e5e71915c1ebdab17e5ce45d028d06d",
+    "backend/cosim_service.cc": "91fc059ac24a162fbb3e3b7e36d6e7039d6c273adb93b16563a8da0485797ee3",
+    "python/moe_ub_cosim/route_evidence.py": "37cbfabbf1463e17da5b8ef7e43197af30d9d673ab61264b1dd20d08f58eb255",
+    "python/moe_ub_cosim/full_model.py": "a111273227d400b1f4966a29338f7ce3e3e2c9624bf154a54ec752fbc761d4ee",
+    "python/moe_ub_cosim/resources.py": "30c9beec4a95f7b2406d87a3bc3c1fa1173fff4f66f2fe467edefdd8b3cb963e"
+  },
+  "input_sha256": "d822f310ca84a48e5fc1a5c8ac3c7399d1d83c1ee4e19488bc1dc7b266ac34db",
+  "counts_report_sha256": "50199907ba8301d693e1de521867ae081df928e038b7f5bbdfbbd3e30227ed4c",
+  "all_layer_counts_sha256": "2207f0a345e30777f99a53ea7de50f9d40e2d1f0da039d5696dcf243d5048475",
+  "count_limits": {
+    "identity_budget_fits": true,
+    "old_graph_transfer_limit": 16000,
+    "old_graph_node_limit": 40000,
+    "old_plan_byte_limit": 134217728,
+    "old_port_limit": 32,
+    "old_total_window_limit": 200000,
+    "old_observation_limit_min_windows_for_target_ports": 16128,
+    "note": "fixture limits are configurable budgets, not protocol restrictions; raising them does not remove duplication"
+  },
+  "unresolved": [
+    "full 61-block graph peak memory/export and backend parse overhead",
+    "whole-run retained plans/transfers",
+    "full fabric initialization peak and all-port trace callbacks",
+    "actual packet segmentation/visits",
+    "final 64-round network completion time, sampling window count and total output size"
+  ],
+  "next_step": "Share immutable transfer/packet provenance across ports with equivalent zero-traffic and provenance-off semantics; then measure remaining target stages",
+  "hardware_calibration": "unvalidated_reference"
+}

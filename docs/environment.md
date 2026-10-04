@@ -3061,3 +3061,68 @@ regression-scenario 先于最后一次部署检查增量构建；最后改动只
 失败日志全部保留。首次 acquire 因遇到源文件末尾缺层退出 1；随后按当前任务的筛选要求保留原始文件，将格式错误作为整份候选拒绝并继续授权前缀，原始校验没有放宽。unit-selection 的人工输入错误地按六个专家造数据，而 fixture 声明四个专家；改为四专家范围后 unit-selection-fixed 又暴露摘要篡改用例替换了已不存在的字符，修正为实际存在的字节后 unit-selection-verified 通过。没有修改生产摘要检查或预期筛选次序。catalog-reproduce 把元数据翻页 URL 的 `%2F` 编码误判为不同路径；改为解码后仍严格核对同一 HTTPS 来源和固定目录，catalog-reproduce-fixed 获取完整目录并逐项匹配。
 
 本步完成、整理记录并本地提交，不推送、不自动进入下一任务。完整目标宿主资源预检和最终 R1/CM384 组合验收仍待用户确认；M10 整体未完成。
+
+## 2026-10-04：M10 目标宿主资源预检
+
+用户确认后执行 `v03-target-host-preflight`，任务说明提交 `dd088f4`，起点为真实请求清单提交 `c894345`。按 v0.3 §3/4.1/4.4/4.6/4.8/6、场景主负载/放置/分块/观测和继承 v0.2 §4/7/8.4/9/10，新增离线计数和 Linux 受限进程测量。没有修改原执行器、C++ 后端、技术规范、依赖、gitlink 或锁文件，没有编译、下载、安装或使用 GPU。
+
+预检已完成，结论为 **target_run_ready=false**。[报告](../fixtures/m10_host_preflight/README.md)、固定输入、全量计数与实测摘要已保存；不把预检通过解释为目标仿真通过。本机 MemTotal 和 cgroup memory.max 均为 68719476736 B，探测前快照 memory.current=33527914496 B、MemAvailable=64408257536 B、文件系统可用 6697946824704 B，CPU affinity 包含 32 个逻辑 CPU。这些口径包含不同的页缓存/系统统计范围，不相减作为稳定可用容量，快照见本地 host.json。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，R=`runs/v03-target-host-preflight`、L=`R/logs`、P=`.venv/llmservingsim-native/bin/python`。已审阅的 R/record.py 记录 argv、cwd、UTC、退出码、stdout/stderr。每个资源探测再保存 probe.json、samples.jsonl 与 worker stdout/stderr；子进程组采样 RSS 上限 8 GiB、每进程 RLIMIT_AS 12 GiB、输出目录/单文件 10 GiB、墙钟 300 s。只清理本次创建的进程组；所有正式探测完成后 live group PID 为空，未触发资源上限。
+
+### 实际命令
+
+下表顶层命令均最终退出 0，开发期失败另述。所有命令由 `python3 R/record.py 标签` 包装，Python 命令环境为 PYTHONPATH=python。
+
+| 命令 | 标签及结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 个递归固定依赖及工作区检查通过。 |
+| `python3 R/baseline.py` / `python3 R/final_audit.py` | baseline、final-audit；复用 build/m10-fabric、原生启动锁和原 M9 两文件共 434 个文件摘要未变，实际十个 ns-3 库均来自复用构建。 |
+| `P -m unittest discover -s tests/unit -p host_probe_test.py -v` | unit-probe、unit-probe-final、unit-probe-reviewed；四项检查涵盖正常/非零退出、采样 RSS、RLIMIT_AS、墙钟、输出总量和后台后代清理。 |
+| `P -m unittest discover -s tests/unit -p host_preflight_test.py -v` | unit-count；两种分块下，三种本地性、计数状态、元数据/业务与实际 CANN 图独立对照。 |
+| `P -m unittest discover -s tests/unit -p '*_test.py' -v` | unit-all；125 项通过。 |
+| `P -m moe_ub_cosim.host_probe --output-dir R/count-probe --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 10737418240 --wall-seconds 300 -- P scripts/probe_target_host.py count --input fixtures/m10_host_preflight/input.json --output-dir R/count-probe/counts` | count-target；全量来源重新逐文件校验，并核算全部 64 轮。 |
+| 同一 host_probe 限额，输出 R/import-128；worker 为 `P scripts/probe_target_host.py import --input fixtures/m10_host_preflight/input.json --request-count 128 --output-dir R/import-128/worker` | import-128；实际现有 select_routes 导入，记录数 475136。完整展开 argv 见 L/import-128.json。 |
+| 同一 host_probe 限额，输出 R/import-1024；worker 改为 `--request-count 1024 --output-dir R/import-1024/worker` | import-1024；实际全部 3801088 条记录。完整 argv 见 L/import-1024.json。 |
+| 同一 host_probe 限额，输出 R/target-layer；worker 为 `P scripts/probe_target_host.py layer --input fixtures/m10_host_preflight/input.json --count-dir R/count-probe/counts --output-dir R/target-layer/worker` | target-layer；真实源入口 1、层 3 的完整 128 rank/1024 Token 计划构造、校验并导出 Chakra。完整 argv 见 L/target-layer.json。 |
+| `P tests/integration/check_host_preflight.py --build-dir build/m10-fabric --output-dir R/observation-final` | observation-final；四组真实 UB 服务、逐端口队列和开关无扰动通过；每组均用上述 host_probe 限额。完整子命令与退出码在 observation-final/commands.json。 |
+| `python3 R/report.py` | report；独立总量守恒、第一层实物计数、测量/退出/清理及结构下界核对，保存 preflight-result.json。 |
+| `python3 R/metadata_audit.py` | metadata-audit；归档与本次产物逐字节一致，全部输入/实现依据摘要及通过记录核对，Git 不包含 runs/data 原始文件。 |
+
+125 项测试先于监控器的最后元数据调整：把通用监控器无法判断的 target_scale_executed 字段改为 workload_semantics_validated=false，避免把进程退出 0 当成业务验收。该调整不改变测量/限制，unit-probe-final 四项复验通过；实际探测均未执行完整目标，旧日志中的 false 与本次事实一致。最终审阅又修正了“采样后父进程退出”可能使旧 PID 快照误报后代残留的竞态，退出后重新读取实际进程组，unit-probe-reviewed 四项通过。此前实际探测均正常完成且无残留，不需要重做其资源测量。移除一个未使用导入不影响计数行为。
+
+### 全量计数、实测和就绪结论
+
+重新读入已选 1024 文件共 2036523373 B，按真实专家选择核算 64 轮。总贡献为同 rank 238703、同 chip 不同 rank 240027、跨 chip 29929974，合计 30408704；对应交付总数 241124521、fabric 写 239454168、本地交付 1670353、完整节点 489968326。节点数以显式正参考阶段成本和开启本地准备为条件，未声称核算目标硬件耗时。fabric 业务 643614160896 B，应用载荷 649720335624 B；它们不是端口访问量或整包线路字节。完整结果在 count-probe/counts/counts.json、layer-counts.json。
+
+| 受限过程 | 墙钟 s | 采样进程组峰值 B | 最大等待子进程 RSS KiB | 目录字节（写 probe.json 前） |
+|---|---:|---:|---:|---:|
+| 完整来源计数 | 58.772 | 43352064 | 43360 | 2328059 |
+| 128 请求的原执行导入器 | 12.153 | 846303232 | 828516 | 81433 |
+| 1024 请求的原执行导入器 | 95.869 | 6570782720 | 6421900 | 599418 |
+| 目标首个 MoE 层构图与导出 | 60.218 | 545468416 | 532684 | 153707842 |
+
+RSS 合计来自同一新进程组的 /proc 每 0.1 s 采样，可能重复计算共享页且可能漏过瞬时峰值；RLIMIT_AS 是独立的每进程虚拟地址限制。最大等待子进程 RSS 来自每次新 CLI 进程的 RUSAGE_CHILDREN，含被等待链上的最大单进程值，不是同时驻留总量。目录体积只含该次探测产物与日志，不含既有原始数据；监控器最后一份报告不计入表内数字。四个离线过程顺序执行。
+
+目标首层实际包含 64992 次交付（fabric 64556、本地 436）、130694 节点、2391386 条依赖边；计划文件 137419998 B。它略超旧 128 MiB 计划预算，本次离线单层明确采用 1 GiB 预算。没有分配完整 61 块图，也没有线性乘层数来宣称完整图资源结果；组合时保留子层/合并图及重新校验的副本仍待测量。
+
+源码与真实小网共同确认，每个 PortObservation 拥有自己的描述符 map，其独有 PayloadLedger 再复制一份描述符 map，并监听所有源 TP 的包创建。全目标交换机出口共 16128 个；全部出口是本次预检的明确范围，不是静默减少后的端口集。第一轮 3741764 次 fabric 写，仅两份 uint32_t map 键就至少 `2×4×16128×3741764=482777358336 B`；64 轮下界为 30895334572032 B。即便不计描述符本体、树节点、字符串、临时复制和包来源，此下界已超本机 64 GiB。没有启动该分配，不能将其写成已发生 OOM。不能靠提高预算或关闭来源输出消除这项结构性成本。
+
+现有旧样例每图 16000 交付/40000 节点、128 MiB 计划和 32 端口预算不适用于目标；这些仍是可配置资源上限。累计交付数低于既有 499999900 身份空间。目标实际结束时间未知，尚不能确定完整 1000 ns 采样窗口数量、包分段/端口访问量及最终文件总量。全目标网络装载、多端口回调绑定、后端解析、整轮保留和全图峰值继续列为未测，不由本步部分通过代替。
+
+### 小网络实际观测与失败记录
+
+已有三 rank、四块合成 MLA 模型，一个请求两轮，显式 16 B 分块；不是 R1 的缩小部署。每轮 1212 交付/2487 节点，整次 2400 次 fabric 写、24 次本地交付、36864 B 业务；所有四组均在 444075 ns 完成，下轮提交等于上轮完成。只初始化一个网络，最终网络空闲，槽位、待处理事件及 KV 归零。
+
+| observation-final 对照 | 墙钟 s | 进程组采样峰值 B | 目录字节 |
+|---|---:|---:|---:|
+| one，1 出口来源开启 | 4.782 | 227557376 | 36663377 |
+| two，2 出口来源开启 | 4.637 | 230645760 | 40843375 |
+| ten，10 出口来源开启 | 5.164 | 237768704 | 59825643 |
+| ten-source-off，10 出口来源关闭 | 4.991 | 235409408 | 44108222 |
+
+每端口均登记 2400 次传输和 2400 个包 UID，各 2000 个窗口，逐事件数组驻留条数均为零。10 出口中五个原生发送计数为零、事件文件为空，但仍持有全部来源；来源关闭也保留这些分类账本。四次 execution/result.json 完全相同；来源开关下逐端口指纹、包事件、队列文件逐字节相同。实际输出字节随启用端口/来源文件不同，RSS 细小波动不作为性能优劣结论。最终四组顺序执行，没有同时跑其他本任务验证。
+
+开发期两次集成失败保留日志。observation-integration 将所有出口按 10 Gbit/s 验证串行化，实际接入出口为 400 Gbit/s；改为从原 topology.csv 逐端口读取速率。observation-verified 又错误假定零流量出口也存在原生 PortTrace 文件；固定 UB 在 Tx/Rx 事件发生时才写该文件（ub-utils.cc 的 PortTxNotify/PortRxNotify）。改为有流量端口逐事件核对原生日志，零流量端口严格检查实际原生计数快照为零、事件文件为空、驻留非零窗口为零；没有将缺失文件直接当作零，没有更改生产观测或断言的业务预期。observation-final 四组全部通过。首次集成与 unit-all 有时间重叠，只采用后续独立最终测量作为报告数据。
+
+本步未做执行器重构，完成预检与记录后本地提交、不推送并停止。下一步应共享端口之间的全量传输/包来源账本，保留被动观测和逐端口窗口语义，再测剩余目标资源；等待用户确认。完整 R1/CM384 64 轮联合运行、2048 请求 refill 和硬件校准仍未完成。

@@ -435,10 +435,11 @@ def main():
     parser.add_argument('--graph-storage', type=Path, help='Full-model graph replay policy; requires --record-storage')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--max-simulation-ns', type=int, default=1000000)
-    parser.add_argument('--wall-timeout-seconds', type=int, default=60)
+    parser.add_argument('--wall-timeout-seconds', type=int, default=60,
+        help='Explicit positive host wait/build timeout; does not advance simulation time')
     args = parser.parse_args()
     integer(args.max_simulation_ns, 'max_simulation_ns', 1)
-    integer(args.wall_timeout_seconds, 'wall_timeout_seconds', 1, 3600)
+    integer(args.wall_timeout_seconds, 'wall_timeout_seconds', 1)
     run(args)
 
 

@@ -22,6 +22,9 @@ def export_metadata(raw,observation,ranks,max_ns,writer,index,limits):
     if 'graph_resources' in report:
         require(report['graph_resources']==front.get('graph_resources'),'Frontend/backend graph resource mismatch')
         budget=validate_budget(report['graph_resources']['budget'])
+    # KV/batch histories were needed only for the front completion/resource
+    # checks above. Do not retain them while scanning every transfer and port.
+    del front
     declared_transfers=declared_nodes=0
     for summary in iter_result(execution,'plan_summary',report):
         require(summary['graph_id'] not in graph_ids,'Repeated graph summary');graph_ids.add(summary['graph_id'])

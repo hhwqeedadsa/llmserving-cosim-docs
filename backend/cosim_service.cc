@@ -68,8 +68,15 @@ void PreparationStage(const fs::path& run, const std::string& stage)
     if (!HostPreparationTrace()) return;
     const auto now = std::chrono::steady_clock::now().time_since_epoch();
     std::ofstream out(run / "preparation-phases.jsonl", std::ios::app);
-    out << Json({{"stage", stage}, {"steady_seconds", std::chrono::duration<double>(now).count()},
-                 {"simulation_ns", ns3::Simulator::Now().GetNanoSeconds()}}).dump() << '\n';
+    Json sample = {{"stage", stage}, {"steady_seconds", std::chrono::duration<double>(now).count()},
+                   {"simulation_ns", ns3::Simulator::Now().GetNanoSeconds()}};
+#if defined(__GLIBC__)
+    const auto heap = mallinfo2();
+    sample["host_heap"] = {{"allocator", "glibc"}, {"arena_bytes", heap.arena},
+        {"allocated_arena_bytes", heap.uordblks}, {"free_arena_bytes", heap.fordblks},
+        {"mapped_bytes", heap.hblkhd}};
+#endif
+    out << sample.dump() << '\n';
     out.close(); Require(bool(out), "Cannot write preparation phase");
 }
 struct Group
@@ -290,6 +297,31 @@ class NetworkDrain
     }
     uint64_t StartedPackets() const { return started_; }
     uint64_t ArrivedPackets() const { return arrived_; }
+    Json RetireJettyHistory()
+    {
+        // All service WRITE Jetties are created per task and destroyed on the
+        // real transaction callback. Never reset a live or long-lived Jetty.
+        Require(Idle(), "Jetty history retirement requires a drained network");
+        std::vector<ns3::Ptr<ns3::UbTransportChannel>> channels;
+        uint64_t before = 0, tp_references = 0;
+        for (const auto& controller : controllers_)
+        {
+            if (controller->GetUbFunction()->GetJettyCount() != 0)
+                return {{"retired", false}, {"reason", "live_jetty"}};
+            for (const auto& [id, tp] : controller->GetTpnMap())
+            {
+                if (!tp->CanRetireInboundTaReferences())
+                    return {{"retired", false}, {"reason", "pending_transport_state"}};
+                channels.push_back(tp);
+                before += tp->GetInboundTaReferenceCount();
+                tp_references += tp->GetInboundTpReferenceCount();
+            }
+        }
+        for (const auto& tp : channels)
+            Require(tp->RetireInboundTaReferences(), "Transport changed during history retirement");
+        return {{"retired", true}, {"ta_references_before", before}, {"ta_references_after", 0},
+            {"retained_tp_references", tp_references}, {"channels", channels.size()}};
+    }
     void SetProgressCallback(std::function<void()> callback) { progress_ = std::move(callback); }
     Json Snapshot() const
     {
@@ -556,6 +588,14 @@ int main(int argc, char** argv)
                 [](const auto& config) { return config.provenance; });
             auto retire_provenance = [&]() {
                 if (!records.Bounded() || provenance_retirement.empty() || !drain.Idle()) return;
+                const auto history = drain.RetireJettyHistory();
+                if (HostPreparationTrace())
+                {
+                    std::ofstream log(run_dir / "transport-retirement.jsonl", std::ios::app);
+                    log << Json({{"simulation_ns", ns3::Simulator::Now().GetNanoSeconds()},
+                        {"history", history}}).dump() << '\n';
+                    log.close(); Require(bool(log), "Cannot write transport retirement audit");
+                }
                 if (provenance) provenance->RetireCompletedGraphs(provenance_retirement);
                 provenance_retirement.clear();
                 ReleaseUnusedHostPages();

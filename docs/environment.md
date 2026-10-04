@@ -3489,3 +3489,27 @@ R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，c
 修复在 retire_graph 返回、其局部执行时刻表也销毁后调用 `malloc_trim(0)`，再暴露 WAVE_DONE；晚些时候真实网络排空、来源账本释放后再次归还空闲页。仅对有界记录模式执行，真实仍在用的对象不提前销毁，旧数组模式不变。资源驱动器另在收到 WAVE_DONE 后、发送最终 COMMIT 前读取后台 VmRSS/VmHWM，供组合内存核算。`build-handoff-pages` 重建 production/deadlock/resource-probe 三个程序退出 0；handoff-preparation、handoff-equivalence、handoff-retirement、handoff-boundaries、handoff-replay 均退出 0，覆盖交接阶段日志断言、四组运行等价、原跨轮释放、死锁及 8/32 轮图重建。checkpoint-handoff 再核对 1304 个受保护文件、三个二进制的唯一 UB 链接及源码绑定后通过；后续完整首轮尚待实测。
 
 三份主动停止的首轮探针也已无损归档，`archive-stopped-probes` 退出 0。归档前逐文件建立清单，归档后顺序重读核验大小/SHA-256，并再次确认源路径集合后删除展开文件；三份 stopped-execution.tar.gz 分别为 468249197、453632079、4063665 B。失败原因、命令、输入和恢复清单保留，归档成功不表示执行成功。归档后本任务累计占用 15167795200 B，未删除历史文件。
+
+### 完整首轮正常结束与图归档
+
+`target-first-round-handoff` 退出 0、无残留进程，完整外层命令见 `R/logs/target-first-round-handoff.json`，原生命令及输入见 `R/target-first-round-handoff/work/command.json`，源码/二进制绑定为 `R/first-round-handoff-source-hashes.json`。宿主 5829.95651050657 s，进程组采样峰值 45941899264 B，累计磁盘采样峰值 19640459264 B。原生执行完成全部 3741764 次网络写、25930 次本地交付、7655238 节点，仿真结束 75323418 ns；物理网络包发送/到达均为 67198929，正常排空。全部 16128 交换出口保留观测，压缩原始记录 3562745545 B。来源峰值为 5144951 包/3741764 传输，图、传输、来源及活动 rank 资源退出清零。仅固定第一张图，不表示配置服务请求或 64 步已完成。
+
+交接后台 RSS 为 16537939968 B，已测下轮构图峰值与前台常驻保守相加为 52096839680 B，略超 48 GiB。因此资源任务保持进行中，加入被动 glibc 堆统计及四块/完整网络诊断，区分仍分配对象与空闲堆页，不据清零计数宣称内存充分。完成首轮原二进制另保存为 `B/output/cosim/ns3.44-cosim-service-first-round` 并校验摘要，记录见 `R/first-round-backend-copy.json`。
+
+`archive-target-graph` 已退出 0。对 134 个图文件（原物理 9269461874 B）及六份已登记硬链接视图逐一校验后，生成 `R/target-build/frozen-graph.tar.gz`（597639171 B，SHA-256 `92f8715c2c3d921869499360339786390f52d7403bc27a39e854bb3d3ba786ac`）。顺序重读归档验证全部字节，并确认源路径、inode、链接数未变后才删除六个展开图目录。清单/恢复依据为同目录 `frozen-graph-inventory.json`，删除详情为 `frozen-graph-cleanup.json`。归档后累计实际占用 10968399872 B；历史文件、原始路由和成功首轮原始研究记录保留。目标完整研究导出 `target-first-round-export` 仍在运行，尚未记录为通过。
+
+## 2026-10-04 资源工程最终验证
+
+最终汇总为 [checkpoint-final.json](../fixtures/m10_resource_efficiency/checkpoint-final.json)，每项包含实际 argv、cwd、输入和退出状态；完整日志在 `runs/v03-resource-efficiency/logs`。完整首轮 `target-first-round-handoff` 与 `target-first-round-export` 均退出 0。首轮执行 5829.957 s、峰值 RSS 45941899264 B；研究导出 2206.719 s、峰值 209526784 B、压缩结果 753462006 B。独立核验全部 3741764 次网络交付、10058044416 B 唯一业务量；全部 16128 交换出口合计 49411089 次包开始、31671470372 B，不能与包含设备端口的 67198929 次物理网络包事件混用。公共窗口共 16128000000，其中 16106841696 为声明的零窗口，实际非零记录 21158304；临时索引 119736448 B 在验证后记录摘要并删除。
+
+四块堆诊断复用保留的 135558 节点/64556 fabric/436 local 图，完整网络真实运行 `heap-diagnostic` 和 `heap-diagnostic-retired` 均退出 0。回收前后台交接 RSS 3219017728 B，回收后 3180920832 B；已分配堆 2848383120→2840126480 B，空闲堆 1379487600→1388915696 B。空闲堆不一定等于可归还物理页，这些四块测量不能解释为完整首轮 15.40 GiB 均属泄漏或均属空闲。源码明确找到按已销毁 Jetty 残留的 TA 序号参考，新增显式安全回收入口，只在物理网络排空、没有存活 Jetty 和待处理 TP/TA 工作时调用，保留 TP/PSN 连续性。完整网络四块回收 129034 条参考；`heap-diagnostic-comparison` 重读 26908 个独立压缩文件、双边共 1072450018 B 解压记录，全部内容、协议、服务结果和 1317492 ns 结束时刻相同。
+
+`transport-retirement-unit` 检查有 ACK 时拒绝清理、空闲后清理、重复清理和 TP 参考保留。`transport-replay` 的五类真实 UB 对照使用 6900 s 显式等待，8/32 轮的参考峰值同为 118、每轮清零；32 轮末已分配堆 3978160 B，8 轮末 3707584 B。原 `transport-boundaries` 死锁/晚到/异常退出回归通过。`final-bounded-export` 再按旧研究算法核对五类结果、时钟/窗口及损坏拒绝，退出 0；导出器完成前台状态检查后释放其 KV/批次历史引用，避免带入长期传输扫描。
+
+UB 子提交为 `a9539dd`，从 `1ba7222` 创建的 `task/m10-retired-sequence-history` 保存，未升级上游。子提交后显式重新配置并构建，避免只运行增量 build 却仍记录旧 catalog 修订。`configure-final-revision`、`build-bound-revision`、`final-revision-replay` 均退出 0；最终目录与子模块 HEAD 一致，9000 s 显式等待的五类真实 UB 对照通过。首次依赖提交因 Git 身份缺失而失败，随后使用用户已提供的身份，通过每命令 `-c` 提交，未修改全局配置。初版超时覆盖测试假定旧命令含该可选参数而失败，修正为存在则替换、缺少则追加，保留失败记录；不是改变测试预期结果。
+
+`front-history` 是纯宿主分配探针：按真实已核验的容量/请求视图，调用实际 `ConfiguredService.memory_snapshot`，保留 18497 份快照、2367616 个 rank 行，始终八请求/rank 作为占用上界形状。RSS 增量 2296381440 B；没有调度、伪造 UB 回调或推进仿真，不作为 64 步业务通过证据。该额外历史内存连同初始前台、原后台交接和下轮构图计入未来预算。
+
+`archive-final-probes` 退出 0，约 481.933 s。两份四块诊断分别归档 177440/177441 个文件至 73011183/73056177 B；成功首轮归档 177446 个文件至 3374503917 B。每份重新读取全部文件并核验大小/SHA-256/路径，复核源文件后才回收展开目录；清单和恢复方式位于各 case 的 completed-execution-inventory.json.gz，汇总 R/final-probe-archives.json。关键阶段/序号回收日志另逐字节保存为 work/preserved-*。研究导出仍可直接读取，若再次运行原始对照或导出，先按清单恢复对应 execution；不能假称原路径仍存在。最终累计新增实际分配约 10.25 GiB，任务磁盘最高采样 20238192640 B（18.85 GiB），小于 20 GiB；1304 个历史保护文件不变。
+
+`prepare-final-run` 只生成并校验策略、观察合同、输入副本和命令清单，未执行最终实验。新 catalog 仅 Git 修订变化，其余字段与旧固定目录完全相同；业务网络文件和输入保留摘要，三类原生辅助日志显式关闭，研究观测全部开启。候选采用 56 GiB 采样 RSS/60 GiB 地址上限，前台含历史预留 6 GiB；与旧后台交接和构图合计约 52.98 GiB，仍不等于已验证的完整多轮峰值。完整 64 步构图、执行和导出线性估计 6.85 天，计入现有保留文件、活动图、研究索引和记录余量后约 295 GiB。候选服务限 7 天、导出限 2 天、累计 320 GiB，个别文件策略不能绕过共享上限；等待用户确认后才执行。当前没有使用该未来预算扩大本任务占用。M10 及硬件校准仍未完成。

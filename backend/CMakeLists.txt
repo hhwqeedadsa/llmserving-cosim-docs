@@ -224,6 +224,13 @@ target_compile_definitions(${target} PRIVATE COSIM_UB_REVISION="${COSIM_UB_REVIS
 endforeach()
 target_compile_definitions(cosim-service-deadlock-test PRIVATE COSIM_SERVICE_DEADLOCK_TEST)
 target_compile_definitions(cosim-service-resource-probe PRIVATE COSIM_SERVICE_RESOURCE_PROBE)
+build_exec(
+  EXECNAME cosim-transport-retirement-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/transport_retirement_test.cc"
+  LIBRARIES_TO_LINK ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-transport-retirement-test PROPERTIES
+  CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m3")
 target_link_options(cosim-service PRIVATE "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m3/service-link.map")
 

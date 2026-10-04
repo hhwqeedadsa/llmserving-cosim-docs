@@ -75,6 +75,8 @@ def main():
                     stages=[json.loads(line) for line in (directory/'preparation-phases.jsonl').read_text().splitlines()]
                     retired=[row for row in stages if row['stage']=='graph_retired_before_frontend_handoff']
                     assert len(retired)==1 and retired[0]['simulation_ns']==done['now_ns']
+                    heap=retired[0]['host_heap']
+                    assert heap['allocator']=='glibc' and heap['arena_bytes']==heap['allocated_arena_bytes']+heap['free_arena_bytes']
                 expanded={field:list(iter_result(directory,field,report)) for field in report['record_storage']['fields']}
                 report.pop('record_storage');reports.append((report,expanded))
                 save(out/(directory.name+'.command.json'),dict(argv=command,exit_code=child.returncode,

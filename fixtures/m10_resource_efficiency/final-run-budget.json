@@ -1,0 +1,93 @@
+{
+  "schema_version": "moe-ub-target-resource-budget/1",
+  "status": "prepared_waiting_for_user_confirmation",
+  "execution_authorized": false,
+  "target": {
+    "ranks": 128,
+    "requests": 1024,
+    "model_blocks": 61,
+    "moe_blocks": 58,
+    "decode_steps": 64,
+    "observed_egress_ports": 16128,
+    "seed": 1,
+    "run": 1,
+    "simulation_limit_ns": 10000000000,
+    "sampling_period_ns": 1000
+  },
+  "host": {
+    "physical_bytes": 68719476736,
+    "service_sampled_rss_bytes": 60129542144,
+    "service_address_bytes": 64424509440,
+    "service_wall_seconds": 604800,
+    "backend_wait_seconds": 9000,
+    "export_sampled_rss_bytes": 17179869184,
+    "export_address_bytes": 25769803776,
+    "export_wall_seconds": 172800,
+    "cumulative_artifact_bytes": 343597383680,
+    "min_free_bytes": 21474836480,
+    "cumulative_scope": [
+      "runs/v03-resource-efficiency",
+      "build/m10-resource-efficiency",
+      "runs/v03-target-final"
+    ]
+  },
+  "record_storage": {
+    "schema_version": "moe-ub-record-storage/1",
+    "max_compressed_bytes": 274877906944,
+    "max_buffer_bytes": 67108864,
+    "max_record_bytes": 262144
+  },
+  "graph_storage": {
+    "schema_version": "moe-ub-graph-storage/1",
+    "max_recipe_bytes": 268435456,
+    "max_archive_bytes": 2147483648,
+    "max_active_graph_bytes": 12884901888
+  },
+  "research_export": {
+    "schema_version": "moe-ub-research-export-policy/1",
+    "max_index_bytes": 8589934592,
+    "max_compressed_bytes": 68719476736,
+    "max_record_bytes": 262144,
+    "max_endpoint_records": 1048576,
+    "max_operations": 8192,
+    "max_layouts": 4096,
+    "max_id_ranges": 2000000,
+    "max_graphs": 64,
+    "cache_rows": 8192
+  },
+  "measured": {
+    "first_round_wall_seconds": 5829.95651050657,
+    "first_round_peak_rss_bytes": 45941899264,
+    "first_round_raw_compressed_bytes": 3562745545,
+    "first_round_research_wall_seconds": 2206.7185278553516,
+    "first_round_research_compressed_bytes": 753462006,
+    "first_round_research_peak_rss_bytes": 209526784,
+    "graph_build_export_wall_seconds": 1199.6592949330807,
+    "graph_build_peak_rss_bytes": 33901703168,
+    "backend_handoff_rss_bytes_before_sequence_retirement_fix": 16537939968,
+    "frontend_initial_rss_bytes": 1657196544,
+    "frontend_snapshot_allocation_envelope_bytes": 2296381440
+  },
+  "estimates": {
+    "basis": "linear first-round scaling with explicit spare capacity; not a 64-step execution result",
+    "service_seconds": 450795.41154813766,
+    "export_seconds": 141229.9857827425,
+    "raw_compressed_bytes": 228015714880,
+    "research_compressed_bytes": 48221568384,
+    "transfer_index_bytes": 7662533376,
+    "conservative_build_handoff_bytes": 56882094080,
+    "retained_frontend_allowance_bytes": 6442450944,
+    "existing_artifact_allowance_bytes": 15032385536,
+    "total_artifact_bytes": 317039472576
+  },
+  "constraints": [
+    "The 320 GiB shared cap applies even when individual caps would permit more.",
+    "No full 64-step run has executed; dynamic peak, later-round runtime and compression remain to be measured.",
+    "One live graph per group; completed graphs are deleted only after verified replay inputs and exact inventory.",
+    "Do not expand declared zero windows into a dense 161280000000-row file.",
+    "Raw and research records remain distinct and bounded; no automatic deletion of historical files.",
+    "Close native auxiliary text diagnostics; keep all required observed and truth records.",
+    "On limit or validation failure preserve cause and partial outputs; do not truncate work or retry without a diagnosis.",
+    "Reference compute/network costs are not hardware calibration; AWQ4 route provenance is not INT8 precision equivalence."
+  ]
+}

@@ -1,5 +1,6 @@
 """Generate one checked ExecutionPlan and one locked-schema Chakra file per rank."""
 import argparse
+from copy import deepcopy
 import hashlib
 import importlib.util
 import json
@@ -48,7 +49,31 @@ def export_bootstrap(output, ranks=range(4)):
 
 
 def export_plan(plan, output):
+    # A plan supplied by a caller may have changed since construction.
     validate_plan(plan)
+    return _write_plan(plan, output)
+
+
+def build_export_full_model(configs, identities, provenance, model, profile, output, *, source_evidence=None):
+    """Build, fully validate and write before returning a mutable full plan.
+
+    No receipt/cache or caller-provided 'already validated' flag is accepted.
+    The only post-validation additions are the offline source declarations
+    previously made by full_round_probe; no executable field is changed.
+    Subsequent export of the returned plan must use export_plan and revalidate.
+    """
+    from .full_model import build_full_model
+    plan = build_full_model(configs, identities, provenance, model, profile)
+    if source_evidence is not None:
+        plan['input_provenance'] = deepcopy(source_evidence)
+        for item in [plan, *plan['layers']]:
+            item['route_source'] = 'published_model_trace'
+            item['compute_source'] = 'full_model_stage_reference_with_context_cost'
+    return plan, _write_plan(plan, output)
+
+
+def _write_plan(plan, output):
+    """Internal writer: called immediately after validation by the two entries."""
     output = Path(output).resolve()
     output.mkdir(exist_ok=False)
     proto, schema = _schema(output)

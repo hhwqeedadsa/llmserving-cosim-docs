@@ -2,7 +2,8 @@
 
 Preparation reads and validates one source file at a time. This is NOT a change
 to the service importer, whose full-window resident objects are excluded here.
-Build/export invoke production APIs unchanged, including all recompositions.
+Build/export use the production closed build/validate/write path. A mutable
+plan is returned only after writing; standalone export still revalidates.
 """
 import argparse
 from collections import Counter
@@ -39,8 +40,9 @@ class Events:
 @contextmanager
 def instrument(events):
     """Wrap only coarse API boundaries, with original calls/results unmodified."""
-    from . import full_model, multilayer
+    from . import full_model, multilayer, generate
     build, compose = multilayer.build_plan, full_model.compose_full_model
+    write = generate._write_plan
     ordinal = 0
 
     def layer(config):
@@ -57,11 +59,19 @@ def instrument(events):
         events('composition_end', call=ordinal, usage=actual_usage(result))
         return result
 
+    def writing(plan, output):
+        events('write_begin', usage=actual_usage(plan))
+        result = write(plan, output)
+        events('write_end')
+        return result
+
     multilayer.build_plan, full_model.compose_full_model = layer, composition
+    generate._write_plan = writing
     try:
         yield
     finally:
         multilayer.build_plan, full_model.compose_full_model = build, compose
+        generate._write_plan = write
 
 
 def prepare(config, output, events):
@@ -138,23 +148,21 @@ def prepare(config, output, events):
 
 
 def build_export(bundle, output, events, expected=None):
-    from .full_model import build_full_model
-    from .generate import export_plan
-    with instrument(events):
+    from .generate import build_export_full_model
+    def record(phase, **values):
+        if phase=='write_begin':
+            actual=values['usage']
+            require(expected is None or actual==expected, 'Actual full round usage differs')
+            events('build_end', usage=actual)
+            save(output/'built.json',dict(actual_usage=actual,target_scale_executed=False))
+            events('export_begin')
+        events(phase, **values)
+        if phase=='write_end':events('export_end')
+    with instrument(record):
         events('build_begin')
-        plan = build_full_model(bundle['configs'],RunIdentities(),bundle['provenance'],bundle['model'],bundle['profile'])
-        if 'source_evidence' in bundle:
-            plan['input_provenance'] = deepcopy(bundle['source_evidence'])
-            for item in [plan, *plan['layers']]:
-                item['route_source'] = 'published_model_trace'
-                item['compute_source'] = 'full_model_stage_reference_with_context_cost'
+        plan, _ = build_export_full_model(bundle['configs'],RunIdentities(),bundle['provenance'],
+            bundle['model'],bundle['profile'],output/'graph',source_evidence=bundle.get('source_evidence'))
         actual = actual_usage(plan)
-        require(expected is None or actual==expected, 'Actual full round usage differs')
-        events('build_end', usage=actual)
-        save(output/'built.json',dict(actual_usage=actual,target_scale_executed=False))
-        events('export_begin')
-        export_plan(plan,output/'graph')
-        events('export_end')
         result = dict(actual_usage=actual,plan_bytes=(output/'graph/plan.json').stat().st_size,
             dependency_edges=sum(len(n['deps']) for g in plan['rank_graphs'] for n in g['nodes']),
             executed_layer_ids=plan['executed_layer_ids'],ranks=len(plan['rank_ids']),

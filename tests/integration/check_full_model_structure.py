@@ -6,8 +6,7 @@ import json
 from pathlib import Path
 import subprocess
 
-from moe_ub_cosim.full_model import build_full_model
-from moe_ub_cosim.generate import export_plan
+from moe_ub_cosim.generate import build_export_full_model
 from moe_ub_cosim.plan import RunIdentities
 
 
@@ -32,8 +31,7 @@ def main():
                 cfg=deepcopy(template);cfg['layer_id']=lid;cfg['tokens'][0]['layer_id']=lid;configs.append(cfg)
         model['layers']=blocks;profile['layers']=costs;profile['model_structure']=deepcopy(model)
         for row in profile['model_structure']['layers']:row.pop('expert_placement',None)
-        plan=build_full_model(configs,RunIdentities(),[[] for _ in configs],model,profile)
-        directory=export_plan(plan,out/f'{label}-plan')
+        plan,directory=build_export_full_model(configs,RunIdentities(),[[] for _ in configs],model,profile,out/f'{label}-plan')
         argv=[str(v) for v in (args.build_dir.resolve()/'output/cosim/ns3.44-cosim-layer',directory,
             root/'fixtures/m1_compute/system.json',root/'fixtures/m3_shared_bottleneck/network','-',out/label)]
         start=datetime.now(timezone.utc).isoformat();p=subprocess.run(argv,cwd=root,capture_output=True,text=True,timeout=120)

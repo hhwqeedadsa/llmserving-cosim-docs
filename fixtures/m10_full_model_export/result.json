@@ -1,0 +1,643 @@
+{
+  "schema_version": "moe-ub-full-model-export-result/1",
+  "baseline_commit": "3bf0f908053c46fda360d5e730357e2e76d952dc",
+  "task_definition_commit": "b38b29b",
+  "source_hashes": [
+    {
+      "path": "python/moe_ub_cosim/generate.py",
+      "sha256": "a064d31f51270ddbcce2b500c38184ad1869d709c1180943a96bef829c1e7b2b"
+    },
+    {
+      "path": "python/moe_ub_cosim/full_round_probe.py",
+      "sha256": "d76bd43baff61bbda705d81c99c93ee10f9aeb760789e8d407813fa593186798"
+    },
+    {
+      "path": "scripts/probe_full_model_export.py",
+      "sha256": "12bfd78d9908435aa730758652427fc376a3f2451a075e0359d2a8aa9619fcf6"
+    },
+    {
+      "path": "tests/unit/full_model_export_test.py",
+      "sha256": "9f4b913180ae054541f0d7fe6f8acfd898c24b96409bb19716c226392ea10820"
+    },
+    {
+      "path": "tests/integration/check_full_model_structure.py",
+      "sha256": "375cfd6b970d345aea2be8d53443372297687de37fc25ca95f213ae1351b798d"
+    },
+    {
+      "path": "fixtures/m10_full_model_export/baseline.json",
+      "sha256": "497c12bfdd39ab7bca5c05087d4918ea0aa6910d913cd52654de7d1b0b07d3ec"
+    }
+  ],
+  "unit_tests_passed": 19,
+  "host": {
+    "utc": "2026-10-04T07:58:05.326868+00:00",
+    "memory": {
+      "MemTotal": "67108864 kB",
+      "MemAvailable": "62872127 kB",
+      "SwapTotal": "0 kB"
+    },
+    "cgroup_memory_max": "68719476736",
+    "cgroup_memory_current": "34874241024",
+    "cpu_affinity_count": 32,
+    "disk_available_bytes": 6691958661120
+  },
+  "preflight": {
+    "passed": true,
+    "four_block_files_equal": 131,
+    "input_hashes_unchanged": true,
+    "composition_calls": {
+      "baseline": 3,
+      "closed": 2
+    },
+    "prepared": {
+      "path": "runs/v03-full-round-preflight/prepare/work/prepared.json",
+      "sha256": "f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615"
+    },
+    "bundle": {
+      "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+      "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+    }
+  },
+  "four_block_comparison": {
+    "compare-baseline": {
+      "build_export_seconds": 39.33987696841359,
+      "usage": {
+        "transfers": 64992,
+        "fabric_transfers": 64556,
+        "local_transfers": 436,
+        "nodes": 135558
+      },
+      "composition_calls": 3,
+      "artifacts": 131,
+      "artifact_bytes": 322598087,
+      "plan_json": {
+        "bytes": 306199718,
+        "sha256": "1eeecc458b67014c8f7ceef9be2b4e9e221647a529c632a3cb90555a75741c92"
+      },
+      "generation_json": {
+        "bytes": 11552,
+        "sha256": "ec4348414dd241cb268d09d14fdcdd8009ce6d582062ffed5bdbb7406d43b9c9"
+      },
+      "artifact_hashes": {
+        "path": "runs/v03-full-model-export/compare-baseline/work/result.json",
+        "sha256": "f78b126181373c0fc442ff8027ce17c53256a8ea7740ceafe50072e0b07f2822"
+      },
+      "phases": {
+        "path": "runs/v03-full-model-export/compare-baseline/work/phases.jsonl",
+        "sha256": "4e276e5af9141c4e4c863f168914eca5d0d76d3efa7842be007d94260cf462d6"
+      },
+      "probe": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/llmservingsim-native/bin/python",
+          "scripts/probe_full_model_export.py",
+          "baseline",
+          "--output-dir",
+          "runs/v03-full-model-export/compare-baseline/work"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "started_utc": "2026-10-04T07:55:48.973696+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 4294967296,
+          "per_process_address_bytes": 6442450944,
+          "artifact_bytes": 2147483648,
+          "wall_seconds": 300.0
+        },
+        "peak_sampled_group_rss_bytes": 847847424,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "process_group": 1818377,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-04T07:56:29.960029+00:00",
+        "wall_seconds": 40.98634508065879,
+        "max_waited_child_rss_kib": 827976,
+        "artifact_bytes_before_report": 322688988
+      }
+    },
+    "compare-closed": {
+      "build_export_seconds": 33.26465512998402,
+      "usage": {
+        "transfers": 64992,
+        "fabric_transfers": 64556,
+        "local_transfers": 436,
+        "nodes": 135558
+      },
+      "composition_calls": 2,
+      "artifacts": 131,
+      "artifact_bytes": 322598087,
+      "plan_json": {
+        "bytes": 306199718,
+        "sha256": "1eeecc458b67014c8f7ceef9be2b4e9e221647a529c632a3cb90555a75741c92"
+      },
+      "generation_json": {
+        "bytes": 11552,
+        "sha256": "ec4348414dd241cb268d09d14fdcdd8009ce6d582062ffed5bdbb7406d43b9c9"
+      },
+      "artifact_hashes": {
+        "path": "runs/v03-full-model-export/compare-closed/work/result.json",
+        "sha256": "61b6ba3158c65d73571be553903c46133936ee189fbacee9a6ea2d113791fb0a"
+      },
+      "phases": {
+        "path": "runs/v03-full-model-export/compare-closed/work/phases.jsonl",
+        "sha256": "13bdcb4a08911dc513144a1b1e1df81bd64b7ab8759312d63972d0c6d1c2c4f3"
+      },
+      "probe": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          ".venv/llmservingsim-native/bin/python",
+          "scripts/probe_full_model_export.py",
+          "closed",
+          "--output-dir",
+          "runs/v03-full-model-export/compare-closed/work"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "started_utc": "2026-10-04T07:57:07.617909+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 4294967296,
+          "per_process_address_bytes": 6442450944,
+          "artifact_bytes": 2147483648,
+          "wall_seconds": 300.0
+        },
+        "peak_sampled_group_rss_bytes": 883277824,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "process_group": 1818822,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-04T07:57:42.464681+00:00",
+        "wall_seconds": 34.84678802639246,
+        "max_waited_child_rss_kib": 862576,
+        "artifact_bytes_before_report": 322680206
+      }
+    }
+  },
+  "full_target": {
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "target",
+        "--input",
+        "runs/v03-full-round-preflight/prepare/work/prepared.json",
+        "--output-dir",
+        "runs/v03-full-model-export/target/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T07:58:05.412113+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 34359738368,
+        "per_process_address_bytes": 42949672960,
+        "artifact_bytes": 25769803776,
+        "wall_seconds": 900.0
+      },
+      "peak_sampled_group_rss_bytes": 33902088192,
+      "peak_sampled_processes": 1,
+      "status": "wall_limit",
+      "workload_semantics_validated": false,
+      "process_group": 1819127,
+      "child_exit_code": -15,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T08:13:07.005382+00:00",
+      "wall_seconds": 901.5932994130999,
+      "max_waited_child_rss_kib": 33107508,
+      "artifact_bytes_before_report": 48204932
+    },
+    "completed_children": 58,
+    "child_usage": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7577414
+    },
+    "expected_complete_usage": {
+      "transfers": 3767694,
+      "fabric_transfers": 3741764,
+      "local_transfers": 25930,
+      "nodes": 7655238
+    },
+    "last_child_end": {
+      "phase": "layer_end",
+      "elapsed_seconds": 274.0891612265259,
+      "rss_bytes": 11754766336,
+      "layer_id": 60,
+      "usage": {
+        "transfers": 64952,
+        "fabric_transfers": 64504,
+        "local_transfers": 448,
+        "nodes": 130624
+      }
+    },
+    "composition_phases": [
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 274.15314350649714,
+        "rss_bytes": 11754766336,
+        "call": 1
+      },
+      {
+        "phase": "composition_end",
+        "elapsed_seconds": 584.4144613333046,
+        "rss_bytes": 22511644672,
+        "call": 1,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      },
+      {
+        "phase": "composition_begin",
+        "elapsed_seconds": 593.6069420129061,
+        "rss_bytes": 23158018048,
+        "call": 2
+      },
+      {
+        "phase": "composition_end",
+        "elapsed_seconds": 887.7081088609993,
+        "rss_bytes": 33902088192,
+        "call": 2,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      }
+    ],
+    "build_and_export_phases": [
+      {
+        "phase": "build_end",
+        "elapsed_seconds": 896.5140771493316,
+        "rss_bytes": 27265675264,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      },
+      {
+        "phase": "export_begin",
+        "elapsed_seconds": 896.5144217424095,
+        "rss_bytes": 27265675264
+      },
+      {
+        "phase": "write_begin",
+        "elapsed_seconds": 896.5144862383604,
+        "rss_bytes": 27265675264,
+        "usage": {
+          "transfers": 3767694,
+          "fabric_transfers": 3741764,
+          "local_transfers": 25930,
+          "nodes": 7655238
+        }
+      }
+    ],
+    "final_phase": {
+      "phase": "write_begin",
+      "elapsed_seconds": 896.5144862383604,
+      "rss_bytes": 27265675264,
+      "usage": {
+        "transfers": 3767694,
+        "fabric_transfers": 3741764,
+        "local_transfers": 25930,
+        "nodes": 7655238
+      }
+    },
+    "build_returned": true,
+    "export_completed": false,
+    "target_load_probe": null,
+    "partial_artifact_sizes": {
+      "layer.0.et": 9169277,
+      "layer.1.et": 9106991,
+      "layer.2.et": 9160065,
+      "layer.3.et": 8877669,
+      "layer.4.et": 9727497,
+      "layer.5.et": 811452,
+      "schema/__pycache__/et_def_pb2.cpython-312.pyc": 5092,
+      "schema/compiler.json": 442,
+      "schema/et_def_pb2.py": 7036
+    },
+    "phases": {
+      "path": "runs/v03-full-model-export/target/work/phases.jsonl",
+      "sha256": "a5c0fbb80ee1e27f4d28103f731b42b026d7e695ebe53ddb92d90e0ec5b3ed10"
+    },
+    "samples": {
+      "path": "runs/v03-full-model-export/target/samples.jsonl",
+      "sha256": "95a4f52a018866fc548726b17e40113da975d83ee9da26cbb448a62a8cf10a0d"
+    }
+  },
+  "regression": {
+    "service": {
+      "passed": true,
+      "cases": {
+        "reference": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "provenance-off": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "shared-slow": {
+          "finished_ns": 1809914,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "sampling-slow": {
+          "finished_ns": 727340,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "tight": {
+          "finished_ns": 148489,
+          "writes": 377,
+          "payload_bytes": 122620,
+          "business_bytes": 113664,
+          "waves": 8,
+          "stage_records": 1008,
+          "empty_stage_records": 546,
+          "shared_last": 0,
+          "routed_last": 33,
+          "layer_overlaps": 6
+        },
+        "window": {
+          "finished_ns": 83098,
+          "writes": 244,
+          "payload_bytes": 67568,
+          "business_bytes": 61440,
+          "waves": 6,
+          "stage_records": 756,
+          "empty_stage_records": 378,
+          "shared_last": 0,
+          "routed_last": 27,
+          "layer_overlaps": 6
+        },
+        "network-slow": {
+          "finished_ns": 1214788,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "scenario": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        }
+      },
+      "failures": {
+        "stage": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "dependency": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "coverage": "cosim-service: Full model: composition mismatch: executed_layer_ids",
+        "cost-domain": "cosim-service: Full model: cost domain differs from model",
+        "declaration": "cosim-service: Full model declaration changed during run",
+        "chakra": "cosim-service: /root/moe-ub-cosim/runs/v03-full-model-export/service-regression/work/bad-chakra/graphs/g0/layer.2.et: Layer plan: compute graph differs from plan"
+      },
+      "hardware_calibrated": false,
+      "target_scale_executed": false
+    },
+    "structure": {
+      "passed": true,
+      "cases": {
+        "61-blocks": {
+          "blocks": 61,
+          "moe_blocks": 58,
+          "nodes": 3102,
+          "writes": 754,
+          "all_transfers": 986,
+          "finished_ns": 315509,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        },
+        "dense-between": {
+          "blocks": 3,
+          "moe_blocks": 2,
+          "nodes": 114,
+          "writes": 26,
+          "all_transfers": 34,
+          "finished_ns": 10829,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        }
+      },
+      "target_scale_executed": false
+    },
+    "loader": {
+      "passed": true,
+      "loaded": {
+        "fabric_transfers": 39,
+        "load_seconds": 0.01236663,
+        "local_transfers": 12,
+        "network_initialized": false,
+        "nodes": 171,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "expected": {
+        "actual_usage": {
+          "transfers": 51,
+          "fabric_transfers": 39,
+          "local_transfers": 12,
+          "nodes": 171
+        },
+        "plan_bytes": 272891,
+        "dependency_edges": 299,
+        "executed_layer_ids": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "ranks": 3,
+        "target_scale_executed": false,
+        "simulation_executed": false
+      },
+      "rejected": [
+        "modified_json_node",
+        "truncated_chakra"
+      ],
+      "target_scale_executed": false
+    },
+    "byte_identical_graphs": {
+      "four-block": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "20f2295a0710b31714b59512c26de8413dd7212ad78ee20ba9674f7193be4ad5",
+          "generation.json": "eb10c0a5555c4d55694c67cebd3604f08304e2729e939d48b312a4cb959f4d09",
+          "layer.12.et": "54f8a230fbed8e83da98e11bddbac5e37fbde2c646f5c0b6c68920ef1551e4cf",
+          "layer.2.et": "4f724ceead60e8e2f014859562e8a904f7c22e2a2d4b92f653c8e8f602996a39",
+          "layer.7.et": "734f742a8e7a898171e3f7fa0abe8f500fb052e9cbd4267ec231d3c4847ae877"
+        }
+      },
+      "61-block": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "50d00546c881d9c0df399fbd67fe8cdd543b32ef84f6429ae02e443497b7345d",
+          "generation.json": "d33b4dd5dc5693a17e04ec1f20e46f445b819031983f0352211d193787ce855c",
+          "layer.12.et": "3d4b9b6975b6ec9fac336a2cfa2d08eff65284aefe8ac48fc6a75e5f06f1213a",
+          "layer.2.et": "8841fc088f0d5a2edc9b07b50920b71aa834016a78e06e2333980da4a5108eac",
+          "layer.7.et": "7d1f7f83d22a4373200f1594b81c34c212bf9831f54f0a32ae2d5afab4cfe560"
+        }
+      },
+      "dense-between": {
+        "files": 5,
+        "hashes": {
+          "plan.json": "b45c2a1ac1157f6956c91964bed9ab831cba54e0e255b1577cf6bb9f51581620",
+          "generation.json": "d62245ed07f869f138e04ce847227e8ce45ebd93221ed6e15247fd0ce029762d",
+          "layer.12.et": "924efd221ba563b02f37680126115d185150552bbb9fa224759713ced13e0c58",
+          "layer.2.et": "09231d1fec0cacf34dd3c4f7104a31f16dddf66fd3abd0d934d425a567f688c6",
+          "layer.7.et": "1908c9a23b528d4021baaa6f22e6f13e4d7fa463889e62d152b4b361c40852e6"
+        }
+      }
+    }
+  },
+  "protection": {
+    "protected_files": 1304,
+    "unchanged": true,
+    "production_cpp_unchanged": true,
+    "no_cpp_rebuild": true,
+    "binaries": {
+      "cosim-service": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-service",
+        "sha256": "ef213af3e6086e69356b8b51759e75e3da8885ec9f42953462db58a7806b93c0",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-layer": {
+        "path": "build/m10-shared-provenance/output/cosim/ns3.44-cosim-layer",
+        "sha256": "0345a51946b86c59d816c5742998de66fc002e43b9a4da2dc4222c674a7eed1e",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      },
+      "cosim-plan-load-probe": {
+        "path": "build/m10-full-round-preflight/output/cosim/ns3.44-cosim-plan-load-probe",
+        "sha256": "de6c8e38c30cf020018b1d9ec5248d3a877ace5a4dea80351664242ec486a7fb",
+        "only_ns3_ub": true,
+        "ns3_library_count": 10
+      }
+    }
+  },
+  "writer_ast_unchanged": true,
+  "commands": {
+    "baseline": {
+      "path": "runs/v03-full-model-export/logs/baseline.json",
+      "sha256": "d6efd78bb7580ef53fda68b888103807dcda4e6dfc9d375fbde63e19c69132c5"
+    },
+    "unit-final": {
+      "path": "runs/v03-full-model-export/logs/unit-final.json",
+      "sha256": "d148070fda48b554b1ecf314c4411c0ce3237fcb131e7ba9fc1a999439da970e"
+    },
+    "compare-baseline": {
+      "path": "runs/v03-full-model-export/logs/compare-baseline.json",
+      "sha256": "470227720e4672d1fd2a1bd1387eb8c142b655d2cd2dfce7e3badbe44f6bcc37"
+    },
+    "compare-closed": {
+      "path": "runs/v03-full-model-export/logs/compare-closed.json",
+      "sha256": "0dde7110de5d0bf6986807dda2b8bf3cb574e5e5a267f1f276954b0dc2ab32fb"
+    },
+    "preflight-final": {
+      "path": "runs/v03-full-model-export/logs/preflight-final.json",
+      "sha256": "3cf535eae30ec375efa5d96443eee4459460844063bbf48fbcd57e4f22dbcbdd"
+    },
+    "service-regression": {
+      "path": "runs/v03-full-model-export/logs/service-regression.json",
+      "sha256": "55e6a7fbaacb35a34fef6af325692810a22f5f86d6aa8938dadf42a4417afecc"
+    },
+    "structure-regression": {
+      "path": "runs/v03-full-model-export/logs/structure-regression.json",
+      "sha256": "c5a638e2ae2a8358a4799f765f22dec5fece250470f30bb3df319cb315687f07"
+    },
+    "loader-check": {
+      "path": "runs/v03-full-model-export/logs/loader-check.json",
+      "sha256": "ee3cb943f4c0d76200b1dfa3491b4ab31a2055fee4db87ddb5e1a8a42a9902a0"
+    },
+    "dependencies": {
+      "path": "runs/v03-full-model-export/logs/dependencies.json",
+      "sha256": "497585ae29f47e043e863a4a67414c969314a1eeea1a56a2b240b559cb1a05a6"
+    },
+    "final-audit": {
+      "path": "runs/v03-full-model-export/logs/final-audit.json",
+      "sha256": "1254b5e1da16ee0181b19cd8389b54bccda44a8aca5357385aa922581ec0b8af"
+    },
+    "unit": {
+      "path": "runs/v03-full-model-export/logs/unit.json",
+      "sha256": "432687efb29f8c451ea587c14dac9a6faf57c704a96a330793ae7a8d496bd5c0"
+    },
+    "preflight": {
+      "path": "runs/v03-full-model-export/logs/preflight.json",
+      "sha256": "82336afeb189c127d0020e1055c8f885de0d676d46e54f32783f657e2bd9bb55"
+    },
+    "target": {
+      "path": "runs/v03-full-model-export/logs/target.json",
+      "sha256": "d878f825aa07858a38016983cccad3d851cc30f01a4e5ce52092294195f814e1"
+    }
+  },
+  "retained_development_failures": [
+    "unit: legacy test module lacked __file__; loader fixed, production checks unchanged",
+    "preflight: comparator had not finished writing result.json; waited and reused completed probes"
+  ],
+  "unchanged": [
+    "full-model builder and validators",
+    "schemas and writer body",
+    "CANN behavior",
+    "service scheduling and mutable-plan export validation",
+    "backend and submodules",
+    "complete target inputs and limits"
+  ],
+  "hardware_calibration": "unvalidated_reference",
+  "target_network_executed": false,
+  "target_full_service_executed": false
+}

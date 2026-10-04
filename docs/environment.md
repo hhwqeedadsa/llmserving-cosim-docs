@@ -3333,3 +3333,58 @@ CANN 基准仍为 305 次 UB 写、131530 ns，共享网络、慢链路、分块
 四块、61 块、穿插 dense 三组 plan.json、generation.json 与 Chakra，共 15 个文件与旧产物逐字节一致。小图 C++ 装载为 171 节点/39 fabric/12 local，修改 JSON 和截断 Chakra 均正确拒绝。C++ 源码、已有三套构建、启动锁、原 M9 文件、首轮 bundle/manifest 及依赖未变；本步没有重编译、下载、修改子模块或推送。
 
 [存储优化说明](../fixtures/m10_full_model_storage/README.md)与[结果摘要](../fixtures/m10_full_model_storage/result.json)保存本步证据。本步完成后本地提交并停止。下一项建议处理导出前的重复完整重构，保持校验覆盖和输入隔离后按相同预算复测；尚未实施，等待用户确认。目标导出/加载、完整网络、多轮累计持有、最终参考实验和硬件校准仍未完成。
+
+## 2026-10-04：完整模型构图与导出的重复重构消除
+
+任务 `v03-full-model-export`，生产基线 `3bf0f90`，任务说明提交 `b38b29b`。根目录 `/root/moe-ub-cosim`；本节 `R` 为 `runs/v03-full-model-export`，`P` 为 `.venv/llmservingsim-native/bin/python`。
+
+新增 generate.build_export_full_model：原构图器及其完整校验返回后，直接调用内部写出函数，写完才返回可变计划。原来源声明移到相同的非执行字段并复制证据；没有暴露任意修改计划的回调、跳过校验开关或跨调用缓存。export_plan 对调用方传入的计划仍完整验证。探针和结构回归使用新生产入口，普通服务通用导出路径继续保留。写出主体仅提取为函数，没有更改序列化或文件摘要算法。
+
+### 已完成的新旧对照
+
+19 项单元测试通过（7.197 s）。四组旧/新完整计划、JSON/Chakra/清单一致；输入与来源隔离、两次完整合并仍包含原重构校验、修改后的计划再次导出被拒绝、失败无成功清单和测量包装恢复均核对。旧源码由固定本地 Git 加载并核验 SHA。
+
+四块资源对照保持前三 dense/首个 MoE、128 rank/1024 请求、原逐层来源。两次串行，RSS 4 GiB、地址 6 GiB、产物 2 GiB、300 s。旧构图后通用导出 39.339877 s，新封闭路径 33.264655 s；含输入读取/核对/退出的总时间 40.986345→34.846788 s。采样峰值 847847424→883277824 B，不能声称内存下降；单次时间下降约 15.4%，不推广为固定比例。
+
+135558 节点、64992 传输（64556 fabric / 436 local）相同。131 个文件共 322598087 B，大小及 SHA-256 全部一致，plan.json 306199718 B，SHA `1eeecc458b67014c8f7ceef9be2b4e9e221647a529c632a3cb90555a75741c92`。原路径记录三次 composition_end，新路径两次；两次探测均 completed/0、无残留进程。
+
+保留失败：unit 退出 1，新测试动态加载旧导出模块时缺少 __file__，找不到 Chakra schema，四组对照因此报错；补充正确模块路径后 unit-final 通过，未改生产检查。preflight 退出 1，是在新对照尚未输出 result.json 时提前读取；等待原对照 completed 后运行 preflight-final，通过所有字节/次数/引用摘要核验，没有重跑资源对照。
+
+### 实际命令与日志
+
+`python3 R/record.py LABEL COMMAND...` 为已审阅的记录入口，保存实际 argv、cwd、UTC、退出码和 stdout/stderr 到 `R/logs/LABEL.*`。原文件与历史日志均保留。
+
+| 实际命令 | 标签与证据 |
+|---|---|
+| `python3 R/baseline.py` | baseline；生产修改前固定旧源码摘要，核验并保存 1304 个保护文件摘要。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest full_model_export_test full_model_storage_test full_model_test full_round_probe_test resource_budget_test` | unit-final；19 项通过，unit 初次测试加载失败另保留。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/compare-baseline --rss-bytes 4294967296 --address-bytes 6442450944 --artifact-bytes 2147483648 --wall-seconds 300 -- P scripts/probe_full_model_export.py baseline --output-dir R/compare-baseline/work` | compare-baseline；旧导出器及原构图器，completed/0。 |
+| 同上，将 `compare-baseline` 换为 `compare-closed`、worker 模式换为 `closed` | compare-closed；新封闭路径，completed/0，全部选定产物一致。 |
+| `env PYTHONPATH=python P R/preflight.py` | preflight-final；核对 131 个文件、3→2 次合并和原 manifest/bundle、请求、容量、fabric、费用及规范引用摘要，保存 host.json。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/target --rss-bytes 34359738368 --address-bytes 42949672960 --artifact-bytes 25769803776 --wall-seconds 900 -- P -m moe_ub_cosim.full_round_probe target --input runs/v03-full-round-preflight/prepare/work/prepared.json --output-dir R/target/work` | target；阶段在 target/work/phases.jsonl，采样在 target/samples.jsonl，最终结果见后文。 |
+| `env PYTHONPATH=python python3 R/regressions.py` | 目标受控停止后串行运行下列三组检查，无目标/回归重叠。 |
+| `P -m moe_ub_cosim.host_probe --output-dir R/service-regression --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 10737418240 --wall-seconds 300 -- P tests/integration/check_full_model.py --build-dir build/m10-shared-provenance --output-dir R/service-regression/work` | service-regression；8 项服务对照、空服务及 6 项后端拒绝通过，实际后端 argv/输入/退出码在 work/commands.json。 |
+| 同上，将 `service-regression` 换为 `structure-regression`、脚本换为 `check_full_model_structure.py` | structure-regression；新封闭入口生成 61 块小 EP、穿插 dense/无 shared 两项图，真实 UB 执行通过。 |
+| `P tests/integration/check_full_round_probe.py --build-dir build/m10-full-round-preflight --output-dir R/loader-check` | loader-check；新入口的小图经原 C++ 加载，修改 JSON/截断 Chakra 拒绝；子进程有资源上限。 |
+| `bash scripts/check_deps.sh`、`python3 R/final_audit.py` | dependencies、final-audit；13 个递归依赖、1304 个保护文件不变，三个复用二进制仅链接对应构建目录的 ns-3-UB；15 个历史小图文件摘要相同，写出函数主体 AST 与旧代码相同。 |
+| `python3 R/report.py` | report；核验阶段/计数/资源/回归/保护证据，生成 fixtures/m10_full_model_export/result.json。 |
+
+除两项已说明的开发期失败和 target 的受控触限外，最终检查均退出 0。命令表中的短路径按本节根目录、R、P 展开；完整原始参数保存于 R/logs 对应 JSON。
+
+### 完整目标阶段与部分产物
+
+目标启动前的 host.json 记录：64 GiB 物理及 cgroup 限额，MemAvailable 62872127 KiB，无 swap，cgroup memory.current 34874241024 B（含缓存），CPU affinity 32，磁盘可用 6691958661120 B。原 prepared.json SHA 为 `f2c6294b525c3f559d17c31064f1d88cbfba592c4c27f6719a8bf75148d0d615`，bundle.json SHA 为 `b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14`；没有重新下载或复制原始路由。
+
+58 个 MoE 子图在 274.089161 s 返回，逐层计数相同。首次完整合并在 584.414461 s 返回，校验中的第二次完整重构在 887.708109 s 返回，构图及全部校验在 896.514077 s 返回，896.514486 s 实际进入内部写出函数。完整计数为 7655238 节点、3767694 次交付（3741764 fabric / 25930 local），与原独立预检一致。没有发生第三次重构。构图器本身未改，和上一任务 876.585 s 的差别只记录为单次测量差异，不声称完整目标构图提速。
+
+900.058962 s 采样触发 wall_limit，worker=-15，外层退出 1；含终止/释放的总时间 901.593299 s，remaining_live_group_pids=[]，stderr 为空。采样峰值 RSS 33902088192 B（约 31.57 GiB），低于原 32 GiB；未触及地址或产物上限，没有宿主 OOM。预算和完整目标输入均未改变，未再次运行目标。
+
+graph 目录留下 layer.0.et 至 layer.5.et（分别为 9169277、9106991、9160065、8877669、9727497、811452 B）及 schema。第六个文件可能在写入中被终止，未将任何部分文件认定为完整图。没有 plan.json、graph-resources.json、generation.json、export_end 或成功摘要；built.json 仅为计数。因完整导出未完成，目标 C++ 加载、网络与服务执行未启动。
+
+### 真实 UB 回归、保护与交接
+
+完整服务基准仍为 5 轮、305 次写、113664 业务字节、120316 总载荷字节、131279 ns；来源开关、共享专家/采样费用、容量等待、观察窗口、慢网络及场景入口对照通过，空服务正确退出，6 项篡改拒绝保持。新封闭入口生成的 61 块小 EP 图为 3102 节点、754 次写、986 次交付、315509 ns；穿插 dense 且无 shared 的图为 114 节点、26 次写、34 次交付、10829 ns，逐节点依赖/时长、收发回调及资源清零均通过。
+
+新入口的小图由原 C++ 探针加载为 171 节点、39 fabric/12 local，修改 JSON 和截断 Chakra 均拒绝。四块、61 块、穿插 dense 的计划、生成清单及 Chakra 共 15 个历史文件摘要相同。1304 个保护文件涵盖原三套构建、启动锁、两份 M9 原文件与首轮 prepared/bundle；C++、锁文件/子模块、构图/校验器、CANN 和服务调度未变。没有重编译、下载、推送或修改技术规范。
+
+本步骤完成并整理记录后本地提交，说明与机器可读证据见 [导出优化](../fixtures/m10_full_model_export/README.md)和 [result.json](../fixtures/m10_full_model_export/result.json)。下一项建议测量并处理序列化与文件摘要开销，同时考虑构图及校验已占用约 896.5 s；尚不能保证仅优化写出即可满足原总时限。下一项尚未执行。M10 最终验收、完整目标导出/加载、网络与多轮累计持有仍未完成；真实来源、参考费用与硬件校准分别记录，AWQ4 采集来源/INT8 容量参考差异和采集代码修订未知等限制没有改变。

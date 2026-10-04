@@ -1,5 +1,6 @@
 #include "ub_network_adapter.hh"
 #include "ub_write_transfer.hh"
+#include "local_delivery.hh"
 #include "ns3/simulator.h"
 #include "ns3/ub-app.h"
 
@@ -110,6 +111,8 @@ int main()
             std::vector<moe_ub::UbWriteTransfer*> registry{&first, &second};
             moe_ub::UbNetworkAdapter sender(0, [](uint64_t) {}, registry);
             moe_ub::UbNetworkAdapter receiver(1, [](uint64_t) {}, registry);
+            Reject<std::logic_error>([&]() { sender.RetireGraph("graph"); });
+            Check(sender.RegisteredTransfers() == 2, "failed retirement removed borrowed transfers");
             Reject<std::invalid_argument>([&]() {
                 moe_ub::UbNetworkAdapter duplicate(0, [](uint64_t) {},
                     std::vector<moe_ub::UbWriteTransfer*>{&first, &first});
@@ -158,6 +161,22 @@ int main()
             // Destruction before the first event cancels the unsubmitted send and unconsumed wait.
         }
         ns3::Simulator::Run();
+        ns3::Simulator::Destroy();
+        {
+            moe_ub::LocalDelivery local({55, "local-retire", 1, 2, 0, 1, 25, 16, "local-op"});
+            moe_ub::UbNetworkAdapter sender(0, [](uint64_t) {}), receiver(1, [](uint64_t) {});
+            sender.RegisterLocalDeliveries({&local}); receiver.RegisterLocalDeliveries({&local});
+            Reject<std::logic_error>([&] { sender.RetireGraph("local-retire"); });
+            unsigned callbacks = 0;
+            sender.sim_send(nullptr, 16, AstraSim::UINT8, 1, 25, nullptr, RecordCompletion, &callbacks);
+            receiver.sim_recv(nullptr, 16, AstraSim::UINT8, 0, 25, nullptr, RecordCompletion, &callbacks);
+            ns3::Simulator::Run(); Check(callbacks == 2, "local completion callbacks missing");
+            sender.RetireGraph("local-retire"); receiver.RetireGraph("local-retire");
+            Check(sender.RegisteredLocalDeliveries() == 0 && receiver.RegisteredLocalDeliveries() == 0,
+                  "retired local pointers remain registered");
+            Reject<std::logic_error>([&] { sender.sim_send(nullptr, 16, AstraSim::UINT8, 1, 25, nullptr, RecordCompletion, &callbacks); });
+            Reject<std::logic_error>([&] { receiver.sim_recv(nullptr, 16, AstraSim::UINT8, 0, 25, nullptr, RecordCompletion, &callbacks); });
+        }
         ns3::Simulator::Destroy();
         CompletionCase(0, 30);  // RECV registered before data.
         CompletionCase(15, 30); // SEND and partial data before RECV.

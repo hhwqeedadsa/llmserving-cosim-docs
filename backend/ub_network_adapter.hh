@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <functional>
 #include <map>
+#include <string>
 #include <tuple>
 #include <vector>
 
@@ -33,6 +34,9 @@ class UbNetworkAdapter final : public AstraSim::AstraNetworkAPI
                               const std::vector<UbWriteTransfer*>& incoming = {}) const;
     void RegisterLocalDeliveries(const std::vector<LocalDelivery*>& local);
     void RegisterTransfers(const std::vector<UbWriteTransfer*>& transfers);
+    void RetireGraph(const std::string& graph);
+    size_t RegisteredTransfers() const { return transfers_.size(); }
+    size_t RegisteredLocalDeliveries() const { return local_.size(); }
     uint64_t ScheduledEvents() const { return scheduled_events_; }
     uint64_t ExecutedCallbacks() const { return executed_callbacks_; }
     void SetProgressCallback(std::function<void()> callback) { progress_ = std::move(callback); }

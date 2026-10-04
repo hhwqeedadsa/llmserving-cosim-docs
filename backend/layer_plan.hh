@@ -2,6 +2,7 @@
 
 #include "ub_write_transfer.hh"
 #include "local_delivery.hh"
+#include "execution_timing.hh"
 #include "extern/helper/json/json.hpp"
 #include <filesystem>
 #include <map>
@@ -52,5 +53,6 @@ void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& gra
 // This is a bounded diagnostic export, not an inference from network packets.
 nlohmann::json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& log, bool graph_identity = false);
 nlohmann::json LayerEndpointOperations(const LayerPlan& plan, const nlohmann::json& execution);
+nlohmann::json LayerEndpointOperations(const LayerPlan& plan, const ExecutionTimes& execution);
 nlohmann::json LayerOperationRegistry(const LayerPlan& plan);
 }

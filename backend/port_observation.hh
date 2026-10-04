@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ub_write_transfer.hh"
+#include "identity_ranges.hh"
+#include "record_store.hh"
 #include "extern/helper/json/json.hpp"
 #include "ns3/packet.h"
 #include "ns3/nstime.h"
@@ -8,6 +10,7 @@
 #include "ns3/ub-port.h"
 
 #include <map>
+#include <set>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -39,11 +42,17 @@ class PortWindows
     const std::vector<ByteCounts>& Rows() const { return rows_; }
     uint64_t Count() const { return (config_.end_ns-config_.start_ns-1)/config_.period_ns+1; }
     ByteCounts Row(uint64_t index) const;
-    size_t ResidentRows() const { return config_.resource_budget.is_null() ? rows_.size() : sparse_.size(); }
+    size_t ResidentRows() const { return sink_ ? size_t(current_.has_value()) : config_.resource_budget.is_null() ? rows_.size() : sparse_.size(); }
+    void Stream(std::function<void(uint64_t, const ByteCounts&)> sink);
+    void Finish();
   private:
     ObservationConfig config_;
     std::vector<ByteCounts> rows_;
     std::map<uint64_t, ByteCounts> sparse_;
+    std::function<void(uint64_t, const ByteCounts&)> sink_;
+    std::optional<uint64_t> current_;
+    ByteCounts current_row_;
+    bool stream_finished_ = false;
 };
 
 struct PayloadRange
@@ -66,8 +75,13 @@ class PayloadLedger
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
     void SetLimits(uint64_t packets, uint64_t transfers);
     void RestrictLimits(uint64_t packets, uint64_t transfers);
+    // Owner must establish that the shared physical network is drained. Packet
+    // provenance may outlive transaction completion (ACKs and retransmission).
+    void RetireCompletedGraphs(const std::set<std::string>& graphs);
+    nlohmann::json RetirementAudit() const;
     size_t PacketCount() const { return ranges_.size(); }
     size_t TransferCount() const { return descriptors_.size(); }
+    uint64_t RegisteredTransferTotal() const { return registered_tasks_.size(); }
     uint64_t CreatedNotifications() const { return created_notifications_; }
     const WriteDescriptor& Descriptor(uint32_t task) const { return descriptors_.at(task); }
     bool HasPayloadRegions() const { return segmented_payload_; }
@@ -76,6 +90,8 @@ class PayloadLedger
     std::map<uint64_t, PayloadRange> ranges_;
     uint64_t max_packets_=UINT64_MAX, max_transfers_=UINT64_MAX;
     uint64_t created_notifications_=0;
+    IdentityRanges registered_tasks_;
+    uint64_t peak_packets_=0, peak_transfers_=0, retired_packets_=0, retired_transfers_=0;
     bool segmented_payload_=false;
 };
 
@@ -92,6 +108,7 @@ class WriteProvenance
     void Register(const std::vector<WriteDescriptor>& descriptors) { ledger_->Register(descriptors); }
     void RestrictLimits(uint64_t packets, uint64_t transfers) { ledger_->RestrictLimits(packets, transfers); }
     const PayloadLedger& Ledger() const { return *ledger_; }
+    void RetireCompletedGraphs(const std::set<std::string>& graphs) { ledger_->RetireCompletedGraphs(graphs); }
     nlohmann::json Audit() const;
   private:
     std::shared_ptr<PayloadLedger> ledger_;
@@ -110,10 +127,14 @@ struct ObservationRegistry
     std::vector<int> ranks;
     size_t transfer_count = 0;
     bool truth = false;
+    bool external_records = false;
     static ObservationRegistry Write(const std::vector<const UbWriteTransfer*>& transfers,
         const nlohmann::json& endpoints, const nlohmann::json& operations,
         const std::filesystem::path& directory, bool truth);
+    static ObservationRegistry ReferToResult(const std::vector<int>& ranks, size_t transfer_count,
+        const std::filesystem::path& directory, bool truth);
 };
+nlohmann::json TransferRegistryRecord(const UbWriteTransfer& transfer);
 
 class PortObservation
 {
@@ -124,7 +145,8 @@ class PortObservation
                     std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events = false,
                     const std::filesystem::path& spool_directory = {});
     PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
-                    bool retain_packet_events = false, const std::filesystem::path& spool_directory = {});
+                    bool retain_packet_events = false, const std::filesystem::path& spool_directory = {},
+                    std::shared_ptr<RecordStore> record_store = {});
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
@@ -141,8 +163,11 @@ class PortObservation
     void QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes,
                     std::optional<uint64_t> busy_until = {});
     void Record(const std::string& name, nlohmann::json& memory, const nlohmann::json& row);
+    std::string RecordName(std::string name) const;
+    void WindowRecord(uint64_t index, const ByteCounts& row);
+    void ExportStored(const std::filesystem::path& base, const ObservationRegistry& registry) const;
     ObservationConfig config_;
-    PortWindows windows_;
+    mutable PortWindows windows_;
     ns3::Ptr<ns3::UbPort> port_;
     std::shared_ptr<WriteProvenance> provenance_;
     uint64_t initial_tx_bytes_ = 0, all_bytes_ = 0, all_packets_ = 0;
@@ -157,5 +182,6 @@ class PortObservation
     std::filesystem::path spool_directory_;
     mutable std::map<std::string,std::ofstream> streams_;
     uint64_t event_bytes_=0;
+    std::shared_ptr<RecordStore> record_store_;
 };
 }

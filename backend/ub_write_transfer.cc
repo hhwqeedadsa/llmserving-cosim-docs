@@ -7,6 +7,7 @@
 #include "ns3/ub-transfer-executor.h"
 #include "ns3/ub-controller.h"
 #include "ns3/ub-transaction.h"
+#include "ns3/ub-function.h"
 
 #include <limits>
 #include <stdexcept>
@@ -84,6 +85,11 @@ void UbWriteTransfer::Send(int rank, uint64_t bytes, int type, int dst, int tag,
             if (id != descriptor_.task_id)
                 throw std::logic_error(Identity() + ": unexpected UB transaction completion");
             // Original UB transaction event, after its physical resource cleanup.
+            const auto controller = ns3::NodeList::GetNode(descriptor_.SourceNode())->GetObject<ns3::UbController>();
+            if (!jetty_ || controller->GetUbFunction()->IsJettyExists(*jetty_) ||
+                controller->GetUbTransaction()->HasJettyState(*jetty_))
+                throw std::logic_error(Identity() + ": source Jetty has not retired");
+            jetty_retired_ = true;
             completion_.TransactionDone();
         });
         ++submitted_tasks_;
@@ -115,6 +121,9 @@ void UbWriteTransfer::ObserveWrite(ns3::Ptr<const ns3::UbWqeSegment> segment)
         segment->GetSegmentKind() != ns3::UbTransactionSegmentKind::REQUEST)
         throw std::logic_error(Identity() + ": unexpected target write metadata");
     // Target GetWqeSize() describes this reassembled TA unit, not the whole WQE.
+    if (jetty_ && *jetty_ != segment->GetOriginJettyNum())
+        throw std::logic_error(Identity() + ": WRITE changed source Jetty");
+    jetty_ = segment->GetOriginJettyNum();
     completion_.WriteCommitted(segment->GetOriginJettyNum(), segment->GetRequestTassn(),
                                segment->GetSize());
 }

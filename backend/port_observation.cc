@@ -1,4 +1,5 @@
 #include "port_observation.hh"
+#include "result_records.hh"
 #include "observation_resources.hh"
 
 #include "ns3/ipv4-header.h"
@@ -80,9 +81,22 @@ PortWindows::PortWindows(ObservationConfig config) : config_(config)
 }
 ByteCounts PortWindows::Row(uint64_t index) const
 {
+    Require(!sink_, "A streamed window must be read from its record file");
     Require(index<Count(), "Window index outside interval");
     if (config_.resource_budget.is_null()) return rows_.at(index);
     const auto found=sparse_.find(index);return found==sparse_.end() ? ByteCounts{} : found->second;
+}
+void PortWindows::Stream(std::function<void(uint64_t, const ByteCounts&)> sink)
+{
+    Require(bool(sink) && !sink_ && sparse_.empty() &&
+            std::all_of(rows_.begin(), rows_.end(), [](const auto& row) { return row.packets == 0; }),
+            "Window streaming must begin before packet observation");
+    rows_.clear(); rows_.shrink_to_fit(); sink_ = std::move(sink);
+}
+void PortWindows::Finish()
+{
+    if (sink_ && current_) { sink_(*current_, current_row_); current_.reset(); current_row_ = {}; }
+    if (sink_) stream_finished_ = true;
 }
 void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business, uint32_t metadata, uint32_t padding)
 {
@@ -90,7 +104,14 @@ void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business, uint3
     Require(payload <= whole, "Payload exceeds packet size");
     if (time_ns < config_.start_ns || time_ns >= config_.end_ns) return;
     const auto index=(time_ns-config_.start_ns)/config_.period_ns;
-    auto& row = config_.resource_budget.is_null() ? rows_.at(index) : sparse_[index];
+    if (sink_)
+    {
+        Require(!stream_finished_, "Window event after final export");
+        Require(!current_ || index >= *current_, "Out-of-order port window event");
+        if (current_ && index != *current_) { sink_(*current_, current_row_); current_row_ = {}; }
+        current_ = index;
+    }
+    auto& row = sink_ ? current_row_ : config_.resource_budget.is_null() ? rows_.at(index) : sparse_[index];
     ++row.packets;
     row.whole += whole;
     row.business += business;
@@ -141,12 +162,35 @@ void PayloadLedger::Register(const std::vector<WriteDescriptor>& descriptors)
     bool segmented = segmented_payload_;
     for (const auto& d : descriptors)
     {
-        Require(d.task_id <= UINT32_MAX && !descriptors_.contains(d.task_id) && checked.emplace(d.task_id, d).second,
+        Require(d.task_id <= UINT32_MAX && !registered_tasks_.count(d.task_id) && checked.emplace(d.task_id, d).second,
                 "Duplicate or invalid UB task identity in provenance registry");
         segmented |= d.payload_regions.has_value();
     }
     descriptors_.merge(checked);
+    for (const auto& d : descriptors) registered_tasks_.insert(d.task_id);
+    peak_transfers_ = std::max(peak_transfers_, uint64_t(descriptors_.size()));
     segmented_payload_ = segmented;
+}
+void PayloadLedger::RetireCompletedGraphs(const std::set<std::string>& graphs)
+{
+    IdentityRanges retired;
+    for (auto it = descriptors_.begin(); it != descriptors_.end();)
+        if (graphs.count(it->second.graph_id))
+        { retired.insert(it->first); it = descriptors_.erase(it); ++retired_transfers_; }
+        else ++it;
+    for (auto it = ranges_.begin(); it != ranges_.end();)
+        if (retired.count(it->second.task_id)) { it = ranges_.erase(it); ++retired_packets_; }
+        else ++it;
+}
+Json PayloadLedger::RetirementAudit() const
+{
+    Require(registered_tasks_.size() == descriptors_.size() + retired_transfers_, "provenance retirement accounting mismatch");
+    return {{"schema_version", "moe-ub-provenance-retirement/1"},
+        {"registered_transfers_total", registered_tasks_.size()}, {"retired_transfers", retired_transfers_},
+        {"retired_packets", retired_packets_}, {"resident_transfers", descriptors_.size()},
+        {"resident_packets", ranges_.size()}, {"peak_resident_transfers", peak_transfers_},
+        {"peak_resident_packets", peak_packets_}, {"identity_intervals", registered_tasks_.Intervals()},
+        {"retirement_boundary", "completed_graph_and_global_physical_network_idle"}};
 }
 void PayloadLedger::SetLimits(uint64_t packets, uint64_t transfers)
 {
@@ -172,6 +216,7 @@ void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
     Require(ranges_.contains(packet->GetUid()) || ranges_.size()<max_packets_, "Observation payload ledger packet budget exceeded");
     auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
     Require(inserted || it->second == value, "Conflicting packet provenance");
+    peak_packets_ = std::max(peak_packets_, uint64_t(ranges_.size()));
     ++created_notifications_;
 }
 PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const
@@ -230,9 +275,10 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
 {}
 
 PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
-                                bool retain_packet_events, const std::filesystem::path& spool_directory)
+                                bool retain_packet_events, const std::filesystem::path& spool_directory,
+                                std::shared_ptr<RecordStore> record_store)
     : config_(config), windows_(config), provenance_(std::move(provenance)),
-      retain_packet_events_(retain_packet_events)
+      retain_packet_events_(retain_packet_events), record_store_(std::move(record_store))
 {
     Require(provenance_ != nullptr, "Observation needs a provenance ledger");
     if (!config_.resource_budget.is_null())
@@ -248,9 +294,10 @@ PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<Write
         for(const std::string name : {"packet-events.jsonl","egress-queue-audit.jsonl","truth/packet_ranges.jsonl"})
         {
             if(name=="truth/packet_ranges.jsonl" && !config_.provenance) continue;
-            streams_[name].open(spool_directory_/name);Require(bool(streams_.at(name)),"Cannot open streaming observation file");
+            if (!record_store_) { streams_[name].open(spool_directory_/name);Require(bool(streams_.at(name)),"Cannot open streaming observation file"); }
         }
     }
+    if (record_store_) windows_.Stream([this](uint64_t index, const auto& row) { WindowRecord(index, row); });
     Require(config_.switch_id < ns3::NodeList::GetNNodes(), "Observation switch does not exist");
     auto node = ns3::NodeList::GetNode(config_.switch_id);
     auto sw = node->GetObject<ns3::UbSwitch>();
@@ -280,11 +327,35 @@ PortObservation::~PortObservation()
 }
 void PortObservation::Record(const std::string& name, Json& memory, const Json& row)
 {
-    if (config_.resource_budget.is_null()) { memory.push_back(row);return; }
+    if (config_.resource_budget.is_null() && !record_store_) { memory.push_back(row);return; }
     const auto text=row.dump()+"\n";
-    Require(text.size()<=config_.resource_budget.at("max_event_bytes_per_port").get<uint64_t>()-event_bytes_, "Observation event byte budget exceeded");
+    if (!config_.resource_budget.is_null())
+        Require(text.size()<=config_.resource_budget.at("max_event_bytes_per_port").get<uint64_t>()-event_bytes_, "Observation event byte budget exceeded");
+    if (record_store_)
+    {
+        record_store_->Append(RecordName(name), std::string_view(text).substr(0, text.size()-1));
+        event_bytes_ += text.size(); return;
+    }
     auto& stream=streams_.at(name);stream<<text;
     Require(bool(stream),"Cannot write observation event");event_bytes_+=text.size();
+}
+std::string PortObservation::RecordName(std::string name) const
+{
+    std::replace(name.begin(), name.end(), '/', '-');
+    return "port-" + std::to_string(config_.switch_id) + "-" + std::to_string(config_.port_id) + "-" + name + ".gz";
+}
+void PortObservation::WindowRecord(uint64_t index, const ByteCounts& row)
+{
+    // Only nonzero windows occupy storage. The finite observation interval and
+    // period in the manifest encode every intervening zero window losslessly.
+    Require(row.packets > 0, "Cannot store an empty active window");
+    Json observed = {{"index", index}, {"counted_packets", row.packets}, {"counted_packet_bytes", row.whole}};
+    record_store_->Append(RecordName("port-windows.jsonl"), observed.dump());
+    if (config_.provenance)
+        record_store_->Append(RecordName("truth-windows.jsonl"), Json({{"index", index},
+            {"business_payload_bytes", row.business}, {"application_metadata_bytes", row.metadata},
+            {"padding_bytes", row.padding}, {"data_protocol_overhead_bytes", row.overhead},
+            {"control_packet_bytes", row.control}, {"unattributed_bytes", 0}}).dump());
 }
 void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes,
                                  std::optional<uint64_t> busy_until)
@@ -431,6 +502,25 @@ Json TransferRecord(const UbWriteTransfer* transfer)
 }
 }
 
+Json TransferRegistryRecord(const UbWriteTransfer& transfer) { return TransferRecord(&transfer); }
+
+ObservationRegistry ObservationRegistry::ReferToResult(const std::vector<int>& ranks, size_t transfer_count,
+    const std::filesystem::path& directory, bool truth)
+{
+    Require(!std::filesystem::exists(directory), "Registry directory already exists");
+    std::filesystem::create_directories(directory);
+    Json fields = {{"observed/endpoint_ops.jsonl", "endpoint_ops"}};
+    if (truth)
+    {
+        fields["truth/operation_registry.jsonl"] = "operation_registry";
+        fields["truth/transfer_registry.jsonl"] = "transfer_registry";
+    }
+    Save((directory / "registry-records.json").string(),
+        {{"schema_version", "moe-ub-observation-registry/2"},
+         {"result", "result.json"}, {"path_base", "execution_directory"}, {"fields", fields}});
+    return {directory, ranks, transfer_count, truth, true};
+}
+
 ObservationRegistry ObservationRegistry::Write(const std::vector<const UbWriteTransfer*>& transfers,
     const Json& endpoints, const Json& operations, const std::filesystem::path& directory, bool truth)
 {
@@ -465,13 +555,17 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         Save((base / name).string(), value, lines);
     };
     Require(port_->GetTxBytes() - initial_tx_bytes_ == all_bytes_, "Native port counter mismatch");
-    Require(transfers.size() == provenance_->Ledger().TransferCount(), "Observation export transfer count mismatch");
+    if (record_store_)
+        Require(shared_registry && shared_registry->external_records && transfers.empty() &&
+                shared_registry->transfer_count == provenance_->Ledger().RegisteredTransferTotal(), "Stored observation registry mismatch");
+    else Require(transfers.size() == provenance_->Ledger().TransferCount(), "Observation export transfer count mismatch");
     std::filesystem::create_directories(base / "observed");
     save("observed/public_config.json", {{"schema_version", "moe-ub-m1-observed/1"},
         {"counter_location", "egress_packet_start"}, {"byte_semantics", "packet_get_size"},
         {"switch_id", config_.switch_id}, {"port_id", config_.port_id}, {"direction", "egress"},
         {"observation_start_local_ns", config_.start_ns}, {"observation_end_local_ns", config_.end_ns},
         {"window_period_ns", config_.period_ns}, {"clock_resolution_ns", 1}});
+    if (record_store_) { ExportStored(base, *shared_registry); return; }
     const bool streamed=!config_.resource_budget.is_null();
     std::ofstream observed_stream,truth_stream;
     if(streamed)
@@ -548,5 +642,40 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
     }
     if(!streamed) { save("truth/packet_ranges.jsonl", packet_ranges_, true);
         save("truth/port_byte_truth.jsonl", truth, true); }
+}
+
+void PortObservation::ExportStored(const std::filesystem::path& base, const ObservationRegistry& registry) const
+{
+    Require(!config_.provenance || registry.truth, "Missing stored truth registry");
+    Require(packet_events_.empty() && packet_ranges_.empty() && queue_events_.empty(), "Stored port retained event JSON");
+    windows_.Finish();
+    Json fields = Json::object();
+    for (const std::string name : {"packet-events.jsonl", "egress-queue-audit.jsonl", "port-windows.jsonl",
+                                  "truth/packet_ranges.jsonl", "truth-windows.jsonl"})
+    {
+        if (!config_.provenance && (name == "truth/packet_ranges.jsonl" || name == "truth-windows.jsonl")) continue;
+        fields[name] = RecordReference(record_store_->Seal(RecordName(name)));
+    }
+    Save((base / "record-storage.json").string(), {{"schema_version", "moe-ub-port-records/1"},
+        {"records_directory", "records"}, {"path_base", "execution_directory"}, {"fields", fields},
+        {"window_encoding", "sparse_nonzero_with_declared_zero_windows"}, {"logical_windows", windows_.Count()},
+        {"padding_field", provenance_->Ledger().HasPayloadRegions()}});
+    std::filesystem::create_hard_link(registry.directory / "registry-records.json", base / "registry-records.json");
+    Save((base / "observation-audit.json").string(), {{"purpose", "test_only_internal_validation"},
+        {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
+        {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_}, {"wire_and_time_fnv1a64", fingerprint_}});
+    Save((base / "resource-audit.json").string(), {{"record_storage", "bounded_gzip_records"}, {"event_bytes", event_bytes_},
+        {"retained_packet_event_records", 0}, {"retained_queue_records", 0}, {"retained_packet_range_records", 0},
+        {"resident_window_rows", windows_.ResidentRows()}, {"peak_window_rows_bound", 1}, {"logical_window_rows", windows_.Count()},
+        {"ledger_packets", provenance_->Ledger().PacketCount()}, {"registered_transfers", provenance_->Ledger().TransferCount()},
+        {"budget", config_.resource_budget}, {"provenance_storage", "shared_run_ledger"},
+        {"owned_descriptor_records", 0}, {"owned_packet_provenance_records", 0}});
+    if (config_.provenance)
+    {
+        std::filesystem::create_directories(base / "truth");
+        Save((base / "truth/clock_models.json").string(), {{"schema_version", "moe-ub-m1-truth/1"},
+            {"offset_ns", 0}, {"drift", 0}, {"rounding", "floor"},
+            {"switch_ids", {config_.switch_id}}, {"rank_ids", registry.ranks}});
+    }
 }
 }

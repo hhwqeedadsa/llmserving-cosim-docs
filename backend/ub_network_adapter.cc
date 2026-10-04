@@ -107,6 +107,21 @@ void UbNetworkAdapter::RegisterLocalDeliveries(const std::vector<LocalDelivery*>
     }
 }
 
+void UbNetworkAdapter::RetireGraph(const std::string& graph)
+{
+    // Check all borrowed objects before removing any registration. The owner
+    // destroys them only after every participant adapter has retired the graph.
+    for (const auto& [key, transfer] : transfers_)
+        if (transfer->Descriptor().graph_id == graph &&
+            (transfer->Completion().Active() || transfer->HasPendingEvents() || transfer->ObservingTarget()))
+            throw std::logic_error("Cannot retire a graph with live UB callbacks");
+    for (const auto& [key, delivery] : local_)
+        if (delivery->Descriptor().graph_id == graph && (delivery->Active() || delivery->HasPendingEvents()))
+            throw std::logic_error("Cannot retire a graph with live local callbacks");
+    std::erase_if(transfers_, [&](const auto& item) { return item.second->Descriptor().graph_id == graph; });
+    std::erase_if(local_, [&](const auto& item) { return item.second->Descriptor().graph_id == graph; });
+}
+
 AstraSim::AstraNetworkAPI::BackendType UbNetworkAdapter::get_backend_type()
 {
     return BackendType::NS3;

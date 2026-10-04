@@ -1,5 +1,7 @@
 # M10 目标参考实验就绪核对
 
+连续资源工程补充：后台压缩记录及跨轮对象释放已通过小型真实 UB 8/32 轮、五类旧结果/逻辑端口对照，见[检查点证据](../fixtures/m10_resource_efficiency/checkpoint-lifecycle.json)。图与传输在完成记录后释放，包来源在共享网络排空后释放；无全局空闲的持续重叠负载仍受账本预算约束。前台完整图保留、研究导出与目标初始化/组合内存仍在当前任务处理，未执行最终 64 步实验。
+
 2026-10-03，最初核对基线 `14c1c8f`；其后已完成 MLA/量化容量实现及小型实际接纳验证。下文区分原独立算式与当前实现状态。M10 整体未完成，场景规格仍不是可执行配置。
 
 MLA/量化容量核算已进入现有唯一 KV 池和请求接纳流程，合同与验收见[容量说明](../fixtures/m10_mla_capacity/README.md)。[完整 Decode 参考计算图](../fixtures/m10_full_model/README.md)已通过小场景实际联合执行，含 dense/shared/首尾阶段；另验证 61 块小 EP 合成结构。[图与观测资源管理](../fixtures/m10_resources/README.md)现已加入显式预算、构图前计数和逐事件文件记录，小场景跨越旧交付/窗口限额。[二级多平面 fabric](../fixtures/m10_fabric/README.md)已完成目标全拓扑离线生成及七平面小网络真实执行。[主场景真实请求清单](../fixtures/m10_route_selection/README.md)已核验 1024 个独立文件。[宿主资源预检](../fixtures/m10_host_preflight/README.md)已实际测量全量导入与目标首层，发现全出口重复账本下界超本机容量；后续[共享来源修改](../fixtures/m10_shared_provenance/README.md)已消除该端口倍增项，并通过新旧后端小场景对照。完整图、后端/网络峰值及最终组合执行仍未验收，原生 LD/ST 仍非当前参考实验前置条件。

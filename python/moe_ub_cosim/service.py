@@ -327,6 +327,9 @@ def run(args):
         if batched:
             deployment['batch_limits'] = layer['batch_limits']
     save(output / 'deployment.json', deployment)
+    if getattr(args, 'record_storage', None) is not None:
+        from .record_storage import validate_policy
+        save(output / 'record-storage.json', validate_policy(json.loads(args.record_storage.read_text())))
     save(output / 'input.json', config)
     save(output / 'layer.json', layer)
     if pd:
@@ -410,6 +413,7 @@ def main():
     parser.add_argument('--system', type=Path, required=True)
     parser.add_argument('--network', type=Path, required=True)
     parser.add_argument('--observation', type=Path)
+    parser.add_argument('--record-storage', type=Path, help='Explicit bounded gzip record policy; emits result/2')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--max-simulation-ns', type=int, default=1000000)
     parser.add_argument('--wall-timeout-seconds', type=int, default=60)

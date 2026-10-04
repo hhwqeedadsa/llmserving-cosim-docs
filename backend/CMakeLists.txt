@@ -1,10 +1,14 @@
 # Included after ns-3-UB has defined its modules and build_exec.
+find_package(ZLIB REQUIRED)
+add_library(cosim-records STATIC "${CMAKE_CURRENT_LIST_DIR}/record_store.cc")
+target_link_libraries(cosim-records PUBLIC ZLIB::ZLIB)
+set_target_properties(cosim-records PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 # The locked logging helper has unqualified format() calls incompatible with
 # C++20 std::format. Keep this bridge on ASTRA's C++17 side of the boundary.
 add_library(cosim-astra-logging STATIC "${CMAKE_CURRENT_LIST_DIR}/astra_logging.cc")
 target_include_directories(cosim-astra-logging PRIVATE
   "${ASTRA_ROOT}" "${ASTRA_ROOT}/extern/helper")
-target_link_libraries(cosim-astra-logging PRIVATE spdlog::spdlog)
+target_link_libraries(cosim-astra-logging PUBLIC cosim-records PRIVATE spdlog::spdlog)
 set_target_properties(cosim-astra-logging PROPERTIES
   CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 build_exec(
@@ -15,6 +19,14 @@ build_exec(
 set_target_properties(cosim-logging-test PROPERTIES
   CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 target_include_directories(cosim-logging-test PRIVATE
+  "${CMAKE_CURRENT_LIST_DIR}" "${ASTRA_ROOT}/extern/helper")
+build_exec(
+  EXECNAME cosim-logging-archive-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/logging_archive_test.cc"
+  LIBRARIES_TO_LINK cosim-astra-logging AstraSim spdlog::spdlog
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-logging-archive-test PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-logging-archive-test PRIVATE
   "${CMAKE_CURRENT_LIST_DIR}" "${ASTRA_ROOT}/extern/helper")
 build_exec(
   EXECNAME cosim-compute
@@ -82,6 +94,8 @@ foreach(target cosim-compute cosim-time-test cosim-write cosim-write-test cosim-
     CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
   target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
 endforeach()
+target_link_libraries(cosim-observation-test cosim-records)
+target_link_libraries(cosim-provenance-test cosim-records)
 file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/cosim-m1")
 target_link_options(cosim-compute PRIVATE
   "LINKER:-Map,${CMAKE_BINARY_DIR}/cosim-m1/link.map")

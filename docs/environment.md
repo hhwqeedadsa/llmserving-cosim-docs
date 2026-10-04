@@ -1,5 +1,15 @@
 # 环境与运行记录
 
+## 2026-10-04：记录存储、跨轮释放与实际磁盘分配
+
+连续资源工程内部检查点，未完成 M10。工作目录 `/root/moe-ub-cosim`，R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`。详细实际 argv、cwd、退出状态和日志见 [checkpoint-lifecycle.json](../fixtures/m10_resource_efficiency/checkpoint-lifecycle.json)。所有下列最终命令退出 0，开发期失败及修正原因单独保留。
+
+`env PYTHONPATH=python P R/lifecycle_regressions.py` 串行运行真实服务、61 块结构、CANN、连续图、观测、五类新旧记录对照、8/32 轮压力和旧共享登记表检查。每项使用新构建、RSS 8 GiB/地址 12 GiB、明确时间上限，合并监测任务 runs/build 的 20 GiB 上限。五类结果与全部逻辑端口记录相同；8/32 轮峰值同为一张图及 59 个网络传输/包来源，退出清零，原网络对象保持。压缩记录为 207516/836642 B；一字节压缩预算明确失败，没有成功结果。
+
+`env PYTHONPATH=python:tests/unit P -m unittest record_storage_test host_probe_test host_processes_test service_test composed_service_test full_model_test evidence_service_test service_boundaries_test` 为 36 项通过。C++ 日志测试恢复超过 110 MiB、220000 条原始事件并跨越全部诊断轮转；记录存储、执行事件、活动对象拒绝释放及晚到事件专项通过。系统已有 zlib 1.3 开发文件，没有安装或改全局配置。
+
+`bash scripts/check_deps.sh` 和 `env PYTHONPATH=python P R/checkpoint_lifecycle.py` 核对 13 依赖、1304 保护文件与四个 UB 单套链接二进制。该检查点记录内容占用 12979926911 B、实际分配 13068611584 B，无清理。新版宿主监测以二者较大值执行限额，每秒扫描并在退出前复核；原历史监测的内容字节口径保留。前台图归档、研究导出与目标组合预算继续处理。
+
 ## 当前状态
 
 截至 2026-09-29，M0、M1、M2 和 M3.1 的分步检查已完成，当前开发能力与限制见 README 和下文各阶段记录。`publish-maintenance-repos` 已将主仓库 `main` 及 ASTRA、UB、LLMServingSim 的 `cosim` 推送到 `baoy21` 的四个私有仓库，维护地址与固定指针已保存；独立目录已从远端取回全部 13 个固定依赖，并通过依赖检查与来源核验。此次发布不改变执行代码，也不代表新机器构建、全模型性能或校准已验证。M3.2 尚未开始。

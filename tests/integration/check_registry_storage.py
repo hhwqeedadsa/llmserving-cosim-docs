@@ -42,7 +42,7 @@ def main():
         assert read(old / 'service_result.json') == read(new / 'service_result.json')
         reports = [read(p / 'execution/result.json') for p in (old, new)]
         for report in reports:
-            report['loaded_libraries'] = [Path(p).name for p in report['loaded_libraries']]
+            report['loaded_libraries'] = sorted(Path(p).name for p in report['loaded_libraries'])
         assert reports[0] == reports[1]
         compared = {}
         for directory in ('graphs', 'execution/ports', 'execution/network/runlog'):

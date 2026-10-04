@@ -72,6 +72,19 @@ int main()
               sparse.Row(0).whole==0 && sparse.Row(1).business==10 && sparse.Row(5000).whole==40,
               "sparse windows must retain only nonzero windows and preserve boundary counts");
         Reject([&] { sparse.Row(5001); });
+        moe_ub::PortWindows streamed(sparse_config);
+        std::vector<std::pair<uint64_t, moe_ub::ByteCounts>> saved_windows;
+        streamed.Stream([&](uint64_t index, const auto& row) { saved_windows.emplace_back(index, row); });
+        streamed.Add(10, 30, 10); streamed.Add(19, 20, 0); streamed.Add(50000, 40, 20);
+        Check(streamed.ResidentRows() == 1 && saved_windows.size() == 1 &&
+              saved_windows[0].first == 1 && saved_windows[0].second.whole == 50,
+              "streaming retained historical windows or changed interval bytes");
+        Reject([&] { streamed.Add(20, 10, 0); });
+        streamed.Finish();
+        Check(streamed.ResidentRows() == 0 && saved_windows.size() == 2 && saved_windows[1].first == 5000,
+              "final sparse window not persisted");
+        Reject([&] { streamed.Row(1); });
+        Reject([&] { streamed.Add(50000, 40, 20); });
         auto data = MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE, 1);
         std::vector<uint8_t> before(data->GetSize()), after(data->GetSize());
         data->CopyData(before.data(), before.size());
@@ -135,6 +148,20 @@ int main()
         Reject([&] { ledger.Register({{4294967321ULL,9,"limit",1,2,0,1,19,1}}); });
         Check(ledger.TransferCount()==2 && ledger.PacketCount()==2 && ledger.CreatedNotifications()==3,
               "shared limits or failed source events changed stored records");
+        // These unit packets were never placed on a physical link. Retiring one
+        // completed graph must preserve the other graph and historical IDs.
+        ledger.RetireCompletedGraphs({"unit"});
+        Check(ledger.TransferCount() == 1 && ledger.PacketCount() == 1 && ledger.Lookup(next_packet, 1).task_id == 8,
+              "retiring one graph invalidated another graph");
+        Reject([&] { ledger.Lookup(data, 1); });
+        Reject([&] { ledger.Created(data, 7, 65536, begin, 1); });
+        Reject([&] { ledger.Register({{4294967319ULL, 7, "reused", 1, 2, 0, 1, 17, 65537}}); });
+        ledger.RetireCompletedGraphs({"next-graph"});
+        const auto audit = ledger.RetirementAudit();
+        Check(audit.at("resident_packets") == 0 && audit.at("resident_transfers") == 0 &&
+              audit.at("retired_packets") == 2 && audit.at("registered_transfers_total") == 2 &&
+              audit.at("peak_resident_packets") == 2 && audit.at("identity_intervals") == 1,
+              "retirement totals/peaks or compact identity history differ");
         std::cout << "PASS: half-open/zero windows, packet parsing, ACK exclusion, exact ranges and diagnostics\n";
         return 0;
     }

@@ -63,6 +63,7 @@ class UbWriteTransfer
     std::optional<uint64_t> TransactionDoneNs() const { return completion_.TransactionDoneNs(); }
     std::optional<uint64_t> SendDoneNs() const { return completion_.SendDoneNs(); }
     bool ObservingTarget() const { return target_ != nullptr; }
+    bool SourceJettyRetired() const { return jetty_retired_; }
     std::optional<uint64_t> SendStartNs() const { return send_start_ns_; }
     std::optional<uint64_t> ReceiveStartNs() const { return receive_start_ns_; }
     bool HasPendingEvents() const { return submit_event_.IsPending() || completion_.HasPendingEvents(); }
@@ -80,5 +81,7 @@ class UbWriteTransfer
     ns3::EventId submit_event_;
     uint64_t submitted_tasks_ = 0;
     std::optional<uint64_t> send_start_ns_, receive_start_ns_;
+    std::optional<uint32_t> jetty_;
+    bool jetty_retired_ = false;
 };
 }

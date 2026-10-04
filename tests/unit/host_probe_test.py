@@ -5,7 +5,7 @@ import sys
 import tempfile
 import unittest
 
-from moe_ub_cosim.host_probe import disk_bytes, probe
+from moe_ub_cosim.host_probe import disk_bytes, disk_usage, probe
 
 
 class HostProbeTest(unittest.TestCase):
@@ -60,9 +60,30 @@ class HostProbeTest(unittest.TestCase):
             seen=set()
             self.assertEqual(disk_bytes(a,seen)+disk_bytes(b,seen),8192)
             r=probe([sys.executable,'-c','print("ok")'],root/'probe',
-                rss_bytes=128*2**20,address_bytes=256*2**20,artifact_bytes=16000,
+                rss_bytes=128*2**20,address_bytes=256*2**20,artifact_bytes=65536,
                 wall_seconds=5,artifact_roots=[a,b])
             self.assertEqual(r['status'],'completed')
+
+    def test_allocated_blocks_and_quick_exit_are_charged(self):
+        code="from pathlib import Path;p=Path('OUTPUT');[(p/str(i)).write_bytes(b'x') for i in range(100)]"
+        r,_,_=self.run_case(code,artifact_bytes=150000)
+        self.assertEqual(r['status'],'artifact_limit')
+        usage=r['aggregate_artifact_usage_before_report']
+        self.assertLess(usage['apparent_bytes'],150000)
+        self.assertGreater(usage['allocated_bytes'],150000)
+
+    def test_sparse_file_and_external_root_growth_are_charged(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);data=root/'data';data.mkdir()
+            with (data/'sparse').open('wb') as f:f.truncate(2**20)
+            usage=disk_usage(data)
+            self.assertEqual(usage['apparent_bytes'],2**20)
+            self.assertLess(usage['allocated_bytes'],usage['apparent_bytes'])
+            (data/'sparse').unlink()
+            code=f"from pathlib import Path;import time;p=Path({str(data)!r});time.sleep(.2);[(p/str(i)).write_bytes(b'x') for i in range(100)];time.sleep(3)"
+            r=probe([sys.executable,'-c',code],root/'probe',rss_bytes=128*2**20,
+                address_bytes=256*2**20,artifact_bytes=150000,wall_seconds=5,artifact_roots=[data])
+            self.assertEqual(r['status'],'artifact_limit')
 
 
 if __name__=='__main__':unittest.main()

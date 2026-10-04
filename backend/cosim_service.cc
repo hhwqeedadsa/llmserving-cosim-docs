@@ -3,6 +3,9 @@
 #include "astra_logging.hh"
 #include "backend_config.hh"
 #include "graph_sequence.hh"
+#include "execution_archive.hh"
+#include "result_records.hh"
+#include "identity_ranges.hh"
 #include "port_observation.hh"
 #include "ns3/simulator.h"
 #include "ns3/ub-function.h"
@@ -146,11 +149,11 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
     });
     return groups;
 }
-void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices,
+void WqeStart(Json* report, moe_ub::ResultRecords* records, const std::map<uint32_t, size_t>* indices,
               const moe_ub::BackendConfig* backend, uint32_t node, uint32_t jetty, uint32_t task)
 {
-    report->at("wqe_starts").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
-        {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
+    Json row = {{"node", node}, {"jetty", jetty}, {"task", task},
+        {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}};
     if (backend)
     {
         auto live = ns3::NodeList::GetNode(node)->GetObject<ns3::UbController>()->GetUbFunction()->GetJetty(jetty);
@@ -161,27 +164,44 @@ void WqeStart(Json* report, const std::map<uint32_t, size_t>* indices,
         Require(live->GetTaSegmentBytes() == std::stoull(attributes.at("ns3::UbJetty::TaSegmentBytes").get<std::string>()) &&
                 inflight.Get() == std::stoull(attributes.at("ns3::UbJetty::UbJettyInflightMax").get<std::string>()),
                 "Live Jetty differs from backend configuration");
-        report->at("wqe_starts").back()["ta_segment_bytes"] = live->GetTaSegmentBytes();
-        report->at("wqe_starts").back()["jetty_inflight_max"] = inflight.Get();
+        row["ta_segment_bytes"] = live->GetTaSegmentBytes();
+        row["jetty_inflight_max"] = inflight.Get();
     }
+    records->Add("wqe_starts", row);
     auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>() + 1;
     (*report)["active_wqes"][indices->at(node)] = active;
     (*report)["peak_wqes"][indices->at(node)] = std::max(active, report->at("peak_wqes").at(indices->at(node)).get<unsigned>());
 }
-void WqeEnd(Json* report, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
+void WqeEnd(Json* report, moe_ub::ResultRecords* records, const std::map<uint32_t, size_t>* indices, uint32_t node, uint32_t jetty, uint32_t task)
 {
-    report->at("wqe_completions").push_back({{"node", node}, {"jetty", jetty}, {"task", task},
+    records->Add("wqe_completions", {{"node", node}, {"jetty", jetty}, {"task", task},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
     auto active = report->at("active_wqes").at(indices->at(node)).get<unsigned>();
     Require(active > 0, "Unexpected WQE completion");
     (*report)["active_wqes"][indices->at(node)] = active - 1;
 }
-void TargetWrite(Json* writes, ns3::Ptr<const ns3::UbWqeSegment> segment)
+void TargetWrite(moe_ub::ResultRecords* records, ns3::Ptr<const ns3::UbWqeSegment> segment)
 {
-    writes->push_back({{"task", segment->GetTaskId()}, {"src", segment->GetSrc()},
+    records->Add("target_writes", {{"task", segment->GetTaskId()}, {"src", segment->GetSrc()},
         {"dst", segment->GetDest()}, {"jetty", segment->GetOriginJettyNum()},
         {"sequence", segment->GetRequestTassn()}, {"bytes", segment->GetSize()},
         {"time_ns", ns3::Simulator::Now().GetNanoSeconds()}});
+}
+Json TransferResult(const moe_ub::UbWriteTransfer& transfer)
+{
+    const auto& d = transfer.Descriptor(); const auto& done = transfer.Completion();
+    Require(!done.Active() && done.SendCallbacks() == 1 && done.ReceiveCallbacks() == 1 &&
+            done.CommittedBytes() == d.bytes && !transfer.ObservingTarget() && !transfer.HasPendingEvents() &&
+            transfer.SourceJettyRetired(), "Incomplete layer transfer " + std::to_string(d.transfer_id));
+    return {{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
+        {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
+        {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"bytes", d.bytes},
+        {"submitted_tasks", transfer.SubmittedTasks()}, {"send_callbacks", done.SendCallbacks()},
+        {"receive_callbacks", done.ReceiveCallbacks()}, {"send_start_ns", *transfer.SendStartNs()},
+        {"receive_start_ns", *transfer.ReceiveStartNs()}, {"data_ready_ns", *done.DataReadyNs()},
+        {"transaction_done_ns", *done.TransactionDoneNs()}, {"send_done_ns", *done.SendDoneNs()},
+        {"receive_done_ns", *done.ReceiveDoneNs()}, {"committed_bytes", done.CommittedBytes()},
+        {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}, {"graph_id", d.graph_id}};
 }
 int Library(dl_phdr_info* info, size_t, void* data)
 {
@@ -307,6 +327,8 @@ int main(int argc, char** argv)
         const std::string run_id = argv[1];
         Require(std::regex_match(run_id, std::regex("[A-Za-z0-9_.-]+")), "Invalid run identity");
         const auto shared = fs::canonical(argv[2]);
+        const auto storage_policy = fs::exists(shared / "record-storage.json") ? ReadJson(shared / "record-storage.json") : Json(nullptr);
+        if (!storage_policy.is_null()) moe_ub::ValidateRecordPolicy(storage_policy);
         Json batch_limits;
         auto groups = LoadGroups(shared, batch_limits);
         std::map<int, size_t> owner, rank_index;
@@ -426,6 +448,7 @@ int main(int argc, char** argv)
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}};
         if (backend_config) report["backend_parameters_active"] = true;
+        moe_ub::ResultRecords records(report, storage_policy);
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank : ranks)
@@ -437,14 +460,15 @@ int main(int argc, char** argv)
             report["initial_tp_counts"].push_back(controller->GetTransportCountForTest());
             auto app = ns3::CreateObject<ns3::UbApp>();
             node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank_node.at(rank));
-            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &node_index,
+            Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &records, &node_index,
                     backend_config ? &*backend_config : nullptr)) &&
-                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &node_index)) &&
+                    app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &records, &node_index)) &&
                     controller->GetUbTransaction()->TraceConnectWithoutContext("RemoteWriteCommitted",
-                        ns3::MakeBoundCallback(TargetWrite, &report["target_writes"])), "Cannot attach execution traces");
+                        ns3::MakeBoundCallback(TargetWrite, &records)), "Cannot attach execution traces");
         }
         if (backend_config) backend_config->WriteEffective(controllers, apps);
         moe_ub::InitializeAstraLogging();
+        if (records.Bounded()) moe_ub::EnableAstraExecutionArchive(records.Store());
         {
             NetworkDrain drain;
             std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> transfers;
@@ -456,7 +480,7 @@ int main(int argc, char** argv)
             for (const auto& config : observation_configs)
                 observations.push_back(std::make_unique<moe_ub::PortObservation>(config,
                     provenance, multiple_ports,
-                    config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id))));
+                    config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id)), records.Store()));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
             Json resource_budget=nullptr, resource_used={{"graphs",0u},{"transfers",0u},{"nodes",0u}};
@@ -482,7 +506,66 @@ int main(int argc, char** argv)
                         "Streaming observation requires complete model graph/run resource budget");
             std::vector<moe_ub::LayerPlan> plans;
             std::set<std::string> graphs, waves, seen_operations, kv_graphs;
-            std::set<uint64_t> transfer_ids, tasks, tags;
+            moe_ub::IdentityRanges transfer_ids, tasks, tags;
+            moe_ub::ExecutionArchive execution_archive;
+            std::set<std::string> provenance_retirement;
+            std::set<int> transfer_ranks;
+            std::map<std::string, uint64_t> endpoint_offsets;
+            uint64_t next_endpoint_offset = 0, expected_completions = 0, submitted_transfers = 0;
+            uint64_t peak_plans = 0, peak_transfers = 0, peak_local = 0, retired_graphs = 0;
+            Json retirement_boundaries = Json::array();
+            const bool record_truth = std::any_of(observation_configs.begin(), observation_configs.end(),
+                [](const auto& config) { return config.provenance; });
+            auto retire_provenance = [&]() {
+                if (!records.Bounded() || provenance_retirement.empty() || !drain.Idle()) return;
+                if (provenance) provenance->RetireCompletedGraphs(provenance_retirement);
+                provenance_retirement.clear();
+            };
+            auto retire_graph = [&](const std::string& graph) {
+                if (!records.Bounded()) return;
+                execution_archive.Read(records.Store()->Directory(), moe_ub::DrainAstraExecutionArchive());
+                auto found = std::find_if(plans.begin(), plans.end(), [&](const auto& p) { return p.data.at("graph_id") == graph; });
+                Require(found != plans.end(), "Completed graph has no retained plan");
+                auto timing = execution_archive.Take(*found);
+                for (const auto& [key, node] : found->nodes)
+                {
+                    const auto& t = timing.at(key);
+                    records.Add("node_execution", {{"rank_id", key.first}, {"node_id", key.second}, {"kind", node.kind},
+                        {"start_ns", t.start_ns}, {"end_ns", t.end_ns}, {"graph_id", graph}}, graph);
+                }
+                auto endpoints = moe_ub::LayerEndpointOperations(*found, timing);
+                auto operations = moe_ub::LayerOperationRegistry(*found);
+                const auto offset = endpoint_offsets.at(graph);
+                for (auto& row : endpoints)
+                {
+                    row["local_record_id"] = row.at("local_record_id").get<uint64_t>() + offset;
+                    records.Add("endpoint_ops", row, graph);
+                }
+                if (record_truth) for (auto& op : operations)
+                {
+                    for (auto& row : op["endpoint_records"]) row["local_record_id"] = row.at("local_record_id").get<uint64_t>() + offset;
+                    records.Add("operation_registry", op, graph);
+                }
+                for (const auto& transfer : transfers) if (transfer->Descriptor().graph_id == graph)
+                {
+                    records.Add("transfers", TransferResult(*transfer), graph);
+                    if (record_truth) records.Add("transfer_registry", moe_ub::TransferRegistryRecord(*transfer), graph);
+                }
+                for (const auto& delivery : local_deliveries) if (delivery->Descriptor().graph_id == graph)
+                {
+                    Require(!delivery->Active() && !delivery->HasPendingEvents(), "Live delivery at graph retirement");
+                    records.Add("local_deliveries", delivery->Result(), graph);
+                }
+                records.FinishGraph(graph);
+                for (auto& adapter : adapters) adapter->RetireGraph(graph);
+                std::erase_if(transfers, [&](const auto& t) { return t->Descriptor().graph_id == graph; });
+                std::erase_if(local_deliveries, [&](const auto& d) { return d->Descriptor().graph_id == graph; });
+                plans.erase(found); endpoint_offsets.erase(graph); ++retired_graphs;
+                provenance_retirement.insert(graph); retire_provenance();
+                retirement_boundaries.push_back({{"graph_id", graph}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()},
+                    {"resident_graphs", plans.size()}, {"resident_transfers", transfers.size()}, {"resident_local", local_deliveries.size()},
+                    {"pending_provenance_graphs", provenance_retirement.size()}, {"same_network_objects", true}});
+            };
             std::map<size_t, uint64_t> completed_groups;
             ns3::EventId wakeup;
             bool decision_pending = false;
@@ -534,7 +617,7 @@ int main(int argc, char** argv)
             }
             for (auto& sys : systems) sys->workload->activate_graph();
             Require(bootstrap_done == unsigned(rank_count) && ns3::Simulator::Now().GetNanoSeconds() == 0 &&
-                    report["wqe_starts"].empty() && drain.StartedPackets() == 0,
+                    records.Count("wqe_starts") == 0 && drain.StartedPackets() == 0,
                     "Bootstrap generated work or advanced time");
             bootstrap = false;
             report["bootstrap"] = {{"finished_ranks", bootstrap_done}, {"time_ns", 0}, {"business_nodes", 0}};
@@ -552,6 +635,7 @@ int main(int argc, char** argv)
                 probe_pending = true;
                 ns3::Simulator::ScheduleNow([&]() { ns3::Simulator::ScheduleNow([&]() {
                     probe_pending = false;
+                    retire_provenance();
                     if (service_finished || decision_pending || wakeup.IsPending() || !drain.Idle()) return;
                     for (const auto& adapter : adapters)
                         if (adapter->ScheduledEvents() != adapter->ExecutedCallbacks()) return;
@@ -585,12 +669,13 @@ int main(int argc, char** argv)
                                         "Graph completion before participant work retired");
                     for (const auto& transfer : transfers)
                         if (transfer->Descriptor().graph_id == group.graph)
-                            Require(!transfer->Completion().Active() && !transfer->ObservingTarget(),
+                            Require(!transfer->Completion().Active() && !transfer->ObservingTarget() && !transfer->HasPendingEvents(),
                                     "Completed group still has an active transfer");
                     for (const auto& delivery : local_deliveries)
                         if (delivery->Descriptor().graph_id == group.graph)
                             Require(!delivery->Active() && !delivery->HasPendingEvents(), "Completed group retains local delivery");
                     const auto done_graph = group.graph;
+                    retire_graph(done_graph);
                     completed.push_back({{"kind", kv_graphs.count(done_graph) ? "KV_DONE" : "WAVE_DONE"}, {"graph_id", done_graph},
                         {"wave_id", group.wave}, {"finished_ns", finished}});
                     for (auto& participant : groups)
@@ -794,19 +879,41 @@ int main(int argc, char** argv)
                     }
                     loaded.Install(systems, adapters, pointers, local_pointers);
                     if (provenance) provenance->Register(plan.descriptors);
+                    records.BeginGraph(graph);
+                    if (records.Bounded())
+                    {
+                        execution_archive.Register(plan);
+                        endpoint_offsets[graph] = next_endpoint_offset;
+                        next_endpoint_offset += plan.data.contains("layers") ? 2 * plan.data.at("layers").size() : 2;
+                        for (const auto& transfer : plan.data.at("transfers")) records.Add("planned_transfers", transfer, graph);
+                        const auto usage = plan.validated_usage.is_null() ? moe_ub::resources::Actual(plan.data) : plan.validated_usage;
+                        records.Add("plan_summary", {{"graph_id", graph}, {"operations", plan.data.at("operations")},
+                            {"resource_budget", resource_budget}, {"resource_usage", usage}}, graph);
+                    }
+                    expected_completions += plan.data.at("rank_ids").size();
+                    submitted_transfers += plan.descriptors.size();
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
                     send_slots = slots;
                     graphs.insert(graph); waves.insert(wave);
                     for (const auto& op : plan.data.at("operations")) seen_operations.insert(op.at("operation_id").get<std::string>());
                     for (const auto& d : plan.descriptors)
-                    { transfer_ids.insert(d.transfer_id); tasks.insert(d.task_id); tags.insert(d.tag); }
+                    {
+                        transfer_ids.insert(d.transfer_id); tasks.insert(d.task_id); tags.insert(d.tag);
+                        transfer_ranks.insert(d.src_rank); transfer_ranks.insert(d.dst_rank);
+                    }
                     for (auto& transfer : prepared)
-                    { export_registry.push_back(transfer.get()); transfers.push_back(std::move(transfer)); }
+                    {
+                        if (!records.Bounded()) export_registry.push_back(transfer.get());
+                        transfers.push_back(std::move(transfer));
+                    }
                     for (const auto& d : plan.local_descriptors)
                     { transfer_ids.insert(d.transfer_id); tags.insert(d.tag); }
                     for (auto& delivery : prepared_local) local_deliveries.push_back(std::move(delivery));
                     plans.push_back(loaded.ReleasePlan());
+                    peak_plans = std::max(peak_plans, uint64_t(plans.size()));
+                    peak_transfers = std::max(peak_transfers, uint64_t(transfers.size()));
+                    peak_local = std::max(peak_local, uint64_t(local_deliveries.size()));
                     if (kv) kv_graphs.insert(graph);
                     for (auto i : selected)
                     { groups[i].graph = graph; groups[i].wave = wave; groups[i].completed.clear(); }
@@ -893,20 +1000,7 @@ int main(int argc, char** argv)
             report["csv_completed_tasks"] = ns3::UbTrafficGen::Get()->GetCompletedTaskCount();
             for (const auto& transfer : transfers)
             {
-                const auto& d = transfer->Descriptor();
-                const auto& done = transfer->Completion();
-                Require(!done.Active() && done.SendCallbacks() == 1 && done.ReceiveCallbacks() == 1 &&
-                        done.CommittedBytes() == d.bytes && !transfer->ObservingTarget(), "Incomplete layer transfer " + std::to_string(d.transfer_id));
-                report["transfers"].push_back({{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
-                    {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
-                    {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"bytes", d.bytes},
-                    {"submitted_tasks", transfer->SubmittedTasks()}, {"send_callbacks", done.SendCallbacks()},
-                    {"receive_callbacks", done.ReceiveCallbacks()}, {"send_start_ns", *transfer->SendStartNs()},
-                    {"receive_start_ns", *transfer->ReceiveStartNs()}, {"data_ready_ns", *done.DataReadyNs()},
-                    {"transaction_done_ns", *done.TransactionDoneNs()}, {"send_done_ns", *done.SendDoneNs()},
-                    {"receive_done_ns", *done.ReceiveDoneNs()}, {"committed_bytes", done.CommittedBytes()},
-                    {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}});
-                report["transfers"].back()["graph_id"] = d.graph_id;
+                report["transfers"].push_back(TransferResult(*transfer));
             }
             for (int rank : ranks)
             {
@@ -934,10 +1028,9 @@ int main(int argc, char** argv)
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
-            size_t expected_completions = 0;
-            for (const auto& plan : plans) expected_completions += plan.data.at("rank_ids").size();
-            Require(report["graph_completions"].size() == expected_completions && report["wqe_starts"].size() == transfers.size() &&
-                    report["wqe_completions"].size() == transfers.size() && report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
+            Require(report["graph_completions"].size() == expected_completions && records.Count("wqe_starts") == submitted_transfers &&
+                    records.Count("wqe_completions") == submitted_transfers && records.Count("transfers") == submitted_transfers &&
+                    report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
                     report["csv_completed_tasks"] == 0, "Service completion invariant failed");
             for (const auto& peak : report["peak_wqes"])
                 Require(peak <= send_slots, "Layer SEND slot limit exceeded");
@@ -970,10 +1063,29 @@ int main(int argc, char** argv)
                 endpoint_offset += plans[step].data.contains("layers") ? 2 * plans[step].data.at("layers").size() : 2;
             }
             std::optional<moe_ub::ObservationRegistry> registry;
-            if (!observations.empty()) registry = moe_ub::ObservationRegistry::Write(
-                export_registry, endpoints, operations, "registry",
-                std::any_of(observation_configs.begin(), observation_configs.end(),
-                    [](const auto& config) { return config.provenance; }));
+            if (records.Bounded())
+            {
+                retire_provenance();
+                execution_archive.Read(records.Store()->Directory(), moe_ub::DrainAstraExecutionArchive());
+                Require(plans.empty() && transfers.empty() && local_deliveries.empty() && provenance_retirement.empty() &&
+                        execution_archive.ActiveGraphs() == 0 && execution_archive.ResidentNodes() == 0,
+                        "Completed service retains graph or execution state");
+                for (const auto& adapter : adapters)
+                    Require(adapter->RegisteredTransfers() == 0 && adapter->RegisteredLocalDeliveries() == 0,
+                            "Completed service retains borrowed transfer pointers");
+                report["resource_lifecycle"] = {{"schema_version", "moe-ub-service-lifecycle/1"},
+                    {"retired_graphs", retired_graphs}, {"peak_resident_graphs", peak_plans},
+                    {"peak_resident_transfers", peak_transfers}, {"peak_resident_local", peak_local},
+                    {"resident_graphs_at_exit", 0}, {"resident_transfers_at_exit", 0}, {"adapter_transfers_at_exit", 0},
+                    {"execution_events_read", execution_archive.EventsRead()}, {"boundaries", retirement_boundaries},
+                    {"transfer_identity_intervals", transfer_ids.Intervals()}, {"task_identity_intervals", tasks.Intervals()},
+                    {"tag_identity_intervals", tags.Intervals()}};
+                if (provenance) report["resource_lifecycle"]["provenance"] = provenance->Ledger().RetirementAudit();
+            }
+            if (!observations.empty())
+                registry = records.Bounded() ? moe_ub::ObservationRegistry::ReferToResult(
+                    std::vector<int>(transfer_ranks.begin(), transfer_ranks.end()), submitted_transfers, "registry", record_truth) :
+                    moe_ub::ObservationRegistry::Write(export_registry, endpoints, operations, "registry", record_truth);
             for (size_t index = 0; index < observations.size(); ++index)
             {
                 const auto& config = observation_configs[index];
@@ -993,6 +1105,7 @@ int main(int argc, char** argv)
                 Require(bool(output), "Cannot write provenance resource audit");
             }
             dl_iterate_phdr(Library, &report["loaded_libraries"]);
+            records.Finish();
         }
         utils->Destroy(); ns3::Simulator::Destroy(); moe_ub::ShutdownAstraLogging();
         std::ofstream output("result.json"); output << report.dump(2) << '\n'; output.close();

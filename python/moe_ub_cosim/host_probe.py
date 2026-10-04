@@ -12,26 +12,34 @@ from pathlib import Path
 import resource
 import signal
 import shutil
+import stat
 import subprocess
 import sys
 import time
 
 from .host_processes import ProcessTree
 
-def disk_bytes(path, seen=None):
+def disk_usage(path, seen=None):
     # Do not follow output symlinks into unrelated directories.
     # Hard-linked registries occupy storage once, including across task roots.
     if seen is None:seen=set()
-    total=0
-    for directory,_,files in os.walk(path,followlinks=False):
-        for name in files:
-            p=Path(directory)/name
+    apparent=allocated=0
+    for directory,dirs,files in os.walk(path,followlinks=False):
+        dirs[:]=[name for name in dirs if not (Path(directory)/name).is_symlink()]
+        for p in [Path(directory),*(Path(directory)/name for name in files)]:
             try:
-                if not p.is_symlink():
-                    stat=p.stat();key=stat.st_dev,stat.st_ino
-                    if key not in seen:total+=stat.st_size;seen.add(key)
+                info=p.lstat();key=info.st_dev,info.st_ino
+                if key not in seen and (stat.S_ISREG(info.st_mode) or stat.S_ISDIR(info.st_mode)):
+                    if stat.S_ISREG(info.st_mode):apparent+=info.st_size
+                    allocated+=info.st_blocks*512
+                    seen.add(key)
             except FileNotFoundError:pass
-    return total
+    return dict(apparent_bytes=apparent,allocated_bytes=allocated)
+
+
+def disk_bytes(path, seen=None):
+    """Legacy logical file size, deduplicating hard links across roots."""
+    return disk_usage(path,seen)['apparent_bytes']
 
 
 def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,artifact_roots=(),min_free_bytes=0):
@@ -46,7 +54,17 @@ def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,a
         if not any(path.is_relative_to(parent) for parent in counted):counted.append(path)
     def size_now():
         seen=set()
-        return sum(disk_bytes(path,seen) for path in counted)
+        totals=dict(apparent_bytes=0,allocated_bytes=0)
+        for path in counted:
+            for key,value in disk_usage(path,seen).items():totals[key]+=value
+        return totals
+    def account(size):
+        value=max(size.values())
+        report['peak_sampled_artifact_bytes']=max(report['peak_sampled_artifact_bytes'],value)
+        for key,amount in size.items():
+            field='peak_sampled_artifact_'+key
+            report[field]=max(report.get(field,0),amount)
+        return value
     def limits():
         for kind,value in ((resource.RLIMIT_AS,address_bytes),(resource.RLIMIT_FSIZE,artifact_bytes),(resource.RLIMIT_CORE,0)):
             _,hard=resource.getrlimit(kind)
@@ -59,7 +77,8 @@ def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,a
         peak_sampled_group_rss_bytes=0,peak_sampled_processes=0,status='starting',workload_semantics_validated=False,
         artifact_roots=[str(p) for p in counted],peak_sampled_artifact_bytes=0,min_free_bytes=min_free_bytes,
         rss_scope='owned_process_tree_including_detached_descendants',
-        artifact_accounting='unique_regular_file_inodes_apparent_bytes')
+        artifact_accounting='max_unique_file_apparent_and_file_directory_allocated_bytes',
+        disk_sample_interval_seconds=1.0)
     start=time.monotonic();child=None;reason=None;tree=None
     def stop():
         if child is None:return
@@ -71,8 +90,7 @@ def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,a
             time.sleep(.01)
     try:
         with (output/'stdout.log').open('w') as stdout,(output/'stderr.log').open('w') as stderr,(output/'samples.jsonl').open('w') as samples:
-            initial_size=size_now();free=shutil.disk_usage(output).free
-            report['peak_sampled_artifact_bytes']=initial_size
+            size=size_now();initial_size=account(size);free=shutil.disk_usage(output).free
             if initial_size>artifact_bytes or free<min_free_bytes:
                 report.update(status='artifact_limit' if initial_size>artifact_bytes else 'disk_free_limit',child_exit_code=None)
                 return report
@@ -80,19 +98,24 @@ def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,a
             child=subprocess.Popen(command,stdout=stdout,stderr=stderr,start_new_session=True,preexec_fn=limits)
             tree.attach(child.pid)
             report['process_group']=child.pid
+            next_disk_sample=0
             while True:
                 elapsed=time.monotonic()-start;group=tree.collect();rss=sum(p['rss_bytes'] for p in group)
-                size=size_now();free=shutil.disk_usage(output).free
-                report['peak_sampled_artifact_bytes']=max(report['peak_sampled_artifact_bytes'],size)
+                exited=child.poll() is not None
+                if elapsed>=next_disk_sample or exited:
+                    size=size_now();free=shutil.disk_usage(output).free
+                    next_disk_sample=time.monotonic()-start+report['disk_sample_interval_seconds']
+                charged=account(size)
                 report['peak_sampled_group_rss_bytes']=max(report['peak_sampled_group_rss_bytes'],rss)
                 report['peak_sampled_processes']=max(report['peak_sampled_processes'],len(group))
-                samples.write(json.dumps(dict(elapsed_seconds=elapsed,group_rss_bytes=rss,artifact_bytes=size,free_disk_bytes=free,processes=group))+'\n');samples.flush()
+                samples.write(json.dumps(dict(elapsed_seconds=elapsed,group_rss_bytes=rss,
+                    artifact_bytes=charged,artifact_usage=size,free_disk_bytes=free,processes=group))+'\n');samples.flush()
                 if rss>rss_bytes:reason='rss_limit'
-                elif size>artifact_bytes:reason='artifact_limit'
+                elif charged>artifact_bytes:reason='artifact_limit'
                 elif free<min_free_bytes:reason='disk_free_limit'
                 elif elapsed>wall_seconds:reason='wall_limit'
                 if reason:stop();break
-                if child.poll() is not None:
+                if exited:
                     # The parent can exit between the RSS sample and poll().
                     # Re-read instead of treating that stale parent as a live descendant.
                     if tree.collect():reason='descendants_after_exit';stop()
@@ -110,9 +133,14 @@ def probe(command,output,*,rss_bytes,address_bytes,artifact_bytes,wall_seconds,a
             report['remaining_live_group_pids']=[p['pid'] for p in tree.collect()]
         if tree is not None:tree.close()
         report.setdefault('remaining_live_group_pids',[])
+        final_size=size_now();account(final_size)
+        if report['status']=='completed' and max(final_size.values())>artifact_bytes:
+            report['status']='artifact_limit'
         report.update(ended_utc=datetime.now(timezone.utc).isoformat(),wall_seconds=time.monotonic()-start,
             max_waited_child_rss_kib=resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss,
-            artifact_bytes_before_report=disk_bytes(output),aggregate_artifact_bytes_before_report=size_now())
+            artifact_bytes_before_report=disk_bytes(output),
+            aggregate_artifact_bytes_before_report=max(final_size.values()),
+            aggregate_artifact_usage_before_report=final_size)
         (output/'probe.json').write_text(json.dumps(report,indent=2)+'\n')
     return report
 

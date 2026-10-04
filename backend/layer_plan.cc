@@ -642,75 +642,72 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
 }
 Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
 {
-    if (plan.data.at("schema_version") == "moe-ub-full-model-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/2")
-    {
-        Json result = Json::array();
-        for (size_t index = 0; index < plan.data.at("layers").size(); ++index)
-        {
-            auto data = plan.data.at("layers")[index];
-            data["transfers"] = Json::array(); data["rank_graphs"] = Json::array();
-            std::set<std::string> operations;
-            for (const auto& op : data.at("operations")) operations.insert(op.at("operation_id").get<std::string>());
-            for (const auto& transfer : plan.data.at("transfers"))
-                if (operations.contains(transfer.at("operation_id").get<std::string>())) data["transfers"].push_back(transfer);
-            for (const auto& graph : plan.data.at("rank_graphs"))
-            {
-                const auto& phase = graph.at("layer_phases")[index];
-                data["rank_graphs"].push_back({{"rank_id", graph.at("rank_id")},
-                    {"phase_nodes", phase.at("phase_nodes")}, {"entry_deps", phase.at("entry_deps")}});
-            }
-            for (auto row : LayerEndpointOperations(LayerPlan{data, {}, {}}, execution))
-            {
-                row["local_record_id"] = row.at("local_record_id").get<uint64_t>() + 2 * index;
-                result.push_back(row);
-            }
-        }
-        return result;
-    }
-    std::map<std::pair<int, uint64_t>, Json> nodes;
-    for (const auto& event : execution) nodes[{event.at("rank_id"), event.at("node_id")}] = event;
+    ExecutionTimes times;
+    for (const auto& event : execution)
+        times[{event.at("rank_id"), event.at("node_id")}] =
+            {event.at("start_ns"), event.at("end_ns"), true, true};
+    return LayerEndpointOperations(plan, times);
+}
+Json LayerEndpointOperations(const LayerPlan& plan, const ExecutionTimes& execution)
+{
     Json endpoints = Json::array();
     if (plan.data.at("communication_template") == "kv_direct_v1")
     {
+        std::map<int, uint64_t> ends;
+        for (const auto& [key, event] : execution) ends[key.first] = std::max(ends[key.first], event.end_ns);
         for (const int rank : plan.data.at("rank_ids"))
         {
-            uint64_t end = plan.data.at("ready_ns");
-            for (const auto& event : execution)
-                if (event.at("rank_id") == rank) end = std::max(end, event.at("end_ns").get<uint64_t>());
             endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "KV_TRANSFER"},
-                {"start_local_ns", plan.data.at("ready_ns")}, {"end_local_ns", end}});
+                {"start_local_ns", plan.data.at("ready_ns")},
+                {"end_local_ns", std::max(ends[rank], plan.data.at("ready_ns").get<uint64_t>())}});
         }
         return endpoints;
     }
-    for (const auto& graph : plan.data.at("rank_graphs"))
+    // One pass over transfers, and one timing index for the whole graph. Status
+    // messages keep their original phase dependencies; only the same dispatch/
+    // combine data nodes used by the old endpoint definition enter these maxima.
+    std::map<std::pair<std::string, int>, uint64_t> communication;
+    for (const auto& transfer : plan.data.at("transfers"))
+        if (transfer.at("kind") == "dispatch" || transfer.at("kind") == "combine")
+            for (const bool send : {true, false})
+            {
+                const int rank = transfer.at(send ? "src_rank" : "dst_rank");
+                auto& end = communication[{transfer.at("operation_id").get<std::string>(), rank}];
+                end = std::max(end, execution.at({rank, transfer.at(send ? "send_node_id" : "recv_node_id").get<uint64_t>()}).end_ns);
+            }
+    const bool layered = plan.data.contains("layers");
+    const size_t count = layered ? plan.data.at("layers").size() : 1;
+    for (size_t index = 0; index < count; ++index)
     {
-        int rank = graph.at("rank_id");
+      const auto& layer = layered ? plan.data.at("layers")[index] : plan.data;
+      std::map<std::string, std::string> operations;
+      for (const auto& op : layer.at("operations")) operations[op.at("kind")] = op.at("operation_id");
+      for (const auto& rank_graph : plan.data.at("rank_graphs"))
+      {
+        const auto& graph = layered ? rank_graph.at("layer_phases")[index] : rank_graph;
+        int rank = rank_graph.at("rank_id");
         const auto& p = graph.at("phase_nodes");
         auto end = [&](const char* phase, uint64_t fallback) {
             return p.at(phase).is_null() ? fallback :
-                nodes.at({rank, p.at(phase).get<uint64_t>()}).at("end_ns").get<uint64_t>();
+                execution.at({rank, p.at(phase).get<uint64_t>()}).end_ns;
         };
         auto communication_end = [&](const char* kind, uint64_t earliest) {
-            for (const auto& transfer : plan.data.at("transfers"))
-                if (transfer.at("kind") == kind)
-                    for (const auto& side : {"send", "recv"})
-                        if (transfer.at(std::string(side) == "send" ? "src_rank" : "dst_rank") == rank)
-                            earliest = std::max(earliest, nodes.at({rank, transfer.at(std::string(side) + "_node_id").get<uint64_t>()})
-                                .at("end_ns").get<uint64_t>());
-            return earliest;
+            const auto op = operations.find(kind);
+            return op == operations.end() ? earliest : std::max(earliest, communication[{op->second, rank}]);
         };
-        uint64_t ready = plan.data.at("ready_ns");
+        uint64_t ready = layer.at("ready_ns");
         if (graph.contains("entry_deps"))
             for (const auto& dep : graph.at("entry_deps"))
-                ready = std::max(ready, nodes.at({rank, dep.get<uint64_t>()}).at("end_ns").get<uint64_t>());
+                ready = std::max(ready, execution.at({rank, dep.get<uint64_t>()}).end_ns);
         const auto prepared = end("prepare", ready);
         const auto dispatched = p.contains("dispatch_reorder") ? end("dispatch_reorder", prepared) : communication_end("dispatch", prepared);
         const auto merged = end("local_merge", end("expert", dispatched));
         const auto finished = end("finish", communication_end("combine", merged));
-        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1}, {"kind", "dispatch"},
+        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 1 + 2 * index}, {"kind", "dispatch"},
             {"start_local_ns", prepared}, {"end_local_ns", dispatched}});
-        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 2}, {"kind", "combine"},
+        endpoints.push_back({{"rank_id", rank}, {"local_record_id", 2 + 2 * index}, {"kind", "combine"},
             {"start_local_ns", merged}, {"end_local_ns", finished}});
+      }
     }
     return endpoints;
 }

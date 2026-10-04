@@ -1,0 +1,1636 @@
+{
+  "schema_version": "moe-ub-resource-efficiency-checkpoint/1",
+  "checkpoint": "bounded_plan_io_and_incremental_loader",
+  "task_completed": false,
+  "source_sha256": {
+    "python/moe_ub_cosim/plan_io.py": "0518c118b14403eb39898f86cd7ce2c33c9e3ede479dbe1cb089697331170964",
+    "python/moe_ub_cosim/generate.py": "f7450e3a8480bdaa56954c94912ea6daeffea39aec93b1e48832eea20b8aea61",
+    "python/moe_ub_cosim/full_round_probe.py": "f9cb5dd8dcc8455b5478f96998d0ce9d6de7a8879c368e05b4740a485a4f7270",
+    "python/moe_ub_cosim/host_probe.py": "45be32402baf251d58b5f1839beed9c4ec78de14a05a0c24ee3526c9352b2c68",
+    "backend/layer_plan.hh": "c05144e9049f6aa91f85867475b5b244a3e1f854b2ca8233c24a23901b9d6527",
+    "backend/layer_plan.cc": "5158945dacb982240eaf6fa68abe73e7f4085f98c1a735a8630d8c7dd0a959c2",
+    "backend/cann_plan.cc": "bb06bfe7f08dc22b28fc724e87287f01052e00b8cdb81bc9153dafedddf15388",
+    "backend/full_model_plan.cc": "a2bf6294c1a255c35ff10c1dd7df39741627a9dda4b3bf6707372517d8d89c50"
+  },
+  "storage": {
+    "compact": true,
+    "usage": {
+      "transfers": 64992,
+      "fabric_transfers": 64556,
+      "local_transfers": 436,
+      "nodes": 135558
+    },
+    "timings": {
+      "write_seconds": 4.563541669398546,
+      "validate_export_seconds": 10.616165788844228
+    },
+    "old_plan_bytes": 306199718,
+    "new_plan_bytes": 133050763,
+    "input_dir": "runs/v03-full-model-export/compare-closed/work/graph",
+    "input_hashes": {
+      "et_def.proto": "3eb062b4085f32a9d8730986447cf0676cebdd02aac82def5ad2cb3cf9ba595b",
+      "plan.json": "1eeecc458b67014c8f7ceef9be2b4e9e221647a529c632a3cb90555a75741c92",
+      "layer.0.et": "f223c0defc324f89b4a7c68ffe6acdf366de9185910858e359e5078b895cac34",
+      "layer.1.et": "4e20582e793b1caa512dba87808faf523bab03b9fe50f85f7baacb9aa86380a3",
+      "layer.10.et": "1089e18635abd50aaba59334a196d3568adb67f3d8ea369ce9c0df0f8176e49c",
+      "layer.100.et": "82c80307d4eac6e791bade52f0f29181106ee632d515fb37408a96c4de75db29",
+      "layer.101.et": "fe6f66fe1795e6678119e7d9c286047c5293039cf9bcbfe0e3b307ab89fcc652",
+      "layer.102.et": "c631fddee4f1552da3c3dfe45e471490a71265bbfb429a4c863ec829c50fb009",
+      "layer.103.et": "56e31beb22955f26928767d3d65565e64aa7e3a4608c76d1e35421f872c4c814",
+      "layer.104.et": "60937e03bfd1d883e30020b22e9d35cf837bc662aa87813a7bb152eedf6a4323",
+      "layer.105.et": "83040ec02b9182356761a8e062c6928017076beeee95c053251f56bb07dd9491",
+      "layer.106.et": "61b4aefdb5d05a7855230b0619f67fbd3c38daeef3eebd8bd0dc8317d0f25188",
+      "layer.107.et": "86a10b3e8e7afb0643c1eb7791c834bea3ff64ad06666199d692362dcbcf0119",
+      "layer.108.et": "bc581b89bc00bb8233b53ffb806e71f0ec7a8be509864bcb692e690fdbbeec5b",
+      "layer.109.et": "6835496bfca6dd3514c86de7aa50d11e0da68e260409ec1f2df5fef2b1e54ed7",
+      "layer.11.et": "082eba498e60ddd7dfb28e61619a13cac64d4cba33af233bfd23688b734adcc5",
+      "layer.110.et": "89957efdee8f6262864fb67d5cbb8fd9614d59ff753a125560db71a6987aeaf7",
+      "layer.111.et": "cb837012d972bb2bb4ed309a157bef179bcad732c89c3d3bea24495dc59cf7ff",
+      "layer.112.et": "c3684a6694d81ca700df93570094007f54be80eb05a4ba8cf4e35f231148034c",
+      "layer.113.et": "afa3f2a64caf190e5b7ddfea0fcfc7ab06e02a9669d7bd3cfc0b7d9e0695be81",
+      "layer.114.et": "d159bc8b874920886a6ecec0c5ed2c71b1a780e9da91d2291c029fa044f98c95",
+      "layer.115.et": "cbe84617c19cc85fb9c908696d619eea424be760d7fdb5b78777d1b8e1de766c",
+      "layer.116.et": "056b1da07438238b73e1434df7a165c0ad4959d41cc4a641c83d6e24ad67cb26",
+      "layer.117.et": "23d1eef093875b3f878764a3bc497003253d51ca91d27fe6fcafff0fa862e112",
+      "layer.118.et": "76b8a5bb3f9245e50cc79c33d46dde62a941c8e7d63b500ee94af1474c165452",
+      "layer.119.et": "9c956df1ec64ef30276de81fdfbbf55a24c5300c95c2a2be986ac267dbf96e2c",
+      "layer.12.et": "4096a3b55e9bd68d34f73547e494817016fd1fc9b587e9ec1bcd1c607507525d",
+      "layer.120.et": "9389558d75cf4b83562ee83f3da79d733f9f28059fbfa7cfff19415f1dd5ea9f",
+      "layer.121.et": "c876131b6287ec849256437dc48023f3a6fe34620e6178188e57fe03c9ea8b76",
+      "layer.122.et": "cad9ef051a754a6057dc23ab30859f1bfb0ef18ba5e38af1cf74b7c1fee139c4",
+      "layer.123.et": "7e0bfe68201b64be1a5d4a6204def93be8ba1ba4464df733e47501b6edcdf435",
+      "layer.124.et": "942cc34e6c6d53dc6d101a3676adbe885b5759f366b78596b97502e3d4ae30c6",
+      "layer.125.et": "400e2f60c150050402306104eb5d53ae594335a6ffcc07fcf8c541f833f28f06",
+      "layer.126.et": "3c3ca7ceede2ffc0c0fd84f9b1a0356fa87784a4fafbcb52630ef9a48a5b21e5",
+      "layer.127.et": "7df6c2905e6b53b06c32da338808516ed2c97280e55f640dbd2dfeafa9a82ffb",
+      "layer.13.et": "0fce4effb5871e9b4f101ee7a9563de7ad5844040d3b2a4a34d22cdd206f7a42",
+      "layer.14.et": "5cf4d7052af700873accb6703e5938f17a9a0eea48a3d5680cf103981a836537",
+      "layer.15.et": "5649e90f74063bb7e9685de6047a438fb7e643201b42f849e2411383ca20ef8d",
+      "layer.16.et": "b523d70e7a3ec3ec0088aa842a3fc4625166bf4425d3046e635e65df74adf13f",
+      "layer.17.et": "da264ef05d72b8aa4e699cc9250642721c0fe91b2f38de1e33cd1b1bf6f36dd0",
+      "layer.18.et": "cac6788fdb2a567a9b857ee8d8ae066ce9fa50bd77afd7b5b23cf22c9774ff55",
+      "layer.19.et": "263f81bb1aac2a7540f3eee038c4dd9341794a932c970ec76170668f77124a10",
+      "layer.2.et": "61e337550b3599bfc3a92d262096051bf224498d1ab5c6dc572f2cd85d8bc85a",
+      "layer.20.et": "2b69838e02ab00a03ac5ebb03f255194e2fe75f89fdb6a791edc484521bb987c",
+      "layer.21.et": "a97455a5439f21cd4fb62ce54b9ed2a6dd442d7e1a9594231da279905fb6b15b",
+      "layer.22.et": "5605c675442e0789bdf3d74ee3198b64810067150df4bd9577ab4c4242fb37b0",
+      "layer.23.et": "b0e972c8a19694d72ebbd95ba6f52b54322e8e27b708293ae2f927080d2a68f9",
+      "layer.24.et": "91c035c3170090c520063e8940374ac9208830d016e0535007eafbc7392547c1",
+      "layer.25.et": "a7d137ed7c909fab784747bb3bfd3c995561556f5761d163621b2c380901cd24",
+      "layer.26.et": "ae0a530cfd5b88d2f9b0eb4edfd79ae8254d2debaf7122a782b2a1125068fc91",
+      "layer.27.et": "b009885b86f80e3cd0c8584d764828fcba45e6287e41684c6ce40da45c306702",
+      "layer.28.et": "b74bb155d0d27935fe0236237c89f5f83f43cd98a1f950b75a5353e621def56a",
+      "layer.29.et": "59a5e895b6b5e3e9570433d4c4670d0190967dde2c66967b51eec61425403f68",
+      "layer.3.et": "26eb1674d92d0086a032a435cfc3b13c305f21fc554468a7f70e173e1e21eaaa",
+      "layer.30.et": "0be18ee82a858d8dfa2f5176b3c2fea3a734f28cfcdf2ef85801e1209c5e1f65",
+      "layer.31.et": "05e889de7dd1b1a5e809a65a1f4308ee426e808a08af34665bff09fe93d88fb8",
+      "layer.32.et": "211247bf66ab103411ad096eff294f045ab4540e5ce367885b453de5ac9a5447",
+      "layer.33.et": "00fb77eef548c79de82a0ea8e9f6b48b3bb5fac30607d6517f70146f7d576fc8",
+      "layer.34.et": "ca9bfa570f01c2c5778ebeb50a954fceb0047c07f9cba7602fdf489b3ad490d7",
+      "layer.35.et": "0fdcc3c17aefc9f342f5151e972759c91e097387ddb8fbdffe29390960380aed",
+      "layer.36.et": "dad0c3ae8523cd348afecdcd4ca6e42188e9e22a16fdea9c1fd6b9dc1e2c9040",
+      "layer.37.et": "b6f62155fbdeb1e739025bcbbe17b1e6242aeec3a2ee70a28648365ae843e748",
+      "layer.38.et": "32853f3117ba0b3175623cd1e25b963ab11d772798bf72197758be16683725b6",
+      "layer.39.et": "fa2d1380458740f359f66b6c4849ea3723943175d2ace009d40f3a1f3a57249a",
+      "layer.4.et": "10c2b82df437016a4d1774b83ddd2f34dddd5dc113f25c68c2d933a000454111",
+      "layer.40.et": "e56dd6b49f90b75f6833a671eba9f7b31fde1b2f166666074a2f1af91719e260",
+      "layer.41.et": "bd748c5ed5a9fac6075fd5103a4f947e6647949162163e617c8218a6b95d30d0",
+      "layer.42.et": "df1a7adca1911462f1c426ce5eb8472930dce2b93e531fb79d561982d2a154b4",
+      "layer.43.et": "e3ea6f61af6b6281a3211900ed044c5823b81e64dff84002929ba631374ceaf2",
+      "layer.44.et": "f97fa42234108b33f4155ac6d0817d01a84f79506a8e58e3db86aba026d985f9",
+      "layer.45.et": "dfbfb7e14845013b928c48e72f72eee95ec902fcac05278f82084559ebbcc2b7",
+      "layer.46.et": "58ad573d70f600569b7bade008922bf4e828ee9ea916c095de92bb690a3dc9cf",
+      "layer.47.et": "5fe42e3326d56c9518798347beb9c85dc9cc80834edd21dd711c0bc602b04ceb",
+      "layer.48.et": "61af70aeabff876c2c77326fe360c0a9e70fc7bcc1b1d2fa55873e0661edcf5c",
+      "layer.49.et": "c129c2deab92965e2584943a7518d4d2736033dcf713431c0d55b8ff2fb32669",
+      "layer.5.et": "dc634f56558a0e97ee3d90e21b9c86ab60a3825778fb2381a55a1e91325ee1d0",
+      "layer.50.et": "b359fed361f8d433ffea45ddbb969d79b8d6ade4dc4bdc3888db85ff9e403263",
+      "layer.51.et": "842606ef4e48b61dc4862e13bc5568f533e76233d2a2ac6f3745ed7254966caa",
+      "layer.52.et": "aacfa4edf7165ad68511d87213a531794be91a188cb223708701387d84465bd8",
+      "layer.53.et": "403a9d8122c845d5a72787f32efa5c7cd6145185fc882b1f8737257017a6211d",
+      "layer.54.et": "4acaf64a1f05d1c5e79e8012e9413b4aad8cb9131aa8853beab20c533b9a8dd3",
+      "layer.55.et": "107818d419936f629d59263914e0451a154d5da3a40acde6bcfc051857137ec3",
+      "layer.56.et": "dfc61d41c12fdd202df1c66235195ce19618e006d0b79f41b4785144e8e0637b",
+      "layer.57.et": "d00e421285430aed7b5215da8334d05616cd27a5544821ccecd8912dfb3e409f",
+      "layer.58.et": "2e079efe359e489ff038b6493a144553c6d832249ea6405d23825d874f46706b",
+      "layer.59.et": "e4cb1fdece182594f518b8518731bc2dacaee9a9a841d9311c07a3bb984baac8",
+      "layer.6.et": "10f107d843c5ea2761f552079dca8ec90778abcad1986b1c6e41dd3a254acdf6",
+      "layer.60.et": "3f9c478e89428bd7855547d93734a7238eb0bd784c300a3f9e86b7cf8bc33955",
+      "layer.61.et": "41509149704e2c32ab767b0a558621870a6da7675a48f881e2dfc320e2d908d3",
+      "layer.62.et": "816ea4a78664ac4bec4560d82ea7395f483e04cb21fa5088b8c8d32f50c07c22",
+      "layer.63.et": "91dca3d36b6d7f3637f60db0caee08be598599b7041c5f5501409808a5ae5c00",
+      "layer.64.et": "cfcc7f1af567f025f8e555a3c036da8d5ffbbea1816ec36f5825949730aa90b6",
+      "layer.65.et": "0e774bf10acf9af2eb692562222b9737f8ae1692606cde4539f69f7fd7c2d9af",
+      "layer.66.et": "2568f978005bf004dfb286a0b4e272af25da5a48a1838e21bc116dcb181ef54e",
+      "layer.67.et": "3fe8987e3a389f495ab30dbdaf291f3f7b7b4616049f82ac1f95480553a88ff8",
+      "layer.68.et": "c9835b63dcf2e15f5b5d17fec4f9f858f51df2214af66f273af6df1b7ca9c773",
+      "layer.69.et": "3c334e056bc1f83b0c48607acda55b24122c5e94ac4266b80f90db0887e5ed9c",
+      "layer.7.et": "6b0d2c99cb39e60911c8d686a650dd27937293c63e89b73788e7ae325e6d9d26",
+      "layer.70.et": "8e57ef42c488a6719ab34a76d6d2a455e63f394f8842b71065768c6e47564d95",
+      "layer.71.et": "eb4b5415ad969c53713d95c8729619dd7dd13a5f98e28c5dab310ada3b584b40",
+      "layer.72.et": "29ebae53a883dc003fa5f1524c296a3dd662e3fe28c95e7fd6bd7830281fcd07",
+      "layer.73.et": "02687b386119e8017ea60d3f960fe2b33aea9ea7b810a158ff8754c463f21688",
+      "layer.74.et": "d16322ac081c9744a906c7afcff398c6d4ad030ddfdac386c0f2b561530624b7",
+      "layer.75.et": "fe83eff1bca334d2f7a6fa1865e163f3787b6a47049da572d9a51f3416875426",
+      "layer.76.et": "a92f304a67925276d1c2a84c6dc7ade181b44a5433472901f86675abb4c814aa",
+      "layer.77.et": "38c9243dc420400d7e2a56835ba1cf698d19429448714d33ae4e3c977a637170",
+      "layer.78.et": "c7913e5c5385fb227615ee71cbd7e84d2cf4577cc7ffbdd7c4e7acc4f8191222",
+      "layer.79.et": "73653acb6c3df7071fddd0c6d7df3233ef3315999e300873869804923923ba3b",
+      "layer.8.et": "a0fdca12470623b3b032a33bcf38f526477bf47b8d37b7f3193f875a200f5f91",
+      "layer.80.et": "e61d60e6dc384166ae684c90ecc92856a216a74b41b7a4c7e232fba08ba9b8f9",
+      "layer.81.et": "040ec615d30b28888f7497f21f5de44d5ae09e5e4bfe2c7482596dbb1c53bd0a",
+      "layer.82.et": "584aa8f1bf16c449b85dfd452878bfadd5def9350bbf93418120fa10ea74c28c",
+      "layer.83.et": "432f34a83f383dab2588e82d46dca891901007fc5f14c87df39fb19cdb632cb4",
+      "layer.84.et": "02437d70f099d374993b6c511461f399d85a8ac8d7148f88434d1d2bc2c24da7",
+      "layer.85.et": "62a6ace9992d8765c2d0186d1c1c43fa2218ed1725afccee5e61197ea6602a48",
+      "layer.86.et": "217ab434c7694933b2236a641c0618bda171d2c712354e8a60d2d4550523465c",
+      "layer.87.et": "dcbcc76c7f16e108b442218515d18dde765e33c41669f8db99f3cca63289d81c",
+      "layer.88.et": "1311eb832c9004c6016fbd03e9fb2ff4947bed9ea10dfe060107af6e78c29121",
+      "layer.89.et": "a577de1fb2f0353af905bb83c55c13271476698b5fe61627c5bf9d5f8ac0c767",
+      "layer.9.et": "d2403669f05bfaacf8168884ad1160238da8a3dafbeadd5e994e80cfdd1a2cc3",
+      "layer.90.et": "1f56ee942c8e6b5dcfe40d9355aca3cb4a3e178bf92e6e7c5d6cf192eb9dc961",
+      "layer.91.et": "bafed581d7880b60ac578033a8c453b60f5be62cd744df170793e16a66552796",
+      "layer.92.et": "8f279d556e8706c96d8a84747d084a2904c286005ff35559c5ac32038f1768e2",
+      "layer.93.et": "9177df2c37217ace58678f91e9c1aadaedfcfacbc6045cedf2c2c23c3a2374fe",
+      "layer.94.et": "714a00878592a1a27c8c15077a2f134e4053868d90706f36a9064e12024ec014",
+      "layer.95.et": "f5f915362aa57ef5c013ee9bd1788b84f9ffebfbc5e398f5f5441c4ad6b1aa76",
+      "layer.96.et": "f7fb7e2d5d546c863e0ecf2d7f37bfe9a95170026a5b0acd75814655c5cec81f",
+      "layer.97.et": "bb6c45777af18521cd518696863f37178f71673d1e0076c484434d9b73a00568",
+      "layer.98.et": "24dfa1bcfc1d49f5336a7539922c3a5fdb7b5a4d6929fbfaa5874ddaa9f3da51",
+      "layer.99.et": "0a9e044c3cb62df2b8d81ef872694e00eb7dd63cecf42cbd620e4261fbdc5e7f",
+      "graph-resources.json": "5bc5b2493d0bc4637ce403ac07bd7b3988f7eff3e84d2680489f53f582f71a28"
+    },
+    "output_hashes": {
+      "et_def.proto": "3eb062b4085f32a9d8730986447cf0676cebdd02aac82def5ad2cb3cf9ba595b",
+      "plan.json": "d0857dd20000aa3fd3c1392f6ea999baee872e3e79a448a1c4c9dcba15cfb31d",
+      "layer.0.et": "f223c0defc324f89b4a7c68ffe6acdf366de9185910858e359e5078b895cac34",
+      "layer.1.et": "4e20582e793b1caa512dba87808faf523bab03b9fe50f85f7baacb9aa86380a3",
+      "layer.10.et": "1089e18635abd50aaba59334a196d3568adb67f3d8ea369ce9c0df0f8176e49c",
+      "layer.100.et": "82c80307d4eac6e791bade52f0f29181106ee632d515fb37408a96c4de75db29",
+      "layer.101.et": "fe6f66fe1795e6678119e7d9c286047c5293039cf9bcbfe0e3b307ab89fcc652",
+      "layer.102.et": "c631fddee4f1552da3c3dfe45e471490a71265bbfb429a4c863ec829c50fb009",
+      "layer.103.et": "56e31beb22955f26928767d3d65565e64aa7e3a4608c76d1e35421f872c4c814",
+      "layer.104.et": "60937e03bfd1d883e30020b22e9d35cf837bc662aa87813a7bb152eedf6a4323",
+      "layer.105.et": "83040ec02b9182356761a8e062c6928017076beeee95c053251f56bb07dd9491",
+      "layer.106.et": "61b4aefdb5d05a7855230b0619f67fbd3c38daeef3eebd8bd0dc8317d0f25188",
+      "layer.107.et": "86a10b3e8e7afb0643c1eb7791c834bea3ff64ad06666199d692362dcbcf0119",
+      "layer.108.et": "bc581b89bc00bb8233b53ffb806e71f0ec7a8be509864bcb692e690fdbbeec5b",
+      "layer.109.et": "6835496bfca6dd3514c86de7aa50d11e0da68e260409ec1f2df5fef2b1e54ed7",
+      "layer.11.et": "082eba498e60ddd7dfb28e61619a13cac64d4cba33af233bfd23688b734adcc5",
+      "layer.110.et": "89957efdee8f6262864fb67d5cbb8fd9614d59ff753a125560db71a6987aeaf7",
+      "layer.111.et": "cb837012d972bb2bb4ed309a157bef179bcad732c89c3d3bea24495dc59cf7ff",
+      "layer.112.et": "c3684a6694d81ca700df93570094007f54be80eb05a4ba8cf4e35f231148034c",
+      "layer.113.et": "afa3f2a64caf190e5b7ddfea0fcfc7ab06e02a9669d7bd3cfc0b7d9e0695be81",
+      "layer.114.et": "d159bc8b874920886a6ecec0c5ed2c71b1a780e9da91d2291c029fa044f98c95",
+      "layer.115.et": "cbe84617c19cc85fb9c908696d619eea424be760d7fdb5b78777d1b8e1de766c",
+      "layer.116.et": "056b1da07438238b73e1434df7a165c0ad4959d41cc4a641c83d6e24ad67cb26",
+      "layer.117.et": "23d1eef093875b3f878764a3bc497003253d51ca91d27fe6fcafff0fa862e112",
+      "layer.118.et": "76b8a5bb3f9245e50cc79c33d46dde62a941c8e7d63b500ee94af1474c165452",
+      "layer.119.et": "9c956df1ec64ef30276de81fdfbbf55a24c5300c95c2a2be986ac267dbf96e2c",
+      "layer.12.et": "4096a3b55e9bd68d34f73547e494817016fd1fc9b587e9ec1bcd1c607507525d",
+      "layer.120.et": "9389558d75cf4b83562ee83f3da79d733f9f28059fbfa7cfff19415f1dd5ea9f",
+      "layer.121.et": "c876131b6287ec849256437dc48023f3a6fe34620e6178188e57fe03c9ea8b76",
+      "layer.122.et": "cad9ef051a754a6057dc23ab30859f1bfb0ef18ba5e38af1cf74b7c1fee139c4",
+      "layer.123.et": "7e0bfe68201b64be1a5d4a6204def93be8ba1ba4464df733e47501b6edcdf435",
+      "layer.124.et": "942cc34e6c6d53dc6d101a3676adbe885b5759f366b78596b97502e3d4ae30c6",
+      "layer.125.et": "400e2f60c150050402306104eb5d53ae594335a6ffcc07fcf8c541f833f28f06",
+      "layer.126.et": "3c3ca7ceede2ffc0c0fd84f9b1a0356fa87784a4fafbcb52630ef9a48a5b21e5",
+      "layer.127.et": "7df6c2905e6b53b06c32da338808516ed2c97280e55f640dbd2dfeafa9a82ffb",
+      "layer.13.et": "0fce4effb5871e9b4f101ee7a9563de7ad5844040d3b2a4a34d22cdd206f7a42",
+      "layer.14.et": "5cf4d7052af700873accb6703e5938f17a9a0eea48a3d5680cf103981a836537",
+      "layer.15.et": "5649e90f74063bb7e9685de6047a438fb7e643201b42f849e2411383ca20ef8d",
+      "layer.16.et": "b523d70e7a3ec3ec0088aa842a3fc4625166bf4425d3046e635e65df74adf13f",
+      "layer.17.et": "da264ef05d72b8aa4e699cc9250642721c0fe91b2f38de1e33cd1b1bf6f36dd0",
+      "layer.18.et": "cac6788fdb2a567a9b857ee8d8ae066ce9fa50bd77afd7b5b23cf22c9774ff55",
+      "layer.19.et": "263f81bb1aac2a7540f3eee038c4dd9341794a932c970ec76170668f77124a10",
+      "layer.2.et": "61e337550b3599bfc3a92d262096051bf224498d1ab5c6dc572f2cd85d8bc85a",
+      "layer.20.et": "2b69838e02ab00a03ac5ebb03f255194e2fe75f89fdb6a791edc484521bb987c",
+      "layer.21.et": "a97455a5439f21cd4fb62ce54b9ed2a6dd442d7e1a9594231da279905fb6b15b",
+      "layer.22.et": "5605c675442e0789bdf3d74ee3198b64810067150df4bd9577ab4c4242fb37b0",
+      "layer.23.et": "b0e972c8a19694d72ebbd95ba6f52b54322e8e27b708293ae2f927080d2a68f9",
+      "layer.24.et": "91c035c3170090c520063e8940374ac9208830d016e0535007eafbc7392547c1",
+      "layer.25.et": "a7d137ed7c909fab784747bb3bfd3c995561556f5761d163621b2c380901cd24",
+      "layer.26.et": "ae0a530cfd5b88d2f9b0eb4edfd79ae8254d2debaf7122a782b2a1125068fc91",
+      "layer.27.et": "b009885b86f80e3cd0c8584d764828fcba45e6287e41684c6ce40da45c306702",
+      "layer.28.et": "b74bb155d0d27935fe0236237c89f5f83f43cd98a1f950b75a5353e621def56a",
+      "layer.29.et": "59a5e895b6b5e3e9570433d4c4670d0190967dde2c66967b51eec61425403f68",
+      "layer.3.et": "26eb1674d92d0086a032a435cfc3b13c305f21fc554468a7f70e173e1e21eaaa",
+      "layer.30.et": "0be18ee82a858d8dfa2f5176b3c2fea3a734f28cfcdf2ef85801e1209c5e1f65",
+      "layer.31.et": "05e889de7dd1b1a5e809a65a1f4308ee426e808a08af34665bff09fe93d88fb8",
+      "layer.32.et": "211247bf66ab103411ad096eff294f045ab4540e5ce367885b453de5ac9a5447",
+      "layer.33.et": "00fb77eef548c79de82a0ea8e9f6b48b3bb5fac30607d6517f70146f7d576fc8",
+      "layer.34.et": "ca9bfa570f01c2c5778ebeb50a954fceb0047c07f9cba7602fdf489b3ad490d7",
+      "layer.35.et": "0fdcc3c17aefc9f342f5151e972759c91e097387ddb8fbdffe29390960380aed",
+      "layer.36.et": "dad0c3ae8523cd348afecdcd4ca6e42188e9e22a16fdea9c1fd6b9dc1e2c9040",
+      "layer.37.et": "b6f62155fbdeb1e739025bcbbe17b1e6242aeec3a2ee70a28648365ae843e748",
+      "layer.38.et": "32853f3117ba0b3175623cd1e25b963ab11d772798bf72197758be16683725b6",
+      "layer.39.et": "fa2d1380458740f359f66b6c4849ea3723943175d2ace009d40f3a1f3a57249a",
+      "layer.4.et": "10c2b82df437016a4d1774b83ddd2f34dddd5dc113f25c68c2d933a000454111",
+      "layer.40.et": "e56dd6b49f90b75f6833a671eba9f7b31fde1b2f166666074a2f1af91719e260",
+      "layer.41.et": "bd748c5ed5a9fac6075fd5103a4f947e6647949162163e617c8218a6b95d30d0",
+      "layer.42.et": "df1a7adca1911462f1c426ce5eb8472930dce2b93e531fb79d561982d2a154b4",
+      "layer.43.et": "e3ea6f61af6b6281a3211900ed044c5823b81e64dff84002929ba631374ceaf2",
+      "layer.44.et": "f97fa42234108b33f4155ac6d0817d01a84f79506a8e58e3db86aba026d985f9",
+      "layer.45.et": "dfbfb7e14845013b928c48e72f72eee95ec902fcac05278f82084559ebbcc2b7",
+      "layer.46.et": "58ad573d70f600569b7bade008922bf4e828ee9ea916c095de92bb690a3dc9cf",
+      "layer.47.et": "5fe42e3326d56c9518798347beb9c85dc9cc80834edd21dd711c0bc602b04ceb",
+      "layer.48.et": "61af70aeabff876c2c77326fe360c0a9e70fc7bcc1b1d2fa55873e0661edcf5c",
+      "layer.49.et": "c129c2deab92965e2584943a7518d4d2736033dcf713431c0d55b8ff2fb32669",
+      "layer.5.et": "dc634f56558a0e97ee3d90e21b9c86ab60a3825778fb2381a55a1e91325ee1d0",
+      "layer.50.et": "b359fed361f8d433ffea45ddbb969d79b8d6ade4dc4bdc3888db85ff9e403263",
+      "layer.51.et": "842606ef4e48b61dc4862e13bc5568f533e76233d2a2ac6f3745ed7254966caa",
+      "layer.52.et": "aacfa4edf7165ad68511d87213a531794be91a188cb223708701387d84465bd8",
+      "layer.53.et": "403a9d8122c845d5a72787f32efa5c7cd6145185fc882b1f8737257017a6211d",
+      "layer.54.et": "4acaf64a1f05d1c5e79e8012e9413b4aad8cb9131aa8853beab20c533b9a8dd3",
+      "layer.55.et": "107818d419936f629d59263914e0451a154d5da3a40acde6bcfc051857137ec3",
+      "layer.56.et": "dfc61d41c12fdd202df1c66235195ce19618e006d0b79f41b4785144e8e0637b",
+      "layer.57.et": "d00e421285430aed7b5215da8334d05616cd27a5544821ccecd8912dfb3e409f",
+      "layer.58.et": "2e079efe359e489ff038b6493a144553c6d832249ea6405d23825d874f46706b",
+      "layer.59.et": "e4cb1fdece182594f518b8518731bc2dacaee9a9a841d9311c07a3bb984baac8",
+      "layer.6.et": "10f107d843c5ea2761f552079dca8ec90778abcad1986b1c6e41dd3a254acdf6",
+      "layer.60.et": "3f9c478e89428bd7855547d93734a7238eb0bd784c300a3f9e86b7cf8bc33955",
+      "layer.61.et": "41509149704e2c32ab767b0a558621870a6da7675a48f881e2dfc320e2d908d3",
+      "layer.62.et": "816ea4a78664ac4bec4560d82ea7395f483e04cb21fa5088b8c8d32f50c07c22",
+      "layer.63.et": "91dca3d36b6d7f3637f60db0caee08be598599b7041c5f5501409808a5ae5c00",
+      "layer.64.et": "cfcc7f1af567f025f8e555a3c036da8d5ffbbea1816ec36f5825949730aa90b6",
+      "layer.65.et": "0e774bf10acf9af2eb692562222b9737f8ae1692606cde4539f69f7fd7c2d9af",
+      "layer.66.et": "2568f978005bf004dfb286a0b4e272af25da5a48a1838e21bc116dcb181ef54e",
+      "layer.67.et": "3fe8987e3a389f495ab30dbdaf291f3f7b7b4616049f82ac1f95480553a88ff8",
+      "layer.68.et": "c9835b63dcf2e15f5b5d17fec4f9f858f51df2214af66f273af6df1b7ca9c773",
+      "layer.69.et": "3c334e056bc1f83b0c48607acda55b24122c5e94ac4266b80f90db0887e5ed9c",
+      "layer.7.et": "6b0d2c99cb39e60911c8d686a650dd27937293c63e89b73788e7ae325e6d9d26",
+      "layer.70.et": "8e57ef42c488a6719ab34a76d6d2a455e63f394f8842b71065768c6e47564d95",
+      "layer.71.et": "eb4b5415ad969c53713d95c8729619dd7dd13a5f98e28c5dab310ada3b584b40",
+      "layer.72.et": "29ebae53a883dc003fa5f1524c296a3dd662e3fe28c95e7fd6bd7830281fcd07",
+      "layer.73.et": "02687b386119e8017ea60d3f960fe2b33aea9ea7b810a158ff8754c463f21688",
+      "layer.74.et": "d16322ac081c9744a906c7afcff398c6d4ad030ddfdac386c0f2b561530624b7",
+      "layer.75.et": "fe83eff1bca334d2f7a6fa1865e163f3787b6a47049da572d9a51f3416875426",
+      "layer.76.et": "a92f304a67925276d1c2a84c6dc7ade181b44a5433472901f86675abb4c814aa",
+      "layer.77.et": "38c9243dc420400d7e2a56835ba1cf698d19429448714d33ae4e3c977a637170",
+      "layer.78.et": "c7913e5c5385fb227615ee71cbd7e84d2cf4577cc7ffbdd7c4e7acc4f8191222",
+      "layer.79.et": "73653acb6c3df7071fddd0c6d7df3233ef3315999e300873869804923923ba3b",
+      "layer.8.et": "a0fdca12470623b3b032a33bcf38f526477bf47b8d37b7f3193f875a200f5f91",
+      "layer.80.et": "e61d60e6dc384166ae684c90ecc92856a216a74b41b7a4c7e232fba08ba9b8f9",
+      "layer.81.et": "040ec615d30b28888f7497f21f5de44d5ae09e5e4bfe2c7482596dbb1c53bd0a",
+      "layer.82.et": "584aa8f1bf16c449b85dfd452878bfadd5def9350bbf93418120fa10ea74c28c",
+      "layer.83.et": "432f34a83f383dab2588e82d46dca891901007fc5f14c87df39fb19cdb632cb4",
+      "layer.84.et": "02437d70f099d374993b6c511461f399d85a8ac8d7148f88434d1d2bc2c24da7",
+      "layer.85.et": "62a6ace9992d8765c2d0186d1c1c43fa2218ed1725afccee5e61197ea6602a48",
+      "layer.86.et": "217ab434c7694933b2236a641c0618bda171d2c712354e8a60d2d4550523465c",
+      "layer.87.et": "dcbcc76c7f16e108b442218515d18dde765e33c41669f8db99f3cca63289d81c",
+      "layer.88.et": "1311eb832c9004c6016fbd03e9fb2ff4947bed9ea10dfe060107af6e78c29121",
+      "layer.89.et": "a577de1fb2f0353af905bb83c55c13271476698b5fe61627c5bf9d5f8ac0c767",
+      "layer.9.et": "d2403669f05bfaacf8168884ad1160238da8a3dafbeadd5e994e80cfdd1a2cc3",
+      "layer.90.et": "1f56ee942c8e6b5dcfe40d9355aca3cb4a3e178bf92e6e7c5d6cf192eb9dc961",
+      "layer.91.et": "bafed581d7880b60ac578033a8c453b60f5be62cd744df170793e16a66552796",
+      "layer.92.et": "8f279d556e8706c96d8a84747d084a2904c286005ff35559c5ac32038f1768e2",
+      "layer.93.et": "9177df2c37217ace58678f91e9c1aadaedfcfacbc6045cedf2c2c23c3a2374fe",
+      "layer.94.et": "714a00878592a1a27c8c15077a2f134e4053868d90706f36a9064e12024ec014",
+      "layer.95.et": "f5f915362aa57ef5c013ee9bd1788b84f9ffebfbc5e398f5f5441c4ad6b1aa76",
+      "layer.96.et": "f7fb7e2d5d546c863e0ecf2d7f37bfe9a95170026a5b0acd75814655c5cec81f",
+      "layer.97.et": "bb6c45777af18521cd518696863f37178f71673d1e0076c484434d9b73a00568",
+      "layer.98.et": "24dfa1bcfc1d49f5336a7539922c3a5fdb7b5a4d6929fbfaa5874ddaa9f3da51",
+      "layer.99.et": "0a9e044c3cb62df2b8d81ef872694e00eb7dd63cecf42cbd620e4261fbdc5e7f",
+      "graph-resources.json": "5bc5b2493d0bc4637ce403ac07bd7b3988f7eff3e84d2680489f53f582f71a28"
+    },
+    "complete_plan_equal": true,
+    "other_artifacts_identical": true
+  },
+  "loader": {
+    "loader-baseline": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "build/m10-full-round-preflight/output/cosim/ns3.44-cosim-plan-load-probe",
+        "runs/v03-resource-efficiency/compact-comparison/work/graph"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T08:33:15.803392+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 21474836480,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 3779096576,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+        "/root/moe-ub-cosim/build/m10-resource-efficiency"
+      ],
+      "peak_sampled_artifact_bytes": 149754915,
+      "min_free_bytes": 21474836480,
+      "process_group": 1831869,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T08:33:53.183106+00:00",
+      "wall_seconds": 37.37972244992852,
+      "max_waited_child_rss_kib": 3690524,
+      "artifact_bytes_before_report": 62388,
+      "aggregate_artifact_bytes_before_report": 149755056
+    },
+    "loader-optimized": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "build/m10-resource-efficiency/output/cosim/ns3.44-cosim-plan-load-probe",
+        "runs/v03-resource-efficiency/compact-comparison/work/graph"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-04T08:43:55.337405+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 21474836480,
+        "wall_seconds": 300.0
+      },
+      "peak_sampled_group_rss_bytes": 1549832192,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/build/m10-resource-efficiency",
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency"
+      ],
+      "peak_sampled_artifact_bytes": 250842673,
+      "min_free_bytes": 21474836480,
+      "process_group": 1837730,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-04T08:44:04.595941+00:00",
+      "wall_seconds": 9.258537663146853,
+      "max_waited_child_rss_kib": 1513508,
+      "artifact_bytes_before_report": 13558,
+      "aggregate_artifact_bytes_before_report": 250842814
+    }
+  },
+  "unit_tests_passed": 28,
+  "regression": {
+    "service-regression": {
+      "passed": true,
+      "cases": {
+        "reference": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "provenance-off": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "shared-slow": {
+          "finished_ns": 1809914,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "sampling-slow": {
+          "finished_ns": 727340,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "tight": {
+          "finished_ns": 148489,
+          "writes": 377,
+          "payload_bytes": 122620,
+          "business_bytes": 113664,
+          "waves": 8,
+          "stage_records": 1008,
+          "empty_stage_records": 546,
+          "shared_last": 0,
+          "routed_last": 33,
+          "layer_overlaps": 6
+        },
+        "window": {
+          "finished_ns": 83098,
+          "writes": 244,
+          "payload_bytes": 67568,
+          "business_bytes": 61440,
+          "waves": 6,
+          "stage_records": 756,
+          "empty_stage_records": 378,
+          "shared_last": 0,
+          "routed_last": 27,
+          "layer_overlaps": 6
+        },
+        "network-slow": {
+          "finished_ns": 1214788,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        },
+        "scenario": {
+          "finished_ns": 131279,
+          "writes": 305,
+          "payload_bytes": 120316,
+          "business_bytes": 113664,
+          "waves": 5,
+          "stage_records": 630,
+          "empty_stage_records": 294,
+          "shared_last": 0,
+          "routed_last": 24,
+          "layer_overlaps": 6
+        }
+      },
+      "failures": {
+        "stage": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "dependency": "cosim-service: Full model: composition mismatch: rank_graphs",
+        "coverage": "cosim-service: Full model: composition mismatch: executed_layer_ids",
+        "cost-domain": "cosim-service: Full model: cost domain differs from model",
+        "declaration": "cosim-service: Full model declaration changed during run",
+        "chakra": "cosim-service: /root/moe-ub-cosim/runs/v03-resource-efficiency/service-regression/work/bad-chakra/graphs/g0/layer.2.et: Layer plan: compute graph differs from plan"
+      },
+      "hardware_calibrated": false,
+      "target_scale_executed": false
+    },
+    "structure-regression": {
+      "passed": true,
+      "cases": {
+        "61-blocks": {
+          "blocks": 61,
+          "moe_blocks": 58,
+          "nodes": 3102,
+          "writes": 754,
+          "all_transfers": 986,
+          "finished_ns": 315509,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        },
+        "dense-between": {
+          "blocks": 3,
+          "moe_blocks": 2,
+          "nodes": 114,
+          "writes": 26,
+          "all_transfers": 34,
+          "finished_ns": 10829,
+          "EP": 3,
+          "experts": 6,
+          "hidden_size": 1024
+        }
+      },
+      "target_scale_executed": false
+    },
+    "cann-regression": {
+      "passed": true,
+      "cases": {
+        "on": {
+          "finished_ns": 131530,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 11686030,
+            "longest_busy_ns": 8200
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 59752,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 59752,
+                "finished_ns": 102322,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 102322,
+                "finished_ns": 131530,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 60017,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 60017,
+                "finished_ns": 91089,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "off": {
+          "finished_ns": 131530,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 11686030,
+            "longest_busy_ns": 8200
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 59752,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 59752,
+                "finished_ns": 102322,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 102322,
+                "finished_ns": 131530,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 60017,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 60017,
+                "finished_ns": 91089,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "absent": {
+          "finished_ns": 131530,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": null,
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 59752,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 59752,
+                "finished_ns": 102322,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 102322,
+                "finished_ns": 131530,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 60017,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 60017,
+                "finished_ns": 91089,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "ep0": {
+          "finished_ns": 99513,
+          "waves": 3,
+          "writes": 197,
+          "local_deliveries": 72,
+          "bytes": {
+            "payload_bytes": 81004,
+            "business_payload_bytes": 76800,
+            "application_metadata_bytes": 3504,
+            "padding_bytes": 700
+          },
+          "route_records": 24,
+          "contribution_localities": {
+            "same_rank": 11,
+            "cross_chip": 25,
+            "same_chip": 12
+          },
+          "zero_count_publications": 75,
+          "repeated_expert_destinations": 3,
+          "peak_wqes": [
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 6,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 6987327,
+            "longest_busy_ns": 4006
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 35669,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 35669,
+                "finished_ns": 70305,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 70305,
+                "finished_ns": 99513,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ]
+          }
+        },
+        "ep1": {
+          "finished_ns": 52604,
+          "waves": 2,
+          "writes": 108,
+          "local_deliveries": 51,
+          "bytes": {
+            "payload_bytes": 39312,
+            "business_payload_bytes": 36864,
+            "application_metadata_bytes": 2112,
+            "padding_bytes": 336
+          },
+          "route_records": 12,
+          "contribution_localities": {
+            "same_rank": 3,
+            "cross_chip": 12,
+            "same_chip": 9
+          },
+          "zero_count_publications": 51,
+          "repeated_expert_destinations": 2,
+          "peak_wqes": [
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 4,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 1298069,
+            "longest_busy_ns": 4006
+          },
+          "groups": {
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 36269,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 36269,
+                "finished_ns": 52604,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "slow": {
+          "finished_ns": 1214814,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 121197223,
+            "longest_busy_ns": 84240
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 557487,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 557487,
+                "finished_ns": 963667,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 963667,
+                "finished_ns": 1214814,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 590702,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 590702,
+                "finished_ns": 891839,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "chunks": {
+          "finished_ns": 176178,
+          "waves": 5,
+          "writes": 638,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 414,
+            "queue_byte_ns": 7879182,
+            "longest_busy_ns": 9990
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 78792,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 78792,
+                "finished_ns": 137279,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 137279,
+                "finished_ns": 176178,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 79042,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 79042,
+                "finished_ns": 117853,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "slots": {
+          "finished_ns": 143044,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1181,
+            "queue_byte_ns": 7486994,
+            "longest_busy_ns": 8112
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 61661,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 61661,
+                "finished_ns": 107628,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 107628,
+                "finished_ns": 143044,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 61926,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 61926,
+                "finished_ns": 90030,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "lanes": {
+          "finished_ns": 144155,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1181,
+            "queue_byte_ns": 7010969,
+            "longest_busy_ns": 8112
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 61294,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 61294,
+                "finished_ns": 108739,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 108739,
+                "finished_ns": 144155,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 61559,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 61559,
+                "finished_ns": 88197,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "local-costs": {
+          "finished_ns": 475621,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 12177457,
+            "longest_busy_ns": 8200
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 175388,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 175388,
+                "finished_ns": 334543,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 334543,
+                "finished_ns": 475621,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 175526,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 175526,
+                "finished_ns": 258700,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "all-local": {
+          "finished_ns": 13330,
+          "waves": 5,
+          "writes": 0,
+          "local_deliveries": 354,
+          "bytes": {},
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "same_chip": 58
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "layer_overlaps": 10,
+          "queue": null,
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 4560,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 4560,
+                "finished_ns": 9120,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 9120,
+                "finished_ns": 13330,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 5160,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 5160,
+                "finished_ns": 7290,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        },
+        "empty": {
+          "finished_ns": 0,
+          "waves": 0,
+          "writes": 0,
+          "local_deliveries": 0,
+          "bytes": {},
+          "route_records": 0,
+          "contribution_localities": {},
+          "zero_count_publications": 0,
+          "repeated_expert_destinations": 0,
+          "peak_wqes": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "layer_overlaps": 0,
+          "queue": null,
+          "groups": {
+            "ep0": [],
+            "ep1": []
+          }
+        },
+        "scenario": {
+          "finished_ns": 131530,
+          "waves": 5,
+          "writes": 305,
+          "local_deliveries": 123,
+          "bytes": {
+            "payload_bytes": 120316,
+            "business_payload_bytes": 113664,
+            "application_metadata_bytes": 5616,
+            "padding_bytes": 1036
+          },
+          "route_records": 36,
+          "contribution_localities": {
+            "same_rank": 14,
+            "cross_chip": 37,
+            "same_chip": 21
+          },
+          "zero_count_publications": 126,
+          "repeated_expert_destinations": 5,
+          "peak_wqes": [
+            2,
+            1,
+            2,
+            2,
+            1,
+            2
+          ],
+          "layer_overlaps": 10,
+          "queue": {
+            "peak_bytes": 1102,
+            "queue_byte_ns": 11686030,
+            "longest_busy_ns": 8200
+          },
+          "groups": {
+            "ep0": [
+              {
+                "submitted_ns": 0,
+                "finished_ns": 59752,
+                "members": [
+                  "201",
+                  "202",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 59752,
+                "finished_ns": 102322,
+                "members": [
+                  "201",
+                  "203",
+                  "204"
+                ]
+              },
+              {
+                "submitted_ns": 102322,
+                "finished_ns": 131530,
+                "members": [
+                  "201",
+                  "203"
+                ]
+              }
+            ],
+            "ep1": [
+              {
+                "submitted_ns": 600,
+                "finished_ns": 60017,
+                "members": [
+                  "401",
+                  "402",
+                  "404"
+                ]
+              },
+              {
+                "submitted_ns": 60017,
+                "finished_ns": 91089,
+                "members": [
+                  "401"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "padding_cases": {
+        "padding-1024": {
+          "writes": 20,
+          "payload_bytes": 6620,
+          "business_bytes": 6150,
+          "metadata_bytes": 352,
+          "padding_bytes": 118
+        },
+        "padding-17": {
+          "writes": 382,
+          "payload_bytes": 6620,
+          "business_bytes": 6150,
+          "metadata_bytes": 352,
+          "padding_bytes": 118
+        }
+      },
+      "failures": {
+        "revision": "ValueError: Unsupported CANN revision/algorithm/TP/quantization",
+        "algorithm": "ValueError: Unsupported CANN revision/algorithm/TP/quantization",
+        "window": "ValueError: CANN data window below tiling bound",
+        "status-count": "cosim-service: CANN: transfer layout, source, state or dependency mismatch",
+        "layout": "cosim-service: CANN: transfer layout, source, state or dependency mismatch",
+        "dependency": "cosim-service: CANN: graph or stage mismatch",
+        "evidence": "cosim-service: CANN: unsupported fidelity claim",
+        "buffers": "cosim-service: CANN: buffer contract mismatch"
+      },
+      "scope": "pinned_source_behavior_on_WRITE_RTP_reference_not_native_CANN_or_target_scale"
+    }
+  },
+  "loader_equivalence": {
+    "passed": true,
+    "valid": {
+      "four-block-pretty": {
+        "fabric_transfers": 33,
+        "local_transfers": 12,
+        "network_initialized": false,
+        "nodes": 159,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "four-block-compact": {
+        "fabric_transfers": 33,
+        "local_transfers": 12,
+        "network_initialized": false,
+        "nodes": 159,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "dense-between-pretty": {
+        "fabric_transfers": 100,
+        "local_transfers": 8,
+        "network_initialized": false,
+        "nodes": 262,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "dense-between-compact": {
+        "fabric_transfers": 100,
+        "local_transfers": 8,
+        "network_initialized": false,
+        "nodes": 262,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "chunked-batch-pretty": {
+        "fabric_transfers": 2736,
+        "local_transfers": 24,
+        "network_initialized": false,
+        "nodes": 5654,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "chunked-batch-compact": {
+        "fabric_transfers": 2736,
+        "local_transfers": 24,
+        "network_initialized": false,
+        "nodes": 5654,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "single-moe-pretty": {
+        "fabric_transfers": 14,
+        "local_transfers": 4,
+        "network_initialized": false,
+        "nodes": 59,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      },
+      "single-moe-compact": {
+        "fabric_transfers": 14,
+        "local_transfers": 4,
+        "network_initialized": false,
+        "nodes": 59,
+        "plan_schema": "moe-ub-full-model-plan/1",
+        "ranks": 3,
+        "schema_version": "moe-ub-plan-load-probe/1",
+        "simulation_executed": false
+      }
+    },
+    "rejected": [
+      "node-duration",
+      "dependency",
+      "stage",
+      "phase",
+      "missing-rank",
+      "extra-rank",
+      "transfer-byte",
+      "transfer-order",
+      "extra-transfer",
+      "missing-transfer",
+      "child-source",
+      "child-lane"
+    ]
+  },
+  "loader_corruption": {
+    "passed": true,
+    "loaded": {
+      "fabric_transfers": 39,
+      "load_seconds": 0.007674477,
+      "local_transfers": 12,
+      "network_initialized": false,
+      "nodes": 171,
+      "plan_schema": "moe-ub-full-model-plan/1",
+      "ranks": 3,
+      "schema_version": "moe-ub-plan-load-probe/1",
+      "simulation_executed": false
+    },
+    "expected": {
+      "actual_usage": {
+        "transfers": 51,
+        "fabric_transfers": 39,
+        "local_transfers": 12,
+        "nodes": 171
+      },
+      "plan_bytes": 272891,
+      "dependency_edges": 299,
+      "executed_layer_ids": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "ranks": 3,
+      "target_scale_executed": false,
+      "simulation_executed": false
+    },
+    "rejected": [
+      "modified_json_node",
+      "truncated_chakra"
+    ],
+    "target_scale_executed": false
+  },
+  "protected_files": 1304,
+  "commands": {
+    "unit-io": "runs/v03-resource-efficiency/logs/unit-io.json",
+    "unit-monitor": "runs/v03-resource-efficiency/logs/unit-monitor.json",
+    "configure": "runs/v03-resource-efficiency/logs/configure.json",
+    "build-loader": "runs/v03-resource-efficiency/logs/build-loader.json",
+    "compact-comparison": "runs/v03-resource-efficiency/logs/compact-comparison.json",
+    "loader-baseline": "runs/v03-resource-efficiency/logs/loader-baseline.json",
+    "loader-optimized": "runs/v03-resource-efficiency/logs/loader-optimized.json",
+    "service-regression": "runs/v03-resource-efficiency/logs/service-regression.json",
+    "structure-regression": "runs/v03-resource-efficiency/logs/structure-regression.json",
+    "cann-regression": "runs/v03-resource-efficiency/logs/cann-regression.json",
+    "loader-check": "runs/v03-resource-efficiency/logs/loader-check.json",
+    "loader-equivalence": "runs/v03-resource-efficiency/logs/loader-equivalence.json"
+  }
+}

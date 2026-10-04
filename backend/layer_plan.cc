@@ -52,7 +52,7 @@ template<class Message> bool ReadMessage(std::istream& input, Message& message)
     throw std::runtime_error("Layer plan: oversized graph varint");
 }
 void CheckGraph(const std::filesystem::path& path, const Json& graph,
-                const std::map<uint64_t, Json>& transfers)
+                const std::map<uint64_t, const Json*>& transfers)
 {
     std::ifstream input(path, std::ios::binary);
     Require(bool(input), "missing graph " + path.string());
@@ -74,7 +74,7 @@ void CheckGraph(const std::filesystem::path& path, const Json& graph,
                     attrs.size() == 1, "compute graph differs from plan");
         else
         {
-            const auto& t = transfers.at(n.at("transfer_id").get<uint64_t>());
+            const auto& t = *transfers.at(n.at("transfer_id").get<uint64_t>());
             Require(node.type() == (n.at("kind") == "SEND" ? ChakraProtoMsg::COMM_SEND_NODE : ChakraProtoMsg::COMM_RECV_NODE) &&
                     node.duration_micros() == 0 && attrs.size() == 5, "communication graph type mismatch");
             Require(attrs.contains("comm_size") && attrs.at("comm_size").has_int64_val() &&
@@ -91,6 +91,13 @@ void CheckGraph(const std::filesystem::path& path, const Json& graph,
 }
 void CheckPlanGraph(const std::filesystem::path& path, const Json& graph,
                     const std::map<uint64_t, Json>& transfers)
+{
+    std::map<uint64_t, const Json*> references;
+    for (const auto& [id, transfer] : transfers) references.emplace(id, &transfer);
+    CheckPlanGraph(path, graph, references);
+}
+void CheckPlanGraph(const std::filesystem::path& path, const Json& graph,
+                    const std::map<uint64_t, const Json*>& transfers)
 {
     try { CheckGraph(path, graph, transfers); }
     catch (const std::exception& error) { throw std::runtime_error(path.string() + ": " + error.what()); }
@@ -141,10 +148,10 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     }
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
-    const auto p = Json::parse(stream);
+    auto p = Json::parse(stream);
     Require(resources::Budget(p.at("input")) == resource_budget, "plan/resource budget sidecar mismatch");
     if (!resource_budget.is_null()) resources::Check(resources::Actual(p),resource_budget);
-    if (p.at("schema_version") == "moe-ub-full-model-plan/1") return LoadFullModelPlan(directory, p);
+    if (p.at("schema_version") == "moe-ub-full-model-plan/1") return LoadFullModelPlan(directory, std::move(p));
     if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
         return LoadMultilayerPlan(directory, p);
     if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);
@@ -155,9 +162,8 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
         CheckPlanGraph(directory / ("layer." + std::to_string(graph.at("rank_id").get<int>()) + ".et"), graph, transfers);
     return plan;
 }
-LayerPlan ValidateLayerPlan(const Json& p)
+LayerPlan ValidateLayerPlan(const Json& p, bool retain_data)
 {
-    LayerPlan plan{p, {}, {}, {}};
     const bool cann = p.at("communication_template") == "cann_a3_v850_fullmesh_v1";
     const bool batched = p.at("schema_version") == "moe-ub-execution-plan/3";
     const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2" || (batched && p.contains("deployment"));
@@ -318,7 +324,8 @@ LayerPlan ValidateLayerPlan(const Json& p)
     const auto ready = Number(p.at("ready_ns"), "ready_ns", INT64_MAX - 1000000);
     Require(input.at("ready_ns") == ready && input.at("graph_id") == p.at("graph_id") &&
             input.at("wave_id") == p.at("wave_id"), "input graph identity/ready mismatch");
-    if (cann) return ValidateCannPlan(p);
+    if (cann) return ValidateCannPlan(p, retain_data);
+    LayerPlan plan{retain_data ? p : Json{}, {}, {}, {}};
     for (int rank : members)
     {
         uint64_t total = 0;
@@ -489,7 +496,8 @@ LayerPlan ValidateLayerPlan(const Json& p)
             const auto id = Number(n.at("node_id"), "node_id");
             Require(id > 0 && n.at("rank_id") == rank && !seen.contains(id), "duplicate node or wrong rank");
             for (auto dep : Ids(n.at("deps"))) Require(seen.contains(dep), "nonlocal, cyclic or unordered dependency");
-            seen.insert(id); local.emplace(id, n); plan.nodes.emplace(std::make_pair(rank, id), n);
+            seen.insert(id); local.emplace(id, n);
+            if (retain_data) plan.nodes.emplace(std::make_pair(rank, id), n);
             if (n.at("kind") == "COMP")
             {
                 Require(Number(n.at("duration_ns"), "duration_ns", INT64_MAX - p.at("ready_ns").get<uint64_t>()) > 0,
@@ -618,10 +626,10 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
     {
         auto record = events.at(key);
         Require(record.contains("start_ns") && record.contains("end_ns") && record["end_ns"] >= record["start_ns"], "incomplete node execution");
-        if (node.at("kind") == "COMP") Require(record["end_ns"].get<uint64_t>() - record["start_ns"].get<uint64_t>() == node.at("duration_ns"), "compute duration mismatch");
-        for (const auto& dep : node.at("deps"))
-            Require(record["start_ns"] >= events.at({key.first, dep.get<uint64_t>()}).at("end_ns"), "execution violated local dependency");
-        record["rank_id"] = key.first; record["node_id"] = key.second; record["kind"] = node.at("kind");
+        if (node.kind == "COMP") Require(record["end_ns"].get<uint64_t>() - record["start_ns"].get<uint64_t>() == node.duration_ns, "compute duration mismatch");
+        for (const auto dep : node.deps)
+            Require(record["start_ns"] >= events.at({key.first, dep}).at("end_ns"), "execution violated local dependency");
+        record["rank_id"] = key.first; record["node_id"] = key.second; record["kind"] = node.kind;
         result.push_back(record);
     }
     return result;

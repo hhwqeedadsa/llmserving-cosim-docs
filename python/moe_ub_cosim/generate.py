@@ -1,13 +1,13 @@
 """Generate one checked ExecutionPlan and one locked-schema Chakra file per rank."""
 import argparse
 from copy import deepcopy
-import hashlib
 import importlib.util
 import json
 from pathlib import Path
 import subprocess
 
 from .plan import build_plan, validate_plan
+from .plan_io import file_sha256, write_plan_json
 
 
 def write_message(stream, message):
@@ -48,13 +48,13 @@ def export_bootstrap(output, ranks=range(4)):
     return output
 
 
-def export_plan(plan, output):
+def export_plan(plan, output, *, compact=False):
     # A plan supplied by a caller may have changed since construction.
     validate_plan(plan)
-    return _write_plan(plan, output)
+    return _write_plan(plan, output, **({'compact': True} if compact else {}))
 
 
-def build_export_full_model(configs, identities, provenance, model, profile, output, *, source_evidence=None):
+def build_export_full_model(configs, identities, provenance, model, profile, output, *, source_evidence=None, compact=False):
     """Build, fully validate and write before returning a mutable full plan.
 
     No receipt/cache or caller-provided 'already validated' flag is accepted.
@@ -69,10 +69,10 @@ def build_export_full_model(configs, identities, provenance, model, profile, out
         for item in [plan, *plan['layers']]:
             item['route_source'] = 'published_model_trace'
             item['compute_source'] = 'full_model_stage_reference_with_context_cost'
-    return plan, _write_plan(plan, output)
+    return plan, _write_plan(plan, output, **({'compact': True} if compact else {}))
 
 
-def _write_plan(plan, output):
+def _write_plan(plan, output, *, compact=False):
     """Internal writer: called immediately after validation by the two entries."""
     output = Path(output).resolve()
     output.mkdir(exist_ok=False)
@@ -99,19 +99,13 @@ def _write_plan(plan, output):
     budget=plan['input'].get('resource_budget')
     if budget is not None:
         (output/'graph-resources.json').write_text(json.dumps(budget)+'\n')
-    written=0
-    with (output/'plan.json').open('wb') as stream:
-        for piece in json.JSONEncoder(indent=2).iterencode(plan):
-            data=piece.encode('utf-8');written+=len(data)
-            if budget is not None and written+1>budget['max_plan_bytes']:
-                raise ValueError('Graph resource budget exceeded: max_plan_bytes')
-            stream.write(data)
-        stream.write(b'\n')
+    plan_file=write_plan_json(plan, output/'plan.json', compact=compact,
+        max_bytes=budget['max_plan_bytes'] if budget is not None else None)
     files = [schema, output / 'plan.json'] + sorted(output.glob('layer.*.et'))
     if budget is not None:files.append(output/'graph-resources.json')
     (output / 'generation.json').write_text(json.dumps(dict(mode='fixture',
-        schema_sha256=hashlib.sha256(schema.read_bytes()).hexdigest(),
-        hashes={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in files}), indent=2) + '\n')
+        schema_sha256=file_sha256(schema),
+        hashes={p.name: plan_file['sha256'] if p==output/'plan.json' else file_sha256(p) for p in files}), indent=2) + '\n')
     return output
 
 

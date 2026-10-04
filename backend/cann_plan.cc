@@ -33,7 +33,7 @@ std::vector<std::pair<unsigned,J>> Split(const J& items,unsigned lanes,unsigned 
 }
 }
 
-LayerPlan ValidateCannPlan(const J& p) {
+LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
     const auto& c=p.at("input");
     std::set<std::string> fields={"schema_version","graph_id","wave_id","service_id","role","group_id","ready_ns","layer_id",
         "rank_ids","rank_to_ub_node","hidden_dim","top_k","dispatch_element_bytes","combine_element_bytes","application_metadata_bytes",
@@ -90,6 +90,20 @@ LayerPlan ValidateCannPlan(const J& p) {
         }
     }
     Check(p.at("contributions")==contributions,"expert contributions mismatch");
+    std::map<int,J> source_items,destination_items;
+    std::map<std::pair<int,int>,uint64_t> source_expert_count;
+    std::map<int,size_t> rank_position;
+    std::map<int,uint64_t> local_dispatch,local_combine;
+    for(size_t i=0;i<ranks.size();++i) {
+        int rank=ranks[i];rank_position[rank]=i;
+        source_items[rank]=J::array();destination_items[rank]=J::array();
+    }
+    for(const auto& x:contributions) {
+        int src=x.at("src_rank"),dst=x.at("dst_rank"),expert=x.at("expert_id");
+        source_items.at(src).push_back(x);destination_items.at(dst).push_back(x);
+        ++source_expert_count[{src,expert}];
+        if(x.at("locality")=="same_chip") {++local_dispatch[src];++local_combine[dst];}
+    }
     std::map<std::string,std::string> opids;
     for(const std::string kind:{"dispatch","combine"}) {
         std::string id=c.at("wave_id").get<std::string>()+".L"+std::to_string(c.at("layer_id").get<uint64_t>())+"."+kind;
@@ -119,18 +133,18 @@ LayerPlan ValidateCannPlan(const J& p) {
         messages.push_back(m);
     };
     for(int rank:ranks) {
-        J items=J::array();for(const auto& x:contributions)if(x.at("src_rank")==rank)items.push_back(x);
+        const auto& items=source_items.at(rank);
         for(const auto& [lane,x]:Split(items,lanes))add("dispatch","data",rank,x.at("dst_rank"),lane,x,nullptr,nullptr);
     }
     J expert_ids=J::array();for(size_t e=0;e<experts;++e)expert_ids.push_back(e);
     for(int rank:ranks) for(const auto& [lane,e]:Split(expert_ids,lanes)) {
-        uint64_t count=0;for(const auto& x:contributions)if(x.at("src_rank")==rank&&x.at("expert_id")==e)++count;
+        uint64_t count=source_expert_count[{rank,e.get<int>()}];
         add("dispatch","status",rank,placement.at(e.get<size_t>()),lane,nullptr,e,count);
     }
     for(size_t ri=0;ri<ranks.size();++ri) {
-        int rank=ranks.at(ri);J items=J::array();for(const auto& x:contributions)if(x.at("dst_rank")==rank)items.push_back(x);
+        int rank=ranks.at(ri);auto& items=destination_items.at(rank);
         auto key=[&](const J& x) {return std::make_tuple(x.at("expert_id").get<int>(),
-            std::distance(ranks.begin(),std::find(ranks.begin(),ranks.end(),x.at("src_rank"))),x.at("source_record_index").get<int>());};
+            rank_position.at(x.at("src_rank").get<int>()),x.at("source_record_index").get<int>());};
         std::sort(items.begin(),items.end(),[&](const J& a,const J& b){return key(a)<key(b);});
         for(const auto& [lane,x]:Split(items,lanes,ri)) {
             add("combine","data",rank,x.at("src_rank"),lane,x,nullptr,nullptr);
@@ -164,6 +178,13 @@ LayerPlan ValidateCannPlan(const J& p) {
         }
     }
     Check(transfers.size()==p.at("transfers").size(),"extra transfers");
+    // Ordered indexes retain the original message/chunk iteration order.
+    std::map<std::pair<std::string,int>,std::vector<size_t>> sends_by_rank,recvs_by_rank;
+    for(size_t i=0;i<transfers.size();++i) {
+        const auto& t=transfers[i];const auto kind=t.at("kind").get<std::string>();
+        sends_by_rank[{kind,t.at("src_rank").get<int>()}].push_back(i);
+        recvs_by_rank[{kind,t.at("dst_rank").get<int>()}].push_back(i);
+    }
     J graphs=J::array();
     for(int rank:ranks) {
         J nodes=J::array(),local_prepares=J::object();uint64_t total_work=0,ready=Num(c.at("ready_ns"));
@@ -182,8 +203,8 @@ LayerPlan ValidateCannPlan(const J& p) {
         };
         auto sends=[&](std::string kind,J deps,J local_ready) {
             J done=J::array(),data_done=J::array();std::map<unsigned,J> last;
-            for(auto& t:transfers) {
-                if(t.at("kind")!=kind||t.at("src_rank")!=rank)continue;
+            for(const auto index:sends_by_rank[{kind,rank}]) {
+                auto& t=transfers[index];
                 J before=deps;unsigned lane=t.at("lane");
                 if(t.at("transport_profile_id")=="same-chip-local-reference")Append(before,local_ready);
                 if(last.contains(lane))before.push_back(last.at(lane));
@@ -194,12 +215,12 @@ LayerPlan ValidateCannPlan(const J& p) {
             return done;
         };
         auto recvs=[&](std::string kind,J deps) {
-            J done=J::array();for(auto& t:transfers)if(t.at("kind")==kind&&t.at("dst_rank")==rank)done.push_back(comm(t,"RECV",deps));return done;
+            J done=J::array();for(const auto index:recvs_by_rank[{kind,rank}])done.push_back(comm(transfers[index],"RECV",deps));return done;
         };
         auto asdeps=[](J n) {return n.is_null()?J::array():J::array({n});};
         auto prepare=comp("attention-route-quant-pack",local[rank],Num(profile.at("attention_route_pack")),J::array());J start=asdeps(prepare);
         auto local_prepare=[&](std::string kind,J deps) {
-            uint64_t n=0;for(const auto& x:contributions)if(x.at("locality")=="same_chip"&&x.at(kind=="dispatch"?"src_rank":"dst_rank")==rank)++n;
+            uint64_t n=(kind=="dispatch"?local_dispatch:local_combine)[rank];
             auto work=c.contains("deployment")?Num(c.at("deployment").at("local_prepare_ns_per_vector").at(kind)):0;
             auto node=comp((kind+"-local-prepare").c_str(),n,work,deps);local_prepares[kind]=node;return asdeps(node);
         };
@@ -222,8 +243,8 @@ LayerPlan ValidateCannPlan(const J& p) {
     Check(p.at("transfers")==transfers,"transfer layout, source, state or dependency mismatch");
     Check(p.at("rank_graphs")==graphs,"graph or stage mismatch");
     Check(resources::Actual(p)==usage,"actual/preflight mismatch");
-    LayerPlan result{p,{},{},{}};
-    for(const auto& g:graphs)for(const auto& n:g.at("nodes"))result.nodes.emplace(std::make_pair(g.at("rank_id").get<int>(),n.at("node_id").get<uint64_t>()),n);
+    LayerPlan result{retain_data ? p : J{},{},{},{}};
+    if (retain_data) for(const auto& g:graphs)for(const auto& n:g.at("nodes"))result.nodes.emplace(std::make_pair(g.at("rank_id").get<int>(),n.at("node_id").get<uint64_t>()),n);
     for(const auto& t:transfers) {
         auto id=t.at("transfer_id").get<uint64_t>(),bytes=t.at("payload_bytes").get<uint64_t>();
         int src=t.at("src_rank"),dst=t.at("dst_rank"),tag=t.at("comm_tag");std::string graph=c.at("graph_id"),op=t.at("operation_id");

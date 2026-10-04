@@ -3388,3 +3388,23 @@ graph 目录留下 layer.0.et 至 layer.5.et（分别为 9169277、9106991、916
 新入口的小图由原 C++ 探针加载为 171 节点、39 fabric/12 local，修改 JSON 和截断 Chakra 均拒绝。四块、61 块、穿插 dense 的计划、生成清单及 Chakra 共 15 个历史文件摘要相同。1304 个保护文件涵盖原三套构建、启动锁、两份 M9 原文件与首轮 prepared/bundle；C++、锁文件/子模块、构图/校验器、CANN 和服务调度未变。没有重编译、下载、推送或修改技术规范。
 
 本步骤完成并整理记录后本地提交，说明与机器可读证据见 [导出优化](../fixtures/m10_full_model_export/README.md)和 [result.json](../fixtures/m10_full_model_export/result.json)。下一项建议测量并处理序列化与文件摘要开销，同时考虑构图及校验已占用约 896.5 s；尚不能保证仅优化写出即可满足原总时限。下一项尚未执行。M10 最终验收、完整目标导出/加载、网络与多轮累计持有仍未完成；真实来源、参考费用与硬件校准分别记录，AWQ4 采集来源/INT8 容量参考差异和采集代码修订未知等限制没有改变。
+
+## 2026-10-04：连续资源工程，计划存储与加载检查点
+
+用户授权 M10 资源与效率工程连续推进，完成后再确认最终目标实验；任务说明提交 `5ba2666`。初始整个工作区约 26 GiB（runs 14 GiB、build 3.8 GiB、环境 5.7 GiB、数据 2.1 GiB），本任务新增总占用先限 20 GiB；不删除历史或未知文件。新的 host_probe 可合并监测本任务运行与构建目录，并检查可用空间，资源预算是宿主政策而非仿真性能或 HBM。
+
+本节命令均在 `/root/moe-ub-cosim`；R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`。`python3 R/record.py LABEL COMMAND...` 保存完整 argv、cwd、时间、退出状态和输出日志，标签不覆盖。已审阅脚本再执行；所有下列最终检查退出 0。
+
+| 命令或记录入口 | 实际结果 |
+|---|---|
+| `env PYTHONPATH=python:tests/unit P -m unittest plan_io_test full_model_export_test full_model_storage_test full_model_test full_round_probe_test resource_budget_test` | unit-io：24 项通过，含旧缩进字节与新紧凑语义/Chakra 等价、分块摘要、计划字节限制和累计磁盘/余量拒绝。 |
+| `env PYTHONPATH=python:tests/unit P -m unittest host_probe_test` | unit-monitor：4 项通过，包含实际子进程退出、后代清理、时间/RSS/地址/产物限制。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.host_probe --output-dir R/compact-comparison --rss-bytes 8589934592 --address-bytes 12884901888 --artifact-bytes 21474836480 --artifact-root R --artifact-root build/m10-resource-efficiency --min-free-bytes 21474836480 --wall-seconds 300 -- P scripts/probe_plan_storage.py --input-dir runs/v03-full-model-export/compare-closed/work/graph --output-dir R/compact-comparison/work --compact` | compact-comparison：完整字段重新解析一致，旧计划 306199718 B、新计划 133050763 B，其他文件摘要不变；实际写出 4.564 s，含校验导出 10.616 s。 |
+| 同上监视器，输出换为 R/loader-baseline，worker 为 `build/m10-full-round-preflight/output/cosim/ns3.44-cosim-plan-load-probe R/compact-comparison/work/graph` | loader-baseline：旧加载器 35.975 s、采样峰值 3779096576 B。 |
+| `python3 R/build.py configure`；同一累计磁盘监视器下运行 `python3 R/build.py build cosim-plan-load-probe cosim-service cosim-layer`，RSS 16 GiB、地址 24 GiB、900 s | configure/build-loader：复用历史 CMake 参数，仅输出目录替换为新构建；4 个编译作业，退出 0，原生启动锁恢复。精确 CMake argv 在 R/configure-argv.json、build-argv.json。构建子工具可能另设进程组，不用同组采样值声称完整编译内存。 |
+| 与旧加载器相同监视器/输入，输出换为 R/loader-optimized，worker 换为新构建同名程序 | loader-optimized：8.044 s、峰值 1549832192 B，节点 135558、fabric 64556、local 436 均相同，无残留进程。 |
+| `env PYTHONPATH=python python3 R/regressions.py` | 顺序执行 service-regression、structure-regression、cann-regression；各限 RSS 8 GiB、地址 12 GiB、300 s，共享累计磁盘上限。随后 loader-check 与 loader-equivalence。各实际参数/退出码在 R/logs/*.json、各目录 commands.json。 |
+
+新完整图加载器接管唯一解析树，子层全部验证后仅返回描述符，按 rank 与逐传输重构比较；节点执行索引保留类型、耗时、依赖，不复制整份 JSON。CANN 独立检查使用有序索引消除反复扫描。八组新/旧实际加载一致，十二项篡改均拒绝。完整服务、61 块小 EP、dense 穿插及 CANN 真实 UB 回归通过，原小图 JSON/Chakra 损坏拒绝保持；未改变 UB 执行事件。1304 个旧受保护文件摘要未变。
+
+检查点时 R 约 346 MiB、新构建约 100 MiB，未清理任何历史结果。证据见 [checkpoint-io.json](../fixtures/m10_resource_efficiency/checkpoint-io.json)。本任务仍 in_progress；完整目标导出/加载、跨轮持有和观测登记表重复落盘尚未解决，不将此检查点写成资源工程完成或 M10 完成。

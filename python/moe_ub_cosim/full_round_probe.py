@@ -59,9 +59,9 @@ def instrument(events):
         events('composition_end', call=ordinal, usage=actual_usage(result))
         return result
 
-    def writing(plan, output):
+    def writing(plan, output, **options):
         events('write_begin', usage=actual_usage(plan))
-        result = write(plan, output)
+        result = write(plan, output, **options)
         events('write_end')
         return result
 
@@ -147,7 +147,7 @@ def prepare(config, output, events):
     events('prepared', usage=expected)
 
 
-def build_export(bundle, output, events, expected=None):
+def build_export(bundle, output, events, expected=None, *, compact=False):
     from .generate import build_export_full_model
     def record(phase, **values):
         if phase=='write_begin':
@@ -161,7 +161,7 @@ def build_export(bundle, output, events, expected=None):
     with instrument(record):
         events('build_begin')
         plan, _ = build_export_full_model(bundle['configs'],RunIdentities(),bundle['provenance'],
-            bundle['model'],bundle['profile'],output/'graph',source_evidence=bundle.get('source_evidence'))
+            bundle['model'],bundle['profile'],output/'graph',source_evidence=bundle.get('source_evidence'),compact=compact)
         actual = actual_usage(plan)
         result = dict(actual_usage=actual,plan_bytes=(output/'graph/plan.json').stat().st_size,
             dependency_edges=sum(len(n['deps']) for g in plan['rank_graphs'] for n in g['nodes']),
@@ -176,6 +176,7 @@ def main():
     parser.add_argument('action',choices=('prepare','target','small'))
     parser.add_argument('--input',type=Path)
     parser.add_argument('--output-dir',type=Path,required=True)
+    parser.add_argument('--compact-plan',action='store_true',help='Lossless compact plan JSON; same Chakra and validation')
     a = parser.parse_args(); a.output_dir.mkdir(parents=True,exist_ok=False)
     events = Events(a.output_dir/'phases.jsonl')
     try:
@@ -187,12 +188,12 @@ def main():
             prepared = json.loads(a.input.read_text())
             require(prepared['schema_version']=='moe-ub-full-round-prepared/1','Invalid prepared manifest')
             _, bundle = read_json(prepared['bundle'])
-            build_export(bundle,a.output_dir,events,prepared['expected_usage'])
+            build_export(bundle,a.output_dir,events,prepared['expected_usage'],compact=a.compact_plan)
         else:
             source = json.loads(Path('fixtures/m10_full_model/service.json').read_text())['groups'][0]
             configs = json.loads(Path('fixtures/m10_full_model/layers.json').read_text())['groups'][0]['layers']
             build_export(dict(configs=configs,provenance=[[] for _ in configs],
-                model=source['model_spec'],profile=source['full_model_profile']),a.output_dir,events)
+                model=source['model_spec'],profile=source['full_model_profile']),a.output_dir,events,compact=a.compact_plan)
     finally:
         events.close()
 

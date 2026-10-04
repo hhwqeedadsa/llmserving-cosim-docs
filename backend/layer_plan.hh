@@ -10,24 +10,38 @@
 
 namespace moe_ub
 {
+// Execution checking needs these values, not another JSON object per node.
+struct ExecutionNode
+{
+    std::string kind;
+    uint64_t duration_ns;
+    std::vector<uint64_t> deps;
+    ExecutionNode(const nlohmann::json& node)
+        : kind(node.at("kind").get<std::string>()),
+          duration_ns(kind == "COMP" ? node.at("duration_ns").get<uint64_t>() : 0),
+          deps(node.at("deps").get<std::vector<uint64_t>>()) {}
+};
 struct LayerPlan
 {
     nlohmann::json data;
     std::vector<WriteDescriptor> descriptors;
-    std::map<std::pair<int, uint64_t>, nlohmann::json> nodes;
+    std::map<std::pair<int, uint64_t>, ExecutionNode> nodes;
     std::vector<LocalDescriptor> local_descriptors;
 };
 void ValidateDeployment(const nlohmann::json& deployment, const nlohmann::json& ranks);
 uint64_t ValidateBatchLimits(const nlohmann::json& limits);
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
-LayerPlan ValidateLayerPlan(const nlohmann::json& data);
-LayerPlan ValidateCannPlan(const nlohmann::json& data);
+// retain_data only controls returned storage; all semantic checks always run.
+LayerPlan ValidateLayerPlan(const nlohmann::json& data, bool retain_data = true);
+LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true);
 void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
-LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const nlohmann::json& data);
+LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data);
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 LayerPlan LoadKvPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& graph,
                     const std::map<uint64_t, nlohmann::json>& transfers);
+void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& graph,
+                    const std::map<uint64_t, const nlohmann::json*>& transfers);
 // Consume the original ASTRA execution records after flushing its logger.
 // This is a bounded diagnostic export, not an inference from network packets.
 nlohmann::json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& log, bool graph_identity = false);

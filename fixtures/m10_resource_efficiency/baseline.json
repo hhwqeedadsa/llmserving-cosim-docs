@@ -1,0 +1,11 @@
+{
+  "baseline_commit": "9db81e8be3abf9691fd22accb0e57bd31b758f41",
+  "task_definition_commit": "5ba2666",
+  "protected_files": 1304,
+  "initial_disk": "4076351488\t./build\n14163521536\t./runs\n770621440\t./third_party\n1110016\t./python\n1581056\t./tests\n692224\t./docs\n2056192\t./fixtures\n413286400\t./.git\n135168\t./scripts\n2244182016\t./data\n475136\t./backend\n6069440512\t./.venv\n27743506432\t.\n",
+  "disk_budget_bytes": 21474836480,
+  "artifact_roots": [
+    "runs/v03-resource-efficiency",
+    "build/m10-resource-efficiency"
+  ]
+}

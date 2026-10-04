@@ -118,8 +118,10 @@ void ValidateFullModelProfile(const Json& model, const Json& profile, const Json
     }
 }
 
-LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& p)
+LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data)
 {
+    LayerPlan result{std::move(data), {}, {}, {}};
+    const auto& p = result.data;
     const auto& model = p.at("model_spec"); const auto& profile = p.at("full_model_profile"); const auto& layers = p.at("layers");
     Require(layers.is_array() && !layers.empty() && layers.size() <= 128, "missing communication layers");
     const auto& first = layers[0]; const auto& ranks = first.at("rank_ids");
@@ -131,15 +133,22 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
         if (row.at("kind") == "moe") moe_ids.push_back(row.at("layer_id"));
     }
     Require(layers.size() == moe_ids.size(), "missing MoE layer");
-    Json expected = first;
-    for (auto key : {"input_provenance", "compute_inputs", "contributions", "compute_evaluation", "communication_buffers"}) expected.erase(key);
+    // Reconstruct every field, but compare large tables as they are produced.
+    // The input tree has one owner; validated children return descriptors only.
+    Json expected = Json::object();
+    const std::set<std::string> replaced = {"input_provenance", "compute_inputs", "contributions", "compute_evaluation",
+        "communication_buffers", "operations", "transfers", "rank_graphs", "expert_input_counts", "layers"};
+    for (const auto& [key, value] : first.items()) if (!replaced.contains(key)) expected[key] = value;
     expected["schema_version"] = "moe-ub-full-model-plan/1";
-    expected["layers"] = layers; expected["model_spec"] = model; expected["full_model_profile"] = profile;
+    expected["model_spec"] = model; expected["full_model_profile"] = profile;
     expected["executed_layer_ids"] = ids; expected["communication_layer_ids"] = moe_ids;
     expected["input"] = Common(first.at("input")); expected["input"]["schema_version"] = "moe-ub-full-model-input/1";
     expected["input"]["executed_layer_ids"] = ids;
-    for (auto key : {"operations", "transfers", "rank_graphs", "expert_input_counts"}) expected[key] = Json::array();
+    for (auto key : {"operations", "expert_input_counts"}) expected[key] = Json::array();
+    Require(p.at("rank_graphs").is_array() && p.at("rank_graphs").size() == ranks.size(), "composition mismatch: rank_graphs");
+    Require(p.at("transfers").is_array(), "composition mismatch: transfers");
     std::map<uint64_t, LayerPlan> children;
+    std::map<uint64_t, const Json*> child_data;
     std::set<std::string> operations; std::map<std::string, std::set<uint64_t>> identities;
     for (size_t i = 0; i < layers.size(); ++i)
     {
@@ -154,7 +163,8 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
         Require(input.at("compute_profile_ns") == Json({{"attention_route_pack", per.at("dispatch_quant_pack")},
             {"expert_per_input", cost.at("routed_expert_per_input_ns")}, {"expert_local_merge", 0},
             {"combine_unpack_merge", per.at("combine_unpack_merge")}, {"next_layer", 0}}), "duplicated/mismatched child cost");
-        children.emplace(lid, ValidateLayerPlan(layer));
+        children.emplace(lid, ValidateLayerPlan(layer, false));
+        child_data.emplace(lid, &layer);
         for (const auto& op : layer.at("operations"))
         {
             Require(operations.insert(op.at("operation_id").get<std::string>()).second, "duplicate operation");
@@ -164,9 +174,10 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
             for (auto key : {"transfer_id", "ub_task_id", "comm_tag"})
                 if (transfer.contains(key)) Require(identities[key].insert(Number(transfer.at(key))).second, "duplicate transfer identity");
     }
+    identities.clear();
     const auto tokens = Tokens(first); const uint64_t ready = Number(first.at("ready_ns"));
     for (const auto& token : tokens) Require(Number(token.at("token_index")) < Number(model.at("max_position_embeddings")), "context exceeds model");
-    LayerPlan result{p, {}, {}, {}}; std::map<std::pair<uint64_t, int>, uint64_t> offsets;
+    std::map<std::pair<uint64_t, int>, uint64_t> offsets;
     for (size_t ri = 0; ri < ranks.size(); ++ri)
     {
         const int rank = ranks[ri]; uint64_t n = 0, context = 0, total = ready, expert_inputs = 0;
@@ -204,7 +215,7 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
             else
             {
                 const auto branch = previous; const auto routed = comp("router", Product(n, Number(per.at("router"))), branch, lid);
-                const auto& checked = children.at(lid); const auto& child = checked.data.at("rank_graphs")[ri];
+                const auto& checked = *child_data.at(lid); const auto& child = checked.at("rank_graphs")[ri];
                 const uint64_t base = nodes.size(); offsets[{lid, rank}] = base;
                 std::set<uint64_t> used; std::vector<uint64_t> terminal;
                 for (const auto& node : child.at("nodes")) for (const auto& dep : node.at("deps")) used.insert(dep.get<uint64_t>());
@@ -234,15 +245,17 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
                 auto shared = comp("shared_expert", Product(Product(n, Number(row.at("shared_experts"))), Number(per.at("shared_expert"))), branch, lid);
                 terminal.insert(terminal.end(), shared.begin(), shared.end());
                 previous = comp("shared_routed_add", Product(n, Number(per.at("shared_routed_add"))), terminal, lid);
-                expert_inputs += checked.data.at("expert_input_counts")[ri].get<uint64_t>();
+                expert_inputs += checked.at("expert_input_counts")[ri].get<uint64_t>();
             }
             previous = comp("ffn_residual", Product(n, Number(per.at("ffn_residual"))), previous, lid);
         }
         for (auto stage : {"final_norm", "lm_head", "sampling"}) previous = comp(stage, Product(n, Number(profile.at("per_token_ns").at(stage))), previous);
         graph["terminal_nodes"] = previous;
+        Require(p.at("rank_graphs")[ri] == graph, "composition mismatch: rank_graphs");
         for (const auto& node : nodes) result.nodes.emplace(std::make_pair(rank, node.at("node_id").get<uint64_t>()), node);
-        expected["rank_graphs"].push_back(graph); expected["expert_input_counts"].push_back(expert_inputs);
+        expected["expert_input_counts"].push_back(expert_inputs);
     }
+    size_t transfer_index = 0;
     for (const auto& layer : layers)
     {
         const auto lid = Number(layer.at("input").at("layer_id"));
@@ -250,27 +263,31 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
         {
             transfer["send_node_id"] = transfer.at("send_node_id").get<uint64_t>() + offsets.at({lid, transfer.at("src_rank").get<int>()});
             transfer["recv_node_id"] = transfer.at("recv_node_id").get<uint64_t>() + offsets.at({lid, transfer.at("dst_rank").get<int>()});
-            expected["transfers"].push_back(transfer);
+            Require(transfer_index < p.at("transfers").size() && p.at("transfers")[transfer_index] == transfer,
+                    "composition mismatch: transfers");
+            ++transfer_index;
         }
-        for (auto descriptor : children.at(lid).descriptors)
+        for (auto& descriptor : children.at(lid).descriptors)
         {
             descriptor.send_node_id += offsets.at({lid, descriptor.src_rank}); descriptor.recv_node_id += offsets.at({lid, descriptor.dst_rank});
-            result.descriptors.push_back(descriptor);
+            result.descriptors.push_back(std::move(descriptor));
         }
-        for (auto descriptor : children.at(lid).local_descriptors)
+        for (auto& descriptor : children.at(lid).local_descriptors)
         {
             descriptor.send_node_id += offsets.at({lid, descriptor.src_rank}); descriptor.recv_node_id += offsets.at({lid, descriptor.dst_rank});
-            result.local_descriptors.push_back(descriptor);
+            result.local_descriptors.push_back(std::move(descriptor));
         }
+        children.erase(lid);
     }
-    const auto usage = resources::Actual(expected);
+    Require(transfer_index == p.at("transfers").size(), "composition mismatch: transfers");
+    const auto usage = resources::Actual(p);
     const auto budget = resources::Budget(expected.at("input"));
     resources::Check(usage, budget);
     if (!budget.is_null()) expected["resource_usage"] = usage;
     for (const auto& [key, value] : expected.items())
         if (key != "compute_source" && key != "route_source") Require(p.at(key) == value, "composition mismatch: " + key);
-    std::map<uint64_t, Json> transfers;
-    for (const auto& transfer : p.at("transfers")) transfers.emplace(transfer.at("transfer_id"), transfer);
+    std::map<uint64_t, const Json*> transfers;
+    for (const auto& transfer : p.at("transfers")) transfers.emplace(transfer.at("transfer_id"), &transfer);
     for (const auto& graph : p.at("rank_graphs"))
         CheckPlanGraph(directory / ("layer." + std::to_string(graph.at("rank_id").get<int>()) + ".et"), graph, transfers);
     return result;

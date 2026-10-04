@@ -1,4 +1,5 @@
 #include "port_observation.hh"
+#include "observation_resources.hh"
 
 #include "ns3/ipv4-header.h"
 #include "ns3/udp-header.h"
@@ -53,33 +54,43 @@ ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
 {
     std::set<std::string> keys;
     for (auto it = input.begin(); it != input.end(); ++it) keys.insert(it.key());
+    const bool streamed=input.at("schema_version")=="moe-ub-port-observation/2";
+    if (streamed) { ValidateObservationBudget(input.at("resource_budget")); keys.erase("resource_budget"); }
     Require(keys == std::set<std::string>{"schema_version", "switch_id", "port_id",
                 "window_start_ns", "window_end_ns", "window_period_ns", "record_provenance"} &&
-            input.at("schema_version") == "moe-ub-port-observation/1" &&
+            (streamed || input.at("schema_version") == "moe-ub-port-observation/1") &&
             input.at("record_provenance").is_boolean(), "Unsupported observation schema or fields");
     ObservationConfig c{static_cast<uint32_t>(Unsigned(input, "switch_id", UINT32_MAX)),
         static_cast<uint32_t>(Unsigned(input, "port_id", UINT32_MAX)),
         Unsigned(input, "window_start_ns", stop_ns), Unsigned(input, "window_end_ns", stop_ns),
         Unsigned(input, "window_period_ns", stop_ns), input.at("record_provenance").get<bool>()};
+    if (streamed) c.resource_budget=input.at("resource_budget");
     Require(c.start_ns < c.end_ns && c.period_ns > 0, "Invalid observation interval or period");
-    Require((c.end_ns - c.start_ns - 1) / c.period_ns < 4096,
-            "M1 observation supports at most 4096 windows");
+    Require((c.end_ns - c.start_ns - 1) / c.period_ns < (streamed ? c.resource_budget.at("max_windows_per_port").get<uint64_t>() : 4096),
+            "Observation windows exceed configured budget (legacy: 4096)");
     return c;
 }
 
 PortWindows::PortWindows(ObservationConfig config) : config_(config)
 {
     Require(config.start_ns < config.end_ns && config.period_ns > 0 &&
-            (config.end_ns - config.start_ns - 1) / config.period_ns < 4096,
+            (config.end_ns - config.start_ns - 1) / config.period_ns < (config.resource_budget.is_null() ? 4096 : config.resource_budget.at("max_windows_per_port").get<uint64_t>()),
             "Invalid port window bounds");
-    rows_.resize((config.end_ns - config.start_ns - 1) / config.period_ns + 1);
+    if (config.resource_budget.is_null()) rows_.resize(Count());
+}
+ByteCounts PortWindows::Row(uint64_t index) const
+{
+    Require(index<Count(), "Window index outside interval");
+    if (config_.resource_budget.is_null()) return rows_.at(index);
+    const auto found=sparse_.find(index);return found==sparse_.end() ? ByteCounts{} : found->second;
 }
 void PortWindows::Add(uint64_t time_ns, uint32_t whole, uint32_t business, uint32_t metadata, uint32_t padding)
 {
     const uint64_t payload = uint64_t(business) + metadata + padding;
     Require(payload <= whole, "Payload exceeds packet size");
     if (time_ns < config_.start_ns || time_ns >= config_.end_ns) return;
-    auto& row = rows_.at((time_ns - config_.start_ns) / config_.period_ns);
+    const auto index=(time_ns-config_.start_ns)/config_.period_ns;
+    auto& row = config_.resource_budget.is_null() ? rows_.at(index) : sparse_[index];
     ++row.packets;
     row.whole += whole;
     row.business += business;
@@ -122,6 +133,8 @@ PayloadLedger::PayloadLedger(const std::vector<WriteDescriptor>& descriptors)
 }
 void PayloadLedger::Register(const std::vector<WriteDescriptor>& descriptors)
 {
+    Require(descriptors_.size()<=max_transfers_ && descriptors.size()<=max_transfers_-descriptors_.size(),
+            "Observation registered transfer budget exceeded");
     auto checked = descriptors_;
     for (const auto& d : descriptors)
         Require(d.task_id <= UINT32_MAX && checked.emplace(d.task_id, d).second,
@@ -139,6 +152,7 @@ void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
             bytes <= d.bytes - task_begin && packet_begin <= packet->GetSize() &&
             bytes == packet->GetSize() - packet_begin, "Invalid WRITE provenance range or task");
     PayloadRange value{task_begin, packet_begin, bytes, packet->GetSize(), task};
+    Require(ranges_.contains(packet->GetUid()) || ranges_.size()<max_packets_, "Observation payload ledger packet budget exceeded");
     auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
     Require(inserted || it->second == value, "Conflicting packet provenance");
 }
@@ -162,10 +176,23 @@ PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descr
 {}
 
 PortObservation::PortObservation(ObservationConfig config, const std::vector<WriteDescriptor>& descriptors,
-                                std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events)
+                                std::vector<ns3::Ptr<ns3::UbController>> sources, bool retain_packet_events,
+                                const std::filesystem::path& spool_directory)
     : config_(config), windows_(config), sources_(std::move(sources)),
       retain_packet_events_(retain_packet_events)
 {
+    if (!config_.resource_budget.is_null())
+    {
+        ValidateObservationBudget(config_.resource_budget);
+        Require(!spool_directory.empty(), "Streaming observation needs its output directory");
+        spool_directory_=spool_directory;std::filesystem::create_directories(spool_directory_/"observed");
+        if(config_.provenance) std::filesystem::create_directories(spool_directory_/"truth");
+        for(const std::string name : {"packet-events.jsonl","egress-queue-audit.jsonl","truth/packet_ranges.jsonl"})
+        {
+            if(name=="truth/packet_ranges.jsonl" && !config_.provenance) continue;
+            streams_[name].open(spool_directory_/name);Require(bool(streams_.at(name)),"Cannot open streaming observation file");
+        }
+    }
     for (const auto& d : descriptors)
     {
         Require(d.task_id <= UINT32_MAX && descriptors_.emplace(d.task_id, d).second,
@@ -183,7 +210,10 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
     // Byte layout is needed even with source attribution disabled. This passive
     // ledger never changes the packet or schedules a simulation event.
     {
-        ledger_ = std::make_shared<PayloadLedger>(descriptors);
+        ledger_ = std::make_shared<PayloadLedger>(std::vector<WriteDescriptor>{});
+        if (!config_.resource_budget.is_null())
+            ledger_->SetLimits(config_.resource_budget.at("max_ledger_packets"),config_.resource_budget.at("max_registered_transfers"));
+        ledger_->Register(descriptors);
         // Keep no TP references: native reclamation owns their lifetime. The bound
         // ledger, not this observer, remains valid if a removed TP outlives its map entry.
         for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
@@ -223,10 +253,21 @@ void PortObservation::Register(const std::vector<WriteDescriptor>& descriptors)
     if (ledger_) ledger_->Register(descriptors);
     descriptors_.swap(checked);
 }
-void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes)
+void PortObservation::Record(const std::string& name, Json& memory, const Json& row)
 {
-    queue_events_.push_back({{"event", event}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()},
-        {"packet_uid", packet->GetUid()}, {"packet_bytes", packet->GetSize()}, {"queue_bytes", queue_bytes}});
+    if (config_.resource_budget.is_null()) { memory.push_back(row);return; }
+    const auto text=row.dump()+"\n";
+    Require(text.size()<=config_.resource_budget.at("max_event_bytes_per_port").get<uint64_t>()-event_bytes_, "Observation event byte budget exceeded");
+    auto& stream=streams_.at(name);stream<<text;
+    Require(bool(stream),"Cannot write observation event");event_bytes_+=text.size();
+}
+void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes,
+                                 std::optional<uint64_t> busy_until)
+{
+    Json row={{"event", event}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()},
+        {"packet_uid", packet->GetUid()}, {"packet_bytes", packet->GetSize()}, {"queue_bytes", queue_bytes}};
+    if(busy_until) row["busy_until_ns"]=*busy_until;
+    Record("egress-queue-audit.jsonl",queue_events_,row);
 }
 void PortObservation::Enqueued(ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes)
 {
@@ -241,8 +282,7 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     // Despite the native trace name, this fires NOW after TransmitStart succeeds.
     // completion_delay is a duration; do not move the observation to packet end.
     const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
-    QueueEvent("tx_start", packet, port_->GetUbQueue()->GetCurrentBytes());
-    queue_events_.back()["busy_until_ns"] = now + completion_delay.GetNanoSeconds();
+    QueueEvent("tx_start", packet, port_->GetUbQueue()->GetCurrentBytes(), now + completion_delay.GetNanoSeconds());
     const auto whole = packet->GetSize();
     const auto payload = WritePayloadBytes(packet);
     uint32_t business = payload, metadata = 0, padding = 0;
@@ -270,13 +310,14 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     }
     if (retain_packet_events_)
     {
-        packet_events_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
-            {"counted_packet_bytes", whole}, {"business_payload_bytes", business}});
+        Json event={{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
+            {"counted_packet_bytes", whole}, {"business_payload_bytes", business}};
         if (segmented_payload_)
         {
-            packet_events_.back()["application_metadata_bytes"] = metadata;
-            packet_events_.back()["padding_bytes"] = padding;
+            event["application_metadata_bytes"] = metadata;
+            event["padding_bytes"] = padding;
         }
+        Record("packet-events.jsonl",packet_events_,event);
     }
     windows_.Add(now, whole, business, metadata, padding);
     all_bytes_ += whole; ++all_packets_;
@@ -297,7 +338,7 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
             if (region.kind != "business") continue;
             const auto a = std::max(region.begin, range.task_begin), b = std::min(region.end, range.task_begin + range.bytes);
             if (a >= b || now < config_.start_ns || now >= config_.end_ns) continue;
-            packet_ranges_.push_back({{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
+            Record("truth/packet_ranges.jsonl",packet_ranges_,{{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
                 {"ub_task_id", descriptor.task_id}, {"transfer_id", descriptor.transfer_id},
                 {"operation_id", descriptor.operation_id.empty() ? descriptor.graph_id + "/write" : descriptor.operation_id},
                 {"task_byte_range", {a, b}},
@@ -343,10 +384,19 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         {"switch_id", config_.switch_id}, {"port_id", config_.port_id}, {"direction", "egress"},
         {"observation_start_local_ns", config_.start_ns}, {"observation_end_local_ns", config_.end_ns},
         {"window_period_ns", config_.period_ns}, {"clock_resolution_ns", 1}});
-    Json observed = Json::array(), truth = Json::array();
-    for (size_t i = 0; i < windows_.Rows().size(); ++i)
+    const bool streamed=!config_.resource_budget.is_null();
+    std::ofstream observed_stream,truth_stream;
+    if(streamed)
     {
-        const auto& row = windows_.Rows()[i];
+        Require(std::filesystem::absolute(base)==std::filesystem::absolute(spool_directory_),"Spool/export directory mismatch");
+        for(auto& [name,stream]:streams_) { stream.flush();Require(bool(stream),"Cannot flush observation stream"); }
+        observed_stream.open(base/"observed/port_counters.jsonl");
+        if(config_.provenance) truth_stream.open(base/"truth/port_byte_truth.jsonl");
+    }
+    Json observed = Json::array(), truth = Json::array();
+    for (size_t i = 0; i < windows_.Count(); ++i)
+    {
+        const auto row = windows_.Row(i);
         const auto start = config_.start_ns + i * config_.period_ns;
         const auto end = start + std::min(config_.period_ns, config_.end_ns - start);
         observed.push_back({{"switch_id", config_.switch_id}, {"port_id", config_.port_id},
@@ -357,15 +407,28 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
             {"data_protocol_overhead_bytes", row.overhead}, {"control_packet_bytes", row.control},
             {"unattributed_bytes", 0}});
         if (segmented_payload_) truth.back()["padding_bytes"] = row.padding;
+        if(streamed)
+        {
+            observed_stream<<observed.back().dump()<<'\n';
+            if(config_.provenance) truth_stream<<truth.back().dump()<<'\n';
+            Require(bool(observed_stream) && (!config_.provenance || bool(truth_stream)),"Cannot stream window output");
+            observed.clear();truth.clear();
+        }
     }
-    save("observed/port_counters.jsonl", observed, true);
+    if(!streamed) save("observed/port_counters.jsonl", observed, true);
+    else { observed_stream.close();Require(bool(observed_stream),"Cannot close windows");if(config_.provenance) { truth_stream.close();Require(bool(truth_stream),"Cannot close truth windows"); } }
     save("observed/endpoint_ops.jsonl", endpoint_ops, true);
     save("observation-audit.json", {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_},
         {"wire_and_time_fnv1a64", fingerprint_}});
-    save("egress-queue-audit.jsonl", queue_events_, true);
-    if (retain_packet_events_) save("packet-events.jsonl", packet_events_, true);
+    if(streamed) save("resource-audit.json",{{"record_storage","streamed_jsonl"},{"event_bytes",event_bytes_},
+        {"retained_packet_event_records",packet_events_.size()},{"retained_queue_records",queue_events_.size()},
+        {"retained_packet_range_records",packet_ranges_.size()},{"resident_window_rows",windows_.ResidentRows()},
+        {"logical_window_rows",windows_.Count()},{"ledger_packets",ledger_->PacketCount()},
+        {"registered_transfers",descriptors_.size()},{"budget",config_.resource_budget}});
+    else { save("egress-queue-audit.jsonl", queue_events_, true);
+        if (retain_packet_events_) save("packet-events.jsonl", packet_events_, true); }
     if (!config_.provenance) return;
     std::filesystem::create_directory(base / "truth");
     std::set<int> ranks;
@@ -409,7 +472,7 @@ void PortObservation::Export(const std::vector<const UbWriteTransfer*>& transfer
         {"switch_ids", {config_.switch_id}}, {"rank_ids", ranks}});
     save("truth/operation_registry.jsonl", operation_registry, true);
     save("truth/transfer_registry.jsonl", registry, true);
-    save("truth/packet_ranges.jsonl", packet_ranges_, true);
-    save("truth/port_byte_truth.jsonl", truth, true);
+    if(!streamed) { save("truth/packet_ranges.jsonl", packet_ranges_, true);
+        save("truth/port_byte_truth.jsonl", truth, true); }
 }
 }

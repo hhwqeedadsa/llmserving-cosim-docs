@@ -1,6 +1,7 @@
 """Integer local clocks and the closed, observed-only research input contract."""
 import csv
 import json
+from itertools import zip_longest
 from pathlib import Path
 
 from .plan import integer, require, MAX_RANK_ID
@@ -29,11 +30,26 @@ def windows(port):
         yield left,min(left+period,end)
 
 
+OBSERVATION_BUDGET_FIELDS = ('max_ports','max_windows_per_port','max_total_windows','max_event_bytes_per_port',
+                             'max_ledger_packets','max_registered_transfers','max_export_bytes')
+
+
+def validate_observation_budget(budget):
+    require(isinstance(budget,dict) and set(budget)==set(OBSERVATION_BUDGET_FIELDS)|{'schema_version'} and
+            budget['schema_version']=='moe-ub-observation-resources/1','Invalid observation resource budget')
+    for key in OBSERVATION_BUDGET_FIELDS:integer(budget[key],key,1)
+    require(budget['max_windows_per_port']<=budget['max_total_windows'],'Observation window budget mismatch')
+    return budget
+
+
 def validate_observation(config, ranks, max_ns):
-    require(set(config)=={'clocks','switches','record_provenance'} and
+    budget=config.get('resource_budget')
+    if budget is not None:validate_observation_budget(budget)
+    limits=budget or dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096)
+    require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set()) and
             type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
     require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
-            1<=len(config['switches'])<=16,'Require observed switches and device clocks')
+            1<=len(config['switches'])<=limits['max_ports'],'Require observed switches and device clocks')
     clocks={}
     for clock in config['clocks']:
         require(set(clock)=={'device_type','device_id','offset_ns','drift_ppb'} and
@@ -51,7 +67,7 @@ def validate_observation(config, ranks, max_ns):
         switch=integer(group['switch_id'],'switch_id',0,2**32-1)
         require(switch not in switches and ('switch',switch) in clocks,'Duplicate switch or missing switch clock')
         switches.add(switch)
-        require(isinstance(group['port_ids'],list) and 1<=len(group['port_ids'])<=16,'Invalid observed ports')
+        require(isinstance(group['port_ids'],list) and 1<=len(group['port_ids'])<=limits['max_ports'],'Invalid observed ports')
         for port in group['port_ids']:integer(port,'port_id',0,2**32-1)
         require(len(set(group['port_ids']))==len(group['port_ids']),'Duplicate observation port')
         integer(group['start_local_ns'],'window start',I64_MIN,I64_MAX)
@@ -60,11 +76,13 @@ def validate_observation(config, ranks, max_ns):
         clock=clocks['switch',switch]
         require(local_time(0,clock)<=group['start_local_ns']<group['end_local_ns']<=local_time(max_ns,clock),
                 'Local observation interval outside simulated time bounds')
-        require((group['end_local_ns']-group['start_local_ns']-1)//group['period_ns']<4096,'Too many observation windows')
+        require((group['end_local_ns']-group['start_local_ns']-1)//group['period_ns']<limits['max_windows_per_port'],'Too many observation windows')
         for port in group['port_ids']:
             ports.append(dict(switch_id=switch,port_id=port,direction='egress',
                 **{k:group[k] for k in ('start_local_ns','end_local_ns','period_ns')}))
-    require(1<=len(ports)<=16,'Require 1..16 distinct observation ports')
+    require(1<=len(ports)<=limits['max_ports'],'Observation port budget exceeded (legacy: 16)')
+    require(sum((p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']+1 for p in ports)<=limits['max_total_windows'],
+            'Observation total window budget exceeded')
     require(set(clocks)=={('rank',r) for r in ranks}|{('switch',s) for s in switches},
             'Missing or unexpected rank/switch clocks')
     return clocks,sorted(ports,key=lambda p:(p['switch_id'],p['port_id']))
@@ -74,27 +92,43 @@ def backend_observation(config, ranks, max_ns):
     _,ports=validate_observation(config,ranks,max_ns)
     # Capture successful starts throughout the simulation. Local clocks are
     # deliberately absent from the backend input and its event scheduler.
-    return dict(schema_version='moe-ub-port-observation-set/1',ports=[dict(
+    result=dict(schema_version='moe-ub-port-observation-set/1',ports=[dict(
         schema_version='moe-ub-port-observation/1',switch_id=p['switch_id'],port_id=p['port_id'],
         window_start_ns=0,window_end_ns=max_ns,window_period_ns=max_ns,
         record_provenance=config['record_provenance']) for p in ports])
+    if 'resource_budget' in config:
+        result.update(schema_version='moe-ub-port-observation-set/2',resource_budget=config['resource_budget'])
+        for port in result['ports']:port.update(schema_version='moe-ub-port-observation/2',resource_budget=config['resource_budget'])
+    return result
 
 
-def public_config(ranks, ports):
-    return dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
+def public_config(ranks, ports, resource_budget=None):
+    result=dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
         port_schema='moe-ub-port-windows/1',rank_ids=ranks,ports=ports,time_unit='ns',
         byte_semantics='ns3_packet_get_size',counter_location='egress_packet_start',clock_resolution_ns=1,
         endpoint_fields=list(ENDPOINT_FIELDS))
+    if resource_budget is not None:
+        result.update(schema_version='moe-ub-observed/2',limits={k:resource_budget[k] for k in ('max_ports','max_windows_per_port','max_total_windows')})
+    return result
+
+
+def iter_json_lines(path, max_line_bytes=64*1024*1024):
+    with path.open('rb') as stream:
+        while True:
+            line=stream.readline(max_line_bytes+1)
+            if not line:break
+            require(len(line)<=max_line_bytes,'JSONL record exceeds line budget')
+            require(line.strip(),'Blank JSONL record')
+            yield json.loads(line)
 
 
 def json_lines(path):
-    lines=path.read_text().splitlines()
-    require(all(line.strip() for line in lines),'Blank JSONL record')
-    return [json.loads(line) for line in lines]
+    return list(iter_json_lines(path))
 
 
 def write_lines(path, rows):
-    path.write_text(''.join(json.dumps(row,sort_keys=True)+'\n' for row in rows))
+    with path.open('w') as stream:
+        for row in rows:stream.write(json.dumps(row,sort_keys=True)+'\n')
 
 
 def write_csv(path, fields, rows):
@@ -102,19 +136,21 @@ def write_csv(path, fields, rows):
         writer=csv.DictWriter(stream,fieldnames=fields);writer.writeheader();writer.writerows(rows)
 
 
-def read_csv(path, fields, text_fields=('direction',)):
+def iter_csv(path, fields, text_fields=('direction',)):
     with path.open(newline='') as stream:
         reader=csv.DictReader(stream)
         require(reader.fieldnames==list(fields),'Unexpected CSV fields')
-        result=[]
         for row in reader:
             require(set(row)==set(fields) and all(v is not None for v in row.values()),'Malformed CSV row')
             for key,value in row.items():
                 if key not in text_fields:
                     number=int(value);require(str(number)==value,'Noncanonical CSV integer')
                     row[key]=number
-            result.append(row)
-        return result
+            yield row
+
+
+def read_csv(path, fields, text_fields=('direction',)):
+    return list(iter_csv(path,fields,text_fields))
 
 
 def validate_observed(directory):
@@ -126,7 +162,11 @@ def validate_observed(directory):
     require(all((directory/name).is_file() and not (directory/name).is_symlink() for name in expected),
             'Observed symlinks/non-files are forbidden')
     public=json.loads((directory/'public_config.json').read_text())
-    require(set(public)==PUBLIC_FIELDS and public['schema_version']=='moe-ub-observed/1' and
+    extended=public.get('schema_version')=='moe-ub-observed/2'
+    limits=public.get('limits',dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096))
+    require(set(limits)=={'max_ports','max_windows_per_port','max_total_windows'},'Invalid public resource limits')
+    for k,v in limits.items():integer(v,k,1)
+    require(set(public)==PUBLIC_FIELDS|({'limits'} if extended else set()) and (extended or public['schema_version']=='moe-ub-observed/1') and
         public['endpoint_schema']=='moe-ub-endpoint-ops/1' and public['port_schema']=='moe-ub-port-windows/1' and
         public['endpoint_fields']==list(ENDPOINT_FIELDS) and public['time_unit']=='ns' and
         public['byte_semantics']=='ns3_packet_get_size' and public['counter_location']=='egress_packet_start' and
@@ -135,8 +175,8 @@ def validate_observed(directory):
     require(isinstance(ranks,list) and bool(ranks) and
             all(type(r) is int and 0<=r<=MAX_RANK_ID for r in ranks) and
             ranks==sorted(set(ranks)),'Invalid public ranks')
-    port_configs=public['ports'];points=set();expected_windows=[]
-    require(isinstance(port_configs,list) and 1<=len(port_configs)<=16,'Invalid public port list')
+    port_configs=public['ports'];points=set();total_windows=0
+    require(isinstance(port_configs,list) and 1<=len(port_configs)<=limits['max_ports'],'Invalid public port list')
     for p in port_configs:
         require(set(p)==WINDOW_CONFIG_FIELDS and p['direction']=='egress','Invalid public port fields')
         integer(p['switch_id'],'switch_id',0,2**32-1);integer(p['port_id'],'port_id',0,2**32-1)
@@ -145,19 +185,23 @@ def validate_observed(directory):
         integer(p['period_ns'],'period_ns',1,I64_MAX)
         point=p['switch_id'],p['port_id']
         require(point not in points and p['start_local_ns']<p['end_local_ns'] and
-            (p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']<4096,'Invalid or duplicate public sampling interval')
+            (p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']<limits['max_windows_per_port'],'Invalid or duplicate public sampling interval')
         points.add(point)
-        expected_windows.extend((p['switch_id'],p['port_id'],'egress',a,b) for a,b in windows(p))
-    ports=read_csv(directory/'port_windows.csv',PORT_FIELDS)
-    require([tuple(r[k] for k in PORT_FIELDS[:5]) for r in ports]==expected_windows,
-            'Missing, duplicated or reordered port windows (missing is not zero)')
-    for row in ports:
+        total_windows+=(p['end_local_ns']-p['start_local_ns']-1)//p['period_ns']+1
+    require(total_windows<=limits['max_total_windows'],'Public total window budget exceeded')
+    expected_windows=((p['switch_id'],p['port_id'],'egress',a,b) for p in port_configs for a,b in windows(p))
+    port_count=zero_count=0
+    for row,expected_row in zip_longest(iter_csv(directory/'port_windows.csv',PORT_FIELDS),expected_windows):
+        require(row is not None and expected_row is not None and tuple(row[k] for k in PORT_FIELDS[:5])==expected_row,
+                'Missing, duplicated or reordered port windows (missing is not zero)')
+        port_count+=1;zero_count+=row['counted_packets']==0
         integer(row['counted_packets'],'counted_packets',0,2**64-1)
         integer(row['counted_packet_bytes'],'counted_packet_bytes',0,2**64-1)
         require((row['counted_packets']==0)==(row['counted_packet_bytes']==0) and
                 row['counted_packets']<=row['counted_packet_bytes'],'Invalid packet/byte counts')
-    endpoints=json_lines(directory/'endpoint_ops.jsonl');last={r:(0,I64_MIN) for r in ranks}
-    for row in endpoints:
+    endpoint_count=0;last={r:(0,I64_MIN) for r in ranks}
+    for row in iter_json_lines(directory/'endpoint_ops.jsonl'):
+        endpoint_count+=1
         require(set(row)==set(ENDPOINT_FIELDS) and type(row['rank_id']) is int and row['rank_id'] in last and
                 row['kind'] in ('dispatch','combine','KV_TRANSFER'),'Invalid endpoint field whitelist')
         integer(row['local_record_id'],'local_record_id',1)
@@ -166,6 +210,6 @@ def validate_observed(directory):
         number,time=last[row['rank_id']]
         require(row['local_record_id']==number+1 and row['start_local_ns']>=time,'Invalid local endpoint sequence')
         last[row['rank_id']]=row['local_record_id'],row['start_local_ns']
-    return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=len(endpoints),
-                port_windows=len(ports),zero_windows=sum(r['counted_packets']==0 for r in ports),
+    return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=endpoint_count,
+                port_windows=port_count,zero_windows=zero_count,
                 access_scope='observed_only')

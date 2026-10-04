@@ -2887,3 +2887,60 @@ full-integration 首次退出 1，原因是新测试错误要求慢 shared 分�
 这些旧路径不调用完整模型成本校验；最后仅收紧无共享专家成本条件，使用完整图最终两套集成重新验证，没有无理由重复旧回归。
 
 本步完整参考图任务完成，本地提交、不推送，current.md 保持 completed，不开始下一任务。完整目标 R1/CM384、目标图/观测规模、完整 fabric、多平面和足够独立真实路由仍未验收；NPU/MLA/量化内核未执行或校准，M10 整体未完成。下一首要工作是目标规模图与观测管理，等待用户确认。
+
+## 2026-10-04：M10 图与观测资源管理
+
+用户确认继续后执行 `v03-graph-observation-resources`，任务说明提交 `000e2ee`，起点为完整参考图提交 `dc5ea7a`。按 v0.3 §3/4.1/4.6/4.8/6 和继承的 v0.2 §4.5–4.6/7/10 增加宿主记录预算；模型、路由、计算参考成本、UB WRITE/RTP 和技术规范未变。没有下载数据、安装软件或使用 GPU，没有修改子模块、锁文件、gitlink。
+
+新增 graph-resources/1，Python 先计数再构图，C++ 独立检查；完整服务绑定各组同一预算并累计已完成图。计划文件在写入和解析前检查字节，资源旁文件纳入生成摘要。新增 observation-resources/1 与原始 set/2，逐包/队列/来源 JSONL 直接写文件，原始窗口只保留非零行；导出器逐端口逐窗口读取事件，公共 CSV/JSONL 逐行验证。旧输入、4096 次交付和 16 端口/4096 窗口限制保持原含义。字段、schema 迁移和驻留对象边界见 [资源说明](../fixtures/m10_resources/README.md)。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，R=`runs/v03-graph-observation-resources`，L=`R/logs`，P=`.venv/llmservingsim-native/bin/python`。审阅后复用 R/record.py；每条记录含实际 argv、cwd、UTC 起止、退出码、stdout/stderr。集成脚本在输出目录的 commands.json 中保存服务/导出/后端子命令、输入和独立计时记录。
+
+### 实际命令与回归
+
+下表最终检查均退出 0，非法输入子命令按预期退出 1。命令统一由 `python3 R/record.py 标签` 记录。
+
+| 命令 | 标签与结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 个固定递归依赖无变化。 |
+| `python3 R/baseline.py` | baseline；保护 13115 份旧构建产物及一份原生启动锁。 |
+| `cmake -S third_party/ns-3-ub -B build/m10-resources -G Ninja ...` | configure；完整参数在 L/configure.json，只启用 unified-bus，注入 backend/inject.cmake，独立 output，不自动获取依赖。 |
+| `cmake --build build/m10-resources --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test cosim-observation-test cosim-write cosim-write-test cosim-layer-delay-test -j8` | build、build-final；540 步初次构建及最终增量构建通过。build-observation-test 另记录新增 C++ 测试的重编。原生启动锁按开始前副本恢复。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p '*_test.py' -v` | unit-final；112 项通过，含 4 项资源预检/窗口合同测试。 |
+| `build/m10-resources/output/cosim/ns3.44-cosim-observation-test` | observation-unit-final；半开窗口、5001 个稀疏窗口、包解析及来源账本上限通过。 |
+| `env PYTHONPATH=python P tests/integration/check_graph_observation_resources.py --build-dir build/m10-resources --output-dir R/resource-verified` | resource-verified；4 次成功服务、3 次成功导出、11 项预期拒绝，共 18 条子命令。目标计数下界另见 target-count-only.json。 |
+| `python3 R/final_audit.py` | final-audit；13116 份旧产物/锁摘要未变，实际十个 ns-3 库均来自新 build/m10-resources/output/lib。 |
+
+六套旧回归使用原脚本与原预期，命令均为 `env PYTHONPATH=python P tests/integration/check_NAME.py --build-dir build/m10-resources --output-dir R/regression-NAME`，标签也为 regression-NAME：full_model、cann_behavior、research_export、write、service_boundaries、composed_service。覆盖完整图、CANN 字节/来源、旧公共观测、WRITE 完成、服务失败/排空及多组层段。前三套先于最终增量构建；后续 C++ 改动仅增加新模式必须声明图预算、清晰拒绝文本和减法前防下溢检查，旧路径行为不变。最终资源集成及后三套回归使用最终后端。unit-final 后仅移除未使用导入，未改变 Python 行为。
+
+### 真实执行与资源记录
+
+沿用四块合成 MLA 模型，取一个三 rank EP 组、一个已有请求的两轮路由，每层选择跨芯片专家 4/5，H=1024、Top-2，通信分块为 4 B。每层 12 次非同 rank Dispatch 状态交付，加两份贡献各 `ceil(1068/4)+ceil(2048/4)+1` 次交付；三层每轮共 4716 次，其中真实 UB 写 4704、本地状态 12，完整图 9495 个节点。
+
+两轮共 9408 次 UB 写、12 份专家贡献、36864 B 业务。第一轮完成于 849322 ns，第二轮完成于 1698528 ns；下轮提交等待实际 WAVE_DONE，所有依赖及 SEND/RECV 回调独立核对。只初始化一个网络，最终排空，未拼接独立流量结果。旧内存记录、新文件记录及关闭来源三次的 execution/result.json 完全相同；两个端口的包/时刻指纹、逐包与队列记录逐字节相同，来源启用时 packet_ranges 也相同。
+
+新模式两个端口各声明 6001 个原始窗口，均只驻留 1699 个非零窗口；packet/queue/range 三类事件数组的驻留数量均为零。每个端口仍保留 9408 个包 UID 来源和 9408 个注册传输，来源关闭也不删除分类所需账本。两端口事件文件分别为 8874448/9475923 B，来源关闭为 8270612/8270704 B。
+
+局部时钟包含 offset 和非零 drift；同窗口定义的新旧公共端侧/端口 CSV、归属 CSV 逐字节一致，字节分类逐项一致。扩展导出有 12002 个窗口、8604 个零窗口，含末尾不满周期的窗口；将公共三个文件单独复制后可完成 observed-only 验证。另有 17 端口×5000 窗口、85000 个零窗口的文件合同测试，追加多余行会失败；该测试不是 17 端口网络执行。
+
+测量用每条命令新建的 Python 计时进程、monotonic 墙钟和 `resource.getrusage(RUSAGE_CHILDREN).ru_maxrss`，数值为等待子进程链上的最大单进程 RSS，不是同时驻留的进程树总和。未安装本机缺少的 `/usr/bin/time`。测量只说明本机这次运行，不能作为稳定性能比较或完整目标资源预测。
+
+| 实际服务（resource-verified） | 墙钟秒 | 最大 RSS KiB | 运行目录字节 |
+|---|---:|---:|---:|
+| legacy 内存事件记录 | 16.772 | 486000 | 154185758 |
+| streamed 文件事件记录 | 16.304 | 434728 | 158676207 |
+| source-off 文件记录、不输出来源 | 16.049 | 434696 | 146109545 |
+
+新模式目录更大是因为同时实际输出了 6001 个原始窗口，旧对照仅有一个覆盖全时域的原始窗口；事件文件本身相同。图、Chakra、后端报告、原生网络日志均在目录字节之内，max_export_bytes 不约束这些内部资料。新公共导出/扩展窗口/来源关闭的目录字节分别为 9612615、11580810、1942964；各次导出的实际墙钟和 RSS 另保留在同目录的 *.time.json。数字可能随诊断路径长度发生细小变化，应以该次 summary.json 为准。
+
+### 拒绝、开发期失败与停止边界
+
+单图交付、计划字节和累计图数不足分别由前端拒绝；累计不足时不生成第二图。直接绕过前端向 C++ 提交的交付/节点/文件预算不足，在 0 ns、未激活任何传输时拒绝。C++ 累计图预算不足在第一图完成的 849322 ns 拒绝第二图：所有 rank 仍指向已完成 g0，槽位/待提交任务为零，无活跃传输，网络空闲。事件文件、来源包账本、注册传输及最终导出文件超预算均明确失败，没有截断后仍报告通过。
+
+开发期失败记录全部保留。unit-resources 的新增全图拒绝测试原本给出 16000 交付预算，实际计数低于它，因而正确进入构图并触发测试哨兵；将该测试输入改为明确不足的 5000 后 unit-resources-fixed 通过，未调整生产拒绝条件。resource-integration 因新测试把局部窗口起点写为 -37、早于 offset=37 所允许的范围而被拒绝；修正时钟输入后 resource-integration-clock-fixed 又因测试误写原始 `period_ns` 字段而被严格 schema 拒绝，改用 `window_period_ns` 后 resource-integration-v3 完整通过。
+
+补充直接后端累计预算用例的 resource-final 中，测试错误地预期第一图完成后失败快照还包含其活跃传输；实际 failure.json 只列活跃对象，正确为空。最终按原有生命周期合同核对“g0 已完成、g1 未激活、无槽位/任务/活跃传输”，resource-verified 全部通过。没有更改完成事件或删除验证条件来绕过执行失败。
+
+目标计数只处理 128 rank、256 专家、双 rank/chip 的 Dispatch 状态下界：每层 32512 次交付，58 层 1885696 次（跨芯片 1870848、本地 14848），含状态检查的节点下界 3778816。未加入 Token 向量、Combine 或完整模型阶段，没有创建目标图；计数明确超出样例资源预算。图/传输对象、注册表及按端口的来源账本仍驻留，计划字节和数量预算不能替代 RAM 实测。
+
+本步完成后本地提交、不推送，不开始下一任务。完整 R1/CM384、完整 fabric/多平面、足够独立真实路由及最终组合规模仍未验收；下一任务是目标拓扑，等待用户确认。数值内核与 NPU 校准状态不变，M10 尚未整体完成。

@@ -2,7 +2,7 @@
 
 2026-10-03，最初核对基线 `14c1c8f`；其后已完成 MLA/量化容量实现及小型实际接纳验证。下文区分原独立算式与当前实现状态。M10 整体未完成，场景规格仍不是可执行配置。
 
-MLA/量化容量核算已进入现有唯一 KV 池和请求接纳流程，合同与验收见[容量说明](../fixtures/m10_mla_capacity/README.md)。[完整 Decode 参考计算图](../fixtures/m10_full_model/README.md)已通过小场景实际联合执行，含 dense/shared/首尾阶段；另验证 61 块小 EP 合成结构。下一首要缺项是**目标规模图管理与观测**；目标拓扑和足够真实路由仍待完成，原生 LD/ST 仍非当前参考实验前置条件。
+MLA/量化容量核算已进入现有唯一 KV 池和请求接纳流程，合同与验收见[容量说明](../fixtures/m10_mla_capacity/README.md)。[完整 Decode 参考计算图](../fixtures/m10_full_model/README.md)已通过小场景实际联合执行，含 dense/shared/首尾阶段；另验证 61 块小 EP 合成结构。[图与观测资源管理](../fixtures/m10_resources/README.md)现已加入显式预算、构图前计数和逐事件文件记录，小场景跨越旧交付/窗口限额。下一首要缺项是**目标完整 fabric 与多平面拓扑**；完整目标图的实际资源开销和足够真实路由仍待验收，原生 LD/ST 仍非当前参考实验前置条件。
 
 ## 当前事务选择
 
@@ -59,9 +59,9 @@ EP 只切分 routed 专家，不切分本 rank 请求的 KV。RoPE 表、临时�
 | 模型/KV 容量 | model/1 保留 GQA；新增 mla_capacity.py 的 model/2，独立逐 tensor/scale 与 latent+RoPE 算式 | 完整 R1 离线库存与原审计逐项匹配；小模型实际影响唯一 KV 池和接纳。容量通过不代表完整 R1 图或实测 HBM 已通过。 |
 | 全模型计算 | 新 full_model.py/full_model_plan.cc 按 model/2 和显式成本完整组图；旧层段入口含义保留 | 小模型及 61 块小 EP 合成图已真实执行，shared/routed 汇合、上下文成本和首尾阶段通过。完整 R1/128 rank 仍未运行；阶段成本不是数值内核或硬件校准。 |
 | 计算依据 | CANN 模板明确拒绝未覆盖阶段的 operator_profile；M9 A100 表为 H=F=256、FP16 GQA/FFN | 不能把该表用于 H=7168、MLA 或 INT8。可另选显式参考成本及敏感性，但不能称为 NPU 校准。 |
-| 状态消息图规模 | 当前 MAX_TRANSFERS=4096，Python/C++ 单层及多层均检查 | 128×(256−2)=32,512 条非同 rank Dispatch 状态；其中同 chip 256、跨 chip 32,256，单层仅状态载荷就有 1,032,192 B 跨 chip。58 层为 1,885,696 条状态交付，尚未计向量/Combine。不能直接提高上限后宣称规模已通过。 |
+| 状态消息图规模 | 旧输入保留 4096 次交付限额；完整服务/CANN 图可显式声明每图及累计运行预算，Python/C++ 独立检查数量和文件字节 | 实际每轮 4716 次交付、连续两轮通过。128×(256−2)=32,512 条状态/层，其中同 chip 256、跨 chip 32,256；58 层为 1,885,696 条。计数下界仍超出小场景预算，未生成/执行目标完整图；图/传输对象未回收，数量和文件上限不是 RSS 预测。 |
 | 网络 | 场景要求保留完整 fabric、7 平面和非活动端点；现有 CANN 验收是小型共享瓶颈 | 需生成与编号一致的节点、端口、路由、预建通道并验证实际路径和队列；多路径开关本身不产生多平面。 |
-| 观测 | Python 及 C++ 限 16 端口、每端口 4096 窗口，原始包/来源账本保留在内存 | 本步实际触发 17 端口及 4097 窗口拒绝。1 μs 采样下超过 4.096 ms 的连续单段窗口会触限；先定目标端口/时域及资源预算，再验证输出/内存成本。当前不声称必然 OOM。 |
+| 观测 | 旧模式仍限 16 端口及每端口 4096 窗口；新增 set/2 预算、事件 JSONL 落盘、稀疏原始窗口及逐窗口公共导出 | 实际两个端口各 6001 窗口、1699 个驻留非零窗口；新旧记录/来源开关的执行与包指纹相同。公共合同另验证 17 端口/85000 零窗口，但未运行该端口数网络。来源账本仍按端口驻留，需按目标端口/时域统一测量。 |
 | 真实路由数量 | 固定 manifest 中仅两文件，prompt 为 26/37，各 128 个 Decode 步；14,848 条层记录再核对通过 | 两文件均满足 window64，但目标需 1024 个独立请求，补入负载需 2048。只审计该 manifest，未扫描完整数据集；不得重复文件凑数。扩大下载另需授权。 |
 | 校准 | 目标 NPU/profile、实际可分配 HBM、链路绝对时序未测 | 参考实验在假设完整且功能正确后可开展；这些不是拒绝实现 MLA 或保持明确参考 WRITE 的理由。 |
 
@@ -75,6 +75,6 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python scripts/audit_target_con
   --output-dir runs/target-contract-audit
 ```
 
---source-dir 下需要固定版本的 inference/model.py 和 LICENSE-CODE，URL/摘要在 reference.json；结构配置和轨迹沿用本机已核验的 M9 文件。检查输出明确 audit_only=true、formal_run_ready=false，成功退出只表示核对完成。实际结果在 runs/v03-target-contract/audit/audit.json；七项拒绝、每项权重形状和字节、输入摘要均保留。其中 MLA/INT8 两项始终针对旧 model/1，不能解读为新 model/2 也不接受；dense/shared 拒绝仍针对旧层段入口，不能套用到新增 configured-service/4；三项图/观测资源限制仍在。
+--source-dir 下需要固定版本的 inference/model.py 和 LICENSE-CODE，URL/摘要在 reference.json；结构配置和轨迹沿用本机已核验的 M9 文件。检查输出明确 audit_only=true、formal_run_ready=false，成功退出只表示核对完成。实际结果在 runs/v03-target-contract/audit/audit.json；七项拒绝、每项权重形状和字节、输入摘要均保留。其中 MLA/INT8 两项始终针对旧 model/1，不能解读为新 model/2 也不接受；dense/shared 拒绝仍针对旧层段入口，不能套用到新增 configured-service/4；三项图/观测拒绝针对未声明新资源预算的旧输入，不代表新的预算入口仍固定为相同上限。
 
-原合同审计曾复用 build/m10-cann-behavior 执行 CANN 小型服务，为 305 次真实写、120316 B 总载荷、131530 ns。后续容量任务复用同一后端执行七项 MLA 对照，基准数值相同，容量收紧、投影存储精度、驻留未选请求、观察退出及网络延迟均通过；102 项单元测试和五套受影响回归通过。完整 R1 仅作离线审计，未运行目标场景或声称 MLA/INT8 算子校准。命令、失败记录和产物保护结果见 [environment.md](environment.md)。上述为容量任务的历史验收。后续完整参考图任务在独立 build/m10-full-model 中通过四块服务和 61 块小 EP 实际执行；当前停在该任务完成，不自动开始目标规模任务。
+原合同审计曾复用 build/m10-cann-behavior 执行 CANN 小型服务，为 305 次真实写、120316 B 总载荷、131530 ns。后续容量任务复用同一后端执行七项 MLA 对照，基准数值相同，容量收紧、投影存储精度、驻留未选请求、观察退出及网络延迟均通过；102 项单元测试和五套受影响回归通过。完整 R1 仅作离线审计，未运行目标场景或声称 MLA/INT8 算子校准。命令、失败记录和产物保护结果见 [environment.md](environment.md)。上述为容量任务的历史验收。后续完整参考图任务在独立 build/m10-full-model 中通过四块服务和 61 块小 EP 实际执行；资源任务在独立 build/m10-resources 中完成上述预算/流式记录小场景验收，目标拓扑仍待用户确认后开始。

@@ -143,3 +143,9 @@ M9 已完成本步的真实数据导入和算子依据验收，文件与选择�
 实际验证了两组三 rank 四块服务，以及前三块 dense、后 58 块 MoE 的 61 块合成模型（EP=3、E=6、H=1024）。共享/路由汇合、最终阶段才反馈、KV 等待回收、窗口结束及公共观测隔离通过。61 块只验证结构和小图执行，不是 R1/CM384 目标规模验收。
 
 `full_model_graph_execution_validated=true` 仅在该次完整图实际正常完成后写入；`full_model_execution_validated`、`numerical_model_executed`、`mla_kernel_validated`、`quantized_kernels_executed`、`target_deployment_validated` 仍为 false。没有加载量化权重或执行数值内核，没有迁用 GQA/A100 实测表，没有拟合 NPU 参数。参考 sampling 不产生文本或推断 EOS；请求预算和观察窗口仍分别处理。详见[输入/成本合同](../fixtures/m10_full_model/README.md)与[环境记录](environment.md)。
+
+## 2026-10-04：M10 图与观测资源管理
+
+显式每图/累计预算与流式记录已在合成小场景实际通过：每轮 4716 次交付、连续两轮、9408 次 UB 写；两个端口各 6001 窗口。新旧记录及来源开关的执行结果和逐包指纹相同，局部时钟公共文件与旧导出一致。超预算输入报错，不改变通信时间或静默截断。
+
+此处测得的 RSS 是宿主程序开销，不是模型 HBM、NPU 性能或校准依据。目标 128 rank/58 MoE 层只做状态消息数量下界检查；未生成其完整图或运行完整 fabric。图/传输对象与按端口的来源账本仍驻留，不能把逐事件落盘解释为总内存恒定。上述校准及目标部署标志保持不变，见[资源合同](../fixtures/m10_resources/README.md)。

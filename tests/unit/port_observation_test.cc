@@ -64,6 +64,14 @@ int main()
         Check(classified.business == 100 && classified.metadata == 48 && classified.padding == 28 &&
               classified.overhead == 104 && classified.control == 0, "application bytes mixed with business/protocol control");
         Reject([&] { layout.Add(0, 20, 10, 8, 3); });
+        moe_ub::ObservationConfig sparse_config{3,0,0,50001,10,true};
+        sparse_config.resource_budget={{"max_windows_per_port",6000u}};
+        moe_ub::PortWindows sparse(sparse_config);
+        sparse.Add(10,30,10);sparse.Add(50000,40,20);
+        Check(sparse.Count()==5001 && sparse.ResidentRows()==2 && sparse.Rows().empty() &&
+              sparse.Row(0).whole==0 && sparse.Row(1).business==10 && sparse.Row(5000).whole==40,
+              "sparse windows must retain only nonzero windows and preserve boundary counts");
+        Reject([&] { sparse.Row(5001); });
         auto data = MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE, 1);
         std::vector<uint8_t> before(data->GetSize()), after(data->GetSize());
         data->CopyData(before.data(), before.size());
@@ -94,6 +102,11 @@ int main()
         Reject([&] { ledger.Register({next, {4294967319ULL, 7, "unit", 1, 2, 0, 1, 17, 65537}}); });
         Reject([&] { ledger.Created(data, 8, 65536, begin, 1); });
         ledger.Register({next});
+        ledger.SetLimits(1,2);
+        Reject([&] { ledger.Register({{4294967321ULL,9,"limit",1,2,0,1,19,1}}); });
+        Reject([&] { ledger.Created(MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE,1),7,65536,begin,1); });
+        Check(ledger.PacketCount()==1,"rejected packet must not change provenance ledger");
+        ledger.SetLimits(2,2);
         auto next_packet = MakeTestPacket(ns3::TaOpcode::TA_OPCODE_WRITE, 1);
         ns3::UbFlowTag old_tag;
         next_packet->RemovePacketTag(old_tag);

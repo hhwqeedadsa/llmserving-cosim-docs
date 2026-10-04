@@ -8,7 +8,7 @@ from copy import deepcopy
 from .mla_capacity import audit_inventory, validate_model
 from .model_capacity import fields, communication_minimum
 from .multilayer import MAX_SEGMENT_LAYERS, build_children, common_input
-from .plan import MAX_TIME_NS, MAX_TRANSFERS, integer, require, validate_plan
+from .plan import MAX_TIME_NS, integer, require, validate_plan
 
 COMMON = ('attention_norm', 'mla_prologue', 'mla_output', 'attention_residual', 'ffn_norm', 'ffn_residual')
 MOE = ('router', 'dispatch_quant_pack', 'combine_unpack_merge', 'shared_expert', 'shared_routed_add')
@@ -150,12 +150,19 @@ def compose_full_model(layers, model, profile):
         for original in child['transfers']:
             t=deepcopy(original);t['send_node_id']+=offsets[lid,t['src_rank']];t['recv_node_id']+=offsets[lid,t['dst_rank']]
             merged['transfers'].append(t)
-    require(len(merged['transfers'])<=MAX_TRANSFERS,'Full model exceeds 4096 transfers')
+    from .resources import actual_usage, check_graph
+    usage=check_graph(actual_usage(merged),common.get('resource_budget'))
+    if 'resource_budget' in common:merged['resource_usage']=usage
     return merged
 
 
 def build_full_model(configs, identities, provenance, model, profile):
+    from .resources import full_usage, check_graph, actual_usage
+    from .plan import validate_config
+    for c in configs:validate_config(c)
+    usage=check_graph(full_usage(configs,model),configs[0].get('resource_budget'))
     plan=compose_full_model(build_children(configs,provenance),model,profile)
+    require(actual_usage(plan)==usage,'Full model preflight count mismatch')
     identities.assign(plan);validate_full_model(plan)
     return plan
 

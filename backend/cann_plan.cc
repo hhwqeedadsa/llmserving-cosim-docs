@@ -1,3 +1,4 @@
+#include "graph_resources.hh"
 #include "layer_plan.hh"
 #include <algorithm>
 #include <set>
@@ -37,7 +38,9 @@ LayerPlan ValidateCannPlan(const J& p) {
     std::set<std::string> fields={"schema_version","graph_id","wave_id","service_id","role","group_id","ready_ns","layer_id",
         "rank_ids","rank_to_ub_node","hidden_dim","top_k","dispatch_element_bytes","combine_element_bytes","application_metadata_bytes",
         "chunk_bytes","send_slots_per_rank","template","expert_placement","tokens","compute_profile_ns","batch_limits","compute_dtypes","cann_profile"};
-    if(c.contains("deployment")) fields.insert("deployment"); Fields(c,fields);
+    if(c.contains("deployment")) fields.insert("deployment");
+    if(c.contains("resource_budget")) fields.insert("resource_budget");
+    Fields(c,fields);
     Check(p.at("schema_version")=="moe-ub-execution-plan/3" && c.at("schema_version")=="moe-ub-layer-fixture/3" && c.at("role")=="D","requires batched Decode");
     const auto& cp=c.at("cann_profile");
     Fields(cp,{"source_revision","algorithm","aiv_lanes","window_bytes","local_cost_ns"});
@@ -75,6 +78,9 @@ LayerPlan ValidateCannPlan(const J& p) {
     for(size_t i=0;i<ranks.size();++i) endpoints[ranks.at(i).get<int>()]=c.at("rank_to_ub_node").at(i).get<uint32_t>();
     if(c.contains("deployment")) for(const auto& r:c.at("deployment").at("ranks")) chips[r.at("rank_id")]=r.at("chip_id");
     auto loc=[&](int src,int dst)->std::string { return src==dst?"same_rank":!chips.empty()&&chips.at(src)==chips.at(dst)?"same_chip":"cross_chip"; };
+    const auto budget=resources::Budget(c); const auto usage=resources::Cann(c);
+    resources::Check(usage,budget);
+    if(!budget.is_null()) Check(p.at("resource_usage")==usage,"preflight count mismatch");
     J contributions=J::array(), operations=J::array(); std::map<int,uint64_t> counts,local;
     for(size_t i=0;i<tokens.size();++i) {
         const auto& t=tokens.at(i);int src=t.at("src_rank");++local[src];
@@ -142,7 +148,7 @@ LayerPlan ValidateCannPlan(const J& p) {
                 auto a=std::max(begin,r.at("begin").get<uint64_t>()),b=std::min(end,r.at("end").get<uint64_t>());
                 if(a<b) {regions.push_back({{"begin",a-begin},{"end",b-begin},{"kind",r.at("kind")}});totals[r.at("kind")]+=b-a;}
             }
-            Check(transfers.size()<4096 && transfers.size()<p.at("transfers").size(),"too many or missing transfers");
+            Check(transfers.size()<usage.at("transfers").get<uint64_t>() && transfers.size()<p.at("transfers").size(),"too many or missing transfers");
             const auto& actual=p.at("transfers").at(transfers.size());
             auto id=Num(actual.at("transfer_id"),1,UINT64_MAX),tag=Num(actual.at("comm_tag"),1,499999999);
             Check(ids.insert(id).second&&tags.insert(tag).second,"reused transfer/tag");
@@ -215,6 +221,7 @@ LayerPlan ValidateCannPlan(const J& p) {
     }
     Check(p.at("transfers")==transfers,"transfer layout, source, state or dependency mismatch");
     Check(p.at("rank_graphs")==graphs,"graph or stage mismatch");
+    Check(resources::Actual(p)==usage,"actual/preflight mismatch");
     LayerPlan result{p,{},{},{}};
     for(const auto& g:graphs)for(const auto& n:g.at("nodes"))result.nodes.emplace(std::make_pair(g.at("rank_id").get<int>(),n.at("node_id").get<uint64_t>()),n);
     for(const auto& t:transfers) {

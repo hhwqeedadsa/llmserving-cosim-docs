@@ -1,0 +1,10 @@
+{
+  "schema_version": "moe-ub-observation-resources/1",
+  "max_ports": 32,
+  "max_windows_per_port": 20000,
+  "max_total_windows": 200000,
+  "max_event_bytes_per_port": 67108864,
+  "max_ledger_packets": 100000,
+  "max_registered_transfers": 40000,
+  "max_export_bytes": 134217728
+}

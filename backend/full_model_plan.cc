@@ -1,3 +1,4 @@
+#include "graph_resources.hh"
 #include "layer_plan.hh"
 
 #include <algorithm>
@@ -262,7 +263,10 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const Json& 
             result.local_descriptors.push_back(descriptor);
         }
     }
-    Require(expected.at("transfers").size() <= 4096, "more than 4096 transfers");
+    const auto usage = resources::Actual(expected);
+    const auto budget = resources::Budget(expected.at("input"));
+    resources::Check(usage, budget);
+    if (!budget.is_null()) expected["resource_usage"] = usage;
     for (const auto& [key, value] : expected.items())
         if (key != "compute_source" && key != "route_source") Require(p.at(key) == value, "composition mismatch: " + key);
     std::map<uint64_t, Json> transfers;

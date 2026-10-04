@@ -78,7 +78,9 @@ M10 的[固定 CANN 路径小型行为适配](fixtures/m10_cann/README.md)已完
 
 已完成[目标参考合同核对](docs/target_readiness.md)及[MLA 与量化权重容量实现](fixtures/m10_mla_capacity/README.md)：独立 model/2 按逐组件存储、实际专家放置和 latent+RoPE KV 核算完整 R1 库存；小型参考模型将结果用于原生唯一 KV 池，真实 UB 验证容量/精度改变接纳、等待释放与观察结束清理。旧 GQA 语义保留。
 
-M10 的[完整 Decode 参考图](fixtures/m10_full_model/README.md)已加入独立 configured-service/4 入口：逐块 MLA、dense/routed/shared FFN 和 embedding、输出头、sampling 进入同一轮图，所有阶段完成后才推进 Token。四块多请求服务、61 块小 EP 合成结构均实际经过 ASTRA/UB，Python/C++ 独立校验及受影响回归通过。没有运行数值内核或校准 NPU，完整 R1 仍只有容量审计；下一首要缺项是目标图与观测规模，随后仍需目标拓扑和足够真实路由。当前实验继续使用已选 WRITE/RTP，native LD/ST 不是前置条件。M10 尚未整体完成；本步本地提交、不推送，下一任务由用户确认。
+M10 的[完整 Decode 参考图](fixtures/m10_full_model/README.md)已加入独立 configured-service/4 入口：逐块 MLA、dense/routed/shared FFN 和 embedding、输出头、sampling 进入同一轮图，所有阶段完成后才推进 Token。四块多请求服务、61 块小 EP 合成结构均实际经过 ASTRA/UB，Python/C++ 独立校验及受影响回归通过。没有运行数值内核或校准 NPU，完整 R1 仍只有容量审计。
+
+[图与观测资源管理](fixtures/m10_resources/README.md)已增加每图/累计运行预算、构图前计数、计划字节检查、逐事件文件记录及逐窗口导出。实际两轮各 4716 次交付、两个端口各 6001 窗口通过，旧/新记录方式与来源开关不改变执行。图和来源账本仍驻留；没有验收完整 R1 的宿主内存、完整 fabric 或多平面。下一项是目标拓扑，随后仍需足够真实路由与最终组合规模验证。当前实验继续使用已选 WRITE/RTP，native LD/ST 不是前置条件。M10 尚未整体完成；本步本地提交、不推送，下一任务由用户确认。
 
 ## 目录建立顺序
 

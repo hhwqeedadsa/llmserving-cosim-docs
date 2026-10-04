@@ -1,3 +1,4 @@
+#include "graph_resources.hh"
 #include "layer_plan.hh"
 #include "operator_profile.hh"
 #include "et_def.pb.h"
@@ -130,9 +131,19 @@ void ValidateDeployment(const Json& deployment, const Json& ranks)
 
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
 {
+    Json resource_budget = nullptr;
+    if (std::filesystem::exists(directory / "graph-resources.json"))
+    {
+        Require(std::filesystem::file_size(directory / "graph-resources.json") <= 4096, "oversized resource budget file");
+        std::ifstream budget_file(directory / "graph-resources.json"); resource_budget=Json::parse(budget_file);
+        resources::Validate(resource_budget);
+        Require(std::filesystem::file_size(directory / "plan.json") <= resource_budget.at("max_plan_bytes").get<uint64_t>(), "plan exceeds max_plan_bytes");
+    }
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
     const auto p = Json::parse(stream);
+    Require(resources::Budget(p.at("input")) == resource_budget, "plan/resource budget sidecar mismatch");
+    if (!resource_budget.is_null()) resources::Check(resources::Actual(p),resource_budget);
     if (p.at("schema_version") == "moe-ub-full-model-plan/1") return LoadFullModelPlan(directory, p);
     if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
         return LoadMultilayerPlan(directory, p);

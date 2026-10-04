@@ -59,7 +59,8 @@ def validate_config(c):
     require(set(c) == expected | ({'deployment'} if physical else set()) |
             ({'batch_limits', 'compute_dtypes'} if batched else set()) |
             ({'operator_profile'} if batched and 'operator_profile' in c else set()) |
-            ({'cann_profile'} if cann and batched else set()) and
+            ({'cann_profile'} if cann and batched else set()) |
+            ({'resource_budget'} if cann and batched and 'resource_budget' in c else set()) and
             c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),
             'Unsupported fixture schema/fields')
     if batched:

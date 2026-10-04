@@ -14,7 +14,22 @@ class FullModelService(ComposedService):
         require(config['schema_version']=='moe-ub-configured-service/4','Unsupported full model service schema')
         require(isinstance(config['groups'],list) and config['groups'],'Missing full model groups')
         self.full_profiles={};self.full_models={}
+        self.resource_budget=config['execution'].get('resource_budget')
+        self.resource_usage=dict(graphs=0,transfers=0,nodes=0)
+        if self.resource_budget is not None:
+            from .resources import validate_budget
+            validate_budget(self.resource_budget)
+            fields(config['execution'],'entry_mode resource_budget','budgeted execution')
+            segments=deepcopy(segments)
+            for group in segments['groups']:
+                for layer in group['layers']:
+                    require('resource_budget' not in layer or layer['resource_budget']==self.resource_budget,'Layer/resource budget mismatch')
+                    layer['resource_budget']=deepcopy(self.resource_budget)
+        else:
+            require(all('resource_budget' not in layer for group in segments['groups'] for layer in group['layers']),
+                    'Service layer resource budgets require execution.resource_budget')
         prepared=deepcopy(config);prepared['schema_version']='moe-ub-configured-service/3'
+        if self.resource_budget is not None:prepared['execution'].pop('resource_budget')
         for group in prepared['groups']:
             fields(group,'group_id model_spec memory scheduling full_model_profile','full model group')
             name=group['group_id'];profile=group.pop('full_model_profile')
@@ -41,7 +56,12 @@ class FullModelService(ComposedService):
 
     def build_iteration(self, configs, provenance):
         name=configs[0]['group_id']
-        return build_full_model(configs,self.identities,provenance,self.full_models[name],self.full_profiles[name])
+        if self.resource_budget is not None:
+            from .resources import full_usage, check_run
+            next_usage=check_run(self.resource_usage,full_usage(configs,self.full_models[name]),self.resource_budget)
+        plan=build_full_model(configs,self.identities,provenance,self.full_models[name],self.full_profiles[name])
+        if self.resource_budget is not None:self.resource_usage=next_usage
+        return plan
 
     def make_plan(self, candidate):
         plan=super().make_plan(candidate)
@@ -56,6 +76,11 @@ class FullModelService(ComposedService):
             group.update(model_spec=deepcopy(self.full_models[name]),full_model_profile=deepcopy(self.full_profiles[name]))
         return result
 
+    def result_fields(self):
+        result=super().result_fields()
+        if self.resource_budget is not None:result['graph_resources']=dict(budget=self.resource_budget,used=self.resource_usage)
+        return result
+
     def manifest_fields(self):
         result=super().manifest_fields()
         result.update(compute_scope='full_model_decode_reference',
@@ -65,6 +90,7 @@ class FullModelService(ComposedService):
             full_model_graph_execution_validated=False,
             full_model_execution_validated=False, numerical_model_executed=False,
             sampling_basis='reference_cost_only_request_target_or_observation_controls_stop')
+        if self.resource_budget is not None:result['graph_resource_budget']=deepcopy(self.resource_budget)
         return result
 
 

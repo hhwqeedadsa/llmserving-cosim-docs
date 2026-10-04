@@ -71,8 +71,19 @@ def export_plan(plan, output):
                         node.attr.add(name='comm_' + field,
                             int32_val=t['comm_tag' if field == 'tag' else field + '_rank'])
                 write_message(stream, node)
-    (output / 'plan.json').write_text(json.dumps(plan, indent=2) + '\n')
+    budget=plan['input'].get('resource_budget')
+    if budget is not None:
+        (output/'graph-resources.json').write_text(json.dumps(budget)+'\n')
+    written=0
+    with (output/'plan.json').open('wb') as stream:
+        for piece in json.JSONEncoder(indent=2).iterencode(plan):
+            data=piece.encode('utf-8');written+=len(data)
+            if budget is not None and written+1>budget['max_plan_bytes']:
+                raise ValueError('Graph resource budget exceeded: max_plan_bytes')
+            stream.write(data)
+        stream.write(b'\n')
     files = [schema, output / 'plan.json'] + sorted(output.glob('layer.*.et'))
+    if budget is not None:files.append(output/'graph-resources.json')
     (output / 'generation.json').write_text(json.dumps(dict(mode='fixture',
         schema_sha256=hashlib.sha256(schema.read_bytes()).hexdigest(),
         hashes={p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in files}), indent=2) + '\n')

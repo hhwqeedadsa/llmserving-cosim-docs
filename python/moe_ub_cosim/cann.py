@@ -8,7 +8,7 @@ from collections import Counter
 from copy import deepcopy
 
 from .locality import locality, LOCAL_PROFILE, FABRIC_PROFILE
-from .plan import integer, require, batch_limit, compute_inputs, MAX_TRANSFERS, MAX_TIME_NS
+from .plan import integer, require, batch_limit, compute_inputs, MAX_TIME_NS
 
 TEMPLATE = 'cann_a3_v850_fullmesh_v1'
 REVISION = '6ead121aded45355043b502756b6592fd7c30b14'
@@ -75,6 +75,8 @@ def split(items, lanes, rotate=0):
 
 
 def build_plan(config, identities=None, *, _validate=True):
+    from .resources import cann_usage, check_graph, actual_usage
+    usage=check_graph(cann_usage(config),config.get('resource_budget'))
     c=deepcopy(config);ranks=c['rank_ids'];h=c['hidden_dim'];cp=c['cann_profile'];lanes=cp['aiv_lanes']
     ops=[dict(operation_id=f"{c['wave_id']}.L{c['layer_id']}.{kind}",kind=kind,
         service_id=c['service_id'],role=c['role'],wave_id=c['wave_id'],layer_id=c['layer_id'],
@@ -146,7 +148,7 @@ def build_plan(config, identities=None, *, _validate=True):
             if 'expert_id' in m:t.update(expert_id=m['expert_id'],token_count=m['token_count'])
             if not same_chip:t['ub_task_id']=100+ordinal
             transfers.append(t)
-    require(len(transfers)<=MAX_TRANSFERS,'CANN plan exceeds 4096 transfer budget')
+    require(len(transfers)==usage['transfers'],'CANN preflight transfer count mismatch')
     graphs=[]
     for rank in ranks:
         nodes=[];cost=cp['local_cost_ns'];profile=c['compute_profile_ns']
@@ -215,6 +217,8 @@ def build_plan(config, identities=None, *, _validate=True):
         transfers=transfers,rank_graphs=graphs,expert_input_counts=[counts[r] for r in ranks],input=c,
         contributions=contrib,communication_buffers=buffers(c),batch_limits=c['batch_limits'],compute_inputs=compute_inputs(c))
     if 'deployment' in c:plan['deployment']=deepcopy(c['deployment'])
+    require(actual_usage(plan)==usage,'CANN preflight count mismatch')
+    if 'resource_budget' in c:plan['resource_usage']=usage
     if identities is not None:identities.assign(plan)
     if _validate:validate_plan(plan)
     return plan

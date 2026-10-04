@@ -1,3 +1,5 @@
+#include "graph_resources.hh"
+#include "observation_resources.hh"
 #include "astra_logging.hh"
 #include "backend_config.hh"
 #include "graph_sequence.hh"
@@ -340,16 +342,26 @@ int main(int argc, char** argv)
         if (std::string(argv[5]) != "-")
         {
             const auto input = ReadJson(fs::absolute(argv[5]));
-            multiple_ports = input.at("schema_version") == "moe-ub-port-observation-set/1";
+            const bool streamed=input.at("schema_version")=="moe-ub-port-observation-set/2";
+            multiple_ports = streamed || input.at("schema_version") == "moe-ub-port-observation-set/1";
+            if(streamed) moe_ub::ValidateObservationBudget(input.at("resource_budget"));
             if (multiple_ports)
             {
-                Require(input.size() == 2 && input.at("ports").is_array() &&
-                        !input.at("ports").empty() && input.at("ports").size() <= 16,
-                        "Observation set requires 1..16 ports");
+                Require(input.size() == (streamed ? 3 : 2) && input.at("ports").is_array() &&
+                        !input.at("ports").empty() && input.at("ports").size() <= (streamed ? input.at("resource_budget").at("max_ports").get<uint64_t>() : 16),
+                        "Observation set exceeds port budget (legacy: 1..16)");
                 std::set<std::pair<uint32_t, uint32_t>> points;
+                uint64_t windows=0;
                 for (const auto& port : input.at("ports"))
                 {
                     const auto config = moe_ub::ObservationConfig::Parse(port, max_ns);
+                    Require(config.resource_budget.is_null()!=streamed,"Mixed observation storage schemas");
+                    if(streamed)
+                    {
+                        Require(config.resource_budget==input.at("resource_budget"),"Observation budget changed across ports");
+                        const auto count=(config.end_ns-config.start_ns-1)/config.period_ns+1;
+                        Require(count<=config.resource_budget.at("max_total_windows").get<uint64_t>()-windows,"Observation total window budget exceeded");windows+=count;
+                    }
                     Require(points.emplace(config.switch_id, config.port_id).second,
                             "Duplicate observation port");
                     observation_configs.push_back(config);
@@ -435,9 +447,31 @@ int main(int argc, char** argv)
             std::vector<std::unique_ptr<moe_ub::PortObservation>> observations;
             for (const auto& config : observation_configs)
                 observations.push_back(std::make_unique<moe_ub::PortObservation>(config,
-                    std::vector<moe_ub::WriteDescriptor>{}, controllers, multiple_ports));
+                    std::vector<moe_ub::WriteDescriptor>{}, controllers, multiple_ports,
+                    config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id))));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
+            Json resource_budget=nullptr, resource_used={{"graphs",0u},{"transfers",0u},{"nodes",0u}};
+            for (const auto& group : groups)
+                if (group.config.contains("layer_configs"))
+                {
+                    const auto b=moe_ub::resources::Budget(group.config.at("layer_configs")[0]);
+                    if (!b.is_null())
+                    {
+                        Require(resource_budget.is_null() || resource_budget==b,"Groups have different resource budgets");
+                        resource_budget=b;
+                    }
+                }
+            if (!resource_budget.is_null())
+                for (const auto& group : groups)
+                {
+                    Require(group.config.contains("model_spec"),"Budgeted service requires complete model groups");
+                    for (const auto& layer : group.config.at("layer_configs"))
+                        Require(moe_ub::resources::Budget(layer)==resource_budget,"Missing or changed group resource budget");
+                }
+            for (const auto& config : observation_configs)
+                Require(config.resource_budget.is_null() || !resource_budget.is_null(),
+                        "Streaming observation requires complete model graph/run resource budget");
             std::vector<moe_ub::LayerPlan> plans;
             std::set<std::string> graphs, waves, seen_operations, kv_graphs;
             std::set<uint64_t> transfer_ids, tasks, tags;
@@ -658,7 +692,12 @@ int main(int argc, char** argv)
                             fs::canonical(shared / prefix.parent_path()) == semantic.parent_path() &&
                             semantic.filename() == "plan.json", "Workload and semantic manifest disagree");
                     const auto directory = semantic.parent_path();
+                    if (!resource_budget.is_null())
+                        Require(fs::file_size(directory / "plan.json") <= resource_budget.at("max_plan_bytes").get<uint64_t>(),"Plan exceeds declared max_plan_bytes");
                     auto plan = moe_ub::LoadLayerPlan(directory);
+                    Require(moe_ub::resources::Budget(plan.data.at("input"))==resource_budget,"Plan/run resource budget mismatch");
+                    if (!resource_budget.is_null())
+                        resource_used=moe_ub::resources::AddRun(resource_used,moe_ub::resources::Actual(plan.data),resource_budget);
                     Require((plan.data.at("schema_version") == "moe-ub-execution-plan/3") == !batch_limits.is_null(),
                             "Plan/service batching schema mismatch");
                     if (!batch_limits.is_null())
@@ -894,6 +933,7 @@ int main(int argc, char** argv)
                 Require(peak <= send_slots, "Layer SEND slot limit exceeded");
             moe_ub::FlushAstraLogging();
             Json endpoints = Json::array(), operations = Json::array();
+            if (!resource_budget.is_null()) report["graph_resources"]={{"budget",resource_budget},{"used",resource_used}};
             report["node_execution"] = Json::array();
             uint64_t endpoint_offset = 0;
             for (size_t step = 0; step < plans.size(); ++step)

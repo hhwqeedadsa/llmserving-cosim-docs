@@ -11,20 +11,33 @@ def read(path):
     return json.loads(path.read_text())
 
 
-def export_records(raw, observation, ranks, max_ns):
+def export_metadata(raw, observation, ranks, max_ns):
     clocks,ports=validate_observation(observation,ranks,max_ns)
     report=read(raw/'execution/result.json');front=read(raw/'service_result.json')
     require(report['normal_exit'] and front['service_finished'] and report['network_drain']['idle'],
             'Cannot export an unfinished run as observations')
-    plans=[read(p) for p in sorted((raw/'graphs').glob('*/plan.json'))]
+    resource_budget=None;used=dict(graphs=0,transfers=0,nodes=0)
+    if 'resource_budget' in observation:
+        from .resources import validate_budget, actual_usage, check_graph, check_run
+        require('graph_resources' in report and report['graph_resources']==front.get('graph_resources'),
+                'Streaming export requires a matching graph/run resource budget')
+        resource_budget=validate_budget(report['graph_resources']['budget'])
     planned={};operations_by_id={}
-    for plan in plans:
+    for path in sorted((raw/'graphs').glob('*/plan.json')):
+        if resource_budget is not None:
+            require(path.stat().st_size<=resource_budget['max_plan_bytes'],'Export plan exceeds byte budget')
+        plan=read(path)
+        if resource_budget is not None:
+            require(plan['input'].get('resource_budget')==resource_budget,'Export plan resource budget mismatch')
+            used=check_run(used,check_graph(actual_usage(plan),resource_budget),resource_budget)
         for t in plan['transfers']:
             require(t['transfer_id'] not in planned,'Duplicate planned transfer')
             planned[t['transfer_id']]=t
         for op in plan['operations']:
             require(op['operation_id'] not in operations_by_id,'Duplicate planned operation')
             operations_by_id[op['operation_id']]=op
+    if resource_budget is not None:
+        require(used==report['graph_resources']['used'],'Export graph resource accounting mismatch')
     local_planned={k:v for k,v in planned.items() if 'ub_task_id' not in v}
     local_actual={t['transfer_id']:t for t in report.get('local_deliveries',[])}
     require(set(local_actual)==set(local_planned),'Local delivery registry mismatch')
@@ -82,6 +95,15 @@ def export_records(raw, observation, ranks, max_ns):
             t['sources']=expected['sources']
             t['execution_global_ns']={k:a[k] for k in ('send_start_ns','receive_start_ns','data_ready_ns',
                                                       'transaction_done_ns','send_done_ns','receive_done_ns')}
+    return dict(clocks=clocks,ports=ports,planned=planned,total_business=total_business,raw_dirs=raw_dirs,
+                endpoints=endpoints,provenance=provenance,operations=operations,transfers=transfers)
+
+
+def export_records(raw, observation, ranks, max_ns):
+    require('resource_budget' not in observation,'Budgeted observation requires streaming_export')
+    meta=export_metadata(raw,observation,ranks,max_ns)
+    clocks,ports,planned,total_business,raw_dirs,endpoints,provenance,operations,transfers=(meta[k] for k in
+        ('clocks','ports','planned','total_business','raw_dirs','endpoints','provenance','operations','transfers'))
     counters=[];categories=[];attribution=[];port_audits=[]
     for port,directory in zip(ports,raw_dirs):
         switch,port_id=port['switch_id'],port['port_id'];clock=clocks['switch',switch]

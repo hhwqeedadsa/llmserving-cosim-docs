@@ -199,7 +199,7 @@ def prepare(input_path, backend_binary, output):
     paths={k:(directory/config[k]).resolve() for k in ('service','layer','system')}
     require(all(p.is_file() for p in paths.values()), 'Missing scenario input')
     service=json.loads(paths['service'].read_text());layer=json.loads(paths['layer'].read_text())
-    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2','moe-ub-configured-service/3','moe-ub-evidence-service/1'),
+    require(service.get('schema_version') in ('moe-ub-configured-service/1','moe-ub-configured-service/2','moe-ub-configured-service/3','moe-ub-configured-service/4','moe-ub-evidence-service/1'),
             'Scenario requires configured service')
     fields(config['execution'],'chunk_bytes send_slots_per_rank seed run','execution')
     execution=config['execution']
@@ -208,14 +208,21 @@ def prepare(input_path, backend_binary, output):
     integer(config['max_simulation_ns'],'max_simulation_ns',1)
     # The scope/capacity checks happen before a backend process can execute work.
     evidence = service['schema_version']=='moe-ub-evidence-service/1'
-    composed = evidence or service['schema_version']=='moe-ub-configured-service/3'
+    full = service['schema_version']=='moe-ub-configured-service/4' or (evidence and service['service']['schema_version']=='moe-ub-configured-service/4')
+    composed = evidence or full or service['schema_version']=='moe-ub-configured-service/3'
     if composed:
-        from .composed_service import ComposedService
+        if full:
+            from .full_model_service import FullModelService as ComposedService
+        else:
+            from .composed_service import ComposedService
         for group in layer['groups']:
             for current in group['layers']:
                 current.update(chunk_bytes=execution['chunk_bytes'],send_slots_per_rank=execution['send_slots_per_rank'])
         if evidence:
-            from .evidence_service import EvidenceService
+            if full:
+                from .full_model_service import FullModelEvidenceService as EvidenceService
+            else:
+                from .evidence_service import EvidenceService
             frontend=EvidenceService(service,layer)
         else:
             frontend=ComposedService(service,layer)
@@ -287,7 +294,8 @@ def prepare(input_path, backend_binary, output):
     source_paths=[input_path,reference,*paths.values(),*(base/name for name in NETWORK_FILES),ROOT/'deps.lock.json']
     manifest=dict(schema_version='moe-ub-scenario-resolution/1',scenario_id=config['scenario_id'],
         state='resolved_not_executed',calibration_status='unvalidated_reference',
-        execution_scope=('configured_groups_moe_layer_segment_continuous_batching' if composed else
+        execution_scope=('configured_groups_full_model_decode_reference' if full else
+            'configured_groups_moe_layer_segment_continuous_batching' if composed else
             'configured_single_group_single_moe_layer_continuous_batching'
             if service['schema_version']=='moe-ub-configured-service/2' else
             'configured_single_group_single_moe_layer_one_request_per_rank'),

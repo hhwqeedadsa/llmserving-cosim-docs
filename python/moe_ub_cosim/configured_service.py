@@ -10,7 +10,7 @@ from .plan import batch_limit, build_plan, integer, require, validate_config
 from .service import Service, group_layer
 
 
-def validate_configured_inputs(config, layer):
+def validate_configured_inputs(config, layer, *, capacity_auditor=audit_capacity):
     operator_profile = layer.get('operator_profile')
     if operator_profile is not None:
         require(config['model_spec'].get('schema_version') == 'moe-ub-model/1',
@@ -45,7 +45,7 @@ def validate_configured_inputs(config, layer):
     require(isinstance(group['group_id'], str) and re.fullmatch(r'[A-Za-z0-9_.-]+', group['group_id']),
             'Invalid group_id')
     validate_config(group_layer(layer, group))
-    audit = audit_capacity(config['model_spec'], config['memory'], layer)
+    audit = capacity_auditor(config['model_spec'], config['memory'], layer)
     require(config['model'] == config['model_spec']['name'], 'Service/model identity mismatch')
     fields(config['scheduling'], 'max_num_seqs max_num_batched_tokens', 'scheduling')
     maximum = config['model_spec']['max_position_embeddings']

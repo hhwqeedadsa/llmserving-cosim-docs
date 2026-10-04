@@ -133,6 +133,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory)
     std::ifstream stream(directory / "plan.json");
     Require(bool(stream), "missing plan.json");
     const auto p = Json::parse(stream);
+    if (p.at("schema_version") == "moe-ub-full-model-plan/1") return LoadFullModelPlan(directory, p);
     if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
         return LoadMultilayerPlan(directory, p);
     if (p.at("communication_template") == "kv_direct_v1") return LoadKvPlan(directory, p);
@@ -616,7 +617,7 @@ Json ReadLayerExecution(const LayerPlan& plan, const std::filesystem::path& path
 }
 Json LayerEndpointOperations(const LayerPlan& plan, const Json& execution)
 {
-    if (plan.data.at("schema_version") == "moe-ub-multilayer-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/2")
+    if (plan.data.at("schema_version") == "moe-ub-full-model-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/1" || plan.data.at("schema_version") == "moe-ub-multilayer-plan/2")
     {
         Json result = Json::array();
         for (size_t index = 0; index < plan.data.at("layers").size(); ++index)
@@ -696,7 +697,7 @@ Json LayerOperationRegistry(const LayerPlan& plan)
         uint64_t offset = 0;
         if (plan.data.contains("executed_layer_ids"))
         {
-            const auto& ids = plan.data.at("executed_layer_ids");
+            const auto& ids = plan.data.at(plan.data.contains("communication_layer_ids") ? "communication_layer_ids" : "executed_layer_ids");
             const auto found = std::find(ids.begin(), ids.end(), operation.at("layer_id"));
             Require(found != ids.end(), "operation outside executed layers");
             offset = 2 * std::distance(ids.begin(), found);

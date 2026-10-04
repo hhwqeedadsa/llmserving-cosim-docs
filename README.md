@@ -74,9 +74,11 @@ M9 已完成[真实路由导入、观察片段与算子依据验收](fixtures/m9
 
 M10 的[固定 CANN 路径小型行为适配](fixtures/m10_cann/README.md)已完成：新增独立模板，按 CANN v8.5.0 A3 fullmesh_v1 的逐专家贡献、计数发布、返回标志与归约依赖生成任务，区分业务、元数据和填充字节。两组三层的真实 UB 基准完成 305 次写，13 次服务运行、2 次非对齐向量执行、8 项拒绝检查及受影响回归通过。URMA_WRITE/RTP 映射、逻辑 lane 和局部耗时仍是明确声明的参考选择，未执行原生 CANN 或校准目标 NPU。
 
-配置服务仍只执行显式 MoE 层段，未执行层计入其声明模型容量；真实 R1 对照仅重放 routed 专家通信与参考计算，不用 GQA 公式代替 MLA 容量。A100 小算子没有套用到 R1 或当前 CANN 的不同维度。M10 整体尚未完成。
+旧配置服务入口执行显式 MoE 层段，未执行层计入其声明模型容量；真实 R1 对照仅重放 routed 专家通信与参考计算，不用 GQA 公式代替 MLA 容量。A100 小算子没有套用到 R1 或当前 CANN 的不同维度。M10 整体尚未完成。
 
-已完成[目标参考合同核对](docs/target_readiness.md)及[MLA 与量化权重容量实现](fixtures/m10_mla_capacity/README.md)：独立 model/2 按逐组件存储、实际专家放置和 latent+RoPE KV 核算完整 R1 库存；小型参考模型将结果用于原生唯一 KV 池，真实 UB 验证容量/精度改变接纳、等待释放与观察结束清理。旧 GQA 语义保留。完整 R1 目前仅做容量审计，未执行 dense/shared/全模型计算；未执行 MLA/INT8 内核，也未校准目标 NPU。下一首要缺项是完整模型计算图；目标图与观测规模、拓扑及足够真实路由也仍待完成。当前实验继续使用已选 WRITE/RTP，未启用的 native LD/ST 不作为前置条件。本任务完成后本地提交、不推送，下一项仍由用户确认。
+已完成[目标参考合同核对](docs/target_readiness.md)及[MLA 与量化权重容量实现](fixtures/m10_mla_capacity/README.md)：独立 model/2 按逐组件存储、实际专家放置和 latent+RoPE KV 核算完整 R1 库存；小型参考模型将结果用于原生唯一 KV 池，真实 UB 验证容量/精度改变接纳、等待释放与观察结束清理。旧 GQA 语义保留。
+
+M10 的[完整 Decode 参考图](fixtures/m10_full_model/README.md)已加入独立 configured-service/4 入口：逐块 MLA、dense/routed/shared FFN 和 embedding、输出头、sampling 进入同一轮图，所有阶段完成后才推进 Token。四块多请求服务、61 块小 EP 合成结构均实际经过 ASTRA/UB，Python/C++ 独立校验及受影响回归通过。没有运行数值内核或校准 NPU，完整 R1 仍只有容量审计；下一首要缺项是目标图与观测规模，随后仍需目标拓扑和足够真实路由。当前实验继续使用已选 WRITE/RTP，native LD/ST 不是前置条件。M10 尚未整体完成；本步本地提交、不推送，下一任务由用户确认。
 
 ## 目录建立顺序
 

@@ -22,6 +22,8 @@ uint64_t ValidateBatchLimits(const nlohmann::json& limits);
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory);
 LayerPlan ValidateLayerPlan(const nlohmann::json& data);
 LayerPlan ValidateCannPlan(const nlohmann::json& data);
+void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
+LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 LayerPlan LoadKvPlan(const std::filesystem::path& directory, const nlohmann::json& data);
 void CheckPlanGraph(const std::filesystem::path& path, const nlohmann::json& graph,

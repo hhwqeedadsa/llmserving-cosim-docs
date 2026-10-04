@@ -21,6 +21,15 @@ def model_structure(model):
 
 
 class ComposedService(ConfiguredService):
+    def validate_layer(self, config, layer):
+        return validate_configured_inputs(config, layer)
+
+    def check_segment(self, layers, group):
+        build_multilayer(layers,RunIdentities(),[[] for _ in layers])
+
+    def build_iteration(self, configs, provenance):
+        return build_multilayer(configs,self.identities,provenance)
+
     def validate_inputs(self, config, segments):
         fields(config, 'schema_version run_id mode execution model groups requests', 'composed service')
         require(config['schema_version']=='moe-ub-configured-service/3' and config['mode']=='fixture' and
@@ -87,7 +96,7 @@ class ComposedService(ConfiguredService):
                     mode=config['mode'], execution=config['execution'], model=config['model'],
                     model_spec=group['model_spec'], memory=group['memory'], scheduling=group['scheduling'],
                     groups=[declaration], requests=local_requests)
-                state=validate_configured_inputs(single,layer)
+                state=self.validate_layer(single,layer)
                 audits.append(state['evidence']['model'])
                 if first_state is None:
                     first_state=state
@@ -97,7 +106,7 @@ class ComposedService(ConfiguredService):
             # before creating schedulers or starting any backend process.
             routing_layers=deepcopy(layers)
             for layer in routing_layers:layer.pop('operator_profile',None)
-            build_multilayer(routing_layers,RunIdentities(),[[] for _ in layers])
+            self.check_segment(routing_layers,group)
             signature=model_structure(group['model_spec'])
             require(structure is None or structure==signature, 'Heterogeneous model structures are not implemented')
             structure=signature
@@ -161,7 +170,7 @@ class ComposedService(ConfiguredService):
                 records.append(dict(request_id=token['request_id'],token_index=token['token_index'],
                     layer_id=token['layer_id'],expert_ids=deepcopy(token['expert_ids']),source_decode_index=offset))
             configs.append(layer);provenance.append(records)
-        plan=build_multilayer(configs,self.identities,provenance)
+        plan=self.build_iteration(configs,provenance)
         plan['input_provenance']=dict(group_id=candidate['group_id'],
             model_spec_sha256=self.evidence['groups'][candidate['group_id']]['model_spec_sha256'],
             route_records=[record for records in provenance for record in records],

@@ -202,7 +202,7 @@ void BackendConfig::CheckPlan(const Json& plan) const
             plan.at("communication_template") == "cann_a3_v850_fullmesh_v1", "scenario requires a supported WRITE/RTP template");
     if (plan.contains("layers"))
     {
-        Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2", "scenario requires configured layer segment");
+        Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2" || plan.at("schema_version") == "moe-ub-full-model-plan/1", "scenario requires configured layer segment");
         for (const auto& layer : plan.at("layers")) CheckPlan(layer);
     }
     for (const auto* key : {"chunk_bytes", "send_slots_per_rank"})

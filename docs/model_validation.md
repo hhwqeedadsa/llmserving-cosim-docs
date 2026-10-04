@@ -134,3 +134,12 @@ M9 已完成本步的真实数据导入和算子依据验收，文件与选择�
 本次只增加离线审计和文档，生产执行代码未变。固定 R1 结构配置与 DeepSeek-V3 官方实现的张量/压缩缓存依据，选择独立、未校准的 INT8 每输出通道 FP32 scale 存储及 BF16 latent+RoPE MLA 缓存。计算结果为每 rank 权重及 scale 24,424,635,648 B、每 Token 全 61 层 KV 70,272 B；4 GiB 工作区、每层 64 MiB 数据窗口和 64 GB 总预算均为明确参考条件，不是实际加载权重或测量结果。
 
 当前 WRITE/RTP 足以继续声明范围内的参考实验，原生 MTE/LDST 等价仍不声称。实际拒绝检查确认 MLA、INT8 权重、dense/shared expert 执行和部分图/观测规模尚不可用；现有两份真实文件也不足目标 1024 请求。完整算式、源版本、缺项及下一实现范围见 [目标就绪核对](target_readiness.md)。复查的 CANN 小型联合执行与上步结果一致，未执行完整 R1 或目标规模，校准状态不变。
+
+
+## 2026-10-04：M10 完整 Decode 参考计算图
+
+新增 configured-service/4 与 full-model-plan/1，把 model/2 声明的 dense/MLA/routed/shared、embedding、final norm、输出头和 sampling 阶段纳入同一轮图。参考成本绑定完整结构与精度，注意力使用实际各请求上下文长度，专家计算使用实际贡献数；新增计算仍竞争原有一个计算槽，网络仍由本次 UB 事件结束。完整图与每层 CANN 图、Chakra、固定服务声明由 Python/C++ 分别检查。
+
+实际验证了两组三 rank 四块服务，以及前三块 dense、后 58 块 MoE 的 61 块合成模型（EP=3、E=6、H=1024）。共享/路由汇合、最终阶段才反馈、KV 等待回收、窗口结束及公共观测隔离通过。61 块只验证结构和小图执行，不是 R1/CM384 目标规模验收。
+
+`full_model_graph_execution_validated=true` 仅在该次完整图实际正常完成后写入；`full_model_execution_validated`、`numerical_model_executed`、`mla_kernel_validated`、`quantized_kernels_executed`、`target_deployment_validated` 仍为 false。没有加载量化权重或执行数值内核，没有迁用 GQA/A100 实测表，没有拟合 NPU 参数。参考 sampling 不产生文本或推断 EOS；请求预算和观察窗口仍分别处理。详见[输入/成本合同](../fixtures/m10_full_model/README.md)与[环境记录](environment.md)。

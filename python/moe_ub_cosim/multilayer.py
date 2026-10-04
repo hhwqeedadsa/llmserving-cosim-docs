@@ -89,7 +89,7 @@ def compose_layers(layers):
     return merged
 
 
-def build_multilayer(configs, identities, provenance):
+def build_children(configs, provenance):
     require(configs and len(configs)==len(provenance) and
             all(c.get('schema_version') == configs[0].get('schema_version') and
                 c.get('schema_version') in ('moe-ub-layer-fixture/1','moe-ub-layer-fixture/3') for c in configs),
@@ -109,7 +109,11 @@ def build_multilayer(configs, identities, provenance):
         ordinal+=len(child['transfers'])
         child['input_provenance']=dict(route_records=deepcopy(records))
         layers.append(child)
-    plan=compose_layers(layers)
+    return layers
+
+
+def build_multilayer(configs, identities, provenance):
+    plan=compose_layers(build_children(configs, provenance))
     identities.assign(plan)
     validate_multilayer(plan)
     return plan

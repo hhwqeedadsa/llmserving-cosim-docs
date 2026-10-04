@@ -2821,3 +2821,69 @@ R/audit/audit.json 的完整权重形状账目包含 61 层（3 dense、58 MoE�
 | cann_behavior / regression-cann | 25（17 / 8） | CANN 字节、贡献、依赖、观测/真值与实际 UB 回归通过。 |
 
 本任务已完成，记录与代码本地提交，不推送；当前任务停在 completed，不自动进入下一项。完整 R1 只完成容量核算，小型 MLA 只执行既有 MoE 图和参考阶段成本，未执行/校准 MLA 或量化内核；完整 61 层计算图、dense/shared 执行、目标规模图/观测、CM384 拓扑与足够真实路由仍待后续确认任务。M10 整体未完成。
+
+## 2026-10-04：M10 完整 Decode 参考计算图
+
+用户确认回到 M10 主线后，完成 `v03-full-model-graph`。起点为上一容量提交 `72be3bd`，任务说明单独提交 `71918e0`。读取开发说明、任务和 v0.3 §4.1–4.6/4.8/6、继承的 v0.2 §7/§9；模型结构参考已固定的本地 DeepSeek-V3 源码和 model/2 合同，没有下载新源码、模型或轨迹，没有安装软件或使用 GPU。
+
+新 configured-service/4 将 embedding、逐块 norm/MLA/残差、dense FFN 或 router+CANN routed/shared 汇合、final norm/head/sampling 组合为 full-model-plan/1。逐阶段参考成本绑定模型结构/精度；注意力按实际上下文长度、专家按实际贡献数计算。Python 与 C++ 独立重建和核对图，deployment/5 固定服务模型/成本，Chakra 必须逐节点匹配。参考 sampling 不执行数值文本生成。每 rank 仍是原有一个计算槽，shared/routed 两路都完成才进入下一块；没有新增逐层全 rank 屏障。服务仍复用原生 Scheduler、唯一 KV 池和实际 UB 事件。
+
+本节 cwd 均为 `/root/moe-ub-cosim`。R=`runs/v03-full-model-graph`，L=`R/logs`，P=`.venv/llmservingsim-native/bin/python`。审阅后复用 R/record.py，记录实际 argv、cwd、UTC 起止、退出码和 stdout/stderr；集成脚本另记录各次子命令及输入。旧测试脚本未改。新构建为 `build/m10-full-model`，其 output 也单独保存；配置产生的原生启动锁在构建后用本任务开始前的副本恢复。子模块源码、gitlink、deps.lock.json 和技术规范均未改。
+
+### 实际命令与检查
+
+下表所有最终命令退出 0；集成子命令中的退出 1 是明确的非法输入验收。命令前均由 `python3 R/record.py 标签` 记录。
+
+| 命令 | 标签与结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 个递归依赖保持固定版本。 |
+| `python3 R/baseline.py` | baseline；记录 12575 份旧产物和一份原生启动锁摘要。 |
+| `cmake -S third_party/ns-3-ub -B build/m10-full-model -G Ninja ...` | configure；完整实际选项在 L/configure.json，沿用已验证的仅 unified-bus 模块、backend/inject.cmake、独立 output 和禁用依赖自动获取配置。 |
+| `cmake --build build/m10-full-model --target cosim-service cosim-service-deadlock-test cosim-layer cosim-sequence cosim-lifecycle-test cosim-observation-test cosim-write cosim-write-test cosim-layer-delay-test -j8` | build；540 步通过，既有依赖/CANN 警告保留。后续 build-final 重编六个使用完整图校验的目标，仅修正无共享专家时的零成本校验。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p '*test.py' -v` | unit-final；108 项通过（新增 6 项完整图测试）。较早 unit-all 为 107 项。 |
+| `env PYTHONPATH=python P tests/integration/check_full_model.py --build-dir build/m10-full-model --output-dir R/full-final-v2` | full-final-v2；8 次场景对照、1 次空请求服务和 6 次后端预期拒绝通过。 |
+| `env PYTHONPATH=python P tests/integration/check_full_model_structure.py --build-dir build/m10-full-model --output-dir R/structure-final` | structure-final；61 块和 MoE/dense/MoE 两次真实小 EP 联合执行通过。 |
+| `python3 R/final_audit.py` | final-audit-final；旧产物/锁原样未变，实际装载的十个 ns-3 库仅来自新的 ns-3-UB 构建，记录源码摘要。 |
+
+### 完整图实际结果
+
+四块合成 MLA 模型（H=1024，1 dense + 3 MoE，各 1 shared expert，六个 routed expert/Top-2）在两组三 rank 上运行。每 rank 权重及 scale 为 12786248 B，KV/token=384 B、块=1536 B；基准为 8 块，收紧后为 3 块。原生池的接纳、等待、按请求分别取整和回收逐事件核对，最终占用均清零。36 条 Decode 层路由、72 份专家贡献均只消费一次。
+
+| 对照 | 完成 ns | UB 写次数 | 载荷 B | 业务 B |
+|---|---:|---:|---:|---:|
+| 基准 / 关闭来源记录 / scenario 入口 | 131279 | 305 | 120316 | 113664 |
+| shared expert 单 Token 成本从 500 增到 100000 ns | 1809914 | 305 | 120316 | 113664 |
+| sampling 单 Token 成本从 19 增到 100000 ns | 727340 | 305 | 120316 | 113664 |
+| 每 rank KV 从 8 块收紧到 3 块 | 148489 | 377 | 122620 | 113664 |
+| 窗口轨迹、第二组每轮 Token 预算为 1 | 83098 | 244 | 67568 | 61440 |
+| 瓶颈 10 Gbps → 1 Gbps | 1214788 | 305 | 120316 | 113664 |
+
+基准五轮记录 630 个外层阶段，其中 294 个为空批次零成本记录、不创建 COMP。CANN 子图的量化准备、计数/重排、专家、打包和归约另独立核算，无重复注意力或 router 成本。24 个有本地 Token 的 MoE 汇合点均等两路；实际出现六次 rank 间层执行重叠，未添加全局层屏障。所有 COMP 时长、依赖、SEND transaction_done、RECV 数据就绪/登记时刻和最终反馈均与原始执行记录核对。
+
+来源开关前后 execution/result.json 完全相同；导出的公共操作仅 Dispatch/Combine，内部模型阶段不进入公共观测。窗口场景七个请求均为 OBSERVATION_ENDED、target_tokens=null、eos_known=false，done 数为零，观察清理不伪装成完成释放；未选中的驻留请求仍计入 KV。六类篡改（阶段时长、shared/routed 依赖、块覆盖、成本域、运行中声明、有效 protobuf 的 COMP 时长）均在 0 ns、尚未交付业务前被拒绝。
+
+61 块结构采用 EP=3、E=6、H=1024、一个合成 Token，前三块 dense、后 58 块 MoE。Python 与 C++ 共同验证并实际执行 3102 个节点、986 次交付（754 次 UB 写），于 315509 ns 完成。另一 MoE/dense/MoE 场景验证不连续 MoE 层号和无 shared expert；共享 FFN 与 shared/routed 相加均为零成本且无 COMP。未使用完整 R1 维度、256 专家、128 rank 或 CM384 网络，也没有提高 4096 transfer 上限。
+
+### 开发期问题与回归
+
+初次手工初始化 evidence 时保留了旧 manifest 内的模型名，前端明确报 Route model differs from execution；随后为复用的人工轨迹创建新的显式 synthetic manifest 和摘要，没有把人工路由声明为真实模型采集。
+
+unit-initial 退出 1：新增测试误将 CANN 内部量化阶段又计入外层 model_stages，并读取不存在的 cur_output；正确外层计数为 4 个首尾 + 8 个 dense + 3×10 个 MoE 外层阶段。unit-full-v2 又错误假定初始 reached 等于 prompt；原生请求已有 generated_tokens，最终测试按输入的 prompt+generated 检查尚无反馈时进度不变。失败日志保留，未修改生产进度语义。unit-full-v3 五项通过，补充无共享专家零成本检查后 unit-final 全部 108 项通过。
+
+full-integration 首次退出 1，原因是新测试错误要求慢 shared 分支必须最后结束。实际单计算槽中 shared FFN 会阻塞本地路由分支的重排/归约，最后结束的仍可为 routed。后续验收按资源语义检查增加 shared 耗时确实推迟完成，并保留两路独立依赖与所有实际时长检查；没有增加计算槽或固定网络延迟。full-integration-v2 通过。复核无共享专家模型后进一步要求 shared_routed_add 也为零，防止多算不存在的相加；build-final、unit-final、full-final、structure-final 使用最终代码全部通过。早期 full-structure 结果保留，不用其无共享专家耗时作为最终结果。最终差异复查补充空请求服务：正常退出但没有提交图时 full_model_graph_execution_validated=false，初始/失败清单也明确为 false；full-final-v2 九次正常运行和六次拒绝通过，unit-full-final 六项再次通过。
+
+以下七套旧回归使用原脚本和预期，统一命令为 `env PYTHONPATH=python P tests/integration/check_NAME.py --build-dir build/m10-full-model --output-dir R/标签`。evidence_service 另加 `--measured-profile runs/v03-route-compute-evidence/a100-profile.json`，只复用已有旧域数据，不用于新的 MLA 图。
+
+| NAME | 标签 | 结果 |
+|---|---|---|
+| mla_capacity | regression-mla | 七种原生池/MLA 库存对照保持原结果。 |
+| service_model_capacity | regression-capacity | 15 条子命令（6 成功、9 预期拒绝）。 |
+| continuous_batching | regression-batching | 26 条（15 成功、11 预期拒绝）。 |
+| composed_service | regression-composed | 26 条（15 成功、11 预期拒绝）。 |
+| evidence_service | regression-evidence | 27 条（19 成功、8 预期拒绝）。 |
+| cann_behavior | regression-cann | 25 条（17 成功、8 预期拒绝），含实际 scenario 与来源隔离。 |
+| write | regression-write | 18 条（7 成功、11 预期拒绝）；早/晚接收、TP 回收、单字节及十个库来源检查通过。 |
+
+这些旧路径不调用完整模型成本校验；最后仅收紧无共享专家成本条件，使用完整图最终两套集成重新验证，没有无理由重复旧回归。
+
+本步完整参考图任务完成，本地提交、不推送，current.md 保持 completed，不开始下一任务。完整目标 R1/CM384、目标图/观测规模、完整 fabric、多平面和足够独立真实路由仍未验收；NPU/MLA/量化内核未执行或校准，M10 整体未完成。下一首要工作是目标规模图与观测管理，等待用户确认。

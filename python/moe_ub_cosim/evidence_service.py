@@ -18,7 +18,7 @@ class EvidenceService(ComposedService):
         require(config['schema_version']=='moe-ub-evidence-service/1','Unsupported evidence service')
         self.observation_config=deepcopy(config)
         service=deepcopy(config['service']);layers=deepcopy(segments)
-        require(service['schema_version']=='moe-ub-configured-service/3' and service['run_id']==config['run_id'] and
+        require(service['schema_version'] in ('moe-ub-configured-service/3','moe-ub-configured-service/4') and service['run_id']==config['run_id'] and
                 service['requests']==[],'Evidence service needs an empty composed-service template')
         require(isinstance(config['requests'],list) and config['requests'],'Require observed requests')
         selected=[layer['layer_id'] for layer in layers['groups'][0]['layers']]

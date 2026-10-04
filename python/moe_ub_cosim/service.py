@@ -281,15 +281,23 @@ def run(args):
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
     evidence = config.get('schema_version') == 'moe-ub-evidence-service/1'
-    composed = evidence or config.get('schema_version') == 'moe-ub-configured-service/3'
+    full = config.get('schema_version') == 'moe-ub-configured-service/4' or (
+        evidence and config['service'].get('schema_version') == 'moe-ub-configured-service/4')
+    composed = evidence or full or config.get('schema_version') == 'moe-ub-configured-service/3'
     configured = composed or config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
     require(layer.get('schema_version') not in ('moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3') or configured,
             'Physical deployment currently requires the configured service entry')
     if evidence:
-        from .evidence_service import EvidenceService
+        if full:
+            from .full_model_service import FullModelEvidenceService as EvidenceService
+        else:
+            from .evidence_service import EvidenceService
         service = EvidenceService(config, layer)
     elif composed:
-        from .composed_service import ComposedService
+        if full:
+            from .full_model_service import FullModelService as ComposedService
+        else:
+            from .composed_service import ComposedService
         service = ComposedService(config, layer)
     elif configured:
         from .configured_service import ConfiguredService
@@ -363,6 +371,7 @@ def run(args):
                 require(not buffer and child.stdout.read() == b'', 'Unexpected protocol after final COMMIT')
                 require(code == 0, f'Backend failed with exit {code}; see backend.stderr.log')
         manifest['normal_exit'] = True
+        if full: manifest['full_model_graph_execution_validated'] = bool(service.history)
         save(output / 'service_result.json', dict(initial=service.initial, waves=service.history,
             requests=service.snapshot(), service_finished=True, finished_ns=service.current_ns,
             scheduler_calls=service.scheduler_calls, decisions=service.decision_id,

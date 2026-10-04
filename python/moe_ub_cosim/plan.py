@@ -296,6 +296,9 @@ def build_plan(config, identities=None, *, _validate=True):
 
 
 def validate_plan(plan):
+    if plan.get('schema_version') == 'moe-ub-full-model-plan/1':
+        from .full_model import validate_full_model
+        return validate_full_model(plan)
     if plan.get('schema_version') in ('moe-ub-multilayer-plan/1','moe-ub-multilayer-plan/2'):
         from .multilayer import validate_multilayer
         return validate_multilayer(plan)

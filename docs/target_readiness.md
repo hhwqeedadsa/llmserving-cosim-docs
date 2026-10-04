@@ -2,7 +2,7 @@
 
 2026-10-03，最初核对基线 `14c1c8f`；其后已完成 MLA/量化容量实现及小型实际接纳验证。下文区分原独立算式与当前实现状态。M10 整体未完成，场景规格仍不是可执行配置。
 
-MLA/量化容量核算已进入现有唯一 KV 池和请求接纳流程，合同与验收见[容量说明](../fixtures/m10_mla_capacity/README.md)。下一首要缺项是**完整模型计算图**；当前没有开始该任务。目标规模图管理与观测、拓扑和足够真实路由仍待完成，原生 LD/ST 仍非当前参考实验前置条件。
+MLA/量化容量核算已进入现有唯一 KV 池和请求接纳流程，合同与验收见[容量说明](../fixtures/m10_mla_capacity/README.md)。[完整 Decode 参考计算图](../fixtures/m10_full_model/README.md)已通过小场景实际联合执行，含 dense/shared/首尾阶段；另验证 61 块小 EP 合成结构。下一首要缺项是**目标规模图管理与观测**；目标拓扑和足够真实路由仍待完成，原生 LD/ST 仍非当前参考实验前置条件。
 
 ## 当前事务选择
 
@@ -57,7 +57,7 @@ EP 只切分 routed 专家，不切分本 rank 请求的 KV。RoPE 表、临时�
 | 对象 | 当前证据 | 影响和处理边界 |
 |---|---|---|
 | 模型/KV 容量 | model/1 保留 GQA；新增 mla_capacity.py 的 model/2，独立逐 tensor/scale 与 latent+RoPE 算式 | 完整 R1 离线库存与原审计逐项匹配；小模型实际影响唯一 KV 池和接纳。容量通过不代表完整 R1 图或实测 HBM 已通过。 |
-| 全模型计算 | model_capacity.py 与 mla_capacity.py 均拒绝执行 dense/selected shared expert；composed_service.py 只组合连续 MoE 层段 | 完整计算图还须加入前三层 dense、MLA、shared expert、embedding/final norm/head/sampling，并等 shared/routed 两方完成后进入下一块。现有参考阶段成本不等于这些算子已分别实现。 |
+| 全模型计算 | 新 full_model.py/full_model_plan.cc 按 model/2 和显式成本完整组图；旧层段入口含义保留 | 小模型及 61 块小 EP 合成图已真实执行，shared/routed 汇合、上下文成本和首尾阶段通过。完整 R1/128 rank 仍未运行；阶段成本不是数值内核或硬件校准。 |
 | 计算依据 | CANN 模板明确拒绝未覆盖阶段的 operator_profile；M9 A100 表为 H=F=256、FP16 GQA/FFN | 不能把该表用于 H=7168、MLA 或 INT8。可另选显式参考成本及敏感性，但不能称为 NPU 校准。 |
 | 状态消息图规模 | 当前 MAX_TRANSFERS=4096，Python/C++ 单层及多层均检查 | 128×(256−2)=32,512 条非同 rank Dispatch 状态；其中同 chip 256、跨 chip 32,256，单层仅状态载荷就有 1,032,192 B 跨 chip。58 层为 1,885,696 条状态交付，尚未计向量/Combine。不能直接提高上限后宣称规模已通过。 |
 | 网络 | 场景要求保留完整 fabric、7 平面和非活动端点；现有 CANN 验收是小型共享瓶颈 | 需生成与编号一致的节点、端口、路由、预建通道并验证实际路径和队列；多路径开关本身不产生多平面。 |
@@ -75,6 +75,6 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python scripts/audit_target_con
   --output-dir runs/target-contract-audit
 ```
 
---source-dir 下需要固定版本的 inference/model.py 和 LICENSE-CODE，URL/摘要在 reference.json；结构配置和轨迹沿用本机已核验的 M9 文件。检查输出明确 audit_only=true、formal_run_ready=false，成功退出只表示核对完成。实际结果在 runs/v03-target-contract/audit/audit.json；七项拒绝、每项权重形状和字节、输入摘要均保留。其中 MLA/INT8 两项始终针对旧 model/1，不能解读为新 model/2 也不接受；其他五项执行/资源限制仍在。
+--source-dir 下需要固定版本的 inference/model.py 和 LICENSE-CODE，URL/摘要在 reference.json；结构配置和轨迹沿用本机已核验的 M9 文件。检查输出明确 audit_only=true、formal_run_ready=false，成功退出只表示核对完成。实际结果在 runs/v03-target-contract/audit/audit.json；七项拒绝、每项权重形状和字节、输入摘要均保留。其中 MLA/INT8 两项始终针对旧 model/1，不能解读为新 model/2 也不接受；dense/shared 拒绝仍针对旧层段入口，不能套用到新增 configured-service/4；三项图/观测资源限制仍在。
 
-原合同审计曾复用 build/m10-cann-behavior 执行 CANN 小型服务，为 305 次真实写、120316 B 总载荷、131530 ns。后续容量任务复用同一后端执行七项 MLA 对照，基准数值相同，容量收紧、投影存储精度、驻留未选请求、观察退出及网络延迟均通过；102 项单元测试和五套受影响回归通过。完整 R1 仅作离线审计，未运行目标场景或声称 MLA/INT8 算子校准。命令、失败记录和产物保护结果见 [environment.md](environment.md)。容量任务完成后停止，不自动开始完整模型计算图。
+原合同审计曾复用 build/m10-cann-behavior 执行 CANN 小型服务，为 305 次真实写、120316 B 总载荷、131530 ns。后续容量任务复用同一后端执行七项 MLA 对照，基准数值相同，容量收紧、投影存储精度、驻留未选请求、观察退出及网络延迟均通过；102 项单元测试和五套受影响回归通过。完整 R1 仅作离线审计，未运行目标场景或声称 MLA/INT8 算子校准。命令、失败记录和产物保护结果见 [environment.md](environment.md)。上述为容量任务的历史验收。后续完整参考图任务在独立 build/m10-full-model 中通过四块服务和 61 块小 EP 实际执行；当前停在该任务完成，不自动开始目标规模任务。

@@ -1,0 +1,115 @@
+{
+  "schema_version": "moe-ub-route-manifest/1",
+  "source": {
+    "kind": "synthetic_test",
+    "dataset_id": "repo/m10-full-model-functional-routes",
+    "dataset_revision": "fixture-v1-reuse-mla-explicit-expert3-to5",
+    "collector_model_id": "synthetic/mla-full-decode-1024",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "synthetic_explicit_ids",
+    "usage_terms": "repo-owned synthetic functional input",
+    "source_url": "fixtures/m10_mla_capacity/routes",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision"
+    ]
+  },
+  "model": {
+    "name": "synthetic/mla-full-decode-1024",
+    "hidden_dim": 1024,
+    "num_layers": 4,
+    "routing_precision": "synthetic_explicit_ids"
+  },
+  "layers": [
+    {
+      "layer_id": 0,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 1,
+      "kind": "moe",
+      "num_experts": 6,
+      "top_k": 2
+    },
+    {
+      "layer_id": 2,
+      "kind": "moe",
+      "num_experts": 6,
+      "top_k": 2
+    },
+    {
+      "layer_id": 3,
+      "kind": "moe",
+      "num_experts": 6,
+      "top_k": 2
+    }
+  ],
+  "files": [
+    {
+      "file_id": "201",
+      "original_path": "synthetic/201.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/201.json",
+        "sha256": "fa57056682413b5d63f694cf314efe734af1d0243629d25820a929a268bf5f23"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "202",
+      "original_path": "synthetic/202.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/202.json",
+        "sha256": "94c90dd0fbb594af057df32acb0cf570394b5951a8714a81dd3ab9db403f6875"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "203",
+      "original_path": "synthetic/203.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/203.json",
+        "sha256": "e34c0e3d86d8224b67f3adff4f4c6faff2594b8567a85236bb0aaafd633efc6d"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "204",
+      "original_path": "synthetic/204.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/204.json",
+        "sha256": "497eb44fe33e6c38cc5e2cadbd5d798f04f26be3c6c3efc47887a50830fdfb18"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "401",
+      "original_path": "synthetic/401.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/401.json",
+        "sha256": "cd15166f8e3c639b52bd7a6c58a7fdd0d8cad6ce619c5e8d235b7fb2a10f1c76"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "402",
+      "original_path": "synthetic/402.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/402.json",
+        "sha256": "94c90dd0fbb594af057df32acb0cf570394b5951a8714a81dd3ab9db403f6875"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "404",
+      "original_path": "synthetic/404.json",
+      "file": {
+        "path": "fixtures/m10_mla_capacity/routes/404.json",
+        "sha256": "f1e117ab35523c1cdf5266a684ac5c2e8d718c028ae2dbda96aa3da3bb1a7e9c"
+      },
+      "format": "token_layer_map_v1"
+    }
+  ]
+}

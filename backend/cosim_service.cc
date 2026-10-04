@@ -51,7 +51,8 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
          {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
     const bool batched = deployment.at("schema_version") == "moe-ub-service-deployment/3";
-    const bool composed = deployment.at("schema_version") == "moe-ub-service-deployment/4";
+    const bool full = deployment.at("schema_version") == "moe-ub-service-deployment/5";
+    const bool composed = full || deployment.at("schema_version") == "moe-ub-service-deployment/4";
     Require(deployment.size() == (batched ? 3 : 2) && (composed || batched || deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
             deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
             deployment.at("groups").is_array() && !deployment.at("groups").empty(), "Invalid service deployment");
@@ -73,7 +74,7 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
     for (const auto& config : deployment.at("groups"))
     {
         const auto name = config.at("group_id").get<std::string>();
-        Require(config.size() == (physical ? 5 : 4) + (composed ? 2 : 0) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
+        Require(config.size() == (physical ? 5 : 4) + (composed ? 2 : 0) + (full ? 2 : 0) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
                 names.insert(name).second && config.at("rank_ids").is_array() &&
                 !config.at("rank_ids").empty() && config.at("rank_to_ub_node").is_array() &&
                 config.at("rank_ids").size() == config.at("rank_to_ub_node").size(),
@@ -112,15 +113,24 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
             moe_ub::ValidateBatchLimits(config.at("batch_limits"));
             const auto& layers = config.at("layer_configs");
             Require(layers.is_array() && !layers.empty() && layers.size() <= 128, "Invalid declared layer segment");
+            Json model_ids = Json::array();
+            if (full)
+            {
+                moe_ub::ValidateFullModelProfile(config.at("model_spec"), config.at("full_model_profile"), config.at("rank_ids"));
+                for (const auto& row : config.at("model_spec").at("layers"))
+                    if (row.at("kind") == "moe") model_ids.push_back(row.at("layer_id"));
+                Require(model_ids.size() == layers.size(), "Full model layer coverage mismatch");
+            }
             uint64_t index = 0;
             for (const auto& layer : layers)
             {
                 Require(layer.at("schema_version") == "moe-ub-layer-fixture/3" &&
                         layer.at("layer_id").is_number_unsigned() && layer.at("layer_id").get<uint64_t>() <= INT32_MAX &&
-                        layer.at("layer_id").get<uint64_t>() == layers[0].at("layer_id").get<uint64_t>() + index++ &&
+                        layer.at("layer_id").get<uint64_t>() == (full ? model_ids[index].get<uint64_t>() : layers[0].at("layer_id").get<uint64_t>() + index) &&
                         layer.at("batch_limits") == config.at("batch_limits") && layer.at("group_id") == name &&
                         layer.at("rank_ids") == config.at("rank_ids") && layer.at("rank_to_ub_node") == config.at("rank_to_ub_node"),
                         "Invalid static layer declaration");
+                ++index;
                 Require(layer.contains("deployment") == physical &&
                         (!physical || layer.at("deployment") == config.at("deployment")), "Static layer locality mismatch");
             }
@@ -654,8 +664,12 @@ int main(int argc, char** argv)
                     if (!batch_limits.is_null())
                         Require(plan.data.at("batch_limits") == batch_limits, "Batch limits changed during run");
                     const bool composed = group.config.contains("layer_configs");
-                    Require((plan.data.at("schema_version") == "moe-ub-multilayer-plan/2") == composed,
+                    const bool full = group.config.contains("model_spec");
+                    Require((plan.data.at("schema_version") == (full ? "moe-ub-full-model-plan/1" : "moe-ub-multilayer-plan/2")) == composed,
                             "Plan/service layer-segment schema mismatch");
+                    if (full)
+                        Require(plan.data.at("model_spec") == group.config.at("model_spec") &&
+                                plan.data.at("full_model_profile") == group.config.at("full_model_profile"), "Full model declaration changed during run");
                     if (composed)
                     {
                         Require(selected.size() == 1 && plan.data.at("batch_limits") == group.config.at("batch_limits") &&

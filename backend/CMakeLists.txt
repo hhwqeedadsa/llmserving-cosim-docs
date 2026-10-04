@@ -184,6 +184,7 @@ build_exec(
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/cosim_service.cc"
     "${CMAKE_CURRENT_LIST_DIR}/backend_config.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/fabric_config.cc"
     "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"
     "${CMAKE_CURRENT_LIST_DIR}/layer_plan.cc"
     "${CMAKE_CURRENT_LIST_DIR}/cann_plan.cc"

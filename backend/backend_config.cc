@@ -1,4 +1,5 @@
 #include "backend_config.hh"
+#include "fabric_config.hh"
 #include "ns3/unified-bus-module.h"
 #include "ns3/core-module.h"
 #include <fstream>
@@ -104,7 +105,8 @@ Json BackendCatalog()
 }
 BackendConfig::BackendConfig(Json input) : input_(std::move(input))
 {
-    Require(input_.is_object() && input_.size() == 11 && input_.at("schema_version") == "moe-ub-backend-config/1", "schema/fields");
+    Require(input_.is_object() && ((input_.size() == 11 && input_.at("schema_version") == "moe-ub-backend-config/1") ||
+        (input_.size() == 12 && input_.at("schema_version") == "moe-ub-backend-config/2" && input_.contains("fabric"))), "schema/fields");
     Require(input_.at("scenario_id").is_string() && !input_.at("scenario_id").get<std::string>().empty(), "missing scenario identity");
     const auto catalog = BackendCatalog();
     Require(input_.at("catalog") == catalog, "catalog does not match this backend build");
@@ -178,6 +180,7 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
         Require(text.front() != '-' && std::stoull(text) > 0, "nonpositive active resource " + std::string(key));
     }
     Require(input_.at("topology").is_object() && input_.at("topology").size() == 2, "topology fields");
+    if (input_.contains("fabric")) ValidateFabric(input_.at("fabric"), input_.at("topology"));
 }
 std::optional<BackendConfig> BackendConfig::Load(const std::filesystem::path& network)
 {
@@ -196,6 +199,18 @@ void BackendConfig::Apply() const
     ns3::RngSeedManager::SetSeed(input_.at("execution").at("seed"));
     ns3::RngSeedManager::SetRun(input_.at("execution").at("run"));
 }
+void BackendConfig::CheckDeployment(const Json& groups) const
+{
+    if (!input_.contains("fabric")) return;
+    const auto& fabric = input_.at("fabric");
+    Require(groups.is_array() && groups.size() == fabric.at("groups").size(), "fabric group count differs");
+    std::set<std::string> names;
+    for (const auto& group : groups)
+    {
+        Require(names.insert(group.at("group_id").get<std::string>()).second, "duplicate fabric service group");
+        CheckFabricPlan(fabric, {{"input", group}});
+    }
+}
 void BackendConfig::CheckPlan(const Json& plan) const
 {
     Require(plan.at("communication_template") == "direct_rank_dedup_v1" ||
@@ -207,6 +222,7 @@ void BackendConfig::CheckPlan(const Json& plan) const
     }
     for (const auto* key : {"chunk_bytes", "send_slots_per_rank"})
         Require(plan.at("input").at(key) == input_.at("execution").at(key), "plan differs from effective execution " + std::string(key));
+    if (input_.contains("fabric")) CheckFabricPlan(input_.at("fabric"), plan);
     Require(plan.at("sender_completion") == "transaction_done", "invalid sender completion");
 }
 void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>>& controllers,
@@ -256,6 +272,11 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
     }
     Require(nodes == input_.at("topology").at("nodes") && links == input_.at("topology").at("links"), "live topology differs from resolved CSV overrides");
     result["topology"] = {{"nodes", nodes}, {"links", links}};
+    if (input_.contains("fabric"))
+    {
+        result["schema_version"] = "moe-ub-effective-backend/2";
+        result["fabric_audit"] = AuditLiveFabric(input_.at("fabric"));
+    }
     for (const auto& app : apps) append("application", app->GetNode()->GetId(), app);
     for (const auto& controller : controllers)
     {

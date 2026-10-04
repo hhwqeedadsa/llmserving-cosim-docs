@@ -2944,3 +2944,59 @@ full-integration 首次退出 1，原因是新测试错误要求慢 shared 分�
 目标计数只处理 128 rank、256 专家、双 rank/chip 的 Dispatch 状态下界：每层 32512 次交付，58 层 1885696 次（跨芯片 1870848、本地 14848），含状态检查的节点下界 3778816。未加入 Token 向量、Combine 或完整模型阶段，没有创建目标图；计数明确超出样例资源预算。图/传输对象、注册表及按端口的来源账本仍驻留，计划字节和数量预算不能替代 RAM 实测。
 
 本步完成后本地提交、不推送，不开始下一任务。完整 R1/CM384、完整 fabric/多平面、足够独立真实路由及最终组合规模仍未验收；下一任务是目标拓扑，等待用户确认。数值内核与 NPU 校准状态不变，M10 尚未整体完成。
+
+## 2026-10-04：M10 目标 fabric 与多平面拓扑
+
+用户确认继续后执行 `v03-target-fabric`，任务说明提交 `d008f77`，起点为图/观测资源任务提交 `28fc0dd`。依据 v0.3 §3、4.1、4.6–4.8、6、场景 fabric/placement/ns3_backend 和继承的 v0.2 §6.6/7/8/10，增加二级多平面生成、部署一致性与实际网络审计。没有修改技术规范、依赖源码、gitlink 或 deps.lock.json，没有安装软件、下载数据或运行数值模型。
+
+新增 fabric/1 与 scenario-run/2；旧单平面 scenario-run/1 保留原约束。Python 先检查数量预算，再生成所有物理节点、链路、压缩路由和活动组跨芯片预建通道。C++ 独立检查拓扑几何、部署和预算，业务启动前核对实际最短候选、TP 端口和双向绑定；每次装载图再次校验归属。当前固定 WRITE/RTP、HASH/shortest、EnableMultiPath=false、packet spray=false 不变。单 TP 的平面选择使用原生随机数，交换机内选出口使用 HASH，二者在[输入说明](../fixtures/m10_fabric/README.md)中分别记录。
+
+本节 cwd 均为 `/root/moe-ub-cosim`，R=`runs/v03-target-fabric`，L=`R/logs`，P=`.venv/llmservingsim-native/bin/python`。审阅后复用 R/record.py；记录 argv、cwd、UTC 起止、退出码和 stdout/stderr。集成目录的 commands.json 与 *.time.json 另记全部服务/后端子命令和独立墙钟/RSS。
+
+### 实际检查
+
+下表通过的顶层命令均退出 0；拒绝输入的子进程明确非零退出，日志保留，不作为成功运行。
+
+| 命令（由 `python3 R/record.py 标签` 包装） | 标签及结果 |
+|---|---|
+| `bash scripts/check_deps.sh` | dependencies-before、dependencies-final；13 个递归固定依赖一致。 |
+| `python3 R/baseline.py` | baseline；保护 13655 份旧构建产物及一份原生启动锁。 |
+| `cmake -S third_party/ns-3-ub -B build/m10-fabric -G Ninja ...` | configure；完整参数见 L/configure.json，仅启用 unified-bus，注入 backend/inject.cmake，独立 output，不自动获取依赖。 |
+| `cmake --build build/m10-fabric --target cosim-service -j 8` | build-fix、build-deployment-check 通过；首次 build 编译失败见下文。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p fabric_test.py -v` | unit-fabric；3 项，独立核对目标库存/全部端口、小网络全部平面候选到达路径及预算拒绝。 |
+| `env PYTHONPATH=python P -m unittest discover -s tests/unit -p '*_test.py' -v` | unit-all；115 项通过。 |
+| `env PYTHONPATH=python P -m moe_ub_cosim.fabric --input fixtures/m10_fabric/target.json --defaults fixtures/m10_fabric/defaults.json --output-dir R/target-generated` | target-generate；全目标离线生成。target-audit 对同目录增加 --audit-existing，四张 CSV 与输入重新生成结果逐项匹配。 |
+| `env PYTHONPATH=python python3 R/measure.py R/target-profile.time.json P -m moe_ub_cosim.fabric --input fixtures/m10_fabric/target.json --defaults fixtures/m10_fabric/defaults.json --output-dir R/target-profile` | target-profile；离线资源测量，未创建 UB 网络。 |
+| `env PYTHONPATH=python P tests/integration/check_target_fabric.py --build-dir build/m10-fabric --output-dir R/integration-final` | integration-final；12 条子命令，4 次成功服务、8 项预期拒绝。 |
+| `env PYTHONPATH=python P tests/integration/check_scenario_backend.py --build-dir build/m10-fabric --output-dir R/regression-scenario` | regression-scenario；36 条子命令，12 成功、24 预期拒绝，旧单平面入口/参数/观测保持原预期。 |
+| `env PYTHONPATH=python P tests/integration/check_full_model.py --build-dir build/m10-fabric --output-dir R/regression-full-model` | regression-full-model；15 条子命令，9 成功、6 预期拒绝，完整图阶段、依赖、调度、来源及旧场景入口通过。 |
+| `python3 R/final_audit.py` | final-audit；核对旧产物/锁摘要与实际 ns-3 库来源，结果见 R/final-audit.json。 |
+
+regression-scenario 先于最后一次部署检查增量构建；最后改动只为带 fabric 的 /2 输入增加启动前部署绑定，/1 路径直接返回。integration-final 和 regression-full-model（包含一次旧 /1 场景）使用最终后端。unit-all 后 Python 仅改入口说明字符串、移除未使用测试导入，没有改变行为。构建后原生 `.lock-ns3_linux_build` 按开始前备份恢复，没有修改未知生成目录。
+
+### 目标离线清单与小网络实际执行
+
+完整目标为 48 服务器×8 芯片×2 die、7 平面，每平面 48 L1/16 L2：共 768 DEVICE、336 L1、112 L2、1216 节点、10752 双向链路和 21504 物理端口。活动 rank 0–127 映射设备 0–127，其余 640 设备也保留连接和路由。压缩路由 47152 行；跨芯片预建通道 `(C(128,2)−64)×7=56448` 行，每行对应两个本端 TP。离线生成实测 0.553 s、最大 RSS 127024 KiB，输出 3730083 B；这些不是 UB 装载或完整模型执行的内存测量。
+
+小网络为 3 服务器、每服务器 2 芯片/4 die、7 平面、每平面 2 L2，共 47 节点、126 链路。6 活动 rank 分属两组，第三服务器完全空闲。观测全部 168 个交换机出口，使用 set/2 与显式图预算。实际最短路查询 1344 项、28 行双向通道的 56 个本端 TP 对象均核对通过；非活动设备也被检查。每次服务均使用同一批网络对象完成 5 轮、305 次真实 UB 写和 123 次本地交付，没有组合多次独立流量。
+
+| integration-final 对照 | 完成 ns | 墙钟 s | 最大 RSS KiB | 目录字节 |
+|---|---:|---:|---:|---:|
+| reference，224 Gbit/s | 33689 | 3.320 | 92740 | 33995275 |
+| source-off，同参数关闭来源 | 33689 | 2.306 | 92804 | 9602670 |
+| slow，全部链路 1 Gbit/s | 1999784 | 2.903 | 93780 | 34121330 |
+| same-server，组内跨芯片留在同服务器 | 22817 | 2.884 | 91716 | 32451953 |
+
+计时方法为每条命令新建 wrapper、monotonic 和 `resource.getrusage(RUSAGE_CHILDREN).ru_maxrss`；RSS 是被等待子进程链中的最大单进程峰值，不是进程树同时驻留总量，更不是 NPU/HBM。对照期间运行了独立旧回归，墙钟不能用于性能优劣结论。模型为已有四块合成 MLA 参考图，未用这些测量外推完整目标开销。
+
+111 个业务包逐 UID 检查实际路径：跨服务器经过源 L1 上行、同平面 L2、目标 L1 下行共三个出口；同服务器只经过一个 L1 出口。七平面都实际出现业务，跨服务器观测到两种 L2 候选。同芯片交付既无预建跨芯片 TP，也不出现在 fabric 包来源中。逐端口成功发送包字节与原生计数器一致，跨服务器出口业务字节访问量 340992 B=113664 B×3，同服务器为 113664 B；另有 64512 B 本地业务，不计入上述 fabric 访问量。
+
+出口队列 enqueue/dequeue 的累计等待在基准为 432 ns、低带宽为 260792 ns；计数涵盖该出口所有实际包。ep0 后续迭代提交从 12152 ns 延迟至 764064 ns，ep1 从 12715 ns 延迟至 776208 ns，时间来自前一轮实际完成。业务交付数和字节未变。来源开关两次 execution/result.json 完全相同，每端口 wire/time 指纹、packet-events 和 egress-queue-audit 逐字节相同。所有图完成，网络 started/arrived 相等并空闲，发送/计算槽和待处理事件归零，KV 释放；图/传输记录及预建 TP 仍按既有服务生命周期保留。
+
+### 拒绝、开发期失败与停止
+
+八项拒绝分别是：层声明错误物理 chip、CSV 缺链路、错误平面路由、跨平面 TP、JSON 错误物理链路、通道预算不足、缺节点、服务与 fabric 的 rank 映射漂移。前端错误不创建执行目录；直接后端部署漂移在网络初始化前拒绝；CSV 错误由实际对象检查在业务激活前拒绝。具体诊断、输入和退出码均在 integration-final/commands.json 与对应日志，没有删减拓扑或用固定通信时间绕过。
+
+开发期失败全部保留：build 因新增 C++ 校验把 JSON 直接传给 set::insert 导致重载歧义，改为明确整数/字符串取值后通过。integration 把研究观测对象直接传给原始后端而缺少 schema，改为使用已有 backend_observation 转换后四组实际运行通过；integration-observation-fix 的队列断言把 tx_start 再当作 dequeue，正确按三种事件核对后修复。integration-queue-fix 的字节期望错误包含本地交付，已改为按既有 ub_task_id 区分真实 fabric 业务，明确核对 113664×3 与 64512 本地字节。integration-byte-fix 只改一层物理归属，先触发原有跨层一致性拒绝；把测试改为各层一致的错误归属后，确认新 fabric 归属检查拒绝。没有改变生产完成条件或放宽合法性检查。
+
+本步完成后整理记录、本地提交、不推送，current.md 停在 completed。完整目标拓扑未与 R1 全图和真实负载组合运行；足够独立真实请求、目标图/来源账本宿主资源及最终规模仍需后续确认。NPU/MLA/量化内核和链路绝对时序未校准，M10 整体仍未完成。

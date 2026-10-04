@@ -332,6 +332,12 @@ int main(int argc, char** argv)
                 system_config.at("trace-enabled") == 1, "Service requires original ASTRA execution and trace");
         const auto network = fs::absolute(argv[4]);
         const auto backend_config = moe_ub::BackendConfig::Load(network);
+        if (backend_config)
+        {
+            Json declarations = Json::array();
+            for (const auto& group : groups) declarations.push_back(group.config);
+            backend_config->CheckDeployment(declarations);
+        }
         const auto run_dir = fs::absolute(argv[6]);
         const std::string bound = argv[7];
         Require(std::regex_match(bound, std::regex("[0-9]+")), "Invalid simulation bound");

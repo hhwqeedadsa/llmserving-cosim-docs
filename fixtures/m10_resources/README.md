@@ -50,4 +50,4 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 每次服务和新导出子命令在 commands.json / *.time.json 记录墙钟时间和 Linux `resource.getrusage(RUSAGE_CHILDREN).ru_maxrss`。用独立计时进程隔离每条命令，记录的是等待子进程链上的最大单进程 RSS，不是多个进程同时驻留量之和，也不是 NPU/HBM 用量。产物字节在 summary.json，详细结果见 [environment.md](../../docs/environment.md)。
 
-128 rank、每 rank 两专家、双 rank/chip 的目标，仅 Dispatch 状态就有 32512 次交付/层，58 层为 1885696 次；计数检查明确拒绝本目录的小场景预算。未生成该目标完整图，也未将其线性外推为内存或运行时间。后续还需目标完整 fabric/多平面拓扑、足够独立真实请求及组合规模实测。
+128 rank、每 rank 两专家、双 rank/chip 的目标，仅 Dispatch 状态就有 32512 次交付/层，58 层为 1885696 次；计数检查明确拒绝本目录的小场景预算。未生成该目标完整图，也未将其线性外推为内存或运行时间。后续 [fabric 任务](../m10_fabric/README.md)已完成目标全拓扑离线生成及七平面小网络的 168 个实际观测出口；足够独立真实请求、完整目标图资源及组合规模仍需实测。

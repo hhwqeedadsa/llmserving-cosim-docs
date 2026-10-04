@@ -1,4 +1,4 @@
-"""Resolve an explicit small service scenario against the loaded UB backend."""
+"""Resolve explicit service and fabric scenarios against the loaded UB backend."""
 import argparse
 import csv
 from datetime import datetime, timezone
@@ -78,17 +78,13 @@ def csv_uint(value, label):
     return integer(int(value), label, 0, 2**32-1)
 
 
-def resolve_network(config, directory, ranks, mapping, endpoint_groups=None):
-    fields(config, 'case_path plane_id defaults nodes links', 'network')
-    require(isinstance(config['plane_id'], str) and config['plane_id'], 'Explicit single plane identity required')
+def resolve_topology(config, node_rows, link_rows, ranks, mapping):
     defaults = config['defaults']
     fields(defaults, 'rate_bps delay_ns allocation_ns forward_ns', 'network defaults')
     for key, value in defaults.items():
         integer(value, key, 1 if key == 'rate_bps' else 0, 2**63-1)
-    base = (directory/config['case_path']).resolve()
-    require(base.is_dir(), 'Missing network case')
     nodes = {}
-    for row in csv_rows(base/'node.csv', 'nodeId,nodeType,portNum,allocationDelay,forwardDelay'):
+    for row in node_rows:
         ids = row['nodeId'].split('..')
         require(len(ids) in (1, 2), 'Invalid node range')
         start, end = csv_uint(ids[0], 'node'), csv_uint(ids[-1], 'node')
@@ -117,7 +113,7 @@ def resolve_network(config, directory, ranks, mapping, endpoint_groups=None):
             require(n in nodes and 0 <= p < nodes[n]['ports'], 'Link endpoint outside topology')
         require(src != dst, 'Self link')
         return (src, sport, dst, dport) if src < dst else (dst, dport, src, sport)
-    for row in csv_rows(base/'topology.csv', 'nodeId1,portId1,nodeId2,portId2,bandwidth,delay'):
+    for row in link_rows:
         a, ap, b, bp = endpoints(*(csv_uint(row[k], k) for k in ('nodeId1','portId1','nodeId2','portId2')))
         require((a,ap) not in ports and (b,bp) not in ports, 'Duplicate connected port')
         ports[a,ap] = b,bp; ports[b,bp] = a,ap
@@ -133,6 +129,17 @@ def resolve_network(config, directory, ranks, mapping, endpoint_groups=None):
         seen.add(key)
         links[key].update(rate_bps=integer(override['rate_bps'],'link rate',1),
                           delay_ns=integer(override['delay_ns'],'link delay'))
+    return nodes, links, ports
+
+
+def resolve_network(config, directory, ranks, mapping, endpoint_groups=None):
+    fields(config, 'case_path plane_id defaults nodes links', 'network')
+    require(isinstance(config['plane_id'], str) and config['plane_id'], 'Explicit single plane identity required')
+    base = (directory/config['case_path']).resolve()
+    require(base.is_dir(), 'Missing network case')
+    nodes, links, ports = resolve_topology(config,
+        csv_rows(base/'node.csv', 'nodeId,nodeType,portNum,allocationDelay,forwardDelay'),
+        csv_rows(base/'topology.csv', 'nodeId1,portId1,nodeId2,portId2,bandwidth,delay'), ranks, mapping)
     routes = csv_rows(base/'routing_table.csv', 'nodeId,dstNodeId,dstPortId,outPorts,metrics')
     routing = {}
     for row in routes:
@@ -191,8 +198,9 @@ def write_network(path, topology, routes, channels, backend):
 
 def prepare(input_path, backend_binary, output):
     config=read_yaml(input_path)
-    require(config.get('schema_version')=='moe-ub-scenario-run/1',
-            'Use moe-ub-scenario-run/1; reference specifications are not complete executable scenarios')
+    require(config.get('schema_version') in ('moe-ub-scenario-run/1','moe-ub-scenario-run/2'),
+            'Use an executable scenario schema; reference specifications are not executable')
+    multi_plane = config['schema_version']=='moe-ub-scenario-run/2'
     fields(config,'schema_version scenario_id basis service layer system backend network execution observation max_simulation_ns', 'scenario')
     require(config['basis']=='selected_reference' and re.fullmatch('[A-Za-z0-9_.-]+',config['scenario_id']), 'Invalid scenario identity/basis')
     directory=input_path.parent
@@ -245,7 +253,24 @@ def prepare(input_path, backend_binary, output):
         require(isinstance(chosen,dict) and all(k in chosen for k in PROFILE_FIELDS),'Active profile is not implemented')
         profiles[role]={k:chosen[k] for k in PROFILE_FIELDS}
     domains=[group['rank_to_ub_node'] for group in frontend.groups] if composed else None
-    base,topology,routes,channels=resolve_network(config['network'],directory,frontend.ranks,[mapping[r] for r in frontend.ranks],domains)
+    fabric_spec = fabric_audit = None
+    if multi_plane:
+        from . import fabric
+        require(composed, 'Fabric scenarios require explicit configured groups and layer segments')
+        fields(config['network'],'fabric_file defaults nodes links','fabric network')
+        fabric_path=(directory/config['network']['fabric_file']).resolve()
+        fabric_spec=json.loads(fabric_path.read_text())
+        topology,routes,channels,fabric_audit=fabric.generate(fabric_spec,config['network']['defaults'])
+        fabric.check_groups(fabric_spec,frontend.groups,layer)
+        rows=fabric.tables(topology,routes,channels)
+        def dictionaries(name):return [dict(zip(fabric.HEADERS[name].split(','),map(str,r))) for r in rows[name]]
+        nodes,links,_=resolve_topology(config['network'],dictionaries('node.csv'),dictionaries('topology.csv'),
+                                       frontend.ranks,[mapping[r] for r in frontend.ranks])
+        topology=dict(nodes=list(nodes.values()),links=[links[k] for k in sorted(links)])
+        network_sources=[fabric_path,Path(fabric.__file__)]
+    else:
+        base,topology,routes,channels=resolve_network(config['network'],directory,frontend.ranks,[mapping[r] for r in frontend.ranks],domains)
+        network_sources=[base/name for name in NETWORK_FILES]
     output.mkdir(parents=True,exist_ok=False)
     commands=[]
     def invoke(label,argv):
@@ -282,6 +307,9 @@ def prepare(input_path, backend_binary, output):
     requested=dict(schema_version='moe-ub-backend-config/1',scenario_id=config['scenario_id'],catalog=catalog,
         profiles=profiles,execution=execution,tp_max_data_payload_bytes=selection['tp_max_data_payload_bytes'],
         transport_channel_setup=selection['transport_channel_setup'],topology=topology,origins=origins,**values)
+    if multi_plane:
+        requested.update(schema_version='moe-ub-backend-config/2',fabric=fabric_spec)
+        save(output/'fabric-audit.json',fabric_audit)
     request=save(output/'requested_backend.json',requested)
     resolved=invoke('check',[backend_binary,'--check-backend',request])
     write_network(output/'network',topology,routes,channels,resolved)
@@ -291,7 +319,7 @@ def prepare(input_path, backend_binary, output):
     if config['observation'] is not None:
         require(isinstance(config['observation'],dict), 'Observation must be a mapping or explicit null')
         observation=save(output/'observation.json',config['observation'])
-    source_paths=[input_path,reference,*paths.values(),*(base/name for name in NETWORK_FILES),ROOT/'deps.lock.json']
+    source_paths=[input_path,reference,*paths.values(),*network_sources,ROOT/'deps.lock.json']
     manifest=dict(schema_version='moe-ub-scenario-resolution/1',scenario_id=config['scenario_id'],
         state='resolved_not_executed',calibration_status='unvalidated_reference',
         execution_scope=('configured_groups_full_model_decode_reference' if full else
@@ -301,7 +329,7 @@ def prepare(input_path, backend_binary, output):
             'configured_single_group_single_moe_layer_one_request_per_rank'),
         imported_reference_sections=['ns3_backend.reference_attributes','ns3_backend.reference_globals','ns3_backend.transaction_profiles'],
         reference_model_and_target_topology_imported=False,target_replication_claimed=False,
-        plane_id=config['network']['plane_id'],network_override_order=['base_case_connectivity','scenario_network_defaults','scenario_node_link_overrides'],
+        plane_id=config['network'].get('plane_id'),network_override_order=['base_case_connectivity','scenario_network_defaults','scenario_node_link_overrides'],
         network_defaults=config['network']['defaults'],node_overrides=config['network']['nodes'],link_overrides=config['network']['links'],
         base_case_attribute_file_used=False,authoritative_network_configuration='network/backend.json',
         backend=dict(path=str(backend_binary),sha256=sha(backend_binary),ub_revision=catalog['ub_revision']),
@@ -313,6 +341,10 @@ def prepare(input_path, backend_binary, output):
             ta_segment_bytes=int(resolved['attributes']['ns3::UbJetty::TaSegmentBytes']),
             tp_max_data_payload_bytes=resolved['tp_max_data_payload_bytes'],tp_payload_source='compiled_UB_MTU_BYTE'),
         observation=config['observation'])
+    if multi_plane:
+        manifest.update(schema_version='moe-ub-scenario-resolution/2',fabric=fabric_audit,
+            network_override_order=['generated_fabric','scenario_network_defaults','scenario_node_link_overrides'])
+        manifest.pop('plane_id')
     if composed:
         manifest['transport_channel_required_groups']=[dict(group_id=g['group_id'],rank_to_ub_node=g['rank_to_ub_node'])
                                                       for g in frontend.groups]

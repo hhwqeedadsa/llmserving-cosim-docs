@@ -27,7 +27,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 ## 输入与覆盖顺序
 
-新入口要求 `schema_version: moe-ub-scenario-run/1`，未知字段、重复 YAML 键和不兼容配置均报错。所有文件路径相对于场景 YAML 所在目录解析。
+本目录入口要求 `schema_version: moe-ub-scenario-run/1`，未知字段、重复 YAML 键和不兼容配置均报错。所有文件路径相对于场景 YAML 所在目录解析。
 
 | 字段 | 含义 |
 |---|---|
@@ -37,7 +37,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 | `backend.profile_by_role` | 显式选择 `dispatch/combine`，当前均要求 URMA WRITE/RTP、数据拥有方发起、RemoteWriteCommitted 就绪、事务完成释放发送槽。 |
 | `backend.attributes/globals` | 原生完整键名和标量值；未知名称、类型/单位错误或矛盾的固定约束报错。带单位时间使用 `10ns` 等字符串，带宽属性使用 `224Gbps` 等原生格式；生效值按原生序列化形式保存。 |
 | `backend.tp_max_data_payload_bytes` | 必须为 4096，来自锁定源码的 `UB_MTU_BYTE`，不是运行时可调参数。 |
-| `backend.transport_channel_setup` | 必须为 `precreated`；当前观测依赖预建通道。 |
+| `backend.transport_channel_setup` | 必须为 `precreated`；这是当前联合入口的明确选择；不代表原生 UB 不能按需创建通道。 |
 | `network.case_path/plane_id` | 显式 CSV 连通关系、路由与通道，以及单平面的记录身份。不会根据模型自动推断或构造目标拓扑。 |
 | `network.defaults` | `rate_bps/delay_ns/allocation_ns/forward_ns`，均为带字段单位的整数；带宽大于零，时间非负。 |
 | `network.nodes/links` | 显式覆盖列表；每个节点项填写 `node_id/allocation_ns/forward_ns`，每个链路项填写 `src/src_port/dst/dst_port/rate_bps/delay_ns`。不允许重复或未知节点、链路；反向书写同一链路等价。 |
@@ -46,7 +46,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 属性覆盖依次为运行时注册的源码默认值、所引用的参考属性、场景属性、联合驱动固定约束。显式选择与固定约束冲突会拒绝，不静默改写。固定约束包括 WRITE/RTP、CBFC/SP/HASH、关闭多路径与喷洒、CC、故障及重传，业务优先级仍为 7，priority/VL 数为 16。驱动关闭原生队列定时采样及自动解析，观测使用现有被动接口。
 
-节点/链路另有更高优先级的 CSV 实例覆盖：读取原案例的连通关系，使用 `network.defaults` 替换其全部速率和时间，再应用 `nodes/links`。不会继承原案例的 `network_attribute.txt`，也不会把原 CSV 中的时间当作最终生效值。节点连续编号、全部声明端口连接、无环单路径及映射端点对的双向预建通道在解析时核对。本入口不验证多平面、ECMP/喷洒、READ、CTP 或 native LD/ST。
+节点/链路另有更高优先级的 CSV 实例覆盖：读取原案例的连通关系，使用 `network.defaults` 替换其全部速率和时间，再应用 `nodes/links`。不会继承原案例的 `network_attribute.txt`，也不会把原 CSV 中的时间当作最终生效值。节点连续编号、全部声明端口连接、无环单路径及映射端点对的双向预建通道在解析时核对。本目录 `/1` 入口不验证多平面、多候选路由/喷洒、READ、CTP 或 native LD/ST。M10 已新增独立 [scenario-run/2 fabric 输入](../m10_fabric/README.md)，在参数化二级网络中验证多平面和 HASH 最短候选；没有放宽 `/1` 的 CSV 约束。
 
 多组层段输入要求预建通道覆盖每组内的端点对，独立组之间不产生业务通信，因此不要求组间端点两两建通道。`resolution.json` 的 `transport_channel_required_groups` 保存这一检查范围；各组仍共享同一物理拓扑及队列。execution 的 chunk/发送槽应用到所有层并重新检查容量和完整层段。
 

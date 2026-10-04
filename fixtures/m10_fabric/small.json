@@ -1,0 +1,44 @@
+{
+  "schema_version": "moe-ub-fabric/1",
+  "shape": {
+    "servers": 3,
+    "chips_per_server": 2,
+    "dies_per_chip": 2,
+    "planes": 7,
+    "l2_per_plane": 2
+  },
+  "groups": [
+    {
+      "group_id": "ep0",
+      "rank_ids": [
+        2,
+        7,
+        12
+      ],
+      "rank_to_ub_node": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "group_id": "ep1",
+      "rank_ids": [
+        20,
+        25,
+        30
+      ],
+      "rank_to_ub_node": [
+        2,
+        3,
+        6
+      ]
+    }
+  ],
+  "budget": {
+    "max_nodes": 64,
+    "max_links": 200,
+    "max_route_rows": 1000,
+    "max_channels": 100
+  }
+}

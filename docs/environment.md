@@ -3477,3 +3477,15 @@ R=`runs/v03-resource-efficiency`，P=`.venv/llmservingsim-native/bin/python`，c
 `archive-failed-native` 使用已审阅的 `P R/archive_failed_native.py`，在相同 20 GiB 总预算下将本任务停止探针的 4008 份 `.tr` 文件逐一登记、压缩、重新读取并核验大小/SHA-256，再删除原文件；1037293641→110027897 B。停止前仍有少量进展，因此最终日志字节大于诊断快照。归档和恢复说明保留于 R/target-first-round/native-diagnostics.tar.gz、native-diagnostics-cleanup.json；没有删除历史文件或研究记录。`checkpoint-runtime-costs` 再核对 1304 个保护文件、源码、成功命令、失败原因和归档，退出 0。
 
 复测 `target-first-round-bounded` 在原首轮命令上增加 `--native-diagnostics off --record-buffer-bytes 67108864`。既有后台 globals 显式关闭三类辅助文本诊断，研究记录仍包括全部 16128 出口；64 MiB 是有界压缩缓冲，不是业务缓存。RSS 48 GiB、地址 56 GiB、累计磁盘 20 GiB、单阶段 3600 s 限制不变。此复测仍在进行，源码/二进制绑定于 R/first-round-bounded-source-hashes.json；内部汇总见 [checkpoint-runtime-costs.json](../fixtures/m10_resource_efficiency/checkpoint-runtime-costs.json)。
+
+### 连续吞吐、有限预算与交接内存检查
+
+`target-first-round-bounded` 的辅助日志目录保持为空，运行中 RSS 约 32 GiB。未封存记录的连续诊断约为 969.35 次写/s、833.27 B 压缩记录/次写；依此估计完整加载/运行约 4760 s、运行记录约 3.28 GB，还不含完成时的图归档。该估计不能作为完整运行结果，但已表明原 3600 s/3 GiB 探针限制不足。比较两次探针前 194698 条完整 WQE 完成行，SHA-256 相同，见 R/target-runtime-prefix-equivalence.json。为避免再消耗约 40 分钟才触限，主动 SIGTERM 后端；probe 为 child_failed、总时 1366.032 s、峰值 45938495488 B，无残留。原因在 runtime-budget-diagnosis.json、controlled-stop.json，未声称整轮完成。
+
+之后 `archive-completed-probes` 在相同 20 GiB 累计上限下运行已审阅的 `P R/archive_completed_probes.py`，退出 0，约 317.4 s、峰值 RSS 966598656 B。两份零业务网络检查各 177425 个文件，归档为 11411848/10601834 B；激活前共同驻留诊断 14 个文件归档为 149050022 B。每份先建立完整文件/目录清单、摘要和硬链接归档，顺序重读并核验全部内容，再核对源路径集合并删除展开文件。归档及恢复清单保存在各 case 的 completed-execution.tar.gz、completed-execution-inventory.json.gz、completed-execution-cleanup.json；原 probe、命令、work/result.json 和原始输入保留。累计实际分配 18224906240→16144703488 B，未删除历史任务文件。
+
+首轮探针宿主预算据实测单独设为 7200 s，后端等待 6900 s，压缩记录 4 GiB；48 GiB RSS、56 GiB 地址、累计 20 GiB 磁盘不变，仍远早于任何无限等待。首个使用该预算的 `target-first-round-budgeted` 在大图加载期间主动停止，尚未激活业务：后续交接审计发现对象释放后未显式归还 C++ 空闲页，不能保证下一轮约 34 GB 的 Python 构图与空闲后台叠加后可容纳。这里是未完成的受控停止，不是资源或业务测试通过。
+
+修复在 retire_graph 返回、其局部执行时刻表也销毁后调用 `malloc_trim(0)`，再暴露 WAVE_DONE；晚些时候真实网络排空、来源账本释放后再次归还空闲页。仅对有界记录模式执行，真实仍在用的对象不提前销毁，旧数组模式不变。资源驱动器另在收到 WAVE_DONE 后、发送最终 COMMIT 前读取后台 VmRSS/VmHWM，供组合内存核算。`build-handoff-pages` 重建 production/deadlock/resource-probe 三个程序退出 0；handoff-preparation、handoff-equivalence、handoff-retirement、handoff-boundaries、handoff-replay 均退出 0，覆盖交接阶段日志断言、四组运行等价、原跨轮释放、死锁及 8/32 轮图重建。checkpoint-handoff 再核对 1304 个受保护文件、三个二进制的唯一 UB 链接及源码绑定后通过；后续完整首轮尚待实测。
+
+三份主动停止的首轮探针也已无损归档，`archive-stopped-probes` 退出 0。归档前逐文件建立清单，归档后顺序重读核验大小/SHA-256，并再次确认源路径集合后删除展开文件；三份 stopped-execution.tar.gz 分别为 468249197、453632079、4063665 B。失败原因、命令、输入和恢复清单保留，归档成功不表示执行成功。归档后本任务累计占用 15167795200 B，未删除历史文件。

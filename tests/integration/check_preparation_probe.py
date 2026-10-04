@@ -71,6 +71,10 @@ def main():
                     assert child.wait(timeout=60)==0 and not buffer and child.stdout.read()==b''
                 report=read(directory/'result.json');assert report['normal_exit'] and report['network_drain']['idle']
                 assert (directory/'resource-preparation.json').exists()==trace
+                if trace:
+                    stages=[json.loads(line) for line in (directory/'preparation-phases.jsonl').read_text().splitlines()]
+                    retired=[row for row in stages if row['stage']=='graph_retired_before_frontend_handoff']
+                    assert len(retired)==1 and retired[0]['simulation_ns']==done['now_ns']
                 expanded={field:list(iter_result(directory,field,report)) for field in report['record_storage']['fields']}
                 report.pop('record_storage');reports.append((report,expanded))
                 save(out/(directory.name+'.command.json'),dict(argv=command,exit_code=child.returncode,

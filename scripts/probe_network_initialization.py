@@ -28,11 +28,15 @@ def main():
     parser.add_argument('--native-diagnostics',choices=('keep','off'),default='keep',
         help='Explicitly disable only native task/packet/port text diagnostics; research observations stay enabled')
     parser.add_argument('--record-buffer-bytes',type=int,default=2**20)
+    parser.add_argument('--record-bytes',type=int,
+        help='Explicit compressed-record cap; the outer cumulative disk cap still applies')
+    parser.add_argument('--backend-wall-seconds',type=int,default=3500)
     parser.add_argument('--prepared',type=Path)
     parser.add_argument('--prepared-graph',type=Path)
     parser.add_argument('--execute-first-round',action='store_true',
         help='Execute exactly the frozen first graph using production service; never the 64-step workload')
     args=parser.parse_args();root=Path.cwd();out=args.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
+    assert args.backend_wall_seconds>0
     assert (args.prepared is None)==(args.prepared_graph is None)
     preparation=args.prepared_graph is not None
     one_round=args.execute_first_round;assert not one_round or preparation
@@ -74,6 +78,7 @@ def main():
     save(shared/'deployment.json',dict(schema_version='moe-ub-service-deployment/5',groups=[group]))
     export_bootstrap(shared/'bootstrap',ranks)
     storage=dict(schema_version='moe-ub-record-storage/1',max_compressed_bytes=(3072 if one_round else 2048 if preparation else 128)*2**20,max_buffer_bytes=args.record_buffer_bytes,max_record_bytes=2**18)
+    if args.record_bytes is not None:storage['max_compressed_bytes']=args.record_bytes
     from moe_ub_cosim.record_storage import validate_policy
     validate_policy(storage)
     save(shared/'record-storage.json',storage)
@@ -105,6 +110,7 @@ def main():
         complete_service_input_validated=False,capacity_budget_not_used=True,
         model_graph_submission_requested=preparation,business_activation_requested=one_round,
         native_auxiliary_diagnostics=args.native_diagnostics,record_buffer_bytes=args.record_buffer_bytes,
+        record_bytes=storage['max_compressed_bytes'],backend_wall_seconds=args.backend_wall_seconds,
         active_endpoints=len(ranks),inactive_endpoints=audit['counts']['devices']-len(ranks),
         observed_egress_ports=ports,source_backend=dict(path=str(prior),sha256=file_sha256(prior))))
     command=[str(binary),run_id,str(shared),str(root/'fixtures/m1_compute/system.json'),
@@ -127,14 +133,22 @@ def main():
                         wave_id=layer['wave_id'],rank_ids=ranks,workload_prefix='graph/layer',semantic_manifest='graph/plan.json')])
                 line=json.dumps(response)+'\n';transcript.write(line);transcript.flush();child.stdin.write(line.encode());child.stdin.flush()
                 if one_round:
-                    line=read_line(child,selector,buffer,3500);transcript.write(line);transcript.flush();message=json.loads(line)
+                    line=read_line(child,selector,buffer,args.backend_wall_seconds);transcript.write(line);transcript.flush();message=json.loads(line)
                     assert message['run_id']==run_id and message['decision_id']==1 and message['available_rank_ids']==ranks
                     assert message['now_ns']>0 and message['completed']==[dict(kind='WAVE_DONE',graph_id=layer['graph_id'],
                         wave_id=layer['wave_id'],finished_ns=message['now_ns'])]
+                    status=Path(f'/proc/{child.pid}/status').read_text().splitlines()
+                    memory={line.split(':',1)[0]:int(line.split()[1])*1024 for line in status
+                        if line.startswith(('VmRSS:','VmHWM:'))}
+                    save(out/'wave-boundary-memory.json',dict(schema_version='moe-ub-host-wave-boundary/1',
+                        backend_pid=child.pid,simulation_ns=message['now_ns'],backend_rss_bytes=memory['VmRSS'],
+                        backend_peak_rss_bytes=memory['VmHWM'],
+                        scope='backend_waiting_for_commit_after_graph_retirement_before_next_frontend_graph_build',
+                        host_memory_not_simulated_hbm=True))
                     response.update(decision_id=1,now_ns=message['now_ns'],submissions=[],service_finished=True)
                     line=json.dumps(response)+'\n';transcript.write(line);transcript.flush();child.stdin.write(line.encode());child.stdin.flush()
                 child.stdin.close()
-                code=child.wait(timeout=3500)
+                code=child.wait(timeout=args.backend_wall_seconds)
                 assert code==0 and not buffer and child.stdout.read()==b''
         if preparation and not one_round:
             report=read(out/'execution/resource-preparation.json')

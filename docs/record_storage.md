@@ -76,3 +76,9 @@ Python `record_storage.iter_result(execution, field)` 逐条读取新旧结果�
 UB 的 task/packet/port 文本诊断与本平台研究记录分别控制。完整目标首轮试测发现原生辅助日志在约 5.2% 写入完成时已增长到 0.985 GB。资源探针新增 `--native-diagnostics off`，通过既有 backend globals 显式关闭 `UB_TASK_TRACE_ENABLE`、`UB_PACKET_TRACE_ENABLE`、`UB_PORT_TRACE_ENABLE`，并记录参数来源；默认 keep 保留原行为。研究端点、逐包成功发送、队列、来源、目标写入和 ASTRA 原始执行记录均继续记录。生产服务使用相同的既有 backend.json 参数，未增加隐藏环境覆盖。
 
 `--record-buffer-bytes` 只选择已有压缩存储缓冲上限，默认 1 MiB。四组真实 UB 对照验证旧/新空闲扫描、辅助日志开/关以及 1/64 MiB 缓冲下的协议、业务执行和全部研究记录相同。小场景没有填满 1 MiB，因此该对照只证明等价性，目标规模的压缩改善以复测为准。关闭辅助日志不删除已产生的诊断；失败探针的日志经逐文件 SHA-256 核验无损归档后才回收原文件。
+
+## 下一轮构图前的宿主内存交接
+
+图完成归档、删除执行对象后，局部执行时刻表也必须先销毁，再向前台发送 WAVE_DONE。当前原生 Linux/glibc 构建在这一边界调用 `malloc_trim(0)`，请求分配器归还已经空闲的页；来源账本在真实网络排空后删除时同样处理。只归还空闲页，不提前释放仍需等待的来源或网络对象；默认旧数组结果仍保留原生命周期。
+
+完整首轮资源驱动器在收到 WAVE_DONE、发送下一次 COMMIT 之前读取后台 VmRSS/VmHWM，保存 wave-boundary-memory.json。这用于核对空闲后台、真实前台和独立下一轮构图的组合资源，不能用图对象计数归零代替 RSS。探针新增显式 `--record-bytes`、`--backend-wall-seconds`，分别设置压缩记录和后端协议等待上限，仍受外层累计磁盘及时间上限约束。

@@ -55,6 +55,14 @@ bool HostPreparationTrace()
     return value && std::string(value) == "1";
 #endif
 }
+void ReleaseUnusedHostPages()
+{
+#if defined(__GLIBC__)
+    // Only allocator-owned free pages are returned; live graph/network objects
+    // remain intact. This matters while the frontend builds the next graph.
+    malloc_trim(0);
+#endif
+}
 void PreparationStage(const fs::path& run, const std::string& stage)
 {
     if (!HostPreparationTrace()) return;
@@ -550,6 +558,7 @@ int main(int argc, char** argv)
                 if (!records.Bounded() || provenance_retirement.empty() || !drain.Idle()) return;
                 if (provenance) provenance->RetireCompletedGraphs(provenance_retirement);
                 provenance_retirement.clear();
+                ReleaseUnusedHostPages();
             };
             auto retire_graph = [&](const std::string& graph) {
                 if (!records.Bounded()) return;
@@ -710,6 +719,14 @@ int main(int argc, char** argv)
                             Require(!delivery->Active() && !delivery->HasPendingEvents(), "Completed group retains local delivery");
                     const auto done_graph = group.graph;
                     retire_graph(done_graph);
+                    if (records.Bounded())
+                    {
+                        // retire_graph's local timing map has now also died.
+                        // Return free pages before exposing WAVE_DONE, when a
+                        // separate Python graph builder may start immediately.
+                        ReleaseUnusedHostPages();
+                        PreparationStage(run_dir, "graph_retired_before_frontend_handoff");
+                    }
                     completed.push_back({{"kind", kv_graphs.count(done_graph) ? "KV_DONE" : "WAVE_DONE"}, {"graph_id", done_graph},
                         {"wave_id", group.wave}, {"finished_ns", finished}});
                     for (auto& participant : groups)
@@ -912,11 +929,9 @@ int main(int argc, char** argv)
                         records.Add("plan_summary", {{"graph_id", graph}, {"operations", plan.data.at("operations")},
                             {"resource_budget", resource_budget}, {"resource_usage", usage}}, graph);
                         loaded.DiscardArchivedTransfers();
-#if defined(__GLIBC__)
                         // Return the no-longer-needed JSON allocation pages
                         // before constructing millions of execution objects.
-                        malloc_trim(0);
-#endif
+                        ReleaseUnusedHostPages();
                     }
                     PreparationStage(run_dir, "archived_transfer_json_released");
                     std::vector<std::unique_ptr<moe_ub::UbWriteTransfer>> prepared;
@@ -958,9 +973,7 @@ int main(int argc, char** argv)
                     { transfer_ids.insert(d.transfer_id); tags.insert(d.tag); }
                     for (auto& delivery : prepared_local) local_deliveries.push_back(std::move(delivery));
                     plans.push_back(loaded.ReleasePlan());
-#if defined(__GLIBC__)
-                    if (records.Bounded()) malloc_trim(0);
-#endif
+                    if (records.Bounded()) ReleaseUnusedHostPages();
                     peak_plans = std::max(peak_plans, uint64_t(plans.size()));
                     peak_transfers = std::max(peak_transfers, uint64_t(transfers.size()));
                     peak_local = std::max(peak_local, uint64_t(local_deliveries.size()));

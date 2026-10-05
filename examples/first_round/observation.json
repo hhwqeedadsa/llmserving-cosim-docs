@@ -1,0 +1,41 @@
+{
+  "record_provenance": true,
+  "clocks": [
+    {
+      "device_type": "rank",
+      "device_id": 2,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 7,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 12,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 8,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    }
+  ],
+  "switches": [
+    {
+      "switch_id": 8,
+      "port_ids": [
+        0,
+        4
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 1000
+    }
+  ]
+}

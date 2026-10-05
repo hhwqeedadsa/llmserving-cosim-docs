@@ -1,0 +1,70 @@
+"""The public interface. Imports for expensive operations stay inside commands."""
+import argparse
+import json
+from pathlib import Path
+import sys
+
+
+def parser():
+    p = argparse.ArgumentParser(prog='moe-ub', description='MoE inference / ASTRA / ns-3-UB co-simulation. '
+        'Configuration paths are relative to the configuration file; CLI paths to the working directory.')
+    p.add_argument('--version', action='version', version='moe-ub-cosim 0.3.0')
+    sub = p.add_subparsers(dest='command', required=True)
+    doctor = sub.add_parser('doctor', help='Check tools, fixed dependencies and available resources; no installation')
+    doctor.add_argument('--backend', type=Path, help='Optional backend executable to check')
+    build = sub.add_parser('build', help='Build the locked native backend; never download dependencies')
+    build.add_argument('--build-dir', type=Path, default=Path('build/default'), help='Build/output directory (default: build/default)')
+    build.add_argument('--jobs', type=int, default=2, help='Parallel compiler jobs (default: 2)')
+    for name, help_text in [('run', 'Run a configured service and export bounded research records'),
+                            ('sample', 'Generate observations from a frozen slice without frontend/backend execution'),
+                            ('replay', 'Execute frozen graphs in the real backend without scheduling or graph generation')]:
+        q = sub.add_parser(name, help=help_text, description=help_text+'. Output must not exist. See docs/user_guide.md.')
+        q.add_argument('--config', type=Path, required=True, help='JSON configuration; paths resolve from this file')
+        q.add_argument('--output', type=Path, required=True, help='New experiment directory; existing directories are rejected')
+        if name in ('sample', 'replay'):
+            q.add_argument('--slice', type=Path, required=True, help='Frozen slice directory')
+        if name in ('run', 'replay'):
+            q.add_argument('--backend', type=Path, help='Override backend path in configuration (relative to working directory)')
+    s = sub.add_parser('slice', help='Freeze or verify a portable first-round research bundle')
+    ss = s.add_subparsers(dest='slice_command', required=True)
+    create = ss.add_parser('create', help='Freeze a completed one-round run; no simulation or graph generation')
+    src = create.add_mutually_exclusive_group(required=True)
+    src.add_argument('--from-run', type=Path, help='Completed moe-ub run directory')
+    src.add_argument('--import-config', type=Path, help='Explicit archive import manifest for an existing first-round run')
+    create.add_argument('--output', type=Path, required=True, help='New slice directory')
+    create.add_argument('--storage', choices=('copy', 'hardlink'), default='copy', help='Copy for independence (default), or immutable hardlinks on the same filesystem')
+    inspect = ss.add_parser('inspect', help='Read scope and file sizes; --verify scans hashes of all bundle files')
+    inspect.add_argument('--slice', type=Path, required=True)
+    inspect.add_argument('--verify', action='store_true', help='Read all bundle bytes to verify integrity')
+    validate = sub.add_parser('validate', help='Verify a completed experiment, or only public observations')
+    target = validate.add_mutually_exclusive_group(required=True)
+    target.add_argument('--run', type=Path, help='Completed experiment directory (reads internal evidence)')
+    target.add_argument('--observed', type=Path, help='Public observation directory only (never reads truth)')
+    return p
+
+
+def main(argv=None):
+    args = parser().parse_args(argv)
+    try:
+        if args.command in ('doctor', 'build'):
+            from .user_build import doctor, build
+            value = doctor(args.backend) if args.command == 'doctor' else build(args.build_dir, args.jobs)
+        elif args.command == 'slice':
+            from .research_slice import create, inspect
+            value = (create(args.from_run, args.output, args.storage, args.import_config)
+                     if args.slice_command == 'create' else inspect(args.slice, verify=args.verify))
+        elif args.command == 'validate':
+            from .user_workflow import validate
+            value = validate(args.run, args.observed)
+        else:
+            from .user_workflow import execute
+            value = execute(args)
+        print(json.dumps(value, indent=2, ensure_ascii=False))
+        return 0 if value.get('passed', True) else 1
+    except (ValueError, OSError, KeyError, TypeError, RuntimeError) as error:
+        print(f'moe-ub: {error}', file=sys.stderr)
+        return 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

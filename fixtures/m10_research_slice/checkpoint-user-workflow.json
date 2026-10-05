@@ -1,0 +1,394 @@
+{
+  "schema_version": "moe-ub-user-workflow-checkpoint/1",
+  "m10_completed": false,
+  "build": {
+    "command": [
+      ".venv/llmservingsim-native/bin/python",
+      "-m",
+      "moe_ub_cosim",
+      "build",
+      "--build-dir",
+      "build/m10-research-slice",
+      "--jobs",
+      "2"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 441.8882624320686,
+    "peak_sampled_group_rss_bytes": 1902280704,
+    "peak_sampled_artifact_bytes": 11092713472
+  },
+  "user_workflow": {
+    "passed": true,
+    "exact_record_counts": {
+      "endpoint_ops": 18,
+      "local_deliveries": 30,
+      "node_execution": 333,
+      "operation_registry": 6,
+      "plan_summary": 1,
+      "planned_transfers": 99,
+      "target_writes": 69,
+      "transfer_registry": 69,
+      "transfers": 69,
+      "wqe_completions": 69,
+      "wqe_starts": 69
+    },
+    "baseline_simulation_ns": 35538,
+    "perturbed_simulation_ns": 90885,
+    "relocated_bundle": true,
+    "no_site_packages_for_sampling_and_replay": true,
+    "clock_boundary_attribution_and_crossing_endpoints": true,
+    "missing_and_corrupt_inputs_rejected": true
+  },
+  "user_commands": [
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "--help"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:00.534709+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/help-0"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "run",
+        "--help"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:00.576836+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/help-1"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "sample",
+        "--help"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:00.617187+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/help-2"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "inspect",
+        "--help"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:00.652921+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/help-3"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "run",
+        "--config",
+        "/root/moe-ub-cosim/examples/first_round/run.json",
+        "--backend",
+        "/root/moe-ub-cosim/build/m10-research-slice/output/cosim/ns3.44-cosim-service",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:00.690944+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/run"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "run",
+        "--config",
+        "/root/moe-ub-cosim/examples/first_round/run.json",
+        "--backend",
+        "/root/moe-ub-cosim/build/m10-research-slice/output/cosim/ns3.44-cosim-service",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:02.023805+00:00",
+      "exit_code": 1,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/existing-output"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "create",
+        "--from-run",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/run",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/slice"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:02.078489+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/freeze"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "inspect",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--verify"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:02.200782+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/inspect"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "sample",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/examples/first_round/sample.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/sample"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:02.271752+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/sample"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "replay",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/examples/first_round/replay.json",
+        "--backend",
+        "/root/moe-ub-cosim/build/m10-research-slice/output/cosim/ns3.44-cosim-service",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/replay"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:02.779981+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/replay"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "validate",
+        "--run",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/sample"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:03.567270+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/validate-sample"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "validate",
+        "--run",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/replay"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:03.621998+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/validate-replay"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "validate",
+        "--observed",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/observed-only"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:03.702776+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/validate-public"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "sample",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/edge.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/edge"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:03.798841+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/edge"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "replay",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/slow.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/slow"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:04.372159+00:00",
+      "exit_code": 0,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/slow"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "replay",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/bad.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/bad"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:05.212760+00:00",
+      "exit_code": 1,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/bad-fields"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "sample",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--config",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/missing.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/missing"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:05.261202+00:00",
+      "exit_code": 1,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/missing-input"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-S",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "inspect",
+        "--slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/moved-slice",
+        "--verify"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:37:05.311698+00:00",
+      "exit_code": 1,
+      "log_prefix": "/root/moe-ub-cosim/runs/v03-research-slice/checks/user-workflow-final-small/tampered"
+    }
+  ],
+  "unit_commands": [
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "research_slice_test.py"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:34:35.878623+00:00",
+      "exit_code": 0,
+      "log": "/root/moe-ub-cosim/runs/v03-research-slice/checks/unit/slice.log"
+    },
+    {
+      "argv": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "service_boundaries_test.py"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-05T02:34:35.950473+00:00",
+      "exit_code": 0,
+      "log": "/root/moe-ub-cosim/runs/v03-research-slice/checks/unit/protocol.log"
+    }
+  ],
+  "target_slice": {
+    "scope": "historical_frozen_first_round_not_configured_service_completion",
+    "simulation_end_ns": 75323418,
+    "ranks": 128,
+    "new_execution_verified": false
+  },
+  "limitations": [
+    "Target baseline resampling is running; new sampling, formal target replay and isolated install remain pending.",
+    "Only propagation delay in legacy CSV topology has been verified as a replay network override.",
+    "No hardware calibration or full 64-step configured service completion claim."
+  ]
+}

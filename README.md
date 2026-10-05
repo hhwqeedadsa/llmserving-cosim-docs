@@ -1,109 +1,58 @@
-# MoE 推理服务与 UB 网络联合仿真
+# MoE 推理与 UB 网络联合仿真
 
-本项目按 [v0.2 开发指南](docs/moe_ub_cosim_dev_v0.2.md) 及 [v0.3 增量规范](docs/moe_ub_cosim_dev_v0.3.md) 逐步实现 LLMServingSim 服务前端、其绑定的 ASTRA-sim/Chakra 执行层与 ns-3-UB 网络后端。目标是生成具有通信操作来源和执行依赖的网络过程，用于端侧通信操作与交换机端口时窗的关联研究。
+本项目将推理服务调度、ASTRA 计算/通信依赖和 ns-3-UB 包级网络放在同一仿真时间中执行，用于研究端侧通信操作与交换端口采样之间的关系。通信完成来自实际 UB 事件，研究算法只读取公共观测。
 
-2026-10-05 用户要求 M10 同时交付可独立使用的命令、最小示例和用户说明。已有入口可从 [backend/README.md](backend/README.md) 及各夹具文档查阅；[用户操作与交付方案](docs/user_delivery.md)中的统一命令仍是待实现设计。[当前任务](docs/tasks/current.md)保持 pending，尚未开始统一命令或首轮研究接口的实现。
+统一用户入口已通过小型真实 UB 流程检查；M10 的完整目标首轮切片与重放验收正在进行。计算与网络参数保留参考模型状态，尚未完成目标硬件校准。当前状态见 [current.md](docs/tasks/current.md)，历史结果见[里程碑记录](docs/milestone_history.md)。
 
-## 当前状态
+## 安装与构建
 
-M0 已完成。M0.1 的 UB 与 LLMServingSim 原生样例可重复；M0.2 所选 8 项上游回归的时钟全部匹配，112 个请求内部一致性核验通过，一份不适用的上游 CSV 已定位来源并保留原比较失败。M0.3 的联合链接探针已构建、运行并通过审计：ASTRA 全部 52 个核心对象进入程序，实际装载的 10 个 ns-3 模块均来自本次 UB 构建。13 个依赖仍按固定提交检出，原生关键产物未变。
-
-M1 已完成：实际 ASTRA SEND/RECV 经 UB 完成一份写事务，接收数据就绪与源事务完成分别计时。在实际交换端口按发送成功开始累计整包字节，保存端侧记录、操作/传输对应和任务至包的有效字节范围。来源开启、关闭和不挂观测的结果一致；写、计算、原 CSV 和链接回归通过。M1 单端口调试输出保留，正式研究输出见下文 M5.1；服务调度范围见 M3。入口见 [联合程序](backend/README.md)，实际检查与失败原因见 [环境记录](docs/environment.md)。
-
-M2.1 已完成：Python 从固定四 rank 输入生成并校验 ExecutionPlan，导出四份 Chakra 图；实际 ASTRA/UB 执行十四条传输，共交付 114,688 字节。八份专家输入含 rank 2 的本地输入，单发送槽、局部依赖和多传输来源核验通过。M2.2 的给定事件与真实 UB 延迟反馈检查已通过：必要输入推迟会移动依赖计算，本地条件满足后无需等待全组 Dispatch 完成。M2.3 已验证同目的 rank 去重、3072 字节分块和两个发送槽：分别为 12/42/42 次 UB 写，保留正确专家计算与来源，原默认集合通信回归通过。M2.4 已完成同一进程和网络中的连续两轮：局部节点号复用、运行内身份隔离、整组装载后激活及旧回调拒绝通过。M2 的固定图功能验收已完成，仍未校准。
-
-M3.1 已完成：联合服务入口调用 LLMServingSim 的真实调度对象，让一个 EP 组的四个已到达请求连续运行三个解码步。每轮完成时间来自同一 UB 网络，后续图由实际请求进度生成；42 次写交付 344064 业务字节，请求均结束。M3.2 已加入动态到达：忙碌组的新请求排队，空闲组在自己的到达时刻启动，同一进程保留八个 NPU 和一套 UB 网络。双组九轮完成 126 次写、1032192 业务字节。
-
-M3.3 已完成共享瓶颈对照：两个 EP 组在同一 10 Gbps 链路上重叠通信，旧队列跨第二组启动保留，实际收发完成变化传到专家计算与下一轮提交。分别运行、重叠、延后第二组及观测开关等七次运行通过；重叠六轮完成 84 次写、688128 业务字节。模型仍未校准。入口及范围见 [共享瓶颈说明](backend/README.md#m33-共享瓶颈对照)。
-
-M3.4 已完成服务边界验收：零 Token 成员仍处理必要的远端专家工作，空闲成员没有填充计算；请求可分别到达、执行不同步数。空输入、纯本地计算、某组提前结束、输入耗尽后的网络排空，以及 EOF、后端退出和死锁位置记录均已检查。M3 的合成功能验收已完成。入口见 [服务边界说明](backend/README.md#m34-服务边界与故障记录)。
-
-M4.1 已完成一个请求的预填充、一次 KV 交接和后续解码。使用明确命名的合成单层小模型，目标容量先预留、源缓存保留至真实 UB 事务完成，D 随后开始解码。4096 字节 KV 分成六次写，容量块填充不进入业务传输；延迟网络、KV dtype、异常图和观测开关检查通过。入口见 [P/D 交接说明](backend/README.md#m41-单请求预填充与-kv-交接)。多个待交接请求及共享竞争见下文 M4.2，真实数据和校准仍分别记录。
-
-M4.2 已完成多个请求的 FIFO 交接、容量等待与第三组共享网络。目标容量不足时 P 保留源缓存、D 继续解码；容量充足的边界优先交接。真实 KV 与独立 EP 通信在同一 1 Gbps 链路竞争，首个交接和 D 启动后移 26143 ns，旧队列保留和观测无扰动均通过。入口见 [交接队列说明](backend/README.md#m42-交接队列与第三组竞争)。
-
-M4.3 已完成当前单层范围的数据导入与逐项替换：核对实际 Mixtral 的 32 层结构和完整容量，导入保留源索引的连续合成解码片段，再引用六项形状匹配的历史 H100 FP16 算子数据。三阶段、来源开关、错误输入和回归通过。该阶段只执行单层，多层功能验证见 M5.2；真实专家路由及目标 NPU profile 仍缺，参考计算和通信模板保持未校准。入口及限制见 [M4.3 数据说明](fixtures/m4_data_inputs/README.md)。
-
-M5.1 已完成多设备本地时钟、同次执行多端口采集和正式研究目录。端侧记录使用实际 ASTRA 阶段时间，端口按本地半开窗口累计整包字节并显式保留零值；全局身份、时间及归属只保留在内部资料。提供仅读取 observed 的校验和读取完整运行的内部核验。时钟、采样区间及来源开关不改变实际网络与服务时刻；普通 EP、KV、空服务和数据输入检查通过。入口与字段见 [研究输出说明](fixtures/m5_observation/README.md)，模型仍未校准。
-
-M5.2 已完成逐层路由的连续执行：一张图包含多个 MoE 层，只按 rank 本地依赖衔接，全部层完成后才推进一次 Token。三个层、三个解码步骤交付 638976 字节；32 层两步、稀疏到达、真实网络延迟、分块、重复和来源隔离也已验证。路由仍为合成数据，完整模型算子和目标时延未验证；入口及范围见 [多层连续样例](fixtures/m5_multilayer/README.md)。
-
-M5.3 已完成 DeepEP v1.2.1 单机四 rank 普通路径的八项行为核对，固定目标提交、调用配置与源码摘要。117 个布局用例和 8 次连续研究运行的业务字节检查通过；记录了元数据、通道、环形缓冲、通知屏障及端侧处理的差异。没有执行 DeepEP 或进行设备测量，阶段时序、端口时窗和硬件校准仍未验证，现有模板保持 reference_model。详见 [模型核对记录](docs/model_validation.md)与[复查入口](fixtures/m5_model_audit/README.md)。
-
-本项目当前不引入 SimAI、ServeGen、AICB 或 SimCCL，不实现端网关联算法。开发环境为原生 Linux。
-
-## 阅读入口
-
-| 文件 | 用途 |
-|---|---|
-| [AGENTS.md](AGENTS.md) | 代码助手每次任务遵守的约束 |
-| [开发管理说明](docs/development.md) | 目录、Git、子模块和文档的维护方式 |
-| [v0.2 开发指南](docs/moe_ub_cosim_dev_v0.2.md) | 技术行为、接口和分阶段验收 |
-| [当前任务](docs/tasks/current.md) | 本次允许做什么、怎样检查、何时停止 |
-| [环境记录](docs/environment.md) | 本地实际确认的环境和命令，未确认项留空 |
-| [模型核对记录](docs/model_validation.md) | M5.3 目标源码依据、行为差异及未验证范围 |
-| [后续版本候选事项](docs/future_iterations.md) | 讨论中增加的事项及其与 v0.3 里程碑的对应关系 |
-| [仓库准备记录](docs/bootstrap.md) | 本次远端准备的范围、依据和未执行检查 |
-| [依赖锁文件](deps.lock.json) | 上游基线、实际采用提交和递归依赖记录 |
-
-## 在 Linux 上开始
-
-使用具有主仓库以及 `baoy21/LLMServingSim`、`baoy21/astra-sim`、`baoy21/ns-3-ub` 四个私有仓库访问权限的 Git 凭证。以下命令用于新克隆；初始化与依赖检查本身不执行构建或仿真。
+需要原生 Linux、Python 3.10+、C++20 编译器、CMake 3.24+、Ninja、Git、protoc 及 protobuf/zlib 开发库。固定维护仓库需要相应 Git 读取权限。小例不需要 GPU、模型权重或真实数据账户。
 
 ```bash
-git clone https://github.com/baoy21/moe-ub-cosim.git
-cd moe-ub-cosim
-# 先阅读 AGENTS.md、docs/development.md 和 docs/tasks/current.md。
 git submodule update --init --recursive
-bash scripts/check_deps.sh
+python3 -m venv .venv/user
+source .venv/user/bin/activate
+python -m pip install -e '.[frontend]'
+moe-ub doctor
+moe-ub build --build-dir build/default --jobs 2
 ```
 
-2026-09-29 已将截至 M5.3 的成果（`b033a2c`）及发布记录推送到主仓库 `main`。三个依赖的项目补丁已在首次发布时由内向外保存到各自维护仓库的 `cosim` 分支；本次在线核对与固定提交相同，无需再次推送子模块。ASTRA 和 LLMServingSim 的本机 `upstream` 保留原始来源。`.gitmodules` 和 `deps.lock.json` 已记录维护地址，实际版本仍由父仓库 gitlink 固定，未升级基线。当天首次发布曾在独立目录从远端取回全部 13 个固定依赖并检查通过，未借用本机对象库；本次未重复完整克隆。部分辅助依赖采用有限历史下载，中断恢复和两次发布的实际检查见 [环境记录](docs/environment.md)。
+安装使用当前源码的 editable 模式。`doctor` 报告缺失项，不自动安装；构建成功后，二进制路径和日志位置保存在 `build/default/backend.json`。
 
-初始化使用父仓库记录的提交，不使用 `--remote`。ns-3-UB 的 `scratch/ns-3-ub-tools` 来自 GitCode；若拉取失败，保留具体报错，不自行换源或升级版本。原生基线可能保留 ASTRA 自带的其他网络后端源码；后续联合程序仍只能链接 ns-3-UB 一套 ns-3。
+## 运行并复用一个首轮切片
 
-13 个依赖中，LLMServingSim、ASTRA 和 UB 使用上述维护仓库，另外十个沿用各自上游的固定提交。新克隆的子模块通常处于固定提交的 detached HEAD，不会自动继承开发机的 `upstream` 配置或 `cosim` 工作分支。递归层级、维护位置和以后修改深层依赖的保存顺序见[开发管理说明](docs/development.md#3-两个直接子模块与递归版本)。
+```bash
+moe-ub run --config examples/first_round/run.json --output runs/demo-run
+moe-ub slice create --from-run runs/demo-run --output data/demo-slice
+moe-ub slice inspect --slice data/demo-slice --verify
+moe-ub sample --slice data/demo-slice --config examples/first_round/sample.json --output runs/demo-10us
+moe-ub replay --slice data/demo-slice --config examples/first_round/replay.json --output runs/demo-replay
+moe-ub validate --run runs/demo-replay
+moe-ub validate --observed runs/demo-10us/observed
+```
 
-`check_deps.sh` 只读取 Git 状态和锁文件，不联网、不切换版本、不编译。返回 0 仅表示它检查的版本和工作区状态一致，不表示依赖可编译或仿真正确。脚本状态及检查范围见 [开发管理说明](docs/development.md)。
+采样命令复用原事件，重放命令复用已生成图并重新计算网络行为。输出目录须尚不存在；需要重复实验时使用新名称。每条命令有 `--help`；也可使用 `python -m moe_ub_cosim`。构建在其他位置时，给运行/重放传入 `--backend`。
 
-从主仓库根目录启动 Codex，先读取 [当前任务](docs/tasks/current.md)。v0.2 的编号任务已按各自范围完成。M6 已完成[单层固定轮次执行参数化](fixtures/m6_execution_parameters/README.md)、[服务模型与容量参数化](fixtures/m6_service_model/README.md)、[部署本地性分类](fixtures/m6_locality/README.md)及[场景 YAML 与 WRITE/RTP 后端参数适配](fixtures/m6_scenario_backend/README.md)。场景参数进入实际图、UB 对象和完成反馈，记录原生默认值、覆盖来源和实例生效值；不兼容事务模式明确拒绝。按既定里程碑范围，M6 验收完成。
+JSON 内路径相对该配置文件，命令行路径相对当前目录。示例采用合成路由和参考耗时。首版切片从已知空网络、KV 已就绪的时间零开始，只覆盖完整首轮；它不是任意中途状态快照，也不复现后续自适应组批。完整操作、预算、输入字段、输出格式和失败处理见[用户指南](docs/user_guide.md)。
 
-M7 已完成[同 rank 多请求连续批处理](fixtures/m7_continuous_batching/README.md)：新配置在迭代完成边界按序列、Token 与 KV 预算接纳和调度请求，每个选中请求推进一个 Token。实际 ASTRA/UB 验证 AB、AC、AC 三轮，六个 Token 共 6 次写、512 业务字节；KV 暂时不足时等待释放，未选中的驻留请求继续计容量。旧 schema 保留原行为。
+## 输入、结果与代码
 
-M8 已完成[多层、多请求、多组联合执行](fixtures/m8_composed_service/README.md)：两个独立组的批次在同一 UB 网络中经过连续三层 MoE，整段完成后推进 Token，层间只保留 rank 本地依赖。实际五轮生成 12 个 Token，124 次写交付 31744 业务字节，另有 38 次同 chip 交付；共享队列竞争推迟本组后续提交，逐层路由、完整模型容量及各组预算核验通过。
+| 位置 | 用途 |
+|---|---|
+| [examples/first_round/](examples/first_round/) | 可复制修改的服务、模型、网络、观测及有限预算 |
+| `data/` | 本地来源数据、可移动的研究切片；不提交 Git |
+| `runs/<实验名>/` | 生效配置、公共观测、内部真值、核验和资源日志；不提交 Git |
+| `build/` | 编译产物与构建日志 |
+| [python/moe_ub_cosim/](python/moe_ub_cosim/)、[backend/](backend/) | 可复用 Python 实现与联合后端 |
+| [tests/](tests/)、[fixtures/](fixtures/)、[scripts/](scripts/) | 自动检查、小型开发输入、仓库维护与专项检查 |
+| [third_party/](third_party/) | 按 gitlink 固定的依赖源码 |
 
-M9 已完成[真实路由导入、观察片段与算子依据验收](fixtures/m9_evidence/README.md)。取得固定版本的两份 R1-AWQ 轨迹，逐条核对 14848 条 Decode 层记录，并用其中 12 条在同一 UB 网络重放两个批次、三个层，完成 78 次写和 315392 业务字节。另在 A100 实测并使用 22 种小型 FP16 算子形状；未知目标、观察终点、窗口 KV、精确查表及范围外拒绝分别验证。89 项单元测试、原 M9 的 15 次执行/8 项拒绝和 16 套旧功能回归通过；真实文件恢复后新增四次联合执行及三项非法选择拒绝通过。
+研究输入位于每次结果的 `observed/`；`truth/`、`raw/` 和图文件用于内部生成与验证，不能作为关联算法的输入。压缩观测显式声明零窗口；读取方式见用户指南，不应把稀疏文件缺行当作未观测。
 
-M10 已完成[连续资源工程](fixtures/m10_resource_efficiency/README.md)：完整首轮 61 块/128 rank 图在目标网络执行并导出全部 16128 出口研究结果；首轮约 97 分钟、峰值 RSS 42.79 GiB，研究导出约 37 分钟、压缩结果约 753 MB。小型 8/32 轮证明图、传输、来源及退役 Jetty 历史有界回收。2026-10-05 用户调整收尾目标：复用该首轮交付研究数据包、离线采样重算和后端图重放，64 步完整服务退出当前验收条件。[当前任务](docs/tasks/current.md)已准备，状态 pending；新入口尚未实现，M10 尚未完成。以下保留各早期检查点当时的证据和限制，最新范围见[就绪说明](docs/target_readiness.md)。
+## 进一步阅读
 
-M10 的[固定 CANN 路径小型行为适配](fixtures/m10_cann/README.md)已完成：新增独立模板，按 CANN v8.5.0 A3 fullmesh_v1 的逐专家贡献、计数发布、返回标志与归约依赖生成任务，区分业务、元数据和填充字节。两组三层的真实 UB 基准完成 305 次写，13 次服务运行、2 次非对齐向量执行、8 项拒绝检查及受影响回归通过。URMA_WRITE/RTP 映射、逻辑 lane 和局部耗时仍是明确声明的参考选择，未执行原生 CANN 或校准目标 NPU。
-
-旧配置服务入口执行显式 MoE 层段，未执行层计入其声明模型容量；真实 R1 对照仅重放 routed 专家通信与参考计算，不用 GQA 公式代替 MLA 容量。A100 小算子没有套用到 R1 或当前 CANN 的不同维度。M10 整体尚未完成。
-
-已完成[目标参考合同核对](docs/target_readiness.md)及[MLA 与量化权重容量实现](fixtures/m10_mla_capacity/README.md)：独立 model/2 按逐组件存储、实际专家放置和 latent+RoPE KV 核算完整 R1 库存；小型参考模型将结果用于原生唯一 KV 池，真实 UB 验证容量/精度改变接纳、等待释放与观察结束清理。旧 GQA 语义保留。
-
-M10 的[完整 Decode 参考图](fixtures/m10_full_model/README.md)已加入独立 configured-service/4 入口：逐块 MLA、dense/routed/shared FFN 和 embedding、输出头、sampling 进入同一轮图，所有阶段完成后才推进 Token。四块多请求服务、61 块小 EP 合成结构均实际经过 ASTRA/UB，Python/C++ 独立校验及受影响回归通过。没有运行数值内核或校准 NPU，完整 R1 仍只有容量审计。
-
-[图与观测资源管理](fixtures/m10_resources/README.md)已增加每图/累计运行预算、构图前计数、计划字节检查、逐事件文件记录及逐窗口导出。实际两轮各 4716 次交付、两个端口各 6001 窗口通过，旧/新记录方式与来源开关不改变执行。图和来源账本仍驻留，完整 R1 的宿主资源尚未验收。
-
-[二级多平面 fabric](fixtures/m10_fabric/README.md)已生成并核对目标 768 端点、336 L1、112 L2、7 平面和全部非活动端点。新 scenario-run/2 校验物理归属与实际路由/TP；47 节点、7 平面小网络在真实 UB 中完成路径、队列、网络反馈和 168 出口观测验证。完整目标拓扑仅离线核对，当前实验继续使用已选 WRITE/RTP，native LD/ST 不是前置条件。
-
-[主场景真实请求清单](fixtures/m10_route_selection/README.md)已从固定修订 MMLU 数据中按 seed=0 核验并选择 1024 个独立文件，形成 128 rank×8 请求×64 步的映射；不合格文件整份排除，不重复文件凑数。该任务的 120 项单元测试、逐文件独立复核及新旧来源的八次小型 UB 执行通过，后续宿主资源检查见下文。2048 请求 refill 数据和最终 R1/CM384 组合执行仍未验收，校准状态不变。M10 尚未整体完成；每步本地提交、不推送，下一任务由用户确认。
-
-[宿主资源预检](fixtures/m10_host_preflight/README.md)已测得完整路由导入峰值约 6.1 GiB，并完成目标首个 MoE 层的离线构图/导出。按全部真实路由核算，64 轮共 241124521 次交付、489968326 节点。预检版本每个观测端口复制完整来源账本，全目标 16128 出口仅第一轮索引键下界就约 449.6 GiB，超过本机 64 GiB 限额；该结论保留为历史证据。
-
-[共享观测来源](fixtures/m10_shared_provenance/README.md)现已消除上述端口间副本：同一次运行只保存一份观测传输表、一份包来源表并统一监听源端事件，各端口仍独立计数。新旧后端 1/2/10 出口及来源关闭的八次真实 UB 对照，执行时序和逐端口输出相同；10 出口的观测描述符从 48000 条减为 2400 条，包来源从 24000 条减为 2400 条。完整图/网络峰值、多轮累计保留与最终规模验收仍待后续确认。
-
-[完整一轮图预检](fixtures/m10_full_round_preflight/README.md)已实际尝试 128 rank/1024 请求/61 块构图：900 s 上限内完成 27/58 个 MoE 层，采样峰值约 5.39 GiB，因时间限额停止；全模型合并、目标导出和目标后端装载未开始。小图装载/损坏拒绝与 61 块小 EP 真实 UB 回归通过。后续索引优化结果见下文。
-
-[CANN 构图索引优化](fixtures/m10_cann_indexing/README.md)已完成：目标首层构图由 34.85 s 降至 4.19 s，完整计划/来源摘要不变，24 组旧图对照和真实 UB 回归通过。相同预算下，58 个目标 MoE 子图在 271 s 内完成；首次全模型合并随后于约 831 s 触及 32 GiB RSS 上限。该次完整图导出、目标后端装载未开始；后续存储优化结果见下文。
-
-[全模型存储优化](fixtures/m10_full_model_storage/README.md)已完成：六块同输入对照的构图时间从 80.35 s 降至 45.44 s，峰值 RSS 下降约 32.7%，完整图与来源摘要不变。完整 61 块目标首次在原预算内完成构图和校验，耗时 876.6 s、采样峰值约 31.58 GiB；随后导出前再次重构时触及 900 s 时间上限，该次目标 JSON/Chakra 未导出，目标 C++ 加载未执行。真实 UB 回归及小图字节对照通过；后续导出优化结果见下文。
-
-[构图后直接导出](fixtures/m10_full_model_export/README.md)已消除封闭路径中导出前的第三次完整重构，通用可变计划导出仍完整校验。四块对照的 131 个文件大小/摘要一致，构图及导出从 39.34 s 降至 33.26 s。完整目标于 896.5 s 完成构图校验并进入写出，随后达到原 900 s 上限；留下六个部分 Chakra 文件，没有完整计划或生成清单，目标 C++ 加载未执行。19 项单元测试、真实 UB 服务/结构回归与小图加载通过；这是当时的导出检查点；后续完整首轮执行、研究导出及资源回收结果见上文连续资源工程，最新 M10 收尾范围见当前任务。
-
-## 目录建立顺序
-
-现在保存规范、管理文件、依赖检查脚本、M0 联合链接探针、计算/写事务/单层与连续图后端、动态 EP 组、P/D 交接队列及数据导入服务入口、研究观测导出、`python/moe_ub_cosim/` 图生成器、合成功能输入、相应测试和两个直接子模块。其他模块到对应步骤才建立，不预先填充空类或功能占位实现。
-
-构建产物、运行日志、虚拟环境和外部数据不提交 Git。需要长期保存的实验原始数据另行备份。上游依赖各自保留原许可证；本次不替项目选择发布许可证，也不改变仓库可见性。
+- [用户指南](docs/user_guide.md)：操作集合、命令、配置、目录和重复实验。
+- [开发管理](docs/development.md)：任务、Git 和依赖维护；日常使用无需阅读开发任务文件。
+- [技术规范 v0.2](docs/moe_ub_cosim_dev_v0.2.md)与[v0.3 增量](docs/moe_ub_cosim_dev_v0.3.md)：执行、观测和真实性边界。
+- [后端及旧模块入口](backend/README.md)：保留此前的专项开发操作。
+- [环境记录](docs/environment.md)与[模型验证](docs/model_validation.md)：实际命令、证据及未校准范围。

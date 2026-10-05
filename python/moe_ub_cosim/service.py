@@ -4,15 +4,14 @@ from copy import deepcopy
 import datetime
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import selectors
 import subprocess
 import sys
-import time
 
 from .generate import export_bootstrap, export_plan
+from .protocol_io import read_line
 from .plan import RunIdentities, build_plan, integer, require, validate_config
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,29 +20,6 @@ LLM = ROOT / 'third_party/LLMServingSim'
 
 def save(path, value):
     path.write_text(json.dumps(value, indent=2) + '\n')
-
-
-def read_line(child, selector, buffer, timeout):
-    """Bound waits even when a child writes only a partial JSON line."""
-    deadline = time.monotonic() + timeout
-    while b'\n' not in buffer:
-        require(len(buffer) < 1048576, 'Backend protocol line exceeds 1 MiB')
-        remaining = deadline - time.monotonic()
-        require(remaining > 0 and selector.select(remaining), 'Timed out waiting for backend DECIDE')
-        chunk = os.read(child.stdout.fileno(), 65536)
-        if not chunk:
-            # Pipe EOF can precede waitpid readiness. Reap a terminating child
-            # before error cleanup, instead of replacing its real exit with -9.
-            try:
-                code = child.wait(timeout=min(remaining, 1.0))
-            except subprocess.TimeoutExpired:
-                code = None
-            raise ValueError(f'Backend EOF before service finished (exit={code}); see backend.stderr.log')
-        buffer.extend(chunk)
-    end = buffer.index(b'\n') + 1
-    line = bytes(buffer[:end]).decode('utf-8')
-    del buffer[:end]
-    return line
 
 
 def service_groups(config, layer):

@@ -3515,3 +3515,14 @@ UB 子提交为 `a9539dd`，从 `1ba7222` 创建的 `task/m10-retired-sequence-h
 `prepare-final-run` 只生成并校验策略、观察合同、输入副本和命令清单，未执行最终实验。新 catalog 仅 Git 修订变化，其余字段与旧固定目录完全相同；业务网络文件和输入保留摘要，三类原生辅助日志显式关闭，研究观测全部开启。候选采用 56 GiB 采样 RSS/60 GiB 地址上限，前台含历史预留 6 GiB；与旧后台交接和构图合计约 52.98 GiB，仍不等于已验证的完整多轮峰值。完整 64 步构图、执行和导出线性估计 6.85 天，计入现有保留文件、活动图、研究索引和记录余量后约 295 GiB。候选服务限 7 天、导出限 2 天、累计 320 GiB，个别文件策略不能绕过共享上限；等待用户确认后才执行。当前没有使用该未来预算扩大本任务占用。M10 及硬件校准仍未完成。
 
 实现及主仓库 gitlink/锁文件已保存为 `3ddcbdb`，UB 子提交 `a9539dd`。`python3 R/record.py deps-final bash scripts/check_deps.sh` 在主仓库提交后退出 0，核对全部 13 个递归依赖的提交、父指针、来源与源码状态一致；这项检查与此前真实构建/仿真分别记录。四个最终二进制均只链接 `B/output/lib` 的同一套十个 UB/ns-3 库，摘要和 ldd 日志见最终检查点。任务标记 `completed`，仅表示资源工程验收完成；最终 64 步命令仍未执行，M10 未完成，未推送。
+
+
+## 2026-10-05 M10 用户入口与首轮切片检查点
+
+用户确认连续完成切片与用户操作交付。`moe-ub` 与 `python -m moe_ub_cosim` 提供同一组命令；当前已验证小例，目标首轮规模检查和隔离安装仍在进行。源码改动及范围见 `docs/tasks/current.md`，使用方法见 `docs/user_guide.md`。
+
+实际构建通过统一入口 `moe-ub build --build-dir build/m10-research-slice --jobs 2`，外层 host_probe 使用 8 GiB RSS / 12 GiB 地址空间 / 1800 秒、两项任务累计 32 GiB 产物和 20 GiB 空闲限制。退出 0，441.888 秒，进程树采样 RSS 1902280704 B，累计占用峰值 11092713472 B。CMake、编译和 ldd 日志在 `build/m10-research-slice/user-build-logs/attempt-0001/`，外层预算及命令在 `runs/v03-research-slice/checks/build/probe.json`。未安装系统软件或改动依赖版本，原 UB 启动锁恢复。
+
+小例完整命令检查位于 `runs/v03-research-slice/checks/user-workflow-delay-fixed/commands.json`，结果为 333 个节点与全部原始记录一致；原运行/冻结图重放均为 35538 ns，逐链路延迟扰动后为 90885 ns。采样和重放在 Python `-S`（不加载 site-packages）下通过，前者无需后端、后者无需调度器或构图依赖。原协议读取与归档边界六项单元检查退出 0，日志在 `checks/unit/`。已将主包以 `pip install --no-deps --no-build-isolation -e .` 安装到既有本地虚拟环境，未下载依赖；这不作为新环境验收。
+
+首次延迟对照和首次归档导入失败原因、修复位置及保留证据见当前任务。历史首轮归档已核验并固定，实际终点取自归档内 result.json，为 75323418 ns；其范围仍是冻结图首轮资源执行，并非完整目标服务请求完成。此检查点不表示 M10 完成。

@@ -1,4 +1,4 @@
-# M4.3 数据导入与逐项替换
+# 数据导入与逐项替换
 
 此入口核对实际 Mixtral 配置的完整容量，并在指定的第 7 层上执行三个连续解码步骤。层号从零开始；其余 31 层没有执行，结果中的迭代时延不代表完整模型 ITL、TTFT 或吞吐。
 
@@ -10,7 +10,7 @@
 | route-stage.json | continuous.jsonl，三个步骤分别给定选择 | 同上 | 28 / 229376 | 54900 |
 | compute-stage.json | 同上 | 六项历史 H100 FP16 算子记录及其余参考耗时 | 28 / 229376 | 303633 |
 
-两份路由都是手工合成输入，没有执行模型前向，也不是实际数据集提取的专家选择。`kind=synthetic` 写入运行清单；目前没有真实路由测试结果。原 P/D 用例继续使用其命名的小模型和合成路由。
+两份路由都是手工合成输入，没有执行模型前向，也不是实际数据集提取的专家选择。`kind=synthetic` 写入运行清单；本目录不提供真实路由验证；后续真实来源见[路由证据用例](../m9_evidence/README.md)。原 P/D 用例继续使用其命名的小模型和合成路由。
 
 ## 使用
 
@@ -26,7 +26,7 @@ env PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.serv
   --output-dir runs/m4-data-example --max-simulation-ns 5000000
 ```
 
-输出目录必须尚不存在。`input_evidence.json` 保存完整模型审计、规范化路由和计算行依据；`graphs/g*/plan.json` 将实际消费记录附在 `input_provenance` 中。每条传输已有的 `source_record_index` 是该图 Token 列表的下标，据此对应同序的 `route_records`，其中另存文件行号及原始索引。它们属于输入与内部真值，不进入端口观测，也不影响业务包。
+输出目录必须尚不存在。`input_evidence.json` 保存完整模型审计、规范化路由和计算行依据；`graphs/g*/plan.json` 将实际消费记录附在 `input_provenance` 中。每条传输已有的 `source_record_index` 是该图 Token 列表的下标，据此对应同序的 `route_records`，其中另存文件行号及原始索引。它们属于输入与内部对应关系，不进入端口观测，也不影响业务包。
 
 三阶段、来源开关、重复运行与错误输入检查：
 
@@ -35,7 +35,7 @@ env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/ch
   --build-dir build/m4-pd-queue --output-dir runs/m4-data-check
 ```
 
-实际命令和记录见[环境记录](../../docs/environment.md#2026-09-29m4-3-data-inputs)。
+实际命令和记录见[历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-09-29m4-3-data-inputs)。
 
 ## 模型和容量
 
@@ -63,4 +63,4 @@ env PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/ch
 
 prepare 整段替换为上述总和加显式的 5000 ns 剩余参考耗时，共 87911 ns；不另保留旧 prepare 节点，也不再增加本地访存耗时。attention、RoPE、路由及打包、专家、局部合并、Combine 处理和 next-layer 占位功能计算仍为参考值。未引用 TP4 attention 数据，未按算力比例换算 NPU。
 
-`calibration_status` 和通信模板状态均为 `unvalidated_reference`。本步骤验证数据导入、容量及逐项替换的因果关系；完整多层连续执行和目标实现核对分别留在 M5.2、M5.3。
+`calibration_status` 和通信模板状态均为 `unvalidated_reference`。本步骤验证数据导入、容量及逐项替换的因果关系；多层执行与目标源码核对分别见[多层用例](../m5_multilayer/README.md)和[模型核对](../m5_model_audit/README.md)。

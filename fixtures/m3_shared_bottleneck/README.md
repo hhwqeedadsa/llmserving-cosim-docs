@@ -1,4 +1,4 @@
-# M3.3 共享瓶颈功能对照
+# 共享瓶颈功能对照
 
 本用例检查同一仿真中的两组通信争用，及网络完成时间向计算与下一轮服务调度的反馈。沿用 M3.2 的两个四成员 EP 组、八专家、Top-2 人工路由、给定就绪 KV 和每请求三步解码。保留每 rank 每轮一个真实 Token、单发送槽、8192 字节分块和原单层计算时间，不加入模型层或真实数据。
 
@@ -24,7 +24,7 @@
 
 ## 实测结果
 
-2026-09-29 的七次检查通过，日志为 `runs/m3-3-shared-bottleneck-20260929T020246Z/shared-final/`。完整命令与保留的检查错误见 [环境记录](../../docs/environment.md#2026-09-29m3-3-shared-bottleneck)。
+2026-09-29 的七次检查通过，日志为 `runs/m3-3-shared-bottleneck-20260929T020246Z/shared-final/`。完整命令与保留的检查错误见 [历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-09-29m3-3-shared-bottleneck)。
 
 | 场景 | ep0 三轮完成时刻（ns） | ep1 三轮完成时刻（ns） | 出口累计排队量（byte·ns） | 最长连续忙碌（ns） |
 |---|---|---|---:|---:|

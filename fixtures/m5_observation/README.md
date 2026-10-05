@@ -1,8 +1,8 @@
-# M5.1 本地时钟与研究输出
+# 本地时钟与研究输出
 
 `run.json` 复用 M3.3 的双组共享网络和单层计算输入，在同一次真实 ASTRA/UB 执行中观测交换机 8 的端口 0、4 以及交换机 9 的端口 4。各 rank 和交换机具有独立偏移、漂移；同一交换机的端口共用时钟和采样起点。输入、计算与通信仍为未校准参考模型。
 
-按 [M5.1 环境记录](../../docs/environment.md#2026-09-29m5-1-observation-export) 配置并构建 `build/m5-observation`，从根目录运行；输出目录必须不存在：
+按 [M5.1 环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-09-29m5-1-observation-export) 配置并构建 `build/m5-observation`，从根目录运行；输出目录必须不存在：
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.research run \
@@ -17,9 +17,11 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
   --build-dir build/m5-observation --output-dir runs/my-observation-check
 ```
 
+以下字段及端口限额适用于本目录的早期 research-run/1、observed/1 用例；当前压缩与稀疏窗口输出见[记录与存储](../../docs/record_storage.md)。
+
 ## 输入与时间
 
-入口为 `moe-ub-research-run/1` JSON，仅接受 `execution.entry_mode=service`，调用已有动态服务程序。`inputs` 的 service、layer、system、network 路径相对于仓库根，也可为绝对路径。`run_id` 覆盖服务副本中的同名字段；`mode=fixture/research` 只声明用途。当前后端 seed 固定为 10、RngRun 为 1，清单记录实际值并核对；其他 seed 明确拒绝。
+入口为 `moe-ub-research-run/1` JSON，仅接受 `execution.entry_mode=service`，调用已有动态服务程序。`inputs` 的 service、layer、system、network 路径相对于仓库根，也可为绝对路径。`run_id` 覆盖服务副本中的同名字段；`mode=fixture/research` 只声明用途。本目录使用的旧研究入口 seed 固定为 10、RngRun 为 1，清单记录实际值并核对；其他 seed 明确拒绝。
 
 `observation.clocks` 必须恰好列出所有 rank 和被观测交换机，每个设备一项，字段为 `device_type, device_id, offset_ns, drift_ppb`。全局执行时间为非负整型纳秒；输出使用精确整数算式：
 
@@ -53,4 +55,4 @@ local_ns = ((1000000000 + drift_ppb) * global_ns) // 1000000000 + offset_ns
 
 基准六轮仍在 264523 ns 完成，84 次真实写唯一交付 688128 字节。最终输入产生 48 条端侧记录、276 个窗口，其中 151 个零窗口。零时钟、来源关闭、重复、裁剪区间和真实包恰好落边界的运行，与不挂观测的运行保持相同业务图、实际时刻、协议及原生网络日志；来源开/关的三个观测文件完全相同。
 
-九个正常研究运行、一个无观测对照、十五项预期失败及相关旧测试通过。普通 EP、KV 交接、空服务和 M4.3 数据输入均覆盖。真实专家路由、目标 NPU profile、完整多层执行及通信校准仍未验证；`research` 用途不会改变 `unvalidated_reference` 状态。没有关联算法、时钟估计算法或模型拟合。
+九个正常研究运行、一个无观测对照、十五项预期失败及相关旧测试通过。普通 EP、KV 交接、空服务和 M4.3 数据输入均覆盖。本用例不包含真实专家路由、目标 NPU profile、完整多层执行或通信校准；`research` 用途不会改变 `unvalidated_reference` 状态。没有关联算法、时钟估计算法或模型拟合。

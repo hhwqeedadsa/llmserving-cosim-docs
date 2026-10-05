@@ -1,4 +1,4 @@
-# M3.1 单 EP 组服务样例
+# 单 EP 组服务样例
 
 `service.json` 为预先到达、给定 KV 已就绪的人工输入。一个四 rank EP 组，各 rank 对应一个 LLMServingSim Scheduler；TP=PP=1，每个调度器每轮选择一个真实请求的一个解码 Token。模型配置使用锁定仓库的 Mixtral-8x7B，仅供请求与 KV 容量记账，无权重下载或模型推理。
 
@@ -13,10 +13,10 @@
 
 四个请求均在 0 ns 前已到达，本次各执行三步。已就绪 KV 通过上游 `Scheduler.add_decode()` 登记内存；没有执行或计入 Prefill、KV 传输以及此前生成过程，因此不输出模型级 TTFT/TPOT 估计。测试检查请求长度、逐次 ITL、结束时刻和 FINISHED 状态。
 
-通信和计算输入复用 `../m2_single_layer/layer.json`。每轮生成时只替换 graph_id、wave_id、ready_ns 和所选 Token；direct_rank_dedup_v1、Top-2、4096 维向量、8 个专家放置、8192 字节分块和单 SEND 槽不变。每轮十四次真实 UB 写、114688 业务字节；计算时间仍是单层功能假设，没有扩展成完整 32 层模型。
+通信和计算输入复用 `../m2_single_layer/layer.json`。每轮生成时只替换 graph_id、wave_id、ready_ns 和所选 Token；direct_rank_dedup_v1、Top-2、4096 维向量、8 个专家放置、8192 字节分块和单 SEND 槽不变。每轮十四次ns-3-UB 写、114688 业务字节；计算时间仍是单层功能假设，没有扩展成完整 32 层模型。
 
-运行命令见 [联合服务入口](../../backend/README.md#m31-单-ep-组服务入口)。基线三轮分别在 21552、43145、64738 ns 完成，各请求均结束。第二轮开始使用已保留的网络状态，不能用单轮结果简单乘三。
+运行命令见 [联合服务入口](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/backend/README.md#m31-单-ep-组服务入口)。基线三轮分别在 21552、43145、64738 ns 完成，各请求均结束。第二轮开始使用已保留的网络状态，不能用单轮结果简单乘三。
 
-M3.1 验收时限定四个 rank 每轮都有 Token、剩余步数相同和 2～32 个显式解码步；当前入口已按 [M3.4](../m3_service_boundaries/README.md) 放开为每 rank 每轮最多一个 Token、1～32 步，本样例仍保留原输入。动态到达、第二个 EP 组、零 Token rank、请求不均匀结束、P/D、真实路由及校准不属于本样例的已验证能力。
+M3.1 验收时限定四个 rank 每轮都有 Token、剩余步数相同和 2～32 个显式解码步；此旧服务版本已按 [M3.4](../m3_service_boundaries/README.md) 放开为每 rank 每轮最多一个 Token、1～32 步，本样例仍保留原输入。动态到达、第二个 EP 组、零 Token rank、请求不均匀结束、P/D、真实路由及校准不属于本样例的已验证能力。
 
 动态到达和第二组的 M3.2 输入见 [独立组样例](../m3_dynamic_arrivals/README.md)；本文件保留单组基线及其验收数据。

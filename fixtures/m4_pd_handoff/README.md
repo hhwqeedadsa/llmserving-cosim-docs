@@ -6,7 +6,7 @@
 
 ## 字节与容量
 
-缓存布局两端均为 `layer-kv-token-head-dim-tp1`，单个 attention rank 持有本请求全部缓存。有效 BF16 KV 为 `1 层 × 2（K/V）× 4 Token × 8 头 × 32 维 × 2 字节 = 4096 字节`。K、V 各 2048 字节，分别按 768/768/512 拆分，共六次真实 UB 写。分片来源保留请求、层、Token/头范围、dtype 和布局；不传 Q。KV 图覆盖八个成员，rank 0 只有 SEND、rank 4 只有 RECV，其余为空图；没有解析通信时间或填充计算。
+缓存布局两端均为 `layer-kv-token-head-dim-tp1`，单个 attention rank 持有本请求全部缓存。有效 BF16 KV 为 `1 层 × 2（K/V）× 4 Token × 8 头 × 32 维 × 2 字节 = 4096 字节`。K、V 各 2048 字节，分别按 768/768/512 拆分，共六次ns-3-UB 写。分片来源保留请求、层、Token/头范围、dtype 和布局；不传 Q。KV 图覆盖八个成员，rank 0 只有 SEND、rank 4 只有 RECV，其余为空图；没有解析通信时间或填充计算。
 
 每 rank 的总内存为 4194304 字节，原生 MemoryModel 计算的权重为 2233856 字节，另预留工作区 65536 字节、通信缓冲 8192 字节。原生 KV 池剩余容量为 115 个块，每块容纳 16 Token，即 16384 字节。请求在源、目标各占一个块，传输只覆盖其中 4096 字节有效数据。只改变 `kv_dtype` 为 fp8 时，有效 KV 为 2048 字节、块为 8192 字节，权重、计算及激活 dtype 保持原输入。
 
@@ -27,4 +27,4 @@ BF16 基线共四份逻辑图（P、KV、D、D）、20 次 UB 写、11264 业务
 
 `tests/integration/check_pd_handoff.py` 执行上表七次运行，以及布局、策略、dtype、总容量、KV 大小、Q 分片、字节范围、末成员图损坏、缺少组成员、组忙时交接、后端被信号终止共十一项失败检查。信号用例截住真实 `KV_DONE` 后终止后端，前端保留尚未确认的交接和两侧容量，不生成成功结果。来源开/关、不挂观测和重复运行的业务、协议及原生网络日志相同。
 
-运行入口见 [backend README](../../backend/README.md#m41-单请求预填充与-kv-交接)，命令、退出码与原始日志见 [环境记录](../../docs/environment.md#2026-09-29m4-1-pd-handoff)。本步不验证真实预填充路由、目标硬件时序、MLA、跨布局转换、多请求交接排队或第三组竞争。
+运行入口见 [backend README](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/backend/README.md#m41-单请求预填充与-kv-交接)，命令、退出码与原始日志见 [历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-09-29m4-1-pd-handoff)。本步不验证真实预填充路由、目标硬件时序、MLA、跨布局转换、多请求交接排队或第三组竞争。

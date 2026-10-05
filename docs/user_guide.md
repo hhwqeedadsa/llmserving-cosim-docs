@@ -1,12 +1,16 @@
-# 用户操作指南
+# 用户指南
 
-统一入口为 `moe-ub`，等价入口是 `python -m moe_ub_cosim`。下述命令已通过小例完整流程、隔离安装及 128 rank 目标首轮验收；实际范围和资源数据见[首轮交付记录](../fixtures/m10_research_slice/README.md)。
+本指南说明怎样安装仿真环境、运行小例，以及复用一次执行结果开展采样和网络重放实验。统一命令为 `moe-ub`，也可用 `python -m moe_ub_cosim` 执行相同操作。
 
-## 环境与安装
+第一次使用时，先完成安装和小例运行。已有首轮数据包的使用者可直接阅读[保存与复用首轮](#保存与复用首轮)。模型与网络的工作方式见[系统架构](architecture.md)。
 
-使用原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、protoc，以及 protobuf、zlib 的开发库。源码包含固定版本的 ASTRA 和 ns-3-UB；不需要 GPU、模型权重或真实路由账户即可运行下文示例。获取私有维护仓库需要已有 Git 读取权限。
+## 安装
+
+需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。
 
 ```bash
+git clone https://github.com/baoy21/moe-ub-cosim.git
+cd moe-ub-cosim
 git submodule update --init --recursive
 python3 -m venv .venv/user
 source .venv/user/bin/activate
@@ -15,83 +19,136 @@ moe-ub doctor
 moe-ub build --build-dir build/default --jobs 2
 ```
 
-初始化按 gitlink 获取固定提交，不使用 `--remote`。安装采用仓库内的 editable 模式；当前原生构建和固定依赖仍从该源码检出读取，不能把 Python 包拷到别处就当作完整环境。`frontend` 额外依赖用于构图与调度；仅检查和重新采样已有切片不需要这些 Python 包，也不需要原生后端。
+子模块初始化取回仓库记录的固定提交，不使用 `--remote`。`pip install -e` 让 Python 包直接使用此处源码，原生构建也依赖这份仓库，因此安装后仍需保留完整源码与依赖。
 
-`doctor` 只检查，不安装、不下载。缺失项目显示在输出中；原生头文件和库是否可用最终由 `build` 检查。构建日志在 `build/default/user-build-logs/`，后端位置记入 `build/default/backend.json`。构建会生成固定 Chakra schema 的 protobuf 文件，并保持既有 UB 原生启动配置。`--jobs` 控制编译并发，与仿真的 rank 数无关。
+`doctor` 检查工具、Python 包、固定依赖和资源，不安装或下载软件。`build` 实际检查原生头文件和库并构建后端。构建结果记在 `build/default/backend.json`，日志位于 `build/default/user-build-logs/`。`--jobs` 是编译并发数。
 
-## 最小完整流程
+只检查数据包或重新采样时，可在虚拟环境中用 `python -m pip install -e .` 安装基础包，无需 `frontend` 额外依赖或原生后端。`run` 需要完整前端与后端；`replay` 需要已构建的后端，但不需要执行调度和构图。`doctor` 检查的是完整运行环境，因此只准备离线采样环境时可能报告缺项。
 
-在仓库根目录执行；输出目录应尚不存在：
+## 运行小例
+
+在仓库根目录执行：
 
 ```bash
 moe-ub run --config examples/first_round/run.json --output runs/demo-run
+```
+
+这会模拟三个 rank 的一次完整解码迭代。rank 是分布式任务中的逻辑参与者，其专家放置和网络映射由输入指定。小例使用合成请求与参考计算耗时，网络传输由 ns-3-UB 执行；模型和请求细节见[小例说明](../examples/first_round/README.md)。
+
+命令成功后会输出 `passed: true`、仿真结束时刻和观测目录。默认配置引用 `build/default` 中的后端；使用其他构建目录时，给 `run` 或 `replay` 增加 `--backend /path/to/ns3.44-cosim-service`，也可修改配置中的 `backend`。
+
+**输出目录必须尚不存在。** 示例配置要求运行时至少保留 20 GiB 空闲磁盘，并显式限制内存、运行时间和产物大小；具体字段见[资源预算与失败处理](#资源预算与失败处理)。这些数值是保护运行环境的上限或预留量，不是小例的实际消耗。
+
+命令行路径相对当前目录，JSON 中的路径相对该 JSON 文件所在目录。因此也可从其他目录运行，但需相应调整命令行路径。缺少输入文件或出现未知配置字段时会报错。
+
+## 查看结果
+
+一次成功运行会在输出目录中保存以下内容：
+
+| 位置 | 用途 |
+|---|---|
+| `manifest.json` | 操作类型、成功状态、实际范围、软件版本和文件摘要 |
+| `inputs/` | 输入副本和实际生效的配置 |
+| `observed/` | 供研究算法读取的端侧操作时间与交换机端口流量统计 |
+| `truth/` | 操作与网络数据的实际对应关系、时钟参数，供评价与核验使用 |
+| `raw/` | `run` 和 `replay` 的内部执行记录 |
+| `metrics/` | 字节核验和观测统计 |
+| `logs/` | 各阶段命令、标准输出、错误信息与资源报告 |
+
+研究算法只读取 `observed/`；可以把这个目录单独复制给算法使用。`truth/` 中的对应关系用于评价算法结果，不能作为算法输入。只检查观测数据时执行：
+
+```bash
+moe-ub validate --observed runs/demo-run/observed
+```
+
+`observed/public_config.json` 描述公开字段和采样范围，`storage.json` 描述文件编码，`records/` 保存压缩记录。端口表的逻辑名称虽然是 `port_windows.csv`，当前物理文件使用 gzip 压缩的 JSONL，即一行一个 JSON 对象；不要直接用 CSV 读取器打开。
+
+没有流量的采样窗口由配置与存储声明共同表示，文件只保存非零窗口。声明范围内缺少存储行表示零流量，范围外则表示未观测。Python 读取器 `stored_rows(directory, table_name)` 读取实际存储行，`logical_windows(observed_directory)` 还原包括零窗口在内的完整序列。大场景可能声明数十亿个窗口，通常应结合公开配置与非零记录计算，避免全部展开。字段、单位及读取示例见[记录格式](record_storage.md)。
+
+## 保存与复用首轮
+
+同一次执行可用于两种后续实验：改变采样方式时，从已捕获的事件生成新观测；改变受支持的网络参数时，用保存的任务重新运行后端。先把完整首轮保存成一个数据包：
+
+```bash
 moe-ub slice create --from-run runs/demo-run --output data/demo-slice
 moe-ub slice inspect --slice data/demo-slice --verify
+```
+
+命令中的 `slice` 指**完整首轮数据包**，包含计算与通信的依赖图、输入配置、初始状态、原始事件及文件摘要。当前只接受从仿真时间零、空网络和已就绪的注意力键值缓存（KV 缓存）开始的完整首轮。存在后续图提交或未来请求到达的服务运行不能直接转成这种数据包；也不能从多轮日志中任意截取一段作为新初态。
+
+`slice inspect` 显示范围、文件大小、版本和校准状态；`--verify` 会读取所有文件并核对摘要。摘要用于发现文件变化和损坏，不是发布者签名。默认复制文件；`--storage hardlink` 可在同一文件系统内节省空间，但源文件和数据包都必须保持不变。
+
+### 改变采样周期
+
+小例原来的端口采样周期为 1 µs。以下命令复用相同事件，生成 10 µs 的观测：
+
+```bash
 moe-ub sample --slice data/demo-slice --config examples/first_round/sample.json --output runs/demo-10us
-moe-ub replay --slice data/demo-slice --config examples/first_round/replay.json --output runs/demo-replay
-moe-ub validate --run runs/demo-replay
 moe-ub validate --observed runs/demo-10us/observed
 ```
 
-小例为三 rank、一个稠密块和三个 MoE 块，使用合成路由与参考计算耗时。三个请求都在时间零到达，各执行一次解码迭代。模型、放置、请求、通信参数分别在 `service.json` 和 `layers.json` 中；首版统一 `run` 接受 `moe-ub-configured-service/4`，旧入口的其他模式继续通过 [backend 文档](../backend/README.md) 使用。不能将小例延迟当作实际硬件测量。
+`sample` 不运行调度器、计算图或网络。示例中的 `observation: null` 继承原观测配置，`period_ns: 10000` 覆盖所有选定端口的周期。也可让 `observation` 指向新的观测 JSON；显式 `period_ns` 的优先级更高，生效配置保存在新输出的 `inputs/observation.json`。
 
-默认配置引用 `build/default`。使用其他构建目录时，给 `run` 和 `replay` 传入 `--backend /path/to/ns3.44-cosim-service`，或修改配置中的 `backend`。命令可以从其他目录执行：**命令行路径相对当前目录，JSON 内路径相对该 JSON 文件目录**。服务模型和路由在示例中内嵌，不隐式搜索历史 `runs/`。
+新的观测可调整周期、窗口起止时刻、设备时钟的偏移与漂移，并选择已捕获端口的子集。采样时不能增加未记录的端口、请求捕获时间范围之外的数据，或改变原始事件是否包含对应关系记录的设置；原观测的资源声明也保持不变。
 
-## 每个操作的合同
+观测使用设备本地时钟，`offset_ns` 的单位是纳秒，`drift_ppb` 是十亿分之一的时钟漂移。它们只改变导出的时间，不改变仿真执行。端口窗口包含起点、不包含终点，即 `[start, end)`；最后一个窗口可以短于设定周期。端侧操作仍保留整个首轮的开始和结束记录，包括跨越所选端口窗口边界的操作。
 
-| 命令 | 主要输入 | 主要输出/行为 |
-|---|---|---|
-| `doctor [--backend FILE]` | 当前环境、固定依赖，可选二进制 | 工具/依赖/资源检查 JSON；缺项退出非零 |
-| `build [--build-dir DIR] [--jobs N]` | 固定源码、工具链 | 后端、库、构建清单与日志；可增量构建，不修改依赖版本 |
-| `run --config FILE --output DIR [--backend FILE]` | 服务、层配置、系统、网络、观测及预算 | 完整服务执行、原始记录和已核验的研究观测 |
-| `slice create --from-run DIR --output DIR [--storage copy\|hardlink]` | 已完成的首轮运行 | 可移动的切片目录；默认复制，硬链接要求同一文件系统且来源不可修改 |
-| `slice inspect --slice DIR [--verify]` | 切片 | 范围、逻辑字节数、版本与校准状态；`--verify` 读取所有文件核对摘要 |
-| `sample --slice DIR --config FILE --output DIR` | 已捕获事件、采样配置、预算 | 新观测和独立核验；不调度、不构图、不运行网络 |
-| `replay --slice DIR --config FILE --output DIR [--backend FILE]` | 冻结图、初态、后端、预算 | 本次真实 UB 完成事件驱动的执行，以及研究观测 |
-| `validate --run DIR` | 完整实验目录 | 校验封存文件、公共观测及已记录的守恒验收；不重新仿真 |
-| `validate --observed DIR` | 仅公共观测目录 | 校验公共字段、记录、窗口及零窗口声明；不读取邻接真值 |
+### 重新执行网络与计算依赖
 
-各子命令的 `--help` 是参数入口。输入错误、已有输出目录、数据损坏或运行超限返回非零退出码；失败日志保留，不自动覆盖、续跑或提高预算。重新运行时换一个输出目录。`run` 和 `replay` 分别监测执行、导出两个阶段；只有全部阶段成功才封存成功清单。
+以下命令读取保存的依赖图，在原生后端中重新执行：
 
-## 配置与资源
-
-`run.json` 的 `inputs` 指向服务、层、系统和网络；`observation`、`record_policy`、`export_policy` 指向相应 JSON 文件。`sample` 的 `observation: null` 表示继承切片的观测配置；可用一个 `period_ns` 字段覆盖所有端口的周期，无需逐设备编辑或编写脚本。需要自定义时钟或窗口时，改为引用观测 JSON。优先级为显式 `period_ns`、观测文件（或继承的原配置），实际结果保存到 `inputs/observation.json`。`replay` 默认使用切片的系统、网络和原观测，不能覆盖模型、请求或路由。
-
-`max_simulation_ns` 和观测时刻的单位均为仿真纳秒；`backend_timeout_seconds`、`host.wall_seconds` 是宿主秒。`host` 必须显式给出进程树 RSS、单进程地址空间、累计产物字节、最低空闲磁盘、宿主时限和其他需要合并计费的 `artifact_roots`。目录内硬链接按唯一 inode 计费，磁盘按文件内容大小和分配块中的较大值核算。采样监测可能存在短时峰值遗漏，不能作为操作系统级硬配额。
-
-执行与导出需要不同预算时，`run`/`replay` 可另给 `export_host`，字段与 `host` 相同；省略时两阶段各自沿用 `host`。两阶段串行，不累加模拟时延。示例每阶段上限为 4 GiB RSS、8 GiB 地址空间、300 秒，输出上限 2 GiB，另保留至少 20 GiB 磁盘；这些是上限，不代表实际需要这么多空间。
-
-`record_policy` 限制原始压缩记录和缓冲；`export_policy` 限制压缩输出、传输索引、单条记录及元数据条数。模型 HBM/KV 在服务输入中单独核算，不与这些宿主预算混用。
-
-## 切片与重复实验
-
-当前切片只覆盖**从已知空网络、KV 已就绪初态开始的完整首轮**。存在后续图提交或未来到达的完整服务运行会拒绝冻结；不从多轮日志中任意截一段并假定网络空闲。固定图重放仍有计算依赖和本次接收就绪事件；历史包时间仅用于比较。
-
-将整个切片目录复制到新位置后即可使用。`slice.json` 绑定文件摘要、执行区间、观测范围、输入来源、版本和校准状态；初态与来源字段也应随包保留。摘要用于检测损坏，不是发布者签名。硬链接只是一种本地节省空间的存储方式，传到另一台机器仍需复制实体内容。
-
-已有历史归档可以用 `slice create --import-config FILE` 导入；该配置使用 `moe-ub-slice-import/1`，显式指定旧运行元数据、共享图目录、图归档/清单、执行归档/清单、网络、系统、观测、范围和来源证明。该入口用于有完整文件清单的历史迁入，不会重新下载原始路由、重新构图或猜测缺失字段。普通使用者取得已封存切片后无需运行迁入步骤。
-
-归档按操作需要展开：采样只需原事件，重放只需原图。可在采样/重放配置中指定 `cache_directory` 复用同一份校验后的展开副本；目录自动计入宿主磁盘预算。省略则位于本次输出的 `work/slice/`。缓存绑定切片摘要，损坏、来源不符或上次展开中断会拒绝，保留失败后改用新缓存路径。不把缓存当作另一份原始数据包。
-
-修改采样周期、窗口边界或既有时钟模型，只需修改观测 JSON。支持已有端口的子集，不能请求没有记录的端口或捕获范围外的数据；不能补造丢失事件或打开原先没有记录的来源。端侧操作保留整个首轮的开始/结束，包括跨采样边界的操作。零端口窗口在声明范围内完整存在，与范围外未观测不同。
-
-首版网络扰动仅验收旧 CSV 网络的 `topology.csv` 中逐链路 `delay`（非负整数 `ns`）。可复制网络目录、修改该列，在重放配置中设置 `network`；其他文件、端点、带宽和顺序必须相同。结构化目标网络暂只重放冻结基线。后端参数目录若仅 UB 修订号不同，会保留原切片，记录相同参数表下的版本重新绑定；执行等价性仍需另行比较，不能靠目录相同宣称通过。
-
-## 结果在哪里、怎样读取
-
-```text
-runs/<实验名>/
-  manifest.json           # 成功/失败、范围、版本、阶段状态和文件摘要
-  inputs/                 # 原输入副本及实际生效配置
-  raw/                    # run/replay 的内部执行记录
-  observed/               # 研究算法唯一允许读取的目录
-  truth/                  # 内部来源与时钟，仅供生成和验证
-  metrics/                # 字节核验、窗口统计和资源索引清理记录
-  logs/                   # 各阶段的命令、stdout/stderr 与资源报告
+```bash
+moe-ub replay --slice data/demo-slice --config examples/first_round/replay.json --output runs/demo-replay
+moe-ub validate --run runs/demo-replay
 ```
 
-采样输出引用同一个来源切片，不复制原始大图或事件。`observed/` 可以单独复制交给研究算法。其 `public_config.json` 声明字段与窗口，`storage.json` 声明压缩记录；`records/` 中是 gzip 压缩 JSONL，逻辑表名保留 `port_windows.csv`，物理内容不是普通 CSV。零窗口采用明确的稀疏编码；直接读非零文件时不能把缺行当作未观测。
+`replay` 不重新运行前端调度器或生成计算图。它仍按本次 ns-3-UB 的通信完成事件推进后续任务，因此网络变化可以改变计算开始时刻。保存的历史包时间不会作为本次执行时间直接套用。默认沿用数据包中的系统、网络和原观测配置。
 
-Python 使用者可复用 `moe_ub_cosim.research_storage.stored_rows(directory, table_name)` 读取存储行，使用 `logical_windows(observed_directory)` 迭代完整窗口。目标首轮可能声明数十亿零窗口；研究算法应尽量基于公共配置和非零记录处理，避免不必要的全量展开。该读取器只读取传入的公共目录，不要求真值。
+`validate --run` 检查已保存文件的完整性、观测格式以及已有的守恒检查结果；它不重新仿真，也不证明两次运行完全等价。需要验证重放与基线是否相同时，应另做记录比较，维护者入口见[开发说明](development.md)。
 
-真实目标首轮的来源、参考计算、模型精度差异及硬件未校准状态均保留；取得切片不意味着复现真实硬件的绝对时延。更换模型、批次、路由、专家放置或计算图，需要回到前端重新生成相应实验，不能继续使用旧冻结图。
+## 为自己的实验修改配置
+
+`run.json` 的 `inputs` 指向服务、层、系统和网络输入；`observation`、`record_policy`、`export_policy` 分别指向观测、原始记录和导出预算文件。当前公共 `run` 接口接受 `moe-ub-configured-service/4`，模型和路由需按该格式提供。其他服务模式的开发入口及后端参数见[后端说明](../backend/README.md)。
+
+| 要改变的因素 | 应使用的操作 |
+|---|---|
+| 端口采样周期、窗口、设备时钟或已捕获端口的子集 | 修改观测配置后使用 `sample` |
+| 旧式 CSV 网络中的链路传播时延 | 修改允许的网络列后使用 `replay` |
+| 模型、请求、组批、专家选择、专家放置或计算耗时 | 修改前端输入，重新 `run` 生成任务 |
+
+当前 `replay` 只支持修改旧式网络 `topology.csv` 的 `delay` 列，值为非负整数加 `ns`，例如 `320ns`。做法是复制原网络目录、只修改该列，再让重放配置的 `network` 指向新目录；文件集合、行顺序、端点、带宽和其他设置必须相同。
+
+包含 `backend.json` 的结构化网络只能重放原有网络配置，不能更改包括链路时延在内的网络参数。后端版本兼容检查见[后端说明](../backend/README.md)。
+
+CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[参考场景](scenarios/cm384_r1.md)。其中 YAML 是场景设计说明，不能直接传给 `run --config`。正式实验应保留生效的 JSON、软件版本和数据来源，并根据[模型依据与验证范围](model_validation.md)解释结果。
+
+## 资源预算与失败处理
+
+运行、采样和重放配置都必须给出有限的 `host` 预算。它限制运行仿真程序的宿主机器资源，与模型内的设备显存及 KV 容量分别计算。
+
+| 字段 | 单位与含义 |
+|---|---|
+| `host.rss_bytes` | 字节；监测整个进程树的驻留内存 |
+| `host.address_bytes` | 字节；单进程地址空间上限 |
+| `host.artifact_bytes` | 字节；累计产物占用上限 |
+| `host.min_free_bytes` | 字节；运行中要求保留的空闲磁盘 |
+| `host.wall_seconds` | 秒；宿主运行时限 |
+| `host.artifact_roots` | 还需计入累计产物预算的目录列表，可为空 |
+| `max_simulation_ns` | 仿真纳秒；`run` 的仿真时间上限 |
+| `backend_timeout_seconds` | 宿主秒；等待后端结束的时限 |
+
+输出目录和展开缓存自动计入产物预算。资源监测会定期采样，可能漏掉很短的峰值；精确核算规则见[记录格式](record_storage.md)。
+
+`run` 和 `replay` 先执行，再导出观测。可用 `export_host` 为导出阶段另设预算，字段与 `host` 相同；省略时两阶段各自沿用 `host`。两个阶段都成功，整个操作才成功；导出所用的宿主时间不计入仿真时延。示例每阶段上限为 4 GiB 驻留内存、8 GiB 地址空间、300 秒，产物上限 2 GiB，至少保留 20 GiB 空闲磁盘。
+
+`record_policy` 另外限制原始压缩记录和缓冲，`export_policy` 限制研究输出、索引与单条记录等规模，具体含义见[记录格式](record_storage.md)。模型的显存、权重、通信缓冲和 KV 缓存在服务配置中核算。
+
+输入错误、已有输出目录、损坏文件或运行超限都会返回非零退出码。运行已开始时，错误与资源报告保存在 `logs/`。先阅读原因，再调整输入或预算，并使用新的输出目录重试；程序不会自动覆盖、续跑或提高预算。各子命令的 `--help` 列出其实际参数。
+
+## 迁移数据包与复用展开缓存
+
+将整个数据包复制到另一位置后，先执行 `slice inspect --verify`，再采样或重放。已经打包的模型、图、输入来源和事件随包保留，后续操作无需重新下载原始路由。重放还需要本机可用的后端二进制。硬链接不是跨机器传输格式，迁移时需要复制文件内容。
+
+包含归档的数据包按操作需要展开：采样展开原始事件，重放展开原图。可在采样或重放配置中设置 `cache_directory`，复用经校验的展开副本；未设置时使用本次输出的 `work/slice/`。缓存属于可再生副本，不能替代原始数据包；其空间仍计入预算。缓存来源不符、数据损坏或上次展开中断时会报错，应查明原因后使用新的缓存路径。
+
+已有历史归档可通过 `slice create --import-config FILE --output DIR` 迁入。导入配置使用 `moe-ub-slice-import/1`，必须显式提供运行元数据、图与执行归档清单、网络、系统、观测、范围及来源证明。此操作适合维护已有完整归档的开发者，不会猜测或补造缺失字段。直接取得完整首轮数据包的使用者无需执行导入。

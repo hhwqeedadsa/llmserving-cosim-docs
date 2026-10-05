@@ -1,4 +1,4 @@
-# M6 场景与 WRITE/RTP 参数入口
+# 场景与 WRITE/RTP 参数入口
 
 `reference.yaml` 引用已有小型 GQA 服务、一个选定 MoE 层和四端点交换网络，从 CM384/R1 参考规格中只导入 `ns3_backend.reference_attributes/reference_globals` 及按角色选择的事务 profile。它不执行参考规格中的模型、384 芯片拓扑或 CANN 流程；原 `moe-ub-scenario-reference/0.1` 文件仍不能直接作为可执行输入。
 
@@ -6,7 +6,7 @@
 
 ## 已验证命令
 
-依赖为现有 `.venv/llmservingsim-native` 中的 PyYAML 6.0.1；无需下载模型。独立构建命令见[环境记录](../../docs/environment.md#2026-10-03m6-场景-yaml-与后端参数适配)。以下命令从主仓库根目录执行，输出目录必须不存在。
+依赖为现有 `.venv/llmservingsim-native` 中的 PyYAML 6.0.1；无需下载模型。独立构建命令见[历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-10-03m6-场景-yaml-与后端参数适配)。以下命令从主仓库根目录执行，输出目录必须不存在。
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.scenario resolve \
@@ -32,7 +32,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 | 字段 | 含义 |
 |---|---|
 | `scenario_id/basis` | 运行身份；当前依据只能为 `selected_reference`。 |
-| `service/layer/system` | configured-service/1 配 layer/1、layer/2，configured-service/2 配 layer/3，configured-service/3 或 evidence-service/1 配 layer-segments/1，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应合同校验。 |
+| `service/layer/system` | configured-service/1 配 layer/1、layer/2，configured-service/2 配 layer/3，configured-service/3 或 evidence-service/1 配 layer-segments/1，以及 ASTRA system JSON；模型、专家放置、容量和映射仍按对应输入约束校验。 |
 | `backend.reference_file` | 原参考规格。只读取上述后端段，所选 profile 必须完整；未选候选允许缺项。 |
 | `backend.profile_by_role` | 显式选择 `dispatch/combine`，当前均要求 URMA WRITE/RTP、数据拥有方发起、RemoteWriteCommitted 就绪、事务完成释放发送槽。 |
 | `backend.attributes/globals` | 原生完整键名和标量值；未知名称、类型/单位错误或矛盾的固定约束报错。带单位时间使用 `10ns` 等字符串，带宽属性使用 `224Gbps` 等原生格式；生效值按原生序列化形式保存。 |
@@ -52,7 +52,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 ## 生效记录
 
-后端的 `--backend-catalog` 从运行时 TypeId 和 GlobalValue 枚举，当前构建共 96 个 UB 属性、21 个 UB 全局值；包含延迟注册的原生工具全局值和出口队列类型，不另维护默认值表。目录记录 UB 提交和编译常量；`--check-backend FILE` 再用原生 checker 校验并规范化。目录不匹配当前构建时拒绝执行。CMake 在配置时记录 UB 提交，依赖变更后应重新配置；当前任务没有变更依赖。
+后端的 `--backend-catalog` 从运行时 TypeId 和 GlobalValue 枚举，该次构建共 96 个 UB 属性、21 个 UB 全局值；包含延迟注册的原生工具全局值和出口队列类型，不另维护默认值表。目录记录 UB 提交和编译常量；`--check-backend FILE` 再用原生 checker 校验并规范化。目录不匹配当前构建时拒绝执行。CMake 在配置时记录 UB 提交，依赖变更后应重新配置；该次检查未变更依赖。
 
 - `requested_backend.json` 保留选择值、运行时默认值和逐参数来源链；`network/backend.json` 保存规范化结果，是新入口的权威输入。完整 `network_attribute.txt` 是审计副本，新路径不再从它加载参数。旧案例未提供 backend.json 时，仍走原 TXT 路径。
 - `resolution.json` 保存导入范围、输入摘要、固定依赖、二进制及适配器摘要、网络覆盖、三个分包口径、RNG/观测输入和完成状态。运行后补记实际执行目录中四份 CSV 的摘要。

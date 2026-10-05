@@ -1,4 +1,4 @@
-# M6 服务模型与容量参数样例
+# 服务模型与容量参数样例
 
 `moe-ub-configured-service/1` 使用显式的 `moe-ub-model/1` 结构与逐 rank 字节预算，执行一组 EP 的单个选定 MoE 层。这里两份模型均为人工构造的功能输入，没有模型下载、真实路由、设备测量或目标部署校准。
 
@@ -27,7 +27,7 @@
 
 接纳前按 `ceil((request.output−1)/block_size)` 在 Scheduler 使用的同一个原生块池中预留；预留不增加 computed/reached Token，不产生 KV 网络流量。原 `add_decode()`、每轮 `schedule()` 和 `add_done()` 复用该块池，最终释放一次。权重和静态预留保持驻留，服务结束要求所有请求 KV 释放。
 
-尚未接纳的请求保存在前端队列，其 ready-KV 是外部给定输入，尚未声明在目标 rank 驻留。当前每 rank 只接纳一个请求；排队请求等待前一请求结束释放后进入。已驻留的多请求排队、连续组批和因当前空闲块不足而等待的组合能力留到 M7，本样例不把序列槽等待称为多请求容量等待。单请求最终容量永久不足则在后端启动前报错。
+尚未接纳的请求保存在前端队列，其 ready-KV 是外部给定输入，尚未声明在目标 rank 驻留。本目录的 service/1 每 rank 只接纳一个请求；排队请求等待前一请求结束释放后进入。多请求驻留、连续组批和容量等待见[M7 用例](../m7_continuous_batching/README.md)；本样例只检查单请求序列槽等待。单请求最终容量永久不足则在后端启动前报错。
 
 容量初始化位于主仓库 `configured_scheduler.py`：锁定的 Scheduler 构造器直接创建均分权重 MemoryModel，故本适配只替换初始化，继续使用其原 `schedule/add_decode/add_done`、Request、BlockPool 和 TieredKVCacheManager。没有修改依赖、全局 monkeypatch 或临时虚假模型。
 
@@ -44,7 +44,7 @@ GQA 中请求 101 在 rank 2 执行四步，请求 102 在 rank 7 执行三步�
 
 实际还执行 GQA 来源开/关/不挂观测、MHA 最后一输入恰好占一块、空服务和九项预期拒绝。Python 单元独立核对完整容量与块边界；集成测试核对实际节点映射、ASTRA 依赖、UB data_ready/send_done、回收和来源被动性。
 
-已有环境的构建方法见 [环境记录](../../docs/environment.md#2026-10-03m6-服务模型与容量参数化)。从根目录运行以下入口，输出目录须尚不存在：
+已有环境的构建方法见 [历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-10-03m6-服务模型与容量参数化)。从根目录运行以下入口，输出目录须尚不存在：
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
@@ -60,7 +60,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
   --output-dir runs/m6-model-check
 ```
 
-旧 `moe-ub-service-fixture/1`、数据、多层、P/D schema 保留原模型与范围，未自动迁移到新配置。当前入口使用 `service` CLI；完整场景 YAML 和新的模型容量 schema 尚未组合到研究导出入口。
+旧 `moe-ub-service-fixture/1`、数据、多层、P/D schema 保留原模型与范围，未自动迁移到新配置。本目录使用内部 `service` CLI，保留其旧 schema；当前完整用户流程见[用户指南](../../docs/user_guide.md)。
 
 
 后续部署本地性任务已为该配置服务增加 layer v2：group 同时声明全局 die/chip/server 归属及本地准备时间，后端按固定部署区分本地交付与 UB 写。模型容量仍按独立 rank 核算，详见[本地性样例](../m6_locality/README.md)。本目录的原 layer v1 输入继续保持原行为。

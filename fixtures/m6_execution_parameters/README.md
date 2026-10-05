@@ -1,6 +1,6 @@
-# M6 单层执行参数对照
+# 单层执行参数对照
 
-本目录验证 M6 首项的单层、固定轮次执行参数化。输入仍使用 `moe-ub-layer-fixture/1`；专家数由 `expert_placement` 长度确定，专家编号为该数组索引。`rank_ids` 为非空、升序且唯一的逻辑 rank，`rank_to_ub_node` 按相同位置给出一一对应的真实 UB 计算端点，不要求同号。
+本目录验证 M6 首项的单层、固定轮次执行参数化。输入仍使用 `moe-ub-layer-fixture/1`；专家数由 `expert_placement` 长度确定，专家编号为该数组索引。`rank_ids` 为非空、升序且唯一的逻辑 rank，`rank_to_ub_node` 按相同位置给出一一对应的 ns-3-UB 计算端点，不要求同号。
 
 | 输入 | EP / 专家数 / Top-K | 逻辑 rank → UB 节点 | 独立预期 |
 |---|---|---|---|
@@ -27,6 +27,6 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 保留的执行边界：每 rank 每轮至多一个本地 Decode Token；旧 Prefill 入口仍最多 16 个 Token；发送槽为 1 或 2，应用元数据为零，协议为 URMA_WRITE/RTP；每份计划最多 4096 个传输。逻辑 rank 须满足 ASTRA 的有符号整数和 `id+1` 表索引范围，稀疏大编号会增加 ASTRA 内部表的内存开销。单层与两轮诊断入口保留 `ready_ns + 1000000 ns` 的仿真截止时间，不能据此宣称任意规模已验证。
 
-执行结果的 `rank_ids`、`rank_to_ub_node` 说明数组顺序；`active_wqes`、`peak_wqes`、`initial_tp_counts` 按逻辑成员顺序排列，WQE/目标写事件中的节点号仍为物理 UB 节点。传输结果及内部真值另存 `src_ub_node`、`dst_ub_node`，端侧操作继续使用逻辑 rank。`observed/` 不增加内部传输身份。
+执行结果的 `rank_ids`、`rank_to_ub_node` 说明数组顺序；`active_wqes`、`peak_wqes`、`initial_tp_counts` 按逻辑成员顺序排列，WQE/目标写事件中的节点号仍为物理 UB 节点。传输结果及内部对应关系另存 `src_ub_node`、`dst_ub_node`，端侧操作继续使用逻辑 rank。`observed/` 不增加内部传输身份。
 
-后续已新增[服务模型与容量参数入口](../m6_service_model/README.md)，在单层服务中验证了逐 rank 容量与非恒等端点映射；旧 schema 的限制保留。同芯片不同 rank 的本地路径和场景 YAML 适配仍未实现，M6 整体尚未完成。
+后续已新增[服务模型与容量参数入口](../m6_service_model/README.md)，在单层服务中验证了逐 rank 容量与非恒等端点映射；旧 schema 的限制保留。同芯片本地交付和场景 YAML 分别见[本地性用例](../m6_locality/README.md)与[场景参数用例](../m6_scenario_backend/README.md)。

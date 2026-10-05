@@ -1,4 +1,4 @@
-# M7 同 rank 多请求连续批处理
+# 同 rank 多请求连续批处理
 
 本样例使用一个 EP 组、两个逻辑 rank（4、10）映射到 UB 节点（1、3），执行 KV 已就绪的纯 Decode 和一个选定 MoE 层。模型、路由和计算系数均为合成参考值。完整模型容量沿用 [M6 的模型公式](../m6_service_model/README.md)，没有下载模型、测量硬件或修改依赖。
 
@@ -40,13 +40,13 @@ C 在第一轮中到达；B 于 21100 ns 完成并释放一块，C 此时接纳�
 
 输出 `moe-ub-execution-plan/3` 在旧计划字段之外保存 batch_limits 和 compute_inputs。后者列出各 rank 的实际请求、Token 索引、上下文长度（索引+1）、query_tokens=1、批次规模、各专家的输入数（含零）与精度。Python 和 C++ 各自核对这些字段及实际节点耗时；运行中不能改变 batch_limits。
 
-本轮计算仍使用显式线性参考系数：准备/结束工作按本地 Token 数缩放，专家工作按本 rank 的专家输入总数缩放。记录标明 `context_sensitive=false`、`expert_distribution_sensitive=false`；上下文和逐专家输入可追溯，但当前系数没有复现长上下文或专家负载分布对内核时间的影响。该依据仍为 `unvalidated_reference`，相应模型与真实数据工作属于 M9。
+本轮计算仍使用显式线性参考系数：准备/结束工作按本地 Token 数缩放，专家工作按本 rank 的专家输入总数缩放。记录标明 `context_sensitive=false`、`expert_distribution_sensitive=false`；上下文和逐专家输入可追溯，但当前系数没有复现长上下文或专家负载分布对内核时间的影响。该依据仍为 `unvalidated_reference`，实测算子表与真实来源的检查另见[M9 用例](../m9_evidence/README.md)。
 
-`service_result.json` 增加 batch_events，记录逐请求 scheduled_tokens、驻留成员、上下文、每批生成量及完成请求；memory_events 记录接纳、等待原因、释放与同一块池快照。每 rank 仍只有一张活动图和一个计算槽；Dispatch/Combine 仍使用真实 UB 完成事件。多层、多请求、多组组合属于 M8，本任务未执行。
+`service_result.json` 增加 batch_events，记录逐请求 scheduled_tokens、驻留成员、上下文、每批生成量及完成请求；memory_events 记录接纳、等待原因、释放与同一块池快照。每 rank 仍只有一张活动图和一个计算槽；Dispatch/Combine 仍使用实际 ns-3-UB 完成事件。多层、多请求、多组组合见[M8 用例](../m8_composed_service/README.md)，不包含在本目录的单层结果中。
 
 ## 已验证入口与对照
 
-独立构建配置见[环境记录](../../docs/environment.md#2026-10-03m7-同-rank-多请求连续批处理)。在根目录使用已有虚拟环境，输出目录须不存在：
+独立构建配置见[历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-10-03m7-同-rank-多请求连续批处理)。在根目录使用已有虚拟环境，输出目录须不存在：
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_continuous_batching.py \

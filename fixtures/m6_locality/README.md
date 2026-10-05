@@ -1,8 +1,8 @@
-# M6 部署本地性样例
+# 部署本地性样例
 
 本样例使用显式芯片归属区分同 rank、同芯片不同 rank、跨芯片三类贡献。所有路由和计算时间都是人工参考输入，状态仍为 `unvalidated_reference`；没有模拟 die 间链路、采集真实路由或校准硬件。
 
-## 输入合同
+## 输入格式与约束
 
 `moe-ub-layer-fixture/2` 在原单层字段之外要求 `deployment`：
 
@@ -31,9 +31,9 @@
 
 新 `moe-ub-execution-plan/2` 的 `contributions` 保存三类逐 Token/目标 rank 贡献及专家编号。`transfers` 是跨 rank **逻辑交付**列表：`urma-write-rtp-default` 才是 UB 写；`same-chip-local-reference` 是本地交付，省略 `ub_task_id`，`priority/task_byte_range` 为 null，不按 fabric 的 chunk_bytes 分块。transfer_id 和 comm_tag 在全部交付中唯一，UB task 分配器只为 fabric 写分配标识。`rank_graphs.local_prepare_nodes` 记录两阶段准备节点或 null。Chakra 序列化沿用原 COMP/SEND/RECV 格式，文件元数据版本保持原值，具体交付语义由 v2 计划校验并登记。
 
-后端结果的 `transfers` 继续只记录真实 UB 写，新增 `local_deliveries` 单独记录本地发布、接收登记和两侧回调时间。旧 `sender_completion=transaction_done` 字段只适用于 fabric WRITE；本地发送回调表示数据已发布，不表示 UB 事务完成。端侧阶段时间包含实际本地工作及等待，端口计数和 `truth/transfer_registry.jsonl` 只包含实际 fabric 事务；本地身份不会加入 observed 字段。
+后端结果的 `transfers` 继续只记录ns-3-UB 写，新增 `local_deliveries` 单独记录本地发布、接收登记和两侧回调时间。旧 `sender_completion=transaction_done` 字段只适用于 fabric WRITE；本地发送回调表示数据已发布，不表示 UB 事务完成。端侧阶段时间包含实际本地工作及等待，端口计数和 `truth/transfer_registry.jsonl` 只包含实际 fabric 事务；本地身份不会加入 observed 字段。
 
-`moe-ub-configured-service/1` 可配合 layer v2 使用，唯一 group 必须重复声明完全一致的 deployment。生成的后端部署文件使用 `moe-ub-service-deployment/2`；每轮都校验部署未改变。每个 rank 仍按原独立预算核算权重与 KV，执行一组、一层、每 rank 同时一个请求。本步也覆盖固定两轮；旧服务、P/D、来源索引及多层入口明确保留 layer v1，不自动迁移。连续批处理和组合运行仍待后续任务。
+`moe-ub-configured-service/1` 可配合 layer v2 使用，唯一 group 必须重复声明完全一致的 deployment。生成的后端部署文件使用 `moe-ub-service-deployment/2`；每轮都校验部署未改变。每个 rank 仍按原独立预算核算权重与 KV，执行一组、一层、每 rank 同时一个请求。本步也覆盖固定两轮；旧服务、P/D、来源索引及多层入口明确保留 layer v1，不自动迁移。多请求连续批处理和多组层段的对应输入分别见[M7](../m7_continuous_batching/README.md)与[M8](../m8_composed_service/README.md)。
 
 ## 手算对照与实际结果
 
@@ -47,7 +47,7 @@
 
 ## 已验证命令
 
-使用[环境记录](../../docs/environment.md#2026-10-03m6-部署本地性分类)中的独立构建，以下命令从仓库根目录执行，输出目录必须不存在：
+使用[历史环境记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-10-03m6-部署本地性分类)中的独立构建，以下命令从仓库根目录执行，输出目录必须不存在：
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.generate \

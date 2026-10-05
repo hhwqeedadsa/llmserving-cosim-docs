@@ -1,58 +1,42 @@
 # MoE 推理与 UB 网络联合仿真
 
-本项目将推理服务调度、ASTRA 计算/通信依赖和 ns-3-UB 包级网络放在同一仿真时间中执行，用于研究端侧通信操作与交换端口采样之间的关系。通信完成来自实际 UB 事件，研究算法只读取公共观测。
+`moe-ub-cosim` 用于研究混合专家（MoE）模型推理中的计算、通信与交换机流量之间的关系。它根据推理请求生成计算与通信任务，在模拟网络中执行，再输出端侧操作记录和交换机端口流量统计。
 
-统一用户入口、小型真实 UB 流程、隔离安装和 128 rank 目标首轮切片/重放均已通过验收。M10 按已确认的首轮研究范围收尾，完整 64 步服务未验证，目标硬件仍未校准。证据见[首轮交付记录](fixtures/m10_research_slice/README.md)，开发状态见 [current.md](docs/tasks/current.md)，历史结果见[里程碑记录](docs/milestone_history.md)。
+MoE 模型会为每个词元（Token）选择部分专家执行计算。当专家分布在不同设备上时，中间数据需要经过网络传送。这个项目让数据传输的实际完成时间决定后续计算何时开始，也决定服务端何时处理下一批请求，因此可以观察网络排队与推理调度之间的相互影响。
 
-## 安装与构建
+## 系统怎样工作
 
-需要原生 Linux、Python 3.10+、C++20 编译器、CMake 3.24+、Ninja、Git、protoc 及 protobuf/zlib 开发库。固定维护仓库需要相应 Git 读取权限。小例不需要 GPU、模型权重或真实数据账户。
+研究者提供模型与部署参数、推理请求、专家选择记录和网络配置。LLMServingSim 负责请求组批，本项目将各轮计算与通信转成执行图，ASTRA-sim 按依赖执行这些任务，ns-3-UB 模拟数据包传输、排队和链路竞争。计算使用配置的耗时模型，不执行模型的数值前向计算。
 
-```bash
-git submodule update --init --recursive
-python3 -m venv .venv/user
-source .venv/user/bin/activate
-python -m pip install -e '.[frontend]'
-moe-ub doctor
-moe-ub build --build-dir build/default --jobs 2
-```
+研究数据包括端侧通信操作的起止时间，以及交换机端口按采样周期统计的包数和字节数。系统另外保存操作与实际网络数据之间的对应关系，供评价关联方法时使用；关联算法只读取观测数据。格式和读取方式见[输出数据说明](docs/record_storage.md)。
 
-安装使用当前源码的 editable 模式。`doctor` 报告缺失项，不自动安装；构建成功后，二进制路径和日志位置保存在 `build/default/backend.json`。
+## 当前可以做什么
 
-## 运行并复用一个首轮切片
+项目可以模拟同一设备上的多请求连续组批、多个模型层，以及共享网络的独立专家并行组。完成一次首轮仿真后，可以保存其任务图与事件，离线调整采样设置，或直接重跑后端以检查相同任务的网络执行。
+
+当前规模验证采用 CM384 部署背景下的 DeepSeek-R1 解码参考场景：128 个计算端点执行完整 61 块模型的首轮任务。同芯片内部通信按本地依赖处理，跨芯片通信使用 UB 网络。该场景结合公开路由、CANN 通信行为和参考计算耗时；目标 NPU 的耗时校准及完整 64 轮服务尚未完成。参数、依据和可开展的实验见[CM384/R1 参考场景](docs/scenarios/cm384_r1.md)。
+
+## 运行第一个例子
+
+先按[用户指南](docs/user_guide.md)完成 Linux 环境安装与后端构建，然后在仓库根目录运行：
 
 ```bash
 moe-ub run --config examples/first_round/run.json --output runs/demo-run
-moe-ub slice create --from-run runs/demo-run --output data/demo-slice
-moe-ub slice inspect --slice data/demo-slice --verify
-moe-ub sample --slice data/demo-slice --config examples/first_round/sample.json --output runs/demo-10us
-moe-ub replay --slice data/demo-slice --config examples/first_round/replay.json --output runs/demo-replay
-moe-ub validate --run runs/demo-replay
-moe-ub validate --observed runs/demo-10us/observed
 ```
 
-采样命令复用原事件，重放命令复用已生成图并重新计算网络行为。输出目录须尚不存在；需要重复实验时使用新名称。每条命令有 `--help`；也可使用 `python -m moe_ub_cosim`。构建在其他位置时，给运行/重放传入 `--backend`。
+[随仓库提供的小例](examples/first_round/README.md)使用合成请求和专家选择，无需下载模型或真实路由数据。运行结束后，`runs/demo-run/observed/` 保存研究观测，`truth/` 保存用于评价的实际对应关系，其他目录保存输入、核验结果与日志。输出目录须使用新路径。
 
-JSON 内路径相对该配置文件，命令行路径相对当前目录。示例采用合成路由和参考耗时。首版切片从已知空网络、KV 已就绪的时间零开始，只覆盖完整首轮；它不是任意中途状态快照，也不复现后续自适应组批。完整操作、预算、输入字段、输出格式和失败处理见[用户指南](docs/user_guide.md)。
+保存首轮数据、修改采样周期和重放后端的完整步骤在[用户指南](docs/user_guide.md)中。
 
-## 输入、结果与代码
+## 文档导航
 
-| 位置 | 用途 |
+| 我想了解 | 阅读入口 |
 |---|---|
-| [examples/first_round/](examples/first_round/) | 可复制修改的服务、模型、网络、观测及有限预算 |
-| `data/` | 本地来源数据、可移动的研究切片；不提交 Git |
-| `runs/<实验名>/` | 生效配置、公共观测、内部真值、核验和资源日志；不提交 Git |
-| `build/` | 编译产物与构建日志 |
-| [python/moe_ub_cosim/](python/moe_ub_cosim/)、[backend/](backend/) | 可复用 Python 实现与联合后端 |
-| [tests/](tests/)、[fixtures/](fixtures/)、[scripts/](scripts/) | 自动检查、小型开发输入、仓库维护与专项检查 |
-| [third_party/](third_party/) | 按 gitlink 固定的依赖源码 |
+| 安装、运行、修改配置和复用结果 | [用户指南](docs/user_guide.md) |
+| 模块如何协作，网络如何影响计算与组批 | [系统架构](docs/architecture.md) |
+| 输出字段、采样时钟、零值窗口和文件读取 | [输出数据与存储](docs/record_storage.md) |
+| 计算、通信和容量模型的依据及近似 | [模型依据与验证范围](docs/model_validation.md) |
+| CM384/R1 的参数、真实路由与实验范围 | [参考场景](docs/scenarios/cm384_r1.md) |
+| 修改代码、管理依赖和选择测试 | [开发维护](docs/development.md)、[后端参考](backend/README.md) |
 
-研究输入位于每次结果的 `observed/`；`truth/`、`raw/` 和图文件用于内部生成与验证，不能作为关联算法的输入。压缩观测显式声明零窗口；读取方式见用户指南，不应把稀疏文件缺行当作未观测。
-
-## 进一步阅读
-
-- [用户指南](docs/user_guide.md)：操作集合、命令、配置、目录和重复实验。
-- [开发管理](docs/development.md)：任务、Git 和依赖维护；日常使用无需阅读开发任务文件。
-- [技术规范 v0.2](docs/moe_ub_cosim_dev_v0.2.md)与[v0.3 增量](docs/moe_ub_cosim_dev_v0.3.md)：执行、观测和真实性边界。
-- [后端及旧模块入口](backend/README.md)：保留此前的专项开发操作。
-- [环境记录](docs/environment.md)与[模型验证](docs/model_validation.md)：实际命令、证据及未校准范围。
+开发进展与旧方案见[里程碑历史](docs/milestone_history.md)和[设计档案](docs/archive/README.md)。测试输入与已保存证据位于 [fixtures/](fixtures/)，通常无需在开始使用前逐份阅读。

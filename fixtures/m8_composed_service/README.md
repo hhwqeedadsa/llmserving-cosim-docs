@@ -1,4 +1,4 @@
-# M8 多层、多请求、多组联合执行
+# 多层、多请求、多组联合执行
 
 `service.json` 声明两个独立 EP 组、完整模型容量及七个就绪 KV 请求，`layers.json` 声明各组执行的连续 MoE 层 1、2、3。每轮选中的请求依次经过三层，整段完成后才推进一次 Token；不同组在同一套 UB 网络中独立推进。输入均为合成功能数据，计算和硬件状态仍为 `unvalidated_reference`。
 
@@ -32,7 +32,7 @@ ep0 的 A/B/C（201/202/203）在 rank 2 上分别剩余 3/1/2 个 Token，C 在
 
 ## 已验证命令与结果
 
-在主仓库根目录完成[独立构建](../../docs/environment.md#2026-10-03m8-多层多请求多组联合执行)后，使用现有虚拟环境，输出目录必须不存在：
+在主仓库根目录完成[独立构建](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/environment.md#2026-10-03m8-多层多请求多组联合执行)后，使用现有虚拟环境，输出目录必须不存在：
 
 ```bash
 PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim.service \
@@ -64,4 +64,4 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python tests/integration/check_
 
 前端拒绝缺失层路由、组间端点重叠、放置不符、层段缓冲不足、不可能的最终 KV，以及缺少组内预建通道。后端独立拒绝层间边界、上下文、跨层重复 tag、静态放置与层序篡改，均在 0 ns、业务提交之前失败。
 
-这一步验证的是选定 MoE 层段的连续解码；dense 层 0、embedding/最终 norm/输出头/sampling 未执行，完整模型 ITL/TTFT、真实路由、目标 profile、MLA、多层 P/D 和完整 CM384/CANN 行为均未在本步验证。M9 等待用户确认。
+这一步验证的是选定 MoE 层段的连续解码；dense 层 0、embedding/最终 norm/输出头/sampling 未执行，完整模型 ITL/TTFT、真实路由、目标 profile、MLA、多层 P/D 和完整 CM384/CANN 行为均未在本步验证。真实来源和算子耗时对照见[M9 用例](../m9_evidence/README.md)，完整模型结构见[完整 Decode 图](../m10_full_model/README.md)。

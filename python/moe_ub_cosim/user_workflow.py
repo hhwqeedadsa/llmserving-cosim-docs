@@ -6,6 +6,7 @@ import sys
 from types import SimpleNamespace
 
 from .plan import integer, require
+from .plan_io import file_sha256
 from .user_io import ROOT, fields, host_policy, inventory, read, relative, save, timestamp, verify_inventory, versions
 
 
@@ -15,7 +16,7 @@ def configuration(path, action, backend=None):
     extra = {'run': {'inputs', 'observation', 'record_policy', 'max_simulation_ns', 'backend', 'backend_timeout_seconds'},
              'sample': {'observation'}, 'replay': {'backend', 'backend_timeout_seconds'}}[action]
     optional = ({'network', 'cache_directory', 'export_host'} if action == 'replay' else
-                {'cache_directory'} if action == 'sample' else {'export_host'})
+                {'cache_directory', 'period_ns'} if action == 'sample' else {'export_host'})
     fields(config, common | extra, optional, label=str(path))
     require(config['schema_version'] == f'moe-ub-{action}/1', f'{path}: unsupported schema_version')
     config['host'] = host_policy(config['host'], base)
@@ -26,7 +27,11 @@ def configuration(path, action, backend=None):
         integer(config['backend_timeout_seconds'], 'backend_timeout_seconds', 1)
     for key in ('observation', 'record_policy', 'export_policy'):
         if key in config:
+            if key == 'observation' and action == 'sample' and config[key] is None:
+                continue
             config[key] = read(relative(base, config[key]))
+    if 'period_ns' in config:
+        integer(config['period_ns'], 'period_ns', 1)
     from .bounded_export import policy
     policy(config['export_policy'])
     if action == 'run':
@@ -64,6 +69,8 @@ def execute(args):
                     started_utc=timestamp(), source_config=str(args.config.resolve()),
                     calibration_status='unvalidated_reference', observation_access_boundary='observed_only',
                     software=versions())
+    if args.command in ('run', 'replay'):
+        manifest['backend_binary'] = dict(path=config['backend'], sha256=file_sha256(Path(config['backend'])))
     save(output/'manifest.json', manifest)
     from .host_probe import probe
     phases = [args.command, 'export'] if args.command in ('run', 'replay') else [args.command]

@@ -55,7 +55,7 @@ moe-ub validate --observed runs/demo-10us/observed
 
 ## 配置与资源
 
-`run.json` 的 `inputs` 指向服务、层、系统和网络；`observation`、`record_policy`、`export_policy` 指向相应 JSON 文件。`sample` 只需要观测和导出策略。`replay` 默认使用切片的系统、网络和原观测，不能覆盖模型、请求或路由。
+`run.json` 的 `inputs` 指向服务、层、系统和网络；`observation`、`record_policy`、`export_policy` 指向相应 JSON 文件。`sample` 的 `observation: null` 表示继承切片的观测配置；可用一个 `period_ns` 字段覆盖所有端口的周期，无需逐设备编辑或编写脚本。需要自定义时钟或窗口时，改为引用观测 JSON。优先级为显式 `period_ns`、观测文件（或继承的原配置），实际结果保存到 `inputs/observation.json`。`replay` 默认使用切片的系统、网络和原观测，不能覆盖模型、请求或路由。
 
 `max_simulation_ns` 和观测时刻的单位均为仿真纳秒；`backend_timeout_seconds`、`host.wall_seconds` 是宿主秒。`host` 必须显式给出进程树 RSS、单进程地址空间、累计产物字节、最低空闲磁盘、宿主时限和其他需要合并计费的 `artifact_roots`。目录内硬链接按唯一 inode 计费，磁盘按文件内容大小和分配块中的较大值核算。采样监测可能存在短时峰值遗漏，不能作为操作系统级硬配额。
 

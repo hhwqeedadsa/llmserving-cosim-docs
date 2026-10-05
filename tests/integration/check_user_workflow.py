@@ -84,6 +84,7 @@ def main():
     switch.update(start_local_ns=at-2, end_local_ns=at+1, period_ns=2)
     save(out/'edge-observation.json', observation)
     config = read(example/'sample.json'); config['observation'] = 'edge-observation.json'
+    config.pop('period_ns', None)
     config['export_policy'] = str(example/'export-policy.json'); save(out/'edge.json', config)
     cli('edge', 'sample', '--slice', bundle, '--config', out/'edge.json', '--output', out/'edge', offline=True)
     expected_attribution = Counter()

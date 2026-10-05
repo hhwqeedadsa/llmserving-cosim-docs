@@ -71,6 +71,7 @@ def versions():
         require(result.returncode == 0, 'Use an editable installation in a complete repository checkout')
         return result.stdout.strip()
     return dict(project_commit=git('rev-parse', 'HEAD'),
+                working_tree_dirty=bool(git('status', '--porcelain')),
                 dependencies=git('submodule', 'status', '--recursive').splitlines(),
                 source_hashes={str(p.relative_to(ROOT)): file_sha256(p)
                     for folder in ('python/moe_ub_cosim', 'backend')

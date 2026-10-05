@@ -6,7 +6,7 @@
 - `service.json`：三条同时到达的请求、完整小模型、容量及参考计算耗时；每请求只运行一次解码迭代。
 - `layers.json`：三 rank 的路由、专家放置和 CANN 模板参数。
 - `system.json`、`network/`：ASTRA 执行和真实 UB 网络配置。
-- `observation.json`、`sample-10us.json`：原 1 µs 和重采样 10 µs 观测；不是两次业务执行。
+- `observation.json`、`sample-10us.json`：原 1 µs 和等价的详细 10 µs 观测示例；默认 `sample.json` 直接继承切片，只用一个 `period_ns` 改周期，不需要复制完整配置。
 - `record-policy.json`、`export-policy.json`：有限原始记录与研究导出预算。
 - `sample.json`、`replay.json`：直接复用切片的实验配置。
 

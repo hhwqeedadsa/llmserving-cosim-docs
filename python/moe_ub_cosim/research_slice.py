@@ -260,7 +260,10 @@ def sample(output, config):
     from .observation import validate_observation
     from .user_workflow import export
     directory = Path(config['slice']); manifest = read(directory/'slice.json')
-    observation = config['observation']
+    observation = deepcopy(manifest['observation'] if config['observation'] is None else config['observation'])
+    if 'period_ns' in config:
+        for switch in observation['switches']:
+            switch['period_ns'] = config['period_ns']
     _, selected = validate_observation(observation, manifest['ranks'], manifest['capture_end_ns'])
     _, available = validate_observation(manifest['observation'], manifest['ranks'], manifest['capture_end_ns'])
     require({(p['switch_id'], p['port_id']) for p in selected} <= {(p['switch_id'], p['port_id']) for p in available},
@@ -268,6 +271,7 @@ def sample(output, config):
     require(observation['record_provenance'] == manifest['observation']['record_provenance'], 'Cannot change capture provenance')
     require(observation.get('resource_budget') == manifest['observation'].get('resource_budget'),
             'Sampling keeps the source capture resource budget; reduce windows if the declared budget is exceeded')
+    save(output/'inputs/observation.json', observation)
     raw = materialize(directory, manifest, output, config, 'execution_archive')
     export(raw, observation, manifest['ranks'], manifest['capture_end_ns'], output, config['export_policy'])
     return dict(simulation_end_ns=manifest['simulation_end_ns'], scope='passive_resampling_of_frozen_execution',

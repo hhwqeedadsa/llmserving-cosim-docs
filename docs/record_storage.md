@@ -89,4 +89,6 @@ UB 的 task/packet/port 文本诊断与本平台研究记录分别控制。完�
 
 设置 `MOE_UB_HOST_PREPARATION_TRACE=1` 时，交接记录包含 glibc 堆的已分配/空闲字节，另保存 `transport-retirement.jsonl`。8/32 轮序号历史峰值同为 118 条、每轮清零；四块/128 rank/完整网络的 129034 条历史回收后，完整执行和研究记录逐字节一致。相关 UB 补丁为 `a9539dd`，固定基线未升级。
 
-服务 `--wall-timeout-seconds` 接受显式正整数，默认仍为 60；宿主等待不计入仿真时间。完整首轮已实测超过一小时，因此不再把旧 3600 s 检查误当成技术上限。完整实验必须同时配置外层总时间、采样 RSS、地址空间及累计磁盘限额；准备好的有限配置见[最终运行预算](../fixtures/m10_resource_efficiency/final-run-budget.json)，尚未获准执行。
+服务 `--wall-timeout-seconds` 接受显式正整数，默认仍为 60；宿主等待不计入仿真时间。完整首轮已实测超过一小时，因此不再把旧 3600 s 检查误当成技术上限。实验必须同时配置外层总时间、采样 RSS、地址空间及累计磁盘限额。原 [64 步预算](../fixtures/m10_resource_efficiency/final-run-budget.json)未执行，2026-10-05 已随用户的范围调整移出 M10 收尾；首轮研究交付的候选限额见[当前任务](tasks/current.md)。
+
+现有图输入归档的 `graph_storage replay` 会重新构图。用户新要求的“直接复用已生成图运行后端”以及通用离线切片采样入口尚未交付，按 [v0.3 §4.9](moe_ub_cosim_dev_v0.3.md#49-首轮研究切片与重复实验)另行验收；不能把上述重建命令称为免构图的后端重放。

@@ -66,3 +66,5 @@
 统一入口检查点已本地提交 `30e5596`，未推送。补充切片清单的必需输入与归档配对检查后，小例完整流程再次通过（`checks/user-workflow-manifest-closure/`）。隔离检出已取得 13 个固定本地源码版本、建立新虚拟环境、完成安装与 doctor；为使重型导出和原生构建串行，首次隔离构建已主动终止并确认无残留进程，原因在 `checks/isolated-install-stop.json`，完整隔离验收仍待执行。目标比较与隔离安装检查脚本已准备，尚未将其未完成部分记为通过。
 
 离线采样增加直接继承切片观测（`observation: null`）和单字段 `period_ns` 覆盖，避免为改周期复制每个设备的配置；实际观测写入输出 inputs。完整小例再次通过，见 `checks/user-workflow-inherited-sampling/`。新运行/重放清单绑定实际后端二进制摘要，源码版本同时记录工作树是否有改动。后续重型验收由 `tests/integration/check_slice_acceptance.py` 串行执行，任何阶段失败即停止；正式目标后端不自动重试。
+
+目标原采样重算已通过，包含 14848 端侧记录、3741764 传输来源、21158304 非零端口窗口和 4319717 归属记录；六张研究表均与历史输出一致。导出含归档恢复共 2280.964 秒、进程树采样峰值 429490176 B，累计产物峰值 16879435776 B；对照检查见 `checks/target-baseline-audit/`。隔离检出以 `f51318b` 和 13 个固定依赖执行完整 README 操作及仓库外调用，47 条记录命令全部退出 0；使用新的虚拟环境并复用系统 Python 包和已核验本地 Git 源码，没有继承原 build/runs/.venv，不作为跨发行版验收。外层 475.513 秒、峰值 RSS 1689341952 B，证据见 `checks/isolated-install-final/` 及 `fixtures/m10_research_slice/checkpoint-isolation-and-baseline.json`。现在执行目标 10 µs 重采样，其后按既定串行流程进行唯一一次正式目标后端重放。

@@ -1,0 +1,173 @@
+{
+  "schema_version": "moe-ub-slice-checkpoint/1",
+  "m10_completed": false,
+  "baseline_audit": {
+    "passed": true,
+    "baseline": {
+      "observed/endpoint_ops.jsonl": {
+        "records": 14848,
+        "method": "identical_compressed_bytes"
+      },
+      "observed/port_windows.csv": {
+        "records": 21158304,
+        "method": "identical_compressed_bytes"
+      },
+      "truth/operation_registry.jsonl": {
+        "records": 116,
+        "method": "identical_compressed_bytes"
+      },
+      "truth/transfer_registry.jsonl": {
+        "records": 3741764,
+        "method": "identical_compressed_bytes"
+      },
+      "truth/attribution_windows.csv": {
+        "records": 4319717,
+        "method": "identical_compressed_bytes"
+      },
+      "metrics/byte-classification.jsonl": {
+        "records": 21158304,
+        "method": "identical_compressed_bytes"
+      }
+    },
+    "resampled": null,
+    "replay": null
+  },
+  "baseline_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+      "-m",
+      "moe_ub_cosim.user_workflow",
+      "sample",
+      "/root/moe-ub-cosim/runs/v03-research-slice/target-sample-baseline"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-05T02:33:10.043202+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 4294967296,
+      "per_process_address_bytes": 8589934592,
+      "artifact_bytes": 34359738368,
+      "wall_seconds": 3600
+    },
+    "peak_sampled_group_rss_bytes": 429490176,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency"
+    ],
+    "peak_sampled_artifact_bytes": 16879435776,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 16143137213,
+    "peak_sampled_artifact_allocated_bytes": 16879435776,
+    "process_group": 2092223,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-05T03:11:11.006707+00:00",
+    "wall_seconds": 2280.963510202244,
+    "max_waited_child_rss_kib": 420448,
+    "artifact_bytes_before_report": 894974,
+    "aggregate_artifact_bytes_before_report": 16763670528,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 16027370268,
+      "allocated_bytes": 16763670528
+    }
+  },
+  "isolated_install": {
+    "passed": true,
+    "commit": "f51318b990038bdfedb05ca4965f7da9efd28ff4",
+    "dependencies": 13,
+    "used_original_build_or_runs_or_venv": false,
+    "reused_verified_local_git_objects": true,
+    "new_venv_with_system_site_packages": true,
+    "no_cross_distribution_claim": true,
+    "command_count": 47
+  },
+  "isolated_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+      "/root/moe-ub-cosim/tests/integration/check_user_install.py",
+      "--output-dir",
+      "/root/moe-ub-cosim/runs/v03-research-slice/checks/isolated-install-final"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-05T03:11:36.772882+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 34359738368,
+      "wall_seconds": 1800.0
+    },
+    "peak_sampled_group_rss_bytes": 1689341952,
+    "peak_sampled_processes": 11,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-research-slice"
+    ],
+    "peak_sampled_artifact_bytes": 17286127616,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 16509470813,
+    "peak_sampled_artifact_allocated_bytes": 17286127616,
+    "process_group": 2108944,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-05T03:19:32.285603+00:00",
+    "wall_seconds": 475.5127268936485,
+    "max_waited_child_rss_kib": 1261124,
+    "artifact_bytes_before_report": 377823,
+    "aggregate_artifact_bytes_before_report": 17286127616,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 16509470813,
+      "allocated_bytes": 17286127616
+    }
+  },
+  "isolated_environment": {
+    "passed": true,
+    "repository": "/root/moe-ub-cosim/runs/v03-research-slice/checks/isolated-install-final/checkout",
+    "python": "3.12.3",
+    "tools": {
+      "git": "/usr/bin/git",
+      "cmake": "/usr/bin/cmake",
+      "ninja": "/usr/bin/ninja",
+      "c++": "/usr/bin/c++",
+      "protoc": "/usr/bin/protoc"
+    },
+    "frontend_packages": {
+      "protobuf": "7.36.2",
+      "numpy": "2.4.1",
+      "pandas": "3.0.0",
+      "rich": "13.7.1",
+      "PyYAML": "6.0.1"
+    },
+    "dependencies": {
+      "exit_code": 0,
+      "output": "READ: . @ f51318b990038bdfedb05ca4965f7da9efd28ff4\nREAD: third_party/LLMServingSim @ 9aed949c8e66fd1424d48365af64bfc0fe0b2ed1\nREAD: third_party/LLMServingSim/astra-sim @ e2a14f55d9a45db8f3831bda7035af3e191e4bb7\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 3964b1d41cb5f7b51004c316b0eae1a3713c2498\nREAD: third_party/ns-3-ub @ a9539ddff9c8713975a50901f922c250cfcf8585\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n"
+    },
+    "backend": null,
+    "available_disk_bytes": 6670353321984,
+    "memory": {
+      "MemTotal_bytes": 68719476736,
+      "MemAvailable_bytes": 62565202944,
+      "SwapTotal_bytes": 0
+    },
+    "checks_scope": "Read-only presence/version checks; native headers/libraries are verified by build, not this command",
+    "missing_frontend_hint": "Install the frontend extra in a virtual environment; offline slice help does not need it"
+  },
+  "commands_log": "runs/v03-research-slice/checks/isolated-install-final/commands.json",
+  "target_replay_executed": false,
+  "new_period_pending": true
+}

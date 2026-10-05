@@ -3526,3 +3526,12 @@ UB 子提交为 `a9539dd`，从 `1ba7222` 创建的 `task/m10-retired-sequence-h
 小例完整命令检查位于 `runs/v03-research-slice/checks/user-workflow-delay-fixed/commands.json`，结果为 333 个节点与全部原始记录一致；原运行/冻结图重放均为 35538 ns，逐链路延迟扰动后为 90885 ns。采样和重放在 Python `-S`（不加载 site-packages）下通过，前者无需后端、后者无需调度器或构图依赖。原协议读取与归档边界六项单元检查退出 0，日志在 `checks/unit/`。已将主包以 `pip install --no-deps --no-build-isolation -e .` 安装到既有本地虚拟环境，未下载依赖；这不作为新环境验收。
 
 首次延迟对照和首次归档导入失败原因、修复位置及保留证据见当前任务。历史首轮归档已核验并固定，实际终点取自归档内 result.json，为 75323418 ns；其范围仍是冻结图首轮资源执行，并非完整目标服务请求完成。此检查点不表示 M10 完成。
+
+
+### 同日：原采样对照及隔离用户流程通过
+
+原首轮归档通过统一 slice 命令迁入，原 1 µs 观测通过统一 sample 命令重算。2280.964 秒、采样进程树峰值 429490176 B、累计产物峰值 16879435776 B；原始图和事件归档通过硬链接复用，仅事件建立一份已校验展开副本。六张研究表和端口原生核验均与历史一致；比较器允许压缩表示不同，此次实际压缩文件也逐字节一致。命令、预算、日志见 `runs/v03-research-slice/target-sample-baseline/logs/resources-sample/` 与 `checks/target-baseline-audit-monitor/`。
+
+隔离环境在 `runs/v03-research-slice/checks/isolated-install-final/checkout` 从提交 f51318b 及 13 个锁定依赖建立。仅共享已核验 Git 对象，没有旧生成文件；新 venv 使用系统 site-packages，局部下载 protobuf 7.36.2（343 kB）并 editable 安装主包。没有安装系统软件或下载模型/路由数据。doctor、独立 CMake 构建、README 的 run/slice/sample/replay/validate 及仓库外调用均通过，47 条命令与全部 stdout/stderr 已保存。总监测 475.513 秒、峰值 RSS 1689341952 B，结束无残留进程，累计磁盘峰值 17286127616 B。首次隔离构建因串行安排主动终止，未用该次中断代替通过；失败/终止记录仍在原目录。
+
+这证明当前 Linux 环境下不依赖开发机历史产物的用户流程；不声明跨发行版或联网首次获取所有私有源码通过。完整目标新周期及正式重放仍待验收。

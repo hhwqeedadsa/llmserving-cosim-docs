@@ -118,7 +118,11 @@ def main():
     slow = list(iter_result(out/'slow/raw/execution', 'transfers'))
     assert [r['transfer_id'] for r in fast] == [r['transfer_id'] for r in slow]
     assert any(a['data_ready_ns'] != b['data_ready_ns'] for a, b in zip(fast, slow))
-    assert list(iter_result(out/'replay/raw/execution', 'node_execution')) != list(iter_result(out/'slow/raw/execution', 'node_execution'))
+    compute = lambda path: {(r['rank_id'], r['node_id']): r for r in iter_result(path/'raw/execution', 'node_execution') if r['kind'] == 'COMP'}
+    fast_compute, slow_compute = compute(out/'replay'), compute(out/'slow')
+    assert set(fast_compute) == set(slow_compute)
+    assert any(fast_compute[k]['start_ns'] != slow_compute[k]['start_ns'] for k in fast_compute)
+    assert all(fast_compute[k]['end_ns']-fast_compute[k]['start_ns'] == slow_compute[k]['end_ns']-slow_compute[k]['start_ns'] for k in fast_compute)
     assert list(iter_result(out/'replay/raw/execution', 'planned_transfers')) == list(iter_result(out/'slow/raw/execution', 'planned_transfers'))
 
     bad = deepcopy(config); bad['unknown'] = 1; save(out/'bad.json', bad)

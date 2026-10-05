@@ -407,5 +407,15 @@
     "Only propagation delay in legacy CSV topology has been verified as a replay network override.",
     "No hardware calibration or full 64-step configured service completion claim."
   ],
-  "slice_manifest_required_inputs_checked": true
+  "slice_manifest_required_inputs_checked": true,
+  "compute_feedback": {
+    "passed": true,
+    "compared_compute_nodes": 135,
+    "changed_compute_start_times": 97,
+    "all_compute_durations_unchanged": true,
+    "inputs": [
+      "runs/v03-research-slice/checks/user-workflow-manifest-closure/replay/raw/execution",
+      "runs/v03-research-slice/checks/user-workflow-manifest-closure/slow/raw/execution"
+    ]
+  }
 }

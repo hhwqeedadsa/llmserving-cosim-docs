@@ -3561,3 +3561,26 @@ UB 子提交为 `a9539dd`，从 `1ba7222` 创建的 `task/m10-retired-sequence-h
 本轮未改子模块源码、gitlink、锁定依赖或原 64 步输入，未安装系统软件、下载模型或追加真实路由。保留了初次延迟覆盖不生效、历史摘要缺字段和主动终止并行构建的原始失败/停止记录，后续修复与独立成功分别记录。M10 按用户确认的首轮研究及用户可复用交付范围完成，原生 CANN/NPU、完整 64 步服务、稳态与硬件校准仍未验证。仅本地提交，不推送，不启动下一阶段。
 
 最终 `git diff --check`、13 个固定依赖及 153 处本地文档链接检查通过，实际命令、工作目录、输入与日志在 `R/checks/final-repository/` 并收入最终摘要。功能验收与这些仓库静态检查分别记录。
+
+## 2026-10-05：推送截至 M10 首轮研究交付的最新版
+
+用户在本地验收提交 `8db9908cfe4df17e401f4e52b660c85797de5ce1` 完成后明确授权推送。起始主仓库及 13 个递归子模块工作区干净，主仓库相对远端 `5880cbde68b10cebae0e6247864ff35899fce740` 超前 59 个提交，UB 相对远端 `1ba7222` 超前一个提交。四个维护远端均核对为本地版本的祖先或同一提交，没有分叉。
+
+本节 R 为 `runs/m10-github-push-2026-10-05/`。每个成功联网操作的 `<标签>.json` 记录实际 argv、cwd、时刻、退出码及同名 stdout/stderr 路径。Git 命令使用单次 `-c url.git@github.com:.insteadOf=https://github.com/`，配合 `GIT_SSH_COMMAND='ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=yes'`，访问既有 GitHub 仓库；`.gitmodules`、远端地址、全局配置和仓库可见性均未修改。
+
+| 检查或操作 | 工作目录与命令（Git 均带上述单次配置） | 实际结果与日志标签 |
+|---|---|---|
+| 固定依赖 | 根目录，`bash scripts/check_deps.sh` | 退出 0，13 个检出、父指针和源码状态一致；`deps` |
+| 四个维护远端 | 各仓库，`git fetch --no-tags --recurse-submodules=no origin refs/heads/<分支>:refs/remotes/origin/<分支>` | 全部退出 0，主仓库用 main，其他用 cosim；`fetch-ssh-main/astra/llm/ub` |
+| UB 推送 | `third_party/ns-3-ub`，`git push --recurse-submodules=check origin a9539ddff9c8713975a50901f922c250cfcf8585:refs/heads/cosim` | 退出 0，1ba7222 → a9539dd；`push-ub` |
+| UB 在线核验 | 同上，`git ls-remote --exit-code origin refs/heads/cosim` | 退出 0，与 a9539dd 完整 SHA 相同；`verify-ub` |
+| 主仓库成果推送 | 根目录，`git push --recurse-submodules=check origin 8db9908cfe4df17e401f4e52b660c85797de5ce1:refs/heads/main` | 退出 0，5880cbd → 8db9908；`push-main` |
+| 主仓库成果在线核验 | 根目录，`git ls-remote --exit-code origin refs/heads/main` | 退出 0，与 8db9908 完整 SHA 相同；`verify-main-code` |
+
+LLMServingSim `9aed949c8e66fd1424d48365af64bfc0fe0b2ed1` 与 ASTRA `e2a14f55d9a45db8f3831bda7035af3e191e4bb7` 已在各自 GitHub `cosim`，本次无新增推送。其余十个递归上游固定版本未变，未重新访问全部上游或进行完整网络克隆；本次不将本地依赖检查当作这些上游的在线可获取性证明。UB 的本地任务分支保留，推送显式指定远端 cosim，未移动其 main。
+
+首次 HTTPS fetch 在 60 秒内未返回，HTTP/1.1 重试亦超时；禁用交互登录助手后立即返回无法读取用户名（128），确认 HTTPS 网络可达但现有登录助手没有返回凭据。SSH 使用已有密钥成功认证为 baoy21，`ssh -T` 返回 GitHub 正常的“认证成功、无 shell”结果（退出 1）。失败及诊断摘要保存在 `initial-https-attempts.json`，未显示或保存凭据。
+
+待推送 Git 对象检查见 `object-audit.json`：主仓库 669 个新增文件对象合计 22335441 B，最大 484643 B；UB 三个文件对象合计 107849 B。没有来自 runs/build/data/downloads/.venv 等忽略根目录的对象。原始路由、完整切片、仿真结果与构建产物仍只在本地；此前功能验收摘要和小型输入随源码保存。四个维护仓库无可执行 pre-push hook，本轮没有新增构建或仿真。
+
+本次只追加环境及当前任务推送记录，收尾提交亦推送至 main。补记的差异检查、提交、推送与最终在线核验保存在 R 的 `records-check`、`records-commit`、`push-records`、`verify-main-final` 和 `final-state.json`。准确收尾 SHA 以最终状态为准；历史验收 JSON 中 `pushed: false` 保留当时事实。停止在此次推送完成，不开始下一阶段。

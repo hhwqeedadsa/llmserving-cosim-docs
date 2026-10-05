@@ -83,7 +83,8 @@ def execute(args):
     if passed:
         manifest['artifacts'] = inventory(output, exclude={'manifest.json'})
     save(output/'manifest.json', manifest)
-    require(passed, f'{args.command} failed ({result["status"]}); see {output/"logs"/("resources-"+phase)}/stderr.log and probe.json')
+    detail = ': '+manifest['error'] if manifest.get('error') else ''
+    require(passed, f'{args.command} failed ({result["status"]}){detail}; see {output/"logs"/("resources-"+phase)}/stderr.log and probe.json')
     return dict(passed=True, output=str(output), simulation_end_ns=manifest.get('simulation_end_ns'),
                 observed=str(output/'observed'), resources=reports)
 

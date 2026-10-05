@@ -128,6 +128,10 @@ def main():
     missing['export_policy'] = str(example/'export-policy.json'); save(out/'missing.json', missing)
     cli('missing-input', 'sample', '--slice', bundle, '--config', out/'missing.json', '--output', out/'missing', fail=True, offline=True)
     assert not (out/'missing').exists()
+    declaration = read(bundle/'slice.json'); reduced = deepcopy(declaration)
+    reduced['artifacts'].pop('inputs/system.json'); save(bundle/'slice.json', reduced)
+    cli('incomplete-inventory', 'slice', 'inspect', '--slice', bundle, fail=True, offline=True)
+    save(bundle/'slice.json', declaration)
     graph = next((bundle/'raw/graphs').glob('*/plan.json')); graph.write_text(graph.read_text()+' ')
     cli('tampered', 'slice', 'inspect', '--slice', bundle, '--verify', fail=True, offline=True)
     save(out/'summary.json', dict(passed=True, exact_record_counts=compared,

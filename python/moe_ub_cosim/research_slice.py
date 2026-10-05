@@ -12,7 +12,7 @@ from pathlib import Path
 import shutil
 import tarfile
 
-from .plan import require
+from .plan import integer, require
 from .plan_io import file_sha256
 from .user_io import ROOT, fields, inside, inventory, read, relative, save, timestamp, verify_inventory
 
@@ -163,6 +163,35 @@ def inspect(directory, *, verify=False):
             'Incomplete or unsupported research slice')
     require(manifest['initial_state'] == dict(simulation_ns=0, network='fresh', kv='ready_at_decode_start'),
             'Unsupported slice initial state')
+    integer(manifest['capture_end_ns'], 'slice capture_end_ns', 1)
+    integer(manifest['simulation_end_ns'], 'slice simulation_end_ns', 0, manifest['capture_end_ns'])
+    ranks = manifest['ranks']
+    require(isinstance(ranks, list) and ranks == sorted(set(ranks)) and ranks, 'Invalid slice rank list')
+    for rank in ranks:
+        integer(rank, 'slice rank', 0, 2**31-2)
+    required = {'raw/deployment.json', 'raw/record-storage.json', 'inputs/system.json'}
+    required.update('raw/bootstrap/layer.'+str(rank)+'.et' for rank in ranks)
+    required.update('inputs/network/'+name for name in ('node.csv', 'topology.csv', 'routing_table.csv', 'transport_channel.csv'))
+    archive_kinds = set()
+    for archive in manifest['archives']:
+        require(archive['kind'] in ('graph_archive', 'execution_archive') and archive['kind'] not in archive_kinds,
+                'Unknown or duplicate slice archive')
+        archive_kinds.add(archive['kind']); required.update((archive['path'], archive['inventory']))
+        expected = 'raw/graph' if archive['kind'] == 'graph_archive' else 'raw/execution'
+        require(archive['destination'] == expected, 'Invalid slice archive destination')
+    require(not archive_kinds or archive_kinds == {'graph_archive', 'execution_archive'}, 'Incomplete slice archive pair')
+    submitted = []
+    for submission in manifest['submissions']:
+        submitted.extend(submission['rank_ids'])
+        inside(directory/'raw', submission['semantic_manifest'])
+        inside(directory/'raw', submission['workload_prefix'])
+        if not archive_kinds:
+            required.add('raw/'+submission['semantic_manifest'])
+            required.update('raw/'+submission['workload_prefix']+'.'+str(rank)+'.et' for rank in submission['rank_ids'])
+    require(sorted(submitted) == ranks, 'Slice submissions must cover each rank exactly once')
+    if not archive_kinds:
+        required.add('raw/execution/result.json')
+    require(required <= set(manifest['artifacts']), 'Slice inventory omits required execution inputs')
     if verify:
         verify_inventory(directory, manifest['artifacts'])
     return dict(passed=True, scope=manifest['scope'], simulation_end_ns=manifest['simulation_end_ns'],

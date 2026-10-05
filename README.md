@@ -2,7 +2,7 @@
 
 本项目将推理服务调度、ASTRA 计算/通信依赖和 ns-3-UB 包级网络放在同一仿真时间中执行，用于研究端侧通信操作与交换端口采样之间的关系。通信完成来自实际 UB 事件，研究算法只读取公共观测。
 
-统一用户入口已通过小型真实 UB 流程检查；M10 的完整目标首轮切片与重放验收正在进行。计算与网络参数保留参考模型状态，尚未完成目标硬件校准。当前状态见 [current.md](docs/tasks/current.md)，历史结果见[里程碑记录](docs/milestone_history.md)。
+统一用户入口、小型真实 UB 流程、隔离安装和 128 rank 目标首轮切片/重放均已通过验收。M10 按已确认的首轮研究范围收尾，完整 64 步服务未验证，目标硬件仍未校准。证据见[首轮交付记录](fixtures/m10_research_slice/README.md)，开发状态见 [current.md](docs/tasks/current.md)，历史结果见[里程碑记录](docs/milestone_history.md)。
 
 ## 安装与构建
 

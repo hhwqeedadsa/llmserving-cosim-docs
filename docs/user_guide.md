@@ -1,6 +1,6 @@
 # 用户操作指南
 
-统一入口为 `moe-ub`，等价入口是 `python -m moe_ub_cosim`。本文覆盖已完成小例检查的命令；M10 目标首轮规模验收仍在进行，以 [current.md](tasks/current.md) 为准。
+统一入口为 `moe-ub`，等价入口是 `python -m moe_ub_cosim`。下述命令已通过小例完整流程、隔离安装及 128 rank 目标首轮验收；实际范围和资源数据见[首轮交付记录](../fixtures/m10_research_slice/README.md)。
 
 ## 环境与安装
 

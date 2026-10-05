@@ -3535,3 +3535,29 @@ UB 子提交为 `a9539dd`，从 `1ba7222` 创建的 `task/m10-retired-sequence-h
 隔离环境在 `runs/v03-research-slice/checks/isolated-install-final/checkout` 从提交 f51318b 及 13 个锁定依赖建立。仅共享已核验 Git 对象，没有旧生成文件；新 venv 使用系统 site-packages，局部下载 protobuf 7.36.2（343 kB）并 editable 安装主包。没有安装系统软件或下载模型/路由数据。doctor、独立 CMake 构建、README 的 run/slice/sample/replay/validate 及仓库外调用均通过，47 条命令与全部 stdout/stderr 已保存。总监测 475.513 秒、峰值 RSS 1689341952 B，结束无残留进程，累计磁盘峰值 17286127616 B。首次隔离构建因串行安排主动终止，未用该次中断代替通过；失败/终止记录仍在原目录。
 
 这证明当前 Linux 环境下不依赖开发机历史产物的用户流程；不声明跨发行版或联网首次获取所有私有源码通过。完整目标新周期及正式重放仍待验收。
+
+## 2026-10-05 M10 首轮研究交付最终验收
+
+本节为上述检查点的最终结果。工作目录均为 `/root/moe-ub-cosim`，Python 为 `.venv/llmservingsim-native/bin/python`。完整 argv、起止时刻、退出码、stdout/stderr 路径与资源报告已汇总到 [checkpoint-final.json](../fixtures/m10_research_slice/checkpoint-final.json)。全部正式阶段退出 0，无残留进程；唯一一次正式目标后端未自动重试。
+
+串行验收命令为 `P tests/integration/check_slice_acceptance.py --workspace runs/v03-research-slice --historical-root runs/v03-resource-efficiency --build-dir build/m10-research-slice --output-dir runs/v03-research-slice/checks/acceptance`，其中 P 指上述 Python。它依次执行原采样比较、隔离安装、统一 `sample --slice R/target-slice --config R/target-config/sample-10us.json --output R/target-sample-10us`、统一 `replay --slice R/target-slice --config R/target-config/replay.json --output R/target-replay` 和最终独立比较；R 为 `runs/v03-research-slice`。原采样与隔离安装结果已在上节记录。
+
+| 阶段 | 监测宿主秒 | 进程树采样峰值 RSS | 日志相对 R |
+|---|---:|---:|---|
+| 目标 10 µs 重采样 | 1679.836 | 253497344 B | `target-sample-10us/logs/resources-sample/` |
+| 正式目标后端重放 | 5751.753 | 45806579712 B | `target-replay/logs/resources-replay/` |
+| 重放研究导出 | 2175.222 | 204955648 B | `target-replay/logs/resources-export/` |
+| 最终独立比较 | 1809.494 | 138940416 B | `checks/target-complete-audit-monitor/` |
+| 缓存核验与回收 | 122.962 | 532299776 B | `checks/cache-reclamation-monitor/` |
+
+重放限 RSS 48 GiB、地址 56 GiB、7200 宿主秒，后端等待 6900 秒；采样/导出/比较限 RSS 4 GiB、地址 8 GiB、每阶段 3600 秒。所有重型阶段串行，两项任务四个 build/run 根合计限 32 GiB，另保留文件系统至少 20 GiB 空闲。峰值是进程树/磁盘采样观测值，不是操作系统级硬配额或模型 HBM。
+
+正式后端实际完成 7655238 节点、3741764 次网络写、25930 次本地交付，结束 75323418 ns，单次网络初始化；物理包发送/到达均为 67198929，网络正常排空。128 rank 的计算/CPU/发送槽、待处理事件/任务及过期回调为零；图、传输和包来源结束清零。最终比较核对 11 类执行记录、16128 端口的审计与 48384 份逐包/队列/来源文件，以及六张研究表；内容与冻结基线相同。部分端口文件压缩表示不同，比较器逐条解压核对通过，没有通过改预期、跳过文件或固定通信时间绕过。
+
+10 µs 的 9461897 个非零端口窗口和 2910987 个归属窗口与原 1 µs 独立合并结果一致；端侧、操作及传输来源表不变。两种周期都保留 3741764 次网络交付和 10058044416 B 唯一业务量。实际执行只有一个首轮；0～1000000000 ns 的观测声明含零尾部，不能据其声称执行了更多轮次。
+
+比较通过后执行已审阅的 `P R/reclaim_cache.py`，外层 host_probe 使用 RSS 4 GiB、地址 8 GiB、600 秒和相同累计磁盘预算。先校验封存切片及 177716 个缓存文件与源摘要一致，再删除本任务 `target-materialized`（含缓存标记和可再生元数据）。原始归档和正式结果不变。执行前后计费 32295723008→18593042432 B，释放 13702680576 B；累计采样峰值 32380264448 B（30.156 GiB），最终约 17.32 GiB，均符合本次约束。命令、脚本 SHA-256、恢复方式和清理清单在最终 JSON 与 `R/checks/cache-reclamation.json`。后续 sample/replay 会按需恢复缓存；清理后的旧展开路径不能当作仍存在。
+
+本轮未改子模块源码、gitlink、锁定依赖或原 64 步输入，未安装系统软件、下载模型或追加真实路由。保留了初次延迟覆盖不生效、历史摘要缺字段和主动终止并行构建的原始失败/停止记录，后续修复与独立成功分别记录。M10 按用户确认的首轮研究及用户可复用交付范围完成，原生 CANN/NPU、完整 64 步服务、稳态与硬件校准仍未验证。仅本地提交，不推送，不启动下一阶段。
+
+最终 `git diff --check`、13 个固定依赖及 153 处本地文档链接检查通过，实际命令、工作目录、输入与日志在 `R/checks/final-repository/` 并收入最终摘要。功能验收与这些仓库静态检查分别记录。

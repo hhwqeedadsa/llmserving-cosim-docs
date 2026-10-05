@@ -67,6 +67,16 @@ def execution_equal(left, right):
     assert original['normal_exit'] and replay['normal_exit']
     assert original['network_drain']['idle'] and replay['network_drain']['idle']
     assert original['simulation_end_ns'] == replay['simulation_end_ns'] == 75323418
+    assert replay['network_initializations'] == 1
+    life = replay['resource_lifecycle']
+    assert life['retired_graphs'] == 1
+    assert all(life[key] == 0 for key in ('resident_graphs_at_exit', 'resident_transfers_at_exit', 'adapter_transfers_at_exit'))
+    assert life['provenance']['resident_packets'] == life['provenance']['resident_transfers'] == 0
+    assert len(replay['rank_resources']) == 128
+    assert all(row[key] == 0 for row in replay['rank_resources']
+               for key in ('compute_slots', 'cpu_slots', 'send_slots', 'pending_events', 'pending_tasks', 'stale_callbacks'))
+    assert all(row['finished'] and not row['remaining_nodes'] for row in replay['rank_resources'])
+    assert all(row['same_network_objects'] for row in replay['boundary_resources'])
     for name, entry in original['record_storage']['fields'].items():
         other = replay['record_storage']['fields'][name]
         assert entry['records'] == other['records']
@@ -90,7 +100,10 @@ def execution_equal(left, right):
             packet_files += 1
         ports += 1
     assert ports == 16128
-    return dict(fields=fields, ports=ports, packet_files=packet_files, simulation_end_ns=replay['simulation_end_ns'])
+    return dict(fields=fields, ports=ports, packet_files=packet_files,
+                simulation_end_ns=replay['simulation_end_ns'], ranks_finished=len(replay['rank_resources']),
+                network_initializations=replay['network_initializations'], network_idle=True,
+                resource_lifecycle=life, exit_resources_cleared=True)
 
 
 def main():

@@ -76,7 +76,7 @@ def iter_port_records(execution, port, name):
                 yield json.loads(line)
         return
     manifest = json.loads(manifest_path.read_text())
-    require(manifest['schema_version'] == 'moe-ub-port-records/1' and
+    require(manifest['schema_version'] in ('moe-ub-port-records/1','moe-ub-port-records/2') and
             manifest['path_base'] == 'execution_directory' and manifest['records_directory'] == 'records',
             'Unknown port record storage')
     if name in ('observed/endpoint_ops.jsonl', 'truth/operation_registry.jsonl', 'truth/transfer_registry.jsonl'):

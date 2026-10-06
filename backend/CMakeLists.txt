@@ -1,5 +1,12 @@
 # Included after ns-3-UB has defined its modules and build_exec.
 build_exec(
+  EXECNAME cosim-queue-windows-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/queue_windows_test.cc"
+  LIBRARIES_TO_LINK ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-queue-windows-test PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-queue-windows-test PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+build_exec(
   EXECNAME cosim-native-runtime-test
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/integration/native_runtime_test.cc"
   LIBRARIES_TO_LINK ${libunified-bus} ${libcore}
@@ -221,6 +228,7 @@ build_exec(
   EXECNAME ${target}
   SOURCE_FILES
     "${CMAKE_CURRENT_LIST_DIR}/cosim_service.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/operation_stages.cc"
     "${CMAKE_CURRENT_LIST_DIR}/backend_config.cc"
     "${CMAKE_CURRENT_LIST_DIR}/fabric_config.cc"
     "${CMAKE_CURRENT_LIST_DIR}/graph_sequence.cc"

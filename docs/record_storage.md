@@ -19,7 +19,7 @@
 
 ## 公开表与字段
 
-压缩研究格式为 `moe-ub-research-storage/1`。每个输出范围有自己的 `storage.json`，声明逻辑表名、文件名、行数、原始与压缩字节、原始内容 CRC32，以及单条记录上限。实际表放在该目录的 `records/` 下。
+原有两表观测采用 `moe-ub-research-storage/1`，新增操作阶段与队列观测采用 `/2`。每个输出范围有自己的 `storage.json`，声明逻辑表名、文件名、行数、原始与压缩字节、原始内容 CRC32，以及单条记录上限。实际表放在该目录的 `records/` 下。
 
 | 逻辑表 | 字段 |
 |---|---|
@@ -28,11 +28,55 @@
 
 `local_record_id` 只在一个 rank 内编号，不编码全局操作身份。端侧起止时间取实际节点与回调，并按通信模板确定 Dispatch/Combine 的操作范围；不能用首包或末包时刻代替。`direction` 当前为 `egress`，包数与字节数为非负整数，时间单位为纳秒。
 
-`public_config.json` 使用 `moe-ub-observed/1` 或带显式数量限制的 `/2`，声明 rank、观测端口、本地时间范围、周期、时钟分辨率、计数位置和字节口径；不包含时钟偏移与漂移。`observed/` 的压缩格式只允许 `public_config.json`、`storage.json`、`records/` 及上述两张表，校验器不会为了验证它们访问 `truth/`。
+`public_config.json` 使用 `moe-ub-observed/1` 或带显式数量限制的 `/2`，声明 rank、观测端口、本地时间范围、周期、时钟分辨率、计数位置和字节口径；不包含时钟偏移与漂移。旧版 `observed/` 的压缩格式只允许 `public_config.json`、`storage.json`、`records/` 及上述两张表；下文 `/3` 公开配置额外允许阶段与队列表。校验器不会为了验证它们访问 `truth/`。
 
 **逻辑名以 `.csv` 结尾的压缩表，内部也是 gzip JSONL。** 例如 `port_windows.csv.gz` 解压后每行一个 JSON 对象，应按清单和项目读取器解释，不能根据后缀交给 CSV 解析器。早期未压缩研究输出则直接保存 `endpoint_ops.jsonl` 和真正的 `port_windows.csv`；二者的字段与统计含义相同，文件编码不同。
 
 ## 计数位置与字节口径
+
+### v0.4 操作阶段与等待统计
+
+新增统计采用独立格式：输入 `moe-ub-observation-config/2` 的 `statistics` 为
+`{"schema_version":"moe-ub-observation-statistics/1","queue_waiting_bytes":true,"operation_stages":true}`，
+并显式给出观测资源预算；其余时钟、端口和来源字段沿用原格式。公开配置升级为
+`moe-ub-observed/3`，压缩观测存储为 `moe-ub-research-storage/2`，增加以下两张表。
+当前交付检查状态见[任务记录](tasks/current.md)，此处规定字段解释。
+
+`endpoint_stages.jsonl` 每行只有 `rank_id`、`local_record_id`、`stage`、`time_local_ns`、`event_count`。
+记录仍使用本 rank 的局部编号，时间转换使用该 rank 的本地时钟。阶段含义如下：
+
+| stage | 实际来源与计数 |
+|---|---|
+| `prepare_start/end` | Dispatch 的 prepare 或 Combine 的 pack/local_merge 计算节点；每项计数 1，无实际节点则省略 |
+| `local_prepare_start/end` | 模板为同芯片交付设置的本地准备节点；与上行准备分别计数 |
+| `request_submit_first/last` | 本 rank 发起、属于该操作的逻辑 UB 任务的最早/最晚提交；计数为任务数，不是分段包数 |
+| `data_ready` | 该 rank 作为消费者收到的全部应用消息的最晚数据就绪回调；计数包括业务、应用状态和同芯片交付，LOAD 取响应消费方 |
+| `initiator_resources_complete` | 本 rank 发起的逻辑 UB 任务的最晚原生事务完成；计数与提交数相同，不表示 LOAD 供数方的全部缓冲状态 |
+| `local_publish_first/last`、`local_resources_complete` | 同芯片交付的实际发布与发送回调，计数为交付数，不伪造 UB 请求 |
+| `operation_complete` | 原 `endpoint_ops` 定义的操作终点，取真实依赖执行，计数 1 |
+
+没有对应事件则省略该阶段，不补虚构时间。准备可以早于旧端侧操作区间的开始；各类就绪与资源完成不相互替代。
+这些是仿真器可见的节点与回调，实际硬件是否能采集同样信息尚未确认。
+
+`queue_windows.csv` 前五项端口与窗口字段沿用 `port_windows.csv`，分别增加
+`voq_waiting_byte_ns/mean_bytes/peak_bytes` 和 `fifo_waiting_byte_ns/mean_bytes/peak_bytes`。
+面积为精确非负整数 byte·ns，均值为面积除以本地窗口实际长度，峰值为整数 byte。
+后端原始面积以十进制字符串保存，公开 Python 读取结果为整数，避免 64 位乘积溢出。
+
+| 对象 | 包含范围 |
+|---|---|
+| `voq_waiting` | 已完成入口处理、等待指定出口调度的 VOQ 包；包含本地生成并进入 VOQ 的信用控制包，排除 ingress processing |
+| `fifo_waiting` | 已进入该出口 FIFO、尚未取出发送的包；排除正在链路上发送的包，直接发送而未入 FIFO 的控制包不计入 |
+
+两种对象均按队列实际保存的 `Packet::GetSize()` 计字节，包含该位置已有的头部及控制消息，不等于业务有效字节。
+每个入队、转移、出队事件更新被动计数；统计不调用调度函数、不插入仿真事件。
+窗口为本地半开区间，面积累计状态持续时间；峰值包含窗口内每次变化后的状态，包括同一时刻持续零纳秒的中间状态。
+左边界前遗留的状态只在窗口内继续保持时计入；恰在左边界出队且立刻变零的旧状态不冒充窗口内峰值。
+持续积压跨窗拆分，末窗用实际长度。发送计数表和队列表分别稀疏保存：无发送但等待量非零的窗口仍必须有队列记录。
+`logical_queue_windows()` 按队列清单恢复其声明范围内的零窗口，不能从发送表的缺行推断等待量为零。
+
+后端 `queue-state-events.jsonl` 保存时间零初值及每次变化后的两个等待量；`queue-windows.jsonl` 直接累计本次声明窗口。
+当前详细采集的再次采样独立重算状态积分，并在原窗口配置下逐项核对直接累计结果。只有发送事件、没有这些状态资料的旧记录不能恢复队列统计。
 
 交换出口成功开始发送时，按当时的 `Packet::GetSize()` 将整包计入窗口。一次包发送全部计入开始时刻所在窗口，不按包在链路上占用的时间拆分到多个窗口。发送尝试、入队和发送结束不是本计数位置；未包含在 ns-3 包中的物理编码或 FEC 字节也不计入。
 
@@ -55,7 +99,7 @@
 
 ## 本地时钟、窗口与零值
 
-执行只使用 ns-3 的全局时钟，导出时才转换为设备本地时钟：
+执行只使用 ns-3 的全局时钟，被动统计和导出将其转换为设备本地时钟：
 
 ```text
 local_ns = floor((1000000000 + drift_ppb) * global_ns / 1000000000) + offset_ns
@@ -71,12 +115,13 @@ local_ns = floor((1000000000 + drift_ppb) * global_ns / 1000000000) + offset_ns
 
 ## 读取与校验
 
-[research_storage.py](../python/moe_ub_cosim/research_storage.py)提供三种常用接口：
+[research_storage.py](../python/moe_ub_cosim/research_storage.py)提供以下常用接口：
 
 | 接口 | 返回或检查的内容 |
 |---|---|
 | `stored_rows(directory, table)` | 逐条读取实际保存的压缩表；端口表仅返回非零窗口 |
 | `logical_windows(observed_directory)` | 按公开配置逐窗恢复完整端口表，包括零窗口和不足周期的尾窗 |
+| `logical_queue_windows(observed_directory)` | 对含队列统计的新版观测逐窗恢复等待量；不依赖该窗是否发包 |
 | `validate_observed_storage(observed_directory)` | 检查目录白名单、清单、公开字段、非零窗口顺序与边界、端侧记录及文件完整性；只读该 observed 目录 |
 
 计算总字节或非零窗口数时可以只遍历实际保存的行，例如在已安装项目的 Python 环境中：
@@ -115,7 +160,7 @@ print(total_bytes, nonzero_windows, zero_windows)
 
 开启后，`execution/result.json` 使用 `moe-ub-service-result/2`，`record_storage.fields` 引用 `execution/records/` 中的 gzip JSONL；没有该策略的旧入口保留 `/1` 数组结果。按图保存的文件在清单中按提交顺序排列，避免多组乱序完成改变原数组的顺序；WQE 启动、完成与目标写入按实际回调顺序记录。
 
-[record_storage.py](../python/moe_ub_cosim/record_storage.py)的 `iter_result(execution, field)` 兼容这两种结果，`iter_port_records(execution, port, name)` 读取端口原始记录并按其清单恢复逻辑空窗口。端口的 `record-storage.json` 使用 `moe-ub-port-records/1`，登记表由共享 `registry-records.json` 引用，避免每个端口复制一份操作和传输表。原始逐包事件、FIFO 队列记录、包字节对应和 ASTRA issue/callback 都是内部执行证据，不直接充当算法输入。
+[record_storage.py](../python/moe_ub_cosim/record_storage.py)的 `iter_result(execution, field)` 兼容这两种结果，`iter_port_records(execution, port, name)` 读取端口原始记录并按其清单恢复逻辑空窗口。端口的 `record-storage.json` 使用 `moe-ub-port-records/1` 或增加队列资料的 `/2`，登记表由共享 `registry-records.json` 引用，避免每个端口复制一份操作和传输表。原始逐包事件、FIFO 队列记录、包字节对应和 ASTRA issue/callback 都是内部执行证据，不直接充当算法输入。
 
 `RecordStore` 共用有限缓冲，按块压缩，不为每个端口常驻文件句柄和压缩器；一个文件允许包含多个标准 gzip member。写入前核对压缩预算，失败后不能继续产生成功结果。空记录在封存时创建，之后禁止追加；可通过硬链接复用相同空内容，但各逻辑文件仍分别计入记录策略的压缩字节限额。后端记录缓冲字节只表示有效载荷，不能作为进程 RSS。
 

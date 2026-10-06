@@ -5,6 +5,7 @@
 #include "graph_sequence.hh"
 #include "execution_archive.hh"
 #include "result_records.hh"
+#include "operation_stages.hh"
 #include "identity_ranges.hh"
 #include "port_observation.hh"
 #include "ns3/simulator.h"
@@ -459,7 +460,8 @@ int main(int argc, char** argv)
         if (std::string(argv[5]) != "-")
         {
             const auto input = ReadJson(fs::absolute(argv[5]));
-            const bool streamed=input.at("schema_version")=="moe-ub-port-observation-set/2";
+            const bool statistics=input.at("schema_version")=="moe-ub-port-observation-set/3";
+            const bool streamed=statistics || input.at("schema_version")=="moe-ub-port-observation-set/2";
             multiple_ports = streamed || input.at("schema_version") == "moe-ub-port-observation-set/1";
             if(streamed) moe_ub::ValidateObservationBudget(input.at("resource_budget"));
             if (multiple_ports)
@@ -472,11 +474,16 @@ int main(int argc, char** argv)
                 for (const auto& port : input.at("ports"))
                 {
                     const auto config = moe_ub::ObservationConfig::Parse(port, max_ns);
+                    Require(statistics==!config.queue_sampling.is_null(),"Mixed observation statistic schemas");
                     Require(config.resource_budget.is_null()!=streamed,"Mixed observation storage schemas");
                     if(streamed)
                     {
                         Require(config.resource_budget==input.at("resource_budget"),"Observation budget changed across ports");
-                        const auto count=(config.end_ns-config.start_ns-1)/config.period_ns+1;
+                        auto count=(config.end_ns-config.start_ns-1)/config.period_ns+1;
+                        if(!config.queue_sampling.is_null()) {
+                            const auto& q=config.queue_sampling;
+                            count=uint64_t((__int128(q.at("end_local_ns").get<int64_t>())-q.at("start_local_ns").get<int64_t>()-1)/q.at("period_ns").get<int64_t>()+1);
+                        }
                         Require(count<=config.resource_budget.at("max_total_windows").get<uint64_t>()-windows,"Observation total window budget exceeded");windows+=count;
                     }
                     Require(points.emplace(config.switch_id, config.port_id).second,
@@ -539,7 +546,9 @@ int main(int argc, char** argv)
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
             {"loaded_libraries", Json::array()}};
         if (backend_config) report["backend_parameters_active"] = true;
-        moe_ub::ResultRecords records(report, storage_policy);
+        const bool record_stages=std::any_of(observation_configs.begin(),observation_configs.end(),
+            [](const auto& c){return !c.queue_sampling.is_null();});
+        moe_ub::ResultRecords records(report, storage_policy, record_stages);
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank : ranks)
@@ -571,10 +580,11 @@ int main(int argc, char** argv)
             std::shared_ptr<moe_ub::WriteProvenance> provenance;
             if (!observation_configs.empty()) provenance = std::make_shared<moe_ub::WriteProvenance>(controllers);
             std::vector<std::unique_ptr<moe_ub::PortObservation>> observations;
+            auto queue_sources=std::make_shared<moe_ub::VoqSources>();
             for (const auto& config : observation_configs)
                 observations.push_back(std::make_unique<moe_ub::PortObservation>(config,
                     provenance, multiple_ports,
-                    config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id)), records.Store()));
+                    config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id)), records.Store(),queue_sources));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
             Json resource_budget=nullptr, resource_used={{"graphs",0u},{"transfers",0u},{"nodes",0u}};
@@ -639,6 +649,8 @@ int main(int argc, char** argv)
                 auto endpoints = moe_ub::LayerEndpointOperations(*found, timing);
                 auto operations = moe_ub::LayerOperationRegistry(*found);
                 const auto offset = endpoint_offsets.at(graph);
+                std::unique_ptr<moe_ub::OperationStages> stages;
+                if(record_stages) stages=std::make_unique<moe_ub::OperationStages>(*found,timing,endpoints,offset);
                 for (auto& row : endpoints)
                 {
                     row["local_record_id"] = row.at("local_record_id").get<uint64_t>() + offset;
@@ -652,13 +664,16 @@ int main(int argc, char** argv)
                 for (const auto& transfer : transfers) if (transfer->Descriptor().graph_id == graph)
                 {
                     records.Add("transfers", TransferResult(*transfer), graph);
+                    if(stages) stages->Transfer(*transfer);
                     if (record_truth) records.Add("transfer_registry", moe_ub::TransferRegistryRecord(*transfer), graph);
                 }
                 for (const auto& delivery : local_deliveries) if (delivery->Descriptor().graph_id == graph)
                 {
                     Require(!delivery->Active() && !delivery->HasPendingEvents(), "Live delivery at graph retirement");
                     records.Add("local_deliveries", delivery->Result(), graph);
+                    if(stages) stages->Local(*delivery);
                 }
+                if(stages) for(const auto& row:stages->Rows()) records.Add("operation_stages",row,graph);
                 records.FinishGraph(graph);
                 for (auto& adapter : adapters) adapter->RetireGraph(graph);
                 std::erase_if(transfers, [&](const auto& t) { return t->Descriptor().graph_id == graph; });

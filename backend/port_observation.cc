@@ -62,7 +62,9 @@ ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
 {
     std::set<std::string> keys;
     for (auto it = input.begin(); it != input.end(); ++it) keys.insert(it.key());
-    const bool streamed=input.at("schema_version")=="moe-ub-port-observation/2";
+    const bool statistics=input.at("schema_version")=="moe-ub-port-observation/3";
+    const bool streamed=statistics || input.at("schema_version")=="moe-ub-port-observation/2";
+    if(statistics) keys.erase("queue_sampling");
     if (streamed) { ValidateObservationBudget(input.at("resource_budget")); keys.erase("resource_budget"); }
     Require(keys == std::set<std::string>{"schema_version", "switch_id", "port_id",
                 "window_start_ns", "window_end_ns", "window_period_ns", "record_provenance"} &&
@@ -73,6 +75,22 @@ ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
         Unsigned(input, "window_start_ns", stop_ns), Unsigned(input, "window_end_ns", stop_ns),
         Unsigned(input, "window_period_ns", stop_ns), input.at("record_provenance").get<bool>()};
     if (streamed) c.resource_budget=input.at("resource_budget");
+    if(statistics) {
+        const auto& sampling=input.at("queue_sampling");
+        Require(sampling.is_object() && sampling.size()==6 && sampling.at("schema_version")=="moe-ub-queue-sampling/1",
+                "Invalid queue sampling schema/fields");
+        auto number=[&](const char* key) {
+            const auto& value=sampling.at(key);
+            Require(value.is_number_integer() && (!value.is_number_unsigned() || value.get<uint64_t>()<=uint64_t(INT64_MAX)),
+                    "Invalid queue local-clock integer");return value.get<int64_t>();
+        };
+        QueueSampling q{number("start_local_ns"),number("end_local_ns"),number("period_ns"),
+                        {number("offset_ns"),number("drift_ppb")}};
+        Require(q.period_ns>0 && q.start_ns<q.end_ns && q.start_ns>=q.clock.At(0) && q.end_ns<=q.clock.At(stop_ns),
+                "Queue sampling outside execution bounds");
+        Require(q.Count()<=c.resource_budget.at("max_windows_per_port").get<uint64_t>(),"Queue sampling window budget exceeded");
+        c.queue_sampling=sampling;
+    }
     Require(c.start_ns < c.end_ns && c.period_ns > 0, "Invalid observation interval or period");
     Require((c.end_ns - c.start_ns - 1) / c.period_ns < (streamed ? c.resource_budget.at("max_windows_per_port").get<uint64_t>() : 4096),
             "Observation windows exceed configured budget (legacy: 4096)");
@@ -355,7 +373,7 @@ PortObservation::PortObservation(ObservationConfig config, const std::vector<Wri
 
 PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
                                 bool retain_packet_events, const std::filesystem::path& spool_directory,
-                                std::shared_ptr<RecordStore> record_store)
+                                std::shared_ptr<RecordStore> record_store, std::shared_ptr<VoqSources> queue_sources)
     : config_(config), windows_(config), provenance_(std::move(provenance)),
       retain_packet_events_(retain_packet_events), record_store_(std::move(record_store))
 {
@@ -391,11 +409,28 @@ PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<Write
                 ns3::MakeCallback(&PortObservation::Enqueued, this)) &&
             port_->GetUbQueue()->TraceConnectWithoutContext("UbDequeue",
                 ns3::MakeCallback(&PortObservation::Dequeued, this)), "Cannot observe egress queue");
+    if(!config_.queue_sampling.is_null()) {
+        Require(bool(record_store_),"Queue statistics require bounded record storage");
+        const auto& q=config_.queue_sampling;
+        QueueSampling sampling{q.at("start_local_ns"),q.at("end_local_ns"),q.at("period_ns"),{q.at("offset_ns"),q.at("drift_ppb")}};
+        queue_windows_=std::make_unique<QueueWindows>(sampling,ns3::Simulator::Now().GetNanoSeconds(),
+            sw->GetQueueManager()->GetOutPortVoqWaitingBytes(config_.port_id),port_->GetUbQueue()->GetWaitingBytes(),
+            [this](auto index,const auto& row){QueueWindowRecord(index,row);});
+        queue_sources_=queue_sources ? std::move(queue_sources) : std::make_shared<VoqSources>();
+        queue_sources_->Watch(config_.switch_id,config_.port_id,[this](uint64_t bytes){VoqChanged(bytes);});
+        Require(port_->GetUbQueue()->TraceConnectWithoutContext("WaitingBytes",ns3::MakeCallback(&PortObservation::FifoChanged,this)),
+                "Cannot observe FIFO waiting bytes");
+        QueueState();
+    }
 }
 PortObservation::~PortObservation()
 {
     if (port_)
     {
+        if(queue_windows_) {
+            queue_sources_->Unwatch(config_.switch_id,config_.port_id);
+            port_->GetUbQueue()->TraceDisconnectWithoutContext("WaitingBytes",ns3::MakeCallback(&PortObservation::FifoChanged,this));
+        }
         port_->TraceDisconnectWithoutContext("TraComEventNotify",
             ns3::MakeCallback(&PortObservation::PacketStart, this));
         port_->GetUbQueue()->TraceDisconnectWithoutContext("UbEnqueue",
@@ -435,6 +470,31 @@ void PortObservation::WindowRecord(uint64_t index, const ByteCounts& row)
             {"business_payload_bytes", row.business}, {"application_metadata_bytes", row.metadata},
             {"padding_bytes", row.padding}, {"data_protocol_overhead_bytes", row.overhead},
             {"control_packet_bytes", row.control}, {"unattributed_bytes", 0}}).dump());
+}
+void PortObservation::QueueWindowRecord(uint64_t index,const QueueWindow& row)
+{
+    const auto& q=config_.queue_sampling;
+    const __int128 left=__int128(q.at("start_local_ns").get<int64_t>())+__int128(index)*q.at("period_ns").get<int64_t>();
+    const auto duration=uint64_t(std::min(__int128(q.at("end_local_ns").get<int64_t>())-left,__int128(q.at("period_ns").get<int64_t>())));
+    const Json value={{"index",index},{"voq_waiting_byte_ns",QueueAreaText(row.voq_byte_ns)},
+        {"fifo_waiting_byte_ns",QueueAreaText(row.fifo_byte_ns)},{"voq_waiting_peak_bytes",row.voq_peak_bytes},
+        {"fifo_waiting_peak_bytes",row.fifo_peak_bytes},
+        {"voq_waiting_mean_bytes",double(static_cast<long double>(row.voq_byte_ns)/duration)},
+        {"fifo_waiting_mean_bytes",double(static_cast<long double>(row.fifo_byte_ns)/duration)}};
+    record_store_->Append(RecordName("queue-windows.jsonl"),value.dump());
+}
+void PortObservation::QueueState()
+{
+    Record("queue-state-events.jsonl",queue_events_,{{"time_ns",ns3::Simulator::Now().GetNanoSeconds()},
+        {"voq_waiting_bytes",queue_windows_->Voq()},{"fifo_waiting_bytes",queue_windows_->Fifo()}});
+}
+void PortObservation::VoqChanged(uint64_t bytes)
+{
+    queue_windows_->Update(ns3::Simulator::Now().GetNanoSeconds(),bytes,{});QueueState();
+}
+void PortObservation::FifoChanged(uint64_t bytes)
+{
+    queue_windows_->Update(ns3::Simulator::Now().GetNanoSeconds(),{},bytes);QueueState();
 }
 void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes,
                                  std::optional<uint64_t> busy_until)
@@ -737,6 +797,7 @@ void PortObservation::ExportStored(const std::filesystem::path& base, const Obse
     Require(!config_.provenance || registry.truth, "Missing stored truth registry");
     Require(packet_events_.empty() && packet_ranges_.empty() && queue_events_.empty(), "Stored port retained event JSON");
     windows_.Finish();
+    if(queue_windows_) queue_windows_->Finish(ns3::Simulator::Now().GetNanoSeconds());
     Json fields = Json::object();
     for (const std::string name : {"packet-events.jsonl", "egress-queue-audit.jsonl", "port-windows.jsonl",
                                   "truth/packet_ranges.jsonl", "truth-windows.jsonl"})
@@ -744,10 +805,14 @@ void PortObservation::ExportStored(const std::filesystem::path& base, const Obse
         if (!config_.provenance && (name == "truth/packet_ranges.jsonl" || name == "truth-windows.jsonl")) continue;
         fields[name] = RecordReference(record_store_->Seal(RecordName(name)));
     }
-    Save((base / "record-storage.json").string(), {{"schema_version", "moe-ub-port-records/1"},
+    if(queue_windows_) for(const auto* name:{"queue-state-events.jsonl","queue-windows.jsonl"})
+        fields[name]=RecordReference(record_store_->Seal(RecordName(name)));
+    Json storage={{"schema_version", queue_windows_ ? "moe-ub-port-records/2" : "moe-ub-port-records/1"},
         {"records_directory", "records"}, {"path_base", "execution_directory"}, {"fields", fields},
         {"window_encoding", "sparse_nonzero_with_declared_zero_windows"}, {"logical_windows", windows_.Count()},
-        {"padding_field", provenance_->Ledger().HasPayloadRegions()}});
+        {"padding_field", provenance_->Ledger().HasPayloadRegions()}};
+    if(queue_windows_) storage["queue_sampling"]=config_.queue_sampling;
+    Save((base / "record-storage.json").string(),storage);
     std::filesystem::create_hard_link(registry.directory / "registry-records.json", base / "registry-records.json");
     Save((base / "observation-audit.json").string(), {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},

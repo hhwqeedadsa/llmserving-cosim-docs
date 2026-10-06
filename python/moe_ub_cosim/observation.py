@@ -32,6 +32,7 @@ def windows(port):
 
 OBSERVATION_BUDGET_FIELDS = ('max_ports','max_windows_per_port','max_total_windows','max_event_bytes_per_port',
                              'max_ledger_packets','max_registered_transfers','max_export_bytes')
+STATISTICS=dict(schema_version='moe-ub-observation-statistics/1',queue_waiting_bytes=True,operation_stages=True)
 
 
 def validate_observation_budget(budget):
@@ -44,9 +45,15 @@ def validate_observation_budget(budget):
 
 def validate_observation(config, ranks, max_ns):
     budget=config.get('resource_budget')
+    statistics='statistics' in config
+    if statistics:
+        require(config.get('schema_version')=='moe-ub-observation-config/2' and config['statistics']==STATISTICS and
+                all(type(config['statistics'][key]) is bool for key in ('queue_waiting_bytes','operation_stages')) and
+                budget is not None,'New statistics require observation-config/2 and an explicit resource budget')
     if budget is not None:validate_observation_budget(budget)
     limits=budget or dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096)
-    require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set()) and
+    require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set())|
+            ({'schema_version','statistics'} if statistics else set()) and
             type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
     require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
             1<=len(config['switches'])<=limits['max_ports'],'Require observed switches and device clocks')
@@ -89,9 +96,9 @@ def validate_observation(config, ranks, max_ns):
 
 
 def backend_observation(config, ranks, max_ns):
-    _,ports=validate_observation(config,ranks,max_ns)
+    clocks,ports=validate_observation(config,ranks,max_ns)
     # Capture successful starts throughout the simulation. Local clocks are
-    # deliberately absent from the backend input and its event scheduler.
+    # only used by passive statistics, never by the event scheduler.
     result=dict(schema_version='moe-ub-port-observation-set/1',ports=[dict(
         schema_version='moe-ub-port-observation/1',switch_id=p['switch_id'],port_id=p['port_id'],
         window_start_ns=0,window_end_ns=max_ns,window_period_ns=max_ns,
@@ -99,6 +106,14 @@ def backend_observation(config, ranks, max_ns):
     if 'resource_budget' in config:
         result.update(schema_version='moe-ub-port-observation-set/2',resource_budget=config['resource_budget'])
         for port in result['ports']:port.update(schema_version='moe-ub-port-observation/2',resource_budget=config['resource_budget'])
+    if 'statistics' in config:
+        result['schema_version']='moe-ub-port-observation-set/3'
+        for port,selected in zip(result['ports'],ports):
+            clock=clocks['switch',selected['switch_id']]
+            port.update(schema_version='moe-ub-port-observation/3',queue_sampling=dict(
+                schema_version='moe-ub-queue-sampling/1',
+                **{k:selected[k] for k in ('start_local_ns','end_local_ns','period_ns')},
+                **{k:clock[k] for k in ('offset_ns','drift_ppb')}))
     return result
 
 
@@ -118,13 +133,20 @@ def execution_coverage(config,ranks,max_ns,finished_ns):
                 scope='time_coverage_of_declared_ports_not_all_network_ports')
 
 
-def public_config(ranks, ports, resource_budget=None):
+def public_config(ranks, ports, resource_budget=None, *, statistics=False):
     result=dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
         port_schema='moe-ub-port-windows/1',rank_ids=ranks,ports=ports,time_unit='ns',
         byte_semantics='ns3_packet_get_size',counter_location='egress_packet_start',clock_resolution_ns=1,
         endpoint_fields=list(ENDPOINT_FIELDS))
     if resource_budget is not None:
         result.update(schema_version='moe-ub-observed/2',limits={k:resource_budget[k] for k in ('max_ports','max_windows_per_port','max_total_windows')})
+    if statistics:
+        require(resource_budget is not None,'New public statistics require resource limits')
+        result.update(schema_version='moe-ub-observed/3',queue_schema='moe-ub-queue-windows/1',
+            endpoint_stage_schema='moe-ub-endpoint-stages/1',
+            queue_objects=dict(voq_waiting='ready_output_VOQs_including_control_excluding_ingress_processing',
+                               fifo_waiting='physical_egress_FIFO_excluding_serializing_packet'),
+            queue_peak_semantics='max_inherited_and_after_update_states_in_half_open_window_including_same_time_transients')
     return result
 
 
@@ -196,11 +218,16 @@ def validate_observed(directory):
 
 
 def validate_public_config(public):
-    extended=public.get('schema_version')=='moe-ub-observed/2'
+    statistics=public.get('schema_version')=='moe-ub-observed/3'
+    extended=statistics or public.get('schema_version')=='moe-ub-observed/2'
+    statistic_fields={'queue_schema','endpoint_stage_schema','queue_objects','queue_peak_semantics'} if statistics else set()
+    if statistics:
+        expected=public_config([],[],dict(max_ports=1,max_windows_per_port=1,max_total_windows=1),statistics=True)
+        require(all(public[k]==expected[k] for k in statistic_fields),'Invalid public statistic semantics')
     limits=public.get('limits',dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096))
     require(set(limits)=={'max_ports','max_windows_per_port','max_total_windows'},'Invalid public resource limits')
     for k,v in limits.items():integer(v,k,1)
-    require(set(public)==PUBLIC_FIELDS|({'limits'} if extended else set()) and (extended or public['schema_version']=='moe-ub-observed/1') and
+    require(set(public)==PUBLIC_FIELDS|({'limits'} if extended else set())|statistic_fields and (extended or public['schema_version']=='moe-ub-observed/1') and
         public['endpoint_schema']=='moe-ub-endpoint-ops/1' and public['port_schema']=='moe-ub-port-windows/1' and
         public['endpoint_fields']==list(ENDPOINT_FIELDS) and public['time_unit']=='ns' and
         public['byte_semantics']=='ns3_packet_get_size' and public['counter_location']=='egress_packet_start' and

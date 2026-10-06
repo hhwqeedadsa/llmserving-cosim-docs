@@ -33,6 +33,8 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
     fields={'observed':['endpoint_ops.jsonl','port_windows.csv'],
             'truth':['operation_registry.jsonl','transfer_registry.jsonl','attribution_windows.csv'],
             'metrics':['byte-classification.jsonl']}
+    statistics='statistics' in observation
+    if statistics:fields['observed']+=['queue_windows.csv','endpoint_stages.jsonl']
     index_path=output/'metrics/transfer-index.bin'
     try:
         for scope,names in fields.items():
@@ -41,7 +43,7 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
         with TransferIndex(index_path,max_bytes=limits['max_index_bytes'],max_operations=limits['max_operations'],
                 max_layouts=limits['max_layouts'],max_id_ranges=limits['max_id_ranges'],cache_rows=limits['cache_rows']) as index:
             meta=export_metadata(raw,observation,ranks,max_ns,writer,index,limits)
-            save(output/'observed/public_config.json',public_config(ranks,meta['ports'],observation.get('resource_budget')))
+            save(output/'observed/public_config.json',public_config(ranks,meta['ports'],observation.get('resource_budget'),statistics=statistics))
             save(output/'truth/clock_models.json',dict(schema_version='moe-ub-clock-models/1',time_unit='ns',
                 drift_unit='parts_per_billion',rounding='floor',formula='floor((1000000000+drift_ppb)*t_ns/1000000000)+offset_ns',
                 devices=observation['clocks']))
@@ -51,10 +53,11 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
                 total_windows+=(end-start-1)//period+1
                 native=read(directory/'observation-audit.json');audit=read(directory/'resource-audit.json')
                 manifest=read(directory/'record-storage.json')
-                require(manifest['schema_version']=='moe-ub-port-records/1' and manifest['path_base']=='execution_directory' and
+                require(manifest['schema_version'] in ('moe-ub-port-records/1','moe-ub-port-records/2') and manifest['path_base']=='execution_directory' and
                     manifest['records_directory']=='records','Invalid raw port storage')
                 require(audit['budget']==observation.get('resource_budget'),'Backend/export observation budget mismatch')
                 event_names=['packet-events.jsonl','egress-queue-audit.jsonl']
+                if manifest['schema_version']=='moe-ub-port-records/2':event_names.append('queue-state-events.jsonl')
                 if meta['provenance']:event_names.append('truth/packet_ranges.jsonl')
                 raw_bytes=sum(manifest['fields'][name]['raw_bytes'] for name in event_names)
                 require(raw_bytes==audit['event_bytes'],'Raw event byte accounting mismatch')
@@ -62,6 +65,9 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
                     require(raw_bytes<=observation['resource_budget']['max_event_bytes_per_port'],'Raw port byte budget exceeded')
                 def records(name):
                     return iter_file(meta['execution'],manifest['fields'][name],meta['record_policy']['max_record_bytes'])
+                if statistics:
+                    from .queue_statistics import export_queue
+                    export_queue(meta,port,manifest,records,writer,max_ns)
                 ranges=iter(records('truth/packet_ranges.jsonl')) if meta['provenance'] else iter(())
                 pending=next(ranges,None);current=None;row_packets=row_bytes=0
                 classes=Counter();by_operation=Counter();previous=packets=whole=included_packets=included_bytes=0

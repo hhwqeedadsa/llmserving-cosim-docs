@@ -186,6 +186,10 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 
 ## 修改后的验证范围
 
+新增操作阶段通过 `OperationStages` 在图退休前读取实际 COMP 执行时刻和传输完成状态，按操作、rank 汇总；它不参与调度。队列使用 `UbQueueManager::OutPortVoqWaitingBytes` 与 `UbEgressQueue::WaitingBytes` 的 64 位被动状态通知。前者包含本地控制包但排除 ingress processing；旧 `GetTotalOutPortBufferUsed` 仍包含处理中的字节，不能替代纯 VOQ getter。一个共享 `VoqSources` 每交换机订阅一次通知，避免为每个包遍历全部观测端口。
+
+`QueueWindows` 仅保留当前窗口、两种等待量及上次本地时刻，用 128 位整数累计 byte·ns；零状态空窗直接跳过，持续积压按实际窗口拆分。`port-observation/3` 的 `queue_sampling` 声明被动本地窗口及变换，要求有界记录策略。详细原始记录、公开表和同刻变化的峰值定义见[记录格式](../docs/record_storage.md#v04-操作阶段与等待统计)，新增字段不进入业务包或路由。
+
 按修改对象选择小型检查，构建与执行方法见[开发维护](../docs/development.md)。不要仅因文档调整重复运行目标规模仿真。
 
 | 修改对象 | 主要现有检查 |

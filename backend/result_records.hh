@@ -32,7 +32,7 @@ class ResultRecords
 {
     using Json = nlohmann::json;
   public:
-    ResultRecords(Json& report, Json policy) : report_(report), policy_(std::move(policy))
+    ResultRecords(Json& report, Json policy, bool stages=false) : report_(report), policy_(std::move(policy)), stages_(stages)
     {
         if (!policy_.is_null())
         {
@@ -42,6 +42,7 @@ class ResultRecords
             for (const auto* field : {"wqe_starts", "wqe_completions", "target_writes", "native_starts", "native_completions"}) Register(field, "");
             for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                      "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"}) ordered_[field];
+            if(stages_) ordered_["operation_stages"];
         }
     }
     bool Bounded() const { return bool(store_); }
@@ -53,6 +54,7 @@ class ResultRecords
         for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                  "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"})
             Register(field, graph);
+        if(stages_) Register("operation_stages",graph);
     }
     void Add(const std::string& field, const Json& row, const std::string& graph = "")
     {
@@ -84,6 +86,7 @@ class ResultRecords
         for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                  "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"})
             sealed_[Name(field, graph)] = store_->Seal(Name(field, graph));
+        if(stages_) sealed_[Name("operation_stages",graph)]=store_->Seal(Name("operation_stages",graph));
     }
     void Finish()
     {
@@ -122,6 +125,7 @@ class ResultRecords
     }
     Json& report_;
     Json policy_;
+    bool stages_;
     std::shared_ptr<RecordStore> store_;
     std::map<std::string, size_t> graphs_;
     std::map<std::string, uint64_t> counts_;

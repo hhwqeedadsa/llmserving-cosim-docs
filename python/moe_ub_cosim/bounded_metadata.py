@@ -64,7 +64,11 @@ def export_metadata(raw,observation,ranks,max_ns,writer,index,limits):
         writer.add('truth','operation_registry.jsonl',operation)
     if provenance:
         require(operations==set(planned_ops) and bound==set(mapped),'Incomplete operation/endpoint binding')
-    endpoint_count=len(mapped);del mapped,bound
+    endpoint_count=len(mapped)
+    if 'statistics' in observation:
+        from .operation_stages import export_stages
+        export_stages(execution,report,mapped,clocks,writer,max_ns)
+    del mapped,bound
 
     actual=iter(iter_result(execution,'transfers',report));local=iter(iter_result(execution,'local_deliveries',report))
     registry=iter(iter_result(execution,'transfer_registry',report))

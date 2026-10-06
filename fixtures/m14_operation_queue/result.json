@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "simulation_end_ns": 47193,
+  "physical_packets": 2088,
+  "operation_stage_events": 177,
+  "queue_state_events": 205,
+  "nonzero_queue_windows": 92,
+  "silent_nonempty_windows": 41,
+  "sampled_nonzero_queue_windows": 37,
+  "sampled_silent_nonempty_windows": 7,
+  "independent_nanosecond_oracle": true,
+  "execution_and_wire_time_unchanged": true,
+  "replay_identical": true,
+  "old_packet_only_upgrade_rejected": true,
+  "event_budget_rejected": true,
+  "resource_comparison": {
+    "disabled": {
+      "wall_seconds": 0.893528750166297,
+      "peak_sampled_group_rss_bytes": 105152512,
+      "max_waited_child_rss_kib": 76468,
+      "file_bytes": 1551332
+    },
+    "enabled": {
+      "wall_seconds": 0.8844641428440809,
+      "peak_sampled_group_rss_bytes": 103964672,
+      "max_waited_child_rss_kib": 74376,
+      "file_bytes": 1563789
+    },
+    "without-truth": {
+      "wall_seconds": 0.9026448130607605,
+      "peak_sampled_group_rss_bytes": 106283008,
+      "max_waited_child_rss_kib": 77552,
+      "file_bytes": 1553001
+    }
+  },
+  "schema_version": "moe-ub-m14-evidence/1",
+  "scope": "functional_consistency_not_hardware_calibration",
+  "implementation_parent_commit": "4f913fd868ad83dd0ac53b300550f5dd60e82cb8",
+  "ub_revision": "c0f1fe54245203a3b14468e44e893a38792cfcc8",
+  "binary_sha256": "a3a6003e3a6833b9bdf6d59f6bdb22f4932653bc9eeb1290c42de0cdfa43a3ea",
+  "evidence": {
+    "build_probe": "runs/v04-platform/build-operation-queue-final/probe.json",
+    "final_probe": "runs/v04-platform/operation-queue-final/probe.json",
+    "commands": "runs/v04-platform/operation-queue-cases-final/commands.json",
+    "unit_stdout": "runs/v04-platform/operation-queue-final/stdout.log",
+    "unit_stderr": "runs/v04-platform/operation-queue-final/stderr.log",
+    "legacy_write": "runs/v04-platform/operation-queue-write-final",
+    "native_routing": "runs/v04-platform/operation-queue-routing-final"
+  },
+  "final_checks": {
+    "child_exit_code": 0,
+    "python_unit_tests": 24,
+    "wall_seconds": 44.612016916275024,
+    "sampled_group_rss_bytes": 125194240,
+    "cumulative_artifact_bytes": 19167539200,
+    "max_waited_child_rss_kib": 78384
+  },
+  "queue_storage_estimate": {
+    "cpp_accumulator_bytes_per_port": 176,
+    "cpp_current_window_bytes": 48,
+    "ports": 16128,
+    "local_period_ns": 1000,
+    "window_count_per_port": 75324,
+    "uncompressed_bytes_per_row_rounded_from_fixture": 288,
+    "dense_queue_rows": 1214825472,
+    "dense_uncompressed_bytes": 349869735936,
+    "counter_object_bytes_only": 2838528,
+    "excludes": "source maps, callbacks, JSON/record buffers, compression, other tables and allocator overhead",
+    "assumption": "dense nonzero queue output through 75.324 ms; size example, not predicted execution or measured hardware cost"
+  },
+  "preserved_failure": {
+    "probe": "runs/v04-platform/operation-queue-01/probe.json",
+    "reason": "independent test incorrectly read operation_id from execution transfer row; fixed by joining planned_transfers via transfer_id, retaining all comparisons"
+  }
+}

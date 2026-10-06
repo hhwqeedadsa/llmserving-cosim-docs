@@ -91,6 +91,8 @@ moe-ub validate --observed runs/demo-10us/observed
 
 新的观测可调整周期、窗口起止时刻、设备时钟的偏移与漂移，并选择已捕获端口的子集。采样时不能增加未记录的端口、请求捕获时间范围之外的数据，或改变原始事件是否包含对应关系记录的设置；原观测的资源声明也保持不变。
 
+需要操作阶段和队列等待统计时，给 `run.json.observation` 指定带显式资源预算的 `moe-ub-observation-config/2`，写入 `statistics: {"schema_version":"moe-ub-observation-statistics/1","queue_waiting_bytes":true,"operation_stages":true}`；完整输入见[统计小例](../fixtures/m14_operation_queue/observation.json)。输出新增 `endpoint_stages.jsonl` 和 `queue_windows.csv` 两张逻辑表，读取方式仍为 `stored_rows`。队列完整序列使用 `logical_queue_windows`，不能把“没有发包”解释成“没有积压”。详细状态已采集时可用同样的 `slice`、`sample`、`replay` 命令；旧的纯发包记录不能补出队列状态。字段含义与采集限制见[记录格式](record_storage.md#v04-操作阶段与等待统计)。
+
 观测使用设备本地时钟，`offset_ns` 的单位是纳秒，`drift_ppb` 是十亿分之一的时钟漂移。它们只改变导出的时间，不改变仿真执行。端口窗口包含起点、不包含终点，即 `[start, end)`；最后一个窗口可以短于设定周期。端侧操作仍保留整个首轮的开始和结束记录，包括跨越所选端口窗口边界的操作。
 
 ### 重新执行网络与计算依赖

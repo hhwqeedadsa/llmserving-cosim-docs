@@ -3,6 +3,7 @@
 #include "ub_write_transfer.hh"
 #include "identity_ranges.hh"
 #include "record_store.hh"
+#include "queue_sources.hh"
 #include "extern/helper/json/json.hpp"
 #include "ns3/packet.h"
 #include "ns3/nstime.h"
@@ -25,6 +26,7 @@ struct ObservationConfig
     uint64_t start_ns, end_ns, period_ns;
     bool provenance;
     nlohmann::json resource_budget = nullptr;
+    nlohmann::json queue_sampling = nullptr;
     static ObservationConfig Parse(const nlohmann::json& input, uint64_t stop_ns);
 };
 
@@ -150,7 +152,7 @@ class PortObservation
                     const std::filesystem::path& spool_directory = {});
     PortObservation(ObservationConfig config, std::shared_ptr<WriteProvenance> provenance,
                     bool retain_packet_events = false, const std::filesystem::path& spool_directory = {},
-                    std::shared_ptr<RecordStore> record_store = {});
+                    std::shared_ptr<RecordStore> record_store = {}, std::shared_ptr<VoqSources> queue_sources = {});
     ~PortObservation();
     PortObservation(const PortObservation&) = delete;
     PortObservation& operator=(const PortObservation&) = delete;
@@ -169,6 +171,10 @@ class PortObservation
     void Record(const std::string& name, nlohmann::json& memory, const nlohmann::json& row);
     std::string RecordName(std::string name) const;
     void WindowRecord(uint64_t index, const ByteCounts& row);
+    void VoqChanged(uint64_t bytes);
+    void FifoChanged(uint64_t bytes);
+    void QueueState();
+    void QueueWindowRecord(uint64_t index, const QueueWindow& row);
     void ExportStored(const std::filesystem::path& base, const ObservationRegistry& registry) const;
     ObservationConfig config_;
     mutable PortWindows windows_;
@@ -187,5 +193,7 @@ class PortObservation
     mutable std::map<std::string,std::ofstream> streams_;
     uint64_t event_bytes_=0;
     std::shared_ptr<RecordStore> record_store_;
+    std::shared_ptr<VoqSources> queue_sources_;
+    mutable std::unique_ptr<QueueWindows> queue_windows_;
 };
 }

@@ -18,6 +18,7 @@
 | M11：原生 STORE/LOAD | 真实供数通知、数据与资源完成、有限请求标识及记录导出；保留 WRITE 回归 | [输入与小型验收](../fixtures/m11_native/README.md) |
 | M12：原生逐包喷洒 | 源/交换出口候选、跨平面源选路、真实乱序和被动记录检查 | [输入与路径验收](../fixtures/m12_native_routing/README.md) |
 | M13：准备成本与出口服务 | 实际 COMP 成本、物理有向速率区间、受限网络重放与执行/观测覆盖 | [输入与验收](../fixtures/m13_endpoint_service/README.md) |
+| M14：操作阶段与等待统计 | 真实节点/回调阶段、纯 VOQ 与 FIFO 面积/均值/峰值、详细重采样和被动性 | [输入与验收](../fixtures/m14_operation_queue/README.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

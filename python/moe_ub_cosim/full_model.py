@@ -52,7 +52,7 @@ def audit_full_capacity(model, memory, layer):
             'Full model layer structure/placement mismatch')
     require(model['hidden_size']==layer['hidden_dim'] and model['dtypes']==layer['compute_dtypes'],
             'Full model execution dimensions/dtypes differ')
-    require(layer['template']=='cann_a3_v850_fullmesh_v1' and layer['role']=='D' and
+    require(layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1') and layer['role']=='D' and
             'operator_profile' not in layer,'Full model currently requires CANN Decode reference compute')
     return result
 
@@ -73,7 +73,7 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
     seen={k:set() for k in ('transfer_id','ub_task_id','comm_tag','operation_id')}
     for layer in layers:
         validate_plan(layer);c=layer['input'];lid=c['layer_id'];spec=model['layers'][lid];cost=profile['layers'][lid]
-        require(layer['schema_version']=='moe-ub-execution-plan/3' and c['template']=='cann_a3_v850_fullmesh_v1'
+        require(layer['schema_version']=='moe-ub-execution-plan/3' and c['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1')
                 and c['role']=='D' and 'operator_profile' not in c,
                 'Full model requires CANN layer/3')
         require(common_input(layer)==common and token_keys(layer)==token_keys(first),'Full model shared configuration/Token continuity mismatch')

@@ -170,6 +170,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention re
 }
 LayerPlan ValidateLayerPlan(const Json& p, bool retain_data)
 {
+    if (p.at("communication_template") == "cann_a3_v850_native_v1") return ValidateNativePlan(p, retain_data);
     const bool cann = p.at("communication_template") == "cann_a3_v850_fullmesh_v1";
     const bool batched = p.at("schema_version") == "moe-ub-execution-plan/3";
     const bool physical = p.at("schema_version") == "moe-ub-execution-plan/2" || (batched && p.contains("deployment"));

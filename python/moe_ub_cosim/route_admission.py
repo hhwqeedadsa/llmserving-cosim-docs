@@ -14,12 +14,15 @@ from .resources import cann_usage,check_graph
 class CannRouteAdmission:
     def __init__(self,layer):
         self.layer=deepcopy(layer);validate_config(self.layer)
-        require(layer['template']==TEMPLATE,'Route arithmetic requires CANN')
+        require(layer['template'] in (TEMPLATE,'cann_a3_v850_native_v1'),'Route arithmetic requires CANN layout')
         self.ranks=set(layer['rank_ids']);self.owners=self.layer['expert_placement']
         self.chips={r['rank_id']:r['chip_id'] for r in layer.get('deployment',{}).get('ranks',[])}
         self.base=cann_usage(dict(layer,tokens=[]))
         h=layer['hidden_dim'];chunk=layer['chunk_bytes']
         self.remote_chunks=((h+31)//32*32+44+chunk-1)//chunk+(2*h+chunk-1)//chunk+1
+        native=layer.get('native_profile',{})
+        self.remote_chunks+=(((h+31)//32*32+44+chunk-1)//chunk)*int(native.get('dispatch')=='LOAD')
+        self.remote_chunks+=((2*h+chunk-1)//chunk)*int(native.get('combine')=='LOAD')
         # Every rank always checks all experts' status, even with no Token.
         stage_durations(self.layer,0,0,0,0)
 

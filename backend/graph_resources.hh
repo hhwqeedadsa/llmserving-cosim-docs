@@ -61,7 +61,15 @@ inline Json Cann(const Json& c)
             const int dst=c.at("expert_placement").at(e); experts.insert(dst);
             if (src==dst) continue;
             if (near(src,dst)) { local+=3;dispatch.insert(src);combine.insert(dst); }
-            else fabric+=((h+31)/32*32+44+chunk-1)/chunk+(h*2+chunk-1)/chunk+1;
+            else {
+                const auto dispatchChunks=((h+31)/32*32+44+chunk-1)/chunk;
+                const auto combineChunks=(h*2+chunk-1)/chunk;
+                fabric+=dispatchChunks+combineChunks+1;
+                if (c.contains("native_profile")) {
+                    if (c.at("native_profile").at("dispatch")=="LOAD") fabric+=dispatchChunks;
+                    if (c.at("native_profile").at("combine")=="LOAD") fabric+=combineChunks;
+                }
+            }
         }
     }
     uint64_t compute=c.at("rank_ids").size()+2*sources.size()+2*experts.size();

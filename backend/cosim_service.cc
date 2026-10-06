@@ -12,6 +12,7 @@
 #include "ns3/ub-switch.h"
 #include "ns3/ub-transfer-executor.h"
 #include "ns3/ub-utils.h"
+#include "ns3/ub-ldst-api.h"
 
 #include <algorithm>
 #include <cstdio>
@@ -231,7 +232,7 @@ Json TransferResult(const moe_ub::UbWriteTransfer& transfer)
     Require(!done.Active() && done.SendCallbacks() == 1 && done.ReceiveCallbacks() == 1 &&
             done.CommittedBytes() == d.bytes && !transfer.ObservingTarget() && !transfer.HasPendingEvents() &&
             transfer.SourceJettyRetired(), "Incomplete layer transfer " + std::to_string(d.transfer_id));
-    return {{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
+    Json result = {{"transfer_id", d.transfer_id}, {"ub_task_id", d.task_id},
         {"src_rank", d.src_rank}, {"dst_rank", d.dst_rank},
         {"src_ub_node", d.SourceNode()}, {"dst_ub_node", d.DestinationNode()}, {"bytes", d.bytes},
         {"submitted_tasks", transfer.SubmittedTasks()}, {"send_callbacks", done.SendCallbacks()},
@@ -240,6 +241,18 @@ Json TransferResult(const moe_ub::UbWriteTransfer& transfer)
         {"transaction_done_ns", *done.TransactionDoneNs()}, {"send_done_ns", *done.SendDoneNs()},
         {"receive_done_ns", *done.ReceiveDoneNs()}, {"committed_bytes", done.CommittedBytes()},
         {"committed_segments", done.CommittedSegments()}, {"context_active", done.Active()}, {"graph_id", d.graph_id}};
+    if (d.operation != moe_ub::TransferOperation::Write)
+    {
+        result["operation"] = d.operation == moe_ub::TransferOperation::Store ? "STORE" : "LOAD";
+        result["initiator_rank"] = d.src_rank;
+        result["data_owner_rank"] = d.DataOwner(); result["consumer_rank"] = d.Consumer();
+        result["initiator_resources_retired"] = transfer.SourceJettyRetired();
+    }
+    return result;
+}
+void NativeEvent(moe_ub::ResultRecords* records, std::string field, uint32_t node, uint32_t task)
+{
+    records->Add(field, {{"node",node},{"task",task},{"time_ns",ns3::Simulator::Now().GetNanoSeconds()}});
 }
 int Library(dl_phdr_info* info, size_t, void* data)
 {
@@ -290,9 +303,15 @@ class NetworkDrain
         // A controller's live TP map is independent of which of its ports is
         // being checked. Query it once per controller, including later TPs.
         for (const auto& controller : controllers_)
+        {
+            const auto node = controller->GetObject<ns3::Node>();
+            const auto native = node->GetObject<ns3::UbLdstInstance>();
+            const auto api = controller->GetUbFunction()->GetUbLdstApi();
+            if ((native && !native->IsIdle()) || api->GetPendingRequestCount() || api->GetWaitingThreadCount()) return false;
             for (const auto& [id, tp] : controller->GetTpnMap())
                 if (!tp->IsEmpty() || tp->GetActiveSendSegmentCount() != 0 ||
                     tp->GetOutstandingUnackedSegmentCount() != 0) return false;
+        }
         return true;
     }
     uint64_t StartedPackets() const { return started_; }
@@ -513,6 +532,7 @@ int main(int argc, char** argv)
             {"activation_order", Json::array()}, {"graph_loads", Json::array()},
             {"step_submissions", Json::array()}, {"boundary_resources", Json::array()},
             {"wqe_starts", Json::array()}, {"wqe_completions", Json::array()},
+            {"native_starts", Json::array()}, {"native_completions", Json::array()},
             {"target_writes", Json::array()}, {"transfers", Json::array()},
             {"active_wqes", std::vector<unsigned>(rank_count, 0)}, {"peak_wqes", std::vector<unsigned>(rank_count, 0)},
             {"initial_tp_counts", Json::array()}, {"rank_resources", Json::array()},
@@ -530,6 +550,9 @@ int main(int argc, char** argv)
             report["initial_tp_counts"].push_back(controller->GetTransportCountForTest());
             auto app = ns3::CreateObject<ns3::UbApp>();
             node->AddApplication(app); apps.push_back(app); utils->ClientTraceConnect(rank_node.at(rank));
+            Require(app->TraceConnectWithoutContext("MemTaskStartsNotify", ns3::MakeBoundCallback(NativeEvent, &records, std::string("native_starts"))) &&
+                    app->TraceConnectWithoutContext("MemTaskCompletesNotify", ns3::MakeBoundCallback(NativeEvent, &records, std::string("native_completions"))),
+                    "Cannot record native task lifecycle");
             Require(app->TraceConnectWithoutContext("WqeTaskStartsNotify", ns3::MakeBoundCallback(WqeStart, &report, &records, &node_index,
                     backend_config ? &*backend_config : nullptr)) &&
                     app->TraceConnectWithoutContext("WqeTaskCompletesNotify", ns3::MakeBoundCallback(WqeEnd, &report, &records, &node_index)) &&
@@ -581,7 +604,7 @@ int main(int argc, char** argv)
             std::set<std::string> provenance_retirement;
             std::set<int> transfer_ranks;
             std::map<std::string, uint64_t> endpoint_offsets;
-            uint64_t next_endpoint_offset = 0, expected_completions = 0, submitted_transfers = 0;
+            uint64_t next_endpoint_offset = 0, expected_completions = 0, submitted_transfers = 0, submitted_native = 0;
             uint64_t peak_plans = 0, peak_transfers = 0, peak_local = 0, retired_graphs = 0;
             Json retirement_boundaries = Json::array();
             const bool record_truth = std::any_of(observation_configs.begin(), observation_configs.end(),
@@ -994,6 +1017,7 @@ int main(int argc, char** argv)
                     PreparationStage(run_dir, "provenance_registered");
                     expected_completions += plan.data.at("rank_ids").size();
                     submitted_transfers += plan.descriptors.size();
+                    for (const auto& d : plan.descriptors) submitted_native += d.operation != moe_ub::TransferOperation::Write;
                     if (!send_slots)
                         for (auto& sys : systems) sys->workload->hw_resource->configure_p2p_send_slots(slots);
                     send_slots = slots;
@@ -1152,8 +1176,9 @@ int main(int argc, char** argv)
                 auto jetty = event.at("jetty").get<uint32_t>();
                 Require(!ctrl->GetUbFunction()->IsJettyExists(jetty) && !ctrl->GetUbTransaction()->HasJettyState(jetty), "Leaked source Jetty resources");
             }
-            Require(report["graph_completions"].size() == expected_completions && records.Count("wqe_starts") == submitted_transfers &&
-                    records.Count("wqe_completions") == submitted_transfers && records.Count("transfers") == submitted_transfers &&
+            Require(report["graph_completions"].size() == expected_completions && records.Count("wqe_starts") == submitted_transfers-submitted_native &&
+                    records.Count("wqe_completions") == submitted_transfers-submitted_native && records.Count("transfers") == submitted_transfers &&
+                    records.Count("native_starts") == submitted_native && records.Count("native_completions") == submitted_native &&
                     report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
                     report["csv_completed_tasks"] == 0, "Service completion invariant failed");
             for (const auto& peak : report["peak_wqes"])

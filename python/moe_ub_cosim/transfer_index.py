@@ -12,7 +12,7 @@ import struct
 
 from .plan import integer,require
 
-ROW=struct.Struct('<QIIIIQ')  # transfer, task, operation, payload, region layout, delivered
+ROW=struct.Struct('<QIIIIBQ')  # transfer, task, operation, payload, layout, native lifecycle, delivered
 
 
 class TransferIndex:
@@ -58,7 +58,8 @@ class TransferIndex:
             require(len(self.transfer_starts)<self.max_id_ranges,'Transfer identity-range budget exceeded')
             self.transfer_starts.append(tid);self.transfer_rows.append(self.count)
         require((self.count+1)*ROW.size<=self.limit,'Transfer index disk budget exceeded')
-        self.stream.write(ROW.pack(tid,task,self.operation_index[op],payload,self.layout_index[layout],0))
+        native=transfer.get('operation') in ('STORE','LOAD')
+        self.stream.write(ROW.pack(tid,task,self.operation_index[op],payload,self.layout_index[layout],int(native),0))
         self.last_transfer=tid;self.last_task=task;self.count+=1;self.bytes_written+=ROW.size
 
     def seal(self):
@@ -85,9 +86,16 @@ class TransferIndex:
 
     def add_write(self,task,size):
         index=self._task_row(task);row=self._row(index)
+        require(row[-2]==0,'Target write event refers to a native task')
         integer(size,'target write bytes',1,row[3]);total=row[-1]+size
         require(total<=row[3],'Duplicate or oversized target write')
         struct.pack_into('<Q',self.mapping,index*ROW.size+ROW.size-8,total)
+
+    def native_event(self,task,*,completed):
+        index=self._task_row(task);row=self._row(index)
+        require(row[-2]==(3 if completed else 1),'Unknown, duplicate or out-of-order native lifecycle event')
+        struct.pack_into('<B',self.mapping,index*ROW.size+ROW.size-9,7 if completed else 3)
+        if completed:struct.pack_into('<Q',self.mapping,index*ROW.size+ROW.size-8,row[3])
 
     def get(self,tid):
         require(self.sealed,'Unsealed transfer index')

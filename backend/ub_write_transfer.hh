@@ -3,16 +3,19 @@
 #include "write_completion.hh"
 #include "ns3/event-id.h"
 #include "ns3/ptr.h"
+#include "ns3/ub-datatype.h"
 
 #include <cstdint>
 #include <optional>
 #include <string>
 #include <vector>
+#include <map>
 
-namespace ns3 { class UbApp; class UbTransaction; class UbWqeSegment; }
+namespace ns3 { class UbApp; class UbTransaction; class UbWqeSegment; class UbLdstApi; class Packet; }
 
 namespace moe_ub
 {
+enum class TransferOperation { Write, Store, Load };
 struct PayloadRegion
 {
     uint64_t begin, end;
@@ -37,6 +40,9 @@ struct WriteDescriptor
     std::optional<uint32_t> src_ub_node{}, dst_ub_node{};
     // Absent on legacy plans: their entire task is useful vector/KV data.
     std::optional<std::vector<PayloadRegion>> payload_regions{};
+    TransferOperation operation = TransferOperation::Write;
+    int DataOwner() const { return operation == TransferOperation::Load ? dst_rank : src_rank; }
+    int Consumer() const { return operation == TransferOperation::Load ? src_rank : dst_rank; }
     // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.
     uint32_t SourceNode() const { return src_ub_node.value_or(static_cast<uint32_t>(src_rank)); }
     uint32_t DestinationNode() const { return dst_ub_node.value_or(static_cast<uint32_t>(dst_rank)); }
@@ -62,7 +68,7 @@ class UbWriteTransfer
     uint64_t SendCallbacks() const { return completion_.SendCallbacks(); }
     std::optional<uint64_t> TransactionDoneNs() const { return completion_.TransactionDoneNs(); }
     std::optional<uint64_t> SendDoneNs() const { return completion_.SendDoneNs(); }
-    bool ObservingTarget() const { return target_ != nullptr; }
+    bool ObservingTarget() const { return target_ != nullptr || native_source_ != nullptr; }
     bool SourceJettyRetired() const { return jetty_retired_; }
     std::optional<uint64_t> SendStartNs() const { return send_start_ns_; }
     std::optional<uint64_t> ReceiveStartNs() const { return receive_start_ns_; }
@@ -72,11 +78,17 @@ class UbWriteTransfer
     void Validate(int src, int dst, uint64_t bytes, int type, int tag,
                   void (*callback)(void*)) const;
     void ObserveWrite(ns3::Ptr<const ns3::UbWqeSegment> segment);
+    void ObserveNativeRequest(ns3::Ptr<const ns3::Packet>, uint32_t, uint64_t, uint32_t, ns3::UbMemOperationType);
+    void ObserveNativeTarget(uint64_t, uint32_t, ns3::UbMemOperationType);
+    void ObserveNativeResponse(uint64_t, uint32_t, uint64_t, uint32_t, ns3::UbMemOperationType);
+    void SubmitNative();
     void DisconnectTarget();
     std::string Identity() const;
     WriteDescriptor descriptor_;
     ns3::Ptr<ns3::UbApp> source_;
     ns3::Ptr<ns3::UbTransaction> target_;
+    ns3::Ptr<ns3::UbLdstApi> native_source_, native_target_;
+    std::map<uint64_t, std::pair<uint64_t, uint32_t>> native_requests_;
     WriteCompletion completion_;
     ns3::EventId submit_event_;
     uint64_t submitted_tasks_ = 0;

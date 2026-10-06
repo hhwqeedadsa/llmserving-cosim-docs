@@ -41,7 +41,7 @@ def audit_capacity(model, memory, layer):
     d = integer(a['head_dim'], 'head_dim', 1, I64)
     require(q % k == 0 and q*d == h, 'Invalid GQA dimensions')
     dt = model['dtypes']
-    vector_bytes = dict(DTYPE_BYTES, **({'int8':1} if layer['template']=='cann_a3_v850_fullmesh_v1' else {}))
+    vector_bytes = dict(DTYPE_BYTES, **({'int8':1} if layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1') else {}))
     fields(dt, 'weights compute kv dispatch combine', 'dtypes')
     require(all(isinstance(value, str) for value in dt.values()) and
             all(dt[key] in DTYPE_BYTES for key in ('weights', 'compute', 'combine')) and dt['dispatch'] in vector_bytes and
@@ -137,7 +137,7 @@ def communication_minimum(layer):
     minimum = max(batch*len(ranks)*remote*layer['hidden_dim']*
                   (layer['dispatch_element_bytes']+layer['combine_element_bytes']),
                   2*layer['send_slots_per_rank']*layer['chunk_bytes'])
-    if layer['template'] == 'cann_a3_v850_fullmesh_v1':
+    if layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1'):
         from .cann import buffers
         minimum = max(minimum, buffers(layer)['total_bytes'])
     return minimum

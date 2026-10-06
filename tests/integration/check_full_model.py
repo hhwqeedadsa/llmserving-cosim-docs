@@ -23,6 +23,7 @@ def save(path,value):path.write_text(json.dumps(value,indent=2)+'\n');return pat
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build-dir',type=Path,required=True);parser.add_argument('--output-dir',type=Path,required=True)
+    parser.add_argument('--native',action='store_true',help='Check native STORE dispatch / LOAD combine in the complete model')
     args=parser.parse_args();root=Path(__file__).resolve().parents[2];out=args.output_dir.resolve();out.mkdir(parents=True,exist_ok=False)
     binary=args.build_dir.resolve()/'output/cosim/ns3.44-cosim-service'
     fixture=root/'fixtures/m10_full_model';base=read(fixture/'service.json');layers=read(fixture/'layers.json')
@@ -48,6 +49,10 @@ def main():
             d=yaml.safe_load((root/'fixtures/m6_scenario_backend/reference.yaml').read_text())
             d.update(service=str(cp),layer=str(lp),system=str(system),scenario_id='m10-full-model',max_simulation_ns=max_ns,observation=raw)
             d['backend']['reference_file']=str(root/'docs/scenarios/cm384_deepseek_r1_decode_v0.1.yaml')
+            if args.native:
+                native=yaml.safe_load((root/'fixtures/m11_native/scenario.yaml').read_text())
+                d['backend']=native['backend']
+                d['backend']['reference_file']=str(root/'fixtures/m11_native/backend-reference.yaml')
             d['network']['case_path']=str(net);d['network']['defaults']['rate_bps']=400000000000
             d['network']['links']=[dict(src=8,src_port=4,dst=9,dst_port=4,rate_bps=10000000000,delay_ns=20)]
             d['execution'].update(chunk_bytes=1024,send_slots_per_rank=2)
@@ -129,7 +134,10 @@ def main():
                     x=actual[t['transfer_id']];business+=t['business_payload_bytes']
                     assert x['bytes']==x['committed_bytes']==t['payload_bytes']
                     assert x['submitted_tasks']==x['receive_callbacks']==x['send_callbacks']==1
-                    assert x['data_ready_ns']<x['transaction_done_ns']==x['send_done_ns']
+                    if t.get('operation')=='LOAD':
+                        assert x['data_ready_ns']==x['transaction_done_ns']==x['send_done_ns']
+                        assert (x['data_owner_rank'],x['consumer_rank'])==(t['dst_rank'],t['src_rank'])
+                    else:assert x['data_ready_ns']<x['transaction_done_ns']==x['send_done_ns']
                     send,recv=x['send_done_ns'],max(x['data_ready_ns'],x['receive_start_ns'])
                 assert events[t['src_rank'],t['send_node_id']]['end_ns']==send
                 assert events[t['dst_rank'],t['recv_node_id']]['end_ns']==recv
@@ -143,6 +151,46 @@ def main():
             waves=len(front['waves']),stage_records=stages,empty_stage_records=empty,shared_last=shared_last,routed_last=routed_last,layer_overlaps=overlaps)
         return path,front,execution,plans
 
+    if args.native:
+        for group in layers['groups']:
+            for layer in group['layers']:
+                layer.update(template='cann_a3_v850_native_v1',
+                             native_profile=dict(dispatch='STORE',combine='LOAD',ready_notice_bytes=32))
+        primary=run('native',scenario=True)
+        off=run('native-truth-off',mode=False,scenario=True)
+        assert primary[2]==off[2]
+        assert all(t['operation'] in ('STORE','LOAD') for t in primary[2]['transfers'])
+        from moe_ub_cosim.record_storage import iter_result
+        from moe_ub_cosim.bounded_export import export_bounded
+        from moe_ub_cosim.research_storage import logical_windows,stored_rows
+        policy=save(out/'record-policy.json',dict(schema_version='moe-ub-record-storage/1',
+            max_compressed_bytes=128*2**20,max_buffer_bytes=2**20,max_record_bytes=2**18))
+        invoke('native-bounded',[sys.executable,'-m','moe_ub_cosim.service',
+            '--input',out/'native.service.json','--layer',out/'native.layers.json','--backend',binary,
+            '--system',system,'--network',out/'native/network','--output-dir',out/'native-bounded',
+            '--observation',out/'native.observation.json','--max-simulation-ns',max_ns,'--record-storage',policy])
+        bounded=out/'native-bounded';report=read(bounded/'execution/result.json')
+        for field in ('transfers','native_starts','native_completions','node_execution'):
+            assert list(iter_result(bounded/'execution',field,report))==primary[2][field],field
+        life=report['resource_lifecycle'];assert life['resident_graphs_at_exit']==life['resident_transfers_at_exit']==0
+        assert life['provenance']['resident_packets']==life['provenance']['pending_native_requests']==0
+        ranks=sorted(r for g in layers['groups'] for r in g['layers'][0]['rank_ids'])
+        obs=dict(clocks=[dict(device_type='rank',device_id=r,offset_ns=0,drift_ppb=0) for r in ranks]+
+            [dict(device_type='switch',device_id=8,offset_ns=0,drift_ppb=0)],
+            switches=[dict(switch_id=8,port_ids=[4],start_local_ns=0,end_local_ns=max_ns,period_ns=1000)],record_provenance=True)
+        limits=dict(schema_version='moe-ub-research-export-policy/1',max_index_bytes=128*2**20,
+            max_compressed_bytes=128*2**20,max_record_bytes=2**20,max_endpoint_records=100000,
+            max_operations=10000,max_layouts=1000,max_id_ranges=10000,max_graphs=1000,cache_rows=16)
+        result=export_bounded(bounded,obs,ranks,max_ns,out/'native-bounded-export',limits)
+        expected=export_records(primary[0],obs,ranks,max_ns)
+        assert list(logical_windows(out/'native-bounded-export/observed'))==expected['counters']
+        for table,key in (('transfer_registry.jsonl','transfers'),('attribution_windows.csv','attribution')):
+            assert list(stored_rows(out/'native-bounded-export/truth',table))==expected[key]
+        assert result['unique_delivery_bytes']==expected['validation']['unique_delivery_bytes']
+        cases['bounded']=dict(storage_equivalent=True,export_equivalent=True,resource_lifecycle=life)
+        save(out/'summary.json',dict(passed=True,cases=cases,native=True,hardware_calibrated=False,target_scale_executed=False))
+        print('PASS: native complete model, composed dependencies, byte export, passive observations and resource exit')
+        return
     primary=run('reference');assert cases['reference']['routed_last']>0 and cases['reference']['layer_overlaps']>0
     off=run('provenance-off',mode=False);assert primary[2]==off[2]
     shared=deepcopy(base)

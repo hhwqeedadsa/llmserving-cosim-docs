@@ -34,12 +34,13 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 
 ## 通信行为模型
 
-### 两种模板的区别
+### 通信模板的区别
 
 | 模板 | 贡献与返回规则 | 依据和用途 |
 |---|---|---|
 | `direct_rank_dedup_v1` | 同一 Token 发往同一目的 rank 的多个专家时只发送一份输入；专家计算分别保留，按声明的本地加权合并约定返回一份向量 | 早期参考模型。已核对 DeepEP v1.2.1 的单机 normal 路径，但没有复现其完整元数据、通知、通道或 NVLink 时序。 |
 | `cann_a3_v850_fullmesh_v1` | 每 Token×专家分别发送和返回，同一目的 rank 不去重；Token 所属 rank 收齐后归约 | 当前 CM384/R1 场景采用的独立 CANN 行为模型，以下说明适用于此模板。 |
+| `cann_a3_v850_native_v1` | 保留上一行的数据布局和状态消息；向量采用可选 STORE/LOAD，LOAD 前增加真实供数通知 | 本平台定义的原生操作映射，不能把新增握手或 worker 调度称为 CANN 真机行为。 |
 
 DeepEP 的固定源码版本为 `9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee`。其四 rank BF16 调用配置、八项源码对照和已知差异保存在[核对证据](../fixtures/m5_model_audit/README.md)与[原始完整核对记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/model_validation.md)。这部分是历史模型依据，不能代替当前 CANN 规则。
 
@@ -85,7 +86,7 @@ Dispatch 数据窗口的地址步长为 `A(A(H,32)+44,512)`；Combine 为 `A(2H,
 
 `aiv_lanes` 为 1～48 个参考逻辑发送序列，不是测得的 AIV 分配数。每个序列等待前一事务完整结束才复用，另受每 rank 1 或 2 个发送槽限制。模型保留成功路径上的状态发布与等待；轮询、清零和局部同步的耗时合并到参考处理阶段。逐 rank 的归约保守地等待本地整个 Combine 阶段，不模拟逐 Token 归约流水或原生 MTE 双窗口重叠。
 
-URMA WRITE 是平台对通信行为的明确映射，不能据此声称复现原生 MTE/LDST。URMA READ、CTP、native MEM_LOAD/MEM_STORE 和 XCCL 没有在此模型中启用。新增这些模式需要分别验证请求/数据方向、可消费完成、资源回收与观测；不能沿用 WRITE 回调作为完成证明。当前也没有验证 CANN 的超时、故障处理或原生标志复用竞态。
+URMA WRITE 是平台对通信行为的明确映射，不能据此声称复现原生 MTE/LDST。独立的 `cann_a3_v850_native_v1` 将向量映射为 ns-3-UB STORE 或 LOAD；状态和 LOAD 供数通知使用 STORE，并通过原生请求/响应回调判断数据与资源完成。LOAD 的 32 B 就绪通知、按 worker 均分任务和整包响应短尾填充均是明确的平台/后端参考行为，未经过 CANN 或 CM384 硬件校准。URMA READ、CTP、XCCL、CANN 超时、故障处理及原生标志复用竞态仍不在已验证范围。
 
 ### 通信缓冲区与输入限制
 

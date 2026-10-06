@@ -65,7 +65,8 @@ def validate_token(c, token):
 
 
 def validate_config(c):
-    cann = c.get('template') == 'cann_a3_v850_fullmesh_v1'
+    native = c.get('template') == 'cann_a3_v850_native_v1'
+    cann = native or c.get('template') == 'cann_a3_v850_fullmesh_v1'
     expected = {'schema_version', 'graph_id', 'wave_id', 'service_id', 'role', 'group_id', 'ready_ns',
                 'layer_id', 'rank_ids', 'rank_to_ub_node', 'hidden_dim', 'top_k',
                 'dispatch_element_bytes', 'combine_element_bytes', 'application_metadata_bytes',
@@ -77,6 +78,7 @@ def validate_config(c):
             ({'batch_limits', 'compute_dtypes'} if batched else set()) |
             ({'operator_profile'} if batched and 'operator_profile' in c else set()) |
             ({'cann_profile'} if cann and batched else set()) |
+            ({'native_profile'} if native else set()) |
             ({'resource_budget'} if cann and batched and 'resource_budget' in c else set()) and
             c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),
             'Unsupported fixture schema/fields')
@@ -145,6 +147,9 @@ def validate_config(c):
     if cann:
         from .cann import validate_config as validate_cann
         validate_cann(c)
+    if native:
+        from .native import validate_profile
+        validate_profile(c['native_profile'])
         return
     expert_counts = Counter(placement[e] for token in tokens for e in token['expert_ids'])
     from .operator_profile import durations
@@ -166,6 +171,9 @@ def validate_config(c):
 
 def build_plan(config, identities=None, *, _validate=True):
     validate_config(config)
+    if config['template'] == 'cann_a3_v850_native_v1':
+        from .native import build_plan as build_native
+        return build_native(config, identities, _validate=_validate)
     if config['template'] == 'cann_a3_v850_fullmesh_v1':
         from .cann import build_plan as build_cann
         return build_cann(config, identities, _validate=_validate)
@@ -311,6 +319,9 @@ def validate_plan(plan):
     if plan.get('communication_template') == 'kv_direct_v1':
         from .kv_plan import validate_kv_plan
         return validate_kv_plan(plan)
+    if plan.get('communication_template') == 'cann_a3_v850_native_v1':
+        from .native import validate_plan as validate_native
+        return validate_native(plan)
     if plan.get('communication_template') == 'cann_a3_v850_fullmesh_v1':
         from .cann import validate_plan as validate_cann
         return validate_cann(plan)

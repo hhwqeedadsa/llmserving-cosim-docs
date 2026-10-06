@@ -43,6 +43,17 @@ class TransferIndexTest(unittest.TestCase):
                     index.add(transfer(100,0))
                     with self.assertRaisesRegex(ValueError,'budget'):index.add(transfer(101,2))
 
+    def test_native_lifecycle_is_distinct_from_write(self):
+        with tempfile.TemporaryDirectory() as tmp,self.index(Path(tmp)/'index') as index:
+            index.add(dict(transfer(1,7),operation='LOAD'));index.add(transfer(2,8));index.seal()
+            with self.assertRaises(ValueError):index.add_write(7,32)
+            with self.assertRaises(ValueError):index.native_event(8,completed=False)
+            with self.assertRaises(ValueError):index.native_event(7,completed=True)
+            index.native_event(7,completed=False);self.assertEqual(index.delivered(7),0)
+            with self.assertRaises(ValueError):index.native_event(7,completed=False)
+            index.native_event(7,completed=True);self.assertEqual(index.delivered(7),32)
+            with self.assertRaises(ValueError):index.native_event(7,completed=True)
+
     def test_transfer_gaps_with_contiguous_tasks_and_one_mapped_read(self):
         from unittest.mock import patch
         with tempfile.TemporaryDirectory() as tmp,self.index(Path(tmp)/'index') as index:

@@ -52,7 +52,11 @@ def cann_usage(c):
             if kind=='same_chip':
                 near+=3;prep['dispatch'].add(src);prep['combine'].add(dst)
             elif kind=='cross_chip':
-                fabric+=((h+31)//32*32+44+chunk-1)//chunk+(2*h+chunk-1)//chunk+1
+                dispatch=((h+31)//32*32+44+chunk-1)//chunk
+                combine=(2*h+chunk-1)//chunk
+                fabric+=dispatch+combine+1
+                native=c.get('native_profile',{})
+                fabric+=dispatch*int(native.get('dispatch')=='LOAD')+combine*int(native.get('combine')=='LOAD')
     compute=len(ranks)+2*len(local)+2*len(experts)
     if c['compute_profile_ns']['next_layer']:compute+=len(local)
     for kind in prep:

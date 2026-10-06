@@ -1,0 +1,54 @@
+schema_version: moe-ub-scenario-run/1
+scenario_id: m11-native-store-load
+basis: selected_reference
+service: service.json
+layer: layer.json
+system: ../m1_compute/system.json
+backend:
+  reference_file: backend-reference.yaml
+  profile_by_role:
+    dispatch: native_store
+    combine: native_load
+  attributes:
+    ns3::UbSwitchAllocator::AllocationTime: 10ns
+    ns3::UbLdstInstance::ThreadNum: 3
+    ns3::UbLdstThread::StoreOutstanding: 2
+    ns3::UbLdstThread::LoadOutstanding: 2
+    ns3::UbLdstApi::RequestIdCount: 8
+    ns3::UbLdstApi::UsePacketSpray: false
+  globals: {}
+  tp_max_data_payload_bytes: 4096
+  transport_channel_setup: precreated
+network:
+  case_path: ../m3_shared_bottleneck/network
+  plane_id: synthetic-single-plane
+  defaults:
+    rate_bps: 400000000000
+    delay_ns: 20
+    allocation_ns: 1
+    forward_ns: 0
+  nodes: []
+  links: []
+execution:
+  chunk_bytes: 1024
+  send_slots_per_rank: 2
+  seed: 1
+  run: 1
+observation:
+  schema_version: moe-ub-port-observation-set/1
+  ports:
+  - schema_version: moe-ub-port-observation/1
+    switch_id: 8
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000
+    record_provenance: true
+  - schema_version: moe-ub-port-observation/1
+    switch_id: 9
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000
+    record_provenance: true
+max_simulation_ns: 10000000

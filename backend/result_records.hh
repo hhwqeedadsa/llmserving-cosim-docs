@@ -39,7 +39,7 @@ class ResultRecords
             ValidateRecordPolicy(policy_);
             store_ = std::make_shared<RecordStore>("records", policy_.at("max_compressed_bytes"),
                 policy_.at("max_buffer_bytes"), policy_.at("max_record_bytes"));
-            for (const auto* field : {"wqe_starts", "wqe_completions", "target_writes"}) Register(field, "");
+            for (const auto* field : {"wqe_starts", "wqe_completions", "target_writes", "native_starts", "native_completions"}) Register(field, "");
             for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                      "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"}) ordered_[field];
         }

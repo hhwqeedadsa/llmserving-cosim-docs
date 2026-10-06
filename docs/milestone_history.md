@@ -15,6 +15,7 @@
 | M8：多请求、多层、多组组合 | 独立组在同一网络中推进完整层段，通信完成变化反馈到后续批次 | [组合服务](../fixtures/m8_composed_service/README.md) |
 | M9：真实路由与计算依据 | 固定真实 R1-AWQ 路由来源、区分观察结束与请求完成，接入 A100 小型算子测量 | [来源与计算检查](../fixtures/m9_evidence/README.md) |
 | M10：CANN 与目标首轮 | CANN 行为、完整模型和拓扑、1024 请求来源、资源改进，以及可复用首轮、采样和后端重放 | [CANN](../fixtures/m10_cann/README.md)、[完整模型](../fixtures/m10_full_model/README.md)、[拓扑](../fixtures/m10_fabric/README.md)、[路由](../fixtures/m10_route_selection/README.md)、[资源记录](../fixtures/m10_resource_efficiency/README.md)、[最终验收](../fixtures/m10_research_slice/README.md) |
+| M11：原生 STORE/LOAD | 真实供数通知、数据与资源完成、有限请求标识及记录导出；保留 WRITE 回归 | [输入与小型验收](../fixtures/m11_native/README.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

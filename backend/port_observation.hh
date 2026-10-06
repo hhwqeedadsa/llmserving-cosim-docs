@@ -72,6 +72,8 @@ class PayloadLedger
     void Register(const std::vector<WriteDescriptor>& descriptors);
     void Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task, uint64_t task_begin,
                  uint32_t packet_begin, uint32_t bytes);
+    void NativeCreated(ns3::Ptr<const ns3::Packet>, uint32_t, uint64_t, uint32_t, ns3::UbMemOperationType);
+    void NativeResponse(uint64_t, ns3::Ptr<const ns3::Packet>, ns3::UbMemOperationType);
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
     void SetLimits(uint64_t packets, uint64_t transfers);
     void RestrictLimits(uint64_t packets, uint64_t transfers);
@@ -88,6 +90,8 @@ class PayloadLedger
   private:
     std::map<uint32_t, WriteDescriptor> descriptors_;
     std::map<uint64_t, PayloadRange> ranges_;
+    struct NativeRequest { uint32_t task; uint64_t begin; uint32_t bytes; };
+    std::map<uint64_t, NativeRequest> native_requests_;
     uint64_t max_packets_=UINT64_MAX, max_transfers_=UINT64_MAX;
     uint64_t created_notifications_=0;
     IdentityRanges registered_tasks_;

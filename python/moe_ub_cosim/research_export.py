@@ -57,7 +57,22 @@ def export_metadata(raw, observation, ranks, max_ns):
     require(len(actual)==len(report['transfers']) and set(actual)==set(planned),'Unique transfer registry mismatch')
     delivered=Counter()
     for row in report['target_writes']:delivered[row['task']]+=row['bytes']
-    require(set(delivered)=={t['ub_task_id'] for t in planned.values()},'Unexpected unique target write')
+    native={t['ub_task_id']:actual[tid] for tid,t in planned.items() if t.get('operation') in ('STORE','LOAD')}
+    require(set(delivered)=={t['ub_task_id'] for t in planned.values()}-set(native),'Unexpected unique target write')
+    lifecycle={}
+    for field in ('native_starts','native_completions'):
+        events=report.get(field,[]);by_task={e['task']:e for e in events}
+        require(len(events)==len(by_task) and set(by_task)==set(native),'Native lifecycle mismatch')
+        lifecycle[field]=by_task
+    for task,x in native.items():
+        start,end=(lifecycle[k][task] for k in ('native_starts','native_completions'))
+        require(start['node']==end['node']==x['src_ub_node'] and
+                start['time_ns']==x['send_start_ns'] and end['time_ns']==x['send_done_ns'] and
+                x['initiator_resources_retired'] and x['operation'] in ('STORE','LOAD'),
+                'Native completion or resource retirement mismatch')
+        # Native useful bytes are accumulated from request arrival (STORE) or
+        # response arrival (LOAD), independently of the task-complete callback.
+        delivered[task]=x['committed_bytes']
     for tid,t in planned.items():
         x=actual[tid]
         require(x['bytes']==x['committed_bytes']==delivered[t['ub_task_id']]==t['payload_bytes'] and

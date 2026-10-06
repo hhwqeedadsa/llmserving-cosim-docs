@@ -83,6 +83,10 @@ def export_metadata(raw,observation,ranks,max_ns,writer,index,limits):
             row['bytes']==row['committed_bytes']==transfer['payload_bytes'] and
             row['submitted_tasks']==row['send_callbacks']==row['receive_callbacks']==1 and not row['context_active'],
             'Unique delivery or callback conservation failed')
+        if transfer.get('operation') in ('STORE','LOAD'):
+            require(row['operation']==transfer['operation'] and row['initiator_resources_retired'] and
+                    row['data_owner_rank']==transfer['data_owner_rank'] and
+                    row['consumer_rank']==transfer['consumer_rank'], 'Native operation or retirement mismatch')
         index.add(transfer);total_business+=transfer['business_payload_bytes']
         padding_present|='payload_regions' in transfer
         if provenance:
@@ -98,6 +102,9 @@ def export_metadata(raw,observation,ranks,max_ns,writer,index,limits):
         next(registry,None) is None,'Extra or missing execution transfer records')
     index.seal()
     for row in iter_result(execution,'target_writes',report):index.add_write(row['task'],row['bytes'])
+    for field,completed in (('native_starts',False),('native_completions',True)):
+        if field in storage['fields']:
+            for row in iter_result(execution,field,report):index.native_event(row['task'],completed=completed)
     for ordinal in range(index.count):
         row=index._row(ordinal)
         require(row[-1]==row[3],'Unique target write byte conservation failed')

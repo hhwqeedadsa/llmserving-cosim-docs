@@ -38,12 +38,14 @@
 |---|---|
 | `business_payload_bytes` | 模板传输的有效激活或专家结果等业务范围；只有这一部分参与操作归属 |
 | `application_metadata_bytes` | 量化比例、索引、计数或状态标志等应用数据 |
-| `padding_bytes` | 为模板布局或复制对齐而实际发送的填充；内存窗口预留空间不自动计入 |
+| `padding_bytes` | 模板布局填充及原生 LOAD 短尾响应中超出有效范围的体字节；内存窗口预留空间不自动计入 |
 | `data_protocol_overhead_bytes` | 承载上述数据的包中，剩余协议头等字节 |
 | `control_packet_bytes` | TA/TP ACK、信用等协议控制包的整包字节 |
 | `unattributed_bytes` | 分类输出保留的未归类计数字段；当前有效执行不以它掩盖缺失的 WRITE 来源 |
 
 应用状态 WRITE 可以只含元数据，仍是应用消息，不能因为没有业务向量就归入协议控制包。TA/TP ACK 即使带任务标签，其载体字节也不获得业务操作归属。旧模板没有应用元数据或填充时相应量为零；`metrics/validation.json` 声明本次是否输出填充字段。
+
+原生 STORE 的业务范围来自请求体，LOAD 来自响应体；读取请求及原生 ACK 计入控制包，响应头计入数据协议开销。32 B 供数就绪通知属于应用元数据。原生 `transfer_registry` 另含 `operation`、`initiator_rank`、`data_owner_rank`、`consumer_rank`；`src_rank/dst_rank` 表示请求方向。`native_starts`、`native_completions` 分别保存实际内存任务的开始与完成，不能用空的 WQE 记录推断原生任务未执行。
 
 每个包每次经过一个观测出口都计数。跨服务器路径可能经过多个交换出口，因此全网端口字节之和不是唯一交付业务量。唯一交付量从目标有效写入核对；逐端口计数与原生端口累计值核对；每窗分类之和与整包计数核对；来源开启时，该窗各操作归属业务字节之和再与业务分类核对。来源关闭会停用操作归属检查并记录 `attribution_status="disabled"`，不改变原有执行和整包观测。
 
@@ -119,7 +121,7 @@ print(total_bytes, nonzero_windows, zero_windows)
 
 研究导出使用 `moe-ub-research-export-policy/1`，所有字段为正整数。`max_compressed_bytes` 限制 observed、truth、metrics 中压缩记录的合计内容，`max_index_bytes` 限制临时传输索引；`max_record_bytes`、`max_endpoint_records`、`max_operations`、`max_layouts`、`max_id_ranges`、`max_graphs`、`cache_rows` 分别约束单条记录、端侧排序表及各种索引和缓存。单条记录最大 64 MiB。
 
-导出逐条核对计划、交付和业务来源，每个网络传输使用 32 B 定长磁盘索引。mmap 页面仍计入宿主 RSS；端侧排序和操作、布局表也需要内存，不能把“流式导出”解释为固定且可忽略的内存消耗。通过全部校验后先写 `metrics/index-cleanup.json`，再删除可重建索引；失败保留原因，不写成功的 `validation.json`。
+导出逐条核对计划、交付和业务来源，每个网络传输使用 33 B 定长磁盘索引（其中 1 B 检查原生任务生命周期，旧版为 32 B）。mmap 页面仍计入宿主 RSS；端侧排序和操作、布局表也需要内存，不能把“流式导出”解释为固定且可忽略的内存消耗。通过全部校验后先写 `metrics/index-cleanup.json`，再删除可重建索引；失败保留原因，不写成功的 `validation.json`。
 
 端口采集另有 `moe-ub-observation-resources/1` 数量预算，约束端口数、每端口和总逻辑窗口数、每端口事件字节、包来源条目、登记传输数及导出字节。这些数量与记录策略均不能代替外层宿主预算。普通用户配置中的 `host` 限制覆盖运行阶段实际拥有的子进程与输出根目录：
 

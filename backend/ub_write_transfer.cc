@@ -8,6 +8,7 @@
 #include "ns3/ub-controller.h"
 #include "ns3/ub-transaction.h"
 #include "ns3/ub-function.h"
+#include "ns3/ub-ldst-api.h"
 
 #include <limits>
 #include <stdexcept>
@@ -33,7 +34,7 @@ UbWriteTransfer::UbWriteTransfer(WriteDescriptor descriptor, ns3::Ptr<ns3::UbApp
         descriptor_.SourceNode() == descriptor_.DestinationNode() ||
         descriptor_.tag < 0 || descriptor_.bytes == 0 || descriptor_.graph_id.empty() ||
         source_->GetNode()->GetId() != descriptor_.SourceNode() ||
-        source_->GetTransportMode() != ns3::TransportMode::RTP)
+        (descriptor_.operation == TransferOperation::Write && source_->GetTransportMode() != ns3::TransportMode::RTP))
     {
         throw std::invalid_argument("M1 requires a nonempty RTP write between distinct mapped ranks");
     }
@@ -68,6 +69,7 @@ void UbWriteTransfer::Send(int rank, uint64_t bytes, int type, int dst, int tag,
     send_start_ns_ = ns3::Simulator::Now().GetNanoSeconds();
     // Only explicit API values and the descriptor are retained; never sim_request*.
     submit_event_ = ns3::Simulator::ScheduleNow([this]() {
+        if (descriptor_.operation != TransferOperation::Write) { SubmitNative(); return; }
         auto controller = ns3::NodeList::GetNode(descriptor_.DestinationNode())->GetObject<ns3::UbController>();
         if (!controller) throw std::runtime_error(Identity() + ": target has no UB controller");
         target_ = controller->GetUbTransaction();
@@ -130,11 +132,67 @@ void UbWriteTransfer::ObserveWrite(ns3::Ptr<const ns3::UbWqeSegment> segment)
 
 void UbWriteTransfer::DisconnectTarget()
 {
+    if (native_source_)
+    {
+        native_source_->TraceDisconnectWithoutContext("RequestCreated", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeRequest, this));
+        native_source_->TraceDisconnectWithoutContext("ResponseArrived", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeResponse, this));
+        native_target_->TraceDisconnectWithoutContext("RequestArrived", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeTarget, this));
+        native_source_ = native_target_ = nullptr;
+    }
     if (target_)
     {
         target_->TraceDisconnectWithoutContext("RemoteWriteCommitted",
             ns3::MakeCallback(&UbWriteTransfer::ObserveWrite, this));
         target_ = nullptr;
     }
+}
+
+void UbWriteTransfer::SubmitNative()
+{
+    native_source_ = source_->GetNode()->GetObject<ns3::UbController>()->GetUbFunction()->GetUbLdstApi();
+    native_target_ = ns3::NodeList::GetNode(descriptor_.DestinationNode())->GetObject<ns3::UbController>()->GetUbFunction()->GetUbLdstApi();
+    if (!native_source_ || !native_target_ ||
+        !native_source_->TraceConnectWithoutContext("RequestCreated", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeRequest, this)) ||
+        !native_source_->TraceConnectWithoutContext("ResponseArrived", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeResponse, this)) ||
+        !native_target_->TraceConnectWithoutContext("RequestArrived", ns3::MakeCallback(&UbWriteTransfer::ObserveNativeTarget, this)))
+        throw std::runtime_error(Identity() + ": cannot observe native data delivery");
+    ns3::UbTrafficGen::RuntimeTask task;
+    task.taskId = descriptor_.task_id; task.sourceNode = descriptor_.SourceNode();
+    task.destNode = descriptor_.DestinationNode(); task.dataSize = descriptor_.bytes; task.priority = 7;
+    task.op = descriptor_.operation == TransferOperation::Store ? ns3::UbTrafficGen::RuntimeTaskOp::MEM_STORE : ns3::UbTrafficGen::RuntimeTaskOp::MEM_LOAD;
+    source_->GetTransferExecutor().Submit(task, [this](uint32_t id) {
+        if (id != descriptor_.task_id || !native_requests_.empty() ||
+            completion_.CommittedBytes() != descriptor_.bytes)
+            throw std::logic_error(Identity() + ": native completion before useful data or resource retirement");
+        jetty_retired_ = true; // Native requests do not allocate a Jetty.
+        completion_.TransactionDone();
+    });
+    ++submitted_tasks_;
+}
+
+void UbWriteTransfer::ObserveNativeRequest(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
+                                          uint64_t offset, uint32_t bytes, ns3::UbMemOperationType type)
+{
+    if (task != descriptor_.task_id || type != ns3::UbMemOperationType::STORE) return;
+    if (!native_requests_.emplace(packet->GetUid(), std::make_pair(offset, bytes)).second)
+        throw std::logic_error(Identity() + ": repeated native request creation");
+}
+
+void UbWriteTransfer::ObserveNativeTarget(uint64_t uid, uint32_t bytes, ns3::UbMemOperationType type)
+{
+    if (type != ns3::UbMemOperationType::STORE) return;
+    const auto found = native_requests_.find(uid);
+    if (found == native_requests_.end()) return;
+    const auto [offset, expected] = found->second;
+    if (bytes != expected) throw std::logic_error(Identity() + ": native STORE size changed");
+    completion_.WriteCommitted(0, offset, bytes);
+    native_requests_.erase(found);
+}
+
+void UbWriteTransfer::ObserveNativeResponse(uint64_t, uint32_t task, uint64_t offset,
+                                           uint32_t bytes, ns3::UbMemOperationType type)
+{
+    if (task == descriptor_.task_id && type == ns3::UbMemOperationType::LOAD)
+        completion_.WriteCommitted(0, offset, bytes);
 }
 }

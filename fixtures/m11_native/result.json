@@ -1,0 +1,351 @@
+{
+  "schema_version": "moe-ub-functional-evidence/1",
+  "passed": true,
+  "ub_revision": "ffb178144635b724e6960887b470884e3d6e330f",
+  "scope": "native STORE/LOAD; small scenes only; packet spray disabled; not hardware calibration",
+  "runtime": {
+    "tasks": 66,
+    "request_response_pairs": 1154,
+    "peak_request_ids": 3,
+    "threads": 3,
+    "response_padding_bytes": 33247,
+    "first_task_id": 4294967295,
+    "no_tp_created": true,
+    "final_state_empty": true
+  },
+  "native": {
+    "passed": true,
+    "cases": {
+      "mixed": {
+        "simulation_end_ns": 9493,
+        "transfers": 87,
+        "loads": 18,
+        "ready_notifications": 18,
+        "physical_packets": 1566,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 1776,
+        "padding_bytes": 252
+      },
+      "truth-off": {
+        "simulation_end_ns": 9493,
+        "transfers": 87,
+        "loads": 18,
+        "ready_notifications": 18,
+        "physical_packets": 1566,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 1776,
+        "padding_bytes": 252
+      },
+      "observation-off": {
+        "simulation_end_ns": 9493,
+        "transfers": 87,
+        "loads": 18,
+        "ready_notifications": 18,
+        "physical_packets": 1566,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 1776,
+        "padding_bytes": 252
+      },
+      "store": {
+        "simulation_end_ns": 8326,
+        "transfers": 69,
+        "loads": 0,
+        "ready_notifications": 0,
+        "physical_packets": 1242,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 1200,
+        "padding_bytes": 252
+      },
+      "load": {
+        "simulation_end_ns": 10543,
+        "transfers": 105,
+        "loads": 36,
+        "ready_notifications": 36,
+        "physical_packets": 1890,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 2352,
+        "padding_bytes": 252
+      },
+      "one-id": {
+        "simulation_end_ns": 27189,
+        "transfers": 87,
+        "loads": 18,
+        "ready_notifications": 18,
+        "physical_packets": 1566,
+        "business_payload_bytes": 27648,
+        "application_metadata_bytes": 1776,
+        "padding_bytes": 252
+      }
+    },
+    "passive_wire_and_time_equal": true,
+    "rejected_cpp_plans": 5,
+    "rejected_backend_attributes": 6,
+    "mismatched_profile_rejected": true,
+    "calibration_status": "unvalidated_reference"
+  },
+  "full_model": {
+    "passed": true,
+    "cases": {
+      "native": {
+        "finished_ns": 152448,
+        "writes": 379,
+        "payload_bytes": 122684,
+        "business_bytes": 113664,
+        "waves": 5,
+        "stage_records": 630,
+        "empty_stage_records": 294,
+        "shared_last": 0,
+        "routed_last": 24,
+        "layer_overlaps": 6
+      },
+      "native-truth-off": {
+        "finished_ns": 152448,
+        "writes": 379,
+        "payload_bytes": 122684,
+        "business_bytes": 113664,
+        "waves": 5,
+        "stage_records": 630,
+        "empty_stage_records": 294,
+        "shared_last": 0,
+        "routed_last": 24,
+        "layer_overlaps": 6
+      },
+      "bounded": {
+        "storage_equivalent": true,
+        "export_equivalent": true,
+        "resource_lifecycle": {
+          "adapter_transfers_at_exit": 0,
+          "boundaries": [
+            {
+              "graph_id": "g0",
+              "pending_provenance_graphs": 1,
+              "resident_graphs": 1,
+              "resident_local": 30,
+              "resident_transfers": 87,
+              "same_network_objects": true,
+              "time_ns": 67903
+            },
+            {
+              "graph_id": "g1",
+              "pending_provenance_graphs": 2,
+              "resident_graphs": 1,
+              "resident_local": 21,
+              "resident_transfers": 87,
+              "same_network_objects": true,
+              "time_ns": 70028
+            },
+            {
+              "graph_id": "g3",
+              "pending_provenance_graphs": 1,
+              "resident_graphs": 1,
+              "resident_local": 21,
+              "resident_transfers": 87,
+              "same_network_objects": true,
+              "time_ns": 99841
+            },
+            {
+              "graph_id": "g2",
+              "pending_provenance_graphs": 0,
+              "resident_graphs": 0,
+              "resident_local": 0,
+              "resident_transfers": 0,
+              "same_network_objects": true,
+              "time_ns": 118322
+            },
+            {
+              "graph_id": "g4",
+              "pending_provenance_graphs": 0,
+              "resident_graphs": 0,
+              "resident_local": 0,
+              "resident_transfers": 0,
+              "same_network_objects": true,
+              "time_ns": 152448
+            }
+          ],
+          "execution_events_read": 3114,
+          "peak_resident_graphs": 2,
+          "peak_resident_local": 60,
+          "peak_resident_transfers": 174,
+          "provenance": {
+            "identity_intervals": 1,
+            "peak_resident_packets": 771,
+            "peak_resident_transfers": 306,
+            "pending_native_requests": 0,
+            "registered_transfers_total": 379,
+            "resident_packets": 0,
+            "resident_transfers": 0,
+            "retired_packets": 1137,
+            "retired_transfers": 379,
+            "retirement_boundary": "completed_graph_and_global_physical_network_idle",
+            "schema_version": "moe-ub-provenance-retirement/1"
+          },
+          "resident_graphs_at_exit": 0,
+          "resident_transfers_at_exit": 0,
+          "retired_graphs": 5,
+          "schema_version": "moe-ub-service-lifecycle/1",
+          "tag_identity_intervals": 1,
+          "task_identity_intervals": 1,
+          "transfer_identity_intervals": 1
+        }
+      }
+    },
+    "native": true,
+    "hardware_calibrated": false,
+    "target_scale_executed": false
+  },
+  "regression": {
+    "selected_python_tests": 47,
+    "transfer_index_tests": 4,
+    "write_network_cases": 6,
+    "invalid_write_inputs": 11,
+    "write_full_model": true,
+    "write_completion_and_observation_unit_tests": true,
+    "shared_provenance_lifetime": true
+  },
+  "probes": {
+    "build-native-pinned-01": {
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        "cmake -S third_party/ns-3-ub -B build/v04-platform\ncmake --build build/v04-platform --parallel 3 --target cosim-service cosim-native-runtime-test cosim-plan-load-probe cosim-write cosim-write-test cosim-observation-test cosim-provenance-test"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-06T07:18:00.451103+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 2177527808,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 18782765056,
+      "child_exit_code": 0,
+      "ended_utc": "2026-10-06T07:20:21.425479+00:00",
+      "wall_seconds": 140.974378824234,
+      "max_waited_child_rss_kib": 1287128
+    },
+    "native-regression-units-01": {
+      "command": [
+        "env",
+        "PYTHONPATH=python:tests/unit",
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "unittest",
+        "native_plan_test",
+        "cann_plan_test",
+        "model_capacity_test",
+        "mla_capacity_test",
+        "resource_budget_test",
+        "route_admission_test",
+        "full_model_test",
+        "composed_service_test",
+        "full_model_storage_test",
+        "transfer_index_test",
+        "research_storage_test"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-06T07:14:49.725502+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 99119104,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 18760163328,
+      "child_exit_code": 0,
+      "ended_utc": "2026-10-06T07:15:16.461853+00:00",
+      "wall_seconds": 26.736360292881727,
+      "max_waited_child_rss_kib": 131152
+    },
+    "native-full-model-03": {
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "tests/integration/check_full_model.py",
+        "--native",
+        "--build-dir",
+        "build/v04-platform",
+        "--output-dir",
+        "runs/v04-platform/native-full-model-cases-03"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-06T07:16:59.885119+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 6385664,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 18782453760,
+      "child_exit_code": 0,
+      "ended_utc": "2026-10-06T07:17:26.240795+00:00",
+      "wall_seconds": 26.355680357664824,
+      "max_waited_child_rss_kib": 78704
+    },
+    "native-final-checks-01": {
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        "build/v04-platform/output/cosim/ns3.44-cosim-provenance-test third_party/ns-3-ub/scratch/2nodes_single-tp runs/v04-platform/provenance-regression-case-01\nPYTHONPATH=python:tests/unit .venv/llmservingsim-native/bin/python -m unittest transfer_index_test\n.venv/llmservingsim-native/bin/python tests/integration/check_write.py --build-dir build/v04-platform --output-dir runs/v04-platform/write-regression-cases-02\n.venv/llmservingsim-native/bin/python tests/integration/check_native_behavior.py --build-dir build/v04-platform --output-dir runs/v04-platform/native-behavior-cases-03\n.venv/llmservingsim-native/bin/python tests/integration/check_full_model.py --build-dir build/v04-platform --output-dir runs/v04-platform/write-full-model-cases-01"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-06T07:20:21.513246+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 167002112,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 18877919232,
+      "child_exit_code": 0,
+      "ended_utc": "2026-10-06T07:21:03.833390+00:00",
+      "wall_seconds": 42.32015157863498,
+      "max_waited_child_rss_kib": 77536
+    },
+    "native-id-boundary-01": {
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        "cmake --build build/v04-platform --parallel 2 --target cosim-native-runtime-test\nbuild/v04-platform/output/cosim/ns3.44-cosim-native-runtime-test third_party/ns-3-ub/scratch/2nodes_single-tp runs/v04-platform/native-runtime-case-03"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-06T07:21:25.899174+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 4268032,
+      "status": "completed",
+      "peak_sampled_artifact_bytes": 18877960192,
+      "child_exit_code": 0,
+      "ended_utc": "2026-10-06T07:21:52.625004+00:00",
+      "wall_seconds": 26.725843001157045,
+      "max_waited_child_rss_kib": 490652
+    }
+  },
+  "retained_failures": [
+    {
+      "path": "runs/v04-platform/native-behavior-01",
+      "reason": "CNA16 congestion field uninitialized; fixed and rechecked with complete packet fingerprints"
+    },
+    {
+      "path": "runs/v04-platform/native-full-model-01",
+      "reason": "legacy research exporter required WRITE events for native tasks; native lifecycle validation added"
+    },
+    {
+      "path": "runs/v04-platform/native-runtime-regressions-02",
+      "reason": "provenance unit command omitted its two required paths; preceding runtime/write/observation checks passed; corrected invocation passed in final checks"
+    }
+  ]
+}

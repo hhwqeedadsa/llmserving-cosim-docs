@@ -35,6 +35,15 @@ Json FixedGlobals()
     return {{"UB_CC_ENABLED", "false"}, {"UB_FAULT_ENABLE", "false"}, {"UB_PRIORITY_NUM", "16"}, {"UB_VL_NUM", "16"},
         {"UB_QUEUE_TRACE_ENABLE", "false"}, {"UB_PARSE_TRACE_ENABLE", "false"}};
 }
+Json NativeProfile(const std::string& operation)
+{
+    const bool load = operation == "LOAD";
+    return {{"programming_model","native_memory"},{"operation",operation},{"transport","LDST"},
+        {"initiator",load?"consumer":"data_owner"},
+        {"payload_direction",load?"target_to_initiator":"initiator_to_target"},
+        {"receiver_ready",load?"native_response_data_arrived":"native_store_data_arrived"},
+        {"sender_release","memory_task_done_callback"}};
+}
 ns3::TypeId::AttributeInformation Attribute(const std::string& key)
 {
     auto at = key.rfind("::");
@@ -116,7 +125,11 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
         {"receiver_ready", "RemoteWriteCommitted"}, {"sender_release", "transaction_done_callback"}};
     Require(input_.at("profiles").is_object() && input_.at("profiles").size() == 2, "require dispatch/combine profiles");
     for (const auto* role : {"dispatch", "combine"})
-        Require(input_.at("profiles").at(role) == profile, "unimplemented active transaction profile for " + std::string(role));
+    {
+        const auto& selected = input_.at("profiles").at(role);
+        Require(selected == profile || selected == NativeProfile("STORE") || selected == NativeProfile("LOAD"),
+                "unimplemented active transaction profile for " + std::string(role));
+    }
     Require(input_.at("execution").size() == 4, "execution fields");
     Integer(input_["execution"]["chunk_bytes"], 1, UINT32_MAX, "chunk_bytes");
     Integer(input_["execution"]["send_slots_per_rank"], 1, 2, "send slots");
@@ -169,6 +182,14 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
         Require(input_.at("attributes").at(key) == value, "unsupported active attribute " + key);
     for (const auto& [key, value] : catalog.at("fixed_globals").items())
         Require(input_.at("globals").at(key) == value, "unsupported active global " + key);
+    const bool native = input_.at("profiles").at("dispatch").at("programming_model") == "native_memory" ||
+                        input_.at("profiles").at("combine").at("programming_model") == "native_memory";
+    if (native) for (const auto* key : {"ns3::UbLdstThread::StoreRequestSize", "ns3::UbLdstThread::LoadResponseSize"})
+    {
+        const auto size = std::stoull(input_.at("attributes").at(key).get<std::string>());
+        Require(size>=64 && size<=8192 && (size & (size-1))==0,
+                std::string("Native payload size must be an explicit 64..8192 power of two: ")+key);
+    }
     // These backend checkers accept zero, but their execution paths require resources.
     for (const auto* key : {"ns3::UbJetty::TaSegmentBytes", "ns3::UbJetty::UbJettyInflightMax",
                            "ns3::UbTransportChannel::DefaultMaxWqeSegNum", "ns3::UbTransportChannel::DefaultMaxInflightPacketSize",
@@ -214,11 +235,19 @@ void BackendConfig::CheckDeployment(const Json& groups) const
 void BackendConfig::CheckPlan(const Json& plan) const
 {
     Require(plan.at("communication_template") == "direct_rank_dedup_v1" ||
-            plan.at("communication_template") == "cann_a3_v850_fullmesh_v1", "scenario requires a supported WRITE/RTP template");
+            plan.at("communication_template") == "cann_a3_v850_fullmesh_v1" ||
+            plan.at("communication_template") == "cann_a3_v850_native_v1", "scenario requires a supported communication template");
     if (plan.contains("layers"))
     {
         Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2" || plan.at("schema_version") == "moe-ub-full-model-plan/1", "scenario requires configured layer segment");
         for (const auto& layer : plan.at("layers")) CheckPlan(layer);
+    }
+    else for (const auto* kind : {"dispatch","combine"})
+    {
+        const auto& selected = input_.at("profiles").at(kind);
+        if (plan.at("communication_template") == "cann_a3_v850_native_v1")
+            Require(selected == NativeProfile(plan.at("input").at("native_profile").at(kind)), "native graph/profile mismatch");
+        else Require(selected.at("programming_model") == "URMA", "native operations require regenerating the native template");
     }
     for (const auto* key : {"chunk_bytes", "send_slots_per_rank"})
         Require(plan.at("input").at(key) == input_.at("execution").at(key), "plan differs from effective execution " + std::string(key));
@@ -280,6 +309,12 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
     for (const auto& app : apps) append("application", app->GetNode()->GetId(), app);
     for (const auto& controller : controllers)
     {
+        const auto node = controller->GetObject<ns3::Node>();
+        const auto native = node->GetObject<ns3::UbLdstInstance>();
+        append("native_api", node->GetId(), controller->GetUbFunction()->GetUbLdstApi());
+        append("native_instance", node->GetId(), native);
+        for (uint32_t id=0; id<native->GetThreadCount(); ++id)
+            append("native_thread:"+std::to_string(id), node->GetId(), native->GetLdstThread(id));
         append("connection_manager", controller->GetObject<ns3::Node>()->GetId(), controller->GetTpConnManager());
         for (const auto& [id, tp] : controller->GetTpnMap())
             append("transport:" + std::to_string(id), controller->GetObject<ns3::Node>()->GetId(), tp);

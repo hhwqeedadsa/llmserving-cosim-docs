@@ -72,7 +72,7 @@ cosim-service --check-backend BACKEND.json
 |---|---|
 | `sim_schedule` | 将相对计算时间放入 ns-3 事件队列，完成时异步调用 ASTRA 回调 |
 | `sim_get_time` | 返回 ns-3 当前绝对纳秒时间 |
-| `sim_send` | 按收发匹配键查找不可变描述，登记回调，提交一份 UB 写事务或本地交付 |
+| `sim_send` | 按收发匹配键查找不可变描述，登记回调，提交一份 UB 操作或本地交付；LOAD 由消费者发起 |
 | `sim_recv` | 登记同一传输的数据等待；不再产生另一份网络任务 |
 | `sim_notify_finished` | 报告该 rank 的图完成；不直接停止其他组或网络事件 |
 
@@ -88,7 +88,7 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 
 ## 数据就绪与发送完成
 
-当前联合事务路径为 **URMA WRITE / RTP**。`UbTransferExecutor` 复用 UB 的协议提交和资源处理，保存任务上下文；CSV 原生入口完成后通知 `UbTrafficGen`，联合入口通知适配器，联合任务不查询 CSV 阶段表。
+联合路径包括 **URMA WRITE / RTP** 与原生 **STORE / LOAD**。`UbTransferExecutor` 复用 UB 的协议提交和资源处理，保存任务上下文；CSV 原生入口完成后通知 `UbTrafficGen`，联合入口通知适配器，联合任务不查询 CSV 阶段表。以下 WQE、Jetty、TA 与 TP 说明适用于 WRITE/RTP。
 
 这里的 WQE 是描述一次写操作的队列条目；Jetty 是承接 WQE 并维护事务上下文的端点资源对象。TA 是事务层拆分与重组的传输单元，TP 是承载这些单元的网络传输通道，保存分包和包序号等状态；这里的 TP 与模型的张量并行参数是不同概念。
 
@@ -102,7 +102,18 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 
 数据先到而 RECV 尚未登记时，保留完成状态；之后的 RECV 在登记当时通过 `ScheduleNow` 完成，即使源 Jetty 已释放。每个有效分段和两侧回调只处理一次，回调不会在登记函数尚未返回时同步重入。`m_memoryStore` 只模拟地址和写入大小，不执行真实张量写入，也不代表硬件内存一致性已建模。[write_completion.cc](write_completion.cc)和[ub_write_transfer.cc](ub_write_transfer.cc)实现累计与生命周期检查。
 
-同芯片不同 rank 使用 `LocalDelivery`，源端准备节点完成后发布数据，再通过同一 ns-3 时刻的排队回调满足双方等待。它没有 UB app/task 和网络包，也支持晚到 RECV。`local_deliveries` 独立保存，`transfers` 及端口包来源只记录实际跨芯片 UB 写；同 rank 的贡献在原本地计算中保留。
+`cann_a3_v850_native_v1` 保留 CANN 消息布局，在输入 `native_profile` 中分别指定 `dispatch`、`combine` 的 `STORE` 或 `LOAD`，并显式设置 `ready_notice_bytes=32`。状态发布始终使用 STORE。这是平台定义的原生操作映射，不代表执行 CANN 的 MTE 指令。
+
+| 原生操作 | 发起与数据方向 | 数据就绪和完成 |
+|---|---|---|
+| STORE | 数据拥有者发起，数据送到目标消费者 | 目标到达通知累计实际有效范围，满足消费者 RECV；反向确认归还请求资源后完成发起方 SEND |
+| LOAD | 消费者发起请求，数据拥有者返回响应 | 消费者收到完整有效响应并结束原生请求后完成 SEND；数据拥有者的 RECV 登记缓冲释放等待 |
+
+LOAD 前增加一份真实的 32 B 元数据 STORE：数据拥有者原有准备依赖完成后发出，消费者收到后才可发起 LOAD。消费者后继计算依赖 LOAD SEND，供数方后继缓冲使用依赖对应 RECV。计划和结果显式记录 `initiator_rank`、`data_owner_rank`、`consumer_rank`；`src_rank/dst_rank` 是请求发起方向，不能直接当作 LOAD 的数据方向。改变操作类型必须重新构图。
+
+原生请求直接进入 `UbLdstApi`、VOQ 和物理端口，不创建或绑定 RTP TP/Jetty。每份任务按配置的 `ThreadNum` 均分给有效 worker，短任务不创建零字节分段；每个 worker 的 LOAD/STORE outstanding 分别限制在途请求。`RequestIdCount` 限定每个发起节点的 16 位请求标识池（1～65,536），池满等待响应，标识只在响应匹配并释放后复用。内部任务分段标识不再截断写入报文。队列、确认计数、任务映射及请求映射均在完成时清理；资源配额属性的回读值不随占用改变。
+
+同芯片不同 rank 使用 `LocalDelivery`，源端准备节点完成后发布数据，再通过同一 ns-3 时刻的排队回调满足双方等待。它没有 UB app/task 和网络包，也支持晚到 RECV。`local_deliveries` 独立保存，`transfers` 及端口包来源只记录实际跨芯片 UB 操作；同 rank 的贡献在原本地计算中保留。
 
 ## 图完成、网络排空与资源释放
 
@@ -112,7 +123,7 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 |---|---|
 | 图、适配器借用指针、传输和本地交付对象 | 必要节点已完成，目标等待和源事务结束，无挂起回调，原始执行记录已刷新、保存并核验 |
 | 端侧执行时间索引 | 当前图的记录读取和核验结束；在发送 WAVE_DONE 前销毁 |
-| 操作到包的内部对应表 | 已登记该图完成，且共享物理网络的包、端口、队列、TP 活动与未确认分段全部排空；仍活动图的记录继续保留 |
+| 操作到包的内部对应表 | 已登记该图完成，且共享物理网络的包、端口、队列、TP 活动、原生 worker 和请求映射全部排空；仍活动图的记录继续保留 |
 | 已销毁 Jetty 的接收 TA 序号历史 | 物理网络排空、相关 Jetty 全部销毁，且无部分接收、待发送或未确认分段及控制包 |
 
 跨图保留 Sys、UB 应用、控制器、物理网络与连接状态；释放已结束 Jetty 的历史不会清空 TP 通道、传输累计序号、PSN 包序号或回绕参考。当前回收入口仅用于每个任务新建并销毁 Jetty 的 WRITE/RTP 服务，不用于持续复用旧 Jetty 的原生应用。持续重叠而网络一直不空闲时，来源记录仍受明确数量上限约束，超限报错。
@@ -125,7 +136,7 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 
 ## 后端参数及实际生效值
 
-模型通信模板、访问方式和 UB 传输模式属于不同层。模板决定贡献、消息和依赖；访问方式说明谁发起、数据流向与消费条件；RTP 等模式决定具体传输协议。当前只接受已验证的 WRITE/RTP 组合。READ、CTP、native LD/ST、拥塞控制、故障及重传模式在联合路径中未启用，明确拒绝不支持的有效选择，不降级为 WRITE。底层属性目录中存在某个字段不代表对应模式已经联调。
+模型通信模板、访问方式和 UB 传输模式属于不同层。模板决定贡献、消息和依赖；访问方式说明谁发起、数据流向与消费条件；RTP 等模式决定具体传输协议。事务 profile 接受 WRITE/RTP 和原生 STORE/LOAD，原生 profile 必须与原生模板选择一致。URMA READ、CTP、拥塞控制、故障及重传模式仍未在联合路径启用。底层属性目录中存在某个字段不代表对应模式已经联调。
 
 新场景生成 `network/backend.json`，旧网络目录没有该文件时沿用 TXT 配置加载。参数校验以[backend_config.cc](backend_config.cc)和当前二进制的 `--backend-catalog` 为准，不在文档复制一份容易过期的全量默认值表。
 
@@ -143,6 +154,8 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 
 `requested_backend.json` 与 `resolution.json` 保存请求值和来源；`network/backend.json` 保存规范化输入；执行目录的 `effective_backend.json` 读取实际网络对象、链路、路由与通道并核对。动态创建的 Jetty 则在 WQE 启动时核对 TA 与 inflight。文本 `network_attribute.txt` 在新路径中只是审计副本，不覆盖 `backend.json`。合法的资源数值仍可能不足以完成某个负载，实际耗尽或超时按失败处理。
 
+原生 API、instance 和每个 worker 的参数也从实际对象回读。结构化原生配置要求 `StoreRequestSize`、`LoadResponseSize` 为 64～8192 B 的二次幂，避免源码向上取整造成输入与实际值不一致。`ThreadNum`、两类 outstanding 和 `RequestIdCount` 必须为正。参考输入见 [原生操作样例](../fixtures/m11_native/README.md)。沿用的网络案例可以保留预建 TP，但这些通道不承载原生操作。
+
 目标场景具体数值及尚无测量依据的参数见[CM384/R1 场景](../docs/scenarios/cm384_r1.md)。改变路径、速率或延迟时须走相应输入校验；现有首轮 `replay` 允许的调整比完整场景解析更窄，见用户指南，不能把后端支持配置等同于任意固定图重放都接受该覆盖。
 
 重放带 `backend.json` 的输入时，[frozen_replay.network_input](../python/moe_ub_cosim/frozen_replay.py)会读取所用二进制的参数目录。除 `ub_revision` 外必须与原目录完全相同；只有修订号不同而目录相同时，才将输入副本绑定到当前修订，并记录旧、新修订及 `behavior_equivalence="must_be_checked_by_execution"`。参数目录兼容不证明行为等价，仍需实际运行对照；它也不授权重放时修改结构化网络参数。
@@ -152,6 +165,8 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 `PortObservation` 复用 `UbPort::TraComEventNotify`：该通知虽然名称含完成含义，实际在通道 `TransmitStart` 成功后发出。记录使用当时的仿真时间与 `Packet::GetSize()`，不移到发送末尾，也不在尝试发送前计数。累计字节另与原端口 `GetTxBytes` 增量核对。
 
 源 Jetty 根据 WQE 进度给出 TA 的任务偏移，TP 创建 WRITE 数据包后通过 `WritePacketCreated` 给出包内载荷范围。`WriteProvenance` 按已有 Packet UID 保存任务与包的对应；多端口共享一份描述和对应表，端口自己的窗口与队列记录独立。它不持有 TP，也不增加包头或标签。来源打开时，未知 WRITE 来源、错位或重叠的业务范围报错。
+
+原生路径的 `RequestCreated` 给出任务有效范围，`RequestArrived` 和 `ResponseArrived` 表示实际接收；`ResponseCreated` 显式关联请求 UID 与新响应 UID。STORE 有效数据来自请求，LOAD 有效数据来自响应；响应不需要继承请求的 UID 或标签。短尾 LOAD 的剩余响应体计入填充，读取请求和原生确认不获得业务归属。原生创建通知只维护被动对应表，不修改包内容、路径、优先级或时延。
 
 共享表采用所有端口声明的最严格包数和传输数预算，包括关闭来源输出的端口。单个端口的释放不会断开其他端口仍需的源 TP 监听；监听由共享对象维护，包创建回调只持有对应表。原生回收的 TP 即使晚于其映射项销毁，晚到回调仍有有效状态，不持有已经释放的端口。图完成后的登记与真正网络排空后的来源清理分别执行。
 
@@ -164,6 +179,7 @@ ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置�
 | 修改对象 | 主要现有检查 |
 |---|---|
 | 时间、发送与接收完成 | [check_compute.py](../tests/integration/check_compute.py)、[check_write.py](../tests/integration/check_write.py)、[check_delay.py](../tests/integration/check_delay.py) |
+| 原生 STORE/LOAD、供数通知、资源和字节方向 | [native_runtime_test.cc](../tests/integration/native_runtime_test.cc)、[check_native_behavior.py](../tests/integration/check_native_behavior.py) |
 | 分块、发送槽及连续图 | [check_variants.py](../tests/integration/check_variants.py)、[check_sequence.py](../tests/integration/check_sequence.py) |
 | 服务、动态到达及共享网络 | [check_service.py](../tests/integration/check_service.py)、[check_dynamic_service.py](../tests/integration/check_dynamic_service.py)、[check_shared_bottleneck.py](../tests/integration/check_shared_bottleneck.py) |
 | 参数生效及 fabric | [check_scenario_backend.py](../tests/integration/check_scenario_backend.py)、[check_target_fabric.py](../tests/integration/check_target_fabric.py) |

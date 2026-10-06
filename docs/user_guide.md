@@ -108,7 +108,7 @@ moe-ub validate --run runs/demo-replay
 
 ## 为自己的实验修改配置
 
-`run.json` 的 `inputs` 指向服务、层、系统和网络输入；`observation`、`record_policy`、`export_policy` 分别指向观测、原始记录和导出预算文件。当前公共 `run` 接口接受 `moe-ub-configured-service/4`，模型和路由需按该格式提供。其他服务模式的开发入口及后端参数见[后端说明](../backend/README.md)。
+`run.json` 的 `inputs` 指向服务、层、系统和网络输入；`observation`、`record_policy`、`export_policy` 分别指向观测、原始记录和导出预算文件。当前公共 `run` 接口接受 `moe-ub-configured-service/4`，模型和路由需按该格式提供。其他服务模式的开发入口及后端参数见[后端说明](../backend/README.md)。 原生 STORE/LOAD 的小型输入及场景命令见[原生操作示例](../fixtures/m11_native/README.md)；向量操作由模板和后端 profile 共同指定，LOAD 包含实际供数通知。
 
 | 要改变的因素 | 应使用的操作 |
 |---|---|

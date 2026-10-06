@@ -9,6 +9,7 @@
 #include "ns3/ub-switch.h"
 #include "ns3/node-list.h"
 #include "ns3/simulator.h"
+#include "ns3/ub-ldst-api.h"
 
 #include <algorithm>
 #include <filesystem>
@@ -49,6 +50,12 @@ void Created(std::shared_ptr<PayloadLedger> ledger, ns3::Ptr<const ns3::Packet> 
 {
     ledger->Created(packet, task, task_begin, packet_begin, bytes);
 }
+void NativeCreated(std::shared_ptr<PayloadLedger> ledger, ns3::Ptr<const ns3::Packet> packet,
+                   uint32_t task, uint64_t begin, uint32_t bytes, ns3::UbMemOperationType type)
+{ ledger->NativeCreated(packet, task, begin, bytes, type); }
+void NativeResponse(std::shared_ptr<PayloadLedger> ledger, uint64_t request,
+                    ns3::Ptr<const ns3::Packet> packet, ns3::UbMemOperationType type)
+{ ledger->NativeResponse(request, packet, type); }
 }
 
 ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
@@ -127,6 +134,27 @@ uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet)
     Require(copy->GetSize() >= dl.GetSerializedSize(), "Missing datalink header");
     copy->PeekHeader(dl);
     if (dl.IsControlCreditHeader()) return 0;
+    if (dl.IsPacketUbMemHeader())
+    {
+        ns3::UbDatalinkPacketHeader header;
+        ns3::UbCna16NetworkHeader network;
+        Remove(copy, header); Remove(copy, network);
+        if (header.GetACK())
+        {
+            ns3::UbCompactAckTransactionHeader ack; Remove(copy, ack);
+            if (ack.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_TRANSACTION_ACK)) return 0;
+            Require(ack.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_READ_RESPONSE), "Unknown native response");
+        }
+        else
+        {
+            ns3::UbCompactTransactionHeader ta; ns3::UbCompactMAExtTah ext;
+            Remove(copy, ta); Remove(copy, ext);
+            if (ta.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_READ)) return 0;
+            Require(ta.GetTaOpcode() == static_cast<uint8_t>(ns3::TaOpcode::TA_OPCODE_WRITE), "Unknown native request");
+        }
+        Require(copy->GetSize() > 0, "Empty native data body");
+        return copy->GetSize();
+    }
     Require(dl.IsPacketIpv4Header(), "M1 observer only accepts RTP/IPv4 or credit frames");
     ns3::UbDatalinkPacketHeader packet_header;
     ns3::UbIpBasedNetworkHeader network;
@@ -173,6 +201,8 @@ void PayloadLedger::Register(const std::vector<WriteDescriptor>& descriptors)
 }
 void PayloadLedger::RetireCompletedGraphs(const std::set<std::string>& graphs)
 {
+    for (const auto& [uid, request] : native_requests_)
+        Require(!graphs.count(descriptors_.at(request.task).graph_id), "Retiring native graph with a pending provenance request");
     IdentityRanges retired;
     for (auto it = descriptors_.begin(); it != descriptors_.end();)
         if (graphs.count(it->second.graph_id))
@@ -189,12 +219,13 @@ Json PayloadLedger::RetirementAudit() const
         {"registered_transfers_total", registered_tasks_.size()}, {"retired_transfers", retired_transfers_},
         {"retired_packets", retired_packets_}, {"resident_transfers", descriptors_.size()},
         {"resident_packets", ranges_.size()}, {"peak_resident_transfers", peak_transfers_},
+        {"pending_native_requests", native_requests_.size()},
         {"peak_resident_packets", peak_packets_}, {"identity_intervals", registered_tasks_.Intervals()},
         {"retirement_boundary", "completed_graph_and_global_physical_network_idle"}};
 }
 void PayloadLedger::SetLimits(uint64_t packets, uint64_t transfers)
 {
-    Require(ranges_.size()<=packets && descriptors_.size()<=transfers,
+    Require(ranges_.size()+native_requests_.size()<=packets && descriptors_.size()<=transfers,
             "Observation provenance already exceeds requested budget");
     max_packets_=packets; max_transfers_=transfers;
 }
@@ -211,12 +242,14 @@ void PayloadLedger::Created(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
     const auto& d = descriptor->second;
     Require(bytes > 0 && task_begin <= d.bytes &&
             bytes <= d.bytes - task_begin && packet_begin <= packet->GetSize() &&
-            bytes == packet->GetSize() - packet_begin, "Invalid WRITE provenance range or task");
+            bytes <= packet->GetSize() - packet_begin &&
+            (d.operation != TransferOperation::Write || bytes == packet->GetSize()-packet_begin),
+            "Invalid provenance range or task");
     PayloadRange value{task_begin, packet_begin, bytes, packet->GetSize(), task};
-    Require(ranges_.contains(packet->GetUid()) || ranges_.size()<max_packets_, "Observation payload ledger packet budget exceeded");
+    Require(ranges_.contains(packet->GetUid()) || ranges_.size()+native_requests_.size()<max_packets_, "Observation payload ledger packet budget exceeded");
     auto [it, inserted] = ranges_.emplace(packet->GetUid(), value);
     Require(inserted || it->second == value, "Conflicting packet provenance");
-    peak_packets_ = std::max(peak_packets_, uint64_t(ranges_.size()));
+    peak_packets_ = std::max(peak_packets_, uint64_t(ranges_.size()+native_requests_.size()));
     ++created_notifications_;
 }
 PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const
@@ -226,11 +259,42 @@ PayloadRange PayloadLedger::Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t 
     const auto& range = it->second;
     ns3::UbFlowTag tag;
     const auto& d = descriptors_.at(range.task_id);
-    Require(packet->PeekPacketTag(tag) && tag.GetFlowId() == d.task_id &&
-            tag.GetFlowSize() == d.bytes &&
-            range.packet_size == packet->GetSize() && range.bytes == payload_bytes,
+    const bool native = d.operation != TransferOperation::Write;
+    Require((native || (packet->PeekPacketTag(tag) && tag.GetFlowId() == d.task_id && tag.GetFlowSize() == d.bytes)) &&
+            range.packet_size == packet->GetSize() &&
+            payload_bytes == range.packet_size-range.packet_begin && range.bytes <= payload_bytes,
             "WRITE packet does not match registered payload range");
     return range;
+}
+
+void PayloadLedger::NativeCreated(ns3::Ptr<const ns3::Packet> packet, uint32_t task,
+                                  uint64_t begin, uint32_t bytes, ns3::UbMemOperationType type)
+{
+    const auto& descriptor = descriptors_.at(task);
+    Require(bytes && begin <= descriptor.bytes && bytes <= descriptor.bytes-begin, "Invalid native useful range");
+    if (type == ns3::UbMemOperationType::STORE)
+    {
+        Require(descriptor.operation == TransferOperation::Store, "Native STORE profile mismatch");
+        Created(packet, task, begin, packet->GetSize()-bytes, bytes);
+    }
+    else
+    {
+        Require(descriptor.operation == TransferOperation::Load && native_requests_.size()+ranges_.size()<max_packets_,
+                "Native LOAD profile or provenance capacity mismatch");
+        Require(native_requests_.emplace(packet->GetUid(), NativeRequest{task,begin,bytes}).second, "Repeated native LOAD request");
+        peak_packets_ = std::max(peak_packets_, uint64_t(ranges_.size()+native_requests_.size()));
+    }
+}
+
+void PayloadLedger::NativeResponse(uint64_t request, ns3::Ptr<const ns3::Packet> packet,
+                                   ns3::UbMemOperationType type)
+{
+    if (type != ns3::UbMemOperationType::LOAD) return;
+    const auto r = native_requests_.at(request);
+    const auto payload = WritePayloadBytes(packet);
+    Require(payload >= r.bytes && packet->GetUid()!=request, "Invalid native LOAD response provenance");
+    native_requests_.erase(request);
+    Created(packet, r.task, r.begin, packet->GetSize()-payload, r.bytes);
 }
 
 WriteProvenance::WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> sources,
@@ -247,6 +311,13 @@ WriteProvenance::WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> source
                     ns3::MakeBoundCallback(Created, ledger_)), "Cannot observe WRITE packet creation");
         ++source_subscriptions_;
     }
+    for (const auto& source : sources_)
+    {
+        auto api = source->GetUbFunction()->GetUbLdstApi();
+        Require(api->TraceConnectWithoutContext("RequestCreated", ns3::MakeBoundCallback(NativeCreated, ledger_)) &&
+                api->TraceConnectWithoutContext("ResponseCreated", ns3::MakeBoundCallback(NativeResponse, ledger_)),
+                "Cannot observe native packet creation");
+    }
 }
 WriteProvenance::~WriteProvenance()
 {
@@ -254,12 +325,20 @@ WriteProvenance::~WriteProvenance()
     // entry; its callback safely retains just the ledger until it is destroyed.
     for (const auto& source : sources_) for (const auto& [id, tp] : source->GetTpnMap())
         tp->TraceDisconnectWithoutContext("WritePacketCreated", ns3::MakeBoundCallback(Created, ledger_));
+    for (const auto& source : sources_)
+    {
+        auto api = source->GetUbFunction()->GetUbLdstApi();
+        api->TraceDisconnectWithoutContext("RequestCreated", ns3::MakeBoundCallback(NativeCreated, ledger_));
+        api->TraceDisconnectWithoutContext("ResponseCreated", ns3::MakeBoundCallback(NativeResponse, ledger_));
+    }
 }
 Json WriteProvenance::Audit() const
 {
     return {{"storage", "shared_run_ledger"}, {"descriptor_tables", 1}, {"packet_tables", 1},
         {"descriptor_records", ledger_->TransferCount()}, {"packet_records", ledger_->PacketCount()},
-        {"source_subscriptions", source_subscriptions_}, {"created_notifications", ledger_->CreatedNotifications()}};
+        {"source_subscriptions", source_subscriptions_+2*sources_.size()},
+        {"rtp_source_subscriptions", source_subscriptions_}, {"native_source_subscriptions", 2*sources_.size()},
+        {"created_notifications", ledger_->CreatedNotifications()}};
 }
 
 PortObservation::PortObservation(ObservationConfig config, WriteDescriptor descriptor,
@@ -387,6 +466,8 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     {
         packet_range = provenance_->Ledger().Lookup(packet, payload);
         const auto& range = *packet_range;
+        business = range.bytes;
+        padding = payload - range.bytes;
         const auto& descriptor = provenance_->Ledger().Descriptor(range.task_id);
         if (descriptor.payload_regions)
         {
@@ -477,6 +558,13 @@ Json TransferRecord(const UbWriteTransfer* transfer)
         {"payload_bytes", d.bytes}, {"business_payload_bytes", d.bytes}, {"application_metadata_bytes", 0},
         {"task_byte_range", {0, d.bytes}}, {"transport_profile", "URMA_WRITE/RTP"},
         {"priority", 7}, {"chunk_id", d.chunk_index}};
+    if (d.operation != TransferOperation::Write)
+    {
+        record["operation"] = d.operation == TransferOperation::Store ? "STORE" : "LOAD";
+        record["transport_profile"] = "native_memory/LDST";
+        record["initiator_rank"] = d.src_rank;
+        record["data_owner_rank"] = d.DataOwner(); record["consumer_rank"] = d.Consumer();
+    }
     if (d.payload_regions)
     {
         uint64_t business = 0, metadata = 0, padding = 0;

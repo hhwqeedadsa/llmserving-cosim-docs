@@ -171,7 +171,7 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, s
         const auto& layer = layers[i]; const auto& input = layer.at("input");
         const auto lid = Number(input.at("layer_id"));
         Require(input.at("layer_id") == moe_ids[i] && layer.at("schema_version") == "moe-ub-execution-plan/3" &&
-                input.at("template") == "cann_a3_v850_fullmesh_v1" && input.at("role") == "D" && !input.contains("operator_profile"), "invalid CANN layer");
+                (input.at("template") == "cann_a3_v850_fullmesh_v1" || input.at("template") == "cann_a3_v850_native_v1") && input.at("role") == "D" && !input.contains("operator_profile"), "invalid CANN layer");
         const auto& row = model.at("layers")[lid]; const auto& cost = profile.at("layers")[lid]; const auto& per = cost.at("per_token_ns");
         Require(Common(input) == Common(first.at("input")) && Tokens(layer) == Tokens(first), "Token continuity/configuration mismatch");
         Require(input.at("hidden_dim") == model.at("hidden_size") && input.at("compute_dtypes") == model.at("dtypes") &&

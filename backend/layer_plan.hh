@@ -45,6 +45,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention re
 // retain_data only controls returned storage; all semantic checks always run.
 LayerPlan ValidateLayerPlan(const nlohmann::json& data, bool retain_data = true);
 LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true);
+LayerPlan ValidateNativePlan(const nlohmann::json& data, bool retain_data = true);
 void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
 LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data,
                           std::vector<std::string> packed_children = {});

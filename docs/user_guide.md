@@ -91,6 +91,10 @@ moe-ub validate --observed runs/demo-10us/observed
 
 新的观测可调整周期、窗口起止时刻、设备时钟的偏移与漂移，并选择已捕获端口的子集。采样时不能增加未记录的端口、请求捕获时间范围之外的数据，或改变原始事件是否包含对应关系记录的设置；原观测的资源声明也保持不变。
 
+上述任意分窗能力要求相应详细事件。使用 `moe-ub-observation-config/3` 时，可通过 `recording.mode="aggregate"` 只保存基础窗口；默认空 `detail_ranges` 不产生逐包资料，也可为所选端口指定一个全局半开详细区间。`mode="detailed"` 保存所有本次观测端口的完整详细范围。完整配置、预算和分类真值示例见[聚合保存小例](../fixtures/m15_aggregate_capture/README.md)，字段见[记录格式](record_storage.md#持续聚合与选择性详细记录)。
+
+先用 `slice inspect` 查看 `capture_capabilities`。只有聚合时，`sample` 允许保持交换机时钟并对齐合并窗口，例如原周期 127 ns 可改为 1270 ns；不能改为 1000 ns、任意移动边界或细分。所选端口若有覆盖整个请求区间的详细发包与队列状态，才可进行相应任意分窗。采样保持原捕获策略与真值类别，程序会在创建输出目录前拒绝能力不足的请求；需要更多范围或不同记录类型时，用显式新观测配置执行 `replay` 或重新 `run`。
+
 需要操作阶段和队列等待统计时，给 `run.json.observation` 指定带显式资源预算的 `moe-ub-observation-config/2`，写入 `statistics: {"schema_version":"moe-ub-observation-statistics/1","queue_waiting_bytes":true,"operation_stages":true}`；完整输入见[统计小例](../fixtures/m14_operation_queue/observation.json)。输出新增 `endpoint_stages.jsonl` 和 `queue_windows.csv` 两张逻辑表，读取方式仍为 `stored_rows`。队列完整序列使用 `logical_queue_windows`，不能把“没有发包”解释成“没有积压”。详细状态已采集时可用同样的 `slice`、`sample`、`replay` 命令；旧的纯发包记录不能补出队列状态。字段含义与采集限制见[记录格式](record_storage.md#v04-操作阶段与等待统计)。
 
 观测使用设备本地时钟，`offset_ns` 的单位是纳秒，`drift_ppb` 是十亿分之一的时钟漂移。它们只改变导出的时间，不改变仿真执行。端口窗口包含起点、不包含终点，即 `[start, end)`；最后一个窗口可以短于设定周期。端侧操作仍保留整个首轮的开始和结束记录，包括跨越所选端口窗口边界的操作。

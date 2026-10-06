@@ -56,15 +56,21 @@ void NativeCreated(std::shared_ptr<PayloadLedger> ledger, ns3::Ptr<const ns3::Pa
 void NativeResponse(std::shared_ptr<PayloadLedger> ledger, uint64_t request,
                     ns3::Ptr<const ns3::Packet> packet, ns3::UbMemOperationType type)
 { ledger->NativeResponse(request, packet, type); }
+void NativeRequestArrived(std::shared_ptr<PayloadLedger> ledger,uint64_t request,uint32_t bytes,ns3::UbMemOperationType type)
+{ ledger->NativeRequestArrived(request,bytes,type); }
+void NativeResponseArrived(std::shared_ptr<PayloadLedger> ledger,uint64_t request,uint32_t task,uint64_t begin,uint32_t bytes,ns3::UbMemOperationType type)
+{ ledger->NativeResponseArrived(request,task,begin,bytes,type); }
 }
 
 ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
 {
     std::set<std::string> keys;
     for (auto it = input.begin(); it != input.end(); ++it) keys.insert(it.key());
-    const bool statistics=input.at("schema_version")=="moe-ub-port-observation/3";
+    const bool aggregate=input.at("schema_version")=="moe-ub-port-observation/4";
+    const bool statistics=aggregate || input.at("schema_version")=="moe-ub-port-observation/3";
     const bool streamed=statistics || input.at("schema_version")=="moe-ub-port-observation/2";
     if(statistics) keys.erase("queue_sampling");
+    if(aggregate) keys.erase("recording");
     if (streamed) { ValidateObservationBudget(input.at("resource_budget")); keys.erase("resource_budget"); }
     Require(keys == std::set<std::string>{"schema_version", "switch_id", "port_id",
                 "window_start_ns", "window_end_ns", "window_period_ns", "record_provenance"} &&
@@ -90,6 +96,22 @@ ObservationConfig ObservationConfig::Parse(const Json& input, uint64_t stop_ns)
                 "Queue sampling outside execution bounds");
         Require(q.Count()<=c.resource_budget.at("max_windows_per_port").get<uint64_t>(),"Queue sampling window budget exceeded");
         c.queue_sampling=sampling;
+    }
+    if(aggregate) {
+        const auto& r=input.at("recording");
+        Require(r.is_object() && r.size()==5 && r.at("schema_version")=="moe-ub-port-recording/1" &&
+                r.at("truth_categories").is_array(),"Invalid port recording policy");
+        for(const char* field:{"max_detail_events_per_port","max_window_attribution_entries"})
+            Require(Unsigned(r,field,INT64_MAX)>0,"Invalid recording budget");
+        std::set<MessageCategory> categories;
+        for(const auto& name:r.at("truth_categories"))
+            Require(name.is_string() && categories.insert(ParseCategory(name)).second,"Invalid or duplicate message category");
+        Require(c.provenance || categories.empty(),"Attribution categories require provenance");
+        if(!r.at("detail_range").is_null()) {
+            const auto& d=r.at("detail_range");Require(d.is_object() && d.size()==2,"Invalid port detail range");
+            Require(Unsigned(d,"start_ns",stop_ns)<Unsigned(d,"end_ns",stop_ns),"Invalid detail interval");
+        }
+        c.recording=r;
     }
     Require(c.start_ns < c.end_ns && c.period_ns > 0, "Invalid observation interval or period");
     Require((c.end_ns - c.start_ns - 1) / c.period_ns < (streamed ? c.resource_budget.at("max_windows_per_port").get<uint64_t>() : 4096),
@@ -233,13 +255,14 @@ void PayloadLedger::RetireCompletedGraphs(const std::set<std::string>& graphs)
 Json PayloadLedger::RetirementAudit() const
 {
     Require(registered_tasks_.size() == descriptors_.size() + retired_transfers_, "provenance retirement accounting mismatch");
-    return {{"schema_version", "moe-ub-provenance-retirement/1"},
+    return {{"schema_version", "moe-ub-provenance-retirement/2"},
         {"registered_transfers_total", registered_tasks_.size()}, {"retired_transfers", retired_transfers_},
         {"retired_packets", retired_packets_}, {"resident_transfers", descriptors_.size()},
         {"resident_packets", ranges_.size()}, {"peak_resident_transfers", peak_transfers_},
         {"pending_native_requests", native_requests_.size()},
+        {"native_payloads_retired_at_arrival",native_payloads_retired_},
         {"peak_resident_packets", peak_packets_}, {"identity_intervals", registered_tasks_.Intervals()},
-        {"retirement_boundary", "completed_graph_and_global_physical_network_idle"}};
+        {"retirement_boundary", "native_payload_arrival_or_completed_graph_and_global_physical_network_idle"}};
 }
 void PayloadLedger::SetLimits(uint64_t packets, uint64_t transfers)
 {
@@ -314,6 +337,22 @@ void PayloadLedger::NativeResponse(uint64_t request, ns3::Ptr<const ns3::Packet>
     native_requests_.erase(request);
     Created(packet, r.task, r.begin, packet->GetSize()-payload, r.bytes);
 }
+void PayloadLedger::NativeRequestArrived(uint64_t uid,uint32_t bytes,ns3::UbMemOperationType type)
+{
+    if(type!=ns3::UbMemOperationType::STORE) return;
+    const auto found=ranges_.find(uid);
+    Require(found!=ranges_.end() && found->second.bytes==bytes &&
+            descriptors_.at(found->second.task_id).operation==TransferOperation::Store,"Native STORE provenance arrival mismatch");
+    ranges_.erase(found);++retired_packets_;++native_payloads_retired_;
+}
+void PayloadLedger::NativeResponseArrived(uint64_t uid,uint32_t task,uint64_t begin,uint32_t bytes,ns3::UbMemOperationType type)
+{
+    if(type!=ns3::UbMemOperationType::LOAD) return;
+    const auto found=ranges_.find(uid);
+    Require(found!=ranges_.end() && found->second.task_id==task && found->second.task_begin==begin && found->second.bytes==bytes &&
+            descriptors_.at(task).operation==TransferOperation::Load,"Native LOAD provenance arrival mismatch");
+    ranges_.erase(found);++retired_packets_;++native_payloads_retired_;
+}
 
 WriteProvenance::WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> sources,
                                const std::vector<WriteDescriptor>& descriptors)
@@ -333,7 +372,9 @@ WriteProvenance::WriteProvenance(std::vector<ns3::Ptr<ns3::UbController>> source
     {
         auto api = source->GetUbFunction()->GetUbLdstApi();
         Require(api->TraceConnectWithoutContext("RequestCreated", ns3::MakeBoundCallback(NativeCreated, ledger_)) &&
-                api->TraceConnectWithoutContext("ResponseCreated", ns3::MakeBoundCallback(NativeResponse, ledger_)),
+                api->TraceConnectWithoutContext("ResponseCreated", ns3::MakeBoundCallback(NativeResponse, ledger_)) &&
+                api->TraceConnectWithoutContext("RequestArrived", ns3::MakeBoundCallback(NativeRequestArrived, ledger_)) &&
+                api->TraceConnectWithoutContext("ResponseArrived", ns3::MakeBoundCallback(NativeResponseArrived, ledger_)),
                 "Cannot observe native packet creation");
     }
 }
@@ -348,14 +389,16 @@ WriteProvenance::~WriteProvenance()
         auto api = source->GetUbFunction()->GetUbLdstApi();
         api->TraceDisconnectWithoutContext("RequestCreated", ns3::MakeBoundCallback(NativeCreated, ledger_));
         api->TraceDisconnectWithoutContext("ResponseCreated", ns3::MakeBoundCallback(NativeResponse, ledger_));
+        api->TraceDisconnectWithoutContext("RequestArrived", ns3::MakeBoundCallback(NativeRequestArrived, ledger_));
+        api->TraceDisconnectWithoutContext("ResponseArrived", ns3::MakeBoundCallback(NativeResponseArrived, ledger_));
     }
 }
 Json WriteProvenance::Audit() const
 {
     return {{"storage", "shared_run_ledger"}, {"descriptor_tables", 1}, {"packet_tables", 1},
         {"descriptor_records", ledger_->TransferCount()}, {"packet_records", ledger_->PacketCount()},
-        {"source_subscriptions", source_subscriptions_+2*sources_.size()},
-        {"rtp_source_subscriptions", source_subscriptions_}, {"native_source_subscriptions", 2*sources_.size()},
+        {"source_subscriptions", source_subscriptions_+4*sources_.size()},
+        {"rtp_source_subscriptions", source_subscriptions_}, {"native_source_subscriptions", 4*sources_.size()},
         {"created_notifications", ledger_->CreatedNotifications()}};
 }
 
@@ -416,11 +459,24 @@ PortObservation::PortObservation(ObservationConfig config, std::shared_ptr<Write
         queue_windows_=std::make_unique<QueueWindows>(sampling,ns3::Simulator::Now().GetNanoSeconds(),
             sw->GetQueueManager()->GetOutPortVoqWaitingBytes(config_.port_id),port_->GetUbQueue()->GetWaitingBytes(),
             [this](auto index,const auto& row){QueueWindowRecord(index,row);});
+        if(!config_.recording.is_null()) {
+            const auto& r=config_.recording;
+            for(const auto& kind:r.at("truth_categories")) retained_categories_.insert(ParseCategory(kind));
+            message_windows_=std::make_unique<MessageWindows>(sampling,retained_categories_,r.at("max_window_attribution_entries"),
+                [this](auto index,const auto& counts,const auto& truth){MessageWindowRecord(index,counts,truth);});
+            if(!r.at("detail_range").is_null()) {
+                detail_range_={{r.at("detail_range").at("start_ns"),r.at("detail_range").at("end_ns")}};
+                detail_queue_=std::make_unique<DetailQueueState>(detail_range_->first,detail_range_->second,queue_windows_->Voq(),queue_windows_->Fifo(),
+                    [this](const char* kind,uint64_t now,uint64_t voq,uint64_t fifo) {
+                        Record("queue-state-events.jsonl",queue_events_,{{"event_kind",kind},{"time_ns",now},{"voq_waiting_bytes",voq},{"fifo_waiting_bytes",fifo}});
+                    });
+            }
+        }
         queue_sources_=queue_sources ? std::move(queue_sources) : std::make_shared<VoqSources>();
         queue_sources_->Watch(config_.switch_id,config_.port_id,[this](uint64_t bytes){VoqChanged(bytes);});
         Require(port_->GetUbQueue()->TraceConnectWithoutContext("WaitingBytes",ns3::MakeCallback(&PortObservation::FifoChanged,this)),
                 "Cannot observe FIFO waiting bytes");
-        QueueState();
+        if(config_.recording.is_null()) QueueState();
     }
 }
 PortObservation::~PortObservation()
@@ -441,6 +497,10 @@ PortObservation::~PortObservation()
 }
 void PortObservation::Record(const std::string& name, Json& memory, const Json& row)
 {
+    if(!config_.recording.is_null()) {
+        Require(detail_events_<config_.recording.at("max_detail_events_per_port").get<uint64_t>(),"Detailed observation event count budget exceeded");
+        ++detail_events_;
+    }
     if (config_.resource_budget.is_null() && !record_store_) { memory.push_back(row);return; }
     const auto text=row.dump()+"\n";
     if (!config_.resource_budget.is_null())
@@ -490,15 +550,31 @@ void PortObservation::QueueState()
 }
 void PortObservation::VoqChanged(uint64_t bytes)
 {
-    queue_windows_->Update(ns3::Simulator::Now().GetNanoSeconds(),bytes,{});QueueState();
+    const uint64_t now=ns3::Simulator::Now().GetNanoSeconds();
+    if(detail_queue_) detail_queue_->Update(now,bytes,{});
+    queue_windows_->Update(now,bytes,{});if(config_.recording.is_null()) QueueState();
 }
 void PortObservation::FifoChanged(uint64_t bytes)
 {
-    queue_windows_->Update(ns3::Simulator::Now().GetNanoSeconds(),{},bytes);QueueState();
+    const uint64_t now=ns3::Simulator::Now().GetNanoSeconds();
+    if(detail_queue_) detail_queue_->Update(now,{},bytes);
+    queue_windows_->Update(now,{},bytes);if(config_.recording.is_null()) QueueState();
+}
+bool PortObservation::Detailed(uint64_t now) const {
+    return config_.recording.is_null() || (detail_range_ && now>=detail_range_->first && now<detail_range_->second);
+}
+void PortObservation::MessageWindowRecord(uint64_t index,const ByteCounts& row,const MessageAttribution& attribution) {
+    record_store_->Append(RecordName("aggregate-windows.jsonl"),Json({{"index",index},{"counted_packets",row.packets},{"counted_packet_bytes",row.whole},
+        {"business_payload_bytes",row.business},{"application_metadata_bytes",row.metadata},{"padding_bytes",row.padding},
+        {"data_protocol_overhead_bytes",row.overhead},{"control_packet_bytes",row.control},{"unattributed_bytes",0}}).dump());
+    for(const auto& [key,bytes]:attribution)
+        record_store_->Append(RecordName("truth/message-windows.jsonl"),Json({{"index",index},{"operation_id",key.first},
+            {"message_category",CategoryName(key.second)},{"application_bytes",bytes}}).dump());
 }
 void PortObservation::QueueEvent(const char* event, ns3::Ptr<const ns3::Packet> packet, uint32_t queue_bytes,
                                  std::optional<uint64_t> busy_until)
 {
+    if(!Detailed(ns3::Simulator::Now().GetNanoSeconds())) return;
     Json row={{"event", event}, {"time_ns", ns3::Simulator::Now().GetNanoSeconds()},
         {"packet_uid", packet->GetUid()}, {"packet_bytes", packet->GetSize()}, {"queue_bytes", queue_bytes}};
     if(busy_until) row["busy_until_ns"]=*busy_until;
@@ -545,7 +621,8 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
             Require(business + metadata + padding == payload, "Incomplete packet byte classification");
         }
     }
-    if (retain_packet_events_)
+    const bool detailed=Detailed(now);
+    if (retain_packet_events_ && detailed)
     {
         Json event={{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
             {"counted_packet_bytes", whole}, {"business_payload_bytes", business}};
@@ -556,7 +633,15 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
         }
         Record("packet-events.jsonl",packet_events_,event);
     }
-    windows_.Add(now, whole, business, metadata, padding);
+    if(message_windows_) {
+        MessageBytes bytes{};bytes[0]=business;std::string operation;
+        if(packet_range) {
+            const auto& descriptor=provenance_->Ledger().Descriptor(packet_range->task_id);
+            bytes.at(static_cast<size_t>(descriptor.metadata_category))=metadata;
+            operation=descriptor.operation_id;
+        }
+        message_windows_->Add(now,whole,bytes,padding,operation);
+    } else windows_.Add(now, whole, business, metadata, padding);
     all_bytes_ += whole; ++all_packets_;
     // Validation fingerprint of actual serialized bytes AND packet start times.
     auto hash_byte = [this](uint8_t b) { fingerprint_ = (fingerprint_ ^ b) * 1099511628211ULL; };
@@ -565,22 +650,26 @@ void PortObservation::PacketStart(ns3::Ptr<ns3::Packet> packet, ns3::Time comple
     std::vector<uint8_t> wire(whole);
     packet->CopyData(wire.data(), whole);
     for (auto b : wire) hash_byte(b);
-    if (config_.provenance && business)
+    if (config_.provenance && detailed && packet_range && (business || metadata))
     {
         const auto range = *packet_range;
         const auto& descriptor = provenance_->Ledger().Descriptor(range.task_id);
         auto regions = descriptor.payload_regions.value_or(std::vector<PayloadRegion>{{0, descriptor.bytes, "business"}});
         for (const auto& region : regions)
         {
-            if (region.kind != "business") continue;
+            if(region.kind=="padding") continue;
+            const auto category=region.kind=="business"?MessageCategory::Business:descriptor.metadata_category;
+            if(config_.recording.is_null() ? region.kind!="business" : !retained_categories_.count(category)) continue;
             const auto a = std::max(region.begin, range.task_begin), b = std::min(region.end, range.task_begin + range.bytes);
             if (a >= b || now < config_.start_ns || now >= config_.end_ns) continue;
-            Record("truth/packet_ranges.jsonl",packet_ranges_,{{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
+            Json record={{"sim_time_ns", now}, {"packet_uid", packet->GetUid()},
                 {"ub_task_id", descriptor.task_id}, {"transfer_id", descriptor.transfer_id},
                 {"operation_id", descriptor.operation_id.empty() ? descriptor.graph_id + "/write" : descriptor.operation_id},
                 {"task_byte_range", {a, b}},
                 {"packet_byte_range", {range.packet_begin + a-range.task_begin, range.packet_begin + b-range.task_begin}},
-                {"counted_packet_bytes", whole}});
+                {"counted_packet_bytes", whole}};
+            if(!config_.recording.is_null()) record["message_category"]=CategoryName(category);
+            Record(config_.recording.is_null()?"truth/packet_ranges.jsonl":"truth/classified_packet_ranges.jsonl",packet_ranges_,record);
         }
     }
 }
@@ -798,31 +887,55 @@ void PortObservation::ExportStored(const std::filesystem::path& base, const Obse
     Require(packet_events_.empty() && packet_ranges_.empty() && queue_events_.empty(), "Stored port retained event JSON");
     windows_.Finish();
     if(queue_windows_) queue_windows_->Finish(ns3::Simulator::Now().GetNanoSeconds());
+    if(message_windows_) message_windows_->Finish();
+    if(detail_queue_) detail_queue_->Finish(ns3::Simulator::Now().GetNanoSeconds());
     Json fields = Json::object();
-    for (const std::string name : {"packet-events.jsonl", "egress-queue-audit.jsonl", "port-windows.jsonl",
+    if(message_windows_) {
+        std::vector<std::string> names={"aggregate-windows.jsonl","queue-windows.jsonl"};
+        if(config_.provenance) names.push_back("truth/message-windows.jsonl");
+        if(detail_range_) {
+            for(const auto* name:{"packet-events.jsonl","egress-queue-audit.jsonl","queue-state-events.jsonl"}) names.push_back(name);
+            if(config_.provenance) names.push_back("truth/classified_packet_ranges.jsonl");
+        }
+        for(const auto& name:names) fields[name]=RecordReference(record_store_->Seal(RecordName(name)));
+    } else for (const std::string name : {"packet-events.jsonl", "egress-queue-audit.jsonl", "port-windows.jsonl",
                                   "truth/packet_ranges.jsonl", "truth-windows.jsonl"})
     {
         if (!config_.provenance && (name == "truth/packet_ranges.jsonl" || name == "truth-windows.jsonl")) continue;
         fields[name] = RecordReference(record_store_->Seal(RecordName(name)));
     }
-    if(queue_windows_) for(const auto* name:{"queue-state-events.jsonl","queue-windows.jsonl"})
+    if(queue_windows_ && !message_windows_) for(const auto* name:{"queue-state-events.jsonl","queue-windows.jsonl"})
         fields[name]=RecordReference(record_store_->Seal(RecordName(name)));
-    Json storage={{"schema_version", queue_windows_ ? "moe-ub-port-records/2" : "moe-ub-port-records/1"},
+    Json storage={{"schema_version", message_windows_ ? "moe-ub-port-records/3" : queue_windows_ ? "moe-ub-port-records/2" : "moe-ub-port-records/1"},
         {"records_directory", "records"}, {"path_base", "execution_directory"}, {"fields", fields},
         {"window_encoding", "sparse_nonzero_with_declared_zero_windows"}, {"logical_windows", windows_.Count()},
         {"padding_field", provenance_->Ledger().HasPayloadRegions()}};
     if(queue_windows_) storage["queue_sampling"]=config_.queue_sampling;
+    if(message_windows_) {
+        storage["recording"]=config_.recording;
+        const auto& q=config_.queue_sampling;
+        storage["logical_windows"]=uint64_t((__int128(q.at("end_local_ns").get<int64_t>())-q.at("start_local_ns").get<int64_t>()-1)/q.at("period_ns").get<int64_t>()+1);
+    }
     Save((base / "record-storage.json").string(),storage);
     std::filesystem::create_hard_link(registry.directory / "registry-records.json", base / "registry-records.json");
     Save((base / "observation-audit.json").string(), {{"purpose", "test_only_internal_validation"},
         {"all_successful_start_packets", all_packets_}, {"all_successful_start_bytes", all_bytes_},
         {"native_tx_bytes_delta", port_->GetTxBytes() - initial_tx_bytes_}, {"wire_and_time_fnv1a64", fingerprint_}});
-    Save((base / "resource-audit.json").string(), {{"record_storage", "bounded_gzip_records"}, {"event_bytes", event_bytes_},
+    Json resource={{"record_storage", "bounded_gzip_records"}, {"event_bytes", event_bytes_},
         {"retained_packet_event_records", 0}, {"retained_queue_records", 0}, {"retained_packet_range_records", 0},
         {"resident_window_rows", windows_.ResidentRows()}, {"peak_window_rows_bound", 1}, {"logical_window_rows", windows_.Count()},
         {"ledger_packets", provenance_->Ledger().PacketCount()}, {"registered_transfers", provenance_->Ledger().TransferCount()},
         {"budget", config_.resource_budget}, {"provenance_storage", "shared_run_ledger"},
-        {"owned_descriptor_records", 0}, {"owned_packet_provenance_records", 0}});
+        {"owned_descriptor_records", 0}, {"owned_packet_provenance_records", 0}};
+    if(message_windows_) {
+        resource["detail_events"]=detail_events_;
+        resource["logical_window_rows"]=storage.at("logical_windows");
+        resource["peak_window_attribution_entries"]=message_windows_->PeakEntries();
+        resource["aggregate_packets"]=message_windows_->Packets();
+        resource["aggregate_bytes"]=message_windows_->Bytes();
+        resource["recording"]=config_.recording;
+    }
+    Save((base / "resource-audit.json").string(),resource);
     if (config_.provenance)
     {
         std::filesystem::create_directories(base / "truth");

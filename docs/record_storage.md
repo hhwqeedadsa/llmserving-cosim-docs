@@ -82,7 +82,7 @@
 
 | 字节类别 | 含义 |
 |---|---|
-| `business_payload_bytes` | 模板传输的有效激活或专家结果等业务范围；只有这一部分参与操作归属 |
+| `business_payload_bytes` | 模板传输的有效激活或专家结果等业务范围；传统 `attribution_windows` 表采用这一口径 |
 | `application_metadata_bytes` | 量化比例、索引、计数或状态标志等应用数据 |
 | `padding_bytes` | 模板布局填充及原生 LOAD 短尾响应中超出有效范围的体字节；内存窗口预留空间不自动计入 |
 | `data_protocol_overhead_bytes` | 承载上述数据的包中，剩余协议头等字节 |
@@ -96,6 +96,45 @@
 每个包每次经过一个观测出口都计数。跨服务器路径可能经过多个交换出口，因此全网端口字节之和不是唯一交付业务量。唯一交付量从目标有效写入核对；逐端口计数与原生端口累计值核对；每窗分类之和与整包计数核对；来源开启时，该窗各操作归属业务字节之和再与业务分类核对。来源关闭会停用操作归属检查并记录 `attribution_status="disabled"`，不改变原有执行和整包观测。
 
 `truth/attribution_windows.csv` 保存 `operation_id`、端口与方向、本地窗口起止和 `business_payload_bytes`。这里的字节量表示该操作在该端口、该本地窗口中实际经过的业务字节，量大于零才表示二者有真实关联。对应关系从本次包的任务与字节范围产生，不从端侧时间相近或端口流量形状反推。
+
+## 持续聚合与选择性详细记录
+
+输入 `moe-ub-observation-config/3` 在 `/2` 的统计和预算字段外增加 `recording`：
+
+```json
+{
+  "schema_version": "moe-ub-observation-recording/1",
+  "mode": "aggregate",
+  "detail_ranges": [{"switch_id": 4, "port_id": 4, "start_ns": 2000, "end_ns": 36000}],
+  "truth_categories": ["business_data", "attached_metadata", "dispatch_count", "combine_flag", "load_ready"],
+  "max_detail_events_per_port": 10000,
+  "max_window_attribution_entries": 1000
+}
+```
+
+`aggregate` 模式直接在当前事件更新包数、各类字节、队列面积与峰值，仅在窗口结束时序列化汇总；不先生成全部逐包 JSON。`detail_ranges` 为空表示只存窗口聚合，非空则额外保存所选出口和全局半开区间内的详细资料。每个所选端口最多给一个详细区间，必须是本次观测端口；总数受观测端口预算限制。`detailed` 模式为所有本次观测端口保存 `[0,max_simulation_ns)` 的详细资料，此时 `detail_ranges` 必须为空。两种模式都保存相同的基础窗口汇总和端侧阶段。
+
+详细范围使用内部全局时间，保存在输入和执行资料，不写入公开观测。详细事件数包括发包、FIFO 审计、状态快照/变化及分类来源；同时受原事件字节预算和压缩记录总预算约束。`max_window_attribution_entries` 限制单端口当前窗口中的“操作、消息类别”条目数，达到上限报错，不丢弃记录。合并窗口导出使用独立导出策略的操作总数限制。操作与协议必要的在途状态始终存在，关闭详细保存不会关闭协议状态。
+
+应用消息分类仅用于 `truth/` 的评价记录：
+
+| `message_category` | 来源 |
+|---|---|
+| `business_data` | 激活、专家结果或 KV 的业务字节区域 |
+| `attached_metadata` | 数据消息内实际复制的 scale、rank/token/topk 等元数据区域 |
+| `dispatch_count` | CANN Dispatch 的计数发布，包括零贡献状态 |
+| `combine_flag` | CANN Combine 的完成标志 |
+| `load_ready` | 原生 LOAD 前真实发送的供数就绪通知 |
+
+`truth_categories` 显式选择保留类别，关闭 `record_provenance` 时必须为空。`truth/message_attribution_windows.csv` 每行包含端口、方向、本地窗口起止、`operation_id`、`message_category` 和 `application_bytes`；其格式与选择声明在 `truth/message_categories.json`。零业务状态消息的归属来自实际传输的消息角色和字节区域，ACK、信用与响应头不会取得这些应用类别。传统 `attribution_windows.csv` 仍只保存所选 `business_data` 的投影，不改变原业务关联定义。保留部分元数据类别时，不宣称其和等于全部应用元数据。
+
+后端采用 `moe-ub-port-records/3`，基础 `aggregate-windows.jsonl` 同时保存计数与字节分类，`queue-windows.jsonl` 保存队列面积与峰值，`truth/message-windows.jsonl` 保存所选类别的操作归属。只有明确选择详细区间的端口才有 `packet-events.jsonl`、`egress-queue-audit.jsonl`、`queue-state-events.jsonl` 和可选 `truth/classified_packet_ranges.jsonl`。清单声明具体范围及事件数/字节预算，不把汇总称为完整逐包来源。
+
+新版队列详细历史用 `event_kind=initial/update/final` 区分区间初值、实际变化和结束快照。初值是左极限状态，不制造零时长峰值；结束快照关闭最后一段持续时间，队列在该详细区间结束时可以仍有积压。快照在下一个实际事件或最终导出时补记已知状态，不插入仿真事件；只有实际执行结束且网络排空后，才允许将后续声明区间记录为零状态。
+
+`sample` 在创建输出目录和展开归档前检查能力：只有基础窗口时，要求交换机时钟保持、起止边界对齐、周期为原周期的整数倍，窗口范围不超出保存范围。包数和面积求和、峰值取最大、均值用合并后的实际长度重算。移动边界、细分或改变交换机时钟，要求选定端口有覆盖整个请求区间的发包与队列状态资料；按整数时钟反求边界，避免忽略映射到同一本地时刻的先前事件。端侧完整区间和阶段仍由已保存的实际时刻转换。
+
+`slice inspect` 的 `capture_capabilities` 显示保存类型、基础窗口、详细范围、队列状态和真值类别。带新策略的数据包使用 `moe-ub-research-slice/2` 并校验能力声明；旧 `/1` 数据按原详细保存解释，采样范围和时钟能力保持，不能新增未采集的队列统计或消息类别。采样保持原捕获策略及类别选择；需要改变它们时重新执行 `run` 或 `replay`。各次输出只对自己 `public_config.ports` 声明的本地范围有效。
 
 ## 本地时钟、窗口与零值
 

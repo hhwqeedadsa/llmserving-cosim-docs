@@ -35,6 +35,7 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
             'metrics':['byte-classification.jsonl']}
     statistics='statistics' in observation
     if statistics:fields['observed']+=['queue_windows.csv','endpoint_stages.jsonl']
+    if 'recording' in observation:fields['truth'].append('message_attribution_windows.csv')
     index_path=output/'metrics/transfer-index.bin'
     try:
         for scope,names in fields.items():
@@ -47,12 +48,25 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
             save(output/'truth/clock_models.json',dict(schema_version='moe-ub-clock-models/1',time_unit='ns',
                 drift_unit='parts_per_billion',rounding='floor',formula='floor((1000000000+drift_ppb)*t_ns/1000000000)+offset_ns',
                 devices=observation['clocks']))
+            if 'recording' in observation:
+                save(output/'truth/message_categories.json',dict(schema_version='moe-ub-message-attribution/1',
+                    categories=observation['recording']['truth_categories'],byte_unit='application_bytes',
+                    source='actual_transmission_payload_ranges',protocol_ack_is_application_metadata=False))
             audits=[];total_windows=nonzero_windows=max_attribution=0
             for port,directory in zip(meta['ports'],meta['raw_dirs']):
                 clock=meta['clocks']['switch',port['switch_id']];start,end,period=(port[k] for k in ('start_local_ns','end_local_ns','period_ns'))
                 total_windows+=(end-start-1)//period+1
                 native=read(directory/'observation-audit.json');audit=read(directory/'resource-audit.json')
                 manifest=read(directory/'record-storage.json')
+                def records(name):
+                    return iter_file(meta['execution'],manifest['fields'][name],meta['record_policy']['max_record_bytes'])
+                if manifest['schema_version']=='moe-ub-port-records/3':
+                    from .aggregate_export import export_port
+                    require(manifest['path_base']=='execution_directory' and manifest['records_directory']=='records' and
+                            audit['budget']==observation['resource_budget'],'Aggregate storage/budget mismatch')
+                    value=export_port(meta,port,manifest,records,writer,index,max_ns,observation,audit,native,limits)
+                    audits.append(value['audit']);nonzero_windows+=value['nonzero_windows']
+                    max_attribution=max(max_attribution,value['max_attribution']);continue
                 require(manifest['schema_version'] in ('moe-ub-port-records/1','moe-ub-port-records/2') and manifest['path_base']=='execution_directory' and
                     manifest['records_directory']=='records','Invalid raw port storage')
                 require(audit['budget']==observation.get('resource_budget'),'Backend/export observation budget mismatch')
@@ -63,8 +77,6 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
                 require(raw_bytes==audit['event_bytes'],'Raw event byte accounting mismatch')
                 if 'resource_budget' in observation:
                     require(raw_bytes<=observation['resource_budget']['max_event_bytes_per_port'],'Raw port byte budget exceeded')
-                def records(name):
-                    return iter_file(meta['execution'],manifest['fields'][name],meta['record_policy']['max_record_bytes'])
                 if statistics:
                     from .queue_statistics import export_queue
                     export_queue(meta,port,manifest,records,writer,max_ns)
@@ -142,6 +154,9 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
                     index_layouts=len(index.layouts),max_cached_transfer_rows=limits['cache_rows'],
                     window_accumulators=1,max_window_operation_entries=max_attribution,
                     classification_window_encoding='nonzero_with_public_declared_zero_windows',padding_field=meta['padding_present']))
+            if 'recording' in observation:
+                result['capture_policy']=observation['recording']
+                result['retained_truth_categories']=observation['recording']['truth_categories']
         # A successful independent check no longer needs its reproducible index.
         save(output/'metrics/index-cleanup.json',dict(path='metrics/transfer-index.bin',bytes=index_path.stat().st_size,
             sha256=file_sha256(index_path),reason='completed_export_validation',raw_input=str(raw),policy=limits))

@@ -62,13 +62,8 @@ def network_input(source, output, override, binary):
         result = subprocess.run([str(binary), '--backend-catalog'], capture_output=True, text=True, timeout=30)
         require(result.returncode == 0, 'Backend catalog inspection failed: '+result.stderr)
         catalog = json.loads(result.stdout)
-        previous = settings['catalog']
-        require({k:v for k,v in previous.items() if k != 'ub_revision'} ==
-                {k:v for k,v in catalog.items() if k != 'ub_revision'}, 'Replay backend parameter catalog is incompatible')
-        if previous != catalog:
-            rebound = dict(old_revision=previous['ub_revision'], new_revision=catalog['ub_revision'],
-                           same_parameter_catalog=True, behavior_equivalence='must_be_checked_by_execution')
-            settings['catalog'] = catalog
+        from .replay_catalog import rebind
+        rebound=rebind(settings,catalog)
         for key,value in overrides.items():
             if key in settings['attributes']:
                 settings['origins']['attributes'][key].append(dict(source='frozen_replay_override',value=value['after']))

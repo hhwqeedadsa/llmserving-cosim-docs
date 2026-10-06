@@ -460,7 +460,8 @@ int main(int argc, char** argv)
         if (std::string(argv[5]) != "-")
         {
             const auto input = ReadJson(fs::absolute(argv[5]));
-            const bool statistics=input.at("schema_version")=="moe-ub-port-observation-set/3";
+            const bool aggregate=input.at("schema_version")=="moe-ub-port-observation-set/4";
+            const bool statistics=aggregate || input.at("schema_version")=="moe-ub-port-observation-set/3";
             const bool streamed=statistics || input.at("schema_version")=="moe-ub-port-observation-set/2";
             multiple_ports = streamed || input.at("schema_version") == "moe-ub-port-observation-set/1";
             if(streamed) moe_ub::ValidateObservationBudget(input.at("resource_budget"));
@@ -474,6 +475,7 @@ int main(int argc, char** argv)
                 for (const auto& port : input.at("ports"))
                 {
                     const auto config = moe_ub::ObservationConfig::Parse(port, max_ns);
+                    Require(aggregate==!config.recording.is_null(),"Mixed capture policy schemas");
                     Require(statistics==!config.queue_sampling.is_null(),"Mixed observation statistic schemas");
                     Require(config.resource_budget.is_null()!=streamed,"Mixed observation storage schemas");
                     if(streamed)

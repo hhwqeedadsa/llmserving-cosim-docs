@@ -17,21 +17,29 @@ def check_values(row,duration):
                 math.isclose(mean,area/duration,rel_tol=1e-12,abs_tol=1e-12),'Queue integral/mean/peak mismatch')
 
 
-def resample(events,port,clock,max_ns):
+def resample(events,port,clock,max_ns,*,capture=None):
     """Bounded stream: intersect constant-state intervals with local windows."""
     start,end,period=(port[k] for k in ('start_local_ns','end_local_ns','period_ns'))
-    current=None;area=[0,0];peak=[0,0];previous=0;state=None;last=local_time(0,clock)
+    current=None;area=[0,0];peak=[0,0];previous=0 if capture is None else capture['start_ns'];state=None
+    last=local_time(previous,clock);finished=False
     def output(index):
         duration=min(period,end-(start+index*period))
         return dict(index=index,**{k+suffix:values[j] for j,k in enumerate(OBJECTS)
             for suffix,values in (('_byte_ns',area),('_mean_bytes',[a/duration for a in area]),('_peak_bytes',peak))})
     for event in events:
-        require(set(event)=={'time_ns','voq_waiting_bytes','fifo_waiting_bytes'},'Invalid queue state fields')
+        require(set(event)=={'time_ns','voq_waiting_bytes','fifo_waiting_bytes'}|({'event_kind'} if capture else set()) and
+                not finished,'Invalid queue state fields/order')
         time=integer(event['time_ns'],'queue state time',previous,max_ns);previous=time
         now=local_time(time,clock)
         after=[integer(event[k+'_bytes'],k,0,2**64-1) for k in OBJECTS]
-        if state is None:
-            require(time==0,'Queue state capture lacks initial time-zero state');state=after
+        initial=state is None;kind=event.get('event_kind')
+        if capture:
+            require(kind in ('initial','update','final') and (kind=='initial')==initial and
+                    (time==capture['end_ns'] if kind=='final' else capture['start_ns']<=time<capture['end_ns']),
+                    'Invalid bounded queue state interval/event')
+            if kind=='final':require(state==after,'Final snapshot changes queue state');finished=True
+        if initial:
+            require(time==(0 if capture is None else capture['start_ns']),'Queue state capture lacks initial state');state=after
         cursor=max(last,start);stop=min(now,end)
         if any(state):
             while cursor<stop:
@@ -43,13 +51,13 @@ def resample(events,port,clock,max_ns):
                 area=[area[j]+state[j]*(right-cursor) for j in range(2)]
                 peak=[max(peak[j],state[j]) for j in range(2)];cursor=right
         state=after;last=now
-        if start<=now<end:
+        if not initial and kind!='final' and start<=now<end:
             index=(now-start)//period
             if current is not None and current!=index:
                 if any(peak):yield output(current)
                 area=[0,0];peak=[0,0]
             current=index;peak=[max(peak[j],state[j]) for j in range(2)]
-    require(state is not None and state==[0,0],'Queue state capture is absent or ends with unresolved waiting bytes')
+    require(state is not None and (finished if capture else state==[0,0]),'Queue state capture is absent or ends with unresolved waiting bytes')
     if current is not None and any(peak):yield output(current)
 
 

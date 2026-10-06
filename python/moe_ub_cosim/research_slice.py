@@ -153,13 +153,16 @@ def create(run, output, storage='copy', import_config=None):
         observation=observation, random=report['random'], calibration_status='unvalidated_reference',
         archives=archives, storage=storage, baseline_validation='historical_completion_and_sealed_files',
         artifacts=inventory(output))
+    from .observation_recording import capabilities
+    if 'recording' in observation:
+        manifest.update(schema_version='moe-ub-research-slice/2',capture_capabilities=capabilities(observation,ranks,max_ns))
     save(output/'slice.json', manifest)
     return inspect(output)
 
 
 def inspect(directory, *, verify=False):
     directory = Path(directory).resolve(); manifest = read(directory/'slice.json')
-    require(manifest.get('schema_version') == SCHEMA and manifest.get('normal_exit') is True,
+    require(manifest.get('schema_version') in (SCHEMA,'moe-ub-research-slice/2') and manifest.get('normal_exit') is True,
             'Incomplete or unsupported research slice')
     require(manifest['initial_state'] == dict(simulation_ns=0, network='fresh', kv='ready_at_decode_start'),
             'Unsupported slice initial state')
@@ -195,7 +198,12 @@ def inspect(directory, *, verify=False):
     if verify:
         verify_inventory(directory, manifest['artifacts'])
     from .observation import execution_coverage
+    from .observation_recording import capabilities
+    capture=capabilities(manifest['observation'],ranks,manifest['capture_end_ns'])
+    if manifest['schema_version']=='moe-ub-research-slice/2':
+        require(manifest.get('capture_capabilities')==capture,'Slice capture capability declaration differs from input')
     return dict(passed=True, scope=manifest['scope'], simulation_end_ns=manifest['simulation_end_ns'],
+        capture_capabilities=capture,
         coverage=execution_coverage(manifest['observation'],ranks,manifest['capture_end_ns'],manifest['simulation_end_ns']),
         capture_end_ns=manifest['capture_end_ns'], ranks=len(manifest['ranks']), graphs=len(manifest['submissions']),
         calibration_status=manifest['calibration_status'], files=len(manifest['artifacts']),
@@ -259,20 +267,11 @@ def materialize(directory, manifest, output, config, kind):
 
 
 def sample(output, config):
-    from .observation import validate_observation
+    from .observation_recording import sample_observation,sampling_plan
     from .user_workflow import export
     directory = Path(config['slice']); manifest = read(directory/'slice.json')
-    observation = deepcopy(manifest['observation'] if config['observation'] is None else config['observation'])
-    if 'period_ns' in config:
-        for switch in observation['switches']:
-            switch['period_ns'] = config['period_ns']
-    _, selected = validate_observation(observation, manifest['ranks'], manifest['capture_end_ns'])
-    _, available = validate_observation(manifest['observation'], manifest['ranks'], manifest['capture_end_ns'])
-    require({(p['switch_id'], p['port_id']) for p in selected} <= {(p['switch_id'], p['port_id']) for p in available},
-            'Requested port has no captured packet events')
-    require(observation['record_provenance'] == manifest['observation']['record_provenance'], 'Cannot change capture provenance')
-    require(observation.get('resource_budget') == manifest['observation'].get('resource_budget'),
-            'Sampling keeps the source capture resource budget; reduce windows if the declared budget is exceeded')
+    observation=sample_observation(manifest['observation'],config)
+    sampling_plan(manifest['observation'],observation,manifest['ranks'],manifest['capture_end_ns'])
     save(output/'inputs/observation.json', observation)
     raw = materialize(directory, manifest, output, config, 'execution_archive')
     export(raw, observation, manifest['ranks'], manifest['capture_end_ns'], output, config['export_policy'])

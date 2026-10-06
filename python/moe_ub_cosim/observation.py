@@ -46,14 +46,20 @@ def validate_observation_budget(budget):
 def validate_observation(config, ranks, max_ns):
     budget=config.get('resource_budget')
     statistics='statistics' in config
+    recording='recording' in config
+    if recording:
+        from .observation_recording import validate_recording
+        require(statistics and config.get('schema_version')=='moe-ub-observation-config/3','Recording policy requires observation-config/3 statistics')
+        validate_recording(config['recording'],max_ns,provenance=config['record_provenance'])
     if statistics:
-        require(config.get('schema_version')=='moe-ub-observation-config/2' and config['statistics']==STATISTICS and
+        require(config.get('schema_version')==('moe-ub-observation-config/3' if recording else 'moe-ub-observation-config/2') and config['statistics']==STATISTICS and
                 all(type(config['statistics'][key]) is bool for key in ('queue_waiting_bytes','operation_stages')) and
                 budget is not None,'New statistics require observation-config/2 and an explicit resource budget')
     if budget is not None:validate_observation_budget(budget)
     limits=budget or dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096)
+    if recording:require(len(config['recording']['detail_ranges'])<=limits['max_ports'],'Detail port budget exceeded')
     require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set())|
-            ({'schema_version','statistics'} if statistics else set()) and
+            ({'schema_version','statistics'} if statistics else set())|({'recording'} if recording else set()) and
             type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
     require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
             1<=len(config['switches'])<=limits['max_ports'],'Require observed switches and device clocks')
@@ -114,6 +120,14 @@ def backend_observation(config, ranks, max_ns):
                 schema_version='moe-ub-queue-sampling/1',
                 **{k:selected[k] for k in ('start_local_ns','end_local_ns','period_ns')},
                 **{k:clock[k] for k in ('offset_ns','drift_ppb')}))
+    if 'recording' in config:
+        from .observation_recording import validate_recording,detail_range
+        policy=validate_recording(config['recording'],max_ns,ports=ports,provenance=config['record_provenance'])
+        result['schema_version']='moe-ub-port-observation-set/4'
+        for port,selected in zip(result['ports'],ports):
+            port.update(schema_version='moe-ub-port-observation/4',recording=dict(
+                schema_version='moe-ub-port-recording/1',detail_range=detail_range(policy,selected,max_ns),
+                **{k:policy[k] for k in ('truth_categories','max_detail_events_per_port','max_window_attribution_entries')}))
     return result
 
 

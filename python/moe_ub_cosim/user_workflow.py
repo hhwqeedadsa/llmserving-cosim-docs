@@ -63,6 +63,11 @@ def execute(args):
     require(not output.exists(), f'Output already exists: {output}; choose a new experiment name')
     if args.command in ('sample', 'replay'):
         from .research_slice import inspect
+        if args.command=='sample':
+            from .observation_recording import sample_observation,sampling_plan
+            source=read(args.slice/'slice.json')
+            sampling_plan(source['observation'],sample_observation(source['observation'],config),
+                          source['ranks'],source['capture_end_ns'])
         inspect(args.slice, verify=True)
         config['slice'] = str(args.slice.resolve())
     output.mkdir(parents=True)

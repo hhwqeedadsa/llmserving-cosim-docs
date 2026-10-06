@@ -264,6 +264,7 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
         if(t.contains("ub_task_id")) {
             WriteDescriptor d{id,t.at("ub_task_id").get<uint64_t>(),graph,t.at("send_node_id").get<uint64_t>(),t.at("recv_node_id").get<uint64_t>(),src,dst,tag,bytes,op,
                 t.at("chunk_index").get<uint32_t>(),t.at("pair_byte_range").at(0).get<uint64_t>(),t.at("pair_payload_bytes").get<uint64_t>(),endpoints.at(src),endpoints.at(dst)};
+            d.metadata_category=MetadataCategory(t.at("kind"),t.at("message_role"));
             d.payload_regions.emplace();for(const auto& r:t.at("payload_regions"))d.payload_regions->push_back({r.at("begin"),r.at("end"),r.at("kind")});result.descriptors.push_back(d);
         } else result.local_descriptors.push_back({id,graph,t.at("send_node_id"),t.at("recv_node_id"),src,dst,tag,bytes,op});
     }

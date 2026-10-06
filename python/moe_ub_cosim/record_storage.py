@@ -76,7 +76,7 @@ def iter_port_records(execution, port, name):
                 yield json.loads(line)
         return
     manifest = json.loads(manifest_path.read_text())
-    require(manifest['schema_version'] in ('moe-ub-port-records/1','moe-ub-port-records/2') and
+    require(manifest['schema_version'] in ('moe-ub-port-records/1','moe-ub-port-records/2','moe-ub-port-records/3') and
             manifest['path_base'] == 'execution_directory' and manifest['records_directory'] == 'records',
             'Unknown port record storage')
     if name in ('observed/endpoint_ops.jsonl', 'truth/operation_registry.jsonl', 'truth/transfer_registry.jsonl'):
@@ -86,6 +86,8 @@ def iter_port_records(execution, port, name):
                 'Unknown shared record registry')
         yield from iter_result(execution, registry['fields'][name])
     elif name in ('observed/port_counters.jsonl', 'truth/port_byte_truth.jsonl'):
+        require(manifest['schema_version']!='moe-ub-port-records/3',
+                'New aggregate captures use aggregate-windows.jsonl; read exported public tables for logical local windows')
         yield from _windows(execution, port, manifest, name)
     else:
         report = json.loads((execution / 'result.json').read_text())

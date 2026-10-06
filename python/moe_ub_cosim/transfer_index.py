@@ -11,6 +11,7 @@ import mmap
 import struct
 
 from .plan import integer,require
+from .observation_recording import metadata_category
 
 ROW=struct.Struct('<QIIIIBQ')  # transfer, task, operation, payload, layout, native lifecycle, delivered
 
@@ -41,9 +42,10 @@ class TransferIndex:
             require(len(self.operations)<self.max_operations,'Transfer index operation budget exceeded')
             self.operation_index[op]=len(self.operations);self.operations.append(op)
         regions=transfer.get('payload_regions',[dict(begin=0,end=payload,kind='business')])
-        layout=tuple((r['begin'],r['end'],r['kind']) for r in regions)
+        regions_tuple=tuple((r['begin'],r['end'],r['kind']) for r in regions)
+        layout=(metadata_category(transfer),regions_tuple)
         previous=0
-        for a,b,kind in layout:
+        for a,b,kind in regions_tuple:
             integer(a,'region begin',previous,previous);integer(b,'region end',a+1,payload)
             require(kind in ('business','metadata','padding'),'Invalid payload region kind');previous=b
         require(previous==payload,'Incomplete indexed payload regions')
@@ -107,11 +109,20 @@ class TransferIndex:
         if ordinal>=self.count:return None
         row=self._row(ordinal)
         if row[0]!=tid:return None
+        category,regions=self.layouts[row[4]]
         result=dict(transfer_id=row[0],ub_task_id=row[1],operation_id=self.operations[row[2]],payload_bytes=row[3],
-                    payload_regions=[dict(begin=a,end=b,kind=k) for a,b,k in self.layouts[row[4]]])
+                    payload_regions=[dict(begin=a,end=b,kind=k) for a,b,k in regions])
         if len(self.cache)==self.cache_limit:self.cache.popitem(last=False)
         self.cache[tid]=result
         return result
+
+    def category(self,tid):
+        """Metadata category for classified detail checks; old get() stays stable."""
+        position=bisect_right(self.transfer_starts,tid)-1
+        require(position>=0,'Unknown classified transfer')
+        row=self._row(self.transfer_rows[position]+tid-self.transfer_starts[position])
+        require(row[0]==tid,'Unknown classified transfer')
+        return self.layouts[row[4]][0]
 
     def close(self):
         if self.mapping is not None:self.mapping.close();self.mapping=None

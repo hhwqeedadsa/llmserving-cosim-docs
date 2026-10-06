@@ -1,6 +1,7 @@
 #pragma once
 
 #include "write_completion.hh"
+#include "message_categories.hh"
 #include "ns3/event-id.h"
 #include "ns3/ptr.h"
 #include "ns3/ub-datatype.h"
@@ -41,6 +42,7 @@ struct WriteDescriptor
     // Absent on legacy plans: their entire task is useful vector/KV data.
     std::optional<std::vector<PayloadRegion>> payload_regions{};
     TransferOperation operation = TransferOperation::Write;
+    MessageCategory metadata_category = MessageCategory::AttachedMetadata;
     int DataOwner() const { return operation == TransferOperation::Load ? dst_rank : src_rank; }
     int Consumer() const { return operation == TransferOperation::Load ? src_rank : dst_rank; }
     // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.

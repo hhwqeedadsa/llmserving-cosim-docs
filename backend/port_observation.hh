@@ -4,6 +4,7 @@
 #include "identity_ranges.hh"
 #include "record_store.hh"
 #include "queue_sources.hh"
+#include "message_windows.hh"
 #include "extern/helper/json/json.hpp"
 #include "ns3/packet.h"
 #include "ns3/nstime.h"
@@ -27,12 +28,8 @@ struct ObservationConfig
     bool provenance;
     nlohmann::json resource_budget = nullptr;
     nlohmann::json queue_sampling = nullptr;
+    nlohmann::json recording = nullptr;
     static ObservationConfig Parse(const nlohmann::json& input, uint64_t stop_ns);
-};
-
-struct ByteCounts
-{
-    uint64_t packets = 0, whole = 0, business = 0, control = 0, overhead = 0, metadata = 0, padding = 0;
 };
 
 // No sampling events: bucket successful starts, and emit every configured window.
@@ -76,11 +73,15 @@ class PayloadLedger
                  uint32_t packet_begin, uint32_t bytes);
     void NativeCreated(ns3::Ptr<const ns3::Packet>, uint32_t, uint64_t, uint32_t, ns3::UbMemOperationType);
     void NativeResponse(uint64_t, ns3::Ptr<const ns3::Packet>, ns3::UbMemOperationType);
+    void NativeRequestArrived(uint64_t,uint32_t,ns3::UbMemOperationType);
+    void NativeResponseArrived(uint64_t,uint32_t,uint64_t,uint32_t,ns3::UbMemOperationType);
     PayloadRange Lookup(ns3::Ptr<const ns3::Packet> packet, uint32_t payload_bytes) const;
     void SetLimits(uint64_t packets, uint64_t transfers);
     void RestrictLimits(uint64_t packets, uint64_t transfers);
-    // Owner must establish that the shared physical network is drained. Packet
-    // provenance may outlive transaction completion (ACKs and retransmission).
+    // WRITE provenance may outlive transaction completion (retransmission).
+    // Graph retirement still requires a drained shared network. Native useful
+    // packet ranges can retire earlier at their final endpoint arrival; no
+    // protocol-owned request/response state is removed by this passive ledger.
     void RetireCompletedGraphs(const std::set<std::string>& graphs);
     nlohmann::json RetirementAudit() const;
     size_t PacketCount() const { return ranges_.size(); }
@@ -98,6 +99,7 @@ class PayloadLedger
     uint64_t created_notifications_=0;
     IdentityRanges registered_tasks_;
     uint64_t peak_packets_=0, peak_transfers_=0, retired_packets_=0, retired_transfers_=0;
+    uint64_t native_payloads_retired_=0;
     bool segmented_payload_=false;
 };
 
@@ -122,7 +124,8 @@ class WriteProvenance
     uint64_t source_subscriptions_=0;
 };
 
-// Returns only WRITE business body bytes. Credit/TP/TA acknowledgments return zero.
+// Application-body bytes in WRITE/STORE and LOAD responses, before semantic
+// region classification. Protocol acknowledgments and credits return zero.
 uint32_t WritePayloadBytes(ns3::Ptr<const ns3::Packet> packet);
 
 // Execution-wide records are identical at every port. Keep one physical copy;
@@ -175,6 +178,8 @@ class PortObservation
     void FifoChanged(uint64_t bytes);
     void QueueState();
     void QueueWindowRecord(uint64_t index, const QueueWindow& row);
+    void MessageWindowRecord(uint64_t,const ByteCounts&,const MessageAttribution&);
+    bool Detailed(uint64_t) const;
     void ExportStored(const std::filesystem::path& base, const ObservationRegistry& registry) const;
     ObservationConfig config_;
     mutable PortWindows windows_;
@@ -192,8 +197,13 @@ class PortObservation
     std::filesystem::path spool_directory_;
     mutable std::map<std::string,std::ofstream> streams_;
     uint64_t event_bytes_=0;
+    uint64_t detail_events_=0;
     std::shared_ptr<RecordStore> record_store_;
     std::shared_ptr<VoqSources> queue_sources_;
     mutable std::unique_ptr<QueueWindows> queue_windows_;
+    mutable std::unique_ptr<MessageWindows> message_windows_;
+    mutable std::unique_ptr<DetailQueueState> detail_queue_;
+    std::optional<std::pair<uint64_t,uint64_t>> detail_range_;
+    std::set<MessageCategory> retained_categories_;
 };
 }

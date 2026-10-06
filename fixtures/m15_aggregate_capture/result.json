@@ -1,0 +1,122 @@
+{
+  "passed": true,
+  "simulation_end_ns": 47193,
+  "physical_packets": 2088,
+  "categories": {
+    "dispatch_count": 386,
+    "load_ready": 268,
+    "business_data": 14336,
+    "combine_flag": 116,
+    "attached_metadata": 76
+  },
+  "direct_aggregate_equals_detail": true,
+  "selected_detail_state_oracle": true,
+  "packet_area_peak_coarsening": true,
+  "unsupported_sampling_refused_before_output": 5,
+  "finite_detail_and_attribution_budgets": true,
+  "old_detailed_reading": true,
+  "replay_identical": true,
+  "protocol_and_wire_time_unchanged": true,
+  "provenance_retirement": {
+    "identity_intervals": 1,
+    "native_payloads_retired_at_arrival": 261,
+    "peak_resident_packets": 7,
+    "peak_resident_transfers": 87,
+    "pending_native_requests": 0,
+    "registered_transfers_total": 87,
+    "resident_packets": 0,
+    "resident_transfers": 0,
+    "retired_packets": 261,
+    "retired_transfers": 87,
+    "retirement_boundary": "native_payload_arrival_or_completed_graph_and_global_physical_network_idle",
+    "schema_version": "moe-ub-provenance-retirement/2"
+  },
+  "resources": {
+    "legacy": {
+      "wall_seconds": 0.873101718723774,
+      "peak_sampled_group_rss_bytes": 105095168,
+      "max_waited_child_rss_kib": 76456,
+      "record_bytes": 54274
+    },
+    "detailed": {
+      "wall_seconds": 1.0208363328129053,
+      "peak_sampled_group_rss_bytes": 102924288,
+      "max_waited_child_rss_kib": 73324,
+      "record_bytes": 60423
+    },
+    "aggregate": {
+      "wall_seconds": 0.885915007442236,
+      "peak_sampled_group_rss_bytes": 107175936,
+      "max_waited_child_rss_kib": 76456,
+      "record_bytes": 39261
+    },
+    "selected": {
+      "wall_seconds": 0.8969096541404724,
+      "peak_sampled_group_rss_bytes": 102957056,
+      "max_waited_child_rss_kib": 73384,
+      "record_bytes": 42636
+    },
+    "count-only": {
+      "wall_seconds": 0.8652186617255211,
+      "peak_sampled_group_rss_bytes": 106049536,
+      "max_waited_child_rss_kib": 78472,
+      "record_bytes": 38558
+    }
+  },
+  "schema_version": "moe-ub-m15-evidence/1",
+  "scope": "functional_consistency_not_hardware_calibration",
+  "implementation_parent_commit": "d1104b3a5f40b76497fbfa51a7cc2a889cd3b69a",
+  "ub_revision": "c0f1fe54245203a3b14468e44e893a38792cfcc8",
+  "binary_sha256": "cba21cfeff34e8d0d047c3ce65ecb3b6856350b701c6be580f8979af4168d1cf",
+  "final_checks": {
+    "child_exit_code": 0,
+    "wall_seconds": 62.497889026999474,
+    "peak_sampled_group_rss_bytes": 141586432,
+    "aggregate_artifact_bytes_before_report": 19279282176,
+    "max_waited_child_rss_kib": 78472
+  },
+  "python_unit_tests": 30,
+  "legacy": {
+    "passed": true,
+    "historical_slice": "/root/moe-ub-cosim/runs/v03-research-slice/small-slice",
+    "simulation_end_ns": 35538,
+    "actual_legacy_execution_equal": {
+      "endpoint_ops": 18,
+      "local_deliveries": 30,
+      "node_execution": 333,
+      "operation_registry": 6,
+      "plan_summary": 1,
+      "planned_transfers": 99,
+      "target_writes": 69,
+      "transfer_registry": 69,
+      "transfers": 69,
+      "wqe_completions": 69,
+      "wqe_starts": 69
+    },
+    "actual_legacy_port_event_streams_equal": 2,
+    "legacy_sampling_succeeded": true,
+    "large_network_catalog_check_only": {
+      "old_revision": "1ba722217ef94716a07a56a2388be2c7dddd8e0b",
+      "new_revision": "c0f1fe54245203a3b14468e44e893a38792cfcc8",
+      "same_parameter_catalog": false,
+      "compatibility_rule": "v03_write_inactive_native_parameters/1",
+      "changes": [
+        "ns3::UbLdstApi::RequestIdCount",
+        "ns3::UbLdstThread::StoreRequestSize.help",
+        "ns3::UbLdstThread::LoadResponseSize.help"
+      ],
+      "behavior_equivalence": "must_be_checked_by_execution"
+    },
+    "large_network_simulation_executed": false
+  },
+  "evidence": {
+    "build_probe": "runs/v04-platform/build-aggregate-final/probe.json",
+    "final_probe": "runs/v04-platform/aggregate-final/probe.json",
+    "commands": "runs/v04-platform/aggregate-capture-cases-final/commands.json",
+    "operation_queue": "runs/v04-platform/aggregate-operation-cases-final",
+    "legacy_write": "runs/v04-platform/aggregate-write-final",
+    "native_routing": "runs/v04-platform/aggregate-routing-final",
+    "actual_legacy_capture": "runs/v04-platform/aggregate-legacy-cases-01",
+    "actual_legacy_probe": "runs/v04-platform/aggregate-legacy-01/probe.json"
+  }
+}

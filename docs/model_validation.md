@@ -45,7 +45,7 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 | 模板 | 贡献与返回规则 | 依据和用途 |
 |---|---|---|
 | `direct_rank_dedup_v1` | 同一 Token 发往同一目的 rank 的多个专家时只发送一份输入；专家计算分别保留，按声明的本地加权合并约定返回一份向量 | 早期参考模型。已核对 DeepEP v1.2.1 的单机 normal 路径，但没有复现其完整元数据、通知、通道或 NVLink 时序。 |
-| `cann_a3_v850_fullmesh_v1` | 每 Token×专家分别发送和返回，同一目的 rank 不去重；Token 所属 rank 收齐后归约 | 当前 CM384/R1 场景采用的独立 CANN 行为模型，以下说明适用于此模板。 |
+| `cann_a3_v850_fullmesh_v1` | 每 Token×专家分别发送和返回，同一目的 rank 不去重；Token 所属 rank 收齐后归约 | CM384/R1 WRITE 基线采用的独立 CANN 行为模型，以下说明适用于此模板。 |
 | `cann_a3_v850_native_v1` | 保留上一行的数据布局和状态消息；向量采用可选 STORE/LOAD，LOAD 前增加真实供数通知 | 本平台定义的原生操作映射，不能把新增握手或 worker 调度称为 CANN 真机行为。 |
 
 DeepEP 的固定源码版本为 `9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee`。其四 rank BF16 调用配置、八项源码对照和已知差异保存在[核对证据](../fixtures/m5_model_audit/README.md)与[原始完整核对记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/model_validation.md)。这部分是历史模型依据，不能代替当前 CANN 规则。
@@ -145,7 +145,8 @@ Decode 入口与请求完成分别处理。文件尾端或观察片段结束均�
 |---|---|---|
 | 固定源码及逐项行为核对 | 贡献、字节、等待和资源规则有可追溯来源 | 原生内核时序、数值正确性和硬件性能 |
 | Python/C++ 独立计划核对及小场景执行 | 输入约束、依赖、实际网络完成反馈、资源释放与观测不扰动执行 | 未运行的规模或不匹配配置 |
-| [CM384/R1 首轮验收](../fixtures/m10_research_slice/README.md) | 完整目标首轮依赖图、已保存图的后端重放、1 µs/10 µs 观测及记录守恒可重复 | 完整 64 步服务、稳态和目标硬件绝对时延 |
+| [CM384/R1 WRITE 首轮验收](../fixtures/m10_research_slice/README.md) | 完整目标首轮依赖图、已保存图的后端重放、1 µs/10 µs 观测及记录守恒可重复 | 完整 64 步服务、稳态和目标硬件绝对时延 |
+| [CM384/R1 原生首轮验收](../fixtures/m16_native_target/README.md) | STORE/LOAD 与逐包喷洒的完整首轮执行、42 所选端口聚合、分类来源和有限资源内公开导出 | 全端口详细记录、第二次完整原生目标重放或硬件校准；重放等价由独立小例检查 |
 | 真实 R1-AWQ 路由和限定 A100 算子测量 | 相应路由来源真实、相应测量形状有设备依据 | CM384 INT8 部署同条件采集或 NPU 校准 |
 
 `runtime_adapted` 表示固定通信源码行为已转为本平台计划；`full_model_graph_execution_validated=true` 只在相应完整图实际完成后写入。`unvalidated_reference` 仍表示未经目标硬件校准。`full_model_execution_validated`、`target_runtime_executed`、`numerical_model_executed`、`mla_kernel_validated`、`quantized_kernels_executed`、`target_deployment_validated` 等完整模型或原生执行标志仍为 false，不因图执行通过而改写。

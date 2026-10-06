@@ -10,6 +10,7 @@
 |---|---|---|
 | [开发规范 v0.2](../moe_ub_cosim_dev_v0.2.md) | 规定联合执行、观测与 M0 至 M5 的分阶段开发 | 包含初始用例限制、接口草案和当时未实现项 |
 | [增量规范 v0.3](moe_ub_cosim_dev_v0.3.md) | 在 v0.2 上增加参数化、连续组批、真实输入、CANN 和 M6 至 M10 | 包含各次批准的增量，最终收尾改为完整首轮；并非全部 schema 的统一版本号 |
+| [增量规范 v0.4](moe_ub_cosim_dev_v0.4.md) | 原生 STORE/LOAD、逐包喷洒、准备成本、出口服务、等待统计和聚合保存，组织为 M11 至 M16 | 保留原要求及用户批准的不新增多 TP 范围；正文的待实现表述是当时状态，进度见当前任务 |
 
 未被后续批准修订的行为约束继续保留。现行文档将这些要求按主题解释，具体字段与命令按当前实现核对；旧规范中的配置草案不应直接作为当前可执行输入。若发现语义冲突，应说明原要求与现行实现的差异，不能因为文件归档就视为旧要求已取消。
 
@@ -26,6 +27,9 @@
 | v0.2 §9；v0.3 §4.8 | 计算、路由、容量的来源与有效范围 | [模型依据](../model_validation.md)、[参考场景](../scenarios/cm384_r1.md) |
 | v0.2 §10；v0.3 §3.6–3.7 | 端侧与端口观测、时钟、字节、评价数据 | [输出数据](../record_storage.md)、[后端参考](../../backend/README.md) |
 | v0.3 §4.9 | 保存首轮、离线采样与后端重放 | [用户指南](../user_guide.md)、[架构](../architecture.md)、[输出数据](../record_storage.md) |
+| v0.4 §3–6 | 原生请求、逐包选路、端侧成本和有向出口服务 | [后端参考](../../backend/README.md)、[架构](../architecture.md)、[模型依据](../model_validation.md) |
+| v0.4 §7–9 | 操作阶段、队列等待、聚合与详细保存、采样和重放边界 | [输出数据](../record_storage.md)、[用户指南](../user_guide.md)、[原生示例](../../examples/native_first_round/README.md) |
+| v0.4 §10 | 分项、公开流程及完整原生首轮验收 | [里程碑](../milestone_history.md)、[最终证据](../../fixtures/m16_native_target/README.md) |
 | v0.2 §12–13；v0.3 §5–6 | 具体用例、分阶段与最终验收 | [里程碑](../milestone_history.md)、对应 `fixtures/` 说明和证据文件 |
 | v0.2 §14；v0.3 §7 | 任务、提交、记录与可复用交付 | [开发维护](../development.md)、[AGENTS.md](../../AGENTS.md)、[当前任务](../tasks/current.md) |
 | v0.2 附录 B | 当时使用的资料和源码定位 | 保留于 v0.2 原文；当前模型来源详见[模型依据](../model_validation.md) |

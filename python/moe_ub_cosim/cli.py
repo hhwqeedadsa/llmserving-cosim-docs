@@ -8,7 +8,7 @@ import sys
 def parser():
     p = argparse.ArgumentParser(prog='moe-ub', description='MoE inference / ASTRA / ns-3-UB co-simulation. '
         'Configuration paths are relative to the configuration file; CLI paths to the working directory.')
-    p.add_argument('--version', action='version', version='moe-ub-cosim 0.3.0')
+    p.add_argument('--version', action='version', version='moe-ub-cosim 0.4.0')
     sub = p.add_subparsers(dest='command', required=True)
     doctor = sub.add_parser('doctor', help='Check tools, fixed dependencies and available resources; no installation')
     doctor.add_argument('--backend', type=Path, help='Optional backend executable to check')

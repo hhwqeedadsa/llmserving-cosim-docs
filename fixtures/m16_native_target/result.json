@@ -1,0 +1,592 @@
+{
+  "schema_version": "moe-ub-m16-native-target-acceptance/1",
+  "passed": true,
+  "date_utc": "2026-10-06",
+  "package_version": "0.4.0",
+  "scope": {
+    "active_ranks": 128,
+    "independent_request_sources": 1024,
+    "model_blocks": 61,
+    "dense_blocks": 3,
+    "moe_blocks": 58,
+    "selected_decode_entry": 1,
+    "selected_route_layer_records": 59392,
+    "physical_planes": 7,
+    "physical_nodes": 1216,
+    "bidirectional_links": 10752,
+    "configured_64_step_service_executed": false,
+    "second_full_target_replay_executed": false,
+    "hardware_calibrated": false
+  },
+  "implementation": {
+    "main_commit_before_final_delivery": "ff502420af1d186c962dcf1b5f429ee93088797e",
+    "ub_commit": "c0f1fe54245203a3b14468e44e893a38792cfcc8",
+    "binary": "build/v04-platform/output/cosim/ns3.44-cosim-service",
+    "binary_sha256": "782d3890a1546ba56aca007ae3e58560d417edab43343b2749cbb21254b91311",
+    "source_sha256": {
+      "backend/graph_sequence.cc": "20f36f703c1f97915f0abf4fcfb0b8b6bf6a8c65826c575c4a394b637a348109",
+      "backend/graph_sequence.hh": "b9e8dae07c9adb3a249f8c3a763c147e816aeb822875c3c0a8daacc17c9681c0",
+      "python/moe_ub_cosim/native.py": "d8d5263ade28e1675ccb340c6429eb6cc1c6fabc4b2862a6b14830648f84a865",
+      "scripts/run_native_target.py": "60ec9d5e578b0f1e34db1a741138e0dfbcd9a661d1750740ac991519926bf559",
+      "scripts/prepare_native_target.py": "98e2b9a21b142d48aa51c927190c2bdeb334daa3ba38f35b378aa2d80df9049c",
+      "scripts/archive_v04_graph.py": "6d2a03172902dd38de16f682f81e3739643829df7f67fe80d7b1656d299e98d5",
+      "scripts/seal_native_target.py": "920520654e0464f1b5228973e252f7b22cc6152c3be2b8586f3fdd547cfeae89",
+      "tests/integration/check_native_target_result.py": "0dcb4bedd0e60f2bbcfc985009480e08ea967dc3300cb91f2e2a3141f59b16d5",
+      "fixtures/m16_native_target/config.json": "0c928843d588cb9e476feda3f02ad6e468b8839d084c38a719b1cb477eeb315f",
+      "fixtures/m16_native_target/export-policy.json": "bb3110286c2ad6cf34e7522d24583b086072037b5a11fba59604f62e487acf3a"
+    }
+  },
+  "input": {
+    "prepared": {
+      "path": "/root/moe-ub-cosim/runs/v04-platform/m16-target-input/full/prepared.json",
+      "sha256": "68976f5735aebfc4dd76989b77ab3e39f220ab34273d58498c5b3f9e9c24bf61"
+    },
+    "route_manifest": {
+      "path": "fixtures/m10_route_selection/manifest.json",
+      "sha256": "b4fd468ed9b09fe2bd80568737891d0d0e5a32fdf8f83f5e24f8f9fdf77f3cdb"
+    },
+    "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "target_precision_match": false
+  },
+  "model_choices": {
+    "dispatch": "STORE",
+    "combine": "LOAD",
+    "ready_notice_bytes": 32,
+    "workers": 1,
+    "store_outstanding": 32,
+    "load_outstanding": 32,
+    "request_id_count": 256,
+    "payload_request_response_bytes": 4096,
+    "chunk_bytes": 8192,
+    "send_slots_per_rank": 1,
+    "packet_spray": true,
+    "multi_tp_added": false,
+    "flow_control": "CBFC",
+    "seed": 1,
+    "run": 1
+  },
+  "execution": {
+    "simulation_end_ns": 48446098,
+    "network_drain": {
+      "arrived_packets": 46058033,
+      "idle": true,
+      "started_packets": 46058033
+    },
+    "record_counts": {
+      "endpoint_ops": 14848,
+      "local_deliveries": 25930,
+      "native_completions": 4677222,
+      "native_starts": 4677222,
+      "node_execution": 9526154,
+      "operation_registry": 116,
+      "operation_stages": 143379,
+      "plan_summary": 1,
+      "planned_transfers": 4703152,
+      "target_writes": 0,
+      "transfer_registry": 4677222,
+      "transfers": 4677222,
+      "wqe_completions": 0,
+      "wqe_starts": 0
+    },
+    "record_bytes": 953471576,
+    "provenance": {
+      "identity_intervals": 1,
+      "native_payloads_retired_at_arrival": 6080409,
+      "peak_resident_packets": 224,
+      "peak_resident_transfers": 4677222,
+      "pending_native_requests": 0,
+      "registered_transfers_total": 4677222,
+      "resident_packets": 0,
+      "resident_transfers": 0,
+      "retired_packets": 6080409,
+      "retired_transfers": 4677222,
+      "retirement_boundary": "native_payload_arrival_or_completed_graph_and_global_physical_network_idle",
+      "schema_version": "moe-ub-provenance-retirement/2"
+    },
+    "resource_evidence": "runs/v04-platform/m16-full-native-feeder/work/raw/preserved-execution-summary.json"
+  },
+  "independent": {
+    "passed": true,
+    "scope": "complete_61_block_128_rank_1024_source_first_entry_not_64_rounds",
+    "totals": {
+      "transfers": 4703152,
+      "fabric_transfers": 4677222,
+      "business_bytes": 10058044416,
+      "payload_packets": 6080409,
+      "local_transfers": 25930
+    },
+    "operations": [
+      {
+        "operation": "LOAD",
+        "message_role": "data",
+        "kind": "combine",
+        "count": 935458
+      },
+      {
+        "operation": "STORE",
+        "message_role": "data",
+        "kind": "dispatch",
+        "count": 467729
+      },
+      {
+        "operation": "STORE",
+        "message_role": "ready",
+        "kind": "combine",
+        "count": 935458
+      },
+      {
+        "operation": "STORE",
+        "message_role": "status",
+        "kind": "combine",
+        "count": 467729
+      },
+      {
+        "operation": "STORE",
+        "message_role": "status",
+        "kind": "dispatch",
+        "count": 1870848
+      }
+    ],
+    "observed_category_bytes": {
+      "attached_metadata": 333232,
+      "business_data": 439993344,
+      "dispatch_count": 2592064,
+      "combine_flag": 653952,
+      "load_ready": 1310976
+    },
+    "observed_active_ports": 42,
+    "observed_planes": 7,
+    "nonzero_queue_windows": 20197,
+    "queue_windows_without_packet_starts": 0,
+    "endpoint_stage_records": 143379,
+    "simulation_end_ns": 48446098,
+    "network_drain": {
+      "arrived_packets": 46058033,
+      "idle": true,
+      "started_packets": 46058033
+    },
+    "hardware_calibrated": false
+  },
+  "public_delivery": {
+    "commands": [
+      {
+        "label": "inspect",
+        "argv": [
+          "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "slice",
+          "inspect",
+          "--slice",
+          "runs/v04-platform/m16-target-slice",
+          "--verify"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "exit_code": 0
+      },
+      {
+        "label": "sample",
+        "argv": [
+          "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "sample",
+          "--slice",
+          "runs/v04-platform/m16-target-slice",
+          "--config",
+          "runs/v04-platform/m16-target-package/sample.json",
+          "--output",
+          "runs/v04-platform/m16-target-sample"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "exit_code": 0
+      },
+      {
+        "label": "validate-run",
+        "argv": [
+          "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "validate",
+          "--run",
+          "runs/v04-platform/m16-target-sample"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "exit_code": 0
+      },
+      {
+        "label": "validate-observed",
+        "argv": [
+          "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "validate",
+          "--observed",
+          "runs/v04-platform/m16-target-sample/observed"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "exit_code": 0
+      },
+      {
+        "label": "independent",
+        "argv": [
+          "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+          "tests/integration/check_native_target_result.py",
+          "--raw",
+          "runs/v04-platform/m16-target-package/materialized/raw",
+          "--export",
+          "runs/v04-platform/m16-target-sample",
+          "--prepared",
+          "runs/v04-platform/m16-target-input/full/prepared.json",
+          "--output",
+          "runs/v04-platform/m16-native-target-result.json"
+        ],
+        "cwd": "/root/moe-ub-cosim",
+        "exit_code": 0
+      }
+    ],
+    "command_log": "runs/v04-platform/m16-target-delivery/commands.json",
+    "sample_manifest": "runs/v04-platform/m16-target-sample/manifest.json",
+    "frontend_executed": false,
+    "backend_executed": false,
+    "port_windows": 420000,
+    "zero_windows": 399803,
+    "storage": {
+      "schema_version": "moe-ub-research-storage/1",
+      "compressed_record_bytes": 255891706,
+      "index_bytes": 154348326,
+      "index_row_bytes": 33,
+      "index_identity_ranges": 1,
+      "index_transfer_ranges": 13784,
+      "index_layouts": 6,
+      "max_cached_transfer_rows": 8192,
+      "window_accumulators": 1,
+      "max_window_operation_entries": 6,
+      "classification_window_encoding": "nonzero_with_public_declared_zero_windows",
+      "padding_field": true
+    },
+    "capture_policy": {
+      "schema_version": "moe-ub-observation-recording/1",
+      "mode": "aggregate",
+      "detail_ranges": [
+        {
+          "switch_id": 768,
+          "port_id": 16,
+          "start_ns": 0,
+          "end_ns": 100000
+        }
+      ],
+      "truth_categories": [
+        "business_data",
+        "attached_metadata",
+        "dispatch_count",
+        "combine_flag",
+        "load_ready"
+      ],
+      "max_detail_events_per_port": 500000,
+      "max_window_attribution_entries": 4096
+    },
+    "observed_only_validation": {
+      "schema_version": "moe-ub-observed-validation/1",
+      "passed": true,
+      "endpoint_records": 14848,
+      "port_windows": 420000,
+      "zero_windows": 399803,
+      "access_scope": "observed_only"
+    },
+    "sampling_limit": "Aligned merges of retained 100000 ns base windows with same clocks; changed boundaries/clocks only where retained detail fully covers the request"
+  },
+  "archives": {
+    "graph": {
+      "inventory": "runs/v04-platform/m16-target-package/graph.tar.inventory.json",
+      "archive": {
+        "path": "/root/moe-ub-cosim/runs/v04-platform/m16-target-package/graph.tar.gz",
+        "bytes": 866814095,
+        "sha256": "365ce94b05a2e86e53272c348a679fc9acec9c3f07831f268adc9b15b3ad9524"
+      },
+      "expanded_bytes": 12303611246,
+      "files": 134,
+      "archive_content_verified": true,
+      "expanded_removed": true
+    },
+    "execution": {
+      "inventory": "runs/v04-platform/m16-target-package/execution.tar.inventory.json",
+      "archive": {
+        "path": "/root/moe-ub-cosim/runs/v04-platform/m16-target-package/execution.tar.gz",
+        "bytes": 886018245,
+        "sha256": "c654e6142ad02c23d20fc0bd428908849110ad10e5f4d7b9aae9543f26f79f0a"
+      },
+      "expanded_bytes": 1220057287,
+      "files": 424,
+      "archive_content_verified": true,
+      "expanded_removed": true
+    }
+  },
+  "phases": {
+    "m16-full-build": {
+      "probe": "runs/v04-platform/m16-full-build/probe.json",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.full_round_probe",
+        "target",
+        "--input",
+        "runs/v04-platform/m16-target-input/full/prepared.json",
+        "--compact-plan",
+        "--output-dir",
+        "runs/v04-platform/m16-full-build/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-full-build",
+      "child_exit_code": 0,
+      "wall_seconds": 1728.9879721440375,
+      "limits": {
+        "sampled_group_rss_bytes": 51539607552,
+        "per_process_address_bytes": 60129542144,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 7200.0
+      },
+      "peak_sampled_group_rss_bytes": 41015795712,
+      "max_waited_child_rss_kib": 40054488,
+      "peak_sampled_artifact_bytes": 32533655552,
+      "aggregate_artifact_bytes_before_report": 32533655552
+    },
+    "m16-full-native-feeder": {
+      "probe": "runs/v04-platform/m16-full-native-feeder/probe.json",
+      "command": [
+        "env",
+        "MOE_UB_HOST_PREPARATION_TRACE=1",
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/run_native_target.py",
+        "--prepared",
+        "runs/v04-platform/m16-target-input/full/prepared.json",
+        "--graph",
+        "runs/v04-platform/m16-full-build/work/graph",
+        "--backend",
+        "build/v04-platform/output/cosim/ns3.44-cosim-service",
+        "--baseline-network",
+        "runs/v03-research-slice/target-slice/inputs/network",
+        "--config",
+        "fixtures/m16_native_target/config.json",
+        "--output-dir",
+        "runs/v04-platform/m16-full-native-feeder/work"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-full-native-feeder",
+      "child_exit_code": 0,
+      "wall_seconds": 4358.144676988944,
+      "limits": {
+        "sampled_group_rss_bytes": 51539607552,
+        "per_process_address_bytes": 60129542144,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 7200.0
+      },
+      "peak_sampled_group_rss_bytes": 48885501952,
+      "max_waited_child_rss_kib": 47714820,
+      "peak_sampled_artifact_bytes": 33205370880,
+      "aggregate_artifact_bytes_before_report": 33205370880
+    },
+    "m16-seal": {
+      "probe": "runs/v04-platform/m16-seal/probe.json",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "scripts/seal_native_target.py",
+        "--work",
+        "runs/v04-platform/m16-full-native-feeder/work",
+        "--graph",
+        "runs/v04-platform/m16-full-build/work/graph",
+        "--graph-alias",
+        "runs/v04-platform/m16-full-native/work/shared/graph",
+        "--prepared",
+        "runs/v04-platform/m16-target-input/full/prepared.json",
+        "--output-dir",
+        "runs/v04-platform/m16-target-package"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-seal",
+      "child_exit_code": 0,
+      "wall_seconds": 294.36255149915814,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 65015808,
+      "max_waited_child_rss_kib": 57864,
+      "peak_sampled_artifact_bytes": 34072469504,
+      "aggregate_artifact_bytes_before_report": 21432909824
+    },
+    "m16-slice-create": {
+      "probe": "runs/v04-platform/m16-slice-create/probe.json",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "create",
+        "--import-config",
+        "runs/v04-platform/m16-target-package/import.json",
+        "--output",
+        "runs/v04-platform/m16-target-slice",
+        "--storage",
+        "hardlink"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-slice-create",
+      "child_exit_code": 0,
+      "wall_seconds": 39.64972327277064,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 27566080,
+      "max_waited_child_rss_kib": 57784,
+      "peak_sampled_artifact_bytes": 21433147392,
+      "aggregate_artifact_bytes_before_report": 21433147392
+    },
+    "m16-delivery-check": {
+      "probe": "runs/v04-platform/m16-delivery-check/probe.json",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-c",
+        "from pathlib import Path\nimport subprocess,sys\nfrom moe_ub_cosim.user_io import save\nroot=Path('runs/v04-platform');out=root/'m16-target-delivery';out.mkdir()\ncommands=[]\ndef call(label,args):\n    argv=[sys.executable,*map(str,args)]\n    with (out/(label+'.stdout.log')).open('x') as stdout,(out/(label+'.stderr.log')).open('x') as stderr:\n        r=subprocess.run(argv,stdout=stdout,stderr=stderr,timeout=1600)\n    commands.append(dict(label=label,argv=argv,cwd=str(Path.cwd()),exit_code=r.returncode))\n    save(out/'commands.json',commands)\n    assert r.returncode==0,label\ndef cli(label,*args):call(label,['-m','moe_ub_cosim',*args])\ncli('inspect','slice','inspect','--slice',root/'m16-target-slice','--verify')\ncli('sample','sample','--slice',root/'m16-target-slice','--config',root/'m16-target-package/sample.json','--output',root/'m16-target-sample')\ncli('validate-run','validate','--run',root/'m16-target-sample')\ncli('validate-observed','validate','--observed',root/'m16-target-sample/observed')\ncall('independent',['tests/integration/check_native_target_result.py','--raw',root/'m16-target-package/materialized/raw','--export',root/'m16-target-sample','--prepared',root/'m16-target-input/full/prepared.json','--output',root/'m16-native-target-result.json'])\nprint('PASS public target slice integrity, passive sampling, both validations and independent native counts')\n"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-delivery-check",
+      "child_exit_code": 0,
+      "wall_seconds": 569.0862402766943,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 315101184,
+      "max_waited_child_rss_kib": 274784,
+      "peak_sampled_artifact_bytes": 23066644480,
+      "aggregate_artifact_bytes_before_report": 22914506752
+    },
+    "m16-local-package": {
+      "probe": "runs/v04-platform/m16-local-package/probe.json",
+      "command": [
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "pip",
+        "install",
+        "--no-index",
+        "--no-deps",
+        "--no-build-isolation",
+        "--no-cache-dir",
+        "-e",
+        "."
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-local-package",
+      "child_exit_code": 0,
+      "wall_seconds": 29.67869009822607,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800.0
+      },
+      "peak_sampled_group_rss_bytes": 7475200,
+      "max_waited_child_rss_kib": 60796,
+      "peak_sampled_artifact_bytes": 21432926208,
+      "aggregate_artifact_bytes_before_report": 21432926208
+    },
+    "public_sample": {
+      "probe": "runs/v04-platform/m16-target-sample/logs/resources-sample/probe.json",
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "sample",
+        "/root/moe-ub-cosim/runs/v04-platform/m16-target-sample"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "logs": "runs/v04-platform/m16-target-sample/logs/resources-sample",
+      "child_exit_code": 0,
+      "wall_seconds": 463.66644949652255,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 34359738368,
+        "wall_seconds": 1800
+      },
+      "peak_sampled_group_rss_bytes": 187006976,
+      "max_waited_child_rss_kib": 274784,
+      "peak_sampled_artifact_bytes": 23068549120,
+      "aggregate_artifact_bytes_before_report": 22914445312,
+      "included_in": "m16-delivery-check"
+    }
+  },
+  "public_regressions": {
+    "native": {
+      "passed": true,
+      "commands": 14,
+      "simulation_end_ns": 47193,
+      "slower_simulation_end_ns": 75919,
+      "same_replay_tables": true,
+      "unsupported_sampling_rejected_before_output": true,
+      "source": "examples/native_first_round copied into a new directory; no historical run or external data"
+    },
+    "write": {
+      "passed": true,
+      "exact_record_counts": {
+        "endpoint_ops": 18,
+        "local_deliveries": 30,
+        "native_completions": 0,
+        "native_starts": 0,
+        "node_execution": 333,
+        "operation_registry": 6,
+        "plan_summary": 1,
+        "planned_transfers": 99,
+        "target_writes": 69,
+        "transfer_registry": 69,
+        "transfers": 69,
+        "wqe_completions": 69,
+        "wqe_starts": 69
+      },
+      "baseline_simulation_ns": 35538,
+      "perturbed_simulation_ns": 90885,
+      "relocated_bundle": true,
+      "no_site_packages_for_sampling_and_replay": true,
+      "clock_boundary_attribution_and_crossing_endpoints": true,
+      "missing_and_corrupt_inputs_rejected": true
+    },
+    "evidence": "fixtures/m16_native_target/feeder-lifetime.json"
+  },
+  "prior_failure": {
+    "evidence": "fixtures/m16_native_target/feeder-lifetime.json",
+    "probe": "runs/v04-platform/m16-full-native/probe.json",
+    "simulation_ns": 0,
+    "peak_sampled_group_rss_bytes": 54810550272,
+    "business_activated": false,
+    "cause": "Execution feeders overlapped retained transfer JSON; feeder creation deferred until JSON archived and released",
+    "same_full_graph_and_original_limits_used": true
+  },
+  "checkpoint_scope": "preflight.json and feeder-lifetime.json describe earlier checkpoints; this file records final full-target acceptance",
+  "resource_summary": {
+    "cumulative_limit_bytes": 34359738368,
+    "full_rss_limit_bytes": 51539607552,
+    "peak_cumulative_bytes": 34072469504,
+    "final_cumulative_bytes": 22914506752,
+    "final_accounting_probe": "runs/v04-platform/m16-delivery-check/probe.json",
+    "expanded_cache": "runs/v04-platform/m16-target-package/materialized/raw",
+    "expanded_graph_retained": false
+  },
+  "delivery_checks": {
+    "passed": true,
+    "checked_markdown_files": 11,
+    "local_links": 237,
+    "archived_technical_body_preserved": true,
+    "package_version": "0.4.0",
+    "source_hashes_match": true,
+    "full_target_rank_and_lifecycle_exit_verified": true,
+    "evidence": "runs/v04-platform/m16-final-checks/result.json"
+  }
+}

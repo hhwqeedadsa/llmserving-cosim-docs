@@ -19,10 +19,10 @@
 | M12：原生逐包喷洒 | 源/交换出口候选、跨平面源选路、真实乱序和被动记录检查 | [输入与路径验收](../fixtures/m12_native_routing/README.md) |
 | M13：准备成本与出口服务 | 实际 COMP 成本、物理有向速率区间、受限网络重放与执行/观测覆盖 | [输入与验收](../fixtures/m13_endpoint_service/README.md) |
 | M14：操作阶段与等待统计 | 真实节点/回调阶段、纯 VOQ 与 FIFO 面积/均值/峰值、详细重采样和被动性 | [输入与验收](../fixtures/m14_operation_queue/README.md) |
-
 | M15：聚合保存与采样能力 | 直接窗口聚合、分类实际应用消息来源、有限详细区间、采样拒绝与旧详细数据兼容 | [输入与验收](../fixtures/m15_aggregate_capture/README.md) |
+| M16：公开交付与完整原生首轮 | 独立用户流程、组合回归、原生完整首轮执行、校验封存和公开采样；有界资源与失败修复证据 | [原生用户示例](../examples/native_first_round/README.md)、[目标验收](../fixtures/m16_native_target/README.md) |
 
-M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
+M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 
 ## M10 收尾范围
 

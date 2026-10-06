@@ -4,7 +4,11 @@
 
 状态：`in_progress`。M15 已保存主仓 `48dabed`，UB 保持 `c0f1fe5`；提交后 13 项依赖检查通过，日志为 `runs/v04-platform/m15-deps-check.log`。按连续授权交付独立的小型原生公开示例，核对组合能力、采样限制及重放覆盖；随后预检完整目标首轮，再在既定预算内完成唯一必要的原生 STORE/LOAD、逐包喷洒、聚合记录规模检查。先做资源预检，不把缩小工作负载当作完整规模通过。
 
-独立原生小例的 14 条公开命令及最终回归已通过；输入位于 [examples/native_first_round](../../examples/native_first_round/README.md)。资源前缀分别执行前三个 dense 块及 1/2 个 MoE 块，均保留 128 rank、1024 请求和完整物理网络，字节与资源退出通过。原生构图优化后的计划和 128 份 Chakra 图与原实现逐文件相同；实际构图/写盘由约 157 s 降至 28 s。完整目标尚未执行，参数、估算、失败原因和日志见[目标预检](../../fixtures/m16_native_target/preflight.json)。
+独立原生小例的 14 条公开命令及最终回归已通过；输入位于 [examples/native_first_round](../../examples/native_first_round/README.md)。资源前缀分别执行前三个 dense 块及 1/2 个 MoE 块，均保留 128 rank、1024 请求和完整物理网络，字节与资源退出通过。原生构图优化后的计划和 128 份 Chakra 图与原实现逐文件相同；实际前缀构图/写盘由约 157 s 降至 28 s。完整目标构图已通过；首次后端在仿真时间 0 的准备结束处超出 RSS 预算而停止，尚未通过网络验收；参数、估算、失败原因和日志见[目标预检](../../fixtures/m16_native_target/preflight.json)。
+
+M16 公开流程、构图效率及资源预检已提交 `5a6ff32`，提交后依赖检查通过。完整构图 `runs/v04-platform/m16-full-build` 已退出 0：计数符合预期、图约 12.30 GB、宿主 1729 s、峰值 RSS 41.02 GB，采用 48 GiB RSS、56 GiB 地址空间、7200 s、累计 32 GiB 预算。网络执行接续登记在 `runs/v04-platform/m16-full-native`；只执行所声明的首轮。三份预检图及两份完成记录均在内容核对后归档并回收，当前累计占用约 32.06 GB。ASTRA 普通诊断日志采用 10 MiB×11 的轮转上限，另行计入固定占用；完整执行事件仍由压缩档保存。
+
+完整后端首次失败日志为 `runs/v04-platform/m16-full-native/probe.json`：宿主 2271 s、RSS 峰值 54.81 GB，监控按 48 GiB 限制停止，未启动业务。定位为传输 JSON 尚未归档释放时已创建全部 Chakra feeder；宿主对象生存期修复已在原前缀逐条验证全部执行字段及 42 个端口记录一致，原生 14 条公开命令与 WRITE 用户流程均通过。检查与原命令参数错误见[修复证据](../../fixtures/m16_native_target/feeder-lifetime.json)。额外预检缓存已核对归档并回收，累计占用降至约 31.97 GB；接续使用同一完整图及原预算验证修复后的后端，不重建图、不提额。
 
 M11–M15 的结果见[里程碑历史](../milestone_history.md)。M15 的实际命令、分类来源、详细记录等价与旧数据兼容证据见[聚合保存](../../fixtures/m15_aggregate_capture/README.md)。本轮不新增多 TP，不推送，不启动正式映射价值实验或 64 轮运行。
 

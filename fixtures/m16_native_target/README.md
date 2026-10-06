@@ -24,3 +24,5 @@ PYTHONPATH=python python scripts/prepare_native_target.py \
 前缀构图测出原生路径曾重复复制大图、对私有 CANN 中间图反复重建自检。当前内部使用自有图并索引各 rank 的收发；完整原生规范重建、逐字段比较、完整模型重建和 C++ 图校验仍执行。`tests/integration/check_native_graph_equivalence.py` 比较优化前后计划、128 份 Chakra 文件、生成摘要和 schema 源码的精确字节；编译命令中的输出路径与 Python 缓存中的文件路径、时间戳单独说明，不视为任务差异。非法依赖、字节、来源及计算耗时仍拒绝。首次资源脚本误把图目录视为平面目录，已修正为递归处理，失败日志保留于 `runs/v04-platform/m16-prefix-native/`，当时未启动网络。
 
 资源前缀及构图优化证据见 [preflight.json](preflight.json)。两次原生后端前缀峰值约 5.50 / 6.27 GB，线性外推约 45.80 GiB，只是预检估算；实际完整运行仍由 48 GiB RSS 上限监管。已将三份预检图共约 810.5 MB 封存为约 58.9 MB，并逐文件校验归档后回收所有登记的展开副本，保留原基线、实际结果与失败日志。维护入口为 `scripts/archive_v04_graph.py`，只允许当前任务登记目录中的确切文件和显式 hardlink 副本；完整目标图也将在完成后封存，再进行研究导出。
+
+完整图实际生成约 12.30 GB，超过线性预估的 11.67 GB，但构图仍在预算内。首次完整后端在仿真时间 0 的准备结束处触及 RSS 上限，未执行业务；原始峰值、原因与修复检查见 [feeder-lifetime.json](feeder-lifetime.json)。后端将执行读取器创建移到传输 JSON 已封存释放之后；完整语义和 Chakra 字段校验保留。原前缀全部执行和端口记录逐条相同，原生及 WRITE 公开流程通过；这份修复证据不等于完整规模已经通过。失败参数审计以逐字节核验的 gzip 保存，失败日志仍保留。

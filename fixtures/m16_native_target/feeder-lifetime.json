@@ -1,0 +1,146 @@
+{
+  "schema_version": "moe-ub-m16-feeder-lifetime/1",
+  "full_native_acceptance_completed": false,
+  "scope": "resource_fix_validated_on_prefix_and_public_workflows",
+  "failure": {
+    "probe": "runs/v04-platform/m16-full-native/probe.json",
+    "simulation_ns": 0,
+    "business_activated": false,
+    "cause": "Chakra execution feeders created while full planned-transfer JSON remained resident",
+    "records_preserved": true
+  },
+  "change": "Create execution feeders in Install after bounded transfer archive verification and JSON release; semantic and Chakra validation remains in LoadLayerPlan",
+  "checks": {
+    "m16-full-build": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1728.9879721440375,
+      "peak_sampled_group_rss_bytes": 41015795712,
+      "max_waited_child_rss_kib": 40054488,
+      "aggregate_artifact_bytes_before_report": 32533655552
+    },
+    "m16-full-native": {
+      "status": "rss_limit",
+      "child_exit_code": -15,
+      "wall_seconds": 2271.460420202464,
+      "peak_sampled_group_rss_bytes": 54810550272,
+      "max_waited_child_rss_kib": 203988,
+      "aggregate_artifact_bytes_before_report": 32251703296
+    },
+    "m16-build-feeder": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 54.25476952083409,
+      "peak_sampled_group_rss_bytes": 2084188160,
+      "max_waited_child_rss_kib": 1335888,
+      "aggregate_artifact_bytes_before_report": 32251752448
+    },
+    "m16-prefix-feeder": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 105.95500515401363,
+      "peak_sampled_group_rss_bytes": 5501607936,
+      "max_waited_child_rss_kib": 5338596,
+      "aggregate_artifact_bytes_before_report": 32494673920
+    },
+    "m16-feeder-public-check": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.9924529902637,
+      "peak_sampled_group_rss_bytes": 80433152,
+      "max_waited_child_rss_kib": 78344,
+      "aggregate_artifact_bytes_before_report": 32733495296
+    },
+    "m16-feeder-write-check": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 29.91471216827631,
+      "peak_sampled_group_rss_bytes": 6426624,
+      "max_waited_child_rss_kib": 77540,
+      "aggregate_artifact_bytes_before_report": 32740147200
+    },
+    "m16-feeder-cleanup-check": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 30.00379701703787,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "max_waited_child_rss_kib": 58076,
+      "aggregate_artifact_bytes_before_report": 31965110272
+    }
+  },
+  "prefix_equivalence": {
+    "evidence": "runs/v04-platform/m16-feeder-equivalence.json",
+    "passed": true,
+    "simulation_end_ns": 874152,
+    "fields": {
+      "endpoint_ops": 256,
+      "local_deliveries": 436,
+      "native_completions": 80706,
+      "native_starts": 80706,
+      "node_execution": 167858,
+      "operation_registry": 2,
+      "operation_stages": 2421,
+      "plan_summary": 1,
+      "planned_transfers": 81142,
+      "target_writes": 0,
+      "transfer_registry": 80706,
+      "transfers": 80706,
+      "wqe_completions": 0,
+      "wqe_starts": 0
+    },
+    "identical_ports": 42,
+    "network_drain": {
+      "arrived_packets": 793126,
+      "idle": true,
+      "started_packets": 793126
+    }
+  },
+  "native_public": {
+    "passed": true,
+    "commands": 14,
+    "simulation_end_ns": 47193,
+    "slower_simulation_end_ns": 75919,
+    "same_replay_tables": true,
+    "unsupported_sampling_rejected_before_output": true,
+    "source": "examples/native_first_round copied into a new directory; no historical run or external data"
+  },
+  "write_public": {
+    "passed": true,
+    "exact_record_counts": {
+      "endpoint_ops": 18,
+      "local_deliveries": 30,
+      "native_completions": 0,
+      "native_starts": 0,
+      "node_execution": 333,
+      "operation_registry": 6,
+      "plan_summary": 1,
+      "planned_transfers": 99,
+      "target_writes": 69,
+      "transfer_registry": 69,
+      "transfers": 69,
+      "wqe_completions": 69,
+      "wqe_starts": 69
+    },
+    "baseline_simulation_ns": 35538,
+    "perturbed_simulation_ns": 90885,
+    "relocated_bundle": true,
+    "no_site_packages_for_sampling_and_replay": true,
+    "clock_boundary_attribution_and_crossing_endpoints": true,
+    "missing_and_corrupt_inputs_rejected": true
+  },
+  "retained_harness_error": {
+    "probe": "runs/v04-platform/m16-feeder-regressions/probe.json",
+    "cause": "Used --build-dir for check_v04_workflow; corrected to documented --backend before public tests began"
+  },
+  "cleanup_evidence": [
+    "runs/v04-platform/m16-feeder-cleanup.json",
+    "runs/v04-platform/m16-feeder-cleanup-commands.json",
+    "runs/v04-platform/m16-failed-parameter-audit-archive.json"
+  ],
+  "binary_sha256": "782d3890a1546ba56aca007ae3e58560d417edab43343b2749cbb21254b91311",
+  "source_sha256": {
+    "backend/graph_sequence.cc": "20f36f703c1f97915f0abf4fcfb0b8b6bf6a8c65826c575c4a394b637a348109",
+    "backend/graph_sequence.hh": "b9e8dae07c9adb3a249f8c3a763c147e816aeb822875c3c0a8daacc17c9681c0"
+  },
+  "next_check": "Resume full native check only with this validated implementation, same generated graph and original budgets; no graph rebuild"
+}

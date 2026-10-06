@@ -138,7 +138,7 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
 }
 
 LoadedGraph::LoadedGraph(const std::filesystem::path& directory)
-    : plan_(LoadLayerPlan(directory, PlanRetention::Execution)), prepared_(Prepare(plan_, directory)) {}
+    : plan_(LoadLayerPlan(directory, PlanRetention::Execution)), directory_(directory) {}
 void LoadedGraph::DiscardArchivedTransfers()
 {
     Require(!installed_ && !released_, "archiving an installed/released graph");
@@ -154,7 +154,11 @@ void LoadedGraph::Install(const std::vector<std::unique_ptr<AstraSim::Sys>>& sys
     const std::vector<UbWriteTransfer*>& transfers, const std::vector<LocalDelivery*>& local)
 {
     Require(!installed_ && !released_, "loaded graph already installed or released");
-    InstallPrepared(plan_, systems, adapters, transfers, local, std::move(prepared_));
+    // LoadLayerPlan already validated every semantic field and Chakra node.
+    // Delay execution feeders until archived transfer JSON has been released.
+    // Prepare all feeders before installing any workload or registering any
+    // transfer; this changes host object lifetime, not simulation dependencies.
+    InstallPrepared(plan_, systems, adapters, transfers, local, Prepare(plan_, directory_));
     installed_ = true;
 }
 LayerPlan LoadedGraph::ReleasePlan()

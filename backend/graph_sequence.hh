@@ -15,8 +15,9 @@ void InstallNextGraph(const LayerPlan& plan, const std::filesystem::path& direct
     const std::vector<LocalDelivery*>& local = {});
 
 // Closed load/prepare/install path for the service. Callers can inspect only a
-// const plan; feeders are prepared before control returns to the caller. A
-// mutable plan supplied to InstallNextGraph still requires full revalidation.
+// const plan. Prepare feeders during Install, after a bounded caller has sealed
+// and released planned-transfer JSON. No graph is activated during preparation.
+// A mutable plan supplied to InstallNextGraph still requires full revalidation.
 class LoadedGraph
 {
   public:
@@ -30,7 +31,7 @@ class LoadedGraph
     LayerPlan ReleasePlan();
   private:
     LayerPlan plan_;
-    std::vector<std::unique_ptr<Chakra::ETFeeder>> prepared_;
+    std::filesystem::path directory_;
     bool installed_ = false, released_ = false;
 };
 }

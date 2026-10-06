@@ -19,9 +19,31 @@ def network_input(source, output, override, binary):
     original = inventory(source); replacement = inventory(actual)
     require(set(original) == set(replacement), 'Replay network override must keep the original files and topology')
     changed = {name for name in original if original[name] != replacement[name]}
-    require(changed <= {'topology.csv'}, 'First replay version permits only link propagation delay overrides in topology.csv')
-    if changed:
-        require(not (source/'backend.json').exists(), 'Structured backend perturbations require a separately validated adapter')
+    structured=(source/'backend.json').exists()
+    require(changed <= ({'backend.json'} if structured else {'topology.csv'}),
+            'Replay may change only structured port service/native spray, or legacy topology.csv delay')
+    overrides={}
+    if structured:
+        before,after=read(source/'backend.json'),read(actual/'backend.json')
+        def fixed(settings):
+            value=deepcopy(settings);schema=value.pop('schema_version')
+            require(schema in ('moe-ub-backend-config/1','moe-ub-backend-config/2','moe-ub-backend-config/3'),
+                    'Unsupported replay backend schema')
+            value.pop('port_service',None)
+            value['attributes'].pop('ns3::UbLdstApi::UsePacketSpray',None)
+            return value
+        require(fixed(before)==fixed(after),'Replay cannot change task profiles, endpoints, base topology or other backend parameters')
+        if 'port_service' in after:
+            from .port_service import validate
+            validate(after['port_service'],after['topology'])
+        if before.get('port_service')!=after.get('port_service'):
+            overrides['port_service']=dict(before=before.get('port_service'),after=after.get('port_service'))
+        key='ns3::UbLdstApi::UsePacketSpray'
+        if before['attributes'][key]!=after['attributes'][key]:
+            require(any(p['programming_model']=='native_memory' for p in after['profiles'].values()) and
+                    after['attributes'][key] in ('true','false'),'Spray replay override requires native memory')
+            overrides[key]=dict(before=before['attributes'][key],after=after['attributes'][key])
+    elif changed:
         def rows(path):
             with path.open(newline='') as stream:
                 reader = csv.DictReader(stream)
@@ -47,8 +69,13 @@ def network_input(source, output, override, binary):
             rebound = dict(old_revision=previous['ub_revision'], new_revision=catalog['ub_revision'],
                            same_parameter_catalog=True, behavior_equivalence='must_be_checked_by_execution')
             settings['catalog'] = catalog
-            save(output/'backend.json', settings)
-    return dict(changed_files=sorted(changed), catalog_revision_rebinding=rebound)
+        for key,value in overrides.items():
+            if key in settings['attributes']:
+                settings['origins']['attributes'][key].append(dict(source='frozen_replay_override',value=value['after']))
+        save(output/'backend.json', settings)
+        checked=subprocess.run([str(binary),'--check-backend',str(output/'backend.json')],capture_output=True,text=True,timeout=30)
+        require(checked.returncode==0,'Replay backend validation failed: '+checked.stderr)
+    return dict(original_inventory=original,changed_files=sorted(changed),overrides=overrides,catalog_revision_rebinding=rebound)
 
 
 def run(directory, manifest, shared, output, inputs, config):
@@ -60,10 +87,12 @@ def run(directory, manifest, shared, output, inputs, config):
     network = inputs/'network'
     change = network_input(directory/'inputs/network', network, config.get('network'), Path(config['backend']))
     shutil.copyfile(directory/'inputs/system.json', inputs/'system.json')
-    save(inputs/'observation.json', manifest['observation'])
-    save(inputs/'backend-observation.json', backend_observation(manifest['observation'], manifest['ranks'], manifest['capture_end_ns']))
+    observation=config.get('observation',manifest['observation'])
+    max_ns=config.get('max_simulation_ns',manifest['capture_end_ns'])
+    save(inputs/'observation.json', observation)
+    save(inputs/'backend-observation.json', backend_observation(observation, manifest['ranks'], max_ns))
     command = [config['backend'], manifest['run_id'], str(shared), str(inputs/'system.json'),
-               str(network), str(inputs/'backend-observation.json'), str(output/'execution'), str(manifest['capture_end_ns'])]
+               str(network), str(inputs/'backend-observation.json'), str(output/'execution'), str(max_ns)]
     record = dict(argv=command, cwd=str(ROOT), started_utc=timestamp(), network=change)
     child = None; decision = 0; completed = set(); now = 0
     expected = {(s['graph_id'], s['wave_id']) for s in manifest['submissions']}

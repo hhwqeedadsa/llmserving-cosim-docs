@@ -115,7 +115,8 @@ Json BackendCatalog()
 BackendConfig::BackendConfig(Json input) : input_(std::move(input))
 {
     Require(input_.is_object() && ((input_.size() == 11 && input_.at("schema_version") == "moe-ub-backend-config/1") ||
-        (input_.size() == 12 && input_.at("schema_version") == "moe-ub-backend-config/2" && input_.contains("fabric"))), "schema/fields");
+        (input_.size() == 12 && input_.at("schema_version") == "moe-ub-backend-config/2" && input_.contains("fabric")) ||
+        (input_.size() == 12+input_.count("fabric") && input_.at("schema_version") == "moe-ub-backend-config/3" && input_.contains("port_service"))), "schema/fields");
     Require(input_.at("scenario_id").is_string() && !input_.at("scenario_id").get<std::string>().empty(), "missing scenario identity");
     const auto catalog = BackendCatalog();
     Require(input_.at("catalog") == catalog, "catalog does not match this backend build");
@@ -203,6 +204,24 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
         Require(text.front() != '-' && std::stoull(text) > 0, "nonpositive active resource " + std::string(key));
     }
     Require(input_.at("topology").is_object() && input_.at("topology").size() == 2, "topology fields");
+    if(input_.contains("port_service")) {
+        const auto& service=input_.at("port_service");
+        Require(service.is_object() && service.size()==3 && service.at("schema_version")=="moe-ub-port-service/1","port service schema/fields");
+        const auto bound=Integer(service.at("execution_end_ns"),1,INT64_MAX,"port service execution end");
+        const auto& rows=service.at("intervals");Require(rows.is_array() && rows.size()<=4096,"port service interval budget");
+        std::set<std::pair<uint32_t,uint32_t>> connected;
+        for(const auto& link:input_.at("topology").at("links")) for(const auto* side:{"src","dst"})
+            connected.emplace(link.at(side),link.at(std::string(side)+"_port"));
+        std::map<std::pair<uint32_t,uint32_t>,uint64_t> previous;
+        for(const auto& row:rows) {
+            Require(row.is_object() && row.size()==5,"port service interval fields");
+            auto node=Integer(row.at("node_id"),0,UINT32_MAX,"service node"),port=Integer(row.at("port_id"),0,UINT32_MAX,"service port");
+            const auto key=std::make_pair(uint32_t(node),uint32_t(port));Require(connected.count(key),"unconnected service port");
+            auto begin=Integer(row.at("start_ns"),0,bound,"service start"),end=Integer(row.at("end_ns"),1,bound,"service end");
+            Integer(row.at("rate_bps"),1,UINT64_MAX,"service rate");
+            Require(begin<end && begin>=previous[key],"overlapping, unordered or empty service intervals");previous[key]=end;
+        }
+    }
     if (input_.contains("fabric")) ValidateFabric(input_.at("fabric"), input_.at("topology"));
 }
 std::optional<BackendConfig> BackendConfig::Load(const std::filesystem::path& network)
@@ -232,6 +251,22 @@ void BackendConfig::CheckDeployment(const Json& groups) const
     {
         Require(names.insert(group.at("group_id").get<std::string>()).second, "duplicate fabric service group");
         CheckFabricPlan(fabric, {{"input", group}});
+    }
+}
+void BackendConfig::ApplyPortService(uint64_t execution_end_ns) const
+{
+    if(!input_.contains("port_service")) return;
+    const auto& service=input_.at("port_service");
+    Require(service.at("execution_end_ns")==execution_end_ns,"port service execution budget differs from run");
+    std::map<std::pair<uint32_t,uint32_t>,std::vector<ns3::UbPort::ServiceInterval>> ports;
+    for(const auto& row:service.at("intervals"))
+        ports[{row.at("node_id"),row.at("port_id")}].push_back({row.at("start_ns"),row.at("end_ns"),row.at("rate_bps")});
+    for(const auto& [key,intervals]:ports) {
+        Require(key.first<ns3::NodeList::GetNNodes(),"missing live service node");
+        auto node=ns3::NodeList::GetNode(key.first);Require(key.second<node->GetNDevices(),"missing live service port");
+        auto port=ns3::DynamicCast<ns3::UbPort>(node->GetDevice(key.second));Require(bool(port),"service endpoint is not UB port");
+        port->SetServiceIntervals(intervals,execution_end_ns);
+        Require(port->GetServiceIntervals().size()==intervals.size(),"live service interval count differs");
     }
 }
 void BackendConfig::CheckPlan(const Json& plan) const
@@ -274,7 +309,7 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
             }
         result["objects"].push_back({{"role", role}, {"node_id", node}, {"attributes", values}});
     };
-    Json nodes = Json::array(), links = Json::array();
+    Json nodes = Json::array(), links = Json::array(), services = Json::array();
     for (auto it = ns3::NodeList::Begin(); it != ns3::NodeList::End(); ++it)
     {
         auto node = *it; auto sw = node->GetObject<ns3::UbSwitch>();
@@ -294,6 +329,10 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
             auto channel = ns3::DynamicCast<ns3::UbLink>(port->GetChannel());
             Require(bool(channel), "expected a connected UB link");
             auto peer = channel->GetDestination(port);
+            for(const auto& interval:port->GetServiceIntervals()) services.push_back({
+                {"node_id",node->GetId()},{"port_id",i},{"start_ns",interval.startNs},
+                {"end_ns",interval.endNs},{"rate_bps",interval.rateBps},
+                {"base_rate_bps",port->GetDataRate().GetBitRate()}});
             if (node->GetId() < peer->GetNode()->GetId())
                 links.push_back({{"src", node->GetId()}, {"src_port", i}, {"dst", peer->GetNode()->GetId()},
                     {"dst_port", peer->GetIfIndex()}, {"rate_bps", port->GetDataRate().GetBitRate()},
@@ -309,6 +348,16 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
         result["fabric_audit"] = AuditLiveFabric(input_.at("fabric"),
             input_.at("profiles").at("dispatch").at("programming_model")=="native_memory" ||
             input_.at("profiles").at("combine").at("programming_model")=="native_memory");
+    }
+    if(input_.contains("port_service")) {
+        result["schema_version"]="moe-ub-effective-backend/3";
+        Require(services.size()==input_.at("port_service").at("intervals").size(),"live service interval count mismatch");
+        for(const auto& row:services) {
+            auto declared=row;declared.erase("base_rate_bps");
+            const auto& expected=input_.at("port_service").at("intervals");
+            Require(std::find(expected.begin(),expected.end(),declared)!=expected.end(),"live service interval differs");
+        }
+        result["live_port_service"]={{"selection","rate_at_successful_packet_start"},{"intervals",services}};
     }
     for (const auto& app : apps) append("application", app->GetNode()->GetId(), app);
     for (const auto& controller : controllers)

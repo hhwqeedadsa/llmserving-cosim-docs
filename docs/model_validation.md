@@ -24,6 +24,8 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 
 正工作阶段要求正成本。没有 shared expert 的层，其 shared expert 和 shared/routed 合并成本为零，并省去相应节点。完整模型中 CANN 子层的 `attention_route_pack` 仅表示 Dispatch 量化打包，不能重复计入已创建的 attention/router；`expert_local_merge=next_layer=0`，Combine 检查与归约也只计一次。
 
+可选 `endpoint_prepare` 表达已有成本尚未包含的端侧额外工作：Dispatch 按该 rank 本地 token 数、Combine 打包按该 rank 实际专家输入数计费，分别只加一次到已有准备/结果打包 COMP 节点。零工作量不产生额外节点；其他计算和本地交付成本不变。这是显式参考耗时，并非新增硬件测量；字段和边界见[后端说明](../backend/README.md)。
+
 全部 COMP 节点竞争每 rank 的一个计算槽。shared expert 可以在 routed 分支等待网络时执行，也可能占住该计算槽；完成顺序由依赖与资源共同决定。层间保持 rank 本地依赖，不增加全 rank 逐层屏障。整轮所有成员完成后，调度器才推进本轮请求。图执行细节见[系统架构](architecture.md)，阶段与结构检查见[完整模型测试输入](../fixtures/m10_full_model/README.md)。
 
 ### 测量表的适用范围

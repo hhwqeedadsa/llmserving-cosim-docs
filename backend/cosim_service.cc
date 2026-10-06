@@ -521,6 +521,7 @@ int main(int argc, char** argv)
                     "Mapped UB node is not a compute endpoint");
         }
         utils->CreateTopo("network/topology.csv");
+        if (backend_config) backend_config->ApplyPortService(max_ns);
         utils->AddRoutingTable("network/routing_table.csv");
         utils->CreateTp("network/transport_channel.csv");
         utils->TopoTraceConnect();
@@ -1143,6 +1144,14 @@ int main(int argc, char** argv)
             report["network_drain"] = {{"started_packets", drain.StartedPackets()},
                 {"arrived_packets", drain.ArrivedPackets()}, {"idle", true}};
             report["simulation_end_ns"] = ns3::Simulator::Now().GetNanoSeconds();
+            report["execution_budget_ns"] = max_ns;
+            Json partial_ports=Json::array();
+            for(const auto& config:observation_configs)
+                if(config.start_ns>0 || config.end_ns<=uint64_t(ns3::Simulator::Now().GetNanoSeconds()))
+                    partial_ports.push_back({{"switch_id",config.switch_id},{"port_id",config.port_id}});
+            report["observation_coverage"]={{"scope","time_coverage_of_declared_backend_ports"},
+                {"enabled",!observation_configs.empty()},
+                {"complete",!observation_configs.empty() && partial_ports.empty()}, {"incomplete_ports",partial_ports}};
             report["decisions"] = decision_id;
             report["normal_exit"] = true;
             report["csv_completed_tasks"] = ns3::UbTrafficGen::Get()->GetCompletedTaskCount();

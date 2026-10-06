@@ -100,7 +100,7 @@ def create(run, output, storage='copy', import_config=None):
     archives = []
     if import_config is None:
         from .user_workflow import validate
-        run = Path(run).resolve(); validate(run)
+        run = Path(run).resolve(); validate(run,allow_partial_observation=True)
         source = read(run/'manifest.json')
         require(source['action'] == 'run', 'Freeze the original configured run, not a sampled derivative')
         raw = run/'raw'; inputs = run/'inputs'
@@ -194,7 +194,9 @@ def inspect(directory, *, verify=False):
     require(required <= set(manifest['artifacts']), 'Slice inventory omits required execution inputs')
     if verify:
         verify_inventory(directory, manifest['artifacts'])
+    from .observation import execution_coverage
     return dict(passed=True, scope=manifest['scope'], simulation_end_ns=manifest['simulation_end_ns'],
+        coverage=execution_coverage(manifest['observation'],ranks,manifest['capture_end_ns'],manifest['simulation_end_ns']),
         capture_end_ns=manifest['capture_end_ns'], ranks=len(manifest['ranks']), graphs=len(manifest['submissions']),
         calibration_status=manifest['calibration_status'], files=len(manifest['artifacts']),
         stored_logical_bytes=sum(v['bytes'] for v in manifest['artifacts'].values()),
@@ -274,7 +276,9 @@ def sample(output, config):
     save(output/'inputs/observation.json', observation)
     raw = materialize(directory, manifest, output, config, 'execution_archive')
     export(raw, observation, manifest['ranks'], manifest['capture_end_ns'], output, config['export_policy'])
+    from .observation import execution_coverage
     return dict(simulation_end_ns=manifest['simulation_end_ns'], scope='passive_resampling_of_frozen_execution',
+                coverage=execution_coverage(observation,manifest['ranks'],manifest['capture_end_ns'],manifest['simulation_end_ns']),
                 source_slice_sha256=file_sha256(directory/'slice.json'), frontend_executed=False, backend_executed=False)
 
 
@@ -284,6 +288,10 @@ def replay(output, config):
     shared = materialize(directory, manifest, output, config, 'graph_archive')
     raw = output/'raw'
     result = run(directory, manifest, shared, raw, output/'inputs', config)
+    from .observation import execution_coverage
+    coverage=execution_coverage(config.get('observation',manifest['observation']),manifest['ranks'],
+        config.get('max_simulation_ns',manifest['capture_end_ns']),result['simulation_end_ns'])
     return dict(simulation_end_ns=result['simulation_end_ns'], scope='dependency_driven_frozen_first_round',
+                coverage=coverage,
                 source_slice_sha256=file_sha256(directory/'slice.json'), frontend_executed=False,
                 graph_generation_executed=False, backend_executed=True, raw='raw', random=result['random'])

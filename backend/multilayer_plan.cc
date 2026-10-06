@@ -15,7 +15,7 @@ void Require(bool condition, const std::string& message)
 Json Common(Json input, bool batched)
 {
     for (const auto* key : {"layer_id", "tokens", "compute_profile_ns", "schema_version"}) input.erase(key);
-    if (batched) { input.erase("expert_placement"); input.erase("top_k"); input.erase("operator_profile"); }
+    if (batched) { input.erase("expert_placement"); input.erase("top_k"); input.erase("operator_profile"); input.erase("endpoint_prepare"); }
     return input;
 }
 Json TokenKeys(const Json& layer)

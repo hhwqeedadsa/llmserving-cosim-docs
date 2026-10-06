@@ -9,7 +9,7 @@ MAX_SEGMENT_LAYERS = 128  # Explicit host-side graph budget; target scale is unv
 def common_input(layer):
     variable = {'layer_id', 'tokens', 'compute_profile_ns', 'schema_version'}
     if layer['schema_version'] == 'moe-ub-execution-plan/3':
-        variable |= {'expert_placement', 'top_k', 'operator_profile'}
+        variable |= {'expert_placement', 'top_k', 'operator_profile', 'endpoint_prepare'}
     return {k:v for k,v in layer['input'].items() if k not in variable}
 
 

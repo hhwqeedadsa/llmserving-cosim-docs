@@ -15,10 +15,13 @@ def configuration(path, action, backend=None):
     common = {'schema_version', 'host', 'export_policy'}
     extra = {'run': {'inputs', 'observation', 'record_policy', 'max_simulation_ns', 'backend', 'backend_timeout_seconds'},
              'sample': {'observation'}, 'replay': {'backend', 'backend_timeout_seconds'}}[action]
-    optional = ({'network', 'cache_directory', 'export_host'} if action == 'replay' else
+    replay_v2=action=='replay' and config.get('schema_version')=='moe-ub-replay/2'
+    if replay_v2:extra=extra|{'max_simulation_ns'}
+    optional = ({'network', 'cache_directory', 'export_host'}|({'observation'} if replay_v2 else set()) if action == 'replay' else
                 {'cache_directory', 'period_ns'} if action == 'sample' else {'export_host'})
     fields(config, common | extra, optional, label=str(path))
-    require(config['schema_version'] == f'moe-ub-{action}/1', f'{path}: unsupported schema_version')
+    require(replay_v2 or config['schema_version'] == f'moe-ub-{action}/1', f'{path}: unsupported schema_version')
+    if replay_v2:integer(config['max_simulation_ns'],'max_simulation_ns',1)
     config['host'] = host_policy(config['host'], base)
     if 'export_host' in config:
         config['export_host'] = host_policy(config['export_host'], base)
@@ -93,6 +96,7 @@ def execute(args):
     detail = ': '+manifest['error'] if manifest.get('error') else ''
     require(passed, f'{args.command} failed ({result["status"]}){detail}; see {output/"logs"/("resources-"+phase)}/stderr.log and probe.json')
     return dict(passed=True, output=str(output), simulation_end_ns=manifest.get('simulation_end_ns'),
+                coverage=manifest.get('coverage'),
                 observed=str(output/'observed'), resources=reports)
 
 
@@ -119,7 +123,9 @@ def service_run(output, config):
         record_storage=inputs/'record-policy.json', graph_storage=None, output_dir=raw,
         max_simulation_ns=config['max_simulation_ns'], wall_timeout_seconds=config['backend_timeout_seconds']))
     report = read(raw/'execution/result.json')
+    from .observation import execution_coverage
     return dict(simulation_end_ns=report['simulation_end_ns'], run_id=service['run_id'],
+                coverage=execution_coverage(config['observation'],ranks,config['max_simulation_ns'],report['simulation_end_ns']),
                 random=report['random'], raw='raw',
                 scope='configured_service', source=read(raw/'manifest.json'))
 
@@ -143,7 +149,7 @@ def worker(action, output):
                 observation, max_ns = config['observation'], config['max_simulation_ns']
             else:
                 source = read(Path(config['slice'])/'slice.json')
-                observation, max_ns = source['observation'], source['capture_end_ns']
+                observation, max_ns = config.get('observation',source['observation']), config.get('max_simulation_ns',source['capture_end_ns'])
             ranks = sorted(r for g in read(output/'raw/deployment.json')['groups'] for r in g['rank_ids'])
             result = export(output/'raw', observation, ranks, max_ns, output, config['export_policy'])
             value = dict(validation=result['passed'])
@@ -161,7 +167,7 @@ def worker(action, output):
         save(output/'manifest.json', manifest)
 
 
-def validate(run=None, observed=None):
+def validate(run=None, observed=None, allow_partial_observation=False):
     from .research_storage import validate_observed_storage
     if observed is not None:
         # This code path only opens files rooted in observed. It never follows
@@ -173,7 +179,13 @@ def validate(run=None, observed=None):
     verify_inventory(run, manifest['artifacts'])
     result = read(run/'metrics/validation.json')
     require(result.get('passed') is True, 'Export validation did not pass')
+    coverage=manifest.get('coverage')
+    if coverage is not None:
+        require(coverage['execution_complete'],'Execution is incomplete')
+        require(coverage['observation_complete'] or allow_partial_observation,
+                'Observation does not cover complete execution; rerun with expanded observation, or explicitly validate partial observation')
     return dict(passed=True, scope='sealed_artifact_integrity_and_recorded_conservation',
+                coverage=coverage,
                 artifacts=len(manifest['artifacts']), observed=validate_observed_storage(run/'observed'))
 
 

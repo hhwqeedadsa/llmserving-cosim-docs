@@ -57,6 +57,19 @@ def validate_config(c):
     integer(p['window_bytes'],'CANN window_bytes',1,MAX_TIME_NS)
     require(isinstance(p['local_cost_ns'],dict) and set(p['local_cost_ns'])==set(COSTS), 'Invalid CANN local costs')
     for k,v in p['local_cost_ns'].items(): integer(v,k,1,MAX_TIME_NS)
+    if 'endpoint_prepare' in c:
+        extra=c['endpoint_prepare']
+        require(isinstance(extra,dict) and set(extra)=={'schema_version','relation','ranks'} and
+                extra['schema_version']=='moe-ub-endpoint-prepare/1' and
+                extra['relation']=='additional_to_existing_once', 'Invalid endpoint prepare declaration')
+        require(isinstance(extra['ranks'],list) and len(extra['ranks'])==len(c['rank_ids']),
+                'Endpoint prepare must declare every rank')
+        for rank,row in zip(c['rank_ids'],extra['ranks']):
+            require(isinstance(row,dict) and set(row)=={'rank_id','dispatch_ns_per_local_token','combine_ns_per_expert_input'} and
+                    type(row['rank_id']) is int and row['rank_id']==rank, 'Endpoint prepare rank/order mismatch')
+            for key in ('dispatch_ns_per_local_token','combine_ns_per_expert_input'):integer(row[key],key)
+            integer(c['compute_profile_ns']['attention_route_pack']+row['dispatch_ns_per_local_token'],'combined dispatch unit cost')
+            integer(p['local_cost_ns']['result_pack_per_input']+row['combine_ns_per_expert_input'],'combined pack unit cost')
     b=buffers(c)
     require(b['data_window_bytes']>=b['minimum_data_window_bytes'], 'CANN data window below tiling bound')
     integer(b['total_bytes'],'CANN buffers',1,MAX_TIME_NS)
@@ -74,10 +87,11 @@ def split(items, lanes, rotate=0):
         for item in part: yield lane,item
 
 
-def stage_durations(c,local,experts,near_source,near_destination):
+def stage_durations(c,local,experts,near_source,near_destination,rank=None):
     """Checked arithmetic shared by future-route admission and actual DAGs."""
     profile=c['compute_profile_ns'];cost=c['cann_profile']['local_cost_ns']
     prep=c.get('deployment',{}).get('local_prepare_ns_per_vector',{})
+    extra=next((row for row in c.get('endpoint_prepare',{}).get('ranks',[]) if row['rank_id']==rank),{})
     result=dict(prepare=local*profile['attention_route_pack'],
         dispatch_local=near_source*prep.get('dispatch',0),
         reorder=experts*cost['dispatch_reorder_per_input']+len(c['expert_placement'])*cost['status_check'],
@@ -85,6 +99,8 @@ def stage_durations(c,local,experts,near_source,near_destination):
         combine_local=near_destination*prep.get('combine',0),
         finish=local*(profile['combine_unpack_merge']+c['top_k']*(cost['status_check']+cost['reduction_per_input'])),
         next_layer=local*profile['next_layer'])
+    result['prepare']+=local*extra.get('dispatch_ns_per_local_token',0)
+    result['pack']+=experts*extra.get('combine_ns_per_expert_input',0)
     for value in result.values():integer(value,'CANN stage duration',0,MAX_TIME_NS-c['ready_ns'])
     integer(c['ready_ns']+sum(result.values()),'CANN rank time bound')
     return result
@@ -184,7 +200,7 @@ def build_plan(config, identities=None, *, _validate=True):
     graphs=[]
     for rank in ranks:
         nodes=[]
-        work=stage_durations(c,local[rank],counts[rank],near_source[rank],near_destination[rank])
+        work=stage_durations(c,local[rank],counts[rank],near_source[rank],near_destination[rank],rank)
         def comp(name,work,deps):
             if not work:return None
             integer(work,'CANN stage duration',1,MAX_TIME_NS-c['ready_ns'])

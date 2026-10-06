@@ -48,19 +48,23 @@ struct Audit {
         responses.erase(uid);
     }
     static void Tx(Audit* a,uint32_t node,uint32_t port,Ptr<Packet> p,Time end) {
+        auto device=DynamicCast<UbPort>(NodeList::GetNode(node)->GetDevice(port));
+        const auto rate=device->GetEffectiveDataRate();
         ++a->sent;a->Hash(TimeNs());a->Hash(node);a->Hash(port);a->Hash(end.GetNanoSeconds());
         std::vector<uint8_t> bytes(p->GetSize());p->CopyData(bytes.data(),bytes.size());
         for(auto b:bytes) { a->hash^=b;a->hash*=1099511628211ull; }
         if(!a->detail) return;
         auto copy=p->Copy();UbDatalinkHeader dl;copy->PeekHeader(dl);
         if(!dl.IsPacketUbMemHeader()) return;
+        Check(end==rate.CalculateBytesTxTime(p->GetSize())+device->GetInterframeGap(),"packet serialization does not use start-time rate");
         UbDatalinkPacketHeader packet;UbCna16NetworkHeader network;
         copy->RemoveHeader(packet);copy->RemoveHeader(network);
         uint32_t opcode;
         if(packet.GetACK()) { UbCompactAckTransactionHeader ack;copy->RemoveHeader(ack);opcode=ack.GetTaOpcode(); }
         else { UbCompactTransactionHeader ta;copy->RemoveHeader(ta);opcode=ta.GetTaOpcode(); }
         a->paths.push_back({{"uid",p->GetUid()},{"node",node},{"port",port},{"time_ns",TimeNs()},
-            {"finish_ns",end.GetNanoSeconds()},{"packet_bytes",p->GetSize()},{"opcode",opcode},
+            {"tx_duration_ns",end.GetNanoSeconds()},{"packet_bytes",p->GetSize()},{"opcode",opcode},
+            {"rate_bps",rate.GetBitRate()},
             {"src",utils::Cna16ToNodeId(network.GetScna())},{"dst",utils::Cna16ToNodeId(network.GetDcna())},
             {"response",packet.GetACK()},{"spray",packet.GetLoadBalanceMode()}});
     }
@@ -70,14 +74,34 @@ struct Audit {
 int main(int argc,char** argv) {
     namespace fs=std::filesystem;
     try {
-        Check(argc==6,"Usage: native-routing-test UB_CASE NEW_OUTPUT SOURCE TARGET DETAIL_0_OR_1");
+        Check(argc==6 || argc==7,"Usage: native-routing-test UB_CASE NEW_OUTPUT SOURCE TARGET DETAIL_0_OR_1 [PORT_SERVICE_JSON]");
         auto input=fs::absolute(argv[1]),out=fs::absolute(argv[2]);
+        J service;
+        if(argc==7) { std::ifstream file(fs::absolute(argv[6]));service=J::parse(file); }
         const auto src=std::stoul(argv[3]),dst=std::stoul(argv[4]);
         Check(!fs::exists(out),"output exists");fs::create_directories(out);fs::current_path(out);
         for(auto name:{"network_attribute.txt","node.csv","topology.csv","routing_table.csv"}) fs::copy_file(input/name,name);
         Time::SetResolution(Time::NS);RngSeedManager::SetSeed(1);RngSeedManager::SetRun(1);
         auto u=utils::UbUtils::Get();UbEgressQueue::GetTypeId();u->SetComponentsAttribute("network_attribute.txt");
         u->CreateTraceDir();u->CreateNode("node.csv");u->CreateTopo("topology.csv");u->AddRoutingTable("routing_table.csv");
+        if(!service.is_null()) {
+            std::map<std::pair<uint32_t,uint32_t>,std::vector<UbPort::ServiceInterval>> selected;
+            for(const auto& row:service.at("intervals")) selected[{row.at("node_id"),row.at("port_id")}].push_back(
+                {row.at("start_ns"),row.at("end_ns"),row.at("rate_bps")});
+            for(const auto& [key,intervals]:selected) {
+                auto port=DynamicCast<UbPort>(NodeList::GetNode(key.first)->GetDevice(key.second));
+                const auto base=port->GetDataRate().GetBitRate();
+                auto check=[port,intervals,base]() {
+                    uint64_t expected=base;
+                    for(const auto& x:intervals) if(int64_t(TimeNs())>=x.startNs && int64_t(TimeNs())<x.endNs) expected=x.rateBps;
+                    Check(port->GetEffectiveDataRate().GetBitRate()==expected,"half-open boundary mismatch");
+                };
+                // Events registered on either side of configuration must agree.
+                for(const auto& x:intervals) for(auto t:{x.startNs,x.endNs}) Simulator::Schedule(NanoSeconds(t),check);
+                port->SetServiceIntervals(intervals,service.at("execution_end_ns"));
+                for(const auto& x:intervals) for(auto t:{x.startNs,x.endNs}) Simulator::Schedule(NanoSeconds(t),check);
+            }
+        }
         auto node=NodeList::GetNode(src);auto app=CreateObject<UbApp>();node->AddApplication(app);
         auto api=node->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();
         auto target=NodeList::GetNode(dst)->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();

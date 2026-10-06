@@ -44,5 +44,5 @@ class CannRouteAdmission:
         usage=check_graph(dict(transfers=fabric+local,fabric_transfers=fabric,local_transfers=local,nodes=nodes),
                           c.get('resource_budget'))
         for rank in destinations.keys()|{src}:
-            stage_durations(c,int(rank==src),destinations[rank],near_count if rank==src else 0,near[rank])
+            stage_durations(c,int(rank==src),destinations[rank],near_count if rank==src else 0,near[rank],rank)
         return usage

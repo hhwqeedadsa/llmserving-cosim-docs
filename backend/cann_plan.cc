@@ -40,6 +40,7 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
         "chunk_bytes","send_slots_per_rank","template","expert_placement","tokens","compute_profile_ns","batch_limits","compute_dtypes","cann_profile"};
     if(c.contains("deployment")) fields.insert("deployment");
     if(c.contains("resource_budget")) fields.insert("resource_budget");
+    if(c.contains("endpoint_prepare")) fields.insert("endpoint_prepare");
     Fields(c,fields);
     Check(p.at("schema_version")=="moe-ub-execution-plan/3" && c.at("schema_version")=="moe-ub-layer-fixture/3" && c.at("role")=="D","requires batched Decode");
     const auto& cp=c.at("cann_profile");
@@ -55,6 +56,18 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
     Check(c.at("compute_dtypes")==J({{"compute","bfloat16"},{"kv","bfloat16"},{"dispatch","int8"},{"combine","bfloat16"}}) &&
           c.at("dispatch_element_bytes")==1 && c.at("combine_element_bytes")==2,"dtype mismatch");
     const auto& ranks=c.at("rank_ids"); const auto& tokens=c.at("tokens"); const auto& placement=c.at("expert_placement");
+    std::map<int,std::pair<uint64_t,uint64_t>> endpoint_prepare;
+    if(c.contains("endpoint_prepare")) {
+        const auto& extra=c.at("endpoint_prepare");Fields(extra,{"schema_version","relation","ranks"});
+        Check(extra.at("schema_version")=="moe-ub-endpoint-prepare/1" &&
+              extra.at("relation")=="additional_to_existing_once","invalid endpoint prepare declaration");
+        Check(extra.at("ranks").is_array() && extra.at("ranks").size()==ranks.size(),"endpoint prepare rank count");
+        for(size_t i=0;i<ranks.size();++i) {
+            const auto& row=extra.at("ranks").at(i);Fields(row,{"rank_id","dispatch_ns_per_local_token","combine_ns_per_expert_input"});
+            Check(row.at("rank_id").is_number_integer() && row.at("rank_id")==ranks.at(i),"endpoint prepare rank/order mismatch");
+            endpoint_prepare[ranks.at(i).get<int>()]={Num(row.at("dispatch_ns_per_local_token")),Num(row.at("combine_ns_per_expert_input"))};
+        }
+    }
     auto world=Num(ranks.size(),2,768), experts=Num(placement.size(),1,1024), h=Num(c.at("hidden_dim"),1024,8192);
     auto topk=Num(c.at("top_k"),1,16), bs=Num(ValidateBatchLimits(c.at("batch_limits")),1,512), lanes=Num(cp.at("aiv_lanes"),1,48);
     Check(experts%world==0,"unequal local expert counts");
@@ -218,20 +231,20 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
             J done=J::array();for(const auto index:recvs_by_rank[{kind,rank}])done.push_back(comm(transfers[index],"RECV",deps));return done;
         };
         auto asdeps=[](J n) {return n.is_null()?J::array():J::array({n});};
-        auto prepare=comp("attention-route-quant-pack",local[rank],Num(profile.at("attention_route_pack")),J::array());J start=asdeps(prepare);
+        auto checked_sum=[&](uint64_t a,uint64_t av,uint64_t b,uint64_t bv) {
+            Check((!a||av<=uint64_t(INT64_MAX)/a)&&(!b||bv<=(uint64_t(INT64_MAX)-a*av)/b),"cost overflow");return a*av+b*bv;
+        };
+        auto prepare=comp("attention-route-quant-pack",local[rank],checked_sum(1,Num(profile.at("attention_route_pack")),1,endpoint_prepare[rank].first),J::array());J start=asdeps(prepare);
         auto local_prepare=[&](std::string kind,J deps) {
             uint64_t n=(kind=="dispatch"?local_dispatch:local_combine)[rank];
             auto work=c.contains("deployment")?Num(c.at("deployment").at("local_prepare_ns_per_vector").at(kind)):0;
             auto node=comp((kind+"-local-prepare").c_str(),n,work,deps);local_prepares[kind]=node;return asdeps(node);
         };
         J lp=local_prepare("dispatch",start),dispatch=start;Append(dispatch,sends("dispatch",start,lp));Append(dispatch,recvs("dispatch",start));Append(dispatch,lp);
-        auto checked_sum=[&](uint64_t a,uint64_t av,uint64_t b,uint64_t bv) {
-            Check((!a||av<=uint64_t(INT64_MAX)/a)&&(!b||bv<=(uint64_t(INT64_MAX)-a*av)/b),"cost overflow");return a*av+b*bv;
-        };
         auto reorder=comp("dispatch-status-check-reorder",1,checked_sum(counts[rank],Num(cost.at("dispatch_reorder_per_input")),experts,Num(cost.at("status_check"))),dispatch);
         auto expert=comp("expert-compute",counts[rank],Num(profile.at("expert_per_input")),asdeps(reorder));
         J computed=expert.is_null()?asdeps(reorder):asdeps(expert);
-        auto pack=comp("expert-result-pack",counts[rank],Num(cost.at("result_pack_per_input")),computed);J packed=pack.is_null()?computed:asdeps(pack);
+        auto pack=comp("expert-result-pack",counts[rank],checked_sum(1,Num(cost.at("result_pack_per_input")),1,endpoint_prepare[rank].second),computed);J packed=pack.is_null()?computed:asdeps(pack);
         J lc=local_prepare("combine",packed),combine=packed;Append(combine,sends("combine",packed,lc));Append(combine,recvs("combine",packed));Append(combine,lc);
         auto reduction=checked_sum(1,Num(cost.at("status_check")),1,Num(cost.at("reduction_per_input")));
         auto finish_cost=checked_sum(1,Num(profile.at("combine_unpack_merge")),topk,reduction);

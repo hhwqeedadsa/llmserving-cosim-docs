@@ -1,0 +1,133 @@
+{
+  "schema_version": "moe-ub-m13-validation/1",
+  "passed": true,
+  "main_base_commit": "3234fadd067d9af479f147db2fee1723a56cdfc8",
+  "ub_commit": "5b107fb2103e3b60a3f32b1dac60a1f1c4e102be",
+  "summary": {
+    "passed": true,
+    "actual_cost_nodes": 6,
+    "cases": {
+      "baseline": {
+        "simulation_end_ns": 11138,
+        "physical_packets": 2088
+      },
+      "prepared": {
+        "simulation_end_ns": 22426,
+        "physical_packets": 2088
+      },
+      "limited": {
+        "simulation_end_ns": 47193,
+        "physical_packets": 2088
+      }
+    },
+    "physical_boundary": {
+      "dst": 2,
+      "node": 0,
+      "opcode": 6,
+      "packet_bytes": 92,
+      "port": 0,
+      "rate_bps": 1000000000,
+      "response": false,
+      "spray": false,
+      "src": 0,
+      "time_ns": 1,
+      "tx_duration_ns": 736,
+      "uid": 0
+    },
+    "restored_packets": 257,
+    "replay_identical": true,
+    "partial_observation_rejected": true,
+    "expanded_replay_completed": true,
+    "execution_timeout_rejected": true,
+    "invalid_backend_or_replay_rejected": 4
+  },
+  "commands": "runs/v04-platform/endpoint-service-cases-final/commands.json",
+  "other_checks": {
+    "python_units": 33,
+    "write_public_workflow": "runs/v04-platform/endpoint-write-workflow-final/summary.json",
+    "native_routing": "runs/v04-platform/endpoint-routing-regression-final/summary.json"
+  },
+  "probes": {
+    "build-port-service-revision-01": {
+      "status": "completed",
+      "wall_seconds": 92.55867007561028,
+      "peak_sampled_group_rss_bytes": 1894481920,
+      "max_waited_child_rss_kib": 1302720,
+      "peak_sampled_artifact_bytes": 19042349056,
+      "probe": "runs/v04-platform/build-port-service-revision-01/probe.json",
+      "stdout": "runs/v04-platform/build-port-service-revision-01/stdout.log",
+      "stderr": "runs/v04-platform/build-port-service-revision-01/stderr.log",
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        "cmake -S third_party/ns-3-ub -B build/v04-platform\ncmake --build build/v04-platform --parallel 2 --target cosim-service cosim-native-routing-test cosim-plan-load-probe"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "child_exit_code": 0
+    },
+    "endpoint-service-regression-units-01": {
+      "status": "completed",
+      "wall_seconds": 27.67185647599399,
+      "peak_sampled_group_rss_bytes": 6426624,
+      "max_waited_child_rss_kib": 98480,
+      "peak_sampled_artifact_bytes": 19042340864,
+      "probe": "runs/v04-platform/endpoint-service-regression-units-01/probe.json",
+      "stdout": "runs/v04-platform/endpoint-service-regression-units-01/stdout.log",
+      "stderr": "runs/v04-platform/endpoint-service-regression-units-01/stderr.log",
+      "command": [
+        "env",
+        "PYTHONPATH=python:tests/unit",
+        ".venv/llmservingsim-native/bin/python",
+        "-m",
+        "unittest",
+        "endpoint_service_test",
+        "cann_plan_test",
+        "native_plan_test",
+        "multilayer_test",
+        "full_model_test",
+        "research_slice_test",
+        "observation_export_test"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "child_exit_code": 0
+    },
+    "endpoint-service-final-01": {
+      "status": "completed",
+      "wall_seconds": 44.789915565401316,
+      "peak_sampled_group_rss_bytes": 90894336,
+      "max_waited_child_rss_kib": 78428,
+      "peak_sampled_artifact_bytes": 19096059904,
+      "probe": "runs/v04-platform/endpoint-service-final-01/probe.json",
+      "stdout": "runs/v04-platform/endpoint-service-final-01/stdout.log",
+      "stderr": "runs/v04-platform/endpoint-service-final-01/stderr.log",
+      "command": [
+        "bash",
+        "-e",
+        "-c",
+        ".venv/llmservingsim-native/bin/python tests/integration/check_endpoint_service.py --build-dir build/v04-platform --output-dir runs/v04-platform/endpoint-service-cases-final\n.venv/llmservingsim-native/bin/python tests/integration/check_user_workflow.py --backend build/v04-platform/output/cosim/ns3.44-cosim-service --output-dir runs/v04-platform/endpoint-write-workflow-final\n.venv/llmservingsim-native/bin/python tests/integration/check_native_routing.py --build-dir build/v04-platform --output-dir runs/v04-platform/endpoint-routing-regression-final"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "child_exit_code": 0
+    }
+  },
+  "failures_preserved": [
+    {
+      "probe": "runs/v04-platform/endpoint-service-01",
+      "reason": "Test used single-layer preparation node name for composed full model; corrected to dispatch-quant-pack."
+    },
+    {
+      "probe": "runs/v04-platform/endpoint-service-02",
+      "reason": "Test incorrectly expected unchanged per-port message distribution under spray after changing service. Actual 516 native packets and 2064 hops conserved; changed worker interleaving changes salt-to-message assignment. Isolated boundary check now fixes routes; combined model still uses spray."
+    }
+  ],
+  "calibration_status": "unvalidated_reference",
+  "full_target_round_executed": false,
+  "inputs": {
+    "layers.json": "8e6ee17fc65f72f3f612bfbd3685f9c3ac51c9a9ab8879b016e716e300c2fbfe",
+    "observation.json": "cca3d242fc28728d16d563c5998ac08f5a19e459a4446ddf24759d533f28a023",
+    "run.json": "3435ff3d9630b4cd75d16de083b1caa95f3937392ec29ddeb46b41eb97fb9cd7",
+    "scenario.yaml": "72757dd46ca2150cfac668ec40d1823c586e6cb8b90c1db333e8e77fe00de484",
+    "service.json": "77aa7985c870c88d45d34ba8a2fc539032679b8cbf636bdceacebcf07709cd3b"
+  }
+}

@@ -198,10 +198,12 @@ def write_network(path, topology, routes, channels, backend):
 
 def prepare(input_path, backend_binary, output):
     config=read_yaml(input_path)
-    require(config.get('schema_version') in ('moe-ub-scenario-run/1','moe-ub-scenario-run/2'),
+    require(config.get('schema_version') in ('moe-ub-scenario-run/1','moe-ub-scenario-run/2','moe-ub-scenario-run/3'),
             'Use an executable scenario schema; reference specifications are not executable')
-    multi_plane = config['schema_version']=='moe-ub-scenario-run/2'
-    fields(config,'schema_version scenario_id basis service layer system backend network execution observation max_simulation_ns', 'scenario')
+    service_intervals=config['schema_version']=='moe-ub-scenario-run/3'
+    multi_plane = config['schema_version']=='moe-ub-scenario-run/2' or (service_intervals and 'fabric_file' in config['network'])
+    fields(config,'schema_version scenario_id basis service layer system backend network execution observation max_simulation_ns'+
+           (' port_service' if service_intervals else ''), 'scenario')
     require(config['basis']=='selected_reference' and re.fullmatch('[A-Za-z0-9_.-]+',config['scenario_id']), 'Invalid scenario identity/basis')
     directory=input_path.parent
     paths={k:(directory/config[k]).resolve() for k in ('service','layer','system')}
@@ -271,6 +273,9 @@ def prepare(input_path, backend_binary, output):
     else:
         base,topology,routes,channels=resolve_network(config['network'],directory,frontend.ranks,[mapping[r] for r in frontend.ranks],domains)
         network_sources=[base/name for name in NETWORK_FILES]
+    if service_intervals:
+        from .port_service import validate as validate_port_service
+        validate_port_service(config['port_service'],topology,config['max_simulation_ns'])
     output.mkdir(parents=True,exist_ok=False)
     commands=[]
     def invoke(label,argv):
@@ -320,6 +325,8 @@ def prepare(input_path, backend_binary, output):
                 transport_channels_used=False,inactive_devices_have_routes=True,
                 validation='declaration; actual route tables checked in effective_backend.json')
         save(output/'fabric-audit.json',fabric_audit)
+    if service_intervals:
+        requested.update(schema_version='moe-ub-backend-config/3',port_service=config['port_service'])
     request=save(output/'requested_backend.json',requested)
     resolved=invoke('check',[backend_binary,'--check-backend',request])
     write_network(output/'network',topology,routes,channels,resolved)

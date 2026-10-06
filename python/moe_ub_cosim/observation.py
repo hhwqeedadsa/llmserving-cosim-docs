@@ -102,6 +102,22 @@ def backend_observation(config, ranks, max_ns):
     return result
 
 
+def execution_coverage(config,ranks,max_ns,finished_ns):
+    """Private evidence: completeness in time for the explicitly selected ports."""
+    clocks,ports=validate_observation(config,ranks,max_ns)
+    require(0<=finished_ns<=max_ns,'Finished time outside execution budget')
+    partial=[]
+    for p in ports:
+        clock=clocks['switch',p['switch_id']]
+        # Windows are half-open: an event at finished_ns must be included too.
+        if p['start_local_ns']>local_time(0,clock) or p['end_local_ns']<=local_time(finished_ns,clock):
+            partial.append(dict(switch_id=p['switch_id'],port_id=p['port_id']))
+    return dict(schema_version='moe-ub-execution-coverage/1',execution_complete=True,
+                execution_budget_ns=max_ns,simulation_end_ns=finished_ns,
+                observation_complete=not partial,incomplete_ports=partial,
+                scope='time_coverage_of_declared_ports_not_all_network_ports')
+
+
 def public_config(ranks, ports, resource_budget=None):
     result=dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
         port_schema='moe-ub-port-windows/1',rank_ids=ranks,ports=ports,time_unit='ns',

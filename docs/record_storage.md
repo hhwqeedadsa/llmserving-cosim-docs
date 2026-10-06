@@ -15,6 +15,8 @@
 
 `sample` 复用的数据可能来自首轮数据包中的归档和工作缓存，未必在输出目录复制一整份 `raw/`。首轮数据包本身也含内部资料；共享算法输入时应选择其导出的 `observed/`，而不是直接传入整个数据包。[系统架构](architecture.md)说明这些记录如何从实际执行生成。
 
+运行清单的 `coverage` 使用 `moe-ub-execution-coverage/1`，分别保存 `execution_complete`、`execution_budget_ns`、`simulation_end_ns`、`observation_complete` 和 `incomplete_ports`。观测完整指所选端口的本地半开窗口覆盖从时间零到实际完成时刻（包含该时刻的事件），不表示观测了全网。窗口之外没有记录，也不补零。此检查使用内部时钟参数，保存在执行资料中，不加入 `observed/`。原始后端另外记录 `execution_budget_ns` 和全局窗口的 `observation_coverage`；公开导出采用用户本地窗口重新计算覆盖，不能直接沿用后端采集范围。
+
 ## 公开表与字段
 
 压缩研究格式为 `moe-ub-research-storage/1`。每个输出范围有自己的 `storage.json`，声明逻辑表名、文件名、行数、原始与压缩字节、原始内容 CRC32，以及单条记录上限。实际表放在该目录的 `records/` 下。

@@ -162,7 +162,15 @@ LOAD 前增加一份真实的 32 B 元数据 STORE：数据拥有者原有准备
 
 目标场景具体数值及尚无测量依据的参数见[CM384/R1 场景](../docs/scenarios/cm384_r1.md)。改变路径、速率或延迟时须走相应输入校验；现有首轮 `replay` 允许的调整比完整场景解析更窄，见用户指南，不能把后端支持配置等同于任意固定图重放都接受该覆盖。
 
-重放带 `backend.json` 的输入时，[frozen_replay.network_input](../python/moe_ub_cosim/frozen_replay.py)会读取所用二进制的参数目录。除 `ub_revision` 外必须与原目录完全相同；只有修订号不同而目录相同时，才将输入副本绑定到当前修订，并记录旧、新修订及 `behavior_equivalence="must_be_checked_by_execution"`。参数目录兼容不证明行为等价，仍需实际运行对照；它也不授权重放时修改结构化网络参数。
+重放带 `backend.json` 的输入时，[frozen_replay.network_input](../python/moe_ub_cosim/frozen_replay.py)会读取所用二进制的参数目录。除 `ub_revision` 外必须与原目录完全相同；只有修订号不同而目录相同时，才将输入副本绑定到当前修订，并记录旧、新修订及 `behavior_equivalence="must_be_checked_by_execution"`。参数目录兼容不证明行为等价，仍需实际运行对照。结构化重放只允许下述出口服务区间及已验证原生路径的 `UsePacketSpray` 开关，其他属性、任务 profile、基础拓扑和端点保持一致。
+
+### 准备成本与出口服务区间
+
+CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="moe-ub-endpoint-prepare/1"`、`relation="additional_to_existing_once"`，以及按 `rank_ids` 顺序完整列出的 `ranks`。每行包含 `rank_id`、`dispatch_ns_per_local_token`、`combine_ns_per_expert_input`，后两项为非负整数纳秒，未使用的 rank 显式填零。省略整个配置等价于全部零。Dispatch 额外成本加到已有准备节点（完整模型名称 `dispatch-quant-pack`），Combine 额外成本加到 `expert-result-pack`，乘数分别为本地 token 数和本 rank 实际专家输入数；既有打包、专家计算、本地交付成本保持。声明者只填写尚未包含在已有成本中的工作。Python 与 C++ 分别重建并核对实际图，溢出及篡改被拒绝；修改成本必须重新构图。
+
+`scenario-run/3` 在原场景字段外要求 `port_service`，网络可沿用 CSV 或 `fabric_file`；解析为 `backend-config/3`。服务配置格式和公开操作见[用户指南](../docs/user_guide.md)。`UbPort::SetServiceIntervals` 在执行前登记有界区间，`GetEffectiveDataRate` 在每次普通或 detached 包发送时查询当前仿真时间，无需安排改速事件；同刻发包使用半开区间定义，已经开始的序列化时长不被追改。`GetDataRate` 仍表示拓扑基础速率，区间只改变指定物理出口，不改变对端基础值。
+
+`effective_backend/3` 的 `live_port_service` 从实际端口读取区间并核对，逐条记录 `base_rate_bps`。原图重放可增减或替换这些区间，并记录旧、新配置；运行 `max_simulation_ns` 必须与服务区间声明的执行范围相同。执行超时保留 `failure.json`，不生成正常完成结果。包级实际速率、边界和在途包检查见[端侧与出口服务输入](../fixtures/m13_endpoint_service/README.md)。
 
 ## 被动观测接口
 

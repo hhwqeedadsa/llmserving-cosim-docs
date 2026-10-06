@@ -1,0 +1,23 @@
+{
+  "schema_version": "moe-ub-run/1",
+  "host": {
+    "rss_bytes": 4294967296,
+    "address_bytes": 8589934592,
+    "artifact_bytes": 2147483648,
+    "wall_seconds": 300,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": []
+  },
+  "inputs": {
+    "service": "../../runs/my-port-service-input/service.json",
+    "layer": "../../runs/my-port-service-input/layer.json",
+    "system": "../../runs/my-port-service-input/system.json",
+    "network": "../../runs/my-port-service-input/network"
+  },
+  "observation": "observation.json",
+  "record_policy": "../../examples/first_round/record-policy.json",
+  "export_policy": "../../examples/first_round/export-policy.json",
+  "max_simulation_ns": 1000000,
+  "backend": "../../build/v04-platform/output/cosim/ns3.44-cosim-service",
+  "backend_timeout_seconds": 240
+}

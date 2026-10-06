@@ -17,6 +17,7 @@
 | M10：CANN 与目标首轮 | CANN 行为、完整模型和拓扑、1024 请求来源、资源改进，以及可复用首轮、采样和后端重放 | [CANN](../fixtures/m10_cann/README.md)、[完整模型](../fixtures/m10_full_model/README.md)、[拓扑](../fixtures/m10_fabric/README.md)、[路由](../fixtures/m10_route_selection/README.md)、[资源记录](../fixtures/m10_resource_efficiency/README.md)、[最终验收](../fixtures/m10_research_slice/README.md) |
 | M11：原生 STORE/LOAD | 真实供数通知、数据与资源完成、有限请求标识及记录导出；保留 WRITE 回归 | [输入与小型验收](../fixtures/m11_native/README.md) |
 | M12：原生逐包喷洒 | 源/交换出口候选、跨平面源选路、真实乱序和被动记录检查 | [输入与路径验收](../fixtures/m12_native_routing/README.md) |
+| M13：准备成本与出口服务 | 实际 COMP 成本、物理有向速率区间、受限网络重放与执行/观测覆盖 | [输入与验收](../fixtures/m13_endpoint_service/README.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

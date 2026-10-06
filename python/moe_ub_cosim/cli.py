@@ -40,6 +40,8 @@ def parser():
     target = validate.add_mutually_exclusive_group(required=True)
     target.add_argument('--run', type=Path, help='Completed experiment directory (reads internal evidence)')
     target.add_argument('--observed', type=Path, help='Public observation directory only (never reads truth)')
+    validate.add_argument('--allow-partial-observation',action='store_true',
+                          help='Validate recorded scope while explicitly accepting incomplete time coverage')
     return p
 
 
@@ -55,7 +57,7 @@ def main(argv=None):
                      if args.slice_command == 'create' else inspect(args.slice, verify=args.verify))
         elif args.command == 'validate':
             from .user_workflow import validate
-            value = validate(args.run, args.observed)
+            value = validate(args.run, args.observed,args.allow_partial_observation)
         else:
             from .user_workflow import execute
             value = execute(args)

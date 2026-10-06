@@ -78,6 +78,7 @@ def validate_config(c):
             ({'batch_limits', 'compute_dtypes'} if batched else set()) |
             ({'operator_profile'} if batched and 'operator_profile' in c else set()) |
             ({'cann_profile'} if cann and batched else set()) |
+            ({'endpoint_prepare'} if cann and batched and 'endpoint_prepare' in c else set()) |
             ({'native_profile'} if native else set()) |
             ({'resource_budget'} if cann and batched and 'resource_budget' in c else set()) and
             c['schema_version'] in ('moe-ub-layer-fixture/1', 'moe-ub-layer-fixture/2', 'moe-ub-layer-fixture/3'),

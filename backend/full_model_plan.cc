@@ -35,7 +35,7 @@ uint64_t Product(uint64_t a, uint64_t b)
 }
 Json Common(Json input)
 {
-    for (auto key : {"layer_id", "tokens", "compute_profile_ns", "schema_version", "expert_placement", "top_k", "operator_profile"})
+    for (auto key : {"layer_id", "tokens", "compute_profile_ns", "schema_version", "expert_placement", "top_k", "operator_profile", "endpoint_prepare"})
         input.erase(key);
     return input;
 }

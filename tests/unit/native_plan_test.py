@@ -61,5 +61,27 @@ class NativePlanTest(unittest.TestCase):
                 node['deps']=[]
             with self.assertRaises(ValueError):validate_plan(bad)
 
+    def test_public_mapping_does_not_mutate_or_alias_input(self):
+        from moe_ub_cosim.native import apply_mapping
+        c=self.fixture();legacy=deepcopy(c);legacy['template']='cann_a3_v850_fullmesh_v1';legacy.pop('native_profile')
+        base=build_plan(legacy);before=deepcopy(base);mapped=apply_mapping(base,c)
+        self.assertEqual(base,before)
+        mapped['rank_graphs'][0]['nodes'][0]['deps'].append(999)
+        mapped['transfers'][0]['payload_regions'][0]['end']+=1
+        self.assertEqual(base,before)
+
+    def test_layout_cost_and_status_dependencies_still_validated(self):
+        p=build_plan(self.fixture())
+        for mutation in ('cost','region','status_dependency','source'):
+            bad=deepcopy(p)
+            if mutation=='cost':
+                next(n for g in bad['rank_graphs'] for n in g['nodes'] if n['kind']=='COMP')['duration_ns']+=1
+            elif mutation=='region':bad['transfers'][0]['payload_regions'][0]['end']+=1
+            elif mutation=='source':next(t for t in bad['transfers'] if t['sources'])['sources'].clear()
+            else:
+                tid=next(t['transfer_id'] for t in bad['transfers'] if t['message_role']=='status')
+                next(n for g in bad['rank_graphs'] for n in g['nodes'] if n.get('transfer_id')==tid and n['deps'])['deps'].clear()
+            with self.assertRaises(ValueError):validate_plan(bad)
+
 
 if __name__=='__main__':unittest.main()

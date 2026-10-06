@@ -1,0 +1,101 @@
+{
+  "schema_version": "moe-ub-m16-preflight/1",
+  "full_target_executed": false,
+  "scope": "resource_estimates_not_acceptance",
+  "public_workflow": {
+    "passed": true,
+    "commands": 14,
+    "simulation_end_ns": 47193,
+    "slower_simulation_end_ns": 75919,
+    "same_replay_tables": true,
+    "unsupported_sampling_rejected_before_output": true,
+    "source": "examples/native_first_round copied into a new directory; no historical run or external data"
+  },
+  "prepared": {
+    "passed": true,
+    "simulation_executed": false,
+    "expected_usage": {
+      "transfers": 4703152,
+      "fabric_transfers": 4677222,
+      "local_transfers": 25930,
+      "nodes": 9526154
+    },
+    "original_prepared": "/root/moe-ub-cosim/runs/v03-full-round-preflight/prepare/work/prepared.json",
+    "original_bundle": {
+      "path": "runs/v03-full-round-preflight/prepare/work/bundle.json",
+      "sha256": "b24a58a837922891fbc6d6c1689016144f944663a3ab8eac2e3662466b0d2c14"
+    },
+    "selected_source_files": 1024,
+    "selected_records": 59392,
+    "full_blocks": 61,
+    "active_ranks": 128,
+    "business_bytes_unchanged": 10058044416,
+    "target_hardware_calibrated": false,
+    "budget": {
+      "schema_version": "moe-ub-graph-resources/1",
+      "max_graph_transfers": 5000000,
+      "max_graph_nodes": 10000000,
+      "max_plan_bytes": 17179869184,
+      "max_run_graphs": 1,
+      "max_run_transfers": 5000000,
+      "max_run_nodes": 10000000
+    }
+  },
+  "prefix": [
+    {
+      "blocks": 4,
+      "simulation_end_ns": 874152,
+      "physical_packets": 793126,
+      "record_bytes": 16016599,
+      "rss_peak_bytes": 5504225280,
+      "probe": "runs/v04-platform/m16-prefix-native-final/probe.json"
+    },
+    {
+      "blocks": 5,
+      "simulation_end_ns": 1580266,
+      "physical_packets": 1586143,
+      "record_bytes": 32239012,
+      "rss_peak_bytes": 6270464000,
+      "probe": "runs/v04-platform/m16-two-prefix/probe.json"
+    }
+  ],
+  "estimates": {
+    "backend_rss_linear_bytes": 49179832320,
+    "backend_rss_method": "one/two MoE prefix peak difference times 57 plus first peak; heuristic, enforced host limit remains authoritative",
+    "graph_bytes_conservative": 11669811700,
+    "raw_compressed_bytes_linear": 934931348,
+    "export_compressed_bytes_linear": 247689754,
+    "python_peak_bytes_linear": 41478897664,
+    "build_seconds_linear": 1695.688
+  },
+  "limits": {
+    "rss_bytes": 51539607552,
+    "address_bytes": 60129542144,
+    "artifact_bytes": 34359738368,
+    "wall_seconds_per_phase": 7200,
+    "min_free_bytes": 21474836480
+  },
+  "graph_equivalence": "runs/v04-platform/m16-native-graph-equivalence.json",
+  "python_regressions": "runs/v04-platform/m16-preflight-regressions/probe.json",
+  "cleanup_plan": "archive/verify known preflight graphs before target; archive/verify full graph after completion and reclaim all registered expanded aliases before research export",
+  "retained_failed_preflight": {
+    "path": "runs/v04-platform/m16-prefix-native",
+    "cause": "driver assumed flat graph directory; fixed recursive directory/hardlink handling before any backend launch"
+  },
+  "corrected_comparison": {
+    "cause": "initial all-file hash check also included location-dependent protoc argv and pyc filename/mtime; compare all semantic graph files byte-for-byte and normalize only documented compiler paths",
+    "corrected_check": "tests/integration/check_native_graph_equivalence.py"
+  },
+  "binary_sha256": "cba21cfeff34e8d0d047c3ce65ecb3b6856350b701c6be580f8979af4168d1cf",
+  "preflight_archival": {
+    "child_exit_code": 0,
+    "aggregate_artifact_bytes_before_report": 20228988928,
+    "wall_seconds": 38.521751675754786,
+    "probe": "runs/v04-platform/m16-preflight-archive/probe.json",
+    "verified_archives": [
+      "runs/v04-platform/m16-prefix-owned-graph.tar.inventory.json",
+      "runs/v04-platform/m16-prefix-final-graph.tar.inventory.json",
+      "runs/v04-platform/m16-two-graph.tar.inventory.json"
+    ]
+  }
+}

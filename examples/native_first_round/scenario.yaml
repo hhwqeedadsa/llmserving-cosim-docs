@@ -1,0 +1,47 @@
+schema_version: moe-ub-scenario-run/3
+scenario_id: native-first-round
+basis: selected_reference
+service: service.json
+layer: layers.json
+system: system.json
+backend:
+  reference_file: backend-reference.yaml
+  profile_by_role:
+    dispatch: native_store
+    combine: native_load
+  attributes:
+    ns3::UbSwitchAllocator::AllocationTime: 10ns
+    ns3::UbLdstInstance::ThreadNum: 3
+    ns3::UbLdstThread::StoreOutstanding: 32
+    ns3::UbLdstThread::LoadOutstanding: 32
+    ns3::UbLdstApi::RequestIdCount: 256
+    ns3::UbLdstApi::UsePacketSpray: true
+    ns3::UbLdstApi::UseShortestPaths: true
+  globals: {}
+  tp_max_data_payload_bytes: 4096
+  transport_channel_setup: precreated
+network:
+  fabric_file: fabric.json
+  defaults:
+    rate_bps: 400000000000
+    delay_ns: 20
+    allocation_ns: 1
+    forward_ns: 0
+  nodes: []
+  links: []
+execution:
+  chunk_bytes: 1024
+  send_slots_per_rank: 2
+  seed: 1
+  run: 1
+observation: null
+max_simulation_ns: 1000000
+port_service:
+  schema_version: moe-ub-port-service/1
+  execution_end_ns: 1000000
+  intervals:
+  - node_id: 4
+    port_id: 4
+    start_ns: 0
+    end_ns: 100000
+    rate_bps: 1000000000

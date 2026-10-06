@@ -41,6 +41,8 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 
 命令行路径相对当前目录，JSON 中的路径相对该 JSON 文件所在目录。因此也可从其他目录运行，但需相应调整命令行路径。缺少输入文件或出现未知配置字段时会报错。
 
+原生 STORE/LOAD、逐包喷洒、出口限速及聚合保存的组合用法见[原生首轮小例](../examples/native_first_round/README.md)。其中 `moe-ub resolve --config 场景.yaml --backend 后端路径 --output 新输入目录` 先检查 YAML 中的模型和网络参数，生成可交给 `run` 的服务、层、系统与网络文件；它不执行网络仿真。场景内路径相对 YAML，输出中的 `resolution.json` 保存输入摘要与解析状态。该命令需要 `frontend` 依赖，参数会由指定的后端再次校验。
+
 ## 查看结果
 
 一次成功运行会在输出目录中保存以下内容：

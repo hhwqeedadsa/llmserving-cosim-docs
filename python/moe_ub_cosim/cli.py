@@ -15,6 +15,10 @@ def parser():
     build = sub.add_parser('build', help='Build the locked native backend; never download dependencies')
     build.add_argument('--build-dir', type=Path, default=Path('build/default'), help='Build/output directory (default: build/default)')
     build.add_argument('--jobs', type=int, default=2, help='Parallel compiler jobs (default: 2)')
+    resolve = sub.add_parser('resolve', help='Validate a structured YAML scenario and write explicit run inputs; no network execution')
+    resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
+    resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
+    resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
     for name, help_text in [('run', 'Run a configured service and export bounded research records'),
                             ('sample', 'Generate observations from a frozen slice without frontend/backend execution'),
                             ('replay', 'Execute frozen graphs in the real backend without scheduling or graph generation')]:
@@ -51,6 +55,11 @@ def main(argv=None):
         if args.command in ('doctor', 'build'):
             from .user_build import doctor, build
             value = doctor(args.backend) if args.command == 'doctor' else build(args.build_dir, args.jobs)
+        elif args.command == 'resolve':
+            from .scenario import prepare
+            _, manifest = prepare(args.config.resolve(), args.backend.resolve(), args.output.resolve())
+            value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
+                         scenario_id=manifest['scenario_id'])
         elif args.command == 'slice':
             from .research_slice import create, inspect
             value = (create(args.from_run, args.output, args.storage, args.import_config)

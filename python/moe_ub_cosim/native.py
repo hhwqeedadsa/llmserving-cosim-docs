@@ -25,7 +25,12 @@ def validate_profile(profile):
 
 
 def apply_mapping(base, config):
-    p = deepcopy(base)
+    """Public mapping keeps the caller's source graph independent."""
+    return _map_owned_plan(deepcopy(base), config)
+
+
+def _map_owned_plan(p, config):
+    """Map an internally owned CANN graph without copying its large DAG again."""
     profile = config['native_profile']
     validate_profile(profile)
     p['input'] = deepcopy(config)
@@ -36,9 +41,8 @@ def apply_mapping(base, config):
         graph_send='request_initiation', graph_recv='peer_wait',
         load_consumer_dependency='SEND_transaction_done_after_all_response_data',
         hardware_calibrated=False)
-    original = {t['transfer_id']: deepcopy(t) for t in p['transfers']}
     notices = {}
-    next_transfer = max(original, default=0)+1
+    next_transfer = max((t['transfer_id'] for t in p['transfers']), default=0)+1
     next_task = max((t.get('ub_task_id', 0) for t in p['transfers']), default=0)+1
     next_tag = max((t['comm_tag'] for t in p['transfers']), default=0)+1
     next_message = max((t['message_id'] for t in p['transfers']), default=0)+1
@@ -67,10 +71,13 @@ def apply_mapping(base, config):
     for notice in notices.values():
         notice['initiator_rank'] = notice['src_rank']
     p['transfers'].extend(notices.values())
+    outgoing={r:[] for r in p['rank_ids']};incoming={r:[] for r in p['rank_ids']}
+    for t in p['transfers']:
+        outgoing[t['src_rank']].append(t);incoming[t['dst_rank']].append(t)
     for graph in p['rank_graphs']:
         nodes = []
         for old in graph['nodes']:
-            n = deepcopy(old)
+            n = old
             n['layout_node_id'] = old['node_id']
             n['node_id'] *= 2
             n['deps'] = [2*d for d in n['deps']]
@@ -94,11 +101,8 @@ def apply_mapping(base, config):
         for field in ('phase_nodes', 'local_prepare_nodes'):
             if field in graph:
                 graph[field] = {k:None if v is None else dense[v] for k,v in graph[field].items()}
-        for t in p['transfers']:
-            if t['src_rank'] == graph['rank_id']:
-                t['send_node_id'] = dense[t['send_node_id']]
-            if t['dst_rank'] == graph['rank_id']:
-                t['recv_node_id'] = dense[t['recv_node_id']]
+        for t in outgoing[graph['rank_id']]:t['send_node_id'] = dense[t['send_node_id']]
+        for t in incoming[graph['rank_id']]:t['recv_node_id'] = dense[t['recv_node_id']]
     from .resources import actual_usage
     if 'resource_budget' in config:
         p['resource_usage'] = actual_usage(p)
@@ -106,14 +110,19 @@ def apply_mapping(base, config):
 
 
 def build_plan(config, identities=None, *, _validate=True):
+    from .plan import validate_config
     from .cann import build_plan as build_cann, TEMPLATE as CANN
     from .resources import cann_usage, check_graph, actual_usage
+    validate_config(config)
     validate_profile(config['native_profile'])
     usage = check_graph(cann_usage(config), config.get('resource_budget'))
     base_config = deepcopy(config)
     base_config['template'] = CANN
     del base_config['native_profile']
-    p = apply_mapping(build_cann(base_config), config)
+    # CANN is a private intermediate here. Native validation below reconstructs
+    # and compares every mapped field, including its CANN layout and DAG. Do not
+    # independently rebuild the discarded intermediate once more on each pass.
+    p = _map_owned_plan(build_cann(base_config, _validate=False), config)
     require(actual_usage(p) == usage, 'Native graph preflight mismatch')
     if identities is not None:
         identities.assign(p)

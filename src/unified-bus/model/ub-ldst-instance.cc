@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-only
 #include "ns3/ub-ldst-instance.h"
 #include "ns3/ub-ldst-thread.h"
+#include <set>
+#include <stdexcept>
 
 namespace ns3 {
 NS_LOG_COMPONENT_DEFINE("UbLdstInstance");
@@ -15,7 +17,7 @@ TypeId UbLdstInstance::GetTypeId(void)
                                           "Number of LDST worker threads.",
                                           UintegerValue(48),
                                           MakeUintegerAccessor(&UbLdstInstance::m_threadNum),
-                                          MakeUintegerChecker<uint32_t>())
+                                          MakeUintegerChecker<uint32_t>(1, 65536))
                             .AddAttribute("QueuePriority",
                                           "Queue (VOQ) priority for packets emitted by this thread.",
                                           UintegerValue(1),
@@ -55,6 +57,7 @@ UbLdstInstance::~UbLdstInstance()
 
 void UbLdstInstance::Init(uint32_t nodeId)
 {
+    if (!m_threads.empty()) throw std::logic_error("LDST instance initialized twice");
     for (uint32_t threadId = 0; threadId < m_threadNum; threadId++) {
         auto ldstThread = CreateObject<UbLdstThread>();
         ldstThread->Init();
@@ -66,7 +69,13 @@ void UbLdstInstance::Init(uint32_t nodeId)
 
 void UbLdstInstance::DoDispose()
 {
+    for (auto thread : m_threads) thread->Dispose();
     m_threads.clear();
+    m_taskToSegmentMap.clear();
+    m_taskSegmentsMap.clear();
+    m_taskSegmentCompletedNum.clear();
+    FinishCallback = {};
+    Object::DoDispose();
 }
 
 void UbLdstInstance::SetClientCallback(Callback<void, uint32_t> cb)
@@ -77,12 +86,24 @@ void UbLdstInstance::SetClientCallback(Callback<void, uint32_t> cb)
 void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length, uint32_t taskId, uint32_t priority,
                                     UbMemOperationType type, const std::vector<uint32_t> &threadIds, uint64_t address)
 {
-    uint32_t threadsNum = threadIds.size();
+    if (!length || threadIds.empty() || src == dest || src != GetObject<Node>()->GetId() || priority > UB_PRIORITY_MAX ||
+        (type != UbMemOperationType::STORE && type != UbMemOperationType::LOAD) ||
+        m_taskToSegmentMap.count(taskId))
+        throw std::invalid_argument("Invalid or duplicate active LDST task");
+    std::set<uint32_t> unique;
+    for (auto id : threadIds) {
+        if (id >= m_threads.size() || !unique.insert(id).second)
+            throw std::invalid_argument("Invalid or repeated LDST thread");
+    }
+    // Never create zero-byte segments (e.g. one byte with 48 workers).
+    uint32_t threadsNum = std::min<uint32_t>(threadIds.size(), length);
     // 将数据均分下发给thread
     uint32_t partSize = length / threadsNum;
 
     FirstPacketSendsNotify(this->GetObject<Node>()->GetId(), taskId);
     MemTaskStartsNotify(this->GetObject<Node>()->GetId(), taskId);
+    uint64_t offset = 0;
+    m_taskSegmentCompletedNum.emplace(taskId, 0);
     for (uint32_t i = 0; i < threadsNum; i++) {
         uint32_t segmentSize = partSize;
         if (i == threadsNum - 1) {
@@ -95,45 +116,54 @@ void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length
         taskSegment->SetDest(dest);
         taskSegment->SetPriority(static_cast<uint8_t>(priority)); 
         taskSegment->SetSize(segmentSize);
+        taskSegment->SetTaskOffset(offset);
+        offset += segmentSize;
         taskSegment->SetTaskId(taskId);
         taskSegment->SetTaskSegmentId(m_currentTaskId);
         taskSegment->SetType(type);
         taskSegment->SetThreadId(threadId);
         m_taskToSegmentMap[taskId].push_back(taskSegment);
         m_taskSegmentsMap[m_currentTaskId] = taskSegment;
-        m_taskSegmentCompletedNum[taskId] = 0;
         m_currentTaskId++;
-        Simulator::ScheduleNow(&UbLdstThread::PushTaskSegment, ldstThread, taskSegment);
+        ldstThread->PushTaskSegment(taskSegment);
     }
 }
 
-void UbLdstInstance::OnRecvAck(uint32_t taskSegmentId)
+void UbLdstInstance::OnRecvAck(Ptr<UbLdstTaskSegment> taskSegment)
 {
-    auto taskSegment = m_taskSegmentsMap[taskSegmentId];
-    if (taskSegment == nullptr) {
-        NS_ASSERT_MSG(0, "taskSegment invalid!");
-    }
+    if (!taskSegment || !m_taskSegmentsMap.count(taskSegment->GetTaskSegmentId()))
+        throw std::logic_error("Response for inactive LDST segment");
     uint32_t threadId = taskSegment->GetThreadId();
     auto ldstThread = GetLdstThread(threadId);
-    Simulator::ScheduleNow(&UbLdstThread::UpdateTask, ldstThread, taskSegment);
+    ldstThread->UpdateTask(taskSegment);
 }
 
 void UbLdstInstance::OnTaskSegmentCompleted(uint32_t taskId)
 {
-    m_taskSegmentCompletedNum[taskId]++;
-    if (m_taskSegmentCompletedNum[taskId] == m_taskToSegmentMap[taskId].size()) {
+    auto& completed = m_taskSegmentCompletedNum.at(taskId);
+    if (++completed == m_taskToSegmentMap.at(taskId).size()) {
+        for (auto segment : m_taskToSegmentMap.at(taskId))
+            m_taskSegmentsMap.erase(segment->GetTaskSegmentId());
+        m_taskToSegmentMap.erase(taskId);
+        m_taskSegmentCompletedNum.erase(taskId);
         LastPacketACKsNotify(this->GetObject<Node>()->GetId(), taskId);
         MemTaskCompletesNotify(this->GetObject<Node>()->GetId(), taskId);
-        FinishCallback(taskId);
+        if (!FinishCallback.IsNull()) FinishCallback(taskId);
     }
 }
 
 Ptr<UbLdstThread> UbLdstInstance::GetLdstThread(uint32_t threadId)
 {
-    if (threadId > m_threads.size()) {
-        NS_ASSERT_MSG(0, "Invalid threadId! Cannot Get Ldst Thread.");
-    }
+    if (threadId >= m_threads.size()) throw std::out_of_range("Invalid LDST thread");
     return m_threads[threadId];
+}
+
+bool UbLdstInstance::IsIdle() const
+{
+    if (!m_taskToSegmentMap.empty() || !m_taskSegmentsMap.empty() ||
+        !m_taskSegmentCompletedNum.empty()) return false;
+    for (auto thread : m_threads) if (!thread->IsIdle()) return false;
+    return true;
 }
 
 void UbLdstInstance::LastPacketACKsNotify(uint32_t nodeId, uint32_t taskId)

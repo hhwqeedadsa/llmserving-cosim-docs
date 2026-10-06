@@ -2,6 +2,7 @@
 #ifndef UB_LDST_THREAD_H
 #define UB_LDST_THREAD_H
 #include "ns3/ub-ldst-instance.h"
+#include "ns3/event-id.h"
 
 namespace ns3 {
 class UbController;
@@ -14,6 +15,12 @@ public:
     UbLdstThread();
     virtual ~UbLdstThread();
     void Init();
+    void DoDispose() override;
+    void ScheduleWork();
+    bool IsIdle() const;
+    uint32_t GetOutstandingCount() const { return m_storeInFlight + m_loadInFlight; }
+    size_t GetWaitingSegmentCount() const { return m_waitingAckNum.size(); }
+    size_t GetQueuedSegmentCount() const { return m_loadQueue.size() + m_storeQueue.size(); }
     void PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment);
     void HandleTaskSegment();
     void SetNode(uint32_t nodeId);
@@ -36,9 +43,12 @@ private:
     uint32_t m_loadReqSize = 0;
     uint32_t m_loadRspLength = 0;
     uint32_t m_storeReqLength = 0;
-    uint32_t m_storeOutstanding; // 发数据包--, 收ack ++
-    uint32_t m_loadOutstanding; // 发数据包--, 收ack ++
-    std::unordered_map<uint32_t, uint32_t> m_waitingAckNum;
+    uint32_t m_storeOutstanding; // Configured limits, independent of in-flight state.
+    uint32_t m_loadOutstanding;
+    uint32_t m_storeInFlight = 0;
+    uint32_t m_loadInFlight = 0;
+    EventId m_workEvent;
+    std::unordered_map<uint64_t, uint32_t> m_waitingAckNum;
 };
 } // namespace ns3
 

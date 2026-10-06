@@ -9,6 +9,7 @@
 #include "ns3/simulator.h"
 #include "ns3/ub-controller.h"
 #include "ns3/ub-datatype.h"
+#include <stdexcept>
 
 namespace ns3 {
 NS_LOG_COMPONENT_DEFINE("UbLdstThread");
@@ -24,19 +25,19 @@ TypeId UbLdstThread::GetTypeId(void)
                                           "Maximum number of outstanding STORE requests this thread may issue.",
                                           UintegerValue(64),
                                           MakeUintegerAccessor(&UbLdstThread::m_storeOutstanding),
-                                          MakeUintegerChecker<uint32_t>())
+                                          MakeUintegerChecker<uint32_t>(1, 65536))
                             .AddAttribute("LoadOutstanding",
                                           "Maximum number of outstanding LOAD requests this thread may issue.",
                                           UintegerValue(64),
                                           MakeUintegerAccessor(&UbLdstThread::m_loadOutstanding),
-                                          MakeUintegerChecker<uint32_t>())
+                                          MakeUintegerChecker<uint32_t>(1, 65536))
                             .AddAttribute("LoadResponseSize",
-                                          "LOAD response payload size in bytes; rounded to nearest 64B * 2^n at Init().",
+                                          "LOAD response payload size in bytes; rounded up to 64B * 2^n at Init().",
                                           UintegerValue(512),
                                           MakeUintegerAccessor(&UbLdstThread::m_loadRspSize),
                                           MakeUintegerChecker<uint32_t>(0, 8192))
                             .AddAttribute("StoreRequestSize",
-                                          "STORE request payload size in bytes; rounded to nearest 64B * 2^n at Init().",
+                                          "STORE request payload size in bytes; rounded up to 64B * 2^n at Init().",
                                           UintegerValue(512),
                                           MakeUintegerAccessor(&UbLdstThread::m_storeReqSize),
                                           MakeUintegerChecker<uint32_t>(0, 8192))
@@ -106,22 +107,24 @@ void UbLdstThread::PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment)
         NS_ASSERT_MSG(0, "task type is wrong");
     }
     auto taskSegmentId = taskSegment->GetTaskSegmentId();
-    m_waitingAckNum[taskSegmentId] = taskSegment->GetPsnSize();
+    if (!taskSegment->GetPsnSize() ||
+        !m_waitingAckNum.emplace(taskSegmentId, taskSegment->GetPsnSize()).second)
+        throw std::logic_error("Empty or repeated LDST segment");
     NS_LOG_DEBUG("[UbLdstThread PushTaskSegment] m_waitingAckNum[" << taskSegmentId << "]: " <<
                  m_waitingAckNum[taskSegmentId]);
     if (taskSegment->GetType() == UbMemOperationType::LOAD) {
         m_loadQueue.push(taskSegment);
-        Simulator::ScheduleNow(&UbLdstThread::HandleLoadTask, this);
+        ScheduleWork();
     } else if (taskSegment->GetType() == UbMemOperationType::STORE) {
         m_storeQueue.push(taskSegment);
-        Simulator::ScheduleNow(&UbLdstThread::HandleStoreTask, this);
+        ScheduleWork();
     }
 }
 
 void UbLdstThread::HandleLoadTask()
 {
     NS_LOG_DEBUG("[UbLdstThread HandleLoadTask]");
-    while (m_loadOutstanding > 0) {
+    while (m_loadInFlight < m_loadOutstanding) {
         Ptr<UbLdstTaskSegment> taskSegment = nullptr;
         while (!m_loadQueue.empty()) {
             taskSegment = m_loadQueue.front();
@@ -137,15 +140,16 @@ void UbLdstThread::HandleLoadTask()
         }
         auto node = NodeList::GetNode(m_nodeId);
         auto ldstapi = node->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();
-        m_loadOutstanding--;
-        ldstapi->LdstProcess(taskSegment);
+        if (!ldstapi->LdstProcess(taskSegment)) return;
+        ++m_loadInFlight;
+        if (taskSegment->IsSentCompleted()) m_loadQueue.pop();
     }
 }
 
 void UbLdstThread::HandleStoreTask()
 {
     NS_LOG_DEBUG("[UbLdstThread HandleStoreTask]");
-    while (m_storeOutstanding > 0) {
+    while (m_storeInFlight < m_storeOutstanding) {
         Ptr<UbLdstTaskSegment> taskSegment = nullptr;
         while (!m_storeQueue.empty()) {
             taskSegment = m_storeQueue.front();
@@ -161,8 +165,9 @@ void UbLdstThread::HandleStoreTask()
         }
         auto node = NodeList::GetNode(m_nodeId);
         auto ldstapi = node->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();
-        m_storeOutstanding--;
-        ldstapi->LdstProcess(taskSegment);
+        if (!ldstapi->LdstProcess(taskSegment)) return;
+        ++m_storeInFlight;
+        if (taskSegment->IsSentCompleted()) m_storeQueue.pop();
     }
 }
 
@@ -178,20 +183,46 @@ void UbLdstThread::SetThreadId(uint32_t threadId)
 
 void UbLdstThread::UpdateTask(Ptr<UbLdstTaskSegment> taskSegment)
 {
-    auto taskSegmentId = taskSegment->GetTaskSegmentId();
-    m_waitingAckNum[taskSegmentId]--;
-    NS_LOG_DEBUG("[UbLdstThread UpdateTask] m_waitingAckNum[" << taskSegmentId << "]"
-                 << m_waitingAckNum[taskSegmentId]);
-    if (m_waitingAckNum[taskSegmentId] == 0) {
-        auto ldstInstance = NodeList::GetNode(m_nodeId)->GetObject<UbLdstInstance>();
-        ldstInstance->OnTaskSegmentCompleted(taskSegment->GetTaskId());
-    }
-    if (taskSegment->GetType() == UbMemOperationType::LOAD) {
-        m_loadOutstanding++;
-        Simulator::ScheduleNow(&UbLdstThread::HandleLoadTask, this);
-    } else if (taskSegment->GetType() == UbMemOperationType::STORE) {
-        m_storeOutstanding++;
-        Simulator::ScheduleNow(&UbLdstThread::HandleStoreTask, this);
-    }
+    auto id = taskSegment->GetTaskSegmentId();
+    auto& waiting = m_waitingAckNum.at(id);
+    auto& inFlight = taskSegment->GetType() == UbMemOperationType::LOAD
+                         ? m_loadInFlight : m_storeInFlight;
+    if (!waiting || !inFlight) throw std::logic_error("Unexpected LDST response");
+    --inFlight;
+    bool completed = --waiting == 0;
+    if (completed) m_waitingAckNum.erase(id);
+    ScheduleWork();
+    // Resource state is retired before callbacks can submit another task.
+    if (completed)
+        NodeList::GetNode(m_nodeId)->GetObject<UbLdstInstance>()->
+            OnTaskSegmentCompleted(taskSegment->GetTaskId());
+}
+
+void UbLdstThread::ScheduleWork()
+{
+    if ((!m_loadQueue.empty() || !m_storeQueue.empty()) && !m_workEvent.IsPending())
+        m_workEvent = Simulator::ScheduleNow(&UbLdstThread::HandleTaskSegment, this);
+}
+
+void UbLdstThread::HandleTaskSegment()
+{
+    HandleLoadTask();
+    HandleStoreTask();
+}
+
+bool UbLdstThread::IsIdle() const
+{
+    return !m_workEvent.IsPending() && m_waitingAckNum.empty() &&
+           m_loadQueue.empty() && m_storeQueue.empty() && !GetOutstandingCount();
+}
+
+void UbLdstThread::DoDispose()
+{
+    m_workEvent.Cancel();
+    m_waitingAckNum.clear();
+    m_loadQueue = {};
+    m_storeQueue = {};
+    m_loadInFlight = m_storeInFlight = 0;
+    Object::DoDispose();
 }
 } // namespace ns3

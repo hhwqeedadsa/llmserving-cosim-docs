@@ -1902,7 +1902,9 @@ UbCnpExtTph::GetLocation() const
  * UbCna16NetworkHeader implementation
  ***************************************************
  */
-UbCna16NetworkHeader::UbCna16NetworkHeader() = default;
+UbCna16NetworkHeader::UbCna16NetworkHeader() : m_ccFields{}
+{
+}
 UbCna16NetworkHeader::~UbCna16NetworkHeader() = default;
 
 TypeId UbCna16NetworkHeader::GetTypeId()

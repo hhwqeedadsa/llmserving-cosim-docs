@@ -23,8 +23,12 @@ public:
     void SetClientCallback(Callback<void, uint32_t> cb);
     Ptr<UbLdstThread> GetLdstThread(uint32_t threadId);
     Callback<void, uint32_t> FinishCallback;
-    void OnRecvAck(uint32_t taskSegmentId);
+    void OnRecvAck(Ptr<UbLdstTaskSegment> segment);
     void OnTaskSegmentCompleted(uint32_t taskId);
+    uint32_t GetThreadCount() const { return m_threads.size(); }
+    size_t GetActiveTaskCount() const { return m_taskToSegmentMap.size(); }
+    size_t GetActiveSegmentCount() const { return m_taskSegmentsMap.size(); }
+    bool IsIdle() const;
 
 private:
     void MemTaskStartsNotify(uint32_t nodeId, uint32_t memTaskId);
@@ -35,8 +39,8 @@ private:
     std::unordered_map<uint32_t, std::vector<Ptr<UbLdstTaskSegment>>> m_taskToSegmentMap;  // taskid -> taskSegments
     std::vector<Ptr<UbLdstThread>> m_threads;
     std::unordered_map<uint32_t, uint32_t> m_taskSegmentCompletedNum;
-    std::unordered_map<uint32_t, Ptr<UbLdstTaskSegment>> m_taskSegmentsMap;
-    uint32_t m_currentTaskId = 0;
+    std::unordered_map<uint64_t, Ptr<UbLdstTaskSegment>> m_taskSegmentsMap;
+    uint64_t m_currentTaskId = 0;
     uint32_t m_threadNum = 0;
     uint32_t m_queuePriority = 0;
     

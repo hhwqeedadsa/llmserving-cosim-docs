@@ -5,6 +5,7 @@
 #include "ns3/ub-datatype.h"
 #include "ns3/ub-controller.h"
 #include "ns3/ub-ldst-api.h"
+#include <stdexcept>
 
 namespace ns3 {
 NS_LOG_COMPONENT_DEFINE("UbLdstApi");
@@ -16,6 +17,23 @@ TypeId UbLdstApi::GetTypeId(void)
     static TypeId tid = TypeId("ns3::UbLdstApi")
                             .SetParent<Object>()
                             .SetGroupName("UnifiedBus")
+                            .AddAttribute("RequestIdCount",
+                                          "Maximum concurrent native requests per initiator; bounded by the 16-bit wire ID.",
+                                          UintegerValue(65536),
+                                          MakeUintegerAccessor(&UbLdstApi::m_requestIdCount),
+                                          MakeUintegerChecker<uint32_t>(1, 65536))
+                            .AddTraceSource("RequestCreated", "Native request and useful task byte range.",
+                                            MakeTraceSourceAccessor(&UbLdstApi::m_requestCreated),
+                                            "ns3::UbLdstApi::RequestCreated")
+                            .AddTraceSource("RequestArrived", "Native request received at the target.",
+                                            MakeTraceSourceAccessor(&UbLdstApi::m_requestArrived),
+                                            "ns3::UbLdstApi::RequestArrived")
+                            .AddTraceSource("ResponseCreated", "New response packet linked to its request UID.",
+                                            MakeTraceSourceAccessor(&UbLdstApi::m_responseCreated),
+                                            "ns3::UbLdstApi::ResponseCreated")
+                            .AddTraceSource("ResponseArrived", "Validated response and useful task byte range.",
+                                            MakeTraceSourceAccessor(&UbLdstApi::m_responseArrived),
+                                            "ns3::UbLdstApi::ResponseArrived")
                             .AddAttribute("UsePacketSpray",
                                           "Enable per-packet load balancing across equal-cost paths.",
                                           BooleanValue(false),
@@ -54,12 +72,25 @@ void UbLdstApi::SetNodeId(uint32_t nodeId)
     m_nodeId = nodeId;
 }
 
-void UbLdstApi::LdstProcess(Ptr<UbLdstTaskSegment> taskSegment)
+bool UbLdstApi::LdstProcess(Ptr<UbLdstTaskSegment> taskSegment)
 {
-    // genpacket
-    auto packet = GenDataPacket(taskSegment);
-    // sendpacket
+    if (m_requests.size() == m_requestIdCount) {
+        m_waitingThreads.insert(taskSegment->GetThreadId());
+        return false;
+    }
+    while (m_requests.count(m_nextRequestId))
+        m_nextRequestId = (m_nextRequestId + 1) % m_requestIdCount;
+    uint16_t id = m_nextRequestId;
+    m_nextRequestId = (m_nextRequestId + 1) % m_requestIdCount;
+    uint64_t offset = taskSegment->GetTaskOffset() + taskSegment->GetSize() - taskSegment->GetBytesLeft();
+    uint32_t bytes = taskSegment->PeekNextDataSize();
+    if (!bytes) throw std::logic_error("Empty native request");
+    m_requests.emplace(id, PendingRequest{taskSegment, offset, bytes});
+    m_peakRequests = std::max<uint64_t>(m_peakRequests, m_requests.size());
+    auto packet = GenDataPacket(taskSegment, id);
+    m_requestCreated(packet, taskSegment->GetTaskId(), offset, bytes, taskSegment->GetType());
     SendPacket(taskSegment, packet);
+    return true;
 }
 
 void UbLdstApi::SendPacket(Ptr<UbLdstTaskSegment> taskSegment, Ptr<Packet> packet)
@@ -87,7 +118,7 @@ void UbLdstApi::SendPacket(Ptr<UbLdstTaskSegment> taskSegment, Ptr<Packet> packe
     Simulator::ScheduleNow(&UbPort::TriggerTransmit, port);
 }
 
-Ptr<Packet> UbLdstApi::GenDataPacket(Ptr<UbLdstTaskSegment> taskSegment)
+Ptr<Packet> UbLdstApi::GenDataPacket(Ptr<UbLdstTaskSegment> taskSegment, uint16_t requestId)
 {
     // Store/load request: DLH cNTH cTAH(0x03/0x06) [cMAETAH] Payload
     UbCompactMAExtTah cMAETah;
@@ -116,7 +147,7 @@ Ptr<Packet> UbLdstApi::GenDataPacket(Ptr<UbLdstTaskSegment> taskSegment)
     taskSegment->UpdateSentBytes(dataSize);
     // Gen Headers
     cMAETah.SetLength((uint8_t)length);
-    cTaHeader.SetIniTaSsn(taskSegment->GetTaskSegmentId()); // taskid
+    cTaHeader.SetIniTaSsn(requestId);
     uint16_t scna = static_cast<uint16_t>(utils::NodeIdToCna16(taskSegment->GetSrc()));
     cna16NetworkHeader.SetScna(scna);
     uint16_t dcna = static_cast<uint16_t>(utils::NodeIdToCna16(taskSegment->GetDest()));
@@ -159,19 +190,23 @@ void UbLdstApi::RecvDataPacket(Ptr<Packet> packet)
     packet->RemoveHeader(linkPacketHeader);
     packet->RemoveHeader(cna16NetworkHeader);
     packet->RemoveHeader(cTaHeader);
-    packet->PeekHeader(cMAETah);
+    packet->RemoveHeader(cMAETah);
 
     Ptr<Packet> ackp;
+    UbMemOperationType operation;
     // 收到store数据包
     if (cTaHeader.GetTaOpcode() == static_cast<uint8_t>(TaOpcode::TA_OPCODE_WRITE)) {
         ackp = Create<Packet>(0);
+        operation = UbMemOperationType::STORE;
         caTaHeader.SetTaOpcode(TaOpcode::TA_OPCODE_TRANSACTION_ACK);
     } else if (cTaHeader.GetTaOpcode() == static_cast<uint8_t>(TaOpcode::TA_OPCODE_READ)) {
         caTaHeader.SetTaOpcode(TaOpcode::TA_OPCODE_READ_RESPONSE);
+        operation = UbMemOperationType::LOAD;
         uint32_t payloadSize = 64 * (1 << (uint32_t)cMAETah.GetLength());
         NS_LOG_DEBUG("[UbLdstApi RecvDataPacket] Load payloadSize: " << payloadSize);
         ackp = Create<Packet>(payloadSize);
-    }
+    } else throw std::logic_error("Invalid native request opcode");
+    m_requestArrived(packet->GetUid(), packet->GetSize(), operation);
     uint16_t tassn = cTaHeader.GetIniTaSsn();
     caTaHeader.SetIniTaSsn(tassn);
 
@@ -184,6 +219,7 @@ void UbLdstApi::RecvDataPacket(Ptr<Packet> packet)
     UbDataLink::GenPacketHeader(ackp, false, true, linkPacketHeader.GetCreditTargetVL(), linkPacketHeader.GetPacketVL(),
                                 linkPacketHeader.GetLoadBalanceMode(), linkPacketHeader.GetRoutingPolicy(),
                                 UbDatalinkHeaderConfig::PACKET_UB_MEM);
+    m_responseCreated(packet->GetUid(), ackp, operation);
 
     RoutingKey rtKey;
     rtKey.sip = utils::Cna16ToIp(cna16NetworkHeader.GetScna()).Get();
@@ -245,9 +281,31 @@ void UbLdstApi::RecvResponse(Ptr<Packet> packet)
                        utils::Cna16ToNodeId(cna16NetworkHeader.GetScna()),
                        PacketType::ACK, packet->GetSize(), flowTag.GetFlowId(), traceTag);
     }
-    uint32_t taskSegmentId = caTaHeader.GetIniTaSsn();
+    auto found = m_requests.find(caTaHeader.GetIniTaSsn());
+    if (found == m_requests.end()) throw std::logic_error("Unknown or repeated native response");
+    auto request = found->second;
+    auto segment = request.segment;
+    bool load = segment->GetType() == UbMemOperationType::LOAD;
+    auto expectedOpcode = load ? TaOpcode::TA_OPCODE_READ_RESPONSE : TaOpcode::TA_OPCODE_TRANSACTION_ACK;
+    if (utils::Cna16ToNodeId(cna16NetworkHeader.GetScna()) != segment->GetDest() ||
+        utils::Cna16ToNodeId(cna16NetworkHeader.GetDcna()) != segment->GetSrc() ||
+        caTaHeader.GetTaOpcode() != static_cast<uint8_t>(expectedOpcode) ||
+        packet->GetSize() != (load ? segment->GetDataSize() : 0))
+        throw std::logic_error("Native response does not match its outstanding request");
+    m_responseArrived(packet->GetUid(), segment->GetTaskId(), request.offset,
+                     request.bytes, segment->GetType());
+    m_requests.erase(found);
     auto ldstInst = NodeList::GetNode(m_nodeId)->GetObject<UbLdstInstance>();
-    Simulator::ScheduleNow(&UbLdstInstance::OnRecvAck, ldstInst, taskSegmentId);
+    for (auto thread : m_waitingThreads) ldstInst->GetLdstThread(thread)->ScheduleWork();
+    m_waitingThreads.clear();
+    ldstInst->OnRecvAck(segment);
+}
+
+void UbLdstApi::DoDispose()
+{
+    m_requests.clear();
+    m_waitingThreads.clear();
+    Object::DoDispose();
 }
 
 void UbLdstApi::SetUsePacketSpray(bool usePacketSpray)

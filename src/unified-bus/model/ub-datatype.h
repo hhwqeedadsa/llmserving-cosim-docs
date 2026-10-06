@@ -228,12 +228,12 @@ public:
         m_taskId = taskId;
     }
 
-    uint32_t GetTaskSegmentId() const
+    uint64_t GetTaskSegmentId() const
     {
         return m_taskSegmentId;
     }
 
-    void SetTaskSegmentId(uint32_t taskSegmentId)
+    void SetTaskSegmentId(uint64_t taskSegmentId)
     {
         m_taskSegmentId = taskSegmentId;
     }
@@ -247,6 +247,9 @@ public:
     {
         m_threadId = threadId;
     }
+
+    uint64_t GetTaskOffset() const { return m_taskOffset; }
+    void SetTaskOffset(uint64_t offset) { m_taskOffset = offset; }
 
     // ========== 任务描述信息 ==========
     uint32_t GetSrc() const
@@ -306,7 +309,7 @@ public:
         m_dataSize = 64 * (1 << length);
         m_packetSize = packetSize;
         // 计算要发的packet数目
-        m_psnCnt = (m_size + m_dataSize - 1) / m_dataSize;
+        m_psnCnt = (uint64_t(m_size) + m_dataSize - 1) / m_dataSize;
     }
 
     uint32_t GetLength()
@@ -385,7 +388,8 @@ private:
     // ========== 全局信息 ==========
     uint32_t m_taskId;
     uint32_t m_threadId;
-    uint32_t m_taskSegmentId;       // 用于识别tasksegment
+    uint64_t m_taskSegmentId;       // Internal identity; never truncated onto the wire.
+    uint64_t m_taskOffset = 0;
     // ========== 任务描述信息 ==========
     uint32_t m_src;                 // 源节点标识符
     uint32_t m_dest;                // 目的节点标识符

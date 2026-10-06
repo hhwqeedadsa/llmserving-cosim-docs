@@ -350,7 +350,9 @@ void UbApp::ExecuteTraffic(UbTrafficGen::RuntimeTask task)
         SetFinishCallback(MakeCallback(&UbApp::OnMemTaskCompleted, this), ldstInstance);
         NS_LOG_INFO("MEM Task Starts, taskId: " << task.taskId);
         MemTaskStartsNotify(GetNode()->GetId(), task.taskId);
-        std::vector<uint32_t> threadIds = {0, 1};
+        std::vector<uint32_t> threadIds;
+        for (uint32_t id = 0; id < ldstInstance->GetThreadCount(); ++id)
+            threadIds.push_back(id);
         ldstInstance->HandleLdstTask(task.sourceNode,
                                      task.destNode,
                                      task.dataSize,

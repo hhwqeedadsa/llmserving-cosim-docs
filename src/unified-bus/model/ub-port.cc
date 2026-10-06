@@ -6,6 +6,8 @@
 #include "ns3/ub-caqm.h"
 #include "ns3/ub-tag.h"
 #include "ns3/ub-utils.h"
+#include <stdexcept>
+#include <iterator>
 #ifdef NS3_MPI
 #include "ns3/mpi-receiver.h"
 #endif
@@ -435,7 +437,7 @@ void UbPort::TransmitPacket(Ptr<Packet> packet, Time delay)
         packet->AddPacketTag(tag);
     }
 
-    Time txTime = m_bps.CalculateBytesTxTime(packet->GetSize()) + delay;
+    Time txTime = GetEffectiveDataRate().CalculateBytesTxTime(packet->GetSize()) + delay;
     Time txCompleteTime = txTime + m_tInterframeGap;
 
     // Try to start transmission on the channel first. Only if it succeeds
@@ -477,7 +479,7 @@ UbPort::TransmitPacketDetached(Ptr<Packet> packet)
         packet->AddPacketTag(tag);
     }
 
-    Time txTime = m_bps.CalculateBytesTxTime(packet->GetSize());
+    Time txTime = GetEffectiveDataRate().CalculateBytesTxTime(packet->GetSize());
     bool result = m_channel->TransmitStart(packet, this, txTime);
     if (result == false) {
         NS_LOG_WARN("Detached channel transmission failed! Packet dropped at Node "
@@ -649,6 +651,33 @@ void UbPort::TraComEventNotify(Ptr<Packet> p, Time t)
 
 DataRate UbPort::GetDataRate()
 {
+    return m_bps;
+}
+
+void UbPort::SetServiceIntervals(const std::vector<ServiceInterval>& intervals, int64_t executionEndNs)
+{
+    if (Simulator::Now() != NanoSeconds(0) || executionEndNs <= 0 || intervals.size() > 4096)
+        throw std::invalid_argument("Port service intervals require bounded pre-execution configuration");
+    int64_t previousEnd = 0;
+    for (const auto& interval : intervals) {
+        if (interval.startNs < previousEnd || interval.endNs <= interval.startNs ||
+            interval.endNs > executionEndNs || interval.rateBps == 0)
+            throw std::invalid_argument("Invalid, overlapping or out-of-range port service interval");
+        previousEnd = interval.endNs;
+    }
+    m_serviceIntervals = intervals;
+}
+
+DataRate UbPort::GetEffectiveDataRate() const
+{
+    if (m_serviceIntervals.empty()) return m_bps;
+    const auto now = Simulator::Now().GetNanoSeconds();
+    const auto after = std::upper_bound(m_serviceIntervals.begin(), m_serviceIntervals.end(), now,
+        [](int64_t time, const ServiceInterval& interval) { return time < interval.startNs; });
+    if (after != m_serviceIntervals.begin()) {
+        const auto& interval = *std::prev(after);
+        if (now < interval.endNs) return DataRate(interval.rateBps);
+    }
     return m_bps;
 }
 

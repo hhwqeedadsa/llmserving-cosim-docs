@@ -118,6 +118,16 @@ public:
     void ResetCredits();
     uint8_t GetCredits(int index);
     void SetDataRate(DataRate bps);
+    struct ServiceInterval {
+        int64_t startNs;
+        int64_t endNs;
+        uint64_t rateBps;
+    };
+    // Install before execution. Half-open intervals never change a transmission
+    // already in progress; each new start queries simulation time directly.
+    void SetServiceIntervals(const std::vector<ServiceInterval>& intervals, int64_t executionEndNs);
+    DataRate GetEffectiveDataRate() const;
+    const std::vector<ServiceInterval>& GetServiceIntervals() const { return m_serviceIntervals; }
 
     // 获取
     DataRate GetDataRate();
@@ -213,6 +223,7 @@ private:
     uint64_t m_txBytes;
 
     DataRate m_bps;
+    std::vector<ServiceInterval> m_serviceIntervals;
 
     SendState m_sendState;  // Current transmission state
 

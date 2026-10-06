@@ -157,9 +157,13 @@ TypeId UbQueueManager::GetTypeId(void)
         .SetGroupName("UnifiedBus")
         .AddConstructor<UbQueueManager>()
         .AddTraceSource("OutPortBufferBytes",
-        "Current total out-port VOQ occupancy in bytes after an update.",
+        "Out-port VOQ plus ingress-processing bytes after an update, including control frames.",
         MakeTraceSourceAccessor(&UbQueueManager::m_traceOutPortBufferBytes),
         "ns3::UbQueueManager::OutPortBufferBytes")
+        .AddTraceSource("OutPortVoqWaitingBytes",
+        "Ready VOQ packet bytes after every change, including control frames; excludes ingress processing, FIFO and serialization.",
+        MakeTraceSourceAccessor(&UbQueueManager::m_traceOutPortVoqWaitingBytes),
+        "ns3::TracedCallback::Uint32Uint64")
         .AddTraceSource("IngressQueueOccupancyBytes",
         "Current ingress queue occupancy in bytes after an update.",
         MakeTraceSourceAccessor(&UbQueueManager::m_traceIngressQueueOccupancyBytes),
@@ -296,6 +300,8 @@ void UbQueueManager::PushToVoq(uint32_t inPort, uint32_t outPort,
         m_outPortControlBytes[outPort][priority] += pSize;
         m_totalVoqBufferedBytes += pSize;
         m_totalOutPortVoqBufferedBytes[outPort] += pSize;
+        m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
+        m_traceOutPortVoqWaitingBytes(outPort, GetOutPortVoqWaitingBytes(outPort));
         NS_LOG_DEBUG("PushToVoq recorded local control frame outside data-plane admission: inPort="
                      << inPort << " outPort=" << outPort << " pri=" << priority
                      << " size=" << pSize);
@@ -306,6 +312,7 @@ void UbQueueManager::PushToVoq(uint32_t inPort, uint32_t outPort,
     m_outPortBuffer[outPort][priority] += pSize;
     m_totalVoqBufferedBytes += pSize;
     m_totalOutPortVoqBufferedBytes[outPort] += pSize;
+    m_traceOutPortVoqWaitingBytes(outPort, GetOutPortVoqWaitingBytes(outPort));
     m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
     m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
 
@@ -330,6 +337,8 @@ void UbQueueManager::PopFromVoq(uint32_t inPort, uint32_t outPort,
         NS_ASSERT_MSG(m_totalOutPortVoqBufferedBytes[outPort] >= pSize,
                       "Out-port VOQ total accounting underflow");
         m_totalOutPortVoqBufferedBytes[outPort] -= pSize;
+        m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
+        m_traceOutPortVoqWaitingBytes(outPort, GetOutPortVoqWaitingBytes(outPort));
         NS_LOG_DEBUG("PopFromVoq drained local control-frame accounting: inPort="
                      << inPort << " outPort=" << outPort << " pri=" << priority
                      << " size=" << pSize);
@@ -342,6 +351,7 @@ void UbQueueManager::PopFromVoq(uint32_t inPort, uint32_t outPort,
     NS_ASSERT_MSG(m_totalOutPortVoqBufferedBytes[outPort] >= pSize,
                   "Out-port VOQ total accounting underflow");
     m_totalOutPortVoqBufferedBytes[outPort] -= pSize;
+    m_traceOutPortVoqWaitingBytes(outPort, GetOutPortVoqWaitingBytes(outPort));
     m_outPortBuffer[outPort][priority] -= pSize;
     m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
     m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
@@ -390,6 +400,7 @@ UbQueueManager::MoveInPortProcessingToVoq(uint32_t inPort,
     m_outPortBuffer[outPort][priority] += pSize;
     m_totalVoqBufferedBytes += pSize;
     m_totalOutPortVoqBufferedBytes[outPort] += pSize;
+    m_traceOutPortVoqWaitingBytes(outPort, GetOutPortVoqWaitingBytes(outPort));
     m_traceIngressQueueOccupancyBytes(inPort, priority, GetQueueIngressTotalBytes(inPort, priority));
     m_traceOutPortBufferBytes(outPort, GetTotalOutPortBufferUsed(outPort));
 }

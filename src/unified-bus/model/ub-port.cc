@@ -30,6 +30,10 @@ TypeId UbEgressQueue::GetTypeId(void)
     static TypeId tid =
         TypeId("ns3::UbEgressQueue")
             .SetParent<Object>()
+            .AddTraceSource("WaitingBytes",
+            "Packet bytes waiting in the physical FIFO after every change, excluding serialization.",
+            MakeTraceSourceAccessor(&UbEgressQueue::m_traceWaitingBytes),
+            "ns3::TracedCallback::Uint64")
             .AddTraceSource(
             "UbEnqueue",
             "Enqueue a packet in the UbEgressQueue.",
@@ -72,6 +76,7 @@ bool UbEgressQueue::DoEnqueue(PacketEntry packetEntry)
     
     m_egressQ.push(packetEntry);
     m_currentBytes += pktSize;  // 更新字节统计
+    m_traceWaitingBytes(m_currentBytes);
     m_traceUbEnqueue(pkt, static_cast<uint32_t>(m_currentBytes));
 
     NS_LOG_LOGIC ("[UbEgressQueue DoEnqueue] Egress Queue size: " << m_egressQ.size () 
@@ -133,6 +138,7 @@ PacketEntry UbEgressQueue::DoDequeue()
     auto [inPortId, priority, pkt] = packetEntry;
     uint32_t pktSize = pkt->GetSize();
     m_currentBytes -= pktSize;  // 更新字节统计
+    m_traceWaitingBytes(m_currentBytes);
     m_traceUbDequeue(pkt, static_cast<uint32_t>(m_currentBytes));
 
     NS_LOG_LOGIC ("[UbEgressQueue DoDequeue] Egress Queue size: " << m_egressQ.size ()

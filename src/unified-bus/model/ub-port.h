@@ -51,6 +51,8 @@ public:
 
     uint64_t m_maxEgressBytes;     // Max bytes accepted by egress queue
     uint64_t m_currentBytes = 0;   // Current bytes in egress queue (用于拥塞控制等)
+    uint64_t GetWaitingBytes() const { return m_currentBytes; }
+    TracedCallback<uint64_t> m_traceWaitingBytes;
 
     static TypeId GetTypeId(void);
     explicit UbEgressQueue();

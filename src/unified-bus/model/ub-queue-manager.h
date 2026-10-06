@@ -205,6 +205,12 @@ public:
     
     /** OutPort视图：某outPort所有优先级的总buffer占用 */
     uint64_t GetTotalOutPortBufferUsed(uint32_t outPort) const;
+    // Ready VOQs only, including locally generated control frames. Excludes
+    // ingress processing, the physical egress FIFO and packets on the link.
+    uint64_t GetOutPortVoqWaitingBytes(uint32_t outPort) const
+    {
+        return m_totalOutPortVoqBufferedBytes.at(outPort);
+    }
     
     uint32_t GetReservePerQueueBytes() const { return m_reservePerQueueBytes; }
     void SetReservePerQueueBytes(uint32_t size);
@@ -270,6 +276,7 @@ private:
     DarrayU64 m_outPortControlBytes; // [outPort][priority] control-frame occupancy outside data-plane admission
     Ptr<Node> m_ownerNode;
     TracedCallback<uint32_t, uint64_t> m_traceOutPortBufferBytes;
+    TracedCallback<uint32_t, uint64_t> m_traceOutPortVoqWaitingBytes;
     TracedCallback<uint32_t, uint32_t, uint64_t> m_traceIngressQueueOccupancyBytes;
 };
 } // namespace ns3

@@ -6,6 +6,14 @@ build_exec(
   EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
 set_target_properties(cosim-native-runtime-test PROPERTIES
   CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+build_exec(
+  EXECNAME cosim-native-routing-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/integration/native_routing_test.cc"
+  LIBRARIES_TO_LINK ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-native-routing-test PROPERTIES
+  CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-native-routing-test PRIVATE "${ASTRA_ROOT}/extern/helper")
 find_package(ZLIB REQUIRED)
 add_library(cosim-records STATIC "${CMAKE_CURRENT_LIST_DIR}/record_store.cc")
 target_link_libraries(cosim-records PUBLIC ZLIB::ZLIB)

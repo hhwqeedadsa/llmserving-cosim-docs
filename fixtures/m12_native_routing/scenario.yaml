@@ -1,0 +1,305 @@
+schema_version: moe-ub-scenario-run/2
+scenario_id: m12-native-routing
+basis: selected_reference
+service: service.json
+layer: layers.json
+system: ../m1_compute/system.json
+backend:
+  reference_file: ../m11_native/backend-reference.yaml
+  profile_by_role:
+    dispatch: native_store
+    combine: native_load
+  attributes:
+    ns3::UbSwitchAllocator::AllocationTime: 10ns
+    ns3::UbLdstInstance::ThreadNum: 3
+    ns3::UbLdstThread::StoreOutstanding: 32
+    ns3::UbLdstThread::LoadOutstanding: 32
+    ns3::UbLdstApi::RequestIdCount: 256
+    ns3::UbLdstApi::UsePacketSpray: true
+    ns3::UbLdstApi::UseShortestPaths: true
+  globals: {}
+  tp_max_data_payload_bytes: 4096
+  transport_channel_setup: precreated
+network:
+  fabric_file: fabric.json
+  defaults:
+    rate_bps: 400000000000
+    delay_ns: 20
+    allocation_ns: 1
+    forward_ns: 0
+  nodes: []
+  links: []
+execution:
+  chunk_bytes: 1024
+  send_slots_per_rank: 2
+  seed: 1
+  run: 1
+observation:
+  schema_version: moe-ub-port-observation-set/2
+  ports:
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 4
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: &id001
+      schema_version: moe-ub-observation-resources/1
+      max_ports: 32
+      max_windows_per_port: 20000
+      max_total_windows: 200000
+      max_event_bytes_per_port: 67108864
+      max_ledger_packets: 100000
+      max_registered_transfers: 40000
+      max_export_bytes: 134217728
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 4
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 4
+    port_id: 2
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 4
+    port_id: 3
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 4
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 5
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 5
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 5
+    port_id: 2
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 5
+    port_id: 3
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 5
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 6
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 6
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 6
+    port_id: 2
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 6
+    port_id: 3
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 6
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 7
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 7
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 7
+    port_id: 2
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 7
+    port_id: 3
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 7
+    port_id: 4
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 8
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 8
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 9
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 9
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 10
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 10
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 11
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 11
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 12
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 12
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 13
+    port_id: 0
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  - schema_version: moe-ub-port-observation/2
+    switch_id: 13
+    port_id: 1
+    window_start_ns: 0
+    window_end_ns: 1000000
+    window_period_ns: 1000000
+    record_provenance: true
+    resource_budget: *id001
+  resource_budget: *id001
+max_simulation_ns: 1000000

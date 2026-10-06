@@ -309,6 +309,16 @@ def prepare(input_path, backend_binary, output):
         transport_channel_setup=selection['transport_channel_setup'],topology=topology,origins=origins,**values)
     if multi_plane:
         requested.update(schema_version='moe-ub-backend-config/2',fabric=fabric_spec)
+        if any(p['programming_model']=='native_memory' for p in profiles.values()):
+            fabric_audit['routing']=dict(programming_model='native_memory',
+                source_selection='HASH over primary-node shortest candidates across planes',
+                source_ports=list(range(fabric_spec['shape']['planes'])),
+                switch_selection='HASH over reachable shortest candidates within the selected plane',
+                packet_spray=values['attributes']['ns3::UbLdstApi::UsePacketSpray']=='true',
+                use_shortest_paths=values['attributes']['ns3::UbLdstApi::UseShortestPaths']=='true',
+                packet_spray_salt='native 8-bit incrementing packet field, echoed by response',
+                transport_channels_used=False,inactive_devices_have_routes=True,
+                validation='declaration; actual route tables checked in effective_backend.json')
         save(output/'fabric-audit.json',fabric_audit)
     request=save(output/'requested_backend.json',requested)
     resolved=invoke('check',[backend_binary,'--check-backend',request])

@@ -184,6 +184,8 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
         Require(input_.at("globals").at(key) == value, "unsupported active global " + key);
     const bool native = input_.at("profiles").at("dispatch").at("programming_model") == "native_memory" ||
                         input_.at("profiles").at("combine").at("programming_model") == "native_memory";
+    if (native) Require(input_.at("attributes").at("ns3::UbLdstApi::UseShortestPaths")=="true",
+                        "Native memory currently requires shortest paths");
     if (native) for (const auto* key : {"ns3::UbLdstThread::StoreRequestSize", "ns3::UbLdstThread::LoadResponseSize"})
     {
         const auto size = std::stoull(input_.at("attributes").at(key).get<std::string>());
@@ -304,7 +306,9 @@ void BackendConfig::WriteEffective(const std::vector<ns3::Ptr<ns3::UbController>
     if (input_.contains("fabric"))
     {
         result["schema_version"] = "moe-ub-effective-backend/2";
-        result["fabric_audit"] = AuditLiveFabric(input_.at("fabric"));
+        result["fabric_audit"] = AuditLiveFabric(input_.at("fabric"),
+            input_.at("profiles").at("dispatch").at("programming_model")=="native_memory" ||
+            input_.at("profiles").at("combine").at("programming_model")=="native_memory");
     }
     for (const auto& app : apps) append("application", app->GetNode()->GetId(), app);
     for (const auto& controller : controllers)

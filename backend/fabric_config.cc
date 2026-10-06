@@ -121,7 +121,7 @@ void CheckFabricPlan(const Json& fabric, const Json& plan)
     }
     Check(input.at("deployment").at("ranks") == placement, "plan physical placement differs");
 }
-Json AuditLiveFabric(const Json& fabric)
+Json AuditLiveFabric(const Json& fabric, bool native_memory)
 {
     Shape s(fabric); uint64_t queries = 0, tps = 0;
     auto route = [&](uint32_t node, uint32_t dst, uint32_t plane, const std::vector<uint16_t>& expected) {
@@ -173,7 +173,38 @@ Json AuditLiveFabric(const Json& fabric)
             for (uint32_t dst = 0; dst < s.devices; ++dst)
                 route(s.L2(plane, spine), dst, plane, {static_cast<uint16_t>(dst / s.perServer)});
     }
-    return {{"status", "matched_before_business_activation"}, {"route_queries", queries},
+    Json result = {{"status", "matched_before_business_activation"}, {"route_queries", queries},
             {"directed_transports", tps}, {"bindings", bindings}, {"inactive_devices_checked", true}};
+    if (native_memory)
+    {
+        uint64_t nativeQueries = 0;
+        auto primary = [&](uint32_t node, uint32_t dst, const std::vector<uint16_t>& expected, bool source) {
+            auto routing = ns3::NodeList::GetNode(node)->GetObject<ns3::UbSwitch>()->GetRoutingProcess();
+            std::vector<uint16_t> actual;
+            // Native source/response use the primary node address. Switches
+            // try port zero then fall back to the primary address, as upstream.
+            uint32_t dip = source ? utils::NodeIdToIp(dst).Get() : utils::NodeIdToIp(dst,0).Get();
+            routing->GetShortestCandidates(dip, UINT16_MAX, actual);
+            std::sort(actual.begin(),actual.end());
+            Check(actual==expected,"native shortest candidates differ"); ++nativeQueries;
+        };
+        std::vector<uint16_t> planes;
+        for (uint16_t p=0;p<s.planes;++p) planes.push_back(p);
+        for (uint32_t n=0;n<s.devices;++n) for (uint32_t dst=0;dst<s.devices;++dst)
+            if (n!=dst) primary(n,dst,planes,true);
+        for (uint32_t p=0;p<s.planes;++p) for (uint32_t dst=0;dst<s.devices;++dst)
+        {
+            for (uint32_t server=0;server<s.servers;++server)
+                primary(s.L1(server,p),dst,dst/s.perServer==server ?
+                    std::vector<uint16_t>{static_cast<uint16_t>(dst%s.perServer)} : uplinks,false);
+            for (uint32_t spine=0;spine<s.spines;++spine)
+                primary(s.L2(p,spine),dst,{static_cast<uint16_t>(dst/s.perServer)},false);
+        }
+        result["native_memory"]={{"route_queries",nativeQueries},{"source_ports",planes},
+            {"source_address","primary_node"},{"remote_l1_uplinks",uplinks},
+            {"plane_crossing","source_selects_plane; switches_remain_in_that_plane"},
+            {"transport_channels_used",false}};
+    }
+    return result;
 }
 }

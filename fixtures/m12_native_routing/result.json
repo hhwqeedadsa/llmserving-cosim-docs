@@ -1,0 +1,169 @@
+{
+  "passed": true,
+  "cases": {
+    "fixed": {
+      "simulation_end_ns": 31682,
+      "native_transfers": 247,
+      "runtime_physical_packets": 2064,
+      "routes": {
+        "source_ports": {
+          "False": [
+            0
+          ],
+          "True": [
+            1
+          ]
+        },
+        "spines": {
+          "False:0": [
+            1
+          ],
+          "True:1": [
+            0
+          ]
+        },
+        "out_of_order_data_arrivals": {
+          "100": 0,
+          "101": 0
+        },
+        "packets_with_paths": 516
+      }
+    },
+    "spray": {
+      "simulation_end_ns": 31283,
+      "native_transfers": 247,
+      "runtime_physical_packets": 2064,
+      "routes": {
+        "source_ports": {
+          "False": [
+            0,
+            1
+          ],
+          "True": [
+            0,
+            1
+          ]
+        },
+        "spines": {
+          "False:0": [
+            0,
+            1,
+            2
+          ],
+          "False:1": [
+            0,
+            1,
+            2
+          ],
+          "True:1": [
+            0,
+            1,
+            2
+          ],
+          "True:0": [
+            0,
+            1,
+            2
+          ]
+        },
+        "out_of_order_data_arrivals": {
+          "100": 61,
+          "101": 59
+        },
+        "packets_with_paths": 516
+      }
+    },
+    "unequal": {
+      "simulation_end_ns": 567248,
+      "native_transfers": 247,
+      "runtime_physical_packets": 2064,
+      "routes": {
+        "source_ports": {
+          "False": [
+            0,
+            1
+          ],
+          "True": [
+            0,
+            1
+          ]
+        },
+        "spines": {
+          "False:0": [
+            0,
+            1,
+            2
+          ],
+          "False:1": [
+            0,
+            1,
+            2
+          ],
+          "True:1": [
+            0,
+            1,
+            2
+          ],
+          "True:0": [
+            0,
+            1,
+            2
+          ]
+        },
+        "out_of_order_data_arrivals": {
+          "100": 76,
+          "101": 67
+        },
+        "packets_with_paths": 516
+      }
+    },
+    "truth-off": {
+      "simulation_end_ns": 567248,
+      "native_transfers": 247,
+      "runtime_physical_packets": 2064,
+      "routes": "detail_disabled"
+    }
+  },
+  "passive_wire_and_time_equal": true,
+  "nonshortest_rejected": true,
+  "hardware_calibrated": false,
+  "multiple_tp_enabled": false,
+  "ub_revision": "ffb178144635b724e6960887b470884e3d6e330f",
+  "write_fabric_regression": true,
+  "fabric_unit_tests": 3,
+  "probe": {
+    "command": [
+      "bash",
+      "-e",
+      "-c",
+      ".venv/llmservingsim-native/bin/python tests/integration/check_native_routing.py --build-dir build/v04-platform --output-dir runs/v04-platform/native-routing-cases-03\nPYTHONPATH=python:tests/unit .venv/llmservingsim-native/bin/python -m unittest fabric_test\n.venv/llmservingsim-native/bin/python tests/integration/check_target_fabric.py --build-dir build/v04-platform --output-dir runs/v04-platform/write-fabric-regression-cases-01"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-06T07:33:11.505070+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 34359738368,
+      "wall_seconds": 1800.0
+    },
+    "peak_sampled_group_rss_bytes": 109907968,
+    "status": "completed",
+    "peak_sampled_artifact_bytes": 19011121152,
+    "child_exit_code": 0,
+    "ended_utc": "2026-10-06T07:33:47.189658+00:00",
+    "wall_seconds": 35.68459190428257,
+    "max_waited_child_rss_kib": 103588
+  },
+  "retained_failures": {
+    "build-native-routing-01": "test target initially omitted the existing JSON include path",
+    "build-native-routing-02": "test helper name conflicted with ns3::Now; renamed",
+    "native-routing-01": "test launcher loaded the attribute file before registering UbEgressQueue; aligned registration with production backend"
+  },
+  "source_sha256": {
+    "tests/integration/native_routing_test.cc": "d6db7b601fe8026436ce2be1adeb871f85bc821f4b37bca3598a4de72f500dd6",
+    "tests/integration/check_native_routing.py": "485b0ebc1f3eae8844a2696bd3dc99386f54445ee4ddfec51a4c449a33b0ba82",
+    "backend/backend_config.cc": "5067537d76ffaf8184a70a4caec5af8ec240c6ad35d2e0912e624fc4090ba594",
+    "backend/fabric_config.cc": "84a8b9e7f786591971cc02d1ac76a00cb3a48d40f8136165170bbc3cc700cd2b",
+    "python/moe_ub_cosim/scenario.py": "4d3b45a0e7f455491ff64176e3a45b775a1b867903425884d0dfcf075ccbb9ce"
+  }
+}

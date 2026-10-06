@@ -150,7 +150,11 @@ LOAD 前增加一份真实的 32 B 元数据 STORE：数据拥有者原有准备
 
 属性使用完整原生键名及原生 checker 支持的值，例如时间字符串 `10ns`、带宽字符串 `224Gbps`；`network.defaults` 中的 `rate_bps`、`delay_ns` 等按字段单位接受整数。未知名称、重复或不存在的节点/链路、错误单位、目录与二进制不一致及不兼容选择都在业务激活前拒绝。TP 最大数据载荷 `4096 B` 来自锁定源码常量，不是可任意修改的运行时开关。
 
-当前场景采用预建通道和统一业务优先级 7。CBFC 按接收侧信用额度约束发送，SP 按严格优先级调度，HASH 按哈希选择候选交换出口；不启用多 TP 同时传输或按包分散到多个路径的 packet spray。二级多平面场景在每次 WQE 从最短 TP 候选中选择一个平面，交换机再在该平面内选择最短出口。此选择使用原生随机配置和 HASH，不读取内部操作来源。同芯片及独立组之间不因拓扑完整而自动产生业务通道。
+当前场景采用统一业务优先级 7、CBFC 信用流控和 SP 严格优先级调度。WRITE/RTP 保留预建通道，每次 WQE 选择一个最短 TP；该路径不启用多 TP 或逐包喷洒。二级多平面中的交换出口由 HASH 选择，同芯片及独立组之间不因拓扑完整而自动产生业务通道。
+
+原生 STORE/LOAD 使用 `ns3::UbLdstApi::UsePacketSpray`（默认 `false`）。关闭时，同一源/目的的方向固定选路；开启时，原生 API 递增 8 位负载均衡字段，源端和交换机按该字段选择包路径，响应回显此字段并独立选返回路径。源端使用节点主地址，fabric 的候选是各平面的源端口；交换机保持在已选平面，在实际可达最短出口中选择。有限样本不保证均匀。这条路径不使用 TP；种子/运行号仍保存，观测不读取或消耗协议随机状态。
+
+已验证组合为 WRITE/RTP 固定选路、原生 STORE/LOAD 固定选路或逐包喷洒，均使用 HASH、最短路径和 CBFC；原生结构化输入的 `UseShortestPaths=false` 被拒绝。`effective_backend.json` 的 `fabric_audit.native_memory` 保存实际候选检查，生成器的声明与运行时核对分开。输入及受控乱序检查见[原生喷洒示例](../fixtures/m12_native_routing/README.md)。
 
 `requested_backend.json` 与 `resolution.json` 保存请求值和来源；`network/backend.json` 保存规范化输入；执行目录的 `effective_backend.json` 读取实际网络对象、链路、路由与通道并核对。动态创建的 Jetty 则在 WQE 启动时核对 TA 与 inflight。文本 `network_attribute.txt` 在新路径中只是审计副本，不覆盖 `backend.json`。合法的资源数值仍可能不足以完成某个负载，实际耗尽或超时按失败处理。
 

@@ -1,0 +1,813 @@
+{
+  "schema_version": "mapping-value-report/1",
+  "analysis_version": "candidate-evidence-v3",
+  "pairs": [
+    {
+      "assessment": "runs/mapping_value/batch4/r000",
+      "run_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 0,
+      "material_round_effect": false,
+      "application_window_hit": false,
+      "conditions": {
+        "E1": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 0,
+      "mapping_candidate_reduction_E5_vs_E4": 0
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r001",
+      "run_manifest_sha256": "1aa188c522368c414be9b7381dfeb3a1b77bacaecf888aea04256bcd96e9f789",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 685,
+      "material_round_effect": true,
+      "application_window_hit": false,
+      "conditions": {
+        "E1": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 32,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 25,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 32,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 25,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 31,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 31,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 7,
+      "mapping_candidate_reduction_E5_vs_E4": 7
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r002",
+      "run_manifest_sha256": "5985f11cd2d23ef6096a96ef908793d7a08054564fd0267f80e1f2d73be3a1a6",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 6710,
+      "material_round_effect": true,
+      "application_window_hit": false,
+      "conditions": {
+        "E1": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 32,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 25,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 32,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 25,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 31,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "endpoint_preparation_increase",
+          "port_candidate_count": 31,
+          "port_target_ranks": null,
+          "endpoint_candidates": [
+            3
+          ],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 7,
+      "mapping_candidate_reduction_E5_vs_E4": 7
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r003",
+      "run_manifest_sha256": "565bd3eec0799f2db224f9a5f99d28712e0f19ea308c0d6b83bfbef79817dd41",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": -5,
+      "material_round_effect": false,
+      "application_window_hit": true,
+      "conditions": {
+        "E1": {
+          "assessment": "unresolved_wait",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 0,
+      "mapping_candidate_reduction_E5_vs_E4": 0
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r004",
+      "run_manifest_sha256": "79fd7fea139598cf9d83b973ae410e990b7e9f5a5196e5cb26fbc60f7e09746c",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 381,
+      "material_round_effect": true,
+      "application_window_hit": true,
+      "conditions": {
+        "E1": {
+          "assessment": "unresolved_wait",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            5
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 28,
+          "port_target_ranks": [
+            4
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 28,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            5
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            1
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 4,
+      "mapping_candidate_reduction_E5_vs_E4": 4
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r005",
+      "run_manifest_sha256": "3a048dec64d5c67f1460670ed7d739dd495366d1cbe5d3d9bc5c534f6daa92b4",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 0,
+      "material_round_effect": false,
+      "application_window_hit": false,
+      "conditions": {
+        "E1": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 0,
+      "mapping_candidate_reduction_E5_vs_E4": 0
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r006",
+      "run_manifest_sha256": "61b07eb05d1b831aec028b5e71d91750b115664334e7f8b5a1fc8816d6789dda",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": 6,
+      "material_round_effect": false,
+      "application_window_hit": true,
+      "conditions": {
+        "E1": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 0,
+      "mapping_candidate_reduction_E5_vs_E4": 0
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r007",
+      "run_manifest_sha256": "9d00fdce509c774ec66e716a62e4cf73c0ac7ff6962d96558f109301abe84b07",
+      "reference_manifest_sha256": "953bb270fdf9d40982cb1fd975b4ba2f2c09cddeea0008e8f47f3d0b855c987b",
+      "round_delta_ns": -11,
+      "material_round_effect": false,
+      "application_window_hit": true,
+      "conditions": {
+        "E1": {
+          "assessment": "unresolved_wait",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 31,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 31,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "unresolved_wait_with_network_changes",
+          "port_candidate_count": 32,
+          "port_target_ranks": [
+            31
+          ],
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "selected_call_scope_only",
+          "port_target_in_candidates": true,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 1,
+      "mapping_candidate_reduction_E5_vs_E4": 1
+    },
+    {
+      "assessment": "runs/mapping_value/batch4/r008",
+      "run_manifest_sha256": "df1842d4c97117acbf966357ebfa1b01e01a7361fc79b22857f0c295477ed2f0",
+      "reference_manifest_sha256": "1aa188c522368c414be9b7381dfeb3a1b77bacaecf888aea04256bcd96e9f789",
+      "round_delta_ns": 0,
+      "material_round_effect": false,
+      "application_window_hit": false,
+      "conditions": {
+        "E1": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": null,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "network_observations_unavailable",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E2": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E4": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E3S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        },
+        "E5S": {
+          "assessment": "no_endpoint_change_above_tolerance",
+          "port_candidate_count": 0,
+          "port_target_ranks": null,
+          "endpoint_candidates": [],
+          "material_prediction_correct": true,
+          "port_evaluation_status": "no_selected_call",
+          "port_target_in_candidates": null,
+          "selected_call_target_wrongly_excluded": false
+        }
+      },
+      "mapping_candidate_reduction_E3_vs_E2": 0,
+      "mapping_candidate_reduction_E5_vs_E4": 0
+    }
+  ],
+  "independent_random_workloads": null,
+  "independence_status": "not_inferred_from_pair_or_request_count",
+  "physical_pairs": 9,
+  "calibration_status": "unvalidated_reference",
+  "qualification": "Paired mechanisms on one fixed workload, not independent request samples or statistical significance. Mapping candidate scope and enhanced observation ranking are reported separately."
+}

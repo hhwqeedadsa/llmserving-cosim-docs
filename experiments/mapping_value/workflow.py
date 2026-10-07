@@ -16,7 +16,7 @@ ARTIFACT_ROOTS = [ROOT / p for p in (
 
 
 def host():
-    return dict(rss_bytes=8*2**30, address_bytes=12*2**30, artifact_bytes=32*2**30,
+    return dict(rss_bytes=8*2**30, address_bytes=12*2**30, artifact_bytes=48*2**30,
                 wall_seconds=1800, min_free_bytes=20*2**30,
                 artifact_roots=[str(p) for p in ARTIFACT_ROOTS])
 

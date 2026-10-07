@@ -1,0 +1,33 @@
+{
+  "schema_version": "mapping-value-full-reference/1",
+  "source_slice_sha256": "b90fb6150ca272af9f22552c092750e09148c199918f92c0950549b251714d07",
+  "ranks": 128,
+  "requests": 1024,
+  "model_blocks": 61,
+  "moe_blocks": 58,
+  "hidden_size": 7168,
+  "experts_per_layer": 256,
+  "top_k": 8,
+  "dataset": "core12345/MoE_expert_selection_trace",
+  "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "source_model": "cognitivecomputations/DeepSeek-R1-AWQ",
+  "source_subset": "mmlu",
+  "route_entry": 1,
+  "simulation_rounds": 1,
+  "max_simulation_ns": 100000000,
+  "selected_ports": 42,
+  "full_cases": [
+    "normal",
+    "physical_egress_112_gbps",
+    "physical_egress_56_gbps"
+  ],
+  "target_layer": 31,
+  "target_port": [
+    768,
+    16
+  ],
+  "record_compressed_reserve_bytes": 2147483648,
+  "export_compressed_reserve_bytes": 2147483648,
+  "analysis_projection_reserve_bytes": 2147483648,
+  "artifact_budget_bytes": 51539607552
+}

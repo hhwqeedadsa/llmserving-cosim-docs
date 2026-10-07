@@ -61,7 +61,7 @@ def public_static(run, design):
             ('time_tolerance_ns','material_round_absolute_ns','material_round_relative','analysis_version')})
 
 
-def prepare(run, reference, config, output):
+def prepare(run, reference, config, output, reference_prepared=None):
     run, reference, output = map(lambda p:Path(p).resolve(), (run,reference,output))
     require(not output.exists(), 'Preparation output already exists')
     design = read(config)
@@ -78,7 +78,28 @@ def prepare(run, reference, config, output):
     require(public == public_static(reference,design), 'Paired public static inputs differ')
     output.mkdir(parents=True); pool = output/'projection'; pool.mkdir()
     save(pool/'public.json',public)
+    shared_reference = None
+    if reference_prepared is not None:
+        reference_prepared=Path(reference_prepared).resolve()
+        binding=read(reference_prepared/'preparation.json')
+        require(binding['design_sha256']==digest(config),'Shared reference uses another experiment design')
+        wanted=digest(reference/'manifest.json')
+        if binding['run_manifest_sha256']==wanted:
+            shared_reference=(reference_prepared/'projection','',binding['projection_sha256'])
+        else:
+            require(binding['reference_manifest_sha256']==wanted,'Shared reference belongs to another run')
+            shared_reference=(reference_prepared/'projection','reference_',binding['projection_sha256'])
+        require(read(reference_prepared/'projection/public.json')==public,'Shared reference public scope differs')
     for prefix,source in (('',run),('reference_',reference)):
+        if prefix and (source==run or shared_reference is not None):
+            previous,old_prefix,hashes=(pool,'',None) if source==run else shared_reference
+            for name in ('endpoint','stages','ports','queues','relations','state_relations'):
+                name += '.jsonl'; path=previous/(old_prefix+name)
+                require(path.is_file() and not path.is_symlink(),'Invalid shared projection file')
+                if hashes is not None:
+                    require(digest(path)==hashes[old_prefix+name],'Shared projection checksum mismatch')
+                os.link(path,pool/(prefix+name))
+            continue
         endpoints = list(stored_rows(source/'observed','endpoint_ops.jsonl'))
         anchor = anchors(stored_rows(source/'truth','operation_registry.jsonl'),endpoints,design['group_id'],design['anchor_rank'])
         write_rows(pool/(prefix+'endpoint.jsonl'),endpoints)
@@ -106,6 +127,7 @@ def prepare(run, reference, config, output):
         run=str(run),reference=str(reference),design_sha256=digest(config),
         run_manifest_sha256=digest(run/'manifest.json'),reference_manifest_sha256=digest(reference/'manifest.json'),
         input_sha256={c:digest(output/c/'condition.json') for c in sorted(CONDITIONS)},
+        projection_sha256={p.name:digest(p) for p in sorted(pool.iterdir())},
         implementation_sha256={p.name:digest(p) for p in sorted(Path(__file__).parent.glob('*.py'))},
         conditions=sorted(CONDITIONS),relation_scope='whole_logical_call_all_captured_windows',
         state_categories=['dispatch_count','combine_flag','load_ready']))

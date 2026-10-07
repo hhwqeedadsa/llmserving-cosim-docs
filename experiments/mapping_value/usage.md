@@ -67,11 +67,41 @@ python -m experiments.mapping_value assess \
 
 结果位于 `prepared/`、`analysis/`、`evaluation/` 和 `summary.json`，命令在 `commands/`。所需队列与状态来源已保留时，可在新输出目录选择 E4、E5、E3S、E5S；无须重跑同一个物理场景。
 
+多个对照共用参考时，给 `prepare` 或 `assess` 增加 `--reference-prepared 既有准备目录`。程序检查参考运行、设计、公共范围和文件摘要后硬链接复用，避免为每个对照复制正常数据。正常自对照的当前与参考投影也只存一份。所有共享文件应保持不可修改。
+
+## 同步窗口、重叠对照和结果汇总
+
+正常与 `r001` 已完成后，可生成后续三项固定干预：
+
+```bash
+python -m experiments.mapping_value freeze-followups \
+  --baseline runs/mapping_value/demo \
+  --endpoint-run runs/mapping_value/demo/r001/run \
+  --output runs/mapping_value/demo/followups
+```
+
+用同一个 `run-case` 命令执行生成的 `r006.json`–`r008.json`。`r006` 选择第 2 个 MoE 层业务发送结束后的真实完成标志窗口，`r007` 选择同一物理出口上同一次调用的业务窗口；二者均用 56 Gb/s，并相对 `r000` 评价。找不到符合定义的正常窗口时拒绝生成，不伪造状态消息。`r008` 在 `r001` 端侧增量之上叠加一个正常时无应用流量的窗口；它的 `assess --reference` 必须使用 `r001/run`，从而只移除网络干预，而非将两个干预的损失混在一起。
+
+评价还会核对成对模型、放置、平台代码、二进制、网络参数和路由/传输结构，拒绝未声明的变化。下面的入口用于检查实际局部时长变化与远端业务、状态就绪的先后，不属于算法输入：
+
+```bash
+python -m experiments.mapping_value explain \
+  --run runs/mapping_value/demo/r001/run \
+  --reference runs/mapping_value/demo/r000 \
+  --layer-id 2 --kind combine \
+  --output runs/mapping_value/demo/effects-r001.json
+python -m experiments.mapping_value report \
+  --assessment runs/mapping_value/demo/assessment-r001 \
+  --output runs/mapping_value/demo/report.json
+```
+
+`report` 可重复给出 `--assessment`，但拒绝重复的物理对照、不一致的信息条件或不同分析版本。它保留逐对照结果，不把请求数或信息条件数当作独立随机样本数。完整规模输入与预检入口见[完整场景参数](configs/full/README.md)。
+
 ## 资源和检查
 
 小运行通过平台预算限制 RSS 8 GiB、单进程地址空间 12 GiB、单阶段 1800 秒；正常执行上限为 1 ms 仿真时间。记录与导出各有 512 MiB 压缩预算；分析输入每张表最多 200 万行、512 MiB，单条最多 64 KiB。准备时相同文件在各信息条件间用硬链接复用。
 
-累计产物限 32 GiB，并至少保留 20 GiB 文件系统空闲；代码中的 `ARTIFACT_ROOTS` 同时统计新实验根与此前登记的 M10/M16 根。`run.json` / `execute.json` 保存本次实际绝对路径和预算。使用其他运行位置时，平台仍计入本次输出，不能借此避开已有根。不要通过修改预算字段绕过一次失败。
+累计产物限 48 GiB，并至少保留 20 GiB 文件系统空闲；代码中的 `ARTIFACT_ROOTS` 同时统计新实验根与此前登记的 M10/M16 根。`run.json` / `execute.json` 保存本次实际绝对路径和预算。使用其他运行位置时，平台仍计入本次输出，不能借此避开已有根。不要通过修改预算字段绕过一次失败。
 
 研究输入隔离与人工差值检查无需后端、真实数据或历史产物：
 

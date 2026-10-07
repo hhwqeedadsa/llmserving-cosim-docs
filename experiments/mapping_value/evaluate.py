@@ -39,7 +39,9 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
             preparation['design_sha256']==digest(config) and
             preparation['input_sha256'][prediction['condition']]==prediction['input_sha256'],
             'Analysis/preparation is not bound to this pair and design')
-    require(intervention['normal_manifest_sha256']==digest(reference/'manifest.json'), 'Case normal reference differs')
+    require(intervention.get('paired_reference_manifest_sha256',intervention['normal_manifest_sha256'])==digest(reference/'manifest.json'), 'Case paired reference differs')
+    from .pairing import check_pair
+    pairing = check_pair(run,reference,intervention)
     reports = [read(p/'raw/execution/result.json') for p in (run,reference)]
     for report in reports:
         require(report['normal_exit'] and report['network_drain']['idle'], 'Evaluation requires complete executions')
@@ -47,8 +49,9 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
     delta = reports[0]['service_finished_ns']-reports[1]['service_finished_ns']
     threshold = max(design['material_round_absolute_ns'],reports[1]['service_finished_ns']*design['material_round_relative'])
     endpoints = paired_operations(run,reference)
-    targets = intervention.get('endpoint_prepare',[])
-    intervals = intervention.get('port_service',[])
+    components=intervention.get('evaluated_components',['endpoint_prepare','port_service'])
+    targets = intervention.get('endpoint_prepare',[]) if 'endpoint_prepare' in components else []
+    intervals = intervention.get('port_service',[]) if 'port_service' in components else []
     endpoint_targets = sorted({r['rank_id'] for r in targets})
     port_targets = sorted({(r['node_id'],r['port_id']) for r in intervals})
     # Applied resources and actual application traffic are separate facts.
@@ -69,6 +72,7 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
         require(len(matches)==1, 'Selected public call cannot be evaluated uniquely')
         selected_id = matches[0]['operation_id']
     candidates = {(r['switch_id'],r['port_id']) for r in prediction['port_candidates']}
+    ordered=[(r['switch_id'],r['port_id']) for r in prediction['port_candidates']]
     all_candidates = {(r['switch_id'],r['port_id']) for r in prediction['all_changed_ports']}
     selected_hit = selected_id in hits
     public = read(Path(prepared)/prediction['condition']/'public.json')
@@ -78,7 +82,7 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
               'no_selected_call' if selected is None else
               'target_port_outside_observed_scope' if not set(port_targets)<=observed_ports else 'selected_call_scope_only')
     value = dict(schema_version='mapping-value-evaluation/1',condition=prediction['condition'],
-        analysis_sha256=digest(analysis),case_sha256=digest(case),
+        analysis_sha256=digest(analysis),case_sha256=digest(case),pairing=pairing,
         run_manifest_sha256=digest(run/'manifest.json'),reference_manifest_sha256=digest(reference/'manifest.json'),
         normal_round_ns=reports[1]['service_finished_ns'],round_ns=reports[0]['service_finished_ns'],
         round_delta_ns=delta,material_threshold_ns=threshold,material_round_effect=delta>threshold,
@@ -92,6 +96,8 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
         application_categories_in_intervention_windows=categories,
         application_window_hit=bool(hits),selected_call_hit=selected_hit,
         port_target_in_candidates=None if not port_targets or not port_evaluable else set(port_targets)<=candidates,
+        port_target_ranks=None if not port_targets or not port_evaluable else
+            [ordered.index(p)+1 if p in ordered else None for p in port_targets],
         selected_call_target_wrongly_excluded=port_evaluable and selected_hit and not set(port_targets)<=candidates,
         assessment=prediction['assessment'],
         interpretation='Resource declarations are not impact labels. Packet/control-only hits are not inferred from application attribution. '

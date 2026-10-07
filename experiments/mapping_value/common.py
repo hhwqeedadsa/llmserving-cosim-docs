@@ -44,7 +44,7 @@ def write_rows(path, values):
     with Path(path).open("w") as stream:
         for count, value in enumerate(values, 1):
             require(count <= 2_000_000, "Table row budget exceeded")
-            line = json.dumps(value, separators=(",", ":"), allow_nan=False) + "\n"
+            line = json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n"
             require(len(line) <= 65536, "Table record budget exceeded")
             stream.write(line)
             require(stream.tell() <= 512 * 2**20, "Table byte budget exceeded")

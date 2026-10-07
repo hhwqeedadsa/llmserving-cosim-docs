@@ -21,6 +21,7 @@
 | M14：操作阶段与等待统计 | 真实节点/回调阶段、纯 VOQ 与 FIFO 面积/均值/峰值、详细重采样和被动性 | [输入与验收](../fixtures/m14_operation_queue/README.md) |
 | M15：聚合保存与采样能力 | 直接窗口聚合、分类实际应用消息来源、有限详细区间、采样拒绝与旧详细数据兼容 | [输入与验收](../fixtures/m15_aggregate_capture/README.md) |
 | M16：公开交付与完整原生首轮 | 独立用户流程、组合回归、原生完整首轮执行、校验封存和公开采样；有界资源与失败修复证据 | [原生用户示例](../examples/native_first_round/README.md)、[目标验收](../fixtures/m16_native_target/README.md) |
+| 端网映射价值实验（独立研究） | 九次小场景及三次完整首轮，隔离准备/分析/评价，E1–E5 与 A/B/C 对照、资源证据和公开复现入口；保留无收益与非单调结果 | [结果与限制](../experiments/mapping_value/results.md)、[实验命令](../experiments/mapping_value/usage.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

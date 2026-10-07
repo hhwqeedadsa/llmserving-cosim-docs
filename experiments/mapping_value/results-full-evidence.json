@@ -1,0 +1,745 @@
+{
+  "schema_version": "mapping-value-delivery-evidence/1",
+  "recorded_utc": "2026-10-07T07:03:22.799348+00:00",
+  "full_source_slice_sha256": "b90fb6150ca272af9f22552c092750e09148c199918f92c0950549b251714d07",
+  "backend_sha256": "782d3890a1546ba56aca007ae3e58560d417edab43343b2749cbb21254b91311",
+  "configuration_sha256": {
+    "experiment.json": "7d9a923175a512e15889a48eb3b841a82d2cc372cfed26dcb571e481c89c88e2",
+    "export-policy.json": "cd13f09f7361ca051a42c5011891707c070ae1e0f35abc2534a844d6adbdad0f",
+    "observation.json": "204ecf6f3d7e39197ad2d1631b3b7adfea72dbb9dae357f84191a00a0c5a5257",
+    "reference.json": "c73b8a0aa3986b3c3b7f03f2a6627122a81bd24eab42cc8ec4abb6f4cfc61a24"
+  },
+  "source_report_sha256": "47bb12c25fd75c564c3d3afbe69f5981a12a55dea4ade52a58f2b890690cf939",
+  "frozen_cases_sha256": "9f042350ae891433eb0ebe9dc86b1fa8d7d13b10645c500c3586131f694833aa",
+  "analysis_version": "candidate-evidence-v3",
+  "cases": {
+    "r000": {
+      "run": "runs/mapping_value/full/r000",
+      "run_manifest_sha256": "aa8568a2ded1a44cb9de46dbef3bc3de3798db6ce25368c7dca0c845f8584cd1",
+      "declaration": {
+        "schema_version": "mapping-value-case/1",
+        "case_id": "r000",
+        "normal_manifest_sha256": "aa8568a2ded1a44cb9de46dbef3bc3de3798db6ce25368c7dca0c845f8584cd1",
+        "endpoint_prepare": [],
+        "purpose": "normal",
+        "port_service": []
+      },
+      "case_sha256": "58b68fd6dda761dcc6570c112bed97dc8bf5423028ae696366d3689b599bc047",
+      "evaluation_sha256": {
+        "E1": "253e1ceeca03accaa2192c7be099d34523e39b7c0f0e906f20de74580cfb1317",
+        "E2": "338c1832c59ea4b3945d78d30be4bfe189f9cef003535b35ad9db364d21e27e0",
+        "E3": "42f0b98ea29483ea74af9ba26c30cd51ddf46e7ca6c74cb2422bf8d8332c82d9",
+        "E4": "70d1f1c89d85a6641e7d4bb1a1c6e5d5cc0db9657a6a498849c39de9e356b267",
+        "E5": "2404abcab5ebbb59f017d0483a07531a425949487156dc4fe1c28dd022e5b7c2"
+      },
+      "round_ns": 48446098,
+      "round_delta_ns": 0,
+      "round_delta_percent": 0.0,
+      "local_duration_increase_max_ns": 0,
+      "local_completion_shift_max_ns": 0,
+      "phases": {
+        "replay": {
+          "path": "runs/mapping_value/full/r000/logs/resources-replay/probe.json",
+          "sha256": "14ca6035d3ee70cd6077fe909910e9d1a2e0e1d1ce92df42ba92e3d982aaef49",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 4422.511986956,
+          "peak_sampled_group_rss_bytes": 48856924160,
+          "peak_sampled_artifact_bytes": 36626661376,
+          "limits": {
+            "sampled_group_rss_bytes": 51539607552,
+            "per_process_address_bytes": 60129542144,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 7200
+          }
+        },
+        "export": {
+          "path": "runs/mapping_value/full/r000/logs/resources-export/probe.json",
+          "sha256": "6c7bdae8300836563433bd8718ca715ee41c5f0563b32891a688bf208d875940",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 462.38708552345634,
+          "peak_sampled_group_rss_bytes": 180015104,
+          "peak_sampled_artifact_bytes": 37044953088,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          }
+        }
+      },
+      "assessment_stages": [
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E1-analyze.resources/probe.json",
+          "sha256": "4efbb75b76ce1fc707c588a4d10f58532d03fc1d6fcde8c900d245e54de7e15d",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.870954075828195,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 36971032576,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E1-evaluate.resources/probe.json",
+          "sha256": "e05f8e8b0596e928f9c1151821c89b3d537d00d74afeca3610a72c4dd1d82a70",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.593900311738253,
+          "peak_sampled_group_rss_bytes": 5357568,
+          "peak_sampled_artifact_bytes": 36974776320,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E2-analyze.resources/probe.json",
+          "sha256": "5318f585b7726886cf6dd71c07a74d675fcd447994d9964b561c650aaff63e34",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 31.257798915728927,
+          "peak_sampled_group_rss_bytes": 5357568,
+          "peak_sampled_artifact_bytes": 36977426432,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E2-evaluate.resources/probe.json",
+          "sha256": "56100bcb741a2b5006933040cc3d5f0cdc8fe1ef19c13c92092f51b9fbc78615",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.776220053434372,
+          "peak_sampled_group_rss_bytes": 7475200,
+          "peak_sampled_artifact_bytes": 36981166080,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E3-analyze.resources/probe.json",
+          "sha256": "d005f638bbd4cacf6b1eb9b3932dde64faf2b3d3838215a4d5449c43c68a3e5c",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 31.456893416121602,
+          "peak_sampled_group_rss_bytes": 244760576,
+          "peak_sampled_artifact_bytes": 36983816192,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E3-evaluate.resources/probe.json",
+          "sha256": "bf328020d51311903c074b9ed680a00b9579d7030225788285d5db7f3495536e",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.64924305304885,
+          "peak_sampled_group_rss_bytes": 6418432,
+          "peak_sampled_artifact_bytes": 36987555840,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E4-analyze.resources/probe.json",
+          "sha256": "56bbe3462a2f3f39f7c09d6a03830394adc7b0eab7f8a5084eaccf1e7e46c588",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.661274548619986,
+          "peak_sampled_group_rss_bytes": 239075328,
+          "peak_sampled_artifact_bytes": 36990205952,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E4-evaluate.resources/probe.json",
+          "sha256": "36a386e06dbd58591838ac4c1f77ba37916bfc2c542ad8d00d74e5981d0ed77a",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.53128824941814,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 36993945600,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E5-analyze.resources/probe.json",
+          "sha256": "8078e0bdf19f413c636dafe4fa1e21bcc10c7050c57b0dedea8830a2fabeb1ed",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.377888230606914,
+          "peak_sampled_group_rss_bytes": 256540672,
+          "peak_sampled_artifact_bytes": 36996595712,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/E5-evaluate.resources/probe.json",
+          "sha256": "3177703077370129efbc618e28256b29dd72ec81c18bc5e4b4d4da4852888862",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.726175494492054,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 37000335360,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r000/commands/prepare.resources/probe.json",
+          "sha256": "d46383f720ee3fb63e273998cb6f19f804af787b02730e19249dee57f1981eb3",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 76.29735580086708,
+          "peak_sampled_group_rss_bytes": 104099840,
+          "peak_sampled_artifact_bytes": 36968378368,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        }
+      ],
+      "assessment_total_wall_seconds": 393.19899214990437,
+      "assessment_peak_sampled_rss_bytes": 256540672
+    },
+    "r001": {
+      "run": "runs/mapping_value/full/r001/run",
+      "run_manifest_sha256": "914baf9151603963542b6892e3637f356c093de76117098d8fdd75f35e102704",
+      "declaration": {
+        "schema_version": "mapping-value-case/1",
+        "case_id": "r001",
+        "normal_manifest_sha256": "aa8568a2ded1a44cb9de46dbef3bc3de3798db6ce25368c7dca0c845f8584cd1",
+        "endpoint_prepare": [],
+        "purpose": "physical_egress_service",
+        "port_service": [
+          {
+            "node_id": 768,
+            "port_id": 16,
+            "start_ns": 25880000,
+            "end_ns": 27230000,
+            "rate_bps": 112000000000
+          }
+        ]
+      },
+      "case_sha256": "554f54d16ece9bdf9b7f26b70809fac767ef286fade5113edbf24391c35eae8d",
+      "evaluation_sha256": {
+        "E1": "7a79382f04d21df4954057504d3ed3cad3a2831a6660f14e125e0b9f02739ea9",
+        "E2": "b111e5286ba19ac388d2a873d0172e50a44bfb2239950251752ed38394529bd3",
+        "E3": "7e2593f49474710e6d4e9a47b1690cf7ae6c6aae65faa6704dae81cc99a08973",
+        "E4": "f7443393b360cf666a75dbeb300e3e255ce311853f56ba16ea49e880e619de95",
+        "E5": "a5cb147b33eda5f8eb8fefacf782fc268e20c107679738d904271b83155966fb"
+      },
+      "round_ns": 48508056,
+      "round_delta_ns": 61958,
+      "round_delta_percent": 0.12789058883545174,
+      "local_duration_increase_max_ns": 36913,
+      "local_completion_shift_max_ns": 86579,
+      "phases": {
+        "replay": {
+          "path": "runs/mapping_value/full/r001/run/logs/resources-replay/probe.json",
+          "sha256": "e37a227140789022de47defea890da0a5c7989cf19b53ef44fbd42cd492064f6",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 4485.140371289104,
+          "peak_sampled_group_rss_bytes": 48951214080,
+          "peak_sampled_artifact_bytes": 38244859904,
+          "limits": {
+            "sampled_group_rss_bytes": 51539607552,
+            "per_process_address_bytes": 60129542144,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 7200
+          }
+        },
+        "export": {
+          "path": "runs/mapping_value/full/r001/run/logs/resources-export/probe.json",
+          "sha256": "27a33c34c68d1ba72e07834d851791883c6ebf389002e78d24e60ac98703a255",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 463.8917035087943,
+          "peak_sampled_group_rss_bytes": 179916800,
+          "peak_sampled_artifact_bytes": 38662705152,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          }
+        }
+      },
+      "assessment_stages": [
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E1-analyze.resources/probe.json",
+          "sha256": "3bff9e57898f1a12a21148dd4fa079e429baa8777927cb01d8758bf1c512f802",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 31.085137149319053,
+          "peak_sampled_group_rss_bytes": 5345280,
+          "peak_sampled_artifact_bytes": 38589313024,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E1-evaluate.resources/probe.json",
+          "sha256": "cdd43a728d399ecc816bf7747bf8a63ea1871df8e1e2077d5b2f893da797ccb8",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.266710000112653,
+          "peak_sampled_group_rss_bytes": 5345280,
+          "peak_sampled_artifact_bytes": 38593142784,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E2-analyze.resources/probe.json",
+          "sha256": "7a2dd64ace42f56edc1b4de5bda41b72ad17accc5b3908d8f39b31d923e11502",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.738639377057552,
+          "peak_sampled_group_rss_bytes": 5341184,
+          "peak_sampled_artifact_bytes": 38595891200,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E2-evaluate.resources/probe.json",
+          "sha256": "5be217407947933f045a4add69e871d1256bfe60d4168255ca096c3835fc1d45",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 31.41440032608807,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 38599716864,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E3-analyze.resources/probe.json",
+          "sha256": "b93c95aa7f3697e6d8f77f1173d4e6a0d720f100e1f547978b2f86f210fd8777",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.31619477644563,
+          "peak_sampled_group_rss_bytes": 258576384,
+          "peak_sampled_artifact_bytes": 38602465280,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E3-evaluate.resources/probe.json",
+          "sha256": "d71cb5cb398615547a284116091f5430340b14fa54517c9dc91a2f8b9c5762cd",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.375468958169222,
+          "peak_sampled_group_rss_bytes": 5345280,
+          "peak_sampled_artifact_bytes": 38606290944,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E4-analyze.resources/probe.json",
+          "sha256": "46f3383ada6b6da9223d69f194005c44252ccf61954123ce1836be08eff43e88",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.867282172665,
+          "peak_sampled_group_rss_bytes": 257646592,
+          "peak_sampled_artifact_bytes": 38609039360,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E4-evaluate.resources/probe.json",
+          "sha256": "f706db4521bcc65d6e393f0f9c6b5a92f2c1283316618b6303cde164137e1265",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.95237412676215,
+          "peak_sampled_group_rss_bytes": 5308416,
+          "peak_sampled_artifact_bytes": 38612865024,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E5-analyze.resources/probe.json",
+          "sha256": "747931130f577258d09dc7651cb3da68eb33bae8032275652c288d2499427c09",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.54692131653428,
+          "peak_sampled_group_rss_bytes": 256565248,
+          "peak_sampled_artifact_bytes": 38615613440,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/E5-evaluate.resources/probe.json",
+          "sha256": "271fed8551b13ab487b84fb100ac2f76d79d0ef69c6e5ab847078d6a7b9561c8",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.790581004694104,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 38619439104,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r001/commands/prepare.resources/probe.json",
+          "sha256": "22a6ce8134418820a38d9856dc68bd5511d45a598df302af2080398c37886df0",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 83.60569211095572,
+          "peak_sampled_group_rss_bytes": 103976960,
+          "peak_sampled_artifact_bytes": 38586572800,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        }
+      ],
+      "assessment_total_wall_seconds": 408.95940131880343,
+      "assessment_peak_sampled_rss_bytes": 258576384
+    },
+    "r002": {
+      "run": "runs/mapping_value/full/r002/run",
+      "run_manifest_sha256": "bd5d197cd5231f55d62bcb5f4853eb8257f728bc928c54d6696f3c936b47d9dd",
+      "declaration": {
+        "schema_version": "mapping-value-case/1",
+        "case_id": "r002",
+        "normal_manifest_sha256": "aa8568a2ded1a44cb9de46dbef3bc3de3798db6ce25368c7dca0c845f8584cd1",
+        "endpoint_prepare": [],
+        "purpose": "physical_egress_service",
+        "port_service": [
+          {
+            "node_id": 768,
+            "port_id": 16,
+            "start_ns": 25880000,
+            "end_ns": 27230000,
+            "rate_bps": 56000000000
+          }
+        ]
+      },
+      "case_sha256": "c708aa72ecf3ecfd97bd5b9640147b026441ce3c23e22032ebaaa48350d748ab",
+      "evaluation_sha256": {
+        "E1": "31887b1f6a29406817bca60a672db35707f002bfee4fad2b3db70b33abb67f2a",
+        "E2": "b4e373ac719e790dd2aec95a0597e6478cefd363873ea9d76240837ce223bac6",
+        "E3": "d354db2672ea7252ca79854f3f1f31635dde349237ded0755a27011f7064af99",
+        "E4": "eb850d407a1a73ae2c5d51935bf4ffc28b603de0448f7e58a9387ed916233f44",
+        "E5": "893794e56d54b8901161099c149c857be0a7c37ae0d4635bb04b54bee9205fa9"
+      },
+      "round_ns": 48456877,
+      "round_delta_ns": 10779,
+      "round_delta_percent": 0.02224946991602915,
+      "local_duration_increase_max_ns": 39910,
+      "local_completion_shift_max_ns": 42773,
+      "phases": {
+        "replay": {
+          "path": "runs/mapping_value/full/r002/run/logs/resources-replay/probe.json",
+          "sha256": "693cf87ddc2db52dafb9ddd11aa095aa04e5dfc692dc58a3b02bfe926339551a",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 4401.567407969385,
+          "peak_sampled_group_rss_bytes": 48943980544,
+          "peak_sampled_artifact_bytes": 39863930880,
+          "limits": {
+            "sampled_group_rss_bytes": 51539607552,
+            "per_process_address_bytes": 60129542144,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 7200
+          }
+        },
+        "export": {
+          "path": "runs/mapping_value/full/r002/run/logs/resources-export/probe.json",
+          "sha256": "1072df723086412570c7fbebcf39c1dcb05fefd06d39d19a74c6b32d8ecc5d86",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 466.9241516441107,
+          "peak_sampled_group_rss_bytes": 177799168,
+          "peak_sampled_artifact_bytes": 40284807168,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          }
+        }
+      },
+      "assessment_stages": [
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E1-analyze.resources/probe.json",
+          "sha256": "0caac700075ec043da55f2588325f6afd8723e6776475d87e1cd1029bc890b33",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.708206882700324,
+          "peak_sampled_group_rss_bytes": 6385664,
+          "peak_sampled_artifact_bytes": 40210915328,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E1-evaluate.resources/probe.json",
+          "sha256": "2247c649505f76ed35c9edf59a60e405bde59ef9c4c8978958ed06b988fba98a",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.787869971245527,
+          "peak_sampled_group_rss_bytes": 7467008,
+          "peak_sampled_artifact_bytes": 40214745088,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E2-analyze.resources/probe.json",
+          "sha256": "7a8a5e4ef1695541d6ee3e7a5af4f101a3c15fed0ccbe26370b531174b12422b",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.52500463090837,
+          "peak_sampled_group_rss_bytes": 5341184,
+          "peak_sampled_artifact_bytes": 40217493504,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E2-evaluate.resources/probe.json",
+          "sha256": "c83a79daa540a8d58cb02cec0f0cb2c285bc9ab664df12c2a1a5ed95ff38f733",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.745432496070862,
+          "peak_sampled_group_rss_bytes": 6426624,
+          "peak_sampled_artifact_bytes": 40221319168,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E3-analyze.resources/probe.json",
+          "sha256": "95b0ca0753a7621e8ddebc5f6a1db71b2de3e048152a814fd24e43fe37f5f238",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.68030215613544,
+          "peak_sampled_group_rss_bytes": 256835584,
+          "peak_sampled_artifact_bytes": 40224067584,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E3-evaluate.resources/probe.json",
+          "sha256": "eee3907ab8903741be56f0b585995a243aca1711720fec2667a3174a636d01e7",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.72129542939365,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 40227893248,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E4-analyze.resources/probe.json",
+          "sha256": "27a41d3230941aa4d2527ce8deabd094e452cfa3c2e567f474f7de671730a87a",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.87969964183867,
+          "peak_sampled_group_rss_bytes": 6389760,
+          "peak_sampled_artifact_bytes": 40230641664,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E4-evaluate.resources/probe.json",
+          "sha256": "3a1c8f8fae7e17991955bff00c1c585387eb808d9e4835e0f7ec273491e458f3",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.773075522854924,
+          "peak_sampled_group_rss_bytes": 6385664,
+          "peak_sampled_artifact_bytes": 40234467328,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E5-analyze.resources/probe.json",
+          "sha256": "f9c846a0a932672bad955b3d7d1425c24ba14d8ec040a788b813fce2d53d2b10",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.96574246138334,
+          "peak_sampled_group_rss_bytes": 258379776,
+          "peak_sampled_artifact_bytes": 40237215744,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/E5-evaluate.resources/probe.json",
+          "sha256": "160860e8bc3a567fca08be20ae848e4818ce068281ee0bb0364e3585b4ad8b1e",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 30.608700048178434,
+          "peak_sampled_group_rss_bytes": 6422528,
+          "peak_sampled_artifact_bytes": 40241041408,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        },
+        {
+          "path": "runs/mapping_value/full/assessment-r002/commands/prepare.resources/probe.json",
+          "sha256": "6f0015e3d7ddd52d9b6292010964334472d8735d80fa1118f938918c492c816a",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 84.19574892893434,
+          "peak_sampled_group_rss_bytes": 114864128,
+          "peak_sampled_artifact_bytes": 40208175104,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800.0
+          }
+        }
+      ],
+      "assessment_total_wall_seconds": 409.5910781696439,
+      "assessment_peak_sampled_rss_bytes": 258379776
+    }
+  },
+  "independent_metric_checks": "round delta from execution completion, fixed threshold, candidate count, run binding",
+  "full_resource_stages": 39,
+  "resource_stages_passed": true,
+  "artifact_roots": [
+    "build/v04-platform",
+    "runs/v04-platform",
+    "build/m10-resource-efficiency",
+    "runs/v03-resource-efficiency",
+    "build/m10-research-slice",
+    "runs/v03-research-slice",
+    "runs/mapping_value"
+  ],
+  "cumulative_storage_snapshot": {
+    "apparent_bytes": 39249742350,
+    "allocated_bytes": 40241090560,
+    "charged_bytes": 40241090560,
+    "unique_files": 222387
+  },
+  "cumulative_peak_sampled_artifact_bytes": 40284807168,
+  "peak_sampled_group_rss_bytes": 48951214080,
+  "small_physical_runs": 9,
+  "full_physical_runs": 3,
+  "synthetic_boundary_checks": 20,
+  "boundary_checks_log": "runs/mapping_value/full-commands/unit-bounded-assess.stderr.log",
+  "closed_analysis_check": {
+    "path": "runs/mapping_value/delivery-closed-analysis/check.json",
+    "sha256": "9989773edeb062d986eb8e16753e3b9ea7ca18e46900aec00b9d032079a493f1"
+  },
+  "calibration_status": "unvalidated_reference",
+  "qualifications": [
+    "Two fixed workloads, no population accuracy or statistical significance claim.",
+    "Shared graph cache retained; old artifacts not removed.",
+    "Resource peaks are sampled, not exact instantaneous physical maxima."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "moe-ub-research-export-policy/1",
+  "max_index_bytes": 134217728,
+  "max_compressed_bytes": 536870912,
+  "max_record_bytes": 262144,
+  "max_endpoint_records": 20000,
+  "max_operations": 10000,
+  "max_layouts": 4096,
+  "max_id_ranges": 100000,
+  "max_graphs": 64,
+  "cache_rows": 8192
+}

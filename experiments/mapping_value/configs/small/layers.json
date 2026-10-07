@@ -1,0 +1,628 @@
+{
+  "schema_version": "moe-ub-layer-segments/1",
+  "groups": [
+    {
+      "group_id": "ep0",
+      "layers": [
+        {
+          "schema_version": "moe-ub-layer-fixture/3",
+          "graph_id": "template-ep0",
+          "wave_id": "template-wave",
+          "service_id": "moe0",
+          "role": "D",
+          "group_id": "ep0",
+          "ready_ns": 0,
+          "layer_id": 1,
+          "rank_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "rank_to_ub_node": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "hidden_dim": 1024,
+          "top_k": 2,
+          "dispatch_element_bytes": 1,
+          "combine_element_bytes": 2,
+          "application_metadata_bytes": 0,
+          "chunk_bytes": 8192,
+          "send_slots_per_rank": 1,
+          "template": "cann_a3_v850_native_v1",
+          "expert_placement": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            5,
+            5,
+            6,
+            6,
+            7,
+            7
+          ],
+          "tokens": [
+            {
+              "request_id": "template",
+              "src_rank": 0,
+              "phase": "decode",
+              "token_index": 64,
+              "layer_id": 1,
+              "expert_ids": [
+                0,
+                9
+              ]
+            }
+          ],
+          "compute_profile_ns": {
+            "attention_route_pack": 20,
+            "expert_per_input": 100,
+            "expert_local_merge": 0,
+            "combine_unpack_merge": 100,
+            "next_layer": 0
+          },
+          "batch_limits": {
+            "max_num_seqs": 4,
+            "max_num_batched_tokens": 4
+          },
+          "compute_dtypes": {
+            "compute": "bfloat16",
+            "kv": "bfloat16",
+            "dispatch": "int8",
+            "combine": "bfloat16"
+          },
+          "deployment": {
+            "network_scope": "cross_chip",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "die_id": "die-0",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 1,
+                "die_id": "die-1",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 2,
+                "die_id": "die-2",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 3,
+                "die_id": "die-3",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 4,
+                "die_id": "die-4",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 5,
+                "die_id": "die-5",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 6,
+                "die_id": "die-6",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 7,
+                "die_id": "die-7",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              }
+            ],
+            "local_prepare_ns_per_vector": {
+              "dispatch": 30,
+              "combine": 40
+            }
+          },
+          "cann_profile": {
+            "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+            "algorithm": "a3_fullmesh_v1_dynamic_int8_tp1",
+            "aiv_lanes": 2,
+            "window_bytes": 1048576,
+            "local_cost_ns": {
+              "dispatch_reorder_per_input": 30,
+              "status_check": 10,
+              "result_pack_per_input": 20,
+              "reduction_per_input": 40
+            }
+          },
+          "native_profile": {
+            "dispatch": "STORE",
+            "combine": "LOAD",
+            "ready_notice_bytes": 32
+          },
+          "endpoint_prepare": {
+            "schema_version": "moe-ub-endpoint-prepare/1",
+            "relation": "additional_to_existing_once",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 1,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 2,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 3,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 4,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 5,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 6,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 7,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              }
+            ]
+          }
+        },
+        {
+          "schema_version": "moe-ub-layer-fixture/3",
+          "graph_id": "template-ep0",
+          "wave_id": "template-wave",
+          "service_id": "moe0",
+          "role": "D",
+          "group_id": "ep0",
+          "ready_ns": 0,
+          "layer_id": 2,
+          "rank_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "rank_to_ub_node": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "hidden_dim": 1024,
+          "top_k": 2,
+          "dispatch_element_bytes": 1,
+          "combine_element_bytes": 2,
+          "application_metadata_bytes": 0,
+          "chunk_bytes": 8192,
+          "send_slots_per_rank": 1,
+          "template": "cann_a3_v850_native_v1",
+          "expert_placement": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            5,
+            5,
+            6,
+            6,
+            7,
+            7
+          ],
+          "tokens": [
+            {
+              "request_id": "template",
+              "src_rank": 0,
+              "phase": "decode",
+              "token_index": 64,
+              "layer_id": 2,
+              "expert_ids": [
+                0,
+                9
+              ]
+            }
+          ],
+          "compute_profile_ns": {
+            "attention_route_pack": 20,
+            "expert_per_input": 100,
+            "expert_local_merge": 0,
+            "combine_unpack_merge": 100,
+            "next_layer": 0
+          },
+          "batch_limits": {
+            "max_num_seqs": 4,
+            "max_num_batched_tokens": 4
+          },
+          "compute_dtypes": {
+            "compute": "bfloat16",
+            "kv": "bfloat16",
+            "dispatch": "int8",
+            "combine": "bfloat16"
+          },
+          "deployment": {
+            "network_scope": "cross_chip",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "die_id": "die-0",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 1,
+                "die_id": "die-1",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 2,
+                "die_id": "die-2",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 3,
+                "die_id": "die-3",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 4,
+                "die_id": "die-4",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 5,
+                "die_id": "die-5",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 6,
+                "die_id": "die-6",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 7,
+                "die_id": "die-7",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              }
+            ],
+            "local_prepare_ns_per_vector": {
+              "dispatch": 30,
+              "combine": 40
+            }
+          },
+          "cann_profile": {
+            "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+            "algorithm": "a3_fullmesh_v1_dynamic_int8_tp1",
+            "aiv_lanes": 2,
+            "window_bytes": 1048576,
+            "local_cost_ns": {
+              "dispatch_reorder_per_input": 30,
+              "status_check": 10,
+              "result_pack_per_input": 20,
+              "reduction_per_input": 40
+            }
+          },
+          "native_profile": {
+            "dispatch": "STORE",
+            "combine": "LOAD",
+            "ready_notice_bytes": 32
+          },
+          "endpoint_prepare": {
+            "schema_version": "moe-ub-endpoint-prepare/1",
+            "relation": "additional_to_existing_once",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 1,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 2,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 3,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 4,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 5,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 6,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 7,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              }
+            ]
+          }
+        },
+        {
+          "schema_version": "moe-ub-layer-fixture/3",
+          "graph_id": "template-ep0",
+          "wave_id": "template-wave",
+          "service_id": "moe0",
+          "role": "D",
+          "group_id": "ep0",
+          "ready_ns": 0,
+          "layer_id": 3,
+          "rank_ids": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "rank_to_ub_node": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "hidden_dim": 1024,
+          "top_k": 2,
+          "dispatch_element_bytes": 1,
+          "combine_element_bytes": 2,
+          "application_metadata_bytes": 0,
+          "chunk_bytes": 8192,
+          "send_slots_per_rank": 1,
+          "template": "cann_a3_v850_native_v1",
+          "expert_placement": [
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            4,
+            4,
+            5,
+            5,
+            6,
+            6,
+            7,
+            7
+          ],
+          "tokens": [
+            {
+              "request_id": "template",
+              "src_rank": 0,
+              "phase": "decode",
+              "token_index": 64,
+              "layer_id": 3,
+              "expert_ids": [
+                0,
+                9
+              ]
+            }
+          ],
+          "compute_profile_ns": {
+            "attention_route_pack": 20,
+            "expert_per_input": 100,
+            "expert_local_merge": 0,
+            "combine_unpack_merge": 100,
+            "next_layer": 0
+          },
+          "batch_limits": {
+            "max_num_seqs": 4,
+            "max_num_batched_tokens": 4
+          },
+          "compute_dtypes": {
+            "compute": "bfloat16",
+            "kv": "bfloat16",
+            "dispatch": "int8",
+            "combine": "bfloat16"
+          },
+          "deployment": {
+            "network_scope": "cross_chip",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "die_id": "die-0",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 1,
+                "die_id": "die-1",
+                "chip_id": "chip-0",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 2,
+                "die_id": "die-2",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 3,
+                "die_id": "die-3",
+                "chip_id": "chip-1",
+                "server_id": "server-0"
+              },
+              {
+                "rank_id": 4,
+                "die_id": "die-4",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 5,
+                "die_id": "die-5",
+                "chip_id": "chip-2",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 6,
+                "die_id": "die-6",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              },
+              {
+                "rank_id": 7,
+                "die_id": "die-7",
+                "chip_id": "chip-3",
+                "server_id": "server-1"
+              }
+            ],
+            "local_prepare_ns_per_vector": {
+              "dispatch": 30,
+              "combine": 40
+            }
+          },
+          "cann_profile": {
+            "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+            "algorithm": "a3_fullmesh_v1_dynamic_int8_tp1",
+            "aiv_lanes": 2,
+            "window_bytes": 1048576,
+            "local_cost_ns": {
+              "dispatch_reorder_per_input": 30,
+              "status_check": 10,
+              "result_pack_per_input": 20,
+              "reduction_per_input": 40
+            }
+          },
+          "native_profile": {
+            "dispatch": "STORE",
+            "combine": "LOAD",
+            "ready_notice_bytes": 32
+          },
+          "endpoint_prepare": {
+            "schema_version": "moe-ub-endpoint-prepare/1",
+            "relation": "additional_to_existing_once",
+            "ranks": [
+              {
+                "rank_id": 0,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 1,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 2,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 3,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 4,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 5,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 6,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              },
+              {
+                "rank_id": 7,
+                "dispatch_ns_per_local_token": 0,
+                "combine_ns_per_expert_input": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

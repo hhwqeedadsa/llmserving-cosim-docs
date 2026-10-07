@@ -1,0 +1,229 @@
+{
+  "record_provenance": true,
+  "clocks": [
+    {
+      "device_type": "rank",
+      "device_id": 0,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 1,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 2,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 3,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 4,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 5,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 6,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 7,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 8,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 9,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 10,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 11,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 12,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 13,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 14,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 15,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    }
+  ],
+  "switches": [
+    {
+      "switch_id": 8,
+      "port_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 9,
+      "port_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 10,
+      "port_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 11,
+      "port_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 12,
+      "port_ids": [
+        0,
+        1
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 13,
+      "port_ids": [
+        0,
+        1
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 14,
+      "port_ids": [
+        0,
+        1
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    },
+    {
+      "switch_id": 15,
+      "port_ids": [
+        0,
+        1
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 100
+    }
+  ],
+  "schema_version": "moe-ub-observation-config/3",
+  "statistics": {
+    "schema_version": "moe-ub-observation-statistics/1",
+    "queue_waiting_bytes": true,
+    "operation_stages": true
+  },
+  "resource_budget": {
+    "schema_version": "moe-ub-observation-resources/1",
+    "max_ports": 32,
+    "max_windows_per_port": 10000,
+    "max_total_windows": 320000,
+    "max_event_bytes_per_port": 33554432,
+    "max_ledger_packets": 200000,
+    "max_registered_transfers": 50000,
+    "max_export_bytes": 536870912
+  },
+  "recording": {
+    "schema_version": "moe-ub-observation-recording/1",
+    "mode": "detailed",
+    "detail_ranges": [],
+    "truth_categories": [
+      "business_data",
+      "attached_metadata",
+      "dispatch_count",
+      "combine_flag",
+      "load_ready"
+    ],
+    "max_detail_events_per_port": 200000,
+    "max_window_attribution_entries": 10000
+  }
+}

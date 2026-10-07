@@ -61,7 +61,7 @@ def validate(directory):
         'material_round_absolute_ns', 'material_round_relative', 'analysis_version'}, 'Unexpected public fields')
     require(public['schema_version'] == 'mapping-value-public/1' and
             public['clock_relation'] == 'shared_accurate_ns' and
-            public['analysis_version'] == 'candidate-evidence-v1', 'Unsupported public input semantics')
+            public['analysis_version'] == 'candidate-evidence-v3', 'Unsupported public input semantics')
     ranks = public['ranks']
     require(ranks and all(type(r) is int and r >= 0 for r in ranks) and ranks == sorted(set(ranks)) and
             public['anchor_rank'] == min(ranks), 'Invalid public group/anchor')

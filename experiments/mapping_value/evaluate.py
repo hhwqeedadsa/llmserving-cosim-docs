@@ -71,6 +71,12 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
     candidates = {(r['switch_id'],r['port_id']) for r in prediction['port_candidates']}
     all_candidates = {(r['switch_id'],r['port_id']) for r in prediction['all_changed_ports']}
     selected_hit = selected_id in hits
+    public = read(Path(prepared)/prediction['condition']/'public.json')
+    observed_ports = {(p['switch_id'],p['port_id']) for p in public['ports']}
+    port_evaluable = prediction['condition']!='E1' and selected is not None and set(port_targets)<=observed_ports
+    status = ('network_observations_unavailable' if prediction['condition']=='E1' else
+              'no_selected_call' if selected is None else
+              'target_port_outside_observed_scope' if not set(port_targets)<=observed_ports else 'selected_call_scope_only')
     value = dict(schema_version='mapping-value-evaluation/1',condition=prediction['condition'],
         analysis_sha256=digest(analysis),case_sha256=digest(case),
         run_manifest_sha256=digest(run/'manifest.json'),reference_manifest_sha256=digest(reference/'manifest.json'),
@@ -80,12 +86,13 @@ def evaluate(run, reference, analysis, case, config, prepared, output):
         operation_differences=endpoints,
         endpoint_target_ranks=endpoint_targets,endpoint_candidates=prediction['endpoint_candidates'],
         endpoint_target_in_candidates=None if not endpoint_targets else set(endpoint_targets)<=set(prediction['endpoint_candidates']),
-        port_targets=[list(p) for p in port_targets],port_candidate_count=len(candidates),
+        port_targets=[list(p) for p in port_targets],port_candidate_count=None if prediction['condition']=='E1' else len(candidates),
+        port_evaluation_status=status,
         changed_port_count=len(all_candidates),selected_scope_reduction=len(all_candidates)-len(candidates),
         application_categories_in_intervention_windows=categories,
         application_window_hit=bool(hits),selected_call_hit=selected_hit,
-        port_target_in_candidates=None if not port_targets else set(port_targets)<=candidates,
-        selected_call_target_wrongly_excluded=selected_hit and not set(port_targets)<=candidates,
+        port_target_in_candidates=None if not port_targets or not port_evaluable else set(port_targets)<=candidates,
+        selected_call_target_wrongly_excluded=port_evaluable and selected_hit and not set(port_targets)<=candidates,
         assessment=prediction['assessment'],
         interpretation='Resource declarations are not impact labels. Packet/control-only hits are not inferred from application attribution. '
                        'Candidate pruning concerns the selected logical call, not every downstream root cause. '

@@ -6,7 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from experiments.mapping_value.analyze import analyze, endpoint_differences
+from experiments.mapping_value.analyze import analyze, endpoint_differences, select_call
 from experiments.mapping_value.common import digest, read, save, write_rows
 from experiments.mapping_value.inputs import tables, validate
 from experiments.mapping_value.prepare import anchors, project_relations
@@ -19,7 +19,7 @@ def hand_input(root, condition='E3'):
         links=[dict(node_a=i,port_a=0,node_b=2,port_b=i,rate_bps=1000000000,delay_ns=20) for i in (0,1)],
         ports=[dict(switch_id=2,port_id=i,direction='egress',start_local_ns=0,end_local_ns=1000,period_ns=100) for i in (0,1)],
         queue_ports=[[2,0]],clock_relation='shared_accurate_ns',time_tolerance_ns=1,
-        material_round_absolute_ns=10,material_round_relative=0.001,analysis_version='candidate-evidence-v1')
+        material_round_absolute_ns=10,material_round_relative=0.001,analysis_version='candidate-evidence-v3')
     save(root/'public.json',public)
     for prefix in ('','reference_'):
         end=20 if prefix else 35
@@ -60,7 +60,7 @@ class InputBoundaryTests(unittest.TestCase):
             self.assertEqual(prediction['selected_call'],dict(rank_id=0,local_record_id=1,kind='dispatch'))
             if condition in ('E3','E5','E3S','E5S'):
                 self.assertEqual(len(prediction['port_candidates']),1)
-                self.assertTrue(prediction['port_candidates'][0]['related_to_selected_call'])
+                self.assertEqual(prediction['association_rule'],'ideal_binary_windows')
 
     def test_no_side_channel_files_even_when_manifest_resealed(self):
         source=hand_input(self.root/'input')
@@ -111,6 +111,30 @@ class InputBoundaryTests(unittest.TestCase):
         result=endpoint_differences(current,normal)[0]
         self.assertEqual(result['duration_delta_ns'],0)
         self.assertEqual(result['completion_shift_ns'],50)
+
+    def test_window_mapping_and_explicit_state_extension(self):
+        counts={}
+        for condition in ('E2','E3','E3S'):
+            source=hand_input(self.root/condition,condition)
+            for prefix in ('','reference_'):
+                path=source/(prefix+'ports.jsonl')
+                data=[json.loads(line) for line in path.read_text().splitlines()]
+                data.append(dict(data[0],port_id=1));write_rows(path,data)
+                if condition=='E3S':
+                    path=source/(prefix+'relations.jsonl')
+                    data=[json.loads(line) for line in path.read_text().splitlines()]
+                    data.append(dict(data[0],port_id=1));write_rows(path,data)
+            seal(source)
+            target=self.root/(condition+'.json');analyze(source,target)
+            counts[condition]=len(read(target)['port_candidates'])
+        self.assertEqual(counts,{'E2':2,'E3':1,'E3S':2})
+
+    def test_unchanged_anchor_does_not_hide_other_rank_delay(self):
+        changes=[dict(rank_id=r,local_record_id=1,kind='dispatch',duration_delta_ns=0 if r==0 else 50,
+                      completion_shift_ns=0 if r==0 else 50) for r in (0,1)]
+        self.assertEqual(select_call(changes,0,10)['rank_id'],0)
+        with self.assertRaisesRegex(ValueError,'matching per-rank'):
+            select_call(changes+[dict(changes[1],local_record_id=2)],0,10)
 
     def test_analysis_import_boundary(self):
         directory=Path(__file__).resolve().parents[1]

@@ -53,6 +53,20 @@ python -m experiments.mapping_value evaluate \
 
 当前分析规则及其推断边界见[方法说明](method.md)。评价输出保存实际整轮差值、局部持续时间变化、完成时刻后移和候选范围；不能把多个后继的后移量相加当作整轮损失。已有研究结果见[结果记录](results.md)，执行进度只看[当前任务](../../docs/tasks/current.md)。
 
+需要一次生成多个条件时，可使用等价的组合入口；它逐条记录上面的准备、分析和评价命令，不重新运行网络：
+
+```bash
+python -m experiments.mapping_value assess \
+  --run runs/mapping_value/demo/r001/run \
+  --reference runs/mapping_value/demo/r000 \
+  --case runs/mapping_value/demo/frozen/r001.json \
+  --config experiments/mapping_value/configs/small/experiment.json \
+  --conditions E1 E2 E3 \
+  --output runs/mapping_value/demo/assessment-r001
+```
+
+结果位于 `prepared/`、`analysis/`、`evaluation/` 和 `summary.json`，命令在 `commands/`。所需队列与状态来源已保留时，可在新输出目录选择 E4、E5、E3S、E5S；无须重跑同一个物理场景。
+
 ## 资源和检查
 
 小运行通过平台预算限制 RSS 8 GiB、单进程地址空间 12 GiB、单阶段 1800 秒；正常执行上限为 1 ms 仿真时间。记录与导出各有 512 MiB 压缩预算；分析输入每张表最多 200 万行、512 MiB，单条最多 64 KiB。准备时相同文件在各信息条件间用硬链接复用。

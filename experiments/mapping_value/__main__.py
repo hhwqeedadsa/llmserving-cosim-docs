@@ -30,6 +30,11 @@ def main(argv=None):
     evaluate = commands.add_parser('evaluate', help='独立使用内部记录评价成对运行及候选范围')
     for name in ('run','reference','analysis','case','config','prepared','output'):
         evaluate.add_argument('--'+name, type=Path, required=True)
+    assess = commands.add_parser('assess', help='一次完成准备、所选信息条件分析和成对评价，保留逐条命令日志')
+    for name in ('run','reference','case','config','output'):
+        assess.add_argument('--'+name,type=Path,required=True)
+    assess.add_argument('--conditions',nargs='+',default=['E1','E2','E3'],
+                        choices=['E1','E2','E3','E4','E5','E3S','E5S'])
     args = parser.parse_args(argv)
     try:
         if args.action == 'run-small':
@@ -51,6 +56,9 @@ def main(argv=None):
             from .inputs import validate
             _,manifest = validate(args.input)
             result = dict(passed=True,condition=manifest['condition'])
+        elif args.action == 'assess':
+            from .assess import assess
+            result = assess(args.run,args.reference,args.case,args.config,args.conditions,args.output)
         else:
             from .evaluate import evaluate
             result = evaluate(args.run,args.reference,args.analysis,args.case,args.config,args.prepared,args.output)

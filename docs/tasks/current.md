@@ -2,7 +2,7 @@
 
 当前执行项：**端网映射价值实验**。状态：`completed`。
 
-2026-10-07 用户确认小场景与完整首轮参数，授权连续完成各批次、验证、记录及本地提交，不推送。本任务已完成，停止于已确认范围；后续功能或实验另行确定。
+2026-10-07 用户确认小场景与完整首轮参数，授权连续完成各批次、验证、记录及本地提交，随后明确授权推送 GitHub。本任务已完成并发布，停止于已确认范围；后续功能或实验另行确定。
 
 ## 目标与结果
 
@@ -42,4 +42,6 @@ runs/mapping_value
 - [结果与限制](../../experiments/mapping_value/results.md)：机制比较、完整对照与资源消耗。
 - [小场景摘要](../../experiments/mapping_value/results-small.json)、[完整场景摘要](../../experiments/mapping_value/results-full.json)、[完整证据摘要](../../experiments/mapping_value/results-full-evidence.json)：条件结果、输入摘要、资源及检查绑定。
 
-实际命令、工作目录、输入、退出状态及日志位于 `runs/mapping_value/`：小场景为 `batch1-v2/` 至 `batch4/`；完整执行、冻结干预、分析评价及汇总为 `full/`；检查为 `full-commands/` 和 `delivery-closed-analysis/`。大文件不提交 Git，可复用程序、配置及必要结果摘要在实验目录。各批次已按授权本地提交，本任务没有推送。
+实际命令、工作目录、输入、退出状态及日志位于 `runs/mapping_value/`：小场景为 `batch1-v2/` 至 `batch4/`；完整执行、冻结干预、分析评价及汇总为 `full/`；检查为 `full-commands/` 和 `delivery-closed-analysis/`。大文件不提交 Git，可复用程序、配置及必要结果摘要在实验目录。
+
+实验成果的五个提交 `f598f45` 至 `59e00cd` 已按用户授权推送至 GitHub 主仓 `origin/main`；本次没有修改子模块或依赖指针。发布命令、退出状态及远程核对记录位于 `runs/mapping_value/publication-20261007/`。

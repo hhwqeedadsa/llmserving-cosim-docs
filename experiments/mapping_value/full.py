@@ -1,7 +1,10 @@
-"""Audit the immutable full input and prepare public replay commands, without running it."""
+"""Prepare, freeze and execute the few declared full-scene replay comparisons."""
 from pathlib import Path
 import os
 import shutil
+import math
+
+from moe_ub_cosim.research_storage import stored_rows
 
 from .common import digest, read, require, save
 from .workflow import ARTIFACT_ROOTS, host, platform
@@ -74,3 +77,71 @@ def prepare_full(source, backend, output):
     save(output/'preflight.json',report)
     return dict(passed=True,output=str(output),source_verified=True,simulation_executed=False,
                 ready_to_run=report['ready_to_run'],budget_shortfall_bytes=report['budget_shortfall_bytes'])
+
+
+def freeze_full(baseline, output):
+    baseline,output=map(lambda p:Path(p).resolve(),(baseline,output))
+    require(not output.exists(),'Frozen full cases already exist')
+    source=read(baseline/'preflight.json'); run=baseline/'r000'
+    manifest=read(run/'manifest.json'); spec=read(baseline/'configuration/reference.json')
+    require(manifest['normal_exit'] and manifest['source_slice_sha256']==source['source_slice_sha256'],
+            'Need complete normal replay of the prepared source')
+    selected=[r for r in stored_rows(run/'truth','operation_registry.jsonl') if r['layer_id']==spec['target_layer']]
+    require(len(selected)==2 and {r['kind'] for r in selected}=={'dispatch','combine'},'Full target layer missing')
+    start=min(e['start_global_ns'] for op in selected for e in op['endpoint_records'])
+    end=max(e['end_global_ns'] for op in selected for e in op['endpoint_records'])
+    node,port=spec['target_port']
+    captured=[p for p in read(run/'observed/public_config.json')['ports'] if (p['switch_id'],p['port_id'])==(node,port)]
+    require(len(captured)==1,'Full target port must be observed')
+    capture=captured[0]; period=capture['period_ns']; origin=capture['start_local_ns']
+    left=origin+(start-origin)//period*period; right=origin+math.ceil((end-origin)/period)*period
+    require(origin<=left<right<=capture['end_local_ns'],'Full interval outside observation coverage')
+    output.mkdir(parents=True)
+    cases={}
+    for index,rate in enumerate((None,112_000_000_000,56_000_000_000)):
+        name=f'r{index:03d}'
+        value=dict(schema_version='mapping-value-case/1',case_id=name,
+            normal_manifest_sha256=digest(run/'manifest.json'),endpoint_prepare=[],
+            purpose='normal' if rate is None else 'physical_egress_service',
+            port_service=[] if rate is None else [dict(node_id=node,port_id=port,start_ns=left,end_ns=right,rate_bps=rate)])
+        save(output/(name+'.json'),value); cases[name]=digest(output/(name+'.json'))
+    save(output/'freeze.json',dict(schema_version='mapping-value-freeze/1',normal_run=str(run),
+        normal_manifest_sha256=digest(run/'manifest.json'),source_slice_sha256=source['source_slice_sha256'],
+        selected_layer=spec['target_layer'],normal_interval_ns=[start,end],alignment_period_ns=period,
+        cases=cases,rule='Declared port and rates, interval from normal all-participant layer span; no result-based retuning'))
+    return dict(passed=True,output=str(output),cases=list(cases),interval_ns=[left,right])
+
+
+def run_full_case(baseline, case_path, output):
+    baseline,case_path,output=map(lambda p:Path(p).resolve(),(baseline,case_path,output))
+    require(not output.exists(),'Full case output already exists')
+    case=read(case_path); source=read(baseline/'preflight.json'); config=read(baseline/'replay.json')
+    frozen=read(case_path.parent/'freeze.json')
+    require(case['case_id'] in frozen['cases'] and frozen['cases'][case['case_id']]==digest(case_path),
+            'Full case differs from frozen declaration')
+    require(case['normal_manifest_sha256']==digest(baseline/'r000/manifest.json') and
+            read(baseline/'r000/manifest.json')['normal_exit'], 'Complete normal reference changed')
+    require(case['endpoint_prepare']==[] and len(case['port_service'])==1,'Full case must contain one network intervention')
+    require(digest(Path(source['source_slice'])/'slice.json')==source['source_slice_sha256'] and
+            digest(config['backend'])==source['backend_sha256'],'Full source or backend changed')
+    # A completed normal replay materialized this cache. The platform verifies its
+    # inventory again; a missing/partial cache is not silently re-expanded here.
+    cache=Path(config['cache_directory'])
+    require((cache/'graph_archive.ready.json').is_file(),'Shared normal graph cache is not ready')
+    usage=storage_usage([*ARTIFACT_ROOTS,baseline,output,cache]); spec=read(baseline/'configuration/reference.json')
+    reserve=sum(spec[k] for k in ('record_compressed_reserve_bytes','export_compressed_reserve_bytes','analysis_projection_reserve_bytes'))
+    budget=min(config['host']['artifact_bytes'],config['export_host']['artifact_bytes'])
+    output.mkdir(parents=True)
+    ready=usage['charged_bytes']+reserve<=budget and shutil.disk_usage(output).free>=config['host']['min_free_bytes']+reserve
+    save(output/'preflight.json',dict(schema_version='mapping-value-case-preflight/1',
+        registered_storage=usage,additional_reserved_bytes=reserve,artifact_budget_bytes=budget,
+        graph_cache_reused=str(cache),ready_to_run=ready))
+    require(ready,'Full case resource preflight failed; retained evidence, no backend launched')
+    save(output/'case.json',case)
+    shutil.copytree(baseline/'network',output/'network')
+    network=read(output/'network/backend.json'); network['port_service']['intervals']=case['port_service']
+    save(output/'network/backend.json',network); config['network']=str(output/'network')
+    save(output/'replay.json',config)
+    platform(['replay','--slice',source['source_slice'],'--config',output/'replay.json','--output',output/'run'],output,'01-replay')
+    platform(['validate','--run',output/'run'],output,'02-validate')
+    return dict(passed=True,output=str(output),run='run',case_sha256=digest(case_path))

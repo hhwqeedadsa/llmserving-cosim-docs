@@ -15,6 +15,12 @@ def main(argv=None):
     full.add_argument('--slice',type=Path,required=True)
     full.add_argument('--backend',type=Path,required=True)
     full.add_argument('--output',type=Path,required=True)
+    freeze_full = commands.add_parser('freeze-full',help='按完整正常首轮第 31 层冻结两档物理出口限速')
+    freeze_full.add_argument('--baseline',type=Path,required=True,help='prepare-full 输出，含已完成的 r000')
+    freeze_full.add_argument('--output',type=Path,required=True)
+    full_case = commands.add_parser('run-full-case',help='预算预检后串行执行一个完整网络对照，复用正常图缓存')
+    for name in ('baseline','case','output'):
+        full_case.add_argument('--'+name,type=Path,required=True)
     freeze = commands.add_parser('freeze-small', help='仅根据正常参考冻结小场景干预，不运行异常组')
     freeze.add_argument('--baseline', type=Path, required=True)
     freeze.add_argument('--output', type=Path, required=True)
@@ -60,6 +66,12 @@ def main(argv=None):
         elif args.action == 'prepare-full':
             from .full import prepare_full
             result = prepare_full(args.slice,args.backend,args.output)
+        elif args.action == 'freeze-full':
+            from .full import freeze_full
+            result = freeze_full(args.baseline,args.output)
+        elif args.action == 'run-full-case':
+            from .full import run_full_case
+            result = run_full_case(args.baseline,args.case,args.output)
         elif args.action == 'freeze-small':
             from .cases import freeze_small
             result = freeze_small(args.baseline,args.output)

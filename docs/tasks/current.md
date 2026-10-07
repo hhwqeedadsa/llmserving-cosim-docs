@@ -39,8 +39,8 @@ runs/mapping_value
 
 第一批已本地提交为 `f598f45`。第二批完成其余四个冻结对照，并按统一 v3 规则分析全部六项 E1–E3；加入窗口关联、公开次序与时间推断、其他 rank 延迟检查及组合 `assess` 入口，人工检查共 13 项。证据位于 `runs/mapping_value/batch2/`，具体收益、无整轮影响和未确定结果只维护在结果记录。
 
-第二批已本地提交为 `70d26a9`。第三、四批完成三项状态/业务/重叠对照、实际局部与远端就绪核算、成对输入一致性检查；全部九次执行按 v3 生成七种信息条件并汇总。队列增强不重跑网络，参考投影通过硬链接复用。17 项人工检查通过，证据位于 `runs/mapping_value/batch3/`、`batch4/`，版本化摘要见[小场景结果](../../experiments/mapping_value/results-small.json)。
+第二批已本地提交为 `70d26a9`。第三、四批完成三项状态/业务/重叠对照、实际局部与远端就绪核算、成对输入一致性检查；全部九次执行按 v3 生成七种信息条件并汇总。队列增强不重跑网络，参考投影通过硬链接复用。17 项人工检查通过，本地提交为 `41bbc57`；证据位于 `runs/mapping_value/batch3/`、`batch4/`，版本化摘要见[小场景结果](../../experiments/mapping_value/results-small.json)。
 
-完整来源已通过公共 `slice inspect --verify`，独立配置和预算预检入口已交付。`runs/mapping_value/full-preflight/preflight.json` 保留原 32 GiB 预检不足：已有产物加图展开为 32.95 GiB，含记录/导出/分析预留为 38.95 GiB。用户随后明确允许累计 48 GiB，按新预算另建完整运行配置；旧预检与候选文件保留。内存和每次完整运行的时间限制保持原值，没有清理旧产物。
+完整来源已通过公共 `slice inspect --verify`，独立配置和预算预检入口已交付。`runs/mapping_value/full-preflight/preflight.json` 保留原 32 GiB 预检不足：已有产物加图展开为 32.95 GiB，含记录/导出/分析预留为 38.95 GiB。用户随后明确允许累计 48 GiB；新配置 `runs/mapping_value/full/preflight.json` 通过预检，正常组 `r000` 正在执行，日志在同目录 `commands/` 及运行 `logs/`。旧预检与候选文件保留，内存和每次完整运行的时间限制保持原值，没有清理旧产物。
 
 各批次验证后本地提交并自动推进；失败保留原因，不自动提高预算或原样重跑。完整目标前核对所有已登记占用与展开峰值；确需改变资源或研究范围时报告具体差额。

@@ -39,6 +39,17 @@ def platform(arguments, output, label):
     command([sys.executable, '-m', 'moe_ub_cosim', *map(str, arguments)], output/'commands', label)
 
 
+def bounded_command(arguments, log_dir, label):
+    """Use the platform's general CLI resource monitor for analysis workers."""
+    log_dir=Path(log_dir).resolve(); policy=host()
+    args=[sys.executable,'-m','moe_ub_cosim.host_probe','--output-dir',log_dir/(label+'.resources')]
+    for key in ('rss_bytes','address_bytes','artifact_bytes','wall_seconds','min_free_bytes'):
+        args+=['--'+key.replace('_','-'),str(policy[key])]
+    for root in [*policy['artifact_roots'],log_dir.parent]:
+        args+=['--artifact-root',str(root)]
+    command([*args,'--',*arguments],log_dir,label)
+
+
 def small_baseline(output, backend):
     output = Path(output).resolve(); backend = Path(backend).resolve()
     require(not output.exists(), f"Output exists: {output}")

@@ -65,7 +65,7 @@ python -m experiments.mapping_value assess \
   --output runs/mapping_value/demo/assessment-r001
 ```
 
-结果位于 `prepared/`、`analysis/`、`evaluation/` 和 `summary.json`，命令在 `commands/`。所需队列与状态来源已保留时，可在新输出目录选择 E4、E5、E3S、E5S；无须重跑同一个物理场景。
+结果位于 `prepared/`、`analysis/`、`evaluation/` 和 `summary.json`，命令在 `commands/`。`assess` 通过平台通用资源监测 CLI 对准备、每个分析和每个评价阶段分别应用 RSS 8 GiB、地址空间 12 GiB、1800 秒以及共享累计磁盘上限；资源报告与子程序日志在 `commands/*.resources/`。单独调用 `prepare`、`analyze` 或 `evaluate` 不隐式启用宿主进程监测。所需队列与状态来源已保留时，可在新输出目录选择 E4、E5、E3S、E5S；无须重跑同一个物理场景。
 
 多个对照共用参考时，给 `prepare` 或 `assess` 增加 `--reference-prepared 既有准备目录`。程序检查参考运行、设计、公共范围和文件摘要后硬链接复用，避免为每个对照复制正常数据。正常自对照的当前与参考投影也只存一份。所有共享文件应保持不可修改。
 

@@ -24,6 +24,38 @@ python -m experiments.mapping_value prepare-full \
 
 `preflight.json` 中 `ready_to_run` 才表示当前估算满足资源条件；命令本身成功只表示输入准备与预检完成。预算不足时保留差额和配置，不自动改预算、删除旧数据或启动后端。累计预算当前为 48 GiB，包含已登记的新旧根。图展开使用一个共享 `graph-cache/`，后续对照复用；记录、导出与分析预留分别为 2 GiB，这些是预留而非未来实际用量。
 
-通过资源检查后，可使用生成的 `replay.json` 交给公共 `moe-ub replay --slice … --config … --output …`，输出必须为新目录。完整场景的执行与验收状态只见[当前任务](../../../../docs/tasks/current.md)，研究结论只见[结果记录](../../results.md)。旧包的 100 µs 聚合窗口不能细分成 10 µs，本配置要求新一次后端执行。
+通过资源检查后，依次运行正常组、冻结干预和指定对照，输出必须为新目录：
+
+```bash
+moe-ub replay --slice runs/v04-platform/m16-target-slice \
+  --config runs/mapping_value/full-input/replay.json \
+  --output runs/mapping_value/full-input/r000
+moe-ub validate --run runs/mapping_value/full-input/r000
+python -m experiments.mapping_value freeze-full \
+  --baseline runs/mapping_value/full-input \
+  --output runs/mapping_value/full-input/frozen
+python -m experiments.mapping_value run-full-case \
+  --baseline runs/mapping_value/full-input \
+  --case runs/mapping_value/full-input/frozen/r001.json \
+  --output runs/mapping_value/full-input/r001
+```
+
+`r001` 为 112 Gb/s，`r002` 为 56 Gb/s；要执行后一项，在上一条命令中同时换用 `r002.json` 和新输出 `r002`。`freeze-full` 按正常第 31 层全部参与端的 Dispatch/Combine 跨度对齐 10 µs 窗口，保存干预及摘要。`run-full-case` 核对冻结文件、正常组、来源包与后端摘要，重新计算累计空间和 6 GiB 预留，然后调用公共重放、校验；图缓存与正常组共用。失败保留原因，不自动增加强度、重跑或删除旧数据。
+
+分析与评价沿用同一入口和固定规则，例如：
+
+```bash
+python -m experiments.mapping_value assess \
+  --run runs/mapping_value/full-input/r001/run \
+  --reference runs/mapping_value/full-input/r000 \
+  --case runs/mapping_value/full-input/frozen/r001.json \
+  --config runs/mapping_value/full-input/configuration/experiment.json \
+  --conditions E1 E2 E3 E4 E5 \
+  --output runs/mapping_value/full-input/assessment-r001
+```
+
+正常自对照使用 `--run …/r000 --reference …/r000 --case …/frozen/r000.json`，输出另命名；后续对照可通过 `--reference-prepared …/assessment-r000/prepared` 复用正常投影。用 `report --assessment …` 汇总完整场景，和小场景结果分开保存。
+
+完整场景的执行与验收状态只见[当前任务](../../../../docs/tasks/current.md)，研究结论只见[结果记录](../../results.md)。旧包的 100 µs 聚合窗口不能细分成 10 µs，本配置要求新一次后端执行。
 
 完整场景只延伸少量代表性网络对照。端侧成本、应用同步机制和重叠负对照先在小场景中检验；不重复完整前端、不展开全部组合，也不将结果称为目标硬件校准。

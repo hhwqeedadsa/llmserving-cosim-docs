@@ -4,7 +4,7 @@ import sys
 
 from .common import read, require, save
 from .inputs import CONDITIONS
-from .workflow import command
+from .workflow import bounded_command
 
 
 def assess(run, reference, case, config, conditions, output, reference_prepared=None):
@@ -13,12 +13,12 @@ def assess(run, reference, case, config, conditions, output, reference_prepared=
     require(conditions and len(set(conditions))==len(conditions) and set(conditions)<=CONDITIONS, 'Invalid conditions')
     output.mkdir(parents=True); logs=output/'commands'; prefix=[sys.executable,'-m','experiments.mapping_value']
     extra=[] if reference_prepared is None else ['--reference-prepared',Path(reference_prepared).resolve()]
-    command([*prefix,'prepare','--run',run,'--reference',reference,'--config',config,'--output',output/'prepared',*extra],logs,'prepare')
+    bounded_command([*prefix,'prepare','--run',run,'--reference',reference,'--config',config,'--output',output/'prepared',*extra],logs,'prepare')
     results={}
     for condition in conditions:
         analysis=output/'analysis'/(condition+'.json'); evaluation=output/'evaluation'/(condition+'.json')
-        command([*prefix,'analyze','--input',output/'prepared'/condition,'--output',analysis],logs,condition+'-analyze')
-        command([*prefix,'evaluate','--run',run,'--reference',reference,'--analysis',analysis,
+        bounded_command([*prefix,'analyze','--input',output/'prepared'/condition,'--output',analysis],logs,condition+'-analyze')
+        bounded_command([*prefix,'evaluate','--run',run,'--reference',reference,'--analysis',analysis,
             '--case',case,'--config',config,'--prepared',output/'prepared','--output',evaluation],logs,condition+'-evaluate')
         report=read(evaluation)
         results[condition]={k:report[k] for k in ('round_delta_ns','material_round_effect','material_prediction_correct',

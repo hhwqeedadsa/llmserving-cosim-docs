@@ -1,0 +1,22 @@
+schema_version: moe-ub-scenario-reference/0.1
+ns3_backend:
+  revision: c0f1fe54245203a3b14468e44e893a38792cfcc8
+  reference_attributes: {}
+  reference_globals: {}
+  transaction_profiles:
+    native_store:
+      programming_model: native_memory
+      operation: STORE
+      transport: LDST
+      initiator: data_owner
+      payload_direction: initiator_to_target
+      receiver_ready: native_store_data_arrived
+      sender_release: memory_task_done_callback
+    native_load:
+      programming_model: native_memory
+      operation: LOAD
+      transport: LDST
+      initiator: consumer
+      payload_direction: target_to_initiator
+      receiver_ready: native_response_data_arrived
+      sender_release: memory_task_done_callback

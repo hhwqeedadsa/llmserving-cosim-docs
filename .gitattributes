@@ -1,5 +1,7 @@
 * text=auto
 *.md text eol=lf
+# Preserve the uploaded experiment plan byte-for-byte and its documented SHA-256.
+experiments/scaleup_observability/plan_v0.1.md -text !eol
 *.sh text eol=lf
 *.py text eol=lf
 *.json text eol=lf

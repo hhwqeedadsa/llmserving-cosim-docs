@@ -26,6 +26,16 @@ python -m experiments.scaleup_observability report \
   --output runs/scaleup_observability/normal-demo/report.json
 ```
 
+环境已有 Matplotlib 时，可生成独立 SVG、PNG 概览图及绘图数据；这是可选实验依赖，未增加平台依赖：
+
+```bash
+python -m experiments.scaleup_observability plot \
+  --batch runs/scaleup_observability/normal-demo \
+  --output runs/scaleup_observability/normal-demo/figures
+```
+
+图中比较整轮时间、单轮完成速率、最忙交换出口的实际发送占用率，以及同大小跨服务器 LOAD 任务的第 95 百分位时延。颜色表示输入组，同一组不同规模是嵌套请求集合；不由这九点推断统计显著性。
+
 `run-batch` 只复用已有 `complete.json` 且输入、后端、运行与概览摘要均通过核验的成功组。已有但未完成的目录会报错，不自动重新运行、删除或放宽预算。保留失败原因，修正后另建明确的新目录。所有新输出目录或汇总文件须不存在。
 
 ```text

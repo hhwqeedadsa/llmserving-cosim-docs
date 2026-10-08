@@ -5,7 +5,7 @@ import shutil
 import sys
 
 from .common import ARTIFACT_ROOTS, bounded, command, digest, host, read, require, save, sources
-from .inputs import verified_case
+from .inputs import BATCHES, SEEDS, verified_case
 
 RESERVE_PER_CASE = 768*2**20
 
@@ -55,6 +55,15 @@ def overview(run, output):
     bounded([sys.executable,'-m','experiments.scaleup_observability.overview',run,output],
             output/'commands','overview',output)
     return read(output/'summary.json')
+
+
+def plot(batch, output):
+    batch, output = Path(batch).resolve(), Path(output).resolve()
+    require(not output.exists(), 'Figure directory exists')
+    output.mkdir(parents=True)
+    bounded([sys.executable,'-m','experiments.scaleup_observability.figures',batch,output],
+            output/'commands','plot',output)
+    return dict(passed=True,output=str(output))
 
 
 def run_case(batch, case_id, backend):
@@ -126,7 +135,12 @@ def report(batch, output):
     platforms = []
     backend = set()
     versions = set()
-    for case in read(batch/'batch.json')['cases']:
+    cases = read(batch/'batch.json')['cases']
+    expected = {(f's{s}-b{b}',s,b,8*b) for s in SEEDS for b in BATCHES}
+    require(len(cases) == 9 and
+            {(c['case_id'],c['input_set'],c['requests_per_rank'],c['request_count']) for c in cases} == expected,
+            'Need nine distinct declared workload combinations')
+    for case in cases:
         done,summary = verify_complete(batch,case)
         backend.add(done['backend_sha256'])
         versions.add(summary['analysis_version'])

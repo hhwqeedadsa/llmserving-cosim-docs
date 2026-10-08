@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 from .inputs import prepare
-from .workflow import overview, preflight, report, run_batch, run_case
+from .workflow import overview, plot, preflight, report, run_batch, run_case
 
 
 def main():
@@ -26,11 +26,15 @@ def main():
     p=sub.add_parser('report',help='Verify and collect all nine case overviews')
     p.add_argument('--batch',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p=sub.add_parser('plot',help='Render a standalone figure from nine verified overviews (requires matplotlib)')
+    p.add_argument('--batch',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='prepare': result=prepare(args.output)
     elif args.command=='preflight': result=preflight(args.batch,args.output)
     elif args.command=='run': result=run_case(args.batch,args.case,args.backend)
     elif args.command=='run-batch': result=run_batch(args.batch,args.backend)
+    elif args.command=='plot': result=plot(args.batch,args.output)
     elif args.command=='overview':
         summary=overview(args.run,args.output)
         result=dict(passed=True,output=str(args.output),round_ns=summary['round_ns'])

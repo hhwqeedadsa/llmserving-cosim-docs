@@ -10,7 +10,8 @@ from experiments.scaleup_observability.common import HERE
 from experiments.scaleup_observability.inputs import make_input, prepare, requests, verified_case
 from experiments.scaleup_observability.overview import transfer_rows
 from experiments.scaleup_observability.statistics import dependency_rows, distribution, queue_summary
-from experiments.scaleup_observability.workflow import storage
+from experiments.scaleup_observability.workflow import report, storage
+from experiments.scaleup_observability.common import read, save
 
 
 def state(t,v,f=0,kind='update'):
@@ -59,6 +60,15 @@ class InputTests(unittest.TestCase):
             for node in ast.walk(tree):
                 names=[a.name for a in node.names] if isinstance(node,ast.Import) else ([node.module or ''] if isinstance(node,ast.ImportFrom) else [])
                 self.assertFalse(any('mapping_value' in n or n.startswith(('tests','fixtures','scripts')) for n in names),file)
+
+    def test_report_rejects_repeated_workload_before_reading_runs(self):
+        with tempfile.TemporaryDirectory() as temp:
+            batch=Path(temp)/'batch';prepare(batch)
+            manifest=read(batch/'batch.json')
+            manifest['cases'][-1]=deepcopy(manifest['cases'][0])
+            save(batch/'batch.json',manifest)
+            with self.assertRaisesRegex(ValueError,'distinct declared'):
+                report(batch,batch/'report.json')
 
 
 class StatisticsTests(unittest.TestCase):

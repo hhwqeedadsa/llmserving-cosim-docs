@@ -54,12 +54,18 @@ def capabilities(observation,ranks,max_ns):
         detail=detail_range(policy,port,max_ns) if policy else dict(start_ns=0,end_ns=max_ns)
         rows.append(dict(**port,clock=clocks['switch',port['switch_id']],details=detail,
                          packet_starts=detail is not None,queue_states=statistics and detail is not None))
-    return dict(schema_version='moe-ub-capture-capabilities/1',
+    result=dict(schema_version='moe-ub-capture-capabilities/1',
         storage='aggregate_with_selected_details' if policy and policy['mode']=='aggregate' else 'detailed',
         port_window_aggregates=bool(policy),queue_statistics=statistics,operation_stages=statistics,
         truth_categories=policy['truth_categories'] if policy else ['business_data'] if observation['record_provenance'] else [],
         ports=rows,aggregate_resampling='aligned_window_merging_only',
         detail_resampling='packet_boundaries_and_clocks; queue_resampling_requires_captured_states')
+
+    if 'send_state' in observation:
+        result.update(schema_version='moe-ub-capture-capabilities/2',endpoint_send_state=dict(
+            policy=observation['send_state'],coverage_start_ns=0,coverage_end_ns=max_ns,
+            resampling='rank_clock_transform_preserves_all_state_updates'))
+    return result
 
 
 def aligned(source,target,source_clock,target_clock):
@@ -82,6 +88,7 @@ def sampling_plan(source,target,ranks,max_ns):
     require(target['record_provenance']==source['record_provenance'],'Cannot change capture provenance')
     require(('statistics' in target)==('statistics' in source),'Requested statistics were not captured or differ from source; rerun simulation')
     require(target.get('recording')==source.get('recording'),'Sampling preserves the capture policy and retained message categories')
+    require(target.get('send_state')==source.get('send_state'),'Send-state observations were not captured or policy differs; rerun simulation')
     by_port={(p['switch_id'],p['port_id']):p for p in available};result={}
     for port in selected:
         key=port['switch_id'],port['port_id'];require(key in by_port,'Requested port was not captured; rerun simulation')

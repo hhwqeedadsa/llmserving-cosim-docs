@@ -50,7 +50,7 @@ class ResearchWriter:
             ref['compressed_bytes']=(self.root/scope/'records'/ref['name']).stat().st_size
             scopes.setdefault(scope,{})[name]=ref
         for scope,refs in scopes.items():
-            value=dict(schema_version='moe-ub-research-storage/2' if scope=='observed' and 'queue_windows.csv' in refs else 'moe-ub-research-storage/1',
+            value=dict(schema_version='moe-ub-research-storage/3' if scope=='observed' and 'endpoint_send_state.jsonl' in refs else 'moe-ub-research-storage/2' if scope=='observed' and 'queue_windows.csv' in refs else 'moe-ub-research-storage/1',
                        max_record_bytes=self.max_record_bytes,fields=refs)
             if scope=='observed':value.update(window_encoding='nonzero_with_declared_zero_windows',logical_windows=logical_windows)
             (self.root/scope/'storage.json').write_text(json.dumps(value,indent=2)+'\n')
@@ -70,7 +70,7 @@ def manifest(directory):
     require(path.is_file() and not path.is_symlink(),'Missing or symlinked research storage manifest')
     require(path.stat().st_size<=2**20,'Research storage manifest too large')
     value=json.loads(path.read_text())
-    require(value['schema_version'] in ('moe-ub-research-storage/1','moe-ub-research-storage/2'),'Unknown research storage')
+    require(value['schema_version'] in ('moe-ub-research-storage/1','moe-ub-research-storage/2','moe-ub-research-storage/3'),'Unknown research storage')
     integer(value['max_record_bytes'],'research line limit',1,64*2**20)
     require(isinstance(value['fields'],dict) and not (directory/'records').is_symlink(),'Invalid research file references')
     return value
@@ -123,21 +123,26 @@ def validate_observed_storage(directory):
     directory=Path(directory);meta=manifest(directory)
     require({p.name for p in directory.iterdir()}=={'public_config.json','storage.json','records'},
             'Missing or unexpected compressed observed file')
-    statistics=meta['schema_version']=='moe-ub-research-storage/2'
+    send_state=meta['schema_version']=='moe-ub-research-storage/3'
+    statistics=meta['schema_version'] in ('moe-ub-research-storage/2','moe-ub-research-storage/3')
     require(set(meta['fields'])=={'endpoint_ops.jsonl','port_windows.csv'}|
-            ({'queue_windows.csv','endpoint_stages.jsonl'} if statistics else set()),'Observed table whitelist mismatch')
+            ({'queue_windows.csv','endpoint_stages.jsonl'} if statistics else set())|({'endpoint_send_state.jsonl'} if send_state else set()),'Observed table whitelist mismatch')
     require({p.name for p in (directory/'records').iterdir()}=={r['name'] for r in meta['fields'].values()},
             'Unexpected observed record file')
     public_path=directory/'public_config.json'
     require(public_path.is_file() and not public_path.is_symlink(),'Invalid public config file')
     public=json.loads(public_path.read_text());ranks,ports,total=validate_public_config(public)
-    require(statistics==(public['schema_version']=='moe-ub-observed/3'),'Public statistic/storage mismatch')
+    require(statistics==(public['schema_version'] in ('moe-ub-observed/3','moe-ub-observed/4')) and
+            send_state==(public['schema_version']=='moe-ub-observed/4'),'Public statistic/storage mismatch')
     count=sum(1 for _ in sparse_windows(directory,public))
     endpoints=validate_endpoint_rows(stored_rows(directory,'endpoint_ops.jsonl'),ranks)
     if statistics:
         from .operation_stages import validate_stages
         validate_stages(stored_rows(directory,'endpoint_stages.jsonl'),stored_rows(directory,'endpoint_ops.jsonl'))
         sum(1 for _ in sparse_queue_windows(directory,public))
+    if send_state:
+        from .send_state import checked_rows
+        sum(1 for _ in checked_rows(stored_rows(directory,'endpoint_send_state.jsonl'),public['send_state'],ranks))
     return dict(schema_version='moe-ub-observed-validation/1',passed=True,endpoint_records=endpoints,
                 port_windows=total,zero_windows=total-count,access_scope='observed_only')
 
@@ -145,7 +150,7 @@ def validate_observed_storage(directory):
 def sparse_queue_windows(directory,public):
     from .queue_statistics import QUEUE_FIELDS,OBJECTS,check_values
     _,ports,_=validate_public_config(public)
-    require(public['schema_version']=='moe-ub-observed/3','Queue windows were not captured')
+    require(public['schema_version'] in ('moe-ub-observed/3','moe-ub-observed/4'),'Queue windows were not captured')
     order={(p['switch_id'],p['port_id']):(i,p) for i,p in enumerate(ports)};previous=(-1,-1)
     for row in stored_rows(directory,'queue_windows.csv'):
         require(set(row)==set(QUEUE_FIELDS) and row['direction']=='egress','Invalid queue observation fields')

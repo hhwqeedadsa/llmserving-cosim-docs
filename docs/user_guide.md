@@ -27,6 +27,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
+需要观察发送槽是否占满、是否有已就绪任务等待时，使用[端侧发送资源小例](../examples/send_state/README.md)。它通过同一套 `resolve`、`run`、`slice`、`sample`、`replay` 和 `validate` 命令启用并读取记录，无需实验目录或历史产物。
+
 在仓库根目录执行：
 
 ```bash

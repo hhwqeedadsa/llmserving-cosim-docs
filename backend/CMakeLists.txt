@@ -32,6 +32,13 @@ find_package(ZLIB REQUIRED)
 add_library(cosim-records STATIC "${CMAKE_CURRENT_LIST_DIR}/record_store.cc")
 target_link_libraries(cosim-records PUBLIC ZLIB::ZLIB)
 set_target_properties(cosim-records PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+build_exec(
+  EXECNAME cosim-send-state-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/send_state_test.cc"
+  LIBRARIES_TO_LINK cosim-records
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-send-state-test PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-send-state-test PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${ASTRA_ROOT}")
 # The locked logging helper has unqualified format() calls incompatible with
 # C++20 std::format. Keep this bridge on ASTRA's C++17 side of the boundary.
 add_library(cosim-astra-logging STATIC "${CMAKE_CURRENT_LIST_DIR}/astra_logging.cc")

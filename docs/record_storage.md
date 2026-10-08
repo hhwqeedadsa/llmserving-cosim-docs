@@ -28,11 +28,40 @@
 
 `local_record_id` 只在一个 rank 内编号，不编码全局操作身份。端侧起止时间取实际节点与回调，并按通信模板确定 Dispatch/Combine 的操作范围；不能用首包或末包时刻代替。`direction` 当前为 `egress`，包数与字节数为非负整数，时间单位为纳秒。
 
-`public_config.json` 使用 `moe-ub-observed/1` 或带显式数量限制的 `/2`，声明 rank、观测端口、本地时间范围、周期、时钟分辨率、计数位置和字节口径；不包含时钟偏移与漂移。旧版 `observed/` 的压缩格式只允许 `public_config.json`、`storage.json`、`records/` 及上述两张表；下文 `/3` 公开配置额外允许阶段与队列表。校验器不会为了验证它们访问 `truth/`。
+`public_config.json` 使用 `moe-ub-observed/1` 或带显式数量限制的 `/2`，声明 rank、观测端口、本地时间范围、周期、时钟分辨率、计数位置和字节口径；不包含时钟偏移与漂移。旧版 `observed/` 的压缩格式只允许 `public_config.json`、`storage.json`、`records/` 及上述两张表；下文 `/3` 公开配置额外允许阶段与队列表，`/4` 再增加发送资源状态表。校验器不会为了验证它们访问 `truth/`。
 
 **逻辑名以 `.csv` 结尾的压缩表，内部也是 gzip JSONL。** 例如 `port_windows.csv.gz` 解压后每行一个 JSON 对象，应按清单和项目读取器解释，不能根据后缀交给 CSV 解析器。早期未压缩研究输出则直接保存 `endpoint_ops.jsonl` 和真正的 `port_windows.csv`；二者的字段与统计含义相同，文件编码不同。
 
 ## 计数位置与字节口径
+
+### 端侧发送资源状态
+
+显式输入 `moe-ub-observation-config/4` 的 `send_state` 开启采集；同时要求已有的 `statistics`、`recording`、观测预算和有界原始记录策略。省略该项时保留原版本行为。策略为：
+
+```json
+{"schema_version":"moe-ub-send-state-config/1","max_records_per_rank":100000,"max_total_records":1000000}
+```
+
+两项上限包含初始、更新和结束记录；每 rank 至少 2 条，总量至少覆盖所有 rank 的两个边界。超限使本次运行失败，不丢弃记录后宣称完整。原始和导出记录也计入各自已有的压缩字节、单行字节预算。
+
+公开配置为 `moe-ub-observed/4`，压缩存储为 `moe-ub-research-storage/3`，在阶段和队列表之外增加 `endpoint_send_state.jsonl`：
+
+| 字段 | 含义 |
+|---|---|
+| `rank_id`、`sequence` | 端点及其从 1 开始的连续顺序号，不编码图、节点或传输身份 |
+| `time_local_ns` | rank 本地时钟的整数纳秒 |
+| `event_kind` | `initial`、`update` 或 `final` |
+| `ready_send_count` | 调度扫描后仍在实际可执行队列中的非 CPU `COMM_SEND_NODE` 数，不含尚未满足前驱的任务 |
+| `active_send_count` | 实际发送资源集合的占用数量，到发起方 SEND 完成回调释放为止 |
+| `send_slot_capacity` | 实际配置的槽容量；初始 0 表示尚未配置，不表示未知或丢记录 |
+
+记录点位于完整依赖就绪扫描后及槽配置后，只有三项值发生变化时写 `update`。不记录扫描内部每一次临时占用/释放；不同扫描在同一纳秒发生时仍保留各次更新。同刻值不可任意去重或重排，计算正时间区间的状态应使用该时刻最后一条记录。本地时钟取整还可能让不同全局时刻映射到同一时间，顺序号继续有效。
+
+采集覆盖整个服务，跨图不重置序号。`public_config.send_state.coverage` 按 rank 声明本地起止、记录数、`complete: true` 和 `dropped_records: 0`；零通信 rank 也必须有两个边界。初始状态在仿真零时刻、槽配置前读取。成功排空后，以已知零待发、零占用状态延续到声明的 `max_simulation_ns`，被动写入 `final`；它不推进模拟时钟，不代表实际完成时刻。容量在空闲尾段保留最后配置值。覆盖范围外未知，缺少边界或序号不连续不能补零。
+
+原始结果的 `send_state` 压缩流使用 `time_ns`；`send_state_capture` 保存采集策略及全局覆盖。导出只对这些真实采集记录转换本地时钟，不从节点执行真值重建计数。公开校验只读 `observed/`，不依赖真值或时钟模型。`stored_rows(observed, 'endpoint_send_state.jsonl')` 顺序读取，内存使用与 rank 数量有关，不累计全量历史。
+
+`slice inspect` 的 `moe-ub-capture-capabilities/2` 声明已捕获发送状态。`sample` 保持该策略与所有状态更新，可变换 rank 本地时钟；端口是否有详细包记录不影响已有发送状态的时钟变换。未捕获发送状态的旧数据必须重新执行后端，不能升级采样来获得。用户步骤见[发送状态小例](../examples/send_state/README.md)。
 
 ### v0.4 操作阶段与等待统计
 

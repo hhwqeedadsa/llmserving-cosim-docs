@@ -176,6 +176,10 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 
 ## 被动观测接口
 
+端侧发送资源由 ASTRA `Workload::set_send_state_observer` 订阅读取：完整依赖就绪扫描恢复未提交队列后，给出其中 SEND 数、`HardwareResource` 实际占用集合大小和容量。首次配置槽后也通知一次。回调保留在同一 Workload 中跨图使用；不插入事件、不变更队列顺序或发包。LOAD 的占用属于发起方，不属于响应供数方；接收数据就绪不释放发起槽，仍由正常 SEND 完成回调释放。
+
+`port-observation-set/5` 以 `send_state` 携带 `moe-ub-send-state-config/1`，端口成员继续使用 `/4`。后端要求有界记录策略，由 `SendStateRecords` 保留每 rank 当前值并流式写入共享记录存储；没有开关时不订阅、不生成发送状态流。初始与排空后的结束边界、局部时钟和条数限制见[发送状态格式](../docs/record_storage.md#端侧发送资源状态)。
+
 `PortObservation` 复用 `UbPort::TraComEventNotify`：该通知虽然名称含完成含义，实际在通道 `TransmitStart` 成功后发出。记录使用当时的仿真时间与 `Packet::GetSize()`，不移到发送末尾，也不在尝试发送前计数。累计字节另与原端口 `GetTxBytes` 增量核对。
 
 源 Jetty 根据 WQE 进度给出 TA 的任务偏移，TP 创建 WRITE 数据包后通过 `WritePacketCreated` 给出包内载荷范围。`WriteProvenance` 按已有 Packet UID 保存任务与包的对应；多端口共享一份描述和对应表，端口自己的窗口与队列记录独立。它不持有 TP，也不增加包头或标签。来源打开时，未知 WRITE 来源、错位或重叠的业务范围报错。

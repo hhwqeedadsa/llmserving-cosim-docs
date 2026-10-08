@@ -1,0 +1,323 @@
+{
+  "passed": true,
+  "cases": {
+    "slots_1": {
+      "graphs": 2,
+      "send_nodes": 234,
+      "state_records": 281,
+      "send_wait_node_ns": 34697,
+      "occupied_slot_ns": 103270,
+      "early_data_before_sender_release": 138,
+      "load_transfers": 36,
+      "peak_active_sends": 1,
+      "compute_without_ready_sends": true,
+      "simulation_end_ns": 90224
+    },
+    "slots_2": {
+      "graphs": 1,
+      "send_nodes": 117,
+      "state_records": 145,
+      "send_wait_node_ns": 0,
+      "occupied_slot_ns": 52590,
+      "early_data_before_sender_release": 69,
+      "load_transfers": 18,
+      "peak_active_sends": 2,
+      "compute_without_ready_sends": true,
+      "simulation_end_ns": 47193
+    }
+  },
+  "execution_and_packet_bytes_times_unchanged": true,
+  "independent_dependency_and_callback_oracle": true,
+  "cross_graph_continuity": true,
+  "truth_disabled_capture": true,
+  "observed_only_validation": true,
+  "local_clock_sampling": true,
+  "frozen_replay_identical": true,
+  "old_capture_upgrade_rejected": true,
+  "record_limit_rejected": true,
+  "schema_version": "moe-ub-send-state-acceptance/1",
+  "date": "2026-10-08",
+  "scope": "small_functional_synthetic_inputs_not_research_gain_or_hardware_calibration",
+  "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+  "baseline_project_commit": "356e3d7",
+  "dependencies": {
+    "LLMServingSim": "1e8bb54df71b9ea17f705d8c582d8e20ba53d6eb",
+    "ns-3-UB": "c0f1fe54245203a3b14468e44e893a38792cfcc8",
+    "ASTRA-sim": "93fe5a466c795129f00bef761d41a83ce56077e6"
+  },
+  "evidence": {
+    "root": "runs/m17-send-state",
+    "commands": "runs/m17-send-state/workflow/commands.json",
+    "summary": "runs/m17-send-state/workflow/summary.json",
+    "unit_commands": "runs/m17-send-state/python-checks.json"
+  },
+  "limits": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "build/v04-platform",
+      "runs/v04-platform",
+      "build/m10-resource-efficiency",
+      "runs/v03-resource-efficiency",
+      "build/m10-research-slice",
+      "runs/v03-research-slice",
+      "runs/mapping_value",
+      "runs/scaleup_observability",
+      "runs/task-sync-20261008",
+      "build/m17-send-state",
+      "runs/m17-send-state"
+    ]
+  },
+  "python_unit_tests": 28,
+  "python_unit_files": [
+    "send_state_test.py",
+    "observation_export_test.py",
+    "observation_recording_test.py",
+    "research_storage_test.py",
+    "record_storage_test.py",
+    "queue_statistics_test.py",
+    "research_slice_test.py"
+  ],
+  "cpp_checks": [
+    "cosim-send-state-test",
+    "cosim-send-slots-test"
+  ],
+  "host_phases": {
+    "compile": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 479.86272428557277,
+      "peak_sampled_group_rss_bytes": 1933524992,
+      "max_waited_child_rss_kib": 1346832,
+      "aggregate_artifact_bytes_before_report": 40683757568
+    },
+    "configure": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 32.25003460794687,
+      "peak_sampled_group_rss_bytes": 3198976,
+      "max_waited_child_rss_kib": 64108,
+      "aggregate_artifact_bytes_before_report": 40592871424
+    },
+    "cpp-send-slots": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 23.851738952100277,
+      "peak_sampled_group_rss_bytes": 0,
+      "max_waited_child_rss_kib": 349588,
+      "aggregate_artifact_bytes_before_report": 40683839488
+    },
+    "cpp-send-state": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 23.79986341111362,
+      "peak_sampled_group_rss_bytes": 0,
+      "max_waited_child_rss_kib": 349588,
+      "aggregate_artifact_bytes_before_report": 40683823104
+    },
+    "integration": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 32.625339640304446,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "max_waited_child_rss_kib": 349588,
+      "aggregate_artifact_bytes_before_report": 40690724864
+    },
+    "integration-continued": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 32.777963591739535,
+      "peak_sampled_group_rss_bytes": 6426624,
+      "max_waited_child_rss_kib": 77532,
+      "aggregate_artifact_bytes_before_report": 40695627776
+    },
+    "integration-final": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 32.47494440898299,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "max_waited_child_rss_kib": 76464,
+      "aggregate_artifact_bytes_before_report": 40703090688
+    },
+    "public-build": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 33.285715471953154,
+      "peak_sampled_group_rss_bytes": 5328896,
+      "max_waited_child_rss_kib": 71548,
+      "aggregate_artifact_bytes_before_report": 40703057920
+    },
+    "unit-compile": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 32.48805283382535,
+      "peak_sampled_group_rss_bytes": 5283840,
+      "max_waited_child_rss_kib": 349588,
+      "aggregate_artifact_bytes_before_report": 40683782144
+    }
+  },
+  "run_resources": {
+    "s1-off": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9995388370007277,
+      "peak_sampled_group_rss_bytes": 109199360,
+      "max_waited_child_rss_kib": 78568,
+      "files": {
+        "apparent_bytes": 2627213,
+        "allocated_bytes": 3252224
+      }
+    },
+    "s1-on": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.0489667914807796,
+      "peak_sampled_group_rss_bytes": 107143168,
+      "max_waited_child_rss_kib": 77492,
+      "files": {
+        "apparent_bytes": 2636169,
+        "allocated_bytes": 3260416
+      },
+      "public_send_state": {
+        "name": "endpoint_send_state.jsonl.gz",
+        "records": 281,
+        "raw_bytes": 38794,
+        "compressed_bytes": 2982,
+        "crc32": 2184115672
+      },
+      "raw_send_state": {
+        "files": [
+          {
+            "compressed_bytes": 2984,
+            "crc32": 696840414,
+            "name": "send_state.jsonl.gz",
+            "raw_bytes": 37108,
+            "records": 281
+          }
+        ],
+        "records": 281
+      }
+    },
+    "s2-off": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9063168652355671,
+      "peak_sampled_group_rss_bytes": 107134976,
+      "max_waited_child_rss_kib": 76388,
+      "files": {
+        "apparent_bytes": 1609894,
+        "allocated_bytes": 2269184
+      }
+    },
+    "s2-on": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.8406623676419258,
+      "peak_sampled_group_rss_bytes": 107139072,
+      "max_waited_child_rss_kib": 77532,
+      "files": {
+        "apparent_bytes": 1615714,
+        "allocated_bytes": 2277376
+      },
+      "public_send_state": {
+        "name": "endpoint_send_state.jsonl.gz",
+        "records": 145,
+        "raw_bytes": 19963,
+        "compressed_bytes": 1515,
+        "crc32": 2394633237
+      },
+      "raw_send_state": {
+        "files": [
+          {
+            "compressed_bytes": 1504,
+            "crc32": 3113831437,
+            "name": "send_state.jsonl.gz",
+            "raw_bytes": 19093,
+            "records": 145
+          }
+        ],
+        "records": 145
+      }
+    },
+    "replay": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.3357810992747545,
+      "peak_sampled_group_rss_bytes": 49139712,
+      "max_waited_child_rss_kib": 29244,
+      "files": {
+        "apparent_bytes": 789544,
+        "allocated_bytes": 1372160
+      },
+      "public_send_state": {
+        "name": "endpoint_send_state.jsonl.gz",
+        "records": 145,
+        "raw_bytes": 19963,
+        "compressed_bytes": 1515,
+        "crc32": 2394633237
+      },
+      "raw_send_state": {
+        "files": [
+          {
+            "compressed_bytes": 1504,
+            "crc32": 3113831437,
+            "name": "send_state.jsonl.gz",
+            "raw_bytes": 19093,
+            "records": 145
+          }
+        ],
+        "records": 145
+      }
+    }
+  },
+  "new_artifacts": {
+    "build/m17-send-state": {
+      "apparent_bytes": 91205098,
+      "allocated_bytes": 95166464
+    },
+    "runs/m17-send-state": {
+      "apparent_bytes": 14690112,
+      "allocated_bytes": 19824640
+    }
+  },
+  "test_driver_failures": [
+    {
+      "phase": "integration",
+      "reason": "Test used lowercase load; execution format declares uppercase LOAD.",
+      "simulation_repeated": false
+    },
+    {
+      "phase": "integration-continued",
+      "reason": "Test incorrectly required pending work with two slots in a two-lane input; corrected to explicit zero-pending assertion, retaining positive wait assertion for one slot and all independent state comparisons.",
+      "simulation_repeated": false
+    }
+  ],
+  "expected_rejections": [
+    "Old uncaptured slice cannot acquire send state through sample; no output directory created.",
+    "Two records per rank cannot retain updates plus boundaries; backend fails without successful run manifest."
+  ],
+  "public_build": {
+    "passed": true,
+    "commands": "build/m17-send-state/user-build-logs/attempt-0001/commands.json",
+    "linked_ns3_libraries": [
+      "libns3.44-unified-bus.so",
+      "libns3.44-internet.so",
+      "libns3.44-network.so",
+      "libns3.44-core.so",
+      "libns3.44-applications.so",
+      "libns3.44-point-to-point.so",
+      "libns3.44-config-store.so",
+      "libns3.44-bridge.so",
+      "libns3.44-traffic-control.so",
+      "libns3.44-stats.so"
+    ]
+  },
+  "document_links": {
+    "passed": true,
+    "checked_links": 207,
+    "missing": []
+  }
+}

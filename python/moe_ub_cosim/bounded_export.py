@@ -34,6 +34,7 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
             'truth':['operation_registry.jsonl','transfer_registry.jsonl','attribution_windows.csv'],
             'metrics':['byte-classification.jsonl']}
     statistics='statistics' in observation
+    if 'send_state' in observation:fields['observed'].append('endpoint_send_state.jsonl')
     if statistics:fields['observed']+=['queue_windows.csv','endpoint_stages.jsonl']
     if 'recording' in observation:fields['truth'].append('message_attribution_windows.csv')
     index_path=output/'metrics/transfer-index.bin'
@@ -44,7 +45,11 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
         with TransferIndex(index_path,max_bytes=limits['max_index_bytes'],max_operations=limits['max_operations'],
                 max_layouts=limits['max_layouts'],max_id_ranges=limits['max_id_ranges'],cache_rows=limits['cache_rows']) as index:
             meta=export_metadata(raw,observation,ranks,max_ns,writer,index,limits)
-            save(output/'observed/public_config.json',public_config(ranks,meta['ports'],observation.get('resource_budget'),statistics=statistics))
+            send_state=None
+            if 'send_state' in observation:
+                from .send_state import export_send_state
+                send_state=export_send_state(meta['execution'],meta['report'],observation,ranks,max_ns,meta['clocks'],writer)
+            save(output/'observed/public_config.json',public_config(ranks,meta['ports'],observation.get('resource_budget'),statistics=statistics,send_state=send_state))
             save(output/'truth/clock_models.json',dict(schema_version='moe-ub-clock-models/1',time_unit='ns',
                 drift_unit='parts_per_billion',rounding='floor',formula='floor((1000000000+drift_ppb)*t_ns/1000000000)+offset_ns',
                 devices=observation['clocks']))

@@ -1,0 +1,14 @@
+{
+  "schema_version": "moe-ub-sample/1",
+  "host": {
+    "rss_bytes": 4294967296,
+    "address_bytes": 8589934592,
+    "artifact_bytes": 2147483648,
+    "wall_seconds": 300,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": []
+  },
+  "observation": null,
+  "period_ns": 1270,
+  "export_policy": "../native_first_round/export-policy.json"
+}

@@ -47,19 +47,25 @@ def validate_observation(config, ranks, max_ns):
     budget=config.get('resource_budget')
     statistics='statistics' in config
     recording='recording' in config
+    send_state='send_state' in config
+    version='moe-ub-observation-config/4' if send_state else 'moe-ub-observation-config/3'
+    if send_state:
+        from .send_state import validate_policy
+        require(recording and statistics and config.get('schema_version')==version,'Send-state requires observation-config/4 recording and statistics')
+        validate_policy(config['send_state'],ranks)
     if recording:
         from .observation_recording import validate_recording
-        require(statistics and config.get('schema_version')=='moe-ub-observation-config/3','Recording policy requires observation-config/3 statistics')
+        require(statistics and config.get('schema_version')==version,'Recording policy requires observation-config/3 statistics')
         validate_recording(config['recording'],max_ns,provenance=config['record_provenance'])
     if statistics:
-        require(config.get('schema_version')==('moe-ub-observation-config/3' if recording else 'moe-ub-observation-config/2') and config['statistics']==STATISTICS and
+        require(config.get('schema_version')==(version if recording else 'moe-ub-observation-config/2') and config['statistics']==STATISTICS and
                 all(type(config['statistics'][key]) is bool for key in ('queue_waiting_bytes','operation_stages')) and
                 budget is not None,'New statistics require observation-config/2 and an explicit resource budget')
     if budget is not None:validate_observation_budget(budget)
     limits=budget or dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096)
     if recording:require(len(config['recording']['detail_ranges'])<=limits['max_ports'],'Detail port budget exceeded')
     require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set())|
-            ({'schema_version','statistics'} if statistics else set())|({'recording'} if recording else set()) and
+            ({'schema_version','statistics'} if statistics else set())|({'recording'} if recording else set())|({'send_state'} if send_state else set()) and
             type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
     require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
             1<=len(config['switches'])<=limits['max_ports'],'Require observed switches and device clocks')
@@ -128,6 +134,8 @@ def backend_observation(config, ranks, max_ns):
             port.update(schema_version='moe-ub-port-observation/4',recording=dict(
                 schema_version='moe-ub-port-recording/1',detail_range=detail_range(policy,selected,max_ns),
                 **{k:policy[k] for k in ('truth_categories','max_detail_events_per_port','max_window_attribution_entries')}))
+    if 'send_state' in config:
+        result.update(schema_version='moe-ub-port-observation-set/5',send_state=config['send_state'])
     return result
 
 
@@ -147,7 +155,7 @@ def execution_coverage(config,ranks,max_ns,finished_ns):
                 scope='time_coverage_of_declared_ports_not_all_network_ports')
 
 
-def public_config(ranks, ports, resource_budget=None, *, statistics=False):
+def public_config(ranks, ports, resource_budget=None, *, statistics=False, send_state=None):
     result=dict(schema_version='moe-ub-observed/1',endpoint_schema='moe-ub-endpoint-ops/1',
         port_schema='moe-ub-port-windows/1',rank_ids=ranks,ports=ports,time_unit='ns',
         byte_semantics='ns3_packet_get_size',counter_location='egress_packet_start',clock_resolution_ns=1,
@@ -161,6 +169,9 @@ def public_config(ranks, ports, resource_budget=None, *, statistics=False):
             queue_objects=dict(voq_waiting='ready_output_VOQs_including_control_excluding_ingress_processing',
                                fifo_waiting='physical_egress_FIFO_excluding_serializing_packet'),
             queue_peak_semantics='max_inherited_and_after_update_states_in_half_open_window_including_same_time_transients')
+    if send_state is not None:
+        require(statistics,'Send-state requires public statistics')
+        result.update(schema_version='moe-ub-observed/4',send_state=send_state)
     return result
 
 
@@ -232,7 +243,8 @@ def validate_observed(directory):
 
 
 def validate_public_config(public):
-    statistics=public.get('schema_version')=='moe-ub-observed/3'
+    send_state=public.get('schema_version')=='moe-ub-observed/4'
+    statistics=public.get('schema_version') in ('moe-ub-observed/3','moe-ub-observed/4')
     extended=statistics or public.get('schema_version')=='moe-ub-observed/2'
     statistic_fields={'queue_schema','endpoint_stage_schema','queue_objects','queue_peak_semantics'} if statistics else set()
     if statistics:
@@ -241,7 +253,7 @@ def validate_public_config(public):
     limits=public.get('limits',dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096))
     require(set(limits)=={'max_ports','max_windows_per_port','max_total_windows'},'Invalid public resource limits')
     for k,v in limits.items():integer(v,k,1)
-    require(set(public)==PUBLIC_FIELDS|({'limits'} if extended else set())|statistic_fields and (extended or public['schema_version']=='moe-ub-observed/1') and
+    require(set(public)==PUBLIC_FIELDS|({'limits'} if extended else set())|statistic_fields|({'send_state'} if send_state else set()) and (extended or public['schema_version']=='moe-ub-observed/1') and
         public['endpoint_schema']=='moe-ub-endpoint-ops/1' and public['port_schema']=='moe-ub-port-windows/1' and
         public['endpoint_fields']==list(ENDPOINT_FIELDS) and public['time_unit']=='ns' and
         public['byte_semantics']=='ns3_packet_get_size' and public['counter_location']=='egress_packet_start' and
@@ -250,6 +262,9 @@ def validate_public_config(public):
     require(isinstance(ranks,list) and bool(ranks) and
             all(type(r) is int and 0<=r<=MAX_RANK_ID for r in ranks) and
             ranks==sorted(set(ranks)),'Invalid public ranks')
+    if send_state:
+        from .send_state import validate_descriptor
+        validate_descriptor(public['send_state'],ranks)
     port_configs=public['ports'];points=set();total_windows=0
     require(isinstance(port_configs,list) and 1<=len(port_configs)<=limits['max_ports'],'Invalid public port list')
     for p in port_configs:

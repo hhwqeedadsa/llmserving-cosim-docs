@@ -1,0 +1,5 @@
+control,treatment,metric,control_value,treatment_value,delta,delta_pct,status
+no_kv_100,kv_100,inference_end_us,6993.33270000,8170.35442000,1177.02172000,16.83062669,matched
+no_kv_100,kv_100,phase_p95_us,67.51949100,110.73768000,43.21818900,64.00846387,matched
+kv_100,kv_200,inference_end_us,8170.35442000,5772.83910000,-2397.51532000,-29.34407979,matched
+kv_100,kv_200,phase_p95_us,110.73768000,35.48554200,-75.25213800,-67.95531386,matched

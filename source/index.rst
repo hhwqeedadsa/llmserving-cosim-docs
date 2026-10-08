@@ -7,6 +7,10 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
 
 .. admonition:: 最新研究进展 · 2026-10-08
 
+   新增3组依赖驱动多副本/KV竞争仿真：820 tasks、59600 packets，8400 μs波形、
+   500 μs计算/通信切片和6 μs逐包放大；100/200 Gbps对照与8项分析验证完成。
+   见 :doc:`dependent-moe-kv-contention`。
+
    复核 1.1 ms 多波峰波谷：20 tasks、1302 packets、9 段波间空闲，修复放大窗口尾段和
    queue 峰值口径；6 项分析回归通过。核对模型/GPU/trace/CCL，并纠正 384 设备映射：
    DP64×TP2×PP3、stage 内共享 EP128 仅通过配置校验，尚未执行 workload。
@@ -66,6 +70,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
    goal-evidence-audit
    model-hardware-trace-contention
    long-window-network-contention
+   dependent-moe-kv-contention
    aidc-inference-tail-survey
    visualization
 

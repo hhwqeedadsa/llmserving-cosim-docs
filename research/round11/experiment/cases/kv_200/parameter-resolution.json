@@ -1,0 +1,26 @@
+{
+  "path": "/home/lry/a100_ep_runtime/\u7b2c05\u8f6e_\u8054\u5408\u4eff\u771fM0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/kv_200/network_attribute.txt",
+  "resolution_mode": "full-catalog-snapshot",
+  "parameter_catalog_source": "/home/lry/a100_ep_runtime/\u7b2c05\u8f6e_\u8054\u5408\u4eff\u771fM0_20260919/ns-3-ub/repo/.openusim/project/parameter-catalog.json",
+  "required_project_pins": {
+    "UB_PYTHON_SCRIPT_PATH": "scratch/ns-3-ub-tools/trace_analysis/parse_trace.py"
+  },
+  "resolved_entry_count": 116,
+  "applied_overrides": {
+    "UB_TRACE_ENABLE": "true",
+    "UB_TASK_TRACE_ENABLE": "true",
+    "UB_PACKET_TRACE_ENABLE": "true",
+    "UB_PORT_TRACE_ENABLE": "true",
+    "UB_QUEUE_TRACE_ENABLE": "true",
+    "UB_RECORD_PKT_TRACE": "true",
+    "UB_PARSE_TRACE_ENABLE": "true",
+    "ns3::UbSwitch::FlowControl": "CBFC",
+    "ns3::UbRoutingProcess::RoutingAlgorithm": "HASH",
+    "ns3::UbSwitchAllocator::AllocationTime": "1ns",
+    "ns3::UbPort::UbInterframeGap": "0ns",
+    "ns3::UbTransportChannel::EnableRetrans": "false",
+    "ns3::UbTransportChannel::EnableFastRetrans": "false",
+    "UB_CC_ENABLED": "false"
+  },
+  "validation_mode": "runtime-addattribute-and-global-catalog"
+}

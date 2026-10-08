@@ -1,0 +1,17 @@
+{
+  "case_id": "no_kv_100",
+  "command": "python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/20261008-dependent-moe-kv-contention/cases/no_kv_100 --dependency-visibility-delay=20ns --initial-task-start-offset-window=0ps --canonical-output=/home/lry/a100_ep_runtime/\u7b2c05\u8f6e_\u8054\u5408\u4eff\u771fM0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/no_kv_100/canonical'",
+  "start": "2026-10-08T14:29:24.840229+08:00",
+  "status": "success",
+  "checkpoint_policy": "continue_full_matrix",
+  "end": "2026-10-08T14:29:27.660371+08:00",
+  "wall_seconds": 2.819981874898076,
+  "returncode": 0,
+  "artifacts": {
+    "canonical.rank0.txt": true,
+    "output/task_statistics.csv": true,
+    "runlog": true
+  },
+  "failure_category": null,
+  "retryable": false
+}

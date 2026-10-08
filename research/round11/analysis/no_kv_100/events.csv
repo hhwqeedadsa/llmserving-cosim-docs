@@ -1,0 +1,421 @@
+resource,group,repetition,type,operation,start_us,end_us,task_id,phase_id,evidence
+NIC0->4,G0,0,communication,AllReduce:reduce_scatter,36.34000000,58.79024000,0,0,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,0,communication,AllReduce:reduce_scatter,36.34000000,58.79024000,1,0,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,0,communication,AllReduce:allgather,58.69280000,101.61800000,2,1,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,0,communication,AllReduce:allgather,58.69280000,101.61800000,3,1,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,0,communication,AllGather:ring_exchange,103.16566000,170.72680000,4,2,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,0,communication,AllGather:ring_exchange,103.16566000,170.72680000,5,2,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,0,communication,ReduceScatter:ring_exchange,627.37550000,649.82352000,6,3,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,0,communication,ReduceScatter:ring_exchange,627.37550000,649.82352000,7,3,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,1,communication,AllReduce:reduce_scatter,686.05608000,739.46392000,8,4,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,1,communication,AllReduce:reduce_scatter,686.05608000,739.46392000,9,4,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,1,communication,AllReduce:allgather,739.37562000,761.91568000,10,5,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,1,communication,AllReduce:allgather,739.37562000,761.91568000,11,5,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,1,communication,AllGather:ring_exchange,764.37006000,831.69542000,12,6,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,1,communication,AllGather:ring_exchange,764.37006000,831.69542000,13,6,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,1,communication,ReduceScatter:ring_exchange,1288.32412000,1310.77718000,14,7,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,1,communication,ReduceScatter:ring_exchange,1288.32412000,1310.77718000,15,7,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,2,communication,AllReduce:reduce_scatter,1347.00974000,1369.46494000,16,8,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,2,communication,AllReduce:reduce_scatter,1347.00974000,1369.46494000,17,8,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,2,communication,AllReduce:allgather,1369.36750000,1434.84582000,18,9,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,2,communication,AllReduce:allgather,1369.36750000,1434.84582000,19,9,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,2,communication,AllGather:ring_exchange,1437.30652000,1461.14244000,20,10,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,2,communication,AllGather:ring_exchange,1437.30652000,1461.14244000,21,10,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,2,communication,ReduceScatter:ring_exchange,1917.78482000,1940.23788000,22,11,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,2,communication,ReduceScatter:ring_exchange,1917.78482000,1940.23788000,23,11,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,3,communication,AllReduce:reduce_scatter,1976.47044000,1998.91564000,24,12,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,3,communication,AllReduce:reduce_scatter,1976.47044000,1998.91564000,25,12,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,3,communication,AllReduce:allgather,1998.81820000,2021.26844000,26,13,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,3,communication,AllReduce:allgather,1998.81820000,2021.26844000,27,13,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,3,communication,AllGather:ring_exchange,2023.72282000,2047.56874000,28,14,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,3,communication,AllGather:ring_exchange,2023.72282000,2047.56874000,29,14,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,3,communication,ReduceScatter:ring_exchange,2504.21112000,2526.65914000,30,15,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,3,communication,ReduceScatter:ring_exchange,2504.21112000,2526.65914000,31,15,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,4,communication,AllReduce:reduce_scatter,2562.89170000,2585.33690000,32,16,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,4,communication,AllReduce:reduce_scatter,2562.89170000,2585.33690000,33,16,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,4,communication,AllReduce:allgather,2585.23946000,2607.68970000,34,17,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,4,communication,AllReduce:allgather,2585.23946000,2607.68970000,35,17,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,4,communication,AllGather:ring_exchange,2610.14408000,2633.99000000,36,18,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,4,communication,AllGather:ring_exchange,2610.14408000,2633.99000000,37,18,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,4,communication,ReduceScatter:ring_exchange,3090.63238000,3113.08544000,38,19,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,4,communication,ReduceScatter:ring_exchange,3090.63238000,3113.08544000,39,19,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,5,communication,AllReduce:reduce_scatter,3149.31800000,3171.76320000,40,20,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,5,communication,AllReduce:reduce_scatter,3149.31800000,3171.76320000,41,20,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,5,communication,AllReduce:allgather,3171.66576000,3194.11600000,42,21,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,5,communication,AllReduce:allgather,3171.66576000,3194.11600000,43,21,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,5,communication,AllGather:ring_exchange,3196.57038000,3220.41630000,44,22,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,5,communication,AllGather:ring_exchange,3196.57038000,3220.41630000,45,22,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,5,communication,ReduceScatter:ring_exchange,3677.05868000,3699.50670000,46,23,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,5,communication,ReduceScatter:ring_exchange,3677.05868000,3699.50670000,47,23,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,6,communication,AllReduce:reduce_scatter,3735.73926000,3758.18446000,48,24,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,6,communication,AllReduce:reduce_scatter,3735.73926000,3758.18446000,49,24,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,6,communication,AllReduce:allgather,3758.08702000,3780.53726000,50,25,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,6,communication,AllReduce:allgather,3758.08702000,3780.53726000,51,25,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,6,communication,AllGather:ring_exchange,3782.99164000,3806.83756000,52,26,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,6,communication,AllGather:ring_exchange,3782.99164000,3806.83756000,53,26,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,6,communication,ReduceScatter:ring_exchange,4263.47994000,4332.37410000,54,27,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,6,communication,ReduceScatter:ring_exchange,4263.47994000,4332.37410000,55,27,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,7,communication,AllReduce:reduce_scatter,4368.61580000,4391.06100000,56,28,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,7,communication,AllReduce:reduce_scatter,4368.61580000,4391.06100000,57,28,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,7,communication,AllReduce:allgather,4390.96356000,4413.41380000,58,29,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,7,communication,AllReduce:allgather,4390.96356000,4413.41380000,59,29,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,7,communication,AllGather:ring_exchange,4415.86818000,4439.71410000,60,30,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,7,communication,AllGather:ring_exchange,4415.86818000,4439.71410000,61,30,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,7,communication,ReduceScatter:ring_exchange,4896.35648000,4957.78010000,62,31,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,7,communication,ReduceScatter:ring_exchange,4896.35648000,4957.78010000,63,31,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,8,communication,AllReduce:reduce_scatter,4991.75940000,5052.37418000,64,32,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,8,communication,AllReduce:reduce_scatter,4991.75940000,5052.37418000,65,32,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,8,communication,AllReduce:allgather,5052.27674000,5074.72698000,66,33,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,8,communication,AllReduce:allgather,5052.27674000,5074.72698000,67,33,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,8,communication,AllGather:ring_exchange,5077.18136000,5101.01224000,68,34,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,8,communication,AllGather:ring_exchange,5077.18136000,5101.01224000,69,34,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,8,communication,ReduceScatter:ring_exchange,5557.65462000,5580.10768000,70,35,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,8,communication,ReduceScatter:ring_exchange,5557.65462000,5580.10768000,71,35,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,9,communication,AllReduce:reduce_scatter,5616.34024000,5677.88200000,72,36,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,9,communication,AllReduce:reduce_scatter,5616.34024000,5677.88200000,73,36,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,9,communication,AllReduce:allgather,5675.20234000,5722.00890000,74,37,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,9,communication,AllReduce:allgather,5675.20234000,5722.00890000,75,37,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,9,communication,AllGather:ring_exchange,5724.47046000,5794.67590000,76,38,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,9,communication,AllGather:ring_exchange,5724.47046000,5794.67590000,77,38,ns3-simulated: first-packet to last-ACK
+NIC0->4,G0,9,communication,ReduceScatter:ring_exchange,6251.31460000,6317.76188000,78,39,ns3-simulated: first-packet to last-ACK
+NIC4->0,G0,9,communication,ReduceScatter:ring_exchange,6251.31460000,6317.76188000,79,39,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,0,communication,AllReduce:reduce_scatter,76.34000000,103.10056000,80,100,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,0,communication,AllReduce:reduce_scatter,76.34000000,103.10056000,81,100,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,0,communication,AllReduce:allgather,103.00312000,170.46680000,82,101,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,0,communication,AllReduce:allgather,103.00312000,170.46680000,83,101,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,0,communication,AllGather:ring_exchange,172.92750000,216.62164000,84,102,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,0,communication,AllGather:ring_exchange,172.92750000,216.62164000,85,102,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,0,communication,ReduceScatter:ring_exchange,673.29120000,737.20832000,86,103,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,0,communication,ReduceScatter:ring_exchange,673.29120000,737.20832000,87,103,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,1,communication,AllReduce:reduce_scatter,772.49338000,832.16542000,88,104,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,1,communication,AllReduce:reduce_scatter,772.49338000,832.16542000,89,104,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,1,communication,AllReduce:allgather,832.07712000,876.49718000,90,105,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,1,communication,AllReduce:allgather,832.07712000,876.49718000,91,105,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,1,communication,AllGather:ring_exchange,878.95788000,926.13564000,92,106,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,1,communication,AllGather:ring_exchange,878.95788000,926.13564000,93,106,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,1,communication,ReduceScatter:ring_exchange,1382.78434000,1435.85496000,94,107,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,1,communication,ReduceScatter:ring_exchange,1382.78434000,1435.85496000,95,107,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,2,communication,AllReduce:reduce_scatter,1472.08752000,1516.51306000,96,108,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,2,communication,AllReduce:reduce_scatter,1472.08752000,1516.51306000,97,108,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,2,communication,AllReduce:allgather,1516.41562000,1560.82202000,98,109,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,2,communication,AllReduce:allgather,1516.41562000,1560.82202000,99,109,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,2,communication,AllGather:ring_exchange,1563.28272000,1610.48552000,100,110,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,2,communication,AllGather:ring_exchange,1563.28272000,1610.48552000,101,110,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,2,communication,ReduceScatter:ring_exchange,2067.13138000,2111.54282000,102,111,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,2,communication,ReduceScatter:ring_exchange,2067.13138000,2111.54282000,103,111,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,3,communication,AllReduce:reduce_scatter,2147.78452000,2192.21510000,104,112,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,3,communication,AllReduce:reduce_scatter,2147.78452000,2192.21510000,105,112,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,3,communication,AllReduce:allgather,2192.11766000,2236.52406000,106,113,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,3,communication,AllReduce:allgather,2192.11766000,2236.52406000,107,113,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,3,communication,AllGather:ring_exchange,2238.98476000,2286.18756000,108,114,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,3,communication,AllGather:ring_exchange,2238.98476000,2286.18756000,109,114,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,3,communication,ReduceScatter:ring_exchange,2742.83342000,2787.24486000,110,115,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,3,communication,ReduceScatter:ring_exchange,2742.83342000,2787.24486000,111,115,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,4,communication,AllReduce:reduce_scatter,2823.48656000,2867.91714000,112,116,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,4,communication,AllReduce:reduce_scatter,2823.48656000,2867.91714000,113,116,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,4,communication,AllReduce:allgather,2867.81970000,2912.22610000,114,117,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,4,communication,AllReduce:allgather,2867.81970000,2912.22610000,115,117,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,4,communication,AllGather:ring_exchange,2914.68680000,2961.88960000,116,118,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,4,communication,AllGather:ring_exchange,2914.68680000,2961.88960000,117,118,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,4,communication,ReduceScatter:ring_exchange,3418.53546000,3462.94690000,118,119,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,4,communication,ReduceScatter:ring_exchange,3418.53546000,3462.94690000,119,119,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,5,communication,AllReduce:reduce_scatter,3499.18860000,3543.61918000,120,120,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,5,communication,AllReduce:reduce_scatter,3499.18860000,3543.61918000,121,120,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,5,communication,AllReduce:allgather,3543.52174000,3587.92814000,122,121,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,5,communication,AllReduce:allgather,3543.52174000,3587.92814000,123,121,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,5,communication,AllGather:ring_exchange,3590.38884000,3637.59164000,124,122,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,5,communication,AllGather:ring_exchange,3590.38884000,3637.59164000,125,122,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,5,communication,ReduceScatter:ring_exchange,4094.23750000,4138.64894000,126,123,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,5,communication,ReduceScatter:ring_exchange,4094.23750000,4138.64894000,127,123,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,6,communication,AllReduce:reduce_scatter,4174.89064000,4219.32122000,128,124,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,6,communication,AllReduce:reduce_scatter,4174.89064000,4219.32122000,129,124,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,6,communication,AllReduce:allgather,4219.22378000,4263.63018000,130,125,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,6,communication,AllReduce:allgather,4219.22378000,4263.63018000,131,125,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,6,communication,AllGather:ring_exchange,4266.09088000,4332.75410000,132,126,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,6,communication,AllGather:ring_exchange,4266.09088000,4332.75410000,133,126,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,6,communication,ReduceScatter:ring_exchange,4789.40280000,4833.81424000,134,127,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,6,communication,ReduceScatter:ring_exchange,4789.40280000,4833.81424000,135,127,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,7,communication,AllReduce:reduce_scatter,4870.05594000,4935.91946000,136,128,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,7,communication,AllReduce:reduce_scatter,4870.05594000,4935.91946000,137,128,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,7,communication,AllReduce:allgather,4935.83116000,4980.58012000,138,129,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,7,communication,AllReduce:allgather,4935.83116000,4980.58012000,139,129,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,7,communication,AllGather:ring_exchange,4983.03168000,5052.21504000,140,130,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,7,communication,AllGather:ring_exchange,4983.03168000,5052.21504000,141,130,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,7,communication,ReduceScatter:ring_exchange,5508.84374000,5553.27432000,142,131,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,7,communication,ReduceScatter:ring_exchange,5508.84374000,5553.27432000,143,131,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,8,communication,AllReduce:reduce_scatter,5589.50688000,5655.34352000,144,132,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,8,communication,AllReduce:reduce_scatter,5589.50688000,5655.34352000,145,132,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,8,communication,AllReduce:allgather,5655.25522000,5721.55112000,146,133,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,8,communication,AllReduce:allgather,5655.25522000,5721.55112000,147,133,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,8,communication,AllGather:ring_exchange,5724.01182000,5794.63590000,148,134,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,8,communication,AllGather:ring_exchange,5724.01182000,5794.63590000,149,134,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,8,communication,ReduceScatter:ring_exchange,6251.26460000,6317.74188000,150,135,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,8,communication,ReduceScatter:ring_exchange,6251.26460000,6317.74188000,151,135,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,9,communication,AllReduce:reduce_scatter,6353.98358000,6398.38998000,152,136,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,9,communication,AllReduce:reduce_scatter,6353.98358000,6398.38998000,153,136,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,9,communication,AllReduce:allgather,6398.30168000,6442.73226000,154,137,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,9,communication,AllReduce:allgather,6398.30168000,6442.73226000,155,137,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,9,communication,AllGather:ring_exchange,6445.18382000,6492.38158000,156,138,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,9,communication,AllGather:ring_exchange,6445.18382000,6492.38158000,157,138,ns3-simulated: first-packet to last-ACK
+NIC1->5,G1,9,communication,ReduceScatter:ring_exchange,6949.02744000,6993.43384000,158,139,ns3-simulated: first-packet to last-ACK
+NIC5->1,G1,9,communication,ReduceScatter:ring_exchange,6949.02744000,6993.43384000,159,139,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,0,communication,AllReduce:reduce_scatter,116.34000000,170.90458000,160,200,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,0,communication,AllReduce:reduce_scatter,116.34000000,170.90458000,161,200,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,0,communication,AllReduce:allgather,170.80714000,216.43906000,162,201,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,0,communication,AllReduce:allgather,170.80714000,216.43906000,163,201,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,0,communication,AllGather:ring_exchange,218.89344000,242.72936000,164,202,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,0,communication,AllGather:ring_exchange,218.89344000,242.72936000,165,202,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,0,communication,ReduceScatter:ring_exchange,699.37174000,742.65536000,166,203,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,0,communication,ReduceScatter:ring_exchange,699.37174000,742.65536000,167,203,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,1,communication,AllReduce:reduce_scatter,777.98402000,832.60934000,168,204,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,1,communication,AllReduce:reduce_scatter,777.98402000,832.60934000,169,204,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,1,communication,AllReduce:allgather,832.20712000,876.54348000,170,205,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,1,communication,AllReduce:allgather,832.20712000,876.54348000,171,205,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,1,communication,AllGather:ring_exchange,878.99504000,926.15564000,172,206,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,1,communication,AllGather:ring_exchange,878.99504000,926.15564000,173,206,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,1,communication,ReduceScatter:ring_exchange,1382.80150000,1435.86496000,174,207,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,1,communication,ReduceScatter:ring_exchange,1382.80150000,1435.86496000,175,207,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,2,communication,AllReduce:reduce_scatter,1472.09752000,1516.52306000,176,208,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,2,communication,AllReduce:reduce_scatter,1472.09752000,1516.52306000,177,208,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,2,communication,AllReduce:allgather,1516.43278000,1560.84202000,178,209,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,2,communication,AllReduce:allgather,1516.43278000,1560.84202000,179,209,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,2,communication,AllGather:ring_exchange,1563.29988000,1610.49552000,180,210,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,2,communication,AllGather:ring_exchange,1563.29988000,1610.49552000,181,210,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,2,communication,ReduceScatter:ring_exchange,2067.13422000,2111.56282000,182,211,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,2,communication,ReduceScatter:ring_exchange,2067.13422000,2111.56282000,183,211,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,3,communication,AllReduce:reduce_scatter,2147.80168000,2192.22510000,184,212,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,3,communication,AllReduce:reduce_scatter,2147.80168000,2192.22510000,185,212,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,3,communication,AllReduce:allgather,2192.13482000,2236.54406000,186,213,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,3,communication,AllReduce:allgather,2192.13482000,2236.54406000,187,213,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,3,communication,AllGather:ring_exchange,2239.00192000,2286.19756000,188,214,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,3,communication,AllGather:ring_exchange,2239.00192000,2286.19756000,189,214,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,3,communication,ReduceScatter:ring_exchange,2742.83626000,2787.26486000,190,215,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,3,communication,ReduceScatter:ring_exchange,2742.83626000,2787.26486000,191,215,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,4,communication,AllReduce:reduce_scatter,2823.50372000,2867.92714000,192,216,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,4,communication,AllReduce:reduce_scatter,2823.50372000,2867.92714000,193,216,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,4,communication,AllReduce:allgather,2867.83686000,2912.24610000,194,217,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,4,communication,AllReduce:allgather,2867.83686000,2912.24610000,195,217,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,4,communication,AllGather:ring_exchange,2914.70396000,2961.89960000,196,218,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,4,communication,AllGather:ring_exchange,2914.70396000,2961.89960000,197,218,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,4,communication,ReduceScatter:ring_exchange,3418.53830000,3462.96690000,198,219,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,4,communication,ReduceScatter:ring_exchange,3418.53830000,3462.96690000,199,219,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,5,communication,AllReduce:reduce_scatter,3499.20576000,3543.62918000,200,220,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,5,communication,AllReduce:reduce_scatter,3499.20576000,3543.62918000,201,220,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,5,communication,AllReduce:allgather,3543.53890000,3587.94814000,202,221,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,5,communication,AllReduce:allgather,3543.53890000,3587.94814000,203,221,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,5,communication,AllGather:ring_exchange,3590.40600000,3637.60164000,204,222,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,5,communication,AllGather:ring_exchange,3590.40600000,3637.60164000,205,222,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,5,communication,ReduceScatter:ring_exchange,4094.24034000,4138.66894000,206,223,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,5,communication,ReduceScatter:ring_exchange,4094.24034000,4138.66894000,207,223,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,6,communication,AllReduce:reduce_scatter,4174.90780000,4219.33122000,208,224,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,6,communication,AllReduce:reduce_scatter,4174.90780000,4219.33122000,209,224,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,6,communication,AllReduce:allgather,4219.24094000,4263.65018000,210,225,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,6,communication,AllReduce:allgather,4219.24094000,4263.65018000,211,225,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,6,communication,AllGather:ring_exchange,4266.10804000,4332.76410000,212,226,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,6,communication,AllGather:ring_exchange,4266.10804000,4332.76410000,213,226,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,6,communication,ReduceScatter:ring_exchange,4789.41280000,4833.83424000,214,227,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,6,communication,ReduceScatter:ring_exchange,4789.41280000,4833.83424000,215,227,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,7,communication,AllReduce:reduce_scatter,4870.07310000,4935.92946000,216,228,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,7,communication,AllReduce:reduce_scatter,4870.07310000,4935.92946000,217,228,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,7,communication,AllReduce:allgather,4935.84116000,4980.59012000,218,229,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,7,communication,AllReduce:allgather,4935.84116000,4980.59012000,219,229,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,7,communication,AllGather:ring_exchange,4983.04884000,5052.22504000,220,230,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,7,communication,AllGather:ring_exchange,4983.04884000,5052.22504000,221,230,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,7,communication,ReduceScatter:ring_exchange,5508.85374000,5553.28432000,222,231,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,7,communication,ReduceScatter:ring_exchange,5508.85374000,5553.28432000,223,231,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,8,communication,AllReduce:reduce_scatter,5589.52404000,5655.35352000,224,232,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,8,communication,AllReduce:reduce_scatter,5589.52404000,5655.35352000,225,232,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,8,communication,AllReduce:allgather,5655.26522000,5721.56112000,226,233,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,8,communication,AllReduce:allgather,5655.26522000,5721.56112000,227,233,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,8,communication,AllGather:ring_exchange,5724.02182000,5794.64590000,228,234,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,8,communication,AllGather:ring_exchange,5724.02182000,5794.64590000,229,234,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,8,communication,ReduceScatter:ring_exchange,6251.27460000,6317.75188000,230,235,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,8,communication,ReduceScatter:ring_exchange,6251.27460000,6317.75188000,231,235,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,9,communication,AllReduce:reduce_scatter,6353.99358000,6398.40998000,232,236,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,9,communication,AllReduce:reduce_scatter,6353.99358000,6398.40998000,233,236,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,9,communication,AllReduce:allgather,6398.31884000,6442.74226000,234,237,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,9,communication,AllReduce:allgather,6398.31884000,6442.74226000,235,237,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,9,communication,AllGather:ring_exchange,6445.20098000,6492.39158000,236,238,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,9,communication,AllGather:ring_exchange,6445.20098000,6492.39158000,237,238,ns3-simulated: first-packet to last-ACK
+NIC2->6,G2,9,communication,ReduceScatter:ring_exchange,6949.03028000,6993.45384000,238,239,ns3-simulated: first-packet to last-ACK
+NIC6->2,G2,9,communication,ReduceScatter:ring_exchange,6949.03028000,6993.45384000,239,239,ns3-simulated: first-packet to last-ACK
+GPU0,G0,0,compute,dense,0.00000000,36.33000000,,0,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,0,compute,dense,0.00000000,36.33000000,,0,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,0,compute,layernorm,100.60666000,103.15566000,,2,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,0,compute,layernorm,100.60666000,103.15566000,,2,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,0,compute,expert,170.62850000,627.36550000,,3,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,0,compute,expert,170.62850000,627.36550000,,3,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,1,compute,dense,649.71608000,686.04608000,,4,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,1,compute,dense,649.71608000,686.04608000,,4,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,1,compute,layernorm,761.81106000,764.36006000,,6,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,1,compute,layernorm,761.81106000,764.36006000,,6,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,1,compute,expert,831.57712000,1288.31412000,,7,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,1,compute,expert,831.57712000,1288.31412000,,7,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,2,compute,dense,1310.66974000,1346.99974000,,8,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,2,compute,dense,1310.66974000,1346.99974000,,8,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,2,compute,layernorm,1434.74752000,1437.29652000,,10,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,2,compute,layernorm,1434.74752000,1437.29652000,,10,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,2,compute,expert,1461.03782000,1917.77482000,,11,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,2,compute,expert,1461.03782000,1917.77482000,,11,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,3,compute,dense,1940.13044000,1976.46044000,,12,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,3,compute,dense,1940.13044000,1976.46044000,,12,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,3,compute,layernorm,2021.16382000,2023.71282000,,14,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,3,compute,layernorm,2021.16382000,2023.71282000,,14,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,3,compute,expert,2047.46412000,2504.20112000,,15,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,3,compute,expert,2047.46412000,2504.20112000,,15,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,4,compute,dense,2526.55170000,2562.88170000,,16,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,4,compute,dense,2526.55170000,2562.88170000,,16,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,4,compute,layernorm,2607.58508000,2610.13408000,,18,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,4,compute,layernorm,2607.58508000,2610.13408000,,18,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,4,compute,expert,2633.88538000,3090.62238000,,19,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,4,compute,expert,2633.88538000,3090.62238000,,19,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,5,compute,dense,3112.97800000,3149.30800000,,20,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,5,compute,dense,3112.97800000,3149.30800000,,20,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,5,compute,layernorm,3194.01138000,3196.56038000,,22,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,5,compute,layernorm,3194.01138000,3196.56038000,,22,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,5,compute,expert,3220.31168000,3677.04868000,,23,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,5,compute,expert,3220.31168000,3677.04868000,,23,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,6,compute,dense,3699.39926000,3735.72926000,,24,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,6,compute,dense,3699.39926000,3735.72926000,,24,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,6,compute,layernorm,3780.43264000,3782.98164000,,26,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,6,compute,layernorm,3780.43264000,3782.98164000,,26,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,6,compute,expert,3806.73294000,4263.46994000,,27,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,6,compute,expert,3806.73294000,4263.46994000,,27,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,7,compute,dense,4332.27580000,4368.60580000,,28,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,7,compute,dense,4332.27580000,4368.60580000,,28,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,7,compute,layernorm,4413.30918000,4415.85818000,,30,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,7,compute,layernorm,4413.30918000,4415.85818000,,30,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,7,compute,expert,4439.60948000,4896.34648000,,31,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,7,compute,expert,4439.60948000,4896.34648000,,31,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,8,compute,dense,4955.41940000,4991.74940000,,32,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,8,compute,dense,4955.41940000,4991.74940000,,32,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,8,compute,layernorm,5074.62236000,5077.17136000,,34,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,8,compute,layernorm,5074.62236000,5077.17136000,,34,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,8,compute,expert,5100.90762000,5557.64462000,,35,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,8,compute,expert,5100.90762000,5557.64462000,,35,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,9,compute,dense,5580.00024000,5616.33024000,,36,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,9,compute,dense,5580.00024000,5616.33024000,,36,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,9,compute,layernorm,5721.91146000,5724.46046000,,38,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,9,compute,layernorm,5721.91146000,5724.46046000,,38,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU0,G0,9,compute,expert,5794.56760000,6251.30460000,,39,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU4,G0,9,compute,expert,5794.56760000,6251.30460000,,39,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,0,compute,dense,40.00000000,76.33000000,,100,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,0,compute,dense,40.00000000,76.33000000,,100,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,0,compute,layernorm,170.36850000,172.91750000,,102,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,0,compute,layernorm,170.36850000,172.91750000,,102,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,0,compute,expert,216.54420000,673.28120000,,103,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,0,compute,expert,216.54420000,673.28120000,,103,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,1,compute,dense,736.15338000,772.48338000,,104,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,1,compute,dense,736.15338000,772.48338000,,104,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,1,compute,layernorm,876.39888000,878.94788000,,106,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,1,compute,layernorm,876.39888000,878.94788000,,106,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,1,compute,expert,926.03734000,1382.77434000,,107,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,1,compute,expert,926.03734000,1382.77434000,,107,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,2,compute,dense,1435.74752000,1472.07752000,,108,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,2,compute,dense,1435.74752000,1472.07752000,,108,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,2,compute,layernorm,1560.72372000,1563.27272000,,110,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,2,compute,layernorm,1560.72372000,1563.27272000,,110,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,2,compute,expert,1610.38438000,2067.12138000,,111,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,2,compute,expert,1610.38438000,2067.12138000,,111,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,3,compute,dense,2111.44452000,2147.77452000,,112,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,3,compute,dense,2111.44452000,2147.77452000,,112,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,3,compute,layernorm,2236.42576000,2238.97476000,,114,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,3,compute,layernorm,2236.42576000,2238.97476000,,114,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,3,compute,expert,2286.08642000,2742.82342000,,115,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,3,compute,expert,2286.08642000,2742.82342000,,115,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,4,compute,dense,2787.14656000,2823.47656000,,116,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,4,compute,dense,2787.14656000,2823.47656000,,116,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,4,compute,layernorm,2912.12780000,2914.67680000,,118,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,4,compute,layernorm,2912.12780000,2914.67680000,,118,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,4,compute,expert,2961.78846000,3418.52546000,,119,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,4,compute,expert,2961.78846000,3418.52546000,,119,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,5,compute,dense,3462.84860000,3499.17860000,,120,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,5,compute,dense,3462.84860000,3499.17860000,,120,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,5,compute,layernorm,3587.82984000,3590.37884000,,122,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,5,compute,layernorm,3587.82984000,3590.37884000,,122,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,5,compute,expert,3637.49050000,4094.22750000,,123,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,5,compute,expert,3637.49050000,4094.22750000,,123,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,6,compute,dense,4138.55064000,4174.88064000,,124,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,6,compute,dense,4138.55064000,4174.88064000,,124,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,6,compute,layernorm,4263.53188000,4266.08088000,,126,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,6,compute,layernorm,4263.53188000,4266.08088000,,126,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,6,compute,expert,4332.65580000,4789.39280000,,127,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,6,compute,expert,4332.65580000,4789.39280000,,127,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,7,compute,dense,4833.71594000,4870.04594000,,128,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,7,compute,dense,4833.71594000,4870.04594000,,128,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,7,compute,layernorm,4980.47268000,4983.02168000,,130,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,7,compute,layernorm,4980.47268000,4983.02168000,,130,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,7,compute,expert,5052.09674000,5508.83374000,,131,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,7,compute,expert,5052.09674000,5508.83374000,,131,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,8,compute,dense,5553.16688000,5589.49688000,,132,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,8,compute,dense,5553.16688000,5589.49688000,,132,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,8,compute,layernorm,5721.45282000,5724.00182000,,134,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,8,compute,layernorm,5721.45282000,5724.00182000,,134,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,8,compute,expert,5794.51760000,6251.25460000,,135,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,8,compute,expert,5794.51760000,6251.25460000,,135,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,9,compute,dense,6317.64358000,6353.97358000,,136,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,9,compute,dense,6317.64358000,6353.97358000,,136,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,9,compute,layernorm,6442.62482000,6445.17382000,,138,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,9,compute,layernorm,6442.62482000,6445.17382000,,138,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU1,G1,9,compute,expert,6492.28044000,6949.01744000,,139,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU5,G1,9,compute,expert,6492.28044000,6949.01744000,,139,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,0,compute,dense,80.00000000,116.33000000,,200,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,0,compute,dense,80.00000000,116.33000000,,200,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,0,compute,layernorm,216.33444000,218.88344000,,202,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,0,compute,layernorm,216.33444000,218.88344000,,202,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,0,compute,expert,242.62474000,699.36174000,,203,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,0,compute,expert,242.62474000,699.36174000,,203,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,1,compute,dense,741.64402000,777.97402000,,204,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,1,compute,dense,741.64402000,777.97402000,,204,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,1,compute,layernorm,876.43604000,878.98504000,,206,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,1,compute,layernorm,876.43604000,878.98504000,,206,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,1,compute,expert,926.05450000,1382.79150000,,207,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,1,compute,expert,926.05450000,1382.79150000,,207,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,2,compute,dense,1435.75752000,1472.08752000,,208,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,2,compute,dense,1435.75752000,1472.08752000,,208,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,2,compute,layernorm,1560.74088000,1563.28988000,,210,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,2,compute,layernorm,1560.74088000,1563.28988000,,210,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,2,compute,expert,1610.38722000,2067.12422000,,211,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,2,compute,expert,1610.38722000,2067.12422000,,211,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,3,compute,dense,2111.46168000,2147.79168000,,212,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,3,compute,dense,2111.46168000,2147.79168000,,212,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,3,compute,layernorm,2236.44292000,2238.99192000,,214,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,3,compute,layernorm,2236.44292000,2238.99192000,,214,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,3,compute,expert,2286.08926000,2742.82626000,,215,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,3,compute,expert,2286.08926000,2742.82626000,,215,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,4,compute,dense,2787.16372000,2823.49372000,,216,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,4,compute,dense,2787.16372000,2823.49372000,,216,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,4,compute,layernorm,2912.14496000,2914.69396000,,218,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,4,compute,layernorm,2912.14496000,2914.69396000,,218,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,4,compute,expert,2961.79130000,3418.52830000,,219,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,4,compute,expert,2961.79130000,3418.52830000,,219,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,5,compute,dense,3462.86576000,3499.19576000,,220,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,5,compute,dense,3462.86576000,3499.19576000,,220,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,5,compute,layernorm,3587.84700000,3590.39600000,,222,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,5,compute,layernorm,3587.84700000,3590.39600000,,222,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,5,compute,expert,3637.49334000,4094.23034000,,223,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,5,compute,expert,3637.49334000,4094.23034000,,223,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,6,compute,dense,4138.56780000,4174.89780000,,224,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,6,compute,dense,4138.56780000,4174.89780000,,224,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,6,compute,layernorm,4263.54904000,4266.09804000,,226,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,6,compute,layernorm,4263.54904000,4266.09804000,,226,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,6,compute,expert,4332.66580000,4789.40280000,,227,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,6,compute,expert,4332.66580000,4789.40280000,,227,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,7,compute,dense,4833.73310000,4870.06310000,,228,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,7,compute,dense,4833.73310000,4870.06310000,,228,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,7,compute,layernorm,4980.48984000,4983.03884000,,230,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,7,compute,layernorm,4980.48984000,4983.03884000,,230,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,7,compute,expert,5052.10674000,5508.84374000,,231,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,7,compute,expert,5052.10674000,5508.84374000,,231,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,8,compute,dense,5553.18404000,5589.51404000,,232,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,8,compute,dense,5553.18404000,5589.51404000,,232,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,8,compute,layernorm,5721.46282000,5724.01182000,,234,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,8,compute,layernorm,5721.46282000,5724.01182000,,234,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,8,compute,expert,5794.52760000,6251.26460000,,235,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,8,compute,expert,5794.52760000,6251.26460000,,235,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,9,compute,dense,6317.65358000,6353.98358000,,236,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,9,compute,dense,6317.65358000,6353.98358000,,236,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,9,compute,layernorm,6442.64198000,6445.19098000,,238,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,9,compute,layernorm,6442.64198000,6445.19098000,,238,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU2,G2,9,compute,expert,6492.28328000,6949.02028000,,239,profile-derived-duration/modelled-placement (not GPU runtime trace)
+GPU6,G2,9,compute,expert,6492.28328000,6949.02028000,,239,profile-derived-duration/modelled-placement (not GPU runtime trace)

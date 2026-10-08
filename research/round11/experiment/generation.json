@@ -1,0 +1,104 @@
+{
+  "status": "generated",
+  "cases": [
+    {
+      "case_id": "no_kv_100",
+      "block_id": "KV",
+      "role": "control",
+      "case_dir": "cases/no_kv_100",
+      "core_gbps": 100,
+      "kv_enabled": false,
+      "changed_variable": "none",
+      "fixed_controls": "experiment-plan.md",
+      "prediction": "All 240 inference tasks complete; dependent stages shift with predecessor completion.",
+      "reason": "Shared output-port service time couples competing flows; compute stays fixed.",
+      "falsification_signal": "Missing task or conservation failure; unchanged or opposite metric direction.",
+      "metric_checks": [
+        "task_count",
+        "payload_conservation",
+        "dependency_delay",
+        "port_capacity",
+        "phase_p95_us",
+        "inference_end_us"
+      ],
+      "expected_artifacts": [
+        "traffic.csv",
+        "flow_manifest.csv",
+        "network_attribute.txt",
+        "canonical.rank0.txt",
+        "runlog",
+        "output/task_statistics.csv"
+      ],
+      "parallel_group": "sequential",
+      "checkpoint_ids": [
+        "complete_and_trace_available"
+      ]
+    },
+    {
+      "case_id": "kv_100",
+      "block_id": "KV_and_BW",
+      "role": "treatment",
+      "case_dir": "cases/kv_100",
+      "core_gbps": 100,
+      "kv_enabled": true,
+      "changed_variable": "KV_presence",
+      "fixed_controls": "experiment-plan.md",
+      "prediction": "Adding KV increases inference phase p95 duration and maximum inference completion time versus no_kv_100.",
+      "reason": "Shared output-port service time couples competing flows; compute stays fixed.",
+      "falsification_signal": "Missing task or conservation failure; unchanged or opposite metric direction.",
+      "metric_checks": [
+        "task_count",
+        "payload_conservation",
+        "dependency_delay",
+        "port_capacity",
+        "phase_p95_us",
+        "inference_end_us"
+      ],
+      "expected_artifacts": [
+        "traffic.csv",
+        "flow_manifest.csv",
+        "network_attribute.txt",
+        "canonical.rank0.txt",
+        "runlog",
+        "output/task_statistics.csv"
+      ],
+      "parallel_group": "sequential",
+      "checkpoint_ids": [
+        "complete_and_trace_available"
+      ]
+    },
+    {
+      "case_id": "kv_200",
+      "block_id": "BW",
+      "role": "treatment",
+      "case_dir": "cases/kv_200",
+      "core_gbps": 200,
+      "kv_enabled": true,
+      "changed_variable": "core_bandwidth",
+      "fixed_controls": "experiment-plan.md",
+      "prediction": "Doubling core bandwidth lowers inference phase p95 duration and maximum inference completion time versus kv_100.",
+      "reason": "Shared output-port service time couples competing flows; compute stays fixed.",
+      "falsification_signal": "Missing task or conservation failure; unchanged or opposite metric direction.",
+      "metric_checks": [
+        "task_count",
+        "payload_conservation",
+        "dependency_delay",
+        "port_capacity",
+        "phase_p95_us",
+        "inference_end_us"
+      ],
+      "expected_artifacts": [
+        "traffic.csv",
+        "flow_manifest.csv",
+        "network_attribute.txt",
+        "canonical.rank0.txt",
+        "runlog",
+        "output/task_statistics.csv"
+      ],
+      "parallel_group": "sequential",
+      "checkpoint_ids": [
+        "complete_and_trace_available"
+      ]
+    }
+  ]
+}

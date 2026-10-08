@@ -1,0 +1,24 @@
+commands:
+  - phase: generate
+    command: "python3 /home/lry/a100_ep_runtime/第11轮_依赖驱动多组推理与KV竞争_20261008/tools/prepare_cases.py"
+    cwd: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo"
+    output_dir: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention"
+    expected_artifacts: [cases/*/traffic.csv, cases/*/network_attribute.txt]
+  - case_id: no_kv_100
+    phase: run
+    command: "python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/20261008-dependent-moe-kv-contention/cases/no_kv_100 --dependency-visibility-delay=20ns --initial-task-start-offset-window=0ps --canonical-output=/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/no_kv_100/canonical'"
+    cwd: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo"
+    output_dir: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/no_kv_100"
+    expected_artifacts: [canonical.rank0.txt, output/task_statistics.csv, runlog]
+  - case_id: kv_100
+    phase: run
+    command: "python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/20261008-dependent-moe-kv-contention/cases/kv_100 --dependency-visibility-delay=20ns --initial-task-start-offset-window=0ps --canonical-output=/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/kv_100/canonical'"
+    cwd: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo"
+    output_dir: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/kv_100"
+    expected_artifacts: [canonical.rank0.txt, output/task_statistics.csv, runlog]
+  - case_id: kv_200
+    phase: run
+    command: "python3.12 ./ns3 run --no-build 'scratch/ub-quick-example --case-path=scratch/20261008-dependent-moe-kv-contention/cases/kv_200 --dependency-visibility-delay=20ns --initial-task-start-offset-window=0ps --canonical-output=/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/kv_200/canonical'"
+    cwd: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo"
+    output_dir: "/home/lry/a100_ep_runtime/第05轮_联合仿真M0_20260919/ns-3-ub/repo/scratch/20261008-dependent-moe-kv-contention/cases/kv_200"
+    expected_artifacts: [canonical.rank0.txt, output/task_statistics.csv, runlog]

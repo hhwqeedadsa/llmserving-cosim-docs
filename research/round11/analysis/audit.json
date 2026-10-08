@@ -1,0 +1,109 @@
+{
+  "cases": [
+    {
+      "case_id": "no_kv_100",
+      "tasks": 240,
+      "phases": 120,
+      "packets": 15600,
+      "payload_bytes": 63897600,
+      "wire_bytes": 65114400,
+      "core_gbps": 100,
+      "inference_end_us": 6993.3327,
+      "all_last_ack_us": 6993.45384,
+      "phase_p95_us": 67.51949099999999,
+      "inference_fct_p95_us": 67.62779099999996,
+      "max_bandwidth_gbps": 100.00000000001819,
+      "max_dependency_error_us": 9.094947017729282e-13,
+      "l2r_queue_peak_kib": 755.220703125,
+      "l2r_callback_peak_kib": 755.2421875,
+      "l2r_idle_5us_bins": 1104,
+      "checks": "all tasks; canonical events; phase delays; per-task payload; per-port serialization; bin integral; horizon",
+      "classification": "matched"
+    },
+    {
+      "case_id": "kv_100",
+      "tasks": 290,
+      "phases": 170,
+      "packets": 22000,
+      "payload_bytes": 90112000,
+      "wire_bytes": 91828000,
+      "core_gbps": 100,
+      "inference_end_us": 8170.35442,
+      "all_last_ack_us": 8170.48052,
+      "phase_p95_us": 110.73767999999932,
+      "inference_fct_p95_us": 111.36913999999996,
+      "max_bandwidth_gbps": 100.00000000001823,
+      "max_dependency_error_us": 9.094947017729282e-13,
+      "l2r_queue_peak_kib": 1401.248046875,
+      "l2r_callback_peak_kib": 1401.248046875,
+      "l2r_idle_5us_bins": 688,
+      "checks": "all tasks; canonical events; phase delays; per-task payload; per-port serialization; bin integral; horizon",
+      "classification": "matched"
+    },
+    {
+      "case_id": "kv_200",
+      "tasks": 290,
+      "phases": 170,
+      "packets": 22000,
+      "payload_bytes": 90112000,
+      "wire_bytes": 91828000,
+      "core_gbps": 200,
+      "inference_end_us": 5772.8391,
+      "all_last_ack_us": 7743.39146,
+      "phase_p95_us": 35.48554200000019,
+      "inference_fct_p95_us": 36.24249300000037,
+      "max_bandwidth_gbps": 199.9008000000232,
+      "max_dependency_error_us": 9.094947017729282e-13,
+      "l2r_queue_peak_kib": 711.28515625,
+      "l2r_callback_peak_kib": 711.28515625,
+      "l2r_idle_5us_bins": 1123,
+      "checks": "all tasks; canonical events; phase delays; per-task payload; per-port serialization; bin integral; horizon",
+      "classification": "matched"
+    }
+  ],
+  "comparisons": [
+    {
+      "control": "no_kv_100",
+      "treatment": "kv_100",
+      "metric": "inference_end_us",
+      "control_value": 6993.3327,
+      "treatment_value": 8170.35442,
+      "delta": 1177.0217199999997,
+      "delta_pct": 16.830626691048177,
+      "status": "matched"
+    },
+    {
+      "control": "no_kv_100",
+      "treatment": "kv_100",
+      "metric": "phase_p95_us",
+      "control_value": 67.51949099999999,
+      "treatment_value": 110.73767999999932,
+      "delta": 43.21818899999933,
+      "delta_pct": 64.00846386712146,
+      "status": "matched"
+    },
+    {
+      "control": "kv_100",
+      "treatment": "kv_200",
+      "metric": "inference_end_us",
+      "control_value": 8170.35442,
+      "treatment_value": 5772.8391,
+      "delta": -2397.5153199999995,
+      "delta_pct": -29.344079788401633,
+      "status": "matched"
+    },
+    {
+      "control": "kv_100",
+      "treatment": "kv_200",
+      "metric": "phase_p95_us",
+      "control_value": 110.73767999999932,
+      "treatment_value": 35.48554200000019,
+      "delta": -75.25213799999912,
+      "delta_pct": -67.95531385522939,
+      "status": "matched"
+    }
+  ],
+  "horizon_us": 8400.0,
+  "measurement": "simulation, not hardware",
+  "status": "passed"
+}

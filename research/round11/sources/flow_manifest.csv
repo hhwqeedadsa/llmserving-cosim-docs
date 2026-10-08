@@ -1,0 +1,9 @@
+request_id,batch_id,block_id,collective_id,parent_collective,collective_op,algorithm_stage,phase_id,depends_on_phase,flow_id,task_id,src_rank,dst_rank,payload_bytes,launch_delay_ns,evidence_source
+req0,batch0,block24,req0.batch0.block24.allreduce.rs,req0.batch0.block24.allreduce,AllReduce,reduce_scatter,0,,flow0,0,0,1,262144,36330,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.allreduce.rs,req0.batch0.block24.allreduce,AllReduce,reduce_scatter,0,,flow1,1,1,0,262144,36330,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.allreduce.ag,req0.batch0.block24.allreduce,AllReduce,allgather,1,0,flow2,2,0,1,262144,0,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.allreduce.ag,req0.batch0.block24.allreduce,AllReduce,allgather,1,0,flow3,3,1,0,262144,0,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.moe_allgather,req0.batch0.block24.moe_allgather,AllGather,ring_exchange,2,1,flow4,4,0,1,278528,2549,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.moe_allgather,req0.batch0.block24.moe_allgather,AllGather,ring_exchange,2,1,flow5,5,1,0,278528,2549,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.moe_reducescatter,req0.batch0.block24.moe_reducescatter,ReduceScatter,ring_exchange,3,2,flow6,6,0,1,262144,456737,trace_bytes_plus_two_rank_ring_projection
+req0,batch0,block24,req0.batch0.block24.moe_reducescatter,req0.batch0.block24.moe_reducescatter,ReduceScatter,ring_exchange,3,2,flow7,7,1,0,262144,456737,trace_bytes_plus_two_rank_ring_projection

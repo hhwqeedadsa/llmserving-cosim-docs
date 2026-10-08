@@ -36,6 +36,9 @@ def tempo_inputs(service, layers, numerator, denominator):
 
 
 def prepare(study, output):
+    if study == 'port-service':
+        from .service_exploration import prepare as prepare_service
+        return prepare_service(output)
     require(study in ('compute-tempo','load-grain'), 'Unsupported exploration')
     output = Path(output).resolve()
     require(not output.exists(), 'Exploration output exists')
@@ -75,6 +78,7 @@ def compare(batch, output):
     batch, output = Path(batch).resolve(), Path(output).resolve()
     require(not output.exists(), 'Exploration comparison output exists')
     output.mkdir(parents=True)
-    bounded([sys.executable, '-m', 'experiments.scaleup_observability.exploration_analysis', batch, output],
+    module = 'service_analysis' if read(batch/'batch.json')['study']=='port-service' else 'exploration_analysis'
+    bounded([sys.executable, '-m', 'experiments.scaleup_observability.'+module, batch, output],
             output/'commands', 'compare', output)
     return dict(passed=True, output=str(output))

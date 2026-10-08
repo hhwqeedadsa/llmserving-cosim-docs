@@ -48,11 +48,12 @@ def preflight(batch, output):
     return result
 
 
-def overview(run, output):
+def overview(run, output, expected_service=None):
     run, output = Path(run).resolve(), Path(output).resolve()
     require(not output.exists(), f'Overview exists: {output}')
     output.mkdir(parents=True)
-    bounded([sys.executable,'-m','experiments.scaleup_observability.overview',run,output],
+    extra = [Path(expected_service).resolve()] if expected_service else []
+    bounded([sys.executable,'-m','experiments.scaleup_observability.overview',run,output,*extra],
             output/'commands','overview',output)
     return read(output/'summary.json')
 
@@ -93,7 +94,13 @@ def run_case(batch, case_id, backend):
     command([sys.executable,'-m','moe_ub_cosim','run','--config',output/'run.json','--output',output/'run'],
             output/'commands','02-run')
     bounded([sys.executable,'-m','moe_ub_cosim','validate','--run',output/'run'],output/'commands','03-validate',batch)
-    summary = overview(output/'run',output/'overview')
+    expected_service = None
+    if 'port_service' in case:
+        require(read(batch/'batch.json').get('study')=='port-service','Unexpected service case')
+        expected_service = output/'expected-service.json'
+        save(expected_service,dict(schema_version='moe-ub-port-service/1',execution_end_ns=1_000_000,
+                                  intervals=case['port_service']))
+    summary = overview(output/'run',output/'overview',expected_service)
     require(summary['request_count'] == case['request_count'], 'Unexpected executed workload')
     result = dict(case_id=case_id, passed=True, run_manifest_sha256=digest(output/'run/manifest.json'),
         overview_sha256=digest(output/'overview/summary.json'), backend_sha256=digest(backend),

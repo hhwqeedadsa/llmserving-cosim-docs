@@ -6,6 +6,7 @@
 |---|---|
 | `compute-tempo` | 专家主体计算 0.5/1/2 倍与单槽/双槽，见[计算节奏方法](tempo-method.md) |
 | `load-grain` | LOAD 响应载荷 128/512/2048 B 与单槽/双槽，见[拆分方法](load-grain-method.md) |
+| `port-service` | 双槽下三个拓扑出口、80%/50% 速率与一个正常基准，见[服务对照方法](service-method.md) |
 
 以下命令从仓库根目录执行。先按[平台指南](../../docs/user_guide.md)准备环境与当前后端，所有输出路径应不存在，不依赖旧运行目录：
 
@@ -27,7 +28,7 @@ study_name=compute-tempo
 
 `sim_backend` 可替换为自选构建路径；该后端须支持当前原生 STORE/LOAD 和端侧发送状态记录。旧名称只是本机已有构建目录，不是新的平台阶段。
 
-运行 LOAD 拆分批次时，把 `study_name` 改为 `load-grain`，并使用新的 `study_root`。不改变旧目录中的冻结输入。
+运行 LOAD 拆分或出口服务批次时，把 `study_name` 改为 `load-grain` 或 `port-service`，并使用新的 `study_root`。不改变旧目录中的冻结输入。
 
 | 位置 | 用途 |
 |---|---|
@@ -42,7 +43,11 @@ study_name=compute-tempo
 
 成本批次保留 `tempo_pairs`，粒度批次使用 `grain_pairs`；`slot_pairs` 在每档条件下比较单槽与双槽。粒度批次每组的 `segmentation` 保存逐任务核对后的 STORE/LOAD 任务数、有效分段总数及单分段任务数，不能把分段数与完整事务数混用。
 
-准备阶段不运行仿真。`run-batch` 串行执行，仅复用同输入、同后端且证据完整的成功结果；失败不自动重跑。分析需重做时使用新的输出路径，通常不需要重复仿真。预算沿用共享累计 48 GiB，六组成本/槽数组合预留 4.5 GiB；单阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒和至少 20 GiB 空闲不变。
+服务批次使用 `service_pairs` 与每组的 `service_hits`，分别记录相对新正常基准的变化，以及固定区间内的实际发包、业务载荷和物理发送时长。`comparison/<case>/` 另含逐任务、逐层完成与逐出口队列变化表。服务位置由拓扑决定，不能把位置当成已观测到的根因标签。
+
+批次运行自动生成并核对 `source/runs/<case>/expected-service.json`。单独对含服务干预的已完成运行生成概览时，需要在原 `overview --run ... --output ...` 后添加 `--expected-service <path>`；文件是完整 `moe-ub-port-service/1` JSON，含 `schema_version`、`execution_end_ns` 和 `intervals`。实际有效设置必须完全相同。未提供该参数时，概览继续只接受正常出口服务。
+
+准备阶段不运行仿真。`run-batch` 串行执行，仅复用同输入、同后端且证据完整的成功结果；失败不自动重跑。分析需重做时使用新的输出路径，通常不需要重复仿真。预算沿用共享累计 48 GiB，六组成本或粒度组合预留 4.5 GiB，七组出口服务组合预留 5.25 GiB；单阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒和至少 20 GiB 空闲不变。
 
 小型程序检查：
 

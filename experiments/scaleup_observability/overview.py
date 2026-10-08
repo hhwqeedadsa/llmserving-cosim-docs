@@ -51,7 +51,16 @@ def transfer_rows(planned, actual, local, operations):
     return rows
 
 
-def build(run, output):
+def check_service(backend, expected):
+    if expected is None:
+        require(not backend['port_service']['intervals'] and backend['attributes']['ns3::UbLdstApi::UsePacketSpray']=='true',
+                'First batch requires normal native spray')
+    else:
+        require(backend['port_service']==expected and backend['attributes']['ns3::UbLdstApi::UsePacketSpray']=='true',
+                'Effective network differs from declared service or native spray')
+
+
+def build(run, output, expected_service=None):
     run, output = Path(run).resolve(), Path(output).resolve()
     require(output.is_dir() and not (output/'summary.json').exists(), 'New overview directory required')
     manifest = read(run/'manifest.json')
@@ -73,8 +82,7 @@ def build(run, output):
     end = report['simulation_end_ns']
     finish = report['service_finished_ns']
     backend = read(run/'inputs/network/backend.json')
-    require(not backend['port_service']['intervals'] and backend['attributes']['ns3::UbLdstApi::UsePacketSpray'] == 'true',
-            'First batch requires normal native spray')
+    check_service(backend, read(expected_service) if expected_service else None)
     observation = read(run/'inputs/observation.json')
     require(observation['recording']['mode'] == 'detailed' and
             all(c['offset_ns'] == c['drift_ppb'] == 0 for c in observation['clocks']),
@@ -193,7 +201,8 @@ def build(run, output):
             **{k:current[k] for k in fields}, **{'cumulative_'+k:cumulative[k] for k in fields}))
     table(output/'progress.csv',series)
     summary = dict(schema_version='scaleup-execution-overview/1', access='researcher_internal',
-        analysis_version='normal-overview-v1', run=str(run), manifest_sha256=digest(run/'manifest.json'),
+        analysis_version='service-overview-v1' if expected_service else 'normal-overview-v1',
+        run=str(run), manifest_sha256=digest(run/'manifest.json'),
         implementation=sources(), request_count=len(service['requests']), input_sha256=digest(run/'inputs/service.json'),
         round_ns=finish, simulation_end_ns=end, completed_decode_tokens=len(state['requests']),
         decode_tokens_per_second=len(state['requests'])*1e9/finish,
@@ -225,7 +234,7 @@ def build(run, output):
             detailed_aggregate_counts_equal=True, queue_integrals_equal=True, graph_timing_consistent=True),
         tables={p.name:digest(p) for p in sorted(output.glob('*.csv'))})
     save(output/'summary.json',summary)
-    lines = ['# 正常执行概览', '', f'请求数：{summary["request_count"]}；整轮：{finish} ns；网络排空：{end} ns。',
+    lines = ['# 执行概览', '', f'请求数：{summary["request_count"]}；整轮：{finish} ns；网络排空：{end} ns。',
         f'计算工作量：{summary["compute_work_ns"]} rank·ns；跨芯片搬运任务：{len(transfers)}；同芯片交付：{len(local)}。', '',
         '| 层次 | 文件 |', '|---|---|', '| 网络资源 | ports.csv、queued-without-transmission.csv |',
         '| 传输完成 | transfers.csv、transfer-groups.csv、local-deliveries.csv |',

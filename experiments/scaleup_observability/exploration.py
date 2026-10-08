@@ -11,6 +11,7 @@ from .inputs import REFERENCE, make_input
 from .slots import set_slots
 
 TEMPO_FACTORS = (('half', 1, 2), ('base', 1, 1), ('double', 2, 1))
+LOAD_GRAINS = (128, 512, 2048)
 
 
 def scaled(value, numerator, denominator):
@@ -35,33 +36,38 @@ def tempo_inputs(service, layers, numerator, denominator):
 
 
 def prepare(study, output):
-    require(study == 'compute-tempo', 'Unsupported exploration')
+    require(study in ('compute-tempo','load-grain'), 'Unsupported exploration')
     output = Path(output).resolve()
     require(not output.exists(), 'Exploration output exists')
     output.mkdir(parents=True)
     service, layers, counts = make_input(4, 8)
     cases = []
-    for name, numerator, denominator in TEMPO_FACTORS:
+    variants = [(name,dict(factor_name=name,factor=[n,d])) for name,n,d in TEMPO_FACTORS] if study == 'compute-tempo' else [
+        (f'load{size}',dict(load_response_bytes=size)) for size in LOAD_GRAINS]
+    for name, variant in variants:
         for slots in (1, 2):
             identity = f's4-b8-{name}-slots{slots}'
             folder = output/'inputs'/identity
             shutil.copytree(REFERENCE, folder)
-            changed_service, changed_layers = tempo_inputs(service, layers, numerator, denominator)
+            changed_service, changed_layers = tempo_inputs(service, layers, *variant.get('factor',[1,1]))
             save(folder/'service.json', changed_service)
             save(folder/'layers.json', set_slots(changed_layers, slots))
             scenario = set_slots(yaml.safe_load((folder/'scenario.yaml').read_text()), slots)
+            if study == 'load-grain':
+                scenario['backend']['attributes']['ns3::UbLdstThread::LoadResponseSize'] = variant['load_response_bytes']
             (folder/'scenario.yaml').write_text(yaml.safe_dump(scenario, sort_keys=False))
             observation = read(folder/'observation.json')
             observation.update(schema_version='moe-ub-observation-config/4', send_state=dict(
                 schema_version='moe-ub-send-state-config/1', max_records_per_rank=100000, max_total_records=1000000))
             save(folder/'observation.json', observation)
             cases.append(dict(case_id=identity, input_set=4, requests_per_rank=8, request_count=64,
-                send_slots_per_rank=slots, factor_name=name, factor=[numerator, denominator],
+                send_slots_per_rank=slots, **variant,
                 expert_inputs=counts, directory=str(folder.relative_to(output)),
                 files={p.name:digest(p) for p in sorted(folder.iterdir()) if p.is_file()}))
+    method = 'tempo-method.md' if study == 'compute-tempo' else 'load-grain-method.md'
     save(output/'batch.json', dict(schema_version='scaleup-exploration-batch/1', study=study,
         synthetic_input=True, simulation_executed=False, implementation=sources(), cases=cases,
-        method='experiments/scaleup_observability/tempo-method.md', method_sha256=digest(HERE/'tempo-method.md')))
+        method='experiments/scaleup_observability/'+method, method_sha256=digest(HERE/method)))
     return dict(output=str(output), study=study, cases=[c['case_id'] for c in cases])
 
 

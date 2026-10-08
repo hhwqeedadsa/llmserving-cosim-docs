@@ -28,6 +28,7 @@
 | Scale-Up 实验支撑：端侧发送资源记录（历史标识 M17） | 按实验发现补充实际就绪队列、发送槽占用与容量；有界采集、本地时钟与公开切片复用通过独立功能验收。M17 为助手自编标识，不表示用户另立研究阶段 | [用户示例](../examples/send_state/README.md)、[验收](../fixtures/m17_send_state/README.md) |
 | Scale-Up 新增端侧状态对照（独立研究） | 四次小场景、同一执行的三档观测及新输入复核；量化端点定位和范围收缩，同时保留周期采样的短等待漏检，未把采样点正确等同于连续覆盖 | [研究结果](../experiments/scaleup_observability/results-send-state.md)、[实验命令](../experiments/scaleup_observability/send-state-usage.md) |
 | Scale-Up 专家计算节奏对照（独立研究） | 三档专家成本与单槽/双槽的六次小场景；发送槽收益在声明范围内保持且随成本改变，网络排队代价同时保留 | [计算节奏结果](../experiments/scaleup_observability/results-tempo.md)、[实验命令](../experiments/scaleup_observability/exploration-usage.md) |
+| Scale-Up LOAD 响应拆分（独立研究） | 固定 2048 B 任务实际拆成 16/4/1 份响应，单槽/双槽共六次；保留较少协议流量却较晚完成的取舍，以及内部请求时序的证据边界 | [拆分结果](../experiments/scaleup_observability/results-load-grain.md)、[实验命令](../experiments/scaleup_observability/exploration-usage.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

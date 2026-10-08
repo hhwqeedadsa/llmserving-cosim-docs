@@ -1,0 +1,2153 @@
+{
+  "schema_version": "scaleup-load-grain-results/1",
+  "date": "2026-10-08",
+  "comparison_path": "runs/scaleup_observability/load-grain-v1/comparison/comparison.json",
+  "comparison_sha256": "b3f2f74431542f6bcf1f7da008a40d23c1348478ddb65334382c4cdfb85126d8",
+  "comparison": {
+    "schema_version": "scaleup-exploration-comparison/1",
+    "study": "load-grain",
+    "access": "researcher_internal",
+    "batch_sha256": "4d78da8fae4464213dcdd50d57883dcf498b2fb0dc360657c9c05f7dbe40eb5c",
+    "method_sha256": "8e51d1e3e299617a6aceeb538b442b144a99923102c5217b2ea58a99e4bc0bc9",
+    "implementation": {
+      "experiments/scaleup_observability/__init__.py": "654922860ab8f1aad6434e70dae323fe240b6aa1ba624b4b2aceb63a7464b4e0",
+      "experiments/scaleup_observability/__main__.py": "38b58040cd0986e78ed5abe578a013c2df22c3ddc973c58e340f33c1b3f82027",
+      "experiments/scaleup_observability/common.py": "c55b15fcdf98a14f8cbf2e53ec9eab2cc61d8b26e3878b4c22b32fc2a92c9f38",
+      "experiments/scaleup_observability/configs/observation-development-sources.json": "c19dfeb372e65a838b5c82e5f4c2d14bc9135420055b4c689a0c13ef72dd3d76",
+      "experiments/scaleup_observability/configs/reference/backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+      "experiments/scaleup_observability/configs/reference/export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+      "experiments/scaleup_observability/configs/reference/fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+      "experiments/scaleup_observability/configs/reference/layers.json": "46029239cd9d50aa9597f635d4d38f83d54e01154f405300cd67f8d81a1ac4a4",
+      "experiments/scaleup_observability/configs/reference/observation.json": "dac24c037f48fdfca115b91799663434ffd638678be0ea74fe53d329d11c0263",
+      "experiments/scaleup_observability/configs/reference/record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+      "experiments/scaleup_observability/configs/reference/scenario.yaml": "571daf6e7cdce5554712d4833c18ac9eeae8f9847ff75ccc25c86a810d06f514",
+      "experiments/scaleup_observability/configs/reference/service.json": "20aa111b412a1d30460b78a8e003ccd8242ee942964772e546a81b420d144cfb",
+      "experiments/scaleup_observability/configs/reference/system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a",
+      "experiments/scaleup_observability/exploration.py": "3b4797a4958707b1b2c4c44107cd2cddc9b3f19d9f5b6673fcb08948c5125251",
+      "experiments/scaleup_observability/exploration_analysis.py": "c9281aa6a447e9e36439887856583e65853b88929b4b307c9e81064a50091ea4",
+      "experiments/scaleup_observability/figures.py": "ace067153ebed1e9e0d53631b9dba348a941cd1e9955f4bb1ce7400f0f2eb277",
+      "experiments/scaleup_observability/inputs.py": "e45c3127af4000011a7563a28bd24b0fdd6145fe697433e8522c9cf5a8474976",
+      "experiments/scaleup_observability/observation_evaluate.py": "ba74268c19f7d2f902d35416bcba73c6c67bf873b4e66f858540a2c34bfaed0f",
+      "experiments/scaleup_observability/observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+      "experiments/scaleup_observability/observation_prepare.py": "a82c512d8758f632087935cc42e5abc0056311bab684edf7da094b791a5daf7e",
+      "experiments/scaleup_observability/observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7",
+      "experiments/scaleup_observability/observation_workflow.py": "b8b33709e4ef3afafeeea4b9498e15c954c689410c5cfa1ca7b9b04d75ea7bec",
+      "experiments/scaleup_observability/overview.py": "bd3638d459eba085ce1689d5110e735438e96b62e098c431273bdb7b6a0b83c5",
+      "experiments/scaleup_observability/results-normal-v1.json": "558fa7f7c742dd33a32d18d54ad27a10678938ecdacd1738d26134a8e7694b79",
+      "experiments/scaleup_observability/results-observations-v1.json": "dabaa53f80558692bc897f3fc73dd1b0d59dbe7c774b9a7864f8637e23fcb3c0",
+      "experiments/scaleup_observability/results-send-state-v1.json": "904abc5e3cdd8ca007750c60cba6e226fffe6175c54d96abdd00b9a76471345e",
+      "experiments/scaleup_observability/results-slots-v1.json": "8a01c3b0ec0229f3c13f8bcbd073043ed1ec3788ac5dd638c877579677ca8190",
+      "experiments/scaleup_observability/results-tempo-v1.json": "3c0213061ee30a0600db1e662a2d256bfa89678fce422fd06c8a36c46afcde49",
+      "experiments/scaleup_observability/send_state_evaluate.py": "7194fc9ebc7e3042845b441c06cdfa00e8a521a10b46bc85343b2c28cde0c39f",
+      "experiments/scaleup_observability/send_state_measure.py": "a4a970993f8ad149c10b0e2dc5711ef8b4376bfca645ce1a5b39e47daf060e57",
+      "experiments/scaleup_observability/send_state_prepare.py": "3db9839affde5fe7cebf256bb7aea32cbade901f74cf2033ea6d0e17349d7d8b",
+      "experiments/scaleup_observability/send_state_spec.py": "cfd3b9562d5b34cecb69fec3128f9fc951d737dcfce3ab16cbf1ca7450af7cc7",
+      "experiments/scaleup_observability/send_state_workflow.py": "62ba277fa08cd9082a0e1cc4260f1884d632f878f5c71dfcb3b8d04ff467ce9f",
+      "experiments/scaleup_observability/slot_analysis.py": "f9460416f127be08541c02abfa75a9d5859d66c614878d10be9ac5783fa5dd41",
+      "experiments/scaleup_observability/slots.py": "62e0c02e94abf6a548392fa2f7637358e0526e11e6d573f2f7a2e618baca2a8e",
+      "experiments/scaleup_observability/statistics.py": "098d4140a1b9e2bd6d466726b7963ed556b0ea67cd9e90034202170d91d83578",
+      "experiments/scaleup_observability/tests/test_exploration.py": "1d62b93b4ec7a3cfd79d35a8c541c9d88b488f0a0280cf9178ad224ac159e12c",
+      "experiments/scaleup_observability/tests/test_first_batch.py": "1dddd9d6267a4c1c2156baaa0013565a52dded4991ff2aa95d3674a696688868",
+      "experiments/scaleup_observability/tests/test_observations.py": "f78da9cd0dfd7596cfcc04a48d8f2bf39132e4361a624abd5ce8a2e5e5af92a1",
+      "experiments/scaleup_observability/tests/test_send_state_observations.py": "be3dbeb7989cd05a7c1fcf39bdabb13ff6d72d40d2b761d787d1841ae1402b3e",
+      "experiments/scaleup_observability/tests/test_slots.py": "723fad93ff6c686264491e34dde2495020ef014bf5f46e3a980a1171f9233634",
+      "experiments/scaleup_observability/workflow.py": "2d290686d0f8a5ecb79708fce0be96f4c894b2f1994bd3007251c06cb0b3839b"
+    },
+    "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+    "cases": [
+      {
+        "case": {
+          "case_id": "s4-b8-load128-slots1",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 1,
+          "load_response_bytes": 128,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load128-slots1",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "ae4876ef27787e5b5bde0af667cb51b74c512b3ebc1ab90574d562b26468239e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "3d099fc5210027c405340fa83ee0420ce8e416149b7a0cb3d575138bea07c086",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load128-slots1",
+          "passed": true,
+          "run_manifest_sha256": "b19b7b67fe12e4fbe51b303a1fba77673ed33f86fe7a030992d89aac3aee2e2a",
+          "overview_sha256": "9ca3d5f9f41e733c852861aae502d82fe8eeb555c82a7c4528830e857336645c",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "a4878c08d714d8554622e5194e4d6e2269a25f9bb5cee0dc8b8f344ffb8528db"
+        },
+        "stats": {
+          "send_slots_per_rank": 1,
+          "round_ns": 67466,
+          "single_round_tokens_per_second": 948625.974564966,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 3399656,
+            "summed_voq_byte_ns": 4056908,
+            "summed_fifo_byte_ns": 1505344,
+            "queued_without_transmission_port_ns": 14306,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.0652921471556043,
+          "total_physical_busy_port_ns": 118250,
+          "max_voq_bytes": 2160,
+          "max_fifo_bytes": 1080,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 795,
+            "p99": 1743,
+            "max": 4299,
+            "mean": 126.05915317559153
+          },
+          "send_wait_total_node_ns": 202451,
+          "wait_with_full_slots_node_ns": 202451,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 251732,
+          "reconstructed_peak_active_sends": 1,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "235",
+              "data_latency_ns_median": "248",
+              "data_latency_ns_p95": "271",
+              "data_latency_ns_p99": "290",
+              "data_latency_ns_max": "290",
+              "data_latency_ns_mean": "250.60638297872342",
+              "task_latency_ns_min": "235",
+              "task_latency_ns_median": "248",
+              "task_latency_ns_p95": "271",
+              "task_latency_ns_p99": "290",
+              "task_latency_ns_max": "290",
+              "task_latency_ns_mean": "250.60638297872342",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "16",
+              "committed_segments_median": "16",
+              "committed_segments_p95": "16",
+              "committed_segments_p99": "16",
+              "committed_segments_max": "16",
+              "committed_segments_mean": "16.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "160",
+              "data_latency_ns_median": "179",
+              "data_latency_ns_p95": "195",
+              "data_latency_ns_p99": "239",
+              "data_latency_ns_max": "242",
+              "data_latency_ns_mean": "174.1595744680851",
+              "task_latency_ns_min": "247",
+              "task_latency_ns_median": "267",
+              "task_latency_ns_p95": "307",
+              "task_latency_ns_p99": "330",
+              "task_latency_ns_max": "341",
+              "task_latency_ns_mean": "267.5531914893617",
+              "data_to_protocol_complete_ns_min": "85",
+              "data_to_protocol_complete_ns_median": "88",
+              "data_to_protocol_complete_ns_p95": "125",
+              "data_to_protocol_complete_ns_p99": "143",
+              "data_to_protocol_complete_ns_max": "178",
+              "data_to_protocol_complete_ns_mean": "93.3936170212766",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "9ca3d5f9f41e733c852861aae502d82fe8eeb555c82a7c4528830e857336645c",
+            "plan_sha256": "05fac20937a626ebab80ea2dc4d231aeec8723a6d72860d1faa96224c7ffc9e0",
+            "tables": {
+              "longest-waits.json": "0b788df29f7fae5c8c7a8bd34c324a51915c83b47638d69b2f1e032046148b52",
+              "send-waits.csv": "20acd38f9f7c7d18cd7f744145aa1be156dcca2c9d096afc16054143bafe71cd",
+              "slot-occupancy.csv": "c1adff5581a2ede3c18266c9d529d67b1d88320a5931fabd054d71384130730e"
+            }
+          },
+          "pending_wait_rank_ns": 132246,
+          "full_slot_wait_rank_ns": 132246,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "b2498cfb3e9c80da649ef87d3776da03bd18f56aeff3a10bf7145b5d186e2632",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 554,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 250,
+            "p99": 269,
+            "max": 290,
+            "mean": 119.60315186246419
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 88,
+            "median": 180,
+            "p95": 270,
+            "p99": 302,
+            "max": 341,
+            "mean": 180.323782234957
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 87,
+            "p95": 97,
+            "p99": 125,
+            "max": 178,
+            "mean": 60.720630372492835
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "128",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 4432,
+            "single_segment_tasks": 0
+          }
+        }
+      },
+      {
+        "case": {
+          "case_id": "s4-b8-load128-slots2",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 2,
+          "load_response_bytes": 128,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load128-slots2",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "777dc607907d6589af625e29aaa764cf1aaef46b2c4dd5f8e32392f1d46b283e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "80a929b6cd81fb34f864d73476bcf4defa4dfab0676f50e3f58f9ab6660bef36",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load128-slots2",
+          "passed": true,
+          "run_manifest_sha256": "3a4b46737aa406a61d6eb67a34884677e97a1084ade90c742e00cbf0006fcccf",
+          "overview_sha256": "9125aa6fe453d2391c3b6c7e6e8eda3be8d3c619184af4e5557ec4dfce5a9793",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "45057c842add18e9caaeb55c33fcbb50fdddb17dcddfb9a27a910d70920ebf61"
+        },
+        "stats": {
+          "send_slots_per_rank": 2,
+          "round_ns": 55021,
+          "single_round_tokens_per_second": 1163192.2356918268,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 3399656,
+            "summed_voq_byte_ns": 5126260,
+            "summed_fifo_byte_ns": 2721652,
+            "queued_without_transmission_port_ns": 12966,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.08105995892477418,
+          "total_physical_busy_port_ns": 118250,
+          "max_voq_bytes": 2160,
+          "max_fifo_bytes": 1080,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 162,
+            "p99": 423,
+            "max": 1015,
+            "mean": 21.911581569115814
+          },
+          "send_wait_total_node_ns": 35190,
+          "wait_with_full_slots_node_ns": 35190,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 92678,
+          "reconstructed_peak_active_sends": 2,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "235",
+              "data_latency_ns_median": "258",
+              "data_latency_ns_p95": "294",
+              "data_latency_ns_p99": "320",
+              "data_latency_ns_max": "338",
+              "data_latency_ns_mean": "260.9574468085106",
+              "task_latency_ns_min": "235",
+              "task_latency_ns_median": "258",
+              "task_latency_ns_p95": "294",
+              "task_latency_ns_p99": "320",
+              "task_latency_ns_max": "338",
+              "task_latency_ns_mean": "260.9574468085106",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "16",
+              "committed_segments_median": "16",
+              "committed_segments_p95": "16",
+              "committed_segments_p99": "16",
+              "committed_segments_max": "16",
+              "committed_segments_mean": "16.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "160",
+              "data_latency_ns_median": "179",
+              "data_latency_ns_p95": "211",
+              "data_latency_ns_p99": "242",
+              "data_latency_ns_max": "258",
+              "data_latency_ns_mean": "180.3031914893617",
+              "task_latency_ns_min": "248",
+              "task_latency_ns_median": "270",
+              "task_latency_ns_p95": "335",
+              "task_latency_ns_p99": "360",
+              "task_latency_ns_max": "376",
+              "task_latency_ns_mean": "277.21276595744683",
+              "data_to_protocol_complete_ns_min": "85",
+              "data_to_protocol_complete_ns_median": "88",
+              "data_to_protocol_complete_ns_p95": "134",
+              "data_to_protocol_complete_ns_p99": "166",
+              "data_to_protocol_complete_ns_max": "166",
+              "data_to_protocol_complete_ns_mean": "96.90957446808511",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "9125aa6fe453d2391c3b6c7e6e8eda3be8d3c619184af4e5557ec4dfce5a9793",
+            "plan_sha256": "1aec23a404e386b24ad30d73e082af6e6f17a05d5f3d64f1b4a54b1c0d90f62b",
+            "tables": {
+              "longest-waits.json": "bc152215a6d0bd3b8c9e5fac5f32b9a53bd10700fbf6c40b340b9ad7a4349440",
+              "send-waits.csv": "960c5202c19e143e756212982f7c48bd5c561dbb3d57bf52bf848e97b3acb5ea",
+              "slot-occupancy.csv": "2b59097a6f60b9c0f2a3fab0632badb587fb03e10b4b5d7a9a076ccdcba70d5c"
+            }
+          },
+          "pending_wait_rank_ns": 23178,
+          "full_slot_wait_rank_ns": 23178,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "aab0eda2555eb239a43c0f34ef848739a6c9f6e9978ef55362739b499a3f63a4",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 554,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 265,
+            "p99": 291,
+            "max": 338,
+            "mean": 123.50214899713467
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 88,
+            "median": 180,
+            "p95": 286,
+            "p99": 320,
+            "max": 376,
+            "mean": 185.3202005730659
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 87,
+            "p95": 106,
+            "p99": 135,
+            "max": 166,
+            "mean": 61.81805157593123
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "128",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 4432,
+            "single_segment_tasks": 0
+          }
+        }
+      },
+      {
+        "case": {
+          "case_id": "s4-b8-load512-slots1",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 1,
+          "load_response_bytes": 512,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load512-slots1",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "ae4876ef27787e5b5bde0af667cb51b74c512b3ebc1ab90574d562b26468239e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "a41f83b3be7d6db39f2a420ffe554f61203f7c66ca86fb6bc1f44ba74ba02b21",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load512-slots1",
+          "passed": true,
+          "run_manifest_sha256": "d3720ad4cbb38c9afdb9f67e6ef0b203e8a64c5b061171d466ac2d396632ea57",
+          "overview_sha256": "ece300cebe0287d653ac366230f9eb7f2b62ffcf14c47d72506c6ad01b440ea0",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "b23f90614a777ad19b086cc0de34d4c4c16f40deb76256a97cbcc78ddb468e27"
+        },
+        "stats": {
+          "send_slots_per_rank": 1,
+          "round_ns": 70013,
+          "single_round_tokens_per_second": 914115.9498950195,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 2553368,
+            "summed_voq_byte_ns": 2801860,
+            "summed_fifo_byte_ns": 1410092,
+            "queued_without_transmission_port_ns": 9702,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.05124762544098953,
+          "total_physical_busy_port_ns": 92130,
+          "max_voq_bytes": 2160,
+          "max_fifo_bytes": 1080,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 736,
+            "p99": 2080,
+            "max": 5145,
+            "mean": 128.26525529265254
+          },
+          "send_wait_total_node_ns": 205994,
+          "wait_with_full_slots_node_ns": 205994,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 262608,
+          "reconstructed_peak_active_sends": 1,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "275",
+              "data_latency_ns_median": "294",
+              "data_latency_ns_p95": "327",
+              "data_latency_ns_p99": "346",
+              "data_latency_ns_max": "347",
+              "data_latency_ns_mean": "294.9468085106383",
+              "task_latency_ns_min": "275",
+              "task_latency_ns_median": "294",
+              "task_latency_ns_p95": "327",
+              "task_latency_ns_p99": "346",
+              "task_latency_ns_max": "347",
+              "task_latency_ns_mean": "294.9468085106383",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "4",
+              "committed_segments_median": "4",
+              "committed_segments_p95": "4",
+              "committed_segments_p99": "4",
+              "committed_segments_max": "4",
+              "committed_segments_mean": "4.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "159",
+              "data_latency_ns_median": "169",
+              "data_latency_ns_p95": "198",
+              "data_latency_ns_p99": "239",
+              "data_latency_ns_max": "242",
+              "data_latency_ns_mean": "172.95744680851064",
+              "task_latency_ns_min": "248",
+              "task_latency_ns_median": "267",
+              "task_latency_ns_p95": "307",
+              "task_latency_ns_p99": "330",
+              "task_latency_ns_max": "341",
+              "task_latency_ns_mean": "267.3404255319149",
+              "data_to_protocol_complete_ns_min": "85",
+              "data_to_protocol_complete_ns_median": "88",
+              "data_to_protocol_complete_ns_p95": "125",
+              "data_to_protocol_complete_ns_p99": "160",
+              "data_to_protocol_complete_ns_max": "178",
+              "data_to_protocol_complete_ns_mean": "94.38297872340425",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "ece300cebe0287d653ac366230f9eb7f2b62ffcf14c47d72506c6ad01b440ea0",
+            "plan_sha256": "05fac20937a626ebab80ea2dc4d231aeec8723a6d72860d1faa96224c7ffc9e0",
+            "tables": {
+              "longest-waits.json": "7436a2f664e261865496c126a060736771ec00348c1d7dda98079a36c31bc72c",
+              "send-waits.csv": "cbf821b6a91661a137850565372202bfebd265959a01f442420180818684e03a",
+              "slot-occupancy.csv": "2c75311d5e25c0fe4af93a3dc7497e01c5f58c689e38d0f12b0e4240c5f3a22d"
+            }
+          },
+          "pending_wait_rank_ns": 136524,
+          "full_slot_wait_rank_ns": 136524,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "72f1926fe6fafb8eebf35a35d5ec18d56680193ba865ff8fe015e293988e9602",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 554,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 295,
+            "p99": 319,
+            "max": 347,
+            "mean": 127.19269340974212
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 89,
+            "median": 180,
+            "p95": 299,
+            "p99": 325,
+            "max": 347,
+            "mean": 188.11461318051576
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 88,
+            "p95": 101,
+            "p99": 126,
+            "max": 178,
+            "mean": 60.92191977077364
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "512",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 1108,
+            "single_segment_tasks": 0
+          }
+        }
+      },
+      {
+        "case": {
+          "case_id": "s4-b8-load512-slots2",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 2,
+          "load_response_bytes": 512,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load512-slots2",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "777dc607907d6589af625e29aaa764cf1aaef46b2c4dd5f8e32392f1d46b283e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "9ef86583f5588ba6934623dc8f12faafb72226269f2b9ea252361ff09411d919",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load512-slots2",
+          "passed": true,
+          "run_manifest_sha256": "d4847871690ace77c31e31f035dfa40ba8a43f79d94ca48f8ea2f8086b8955c2",
+          "overview_sha256": "4a834e329c4ce91fbb1af25c592a32ed6dffdb7741321396053c3d19619d9505",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "0e9c3fbb4fde0b0e88a4ef8295702d2b825343c0e662109ea36872fcc6c79599"
+        },
+        "stats": {
+          "send_slots_per_rank": 2,
+          "round_ns": 56030,
+          "single_round_tokens_per_second": 1142245.225771908,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 2553368,
+            "summed_voq_byte_ns": 3196484,
+            "summed_fifo_byte_ns": 2452932,
+            "queued_without_transmission_port_ns": 8987,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.06703551668748885,
+          "total_physical_busy_port_ns": 92130,
+          "max_voq_bytes": 2160,
+          "max_fifo_bytes": 1080,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 152,
+            "p99": 348,
+            "max": 1071,
+            "mean": 22.65068493150685
+          },
+          "send_wait_total_node_ns": 36377,
+          "wait_with_full_slots_node_ns": 36377,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 97070,
+          "reconstructed_peak_active_sends": 2,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "275",
+              "data_latency_ns_median": "295",
+              "data_latency_ns_p95": "344",
+              "data_latency_ns_p99": "376",
+              "data_latency_ns_max": "379",
+              "data_latency_ns_mean": "301.29787234042556",
+              "task_latency_ns_min": "275",
+              "task_latency_ns_median": "295",
+              "task_latency_ns_p95": "344",
+              "task_latency_ns_p99": "376",
+              "task_latency_ns_max": "379",
+              "task_latency_ns_mean": "301.29787234042556",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "4",
+              "committed_segments_median": "4",
+              "committed_segments_p95": "4",
+              "committed_segments_p99": "4",
+              "committed_segments_max": "4",
+              "committed_segments_mean": "4.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "159",
+              "data_latency_ns_median": "179",
+              "data_latency_ns_p95": "208",
+              "data_latency_ns_p99": "242",
+              "data_latency_ns_max": "258",
+              "data_latency_ns_mean": "178.45744680851064",
+              "task_latency_ns_min": "248",
+              "task_latency_ns_median": "274",
+              "task_latency_ns_p95": "333",
+              "task_latency_ns_p99": "360",
+              "task_latency_ns_max": "376",
+              "task_latency_ns_mean": "278.1755319148936",
+              "data_to_protocol_complete_ns_min": "86",
+              "data_to_protocol_complete_ns_median": "89",
+              "data_to_protocol_complete_ns_p95": "138",
+              "data_to_protocol_complete_ns_p99": "166",
+              "data_to_protocol_complete_ns_max": "166",
+              "data_to_protocol_complete_ns_mean": "99.71808510638297",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "4a834e329c4ce91fbb1af25c592a32ed6dffdb7741321396053c3d19619d9505",
+            "plan_sha256": "1aec23a404e386b24ad30d73e082af6e6f17a05d5f3d64f1b4a54b1c0d90f62b",
+            "tables": {
+              "longest-waits.json": "5e945f605b1253bef214e14bdaabd835838b9a9ae8e91e910baafe750c95bc56",
+              "send-waits.csv": "9603f956aa9308e7f9016584118eeb2da4fa6b001fee087beb3b3956e8389f09",
+              "slot-occupancy.csv": "923663eedcf6b8ca6ac5b9c9fa23e57f3d60a45b9246817c6c6d80f4844ce621"
+            }
+          },
+          "pending_wait_rank_ns": 26084,
+          "full_slot_wait_rank_ns": 26084,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "5838ac37fd017cbea92e046d9a90e70340c68a4db59bf47c0f6b0dc9f0f55679",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 554,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 302,
+            "p99": 335,
+            "max": 379,
+            "mean": 129.93481375358166
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 88,
+            "median": 180,
+            "p95": 309,
+            "p99": 348,
+            "max": 379,
+            "mean": 192.80587392550143
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 88,
+            "p95": 118,
+            "p99": 145,
+            "max": 180,
+            "mean": 62.87106017191977
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "512",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 1108,
+            "single_segment_tasks": 0
+          }
+        }
+      },
+      {
+        "case": {
+          "case_id": "s4-b8-load2048-slots1",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 1,
+          "load_response_bytes": 2048,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load2048-slots1",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "ae4876ef27787e5b5bde0af667cb51b74c512b3ebc1ab90574d562b26468239e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "c86e1564a3a5d3b18b59d3a4fe06ca5ed1288eb090763f7de4acf3701863b5e8",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load2048-slots1",
+          "passed": true,
+          "run_manifest_sha256": "a382cef9463be12d9741680aab708f0408cc705f04eebaa6dba098e77a076c8a",
+          "overview_sha256": "26f2fabe89f57d8e70f1ac8769c3efc7c6e7cbbdf21265463b275fd6acd47c0f",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "18e464a9acb8208ddc30a4c583ac2f7558888f71b462dc41c3cbb6566447f72b"
+        },
+        "stats": {
+          "send_slots_per_rank": 1,
+          "round_ns": 77644,
+          "single_round_tokens_per_second": 824274.8956777086,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 2341796,
+            "summed_voq_byte_ns": 2502684,
+            "summed_fifo_byte_ns": 1298284,
+            "queued_without_transmission_port_ns": 7844,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.04306836329916027,
+          "total_physical_busy_port_ns": 84947,
+          "max_voq_bytes": 2160,
+          "max_fifo_bytes": 2064,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 957,
+            "p99": 2109,
+            "max": 5162,
+            "mean": 158.6500622665006
+          },
+          "send_wait_total_node_ns": 254792,
+          "wait_with_full_slots_node_ns": 254792,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 309064,
+          "reconstructed_peak_active_sends": 1,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "475",
+              "data_latency_ns_median": "476",
+              "data_latency_ns_p95": "567",
+              "data_latency_ns_p99": "682",
+              "data_latency_ns_max": "689",
+              "data_latency_ns_mean": "488.6010638297872",
+              "task_latency_ns_min": "475",
+              "task_latency_ns_median": "476",
+              "task_latency_ns_p95": "567",
+              "task_latency_ns_p99": "682",
+              "task_latency_ns_max": "689",
+              "task_latency_ns_mean": "488.6010638297872",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "1",
+              "committed_segments_median": "1",
+              "committed_segments_p95": "1",
+              "committed_segments_p99": "1",
+              "committed_segments_max": "1",
+              "committed_segments_mean": "1.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "160",
+              "data_latency_ns_median": "179",
+              "data_latency_ns_p95": "186",
+              "data_latency_ns_p99": "239",
+              "data_latency_ns_max": "242",
+              "data_latency_ns_mean": "173.14893617021278",
+              "task_latency_ns_min": "248",
+              "task_latency_ns_median": "267",
+              "task_latency_ns_p95": "303",
+              "task_latency_ns_p99": "330",
+              "task_latency_ns_max": "341",
+              "task_latency_ns_mean": "265.75",
+              "data_to_protocol_complete_ns_min": "85",
+              "data_to_protocol_complete_ns_median": "88",
+              "data_to_protocol_complete_ns_p95": "122",
+              "data_to_protocol_complete_ns_p99": "143",
+              "data_to_protocol_complete_ns_max": "178",
+              "data_to_protocol_complete_ns_mean": "92.60106382978724",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "26f2fabe89f57d8e70f1ac8769c3efc7c6e7cbbdf21265463b275fd6acd47c0f",
+            "plan_sha256": "05fac20937a626ebab80ea2dc4d231aeec8723a6d72860d1faa96224c7ffc9e0",
+            "tables": {
+              "longest-waits.json": "4c8834bda051d04e39117f190d317cc122ada28d5b81f9455d2ed1e7b420f386",
+              "send-waits.csv": "fe7a44b4a7a7313cf80b6a6de18985fa932205c734181184d602265ba46f4004",
+              "slot-occupancy.csv": "cdb69df7e4e22595a2ca57a62357d2d5f9368c6d7e6c78276eb8c998d61d095c"
+            }
+          },
+          "pending_wait_rank_ns": 168813,
+          "full_slot_wait_rank_ns": 168813,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "04a39af5346ecaebdb3e1119e062425446a9c4ddb8947a38c48870d962f4814c",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 277,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 476,
+            "p99": 540,
+            "max": 689,
+            "mean": 159.42263610315186
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 89,
+            "median": 180,
+            "p95": 476,
+            "p99": 540,
+            "max": 689,
+            "mean": 221.39255014326648
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 87,
+            "p95": 102,
+            "p99": 163,
+            "max": 284,
+            "mean": 61.96991404011462
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "2048",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 277,
+            "single_segment_tasks": 277
+          }
+        }
+      },
+      {
+        "case": {
+          "case_id": "s4-b8-load2048-slots2",
+          "input_set": 4,
+          "requests_per_rank": 8,
+          "request_count": 64,
+          "send_slots_per_rank": 2,
+          "load_response_bytes": 2048,
+          "expert_inputs": {
+            "1": [
+              6,
+              9,
+              9,
+              8,
+              7,
+              12,
+              9,
+              4,
+              10,
+              7,
+              11,
+              7,
+              5,
+              6,
+              8,
+              10
+            ],
+            "2": [
+              9,
+              4,
+              10,
+              9,
+              8,
+              8,
+              12,
+              9,
+              5,
+              5,
+              13,
+              9,
+              6,
+              4,
+              8,
+              9
+            ],
+            "3": [
+              3,
+              12,
+              8,
+              9,
+              12,
+              10,
+              13,
+              4,
+              8,
+              8,
+              9,
+              6,
+              7,
+              8,
+              4,
+              7
+            ]
+          },
+          "directory": "inputs/s4-b8-load2048-slots2",
+          "files": {
+            "backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+            "export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+            "fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+            "layers.json": "777dc607907d6589af625e29aaa764cf1aaef46b2c4dd5f8e32392f1d46b283e",
+            "observation.json": "3f1ee0bb8020c7c8d7d12356c6029259c23e5299b6a88c62b3026e6a3214c3a8",
+            "record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+            "scenario.yaml": "665de1757646ec33bd3bfeac351fddebdfe80e0bff551d3f3ff2e16c2afa796a",
+            "service.json": "e187e5f99542c2781b899404072a2f163cff658c93ba61185e98b1405e5d2d18",
+            "system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a"
+          }
+        },
+        "completion": {
+          "case_id": "s4-b8-load2048-slots2",
+          "passed": true,
+          "run_manifest_sha256": "1d620ff8cdfda73c6e709e5c3b6158052daa1a53562b1de980cc1663fb714742",
+          "overview_sha256": "02ae607de9ee1f2203cc6621b57bbd44afc6a2560905fff9d80fb4aa53c2e938",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "9168bda44f97852532eed5943c7fadb3ae39adc861107421a3e98f0289866470"
+        },
+        "stats": {
+          "send_slots_per_rank": 2,
+          "round_ns": 61980,
+          "single_round_tokens_per_second": 1032591.1584382058,
+          "request_count": 64,
+          "compute_work_rank_ns": 314756,
+          "network": {
+            "observed_ports": 32,
+            "counted_packet_bytes": 2341796,
+            "summed_voq_byte_ns": 2963296,
+            "summed_fifo_byte_ns": 2278612,
+            "queued_without_transmission_port_ns": 7286,
+            "queued_without_transmission_max_ns": 1
+          },
+          "max_port_busy_fraction": 0.053000968054211034,
+          "total_physical_busy_port_ns": 84947,
+          "max_voq_bytes": 4128,
+          "max_fifo_bytes": 2080,
+          "send_nodes": 1606,
+          "send_wait_ns": {
+            "count": 1606,
+            "min": 0,
+            "median": 0,
+            "p95": 263,
+            "p99": 523,
+            "max": 1289,
+            "mean": 33.72727272727273
+          },
+          "send_wait_total_node_ns": 54166,
+          "wait_with_full_slots_node_ns": 54166,
+          "wait_with_free_slot_node_ns": 0,
+          "full_occupancy_rank_ns": 115285,
+          "reconstructed_peak_active_sends": 2,
+          "cross_server_data_groups": [
+            {
+              "kind": "combine",
+              "message_role": "data",
+              "operation": "LOAD",
+              "payload_bytes": "2048",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "474",
+              "data_latency_ns_median": "476",
+              "data_latency_ns_p95": "587",
+              "data_latency_ns_p99": "675",
+              "data_latency_ns_max": "722",
+              "data_latency_ns_mean": "493.48936170212767",
+              "task_latency_ns_min": "474",
+              "task_latency_ns_median": "476",
+              "task_latency_ns_p95": "587",
+              "task_latency_ns_p99": "675",
+              "task_latency_ns_max": "722",
+              "task_latency_ns_mean": "493.48936170212767",
+              "data_to_protocol_complete_ns_min": "0",
+              "data_to_protocol_complete_ns_median": "0",
+              "data_to_protocol_complete_ns_p95": "0",
+              "data_to_protocol_complete_ns_p99": "0",
+              "data_to_protocol_complete_ns_max": "0",
+              "data_to_protocol_complete_ns_mean": "0.0",
+              "committed_segments_min": "1",
+              "committed_segments_median": "1",
+              "committed_segments_p95": "1",
+              "committed_segments_p99": "1",
+              "committed_segments_max": "1",
+              "committed_segments_mean": "1.0"
+            },
+            {
+              "kind": "dispatch",
+              "message_role": "data",
+              "operation": "STORE",
+              "payload_bytes": "1068",
+              "locality": "cross_server",
+              "tasks": "188",
+              "data_latency_ns_min": "160",
+              "data_latency_ns_median": "179",
+              "data_latency_ns_p95": "204",
+              "data_latency_ns_p99": "242",
+              "data_latency_ns_max": "258",
+              "data_latency_ns_mean": "178.0744680851064",
+              "task_latency_ns_min": "247",
+              "task_latency_ns_median": "268",
+              "task_latency_ns_p95": "328",
+              "task_latency_ns_p99": "360",
+              "task_latency_ns_max": "376",
+              "task_latency_ns_mean": "274.8670212765957",
+              "data_to_protocol_complete_ns_min": "85",
+              "data_to_protocol_complete_ns_median": "88",
+              "data_to_protocol_complete_ns_p95": "137",
+              "data_to_protocol_complete_ns_p99": "166",
+              "data_to_protocol_complete_ns_max": "166",
+              "data_to_protocol_complete_ns_mean": "96.79255319148936",
+              "committed_segments_min": "3",
+              "committed_segments_median": "3",
+              "committed_segments_p95": "3",
+              "committed_segments_p99": "3",
+              "committed_segments_max": "3",
+              "committed_segments_mean": "3.0"
+            }
+          ],
+          "evidence": {
+            "overview_sha256": "02ae607de9ee1f2203cc6621b57bbd44afc6a2560905fff9d80fb4aa53c2e938",
+            "plan_sha256": "1aec23a404e386b24ad30d73e082af6e6f17a05d5f3d64f1b4a54b1c0d90f62b",
+            "tables": {
+              "longest-waits.json": "27863260bf02fdba8b03c603d7f2a9e5c7686b9a6017464a45d0b4104b2d72d5",
+              "send-waits.csv": "09a93b18f7dbb3fab5b276b104040cfcd6d8fa67650411dd881d4fae5f969b8f",
+              "slot-occupancy.csv": "687d09c098248f85602e0e3d753e9e9e57bc39d82598d58061f6adf56ecfc131"
+            }
+          },
+          "pending_wait_rank_ns": 36574,
+          "full_slot_wait_rank_ns": 36574,
+          "other_pending_wait_rank_ns": 0
+        },
+        "layer_completion_table_sha256": "18bb61d8a6e79285279cf97c2a63366372753fac72336142378b969ea857ca1d",
+        "transfer_counts": {
+          "fabric_tasks": 1396,
+          "local_deliveries": 210,
+          "unique_fabric_business_bytes": 850944,
+          "tasks_with_multiple_committed_segments": 277,
+          "data_latency_ns": {
+            "count": 1396,
+            "min": 45,
+            "median": 92,
+            "p95": 476,
+            "p99": 554,
+            "max": 722,
+            "mean": 164.3051575931232
+          },
+          "task_latency_ns": {
+            "count": 1396,
+            "min": 88,
+            "median": 180,
+            "p95": 476,
+            "p99": 554,
+            "max": 722,
+            "mean": 231.70702005730658
+          },
+          "data_to_protocol_complete_ns": {
+            "count": 1396,
+            "min": 0,
+            "median": 88,
+            "p95": 144,
+            "p99": 234,
+            "max": 354,
+            "mean": 67.40186246418338
+          }
+        },
+        "actual_native_sizes": {
+          "ns3::UbLdstThread::LoadRequestSize": "64",
+          "ns3::UbLdstThread::LoadResponseSize": "2048",
+          "ns3::UbLdstThread::StoreRequestSize": "512"
+        },
+        "segmentation": {
+          "STORE": {
+            "tasks": 1119,
+            "committed_segments": 1673,
+            "single_segment_tasks": 842
+          },
+          "LOAD": {
+            "tasks": 277,
+            "committed_segments": 277,
+            "single_segment_tasks": 277
+          }
+        }
+      }
+    ],
+    "slot_pairs": [
+      {
+        "load_response_bytes": 128,
+        "before": "s4-b8-load128-slots1",
+        "after": "s4-b8-load128-slots2",
+        "round_delta_ns": -12445,
+        "round_reduction_fraction": 0.18446328521032818,
+        "full_slot_wait_delta_rank_ns": -109068,
+        "queue_area_delta_byte_ns": 2285660
+      },
+      {
+        "load_response_bytes": 512,
+        "before": "s4-b8-load512-slots1",
+        "after": "s4-b8-load512-slots2",
+        "round_delta_ns": -13983,
+        "round_reduction_fraction": 0.19972005199034465,
+        "full_slot_wait_delta_rank_ns": -110440,
+        "queue_area_delta_byte_ns": 1437464
+      },
+      {
+        "load_response_bytes": 2048,
+        "before": "s4-b8-load2048-slots1",
+        "after": "s4-b8-load2048-slots2",
+        "round_delta_ns": -15664,
+        "round_reduction_fraction": 0.20174128071711916,
+        "full_slot_wait_delta_rank_ns": -132239,
+        "queue_area_delta_byte_ns": 1440940
+      }
+    ],
+    "grain_pairs": [
+      {
+        "send_slots_per_rank": 1,
+        "load_response_bytes": 128,
+        "before": "s4-b8-load512-slots1",
+        "after": "s4-b8-load128-slots1",
+        "round_delta_ns": -2547,
+        "round_reduction_fraction": 0.036378958193478354,
+        "full_slot_wait_delta_rank_ns": -4278,
+        "queue_area_delta_byte_ns": 1350300
+      },
+      {
+        "send_slots_per_rank": 1,
+        "load_response_bytes": 2048,
+        "before": "s4-b8-load512-slots1",
+        "after": "s4-b8-load2048-slots1",
+        "round_delta_ns": 7631,
+        "round_reduction_fraction": -0.10899404396326397,
+        "full_slot_wait_delta_rank_ns": 32289,
+        "queue_area_delta_byte_ns": -410984
+      },
+      {
+        "send_slots_per_rank": 2,
+        "load_response_bytes": 128,
+        "before": "s4-b8-load512-slots2",
+        "after": "s4-b8-load128-slots2",
+        "round_delta_ns": -1009,
+        "round_reduction_fraction": 0.018008209887560234,
+        "full_slot_wait_delta_rank_ns": -2906,
+        "queue_area_delta_byte_ns": 2198496
+      },
+      {
+        "send_slots_per_rank": 2,
+        "load_response_bytes": 2048,
+        "before": "s4-b8-load512-slots2",
+        "after": "s4-b8-load2048-slots2",
+        "round_delta_ns": 5950,
+        "round_reduction_fraction": -0.10619311083348207,
+        "full_slot_wait_delta_rank_ns": 10490,
+        "queue_area_delta_byte_ns": -407508
+      }
+    ],
+    "checks": {
+      "exact_node_and_communication_invariants": true,
+      "actual_expert_compute_work": true,
+      "actual_submit_release_occupancy": true,
+      "same_platform_and_backend": true,
+      "unchanged_effective_network_except_declared_parameters": true,
+      "actual_native_segmentation": true
+    },
+    "qualification": "One seen synthetic input; only declared cost or LOAD response condition; no hardware calibration or direct network root-cause label"
+  },
+  "frozen_implementation": {
+    "experiments/scaleup_observability/__init__.py": "654922860ab8f1aad6434e70dae323fe240b6aa1ba624b4b2aceb63a7464b4e0",
+    "experiments/scaleup_observability/__main__.py": "38b58040cd0986e78ed5abe578a013c2df22c3ddc973c58e340f33c1b3f82027",
+    "experiments/scaleup_observability/common.py": "c55b15fcdf98a14f8cbf2e53ec9eab2cc61d8b26e3878b4c22b32fc2a92c9f38",
+    "experiments/scaleup_observability/configs/observation-development-sources.json": "c19dfeb372e65a838b5c82e5f4c2d14bc9135420055b4c689a0c13ef72dd3d76",
+    "experiments/scaleup_observability/configs/reference/backend-reference.yaml": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+    "experiments/scaleup_observability/configs/reference/export-policy.json": "ce16b8de9cca016a4a06630efbe36d3258de650106a5871c95e03bb096dbcf62",
+    "experiments/scaleup_observability/configs/reference/fabric.json": "b44d7784b6b6190b877d7c87c310d84fe2248440a72e6cac37939a7e527ef38d",
+    "experiments/scaleup_observability/configs/reference/layers.json": "46029239cd9d50aa9597f635d4d38f83d54e01154f405300cd67f8d81a1ac4a4",
+    "experiments/scaleup_observability/configs/reference/observation.json": "dac24c037f48fdfca115b91799663434ffd638678be0ea74fe53d329d11c0263",
+    "experiments/scaleup_observability/configs/reference/record-policy.json": "10452c81eb674786f6ca225f7f44b3e9715b176b20b3b0ad7165d7adb93ddc71",
+    "experiments/scaleup_observability/configs/reference/scenario.yaml": "571daf6e7cdce5554712d4833c18ac9eeae8f9847ff75ccc25c86a810d06f514",
+    "experiments/scaleup_observability/configs/reference/service.json": "20aa111b412a1d30460b78a8e003ccd8242ee942964772e546a81b420d144cfb",
+    "experiments/scaleup_observability/configs/reference/system.json": "8978efe76d2f1d79fbe284551858265740dcd1794b78a1acc954037687f2642a",
+    "experiments/scaleup_observability/exploration.py": "3b4797a4958707b1b2c4c44107cd2cddc9b3f19d9f5b6673fcb08948c5125251",
+    "experiments/scaleup_observability/exploration_analysis.py": "c9281aa6a447e9e36439887856583e65853b88929b4b307c9e81064a50091ea4",
+    "experiments/scaleup_observability/figures.py": "ace067153ebed1e9e0d53631b9dba348a941cd1e9955f4bb1ce7400f0f2eb277",
+    "experiments/scaleup_observability/inputs.py": "e45c3127af4000011a7563a28bd24b0fdd6145fe697433e8522c9cf5a8474976",
+    "experiments/scaleup_observability/observation_evaluate.py": "ba74268c19f7d2f902d35416bcba73c6c67bf873b4e66f858540a2c34bfaed0f",
+    "experiments/scaleup_observability/observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+    "experiments/scaleup_observability/observation_prepare.py": "a82c512d8758f632087935cc42e5abc0056311bab684edf7da094b791a5daf7e",
+    "experiments/scaleup_observability/observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7",
+    "experiments/scaleup_observability/observation_workflow.py": "b8b33709e4ef3afafeeea4b9498e15c954c689410c5cfa1ca7b9b04d75ea7bec",
+    "experiments/scaleup_observability/overview.py": "bd3638d459eba085ce1689d5110e735438e96b62e098c431273bdb7b6a0b83c5",
+    "experiments/scaleup_observability/results-normal-v1.json": "558fa7f7c742dd33a32d18d54ad27a10678938ecdacd1738d26134a8e7694b79",
+    "experiments/scaleup_observability/results-observations-v1.json": "dabaa53f80558692bc897f3fc73dd1b0d59dbe7c774b9a7864f8637e23fcb3c0",
+    "experiments/scaleup_observability/results-send-state-v1.json": "904abc5e3cdd8ca007750c60cba6e226fffe6175c54d96abdd00b9a76471345e",
+    "experiments/scaleup_observability/results-slots-v1.json": "8a01c3b0ec0229f3c13f8bcbd073043ed1ec3788ac5dd638c877579677ca8190",
+    "experiments/scaleup_observability/results-tempo-v1.json": "3c0213061ee30a0600db1e662a2d256bfa89678fce422fd06c8a36c46afcde49",
+    "experiments/scaleup_observability/send_state_evaluate.py": "7194fc9ebc7e3042845b441c06cdfa00e8a521a10b46bc85343b2c28cde0c39f",
+    "experiments/scaleup_observability/send_state_measure.py": "a4a970993f8ad149c10b0e2dc5711ef8b4376bfca645ce1a5b39e47daf060e57",
+    "experiments/scaleup_observability/send_state_prepare.py": "3db9839affde5fe7cebf256bb7aea32cbade901f74cf2033ea6d0e17349d7d8b",
+    "experiments/scaleup_observability/send_state_spec.py": "cfd3b9562d5b34cecb69fec3128f9fc951d737dcfce3ab16cbf1ca7450af7cc7",
+    "experiments/scaleup_observability/send_state_workflow.py": "62ba277fa08cd9082a0e1cc4260f1884d632f878f5c71dfcb3b8d04ff467ce9f",
+    "experiments/scaleup_observability/slot_analysis.py": "f9460416f127be08541c02abfa75a9d5859d66c614878d10be9ac5783fa5dd41",
+    "experiments/scaleup_observability/slots.py": "62e0c02e94abf6a548392fa2f7637358e0526e11e6d573f2f7a2e618baca2a8e",
+    "experiments/scaleup_observability/statistics.py": "098d4140a1b9e2bd6d466726b7963ed556b0ea67cd9e90034202170d91d83578",
+    "experiments/scaleup_observability/tests/test_exploration.py": "1d62b93b4ec7a3cfd79d35a8c541c9d88b488f0a0280cf9178ad224ac159e12c",
+    "experiments/scaleup_observability/tests/test_first_batch.py": "1dddd9d6267a4c1c2156baaa0013565a52dded4991ff2aa95d3674a696688868",
+    "experiments/scaleup_observability/tests/test_observations.py": "f78da9cd0dfd7596cfcc04a48d8f2bf39132e4361a624abd5ce8a2e5e5af92a1",
+    "experiments/scaleup_observability/tests/test_send_state_observations.py": "be3dbeb7989cd05a7c1fcf39bdabb13ff6d72d40d2b761d787d1841ae1402b3e",
+    "experiments/scaleup_observability/tests/test_slots.py": "723fad93ff6c686264491e34dde2495020ef014bf5f46e3a980a1171f9233634",
+    "experiments/scaleup_observability/workflow.py": "2d290686d0f8a5ecb79708fce0be96f4c894b2f1994bd3007251c06cb0b3839b"
+  },
+  "method_sha256": "8e51d1e3e299617a6aceeb538b442b144a99923102c5217b2ea58a99e4bc0bc9",
+  "resources": {
+    "phases": [
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:08:47.131291+00:00",
+        "ended_utc": "2026-10-08T15:09:19.742599+00:00",
+        "wall_seconds": 32.61132173426449,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 79376,
+        "peak_sampled_artifact_bytes": 40903294976,
+        "aggregate_artifact_bytes_before_report": 40903294976
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:09:20.178016+00:00",
+        "ended_utc": "2026-10-08T15:09:52.875565+00:00",
+        "wall_seconds": 32.69754861854017,
+        "peak_sampled_group_rss_bytes": 6422528,
+        "max_waited_child_rss_kib": 89876,
+        "peak_sampled_artifact_bytes": 40923627520,
+        "aggregate_artifact_bytes_before_report": 40923627520
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:09:52.878158+00:00",
+        "ended_utc": "2026-10-08T15:10:25.703785+00:00",
+        "wall_seconds": 32.82564929313958,
+        "peak_sampled_group_rss_bytes": 5357568,
+        "max_waited_child_rss_kib": 126716,
+        "peak_sampled_artifact_bytes": 40924315648,
+        "aggregate_artifact_bytes_before_report": 40924315648
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:10:25.897830+00:00",
+        "ended_utc": "2026-10-08T15:10:58.947216+00:00",
+        "wall_seconds": 33.04939515888691,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 76560,
+        "peak_sampled_artifact_bytes": 40924438528,
+        "aggregate_artifact_bytes_before_report": 40924438528
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:10:59.008350+00:00",
+        "ended_utc": "2026-10-08T15:11:32.422761+00:00",
+        "wall_seconds": 33.41442350670695,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 62736,
+        "peak_sampled_artifact_bytes": 40925233152,
+        "aggregate_artifact_bytes_before_report": 40925233152
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:11:43.577928+00:00",
+        "ended_utc": "2026-10-08T15:12:16.580461+00:00",
+        "wall_seconds": 33.00254800915718,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 78320,
+        "peak_sampled_artifact_bytes": 40925609984,
+        "aggregate_artifact_bytes_before_report": 40925609984
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:12:17.003844+00:00",
+        "ended_utc": "2026-10-08T15:12:50.140452+00:00",
+        "wall_seconds": 33.136610174551606,
+        "peak_sampled_group_rss_bytes": 7475200,
+        "max_waited_child_rss_kib": 90856,
+        "peak_sampled_artifact_bytes": 40945836032,
+        "aggregate_artifact_bytes_before_report": 40945836032
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:12:50.143246+00:00",
+        "ended_utc": "2026-10-08T15:13:22.702057+00:00",
+        "wall_seconds": 32.55882512405515,
+        "peak_sampled_group_rss_bytes": 7479296,
+        "max_waited_child_rss_kib": 126196,
+        "peak_sampled_artifact_bytes": 40946454528,
+        "aggregate_artifact_bytes_before_report": 40946454528
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:13:22.887156+00:00",
+        "ended_utc": "2026-10-08T15:13:56.003406+00:00",
+        "wall_seconds": 33.11625485308468,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 63000,
+        "peak_sampled_artifact_bytes": 40946577408,
+        "aggregate_artifact_bytes_before_report": 40946577408
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:13:56.063524+00:00",
+        "ended_utc": "2026-10-08T15:14:28.901489+00:00",
+        "wall_seconds": 32.8379717990756,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 76612,
+        "peak_sampled_artifact_bytes": 40947335168,
+        "aggregate_artifact_bytes_before_report": 40947335168
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:14:39.981874+00:00",
+        "ended_utc": "2026-10-08T15:15:13.323227+00:00",
+        "wall_seconds": 33.341371236369014,
+        "peak_sampled_group_rss_bytes": 5357568,
+        "max_waited_child_rss_kib": 79444,
+        "peak_sampled_artifact_bytes": 40947712000,
+        "aggregate_artifact_bytes_before_report": 40947712000
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:15:13.778894+00:00",
+        "ended_utc": "2026-10-08T15:15:46.954167+00:00",
+        "wall_seconds": 33.175278685986996,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 89800,
+        "peak_sampled_artifact_bytes": 40964304896,
+        "aggregate_artifact_bytes_before_report": 40964304896
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:15:46.956598+00:00",
+        "ended_utc": "2026-10-08T15:16:19.599926+00:00",
+        "wall_seconds": 32.64334129169583,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 99792,
+        "peak_sampled_artifact_bytes": 40964931584,
+        "aggregate_artifact_bytes_before_report": 40964931584
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:16:19.773156+00:00",
+        "ended_utc": "2026-10-08T15:16:52.996727+00:00",
+        "wall_seconds": 33.223582772538066,
+        "peak_sampled_group_rss_bytes": 7475200,
+        "max_waited_child_rss_kib": 76796,
+        "peak_sampled_artifact_bytes": 40965054464,
+        "aggregate_artifact_bytes_before_report": 40965054464
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:16:53.060825+00:00",
+        "ended_utc": "2026-10-08T15:17:26.335607+00:00",
+        "wall_seconds": 33.27478813380003,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 62984,
+        "peak_sampled_artifact_bytes": 40965758976,
+        "aggregate_artifact_bytes_before_report": 40965758976
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:17:37.708789+00:00",
+        "ended_utc": "2026-10-08T15:18:11.150680+00:00",
+        "wall_seconds": 33.44190042838454,
+        "peak_sampled_group_rss_bytes": 6443008,
+        "max_waited_child_rss_kib": 78588,
+        "peak_sampled_artifact_bytes": 40966139904,
+        "aggregate_artifact_bytes_before_report": 40966139904
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:18:11.582002+00:00",
+        "ended_utc": "2026-10-08T15:18:45.026189+00:00",
+        "wall_seconds": 33.44418619014323,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 91936,
+        "peak_sampled_artifact_bytes": 40982675456,
+        "aggregate_artifact_bytes_before_report": 40982675456
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:18:45.028805+00:00",
+        "ended_utc": "2026-10-08T15:19:17.731964+00:00",
+        "wall_seconds": 32.703171448782086,
+        "peak_sampled_group_rss_bytes": 5316608,
+        "max_waited_child_rss_kib": 107596,
+        "peak_sampled_artifact_bytes": 40983240704,
+        "aggregate_artifact_bytes_before_report": 40983240704
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:19:17.932356+00:00",
+        "ended_utc": "2026-10-08T15:19:51.305355+00:00",
+        "wall_seconds": 33.37300454080105,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 63224,
+        "peak_sampled_artifact_bytes": 40983379968,
+        "aggregate_artifact_bytes_before_report": 40983379968
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:19:51.361231+00:00",
+        "ended_utc": "2026-10-08T15:20:24.221924+00:00",
+        "wall_seconds": 32.860695004463196,
+        "peak_sampled_group_rss_bytes": 6422528,
+        "max_waited_child_rss_kib": 68696,
+        "peak_sampled_artifact_bytes": 40984059904,
+        "aggregate_artifact_bytes_before_report": 40984059904
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:20:35.620046+00:00",
+        "ended_utc": "2026-10-08T15:21:08.278876+00:00",
+        "wall_seconds": 32.65883948467672,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 77320,
+        "peak_sampled_artifact_bytes": 40984436736,
+        "aggregate_artifact_bytes_before_report": 40984436736
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:21:08.725167+00:00",
+        "ended_utc": "2026-10-08T15:21:41.789318+00:00",
+        "wall_seconds": 33.06415265053511,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 91876,
+        "peak_sampled_artifact_bytes": 41000067072,
+        "aggregate_artifact_bytes_before_report": 41000067072
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:21:41.792397+00:00",
+        "ended_utc": "2026-10-08T15:22:14.637457+00:00",
+        "wall_seconds": 32.84506905451417,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 99148,
+        "peak_sampled_artifact_bytes": 41000644608,
+        "aggregate_artifact_bytes_before_report": 41000644608
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:22:14.815151+00:00",
+        "ended_utc": "2026-10-08T15:22:48.119390+00:00",
+        "wall_seconds": 33.304244389757514,
+        "peak_sampled_group_rss_bytes": 6430720,
+        "max_waited_child_rss_kib": 63644,
+        "peak_sampled_artifact_bytes": 41000767488,
+        "aggregate_artifact_bytes_before_report": 41000767488
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:22:48.175345+00:00",
+        "ended_utc": "2026-10-08T15:23:21.501097+00:00",
+        "wall_seconds": 33.325759164988995,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 63276,
+        "peak_sampled_artifact_bytes": 41001439232,
+        "aggregate_artifact_bytes_before_report": 41001439232
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/commands/01-resolve.resources/probe.json",
+        "started_utc": "2026-10-08T15:23:32.640878+00:00",
+        "ended_utc": "2026-10-08T15:24:05.941268+00:00",
+        "wall_seconds": 33.300402933731675,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 79504,
+        "peak_sampled_artifact_bytes": 41001816064,
+        "aggregate_artifact_bytes_before_report": 41001816064
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/run/logs/resources-run/probe.json",
+        "started_utc": "2026-10-08T15:24:06.369710+00:00",
+        "ended_utc": "2026-10-08T15:24:39.455098+00:00",
+        "wall_seconds": 33.085387548431754,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 89752,
+        "peak_sampled_artifact_bytes": 41017417728,
+        "aggregate_artifact_bytes_before_report": 41017417728
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/run/logs/resources-export/probe.json",
+        "started_utc": "2026-10-08T15:24:39.458209+00:00",
+        "ended_utc": "2026-10-08T15:25:12.126469+00:00",
+        "wall_seconds": 32.66826848126948,
+        "peak_sampled_group_rss_bytes": 6426624,
+        "max_waited_child_rss_kib": 99596,
+        "peak_sampled_artifact_bytes": 41017925632,
+        "aggregate_artifact_bytes_before_report": 41017925632
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/commands/03-validate.resources/probe.json",
+        "started_utc": "2026-10-08T15:25:12.314415+00:00",
+        "ended_utc": "2026-10-08T15:25:45.586884+00:00",
+        "wall_seconds": 33.2724722083658,
+        "peak_sampled_group_rss_bytes": 5353472,
+        "max_waited_child_rss_kib": 63528,
+        "peak_sampled_artifact_bytes": 41018048512,
+        "aggregate_artifact_bytes_before_report": 41018048512
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/overview/commands/overview.resources/probe.json",
+        "started_utc": "2026-10-08T15:25:45.640470+00:00",
+        "ended_utc": "2026-10-08T15:26:18.866821+00:00",
+        "wall_seconds": 33.226357005536556,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 63248,
+        "peak_sampled_artifact_bytes": 41018703872,
+        "aggregate_artifact_bytes_before_report": 41018703872
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/comparison/commands/compare.resources/probe.json",
+        "started_utc": "2026-10-08T15:26:19.037506+00:00",
+        "ended_utc": "2026-10-08T15:26:52.383490+00:00",
+        "wall_seconds": 33.345986776053905,
+        "peak_sampled_group_rss_bytes": 5357568,
+        "max_waited_child_rss_kib": 95328,
+        "peak_sampled_artifact_bytes": 41019617280,
+        "aggregate_artifact_bytes_before_report": 41019617280
+      }
+    ],
+    "charged_bytes_before": 40902909952,
+    "charged_bytes_at_last_monitor": 41019617280,
+    "added_charged_bytes": 116707328,
+    "total_monitored_wall_seconds": 1024.828807702288,
+    "max_stage_wall_seconds": 33.44418619014323,
+    "peak_sampled_group_rss_bytes": 7479296,
+    "max_waited_child_rss_kib": 126716,
+    "limits": {
+      "rss_bytes": 8589934592,
+      "address_bytes": 12884901888,
+      "artifact_bytes": 51539607552,
+      "wall_seconds": 1800,
+      "min_free_bytes": 21474836480
+    }
+  },
+  "checks": {
+    "experiment_tests": 38,
+    "dependencies": 13,
+    "frozen_method_and_implementation": true,
+    "command_records": [
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/compare.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/preflight.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/prepare-source.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/public-help.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/run-batch.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/tempo-regression/commands/compare.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/tempo-regression.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/unit-tests.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/comparison/commands/compare.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots1/overview/commands/overview.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load128-slots2/overview/commands/overview.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots1/overview/commands/overview.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load2048-slots2/overview/commands/overview.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots1/overview/commands/overview.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/commands/01-resolve.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/commands/02-run.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/commands/03-validate.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/load-grain-v1/source/runs/s4-b8-load512-slots2/overview/commands/overview.command.json",
+        "exit_code": 0
+      }
+    ],
+    "diagnostic_commands": [
+      {
+        "path": "runs/scaleup_observability/load-grain-checks/summarize.command.json",
+        "exit_code": 1,
+        "reason": "Direct file invocation could not import repository experiments; corrected only the summary invocation; no simulation rerun"
+      }
+    ]
+  }
+}

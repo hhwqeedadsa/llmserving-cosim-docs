@@ -3,10 +3,11 @@ from copy import deepcopy
 from pathlib import Path
 import tempfile
 import unittest
+import yaml
 
 from experiments.scaleup_observability.common import read
 from experiments.scaleup_observability.exploration import prepare, scaled, tempo_inputs
-from experiments.scaleup_observability.exploration_analysis import pair_metrics, tempo_graph_signature
+from experiments.scaleup_observability.exploration_analysis import pair_metrics, tempo_graph_signature, segment_audit
 from experiments.scaleup_observability.inputs import make_input, verified_case
 from experiments.scaleup_observability.slots import verify_pair_inputs
 
@@ -63,6 +64,34 @@ class Tempo(unittest.TestCase):
         self.assertEqual(r['round_reduction_fraction'],-.2)
         self.assertEqual(r['full_slot_wait_delta_rank_ns'],-15)
         self.assertEqual(r['queue_area_delta_byte_ns'],15)
+
+
+class LoadGrain(unittest.TestCase):
+    def test_only_response_size_changes_across_grains(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)/'batch';prepare('load-grain',root)
+            first=None
+            for size in (128,512,2048):
+                _,a=verified_case(root,f's4-b8-load{size}-slots1')
+                _,b=verified_case(root,f's4-b8-load{size}-slots2')
+                verify_pair_inputs(a,b)
+                scenario=yaml.safe_load((a/'scenario.yaml').read_text())
+                self.assertEqual(scenario['backend']['attributes'].pop('ns3::UbLdstThread::LoadResponseSize'),size)
+                content={p.name:p.read_bytes() for p in a.iterdir() if p.name!='scenario.yaml'}
+                if first is None:first=(scenario,content)
+                self.assertEqual((scenario,content),first)
+                self.assertEqual(read(a/'service.json'),make_input(4,8)[0])
+
+    def test_actual_response_count_and_store_tail(self):
+        rows=[dict(operation='LOAD',payload_bytes=2048,committed_segments=16),
+              dict(operation='STORE',payload_bytes=1068,committed_segments=3),
+              dict(operation='STORE',payload_bytes=32,committed_segments=1)]
+        counts=segment_audit(rows,128,512)
+        self.assertEqual(counts['LOAD'],dict(tasks=1,committed_segments=16,single_segment_tasks=0))
+        self.assertEqual(counts['STORE'],dict(tasks=2,committed_segments=4,single_segment_tasks=1))
+        rows[0]['committed_segments']=1
+        self.assertEqual(segment_audit(rows,2048,512)['LOAD']['single_segment_tasks'],1)
+        with self.assertRaisesRegex(ValueError,'segmentation differs'):segment_audit(rows,512,512)
 
 
 if __name__=='__main__': unittest.main()

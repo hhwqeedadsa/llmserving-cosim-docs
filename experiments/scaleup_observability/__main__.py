@@ -53,7 +53,7 @@ def main():
     p.add_argument('--batch',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p=sub.add_parser('prepare-exploration',help='Freeze a declared small exploration batch without simulation')
-    p.add_argument('--study',choices=('compute-tempo',),required=True)
+    p.add_argument('--study',choices=('compute-tempo','load-grain'),required=True)
     p.add_argument('--output',type=Path,required=True)
     p=sub.add_parser('compare-exploration',help='Check declared graph changes and compare completed exploration cases')
     p.add_argument('--batch',type=Path,required=True)

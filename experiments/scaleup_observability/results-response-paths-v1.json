@@ -1,0 +1,650 @@
+{
+  "schema_version": "scaleup-response-paths-results/1",
+  "date": "2026-10-08",
+  "summary": {
+    "schema_version": "scaleup-response-paths/1",
+    "access": "researcher_internal",
+    "batch_sha256": "4d78da8fae4464213dcdd50d57883dcf498b2fb0dc360657c9c05f7dbe40eb5c",
+    "retrospective": true,
+    "selection": "All 188 cross-server 2048 B LOADs per condition; witness is minimum transfer_id shared across conditions",
+    "cases": [
+      {
+        "case_id": "s4-b8-load128-slots1",
+        "load_response_bytes": 128,
+        "send_slots_per_rank": 1,
+        "completion": {
+          "case_id": "s4-b8-load128-slots1",
+          "passed": true,
+          "run_manifest_sha256": "b19b7b67fe12e4fbe51b303a1fba77673ed33f86fe7a030992d89aac3aee2e2a",
+          "overview_sha256": "9ca3d5f9f41e733c852861aae502d82fe8eeb555c82a7c4528830e857336645c",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "a4878c08d714d8554622e5194e4d6e2269a25f9bb5cee0dc8b8f344ffb8528db"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 16,
+          "submit_ns": 16236,
+          "first_captured_response_ns": 16360,
+          "data_ready_ns": 16510,
+          "before_first_captured_response_ns": 124,
+          "captured_response_completion_span_ns": 150,
+          "data_latency_ns": 274,
+          "owner_access_egress_ports": 4,
+          "first_departure_spread_ns": 73,
+          "last_hop_serialization_min_ns": 5,
+          "last_hop_serialization_max_ns": 5
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 121,
+            "median": 123,
+            "p95": 136,
+            "p99": 147,
+            "max": 148,
+            "mean": 124.8936170212766
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 112,
+            "median": 123,
+            "p95": 143,
+            "p99": 162,
+            "max": 162,
+            "mean": 125.7127659574468
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 235,
+            "median": 248,
+            "p95": 271,
+            "p99": 290,
+            "max": 290,
+            "mean": 250.60638297872342
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 3,
+            "median": 4,
+            "p95": 4,
+            "p99": 4,
+            "max": 4,
+            "mean": 3.978723404255319
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 35,
+            "median": 45,
+            "p95": 65,
+            "p99": 85,
+            "max": 85,
+            "mean": 47.388297872340424
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 5,
+            "median": 5,
+            "p95": 5,
+            "p99": 5,
+            "max": 5,
+            "mean": 5.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 5,
+            "median": 5,
+            "p95": 5,
+            "p99": 5,
+            "max": 5,
+            "mean": 5.0
+          }
+        }
+      },
+      {
+        "case_id": "s4-b8-load128-slots2",
+        "load_response_bytes": 128,
+        "send_slots_per_rank": 2,
+        "completion": {
+          "case_id": "s4-b8-load128-slots2",
+          "passed": true,
+          "run_manifest_sha256": "3a4b46737aa406a61d6eb67a34884677e97a1084ade90c742e00cbf0006fcccf",
+          "overview_sha256": "9125aa6fe453d2391c3b6c7e6e8eda3be8d3c619184af4e5557ec4dfce5a9793",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "45057c842add18e9caaeb55c33fcbb50fdddb17dcddfb9a27a910d70920ebf61"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 16,
+          "submit_ns": 14460,
+          "first_captured_response_ns": 14582,
+          "data_ready_ns": 14719,
+          "before_first_captured_response_ns": 122,
+          "captured_response_completion_span_ns": 137,
+          "data_latency_ns": 259,
+          "owner_access_egress_ports": 4,
+          "first_departure_spread_ns": 54,
+          "last_hop_serialization_min_ns": 5,
+          "last_hop_serialization_max_ns": 5
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 121,
+            "median": 123,
+            "p95": 143,
+            "p99": 161,
+            "max": 175,
+            "mean": 127.34574468085107
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 112,
+            "median": 130,
+            "p95": 163,
+            "p99": 182,
+            "max": 184,
+            "mean": 133.61170212765958
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 235,
+            "median": 258,
+            "p95": 294,
+            "p99": 320,
+            "max": 338,
+            "mean": 260.9574468085106
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 3,
+            "median": 4,
+            "p95": 4,
+            "p99": 4,
+            "max": 4,
+            "mean": 3.984042553191489
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 35,
+            "median": 48,
+            "p95": 84,
+            "p99": 96,
+            "max": 108,
+            "mean": 52.329787234042556
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 5,
+            "median": 5,
+            "p95": 5,
+            "p99": 5,
+            "max": 5,
+            "mean": 5.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 5,
+            "median": 5,
+            "p95": 5,
+            "p99": 5,
+            "max": 5,
+            "mean": 5.0
+          }
+        }
+      },
+      {
+        "case_id": "s4-b8-load512-slots1",
+        "load_response_bytes": 512,
+        "send_slots_per_rank": 1,
+        "completion": {
+          "case_id": "s4-b8-load512-slots1",
+          "passed": true,
+          "run_manifest_sha256": "d3720ad4cbb38c9afdb9f67e6ef0b203e8a64c5b061171d466ac2d396632ea57",
+          "overview_sha256": "ece300cebe0287d653ac366230f9eb7f2b62ffcf14c47d72506c6ad01b440ea0",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "b23f90614a777ad19b086cc0de34d4c4c16f40deb76256a97cbcc78ddb468e27"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 4,
+          "submit_ns": 15370,
+          "first_captured_response_ns": 15507,
+          "data_ready_ns": 15706,
+          "before_first_captured_response_ns": 137,
+          "captured_response_completion_span_ns": 199,
+          "data_latency_ns": 336,
+          "owner_access_egress_ports": 3,
+          "first_departure_spread_ns": 80,
+          "last_hop_serialization_min_ns": 19,
+          "last_hop_serialization_max_ns": 19
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 135,
+            "median": 137,
+            "p95": 154,
+            "p99": 171,
+            "max": 171,
+            "mean": 138.5744680851064
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 138,
+            "median": 157,
+            "p95": 179,
+            "p99": 195,
+            "max": 199,
+            "mean": 156.37234042553192
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 275,
+            "median": 294,
+            "p95": 327,
+            "p99": 346,
+            "max": 347,
+            "mean": 294.9468085106383
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 1,
+            "median": 3,
+            "p95": 4,
+            "p99": 4,
+            "max": 4,
+            "mean": 2.797872340425532
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 19,
+            "median": 38,
+            "p95": 58,
+            "p99": 76,
+            "max": 80,
+            "mean": 36.90425531914894
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 19,
+            "median": 19,
+            "p95": 19,
+            "p99": 19,
+            "max": 19,
+            "mean": 19.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 19,
+            "median": 19,
+            "p95": 19,
+            "p99": 19,
+            "max": 19,
+            "mean": 19.0
+          }
+        }
+      },
+      {
+        "case_id": "s4-b8-load512-slots2",
+        "load_response_bytes": 512,
+        "send_slots_per_rank": 2,
+        "completion": {
+          "case_id": "s4-b8-load512-slots2",
+          "passed": true,
+          "run_manifest_sha256": "d4847871690ace77c31e31f035dfa40ba8a43f79d94ca48f8ea2f8086b8955c2",
+          "overview_sha256": "4a834e329c4ce91fbb1af25c592a32ed6dffdb7741321396053c3d19619d9505",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "0e9c3fbb4fde0b0e88a4ef8295702d2b825343c0e662109ea36872fcc6c79599"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 4,
+          "submit_ns": 14432,
+          "first_captured_response_ns": 14569,
+          "data_ready_ns": 14729,
+          "before_first_captured_response_ns": 137,
+          "captured_response_completion_span_ns": 160,
+          "data_latency_ns": 297,
+          "owner_access_egress_ports": 3,
+          "first_departure_spread_ns": 41,
+          "last_hop_serialization_min_ns": 19,
+          "last_hop_serialization_max_ns": 19
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 135,
+            "median": 137,
+            "p95": 160,
+            "p99": 198,
+            "max": 204,
+            "mean": 140.9787234042553
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 138,
+            "median": 157,
+            "p95": 185,
+            "p99": 223,
+            "max": 239,
+            "mean": 160.31914893617022
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 275,
+            "median": 295,
+            "p95": 344,
+            "p99": 376,
+            "max": 379,
+            "mean": 301.29787234042556
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 1,
+            "median": 3,
+            "p95": 4,
+            "p99": 4,
+            "max": 4,
+            "mean": 2.8031914893617023
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 18,
+            "median": 38,
+            "p95": 65,
+            "p99": 104,
+            "max": 120,
+            "mean": 39.62765957446808
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 19,
+            "median": 19,
+            "p95": 19,
+            "p99": 19,
+            "max": 19,
+            "mean": 19.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 19,
+            "median": 19,
+            "p95": 19,
+            "p99": 19,
+            "max": 19,
+            "mean": 19.0
+          }
+        }
+      },
+      {
+        "case_id": "s4-b8-load2048-slots1",
+        "load_response_bytes": 2048,
+        "send_slots_per_rank": 1,
+        "completion": {
+          "case_id": "s4-b8-load2048-slots1",
+          "passed": true,
+          "run_manifest_sha256": "a382cef9463be12d9741680aab708f0408cc705f04eebaa6dba098e77a076c8a",
+          "overview_sha256": "26f2fabe89f57d8e70f1ac8769c3efc7c6e7cbbdf21265463b275fd6acd47c0f",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "18e464a9acb8208ddc30a4c583ac2f7558888f71b462dc41c3cbb6566447f72b"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 1,
+          "submit_ns": 17362,
+          "first_captured_response_ns": 17562,
+          "data_ready_ns": 17846,
+          "before_first_captured_response_ns": 200,
+          "captured_response_completion_span_ns": 284,
+          "data_latency_ns": 484,
+          "owner_access_egress_ports": 1,
+          "first_departure_spread_ns": 0,
+          "last_hop_serialization_min_ns": 74,
+          "last_hop_serialization_max_ns": 74
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 191,
+            "median": 192,
+            "p95": 283,
+            "p99": 398,
+            "max": 405,
+            "mean": 204.5904255319149
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 283,
+            "median": 284,
+            "p95": 284,
+            "p99": 284,
+            "max": 287,
+            "mean": 284.01063829787233
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 475,
+            "median": 476,
+            "p95": 567,
+            "p99": 682,
+            "max": 689,
+            "mean": 488.6010638297872
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 1,
+            "median": 1,
+            "p95": 1,
+            "p99": 1,
+            "max": 1,
+            "mean": 1.0
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 0,
+            "median": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "mean": 0.0
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 74,
+            "median": 74,
+            "p95": 74,
+            "p99": 74,
+            "max": 74,
+            "mean": 74.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 74,
+            "median": 74,
+            "p95": 74,
+            "p99": 74,
+            "max": 74,
+            "mean": 74.0
+          }
+        }
+      },
+      {
+        "case_id": "s4-b8-load2048-slots2",
+        "load_response_bytes": 2048,
+        "send_slots_per_rank": 2,
+        "completion": {
+          "case_id": "s4-b8-load2048-slots2",
+          "passed": true,
+          "run_manifest_sha256": "1d620ff8cdfda73c6e709e5c3b6158052daa1a53562b1de980cc1663fb714742",
+          "overview_sha256": "02ae607de9ee1f2203cc6621b57bbd44afc6a2560905fff9d80fb4aa53c2e938",
+          "backend_sha256": "8e2dcc7d5f9bea590ef00e01322d95d3ec7086a4c147d0d3b138d89374550493",
+          "case_sha256": "9168bda44f97852532eed5943c7fadb3ae39adc861107421a3e98f0289866470"
+        },
+        "tasks": 188,
+        "witness": {
+          "transfer_id": 4294967622,
+          "responses": 1,
+          "submit_ns": 14580,
+          "first_captured_response_ns": 14883,
+          "data_ready_ns": 15167,
+          "before_first_captured_response_ns": 303,
+          "captured_response_completion_span_ns": 284,
+          "data_latency_ns": 587,
+          "owner_access_egress_ports": 1,
+          "first_departure_spread_ns": 0,
+          "last_hop_serialization_min_ns": 74,
+          "last_hop_serialization_max_ns": 74
+        },
+        "distributions": {
+          "before_first_captured_response_ns": {
+            "count": 188,
+            "min": 190,
+            "median": 192,
+            "p95": 303,
+            "p99": 391,
+            "max": 438,
+            "mean": 208.77659574468086
+          },
+          "captured_response_completion_span_ns": {
+            "count": 188,
+            "min": 283,
+            "median": 284,
+            "p95": 284,
+            "p99": 332,
+            "max": 333,
+            "mean": 284.71276595744683
+          },
+          "data_latency_ns": {
+            "count": 188,
+            "min": 474,
+            "median": 476,
+            "p95": 587,
+            "p99": 675,
+            "max": 722,
+            "mean": 493.48936170212767
+          },
+          "owner_access_egress_ports": {
+            "count": 188,
+            "min": 1,
+            "median": 1,
+            "p95": 1,
+            "p99": 1,
+            "max": 1,
+            "mean": 1.0
+          },
+          "first_departure_spread_ns": {
+            "count": 188,
+            "min": 0,
+            "median": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "mean": 0.0
+          },
+          "last_hop_serialization_min_ns": {
+            "count": 188,
+            "min": 74,
+            "median": 74,
+            "p95": 74,
+            "p99": 74,
+            "max": 74,
+            "mean": 74.0
+          },
+          "last_hop_serialization_max_ns": {
+            "count": 188,
+            "min": 74,
+            "median": 74,
+            "p95": 74,
+            "p99": 74,
+            "max": 74,
+            "mean": 74.0
+          }
+        }
+      }
+    ],
+    "checks": {
+      "complete_response_byte_cover": true,
+      "physical_departures_match_attribution": true,
+      "connected_three_switch_paths": true,
+      "terminal_arrival_matches_actual_data_ready": true,
+      "same_task_identities": true
+    },
+    "tables": {
+      "s4-b8-load128-slots1-witness.json": "b098843f5571a83e82f1772a219fde3ed4bd82649dd1ee4be8623704a12d12ac",
+      "s4-b8-load128-slots1.csv": "b8c0f3feda315bc1a0ac0b749e2b36ca4bf0799e63f2f9d9e572d231eec9dc6b",
+      "s4-b8-load128-slots2-witness.json": "4fb9032ca5488f2186a4b1a2aa636e0bd2f61bbdc18b10ebebbac27a07d6827e",
+      "s4-b8-load128-slots2.csv": "b09b6fd80fa1a5c3e5ec1eafcaddb3081b1dbec9d0939fc6cf12b28940a5cad3",
+      "s4-b8-load2048-slots1-witness.json": "9c54caea3c3ad3d61377ca22a70ba63c3557991660cf62f190deb4d4d78f0a51",
+      "s4-b8-load2048-slots1.csv": "ef8646538c5b8eb66b5a24ecbb04920b30823cd91c8c4dd4eacd8e3a1f71de03",
+      "s4-b8-load2048-slots2-witness.json": "2ab779f5d3c221a74492b6cf88997c050c69e86764bd67688e36be455e52aa2c",
+      "s4-b8-load2048-slots2.csv": "1d8d8d38f42f2652693b9c07712f172b1667bd2ce79fe2ce513d8e6622a654f5",
+      "s4-b8-load512-slots1-witness.json": "f4e6e4ffe6bfb932ed46c641f8ccf9c37d362d3f7939c9670c3b6cf60fa4dcf3",
+      "s4-b8-load512-slots1.csv": "61041667c9d4c660af1e7dcf39f6fb9e3b6646b5da837dd712e30829f70fbc04",
+      "s4-b8-load512-slots2-witness.json": "2a885d8d3d9090dfc3bf36cb5c85f4a533d9dac39b8578fa4c2f8e1b403dc03a",
+      "s4-b8-load512-slots2.csv": "d8cf81e7d19a29c47ab38c531816018985c2b883fae9f74a4084bfd436c21168"
+    },
+    "qualification": "Data response path reconstruction only. Device source departure, request arrival and resource release histories are not fully captured; no isolated attribution of spray versus pipelining."
+  },
+  "summary_path": "runs/scaleup_observability/response-paths-v1/summary.json",
+  "summary_sha256": "879e0a264d60d4508c2641f3d641b918ca26887ccf90931e9d6fd2c69207d4db",
+  "analyzer": {
+    "path": "experiments/scaleup_observability/response_paths.py",
+    "sha256": "c8590aae470a671322d8194e67cf9e2d044da1e2ad3ba2954e9994f810cb8e9b"
+  },
+  "checks": {
+    "unit_tests": 3,
+    "public_entry_reproduces_summary": true,
+    "simulation_executed": false,
+    "commands": [
+      {
+        "path": "runs/scaleup_observability/response-paths-checks/help.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/response-paths-checks/public-analysis.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/response-paths-checks/unit-tests.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/response-paths-draft/commands/analyze-existing.command.json",
+        "exit_code": 0
+      },
+      {
+        "path": "runs/scaleup_observability/response-paths-public-check/commands/response-paths.command.json",
+        "exit_code": 0
+      }
+    ]
+  },
+  "resources": {
+    "phases": [
+      {
+        "path": "runs/scaleup_observability/response-paths-draft/commands/analyze-existing.resources/probe.json",
+        "wall_seconds": 34.28757013566792,
+        "peak_sampled_group_rss_bytes": 7438336,
+        "max_waited_child_rss_kib": 64272,
+        "peak_sampled_artifact_bytes": 41672568832
+      },
+      {
+        "path": "runs/scaleup_observability/response-paths-public-check/commands/response-paths.resources/probe.json",
+        "wall_seconds": 34.43768770992756,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 77940,
+        "peak_sampled_artifact_bytes": 41727160320
+      }
+    ],
+    "owned_analysis_storage": {
+      "apparent_bytes": 280797,
+      "allocated_bytes": 434176,
+      "charged_bytes": 434176
+    },
+    "qualification": "Global artifact growth concurrently includes the full normal simulation; use owned_analysis_storage for this analysis, not a global before/after difference."
+  }
+}

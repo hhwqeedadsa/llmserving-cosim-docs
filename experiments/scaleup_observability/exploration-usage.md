@@ -54,3 +54,15 @@ study_name=compute-tempo
 ```bash
 "$sim_python" -m unittest discover -s experiments/scaleup_observability/tests -v
 ```
+
+## 已有响应路径核验
+
+完成六组 `load-grain` 后，可只读核对响应的实际逐跳发送与数据就绪事件，不必重跑仿真：
+
+```bash
+"$sim_python" -m experiments.scaleup_observability.response_paths \
+  --batch runs/scaleup_observability/my-load-study/source \
+  --output runs/scaleup_observability/my-response-paths
+```
+
+`--batch` 须包含完整六组成功结果，`--output` 须不存在。输出为逐任务 CSV、各组固定样例的逐包路径及 `summary.json`，沿用上述单阶段分析与累计空间预算。该程序读取内部业务归属，属于研究者核验，不是只读公开观测的算法；输入选择与解释范围见[响应路径方法](response-path-method.md)。

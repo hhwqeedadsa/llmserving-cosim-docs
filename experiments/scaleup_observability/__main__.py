@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .inputs import prepare
 from .observation_workflow import prepare_source, study
+from .send_state_workflow import prepare_source as prepare_state_source, study as state_study
 from .slots import compare_slots, prepare_slots
 from .workflow import overview, plot, preflight, report, run_batch, run_case
 
@@ -16,10 +17,15 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p = sub.add_parser('prepare-observation-source',help='Freeze a fresh seed=3 B8 one/two-slot pair; no simulation')
     p.add_argument('--output',type=Path,required=True)
+    p = sub.add_parser('prepare-state-source',help='Freeze seed=3 reference and seed=4 holdout slot pairs with actual endpoint state capture')
+    p.add_argument('--output',type=Path,required=True)
     for name, flags, description in (
         ('prepare-observations', ('sources',), 'Prepare separate public packages and internal evaluation labels'),
         ('measure-observations', ('observed',), 'Read only an isolated public package and select candidate windows'),
-        ('evaluate-observations', ('truth', 'predictions'), 'Evaluate predictions against separately prepared labels')):
+        ('evaluate-observations', ('truth', 'predictions'), 'Evaluate predictions against separately prepared labels'),
+        ('prepare-state-observations', ('sources',), 'Prepare three isolated conditions and independent state evaluation labels'),
+        ('measure-state-observations', ('observed',), 'Classify sampled actual endpoint counts using only the public package'),
+        ('evaluate-state-observations', ('truth','predictions'), 'Evaluate point states and candidate windows for any of the three conditions')):
         p = sub.add_parser(name, help=description)
         for flag in (*flags, 'output'): p.add_argument('--'+flag,type=Path,required=True)
     p = sub.add_parser('prepare-slots',help='Freeze three two-slot inputs against verified one-slot baselines')
@@ -48,9 +54,13 @@ def main():
     args=parser.parse_args()
     if args.command=='prepare': result=prepare(args.output)
     elif args.command=='prepare-observation-source': result=prepare_source(args.output)
+    elif args.command=='prepare-state-source': result=prepare_state_source(args.output)
     elif args.command=='prepare-observations': result=study('prepare',[args.sources],args.output)
     elif args.command=='measure-observations': result=study('measure',[args.observed],args.output)
     elif args.command=='evaluate-observations': result=study('evaluate',[args.truth,args.predictions],args.output)
+    elif args.command=='prepare-state-observations': result=state_study('prepare',[args.sources],args.output)
+    elif args.command=='measure-state-observations': result=state_study('measure',[args.observed],args.output)
+    elif args.command=='evaluate-state-observations': result=state_study('evaluate',[args.truth,args.predictions],args.output)
     elif args.command=='prepare-slots': result=prepare_slots(args.baseline,args.output)
     elif args.command=='compare-slots': result=compare_slots(args.batch,args.output)
     elif args.command=='preflight': result=preflight(args.batch,args.output)

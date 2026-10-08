@@ -12,7 +12,7 @@ ARTIFACT_ROOTS = tuple(ROOT / p for p in (
     'build/v04-platform', 'runs/v04-platform', 'build/m10-resource-efficiency',
     'runs/v03-resource-efficiency', 'build/m10-research-slice',
     'runs/v03-research-slice', 'runs/mapping_value', 'runs/scaleup_observability',
-    'runs/task-sync-20261008'))
+    'runs/task-sync-20261008', 'build/m17-send-state', 'runs/m17-send-state'))
 
 
 def require(condition, message):

@@ -93,12 +93,19 @@ def static_topology(root, folder):
 def prepare(manifest, output):
     manifest, output = Path(manifest).resolve(), Path(output).resolve()
     spec = read(manifest)
-    require(set(spec) == {'schema_version', 'cases'} and spec['schema_version'] == 'scaleup-observation-sources/1',
+    with_states = spec.get('schema_version') == 'scaleup-send-state-sources/1'
+    require(set(spec) == {'schema_version', 'cases'} and (with_states or spec['schema_version'] == 'scaleup-observation-sources/1'),
             'Invalid source manifest')
     require(0 < len(spec['cases']) <= 8, 'Need at most eight source cases')
+    conditions = CONDITIONS
+    if with_states:
+        from .send_state_prepare import load_states, snapshot, point_truth
+        from .send_state_spec import STATE_CONDITIONS, CONDITION, STATE_FIELDS, SAMPLING, ROLES
+        conditions = STATE_CONDITIONS
+        require(len(spec['cases']) == 4, 'State study requires two fixed input pairs')
     truth_dir = output/'truth'; truth_dir.mkdir()
     streams = {}
-    for condition in CONDITIONS:
+    for condition in conditions:
         folder = output/'observed'/condition; folder.mkdir(parents=True)
         streams[condition] = (folder/'windows.jsonl').open('x')
     bindings = []; platforms = []; backends = set(); seen = set(); pairs = defaultdict(dict)
@@ -106,14 +113,18 @@ def prepare(manifest, output):
     try:
         with (truth_dir/'windows.jsonl').open('x') as truth_out:
             for index, ref in enumerate(spec['cases']):
-                require(set(ref) == {'batch', 'case_id', 'role'} and ref['role'] in ('development', 'holdout'),
+                require(set(ref) == {'batch', 'case_id', 'role'} and ref['role'] in
+                        (('reference', 'holdout') if with_states else ('development', 'holdout')),
                         'Invalid source binding')
                 batch = (manifest.parent/ref['batch']).resolve()
                 key = (str(batch), ref['case_id']); require(key not in seen, 'Repeated source case'); seen.add(key)
                 case, folder = verified_case(batch, ref['case_id'])
                 require(case['requests_per_rank'] == 8 and case['request_count'] == 64, 'Need B8 inputs')
-                require((case['input_set'] in (0, 1, 2) and ref['role'] == 'development') or
-                        (case['input_set'] == 3 and ref['role'] == 'holdout'), 'Input role mismatch')
+                if with_states:
+                    require(case['input_set'] in ROLES and ref['role'] == ROLES[case['input_set']], 'State input role mismatch')
+                else:
+                    require((case['input_set'] in (0, 1, 2) and ref['role'] == 'development') or
+                            (case['input_set'] == 3 and ref['role'] == 'holdout'), 'Input role mismatch')
                 done, summary = verify_complete(batch, case)
                 root = batch/'runs'/case['case_id']
                 require(0 < summary['round_ns'] <= END_NS, 'Execution exceeds fixed study interval; no extension')
@@ -129,6 +140,7 @@ def prepare(manifest, output):
                 pair[slots] = (folder, plan)
                 ranks = rank_truth(nodes, slots, summary['round_ns'])
                 ports, data = base_windows(root/'run/observed')
+                if with_states: states = load_states(root/'run/observed')
                 topology = static_topology(root, folder)
                 if declared_ports is None: declared_ports = ports
                 if declared_topology is None: declared_topology = topology
@@ -144,16 +156,19 @@ def prepare(manifest, output):
                             for k in (0, 1, 2, 4): dest[k] += source[k]
                             for k in (3, 5): dest[k] = max(dest[k], source[k])
                         for condition, stream in streams.items():
-                            exposed = values if condition == 'counts-queues' else [p[:2] for p in values]
-                            stream.write(json.dumps(dict(**key, ports=exposed), separators=(',', ':'))+'\n')
+                            exposed = [p[:2] for p in values] if condition == 'counts' else values
+                            row = dict(**key, ports=exposed)
+                            if with_states and condition == CONDITION: row['rank_states'] = snapshot(states, a)
+                            stream.write(json.dumps(row, separators=(',', ':'))+'\n')
                         labels = []
                         for rank in range(8):
                             pending, full = ranks[rank]
                             wait, blocked = overlap(pending, a, b), overlap(full, a, b)
                             require(0 <= blocked <= wait <= b-a, 'Truth duration partition failed')
                             labels.append([blocked, wait-blocked, b-a-wait])
-                        truth_out.write(json.dumps(dict(**key, ranks=labels,
-                            active_ns=max(0, min(b, summary['round_ns'])-a)), separators=(',', ':'))+'\n')
+                        row = dict(**key, ranks=labels, active_ns=max(0, min(b, summary['round_ns'])-a))
+                        if with_states: row['point_states'] = point_truth(ranks, a)
+                        truth_out.write(json.dumps(row, separators=(',', ':'))+'\n')
                     require(sums == totals, 'Coarsened count/area/peak conservation failed')
                 bindings.append(dict(sample_id=sample, role=ref['role'], input_set=case['input_set'],
                     send_slots_per_rank=slots, round_ns=summary['round_ns'], source=key_from_ref(ref, batch),
@@ -165,21 +180,25 @@ def prepare(manifest, output):
     finally:
         for stream in streams.values(): stream.close()
     require(len(backends) == 1 and all(p == platforms[0] for p in platforms), 'Platform/backend differs across cases')
+    if with_states: require(set(pairs) == set(ROLES), 'State input sets differ from frozen method')
     for pair in pairs.values():
         require(set(pair) == {1, 2}, 'Each input must contain the one/two-slot pair')
         verify_pair_inputs(pair[1][0], pair[2][0])
         require(set_slots(pair[1][1], 2) == pair[2][1], 'Paired executed graphs differ beyond slots')
     observed_hashes = {}
-    for condition in CONDITIONS:
+    for condition in conditions:
         folder = output/'observed'/condition
-        save(folder/'manifest.json', dict(schema_version='scaleup-observation-public/1', condition=condition,
+        public = dict(schema_version='scaleup-observation-public/1', condition=condition,
             rank_ids=list(range(8)), port_ids=declared_ports,
             topology=declared_topology,
-            fields=COUNT_FIELDS+(QUEUE_FIELDS if condition == 'counts-queues' else ()),
+            fields=COUNT_FIELDS+(QUEUE_FIELDS if condition != 'counts' else ()),
             interval_ns=[0, END_NS], grids=GRIDS, sample_ids=[b['sample_id'] for b in bindings],
-            windows_sha256=digest(folder/'windows.jsonl')))
+            windows_sha256=digest(folder/'windows.jsonl'))
+        if with_states and condition == CONDITION:
+            public.update(schema_version='scaleup-send-state-public/1', state_fields=STATE_FIELDS, state_sampling=SAMPLING)
+        save(folder/'manifest.json', public)
         observed_hashes[condition] = digest(folder/'manifest.json')
-    save(truth_dir/'manifest.json', dict(schema_version='scaleup-observation-truth/1',
+    save(truth_dir/'manifest.json', dict(schema_version='scaleup-observation-truth/2' if with_states else 'scaleup-observation-truth/1',
         label_fields=['slot_full_wait_ns', 'other_ready_wait_ns', 'no_pending_ready_send_ns'],
         sources_sha256=digest(manifest), implementation=sources(), bindings=bindings,
         observed_manifest_sha256=observed_hashes, windows_sha256=digest(truth_dir/'windows.jsonl'),

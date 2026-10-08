@@ -1,0 +1,77 @@
+{
+  "audit_date": "2026-10-08",
+  "scope": "Archived experiment evidence and current code; no new simulation or hardware run",
+  "findings": {
+    "model": {
+      "total_parameters": 30532122624,
+      "active_parameters_shared_plus_topk": 3353032704,
+      "bf16_weight_gib": 56.87051010131836,
+      "kv_bytes_per_token": 98304,
+      "caveat": "Full embedding/head tables counted in shared parameters; not actual per-token FLOPs or measured memory."
+    },
+    "gpu_profile": {
+      "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+      "profiled_at": "2026-04-24T12:44:06+00:00",
+      "profiler_engine_tp": 1,
+      "available_tp_profiles": [
+        1,
+        2
+      ],
+      "evidence": "bundled-profile metadata, not a new A100 measurement"
+    },
+    "request_sweep": {
+      "cases": 6,
+      "text_traces": 110,
+      "result": "All original request outputs, collective counts/bytes and saved configs agree with the published ledger"
+    },
+    "mapping_and_bandwidth": {
+      "validated_config_dims": [
+        2,
+        3,
+        64
+      ],
+      "logical_devices": 384,
+      "ep_per_stage": 128,
+      "status": "configuration validation only; no 384-rank execution or NPU performance claim",
+      "old_direct_config_rejections": [
+        "DP group 'old': ep_size (128) not divisible by dp_group_size (3)",
+        "DP group 'old': ep_size (64) not divisible by dp_group_size (3)"
+      ],
+      "bandwidth_examples": "[50,12.5,25] GB/s are arbitrary API test values, NOT Huawei specifications"
+    },
+    "contention": {
+      "cases": 11,
+      "completed_tasks": 63,
+      "prediction_status": "All registered direction, byte-ratio and hotspot predictions matched",
+      "same_direction_fct_us": 45.6828,
+      "hotspot_phase_ratio": 3.70710764085147
+    },
+    "finest_granularity": {
+      "selected_peer_payload_bytes": 278528,
+      "selected_peer_data_packets": 68,
+      "selected_peer_wqe_segments": 5,
+      "boundary": "Packet/hop/queue events are modeled; CCL channel/chunk schedule is not hardware-measured"
+    },
+    "block_identity": {
+      "zero_based_block": 24,
+      "ordinal_block": 25,
+      "batch": 0,
+      "request": 0,
+      "first_operation": "layernorm_289",
+      "compute_evidence": "profile-derived"
+    },
+    "long_timeline": {
+      "window_us": 1100,
+      "waves": 10,
+      "inter_wave_idle_gaps": 9,
+      "tasks": 20,
+      "packets": 1302,
+      "conserved_wire_bytes": 5434548,
+      "zoom_export_window_us": [
+        100,
+        280
+      ],
+      "evidence": "synthetic release schedule + ns3 packet traces; gaps are not observed GPU compute"
+    }
+  }
+}

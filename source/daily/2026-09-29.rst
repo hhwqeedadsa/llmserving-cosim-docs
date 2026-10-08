@@ -90,6 +90,11 @@ queue 和 port。
 experts；384 是 rank 数。设备/节点内、超节点内、超节点外带宽与时延全部保持 ``TBD``，
 等待官方规格或实测，当前不把 100/400 Gbps case 称为华为超节点仿真。
 
+2026-10-08 复核修正：上述两种独立维度草图不能直接作为当前 LLMServingSim 配置。
+TP 与 EP 共享设备，三成员 DP group 的 EP 整除条件也不满足。已补充通过配置校验的
+``DP64 × TP2 × PP3``、stage 内共享 EP128 候选；尚未执行 384-rank workload。
+详见 :doc:`../goal-evidence-audit`。
+
 当日交付
 --------
 

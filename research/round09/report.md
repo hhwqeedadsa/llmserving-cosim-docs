@@ -56,7 +56,7 @@
 | 位置 | 本轮参数 | 是否可调 | 证据边界 |
 |---|---|---|---|
 | GPU operator | RTX PRO 6000 Blackwell Server Edition 的 BF16 Profile | 可替换 hardware profile | 不能说成 A100/NPU 时间 |
-| LLMServingSim logical fabric | FullyConnected，2 ranks，16 GB/s，20 µs | `network.yml` 可调 bandwidth/latency/topology | analytical，不含 packet queue |
+| LLMServingSim logical fabric | FullyConnected，2 ranks，16 GB/s，20 µs | cluster `link_bw`（GB/s）、`link_latency`（ns），生成 `network.yml` | analytical，不含 packet queue |
 | ns-3 Block A/B host access | 400 Gbps，20 ns | `topology.csv` 可调 | 为突出 100 Gbps core 竞争 |
 | ns-3 Block A/B inter-switch core | 100 Gbps，50 ns | 可调 | 代表性共享瓶颈，不是生产交换网 |
 | ns-3 Block C host access | 100 Gbps，20 ns | 可调 | 为突出热点目的端 access link |
@@ -176,7 +176,7 @@ Block A/B 使用 8 hosts、2 switches：host access 为 400 Gbps，两个交换�
 
 ## 5. 代表性 Block 24 时间切片
 
-Block 24 不是一个 batch，也不是一个请求；它是 **request 0 / batch 0 的 prefill 中，48 个 transformer blocks 的第 24 个中间 block**。选择它有四个理由：位于执行中部，避开初始化和输出边界；包含 attention、TP AllReduce、MoE dispatch、expert compute 和 combine；GPU 与 NIC 都有事件；邻近 block 结构重复，选择依据不是先看结果再挑样本。
+Block 24 不是一个 batch，也不是一个请求；它是 **request 0 / batch 0 的 prefill 中，48 个 transformer blocks 的零起编号 24（顺序第 25 个）中间 block**，原始行从 `layernorm_289` 开始，含 `expert_297/299`。它位于执行中部，避开初始化和输出边界；包含 attention、TP AllReduce、MoE dispatch、expert compute 和 combine；GPU 与 NIC 都有事件；邻近 block 结构重复。代表性仅指结构与分析粒度，不表示统计上代表所有请求。
 
 ![Block 24 GPU NIC 时间线](../../source/_static/round09/block24-gpu-nic-timeline.svg)
 
@@ -249,11 +249,11 @@ LLMServingSim 本身不调用真实 NCCL/HCCL 数据面。它的路径是：
 
 ![华为 384 逻辑映射](../../source/_static/round09/huawei-384-logical-mapping.svg)
 
-**图 10：384 个逻辑 NPU rank 的两种候选映射。** 方案 A 为 `DP3 × EP128`，每个 EP rank 对应一个 expert；方案 B 为 `DP3 × TP2 × EP64`，每个 EP rank 对应两个 experts，用更小的 EP group 换取 TP 通信。
+**图 10（2026-10-08 修正）：配置校验通过的 384 设备候选。** `DP64 × TP2 × PP3 = 384`，每个 PP stage 内的 128 台设备组成共享 EP128 group；EP 不是额外相乘的设备维度。旧的 `DP3 × EP128` / `DP3 × TP2 × EP64` 是独立维度草图，按三实例 DP group 直接配置时因 EP 不能被 3 整除而被校验器拒绝，不能称为已支持的配置。
 
-- 数据来源：`analysis/huawei_384_mapping.csv`。
-- 物理量与单位：DP/TP/EP rank 数和 expert 数，单位均为 count。
-- 证据类型：`design-hypothesis`。
+- 数据来源：`analysis/huawei_384_mapping.csv`、实际 `config_builder.py` 校验；网站仓库 `research/goal-audit-20261008/verify_evidence.py`。
+- 物理量与单位：DP/TP/PP/EP rank、设备和 block 数，单位均为 count。
+- 证据类型：`config-validator-only/design-hypothesis`。仅通过配置校验，尚未执行 384-rank workload。
 - 不能证明：384 是逻辑 rank 数，不会把 128 experts 变成 384 experts；在填入官方规格或实测的节点内、超节点内和超节点外带宽/时延前，不能声称复现华为硬件。
 
 实际配置时需要把三层位置分开，而不是只填一个 bandwidth：
@@ -263,6 +263,8 @@ LLMServingSim 本身不调用真实 NCCL/HCCL 数据面。它的路径是：
 - 超节点外：DP 或跨域 EP 流、oversubscription、路由和故障绕行。
 
 上述字段已经在映射表中预留；当前值为 `TBD`，避免用本轮 100/400 Gbps 控制参数冒充真实配置。
+
+实际调参应修改 cluster 的 `link_bw`（GB/s）和 `link_latency`（ns），支持标量或与逻辑拓扑维度等长的列表；每次运行会重新生成 `network.yml`。逻辑维度不会自动对应设备/节点内外，物理 placement 与逐链路拓扑需要另行指定；换成 NPU 必须替换算子 Profile，不能仅修改设备名称或网络带宽。
 
 ## 9. 不同仿真平台的粒度和覆盖范围
 

@@ -27,4 +27,5 @@ Generate an ns-3-backed, millisecond-scale traffic trace with visible busy and i
 - Status: success; 20/20 tasks completed with full packet timestamps.
 - Simulated interval: 0--1.1 ms; 1,302 data packets reconstructed at the core link.
 - Maximum per-direction bandwidth: L→R 100.0 Gbps, R→L 98.2032 Gbps in 5-us bins.
-- Raw core queue peaks: L→R 670.3 KiB, R→L 208.4 KiB.
+- Original last-update-per-timestamp core queue peaks: L→R 670.3 KiB, R→L 208.4 KiB.
+- 2026-10-08 analysis correction (no rerun): all-callback-record peaks are L→R 670.325 KiB and R→L 212.099 KiB; these include intermediate updates at the same timestamp, not hardware buffer measurements.

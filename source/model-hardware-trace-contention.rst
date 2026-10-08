@@ -98,7 +98,7 @@ BF16、最大上下文 262,144 tokens。
      - 不是 A100 或华为 NPU 时间
    * - LLMServingSim logical fabric
      - FullyConnected、2 ranks、16 GB/s、20 μs
-     - ``network.yml``
+     - cluster ``link_bw`` / ``link_latency``，生成 ``network.yml``
      - 没有 packet queue 和路由冲突
    * - Block A/B host access
      - 400 Gbps、20 ns
@@ -326,7 +326,8 @@ balanced/Zipf/hot 在 phase 内的平均合计带宽为 378.4/203.7/102.1 Gbps�
 ----------------------
 
 Block 24 不是一个 batch 或请求，而是 **request 0 / batch 0 prefill 中，48 个 transformer
-blocks 的第 24 个中间 block**。它位于执行中部，同时包含 attention、TP AllReduce、
+blocks 的零起编号 24（顺序第 25 个）中间 block**。原始行从 ``layernorm_289`` 开始，
+含 ``expert_297/299``。它位于执行中部，同时包含 attention、TP AllReduce、
 MoE dispatch、rank-local expert 和 combine，并且邻近 block 结构重复。
 
 .. figure:: _static/round09/block24-gpu-nic-timeline.svg
@@ -411,21 +412,32 @@ channel、怎样切 chunk、GPU kernel/NIC 如何 overlap。代码路径与边�
 --------------------
 
 .. figure:: _static/round09/huawei-384-logical-mapping.svg
-   :alt: 384 NPU DP TP EP候选映射及待校准带宽
+   :alt: 通过配置校验的384逻辑设备DP64 TP2 PP3及共享EP128映射
    :align: center
    :class: study-figure
 
-   **图 10：384 个逻辑 NPU ranks 的两个实验入口。** ``DP3 × EP128`` 让每个 EP rank
-   管一个 expert；``DP3 × TP2 × EP64`` 让每个 EP rank 管两个 experts，并增加 TP 通信。
+   **图 10：配置校验通过的 384 设备候选，不是 384 卡运行结果。** ``DP64 × TP2 × PP3``
+   共 384 个逻辑设备；每个 PP stage 的 ``DP64 × TP2`` 共享同一个 EP128 group。
+   每个 stage 包含 16 个 transformer blocks，EP 不是额外相乘的设备维度。
 
-:数据来源: ``research/round09/huawei_384_mapping.csv``。
-:物理量与单位: DP/TP/EP rank 数、expert 数，单位为 count。
-:证据类型: ``design-hypothesis``。
+:数据来源: ``config_builder.py`` 实际校验；``research/goal-audit-20261008/verify_evidence.py`` 和 ``research/round09/huawei_384_mapping.csv``。
+:物理量与单位: DP/TP/PP/EP rank 数、device/block 数，单位为 count。
+:证据类型: ``config-validator-only/design-hypothesis``。
 :解释边界: 128 experts 保持不变；节点内、超节点内和超节点外带宽/时延仍为 TBD。
 
 实际接入时不能只填一个 bandwidth，应分别校准设备/节点内、超节点内、超节点外三层；
 同时固定 placement，让 TP、EP、DP 流明确映射到对应物理位置。本轮不使用 100/400 Gbps
 控制参数冒充华为 384 超节点配置。
+
+2026-10-08 修正：旧的 ``DP3 × EP128`` / ``DP3 × TP2 × EP64`` 只是独立维度草图，
+不能直接作为当前前端配置；``ep_size`` 必须被 DP group size 整除，而且 TP 与 EP 共享
+设备。旧草图按三实例 DP group 解释均被实际校验器拒绝。本次通过的候选引入 PP，
+研究的问题也随之改变；仍未执行大规模 workload，没有 NPU Profile 或目标物理拓扑校准。
+
+带宽应从 cluster config 设置：``link_bw`` 单位 GB/s、``link_latency`` 单位 ns，可填
+标量或与 ASTRA dimensions 等长的列表。``network.yml`` 是生成结果，每次运行会被
+重建；仅手改它不能稳定保存设置。逻辑维度不自动等于节点内/外位置，必须另外定义
+rank placement 和 ns-3 每条物理链路。配置示例与校验见 :doc:`goal-evidence-audit`。
 
 八、平台粒度与实验代表性
 ------------------------

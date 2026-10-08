@@ -5,13 +5,13 @@ LLM Serving、ASTRA-sim 与 MoE-UB 联合仿真
 LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步把非均匀 MoE/P-D
 通信展开到 UB 协议网络，并增加端网观测和独立真值。
 
-.. admonition:: 最新研究进展 · 2026-09-30
+.. admonition:: 最新研究进展 · 2026-10-08
 
-   新增 1.1 ms 长窗口 ns-3 replay：20 个 task、10 个通信 wave、1,302 个 data packet，
-   把核心链路带宽、方向、队列和 task/ACK 窗口对齐，形成可见波峰和空闲波谷；同时明确
-   同向竞争发生在 switch 8 / port 4，反向流走独立全双工方向。详见
-   :doc:`daily/2026-09-30`、:doc:`long-window-network-contention`；前一轮模型、trace、
-   CCL 和 384 NPU 调研见 :doc:`model-hardware-trace-contention`。
+   复核 1.1 ms 多波峰波谷：20 tasks、1302 packets、9 段波间空闲，修复放大窗口尾段和
+   queue 峰值口径；6 项分析回归通过。核对模型/GPU/trace/CCL，并纠正 384 设备映射：
+   DP64×TP2×PP3、stage 内共享 EP128 仅通过配置校验，尚未执行 workload。
+   详见 :doc:`daily/2026-10-08`、:doc:`goal-evidence-audit`。既有完整结果见
+   :doc:`long-window-network-contention`、:doc:`model-hardware-trace-contention`。
 
 .. raw:: html
 
@@ -63,6 +63,7 @@ LLMServingSim 在其上增加 LLM 服务语义，我们的联合框架进一步�
    :caption: 专题研究与可视化
 
    simai-llmservingsim-study
+   goal-evidence-audit
    model-hardware-trace-contention
    long-window-network-contention
    aidc-inference-tail-survey

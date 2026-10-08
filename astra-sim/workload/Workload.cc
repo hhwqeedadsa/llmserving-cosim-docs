@@ -114,11 +114,31 @@ void Workload::issue_dep_free_nodes() {
         node = et_feeder->getNextIssuableNode();
     }
 
+    uint64_t ready_sends = 0;
     while (!push_back_queue.empty()) {
         shared_ptr<Chakra::ETFeederNode> node = push_back_queue.front();
         et_feeder->pushBackIssuableNode(node->id());
+        if (send_state_observer_ && !node->is_cpu_op() && node->type() == ChakraNodeType::COMM_SEND_NODE)
+            ++ready_sends;
         push_back_queue.pop();
     }
+    if (send_state_observer_) {
+        ready_send_count_ = ready_sends;
+        notify_send_state();
+    }
+}
+
+void Workload::set_send_state_observer(SendStateObserver observer) {
+    if (graph_id_.empty() || !can_load_graph())
+        throw std::logic_error("Send-state observer requires an idle managed workload");
+    send_state_observer_ = std::move(observer);
+    ready_send_count_ = 0;
+    notify_send_state();
+}
+
+void Workload::notify_send_state() const {
+    if (send_state_observer_)
+        send_state_observer_(ready_send_count_, hw_resource->active_p2p_sends(), hw_resource->p2p_send_capacity());
 }
 
 void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {

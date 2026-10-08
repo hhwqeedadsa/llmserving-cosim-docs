@@ -34,8 +34,10 @@ int main() {
         check(legacy.num_gpu_comms == 2 && legacy.active_p2p_sends() == 0);
 
         AstraSim::HardwareResource resource(1);
+        check(resource.p2p_send_capacity() == 0);
         rejects([&] { resource.configure_p2p_send_slots(0); });
         resource.configure_p2p_send_slots(2);
+        check(resource.p2p_send_capacity() == 2);
         resource.occupy(a); check(resource.is_available(b)); resource.occupy(b);
         check(resource.active_p2p_sends() == 2 && resource.num_in_flight_gpu_comm_ops == 2);
         check(!resource.is_available(c) && !resource.is_available(collective));
@@ -51,6 +53,7 @@ int main() {
         resource.occupy(collective); check(!resource.is_available(a) && resource.is_available(recv));
         resource.release(collective);
         resource.configure_p2p_send_slots(1); resource.occupy(a);
+        check(resource.p2p_send_capacity() == 1);
         check(!resource.is_available(b)); resource.release(a);
         check(resource.active_p2p_sends() == 0 && resource.num_in_flight_gpu_comm_ops == 0 && resource.num_gpu_comms == 5);
         std::cout << "PASS: default/collective resource rules, one/two P2P slots, RECV independence, identity release\n";

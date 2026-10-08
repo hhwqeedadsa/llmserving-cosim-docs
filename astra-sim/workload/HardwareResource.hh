@@ -26,6 +26,7 @@ class HardwareResource {
     // scheduling retains the original single communication resource.
     void configure_p2p_send_slots(uint32_t slots);
     uint32_t active_p2p_sends() const { return p2p_sends.size(); }
+    uint32_t p2p_send_capacity() const { return p2p_send_slots; }
 
     std::shared_ptr<Chakra::ETFeederNode> cpu_ops_node;
     std::shared_ptr<Chakra::ETFeederNode> gpu_ops_node;

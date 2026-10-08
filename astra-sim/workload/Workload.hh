@@ -7,6 +7,7 @@ LICENSE file in the root directory of this source tree.
 #define __WORKLOAD_HH__
 
 #include <memory>
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <queue>
@@ -56,6 +57,12 @@ class Workload : public Callable {
     bool graph_active() const { return graph_active_; }
     uint64_t stale_callbacks() const { return stale_callbacks_; }
 
+    // Joint-mode passive snapshots after a complete dependency-free dispatch
+    // scan. The observer must not schedule work or mutate execution state.
+    using SendStateObserver = std::function<void(uint64_t, uint32_t, uint32_t)>;
+    void set_send_state_observer(SendStateObserver observer);
+    void notify_send_state() const;
+
     // stats
     void report();
 
@@ -78,6 +85,8 @@ class Workload : public Callable {
     std::unordered_set<uint64_t> active_nodes_;
     bool graph_active_ = false;
     uint64_t stale_callbacks_ = 0;
+    SendStateObserver send_state_observer_;
+    uint64_t ready_send_count_ = 0;
     std::string graph_log_suffix() const;
 
 };

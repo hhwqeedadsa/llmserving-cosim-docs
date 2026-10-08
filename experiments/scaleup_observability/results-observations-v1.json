@@ -1,0 +1,1119 @@
+{
+  "schema_version": "scaleup-observation-summary/1",
+  "source_head": "8acfa26",
+  "backend_sha256": "782d3890a1546ba56aca007ae3e58560d417edab43343b2749cbb21254b91311",
+  "method": {
+    "path": "experiments/scaleup_observability/observation-method.md",
+    "sha256": "ee394ccc8f33c58fc714ef615a36f21c7ebf47d8dd9c72f281433f7fc13bcb59"
+  },
+  "frozen_rules": {
+    "path": "runs/scaleup_observability/observations-v1/frozen-method.json",
+    "sha256": "08f518fe6d355b6ca7e523b981c5108be83501f3c8f0effa476fe00b491ff419"
+  },
+  "implementation_notes": [
+    {
+      "path": "runs/scaleup_observability/observations-v1/compatibility-note.json",
+      "sha256": "33bac0a6f1cba624bda77d0b3980bb490fa449ee420b9986d916cea6096ea4ba"
+    },
+    {
+      "path": "runs/scaleup_observability/observations-v1/static-topology-note.json",
+      "sha256": "78bc0ae05bf7f964275bdbd44b4ca0dbc439c7fdac378b00375b8c6b57533cf7"
+    }
+  ],
+  "interval_ns": [
+    0,
+    100000
+  ],
+  "grids_ns": [
+    [
+      100,
+      0
+    ],
+    [
+      1000,
+      0
+    ],
+    [
+      1000,
+      500
+    ],
+    [
+      10000,
+      0
+    ],
+    [
+      10000,
+      5000
+    ]
+  ],
+  "source_cases": 8,
+  "new_simulations": 2,
+  "paired_execution": [
+    {
+      "input_set": 0,
+      "role": "development",
+      "round_ns": [
+        79249,
+        58272
+      ],
+      "round_reduction_fraction": 0.2646973463387551,
+      "full_slot_wait_rank_ns": [
+        145702,
+        27382
+      ],
+      "other_ready_wait_rank_ns": [
+        0,
+        0
+      ]
+    },
+    {
+      "input_set": 1,
+      "role": "development",
+      "round_ns": [
+        73393,
+        60566
+      ],
+      "round_reduction_fraction": 0.17477143596800784,
+      "full_slot_wait_rank_ns": [
+        139781,
+        23892
+      ],
+      "other_ready_wait_rank_ns": [
+        0,
+        0
+      ]
+    },
+    {
+      "input_set": 2,
+      "role": "development",
+      "round_ns": [
+        70865,
+        56780
+      ],
+      "round_reduction_fraction": 0.19875820221548013,
+      "full_slot_wait_rank_ns": [
+        150235,
+        26413
+      ],
+      "other_ready_wait_rank_ns": [
+        0,
+        0
+      ]
+    },
+    {
+      "input_set": 3,
+      "role": "holdout",
+      "round_ns": [
+        68807,
+        55845
+      ],
+      "round_reduction_fraction": 0.18838199601784703,
+      "full_slot_wait_rank_ns": [
+        137512,
+        21879
+      ],
+      "other_ready_wait_rank_ns": [
+        0,
+        0
+      ]
+    }
+  ],
+  "evaluations": [
+    {
+      "role": "development",
+      "condition": "counts",
+      "evidence": {
+        "path": "runs/scaleup_observability/observations-v1/development-evaluation-counts/evaluation.json",
+        "sha256": "5f88047eac838d3dbf2b43488054cbf7ab6d7f7968cba23659374dc96781b97f"
+      },
+      "groups": [
+        {
+          "role": "development",
+          "grid": "p100-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2287200,
+          "selected_active_rank_ns": 2287200,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513273,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 1773927,
+          "target_cells": 6103,
+          "selected_cells": 22872,
+          "false_lead_cells": 16789,
+          "missed_target_cells": 20,
+          "cells": 48000,
+          "undetermined_cells": 48000,
+          "investigated_fraction": 0.4765,
+          "investigated_active_fraction": 0.7163169433134983,
+          "wait_coverage_fraction": 0.9997428930376603,
+          "wait_share_of_selected_time": 0.2244110703043022,
+          "false_lead_fraction": 0.7340416229450857,
+          "missed_wait_rank_ns": 132,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p1000-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2560000,
+          "selected_active_rank_ns": 2560000,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2046595,
+          "target_cells": 1086,
+          "selected_cells": 2560,
+          "false_lead_cells": 1474,
+          "missed_target_cells": 0,
+          "cells": 4800,
+          "undetermined_cells": 4800,
+          "investigated_fraction": 0.5333333333333333,
+          "investigated_active_fraction": 0.8017538365173817,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.200548828125,
+          "false_lead_fraction": 0.57578125,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p1000-o500",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2536000,
+          "selected_active_rank_ns": 2536000,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513337,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2022663,
+          "target_cells": 1076,
+          "selected_cells": 2536,
+          "false_lead_cells": 1477,
+          "missed_target_cells": 17,
+          "cells": 4848,
+          "undetermined_cells": 4848,
+          "investigated_fraction": 0.5283333333333333,
+          "investigated_active_fraction": 0.7942373943000313,
+          "wait_coverage_fraction": 0.9998675509587948,
+          "wait_share_of_selected_time": 0.20241995268138802,
+          "false_lead_fraction": 0.5824132492113565,
+          "missed_wait_rank_ns": 68,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p10000-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 3280000,
+          "selected_active_rank_ns": 3181552,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2766595,
+          "target_cells": 259,
+          "selected_cells": 328,
+          "false_lead_cells": 69,
+          "missed_target_cells": 0,
+          "cells": 480,
+          "undetermined_cells": 480,
+          "investigated_fraction": 0.6833333333333333,
+          "investigated_active_fraction": 0.9964146570623238,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.15652591463414633,
+          "false_lead_fraction": 0.21036585365853658,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p10000-o5000",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 3120000,
+          "selected_active_rank_ns": 2938760,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2606595,
+          "target_cells": 271,
+          "selected_cells": 312,
+          "false_lead_cells": 41,
+          "missed_target_cells": 0,
+          "cells": 528,
+          "undetermined_cells": 528,
+          "investigated_fraction": 0.65,
+          "investigated_active_fraction": 0.9203758221108675,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.16455288461538461,
+          "false_lead_fraction": 0.13141025641025642,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "role": "development",
+      "condition": "counts-queues",
+      "evidence": {
+        "path": "runs/scaleup_observability/observations-v1/development-evaluation-counts-queues/evaluation.json",
+        "sha256": "baab42195f65a216c52e15383fe6bebce1953cf5948f77dc79073999b313672e"
+      },
+      "groups": [
+        {
+          "role": "development",
+          "grid": "p100-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2287200,
+          "selected_active_rank_ns": 2287200,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513273,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 1773927,
+          "target_cells": 6103,
+          "selected_cells": 22872,
+          "false_lead_cells": 16789,
+          "missed_target_cells": 20,
+          "cells": 48000,
+          "undetermined_cells": 48000,
+          "investigated_fraction": 0.4765,
+          "investigated_active_fraction": 0.7163169433134983,
+          "wait_coverage_fraction": 0.9997428930376603,
+          "wait_share_of_selected_time": 0.2244110703043022,
+          "false_lead_fraction": 0.7340416229450857,
+          "missed_wait_rank_ns": 132,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p1000-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2560000,
+          "selected_active_rank_ns": 2560000,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2046595,
+          "target_cells": 1086,
+          "selected_cells": 2560,
+          "false_lead_cells": 1474,
+          "missed_target_cells": 0,
+          "cells": 4800,
+          "undetermined_cells": 4800,
+          "investigated_fraction": 0.5333333333333333,
+          "investigated_active_fraction": 0.8017538365173817,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.200548828125,
+          "false_lead_fraction": 0.57578125,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p1000-o500",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 2536000,
+          "selected_active_rank_ns": 2536000,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513337,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2022663,
+          "target_cells": 1076,
+          "selected_cells": 2536,
+          "false_lead_cells": 1477,
+          "missed_target_cells": 17,
+          "cells": 4848,
+          "undetermined_cells": 4848,
+          "investigated_fraction": 0.5283333333333333,
+          "investigated_active_fraction": 0.7942373943000313,
+          "wait_coverage_fraction": 0.9998675509587948,
+          "wait_share_of_selected_time": 0.20241995268138802,
+          "false_lead_fraction": 0.5824132492113565,
+          "missed_wait_rank_ns": 68,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p10000-o0",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 3280000,
+          "selected_active_rank_ns": 3181552,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2766595,
+          "target_cells": 259,
+          "selected_cells": 328,
+          "false_lead_cells": 69,
+          "missed_target_cells": 0,
+          "cells": 480,
+          "undetermined_cells": 480,
+          "investigated_fraction": 0.6833333333333333,
+          "investigated_active_fraction": 0.9964146570623238,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.15652591463414633,
+          "false_lead_fraction": 0.21036585365853658,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "development",
+          "grid": "p10000-o5000",
+          "declared_rank_ns": 4800000,
+          "active_rank_ns": 3193000,
+          "selected_rank_ns": 3120000,
+          "selected_active_rank_ns": 2938760,
+          "slot_full_wait_rank_ns": 513405,
+          "covered_slot_full_wait_rank_ns": 513405,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 2606595,
+          "target_cells": 271,
+          "selected_cells": 312,
+          "false_lead_cells": 41,
+          "missed_target_cells": 0,
+          "cells": 528,
+          "undetermined_cells": 528,
+          "investigated_fraction": 0.65,
+          "investigated_active_fraction": 0.9203758221108675,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.16455288461538461,
+          "false_lead_fraction": 0.13141025641025642,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "role": "holdout",
+      "condition": "counts",
+      "evidence": {
+        "path": "runs/scaleup_observability/observations-v1/holdout-evaluation-counts/evaluation.json",
+        "sha256": "f37362227a06e6273733328a97a4f13bef11284bd93df56dbe8ac081700f3b63"
+      },
+      "groups": [
+        {
+          "role": "holdout",
+          "grid": "p100-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 691200,
+          "selected_active_rank_ns": 691200,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159357,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 531843,
+          "target_cells": 1888,
+          "selected_cells": 6912,
+          "false_lead_cells": 5031,
+          "missed_target_cells": 7,
+          "cells": 16000,
+          "undetermined_cells": 16000,
+          "investigated_fraction": 0.432,
+          "investigated_active_fraction": 0.6931296730096589,
+          "wait_coverage_fraction": 0.9997866880815103,
+          "wait_share_of_selected_time": 0.23055121527777778,
+          "false_lead_fraction": 0.7278645833333334,
+          "missed_wait_rank_ns": 34,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p1000-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 784000,
+          "selected_active_rank_ns": 784000,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 624609,
+          "target_cells": 334,
+          "selected_cells": 784,
+          "false_lead_cells": 450,
+          "missed_target_cells": 0,
+          "cells": 1600,
+          "undetermined_cells": 1600,
+          "investigated_fraction": 0.49,
+          "investigated_active_fraction": 0.7861887494785483,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.2033048469387755,
+          "false_lead_fraction": 0.5739795918367347,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p1000-o500",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 776000,
+          "selected_active_rank_ns": 776000,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159371,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 616629,
+          "target_cells": 351,
+          "selected_cells": 776,
+          "false_lead_cells": 430,
+          "missed_target_cells": 5,
+          "cells": 1616,
+          "undetermined_cells": 1616,
+          "investigated_fraction": 0.485,
+          "investigated_active_fraction": 0.7781664153001957,
+          "wait_coverage_fraction": 0.9998745224008884,
+          "wait_share_of_selected_time": 0.205375,
+          "false_lead_fraction": 0.5541237113402062,
+          "missed_wait_rank_ns": 20,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p10000-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 1040000,
+          "selected_active_rank_ns": 997216,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 880609,
+          "target_cells": 87,
+          "selected_cells": 104,
+          "false_lead_cells": 17,
+          "missed_target_cells": 0,
+          "cells": 160,
+          "undetermined_cells": 160,
+          "investigated_fraction": 0.65,
+          "investigated_active_fraction": 1.0,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.15326057692307693,
+          "false_lead_fraction": 0.16346153846153846,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p10000-o5000",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 960000,
+          "selected_active_rank_ns": 910456,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 800609,
+          "target_cells": 83,
+          "selected_cells": 96,
+          "false_lead_cells": 13,
+          "missed_target_cells": 0,
+          "cells": 176,
+          "undetermined_cells": 176,
+          "investigated_fraction": 0.6,
+          "investigated_active_fraction": 0.9129977858357667,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.16603229166666666,
+          "false_lead_fraction": 0.13541666666666666,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "role": "holdout",
+      "condition": "counts-queues",
+      "evidence": {
+        "path": "runs/scaleup_observability/observations-v1/holdout-evaluation-counts-queues/evaluation.json",
+        "sha256": "265aaa810e7b4aff76775e67ff2e3d90b5f5050d28684f73057b35ce826fd1fa"
+      },
+      "groups": [
+        {
+          "role": "holdout",
+          "grid": "p100-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 690400,
+          "selected_active_rank_ns": 690400,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159357,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 531043,
+          "target_cells": 1888,
+          "selected_cells": 6904,
+          "false_lead_cells": 5023,
+          "missed_target_cells": 7,
+          "cells": 16000,
+          "undetermined_cells": 16000,
+          "investigated_fraction": 0.4315,
+          "investigated_active_fraction": 0.6923274395918236,
+          "wait_coverage_fraction": 0.9997866880815103,
+          "wait_share_of_selected_time": 0.2308183661645423,
+          "false_lead_fraction": 0.7275492468134415,
+          "missed_wait_rank_ns": 34,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p1000-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 784000,
+          "selected_active_rank_ns": 784000,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 624609,
+          "target_cells": 334,
+          "selected_cells": 784,
+          "false_lead_cells": 450,
+          "missed_target_cells": 0,
+          "cells": 1600,
+          "undetermined_cells": 1600,
+          "investigated_fraction": 0.49,
+          "investigated_active_fraction": 0.7861887494785483,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.2033048469387755,
+          "false_lead_fraction": 0.5739795918367347,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p1000-o500",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 776000,
+          "selected_active_rank_ns": 776000,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159371,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 616629,
+          "target_cells": 351,
+          "selected_cells": 776,
+          "false_lead_cells": 430,
+          "missed_target_cells": 5,
+          "cells": 1616,
+          "undetermined_cells": 1616,
+          "investigated_fraction": 0.485,
+          "investigated_active_fraction": 0.7781664153001957,
+          "wait_coverage_fraction": 0.9998745224008884,
+          "wait_share_of_selected_time": 0.205375,
+          "false_lead_fraction": 0.5541237113402062,
+          "missed_wait_rank_ns": 20,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p10000-o0",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 1040000,
+          "selected_active_rank_ns": 997216,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 880609,
+          "target_cells": 87,
+          "selected_cells": 104,
+          "false_lead_cells": 17,
+          "missed_target_cells": 0,
+          "cells": 160,
+          "undetermined_cells": 160,
+          "investigated_fraction": 0.65,
+          "investigated_active_fraction": 1.0,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.15326057692307693,
+          "false_lead_fraction": 0.16346153846153846,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        },
+        {
+          "role": "holdout",
+          "grid": "p10000-o5000",
+          "declared_rank_ns": 1600000,
+          "active_rank_ns": 997216,
+          "selected_rank_ns": 960000,
+          "selected_active_rank_ns": 910456,
+          "slot_full_wait_rank_ns": 159391,
+          "covered_slot_full_wait_rank_ns": 159391,
+          "other_ready_wait_rank_ns": 0,
+          "selected_no_pending_rank_ns": 800609,
+          "target_cells": 83,
+          "selected_cells": 96,
+          "false_lead_cells": 13,
+          "missed_target_cells": 0,
+          "cells": 176,
+          "undetermined_cells": 176,
+          "investigated_fraction": 0.6,
+          "investigated_active_fraction": 0.9129977858357667,
+          "wait_coverage_fraction": 1.0,
+          "wait_share_of_selected_time": 0.16603229166666666,
+          "false_lead_fraction": 0.13541666666666666,
+          "missed_wait_rank_ns": 0,
+          "undetermined_fraction": 1.0
+        }
+      ]
+    }
+  ],
+  "selection_agreement": [
+    {
+      "role": "development",
+      "grid": "p100-o0",
+      "windows": 6000,
+      "both_selected": 2859,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 3141
+    },
+    {
+      "role": "development",
+      "grid": "p1000-o0",
+      "windows": 600,
+      "both_selected": 320,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 280
+    },
+    {
+      "role": "development",
+      "grid": "p1000-o500",
+      "windows": 606,
+      "both_selected": 317,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 289
+    },
+    {
+      "role": "development",
+      "grid": "p10000-o0",
+      "windows": 60,
+      "both_selected": 41,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 19
+    },
+    {
+      "role": "development",
+      "grid": "p10000-o5000",
+      "windows": 66,
+      "both_selected": 39,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 27
+    },
+    {
+      "role": "holdout",
+      "grid": "p100-o0",
+      "windows": 2000,
+      "both_selected": 863,
+      "counts_only": 1,
+      "queues_only": 0,
+      "neither_selected": 1136
+    },
+    {
+      "role": "holdout",
+      "grid": "p1000-o0",
+      "windows": 200,
+      "both_selected": 98,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 102
+    },
+    {
+      "role": "holdout",
+      "grid": "p1000-o500",
+      "windows": 202,
+      "both_selected": 97,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 105
+    },
+    {
+      "role": "holdout",
+      "grid": "p10000-o0",
+      "windows": 20,
+      "both_selected": 13,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 7
+    },
+    {
+      "role": "holdout",
+      "grid": "p10000-o5000",
+      "windows": 22,
+      "both_selected": 12,
+      "counts_only": 0,
+      "queues_only": 0,
+      "neither_selected": 10
+    }
+  ],
+  "method_costs": [
+    {
+      "role": "development",
+      "schema_version": "scaleup-observation-predictions/1",
+      "condition": "counts",
+      "observed_manifest_sha256": "4d6b44ffb17b376aa31d8c5d9fa7d333d1f06fdd8cb5924af6422a19f7c00e6b",
+      "implementation": {
+        "observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+        "observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7"
+      },
+      "windows": 7332,
+      "port_window_records": 234624,
+      "peak_ports_per_window": 32,
+      "input_bytes": 2180820,
+      "prediction_bytes": 848166,
+      "predictions_sha256": "2f97d834b505a462d4828750ecb71c5f48ae5d775cdd727e5ff029de68d5a7d4",
+      "elapsed_seconds": 0.21331373415887356,
+      "cause_state": "undetermined"
+    },
+    {
+      "role": "development",
+      "schema_version": "scaleup-observation-predictions/1",
+      "condition": "counts-queues",
+      "observed_manifest_sha256": "24903a3dc8d321c20d781d501e0b7fad38ef0832396fb2ff3398e9f4777dad05",
+      "implementation": {
+        "observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+        "observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7"
+      },
+      "windows": 7332,
+      "port_window_records": 234624,
+      "peak_ports_per_window": 32,
+      "input_bytes": 4415023,
+      "prediction_bytes": 848166,
+      "predictions_sha256": "2f97d834b505a462d4828750ecb71c5f48ae5d775cdd727e5ff029de68d5a7d4",
+      "elapsed_seconds": 0.31896950118243694,
+      "cause_state": "undetermined"
+    },
+    {
+      "role": "holdout",
+      "schema_version": "scaleup-observation-predictions/1",
+      "condition": "counts",
+      "observed_manifest_sha256": "a09caf0bcb15f48ee399cd0e3dc8d44573d22fdfe3c2ae843df84ad3c148edef",
+      "implementation": {
+        "observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+        "observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7"
+      },
+      "windows": 2444,
+      "port_window_records": 78208,
+      "peak_ports_per_window": 32,
+      "input_bytes": 727189,
+      "prediction_bytes": 282830,
+      "predictions_sha256": "984e6630c21412c46f5772cb45ce9de4a153812d511ec79f55e9c3c7650566ef",
+      "elapsed_seconds": 0.07064585573971272,
+      "cause_state": "undetermined"
+    },
+    {
+      "role": "holdout",
+      "schema_version": "scaleup-observation-predictions/1",
+      "condition": "counts-queues",
+      "observed_manifest_sha256": "a122b6c84bd0dbe976a3463a7787584925d60af61400cff4843dbedcd7fa552a",
+      "implementation": {
+        "observation_measure.py": "61ccc260bba776e42749ae0d1e5a6cd8de6b7424ca52a697ae3a1c6868e89dae",
+        "observation_spec.py": "e65f5970003177a239ea34d14a5762e3eb92cb730952390e054bc9ceeee13bd7"
+      },
+      "windows": 2444,
+      "port_window_records": 78208,
+      "peak_ports_per_window": 32,
+      "input_bytes": 1462154,
+      "prediction_bytes": 282831,
+      "predictions_sha256": "6e837a20efcb47b481ab64afef780dbd0f0f9e57ddf0b81478e78a5afe3812f9",
+      "elapsed_seconds": 0.1067805364727974,
+      "cause_state": "undetermined"
+    }
+  ],
+  "validation": {
+    "unit_checks": 25,
+    "command_evidence": [
+      {
+        "path": "runs/scaleup_observability/observation-checks/01-unit.command.json",
+        "sha256": "84fcd0d72c9292b9fe0469df12f66788f61ce78272e71ee3c26b670bf7f33370"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/02-prepare-source.command.json",
+        "sha256": "6351217239a1b9b70fe60ba5423a21a3092ca52eca3d93ec26d1d856832e48c5"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/03-preflight.command.json",
+        "sha256": "b61d8f2fa411473c16d2c34254c674749f9330b145fe0bdfd46a4a314b5793fa"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/04-heldout-runs.command.json",
+        "sha256": "0346ba994ae4b91387ba9aa2c5248b4531386c714aa3e081191ee3b3ad6f084a"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/05-unit-compatible-hash.command.json",
+        "sha256": "d5e757a5146da0a44712b0b6b05cff4b0a121c6aab082f95a39ef59edf4eb675"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/06-help-0.command.json",
+        "sha256": "104ba3652658c88ad355eb2cc451d42551ab5cb50b401f9a6ee18dfcd55d4f56"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/06-help-1.command.json",
+        "sha256": "8859b7f9b47f2f919ff50d9545103f0d86b8a8ef74a1115110b9b86acc506e52"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/06-help-2.command.json",
+        "sha256": "1b3275560fae67e08ae1eb2272151c525e1fe5fc93855bf716c88776b9d877ea"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/06-help-3.command.json",
+        "sha256": "cd1fa99ebe0c1f7fac2682fa54c44d8c21741dc659be9e497d452e5c3b9fe589"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/07-unit-static-topology.command.json",
+        "sha256": "c1cc81cd811d407ded508a1800e3e14ca240775fb92da365ee6b946a414815f7"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/08-development-prepare.command.json",
+        "sha256": "d45d5f602081d9f605f2ab409883470045ed0ce890a48f2572da8557235248fa"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/08-holdout-prepare.command.json",
+        "sha256": "cd486472ca7d9da092b76f64687fd93941c3ecb3845d35eb3fec6f45db1d4ef2"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/09-development-counts-measure.command.json",
+        "sha256": "57ad05fc1c5f64446812527cddb8789deb2103dee53fe659d947f671f212b935"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/09-development-counts-queues-measure.command.json",
+        "sha256": "1a5d0cb5631081070049cbedaf7a2b50183917cf542a36fc5da0327fdfd8ac7a"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/09-holdout-counts-measure.command.json",
+        "sha256": "d9e0c88330c78abffcfa57cb71b3fba40cd48567f3200997f55229f3d52c2b47"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/09-holdout-counts-queues-measure.command.json",
+        "sha256": "4c55abf460bbfe48d61106bec29384c875afe984d7b571d97e11fd97e2d57bee"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/10-development-counts-evaluate.command.json",
+        "sha256": "db1a9fe79a876fc2825372429a96a7deec5a34fcd3f01965d9a6850272ad39dd"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/10-development-counts-queues-evaluate.command.json",
+        "sha256": "8ff85e5205f033eca453fb4822e509d4633d0d4f25d03199227bdca6398b2135"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/10-holdout-counts-evaluate.command.json",
+        "sha256": "02108f96ec246bdab97b31713ea253259b23a843816eef581117ec16416944f3"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/10-holdout-counts-queues-evaluate.command.json",
+        "sha256": "a09ca7b743b025448c32bb8229016d1134da6c92146b545dd37e83f4913d44da"
+      },
+      {
+        "path": "runs/scaleup_observability/observation-checks/11-dependencies.command.json",
+        "sha256": "69449a5526f16201554d2c3a0566cb7cf9465930e005f63f051974855cabed2c"
+      }
+    ],
+    "packaging_failures": [
+      {
+        "path": "runs/scaleup_observability/observation-checks/12-summary.command.json",
+        "sha256": "d0ba5cd8fa32bc933d244ce473c9aba64b3c8881b10adc85770e4b40b41b3e5b",
+        "reason": "Summary assembly repeated condition keyword; corrected without rerunning simulations or measurement."
+      }
+    ],
+    "all_20_bounded_phases_passed": true,
+    "unchanged_platform_across_all_eight": true,
+    "fresh_two_run_user_workflow_passed": true,
+    "frozen_rule_verification": {
+      "path": "runs/scaleup_observability/observations-v1/frozen-rule-snapshot/verification.json",
+      "sha256": "b8b1ba50ddfd099dab5992a17d3b3019b54e77d71fc8c35efed0339163ce2622"
+    }
+  },
+  "resources": {
+    "phases": [
+      {
+        "path": "runs/scaleup_observability/observations-v1/development-bundle/commands/prepare.resources/probe.json",
+        "sha256": "2283f5f929fae8390c0d5e976caff637f5950b497f9a0580b30419b7ab81fc86",
+        "wall_seconds": 32.03401784412563,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 129176,
+        "peak_sampled_artifact_bytes": 40586002432
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/development-counts/commands/measure.resources/probe.json",
+        "sha256": "514937b2214840d5d7b8d717619ec71a03fe17266c22fa043c0125502b99fcd3",
+        "wall_seconds": 32.07662631571293,
+        "peak_sampled_group_rss_bytes": 5357568,
+        "max_waited_child_rss_kib": 62504,
+        "peak_sampled_artifact_bytes": 40586895360
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/development-counts-queues/commands/measure.resources/probe.json",
+        "sha256": "68307c122ddb371f02ac5fd22317b364ee6233ac1207e6ed37c017b102f7ddad",
+        "wall_seconds": 31.681556563824415,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 61376,
+        "peak_sampled_artifact_bytes": 40587870208
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/development-evaluation-counts/commands/evaluate.resources/probe.json",
+        "sha256": "03a21379328ccb054e9d9f2b2709ca9c613e58c5132d895a658bb1a33e978270",
+        "wall_seconds": 32.08780471608043,
+        "peak_sampled_group_rss_bytes": 9572352,
+        "max_waited_child_rss_kib": 61436,
+        "peak_sampled_artifact_bytes": 40586969088
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/development-evaluation-counts-queues/commands/evaluate.resources/probe.json",
+        "sha256": "58e5dbd181a3090ee9a9611a4465a648f3f26ee108485b0f62764e981b5c1458",
+        "wall_seconds": 32.23455524817109,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 66724,
+        "peak_sampled_artifact_bytes": 40587943936
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots1/commands/01-resolve.resources/probe.json",
+        "sha256": "54386aeac54bc431efd8614bf4800460ac2b30ac5cbddee950aadb818d9ea81d",
+        "wall_seconds": 32.13188209198415,
+        "peak_sampled_group_rss_bytes": 6422528,
+        "max_waited_child_rss_kib": 79520,
+        "peak_sampled_artifact_bytes": 40537968640
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots1/commands/03-validate.resources/probe.json",
+        "sha256": "00a833774f5318bfdac26f0757bd603514c67272d6f4975be19c6078a02baaf1",
+        "wall_seconds": 32.27619984932244,
+        "peak_sampled_group_rss_bytes": 7438336,
+        "max_waited_child_rss_kib": 61328,
+        "peak_sampled_artifact_bytes": 40554782720
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots1/overview/commands/overview.resources/probe.json",
+        "sha256": "2c0cc07cb2456e424e97332109c8b255a92144789bdfa5b2ae38b19e97a6b99e",
+        "wall_seconds": 32.11177479662001,
+        "peak_sampled_group_rss_bytes": 6422528,
+        "max_waited_child_rss_kib": 62188,
+        "peak_sampled_artifact_bytes": 40555458560
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots1/run/logs/resources-export/probe.json",
+        "sha256": "a5ef3cf8ce7166d25b8867b5f00279b04df865fd55044ef520ce2f0aff8ae8b3",
+        "wall_seconds": 31.79392034932971,
+        "peak_sampled_group_rss_bytes": 7442432,
+        "max_waited_child_rss_kib": 90956,
+        "peak_sampled_artifact_bytes": 40554684416
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots1/run/logs/resources-run/probe.json",
+        "sha256": "970c157c1a6150e650febd2fbc1b9eb1f5847c2c4778e585d33923aebbabf282",
+        "wall_seconds": 32.097088219597936,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 90956,
+        "peak_sampled_artifact_bytes": 40554074112
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots2/commands/01-resolve.resources/probe.json",
+        "sha256": "5863409c14cb0a1800312d45bbb3ae70ffe15e8a197d4238fca0016ed05f9bb3",
+        "wall_seconds": 31.991649417206645,
+        "peak_sampled_group_rss_bytes": 6430720,
+        "max_waited_child_rss_kib": 79344,
+        "peak_sampled_artifact_bytes": 40555831296
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots2/commands/03-validate.resources/probe.json",
+        "sha256": "1da7cbad2923ced858adab168c96a85fdf7709265c9849eb2f768298c1cbc384",
+        "wall_seconds": 32.20418827421963,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 61876,
+        "peak_sampled_artifact_bytes": 40572620800
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots2/overview/commands/overview.resources/probe.json",
+        "sha256": "980b5b4c7b09484014bf04cdefbd3fe45f5f78a84ff2b0f3a53bb52b3714f992",
+        "wall_seconds": 32.10810864716768,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 61568,
+        "peak_sampled_artifact_bytes": 40573276160
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots2/run/logs/resources-export/probe.json",
+        "sha256": "05a0c238c0a946b79cad0a30ec7a1e6884be90c6e88329c3ac47f91ecd0b87c6",
+        "wall_seconds": 31.970477195456624,
+        "peak_sampled_group_rss_bytes": 7471104,
+        "max_waited_child_rss_kib": 91856,
+        "peak_sampled_artifact_bytes": 40572497920
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/heldout/runs/s3-b8-slots2/run/logs/resources-run/probe.json",
+        "sha256": "4989fae612ddcbd07523539a4b4ab80cc133f2816dd7f7a806213f9b80fa061f",
+        "wall_seconds": 32.43839212693274,
+        "peak_sampled_group_rss_bytes": 6393856,
+        "max_waited_child_rss_kib": 91856,
+        "peak_sampled_artifact_bytes": 40571957248
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/holdout-bundle/commands/prepare.resources/probe.json",
+        "sha256": "790fda542fb8ddbb5893c8d0f0b8accaa0e4e4729a5ae9e5af8ff991413c573e",
+        "wall_seconds": 32.73271551541984,
+        "peak_sampled_group_rss_bytes": 5365760,
+        "max_waited_child_rss_kib": 74400,
+        "peak_sampled_artifact_bytes": 40576286720
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/holdout-counts/commands/measure.resources/probe.json",
+        "sha256": "84f882d2bb60f620d4a24093d3e50f7041db8dfade706bda7b509170b60dd3a2",
+        "wall_seconds": 31.666100518777966,
+        "peak_sampled_group_rss_bytes": 6389760,
+        "max_waited_child_rss_kib": 61332,
+        "peak_sampled_artifact_bytes": 40576614400
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/holdout-counts-queues/commands/measure.resources/probe.json",
+        "sha256": "2ebba017fad3439155a4de4643871817d74fe5d3e19901fadd880079b1d02b16",
+        "wall_seconds": 32.233806036412716,
+        "peak_sampled_group_rss_bytes": 7491584,
+        "max_waited_child_rss_kib": 61832,
+        "peak_sampled_artifact_bytes": 40576995328
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/holdout-evaluation-counts/commands/evaluate.resources/probe.json",
+        "sha256": "756d92f013aa029d0c9a2b52ef24d0ccc68280b5b36b980dfe486c2693f0cc77",
+        "wall_seconds": 32.124243792146444,
+        "peak_sampled_group_rss_bytes": 5328896,
+        "max_waited_child_rss_kib": 70104,
+        "peak_sampled_artifact_bytes": 40576667648
+      },
+      {
+        "path": "runs/scaleup_observability/observations-v1/holdout-evaluation-counts-queues/commands/evaluate.resources/probe.json",
+        "sha256": "8a8704c83693c196c3b0792e028207901d6af3d0d8e360e22c6d008cba2240f2",
+        "wall_seconds": 32.24178398773074,
+        "peak_sampled_group_rss_bytes": 5357568,
+        "max_waited_child_rss_kib": 61344,
+        "peak_sampled_artifact_bytes": 40577048576
+      }
+    ],
+    "storage_before": {
+      "apparent_bytes": 39508216719,
+      "allocated_bytes": 40537587712,
+      "charged_bytes": 40537587712
+    },
+    "storage_after": {
+      "apparent_bytes": 39553896932,
+      "allocated_bytes": 40587976704,
+      "charged_bytes": 40587976704
+    },
+    "task_storage": {
+      "apparent_bytes": 45821689,
+      "allocated_bytes": 50642944,
+      "charged_bytes": 50642944
+    },
+    "note": "Group RSS is sampled and may miss short peaks; waited-child maximum is per process. Probe wall time includes monitoring. No cleanup or simulation retry."
+  },
+  "qualifications": [
+    "Synthetic requests and reference compute; no hardware calibration.",
+    "Explicit dependency and slot-occupancy reconstruction is evaluation-only, not a direct ready trace.",
+    "Candidates select all ranks; all cause labels remain undetermined.",
+    "Two fixed baseline rules do not establish an impossibility result for all port-based algorithms.",
+    "No platform telemetry extension or representative full-scene verification in this task."
+  ]
+}

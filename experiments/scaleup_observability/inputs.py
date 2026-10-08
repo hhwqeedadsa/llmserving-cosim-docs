@@ -13,8 +13,8 @@ REFERENCE = HERE/'configs/reference'
 
 
 def requests(seed, per_rank):
-    require(type(seed) is int and seed in SEEDS and type(per_rank) is int and per_rank in BATCHES,
-            'First batch supports input sets 0/1/2 and 2/4/8 requests per rank')
+    require(type(seed) is int and seed in (*SEEDS, 3) and type(per_rank) is int and per_rank in BATCHES,
+            'Supported input sets: 0/1/2 (development), 3 (held out); 2/4/8 requests per rank')
     rows = []
     for rank in range(8):
         for slot in range(per_rank):
@@ -73,7 +73,8 @@ def prepare(output):
 def verified_case(batch, name):
     batch = Path(batch).resolve()
     metadata = read(batch/'batch.json')
-    require(metadata['schema_version'] in ('scaleup-normal-batch/1','scaleup-slot-batch/1'), 'Unsupported batch')
+    require(metadata['schema_version'] in ('scaleup-normal-batch/1','scaleup-slot-batch/1',
+            'scaleup-observation-source-batch/1'), 'Unsupported batch')
     matches = [row for row in metadata['cases'] if row['case_id'] == name]
     require(len(matches) == 1, f'Unknown or repeated case {name}')
     case = matches[0]

@@ -4,6 +4,8 @@
 
 首批正常场景的公开入口见[运行与查看](usage.md)，固定输入见[配置说明](configs/README.md)，概览的字段与解释边界见[统计口径](overview-method.md)，九组比较及后续选择依据见[首批结果](results.md)。
 
+发送槽 1 与 2 的配对入口见[发送槽操作](slots-usage.md)，输入控制和等待分析定义见[对照方法](slots-method.md)，实际发现见[发送槽结果](results-slots.md)。
+
 `plan_v0.1.md` 原样保存上传的 `261008下一阶段实验方案.md`，包括原有术语、章节、参数和资料引用文本。文件 SHA-256 为 `7922ad6f58ec42fb04cd90dfcd74ed1fb016747ef43a8f6a7daad9186236eb2b`。后续实现记录不追加到该文件，方案调整另行明确版本与差异。
 
 ## 从哪里开始

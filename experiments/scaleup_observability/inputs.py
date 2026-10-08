@@ -73,7 +73,7 @@ def prepare(output):
 def verified_case(batch, name):
     batch = Path(batch).resolve()
     metadata = read(batch/'batch.json')
-    require(metadata['schema_version'] == 'scaleup-normal-batch/1', 'Unsupported batch')
+    require(metadata['schema_version'] in ('scaleup-normal-batch/1','scaleup-slot-batch/1'), 'Unsupported batch')
     matches = [row for row in metadata['cases'] if row['case_id'] == name]
     require(len(matches) == 1, f'Unknown or repeated case {name}')
     case = matches[0]

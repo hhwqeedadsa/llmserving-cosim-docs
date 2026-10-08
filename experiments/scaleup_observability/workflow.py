@@ -70,6 +70,11 @@ def run_case(batch, case_id, backend):
     batch, backend = Path(batch).resolve(), Path(backend).resolve()
     case, config = verified_case(batch,case_id)
     require(backend.is_file(), f'Missing backend: {backend}')
+    if 'baseline' in case:
+        from .slots import verify_reference, verify_pair_inputs
+        _, reference_folder, done, _ = verify_reference(case['baseline'])
+        verify_pair_inputs(reference_folder,config)
+        require(done['backend_sha256']==digest(backend), 'Paired baseline backend differs')
     output = batch/'runs'/case_id
     require(not output.exists(), f'Run exists: {output}; failed runs are not retried automatically')
     output.mkdir(parents=True)

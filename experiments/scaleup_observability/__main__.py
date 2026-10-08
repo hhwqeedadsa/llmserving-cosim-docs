@@ -8,6 +8,7 @@ from .exploration import prepare as prepare_exploration, compare as compare_expl
 from .observation_workflow import prepare_source, study
 from .send_state_workflow import prepare_source as prepare_state_source, study as state_study
 from .slots import compare_slots, prepare_slots
+from . import representative
 from .workflow import overview, plot, preflight, report, run_batch, run_case
 
 
@@ -59,8 +60,26 @@ def main():
     p=sub.add_parser('compare-exploration',help='Check declared graph changes and compare completed exploration cases')
     p.add_argument('--batch',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p=sub.add_parser('prepare-representative',help='Freeze a normal/50-percent pair on the fixed full source and existing shared cache; no simulation')
+    p.add_argument('--slice',type=Path,required=True)
+    p.add_argument('--cache',type=Path,required=True)
+    p.add_argument('--backend',type=Path,required=True)
+    p.add_argument('--role',choices=('l1_up','l2_down','access_down'),required=True)
+    p.add_argument('--output',type=Path,required=True)
+    for name,description in (
+        ('preflight-representative','Check cumulative reserve for the next full execution'),
+        ('run-representative','Run and summarize one fixed full case; service requires successful normal'),
+        ('compare-representative','Verify and compare the completed normal/service full pair')):
+        p=sub.add_parser(name,help=description)
+        p.add_argument('--study',type=Path,required=True)
+        if name=='run-representative':p.add_argument('--case',choices=('normal','service50'),required=True)
+        else:p.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='prepare': result=prepare(args.output)
+    elif args.command=='prepare-representative':result=representative.prepare(args.slice,args.cache,args.backend,args.role,args.output)
+    elif args.command=='preflight-representative':result=representative.preflight(args.study,args.output)
+    elif args.command=='run-representative':result=representative.run_case(args.study,args.case)
+    elif args.command=='compare-representative':result=representative.compare(args.study,args.output)
     elif args.command=='prepare-exploration': result=prepare_exploration(args.study,args.output)
     elif args.command=='compare-exploration': result=compare_exploration(args.batch,args.output)
     elif args.command=='prepare-observation-source': result=prepare_source(args.output)

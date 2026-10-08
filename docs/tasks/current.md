@@ -1,36 +1,38 @@
 # 当前任务与交接
 
-当前任务：**Scale-Up 性能现象探索与被动测量需求验证**。整体状态：`in_progress`。
+当前任务：**Scale-Up 性能现象探索与被动测量需求验证**。整体状态：`completed`。
 
-当前批次：**物理出口服务变化对照**，状态：`completed`。七组执行与比较通过，整理本地提交后继续完整首轮代表性验证；不另立平台 M 编号。
+2026-10-08 已完成原方案中选定的探索、成因核验、观测比较及最后两组完整首轮验证。结果先读[研究总结](../../experiments/scaleup_observability/conclusions.md)。依据仍为用户的[实验方案 v0.1](../../experiments/scaleup_observability/plan_v0.1.md)，原文未改写，没有新增平台里程碑。
 
-依据为用户的[实验方案 v0.1](../../experiments/scaleup_observability/plan_v0.1.md)。原方案未改写；当前工作仍是现象发现、成因验证、观测需求判断。
+## 目标与完成范围
 
-## 全局进度与证据
+以现象发现、成因验证和观测需求判断为主线。正常小场景统一观察全部 32 个交换机出口，依据结果选择配置和服务对照；测量程序与内部核验资料保持分离。完整场景最后执行，复用固定真实路由首轮与已有图缓存。
 
-| 工作 | 状态与证据入口 |
+| 工作 | 结果与证据入口 |
 |---|---|
 | 九组正常小场景与统一概览 | 已完成；[首批结果](../../experiments/scaleup_observability/results.md) |
 | 发送槽定向对照与机制核验 | 已完成；[发送槽结果](../../experiments/scaleup_observability/results-slots.md) |
-| 发送槽现象的基础与新增状态观测比较 | 已完成首轮；[基础比较](../../experiments/scaleup_observability/results-observations.md)、[新增状态比较](../../experiments/scaleup_observability/results-send-state.md)；所需平台记录曾独立验收，见[支撑证据](../../fixtures/m17_send_state/README.md) |
-| 专家计算节奏 | 已完成六组；0.5/1/2 倍成本下双槽收益为 25.68%/19.97%/15.02%，排队代价同时保留；[结果](../../experiments/scaleup_observability/results-tempo.md) |
-| LOAD 消息拆分与完成 | 已完成六组；少分段减少网络字节却增加完成时延，见[拆分结果](../../experiments/scaleup_observability/results-load-grain.md) |
-| 外部出口服务变化 | 已完成七组，逐包确认生效，局部队列增加但整轮变化小且非单调，见[结果](../../experiments/scaleup_observability/results-service.md) |
-| 汇总筛选与针对性深化 | 保留发送槽等待与响应粒度取舍；发送槽已有独立观测比较，不新增分类算法，待完整代表性结果后统一收尾 |
-| 完整场景代表性验证与总结 | 最后选择少量场景，先核对能力、来源及剩余资源 |
+| 基础与新增状态的观测比较 | 已完成选定规则和新输入复核；[基础比较](../../experiments/scaleup_observability/results-observations.md)、[端侧状态比较](../../experiments/scaleup_observability/results-send-state.md)；支撑记录曾独立验收，见[平台证据](../../fixtures/m17_send_state/README.md) |
+| 专家计算节奏 | 六组完成；三档成本下双槽收益与排队代价均保留，见[结果](../../experiments/scaleup_observability/results-tempo.md) |
+| LOAD 响应拆分与推进 | 六组完成，并只读核验全部配对跨服务器任务的真实路径与数据到齐，见[拆分结果](../../experiments/scaleup_observability/results-load-grain.md)、[路径证据](../../experiments/scaleup_observability/results-response-paths.md) |
+| 外部出口服务变化 | 七组完成，逐包确认生效，局部排队与整轮变化并非简单对应，见[结果](../../experiments/scaleup_observability/results-service.md) |
+| 完整首轮代表性验证 | 正常与 L1 上行半速两组完成；工作量相同，正常组精确复现 48,446,098 ns，半速组增加 74,238 ns，见[完整结果](../../experiments/scaleup_observability/results-representative.md) |
+| 阶段现象、解释及后续取舍 | 已完成；[研究总结](../../experiments/scaleup_observability/conclusions.md) |
 
-当前已解释发送槽限制，尚没有持续信用反压传播或异常内存事务拖尾的充分证据。一条现象分支完成观测比较不等于整体实验完成。
+本阶段最明确的测量需求是保留端侧实际待发和资源占用信息，同时解决周期采样的短等待漏检。响应拆分已核对实际路径与完成时序，但未独立分离多路径、流水和请求资源贡献。现有证据不足以确认持续信用反压传播；完整场景没有验证小场景的采样覆盖率。
 
-## 本批目标与状态
+## 验证与资源
 
-按[出口服务方法](../../experiments/scaleup_observability/service-method.md)执行：seed=4、64 请求、原始计算和双槽，三个拓扑出口各 80%/50% 速率，另加新正常基准。区间固定为 [14,007, 42,022) ns；不根据结果选择热点或改变时间窗。
+46 项实验程序检查及 3 项新增响应路径检查通过；路径分析公开入口复现同一摘要。完整两组的重放、导出、公开校验、流式统计与配对比较均通过，固定方法和既有实现摘要不变。13 项递归依赖一致，平台源码和锁定子模块未修改。
 
-42 项实验检查、原正常概览回归、13 项递归依赖检查、七组执行及统一比较通过；详见[结果](../../experiments/scaleup_observability/results-service.md)。下一批按[代表性方法](../../experiments/scaleup_observability/representative-method.md)选择 L1 上行 50%，保留原完整切片参数与共享图；只扩展实验准备和流式读取。
+完整阶段九个受监控步骤累计约 2.82 小时；采样 RSS 峰值约 45.53 GiB。累计登记产物最终快照约 41.10 GiB，含临时文件的采样峰值约 41.24 GiB。完整后端 RSS 48 GiB、地址空间 56 GiB、7200 秒，其他阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒，以及累计 48 GiB、至少 20 GiB 空闲的预算均保持原值。未下载、重新展开大图、清理旧产物或重跑完整仿真。
 
-## 产物、预算与衔接授权
+详细结果、命令与资源报告入口：
 
-- 当前输入、执行、分析：`runs/scaleup_observability/service-v1/`；检查与实际命令：`runs/scaleup_observability/service-checks/`。
-- 上一批：`runs/scaleup_observability/load-grain-v1/` 和 `load-grain-checks/`；其他历史产物通过各结果页索引，不移动或改写。
-- 小场景沿用 RSS 8 GiB、地址空间 12 GiB、每阶段 1800 秒、累计 48 GiB、至少 20 GiB 空闲；旧累计目录继续计入。
-- 最近完成批次的累计快照约 38.325 GiB；完整场景每次预留 6 GiB并逐次预检，后端沿用 RSS 48 GiB、地址空间 56 GiB、7200 秒，其余阶段仍用小场景预算。失败保留原因，不自动重跑、提高限额或清理旧产物。
-- 2026-10-08 用户允许在上述主线内按批次自主衔接；各批验证通过后整理记录、本地提交，不推送。改变研究定义、增加未授权平台模型或提高资源预算时另行明确。
+- 完整两组：`runs/scaleup_observability/representative-v1/`，检查与收尾：`representative-checks/`。
+- 只读路径证据：`runs/scaleup_observability/response-paths-v1/`，公开复核：`response-paths-public-check/`，检查：`response-paths-checks/`。
+- 小场景各批输入、运行与检查位置由对应结果页索引；公开操作统一从[实验首页](../../experiments/scaleup_observability/README.md)进入。
+
+## 交接
+
+用户已允许在本实验主线内自主衔接批次；验证通过后整理记录并本地提交，不推送。本阶段到此收尾。[后续事项](../future_iterations.md)保存短等待采集及响应机制等候选，它们不自动成为新的执行任务。

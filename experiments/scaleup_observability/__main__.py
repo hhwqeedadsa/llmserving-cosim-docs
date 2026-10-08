@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from .inputs import prepare
+from .exploration import prepare as prepare_exploration, compare as compare_exploration
 from .observation_workflow import prepare_source, study
 from .send_state_workflow import prepare_source as prepare_state_source, study as state_study
 from .slots import compare_slots, prepare_slots
@@ -51,8 +52,16 @@ def main():
     p=sub.add_parser('plot',help='Render a standalone figure from nine verified overviews (requires matplotlib)')
     p.add_argument('--batch',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p=sub.add_parser('prepare-exploration',help='Freeze a declared small exploration batch without simulation')
+    p.add_argument('--study',choices=('compute-tempo',),required=True)
+    p.add_argument('--output',type=Path,required=True)
+    p=sub.add_parser('compare-exploration',help='Check declared graph changes and compare completed exploration cases')
+    p.add_argument('--batch',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.command=='prepare': result=prepare(args.output)
+    elif args.command=='prepare-exploration': result=prepare_exploration(args.study,args.output)
+    elif args.command=='compare-exploration': result=compare_exploration(args.batch,args.output)
     elif args.command=='prepare-observation-source': result=prepare_source(args.output)
     elif args.command=='prepare-state-source': result=prepare_state_source(args.output)
     elif args.command=='prepare-observations': result=study('prepare',[args.sources],args.output)

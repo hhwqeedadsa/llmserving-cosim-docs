@@ -37,6 +37,25 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 
 每个 case 中，`prepared/` 为带来源证据的实际层段输入，`resolved/` 为有效网络，`run/observed/` 为观察数据，`run/truth/` 和 `run/raw/` 为内部核验资料。`commands.jsonl` 保存公共命令、工作目录、退出码及日志名。资源报告位于相邻 `*-prepare/`、`*-resources/` 和 `run/logs/`，报告成功只代表其明确检查范围。
 
+## 单因素对照输入
+
+候选和对照对象确定后，可在同一 `workflow prepare` 命令中加 `--control CONTROL.json`。`--case` 仍指定正常基线，输出使用新目录。对照文件格式为：
+
+```json
+{
+  "schema_version": "issue-screening-control/1",
+  "case_id": "g0-b2-expert-half",
+  "baseline_case": "g0-b2-short",
+  "parameter": "routed_expert_per_input_ns",
+  "reference": 100,
+  "value": 50
+}
+```
+
+这里只改变所选层段的单专家输入参考计算成本（单位 ns），同时更新模型成本和对应层成本。也支持 `parameter="copy_fence"`、`reference="data_ready"`、`value="local_read_complete"`，只改所选层的复制完成条件。每个文件只能声明一个因素，基线值不符则拒绝。来源、请求、容量、网络和其他计算成本保持原配置；改变计算或依赖后重新构图，不能修改已保存的图或时间戳。有效对照及配置摘要记录在 `case.json`。
+
+上述格式只说明操作，不表示应默认执行所有对照。正式配置需与候选记录中预定的作用对象、比较方法对应。
+
 ## 长段磁盘预估
 
 短段完成后、归档前可记录其实际占用；归档完成后再估计长段与压缩包共存的峰值。估计命令只适用于方法中固定的三层与六层条件，不能当作任意输入的空间保证。
@@ -87,6 +106,8 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service
 ```
 
-前者检查覆盖、三个时间指标及归档拒绝条件；后者用本目录的合成小输入完成准备、运行、分析、保存、压缩、恢复和平台验证，不依赖真实来源或旧运行。合成结果只检查工具，不能作为正常业务发现。
+`check_small` 也接受 `--control experiments/scaleup_issue_screening/configs/check/control-half.json`，用独立合成输入验证同一单因素修改路径。
+
+前者检查覆盖、三个时间指标、单因素输入隔离及归档拒绝条件；后者用本目录的合成小输入完成准备、运行、分析、保存、压缩、恢复和平台验证，不依赖真实来源或旧运行。合成结果只检查工具，不能作为正常业务发现。
 
 资源上限由 `configs/host.json` 和公开运行配置明确给出，所有大操作均受监控。任何命令非零退出后先查看对应日志，不覆盖失败目录或自动加大上限。正常探索串行运行并归档，后续候选按方案门槛另行记录。

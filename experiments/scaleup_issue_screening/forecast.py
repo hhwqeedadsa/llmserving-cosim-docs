@@ -71,6 +71,9 @@ def main():
             p.error('Measurement output must be new')
         if not (a.measure_run/'manifest.json').is_file():
             p.error('Expected a completed public run with manifest.json')
+        manifest=read(a.measure_run/'manifest.json')
+        if not (manifest.get('normal_exit') is True and manifest.get('validation') is True and manifest.get('finished_utc')):
+            p.error('Disk basis requires a completed, validated public run')
         save(a.output,dict(schema_version='issue-screening-disk-basis/1',
             run=disk_usage(a.measure_run),manifest_sha256=digest(a.measure_run/'manifest.json')))
     else:

@@ -63,7 +63,7 @@ def cli(directory, name, *args):
     command(directory, name, [sys.executable, '-m', 'moe_ub_cosim', *map(str, args)])
 
 
-def generate_inputs(case, directory, backend):
+def generate_inputs(case, directory, backend, control=None):
     """Write a closed input set; manifest subset retains original identities."""
     directory = Path(directory).resolve()
     spec = read(CONFIG / 'batch.json')
@@ -87,7 +87,6 @@ def generate_inputs(case, directory, backend):
     source['requests'] = [dict(request_id=i+1, rank_id=i % 128, arrival_ns=0,
         file_id=row['file_id'], first_decode_entry=1, decode_steps=1, target_total_tokens=None)
         for i, row in enumerate(manifest['files'])]
-    save(directory/'source.json', source)
     template = read(CONFIG/'layer-template.json')
     layers = []
     # Template token contents are replaced by the service's verified routes.
@@ -98,6 +97,11 @@ def generate_inputs(case, directory, backend):
         for token in layer['tokens']:
             token['layer_id'] = index
         layers.append(layer)
+    if control is not None:
+        from .controls import apply
+        baseline = dict(case, case_id=control['baseline_case'])
+        source, layers = apply(source, layers, baseline, control)
+    save(directory/'source.json', source)
     save(directory/'source-layers.json', dict(schema_version='moe-ub-layer-segments/1',
                                              groups=[dict(group_id='ep0', layers=layers)]))
     save(directory/'case.json', dict(**case, schema_version='issue-screening-case/1',
@@ -106,13 +110,20 @@ def generate_inputs(case, directory, backend):
         source_files=count, independent_group='g0', decode_step=spec['decode_step']))
 
 
-def prepare(case_id, directory, backend):
+def prepare(case_id, directory, backend, control_path=None):
     spec = read(CONFIG/'batch.json')
-    case = next(c for c in spec['cases'] if c['case_id'] == case_id)
+    case = deepcopy(next(c for c in spec['cases'] if c['case_id'] == case_id))
+    control = None
+    if control_path is not None:
+        from .controls import validate
+        control = validate(read(control_path), case)
+        case.update(case_id=control['case_id'], baseline_case_id=case_id,
+            control=control, control_sha256=digest(control_path))
+        case_id = control['case_id']
     directory = Path(directory).resolve()
     directory.mkdir(parents=True, exist_ok=False)
     backend = Path(backend).resolve()
-    generate_inputs(case, directory, backend)
+    generate_inputs(case, directory, backend, control)
     command(directory, 'fabric', [sys.executable, '-m', 'moe_ub_cosim.fabric',
         '--input', str(CONFIG/'fabric.json'), '--defaults', str(CONFIG/'network-defaults.json'),
         '--output-dir', str(directory/'source-network')])
@@ -159,6 +170,7 @@ def main():
     p.add_argument('--case', required=True, choices=[c['case_id'] for c in read(CONFIG/'batch.json')['cases']])
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--backend', type=Path, required=True)
+    p.add_argument('--control', type=Path, help='Explicit one-factor control JSON; changes inputs before preparation')
     p.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     p = sub.add_parser('run', help='Execute and export through moe-ub run; retain all failures')
     p.add_argument('--case-dir', type=Path, required=True)
@@ -170,11 +182,12 @@ def main():
         parser.error('Run from the repository root (all source paths are relative to it)')
     if args.action == 'prepare':
         if args.worker:
-            prepare(args.case, args.output, args.backend)
+            prepare(args.case, args.output, args.backend, args.control)
         else:
             from moe_ub_cosim.host_probe import probe
             report = probe([sys.executable, '-m', MODULE, 'prepare', '--worker', '--case', args.case,
-                '--output', str(args.output.resolve()), '--backend', str(args.backend.resolve())],
+                '--output', str(args.output.resolve()), '--backend', str(args.backend.resolve())] +
+                (['--control',str(args.control.resolve())] if args.control else []),
                 str(args.output.resolve())+'-prepare', **host(extra_roots=[args.output]))
             if report['status'] != 'completed':
                 raise SystemExit('Preparation failed: '+report['status'])

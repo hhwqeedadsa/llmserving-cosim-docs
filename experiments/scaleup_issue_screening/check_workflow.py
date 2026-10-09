@@ -13,12 +13,38 @@ from .archive import inventory, pack, restore, verify
 from .workflow import CONFIG, ROOT, read, save
 from .analyze import compute_relations, distribution, operation_stats
 from .compare import compare_initial
+from .controls import apply as apply_control
+from copy import deepcopy
 from moe_ub_cosim.fabric import validate as validate_fabric
 from moe_ub_cosim.observation import validate_observation
 from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_one_factor_controls_preserve_workload_and_untargeted_layers(self):
+        source = read(CONFIG/'source-base.json')
+        layers = [dict(deepcopy(read(CONFIG/'layer-template.json')),layer_id=i) for i in range(3,61)]
+        case = dict(case_id='normal',first_layer=6,layer_count=3)
+        base = dict(schema_version='issue-screening-control/1',case_id='control-half',baseline_case='normal',
+            parameter='routed_expert_per_input_ns',reference=100,value=50)
+        changed, child = apply_control(source,layers,case,base)
+        expected = deepcopy(source)
+        for i in (6,7,8):
+            expected['service']['groups'][0]['full_model_profile']['layers'][i]['routed_expert_per_input_ns']=50
+        self.assertEqual(changed,expected)
+        expected_layers=deepcopy(layers)
+        for layer in expected_layers:
+            if layer['layer_id'] in (6,7,8):layer['compute_profile_ns']['expert_per_input']=50
+        self.assertEqual(child,expected_layers)
+        self.assertEqual(source,read(CONFIG/'source-base.json'))
+        fence=dict(base,case_id='control-fence',parameter='copy_fence',reference='data_ready',value='local_read_complete')
+        changed, child=apply_control(source,layers,case,fence)
+        self.assertEqual(changed,source)
+        self.assertEqual([l['cann_profile']['copy_fence'] for l in child],
+            ['local_read_complete' if i in (6,7,8) else 'data_ready' for i in range(3,61)])
+        for invalid in (dict(base,reference=99),dict(base,baseline_case='different'),dict(base,value=True),dict(base,parameter='link_rate')):
+            with self.assertRaises(ValueError):apply_control(source,layers,case,invalid)
+
     def test_initial_state_comparison_rejects_identity_and_coverage_changes(self):
         short = {(7,kind,rank):dict(workload={'requests':1},relative_entry_ns=rank*10,
             duration_ns=20,relative_finish_ns=20+rank*10) for kind in ('dispatch','combine') for rank in (0,1)}

@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "synthetic_only": true,
+  "requests": 3,
+  "operations": 4,
+  "simulation_end_ns": 3214,
+  "archive": {
+    "schema_version": "issue-screening-archive/1",
+    "archive_sha256": "5f7c22f02c2c07c630b0b6cf5c7c80367d9c32df17ab6fa6d632beb91e3673f8",
+    "archive_bytes": 262378,
+    "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/tooling-control-check/case",
+    "logical_bytes": 2978385,
+    "verified": true,
+    "expanded_released": true
+  },
+  "public_run_and_freeze": true,
+  "restored_run_and_slice_validated": true,
+  "control": {
+    "schema_version": "issue-screening-control/1",
+    "case_id": "synthetic-half",
+    "baseline_case": "synthetic-tooling-check",
+    "parameter": "routed_expert_per_input_ns",
+    "reference": 100,
+    "value": 50
+  },
+  "unit_checks": {
+    "passed": true,
+    "count": 8,
+    "command_log": "runs/scaleup_issue_screening/entry-audit/commands.jsonl",
+    "stderr": "runs/scaleup_issue_screening/entry-audit/one-factor-controls-checks.stderr.log"
+  },
+  "resources": {
+    "status": "completed",
+    "wall_seconds": 160.20382379181683,
+    "peak_sampled_group_rss_bytes": 156344320,
+    "peak_sampled_artifact_bytes": 50477420544
+  },
+  "program_sha256": {
+    "controls.py": "eccd915da3da4274cd71177b46a8d5020d44338d9411365a4336f8e9039f1239",
+    "workflow.py": "cc68eaef151ed5d19103d8d68c41b4e40ee0e3b17bc77ebbd09e00b4e8285eb9",
+    "check_small.py": "f9dd3259632b13ec90978d1986a2d35164618fc3cfee20c686599ed37ee6a89f",
+    "check_workflow.py": "539293874ccf6378de6716eedd2f8ea9aa6450e7765cc30a200d963d6abfa2d8",
+    "archive.py": "3c7da1973e20f23e7eca04aaeec3e149023eb44a3080858082f8f94b8d6ae5d1"
+  },
+  "evidence_directory": "runs/scaleup_issue_screening/tooling-control-check"
+}

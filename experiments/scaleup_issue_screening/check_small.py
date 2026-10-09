@@ -22,7 +22,7 @@ def check(output, backend):
     scenario['network']['fabric_file'] = str(config/'fabric.json')
     (case/'scenario.yaml').write_text(yaml.safe_dump(scenario,sort_keys=False))
     cli(case,'resolve','resolve','--config',case/'scenario.yaml','--backend',backend,'--output',case/'resolved')
-    save(case/'source-run.json',dict(schema_version='moe-ub-run/1',host=host(),
+    save(case/'source-run.json',dict(schema_version='moe-ub-run/1',host=host(extra_roots=[case]),
         inputs=dict(service=str(case/'resolved/service.json'),layer=str(case/'resolved/layer.json'),
             system=str(case/'resolved/system.json'),network=str(case/'resolved/network')),
         observation=str(config/'observation.json'),record_policy=str(CONFIG/'record-policy.json'),
@@ -60,7 +60,7 @@ def main():
     else:
         from moe_ub_cosim.host_probe import probe
         report=probe([sys.executable,'-m','experiments.scaleup_issue_screening.check_small','--worker',
-            '--output',str(a.output.resolve()),'--backend',str(a.backend.resolve())],str(a.output.resolve())+'-resources',**host())
+            '--output',str(a.output.resolve()),'--backend',str(a.backend.resolve())],str(a.output.resolve())+'-resources',**host(extra_roots=[a.output]))
         if report['status']!='completed':
             raise SystemExit('Small workflow failed: '+report['status'])
 

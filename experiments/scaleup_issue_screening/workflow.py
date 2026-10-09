@@ -35,9 +35,10 @@ def digest(path):
         return hashlib.file_digest(stream, 'sha256').hexdigest()
 
 
-def host(backend=False):
+def host(backend=False, extra_roots=()):
     result = read(CONFIG / 'host.json')
     result['artifact_roots'] = [str(ROOT / p) for p in result['artifact_roots']]
+    result['artifact_roots'] += [str(Path(p).resolve()) for p in extra_roots]
     if backend:
         result.update(rss_bytes=48*2**30, address_bytes=56*2**30, wall_seconds=7200)
     return result
@@ -111,7 +112,7 @@ def prepare(case_id, directory, backend):
     command(directory, 'fabric', [sys.executable, '-m', 'moe_ub_cosim.fabric',
         '--input', str(CONFIG/'fabric.json'), '--defaults', str(CONFIG/'network-defaults.json'),
         '--output-dir', str(directory/'source-network')])
-    source_run = dict(schema_version='moe-ub-segment-source/1', host=host(),
+    source_run = dict(schema_version='moe-ub-segment-source/1', host=host(extra_roots=[directory]),
         inputs=dict(service=str(directory/'source.json'), layer=str(directory/'source-layers.json'),
                     system=str(CONFIG/'system.json'), network=str(directory/'source-network')),
         observation=str(CONFIG/'observation.json'), record_policy=str(CONFIG/'record-policy.json'),
@@ -142,7 +143,7 @@ def prepare(case_id, directory, backend):
     run['inputs']['network'] = str(directory/'resolved/network')
     for key in ('observation', 'record_policy', 'export_policy', 'input_evidence'):
         run[key] = str(directory/'prepared'/run[key])
-    run['host'], run['export_host'] = host(True), host()
+    run['host'], run['export_host'] = host(True,[directory]), host(extra_roots=[directory])
     save(directory/'run.json', run)
     print(json.dumps(dict(prepared=True, case=case_id, output=str(directory))))
 
@@ -170,7 +171,7 @@ def main():
             from moe_ub_cosim.host_probe import probe
             report = probe([sys.executable, '-m', MODULE, 'prepare', '--worker', '--case', args.case,
                 '--output', str(args.output.resolve()), '--backend', str(args.backend.resolve())],
-                str(args.output.resolve())+'-prepare', **host())
+                str(args.output.resolve())+'-prepare', **host(extra_roots=[args.output]))
             if report['status'] != 'completed':
                 raise SystemExit('Preparation failed: '+report['status'])
     elif args.action == 'run':
@@ -187,7 +188,7 @@ def main():
         else:
             from moe_ub_cosim.host_probe import probe
             report = probe([sys.executable,'-m',MODULE,'freeze','--worker','--case-dir',str(directory)],
-                str(directory)+'-freeze', **host())
+                str(directory)+'-freeze', **host(extra_roots=[directory]))
             if report['status'] != 'completed':
                 raise SystemExit('Slice saving failed: '+report['status'])
 

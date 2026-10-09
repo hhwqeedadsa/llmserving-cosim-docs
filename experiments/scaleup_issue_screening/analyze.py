@@ -244,8 +244,7 @@ def main():
         analyze(a.case_dir, a.output)
     else:
         from moe_ub_cosim.host_probe import probe
-        policy = host()
-        policy['artifact_roots'].append(str(a.output.resolve()))
+        policy = host(extra_roots=[a.case_dir,a.output])
         report = probe([sys.executable,'-m','experiments.scaleup_issue_screening.analyze',
             '--worker','--case-dir',str(a.case_dir.resolve()),'--output',str(a.output.resolve())],
             str(a.output.resolve())+'-resources', **policy)

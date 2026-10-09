@@ -15,6 +15,7 @@ from .analyze import compute_relations, distribution, operation_stats
 from .compare import compare_initial
 from .controls import apply as apply_control, audit as audit_control
 from .inspect_facts import witness
+from .compare_controls import same_workload
 from copy import deepcopy
 from moe_ub_cosim.fabric import validate as validate_fabric
 from moe_ub_cosim.observation import validate_observation
@@ -22,6 +23,17 @@ from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_control_pairing_rejects_workload_changes_and_duplicate_ranks(self):
+        summary=dict(requests=2,semantic_workload_sha256_by_layer={'7':'fixed'})
+        records=[dict(layer_id=7,kind='combine',rank_id=r,workload=dict(routed_inputs=2),end_ns=20) for r in (0,1)]
+        changed=deepcopy(records);changed[0]['end_ns']=10
+        same_workload(summary,summary,records,changed)
+        with self.assertRaises(ValueError):
+            same_workload(summary,dict(summary,semantic_workload_sha256_by_layer={'7':'changed'}),records,changed)
+        with self.assertRaises(ValueError):same_workload(summary,summary,records,changed+[changed[0]])
+        changed[0]['workload']['routed_inputs']=3
+        with self.assertRaises(ValueError):same_workload(summary,summary,records,changed)
+
     def test_prepared_control_audit_rejects_an_additional_consistent_factor(self):
         import yaml
         with tempfile.TemporaryDirectory() as temp:

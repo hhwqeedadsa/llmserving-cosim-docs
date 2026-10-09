@@ -1,0 +1,42 @@
+[
+  {
+    "phase": "g0-b2-expert-half-prepare/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 241.9387889932841,
+    "peak_sampled_group_rss_bytes": 1416581120,
+    "peak_sampled_artifact_bytes": 49305567232
+  },
+  {
+    "phase": "g0-b2-expert-half/run/logs/resources-run/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 509.44491343945265,
+    "peak_sampled_group_rss_bytes": 6776999936,
+    "peak_sampled_artifact_bytes": 50430074880
+  },
+  {
+    "phase": "g0-b2-expert-half/run/logs/resources-export/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 82.22611072286963,
+    "peak_sampled_group_rss_bytes": 33976320,
+    "peak_sampled_artifact_bytes": 50448736256
+  },
+  {
+    "phase": "analysis/g0-b2-expert-half-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 57.33929079584777,
+    "peak_sampled_group_rss_bytes": 1248550912,
+    "peak_sampled_artifact_bytes": 50452172800
+  },
+  {
+    "phase": "archives/g0-b2-expert-half.tar.gz-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 68.54518418945372,
+    "peak_sampled_group_rss_bytes": 63733760,
+    "peak_sampled_artifact_bytes": 50567909376
+  }
+]

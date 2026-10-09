@@ -30,7 +30,7 @@
 | M20（P3）内部事实与有限层段 | `completed` | 公共准备、运行、事实导出、保存与离线回放，范围拒绝和旧用户流程通过；[流程证据](../../fixtures/m20_segment_facts/README.md)，提交 `1bb02a0` |
 | M21（P4）平台独立验收 | `completed` | 四类小测试、采集启停、来源绑定、128/1024 请求三层执行及目标包全文件校验通过；[最终验收](../../fixtures/m21_platform/README.md)，代码检查点 `a0af1d7`，128 请求证据检查点 `e4bfd65` |
 | E1 正常业务探索 | `completed` | 256/512/1024 请求短段及 1024 请求六层段均完成、校验和归档；相同分析层工作量一致，主要 Combine 现象保留；[E1 结果](../../experiments/scaleup_issue_screening/results/e1/README.md) |
-| E2 成因与稳健性 | `in_progress` | 只选 C1：Combine 等待及后层进入传播；基线依赖核验通过，专家成本减半对照执行中，预定检查见[候选记录](../../experiments/scaleup_issue_screening/candidates.md) |
+| E2 成因与稳健性 | `in_progress` | 只选 C1：Combine 等待及后层进入传播；基线依赖核验及专家成本减半对照通过，成本加倍输入准备中，预定检查见[候选记录](../../experiments/scaleup_issue_screening/candidates.md) |
 | E3 测量价值 | `conditional` | E2 已有可信解释与具体判断歧义，再比较信息 |
 | E4 完整场景与收尾 | `conditional` | 有通过前述检查的候选才跑少量完整首轮；没有候选可按已完成范围结束 |
 
@@ -50,6 +50,6 @@ P 部分已完成，代码、输入、结果摘要及按职责维护的文档在
 
 E1 的三个短段及六层长段均已完成并公开校验通过，完整记录已无损归档，展开文件释放。三档正常业务及初态检查的结果见 [E1 说明](../../experiments/scaleup_issue_screening/results/e1/README.md)，逐 rank、计算与端口统计留在 `runs/scaleup_issue_screening/analysis/`。长段执行 1947352 个节点、389878 次逻辑传输，模拟结束于 669521 ns；实际累计磁盘采样峰值约 47.45 GiB，低于 48 GiB。短段已有切片，长段保留完整原始运行并省略额外切片；[归档摘要](../../experiments/scaleup_issue_screening/results/e1/archives.json)固定包摘要与文件数量。
 
-E2 已在对照执行前记录一个候选、竞争解释和预定检查，不给出拥塞标签。基线恢复、两层 379068 个节点及 81263 次交付的公共事实导出、最晚前驱核验均通过，见 [E2 事实](../../experiments/scaleup_issue_screening/results/e2/README.md)。成本减半对照已通过输入隔离核验并开始运行，之后按预定顺序检查成本加倍和复制完成条件。对照仍保持完整 128 rank、物理网络和容量，工作量与依赖变化经公共入口重新构图，不改历史时间戳。E3/E4 继续按证据门槛决定。
+E2 已在对照执行前记录一个候选、竞争解释和预定检查，不给出拥塞标签。基线恢复、两层 379068 个节点及 81263 次交付的公共事实导出、最晚前驱核验均通过，见 [E2 事实](../../experiments/scaleup_issue_screening/results/e2/README.md)。成本减半对照已完成、校验并归档，实际最后一层计算结束从 110792 降到 83025 ns，相关结果与限制见 E2 记录。当前准备成本加倍输入，之后检查复制完成条件。对照仍保持完整 128 rank、物理网络和容量，工作量与依赖变化经公共入口重新构图，不改历史时间戳。E3/E4 继续按证据门槛决定。
 
 独立合成流程、输入隔离、归档恢复和预算拒绝检查通过，见[单因素工具证据](../../experiments/scaleup_issue_screening/control-tooling-summary.json)、[归档检查](../../experiments/scaleup_issue_screening/archive-check-summary.json)和[用户操作](../../experiments/scaleup_issue_screening/usage.md)。已有来源不足以构成第二组不重复的 1024 请求，本轮只用一组，不下载、不循环来源，也不将相关 rank 或重放计为独立重复。旧产物保留，实际命令、退出状态和日志在 `runs/scaleup_issue_screening/`；所有后续操作继续遵守原预算。

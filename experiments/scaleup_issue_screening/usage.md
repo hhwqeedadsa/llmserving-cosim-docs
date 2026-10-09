@@ -100,6 +100,16 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 该检查器按固定规则选择各层最后完成和专家输入最多的端，逐次跟踪一条最晚前驱，保留并列项、未选范围边界和未知资源持有者。跨端追踪回到发送提交时刻，不能把较晚的 ACK 回收代入数据交付链。输出不是完整根因分类，也不是可节省时长的求和。
 
 
+三个预定对照全部分析完成后，统一比较实际业务结束、操作时序、计算依赖和相同覆盖下的端口聚合：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.compare_controls \
+  --analysis-root runs/scaleup_issue_screening/analysis \
+  --output runs/scaleup_issue_screening/e2-comparison.json
+```
+
+比较会检查声明因素、输入核验摘要、实际请求/路由/上下文及参与者覆盖。结果是同一来源组内的模型效应，不把 rank 当作独立重复，也不将同种子写成包路径相同。
+
 ## 长段磁盘预估
 
 短段完成后、归档前可记录其实际占用；归档完成后再估计长段与压缩包共存的峰值。估计命令只适用于方法中固定的三层与六层条件，不能当作任意输入的空间保证。

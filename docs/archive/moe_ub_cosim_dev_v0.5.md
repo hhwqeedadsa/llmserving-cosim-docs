@@ -1,8 +1,10 @@
 # 联合仿真平台 v0.5 增量规范
 
-本版规定下一轮问题筛选所需的平台修正、内部记录和有限层段执行能力。它是待实施方案，不表示相应功能已经可用，也不自动改变软件发布版本或输入格式版本。进度与停止位置只维护在[当前任务](tasks/current.md)；研究问题、实验输入与结果判断由[独立实验方案](../experiments/scaleup_issue_screening/plan_v0.1.md)负责。
+> 历史规范：M18～M21 平台部分已完成验收。正文保留实施前的要求；现行能力见[用户指南](../user_guide.md)和[模型依据](../model_validation.md)，完成证据见[M21 验收](../../fixtures/m21_platform/README.md)。实验进度仍由[当前任务](../tasks/current.md)维护。
 
-本版依据 2026-10-09 用户确认的下一阶段方案整理。未被本版明确调整的执行、观测与交付约束，继续遵循 [AGENTS.md](../AGENTS.md)、[开发维护](development.md)和既有规范。平台验收不要求性能提升、拥塞增加或测量方法有效。
+本版规定下一轮问题筛选所需的平台修正、内部记录和有限层段执行能力。它是待实施方案，不表示相应功能已经可用，也不自动改变软件发布版本或输入格式版本。进度与停止位置只维护在[当前任务](../tasks/current.md)；研究问题、实验输入与结果判断由[独立实验方案](../../experiments/scaleup_issue_screening/plan_v0.1.md)负责。
+
+本版依据 2026-10-09 用户确认的下一阶段方案整理。未被本版明确调整的执行、观测与交付约束，继续遵循 [AGENTS.md](../../AGENTS.md)、[开发维护](../development.md)和既有规范。平台验收不要求性能提升、拥塞增加或测量方法有效。
 
 ## 1. 基线与范围
 
@@ -16,7 +18,7 @@
 
 ## 2. 固定通信依据
 
-继续选择 A3 / CANN 8.5.0 的 `MoeDistributeDispatchV2` 和 `MoeDistributeCombineV2`，采用 `fullmesh_v1`、TP=1、`expertShardType=0`；Dispatch 为动态 INT8，Combine 为非量化 BF16。完整调用范围以[固定来源清单](../fixtures/m10_cann/source-evidence.json)及[模型依据](model_validation.md)为准。
+继续选择 A3 / CANN 8.5.0 的 `MoeDistributeDispatchV2` 和 `MoeDistributeCombineV2`，采用 `fullmesh_v1`、TP=1、`expertShardType=0`；Dispatch 为动态 INT8，Combine 为非量化 BF16。完整调用范围以[固定来源清单](../../fixtures/m10_cann/source-evidence.json)及[模型依据](../model_validation.md)为准。
 
 CANN 来源提交为 `6ead121aded45355043b502756b6592fd7c30b14`。先取得匹配摘要的源码，核对所选分支的 tiling、`SplitToCore`、发送循环、局部缓冲复用、计数发布、到达检查与归约。清单只证明已经固定来源，不代替本轮对资源和完成条件的检查。若所需完成语义仍缺少公开依据，明确记录假设及影响，不把另一架构的行为补进来。
 

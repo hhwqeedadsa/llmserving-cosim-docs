@@ -109,6 +109,114 @@
           "path": "runs/m21-platform-acceptance/scale-128-execute/probe.json"
         }
       }
+    },
+    {
+      "passed": true,
+      "requests": 1024,
+      "ranks": 128,
+      "experts": 256,
+      "top_k": 8,
+      "hidden_dim": 7168,
+      "original_layers": [
+        3,
+        4,
+        5
+      ],
+      "full_deployed_blocks": 61,
+      "simulation_end_ns": 280072,
+      "nodes": 973728,
+      "fabric_transfers": 193644,
+      "local_deliveries": 1308,
+      "fabric_payload_bytes": 525742596,
+      "business_payload_bytes": 520805376,
+      "application_metadata_bytes": 4259088,
+      "physical_packets": 2016740,
+      "route_records": 3072,
+      "plan_bytes": 565202381,
+      "trace_dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "hardware_calibrated": false,
+      "scope": "functional_target_scale_finite_segment_not_performance_experiment",
+      "run_directory": "runs/m21-platform-acceptance/scale-1024-run",
+      "source_commit": "e4bfd6532e45d5671c2595f03c9c73b5b7e1d8e6",
+      "working_tree_dirty": false,
+      "backend_sha256": "ad7e83e5b19201e98dd0485c1ed05c0e58181f8f7604871ab1b59aeca0eb57bf",
+      "resource_reports": {
+        "prepare": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 621.8055228665471,
+          "peak_sampled_group_rss_bytes": 2237251584,
+          "max_waited_child_rss_kib": 2314448,
+          "peak_sampled_artifact_bytes": 45373198336,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-1024-prepare/probe.json"
+        },
+        "run": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 1373.1233993079513,
+          "peak_sampled_group_rss_bytes": 9037467648,
+          "max_waited_child_rss_kib": 7795272,
+          "peak_sampled_artifact_bytes": 46850846720,
+          "limits": {
+            "sampled_group_rss_bytes": 51539607552,
+            "per_process_address_bytes": 60129542144,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 7200
+          },
+          "path": "runs/m21-platform-acceptance/scale-1024-run/logs/resources-run/probe.json"
+        },
+        "export": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 45.80744534172118,
+          "peak_sampled_group_rss_bytes": 25694208,
+          "max_waited_child_rss_kib": 7795272,
+          "peak_sampled_artifact_bytes": 46864355328,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-1024-run/logs/resources-export/probe.json"
+        },
+        "verify": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 35.81705550476909,
+          "peak_sampled_group_rss_bytes": 314765312,
+          "max_waited_child_rss_kib": 413288,
+          "peak_sampled_artifact_bytes": 46861869056,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-1024-verify/probe.json"
+        },
+        "whole_public_run": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 1448.631267286837,
+          "peak_sampled_group_rss_bytes": 9174999040,
+          "max_waited_child_rss_kib": 7795272,
+          "peak_sampled_artifact_bytes": 46867337216,
+          "limits": {
+            "sampled_group_rss_bytes": 51539607552,
+            "per_process_address_bytes": 60129542144,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 7200
+          },
+          "path": "runs/m21-platform-acceptance/scale-1024-execute/probe.json"
+        }
+      }
     }
   ],
   "dependencies": [
@@ -125,5 +233,9 @@
     " 3964b1d41cb5f7b51004c316b0eae1a3713c2498 third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 (heads/astra-sim)",
     " c0f1fe54245203a3b14468e44e893a38792cfcc8 third_party/ns-3-ub (v1.1.0-341-gc0f1fe5)",
     " 2afc7202f88c132b63c38e8c7dcfc08505b13bb2 third_party/ns-3-ub/scratch/ns-3-ub-tools (remotes/origin/codex/simai-flow-converter-6-g2afc720)"
-  ]
+  ],
+  "rss_notes": {
+    "peak_sampled_group_rss_bytes": "Sampled sum of owned processes; may miss short peaks and count shared pages more than once.",
+    "max_waited_child_rss_kib": "Kernel RUSAGE_CHILDREN maximum over the monitor process lifetime; may include an earlier phase. It is not an isolated phase peak."
+  }
 }

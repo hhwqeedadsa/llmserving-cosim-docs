@@ -42,7 +42,7 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 | 计算、通信和容量模型的依据及近似 | [模型依据与验证范围](docs/model_validation.md) |
 | CM384/R1 的参数、真实路由与实验范围 | [参考场景](docs/scenarios/cm384_r1.md) |
 | 修改代码、管理依赖和选择测试 | [开发维护](docs/development.md)、[后端参考](backend/README.md) |
-| 下一阶段平台与实验方案 | [平台 v0.5](docs/moe_ub_cosim_dev_v0.5.md)、[正常业务问题筛选](experiments/scaleup_issue_screening/README.md) |
+| 平台依据与后续实验 | [v0.5 设计档案](docs/archive/moe_ub_cosim_dev_v0.5.md)、[正常业务问题筛选](experiments/scaleup_issue_screening/README.md) |
 | 当前任务、执行顺序与交接 | [当前任务](docs/tasks/current.md) |
 | 已完成实验 | [端网映射价值](experiments/mapping_value/README.md)、[Scale-Up 性能现象探索](experiments/scaleup_observability/README.md) |
 

@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "scope": "completed_finite_moe_segment",
+  "simulation_end_ns": 280072,
+  "capture_end_ns": 1000000000,
+  "ranks": 128,
+  "graphs": 1,
+  "calibration_status": "unvalidated_reference",
+  "files": 4543,
+  "stored_logical_bytes": 1465753271,
+  "archive_expanded_logical_bytes": 0,
+  "integrity": "all_file_hashes_verified",
+  "slice_directory": "runs/m21-platform-acceptance/scale-1024-slice",
+  "hardlinked_files": 4543,
+  "additional_payload_copy_bytes": 0,
+  "slice_manifest_bytes": 2021922,
+  "original_layers": [
+    3,
+    4,
+    5
+  ],
+  "same_platform_sources_and_backend_as_128": true,
+  "target_backend_replay_executed": false,
+  "resources": {
+    "status": "completed",
+    "wall_seconds": 36.57283406704664,
+    "peak_sampled_group_rss_bytes": 7438336,
+    "max_waited_child_rss_kib": 67732,
+    "peak_sampled_artifact_bytes": 46864777216
+  },
+  "resource_report": "runs/m21-platform-acceptance/scale-1024-freeze/probe.json",
+  "full_summary": "runs/m21-platform-acceptance/scale-1024-freeze/summary.json",
+  "slice_manifest_sha256": "237abf279c442937933470e2d9ed6f9ef8c12b977875abd77ac658def94ea2b5"
+}

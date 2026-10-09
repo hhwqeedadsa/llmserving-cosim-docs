@@ -2,7 +2,7 @@
 
 这里列出尚未完成、需要按实验目的选择的工作，不代表执行授权或本轮任务。当前工作见[任务记录](tasks/current.md)，已完成的平台能力与证据见[里程碑历史](milestone_history.md)。
 
-本轮已确认的 A3 资源与关键依赖修正、必要事实记录和有限层段入口见[平台 v0.5 规范](moe_ub_cosim_dev_v0.5.md)，正常业务探索见[问题筛选实验](../experiments/scaleup_issue_screening/README.md)。这些不再作为本表的待选工作。下表各项需明确目标、支持范围和预算后实施；当前参考条件的限制见[CM384/R1 场景](scenarios/cm384_r1.md)。
+A3 资源与关键依赖修正、必要事实记录和有限层段入口已交付，操作见[用户指南](user_guide.md)，要求见[v0.5 设计档案](archive/moe_ub_cosim_dev_v0.5.md)；后续正常业务探索见[问题筛选实验](../experiments/scaleup_issue_screening/README.md)。这些不再作为本表的待选工作。下表各项需明确目标、支持范围和预算后实施；当前参考条件的限制见[CM384/R1 场景](scenarios/cm384_r1.md)。
 
 | 待选工作 | 什么时候需要 | 已有基础与仍需补充的部分 |
 |---|---|---|

@@ -154,6 +154,7 @@ Decode 入口与请求完成分别处理。文件尾端或观察片段结束均�
 | Python/C++ 独立计划核对及小场景执行 | 输入约束、依赖、实际网络完成反馈、资源释放与观测不扰动执行 | 未运行的规模或不匹配配置 |
 | [CM384/R1 WRITE 首轮验收](../fixtures/m10_research_slice/README.md) | 完整目标首轮依赖图、已保存图的后端重放、1 µs/10 µs 观测及记录守恒可重复 | 完整 64 步服务、稳态和目标硬件绝对时延 |
 | [CM384/R1 原生首轮验收](../fixtures/m16_native_target/README.md) | STORE/LOAD 与逐包喷洒的完整首轮执行、42 所选端口聚合、分类来源和有限资源内公开导出 | 全端口详细记录、第二次完整原生目标重放或硬件校准；重放等价由独立小例检查 |
+| [A3 资源与目标层段验收](../fixtures/m21_platform/README.md) | STORE/STORE、四类因果小测试、采集启停一致性，以及保留目标部署的 128/1024 请求连续三层执行和保存 | 新资源模板下的完整 61 块、64 轮服务或目标硬件校准；后端重放等价由独立小例检查 |
 | 真实 R1-AWQ 路由和限定 A100 算子测量 | 相应路由来源真实、相应测量形状有设备依据 | CM384 INT8 部署同条件采集或 NPU 校准 |
 
 `runtime_adapted` 表示固定通信源码行为已转为本平台计划；`full_model_graph_execution_validated=true` 只在相应完整图实际完成后写入。`unvalidated_reference` 仍表示未经目标硬件校准。`full_model_execution_validated`、`target_runtime_executed`、`numerical_model_executed`、`mla_kernel_validated`、`quantized_kernels_executed`、`target_deployment_validated` 等完整模型或原生执行标志仍为 false，不因图执行通过而改写。
@@ -162,4 +163,4 @@ Decode 入口与请求完成分别处理。文件尾端或观察片段结束均�
 
 ## 有限层段的初态与容量
 
-有限层段复用原模型、完整部署容量、专家放置、原始路由层号和所选 Decode 步骤上下文。假定首块输入及 KV 已就绪，从空网络开始；首层不自动等同于充分预热，也不宣称稳态。只执行选定完整块的参考成本，不含 embedding、末尾 head 或采样。局部读完成采用全部原生 STORE 请求已形成的参考事件，业务与状态到达按真实接收字节区间核验；硬件 MTE/HBM 时序仍未校准。功能证据见 [M20](../fixtures/m20_segment_facts/README.md)。
+有限层段复用原模型、完整部署容量、专家放置、原始路由层号和所选 Decode 步骤上下文。假定首块输入及 KV 已就绪，从空网络开始；首层不自动等同于充分预热，也不宣称稳态。只执行选定完整块的参考成本，不含 embedding、末尾 head 或采样。局部读完成采用全部原生 STORE 请求已形成的参考事件，业务与状态到达按真实接收字节区间核验；硬件 MTE/HBM 时序仍未校准。公开流程证据见 [M20](../fixtures/m20_segment_facts/README.md)，真实路由的目标规模执行与剩余参考假设见 [M21](../fixtures/m21_platform/README.md)。

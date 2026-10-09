@@ -34,8 +34,10 @@
 | Scale-Up 完整代表性验证与阶段总结（独立研究） | 真实路由完整首轮正常／半速两组，工作量相同且资源均释放；目标出口积压增加 57.60%，整轮增加 0.1532%。归纳现象、机制和后续测量取舍，不扩展为新平台里程碑 | [完整结果](../experiments/scaleup_observability/results-representative.md)、[研究总结](../experiments/scaleup_observability/conclusions.md)、[实验命令](../experiments/scaleup_observability/representative-usage.md) |
 | M18：A3 来源与执行条件 | 固定八份 CANN 来源，区分源码行为、局部资源与完成事件的参考映射，明确验证范围 | [来源核对](../fixtures/m18_a3_execution/README.md) |
 | M19：A3 局部资源与依赖 | 独立 STORE/STORE 模板、通信核计算资源、有限局部缓冲与实际完成事件，按 Token 归约及两轮执行通过；旧模型保持可复现 | [小型验收](../fixtures/m19_a3_resources/README.md) |
+| M20：有限层段与内部事实 | 保留完整容量和原层号的准备、运行、有界事实导出、保存与离线回放；新旧公开流程及 C++ 范围核对通过 | [层段验收](../fixtures/m20_segment_facts/README.md)、[用户示例](../examples/a3_segment/README.md) |
+| M21：平台独立验收 | 四类小测试、记录启停一致性、固定真实路由导入，以及 128/1024 请求、128 rank 的原始三层执行；目标层段保存和全文件校验通过 | [验收与资源](../fixtures/m21_platform/README.md) |
 
-M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
+M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4，M18 至 M21 对应 v0.5 平台部分。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 
 ## M10 收尾范围
 
@@ -46,5 +48,3 @@ M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F
 ## 文档整理
 
 2026-10-05 完成主仓文档职责划分、术语说明、重复记录压缩和导航整理，发布于 [749c8c5](https://github.com/baoy21/moe-ub-cosim/commit/749c8c55fce4e5199888b63b3ae56cf55d7d92ef)。检查范围及结果见[当时的任务记录](https://github.com/baoy21/moe-ub-cosim/blob/749c8c55fce4e5199888b63b3ae56cf55d7d92ef/docs/tasks/current.md)。这次交付仅调整文档，源码、配置、测试输入、依赖与原验收结论不变。
-
-- 2026-10-09，M20（P3）：有限原始 MoE 层段、内部局部完成事实及有界导出、新格式冻结与后端回放已通过小型公共流程、C++ 范围校验和旧首轮回归。范围与证据见 [M20 fixture](../fixtures/m20_segment_facts/README.md)。

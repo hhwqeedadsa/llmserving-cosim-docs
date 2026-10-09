@@ -10,6 +10,7 @@
 #include "ns3/ub-function.h"
 #include "ns3/ub-ldst-api.h"
 
+#include <algorithm>
 #include <limits>
 #include <stdexcept>
 #include <utility>
@@ -190,6 +191,20 @@ void UbWriteTransfer::ObserveNativeTarget(uint64_t uid, uint32_t bytes, ns3::UbM
     const auto [offset, expected] = found->second;
     if (bytes != expected) throw std::logic_error(Identity() + ": native STORE size changed");
     completion_.WriteCommitted(0, offset, bytes);
+    if (descriptor_.local_facts)
+    {
+        uint64_t business = 0, metadata = 0;
+        for (const auto& region : *descriptor_.payload_regions)
+        {
+            const auto begin = std::max(offset, region.begin), end = std::min(offset + bytes, region.end);
+            const uint64_t arrived = end > begin ? end - begin : 0;
+            if (region.kind == "business") { business += region.end-region.begin; business_arrived_ += arrived; }
+            else if (region.kind == "metadata") { metadata += region.end-region.begin; metadata_arrived_ += arrived; }
+        }
+        const uint64_t now = ns3::Simulator::Now().GetNanoSeconds();
+        if (business && business_arrived_ == business && !business_ready_ns_) business_ready_ns_ = now;
+        if (metadata && metadata_arrived_ == metadata && !metadata_ready_ns_) metadata_ready_ns_ = now;
+    }
     if (completion_.CommittedBytes() == descriptor_.bytes) target_ready_.Signal();
     native_requests_.erase(found);
 }

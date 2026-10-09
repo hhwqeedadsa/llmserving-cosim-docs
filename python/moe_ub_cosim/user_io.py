@@ -91,3 +91,19 @@ def host_policy(value, base):
     result = dict(value)
     result['artifact_roots'] = [str((Path(base)/p).resolve()) for p in value['artifact_roots']]
     return result
+
+
+def budgeted_worker(module,arguments,output,host,result_name):
+    """Run a preparer/exporter with the same explicit host limits as execution."""
+    import sys
+    from .host_probe import probe
+    output=Path(output).resolve()
+    require(not output.exists(),f'Output already exists: {output}')
+    output.mkdir(parents=True)
+    host=dict(host);host['artifact_roots']=[*host['artifact_roots'],str(output)]
+    report=probe([sys.executable,'-m',module,*arguments,str(output)],output/'logs/resources',**host)
+    passed=report['status']=='completed' and not report['remaining_live_group_pids']
+    require(passed,f'{module} failed ({report["status"]}); see {output}/logs/resources/stderr.log and probe.json')
+    result=read(output/result_name)
+    require(result['passed'],'Worker did not seal a successful result')
+    return dict(passed=True,output=str(output),result=str(output/result_name),resources=str(output/'logs/resources/probe.json'))

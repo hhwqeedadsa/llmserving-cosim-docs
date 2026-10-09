@@ -97,7 +97,8 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
          {"expert_placement", {0u,0u,1u,1u,2u,2u,3u,3u}}}})}};
     if (fs::exists(shared / "deployment.json")) deployment = ReadJson(shared / "deployment.json");
     const bool batched = deployment.at("schema_version") == "moe-ub-service-deployment/3";
-    const bool full = deployment.at("schema_version") == "moe-ub-service-deployment/5";
+    const bool segment = deployment.at("schema_version") == "moe-ub-service-deployment/6";
+    const bool full = segment || deployment.at("schema_version") == "moe-ub-service-deployment/5";
     const bool composed = full || deployment.at("schema_version") == "moe-ub-service-deployment/4";
     Require(deployment.size() == (batched ? 3 : 2) && (composed || batched || deployment.at("schema_version") == "moe-ub-service-deployment/2" ||
             deployment.at("schema_version") == "moe-ub-service-deployment/1") &&
@@ -120,7 +121,7 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
     for (const auto& config : deployment.at("groups"))
     {
         const auto name = config.at("group_id").get<std::string>();
-        Require(config.size() == (physical ? 5 : 4) + (composed ? 2 : 0) + (full ? 2 : 0) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
+        Require(config.size() == (physical ? 5 : 4) + (composed ? 2 : 0) + (full ? 2 : 0) + (segment?1:0) && std::regex_match(name, std::regex("[A-Za-z0-9_.-]+")) &&
                 names.insert(name).second && config.at("rank_ids").is_array() &&
                 !config.at("rank_ids").empty() && config.at("rank_to_ub_node").is_array() &&
                 config.at("rank_ids").size() == config.at("rank_to_ub_node").size(),
@@ -165,6 +166,7 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
                 moe_ub::ValidateFullModelProfile(config.at("model_spec"), config.at("full_model_profile"), config.at("rank_ids"));
                 for (const auto& row : config.at("model_spec").at("layers"))
                     if (row.at("kind") == "moe") model_ids.push_back(row.at("layer_id"));
+                if(segment)model_ids=moe_ub::ValidateModelSegment(config.at("segment"),config.at("model_spec"));
                 Require(model_ids.size() == layers.size(), "Full model layer coverage mismatch");
             }
             uint64_t index = 0;
@@ -249,6 +251,14 @@ Json TransferResult(const moe_ub::UbWriteTransfer& transfer)
         result["initiator_rank"] = d.src_rank;
         result["data_owner_rank"] = d.DataOwner(); result["consumer_rank"] = d.Consumer();
         result["initiator_resources_retired"] = transfer.SourceJettyRetired();
+    }
+    if (d.local_facts)
+    {
+        const auto time = [](const std::optional<uint64_t>& value) -> Json { return value ? Json(*value) : Json(nullptr); };
+        result["local_facts"] = {{"schema_version", "moe-ub-transfer-local-facts/1"},
+            {"local_read_complete_ns", time(transfer.LocalReadCompleteNs())},
+            {"business_ready_ns", time(transfer.BusinessReadyNs())},
+            {"application_metadata_ready_ns", time(transfer.MetadataReadyNs())}};
     }
     return result;
 }
@@ -950,8 +960,11 @@ int main(int argc, char** argv)
                         Require(plan.data.at("batch_limits") == batch_limits, "Batch limits changed during run");
                     const bool composed = group.config.contains("layer_configs");
                     const bool full = group.config.contains("model_spec");
-                    Require((plan.data.at("schema_version") == (full ? "moe-ub-full-model-plan/1" : "moe-ub-multilayer-plan/2")) == composed,
+                    const bool segment = group.config.contains("segment");
+                    Require((plan.data.at("schema_version") == (segment?"moe-ub-model-segment-plan/1":full ? "moe-ub-full-model-plan/1" : "moe-ub-multilayer-plan/2")) == composed,
                             "Plan/service layer-segment schema mismatch");
+                    Require(plan.data.contains("segment")==segment && (!segment || plan.data.at("segment")==group.config.at("segment")),
+                            "Segment initial state changed during run");
                     if (full)
                         Require(plan.data.at("model_spec") == group.config.at("model_spec") &&
                                 plan.data.at("full_model_profile") == group.config.at("full_model_profile"), "Full model declaration changed during run");

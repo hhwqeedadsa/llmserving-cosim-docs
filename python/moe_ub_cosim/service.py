@@ -264,7 +264,7 @@ def run(args):
     pd = queued or config.get('schema_version') == 'moe-ub-pd-fixture/1'
     data = config.get('schema_version') in ('moe-ub-data-service/1','moe-ub-multilayer-service/1')
     evidence = config.get('schema_version') == 'moe-ub-evidence-service/1'
-    full = config.get('schema_version') == 'moe-ub-configured-service/4' or (
+    full = config.get('schema_version') in ('moe-ub-configured-service/4','moe-ub-configured-service/5') or (
         evidence and config['service'].get('schema_version') == 'moe-ub-configured-service/4')
     composed = evidence or full or config.get('schema_version') == 'moe-ub-configured-service/3'
     configured = composed or config.get('schema_version') in ('moe-ub-configured-service/1', 'moe-ub-configured-service/2')
@@ -368,7 +368,11 @@ def run(args):
             service.graph_storage.finish()
             manifest['graph_storage']='moe-ub-graph-replay/1'
         manifest['normal_exit'] = True
-        if full: manifest['full_model_graph_execution_validated'] = bool(service.history)
+        if full:
+            if getattr(service,'segment',None) is None:
+                manifest['full_model_graph_execution_validated'] = bool(service.history)
+            else:
+                manifest['finite_segment_graph_execution_validated'] = bool(service.history)
         save(output / 'service_result.json', dict(initial=service.initial, waves=service.history,
             requests=service.snapshot(), service_finished=True, finished_ns=service.current_ns,
             scheduler_calls=service.scheduler_calls, decisions=service.decision_id,

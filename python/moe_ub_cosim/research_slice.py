@@ -94,10 +94,12 @@ def _archived_json(directory, archive, name):
     raise ValueError('Missing archived JSON: '+name)
 
 
-def create(run, output, storage='copy', import_config=None):
+def create(run, output, storage='copy', import_config=None, *, segment_scope=False):
     output = Path(output).resolve()
     require(not output.exists(), f'Slice output already exists: {output}')
     archives = []
+    segment = None
+    require(not (segment_scope and import_config), 'Finite segments require a completed public run')
     if import_config is None:
         from .user_workflow import validate
         run = Path(run).resolve(); validate(run,allow_partial_observation=True)
@@ -107,11 +109,17 @@ def create(run, output, storage='copy', import_config=None):
         run_id, submissions = _first_round(raw/'protocol.jsonl')
         report = read(raw/'execution/result.json')
         effective = read(inputs/'effective.json')
+        service = read(inputs/'service.json')
+        segment = service.get('execution', {}).get('segment')
+        require(bool(segment) == segment_scope,
+                'Use segment freeze for a finite segment; slice create retains its full first-round boundary')
         observation = effective['observation']; max_ns = effective['max_simulation_ns']
         output.mkdir(parents=True)
         _copy(raw, output/'raw', storage)
         _copy(inputs, output/'inputs', storage)
         source_scope = 'completed_configured_first_round'
+        if segment_scope:
+            source_scope = 'completed_finite_moe_segment'
     else:
         path = Path(import_config).resolve(); config = read(path); base = path.parent
         fields(config, {'schema_version', 'run_directory', 'shared_directory', 'system', 'network', 'observation',
@@ -156,16 +164,32 @@ def create(run, output, storage='copy', import_config=None):
     from .observation_recording import capabilities
     if 'recording' in observation:
         manifest.update(schema_version='moe-ub-research-slice/2',capture_capabilities=capabilities(observation,ranks,max_ns))
+    if segment_scope:
+        from .segment import INITIAL_STATE
+        manifest.update(schema_version='moe-ub-research-slice/3',segment=segment,
+            initial_state=deepcopy(INITIAL_STATE),capture_capabilities=capabilities(observation,ranks,max_ns))
     save(output/'slice.json', manifest)
     return inspect(output)
 
 
 def inspect(directory, *, verify=False):
     directory = Path(directory).resolve(); manifest = read(directory/'slice.json')
-    require(manifest.get('schema_version') in (SCHEMA,'moe-ub-research-slice/2') and manifest.get('normal_exit') is True,
+    finite = manifest.get('schema_version') == 'moe-ub-research-slice/3'
+    require(manifest.get('schema_version') in (SCHEMA,'moe-ub-research-slice/2','moe-ub-research-slice/3') and manifest.get('normal_exit') is True,
             'Incomplete or unsupported research slice')
-    require(manifest['initial_state'] == dict(simulation_ns=0, network='fresh', kv='ready_at_decode_start'),
+    from .segment import INITIAL_STATE,validate_segment
+    require(manifest['initial_state'] == (INITIAL_STATE if finite else dict(simulation_ns=0, network='fresh', kv='ready_at_decode_start')),
             'Unsupported slice initial state')
+    if finite:
+        require(manifest['scope']=='completed_finite_moe_segment' and not manifest['archives'],
+                'Invalid finite segment slice boundary')
+        service=read(directory/'inputs/service.json');deployment=read(directory/'raw/deployment.json')
+        require(service['schema_version']=='moe-ub-configured-service/5' and
+                deployment['schema_version']=='moe-ub-service-deployment/6' and
+                service['execution']['segment']==manifest['segment'], 'Finite segment source mismatch')
+        for group in deployment['groups']:
+            require(group['segment']==manifest['segment'],'Finite segment deployment mismatch')
+            validate_segment(manifest['segment'],group['model_spec'])
     integer(manifest['capture_end_ns'], 'slice capture_end_ns', 1)
     integer(manifest['simulation_end_ns'], 'slice simulation_end_ns', 0, manifest['capture_end_ns'])
     ranks = manifest['ranks']
@@ -200,7 +224,7 @@ def inspect(directory, *, verify=False):
     from .observation import execution_coverage
     from .observation_recording import capabilities
     capture=capabilities(manifest['observation'],ranks,manifest['capture_end_ns'])
-    if manifest['schema_version']=='moe-ub-research-slice/2':
+    if manifest['schema_version'] in ('moe-ub-research-slice/2','moe-ub-research-slice/3'):
         require(manifest.get('capture_capabilities')==capture,'Slice capture capability declaration differs from input')
     return dict(passed=True, scope=manifest['scope'], simulation_end_ns=manifest['simulation_end_ns'],
         capture_capabilities=capture,
@@ -290,7 +314,9 @@ def replay(output, config):
     from .observation import execution_coverage
     coverage=execution_coverage(config.get('observation',manifest['observation']),manifest['ranks'],
         config.get('max_simulation_ns',manifest['capture_end_ns']),result['simulation_end_ns'])
-    return dict(simulation_end_ns=result['simulation_end_ns'], scope='dependency_driven_frozen_first_round',
+    return dict(simulation_end_ns=result['simulation_end_ns'], scope=(
+                'dependency_driven_frozen_finite_segment' if manifest['schema_version']=='moe-ub-research-slice/3'
+                else 'dependency_driven_frozen_first_round'),
                 coverage=coverage,
                 source_slice_sha256=file_sha256(directory/'slice.json'), frontend_executed=False,
                 graph_generation_executed=False, backend_executed=True, raw='raw', random=result['random'])

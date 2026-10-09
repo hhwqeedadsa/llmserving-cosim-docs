@@ -118,6 +118,32 @@ void ValidateFullModelProfile(const Json& model, const Json& profile, const Json
     }
 }
 
+Json ValidateModelSegment(const Json& segment, const Json& model)
+{
+    Fields(segment,"schema_version first_layer layer_count decode_step initial_state requests");
+    Require(segment.at("schema_version")=="moe-ub-model-segment/1" && segment.at("initial_state")==Json({
+        {"simulation_ns",0},{"network","fresh"},{"activations","first_block_input_ready"},
+        {"kv","ready_at_selected_decode_step"},{"capacity","full_deployment"}}),"invalid segment initial state");
+    const auto first=Number(segment.at("first_layer")),count=Number(segment.at("layer_count"),1),step=Number(segment.at("decode_step"));
+    Require(first<model.at("layers").size() && count<=model.at("layers").size()-first,"segment outside model");
+    Json ids=Json::array();
+    for(uint64_t i=first;i<first+count;++i) {
+        Require(model.at("layers").at(i).at("kind")=="moe","segment includes non-MoE block");ids.push_back(i);
+    }
+    Require(segment.at("requests").is_array() && !segment.at("requests").empty(),"empty segment requests");
+    std::set<std::string> requests;
+    for(const auto& row:segment.at("requests")) {
+        Fields(row,"request_id rank_id prompt_tokens generated_tokens_at_trace_start token_index");
+        Require(row.at("request_id").is_string() && !row.at("request_id").get<std::string>().empty() &&
+            requests.insert(row.at("request_id").get<std::string>()).second && Number(row.at("rank_id"))<INT32_MAX,"invalid segment request");
+        auto prompt=Number(row.at("prompt_tokens"),1),generated=Number(row.at("generated_tokens_at_trace_start"),1);
+        Require(prompt<=uint64_t(INT64_MAX)-generated && prompt+generated-1<=uint64_t(INT64_MAX)-step &&
+            Number(row.at("token_index"))==prompt+generated-1+step &&
+            Number(row.at("token_index"))<Number(model.at("max_position_embeddings")),"segment context mismatch");
+    }
+    return ids;
+}
+
 LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, std::vector<std::string> packed_children)
 {
     LayerPlan result{std::move(data), {}, {}, {}};
@@ -135,11 +161,25 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, s
     Require(layers.is_array() && !layers.empty() && layers.size() <= 128, "missing communication layers");
     const auto& first = layers[0]; const auto& ranks = first.at("rank_ids");
     ValidateFullModelProfile(model, profile, ranks);
+    const bool segment=p.at("schema_version")=="moe-ub-model-segment-plan/1";
+    Require(p.contains("segment")==segment,"segment/schema mismatch");
     Json ids = Json::array(), moe_ids = Json::array();
     for (const auto& row : model.at("layers"))
     {
         ids.push_back(row.at("layer_id"));
         if (row.at("kind") == "moe") moe_ids.push_back(row.at("layer_id"));
+    }
+    if(segment) {
+        ids=ValidateModelSegment(p.at("segment"),model);moe_ids=ids;
+        Require(first.at("ready_ns")==0,"segment requires fresh simulation time zero");
+        std::map<std::string,const Json*> initial;
+        for(const auto& row:p.at("segment").at("requests"))
+            if(std::find(ranks.begin(),ranks.end(),row.at("rank_id"))!=ranks.end()) initial.emplace(row.at("request_id"),&row);
+        const auto& tokens=first.at("input").at("tokens");Require(initial.size()==tokens.size(),"incomplete segment batch");
+        for(const auto& token:tokens) {
+            const auto& row=*initial.at(token.at("request_id"));
+            Require(token.at("src_rank")==row.at("rank_id") && token.at("token_index")==row.at("token_index"),"segment Token context differs");
+        }
     }
     Require(layers.size() == moe_ids.size(), "missing MoE layer");
     // Reconstruct every field, but compare large tables as they are produced.
@@ -148,10 +188,11 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, s
     const std::set<std::string> replaced = {"input_provenance", "compute_inputs", "contributions", "compute_evaluation",
         "communication_buffers", "operations", "transfers", "rank_graphs", "expert_input_counts", "layers"};
     for (const auto& [key, value] : first.items()) if (!replaced.contains(key)) expected[key] = value;
-    expected["schema_version"] = "moe-ub-full-model-plan/1";
+    expected["schema_version"] = segment?"moe-ub-model-segment-plan/1":"moe-ub-full-model-plan/1";
+    if(segment)expected["segment"]=p.at("segment");
     expected["model_spec"] = model; expected["full_model_profile"] = profile;
     expected["executed_layer_ids"] = ids; expected["communication_layer_ids"] = moe_ids;
-    expected["input"] = Common(first.at("input")); expected["input"]["schema_version"] = "moe-ub-full-model-input/1";
+    expected["input"] = Common(first.at("input")); expected["input"]["schema_version"] = segment?"moe-ub-model-segment-input/1":"moe-ub-full-model-input/1";
     expected["input"]["executed_layer_ids"] = ids;
     for (auto key : {"operations", "expert_input_counts"}) expected[key] = Json::array();
     Require(p.at("rank_graphs").is_array() && p.at("rank_graphs").size() == ranks.size(), "composition mismatch: rank_graphs");
@@ -234,10 +275,11 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, s
                 {"entry_deps", deps}, {"batch_size", n}, {"context_tokens", contexts}});
             return work ? std::vector<uint64_t>{node_id.get<uint64_t>()} : deps;
         };
-        previous = comp("embedding", Product(n, Number(profile.at("per_token_ns").at("embedding"))), previous);
+        if(!segment) previous = comp("embedding", Product(n, Number(profile.at("per_token_ns").at("embedding"))), previous);
         for (const auto& row : model.at("layers"))
         {
             const uint64_t lid = Number(row.at("layer_id")); const auto& cost = profile.at("layers")[lid]; const auto& per = cost.at("per_token_ns");
+            if(std::find(ids.begin(),ids.end(),row.at("layer_id"))==ids.end())continue;
             for (auto stage : {"attention_norm", "mla_prologue"}) previous = comp(stage, Product(n, Number(per.at(stage))), previous, lid);
             previous = comp("mla_attention", Product(context, Number(cost.at("attention_per_context_token_ns"))), previous, lid);
             for (auto stage : {"mla_output", "attention_residual", "ffn_norm"}) previous = comp(stage, Product(n, Number(per.at(stage))), previous, lid);
@@ -294,7 +336,7 @@ LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, Json data, s
             }
             previous = comp("ffn_residual", Product(n, Number(per.at("ffn_residual"))), previous, lid);
         }
-        for (auto stage : {"final_norm", "lm_head", "sampling"}) previous = comp(stage, Product(n, Number(profile.at("per_token_ns").at(stage))), previous);
+        if(!segment)for (auto stage : {"final_norm", "lm_head", "sampling"}) previous = comp(stage, Product(n, Number(profile.at("per_token_ns").at(stage))), previous);
         graph["terminal_nodes"] = previous;
         Require(p.at("rank_graphs")[ri] == graph, "composition mismatch: rank_graphs");
         if (result.execution_retention)

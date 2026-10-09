@@ -169,3 +169,14 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 包含归档的数据包按操作需要展开：采样展开原始事件，重放展开原图。可在采样或重放配置中设置 `cache_directory`，复用经校验的展开副本；未设置时使用本次输出的 `work/slice/`。缓存属于可再生副本，不能替代原始数据包；其空间仍计入预算。缓存来源不符、数据损坏或上次展开中断时会报错，应查明原因后使用新的缓存路径。
 
 已有历史归档可通过 `slice create --import-config FILE --output DIR` 迁入。导入配置使用 `moe-ub-slice-import/1`，必须显式提供运行元数据、图与执行归档清单、网络、系统、观测、范围及来源证明。此操作适合维护已有完整归档的开发者，不会猜测或补造缺失字段。直接取得完整首轮数据包的使用者无需执行导入。
+
+
+## 执行有限 MoE 层段
+
+需要反复研究少量连续层时，使用 [A3 层段小例](../examples/a3_segment/README.md)。`segment prepare --config SELECT.json --output INPUT` 从 `moe-ub-run/1` 指向的完整模型输入中选择原始 MoE 层和 Decode 步骤，输出 `INPUT/run.json`；随后使用已有 `run`、`validate`。选择文件格式为 `moe-ub-segment-prepare/1`，字段是 `source_run`、`first_layer`、`layer_count`、`decode_step`，索引从 0 开始。准备阶段沿用来源运行配置的 `host` 上限，日志在 `INPUT/logs/resources/`。
+
+选择只改变执行范围。模型权重、专家放置和容量声明完整保留；请求上下文对应所选 Decode 步骤。所有请求须在 0 ns 已就绪并容纳在同一初始批次，首块输入和 KV 明确声明已就绪。不会补造缺失路由，也不将短层段等同于完整推理或稳态。
+
+`facts --run RUN --config FACTS.json --output DETAIL` 离线核对并导出指定 graph/rank/层的内部事实，输入必须是带有封存任务图的原始公共运行。配置、数量及空间上限见示例；超过范围或预算会失败。详细记录在 `DETAIL/truth/`，覆盖清单在 `DETAIL/facts.json`，资源日志在 `DETAIL/logs/resources/`。这些字段仅供核验与评价，不能作为只允许读 `observed/` 的分析输入。
+
+`segment freeze --from-run RUN --output SLICE [--storage copy|hardlink]` 保存完成的层段。`copy` 默认独立复制，`hardlink` 适合同一文件系统中不可修改的共享输入；选择前按产物大小预留磁盘。随后使用已有 `slice inspect`、`sample`、`replay`、`validate`。原 `slice create` 的完整首轮约束保持不变。层段回放只接受初态与范围完整声明的 `research-slice/3`；图内条件变化需要重新运行前端。

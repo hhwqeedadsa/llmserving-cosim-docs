@@ -49,3 +49,5 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 v0.5 与问题筛选文档是下一阶段方案，不表示新模型已实现或研究实验已完成。
 
 开发进展与旧方案见[里程碑历史](docs/milestone_history.md)和[设计档案](docs/archive/README.md)。测试输入与已保存证据位于 [fixtures/](fixtures/)，通常无需在开始使用前逐份阅读。
+
+有限连续 MoE 层的准备、内部事实与后端回放见 [A3 层段示例](examples/a3_segment/README.md)。它保留完整模型容量和原层编号，并明确声明起始状态。

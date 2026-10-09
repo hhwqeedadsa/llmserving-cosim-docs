@@ -268,3 +268,16 @@ RSS 和磁盘为周期采样，可能遗漏采样间隔内的短暂峰值；地�
 `moe-ub sample` 则只读取首轮数据包的实际事件，在已覆盖的端口与时间范围内改变采样，不执行上述两种流程。首轮清单绑定输入、来源、图、执行事件、网络与观察范围、随机配置和文件摘要。当前只支持从明确初态执行完整首轮，不恢复任意中途网络状态；改变批次、路由或计算图的实验须重新运行相应前端。
 
 原设计的观测范围与统计要求见 [v0.2 §10](moe_ub_cosim_dev_v0.2.md)，首轮复用边界见 [v0.3 §4.9](archive/moe_ub_cosim_dev_v0.3.md)。存储改造和规模测量的具体结果保留在[资源工程记录](../fixtures/m10_resource_efficiency/README.md)和[首轮验收记录](../fixtures/m10_research_slice/README.md)，不在本格式说明中重复实验过程。
+
+
+## A3 内部局部完成事实与有限层段
+
+A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`（`moe-ub-transfer-local-facts/1`）。`local_read_complete_ns` 是该传输所有原生请求已实际取得编号并形成请求包的时刻，作为参考模型的局部读完成事件；`business_ready_ns` 和 `application_metadata_ready_ns` 分别来自接收方实际 `RequestArrived`，按计划中业务/应用元数据字节区间计算。类别没有字节时为 `null`。填充字节不计入这两类。协议 ACK 回收继续用 `transaction_done_ns`，不与局部复用合并。这些是内部仿真事实，不是硬件可采集接口或 HBM 时序测量。
+
+既有操作级 `data_ready` 保持业务、应用状态及同芯片交付的汇总含义；不能解释为最后一个业务数据包到达。逐数据解释使用新增局部字段，并结合 `message_role` 区分附带元数据和独立 count/flag 消息。
+
+公共 `facts` 命令从封存计划及有界结果记录导出选定范围，格式和预算见 [示例策略](../examples/a3_segment/facts.json)。`truth/nodes.jsonl` 记录原层号、rank、资源名、直接前驱、前驱完成最大值 `dependency_ready_ns`、实际起止时间和事件种类。`ready_to_start_ns` 包含资源与调度等待，不能全部标成网络排队。`truth/deliveries.jsonl` 记录实际数据所有者和消费者、任务/有效字节、来源、提交、局部读、业务与状态到达、全部载荷就绪及协议回收；同芯片行明确 `delivery=same_chip`，没有虚构网络包。
+
+两张表使用现有 `moe-ub-research-storage/1` 压缩清单，通过 `research_storage.stored_rows(DETAIL / 'truth', 'nodes.jsonl')` 或 `deliveries.jsonl` 读取。`facts.json` 声明选定 graph/rank/层、实际数量、输入摘要和限额。一次只加载一个不超过 `max_plan_bytes` 的计划，保留选定节点及其直接前驱；结果记录逐行读取。内存、时间和累计磁盘另受配置 `host` 约束，超限不会产生成功清单。明细不写入 `observed/`，离线导出不会再次运行仿真。
+
+有限层段输入为 `configured-service/5`，其 `execution.segment`（`moe-ub-model-segment/1`）声明原始连续层、Decode 步骤、请求上下文、入口与 KV 已就绪、空网络从 0 ns 开始和完整部署容量。对应计划为 `model-segment-plan/1`，部署为 `service-deployment/6`，保存包为 `research-slice/3`。相关计算只覆盖所选完整块，不执行 embedding、末尾归一化、lm_head 和 sampling。结果 `completion_scope=selected_segment_only`，前端一轮推进仅是执行驱动，不是完整生成 Token；回放范围为 `dependency_driven_frozen_finite_segment`。

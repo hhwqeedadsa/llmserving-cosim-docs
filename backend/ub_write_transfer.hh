@@ -44,6 +44,7 @@ struct WriteDescriptor
     std::optional<std::vector<PayloadRegion>> payload_regions{};
     TransferOperation operation = TransferOperation::Write;
     MessageCategory metadata_category = MessageCategory::AttachedMetadata;
+    bool local_facts = false; // Passive A3 category arrival facts; legacy records remain unchanged.
     int DataOwner() const { return operation == TransferOperation::Load ? dst_rank : src_rank; }
     int Consumer() const { return operation == TransferOperation::Load ? src_rank : dst_rank; }
     // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.
@@ -78,6 +79,8 @@ class UbWriteTransfer
     bool HasPendingEvents() const { return submit_event_.IsPending() || completion_.HasPendingEvents() || local_read_.Pending() || target_ready_.Pending(); }
     void WaitEvent(const std::string& event, std::function<void()> callback);
     std::optional<uint64_t> LocalReadCompleteNs() const { return local_read_.Time(); }
+    std::optional<uint64_t> BusinessReadyNs() const { return business_ready_ns_; }
+    std::optional<uint64_t> MetadataReadyNs() const { return metadata_ready_ns_; }
 
   private:
     void Validate(int src, int dst, uint64_t bytes, int type, int tag,
@@ -102,5 +105,7 @@ class UbWriteTransfer
     bool jetty_retired_ = false;
     uint64_t created_bytes_ = 0;
     CompletionEvent local_read_, target_ready_;
+    uint64_t business_arrived_ = 0, metadata_arrived_ = 0;
+    std::optional<uint64_t> business_ready_ns_, metadata_ready_ns_;
 };
 }

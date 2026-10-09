@@ -19,6 +19,19 @@ def parser():
     resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
     resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
+    segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
+    commands=segment.add_subparsers(dest='segment_command',required=True)
+    prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
+    prepare.add_argument('--config',type=Path,required=True,help='Segment selection JSON referencing a public full-model run config')
+    prepare.add_argument('--output',type=Path,required=True,help='New input directory with run.json')
+    freeze=commands.add_parser('freeze',help='Freeze a completed finite segment; not an arbitrary simulator snapshot')
+    freeze.add_argument('--from-run',type=Path,required=True)
+    freeze.add_argument('--output',type=Path,required=True)
+    freeze.add_argument('--storage',choices=('copy','hardlink'),default='copy')
+    facts=sub.add_parser('facts',help='Export bounded selected A3 execution facts into internal truth; never observed data')
+    facts.add_argument('--run',type=Path,required=True,help='Completed original configured run with sealed plans')
+    facts.add_argument('--config',type=Path,required=True,help='Explicit graph/rank/layer coverage and resource budgets')
+    facts.add_argument('--output',type=Path,required=True,help='New internal facts directory')
     for name, help_text in [('run', 'Run a configured service and export bounded research records'),
                             ('sample', 'Generate observations from a frozen slice without frontend/backend execution'),
                             ('replay', 'Execute frozen graphs in the real backend without scheduling or graph generation')]:
@@ -60,6 +73,16 @@ def main(argv=None):
             _, manifest = prepare(args.config.resolve(), args.backend.resolve(), args.output.resolve())
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
+        elif args.command == 'segment':
+            if args.segment_command=='prepare':
+                from .segment import prepare
+                value=prepare(args.config,args.output)
+            else:
+                from .research_slice import create
+                value=create(args.from_run,args.output,args.storage,segment_scope=True)
+        elif args.command == 'facts':
+            from .local_facts import execute
+            value=execute(args.run,args.config,args.output)
         elif args.command == 'slice':
             from .research_slice import create, inspect
             value = (create(args.from_run, args.output, args.storage, args.import_config)

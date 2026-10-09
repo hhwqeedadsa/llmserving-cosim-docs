@@ -201,7 +201,7 @@ LayerPlan ValidateA3Plan(const J& p,bool retain) {
     for(const auto& t:p.at("transfers")){int src=t.at("src_rank"),dst=t.at("dst_rank");
         if(!t.contains("ub_task_id")){result.local_descriptors.push_back({t.at("transfer_id"),p.at("graph_id"),t.at("send_node_id"),t.at("recv_node_id"),src,dst,t.at("comm_tag"),t.at("payload_bytes"),t.at("operation_id")});continue;}
         WriteDescriptor d{t.at("transfer_id"),t.at("ub_task_id"),p.at("graph_id"),t.at("send_node_id"),t.at("recv_node_id"),src,dst,t.at("comm_tag"),t.at("payload_bytes"),t.at("operation_id"),t.at("chunk_index"),t.at("pair_byte_range").at(0),t.at("pair_payload_bytes"),endpoints.at(src),endpoints.at(dst)};
-        d.operation=TransferOperation::Store;d.metadata_category=MetadataCategory(t.at("kind"),t.at("message_role"));d.payload_regions.emplace();
+        d.operation=TransferOperation::Store;d.local_facts=true;d.metadata_category=MetadataCategory(t.at("kind"),t.at("message_role"));d.payload_regions.emplace();
         for(const auto& r:t.at("payload_regions"))d.payload_regions->push_back({r.at("begin"),r.at("end"),r.at("kind")});
         result.descriptors.push_back(d);
     }

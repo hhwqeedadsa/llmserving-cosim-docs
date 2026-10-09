@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "simulation_end_ns": 3414,
+  "selected_layers": [
+    2,
+    3
+  ],
+  "facts": {
+    "nodes": 448,
+    "deliveries": 66
+  },
+  "replay_compared_fields": {
+    "endpoint_ops": 12,
+    "local_deliveries": 20,
+    "native_completions": 46,
+    "native_starts": 46,
+    "node_execution": 448,
+    "operation_registry": 4,
+    "operation_stages": 90,
+    "plan_summary": 1,
+    "planned_transfers": 66,
+    "target_writes": 0,
+    "transfer_registry": 46,
+    "transfers": 46,
+    "wqe_completions": 0,
+    "wqe_starts": 0
+  },
+  "source_state": "fresh_network_ready_block_input_and_KV",
+  "full_capacity_preserved": true,
+  "offline_replay": true,
+  "python_checks": 29,
+  "cpp_scope_rejections": 5,
+  "legacy_first_round_workflow": true,
+  "evidence_directory": "runs/m20-segment-facts",
+  "calibration_status": "unvalidated_reference"
+}

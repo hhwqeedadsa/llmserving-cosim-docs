@@ -47,8 +47,8 @@ def configuration(path, action, backend=None):
         service = read(config['inputs']['service'])
         # The first public workflow exposes inline configured full-model inputs;
         # legacy entrypoints retain their existing capabilities and path rules.
-        require(service.get('schema_version') == 'moe-ub-configured-service/4',
-                'inputs.service: public run requires moe-ub-configured-service/4 with inline model/routes')
+        require(service.get('schema_version') in ('moe-ub-configured-service/4','moe-ub-configured-service/5'),
+                'inputs.service: public run requires full-model service/4 or finite-segment service/5 with inline model/routes')
     if 'network' in config:
         config['network'] = str(relative(base, config['network'], kind='directory'))
     if 'cache_directory' in config:

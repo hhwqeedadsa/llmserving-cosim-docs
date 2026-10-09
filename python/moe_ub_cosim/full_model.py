@@ -57,7 +57,7 @@ def audit_full_capacity(model, memory, layer):
     return result
 
 
-def compose_full_model(layers, model, profile, *, _retain_layers=False):
+def compose_full_model(layers, model, profile, *, segment=None, _retain_layers=False):
     # Public composition copies the caller's children. Internal build owns its
     # children; validation reads existing children without changing them. Both
     # may retain that list instead of duplicating it. All checks still run.
@@ -66,7 +66,11 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
     validate_model(model,ranks);validate_profile(model,profile)
     require(len(model['layers'])<=MAX_SEGMENT_LAYERS,'Full model exceeds host layer budget')
     ids=[r['layer_id'] for r in model['layers']]
-    moe_ids=[r['layer_id'] for r in model['layers'] if r['kind']=='moe']
+    if segment is not None:
+        from .segment import validate_segment
+        require(first['ready_ns']==0,'Segment requires fresh simulation time zero')
+        ids=validate_segment(segment,model,first['input']['tokens'],ranks)
+    moe_ids=[i for i in ids if model['layers'][i]['kind']=='moe']
     require([l['input']['layer_id'] for l in layers]==moe_ids,'Full model requires every MoE layer exactly once')
     common=common_input(first)
     token_keys=lambda p:[{k:v for k,v in t.items() if k not in ('layer_id','expert_ids')} for t in p['input']['tokens']]
@@ -105,6 +109,9 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
         input=dict(deepcopy(common),schema_version='moe-ub-full-model-input/1',executed_layer_ids=ids),
         operations=[deepcopy(op) for l in layers for op in l['operations']],transfers=[],rank_graphs=[],
         expert_input_counts=[sum(l['expert_input_counts'][i] for l in layers) for i in range(len(ranks))])
+    if segment is not None:
+        merged.update(schema_version='moe-ub-model-segment-plan/1',segment=deepcopy(segment))
+        merged['input']['schema_version']='moe-ub-model-segment-input/1'
     offsets={}
     for ri,rank in enumerate(ranks):
         local=[t for t in tokens if t['src_rank']==rank];n=len(local);context=sum(t['token_index']+1 for t in local)
@@ -119,10 +126,10 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
             graph['model_stages'].append(dict(stage=stage,layer_id=lid,node_id=node_id,duration_ns=work,
                 entry_deps=deps,batch_size=n,context_tokens=[t['token_index']+1 for t in local]))
             return [node_id] if node_id is not None else deps
-        previous=comp('embedding',n*profile['per_token_ns']['embedding'],previous)
+        if segment is None:previous=comp('embedding',n*profile['per_token_ns']['embedding'],previous)
         children={l['input']['layer_id']:l for l in layers}
-        for spec,cost in zip(model['layers'],profile['layers']):
-            lid=spec['layer_id'];per=cost['per_token_ns']
+        for lid in ids:
+            spec,cost=model['layers'][lid],profile['layers'][lid];per=cost['per_token_ns']
             for stage in ('attention_norm','mla_prologue'):
                 previous=comp(stage,n*per[stage],previous,lid)
             previous=comp('mla_attention',context*cost['attention_per_context_token_ns'],previous,lid)
@@ -157,7 +164,7 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
                 shared=comp('shared_expert',n*spec['shared_experts']*per['shared_expert'],branch,lid)
                 previous=comp('shared_routed_add',n*per['shared_routed_add'],terminal+shared,lid)
             previous=comp('ffn_residual',n*per['ffn_residual'],previous,lid)
-        for stage in ('final_norm','lm_head','sampling'):
+        for stage in (() if segment is not None else ('final_norm','lm_head','sampling')):
             previous=comp(stage,n*profile['per_token_ns'][stage],previous)
         integer(first['ready_ns']+sum(node.get('duration_ns',0) for node in nodes),'full model time bound')
         graph['terminal_nodes']=previous;merged['rank_graphs'].append(graph)
@@ -172,19 +179,19 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
     return merged
 
 
-def build_full_model(configs, identities, provenance, model, profile):
+def build_full_model(configs, identities, provenance, model, profile, *, segment=None):
     from .resources import full_usage, check_graph, actual_usage
     from .plan import validate_config
     for c in configs:validate_config(c)
-    usage=check_graph(full_usage(configs,model),configs[0].get('resource_budget'))
-    plan=compose_full_model(build_children(configs,provenance),model,profile,_retain_layers=True)
+    usage=check_graph(full_usage(configs,model,segment=segment),configs[0].get('resource_budget'))
+    plan=compose_full_model(build_children(configs,provenance),model,profile,segment=segment,_retain_layers=True)
     require(actual_usage(plan)==usage,'Full model preflight count mismatch')
     identities.assign(plan);validate_full_model(plan)
     return plan
 
 
 def validate_full_model(plan):
-    expected=compose_full_model(plan['layers'],plan['model_spec'],plan['full_model_profile'],_retain_layers=True)
+    expected=compose_full_model(plan['layers'],plan['model_spec'],plan['full_model_profile'],segment=plan.get('segment'),_retain_layers=True)
     for key,value in expected.items():
         if key not in ('compute_source','route_source'):
             require(plan.get(key)==value,'Full model composition mismatch: '+key)

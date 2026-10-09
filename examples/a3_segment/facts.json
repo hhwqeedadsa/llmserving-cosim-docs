@@ -1,0 +1,33 @@
+{
+  "schema_version": "moe-ub-local-facts/1",
+  "host": {
+    "rss_bytes": 4294967296,
+    "address_bytes": 8589934592,
+    "artifact_bytes": 2147483648,
+    "wall_seconds": 300,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": []
+  },
+  "selection": {
+    "graph_ids": [
+      "g0"
+    ],
+    "rank_ids": [
+      2,
+      7,
+      12
+    ],
+    "layer_ids": [
+      2,
+      3
+    ]
+  },
+  "limits": {
+    "max_graphs": 1,
+    "max_nodes": 10000,
+    "max_transfers": 10000,
+    "max_plan_bytes": 134217728,
+    "max_compressed_bytes": 16777216,
+    "max_record_bytes": 1048576
+  }
+}

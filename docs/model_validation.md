@@ -159,3 +159,7 @@ Decode 入口与请求完成分别处理。文件尾端或观察片段结束均�
 `runtime_adapted` 表示固定通信源码行为已转为本平台计划；`full_model_graph_execution_validated=true` 只在相应完整图实际完成后写入。`unvalidated_reference` 仍表示未经目标硬件校准。`full_model_execution_validated`、`target_runtime_executed`、`numerical_model_executed`、`mla_kernel_validated`、`quantized_kernels_executed`、`target_deployment_validated` 等完整模型或原生执行标志仍为 false，不因图执行通过而改写。
 
 开展参考参数实验时，应记录固定输入与版本、成本和网络选择、采样口径及结果适用范围。若要进一步声称复现目标硬件，需取得匹配形状、精度、并行布局和通信路径的测量，先固定事件对应、时间戳精度与字节口径，再分别比较数据量、阶段时间和端口分布。当前没有拟合目标时延或设定统一硬件误差百分比。
+
+## 有限层段的初态与容量
+
+有限层段复用原模型、完整部署容量、专家放置、原始路由层号和所选 Decode 步骤上下文。假定首块输入及 KV 已就绪，从空网络开始；首层不自动等同于充分预热，也不宣称稳态。只执行选定完整块的参考成本，不含 embedding、末尾 head 或采样。局部读完成采用全部原生 STORE 请求已形成的参考事件，业务与状态到达按真实接收字节区间核验；硬件 MTE/HBM 时序仍未校准。功能证据见 [M20](../fixtures/m20_segment_facts/README.md)。

@@ -53,6 +53,7 @@ LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true,
 LayerPlan ValidateA3Plan(const nlohmann::json& data, bool retain_data = true);
 LayerPlan ValidateNativePlan(const nlohmann::json& data, bool retain_data = true);
 void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
+nlohmann::json ValidateModelSegment(const nlohmann::json& segment, const nlohmann::json& model);
 LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data,
                           std::vector<std::string> packed_children = {});
 LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const nlohmann::json& data);

@@ -157,10 +157,11 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention re
     if (retention == PlanRetention::Execution) parsed = ParsePackedPlanJson(stream);
     else parsed.data = Json::parse(stream);
     auto& p = parsed.data;
-    if (p.at("schema_version") != "moe-ub-full-model-plan/1") parsed.Restore();
+    const bool full=p.at("schema_version")=="moe-ub-full-model-plan/1" || p.at("schema_version")=="moe-ub-model-segment-plan/1";
+    if (!full) parsed.Restore();
     Require(resources::Budget(p.at("input")) == resource_budget, "plan/resource budget sidecar mismatch");
     if (!resource_budget.is_null()) resources::Check(resources::Actual(p),resource_budget);
-    if (p.at("schema_version") == "moe-ub-full-model-plan/1")
+    if (full)
         return LoadFullModelPlan(directory, std::move(p), std::move(parsed.layers));
     if (p.at("schema_version") == "moe-ub-multilayer-plan/1" || p.at("schema_version") == "moe-ub-multilayer-plan/2")
         return LoadMultilayerPlan(directory, p);

@@ -46,3 +46,5 @@ M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F
 ## 文档整理
 
 2026-10-05 完成主仓文档职责划分、术语说明、重复记录压缩和导航整理，发布于 [749c8c5](https://github.com/baoy21/moe-ub-cosim/commit/749c8c55fce4e5199888b63b3ae56cf55d7d92ef)。检查范围及结果见[当时的任务记录](https://github.com/baoy21/moe-ub-cosim/blob/749c8c55fce4e5199888b63b3ae56cf55d7d92ef/docs/tasks/current.md)。这次交付仅调整文档，源码、配置、测试输入、依赖与原验收结论不变。
+
+- 2026-10-09，M20（P3）：有限原始 MoE 层段、内部局部完成事实及有界导出、新格式冻结与后端回放已通过小型公共流程、C++ 范围校验和旧首轮回归。范围与证据见 [M20 fixture](../fixtures/m20_segment_facts/README.md)。

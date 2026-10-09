@@ -67,11 +67,15 @@ def cann_usage(c):
     return dict(transfers=fabric+near,fabric_transfers=fabric,local_transfers=near,nodes=2*(fabric+near)+compute)
 
 
-def full_usage(configs,model):
+def full_usage(configs,model,*,segment=None):
     rows=[cann_usage(c) for c in configs]
     result={key:sum(r[key] for r in rows) for key in rows[0]}
     active=len({t['src_rank'] for t in configs[0]['tokens']})
-    outer=4+sum(8 if r['kind']=='dense' else 10 if r['shared_experts'] else 8 for r in model['layers'])
+    blocks=model['layers']
+    if segment is not None:
+        from .segment import validate_segment
+        blocks=[model['layers'][i] for i in validate_segment(segment,model)]
+    outer=(4 if segment is None else 0)+sum(8 if r['kind']=='dense' else 10 if r['shared_experts'] else 8 for r in blocks)
     result['nodes']+=active*outer
     return result
 

@@ -222,3 +222,7 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 | 端口观测、来源及存储 | [check_observation.py](../tests/integration/check_observation.py)、[资源工程测试记录](../fixtures/m10_resource_efficiency/README.md) |
 
 原设计的时间、控制协议、完成与身份要求保留在 [v0.2 §7～8](../docs/moe_ub_cosim_dev_v0.2.md)，参数化和多组执行要求见 [v0.3 §3、4.5～4.7](../docs/archive/moe_ub_cosim_dev_v0.3.md)。各阶段的历史命令、耗时和失败修正通过[历史索引](../docs/milestone_history.md)查阅；这些记录不改变当前接口的范围。
+
+## 有限原始层段
+
+`model-segment-plan/1` 复用完整模型成本与 A3 资源图，只执行声明的连续原始 MoE 块，保留原层号。C++ 从完整模型、成本、原始子层输入与 `segment` 初态独立重建，拒绝范围或上下文不一致。`service-deployment/6` 固定该范围，协议提交不能中途改变。布局、事件和容量边界见[输出数据](../docs/record_storage.md)及[公开小例](../examples/a3_segment/README.md)。A3 STORE 的局部与分类到达时刻取自原生请求形成及真实目标交付回调；这些被动字段不调度事件、不改变包或路径。

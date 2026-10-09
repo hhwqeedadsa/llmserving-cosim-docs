@@ -61,7 +61,11 @@ def audit(baseline, directory, output):
     if output.exists():raise ValueError('Input audit output must be new')
     base_case,case=read(baseline/'case.json'),read(directory/'case.json')
     control=validate(case['control'],base_case)
-    source=read(baseline/'prepared/service.json'); layers=read(baseline/'prepared/layers.json')
+    baseline_run=baseline/'run'
+    manifest=read(baseline_run/'manifest.json')
+    if not (manifest.get('normal_exit') is True and manifest.get('validation') is True):
+        raise ValueError('Baseline run must be completed and validated')
+    source=read(baseline_run/'inputs/service.json'); layers=read(baseline_run/'inputs/layer.json')
     actual=read(directory/'prepared/service.json'); actual_layers=read(directory/'prepared/layers.json')
     if len(layers['groups'])!=1 or len(actual_layers['groups'])!=1:
         raise ValueError('This batch requires one explicit group')
@@ -75,10 +79,24 @@ def audit(baseline, directory, output):
     for value in (bnet,cnet):
         for key in ('scenario_id','service','layer'):value.pop(key)
     if bnet!=cnet:raise ValueError('Network or system scenario changed')
+    bdir,cdir=baseline_run/'inputs/network',directory/'resolved/network'
+    bfiles={p.relative_to(bdir).as_posix():p for p in bdir.rglob('*') if p.is_file()}
+    cfiles={p.relative_to(cdir).as_posix():p for p in cdir.rglob('*') if p.is_file()}
+    if set(bfiles)!=set(cfiles):raise ValueError('Actual network file coverage changed')
+    network={}
+    for name,path in bfiles.items():
+        if name=='backend.json':
+            left,right=read(path),read(cfiles[name])
+            left.pop('scenario_id',None);right.pop('scenario_id',None)
+            if left!=right:raise ValueError('Effective backend changed beyond scenario identity')
+        elif digest(path)!=digest(cfiles[name]):raise ValueError('Actual network file changed: '+name)
+        network[name]=dict(baseline_sha256=digest(path),control_sha256=digest(cfiles[name]))
     checks={}
     for name in ('route-manifest.json','prepared/system.json','prepared/observation.json',
                  'prepared/record-policy.json','prepared/export-policy.json'):
-        left,right=digest(baseline/name),digest(directory/name)
+        sealed=('run/inputs/'+name.removeprefix('prepared/')) if name in (
+            'prepared/system.json','prepared/observation.json','prepared/record-policy.json') else name
+        left,right=digest(baseline/sealed),digest(directory/name)
         if left!=right:raise ValueError('Common input changed: '+name)
         checks[name]=left
     if any(base_case[k]!=case[k] for k in ('platform_commit','backend_sha256')):
@@ -89,7 +107,10 @@ def audit(baseline, directory, output):
             raise ValueError('Host limits changed')
     save(output,dict(schema_version='issue-screening-control-input-audit/1',passed=True,control=control,
         baseline_case_sha256=digest(baseline/'case.json'),control_case_sha256=digest(directory/'case.json'),
-        common_input_sha256=checks,prepared_source_sha256=digest(directory/'prepared/service.json'),
+        baseline_sealed_service_sha256=digest(baseline_run/'inputs/service.json'),
+        baseline_sealed_layers_sha256=digest(baseline_run/'inputs/layer.json'),
+        common_input_sha256=checks,network_files=network,
+        prepared_source_sha256=digest(directory/'prepared/service.json'),
         prepared_layers_sha256=digest(directory/'prepared/layers.json'),
         equal_except_declared_factor_and_run_identity=True,program_sha256=digest(Path(__file__))))
     print('single-factor input audit passed:',control['case_id'])

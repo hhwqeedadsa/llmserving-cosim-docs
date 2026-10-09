@@ -41,7 +41,17 @@ class Checks(unittest.TestCase):
                     save(path/name,dict(common=True))
                 save(path/'run.json',dict(host=dict(rss_bytes=8,artifact_roots=[str(path)]),export_host=dict(rss_bytes=8,artifact_roots=[str(path)])))
                 (path/'scenario.yaml').write_text(yaml.safe_dump(dict(scenario_id=marker['case_id'],service=str(path/'prepared/service.json'),layer=str(path/'prepared/layers.json'),network=dict(rate='400Gbps'))))
+            for name,target in (('service.json','service.json'),('layers.json','layer.json'),
+                    ('system.json','system.json'),('observation.json','observation.json'),('record-policy.json','record-policy.json')):
+                save(base/'run/inputs'/target,read(base/'prepared'/name))
+            save(base/'run/manifest.json',dict(normal_exit=True,validation=True))
+            save(base/'run/inputs/network/backend.json',dict(scenario_id='normal',seed=1))
+            save(changed/'resolved/network/backend.json',dict(scenario_id='control-half',seed=1))
             audit_control(base,changed,root/'accepted.json')
+            save(changed/'resolved/network/backend.json',dict(scenario_id='control-half',seed=2))
+            with self.assertRaisesRegex(ValueError,'Effective backend changed'):
+                audit_control(base,changed,root/'bad-network.json')
+            save(changed/'resolved/network/backend.json',dict(scenario_id='control-half',seed=1))
             actual=read(changed/'prepared/service.json');actual['groups'][0]['full_model_profile']['layers'][7]['per_token_ns']['combine_unpack_merge']+=1
             save(changed/'prepared/service.json',actual)
             actual=read(changed/'prepared/layers.json');actual['groups'][0]['layers'][1]['compute_profile_ns']['combine_unpack_merge']+=1

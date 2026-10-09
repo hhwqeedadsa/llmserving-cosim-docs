@@ -23,7 +23,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --output runs/scaleup_issue_screening/analysis/g0-b2-short
 ```
 
-分析先调用 `moe-ub validate`，再读取公开格式和内部身份，输出 `summary.json`、`ranks.jsonl`、`compute.jsonl` 和 `ports.jsonl`。分别是操作/网络摘要、各 rank 的进入与完成及工作量、后续实际计算节点时刻、覆盖端口统计。分析是研究者核验工具，会读 `truth/`，不能拿它作为只读公开观测的测量算法。没有将相关 rank 计为独立重复。
+分析先调用 `moe-ub validate`，再读取运行中封存的 `inputs/service.json`、`inputs/layer.json`、公开格式和内部身份，输出 `summary.json`、`ranks.jsonl`、`compute.jsonl` 和 `ports.jsonl`。分别是操作/网络摘要、各 rank 的进入与完成及工作量、后续实际计算节点时刻、覆盖端口统计。分析是研究者核验工具，会读 `truth/`，不能拿它作为只读公开观测的测量算法。没有将相关 rank 计为独立重复。
 
 四个预定 case 全部分析完成后，可比较负载档位和短长段的相同分析层：
 
@@ -72,7 +72,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --output runs/scaleup_issue_screening/g0-b2-expert-half/input-audit.json
 ```
 
-核验会拒绝未声明的请求、成本、网络、观察配置和预算变化。使用新目录，逐项核验后再执行下一项，不同时运行多个后端。
+核验以正常运行封存的输入及实际网络文件为依据，会拒绝未声明的请求、成本、网络、观察配置和预算变化。仅允许网络元数据中的运行身份不同；种子、节点和链路等有效条件必须一致。分析时再次检查对照输入摘要与实际执行封存内容相符。使用新目录，逐项核验后再执行下一项，不同时运行多个后端。
 
 恢复正常基线后，可用公开平台入口导出已选候选的内部事实：
 

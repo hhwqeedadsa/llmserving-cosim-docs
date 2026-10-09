@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "e1_archives": {
+    "g0-b2-short.tar.gz.json": {
+      "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+      "prepared_matches_sealed": {
+        "service.json": true,
+        "layers.json": true
+      }
+    },
+    "g0-b4-short.tar.gz.json": {
+      "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+      "prepared_matches_sealed": {
+        "service.json": true,
+        "layers.json": true
+      }
+    },
+    "g0-b8-long.tar.gz.json": {
+      "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+      "prepared_matches_sealed": {
+        "service.json": true,
+        "layers.json": true
+      }
+    },
+    "g0-b8-short.tar.gz.json": {
+      "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "prepared_matches_sealed": {
+        "service.json": true,
+        "layers.json": true
+      }
+    }
+  },
+  "small_analysis_identical": true,
+  "small_analysis_output": "runs/scaleup_issue_screening/tooling-control-check/analysis-sealed",
+  "checks": 10,
+  "checks_log": "runs/scaleup_issue_screening/entry-audit/sealed-input-final-checks.stderr.log",
+  "programs": {
+    "analyze.py": "c236ce7a00779cab11ad3d058bca8f61c17a288dffedc6f77fe67769d2f1fc31",
+    "controls.py": "c6ba8929c999818432e2d541c8fed78f97b5a24accbb32412d8a30e3b121c1ef",
+    "check_workflow.py": "0875043c9924226fb048a82db0fa5e015faef8bd6f3c9ff7896390a34adb83dc"
+  }
+}

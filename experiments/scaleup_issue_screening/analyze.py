@@ -125,7 +125,7 @@ def analyze(directory, output, validate=True):
     run = directory/'run'
     if validate:
         cli(output, 'validate', 'validate', '--run', run)
-    source = read(directory/'prepared/service.json')
+    source = read(run/'inputs/service.json')
     case = read(directory/'case.json')
     execution = read(run/'raw/execution/result.json')
     compute = compute_index(run)
@@ -149,7 +149,7 @@ def analyze(directory, output, validate=True):
     workloads = {}
     expert_counts = {}
     ranks = sorted(public['rank_ids'])
-    layers = {layer['layer_id']:layer for group in read(directory/'prepared/layers.json')['groups'] for layer in group['layers']}
+    layers = {layer['layer_id']:layer for group in read(run/'inputs/layer.json')['groups'] for layer in group['layers']}
     ids = sorted({o['layer_id'] for o in operations})
     for layer in ids:
         work = {r:dict(requests=0, context_tokens=0, routed_inputs=0, same_chip_vectors=0, network_vectors=0) for r in ranks}
@@ -228,6 +228,16 @@ def analyze(directory, output, validate=True):
         compute_relations=compute_relations(rank_rows,actual_compute,source['groups'][0]['full_model_profile']),
         analysis_program_sha256=digest(Path(__file__)),
         independent_source_groups=1, rank_observations_are_independent_repetitions=False)
+    summary['sealed_input_sha256']={name:digest(run/'inputs'/name) for name in ('service.json','layer.json')}
+    if 'control' in case:
+        audit=read(directory/'input-audit.json')
+        if not (audit['passed'] and audit['control']==case['control'] and
+                audit['control_case_sha256']==digest(directory/'case.json') and
+                audit['prepared_source_sha256']==summary['sealed_input_sha256']['service.json'] and
+                audit['prepared_layers_sha256']==summary['sealed_input_sha256']['layer.json']):
+            raise ValueError('Control input audit does not match this sealed execution')
+        summary.update(control=case['control'],input_audit_sha256=digest(directory/'input-audit.json'))
+        save(output/'input-audit.json',audit)
     save(output/'summary.json', summary)
     with (output/'ranks.jsonl').open('w') as stream:
         for row in rank_rows:

@@ -1,0 +1,42 @@
+[
+  {
+    "phase": "g0-b2-expert-double-prepare/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 241.88451400771737,
+    "peak_sampled_group_rss_bytes": 1282351104,
+    "peak_sampled_artifact_bytes": 49428250624
+  },
+  {
+    "phase": "g0-b2-expert-double/run/logs/resources-run/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 542.5362631194293,
+    "peak_sampled_group_rss_bytes": 6780624896,
+    "peak_sampled_artifact_bytes": 50558853120
+  },
+  {
+    "phase": "g0-b2-expert-double/run/logs/resources-export/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 81.90780843421817,
+    "peak_sampled_group_rss_bytes": 36143104,
+    "peak_sampled_artifact_bytes": 50579230720
+  },
+  {
+    "phase": "analysis/g0-b2-expert-double-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 58.458187099546194,
+    "peak_sampled_group_rss_bytes": 1031696384,
+    "peak_sampled_artifact_bytes": 50582659072
+  },
+  {
+    "phase": "archives/g0-b2-expert-double.tar.gz-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 68.70850994437933,
+    "peak_sampled_group_rss_bytes": 60325888,
+    "peak_sampled_artifact_bytes": 50704420864
+  }
+]

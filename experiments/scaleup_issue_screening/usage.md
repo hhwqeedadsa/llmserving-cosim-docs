@@ -160,7 +160,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service
 ```
 
-`check_small` 也接受 `--control experiments/scaleup_issue_screening/configs/check/control-half.json`，用独立合成输入验证同一单因素修改路径。
+`check_small` 也接受 `--control experiments/scaleup_issue_screening/configs/check/control-half.json` 或 `control-fence.json`，分别用独立合成输入验证成本与复制完成条件的修改路径。先选出层段，再解析该层段的有效场景；未执行的来源层不参与运行配置检查。
 
 前者检查覆盖、三个时间指标、单因素输入隔离及归档拒绝条件；后者用本目录的合成小输入完成准备、运行、分析、保存、压缩、恢复和平台验证，不依赖真实来源或旧运行。合成结果只检查工具，不能作为正常业务发现。
 

@@ -34,6 +34,14 @@
 
 摘要见[实际结果](g0-b2-expert-half.json)、[资源](g0-b2-expert-half-resources.json)和[归档](g0-b2-expert-half-archive.json)。
 
+## 专家成本加倍的实际结果
+
+相同范围的参考成本改为 200 ns/输入后，最后一层计算结束为 166613 ns，比基线增加 55821 ns（50.38%）。第 7、8 层 Combine 中位持续时间为 48919、53187.5 ns，进入跨度为 41526、44780 ns。单因素输入核验、公开运行校验与归档核验均通过。
+
+两个交换机队列类别的总等待面积为 5864050616 字节·纳秒，比基线减少约 4.52%，业务却明显变慢。这与减半对照一起支持准备节奏的重要作用；它们没有把原生请求推进与交换机服务分别隔离，不能据此量化全部端侧或网络贡献。
+
+摘要见[实际结果](g0-b2-expert-double.json)、[输入核验](expert-double-input-audit.json)、[资源](g0-b2-expert-double-resources.json)和[归档](g0-b2-expert-double-archive.json)。
+
 ## 输入和证据
 
 对照输入先与正常基线逐项比较。只允许所选层的声明因素和运行身份改变；实际请求、路由、上下文、其他成本、模型容量、网络与观察配置保持一致。控制后的模型成本和层成本同时核对，防止误改第二个因素。
@@ -41,5 +49,6 @@
 - [基线摘要](baseline.json)、[事实与资源摘要](baseline-facts.json)、[依赖链](baseline-witnesses.json)。
 - [批次磁盘估计](budget.json)：约 47.78 GiB，含三个对照归档与明细限额；这是估计，仍受 48 GiB 实际监控约束。
 - [成本减半输入核验](expert-half-input-audit.json)。
+- [替代完成条件的小型工具验证](../../fence-tooling-summary.json)：独立合成来源，准备、执行、分析、保存及归档恢复均通过；不作为正常业务证据。
 
 完整事实在 `runs/scaleup_issue_screening/facts/g0-b2-baseline/`，其 `truth/` 只供核验。操作见[实验命令](../../usage.md)，当前执行位置只在[任务页](../../../../docs/tasks/current.md)维护。

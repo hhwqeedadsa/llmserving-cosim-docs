@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "synthetic_only": true,
+  "requests": 3,
+  "operations": 4,
+  "simulation_end_ns": 3414,
+  "archive": {
+    "schema_version": "issue-screening-archive/1",
+    "archive_sha256": "eb035c53609c49b5ea0ba22fa92c66a73125c8069637c0bed1c4d6c4eed8562d",
+    "archive_bytes": 251292,
+    "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/tooling-fence-check/case",
+    "logical_bytes": 2838733,
+    "verified": true,
+    "expanded_released": true
+  },
+  "public_run_and_freeze": true,
+  "restored_run_and_slice_validated": true,
+  "control": {
+    "schema_version": "issue-screening-control/1",
+    "case_id": "synthetic-fence",
+    "baseline_case": "synthetic-tooling-check",
+    "parameter": "copy_fence",
+    "reference": "data_ready",
+    "value": "local_read_complete"
+  },
+  "unit_checks": {
+    "passed": true,
+    "count": 11,
+    "log": "runs/scaleup_issue_screening/entry-audit/fence-workflow-checks.stderr.log"
+  },
+  "resources": {
+    "status": "completed",
+    "wall_seconds": 172.44696369580925,
+    "peak_sampled_group_rss_bytes": 190185472,
+    "peak_sampled_artifact_bytes": 49479426048
+  },
+  "program_sha256": {
+    "check_small.py": "e973b3edeba272cd0022f7f17b577ce3b698a7bbcc43dec034b708a0986496e7",
+    "controls.py": "c6ba8929c999818432e2d541c8fed78f97b5a24accbb32412d8a30e3b121c1ef",
+    "workflow.py": "cc68eaef151ed5d19103d8d68c41b4e40ee0e3b17bc77ebbd09e00b4e8285eb9",
+    "check_workflow.py": "f89367cd60d7ea1ee04f5dea4cb77188449b8408a521b6f894e821b45014f78e"
+  },
+  "evidence_directory": "runs/scaleup_issue_screening/tooling-fence-check"
+}

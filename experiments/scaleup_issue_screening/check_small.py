@@ -6,7 +6,7 @@ import yaml
 
 from .analyze import analyze
 from .archive import pack, restore
-from .workflow import CONFIG, cli, digest, host, read, save
+from .workflow import CONFIG, cli, command, digest, host, read, save
 
 
 def check(output, backend, control_path=None):
@@ -30,19 +30,31 @@ def check(output, backend, control_path=None):
     scenario['system'] = str(CONFIG/'system.json')
     scenario['backend']['reference_file'] = str(CONFIG/'backend-reference.yaml')
     scenario['network']['fabric_file'] = str(config/'fabric.json')
-    (case/'scenario.yaml').write_text(yaml.safe_dump(scenario,sort_keys=False))
-    cli(case,'resolve','resolve','--config',case/'scenario.yaml','--backend',backend,'--output',case/'resolved')
-    save(case/'source-run.json',dict(schema_version='moe-ub-run/1',host=host(extra_roots=[case]),
-        inputs=dict(service=str(case/'resolved/service.json'),layer=str(case/'resolved/layer.json'),
-            system=str(case/'resolved/system.json'),network=str(case/'resolved/network')),
+    save(case/'source-network-defaults.json',scenario['network']['defaults'])
+    command(case,'source-fabric',[sys.executable,'-m','moe_ub_cosim.fabric',
+        '--input',str(config/'fabric.json'),'--defaults',str(case/'source-network-defaults.json'),
+        '--output-dir',str(case/'source-network')])
+    save(case/'source-run.json',dict(schema_version='moe-ub-segment-source/1',host=host(extra_roots=[case]),
+        inputs=dict(service=scenario['service'],layer=scenario['layer'],
+            system=str(CONFIG/'system.json'),network=str(case/'source-network')),
         observation=str(config/'observation.json'),record_policy=str(CONFIG/'record-policy.json'),
         export_policy=str(CONFIG/'export-policy.json'),max_simulation_ns=1000000,backend=str(backend),backend_timeout_seconds=240))
     save(case/'select.json',dict(schema_version='moe-ub-segment-prepare/1',source_run='source-run.json',
         first_layer=2,layer_count=2,decode_step=0))
     cli(case,'prepare','segment','prepare','--config',case/'select.json','--output',case/'prepared')
+    scenario['service'], scenario['layer'] = str(case/'prepared/service.json'),str(case/'prepared/layers.json')
+    (case/'scenario.yaml').write_text(yaml.safe_dump(scenario,sort_keys=False))
+    cli(case,'resolve','resolve','--config',case/'scenario.yaml','--backend',backend,'--output',case/'resolved')
+    run = read(case/'prepared/run.json')
+    for key, value in run['inputs'].items():
+        run['inputs'][key] = str(case/'prepared'/value)
+    run['inputs']['network'] = str(case/'resolved/network')
+    for key in ('observation','record_policy','export_policy','input_evidence'):
+        run[key] = str(case/'prepared'/run[key])
+    save(case/'run.json',run)
     save(case/'case.json',dict(schema_version='issue-screening-case/1',owned_by='scaleup_issue_screening',
         case_id='synthetic-tooling-check',analyzed_layers=[2,3],source_kind='synthetic',backend_sha256=digest(backend)))
-    cli(case,'run','run','--config',case/'prepared/run.json','--output',case/'run')
+    cli(case,'run','run','--config',case/'run.json','--output',case/'run')
     analyze(case,case/'analysis')
     cli(case,'freeze','segment','freeze','--from-run',case/'run','--output',case/'slice','--storage','hardlink')
     cli(case,'inspect','slice','inspect','--slice',case/'slice','--verify')

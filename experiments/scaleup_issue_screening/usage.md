@@ -20,10 +20,20 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --case-dir runs/scaleup_issue_screening/g0-b2-short
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.analyze \
   --case-dir runs/scaleup_issue_screening/g0-b2-short \
-  --output runs/scaleup_issue_screening/g0-b2-short/analysis
+  --output runs/scaleup_issue_screening/analysis/g0-b2-short
 ```
 
 分析先调用 `moe-ub validate`，再读取公开格式和内部身份，输出 `summary.json`、`ranks.jsonl`、`compute.jsonl` 和 `ports.jsonl`。分别是操作/网络摘要、各 rank 的进入与完成及工作量、后续实际计算节点时刻、覆盖端口统计。分析是研究者核验工具，会读 `truth/`，不能拿它作为只读公开观测的测量算法。没有将相关 rank 计为独立重复。
+
+四个预定 case 全部分析完成后，可比较负载档位和短长段的相同分析层：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.compare \
+  --analysis-root runs/scaleup_issue_screening/analysis \
+  --output runs/scaleup_issue_screening/e1-comparison.json
+```
+
+比较会拒绝请求、路由、上下文、放置或参与者覆盖不一致的短长段。输出为描述统计，不自动赋予原因标签。分析目录在归档后保留，查看和比较时无需恢复全部大文件。
 
 每个 case 中，`prepared/` 为带来源证据的实际层段输入，`resolved/` 为有效网络，`run/observed/` 为观察数据，`run/truth/` 和 `run/raw/` 为内部核验资料。`commands.jsonl` 保存公共命令、工作目录、退出码及日志名。资源报告位于相邻 `*-prepare/`、`*-resources/` 和 `run/logs/`，报告成功只代表其明确检查范围。
 
@@ -39,7 +49,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --output runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz --release-expanded
 ```
 
-归档保存整个 case，包括输入、原始结果、分析及切片。`--release-expanded` 只释放本实验拥有且已逐文件核验的展开文件；不加此参数则保留两份。压缩包旁的 `.json` 是摘要和文件清单，必须一起保存。归档失败会保留原因与原文件，不应直接删除未核验产物。
+归档保存整个 case，包括输入、原始结果及切片；按上述命令生成的分析另留在 `analysis/`。`--release-expanded` 只释放本实验拥有且已逐文件核验的展开文件；不加此参数则保留两份。压缩包旁的 `.json` 是摘要和文件清单，必须一起保存。归档失败会保留原因与原文件，不应直接删除未核验产物。
 
 ```bash
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.archive restore \

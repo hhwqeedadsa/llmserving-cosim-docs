@@ -6,6 +6,7 @@ overlap is descriptive and is not a causal attribution or an avoidable delay.
 import argparse
 from collections import Counter, defaultdict
 import json
+import hashlib
 import math
 from pathlib import Path
 import statistics
@@ -166,6 +167,13 @@ def analyze(directory, output, validate=True):
                 work[rank]['same_chip_vectors' if chips[rank]==chips[dst] else 'network_vectors'] += 1
         workloads[layer] = work
         expert_counts[layer] = dict(distribution=distribution(list(expert.values())), by_expert=dict(expert))
+    workload_hashes = {}
+    for layer in ids:
+        identity = dict(requests=[dict(request_id=r['request_id'],rank_id=r['rank_id'],
+            prompt_tokens=r['prompt_tokens'],generated_tokens=r['generated_tokens'],
+            experts=r['decode_routes'][0][str(layer)]) for r in source['requests']],
+            expert_placement=layers[layer]['expert_placement'],hidden_dim=layers[layer]['hidden_dim'])
+        workload_hashes[str(layer)] = hashlib.sha256(json.dumps(identity,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     summaries, rank_rows = [], []
     for op in sorted(operations, key=lambda r:(r['layer_id'],r['kind'])):
         members = [endpoints[r['rank_id'],r['local_record_id']] for r in op['endpoint_records']]
@@ -213,6 +221,7 @@ def analyze(directory, output, validate=True):
         case_sha256=digest(directory/'case.json'), public_manifest_sha256=digest(run/'manifest.json'),
         scope='researcher_internal_analysis_not_a_measurement_algorithm',
         requests=len(source['requests']), analyzed_layers=case.get('analyzed_layers',[7,8]),
+        semantic_workload_sha256_by_layer=workload_hashes,
         simulation_end_ns=execution['simulation_end_ns'], service_finished_ns=execution['service_finished_ns'],
         rank_last_node_end_ns=dict(rank_completion), executed_node_counts=dict(node_counts),
         network_drain=execution['network_drain'], operations=summaries, experts=expert_counts, network=network,

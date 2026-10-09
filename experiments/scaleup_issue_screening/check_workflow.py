@@ -11,12 +11,26 @@ import unittest
 from .archive import inventory, pack, restore, verify
 from .workflow import CONFIG, ROOT, read, save
 from .analyze import compute_relations, distribution, operation_stats
+from .compare import compare_initial
 from moe_ub_cosim.fabric import validate as validate_fabric
 from moe_ub_cosim.observation import validate_observation
 from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_initial_state_comparison_rejects_identity_and_coverage_changes(self):
+        short = {(7,kind,rank):dict(workload={'requests':1},relative_entry_ns=rank*10,
+            duration_ns=20,relative_finish_ns=20+rank*10) for kind in ('dispatch','combine') for rank in (0,1)}
+        long = {key:dict(value) for key,value in short.items()}
+        hashes={'7':'same-route-context-placement-digest'}
+        result=compare_initial(short,long,hashes,hashes,[7])
+        self.assertEqual(result[0]['long_minus_short_ns']['relative_entry_ns']['maximum'],0)
+        long[7,'dispatch',1]['relative_entry_ns']+=7
+        self.assertEqual(compare_initial(short,long,hashes,hashes,[7])[0]['long_minus_short_ns']['relative_entry_ns']['maximum'],7)
+        with self.assertRaises(ValueError):compare_initial(short,long,hashes,{'7':'different'},[7])
+        del long[7,'combine',1]
+        with self.assertRaises(ValueError):compare_initial(short,long,hashes,hashes,[7])
+
     def test_scope(self):
         observation = read(CONFIG/'observation.json')
         _, ports = validate_observation(observation, list(range(128)), 10000000)

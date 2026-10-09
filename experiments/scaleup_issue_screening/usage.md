@@ -76,7 +76,7 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim slice in
   --slice runs/scaleup_issue_screening/restored-g0-b2-short/slice --verify
 ```
 
-恢复到新目录前检查原清单、压缩包摘要和预算。恢复后的 `slice/` 可按平台指南使用 `sample` 和 `replay`，不需重新准备路由或构图。原 `run.json` 保留历史绝对路径用于审计；移动后重放使用可移动的切片，不直接执行旧路径配置。
+恢复到新目录前检查原清单、压缩包摘要和预算。共享硬链接只计一次数据，并预留文件块取整和目录空间；超出预算则在展开前拒绝。恢复后的 `slice/` 可按平台指南使用 `sample` 和 `replay`，不需重新准备路由或构图。原 `run.json` 保留历史绝对路径用于审计；移动后重放使用可移动的切片，不直接执行旧路径配置。
 
 ## 不依赖真实数据的小检查
 

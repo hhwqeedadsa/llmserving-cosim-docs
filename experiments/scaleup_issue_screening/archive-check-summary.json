@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": 7,
+  "command_log": "runs/scaleup_issue_screening/entry-audit/commands.jsonl",
+  "stdout": "runs/scaleup_issue_screening/entry-audit/archive-budget-boundary-checks.stdout.log",
+  "stderr": "runs/scaleup_issue_screening/entry-audit/archive-budget-boundary-checks.stderr.log",
+  "scope": "lossless hardlink restoration, metadata reserve and unchanged-budget refusal before extraction; no simulation",
+  "archive_program_sha256": "3c7da1973e20f23e7eca04aaeec3e149023eb44a3080858082f8f94b8d6ae5d1"
+}

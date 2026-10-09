@@ -7,6 +7,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from .archive import inventory, pack, restore, verify
 from .workflow import CONFIG, ROOT, read, save
@@ -64,7 +65,21 @@ class Checks(unittest.TestCase):
             self.assertTrue(result['expanded_released'])
             self.assertFalse(case.exists())
             restored = temp/'restored'
-            restore(archive, restored)
+            # The payload has two names but occupies one inode. The budget
+            # fits the real restoration and metadata, not two payload copies.
+            from moe_ub_cosim.host_probe import disk_usage
+            footprint = verify(archive, before)
+            existing = max(disk_usage(temp).values())
+            self.assertEqual(footprint['hardlinks'],1)
+            self.assertLess(footprint['restore_reserve_bytes'],result['logical_bytes'])
+            with patch('experiments.scaleup_issue_screening.archive.host',return_value=dict(
+                    artifact_roots=[str(temp)],artifact_bytes=existing+footprint['restore_reserve_bytes']-1,min_free_bytes=0)):
+                with self.assertRaisesRegex(ValueError,'disk budget'):
+                    restore(archive, restored)
+            self.assertFalse(restored.exists())
+            with patch('experiments.scaleup_issue_screening.archive.host',return_value=dict(
+                    artifact_roots=[str(temp)],artifact_bytes=existing+footprint['restore_reserve_bytes'],min_free_bytes=0)):
+                restore(archive, restored)
             self.assertEqual(inventory(restored), before)
             self.assertEqual((restored/'linked.bin').stat().st_ino, (restored/'nested/data.bin').stat().st_ino)
             with self.assertRaises(ValueError):

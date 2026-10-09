@@ -33,14 +33,18 @@ def inventory(root):
     return result
 
 
-def verify(archive, entries):
+def verify(archive, entries, block_size=4096):
     seen = {}
+    payload = allocated = links = 0
+    directories = {'.'}
     with tarfile.open(archive, 'r|gz') as stream:
         for member in stream:
             name = safe_name(member.name)
+            directories.update(str(p) for p in PurePosixPath(name).parents)
             if name in seen or name not in entries:
                 raise ValueError('Unexpected or duplicate member: '+name)
             if member.islnk():
+                links += 1
                 target = safe_name(member.linkname)
                 if target not in seen:
                     raise ValueError('Hardlink must refer to a preceding verified regular file')
@@ -50,6 +54,8 @@ def verify(archive, entries):
                     raise ValueError('Member size mismatch: '+name)
                 with stream.extractfile(member) as data:
                     actual = dict(bytes=member.size, sha256=hashlib.file_digest(data, 'sha256').hexdigest())
+                payload += member.size
+                allocated += ((member.size+block_size-1)//block_size)*block_size
             else:
                 raise ValueError('Archive contains a special member')
             if actual != entries[name]:
@@ -57,6 +63,11 @@ def verify(archive, entries):
             seen[name] = actual
     if seen != entries:
         raise ValueError('Archive is incomplete')
+    # Budget unique payload once, while reserving a block for every directory
+    # entry (including hardlinks) and directory. This intentionally overstates
+    # directory storage; the live host policy remains the final limit.
+    return dict(unique_payload_bytes=payload, hardlinks=links,
+        restore_reserve_bytes=allocated+block_size*(len(entries)+len(directories)))
 
 
 def pack(directory, output, release=False):
@@ -103,8 +114,8 @@ def restore(archive, output):
         safe_name(name)
     if output.exists():
         raise ValueError('Restore output must not exist')
-    # Conservative: charge every logical byte even where hardlinks will save
-    # blocks. Refuse before extraction, rather than filling the remaining disk.
+    # Verify hardlinks before counting their shared payload only once. Still
+    # charge file-block rounding and conservative directory-entry space.
     from moe_ub_cosim.host_probe import disk_usage
     import shutil
     policy = host()
@@ -117,13 +128,13 @@ def restore(archive, output):
         counted.append(root)
         for key, value in disk_usage(root, seen).items():
             total[key] += value
-    needed = sum(v['bytes'] for v in entries.values())
     existing = output.parent
     while not existing.exists():
         existing = existing.parent
+    footprint = verify(archive, entries, os.statvfs(existing).f_frsize)
+    needed = footprint['restore_reserve_bytes']
     if max(total.values())+needed > policy['artifact_bytes'] or shutil.disk_usage(existing).free-needed < policy['min_free_bytes']:
         raise ValueError('Restoration would exceed the unchanged disk budget')
-    verify(archive, entries)
     output.mkdir(parents=True, exist_ok=False)
     with tarfile.open(archive, 'r|gz') as stream:
         for member in stream:
@@ -138,7 +149,8 @@ def restore(archive, output):
                 target.chmod(member.mode & 0o777)
     if inventory(output) != entries:
         raise ValueError('Restored content differs')
-    return dict(restored=True, output=str(output), files=len(entries), logical_bytes=report['logical_bytes'])
+    return dict(restored=True, output=str(output), files=len(entries),
+        logical_bytes=report['logical_bytes'], **footprint)
 
 
 def main():

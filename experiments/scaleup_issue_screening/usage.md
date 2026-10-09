@@ -63,7 +63,16 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service
 ```
 
-准备后，沿用上节的 `workflow run`、`analyze` 和归档命令，只更换 case 目录；本批新增对照省略 `freeze`。使用新目录，逐项核验后再执行下一项，不同时运行多个后端。
+准备后先核对输入只改变了声明因素，再沿用上节的 `workflow run`、`analyze` 和归档命令，只更换 case 目录；本批新增对照省略 `freeze`。
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.controls \
+  --baseline-case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --case-dir runs/scaleup_issue_screening/g0-b2-expert-half \
+  --output runs/scaleup_issue_screening/g0-b2-expert-half/input-audit.json
+```
+
+核验会拒绝未声明的请求、成本、网络、观察配置和预算变化。使用新目录，逐项核验后再执行下一项，不同时运行多个后端。
 
 恢复正常基线后，可用公开平台入口导出已选候选的内部事实：
 
@@ -75,6 +84,21 @@ PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim facts \
 ```
 
 该策略限定第 7、8 层、128 个 rank 及明确数量和宿主预算。输出仅供研究者核验，位于 `truth/`，不能作为测量程序的默认输入。
+
+如需复核保存的基线分析并追踪最晚前驱：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.analyze \
+  --case-dir runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/analysis/g0-b2-baseline
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.inspect_facts \
+  --facts runs/scaleup_issue_screening/facts/g0-b2-baseline \
+  --analysis runs/scaleup_issue_screening/analysis/g0-b2-baseline \
+  --output runs/scaleup_issue_screening/facts/g0-b2-witnesses.json
+```
+
+该检查器按固定规则选择各层最后完成和专家输入最多的端，逐次跟踪一条最晚前驱，保留并列项、未选范围边界和未知资源持有者。跨端追踪回到发送提交时刻，不能把较晚的 ACK 回收代入数据交付链。输出不是完整根因分类，也不是可节省时长的求和。
+
 
 ## 长段磁盘预估
 

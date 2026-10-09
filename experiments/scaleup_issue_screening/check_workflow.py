@@ -13,7 +13,8 @@ from .archive import inventory, pack, restore, verify
 from .workflow import CONFIG, ROOT, read, save
 from .analyze import compute_relations, distribution, operation_stats
 from .compare import compare_initial
-from .controls import apply as apply_control
+from .controls import apply as apply_control, audit as audit_control
+from .inspect_facts import witness
 from copy import deepcopy
 from moe_ub_cosim.fabric import validate as validate_fabric
 from moe_ub_cosim.observation import validate_observation
@@ -21,6 +22,58 @@ from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_prepared_control_audit_rejects_an_additional_consistent_factor(self):
+        import yaml
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);base=root/'base';changed=root/'changed'
+            case=dict(case_id='normal',first_layer=6,layer_count=3,platform_commit='fixed',backend_sha256='fixed')
+            control=dict(schema_version='issue-screening-control/1',case_id='control-half',baseline_case='normal',
+                parameter='routed_expert_per_input_ns',reference=100,value=50)
+            source=read(CONFIG/'source-base.json')
+            layers=[dict(deepcopy(read(CONFIG/'layer-template.json')),layer_id=i) for i in (6,7,8)]
+            value,child=apply_control(source,layers,case,control)
+            value['service']['run_id']=control['case_id']
+            for path,svc,ls,marker in ((base,source['service'],layers,case),
+                    (changed,value['service'],child,dict(case,case_id=control['case_id'],control=control))):
+                save(path/'case.json',marker);save(path/'prepared/service.json',svc)
+                save(path/'prepared/layers.json',dict(groups=[dict(group_id='ep0',layers=ls)]))
+                for name in ('route-manifest.json','prepared/system.json','prepared/observation.json','prepared/record-policy.json','prepared/export-policy.json'):
+                    save(path/name,dict(common=True))
+                save(path/'run.json',dict(host=dict(rss_bytes=8,artifact_roots=[str(path)]),export_host=dict(rss_bytes=8,artifact_roots=[str(path)])))
+                (path/'scenario.yaml').write_text(yaml.safe_dump(dict(scenario_id=marker['case_id'],service=str(path/'prepared/service.json'),layer=str(path/'prepared/layers.json'),network=dict(rate='400Gbps'))))
+            audit_control(base,changed,root/'accepted.json')
+            actual=read(changed/'prepared/service.json');actual['groups'][0]['full_model_profile']['layers'][7]['per_token_ns']['combine_unpack_merge']+=1
+            save(changed/'prepared/service.json',actual)
+            actual=read(changed/'prepared/layers.json');actual['groups'][0]['layers'][1]['compute_profile_ns']['combine_unpack_merge']+=1
+            save(changed/'prepared/layers.json',actual)
+            with self.assertRaisesRegex(ValueError,'beyond the declared factor'):
+                audit_control(base,changed,root/'rejected.json')
+            self.assertFalse((root/'rejected.json').exists())
+
+    def test_callback_witness_uses_submission_not_ack_and_preserves_late_entry(self):
+        def node(rank,nid,kind,name,start,end,deps=(),transfer=None):
+            ready=max((d['end_ns'] for d in deps),default=0)
+            return dict(graph_id='g0',rank_id=rank,layer_id=7,node_id=nid,kind=kind,name=name,
+                resource_id='',start_ns=start,end_ns=end,dependencies=list(deps),dependency_ready_ns=ready,
+                ready_to_start_ns=start-ready,event=None,transfer_id=transfer)
+        nodes={('g0',0,1):node(0,1,'COMP','pack',0,20),
+            ('g0',0,2):node(0,2,'SEND','send',20,150,[dict(node_id=1,end_ns=20)],1),
+            ('g0',1,1):node(1,1,'COMP','entry',0,50),
+            ('g0',1,2):node(1,2,'RECV','receive',50,100,[dict(node_id=1,end_ns=50)],1)}
+        delivery=dict(src_rank=0,dst_rank=1,send_node_id=2,submitted_ns=20,local_read_complete_ns=25,
+            business_ready_ns=100,application_metadata_ready_ns=None,all_payload_ready_ns=100,
+            protocol_retired_ns=150,kind='combine',message_role='data',business_payload_bytes=4,delivery='native_store')
+        result=witness(nodes,{('g0',1):delivery},('g0',1,2))
+        self.assertEqual([r['anchor_ns'] for r in result],[100,20,20])
+        self.assertEqual(result[1]['end_ns'],150)
+        self.assertTrue(result[1]['anchor_is_submission'])
+        nodes['g0',1,1]['end_ns']=110
+        nodes['g0',1,2].update(start_ns=110,end_ns=110,dependency_ready_ns=110,
+            dependencies=[dict(node_id=1,end_ns=110)])
+        result=witness(nodes,{('g0',1):delivery},('g0',1,2))
+        self.assertEqual([r['rank_id'] for r in result],[1,1])
+        self.assertEqual(result[0]['delivery_event']['time_ns'],100)
+
     def test_one_factor_controls_preserve_workload_and_untargeted_layers(self):
         source = read(CONFIG/'source-base.json')
         layers = [dict(deepcopy(read(CONFIG/'layer-template.json')),layer_id=i) for i in range(3,61)]

@@ -1,0 +1,18 @@
+{
+  "schema_version": "issue-screening-e2-budget/1",
+  "baseline_case_sha256": "cad451306c33a240f4a30fa33876de9cb5da6a876d00312a87783e37be47b449",
+  "baseline_case_usage": {
+    "apparent_bytes": 1137219807,
+    "allocated_bytes": 1277235200
+  },
+  "completed_restore_peak_bytes": 49211342848,
+  "active_control_case_allowance_bytes": 1342177280,
+  "three_control_archives_allowance_bytes": 483183819,
+  "facts_limit_bytes": 134217728,
+  "additional_reserve_bytes": 134217728,
+  "estimated_batch_peak_bytes": 51305139403,
+  "budget_bytes": 51539607552,
+  "fits": true,
+  "basis": "same workload and topology; cost changes preserve graph size, local-read fence removes nodes; no control slice duplication",
+  "limitations": "estimate, not a guarantee; unchanged live limits apply, no automatic increase or rerun"
+}

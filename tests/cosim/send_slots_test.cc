@@ -56,6 +56,22 @@ int main() {
         check(resource.p2p_send_capacity() == 1);
         check(!resource.is_available(b)); resource.release(a);
         check(resource.active_p2p_sends() == 0 && resource.num_in_flight_gpu_comm_ops == 0 && resource.num_gpu_comms == 5);
+        AstraSim::HardwareResource named(1);
+        auto core0=node(8,COMP_NODE),core1=node(9,COMP_NODE),same_core=node(10,COMP_NODE),wait=node(11,COMP_NODE);
+        named.configure_compute_resources({{8,"aiv:0"},{9,"aiv:1"},{10,"aiv:0"},{11,""}});
+        named.configure_p2p_protocol_resources();
+        named.occupy(core0);check(named.is_available(core1) && !named.is_available(same_core));
+        named.occupy(core1);named.occupy(wait);
+        check(named.num_in_flight_gpu_comp_ops==3);
+        rejects([&]{named.occupy(same_core);});rejects([&]{named.configure_compute_resources({});});
+        named.occupy(a);named.occupy(b);named.occupy(c);
+        check(named.active_p2p_sends()==3 && named.p2p_send_capacity()==0);
+        named.release(core1);named.release(wait);check(!named.is_available(same_core));
+        named.release(core0);named.occupy(same_core);named.release(same_core);
+        named.release(b);named.release(c);named.release(a);
+        check(named.num_in_flight_gpu_comp_ops==0 && named.num_in_flight_gpu_comm_ops==0);
+        rejects([&]{named.release(core0);});
+        named.configure_compute_resources({});
         std::cout << "PASS: default/collective resource rules, one/two P2P slots, RECV independence, identity release\n";
         return 0;
     } catch (const std::exception& error) {

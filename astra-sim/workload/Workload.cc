@@ -141,6 +141,13 @@ void Workload::notify_send_state() const {
         send_state_observer_(ready_send_count_, hw_resource->active_p2p_sends(), hw_resource->p2p_send_capacity());
 }
 
+void Workload::set_external_events(std::unordered_set<uint64_t> nodes, ExternalEventHandler handler) {
+    if (!can_load_graph() || (!nodes.empty() && !handler))
+        throw std::logic_error("External events require an idle managed workload and handler");
+    external_events_ = std::move(nodes);
+    external_event_handler_ = std::move(handler);
+}
+
 void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
     auto logger = LoggerFactory::get_logger("workload");
     if (!graph_id_.empty()) {
@@ -150,7 +157,24 @@ void Workload::issue(shared_ptr<Chakra::ETFeederNode> node) {
             throw std::logic_error("Invalid node issue in managed graph " + graph_id_);
         }
     }
-    if (sys->replay_only) {
+    if (external_events_.count(node->id())) {
+        if (node->type() != ChakraNodeType::COMP_NODE || node->runtime() != 0 || node->num_ops() != 0)
+            throw std::logic_error("External event has computation or wrong encoding");
+        hw_resource->occupy(node);
+        if (sys->trace_enabled)
+            logger->debug("issue,sys->id={}, tick={}, node->id={}, node->name={}, node->type={}{}",
+                sys->id, Sys::boostedTick(), node->id(), node->name(),
+                static_cast<uint64_t>(node->type()), graph_log_suffix());
+        auto* context = new WorkloadLayerHandlerData;
+        context->node_id = node->id();
+        context->graph_id = graph_id_;
+        auto delivered = std::make_shared<bool>(false);
+        external_event_handler_(node->id(), [this, context, delivered]() {
+            if (*delivered) throw std::logic_error("Repeated external event completion");
+            *delivered = true;
+            sys->register_event(this, EventType::General, context, 0);
+        });
+    } else if (sys->replay_only) {
         hw_resource->occupy(node);
         issue_replay(node);
     } else {
@@ -667,6 +691,14 @@ void Workload::fire() {
 
 void Workload::report() {
     Tick curr_tick = Sys::boostedTick();
+    if (!external_events_.empty()) {
+        // Parallel local engines make summed compute work different from the
+        // elapsed interval; their difference is not exposed communication.
+        LoggerFactory::get_logger("workload")
+            ->info("sys[{}] iteration {} finished, {} cycles, cumulative compute work {} cycles.",
+                   sys->id, iteration, curr_tick, hw_resource->tics_gpu_ops);
+        return;
+    }
     LoggerFactory::get_logger("workload")
         ->info("sys[{}] iteration {} finished, {} cycles, exposed communication {} cycles.",
                sys->id, iteration, curr_tick, curr_tick - hw_resource->tics_gpu_ops);

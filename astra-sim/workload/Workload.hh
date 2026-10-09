@@ -62,6 +62,10 @@ class Workload : public Callable {
     using SendStateObserver = std::function<void(uint64_t, uint32_t, uint32_t)>;
     void set_send_state_observer(SendStateObserver observer);
     void notify_send_state() const;
+    // Explicit managed event nodes use COMP encoding with zero runtime; their
+    // completion comes from an execution object, never from a guessed delay.
+    using ExternalEventHandler = std::function<void(uint64_t, std::function<void()>)>;
+    void set_external_events(std::unordered_set<uint64_t> nodes, ExternalEventHandler handler);
 
     // stats
     void report();
@@ -87,6 +91,8 @@ class Workload : public Callable {
     uint64_t stale_callbacks_ = 0;
     SendStateObserver send_state_observer_;
     uint64_t ready_send_count_ = 0;
+    std::unordered_set<uint64_t> external_events_;
+    ExternalEventHandler external_event_handler_;
     std::string graph_log_suffix() const;
 
 };

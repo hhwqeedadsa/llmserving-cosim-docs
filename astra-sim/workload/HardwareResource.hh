@@ -10,6 +10,8 @@ LICENSE file in the root directory of this source tree.
 
 #include <cstdint>
 #include <unordered_set>
+#include <unordered_map>
+#include <string>
 
 #include "extern/graph_frontend/chakra/src/feeder/et_feeder.h"
 
@@ -25,6 +27,10 @@ class HardwareResource {
     // Opt-in for explicit point-to-point graphs. Default collective/native
     // scheduling retains the original single communication resource.
     void configure_p2p_send_slots(uint32_t slots);
+    // Managed graphs may own local buffers in their DAG and leave protocol
+    // capacity to the network backend. This never changes legacy scheduling.
+    void configure_p2p_protocol_resources();
+    void configure_compute_resources(const std::unordered_map<uint64_t, std::string>& nodes);
     uint32_t active_p2p_sends() const { return p2p_sends.size(); }
     uint32_t p2p_send_capacity() const { return p2p_send_slots; }
 
@@ -48,6 +54,11 @@ class HardwareResource {
   private:
     uint32_t p2p_send_slots = 0;
     std::unordered_set<uint64_t> p2p_sends;
+    bool protocol_owned_p2p = false;
+    bool named_compute = false;
+    std::unordered_map<uint64_t, std::string> compute_resources;
+    std::unordered_set<std::string> occupied_compute;
+    std::unordered_set<uint64_t> active_compute;
 };
 
 }  // namespace AstraSim

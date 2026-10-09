@@ -1,0 +1,50 @@
+[
+  {
+    "phase": "g0-b8-short-prepare/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 642.2851784173399,
+    "peak_sampled_group_rss_bytes": 2256326656,
+    "peak_sampled_artifact_bytes": 47950110720
+  },
+  {
+    "phase": "g0-b8-short/run/logs/resources-run/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 1439.7581305094063,
+    "peak_sampled_group_rss_bytes": 9345744896,
+    "peak_sampled_artifact_bytes": 49082191872
+  },
+  {
+    "phase": "g0-b8-short/run/logs/resources-export/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 134.3588237427175,
+    "peak_sampled_group_rss_bytes": 39206912,
+    "peak_sampled_artifact_bytes": 49127550976
+  },
+  {
+    "phase": "analysis/g0-b8-short-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 71.15942773595452,
+    "peak_sampled_group_rss_bytes": 1677455360,
+    "peak_sampled_artifact_bytes": 49128636416
+  },
+  {
+    "phase": "g0-b8-short-freeze/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 74.84794785641134,
+    "peak_sampled_group_rss_bytes": 121638912,
+    "peak_sampled_artifact_bytes": 49176510464
+  },
+  {
+    "phase": "archives/g0-b8-short.tar.gz-resources/probe.json",
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 96.3016125112772,
+    "peak_sampled_group_rss_bytes": 197246976,
+    "peak_sampled_artifact_bytes": 49430761472
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "schema_version": "issue-screening-disk-forecast/1",
+  "reference_archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+  "basis_sha256": "9251eda937e58833a83d66969c8aab602a2742a645f1f3d12818ebd4de38dd3b",
+  "current_usage": {
+    "apparent_bytes": 46390245361,
+    "allocated_bytes": 47534772224
+  },
+  "reference_run_charged_bytes": 1773371392,
+  "fixed_effective_backend_bytes": 151505056,
+  "reference_rotating_log_bytes": 110768128,
+  "rotating_log_bound_bytes": 115343360,
+  "long_run_estimate_bytes": 3307827122,
+  "long_archive_estimate_bytes": 533853298,
+  "extra_reserve_bytes": 134217728,
+  "estimated_peak_bytes": 51510670372,
+  "budget_bytes": 51539607552,
+  "fits": true,
+  "long_slice_created": false,
+  "complete_original_run_retained": true,
+  "assumptions": [
+    "same ranks, topology, observation coverage, native parameters and request batch",
+    "at most 2.01 times the measured short-run footprint before fixed configuration/log adjustments",
+    "compressed archive at most 2.1 times the short archive",
+    "existing long preparation already counted in current usage",
+    "estimate only; stop on actual host-policy violations"
+  ],
+  "logging_source": "third_party/LLMServingSim/astra-sim/astra-sim/common/Logging.cc",
+  "logging_source_sha256": "28f33825e1153574a289513a244152d0f1d797dbb3b084ab62db2b775fe26523"
+}

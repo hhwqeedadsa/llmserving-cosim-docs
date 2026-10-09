@@ -37,6 +37,23 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 
 每个 case 中，`prepared/` 为带来源证据的实际层段输入，`resolved/` 为有效网络，`run/observed/` 为观察数据，`run/truth/` 和 `run/raw/` 为内部核验资料。`commands.jsonl` 保存公共命令、工作目录、退出码及日志名。资源报告位于相邻 `*-prepare/`、`*-resources/` 和 `run/logs/`，报告成功只代表其明确检查范围。
 
+## 长段磁盘预估
+
+短段完成后、归档前可记录其实际占用；归档完成后再估计长段与压缩包共存的峰值。估计命令只适用于方法中固定的三层与六层条件，不能当作任意输入的空间保证。
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.forecast \
+  --measure-run runs/scaleup_issue_screening/g0-b8-short/run \
+  --output runs/scaleup_issue_screening/short-resource-basis.json
+# 按下节完成短段归档，再执行：
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.forecast \
+  --basis runs/scaleup_issue_screening/short-resource-basis.json \
+  --reference-archive runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz \
+  --output runs/scaleup_issue_screening/long-disk-forecast.json
+```
+
+本批六层长段省略 `freeze`，保留完整原始运行并直接归档。若以后需要切片，恢复完整目录后再用 `moe-ub segment freeze --from-run` 保存；重新检查当时预算。
+
 ## 保存与恢复
 
 需要复用后端时，先通过平台入口保存有限层段；同文件系统的硬链接不会复制大图：

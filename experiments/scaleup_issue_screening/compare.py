@@ -2,9 +2,10 @@
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from .analyze import compute_relations, correlation, distribution
-from .workflow import CONFIG, digest, read, save
+from .workflow import CONFIG, digest, host, read, save
 
 
 def rows(path):
@@ -72,8 +73,17 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--analysis-root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--worker',action='store_true',help=argparse.SUPPRESS)
     a=p.parse_args()
-    compare(a.analysis_root,a.output)
+    if a.worker:
+        compare(a.analysis_root,a.output)
+    else:
+        from moe_ub_cosim.host_probe import probe
+        report=probe([sys.executable,'-m','experiments.scaleup_issue_screening.compare','--worker',
+            '--analysis-root',str(a.analysis_root.resolve()),'--output',str(a.output.resolve())],
+            str(a.output.resolve())+'-resources',**host(extra_roots=[a.analysis_root,a.output.resolve().parent]))
+        if report['status']!='completed':
+            raise SystemExit('Comparison failed: '+report['status'])
 
 
 if __name__=='__main__':

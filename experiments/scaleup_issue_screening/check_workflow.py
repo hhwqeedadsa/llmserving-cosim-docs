@@ -1,0 +1,93 @@
+"""Small independent checks for experiment inputs and lossless storage."""
+import io
+import hashlib
+import json
+import os
+from pathlib import Path
+import tarfile
+import tempfile
+import unittest
+
+from .archive import inventory, pack, restore, verify
+from .workflow import CONFIG, ROOT, read, save
+from .analyze import distribution, operation_stats
+from moe_ub_cosim.fabric import validate as validate_fabric
+from moe_ub_cosim.observation import validate_observation
+from moe_ub_cosim.route_evidence import validate_manifest
+
+
+class Checks(unittest.TestCase):
+    def test_scope(self):
+        observation = read(CONFIG/'observation.json')
+        _, ports = validate_observation(observation, list(range(128)), 10000000)
+        selected = {(p['switch_id'], p['port_id']) for p in ports}
+        self.assertEqual(len(selected), 2688)
+        # All static shortest-path candidates, independently derived from shape.
+        expected = {(768+7*s+p, q) for s in range(8) for p in range(7) for q in range(32)}
+        expected |= {(1104+16*p+h, s) for p in range(7) for h in range(16) for s in range(8)}
+        self.assertEqual(selected, expected)
+        self.assertEqual(validate_fabric(read(CONFIG/'fabric.json'))['active_endpoints'], 128)
+        manifest = validate_manifest(read(CONFIG/'route-manifest.json'))
+        self.assertEqual(len({row['file']['sha256'] for row in manifest['files']}), 1024)
+        batch = read(CONFIG/'batch.json')
+        self.assertEqual([(c['requests'], c['first_layer'], c['layer_count']) for c in batch['cases']],
+                         [(256,6,3),(512,6,3),(1024,6,3),(1024,3,6)])
+        self.assertTrue(all(set(batch['analyzed_layers']) <= set(range(c['first_layer'], c['first_layer']+c['layer_count'])) for c in batch['cases']))
+
+    def test_archive_roundtrip_and_refusals(self):
+        parent = ROOT/'runs/scaleup_issue_screening'
+        parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='check-', dir=parent) as temp:
+            temp = Path(temp)
+            case = temp/'case'
+            save(case/'case.json', dict(owned_by='scaleup_issue_screening', schema_version='issue-screening-case/1'))
+            (case/'nested').mkdir()
+            (case/'nested/data.bin').write_bytes(bytes(range(256))*4096)
+            os.link(case/'nested/data.bin', case/'linked.bin')
+            before = inventory(case)
+            archive = temp/'case.tar.gz'
+            result = pack(case, archive, release=True)
+            self.assertTrue(result['expanded_released'])
+            self.assertFalse(case.exists())
+            restored = temp/'restored'
+            restore(archive, restored)
+            self.assertEqual(inventory(restored), before)
+            self.assertEqual((restored/'linked.bin').stat().st_ino, (restored/'nested/data.bin').stat().st_ino)
+            with self.assertRaises(ValueError):
+                restore(archive, restored)
+            (restored/'symlink').symlink_to('/etc/passwd')
+            with self.assertRaises(ValueError):
+                pack(restored, temp/'unsafe.tar.gz', release=True)
+            self.assertTrue((restored/'case.json').exists())
+            with archive.open('ab') as stream:
+                stream.write(b'tamper')
+            with self.assertRaises(ValueError):
+                restore(archive, temp/'tampered')
+            self.assertFalse((temp/'tampered').exists())
+
+    def test_archive_rejects_traversal_and_duplicates(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp)/'bad.tar.gz'
+            for names in [['../escape'], ['a', 'a']]:
+                with tarfile.open(path, 'w:gz') as archive:
+                    for name in names:
+                        member = tarfile.TarInfo(name)
+                        member.size = 1
+                        archive.addfile(member, io.BytesIO(b'x'))
+                with self.assertRaises(ValueError):
+                    verify(path, {'a':dict(bytes=1, sha256=hashlib.sha256(b'x').hexdigest())})
+
+    def test_entry_duration_and_finish_are_distinct(self):
+        endpoints = [dict(rank_id=0,local_record_id=1,start_local_ns=10,end_local_ns=30),
+                     dict(rank_id=1,local_record_id=1,start_local_ns=25,end_local_ns=35)]
+        summary, rows = operation_stats(endpoints, {(0,1):{},(1,1):{}}, {0:{},1:{}})
+        self.assertEqual(summary['relative_entry_ns']['spread'],15)
+        self.assertEqual(summary['duration_ns']['maximum'],20)
+        self.assertEqual(summary['relative_finish_ns']['maximum'],25)
+        self.assertEqual(summary['last_finishing_ranks'],[1])
+        self.assertEqual(rows[0]['duration_ns'],20)
+        self.assertEqual(distribution([1,2,3,4])['median'],2.5)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -157,6 +157,9 @@ def main():
     p.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     p = sub.add_parser('run', help='Execute and export through moe-ub run; retain all failures')
     p.add_argument('--case-dir', type=Path, required=True)
+    p = sub.add_parser('freeze', help='Budgeted public segment freeze and full slice verification')
+    p.add_argument('--case-dir', type=Path, required=True)
+    p.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
     if Path.cwd().resolve() != ROOT:
         parser.error('Run from the repository root (all source paths are relative to it)')
@@ -175,6 +178,18 @@ def main():
         if read(directory/'case.json')['owned_by'] != 'scaleup_issue_screening':
             parser.error('Not an owned experiment case')
         cli(directory, 'run', 'run', '--config', directory/'run.json', '--output', directory/'run')
+    elif args.action == 'freeze':
+        directory = args.case_dir.resolve()
+        if args.worker:
+            cli(directory,'freeze','segment','freeze','--from-run',directory/'run',
+                '--output',directory/'slice','--storage','hardlink')
+            cli(directory,'inspect','slice','inspect','--slice',directory/'slice','--verify')
+        else:
+            from moe_ub_cosim.host_probe import probe
+            report = probe([sys.executable,'-m',MODULE,'freeze','--worker','--case-dir',str(directory)],
+                str(directory)+'-freeze', **host())
+            if report['status'] != 'completed':
+                raise SystemExit('Slice saving failed: '+report['status'])
 
 
 if __name__ == '__main__':

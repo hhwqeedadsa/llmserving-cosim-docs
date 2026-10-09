@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "synthetic_only": true,
+  "requests": 3,
+  "operations": 4,
+  "simulation_end_ns": 3414,
+  "archive": {
+    "schema_version": "issue-screening-archive/1",
+    "archive_sha256": "5dcb9abb3de027f770d610b695c09eb02ee9bfc8a79a70476192d2780275009e",
+    "archive_bytes": 258438,
+    "logical_bytes": 2947412,
+    "verified": true,
+    "expanded_released": true
+  },
+  "public_run_and_freeze": true,
+  "restored_run_and_slice_validated": true,
+  "evidence_directory": "runs/scaleup_issue_screening/tooling-check",
+  "resources": {
+    "status": "completed",
+    "wall_seconds": 154.2585435230285,
+    "peak_sampled_group_rss_bytes": 159367168,
+    "peak_sampled_artifact_bytes": 47264862208
+  },
+  "unit_checks": {
+    "passed": true,
+    "count": 4,
+    "commands": "runs/scaleup_issue_screening/entry-audit/commands.jsonl"
+  }
+}

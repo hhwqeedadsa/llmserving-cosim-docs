@@ -69,6 +69,10 @@ def generate_inputs(case, directory, backend):
     spec = read(CONFIG / 'batch.json')
     if digest(backend) != spec['backend_sha256']:
         raise ValueError('Backend differs from the fixed accepted baseline')
+    checked = subprocess.run(['git','diff','--quiet',spec['platform_commit'],'--',
+        'python/moe_ub_cosim','backend','deps.lock.json','third_party/LLMServingSim','third_party/ns-3-ub'],cwd=ROOT)
+    if checked.returncode:
+        raise ValueError('Platform code or fixed dependencies differ from the accepted baseline')
     source = read(CONFIG / 'source-base.json')
     manifest = read(CONFIG / 'route-manifest.json')
     count = case['requests']

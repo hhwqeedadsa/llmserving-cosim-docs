@@ -1,0 +1,129 @@
+{
+  "schema_version": "moe-ub-a3-scale-acceptance/1",
+  "scope": "platform_functional_acceptance",
+  "targets": [
+    {
+      "passed": true,
+      "requests": 128,
+      "ranks": 128,
+      "experts": 256,
+      "top_k": 8,
+      "hidden_dim": 7168,
+      "original_layers": [
+        3,
+        4,
+        5
+      ],
+      "full_deployed_blocks": 61,
+      "simulation_end_ns": 43149,
+      "nodes": 501052,
+      "fabric_transfers": 108892,
+      "local_deliveries": 819,
+      "fabric_payload_bytes": 68505556,
+      "business_payload_bytes": 65178624,
+      "application_metadata_bytes": 3242064,
+      "physical_packets": 891212,
+      "route_records": 384,
+      "plan_bytes": 291418039,
+      "trace_dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+      "hardware_calibrated": false,
+      "scope": "functional_target_scale_finite_segment_not_performance_experiment",
+      "run_directory": "runs/m21-platform-acceptance/scale-128-run",
+      "source_commit": "a0af1d7ecc56252df221f147fb90139a2f572c39",
+      "working_tree_dirty": false,
+      "backend_sha256": "ad7e83e5b19201e98dd0485c1ed05c0e58181f8f7604871ab1b59aeca0eb57bf",
+      "resource_reports": {
+        "prepare": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 204.43160727247596,
+          "peak_sampled_group_rss_bytes": 1043968000,
+          "max_waited_child_rss_kib": 1191840,
+          "peak_sampled_artifact_bytes": 44391530496,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-128-prepare-2/probe.json"
+        },
+        "run": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 362.6400659326464,
+          "peak_sampled_group_rss_bytes": 6420148224,
+          "max_waited_child_rss_kib": 5356588,
+          "peak_sampled_artifact_bytes": 45284429824,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-128-run/logs/resources-run/probe.json"
+        },
+        "export": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 36.344417948275805,
+          "peak_sampled_group_rss_bytes": 29007872,
+          "max_waited_child_rss_kib": 5356588,
+          "peak_sampled_artifact_bytes": 45289627648,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-128-run/logs/resources-export/probe.json"
+        },
+        "verify": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 35.520175367593765,
+          "peak_sampled_group_rss_bytes": 6393856,
+          "max_waited_child_rss_kib": 160884,
+          "peak_sampled_artifact_bytes": 45290434560,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-128-verify/probe.json"
+        },
+        "whole_public_run": {
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 436.2179494854063,
+          "peak_sampled_group_rss_bytes": 6538485760,
+          "max_waited_child_rss_kib": 5356588,
+          "peak_sampled_artifact_bytes": 45290409984,
+          "limits": {
+            "sampled_group_rss_bytes": 8589934592,
+            "per_process_address_bytes": 12884901888,
+            "artifact_bytes": 51539607552,
+            "wall_seconds": 1800
+          },
+          "path": "runs/m21-platform-acceptance/scale-128-execute/probe.json"
+        }
+      }
+    }
+  ],
+  "dependencies": [
+    "dfd0d0594e8f19bd783ab6851af47c6cf1380b30 third_party/LLMServingSim (v1.1.0-127-gdfd0d05)",
+    " 0210e24bf76f49b4111a73d1e419f6fee4f3f0b6 third_party/LLMServingSim/astra-sim (heads/codex/m19-a3-resources)",
+    " 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7 third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra (heads/main)",
+    " 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7 third_party/LLMServingSim/astra-sim/extern/helper/fmt (11.0.2-281-g7e73566c)",
+    " 63f0875000bf90867aa7c76a831bd834cb7d4b5e third_party/LLMServingSim/astra-sim/extern/helper/spdlog (v1.2.1-2459-g63f08750)",
+    " 62313ef09abaf6a9764d13e2684ca61247def14b third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical (heads/main)",
+    " 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e third_party/LLMServingSim/astra-sim/extern/network_backend/analytical (heads/main)",
+    " 1204d634444b0ba6da53201a8b6caf2a502d883c third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest (release-1.8.0-3500-g1204d634)",
+    " 3d2888cc8a45da2f420454ad728cdfad01a3d54f third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp (0.8.0-50-g3d2888c)",
+    " 67cbbbb1cccdbddc400803414127d044ecd55290 third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim (67cbbbb)",
+    " 3964b1d41cb5f7b51004c316b0eae1a3713c2498 third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 (heads/astra-sim)",
+    " c0f1fe54245203a3b14468e44e893a38792cfcc8 third_party/ns-3-ub (v1.1.0-341-gc0f1fe5)",
+    " 2afc7202f88c132b63c38e8c7dcfc08505b13bb2 third_party/ns-3-ub/scratch/ns-3-ub-tools (remotes/origin/codex/simai-flow-converter-6-g2afc720)"
+  ]
+}

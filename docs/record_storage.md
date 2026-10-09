@@ -281,3 +281,5 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 两张表使用现有 `moe-ub-research-storage/1` 压缩清单，通过 `research_storage.stored_rows(DETAIL / 'truth', 'nodes.jsonl')` 或 `deliveries.jsonl` 读取。`facts.json` 声明选定 graph/rank/层、实际数量、输入摘要和限额。一次只加载一个不超过 `max_plan_bytes` 的计划，保留选定节点及其直接前驱；结果记录逐行读取。内存、时间和累计磁盘另受配置 `host` 约束，超限不会产生成功清单。明细不写入 `observed/`，离线导出不会再次运行仿真。
 
 有限层段输入为 `configured-service/5`，其 `execution.segment`（`moe-ub-model-segment/1`）声明原始连续层、Decode 步骤、请求上下文、入口与 KV 已就绪、空网络从 0 ns 开始和完整部署容量。对应计划为 `model-segment-plan/1`，部署为 `service-deployment/6`，保存包为 `research-slice/3`。相关计算只覆盖所选完整块，不执行 embedding、末尾归一化、lm_head 和 sampling。结果 `completion_scope=selected_segment_only`，前端一轮推进仅是执行驱动，不是完整生成 Token；回放范围为 `dependency_driven_frozen_finite_segment`。
+
+通过已核验文件准备的层段在 `inputs/preparation.json.route_evidence` 保留来源修订、文件摘要、原始层和行号、请求上下文及精度差异。`run.json.input_evidence` 绑定准备结果；运行检查服务与层输入摘要，并核对来源记录覆盖和实际专家选择。图与运行清单据此区分 `published_model_trace` 和合成输入，保存包携带同一证据。运行和回放无需重新读取原始轨迹文件；改变路由或范围须重新准备。紧凑 JSON 只省去空白，不改变字段和核验条件。

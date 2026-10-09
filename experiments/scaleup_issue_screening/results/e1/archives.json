@@ -1,0 +1,42 @@
+{
+  "g0-b2-short": {
+    "path": "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+    "report_path": "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz.json",
+    "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+    "archive_bytes": 120909096,
+    "logical_bytes": 2159300811,
+    "verified": true,
+    "expanded_released": true,
+    "files": 56818
+  },
+  "g0-b4-short": {
+    "path": "runs/scaleup_issue_screening/archives/g0-b4-short.tar.gz",
+    "report_path": "runs/scaleup_issue_screening/archives/g0-b4-short.tar.gz.json",
+    "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+    "archive_bytes": 166714663,
+    "logical_bytes": 2573408545,
+    "verified": true,
+    "expanded_released": true,
+    "files": 56807
+  },
+  "g0-b8-short": {
+    "path": "runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz",
+    "report_path": "runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz.json",
+    "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+    "archive_bytes": 254215856,
+    "logical_bytes": 3369161231,
+    "verified": true,
+    "expanded_released": true,
+    "files": 56807
+  },
+  "g0-b8-long": {
+    "path": "runs/scaleup_issue_screening/archives/g0-b8-long.tar.gz",
+    "report_path": "runs/scaleup_issue_screening/archives/g0-b8-long.tar.gz.json",
+    "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+    "archive_bytes": 476490376,
+    "logical_bytes": 2884445670,
+    "verified": true,
+    "expanded_released": true,
+    "files": 28445
+  }
+}

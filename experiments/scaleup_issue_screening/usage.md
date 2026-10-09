@@ -54,7 +54,27 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 
 这里只改变所选层段的单专家输入参考计算成本（单位 ns），同时更新模型成本和对应层成本。也支持 `parameter="copy_fence"`、`reference="data_ready"`、`value="local_read_complete"`，只改所选层的复制完成条件。每个文件只能声明一个因素，基线值不符则拒绝。来源、请求、容量、网络和其他计算成本保持原配置；改变计算或依赖后重新构图，不能修改已保存的图或时间戳。有效对照及配置摘要记录在 `case.json`。
 
-上述格式只说明操作，不表示应默认执行所有对照。正式配置需与候选记录中预定的作用对象、比较方法对应。
+正式选择与作用对象见[候选记录](candidates.md)。本批配置为 `configs/controls/expert-half.json`、`expert-double.json`、`local-fence.json`，均以 `g0-b2-short` 为基线。以第一项为例：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.workflow prepare \
+  --case g0-b2-short --control experiments/scaleup_issue_screening/configs/controls/expert-half.json \
+  --output runs/scaleup_issue_screening/g0-b2-expert-half \
+  --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service
+```
+
+准备后，沿用上节的 `workflow run`、`analyze` 和归档命令，只更换 case 目录；本批新增对照省略 `freeze`。使用新目录，逐项核验后再执行下一项，不同时运行多个后端。
+
+恢复正常基线后，可用公开平台入口导出已选候选的内部事实：
+
+```bash
+PYTHONPATH=python .venv/llmservingsim-native/bin/python -m moe_ub_cosim facts \
+  --run runs/scaleup_issue_screening/restored-g0-b2-short/run \
+  --config experiments/scaleup_issue_screening/configs/facts.json \
+  --output runs/scaleup_issue_screening/facts/g0-b2-baseline
+```
+
+该策略限定第 7、8 层、128 个 rank 及明确数量和宿主预算。输出仅供研究者核验，位于 `truth/`，不能作为测量程序的默认输入。
 
 ## 长段磁盘预估
 

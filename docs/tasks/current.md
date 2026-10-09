@@ -29,8 +29,8 @@
 | M19（P2）资源与关键依赖 | `completed` | 独立资源、真实完成事件、部分准备与 Token 归约、工作量守恒、新旧路径及两轮回收通过；[小型验收](../../fixtures/m19_a3_resources/README.md)，提交 `6ddb0c0` |
 | M20（P3）内部事实与有限层段 | `completed` | 公共准备、运行、事实导出、保存与离线回放，范围拒绝和旧用户流程通过；[流程证据](../../fixtures/m20_segment_facts/README.md)，提交 `1bb02a0` |
 | M21（P4）平台独立验收 | `completed` | 四类小测试、采集启停、来源绑定、128/1024 请求三层执行及目标包全文件校验通过；[最终验收](../../fixtures/m21_platform/README.md)，代码检查点 `a0af1d7`，128 请求证据检查点 `e4bfd65` |
-| E1 正常业务探索 | `in_progress` | 256/512/1024 请求短段均完成、校验并归档；1024 请求六层长段执行中；[方法](../../experiments/scaleup_issue_screening/method.md)，[首组摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short.json)，[512 请求摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short.json) |
-| E2 成因与稳健性 | `conditional` | E1 有可信候选后，最多深入两个，先记录选择理由 |
+| E1 正常业务探索 | `completed` | 256/512/1024 请求短段及 1024 请求六层段均完成、校验和归档；相同分析层工作量一致，主要 Combine 现象保留；[E1 结果](../../experiments/scaleup_issue_screening/results/e1/README.md) |
+| E2 成因与稳健性 | `in_progress` | 只选 C1：Combine 等待及后层进入传播；恢复 256 请求基线核对依赖，预定成本与完成条件检查见[候选记录](../../experiments/scaleup_issue_screening/candidates.md) |
 | E3 测量价值 | `conditional` | E2 已有可信解释与具体判断歧义，再比较信息 |
 | E4 完整场景与收尾 | `conditional` | 有通过前述检查的候选才跑少量完整首轮；没有候选可按已完成范围结束 |
 
@@ -48,6 +48,8 @@ M21 的四类小测试覆盖独立核与缓冲复用、Token 分别到齐、共�
 
 P 部分已完成，代码、输入、结果摘要及按职责维护的文档在本地保存；未推送。ASTRA 与 LLMServingSim 修改已由内向外本地提交，主仓 gitlink 和 `deps.lock.json` 一致，未升级上游；实际依赖提交与二进制摘要见[M21 摘要](../../fixtures/m21_platform/scale-summary.json)。
 
-E1 的 256/512 请求分别完成 568544/703636 个节点、121880/146245 次逻辑传输，模拟结束于 110792/207593 ns；相关 2688 个交换出口均有观察。两组的完整记录、切片和清单已无损归档，展开文件释放，分析保留在 `runs/scaleup_issue_screening/analysis/`；[256 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short-resources.json)和[512 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short-resources.json)记录实际耗时和采样峰值。1024 请求短段也已完成，模拟结束于 394911 ns，执行 973624 个节点和 194926 次逻辑传输；[摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b8-short.json)及[资源](../../experiments/scaleup_issue_screening/results/e1/g0-b8-short-resources.json)已保存。六层长段准备通过并开始运行；[磁盘预估](../../experiments/scaleup_issue_screening/results/e1/long-disk-forecast.json)约 47.97 GiB，含压缩包和额外余量。长段保留完整原始运行，不另存切片；实际监控上限仍为 48 GiB。联合仿真串行，之后完成相同分析层的初态比较，再选择候选。
+E1 的三个短段及六层长段均已完成并公开校验通过，完整记录已无损归档，展开文件释放。三档正常业务及初态检查的结果见 [E1 说明](../../experiments/scaleup_issue_screening/results/e1/README.md)，逐 rank、计算与端口统计留在 `runs/scaleup_issue_screening/analysis/`。长段执行 1947352 个节点、389878 次逻辑传输，模拟结束于 669521 ns；实际累计磁盘采样峰值约 47.45 GiB，低于 48 GiB。短段已有切片，长段保留完整原始运行并省略额外切片；[归档摘要](../../experiments/scaleup_issue_screening/results/e1/archives.json)固定包摘要与文件数量。
 
-独立合成小流程、工具检查及恢复后小记录的计算时序分析通过，见[工具证据](../../experiments/scaleup_issue_screening/tooling-summary.json)、[分析补充检查](../../experiments/scaleup_issue_screening/analysis-check-summary.json)和[用户操作](../../experiments/scaleup_issue_screening/usage.md)。已有源文件不足以组成第二组不重复的 1024 请求，本轮不下载、不循环来源，也不将相关 rank 或同一运行的回放计为独立重复。累计产物仍受 48 GiB 限制，旧产物保留。实际命令和退出记录位于 `runs/scaleup_issue_screening/`。根据 E1 结果至多选择两个候选，只有满足成因和信息比较条件才进入后续阶段，不要求正收益。
+E2 已在对照执行前记录一个候选、竞争解释和预定检查，不给出拥塞标签。下一步恢复 256 请求基线，通过公开事实导出核对第 7、8 层的关键依赖，再按序检查专家准备成本与复制完成条件。对照仍保持完整 128 rank、物理网络和容量，工作量与依赖变化经公共入口重新构图，不改历史时间戳。E3/E4 继续按证据门槛决定。
+
+独立合成流程、输入隔离、归档恢复和预算拒绝检查通过，见[单因素工具证据](../../experiments/scaleup_issue_screening/control-tooling-summary.json)、[归档检查](../../experiments/scaleup_issue_screening/archive-check-summary.json)和[用户操作](../../experiments/scaleup_issue_screening/usage.md)。已有来源不足以构成第二组不重复的 1024 请求，本轮只用一组，不下载、不循环来源，也不将相关 rank 或重放计为独立重复。旧产物保留，实际命令、退出状态和日志在 `runs/scaleup_issue_screening/`；所有后续操作继续遵守原预算。

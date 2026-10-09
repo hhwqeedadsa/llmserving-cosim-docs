@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "platform_commit": "e3db37a67ebb13edd5dd522dd1f8028cc46c2e19",
+  "formal_runs": 7,
+  "public_execution_validation": "all seven normal_exit, validated and drained; original run manifests retained in archives",
+  "selected_candidate": "C1",
+  "ending": "E2: preparation effect supported; remaining native and physical network waiting not separated",
+  "e3": "not triggered; no measurement comparison",
+  "e4": "not triggered; no full 61-block first round",
+  "checks": {
+    "unit_checks": 11,
+    "unit_log": "runs/scaleup_issue_screening/entry-audit/fence-workflow-checks.stderr.log",
+    "dependencies_log": "runs/scaleup_issue_screening/entry-audit/final-dependencies.stdout.log",
+    "platform_guard_log": "runs/scaleup_issue_screening/entry-audit/final-fixed-platform.stdout.log",
+    "document_links_log": "runs/scaleup_issue_screening/entry-audit/final-document-links.stdout.log",
+    "whitespace_log": "runs/scaleup_issue_screening/entry-audit/final-whitespace.stdout.log"
+  },
+  "comparison_sha256": "ab5556727ea56255e8c1bcf52232bafa18145f34a00a4899890f163bacfd5f91",
+  "archive_hashes_rechecked": true,
+  "command_log": "runs/scaleup_issue_screening/entry-audit/commands.jsonl",
+  "pushed": false
+}

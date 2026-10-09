@@ -4,6 +4,8 @@
 
 研究范围、输入建议、成因对照、信息比较和结束条件以[实验方案 v0.1](plan_v0.1.md)为准。平台修正由[平台 v0.5 规范](../../docs/archive/moe_ub_cosim_dev_v0.5.md)负责，两者分别验收。当前状态、实际基线和执行顺序只维护在[当前任务](../../docs/tasks/current.md)。
 
+查看本轮发现先读[研究结论](conclusions.md)，核对具体过程再看 [E1 正常业务](results/e1/README.md)和 [E2 成因对照](results/e2/README.md)。[资源汇总](results/resources.md)说明实际耗时、内存、保存空间及计量边界；复现或恢复结果见[操作说明](usage.md)。
+
 ## 接手入口
 
 先读仓库 [AGENTS.md](../../AGENTS.md)和当前任务，确认平台验收是否完成。研究运行采用通过 v0.5 对应验收的实际提交，不直接复用旧模型的任务图和时间记录。运行、采样和重放的既有规则见[用户指南](../../docs/user_guide.md)，字段见[记录格式](../../docs/record_storage.md)，来源与近似见[模型依据](../../docs/model_validation.md)。

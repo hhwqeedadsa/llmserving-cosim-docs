@@ -36,6 +36,7 @@
 | M19：A3 局部资源与依赖 | 独立 STORE/STORE 模板、通信核计算资源、有限局部缓冲与实际完成事件，按 Token 归约及两轮执行通过；旧模型保持可复现 | [小型验收](../fixtures/m19_a3_resources/README.md) |
 | M20：有限层段与内部事实 | 保留完整容量和原层号的准备、运行、有界事实导出、保存与离线回放；新旧公开流程及 C++ 范围核对通过 | [层段验收](../fixtures/m20_segment_facts/README.md)、[用户示例](../examples/a3_segment/README.md) |
 | M21：平台独立验收 | 四类小测试、记录启停一致性、固定真实路由导入，以及 128/1024 请求、128 rank 的原始三层执行；目标层段保存和全文件校验通过 | [验收与资源](../fixtures/m21_platform/README.md) |
+| v0.5 正常业务问题筛选（独立研究 E） | 四次正常运行与三次单因素对照，核对热点供数、后层传播、初态与完成条件；准备成本作用明确，剩余等待未独立归因，按方案在 E2 收尾，未触发 E3/E4 | [研究结论](../experiments/scaleup_issue_screening/conclusions.md)、[复现命令](../experiments/scaleup_issue_screening/usage.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4，M18 至 M21 对应 v0.5 平台部分。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

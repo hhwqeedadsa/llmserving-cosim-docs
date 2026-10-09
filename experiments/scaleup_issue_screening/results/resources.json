@@ -1,0 +1,455 @@
+{
+  "schema_version": "issue-screening-resource-summary/1",
+  "formal_runs": 7,
+  "cases": [
+    {
+      "case_id": "g0-b2-short",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e1/g0-b2-short-resources.json",
+      "archive_bytes": 120909096,
+      "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b2-short-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 228.5166600588709,
+          "peak_sampled_group_rss_bytes": 1083777024,
+          "peak_sampled_artifact_bytes": 46945402880
+        },
+        {
+          "phase": "g0-b2-short/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 533.3400109373033,
+          "peak_sampled_group_rss_bytes": 6773702656,
+          "peak_sampled_artifact_bytes": 48075116544
+        },
+        {
+          "phase": "g0-b2-short/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 71.15892161428928,
+          "peak_sampled_group_rss_bytes": 36425728,
+          "peak_sampled_artifact_bytes": 48094466048
+        },
+        {
+          "phase": "g0-b2-short/analysis-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 61.0993049107492,
+          "peak_sampled_group_rss_bytes": 674779136,
+          "peak_sampled_artifact_bytes": 48097894400
+        },
+        {
+          "phase": "g0-b2-short-freeze/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 63.430083552375436,
+          "peak_sampled_group_rss_bytes": 73809920,
+          "peak_sampled_artifact_bytes": 48147185664
+        },
+        {
+          "phase": "archives/g0-b2-short.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 84.39213141798973,
+          "peak_sampled_group_rss_bytes": 206053376,
+          "peak_sampled_artifact_bytes": 48274628608,
+          "archive_bytes": 120909096,
+          "archive_files": 56818,
+          "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+          "expanded_released": true
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b4-short",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e1/g0-b4-short-resources.json",
+      "archive_bytes": 166714663,
+      "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b4-short-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 365.95780434273183,
+          "peak_sampled_group_rss_bytes": 1458487296,
+          "peak_sampled_artifact_bytes": 48274624512
+        },
+        {
+          "phase": "g0-b4-short/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 833.2834145035595,
+          "peak_sampled_group_rss_bytes": 7663542272,
+          "peak_sampled_artifact_bytes": 48571457536
+        },
+        {
+          "phase": "g0-b4-short/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 102.9830167349428,
+          "peak_sampled_group_rss_bytes": 38674432,
+          "peak_sampled_artifact_bytes": 48599912448
+        },
+        {
+          "phase": "analysis/g0-b4-short-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 60.858573047444224,
+          "peak_sampled_group_rss_bytes": 429846528,
+          "peak_sampled_artifact_bytes": 48602595328
+        },
+        {
+          "phase": "g0-b4-short-freeze/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 63.97910526394844,
+          "peak_sampled_group_rss_bytes": 130138112,
+          "peak_sampled_artifact_bytes": 48650305536
+        },
+        {
+          "phase": "archives/g0-b4-short.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 85.28514684550464,
+          "peak_sampled_group_rss_bytes": 189263872,
+          "peak_sampled_artifact_bytes": 48817065984,
+          "archive_bytes": 166714663,
+          "archive_files": 56807,
+          "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+          "expanded_released": true
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b8-short",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e1/g0-b8-short-resources.json",
+      "archive_bytes": 254215856,
+      "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b8-short-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 642.2851784173399,
+          "peak_sampled_group_rss_bytes": 2256326656,
+          "peak_sampled_artifact_bytes": 47950110720
+        },
+        {
+          "phase": "g0-b8-short/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 1439.7581305094063,
+          "peak_sampled_group_rss_bytes": 9345744896,
+          "peak_sampled_artifact_bytes": 49082191872
+        },
+        {
+          "phase": "g0-b8-short/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 134.3588237427175,
+          "peak_sampled_group_rss_bytes": 39206912,
+          "peak_sampled_artifact_bytes": 49127550976
+        },
+        {
+          "phase": "analysis/g0-b8-short-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 71.15942773595452,
+          "peak_sampled_group_rss_bytes": 1677455360,
+          "peak_sampled_artifact_bytes": 49128636416
+        },
+        {
+          "phase": "g0-b8-short-freeze/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 74.84794785641134,
+          "peak_sampled_group_rss_bytes": 121638912,
+          "peak_sampled_artifact_bytes": 49176510464
+        },
+        {
+          "phase": "archives/g0-b8-short.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 96.3016125112772,
+          "peak_sampled_group_rss_bytes": 197246976,
+          "peak_sampled_artifact_bytes": 49430761472
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b8-long",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e1/g0-b8-long-resources.json",
+      "archive_bytes": 476490376,
+      "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b8-long-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 1150.4733387567103,
+          "peak_sampled_group_rss_bytes": 4494852096,
+          "peak_sampled_artifact_bytes": 48817070080
+        },
+        {
+          "phase": "g0-b8-long/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 2838.8486797008663,
+          "peak_sampled_group_rss_bytes": 12051734528,
+          "peak_sampled_artifact_bytes": 50382905344
+        },
+        {
+          "phase": "g0-b8-long/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 253.9454384110868,
+          "peak_sampled_group_rss_bytes": 46723072,
+          "peak_sampled_artifact_bytes": 50477420544
+        },
+        {
+          "phase": "analysis/g0-b8-long-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 116.67669836618006,
+          "peak_sampled_group_rss_bytes": 5563502592,
+          "peak_sampled_artifact_bytes": 50473308160
+        },
+        {
+          "phase": "archives/g0-b8-long.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 103.45491861365736,
+          "peak_sampled_group_rss_bytes": 116256768,
+          "peak_sampled_artifact_bytes": 50949869568
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b2-expert-half",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-half-resources.json",
+      "archive_bytes": 115718642,
+      "archive_sha256": "2a9b1314652cbfc90d8e6cb3285e124be9ac8fa7041674efd94b5652a73d5d84",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b2-expert-half-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 241.9387889932841,
+          "peak_sampled_group_rss_bytes": 1416581120,
+          "peak_sampled_artifact_bytes": 49305567232
+        },
+        {
+          "phase": "g0-b2-expert-half/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 509.44491343945265,
+          "peak_sampled_group_rss_bytes": 6776999936,
+          "peak_sampled_artifact_bytes": 50430074880
+        },
+        {
+          "phase": "g0-b2-expert-half/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 82.22611072286963,
+          "peak_sampled_group_rss_bytes": 33976320,
+          "peak_sampled_artifact_bytes": 50448736256
+        },
+        {
+          "phase": "analysis/g0-b2-expert-half-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 57.33929079584777,
+          "peak_sampled_group_rss_bytes": 1248550912,
+          "peak_sampled_artifact_bytes": 50452172800
+        },
+        {
+          "phase": "archives/g0-b2-expert-half.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 68.54518418945372,
+          "peak_sampled_group_rss_bytes": 63733760,
+          "peak_sampled_artifact_bytes": 50567909376
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b2-expert-double",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-double-resources.json",
+      "archive_bytes": 121742404,
+      "archive_sha256": "64f218db141d8662867a368134d5ba8495fe124da19bb312ab3c8ff02a9ce000",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b2-expert-double-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 241.88451400771737,
+          "peak_sampled_group_rss_bytes": 1282351104,
+          "peak_sampled_artifact_bytes": 49428250624
+        },
+        {
+          "phase": "g0-b2-expert-double/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 542.5362631194293,
+          "peak_sampled_group_rss_bytes": 6780624896,
+          "peak_sampled_artifact_bytes": 50558853120
+        },
+        {
+          "phase": "g0-b2-expert-double/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 81.90780843421817,
+          "peak_sampled_group_rss_bytes": 36143104,
+          "peak_sampled_artifact_bytes": 50579230720
+        },
+        {
+          "phase": "analysis/g0-b2-expert-double-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 58.458187099546194,
+          "peak_sampled_group_rss_bytes": 1031696384,
+          "peak_sampled_artifact_bytes": 50582659072
+        },
+        {
+          "phase": "archives/g0-b2-expert-double.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 68.70850994437933,
+          "peak_sampled_group_rss_bytes": 60325888,
+          "peak_sampled_artifact_bytes": 50704420864
+        }
+      ]
+    },
+    {
+      "case_id": "g0-b2-local-fence",
+      "phase_reports": "experiments/scaleup_issue_screening/results/e2/g0-b2-local-fence-resources.json",
+      "archive_bytes": 111340654,
+      "archive_sha256": "eb3b528a2c52625d86d73f0b7a34d23cb30872ac4f0d520c21d83682726ba131",
+      "archive_verified": true,
+      "expanded_released": true,
+      "phases": [
+        {
+          "phase": "g0-b2-local-fence-prepare/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 239.78683076053858,
+          "peak_sampled_group_rss_bytes": 1068363776,
+          "peak_sampled_artifact_bytes": 49559953408
+        },
+        {
+          "phase": "g0-b2-local-fence/run/logs/resources-run/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 501.74058355763555,
+          "peak_sampled_group_rss_bytes": 6395731968,
+          "peak_sampled_artifact_bytes": 49560096768
+        },
+        {
+          "phase": "g0-b2-local-fence/run/logs/resources-export/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 72.16849838383496,
+          "peak_sampled_group_rss_bytes": 36155392,
+          "peak_sampled_artifact_bytes": 49387081728
+        },
+        {
+          "phase": "analysis/g0-b2-local-fence-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 50.49343464337289,
+          "peak_sampled_group_rss_bytes": 639827968,
+          "peak_sampled_artifact_bytes": 49391398912
+        },
+        {
+          "phase": "facts/g0-b2-local-fence/logs/resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 61.753634467720985,
+          "peak_sampled_group_rss_bytes": 1131892736,
+          "peak_sampled_artifact_bytes": 49401614336
+        },
+        {
+          "phase": "facts/g0-b2-local-fence-witnesses.json-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 39.803714683279395,
+          "peak_sampled_group_rss_bytes": 6393856,
+          "peak_sampled_artifact_bytes": 49404977152
+        },
+        {
+          "phase": "archives/g0-b2-local-fence.tar.gz-resources/probe.json",
+          "status": "completed",
+          "child_exit_code": 0,
+          "wall_seconds": 69.62452105619013,
+          "peak_sampled_group_rss_bytes": 120434688,
+          "peak_sampled_artifact_bytes": 49513377792
+        }
+      ]
+    }
+  ],
+  "declared_policy": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "peak_formal_phase_artifact_bytes": 50949869568,
+  "final_cumulative_usage": {
+    "apparent_bytes": 47184092836,
+    "allocated_bytes": 48331038720
+  },
+  "final_experiment_usage": {
+    "apparent_bytes": 1462355350,
+    "allocated_bytes": 1466167296
+  },
+  "archives_bytes": 1367131691,
+  "archive_hashes_rechecked": true,
+  "restored_baseline_copy_released": {
+    "passed": true,
+    "archive": "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+    "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+    "released_directory": "runs/scaleup_issue_screening/restored-g0-b2-short",
+    "files": 56818,
+    "archive_and_analysis_retained": true
+  },
+  "caveats": [
+    "sampled RSS can miss short peaks",
+    "run phase includes frontend graph work, backend execution and resource monitoring",
+    "phase times omit gaps between commands and tooling development",
+    "old artifacts preserved; cumulative charge includes configured old roots",
+    "no inference of simulated device memory or switch telemetry cost from host measurements"
+  ]
+}

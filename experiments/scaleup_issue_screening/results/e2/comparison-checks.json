@@ -1,6 +1,15 @@
 {
   "passed": true,
   "unit_checks": 11,
-  "log": "runs/scaleup_issue_screening/entry-audit/control-pairing-checks.stderr.log",
-  "full_three_control_comparison": "pending remaining predeclared executions"
+  "unit_log": "runs/scaleup_issue_screening/entry-audit/fence-workflow-checks.stderr.log",
+  "full_three_control_comparison": "passed",
+  "comparison_sha256": "ab5556727ea56255e8c1bcf52232bafa18145f34a00a4899890f163bacfd5f91",
+  "resources": {
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 39.42864873073995,
+    "peak_sampled_group_rss_bytes": 5369856,
+    "peak_sampled_artifact_bytes": 49402015744
+  },
+  "log_directory": "runs/scaleup_issue_screening/e2-comparison.json-resources"
 }

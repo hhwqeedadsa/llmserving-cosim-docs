@@ -1,0 +1,1103 @@
+{
+  "schema_version": "issue-screening-e2-comparison/1",
+  "baseline_summary_sha256": "7a5f2e649174da5c9e07a2817b5e967381fa4207bf1c12127e5774abd488dafd",
+  "baseline_last_layer_compute_finished_ns": 110792,
+  "controls": [
+    {
+      "case_id": "g0-b2-expert-half",
+      "control": {
+        "schema_version": "issue-screening-control/1",
+        "case_id": "g0-b2-expert-half",
+        "baseline_case": "g0-b2-short",
+        "parameter": "routed_expert_per_input_ns",
+        "reference": 100,
+        "value": 50
+      },
+      "source_summary_sha256": "1ac95cca8eb495328bb5895e98ad0a448170ebf5dcbb355b1343f8012d1385cc",
+      "input_audit_sha256": "5f0acd09f68d4486c19e82f0e9aa43fccee8b5059d40ad06703c8e49062a187c",
+      "last_layer_compute_finished_ns": 83025,
+      "compute_finish_delta_ns": -27767,
+      "modeled_duration_reduction_percent": 25.062278864899994,
+      "simulation_end_ns": 83025,
+      "network_drain": {
+        "arrived_packets": 1050885,
+        "idle": true,
+        "started_packets": 1050885
+      },
+      "operations": [
+        {
+          "layer_id": 7,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 11595,
+            "median_duration_ns": 6162.5,
+            "finish_spread_ns": 1290,
+            "last_finish_ns": 33920
+          },
+          "control": {
+            "entry_spread_ns": 10509,
+            "median_duration_ns": 6017.0,
+            "finish_spread_ns": 1395,
+            "last_finish_ns": 27386
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -8169,
+              "median": -6528.5,
+              "mean": -6354.3828125,
+              "p95": -5050,
+              "maximum": -4244,
+              "spread": 3925
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -2395,
+              "median": -110.5,
+              "mean": -278.4609375,
+              "p95": 266,
+              "maximum": 1530,
+              "spread": 3925
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -6720,
+              "median": -6639.0,
+              "mean": -6632.84375,
+              "p95": -6577,
+              "maximum": -6512,
+              "spread": 208
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            86
+          ],
+          "control_last_finishing_ranks": [
+            70
+          ]
+        },
+        {
+          "layer_id": 7,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 21326,
+            "median_duration_ns": 29499.0,
+            "finish_spread_ns": 26131,
+            "last_finish_ns": 68720
+          },
+          "control": {
+            "entry_spread_ns": 11353,
+            "median_duration_ns": 20184.5,
+            "finish_spread_ns": 18533,
+            "last_finish_ns": 52080
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -16662,
+              "median": -7039.0,
+              "mean": -7432.84375,
+              "p95": -6689,
+              "maximum": -6639,
+              "spread": 10023
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -10437,
+              "median": -9646.0,
+              "mean": -8892.984375,
+              "p95": -4777,
+              "maximum": -14,
+              "spread": 10423
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -17576,
+              "median": -16684.0,
+              "mean": -16325.828125,
+              "p95": -13139,
+              "maximum": -9042,
+              "spread": 8534
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            27
+          ],
+          "control_last_finishing_ranks": [
+            27
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 28115,
+            "median_duration_ns": 8066.5,
+            "finish_spread_ns": 1142,
+            "last_finish_ns": 73380
+          },
+          "control": {
+            "entry_spread_ns": 20471,
+            "median_duration_ns": 7949.0,
+            "finish_spread_ns": 1139,
+            "last_finish_ns": 56691
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -17576,
+              "median": -16684.0,
+              "mean": -16325.828125,
+              "p95": -13139,
+              "maximum": -9042,
+              "spread": 8534
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -7601,
+              "median": 6.0,
+              "mean": -357.1796875,
+              "p95": 291,
+              "maximum": 890,
+              "spread": 8491
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -16774,
+              "median": -16686.0,
+              "mean": -16683.0078125,
+              "p95": -16643,
+              "maximum": -16571,
+              "spread": 203
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            20
+          ],
+          "control_last_finishing_ranks": [
+            65
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 22878,
+            "median_duration_ns": 32488.5,
+            "finish_spread_ns": 25528,
+            "last_finish_ns": 110700
+          },
+          "control": {
+            "entry_spread_ns": 11989,
+            "median_duration_ns": 22300.5,
+            "finish_spread_ns": 18931,
+            "last_finish_ns": 82933
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -27627,
+              "median": -17094.5,
+              "mean": -17483.0078125,
+              "p95": -16786,
+              "maximum": -16686,
+              "spread": 10941
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -11039,
+              "median": -10482.5,
+              "mean": -10027.546875,
+              "p95": -6435,
+              "maximum": -3,
+              "spread": 11036
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -28125,
+              "median": -27645.0,
+              "mean": -27510.5546875,
+              "p95": -27340,
+              "maximum": -21170,
+              "spread": 6955
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            58
+          ],
+          "control_last_finishing_ranks": [
+            58
+          ]
+        }
+      ],
+      "compute_relations": {
+        "6": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9675493997221636,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 0
+          }
+        },
+        "7": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9656957438833621,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        },
+        "8": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9676077550697006,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        }
+      },
+      "network": {
+        "observed_ports": 2688,
+        "ports_with_nonzero_records": 2688,
+        "zero_record_ports": 0,
+        "packet_bytes": 387691032,
+        "packets": 772593,
+        "voq_waiting_byte_ns": 4498630088,
+        "fifo_waiting_byte_ns": 2267586248,
+        "max_voq_waiting_bytes": 113160,
+        "max_fifo_waiting_bytes": 11392,
+        "queue_area_is_not_saved_time": true,
+        "source_device_queues_observed": false
+      },
+      "actual_static_port_coverage_equal": true,
+      "ports_with_changed_total_packet_bytes": 2671,
+      "ports_with_changed_queue_area": 2688,
+      "packet_path_equality_verified": false
+    },
+    {
+      "case_id": "g0-b2-expert-double",
+      "control": {
+        "schema_version": "issue-screening-control/1",
+        "case_id": "g0-b2-expert-double",
+        "baseline_case": "g0-b2-short",
+        "parameter": "routed_expert_per_input_ns",
+        "reference": 100,
+        "value": 200
+      },
+      "source_summary_sha256": "06d71e0e400494ced825713ae156ec799c00140883d9dd16d73861b1ef3f87aa",
+      "input_audit_sha256": "0f80a96b634d7e11aa3a1c17ee3e5e6b9ad3d74dbaa8a2bca565407aa0219496",
+      "last_layer_compute_finished_ns": 166613,
+      "compute_finish_delta_ns": 55821,
+      "modeled_duration_reduction_percent": -50.38360170409416,
+      "simulation_end_ns": 166613,
+      "network_drain": {
+        "arrived_packets": 1050890,
+        "idle": true,
+        "started_packets": 1050890
+      },
+      "operations": [
+        {
+          "layer_id": 7,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 11595,
+            "median_duration_ns": 6162.5,
+            "finish_spread_ns": 1290,
+            "last_finish_ns": 33920
+          },
+          "control": {
+            "entry_spread_ns": 15080,
+            "median_duration_ns": 6887.0,
+            "finish_spread_ns": 1268,
+            "last_finish_ns": 47306
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": 8699,
+              "median": 13196.0,
+              "mean": 12827.9609375,
+              "p95": 13446,
+              "maximum": 13635,
+              "spread": 4936
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -227,
+              "median": 219.0,
+              "mean": 577.84375,
+              "p95": 2418,
+              "maximum": 4709,
+              "spread": 4936
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": 13258,
+              "median": 13408.0,
+              "mean": 13405.8046875,
+              "p95": 13408,
+              "maximum": 13472,
+              "spread": 214
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            86
+          ],
+          "control_last_finishing_ranks": [
+            70
+          ]
+        },
+        {
+          "layer_id": 7,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 21326,
+            "median_duration_ns": 29499.0,
+            "finish_spread_ns": 26131,
+            "last_finish_ns": 68720
+          },
+          "control": {
+            "entry_spread_ns": 41526,
+            "median_duration_ns": 48919.0,
+            "finish_spread_ns": 41888,
+            "last_finish_ns": 102768
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": 13408,
+              "median": 14208.0,
+              "mean": 15005.8046875,
+              "p95": 18308,
+              "maximum": 33708,
+              "spread": 20300
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": 223,
+              "median": 19649.5,
+              "mean": 18216.890625,
+              "p95": 20323,
+              "maximum": 20777,
+              "spread": 20554
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": 18291,
+              "median": 33829.0,
+              "mean": 33222.6953125,
+              "p95": 34409,
+              "maximum": 34898,
+              "spread": 16607
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            27
+          ],
+          "control_last_finishing_ranks": [
+            30
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 28115,
+            "median_duration_ns": 8066.5,
+            "finish_spread_ns": 1142,
+            "last_finish_ns": 73380
+          },
+          "control": {
+            "entry_spread_ns": 43743,
+            "median_duration_ns": 8163.0,
+            "finish_spread_ns": 1133,
+            "last_finish_ns": 107289
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": 18291,
+              "median": 33829.0,
+              "mean": 33222.6953125,
+              "p95": 34409,
+              "maximum": 34898,
+              "spread": 16607
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -979,
+              "median": 90.0,
+              "mean": 688.8046875,
+              "p95": 7352,
+              "maximum": 15628,
+              "spread": 16607
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": 33786,
+              "median": 33919.0,
+              "mean": 33911.5,
+              "p95": 33919,
+              "maximum": 33921,
+              "spread": 135
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            20
+          ],
+          "control_last_finishing_ranks": [
+            65
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 22878,
+            "median_duration_ns": 32488.5,
+            "finish_spread_ns": 25528,
+            "last_finish_ns": 110700
+          },
+          "control": {
+            "entry_spread_ns": 44780,
+            "median_duration_ns": 53187.5,
+            "finish_spread_ns": 38334,
+            "last_finish_ns": 166521
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": 33919,
+              "median": 34726.0,
+              "mean": 35511.5,
+              "p95": 38119,
+              "maximum": 55821,
+              "spread": 21902
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": 0,
+              "median": 21045.0,
+              "mean": 20073.5234375,
+              "p95": 21703,
+              "maximum": 21902,
+              "spread": 21902
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": 43015,
+              "median": 55821.0,
+              "mean": 55585.0234375,
+              "p95": 55821,
+              "maximum": 55821,
+              "spread": 12806
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            58
+          ],
+          "control_last_finishing_ranks": [
+            58
+          ]
+        }
+      ],
+      "compute_relations": {
+        "6": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9978404366044937,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 0
+          }
+        },
+        "7": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9977810406251212,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        },
+        "8": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9978664702807603,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        }
+      },
+      "network": {
+        "observed_ports": 2688,
+        "ports_with_nonzero_records": 2688,
+        "zero_record_ports": 0,
+        "packet_bytes": 387691232,
+        "packets": 772598,
+        "voq_waiting_byte_ns": 4099796388,
+        "fifo_waiting_byte_ns": 1764254228,
+        "max_voq_waiting_bytes": 113160,
+        "max_fifo_waiting_bytes": 11392,
+        "queue_area_is_not_saved_time": true,
+        "source_device_queues_observed": false
+      },
+      "actual_static_port_coverage_equal": true,
+      "ports_with_changed_total_packet_bytes": 2654,
+      "ports_with_changed_queue_area": 2688,
+      "packet_path_equality_verified": false
+    },
+    {
+      "case_id": "g0-b2-local-fence",
+      "control": {
+        "schema_version": "issue-screening-control/1",
+        "case_id": "g0-b2-local-fence",
+        "baseline_case": "g0-b2-short",
+        "parameter": "copy_fence",
+        "reference": "data_ready",
+        "value": "local_read_complete"
+      },
+      "source_summary_sha256": "e5e257ade3f3491ec87861db3fa86030e8af758d63f33564c540b9cd6db4ea2c",
+      "input_audit_sha256": "7e7661f269e44c6dda9010800c371e092950007b9a3b6f42af44955fdc70b6f4",
+      "last_layer_compute_finished_ns": 109436,
+      "compute_finish_delta_ns": -1356,
+      "modeled_duration_reduction_percent": 1.2239150841215973,
+      "simulation_end_ns": 109436,
+      "network_drain": {
+        "arrived_packets": 1050885,
+        "idle": true,
+        "started_packets": 1050885
+      },
+      "operations": [
+        {
+          "layer_id": 7,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 11595,
+            "median_duration_ns": 6162.5,
+            "finish_spread_ns": 1290,
+            "last_finish_ns": 33920
+          },
+          "control": {
+            "entry_spread_ns": 11337,
+            "median_duration_ns": 6526.5,
+            "finish_spread_ns": 1244,
+            "last_finish_ns": 33218
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -2767,
+              "median": -460.5,
+              "mean": -630.296875,
+              "p95": -153,
+              "maximum": -19,
+              "spread": 2748
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -650,
+              "median": -217.0,
+              "mean": -33.3359375,
+              "p95": 1665,
+              "maximum": 2107,
+              "spread": 2757
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -819,
+              "median": -659.0,
+              "mean": -663.6328125,
+              "p95": -628,
+              "maximum": -606,
+              "spread": 213
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            86
+          ],
+          "control_last_finishing_ranks": [
+            70
+          ]
+        },
+        {
+          "layer_id": 7,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 21326,
+            "median_duration_ns": 29499.0,
+            "finish_spread_ns": 26131,
+            "last_finish_ns": 68720
+          },
+          "control": {
+            "entry_spread_ns": 21298,
+            "median_duration_ns": 29575.0,
+            "finish_spread_ns": 26169,
+            "last_finish_ns": 68056
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -819,
+              "median": -659.0,
+              "mean": -663.6328125,
+              "p95": -628,
+              "maximum": -606,
+              "spread": 213
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -2222,
+              "median": -11.5,
+              "mean": -142.9296875,
+              "p95": 745,
+              "maximum": 897,
+              "spread": 3119
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -2885,
+              "median": -670.5,
+              "mean": -806.5625,
+              "p95": 63,
+              "maximum": 232,
+              "spread": 3117
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            27
+          ],
+          "control_last_finishing_ranks": [
+            33
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "dispatch",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 28115,
+            "median_duration_ns": 8066.5,
+            "finish_spread_ns": 1142,
+            "last_finish_ns": 73380
+          },
+          "control": {
+            "entry_spread_ns": 27715,
+            "median_duration_ns": 7195.0,
+            "finish_spread_ns": 1224,
+            "last_finish_ns": 71992
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -2885,
+              "median": -670.5,
+              "mean": -806.5625,
+              "p95": 63,
+              "maximum": 232,
+              "spread": 3117
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -1688,
+              "median": -766.0,
+              "mean": -611.671875,
+              "p95": 1154,
+              "maximum": 1532,
+              "spread": 3220
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -1562,
+              "median": -1425.0,
+              "mean": -1418.234375,
+              "p95": -1335,
+              "maximum": -1038,
+              "spread": 524
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            20
+          ],
+          "control_last_finishing_ranks": [
+            65
+          ]
+        },
+        {
+          "layer_id": 8,
+          "kind": "combine",
+          "participants": 128,
+          "baseline": {
+            "entry_spread_ns": 22878,
+            "median_duration_ns": 32488.5,
+            "finish_spread_ns": 25528,
+            "last_finish_ns": 110700
+          },
+          "control": {
+            "entry_spread_ns": 22939,
+            "median_duration_ns": 32177.5,
+            "finish_spread_ns": 25695,
+            "last_finish_ns": 109344
+          },
+          "paired_control_minus_baseline_ns": {
+            "start_ns": {
+              "n": 128,
+              "minimum": -1562,
+              "median": -1425.0,
+              "mean": -1418.234375,
+              "p95": -1335,
+              "maximum": -1038,
+              "spread": 524
+            },
+            "duration_ns": {
+              "n": 128,
+              "minimum": -2122,
+              "median": 70.0,
+              "mean": -160.3359375,
+              "p95": 657,
+              "maximum": 809,
+              "spread": 2931
+            },
+            "end_ns": {
+              "n": 128,
+              "minimum": -3470,
+              "median": -1371.0,
+              "mean": -1578.5703125,
+              "p95": -758,
+              "maximum": -617,
+              "spread": 2853
+            }
+          },
+          "baseline_last_finishing_ranks": [
+            58
+          ],
+          "control_last_finishing_ranks": [
+            80
+          ]
+        }
+      ],
+      "compute_relations": {
+        "6": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9915768010301856,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 0
+          }
+        },
+        "7": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.9914066349333622,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        },
+        "8": {
+          "expert_start_minus_dispatch_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "combine_entry_minus_expert_finish_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "expert_duration_minus_declared_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          },
+          "routed_inputs_vs_combine_entry_correlation": 0.991441622096724,
+          "next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns": {
+            "n": 128,
+            "minimum": 0,
+            "median": 0.0,
+            "mean": 0,
+            "p95": 0,
+            "maximum": 0,
+            "spread": 0
+          }
+        }
+      },
+      "network": {
+        "observed_ports": 2688,
+        "ports_with_nonzero_records": 2688,
+        "zero_record_ports": 0,
+        "packet_bytes": 387690992,
+        "packets": 772592,
+        "voq_waiting_byte_ns": 4599658200,
+        "fifo_waiting_byte_ns": 1967915380,
+        "max_voq_waiting_bytes": 113160,
+        "max_fifo_waiting_bytes": 11392,
+        "queue_area_is_not_saved_time": true,
+        "source_device_queues_observed": false
+      },
+      "actual_static_port_coverage_equal": true,
+      "ports_with_changed_total_packet_bytes": 2687,
+      "ports_with_changed_queue_area": 2688,
+      "packet_path_equality_verified": false
+    }
+  ],
+  "independent_source_groups": 1,
+  "rank_samples_are_independent": false,
+  "scope": "model-internal one-factor total effects with actual completion feedback; not calibrated hardware gains",
+  "caveats": [
+    "same seed does not freeze packet paths",
+    "aggregate queue areas are not avoidable time",
+    "no source-device queue or per-packet waiting attribution",
+    "only 256-request controls; 1024-request E1 observations are not control validation"
+  ],
+  "program_sha256": "9af86fc25f30e6cd52cf293531b5120dc5af1ab905a3ef3f0dc714a66f5c67bd"
+}

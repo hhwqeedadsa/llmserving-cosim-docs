@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "cases": {
+    "baseline": {
+      "simulation_end_ns": 56762,
+      "fabric_payload_bytes": 39312,
+      "compute_work_ns": 16006,
+      "overlapping_core_pairs": 38,
+      "partial_token_starts": 3,
+      "local_reads_before_protocol_retirement": 108,
+      "graphs": 2
+    },
+    "partial": {
+      "simulation_end_ns": 178056,
+      "fabric_payload_bytes": 19656,
+      "compute_work_ns": 308138,
+      "overlapping_core_pairs": 21,
+      "partial_token_starts": 3,
+      "local_reads_before_protocol_retirement": 54,
+      "graphs": 1
+    }
+  },
+  "schema_version": "moe-ub-a3-resource-acceptance/1",
+  "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+  "platform_aiv_cores": 2,
+  "copy_fence": "data_ready",
+  "hardware_calibrated": false,
+  "scope": "synthetic_functional_not_research",
+  "cpp_tamper_rejections": 4,
+  "python_tests": 22,
+  "legacy_native_cases": 6,
+  "evidence_root": "runs/m19-a3-resources"
+}

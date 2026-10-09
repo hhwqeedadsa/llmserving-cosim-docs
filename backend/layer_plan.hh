@@ -17,10 +17,14 @@ struct ExecutionNode
     std::string kind;
     uint64_t duration_ns;
     std::vector<uint64_t> deps;
+    std::string resource_id, event;
+    uint64_t event_transfer = 0;
     ExecutionNode(const nlohmann::json& node)
         : kind(node.at("kind").get<std::string>()),
           duration_ns(kind == "COMP" ? node.at("duration_ns").get<uint64_t>() : 0),
-          deps(node.at("deps").get<std::vector<uint64_t>>()) {}
+          deps(node.at("deps").get<std::vector<uint64_t>>()),
+          resource_id(node.value("resource_id", std::string())), event(node.value("event", std::string())),
+          event_transfer(kind == "EVENT" ? node.value("transfer_id",uint64_t(0)) : 0) {}
 };
 struct LayerPlan
 {
@@ -44,7 +48,9 @@ uint64_t ValidateBatchLimits(const nlohmann::json& limits);
 LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention retention = PlanRetention::Complete);
 // retain_data only controls returned storage; all semantic checks always run.
 LayerPlan ValidateLayerPlan(const nlohmann::json& data, bool retain_data = true);
-LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true);
+LayerPlan ValidateCannPlan(const nlohmann::json& data, bool retain_data = true,
+                          nlohmann::json* reconstructed_layout = nullptr);
+LayerPlan ValidateA3Plan(const nlohmann::json& data, bool retain_data = true);
 LayerPlan ValidateNativePlan(const nlohmann::json& data, bool retain_data = true);
 void ValidateFullModelProfile(const nlohmann::json& model, const nlohmann::json& profile, const nlohmann::json& ranks);
 LayerPlan LoadFullModelPlan(const std::filesystem::path& directory, nlohmann::json data,

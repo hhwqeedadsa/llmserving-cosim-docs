@@ -3,6 +3,7 @@
 #include <regex>
 #include <set>
 #include <stdexcept>
+#include "ns3/simulator.h"
 
 namespace moe_ub
 {
@@ -105,6 +106,36 @@ void InstallPrepared(const LayerPlan& plan,
                 "rank " + std::to_string(rank) + " has an in-flight graph or reused identity");
         adapters[rank_index.at(rank)]->CheckTransfers(per_rank.at(rank));
         adapters[rank_index.at(rank)]->CheckLocalDeliveries(per_rank_local.at(rank), per_rank.at(rank));
+    }
+    if (plan.data.contains("a3_resources")) {
+        std::map<uint64_t,UbWriteTransfer*> fabric_events;
+        std::map<uint64_t,LocalDelivery*> local_events;
+        for(auto* t:transfers)fabric_events.emplace(t->Descriptor().transfer_id,t);
+        for(auto* t:local)local_events.emplace(t->Descriptor().transfer_id,t);
+        for(int rank:ranks) {
+            auto* workload=systems[rank_index.at(rank)]->workload;
+            std::unordered_map<uint64_t,std::string> resources;
+            std::unordered_set<uint64_t> events;
+            using Handler=std::function<void(std::function<void()>)>;
+            auto handlers=std::make_shared<std::map<uint64_t,Handler>>();
+            for(const auto& [key,node]:plan.nodes)if(key.first==rank) {
+                if(node.kind=="COMP" || node.kind=="EVENT")resources.emplace(key.second,node.resource_id);
+                if(node.kind!="EVENT")continue;
+                events.insert(key.second);
+                if(node.event=="barrier")handlers->emplace(key.second,[](auto done){done();});
+                else if(auto it=fabric_events.find(node.event_transfer);it!=fabric_events.end()) {
+                    Require(it->second->Descriptor().src_rank==rank,"event owner is not the sender");
+                    handlers->emplace(key.second,[t=it->second,event=node.event](auto done){t->WaitEvent(event,std::move(done));});
+                } else {
+                    auto* delivery=local_events.at(node.event_transfer);
+                    Require(delivery->Descriptor().src_rank==rank,"local event owner is not the sender");
+                    handlers->emplace(key.second,[delivery](auto done){delivery->WaitReady(std::move(done));});
+                }
+            }
+            workload->hw_resource->configure_p2p_protocol_resources();
+            workload->hw_resource->configure_compute_resources(resources);
+            workload->set_external_events(std::move(events),[handlers](auto node,auto done){handlers->at(node)(std::move(done));});
+        }
     }
     // Nothing above starts tasks or replaces an existing feeder. Partitioning
     // only removes repeated scans of records irrelevant to a rank.

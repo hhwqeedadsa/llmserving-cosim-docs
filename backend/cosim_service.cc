@@ -699,6 +699,7 @@ int main(int argc, char** argv)
             ns3::EventId wakeup;
             bool decision_pending = false;
             unsigned bootstrap_done = 0, send_slots = 0;
+            std::optional<unsigned> send_model;
             uint64_t decision_id = 0;
             bool bootstrap = true, service_finished = false;
             std::string stage = "bootstrap";
@@ -1004,7 +1005,9 @@ int main(int argc, char** argv)
                             Require(op.at("group_id") == group.config.at("group_id"), "Operation group differs from deployment");
                     }
                     const auto slots = plan.data.at("send_slots_per_rank").get<unsigned>();
-                    Require(send_slots == 0 || slots == send_slots, "Cannot change send slots during a run");
+                    Require(!send_model || slots == *send_model, "Cannot change send resource model during a run");
+                    Require(slots != 0 || send_state_policy.is_null(), "Legacy send-slot observation does not describe A3 per-core resources");
+                    send_model = slots;
                     for (const auto& op : plan.data.at("operations"))
                         Require(op.at("wave_id") == wave &&
                                 !seen_operations.count(op.at("operation_id").get<std::string>()),
@@ -1052,7 +1055,7 @@ int main(int argc, char** argv)
                     expected_completions += plan.data.at("rank_ids").size();
                     submitted_transfers += plan.descriptors.size();
                     for (const auto& d : plan.descriptors) submitted_native += d.operation != moe_ub::TransferOperation::Write;
-                    if (!send_slots)
+                    if (!send_slots && !plan.data.contains("a3_resources"))
                         for (auto& sys : systems) {
                             sys->workload->hw_resource->configure_p2p_send_slots(slots);
                             sys->workload->notify_send_state();
@@ -1227,7 +1230,7 @@ int main(int argc, char** argv)
                     report["active_wqes"] == Json(std::vector<unsigned>(rank_count, 0)) &&
                     report["csv_completed_tasks"] == 0, "Service completion invariant failed");
             for (const auto& peak : report["peak_wqes"])
-                Require(peak <= send_slots, "Layer SEND slot limit exceeded");
+                Require(send_slots==0 || peak <= send_slots, "Layer SEND slot limit exceeded");
             moe_ub::FlushAstraLogging();
             Json endpoints = Json::array(), operations = Json::array();
             if (!resource_budget.is_null()) report["graph_resources"]={{"budget",resource_budget},{"used",resource_used}};

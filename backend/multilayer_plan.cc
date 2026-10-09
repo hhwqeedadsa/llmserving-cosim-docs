@@ -121,10 +121,18 @@ LayerPlan LoadMultilayerPlan(const std::filesystem::path& directory, const Json&
                 target["nodes"].push_back(node);
                 Require(result.nodes.emplace(std::make_pair(rank, number + offset), node).second, "duplicate node");
             }
+            if (source.contains("terminal_nodes")) {
+                terminal.clear();
+                for (const auto& value : source.at("terminal_nodes")) terminal.push_back(value.get<uint64_t>() + offset);
+            }
             if (terminal.empty()) terminal = entry;
             auto phases = source.at("phase_nodes");
             for (auto& [name, value] : phases.items()) if (!value.is_null()) value = value.get<uint64_t>() + offset;
             Json phase = {{"layer_id", id}, {"entry_deps", entry}, {"terminal_nodes", terminal}, {"phase_nodes", phases}};
+            if (source.contains("phase_members")) {
+                phase["phase_members"] = source.at("phase_members");
+                for (auto& values : phase["phase_members"]) for (auto& value : values) value = value.get<uint64_t>() + offset;
+            }
             if (source.contains("local_prepare_nodes"))
             {
                 phase["local_prepare_nodes"] = source.at("local_prepare_nodes");

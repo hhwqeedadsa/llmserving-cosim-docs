@@ -23,7 +23,8 @@ void CompareRetention(const std::filesystem::path& directory, const moe_ub::Laye
     for (const auto& [key, node] : expected.nodes)
     {
         const auto& other = actual.nodes.at(key);
-        require(std::tie(node.kind, node.duration_ns, node.deps) == std::tie(other.kind, other.duration_ns, other.deps));
+        require(std::tie(node.kind, node.duration_ns, node.deps, node.resource_id, node.event, node.event_transfer) ==
+                std::tie(other.kind, other.duration_ns, other.deps, other.resource_id, other.event, other.event_transfer));
     }
     auto fields = [](const auto& d) { return std::tie(d.transfer_id, d.task_id, d.graph_id, d.send_node_id, d.recv_node_id,
         d.src_rank, d.dst_rank, d.tag, d.bytes, d.operation_id, d.chunk_index, d.pair_byte_offset, d.pair_payload_bytes,

@@ -30,7 +30,7 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 
 可选 `endpoint_prepare` 表达已有成本尚未包含的端侧额外工作：Dispatch 按该 rank 本地 token 数、Combine 打包按该 rank 实际专家输入数计费，分别只加一次到已有准备/结果打包 COMP 节点。零工作量不产生额外节点；其他计算和本地交付成本不变。这是显式参考耗时，并非新增硬件测量；字段和边界见[后端说明](../backend/README.md)。
 
-全部 COMP 节点竞争每 rank 的一个计算槽。shared expert 可以在 routed 分支等待网络时执行，也可能占住该计算槽；完成顺序由依赖与资源共同决定。层间保持 rank 本地依赖，不增加全 rank 逐层屏障。整轮所有成员完成后，调度器才推进本轮请求。图执行细节见[系统架构](architecture.md)，阶段与结构检查见[完整模型测试输入](../fixtures/m10_full_model/README.md)。
+旧模板全部 COMP 节点竞争每 rank 的一个计算槽。A3 局部资源模板将声明的通信核分别建模，普通模型计算仍竞争一个 `gpu_compute` 资源；共享专家可与独立通信核工作重叠。完成顺序由依赖与资源共同决定。层间保持 rank 本地依赖，不增加全 rank 逐层屏障。整轮所有成员完成后，调度器才推进本轮请求。图执行细节见[系统架构](architecture.md)，阶段与结构检查见[完整模型测试输入](../fixtures/m10_full_model/README.md)。
 
 ### 测量表的适用范围
 
@@ -47,6 +47,7 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 | `direct_rank_dedup_v1` | 同一 Token 发往同一目的 rank 的多个专家时只发送一份输入；专家计算分别保留，按声明的本地加权合并约定返回一份向量 | 早期参考模型。已核对 DeepEP v1.2.1 的单机 normal 路径，但没有复现其完整元数据、通知、通道或 NVLink 时序。 |
 | `cann_a3_v850_fullmesh_v1` | 每 Token×专家分别发送和返回，同一目的 rank 不去重；Token 所属 rank 收齐后归约 | CM384/R1 WRITE 基线采用的独立 CANN 行为模型，以下说明适用于此模板。 |
 | `cann_a3_v850_native_v1` | 保留上一行的数据布局和状态消息；向量采用可选 STORE/LOAD，LOAD 前增加真实供数通知 | 本平台定义的原生操作映射，不能把新增握手或 worker 调度称为 CANN 真机行为。 |
+| `cann_a3_v850_store_resources_v1` | STORE/STORE；按源码分核、有限局部缓冲及逐 Token 条件执行，分开局部复用和协议回收 | v0.5 平台参考模板；核数量和复制栅栏映射为显式假设，未硬件校准。 |
 
 DeepEP 的固定源码版本为 `9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee`。其四 rank BF16 调用配置、八项源码对照和已知差异保存在[核对证据](../fixtures/m5_model_audit/README.md)与[原始完整核对记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/model_validation.md)。这部分是历史模型依据，不能代替当前 CANN 规则。
 
@@ -92,7 +93,9 @@ Dispatch 数据窗口的地址步长为 `A(A(H,32)+44,512)`；Combine 为 `A(2H,
 
 跨芯片分块使用 `URMA_WRITE/RTP` 参考映射。Dispatch 数据由 Token 所属 rank 发往专家 rank，Combine 数据反向返回。发送方只提交一次事务，接收节点只登记等待。目标 `RemoteWriteCommitted` 累计达到实际载荷长度后表示数据可消费；源 `transaction_done` 才表示发送完成并释放发送资源。源数据发送完成后发布 Dispatch 计数；对应返回数据完成后发布 Combine 标志。不能将接收就绪与发送资源回收合并为一个回调。
 
-`aiv_lanes` 为 1～48 个参考逻辑发送序列，不是测得的 AIV 分配数。每个序列等待前一事务完整结束才复用，另受每 rank 1 或 2 个发送槽限制。模型保留成功路径上的状态发布与等待；轮询、清零和局部同步的耗时合并到参考处理阶段。逐 rank 的归约保守地等待本地整个 Combine 阶段，不模拟逐 Token 归约流水或原生 MTE 双窗口重叠。
+旧模板的 `aiv_lanes` 为 1～48 个参考逻辑发送序列，不是测得的 AIV 分配数。每个序列等待前一事务完整结束才复用，另受每 rank 1 或 2 个发送槽限制。旧模板逐 rank 归约等待本地整个 Combine 阶段；这些行为保留供历史结果复现。
+
+v0.5 模板按固定源码的 SplitToCore 分配贡献与 Token，保留 Dispatch 跨核数据栅栏及 Combine 核内次序，允许无关核独立工作和已到齐 Token 先归约。准备、重排、打包、状态检查与归约的累计成本保持原定义；它们的重叠可以改变总耗时。局部复用等待原生请求成功形成，默认复制栅栏等待目标数据交付，协议资源仍等待原生响应回收。该映射不等于模拟了真实 MTE、HBM 或缓存，来源与剩余假设见[固定源码核对](../fixtures/m18_a3_execution/README.md)，字段见[后端参考](../backend/README.md#a3-局部资源模板)。
 
 URMA WRITE 是平台对通信行为的明确映射，不能据此声称复现原生 MTE/LDST。独立的 `cann_a3_v850_native_v1` 将向量映射为 ns-3-UB STORE 或 LOAD；状态和 LOAD 供数通知使用 STORE，并通过原生请求/响应回调判断数据与资源完成。LOAD 的 32 B 就绪通知、按 worker 均分任务和整包响应短尾填充均是明确的平台/后端参考行为，未经过 CANN 或 CM384 硬件校准。URMA READ、CTP、XCCL、CANN 超时、故障处理及原生标志复用竞态仍不在已验证范围。
 
@@ -105,6 +108,8 @@ data_min = 2 × B × [E × A(A(2H,32)+44,512) + K × A(2H,512)]
 staging = 2 × L × A(A(H,32)+44,32)
 cann_buffers = declared_data_window + 1,048,576 + staging
 ```
+
+上述 `staging` 适用于旧模板。v0.5 模板按源码动态量化的占用公式与 170 KiB 阈值选择每核 1 或 2 个 Dispatch 缓冲，Combine 为 2 个缓冲；容量预留改为 `cores × [dispatch_buffers × A(A(H,32)+44,32) + 2 × A(2H,32)]`。数据窗口及各层保守求和规则继续保留。缓冲数依据源码公式，通信核数和本地处理耗时仍是参考参数。
 
 声明的数据窗口必须不小于 `data_min`。容量模型还保留更大的向量及发送槽下界。令 R 为 rank 数，S 为每 rank 发送槽数，sD/sC 分别为 Dispatch/Combine 每元素字节数：
 

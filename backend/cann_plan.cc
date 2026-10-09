@@ -33,7 +33,7 @@ std::vector<std::pair<unsigned,J>> Split(const J& items,unsigned lanes,unsigned 
 }
 }
 
-LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
+LayerPlan ValidateCannPlan(const J& p, bool retain_data, J* reconstructed_layout) {
     const auto& c=p.at("input");
     std::set<std::string> fields={"schema_version","graph_id","wave_id","service_id","role","group_id","ready_ns","layer_id",
         "rank_ids","rank_to_ub_node","hidden_dim","top_k","dispatch_element_bytes","combine_element_bytes","application_metadata_bytes",
@@ -79,13 +79,13 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
         {"staging_bytes",staging},{"total_bytes",window+1048576+staging},{"reuse_rule","no_reuse_before_local_graph_completion"},
         {"native_double_window_overlap_modeled",false},{"logical_input_slots_per_rank",bs},{"global_bs",bs*world},
         {"inactive_slots","masked_no_vector_traffic"},{"dispatch_window_stride",Align(Align(h,32)+44,512)},{"combine_window_stride",Align(h*2,512)}};
-    Check(p.at("communication_buffers")==buffers,"buffer contract mismatch");
+    if (!reconstructed_layout) Check(p.at("communication_buffers")==buffers,"buffer contract mismatch");
     J evidence={{"source_revision",revision},{"source_path","mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.h"},
         {"combine_source_path","mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h"},
         {"transaction_mapping","URMA_WRITE/RTP_reference_not_native_MTE"},
         {"scheduling","balanced_core_lanes_with_transaction_done_serialization_reference"},
         {"target_runtime_executed",false},{"local_cost_basis","declared_reference"}};
-    Check(p.at("communication_evidence")==evidence && p.at("communication_profile_basis")=="runtime_adapted" &&
+    if (!reconstructed_layout) Check(p.at("communication_evidence")==evidence && p.at("communication_profile_basis")=="runtime_adapted" &&
         p.at("calibration_status")=="unvalidated_reference","unsupported fidelity claim");
     std::map<int,std::string> chips; std::map<int,uint32_t> endpoints;
     for(size_t i=0;i<ranks.size();++i) endpoints[ranks.at(i).get<int>()]=c.at("rank_to_ub_node").at(i).get<uint32_t>();
@@ -93,7 +93,7 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
     auto loc=[&](int src,int dst)->std::string { return src==dst?"same_rank":!chips.empty()&&chips.at(src)==chips.at(dst)?"same_chip":"cross_chip"; };
     const auto budget=resources::Budget(c); const auto usage=resources::Cann(c);
     resources::Check(usage,budget);
-    if(!budget.is_null()) Check(p.at("resource_usage")==usage,"preflight count mismatch");
+    if(!budget.is_null() && !reconstructed_layout) Check(p.at("resource_usage")==usage,"preflight count mismatch");
     J contributions=J::array(), operations=J::array(); std::map<int,uint64_t> counts,local;
     for(size_t i=0;i<tokens.size();++i) {
         const auto& t=tokens.at(i);int src=t.at("src_rank");++local[src];
@@ -252,6 +252,18 @@ LayerPlan ValidateCannPlan(const J& p, bool retain_data) {
         auto next=comp("next-layer",local[rank],Num(profile.at("next_layer")),finish.is_null()?combine:asdeps(finish));
         J graph={{"rank_id",rank},{"nodes",nodes},{"phase_nodes",{{"prepare",prepare},{"dispatch_reorder",reorder},{"expert",expert},{"local_merge",pack},{"finish",finish},{"next_layer",next}}}};
         if(c.contains("deployment"))graph["local_prepare_nodes"]=local_prepares;graphs.push_back(graph);
+    }
+    if (reconstructed_layout) {
+        // Internal layout reconstruction for a different, explicitly named
+        // execution model. The caller validates the reconstructed reference
+        // and compares the complete newly scheduled plan independently.
+        *reconstructed_layout=p;
+        (*reconstructed_layout)["communication_buffers"]=buffers;
+        (*reconstructed_layout)["communication_evidence"]=evidence;
+        (*reconstructed_layout)["transfers"]=transfers;
+        (*reconstructed_layout)["rank_graphs"]=graphs;
+        if (!budget.is_null()) (*reconstructed_layout)["resource_usage"]=usage;
+        return {};
     }
     Check(p.at("transfers")==transfers,"transfer layout, source, state or dependency mismatch");
     Check(p.at("rank_graphs")==graphs,"graph or stage mismatch");

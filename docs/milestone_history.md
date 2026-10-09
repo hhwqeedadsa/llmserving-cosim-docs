@@ -32,6 +32,8 @@
 | Scale-Up 物理出口服务（独立研究） | 三类出口两档速率加正常基准，共七次；逐包核对实际速率和业务命中，保留局部排队增加与微小、非单调整轮影响 | [出口服务结果](../experiments/scaleup_observability/results-service.md)、[实验命令](../experiments/scaleup_observability/exploration-usage.md) |
 | Scale-Up 响应路径核验（独立研究） | 只读六组既有记录，188 个任务在六个条件下均通过逐包路径、完整字节与实际数据就绪时刻核对；提供公开分析入口，保留多路径与流水贡献未独立分离的边界 | [路径证据](../experiments/scaleup_observability/results-response-paths.md)、[实验命令](../experiments/scaleup_observability/exploration-usage.md) |
 | Scale-Up 完整代表性验证与阶段总结（独立研究） | 真实路由完整首轮正常／半速两组，工作量相同且资源均释放；目标出口积压增加 57.60%，整轮增加 0.1532%。归纳现象、机制和后续测量取舍，不扩展为新平台里程碑 | [完整结果](../experiments/scaleup_observability/results-representative.md)、[研究总结](../experiments/scaleup_observability/conclusions.md)、[实验命令](../experiments/scaleup_observability/representative-usage.md) |
+| M18：A3 来源与执行条件 | 固定八份 CANN 来源，区分源码行为、局部资源与完成事件的参考映射，明确验证范围 | [来源核对](../fixtures/m18_a3_execution/README.md) |
+| M19：A3 局部资源与依赖 | 独立 STORE/STORE 模板、通信核计算资源、有限局部缓冲与实际完成事件，按 Token 归约及两轮执行通过；旧模型保持可复现 | [小型验收](../fixtures/m19_a3_resources/README.md) |
 
 M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4。原 F01 至 F04 分别由 M9 路由导入、M9 A100 小形状测量、M7/M8 连续组批和 M10 CANN 行为交付承接。源码核对和参考参数的完成不等于目标 NPU 性能校准。
 

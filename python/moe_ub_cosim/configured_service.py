@@ -64,7 +64,7 @@ def validate_configured_inputs(config, layer, *, capacity_auditor=audit_capacity
     block_size = config['memory']['block_size']
     requirements = []
     route_admission=None
-    if layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1'):
+    if layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1','cann_a3_v850_store_resources_v1'):
         from .route_admission import CannRouteAdmission
         route_admission=CannRouteAdmission(layer)
     for source in requests:

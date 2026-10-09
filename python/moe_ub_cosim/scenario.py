@@ -213,7 +213,7 @@ def prepare(input_path, backend_binary, output):
             'Scenario requires configured service')
     fields(config['execution'],'chunk_bytes send_slots_per_rank seed run','execution')
     execution=config['execution']
-    integer(execution['chunk_bytes'],'chunk_bytes',1,2**32-1);integer(execution['send_slots_per_rank'],'send slots',1,2)
+    integer(execution['chunk_bytes'],'chunk_bytes',1,2**32-1);integer(execution['send_slots_per_rank'],'send slots (0: A3 native resources)',0,2)
     integer(execution['seed'],'seed',1,2**32-1);integer(execution['run'],'run',1)
     integer(config['max_simulation_ns'],'max_simulation_ns',1)
     # The scope/capacity checks happen before a backend process can execute work.

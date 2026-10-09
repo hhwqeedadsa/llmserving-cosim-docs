@@ -52,7 +52,7 @@ def audit_full_capacity(model, memory, layer):
             'Full model layer structure/placement mismatch')
     require(model['hidden_size']==layer['hidden_dim'] and model['dtypes']==layer['compute_dtypes'],
             'Full model execution dimensions/dtypes differ')
-    require(layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1') and layer['role']=='D' and
+    require(layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1','cann_a3_v850_store_resources_v1') and layer['role']=='D' and
             'operator_profile' not in layer,'Full model currently requires CANN Decode reference compute')
     return result
 
@@ -73,7 +73,7 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
     seen={k:set() for k in ('transfer_id','ub_task_id','comm_tag','operation_id')}
     for layer in layers:
         validate_plan(layer);c=layer['input'];lid=c['layer_id'];spec=model['layers'][lid];cost=profile['layers'][lid]
-        require(layer['schema_version']=='moe-ub-execution-plan/3' and c['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1')
+        require(layer['schema_version']=='moe-ub-execution-plan/3' and c['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1','cann_a3_v850_store_resources_v1')
                 and c['role']=='D' and 'operator_profile' not in c,
                 'Full model requires CANN layer/3')
         require(common_input(layer)==common and token_keys(layer)==token_keys(first),'Full model shared configuration/Token continuity mismatch')
@@ -138,7 +138,8 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
                 # Dependency lists remain independent mutable lists as before.
                 shifted={node['node_id']:node['node_id']+base for node in child['nodes']}
                 used={d for node in child['nodes'] for d in node['deps']}
-                terminal=[shifted[node['node_id']] for node in child['nodes'] if node['node_id'] not in used] or routed
+                terminal=([shifted[n] for n in child['terminal_nodes']] if 'terminal_nodes' in child else
+                    [shifted[node['node_id']] for node in child['nodes'] if node['node_id'] not in used]) or routed
                 for original in child['nodes']:
                     node={k:None if k=='deps' else deepcopy(v) for k,v in original.items()}
                     node.update(node_id=shifted[original['node_id']],layer_id=lid,
@@ -148,6 +149,8 @@ def compose_full_model(layers, model, profile, *, _retain_layers=False):
                     nodes.append(node)
                 phase=dict(layer_id=lid,entry_deps=routed,terminal_nodes=terminal,
                     phase_nodes={k:None if v is None else shifted[v] for k,v in child['phase_nodes'].items()})
+                if 'phase_members' in child:
+                    phase['phase_members']={k:[shifted[v] for v in values] for k,values in child['phase_members'].items()}
                 if 'local_prepare_nodes' in child:
                     phase['local_prepare_nodes']={k:None if v is None else shifted[v] for k,v in child['local_prepare_nodes'].items()}
                 graph['layer_phases'].append(phase)

@@ -27,7 +27,17 @@ OperationStages::OperationStages(const LayerPlan& plan,const ExecutionTimes& tim
             Add(key,prefix+"_start",t.start_ns);Add(key,prefix+"_end",t.end_ns);
         };
         const std::string kind=op.at("kind");
-        node(g.at("phase_nodes").at(kind=="dispatch"?"prepare":"local_merge"),"prepare");
+        if(g.contains("phase_members")) {
+            const auto field=kind=="dispatch"?"prepare":"pack";
+            std::optional<uint64_t> start,end;
+            if(g.at("phase_members").contains(field))for(const auto& member:g.at("phase_members").at(field)) {
+                const auto& t=timing.at({rank,member.get<uint64_t>()});
+                if(!t.started || !t.finished)throw std::runtime_error("Incomplete local preparation");
+                start=start?std::min(*start,t.start_ns):t.start_ns;
+                end=end?std::max(*end,t.end_ns):t.end_ns;
+            }
+            if(start) {Add(key,"prepare_start",*start);Add(key,"prepare_end",*end);}
+        } else node(g.at("phase_nodes").at(kind=="dispatch"?"prepare":"local_merge"),"prepare");
         if(g.contains("local_prepare_nodes")) node(g.at("local_prepare_nodes").at(kind),"local_prepare");
     }
 }

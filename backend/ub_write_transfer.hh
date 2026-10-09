@@ -1,6 +1,7 @@
 #pragma once
 
 #include "write_completion.hh"
+#include "completion_event.hh"
 #include "message_categories.hh"
 #include "ns3/event-id.h"
 #include "ns3/ptr.h"
@@ -74,7 +75,9 @@ class UbWriteTransfer
     bool SourceJettyRetired() const { return jetty_retired_; }
     std::optional<uint64_t> SendStartNs() const { return send_start_ns_; }
     std::optional<uint64_t> ReceiveStartNs() const { return receive_start_ns_; }
-    bool HasPendingEvents() const { return submit_event_.IsPending() || completion_.HasPendingEvents(); }
+    bool HasPendingEvents() const { return submit_event_.IsPending() || completion_.HasPendingEvents() || local_read_.Pending() || target_ready_.Pending(); }
+    void WaitEvent(const std::string& event, std::function<void()> callback);
+    std::optional<uint64_t> LocalReadCompleteNs() const { return local_read_.Time(); }
 
   private:
     void Validate(int src, int dst, uint64_t bytes, int type, int tag,
@@ -97,5 +100,7 @@ class UbWriteTransfer
     std::optional<uint64_t> send_start_ns_, receive_start_ns_;
     std::optional<uint32_t> jetty_;
     bool jetty_retired_ = false;
+    uint64_t created_bytes_ = 0;
+    CompletionEvent local_read_, target_ready_;
 };
 }

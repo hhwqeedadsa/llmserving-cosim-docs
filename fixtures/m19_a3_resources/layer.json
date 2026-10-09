@@ -1,0 +1,107 @@
+{
+  "schema_version": "moe-ub-layer-fixture/3",
+  "graph_id": "template-ep0",
+  "wave_id": "template-wave",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 1,
+  "rank_ids": [
+    2,
+    7,
+    12
+  ],
+  "rank_to_ub_node": [
+    0,
+    2,
+    1
+  ],
+  "hidden_dim": 1025,
+  "top_k": 2,
+  "dispatch_element_bytes": 1,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 1024,
+  "send_slots_per_rank": 0,
+  "template": "cann_a3_v850_store_resources_v1",
+  "expert_placement": [
+    2,
+    2,
+    7,
+    7,
+    12,
+    12
+  ],
+  "tokens": [
+    {
+      "request_id": "placeholder",
+      "src_rank": 2,
+      "phase": "decode",
+      "token_index": 2,
+      "layer_id": 1,
+      "expert_ids": [
+        0,
+        5
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 200,
+    "expert_per_input": 100,
+    "expert_local_merge": 0,
+    "combine_unpack_merge": 100,
+    "next_layer": 0
+  },
+  "batch_limits": {
+    "max_num_seqs": 2,
+    "max_num_batched_tokens": 2
+  },
+  "compute_dtypes": {
+    "compute": "bfloat16",
+    "kv": "bfloat16",
+    "dispatch": "int8",
+    "combine": "bfloat16"
+  },
+  "deployment": {
+    "network_scope": "cross_chip",
+    "ranks": [
+      {
+        "rank_id": 2,
+        "die_id": "die-2",
+        "chip_id": "ep0-left",
+        "server_id": "server0"
+      },
+      {
+        "rank_id": 7,
+        "die_id": "die-7",
+        "chip_id": "ep0-left",
+        "server_id": "server0"
+      },
+      {
+        "rank_id": 12,
+        "die_id": "die-12",
+        "chip_id": "ep0-right",
+        "server_id": "server0"
+      }
+    ],
+    "local_prepare_ns_per_vector": {
+      "dispatch": 30,
+      "combine": 40
+    }
+  },
+  "cann_profile": {
+    "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+    "algorithm": "a3_fullmesh_v1_store_resources_tp1",
+    "window_bytes": 1048576,
+    "local_cost_ns": {
+      "dispatch_reorder_per_input": 30,
+      "status_check": 10,
+      "result_pack_per_input": 20,
+      "reduction_per_input": 40
+    },
+    "platform_aiv_cores": 2,
+    "core_count_basis": "declared_platform_reference",
+    "copy_fence": "data_ready"
+  }
+}

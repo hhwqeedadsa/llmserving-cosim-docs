@@ -86,7 +86,19 @@ cosim-service --check-backend BACKEND.json
 
 `sim_request*` 可能来自调用栈且包含未初始化字段，适配器只复制明确需要的实参，不异步保留或读取整份请求对象。回调保存图、节点和传输身份，旧图回调不得绑定到下一轮相同局部节点号。
 
-ASTRA 的点对点发送槽按节点身份占用和释放，支持当前配置的一槽或两槽，乱序完成也释放对应槽。RECV 不占发送槽；每 rank 保留一个计算槽。已展开的 Dispatch/Combine 不再交给 ASTRA 集合通信模型或 `UbTrafficGen` 重复生成与调度。
+旧模板的 ASTRA 点对点发送槽按节点身份占用和释放，支持一槽或两槽，乱序完成也释放对应槽。RECV 不占发送槽；旧模板每 rank 保留一个计算槽。已展开的 Dispatch/Combine 不再交给 ASTRA 集合通信模型或 `UbTrafficGen` 重复生成与调度。
+
+### A3 局部资源模板
+
+`cann_a3_v850_store_resources_v1` 固定采用原生 STORE/STORE，沿用 CANN 的消息布局与独立状态消息。输入仍为 `layer-fixture/3`，`send_slots_per_rank=0` 专门表示由局部缓冲及原生请求池控制发送；它不是无限容量的请求池，旧模板不接受零。结构化场景的 Dispatch/Combine profile 必须均为 STORE，同一次运行不能切换发送资源模型。
+
+`cann_profile` 保留 `source_revision`、`window_bytes`、`local_cost_ns`，另要求 `algorithm="a3_fullmesh_v1_store_resources_tp1"`、`platform_aiv_cores`（1～48）、`core_count_basis="declared_platform_reference"` 和 `copy_fence`。通信核数量是显式参考参数，不能当成已确认的硬件配置。`copy_fence` 默认为示例中声明的 `data_ready`，也允许显式选择 `local_read_complete` 做完成条件敏感性检查；输入不能省略该字段。
+
+Python 的 [a3.py](../python/moe_ub_cosim/a3.py) 与 C++ 的 [a3_plan.cc](a3_plan.cc) 分别重建分核、缓冲复用和完成依赖。每个 `aiv:N` 是一个独占计算资源，普通模型计算使用 `gpu_compute`；独立通信核可同时工作。局部缓冲用成对的准备与复用依赖表示：同一核的同一缓冲必须等上次数据被提交路径实际读取，才允许再次准备。原生 worker 的 outstanding 上限和节点请求号池继续由 ns-3-UB 管理。
+
+图中 `EVENT` 不计计算耗时。它在 Chakra 中编码为零时长 COMP，但由 `Workload::set_external_events` 绑定到已校验的屏障、实际请求形成或目标交付事件，保留正常异步回调及执行日志，不走原有的零 COMP 删除路径。`RequestCreated` 累计整份 STORE 的有效字节后产生 `local_read_complete`；它不表示上链路或到达目标。默认复制栅栏等待实际目标 `data_ready`；SEND 仍等原生事务完成和资源回收，RECV 仍只等待数据。
+
+Dispatch 保留源码的跨核数据栅栏再发布计数。Combine 按核发送，并按本核分配的 Token 分别等待与归约；下一算子等待整个本地算子完成。连续层依赖使用显式 `terminal_nodes`，最终图完成仍要求所有发送、回调和协议资源清理。`phase_members` 保存拆分后的准备、重排、打包和归约节点，聚合准备阶段给出这些节点的时间包络，不代表它们串行执行。旧的全 rank `send_state` 采集不适用于此模板，会明确拒绝。
 
 ## 数据就绪与发送完成
 

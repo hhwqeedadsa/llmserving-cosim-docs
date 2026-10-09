@@ -1,5 +1,6 @@
 #pragma once
 #include "extern/helper/json/json.hpp"
+#include "completion_event.hh"
 #include <cstdint>
 #include <functional>
 #include <string>
@@ -24,7 +25,8 @@ class LocalDelivery
     void Send(int rank, uint64_t bytes, int type, int peer, int tag, void (*callback)(void*), void* arg);
     void Receive(int rank, uint64_t bytes, int type, int peer, int tag, void (*callback)(void*), void* arg);
     bool Active() const { return !send_done_ || !recv_done_; }
-    bool HasPendingEvents() const { return pending_ != 0; }
+    bool HasPendingEvents() const { return pending_ != 0 || ready_.Pending(); }
+    void WaitReady(std::function<void()> callback) { ready_.Wait(std::move(callback)); }
     nlohmann::json Result() const;
   private:
     void Check(bool send, int rank, uint64_t bytes, int type, int peer, int tag, void (*callback)(void*)) const;
@@ -34,5 +36,6 @@ class LocalDelivery
     unsigned pending_ = 0;
     std::function<void()> receive_;
     nlohmann::json ready_ns_ = nullptr, receive_ns_ = nullptr, send_done_ns_ = nullptr, recv_done_ns_ = nullptr;
+    CompletionEvent ready_;
 };
 }

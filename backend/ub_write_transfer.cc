@@ -176,6 +176,10 @@ void UbWriteTransfer::ObserveNativeRequest(ns3::Ptr<const ns3::Packet> packet, u
     if (task != descriptor_.task_id || type != ns3::UbMemOperationType::STORE) return;
     if (!native_requests_.emplace(packet->GetUid(), std::make_pair(offset, bytes)).second)
         throw std::logic_error(Identity() + ": repeated native request creation");
+    if (!bytes || bytes > descriptor_.bytes-created_bytes_)
+        throw std::logic_error(Identity() + ": invalid locally read byte count");
+    created_bytes_ += bytes;
+    if (created_bytes_ == descriptor_.bytes) local_read_.Signal();
 }
 
 void UbWriteTransfer::ObserveNativeTarget(uint64_t uid, uint32_t bytes, ns3::UbMemOperationType type)
@@ -186,7 +190,17 @@ void UbWriteTransfer::ObserveNativeTarget(uint64_t uid, uint32_t bytes, ns3::UbM
     const auto [offset, expected] = found->second;
     if (bytes != expected) throw std::logic_error(Identity() + ": native STORE size changed");
     completion_.WriteCommitted(0, offset, bytes);
+    if (completion_.CommittedBytes() == descriptor_.bytes) target_ready_.Signal();
     native_requests_.erase(found);
+}
+
+void UbWriteTransfer::WaitEvent(const std::string& event, std::function<void()> callback)
+{
+    if (descriptor_.operation != TransferOperation::Store)
+        throw std::logic_error(Identity() + ": local events require native STORE");
+    if (event == "local_read_complete") local_read_.Wait(std::move(callback));
+    else if (event == "data_ready") target_ready_.Wait(std::move(callback));
+    else throw std::invalid_argument("Unknown STORE event: " + event);
 }
 
 void UbWriteTransfer::ObserveNativeResponse(uint64_t, uint32_t task, uint64_t offset,

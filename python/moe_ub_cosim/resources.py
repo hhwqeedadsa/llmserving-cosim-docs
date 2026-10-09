@@ -32,6 +32,9 @@ def check_graph(usage,budget=None):
 
 def cann_usage(c):
     """Count without constructing status messages, transfer dictionaries or DAGs."""
+    if c.get('template')=='cann_a3_v850_store_resources_v1':
+        from .a3 import usage
+        return usage(c)
     ranks=c['rank_ids'];placement=c['expert_placement'];h=c['hidden_dim'];chunk=c['chunk_bytes']
     chips={r['rank_id']:r['chip_id'] for r in c.get('deployment',{}).get('ranks',[])}
     def locality(src,dst):

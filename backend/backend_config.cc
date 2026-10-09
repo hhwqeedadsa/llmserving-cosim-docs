@@ -133,7 +133,7 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
     }
     Require(input_.at("execution").size() == 4, "execution fields");
     Integer(input_["execution"]["chunk_bytes"], 1, UINT32_MAX, "chunk_bytes");
-    Integer(input_["execution"]["send_slots_per_rank"], 1, 2, "send slots");
+    Integer(input_["execution"]["send_slots_per_rank"], 0, 2, "send slots (0: A3 native resources)");
     Integer(input_["execution"]["seed"], 1, UINT32_MAX, "seed");
     Integer(input_["execution"]["run"], 1, INT64_MAX, "RNG run");
     Require(input_.at("tp_max_data_payload_bytes") == ns3::UB_MTU_BYTE, "TP payload is a compile-time constant");
@@ -273,7 +273,8 @@ void BackendConfig::CheckPlan(const Json& plan) const
 {
     Require(plan.at("communication_template") == "direct_rank_dedup_v1" ||
             plan.at("communication_template") == "cann_a3_v850_fullmesh_v1" ||
-            plan.at("communication_template") == "cann_a3_v850_native_v1", "scenario requires a supported communication template");
+            plan.at("communication_template") == "cann_a3_v850_native_v1" ||
+            plan.at("communication_template") == "cann_a3_v850_store_resources_v1", "scenario requires a supported communication template");
     if (plan.contains("layers"))
     {
         Require(plan.at("schema_version") == "moe-ub-multilayer-plan/2" || plan.at("schema_version") == "moe-ub-full-model-plan/1", "scenario requires configured layer segment");
@@ -282,7 +283,9 @@ void BackendConfig::CheckPlan(const Json& plan) const
     else for (const auto* kind : {"dispatch","combine"})
     {
         const auto& selected = input_.at("profiles").at(kind);
-        if (plan.at("communication_template") == "cann_a3_v850_native_v1")
+        if (plan.at("communication_template") == "cann_a3_v850_store_resources_v1")
+            Require(selected == NativeProfile("STORE"), "A3 resources require STORE/STORE");
+        else if (plan.at("communication_template") == "cann_a3_v850_native_v1")
             Require(selected == NativeProfile(plan.at("input").at("native_profile").at(kind)), "native graph/profile mismatch");
         else Require(selected.at("programming_model") == "URMA", "native operations require regenerating the native template");
     }

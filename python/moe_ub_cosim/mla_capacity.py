@@ -205,7 +205,7 @@ def audit_execution_capacity(model, memory, layer):
     require(model['hidden_size'] == layer['hidden_dim'] and
             dict(DTYPE_BYTES, int8=1)[dt['dispatch']] == layer['dispatch_element_bytes'] and
             DTYPE_BYTES[dt['combine']] == layer['combine_element_bytes'], 'Model and execution dimensions/dtypes differ')
-    require(dt['dispatch'] != 'int8' or layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1'),
+    require(dt['dispatch'] != 'int8' or layer['template'] in ('cann_a3_v850_fullmesh_v1','cann_a3_v850_native_v1','cann_a3_v850_store_resources_v1'),
             'INT8 dispatch requires the CANN behavior template')
     # layer/3 carries explicit compute and KV dtypes. Do not infer them from byte widths.
     require(layer['schema_version'] == 'moe-ub-layer-fixture/3' and layer['compute_dtypes'] == dt,

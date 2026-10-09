@@ -72,7 +72,8 @@ def compose_layers(layers):
                     'Layer node ids must be contiguous')
             entry=previous[rank]
             used={d for n in src['nodes'] for d in n['deps']}
-            terminal=[n['node_id']+base for n in src['nodes'] if n['node_id'] not in used] or entry
+            terminal=([n+base for n in src['terminal_nodes']] if 'terminal_nodes' in src else
+                [n['node_id']+base for n in src['nodes'] if n['node_id'] not in used]) or entry
             for original in src['nodes']:
                 node=deepcopy(original)
                 node.update(node_id=original['node_id']+base,layer_id=layer_id,
@@ -80,6 +81,8 @@ def compose_layers(layers):
                 dst['nodes'].append(node)
             phase = dict(layer_id=layer_id,entry_deps=list(entry),terminal_nodes=terminal,
                 phase_nodes={k:None if v is None else v+base for k,v in src['phase_nodes'].items()})
+            if 'phase_members' in src:
+                phase['phase_members']={k:[v+base for v in values] for k,values in src['phase_members'].items()}
             if 'local_prepare_nodes' in src:
                 phase['local_prepare_nodes'] = {k:None if v is None else v+base for k,v in src['local_prepare_nodes'].items()}
             dst['layer_phases'].append(phase)

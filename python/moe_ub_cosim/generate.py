@@ -84,10 +84,13 @@ def _write_plan(plan, output, *, compact=False):
             for task in graph['nodes']:
                 node = proto.Node(id=task['node_id'], name=task['name'], data_deps=task['deps'])
                 node.attr.add(name='is_cpu_op', bool_val=False)
-                if task['kind'] == 'COMP':
+                if task['kind'] in ('COMP','EVENT'):
                     node.type = proto.COMP_NODE
                     # Locked fork consumes ns despite the legacy field name.
-                    node.duration_micros = task['duration_ns']
+                    node.duration_micros = task.get('duration_ns',0)
+                    if task['kind']=='EVENT':
+                        # The locked feeder does not initialize absent num_ops.
+                        node.attr.add(name='num_ops',int64_val=0)
                 else:
                     t = transfers[task['transfer_id']]
                     node.type = proto.COMM_SEND_NODE if task['kind'] == 'SEND' else proto.COMM_RECV_NODE

@@ -70,7 +70,11 @@ void CheckGraph(const std::filesystem::path& path, const Json& graph,
         for (const auto& attr : node.attr()) Require(attrs.emplace(attr.name(), attr).second, "duplicate graph attribute");
         Require(attrs.contains("is_cpu_op") && attrs.at("is_cpu_op").has_bool_val() &&
                 !attrs.at("is_cpu_op").bool_val(), "graph resource mismatch");
-        if (n.at("kind") == "COMP")
+        if (n.at("kind") == "EVENT")
+            Require(node.type() == ChakraProtoMsg::COMP_NODE && node.duration_micros() == 0 &&
+                    attrs.size() == 2 && attrs.contains("num_ops") && attrs.at("num_ops").has_int64_val() &&
+                    attrs.at("num_ops").int64_val() == 0, "event graph differs from plan");
+        else if (n.at("kind") == "COMP")
             Require(node.type() == ChakraProtoMsg::COMP_NODE && node.duration_micros() == n.at("duration_ns") &&
                     attrs.size() == 1, "compute graph differs from plan");
         else
@@ -170,6 +174,7 @@ LayerPlan LoadLayerPlan(const std::filesystem::path& directory, PlanRetention re
 }
 LayerPlan ValidateLayerPlan(const Json& p, bool retain_data)
 {
+    if (p.at("communication_template") == "cann_a3_v850_store_resources_v1") return ValidateA3Plan(p, retain_data);
     if (p.at("communication_template") == "cann_a3_v850_native_v1") return ValidateNativePlan(p, retain_data);
     const bool cann = p.at("communication_template") == "cann_a3_v850_fullmesh_v1";
     const bool batched = p.at("schema_version") == "moe-ub-execution-plan/3";

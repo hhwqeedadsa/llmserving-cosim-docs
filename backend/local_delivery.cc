@@ -27,6 +27,7 @@ void LocalDelivery::Send(int rank, uint64_t bytes, int type, int peer, int tag,
     Check(true, rank, bytes, type, peer, tag, callback);
     sent_ = true;
     ready_ns_ = ns3::Simulator::Now().GetNanoSeconds();
+    ready_.Signal();
     ++pending_;
     ns3::Simulator::ScheduleNow([this, callback, arg]() {
         --pending_; send_done_ = true; send_done_ns_ = ns3::Simulator::Now().GetNanoSeconds();

@@ -65,6 +65,9 @@ def validate_token(c, token):
 
 
 def validate_config(c):
+    if c.get('template') == 'cann_a3_v850_store_resources_v1':
+        from .a3 import validate_config as validate_a3
+        return validate_a3(c)
     native = c.get('template') == 'cann_a3_v850_native_v1'
     cann = native or c.get('template') == 'cann_a3_v850_fullmesh_v1'
     expected = {'schema_version', 'graph_id', 'wave_id', 'service_id', 'role', 'group_id', 'ready_ns',
@@ -172,6 +175,9 @@ def validate_config(c):
 
 def build_plan(config, identities=None, *, _validate=True):
     validate_config(config)
+    if config['template'] == 'cann_a3_v850_store_resources_v1':
+        from .a3 import build_plan as build_a3
+        return build_a3(config, identities, _validate=_validate)
     if config['template'] == 'cann_a3_v850_native_v1':
         from .native import build_plan as build_native
         return build_native(config, identities, _validate=_validate)
@@ -320,6 +326,9 @@ def validate_plan(plan):
     if plan.get('communication_template') == 'kv_direct_v1':
         from .kv_plan import validate_kv_plan
         return validate_kv_plan(plan)
+    if plan.get('communication_template') == 'cann_a3_v850_store_resources_v1':
+        from .a3 import validate_plan as validate_a3
+        return validate_a3(plan)
     if plan.get('communication_template') == 'cann_a3_v850_native_v1':
         from .native import validate_plan as validate_native
         return validate_native(plan)

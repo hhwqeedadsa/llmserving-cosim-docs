@@ -13,6 +13,26 @@ class FullModelService(ComposedService):
         self.graph_storage=graph_storage
         super().__init__(config,segments)
 
+    def bind_segment_source(self,proof):
+        require(self.segment is not None and proof['schema_version']=='moe-ub-segment-preparation/1' and
+                proof['passed'] and proof['segment']==self.segment,'Prepared segment source scope mismatch')
+        source=proof.get('route_evidence')
+        if source is None:return
+        records={(r['request_id'],r['layer_id']):r for r in source['records']}
+        require(len(records)==len(source['records']),'Duplicate prepared source record')
+        expected={}
+        for request in self.segment_requests:
+            for lid,experts in request['decode_routes'][0].items():
+                key=str(request['request_id']),int(lid);expected[key]=True
+                row=records.get(key)
+                require(row is not None and row['expert_ids']==experts and row['source_layer_id']==int(lid) and
+                    row['source_entry']==request['generated_tokens'] and row['source_token_row']==0 and
+                    row['token_index']==request['prompt_tokens']+request['generated_tokens']-1,
+                    'Prepared source route/context differs from configured segment')
+        require(set(records)==set(expected) and source['route_data_is_synthetic']==(source['source']['kind']=='synthetic_test')
+                and source['eos_inferred'] is False,'Prepared source coverage/kind differs')
+        self.segment_source=deepcopy(source);self.segment_source_records=deepcopy(records)
+
     def validate_inputs(self, config, segments):
         fields(config,'schema_version run_id mode execution model groups requests','full model service')
         self.segment=config['execution'].get('segment')
@@ -102,6 +122,14 @@ class FullModelService(ComposedService):
         plan['compute_source']='full_model_stage_reference_with_context_cost'
         plan['input_provenance'].update(execution_scope='full_model_decode_reference',compute_source=plan['compute_source'])
         if self.segment is not None:plan['input_provenance']['execution_scope']='finite_moe_segment_reference'
+        if hasattr(self,'segment_source'):
+            rows=[]
+            for child in plan['layers']:
+                selected=[deepcopy(self.segment_source_records[t['request_id'],t['layer_id']]) for t in child['input']['tokens']]
+                child['input_provenance']['route_records']=selected;rows.extend(selected)
+                child['route_source']=self.segment_source['source']['kind']
+            plan['route_source']=self.segment_source['source']['kind']
+            plan['input_provenance'].update(route_records=rows,route_manifest=deepcopy(self.segment_source['manifest']))
         return plan
 
     def deployment(self):
@@ -134,6 +162,10 @@ class FullModelService(ComposedService):
             result.update(compute_scope='finite_moe_segment_reference',latency_scope='declared_block_entry_to_segment_completion',
                 full_model_graph_coverage='declared_consecutive_moe_blocks',segment=deepcopy(self.segment),
                 sampling_basis='not_executed_segment_completion_only')
+        if hasattr(self,'segment_source'):
+            result.update(route_data_is_synthetic=self.segment_source['route_data_is_synthetic'],
+                routing_source=self.segment_source['source']['kind'],route_manifest=deepcopy(self.segment_source['manifest']),
+                target_precision_match=self.segment_source['target_precision_match'],eos_inferred=False)
         return result
 
 

@@ -1,0 +1,37 @@
+{
+  "schema_version": "moe-ub-a3-scale-inputs/1",
+  "source_input_hashes": {
+    "runs/v03-resource-efficiency/final-run-inputs/input.json": "45a40fdfea58b1a65de5df54de0a7f4d7027c1652b722da9ff551499c3f0326a",
+    "runs/v03-resource-efficiency/final-run-inputs/layers.json": "400d42d8a533dfd9327a9cbc09301a2876f5111b7c5aa07bb58af9f78bcc7e2c"
+  },
+  "route_manifest": {
+    "path": "fixtures/m10_route_selection/manifest.json",
+    "sha256": "b4fd468ed9b09fe2bd80568737891d0d0e5a32fdf8f83f5e24f8f9fdf77f3cdb"
+  },
+  "changes": [
+    "A3 STORE resource template and 48 declared reference AIV cores",
+    "explicit one-graph bounded scope",
+    "new run identity"
+  ],
+  "preserved": [
+    "complete model and reference costs",
+    "weights/KV/capacity reserve",
+    "original physical rank and expert placement",
+    "original request IDs and source windows"
+  ],
+  "scope": {
+    "first_layer": 3,
+    "layer_count": 3,
+    "decode_step": 0
+  },
+  "native_attributes": {
+    "ns3::UbLdstInstance::ThreadNum": "1",
+    "ns3::UbLdstThread::StoreOutstanding": "32",
+    "ns3::UbLdstThread::LoadOutstanding": "32",
+    "ns3::UbLdstThread::StoreRequestSize": "4096",
+    "ns3::UbLdstThread::LoadResponseSize": "4096",
+    "ns3::UbLdstApi::RequestIdCount": "256",
+    "ns3::UbLdstApi::UsePacketSpray": "true",
+    "ns3::UbLdstApi::UseShortestPaths": "true"
+  }
+}

@@ -71,6 +71,44 @@ def select(service,layers,first,count,step):
     return result,segments
 
 
+def select_source(source,layers,first,count,step):
+    """Stream verified trace files when the source uses an evidence wrapper."""
+    if source.get('schema_version')!='moe-ub-evidence-service/1':
+        service,selected=select(source,layers,first,count,step)
+        return service,selected,None
+    from .route_evidence import select_routes
+    fields(source,'schema_version run_id service route_manifest requests compute_profiles','segment route source')
+    require(source['service']['schema_version']=='moe-ub-configured-service/4' and
+            source['service']['run_id']==source['run_id'] and source['service']['requests']==[],
+            'Route source requires an empty full-model service template')
+    require(source['compute_profiles']==[],
+            'Segment uses the declared full-model cost profile; separate operator profiles are unsupported')
+    integer(step,'Decode step',0);integer(first,'first layer',0);integer(count,'layer count',1)
+    requests=deepcopy(source['requests'])
+    for row in requests:
+        integer(row['decode_steps'],'source Decode steps',1)
+        require(step<row['decode_steps'],'Selected step is outside the declared source window')
+        row['first_decode_entry']+=step;row['decode_steps']=1
+    models=[g['model_spec'] for g in source['service']['groups']]
+    budget=source['service']['execution'].get('resource_budget')
+    for group in layers['groups']:
+        for layer in group['layers']:
+            if first<=layer['layer_id']<first+count:
+                require('resource_budget' not in layer or layer['resource_budget']==budget,
+                        'Source layer/resource budget mismatch')
+    normalized,records,evidence=select_routes(source['route_manifest'],requests,models,list(range(first,first+count)),compact=True)
+    service=deepcopy(source['service']);service['requests']=normalized
+    # The importer has already advanced context to the selected source entry.
+    # Select that one supplied iteration, then retain the original window index.
+    service,selected=select(service,layers,first,count,0)
+    scope=service['execution']['segment'];scope['decode_step']=step
+    for row in scope['requests']:row['generated_tokens_at_trace_start']-=step
+    for model in models:validate_segment(scope,model)
+    evidence.update(original_request_windows=deepcopy(source['requests']),selected_decode_step=step,
+        records=[records[key] for key in records],eos_inferred=False)
+    return service,selected,evidence
+
+
 def _prepare(config_path,output):
     """Prepare portable run inputs, without graph generation or simulation."""
     import shutil
@@ -80,10 +118,11 @@ def _prepare(config_path,output):
     fields(config,'schema_version source_run first_layer layer_count decode_step','segment prepare')
     require(config['schema_version']=='moe-ub-segment-prepare/1','Unknown segment preparation schema')
     source=relative(base,config['source_run']);run=read(source)
-    require(run['schema_version']=='moe-ub-run/1','Segment source must declare a public run')
+    require(run['schema_version'] in ('moe-ub-run/1','moe-ub-segment-source/1'),
+            'Segment source must declare public run inputs or a verified trace source')
     source_base=source.parent
     paths={k:relative(source_base,v,kind='directory' if k=='network' else 'file') for k,v in run['inputs'].items()}
-    service,layers=select(read(paths['service']),read(paths['layer']),config['first_layer'],config['layer_count'],config['decode_step'])
+    service,layers,route_evidence=select_source(read(paths['service']),read(paths['layer']),config['first_layer'],config['layer_count'],config['decode_step'])
     # Validate capacity and every selected route without constructing graphs.
     from .full_model_service import FullModelService
     class Preparation(FullModelService):
@@ -94,17 +133,19 @@ def _prepare(config_path,output):
     output=Path(output).resolve()
     save(output/'service.json',service);save(output/'layers.json',layers)
     shutil.copyfile(paths['system'],output/'system.json');shutil.copytree(paths['network'],output/'network')
-    effective=deepcopy(run);effective['inputs']=dict(service='service.json',layer='layers.json',system='system.json',network='network')
+    effective=deepcopy(run);effective['schema_version']='moe-ub-run/1'
+    effective['inputs']=dict(service='service.json',layer='layers.json',system='system.json',network='network')
     for key in ('observation','record_policy','export_policy'):
         src=relative(source_base,run[key]);name=key.replace('_','-')+'.json'
         shutil.copyfile(src,output/name);effective[key]=name
     effective['backend']=str((source_base/run['backend']).resolve())
+    effective['input_evidence']='preparation.json'
     for key in ('host','export_host'):
         if key in effective:effective[key]['artifact_roots']=[str((source_base/p).resolve()) for p in effective[key]['artifact_roots']]
     save(output/'run.json',effective)
     save(output/'preparation.json',dict(schema_version='moe-ub-segment-preparation/1',passed=True,
         source=dict(run_sha256=file_sha256(source),service_sha256=file_sha256(paths['service']),layer_sha256=file_sha256(paths['layer'])),
-        segment=service['execution']['segment'],capacity=frontend.evidence,
+        segment=service['execution']['segment'],capacity=frontend.evidence,route_evidence=route_evidence,
         artifacts={k:v for k,v in inventory(output).items() if not k.startswith('logs/')},
         graph_generation_executed=False,simulation_executed=False))
     return dict(passed=True,output=str(output),run_config=str(output/'run.json'),

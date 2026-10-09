@@ -163,7 +163,8 @@ class Service:
 
     def export_graph(self, candidate, directory):
         storage=getattr(self,'graph_storage',None)
-        if storage is None:export_plan(self.make_plan(candidate),directory)
+        if storage is None:
+            export_plan(self.make_plan(candidate),directory,compact=bool(getattr(self,'segment',None)))
         else:storage.generate(self,candidate,directory)
 
     def snapshot(self):
@@ -304,6 +305,9 @@ def run(args):
         service = PdService(config, layer)
     else:
         service = Service(config, layer)
+    if getattr(args,'prepared_input_evidence',None) is not None:
+        require(config.get('schema_version')=='moe-ub-configured-service/5', 'Prepared input evidence requires a finite segment')
+        service.bind_segment_source(json.loads(Path(args.prepared_input_evidence).read_text()))
     if storage is None:
         output.mkdir(exist_ok=False)
         (output / 'graphs').mkdir()

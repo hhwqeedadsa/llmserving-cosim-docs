@@ -36,6 +36,19 @@ def main():
     assert prepared['groups']==read(out/'resolved/service.json')['groups']
     cli('run','run','--config',out/'prepared/run.json','--output',out/'run')
     cli('validate','validate','--run',out/'run',offline=True)
+    # Backend also rejects initial requests outside the complete deployment,
+    # independently of the Python input validator.
+    invalid=out/'invalid-deployment';shutil.copytree(out/'run/raw',invalid)
+    declaration=read(invalid/'deployment.json');request=deepcopy(declaration['groups'][0]['segment']['requests'][0])
+    request.update(request_id='foreign',rank_id=999)
+    declaration['groups'][0]['segment']['requests'].append(request);save(invalid/'deployment.json',declaration)
+    cmd=list(map(str,[binary,prepared['run_id'],invalid,out/'run/inputs/system.json',out/'run/inputs/network',
+        out/'run/inputs/backend-observation.json',out/'rejected-execution',1000000]))
+    result=subprocess.run(cmd,cwd=root,capture_output=True,text=True,timeout=30)
+    (out/'invalid-deployment.stderr.log').write_text(result.stderr)
+    commands.append(dict(command=cmd,cwd=str(root),exit_code=result.returncode,log_prefix=str(out/'invalid-deployment')))
+    save(out/'commands.json',commands)
+    assert result.returncode==1 and 'belongs to no declared rank' in result.stderr,result.stderr
     before=read(out/'run/manifest.json')['artifacts']
     cli('facts','facts','--run',out/'run','--config',example/'facts.json','--output',out/'facts',offline=True)
     cli('validate-after-facts','validate','--run',out/'run',offline=True)

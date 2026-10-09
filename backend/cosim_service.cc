@@ -186,6 +186,13 @@ std::vector<Group> LoadGroups(const fs::path& shared, Json& batch_limits)
         }
         groups.push_back({config, ranks, {}, {}, {}});
     }
+    if (segment)
+    {
+        const auto& scope = groups.front().config.at("segment");
+        for (const auto& group : groups) Require(group.config.at("segment") == scope, "Groups disagree on segment initial scope");
+        for (const auto& request : scope.at("requests"))
+            Require(members.count(request.at("rank_id").get<int>()), "Segment initial request belongs to no declared rank");
+    }
     Require(!physical || composed || groups.size() == 1, "Physical service currently requires one group");
     std::sort(groups.begin(), groups.end(), [](const auto& a, const auto& b) {
         return a.config.at("group_id").template get<std::string>() < b.config.at("group_id").template get<std::string>();

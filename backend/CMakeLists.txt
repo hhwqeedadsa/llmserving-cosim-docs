@@ -1,5 +1,12 @@
 # Included after ns-3-UB has defined its modules and build_exec.
 build_exec(
+  EXECNAME cosim-a3-egress-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/integration/a3_egress_test.cc"
+  LIBRARIES_TO_LINK ${libunified-bus} ${libcore}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim" IGNORE_PCH)
+set_target_properties(cosim-a3-egress-test PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_include_directories(cosim-a3-egress-test PRIVATE "${ASTRA_ROOT}/extern/helper")
+build_exec(
   EXECNAME cosim-message-windows-test
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/message_windows_test.cc"
   LIBRARIES_TO_LINK ${libcore}

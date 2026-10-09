@@ -18,7 +18,7 @@ def configuration(path, action, backend=None):
     replay_v2=action=='replay' and config.get('schema_version')=='moe-ub-replay/2'
     if replay_v2:extra=extra|{'max_simulation_ns'}
     optional = ({'network', 'cache_directory', 'export_host'}|({'observation'} if replay_v2 else set()) if action == 'replay' else
-                {'cache_directory', 'period_ns'} if action == 'sample' else {'export_host'})
+                {'cache_directory', 'period_ns'} if action == 'sample' else {'export_host','input_evidence'})
     fields(config, common | extra, optional, label=str(path))
     require(replay_v2 or config['schema_version'] == f'moe-ub-{action}/1', f'{path}: unsupported schema_version')
     if replay_v2:integer(config['max_simulation_ns'],'max_simulation_ns',1)
@@ -49,6 +49,14 @@ def configuration(path, action, backend=None):
         # legacy entrypoints retain their existing capabilities and path rules.
         require(service.get('schema_version') in ('moe-ub-configured-service/4','moe-ub-configured-service/5'),
                 'inputs.service: public run requires full-model service/4 or finite-segment service/5 with inline model/routes')
+        if 'input_evidence' in config:
+            evidence_path=relative(base,config['input_evidence']);evidence=read(evidence_path)
+            require(evidence['schema_version']=='moe-ub-segment-preparation/1' and evidence['passed'] and
+                    service.get('execution',{}).get('segment')==evidence['segment'], 'Prepared source scope differs from run')
+            for key,name in (('service','service.json'),('layer','layers.json')):
+                require(file_sha256(Path(config['inputs'][key]))==evidence['artifacts'][name]['sha256'],
+                        'Prepared source input changed: '+key)
+            config['input_evidence']=str(evidence_path)
     if 'network' in config:
         config['network'] = str(relative(base, config['network'], kind='directory'))
     if 'cache_directory' in config:
@@ -120,19 +128,23 @@ def service_run(output, config):
     save(inputs/'observation.json', config['observation'])
     save(inputs/'backend-observation.json', backend_observation(config['observation'], ranks, config['max_simulation_ns']))
     save(inputs/'record-policy.json', config['record_policy'])
+    if 'input_evidence' in config:
+        shutil.copyfile(config['input_evidence'],inputs/'preparation.json')
     # Importing Scheduler is intentionally confined to the run worker.
     sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
     raw = output/'raw'
     run(SimpleNamespace(input=inputs/'service.json', layer=inputs/'layer.json', backend=Path(config['backend']),
         system=inputs/'system.json', network=inputs/'network', observation=inputs/'backend-observation.json',
         record_storage=inputs/'record-policy.json', graph_storage=None, output_dir=raw,
+        prepared_input_evidence=inputs/'preparation.json' if 'input_evidence' in config else None,
         max_simulation_ns=config['max_simulation_ns'], wall_timeout_seconds=config['backend_timeout_seconds']))
     report = read(raw/'execution/result.json')
     from .observation import execution_coverage
     return dict(simulation_end_ns=report['simulation_end_ns'], run_id=service['run_id'],
                 coverage=execution_coverage(config['observation'],ranks,config['max_simulation_ns'],report['simulation_end_ns']),
                 random=report['random'], raw='raw',
-                scope='configured_service', source=read(raw/'manifest.json'))
+                scope='configured_finite_moe_segment' if service['schema_version']=='moe-ub-configured-service/5' else 'configured_service',
+                source=read(raw/'manifest.json'))
 
 
 def export(raw, observation, ranks, max_ns, output, policy):

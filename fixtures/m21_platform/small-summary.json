@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "cases": {
+    "buffers": {
+      "simulation_end_ns": 37846,
+      "fabric_transfers": 38,
+      "fabric_bytes": 19144,
+      "physical_packets": 1776,
+      "actual_buffer_waits": 4,
+      "other_core_progress_during_wait": 4
+    },
+    "partial": {
+      "simulation_end_ns": 51195,
+      "fabric_transfers": 18,
+      "fabric_bytes": 6552,
+      "physical_packets": 432,
+      "first_reduction_ns": 608,
+      "second_token_ready_ns": 50903,
+      "operator_complete_ns": 51103
+    },
+    "early": {
+      "simulation_end_ns": 1080,
+      "fabric_transfers": 18,
+      "fabric_bytes": 6552,
+      "physical_packets": 432
+    },
+    "late": {
+      "simulation_end_ns": 6079,
+      "fabric_transfers": 18,
+      "fabric_bytes": 6552,
+      "physical_packets": 432,
+      "pre_submit_delay_ns": 5000,
+      "dispatch_delivery_latencies_ns": [
+        [
+          123,
+          122
+        ],
+        [
+          116,
+          115
+        ],
+        [
+          139,
+          138
+        ],
+        [
+          132,
+          131
+        ]
+      ],
+      "observation_off_identical": true
+    },
+    "late-observation-off": {
+      "simulation_end_ns": 6079,
+      "fabric_transfers": 18,
+      "fabric_bytes": 6552,
+      "physical_packets": 432
+    },
+    "shared": {
+      "queue_byte_ns": 815694208,
+      "queue_peak_bytes": 8248,
+      "latest_ready_ns": 132092,
+      "store_packets": 4,
+      "wire_data_bytes": 16496
+    },
+    "separate": {
+      "queue_byte_ns": 271458176,
+      "queue_peak_bytes": 4124,
+      "latest_ready_ns": 66108,
+      "store_packets": 4,
+      "wire_data_bytes": 16496
+    }
+  },
+  "scope": "platform_functional_checks_not_normal_business_experiments"
+}

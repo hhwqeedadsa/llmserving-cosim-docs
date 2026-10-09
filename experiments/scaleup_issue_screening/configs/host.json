@@ -1,0 +1,25 @@
+{
+  "rss_bytes": 8589934592,
+  "address_bytes": 12884901888,
+  "artifact_bytes": 51539607552,
+  "wall_seconds": 1800,
+  "min_free_bytes": 21474836480,
+  "artifact_roots": [
+    "build/v04-platform",
+    "runs/v04-platform",
+    "build/m10-resource-efficiency",
+    "runs/v03-resource-efficiency",
+    "build/m10-research-slice",
+    "runs/v03-research-slice",
+    "runs/mapping_value",
+    "runs/scaleup_observability",
+    "runs/task-sync-20261008",
+    "build/m17-send-state",
+    "runs/m17-send-state",
+    "build/m19-a3-resources",
+    "runs/m19-a3-resources",
+    "runs/m20-segment-facts",
+    "runs/m21-platform-acceptance",
+    "runs/scaleup_issue_screening"
+  ]
+}

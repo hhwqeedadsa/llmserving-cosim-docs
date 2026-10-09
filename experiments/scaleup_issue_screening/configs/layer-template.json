@@ -1,0 +1,1372 @@
+{
+  "schema_version": "moe-ub-layer-fixture/3",
+  "graph_id": "screening-template",
+  "wave_id": "screening-template",
+  "service_id": "moe0",
+  "role": "D",
+  "group_id": "ep0",
+  "ready_ns": 0,
+  "layer_id": 3,
+  "rank_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "rank_to_ub_node": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127
+  ],
+  "hidden_dim": 7168,
+  "top_k": 8,
+  "dispatch_element_bytes": 1,
+  "combine_element_bytes": 2,
+  "application_metadata_bytes": 0,
+  "chunk_bytes": 8192,
+  "send_slots_per_rank": 0,
+  "template": "cann_a3_v850_store_resources_v1",
+  "expert_placement": [
+    0,
+    0,
+    1,
+    1,
+    2,
+    2,
+    3,
+    3,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    7,
+    7,
+    8,
+    8,
+    9,
+    9,
+    10,
+    10,
+    11,
+    11,
+    12,
+    12,
+    13,
+    13,
+    14,
+    14,
+    15,
+    15,
+    16,
+    16,
+    17,
+    17,
+    18,
+    18,
+    19,
+    19,
+    20,
+    20,
+    21,
+    21,
+    22,
+    22,
+    23,
+    23,
+    24,
+    24,
+    25,
+    25,
+    26,
+    26,
+    27,
+    27,
+    28,
+    28,
+    29,
+    29,
+    30,
+    30,
+    31,
+    31,
+    32,
+    32,
+    33,
+    33,
+    34,
+    34,
+    35,
+    35,
+    36,
+    36,
+    37,
+    37,
+    38,
+    38,
+    39,
+    39,
+    40,
+    40,
+    41,
+    41,
+    42,
+    42,
+    43,
+    43,
+    44,
+    44,
+    45,
+    45,
+    46,
+    46,
+    47,
+    47,
+    48,
+    48,
+    49,
+    49,
+    50,
+    50,
+    51,
+    51,
+    52,
+    52,
+    53,
+    53,
+    54,
+    54,
+    55,
+    55,
+    56,
+    56,
+    57,
+    57,
+    58,
+    58,
+    59,
+    59,
+    60,
+    60,
+    61,
+    61,
+    62,
+    62,
+    63,
+    63,
+    64,
+    64,
+    65,
+    65,
+    66,
+    66,
+    67,
+    67,
+    68,
+    68,
+    69,
+    69,
+    70,
+    70,
+    71,
+    71,
+    72,
+    72,
+    73,
+    73,
+    74,
+    74,
+    75,
+    75,
+    76,
+    76,
+    77,
+    77,
+    78,
+    78,
+    79,
+    79,
+    80,
+    80,
+    81,
+    81,
+    82,
+    82,
+    83,
+    83,
+    84,
+    84,
+    85,
+    85,
+    86,
+    86,
+    87,
+    87,
+    88,
+    88,
+    89,
+    89,
+    90,
+    90,
+    91,
+    91,
+    92,
+    92,
+    93,
+    93,
+    94,
+    94,
+    95,
+    95,
+    96,
+    96,
+    97,
+    97,
+    98,
+    98,
+    99,
+    99,
+    100,
+    100,
+    101,
+    101,
+    102,
+    102,
+    103,
+    103,
+    104,
+    104,
+    105,
+    105,
+    106,
+    106,
+    107,
+    107,
+    108,
+    108,
+    109,
+    109,
+    110,
+    110,
+    111,
+    111,
+    112,
+    112,
+    113,
+    113,
+    114,
+    114,
+    115,
+    115,
+    116,
+    116,
+    117,
+    117,
+    118,
+    118,
+    119,
+    119,
+    120,
+    120,
+    121,
+    121,
+    122,
+    122,
+    123,
+    123,
+    124,
+    124,
+    125,
+    125,
+    126,
+    126,
+    127,
+    127
+  ],
+  "tokens": [
+    {
+      "request_id": "1",
+      "src_rank": 0,
+      "phase": "decode",
+      "token_index": 14,
+      "layer_id": 3,
+      "expert_ids": [
+        90,
+        91,
+        92,
+        98,
+        114,
+        122,
+        253,
+        186
+      ]
+    }
+  ],
+  "compute_profile_ns": {
+    "attention_route_pack": 20,
+    "expert_per_input": 100,
+    "expert_local_merge": 0,
+    "combine_unpack_merge": 100,
+    "next_layer": 0
+  },
+  "batch_limits": {
+    "max_num_seqs": 8,
+    "max_num_batched_tokens": 8
+  },
+  "compute_dtypes": {
+    "compute": "bfloat16",
+    "kv": "bfloat16",
+    "dispatch": "int8",
+    "combine": "bfloat16"
+  },
+  "deployment": {
+    "network_scope": "cross_chip",
+    "ranks": [
+      {
+        "rank_id": 0,
+        "die_id": "die-0",
+        "chip_id": "chip-0",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 1,
+        "die_id": "die-1",
+        "chip_id": "chip-0",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 2,
+        "die_id": "die-2",
+        "chip_id": "chip-1",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 3,
+        "die_id": "die-3",
+        "chip_id": "chip-1",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 4,
+        "die_id": "die-4",
+        "chip_id": "chip-2",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 5,
+        "die_id": "die-5",
+        "chip_id": "chip-2",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 6,
+        "die_id": "die-6",
+        "chip_id": "chip-3",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 7,
+        "die_id": "die-7",
+        "chip_id": "chip-3",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 8,
+        "die_id": "die-8",
+        "chip_id": "chip-4",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 9,
+        "die_id": "die-9",
+        "chip_id": "chip-4",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 10,
+        "die_id": "die-10",
+        "chip_id": "chip-5",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 11,
+        "die_id": "die-11",
+        "chip_id": "chip-5",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 12,
+        "die_id": "die-12",
+        "chip_id": "chip-6",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 13,
+        "die_id": "die-13",
+        "chip_id": "chip-6",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 14,
+        "die_id": "die-14",
+        "chip_id": "chip-7",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 15,
+        "die_id": "die-15",
+        "chip_id": "chip-7",
+        "server_id": "server-0"
+      },
+      {
+        "rank_id": 16,
+        "die_id": "die-16",
+        "chip_id": "chip-8",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 17,
+        "die_id": "die-17",
+        "chip_id": "chip-8",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 18,
+        "die_id": "die-18",
+        "chip_id": "chip-9",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 19,
+        "die_id": "die-19",
+        "chip_id": "chip-9",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 20,
+        "die_id": "die-20",
+        "chip_id": "chip-10",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 21,
+        "die_id": "die-21",
+        "chip_id": "chip-10",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 22,
+        "die_id": "die-22",
+        "chip_id": "chip-11",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 23,
+        "die_id": "die-23",
+        "chip_id": "chip-11",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 24,
+        "die_id": "die-24",
+        "chip_id": "chip-12",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 25,
+        "die_id": "die-25",
+        "chip_id": "chip-12",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 26,
+        "die_id": "die-26",
+        "chip_id": "chip-13",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 27,
+        "die_id": "die-27",
+        "chip_id": "chip-13",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 28,
+        "die_id": "die-28",
+        "chip_id": "chip-14",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 29,
+        "die_id": "die-29",
+        "chip_id": "chip-14",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 30,
+        "die_id": "die-30",
+        "chip_id": "chip-15",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 31,
+        "die_id": "die-31",
+        "chip_id": "chip-15",
+        "server_id": "server-1"
+      },
+      {
+        "rank_id": 32,
+        "die_id": "die-32",
+        "chip_id": "chip-16",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 33,
+        "die_id": "die-33",
+        "chip_id": "chip-16",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 34,
+        "die_id": "die-34",
+        "chip_id": "chip-17",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 35,
+        "die_id": "die-35",
+        "chip_id": "chip-17",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 36,
+        "die_id": "die-36",
+        "chip_id": "chip-18",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 37,
+        "die_id": "die-37",
+        "chip_id": "chip-18",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 38,
+        "die_id": "die-38",
+        "chip_id": "chip-19",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 39,
+        "die_id": "die-39",
+        "chip_id": "chip-19",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 40,
+        "die_id": "die-40",
+        "chip_id": "chip-20",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 41,
+        "die_id": "die-41",
+        "chip_id": "chip-20",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 42,
+        "die_id": "die-42",
+        "chip_id": "chip-21",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 43,
+        "die_id": "die-43",
+        "chip_id": "chip-21",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 44,
+        "die_id": "die-44",
+        "chip_id": "chip-22",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 45,
+        "die_id": "die-45",
+        "chip_id": "chip-22",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 46,
+        "die_id": "die-46",
+        "chip_id": "chip-23",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 47,
+        "die_id": "die-47",
+        "chip_id": "chip-23",
+        "server_id": "server-2"
+      },
+      {
+        "rank_id": 48,
+        "die_id": "die-48",
+        "chip_id": "chip-24",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 49,
+        "die_id": "die-49",
+        "chip_id": "chip-24",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 50,
+        "die_id": "die-50",
+        "chip_id": "chip-25",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 51,
+        "die_id": "die-51",
+        "chip_id": "chip-25",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 52,
+        "die_id": "die-52",
+        "chip_id": "chip-26",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 53,
+        "die_id": "die-53",
+        "chip_id": "chip-26",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 54,
+        "die_id": "die-54",
+        "chip_id": "chip-27",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 55,
+        "die_id": "die-55",
+        "chip_id": "chip-27",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 56,
+        "die_id": "die-56",
+        "chip_id": "chip-28",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 57,
+        "die_id": "die-57",
+        "chip_id": "chip-28",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 58,
+        "die_id": "die-58",
+        "chip_id": "chip-29",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 59,
+        "die_id": "die-59",
+        "chip_id": "chip-29",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 60,
+        "die_id": "die-60",
+        "chip_id": "chip-30",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 61,
+        "die_id": "die-61",
+        "chip_id": "chip-30",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 62,
+        "die_id": "die-62",
+        "chip_id": "chip-31",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 63,
+        "die_id": "die-63",
+        "chip_id": "chip-31",
+        "server_id": "server-3"
+      },
+      {
+        "rank_id": 64,
+        "die_id": "die-64",
+        "chip_id": "chip-32",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 65,
+        "die_id": "die-65",
+        "chip_id": "chip-32",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 66,
+        "die_id": "die-66",
+        "chip_id": "chip-33",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 67,
+        "die_id": "die-67",
+        "chip_id": "chip-33",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 68,
+        "die_id": "die-68",
+        "chip_id": "chip-34",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 69,
+        "die_id": "die-69",
+        "chip_id": "chip-34",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 70,
+        "die_id": "die-70",
+        "chip_id": "chip-35",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 71,
+        "die_id": "die-71",
+        "chip_id": "chip-35",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 72,
+        "die_id": "die-72",
+        "chip_id": "chip-36",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 73,
+        "die_id": "die-73",
+        "chip_id": "chip-36",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 74,
+        "die_id": "die-74",
+        "chip_id": "chip-37",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 75,
+        "die_id": "die-75",
+        "chip_id": "chip-37",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 76,
+        "die_id": "die-76",
+        "chip_id": "chip-38",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 77,
+        "die_id": "die-77",
+        "chip_id": "chip-38",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 78,
+        "die_id": "die-78",
+        "chip_id": "chip-39",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 79,
+        "die_id": "die-79",
+        "chip_id": "chip-39",
+        "server_id": "server-4"
+      },
+      {
+        "rank_id": 80,
+        "die_id": "die-80",
+        "chip_id": "chip-40",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 81,
+        "die_id": "die-81",
+        "chip_id": "chip-40",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 82,
+        "die_id": "die-82",
+        "chip_id": "chip-41",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 83,
+        "die_id": "die-83",
+        "chip_id": "chip-41",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 84,
+        "die_id": "die-84",
+        "chip_id": "chip-42",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 85,
+        "die_id": "die-85",
+        "chip_id": "chip-42",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 86,
+        "die_id": "die-86",
+        "chip_id": "chip-43",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 87,
+        "die_id": "die-87",
+        "chip_id": "chip-43",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 88,
+        "die_id": "die-88",
+        "chip_id": "chip-44",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 89,
+        "die_id": "die-89",
+        "chip_id": "chip-44",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 90,
+        "die_id": "die-90",
+        "chip_id": "chip-45",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 91,
+        "die_id": "die-91",
+        "chip_id": "chip-45",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 92,
+        "die_id": "die-92",
+        "chip_id": "chip-46",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 93,
+        "die_id": "die-93",
+        "chip_id": "chip-46",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 94,
+        "die_id": "die-94",
+        "chip_id": "chip-47",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 95,
+        "die_id": "die-95",
+        "chip_id": "chip-47",
+        "server_id": "server-5"
+      },
+      {
+        "rank_id": 96,
+        "die_id": "die-96",
+        "chip_id": "chip-48",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 97,
+        "die_id": "die-97",
+        "chip_id": "chip-48",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 98,
+        "die_id": "die-98",
+        "chip_id": "chip-49",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 99,
+        "die_id": "die-99",
+        "chip_id": "chip-49",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 100,
+        "die_id": "die-100",
+        "chip_id": "chip-50",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 101,
+        "die_id": "die-101",
+        "chip_id": "chip-50",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 102,
+        "die_id": "die-102",
+        "chip_id": "chip-51",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 103,
+        "die_id": "die-103",
+        "chip_id": "chip-51",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 104,
+        "die_id": "die-104",
+        "chip_id": "chip-52",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 105,
+        "die_id": "die-105",
+        "chip_id": "chip-52",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 106,
+        "die_id": "die-106",
+        "chip_id": "chip-53",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 107,
+        "die_id": "die-107",
+        "chip_id": "chip-53",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 108,
+        "die_id": "die-108",
+        "chip_id": "chip-54",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 109,
+        "die_id": "die-109",
+        "chip_id": "chip-54",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 110,
+        "die_id": "die-110",
+        "chip_id": "chip-55",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 111,
+        "die_id": "die-111",
+        "chip_id": "chip-55",
+        "server_id": "server-6"
+      },
+      {
+        "rank_id": 112,
+        "die_id": "die-112",
+        "chip_id": "chip-56",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 113,
+        "die_id": "die-113",
+        "chip_id": "chip-56",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 114,
+        "die_id": "die-114",
+        "chip_id": "chip-57",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 115,
+        "die_id": "die-115",
+        "chip_id": "chip-57",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 116,
+        "die_id": "die-116",
+        "chip_id": "chip-58",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 117,
+        "die_id": "die-117",
+        "chip_id": "chip-58",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 118,
+        "die_id": "die-118",
+        "chip_id": "chip-59",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 119,
+        "die_id": "die-119",
+        "chip_id": "chip-59",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 120,
+        "die_id": "die-120",
+        "chip_id": "chip-60",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 121,
+        "die_id": "die-121",
+        "chip_id": "chip-60",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 122,
+        "die_id": "die-122",
+        "chip_id": "chip-61",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 123,
+        "die_id": "die-123",
+        "chip_id": "chip-61",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 124,
+        "die_id": "die-124",
+        "chip_id": "chip-62",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 125,
+        "die_id": "die-125",
+        "chip_id": "chip-62",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 126,
+        "die_id": "die-126",
+        "chip_id": "chip-63",
+        "server_id": "server-7"
+      },
+      {
+        "rank_id": 127,
+        "die_id": "die-127",
+        "chip_id": "chip-63",
+        "server_id": "server-7"
+      }
+    ],
+    "local_prepare_ns_per_vector": {
+      "dispatch": 30,
+      "combine": 40
+    }
+  },
+  "cann_profile": {
+    "source_revision": "6ead121aded45355043b502756b6592fd7c30b14",
+    "algorithm": "a3_fullmesh_v1_store_resources_tp1",
+    "window_bytes": 67108864,
+    "local_cost_ns": {
+      "dispatch_reorder_per_input": 30,
+      "status_check": 10,
+      "result_pack_per_input": 20,
+      "reduction_per_input": 40
+    },
+    "platform_aiv_cores": 48,
+    "core_count_basis": "declared_platform_reference",
+    "copy_fence": "data_ready"
+  },
+  "resource_budget": {
+    "schema_version": "moe-ub-graph-resources/1",
+    "max_graph_transfers": 800000,
+    "max_graph_nodes": 3000000,
+    "max_plan_bytes": 2147483648,
+    "max_run_graphs": 1,
+    "max_run_transfers": 800000,
+    "max_run_nodes": 3000000
+  }
+}

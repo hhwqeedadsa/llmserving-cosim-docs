@@ -51,6 +51,8 @@ def compare(root, output):
         ranks, compute = rows(directory/'ranks.jsonl'), rows(directory/'compute.jsonl')
         cases[name] = dict(source_summary_sha256=digest(directory/'summary.json'),
             requests=summary['requests'], simulation_end_ns=summary['simulation_end_ns'],
+            last_layer_compute_finished_ns=max(r['end_ns'] for r in compute
+                if r['layer_id']==spec['first_layer']+spec['layer_count']-1 and r['stage']=='ffn_residual'),
             network=summary['network'], compute_relations=compute_relations(ranks,compute,profile))
         rank_rows[name] = {(r['layer_id'],r['kind'],r['rank_id']):r for r in ranks}
         for op in summary['operations']:

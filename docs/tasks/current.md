@@ -29,7 +29,7 @@
 | M19（P2）资源与关键依赖 | `completed` | 独立资源、真实完成事件、部分准备与 Token 归约、工作量守恒、新旧路径及两轮回收通过；[小型验收](../../fixtures/m19_a3_resources/README.md)，提交 `6ddb0c0` |
 | M20（P3）内部事实与有限层段 | `completed` | 公共准备、运行、事实导出、保存与离线回放，范围拒绝和旧用户流程通过；[流程证据](../../fixtures/m20_segment_facts/README.md)，提交 `1bb02a0` |
 | M21（P4）平台独立验收 | `completed` | 四类小测试、采集启停、来源绑定、128/1024 请求三层执行及目标包全文件校验通过；[最终验收](../../fixtures/m21_platform/README.md)，代码检查点 `a0af1d7`，128 请求证据检查点 `e4bfd65` |
-| E1 正常业务探索 | `in_progress` | 256/512 请求短段完成、校验并归档；1024 请求短段执行中，长段准备中；[方法](../../experiments/scaleup_issue_screening/method.md)，[首组摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short.json)，[512 请求摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short.json) |
+| E1 正常业务探索 | `in_progress` | 256/512 请求短段完成、校验并归档；1024 请求短段执行中，长段准备已通过；[方法](../../experiments/scaleup_issue_screening/method.md)，[首组摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short.json)，[512 请求摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short.json) |
 | E2 成因与稳健性 | `conditional` | E1 有可信候选后，最多深入两个，先记录选择理由 |
 | E3 测量价值 | `conditional` | E2 已有可信解释与具体判断歧义，再比较信息 |
 | E4 完整场景与收尾 | `conditional` | 有通过前述检查的候选才跑少量完整首轮；没有候选可按已完成范围结束 |
@@ -48,6 +48,6 @@ M21 的四类小测试覆盖独立核与缓冲复用、Token 分别到齐、共�
 
 P 部分已完成，代码、输入、结果摘要及按职责维护的文档在本地保存；未推送。ASTRA 与 LLMServingSim 修改已由内向外本地提交，主仓 gitlink 和 `deps.lock.json` 一致，未升级上游；实际依赖提交与二进制摘要见[M21 摘要](../../fixtures/m21_platform/scale-summary.json)。
 
-E1 的 256/512 请求分别完成 568544/703636 个节点、121880/146245 次逻辑传输，模拟结束于 110792/207593 ns；相关 2688 个交换出口均有观察。两组的完整记录、切片和清单已无损归档，展开文件释放，分析保留在 `runs/scaleup_issue_screening/analysis/`；[256 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short-resources.json)和[512 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short-resources.json)记录实际耗时和采样峰值。1024 请求短段执行中，长段并行准备；联合仿真串行，之后完成相同分析层的初态比较，再选择候选。
+E1 的 256/512 请求分别完成 568544/703636 个节点、121880/146245 次逻辑传输，模拟结束于 110792/207593 ns；相关 2688 个交换出口均有观察。两组的完整记录、切片和清单已无损归档，展开文件释放，分析保留在 `runs/scaleup_issue_screening/analysis/`；[256 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b2-short-resources.json)和[512 资源摘要](../../experiments/scaleup_issue_screening/results/e1/g0-b4-short-resources.json)记录实际耗时和采样峰值。1024 请求短段执行中；六层长段准备通过，耗时约 1151 秒、采样内存峰值约 4.19 GiB，证据在 `runs/scaleup_issue_screening/g0-b8-long-prepare/`。联合仿真串行，之后完成相同分析层的初态比较，再选择候选。
 
 独立合成小流程、工具检查及恢复后小记录的计算时序分析通过，见[工具证据](../../experiments/scaleup_issue_screening/tooling-summary.json)、[分析补充检查](../../experiments/scaleup_issue_screening/analysis-check-summary.json)和[用户操作](../../experiments/scaleup_issue_screening/usage.md)。已有源文件不足以组成第二组不重复的 1024 请求，本轮不下载、不循环来源，也不将相关 rank 或同一运行的回放计为独立重复。累计产物仍受 48 GiB 限制，旧产物保留。实际命令和退出记录位于 `runs/scaleup_issue_screening/`。根据 E1 结果至多选择两个候选，只有满足成因和信息比较条件才进入后续阶段，不要求正收益。

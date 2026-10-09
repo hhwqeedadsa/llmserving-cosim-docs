@@ -99,7 +99,15 @@ def compute_relations(rank_rows, compute_rows, profile):
             if (lid-1,'combine',rank) in ranks:
                 stages = [(lid-1,s) for s in ('shared_routed_add','ffn_residual')]
                 stages += [(lid,s) for s in ('attention_norm','mla_prologue','mla_attention','mla_output','attention_residual','ffn_norm','router')]
-                chain = [compute[layer,stage,rank] for layer,stage in stages]
+                chain = []
+                for layer,stage in stages:
+                    node = compute.get((layer,stage,rank))
+                    if node is not None:
+                        chain.append(node)
+                    elif c['workload']['requests'] != 0:
+                        raise ValueError('Missing nonempty local compute stage')
+                    # Idle ranks have no local-token model work; the planner
+                    # omits these zero-duration nodes, not their expert work.
                 work = sum(r['end_ns']-r['start_ns'] for r in chain)
                 propagated_residual.append(d['start_ns']-ranks[lid-1,'combine',rank]['end_ns']-work)
         result[str(lid)] = dict(expert_start_minus_dispatch_finish_ns=distribution(expert_after),

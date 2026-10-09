@@ -1,9 +1,11 @@
 {
   "passed": true,
-  "checks": 5,
+  "checks": 6,
   "command_directory": "runs/scaleup_issue_screening/entry-audit",
   "command_log": "commands.jsonl",
-  "stdout": "compute-checks.stdout.log",
-  "stderr": "compute-checks.stderr.log",
-  "scope": "input_coverage_archive_and_time_decomposition_not_hardware_calibration"
+  "stdout": "idle-compute-checks.stdout.log",
+  "stderr": "idle-compute-checks.stderr.log",
+  "scope": "input_coverage_archive_and_time_decomposition_not_hardware_calibration",
+  "restored_small_analysis": "runs/scaleup_issue_screening/tooling-check/analysis-compute",
+  "restored_small_analysis_passed": true
 }

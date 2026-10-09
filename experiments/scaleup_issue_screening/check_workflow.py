@@ -102,6 +102,16 @@ class Checks(unittest.TestCase):
         self.assertEqual(result['combine_entry_minus_expert_finish_ns']['maximum'],0)
         self.assertEqual(result['expert_start_minus_dispatch_finish_ns']['maximum'],1)
 
+    def test_compute_relation_idle_rank_has_no_local_token_chain(self):
+        rows, compute = [], []
+        for layer in (1,2):
+            rows.extend([dict(layer_id=layer,kind='dispatch',rank_id=0,start_ns=10,end_ns=10),
+                dict(layer_id=layer,kind='combine',rank_id=0,start_ns=10,end_ns=10,
+                     workload=dict(routed_inputs=0,requests=0))])
+            compute.append(dict(layer_id=layer,stage='routed_expert',rank_id=0,start_ns=10,end_ns=10))
+        result=compute_relations(rows,compute,dict(layers=[{},dict(routed_expert_per_input_ns=100),dict(routed_expert_per_input_ns=100)]))
+        self.assertEqual(result['2']['next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns']['maximum'],0)
+
 
 if __name__ == '__main__':
     unittest.main()

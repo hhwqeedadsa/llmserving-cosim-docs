@@ -1,40 +1,53 @@
 # 当前任务与交接
 
-当前任务：**Scale-Up 性能现象探索与被动测量需求验证**。整体状态：`completed`。
+当前任务为 **平台 v0.5 修正与 Scale-Up 正常业务问题筛选**，整体状态 `ready`。2026-10-09 用户确认方案并授权本次文档交接，由 Codex 负责具体执行。本次仅建立方案和更新入口，未修改平台代码、输入配置或依赖，未开始新的构建及仿真验收。
 
-2026-10-08 已完成原方案中选定的探索、成因核验、观测比较及最后两组完整首轮验证。结果先读[研究总结](../../experiments/scaleup_observability/conclusions.md)。依据仍为用户的[实验方案 v0.1](../../experiments/scaleup_observability/plan_v0.1.md)，原文未改写，没有新增平台里程碑。
+## 依据与文件分工
 
-## 目标与完成范围
-
-以现象发现、成因验证和观测需求判断为主线。正常小场景统一观察全部 32 个交换机出口，依据结果选择配置和服务对照；测量程序与内部核验资料保持分离。完整场景最后执行，复用固定真实路由首轮与已有图缓存。
-
-| 工作 | 结果与证据入口 |
+| 文件 | 职责 |
 |---|---|
-| 九组正常小场景与统一概览 | 已完成；[首批结果](../../experiments/scaleup_observability/results.md) |
-| 发送槽定向对照与机制核验 | 已完成；[发送槽结果](../../experiments/scaleup_observability/results-slots.md) |
-| 基础与新增状态的观测比较 | 已完成选定规则和新输入复核；[基础比较](../../experiments/scaleup_observability/results-observations.md)、[端侧状态比较](../../experiments/scaleup_observability/results-send-state.md)；支撑记录曾独立验收，见[平台证据](../../fixtures/m17_send_state/README.md) |
-| 专家计算节奏 | 六组完成；三档成本下双槽收益与排队代价均保留，见[结果](../../experiments/scaleup_observability/results-tempo.md) |
-| LOAD 响应拆分与推进 | 六组完成，并只读核验全部配对跨服务器任务的真实路径与数据到齐，见[拆分结果](../../experiments/scaleup_observability/results-load-grain.md)、[路径证据](../../experiments/scaleup_observability/results-response-paths.md) |
-| 外部出口服务变化 | 七组完成，逐包确认生效，局部排队与整轮变化并非简单对应，见[结果](../../experiments/scaleup_observability/results-service.md) |
-| 完整首轮代表性验证 | 正常与 L1 上行半速两组完成；工作量相同，正常组精确复现 48,446,098 ns，半速组增加 74,238 ns，见[完整结果](../../experiments/scaleup_observability/results-representative.md) |
-| 阶段现象、解释及后续取舍 | 已完成；[研究总结](../../experiments/scaleup_observability/conclusions.md) |
+| [平台 v0.5 增量规范](../moe_ub_cosim_dev_v0.5.md) | 通信基线、资源与等待修正、必要内部事实、有限层段及平台验收 |
+| [问题筛选实验方案 v0.1](../../experiments/scaleup_issue_screening/plan_v0.1.md) | 正常输入、候选筛选、成因与稳健性检查、测量价值及结束条件 |
+| [新实验入口](../../experiments/scaleup_issue_screening/README.md) | 实验目录与程序职责，后续真实操作和结果的入口 |
+| 本页 | 当前范围、阶段状态、检查结果、停止位置与下一步 |
 
-本阶段最明确的测量需求是保留端侧实际待发和资源占用信息，同时解决周期采样的短等待漏检。响应拆分已核对实际路径与完成时序，但未独立分离多路径、流水和请求资源贡献。现有证据不足以确认持续信用反压传播；完整场景没有验证小场景的采样覆盖率。
+仓库通用要求沿用 [AGENTS.md](../../AGENTS.md)和[开发维护](../development.md)，不在本页另写一套。架构、用户指南和字段文档只在能力实现并验证后更新，不把方案写成已有功能。
 
-## 验证与资源
+## 起点与历史结果
 
-46 项实验程序检查及 3 项新增响应路径检查通过；路径分析公开入口复现同一摘要。完整两组的重放、导出、公开校验、流式统计与配对比较均通过，固定方法和既有实现摘要不变。13 项递归依赖一致，平台源码和锁定子模块未修改。
+核对基线为主仓 `c8b4b670c4802852ebb9b7a0ddb106a08881e2be`，依赖按该提交的 gitlink 与 `deps.lock.json`。交接提交只改变文档；Codex 开始前仍须检查本地未提交工作、依赖与后续远端增量，不回退或覆盖其他工作。
 
-完整阶段九个受监控步骤累计约 2.82 小时；采样 RSS 峰值约 45.53 GiB。累计登记产物最终快照约 41.10 GiB，含临时文件的采样峰值约 41.24 GiB。完整后端 RSS 48 GiB、地址空间 56 GiB、7200 秒，其他阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒，以及累计 48 GiB、至少 20 GiB 空闲的预算均保持原值。未下载、重新展开大图、清理旧产物或重跑完整仿真。
+上一阶段实验已完成，入口见[原实验](../../experiments/scaleup_observability/README.md)和[研究总结](../../experiments/scaleup_observability/conclusions.md)；其检查、资源与发布记录完整保存在[交接前任务快照](https://github.com/baoy21/moe-ub-cosim/blob/c8b4b670c4802852ebb9b7a0ddb106a08881e2be/docs/tasks/current.md)。原始 `plan_v0.1.md`、结果和数据不改写。
 
-详细结果、命令与资源报告入口：
+本轮调整了后续选择。旧全 rank 发送配额与 LOAD 拆分结果保留为原模型条件下的发现，短等待采集和响应拆分不再是默认下一项算法任务。A3 资源和关键依赖修正已纳入 v0.5，不能继续整体放到后续事项中。
 
-- 完整两组：`runs/scaleup_observability/representative-v1/`，检查与收尾：`representative-checks/`。
-- 只读路径证据：`runs/scaleup_observability/response-paths-v1/`，公开复核：`response-paths-public-check/`，检查：`response-paths-checks/`。
-- 小场景各批输入、运行与检查位置由对应结果页索引；公开操作统一从[实验首页](../../experiments/scaleup_observability/README.md)进入。
+## 已采纳的范围
 
-## 交接
+平台保持 A3/CANN 8.5 依据，使用已有原生 STORE/STORE 形成写入式主基线，保留该分支有依据的独立状态发布。修正全 rank 配额、整事务等待与局部准备和归约条件，补必要事实记录及保留 R1 规模的有限层段入口。具体要求以 v0.5 为准，不把 A5 布局和未知硬件容量当作确定规格。
 
-开发期间各批验证后仅本地提交。2026-10-08 用户另行确认发布，实验交付 `7a9daef` 已推送至主仓库 `origin/main`；依赖按由内向外顺序发布，ASTRA-sim `cosim` 为 `93fe5a4`，LLMServingSim `cosim` 为 `1e8bb54`，ns-3-UB `cosim` 已同步且仍为 `c0f1fe5`。更深层依赖保持原固定提交。实际命令、退出状态与远程核对记录在 `runs/publish-20261008T235201Z/`；本地大产物不随 Git 发布。
+实验先观察正常业务中的慢执行与网络竞争，最多深入两个候选。长尾、拥塞和端网映射均不预定为最终主线。没有可信候选时可结束本轮；成因、信息比较和完整场景按前一步证据进入，不为通过阶段而制造正例。
 
-本阶段到此收尾。[后续事项](../future_iterations.md)保存短等待采集及响应机制等候选，它们不自动成为新的执行任务。
+完整 HBM/缓存、A5 移植、任意中途快照、P/D 分离、多模型混部、新测量协议、目标硬件全量校准及完整 64 轮服务不在本轮。资源上限和分项监控按实验方案第 7 节及仓库约定执行，本次交接不授权自动提高预算。
+
+## 阶段状态与进入条件
+
+| 阶段 | 状态 | 下一项可检查工作或进入条件 |
+|---|---|---|
+| P1 来源与执行条件核对 | `ready` | 读取固定 A3 源码，明确工作划分、资源归属和释放条件，区分事实与假设 |
+| P2 资源与关键依赖修正 | `pending` | P1 明确实际修改后，完成 STORE/STORE 小型执行与工作量核验 |
+| P3 必要记录与有限层段 | `pending` | 复用公共接口完成有界记录和层段运行，检查不扰动执行 |
+| P4 平台独立验收 | `pending` | 四类小测试、公共流程与规模预检通过，固定实际平台提交和依赖 |
+| E1 正常业务探索 | `pending` | 平台前提通过后，先检查请求来源和资源，再运行最多九组初始输入 |
+| E2 成因与稳健性 | `conditional` | E1 有值得解释的候选，最多深入两个，先记录选择理由 |
+| E3 测量价值 | `conditional` | E2 有可信解释和具体判断歧义，比较已有信息与单项新增信息 |
+| E4 完整场景与收尾 | `conditional` | 有通过前述检查的候选才跑少量完整首轮；没有候选则按已完成范围收尾 |
+
+P1 至 P4 的边界与验收见平台规范第 6 至 8 节。实验各阶段的方法与停止条件见实验方案。阶段切换记录依据后按已确认范围继续执行，不把条件性工作一律当成必须完成的清单，也不为源于模型设定的现象自动扩大开发。
+
+## Codex 从哪里开始
+
+当前停止位置是文档交接完成、实现尚未开始。先核对工作区和依赖，读取两份方案及 `fixtures/m10_cann/source-evidence.json`，从 P1 核查所选 A3 分支开始。只围绕本轮资源与完成条件确定必要修改，随后以独立小测试推进 P2，不先重跑完整场景，也不启动旧短等待算法分支。
+
+每批实现通过相关检查后建立本地 Git 检查点，并在本页简记实际提交、测试和下一步；详细日志留在运行目录，模型解释与研究结果各自归档。平台交付与实验提交分开。尚未执行的检查保留 `pending`，不能将旧测试或本次文档检查记作 v0.5 验收。
+
+本次用户授权的是发布本轮交接文档。Codex 后续实现仍沿用仓库规则，未经新的明确授权不推送远端；涉及子模块时先保存子提交，再记录父仓 gitlink 与锁文件。

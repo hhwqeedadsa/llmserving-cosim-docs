@@ -79,6 +79,37 @@ def operation_stats(endpoints, stages, work):
     return summaries, ranks
 
 
+def compute_relations(rank_rows, compute_rows, profile):
+    """Compare recorded dependencies and declared work; not hardware calibration."""
+    ranks = {(r['layer_id'],r['kind'],r['rank_id']):r for r in rank_rows}
+    compute = {(r['layer_id'],r['stage'],r['rank_id']):r for r in compute_rows}
+    result = {}
+    for lid in sorted({r['layer_id'] for r in rank_rows}):
+        participants = sorted(r for layer,kind,r in ranks if layer==lid and kind=='combine')
+        expert_after, combine_after, work_error, count, entry = [], [], [], [], []
+        propagated_residual = []
+        for rank in participants:
+            d, c = ranks[lid,'dispatch',rank], ranks[lid,'combine',rank]
+            e = compute[lid,'routed_expert',rank]
+            n = c['workload']['routed_inputs']
+            count.append(n); entry.append(c['start_ns'])
+            expert_after.append(e['start_ns']-d['end_ns'])
+            combine_after.append(c['start_ns']-e['end_ns'])
+            work_error.append(e['end_ns']-e['start_ns']-n*profile['layers'][lid]['routed_expert_per_input_ns'])
+            if (lid-1,'combine',rank) in ranks:
+                stages = [(lid-1,s) for s in ('shared_routed_add','ffn_residual')]
+                stages += [(lid,s) for s in ('attention_norm','mla_prologue','mla_attention','mla_output','attention_residual','ffn_norm','router')]
+                chain = [compute[layer,stage,rank] for layer,stage in stages]
+                work = sum(r['end_ns']-r['start_ns'] for r in chain)
+                propagated_residual.append(d['start_ns']-ranks[lid-1,'combine',rank]['end_ns']-work)
+        result[str(lid)] = dict(expert_start_minus_dispatch_finish_ns=distribution(expert_after),
+            combine_entry_minus_expert_finish_ns=distribution(combine_after),
+            expert_duration_minus_declared_work_ns=distribution(work_error),
+            routed_inputs_vs_combine_entry_correlation=correlation(count,entry),
+            next_dispatch_entry_minus_previous_combine_finish_and_intervening_work_ns=distribution(propagated_residual))
+    return result
+
+
 def analyze(directory, output, validate=True):
     directory, output = Path(directory).resolve(), Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
@@ -177,6 +208,8 @@ def analyze(directory, output, validate=True):
         simulation_end_ns=execution['simulation_end_ns'], service_finished_ns=execution['service_finished_ns'],
         rank_last_node_end_ns=dict(rank_completion), executed_node_counts=dict(node_counts),
         network_drain=execution['network_drain'], operations=summaries, experts=expert_counts, network=network,
+        compute_relations=compute_relations(rank_rows,actual_compute,source['groups'][0]['full_model_profile']),
+        analysis_program_sha256=digest(Path(__file__)),
         independent_source_groups=1, rank_observations_are_independent_repetitions=False)
     save(output/'summary.json', summary)
     with (output/'ranks.jsonl').open('w') as stream:

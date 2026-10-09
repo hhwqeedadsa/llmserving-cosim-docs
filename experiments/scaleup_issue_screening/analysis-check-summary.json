@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "checks": 5,
+  "command_directory": "runs/scaleup_issue_screening/entry-audit",
+  "command_log": "commands.jsonl",
+  "stdout": "compute-checks.stdout.log",
+  "stderr": "compute-checks.stderr.log",
+  "scope": "input_coverage_archive_and_time_decomposition_not_hardware_calibration"
+}

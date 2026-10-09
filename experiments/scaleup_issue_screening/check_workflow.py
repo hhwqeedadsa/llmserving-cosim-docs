@@ -10,7 +10,7 @@ import unittest
 
 from .archive import inventory, pack, restore, verify
 from .workflow import CONFIG, ROOT, read, save
-from .analyze import distribution, operation_stats
+from .analyze import compute_relations, distribution, operation_stats
 from moe_ub_cosim.fabric import validate as validate_fabric
 from moe_ub_cosim.observation import validate_observation
 from moe_ub_cosim.route_evidence import validate_manifest
@@ -87,6 +87,20 @@ class Checks(unittest.TestCase):
         self.assertEqual(summary['last_finishing_ranks'],[1])
         self.assertEqual(rows[0]['duration_ns'],20)
         self.assertEqual(distribution([1,2,3,4])['median'],2.5)
+
+    def test_compute_relation_retains_extra_wait(self):
+        rows, compute = [], []
+        for rank in (0,1):
+            end = 10+rank
+            rows.append(dict(layer_id=1,kind='dispatch',rank_id=rank,end_ns=end))
+            compute.append(dict(layer_id=1,stage='routed_expert',rank_id=rank,start_ns=end+rank,
+                                end_ns=end+rank+100*(rank+1)))
+            rows.append(dict(layer_id=1,kind='combine',rank_id=rank,start_ns=compute[-1]['end_ns'],
+                             workload=dict(routed_inputs=rank+1)))
+        result = compute_relations(rows,compute,dict(layers=[{},dict(routed_expert_per_input_ns=100)]))['1']
+        self.assertEqual(result['expert_duration_minus_declared_work_ns']['maximum'],0)
+        self.assertEqual(result['combine_entry_minus_expert_finish_ns']['maximum'],0)
+        self.assertEqual(result['expert_start_minus_dispatch_finish_ns']['maximum'],1)
 
 
 if __name__ == '__main__':

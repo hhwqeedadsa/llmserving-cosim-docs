@@ -1,6 +1,6 @@
 # 当前任务与交接
 
-**E1、E2 交付收尾已完成，状态 `completed`。** 按用户 2026-10-10 的确认补齐时长和实际路径证据，修正阶段结束判断，整理记录并本地提交，不推送。平台 P 部分（M18～M21）保持已完成；本次没有启动 E3、E4 或新的平台任务。
+**E1、E2 交付收尾已完成，状态 `completed`。** 按用户 2026-10-10 的确认补齐时长和实际路径证据，修正阶段结束判断，整理记录并本地提交。用户随后确认将已完成提交及相关子模块发布到 GitHub，目标为主仓库 `main` 与 ASTRA-sim、LLMServingSim 的 `cosim` 分支。平台 P 部分（M18～M21）保持已完成；本次没有启动 E3、E4 或新的平台任务。
 
 ## 范围与结果
 
@@ -22,4 +22,4 @@
 
 详细时长表、逐包证据、命令和日志在 `runs/scaleup_issue_screening/delivery/`；[补证索引](../../experiments/scaleup_issue_screening/results/delivery/README.md)说明目录，[实验操作](../../experiments/scaleup_issue_screening/usage.md)提供公开可复用命令。方法、结果与运行日志分别保存，当前页只负责交接。历史阶段见[里程碑](../milestone_history.md)。
 
-本次提交恢复既有类型前缀，规范已写入[开发维护](../development.md)；没有改写被证据引用的历史提交。当前停止在 E1/E2 收尾完成处，下一阶段由用户确认。
+本次提交恢复既有类型前缀，规范已写入[开发维护](../development.md)；没有改写被证据引用的历史提交。发布按 ASTRA-sim、LLMServingSim、主仓库的顺序进行，命令、退出状态及远端提交核验保存在 `runs/git-publish/20261010-e1-e2/`。当前停止在 E1/E2 收尾完成处，下一阶段由用户确认。

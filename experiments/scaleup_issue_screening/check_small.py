@@ -9,7 +9,7 @@ from .archive import pack, restore
 from .workflow import CONFIG, cli, command, digest, host, read, save
 
 
-def check(output, backend, control_path=None):
+def check(output, backend, control_path=None, complete_coverage=False):
     output.mkdir(parents=True, exist_ok=False)
     case = output/'case'
     case.mkdir()
@@ -51,6 +51,20 @@ def check(output, backend, control_path=None):
     run['inputs']['network'] = str(case/'resolved/network')
     for key in ('observation','record_policy','export_policy','input_evidence'):
         run[key] = str(case/'prepared'/run[key])
+    if complete_coverage:
+        observation=read(run['observation'])
+        network=read(case/'resolved/network/backend.json')['topology']
+        switches={n['node_id']:set() for n in network['nodes'] if n['kind']!='DEVICE'}
+        for link in network['links']:
+            for end in ('src','dst'):
+                if link[end] in switches:switches[link[end]].add(link[end+'_port'])
+        observation['clocks']=[c for c in observation['clocks'] if c['device_type']=='rank']+[
+            dict(device_type='switch',device_id=n,offset_ns=0,drift_ppb=0) for n in sorted(switches)]
+        observation['switches']=[dict(switch_id=n,port_ids=sorted(ports),start_local_ns=0,
+            end_local_ns=10000,period_ns=1000) for n,ports in sorted(switches.items())]
+        observation['resource_budget']['max_ports']=256
+        save(case/'complete-observation.json',observation)
+        run['observation']=str(case/'complete-observation.json')
     save(case/'run.json',run)
     save(case/'case.json',dict(schema_version='issue-screening-case/1',owned_by='scaleup_issue_screening',
         case_id='synthetic-tooling-check',analyzed_layers=[2,3],source_kind='synthetic',backend_sha256=digest(backend)))

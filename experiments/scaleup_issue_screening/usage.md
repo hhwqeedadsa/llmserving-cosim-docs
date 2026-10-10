@@ -167,3 +167,61 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 前者检查覆盖、三个时间指标、单因素输入隔离及归档拒绝条件；后者用本目录的合成小输入完成准备、运行、分析、保存、压缩、恢复和平台验证，不依赖真实来源或旧运行。合成结果只检查工具，不能作为正常业务发现。
 
 资源上限由 `configs/host.json` 和公开运行配置明确给出，所有大操作均受监控。任何命令非零退出后先查看对应日志，不覆盖失败目录或自动加大上限。正常探索串行运行并归档，后续候选按方案门槛另行记录。
+
+## 排队时长与实际路径补证
+
+定义、精度与选择规则见[补证方法](delivery_method.md)。从完整原归档直接核算所有已声明出口的队列非空时长上下界，不展开任务图：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.duration_bounds \
+  --archive runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz \
+  --output runs/scaleup_issue_screening/duration-new/g0-b2-short
+```
+
+输出 `ports.jsonl` 和 `summary.json`。上下界之差是不可恢复的不确定度；相邻正面积窗口不是连续积压的证明。其他三个 E1 case 使用同一命令替换名称。
+
+实际路径需要新执行补记录。先完成不依赖真实数据及旧产物的小流程：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.check_delivery_math
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.check_delivery \
+  --output runs/scaleup_issue_screening/capture-check-new \
+  --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service
+```
+
+`check_delivery` 生成合成输入，执行全出口聚合、保存与详细回放，核对不扰动、逐包路径和精确队列积分；其 `delivery-summary.json` 仅是工具检查。
+
+正式 case 先按上文恢复到新目录，例如 `restored-g0-b2-short`，并确保原分析摘要可用。准备选取全静态最短路径出口并保存 `selection.json`，必要时用硬链接保存该 case 的切片；回放只执行后端：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.path_replay prepare \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --summary runs/scaleup_issue_screening/analysis/g0-b2-baseline/summary.json \
+  --backend build/m19-a3-resources/output/cosim/ns3.44-cosim-service \
+  --fixed-pairs experiments/scaleup_issue_screening/configs/delivery-pairs.json \
+  --output runs/scaleup_issue_screening/restored-g0-b2-short/detail
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.path_replay run \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/restored-g0-b2-short/detail
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.path_replay compare \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/restored-g0-b2-short/detail
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.path_analysis \
+  --detail runs/scaleup_issue_screening/restored-g0-b2-short/detail \
+  --output runs/scaleup_issue_screening/path-analysis-new/g0-b2-short
+```
+
+`compare` 先验证回放，再核对所有执行记录、原有观测和全部已声明出口的数据包内容/发送时刻摘要，生成 `equivalence.json`。`path_analysis` 输出逐包路径 `packets.jsonl`、任务比较 `transfers.json`、选定出口精确时长 `queues.json` 与核验摘要。它们属于研究者内部证据，会读取真值，不能直接供给 E3 测量算法。回放不等于新的独立请求样本。
+
+对 `g0-b2-expert-half`、`g0-b2-expert-double`、`g0-b2-local-fence` 重复上述串行流程，替换 case 和对应分析摘要；保留相同 `delivery-pairs.json`。所有条件完成后比较共有任务：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.compare_paths \
+  --baseline runs/scaleup_issue_screening/path-analysis-new/g0-b2-short \
+  --controls runs/scaleup_issue_screening/path-analysis-new/g0-b2-expert-half \
+    runs/scaleup_issue_screening/path-analysis-new/g0-b2-expert-double \
+    runs/scaleup_issue_screening/path-analysis-new/g0-b2-local-fence \
+  --output runs/scaleup_issue_screening/path-comparison-new.json
+```
+
+每个恢复 case 包含新 `detail/`，可用已有 `archive pack --release-expanded` 生成另一个完整归档后释放展开文件。路径分析另行保留，旧包不覆盖。串行恢复、补采、核验、归档，避免四份展开图同时占用磁盘；先检查现存累计占用与预计额外空间，不能用原执行峰值保证补采也能装下。

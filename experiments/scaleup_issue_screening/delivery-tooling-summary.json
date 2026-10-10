@@ -1,0 +1,265 @@
+{
+  "passed": true,
+  "synthetic_only": true,
+  "full_workflow": {
+    "passed": true,
+    "synthetic_only": true,
+    "requests": 3,
+    "operations": 4,
+    "simulation_end_ns": 3414,
+    "archive": {
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "5e1406f03d1eab2d3713b59d32b9f256188df4242b922a60780f4c55a94cfdb7",
+      "archive_bytes": 322179,
+      "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/delivery-small-complete/case",
+      "logical_bytes": 3413180,
+      "verified": true,
+      "expanded_released": true
+    },
+    "public_run_and_freeze": true,
+    "restored_run_and_slice_validated": true,
+    "control": null
+  },
+  "equivalence": {
+    "schema_version": "issue-screening-capture-equivalence/1",
+    "passed": true,
+    "original_manifest_sha256": "47afe7d2a36fd5d5d0eabd9e4706fd705aab1ffc2aa723a396079667415fab1e",
+    "replay_manifest_sha256": "3eed5ea59a373a341847a39e52e407b63f866ca5df2cbf20733fe96c2ef0a9f8",
+    "selection_sha256": "8c884722b4058ebe696fab73420724fbcbc7fc14bc04ef4003bb00be9d04592c",
+    "execution_fields": {
+      "endpoint_ops": {
+        "records": 12,
+        "sha256": "052a2808036e9e96ef1127bdc56e3a027fd844c6da46178d29973bdb955fa1f3"
+      },
+      "local_deliveries": {
+        "records": 20,
+        "sha256": "1922fb7a41d2672b4a63b94674ef6afbbf1084e912fc2f4591e38fed0a486684"
+      },
+      "native_completions": {
+        "records": 46,
+        "sha256": "09a4ee7ee451b2a42202a9b465dd12565fe0c2ded25c282e54ec27e9b67c4041"
+      },
+      "native_starts": {
+        "records": 46,
+        "sha256": "a0faafff6edb5200a28a7732270e4b87f531b756d6111e4c2d2966ce470bfc36"
+      },
+      "node_execution": {
+        "records": 448,
+        "sha256": "c4da0030259c58aa17faf73bfce785f6e084cf1df7fb07a0aabae84490e2829c"
+      },
+      "operation_registry": {
+        "records": 4,
+        "sha256": "b55ada4fe2452bb71c1e8ac238627177ebe0d7dd4968a9b252b1aed5e27bcd06"
+      },
+      "operation_stages": {
+        "records": 90,
+        "sha256": "38068212455ff011970bd7f4a645cce387e1ff212eedf17d31322a8821eacb70"
+      },
+      "plan_summary": {
+        "records": 1,
+        "sha256": "d453622f35f8c3c5f794cafbab05859a331770a234feec82262f6eb21b7a16fa"
+      },
+      "planned_transfers": {
+        "records": 66,
+        "sha256": "cda8d63beaa37f1548a3dfdcf351409f172126a87cbfe4ec15c50af69bc17981"
+      },
+      "target_writes": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "transfer_registry": {
+        "records": 46,
+        "sha256": "4df8c2e0988951889152a9e3d33b8015a764a4b20242a2a4d00100717dfc5533"
+      },
+      "transfers": {
+        "records": 46,
+        "sha256": "9037817f17d572453e16d99d8ffa8902334eef7a2d776d27031a17b49c3f8682"
+      },
+      "wqe_completions": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wqe_starts": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "observed_fields": {
+      "endpoint_ops.jsonl": {
+        "records": 12,
+        "sha256": "76962389b66fdaeb8ce03abf3185a0aebde7e5223c1eaef8075478b9996bf5fd"
+      },
+      "port_windows.csv": {
+        "records": 90,
+        "sha256": "6375d6a03f03c4b0324c7e8195aa49ad5d282cf8677567c16a32b96dc0c86f60"
+      },
+      "queue_windows.csv": {
+        "records": 90,
+        "sha256": "a7257a047e72bf4e501c4bfcc8d3f4f2837229ec0949e7491ae63009b07d8006"
+      },
+      "endpoint_stages.jsonl": {
+        "records": 90,
+        "sha256": "2fddc72f288118d9cdcf5514ab5098cbc6027ed33d5806930cc37754bd99f346"
+      }
+    },
+    "metadata_fields": [
+      "simulation_end_ns",
+      "service_finished_ns",
+      "random",
+      "network_drain",
+      "graph_completions",
+      "rank_resources",
+      "boundary_resources",
+      "resource_lifecycle"
+    ],
+    "simulation_end_ns": 3414,
+    "random": {
+      "run": 1,
+      "seed": 1
+    },
+    "packet_wire_and_start_fingerprints_match": true,
+    "ports_compared": 32,
+    "port_equivalence_sha256": "7a6fe8a606686152960629219a86afc27aec71905d1512a68cf897357e5224ae",
+    "backend_executed": true,
+    "frontend_executed": false,
+    "independent_statistical_repeat": false
+  },
+  "paths": {
+    "schema_version": "issue-screening-selected-paths/1",
+    "passed": true,
+    "scope": "researcher_internal_not_E3_input",
+    "selection_sha256": "8c884722b4058ebe696fab73420724fbcbc7fc14bc04ef4003bb00be9d04592c",
+    "equivalence_sha256": "03151033210b4825737c5c3f4aba6f70c41e61f09adc4a495d5ec6da13d6843b",
+    "pairs": [
+      [
+        2,
+        12,
+        2
+      ],
+      [
+        2,
+        12,
+        7
+      ],
+      [
+        3,
+        12,
+        2
+      ],
+      [
+        3,
+        12,
+        7
+      ]
+    ],
+    "critical_data": [
+      {
+        "layer": 2,
+        "source": 12,
+        "consumer": 2,
+        "transfer_id": 4294967424,
+        "data_ready_ns": 1107,
+        "combine_finish_ns": 1615
+      },
+      {
+        "layer": 2,
+        "source": 12,
+        "consumer": 7,
+        "transfer_id": 4294967426,
+        "data_ready_ns": 961,
+        "combine_finish_ns": 1615
+      },
+      {
+        "layer": 3,
+        "source": 12,
+        "consumer": 2,
+        "transfer_id": 4294967459,
+        "data_ready_ns": 2657,
+        "combine_finish_ns": 3322
+      },
+      {
+        "layer": 3,
+        "source": 12,
+        "consumer": 2,
+        "transfer_id": 4294967460,
+        "data_ready_ns": 2657,
+        "combine_finish_ns": 3322
+      },
+      {
+        "layer": 3,
+        "source": 12,
+        "consumer": 7,
+        "transfer_id": 4294967457,
+        "data_ready_ns": 2803,
+        "combine_finish_ns": 3322
+      }
+    ],
+    "transfers": 18,
+    "packets": 54,
+    "ports": 16,
+    "complete_selected_application_bytes": true,
+    "connected_physical_paths": true,
+    "actual_data_ready_reconciled": true,
+    "exact_queue_duration_ns": true,
+    "queue_integrals_match_aggregates": true,
+    "queue_distributions": {
+      "voq": {
+        "nonempty_ns": {
+          "n": 16,
+          "minimum": 14,
+          "median": 23.0,
+          "mean": 24.4375,
+          "p95": 46,
+          "maximum": 46,
+          "spread": 32
+        },
+        "max_contiguous_ns": {
+          "n": 16,
+          "minimum": 2,
+          "median": 3.0,
+          "mean": 3.0625,
+          "p95": 5,
+          "maximum": 5,
+          "spread": 3
+        }
+      },
+      "fifo": {
+        "nonempty_ns": {
+          "n": 16,
+          "minimum": 0,
+          "median": 0.0,
+          "mean": 0.0625,
+          "p95": 1,
+          "maximum": 1,
+          "spread": 1
+        },
+        "max_contiguous_ns": {
+          "n": 16,
+          "minimum": 0,
+          "median": 0.0,
+          "mean": 0.0625,
+          "p95": 1,
+          "maximum": 1,
+          "spread": 1
+        }
+      }
+    },
+    "fifo_residence_ns": {
+      "n": 18,
+      "minimum": 0,
+      "median": 0.0,
+      "mean": 0.05555555555555555,
+      "p95": 1,
+      "maximum": 1,
+      "spread": 1
+    },
+    "limitation": "No source-device departure or per-packet VOQ admission time; port occupancy is not selected-packet waiting or avoidable business loss.",
+    "files": {
+      "queues.json": "94f951f3f5b007f06251228a3eb84cde50c62f5e822c81aff4c266bfad696899",
+      "packets.jsonl": "c2edf0e16c7c1d418fd2e6907aa91fe84907fed655f8c6d8dd547a9097754bec",
+      "transfers.json": "939f2233864f21956ee6b0a51fa3d509425d012e04367c142dbdb7a315722751"
+    },
+    "program_sha256": "aa09d862e1b12ac7fcf503a11b34f9e2f651a942ed60bcd64decb8633fc936d4"
+  },
+  "completion_note": "Path analysis run separately after correcting optional port_service handling; original simulator execution retained. Queue sparse-encoding and path-analysis input mistakes retain their logs."
+}

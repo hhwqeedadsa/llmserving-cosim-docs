@@ -2,6 +2,8 @@
 
 本方法在首个 E 仿真前固定，依据 [方案](plan_v0.1.md)。平台采用已验收的 `e3db37a`，A3 STORE/STORE 模板、48 个声明的通信核、`data_ready` 复制栅栏、单 LD/ST 线程和有限原生请求池。计算和局部准备成本均为参考值，真实路由不等于目标硬件校准。
 
+2026-10-10 授权的 E1/E2 交付补证采用独立的[补证方法](delivery_method.md)，补充时长精度与候选路径核验，不改变本页原正常业务定义。
+
 ## 输入与初态
 
 固定 HF 数据集 `core12345/MoE_expert_selection_trace` 的修订 `27febb7b2d24169560a9f6f83d38eb53f94916cf`，采用此前 seed=0 顺序筛得的 1024 个不同源文件，逐文件 SHA-256 和结构检查。清单在 `configs/route-manifest.json`。原采集为 DeepSeek-R1-AWQ，目标容量采用条件 INT8 模型，二者精度不同；采集器权重修订、运行时和硬件仍未确认。

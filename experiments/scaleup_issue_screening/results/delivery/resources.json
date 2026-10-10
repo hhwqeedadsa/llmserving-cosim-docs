@@ -1,0 +1,71 @@
+{
+  "schema_version": "issue-screening-delivery-resources/1",
+  "acceptance_sha256": "bf35b10a92e52642f091620e158bdeb508014843d1ff53ecbb8de3a7c912dba4",
+  "peak_sampled_artifact_bytes": 51236995072,
+  "replay_peak_sampled_rss_bytes": 5920210944,
+  "new_archive_bytes": 920741396,
+  "final_declared_artifact_bytes": 49331097600,
+  "final_declared_artifact_usage": {
+    "apparent_bytes": 48178274913,
+    "allocated_bytes": 49331097600
+  },
+  "experiment_directory_usage": {
+    "apparent_bytes": 2456540429,
+    "allocated_bytes": 2466230272
+  },
+  "original_archives_preserved": 7,
+  "new_archives_verified_and_released": 4,
+  "duration_resources": {
+    "g0-b4-short-resources": {
+      "status": "completed",
+      "wall_seconds": 47.74420735985041,
+      "peak_sampled_group_rss_bytes": 93704192,
+      "peak_sampled_artifact_bytes": 48339939328,
+      "path": "runs/scaleup_issue_screening/delivery/durations/g0-b4-short-resources/probe.json",
+      "sha256": "d0baa09bdc87397bbe5bef3b61329c24ac9d10331aab0cefc6b0adab5d8f5f2b"
+    },
+    "g0-b8-long-resources": {
+      "status": "completed",
+      "wall_seconds": 47.09179584123194,
+      "peak_sampled_group_rss_bytes": 96092160,
+      "peak_sampled_artifact_bytes": 48346238976,
+      "path": "runs/scaleup_issue_screening/delivery/durations/g0-b8-long-resources/probe.json",
+      "sha256": "dff7185e7dd5e4ca79c3a68b87126d68e60a4548e0443784f3c33a5df0841b3d"
+    },
+    "g0-b8-short-resources": {
+      "status": "completed",
+      "wall_seconds": 46.99996681138873,
+      "peak_sampled_group_rss_bytes": 98840576,
+      "peak_sampled_artifact_bytes": 48341143552,
+      "path": "runs/scaleup_issue_screening/delivery/durations/g0-b8-short-resources/probe.json",
+      "sha256": "1a5150589c25e550ff2ef42ff877ddbb49fe08ee7b6f0770569c1866a928e4d4"
+    },
+    "g0-b2-short-v2-resources": {
+      "status": "completed",
+      "wall_seconds": 36.73181211203337,
+      "peak_sampled_group_rss_bytes": 5378048,
+      "peak_sampled_artifact_bytes": 48335261696,
+      "path": "runs/scaleup_issue_screening/delivery/durations/g0-b2-short-v2-resources/probe.json",
+      "sha256": "2280cc9c452562b07260286501a94af9d587864fbeb261322d75c79ec9536999"
+    },
+    "g0-b2-short-resources": {
+      "status": "child_failed",
+      "wall_seconds": 36.55460209399462,
+      "peak_sampled_group_rss_bytes": 5378048,
+      "peak_sampled_artifact_bytes": 48334196736,
+      "path": "runs/scaleup_issue_screening/delivery/durations/g0-b2-short-resources/probe.json",
+      "sha256": "e4377c3a6bc576e8fb033f6fdb4d59079d0c36c029afba575e4895836b4846e9"
+    }
+  },
+  "audit_resource_report": {
+    "path": "runs/scaleup_issue_screening/delivery/acceptance.json-resources/probe.json",
+    "sha256": "9952fef8b2d93cc00cec2088867c23796a9f5c0b066ffff2b86a2d8aac91b64c",
+    "wall_seconds": 78.0290693808347,
+    "status": "completed"
+  },
+  "known_tool_reading_failures": [
+    "duration first check assumed dense rows; corrected to sealed sparse-zero declaration, no simulation repeated",
+    "small path analysis expected optional port_service field; corrected old-schema default, no simulation repeated"
+  ],
+  "phase_resources": "acceptance.json: replays[].resources"
+}

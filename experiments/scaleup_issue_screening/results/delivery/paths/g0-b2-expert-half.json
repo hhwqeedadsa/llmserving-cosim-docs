@@ -1,0 +1,1202 @@
+{
+  "case": "g0-b2-expert-half",
+  "equivalence": {
+    "schema_version": "issue-screening-capture-equivalence/1",
+    "passed": true,
+    "original_manifest_sha256": "adfa5ed84b4306733cc6781920fb5f7fa1c4def751e755402999eabb375f9d2c",
+    "replay_manifest_sha256": "d62975746e5701cbe06ba940e8582691c0319f3978df4c727c7b21243dd13af8",
+    "selection_sha256": "91378981ca4c64d6ef79111c89da832492c31ffb298d9661bb54221377da6821",
+    "execution_fields": {
+      "endpoint_ops": {
+        "records": 768,
+        "sha256": "fd22aaf9e7a8ee7f8cc7974d0dc4f1be4b1f50156f93b60c6ec04519443b7f30"
+      },
+      "local_deliveries": {
+        "records": 900,
+        "sha256": "aab4f0db2be3508b83982e59c0438f311f8ad4cb1ed8c8cf49cc93e9242be1ba"
+      },
+      "native_completions": {
+        "records": 120980,
+        "sha256": "c38b589197636a8b55d8c514c3990a2cbf3e1fb78d33d572226c4e9a99da5d09"
+      },
+      "native_starts": {
+        "records": 120980,
+        "sha256": "96e8e098bb243bb284888524019403e46d1570382d82a60b47949fcfeaed02cb"
+      },
+      "node_execution": {
+        "records": 568544,
+        "sha256": "e333ae6508c98b77d556d7084ac14305cd660d46925ce9d8fc8c05be19b65be8"
+      },
+      "operation_registry": {
+        "records": 6,
+        "sha256": "9790b65f83a708c03c8c6351e31e2db2e5ac08bd25635a6d3de78f9f8677494a"
+      },
+      "operation_stages": {
+        "records": 6619,
+        "sha256": "078e10739d3c37eb9553f0ab283adccf9df96f7d4779fb07537c7ce3a95ca102"
+      },
+      "plan_summary": {
+        "records": 1,
+        "sha256": "75fdce6c85040412c8d68992292b25b9c0ddb2debd91a54d8f45efd1433c11c9"
+      },
+      "planned_transfers": {
+        "records": 121880,
+        "sha256": "98bdd93258b0fea6bccc65112c1b41a07d050753bd6f6967d1a95cd82911579f"
+      },
+      "target_writes": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "transfer_registry": {
+        "records": 120980,
+        "sha256": "0ffb42a34b7771f589aeea40115109ee8308e5d895c46f25f30ead8ff9437310"
+      },
+      "transfers": {
+        "records": 120980,
+        "sha256": "9dc4b26ea6f6dcb39d882095ef88da06f4f0677a676df8e73ee556b0bae1f0a7"
+      },
+      "wqe_completions": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wqe_starts": {
+        "records": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "observed_fields": {
+      "endpoint_ops.jsonl": {
+        "records": 768,
+        "sha256": "9cf9eaa51e31f3a0398ff72d146e7e9209103557949facbc793e7983b4ed255a"
+      },
+      "port_windows.csv": {
+        "records": 139207,
+        "sha256": "62aadb3ed59c4248e5783a69afadfde7ce000a7577b4a75e91e0d6081af4800a"
+      },
+      "queue_windows.csv": {
+        "records": 139250,
+        "sha256": "423fba77c159aeec43bfa296fdb95f7cd008d3a293bbc657ba850fde2fa3bb0f"
+      },
+      "endpoint_stages.jsonl": {
+        "records": 6619,
+        "sha256": "20ca13e9d4190ae95f4cc5d1995fc5a2eb6ee66828145d00e47aaf7710e3d916"
+      }
+    },
+    "metadata_fields": [
+      "simulation_end_ns",
+      "service_finished_ns",
+      "random",
+      "network_drain",
+      "graph_completions",
+      "rank_resources",
+      "boundary_resources",
+      "resource_lifecycle"
+    ],
+    "simulation_end_ns": 83025,
+    "random": {
+      "run": 1,
+      "seed": 1
+    },
+    "packet_wire_and_start_fingerprints_match": true,
+    "ports_compared": 2688,
+    "port_equivalence_sha256": "a2fee0a764a8c0079800e590154baf79923315a0efc14e4b21ab15868e424cc4",
+    "backend_executed": true,
+    "frontend_executed": false,
+    "independent_statistical_repeat": false
+  },
+  "paths": {
+    "schema_version": "issue-screening-selected-paths/1",
+    "passed": true,
+    "scope": "researcher_internal_not_E3_input",
+    "selection_sha256": "91378981ca4c64d6ef79111c89da832492c31ffb298d9661bb54221377da6821",
+    "equivalence_sha256": "f49e9cbc31e6c8b96d125ded7423076bd9a1b4822ec546ef26b6c17bd740de41",
+    "pairs": [
+      [
+        7,
+        70,
+        27
+      ],
+      [
+        8,
+        65,
+        58
+      ]
+    ],
+    "critical_data": [
+      {
+        "layer": 7,
+        "source": 70,
+        "consumer": 27,
+        "transfer_id": 4295045028,
+        "data_ready_ns": 51492,
+        "combine_finish_ns": 52080
+      },
+      {
+        "layer": 8,
+        "source": 65,
+        "consumer": 58,
+        "transfer_id": 4295086595,
+        "data_ready_ns": 82345,
+        "combine_finish_ns": 82933
+      }
+    ],
+    "transfers": 12,
+    "packets": 20,
+    "ports": 350,
+    "complete_selected_application_bytes": true,
+    "connected_physical_paths": true,
+    "actual_data_ready_reconciled": true,
+    "exact_queue_duration_ns": true,
+    "queue_integrals_match_aggregates": true,
+    "queue_distributions": {
+      "voq": {
+        "nonempty_ns": {
+          "n": 350,
+          "minimum": 208,
+          "median": 300.0,
+          "mean": 318.1485714285714,
+          "p95": 441,
+          "maximum": 684,
+          "spread": 476
+        },
+        "max_contiguous_ns": {
+          "n": 350,
+          "minimum": 2,
+          "median": 29.5,
+          "mean": 37.27142857142857,
+          "p95": 116,
+          "maximum": 325,
+          "spread": 323
+        }
+      },
+      "fifo": {
+        "nonempty_ns": {
+          "n": 350,
+          "minimum": 0,
+          "median": 325.0,
+          "mean": 348.4685714285714,
+          "p95": 621,
+          "maximum": 997,
+          "spread": 997
+        },
+        "max_contiguous_ns": {
+          "n": 350,
+          "minimum": 0,
+          "median": 81.0,
+          "mean": 76.11714285714285,
+          "p95": 81,
+          "maximum": 163,
+          "spread": 163
+        }
+      }
+    },
+    "fifo_residence_ns": {
+      "n": 12,
+      "minimum": 0,
+      "median": 0.0,
+      "mean": 1.1666666666666667,
+      "p95": 4,
+      "maximum": 4,
+      "spread": 4
+    },
+    "limitation": "No source-device departure or per-packet VOQ admission time; port occupancy is not selected-packet waiting or avoidable business loss.",
+    "files": {
+      "queues.json": "ed101ca46a17a375ea7bb47e74563de1c8896ae81f22b068112eef870747cb02",
+      "packets.jsonl": "c166ec632c24df7c5189834b7346e4ec23b04fb4cd694f0d7628103e4d7619f9",
+      "transfers.json": "5fc6f383c00315c18622989b3945ca1730dd06b56cfc35018e2258b1f727c5e4"
+    },
+    "program_sha256": "cdd590b5f12399cfb20999080e205ce575e5bdbb6fec3882fa425866b50f3594"
+  },
+  "transfers": [
+    {
+      "transfer_id": 4295045025,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "data",
+      "pair_byte_range": [
+        0,
+        8192
+      ],
+      "message_id": 36191,
+      "chunk_index": 0,
+      "sources_sha256": "5aa23cb4548a7e60dfa4dd87ddc3bd2226f6c0d8f51d909fef77a6abee686c55",
+      "task_byte_range": [
+        0,
+        8192
+      ],
+      "payload_bytes": 8192,
+      "packets": 2,
+      "send_start_ns": 46512,
+      "data_ready_ns": 48354,
+      "latency_ns": 1842,
+      "before_first_switch_start_ns": 1274,
+      "captured_completion_span_ns": 568,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              797,
+              28
+            ],
+            [
+              1132,
+              1
+            ],
+            [
+              776,
+              11
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              8192
+            ]
+          ],
+          "ports": [
+            [
+              799,
+              28
+            ],
+            [
+              1164,
+              1
+            ],
+            [
+              778,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295045026,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "data",
+      "pair_byte_range": [
+        8192,
+        14336
+      ],
+      "message_id": 36191,
+      "chunk_index": 1,
+      "sources_sha256": "5aa23cb4548a7e60dfa4dd87ddc3bd2226f6c0d8f51d909fef77a6abee686c55",
+      "task_byte_range": [
+        0,
+        6144
+      ],
+      "payload_bytes": 6144,
+      "packets": 2,
+      "send_start_ns": 46512,
+      "data_ready_ns": 48145,
+      "latency_ns": 1633,
+      "before_first_switch_start_ns": 1321,
+      "captured_completion_span_ns": 312,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 2,
+        "p95": 5,
+        "maximum": 5,
+        "spread": 4
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0.6666666666666666,
+        "p95": 4,
+        "maximum": 4,
+        "spread": 4
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              801,
+              16
+            ],
+            [
+              1184,
+              1
+            ],
+            [
+              780,
+              11
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              6144
+            ]
+          ],
+          "ports": [
+            [
+              801,
+              26
+            ],
+            [
+              1194,
+              1
+            ],
+            [
+              780,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295045027,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "status",
+      "pair_byte_range": [
+        0,
+        32
+      ],
+      "message_id": 36192,
+      "chunk_index": 0,
+      "sources_sha256": "5aa23cb4548a7e60dfa4dd87ddc3bd2226f6c0d8f51d909fef77a6abee686c55",
+      "task_byte_range": [
+        0,
+        32
+      ],
+      "payload_bytes": 32,
+      "packets": 1,
+      "send_start_ns": 48354,
+      "data_ready_ns": 49599,
+      "latency_ns": 1245,
+      "before_first_switch_start_ns": 1180,
+      "captured_completion_span_ns": 65,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 2,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 3,
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              32
+            ]
+          ],
+          "ports": [
+            [
+              798,
+              17
+            ],
+            [
+              1137,
+              1
+            ],
+            [
+              777,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295045028,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "data",
+      "pair_byte_range": [
+        0,
+        8192
+      ],
+      "message_id": 36193,
+      "chunk_index": 0,
+      "sources_sha256": "5d904415c7cf909642df6d9f7903ce1a6a0e49087dccdb20bcc80f37a4bbfd9a",
+      "task_byte_range": [
+        0,
+        8192
+      ],
+      "payload_bytes": 8192,
+      "packets": 2,
+      "send_start_ns": 49531,
+      "data_ready_ns": 51492,
+      "latency_ns": 1961,
+      "before_first_switch_start_ns": 1584,
+      "captured_completion_span_ns": 377,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              798,
+              19
+            ],
+            [
+              1139,
+              1
+            ],
+            [
+              777,
+              11
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              8192
+            ]
+          ],
+          "ports": [
+            [
+              800,
+              30
+            ],
+            [
+              1182,
+              1
+            ],
+            [
+              779,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295045029,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "data",
+      "pair_byte_range": [
+        8192,
+        14336
+      ],
+      "message_id": 36193,
+      "chunk_index": 1,
+      "sources_sha256": "5d904415c7cf909642df6d9f7903ce1a6a0e49087dccdb20bcc80f37a4bbfd9a",
+      "task_byte_range": [
+        0,
+        6144
+      ],
+      "payload_bytes": 6144,
+      "packets": 2,
+      "send_start_ns": 49531,
+      "data_ready_ns": 51465,
+      "latency_ns": 1934,
+      "before_first_switch_start_ns": 1538,
+      "captured_completion_span_ns": 396,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 0,
+        "median": 1.0,
+        "mean": 0.75,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 1
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0.3333333333333333,
+        "p95": 2,
+        "maximum": 2,
+        "spread": 2
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              796,
+              27
+            ],
+            [
+              1115,
+              1
+            ],
+            [
+              775,
+              11
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              6144
+            ]
+          ],
+          "ports": [
+            [
+              797,
+              25
+            ],
+            [
+              1129,
+              1
+            ],
+            [
+              776,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295045030,
+      "operation_id": "D.w0.L7.combine",
+      "src_rank": 70,
+      "dst_rank": 27,
+      "message_role": "status",
+      "pair_byte_range": [
+        0,
+        32
+      ],
+      "message_id": 36194,
+      "chunk_index": 0,
+      "sources_sha256": "5d904415c7cf909642df6d9f7903ce1a6a0e49087dccdb20bcc80f37a4bbfd9a",
+      "task_byte_range": [
+        0,
+        32
+      ],
+      "payload_bytes": 32,
+      "packets": 1,
+      "send_start_ns": 51492,
+      "data_ready_ns": 51580,
+      "latency_ns": 88,
+      "before_first_switch_start_ns": 23,
+      "captured_completion_span_ns": 65,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 2,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 3,
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              32
+            ]
+          ],
+          "ports": [
+            [
+              797,
+              26
+            ],
+            [
+              1130,
+              1
+            ],
+            [
+              776,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086592,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "data",
+      "pair_byte_range": [
+        0,
+        8192
+      ],
+      "message_id": 36825,
+      "chunk_index": 0,
+      "sources_sha256": "bd1b9571d2cd05b0bd0a2d41cf7f810019feab772c925fcd69afe7b78a8ef82a",
+      "task_byte_range": [
+        0,
+        8192
+      ],
+      "payload_bytes": 8192,
+      "packets": 2,
+      "send_start_ns": 76983,
+      "data_ready_ns": 79241,
+      "latency_ns": 2258,
+      "before_first_switch_start_ns": 1828,
+      "captured_completion_span_ns": 430,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              801,
+              26
+            ],
+            [
+              1194,
+              3
+            ],
+            [
+              794,
+              10
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              8192
+            ]
+          ],
+          "ports": [
+            [
+              797,
+              28
+            ],
+            [
+              1132,
+              3
+            ],
+            [
+              790,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086593,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "data",
+      "pair_byte_range": [
+        8192,
+        14336
+      ],
+      "message_id": 36825,
+      "chunk_index": 1,
+      "sources_sha256": "bd1b9571d2cd05b0bd0a2d41cf7f810019feab772c925fcd69afe7b78a8ef82a",
+      "task_byte_range": [
+        0,
+        6144
+      ],
+      "payload_bytes": 6144,
+      "packets": 2,
+      "send_start_ns": 76983,
+      "data_ready_ns": 79135,
+      "latency_ns": 2152,
+      "before_first_switch_start_ns": 1840,
+      "captured_completion_span_ns": 312,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 2,
+        "p95": 5,
+        "maximum": 5,
+        "spread": 4
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0.6666666666666666,
+        "p95": 4,
+        "maximum": 4,
+        "spread": 4
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              799,
+              22
+            ],
+            [
+              1158,
+              3
+            ],
+            [
+              792,
+              10
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              6144
+            ]
+          ],
+          "ports": [
+            [
+              799,
+              18
+            ],
+            [
+              1154,
+              3
+            ],
+            [
+              792,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086594,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "status",
+      "pair_byte_range": [
+        0,
+        32
+      ],
+      "message_id": 36826,
+      "chunk_index": 0,
+      "sources_sha256": "bd1b9571d2cd05b0bd0a2d41cf7f810019feab772c925fcd69afe7b78a8ef82a",
+      "task_byte_range": [
+        0,
+        32
+      ],
+      "payload_bytes": 32,
+      "packets": 1,
+      "send_start_ns": 79241,
+      "data_ready_ns": 80091,
+      "latency_ns": 850,
+      "before_first_switch_start_ns": 785,
+      "captured_completion_span_ns": 65,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 2,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 3,
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              32
+            ]
+          ],
+          "ports": [
+            [
+              798,
+              16
+            ],
+            [
+              1136,
+              3
+            ],
+            [
+              791,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086595,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "data",
+      "pair_byte_range": [
+        0,
+        8192
+      ],
+      "message_id": 36827,
+      "chunk_index": 0,
+      "sources_sha256": "9ba76d322b34cfef355238b6c099e6529695f76f1c686a9723354ed3e3c0fa1c",
+      "task_byte_range": [
+        0,
+        8192
+      ],
+      "payload_bytes": 8192,
+      "packets": 2,
+      "send_start_ns": 80023,
+      "data_ready_ns": 82345,
+      "latency_ns": 2322,
+      "before_first_switch_start_ns": 1895,
+      "captured_completion_span_ns": 427,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              801,
+              31
+            ],
+            [
+              1199,
+              3
+            ],
+            [
+              794,
+              10
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              8192
+            ]
+          ],
+          "ports": [
+            [
+              798,
+              26
+            ],
+            [
+              1146,
+              3
+            ],
+            [
+              791,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086596,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "data",
+      "pair_byte_range": [
+        8192,
+        14336
+      ],
+      "message_id": 36827,
+      "chunk_index": 1,
+      "sources_sha256": "9ba76d322b34cfef355238b6c099e6529695f76f1c686a9723354ed3e3c0fa1c",
+      "task_byte_range": [
+        0,
+        6144
+      ],
+      "payload_bytes": 6144,
+      "packets": 2,
+      "send_start_ns": 80023,
+      "data_ready_ns": 82276,
+      "latency_ns": 2253,
+      "before_first_switch_start_ns": 1941,
+      "captured_completion_span_ns": 312,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 4,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 2,
+        "p95": 5,
+        "maximum": 5,
+        "spread": 4
+      },
+      "fifo_residence_ns": {
+        "n": 6,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0.6666666666666666,
+        "p95": 4,
+        "maximum": 4,
+        "spread": 4
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              4096
+            ]
+          ],
+          "ports": [
+            [
+              796,
+              17
+            ],
+            [
+              1105,
+              3
+            ],
+            [
+              789,
+              10
+            ]
+          ]
+        },
+        {
+          "ranges": [
+            [
+              4096,
+              6144
+            ]
+          ],
+          "ports": [
+            [
+              796,
+              27
+            ],
+            [
+              1115,
+              3
+            ],
+            [
+              789,
+              10
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "transfer_id": 4295086597,
+      "operation_id": "D.w0.L8.combine",
+      "src_rank": 65,
+      "dst_rank": 58,
+      "message_role": "status",
+      "pair_byte_range": [
+        0,
+        32
+      ],
+      "message_id": 36828,
+      "chunk_index": 0,
+      "sources_sha256": "9ba76d322b34cfef355238b6c099e6529695f76f1c686a9723354ed3e3c0fa1c",
+      "task_byte_range": [
+        0,
+        32
+      ],
+      "payload_bytes": 32,
+      "packets": 1,
+      "send_start_ns": 82345,
+      "data_ready_ns": 82433,
+      "latency_ns": 88,
+      "before_first_switch_start_ns": 23,
+      "captured_completion_span_ns": 65,
+      "intermediate_arrival_to_departure_ns": {
+        "n": 2,
+        "minimum": 1,
+        "median": 1.0,
+        "mean": 1,
+        "p95": 1,
+        "maximum": 1,
+        "spread": 0
+      },
+      "fifo_residence_ns": {
+        "n": 3,
+        "minimum": 0,
+        "median": 0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      },
+      "path_signatures": [
+        {
+          "ranges": [
+            [
+              0,
+              32
+            ]
+          ],
+          "ports": [
+            [
+              798,
+              18
+            ],
+            [
+              1138,
+              3
+            ],
+            [
+              791,
+              10
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "run_directory": "runs/scaleup_issue_screening/delivery/paths/g0-b2-expert-half",
+  "archive": {
+    "schema_version": "issue-screening-archive/1",
+    "archive_sha256": "159d02305a95edfa95938c48f9b293e9dffbd5969ef28cea356e354650f2796c",
+    "archive_bytes": 223442595,
+    "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/delivery/cases/g0-b2-expert-half",
+    "logical_bytes": 2692293525,
+    "verified": true,
+    "expanded_released": true
+  }
+}

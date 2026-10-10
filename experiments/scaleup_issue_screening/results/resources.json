@@ -451,5 +451,11 @@
     "phase times omit gaps between commands and tooling development",
     "old artifacts preserved; cumulative charge includes configured old roots",
     "no inference of simulated device memory or switch telemetry cost from host measurements"
-  ]
+  ],
+  "delivery_supplement": {
+    "summary": "delivery/resources.json",
+    "acceptance": "delivery/acceptance.json",
+    "new_archive_bytes": 920741396,
+    "final_declared_artifact_bytes": 49331097600
+  }
 }

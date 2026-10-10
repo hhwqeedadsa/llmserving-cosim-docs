@@ -225,3 +225,14 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 每个恢复 case 包含新 `detail/`，可用已有 `archive pack --release-expanded` 生成另一个完整归档后释放展开文件。路径分析另行保留，旧包不覆盖。串行恢复、补采、核验、归档，避免四份展开图同时占用磁盘；先检查现存累计占用与预计额外空间，不能用原执行峰值保证补采也能装下。
+
+本轮补证根目录按 `durations/`、`paths/`、`archives/` 和 `path-comparison.json` 保存上述结果后，可统一核验四个正常 case 和四份补采的覆盖及归档绑定，不展开图或重跑仿真：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.review_delivery \
+  --delivery runs/scaleup_issue_screening/delivery \
+  --original-archives runs/scaleup_issue_screening/archives \
+  --output runs/scaleup_issue_screening/delivery/acceptance.json
+```
+
+检查读取原包与新包摘要、指定清单成员以及统计文件，核对二进制、随机配置、实际完成时刻、不扰动证据和共有任务身份。逐文件完整归档核验由保存阶段完成；此命令不是硬件校准、E3 信息收益评价或新一次仿真。

@@ -6,7 +6,7 @@
 
 查看本轮发现先读[研究结论](conclusions.md)，核对具体过程再看 [E1 正常业务](results/e1/README.md)和 [E2 成因对照](results/e2/README.md)。[资源汇总](results/resources.md)说明实际耗时、内存、保存空间及计量边界；复现或恢复结果见[操作说明](usage.md)。
 
-2026-10-10 的[交付复核](results/delivery-review.md)更正了原先的全部验收判断：已有运行与数值保留，排队持续时长、实际路径核验及阶段结束判断仍需补充。
+2026-10-10 的[交付复核](results/delivery-review.md)发现并补齐了时长与路径两项缺口，同时修正原先过宽的 E3 停止判断。[补证证据](results/delivery/README.md)保存全覆盖时长范围、候选路径变化及不扰动检查；不把这些研究者内部核验称为测量算法收益。
 
 ## 接手入口
 

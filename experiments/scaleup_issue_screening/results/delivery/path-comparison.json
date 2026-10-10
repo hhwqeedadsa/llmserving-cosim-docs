@@ -1,0 +1,615 @@
+{
+  "schema_version": "issue-screening-actual-path-comparison/1",
+  "baseline_summary_sha256": "2ef85cd7755c45420864ee57c911311e2dc3d7ca2dd35a14ca24a8852ca8a983",
+  "baseline_tasks": 12,
+  "cases": [
+    {
+      "case": "g0-b2-expert-half",
+      "summary_sha256": "5016f2efcd1178a44e07815d83368af946302762b6eafaa3a1639701a35902c3",
+      "tasks_compared": 12,
+      "tasks_with_changed_paths": 8,
+      "packets_compared": 20,
+      "packets_with_changed_paths": 14,
+      "comparisons": [
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1802,
+          "control_latency_ns": 1842
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1884,
+          "control_latency_ns": 1633
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36192,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1177,
+          "control_latency_ns": 1245
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1832,
+          "control_latency_ns": 1961
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1914,
+          "control_latency_ns": 1934
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 0,
+          "message_id": 36194,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 88
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 0,
+          "message_id": 36825,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2347,
+          "control_latency_ns": 2258
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 0,
+          "message_id": 36825,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2300,
+          "control_latency_ns": 2152
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36826,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1129,
+          "control_latency_ns": 850
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36827,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2261,
+          "control_latency_ns": 2322
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36827,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2220,
+          "control_latency_ns": 2253
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 0,
+          "message_id": 36828,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 88
+        }
+      ]
+    },
+    {
+      "case": "g0-b2-expert-double",
+      "summary_sha256": "f13df1faf0e811f2437a3a13fb3475c9fa804e548c1cdeeef551935e1d95d9fe",
+      "tasks_compared": 12,
+      "tasks_with_changed_paths": 6,
+      "packets_compared": 20,
+      "packets_with_changed_paths": 10,
+      "comparisons": [
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1802,
+          "control_latency_ns": 1776
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1884,
+          "control_latency_ns": 1798
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36192,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1177,
+          "control_latency_ns": 1482
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1832,
+          "control_latency_ns": 1938
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1914,
+          "control_latency_ns": 2063
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36194,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 88
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 0,
+          "message_id": 36825,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2347,
+          "control_latency_ns": 2347
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 0,
+          "message_id": 36825,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2300,
+          "control_latency_ns": 2300
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 0,
+          "message_id": 36826,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1129,
+          "control_latency_ns": 1129
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 0,
+          "message_id": 36827,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2261,
+          "control_latency_ns": 2261
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 0,
+          "message_id": 36827,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2220,
+          "control_latency_ns": 2220
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 0,
+          "message_id": 36828,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 88
+        }
+      ]
+    },
+    {
+      "case": "g0-b2-local-fence",
+      "summary_sha256": "d7891c616a615439785b3501026b5f13dc5dddbcbda3d8ad2fc81304c09bc89c",
+      "tasks_compared": 12,
+      "tasks_with_changed_paths": 12,
+      "packets_compared": 20,
+      "packets_with_changed_paths": 20,
+      "comparisons": [
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1802,
+          "control_latency_ns": 1273
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36191,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1884,
+          "control_latency_ns": 1122
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36192,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1177,
+          "control_latency_ns": 2607
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 1832,
+          "control_latency_ns": 1055
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36193,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 1914,
+          "control_latency_ns": 1045
+        },
+        {
+          "operation_id": "D.w0.L7.combine",
+          "src_rank": 70,
+          "dst_rank": 27,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36194,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 339
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36825,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2347,
+          "control_latency_ns": 1759
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36825,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2300,
+          "control_latency_ns": 1882
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36826,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 1129,
+          "control_latency_ns": 1972
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            0,
+            8192
+          ],
+          "changed_packets": 2,
+          "message_id": 36827,
+          "chunk_index": 0,
+          "packets": 2,
+          "baseline_latency_ns": 2261,
+          "control_latency_ns": 1723
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "data",
+          "pair_byte_range": [
+            8192,
+            14336
+          ],
+          "changed_packets": 2,
+          "message_id": 36827,
+          "chunk_index": 1,
+          "packets": 2,
+          "baseline_latency_ns": 2220,
+          "control_latency_ns": 1805
+        },
+        {
+          "operation_id": "D.w0.L8.combine",
+          "src_rank": 65,
+          "dst_rank": 58,
+          "message_role": "status",
+          "pair_byte_range": [
+            0,
+            32
+          ],
+          "changed_packets": 1,
+          "message_id": 36828,
+          "chunk_index": 0,
+          "packets": 1,
+          "baseline_latency_ns": 88,
+          "control_latency_ns": 569
+        }
+      ]
+    }
+  ],
+  "identity": "operation, source, consumer, message role/ordinal, chunk and byte ranges, with source-token digest checked; packet UIDs not compared across cases",
+  "boundary": "Candidate paths only; random-state equality does not fix paths; input-change total effects do not isolate queueing."
+}

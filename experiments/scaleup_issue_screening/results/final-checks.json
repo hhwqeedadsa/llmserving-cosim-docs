@@ -18,5 +18,12 @@
   "comparison_sha256": "ab5556727ea56255e8c1bcf52232bafa18145f34a00a4899890f163bacfd5f91",
   "archive_hashes_rechecked": true,
   "command_log": "runs/scaleup_issue_screening/entry-audit/commands.jsonl",
-  "pushed": false
+  "pushed": false,
+  "passed_scope": "Execution and tooling checks recorded on 2026-10-09; not full experiment delivery acceptance",
+  "delivery_review": {
+    "date": "2026-10-10",
+    "overall_delivery_acceptance": false,
+    "report": "delivery-review.md",
+    "evidence": "delivery-review-evidence.json"
+  }
 }

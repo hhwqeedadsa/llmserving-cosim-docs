@@ -1,0 +1,165 @@
+{
+  "review_date": "2026-10-10",
+  "review_completed": true,
+  "overall_delivery_acceptance": false,
+  "scope": "read existing archived manifests and validation results, compare record fields and original plan; no simulation rerun; archive member hashes checked, not full archive revalidation",
+  "formal_runs": [
+    {
+      "case_id": "g0-b2-short",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+      "archive_recorded_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T14:50:54.814815+00:00",
+      "manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "1e5684808f77cd60121bd515a5bc511ae7070b2691a12628fbe8bac3af7cfdcc",
+      "sampled_queue_record_fields": [
+        "direction",
+        "fifo_waiting_byte_ns",
+        "fifo_waiting_mean_bytes",
+        "fifo_waiting_peak_bytes",
+        "local_window_end_ns",
+        "local_window_start_ns",
+        "port_id",
+        "switch_id",
+        "voq_waiting_byte_ns",
+        "voq_waiting_mean_bytes",
+        "voq_waiting_peak_bytes"
+      ]
+    },
+    {
+      "case_id": "g0-b4-short",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b4-short.tar.gz",
+      "archive_recorded_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T15:17:20.478997+00:00",
+      "manifest_sha256": "15830023b2190abf36d9c9bf892267fdc64c2b74678a6662559fd9839cd96658",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "e77b315f78c5cf926a4e2ea0c3a8703c6b09a62058b6462c5a73721bbacebb16"
+    },
+    {
+      "case_id": "g0-b8-short",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz",
+      "archive_recorded_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T15:49:50.505556+00:00",
+      "manifest_sha256": "1826bd32d433f791ab57c76db6f6b86c160511ecec6f65b3af67c62ea8fd1251",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "b9fcd34173492788d5f8af5d32ef36a5abc278a034a747ba894f64d453874553"
+    },
+    {
+      "case_id": "g0-b8-long",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b8-long.tar.gz",
+      "archive_recorded_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T16:53:24.183370+00:00",
+      "manifest_sha256": "ca55c2ac25c98f3faf5d87a6dd6f301240020cffda2940e718e7ff170f0595c2",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "a401a75f9182d33d5159116ad2b4ede9bd839766df60d9dbee65abadd275e981"
+    },
+    {
+      "case_id": "g0-b2-expert-half",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b2-expert-half.tar.gz",
+      "archive_recorded_sha256": "2a9b1314652cbfc90d8e6cb3285e124be9ac8fa7041674efd94b5652a73d5d84",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T17:21:21.671004+00:00",
+      "manifest_sha256": "adfa5ed84b4306733cc6781920fb5f7fa1c4def751e755402999eabb375f9d2c",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "5c6e96a3862de8a4fa632853c89cfdb7da0b7f628b974af45950540d5d1d4052"
+    },
+    {
+      "case_id": "g0-b2-expert-double",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b2-expert-double.tar.gz",
+      "archive_recorded_sha256": "64f218db141d8662867a368134d5ba8495fe124da19bb312ab3c8ff02a9ce000",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T17:41:39.234534+00:00",
+      "manifest_sha256": "765f527e99b6786fa7d18b7d7374403086658df6ee532036cd8ad9297796b5b6",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "3772cd58811fad24386038a969f08efa679a764019b7b0fe8043af51c9c3d24a"
+    },
+    {
+      "case_id": "g0-b2-local-fence",
+      "archive": "runs/scaleup_issue_screening/archives/g0-b2-local-fence.tar.gz",
+      "archive_recorded_sha256": "eb3b528a2c52625d86d73f0b7a34d23cb30872ac4f0d520c21d83682726ba131",
+      "raw_queue_state_files": 0,
+      "normal_exit": true,
+      "finished_utc": "2026-10-09T18:09:17.076117+00:00",
+      "manifest_sha256": "93efcce9decd6ffca82d5fd081a1459c77a840e0bd65ff4f4572fe85da99fbf4",
+      "random": {
+        "run": 1,
+        "seed": 1
+      },
+      "validation_passed": true,
+      "validation_sha256": "e398d7055c98d69956b8c709f440ca61fda22f7013538ce0f650138d9f80399d"
+    }
+  ],
+  "source_files": 1024,
+  "distinct_source_sha256": 1024,
+  "capture_policy": {
+    "schema_version": "moe-ub-observation-recording/1",
+    "mode": "aggregate",
+    "detail_ranges": [],
+    "truth_categories": [
+      "business_data",
+      "attached_metadata",
+      "dispatch_count",
+      "combine_flag"
+    ],
+    "max_detail_events_per_port": 500000,
+    "max_window_attribution_entries": 4096
+  },
+  "control_path_equality_verified": [
+    {
+      "case_id": "g0-b2-expert-half",
+      "value": false
+    },
+    {
+      "case_id": "g0-b2-expert-double",
+      "value": false
+    },
+    {
+      "case_id": "g0-b2-local-fence",
+      "value": false
+    }
+  ],
+  "gaps": [
+    "E1: no separately delivered queue nonempty duration or continuous waiting interval; byte-ns area and fixed window length do not provide it",
+    "E2: actual transfer paths not verified; only configured routing/random seed and aggregate port traffic compared"
+  ],
+  "not_additional_requirements": [
+    "no requirement to obtain a positive congestion result",
+    "no requirement to classify every native wait",
+    "no requirement to freeze every packet path"
+  ],
+  "command_log": "runs/scaleup_issue_screening/delivery-review-20261010/commands.jsonl"
+}

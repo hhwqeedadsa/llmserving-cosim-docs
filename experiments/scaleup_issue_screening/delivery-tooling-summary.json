@@ -256,10 +256,13 @@
     "limitation": "No source-device departure or per-packet VOQ admission time; port occupancy is not selected-packet waiting or avoidable business loss.",
     "files": {
       "queues.json": "94f951f3f5b007f06251228a3eb84cde50c62f5e822c81aff4c266bfad696899",
-      "packets.jsonl": "c2edf0e16c7c1d418fd2e6907aa91fe84907fed655f8c6d8dd547a9097754bec",
-      "transfers.json": "939f2233864f21956ee6b0a51fa3d509425d012e04367c142dbdb7a315722751"
+      "packets.jsonl": "cf9ce4e6a33cbfe68a01297f7b7de0d89b0f1b9f58dd1f9b9048dfe1fff5cb4c",
+      "transfers.json": "b1708196ccaf3d70651915382b3d94d763837ff16b7b66127cd54c177af82986"
     },
-    "program_sha256": "aa09d862e1b12ac7fcf503a11b34f9e2f651a942ed60bcd64decb8633fc936d4"
+    "program_sha256": "cdd590b5f12399cfb20999080e205ce575e5bdbb6fec3882fa425866b50f3594"
   },
-  "completion_note": "Path analysis run separately after correcting optional port_service handling; original simulator execution retained. Queue sparse-encoding and path-analysis input mistakes retain their logs."
+  "completion_note": "Path analysis run separately after correcting optional port_service handling; original simulator execution retained. Queue sparse-encoding and path-analysis input mistakes retain their logs.",
+  "unit_checks_passed": 5,
+  "existing_experiment_checks_passed": 11,
+  "path_analysis_directory": "runs/scaleup_issue_screening/delivery-small-complete/path-analysis-final"
 }

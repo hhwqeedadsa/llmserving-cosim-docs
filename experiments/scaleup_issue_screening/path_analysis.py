@@ -2,6 +2,7 @@
 import argparse
 from collections import defaultdict
 import json
+import hashlib
 from pathlib import Path
 import sys
 
@@ -51,15 +52,18 @@ def reconstruct(packets, transfer, links, kinds):
         regions=points[0]['ranges']
         require(all(p['ranges']==regions for p in points),'Application identity changed between hops')
         require(len({p['node_id'] for p in points})==len(points),'Packet revisits a switch')
+        residences=[]
         for a,b in zip(points,points[1:]):
             link=links[a['node_id'],a['port_id'],'egress']
             require(link['target']==b['node_id'] and b['start_ns']>=a['busy_until_ns']+link['delay_ns'],
                     'Disconnected path or propagation precedes serialization')
+            residences.append(b['start_ns']-a['busy_until_ns']-link['delay_ns'])
         last=points[-1];link=links[last['node_id'],last['port_id'],'egress']
         require(link['target']==actual['dst_ub_node'],'Final hop does not reach consumer')
         require(points[0]['start_ns']>=actual['send_start_ns'],'Packet predates task submission')
         covered.extend(regions)
-        details.append(dict(packet_uid=uid,departures=points,arrival_ns=last['busy_until_ns']+link['delay_ns']))
+        details.append(dict(packet_uid=uid,departures=points,arrival_ns=last['busy_until_ns']+link['delay_ns'],
+            intermediate_arrival_to_departure_ns=residences))
     require(details,'Selected transfer has no captured packets')
     expected=merged_ranges((r['begin'],r['end']) for r in plan['payload_regions'] if r['kind']!='padding')
     require(merged_ranges(covered)==expected,'Captured application ranges do not cover the selected task')
@@ -124,10 +128,14 @@ def analyze(detail, output):
                     ports=[[p['node_id'],p['port_id']] for p in packet['departures']]))
             summaries.append(dict(transfer_id=tid,operation_id=plan['operation_id'],src_rank=plan['src_rank'],
                 dst_rank=plan['dst_rank'],message_role=plan['message_role'],pair_byte_range=plan['pair_byte_range'],
+                message_id=plan['message_id'],chunk_index=plan['chunk_index'],
+                sources_sha256=hashlib.sha256(json.dumps(plan['sources'],sort_keys=True,separators=(',',':')).encode()).hexdigest(),
                 task_byte_range=plan['task_byte_range'],payload_bytes=plan['payload_bytes'],packets=len(packets),
                 send_start_ns=actual['send_start_ns'],data_ready_ns=actual['data_ready_ns'],
                 latency_ns=actual['data_ready_ns']-actual['send_start_ns'],
                 before_first_switch_start_ns=min(p['departures'][0]['start_ns'] for p in packets)-actual['send_start_ns'],
+                captured_completion_span_ns=actual['data_ready_ns']-min(p['departures'][0]['start_ns'] for p in packets),
+                intermediate_arrival_to_departure_ns=distribution([d for p in packets for d in p['intermediate_arrival_to_departure_ns']]),
                 fifo_residence_ns=distribution([p['fifo_enqueue_to_start_ns'] for packet in packets for p in packet['departures']]),
                 path_signatures=sorted(signatures,key=lambda x:x['ranges'])))
     save(output/'transfers.json',summaries);save(output/'queues.json',queues)

@@ -3,9 +3,15 @@ import unittest
 from .duration_bounds import window_bounds
 from .path_analysis import queue_duration, reconstruct
 from .path_replay import shortest_ports
+from .compare_paths import identity
 
 
 class DeliveryChecks(unittest.TestCase):
+    def test_repeated_equal_size_messages_are_distinct(self):
+        row=dict(operation_id='combine',src_rank=1,dst_rank=2,message_role='status',
+            message_id=3,chunk_index=0,pair_byte_range=[0,32],task_byte_range=[0,32])
+        self.assertNotEqual(identity(row),identity(dict(row,message_id=4)))
+
     def test_bounds_contain_known_occupancy(self):
         # 10 bytes for 3 ns, zero for 7 ns: area 30, duration 3.
         self.assertEqual(window_bounds(30,10,10),(3,10))

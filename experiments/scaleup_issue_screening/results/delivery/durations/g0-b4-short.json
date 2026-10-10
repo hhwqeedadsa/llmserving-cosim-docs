@@ -1,0 +1,104 @@
+{
+  "schema_version": "issue-screening-queue-duration-bounds/1",
+  "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+  "input_members": {
+    "run/observed/public_config.json": {
+      "bytes": 458380,
+      "sha256": "d909bee75eb11079cf99a4e39e144d31cd136f88bd49aa92eecc7b23d8557515"
+    },
+    "run/observed/storage.json": {
+      "bytes": 932,
+      "sha256": "f6c2fe845aa866e10bf3f4ba56212b7389a52e692e4a337a24ed832c9a21b80f"
+    },
+    "run/observed/records/queue_windows.csv.gz": {
+      "bytes": 4942672,
+      "sha256": "6d46197dc35502475f1ac4d1c57e3e4574a475f7727a958f56328067e1584fba"
+    },
+    "run/manifest.json": {
+      "bytes": 5010122,
+      "sha256": "15830023b2190abf36d9c9bf892267fdc64c2b74678a6662559fd9839cd96658"
+    },
+    "run/metrics/validation.json": {
+      "bytes": 789629,
+      "sha256": "e77b315f78c5cf926a4e2ea0c3a8703c6b09a62058b6462c5a73721bbacebb16"
+    },
+    "run/inputs/observation.json": {
+      "bytes": 89312,
+      "sha256": "eeda15ae00cb3e48210f5df89f10b0ef6201be59557f030a35f0267347c49ec9"
+    }
+  },
+  "program_sha256": "b0b522ec50508c134ed0e986a0e8a4bd55f6e5e6f864912464ef68f48cad82e6",
+  "ports": 2688,
+  "stored_windows": 264950,
+  "windows": 26880000,
+  "definition": "per-port time with waiting bytes > 0, VOQ and FIFO separately",
+  "bound": "sum floor(area/peak) <= nonempty time <= sum width of positive-area windows",
+  "precision": "outward lower rounding < 1 ns per positive window; actual uncertainty is upper minus lower",
+  "continuous_backlog_reconstructed": false,
+  "device_queues_observed": false,
+  "positive_window_runs_are_continuous_backlog": false,
+  "complete_declared_coverage": true,
+  "distributions": {
+    "voq": {
+      "nonempty_lower_ns": {
+        "n": 2688,
+        "minimum": 149,
+        "median": 220.5,
+        "mean": 326.8043154761905,
+        "p95": 654,
+        "maximum": 4313,
+        "spread": 4164
+      },
+      "nonempty_upper_ns": {
+        "n": 2688,
+        "minimum": 64000,
+        "median": 98000.0,
+        "mean": 98418.52678571429,
+        "p95": 127000,
+        "maximum": 145000,
+        "spread": 81000
+      },
+      "max_positive_window_run_ns": {
+        "n": 2688,
+        "minimum": 7000,
+        "median": 20500.0,
+        "mean": 21022.321428571428,
+        "p95": 32000,
+        "maximum": 42000,
+        "spread": 35000
+      }
+    },
+    "fifo": {
+      "nonempty_lower_ns": {
+        "n": 2688,
+        "minimum": 0,
+        "median": 222.0,
+        "mean": 346.30543154761904,
+        "p95": 994,
+        "maximum": 4924,
+        "spread": 4924
+      },
+      "nonempty_upper_ns": {
+        "n": 2688,
+        "minimum": 1000,
+        "median": 11000.0,
+        "mean": 11244.047619047618,
+        "p95": 19000,
+        "maximum": 40000,
+        "spread": 39000
+      },
+      "max_positive_window_run_ns": {
+        "n": 2688,
+        "minimum": 1000,
+        "median": 2000.0,
+        "mean": 2458.7053571428573,
+        "p95": 4000,
+        "maximum": 15000,
+        "spread": 14000
+      }
+    }
+  },
+  "ports_sha256": "c0fe548ed2fd9033b509cfa191753e15c66ba45dc80408bfeb8290576b0ef9cb",
+  "run_directory": "runs/scaleup_issue_screening/delivery/durations/g0-b4-short",
+  "resource_report": "runs/scaleup_issue_screening/delivery/durations/g0-b4-short-resources/probe.json"
+}

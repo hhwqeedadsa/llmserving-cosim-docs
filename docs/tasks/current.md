@@ -25,7 +25,7 @@
 | M19（P2）资源与关键依赖 | `completed` | 独立核、缓冲、真实完成与 Token 归约；[小型验收](../../fixtures/m19_a3_resources/README.md) |
 | M20（P3）内部事实与有限层段 | `completed` | 公共准备、运行、事实导出、保存与回放；[流程证据](../../fixtures/m20_segment_facts/README.md) |
 | M21（P4）平台独立验收 | `completed` | 四类小测试、采集不扰动、128/1024 请求三层执行与切片核验；[最终验收](../../fixtures/m21_platform/README.md) |
-| E1 正常业务探索 | 验收 `pending` | 四次运行与主要分析完成；待补排队持续时长的定义和交付；[正常结果](../../experiments/scaleup_issue_screening/results/e1/README.md) |
+| E1 正常业务探索 | `completed` | 四次原运行及全 2688 出口的非空时长上下界已交付；明确原聚合精度，未冒充连续积压；[正常结果](../../experiments/scaleup_issue_screening/results/e1/README.md) |
 | E2 成因与稳健性 | 验收 `pending` | 三次对照及依赖核验完成；待补实际路径核验，并修正阶段结束判断；[成因结果](../../experiments/scaleup_issue_screening/results/e2/README.md) |
 | E3 测量价值 | `pending` | 未执行；需按具体诊断任务判断，不能以所有网络等待未分清一概排除 |
 | E4 完整场景 | `conditional` | 未执行；仍以成因及信息比较通过为前提 |

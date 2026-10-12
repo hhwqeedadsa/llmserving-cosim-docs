@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import shutil
 import yaml
 
 from moe_ub_cosim.native_queue import checked_rows
@@ -117,9 +118,32 @@ def main():
     replay['host']['artifact_roots']=[str(out)]
     cli('replay','replay','--slice',out/'slice','--config',save(out/'replay.json',replay),'--output',out/'replay')
     assert list(stored_rows(out/'quota/truth','native_queue.jsonl'))==list(stored_rows(out/'replay/truth','native_queue.jsonl'))
+    shutil.copytree(out/'slice/inputs/network',out/'quota-network')
+    network=read(out/'quota-network/backend.json')
+    network['attributes']['ns3::UbLdstThread::StoreOutstanding']='2'
+    save(out/'quota-network/backend.json',network)
+    replay['network']=str(out/'quota-network')
+    cli('quota-replay','replay','--slice',out/'slice','--config',save(out/'quota-replay.json',replay),'--output',out/'quota-replay')
+    cli('quota-replay-validate','validate','--run',out/'quota-replay')
+    changed=out/'quota-replay/raw/execution';changed_report=read(changed/'result.json')
+    changed_rows=list(checked_rows(changed,changed_report))
+    assert all(r['store_capacity']==2 and r['request_pool_capacity']==256 for r in changed_rows)
+    def issued_ranges(rows):
+        return sorted((r['rank_id'],r['affected']['identity']['transfer_id'],r['affected']['thread_id'],
+                       r['affected']['offset'],r['affected']['bytes']) for r in rows if r['event']=='request_issued')
+    assert issued_ranges(changed_rows)==issued_ranges(list(checked_rows(runs['quota'],read(runs['quota']/'result.json'))))
+    assert list(iter_result(changed,'planned_transfers'))==list(iter_result(runs['quota'],'planned_transfers'))
+    # The whitelist cannot silently change fragmentation, task profile or pools.
+    for key,value in [('ns3::UbLdstInstance::ThreadNum','2'),('ns3::UbLdstApi::RequestIdCount','128'),
+                      ('ns3::UbLdstThread::StoreRequestSize','512')]:
+        rejected=deepcopy(network);rejected['attributes'][key]=value
+        save(out/'quota-network/backend.json',rejected)
+        label='reject-'+key.split('::')[-1]
+        cli(label,'replay','--slice',out/'slice','--config',out/'quota-replay.json','--output',out/label,fail=True)
+        assert 'Replay cannot change' in (out/label/'logs/resources-replay/stderr.log').read_text()
     save(out/'summary.json',dict(passed=True,cases=summaries,passive_execution_and_wire=True,
         independent_request_conservation=True,worker_split_changes_status_requests=[1,32],replay_identical=True,
-        overflow_rejected=True))
+        overflow_rejected=True,quota_override_changes_only_capacity=True,other_native_overrides_rejected=True))
     print('PASS native queue branch oracle, passive execution, fragmentation confound, bounded truth and replay')
 
 

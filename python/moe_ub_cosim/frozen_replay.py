@@ -21,7 +21,7 @@ def network_input(source, output, override, binary):
     changed = {name for name in original if original[name] != replacement[name]}
     structured=(source/'backend.json').exists()
     require(changed <= ({'backend.json'} if structured else {'topology.csv'}),
-            'Replay may change only structured port service/native spray, or legacy topology.csv delay')
+            'Replay may change only structured port service/native spray/STORE quota, or legacy topology.csv delay')
     overrides={}
     if structured:
         before,after=read(source/'backend.json'),read(actual/'backend.json')
@@ -31,6 +31,7 @@ def network_input(source, output, override, binary):
                     'Unsupported replay backend schema')
             value.pop('port_service',None)
             value['attributes'].pop('ns3::UbLdstApi::UsePacketSpray',None)
+            value['attributes'].pop('ns3::UbLdstThread::StoreOutstanding',None)
             return value
         require(fixed(before)==fixed(after),'Replay cannot change task profiles, endpoints, base topology or other backend parameters')
         if 'port_service' in after:
@@ -43,6 +44,14 @@ def network_input(source, output, override, binary):
             require(any(p['programming_model']=='native_memory' for p in after['profiles'].values()) and
                     after['attributes'][key] in ('true','false'),'Spray replay override requires native memory')
             overrides[key]=dict(before=before['attributes'][key],after=after['attributes'][key])
+        key='ns3::UbLdstThread::StoreOutstanding'
+        if before['attributes'].get(key)!=after['attributes'].get(key):
+            value=after['attributes'].get(key)
+            require(any(p['programming_model']=='native_memory' and p['operation']=='STORE'
+                        for p in after['profiles'].values()) and isinstance(value,str) and
+                    re.fullmatch(r'[1-9][0-9]*',value) and 1<=int(value)<=65536,
+                    'STORE quota replay override requires native STORE and an integer string in 1..65536')
+            overrides[key]=dict(before=before['attributes'].get(key),after=value)
     elif changed:
         def rows(path):
             with path.open(newline='') as stream:

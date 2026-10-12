@@ -126,12 +126,12 @@ moe-ub validate --run runs/demo-replay
 |---|---|
 | 端口采样周期、窗口、设备时钟或已捕获端口的子集 | 修改观测配置后使用 `sample` |
 | 旧式 CSV 网络中的链路传播时延 | 修改允许的网络列后使用 `replay` |
-| 结构化网络的有向出口速率区间、原生逐包喷洒开关 | 修改 `backend.json` 中下述允许字段后使用 `replay` |
+| 结构化网络的有向出口速率区间、原生逐包喷洒开关、STORE 请求额度 | 修改 `backend.json` 中下述允许字段后使用 `replay` |
 | 模型、请求、组批、专家选择、专家放置或计算耗时 | 修改前端输入，重新 `run` 生成任务 |
 
 旧式网络的 `replay` 允许修改 `topology.csv` 的 `delay` 列，值为非负整数加 `ns`，例如 `320ns`。复制原网络目录、只修改该列，再让重放配置的 `network` 指向新目录；文件集合、行顺序、端点、带宽和其他设置必须相同。
 
-包含 `backend.json` 的结构化网络允许覆盖 `port_service`，以及使用原生 STORE/LOAD 时的 `attributes["ns3::UbLdstApi::UsePacketSpray"]`（字符串 `"true"` / `"false"`）。新增服务区间时将后端配置格式改为 `moe-ub-backend-config/3`；其余字段、来源声明和目录文件保持原值。软件记录原始文件摘要和前后参数，对副本补充实际覆盖来源并再次执行后端校验。结构化重放尚不接受基础拓扑、链路延迟、其他路由设置或任意属性修改；版本兼容检查见[后端说明](../backend/README.md)。
+包含 `backend.json` 的结构化网络允许覆盖 `port_service`，以及使用原生 STORE/LOAD 时的 `attributes["ns3::UbLdstApi::UsePacketSpray"]`（字符串 `"true"` / `"false"`），以及原生 STORE 的 `attributes["ns3::UbLdstThread::StoreOutstanding"]`（字符串形式的整数 1～65536）。请求额度按 worker 生效；只改变额度不会改变 worker 数、每份任务的字节拆分或端点共享编号池，实际请求顺序、网络竞争及完成时间仍由本次执行决定。新增服务区间时将后端配置格式改为 `moe-ub-backend-config/3`；其余字段、来源声明和目录文件保持原值。软件记录原始文件摘要和前后参数，对副本补充实际覆盖来源并再次执行后端校验。结构化重放尚不接受基础拓扑、链路延迟、其他路由设置或任意属性修改；版本兼容检查见[后端说明](../backend/README.md)。
 
 `port_service` 使用 `moe-ub-port-service/1`，包含正整数 `execution_end_ns` 和最多 4096 个 `intervals`。每条区间写明物理 `node_id`、`port_id`、`start_ns`、`end_ns`、正整数 `rate_bps`。仅指定方向受影响；同一出口按起点排序且不得重叠，区间为 `[start_ns, end_ns)`，到期恢复拓扑中配置的速率。`[0, execution_end_ns)` 可表示整个执行范围的速率覆盖。已在发送的包保持开始时确定的速率。
 

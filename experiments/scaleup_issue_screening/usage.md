@@ -236,3 +236,16 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 检查读取原包与新包摘要、指定清单成员以及统计文件，核对二进制、随机配置、实际完成时刻、不扰动证据和共有任务身份。逐文件完整归档核验由保存阶段完成；此命令不是硬件校准、E3 信息收益评价或新一次仿真。
+
+核对 C1 两条既有时间链与实际对象参数时，直接流式读取原归档，CANN 源码目录使用来源清单指定的固定版本：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.mechanism_review \
+  --archive runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz \
+  --witnesses experiments/scaleup_issue_screening/results/e2/baseline-witnesses.json \
+  --source-root runs/v03-cann-behavior/cann-source \
+  --source-manifest fixtures/m10_cann/source-evidence.json \
+  --output runs/scaleup_issue_screening/c1-mechanism-review.json
+```
+
+输出保存分段时间、并列前驱、传输业务身份、实际对象回读和来源摘要。该操作不恢复大图或执行仿真；源码目录若移动，可修改 `--source-root`，文件内容仍须与清单一致。

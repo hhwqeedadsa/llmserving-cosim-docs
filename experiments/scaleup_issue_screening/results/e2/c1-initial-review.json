@@ -1,0 +1,954 @@
+{
+  "schema_version": "issue-screening-c1-initial-review/1",
+  "passed": true,
+  "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+  "archive_members": {
+    "run/raw/execution/effective_backend.json": {
+      "bytes": 151505056,
+      "sha256": "856f47b3d19ee91099546faf9b9ad1c0f7490be50086d75acf619dbc999a7873"
+    },
+    "run/raw/execution/records/node_execution-g0.jsonl.gz": {
+      "bytes": 5045226,
+      "sha256": "f7ecb21ebfc639a8ad9020d27ee6889286496598b295047899280f4eb990d96e"
+    },
+    "run/raw/execution/records/planned_transfers-g0.jsonl.gz": {
+      "bytes": 5297353,
+      "sha256": "cddcd0f1268c2ef169b4bbb3c941f4730ebe164b4ea9096343903abc4215cdeb"
+    },
+    "run/raw/execution/records/transfers-g0.jsonl.gz": {
+      "bytes": 6519131,
+      "sha256": "bf6e2b414e8db39029dc902f3d5915c5827d37e36e46e349d37e23d3a616b927"
+    },
+    "run/raw/execution/result.json": {
+      "bytes": 1629555,
+      "sha256": "22bb5f91150f6f51e914f08499bebbc63f375e0fb64c7e7c2c274276b9c849f6"
+    }
+  },
+  "witness_sha256": "bc4b93f903df7b2f5eaf533d0724f324806a7f5dfd630018d97d65a580dde433",
+  "chains": [
+    {
+      "layer_id": 7,
+      "consumer_rank": 27,
+      "source_rank": 70,
+      "core": "aiv:8",
+      "key_transfer_id": 4295045029,
+      "start_ns": 54198,
+      "end_ns": 66218,
+      "duration_ns": 12020,
+      "nonoverlapping_components_ns": {
+        "result_pack": 100,
+        "data_ready": 5732,
+        "local_read_complete": 6188
+      },
+      "steps": [
+        {
+          "node_id": 3231,
+          "kind": "result_pack",
+          "start_ns": 54198,
+          "end_ns": 54218,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 54198,
+              "node_id": 2708
+            }
+          ]
+        },
+        {
+          "node_id": 3234,
+          "kind": "data_ready",
+          "start_ns": 54218,
+          "end_ns": 55246,
+          "duration_ns": 1028,
+          "transfer_id": 4295045016,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77131,
+            "src_rank": 70,
+            "dst_rank": 25,
+            "message_id": 36185,
+            "chunk_index": 0,
+            "payload_bytes": 8192,
+            "business_payload_bytes": 8192,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "26",
+                "source_record_index": 50,
+                "token_index": 26,
+                "topk_index": 5
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 54218,
+              "node_id": 3231
+            }
+          ]
+        },
+        {
+          "node_id": 3241,
+          "kind": "local_read_complete",
+          "start_ns": 55246,
+          "end_ns": 57148,
+          "duration_ns": 1902,
+          "transfer_id": 4295045018,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77133,
+            "src_rank": 70,
+            "dst_rank": 25,
+            "message_id": 36186,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "26",
+                "source_record_index": 50,
+                "token_index": 26,
+                "topk_index": 5
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 55246,
+              "node_id": 3239
+            }
+          ]
+        },
+        {
+          "node_id": 3243,
+          "kind": "result_pack",
+          "start_ns": 57148,
+          "end_ns": 57168,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 57148,
+              "node_id": 3241
+            }
+          ]
+        },
+        {
+          "node_id": 3246,
+          "kind": "data_ready",
+          "start_ns": 57168,
+          "end_ns": 58475,
+          "duration_ns": 1307,
+          "transfer_id": 4295045019,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77134,
+            "src_rank": 70,
+            "dst_rank": 26,
+            "message_id": 36187,
+            "chunk_index": 0,
+            "payload_bytes": 8192,
+            "business_payload_bytes": 8192,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "27",
+                "source_record_index": 52,
+                "token_index": 10,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 57168,
+              "node_id": 3243
+            }
+          ]
+        },
+        {
+          "node_id": 3253,
+          "kind": "local_read_complete",
+          "start_ns": 58475,
+          "end_ns": 60251,
+          "duration_ns": 1776,
+          "transfer_id": 4295045021,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77136,
+            "src_rank": 70,
+            "dst_rank": 26,
+            "message_id": 36188,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "27",
+                "source_record_index": 52,
+                "token_index": 10,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 58475,
+              "node_id": 3251
+            }
+          ]
+        },
+        {
+          "node_id": 3255,
+          "kind": "result_pack",
+          "start_ns": 60251,
+          "end_ns": 60271,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 60251,
+              "node_id": 3253
+            }
+          ]
+        },
+        {
+          "node_id": 3261,
+          "kind": "data_ready",
+          "start_ns": 60271,
+          "end_ns": 61784,
+          "duration_ns": 1513,
+          "transfer_id": 4295045023,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77138,
+            "src_rank": 70,
+            "dst_rank": 26,
+            "message_id": 36189,
+            "chunk_index": 1,
+            "payload_bytes": 6144,
+            "business_payload_bytes": 6144,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "155",
+                "source_record_index": 53,
+                "token_index": 9,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 60271,
+              "node_id": 3255
+            }
+          ]
+        },
+        {
+          "node_id": 3265,
+          "kind": "local_read_complete",
+          "start_ns": 61784,
+          "end_ns": 63205,
+          "duration_ns": 1421,
+          "transfer_id": 4295045024,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77139,
+            "src_rank": 70,
+            "dst_rank": 26,
+            "message_id": 36190,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "155",
+                "source_record_index": 53,
+                "token_index": 9,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 61784,
+              "node_id": 3263
+            }
+          ]
+        },
+        {
+          "node_id": 3267,
+          "kind": "result_pack",
+          "start_ns": 63205,
+          "end_ns": 63225,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 63205,
+              "node_id": 3265
+            }
+          ]
+        },
+        {
+          "node_id": 3273,
+          "kind": "data_ready",
+          "start_ns": 63225,
+          "end_ns": 65109,
+          "duration_ns": 1884,
+          "transfer_id": 4295045026,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77141,
+            "src_rank": 70,
+            "dst_rank": 27,
+            "message_id": 36191,
+            "chunk_index": 1,
+            "payload_bytes": 6144,
+            "business_payload_bytes": 6144,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "28",
+                "source_record_index": 54,
+                "token_index": 10,
+                "topk_index": 4
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 63225,
+              "node_id": 3267
+            }
+          ]
+        },
+        {
+          "node_id": 3277,
+          "kind": "local_read_complete",
+          "start_ns": 65109,
+          "end_ns": 66198,
+          "duration_ns": 1089,
+          "transfer_id": 4295045027,
+          "identity": {
+            "operation_id": "D.w0.L7.combine",
+            "ub_task_id": 77142,
+            "src_rank": 70,
+            "dst_rank": 27,
+            "message_id": 36192,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  141
+                ],
+                "layer_id": 7,
+                "phase": "decode",
+                "request_id": "28",
+                "source_record_index": 54,
+                "token_index": 10,
+                "topk_index": 4
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 65109,
+              "node_id": 3275
+            }
+          ]
+        },
+        {
+          "node_id": 3279,
+          "kind": "result_pack",
+          "start_ns": 66198,
+          "end_ns": 66218,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 66198,
+              "node_id": 3277
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "layer_id": 8,
+      "consumer_rank": 58,
+      "source_rank": 65,
+      "core": "aiv:20",
+      "key_transfer_id": 4295086595,
+      "start_ns": 95268,
+      "end_ns": 107851,
+      "duration_ns": 12583,
+      "nonoverlapping_components_ns": {
+        "result_pack": 100,
+        "data_ready": 8177,
+        "local_read_complete": 4306
+      },
+      "steps": [
+        {
+          "node_id": 5545,
+          "kind": "result_pack",
+          "start_ns": 95268,
+          "end_ns": 95288,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 95268,
+              "node_id": 4299
+            }
+          ]
+        },
+        {
+          "node_id": 5551,
+          "kind": "data_ready",
+          "start_ns": 95288,
+          "end_ns": 97018,
+          "duration_ns": 1730,
+          "transfer_id": 4295086584,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118396,
+            "src_rank": 65,
+            "dst_rank": 56,
+            "message_id": 36819,
+            "chunk_index": 1,
+            "payload_bytes": 6144,
+            "business_payload_bytes": 6144,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "185",
+                "source_record_index": 113,
+                "token_index": 42,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 95288,
+              "node_id": 5545
+            }
+          ]
+        },
+        {
+          "node_id": 5555,
+          "kind": "local_read_complete",
+          "start_ns": 97018,
+          "end_ns": 98386,
+          "duration_ns": 1368,
+          "transfer_id": 4295086585,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118397,
+            "src_rank": 65,
+            "dst_rank": 56,
+            "message_id": 36820,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "185",
+                "source_record_index": 113,
+                "token_index": 42,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 97018,
+              "node_id": 5553
+            }
+          ]
+        },
+        {
+          "node_id": 5557,
+          "kind": "result_pack",
+          "start_ns": 98386,
+          "end_ns": 98406,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 98386,
+              "node_id": 5555
+            }
+          ]
+        },
+        {
+          "node_id": 5563,
+          "kind": "data_ready",
+          "start_ns": 98406,
+          "end_ns": 100386,
+          "duration_ns": 1980,
+          "transfer_id": 4295086587,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118399,
+            "src_rank": 65,
+            "dst_rank": 57,
+            "message_id": 36821,
+            "chunk_index": 1,
+            "payload_bytes": 6144,
+            "business_payload_bytes": 6144,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "58",
+                "source_record_index": 114,
+                "token_index": 17,
+                "topk_index": 5
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 98406,
+              "node_id": 5557
+            }
+          ]
+        },
+        {
+          "node_id": 5567,
+          "kind": "local_read_complete",
+          "start_ns": 100386,
+          "end_ns": 101544,
+          "duration_ns": 1158,
+          "transfer_id": 4295086588,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118400,
+            "src_rank": 65,
+            "dst_rank": 57,
+            "message_id": 36822,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "58",
+                "source_record_index": 114,
+                "token_index": 17,
+                "topk_index": 5
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 100386,
+              "node_id": 5565
+            }
+          ]
+        },
+        {
+          "node_id": 5569,
+          "kind": "result_pack",
+          "start_ns": 101544,
+          "end_ns": 101564,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 101544,
+              "node_id": 5567
+            }
+          ]
+        },
+        {
+          "node_id": 5572,
+          "kind": "data_ready",
+          "start_ns": 101564,
+          "end_ns": 103684,
+          "duration_ns": 2120,
+          "transfer_id": 4295086589,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118401,
+            "src_rank": 65,
+            "dst_rank": 57,
+            "message_id": 36823,
+            "chunk_index": 0,
+            "payload_bytes": 8192,
+            "business_payload_bytes": 8192,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "186",
+                "source_record_index": 115,
+                "token_index": 28,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 101564,
+              "node_id": 5569
+            }
+          ]
+        },
+        {
+          "node_id": 5579,
+          "kind": "local_read_complete",
+          "start_ns": 103684,
+          "end_ns": 104547,
+          "duration_ns": 863,
+          "transfer_id": 4295086591,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118403,
+            "src_rank": 65,
+            "dst_rank": 57,
+            "message_id": 36824,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "186",
+                "source_record_index": 115,
+                "token_index": 28,
+                "topk_index": 3
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 103684,
+              "node_id": 5577
+            }
+          ]
+        },
+        {
+          "node_id": 5581,
+          "kind": "result_pack",
+          "start_ns": 104547,
+          "end_ns": 104567,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 104547,
+              "node_id": 5579
+            }
+          ]
+        },
+        {
+          "node_id": 5584,
+          "kind": "data_ready",
+          "start_ns": 104567,
+          "end_ns": 106914,
+          "duration_ns": 2347,
+          "transfer_id": 4295086592,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118404,
+            "src_rank": 65,
+            "dst_rank": 58,
+            "message_id": 36825,
+            "chunk_index": 0,
+            "payload_bytes": 8192,
+            "business_payload_bytes": 8192,
+            "application_metadata_bytes": 0,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "59",
+                "source_record_index": 116,
+                "token_index": 22,
+                "topk_index": 4
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 104567,
+              "node_id": 5581
+            }
+          ]
+        },
+        {
+          "node_id": 5591,
+          "kind": "local_read_complete",
+          "start_ns": 106914,
+          "end_ns": 107831,
+          "duration_ns": 917,
+          "transfer_id": 4295086594,
+          "identity": {
+            "operation_id": "D.w0.L8.combine",
+            "ub_task_id": 118406,
+            "src_rank": 65,
+            "dst_rank": 58,
+            "message_id": 36826,
+            "chunk_index": 0,
+            "payload_bytes": 32,
+            "business_payload_bytes": 0,
+            "application_metadata_bytes": 32,
+            "sources": [
+              {
+                "expert_ids": [
+                  130
+                ],
+                "layer_id": 8,
+                "phase": "decode",
+                "request_id": "59",
+                "source_record_index": 116,
+                "token_index": 22,
+                "topk_index": 4
+              }
+            ]
+          },
+          "latest_dependency_ties": [
+            {
+              "end_ns": 106914,
+              "node_id": 5589
+            }
+          ]
+        },
+        {
+          "node_id": 5593,
+          "kind": "result_pack",
+          "start_ns": 107831,
+          "end_ns": 107851,
+          "duration_ns": 20,
+          "transfer_id": null,
+          "identity": null,
+          "latest_dependency_ties": [
+            {
+              "end_ns": 107831,
+              "node_id": 5591
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "requested_native_attributes": {
+    "ns3::UbLdstInstance::ThreadNum": "1",
+    "ns3::UbLdstThread::StoreOutstanding": "32",
+    "ns3::UbLdstThread::StoreRequestSize": "4096",
+    "ns3::UbLdstApi::RequestIdCount": "256"
+  },
+  "effective_objects": [
+    {
+      "attributes": {
+        "ns3::UbLdstApi::RequestIdCount": "256",
+        "ns3::UbLdstApi::UsePacketSpray": "true",
+        "ns3::UbLdstApi::UseShortestPaths": "true"
+      },
+      "node_id": 65,
+      "role": "native_api"
+    },
+    {
+      "attributes": {
+        "ns3::UbLdstInstance::QueuePriority": "1",
+        "ns3::UbLdstInstance::ThreadNum": "1"
+      },
+      "node_id": 65,
+      "role": "native_instance"
+    },
+    {
+      "attributes": {
+        "ns3::UbLdstThread::LoadOutstanding": "32",
+        "ns3::UbLdstThread::LoadRequestSize": "64",
+        "ns3::UbLdstThread::LoadResponseSize": "4096",
+        "ns3::UbLdstThread::StoreOutstanding": "32",
+        "ns3::UbLdstThread::StoreRequestSize": "4096"
+      },
+      "node_id": 65,
+      "role": "native_thread:0"
+    },
+    {
+      "attributes": {
+        "ns3::UbLdstApi::RequestIdCount": "256",
+        "ns3::UbLdstApi::UsePacketSpray": "true",
+        "ns3::UbLdstApi::UseShortestPaths": "true"
+      },
+      "node_id": 70,
+      "role": "native_api"
+    },
+    {
+      "attributes": {
+        "ns3::UbLdstInstance::QueuePriority": "1",
+        "ns3::UbLdstInstance::ThreadNum": "1"
+      },
+      "node_id": 70,
+      "role": "native_instance"
+    },
+    {
+      "attributes": {
+        "ns3::UbLdstThread::LoadOutstanding": "32",
+        "ns3::UbLdstThread::LoadRequestSize": "64",
+        "ns3::UbLdstThread::LoadResponseSize": "4096",
+        "ns3::UbLdstThread::StoreOutstanding": "32",
+        "ns3::UbLdstThread::StoreRequestSize": "4096"
+      },
+      "node_id": 70,
+      "role": "native_thread:0"
+    }
+  ],
+  "fixed_source": {
+    "repository": "https://gitcode.com/cann/ops-transformer",
+    "revision": "6ead121aded45355043b502756b6592fd7c30b14",
+    "files_checked": [
+      {
+        "path": "LICENSE",
+        "sha256": "cb282ac2b66d7d6734c3fb354db792b28cf23ab29fbc16d5cfd8bd542bedeb1e",
+        "bytes": 5278
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.cpp",
+        "sha256": "37fa7102ec975cc304891c9313a5b4305f018d9164ecb9199cba4bdc0b2dba21",
+        "bytes": 11274
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.h",
+        "sha256": "cd6592894c268a83fd682b164920e3cbad672f79faafc2fa07e02df848947c18",
+        "bytes": 75738
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_v2_base.h",
+        "sha256": "9e5e0ae58b11f65256132fbe4f34ee5211d7018ff6a4c204002e5d1e7d0b0cb8",
+        "bytes": 3589
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_host/op_tiling/moe_distribute_dispatch_v2_tiling.cpp",
+        "sha256": "4e1c875b2d078aadeec16f3421cb2853100dab132ecf383c669c3d2ee94ef773",
+        "bytes": 92118
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.cpp",
+        "sha256": "176af6e47526071dc57cf4e98701ec1327b41ea122d8a23c029decb96ec8ef95",
+        "bytes": 6828
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+        "sha256": "82ef8554a8a311f30d73cef3398b9846f5f40a7a6a821d6f037d93fcf4f4f274",
+        "bytes": 68608
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_host/op_tiling/moe_distribute_combine_v2_tiling.cpp",
+        "sha256": "69be2c748ec80f6a2dd79238dce14c41cbee78e0af1a8b9bb8d230a56ee57300",
+        "bytes": 103538
+      }
+    ],
+    "selected_call": {
+      "architecture": "A3",
+      "dispatch": "MoeDistributeDispatchV2",
+      "combine": "MoeDistributeCombineV2",
+      "comm_alg": "fullmesh_v1",
+      "tp_world_size": 1,
+      "dispatch_quant_mode": 2,
+      "combine_quant_mode": 0,
+      "smooth_scales": false,
+      "shared_expert_num": 0,
+      "shared_expert_rank_num": 0,
+      "expert_shard_type": 0,
+      "elastic_info": false,
+      "special_experts": false,
+      "active_mask": "prefix-active within configured equal slots"
+    }
+  },
+  "limitations": [
+    "Witness predecessor ties retained; this is not unique-cause or avoidable-time attribution",
+    "Per-request queue state and resource release owners require passive supplemental capture"
+  ],
+  "simulation_executed": false,
+  "program_sha256": "72b3f892b8104fe55a452dbeff1988042988e9d30b1f09abd8ed772ef373d187"
+}

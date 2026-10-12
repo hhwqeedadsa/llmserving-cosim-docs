@@ -1,8 +1,8 @@
 # 当前任务与交接
 
-继续 **Scale-Up 正常业务问题筛选**，当前执行项为既有候选 C1 的 E2 增量机制核验，状态 `pending`。2026-10-12 用户确认沿原任务继续，重点解释专家计算结束后约 12 μs 的发送推进过程。不开新任务、里程碑、平台版本或实验目录，不自动进入 E3。
+继续 **Scale-Up 正常业务问题筛选**，当前执行项为既有候选 C1 的 E2 增量机制核验，状态 `in_progress`。2026-10-12 用户确认沿原任务继续，重点解释专家计算结束后约 12 μs 的发送推进过程。不开新任务、里程碑、平台版本或实验目录，不自动进入 E3。
 
-本次交接只修改文档。Codex 按下述范围开展核查、必要的小型实现与验证；尚未执行新的构建、测试或仿真。原平台验收、E1/E2 已完成运行及交付补证继续有效，新增核验不追溯改写这些执行事实。
+已同步远端交接提交 `c2e6389`，主仓库与所有子模块开始时干净。两条时间链、原始记录绑定、实际对象参数和固定 CANN 文件摘要已复核通过；13 项依赖检查通过。正在补充仅覆盖两供数端的有界请求队列记录，先进行小型启停等价验证。原平台验收、E1/E2 已完成运行及交付补证继续有效，新增核验不追溯改写这些执行事实。
 
 ## 基线与阅读入口
 
@@ -15,7 +15,7 @@
 | 平台 P：M18～M21 | `completed` | [平台验收](../../fixtures/m21_platform/README.md)；不重开 v0.5 开发清单 |
 | E1 正常业务探索 | `completed` | [E1 结果](../../experiments/scaleup_issue_screening/results/e1/README.md)；沿用输入与已保存结果 |
 | E2 原对照及交付补证 | `completed` | [E2 结果](../../experiments/scaleup_issue_screening/results/e2/README.md)、[交付复核](../../experiments/scaleup_issue_screening/results/delivery-review.md)；保留原事实与归档 |
-| E2：C1 发送推进机制核验 | `pending` | 按候选文档先复核两条前驱链，再核查请求队列、资源占用及核内同步 |
+| E2：C1 发送推进机制核验 | `in_progress` | 按候选文档先复核两条前驱链，再核查请求队列、资源占用及核内同步 |
 | E3、E4 | `pending` / `conditional` | 均未执行；不在本次执行范围，机制核验后先作候选去留判断 |
 
 旧任务的检查、资源与发布记录完整保留在[交接前快照](https://github.com/baoy21/moe-ub-cosim/blob/6ebe4984280465316f90886ccdbf4f66f4fe9d49/docs/tasks/current.md)。本次状态变化表示继续同一候选，不表示旧结果通过了新增的现实机制核验。
@@ -44,6 +44,6 @@
 
 运行与恢复方法沿用[实验操作](../../experiments/scaleup_issue_screening/usage.md)，旧资料位置见[资源汇总](../../experiments/scaleup_issue_screening/results/resources.md)和[补证索引](../../experiments/scaleup_issue_screening/results/delivery/README.md)。新增产物使用该实验已有 `runs/scaleup_issue_screening/` 下的新运行路径，不覆盖历史输入和结果。
 
-本页目前停止于文档交接，下一项是 C1 的现有证据复核。每批验证后记录实际代码及依赖提交、检查摘要、结果入口和下一步；详细命令及日志留在运行目录。新解释写回对应候选和结论小节，新增结果在实际形成后更新既有 E2 结果组织，不预建空报告。
+[已有证据复核](../../experiments/scaleup_issue_screening/results/e2/c1-initial-review.json)已完成：第 7 层 100+5732+6188=12020 ns，第 8 层 100+8177+4306=12583 ns；都由原始归档事件及传输字节身份核对。实际对象确认为 ThreadNum=1、StoreOutstanding=32、RequestIdCount=256。选择单 worker 的提交未记录硬件依据。累计产物当前约 45.943 GiB，剩余约 2.057 GiB；新增隔离构建预计约 0.1 GiB，先验证后再预检恢复。命令、首次读取错误与修正后的日志在 `runs/scaleup_issue_screening/c1-mechanism-20261012/`。当前下一项为最小被动请求队列记录和启停等价检查。每批验证后记录实际代码及依赖提交、检查摘要、结果入口和下一步；详细命令及日志留在运行目录。新解释写回对应候选和结论小节，新增结果在实际形成后更新既有 E2 结果组织，不预建空报告。
 
 本次用户授权发布交接文档。Codex 后续按范围实现、验证并建立本地检查点；新的远端推送仍需明确授权。涉及子模块按由内向外的顺序保存提交、更新 gitlink 与锁文件，不改写被已有证据引用的历史提交。

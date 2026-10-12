@@ -65,6 +65,10 @@ def capabilities(observation,ranks,max_ns):
         result.update(schema_version='moe-ub-capture-capabilities/2',endpoint_send_state=dict(
             policy=observation['send_state'],coverage_start_ns=0,coverage_end_ns=max_ns,
             resampling='rank_clock_transform_preserves_all_state_updates'))
+    if 'native_queue' in observation:
+        result.update(schema_version='moe-ub-capture-capabilities/3',native_queue_truth=dict(
+            policy=observation['native_queue'],access_scope='internal_truth_not_observed',
+            resampling='preserves_original_global_time_and_full_capture_policy'))
     return result
 
 
@@ -89,6 +93,7 @@ def sampling_plan(source,target,ranks,max_ns):
     require(('statistics' in target)==('statistics' in source),'Requested statistics were not captured or differ from source; rerun simulation')
     require(target.get('recording')==source.get('recording'),'Sampling preserves the capture policy and retained message categories')
     require(target.get('send_state')==source.get('send_state'),'Send-state observations were not captured or policy differs; rerun simulation')
+    require(target.get('native_queue')==source.get('native_queue'),'Native queue truth was not captured or policy differs; rerun simulation')
     by_port={(p['switch_id'],p['port_id']):p for p in available};result={}
     for port in selected:
         key=port['switch_id'],port['port_id'];require(key in by_port,'Requested port was not captured; rerun simulation')

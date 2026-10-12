@@ -32,7 +32,7 @@ class ResultRecords
 {
     using Json = nlohmann::json;
   public:
-    ResultRecords(Json& report, Json policy, bool stages=false, bool send_state=false) : report_(report), policy_(std::move(policy)), stages_(stages)
+    ResultRecords(Json& report, Json policy, bool stages=false, bool send_state=false, bool native_queue=false) : report_(report), policy_(std::move(policy)), stages_(stages)
     {
         if (!policy_.is_null())
         {
@@ -41,6 +41,7 @@ class ResultRecords
                 policy_.at("max_buffer_bytes"), policy_.at("max_record_bytes"));
             for (const auto* field : {"wqe_starts", "wqe_completions", "target_writes", "native_starts", "native_completions"}) Register(field, "");
             if(send_state) Register("send_state", "");
+            if(native_queue) Register("native_queue", "");
             for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                      "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"}) ordered_[field];
             if(stages_) ordered_["operation_stages"];

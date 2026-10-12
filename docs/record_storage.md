@@ -34,6 +34,29 @@
 
 ## 计数位置与字节口径
 
+### 原生请求队列诊断
+
+`moe-ub-observation-config/5` 在已有 `statistics`、`recording` 和预算之外接受 `native_queue`。可与 `send_state` 同时配置；未配置时不订阅、不生成请求队列流。配置必须恰好包含：
+
+```json
+{"schema_version":"moe-ub-native-queue-config/1","rank_ids":[2],"end_ns":100000,"max_records":100000,"max_snapshot_items":1024}
+```
+
+`rank_ids` 选择发起端，必须属于本次运行。所有被选端点的所有原生 worker（请求处理器）都被覆盖，从仿真零时刻开始，到 `min(end_ns, simulation_end_ns)` 为止。`end_ns` 不超过仿真上限；`max_records` 限制总行数及登记身份数；`max_snapshot_items` 限制每行队列与在途请求总数，上限 65536。另受原始存储、导出单行/压缩空间和宿主预算约束，任何超限均失败。较大的并发额度会增大每条快照，需预检，不应盲目开启全端点记录。
+
+`truth/native_queue.jsonl` 使用全局 `time_ns` 和连续 `sequence`，包含 rank、实际节点与 worker 编号，STORE/LOAD 当前占用与额度、端点共享请求编号池容量、该 worker 的两个有序任务队列，以及整个端点的在途请求。每份任务含真实图、传输和 SEND 节点身份；每份在途请求含编号、任务字节偏移与长度。`affected` 指向触发该行的任务/请求。事件为：
+
+| event | 实际读取位置 |
+|---|---|
+| `initial` / `final` | 零时刻初始状态 / 覆盖结束时的状态 |
+| `task_queued` | 任务段进入 worker 队列后 |
+| `request_issued` | 请求实际形成且占用 worker 额度后 |
+| `outstanding_blocked` | worker 达到对应额度且队列仍非空的分支 |
+| `request_pool_blocked` | API 分配共享请求编号失败的分支 |
+| `response_released` | 响应释放编号和 worker 额度后，完成回调之前 |
+
+若执行超过采集终点，`final` 使用终点之前最后一次真实状态，不新增仿真事件；状态可以非空。`truth/native_queue_capture.json` 给出覆盖、策略、条数和零丢弃声明。该流与 `observed/` 隔离，不能作为分析算法输入；它不是交换机排队或硬件流水线测量。通过 `iter_result(execution, 'native_queue')` 读取原始记录，通过 `stored_rows(truth, 'native_queue.jsonl')` 读取导出记录。`slice inspect` 声明此内部采集能力，`sample` 保留原采集策略和全局时刻；旧记录必须重新执行后端才能补齐。公共操作见[原生小例](../examples/native_first_round/README.md)。
+
 ### 端侧发送资源状态
 
 显式输入 `moe-ub-observation-config/4` 的 `send_state` 开启采集；同时要求已有的 `statistics`、`recording`、观测预算和有界原始记录策略。省略该项时保留原版本行为。策略为：

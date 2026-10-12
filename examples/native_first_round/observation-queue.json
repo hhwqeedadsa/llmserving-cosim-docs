@@ -1,0 +1,90 @@
+{
+  "record_provenance": true,
+  "clocks": [
+    {
+      "device_type": "rank",
+      "device_id": 2,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 7,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "rank",
+      "device_id": 12,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    },
+    {
+      "device_type": "switch",
+      "device_id": 4,
+      "offset_ns": 0,
+      "drift_ppb": 0
+    }
+  ],
+  "switches": [
+    {
+      "switch_id": 4,
+      "port_ids": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "start_local_ns": 0,
+      "end_local_ns": 1000000,
+      "period_ns": 127
+    }
+  ],
+  "schema_version": "moe-ub-observation-config/5",
+  "statistics": {
+    "schema_version": "moe-ub-observation-statistics/1",
+    "queue_waiting_bytes": true,
+    "operation_stages": true
+  },
+  "resource_budget": {
+    "schema_version": "moe-ub-observation-resources/1",
+    "max_ports": 8,
+    "max_windows_per_port": 20000,
+    "max_total_windows": 40000,
+    "max_event_bytes_per_port": 16777216,
+    "max_ledger_packets": 100000,
+    "max_registered_transfers": 10000,
+    "max_export_bytes": 67108864
+  },
+  "recording": {
+    "schema_version": "moe-ub-observation-recording/1",
+    "mode": "aggregate",
+    "detail_ranges": [
+      {
+        "switch_id": 4,
+        "port_id": 4,
+        "start_ns": 2000,
+        "end_ns": 36000
+      }
+    ],
+    "truth_categories": [
+      "business_data",
+      "attached_metadata",
+      "dispatch_count",
+      "combine_flag",
+      "load_ready"
+    ],
+    "max_detail_events_per_port": 10000,
+    "max_window_attribution_entries": 1000
+  },
+  "native_queue": {
+    "schema_version": "moe-ub-native-queue-config/1",
+    "rank_ids": [
+      2
+    ],
+    "end_ns": 100000,
+    "max_records": 100000,
+    "max_snapshot_items": 1024
+  }
+}

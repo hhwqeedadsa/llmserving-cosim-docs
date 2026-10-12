@@ -48,7 +48,12 @@ def validate_observation(config, ranks, max_ns):
     statistics='statistics' in config
     recording='recording' in config
     send_state='send_state' in config
-    version='moe-ub-observation-config/4' if send_state else 'moe-ub-observation-config/3'
+    native_queue='native_queue' in config
+    version='moe-ub-observation-config/5' if native_queue else 'moe-ub-observation-config/4' if send_state else 'moe-ub-observation-config/3'
+    if native_queue:
+        from .native_queue import policy
+        require(recording and statistics and config.get('schema_version')==version,'Native queue requires observation-config/5 recording and statistics')
+        policy(config['native_queue'],ranks,max_ns)
     if send_state:
         from .send_state import validate_policy
         require(recording and statistics and config.get('schema_version')==version,'Send-state requires observation-config/4 recording and statistics')
@@ -65,7 +70,7 @@ def validate_observation(config, ranks, max_ns):
     limits=budget or dict(max_ports=16,max_windows_per_port=4096,max_total_windows=16*4096)
     if recording:require(len(config['recording']['detail_ranges'])<=limits['max_ports'],'Detail port budget exceeded')
     require(set(config)=={'clocks','switches','record_provenance'}|({'resource_budget'} if budget is not None else set())|
-            ({'schema_version','statistics'} if statistics else set())|({'recording'} if recording else set())|({'send_state'} if send_state else set()) and
+            ({'schema_version','statistics'} if statistics else set())|({'recording'} if recording else set())|({'send_state'} if send_state else set())|({'native_queue'} if native_queue else set()) and
             type(config['record_provenance']) is bool,'Invalid observation fields/provenance flag')
     require(isinstance(config['clocks'],list) and isinstance(config['switches'],list) and
             1<=len(config['switches'])<=limits['max_ports'],'Require observed switches and device clocks')
@@ -136,6 +141,8 @@ def backend_observation(config, ranks, max_ns):
                 **{k:policy[k] for k in ('truth_categories','max_detail_events_per_port','max_window_attribution_entries')}))
     if 'send_state' in config:
         result.update(schema_version='moe-ub-port-observation-set/5',send_state=config['send_state'])
+    if 'native_queue' in config:
+        result.update(schema_version='moe-ub-port-observation-set/6',native_queue=config['native_queue'])
     return result
 
 

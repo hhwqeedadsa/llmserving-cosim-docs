@@ -6,6 +6,7 @@
 #include "execution_archive.hh"
 #include "result_records.hh"
 #include "send_state.hh"
+#include "native_queue.hh"
 #include "operation_stages.hh"
 #include "identity_ranges.hh"
 #include "port_observation.hh"
@@ -475,12 +476,20 @@ int main(int argc, char** argv)
         Require(max_ns > 0 && max_ns <= INT64_MAX, "Invalid simulation bound");
         std::vector<moe_ub::ObservationConfig> observation_configs;
         Json send_state_policy=nullptr;
+        Json native_queue_policy=nullptr;
         bool multiple_ports = false;
         if (std::string(argv[5]) != "-")
         {
             const auto input = ReadJson(fs::absolute(argv[5]));
-            const bool send_state=input.at("schema_version")=="moe-ub-port-observation-set/5";
-            const bool aggregate=send_state || input.at("schema_version")=="moe-ub-port-observation-set/4";
+            const bool native_queue=input.at("schema_version")=="moe-ub-port-observation-set/6";
+            const bool send_state=input.at("schema_version")=="moe-ub-port-observation-set/5" ||
+                (native_queue && input.contains("send_state"));
+            const bool aggregate=native_queue || send_state || input.at("schema_version")=="moe-ub-port-observation-set/4";
+            if(native_queue) {
+                native_queue_policy=input.at("native_queue");
+                moe_ub::NativeQueueRecords::Validate(native_queue_policy,ranks,max_ns);
+                Require(!storage_policy.is_null(),"Native queue capture requires bounded record storage");
+            }
             if(send_state) {
                 send_state_policy=input.at("send_state");
                 moe_ub::SendStateRecords::ValidatePolicy(send_state_policy,ranks.size());
@@ -492,7 +501,7 @@ int main(int argc, char** argv)
             if(streamed) moe_ub::ValidateObservationBudget(input.at("resource_budget"));
             if (multiple_ports)
             {
-                Require(input.size() == (send_state ? 4 : streamed ? 3 : 2) && input.at("ports").is_array() &&
+                Require(input.size() == ((streamed ? 3 : 2)+size_t(send_state)+size_t(native_queue)) && input.at("ports").is_array() &&
                         !input.at("ports").empty() && input.at("ports").size() <= (streamed ? input.at("resource_budget").at("max_ports").get<uint64_t>() : 16),
                         "Observation set exceeds port budget (legacy: 1..16)");
                 std::set<std::pair<uint32_t, uint32_t>> points;
@@ -575,7 +584,7 @@ int main(int argc, char** argv)
         if (backend_config) report["backend_parameters_active"] = true;
         const bool record_stages=std::any_of(observation_configs.begin(),observation_configs.end(),
             [](const auto& c){return !c.queue_sampling.is_null();});
-        moe_ub::ResultRecords records(report, storage_policy, record_stages, !send_state_policy.is_null());
+        moe_ub::ResultRecords records(report, storage_policy, record_stages, !send_state_policy.is_null(),!native_queue_policy.is_null());
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank : ranks)
@@ -614,6 +623,8 @@ int main(int argc, char** argv)
                     config.resource_budget.is_null() ? fs::path{} : fs::path("ports")/(std::to_string(config.switch_id)+"-"+std::to_string(config.port_id)), records.Store(),queue_sources));
             std::vector<std::unique_ptr<moe_ub::UbNetworkAdapter>> adapters;
             std::unique_ptr<moe_ub::SendStateRecords> send_state;
+            std::unique_ptr<moe_ub::NativeQueueRecords> native_queue;
+            if(!native_queue_policy.is_null()) native_queue=std::make_unique<moe_ub::NativeQueueRecords>(records,native_queue_policy,rank_node);
             std::vector<std::unique_ptr<AstraSim::Sys>> systems;
             Json resource_budget=nullptr, resource_used={{"graphs",0u},{"transfers",0u},{"nodes",0u}};
             for (const auto& group : groups)
@@ -1070,6 +1081,7 @@ int main(int argc, char** argv)
                     }
                     loaded.Install(systems, adapters, pointers, local_pointers);
                     PreparationStage(run_dir, "graph_and_transfers_installed");
+                    if(native_queue) native_queue->Register(plan.descriptors);
                     if (provenance) provenance->Register(plan.descriptors);
                     PreparationStage(run_dir, "provenance_registered");
                     expected_completions += plan.data.at("rank_ids").size();
@@ -1323,6 +1335,7 @@ int main(int argc, char** argv)
             }
             dl_iterate_phdr(Library, &report["loaded_libraries"]);
             if(send_state) report["send_state_capture"]=send_state->Finish();
+            if(native_queue) report["native_queue_capture"]=native_queue->Finish();
             records.Finish();
         }
         utils->Destroy(); ns3::Simulator::Destroy(); moe_ub::ShutdownAstraLogging();

@@ -47,3 +47,12 @@ moe-ub validate --run runs/native-slower-replay
 ```
 
 更换 `runs/native-input` 等默认目录时，也要修改 `run.json.inputs` 或 `replay-slower.json.network`。改变 STORE/LOAD、通信模板或已编入图的计算/准备成本，需要修改输入后重新 `run`。原生传输不使用 TP，多 TP 不属于本例；计算与通信参数都是参考值，结果不代表目标硬件时延。
+
+需要核查原生请求为什么没有发出时，在上述 `resolve` 后运行：
+
+```bash
+moe-ub run --config examples/native_first_round/run-queue.json --output runs/native-queue
+moe-ub validate --run runs/native-queue
+```
+
+`observation-queue.json` 选择 rank 2 从零时刻到 100000 ns 的请求队列，最多 100000 条记录，每条队列与在途请求合计最多 1024 项。输出 `truth/native_queue.jsonl` 是压缩存储中的逻辑表名，用 `stored_rows(Path('runs/native-queue/truth'), 'native_queue.jsonl')` 读取；`truth/native_queue_capture.json` 给出实际覆盖和完整性。字段见[请求队列格式](../../docs/record_storage.md#原生请求队列诊断)。这些内部身份只供机制核查，不属于算法可读的 `observed/`。启用记录不改变调度；超过任一记录上限会失败，不丢弃记录后宣称成功。

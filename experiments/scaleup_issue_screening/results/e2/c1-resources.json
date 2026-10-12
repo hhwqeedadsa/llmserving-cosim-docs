@@ -1,0 +1,1119 @@
+{
+  "schema_version": "issue-screening-c1-resource-review/1",
+  "source_directory": "runs/scaleup_issue_screening/c1-mechanism-20261012",
+  "limits": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "backend_limits": {
+    "rss_bytes": 51539607552,
+    "address_bytes": 60129542144,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 7200,
+    "min_free_bytes": 21474836480
+  },
+  "platform_checks": {
+    "small-native": {
+      "passed": false,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native.tar.gz"
+    },
+    "small-native-v2": {
+      "passed": false,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native-v2.tar.gz"
+    },
+    "small-native-v3": {
+      "passed": false,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native-v3.tar.gz"
+    },
+    "small-native-v4": {
+      "passed": false,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native-v4.tar.gz"
+    },
+    "small-native-v5": {
+      "passed": false,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native-v5.tar.gz"
+    },
+    "small-native-v6": {
+      "passed": true,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/small-native-v6.tar.gz"
+    },
+    "native-regression": {
+      "passed": true,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/native-regression.tar.gz"
+    },
+    "a3-regression": {
+      "passed": true,
+      "archive": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/a3-regression.tar.gz"
+    }
+  },
+  "platform_validation": "runs/scaleup_issue_screening/c1-mechanism-20261012/platform-validation.json",
+  "quota_replay_validation": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-validation.json",
+  "fresh_user_example": {
+    "passed": true,
+    "scope": "Fresh versioned user example via resolve/run/validate; mixed STORE/LOAD diagnostics with issue/release conservation; no historical simulation inputs.",
+    "events": {
+      "task_queued:STORE": 54,
+      "request_issued:STORE": 54,
+      "response_released:STORE": 54,
+      "task_queued:LOAD": 36,
+      "request_issued:LOAD": 36,
+      "response_released:LOAD": 36
+    },
+    "capture": {
+      "access_scope": "internal_truth_not_observed",
+      "complete": true,
+      "dropped_records": 0,
+      "end_ns": 47193,
+      "policy": {
+        "end_ns": 100000,
+        "max_records": 100000,
+        "max_snapshot_items": 1024,
+        "rank_ids": [
+          2
+        ],
+        "schema_version": "moe-ub-native-queue-config/1"
+      },
+      "records": 276,
+      "schema_version": "moe-ub-native-queue-capture/1",
+      "start_ns": 0,
+      "state_phase": "after_queue_issue_block_or_response_resource_release",
+      "workers": [
+        {
+          "node_id": 0,
+          "rank_id": 2,
+          "thread_id": 0
+        },
+        {
+          "node_id": 0,
+          "rank_id": 2,
+          "thread_id": 1
+        },
+        {
+          "node_id": 0,
+          "rank_id": 2,
+          "thread_id": 2
+        }
+      ]
+    },
+    "simulation_end_ns": 47193
+  },
+  "experiment_checks": {
+    "passed": true,
+    "command": [
+      "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+      "-m",
+      "unittest",
+      "experiments.scaleup_issue_screening.check_workflow"
+    ],
+    "environment": {
+      "PYTHONPATH": "python:."
+    },
+    "cwd": "/root/moe-ub-cosim",
+    "exit_code": 0,
+    "tests": 13,
+    "log": "runs/scaleup_issue_screening/c1-mechanism-20261012/tooling-check-final.stderr.log",
+    "program_sha256": "3c1592e3dc50a95b32907a64241b8e2920ad9c15cfbea6ac39b5821f7e3c6fd7",
+    "scope": "Experiment tooling only: verified restored-subset release, unknown-file refusal, retained hardlink preservation and reselecting the latest chunk with ties; no simulation"
+  },
+  "dependency_check_log": "runs/scaleup_issue_screening/c1-mechanism-20261012/final-dependencies.stdout.log",
+  "archives": [
+    {
+      "path": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+      "index": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz.json",
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "7794447a1444c21f58ef6b2e9539170a0f7f803910d4725d0dddb0170b1c1c84",
+      "archive_bytes": 125817644,
+      "logical_bytes": 559560068,
+      "verified": true,
+      "expanded_released": true
+    },
+    {
+      "path": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz",
+      "index": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz.json",
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "5966ae1f19118728157ba184474b5b67b7f460fdfd65e2787f6ef36e42f12726",
+      "archive_bytes": 143250067,
+      "logical_bytes": 586671005,
+      "verified": true,
+      "expanded_released": true
+    }
+  ],
+  "original_archive": "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+  "original_restore_release": {
+    "status": "completed",
+    "journal": "runs/scaleup_issue_screening/c1-mechanism-20261012/original.release.json",
+    "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+    "released_files": 56818
+  },
+  "stages": [
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/a3-regression-resources/probe.json",
+      "sha256": "a0a5f6b09b9e29b081ca76a4f1d7ab0d77d6ed65af1708daaf02989a219c0b5b",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:43:25.031267+00:00",
+      "ended_utc": "2026-10-12T07:44:01.911698+00:00",
+      "wall_seconds": 36.880442755296826,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49509797888,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_a3_resources.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/a3-regression"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture-analyze-resources/probe.json",
+      "sha256": "8baa83c141dd4a62ee6c1c1301d6b887a0948326d60b7f084e3560fc26145bf2",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:59:43.601181+00:00",
+      "ended_utc": "2026-10-12T08:00:41.449327+00:00",
+      "wall_seconds": 57.84815048798919,
+      "peak_sampled_group_rss_bytes": 247107584,
+      "peak_sampled_artifact_bytes": 51390345216,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "analyze",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture-compare-resources/probe.json",
+      "sha256": "517654d99e67e74d6a419f0cb25a1cd1e38772d542131a5c57364948c8329183",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:58:20.071244+00:00",
+      "ended_utc": "2026-10-12T07:59:43.524808+00:00",
+      "wall_seconds": 83.45357684604824,
+      "peak_sampled_group_rss_bytes": 30621696,
+      "peak_sampled_artifact_bytes": 51388907520,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "compare",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture-prepare-resources/probe.json",
+      "sha256": "e6b05c831001fefcdd99a2734ed6a075706c276a5504a56734879420d9f81b9e",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:49:35.031412+00:00",
+      "ended_utc": "2026-10-12T07:50:29.813899+00:00",
+      "wall_seconds": 54.78249190747738,
+      "peak_sampled_group_rss_bytes": 74604544,
+      "peak_sampled_artifact_bytes": 50788384768,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "prepare",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture",
+        "--backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--platform-commit",
+        "8fe4884",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz-resources/probe.json",
+      "sha256": "0a4a1426df12305c28b57c40403cf97136b6c2de4d91b953cee98c01839e8850",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:02:37.161424+00:00",
+      "ended_utc": "2026-10-12T08:03:45.367175+00:00",
+      "wall_seconds": 68.20575769431889,
+      "peak_sampled_group_rss_bytes": 115642368,
+      "peak_sampled_artifact_bytes": 51516178432,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/capture",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/diagnostic-build-resources/probe.json",
+      "sha256": "a16d78c3093d714e9e5d4125356e64e6a6038d66c7588db052cc6359b0ce907b",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:25:11.915971+00:00",
+      "ended_utc": "2026-10-12T07:25:48.354435+00:00",
+      "wall_seconds": 36.43848147429526,
+      "peak_sampled_group_rss_bytes": 5332992,
+      "peak_sampled_artifact_bytes": 49336078336,
+      "command": [
+        "cmake",
+        "--build",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-native",
+        "--target",
+        "cosim-service",
+        "cosim-plan-load-probe",
+        "native-runtime-test",
+        "-j",
+        "4"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/diagnostic-build-v2-resources/probe.json",
+      "sha256": "35f176b98472f20a3c99a6c6a6c80bc194dd56a80f25452208c67ad522de2662",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:31:35.944027+00:00",
+      "ended_utc": "2026-10-12T07:36:19.363673+00:00",
+      "wall_seconds": 283.4196440242231,
+      "peak_sampled_group_rss_bytes": 2838233088,
+      "peak_sampled_artifact_bytes": 49433145344,
+      "command": [
+        "cmake",
+        "--build",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-native",
+        "--target",
+        "cosim-service",
+        "cosim-plan-load-probe",
+        "cosim-native-runtime-test",
+        "-j",
+        "4"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/diagnostic-build-v3-resources/probe.json",
+      "sha256": "da29141b0674bda5d42311d5b50d1f95db2bb11c0624f3520c09558d37bada30",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:39:47.388708+00:00",
+      "ended_utc": "2026-10-12T07:40:55.834478+00:00",
+      "wall_seconds": 68.44577703811228,
+      "peak_sampled_group_rss_bytes": 1425641472,
+      "peak_sampled_artifact_bytes": 49451466752,
+      "command": [
+        "cmake",
+        "--build",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-native",
+        "--target",
+        "cosim-service",
+        "-j",
+        "4"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/diagnostic-configure-resources/probe.json",
+      "sha256": "fa891476ed7651f1a329bb0bc0c77237fef7e14a573168a9306512b7d0ddd64d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:24:35.341884+00:00",
+      "ended_utc": "2026-10-12T07:25:11.912110+00:00",
+      "wall_seconds": 36.57023614272475,
+      "peak_sampled_group_rss_bytes": 2105344,
+      "peak_sampled_artifact_bytes": 49336053760,
+      "command": [
+        "cmake",
+        "-S",
+        "/root/moe-ub-cosim/third_party/ns-3-ub",
+        "-B",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-native",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=release",
+        "-DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake",
+        "-DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m19-a3-resources/c1-native/output",
+        "-DNS3_ENABLED_MODULES=unified-bus",
+        "-DNS3_EXAMPLES=OFF",
+        "-DNS3_TESTS=OFF",
+        "-DNS3_MPI=OFF",
+        "-DNS3_MTP=OFF",
+        "-DNS3_ASSERT=OFF",
+        "-DNS3_LOG=OFF",
+        "-DNS3_WARNINGS_AS_ERRORS=OFF",
+        "-DNS3_NATIVE_OPTIMIZATIONS=OFF",
+        "-DNS3_CCACHE=OFF",
+        "-DNS3_PRECOMPILE_HEADERS=OFF",
+        "-DNS3_FETCH_OPTIONAL_COMPONENTS=OFF",
+        "-DNS3_NETANIM=OFF",
+        "-DNS3_CPM=OFF",
+        "-DNS3_VCPKG=OFF"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/initial-review-v2.json-resources/probe.json",
+      "sha256": "65b78dae504f31434420f1d7ffea94fcbd4f4464d78f5ac0afc602d5ce788acd",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:13:00.961913+00:00",
+      "ended_utc": "2026-10-12T07:13:46.984720+00:00",
+      "wall_seconds": 46.02281408198178,
+      "peak_sampled_group_rss_bytes": 214999040,
+      "peak_sampled_artifact_bytes": 49331183616,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.mechanism_review",
+        "--archive",
+        "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--witnesses",
+        "experiments/scaleup_issue_screening/results/e2/baseline-witnesses.json",
+        "--source-root",
+        "runs/v03-cann-behavior/cann-source",
+        "--source-manifest",
+        "fixtures/m10_cann/source-evidence.json",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/initial-review-v2.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/initial-review.json-resources/probe.json",
+      "sha256": "66048479655600c32ae16e8faff1c8f6f647c3344f212e9688320b04a1bb6cf7",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:10:59.664907+00:00",
+      "ended_utc": "2026-10-12T07:11:45.962812+00:00",
+      "wall_seconds": 46.29790619015694,
+      "peak_sampled_group_rss_bytes": 216293376,
+      "peak_sampled_artifact_bytes": 49331130368,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.mechanism_review",
+        "--archive",
+        "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--witnesses",
+        "experiments/scaleup_issue_screening/results/e2/baseline-witnesses.json",
+        "--source-root",
+        "runs/v03-cann-behavior/cann-source",
+        "--source-manifest",
+        "fixtures/m10_cann/source-evidence.json",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/initial-review.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/native-regression-resources/probe.json",
+      "sha256": "3b05e94f85d8266a49bf825f89d3a8d7705d46f907ba016deb76bb32fef3ac2f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:42:48.049934+00:00",
+      "ended_utc": "2026-10-12T07:43:25.027112+00:00",
+      "wall_seconds": 36.97718877904117,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "peak_sampled_artifact_bytes": 49502814208,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_behavior.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/native-regression"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/original-release-0-resources/probe.json",
+      "sha256": "dd2c7ec94aa7d75a92654f87902ec71d512d8d77edae67c25d485a1d4ddf1700",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:41:37.507171+00:00",
+      "ended_utc": "2026-10-12T08:42:32.098475+00:00",
+      "wall_seconds": 54.591313775628805,
+      "peak_sampled_group_rss_bytes": 163123200,
+      "peak_sampled_artifact_bytes": 51469774848,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "release-restored",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/original-release-2-resources/probe.json",
+      "sha256": "15efb581b89e32d1e4c19f970f9acf541257b8c74d2aec86d642517d1aebb279",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:13:58.585770+00:00",
+      "ended_utc": "2026-10-12T08:14:52.911515+00:00",
+      "wall_seconds": 54.32575360685587,
+      "peak_sampled_group_rss_bytes": 115281920,
+      "peak_sampled_artifact_bytes": 50878251008,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "release-restored",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker",
+        "--keep-directory",
+        "run",
+        "--keep-directory",
+        "slice"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/original-resources/probe.json",
+      "sha256": "6ed8dfa18526cbae6bdd33d125665a860f0f4bf0ff7bc7bfe551a2a81131b2dc",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:48:03.059482+00:00",
+      "ended_utc": "2026-10-12T07:49:27.394436+00:00",
+      "wall_seconds": 84.33496386744082,
+      "peak_sampled_group_rss_bytes": 315490304,
+      "peak_sampled_artifact_bytes": 50787123200,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "restore",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/pinned-build-resources/probe.json",
+      "sha256": "ec24454dda5c6eb6906e4646906dd1a41b0e9e727e084b6bab4327b8f0c242fd",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:45:57.486611+00:00",
+      "ended_utc": "2026-10-12T07:47:17.358070+00:00",
+      "wall_seconds": 79.87146853841841,
+      "peak_sampled_group_rss_bytes": 2764222464,
+      "peak_sampled_artifact_bytes": 49509855232,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "build",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--jobs",
+        "4"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-small-resources/probe.json",
+      "sha256": "8e48435c95fef2538d0d1be16be4ea4fbe6c9e4007d5cada5f2fff02b2c5f8b1",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T08:04:27.375393+00:00",
+      "ended_utc": "2026-10-12T08:05:09.700990+00:00",
+      "wall_seconds": 42.325597831979394,
+      "peak_sampled_group_rss_bytes": 6434816,
+      "peak_sampled_artifact_bytes": 50857586688,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-small"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-small-v2-resources/probe.json",
+      "sha256": "4388ec93c7fbcdf3e625b5f2c1e8755642086aa8494aed3cef0d9cecbad9690d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:06:43.227414+00:00",
+      "ended_utc": "2026-10-12T08:07:38.131312+00:00",
+      "wall_seconds": 54.90390324406326,
+      "peak_sampled_group_rss_bytes": 75636736,
+      "peak_sampled_artifact_bytes": 50878238720,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-small-v2"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-analyze-resources/probe.json",
+      "sha256": "539c004666aa84707085665c46a3cfd04d59d32f99d475ead8f92489d25cf247",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:27:02.429119+00:00",
+      "ended_utc": "2026-10-12T08:28:01.854298+00:00",
+      "wall_seconds": 59.42518503777683,
+      "peak_sampled_group_rss_bytes": 251969536,
+      "peak_sampled_artifact_bytes": 51469598720,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "analyze",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-effect-resources/probe.json",
+      "sha256": "c7b4c9971b123112e989d01fb02ee3f0c9d7ce1199ae777b78b119f7d8e084bf",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T08:28:01.934053+00:00",
+      "ended_utc": "2026-10-12T08:29:12.813419+00:00",
+      "wall_seconds": 70.87936845608056,
+      "peak_sampled_group_rss_bytes": 1296138240,
+      "peak_sampled_artifact_bytes": 51469623296,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "effect",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--baseline-capture",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-effect-v2-resources/probe.json",
+      "sha256": "f8b0c520c189f075f3908be7a9f23be57712f29371d4a39d82b45012e7b87919",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T08:34:20.143245+00:00",
+      "ended_utc": "2026-10-12T08:35:42.659028+00:00",
+      "wall_seconds": 82.51580440066755,
+      "peak_sampled_group_rss_bytes": 1418268672,
+      "peak_sampled_artifact_bytes": 51469660160,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "effect",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--baseline-capture",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-effect-v3-resources/probe.json",
+      "sha256": "92dfac62474a5d03c70449979ff781486de8a14dfab93de3e3502b42ea1bde5b",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:36:32.526461+00:00",
+      "ended_utc": "2026-10-12T08:38:08.366802+00:00",
+      "wall_seconds": 95.84034663066268,
+      "peak_sampled_group_rss_bytes": 1460330496,
+      "peak_sampled_artifact_bytes": 51469713408,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "effect",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--baseline-capture",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-effect-v4-resources/probe.json",
+      "sha256": "fbe4e0f401f52394c12450a2a99a18810b1703b2fa249de7aa513b27d2df2d58",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:39:20.778578+00:00",
+      "ended_utc": "2026-10-12T08:40:56.924771+00:00",
+      "wall_seconds": 96.14620236679912,
+      "peak_sampled_group_rss_bytes": 1373298688,
+      "peak_sampled_artifact_bytes": 51469766656,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "effect",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--baseline-capture",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64-prepare-resources/probe.json",
+      "sha256": "43dbe323f84355322cf3d95140ea97319fbb94157f53fab9c911c8009ea6a474",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:18:13.415675+00:00",
+      "ended_utc": "2026-10-12T08:19:09.610437+00:00",
+      "wall_seconds": 56.19477319344878,
+      "peak_sampled_group_rss_bytes": 75227136,
+      "peak_sampled_artifact_bytes": 50800799744,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.native_review",
+        "prepare",
+        "--case",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/original",
+        "--output",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--platform-commit",
+        "4e23dda",
+        "--store-outstanding",
+        "64",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz-resources/probe.json",
+      "sha256": "e19090a122fcc51a09690080c2255ad56415391f916fb13a6a0d1cf90f41dce3",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:42:32.186616+00:00",
+      "ended_utc": "2026-10-12T08:43:32.824961+00:00",
+      "wall_seconds": 60.638365998864174,
+      "peak_sampled_group_rss_bytes": 80912384,
+      "peak_sampled_artifact_bytes": 50423918592,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/quota64",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-resources/probe.json",
+      "sha256": "20f5d6ceb7419097a9092bc20b9f6ef18b8195337205f6b59a153fbdec885bd7",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:36:26.608272+00:00",
+      "ended_utc": "2026-10-12T07:37:02.824286+00:00",
+      "wall_seconds": 36.21601723693311,
+      "peak_sampled_group_rss_bytes": 6451200,
+      "peak_sampled_artifact_bytes": 49433178112,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v2-resources/probe.json",
+      "sha256": "aba6ff8da118cb93ff4e72c091c47fb33e742b05352e1c499e9347641ba9b3b5",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:37:02.932441+00:00",
+      "ended_utc": "2026-10-12T07:37:39.332327+00:00",
+      "wall_seconds": 36.39989157952368,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 49433210880,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v2"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v3-resources/probe.json",
+      "sha256": "df08cabd2df7c84c061b9df1a89d9c42fef61bc9b4965d1839a8d7a913d6ad7f",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:37:47.456202+00:00",
+      "ended_utc": "2026-10-12T07:38:23.243984+00:00",
+      "wall_seconds": 35.78778547793627,
+      "peak_sampled_group_rss_bytes": 6438912,
+      "peak_sampled_artifact_bytes": 49434787840,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v3"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v4-resources/probe.json",
+      "sha256": "61f61b42d13673faf06d764843685848877e92c72571d9ad742f825b6edadd09",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:38:26.181157+00:00",
+      "ended_utc": "2026-10-12T07:39:13.297200+00:00",
+      "wall_seconds": 47.11605231650174,
+      "peak_sampled_group_rss_bytes": 161181696,
+      "peak_sampled_artifact_bytes": 49451417600,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v4"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v5-resources/probe.json",
+      "sha256": "34b08ba27e8c512ebc0a59edcecb400ef737b7753ff395c3bd28d5976065680f",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "started_utc": "2026-10-12T07:40:53.663913+00:00",
+      "ended_utc": "2026-10-12T07:41:41.851117+00:00",
+      "wall_seconds": 48.18720574863255,
+      "peak_sampled_group_rss_bytes": 117506048,
+      "peak_sampled_artifact_bytes": 49468112896,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v5"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v6-resources/probe.json",
+      "sha256": "6cb9a9a6c969c9cadb5e3cd568f430853d0964ee026dc5e95daddf2bfff23648",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:42:00.877407+00:00",
+      "ended_utc": "2026-10-12T07:42:48.046019+00:00",
+      "wall_seconds": 47.16862504929304,
+      "peak_sampled_group_rss_bytes": 162525184,
+      "peak_sampled_artifact_bytes": 49487421440,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-native",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/small-native-v6"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run/logs/resources-export/probe.json",
+      "sha256": "5bb5c97108a962afb26a255d0c41437ab9ccfc3ada5435ec9d2825bf892430e3",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:44:24.525334+00:00",
+      "ended_utc": "2026-10-12T08:44:24.781238+00:00",
+      "wall_seconds": 0.2559168376028538,
+      "peak_sampled_group_rss_bytes": 20271104,
+      "peak_sampled_artifact_bytes": 2277376,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "export",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run/logs/resources-run/probe.json",
+      "sha256": "3db3fefe25abebb20bdb21325f22eb5fa6c60f68bc701047c9e2ed5572ae22e3",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:44:23.637013+00:00",
+      "ended_utc": "2026-10-12T08:44:24.524507+00:00",
+      "wall_seconds": 0.8875014670193195,
+      "peak_sampled_group_rss_bytes": 105967616,
+      "peak_sampled_artifact_bytes": 2138112,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "run",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/user-example-resolve-resources/probe.json",
+      "sha256": "94876600427a4ca24880011014a2f930c2e99cb5895c0f02ce0fed920ad67e0f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:43:37.245334+00:00",
+      "ended_utc": "2026-10-12T08:44:13.951957+00:00",
+      "wall_seconds": 36.70663761347532,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "peak_sampled_artifact_bytes": 49737850880,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "resolve",
+        "--config",
+        "/root/moe-ub-cosim/examples/native_first_round/scenario.yaml",
+        "--backend",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/inputs"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/user-example-run-resources/probe.json",
+      "sha256": "8cd89b2f089077757caad009c6edccb44c6ed8d9ba23c94c83c1d8434e067ee4",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:44:13.956291+00:00",
+      "ended_utc": "2026-10-12T08:44:50.956488+00:00",
+      "wall_seconds": 37.0002112723887,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49740193792,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "run",
+        "--config",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/user-example-validate-resources/probe.json",
+      "sha256": "514ca76803cec8df15bebf3a123d572f2ee5b8d183e195bca433b77a0ff3e76c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:44:50.960493+00:00",
+      "ended_utc": "2026-10-12T08:45:26.724564+00:00",
+      "wall_seconds": 35.76409152150154,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 49740210176,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "validate",
+        "--run",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/user-example/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/quota-replay-small-v2.tar.gz-resources/probe.json",
+      "sha256": "64715250b129a9349732eac90efea640a5ca4a85e40260cd705e66474f9a433a",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:18:42.353278+00:00",
+      "ended_utc": "2026-10-12T08:19:24.930336+00:00",
+      "wall_seconds": 42.57705528475344,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 50800799744,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/quota-replay-small-v2",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/validation-archives/quota-replay-small-v2.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz::run/logs/resources-export/probe.json",
+      "sha256": "929acfe35a3aa075e0a5bee2801d407e7973f5be59516020663f103550ed823c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:56:30.939523+00:00",
+      "ended_utc": "2026-10-12T07:58:06.003661+00:00",
+      "wall_seconds": 95.06415084935725,
+      "peak_sampled_group_rss_bytes": 62189568,
+      "peak_sampled_artifact_bytes": 51383455744,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "export",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/capture/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz::run/logs/resources-replay/probe.json",
+      "sha256": "152979f31713d8d1f3940a8b4917a364cae021652484d18306db288d5a36b821",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T07:52:42.551362+00:00",
+      "ended_utc": "2026-10-12T07:56:30.935545+00:00",
+      "wall_seconds": 228.3841903936118,
+      "peak_sampled_group_rss_bytes": 5916737536,
+      "peak_sampled_artifact_bytes": 51350265856,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "replay",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/capture/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz::run/logs/resources-export/probe.json",
+      "sha256": "c2c56f3285eae206ea01890c17722fcf407bf7bb80cbd0e26823450806859976",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:24:14.368705+00:00",
+      "ended_utc": "2026-10-12T08:25:49.698828+00:00",
+      "wall_seconds": 95.33013391308486,
+      "peak_sampled_group_rss_bytes": 59113472,
+      "peak_sampled_artifact_bytes": 51466747904,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "export",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/quota64/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    },
+    {
+      "evidence": "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz::run/logs/resources-replay/probe.json",
+      "sha256": "a8ba038a2c0b7484ecf89636ccddcb7a5e20d862b715e618e8a8e7cb0fe62cbc",
+      "status": "completed",
+      "child_exit_code": 0,
+      "started_utc": "2026-10-12T08:20:25.159160+00:00",
+      "ended_utc": "2026-10-12T08:24:14.364177+00:00",
+      "wall_seconds": 229.2050130981952,
+      "peak_sampled_group_rss_bytes": 5918576640,
+      "peak_sampled_artifact_bytes": 51416498176,
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "replay",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-mechanism-20261012/quota64/run"
+      ],
+      "cwd": "/root/moe-ub-cosim"
+    }
+  ],
+  "cumulative_sampled_peak_bytes": 51516178432,
+  "cumulative_final_usage": {
+    "apparent_bytes": 48582121941,
+    "allocated_bytes": 49740218368
+  },
+  "cumulative_final_charged_bytes": 49740218368,
+  "disk_free_bytes": 6500678725632,
+  "analysis_program_sha256": "eae185d52a06d96255c999c2ba26be599104128dc2337107a38c45e371b46841",
+  "notes": [
+    "Peak and current bytes cover all authorized artifact roots with inode deduplication; the larger of apparent and allocated bytes is charged.",
+    "Historical failed build/test/analysis attempts are retained. Successful process exit alone does not establish semantic acceptance.",
+    "quota64 effect v1 reused baseline chunk order and failed; v2 incorrectly used SEND completion instead of submission and failed; v3 consumer-selection shadowing was found in review and explicitly rejected in quota64-effect-v3-rejected.json. Corrected v4 reanalysis passed; no backend rerun was needed.",
+    "Only regenerated copies owned by this task were released after archive and content checks; all original archives survive."
+  ]
+}

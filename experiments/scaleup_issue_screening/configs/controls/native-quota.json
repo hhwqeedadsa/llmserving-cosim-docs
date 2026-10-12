@@ -1,0 +1,20 @@
+{
+  "schema_version": "issue-screening-native-quota-control/1",
+  "attribute": "ns3::UbLdstThread::StoreOutstanding",
+  "before": 32,
+  "after": 64,
+  "fixed_attributes": {
+    "ns3::UbLdstInstance::ThreadNum": "1",
+    "ns3::UbLdstApi::RequestIdCount": "256",
+    "ns3::UbLdstThread::StoreRequestSize": "4096",
+    "ns3::UbLdstThread::LoadResponseSize": "4096",
+    "ns3::UbLdstApi::UsePacketSpray": "true",
+    "ns3::UbLdstApi::UseShortestPaths": "true"
+  },
+  "basis": "Eight baseline status waits directly show full worker quota, earlier cross-core queue heads and response releases; the shared pool never fills.",
+  "prediction": "More in-flight capacity should reduce issue-queue waiting if this declared quota limits progress; network feedback can offset or redistribute the local gain.",
+  "weakening_result": "Little change in the same contributions or business completion despite extra capacity weakens a capacity-driven business-loss explanation.",
+  "fixed": ["sealed task graphs and all dependencies", "requests and real expert routes", "compute costs", "placement and topology", "STORE/STORE profiles", "request byte splitting", "random seed and run", "CBFC and physical service"],
+  "measure": ["same eight status contributions", "same critical data contribution", "original and actual last Combine consumers", "following compute and layer completion", "request ranges and byte counts", "actual port packet/byte redistribution"],
+  "scope": "One model-internal diagnostic condition; not a calibrated hardware capacity or optimization claim. Changed issue order, contention and packet paths are execution consequences to report. No E3."
+}

@@ -195,6 +195,49 @@ class Checks(unittest.TestCase):
                 restore(archive, temp/'tampered')
             self.assertFalse((temp/'tampered').exists())
 
+    def test_release_verified_restored_subset(self):
+        from .archive import release_restored
+        parent=ROOT/'runs/scaleup_issue_screening'
+        with tempfile.TemporaryDirectory(prefix='release-check-',dir=parent) as name:
+            temp=Path(name);case=temp/'case'
+            save(case/'case.json',dict(owned_by='scaleup_issue_screening',schema_version='issue-screening-case/1'))
+            (case/'run').mkdir();(case/'prepared').mkdir()
+            (case/'run/data').write_bytes(b'kept input')
+            os.link(case/'run/data',case/'prepared/linked')
+            (case/'prepared/extra').write_bytes(b'regenerable preparation')
+            archive=temp/'case.tar.gz';pack(case,archive)
+            (case/'unknown').write_bytes(b'not registered')
+            with self.assertRaisesRegex(ValueError,'unregistered'):
+                release_restored(case,archive,['run'])
+            self.assertTrue((case/'prepared/extra').exists())
+            (case/'unknown').unlink()
+            result=release_restored(case,archive,['run'])
+            self.assertEqual(result['released_files'],2)
+            self.assertEqual((case/'run/data').read_bytes(),b'kept input')
+            self.assertFalse((case/'prepared').exists())
+            self.assertTrue(archive.exists())
+            result=release_restored(case,archive)
+            self.assertEqual(result['released_files'],2)
+            self.assertFalse(case.exists())
+            self.assertTrue(read(str(case)+'.release.json')['status']=='completed')
+
+    def test_native_chain_reselects_latest_chunk_and_retains_ties(self):
+        from .native_review import predecessor_chain
+        plan={0:dict(name='expert',kind='COMP',deps=[]),
+              1:dict(name='chunk-a',kind='EVENT',event='data_ready',deps=[0]),
+              2:dict(name='chunk-b',kind='EVENT',event='data_ready',deps=[0]),
+              3:dict(name='fence',kind='EVENT',event='barrier',deps=[1,2])}
+        for a,b,want in [(30,20,1),(20,30,2),(30,30,1)]:
+            records={0:dict(start_ns=0,end_ns=10),1:dict(start_ns=10,end_ns=a),
+                     2:dict(start_ns=10,end_ns=b),3:dict(start_ns=max(a,b),end_ns=max(a,b))}
+            steps,totals=predecessor_chain(plan,records,3,0)
+            self.assertEqual(steps[0]['node_id'],want)
+            self.assertEqual(totals,{'data_ready':20})
+            self.assertEqual(steps[-1]['latest_dependency_ties'],[1,2] if a==b else [want])
+        records[3]['start_ns']+=1
+        with self.assertRaisesRegex(AssertionError,'scheduling gap'):
+            predecessor_chain(plan,records,3,0)
+
     def test_archive_rejects_traversal_and_duplicates(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp)/'bad.tar.gz'

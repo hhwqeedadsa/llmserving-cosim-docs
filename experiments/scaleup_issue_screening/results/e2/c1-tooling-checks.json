@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "command": [
+    "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+    "-m",
+    "unittest",
+    "experiments.scaleup_issue_screening.check_workflow"
+  ],
+  "environment": {
+    "PYTHONPATH": "python:."
+  },
+  "cwd": "/root/moe-ub-cosim",
+  "exit_code": 0,
+  "tests": 13,
+  "log": "runs/scaleup_issue_screening/c1-mechanism-20261012/tooling-check-final.stderr.log",
+  "program_sha256": "3c1592e3dc50a95b32907a64241b8e2920ad9c15cfbea6ac39b5821f7e3c6fd7",
+  "scope": "Experiment tooling only: verified restored-subset release, unknown-file refusal, retained hardlink preservation and reselecting the latest chunk with ties; no simulation"
+}

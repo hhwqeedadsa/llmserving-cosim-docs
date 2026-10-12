@@ -1,0 +1,128 @@
+{
+  "schema_version": "issue-screening-c1-source-review/1",
+  "review_date": "2026-10-12",
+  "fixed_source": {
+    "repository": "https://gitcode.com/cann/ops-transformer",
+    "revision": "6ead121aded45355043b502756b6592fd7c30b14",
+    "files_checked": [
+      {
+        "path": "LICENSE",
+        "sha256": "cb282ac2b66d7d6734c3fb354db792b28cf23ab29fbc16d5cfd8bd542bedeb1e",
+        "bytes": 5278
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.cpp",
+        "sha256": "37fa7102ec975cc304891c9313a5b4305f018d9164ecb9199cba4bdc0b2dba21",
+        "bytes": 11274
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_dispatch_v2.h",
+        "sha256": "cd6592894c268a83fd682b164920e3cbad672f79faafc2fa07e02df848947c18",
+        "bytes": 75738
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_kernel/moe_distribute_v2_base.h",
+        "sha256": "9e5e0ae58b11f65256132fbe4f34ee5211d7018ff6a4c204002e5d1e7d0b0cb8",
+        "bytes": 3589
+      },
+      {
+        "path": "mc2/moe_distribute_dispatch_v2/op_host/op_tiling/moe_distribute_dispatch_v2_tiling.cpp",
+        "sha256": "4e1c875b2d078aadeec16f3421cb2853100dab132ecf383c669c3d2ee94ef773",
+        "bytes": 92118
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.cpp",
+        "sha256": "176af6e47526071dc57cf4e98701ec1327b41ea122d8a23c029decb96ec8ef95",
+        "bytes": 6828
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+        "sha256": "82ef8554a8a311f30d73cef3398b9846f5f40a7a6a821d6f037d93fcf4f4f274",
+        "bytes": 68608
+      },
+      {
+        "path": "mc2/moe_distribute_combine_v2/op_host/op_tiling/moe_distribute_combine_v2_tiling.cpp",
+        "sha256": "69be2c748ec80f6a2dd79238dce14c41cbee78e0af1a8b9bb8d230a56ee57300",
+        "bytes": 103538
+      }
+    ],
+    "selected_call": {
+      "architecture": "A3",
+      "dispatch": "MoeDistributeDispatchV2",
+      "combine": "MoeDistributeCombineV2",
+      "comm_alg": "fullmesh_v1",
+      "tp_world_size": 1,
+      "dispatch_quant_mode": 2,
+      "combine_quant_mode": 0,
+      "smooth_scales": false,
+      "shared_expert_num": 0,
+      "shared_expert_rank_num": 0,
+      "expert_shard_type": 0,
+      "elastic_info": false,
+      "special_experts": false,
+      "active_mask": "prefix-active within configured equal slots"
+    }
+  },
+  "selected_branch": "A3 Combine, TP=1, IsNeedReduceScatter=false, IsInt8Quant=false; BF16 output",
+  "source_relations": [
+    {
+      "file": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+      "lines": [
+        534,
+        570
+      ],
+      "finding": "结果搬入队列有 BUFFER_NUM 个缓冲；状态使用独立 readStateBuf_。"
+    },
+    {
+      "file": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+      "lines": [
+        834,
+        867
+      ],
+      "finding": "状态常量在循环之前生成；每份结果调用复制后执行 PIPE_MTE3 栅栏，再向状态地址复制 32 B。循环内没有显式等待状态原生请求形成的 API。"
+    },
+    {
+      "file": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+      "lines": [
+        938,
+        945
+      ],
+      "finding": "选中分支通过 AllocTensor、GM→UB 复制、EnQue/DeQue、UB→远端窗口复制、FreeTensor 管理每份结果的局部缓冲。"
+    },
+    {
+      "file": "mc2/moe_distribute_combine_v2/op_kernel/moe_distribute_combine_v2.h",
+      "lines": [
+        829,
+        830
+      ],
+      "finding": "整个发送循环之后有 MTE3→Scalar 同步；不能据此推导每份结果的所有流水均串行。"
+    }
+  ],
+  "official_references": [
+    {
+      "version": "CANN 8.5.0 Community API",
+      "url": "https://www.hiascend.com/doc_center/source/en/CANNCommunityEdition/850/API/ascendcopapi/atlasascendc_api_07_0179.html",
+      "finding": "标量、计算与搬运执行单元异步并行；单流水栅栏保证该流水的先后顺序，跨流水同步由事件或框架/编译器完成。"
+    },
+    {
+      "version": "CANN 8.5.0 API",
+      "url": "https://www.hiascend.com/doc_center/source/en/canncommercial/850/API/ascendcopapi/atlasascendc_api_07_0139.html",
+      "finding": "FreeTensor 释放队列中的局部张量。此 API 说明没有给出 Unified Bus 请求编号池或 worker 额度与缓冲释放之间的对应。"
+    }
+  ],
+  "model_relation": {
+    "file": "python/moe_ub_cosim/a3.py",
+    "platform_commit": "8fe4884d65496bc5c5347c7d5767e0328d7a0d7c",
+    "description": "每核 previous=上一状态的 local_read_complete；下一份 combine-result-pack 依赖 previous；复用缓冲另依赖对应数据的 local_read_complete。后端将该事件定义为全部有用字节已形成原生请求。"
+  },
+  "conclusions": [
+    "源码支持数据先于其状态，以及缓冲不能过早复用。",
+    "源码和官方说明不能确认“下一份准备必须等待上一状态的全部 ns-3 原生请求形成”这一跨层映射。没有显式等待也不足以排除编译器和队列框架插入的同步。",
+    "未取得将所有 AIV 的任务统一放入一个 LD/ST worker、每 worker 32 个请求与真实 A3 共享硬件容量一一对应的资料。默认 48 及合法取值范围不是硬件证据。",
+    "保留原基线，将容量对照限定为模型机制诊断，不将其收益直接解释为硬件优化；不删除同步或构造未经证实的理想并行基线。"
+  ],
+  "minimum_unresolved_evidence": [
+    "选定 A3 CANN 分支编译后或可复核的队列框架同步关系，特别是状态发送与下一份结果搬入/准备之间的依赖。",
+    "AIV/MTE 到原生内存请求队列的组织与共享范围；精确容量可另校准，但组织关系不能仅由 1/48 默认值推断。"
+  ]
+}

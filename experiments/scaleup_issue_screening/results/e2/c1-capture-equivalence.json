@@ -1,0 +1,104 @@
+{
+  "schema_version": "issue-screening-capture-equivalence/1",
+  "passed": true,
+  "original_manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+  "replay_manifest_sha256": "687fadc4ab6053ef9cca7e70c27be45eb150cc6d0ddf42920b69772092c87161",
+  "selection_sha256": "be59a5725fba42034eeadb1969e58d38cf862cf3a9de87046d11f0736fe25f67",
+  "execution_fields": {
+    "endpoint_ops": {
+      "records": 768,
+      "sha256": "54a7179ab5977ccdeddda41cd85a4a07e4b20a089eb3c3544a704981fdbf86de"
+    },
+    "local_deliveries": {
+      "records": 900,
+      "sha256": "df14d68ff17c12e0b3bc30700b21979d52253a802905a8bdd9d18ea185c0a407"
+    },
+    "native_completions": {
+      "records": 120980,
+      "sha256": "f3bdb54025a9de6fe849f6b65ec8526d515d818d92802f70a42a61b26a5cf376"
+    },
+    "native_starts": {
+      "records": 120980,
+      "sha256": "5da858093c3bd439f351450e63c0fee710614f4ba545d340689c486aab13d389"
+    },
+    "node_execution": {
+      "records": 568544,
+      "sha256": "5496394e2040afdf5d94c1b15b438b084051a623b212477b9a6400a4dfe8b502"
+    },
+    "operation_registry": {
+      "records": 6,
+      "sha256": "9790b65f83a708c03c8c6351e31e2db2e5ac08bd25635a6d3de78f9f8677494a"
+    },
+    "operation_stages": {
+      "records": 6619,
+      "sha256": "8e18bd510258ade34be6394feae2d1ac09fda74039f3430786c9ddba23be8c55"
+    },
+    "plan_summary": {
+      "records": 1,
+      "sha256": "75fdce6c85040412c8d68992292b25b9c0ddb2debd91a54d8f45efd1433c11c9"
+    },
+    "planned_transfers": {
+      "records": 121880,
+      "sha256": "98bdd93258b0fea6bccc65112c1b41a07d050753bd6f6967d1a95cd82911579f"
+    },
+    "target_writes": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "transfer_registry": {
+      "records": 120980,
+      "sha256": "0ffb42a34b7771f589aeea40115109ee8308e5d895c46f25f30ead8ff9437310"
+    },
+    "transfers": {
+      "records": 120980,
+      "sha256": "bc69bb8f8a35d4e54396add798d37650bbb0d1a628ff69ed40081bacf1d558f0"
+    },
+    "wqe_completions": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "wqe_starts": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observed_fields": {
+    "endpoint_ops.jsonl": {
+      "records": 768,
+      "sha256": "4fcceea5a7d4dc667a0778a64dd97a2fd513042632fe628997d0b2d21861545f"
+    },
+    "port_windows.csv": {
+      "records": 155045,
+      "sha256": "dd777a4afeeb660b970c77463f638b753cc8d0490867d8292c8890492fb0b67d"
+    },
+    "queue_windows.csv": {
+      "records": 155124,
+      "sha256": "2b3171c103230906f58845a23e2a36c1860d4a5f597e2bba62815c3b5fab677c"
+    },
+    "endpoint_stages.jsonl": {
+      "records": 6619,
+      "sha256": "764ab5712c231148809e32f4f8e97aef097265f1ab25478d02bfcf4df742c705"
+    }
+  },
+  "metadata_fields": [
+    "simulation_end_ns",
+    "service_finished_ns",
+    "random",
+    "network_drain",
+    "graph_completions",
+    "rank_resources",
+    "boundary_resources",
+    "resource_lifecycle"
+  ],
+  "simulation_end_ns": 110792,
+  "random": {
+    "run": 1,
+    "seed": 1
+  },
+  "packet_wire_and_start_fingerprints_match": true,
+  "ports_compared": 2688,
+  "port_equivalence_sha256": "ba6a6741c3a9a9fc3d141a513dccfb2a78e702576d41cae6fbc11f687431c184",
+  "backend_executed": true,
+  "frontend_executed": false,
+  "independent_statistical_repeat": false
+}

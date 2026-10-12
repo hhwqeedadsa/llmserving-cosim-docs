@@ -249,3 +249,47 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 输出保存分段时间、并列前驱、传输业务身份、实际对象回读和来源摘要。该操作不恢复大图或执行仿真；源码目录若移动，可修改 `--source-root`，文件内容仍须与清单一致。
+
+## C1 原生请求队列核验
+
+`native_review` 是本实验的研究者核验入口，会读内部真值。它复用原冻结图，选择 rank 70、65 从零时刻至 120000 ns 的完整请求队列，最多 100000 条记录、每条最多 4096 个队列或在途项。平台格式和独立合成示例见[请求队列诊断](../../docs/record_storage.md#原生请求队列诊断)与[小例](../../examples/native_first_round/README.md)。
+
+先按上节恢复 `g0-b2-short` 到一个新目录。以下采用 `restored-g0-b2-short`，后端指向本次隔离构建；其他机器可替换路径。`--platform-commit` 必须与本机实际平台源码、锁文件和子模块一致，不绕过版本检查。原实验 `workflow` 的旧平台固定条件继续保留。
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.native_review prepare \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/native-capture-new \
+  --backend build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service \
+  --platform-commit 4e23dda
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.native_review run \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short --output runs/scaleup_issue_screening/native-capture-new
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.native_review compare \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short --output runs/scaleup_issue_screening/native-capture-new
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.native_review analyze \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short --output runs/scaleup_issue_screening/native-capture-new
+```
+
+`compare` 核对原有全部执行记录、观测记录及端口包内容/发送时刻指纹；`analyze` 保存八条状态传输的直接阻塞分支、队首、跨核任务身份、请求字节范围及释放响应。完整过程在 `queue-review.json`，可读摘要为 `queue-summary.json`。时间区间没有重叠求和，但其中“额度满”和“排在其他任务后”是同一时段的两项事实，不能再相加。
+
+使用 `archive pack --release-expanded` 保存并释放这份补采目录，再准备唯一的额度对照。沿用同一组 `prepare/run/analyze` 命令，把输出换成新目录 `native-quota64-new`，并在 **prepare** 中加入 `--store-outstanding 64`。配置依据为 `configs/controls/native-quota.json`：保持单 worker、4096 B 拆分与共享池 256，仅将 STORE 在途上限从 32 改成 64。行为改变后不运行等价 `compare`，改用：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.native_review effect \
+  --case runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/native-quota64-new \
+  --baseline-capture runs/scaleup_issue_screening/native-capture-new.tar.gz
+```
+
+`effect.json` 核对相同业务贡献、实际前驱和并列项、原消费者及实际最晚消费者、后续计算、包数、字节和端口分布。所选端点的实际请求字节范围逐项比较；其他端点受相同冻结计划与全局拆分参数约束。它不宣称 64 是硬件容量，也不将同一随机种子解释为相同包路径。
+
+这些操作沿用 `configs/host.json` 的累计资源根目录和 48 GiB 硬上限。每次恢复、运行及压缩前按当前占用预检，串行执行；上面的目录名不表示可以同时保留全部展开副本。若只需原 run 和 slice，可经逐文件核验释放恢复目录中其他内容：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.archive release-restored \
+  --input runs/scaleup_issue_screening/restored-g0-b2-short \
+  --output runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz \
+  --keep-directory run --keep-directory slice
+```
+
+此处 `--output` 指已存在的来源归档，命令不会覆盖它。未登记文件、内容变化或归档校验失败均拒绝释放；外置 `.release.json` 记录释放范围。全部比较完成后，同一命令省略两个 `--keep-directory` 即可释放剩余恢复副本。随后将额度对照目录校验归档；原归档始终保留。

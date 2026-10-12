@@ -1,0 +1,1123 @@
+{
+  "schema_version": "issue-screening-native-quota-effect/1",
+  "passed": true,
+  "selection": {
+    "schema_version": "issue-screening-native-selection/1",
+    "original_manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+    "platform_commit": "4e23dda",
+    "backend_sha256": "9f8b0ac3f695a72806054478c96694baa73c85ecb9227534c805f9058d4d654a",
+    "policy": {
+      "schema_version": "moe-ub-native-queue-config/1",
+      "rank_ids": [
+        70,
+        65
+      ],
+      "end_ns": 120000,
+      "max_records": 100000,
+      "max_snapshot_items": 4096
+    },
+    "program_sha256": "28aef788812b3d053a39c27db51bc73fe3de31c91e8fbdccee1c510458fad0d0",
+    "control": {
+      "schema_version": "issue-screening-native-quota-control/1",
+      "attribute": "ns3::UbLdstThread::StoreOutstanding",
+      "before": 32,
+      "after": 64,
+      "fixed_attributes": {
+        "ns3::UbLdstInstance::ThreadNum": "1",
+        "ns3::UbLdstApi::RequestIdCount": "256",
+        "ns3::UbLdstThread::StoreRequestSize": "4096",
+        "ns3::UbLdstThread::LoadResponseSize": "4096",
+        "ns3::UbLdstApi::UsePacketSpray": "true",
+        "ns3::UbLdstApi::UseShortestPaths": "true"
+      },
+      "basis": "Eight baseline status waits directly show full worker quota, earlier cross-core queue heads and response releases; the shared pool never fills.",
+      "prediction": "More in-flight capacity should reduce issue-queue waiting if this declared quota limits progress; network feedback can offset or redistribute the local gain.",
+      "weakening_result": "Little change in the same contributions or business completion despite extra capacity weakens a capacity-driven business-loss explanation.",
+      "fixed": [
+        "sealed task graphs and all dependencies",
+        "requests and real expert routes",
+        "compute costs",
+        "placement and topology",
+        "STORE/STORE profiles",
+        "request byte splitting",
+        "random seed and run",
+        "CBFC and physical service"
+      ],
+      "measure": [
+        "same eight status contributions",
+        "same critical data contribution",
+        "original and actual last Combine consumers",
+        "following compute and layer completion",
+        "request ranges and byte counts",
+        "actual port packet/byte redistribution"
+      ],
+      "scope": "One model-internal diagnostic condition; not a calibrated hardware capacity or optimization claim. Changed issue order, contention and packet paths are execution consequences to report. No E3."
+    },
+    "purpose": "internal mechanism verification; not E3 input"
+  },
+  "baseline_capture_sha256": "7794447a1444c21f58ef6b2e9539170a0f7f803910d4725d0dddb0170b1c1c84",
+  "planned_transfer_digest": {
+    "records": 121880,
+    "sha256": "98bdd93258b0fea6bccc65112c1b41a07d050753bd6f6967d1a95cd82911579f"
+  },
+  "same_compute_durations": true,
+  "selected_native_request_ranges_identical": true,
+  "selected_requests": 4019,
+  "layers": [
+    {
+      "layer_id": 7,
+      "source_rank": 70,
+      "original_consumer_rank": 27,
+      "key_transfer_id": 4295045029,
+      "baseline": {
+        "source_expert_end_ns": 54198,
+        "same_data_submit_ns": 66218,
+        "expert_to_data_submit_ns": 12020,
+        "same_data_ready_ns": 68132,
+        "nonoverlapping_components_ns": {
+          "result_pack": 100,
+          "data_ready": 5732,
+          "local_read_complete": 6188
+        },
+        "actual_predecessor_chain": [
+          {
+            "node_id": 2708,
+            "kind": "barrier",
+            "start_ns": 54198,
+            "end_ns": 54198,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              2707
+            ]
+          },
+          {
+            "node_id": 3231,
+            "kind": "result_pack",
+            "start_ns": 54198,
+            "end_ns": 54218,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              2708
+            ]
+          },
+          {
+            "node_id": 3234,
+            "kind": "data_ready",
+            "start_ns": 54218,
+            "end_ns": 55246,
+            "duration_ns": 1028,
+            "transfer_id": 4295045016,
+            "latest_dependency_ties": [
+              3231
+            ]
+          },
+          {
+            "node_id": 3239,
+            "kind": "barrier",
+            "start_ns": 55246,
+            "end_ns": 55246,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3234
+            ]
+          },
+          {
+            "node_id": 3241,
+            "kind": "local_read_complete",
+            "start_ns": 55246,
+            "end_ns": 57148,
+            "duration_ns": 1902,
+            "transfer_id": 4295045018,
+            "latest_dependency_ties": [
+              3239
+            ]
+          },
+          {
+            "node_id": 3243,
+            "kind": "result_pack",
+            "start_ns": 57148,
+            "end_ns": 57168,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3241
+            ]
+          },
+          {
+            "node_id": 3246,
+            "kind": "data_ready",
+            "start_ns": 57168,
+            "end_ns": 58475,
+            "duration_ns": 1307,
+            "transfer_id": 4295045019,
+            "latest_dependency_ties": [
+              3243
+            ]
+          },
+          {
+            "node_id": 3251,
+            "kind": "barrier",
+            "start_ns": 58475,
+            "end_ns": 58475,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3246
+            ]
+          },
+          {
+            "node_id": 3253,
+            "kind": "local_read_complete",
+            "start_ns": 58475,
+            "end_ns": 60251,
+            "duration_ns": 1776,
+            "transfer_id": 4295045021,
+            "latest_dependency_ties": [
+              3251
+            ]
+          },
+          {
+            "node_id": 3255,
+            "kind": "result_pack",
+            "start_ns": 60251,
+            "end_ns": 60271,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3253
+            ]
+          },
+          {
+            "node_id": 3261,
+            "kind": "data_ready",
+            "start_ns": 60271,
+            "end_ns": 61784,
+            "duration_ns": 1513,
+            "transfer_id": 4295045023,
+            "latest_dependency_ties": [
+              3255
+            ]
+          },
+          {
+            "node_id": 3263,
+            "kind": "barrier",
+            "start_ns": 61784,
+            "end_ns": 61784,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3261
+            ]
+          },
+          {
+            "node_id": 3265,
+            "kind": "local_read_complete",
+            "start_ns": 61784,
+            "end_ns": 63205,
+            "duration_ns": 1421,
+            "transfer_id": 4295045024,
+            "latest_dependency_ties": [
+              3263
+            ]
+          },
+          {
+            "node_id": 3267,
+            "kind": "result_pack",
+            "start_ns": 63205,
+            "end_ns": 63225,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3265
+            ]
+          },
+          {
+            "node_id": 3273,
+            "kind": "data_ready",
+            "start_ns": 63225,
+            "end_ns": 65109,
+            "duration_ns": 1884,
+            "transfer_id": 4295045026,
+            "latest_dependency_ties": [
+              3267
+            ]
+          },
+          {
+            "node_id": 3275,
+            "kind": "barrier",
+            "start_ns": 65109,
+            "end_ns": 65109,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3273
+            ]
+          },
+          {
+            "node_id": 3277,
+            "kind": "local_read_complete",
+            "start_ns": 65109,
+            "end_ns": 66198,
+            "duration_ns": 1089,
+            "transfer_id": 4295045027,
+            "latest_dependency_ties": [
+              3275
+            ]
+          },
+          {
+            "node_id": 3279,
+            "kind": "result_pack",
+            "start_ns": 66198,
+            "end_ns": 66218,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3277
+            ]
+          }
+        ],
+        "submit_dependency_ties": [
+          3279
+        ],
+        "original_consumer_combine_end_ns": 68720,
+        "last_combine_end_ns": 68720,
+        "actual_last_consumers": [
+          27
+        ],
+        "latest_incoming_data_for_actual_last_consumers": [
+          {
+            "consumer_rank": 27,
+            "source_rank": 70,
+            "transfer_id": 4295045029,
+            "data_ready_ns": 68132,
+            "business_identity": {
+              "message_id": 36193,
+              "chunk_index": 1,
+              "payload_bytes": 6144,
+              "pair_byte_range": [
+                8192,
+                14336
+              ]
+            }
+          }
+        ],
+        "original_consumer_following_compute": {
+          "7.shared_routed_add": {
+            "start_ns": 68720,
+            "end_ns": 68778
+          },
+          "7.ffn_residual": {
+            "start_ns": 68778,
+            "end_ns": 68812
+          },
+          "8.attention_norm": {
+            "start_ns": 68812,
+            "end_ns": 68816
+          },
+          "8.router": {
+            "start_ns": 68949,
+            "end_ns": 68987
+          }
+        },
+        "layer_compute_end_ns": 68812
+      },
+      "control": {
+        "source_expert_end_ns": 50573,
+        "same_data_submit_ns": 59151,
+        "expert_to_data_submit_ns": 8578,
+        "same_data_ready_ns": 60123,
+        "nonoverlapping_components_ns": {
+          "result_pack": 100,
+          "data_ready": 5726,
+          "local_read_complete": 2752
+        },
+        "actual_predecessor_chain": [
+          {
+            "node_id": 2708,
+            "kind": "barrier",
+            "start_ns": 50573,
+            "end_ns": 50573,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              2707
+            ]
+          },
+          {
+            "node_id": 3231,
+            "kind": "result_pack",
+            "start_ns": 50573,
+            "end_ns": 50593,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              2708
+            ]
+          },
+          {
+            "node_id": 3234,
+            "kind": "data_ready",
+            "start_ns": 50593,
+            "end_ns": 51621,
+            "duration_ns": 1028,
+            "transfer_id": 4295045016,
+            "latest_dependency_ties": [
+              3231
+            ]
+          },
+          {
+            "node_id": 3239,
+            "kind": "barrier",
+            "start_ns": 51621,
+            "end_ns": 51621,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3234
+            ]
+          },
+          {
+            "node_id": 3241,
+            "kind": "local_read_complete",
+            "start_ns": 51621,
+            "end_ns": 52453,
+            "duration_ns": 832,
+            "transfer_id": 4295045018,
+            "latest_dependency_ties": [
+              3239
+            ]
+          },
+          {
+            "node_id": 3243,
+            "kind": "result_pack",
+            "start_ns": 52453,
+            "end_ns": 52473,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3241
+            ]
+          },
+          {
+            "node_id": 3246,
+            "kind": "data_ready",
+            "start_ns": 52473,
+            "end_ns": 53849,
+            "duration_ns": 1376,
+            "transfer_id": 4295045019,
+            "latest_dependency_ties": [
+              3243
+            ]
+          },
+          {
+            "node_id": 3251,
+            "kind": "barrier",
+            "start_ns": 53849,
+            "end_ns": 53849,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3246
+            ]
+          },
+          {
+            "node_id": 3253,
+            "kind": "local_read_complete",
+            "start_ns": 53849,
+            "end_ns": 54350,
+            "duration_ns": 501,
+            "transfer_id": 4295045021,
+            "latest_dependency_ties": [
+              3251
+            ]
+          },
+          {
+            "node_id": 3255,
+            "kind": "result_pack",
+            "start_ns": 54350,
+            "end_ns": 54370,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3253
+            ]
+          },
+          {
+            "node_id": 3258,
+            "kind": "data_ready",
+            "start_ns": 54370,
+            "end_ns": 56371,
+            "duration_ns": 2001,
+            "transfer_id": 4295045022,
+            "latest_dependency_ties": [
+              3255
+            ]
+          },
+          {
+            "node_id": 3263,
+            "kind": "barrier",
+            "start_ns": 56371,
+            "end_ns": 56371,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3258
+            ]
+          },
+          {
+            "node_id": 3265,
+            "kind": "local_read_complete",
+            "start_ns": 56371,
+            "end_ns": 57116,
+            "duration_ns": 745,
+            "transfer_id": 4295045024,
+            "latest_dependency_ties": [
+              3263
+            ]
+          },
+          {
+            "node_id": 3267,
+            "kind": "result_pack",
+            "start_ns": 57116,
+            "end_ns": 57136,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3265
+            ]
+          },
+          {
+            "node_id": 3273,
+            "kind": "data_ready",
+            "start_ns": 57136,
+            "end_ns": 58457,
+            "duration_ns": 1321,
+            "transfer_id": 4295045026,
+            "latest_dependency_ties": [
+              3267
+            ]
+          },
+          {
+            "node_id": 3275,
+            "kind": "barrier",
+            "start_ns": 58457,
+            "end_ns": 58457,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3273
+            ]
+          },
+          {
+            "node_id": 3277,
+            "kind": "local_read_complete",
+            "start_ns": 58457,
+            "end_ns": 59131,
+            "duration_ns": 674,
+            "transfer_id": 4295045027,
+            "latest_dependency_ties": [
+              3275
+            ]
+          },
+          {
+            "node_id": 3279,
+            "kind": "result_pack",
+            "start_ns": 59131,
+            "end_ns": 59151,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              3277
+            ]
+          }
+        ],
+        "submit_dependency_ties": [
+          3279
+        ],
+        "original_consumer_combine_end_ns": 60985,
+        "last_combine_end_ns": 61014,
+        "actual_last_consumers": [
+          33
+        ],
+        "latest_incoming_data_for_actual_last_consumers": [
+          {
+            "consumer_rank": 33,
+            "source_rank": 70,
+            "transfer_id": 4295045058,
+            "data_ready_ns": 60426,
+            "business_identity": {
+              "message_id": 36213,
+              "chunk_index": 0,
+              "payload_bytes": 8192,
+              "pair_byte_range": [
+                0,
+                8192
+              ]
+            }
+          }
+        ],
+        "original_consumer_following_compute": {
+          "7.shared_routed_add": {
+            "start_ns": 60985,
+            "end_ns": 61043
+          },
+          "7.ffn_residual": {
+            "start_ns": 61043,
+            "end_ns": 61077
+          },
+          "8.attention_norm": {
+            "start_ns": 61077,
+            "end_ns": 61081
+          },
+          "8.router": {
+            "start_ns": 61214,
+            "end_ns": 61252
+          }
+        },
+        "layer_compute_end_ns": 61106
+      }
+    },
+    {
+      "layer_id": 8,
+      "source_rank": 65,
+      "original_consumer_rank": 58,
+      "key_transfer_id": 4295086595,
+      "baseline": {
+        "source_expert_end_ns": 95268,
+        "same_data_submit_ns": 107851,
+        "expert_to_data_submit_ns": 12583,
+        "same_data_ready_ns": 110112,
+        "nonoverlapping_components_ns": {
+          "result_pack": 100,
+          "data_ready": 8177,
+          "local_read_complete": 4306
+        },
+        "actual_predecessor_chain": [
+          {
+            "node_id": 4299,
+            "kind": "barrier",
+            "start_ns": 95268,
+            "end_ns": 95268,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              4298
+            ]
+          },
+          {
+            "node_id": 5545,
+            "kind": "result_pack",
+            "start_ns": 95268,
+            "end_ns": 95288,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              4299
+            ]
+          },
+          {
+            "node_id": 5551,
+            "kind": "data_ready",
+            "start_ns": 95288,
+            "end_ns": 97018,
+            "duration_ns": 1730,
+            "transfer_id": 4295086584,
+            "latest_dependency_ties": [
+              5545
+            ]
+          },
+          {
+            "node_id": 5553,
+            "kind": "barrier",
+            "start_ns": 97018,
+            "end_ns": 97018,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5551
+            ]
+          },
+          {
+            "node_id": 5555,
+            "kind": "local_read_complete",
+            "start_ns": 97018,
+            "end_ns": 98386,
+            "duration_ns": 1368,
+            "transfer_id": 4295086585,
+            "latest_dependency_ties": [
+              5553
+            ]
+          },
+          {
+            "node_id": 5557,
+            "kind": "result_pack",
+            "start_ns": 98386,
+            "end_ns": 98406,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5555
+            ]
+          },
+          {
+            "node_id": 5563,
+            "kind": "data_ready",
+            "start_ns": 98406,
+            "end_ns": 100386,
+            "duration_ns": 1980,
+            "transfer_id": 4295086587,
+            "latest_dependency_ties": [
+              5557
+            ]
+          },
+          {
+            "node_id": 5565,
+            "kind": "barrier",
+            "start_ns": 100386,
+            "end_ns": 100386,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5563
+            ]
+          },
+          {
+            "node_id": 5567,
+            "kind": "local_read_complete",
+            "start_ns": 100386,
+            "end_ns": 101544,
+            "duration_ns": 1158,
+            "transfer_id": 4295086588,
+            "latest_dependency_ties": [
+              5565
+            ]
+          },
+          {
+            "node_id": 5569,
+            "kind": "result_pack",
+            "start_ns": 101544,
+            "end_ns": 101564,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5567
+            ]
+          },
+          {
+            "node_id": 5572,
+            "kind": "data_ready",
+            "start_ns": 101564,
+            "end_ns": 103684,
+            "duration_ns": 2120,
+            "transfer_id": 4295086589,
+            "latest_dependency_ties": [
+              5569
+            ]
+          },
+          {
+            "node_id": 5577,
+            "kind": "barrier",
+            "start_ns": 103684,
+            "end_ns": 103684,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5572,
+              5575
+            ]
+          },
+          {
+            "node_id": 5579,
+            "kind": "local_read_complete",
+            "start_ns": 103684,
+            "end_ns": 104547,
+            "duration_ns": 863,
+            "transfer_id": 4295086591,
+            "latest_dependency_ties": [
+              5577
+            ]
+          },
+          {
+            "node_id": 5581,
+            "kind": "result_pack",
+            "start_ns": 104547,
+            "end_ns": 104567,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5579
+            ]
+          },
+          {
+            "node_id": 5584,
+            "kind": "data_ready",
+            "start_ns": 104567,
+            "end_ns": 106914,
+            "duration_ns": 2347,
+            "transfer_id": 4295086592,
+            "latest_dependency_ties": [
+              5581
+            ]
+          },
+          {
+            "node_id": 5589,
+            "kind": "barrier",
+            "start_ns": 106914,
+            "end_ns": 106914,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5584
+            ]
+          },
+          {
+            "node_id": 5591,
+            "kind": "local_read_complete",
+            "start_ns": 106914,
+            "end_ns": 107831,
+            "duration_ns": 917,
+            "transfer_id": 4295086594,
+            "latest_dependency_ties": [
+              5589
+            ]
+          },
+          {
+            "node_id": 5593,
+            "kind": "result_pack",
+            "start_ns": 107831,
+            "end_ns": 107851,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5591
+            ]
+          }
+        ],
+        "submit_dependency_ties": [
+          5593
+        ],
+        "original_consumer_combine_end_ns": 110700,
+        "last_combine_end_ns": 110700,
+        "actual_last_consumers": [
+          58
+        ],
+        "latest_incoming_data_for_actual_last_consumers": [
+          {
+            "consumer_rank": 58,
+            "source_rank": 65,
+            "transfer_id": 4295086595,
+            "data_ready_ns": 110112,
+            "business_identity": {
+              "message_id": 36827,
+              "chunk_index": 0,
+              "payload_bytes": 8192,
+              "pair_byte_range": [
+                0,
+                8192
+              ]
+            }
+          }
+        ],
+        "original_consumer_following_compute": {
+          "8.shared_routed_add": {
+            "start_ns": 110700,
+            "end_ns": 110758
+          },
+          "8.ffn_residual": {
+            "start_ns": 110758,
+            "end_ns": 110792
+          }
+        },
+        "layer_compute_end_ns": 110792
+      },
+      "control": {
+        "source_expert_end_ns": 86757,
+        "same_data_submit_ns": 95109,
+        "expert_to_data_submit_ns": 8352,
+        "same_data_ready_ns": 96890,
+        "nonoverlapping_components_ns": {
+          "result_pack": 100,
+          "data_ready": 5737,
+          "local_read_complete": 2515
+        },
+        "actual_predecessor_chain": [
+          {
+            "node_id": 4299,
+            "kind": "barrier",
+            "start_ns": 86757,
+            "end_ns": 86757,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              4298
+            ]
+          },
+          {
+            "node_id": 5545,
+            "kind": "result_pack",
+            "start_ns": 86757,
+            "end_ns": 86777,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              4299
+            ]
+          },
+          {
+            "node_id": 5551,
+            "kind": "data_ready",
+            "start_ns": 86777,
+            "end_ns": 88215,
+            "duration_ns": 1438,
+            "transfer_id": 4295086584,
+            "latest_dependency_ties": [
+              5545
+            ]
+          },
+          {
+            "node_id": 5553,
+            "kind": "barrier",
+            "start_ns": 88215,
+            "end_ns": 88215,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5551
+            ]
+          },
+          {
+            "node_id": 5555,
+            "kind": "local_read_complete",
+            "start_ns": 88215,
+            "end_ns": 88763,
+            "duration_ns": 548,
+            "transfer_id": 4295086585,
+            "latest_dependency_ties": [
+              5553
+            ]
+          },
+          {
+            "node_id": 5557,
+            "kind": "result_pack",
+            "start_ns": 88763,
+            "end_ns": 88783,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5555
+            ]
+          },
+          {
+            "node_id": 5563,
+            "kind": "data_ready",
+            "start_ns": 88783,
+            "end_ns": 90284,
+            "duration_ns": 1501,
+            "transfer_id": 4295086587,
+            "latest_dependency_ties": [
+              5557
+            ]
+          },
+          {
+            "node_id": 5565,
+            "kind": "barrier",
+            "start_ns": 90284,
+            "end_ns": 90284,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5563
+            ]
+          },
+          {
+            "node_id": 5567,
+            "kind": "local_read_complete",
+            "start_ns": 90284,
+            "end_ns": 91002,
+            "duration_ns": 718,
+            "transfer_id": 4295086588,
+            "latest_dependency_ties": [
+              5565
+            ]
+          },
+          {
+            "node_id": 5569,
+            "kind": "result_pack",
+            "start_ns": 91002,
+            "end_ns": 91022,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5567
+            ]
+          },
+          {
+            "node_id": 5572,
+            "kind": "data_ready",
+            "start_ns": 91022,
+            "end_ns": 92399,
+            "duration_ns": 1377,
+            "transfer_id": 4295086589,
+            "latest_dependency_ties": [
+              5569
+            ]
+          },
+          {
+            "node_id": 5577,
+            "kind": "barrier",
+            "start_ns": 92399,
+            "end_ns": 92399,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5572
+            ]
+          },
+          {
+            "node_id": 5579,
+            "kind": "local_read_complete",
+            "start_ns": 92399,
+            "end_ns": 93140,
+            "duration_ns": 741,
+            "transfer_id": 4295086591,
+            "latest_dependency_ties": [
+              5577
+            ]
+          },
+          {
+            "node_id": 5581,
+            "kind": "result_pack",
+            "start_ns": 93140,
+            "end_ns": 93160,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5579
+            ]
+          },
+          {
+            "node_id": 5587,
+            "kind": "data_ready",
+            "start_ns": 93160,
+            "end_ns": 94581,
+            "duration_ns": 1421,
+            "transfer_id": 4295086593,
+            "latest_dependency_ties": [
+              5581
+            ]
+          },
+          {
+            "node_id": 5589,
+            "kind": "barrier",
+            "start_ns": 94581,
+            "end_ns": 94581,
+            "duration_ns": 0,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5587
+            ]
+          },
+          {
+            "node_id": 5591,
+            "kind": "local_read_complete",
+            "start_ns": 94581,
+            "end_ns": 95089,
+            "duration_ns": 508,
+            "transfer_id": 4295086594,
+            "latest_dependency_ties": [
+              5589
+            ]
+          },
+          {
+            "node_id": 5593,
+            "kind": "result_pack",
+            "start_ns": 95089,
+            "end_ns": 95109,
+            "duration_ns": 20,
+            "transfer_id": null,
+            "latest_dependency_ties": [
+              5591
+            ]
+          }
+        ],
+        "submit_dependency_ties": [
+          5593
+        ],
+        "original_consumer_combine_end_ns": 97478,
+        "last_combine_end_ns": 97854,
+        "actual_last_consumers": [
+          56
+        ],
+        "latest_incoming_data_for_actual_last_consumers": [
+          {
+            "consumer_rank": 56,
+            "source_rank": 65,
+            "transfer_id": 4295086581,
+            "data_ready_ns": 97266,
+            "business_identity": {
+              "message_id": 36817,
+              "chunk_index": 1,
+              "payload_bytes": 6144,
+              "pair_byte_range": [
+                8192,
+                14336
+              ]
+            }
+          }
+        ],
+        "original_consumer_following_compute": {
+          "8.shared_routed_add": {
+            "start_ns": 97478,
+            "end_ns": 97536
+          },
+          "8.ffn_residual": {
+            "start_ns": 97536,
+            "end_ns": 97570
+          }
+        },
+        "layer_compute_end_ns": 97946
+      }
+    }
+  ],
+  "baseline_simulation_end_ns": 110792,
+  "control_simulation_end_ns": 97946,
+  "modeled_end_reduction_percent": 11.594699978337786,
+  "physical_packets": {
+    "baseline": {
+      "arrived_packets": 1050887,
+      "idle": true,
+      "started_packets": 1050887
+    },
+    "control": {
+      "arrived_packets": 1050889,
+      "idle": true,
+      "started_packets": 1050889
+    }
+  },
+  "port_totals": {
+    "baseline": {
+      "packets": 772595,
+      "packet_bytes": 387691112,
+      "business_data": 360815616,
+      "dispatch_count": 8601600,
+      "combine_flag": 536928,
+      "attached_metadata": 268464
+    },
+    "control": {
+      "packets": 772597,
+      "packet_bytes": 387691192,
+      "business_data": 360815616,
+      "dispatch_count": 8601600,
+      "combine_flag": 536928,
+      "attached_metadata": 268464
+    }
+  },
+  "ports_with_changed_packets": 2555,
+  "ports_with_changed_wire_bytes": 2685,
+  "ports_with_changed_business_byte_hops": 2341,
+  "path_scope": "All observed egress totals and actual application-byte attribution; no paired packet-path equality claim",
+  "program_sha256": "eae185d52a06d96255c999c2ba26be599104128dc2337107a38c45e371b46841"
+}

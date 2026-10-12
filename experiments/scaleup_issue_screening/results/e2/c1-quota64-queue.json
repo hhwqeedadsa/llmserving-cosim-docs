@@ -1,0 +1,1113 @@
+{
+  "schema_version": "issue-screening-native-review/1",
+  "passed": true,
+  "run_manifest_sha256": "a38ccb4159fc5d437d1ab2697dd5dc7041022a7a7c890a52b91dfd8319b8f2ea",
+  "selection": {
+    "schema_version": "issue-screening-native-selection/1",
+    "original_manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+    "platform_commit": "4e23dda",
+    "backend_sha256": "9f8b0ac3f695a72806054478c96694baa73c85ecb9227534c805f9058d4d654a",
+    "policy": {
+      "schema_version": "moe-ub-native-queue-config/1",
+      "rank_ids": [
+        70,
+        65
+      ],
+      "end_ns": 120000,
+      "max_records": 100000,
+      "max_snapshot_items": 4096
+    },
+    "program_sha256": "28aef788812b3d053a39c27db51bc73fe3de31c91e8fbdccee1c510458fad0d0",
+    "control": {
+      "schema_version": "issue-screening-native-quota-control/1",
+      "attribute": "ns3::UbLdstThread::StoreOutstanding",
+      "before": 32,
+      "after": 64,
+      "fixed_attributes": {
+        "ns3::UbLdstInstance::ThreadNum": "1",
+        "ns3::UbLdstApi::RequestIdCount": "256",
+        "ns3::UbLdstThread::StoreRequestSize": "4096",
+        "ns3::UbLdstThread::LoadResponseSize": "4096",
+        "ns3::UbLdstApi::UsePacketSpray": "true",
+        "ns3::UbLdstApi::UseShortestPaths": "true"
+      },
+      "basis": "Eight baseline status waits directly show full worker quota, earlier cross-core queue heads and response releases; the shared pool never fills.",
+      "prediction": "More in-flight capacity should reduce issue-queue waiting if this declared quota limits progress; network feedback can offset or redistribute the local gain.",
+      "weakening_result": "Little change in the same contributions or business completion despite extra capacity weakens a capacity-driven business-loss explanation.",
+      "fixed": [
+        "sealed task graphs and all dependencies",
+        "requests and real expert routes",
+        "compute costs",
+        "placement and topology",
+        "STORE/STORE profiles",
+        "request byte splitting",
+        "random seed and run",
+        "CBFC and physical service"
+      ],
+      "measure": [
+        "same eight status contributions",
+        "same critical data contribution",
+        "original and actual last Combine consumers",
+        "following compute and layer completion",
+        "request ranges and byte counts",
+        "actual port packet/byte redistribution"
+      ],
+      "scope": "One model-internal diagnostic condition; not a calibrated hardware capacity or optimization claim. Changed issue order, contention and packet paths are execution consequences to report. No E3."
+    },
+    "purpose": "internal mechanism verification; not E3 input"
+  },
+  "capture": {
+    "access_scope": "internal_truth_not_observed",
+    "complete": true,
+    "dropped_records": 0,
+    "end_ns": 97946,
+    "policy": {
+      "end_ns": 120000,
+      "max_records": 100000,
+      "max_snapshot_items": 4096,
+      "rank_ids": [
+        70,
+        65
+      ],
+      "schema_version": "moe-ub-native-queue-config/1"
+    },
+    "records": 14569,
+    "schema_version": "moe-ub-native-queue-capture/1",
+    "start_ns": 0,
+    "state_phase": "after_queue_issue_block_or_response_resource_release",
+    "workers": [
+      {
+        "node_id": 70,
+        "rank_id": 70,
+        "thread_id": 0
+      },
+      {
+        "node_id": 65,
+        "rank_id": 65,
+        "thread_id": 0
+      }
+    ]
+  },
+  "event_counts": {
+    "initial": 2,
+    "task_queued": 2998,
+    "request_issued": 4019,
+    "response_released": 4019,
+    "outstanding_blocked": 3529,
+    "final": 2
+  },
+  "peak_pending_by_rank": {
+    "70": 64,
+    "65": 64
+  },
+  "scope": "Direct branch, queue, request owner and response evidence; not hardware calibration",
+  "program_sha256": "f59187c69c078ed0cf321c0ab154c61d343eb2059503688583cb29e07f77b31d",
+  "statuses": [
+    {
+      "transfer_id": 4295045018,
+      "rank_id": 70,
+      "submitted_ns": 51621,
+      "formed_ns": 52453,
+      "wait_ns": 832,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 832
+      },
+      "blocks": {
+        "outstanding_blocked": 94
+      },
+      "queue_trace_sequences": [
+        5828,
+        6116
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 44,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:11",
+        "aiv:2",
+        "aiv:3",
+        "aiv:31",
+        "aiv:32",
+        "aiv:33",
+        "aiv:34",
+        "aiv:35",
+        "aiv:36",
+        "aiv:37",
+        "aiv:38",
+        "aiv:39",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 0,
+      "behind_other_tasks_ns": 832,
+      "head_cores_time_ns": {
+        "aiv:31": 46,
+        "aiv:32": 38,
+        "aiv:33": 4,
+        "aiv:34": 42,
+        "aiv:35": 39,
+        "aiv:36": 42,
+        "aiv:37": 5,
+        "aiv:38": 36,
+        "aiv:39": 42,
+        "aiv:40": 39,
+        "aiv:41": 80,
+        "aiv:42": 82,
+        "aiv:43": 11,
+        "aiv:44": 72,
+        "aiv:45": 8,
+        "aiv:46": 76,
+        "aiv:47": 42,
+        "aiv:1": 2,
+        "aiv:0": 2,
+        "aiv:4": 34,
+        "aiv:2": 9,
+        "aiv:7": 4,
+        "aiv:6": 30,
+        "aiv:3": 3,
+        "aiv:9": 40,
+        "aiv:5": 2,
+        "aiv:11": 2
+      },
+      "resource_releases": 80,
+      "first_release": {
+        "time_ns": 51623,
+        "owner": {
+          "dst_rank": 14,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 3055,
+          "src_rank": 70,
+          "transfer_id": 4295044972,
+          "task_id": 77087,
+          "thread_id": 0,
+          "cores": [
+            "aiv:5"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 52453,
+        "owner": {
+          "dst_rank": 98,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 4591,
+          "src_rank": 70,
+          "transfer_id": 4295045354,
+          "task_id": 77465,
+          "thread_id": 0,
+          "cores": [
+            "aiv:36"
+          ],
+          "offset": 4096,
+          "bytes": 2048,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 61
+      }
+    },
+    {
+      "transfer_id": 4295045021,
+      "rank_id": 70,
+      "submitted_ns": 53849,
+      "formed_ns": 54350,
+      "wait_ns": 501,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 501
+      },
+      "blocks": {
+        "outstanding_blocked": 79
+      },
+      "queue_trace_sequences": [
+        6713,
+        6949
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 36,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:11",
+        "aiv:14",
+        "aiv:15",
+        "aiv:18",
+        "aiv:2",
+        "aiv:3",
+        "aiv:30",
+        "aiv:33",
+        "aiv:34",
+        "aiv:35",
+        "aiv:36",
+        "aiv:37",
+        "aiv:38",
+        "aiv:39",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 2,
+      "behind_other_tasks_ns": 499,
+      "head_cores_time_ns": {
+        "aiv:30": 2,
+        "aiv:39": 3,
+        "aiv:47": 2,
+        "aiv:40": 2,
+        "aiv:45": 1,
+        "aiv:33": 37,
+        "aiv:41": 1,
+        "aiv:42": 10,
+        "aiv:43": 24,
+        "aiv:34": 4,
+        "aiv:35": 14,
+        "aiv:44": 31,
+        "aiv:7": 19,
+        "aiv:6": 16,
+        "aiv:1": 1,
+        "aiv:3": 6,
+        "aiv:9": 6,
+        "aiv:0": 2,
+        "aiv:14": 68,
+        "aiv:11": 42,
+        "aiv:2": 4,
+        "aiv:36": 18,
+        "aiv:5": 18,
+        "aiv:15": 4,
+        "aiv:18": 6,
+        "aiv:37": 76,
+        "aiv:46": 47,
+        "aiv:38": 35,
+        "aiv:8": 2
+      },
+      "resource_releases": 52,
+      "first_release": {
+        "time_ns": 53851,
+        "owner": {
+          "dst_rank": 14,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 3064,
+          "src_rank": 70,
+          "transfer_id": 4295044974,
+          "task_id": 77089,
+          "thread_id": 0,
+          "cores": [
+            "aiv:5"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 54350,
+        "owner": {
+          "dst_rank": 120,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 4980,
+          "src_rank": 70,
+          "transfer_id": 4295045451,
+          "task_id": 77562,
+          "thread_id": 0,
+          "cores": [
+            "aiv:44"
+          ],
+          "offset": 0,
+          "bytes": 32,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    },
+    {
+      "transfer_id": 4295045024,
+      "rank_id": 70,
+      "submitted_ns": 56371,
+      "formed_ns": 57116,
+      "wait_ns": 745,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 745
+      },
+      "blocks": {
+        "outstanding_blocked": 99
+      },
+      "queue_trace_sequences": [
+        7751,
+        8047
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 45,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:10",
+        "aiv:11",
+        "aiv:12",
+        "aiv:14",
+        "aiv:15",
+        "aiv:18",
+        "aiv:2",
+        "aiv:25",
+        "aiv:29",
+        "aiv:3",
+        "aiv:34",
+        "aiv:36",
+        "aiv:38",
+        "aiv:39",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 0,
+      "behind_other_tasks_ns": 745,
+      "head_cores_time_ns": {
+        "aiv:34": 47,
+        "aiv:14": 4,
+        "aiv:18": 32,
+        "aiv:36": 6,
+        "aiv:45": 40,
+        "aiv:42": 48,
+        "aiv:46": 37,
+        "aiv:7": 1,
+        "aiv:43": 47,
+        "aiv:38": 32,
+        "aiv:6": 1,
+        "aiv:1": 37,
+        "aiv:44": 58,
+        "aiv:11": 1,
+        "aiv:4": 1,
+        "aiv:39": 32,
+        "aiv:10": 1,
+        "aiv:29": 4,
+        "aiv:47": 33,
+        "aiv:15": 33,
+        "aiv:3": 17,
+        "aiv:40": 46,
+        "aiv:12": 24,
+        "aiv:2": 9,
+        "aiv:9": 73,
+        "aiv:41": 23,
+        "aiv:0": 58
+      },
+      "resource_releases": 77,
+      "first_release": {
+        "time_ns": 56382,
+        "owner": {
+          "dst_rank": 39,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 3535,
+          "src_rank": 70,
+          "transfer_id": 4295045092,
+          "task_id": 77207,
+          "thread_id": 0,
+          "cores": [
+            "aiv:13"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 57116,
+        "owner": {
+          "dst_rank": 96,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 4612,
+          "src_rank": 70,
+          "transfer_id": 4295045359,
+          "task_id": 77470,
+          "thread_id": 0,
+          "cores": [
+            "aiv:36"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 62
+      }
+    },
+    {
+      "transfer_id": 4295045027,
+      "rank_id": 70,
+      "submitted_ns": 58457,
+      "formed_ns": 59131,
+      "wait_ns": 674,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 674
+      },
+      "blocks": {
+        "outstanding_blocked": 81
+      },
+      "queue_trace_sequences": [
+        8614,
+        8853
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 39,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:11",
+        "aiv:12",
+        "aiv:14",
+        "aiv:15",
+        "aiv:18",
+        "aiv:21",
+        "aiv:25",
+        "aiv:29",
+        "aiv:3",
+        "aiv:34",
+        "aiv:36",
+        "aiv:37",
+        "aiv:38",
+        "aiv:39",
+        "aiv:40",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:7",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 6,
+      "behind_other_tasks_ns": 668,
+      "head_cores_time_ns": {
+        "aiv:36": 24,
+        "aiv:45": 55,
+        "aiv:37": 25,
+        "aiv:44": 2,
+        "aiv:29": 12,
+        "aiv:39": 43,
+        "aiv:21": 26,
+        "aiv:38": 58,
+        "aiv:40": 4,
+        "aiv:46": 32,
+        "aiv:18": 29,
+        "aiv:41": 7,
+        "aiv:25": 17,
+        "aiv:15": 1,
+        "aiv:47": 75,
+        "aiv:12": 5,
+        "aiv:0": 3,
+        "aiv:7": 1,
+        "aiv:34": 37,
+        "aiv:3": 2,
+        "aiv:14": 34,
+        "aiv:42": 25,
+        "aiv:9": 69,
+        "aiv:1": 22,
+        "aiv:5": 31,
+        "aiv:11": 2,
+        "aiv:43": 27,
+        "aiv:8": 6
+      },
+      "resource_releases": 65,
+      "first_release": {
+        "time_ns": 58478,
+        "owner": {
+          "dst_rank": 15,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 3091,
+          "src_rank": 70,
+          "transfer_id": 4295044981,
+          "task_id": 77096,
+          "thread_id": 0,
+          "cores": [
+            "aiv:5"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 59131,
+        "owner": {
+          "dst_rank": 44,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L7.combine",
+          "send_node_id": 3648,
+          "src_rank": 70,
+          "transfer_id": 4295045120,
+          "task_id": 77235,
+          "thread_id": 0,
+          "cores": [
+            "aiv:15"
+          ],
+          "offset": 0,
+          "bytes": 32,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    },
+    {
+      "transfer_id": 4295086585,
+      "rank_id": 65,
+      "submitted_ns": 88215,
+      "formed_ns": 88763,
+      "wait_ns": 548,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 548
+      },
+      "blocks": {
+        "outstanding_blocked": 68
+      },
+      "queue_trace_sequences": [
+        10970,
+        11191
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 38,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:10",
+        "aiv:11",
+        "aiv:12",
+        "aiv:13",
+        "aiv:14",
+        "aiv:15",
+        "aiv:16",
+        "aiv:17",
+        "aiv:19",
+        "aiv:2",
+        "aiv:21",
+        "aiv:22",
+        "aiv:23",
+        "aiv:25",
+        "aiv:3",
+        "aiv:4",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:8",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 5,
+      "behind_other_tasks_ns": 543,
+      "head_cores_time_ns": {
+        "aiv:41": 8,
+        "aiv:42": 36,
+        "aiv:43": 82,
+        "aiv:44": 45,
+        "aiv:45": 37,
+        "aiv:46": 44,
+        "aiv:47": 42,
+        "aiv:22": 42,
+        "aiv:0": 2,
+        "aiv:1": 38,
+        "aiv:4": 2,
+        "aiv:2": 2,
+        "aiv:8": 38,
+        "aiv:3": 40,
+        "aiv:12": 2,
+        "aiv:6": 1,
+        "aiv:13": 1,
+        "aiv:23": 4,
+        "aiv:10": 34,
+        "aiv:25": 4,
+        "aiv:14": 4,
+        "aiv:16": 32,
+        "aiv:19": 1,
+        "aiv:21": 1,
+        "aiv:15": 1,
+        "aiv:20": 5
+      },
+      "resource_releases": 54,
+      "first_release": {
+        "time_ns": 88217,
+        "owner": {
+          "dst_rank": 54,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 5489,
+          "src_rank": 65,
+          "transfer_id": 4295086569,
+          "task_id": 118381,
+          "thread_id": 0,
+          "cores": [
+            "aiv:19"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 88763,
+        "owner": {
+          "dst_rank": 115,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 6629,
+          "src_rank": 65,
+          "transfer_id": 4295086853,
+          "task_id": 118663,
+          "thread_id": 0,
+          "cores": [
+            "aiv:41"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    },
+    {
+      "transfer_id": 4295086588,
+      "rank_id": 65,
+      "submitted_ns": 90284,
+      "formed_ns": 91002,
+      "wait_ns": 718,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 718
+      },
+      "blocks": {
+        "outstanding_blocked": 110
+      },
+      "queue_trace_sequences": [
+        11846,
+        12173
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 49,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:10",
+        "aiv:11",
+        "aiv:12",
+        "aiv:15",
+        "aiv:16",
+        "aiv:2",
+        "aiv:22",
+        "aiv:23",
+        "aiv:25",
+        "aiv:34",
+        "aiv:36",
+        "aiv:37",
+        "aiv:38",
+        "aiv:39",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:42",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:8",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 2,
+      "behind_other_tasks_ns": 716,
+      "head_cores_time_ns": {
+        "aiv:8": 2,
+        "aiv:12": 1,
+        "aiv:36": 19,
+        "aiv:34": 24,
+        "aiv:23": 2,
+        "aiv:6": 11,
+        "aiv:9": 19,
+        "aiv:25": 2,
+        "aiv:39": 41,
+        "aiv:5": 3,
+        "aiv:16": 3,
+        "aiv:42": 3,
+        "aiv:40": 32,
+        "aiv:37": 12,
+        "aiv:41": 32,
+        "aiv:10": 1,
+        "aiv:15": 3,
+        "aiv:22": 41,
+        "aiv:43": 12,
+        "aiv:47": 67,
+        "aiv:44": 28,
+        "aiv:38": 51,
+        "aiv:45": 48,
+        "aiv:46": 48,
+        "aiv:0": 72,
+        "aiv:11": 3,
+        "aiv:1": 35,
+        "aiv:4": 49,
+        "aiv:2": 10,
+        "aiv:7": 42,
+        "aiv:20": 2
+      },
+      "resource_releases": 88,
+      "first_release": {
+        "time_ns": 90286,
+        "owner": {
+          "dst_rank": 52,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 5438,
+          "src_rank": 65,
+          "transfer_id": 4295086556,
+          "task_id": 118368,
+          "thread_id": 0,
+          "cores": [
+            "aiv:18"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 91002,
+        "owner": {
+          "dst_rank": 44,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 5266,
+          "src_rank": 65,
+          "transfer_id": 4295086513,
+          "task_id": 118325,
+          "thread_id": 0,
+          "cores": [
+            "aiv:15"
+          ],
+          "offset": 0,
+          "bytes": 32,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    },
+    {
+      "transfer_id": 4295086591,
+      "rank_id": 65,
+      "submitted_ns": 92399,
+      "formed_ns": 93140,
+      "wait_ns": 741,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 741
+      },
+      "blocks": {
+        "outstanding_blocked": 94
+      },
+      "queue_trace_sequences": [
+        12762,
+        13046
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 42,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:12",
+        "aiv:13",
+        "aiv:14",
+        "aiv:16",
+        "aiv:2",
+        "aiv:22",
+        "aiv:23",
+        "aiv:25",
+        "aiv:3",
+        "aiv:30",
+        "aiv:34",
+        "aiv:35",
+        "aiv:37",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:43",
+        "aiv:44",
+        "aiv:45",
+        "aiv:46",
+        "aiv:47",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:8",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 1,
+      "behind_other_tasks_ns": 740,
+      "head_cores_time_ns": {
+        "aiv:22": 36,
+        "aiv:37": 84,
+        "aiv:30": 33,
+        "aiv:41": 9,
+        "aiv:35": 73,
+        "aiv:8": 17,
+        "aiv:45": 30,
+        "aiv:12": 5,
+        "aiv:46": 44,
+        "aiv:43": 40,
+        "aiv:34": 41,
+        "aiv:4": 1,
+        "aiv:0": 35,
+        "aiv:7": 4,
+        "aiv:25": 2,
+        "aiv:40": 77,
+        "aiv:47": 9,
+        "aiv:6": 31,
+        "aiv:44": 14,
+        "aiv:13": 28,
+        "aiv:2": 45,
+        "aiv:3": 1,
+        "aiv:16": 3,
+        "aiv:14": 34,
+        "aiv:5": 3,
+        "aiv:23": 41,
+        "aiv:20": 1
+      },
+      "resource_releases": 71,
+      "first_release": {
+        "time_ns": 92401,
+        "owner": {
+          "dst_rank": 57,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 5573,
+          "src_rank": 65,
+          "transfer_id": 4295086590,
+          "task_id": 118402,
+          "thread_id": 0,
+          "cores": [
+            "aiv:20"
+          ],
+          "offset": 4096,
+          "bytes": 2048,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 93140,
+        "owner": {
+          "dst_rank": 119,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 6698,
+          "src_rank": 65,
+          "transfer_id": 4295086870,
+          "task_id": 118680,
+          "thread_id": 0,
+          "cores": [
+            "aiv:42"
+          ],
+          "offset": 0,
+          "bytes": 4096,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    },
+    {
+      "transfer_id": 4295086594,
+      "rank_id": 65,
+      "submitted_ns": 94581,
+      "formed_ns": 95089,
+      "wait_ns": 508,
+      "nonoverlapping_state_ns": {
+        "worker_quota_full": 508
+      },
+      "blocks": {
+        "outstanding_blocked": 82
+      },
+      "queue_trace_sequences": [
+        13648,
+        13900
+      ],
+      "initial_worker_inflight": 64,
+      "worker_capacity": 64,
+      "initial_pool_used": 64,
+      "pool_capacity": 256,
+      "preceding_tasks": 39,
+      "preceding_cores": [
+        "aiv:0",
+        "aiv:1",
+        "aiv:12",
+        "aiv:13",
+        "aiv:16",
+        "aiv:2",
+        "aiv:23",
+        "aiv:24",
+        "aiv:25",
+        "aiv:29",
+        "aiv:3",
+        "aiv:30",
+        "aiv:34",
+        "aiv:35",
+        "aiv:37",
+        "aiv:38",
+        "aiv:39",
+        "aiv:4",
+        "aiv:40",
+        "aiv:41",
+        "aiv:43",
+        "aiv:45",
+        "aiv:46",
+        "aiv:5",
+        "aiv:6",
+        "aiv:7",
+        "aiv:8",
+        "aiv:9"
+      ],
+      "own_head_wait_ns": 3,
+      "behind_other_tasks_ns": 505,
+      "head_cores_time_ns": {
+        "aiv:23": 2,
+        "aiv:29": 9,
+        "aiv:2": 4,
+        "aiv:30": 33,
+        "aiv:39": 42,
+        "aiv:38": 3,
+        "aiv:12": 34,
+        "aiv:45": 9,
+        "aiv:25": 2,
+        "aiv:4": 2,
+        "aiv:7": 28,
+        "aiv:41": 37,
+        "aiv:34": 48,
+        "aiv:3": 1,
+        "aiv:6": 33,
+        "aiv:46": 21,
+        "aiv:37": 30,
+        "aiv:0": 46,
+        "aiv:5": 2,
+        "aiv:16": 24,
+        "aiv:9": 1,
+        "aiv:35": 14,
+        "aiv:40": 68,
+        "aiv:43": 11,
+        "aiv:24": 1,
+        "aiv:20": 3
+      },
+      "resource_releases": 62,
+      "first_release": {
+        "time_ns": 94583,
+        "owner": {
+          "dst_rank": 58,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 5585,
+          "src_rank": 65,
+          "transfer_id": 4295086593,
+          "task_id": 118405,
+          "thread_id": 0,
+          "cores": [
+            "aiv:20"
+          ],
+          "offset": 4096,
+          "bytes": 2048,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      },
+      "last_release": {
+        "time_ns": 95089,
+        "owner": {
+          "dst_rank": 88,
+          "graph_id": "g0",
+          "operation_id": "D.w0.L8.combine",
+          "send_node_id": 6137,
+          "src_rank": 65,
+          "transfer_id": 4295086730,
+          "task_id": 118540,
+          "thread_id": 0,
+          "cores": [
+            "aiv:30"
+          ],
+          "offset": 4096,
+          "bytes": 2048,
+          "operation": "STORE"
+        },
+        "remaining_inflight": 63
+      }
+    }
+  ],
+  "detailed_report": {
+    "member": "queue-review.json",
+    "sha256": "839efa5ca81588335f2ba3611426ab82e0e572d113e6f60e68780137b6861e74"
+  },
+  "note": "All original queue states, byte-range owners and releases remain in the detailed archived report and native_queue stream."
+}

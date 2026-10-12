@@ -153,29 +153,77 @@ def restore(archive, output):
         logical_bytes=report['logical_bytes'], **footprint)
 
 
+def release_restored(directory, archive, keep=()):
+    """Release only byte-verified restored files; the original archive survives.
+
+    Kept directories remain usable as sealed public runs/slices. An external
+    journal binds subsequent cleanup to the same archive and exact live files.
+    """
+    directory,archive=Path(directory).resolve(),Path(archive).resolve()
+    allowed=ROOT/'runs/scaleup_issue_screening'
+    if not directory.is_relative_to(allowed) or directory==allowed or archive.is_relative_to(directory):
+        raise ValueError('Only this experiment owns releasable restored copies')
+    marker=read(directory/'case.json')
+    if marker.get('owned_by')!='scaleup_issue_screening' or marker.get('schema_version')!='issue-screening-case/1':
+        raise ValueError('Missing restored case ownership marker')
+    report=read(str(archive)+'.json')
+    if not report.get('verified') or digest(archive)!=report['archive_sha256']:
+        raise ValueError('Restored source archive identity mismatch')
+    verify(archive,report['entries'])
+    journal=Path(str(directory)+'.release.json');released=set()
+    if journal.exists():
+        previous=read(journal)
+        if previous['archive_sha256']!=report['archive_sha256'] or previous['status']!='completed':
+            raise ValueError('Inspect incomplete or mismatched release journal')
+        released=set(previous['released_files'])
+    remaining={k:v for k,v in report['entries'].items() if k not in released}
+    if inventory(directory)!=remaining:
+        raise ValueError('Restored copy changed or contains unregistered files; nothing released')
+    prefixes=[safe_name(k) for k in keep]
+    if any(not (directory/k).is_dir() for k in prefixes):raise ValueError('Keep paths must be existing directories')
+    selected=[k for k in remaining if not prefixes or
+              (k!='case.json' and not any(k.startswith(p+'/') for p in prefixes))]
+    proof=dict(schema_version='issue-screening-restored-release/1',archive=str(archive),
+        archive_sha256=report['archive_sha256'],directory=str(directory),keep_directories=prefixes,
+        status='verified_pending_release',released_files=sorted(released),pending_files=selected)
+    save(journal,proof)
+    for name in selected:(directory/name).unlink()
+    for path in sorted(directory.rglob('*'),key=lambda p:len(p.parts),reverse=True):
+        if path.is_dir() and not any(path.iterdir()):path.rmdir()
+    if not any(directory.iterdir()):directory.rmdir()
+    proof.update(status='completed',released_files=sorted(released|set(selected)),pending_files=[])
+    save(journal,proof)
+    return dict(passed=True,released_files=len(selected),kept_files=len(remaining)-len(selected),journal=str(journal))
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action', choices=('pack', 'restore'))
+    p.add_argument('action', choices=('pack', 'restore', 'release-restored'))
     p.add_argument('--input', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--release-expanded', action='store_true', help='Pack: release only registered case files after two digest checks')
+    p.add_argument('--keep-directory',action='append',default=[],help='release-restored: keep this relative directory; output names the existing source archive')
     p.add_argument('--worker', action='store_true', help=argparse.SUPPRESS)
     a = p.parse_args()
-    if a.action == 'restore' and a.release_expanded:
+    if a.action != 'pack' and a.release_expanded:
         p.error('--release-expanded applies only to pack')
+    if a.keep_directory and a.action!='release-restored':p.error('--keep-directory applies only to release-restored')
     if not a.worker:
         from moe_ub_cosim.host_probe import probe
         args = [sys.executable, '-m', 'experiments.scaleup_issue_screening.archive', a.action,
                 '--input', str(a.input.resolve()), '--output', str(a.output.resolve()), '--worker']
         if a.release_expanded:
             args.append('--release-expanded')
+        for name in a.keep_directory:args.extend(['--keep-directory',name])
         policy = host()
         policy['artifact_roots'] += [str(a.output.resolve().parent)]
-        report = probe(args, str(a.output.resolve())+'-resources', **policy)
+        logs=str(a.input.resolve())+'-release-'+str(len(a.keep_directory))+'-resources' if a.action=='release-restored' else str(a.output.resolve())+'-resources'
+        report = probe(args, logs, **policy)
         if report['status'] != 'completed':
             raise SystemExit('Archive operation failed: '+report['status'])
     else:
-        result = pack(a.input, a.output, a.release_expanded) if a.action == 'pack' else restore(a.input, a.output)
+        result = (pack(a.input,a.output,a.release_expanded) if a.action=='pack' else
+                  restore(a.input,a.output) if a.action=='restore' else release_restored(a.input,a.output,a.keep_directory))
         print(result)
 
 

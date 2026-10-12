@@ -1,6 +1,6 @@
 # 当前任务与交接
 
-既有 **Scale-Up 正常业务问题筛选 / C1 的 E2 增量机制核验**已完成，状态 `completed`。按用户要求同步远端 `main` 到 `c2e6389` 后继续原任务；没有新建任务、里程碑或实验，没有进入 E3/E4。本次实现和实验只建立本地提交，未推送。
+既有 **Scale-Up 正常业务问题筛选 / C1 的 E2 增量机制核验**已完成，状态 `completed`。按用户要求同步远端 `main` 到 `c2e6389` 后继续原任务；没有新建任务、里程碑或实验，没有进入 E3/E4。2026-10-12 按用户新增授权，已将本次实现和实验推送到 GitHub。
 
 结论是：**请求额度和跨核队首推进显著影响当前模型，但真实 A3 的队列组织及核内同步对应尚未证实，因此限制 C1 的现实解释，暂不据此开展新增测量研究。** 这不表示端网映射已被证明有收益或无收益。研究依据见[候选 C1](../../experiments/scaleup_issue_screening/candidates.md#7-本次核验后的候选判断)、[E2 增量结果](../../experiments/scaleup_issue_screening/results/e2/README.md#原生请求与核内同步增量核验)和[研究结论](../../experiments/scaleup_issue_screening/conclusions.md)。
 
@@ -25,7 +25,9 @@
 - 平台最小检查通过：启停等价、边界与溢出、请求占用/释放守恒、worker 额度与共享池分支区分、冻结重放、额度白名单和固定拆分/编号池拒绝。STORE/LOAD 与 A3 回归通过。全新公开示例 `resolve → run → validate` 通过，所选端点 54 个 STORE、36 个 LOAD 请求各自形成/释放守恒。
 - [13 项实验工具检查](../../experiments/scaleup_issue_screening/results/e2/c1-tooling-checks.json)、13 项依赖检查及差异检查通过。分析中的分块顺序变化、SEND 提交与完成区别及消费者选择错误已纠正并复核；失败与拒收摘要保留，没有重跑成功的额度仿真。
 
-平台提交为 `8fe4884 feat(observation): capture bounded native request queue truth`、`4e23dda feat(replay): allow isolated native STORE quota overrides`；ns-3-UB 子模块先保存为 `fd1c6f0`，再更新主仓 gitlink 和锁文件。初始实验复核为 `cb4fe19`，本次实验收尾另以 `experiment:` 提交，与平台分开。LLMServingSim、ASTRA-sim 及更深依赖未改。
+平台提交为 `8fe4884 feat(observation): capture bounded native request queue truth`、`4e23dda feat(replay): allow isolated native STORE quota overrides`；ns-3-UB 子模块先保存为 `fd1c6f0`，再更新主仓 gitlink 和锁文件。初始实验复核为 `cb4fe19`，实验收尾为 `3cfe74d experiment: verify C1 request blocking and bound hardware conclusions`，与平台分开。LLMServingSim、ASTRA-sim 及更深依赖未改。
+
+本次发布先将 ns-3-UB 的 `fd1c6f0` 快进推送至 `baoy21/ns-3-ub:cosim`，再将主仓四个提交推送至 `baoy21/moe-ub-cosim:main`，实现与实验截至 `3cfe74d`；两个远端分支均经 `ls-remote` 核对。发布前 13 项依赖检查通过，递归工作区干净；未更改依赖版本、强制推送或上传本地大产物。实际命令及远端校验在 `runs/scaleup_issue_screening/c1-mechanism-20261012/publish-20261012/`，本页发布记录另以文档提交保存。
 
 原平台仍为 `e3db37a67ebb13edd5dd522dd1f8028cc46c2e19`，原二进制 SHA-256 为 `ad7e83e5b19201e98dd0485c1ed05c0e58181f8f7604871ab1b59aeca0eb57bf`；本次补采与额度对照二进制共用 SHA-256 `9f8b0ac3f695a72806054478c96694baa73c85ecb9227534c805f9058d4d654a`。新旧证据分别绑定版本。
 
@@ -46,4 +48,4 @@
 
 ## 停止位置
 
-本次已完成授权的机制核验与候选去留判断，停止于 C1/E2。若以后重新考虑该候选，最小缺项是选定 A3 实现可复核的状态到后续准备同步关系，以及 AIV/MTE 到协议请求队列的组织和共享范围；不是自动开始新任务的清单。后续研究和远端推送均等待新的明确授权。
+本次已完成授权的机制核验、候选去留判断及发布，停止于 C1/E2。若以后重新考虑该候选，最小缺项是选定 A3 实现可复核的状态到后续准备同步关系，以及 AIV/MTE 到协议请求队列的组织和共享范围；不是自动开始新任务的清单。本次发布之外的后续研究和远端推送均等待新的明确授权。

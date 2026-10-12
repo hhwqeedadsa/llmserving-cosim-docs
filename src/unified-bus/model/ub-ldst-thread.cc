@@ -41,6 +41,9 @@ TypeId UbLdstThread::GetTypeId(void)
                                           UintegerValue(512),
                                           MakeUintegerAccessor(&UbLdstThread::m_storeReqSize),
                                           MakeUintegerChecker<uint32_t>(0, 8192))
+                            .AddTraceSource("QueueState", "Passive queue state at native issue/block/release branches.",
+                                            MakeTraceSourceAccessor(&UbLdstThread::m_queueState),
+                                            "ns3::UbLdstThread::QueueState")
                             .AddAttribute("LoadRequestSize",
                                           "Payload size (bytes) for each LOAD request.",
                                           UintegerValue(64),
@@ -119,6 +122,21 @@ void UbLdstThread::PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment)
         m_storeQueue.push(taskSegment);
         ScheduleWork();
     }
+    ObserveQueue("task_queued", taskSegment);
+}
+
+std::vector<Ptr<const UbLdstTaskSegment>> UbLdstThread::GetQueueSnapshot(bool load) const
+{
+    auto queue = load ? m_loadQueue : m_storeQueue;
+    std::vector<Ptr<const UbLdstTaskSegment>> result;
+    while (!queue.empty()) { result.push_back(queue.front()); queue.pop(); }
+    return result;
+}
+
+void UbLdstThread::ObserveQueue(const std::string& event, Ptr<UbLdstTaskSegment> segment,
+                               uint64_t offset, uint32_t bytes)
+{
+    if (!m_queueState.IsEmpty()) m_queueState(this, event, segment, offset, bytes);
 }
 
 void UbLdstThread::HandleLoadTask()
@@ -140,10 +158,17 @@ void UbLdstThread::HandleLoadTask()
         }
         auto node = NodeList::GetNode(m_nodeId);
         auto ldstapi = node->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();
-        if (!ldstapi->LdstProcess(taskSegment)) return;
+        const auto offset = taskSegment->GetTaskOffset() + taskSegment->GetSize() - taskSegment->GetBytesLeft();
+        const auto bytes = taskSegment->PeekNextDataSize();
+        if (!ldstapi->LdstProcess(taskSegment)) {
+            ObserveQueue("request_pool_blocked", taskSegment, offset, bytes);
+            return;
+        }
         ++m_loadInFlight;
         if (taskSegment->IsSentCompleted()) m_loadQueue.pop();
+        ObserveQueue("request_issued", taskSegment, offset, bytes);
     }
+    if (!m_loadQueue.empty()) ObserveQueue("outstanding_blocked", m_loadQueue.front());
 }
 
 void UbLdstThread::HandleStoreTask()
@@ -165,10 +190,17 @@ void UbLdstThread::HandleStoreTask()
         }
         auto node = NodeList::GetNode(m_nodeId);
         auto ldstapi = node->GetObject<UbController>()->GetUbFunction()->GetUbLdstApi();
-        if (!ldstapi->LdstProcess(taskSegment)) return;
+        const auto offset = taskSegment->GetTaskOffset() + taskSegment->GetSize() - taskSegment->GetBytesLeft();
+        const auto bytes = taskSegment->PeekNextDataSize();
+        if (!ldstapi->LdstProcess(taskSegment)) {
+            ObserveQueue("request_pool_blocked", taskSegment, offset, bytes);
+            return;
+        }
         ++m_storeInFlight;
         if (taskSegment->IsSentCompleted()) m_storeQueue.pop();
+        ObserveQueue("request_issued", taskSegment, offset, bytes);
     }
+    if (!m_storeQueue.empty()) ObserveQueue("outstanding_blocked", m_storeQueue.front());
 }
 
 void UbLdstThread::SetNode(uint32_t nodeId)
@@ -181,7 +213,7 @@ void UbLdstThread::SetThreadId(uint32_t threadId)
     m_threadId = threadId;
 }
 
-void UbLdstThread::UpdateTask(Ptr<UbLdstTaskSegment> taskSegment)
+void UbLdstThread::UpdateTask(Ptr<UbLdstTaskSegment> taskSegment, uint64_t offset, uint32_t bytes)
 {
     auto id = taskSegment->GetTaskSegmentId();
     auto& waiting = m_waitingAckNum.at(id);
@@ -191,6 +223,7 @@ void UbLdstThread::UpdateTask(Ptr<UbLdstTaskSegment> taskSegment)
     --inFlight;
     bool completed = --waiting == 0;
     if (completed) m_waitingAckNum.erase(id);
+    ObserveQueue("response_released", taskSegment, offset, bytes);
     ScheduleWork();
     // Resource state is retired before callbacks can submit another task.
     if (completed)

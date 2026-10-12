@@ -31,6 +31,13 @@ public:
     size_t GetPendingRequestCount() const { return m_requests.size(); }
     size_t GetWaitingThreadCount() const { return m_waitingThreads.size(); }
     uint64_t GetPeakPendingRequestCount() const { return m_peakRequests; }
+    struct RequestState {
+        uint16_t requestId;
+        Ptr<const UbLdstTaskSegment> segment;
+        uint64_t offset;
+        uint32_t bytes;
+    };
+    std::vector<RequestState> GetRequestSnapshot() const;
 
 private:
     void SendPacket(Ptr<UbLdstTaskSegment> taskSegment, Ptr<Packet> packet);

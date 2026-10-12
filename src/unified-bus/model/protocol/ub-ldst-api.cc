@@ -72,6 +72,14 @@ void UbLdstApi::SetNodeId(uint32_t nodeId)
     m_nodeId = nodeId;
 }
 
+std::vector<UbLdstApi::RequestState> UbLdstApi::GetRequestSnapshot() const
+{
+    std::vector<RequestState> result;
+    for (const auto& [id, request] : m_requests)
+        result.push_back({id, request.segment, request.offset, request.bytes});
+    return result;
+}
+
 bool UbLdstApi::LdstProcess(Ptr<UbLdstTaskSegment> taskSegment)
 {
     if (m_requests.size() == m_requestIdCount) {
@@ -298,7 +306,7 @@ void UbLdstApi::RecvResponse(Ptr<Packet> packet)
     auto ldstInst = NodeList::GetNode(m_nodeId)->GetObject<UbLdstInstance>();
     for (auto thread : m_waitingThreads) ldstInst->GetLdstThread(thread)->ScheduleWork();
     m_waitingThreads.clear();
-    ldstInst->OnRecvAck(segment);
+    ldstInst->OnRecvAck(segment, request.offset, request.bytes);
 }
 
 void UbLdstApi::DoDispose()

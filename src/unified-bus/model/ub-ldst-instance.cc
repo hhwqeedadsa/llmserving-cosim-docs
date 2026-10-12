@@ -129,13 +129,13 @@ void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length
     }
 }
 
-void UbLdstInstance::OnRecvAck(Ptr<UbLdstTaskSegment> taskSegment)
+void UbLdstInstance::OnRecvAck(Ptr<UbLdstTaskSegment> taskSegment, uint64_t offset, uint32_t bytes)
 {
     if (!taskSegment || !m_taskSegmentsMap.count(taskSegment->GetTaskSegmentId()))
         throw std::logic_error("Response for inactive LDST segment");
     uint32_t threadId = taskSegment->GetThreadId();
     auto ldstThread = GetLdstThread(threadId);
-    ldstThread->UpdateTask(taskSegment);
+    ldstThread->UpdateTask(taskSegment, offset, bytes);
 }
 
 void UbLdstInstance::OnTaskSegmentCompleted(uint32_t taskId)

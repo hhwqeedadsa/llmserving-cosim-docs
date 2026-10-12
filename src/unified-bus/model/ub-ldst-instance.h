@@ -23,7 +23,7 @@ public:
     void SetClientCallback(Callback<void, uint32_t> cb);
     Ptr<UbLdstThread> GetLdstThread(uint32_t threadId);
     Callback<void, uint32_t> FinishCallback;
-    void OnRecvAck(Ptr<UbLdstTaskSegment> segment);
+    void OnRecvAck(Ptr<UbLdstTaskSegment> segment, uint64_t offset = 0, uint32_t bytes = 0);
     void OnTaskSegmentCompleted(uint32_t taskId);
     uint32_t GetThreadCount() const { return m_threads.size(); }
     size_t GetActiveTaskCount() const { return m_taskToSegmentMap.size(); }

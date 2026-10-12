@@ -27,11 +27,19 @@ public:
     void SetThreadId(uint32_t threadId);
     void HandleLoadTask();
     void HandleStoreTask();
-    void UpdateTask(Ptr<UbLdstTaskSegment> taskSegment);
+    void UpdateTask(Ptr<UbLdstTaskSegment> taskSegment, uint64_t offset = 0, uint32_t bytes = 0);
+    uint32_t GetNodeId() const { return m_nodeId; }
+    uint32_t GetThreadId() const { return m_threadId; }
+    uint32_t GetInFlight(bool load) const { return load ? m_loadInFlight : m_storeInFlight; }
+    uint32_t GetCapacity(bool load) const { return load ? m_loadOutstanding : m_storeOutstanding; }
+    std::vector<Ptr<const UbLdstTaskSegment>> GetQueueSnapshot(bool load) const;
     void SetLoadReqSize(uint32_t size);
     void SetStoreReqLength(uint32_t length);
     void SetLoadRspLength(uint32_t length);
 private:
+    void ObserveQueue(const std::string& event, Ptr<UbLdstTaskSegment> segment,
+                      uint64_t offset = 0, uint32_t bytes = 0);
+    TracedCallback<Ptr<const UbLdstThread>, std::string, Ptr<const UbLdstTaskSegment>, uint64_t, uint32_t> m_queueState;
     uint32_t CalcLength(uint32_t size);
     uint32_t m_nodeId;
     uint32_t m_threadId;

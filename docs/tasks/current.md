@@ -1,25 +1,49 @@
 # 当前任务与交接
 
-**E1、E2 交付收尾已完成，状态 `completed`。** 按用户 2026-10-10 的确认补齐时长和实际路径证据，修正阶段结束判断，整理记录并本地提交。用户随后确认将已完成提交及相关子模块发布到 GitHub，目标为主仓库 `main` 与 ASTRA-sim、LLMServingSim 的 `cosim` 分支。平台 P 部分（M18～M21）保持已完成；本次没有启动 E3、E4 或新的平台任务。
+继续 **Scale-Up 正常业务问题筛选**，当前执行项为既有候选 C1 的 E2 增量机制核验，状态 `pending`。2026-10-12 用户确认沿原任务继续，重点解释专家计算结束后约 12 μs 的发送推进过程。不开新任务、里程碑、平台版本或实验目录，不自动进入 E3。
 
-## 范围与结果
+本次交接只修改文档。Codex 按下述范围开展核查、必要的小型实现与验证；尚未执行新的构建、测试或仿真。原平台验收、E1/E2 已完成运行及交付补证继续有效，新增核验不追溯改写这些执行事实。
 
-| 项目 | 状态 | 结果与证据入口 |
+## 基线与阅读入口
+
+交接前主仓为 `6ebe4984280465316f90886ccdbf4f66f4fe9d49`。原实验平台固定在 `e3db37a67ebb13edd5dd522dd1f8028cc46c2e19`，后端 SHA-256 为 `ad7e83e5b19201e98dd0485c1ed05c0e58181f8f7604871ab1b59aeca0eb57bf`；依赖为 `ns-3-ub c0f1fe5`、`LLMServingSim dfd0d05`、`ASTRA-sim 0210e24`，完整标识以 gitlink 与锁文件为准。开始前检查工作区和远端增量，不覆盖其他修改。
+
+[原实验方案](../../experiments/scaleup_issue_screening/plan_v0.1.md)继续规定研究目标和整体边界；[候选 C1](../../experiments/scaleup_issue_screening/candidates.md)已增量修订，规定本次具体检查、对照和停止条件。[开发维护中的性能现象核查](../development.md#性能现象核查)规定执行者的主动自查责任。进度、实际提交、检查结果和下一步只维护在本页。
+
+| 内容 | 状态 | 依据与当前处理 |
 |---|---|---|
-| 平台 P：M18～M21 | `completed` | 固定 `e3db37a67ebb13edd5dd522dd1f8028cc46c2e19`，平台及子模块未改变；[平台验收](../../fixtures/m21_platform/README.md) |
-| E1 正常业务探索 | `completed` | 四次正常运行、初态比较及全 2688 出口非空时长界限；明确原聚合精度；[E1 结果](../../experiments/scaleup_issue_screening/results/e1/README.md) |
-| E2 成因与稳健性 | `completed` | 三项原对照及四份后端补采；实际路径、不扰动和选定出口精确时长核验通过；[E2 结果](../../experiments/scaleup_issue_screening/results/e2/README.md) |
-| E3 测量价值 | `pending` | 未执行；可以考虑具体端点定位任务，不能因所有网络等待未分清而一概排除 |
-| E4 完整场景 | `conditional` | 未执行，仍以成因和信息比较通过为前提 |
+| 平台 P：M18～M21 | `completed` | [平台验收](../../fixtures/m21_platform/README.md)；不重开 v0.5 开发清单 |
+| E1 正常业务探索 | `completed` | [E1 结果](../../experiments/scaleup_issue_screening/results/e1/README.md)；沿用输入与已保存结果 |
+| E2 原对照及交付补证 | `completed` | [E2 结果](../../experiments/scaleup_issue_screening/results/e2/README.md)、[交付复核](../../experiments/scaleup_issue_screening/results/delivery-review.md)；保留原事实与归档 |
+| E2：C1 发送推进机制核验 | `pending` | 按候选文档先复核两条前驱链，再核查请求队列、资源占用及核内同步 |
+| E3、E4 | `pending` / `conditional` | 均未执行；不在本次执行范围，机制核验后先作候选去留判断 |
 
-只保留一个候选 C1：供数准备拖后消费者并传递到后层。专家准备成本作用有证据；首次交换机发送前的剩余过程尚未完全归因。没有证明端网映射有收益或无收益，也没有硬件校准或泛化结论。[研究结论](../../experiments/scaleup_issue_screening/conclusions.md)解释发现与限制，[原方案](../../experiments/scaleup_issue_screening/plan_v0.1.md)规定研究门槛。
+旧任务的检查、资源与发布记录完整保留在[交接前快照](https://github.com/baoy21/moe-ub-cosim/blob/6ebe4984280465316f90886ccdbf4f66f4fe9d49/docs/tasks/current.md)。本次状态变化表示继续同一候选，不表示旧结果通过了新增的现实机制核验。
 
-## 验证与保存
+## 本次固定与允许范围
 
-[交付复核](../../experiments/scaleup_issue_screening/results/delivery-review.md)按原方案逐项核对；[统一验收](../../experiments/scaleup_issue_screening/results/delivery/acceptance.json)通过。5 项新增检查、11 项原实验工具检查、独立合成完整流程及 13 项依赖检查通过。平台校验、实验解释和硬件校准分别陈述，没有把只读检查当成构建。
+固定现有真实专家路由、网络拓扑、请求与专家放置、A3 STORE/STORE 调用和随输入工作量增长的线性计算成本。不重新组织负载代表性调研、计算成本拟合或专家均衡方案；已有来源与趋势检查沿用，除非发现直接影响本次判断的新错误，不反复重开。
 
-原七个归档保留，新增四个补采包约 0.858 GiB，已逐文件核验后释放本次展开文件。累计产物采样峰值 47.718 GiB，低于原 48 GiB 上限。后端回放不执行前端或重新构图；[资源汇总](../../experiments/scaleup_issue_screening/results/resources.md)保存实际耗时及计量边界。
+首要对象是第 7 层 rank 70 向 rank 27 供数的 12,020 ns，以及第 8 层 rank 65 向 rank 58 供数的 12,583 ns。已知 `ThreadNum=1` 是项目显式配置，后端默认值为 48；增加 worker 还会拆分每份任务并改变请求数量，不能直接作为并行度单因素对照。具体证据及第 7 层时间分解见候选文档，执行者仍须用原始记录独立核对。
 
-详细时长表、逐包证据、命令和日志在 `runs/scaleup_issue_screening/delivery/`；[补证索引](../../experiments/scaleup_issue_screening/results/delivery/README.md)说明目录，[实验操作](../../experiments/scaleup_issue_screening/usage.md)提供公开可复用命令。方法、结果与运行日志分别保存，当前页只负责交接。历史阶段见[里程碑](../milestone_history.md)。
+允许在既有预算内完成配置和源码溯源、已有记录重分析、局部补采、最小机制测试，以及证据支持的必要平台修正。只在现有接口不能回答关键问题时补公共能力；任务分配与字节拆分的独立控制属于条件性修改，不是必做功能。平台修正与实验对照分别检查、分别提交。
 
-本次提交恢复既有类型前缀，规范已写入[开发维护](../development.md)；没有改写被证据引用的历史提交。发布按 ASTRA-sim、LLMServingSim、主仓库的顺序进行，命令、退出状态及远端提交核验保存在 `runs/git-publish/20261010-e1-e2/`。当前停止在 E1/E2 收尾完成处，下一阶段由用户确认。
+不预设单 worker 是根因，不把默认 48 或 AIV 数直接当作真实协议资源数，不承诺保留当前性能现象。不开启状态消息优先级优化、测量算法、P4、A5 移植、完整 HBM/缓存模拟、P/D、多模型或完整 61 块/64 步运行。
+
+## 执行顺序与自主处理
+
+先复核已有事件与生效配置，核对 `ThreadNum` 的覆盖来源、每份任务的拆分方式，以及同一通信核等待状态请求形成后才继续的依赖。随后在所选端点与必要时间范围内补齐队首、在途占用、阻塞原因和释放响应，提出可被否定的候选解释，再据此选择少量对照。具体要求以候选文档为准，不另行维护并行清单。
+
+在这一范围内，Codex 应主动检查相关源码、配置、原始记录并完成低成本验证，不因某项摘要写着未知就停止，也不为已经允许的小步骤反复等待确认。确实缺少硬件资料、资源预算不足或需要扩大研究范围时，记录已完成核查、已排除解释和最小缺项，停止受影响部分；不能自行换版本、抬高预算或制造新的正例。
+
+主要依赖未经证实的模型设定时，修正或限制该候选；机制有依据且业务影响明确时，再说明现有信息的具体不足。没有信息增量或影响很小也可收尾。本次只形成是否继续 C1 的判断，不以完成 E3 或获得优化收益为验收条件。
+
+## 资源、记录与交付
+
+沿用原上限：后端运行 RSS 48 GiB、单进程地址空间 56 GiB、7200 秒；其他阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒；累计产物 48 GiB，磁盘至少空余 20 GiB。上一轮累计产物采样峰值为 47.718 GiB，不能视为当前空闲量。先读取索引和压缩资料，核对实际占用，再按需恢复；不自动清理旧归档、复制整批产物或提高上限。
+
+运行与恢复方法沿用[实验操作](../../experiments/scaleup_issue_screening/usage.md)，旧资料位置见[资源汇总](../../experiments/scaleup_issue_screening/results/resources.md)和[补证索引](../../experiments/scaleup_issue_screening/results/delivery/README.md)。新增产物使用该实验已有 `runs/scaleup_issue_screening/` 下的新运行路径，不覆盖历史输入和结果。
+
+本页目前停止于文档交接，下一项是 C1 的现有证据复核。每批验证后记录实际代码及依赖提交、检查摘要、结果入口和下一步；详细命令及日志留在运行目录。新解释写回对应候选和结论小节，新增结果在实际形成后更新既有 E2 结果组织，不预建空报告。
+
+本次用户授权发布交接文档。Codex 后续按范围实现、验证并建立本地检查点；新的远端推送仍需明确授权。涉及子模块按由内向外的顺序保存提交、更新 gitlink 与锁文件，不改写被已有证据引用的历史提交。

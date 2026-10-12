@@ -4,19 +4,21 @@
 
 研究范围、输入建议、成因对照、信息比较和结束条件以[实验方案 v0.1](plan_v0.1.md)为准。平台修正由[平台 v0.5 规范](../../docs/archive/moe_ub_cosim_dev_v0.5.md)负责，两者分别验收。当前状态、实际基线和执行顺序只维护在[当前任务](../../docs/tasks/current.md)。
 
-查看本轮发现先读[研究结论](conclusions.md)，核对具体过程再看 [E1 正常业务](results/e1/README.md)和 [E2 成因对照](results/e2/README.md)。[资源汇总](results/resources.md)说明实际耗时、内存、保存空间及计量边界；复现或恢复结果见[操作说明](usage.md)。
+查看已有发现先读[研究结论](conclusions.md)，核对具体过程再看 [E1 正常业务](results/e1/README.md)和 [E2 成因对照](results/e2/README.md)。[资源汇总](results/resources.md)说明实际耗时、内存、保存空间及计量边界；复现或恢复结果见[操作说明](usage.md)。
 
 2026-10-10 的[交付复核](results/delivery-review.md)发现并补齐了时长与路径两项缺口，同时修正原先过宽的 E3 停止判断。[补证证据](results/delivery/README.md)保存全覆盖时长范围、候选路径变化及不扰动检查；不把这些研究者内部核验称为测量算法收益。
 
+2026-10-12 的[候选 C1 增量安排](candidates.md)继续核验计算结束后的发送推进、LD/ST 请求组织及必要同步。它承接同一实验，不新建任务；固定已有路由、拓扑和计算成本，先判断现象是否依赖模型设定，不自动转入供数端定位算法或 E3。
+
 ## 接手入口
 
-先读仓库 [AGENTS.md](../../AGENTS.md)和当前任务，确认平台验收是否完成。研究运行采用通过 v0.5 对应验收的实际提交，不直接复用旧模型的任务图和时间记录。运行、采样和重放的既有规则见[用户指南](../../docs/user_guide.md)，字段见[记录格式](../../docs/record_storage.md)，来源与近似见[模型依据](../../docs/model_validation.md)。
+先读仓库 [AGENTS.md](../../AGENTS.md)、当前任务和候选 C1，再按[开发维护](../../docs/development.md#性能现象核查)执行主动核查。原平台验收和已有结果继续保留；局部实现若确需改变行为，应独立验收并固定新基线，不能直接复用不兼容的图。运行、采样和重放的既有规则见[用户指南](../../docs/user_guide.md)，字段见[记录格式](../../docs/record_storage.md)，来源与近似见[模型依据](../../docs/model_validation.md)。
 
 本目录与旧的 `mapping_value`、`scaleup_observability` 独立。旧结果用于了解已有发现和限制，不作为本实验默认算法、干预位置、输入筛选或采样规则。
 
 ## 实现与资料职责
 
-固定输入与判定规则见[本轮方法](method.md)，命令和输入输出位置见[操作说明](usage.md)。`configs/` 保存独立配置，`workflow.py` 组织公共平台命令，`analyze.py` 做研究者内部分析，`archive.py` 保存与恢复结果；研究结果不写回方案。正常业务现象与证据见 [E1 结果](results/e1/README.md)，候选和预定成因对照见[候选记录](candidates.md)，依赖事实及成因结果见 [E2 记录](results/e2/README.md)。受限测量与评价只在候选满足方案条件时开展。
+原正常输入与判定规则见[本轮方法](method.md)，原交付补证规则见[补证方法](delivery_method.md)，当前增量核验以[候选 C1](candidates.md)为准，不追溯改写原运行方法。命令和输入输出位置见[操作说明](usage.md)。`configs/` 保存独立配置，`workflow.py` 组织公共平台命令，`analyze.py` 做研究者内部分析，`archive.py` 保存与恢复结果；研究结果不写回方案。正常业务现象与证据见 [E1 结果](results/e1/README.md)，依赖事实及成因结果见 [E2 记录](results/e2/README.md)。
 
 配置保存在本实验目录或由确定的公共来源生成，准备和运行不得依赖旧运行目录或测试 helper。平台通用代码不导入本实验。模型资源、回调和接口确需变化时，先按平台规范独立修改并验收，再固定新的实验基线。
 

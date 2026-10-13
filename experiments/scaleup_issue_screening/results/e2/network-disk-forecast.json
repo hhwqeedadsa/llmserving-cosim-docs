@@ -1,0 +1,325 @@
+{
+  "schema_version": "issue-network-disk-forecast/1",
+  "scope": "read_only_accounting_not_simulation",
+  "status": "estimate_not_measured_1024_capture",
+  "source_commit": "c2a8bd5",
+  "evidence_directory": "runs/scaleup_issue_screening/network-screening-20261013",
+  "sources": {
+    "disk-accounting.py": {
+      "sha256": "ff8aec7f5fb5917b8721b187f52164394e8c45814295c273baad800652cda10f"
+    },
+    "disk-inventory.json": {
+      "sha256": "25d93b76671d713f4e41d4eac109832c95879760ad4cc09c4e8b447297799dc1"
+    },
+    "disk-compression.json": {
+      "sha256": "fcf0d54f3b42c9711d38aa38375e2ab6a9923c566f37cf375220e3369f5d5c42"
+    },
+    "disk-duplicates.json": {
+      "sha256": "fb32a24758b80647f614cfea3513c31e74a698077b9a488ec3be018b29a5a4e0"
+    },
+    "disk-archive-footprints.json": {
+      "sha256": "60a26ba7d041886b8d526624ccdffb9c90e27ad1d411aa47d3c3e78645537577"
+    },
+    "disk-accounting-execution.json": {
+      "sha256": "e55a85ec7bc1253ca7679fbb2476399239893ce2920cdcb8b2a423165972e18e"
+    },
+    "disk-accounting-resources/probe.json": {
+      "sha256": "64db9f81f2d907293c29197d3daae463b079e9155086d709928944ac09d845b9"
+    }
+  },
+  "forecast_script_sha256": "7bf03bf8bc158d4b8f43ea204c42763bd00a2147e13602d5199b4ed6cabef1d1",
+  "current": {
+    "apparent_bytes": 49829842772,
+    "allocated_bytes": 50993610752,
+    "planning_start_bytes": 50993999872,
+    "cap_bytes": 51539607552,
+    "physical_disk": {
+      "total": 31875640950784,
+      "used": 23823900262400,
+      "free": 6451519864832
+    },
+    "accounting": "max(unique file apparent bytes, allocated file and directory bytes); all 16 existing roots retained",
+    "roots": [
+      {
+        "path": "build/v04-platform",
+        "apparent_bytes": 109855947,
+        "allocated_bytes": 113840128,
+        "files": 986
+      },
+      {
+        "path": "runs/v04-platform",
+        "apparent_bytes": 4061655472,
+        "allocated_bytes": 4207796224,
+        "files": 38769
+      },
+      {
+        "path": "build/m10-resource-efficiency",
+        "apparent_bytes": 166759805,
+        "allocated_bytes": 170778624,
+        "files": 1051
+      },
+      {
+        "path": "runs/v03-resource-efficiency",
+        "apparent_bytes": 10663065706,
+        "allocated_bytes": 10827821056,
+        "files": 48218
+      },
+      {
+        "path": "build/m10-research-slice",
+        "apparent_bytes": 87143926,
+        "allocated_bytes": 90984448,
+        "files": 954
+      },
+      {
+        "path": "runs/v03-research-slice",
+        "apparent_bytes": 6866604480,
+        "allocated_bytes": 7503495168,
+        "files": 123886
+      },
+      {
+        "path": "runs/mapping_value",
+        "apparent_bytes": 17294666271,
+        "allocated_bytes": 17326469120,
+        "files": 8561
+      },
+      {
+        "path": "runs/scaleup_observability",
+        "apparent_bytes": 3681321140,
+        "allocated_bytes": 3774943232,
+        "files": 27933
+      },
+      {
+        "path": "runs/task-sync-20261008",
+        "apparent_bytes": 4856,
+        "allocated_bytes": 77824,
+        "files": 28
+      },
+      {
+        "path": "build/m17-send-state",
+        "apparent_bytes": 91205098,
+        "allocated_bytes": 95166464,
+        "files": 960
+      },
+      {
+        "path": "runs/m17-send-state",
+        "apparent_bytes": 14693511,
+        "allocated_bytes": 19845120,
+        "files": 1428
+      },
+      {
+        "path": "build/m19-a3-resources",
+        "apparent_bytes": 236965545,
+        "allocated_bytes": 247996416,
+        "files": 2444
+      },
+      {
+        "path": "runs/m19-a3-resources",
+        "apparent_bytes": 21114731,
+        "allocated_bytes": 24944640,
+        "files": 1107
+      },
+      {
+        "path": "runs/m20-segment-facts",
+        "apparent_bytes": 12735604,
+        "allocated_bytes": 17825792,
+        "files": 1377
+      },
+      {
+        "path": "runs/m21-platform-acceptance",
+        "apparent_bytes": 2553103889,
+        "allocated_bytes": 2589106176,
+        "files": 12790
+      },
+      {
+        "path": "runs/scaleup_issue_screening",
+        "apparent_bytes": 3968946791,
+        "allocated_bytes": 3982520320,
+        "files": 3850
+      }
+    ],
+    "existing_hardlink_avoided_logical_bytes": 14439030717
+  },
+  "historical_storage": {
+    "text_compression_full_stream": {
+      "files": 71,
+      "source_bytes": 4294920770,
+      "gzip_stream_bytes": 153685761,
+      "potential_payload_saving_bytes": 4141235009,
+      "migration_not_validated": true
+    },
+    "independent_inode_duplicates": {
+      "groups": 7,
+      "read_bytes": 4291168728,
+      "redundant_logical_bytes": 2598951798,
+      "read_scope": "complete files >=4 MiB in largest size groups fitting the read budget, not an exhaustive deduplication audit",
+      "deletion_not_authorized_or_validated": true
+    },
+    "largest_uncompressed_graph": {
+      "path": "runs/mapping_value/full/graph-cache/raw/graph/plan.json",
+      "bytes": 10871402067,
+      "allocated_bytes": 10871406592,
+      "nlink": 1,
+      "mtime_ns": 1791340428480086863
+    },
+    "caveat": "Compression and deduplication findings are conditional, may overlap, and are not credited in this forecast."
+  },
+  "source_archives": [
+    {
+      "path": "runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz",
+      "archive_bytes": 254215856,
+      "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "inventory_logical_bytes": 3369161231,
+      "verified": {
+        "unique_payload_bytes": 1755667442,
+        "hardlinks": 31048,
+        "restore_reserve_bytes": 2123907072
+      },
+      "slice_nonexecution_logical_bytes": 902119478,
+      "note": "archive hardlinks verified and counted only once in unique payload and restore reserve"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz",
+      "archive_bytes": 90827249,
+      "archive_sha256": "b8266515cf3bd3007aace21c3a3eb965ebb7de4cdad0c5a42e7f00eb69c9401e",
+      "inventory_logical_bytes": 528984910,
+      "verified": {
+        "unique_payload_bytes": 528156946,
+        "hardlinks": 2691,
+        "restore_reserve_bytes": 748089344
+      },
+      "slice_nonexecution_logical_bytes": 0,
+      "note": "archive hardlinks verified and counted only once in unique payload and restore reserve"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz",
+      "archive_bytes": 89511240,
+      "archive_sha256": "dec3943fb2fbef1222633c969f074b3ea52a6423172a781d2c4797b6e7847dba",
+      "inventory_logical_bytes": 425773694,
+      "verified": {
+        "unique_payload_bytes": 424945730,
+        "hardlinks": 2691,
+        "restore_reserve_bytes": 644886528
+      },
+      "slice_nonexecution_logical_bytes": 0,
+      "note": "archive hardlinks verified and counted only once in unique payload and restore reserve"
+    }
+  ],
+  "replay_scope": {
+    "requests": 1024,
+    "ranks": 128,
+    "original_layers": [
+      6,
+      7,
+      8
+    ],
+    "source": "g0-b8-short",
+    "capture_ports": 34,
+    "detail_start_ns": 0,
+    "detail_end_ns": 114000,
+    "target_runs_already_used": 2,
+    "remaining_target_run_ceiling": 4,
+    "frontend_repeated": false,
+    "graph_shared_between_runs": true,
+    "controls_conditional_on_actual_wait_and_business_evidence": true
+  },
+  "allowances_bytes": {
+    "original_nonexecution_slice": 902119478,
+    "compact_shared_slice": 1271922688,
+    "compact_execution_archive": 335544320,
+    "slice_block_rounding": 16777216,
+    "slice_metadata": 16777216,
+    "original_variable_records_runlog_exports": 478607657,
+    "capture_variable_records_runlog_exports": 227824672,
+    "detail_256_measured": 820973,
+    "new_detail": 5242880,
+    "variable_with_margin": 605028352,
+    "fixed_object_table": 151505056,
+    "backend_case_with_exports_reserved": 1136656384,
+    "closed_case": 1029701632,
+    "export_case_with_index": 1298137088,
+    "archive_case_before_release": 1365245952,
+    "single_new_archive": 335544320,
+    "plain_diagnostic_logs": 115343360,
+    "compressed_diagnostic_logs": 8388608,
+    "temporary_export_index": 268435456,
+    "analysis_working": 134217728,
+    "retained_analysis_per_run": 67108864,
+    "general_margin": 268435456
+  },
+  "formulas": {
+    "variable": "ceil_MiB(1.25 * (measured_original_1024_records + runlog + exported_records + detail_allowance))",
+    "detail": "ceil_MiB(4 * 1.5 * max(measured_256_capture_detail, measured_256_service_detail))",
+    "backend": "ceil_MiB(capture_restore_reserve - capture_variable + variable_allowance - capture_plain_logs + 110 MiB)",
+    "archive": "ceil_32MiB(1.25 * (original_full_case_archive + detail_allowance))",
+    "export": "backend_case - 110 MiB + 8 MiB + 256 MiB index",
+    "compact": "ceil_MiB(nonexecution_slice) + 16 MiB block allowance + 16 MiB metadata + archive_allowance",
+    "prior_serial_runs": "each earlier run contributes only its archive and 64 MiB retained analysis"
+  },
+  "assumptions": [
+    "Original archive remains; restore to a fresh owned directory; compact with hardlinks then verify and release only the fresh restored copy.",
+    "Compact source graph and inputs remain available throughout; no copy per replay and no new frontend build.",
+    "Each run is reviewed and archived with full verification before its expanded copy is released and another run starts.",
+    "Closed .log files are compressed only after backend exit; native runlog files are counted separately and remain uncompressed.",
+    "The full export index cap is reserved; existing export compressed-output limit is 2 GiB, not the predicted output size.",
+    "Detailed packet recording scales empirically; original measured dynamic files plus 25% are a planning estimate, not a formal worst-case bound.",
+    "The archive allowance also covers the compact execution archive empirically; actual sizes must be checked after compaction and each run.",
+    "If output approaches the configured 2 GiB export cap or a stage exceeds the estimate, reassess before subsequent execution; never silently expand the limit."
+  ],
+  "scenarios": [
+    {
+      "additional_serial_target_runs": 1,
+      "stage_peak_bytes": {
+        "restore": 53386342400,
+        "compact_before_release": 53755441152,
+        "last_backend": 53805232128,
+        "last_export": 53966712832,
+        "last_archive_before_release": 54033821696
+      },
+      "estimated_peak_bytes": 54033821696,
+      "retained_total_bytes": 52668575744,
+      "retained_growth_bytes": 1674575872
+    },
+    {
+      "additional_serial_target_runs": 2,
+      "stage_peak_bytes": {
+        "restore": 53386342400,
+        "compact_before_release": 53755441152,
+        "last_backend": 54207885312,
+        "last_export": 54369366016,
+        "last_archive_before_release": 54436474880
+      },
+      "estimated_peak_bytes": 54436474880,
+      "retained_total_bytes": 53071228928,
+      "retained_growth_bytes": 2077229056
+    },
+    {
+      "additional_serial_target_runs": 4,
+      "stage_peak_bytes": {
+        "restore": 53386342400,
+        "compact_before_release": 53755441152,
+        "last_backend": 55013191680,
+        "last_export": 55174672384,
+        "last_archive_before_release": 55241781248
+      },
+      "estimated_peak_bytes": 55241781248,
+      "retained_total_bytes": 53876535296,
+      "retained_growth_bytes": 2882535424
+    }
+  ],
+  "sanity_check": {
+    "measured_capture_case_increment_bytes": 632123392,
+    "archive_capture_restore_reserve_bytes": 748089344,
+    "captured_in_previous_preflight": "runs/scaleup_issue_screening/network-screening-20261013/service-preflight.json"
+  },
+  "recommendation": {
+    "cumulative_artifact_bytes": 60129542144,
+    "increase_over_current_cap_bytes": 8589934592,
+    "rationale": "Preserve all historical evidence and allow serial original-discovery validation with buffer beyond the 50-52 GiB forecast.",
+    "policy_changed": false,
+    "target_runs_started": 0,
+    "files_deleted": 0,
+    "pushed": false,
+    "memory_wall_time_minimum_free_and_run_count_limits_unchanged": true,
+    "current_authorization": "Accounting only; no concrete new numerical disk limit approved"
+  }
+}

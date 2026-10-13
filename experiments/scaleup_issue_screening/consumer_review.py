@@ -71,7 +71,7 @@ def condition_class(node, transfers):
     return 'local_dependency'
 
 
-def completion_conditions(plan, times, transfers, actual, finish_id, layer):
+def completion_conditions(plan, times, transfers, actual, finish_id, layer, kind='combine'):
     """All finish inputs/reduction gates plus the DAG of all latest ties.
 
     Exclusive-resource holders are reconstructed from actual COMP intervals and
@@ -125,15 +125,16 @@ def completion_conditions(plan, times, transfers, actual, finish_id, layer):
         return row
 
     finish=detail(finish_id)
-    reductions=[detail(i) for i,n in plan.items() if n.get('layer_id')==layer and n['name']=='combine-token-reduction']
-    sends=[detail(i) for i,n in plan.items() if n.get('layer_id')==layer and n['name']=='combine-core-sends-complete']
+    if kind not in ('dispatch','combine'):raise ValueError('Unknown operation kind')
+    reductions=[detail(i) for i,n in plan.items() if kind=='combine' and n.get('layer_id')==layer and n['name']=='combine-token-reduction']
+    sends=[detail(i) for i,n in plan.items() if kind=='combine' and n.get('layer_id')==layer and n['name']=='combine-core-sends-complete']
     pending=[finish_id];seen={}
     while pending:
         nid=pending.pop()
         if nid in seen:continue
         if len(seen)>=10000:raise ValueError('Completion witness exceeds 10000 nodes')
         row=detail(nid);seen[nid]=row
-        if plan[nid].get('layer_id')!=layer or plan[nid]['name']=='combine-entry':
+        if plan[nid].get('layer_id')!=layer or plan[nid]['name']==kind+'-entry':
             row['boundary']='layer entry; prior execution retained in source records'
         elif row.get('delivery_condition',{}).get('pending_after_start'):
             row['boundary']='actual transfer callback; sender/resource/network interval not further split'
@@ -142,9 +143,15 @@ def completion_conditions(plan, times, transfers, actual, finish_id, layer):
         # Dependency readiness and an occupied resource are separate gates.
         # Keep the actual occupying nodes too, without labeling uncovered time.
         pending.extend(o['node_id'] for o in row['resource_owners'])
-    return dict(finish=finish,all_token_reductions=reductions,all_core_send_barriers=sends,
+    result=dict(finish=finish,all_token_reductions=reductions,all_core_send_barriers=sends,
                 latest_completion_dag=list(seen.values()),
                 scope='All finish gates, all token reduction inputs, all tied latest branches; callback and prior-layer boundaries explicit')
+    if kind=='dispatch':
+        result.update(all_data_status_gates=[detail(i) for i,n in plan.items() if n.get('layer_id')==layer and
+            n['name'] in ('dispatch-counts-and-data-ready','dispatch-cross-core-data-barrier')],
+            all_reorder_nodes=[detail(i) for i,n in plan.items() if n.get('layer_id')==layer and n['name']=='dispatch-reorder'],
+            scope='All Dispatch finish, data/status and local data barriers, all reorder nodes and tied latest branches; callback boundary explicit')
+    return result
 
 
 def review(plan_archive, archive, output):

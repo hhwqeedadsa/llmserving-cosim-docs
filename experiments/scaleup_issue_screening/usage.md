@@ -352,3 +352,40 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 输出保留所有并列数据栅栏，但只沿一条相接路径累计时长；缺少完整队列的来源单独列出。另按端点和通信核分组，逐请求核对两种组织的核内实际发起顺序，核间交织变化不算核内重排。形成后的尾段不是纯交换机时延，形成前的等待也可能依赖网络响应释放。
+
+## 正常网络侧筛选
+
+先读取四份原始正常执行的归档和既有分析摘要。以下命令不展开任务图、不执行仿真；`--output` 必须是新目录。对 `g0-b2-short`、`g0-b4-short`、`g0-b8-short`、`g0-b8-long` 分别执行：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_screen \
+  --archive runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz \
+  --analysis runs/scaleup_issue_screening/analysis/g0-b2-short \
+  --output runs/scaleup_issue_screening/network-review-new/g0-b2-short
+```
+
+`summary.json` 绑定原归档、清单成员、原分析和程序摘要；`ports.json` 保留全部声明出口，`events.jsonl.gz` 保留完整排序。排序先比较单窗平均等待字节，再比较事件组面积和峰值，不使用业务损失。相邻正面积窗口仅合并为事件组，不能解释为连续积压；队列非空时长报告上下界，未覆盖设备队列不记成零。
+
+四份结果齐备后固定最多两个对象，再读取业务依赖：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_review select \
+  --summaries runs/scaleup_issue_screening/network-review-new/g0-b2-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b4-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b8-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b8-long/summary.json \
+  --output runs/scaleup_issue_screening/network-review-new/selection.json
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_review facts \
+  --archive runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz \
+  --selection runs/scaleup_issue_screening/network-review-new/selection.json \
+  --analysis runs/scaleup_issue_screening/analysis/g0-b8-short \
+  --output runs/scaleup_issue_screening/network-review-new/business-facts
+```
+
+当前读者核查第 7、8 层中选定设备出口的接收端，以及当次 Dispatch/Combine 的全部并列最晚端；要求原记录中的 rank 与设备编号对应已经核对一致。输出保留完整完成条件、重排、归约、本核发送及后继计算。`selected-facts.json.gz` 是所选 rank 的内部图、时序与传输，不能直接供给受限观测判断程序。实际路径与逐包等待仍须有相应记录，不能由窗口重叠补造。
+
+小型分析与配置检查使用：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.check_network
+```

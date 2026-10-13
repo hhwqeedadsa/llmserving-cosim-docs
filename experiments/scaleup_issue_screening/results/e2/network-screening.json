@@ -1,0 +1,2853 @@
+{
+  "schema_version": "issue-network-screening-review/1",
+  "selection": {
+    "schema_version": "issue-network-candidate-selection/1",
+    "rule": {
+      "schema_version": "issue-network-selection-rule/1",
+      "sources": [
+        "g0-b2-short",
+        "g0-b4-short",
+        "g0-b8-short",
+        "g0-b8-long"
+      ],
+      "candidate_queues": [
+        "voq",
+        "fifo"
+      ],
+      "max_candidates": 2,
+      "grouping": "adjacent positive-area windows on the same directed port and queue",
+      "ranking": [
+        "descending maximum single-window mean waiting bytes",
+        "descending event area",
+        "descending peak waiting bytes",
+        "ascending case, switch, port, start"
+      ],
+      "eligible": "maximum-area window overlaps a layer 7 or 8 operation envelope",
+      "selection": "one highest-ranked event per queue class; merge if the same resource and interval",
+      "exclusion": "zero-area peaks are instantaneous, not evidence of positive-duration waiting",
+      "no_business_effect_or_truth_used_for_ranking": true,
+      "service_bytes_per_ns": 50,
+      "continuous_backlog_inferred": false
+    },
+    "candidates": [
+      {
+        "candidate_id": "N1",
+        "switch_id": 802,
+        "port_id": 6,
+        "queue": "voq",
+        "start_ns": 85000,
+        "end_ns": 107000,
+        "area": 1554537760,
+        "peak": 232184,
+        "positive_windows": 22,
+        "nonempty_lower_ns": 13172,
+        "nonempty_upper_ns": 22000,
+        "max_window_mean_bytes": 226342.996,
+        "peak_window_start_ns": 101000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 102000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 4643.68,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      },
+      {
+        "candidate_id": "N2",
+        "switch_id": 810,
+        "port_id": 2,
+        "queue": "fifo",
+        "start_ns": 97000,
+        "end_ns": 102000,
+        "area": 10758592,
+        "peak": 11392,
+        "positive_windows": 5,
+        "nonempty_lower_ns": 1506,
+        "nonempty_upper_ns": 5000,
+        "max_window_mean_bytes": 4335.6,
+        "peak_window_start_ns": 100000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 101000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 227.84,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      }
+    ],
+    "sources": {
+      "g0-b2-short": {
+        "summary_sha256": "1621f9f5e26a6b8d7b423ab51ae4084cdec42f8dacd4c534a28e29c39cf107c5",
+        "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+        "ports": 2688,
+        "groups": 56732,
+        "complete_order_sha256": "7dafbffe15b0aae8fe90a8f94e3749a55356aada1372d2042abeb33527303b56"
+      },
+      "g0-b4-short": {
+        "summary_sha256": "42995bd7b471f692a29e4ddce70d5ca0756eaae105bbcf8ef2e3063ea8f545c5",
+        "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+        "ports": 2688,
+        "groups": 98917,
+        "complete_order_sha256": "bc22398acad2122ea1699d2c5b1f8da60cbd61991cce9c0734e7eb715bc02641"
+      },
+      "g0-b8-short": {
+        "summary_sha256": "13484171af9d5801e97d3bdafe2e1799b47bdca588360cfb1b05cdf297908ed4",
+        "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+        "ports": 2688,
+        "groups": 189574,
+        "complete_order_sha256": "896d980918d432a629653401ad79bb95a77bac8c451754beee9a9dac73cd0e9f"
+      },
+      "g0-b8-long": {
+        "summary_sha256": "80b89a3083329efed368e01209efbf30f0aa297cc1a4d1cb1602b3e5317b906c",
+        "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+        "ports": 2688,
+        "groups": 356350,
+        "complete_order_sha256": "95ca6e7de4650a4dd904fcc3b54c8ce37ae8e70493bfaf72d1990b9fe2651818"
+      }
+    },
+    "selection_precedes_business_review": true,
+    "program_sha256": "6da9c3acf66785207eacab4a61f7fb2215d4e9b4299ba5ba748f751136b89d3f",
+    "rejected": "Other ranked events remain in each complete compressed ordering; only one representative per queue class is deepened."
+  },
+  "coverage": {
+    "g0-b2-short": {
+      "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+      "original_analysis_sha256": "5cf7816c05567ff42c80b57aa826c3cc2492eec2faf6714455a069ed1c12eb50",
+      "program_sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "observed_ports": 2688,
+      "logical_windows": 26880000,
+      "stored_queue_windows": 155124,
+      "totals": {
+        "voq_area": 4146289488,
+        "voq_lower_ns": 532265,
+        "voq_upper_ns": 154912000,
+        "voq_instantaneous_peak_windows": 126,
+        "fifo_area": 1995193768,
+        "fifo_lower_ns": 465995,
+        "fifo_upper_ns": 17328000,
+        "fifo_instantaneous_peak_windows": 137715,
+        "packets": 772595,
+        "packet_bytes": 387691112
+      },
+      "event_groups": 56732,
+      "complete_declared_coverage": true,
+      "events_sha256": "7dafbffe15b0aae8fe90a8f94e3749a55356aada1372d2042abeb33527303b56",
+      "ports_sha256": "a538bb023bed8d127698207d3f502f1e1714397f9aa02866cb7ef6091396de96",
+      "eligible_top_by_queue": {
+        "voq": [
+          {
+            "switch_id": 799,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 23000,
+            "end_ns": 32000,
+            "area": 42507108,
+            "peak": 38360,
+            "positive_windows": 9,
+            "nonempty_lower_ns": 1560,
+            "nonempty_upper_ns": 9000,
+            "max_window_mean_bytes": 25542.304,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 767.2,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 19000,
+            "end_ns": 32000,
+            "area": 36563132,
+            "peak": 32276,
+            "positive_windows": 13,
+            "nonempty_lower_ns": 1388,
+            "nonempty_upper_ns": 13000,
+            "max_window_mean_bytes": 24997.776,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 645.52,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 58000,
+            "end_ns": 76000,
+            "area": 25355812,
+            "peak": 35360,
+            "positive_windows": 18,
+            "nonempty_lower_ns": 979,
+            "nonempty_upper_ns": 18000,
+            "max_window_mean_bytes": 19642.092,
+            "peak_window_start_ns": 69000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 70000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 707.2,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 22000,
+            "end_ns": 33000,
+            "area": 23688408,
+            "peak": 31152,
+            "positive_windows": 11,
+            "nonempty_lower_ns": 1059,
+            "nonempty_upper_ns": 11000,
+            "max_window_mean_bytes": 18623.44,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 623.04,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 813,
+            "port_id": 2,
+            "queue": "voq",
+            "start_ns": 23000,
+            "end_ns": 33000,
+            "area": 12967684,
+            "peak": 25008,
+            "positive_windows": 10,
+            "nonempty_lower_ns": 655,
+            "nonempty_upper_ns": 10000,
+            "max_window_mean_bytes": 11778.944,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 500.16,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 22000,
+            "end_ns": 32000,
+            "area": 17523860,
+            "peak": 21924,
+            "positive_windows": 10,
+            "nonempty_lower_ns": 1204,
+            "nonempty_upper_ns": 10000,
+            "max_window_mean_bytes": 11035.172,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 438.48,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 23000,
+            "end_ns": 32000,
+            "area": 21071556,
+            "peak": 22904,
+            "positive_windows": 9,
+            "nonempty_lower_ns": 1336,
+            "nonempty_upper_ns": 9000,
+            "max_window_mean_bytes": 10936.032,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 458.08,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 2,
+            "queue": "voq",
+            "start_ns": 23000,
+            "end_ns": 32000,
+            "area": 11450856,
+            "peak": 18660,
+            "positive_windows": 9,
+            "nonempty_lower_ns": 773,
+            "nonempty_upper_ns": 9000,
+            "max_window_mean_bytes": 10618.94,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 373.2,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 812,
+            "port_id": 2,
+            "queue": "voq",
+            "start_ns": 22000,
+            "end_ns": 33000,
+            "area": 10488916,
+            "peak": 20884,
+            "positive_windows": 11,
+            "nonempty_lower_ns": 632,
+            "nonempty_upper_ns": 11000,
+            "max_window_mean_bytes": 9835.736,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 417.68,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 61000,
+            "end_ns": 72000,
+            "area": 16615216,
+            "peak": 19700,
+            "positive_windows": 11,
+            "nonempty_lower_ns": 1317,
+            "nonempty_upper_ns": 11000,
+            "max_window_mean_bytes": 7285.876,
+            "peak_window_start_ns": 69000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 70000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 394.0,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ],
+        "fifo": [
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 23000,
+            "end_ns": 31000,
+            "area": 9210924,
+            "peak": 7268,
+            "positive_windows": 8,
+            "nonempty_lower_ns": 1836,
+            "nonempty_upper_ns": 8000,
+            "max_window_mean_bytes": 3753.88,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 67000,
+            "end_ns": 71000,
+            "area": 5522876,
+            "peak": 7268,
+            "positive_windows": 4,
+            "nonempty_lower_ns": 840,
+            "nonempty_upper_ns": 4000,
+            "max_window_mean_bytes": 3659.076,
+            "peak_window_start_ns": 69000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 70000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 25000,
+            "end_ns": 31000,
+            "area": 6504728,
+            "peak": 4244,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 1564,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3300.988,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 84.88,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 25000,
+            "end_ns": 31000,
+            "area": 3575784,
+            "peak": 4124,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 865,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3298.9,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 82.48,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 25000,
+            "end_ns": 31000,
+            "area": 7787840,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 1758,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3240.228,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 813,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 25000,
+            "end_ns": 31000,
+            "area": 5117064,
+            "peak": 7268,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 895,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3196.068,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 23000,
+            "end_ns": 31000,
+            "area": 6192172,
+            "peak": 7268,
+            "positive_windows": 8,
+            "nonempty_lower_ns": 1286,
+            "nonempty_upper_ns": 8000,
+            "max_window_mean_bytes": 3101.844,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 23000,
+            "end_ns": 31000,
+            "area": 5911112,
+            "peak": 4140,
+            "positive_windows": 8,
+            "nonempty_lower_ns": 1429,
+            "nonempty_upper_ns": 8000,
+            "max_window_mean_bytes": 2987.436,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 82.8,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 768,
+            "port_id": 12,
+            "queue": "fifo",
+            "start_ns": 69000,
+            "end_ns": 70000,
+            "area": 2956580,
+            "peak": 8248,
+            "positive_windows": 1,
+            "nonempty_lower_ns": 358,
+            "nonempty_upper_ns": 1000,
+            "max_window_mean_bytes": 2956.58,
+            "peak_window_start_ns": 69000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 70000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 812,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 28000,
+            "end_ns": 31000,
+            "area": 3146656,
+            "peak": 4124,
+            "positive_windows": 3,
+            "nonempty_lower_ns": 762,
+            "nonempty_upper_ns": 3000,
+            "max_window_mean_bytes": 2920.432,
+            "peak_window_start_ns": 29000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 30000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 82.48,
+            "case_id": "g0-b2-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ]
+      }
+    },
+    "g0-b4-short": {
+      "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+      "original_analysis_sha256": "13abe0e8ffcc3a90140a27d8def4889ab17141a69c76f726814971b33a00caea",
+      "program_sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "observed_ports": 2688,
+      "logical_windows": 26880000,
+      "stored_queue_windows": 264950,
+      "totals": {
+        "voq_area": 15619273312,
+        "voq_lower_ns": 878450,
+        "voq_upper_ns": 264549000,
+        "voq_instantaneous_peak_windows": 287,
+        "fifo_area": 4137505232,
+        "fifo_lower_ns": 930869,
+        "fifo_upper_ns": 30224000,
+        "fifo_instantaneous_peak_windows": 234618,
+        "packets": 1008371,
+        "packet_bytes": 755688488
+      },
+      "event_groups": 98917,
+      "complete_declared_coverage": true,
+      "events_sha256": "bc22398acad2122ea1699d2c5b1f8da60cbd61991cce9c0734e7eb715bc02641",
+      "ports_sha256": "fb839530b7c75e955c168b09bd798d5f1343d1dfd91f3445e46c6ca64f180605",
+      "eligible_top_by_queue": {
+        "voq": [
+          {
+            "switch_id": 802,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 44000,
+            "end_ns": 63000,
+            "area": 188491740,
+            "peak": 95524,
+            "positive_windows": 19,
+            "nonempty_lower_ns": 3226,
+            "nonempty_upper_ns": 19000,
+            "max_window_mean_bytes": 82148.968,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1910.48,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 46000,
+            "end_ns": 63000,
+            "area": 141006188,
+            "peak": 76268,
+            "positive_windows": 17,
+            "nonempty_lower_ns": 2683,
+            "nonempty_upper_ns": 17000,
+            "max_window_mean_bytes": 66727.816,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1525.36,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 108000,
+            "end_ns": 139000,
+            "area": 115952132,
+            "peak": 77784,
+            "positive_windows": 31,
+            "nonempty_lower_ns": 2270,
+            "nonempty_upper_ns": 31000,
+            "max_window_mean_bytes": 64906.872,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1555.68,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 111000,
+            "end_ns": 138000,
+            "area": 155796716,
+            "peak": 77784,
+            "positive_windows": 27,
+            "nonempty_lower_ns": 3091,
+            "nonempty_upper_ns": 27000,
+            "max_window_mean_bytes": 64552.048,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1555.68,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 108000,
+            "end_ns": 133000,
+            "area": 88832308,
+            "peak": 52180,
+            "positive_windows": 25,
+            "nonempty_lower_ns": 2288,
+            "nonempty_upper_ns": 25000,
+            "max_window_mean_bytes": 44446.716,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1043.6,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 108000,
+            "end_ns": 134000,
+            "area": 75032948,
+            "peak": 59244,
+            "positive_windows": 26,
+            "nonempty_lower_ns": 1926,
+            "nonempty_upper_ns": 26000,
+            "max_window_mean_bytes": 43294.188,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1184.88,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 111000,
+            "end_ns": 134000,
+            "area": 71493568,
+            "peak": 58264,
+            "positive_windows": 23,
+            "nonempty_lower_ns": 1949,
+            "nonempty_upper_ns": 23000,
+            "max_window_mean_bytes": 41570.568,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1165.28,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 105000,
+            "end_ns": 134000,
+            "area": 60032684,
+            "peak": 49896,
+            "positive_windows": 29,
+            "nonempty_lower_ns": 1437,
+            "nonempty_upper_ns": 29000,
+            "max_window_mean_bytes": 38263.008,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 997.92,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 42000,
+            "end_ns": 63000,
+            "area": 81977004,
+            "peak": 51916,
+            "positive_windows": 21,
+            "nonempty_lower_ns": 2370,
+            "nonempty_upper_ns": 21000,
+            "max_window_mean_bytes": 33943.832,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 1038.32,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 44000,
+            "end_ns": 59000,
+            "area": 102352908,
+            "peak": 46752,
+            "positive_windows": 15,
+            "nonempty_lower_ns": 3421,
+            "nonempty_upper_ns": 15000,
+            "max_window_mean_bytes": 33270.668,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 935.04,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ],
+        "fifo": [
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 122000,
+            "end_ns": 133000,
+            "area": 14570452,
+            "peak": 8248,
+            "positive_windows": 11,
+            "nonempty_lower_ns": 2728,
+            "nonempty_upper_ns": 11000,
+            "max_window_mean_bytes": 4273.112,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 128000,
+            "end_ns": 133000,
+            "area": 9044316,
+            "peak": 8248,
+            "positive_windows": 5,
+            "nonempty_lower_ns": 1515,
+            "nonempty_upper_ns": 5000,
+            "max_window_mean_bytes": 4210.3,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 127000,
+            "end_ns": 132000,
+            "area": 10109876,
+            "peak": 7268,
+            "positive_windows": 5,
+            "nonempty_lower_ns": 1797,
+            "nonempty_upper_ns": 5000,
+            "max_window_mean_bytes": 4111.32,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 44000,
+            "end_ns": 59000,
+            "area": 20398764,
+            "peak": 7268,
+            "positive_windows": 15,
+            "nonempty_lower_ns": 4179,
+            "nonempty_upper_ns": 15000,
+            "max_window_mean_bytes": 4086.912,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 46000,
+            "end_ns": 59000,
+            "area": 16650672,
+            "peak": 8248,
+            "positive_windows": 13,
+            "nonempty_lower_ns": 3455,
+            "nonempty_upper_ns": 13000,
+            "max_window_mean_bytes": 4034.972,
+            "peak_window_start_ns": 55000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 56000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 128000,
+            "end_ns": 133000,
+            "area": 8607872,
+            "peak": 11392,
+            "positive_windows": 5,
+            "nonempty_lower_ns": 1165,
+            "nonempty_upper_ns": 5000,
+            "max_window_mean_bytes": 4008.268,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 227.84,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 126000,
+            "end_ns": 132000,
+            "area": 10675244,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 1874,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3962.248,
+            "peak_window_start_ns": 130000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 131000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 49000,
+            "end_ns": 57000,
+            "area": 6819784,
+            "peak": 7268,
+            "positive_windows": 8,
+            "nonempty_lower_ns": 1045,
+            "nonempty_upper_ns": 8000,
+            "max_window_mean_bytes": 3684.136,
+            "peak_window_start_ns": 55000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 56000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 46000,
+            "end_ns": 58000,
+            "area": 22571784,
+            "peak": 8248,
+            "positive_windows": 12,
+            "nonempty_lower_ns": 4561,
+            "nonempty_upper_ns": 12000,
+            "max_window_mean_bytes": 3682.308,
+            "peak_window_start_ns": 56000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 57000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 128000,
+            "end_ns": 133000,
+            "area": 12864520,
+            "peak": 7268,
+            "positive_windows": 5,
+            "nonempty_lower_ns": 2732,
+            "nonempty_upper_ns": 5000,
+            "max_window_mean_bytes": 3678.188,
+            "peak_window_start_ns": 129000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 130000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 145.36,
+            "case_id": "g0-b4-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ]
+      }
+    },
+    "g0-b8-short": {
+      "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "original_analysis_sha256": "0621a807eb92b9c8549a9cccbc76a47a8e93a6071e613dc56781847162e5373a",
+      "program_sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "observed_ports": 2688,
+      "logical_windows": 26880000,
+      "stored_queue_windows": 469221,
+      "totals": {
+        "voq_area": 55528105092,
+        "voq_lower_ns": 1566725,
+        "voq_upper_ns": 467934000,
+        "voq_instantaneous_peak_windows": 1016,
+        "fifo_area": 8506476380,
+        "fifo_lower_ns": 1889274,
+        "fifo_upper_ns": 58175000,
+        "fifo_instantaneous_peak_windows": 410854,
+        "packets": 1481220,
+        "packet_bytes": 1490775360
+      },
+      "event_groups": 189574,
+      "complete_declared_coverage": true,
+      "events_sha256": "896d980918d432a629653401ad79bb95a77bac8c451754beee9a9dac73cd0e9f",
+      "ports_sha256": "27d0c3a5f4669414113c7dd1ce823ae9c592bfaf7a840f541494d0f8a168199e",
+      "eligible_top_by_queue": {
+        "voq": [
+          {
+            "switch_id": 802,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 85000,
+            "end_ns": 107000,
+            "area": 1554537760,
+            "peak": 232184,
+            "positive_windows": 22,
+            "nonempty_lower_ns": 13172,
+            "nonempty_upper_ns": 22000,
+            "max_window_mean_bytes": 226342.996,
+            "peak_window_start_ns": 101000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 102000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 4643.68,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 83000,
+            "end_ns": 108000,
+            "area": 1298203220,
+            "peak": 191220,
+            "positive_windows": 25,
+            "nonempty_lower_ns": 11428,
+            "nonempty_upper_ns": 25000,
+            "max_window_mean_bytes": 180704.304,
+            "peak_window_start_ns": 101000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 102000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3824.4,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 84000,
+            "end_ns": 108000,
+            "area": 1019400340,
+            "peak": 168720,
+            "positive_windows": 24,
+            "nonempty_lower_ns": 10923,
+            "nonempty_upper_ns": 24000,
+            "max_window_mean_bytes": 158244.56,
+            "peak_window_start_ns": 101000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 102000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3374.4,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 84000,
+            "end_ns": 108000,
+            "area": 1064767932,
+            "peak": 164468,
+            "positive_windows": 24,
+            "nonempty_lower_ns": 11136,
+            "nonempty_upper_ns": 24000,
+            "max_window_mean_bytes": 154084.16,
+            "peak_window_start_ns": 101000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 102000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3289.36,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 85000,
+            "end_ns": 108000,
+            "area": 689362252,
+            "peak": 161016,
+            "positive_windows": 23,
+            "nonempty_lower_ns": 8421,
+            "nonempty_upper_ns": 23000,
+            "max_window_mean_bytes": 150678.892,
+            "peak_window_start_ns": 101000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 102000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3220.32,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 207000,
+            "end_ns": 252000,
+            "area": 562379372,
+            "peak": 151708,
+            "positive_windows": 45,
+            "nonempty_lower_ns": 5270,
+            "nonempty_upper_ns": 45000,
+            "max_window_mean_bytes": 141103.372,
+            "peak_window_start_ns": 246000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 247000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3034.16,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 212000,
+            "end_ns": 252000,
+            "area": 586986824,
+            "peak": 145624,
+            "positive_windows": 40,
+            "nonempty_lower_ns": 5757,
+            "nonempty_upper_ns": 40000,
+            "max_window_mean_bytes": 137830.408,
+            "peak_window_start_ns": 246000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 247000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 2912.48,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 214000,
+            "end_ns": 252000,
+            "area": 514591656,
+            "peak": 152628,
+            "positive_windows": 38,
+            "nonempty_lower_ns": 5450,
+            "nonempty_upper_ns": 38000,
+            "max_window_mean_bytes": 136507.196,
+            "peak_window_start_ns": 247000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 248000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3052.56,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 218000,
+            "end_ns": 262000,
+            "area": 571833428,
+            "peak": 152628,
+            "positive_windows": 44,
+            "nonempty_lower_ns": 5554,
+            "nonempty_upper_ns": 44000,
+            "max_window_mean_bytes": 136011.968,
+            "peak_window_start_ns": 247000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 248000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3052.56,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 209000,
+            "end_ns": 252000,
+            "area": 504879980,
+            "peak": 142276,
+            "positive_windows": 43,
+            "nonempty_lower_ns": 5695,
+            "nonempty_upper_ns": 43000,
+            "max_window_mean_bytes": 134280.592,
+            "peak_window_start_ns": 246000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 247000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 2845.52,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ],
+        "fifo": [
+          {
+            "switch_id": 810,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 97000,
+            "end_ns": 102000,
+            "area": 10758592,
+            "peak": 11392,
+            "positive_windows": 5,
+            "nonempty_lower_ns": 1506,
+            "nonempty_upper_ns": 5000,
+            "max_window_mean_bytes": 4335.6,
+            "peak_window_start_ns": 100000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 101000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 227.84,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 87000,
+            "end_ns": 104000,
+            "area": 42260892,
+            "peak": 8248,
+            "positive_windows": 17,
+            "nonempty_lower_ns": 6475,
+            "nonempty_upper_ns": 17000,
+            "max_window_mean_bytes": 4253.42,
+            "peak_window_start_ns": 91000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 92000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 6,
+                "kind": "combine",
+                "operation_id": "D.w0.L6.combine"
+              },
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 242000,
+            "end_ns": 249000,
+            "area": 13483904,
+            "peak": 8248,
+            "positive_windows": 7,
+            "nonempty_lower_ns": 2625,
+            "nonempty_upper_ns": 7000,
+            "max_window_mean_bytes": 4216.956,
+            "peak_window_start_ns": 244000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 245000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 242000,
+            "end_ns": 248000,
+            "area": 12105932,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 2050,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 4120.232,
+            "peak_window_start_ns": 245000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 246000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 90000,
+            "end_ns": 106000,
+            "area": 41610936,
+            "peak": 11392,
+            "positive_windows": 16,
+            "nonempty_lower_ns": 7600,
+            "nonempty_upper_ns": 16000,
+            "max_window_mean_bytes": 4060.312,
+            "peak_window_start_ns": 102000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 103000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 227.84,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 87000,
+            "end_ns": 104000,
+            "area": 39745696,
+            "peak": 11392,
+            "positive_windows": 17,
+            "nonempty_lower_ns": 6374,
+            "nonempty_upper_ns": 17000,
+            "max_window_mean_bytes": 4049.82,
+            "peak_window_start_ns": 97000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 98000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 227.84,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 6,
+                "kind": "combine",
+                "operation_id": "D.w0.L6.combine"
+              },
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 243000,
+            "end_ns": 249000,
+            "area": 16032276,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 3095,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 4008.556,
+            "peak_window_start_ns": 247000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 248000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 88000,
+            "end_ns": 106000,
+            "area": 48851108,
+            "peak": 12372,
+            "positive_windows": 18,
+            "nonempty_lower_ns": 7319,
+            "nonempty_upper_ns": 18000,
+            "max_window_mean_bytes": 3972.18,
+            "peak_window_start_ns": 92000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 93000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 247.44,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 6,
+                "kind": "combine",
+                "operation_id": "D.w0.L6.combine"
+              },
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 242000,
+            "end_ns": 251000,
+            "area": 22699672,
+            "peak": 8248,
+            "positive_windows": 9,
+            "nonempty_lower_ns": 4707,
+            "nonempty_upper_ns": 9000,
+            "max_window_mean_bytes": 3965.392,
+            "peak_window_start_ns": 246000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 247000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 87000,
+            "end_ns": 106000,
+            "area": 49507912,
+            "peak": 11392,
+            "positive_windows": 19,
+            "nonempty_lower_ns": 7547,
+            "nonempty_upper_ns": 19000,
+            "max_window_mean_bytes": 3888.332,
+            "peak_window_start_ns": 98000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 99000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 227.84,
+            "case_id": "g0-b8-short",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ]
+      }
+    },
+    "g0-b8-long": {
+      "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+      "original_analysis_sha256": "c4522af42ba9d87a3527d3bfb253f8a4f717c0804232d5f120c47be168faf6db",
+      "program_sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "observed_ports": 2688,
+      "logical_windows": 26880000,
+      "stored_queue_windows": 943850,
+      "totals": {
+        "voq_area": 63252961048,
+        "voq_lower_ns": 2692930,
+        "voq_upper_ns": 941186000,
+        "voq_instantaneous_peak_windows": 2089,
+        "fifo_area": 14624730644,
+        "fifo_lower_ns": 3335262,
+        "fifo_upper_ns": 119912000,
+        "fifo_instantaneous_peak_windows": 823505,
+        "packets": 2965380,
+        "packet_bytes": 2984249008
+      },
+      "event_groups": 356350,
+      "complete_declared_coverage": true,
+      "events_sha256": "95ca6e7de4650a4dd904fcc3b54c8ce37ae8e70493bfaf72d1990b9fe2651818",
+      "ports_sha256": "2011b9a8c8d3101f8bf4061d776aac32807ea7dbe69646971cb9df6f8132df85",
+      "eligible_top_by_queue": {
+        "voq": [
+          {
+            "switch_id": 801,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 357000,
+            "end_ns": 382000,
+            "area": 1713539044,
+            "peak": 220292,
+            "positive_windows": 25,
+            "nonempty_lower_ns": 12833,
+            "nonempty_upper_ns": 25000,
+            "max_window_mean_bytes": 210808.084,
+            "peak_window_start_ns": 374000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 375000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 4405.84,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 358000,
+            "end_ns": 381000,
+            "area": 1212669788,
+            "peak": 214100,
+            "positive_windows": 23,
+            "nonempty_lower_ns": 11286,
+            "nonempty_upper_ns": 23000,
+            "max_window_mean_bytes": 202973.796,
+            "peak_window_start_ns": 374000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 375000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 4282.0,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 488000,
+            "end_ns": 536000,
+            "area": 809877360,
+            "peak": 200420,
+            "positive_windows": 48,
+            "nonempty_lower_ns": 6034,
+            "nonempty_upper_ns": 48000,
+            "max_window_mean_bytes": 191860.836,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 4008.4,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 358000,
+            "end_ns": 385000,
+            "area": 1099194324,
+            "peak": 177000,
+            "positive_windows": 27,
+            "nonempty_lower_ns": 11268,
+            "nonempty_upper_ns": 27000,
+            "max_window_mean_bytes": 166356.22,
+            "peak_window_start_ns": 374000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 375000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3540.0,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 358000,
+            "end_ns": 380000,
+            "area": 1208883672,
+            "peak": 175644,
+            "positive_windows": 22,
+            "nonempty_lower_ns": 11533,
+            "nonempty_upper_ns": 22000,
+            "max_window_mean_bytes": 158213.876,
+            "peak_window_start_ns": 375000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 376000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3512.88,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 485000,
+            "end_ns": 526000,
+            "area": 688124788,
+            "peak": 168000,
+            "positive_windows": 41,
+            "nonempty_lower_ns": 6309,
+            "nonempty_upper_ns": 41000,
+            "max_window_mean_bytes": 153585.816,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3360.0,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 6,
+            "queue": "voq",
+            "start_ns": 358000,
+            "end_ns": 386000,
+            "area": 940055288,
+            "peak": 154968,
+            "positive_windows": 28,
+            "nonempty_lower_ns": 10532,
+            "nonempty_upper_ns": 28000,
+            "max_window_mean_bytes": 141328.7,
+            "peak_window_start_ns": 374000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 375000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 3099.36,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 482000,
+            "end_ns": 526000,
+            "area": 572443792,
+            "peak": 148360,
+            "positive_windows": 44,
+            "nonempty_lower_ns": 5785,
+            "nonempty_upper_ns": 44000,
+            "max_window_mean_bytes": 132285.172,
+            "peak_window_start_ns": 519000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 520000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 2967.2,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 480000,
+            "end_ns": 526000,
+            "area": 510471816,
+            "peak": 136192,
+            "positive_windows": 46,
+            "nonempty_lower_ns": 5671,
+            "nonempty_upper_ns": 46000,
+            "max_window_mean_bytes": 127448.484,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 2723.84,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "voq",
+            "start_ns": 488000,
+            "end_ns": 526000,
+            "area": 388726428,
+            "peak": 131028,
+            "positive_windows": 38,
+            "nonempty_lower_ns": 4729,
+            "nonempty_upper_ns": 38000,
+            "max_window_mean_bytes": 118702.908,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 2620.56,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ],
+        "fifo": [
+          {
+            "switch_id": 796,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 506000,
+            "end_ns": 525000,
+            "area": 33469872,
+            "peak": 8248,
+            "positive_windows": 19,
+            "nonempty_lower_ns": 6491,
+            "nonempty_upper_ns": 19000,
+            "max_window_mean_bytes": 4285.1,
+            "peak_window_start_ns": 518000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 519000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 2,
+            "queue": "fifo",
+            "start_ns": 364000,
+            "end_ns": 376000,
+            "area": 20496732,
+            "peak": 8248,
+            "positive_windows": 12,
+            "nonempty_lower_ns": 3530,
+            "nonempty_upper_ns": 12000,
+            "max_window_mean_bytes": 4154.976,
+            "peak_window_start_ns": 372000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 373000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 802,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 510000,
+            "end_ns": 524000,
+            "area": 24763040,
+            "peak": 8248,
+            "positive_windows": 14,
+            "nonempty_lower_ns": 4818,
+            "nonempty_upper_ns": 14000,
+            "max_window_mean_bytes": 4140.22,
+            "peak_window_start_ns": 521000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 522000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 797,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 364000,
+            "end_ns": 380000,
+            "area": 48544324,
+            "peak": 8248,
+            "positive_windows": 16,
+            "nonempty_lower_ns": 7855,
+            "nonempty_upper_ns": 16000,
+            "max_window_mean_bytes": 4049.784,
+            "peak_window_start_ns": 370000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 371000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 6,
+                "kind": "combine",
+                "operation_id": "D.w0.L6.combine"
+              },
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 516000,
+            "end_ns": 523000,
+            "area": 18244556,
+            "peak": 8248,
+            "positive_windows": 7,
+            "nonempty_lower_ns": 3256,
+            "nonempty_upper_ns": 7000,
+            "max_window_mean_bytes": 4049.672,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 1,
+            "queue": "fifo",
+            "start_ns": 516000,
+            "end_ns": 525000,
+            "area": 22206164,
+            "peak": 8248,
+            "positive_windows": 9,
+            "nonempty_lower_ns": 4123,
+            "nonempty_upper_ns": 9000,
+            "max_window_mean_bytes": 3938.728,
+            "peak_window_start_ns": 519000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 520000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 801,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 516000,
+            "end_ns": 522000,
+            "area": 13044108,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 2686,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3919.376,
+            "peak_window_start_ns": 518000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 519000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 798,
+            "port_id": 6,
+            "queue": "fifo",
+            "start_ns": 360000,
+            "end_ns": 380000,
+            "area": 48694800,
+            "peak": 8248,
+            "positive_windows": 20,
+            "nonempty_lower_ns": 7523,
+            "nonempty_upper_ns": 20000,
+            "max_window_mean_bytes": 3858.368,
+            "peak_window_start_ns": 367000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 368000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 6,
+                "kind": "combine",
+                "operation_id": "D.w0.L6.combine"
+              },
+              {
+                "layer_id": 7,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L7.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 799,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 516000,
+            "end_ns": 522000,
+            "area": 13098084,
+            "peak": 4124,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 3173,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3853.808,
+            "peak_window_start_ns": 518000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 519000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 82.48,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          },
+          {
+            "switch_id": 800,
+            "port_id": 7,
+            "queue": "fifo",
+            "start_ns": 516000,
+            "end_ns": 522000,
+            "area": 14107640,
+            "peak": 8248,
+            "positive_windows": 6,
+            "nonempty_lower_ns": 2964,
+            "nonempty_upper_ns": 6000,
+            "max_window_mean_bytes": 3832.248,
+            "peak_window_start_ns": 520000,
+            "left_coverage_truncated": false,
+            "peak_window_end_ns": 521000,
+            "right_coverage_truncated": false,
+            "peak_drain_equivalent_ns": 164.96,
+            "case_id": "g0-b8-long",
+            "overlapping_operations": [
+              {
+                "layer_id": 8,
+                "kind": "dispatch",
+                "operation_id": "D.w0.L8.dispatch"
+              }
+            ],
+            "eligible": true
+          }
+        ]
+      }
+    }
+  },
+  "reference": {
+    "schema_version": "issue-network-candidate-selection/1",
+    "rule": {
+      "schema_version": "issue-network-selection-rule/1",
+      "sources": [
+        "g0-b2-short",
+        "g0-b4-short",
+        "g0-b8-short",
+        "g0-b8-long"
+      ],
+      "candidate_queues": [
+        "voq",
+        "fifo"
+      ],
+      "max_candidates": 2,
+      "grouping": "adjacent positive-area windows on the same directed port and queue",
+      "ranking": [
+        "descending maximum single-window mean waiting bytes",
+        "descending event area",
+        "descending peak waiting bytes",
+        "ascending case, switch, port, start"
+      ],
+      "eligible": "maximum-area window overlaps a layer 7 or 8 operation envelope",
+      "selection": "one highest-ranked event per queue class; merge if the same resource and interval",
+      "exclusion": "zero-area peaks are instantaneous, not evidence of positive-duration waiting",
+      "no_business_effect_or_truth_used_for_ranking": true,
+      "service_bytes_per_ns": 50,
+      "continuous_backlog_inferred": false
+    },
+    "candidates": [
+      {
+        "candidate_id": "N1",
+        "switch_id": 802,
+        "port_id": 6,
+        "queue": "voq",
+        "start_ns": 22000,
+        "end_ns": 33000,
+        "area": 23688408,
+        "peak": 31152,
+        "positive_windows": 11,
+        "nonempty_lower_ns": 1059,
+        "nonempty_upper_ns": 11000,
+        "max_window_mean_bytes": 18623.44,
+        "peak_window_start_ns": 29000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 30000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 623.04,
+        "case_id": "g0-b2-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      },
+      {
+        "candidate_id": "N2",
+        "switch_id": 810,
+        "port_id": 2,
+        "queue": "fifo",
+        "start_ns": 28000,
+        "end_ns": 30000,
+        "area": 1456476,
+        "peak": 4124,
+        "positive_windows": 2,
+        "nonempty_lower_ns": 353,
+        "nonempty_upper_ns": 2000,
+        "max_window_mean_bytes": 1192.504,
+        "peak_window_start_ns": 29000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 30000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 82.48,
+        "case_id": "g0-b2-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      }
+    ],
+    "sources": {
+      "g0-b2-short": {
+        "summary_sha256": "1621f9f5e26a6b8d7b423ab51ae4084cdec42f8dacd4c534a28e29c39cf107c5",
+        "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+        "ports": 2688,
+        "groups": 56732,
+        "complete_order_sha256": "7dafbffe15b0aae8fe90a8f94e3749a55356aada1372d2042abeb33527303b56"
+      },
+      "g0-b4-short": {
+        "summary_sha256": "42995bd7b471f692a29e4ddce70d5ca0756eaae105bbcf8ef2e3063ea8f545c5",
+        "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+        "ports": 2688,
+        "groups": 98917,
+        "complete_order_sha256": "bc22398acad2122ea1699d2c5b1f8da60cbd61991cce9c0734e7eb715bc02641"
+      },
+      "g0-b8-short": {
+        "summary_sha256": "13484171af9d5801e97d3bdafe2e1799b47bdca588360cfb1b05cdf297908ed4",
+        "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+        "ports": 2688,
+        "groups": 189574,
+        "complete_order_sha256": "896d980918d432a629653401ad79bb95a77bac8c451754beee9a9dac73cd0e9f"
+      },
+      "g0-b8-long": {
+        "summary_sha256": "80b89a3083329efed368e01209efbf30f0aa297cc1a4d1cb1602b3e5317b906c",
+        "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+        "ports": 2688,
+        "groups": 356350,
+        "complete_order_sha256": "95ca6e7de4650a4dd904fcc3b54c8ce37ae8e70493bfaf72d1990b9fe2651818"
+      }
+    },
+    "selection_precedes_business_review": true,
+    "program_sha256": "6da9c3acf66785207eacab4a61f7fb2215d4e9b4299ba5ba748f751136b89d3f",
+    "rejected": "Other ranked events remain in each complete compressed ordering; only one representative per queue class is deepened.",
+    "discovery_candidates": [
+      {
+        "candidate_id": "N1",
+        "switch_id": 802,
+        "port_id": 6,
+        "queue": "voq",
+        "start_ns": 85000,
+        "end_ns": 107000,
+        "area": 1554537760,
+        "peak": 232184,
+        "positive_windows": 22,
+        "nonempty_lower_ns": 13172,
+        "nonempty_upper_ns": 22000,
+        "max_window_mean_bytes": 226342.996,
+        "peak_window_start_ns": 101000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 102000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 4643.68,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      },
+      {
+        "candidate_id": "N2",
+        "switch_id": 810,
+        "port_id": 2,
+        "queue": "fifo",
+        "start_ns": 97000,
+        "end_ns": 102000,
+        "area": 10758592,
+        "peak": 11392,
+        "positive_windows": 5,
+        "nonempty_lower_ns": 1506,
+        "nonempty_upper_ns": 5000,
+        "max_window_mean_bytes": 4335.6,
+        "peak_window_start_ns": 100000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 101000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 227.84,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      }
+    ],
+    "discovery_selection_sha256": "ceaa97bb50a25303144432dd99a7c5e9eac73a011ac2408dc82e898e6c944cbe",
+    "reference_selection_program_sha256": "9206a2ee1919483e2f0c6520bd1303fffcb3eca3df3c9127ce8eb143f5d9a2c9",
+    "reference_scope": "Same directed ports and layer/operation in an existing smaller normal case; tests a shared mechanism, not the discovery-case causal effect",
+    "reason": "Reuse an existing compact slice within the fixed cumulative disk budget; do not regenerate or alter business inputs"
+  },
+  "simulation_executed": false,
+  "small_checks": {
+    "analysis_checks": 7,
+    "existing_workflow_checks": 22,
+    "public_workflow": {
+      "passed": true,
+      "synthetic_only": true,
+      "no_old_run_input": true,
+      "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+      "program_sha256": "b43929fa50f7718c805fbe3e91816c96ef8b88ef15fc8c76b33f3a4c3d019fc3",
+      "capture_equivalence": {
+        "endpoint_ops": {
+          "records": 12,
+          "sha256": "052a2808036e9e96ef1127bdc56e3a027fd844c6da46178d29973bdb955fa1f3"
+        },
+        "local_deliveries": {
+          "records": 20,
+          "sha256": "1922fb7a41d2672b4a63b94674ef6afbbf1084e912fc2f4591e38fed0a486684"
+        },
+        "native_completions": {
+          "records": 46,
+          "sha256": "09a4ee7ee451b2a42202a9b465dd12565fe0c2ded25c282e54ec27e9b67c4041"
+        },
+        "native_starts": {
+          "records": 46,
+          "sha256": "a0faafff6edb5200a28a7732270e4b87f531b756d6111e4c2d2966ce470bfc36"
+        },
+        "node_execution": {
+          "records": 448,
+          "sha256": "c4da0030259c58aa17faf73bfce785f6e084cf1df7fb07a0aabae84490e2829c"
+        },
+        "operation_registry": {
+          "records": 4,
+          "sha256": "b55ada4fe2452bb71c1e8ac238627177ebe0d7dd4968a9b252b1aed5e27bcd06"
+        },
+        "operation_stages": {
+          "records": 90,
+          "sha256": "38068212455ff011970bd7f4a645cce387e1ff212eedf17d31322a8821eacb70"
+        },
+        "plan_summary": {
+          "records": 1,
+          "sha256": "d453622f35f8c3c5f794cafbab05859a331770a234feec82262f6eb21b7a16fa"
+        },
+        "planned_transfers": {
+          "records": 66,
+          "sha256": "cda8d63beaa37f1548a3dfdcf351409f172126a87cbfe4ec15c50af69bc17981"
+        },
+        "target_writes": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "transfer_registry": {
+          "records": 46,
+          "sha256": "4df8c2e0988951889152a9e3d33b8015a764a4b20242a2a4d00100717dfc5533"
+        },
+        "transfers": {
+          "records": 46,
+          "sha256": "9037817f17d572453e16d99d8ffa8902334eef7a2d776d27031a17b49c3f8682"
+        },
+        "wqe_completions": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wqe_starts": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "directed_service_readback": {
+        "intervals": [
+          {
+            "base_rate_bps": 400000000000,
+            "end_ns": 1000000,
+            "node_id": 4,
+            "port_id": 0,
+            "rate_bps": 800000000000,
+            "start_ns": 0
+          }
+        ],
+        "selection": "rate_at_successful_packet_start"
+      },
+      "baseline_end_ns": 3414,
+      "faster_end_ns": 3414,
+      "faster_is_not_a_required_test_result": true
+    }
+  },
+  "disk_preflight": {
+    "current_artifact_bytes": 50787168256,
+    "limit": 51539607552,
+    "predicted_additional_bytes": 741859966,
+    "predicted_total_bytes": 51529028222,
+    "basis": "Prior accepted 256-request FIFO case, omit absent native queue/request files; retain its entire archive size as conservative archive allowance; add 64 MiB for details, blocks, and small analysis",
+    "old_fifo_entries_bytes": 588332421,
+    "omitted_files": {
+      "run/raw/execution/records/native_queue.jsonl.gz": {
+        "bytes": 28653492,
+        "sha256": "29dac44f7ad67fa11e1e1c010ae9992f1fb1c53a1dd6d076563ab0e63c494788"
+      },
+      "run/raw/execution/records/native_requests.jsonl.gz": {
+        "bytes": 3205097,
+        "sha256": "fd6952e92192a74e4e33d3548680be973dcf89cf845f711f53364ed905bfb65f"
+      },
+      "run/truth/native_queue_capture.json": {
+        "bytes": 916,
+        "sha256": "65312ddd7bb267d852a2c6882f861082aef9eab40ef8ceb4d0780701b6e96048"
+      },
+      "run/truth/records/native_queue.jsonl.gz": {
+        "bytes": 24007517,
+        "sha256": "c63a2db8c43691f87ed7f7d43c5d618c5508c3064ad931411e4d6160555ad76c"
+      },
+      "run/truth/records/native_requests.jsonl.gz": {
+        "bytes": 3043491,
+        "sha256": "d8c8fb20e7382e06c1662591cfc9bc5ab570730c6a81359e02ebdd67bad22199"
+      }
+    },
+    "detail_and_allocation_reserve_bytes": 67108864,
+    "discovery_slice_nonexecution_bytes": 902119478,
+    "discovery_public_restore_or_compaction_fits": false,
+    "same_existing_normal_reference": "g0-b2-short; exact original archive and compact slice binding verified",
+    "target_runs_started": 0,
+    "small_retry": {
+      "reason": "port_service requires backend config schema /3",
+      "backend_started": false,
+      "only_affected_service_item_retried": true
+    }
+  },
+  "discovery_completion_summary": [
+    {
+      "rank_id": 70,
+      "kind": "dispatch",
+      "layer_id": 7,
+      "is_actual_last": true,
+      "finish_ns": 109021,
+      "expert_start_ns": 109021,
+      "latest_gates": [
+        {
+          "name": "dispatch-operator-complete",
+          "end_ns": 109021,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-reorder",
+          "end_ns": 109021,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-counts-and-data-ready",
+          "end_ns": 107921,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-status-recv",
+          "end_ns": 107921,
+          "transfer_id": 4295068083,
+          "delivery": {
+            "field": "data_ready_ns",
+            "time_ns": 107921,
+            "pending_after_start": true,
+            "coincident_with_start": false,
+            "submitted_ns": 107573,
+            "protocol_retired_ns": 108007,
+            "identity": {
+              "transfer_id": 4295068083,
+              "operation_id": "D.w0.L7.dispatch",
+              "src_rank": 108,
+              "dst_rank": 70,
+              "message_role": "status",
+              "message_id": 35694,
+              "chunk_index": 0,
+              "payload_bytes": 32,
+              "sources": []
+            }
+          }
+        },
+        {
+          "name": "dispatch-reorder",
+          "end_ns": 109021,
+          "transfer_id": null,
+          "delivery": null
+        }
+      ]
+    },
+    {
+      "rank_id": 98,
+      "kind": "dispatch",
+      "layer_id": 7,
+      "is_actual_last": false,
+      "finish_ns": 108092,
+      "expert_start_ns": 108092,
+      "latest_gates": [
+        {
+          "name": "dispatch-operator-complete",
+          "end_ns": 108092,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-reorder",
+          "end_ns": 108092,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-counts-and-data-ready",
+          "end_ns": 107192,
+          "transfer_id": null,
+          "delivery": null
+        },
+        {
+          "name": "dispatch-status-recv",
+          "end_ns": 107192,
+          "transfer_id": 4295068140,
+          "delivery": {
+            "field": "data_ready_ns",
+            "time_ns": 107192,
+            "pending_after_start": true,
+            "coincident_with_start": false,
+            "submitted_ns": 106973,
+            "protocol_retired_ns": 107234,
+            "identity": {
+              "transfer_id": 4295068140,
+              "operation_id": "D.w0.L7.dispatch",
+              "src_rank": 108,
+              "dst_rank": 98,
+              "message_role": "status",
+              "message_id": 35751,
+              "chunk_index": 0,
+              "payload_bytes": 32,
+              "sources": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "complete_business_facts_sha256": "29ac70a44d7275c63f83e041ebc66095745fe919c6edffe3656b32caf21bfbb2"
+}

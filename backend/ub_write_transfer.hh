@@ -45,6 +45,7 @@ struct WriteDescriptor
     TransferOperation operation = TransferOperation::Write;
     MessageCategory metadata_category = MessageCategory::AttachedMetadata;
     bool local_facts = false; // Passive A3 category arrival facts; legacy records remain unchanged.
+    std::optional<uint32_t> native_producer; // From validated static A3 work assignment.
     int DataOwner() const { return operation == TransferOperation::Load ? dst_rank : src_rank; }
     int Consumer() const { return operation == TransferOperation::Load ? src_rank : dst_rank; }
     // Legacy M1/KV descriptors use identity mapping; layer plans set both explicitly.

@@ -50,7 +50,7 @@ J ResourceDescription(const J& c) {
         {"send_capacity","native_worker_outstanding_and_node_request_id_pool"},
         {"compute_resources","one_per_aiv_and_one_gpu_compute"},{"hardware_calibrated",false}};
 }
-J Schedule(J p,const J& c) {
+J Schedule(J p,const J& c,std::map<uint64_t,unsigned>& producers) {
     const auto& cp=c.at("cann_profile");const auto& ranks=c.at("rank_ids");
     unsigned cores=N(cp.at("platform_aiv_cores"));auto info=ResourceDescription(c);
     const auto& cost=cp.at("local_cost_ns");const auto& profile=c.at("compute_profile_ns");uint64_t k=N(c.at("top_k"));
@@ -91,7 +91,8 @@ J Schedule(J p,const J& c) {
             auto id=duration?add("COMP",label,deps,{{"duration_ns",duration},{"resource_id",core<0?"gpu_compute":"aiv:"+std::to_string(core)}}):event(label,deps);
             if(!member.empty()){if(!members.contains(member))members[member]=J::array();members[member].push_back(id);}return id;
         };
-        auto send=[&](J& t,J deps)->std::pair<uint64_t,uint64_t>{
+        auto send=[&](J& t,J deps,unsigned core)->std::pair<uint64_t,uint64_t>{
+            Check(producers.emplace(Id(t.at("transfer_id")),core).second,"duplicate producer identity");
             t["send_node_id"]=add("SEND",t.at("kind").get<std::string>()+"-"+t.at("message_role").get<std::string>()+"-send",deps,{{"transfer_id",t.at("transfer_id")}});
             auto read=event("local-read-complete",deps,&t,"local_read_complete");
             auto fence=cp.at("copy_fence")=="local_read_complete"?read:event("copy-fence",deps,&t,"data_ready");return {read,fence};
@@ -99,9 +100,9 @@ J Schedule(J p,const J& c) {
         auto receive=[&](std::string kind,uint64_t entry){for(auto index:incoming[{kind,rank}]){
             auto& t=transfers[index];auto n=add("RECV",kind+"-"+t.at("message_role").get<std::string>()+"-recv",J::array({entry}),{{"transfer_id",t.at("transfer_id")}});
             t["recv_node_id"]=n;receives[Id(t.at("transfer_id"))]=n;}};
-        auto copies=[&](std::string kind,const J& x,uint64_t prepared)->std::pair<uint64_t,uint64_t>{
+        auto copies=[&](std::string kind,const J& x,uint64_t prepared,unsigned core)->std::pair<uint64_t,uint64_t>{
             J reads=J::array(),fences=J::array();for(auto index:vector[{kind,"data",rank,N(x.at("source_record_index")),N(x.at("topk_index"))}]){
-                auto [read,fence]=send(transfers[index],J::array({prepared}));reads.push_back(read);fences.push_back(fence);}
+                auto [read,fence]=send(transfers[index],J::array({prepared}),core);reads.push_back(read);fences.push_back(fence);}
             if(reads.empty())reads.push_back(prepared);
             if(fences.empty())fences.push_back(prepared);
             return {event(kind+"-buffer-reusable",reads),event(kind+"-data-fence",fences)};
@@ -115,7 +116,7 @@ J Schedule(J p,const J& c) {
             if(buffers.count({core,slot}))deps.push_back(buffers.at({core,slot}));
             uint64_t duration=unit/k+(N(x.at("topk_index"))<unit%k)+(x.at("locality")=="same_chip"?local_dispatch:0);
             auto prep=work("dispatch-quant-pack",duration,deps,core,"prepare");previous[core]=prep;
-            auto [read,fence]=copies("dispatch",x,prep);buffers[{core,slot}]=read;data_done.push_back(fence);
+            auto [read,fence]=copies("dispatch",x,prep,core);buffers[{core,slot}]=read;data_done.push_back(fence);
         }
         J all=J::array({entry});Extend(all,data_done);for(const auto& [key,value]:buffers)all.push_back(value);
         auto data_barrier=event("dispatch-cross-core-data-barrier",all);J status_done=J::array();previous.clear();
@@ -123,7 +124,7 @@ J Schedule(J p,const J& c) {
         for(const auto& [core,e]:Split(expert_ids,cores)){
             J deps=J::array({data_barrier});if(previous.count(core))deps.push_back(previous.at(core));
             auto it=states.find({rank,e.get<int>()});if(it!=states.end()){
-                auto [read,fence]=send(transfers[it->second],deps);previous[core]=read;status_done.push_back(fence);}
+                auto [read,fence]=send(transfers[it->second],deps,core);previous[core]=read;status_done.push_back(fence);}
         }
         all=J::array({data_barrier});Extend(all,status_done);
         for(auto index:incoming[{"dispatch",rank}])all.push_back(receives.at(Id(transfers[index].at("transfer_id"))));
@@ -145,9 +146,9 @@ J Schedule(J p,const J& c) {
             unsigned slot=ordinal[core]++%2;J deps=J::array({combined_entry});if(previous.count(core))deps.push_back(previous.at(core));
             if(buffers.count({core,slot}))deps.push_back(buffers.at({core,slot}));
             auto duration=N(cost.at("result_pack_per_input"))+extra_combine+(x.at("locality")=="same_chip"?local_combine:0);
-            auto prep=work("combine-result-pack",duration,deps,core,"pack");auto [read,fence]=copies("combine",x,prep);buffers[{core,slot}]=read;
+            auto prep=work("combine-result-pack",duration,deps,core,"pack");auto [read,fence]=copies("combine",x,prep,core);buffers[{core,slot}]=read;
             auto i=N(x.at("source_record_index")),j=N(x.at("topk_index"));const auto& status=vector[{"combine","status",rank,i,j}];
-            if(!status.empty()){auto [sr,sf]=send(transfers[status.at(0)],J::array({fence}));previous[core]=sr;end_by_core[core].push_back(sf);}
+            if(!status.empty()){auto [sr,sf]=send(transfers[status.at(0)],J::array({fence}),core);previous[core]=sr;end_by_core[core].push_back(sf);}
             else{previous[core]=fence;end_by_core[core].push_back(fence);local_results[{i,j}]=fence;}
         }
         std::map<unsigned,uint64_t> core_end;for(unsigned core=0;core<cores;++core){
@@ -192,7 +193,8 @@ LayerPlan ValidateA3Plan(const J& p,bool retain) {
     projected["communication_template"]="cann_a3_v850_fullmesh_v1";projected["send_slots_per_rank"]=uint64_t(1);
     J reference;ValidateCannPlan(projected,false,&reference);
     ValidateLayerPlan(reference,false);
-    auto expected=Schedule(std::move(reference),config);
+    std::map<uint64_t,unsigned> producers;
+    auto expected=Schedule(std::move(reference),config,producers);
     Check(expected==p,"layout, work, resource or dependency mismatch");
     resources::Check(resources::Actual(p),resources::Budget(config));
     LayerPlan result{retain?p:J{},{},{},{}};std::map<int,uint32_t> endpoints;
@@ -201,6 +203,7 @@ LayerPlan ValidateA3Plan(const J& p,bool retain) {
     for(const auto& t:p.at("transfers")){int src=t.at("src_rank"),dst=t.at("dst_rank");
         if(!t.contains("ub_task_id")){result.local_descriptors.push_back({t.at("transfer_id"),p.at("graph_id"),t.at("send_node_id"),t.at("recv_node_id"),src,dst,t.at("comm_tag"),t.at("payload_bytes"),t.at("operation_id")});continue;}
         WriteDescriptor d{t.at("transfer_id"),t.at("ub_task_id"),p.at("graph_id"),t.at("send_node_id"),t.at("recv_node_id"),src,dst,t.at("comm_tag"),t.at("payload_bytes"),t.at("operation_id"),t.at("chunk_index"),t.at("pair_byte_range").at(0),t.at("pair_payload_bytes"),endpoints.at(src),endpoints.at(dst)};
+        d.native_producer=producers.at(Id(t.at("transfer_id")));
         d.operation=TransferOperation::Store;d.local_facts=true;d.metadata_category=MetadataCategory(t.at("kind"),t.at("message_role"));d.payload_regions.emplace();
         for(const auto& r:t.at("payload_regions"))d.payload_regions->push_back({r.at("begin"),r.at("end"),r.at("kind")});
         result.descriptors.push_back(d);

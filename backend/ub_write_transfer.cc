@@ -160,6 +160,7 @@ void UbWriteTransfer::SubmitNative()
     ns3::UbTrafficGen::RuntimeTask task;
     task.taskId = descriptor_.task_id; task.sourceNode = descriptor_.SourceNode();
     task.destNode = descriptor_.DestinationNode(); task.dataSize = descriptor_.bytes; task.priority = 7;
+    task.nativeProducer = descriptor_.native_producer;
     task.op = descriptor_.operation == TransferOperation::Store ? ns3::UbTrafficGen::RuntimeTaskOp::MEM_STORE : ns3::UbTrafficGen::RuntimeTaskOp::MEM_LOAD;
     source_->GetTransferExecutor().Submit(task, [this](uint32_t id) {
         if (id != descriptor_.task_id || !native_requests_.empty() ||

@@ -127,6 +127,10 @@ LOAD 前增加一份真实的 32 B 元数据 STORE：数据拥有者原有准备
 
 原生请求直接进入 `UbLdstApi`、VOQ 和物理端口，不创建或绑定 RTP TP/Jetty。每份任务按配置的 `ThreadNum` 均分给有效 worker，短任务不创建零字节分段；每个 worker 的 LOAD/STORE outstanding 分别限制在途请求。`RequestIdCount` 限定每个发起节点的 16 位请求标识池（1～65,536），池满等待响应，标识只在响应匹配并释放后复用。内部任务分段标识不再截断写入报文。队列、确认计数、任务映射及请求映射均在完成时清理；资源配额属性的回读值不随占用改变。
 
+`ns3::UbLdstThread::StoreQueuePolicy` 默认为 `fifo`，保留统一 STORE 任务队列；`producer_round_robin` 是可选的按生产者轮转参考，要求 `ThreadNum=1`。所有生产者共用这个 worker 的 STORE 额度和端点编号池。最初从非空序列的最小核编号开始；每次成功形成一个既有请求后，游标移至该核，下一次选编号更大的首个非空序列，没有则回绕。池或额度阻塞不移动游标，仍由原有响应事件唤醒，不增加轮询、时延或随机状态。任务形成全部请求后退出核内队首，不额外等待协议确认；LOAD 队列及两种操作的占用/释放语义保持原状。
+
+联合后端仅为已校验的 `cann_a3_v850_store_resources_v1` 图提供生产者身份。在 `ValidateA3Plan` 独立重建静态分配时，把产生 SEND 的核编号保存到描述符，再随 RuntimeTask 传至任务分段；不从近邻计算节点、目的端或实验真值猜测。零成本工作和跨核状态屏障也保留唯一分配。完整模型组合保留此内部字段，原 JSON 图、依赖和摘要不变。身份不写入包或选路哈希，启用策略但缺少身份、非法策略或多个 worker 均拒绝。各核逻辑序列是模型参考，不能据此认定真实 A3 的硬件队列结构。公开配置见[A3 小例](../examples/a3_segment/README.md)。
+
 同芯片不同 rank 使用 `LocalDelivery`，源端准备节点完成后发布数据，再通过同一 ns-3 时刻的排队回调满足双方等待。它没有 UB app/task 和网络包，也支持晚到 RECV。`local_deliveries` 独立保存，`transfers` 及端口包来源只记录实际跨芯片 UB 操作；同 rank 的贡献在原本地计算中保留。
 
 ## 图完成、网络排空与资源释放
@@ -176,7 +180,7 @@ LOAD 前增加一份真实的 32 B 元数据 STORE：数据拥有者原有准备
 
 目标场景具体数值及尚无测量依据的参数见[CM384/R1 场景](../docs/scenarios/cm384_r1.md)。改变路径、速率或延迟时须走相应输入校验；现有首轮 `replay` 允许的调整比完整场景解析更窄，见用户指南，不能把后端支持配置等同于任意固定图重放都接受该覆盖。
 
-重放带 `backend.json` 的输入时，[frozen_replay.network_input](../python/moe_ub_cosim/frozen_replay.py)会读取所用二进制的参数目录。通常要求除 `ub_revision` 外完全相同，再将输入副本绑定到当前修订。旧 v0.3 WRITE/RTP 数据另有一项明确迁移：只补充未激活的原生 `RequestIdCount=65536`，并接受两个原生请求长度参数从 nearest 更正为 up 的帮助文字；原参数值、默认值、类型及其他目录项必须保持。原生 profile 不接受此迁移，其他差异仍拒绝。副本记录兼容规则、增补来源及 `behavior_equivalence="must_be_checked_by_execution"`，不修改原数据。目录兼容不证明行为等价，仍需实际对照。结构化重放只允许下述出口服务区间及已验证原生路径的 `UsePacketSpray` 开关，其他属性、任务 profile、基础拓扑和端点保持一致。
+重放带 `backend.json` 的输入时，[frozen_replay.network_input](../python/moe_ub_cosim/frozen_replay.py)会读取所用二进制的参数目录。通常要求除 `ub_revision` 外完全相同，再将输入副本绑定到当前修订。旧 v0.3 WRITE/RTP 数据另有一项明确迁移：只补充未激活的原生 `RequestIdCount=65536`，并接受两个原生请求长度参数从 nearest 更正为 up 的帮助文字；原参数值、默认值、类型及其他目录项必须保持。原生 profile 不接受上述 WRITE 专用迁移。另一项兼容规则允许旧目录缺少 `StoreQueuePolicy` 时补入精确声明的 `fifo` 默认值，并记录来源；其余目录项仍须完全匹配，显式轮转覆盖还要经过单 worker 和图身份检查。其他差异仍拒绝。副本记录兼容规则、增补来源及 `behavior_equivalence="must_be_checked_by_execution"`，不修改原数据。目录兼容不证明行为等价，仍需实际对照。结构化重放允许下述出口服务区间、已验证原生路径的 `UsePacketSpray` 开关、STORE 总额度，以及单 worker A3 资源图的 STORE 队列策略；其他属性、任务 profile、基础拓扑和端点保持一致。
 
 ### 准备成本与出口服务区间
 

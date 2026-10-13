@@ -5,8 +5,11 @@ from .record_storage import iter_result
 
 
 def policy(value, ranks, max_ns):
-    require(isinstance(value,dict) and set(value)=={'schema_version','rank_ids','end_ns','max_records','max_snapshot_items'}
-            and value['schema_version']=='moe-ub-native-queue-config/1','Invalid native queue policy')
+    require(isinstance(value,dict),'Invalid native queue policy')
+    audit=value.get('schema_version')=='moe-ub-native-queue-config/2'
+    require(set(value)=={'schema_version','rank_ids','end_ns','max_records','max_snapshot_items'}|({'max_request_records'} if audit else set())
+            and (audit or value['schema_version']=='moe-ub-native-queue-config/1'),'Invalid native queue policy')
+    if audit:integer(value['max_request_records'],'native request audit records',1,2**63-1)
     selected=value['rank_ids']
     require(isinstance(selected,list) and selected and all(type(r) is int for r in selected) and
             len(selected)==len(set(selected)) and set(selected)<=set(ranks),'Invalid native queue ranks')
@@ -69,4 +72,40 @@ def export(execution, report, observation, writer):
     capture=report.get('native_queue_capture')
     require(capture and capture['policy']==observation['native_queue'],'Native queue policy was not captured')
     for row in checked_rows(execution,report):writer.add('truth','native_queue.jsonl',row)
+    if 'max_request_records' in capture['policy']:
+        for row in checked_requests(execution,report):writer.add('truth','native_requests.jsonl',row)
     return capture
+
+
+def checked_requests(execution, report):
+    """All STORE request ranges, including endpoints outside queue selection.
+
+    Exact range coverage is checked against each completed transfer; the audit
+    uses internal business identities and excludes changing packet/request IDs.
+    """
+    capture=report['native_queue_capture'];audit=capture['request_audit']
+    require(audit['schema_version']=='moe-ub-native-request-audit/1' and audit['complete'] is True and
+            audit['dropped_records']==0 and audit['end_ns']==report['simulation_end_ns'] and
+            audit['scope']=='all_native_STORE_requests_entire_execution','Incomplete native request audit')
+    planned={(t['graph_id'],t['transfer_id']):t for t in iter_result(execution,'transfers',report)
+             if t.get('operation')=='STORE'}
+    ranges={};count=time=0
+    for row in iter_result(execution,'native_requests',report):
+        count+=1;i=row['identity'];key=i['graph_id'],i['transfer_id']
+        require(row['sequence']==count and time<=row['time_ns']<=audit['end_ns'] and key in planned and
+                row['operation']=='STORE','Invalid native request audit order/identity')
+        time=row['time_ns'];t=planned[key]
+        for field in ('src_rank','dst_rank'):
+            require(i[field]==t[field],'Native request business identity mismatch')
+        require(row['node_id']==t['src_ub_node'],'Native request node mismatch')
+        offset=integer(row['offset'],'request offset',0,2**63-1)
+        size=integer(row['bytes'],'request size',1,8192)
+        ranges.setdefault(key,[]).append((offset,size))
+        require(count<=capture['policy']['max_request_records'],'Native request audit limit exceeded')
+        yield row
+    require(count==audit['records'] and set(ranges)==set(planned),'Incomplete STORE request coverage')
+    for key,parts in ranges.items():
+        end=0
+        for offset,size in sorted(parts):
+            require(offset==end,'STORE request ranges overlap or have gaps');end+=size
+        require(end==planned[key]['bytes'],'STORE request byte coverage mismatch')

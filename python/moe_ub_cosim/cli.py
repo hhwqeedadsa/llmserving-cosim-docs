@@ -53,6 +53,10 @@ def parser():
     inspect = ss.add_parser('inspect', help='Read scope and file sizes; --verify scans hashes of all bundle files')
     inspect.add_argument('--slice', type=Path, required=True)
     inspect.add_argument('--verify', action='store_true', help='Read all bundle bytes to verify integrity')
+    compact = ss.add_parser('compact', help='Create a finite slice with compressed execution evidence; retain every byte and the original graph')
+    compact.add_argument('--slice', type=Path, required=True, help='Verified expanded finite slice/3')
+    compact.add_argument('--output', type=Path, required=True, help='New compact bundle; source is retained')
+    compact.add_argument('--storage', choices=('copy','hardlink'), default='copy', help='Storage for unchanged inputs and graphs')
     validate = sub.add_parser('validate', help='Verify a completed experiment, or only public observations')
     target = validate.add_mutually_exclusive_group(required=True)
     target.add_argument('--run', type=Path, help='Completed experiment directory (reads internal evidence)')
@@ -84,9 +88,10 @@ def main(argv=None):
             from .local_facts import execute
             value=execute(args.run,args.config,args.output)
         elif args.command == 'slice':
-            from .research_slice import create, inspect
+            from .research_slice import create, inspect, compact_slice
             value = (create(args.from_run, args.output, args.storage, args.import_config)
-                     if args.slice_command == 'create' else inspect(args.slice, verify=args.verify))
+                     if args.slice_command == 'create' else compact_slice(args.slice,args.output,args.storage)
+                     if args.slice_command == 'compact' else inspect(args.slice, verify=args.verify))
         elif args.command == 'validate':
             from .user_workflow import validate
             value = validate(args.run, args.observed,args.allow_partial_observation)

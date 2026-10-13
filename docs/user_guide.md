@@ -126,12 +126,12 @@ moe-ub validate --run runs/demo-replay
 |---|---|
 | 端口采样周期、窗口、设备时钟或已捕获端口的子集 | 修改观测配置后使用 `sample` |
 | 旧式 CSV 网络中的链路传播时延 | 修改允许的网络列后使用 `replay` |
-| 结构化网络的有向出口速率区间、原生逐包喷洒开关、STORE 请求额度 | 修改 `backend.json` 中下述允许字段后使用 `replay` |
+| 结构化网络的有向出口速率区间、原生逐包喷洒开关、STORE 请求额度和队列策略 | 修改 `backend.json` 中下述允许字段后使用 `replay` |
 | 模型、请求、组批、专家选择、专家放置或计算耗时 | 修改前端输入，重新 `run` 生成任务 |
 
 旧式网络的 `replay` 允许修改 `topology.csv` 的 `delay` 列，值为非负整数加 `ns`，例如 `320ns`。复制原网络目录、只修改该列，再让重放配置的 `network` 指向新目录；文件集合、行顺序、端点、带宽和其他设置必须相同。
 
-包含 `backend.json` 的结构化网络允许覆盖 `port_service`，以及使用原生 STORE/LOAD 时的 `attributes["ns3::UbLdstApi::UsePacketSpray"]`（字符串 `"true"` / `"false"`），以及原生 STORE 的 `attributes["ns3::UbLdstThread::StoreOutstanding"]`（字符串形式的整数 1～65536）。请求额度按 worker 生效；只改变额度不会改变 worker 数、每份任务的字节拆分或端点共享编号池，实际请求顺序、网络竞争及完成时间仍由本次执行决定。新增服务区间时将后端配置格式改为 `moe-ub-backend-config/3`；其余字段、来源声明和目录文件保持原值。软件记录原始文件摘要和前后参数，对副本补充实际覆盖来源并再次执行后端校验。结构化重放尚不接受基础拓扑、链路延迟、其他路由设置或任意属性修改；版本兼容检查见[后端说明](../backend/README.md)。
+包含 `backend.json` 的结构化网络允许覆盖 `port_service`，以及使用原生 STORE/LOAD 时的 `attributes["ns3::UbLdstApi::UsePacketSpray"]`（字符串 `"true"` / `"false"`），以及原生 STORE 的 `attributes["ns3::UbLdstThread::StoreOutstanding"]`（字符串形式的整数 1～65536）。请求额度按 worker 生效；只改变额度不会改变 worker 数、每份任务的字节拆分或端点共享编号池，实际请求顺序、网络竞争及完成时间仍由本次执行决定。新增服务区间时将后端配置格式改为 `moe-ub-backend-config/3`；其余字段、来源声明和目录文件保持原值。软件记录原始文件摘要和前后参数，对副本补充实际覆盖来源并再次执行后端校验。A3 资源图还允许覆盖 `attributes["ns3::UbLdstThread::StoreQueuePolicy"]` 为字符串 `"fifo"` 或 `"producer_round_robin"`，要求一个 worker；没有唯一静态核身份的图拒绝轮转。旧参数目录仅可按明确规则补入 FIFO 默认值，不改原图。核内序列、总额度及请求范围的含义和可复制配置见 [A3 小例](../examples/a3_segment/README.md)。结构化重放尚不接受基础拓扑、链路延迟、其他路由设置或任意属性修改；版本兼容检查见[后端说明](../backend/README.md)。
 
 `port_service` 使用 `moe-ub-port-service/1`，包含正整数 `execution_end_ns` 和最多 4096 个 `intervals`。每条区间写明物理 `node_id`、`port_id`、`start_ns`、`end_ns`、正整数 `rate_bps`。仅指定方向受影响；同一出口按起点排序且不得重叠，区间为 `[start_ns, end_ns)`，到期恢复拓扑中配置的速率。`[0, execution_end_ns)` 可表示整个执行范围的速率覆盖。已在发送的包保持开始时确定的速率。
 
@@ -169,6 +169,8 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 将整个数据包复制到另一位置后，先执行 `slice inspect --verify`，再采样或重放。已经打包的模型、图、输入来源和事件随包保留，后续操作无需重新下载原始路由。重放还需要本机可用的后端二进制。硬链接不是跨机器传输格式，迁移时需要复制文件内容。
 
 包含归档的数据包按操作需要展开：采样展开原始事件，重放展开原图。可在采样或重放配置中设置 `cache_directory`，复用经校验的展开副本；未设置时使用本次输出的 `work/slice/`。缓存属于可再生副本，不能替代原始数据包；其空间仍计入预算。缓存来源不符、数据损坏或上次展开中断时会报错，应查明原因后使用新的缓存路径。
+
+有限层段的展开切片可以用 `moe-ub slice compact --slice 原切片 --output 新切片` 压缩历史执行记录，保留每个原始文件的内容与冻结图。源目录不删除，新切片单独生成清单并绑定原 `slice.json` 摘要。默认复制未压缩的图与输入；同一文件系统内可加 `--storage hardlink` 共享不可变文件，避免压缩时重复占用图空间。使用新切片执行 `replay` 时直接读取原图，不展开历史执行记录；`sample` 则校验并展开所需历史记录，展开空间仍计入预算。当前该命令只接收展开的有限层段 `research-slice/3`，输出 `/4`；不能把完整首轮或任意缺失文件的目录当作输入。压缩需要临时空间，不能以预计压缩率代替运行前的空间预检。
 
 已有历史归档可通过 `slice create --import-config FILE --output DIR` 迁入。导入配置使用 `moe-ub-slice-import/1`，必须显式提供运行元数据、图与执行归档清单、网络、系统、观测、范围及来源证明。此操作适合维护已有完整归档的开发者，不会猜测或补造缺失字段。直接取得完整首轮数据包的使用者无需执行导入。
 

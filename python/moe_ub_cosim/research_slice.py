@@ -8,6 +8,7 @@ import gzip
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import tarfile
@@ -174,15 +175,24 @@ def create(run, output, storage='copy', import_config=None, *, segment_scope=Fal
 
 def inspect(directory, *, verify=False):
     directory = Path(directory).resolve(); manifest = read(directory/'slice.json')
-    finite = manifest.get('schema_version') == 'moe-ub-research-slice/3'
-    require(manifest.get('schema_version') in (SCHEMA,'moe-ub-research-slice/2','moe-ub-research-slice/3') and manifest.get('normal_exit') is True,
+    compact = manifest.get('schema_version') == 'moe-ub-research-slice/4'
+    finite = compact or manifest.get('schema_version') == 'moe-ub-research-slice/3'
+    require(manifest.get('schema_version') in (SCHEMA,'moe-ub-research-slice/2','moe-ub-research-slice/3','moe-ub-research-slice/4') and manifest.get('normal_exit') is True,
             'Incomplete or unsupported research slice')
     from .segment import INITIAL_STATE,validate_segment
     require(manifest['initial_state'] == (INITIAL_STATE if finite else dict(simulation_ns=0, network='fresh', kv='ready_at_decode_start')),
             'Unsupported slice initial state')
     if finite:
-        require(manifest['scope']=='completed_finite_moe_segment' and not manifest['archives'],
+        require(manifest['scope']=='completed_finite_moe_segment' and (compact or not manifest['archives']),
                 'Invalid finite segment slice boundary')
+        if compact:
+            require(isinstance(manifest.get('compaction'),dict) and
+                    set(manifest['compaction'])=={'schema_version','source_slice_sha256','preserved','execution_files'} and
+                    manifest['compaction'].get('schema_version')=='moe-ub-slice-compaction/1' and
+                    manifest['compaction'].get('preserved')=='all_original_bytes' and
+                    re.fullmatch('[0-9a-f]{64}',manifest['compaction'].get('source_slice_sha256','')),
+                    'Missing compact slice source binding')
+            integer(manifest['compaction']['execution_files'],'compacted execution files',1)
         service=read(directory/'inputs/service.json');deployment=read(directory/'raw/deployment.json')
         require(service['schema_version']=='moe-ub-configured-service/5' and
                 deployment['schema_version']=='moe-ub-service-deployment/6' and
@@ -206,17 +216,18 @@ def inspect(directory, *, verify=False):
         archive_kinds.add(archive['kind']); required.update((archive['path'], archive['inventory']))
         expected = 'raw/graph' if archive['kind'] == 'graph_archive' else 'raw/execution'
         require(archive['destination'] == expected, 'Invalid slice archive destination')
-    require(not archive_kinds or archive_kinds == {'graph_archive', 'execution_archive'}, 'Incomplete slice archive pair')
+    require(archive_kinds == {'execution_archive'} if compact else
+            not archive_kinds or archive_kinds == {'graph_archive', 'execution_archive'}, 'Incomplete slice archive components')
     submitted = []
     for submission in manifest['submissions']:
         submitted.extend(submission['rank_ids'])
         inside(directory/'raw', submission['semantic_manifest'])
         inside(directory/'raw', submission['workload_prefix'])
-        if not archive_kinds:
+        if 'graph_archive' not in archive_kinds:
             required.add('raw/'+submission['semantic_manifest'])
             required.update('raw/'+submission['workload_prefix']+'.'+str(rank)+'.et' for rank in submission['rank_ids'])
     require(sorted(submitted) == ranks, 'Slice submissions must cover each rank exactly once')
-    if not archive_kinds:
+    if 'execution_archive' not in archive_kinds:
         required.add('raw/execution/result.json')
     require(required <= set(manifest['artifacts']), 'Slice inventory omits required execution inputs')
     if verify:
@@ -224,7 +235,7 @@ def inspect(directory, *, verify=False):
     from .observation import execution_coverage
     from .observation_recording import capabilities
     capture=capabilities(manifest['observation'],ranks,manifest['capture_end_ns'])
-    if manifest['schema_version'] in ('moe-ub-research-slice/2','moe-ub-research-slice/3'):
+    if manifest['schema_version'] in ('moe-ub-research-slice/2','moe-ub-research-slice/3','moe-ub-research-slice/4'):
         require(manifest.get('capture_capabilities')==capture,'Slice capture capability declaration differs from input')
     return dict(passed=True, scope=manifest['scope'], simulation_end_ns=manifest['simulation_end_ns'],
         capture_capabilities=capture,
@@ -234,6 +245,53 @@ def inspect(directory, *, verify=False):
         stored_logical_bytes=sum(v['bytes'] for v in manifest['artifacts'].values()),
         archive_expanded_logical_bytes=sum(v['expanded_logical_bytes'] for v in manifest['archives']),
         integrity='all_file_hashes_verified' if verify else 'metadata_only_no_hash_scan')
+
+
+def compact_slice(directory, output, storage='copy'):
+    """Archive a finite slice's execution evidence, retaining the sealed graph.
+
+    Creates a new bundle and never removes the source. Replay uses the original
+    graph files directly; sampling materializes the verified execution archive.
+    """
+    directory,output=Path(directory).resolve(),Path(output).resolve()
+    inspect(directory,verify=True);original=read(directory/'slice.json')
+    require(original['schema_version']=='moe-ub-research-slice/3' and not original['archives'],
+            'Compaction currently requires an expanded finite segment slice/3')
+    require(storage in ('copy','hardlink') and not output.exists() and not output.is_relative_to(directory),
+            'Compact slice output must be new and outside its source')
+    output.mkdir(parents=True)
+    for name,identity in original['artifacts'].items():
+        if not name.startswith('raw/execution/'):
+            _copy(inside(directory,name),inside(output,name),storage)
+    source=directory/'raw/execution';entries=inventory(source)
+    require(entries=={k[len('raw/execution/'):]:v for k,v in original['artifacts'].items()
+                      if k.startswith('raw/execution/')},'Execution differs from sealed slice inventory')
+    archive=output/'archives/execution_archive.tar.gz';archive.parent.mkdir()
+    with tarfile.open(archive,'x:gz',compresslevel=6,dereference=True) as stream:
+        for name in sorted(entries):stream.add(inside(source,name),arcname=name,recursive=False)
+    # Verify every compressed member without allocating an expanded copy.
+    seen=set()
+    with tarfile.open(archive,'r|gz') as stream:
+        for member in stream:
+            require(member.isfile() and member.name in entries and member.name not in seen,'Invalid compact archive member')
+            expected=entries[member.name]
+            require(member.size==expected['bytes'] and
+                    hashlib.file_digest(stream.extractfile(member),'sha256').hexdigest()==expected['sha256'],
+                    'Compact archive byte identity differs')
+            seen.add(member.name)
+    require(seen==set(entries),'Incomplete compact archive')
+    meta=output/'archives/execution_archive.inventory.json.gz'
+    with gzip.open(meta,'xt',compresslevel=1) as stream:json.dump(dict(files=entries),stream,separators=(',',':'))
+    verify_inventory(directory,original['artifacts'])
+    manifest=deepcopy(original)
+    manifest.update(schema_version='moe-ub-research-slice/4',storage=storage,created_utc=timestamp(),
+        compaction=dict(schema_version='moe-ub-slice-compaction/1',source_slice_sha256=file_sha256(directory/'slice.json'),
+                        preserved='all_original_bytes',execution_files=len(entries)),
+        archives=[dict(kind='execution_archive',path=str(archive.relative_to(output)),
+                       inventory=str(meta.relative_to(output)),destination='raw/execution',
+                       expanded_logical_bytes=sum(v['bytes'] for v in entries.values()))],artifacts=inventory(output))
+    save(output/'slice.json',manifest)
+    return inspect(output,verify=True)
 
 
 def _extract(directory, archive, destination):
@@ -315,7 +373,7 @@ def replay(output, config):
     coverage=execution_coverage(config.get('observation',manifest['observation']),manifest['ranks'],
         config.get('max_simulation_ns',manifest['capture_end_ns']),result['simulation_end_ns'])
     return dict(simulation_end_ns=result['simulation_end_ns'], scope=(
-                'dependency_driven_frozen_finite_segment' if manifest['schema_version']=='moe-ub-research-slice/3'
+                'dependency_driven_frozen_finite_segment' if manifest['schema_version'] in ('moe-ub-research-slice/3','moe-ub-research-slice/4')
                 else 'dependency_driven_frozen_first_round'),
                 coverage=coverage,
                 source_slice_sha256=file_sha256(directory/'slice.json'), frontend_executed=False,

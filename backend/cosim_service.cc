@@ -584,7 +584,7 @@ int main(int argc, char** argv)
         if (backend_config) report["backend_parameters_active"] = true;
         const bool record_stages=std::any_of(observation_configs.begin(),observation_configs.end(),
             [](const auto& c){return !c.queue_sampling.is_null();});
-        moe_ub::ResultRecords records(report, storage_policy, record_stages, !send_state_policy.is_null(),!native_queue_policy.is_null());
+        moe_ub::ResultRecords records(report, storage_policy, record_stages, !send_state_policy.is_null(),!native_queue_policy.is_null(),native_queue_policy.contains("max_request_records"));
         std::vector<ns3::Ptr<ns3::UbController>> controllers;
         std::vector<ns3::Ptr<ns3::UbApp>> apps;
         for (int rank : ranks)

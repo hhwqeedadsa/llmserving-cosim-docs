@@ -20,6 +20,21 @@ moe-ub validate --run runs/a3-replay
 
 自选构建目录时修改 `source-run.json.backend` 与 `replay.json.backend`，或在 `run`、`replay` 时使用 `--backend`。更换 `runs/a3-resolved` 时同步修改 `source-run.json.inputs`。
 
+按通信核轮转 STORE 请求的参考配置使用同一合成模型，固定一个 worker、32 个总在途 STORE、256 个共享编号和 4096 B 请求粒度。它不代表已校准的硬件队列。运行入口为：
+
+```bash
+moe-ub resolve --config examples/a3_segment/scenario-round-robin.yaml \
+  --backend build/default/output/cosim/ns3.44-cosim-service --output runs/a3-queue-resolved
+moe-ub segment prepare --config examples/a3_segment/segment-round-robin.json --output runs/a3-queue-input
+moe-ub run --config runs/a3-queue-input/run.json --output runs/a3-queue-run
+moe-ub validate --run runs/a3-queue-run
+moe-ub segment freeze --from-run runs/a3-queue-run --output runs/a3-queue-slice
+moe-ub replay --slice runs/a3-queue-slice --config examples/a3_segment/replay.json --output runs/a3-queue-replay
+moe-ub validate --run runs/a3-queue-replay
+```
+
+`queue-observation.json` 限定队列快照和全部 STORE 请求范围的记录量，两者只进入 `truth/`；字段与读取接口见[请求队列记录](../../docs/record_storage.md#原生请求队列诊断)。对照 FIFO 时，把场景属性 `ns3::UbLdstThread::StoreQueuePolicy` 改为 `fifo`，保持其余参数相同，使用新输出目录。旧 `scenario.yaml` 保留原来的三个 worker 设置，不能直接把它当作固定资源的 FIFO 对照。
+
 | 输入 | 用途 |
 |---|---|
 | `scenario.yaml`、`backend-reference.yaml`、`fabric.json` | 两个平面的网络、逐包喷洒、CBFC、3 个原生 worker、32 个每 worker STORE 并发和 256 个每节点请求编号；不使用全 rank SEND 配额 |
@@ -35,3 +50,5 @@ moe-ub validate --run runs/a3-replay
 `runs/a3-run/observed/` 保存可供分析的操作和端口统计；`raw/` 保存执行核验记录。`runs/a3-facts/truth/` 是内部节点与交付事实，读取方法见[输出数据](../../docs/record_storage.md)。它不属于算法可读数据。`facts.json` 记录选定和实际覆盖，超限时保留日志并失败，不静默截断。
 
 `segment freeze` 使用 `research-slice/3` 保存明确的有限范围。原有 `slice create` 会拒绝这种输入。移动保存目录后仍可执行 `sample` 和 `replay`；回放只运行后端，不重做前端排程或构图。修改层数、路由、准备成本等图内条件必须重新准备和运行。层段完成不表示生成了一个完整模型 Token，也不表示网络已达到稳态。
+
+需要节省反复重放时的历史记录空间，可执行 `moe-ub slice compact --slice runs/a3-queue-slice --output runs/a3-queue-compact --storage hardlink`，再将 `replay --slice` 指向新目录。命令完整核验压缩记录和未改动图，保留原切片；不要修改共享的图或输入。压缩格式、复制选项及采样展开空间见[用户指南](../../docs/user_guide.md)。

@@ -187,6 +187,10 @@ BackendConfig::BackendConfig(Json input) : input_(std::move(input))
                         input_.at("profiles").at("combine").at("programming_model") == "native_memory";
     if (native) Require(input_.at("attributes").at("ns3::UbLdstApi::UseShortestPaths")=="true",
                         "Native memory currently requires shortest paths");
+    const auto queue=input_.at("attributes").at("ns3::UbLdstThread::StoreQueuePolicy");
+    Require(queue=="fifo" || queue=="producer_round_robin","Unknown STORE queue policy");
+    if(queue!="fifo") Require(native && input_.at("attributes").at("ns3::UbLdstInstance::ThreadNum")=="1",
+        "Producer round robin requires native memory and exactly one worker");
     if (native) for (const auto* key : {"ns3::UbLdstThread::StoreRequestSize", "ns3::UbLdstThread::LoadResponseSize"})
     {
         const auto size = std::stoull(input_.at("attributes").at(key).get<std::string>());
@@ -271,6 +275,9 @@ void BackendConfig::ApplyPortService(uint64_t execution_end_ns) const
 }
 void BackendConfig::CheckPlan(const Json& plan) const
 {
+    if(input_.at("attributes").at("ns3::UbLdstThread::StoreQueuePolicy")!="fifo")
+        Require(plan.at("communication_template")=="cann_a3_v850_store_resources_v1",
+            "Producer round robin requires static producer identities from the validated A3 resource plan");
     Require(plan.at("communication_template") == "direct_rank_dedup_v1" ||
             plan.at("communication_template") == "cann_a3_v850_fullmesh_v1" ||
             plan.at("communication_template") == "cann_a3_v850_native_v1" ||

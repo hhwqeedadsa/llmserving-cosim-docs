@@ -1,0 +1,41 @@
+schema_version: moe-ub-scenario-run/2
+scenario_id: a3-producer-round-robin-example
+basis: selected_reference
+service: service.json
+layer: layers.json
+system: system.json
+backend:
+  reference_file: backend-reference.yaml
+  profile_by_role:
+    dispatch: native_store
+    combine: native_store
+  attributes:
+    ns3::UbSwitchAllocator::AllocationTime: 10ns
+    ns3::UbLdstInstance::ThreadNum: 1
+    ns3::UbLdstThread::StoreOutstanding: 32
+    ns3::UbLdstThread::LoadOutstanding: 32
+    ns3::UbLdstApi::RequestIdCount: 256
+    ns3::UbLdstApi::UsePacketSpray: true
+    ns3::UbLdstApi::UseShortestPaths: true
+    ns3::UbLdstThread::StoreRequestSize: 4096
+    ns3::UbLdstThread::LoadResponseSize: 4096
+    ns3::UbLdstThread::StoreQueuePolicy: producer_round_robin
+  globals: {}
+  tp_max_data_payload_bytes: 4096
+  transport_channel_setup: precreated
+network:
+  fabric_file: fabric.json
+  defaults:
+    rate_bps: 400000000000
+    delay_ns: 20
+    allocation_ns: 1
+    forward_ns: 0
+  nodes: []
+  links: []
+execution:
+  chunk_bytes: 8192
+  send_slots_per_rank: 0
+  seed: 1
+  run: 1
+observation: null
+max_simulation_ns: 1000000

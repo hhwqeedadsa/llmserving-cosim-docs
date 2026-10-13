@@ -32,6 +32,7 @@ def network_input(source, output, override, binary):
             value.pop('port_service',None)
             value['attributes'].pop('ns3::UbLdstApi::UsePacketSpray',None)
             value['attributes'].pop('ns3::UbLdstThread::StoreOutstanding',None)
+            value['attributes'].pop('ns3::UbLdstThread::StoreQueuePolicy',None)
             return value
         require(fixed(before)==fixed(after),'Replay cannot change task profiles, endpoints, base topology or other backend parameters')
         if 'port_service' in after:
@@ -52,6 +53,14 @@ def network_input(source, output, override, binary):
                     re.fullmatch(r'[1-9][0-9]*',value) and 1<=int(value)<=65536,
                     'STORE quota replay override requires native STORE and an integer string in 1..65536')
             overrides[key]=dict(before=before['attributes'].get(key),after=value)
+        key='ns3::UbLdstThread::StoreQueuePolicy'
+        if before['attributes'].get(key,'fifo')!=after['attributes'].get(key,'fifo'):
+            value=after['attributes'].get(key)
+            require(value in ('fifo','producer_round_robin') and
+                    after['attributes']['ns3::UbLdstInstance::ThreadNum']=='1' and
+                    any(p['programming_model']=='native_memory' and p['operation']=='STORE'
+                        for p in after['profiles'].values()),'Queue replay override requires native STORE and one worker')
+            overrides[key]=dict(before=before['attributes'].get(key,'fifo'),after=value)
     elif changed:
         def rows(path):
             with path.open(newline='') as stream:

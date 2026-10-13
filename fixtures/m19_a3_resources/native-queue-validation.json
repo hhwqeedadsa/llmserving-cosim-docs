@@ -1,0 +1,625 @@
+{
+  "schema_version": "moe-ub-native-queue-validation/1",
+  "passed": true,
+  "ns3_commit": "13cf3da346455185b3777322944fb1d3c39e0d3d",
+  "backend": {
+    "path": "build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service",
+    "sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5"
+  },
+  "queue_checks": {
+    "passed": true,
+    "cases": {
+      "default": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 32,
+        "pool_blocks": 0,
+        "released": 48,
+        "worker_blocks": 16,
+        "requests": 48,
+        "full_result_sha256": "8d1fa4e2fa1068807c845d24981e8c643a0afe7e21248a14b1b2ede2d9298ff5"
+      },
+      "fifo": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 32,
+        "pool_blocks": 0,
+        "released": 48,
+        "worker_blocks": 16,
+        "requests": 48,
+        "full_result_sha256": "8d1fa4e2fa1068807c845d24981e8c643a0afe7e21248a14b1b2ede2d9298ff5"
+      },
+      "single": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 32,
+        "pool_blocks": 0,
+        "released": 48,
+        "worker_blocks": 16,
+        "requests": 48,
+        "full_result_sha256": "8d1fa4e2fa1068807c845d24981e8c643a0afe7e21248a14b1b2ede2d9298ff5"
+      },
+      "multi": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 32,
+        "pool_blocks": 0,
+        "released": 48,
+        "worker_blocks": 16,
+        "requests": 48,
+        "full_result_sha256": "32330bdf77f4b6eabe597838347e6c5611bfbe106c46defd1d68c0931f41f4ab"
+      },
+      "pool": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 2,
+        "pool_blocks": 46,
+        "released": 48,
+        "worker_blocks": 0,
+        "requests": 48,
+        "full_result_sha256": "f679e19e3422b20cb104738f2f3ced9c629c6c0777f5ae31f226628b975a7639"
+      },
+      "worker": {
+        "next_before_retirement": true,
+        "passed": true,
+        "peak": 2,
+        "pool_blocks": 0,
+        "released": 48,
+        "worker_blocks": 46,
+        "requests": 48,
+        "full_result_sha256": "3dd6cddbe00ca5ccc7de532ce53603d2b6c81ae82b71122515fd3a7ec0b7c5b1"
+      },
+      "old-public": {
+        "simulation_end_ns": 3468,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "fifo-off-public": {
+        "simulation_end_ns": 3468,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "fifo-audit-public": {
+        "simulation_end_ns": 3468,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "rr-public": {
+        "simulation_end_ns": 3510,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "rr-off-public": {
+        "simulation_end_ns": 3510,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "zero-public": {
+        "simulation_end_ns": 3501,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "one-fifo-public": {
+        "simulation_end_ns": 4229,
+        "packets": 272,
+        "native_tasks": 34
+      },
+      "one-rr-public": {
+        "simulation_end_ns": 4229,
+        "packets": 272,
+        "native_tasks": 34
+      }
+    },
+    "legacy_fifo_execution_and_wire_equal": true,
+    "passive_audit_equal": true,
+    "all_store_ranges_equal": true,
+    "old_sealed_plan_replay": true,
+    "independent_protocol_order_capacity_release": true,
+    "missing_identity_rejected": true
+  },
+  "regressions": {
+    "a3-regression": {
+      "summary": "runs/scaleup_issue_screening/c1-organization-20261013/a3-regression/summary.json",
+      "sha256": "43caf2733695662c6f9756836262701d5871efb0ab8670392fe53e13fe81c83f",
+      "result": {
+        "passed": true,
+        "cases": {
+          "baseline": {
+            "simulation_end_ns": 56762,
+            "fabric_payload_bytes": 39312,
+            "compute_work_ns": 16006,
+            "overlapping_core_pairs": 38,
+            "partial_token_starts": 3,
+            "local_reads_before_protocol_retirement": 108,
+            "graphs": 2
+          },
+          "partial": {
+            "simulation_end_ns": 178056,
+            "fabric_payload_bytes": 19656,
+            "compute_work_ns": 308138,
+            "overlapping_core_pairs": 21,
+            "partial_token_starts": 3,
+            "local_reads_before_protocol_retirement": 54,
+            "graphs": 1
+          }
+        }
+      }
+    },
+    "native-regression": {
+      "summary": "runs/scaleup_issue_screening/c1-organization-20261013/native-regression/summary.json",
+      "sha256": "6130c31237770c22afb6d494c2eaf0e83dc7452b553979e9652f96ab203650a2",
+      "result": {
+        "passed": true,
+        "cases": {
+          "mixed": {
+            "simulation_end_ns": 9493,
+            "transfers": 87,
+            "loads": 18,
+            "ready_notifications": 18,
+            "physical_packets": 1566,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 1776,
+            "padding_bytes": 252
+          },
+          "truth-off": {
+            "simulation_end_ns": 9493,
+            "transfers": 87,
+            "loads": 18,
+            "ready_notifications": 18,
+            "physical_packets": 1566,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 1776,
+            "padding_bytes": 252
+          },
+          "observation-off": {
+            "simulation_end_ns": 9493,
+            "transfers": 87,
+            "loads": 18,
+            "ready_notifications": 18,
+            "physical_packets": 1566,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 1776,
+            "padding_bytes": 252
+          },
+          "store": {
+            "simulation_end_ns": 8326,
+            "transfers": 69,
+            "loads": 0,
+            "ready_notifications": 0,
+            "physical_packets": 1242,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 1200,
+            "padding_bytes": 252
+          },
+          "load": {
+            "simulation_end_ns": 10543,
+            "transfers": 105,
+            "loads": 36,
+            "ready_notifications": 36,
+            "physical_packets": 1890,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 2352,
+            "padding_bytes": 252
+          },
+          "one-id": {
+            "simulation_end_ns": 27189,
+            "transfers": 87,
+            "loads": 18,
+            "ready_notifications": 18,
+            "physical_packets": 1566,
+            "business_payload_bytes": 27648,
+            "application_metadata_bytes": 1776,
+            "padding_bytes": 252
+          }
+        },
+        "passive_wire_and_time_equal": true,
+        "rejected_cpp_plans": 5,
+        "rejected_backend_attributes": 6,
+        "mismatched_profile_rejected": true,
+        "calibration_status": "unvalidated_reference"
+      }
+    },
+    "capture-pinned": {
+      "summary": "runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned/summary.json",
+      "sha256": "965df183d4a0879272920e254eb8b27c8868331c728cdd76699677d0763b3d42",
+      "result": {
+        "passed": true,
+        "cases": {
+          "quota": {
+            "events": {
+              "initial": 3,
+              "task_queued": 51,
+              "request_issued": 51,
+              "outstanding_blocked": 19,
+              "response_released": 51,
+              "final": 3
+            },
+            "simulation_end_ns": 38037,
+            "issued": {
+              "4294967409": 1,
+              "4294967412": 1,
+              "4294967400": 1,
+              "4294967410": 1,
+              "4294967411": 1,
+              "4294967396": 1,
+              "4294967398": 1,
+              "4294967403": 1,
+              "4294967404": 1,
+              "4294967407": 1,
+              "4294967408": 1,
+              "4294967417": 1,
+              "4294967421": 1,
+              "4294967418": 1,
+              "4294967422": 1,
+              "4294967419": 1,
+              "4294967427": 1,
+              "4294967420": 1,
+              "4294967434": 1,
+              "4294967435": 1,
+              "4294967436": 1,
+              "4294967439": 1,
+              "4294967437": 1,
+              "4294967438": 1,
+              "4294967424": 1,
+              "4294967425": 1,
+              "4294967430": 1,
+              "4294967431": 1,
+              "4294967444": 1,
+              "4294967448": 1,
+              "4294967445": 1,
+              "4294967449": 1,
+              "4294967446": 1,
+              "4294967454": 1,
+              "4294967447": 1,
+              "4294967461": 1,
+              "4294967463": 1,
+              "4294967466": 1,
+              "4294967464": 1,
+              "4294967465": 1,
+              "4294967462": 1,
+              "4294967451": 1,
+              "4294967452": 1,
+              "4294967457": 1,
+              "4294967458": 1,
+              "4294967471": 1,
+              "4294967475": 1,
+              "4294967472": 1,
+              "4294967476": 1,
+              "4294967473": 1,
+              "4294967474": 1
+            }
+          },
+          "pool": {
+            "events": {
+              "initial": 9,
+              "task_queued": 153,
+              "request_issued": 153,
+              "request_pool_blocked": 218,
+              "response_released": 153,
+              "final": 9
+            },
+            "simulation_end_ns": 44490,
+            "issued": {
+              "4294967409": 3,
+              "4294967412": 3,
+              "4294967400": 3,
+              "4294967410": 3,
+              "4294967396": 3,
+              "4294967411": 3,
+              "4294967398": 3,
+              "4294967403": 3,
+              "4294967404": 3,
+              "4294967407": 3,
+              "4294967408": 3,
+              "4294967417": 3,
+              "4294967421": 3,
+              "4294967418": 3,
+              "4294967422": 3,
+              "4294967419": 3,
+              "4294967427": 3,
+              "4294967434": 3,
+              "4294967420": 3,
+              "4294967436": 3,
+              "4294967435": 3,
+              "4294967439": 3,
+              "4294967437": 3,
+              "4294967424": 3,
+              "4294967438": 3,
+              "4294967425": 3,
+              "4294967430": 3,
+              "4294967431": 3,
+              "4294967444": 3,
+              "4294967448": 3,
+              "4294967445": 3,
+              "4294967449": 3,
+              "4294967446": 3,
+              "4294967454": 3,
+              "4294967447": 3,
+              "4294967461": 3,
+              "4294967462": 3,
+              "4294967463": 3,
+              "4294967466": 3,
+              "4294967464": 3,
+              "4294967451": 3,
+              "4294967465": 3,
+              "4294967452": 3,
+              "4294967457": 3,
+              "4294967458": 3,
+              "4294967471": 3,
+              "4294967475": 3,
+              "4294967472": 3,
+              "4294967476": 3,
+              "4294967473": 3,
+              "4294967474": 3
+            }
+          },
+          "split": {
+            "events": {
+              "initial": 144,
+              "task_queued": 1920,
+              "request_issued": 1920,
+              "response_released": 1920,
+              "final": 144
+            },
+            "simulation_end_ns": 85202,
+            "issued": {
+              "4294967409": 32,
+              "4294967412": 32,
+              "4294967400": 48,
+              "4294967396": 48,
+              "4294967398": 48,
+              "4294967410": 32,
+              "4294967407": 32,
+              "4294967408": 32,
+              "4294967403": 32,
+              "4294967411": 32,
+              "4294967404": 32,
+              "4294967417": 48,
+              "4294967421": 48,
+              "4294967418": 32,
+              "4294967422": 32,
+              "4294967427": 48,
+              "4294967419": 48,
+              "4294967434": 32,
+              "4294967420": 32,
+              "4294967435": 32,
+              "4294967424": 48,
+              "4294967436": 32,
+              "4294967439": 32,
+              "4294967425": 48,
+              "4294967437": 32,
+              "4294967430": 32,
+              "4294967438": 32,
+              "4294967431": 32,
+              "4294967444": 48,
+              "4294967448": 48,
+              "4294967449": 32,
+              "4294967454": 48,
+              "4294967445": 32,
+              "4294967461": 32,
+              "4294967446": 48,
+              "4294967462": 32,
+              "4294967447": 32,
+              "4294967463": 32,
+              "4294967466": 32,
+              "4294967451": 48,
+              "4294967464": 32,
+              "4294967452": 48,
+              "4294967465": 32,
+              "4294967457": 32,
+              "4294967458": 32,
+              "4294967471": 48,
+              "4294967475": 48,
+              "4294967472": 32,
+              "4294967476": 32,
+              "4294967473": 48,
+              "4294967474": 32
+            }
+          },
+          "boundary": {
+            "events": {
+              "initial": 3,
+              "task_queued": 9,
+              "request_issued": 9,
+              "outstanding_blocked": 3,
+              "response_released": 8,
+              "final": 3
+            },
+            "simulation_end_ns": 38037,
+            "issued": {
+              "4294967409": 1,
+              "4294967412": 1,
+              "4294967400": 1,
+              "4294967410": 1,
+              "4294967411": 1,
+              "4294967396": 1,
+              "4294967398": 1,
+              "4294967403": 1,
+              "4294967404": 1
+            }
+          },
+          "mixed-audit": {
+            "events": {
+              "initial": 9,
+              "task_queued": 180,
+              "request_issued": 180,
+              "response_released": 180,
+              "final": 9
+            },
+            "simulation_end_ns": 41074,
+            "issued": {
+              "4294967409": 3,
+              "4294967412": 3,
+              "4294967410": 3,
+              "4294967400": 3,
+              "4294967411": 3,
+              "4294967396": 3,
+              "4294967398": 3,
+              "4294967403": 3,
+              "4294967404": 3,
+              "4294967407": 3,
+              "4294967408": 3,
+              "4294967423": 3,
+              "4294967425": 3,
+              "4294967421": 3,
+              "4294967417": 3,
+              "4294967422": 3,
+              "4294967418": 3,
+              "4294967424": 3,
+              "4294967430": 3,
+              "4294967419": 3,
+              "4294967437": 3,
+              "4294967438": 3,
+              "4294967420": 3,
+              "4294967439": 3,
+              "4294967442": 3,
+              "4294967440": 3,
+              "4294967441": 3,
+              "4294967427": 3,
+              "4294967428": 3,
+              "4294967433": 3,
+              "4294967434": 3,
+              "4294967453": 3,
+              "4294967455": 3,
+              "4294967447": 3,
+              "4294967451": 3,
+              "4294967452": 3,
+              "4294967460": 3,
+              "4294967467": 3,
+              "4294967448": 3,
+              "4294967468": 3,
+              "4294967454": 3,
+              "4294967449": 3,
+              "4294967450": 3,
+              "4294967469": 3,
+              "4294967472": 3,
+              "4294967470": 3,
+              "4294967471": 3,
+              "4294967457": 3,
+              "4294967458": 3,
+              "4294967463": 3,
+              "4294967464": 3,
+              "4294967483": 3,
+              "4294967485": 3,
+              "4294967477": 3,
+              "4294967481": 3,
+              "4294967482": 3,
+              "4294967478": 3,
+              "4294967484": 3,
+              "4294967479": 3,
+              "4294967480": 3
+            }
+          }
+        },
+        "passive_execution_and_wire": true,
+        "independent_request_conservation": true,
+        "worker_split_changes_status_requests": [
+          1,
+          32
+        ],
+        "replay_identical": true,
+        "overflow_rejected": true,
+        "quota_override_changes_only_capacity": true,
+        "other_native_overrides_rejected": true
+      }
+    },
+    "compact-v1": {
+      "summary": "runs/scaleup_issue_screening/c1-organization-20261013/compact-v1/summary.json",
+      "sha256": "e9fe425f9f1deabb117c679dd1eb674db2988deb4152e09539dd68b43f29a2fc",
+      "result": {
+        "passed": true,
+        "all_original_bytes_preserved": true,
+        "source_unchanged": true,
+        "corruption_rejected": true,
+        "sample_identical": true,
+        "replay_records_and_wire_identical": true,
+        "replay_did_not_expand_execution": true,
+        "original_bytes": 1104485,
+        "compact_bytes": 752789
+      }
+    }
+  },
+  "resources": {
+    "build-v1": {
+      "status": "child_failed",
+      "wall_seconds": 36.60947843082249,
+      "peak_sampled_group_rss_bytes": 6422528,
+      "peak_sampled_artifact_bytes": 49741070336
+    },
+    "compile-v1": {
+      "status": "completed",
+      "wall_seconds": 500.6267065424472,
+      "peak_sampled_group_rss_bytes": 1961639936,
+      "peak_sampled_artifact_bytes": 49837400064
+    },
+    "compile-tests-v1": {
+      "status": "completed",
+      "wall_seconds": 89.42892118729651,
+      "peak_sampled_group_rss_bytes": 1394941952,
+      "peak_sampled_artifact_bytes": 49843806208
+    },
+    "compile-pinned": {
+      "status": "completed",
+      "wall_seconds": 124.42443506792188,
+      "peak_sampled_group_rss_bytes": 1923641344,
+      "peak_sampled_artifact_bytes": 49985126400
+    },
+    "small-pinned-resources": {
+      "status": "completed",
+      "wall_seconds": 59.28926601074636,
+      "peak_sampled_group_rss_bytes": 145510400,
+      "peak_sampled_artifact_bytes": 49948753920
+    },
+    "capture-pinned-resources": {
+      "status": "completed",
+      "wall_seconds": 59.10423538275063,
+      "peak_sampled_group_rss_bytes": 165179392,
+      "peak_sampled_artifact_bytes": 49971908608
+    },
+    "compact-v1-resources": {
+      "status": "completed",
+      "wall_seconds": 37.339952647686005,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49941479424
+    }
+  },
+  "failed_test_inputs_preserved": {
+    "small-v1": {
+      "archive": "runs/scaleup_issue_screening/c1-organization-20261013/small-v1.tar.gz",
+      "sha256": "038c43c5c01c6c8ad174461ddb2943a1347f46c934741be12d73b97321b66bb6",
+      "expanded_released": true,
+      "reason": "invalid zero per-token cost"
+    },
+    "small-v2": {
+      "archive": "runs/scaleup_issue_screening/c1-organization-20261013/small-v2.tar.gz",
+      "sha256": "1ae95a05d2296fd1605df0488ebc76964d823ccfd06d0ce73d0ecf6d9166a458",
+      "expanded_released": true,
+      "reason": "invalid zero CANN cost"
+    },
+    "small-v3": {
+      "archive": "runs/scaleup_issue_screening/c1-organization-20261013/small-v3.tar.gz",
+      "sha256": "891f86c7bb31e8ee52f78597f92ec829708dd7dede0b08d405fbe159a3ea9f6e",
+      "expanded_released": true,
+      "reason": "replay/1 cannot override observation"
+    },
+    "small-v4": {
+      "archive": "runs/scaleup_issue_screening/c1-organization-20261013/small-v4.tar.gz",
+      "sha256": "2dae356d99e69c5442d987d57d8cb9547b03806f6b33c84e555c291017e8aeae",
+      "expanded_released": true,
+      "reason": "replay/2 requires max_simulation_ns"
+    }
+  },
+  "unit_checks": {
+    "count": 16,
+    "log": "runs/scaleup_issue_screening/c1-organization-20261013/queue-unit-v1.stderr.log"
+  },
+  "mixed_runtime": {
+    "tasks_per_condition": 66,
+    "store_load_both_passed": true,
+    "log_prefixes": [
+      "runs/scaleup_issue_screening/c1-organization-20261013/mixed-fifo",
+      "runs/scaleup_issue_screening/c1-organization-20261013/mixed-rr"
+    ]
+  },
+  "scope": "platform behavior and public interfaces; not C1 performance results or hardware calibration"
+}

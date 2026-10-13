@@ -69,6 +69,8 @@ def capabilities(observation,ranks,max_ns):
         result.update(schema_version='moe-ub-capture-capabilities/3',native_queue_truth=dict(
             policy=observation['native_queue'],access_scope='internal_truth_not_observed',
             resampling='preserves_original_global_time_and_full_capture_policy'))
+        if 'max_request_records' in observation['native_queue']:
+            result['native_queue_truth']['request_audit']='all_native_STORE_requests_entire_execution'
     return result
 
 

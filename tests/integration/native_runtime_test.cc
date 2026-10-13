@@ -67,7 +67,9 @@ struct Observer {
 
 int main(int argc, char** argv) {
     try {
-        Check(argc == 3, "Usage: native-runtime-test UB_CASE NEW_OUTPUT");
+        Check(argc == 3 || (argc == 4 && std::string(argv[3]) == "producer_round_robin"),
+              "Usage: native-runtime-test UB_CASE NEW_OUTPUT [producer_round_robin]");
+        const uint32_t threads = argc == 4 ? 1 : 3;
         // Construct on deliberately dirty storage: serialized defaults must not
         // depend on stack/allocator contents or the presence of an observer.
         for (unsigned char pattern : {0x55, 0xaa}) {
@@ -92,7 +94,8 @@ int main(int argc, char** argv) {
                           "UB_PORT_TRACE_ENABLE", "UB_QUEUE_TRACE_ENABLE", "UB_RECORD_PKT_TRACE",
                           "UB_FLOW_CONTROL_TRACE_ENABLE", "UB_CONGESTION_CONTROL_TRACE_ENABLE", "UB_PARSE_TRACE_ENABLE"})
             GlobalValue::Bind(flag, BooleanValue(false));
-        Config::SetDefault("ns3::UbLdstInstance::ThreadNum", UintegerValue(3));
+        Config::SetDefault("ns3::UbLdstInstance::ThreadNum", UintegerValue(threads));
+        if (argc == 4) Config::SetDefault("ns3::UbLdstThread::StoreQueuePolicy", StringValue(argv[3]));
         Config::SetDefault("ns3::UbLdstThread::StoreOutstanding", UintegerValue(2));
         Config::SetDefault("ns3::UbLdstThread::LoadOutstanding", UintegerValue(1));
         Config::SetDefault("ns3::UbLdstApi::RequestIdCount", UintegerValue(3));
@@ -108,7 +111,7 @@ int main(int argc, char** argv) {
         Check(api->TraceConnectWithoutContext("ResponseArrived", MakeCallback(&Observer::Completed,&observer)), "missing completion trace");
         Check(targetApi->TraceConnectWithoutContext("RequestArrived", MakeCallback(&Observer::Arrived,&observer)), "missing target trace");
         Check(targetApi->TraceConnectWithoutContext("ResponseCreated", MakeCallback(&Observer::Responded,&observer)), "missing response trace");
-        Check(instance->GetThreadCount() == 3, "configured worker count ignored");
+        Check(instance->GetThreadCount() == threads, "configured worker count ignored");
         uint32_t completed = 0;
         std::function<void(uint32_t)> submit;
         submit = [&](uint32_t id) {
@@ -116,6 +119,7 @@ int main(int argc, char** argv) {
             task.taskId = UINT32_MAX-id; task.sourceNode = 0; task.destNode = 1; task.priority = 7;
             task.dataSize = id < 2 ? 1 : 8193;
             task.op = id % 2 ? UbTrafficGen::RuntimeTaskOp::MEM_LOAD : UbTrafficGen::RuntimeTaskOp::MEM_STORE;
+            task.nativeProducer = id % 4;
             app->GetTransferExecutor().Submit(task, [&,task](uint32_t done) {
                 Check(done == task.taskId, "completion identity wrong");
                 uint64_t cursor = 0;
@@ -133,7 +137,7 @@ int main(int argc, char** argv) {
                 if (completed % 2 == 0) {
                     Check(instance->IsIdle() && !api->GetPendingRequestCount() && !api->GetWaitingThreadCount(), "native state retained after wave");
                     Check(app->GetTransferExecutor().GetPendingCount() == 0, "executor retained completed task");
-                    for (uint32_t t=0; t<3; ++t) {
+                    for (uint32_t t=0; t<threads; ++t) {
                         UintegerValue store, load;
                         instance->GetLdstThread(t)->GetAttribute("StoreOutstanding", store);
                         instance->GetLdstThread(t)->GetAttribute("LoadOutstanding", load);
@@ -149,7 +153,7 @@ int main(int argc, char** argv) {
         Check(observer.created == observer.responseCount && observer.padding > 0 && api->GetPeakPendingRequestCount() == 3, "native resource or byte evidence missing");
         Check(node->GetObject<UbController>()->GetTransportCountForTest() == 0, "native execution unexpectedly created TP");
         std::cout << "PASS native runtime: tasks=" << completed << " requests=" << observer.created
-                  << " response_padding_bytes=" << observer.padding << " peak_request_ids=3 threads=3 final_state=empty\n";
+                  << " response_padding_bytes=" << observer.padding << " peak_request_ids=3 threads=" << threads << " final_state=empty\n";
         Simulator::Destroy(); return 0;
     } catch (const std::exception& e) { std::cerr << e.what() << '\n'; Simulator::Destroy(); return 1; }
 }

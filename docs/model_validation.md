@@ -51,6 +51,8 @@ Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）�
 
 DeepEP 的固定源码版本为 `9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee`。其四 rank BF16 调用配置、八项源码对照和已知差异保存在[核对证据](../fixtures/m5_model_audit/README.md)与[原始完整核对记录](https://github.com/baoy21/moe-ub-cosim/blob/e20d42a2bcf0b2ac2529b8641a9492638ffc786f/docs/model_validation.md)。这部分是历史模型依据，不能代替当前 CANN 规则。
 
+可选 `producer_round_robin` 仅用于检验请求组织假设：按已验证的通信核静态分配划分逻辑序列，每端仍共用一个 worker、统一 STORE 额度和请求池。它不声明 A3 具有这些物理队列，也不修改状态到下一份准备的同步。默认 FIFO 同样不能仅因名称或默认配置被当成硬件依据。实现与配置见[后端参考](../backend/README.md)。
+
 ### CANN 来源与调用范围
 
 固定来源为 [CANN ops-transformer v8.5.0](https://gitcode.com/cann/ops-transformer/tree/6ead121aded45355043b502756b6592fd7c30b14)，提交 `6ead121aded45355043b502756b6592fd7c30b14`。八个来源文件的路径、SHA-256、大小、调用配置与许可证摘要保存在 [source-evidence.json](../fixtures/m10_cann/source-evidence.json)。来源使用 CANN Open Software License Agreement Version 2.0；本平台没有链接或执行这些内核。

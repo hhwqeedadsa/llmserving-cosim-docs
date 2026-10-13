@@ -1,6 +1,6 @@
 from copy import deepcopy
 import unittest
-from moe_ub_cosim.replay_catalog import REQUEST_IDS,REQUEST_SPEC,rebind
+from moe_ub_cosim.replay_catalog import REQUEST_IDS,REQUEST_SPEC,QUEUE_POLICY,QUEUE_SPEC,rebind
 
 
 class ReplayCatalogTest(unittest.TestCase):
@@ -29,6 +29,19 @@ class ReplayCatalogTest(unittest.TestCase):
             settings,catalog=self.values();mutate(settings,catalog);before=deepcopy(settings)
             with self.assertRaises(ValueError):rebind(settings,catalog)
             self.assertEqual(settings,before)
+
+    def test_fifo_default_addition_preserves_active_native_settings(self):
+        settings,catalog=self.values();rebind(settings,catalog)
+        settings['profiles']['dispatch'].update(programming_model='native_memory',operation='STORE')
+        target=deepcopy(catalog);target['ub_revision']='queue-version';target['attributes'][QUEUE_POLICY]=deepcopy(QUEUE_SPEC)
+        original=deepcopy(settings);result=rebind(settings,target)
+        self.assertEqual(settings['attributes'][QUEUE_POLICY],'fifo')
+        self.assertEqual(result['changes'],[QUEUE_POLICY])
+        for k,v in original['attributes'].items():self.assertEqual(settings['attributes'][k],v)
+        for key,value in [('default','producer_round_robin'),('help','different'),('value_type','ns3::EnumValue')]:
+            bad=deepcopy(target);bad['attributes'][QUEUE_POLICY][key]=value;s=deepcopy(original)
+            with self.assertRaises(ValueError):rebind(s,bad)
+            self.assertEqual(s,original)
 
 
 if __name__=='__main__':unittest.main()

@@ -36,6 +36,12 @@
 
 ### 原生请求队列诊断
 
+新的队列记录附带 `store_queue_policy`、`last_store_producer`，任务与内部身份附带 `producer`。游标表示最近成功形成请求的核，初始为 `null`；没有静态分配的旧 FIFO 任务，其核身份为 `null`。FIFO 的 `queue` 按任务顺序排列；轮转模式先按下一次选择的核开始循环，再逐核列出核内队列，不能把整个展开列表解释成严格的未来请求顺序。旧记录没有这些新增字段时仍按原 FIFO 格式读取。
+
+可将嵌套策略改为 `moe-ub-native-queue-config/2`，保留原五个字段并显式增加正整数 `max_request_records`。这另外记录**整个执行、所有端点的全部原生 STORE 请求**，不受队列快照的 `rank_ids/end_ns` 选择限制，LOAD 不进入该流。超限立即失败，不截断。外层仍用 `moe-ub-observation-config/5`，总压缩与导出预算继续生效。
+
+新增 `truth/native_requests.jsonl` 含连续 `sequence`、全局 `time_ns`、实际 `node_id`、`operation="STORE"`、任务内 `offset/bytes` 和 `identity`（图、传输、发送节点、源/目的 rank、操作、生产者）。它没有包 UID 或线上请求编号，便于按稳定业务身份比较字节范围。`native_queue_capture.json.request_audit` 声明完整覆盖、条数与实际结束时刻；只打开原策略 `/1` 时不生成该流。`moe_ub_cosim.native_queue.checked_requests(execution, report)` 流式读取并核验条数、顺序、完成传输覆盖、连续无重叠字节范围及字节总量；须消费完迭代器才能完成末尾检查。两种记录都属于内部真值，不是设备已具备的观测接口。
+
 `moe-ub-observation-config/5` 在已有 `statistics`、`recording` 和预算之外接受 `native_queue`。可与 `send_state` 同时配置；未配置时不订阅、不生成请求队列流。配置必须恰好包含：
 
 ```json
@@ -294,6 +300,8 @@ RSS 和磁盘为周期采样，可能遗漏采样间隔内的短暂峰值；地�
 
 
 ## A3 内部局部完成事实与有限层段
+
+`research-slice/4` 是有限层段 `/3` 的无损压缩保存形式：`archives` 恰好含一个 `execution_archive`，目的目录为 `raw/execution`；图和全部输入仍为原文件。压缩包有独立逐文件清单，`compaction` 保存原切片清单 SHA-256、保存全部原始字节的声明和执行文件数，新 `artifacts` 绑定压缩包、清单及未压缩文件。压缩时逐成员验证并再次检查原切片；`slice inspect --verify` 核验新包全部文件。重放不解压历史执行，采样使用已有校验展开路径。该变化只改变存储，初始网络、层段、依赖和完成边界不变。
 
 A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`（`moe-ub-transfer-local-facts/1`）。`local_read_complete_ns` 是该传输所有原生请求已实际取得编号并形成请求包的时刻，作为参考模型的局部读完成事件；`business_ready_ns` 和 `application_metadata_ready_ns` 分别来自接收方实际 `RequestArrived`，按计划中业务/应用元数据字节区间计算。类别没有字节时为 `null`。填充字节不计入这两类。协议 ACK 回收继续用 `transaction_done_ns`，不与局部复用合并。这些是内部仿真事实，不是硬件可采集接口或 HBM 时序测量。
 

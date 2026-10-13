@@ -10,7 +10,7 @@ import sys
 import shutil
 import yaml
 
-from moe_ub_cosim.native_queue import checked_rows
+from moe_ub_cosim.native_queue import checked_rows, checked_requests
 from moe_ub_cosim.record_storage import iter_result
 from moe_ub_cosim.research_storage import stored_rows
 
@@ -56,7 +56,14 @@ def main():
     policy=dict(schema_version='moe-ub-native-queue-config/1',rank_ids=[2,7,12],end_ns=1000000,
                 max_records=100000,max_snapshot_items=1024)
     for label,threads,quota,pool in [('off',1,1,256),('quota',1,1,256),('pool',3,32,1),
-                                    ('split',48,32,256),('boundary',1,1,256),('overflow',1,1,256)]:
+                                    ('split',48,32,256),('boundary',1,1,256),('overflow',1,1,256),
+                                    ('mixed-audit',3,32,256)]:
+        if label=='mixed-audit':
+            mixed=deepcopy(layers)
+            for group in mixed['groups']:
+                for layer in group['layers']:layer['native_profile']['combine']='LOAD'
+            scenario['layer']=str(save(out/'mixed-layers.json',mixed))
+            scenario['backend']['profile_by_role']['combine']='native_load'
         attrs.update({'ns3::UbLdstInstance::ThreadNum':threads,'ns3::UbLdstThread::StoreOutstanding':quota,
                       'ns3::UbLdstApi::RequestIdCount':pool})
         path=out/(label+'-scenario.yaml');path.write_text(yaml.safe_dump(scenario,sort_keys=False))
@@ -66,6 +73,7 @@ def main():
             obs.update(schema_version='moe-ub-observation-config/5',native_queue=deepcopy(policy))
         if label=='boundary':obs['native_queue']['end_ns']=5000
         if label=='overflow':obs['native_queue']['max_records']=6
+        if label=='mixed-audit':obs['native_queue'].update(schema_version='moe-ub-native-queue-config/2',max_request_records=100000)
         config=read(example/'run.json');config['backend']=str(binary)
         config['host']['artifact_roots']=[str(out)]
         config['inputs']={k:str(out/(label+'-resolved')/(k+'.json' if k!='network' else k))
@@ -83,6 +91,11 @@ def main():
         assert report['normal_exit'] and report['network_drain']['idle']
         if label=='off':continue
         rows=list(checked_rows(execution,report))
+        if label=='mixed-audit':
+            audit=list(checked_requests(execution,report))
+            assert audit and audit==list(stored_rows(out/label/'truth','native_requests.jsonl'))
+            assert all(row['operation']=='STORE' for row in audit)
+            assert any(t['operation']=='LOAD' for t in iter_result(execution,'transfers',report))
         assert rows==list(stored_rows(out/label/'truth','native_queue.jsonl'))
         assert not any('native_queue' in p.name for p in (out/label/'observed').iterdir())
         events=Counter(r['event'] for r in rows)

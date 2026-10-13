@@ -36,6 +36,7 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
     statistics='statistics' in observation
     if 'send_state' in observation:fields['observed'].append('endpoint_send_state.jsonl')
     if 'native_queue' in observation:fields['truth'].append('native_queue.jsonl')
+    if 'max_request_records' in observation.get('native_queue',{}):fields['truth'].append('native_requests.jsonl')
     if statistics:fields['observed']+=['queue_windows.csv','endpoint_stages.jsonl']
     if 'recording' in observation:fields['truth'].append('message_attribution_windows.csv')
     index_path=output/'metrics/transfer-index.bin'

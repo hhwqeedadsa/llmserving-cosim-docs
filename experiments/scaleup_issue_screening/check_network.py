@@ -5,6 +5,32 @@ from .network_screen import groups, rank_key
 
 
 class NetworkChecks(unittest.TestCase):
+    def test_relocated_business_review_rejects_wrong_slice_before_reading_run(self):
+        import json
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from .network_run_review import review
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);case=root/'case';case.mkdir();bundle=root/'relocated';bundle.mkdir()
+            (case/'selection.json').write_text(json.dumps(dict(slice='/absent-original',slice_sha256='wrong')))
+            (bundle/'slice.json').write_text('{}')
+            with self.assertRaisesRegex(ValueError,'Explicit slice differs'):
+                review(case,root/'output',bundle)
+            self.assertFalse((root/'output').exists())
+
+    def test_busy_overlap_is_clipped_and_not_double_counted(self):
+        from .network_packets import overlap
+        self.assertEqual(overlap([(0,8),(5,12),(12,12),(15,20)],3,18),12)
+        self.assertEqual(overlap([(0,4),(6,10)],4,6),0)
+        with self.assertRaises(ValueError):overlap([],5,4)
+
+    def test_packet_comparison_uses_business_ranges_not_uid(self):
+        from .compare_network import packet_key
+        r=dict(candidate_id='N1',transfer_id=10,packet_uid=100,
+            classified_ranges=[dict(message_category='business_data',task_byte_range=[0,4096])])
+        self.assertEqual(packet_key(r),packet_key(dict(r,packet_uid=500)))
+        self.assertNotEqual(packet_key(r),packet_key(dict(r,transfer_id=11)))
+
     def test_capture_and_service_keep_other_resources_and_direction(self):
         from copy import deepcopy
         from .network_control import capture_ports, change_service

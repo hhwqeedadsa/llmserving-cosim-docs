@@ -1,0 +1,8 @@
+{
+  "schema_version": "issue-network-platform/1",
+  "platform_commit": "49005b8154bdc774ea9d01fffd66e1d1ca397adc",
+  "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+  "parent_platform_commit": "4e5fd4d",
+  "change": "Only verified gzip of closed diagnostic text; same simulation binary and inputs",
+  "acceptance": "fixtures/m21_platform/diagnostic-storage.json"
+}

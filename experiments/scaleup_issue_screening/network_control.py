@@ -44,15 +44,20 @@ def change_service(network, candidate, start, end, rate):
     return value
 
 
-def prepare(archive, bundle, selection, backend, output, candidate=None):
+def prepare(archive, bundle, selection, backend, output, candidate=None, baseline_review=None):
     archive,bundle,selection,backend,output=map(lambda p:Path(p).resolve(),(archive,bundle,selection,backend,output))
     if output.exists():raise ValueError('Control output must be new')
-    accepted=read(CONFIG/'controls/native-organization.json')
+    accepted=read(CONFIG/'controls/network-screening.json')
     if digest(backend)!=accepted['backend_sha256']:raise ValueError('Expected the accepted FIFO-preserving binary')
     if subprocess.run(['git','diff','--quiet',accepted['platform_commit'],'--','python/moe_ub_cosim',
             'backend','deps.lock.json','third_party/LLMServingSim','third_party/ns-3-ub'],cwd=ROOT).returncode:
         raise ValueError('Platform differs from accepted implementation')
     source=Archive(archive);manifest=read(bundle/'slice.json');chosen=read(selection)
+    prior=read(baseline_review) if baseline_review else None
+    if candidate and prior is None:raise ValueError('A service control requires the actual baseline gate review')
+    if prior and (prior['backend_sha256']!=digest(backend) or
+                  any(digest(bundle/k)!=v for k,v in prior['plan_files'].items())):
+        raise ValueError('Baseline review must use the same binary and graph')
     if manifest.get('compaction',{}).get('source_slice_sha256')!=source.index['entries']['slice/slice.json']['sha256']:
         raise ValueError('Compact slice is not bound to the explicit original archive')
     if any(chosen['sources'][c['case_id']]['archive_sha256']!=source.index['archive_sha256'] for c in chosen['candidates']):
@@ -63,14 +68,16 @@ def prepare(archive, bundle, selection, backend, output, candidate=None):
     if observation.get('native_queue') or network['attributes'].get('ns3::UbLdstThread::StoreQueuePolicy','fifo')!='fifo':
         raise ValueError('Expected normal FIFO reference without extra native queue capture')
     ports,direct=capture_ports(network['topology'],chosen['candidates'])
-    # Include time-zero initial states and all earlier blockers, through a fixed
-    # margin after the original layer-7 dispatch envelope (ends at 33920 ns).
-    detail_end=40000
+    # Derive the bounded interval from the already fixed event groups, never
+    # from the eventual outcome. Time zero retains all previous blockers.
+    service_start=max(0,min(c['start_ns'] for c in chosen['candidates'])-2000)
+    detail_end=max(c['end_ns'] for c in chosen['candidates'])+7000
+    if detail_end>manifest['capture_end_ns']:raise ValueError('Selected interval exceeds slice capture budget')
     observation['recording']['detail_ranges']=[dict(switch_id=n,port_id=p,start_ns=0,end_ns=detail_end) for n,p in ports]
     intervention=None
     if candidate:
         c=next(c for c in chosen['candidates'] if c['candidate_id']==candidate)
-        network=change_service(network,c,20000,detail_end,800000000000)
+        network=change_service(network,c,service_start,detail_end,800000000000)
         network['port_service']['execution_end_ns']=manifest['capture_end_ns']
         intervention=network['port_service']
     output.mkdir(parents=True)
@@ -82,7 +89,8 @@ def prepare(archive, bundle, selection, backend, output, candidate=None):
     save(output/'replay.json',dict(schema_version='moe-ub-replay/2',host=host(True,[output,bundle]),
         export_host=host(extra_roots=[output,bundle]),backend=str(backend),
         backend_timeout_seconds=effective['backend_timeout_seconds'],max_simulation_ns=effective['max_simulation_ns'],
-        network=str(output/'network'),observation=str(output/'observation.json'),export_policy=str(CONFIG/'export-policy.json')))
+        network=str(output/'network'),observation=str(output/'observation.json'),export_policy=str(CONFIG/'export-policy.json'),
+        diagnostic_storage='gzip'))
     save(output/'selection.json',dict(schema_version='issue-network-control-selection/1',mode='fifo',
         original_archive=str(archive),original_archive_sha256=source.index['archive_sha256'],
         original_manifest_sha256=source.index['entries']['run/manifest.json']['sha256'],
@@ -91,6 +99,8 @@ def prepare(archive, bundle, selection, backend, output, candidate=None):
         direct_device_ingress_without_upstream_packet_capture=direct,
         detail_start_ns=0,detail_end_ns=detail_end,intervention=intervention,
         intervention_candidate=candidate,program_sha256=digest(__file__),
+        baseline_review_sha256=digest(baseline_review) if prior else None,
+        baseline_actual_last={o['operation_id']:o['all_actual_last'] for o in prior['operations']} if prior else {},
         fixed=['graph','requests','compute','native resources','FIFO','synchronization','topology','flow control','random'],
         hypotheses=[
             'If this outlet delays a necessary delivery or its feedback, faster local service should reduce that wait; complete dependency review tests business propagation.',
@@ -106,14 +116,14 @@ def prepare(archive, bundle, selection, backend, output, candidate=None):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=('prepare','run','equivalent'))
-    for n in ('archive','slice','selection','backend'):p.add_argument('--'+n,type=Path)
+    for n in ('archive','slice','selection','backend','baseline-review'):p.add_argument('--'+n,type=Path)
     p.add_argument('--candidate',choices=('N1','N2'));p.add_argument('--output',type=Path,required=True)
     p.add_argument('--worker',action='store_true',help=argparse.SUPPRESS);a=p.parse_args()
     if a.action=='run':
         selected=read(a.output/'selection.json')
         cli(a.output,'replay','replay','--slice',selected['slice'],'--config',a.output/'replay.json','--output',a.output/'run')
     elif a.worker:
-        if a.action=='prepare':prepare(a.archive,a.slice,a.selection,a.backend,a.output,a.candidate)
+        if a.action=='prepare':prepare(a.archive,a.slice,a.selection,a.backend,a.output,a.candidate,a.baseline_review)
         else:
             if read(a.output/'selection.json')['intervention'] is not None:raise ValueError('Intervention is not an equivalence capture')
             equivalent(a.archive,a.output)

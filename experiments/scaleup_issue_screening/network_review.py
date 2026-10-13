@@ -68,6 +68,36 @@ def reference(selection, screening, output):
         reason='Reuse an existing compact slice within the fixed cumulative disk budget; do not regenerate or alter business inputs'))
 
 
+def recurrence(selection, summaries, output):
+    """Same outlets/semantic operation across normal inputs; no new selection."""
+    choice=read(selection);rows=[]
+    for summary_path in summaries:
+        summary=read(summary_path);case=summary['case_id'];root=summary_path.parent
+        if choice['sources'][case]['archive_sha256']!=summary['archive_sha256'] or \
+                digest(root/'events.jsonl.gz')!=summary['events_sha256']:
+            raise ValueError('Recurrence source changed')
+        found={}
+        with gzip.open(root/'events.jsonl.gz','rt') as stream:
+            for line in stream:
+                event=json.loads(line)
+                for c in choice['candidates']:
+                    key=c['candidate_id']
+                    if key in found:continue
+                    if ((event['switch_id'],event['port_id'],event['queue'])==
+                        (c['switch_id'],c['port_id'],c['queue']) and any(
+                            o in event['overlapping_operations'] for o in c['overlapping_operations'])):
+                        found[key]=event
+        rows.extend(dict(candidate_id=c['candidate_id'],case_id=case,
+            highest_matching_event=found.get(c['candidate_id']),source_sha256=digest(summary_path))
+            for c in choice['candidates'])
+    save(output,dict(schema_version='issue-network-recurrence/1',selection_sha256=digest(selection),
+        rows=rows,program_sha256=digest(__file__),
+        limits=['Existing ranked groups matched by outlet, queue and semantic operation, not equal wall time.',
+            'A null event means no matching positive group within declared coverage; it is not an unobserved-device zero.',
+            'Nested request sets and longer-prefix execution are related references, not independent replication.',
+            'Aggregate recurrence is not packet membership or causal business impact.']))
+
+
 def facts(archive, selection, analysis, output):
     source=Archive(archive);choice=read(selection);baseline=read(analysis/'summary.json')
     if output.exists():raise ValueError('Facts output must be new')
@@ -161,13 +191,14 @@ def facts(archive, selection, analysis, output):
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=('select','reference','facts'))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=('select','reference','recurrence','facts'))
     p.add_argument('--summaries',type=Path,nargs='+');p.add_argument('--archive',type=Path)
     p.add_argument('--selection',type=Path);p.add_argument('--analysis',type=Path)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--worker',action='store_true',help=argparse.SUPPRESS);a=p.parse_args()
     if a.action=='select':select(a.summaries,a.output)
     elif a.action=='reference':reference(a.selection,a.analysis,a.output)
+    elif a.action=='recurrence':recurrence(a.selection,a.summaries,a.output)
     elif a.worker:facts(a.archive,a.selection,a.analysis,a.output)
     else:
         from moe_ub_cosim.host_probe import probe

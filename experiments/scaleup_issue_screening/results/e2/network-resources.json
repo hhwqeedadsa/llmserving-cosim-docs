@@ -1,0 +1,921 @@
+{
+  "schema_version": "issue-network-resource-review/1",
+  "limits": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "initial": {
+    "apparent_bytes": 49574117580,
+    "allocated_bytes": 50737192960
+  },
+  "final_measured_usage": {
+    "apparent_bytes": 49829818472,
+    "allocated_bytes": 50993561600
+  },
+  "final_free_bytes": 6460433907712,
+  "target_runs": {
+    "limit": 6,
+    "runs": [
+      {
+        "number": 1,
+        "case": "capture",
+        "purpose": "Merged passive details for N1 and N2 in the explicitly separate 256-request normal reference",
+        "status": "completed"
+      },
+      {
+        "number": 2,
+        "case": "service-n1-gzip",
+        "purpose": "One predeclared outlet service diagnostic in the unchanged normal 256-request reference",
+        "status": "completed",
+        "preflight_sha256": "26cfe74ea2ea2282d1e7cef3c274104c733a3665c61d0570a0b6cec258db3aef"
+      }
+    ]
+  },
+  "target_phases": {
+    "capture": {
+      "resources-export": {
+        "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz!/run/logs/resources-export/probe.json",
+        "sha256": "5ba7f71c7a45a0d4e821c2b0dff40bcf7b4b14b99e7bff551ba583d81b09b627",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 72.23766937293112,
+        "peak_sampled_group_rss_bytes": 54976512,
+        "peak_sampled_artifact_bytes": 51408379904,
+        "remaining_live_group_pids": [],
+        "started_utc": "2026-10-13T09:15:40.293123+00:00",
+        "ended_utc": "2026-10-13T09:16:52.530775+00:00"
+      },
+      "resources-replay": {
+        "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz!/run/logs/resources-replay/probe.json",
+        "sha256": "2026626eafa005ee69f40e47ef0ea3200aa5f299932aaf190de32185b51d9b1f",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 200.0940061416477,
+        "peak_sampled_group_rss_bytes": 5911179264,
+        "peak_sampled_artifact_bytes": 51390119936,
+        "remaining_live_group_pids": [],
+        "started_utc": "2026-10-13T09:12:20.193866+00:00",
+        "ended_utc": "2026-10-13T09:15:40.287864+00:00"
+      }
+    },
+    "service-n1": {
+      "resources-export": {
+        "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz!/run/logs/resources-export/probe.json",
+        "sha256": "f63118cf02b2704d2069e3ba45613142401190682e4ef5617673388d293cd50c",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 71.40606394782662,
+        "peak_sampled_group_rss_bytes": 50868224,
+        "peak_sampled_artifact_bytes": 51409272832,
+        "remaining_live_group_pids": [],
+        "started_utc": "2026-10-13T09:57:31.543423+00:00",
+        "ended_utc": "2026-10-13T09:58:42.949474+00:00"
+      },
+      "resources-replay": {
+        "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz!/run/logs/resources-replay/probe.json",
+        "sha256": "5252c8e1efba659046a6e3735dd5a8ce6a2c8c1fb7e01096d37565d84ee33101",
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 208.101040545851,
+        "peak_sampled_group_rss_bytes": 5912625152,
+        "peak_sampled_artifact_bytes": 51480973312,
+        "remaining_live_group_pids": [],
+        "started_utc": "2026-10-13T09:54:03.437745+00:00",
+        "ended_utc": "2026-10-13T09:57:31.538783+00:00"
+      }
+    }
+  },
+  "archives": [
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz",
+      "archive_sha256": "b8266515cf3bd3007aace21c3a3eb965ebb7de4cdad0c5a42e7f00eb69c9401e",
+      "archive_bytes": 90827249,
+      "logical_bytes": 528984910,
+      "verified": true,
+      "expanded_released": true
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz",
+      "archive_sha256": "dec3943fb2fbef1222633c969f074b3ea52a6423172a781d2c4797b6e7847dba",
+      "archive_bytes": 89511240,
+      "logical_bytes": 425773694,
+      "verified": true,
+      "expanded_released": true
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz",
+      "archive_sha256": "da6978279478bcc0c31f95343f61b8642cf0e8db818dc1c405515b02fe48772f",
+      "archive_bytes": 565164,
+      "logical_bytes": 4578028,
+      "verified": true,
+      "expanded_released": true
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz",
+      "archive_sha256": "fd1961d65646aea6008cac92bbdba100f60ca215d81d6bfac67a358413e1ef23",
+      "archive_bytes": 629024,
+      "logical_bytes": 4489184,
+      "verified": true,
+      "expanded_released": true
+    }
+  ],
+  "monitored_stages": [
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/business-facts-complete-resources/probe.json",
+      "sha256": "67e7100f0a76f52028a95b16cdd512f4e6d8b28b598290f6cb13be18afae957b",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 58.343132534995675,
+      "peak_sampled_group_rss_bytes": 3040468992,
+      "peak_sampled_artifact_bytes": 50769072128,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:54:54.036562+00:00",
+      "ended_utc": "2026-10-13T08:55:52.379684+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/business-facts-complete.tar.gz-resources/probe.json",
+      "sha256": "be91ab9282c8ded8cd30db1bf3588af6af5a56d6bdf931cf912a63811006da2d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 35.726360065862536,
+      "peak_sampled_group_rss_bytes": 5378048,
+      "peak_sampled_artifact_bytes": 50894409728,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:31:24.287929+00:00",
+      "ended_utc": "2026-10-13T09:32:00.014280+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/business-facts-resources/probe.json",
+      "sha256": "cff778227324fdb01869a4d5107e64b1d63f3aaab43404be51727e0dfcb8ca5d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 57.80887258797884,
+      "peak_sampled_group_rss_bytes": 3117891584,
+      "peak_sampled_artifact_bytes": 50760945664,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:47:11.849460+00:00",
+      "ended_utc": "2026-10-13T08:48:09.658328+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/business-facts.tar.gz-resources/probe.json",
+      "sha256": "5a25f1b834b0960076004ea45c01d47e4d6e64af21bfee0e2648652352abd5fa",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.13622955232859,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "peak_sampled_artifact_bytes": 50899329024,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:30:48.072922+00:00",
+      "ended_utc": "2026-10-13T09:31:24.209143+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture-equivalent-resources/probe.json",
+      "sha256": "9b9e50762ec478383b60cbb431a8f2918797807660b1ff7f8f491f0e7b28f6a1",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 106.97880856320262,
+      "peak_sampled_group_rss_bytes": 190685184,
+      "peak_sampled_artifact_bytes": 51413458944,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:16:58.254843+00:00",
+      "ended_utc": "2026-10-13T09:18:45.233643+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture-gates-resources/probe.json",
+      "sha256": "81e4e10781569ce738f2b205ceb027acf6a19832a0adde872912f6973995bc9e",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 50.83664197102189,
+      "peak_sampled_group_rss_bytes": 1483382784,
+      "peak_sampled_artifact_bytes": 51420385280,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:19:22.926090+00:00",
+      "ended_utc": "2026-10-13T09:20:13.762730+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture-packets-resources/probe.json",
+      "sha256": "3dd90aa8d7d2fe716b143eda9cbb8ded16cbaa956b7d697ad4d617fc32bd6f8b",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.05774179846048,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 51420524544,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:20:13.868915+00:00",
+      "ended_utc": "2026-10-13T09:20:52.926650+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture-prepare-resources/probe.json",
+      "sha256": "4b3d56a5a964d9a3f6f042282e8c651bd5bcb4b510b0c58a164702bb4d25254f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.03752585500479,
+      "peak_sampled_group_rss_bytes": 7536640,
+      "peak_sampled_artifact_bytes": 50781335552,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:00:03.643325+00:00",
+      "ended_utc": "2026-10-13T09:00:40.680839+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz-resources/probe.json",
+      "sha256": "1627a2d7f80b112b25e0ee1962cd7e3f49e56fa4e9aca29c261c6d6ad9d850be",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 59.40863288752735,
+      "peak_sampled_group_rss_bytes": 112304128,
+      "peak_sampled_artifact_bytes": 51511402496,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:25:21.277740+00:00",
+      "ended_utc": "2026-10-13T09:26:20.686363+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow-resources/probe.json",
+      "sha256": "171f5ba008a4a506bd300252b7f2e12cb840bcee54469c98fc6d9903fc8a3ed7",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.527469078078866,
+      "peak_sampled_group_rss_bytes": 5316608,
+      "peak_sampled_artifact_bytes": 50886619136,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:48:56.153725+00:00",
+      "ended_utc": "2026-10-13T09:49:32.681185+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz-resources/probe.json",
+      "sha256": "a7e90b7da59425726a5bdbb53e633e86e65c442e9b8d90f1a70775446cbfba29",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.387293219566345,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 50893598720,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:51:48.954669+00:00",
+      "ended_utc": "2026-10-13T09:52:25.341956+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/g0-b2-short-resources/probe.json",
+      "sha256": "0a3d0df940e86fc70f7628aa3f8e91857264087577c33c056e589e55c948f84c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 46.683300510048866,
+      "peak_sampled_group_rss_bytes": 125263872,
+      "peak_sampled_artifact_bytes": 50739154944,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:38:30.415752+00:00",
+      "ended_utc": "2026-10-13T08:39:17.099049+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/g0-b4-short-resources/probe.json",
+      "sha256": "08804e7938765232f62e00f8fc50bc69ecb227324865274fb6c89411cb3df16d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 46.84795380011201,
+      "peak_sampled_group_rss_bytes": 117760000,
+      "peak_sampled_artifact_bytes": 50741792768,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:39:17.186005+00:00",
+      "ended_utc": "2026-10-13T08:40:04.033949+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/g0-b8-long-resources/probe.json",
+      "sha256": "d6b6ee9144258b16a35383c6d5b721b611d88dde9354c995ac15cdf6d037cc73",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 66.92316465266049,
+      "peak_sampled_group_rss_bytes": 539942912,
+      "peak_sampled_artifact_bytes": 50753593344,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:41:01.890065+00:00",
+      "ended_utc": "2026-10-13T08:42:08.813220+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/g0-b8-short-resources/probe.json",
+      "sha256": "400618d24bf147123cda5798b4c0dec8dd0400a1717afd900437b41587eb6578",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 57.676656283438206,
+      "peak_sampled_group_rss_bytes": 338329600,
+      "peak_sampled_artifact_bytes": 50746011648,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:40:04.121691+00:00",
+      "ended_utc": "2026-10-13T08:41:01.798316+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/reference-business-facts-resources/probe.json",
+      "sha256": "65d2a39b3d5399867510a44dcfe635f9f347a9615711fb5be118facfed19fe6d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 46.88238153606653,
+      "peak_sampled_group_rss_bytes": 855519232,
+      "peak_sampled_artifact_bytes": 50774376448,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T08:55:52.473362+00:00",
+      "ended_utc": "2026-10-13T08:56:39.355735+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/reference-business-facts.tar.gz-resources/probe.json",
+      "sha256": "89211dc6d6e2e431ebd8d3c6e563565631fb0fa423bc492296f7c89baf139289",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.163505889475346,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 50888765440,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:32:00.097108+00:00",
+      "ended_utc": "2026-10-13T09:32:36.260610+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-effect-with-hops.json-resources/probe.json",
+      "sha256": "04f09f7b08a1602db66a216a2fd6d628d2d6d97a846d189d7435f186bfdb7133",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.11083018220961,
+      "peak_sampled_group_rss_bytes": 5304320,
+      "peak_sampled_artifact_bytes": 51424120832,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T10:02:50.137551+00:00",
+      "ended_utc": "2026-10-13T10:03:29.248377+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-effect.json-resources/probe.json",
+      "sha256": "905fe5e698994a41dcb3f22277cb3e4a31092be97a1c4cb6fa5c080772240bc9",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.27162975259125,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 51421052928,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T10:01:24.554178+00:00",
+      "ended_utc": "2026-10-13T10:02:03.825796+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-gates-resources/probe.json",
+      "sha256": "d101a6cf7ebb55d948a76e9696084f8e1ac1cfca06219be67556086fe591acb3",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 50.6775023676455,
+      "peak_sampled_group_rss_bytes": 1385914368,
+      "peak_sampled_artifact_bytes": 51417894912,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:59:54.209139+00:00",
+      "ended_utc": "2026-10-13T10:00:44.886640+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1-gzip-prepare-resources/probe.json",
+      "sha256": "9198fc755342b826bcfb91cf243ff7407f540ce613bfb9ba939d6e8fabb70b76",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.40447133779526,
+      "peak_sampled_group_rss_bytes": 5337088,
+      "peak_sampled_artifact_bytes": 50893598720,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:51:29.357530+00:00",
+      "ended_utc": "2026-10-13T09:52:05.761994+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1-prepare-resources/probe.json",
+      "sha256": "686449809e4c27efe0787d169b0c423ac1e36c0c0171c523c578fdff48364695",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.75911452807486,
+      "peak_sampled_group_rss_bytes": 5386240,
+      "peak_sampled_artifact_bytes": 50912264192,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:26:20.787588+00:00",
+      "ended_utc": "2026-10-13T09:26:57.546698+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz-resources/probe.json",
+      "sha256": "6aad24b59a4628a427d225d5e01fa351c2214eaa6ab6bf12b867348c83c1afa4",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 59.99018104188144,
+      "peak_sampled_group_rss_bytes": 114253824,
+      "peak_sampled_artifact_bytes": 51513749504,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T10:08:50.430012+00:00",
+      "ended_utc": "2026-10-13T10:09:50.420189+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-packets-resources/probe.json",
+      "sha256": "4f5d63c024103ad8fbbc050402e42fb12fabb55a7bcee531ae21504ff0497793",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.490035546943545,
+      "peak_sampled_group_rss_bytes": 5341184,
+      "peak_sampled_artifact_bytes": 51418038272,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T10:00:44.976464+00:00",
+      "ended_utc": "2026-10-13T10:01:24.466491+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow-resources/probe.json",
+      "sha256": "06a2023ad095ae2c578959ffdc2e6021c356ac5a4ca5a4f605987cdf65fbf388",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 250.75899977236986,
+      "peak_sampled_group_rss_bytes": 173555712,
+      "peak_sampled_artifact_bytes": 50785701888,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:02:51.951181+00:00",
+      "ended_utc": "2026-10-13T09:07:02.710172+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow-retry-resources/probe.json",
+      "sha256": "d028d04ef3746dc1b23c279f54b0d4e96bb2480773bfb3d4886747f731cd7023",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 114.93441214598715,
+      "peak_sampled_group_rss_bytes": 147755008,
+      "peak_sampled_artifact_bytes": 50787168256,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:09:16.821890+00:00",
+      "ended_utc": "2026-10-13T09:11:11.756294+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz-resources/probe.json",
+      "sha256": "f1f7f2b498be6e27807917ebf0a1480fa53ce3d4c92a90fff6270af80d507f7e",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.038065603002906,
+      "peak_sampled_group_rss_bytes": 5345280,
+      "peak_sampled_artifact_bytes": 50884993024,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:32:36.348066+00:00",
+      "ended_utc": "2026-10-13T09:33:12.386128+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz!/run/logs/resources-export/probe.json",
+      "sha256": "5ba7f71c7a45a0d4e821c2b0dff40bcf7b4b14b99e7bff551ba583d81b09b627",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 72.23766937293112,
+      "peak_sampled_group_rss_bytes": 54976512,
+      "peak_sampled_artifact_bytes": 51408379904,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:15:40.293123+00:00",
+      "ended_utc": "2026-10-13T09:16:52.530775+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz!/run/logs/resources-replay/probe.json",
+      "sha256": "2026626eafa005ee69f40e47ef0ea3200aa5f299932aaf190de32185b51d9b1f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 200.0940061416477,
+      "peak_sampled_group_rss_bytes": 5911179264,
+      "peak_sampled_artifact_bytes": 51390119936,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:12:20.193866+00:00",
+      "ended_utc": "2026-10-13T09:15:40.287864+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz!/run/logs/resources-export/probe.json",
+      "sha256": "f63118cf02b2704d2069e3ba45613142401190682e4ef5617673388d293cd50c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 71.40606394782662,
+      "peak_sampled_group_rss_bytes": 50868224,
+      "peak_sampled_artifact_bytes": 51409272832,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:57:31.543423+00:00",
+      "ended_utc": "2026-10-13T09:58:42.949474+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/service-n1.tar.gz!/run/logs/resources-replay/probe.json",
+      "sha256": "5252c8e1efba659046a6e3735dd5a8ce6a2c8c1fb7e01096d37565d84ee33101",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 208.101040545851,
+      "peak_sampled_group_rss_bytes": 5912625152,
+      "peak_sampled_artifact_bytes": 51480973312,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:54:03.437745+00:00",
+      "ended_utc": "2026-10-13T09:57:31.538783+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/baseline/logs/resources-export/probe.json",
+      "sha256": "8c8409bd5335ac2768581292473cbbf077e80c957701cbe3f55a92c35963c564",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.432963605970144,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 50783809536,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:04:14.708970+00:00",
+      "ended_utc": "2026-10-13T09:04:51.141919+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/baseline/logs/resources-run/probe.json",
+      "sha256": "81c0dbfb27f513ee0c9041c1ea6e1b0622d6ffc249cb90e70b062850c562030a",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.1769784912467,
+      "peak_sampled_group_rss_bytes": 5406720,
+      "peak_sampled_artifact_bytes": 50783686656,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:03:38.527726+00:00",
+      "ended_utc": "2026-10-13T09:04:14.704702+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/capture/logs/resources-export/probe.json",
+      "sha256": "9fa97681413e6b593235e7a80a7de3f0117edb7b87b7ba35df6f1f3f95c8f2c9",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.67514140531421,
+      "peak_sampled_group_rss_bytes": 5402624,
+      "peak_sampled_artifact_bytes": 50785374208,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:05:28.128331+00:00",
+      "ended_utc": "2026-10-13T09:06:04.803461+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/capture/logs/resources-replay/probe.json",
+      "sha256": "5eef2fad52a621625ab201e69e8de473e2a038ae415ca202cd601eec308103ac",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.23267034627497,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 50785251328,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:04:51.891254+00:00",
+      "ended_utc": "2026-10-13T09:05:28.123925+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/faster/logs/resources-replay/probe.json",
+      "sha256": "5a6d737b30563a5bb63394c7eff59d546eee3f35fb341e71dbf448e4007ed793",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 36.922729374840856,
+      "peak_sampled_group_rss_bytes": 5353472,
+      "peak_sampled_artifact_bytes": 50785685504,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:06:05.504726+00:00",
+      "ended_utc": "2026-10-13T09:06:42.427448+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/faster-retry/logs/resources-export/probe.json",
+      "sha256": "b65d0fac79170fbb978d1621e018ec84d48d2beed82286700d168663d5acf5b4",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.40393557585776,
+      "peak_sampled_group_rss_bytes": 5304320,
+      "peak_sampled_artifact_bytes": 50787119104,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:10:03.492528+00:00",
+      "ended_utc": "2026-10-13T09:10:42.896451+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/faster-retry/logs/resources-replay/probe.json",
+      "sha256": "40996aa2c064d8e9adaf5204de986a0a75cec65837d05df22d4cd9202657db97",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.97201806679368,
+      "peak_sampled_group_rss_bytes": 5345280,
+      "peak_sampled_artifact_bytes": 50786992128,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:09:26.516133+00:00",
+      "ended_utc": "2026-10-13T09:10:03.488138+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/small-workflow.tar.gz!/prepared/logs/resources/probe.json",
+      "sha256": "73dee81a407b2c46e6beb267f33722fd3ca51b94b3e99e84ad6fdb08f3a1643c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.09402611479163,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "peak_sampled_artifact_bytes": 50781921280,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:03:01.631612+00:00",
+      "ended_utc": "2026-10-13T09:03:37.725635+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/edge/logs/resources-sample/probe.json",
+      "sha256": "ae72f72c1e7ddc8c0a755a544e6fc670d80bbfbc80cb978e6b86f6c1a4816174",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13091433607041836,
+      "peak_sampled_group_rss_bytes": 5337088,
+      "peak_sampled_artifact_bytes": 126976,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:10.108399+00:00",
+      "ended_utc": "2026-10-13T09:49:10.239297+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/original-run-hidden/logs/resources-export/probe.json",
+      "sha256": "1b879b21bee84f1817731cd7d26730b8a1587f8579fd4667e2dc5e55b44beb87",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13677753321826458,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 1949696,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:07.474835+00:00",
+      "ended_utc": "2026-10-13T09:49:07.611597+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/original-run-hidden/logs/resources-run/probe.json",
+      "sha256": "8490867be4b72938c3eb46ea9d12be037ba1ee55cedf1275eb4c23d36eb7daee",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9593407567590475,
+      "peak_sampled_group_rss_bytes": 104165376,
+      "peak_sampled_artifact_bytes": 1855488,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:06.514851+00:00",
+      "ended_utc": "2026-10-13T09:49:07.474189+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/replay/logs/resources-export/probe.json",
+      "sha256": "5d6f3b1e8d39b6f1a2e96a17b143a6d62e58833a9f1cc18bf7dd2d6614d93471",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.139241311699152,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 1073152,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:09.251050+00:00",
+      "ended_utc": "2026-10-13T09:49:09.390281+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/replay/logs/resources-replay/probe.json",
+      "sha256": "2bc1c6e47afeb5134f1c3ab06f179921787e7d75276269c8a93c26d0ec0e4039",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24022826738655567,
+      "peak_sampled_group_rss_bytes": 48144384,
+      "peak_sampled_artifact_bytes": 978944,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:09.009932+00:00",
+      "ended_utc": "2026-10-13T09:49:09.250152+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/sample/logs/resources-sample/probe.json",
+      "sha256": "ba28d5f1990979ebb72d24f9250d88a73619ce1197190e326f981d0b58900813",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13143785670399666,
+      "peak_sampled_group_rss_bytes": 5341184,
+      "peak_sampled_artifact_bytes": 126976,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:08.385979+00:00",
+      "ended_utc": "2026-10-13T09:49:08.517404+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/slow/logs/resources-export/probe.json",
+      "sha256": "a51ff838d590ffd57c0857a379325f1db8a1f404e09ed0bbc42dc0a9afb6d57d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13509593345224857,
+      "peak_sampled_group_rss_bytes": 5308416,
+      "peak_sampled_artifact_bytes": 1150976,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:10.972167+00:00",
+      "ended_utc": "2026-10-13T09:49:11.107247+00:00"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz!/slow/logs/resources-replay/probe.json",
+      "sha256": "02dfb16ccfbff4b0f62d1dc703c9be5d9f6b5883cdd2062fef445ae13ee0e8ba",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.2336386051028967,
+      "peak_sampled_group_rss_bytes": 47951872,
+      "peak_sampled_artifact_bytes": 1056768,
+      "remaining_live_group_pids": [],
+      "started_utc": "2026-10-13T09:49:10.737765+00:00",
+      "ended_utc": "2026-10-13T09:49:10.971399+00:00"
+    }
+  ],
+  "largest_recorded_artifact_bytes": 51580600320,
+  "all_stages_within_disk_limit": false,
+  "disk_exception": {
+    "reason": "Finalization copied a 151513095-byte effective object table as metadata without sizing it first; archive preflight caught aggregate 48 GiB excess before any archive started",
+    "source": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/service-n1-gzip/run/raw/execution/effective_backend.json",
+    "duplicate": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/service-retained/run/raw/execution/effective_backend.json",
+    "sha256": "4c2135a794a705fe83979b5a9425b5a18d8de2e1123b2dcbd95c2f531092369d",
+    "bytes": 151513095,
+    "measured_peak": {
+      "apparent_bytes": 50311745817,
+      "allocated_bytes": 51580600320
+    },
+    "source_retained": true,
+    "status": "released_verified_duplicate",
+    "scope": "Postprocessing duplicate metadata retention only; both backend/export runs and corrected archiving completed within their monitored limits",
+    "additional_authorization_or_limit_increase": false
+  },
+  "preflight_records": {
+    "service-preflight.json": {
+      "current_artifact_bytes": 50880000000,
+      "limit": 51539607552,
+      "baseline_increment_bytes": 632123392,
+      "archive_allowance_bytes": 90827249,
+      "extra_reserve_bytes": 12582912,
+      "predicted_total_bytes": 51615533553,
+      "basis": "Actual complete capture increment plus its verified archive size, with 12 MiB additional reserve; same frozen graph and same passive ports. Active monitoring remains authoritative.",
+      "cleanup": "Verified full capture and bounded analysis/small-workflow archives survive; only this round\u2019s redundant observation links and byte-verified expanded copies were released."
+    },
+    "service-preflight-gzip.json": {
+      "current": {
+        "apparent_bytes": 49724166449,
+        "allocated_bytes": 50887774208
+      },
+      "storage_saving_basis": {
+        "archive_sha256": "b8266515cf3bd3007aace21c3a3eb965ebb7de4cdad0c5a42e7f00eb69c9401e",
+        "files": [
+          {
+            "name": "run/raw/execution/log/err.log",
+            "source_bytes": 0,
+            "gzip_bytes": 20
+          },
+          {
+            "name": "run/raw/execution/log/log.1.log",
+            "source_bytes": 10485707,
+            "gzip_bytes": 416789
+          },
+          {
+            "name": "run/raw/execution/log/log.10.log",
+            "source_bytes": 10485648,
+            "gzip_bytes": 391368
+          },
+          {
+            "name": "run/raw/execution/log/log.2.log",
+            "source_bytes": 10485712,
+            "gzip_bytes": 377849
+          },
+          {
+            "name": "run/raw/execution/log/log.3.log",
+            "source_bytes": 10485753,
+            "gzip_bytes": 386139
+          },
+          {
+            "name": "run/raw/execution/log/log.4.log",
+            "source_bytes": 10485638,
+            "gzip_bytes": 388784
+          },
+          {
+            "name": "run/raw/execution/log/log.5.log",
+            "source_bytes": 10485682,
+            "gzip_bytes": 389194
+          },
+          {
+            "name": "run/raw/execution/log/log.6.log",
+            "source_bytes": 10485611,
+            "gzip_bytes": 415122
+          },
+          {
+            "name": "run/raw/execution/log/log.7.log",
+            "source_bytes": 10485710,
+            "gzip_bytes": 351300
+          },
+          {
+            "name": "run/raw/execution/log/log.8.log",
+            "source_bytes": 10485635,
+            "gzip_bytes": 400381
+          },
+          {
+            "name": "run/raw/execution/log/log.9.log",
+            "source_bytes": 10485611,
+            "gzip_bytes": 382686
+          },
+          {
+            "name": "run/raw/execution/log/log.log",
+            "source_bytes": 71787,
+            "gzip_bytes": 3588
+          }
+        ],
+        "source_bytes": 104928494,
+        "gzip_bytes": 3903220,
+        "verification": "Per-member inventory checked and compressed stream fully read back; no expanded copy retained"
+      },
+      "predicted_backend_peak": 51532897301,
+      "predicted_archive_peak": 51522282487,
+      "predicted_total_bytes": 51532897301,
+      "limit": 51539607552,
+      "reserve": 12582912,
+      "passed": true
+    },
+    "service-archive-preflight.json": {
+      "current": {
+        "apparent_bytes": 50311745817,
+        "allocated_bytes": 51580600320
+      },
+      "archive_allowance": 107604465,
+      "predicted": 51688204785,
+      "limit": 51539607552,
+      "passed": false
+    },
+    "service-archive-preflight-corrected.json": {
+      "current": {
+        "apparent_bytes": 50155342373,
+        "allocated_bytes": 51424215040
+      },
+      "archive_allowance": 107604465,
+      "predicted": 51531819505,
+      "limit": 51539607552,
+      "passed": true
+    }
+  },
+  "validation": {
+    "network_unit_tests": 10,
+    "previous_experiment_regressions": 22,
+    "platform_storage_unit_tests": 4,
+    "fresh_network_workflow_archive": "small-workflow.tar.gz",
+    "fresh_platform_public_workflow_archive": "diagnostic-workflow.tar.gz",
+    "passive_capture_equivalent": true,
+    "service_public_validation": true,
+    "fixed_graph_objects_and_compute": true,
+    "final_check_log": "runs/scaleup_issue_screening/network-screening-20261013/network-final-checks.stderr.log",
+    "final_check_sha256": "85bdb3d23316195a7aad16b696a688d839cd6f3a8ddf856daed46f675b993098",
+    "delivery_verification": "runs/scaleup_issue_screening/network-screening-20261013/delivery-verification.json",
+    "delivery_verification_sha256": "16b42fadf99dbc6a4ecc56f3ca65a0c972d20c59ba90e5c93048f092c90d84cd"
+  },
+  "command_journal": "runs/scaleup_issue_screening/network-screening-20261013/commands.jsonl",
+  "recorded_failed_commands": [
+    {
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.check_network_replay",
+        "--backend",
+        "build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/small-workflow"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T09:02:51.886036+00:00",
+      "wall_seconds": 250.84491382725537,
+      "exit_code": 1,
+      "stdout": "small-network-workflow.stdout.log",
+      "stderr": "small-network-workflow.stderr.log"
+    },
+    {
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--directory",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow.tar.gz",
+        "--release"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T09:51:18.265083+00:00",
+      "wall_seconds": 0.06679791957139969,
+      "exit_code": 2,
+      "stdout": "pack-diagnostic-workflow.stdout.log",
+      "stderr": "pack-diagnostic-workflow.stderr.log"
+    },
+    {
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/archive-service.py"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T10:05:25.267529+00:00",
+      "wall_seconds": 9.980947075411677,
+      "exit_code": 1,
+      "stdout": "archive-service-driver.stdout.log",
+      "stderr": "archive-service-driver.stderr.log"
+    },
+    {
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/assemble-results.py"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T10:06:57.349029+00:00",
+      "wall_seconds": 0.1661933809518814,
+      "exit_code": 1,
+      "stdout": "assemble-results.stdout.log",
+      "stderr": "assemble-results.stderr.log"
+    }
+  ],
+  "limits_of_interpretation": [
+    "RSS and disk monitoring are sampled; aggregate counts unique hardlinked payload and allocated directories under unchanged roots",
+    "A metadata retention error briefly exceeded 48 GiB; it is recorded, not hidden by a claim that all work met the disk ceiling",
+    "Failures in preparation, reading or summary formatting did not cause extra target backend runs",
+    "Both complete target cases were verified and archived before releasing their expanded copies; no old archives were deleted"
+  ]
+}

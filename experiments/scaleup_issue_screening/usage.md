@@ -389,3 +389,66 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```bash
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.check_network
 ```
+
+对同两个出口做跨正常输入复核，使用已有四份筛选结果；不增加候选或后端执行：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_review recurrence \
+  --selection runs/scaleup_issue_screening/network-review-new/selection.json \
+  --summaries runs/scaleup_issue_screening/network-review-new/g0-b2-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b4-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b8-short/summary.json \
+    runs/scaleup_issue_screening/network-review-new/g0-b8-long/summary.json \
+  --output runs/scaleup_issue_screening/network-review-new/recurrence.json
+```
+
+必要补采通过原始归档、显式压缩切片和固定选择准备。以下示例使用本轮已有选择与原 256 请求辅助档，不把它当成 1024 请求发现档。`NETWORK_NEW` 必须新建，`NETWORK_SLICE` 必须是与 `NETWORK_ARCHIVE` 相符的、已验证的原始压缩切片；恢复步骤沿用上文。先核算所有声明根目录的累计占用及归档峰值。已有旧产物时，这些命令不保证仍有空间重新执行。
+
+```bash
+NETWORK_OLD=runs/scaleup_issue_screening/network-screening-20261013
+NETWORK_NEW=runs/scaleup_issue_screening/network-replay-new
+NETWORK_ARCHIVE=runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz
+NETWORK_SLICE=runs/scaleup_issue_screening/c1-organization-20261013/compact-slice
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control prepare \
+  --archive "$NETWORK_ARCHIVE" --slice "$NETWORK_SLICE" \
+  --selection "$NETWORK_OLD/reference-selection.json" \
+  --backend build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service \
+  --output "$NETWORK_NEW/capture"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control run \
+  --output "$NETWORK_NEW/capture"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control equivalent \
+  --archive "$NETWORK_ARCHIVE" --output "$NETWORK_NEW/capture"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_run_review \
+  --case "$NETWORK_NEW/capture" --output "$NETWORK_NEW/capture-gates"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_packets \
+  --case "$NETWORK_NEW/capture" --facts "$NETWORK_NEW/capture-gates" --output "$NETWORK_NEW/capture-packets"
+```
+
+准备器核对 `configs/controls/network-screening.json` 的平台提交和相同后端二进制，保持全部业务图与原生设置；详细窗口覆盖所选出口及交换机上游，从零时刻到所选事件结束后 7000 ns。当前生成配置使用 `diagnostic_storage=gzip`，只在后端退出后压缩文本；仍须预留执行期间的未压缩日志。不能把原始 `effective_backend.json` 当作小型元数据直接额外复制，应先查看文件大小，优先读取所需字段或使用已验证归档。
+
+仅在等待与业务作用线索足够时，先保存竞争解释及干预声明，再为选定候选准备一次服务对照。以下对应本轮 N1；实际只改一个有向出口，从最早所选事件开始前 2000 ns 到上述详细窗口末尾，服务率为 800 Gb/s。非服务设置和基线图必须通过绑定核对：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control prepare \
+  --archive "$NETWORK_ARCHIVE" --slice "$NETWORK_SLICE" \
+  --selection "$NETWORK_OLD/reference-selection.json" --candidate N1 \
+  --baseline-review "$NETWORK_NEW/capture-gates/summary.json" \
+  --backend build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service \
+  --output "$NETWORK_NEW/service"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control run \
+  --output "$NETWORK_NEW/service"
+moe-ub validate --run "$NETWORK_NEW/service/run"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_run_review \
+  --case "$NETWORK_NEW/service" --output "$NETWORK_NEW/service-gates"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_packets \
+  --case "$NETWORK_NEW/service" --facts "$NETWORK_NEW/service-gates" --output "$NETWORK_NEW/service-packets"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.compare_network \
+  --baseline "$NETWORK_NEW/capture-gates" --treatment "$NETWORK_NEW/service-gates" \
+  --baseline-packets "$NETWORK_NEW/capture-packets" --treatment-packets "$NETWORK_NEW/service-packets" \
+  --ports "$NETWORK_NEW/capture/port-equivalence.json" --case "$NETWORK_NEW/service" \
+  --output "$NETWORK_NEW/service-effect.json"
+```
+
+`network_run_review` 可用 `--slice <迁移后路径>` 显式指定同一不可变切片，先核对其清单摘要；默认使用准备时记录的位置。它读取本次全部执行节点，核对原图及计算成本，分别检查原接收端、当次所有最晚端及基线最晚端；保留完整重排、归约、发送条件和资源持有者。`network_packets` 按真实包身份及业务字节范围关联所见上游到达、FIFO、出口服务和完整传输回调，缺失的前一跳不补零。`compare_network` 拒绝固定对象变化，保留全部配对交付及退化、未配对包、当次业务条件与后继计算。三个输出均为研究者核验资料，不能当作受限算法的公开输入。
+
+无需重新运行即可查看本轮保存的 `capture-gates/`、`service-gates/`、`capture-packets/`、`service-packets/`、`service-effect-with-hops.json` 与 `recurrence.json`。完整执行位于 `capture.tar.gz`、`service-n1.tar.gz` 和各自的校验清单；若需重新解析原始记录，先按本页归档恢复命令检查预算。公开小型功能流程为 `python -m experiments.scaleup_issue_screening.check_network_replay --backend <已构建二进制> --output <新目录>`，同样在仓库根、上述 Python 环境和 `PYTHONPATH` 下执行；它只用公开合成示例，不能进入正常业务分析。

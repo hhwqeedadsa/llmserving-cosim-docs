@@ -19,6 +19,8 @@
 
 ## 公开表与字段
 
+可选 `diagnostic_storage=gzip` 仅处理已退出后端的 `raw/execution/log/*.log` 文本。`raw/execution/diagnostic-storage.json` 使用 `moe-ub-diagnostic-storage/1`，逐文件保存原名、原始字节数与 SHA-256，以及 gzip 路径、大小与 SHA-256。完整解压校验通过后才释放对应文本副本；未完成清单或校验错误会使运行失败。它保留后端当时留下的全部日志字节，不补回此前已轮转淘汰的日志。结构化执行记录、研究输出及仿真事件不受影响。
+
 原有两表观测采用 `moe-ub-research-storage/1`，新增操作阶段与队列观测采用 `/2`。每个输出范围有自己的 `storage.json`，声明逻辑表名、文件名、行数、原始与压缩字节、原始内容 CRC32，以及单条记录上限。实际表放在该目录的 `records/` 下。
 
 | 逻辑表 | 字段 |

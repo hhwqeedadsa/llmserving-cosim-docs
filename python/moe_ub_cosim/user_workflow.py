@@ -19,9 +19,13 @@ def configuration(path, action, backend=None):
     if replay_v2:extra=extra|{'max_simulation_ns'}
     optional = ({'network', 'cache_directory', 'export_host'}|({'observation'} if replay_v2 else set()) if action == 'replay' else
                 {'cache_directory', 'period_ns'} if action == 'sample' else {'export_host','input_evidence'})
+    if action in ('run', 'replay'):
+        optional = optional | {'diagnostic_storage'}
     fields(config, common | extra, optional, label=str(path))
     require(replay_v2 or config['schema_version'] == f'moe-ub-{action}/1', f'{path}: unsupported schema_version')
     if replay_v2:integer(config['max_simulation_ns'],'max_simulation_ns',1)
+    if 'diagnostic_storage' in config:
+        require(config['diagnostic_storage'] in ('plain', 'gzip'), 'diagnostic_storage: expected plain or gzip')
     config['host'] = host_policy(config['host'], base)
     if 'export_host' in config:
         config['export_host'] = host_policy(config['export_host'], base)
@@ -175,6 +179,9 @@ def worker(action, output):
         else:
             from .research_slice import sample, replay
             value = (sample if action == 'sample' else replay)(output, config)
+        if action in ('run', 'replay') and config.get('diagnostic_storage') == 'gzip':
+            from .diagnostic_storage import compress_closed_logs
+            value['diagnostic_storage'] = compress_closed_logs(output/'raw/execution')
         manifest.update(value)
         manifest.setdefault('completed_phases', []).append(action)
     except BaseException as error:

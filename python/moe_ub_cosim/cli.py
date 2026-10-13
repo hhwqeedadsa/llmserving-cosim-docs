@@ -36,7 +36,8 @@ def parser():
                             ('sample', 'Generate observations from a frozen slice without frontend/backend execution'),
                             ('replay', 'Execute frozen graphs in the real backend without scheduling or graph generation')]:
         q = sub.add_parser(name, help=help_text, description=help_text+'. Output must not exist. See docs/user_guide.md.')
-        q.add_argument('--config', type=Path, required=True, help='JSON configuration; paths resolve from this file')
+        q.add_argument('--config', type=Path, required=True, help='JSON configuration; paths resolve from this file'+
+                       ('; optional diagnostic_storage=gzip compresses closed text logs' if name in ('run','replay') else ''))
         q.add_argument('--output', type=Path, required=True, help='New experiment directory; existing directories are rejected')
         if name in ('sample', 'replay'):
             q.add_argument('--slice', type=Path, required=True, help='Frozen slice directory')

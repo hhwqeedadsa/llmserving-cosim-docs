@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "exact_record_counts": {
+    "endpoint_ops": 18,
+    "local_deliveries": 30,
+    "native_completions": 0,
+    "native_starts": 0,
+    "node_execution": 333,
+    "operation_registry": 6,
+    "plan_summary": 1,
+    "planned_transfers": 99,
+    "target_writes": 69,
+    "transfer_registry": 69,
+    "transfers": 69,
+    "wqe_completions": 69,
+    "wqe_starts": 69
+  },
+  "baseline_simulation_ns": 35538,
+  "perturbed_simulation_ns": 90885,
+  "relocated_bundle": true,
+  "no_site_packages_for_sampling_and_replay": true,
+  "closed_diagnostics_lossless_gzip": true,
+  "diagnostic_files": 2,
+  "clock_boundary_attribution_and_crossing_endpoints": true,
+  "missing_and_corrupt_inputs_rejected": true,
+  "schema_version": "diagnostic-storage-acceptance/1",
+  "scope": "Closed text logs only; no backend/source dependency changes",
+  "unit_tests": 4,
+  "unit_log": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-storage-unit.stderr.log",
+  "public_workflow": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow",
+  "resource_report": "runs/scaleup_issue_screening/network-screening-20261013/diagnostic-workflow-resources/probe.json",
+  "source_sha256": {
+    "/root/moe-ub-cosim/python/moe_ub_cosim/diagnostic_storage.py": "2e523cf5b29f97ef2ae95752f25ea1bf070b6a9eea3b5e7f85eef39af6974b6f",
+    "/root/moe-ub-cosim/python/moe_ub_cosim/user_workflow.py": "0b661e65db7aa0259d86488f1395dde1eea615b2e60ef99c7bddefaab18b48a4",
+    "/root/moe-ub-cosim/tests/integration/check_user_workflow.py": "48ecc34e0aef75d0331bae2f6a21140459504cabbe290a666e31d7f2739784ca"
+  }
+}

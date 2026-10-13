@@ -4,6 +4,8 @@ from collections import Counter
 from copy import deepcopy
 from fractions import Fraction
 import json
+import gzip
+import hashlib
 from pathlib import Path
 import shutil
 import subprocess
@@ -54,7 +56,18 @@ def main():
     (out/'run').rename(out/'original-run-hidden'); original = out/'original-run-hidden'
     cli('inspect', 'slice', 'inspect', '--slice', bundle, '--verify', offline=True)
     cli('sample', 'sample', '--slice', bundle, '--config', example/'sample.json', '--output', out/'sample', offline=True)
-    cli('replay', 'replay', '--slice', bundle, '--config', example/'replay.json', '--backend', binary, '--output', out/'replay', offline=True)
+    replay_config=read(example/'replay.json')
+    replay_config.update(export_policy=str(example/'export-policy.json'),diagnostic_storage='gzip')
+    save(out/'replay-config.json',replay_config)
+    cli('replay', 'replay', '--slice', bundle, '--config', out/'replay-config.json', '--backend', binary, '--output', out/'replay', offline=True)
+    execution=out/'replay/raw/execution'
+    diagnostics=read(execution/'diagnostic-storage.json')
+    assert diagnostics['completed'] and diagnostics['files']
+    assert diagnostics==read(out/'replay/manifest.json')['diagnostic_storage']
+    for name,item in diagnostics['files'].items():
+        payload=gzip.decompress((execution/item['compressed']['path']).read_bytes())
+        assert dict(bytes=len(payload),sha256=hashlib.sha256(payload).hexdigest())==item['source']
+        assert not (execution/name).exists()
     for name in ('sample', 'replay'):
         cli('validate-'+name, 'validate', '--run', out/name, offline=True)
     public = out/'observed-only'; shutil.copytree(out/'sample/observed', public)
@@ -129,6 +142,9 @@ def main():
     bad = deepcopy(config); bad['unknown'] = 1; save(out/'bad.json', bad)
     cli('bad-fields', 'replay', '--slice', bundle, '--config', out/'bad.json', '--output', out/'bad', fail=True)
     assert not (out/'bad').exists()
+    bad = deepcopy(config); bad['diagnostic_storage']='discard';save(out/'bad-storage.json',bad)
+    cli('bad-storage', 'replay', '--slice', bundle, '--config', out/'bad-storage.json', '--output', out/'bad-storage', fail=True)
+    assert not (out/'bad-storage').exists()
     missing = read(example/'sample.json'); missing['observation'] = 'absent.json'
     missing['export_policy'] = str(example/'export-policy.json'); save(out/'missing.json', missing)
     cli('missing-input', 'sample', '--slice', bundle, '--config', out/'missing.json', '--output', out/'missing', fail=True, offline=True)
@@ -142,6 +158,7 @@ def main():
     save(out/'summary.json', dict(passed=True, exact_record_counts=compared,
         baseline_simulation_ns=replay_report['simulation_end_ns'], perturbed_simulation_ns=slow_report['simulation_end_ns'],
         relocated_bundle=True, no_site_packages_for_sampling_and_replay=True,
+        closed_diagnostics_lossless_gzip=True, diagnostic_files=len(diagnostics['files']),
         clock_boundary_attribution_and_crossing_endpoints=True, missing_and_corrupt_inputs_rejected=True))
     print('PASS: public workflow, relocation, offline sampling, exact replay and real network delay feedback')
 

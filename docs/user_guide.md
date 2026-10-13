@@ -162,6 +162,8 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 
 `record_policy` 另外限制原始压缩记录和缓冲，`export_policy` 限制研究输出、索引与单条记录等规模，具体含义见[记录格式](record_storage.md)。模型的显存、权重、通信缓冲和 KV 缓存在服务配置中核算。
 
+`run`、`replay` 配置可加入 `"diagnostic_storage": "gzip"`，在后端退出后、导出前逐个无损压缩 `raw/execution/log/` 的文本日志。默认 `plain` 保留原文件。压缩后完整读回核对原始长度与 SHA-256，才释放该文本副本；对应清单写入 `raw/execution/diagnostic-storage.json` 并封入运行清单。可用 `gzip -dc runs/demo-replay/raw/execution/log/log.log.gz` 读取原文。此选项不减少仿真运行时的日志占用，须同时预留当时的文本和一个压缩文件的空间；压缩仍受执行阶段宿主预算约束。
+
 输入错误、已有输出目录、损坏文件或运行超限都会返回非零退出码。运行已开始时，错误与资源报告保存在 `logs/`。先阅读原因，再调整输入或预算，并使用新的输出目录重试；程序不会自动覆盖、续跑或提高预算。各子命令的 `--help` 列出其实际参数。
 
 ## 迁移数据包与复用展开缓存

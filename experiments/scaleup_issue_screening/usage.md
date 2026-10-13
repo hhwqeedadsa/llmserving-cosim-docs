@@ -304,3 +304,51 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 此处 `--output` 指已存在的来源归档，命令不会覆盖它。未登记文件、内容变化或归档校验失败均拒绝释放；外置 `.release.json` 记录释放范围。全部比较完成后，同一命令省略两个 `--keep-directory` 即可释放剩余恢复副本。随后将额度对照目录校验归档；原归档始终保留。
+
+## C1 固定总额度的队列组织对照
+
+`organization` 复用原冻结图，调用公共 `replay` 和 `validate`，不生成新请求或重新构图。控制文件是 [native-organization.json](configs/controls/native-organization.json)，其中固定平台、二进制、原归档及所有资源参数。其他机器的构建摘要不同，需要核对同一源码和依赖后明确建立新的控制配置，不能忽略摘要失败。该入口用于本实验内部核验，会读取真值。
+
+输入使用与原归档绑定的压缩有限切片 `research-slice/4`。可先按上述归档命令恢复原 case，只保留 `slice/`，再用公开 [`slice compact`](../../docs/user_guide.md) 生成新包；压缩也应由 `moe_ub_cosim.host_probe.probe` 配合本实验 `workflow.host()` 的预算监督。核验新包后，通过 `archive release-restored` 释放恢复副本。新包保留原图与全部输入，旧执行记录无损压缩；原归档不删除。以下使用已完成这一步的目录：
+
+```bash
+C1_ORG=runs/scaleup_issue_screening/c1-organization-20261013
+C1_ARCHIVE=runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.organization prepare \
+  --archive "$C1_ARCHIVE" --slice "$C1_ORG/compact-slice" --output "$C1_ORG/fifo-new" \
+  --backend build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service --mode fifo
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.organization run \
+  --output "$C1_ORG/fifo-new"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.organization equivalent \
+  --archive "$C1_ARCHIVE" --output "$C1_ORG/fifo-new"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.organization_review \
+  --case "$C1_ORG/fifo-new" --output "$C1_ORG/fifo-new/organization-review.json"
+```
+
+`equivalent` 从原归档读取所有旧执行记录、四类原有观测及端口包内容/时刻指纹，保留空记录家族并验证硬链接身份。`organization_review` 核对全体原生端的实际对象参数、全部 STORE 请求偏移和长度、所有计算时长，重新寻找每层全部并列最晚消费者，保存状态、数据、本核发送、归约与资源调度条件。它同时回溯实际决定完成的来源及原两份数据；不把轮转列表解释为统一 FIFO 前驱顺序。
+
+FIFO 等价通过后，保存 `equivalence.json`、`organization-review.json` 和 `organization-ports.json` 到运行根目录，以便释放 case 后比较；完整队列细节仍随 case 归档。用 `archive pack --release-expanded` 核验归档并释放 FIFO 展开目录。重新检查累计空间，然后只执行一次相同 `prepare/run/organization_review` 流程，输出改成 `rr-new`，**prepare** 的 `--mode` 改为 `producer_round_robin`；轮转不执行等价检查。两者均保留单 worker、总 STORE 额度 32、请求池 256 和请求粒度 4096 B，全部 A3 发起端采用同一规则。
+
+每次选择 rank 65、70 的完整队列，时间上界沿用切片捕获上界；额外的请求范围审计覆盖整次执行的全部原生 STORE，与队列选择范围无关。上限分别为 100000 条队列记录、每条 4096 项、500000 条请求记录，溢出报错。出现新关键来源而未记录其完整队列时，摘要明确说明边界，不把全图请求范围审计等同于全图阻塞分支采集。
+
+两份摘要和端口表保存后，比较入口为：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.compare_organization \
+  --baseline "$C1_ORG/fifo-review.json" --control "$C1_ORG/rr-review.json" \
+  --baseline-ports "$C1_ORG/fifo-ports.json" --control-ports "$C1_ORG/rr-ports.json" \
+  --output "$C1_ORG/organization-effect.json"
+```
+
+比较先拒绝图、计算、实际请求范围、实际固定参数或输入绑定变化，再输出同贡献等待、实际最晚消费者、最后模型计算结束及端口分布。它记录队列组织改变后的总效应，包含网络反馈，不量化纯 FIFO 损失或证明真实硬件采用哪种队列。每个命令使用新输出目录；失败保留日志并先查原因，不通过自动重跑后端消除失败。
+
+核对数据栅栏增加在哪一段时，可直接读取两份归档，以实际 `local_read_complete`（全部原生请求形成）回调划分等待，再核对形成前区间的队列成员和资源占用，不恢复目录或重跑仿真：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.organization_waits \
+  --baseline-review "$C1_ORG/fifo-review.json" --control-review "$C1_ORG/rr-review.json" \
+  --baseline-archive "$C1_ORG/fifo.tar.gz" --control-archive "$C1_ORG/rr.tar.gz" \
+  --output "$C1_ORG/organization-waits-new.json"
+```
+
+输出保留所有并列数据栅栏，但只沿一条相接路径累计时长；缺少完整队列的来源单独列出。另按端点和通信核分组，逐请求核对两种组织的核内实际发起顺序，核间交织变化不算核内重排。形成后的尾段不是纯交换机时延，形成前的等待也可能依赖网络响应释放。

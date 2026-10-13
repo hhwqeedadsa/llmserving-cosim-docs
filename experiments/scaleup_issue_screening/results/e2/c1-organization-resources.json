@@ -1,0 +1,1856 @@
+{
+  "schema_version": "issue-screening-organization-resources/1",
+  "passed": true,
+  "source_directory": "runs/scaleup_issue_screening/c1-organization-20261013",
+  "limits": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "backend_limits": {
+    "rss_bytes": 51539607552,
+    "address_bytes": 60129542144,
+    "artifact_bytes": 51539607552,
+    "wall_seconds": 7200,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "platform_commit": "4e5fd4d",
+  "ns3_commit": "13cf3da346455185b3777322944fb1d3c39e0d3d",
+  "platform_validation": {
+    "path": "fixtures/m19_a3_resources/native-queue-validation.json",
+    "sha256": "7fae1eee22332cc2e77dbea26f94e030aa2625ad0de077058a34e0804cb8f32e"
+  },
+  "target_backend_runs": 2,
+  "target_conditions": [
+    "fifo_equivalence",
+    "producer_round_robin_shared_32"
+  ],
+  "frontend_executed": false,
+  "experiment_checks": {
+    "tests": 22,
+    "passed": true,
+    "log": "runs/scaleup_issue_screening/c1-organization-20261013/organization-check-final.stderr.log",
+    "sha256": "e045efd055b1ce7ad043af38db6e7f7bdae0eaa42fa3c2cf15c9bfcb4e2e9a7e"
+  },
+  "dependency_check": {
+    "log": "runs/scaleup_issue_screening/c1-organization-20261013/dependencies-final.stdout.log",
+    "sha256": "54a23e1a6cbebe2b0d45366c4f4c1bc9f65870ab6005a41bdbb7e95867abc9ab"
+  },
+  "probes": {
+    "runs/scaleup_issue_screening/c1-organization-20261013/a3-regression-resources/probe.json": {
+      "sha256": "9414e6db79341814b868f93473ac8ab3ebaf9a324b01ff55546ca1427ff2a8e2",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.76064723171294,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49948655616,
+      "peak_sampled_artifact_apparent_bytes": 48750214901,
+      "peak_sampled_artifact_allocated_bytes": 49948655616,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_a3_resources.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/a3-regression"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:38:15.277837+00:00",
+      "ended_utc": "2026-10-13T02:38:53.038483+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/a3-regression.tar.gz-resources/probe.json": {
+      "sha256": "ac51724a47f8fd88e563b166b8578d23a1c2baa471d8923853fae6fe214f7664",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.35916197486222,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "peak_sampled_artifact_bytes": 51345244160,
+      "peak_sampled_artifact_apparent_bytes": 50075761180,
+      "peak_sampled_artifact_allocated_bytes": 51345244160,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/a3-regression",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/a3-regression.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:22:09.372817+00:00",
+      "ended_utc": "2026-10-13T03:22:47.731960+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/build-v1/probe.json": {
+      "sha256": "657bb74b4952bcb2d11305e3dd5b167f3d083105912bec7485038a47ca07a581",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 36.60947843082249,
+      "peak_sampled_group_rss_bytes": 6422528,
+      "peak_sampled_artifact_bytes": 49741070336,
+      "peak_sampled_artifact_apparent_bytes": 48582829765,
+      "peak_sampled_artifact_allocated_bytes": 49741070336,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "build",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--jobs",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:11:43.758386+00:00",
+      "ended_utc": "2026-10-13T02:12:20.367855+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned-resources/probe.json": {
+      "sha256": "77e224cbb07ccfb2c6ac24025eca36167c0a5b6b7f22c342832a94a38440c086",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 59.10423538275063,
+      "peak_sampled_group_rss_bytes": 165179392,
+      "peak_sampled_artifact_bytes": 49971908608,
+      "peak_sampled_artifact_apparent_bytes": 48776069669,
+      "peak_sampled_artifact_allocated_bytes": 49971908608,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:47:55.524781+00:00",
+      "ended_utc": "2026-10-13T02:48:54.629003+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned.tar.gz-resources/probe.json": {
+      "sha256": "26d5f3bb0661821a2149e85cf820e875c62eae0d1ce85aa0b90de44472dc8039",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 40.044038036838174,
+      "peak_sampled_group_rss_bytes": 6447104,
+      "peak_sampled_artifact_bytes": 51222392832,
+      "peak_sampled_artifact_apparent_bytes": 49945185214,
+      "peak_sampled_artifact_allocated_bytes": 51222392832,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:20:48.931949+00:00",
+      "ended_utc": "2026-10-13T03:21:28.975982+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/capture-regression-resources/probe.json": {
+      "sha256": "c7f09bdb289014d403e4efdccff3b310decb5d3fb3c8f4d431c200cc5ec40306",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 58.650321543216705,
+      "peak_sampled_group_rss_bytes": 123793408,
+      "peak_sampled_artifact_bytes": 49985089536,
+      "peak_sampled_artifact_apparent_bytes": 48779352971,
+      "peak_sampled_artifact_allocated_bytes": 49985089536,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/capture-regression"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:39:30.961534+00:00",
+      "ended_utc": "2026-10-13T02:40:29.611847+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/capture-regression.tar.gz-resources/probe.json": {
+      "sha256": "6a731fea308e0313fd8866b2f3aca8593e8b57d97779585149bb01f6a88b598d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.034302996471524,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 50579066880,
+      "peak_sampled_artifact_apparent_bytes": 49390960314,
+      "peak_sampled_artifact_allocated_bytes": 50579066880,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/capture-regression",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/capture-regression.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:05:59.644429+00:00",
+      "ended_utc": "2026-10-13T03:06:37.678727+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compact-target-resources/probe.json": {
+      "sha256": "6c86a79facebc14ee19693406bfd9bda86e94aa46916877981ab0f91a95ad2d8",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 76.13340057618916,
+      "peak_sampled_group_rss_bytes": 120672256,
+      "peak_sampled_artifact_bytes": 51193491456,
+      "peak_sampled_artifact_apparent_bytes": 49891753614,
+      "peak_sampled_artifact_allocated_bytes": 51193491456,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "slice",
+        "compact",
+        "--slice",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/original-restored/slice",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/compact-slice",
+        "--storage",
+        "hardlink"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:59:31.092809+00:00",
+      "ended_utc": "2026-10-13T03:00:47.226198+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compact-v1-resources/probe.json": {
+      "sha256": "e5fe38076400b3538c8d04852bc0c6f7eb8591c511e3d09e310c5886f363036a",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.339952647686005,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49941479424,
+      "peak_sampled_artifact_apparent_bytes": 48743828256,
+      "peak_sampled_artifact_allocated_bytes": 49941479424,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_slice_compact.py",
+        "--slice",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v5/old-slice",
+        "--backend",
+        "build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/compact-v1"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:35:21.207362+00:00",
+      "ended_utc": "2026-10-13T02:35:58.547309+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compact-v1.tar.gz-resources/probe.json": {
+      "sha256": "1cf3fb0ad6d4dabfb095ffc904209d5295c9c9f7f669a3d8e60ed63f2d6b2b2d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.97289857454598,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "peak_sampled_artifact_bytes": 50563375104,
+      "peak_sampled_artifact_apparent_bytes": 49379891437,
+      "peak_sampled_artifact_allocated_bytes": 50563375104,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/compact-v1",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/compact-v1.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:06:37.756161+00:00",
+      "ended_utc": "2026-10-13T03:07:14.729056+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compile-mixed-v1/probe.json": {
+      "sha256": "13d339177ab4e9f737fe16de10ccf2bd27fb4ebd2b2e8818cf151b140d95ec8e",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.788829512894154,
+      "peak_sampled_group_rss_bytes": 5275648,
+      "peak_sampled_artifact_bytes": 49941499904,
+      "peak_sampled_artifact_apparent_bytes": 48743837154,
+      "peak_sampled_artifact_allocated_bytes": 49941499904,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "--build",
+        "build/m19-a3-resources/c1-organization",
+        "--target",
+        "cosim-native-runtime-test",
+        "-j",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:35:58.551189+00:00",
+      "ended_utc": "2026-10-13T02:36:35.340009+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compile-pinned/probe.json": {
+      "sha256": "eeb7189894c427a4c7f3665c289b110dee160cb1da53106587495a005dcfcd1f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 124.42443506792188,
+      "peak_sampled_group_rss_bytes": 1923641344,
+      "peak_sampled_artifact_bytes": 49985126400,
+      "peak_sampled_artifact_apparent_bytes": 48779361513,
+      "peak_sampled_artifact_allocated_bytes": 49985126400,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "--build",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization",
+        "--target",
+        "cosim-service",
+        "-j",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:43:08.917343+00:00",
+      "ended_utc": "2026-10-13T02:45:13.341775+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compile-tests-v1/probe.json": {
+      "sha256": "f2940dfe767901a91b6e5733cd94f15179216d00457c80922ef70bba142670bf",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 89.42892118729651,
+      "peak_sampled_group_rss_bytes": 1394941952,
+      "peak_sampled_artifact_bytes": 49843806208,
+      "peak_sampled_artifact_apparent_bytes": 48681517487,
+      "peak_sampled_artifact_allocated_bytes": 49843806208,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "--build",
+        "build/m19-a3-resources/c1-organization",
+        "--target",
+        "cosim-service",
+        "cosim-native-queue-policy-test",
+        "cosim-native-runtime-test",
+        "cosim-plan-load-probe",
+        "-j",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:22:05.914625+00:00",
+      "ended_utc": "2026-10-13T02:23:35.343545+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/compile-v1/probe.json": {
+      "sha256": "d6b7e2145e328519844d7d2a15462ef176b708f060d1a8a9b4fd36eb81342da9",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 500.6267065424472,
+      "peak_sampled_group_rss_bytes": 1961639936,
+      "peak_sampled_artifact_bytes": 49837400064,
+      "peak_sampled_artifact_apparent_bytes": 48675168690,
+      "peak_sampled_artifact_allocated_bytes": 49837400064,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "--build",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization",
+        "--target",
+        "cosim-service",
+        "-j",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:13:45.778808+00:00",
+      "ended_utc": "2026-10-13T02:22:06.405499+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/configure-pinned/probe.json": {
+      "sha256": "0dbd1e8acbe7c9aa233a6d920d9a7191aa612bd8a2df9cb36e1f8200ce00a152",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.335730055347085,
+      "peak_sampled_group_rss_bytes": 5279744,
+      "peak_sampled_artifact_bytes": 49985110016,
+      "peak_sampled_artifact_apparent_bytes": 48779358969,
+      "peak_sampled_artifact_allocated_bytes": 49985110016,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "-S",
+        "/root/moe-ub-cosim/third_party/ns-3-ub",
+        "-B",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:42:30.577506+00:00",
+      "ended_utc": "2026-10-13T02:43:08.913231+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/configure-v1/probe.json": {
+      "sha256": "d720e7e90f0ffa6bef2a9ad40b258fffec23d907f091e071d8a7bc56e6f29931",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 36.43028193898499,
+      "peak_sampled_group_rss_bytes": 5320704,
+      "peak_sampled_artifact_bytes": 49745940480,
+      "peak_sampled_artifact_apparent_bytes": 48584712010,
+      "peak_sampled_artifact_allocated_bytes": 49745940480,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "cmake",
+        "-S",
+        "/root/moe-ub-cosim/third_party/ns-3-ub",
+        "-B",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization",
+        "-G",
+        "Ninja",
+        "-DCMAKE_BUILD_TYPE=release",
+        "-DCMAKE_PROJECT_NS3_INCLUDE=/root/moe-ub-cosim/backend/inject.cmake",
+        "-DNS3_OUTPUT_DIRECTORY=/root/moe-ub-cosim/build/m19-a3-resources/c1-organization/output",
+        "-DNS3_ENABLED_MODULES=unified-bus",
+        "-DNS3_EXAMPLES=OFF",
+        "-DNS3_TESTS=OFF",
+        "-DNS3_MPI=OFF",
+        "-DNS3_MTP=OFF",
+        "-DNS3_ASSERT=OFF",
+        "-DNS3_LOG=OFF",
+        "-DNS3_WARNINGS_AS_ERRORS=OFF",
+        "-DNS3_NATIVE_OPTIMIZATIONS=OFF",
+        "-DNS3_CCACHE=OFF",
+        "-DNS3_PRECOMPILE_HEADERS=OFF",
+        "-DNS3_FETCH_OPTIONAL_COMPONENTS=OFF",
+        "-DNS3_NETANIM=OFF",
+        "-DNS3_CPM=OFF",
+        "-DNS3_VCPKG=OFF"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:13:09.344468+00:00",
+      "ended_utc": "2026-10-13T02:13:45.774746+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo-equivalent-resources/probe.json": {
+      "sha256": "6bd24dfc75459c0340f1bfee9eafb14931aaa4a62d0598e20eafb8c07741c0a4",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 86.95220010913908,
+      "peak_sampled_group_rss_bytes": 92626944,
+      "peak_sampled_artifact_bytes": 51241459712,
+      "peak_sampled_artifact_apparent_bytes": 49955427043,
+      "peak_sampled_artifact_allocated_bytes": 51241459712,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization",
+        "equivalent",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo",
+        "--archive",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:14:14.066399+00:00",
+      "ended_utc": "2026-10-13T03:15:41.018593+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo-equivalent-v2-resources/probe.json": {
+      "sha256": "3e27c6f6ba4735a9ae409fa286a7407574b6dfc79cb7fd53f998c209139afce6",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 108.14089857786894,
+      "peak_sampled_group_rss_bytes": 147169280,
+      "peak_sampled_artifact_bytes": 51243798528,
+      "peak_sampled_artifact_apparent_bytes": 49957730918,
+      "peak_sampled_artifact_allocated_bytes": 51243798528,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization",
+        "equivalent",
+        "--archive",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:18:01.509460+00:00",
+      "ended_utc": "2026-10-13T03:19:49.650348+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo-prepare-resources/probe.json": {
+      "sha256": "bec34f20d693717e15ad7f5bf7dfbc352ff97c56fd36f53213b93b9b2a0991f0",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 41.07399703934789,
+      "peak_sampled_group_rss_bytes": 7479296,
+      "peak_sampled_artifact_bytes": 51193503744,
+      "peak_sampled_artifact_apparent_bytes": 49891756100,
+      "peak_sampled_artifact_allocated_bytes": 51193503744,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization",
+        "prepare",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo",
+        "--archive",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker",
+        "--slice",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/compact-slice",
+        "--backend",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service",
+        "--mode",
+        "fifo"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:01:16.750812+00:00",
+      "ended_utc": "2026-10-13T03:01:57.824805+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz-resources/probe.json": {
+      "sha256": "d5c741efc9855f22f4dc3dcc0ead4240a394c373d1103b1a2242fb46f98a29e1",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 62.388414200395346,
+      "peak_sampled_group_rss_bytes": 82821120,
+      "peak_sampled_artifact_bytes": 51345248256,
+      "peak_sampled_artifact_apparent_bytes": 50075764125,
+      "peak_sampled_artifact_allocated_bytes": 51345248256,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:21:42.456742+00:00",
+      "ended_utc": "2026-10-13T03:22:44.845149+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo32-consumers.json-resources/probe.json": {
+      "sha256": "19fdfc87353d4af633d753e257bd58a8c270e8bba9f5977e66c6818af232b257",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 88.0287284720689,
+      "peak_sampled_group_rss_bytes": 1190825984,
+      "peak_sampled_artifact_bytes": 49740566528,
+      "peak_sampled_artifact_apparent_bytes": 48582370744,
+      "peak_sampled_artifact_allocated_bytes": 49740566528,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.consumer_review",
+        "--plan-archive",
+        "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--archive",
+        "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo32-consumers.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:00:09.429192+00:00",
+      "ended_utc": "2026-10-13T02:01:37.457917+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo64-consumers.json-resources/probe.json": {
+      "sha256": "9f6ef8aad2ab9e97817aa8e9f92fe2ab55e57c779699b2eee40becd4feea0b47",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 67.15126056037843,
+      "peak_sampled_group_rss_bytes": 341766144,
+      "peak_sampled_artifact_bytes": 49741033472,
+      "peak_sampled_artifact_apparent_bytes": 48582822982,
+      "peak_sampled_artifact_allocated_bytes": 49741033472,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.consumer_review",
+        "--plan-archive",
+        "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--archive",
+        "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo64-consumers.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:01:37.533677+00:00",
+      "ended_utc": "2026-10-13T02:02:44.684924+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/native-regression-resources/probe.json": {
+      "sha256": "96919bd7c78185a7517ad24273565a4f50953b6bd9ede5f64e2c542fe739a251",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.915320836007595,
+      "peak_sampled_group_rss_bytes": 6451200,
+      "peak_sampled_artifact_bytes": 49964187648,
+      "peak_sampled_artifact_apparent_bytes": 48763106180,
+      "peak_sampled_artifact_allocated_bytes": 49964187648,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_behavior.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/native-regression"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:38:53.042362+00:00",
+      "ended_utc": "2026-10-13T02:39:30.957672+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/native-regression.tar.gz-resources/probe.json": {
+      "sha256": "08163e6e83bbfbaaa2c087c3afeb83465439ab6d86fd29f69ab02846751fa558",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 40.23649472557008,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 51207340032,
+      "peak_sampled_artifact_apparent_bytes": 49937903102,
+      "peak_sampled_artifact_allocated_bytes": 51207340032,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/native-regression",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/native-regression.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:21:29.056773+00:00",
+      "ended_utc": "2026-10-13T03:22:09.293267+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/organization-effect-resources/probe.json": {
+      "sha256": "f66270b49ec3c4864d766f9728a51f7b68e749d764b55e990a92bc108a323b02",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 40.44126734510064,
+      "peak_sampled_group_rss_bytes": 7454720,
+      "peak_sampled_artifact_bytes": 51277426688,
+      "peak_sampled_artifact_apparent_bytes": 50009453087,
+      "peak_sampled_artifact_allocated_bytes": 51277426688,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.compare_organization",
+        "--baseline",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo-review.json",
+        "--control",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr-review.json",
+        "--baseline-ports",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo-ports.json",
+        "--control-ports",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr-ports.json",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/organization-effect.json"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:30:53.827024+00:00",
+      "ended_utc": "2026-10-13T03:31:34.268288+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits-v2.json-resources/probe.json": {
+      "sha256": "a40dd608716dab824ad43f6b4276f2895a66680012c8dcae4882f7da71b1b3f2",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 57.68178689107299,
+      "peak_sampled_group_rss_bytes": 130187264,
+      "peak_sampled_artifact_bytes": 50736885760,
+      "peak_sampled_artifact_apparent_bytes": 49573940362,
+      "peak_sampled_artifact_allocated_bytes": 50736885760,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization_waits",
+        "--baseline-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo-review.json",
+        "--control-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr-review.json",
+        "--baseline-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+        "--control-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits-v2.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:38:56.793890+00:00",
+      "ended_utc": "2026-10-13T03:39:54.475672+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits.json-resources/probe.json": {
+      "sha256": "abf53431898f2c4e685419b52f0912ddfc76f22dd791eb37b669e8eae35ceceb",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.913698783144355,
+      "peak_sampled_group_rss_bytes": 77262848,
+      "peak_sampled_artifact_bytes": 50736807936,
+      "peak_sampled_artifact_apparent_bytes": 49573881555,
+      "peak_sampled_artifact_allocated_bytes": 50736807936,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization_waits",
+        "--baseline-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo-review.json",
+        "--control-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr-review.json",
+        "--baseline-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+        "--control-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:35:27.392419+00:00",
+      "ended_utc": "2026-10-13T03:36:05.306107+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/original-restored-release-0-resources/probe.json": {
+      "sha256": "367cd8b00610caf98836553afa31ac2a119d26d3ed30eb2523048c314e9d672d",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 50.925725350156426,
+      "peak_sampled_group_rss_bytes": 114249728,
+      "peak_sampled_artifact_bytes": 51193503744,
+      "peak_sampled_artifact_apparent_bytes": 49891756100,
+      "peak_sampled_artifact_allocated_bytes": 51193503744,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "release-restored",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/original-restored",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:01:15.574379+00:00",
+      "ended_utc": "2026-10-13T03:02:06.500100+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/original-restored-release-1-resources/probe.json": {
+      "sha256": "0a1627c9918943beda008b98d272b0891c479e61833fa064a1f437a90545f0f9",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 54.466786889359355,
+      "peak_sampled_group_rss_bytes": 115929088,
+      "peak_sampled_artifact_bytes": 51249233920,
+      "peak_sampled_artifact_apparent_bytes": 49913320073,
+      "peak_sampled_artifact_allocated_bytes": 51249233920,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "release-restored",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/original-restored",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker",
+        "--keep-directory",
+        "slice"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:58:41.154641+00:00",
+      "ended_utc": "2026-10-13T02:59:35.621426+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/original-restored-resources/probe.json": {
+      "sha256": "2b63a9314d8276a5575d3b4c19f965d026df3318ebdf432facdf0cfc1bfb1182",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 87.66892811469734,
+      "peak_sampled_group_rss_bytes": 321536000,
+      "peak_sampled_artifact_bytes": 51249197056,
+      "peak_sampled_artifact_apparent_bytes": 49913317074,
+      "peak_sampled_artifact_allocated_bytes": 51249197056,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "restore",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/original-restored",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:56:22.602393+00:00",
+      "ended_utc": "2026-10-13T02:57:50.271314+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/public-build-final/probe.json": {
+      "sha256": "9612f40f0ef36300dc4bf0ba89c238bd3bad7a4de366b2780335ffdee972bd3a",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.66866557113826,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "peak_sampled_artifact_bytes": 49971949568,
+      "peak_sampled_artifact_apparent_bytes": 48776083174,
+      "peak_sampled_artifact_allocated_bytes": 49971949568,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "build",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--jobs",
+        "2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:51:22.715464+00:00",
+      "ended_utc": "2026-10-13T02:52:01.384125+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/rr-prepare-resources/probe.json": {
+      "sha256": "c7ebca181b458cf45474519de2f5ba034f2d9042f325d107b14e78a38a3fd58b",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 40.255029363557696,
+      "peak_sampled_group_rss_bytes": 7438336,
+      "peak_sampled_artifact_bytes": 51345244160,
+      "peak_sampled_artifact_apparent_bytes": 50075761180,
+      "peak_sampled_artifact_allocated_bytes": 51345244160,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization",
+        "prepare",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr",
+        "--archive",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz",
+        "--worker",
+        "--slice",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/compact-slice",
+        "--backend",
+        "/root/moe-ub-cosim/build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service",
+        "--mode",
+        "producer_round_robin"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:21:43.561860+00:00",
+      "ended_utc": "2026-10-13T03:22:23.816887+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz-resources/probe.json": {
+      "sha256": "fa7a9a4619202c958ce6c741eb2fe0da8c6bea058a0e3aef0047f40ca0466ca6",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 60.41850399598479,
+      "peak_sampled_group_rss_bytes": 87273472,
+      "peak_sampled_artifact_bytes": 51421196288,
+      "peak_sampled_artifact_apparent_bytes": 50153211987,
+      "peak_sampled_artifact_allocated_bytes": 51421196288,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:32:28.459114+00:00",
+      "ended_utc": "2026-10-13T03:33:28.877614+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-pinned-resources/probe.json": {
+      "sha256": "4eb2269f9ead9db6ea1997eeeda5faf0ea2976351e09178d43afe3d09987ba07",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 59.28926601074636,
+      "peak_sampled_group_rss_bytes": 145510400,
+      "peak_sampled_artifact_bytes": 49948753920,
+      "peak_sampled_artifact_apparent_bytes": 48758107600,
+      "peak_sampled_artifact_allocated_bytes": 49948753920,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-pinned"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:46:56.231489+00:00",
+      "ended_utc": "2026-10-13T02:47:55.520751+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-pinned.tar.gz-resources/probe.json": {
+      "sha256": "bcbd8fe2ee284be79cdee7db00b013983c19d3b67305a97ea2f4f4e908f87578",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 41.61455405317247,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 51244236800,
+      "peak_sampled_artifact_apparent_bytes": 49958158614,
+      "peak_sampled_artifact_allocated_bytes": 51244236800,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-pinned",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-pinned.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:20:07.237476+00:00",
+      "ended_utc": "2026-10-13T03:20:48.852024+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v1-resources/probe.json": {
+      "sha256": "ee75da1a21034d6c8f8daa97012b6cda99c307c1b8ac95b4b890faffe7526f44",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 47.07517288438976,
+      "peak_sampled_group_rss_bytes": 89055232,
+      "peak_sampled_artifact_bytes": 49856348160,
+      "peak_sampled_artifact_apparent_bytes": 48689607613,
+      "peak_sampled_artifact_allocated_bytes": 49856348160,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v1"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:24:18.082119+00:00",
+      "ended_utc": "2026-10-13T02:25:05.157293+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v1.tar.gz-resources/probe.json": {
+      "sha256": "1b00e0b712d35db72268de6dd3bc5e9fb225d25a6bf504c3a548a631ecbde7f9",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 39.149354157969356,
+      "peak_sampled_group_rss_bytes": 7483392,
+      "peak_sampled_artifact_bytes": 49985134592,
+      "peak_sampled_artifact_apparent_bytes": 48779364337,
+      "peak_sampled_artifact_allocated_bytes": 49985134592,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v1",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v1.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:43:14.003374+00:00",
+      "ended_utc": "2026-10-13T02:43:53.152725+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v2-resources/probe.json": {
+      "sha256": "cbc2462d2103082dae86a6668652dc100ac01782313fe7c41860bd5a596a9baf",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 48.21991803497076,
+      "peak_sampled_group_rss_bytes": 111210496,
+      "peak_sampled_artifact_bytes": 49868894208,
+      "peak_sampled_artifact_apparent_bytes": 48697697702,
+      "peak_sampled_artifact_allocated_bytes": 49868894208,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v2"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:26:10.402507+00:00",
+      "ended_utc": "2026-10-13T02:26:58.622423+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v2.tar.gz-resources/probe.json": {
+      "sha256": "292a916a9026c4a87f8a363d88ed9a2b4a5dab07fe28779a3a1fb6bf14f983e6",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.12178283371031,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 49974128640,
+      "peak_sampled_artifact_apparent_bytes": 48772774651,
+      "peak_sampled_artifact_allocated_bytes": 49974128640,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v2",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v2.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:43:53.234923+00:00",
+      "ended_utc": "2026-10-13T02:44:31.356703+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v3-resources/probe.json": {
+      "sha256": "e082c6d7ceeb57cae7d12124844417948c98dd1e2ab94eb7a049a5b709165344",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 58.30015619657934,
+      "peak_sampled_group_rss_bytes": 112295936,
+      "peak_sampled_artifact_bytes": 49890484224,
+      "peak_sampled_artifact_apparent_bytes": 48711668459,
+      "peak_sampled_artifact_allocated_bytes": 49890484224,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v3"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:27:30.972591+00:00",
+      "ended_utc": "2026-10-13T02:28:29.272743+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v3.tar.gz-resources/probe.json": {
+      "sha256": "7af655e0b24e2ddad7ced4087ff382aa824530a250ba4febdf9d7aa17ac5b09c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.336521219462156,
+      "peak_sampled_group_rss_bytes": 7475200,
+      "peak_sampled_artifact_bytes": 49962954752,
+      "peak_sampled_artifact_apparent_bytes": 48766017676,
+      "peak_sampled_artifact_allocated_bytes": 49962954752,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v3",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v3.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:44:31.438272+00:00",
+      "ended_utc": "2026-10-13T02:45:09.774786+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v4-resources/probe.json": {
+      "sha256": "9ba817fe88f8cc3798433d3452db07120b4b5ed1b526c6ad5744e518b67e2059",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 58.8472908269614,
+      "peak_sampled_group_rss_bytes": 146460672,
+      "peak_sampled_artifact_bytes": 49912074240,
+      "peak_sampled_artifact_apparent_bytes": 48725639640,
+      "peak_sampled_artifact_allocated_bytes": 49912074240,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v4"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:28:51.417785+00:00",
+      "ended_utc": "2026-10-13T02:29:50.265059+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v4.tar.gz-resources/probe.json": {
+      "sha256": "4d49cb710cc80f4f2b59166456c1e1c50ad76fef12233c168c15a370211c8616",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.04689492844045,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 49943789568,
+      "peak_sampled_artifact_apparent_bytes": 48754447631,
+      "peak_sampled_artifact_allocated_bytes": 49943789568,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v4",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v4.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:45:09.859437+00:00",
+      "ended_utc": "2026-10-13T02:45:47.906327+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v5-resources/probe.json": {
+      "sha256": "1bbc6a8329e7a809d06f831a5eafd52fae1fb72b433a034a570354c2d14ccf53",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 58.8216982036829,
+      "peak_sampled_group_rss_bytes": 108118016,
+      "peak_sampled_artifact_bytes": 49936236544,
+      "peak_sampled_artifact_apparent_bytes": 48740887081,
+      "peak_sampled_artifact_allocated_bytes": 49936236544,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "tests/integration/check_native_queue_policy.py",
+        "--build-dir",
+        "build/m19-a3-resources/c1-organization",
+        "--previous-backend",
+        "build/m19-a3-resources/c1-native/output/cosim/ns3.44-cosim-service",
+        "--output-dir",
+        "runs/scaleup_issue_screening/c1-organization-20261013/small-v5"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T02:30:25.235765+00:00",
+      "ended_utc": "2026-10-13T02:31:24.057461+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/small-v5.tar.gz-resources/probe.json": {
+      "sha256": "ca1f3be56c396658864db282dddebc13d6007f5c163392d2bdb78595ab6cda1a",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 38.25275436602533,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "peak_sampled_artifact_bytes": 50599768064,
+      "peak_sampled_artifact_apparent_bytes": 49402882708,
+      "peak_sampled_artifact_allocated_bytes": 50599768064,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.archive",
+        "pack",
+        "--input",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v5",
+        "--output",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/small-v5.tar.gz",
+        "--worker",
+        "--release-expanded"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:05:21.305777+00:00",
+      "ended_utc": "2026-10-13T03:05:59.558527+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz!/organization-review.json-resources/probe.json": {
+      "sha256": "64c8a20c9cf6725aec28185deb3d35273ea194327a359e577da01e1c3f461cd6",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 75.38045091554523,
+      "peak_sampled_group_rss_bytes": 2472681472,
+      "peak_sampled_artifact_bytes": 51241455616,
+      "peak_sampled_artifact_apparent_bytes": 49955424376,
+      "peak_sampled_artifact_allocated_bytes": 51241455616,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization_review",
+        "--case",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo/organization-review.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:14:14.065563+00:00",
+      "ended_utc": "2026-10-13T03:15:29.446005+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz!/run/logs/resources-export/probe.json": {
+      "sha256": "8456df619f3a53a67ac9f9778e52145f5c8bf12a134668b6f47050afc0141044",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 95.79869958013296,
+      "peak_sampled_group_rss_bytes": 152395776,
+      "peak_sampled_artifact_bytes": 51236696064,
+      "peak_sampled_artifact_apparent_bytes": 49950717946,
+      "peak_sampled_artifact_allocated_bytes": 51236696064,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "export",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:11:45.141265+00:00",
+      "ended_utc": "2026-10-13T03:13:20.939955+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz!/run/logs/resources-replay/probe.json": {
+      "sha256": "2d06496fd0d8ded68705382ee545443ff9a7dd376116e3578745698e6d0755c6",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 238.44069497846067,
+      "peak_sampled_group_rss_bytes": 5908668416,
+      "peak_sampled_artifact_bytes": 51191652352,
+      "peak_sampled_artifact_apparent_bytes": 49905756901,
+      "peak_sampled_artifact_allocated_bytes": 51191652352,
+      "limits": {
+        "sampled_group_rss_bytes": 51539607552,
+        "per_process_address_bytes": 60129542144,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 7200
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "replay",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:07:46.695247+00:00",
+      "ended_utc": "2026-10-13T03:11:45.135942+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz!/organization-review.json-resources/probe.json": {
+      "sha256": "41300c0afb911473733416af74c37531308987b036552366c85c0bfb81cd7a80",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 73.81938896514475,
+      "peak_sampled_group_rss_bytes": 2470301696,
+      "peak_sampled_artifact_bytes": 51276238848,
+      "peak_sampled_artifact_apparent_bytes": 50008281904,
+      "peak_sampled_artifact_allocated_bytes": 51276238848,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization_review",
+        "--case",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr/organization-review.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:28:49.493060+00:00",
+      "ended_utc": "2026-10-13T03:30:03.312443+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz!/run/logs/resources-export/probe.json": {
+      "sha256": "fa3a44533ca198dcac7f70520ac5c1ace15ad1400dd4dae58aea72664c8e944f",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 95.21828856319189,
+      "peak_sampled_group_rss_bytes": 153698304,
+      "peak_sampled_artifact_bytes": 51271360512,
+      "peak_sampled_artifact_apparent_bytes": 50003440089,
+      "peak_sampled_artifact_allocated_bytes": 51271360512,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "export",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:26:54.118704+00:00",
+      "ended_utc": "2026-10-13T03:28:29.336980+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz!/run/logs/resources-replay/probe.json": {
+      "sha256": "8ff6f89979e697f102d4a3a086b02aee03fc5d95583efaff629aa8295f4f1cbe",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 224.21962164528668,
+      "peak_sampled_group_rss_bytes": 5912358912,
+      "peak_sampled_artifact_bytes": 51226251264,
+      "peak_sampled_artifact_apparent_bytes": 49958402059,
+      "peak_sampled_artifact_allocated_bytes": 51226251264,
+      "limits": {
+        "sampled_group_rss_bytes": 51539607552,
+        "per_process_address_bytes": 60129542144,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 7200
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "moe_ub_cosim.user_workflow",
+        "replay",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr/run"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:23:09.893989+00:00",
+      "ended_utc": "2026-10-13T03:26:54.113601+00:00"
+    },
+    "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits-final.json-resources/probe.json": {
+      "sha256": "12dadd57754e626f00a8a0bc8d219309fdb78890833177807aa3d62ab8feb71c",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 58.56161758676171,
+      "peak_sampled_group_rss_bytes": 149913600,
+      "peak_sampled_artifact_bytes": 50737074176,
+      "peak_sampled_artifact_apparent_bytes": 49574087587,
+      "peak_sampled_artifact_allocated_bytes": 50737074176,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 51539607552,
+        "wall_seconds": 1800
+      },
+      "command": [
+        "/root/moe-ub-cosim/.venv/llmservingsim-native/bin/python",
+        "-m",
+        "experiments.scaleup_issue_screening.organization_waits",
+        "--baseline-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo-review.json",
+        "--control-review",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr-review.json",
+        "--baseline-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+        "--control-archive",
+        "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/c1-organization-20261013/organization-waits-final.json",
+        "--worker"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-13T03:55:59.698800+00:00",
+      "ended_utc": "2026-10-13T03:56:58.260416+00:00"
+    }
+  },
+  "archives": {
+    "fifo": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+      "archive_sha256": "12879bfaaf04fc72deb6cf7aa2654cd35af2e7b142e7e33ab8a9356a1d97542d",
+      "archive_bytes": 145329194,
+      "logical_bytes": 588332421,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "23f96c127626e8c0ee736c566f9b0f1c932099a2ae7056a8e599b44961bbe1e8"
+    },
+    "rr": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/rr.tar.gz",
+      "archive_sha256": "3abd698cbeca725890378c6b83116ea4cda219879e435ecc6a3c1f0ac3745c9f",
+      "archive_bytes": 143748681,
+      "logical_bytes": 585165206,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "c8ff21c1a9e9e0704f5aa86a6b570dbcefc2f2acebe385512b52c837099debb6"
+    },
+    "small-v1": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-v1.tar.gz",
+      "archive_sha256": "038c43c5c01c6c8ad174461ddb2943a1347f46c934741be12d73b97321b66bb6",
+      "archive_bytes": 1164112,
+      "logical_bytes": 8090890,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "579fb0bb49a6453788a87aebfc96f0d631ed130ba668314e3a80682af455998b"
+    },
+    "small-v2": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-v2.tar.gz",
+      "archive_sha256": "1ae95a05d2296fd1605df0488ebc76964d823ccfd06d0ce73d0ecf6d9166a458",
+      "archive_bytes": 1163844,
+      "logical_bytes": 8090259,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "5814c6f2b0440c9b84ad5d22ee974eaa91d9f46f4224609a66dbaedc920463a6"
+    },
+    "small-v3": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-v3.tar.gz",
+      "archive_sha256": "891f86c7bb31e8ee52f78597f92ec829708dd7dede0b08d405fbe159a3ea9f6e",
+      "archive_bytes": 2022700,
+      "logical_bytes": 13972759,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "d0060c2871e18561d8eccc653192f7cd5de3b7f73b4541cb6ac0dc05595f9bcf"
+    },
+    "small-v4": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-v4.tar.gz",
+      "archive_sha256": "2dae356d99e69c5442d987d57d8cb9547b03806f6b33c84e555c291017e8aeae",
+      "archive_bytes": 2022730,
+      "logical_bytes": 13973012,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "6659174355ed2456cd32aed6df58d2dd477e7d0357ce53f1c33f89ff8ca27aec"
+    },
+    "small-v5": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-v5.tar.gz",
+      "archive_sha256": "5b48d967ca27204cd22d0fe9636bbb3dee9289c8325a0b36f3bd0c79cc97b599",
+      "archive_bytes": 2285916,
+      "logical_bytes": 15253330,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "9fc5eef833d5636d973e35272e88038d2300b9da7f2a6e4560a9c60743dbd36e"
+    },
+    "small-pinned": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/small-pinned.tar.gz",
+      "archive_sha256": "3d5bfad123648f93e670a3e3fc1c85530eec25997fe557d3a5ec1a739cee773f",
+      "archive_bytes": 2286570,
+      "logical_bytes": 15256756,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "7386802fc7675f9f5898723a617862ae53b6ea4b7ece2598e1bfe20529c44842"
+    },
+    "capture-regression": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/capture-regression.tar.gz",
+      "archive_sha256": "cbaa9e5589eb1ad12cc3daed76374067889086ed784042b8b90ccb597601ce90",
+      "archive_bytes": 4940540,
+      "logical_bytes": 16238873,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "ff3340b8b6ea3002d4d73ec65d0dfef3ce250ce7ce5fe41851787effd21a6ada"
+    },
+    "capture-pinned": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/capture-pinned.tar.gz",
+      "archive_sha256": "9f070dde1783feccecbcf55224c3ec602b4764193da43b64c98fb0d7e085297a",
+      "archive_bytes": 5242894,
+      "logical_bytes": 17955020,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "d57b66763d0fd310458db5a9bca7a1b19f91b6f8ed4e5461bf99c11914bd4ebd"
+    },
+    "native-regression": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/native-regression.tar.gz",
+      "archive_sha256": "cc4cc1db32498822c2c1247ed9c42332657c61f252fbcc63e3c7d7e0100440bf",
+      "archive_bytes": 1228078,
+      "logical_bytes": 13284038,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "993ce118d8528904cf2ab1214bf23737f20fa92be315cc4a57583a4d5ad9587d"
+    },
+    "a3-regression": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/a3-regression.tar.gz",
+      "archive_sha256": "1d7304b71286261eaf7e5df539a017df626fe061182d3fb6d7a5a2a651935939",
+      "archive_bytes": 586311,
+      "logical_bytes": 6252971,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "438209f9a2873156ad26cb90114a71e58be92af79ffe57e3b8a89af26377d7ba"
+    },
+    "compact-v1": {
+      "path": "runs/scaleup_issue_screening/c1-organization-20261013/compact-v1.tar.gz",
+      "archive_sha256": "5bc9d50852c92407a40d6830c55fcfe3b69128935b13629afc3a0ce98093817c",
+      "archive_bytes": 655465,
+      "logical_bytes": 3564316,
+      "verified": true,
+      "expanded_released": true,
+      "inventory_sha256": "057f6ba06b70c8e00f7bed2226b76c5cbbffdc1a1f39f325ff401d4c06828598"
+    }
+  },
+  "unchanged_old_archives": {
+    "runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+    "runs/scaleup_issue_screening/c1-mechanism-20261012/capture.tar.gz": "7794447a1444c21f58ef6b2e9539170a0f7f803910d4725d0dddb0170b1c1c84",
+    "runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz": "5966ae1f19118728157ba184474b5b67b7f460fdfd65e2787f6ef36e42f12726"
+  },
+  "compact_slice": {
+    "path": "runs/scaleup_issue_screening/c1-organization-20261013/compact-slice",
+    "manifest_sha256": "2231c3791044547053d63cf1250ee47905e86fa3e63c29f71d2a7c575cdd1b9b",
+    "compaction": {
+      "schema_version": "moe-ub-slice-compaction/1",
+      "source_slice_sha256": "533d663b1778d7c8f33c408a9da1c8aeb5e95f2bd7a0f930c7d00f7875aae51c",
+      "preserved": "all_original_bytes",
+      "execution_files": 28071
+    },
+    "usage": {
+      "apparent_bytes": 615067978,
+      "allocated_bytes": 615972864
+    }
+  },
+  "cumulative_peak_bytes": 51421196288,
+  "cumulative_final_usage": {
+    "apparent_bytes": 49574097501,
+    "allocated_bytes": 50737086464
+  },
+  "cumulative_final_charged_bytes": 50737086464,
+  "disk_free_bytes": 6433340534784,
+  "disk_preflights": {
+    "fifo-preflight-reserve.json": {
+      "backend_executed": false,
+      "reason": "900 MiB conservative reserve exceeds remaining 939855872 bytes by 3862528 bytes",
+      "action": "archive and release verified earlier small checks, keeping final pinned evidence"
+    },
+    "disk-before-fifo-v2.json": {
+      "apparent_bytes": 49377097296,
+      "allocated_bytes": 50558210048,
+      "reserve_bytes": 943718400
+    },
+    "disk-before-rr.json": {
+      "apparent_bytes": 49430875952,
+      "allocated_bytes": 50593783808,
+      "reserve_bytes": 943718400,
+      "baseline_archive": "12879bfaaf04fc72deb6cf7aa2654cd35af2e7b142e7e33ab8a9356a1d97542d"
+    }
+  },
+  "build_cache_release": {
+    "path": "runs/scaleup_issue_screening/c1-organization-20261013/build-object-cache-release.json",
+    "sha256": "592ad973424db39261da367cce1baebf22357e5f08a5686876848096394cae28",
+    "released_files": 460
+  },
+  "results": {
+    "c1-organization-effect.json": {
+      "path": "experiments/scaleup_issue_screening/results/e2/c1-organization-effect.json",
+      "sha256": "e0729a96260deae558244668259787a305a71982b1972cb56459582669d240f4"
+    },
+    "c1-organization-equivalence.json": {
+      "path": "experiments/scaleup_issue_screening/results/e2/c1-organization-equivalence.json",
+      "sha256": "c89c085c5db4de5c470ff2e80013ddc8a3cd626bdd4c18d1d0f63b4d81194c88"
+    },
+    "c1-organization-fifo.json": {
+      "path": "experiments/scaleup_issue_screening/results/e2/c1-organization-fifo.json",
+      "sha256": "a5892bd0d340f4adb1a934b2a6adfbf35b592adb32f09219aef28808df4780ca"
+    },
+    "c1-organization-rr.json": {
+      "path": "experiments/scaleup_issue_screening/results/e2/c1-organization-rr.json",
+      "sha256": "550ca1b969582ef67f76f86555c9870f4da5c48ee9b0d2a0105d6e72d68a3fa2"
+    },
+    "c1-organization-waits.json": {
+      "path": "experiments/scaleup_issue_screening/results/e2/c1-organization-waits.json",
+      "sha256": "ed45dcbb3bf09b5329c09cea597dc1eddd08b58530309abe2c348d7cc3fc6843"
+    }
+  },
+  "notes": [
+    "FIFO equivalence initially rejected three empty gzip hardlink aliases; fixed bounded archive reading, tested rejection of mismatched alias inventory, and repeated only analysis. No target backend rerun.",
+    "Startup conservative disk reserve stopped before simulation; confirmed task-owned small-test copies were losslessly archived, and only this isolated build object cache was released. Binaries and libraries remain unchanged.",
+    "Early platform small-check input errors and the dirty-dependency build guard are preserved in their probes/archives and platform fixture; successful pinned checks and public build are separate evidence.",
+    "Both target captures and exports complete; no budget increased. RSS is sampled process-tree usage, artifact charge is max of unique apparent and allocated bytes. Archived probes remain inside their named archive.",
+    "Experiment programs and target execution metadata explicitly bind the accepted platform; working-tree changes during runs were experiment code/docs only, rejected if platform or dependency paths differ.",
+    "Preparation source snapshot, consumer source and comparison source are retained alongside case records or in the run root. Detailed command ledgers and failures stay in this task directory."
+  ],
+  "cumulative_usage_measured_before_this_report_write": true
+}

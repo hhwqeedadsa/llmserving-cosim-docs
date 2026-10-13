@@ -1,50 +1,44 @@
 # 当前任务与交接
 
-继续既有 **Scale-Up 正常业务问题筛选 / C1 的 E2 机制核验**。当前执行项为最晚消费者完成依赖补查，以及固定总额度的请求队列组织对照，状态 `in_progress`。2026-10-13 用户确认连续推进，不新建任务、里程碑、平台版本或实验目录，不进入 E3/E4。
+既有 **Scale-Up 正常业务问题筛选 / C1 的 E2 机制核验**，本次授权范围已完成，状态 `completed`。已从干净工作区同步远端 `main` 至 `c3abc36`，先补查已有两组记录的完整消费者依赖，再完成固定总额度的队列组织对照。没有新建任务或里程碑，没有进入 E3/E4；后续实现未推送。
 
-已从干净工作区快进同步远端交接 `c3abc36`，13 项依赖检查通过；已完成已有归档中的消费者完成依赖复核，已完成固定总额度队列参考及无损切片压缩的小型平台验收，准备目标对照。上轮被动补采与 32→64 对照证明当前模型对请求额度敏感，尚未证明真实 A3 存在相同瓶颈。本轮继续检查队列组织的影响，不重跑已经完成的研究清单。新增命令、预算和日志位于 `runs/scaleup_issue_screening/c1-organization-20261013/`。
+## 目标与边界
 
-## 基线与阅读入口
+区分请求总容量与请求组织方式的影响。固定真实路由、128 rank、256 请求、原始第 6～8 层、完整部署容量、物理网络、放置、STORE/STORE、线性计算成本及全部核内同步。保留数据栅栏、状态到下一份准备的依赖和缓冲复用条件。
 
-交接前主仓为 `2362ef9d502fb0d12f51f0649b9b81ac619a6cd1`，ns-3-UB 为 `fd1c6f0341284949f36b166bc2b7e34610ae5070`，其余依赖以该提交的 gitlink 与 `deps.lock.json` 为准。上轮补采和额度对照共用后端 SHA-256 `9f8b0ac3f695a72806054478c96694baa73c85ecb9227534c805f9058d4d654a`。开始前核对本地工作区、依赖和远端增量，不覆盖其他修改，不以旧提交回退当前工作。
+统一 FIFO 与按通信核轮转共用每端 32 个在途 STORE 额度、256 项请求编号池、一个 worker 和 4096 B 请求粒度。轮转是用于检查模型假设的参考策略，默认关闭，不代表已经确认的 A3 硬件组织。不追加容量扫描、状态优先级、同步改造、测量算法或完整 61 块/64 轮执行。
 
-[原实验方案](../../experiments/scaleup_issue_screening/plan_v0.1.md)规定整体目标；[候选 C1](../../experiments/scaleup_issue_screening/candidates.md)已替换为本轮具体要求，包括对照行为、不变量、验收与停止条件。沿用 [AGENTS.md](../../AGENTS.md)和[性能现象核查](../development.md#性能现象核查)中的主动自查责任。进度、实际提交及下一步只维护在本页。
+## 状态与验收
 
-| 内容 | 状态 | 当前处理 |
+| 内容 | 状态 | 结果与证据 |
 |---|---|---|
-| 平台 P：M18～M21 | `completed` | [原平台验收](../../fixtures/m21_platform/README.md)，不重开开发清单 |
-| E1 与 E2 原对照、交付补证 | `completed` | [E1](../../experiments/scaleup_issue_screening/results/e1/README.md)、[E2](../../experiments/scaleup_issue_screening/results/e2/README.md)，保留执行事实与原归档 |
-| E2 请求阻塞补采及 32→64 对照 | `completed` | [请求队列证据](../../experiments/scaleup_issue_screening/results/e2/c1-native-review.json)、[额度效应](../../experiments/scaleup_issue_screening/results/e2/c1-quota64-effect.json)；不追加额度扫描 |
-| E2 最晚消费者完成依赖补查 | `completed` | [32](../../experiments/scaleup_issue_screening/results/e2/c1-fifo32-consumers.json) / [64](../../experiments/scaleup_issue_screening/results/e2/c1-fifo64-consumers.json)：四条最晚链均由状态到达后 500 ns 归约决定；无额外资源调度间隔，14 项分析小测通过 |
-| E2 固定总额度的队列组织对照 | `in_progress` | 平台小测与回归已通过，见 [独立验收](../../fixtures/m19_a3_resources/native-queue-validation.json)；接着执行同场景 FIFO 等价基线与一次轮转对照 |
-| E3、E4 | `pending` / `conditional` | 均未执行，不在本次范围；本轮完成后先判断 C1 是否值得继续 |
+| 平台 P：M18～M21 | `completed` | 原验收保留，不重开清单；见 [M21](../../fixtures/m21_platform/README.md) |
+| E1/E2 原对照与上轮 32→64 核验 | `completed` | [E1](../../experiments/scaleup_issue_screening/results/e1/README.md)、[E2](../../experiments/scaleup_issue_screening/results/e2/README.md)，旧记录与归档保留 |
+| 已有最晚消费者完整依赖补查 | `completed` | [FIFO/32](../../experiments/scaleup_issue_screening/results/e2/c1-fifo32-consumers.json)、[FIFO/64](../../experiments/scaleup_issue_screening/results/e2/c1-fifo64-consumers.json)：均由状态到达后归约决定，保留本核发送、全部归约及并列条件；没有为补查重跑仿真 |
+| 固定总额度参考的平台实现 | `completed` | [独立验收](../../fixtures/m19_a3_resources/native-queue-validation.json)：旧 FIFO、单核退化、多核轮转、额度与编号池、STORE/LOAD、静态核身份、全部请求范围、旧切片重放及无损压缩检查通过，提交后公开构建通过 |
+| 目标 FIFO 等价基线 | `completed` | [等价报告](../../experiments/scaleup_issue_screening/results/e2/c1-organization-equivalence.json)：8082 个旧记录文件及 2688 个出口包内容/时刻指纹一致 |
+| 唯一一次轮转/32 参考 | `completed` | [效应核验](../../experiments/scaleup_issue_screening/results/e2/c1-organization-effect.json)：全图请求范围、计算和固定资源一致，实际消费者重新追踪；22 项实验工具检查通过 |
+| C1 去留判断 | `completed` | [结论](../../experiments/scaleup_issue_screening/conclusions.md)：保留模型内现象，降低直接将请求排队分量提出为真实测量问题的优先级，暂停新增测量研究 |
+| E3、E4 | `pending` / `conditional` | 未执行，不在本次授权范围 |
 
-上轮完整的检查、归档、失败记录及发布说明保存在[交接前任务快照](https://github.com/baoy21/moe-ub-cosim/blob/2362ef9d502fb0d12f51f0649b9b81ac619a6cd1/docs/tasks/current.md)。本轮续接不追溯改写旧结果，也不把已有数据最后到达的来源直接当作新最晚消费者的完整根因。
+## 主要结果
 
-## 本次固定与允许范围
+128 个原生发起端的实际对象回读一致；568544 个节点、121880 条计划传输和全部计算成本保持，120980 项原生 STORE 的 139139 个实际请求按业务身份、核身份和字节范围完全相同，6144 组端点/通信核的实际请求顺序也保持一致。
 
-固定现有真实路由、128 rank、256 请求、原始第 6～8 层、物理网络、放置、A3 STORE/STORE、线性计算成本及全部核内同步。继续采用默认数据栅栏；状态到下一份准备的依赖及缓冲复用条件本轮均不改变。不再展开负载代表性、计算成本拟合、专家复制或硬件容量校准。
+原两条链的前序状态形成等待从 6188、4306 ns 降至 1161、1302 ns，但前序数据栅栏增加至 11233、11396 ns。同一贡献从专家结束到数据提交的链反而增加 474、215 ns。利用保存的回调和队列进一步核对：增量主要在全部数据请求形成之前，任务仍在队列且 worker 额度占满，形成后的尾段缩短；见[分段与占用证据](../../experiments/scaleup_issue_screening/results/e2/c1-organization-waits.json)。不把该事件分段写成纯交换机时延或可消除损失。
 
-保留统一 FIFO 作为基线。替代方式按通信核保存待发序列，共用每端 32 个在途 STORE 额度及 256 项请求编号池，有额度时按确定规则轮转，每次从一个就绪序列形成一个既有请求。每份任务的请求字节范围保持不变，不使用 `ThreadNum=48` 分段，不为各核分别新增 32 个额度，不给予状态消息或已知关键消费者优先级。
+轮转下实际最晚消费者改为第 7 层 rank 10、第 8 层 rank 34，仍分别由 rank 70、65 的状态到达后归约 500 ns 决定，再执行 92 ns 后续计算；无额外资源调度间隔。原消费者 27、58 和新来源核的完整条件均保留在 [FIFO](../../experiments/scaleup_issue_screening/results/e2/c1-organization-fifo.json) / [轮转](../../experiments/scaleup_issue_screening/results/e2/c1-organization-rr.json)中。
 
-替代方式只是用于检验组织假设的参考对照，不代表已经取得 A3 硬件实现依据。新增策略默认关闭，旧 FIFO 与历史配置含义保留。允许为该对照补充必要的生产者身份、请求调度、配置校验、记录及安全重放能力；具体字段和接口由 Codex 在现有结构中实现并验证，不预建一套通用调度系统。
+三层最后模型计算从 110792 降至 109847 ns，仅提前 **945 ns（0.85%）**。网络排空另行核对，实际端口分布改变；没有把局部状态等待下降或相同随机种子解释成纯队列收益或相同路径。硬件方面仍缺选定 A3 的通信核（AIV）与搬运流水（MTE）请求队列共享组织、状态到后续准备的同步对应，不用更多参数扫描代替机制依据。
 
-先补查上轮额度 64 下 rank 33、56 的完整完成依赖，同时核对基线 rank 27、58；保留并列最晚端和并列前驱。现有 `native_review.py` 的 `latest_incoming_data_for_actual_last_consumers` 只筛选 data，不足以独自确定最终阻塞者。优先读取已有原始记录，无须为这项统计修正重跑仿真。必要的新来源和新最晚消费者由本次执行决定，不固定为 rank 70、65。
+## 保存、资源与提交
 
-## 顺序与自主处理
+消费者补查已本地提交 `3a2800e`；平台由内向外保存为 ns-3-UB `13cf3da`、主仓 `4e5fd4d`。二进制 SHA-256 为 `41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5`。实验程序、结果及本页随独立实验提交保存，不混入平台提交；其余依赖保持锁定，收尾 13 项依赖检查通过。
 
-Codex 先完成上述分析修正，再按候选文档实现固定预算的队列组织对照。小型检查应证明请求划分、总容量、核内顺序、回调及协议回收不变，并验证旧 FIFO 执行等价。通过后，复用当前三层场景完成一次轮转参考运行；为验证新二进制的 FIFO 行为，可执行一次同场景等价基线，不将其算为独立样本。
+本轮记录位于 `runs/scaleup_issue_screening/c1-organization-20261013/`。`fifo.tar.gz`、`rr.tar.gz` 及相邻清单保存完整执行、日志和队列记录；`compact-slice/` 保留可直接重放的原图、输入及无损压缩的旧执行。摘要可直接查看，无须解压；用户命令见[组织对照操作](../../experiments/scaleup_issue_screening/usage.md#c1-固定总额度的队列组织对照)。
 
-在授权范围内主动排查身份缺失、隐式资源增量、请求重分段及重放限制，发现问题先提炼小型用例、修复并验证。不以修改一个配置名就声称单因素，也不根据性能结果调整轮转次序。若遇到资料不足、预算不足或需要实质性扩围，保留已查事实、排除项和最小缺项，停止受影响部分。
+预算保持：后端 RSS 48 GiB、地址空间 56 GiB、7200 秒；其他受监控阶段 8 GiB、12 GiB、1800 秒；累计产物 48 GiB、最低空闲 20 GiB。累计采样峰值 **47.890 GiB**，收尾取样约 **47.253 GiB**；两次后端分别约 238.44、224.22 秒，RSS 峰值约 5.503、5.506 GiB。详见[资源及归档证据](../../experiments/scaleup_issue_screening/results/e2/c1-organization-resources.json)。
 
-本轮不修改核内同步，不新增状态优先级、专用 VC、新协议、测量算法或 P4，不做 A5 移植、完整 HBM/缓存或完整 61 块/64 步运行。固定资源下现象稳定，只能支持对这次组织变化的稳健性，不能自动证明硬件真实性或进入 E3。
+旧基线及上轮补采、额度 64 归档摘要核对不变。仅释放本轮经核验的恢复副本、新 case 和小测展开副本，以及隔离构建的可再生对象文件；二进制和库保留。启动前空间预检、平台早期输入错误、旧空文件硬链接导致的首次等价读取失败均保留原因；修正读取后只重做分析，两次目标后端均只运行一次，没有提高上限。
 
-## 资源、保存与交付
-
-上限不变：后端 RSS 48 GiB、单进程地址空间 56 GiB、7200 秒；其他阶段 RSS 8 GiB、地址空间 12 GiB、1800 秒；累计产物 48 GiB，最低空闲磁盘 20 GiB。上轮归档后的记录约为 46.32 GiB，不能当作当前实测占用。先查实际空间和清单，按需读取或恢复，串行运行、及时核验归档及释放本轮可再生副本，不删除旧归档或自动扩大预算。
-
-既有 `runs/scaleup_issue_screening/c1-mechanism-20261012/` 中的 `capture.tar.gz`、`quota64.tar.gz` 及相邻清单保留。复用方式见[实验操作](../../experiments/scaleup_issue_screening/usage.md#c1-原生请求队列核验)，旧资源与检查见[摘要](../../experiments/scaleup_issue_screening/results/e2/c1-resources.json)。新增运行使用同一实验下的独立路径，详细日志不提交 Git。
-
-完成后给出修正的消费者依赖证据、固定资源与请求不变量检查、FIFO/轮转的局部等待和业务比较，以及 C1 的去留判断。研究结果加入既有 E2 结果组织，候选和结论按证据更新；使用指南只记录已验证接口，不预建空报告或新版本规范。
-
-消费者补查和平台小型验收已完成。新增策略默认关闭，核身份从已校验静态分配传递，全部 STORE 请求范围可有界核验；旧 FIFO、单核退化、多核轮转、有限额度与编号池、STORE/LOAD、旧切片重放通过。ns-3-UB 已本地提交 `13cf3da`。为满足原磁盘上限，公共 `slice compact` 无损压缩历史执行记录、保留原图并生成新清单；小例采样、重放和损坏拒绝检查通过。下一步是目标 FIFO 等价基线与一次轮转参考运行。平台修改与实验分析分别验收、分别建立本地提交；涉及依赖时由内向外保存提交、更新 gitlink 和锁文件。后续实现的远端推送仍需新的明确授权。
+本次授权工作没有剩余执行项。继续研究需先明确上述最小机制依据或新的研究范围；不自动进入 E3/E4。**未经新的明确授权，不推送后续实现。**

@@ -1,0 +1,111 @@
+{
+  "schema_version": "issue-screening-organization-equivalence/1",
+  "passed": true,
+  "original_archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+  "original_manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+  "replay_manifest_sha256": "454decc2c59f8712aa1b27ab0634f214fa301f1ddb418f5a1ee6566cc828e1bd",
+  "selection_sha256": "660fb7b5021d7430b6668bcbe5fc16526e9933f24cfdf06ba44eaeaf2d40dafe",
+  "metadata_fields": [
+    "simulation_end_ns",
+    "service_finished_ns",
+    "random",
+    "network_drain",
+    "graph_completions",
+    "rank_resources",
+    "boundary_resources",
+    "resource_lifecycle"
+  ],
+  "ports_compared": 2688,
+  "packet_wire_and_start_fingerprints_match": true,
+  "port_equivalence_sha256": "15ef6eac5d19a4bcd236e1a2428437f580bff0b424477ef5312d5a146da67d8c",
+  "simulation_end_ns": 110792,
+  "backend_executed": true,
+  "frontend_executed": false,
+  "independent_statistical_repeat": false,
+  "program_sha256": "14ef9c005003c7bde8931dd4bf8ed3ab98cf292c5e3190ff9f7e008ee031f92f",
+  "record_files_compared": 8082,
+  "record_fingerprint_digest": {
+    "records": 1,
+    "sha256": "a104a9b1458258815641d69dd1fd8c12888452d156e54e9d5792daef74758e44"
+  },
+  "original_record_families": {
+    "run/observed/records/endpoint_ops.jsonl.gz": {
+      "records": 768,
+      "sha256": "4fcceea5a7d4dc667a0778a64dd97a2fd513042632fe628997d0b2d21861545f"
+    },
+    "run/observed/records/endpoint_stages.jsonl.gz": {
+      "records": 6619,
+      "sha256": "764ab5712c231148809e32f4f8e97aef097265f1ab25478d02bfcf4df742c705"
+    },
+    "run/observed/records/port_windows.csv.gz": {
+      "records": 155045,
+      "sha256": "dd777a4afeeb660b970c77463f638b753cc8d0490867d8292c8890492fb0b67d"
+    },
+    "run/observed/records/queue_windows.csv.gz": {
+      "records": 155124,
+      "sha256": "2b3171c103230906f58845a23e2a36c1860d4a5f597e2bba62815c3b5fab677c"
+    },
+    "run/raw/execution/records/target_writes.jsonl.gz": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "run/raw/execution/records/wqe_completions.jsonl.gz": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "run/raw/execution/records/wqe_starts.jsonl.gz": {
+      "records": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "run/raw/execution/records/endpoint_ops-g0.jsonl.gz": {
+      "records": 768,
+      "sha256": "54a7179ab5977ccdeddda41cd85a4a07e4b20a089eb3c3544a704981fdbf86de"
+    },
+    "run/raw/execution/records/local_deliveries-g0.jsonl.gz": {
+      "records": 900,
+      "sha256": "df14d68ff17c12e0b3bc30700b21979d52253a802905a8bdd9d18ea185c0a407"
+    },
+    "run/raw/execution/records/native_completions.jsonl.gz": {
+      "records": 120980,
+      "sha256": "f3bdb54025a9de6fe849f6b65ec8526d515d818d92802f70a42a61b26a5cf376"
+    },
+    "run/raw/execution/records/native_starts.jsonl.gz": {
+      "records": 120980,
+      "sha256": "5da858093c3bd439f351450e63c0fee710614f4ba545d340689c486aab13d389"
+    },
+    "run/raw/execution/records/node_execution-g0.jsonl.gz": {
+      "records": 568544,
+      "sha256": "5496394e2040afdf5d94c1b15b438b084051a623b212477b9a6400a4dfe8b502"
+    },
+    "run/raw/execution/records/operation_registry-g0.jsonl.gz": {
+      "records": 6,
+      "sha256": "9790b65f83a708c03c8c6351e31e2db2e5ac08bd25635a6d3de78f9f8677494a"
+    },
+    "run/raw/execution/records/operation_stages-g0.jsonl.gz": {
+      "records": 6619,
+      "sha256": "8e18bd510258ade34be6394feae2d1ac09fda74039f3430786c9ddba23be8c55"
+    },
+    "run/raw/execution/records/plan_summary-g0.jsonl.gz": {
+      "records": 1,
+      "sha256": "75fdce6c85040412c8d68992292b25b9c0ddb2debd91a54d8f45efd1433c11c9"
+    },
+    "run/raw/execution/records/planned_transfers-g0.jsonl.gz": {
+      "records": 121880,
+      "sha256": "98bdd93258b0fea6bccc65112c1b41a07d050753bd6f6967d1a95cd82911579f"
+    },
+    "run/raw/execution/records/transfer_registry-g0.jsonl.gz": {
+      "records": 120980,
+      "sha256": "0ffb42a34b7771f589aeea40115109ee8308e5d895c46f25f30ead8ff9437310"
+    },
+    "run/raw/execution/records/transfers-g0.jsonl.gz": {
+      "records": 120980,
+      "sha256": "bc69bb8f8a35d4e54396add798d37650bbb0d1a628ff69ed40081bacf1d558f0"
+    }
+  },
+  "detailed_report": {
+    "archive": "runs/scaleup_issue_screening/c1-organization-20261013/fifo.tar.gz",
+    "archive_sha256": "12879bfaaf04fc72deb6cf7aa2654cd35af2e7b142e7e33ab8a9356a1d97542d",
+    "member": "equivalence.json",
+    "sha256": "f53891f15ac29c6f42ead7599bdf63674116ae712cc9be11ced4d9e4d1137a84"
+  }
+}

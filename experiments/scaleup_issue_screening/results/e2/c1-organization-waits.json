@@ -1,0 +1,930 @@
+{
+  "schema_version": "issue-screening-organization-wait-partition/1",
+  "passed": true,
+  "baseline": {
+    "review_sha256": "a5892bd0d340f4adb1a934b2a6adfbf35b592adb32f09219aef28808df4780ca",
+    "archive_sha256": "12879bfaaf04fc72deb6cf7aa2654cd35af2e7b142e7e33ab8a9356a1d97542d",
+    "contributions": [
+      {
+        "transfer_id": 4295045029,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "reasons": [
+          "original key data"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 3455,
+          "after_all_requests_formed_ns": 2277
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 3455
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 3273,
+            "transfer_id": 4295045026,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1328
+            },
+            "start_ns": 63225,
+            "end_ns": 65109,
+            "submit_ns": 63225,
+            "all_requests_formed_ns": 64553,
+            "before_all_requests_formed_ns": 1328,
+            "after_all_requests_formed_ns": 556,
+            "transaction_done_ns": 65193
+          },
+          {
+            "node_id": 3261,
+            "transfer_id": 4295045023,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 976
+            },
+            "start_ns": 60271,
+            "end_ns": 61784,
+            "submit_ns": 60271,
+            "all_requests_formed_ns": 61247,
+            "before_all_requests_formed_ns": 976,
+            "after_all_requests_formed_ns": 537,
+            "transaction_done_ns": 61868
+          },
+          {
+            "node_id": 3246,
+            "transfer_id": 4295045019,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 733
+            },
+            "start_ns": 57168,
+            "end_ns": 58475,
+            "submit_ns": 57168,
+            "all_requests_formed_ns": 57901,
+            "before_all_requests_formed_ns": 733,
+            "after_all_requests_formed_ns": 574,
+            "transaction_done_ns": 58582
+          },
+          {
+            "node_id": 3234,
+            "transfer_id": 4295045016,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 418
+            },
+            "start_ns": 54218,
+            "end_ns": 55246,
+            "submit_ns": 54218,
+            "all_requests_formed_ns": 54636,
+            "before_all_requests_formed_ns": 418,
+            "after_all_requests_formed_ns": 610,
+            "transaction_done_ns": 55330
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295045030,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "reasons": [
+          "consumer 27 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 4873,
+          "after_all_requests_formed_ns": 2773
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 4873
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 3285,
+            "transfer_id": 4295045029,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1418
+            },
+            "start_ns": 66218,
+            "end_ns": 68132,
+            "submit_ns": 66218,
+            "all_requests_formed_ns": 67636,
+            "before_all_requests_formed_ns": 1418,
+            "after_all_requests_formed_ns": 496,
+            "transaction_done_ns": 68216
+          },
+          {
+            "node_id": 3273,
+            "transfer_id": 4295045026,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1328
+            },
+            "start_ns": 63225,
+            "end_ns": 65109,
+            "submit_ns": 63225,
+            "all_requests_formed_ns": 64553,
+            "before_all_requests_formed_ns": 1328,
+            "after_all_requests_formed_ns": 556,
+            "transaction_done_ns": 65193
+          },
+          {
+            "node_id": 3261,
+            "transfer_id": 4295045023,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 976
+            },
+            "start_ns": 60271,
+            "end_ns": 61784,
+            "submit_ns": 60271,
+            "all_requests_formed_ns": 61247,
+            "before_all_requests_formed_ns": 976,
+            "after_all_requests_formed_ns": 537,
+            "transaction_done_ns": 61868
+          },
+          {
+            "node_id": 3246,
+            "transfer_id": 4295045019,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 733
+            },
+            "start_ns": 57168,
+            "end_ns": 58475,
+            "submit_ns": 57168,
+            "all_requests_formed_ns": 57901,
+            "before_all_requests_formed_ns": 733,
+            "after_all_requests_formed_ns": 574,
+            "transaction_done_ns": 58582
+          },
+          {
+            "node_id": 3234,
+            "transfer_id": 4295045016,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 418
+            },
+            "start_ns": 54218,
+            "end_ns": 55246,
+            "submit_ns": 54218,
+            "all_requests_formed_ns": 54636,
+            "before_all_requests_formed_ns": 418,
+            "after_all_requests_formed_ns": 610,
+            "transaction_done_ns": 55330
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295086595,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "reasons": [
+          "original key data"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 6071,
+          "after_all_requests_formed_ns": 2106
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 6071
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 5584,
+            "transfer_id": 4295086592,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1797
+            },
+            "start_ns": 104567,
+            "end_ns": 106914,
+            "submit_ns": 104567,
+            "all_requests_formed_ns": 106364,
+            "before_all_requests_formed_ns": 1797,
+            "after_all_requests_formed_ns": 550,
+            "transaction_done_ns": 106998
+          },
+          {
+            "node_id": 5575,
+            "transfer_id": 4295086590,
+            "on_representative_path": false,
+            "formation_queue_state_ns": {
+              "worker_full": 1611
+            },
+            "start_ns": 101564,
+            "end_ns": 103684,
+            "submit_ns": 101564,
+            "all_requests_formed_ns": 103175,
+            "before_all_requests_formed_ns": 1611,
+            "after_all_requests_formed_ns": 509,
+            "transaction_done_ns": 103768
+          },
+          {
+            "node_id": 5563,
+            "transfer_id": 4295086587,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1522
+            },
+            "start_ns": 98406,
+            "end_ns": 100386,
+            "submit_ns": 98406,
+            "all_requests_formed_ns": 99928,
+            "before_all_requests_formed_ns": 1522,
+            "after_all_requests_formed_ns": 458,
+            "transaction_done_ns": 100470
+          },
+          {
+            "node_id": 5551,
+            "transfer_id": 4295086584,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1158
+            },
+            "start_ns": 95288,
+            "end_ns": 97018,
+            "submit_ns": 95288,
+            "all_requests_formed_ns": 96446,
+            "before_all_requests_formed_ns": 1158,
+            "after_all_requests_formed_ns": 572,
+            "transaction_done_ns": 97102
+          },
+          {
+            "node_id": 5572,
+            "transfer_id": 4295086589,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1594
+            },
+            "start_ns": 101564,
+            "end_ns": 103684,
+            "submit_ns": 101564,
+            "all_requests_formed_ns": 103158,
+            "before_all_requests_formed_ns": 1594,
+            "after_all_requests_formed_ns": 526,
+            "transaction_done_ns": 103768
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295086597,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "reasons": [
+          "consumer 58 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 7750,
+          "after_all_requests_formed_ns": 2688
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 7750
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 5596,
+            "transfer_id": 4295086595,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1679
+            },
+            "start_ns": 107851,
+            "end_ns": 110112,
+            "submit_ns": 107851,
+            "all_requests_formed_ns": 109530,
+            "before_all_requests_formed_ns": 1679,
+            "after_all_requests_formed_ns": 582,
+            "transaction_done_ns": 110196
+          },
+          {
+            "node_id": 5584,
+            "transfer_id": 4295086592,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1797
+            },
+            "start_ns": 104567,
+            "end_ns": 106914,
+            "submit_ns": 104567,
+            "all_requests_formed_ns": 106364,
+            "before_all_requests_formed_ns": 1797,
+            "after_all_requests_formed_ns": 550,
+            "transaction_done_ns": 106998
+          },
+          {
+            "node_id": 5575,
+            "transfer_id": 4295086590,
+            "on_representative_path": false,
+            "formation_queue_state_ns": {
+              "worker_full": 1611
+            },
+            "start_ns": 101564,
+            "end_ns": 103684,
+            "submit_ns": 101564,
+            "all_requests_formed_ns": 103175,
+            "before_all_requests_formed_ns": 1611,
+            "after_all_requests_formed_ns": 509,
+            "transaction_done_ns": 103768
+          },
+          {
+            "node_id": 5563,
+            "transfer_id": 4295086587,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1522
+            },
+            "start_ns": 98406,
+            "end_ns": 100386,
+            "submit_ns": 98406,
+            "all_requests_formed_ns": 99928,
+            "before_all_requests_formed_ns": 1522,
+            "after_all_requests_formed_ns": 458,
+            "transaction_done_ns": 100470
+          },
+          {
+            "node_id": 5551,
+            "transfer_id": 4295086584,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1158
+            },
+            "start_ns": 95288,
+            "end_ns": 97018,
+            "submit_ns": 95288,
+            "all_requests_formed_ns": 96446,
+            "before_all_requests_formed_ns": 1158,
+            "after_all_requests_formed_ns": 572,
+            "transaction_done_ns": 97102
+          },
+          {
+            "node_id": 5572,
+            "transfer_id": 4295086589,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1594
+            },
+            "start_ns": 101564,
+            "end_ns": 103684,
+            "submit_ns": 101564,
+            "all_requests_formed_ns": 103158,
+            "before_all_requests_formed_ns": 1594,
+            "after_all_requests_formed_ns": 526,
+            "transaction_done_ns": 103768
+          }
+        ]
+      }
+    ],
+    "missing_queue_sources": [],
+    "per_producer_request_order": {
+      "records": 6144,
+      "sha256": "32b4aa2a843becfe78cf274e25980910f3a4cf4b2dd7a2ab43d0869160b2ad9f"
+    }
+  },
+  "control": {
+    "review_sha256": "550ca1b969582ef67f76f86555c9870f4da5c48ee9b0d2a0105d6e72d68a3fa2",
+    "archive_sha256": "3abd698cbeca725890378c6b83116ea4cda219879e435ecc6a3c1f0ac3745c9f",
+    "contributions": [
+      {
+        "transfer_id": 4295044955,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 10,
+        "reasons": [
+          "consumer 10 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 10628,
+          "after_all_requests_formed_ns": 1894
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 10628
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 2985,
+            "transfer_id": 4295044954,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 823
+            },
+            "start_ns": 66314,
+            "end_ns": 67783,
+            "submit_ns": 66314,
+            "all_requests_formed_ns": 67137,
+            "before_all_requests_formed_ns": 823,
+            "after_all_requests_formed_ns": 646,
+            "transaction_done_ns": 67867
+          },
+          {
+            "node_id": 2973,
+            "transfer_id": 4295044951,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2558
+            },
+            "start_ns": 63071,
+            "end_ns": 65881,
+            "submit_ns": 63071,
+            "all_requests_formed_ns": 65629,
+            "before_all_requests_formed_ns": 2558,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 65965
+          },
+          {
+            "node_id": 2961,
+            "transfer_id": 4295044948,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2595
+            },
+            "start_ns": 59810,
+            "end_ns": 62657,
+            "submit_ns": 59810,
+            "all_requests_formed_ns": 62405,
+            "before_all_requests_formed_ns": 2595,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 62741
+          },
+          {
+            "node_id": 2949,
+            "transfer_id": 4295044945,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2586
+            },
+            "start_ns": 56662,
+            "end_ns": 59500,
+            "submit_ns": 56662,
+            "all_requests_formed_ns": 59248,
+            "before_all_requests_formed_ns": 2586,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 59584
+          },
+          {
+            "node_id": 2937,
+            "transfer_id": 4295044942,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2066
+            },
+            "start_ns": 53913,
+            "end_ns": 56471,
+            "submit_ns": 53913,
+            "all_requests_formed_ns": 55979,
+            "before_all_requests_formed_ns": 2066,
+            "after_all_requests_formed_ns": 492,
+            "transaction_done_ns": 56555
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295045029,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "reasons": [
+          "original key data"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 9936,
+          "after_all_requests_formed_ns": 1297
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 9936
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 3273,
+            "transfer_id": 4295045026,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2601
+            },
+            "start_ns": 63113,
+            "end_ns": 65966,
+            "submit_ns": 63113,
+            "all_requests_formed_ns": 65714,
+            "before_all_requests_formed_ns": 2601,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 66051
+          },
+          {
+            "node_id": 3261,
+            "transfer_id": 4295045023,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2592
+            },
+            "start_ns": 59895,
+            "end_ns": 62825,
+            "submit_ns": 59895,
+            "all_requests_formed_ns": 62487,
+            "before_all_requests_formed_ns": 2592,
+            "after_all_requests_formed_ns": 338,
+            "transaction_done_ns": 62909
+          },
+          {
+            "node_id": 3249,
+            "transfer_id": 4295045020,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2594
+            },
+            "start_ns": 56736,
+            "end_ns": 59582,
+            "submit_ns": 56736,
+            "all_requests_formed_ns": 59330,
+            "before_all_requests_formed_ns": 2594,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 59667
+          },
+          {
+            "node_id": 3237,
+            "transfer_id": 4295045017,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2149
+            },
+            "start_ns": 53913,
+            "end_ns": 56517,
+            "submit_ns": 53913,
+            "all_requests_formed_ns": 56062,
+            "before_all_requests_formed_ns": 2149,
+            "after_all_requests_formed_ns": 455,
+            "transaction_done_ns": 56601
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295045030,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "reasons": [
+          "consumer 27 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 10774,
+          "after_all_requests_formed_ns": 1549
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 10774
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 3285,
+            "transfer_id": 4295045029,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 838
+            },
+            "start_ns": 66387,
+            "end_ns": 67477,
+            "submit_ns": 66387,
+            "all_requests_formed_ns": 67225,
+            "before_all_requests_formed_ns": 838,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 67560
+          },
+          {
+            "node_id": 3273,
+            "transfer_id": 4295045026,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2601
+            },
+            "start_ns": 63113,
+            "end_ns": 65966,
+            "submit_ns": 63113,
+            "all_requests_formed_ns": 65714,
+            "before_all_requests_formed_ns": 2601,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 66051
+          },
+          {
+            "node_id": 3261,
+            "transfer_id": 4295045023,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2592
+            },
+            "start_ns": 59895,
+            "end_ns": 62825,
+            "submit_ns": 59895,
+            "all_requests_formed_ns": 62487,
+            "before_all_requests_formed_ns": 2592,
+            "after_all_requests_formed_ns": 338,
+            "transaction_done_ns": 62909
+          },
+          {
+            "node_id": 3249,
+            "transfer_id": 4295045020,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2594
+            },
+            "start_ns": 56736,
+            "end_ns": 59582,
+            "submit_ns": 56736,
+            "all_requests_formed_ns": 59330,
+            "before_all_requests_formed_ns": 2594,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 59667
+          },
+          {
+            "node_id": 3237,
+            "transfer_id": 4295045017,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2149
+            },
+            "start_ns": 53913,
+            "end_ns": 56517,
+            "submit_ns": 53913,
+            "all_requests_formed_ns": 56062,
+            "before_all_requests_formed_ns": 2149,
+            "after_all_requests_formed_ns": 455,
+            "transaction_done_ns": 56601
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295086462,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 34,
+        "reasons": [
+          "consumer 34 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 13033,
+          "after_all_requests_formed_ns": 1422
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 13033
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 5059,
+            "transfer_id": 4295086461,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1553
+            },
+            "start_ns": 107322,
+            "end_ns": 109167,
+            "submit_ns": 107322,
+            "all_requests_formed_ns": 108875,
+            "before_all_requests_formed_ns": 1553,
+            "after_all_requests_formed_ns": 292,
+            "transaction_done_ns": 109251
+          },
+          {
+            "node_id": 5047,
+            "transfer_id": 4295086458,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2965
+            },
+            "start_ns": 104001,
+            "end_ns": 107218,
+            "submit_ns": 104001,
+            "all_requests_formed_ns": 106966,
+            "before_all_requests_formed_ns": 2965,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 107302
+          },
+          {
+            "node_id": 5035,
+            "transfer_id": 4295086455,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2839
+            },
+            "start_ns": 100769,
+            "end_ns": 103862,
+            "submit_ns": 100769,
+            "all_requests_formed_ns": 103608,
+            "before_all_requests_formed_ns": 2839,
+            "after_all_requests_formed_ns": 254,
+            "transaction_done_ns": 103945
+          },
+          {
+            "node_id": 5023,
+            "transfer_id": 4295086452,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2832
+            },
+            "start_ns": 97534,
+            "end_ns": 100698,
+            "submit_ns": 97534,
+            "all_requests_formed_ns": 100366,
+            "before_all_requests_formed_ns": 2832,
+            "after_all_requests_formed_ns": 332,
+            "transaction_done_ns": 100782
+          },
+          {
+            "node_id": 5011,
+            "transfer_id": 4295086449,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2844
+            },
+            "start_ns": 94328,
+            "end_ns": 97464,
+            "submit_ns": 94328,
+            "all_requests_formed_ns": 97172,
+            "before_all_requests_formed_ns": 2844,
+            "after_all_requests_formed_ns": 292,
+            "transaction_done_ns": 97548
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295086595,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "reasons": [
+          "original key data"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 10322,
+          "after_all_requests_formed_ns": 1074
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 10322
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 5587,
+            "transfer_id": 4295086593,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2718
+            },
+            "start_ns": 103748,
+            "end_ns": 106746,
+            "submit_ns": 103748,
+            "all_requests_formed_ns": 106466,
+            "before_all_requests_formed_ns": 2718,
+            "after_all_requests_formed_ns": 280,
+            "transaction_done_ns": 106830
+          },
+          {
+            "node_id": 5575,
+            "transfer_id": 4295086590,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2626
+            },
+            "start_ns": 100516,
+            "end_ns": 103394,
+            "submit_ns": 100516,
+            "all_requests_formed_ns": 103142,
+            "before_all_requests_formed_ns": 2626,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 103478
+          },
+          {
+            "node_id": 5563,
+            "transfer_id": 4295086587,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2664
+            },
+            "start_ns": 97278,
+            "end_ns": 100194,
+            "submit_ns": 97278,
+            "all_requests_formed_ns": 99942,
+            "before_all_requests_formed_ns": 2664,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 100278
+          },
+          {
+            "node_id": 5551,
+            "transfer_id": 4295086584,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2314
+            },
+            "start_ns": 94328,
+            "end_ns": 96932,
+            "submit_ns": 94328,
+            "all_requests_formed_ns": 96642,
+            "before_all_requests_formed_ns": 2314,
+            "after_all_requests_formed_ns": 290,
+            "transaction_done_ns": 97016
+          }
+        ]
+      },
+      {
+        "transfer_id": 4295086597,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "reasons": [
+          "consumer 58 critical gate"
+        ],
+        "totals_ns": {
+          "before_all_requests_formed_ns": 11763,
+          "after_all_requests_formed_ns": 1527
+        },
+        "formation_queue_state_ns": {
+          "worker_full": 11763
+        },
+        "all_tied_data_fences": [
+          {
+            "node_id": 5599,
+            "transfer_id": 4295086596,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 1441
+            },
+            "start_ns": 107106,
+            "end_ns": 109000,
+            "submit_ns": 107106,
+            "all_requests_formed_ns": 108547,
+            "before_all_requests_formed_ns": 1441,
+            "after_all_requests_formed_ns": 453,
+            "transaction_done_ns": 109084
+          },
+          {
+            "node_id": 5587,
+            "transfer_id": 4295086593,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2718
+            },
+            "start_ns": 103748,
+            "end_ns": 106746,
+            "submit_ns": 103748,
+            "all_requests_formed_ns": 106466,
+            "before_all_requests_formed_ns": 2718,
+            "after_all_requests_formed_ns": 280,
+            "transaction_done_ns": 106830
+          },
+          {
+            "node_id": 5575,
+            "transfer_id": 4295086590,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2626
+            },
+            "start_ns": 100516,
+            "end_ns": 103394,
+            "submit_ns": 100516,
+            "all_requests_formed_ns": 103142,
+            "before_all_requests_formed_ns": 2626,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 103478
+          },
+          {
+            "node_id": 5563,
+            "transfer_id": 4295086587,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2664
+            },
+            "start_ns": 97278,
+            "end_ns": 100194,
+            "submit_ns": 97278,
+            "all_requests_formed_ns": 99942,
+            "before_all_requests_formed_ns": 2664,
+            "after_all_requests_formed_ns": 252,
+            "transaction_done_ns": 100278
+          },
+          {
+            "node_id": 5551,
+            "transfer_id": 4295086584,
+            "on_representative_path": true,
+            "formation_queue_state_ns": {
+              "worker_full": 2314
+            },
+            "start_ns": 94328,
+            "end_ns": 96932,
+            "submit_ns": 94328,
+            "all_requests_formed_ns": 96642,
+            "before_all_requests_formed_ns": 2314,
+            "after_all_requests_formed_ns": 290,
+            "transaction_done_ns": 97016
+          }
+        ]
+      }
+    ],
+    "missing_queue_sources": [],
+    "per_producer_request_order": {
+      "records": 6144,
+      "sha256": "32b4aa2a843becfe78cf274e25980910f3a4cf4b2dd7a2ab43d0869160b2ad9f"
+    }
+  },
+  "per_producer_request_order_identical": true,
+  "scope": "Recorded time partition at local_read_complete; formation waits can depend on network responses, and post-formation time includes sender/network/receiver work. No independent switch-delay or removable-loss attribution.",
+  "program_sha256": "de0043eae6698a9c920a01c8659bf1e315ecf81313fc3bfa9fdbc8e122665df7",
+  "simulation_executed": false
+}

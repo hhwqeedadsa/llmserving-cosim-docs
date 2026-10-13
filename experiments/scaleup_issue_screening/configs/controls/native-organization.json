@@ -1,0 +1,25 @@
+{
+  "schema_version": "issue-screening-native-organization-control/1",
+  "platform_commit": "4e5fd4d",
+  "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+  "original_archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+  "attribute": "ns3::UbLdstThread::StoreQueuePolicy",
+  "before": "fifo",
+  "after": "producer_round_robin",
+  "fixed_attributes": {
+    "ns3::UbLdstInstance::ThreadNum": "1",
+    "ns3::UbLdstThread::StoreOutstanding": "32",
+    "ns3::UbLdstThread::LoadOutstanding": "32",
+    "ns3::UbLdstApi::RequestIdCount": "256",
+    "ns3::UbLdstThread::StoreRequestSize": "4096",
+    "ns3::UbLdstThread::LoadResponseSize": "4096",
+    "ns3::UbLdstApi::UsePacketSpray": "true",
+    "ns3::UbLdstApi::UseShortestPaths": "true"
+  },
+  "selection": {"rank_ids": [65, 70], "max_records": 100000, "max_snapshot_items": 4096, "max_request_records": 500000},
+  "order": "smallest nonempty producer initially; after each successful request choose the next greater nonempty producer, wrapping; cursor persists",
+  "fixed": ["all graph bytes and dependencies", "business input and placement", "compute durations", "core synchronization", "network and CBFC", "seed and run", "worker and total resource capacities", "each actual STORE byte range"],
+  "measure": ["original two contributions and eight status waits", "all actual latest consumers and tied completion gates", "last layer model compute end separately from network drain", "all STORE request ranges", "all planned tasks and compute", "port packet and business-byte redistribution"],
+  "interpretation": "Substantial changes weaken C1 as a hardware-independent measurement candidate. Unchanged behavior establishes robustness only to this reference organization. Earlier local status alone is not business benefit; track other gates. Network feedback is included, not an isolated pure FIFO penalty.",
+  "scope": "One FIFO equivalence check and one shared-budget round-robin run of the existing three-layer input. No synchronization change, capacity scan, E3 or E4."
+}

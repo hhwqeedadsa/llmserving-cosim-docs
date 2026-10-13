@@ -23,6 +23,123 @@ from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_request_order_allows_intercore_interleaving_but_detects_within_core_change(self):
+        from .organization_waits import request_order
+        def req(tid,producer):return dict(identity=dict(src_rank=0,producer=producer,graph_id='g0',transfer_id=tid,send_node_id=tid),offset=0,bytes=32)
+        a,b,c=req(1,0),req(2,0),req(3,1)
+        self.assertEqual(request_order([a,b,c]),request_order([a,c,b]))
+        self.assertNotEqual(request_order([a,b,c]),request_order([b,a,c]))
+
+    def test_formation_queue_accounting_checks_coverage_and_actual_membership(self):
+        from .organization_waits import formation_states
+        step={10:dict(start_ns=10,end_ns=50)}
+        actual={10:dict(src_rank=65,send_start_ns=10,data_ready_ns=50,transaction_done_ns=60,local_facts=dict(local_read_complete_ns=30))}
+        rows=[dict(sequence=1,rank_id=65,time_ns=0,event='initial',store_capacity=32,request_pool_capacity=256,
+                   store_inflight=0,pending=[],queue=[]),
+              dict(sequence=2,rank_id=65,time_ns=10,event='task_queued',store_capacity=32,request_pool_capacity=256,
+                   store_inflight=32,pending=[],queue=[dict(identity=dict(transfer_id=10))]),
+              dict(sequence=3,rank_id=65,time_ns=30,event='final',store_capacity=32,request_pool_capacity=256,
+                   store_inflight=0,pending=[],queue=[])]
+        capture=dict(policy=dict(rank_ids=[65]),records=3)
+        totals,missing=formation_states(iter(rows),step,actual,capture)
+        self.assertEqual(dict(totals[10]),{'worker_full':20});self.assertEqual(missing,[])
+        rows[1]['queue']=[]
+        with self.assertRaisesRegex(ValueError,'missing from actual queue'):formation_states(iter(rows),step,actual,capture)
+
+    def test_data_fence_partition_clips_request_formation_to_active_wait(self):
+        from .organization_waits import partition
+        actual=dict(send_start_ns=10,data_ready_ns=50,transaction_done_ns=80,local_facts=dict(local_read_complete_ns=30))
+        out=partition(dict(start_ns=10,end_ns=50),actual)
+        self.assertEqual((out['before_all_requests_formed_ns'],out['after_all_requests_formed_ns']),(20,20))
+        out=partition(dict(start_ns=40,end_ns=50),actual)
+        self.assertEqual((out['before_all_requests_formed_ns'],out['after_all_requests_formed_ns']),(0,10))
+        with self.assertRaises(ValueError):partition(dict(start_ns=10,end_ns=49),actual)
+
+    def test_selected_archive_records_resolve_hardlinks_without_skipping_fields(self):
+        from .organization import resolved_members
+        from .consumer_review import Archive
+        from .workflow import digest
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'records.tar.gz';data=b'payload'
+            with tarfile.open(path,'w:gz') as stream:
+                member=tarfile.TarInfo('first');member.size=len(data);stream.addfile(member,io.BytesIO(data))
+                member=tarfile.TarInfo('alias');member.type=tarfile.LNKTYPE;member.linkname='first';stream.addfile(member)
+            identity=dict(bytes=len(data),sha256=hashlib.sha256(data).hexdigest())
+            report=dict(verified=True,archive_sha256=digest(path),entries=dict(first=identity,alias=dict(identity)))
+            save(str(path)+'.json',report)
+            self.assertEqual(list(resolved_members(Archive(path),['alias'])),[('alias',data)])
+            report['entries']['alias']['sha256']='0'*64;save(str(path)+'.json',report)
+            with self.assertRaisesRegex(ValueError,'Hardlink inventory'):list(resolved_members(Archive(path),['alias']))
+
+    def test_queue_review_uses_next_producer_without_assuming_fifo_predecessors(self):
+        from .organization_review import queue_review
+        def task(tid,producer):return dict(task_id=tid,operation='STORE',remaining_bytes=32,
+            identity=dict(transfer_id=tid,producer=producer,src_rank=65))
+        target,other=task(10,5),task(20,0)
+        base=dict(rank_id=65,thread_id=0,store_capacity=32,request_pool_capacity=256,store_inflight=32,
+            store_queue_policy='producer_round_robin',last_store_producer=4,pending=[dict(request_id=i) for i in range(32)])
+        rows=[dict(base,sequence=1,time_ns=0,event='task_queued',affected=target,queue=[other,target]),
+              dict(base,sequence=2,time_ns=5,event='outstanding_blocked',affected=target,queue=[target,other]),
+              dict(base,sequence=3,time_ns=10,event='request_issued',affected=dict(target,offset=0,bytes=32),queue=[other])]
+        report=dict(native_queue_capture=dict(policy=dict(rank_ids=[65,70])))
+        with patch('experiments.scaleup_issue_screening.organization_review.checked_rows',return_value=iter(rows)):
+            out=queue_review('unused',report,{10:dict(src_rank=65,send_start_ns=0)})
+        status=out['statuses'][0]
+        self.assertEqual(status['wait_ns'],10)
+        self.assertEqual(status['state_duration_ns'],{'worker_full':10})
+        self.assertEqual(status['next_is_target_ns'],5)
+        self.assertEqual(status['next_producer_duration_ns'],{0:5,5:5})
+
+    def test_organization_actual_objects_and_comparison_reject_resource_drift(self):
+        from .organization_review import fixed_effective
+        from .compare_organization import compare
+        c=read(CONFIG/'controls/native-organization.json');key=c['attribute'];attrs=deepcopy(c['fixed_attributes'])
+        attrs[key]='fifo'
+        value=dict(attributes=attrs,object_validation='matched_before_business_activation',origins={},catalog={},objects=[
+            dict(node_id=0,role='native_thread:0',attributes={k:v for k,v in attrs.items() if 'UbLdstThread' in k}),
+            dict(node_id=0,role='native_instance',attributes={'ns3::UbLdstInstance::ThreadNum':'1'}),
+            dict(node_id=0,role='native_api',attributes={'ns3::UbLdstApi::RequestIdCount':'256'})])
+        rr=deepcopy(value);rr['attributes'][key]='producer_round_robin';rr['objects'][0]['attributes'][key]='producer_round_robin'
+        self.assertEqual(fixed_effective(value,'fifo'),fixed_effective(rr,'producer_round_robin'))
+        rr['objects'][0]['attributes']['ns3::UbLdstThread::StoreOutstanding']='64'
+        with self.assertRaisesRegex(ValueError,'object budget'):fixed_effective(rr,'producer_round_robin')
+        fields=('plan_files','executed_nodes','compute_cost_digest','request_range_digest','planned_transfer_digest',
+                'bytes_by_role','random','effective_readback')
+        a=dict.fromkeys(fields,'same');a.update(passed=True,mode='fifo')
+        for name in ('compute_cost_digest','request_range_digest','effective_readback'):
+            b=dict(a,mode='producer_round_robin');b[name]='changed'
+            with patch('experiments.scaleup_issue_screening.compare_organization.read',side_effect=[a,b]):
+                with self.assertRaisesRegex(ValueError,name):compare('a','b','ports-a','ports-b','out')
+
+    def test_organization_source_chain_keeps_ties_and_rejects_unexplained_gaps(self):
+        from .organization_review import source_chain
+        plan={0:dict(kind='COMP',name='expert',layer_id=7,deps=[]),
+              1:dict(kind='EVENT',name='data',event='data_ready',layer_id=7,deps=[0],transfer_id=10),
+              2:dict(kind='EVENT',name='status',event='local_read_complete',layer_id=7,deps=[0],transfer_id=11),
+              3:dict(kind='EVENT',name='barrier',layer_id=7,deps=[1,2]),
+              4:dict(kind='SEND',name='data-send',layer_id=7,deps=[3])}
+        times={i:dict(start_ns=a,end_ns=b) for i,(a,b) in enumerate([(0,10),(10,20),(10,20),(20,20),(20,30)])}
+        out=source_chain(plan,times,4,0)
+        self.assertEqual(out['expert_to_submit_ns'],10)
+        self.assertEqual({n['node_id'] for n in out['all_latest_dependency_dag']},{0,1,2,3})
+        self.assertEqual(sum(out['representative_components_ns'].values()),10)
+        times[3]['start_ns']=21;times[3]['end_ns']=21;times[4]['start_ns']=21
+        with self.assertRaisesRegex(ValueError,'scheduling gap'):source_chain(plan,times,4,0)
+
+    def test_queue_control_changes_only_policy_and_rejects_hidden_capacity(self):
+        from .organization import controlled_network
+        control=read(CONFIG/'controls/native-organization.json')
+        original=dict(attributes=deepcopy(control['fixed_attributes']),execution=dict(seed=1),profiles=dict(native=True))
+        for mode in ('fifo','producer_round_robin'):
+            changed=controlled_network(original,mode,control)
+            self.assertEqual(changed['attributes'].pop(control['attribute']),mode)
+            self.assertEqual(changed,original)
+        bad=deepcopy(original);bad['attributes']['ns3::UbLdstInstance::ThreadNum']='48'
+        with self.assertRaises(ValueError):controlled_network(bad,'producer_round_robin',control)
+        bad=deepcopy(original);bad['attributes']['ns3::UbLdstThread::StoreOutstanding']='64'
+        with self.assertRaises(ValueError):controlled_network(bad,'producer_round_robin',control)
+        with self.assertRaises(ValueError):controlled_network(original,'status_first',control)
+
     def test_consumer_completion_separates_status_local_work_resource_and_ties(self):
         from .consumer_review import completion_conditions
         def node(kind,name,deps,**kw):return dict(kind=kind,name=name,deps=deps,layer_id=7,**kw)

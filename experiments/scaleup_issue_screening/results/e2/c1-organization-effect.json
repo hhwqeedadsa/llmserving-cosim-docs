@@ -1,0 +1,2890 @@
+{
+  "schema_version": "issue-screening-organization-effect/1",
+  "passed": true,
+  "baseline": {
+    "path": "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/fifo-review.json",
+    "sha256": "a5892bd0d340f4adb1a934b2a6adfbf35b592adb32f09219aef28808df4780ca",
+    "manifest_sha256": "454decc2c59f8712aa1b27ab0634f214fa301f1ddb418f5a1ee6566cc828e1bd"
+  },
+  "control": {
+    "path": "/root/moe-ub-cosim/runs/scaleup_issue_screening/c1-organization-20261013/rr-review.json",
+    "sha256": "550ca1b969582ef67f76f86555c9870f4da5c48ee9b0d2a0105d6e72d68a3fa2",
+    "manifest_sha256": "fbbf7baabcd818a7be1abe46cc7a35bdf012370c9101929f599581355e269c4b"
+  },
+  "invariant_fields": [
+    "plan_files",
+    "executed_nodes",
+    "compute_cost_digest",
+    "request_range_digest",
+    "planned_transfer_digest",
+    "bytes_by_role",
+    "random",
+    "effective_readback"
+  ],
+  "all_native_STORE_ranges_identical": {
+    "records": 120980,
+    "sha256": "4e32dad9ddd516d1b9dc8b60540c64b024e46fbea586613483ba752577d9cf07",
+    "requests": 139139,
+    "all_native_STORE": true
+  },
+  "all_native_initiators": 128,
+  "original_status_contributions": [
+    {
+      "transfer_id": 4295045018,
+      "baseline": {
+        "transfer_id": 4295045018,
+        "rank_id": 70,
+        "submitted_ns": 55246,
+        "formed_ns": 57148,
+        "producer": 8,
+        "task_id": 77133,
+        "formed_sequence": 6722,
+        "wait_ns": 1902,
+        "state_duration_ns": {
+          "worker_full": 1902
+        },
+        "next_producer_duration_ns": {
+          "17": 5,
+          "18": 45,
+          "19": 38,
+          "20": 82,
+          "21": 42,
+          "22": 86,
+          "23": 35,
+          "24": 90,
+          "25": 79,
+          "27": 81,
+          "28": 46,
+          "29": 36,
+          "30": 41,
+          "31": 11,
+          "32": 72,
+          "33": 7,
+          "34": 33,
+          "35": 47,
+          "36": 43,
+          "37": 77,
+          "38": 217,
+          "39": 78,
+          "40": 35,
+          "41": 78,
+          "42": 57,
+          "43": 29,
+          "44": 76,
+          "45": 82,
+          "46": 82,
+          "47": 82,
+          "1": 4,
+          "0": 4,
+          "4": 1,
+          "2": 5,
+          "7": 32,
+          "6": 11,
+          "3": 1,
+          "5": 28,
+          "9": 4
+        },
+        "next_is_target_ns": 0,
+        "enqueue": {
+          "sequence": 5766,
+          "time_ns": 55246,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 69,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295045018,
+        "rank_id": 70,
+        "submitted_ns": 56517,
+        "formed_ns": 56716,
+        "producer": 8,
+        "task_id": 77133,
+        "formed_sequence": 6554,
+        "wait_ns": 199,
+        "state_duration_ns": {
+          "worker_full": 199
+        },
+        "next_producer_duration_ns": {
+          "33": 1,
+          "34": 12,
+          "35": 21,
+          "36": 1,
+          "37": 3,
+          "38": 3,
+          "39": 1,
+          "40": 13,
+          "42": 25,
+          "43": 4,
+          "44": 1,
+          "45": 31,
+          "46": 1,
+          "47": 2,
+          "0": 1,
+          "2": 3,
+          "3": 2,
+          "4": 1,
+          "5": 2,
+          "6": 10,
+          "7": 29,
+          "8": 32
+        },
+        "next_is_target_ns": 32,
+        "enqueue": {
+          "sequence": 6441,
+          "time_ns": 56517,
+          "policy": "producer_round_robin",
+          "last_store_producer": 32,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 29,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -1703
+    },
+    {
+      "transfer_id": 4295045021,
+      "baseline": {
+        "transfer_id": 4295045021,
+        "rank_id": 70,
+        "submitted_ns": 58475,
+        "formed_ns": 60251,
+        "producer": 8,
+        "task_id": 77136,
+        "formed_sequence": 7594,
+        "wait_ns": 1776,
+        "state_duration_ns": {
+          "worker_full": 1776
+        },
+        "next_producer_duration_ns": {
+          "17": 77,
+          "19": 48,
+          "24": 38,
+          "21": 64,
+          "20": 84,
+          "25": 36,
+          "22": 68,
+          "23": 85,
+          "27": 58,
+          "29": 24,
+          "46": 22,
+          "44": 14,
+          "28": 64,
+          "30": 64,
+          "31": 82,
+          "35": 43,
+          "36": 40,
+          "32": 79,
+          "45": 3,
+          "37": 78,
+          "38": 85,
+          "33": 64,
+          "39": 65,
+          "34": 118,
+          "40": 45,
+          "41": 41,
+          "47": 42,
+          "1": 25,
+          "0": 10,
+          "42": 86,
+          "4": 4,
+          "2": 1,
+          "7": 7,
+          "3": 28,
+          "6": 2,
+          "5": 2,
+          "9": 16,
+          "43": 32,
+          "11": 14,
+          "8": 18
+        },
+        "next_is_target_ns": 18,
+        "enqueue": {
+          "sequence": 7170,
+          "time_ns": 58475,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 64,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            11,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295045021,
+        "rank_id": 70,
+        "submitted_ns": 59582,
+        "formed_ns": 59875,
+        "producer": 8,
+        "task_id": 77136,
+        "formed_sequence": 7453,
+        "wait_ns": 293,
+        "state_duration_ns": {
+          "worker_full": 293
+        },
+        "next_producer_duration_ns": {
+          "25": 2,
+          "27": 1,
+          "28": 73,
+          "30": 2,
+          "31": 1,
+          "32": 1,
+          "35": 4,
+          "36": 1,
+          "37": 2,
+          "38": 37,
+          "39": 1,
+          "40": 34,
+          "41": 3,
+          "43": 1,
+          "44": 1,
+          "45": 2,
+          "47": 1,
+          "0": 1,
+          "1": 1,
+          "2": 37,
+          "3": 2,
+          "4": 1,
+          "5": 35,
+          "6": 4,
+          "7": 3,
+          "8": 42
+        },
+        "next_is_target_ns": 42,
+        "enqueue": {
+          "sequence": 7314,
+          "time_ns": 59582,
+          "policy": "producer_round_robin",
+          "last_store_producer": 24,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 28,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -1483
+    },
+    {
+      "transfer_id": 4295045024,
+      "baseline": {
+        "transfer_id": 4295045024,
+        "rank_id": 70,
+        "submitted_ns": 61784,
+        "formed_ns": 63205,
+        "producer": 8,
+        "task_id": 77139,
+        "formed_sequence": 8463,
+        "wait_ns": 1421,
+        "state_duration_ns": {
+          "worker_full": 1421
+        },
+        "next_producer_duration_ns": {
+          "18": 15,
+          "24": 26,
+          "17": 46,
+          "39": 2,
+          "19": 80,
+          "21": 101,
+          "25": 42,
+          "20": 91,
+          "41": 9,
+          "23": 57,
+          "42": 11,
+          "28": 69,
+          "27": 83,
+          "22": 26,
+          "30": 57,
+          "31": 24,
+          "29": 25,
+          "32": 51,
+          "35": 55,
+          "43": 10,
+          "38": 28,
+          "33": 103,
+          "46": 36,
+          "36": 32,
+          "47": 68,
+          "45": 25,
+          "1": 41,
+          "4": 2,
+          "2": 4,
+          "34": 55,
+          "7": 21,
+          "3": 18,
+          "6": 21,
+          "37": 10,
+          "40": 41,
+          "9": 6,
+          "10": 4,
+          "8": 26
+        },
+        "next_is_target_ns": 26,
+        "enqueue": {
+          "sequence": 8059,
+          "time_ns": 61784,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 61,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295045024,
+        "rank_id": 70,
+        "submitted_ns": 62825,
+        "formed_ns": 63093,
+        "producer": 8,
+        "task_id": 77139,
+        "formed_sequence": 8376,
+        "wait_ns": 268,
+        "state_duration_ns": {
+          "worker_full": 268
+        },
+        "next_producer_duration_ns": {
+          "32": 18,
+          "33": 42,
+          "34": 4,
+          "35": 15,
+          "36": 5,
+          "37": 7,
+          "38": 9,
+          "39": 26,
+          "40": 12,
+          "41": 8,
+          "42": 4,
+          "43": 1,
+          "44": 10,
+          "45": 3,
+          "46": 3,
+          "47": 22,
+          "0": 16,
+          "1": 15,
+          "2": 5,
+          "3": 1,
+          "4": 2,
+          "5": 18,
+          "6": 2,
+          "7": 2,
+          "8": 18
+        },
+        "next_is_target_ns": 18,
+        "enqueue": {
+          "sequence": 8250,
+          "time_ns": 62825,
+          "policy": "producer_round_robin",
+          "last_store_producer": 31,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 24,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            10,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -1153
+    },
+    {
+      "transfer_id": 4295045027,
+      "baseline": {
+        "transfer_id": 4295045027,
+        "rank_id": 70,
+        "submitted_ns": 65109,
+        "formed_ns": 66198,
+        "producer": 8,
+        "task_id": 77142,
+        "formed_sequence": 9323,
+        "wait_ns": 1089,
+        "state_duration_ns": {
+          "worker_full": 1089
+        },
+        "next_producer_duration_ns": {
+          "36": 1,
+          "17": 37,
+          "34": 37,
+          "25": 45,
+          "21": 52,
+          "28": 46,
+          "20": 72,
+          "19": 47,
+          "27": 37,
+          "23": 45,
+          "37": 35,
+          "29": 47,
+          "40": 7,
+          "30": 61,
+          "39": 50,
+          "22": 40,
+          "42": 45,
+          "43": 6,
+          "31": 35,
+          "46": 4,
+          "35": 77,
+          "47": 2,
+          "44": 1,
+          "45": 2,
+          "32": 80,
+          "0": 4,
+          "4": 1,
+          "7": 1,
+          "2": 32,
+          "3": 2,
+          "6": 38,
+          "9": 3,
+          "38": 42,
+          "33": 47,
+          "10": 7,
+          "8": 1
+        },
+        "next_is_target_ns": 1,
+        "enqueue": {
+          "sequence": 8975,
+          "time_ns": 65109,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 53,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            9,
+            10,
+            17,
+            19,
+            20,
+            21,
+            22,
+            23,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295045027,
+        "rank_id": 70,
+        "submitted_ns": 65966,
+        "formed_ns": 66367,
+        "producer": 8,
+        "task_id": 77142,
+        "formed_sequence": 9282,
+        "wait_ns": 401,
+        "state_duration_ns": {
+          "worker_full": 401
+        },
+        "next_producer_duration_ns": {
+          "20": 38,
+          "21": 3,
+          "22": 1,
+          "23": 30,
+          "24": 2,
+          "25": 3,
+          "28": 7,
+          "29": 1,
+          "30": 40,
+          "31": 6,
+          "32": 22,
+          "33": 1,
+          "34": 1,
+          "35": 1,
+          "36": 6,
+          "37": 45,
+          "38": 7,
+          "39": 24,
+          "40": 7,
+          "43": 1,
+          "44": 6,
+          "45": 1,
+          "46": 29,
+          "47": 7,
+          "0": 31,
+          "1": 4,
+          "2": 3,
+          "3": 1,
+          "4": 43,
+          "6": 4,
+          "7": 2,
+          "8": 24
+        },
+        "next_is_target_ns": 24,
+        "enqueue": {
+          "sequence": 9125,
+          "time_ns": 65966,
+          "policy": "producer_round_robin",
+          "last_store_producer": 19,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 34,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            7,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -688
+    },
+    {
+      "transfer_id": 4295086585,
+      "baseline": {
+        "transfer_id": 4295086585,
+        "rank_id": 65,
+        "submitted_ns": 97018,
+        "formed_ns": 98386,
+        "producer": 20,
+        "task_id": 118397,
+        "formed_sequence": 12001,
+        "wait_ns": 1368,
+        "state_duration_ns": {
+          "worker_full": 1368
+        },
+        "next_producer_duration_ns": {
+          "33": 11,
+          "34": 80,
+          "35": 207,
+          "36": 84,
+          "37": 40,
+          "38": 42,
+          "39": 76,
+          "40": 42,
+          "41": 52,
+          "42": 116,
+          "43": 82,
+          "44": 44,
+          "45": 80,
+          "46": 44,
+          "47": 82,
+          "22": 38,
+          "0": 2,
+          "4": 40,
+          "7": 4,
+          "2": 2,
+          "8": 1,
+          "3": 35,
+          "6": 7,
+          "5": 31,
+          "9": 2,
+          "12": 4,
+          "10": 2,
+          "13": 4,
+          "11": 32,
+          "14": 4,
+          "15": 34,
+          "16": 6,
+          "18": 4,
+          "23": 1,
+          "19": 5,
+          "25": 2,
+          "24": 1,
+          "20": 25
+        },
+        "next_is_target_ns": 25,
+        "enqueue": {
+          "sequence": 11631,
+          "time_ns": 97018,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 56,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24,
+            25,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295086585,
+        "rank_id": 65,
+        "submitted_ns": 96932,
+        "formed_ns": 97258,
+        "producer": 20,
+        "task_id": 118397,
+        "formed_sequence": 11666,
+        "wait_ns": 326,
+        "state_duration_ns": {
+          "worker_full": 326
+        },
+        "next_producer_duration_ns": {
+          "39": 2,
+          "40": 26,
+          "41": 2,
+          "42": 2,
+          "43": 2,
+          "44": 3,
+          "45": 1,
+          "46": 4,
+          "47": 1,
+          "0": 34,
+          "1": 2,
+          "2": 5,
+          "3": 26,
+          "4": 9,
+          "5": 1,
+          "6": 3,
+          "7": 69,
+          "8": 4,
+          "9": 4,
+          "10": 4,
+          "11": 36,
+          "12": 2,
+          "13": 32,
+          "14": 8,
+          "15": 2,
+          "16": 3,
+          "17": 4,
+          "18": 5,
+          "20": 30
+        },
+        "next_is_target_ns": 30,
+        "enqueue": {
+          "sequence": 11515,
+          "time_ns": 96932,
+          "policy": "producer_round_robin",
+          "last_store_producer": 38,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 31,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            22,
+            23,
+            24,
+            25,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -1042
+    },
+    {
+      "transfer_id": 4295086588,
+      "baseline": {
+        "transfer_id": 4295086588,
+        "rank_id": 65,
+        "submitted_ns": 100386,
+        "formed_ns": 101544,
+        "producer": 20,
+        "task_id": 118400,
+        "formed_sequence": 12925,
+        "wait_ns": 1158,
+        "state_duration_ns": {
+          "worker_full": 1158
+        },
+        "next_producer_duration_ns": {
+          "34": 35,
+          "35": 50,
+          "36": 82,
+          "37": 78,
+          "39": 48,
+          "40": 78,
+          "41": 79,
+          "46": 5,
+          "42": 77,
+          "38": 43,
+          "43": 46,
+          "0": 6,
+          "1": 28,
+          "7": 50,
+          "2": 2,
+          "3": 30,
+          "8": 4,
+          "44": 82,
+          "6": 14,
+          "47": 32,
+          "22": 42,
+          "5": 32,
+          "45": 44,
+          "9": 6,
+          "12": 4,
+          "10": 2,
+          "13": 26,
+          "11": 12,
+          "15": 32,
+          "17": 1,
+          "14": 5,
+          "23": 4,
+          "16": 28,
+          "18": 5,
+          "19": 2,
+          "25": 4,
+          "24": 7,
+          "21": 2,
+          "26": 30,
+          "20": 1
+        },
+        "next_is_target_ns": 1,
+        "enqueue": {
+          "sequence": 12574,
+          "time_ns": 100386,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 54,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295086588,
+        "rank_id": 65,
+        "submitted_ns": 100194,
+        "formed_ns": 100496,
+        "producer": 20,
+        "task_id": 118400,
+        "formed_sequence": 12583,
+        "wait_ns": 302,
+        "state_duration_ns": {
+          "worker_full": 302
+        },
+        "next_producer_duration_ns": {
+          "41": 2,
+          "42": 6,
+          "44": 34,
+          "45": 1,
+          "46": 3,
+          "47": 3,
+          "0": 1,
+          "1": 3,
+          "2": 3,
+          "3": 1,
+          "4": 27,
+          "5": 6,
+          "6": 2,
+          "7": 3,
+          "8": 29,
+          "9": 4,
+          "10": 3,
+          "11": 41,
+          "12": 2,
+          "13": 41,
+          "14": 3,
+          "16": 36,
+          "17": 6,
+          "18": 36,
+          "19": 1,
+          "20": 5
+        },
+        "next_is_target_ns": 5,
+        "enqueue": {
+          "sequence": 12445,
+          "time_ns": 100194,
+          "policy": "producer_round_robin",
+          "last_store_producer": 40,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 29,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            18,
+            19,
+            22,
+            23,
+            24,
+            26,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -856
+    },
+    {
+      "transfer_id": 4295086591,
+      "baseline": {
+        "transfer_id": 4295086591,
+        "rank_id": 65,
+        "submitted_ns": 103684,
+        "formed_ns": 104547,
+        "producer": 20,
+        "task_id": 118403,
+        "formed_sequence": 13818,
+        "wait_ns": 863,
+        "state_duration_ns": {
+          "worker_full": 863
+        },
+        "next_producer_duration_ns": {
+          "34": 2,
+          "35": 82,
+          "36": 46,
+          "47": 5,
+          "37": 37,
+          "45": 1,
+          "46": 44,
+          "39": 39,
+          "0": 35,
+          "4": 1,
+          "40": 38,
+          "1": 15,
+          "7": 29,
+          "2": 17,
+          "8": 21,
+          "42": 33,
+          "3": 10,
+          "41": 72,
+          "6": 13,
+          "5": 4,
+          "9": 1,
+          "12": 35,
+          "38": 5,
+          "10": 2,
+          "13": 5,
+          "11": 26,
+          "17": 9,
+          "23": 35,
+          "43": 54,
+          "22": 32,
+          "15": 4,
+          "25": 1,
+          "14": 11,
+          "16": 26,
+          "24": 13,
+          "18": 21,
+          "26": 2,
+          "19": 8,
+          "21": 5,
+          "20": 24
+        },
+        "next_is_target_ns": 24,
+        "enqueue": {
+          "sequence": 13504,
+          "time_ns": 103684,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 50,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295086591,
+        "rank_id": 65,
+        "submitted_ns": 103394,
+        "formed_ns": 103728,
+        "producer": 20,
+        "task_id": 118403,
+        "formed_sequence": 13477,
+        "wait_ns": 334,
+        "state_duration_ns": {
+          "worker_full": 334
+        },
+        "next_producer_duration_ns": {
+          "40": 8,
+          "41": 30,
+          "42": 2,
+          "45": 4,
+          "46": 4,
+          "0": 28,
+          "2": 4,
+          "3": 2,
+          "4": 2,
+          "6": 1,
+          "7": 5,
+          "9": 36,
+          "10": 32,
+          "11": 56,
+          "12": 2,
+          "13": 34,
+          "14": 2,
+          "15": 4,
+          "16": 36,
+          "17": 6,
+          "18": 32,
+          "19": 4
+        },
+        "next_is_target_ns": 0,
+        "enqueue": {
+          "sequence": 13339,
+          "time_ns": 103394,
+          "policy": "producer_round_robin",
+          "last_store_producer": 39,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 29,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            16,
+            17,
+            22,
+            23,
+            24,
+            25,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -529
+    },
+    {
+      "transfer_id": 4295086594,
+      "baseline": {
+        "transfer_id": 4295086594,
+        "rank_id": 65,
+        "submitted_ns": 106914,
+        "formed_ns": 107831,
+        "producer": 20,
+        "task_id": 118406,
+        "formed_sequence": 14784,
+        "wait_ns": 917,
+        "state_duration_ns": {
+          "worker_full": 917
+        },
+        "next_producer_duration_ns": {
+          "34": 41,
+          "45": 7,
+          "35": 75,
+          "0": 7,
+          "1": 1,
+          "46": 10,
+          "4": 17,
+          "36": 52,
+          "7": 38,
+          "2": 2,
+          "8": 2,
+          "6": 6,
+          "37": 34,
+          "3": 9,
+          "5": 12,
+          "9": 61,
+          "12": 3,
+          "10": 1,
+          "23": 34,
+          "39": 18,
+          "13": 28,
+          "17": 1,
+          "11": 1,
+          "25": 4,
+          "15": 28,
+          "26": 3,
+          "40": 46,
+          "24": 1,
+          "16": 2,
+          "42": 11,
+          "38": 72,
+          "14": 2,
+          "41": 63,
+          "18": 10,
+          "43": 16,
+          "21": 16,
+          "19": 45,
+          "44": 61,
+          "47": 37,
+          "20": 40
+        },
+        "next_is_target_ns": 40,
+        "enqueue": {
+          "sequence": 14451,
+          "time_ns": 106914,
+          "policy": "fifo",
+          "last_store_producer": null,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 51,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            23,
+            24,
+            25,
+            26,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "control": {
+        "transfer_id": 4295086594,
+        "rank_id": 65,
+        "submitted_ns": 106746,
+        "formed_ns": 107086,
+        "producer": 20,
+        "task_id": 118406,
+        "formed_sequence": 14390,
+        "wait_ns": 340,
+        "state_duration_ns": {
+          "worker_full": 340
+        },
+        "next_producer_duration_ns": {
+          "41": 8,
+          "42": 4,
+          "43": 26,
+          "44": 4,
+          "45": 4,
+          "46": 2,
+          "47": 1,
+          "0": 1,
+          "1": 1,
+          "2": 2,
+          "3": 1,
+          "4": 1,
+          "5": 3,
+          "6": 26,
+          "7": 8,
+          "8": 28,
+          "9": 16,
+          "11": 84,
+          "13": 42,
+          "14": 30,
+          "15": 6,
+          "16": 4,
+          "17": 2,
+          "18": 1,
+          "19": 29,
+          "20": 6
+        },
+        "next_is_target_ns": 6,
+        "enqueue": {
+          "sequence": 14249,
+          "time_ns": 106746,
+          "policy": "producer_round_robin",
+          "last_store_producer": 40,
+          "inflight": 32,
+          "pool_used": 32,
+          "other_tasks": 31,
+          "other_producers": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            23,
+            24,
+            25,
+            26,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        }
+      },
+      "wait_change_ns": -577
+    }
+  ],
+  "original_data_contributions": [
+    {
+      "transfer_id": 4295045029,
+      "baseline": {
+        "transfer_id": 4295045029,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "message_role": "data",
+        "reasons": [
+          "original key data"
+        ],
+        "producer": 8,
+        "first_request_ns": 67627,
+        "last_request_ns": 67636,
+        "request_ranges": [
+          [
+            0,
+            4096
+          ],
+          [
+            4096,
+            2048
+          ]
+        ],
+        "data_ready_ns": 68132,
+        "transaction_done_ns": 68216,
+        "chain": {
+          "source_expert_end_ns": 54198,
+          "submit_ns": 66218,
+          "expert_to_submit_ns": 12020,
+          "submit_dependency_ties": [
+            3279
+          ],
+          "all_latest_dependency_dag": [
+            {
+              "node_id": 3279,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 66198,
+              "end_ns": 66218,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3277
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3277,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 65109,
+              "end_ns": 66198,
+              "duration_ns": 1089,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3275
+              ],
+              "transfer_id": 4295045027
+            },
+            {
+              "node_id": 3275,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 65109,
+              "end_ns": 65109,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3273
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3273,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 63225,
+              "end_ns": 65109,
+              "duration_ns": 1884,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3267
+              ],
+              "transfer_id": 4295045026
+            },
+            {
+              "node_id": 3267,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 63205,
+              "end_ns": 63225,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3265
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3265,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 61784,
+              "end_ns": 63205,
+              "duration_ns": 1421,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3263
+              ],
+              "transfer_id": 4295045024
+            },
+            {
+              "node_id": 3263,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 61784,
+              "end_ns": 61784,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3261
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3261,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 60271,
+              "end_ns": 61784,
+              "duration_ns": 1513,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3255
+              ],
+              "transfer_id": 4295045023
+            },
+            {
+              "node_id": 3255,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 60251,
+              "end_ns": 60271,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3253
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3253,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 58475,
+              "end_ns": 60251,
+              "duration_ns": 1776,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3251
+              ],
+              "transfer_id": 4295045021
+            },
+            {
+              "node_id": 3251,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 58475,
+              "end_ns": 58475,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3246
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3246,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 57168,
+              "end_ns": 58475,
+              "duration_ns": 1307,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3243
+              ],
+              "transfer_id": 4295045019
+            },
+            {
+              "node_id": 3243,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 57148,
+              "end_ns": 57168,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3241
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3241,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 55246,
+              "end_ns": 57148,
+              "duration_ns": 1902,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3239
+              ],
+              "transfer_id": 4295045018
+            },
+            {
+              "node_id": 3239,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 55246,
+              "end_ns": 55246,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3234
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3234,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 54218,
+              "end_ns": 55246,
+              "duration_ns": 1028,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3231
+              ],
+              "transfer_id": 4295045016
+            },
+            {
+              "node_id": 3231,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 54198,
+              "end_ns": 54218,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                2708
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 2708,
+              "name": "combine-entry",
+              "kind": "barrier",
+              "start_ns": 54198,
+              "end_ns": 54198,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                2707
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 2707,
+              "boundary": "source routed expert end",
+              "end_ns": 54198
+            }
+          ],
+          "representative_path": [
+            3279,
+            3277,
+            3275,
+            3273,
+            3267,
+            3265,
+            3263,
+            3261,
+            3255,
+            3253,
+            3251,
+            3246,
+            3243,
+            3241,
+            3239,
+            3234,
+            3231,
+            2708
+          ],
+          "representative_components_ns": {
+            "result_pack": 100,
+            "local_read_complete": 6188,
+            "barrier": 0,
+            "data_ready": 5732
+          },
+          "path_reaches_expert": true,
+          "other_boundaries": [],
+          "scope": "All ties retained; components describe one equal-length elapsed path, not a sum across branches"
+        }
+      },
+      "control": {
+        "transfer_id": 4295045029,
+        "layer_id": 7,
+        "src_rank": 70,
+        "dst_rank": 27,
+        "message_role": "data",
+        "reasons": [
+          "original key data"
+        ],
+        "producer": 8,
+        "first_request_ns": 66799,
+        "last_request_ns": 67225,
+        "request_ranges": [
+          [
+            0,
+            4096
+          ],
+          [
+            4096,
+            2048
+          ]
+        ],
+        "data_ready_ns": 67477,
+        "transaction_done_ns": 67560,
+        "chain": {
+          "source_expert_end_ns": 53893,
+          "submit_ns": 66387,
+          "expert_to_submit_ns": 12494,
+          "submit_dependency_ties": [
+            3279
+          ],
+          "all_latest_dependency_dag": [
+            {
+              "node_id": 3279,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 66367,
+              "end_ns": 66387,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3277
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3277,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 65966,
+              "end_ns": 66367,
+              "duration_ns": 401,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3275
+              ],
+              "transfer_id": 4295045027
+            },
+            {
+              "node_id": 3275,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 65966,
+              "end_ns": 65966,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3273
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3273,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 63113,
+              "end_ns": 65966,
+              "duration_ns": 2853,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3267
+              ],
+              "transfer_id": 4295045026
+            },
+            {
+              "node_id": 3267,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 63093,
+              "end_ns": 63113,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3265
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3265,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 62825,
+              "end_ns": 63093,
+              "duration_ns": 268,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3263
+              ],
+              "transfer_id": 4295045024
+            },
+            {
+              "node_id": 3263,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 62825,
+              "end_ns": 62825,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3261
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3261,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 59895,
+              "end_ns": 62825,
+              "duration_ns": 2930,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3255
+              ],
+              "transfer_id": 4295045023
+            },
+            {
+              "node_id": 3255,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 59875,
+              "end_ns": 59895,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3253
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3253,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 59582,
+              "end_ns": 59875,
+              "duration_ns": 293,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3251
+              ],
+              "transfer_id": 4295045021
+            },
+            {
+              "node_id": 3251,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 59582,
+              "end_ns": 59582,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3249
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3249,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 56736,
+              "end_ns": 59582,
+              "duration_ns": 2846,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3243
+              ],
+              "transfer_id": 4295045020
+            },
+            {
+              "node_id": 3243,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 56716,
+              "end_ns": 56736,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3241
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3241,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 56517,
+              "end_ns": 56716,
+              "duration_ns": 199,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3239
+              ],
+              "transfer_id": 4295045018
+            },
+            {
+              "node_id": 3239,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 56517,
+              "end_ns": 56517,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3237
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 3237,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 53913,
+              "end_ns": 56517,
+              "duration_ns": 2604,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                3231
+              ],
+              "transfer_id": 4295045017
+            },
+            {
+              "node_id": 3231,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 53893,
+              "end_ns": 53913,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                2708
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 2708,
+              "name": "combine-entry",
+              "kind": "barrier",
+              "start_ns": 53893,
+              "end_ns": 53893,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                2707
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 2707,
+              "boundary": "source routed expert end",
+              "end_ns": 53893
+            }
+          ],
+          "representative_path": [
+            3279,
+            3277,
+            3275,
+            3273,
+            3267,
+            3265,
+            3263,
+            3261,
+            3255,
+            3253,
+            3251,
+            3249,
+            3243,
+            3241,
+            3239,
+            3237,
+            3231,
+            2708
+          ],
+          "representative_components_ns": {
+            "result_pack": 100,
+            "local_read_complete": 1161,
+            "barrier": 0,
+            "data_ready": 11233
+          },
+          "path_reaches_expert": true,
+          "other_boundaries": [],
+          "scope": "All ties retained; components describe one equal-length elapsed path, not a sum across branches"
+        }
+      }
+    },
+    {
+      "transfer_id": 4295086595,
+      "baseline": {
+        "transfer_id": 4295086595,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "message_role": "data",
+        "reasons": [
+          "original key data"
+        ],
+        "producer": 20,
+        "first_request_ns": 109487,
+        "last_request_ns": 109530,
+        "request_ranges": [
+          [
+            0,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "data_ready_ns": 110112,
+        "transaction_done_ns": 110196,
+        "chain": {
+          "source_expert_end_ns": 95268,
+          "submit_ns": 107851,
+          "expert_to_submit_ns": 12583,
+          "submit_dependency_ties": [
+            5593
+          ],
+          "all_latest_dependency_dag": [
+            {
+              "node_id": 5593,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 107831,
+              "end_ns": 107851,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5591
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5591,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 106914,
+              "end_ns": 107831,
+              "duration_ns": 917,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5589
+              ],
+              "transfer_id": 4295086594
+            },
+            {
+              "node_id": 5589,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 106914,
+              "end_ns": 106914,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5584
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5584,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 104567,
+              "end_ns": 106914,
+              "duration_ns": 2347,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5581
+              ],
+              "transfer_id": 4295086592
+            },
+            {
+              "node_id": 5581,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 104547,
+              "end_ns": 104567,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5579
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5579,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 103684,
+              "end_ns": 104547,
+              "duration_ns": 863,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5577
+              ],
+              "transfer_id": 4295086591
+            },
+            {
+              "node_id": 5577,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 103684,
+              "end_ns": 103684,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5572,
+                5575
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5575,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 101564,
+              "end_ns": 103684,
+              "duration_ns": 2120,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5569
+              ],
+              "transfer_id": 4295086590
+            },
+            {
+              "node_id": 5569,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 101544,
+              "end_ns": 101564,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5567
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5567,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 100386,
+              "end_ns": 101544,
+              "duration_ns": 1158,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5565
+              ],
+              "transfer_id": 4295086588
+            },
+            {
+              "node_id": 5565,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 100386,
+              "end_ns": 100386,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5563
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5563,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 98406,
+              "end_ns": 100386,
+              "duration_ns": 1980,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5557
+              ],
+              "transfer_id": 4295086587
+            },
+            {
+              "node_id": 5557,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 98386,
+              "end_ns": 98406,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5555
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5555,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 97018,
+              "end_ns": 98386,
+              "duration_ns": 1368,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5553
+              ],
+              "transfer_id": 4295086585
+            },
+            {
+              "node_id": 5553,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 97018,
+              "end_ns": 97018,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5551
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5551,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 95288,
+              "end_ns": 97018,
+              "duration_ns": 1730,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5545
+              ],
+              "transfer_id": 4295086584
+            },
+            {
+              "node_id": 5545,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 95268,
+              "end_ns": 95288,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                4299
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 4299,
+              "name": "combine-entry",
+              "kind": "barrier",
+              "start_ns": 95268,
+              "end_ns": 95268,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                4298
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 4298,
+              "boundary": "source routed expert end",
+              "end_ns": 95268
+            },
+            {
+              "node_id": 5572,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 101564,
+              "end_ns": 103684,
+              "duration_ns": 2120,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5569
+              ],
+              "transfer_id": 4295086589
+            }
+          ],
+          "representative_path": [
+            5593,
+            5591,
+            5589,
+            5584,
+            5581,
+            5579,
+            5577,
+            5572,
+            5569,
+            5567,
+            5565,
+            5563,
+            5557,
+            5555,
+            5553,
+            5551,
+            5545,
+            4299
+          ],
+          "representative_components_ns": {
+            "result_pack": 100,
+            "local_read_complete": 4306,
+            "barrier": 0,
+            "data_ready": 8177
+          },
+          "path_reaches_expert": true,
+          "other_boundaries": [],
+          "scope": "All ties retained; components describe one equal-length elapsed path, not a sum across branches"
+        }
+      },
+      "control": {
+        "transfer_id": 4295086595,
+        "layer_id": 8,
+        "src_rank": 65,
+        "dst_rank": 58,
+        "message_role": "data",
+        "reasons": [
+          "original key data"
+        ],
+        "producer": 20,
+        "first_request_ns": 107352,
+        "last_request_ns": 107721,
+        "request_ranges": [
+          [
+            0,
+            4096
+          ],
+          [
+            4096,
+            4096
+          ]
+        ],
+        "data_ready_ns": 108207,
+        "transaction_done_ns": 108291,
+        "chain": {
+          "source_expert_end_ns": 94308,
+          "submit_ns": 107106,
+          "expert_to_submit_ns": 12798,
+          "submit_dependency_ties": [
+            5593
+          ],
+          "all_latest_dependency_dag": [
+            {
+              "node_id": 5593,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 107086,
+              "end_ns": 107106,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5591
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5591,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 106746,
+              "end_ns": 107086,
+              "duration_ns": 340,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5589
+              ],
+              "transfer_id": 4295086594
+            },
+            {
+              "node_id": 5589,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 106746,
+              "end_ns": 106746,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5587
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5587,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 103748,
+              "end_ns": 106746,
+              "duration_ns": 2998,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5581
+              ],
+              "transfer_id": 4295086593
+            },
+            {
+              "node_id": 5581,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 103728,
+              "end_ns": 103748,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5579
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5579,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 103394,
+              "end_ns": 103728,
+              "duration_ns": 334,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5577
+              ],
+              "transfer_id": 4295086591
+            },
+            {
+              "node_id": 5577,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 103394,
+              "end_ns": 103394,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5575
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5575,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 100516,
+              "end_ns": 103394,
+              "duration_ns": 2878,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5569
+              ],
+              "transfer_id": 4295086590
+            },
+            {
+              "node_id": 5569,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 100496,
+              "end_ns": 100516,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5567
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5567,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 100194,
+              "end_ns": 100496,
+              "duration_ns": 302,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5565
+              ],
+              "transfer_id": 4295086588
+            },
+            {
+              "node_id": 5565,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 100194,
+              "end_ns": 100194,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5563
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5563,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 97278,
+              "end_ns": 100194,
+              "duration_ns": 2916,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5557
+              ],
+              "transfer_id": 4295086587
+            },
+            {
+              "node_id": 5557,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 97258,
+              "end_ns": 97278,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5555
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5555,
+              "name": "local-read-complete",
+              "kind": "local_read_complete",
+              "start_ns": 96932,
+              "end_ns": 97258,
+              "duration_ns": 326,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5553
+              ],
+              "transfer_id": 4295086585
+            },
+            {
+              "node_id": 5553,
+              "name": "combine-data-fence",
+              "kind": "barrier",
+              "start_ns": 96932,
+              "end_ns": 96932,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5551
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 5551,
+              "name": "copy-fence",
+              "kind": "data_ready",
+              "start_ns": 94328,
+              "end_ns": 96932,
+              "duration_ns": 2604,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                5545
+              ],
+              "transfer_id": 4295086584
+            },
+            {
+              "node_id": 5545,
+              "name": "combine-result-pack",
+              "kind": "result_pack",
+              "start_ns": 94308,
+              "end_ns": 94328,
+              "duration_ns": 20,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                4299
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 4299,
+              "name": "combine-entry",
+              "kind": "barrier",
+              "start_ns": 94308,
+              "end_ns": 94308,
+              "duration_ns": 0,
+              "ready_to_start_ns": 0,
+              "latest_dependency_ties": [
+                4298
+              ],
+              "transfer_id": null
+            },
+            {
+              "node_id": 4298,
+              "boundary": "source routed expert end",
+              "end_ns": 94308
+            }
+          ],
+          "representative_path": [
+            5593,
+            5591,
+            5589,
+            5587,
+            5581,
+            5579,
+            5577,
+            5575,
+            5569,
+            5567,
+            5565,
+            5563,
+            5557,
+            5555,
+            5553,
+            5551,
+            5545,
+            4299
+          ],
+          "representative_components_ns": {
+            "result_pack": 100,
+            "local_read_complete": 1302,
+            "barrier": 0,
+            "data_ready": 11396
+          },
+          "path_reaches_expert": true,
+          "other_boundaries": [],
+          "scope": "All ties retained; components describe one equal-length elapsed path, not a sum across branches"
+        }
+      }
+    }
+  ],
+  "last_model_compute_end_ns": {
+    "baseline": 110792,
+    "control": 109847
+  },
+  "modeled_end_reduction_percent": 0.8529496714564229,
+  "model_layer_end_ns": {
+    "baseline": {
+      "6": 28998,
+      "7": 68812,
+      "8": 110792
+    },
+    "control": {
+      "6": 28272,
+      "7": 68463,
+      "8": 109847
+    }
+  },
+  "actual_last_consumers": {
+    "baseline": [
+      {
+        "layer_id": 7,
+        "combine_end_ns": 68720,
+        "ranks": [
+          27
+        ]
+      },
+      {
+        "layer_id": 8,
+        "combine_end_ns": 110700,
+        "ranks": [
+          58
+        ]
+      }
+    ],
+    "control": [
+      {
+        "layer_id": 7,
+        "combine_end_ns": 68371,
+        "ranks": [
+          10
+        ]
+      },
+      {
+        "layer_id": 8,
+        "combine_end_ns": 109755,
+        "ranks": [
+          34
+        ]
+      }
+    ]
+  },
+  "simulation_end_ns": {
+    "baseline": 110792,
+    "control": 109847
+  },
+  "physical_packets": {
+    "baseline": {
+      "arrived_packets": 1050887,
+      "idle": true,
+      "started_packets": 1050887
+    },
+    "control": {
+      "arrived_packets": 1050887,
+      "idle": true,
+      "started_packets": 1050887
+    }
+  },
+  "port_totals": {
+    "baseline": {
+      "packets": 772595,
+      "packet_bytes": 387691112,
+      "business_data": 360815616,
+      "dispatch_count": 8601600,
+      "combine_flag": 536928,
+      "attached_metadata": 268464
+    },
+    "control": {
+      "packets": 772597,
+      "packet_bytes": 387691192,
+      "attached_metadata": 268464,
+      "business_data": 360815616,
+      "dispatch_count": 8601600,
+      "combine_flag": 536928
+    }
+  },
+  "ports_compared": 2688,
+  "ports_with_changed_packets": 2637,
+  "ports_with_changed_wire_bytes": 2688,
+  "ports_with_changed_business_byte_hops": 2657,
+  "scope": "One dependency-driven fixed-budget organization control; network feedback included; no hardware calibration or independent statistical repeat",
+  "program_sha256": "e74b1c67f0ca5f32b165548294c7da18f5181431f4ecbc8579d38c375fd97123"
+}

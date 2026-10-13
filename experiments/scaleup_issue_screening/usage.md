@@ -252,6 +252,17 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 
 ## C1 原生请求队列核验
 
+只补查最晚消费者的完整完成依赖时，无须恢复目录或执行仿真：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.consumer_review \
+  --plan-archive runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz \
+  --archive runs/scaleup_issue_screening/c1-mechanism-20261012/quota64.tar.gz \
+  --output runs/scaleup_issue_screening/consumer-review-new.json
+```
+
+`--plan-archive` 提供同一业务图，`--archive` 提供待分析执行；分析基线时两者可指向同一原归档。命令核验归档及逐成员摘要，输出完整归约输入、各核发送屏障、并列最晚依赖、实际资源占用者、后续计算和未展开的回调边界。输出路径须为新路径，相邻 `-resources` 目录保存预算与退出状态。它读取内部事实，属于研究核验，不能用于受限观测算法。
+
 `native_review` 是本实验的研究者核验入口，会读内部真值。它复用原冻结图，选择 rank 70、65 从零时刻至 120000 ns 的完整请求队列，最多 100000 条记录、每条最多 4096 个队列或在途项。平台格式和独立合成示例见[请求队列诊断](../../docs/record_storage.md#原生请求队列诊断)与[小例](../../examples/native_first_round/README.md)。
 
 先按上节恢复 `g0-b2-short` 到一个新目录。以下采用 `restored-g0-b2-short`，后端指向本次隔离构建；其他机器可替换路径。`--platform-commit` 必须与本机实际平台源码、锁文件和子模块一致，不绕过版本检查。原实验 `workflow` 的旧平台固定条件继续保留。

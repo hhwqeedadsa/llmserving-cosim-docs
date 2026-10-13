@@ -23,6 +23,42 @@ from moe_ub_cosim.route_evidence import validate_manifest
 
 
 class Checks(unittest.TestCase):
+    def test_consumer_completion_separates_status_local_work_resource_and_ties(self):
+        from .consumer_review import completion_conditions
+        def node(kind,name,deps,**kw):return dict(kind=kind,name=name,deps=deps,layer_id=7,**kw)
+        plan={0:node('EVENT','combine-entry',[]),
+              1:node('RECV','data',[0],transfer_id=1),2:node('RECV','status',[0],transfer_id=2),
+              3:node('EVENT','combine-core-sends-complete',[0]),
+              4:node('COMP','combine-token-reduction',[1,2,3],resource_id='aiv:0'),
+              5:node('EVENT','combine-operator-complete',[3,4])}
+        spans={0:(0,10),1:(10,30),2:(10,40),3:(10,10),4:(40,45),5:(45,45)}
+        times={i:dict(start_ns=a,end_ns=b) for i,(a,b) in spans.items()}
+        transfers={i:dict(transfer_id=i,src_rank=0,dst_rank=1,ub_task_id=i,message_role=role)
+                   for i,role in [(1,'data'),(2,'status')]}
+        actual={i:dict(data_ready_ns=t,send_start_ns=0,transaction_done_ns=100) for i,t in [(1,30),(2,40)]}
+        out=completion_conditions(plan,times,transfers,actual,5,7)
+        self.assertEqual(out['all_token_reductions'][0]['latest_dependency_ties'],[2])
+        self.assertEqual(out['latest_completion_dag'][-1]['condition'],'incoming_status')
+        # The local core may finish after both incoming callbacks.
+        plan[6]=node('EVENT','copy-fence',[0],transfer_id=3,event='data_ready')
+        plan[3]['deps']=[6];times[6]=dict(start_ns=10,end_ns=60)
+        times[3]=dict(start_ns=60,end_ns=60);times[4]=dict(start_ns=60,end_ns=65);times[5]=dict(start_ns=65,end_ns=65)
+        transfers[3]=dict(transfer_id=3,src_rank=1,dst_rank=2,ub_task_id=3,message_role='status')
+        actual[3]=dict(data_ready_ns=60,send_start_ns=10,transaction_done_ns=150)
+        out=completion_conditions(plan,times,transfers,actual,5,7)
+        self.assertEqual(out['all_token_reductions'][0]['latest_dependency_ties'],[3])
+        self.assertEqual(out['latest_completion_dag'][-1]['condition'],'local_send_data_ready')
+        # Retain tied local/status readiness, then account actual resource use.
+        times[2]['end_ns']=60;actual[2]['data_ready_ns']=60
+        plan[7]=node('COMP','other-compute',[0],resource_id='aiv:0');times[7]=dict(start_ns=50,end_ns=70)
+        times[4]=dict(start_ns=70,end_ns=75);times[5]=dict(start_ns=75,end_ns=75)
+        out=completion_conditions(plan,times,transfers,actual,5,7)
+        reduction=out['all_token_reductions'][0]
+        self.assertEqual(reduction['latest_dependency_ties'],[2,3])
+        self.assertEqual(reduction['ready_to_start_ns'],10)
+        self.assertEqual([p['node_id'] for p in reduction['resource_owners']],[7])
+        self.assertEqual(reduction['unexplained_scheduling_ns'],0)
+
     def test_control_pairing_rejects_workload_changes_and_duplicate_ranks(self):
         summary=dict(requests=2,semantic_workload_sha256_by_layer={'7':'fixed'})
         records=[dict(layer_id=7,kind='combine',rank_id=r,workload=dict(routed_inputs=2),end_ns=20) for r in (0,1)]

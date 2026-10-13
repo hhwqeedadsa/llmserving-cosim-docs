@@ -61,6 +61,8 @@ void UbLdstInstance::Init(uint32_t nodeId)
     for (uint32_t threadId = 0; threadId < m_threadNum; threadId++) {
         auto ldstThread = CreateObject<UbLdstThread>();
         ldstThread->Init();
+        if (ldstThread->GetStoreQueuePolicy() != "fifo" && m_threadNum != 1)
+            throw std::invalid_argument("Producer round robin requires exactly one LDST thread");
         ldstThread->SetNode(nodeId);
         ldstThread->SetThreadId(threadId);
         m_threads.push_back(ldstThread);
@@ -84,7 +86,8 @@ void UbLdstInstance::SetClientCallback(Callback<void, uint32_t> cb)
 }
 
 void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length, uint32_t taskId, uint32_t priority,
-                                    UbMemOperationType type, const std::vector<uint32_t> &threadIds, uint64_t address)
+                                    UbMemOperationType type, const std::vector<uint32_t> &threadIds, uint64_t address,
+                                    std::optional<uint32_t> producer)
 {
     if (!length || threadIds.empty() || src == dest || src != GetObject<Node>()->GetId() || priority > UB_PRIORITY_MAX ||
         (type != UbMemOperationType::STORE && type != UbMemOperationType::LOAD) ||
@@ -94,6 +97,9 @@ void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length
     for (auto id : threadIds) {
         if (id >= m_threads.size() || !unique.insert(id).second)
             throw std::invalid_argument("Invalid or repeated LDST thread");
+        if (type == UbMemOperationType::STORE &&
+            m_threads[id]->GetStoreQueuePolicy() != "fifo" && !producer)
+            throw std::invalid_argument("Producer round robin STORE requires a static producer identity");
     }
     // Never create zero-byte segments (e.g. one byte with 48 workers).
     uint32_t threadsNum = std::min<uint32_t>(threadIds.size(), length);
@@ -117,6 +123,7 @@ void UbLdstInstance::HandleLdstTask(uint32_t src, uint32_t dest, uint32_t length
         taskSegment->SetPriority(static_cast<uint8_t>(priority)); 
         taskSegment->SetSize(segmentSize);
         taskSegment->SetTaskOffset(offset);
+        taskSegment->SetProducer(producer);
         offset += segmentSize;
         taskSegment->SetTaskId(taskId);
         taskSegment->SetTaskSegmentId(m_currentTaskId);

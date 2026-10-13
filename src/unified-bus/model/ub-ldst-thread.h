@@ -20,7 +20,9 @@ public:
     bool IsIdle() const;
     uint32_t GetOutstandingCount() const { return m_storeInFlight + m_loadInFlight; }
     size_t GetWaitingSegmentCount() const { return m_waitingAckNum.size(); }
-    size_t GetQueuedSegmentCount() const { return m_loadQueue.size() + m_storeQueue.size(); }
+    size_t GetQueuedSegmentCount() const;
+    const std::string& GetStoreQueuePolicy() const { return m_storeQueuePolicy; }
+    std::optional<uint32_t> GetLastStoreProducer() const { return m_lastStoreProducer; }
     void PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment);
     void HandleTaskSegment();
     void SetNode(uint32_t nodeId);
@@ -37,6 +39,8 @@ public:
     void SetStoreReqLength(uint32_t length);
     void SetLoadRspLength(uint32_t length);
 private:
+    Ptr<UbLdstTaskSegment> NextStore() const;
+    void StoreIssued(Ptr<UbLdstTaskSegment> segment);
     void ObserveQueue(const std::string& event, Ptr<UbLdstTaskSegment> segment,
                       uint64_t offset = 0, uint32_t bytes = 0);
     TracedCallback<Ptr<const UbLdstThread>, std::string, Ptr<const UbLdstTaskSegment>, uint64_t, uint32_t> m_queueState;
@@ -45,6 +49,9 @@ private:
     uint32_t m_threadId;
     std::queue<Ptr<UbLdstTaskSegment>> m_loadQueue;
     std::queue<Ptr<UbLdstTaskSegment>> m_storeQueue;
+    std::map<uint32_t, std::queue<Ptr<UbLdstTaskSegment>>> m_storeProducers;
+    std::optional<uint32_t> m_lastStoreProducer;
+    std::string m_storeQueuePolicy;
 
     uint32_t m_loadRspSize = 0;
     uint32_t m_storeReqSize = 0;

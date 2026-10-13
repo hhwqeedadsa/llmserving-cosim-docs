@@ -81,6 +81,7 @@ public:
         bool hasSrcEntityId{false};
         bool hasDstEntityId{false};
         bool hasPhaseDependencies{false};
+        std::optional<uint32_t> nativeProducer; // Internal static work assignment, not wire metadata.
     };
 
     struct TaskCleanupInfo

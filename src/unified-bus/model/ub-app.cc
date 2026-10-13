@@ -360,7 +360,8 @@ void UbApp::ExecuteTraffic(UbTrafficGen::RuntimeTask task)
                                      task.priority,
                                      type,
                                      threadIds,
-                                     0);
+                                     0,
+                                     task.nativeProducer);
     } else if (task.op == UbTrafficGen::RuntimeTaskOp::URMA_WRITE ||
                task.op == UbTrafficGen::RuntimeTaskOp::URMA_READ) {
         if (m_transportMode == TransportMode::CTP)

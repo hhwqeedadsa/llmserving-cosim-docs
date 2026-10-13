@@ -9,6 +9,7 @@
 
 #include <bitset>
 #include <cstdint>
+#include <optional>
 
 namespace ns3 {
 
@@ -250,7 +251,13 @@ public:
 
     uint64_t GetTaskOffset() const { return m_taskOffset; }
     void SetTaskOffset(uint64_t offset) { m_taskOffset = offset; }
+    // Simulator-only producer identity; never serialized into a packet.
+    std::optional<uint32_t> GetProducer() const { return m_producer; }
+    void SetProducer(std::optional<uint32_t> producer) { m_producer = producer; }
 
+private:
+    std::optional<uint32_t> m_producer;
+public:
     // ========== 任务描述信息 ==========
     uint32_t GetSrc() const
     {

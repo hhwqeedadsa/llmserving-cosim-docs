@@ -21,6 +21,11 @@ TypeId UbLdstThread::GetTypeId(void)
     static TypeId tid = TypeId("ns3::UbLdstThread")
                             .SetParent<Object>()
                             .SetGroupName("UnifiedBus")
+                            .AddAttribute("StoreQueuePolicy",
+                                          "STORE queue organization: fifo or producer_round_robin; one shared worker budget.",
+                                          StringValue("fifo"),
+                                          MakeStringAccessor(&UbLdstThread::m_storeQueuePolicy),
+                                          MakeStringChecker())
                             .AddAttribute("StoreOutstanding",
                                           "Maximum number of outstanding STORE requests this thread may issue.",
                                           UintegerValue(64),
@@ -76,6 +81,8 @@ uint32_t UbLdstThread::CalcLength(uint32_t size)
 
 void UbLdstThread::Init()
 {
+    if (m_storeQueuePolicy != "fifo" && m_storeQueuePolicy != "producer_round_robin")
+        throw std::invalid_argument("Unknown STORE queue policy");
     m_loadRspLength = CalcLength(m_loadRspSize);
     m_storeReqLength = CalcLength(m_storeReqSize);
     // Reset Size
@@ -103,6 +110,8 @@ void UbLdstThread::SetLoadRspLength(uint32_t length)
 void UbLdstThread::PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment)
 {
     if (taskSegment->GetType() == UbMemOperationType::STORE) {
+        if (m_storeQueuePolicy != "fifo" && !taskSegment->GetProducer())
+            throw std::invalid_argument("Producer round robin STORE requires a static producer identity");
         taskSegment->SetPacketInfo(64 * (1 << m_storeReqLength), m_storeReqLength);
     } else if (taskSegment->GetType() == UbMemOperationType::LOAD) {
         taskSegment->SetPacketInfo(m_loadReqSize, m_loadRspLength);
@@ -119,7 +128,8 @@ void UbLdstThread::PushTaskSegment(Ptr<UbLdstTaskSegment> taskSegment)
         m_loadQueue.push(taskSegment);
         ScheduleWork();
     } else if (taskSegment->GetType() == UbMemOperationType::STORE) {
-        m_storeQueue.push(taskSegment);
+        if (m_storeQueuePolicy == "fifo") m_storeQueue.push(taskSegment);
+        else m_storeProducers[*taskSegment->GetProducer()].push(taskSegment);
         ScheduleWork();
     }
     ObserveQueue("task_queued", taskSegment);
@@ -130,7 +140,50 @@ std::vector<Ptr<const UbLdstTaskSegment>> UbLdstThread::GetQueueSnapshot(bool lo
     auto queue = load ? m_loadQueue : m_storeQueue;
     std::vector<Ptr<const UbLdstTaskSegment>> result;
     while (!queue.empty()) { result.push_back(queue.front()); queue.pop(); }
+    if (!load && !m_storeProducers.empty()) {
+        auto begin = m_lastStoreProducer ? m_storeProducers.upper_bound(*m_lastStoreProducer)
+                                         : m_storeProducers.begin();
+        if (begin == m_storeProducers.end()) begin = m_storeProducers.begin();
+        auto it = begin;
+        do {
+            auto tasks = it->second;
+            while (!tasks.empty()) { result.push_back(tasks.front()); tasks.pop(); }
+            if (++it == m_storeProducers.end()) it = m_storeProducers.begin();
+        } while (it != begin);
+    }
     return result;
+}
+
+size_t UbLdstThread::GetQueuedSegmentCount() const
+{
+    size_t count = m_loadQueue.size() + m_storeQueue.size();
+    for (const auto& [producer, queue] : m_storeProducers) count += queue.size();
+    return count;
+}
+
+Ptr<UbLdstTaskSegment> UbLdstThread::NextStore() const
+{
+    if (m_storeQueuePolicy == "fifo") return m_storeQueue.empty() ? nullptr : m_storeQueue.front();
+    if (m_storeProducers.empty()) return nullptr;
+    auto it = m_lastStoreProducer ? m_storeProducers.upper_bound(*m_lastStoreProducer)
+                                  : m_storeProducers.begin();
+    if (it == m_storeProducers.end()) it = m_storeProducers.begin();
+    return it->second.front();
+}
+
+void UbLdstThread::StoreIssued(Ptr<UbLdstTaskSegment> segment)
+{
+    if (m_storeQueuePolicy == "fifo") {
+        if (segment->IsSentCompleted()) m_storeQueue.pop();
+        return;
+    }
+    // Advance only after a request was formed. A task leaves its producer
+    // queue after its last request, independently of transaction retirement.
+    const auto producer = *segment->GetProducer();
+    m_lastStoreProducer = producer;
+    auto& queue = m_storeProducers.at(producer);
+    if (segment->IsSentCompleted()) queue.pop();
+    if (queue.empty()) m_storeProducers.erase(producer);
 }
 
 void UbLdstThread::ObserveQueue(const std::string& event, Ptr<UbLdstTaskSegment> segment,
@@ -175,16 +228,7 @@ void UbLdstThread::HandleStoreTask()
 {
     NS_LOG_DEBUG("[UbLdstThread HandleStoreTask]");
     while (m_storeInFlight < m_storeOutstanding) {
-        Ptr<UbLdstTaskSegment> taskSegment = nullptr;
-        while (!m_storeQueue.empty()) {
-            taskSegment = m_storeQueue.front();
-            if (taskSegment->PeekNextDataSize() == 0) {
-                m_storeQueue.pop();
-                taskSegment = nullptr;
-            } else {
-                break;
-            }
-        }
+        auto taskSegment = NextStore();
         if (taskSegment == nullptr) {
             return;
         }
@@ -197,10 +241,10 @@ void UbLdstThread::HandleStoreTask()
             return;
         }
         ++m_storeInFlight;
-        if (taskSegment->IsSentCompleted()) m_storeQueue.pop();
+        StoreIssued(taskSegment);
         ObserveQueue("request_issued", taskSegment, offset, bytes);
     }
-    if (!m_storeQueue.empty()) ObserveQueue("outstanding_blocked", m_storeQueue.front());
+    if (auto next = NextStore()) ObserveQueue("outstanding_blocked", next);
 }
 
 void UbLdstThread::SetNode(uint32_t nodeId)
@@ -233,7 +277,7 @@ void UbLdstThread::UpdateTask(Ptr<UbLdstTaskSegment> taskSegment, uint64_t offse
 
 void UbLdstThread::ScheduleWork()
 {
-    if ((!m_loadQueue.empty() || !m_storeQueue.empty()) && !m_workEvent.IsPending())
+    if ((!m_loadQueue.empty() || !m_storeQueue.empty() || !m_storeProducers.empty()) && !m_workEvent.IsPending())
         m_workEvent = Simulator::ScheduleNow(&UbLdstThread::HandleTaskSegment, this);
 }
 
@@ -246,7 +290,7 @@ void UbLdstThread::HandleTaskSegment()
 bool UbLdstThread::IsIdle() const
 {
     return !m_workEvent.IsPending() && m_waitingAckNum.empty() &&
-           m_loadQueue.empty() && m_storeQueue.empty() && !GetOutstandingCount();
+           m_loadQueue.empty() && m_storeQueue.empty() && m_storeProducers.empty() && !GetOutstandingCount();
 }
 
 void UbLdstThread::DoDispose()
@@ -255,6 +299,8 @@ void UbLdstThread::DoDispose()
     m_waitingAckNum.clear();
     m_loadQueue = {};
     m_storeQueue = {};
+    m_storeProducers.clear();
+    m_lastStoreProducer.reset();
     m_loadInFlight = m_storeInFlight = 0;
     Object::DoDispose();
 }

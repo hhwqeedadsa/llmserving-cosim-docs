@@ -1,0 +1,976 @@
+{
+  "schema_version": "issue-network-discovery-verification/1",
+  "source_case": "g0-b8-short",
+  "request_count": 1024,
+  "source_archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+  "slice_sha256": "9c25156c6f811205722d759040d519e3e75a22a101d87fa9385d7bae7ba54bcd",
+  "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+  "passive_equivalence_passed": true,
+  "fixed_fields": [
+    "plan_files",
+    "planned_transfers",
+    "computation_costs",
+    "executed_node_counts",
+    "fixed_actual_objects",
+    "fixed_attributes",
+    "random",
+    "backend_sha256"
+  ],
+  "fixed_values": {
+    "planned_transfers": {
+      "records": 194926,
+      "sha256": "e5bbdb0a78d827213072510052f6211b2d935b192065cd481068566bceccc1a4"
+    },
+    "computation_costs": {
+      "records": 74880,
+      "sha256": "ca79ee460b2e0ffbc28cdc73ea0da4ab936042ae93d129b91d84448fc07515cd"
+    },
+    "executed_node_counts": {
+      "COMP": 74880,
+      "EVENT": 508892,
+      "RECV": 194926,
+      "SEND": 194926
+    },
+    "fixed_actual_objects": {
+      "records": 161408,
+      "sha256": "dbd3b41c395890c50f9d9229fe28e084bd492c9c7ad06a78087a2380e2d476f5"
+    },
+    "random": {
+      "run": 1,
+      "seed": 1
+    },
+    "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5"
+  },
+  "actual_service": {
+    "intervals": [
+      {
+        "base_rate_bps": 400000000000,
+        "end_ns": 114000,
+        "node_id": 802,
+        "port_id": 6,
+        "rate_bps": 800000000000,
+        "start_ns": 83000
+      }
+    ],
+    "selection": "rate_at_successful_packet_start"
+  },
+  "effective_object_review": {
+    "original_effective_sha256": "cf0f70951d4859eb0bd8119f2a3ca228948cd70c50af17c3874b5870372842c2",
+    "network_sha256": "a7823f77e5383a61a1e5babdf8a53b0daa16d757e2d4e35532eb731a6b99ab7f",
+    "selection_sha256": "ceaa97bb50a25303144432dd99a7c5e9eac73a011ac2408dc82e898e6c944cbe",
+    "points": [
+      {
+        "candidate_id": "N1",
+        "link": {
+          "delay_ns": 20,
+          "dst": 802,
+          "dst_port": 6,
+          "rate_bps": 400000000000,
+          "src": 70,
+          "src_port": 6
+        },
+        "objects": [
+          {
+            "attributes": {
+              "ns3::UbSwitch::FlowControl": "CBFC",
+              "ns3::UbSwitch::InPortProcessingDelay": "+0ns",
+              "ns3::UbSwitch::VlScheduler": "SP"
+            },
+            "node_id": 70,
+            "role": "switch"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitchAllocator::AllocationTime": "+1ns"
+            },
+            "node_id": 70,
+            "role": "allocator"
+          },
+          {
+            "attributes": {
+              "ns3::PointToPointNetDevice::Address": "00:00:00:00:01:f1",
+              "ns3::PointToPointNetDevice::DataRate": "32768bps",
+              "ns3::PointToPointNetDevice::InterframeGap": "+0ns",
+              "ns3::PointToPointNetDevice::Mtu": "1500",
+              "ns3::PointToPointNetDevice::ReceiveErrorModel": "0",
+              "ns3::PointToPointNetDevice::TxQueue": "0",
+              "ns3::UbPort::CbfcCtrlCrdRtrThldCell": "1024",
+              "ns3::UbPort::CbfcFlitLenByte": "20",
+              "ns3::UbPort::CbfcFlitsPerCell": "8",
+              "ns3::UbPort::CbfcInitCreditCell": "6553",
+              "ns3::UbPort::CbfcRetCellGrainControlPacket": "32",
+              "ns3::UbPort::CbfcRetCellGrainDataPacket": "4",
+              "ns3::UbPort::CbfcSharedInitCreditCell": "4096",
+              "ns3::UbPort::PfcLowThld": "655360",
+              "ns3::UbPort::PfcUpThld": "819200",
+              "ns3::UbPort::UbDataRate": "400000000000bps",
+              "ns3::UbPort::UbInterframeGap": "+0ns"
+            },
+            "node_id": 70,
+            "role": "port:6"
+          },
+          {
+            "attributes": {
+              "ns3::UbEgressQueue::MaxEgressBytes": "524288"
+            },
+            "node_id": 70,
+            "role": "egress:6"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitch::FlowControl": "CBFC",
+              "ns3::UbSwitch::InPortProcessingDelay": "+0ns",
+              "ns3::UbSwitch::VlScheduler": "SP"
+            },
+            "node_id": 802,
+            "role": "switch"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitchAllocator::AllocationTime": "+1ns"
+            },
+            "node_id": 802,
+            "role": "allocator"
+          },
+          {
+            "attributes": {
+              "ns3::PointToPointNetDevice::Address": "00:00:00:00:19:47",
+              "ns3::PointToPointNetDevice::DataRate": "32768bps",
+              "ns3::PointToPointNetDevice::InterframeGap": "+0ns",
+              "ns3::PointToPointNetDevice::Mtu": "1500",
+              "ns3::PointToPointNetDevice::ReceiveErrorModel": "0",
+              "ns3::PointToPointNetDevice::TxQueue": "0",
+              "ns3::UbPort::CbfcCtrlCrdRtrThldCell": "1024",
+              "ns3::UbPort::CbfcFlitLenByte": "20",
+              "ns3::UbPort::CbfcFlitsPerCell": "8",
+              "ns3::UbPort::CbfcInitCreditCell": "6553",
+              "ns3::UbPort::CbfcRetCellGrainControlPacket": "32",
+              "ns3::UbPort::CbfcRetCellGrainDataPacket": "4",
+              "ns3::UbPort::CbfcSharedInitCreditCell": "4096",
+              "ns3::UbPort::PfcLowThld": "655360",
+              "ns3::UbPort::PfcUpThld": "819200",
+              "ns3::UbPort::UbDataRate": "400000000000bps",
+              "ns3::UbPort::UbInterframeGap": "+0ns"
+            },
+            "node_id": 802,
+            "role": "port:6"
+          },
+          {
+            "attributes": {
+              "ns3::UbEgressQueue::MaxEgressBytes": "524288"
+            },
+            "node_id": 802,
+            "role": "egress:6"
+          }
+        ]
+      },
+      {
+        "candidate_id": "N2",
+        "link": {
+          "delay_ns": 20,
+          "dst": 810,
+          "dst_port": 2,
+          "rate_bps": 400000000000,
+          "src": 98,
+          "src_port": 0
+        },
+        "objects": [
+          {
+            "attributes": {
+              "ns3::UbSwitch::FlowControl": "CBFC",
+              "ns3::UbSwitch::InPortProcessingDelay": "+0ns",
+              "ns3::UbSwitch::VlScheduler": "SP"
+            },
+            "node_id": 98,
+            "role": "switch"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitchAllocator::AllocationTime": "+1ns"
+            },
+            "node_id": 98,
+            "role": "allocator"
+          },
+          {
+            "attributes": {
+              "ns3::PointToPointNetDevice::Address": "00:00:00:00:02:af",
+              "ns3::PointToPointNetDevice::DataRate": "32768bps",
+              "ns3::PointToPointNetDevice::InterframeGap": "+0ns",
+              "ns3::PointToPointNetDevice::Mtu": "1500",
+              "ns3::PointToPointNetDevice::ReceiveErrorModel": "0",
+              "ns3::PointToPointNetDevice::TxQueue": "0",
+              "ns3::UbPort::CbfcCtrlCrdRtrThldCell": "1024",
+              "ns3::UbPort::CbfcFlitLenByte": "20",
+              "ns3::UbPort::CbfcFlitsPerCell": "8",
+              "ns3::UbPort::CbfcInitCreditCell": "6553",
+              "ns3::UbPort::CbfcRetCellGrainControlPacket": "32",
+              "ns3::UbPort::CbfcRetCellGrainDataPacket": "4",
+              "ns3::UbPort::CbfcSharedInitCreditCell": "4096",
+              "ns3::UbPort::PfcLowThld": "655360",
+              "ns3::UbPort::PfcUpThld": "819200",
+              "ns3::UbPort::UbDataRate": "400000000000bps",
+              "ns3::UbPort::UbInterframeGap": "+0ns"
+            },
+            "node_id": 98,
+            "role": "port:0"
+          },
+          {
+            "attributes": {
+              "ns3::UbEgressQueue::MaxEgressBytes": "524288"
+            },
+            "node_id": 98,
+            "role": "egress:0"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitch::FlowControl": "CBFC",
+              "ns3::UbSwitch::InPortProcessingDelay": "+0ns",
+              "ns3::UbSwitch::VlScheduler": "SP"
+            },
+            "node_id": 810,
+            "role": "switch"
+          },
+          {
+            "attributes": {
+              "ns3::UbSwitchAllocator::AllocationTime": "+1ns"
+            },
+            "node_id": 810,
+            "role": "allocator"
+          },
+          {
+            "attributes": {
+              "ns3::PointToPointNetDevice::Address": "00:00:00:00:1a:43",
+              "ns3::PointToPointNetDevice::DataRate": "32768bps",
+              "ns3::PointToPointNetDevice::InterframeGap": "+0ns",
+              "ns3::PointToPointNetDevice::Mtu": "1500",
+              "ns3::PointToPointNetDevice::ReceiveErrorModel": "0",
+              "ns3::PointToPointNetDevice::TxQueue": "0",
+              "ns3::UbPort::CbfcCtrlCrdRtrThldCell": "1024",
+              "ns3::UbPort::CbfcFlitLenByte": "20",
+              "ns3::UbPort::CbfcFlitsPerCell": "8",
+              "ns3::UbPort::CbfcInitCreditCell": "6553",
+              "ns3::UbPort::CbfcRetCellGrainControlPacket": "32",
+              "ns3::UbPort::CbfcRetCellGrainDataPacket": "4",
+              "ns3::UbPort::CbfcSharedInitCreditCell": "4096",
+              "ns3::UbPort::PfcLowThld": "655360",
+              "ns3::UbPort::PfcUpThld": "819200",
+              "ns3::UbPort::UbDataRate": "400000000000bps",
+              "ns3::UbPort::UbInterframeGap": "+0ns"
+            },
+            "node_id": 810,
+            "role": "port:2"
+          },
+          {
+            "attributes": {
+              "ns3::UbEgressQueue::MaxEgressBytes": "524288"
+            },
+            "node_id": 810,
+            "role": "egress:2"
+          }
+        ]
+      }
+    ],
+    "source_sha256": {
+      "backend/port_observation.cc": "64fd49691eff34499baf0914f670ad1588e83c9a4c00cba031b8e8ea37ee6c9c",
+      "third_party/ns-3-ub/src/unified-bus/model/ub-switch-allocator.cc": "c4efe9b801b4b538d212314f5daa60e776059607ba294b011d76dd4bb836a134",
+      "third_party/ns-3-ub/src/unified-bus/model/ub-port.cc": "a0861aacbeb26456be14826308e332d75a0b24eb9fa92cf2828ebeb61641d098"
+    },
+    "interpretation": [
+      "Use actual selected objects, not global attribute defaults: selected allocators use 1 ns while the global declaration is 10 ns.",
+      "Use UbPort::UbDataRate and effective directed service, not the inherited unused PointToPointNetDevice data rate.",
+      "Actual FIFO capacity is 524288 B; VOQ waiting statistics and physical FIFO waiting are separate.",
+      "Forwarded VOQ eligibility checks flow control; occupied local service alone does not rule out simultaneous credit gating.",
+      "Packet trace fires at actual successful transmission start; busy_until adds transmit completion duration including the configured interframe gap.",
+      "Only 0 ns ingress processing and configured zero interframe gap allow arrival-to-FIFO to be interpreted as VOQ residence plus allocation here."
+    ]
+  },
+  "queue_waiting": [
+    {
+      "candidate": {
+        "candidate_id": "N1",
+        "switch_id": 802,
+        "port_id": 6,
+        "queue": "voq",
+        "start_ns": 85000,
+        "end_ns": 107000,
+        "area": 1554537760,
+        "peak": 232184,
+        "positive_windows": 22,
+        "nonempty_lower_ns": 13172,
+        "nonempty_upper_ns": 22000,
+        "max_window_mean_bytes": 226342.996,
+        "peak_window_start_ns": 101000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 102000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 4643.68,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      },
+      "before": {
+        "queue_state": {
+          "voq": {
+            "nonempty_ns": 17149,
+            "max_contiguous_ns": 16276,
+            "byte_ns": 1555142516,
+            "intervals": 202
+          },
+          "fifo": {
+            "nonempty_ns": 18191,
+            "max_contiguous_ns": 207,
+            "byte_ns": 56433352,
+            "intervals": 242
+          }
+        },
+        "counts": {
+          "fifo_byte_ns_exited": 56433352,
+          "arrival_to_fifo_byte_ns_exited": 1514297356,
+          "packets": 556,
+          "fifo_packets_without_upstream_capture": 55,
+          "fifo_byte_ns_not_in_completed_packet_rows": 0
+        },
+        "dispatch": {
+          "packets": 305,
+          "distributions": {
+            "fifo_wait_ns": {
+              "n": 305,
+              "minimum": 0,
+              "median": 62,
+              "mean": 55.678688524590164,
+              "p95": 124,
+              "maximum": 205,
+              "spread": 205
+            },
+            "fifo_wait_without_busy_ns": {
+              "n": 305,
+              "minimum": 0,
+              "median": 0,
+              "mean": 0,
+              "p95": 0,
+              "maximum": 0,
+              "spread": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 281,
+              "minimum": 0,
+              "median": 1215,
+              "mean": 1698.306049822064,
+              "p95": 4981,
+              "maximum": 5556,
+              "spread": 5556
+            },
+            "arrival_to_fifo_without_busy_ns": {
+              "n": 281,
+              "minimum": 0,
+              "median": 4,
+              "mean": 5.758007117437723,
+              "p95": 18,
+              "maximum": 27,
+              "spread": 27
+            }
+          },
+          "complete_transfer_delivery_packets": 217
+        }
+      },
+      "after": {
+        "queue_state": {
+          "voq": {
+            "nonempty_ns": 4455,
+            "max_contiguous_ns": 1308,
+            "byte_ns": 30119772,
+            "intervals": 412
+          },
+          "fifo": {
+            "nonempty_ns": 6853,
+            "max_contiguous_ns": 81,
+            "byte_ns": 19309032,
+            "intervals": 197
+          }
+        },
+        "counts": {
+          "fifo_byte_ns_exited": 19309032,
+          "arrival_to_fifo_byte_ns_exited": 29108072,
+          "packets": 556,
+          "fifo_packets_without_upstream_capture": 55,
+          "fifo_byte_ns_not_in_completed_packet_rows": 0
+        },
+        "dispatch": {
+          "packets": 305,
+          "distributions": {
+            "fifo_wait_ns": {
+              "n": 305,
+              "minimum": 0,
+              "median": 8,
+              "mean": 16.42950819672131,
+              "p95": 40,
+              "maximum": 70,
+              "spread": 70
+            },
+            "fifo_wait_without_busy_ns": {
+              "n": 305,
+              "minimum": 0,
+              "median": 0,
+              "mean": 0,
+              "p95": 0,
+              "maximum": 0,
+              "spread": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 281,
+              "minimum": 0,
+              "median": 1,
+              "mean": 31.619217081850532,
+              "p95": 169,
+              "maximum": 417,
+              "spread": 417
+            },
+            "arrival_to_fifo_without_busy_ns": {
+              "n": 281,
+              "minimum": 0,
+              "median": 1,
+              "mean": 0.5587188612099644,
+              "p95": 1,
+              "maximum": 2,
+              "spread": 2
+            }
+          },
+          "complete_transfer_delivery_packets": 81
+        }
+      }
+    },
+    {
+      "candidate": {
+        "candidate_id": "N2",
+        "switch_id": 810,
+        "port_id": 2,
+        "queue": "fifo",
+        "start_ns": 97000,
+        "end_ns": 102000,
+        "area": 10758592,
+        "peak": 11392,
+        "positive_windows": 5,
+        "nonempty_lower_ns": 1506,
+        "nonempty_upper_ns": 5000,
+        "max_window_mean_bytes": 4335.6,
+        "peak_window_start_ns": 100000,
+        "left_coverage_truncated": false,
+        "peak_window_end_ns": 101000,
+        "right_coverage_truncated": false,
+        "peak_drain_equivalent_ns": 227.84,
+        "case_id": "g0-b8-short",
+        "overlapping_operations": [
+          {
+            "layer_id": 7,
+            "kind": "dispatch",
+            "operation_id": "D.w0.L7.dispatch"
+          }
+        ],
+        "eligible": true
+      },
+      "before": {
+        "queue_state": {
+          "voq": {
+            "nonempty_ns": 4514,
+            "max_contiguous_ns": 2770,
+            "byte_ns": 60860572,
+            "intervals": 242
+          },
+          "fifo": {
+            "nonempty_ns": 5830,
+            "max_contiguous_ns": 226,
+            "byte_ns": 20050300,
+            "intervals": 87
+          }
+        },
+        "counts": {
+          "fifo_byte_ns_exited": 20050300,
+          "arrival_to_fifo_byte_ns_exited": 54582272,
+          "packets": 360,
+          "fifo_packets_without_upstream_capture": 41,
+          "fifo_byte_ns_not_in_completed_packet_rows": 0
+        },
+        "dispatch": {
+          "packets": 156,
+          "distributions": {
+            "fifo_wait_ns": {
+              "n": 156,
+              "minimum": 0,
+              "median": 28.0,
+              "mean": 38.55128205128205,
+              "p95": 81,
+              "maximum": 224,
+              "spread": 224
+            },
+            "fifo_wait_without_busy_ns": {
+              "n": 156,
+              "minimum": 0,
+              "median": 0.0,
+              "mean": 0,
+              "p95": 0,
+              "maximum": 0,
+              "spread": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 138,
+              "minimum": 0,
+              "median": 1.0,
+              "mean": 133.1014492753623,
+              "p95": 836,
+              "maximum": 1149,
+              "spread": 1149
+            },
+            "arrival_to_fifo_without_busy_ns": {
+              "n": 138,
+              "minimum": 0,
+              "median": 1.0,
+              "mean": 0.717391304347826,
+              "p95": 3,
+              "maximum": 6,
+              "spread": 6
+            }
+          },
+          "complete_transfer_delivery_packets": 92
+        }
+      },
+      "after": {
+        "queue_state": {
+          "voq": {
+            "nonempty_ns": 4429,
+            "max_contiguous_ns": 2627,
+            "byte_ns": 54286316,
+            "intervals": 250
+          },
+          "fifo": {
+            "nonempty_ns": 5782,
+            "max_contiguous_ns": 163,
+            "byte_ns": 19075832,
+            "intervals": 86
+          }
+        },
+        "counts": {
+          "fifo_byte_ns_exited": 19075832,
+          "arrival_to_fifo_byte_ns_exited": 49079992,
+          "packets": 362,
+          "fifo_packets_without_upstream_capture": 42,
+          "fifo_byte_ns_not_in_completed_packet_rows": 0
+        },
+        "dispatch": {
+          "packets": 156,
+          "distributions": {
+            "fifo_wait_ns": {
+              "n": 156,
+              "minimum": 0,
+              "median": 20.0,
+              "mean": 37.333333333333336,
+              "p95": 81,
+              "maximum": 162,
+              "spread": 162
+            },
+            "fifo_wait_without_busy_ns": {
+              "n": 156,
+              "minimum": 0,
+              "median": 0.0,
+              "mean": 0,
+              "p95": 0,
+              "maximum": 0,
+              "spread": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 138,
+              "minimum": 0,
+              "median": 1.0,
+              "mean": 108.44927536231884,
+              "p95": 630,
+              "maximum": 1104,
+              "spread": 1104
+            },
+            "arrival_to_fifo_without_busy_ns": {
+              "n": 138,
+              "minimum": 0,
+              "median": 1.0,
+              "mean": 0.7318840579710145,
+              "p95": 3,
+              "maximum": 3,
+              "spread": 3
+            }
+          },
+          "complete_transfer_delivery_packets": 88
+        }
+      }
+    }
+  ],
+  "last_model_compute_ns": {
+    "before": 394911,
+    "after": 394069,
+    "change": -842
+  },
+  "network_drain": {
+    "before": {
+      "arrived_packets": 2014863,
+      "idle": true,
+      "started_packets": 2014863
+    },
+    "after": {
+      "arrived_packets": 2014862,
+      "idle": true,
+      "started_packets": 2014862
+    }
+  },
+  "all_rank_business": {
+    "endpoint_operations": {
+      "count": 768,
+      "earlier": 555,
+      "unchanged": 185,
+      "later": 28,
+      "end_change_ns": {
+        "n": 768,
+        "minimum": -1771,
+        "median": -612.0,
+        "mean": -479.0625,
+        "p95": 0,
+        "maximum": 258,
+        "spread": 2029
+      },
+      "start_change_ns": {
+        "n": 768,
+        "minimum": -1771,
+        "median": -113.0,
+        "mean": -352.6484375,
+        "p95": 0,
+        "maximum": 258,
+        "spread": 2029
+      },
+      "duration_change_ns": {
+        "n": 768,
+        "minimum": -1461,
+        "median": 0.0,
+        "mean": -126.4140625,
+        "p95": 414,
+        "maximum": 1140,
+        "spread": 2601
+      }
+    },
+    "model_stages": {
+      "count": 3840,
+      "earlier": 2000,
+      "unchanged": 1594,
+      "later": 246,
+      "end_change_ns": {
+        "n": 3840,
+        "minimum": -1771,
+        "median": -2.0,
+        "mean": -280.1567708333333,
+        "p95": 7,
+        "maximum": 258,
+        "spread": 2029
+      },
+      "start_change_ns": {
+        "n": 3840,
+        "minimum": -1771,
+        "median": -2.0,
+        "mean": -280.1567708333333,
+        "p95": 7,
+        "maximum": 258,
+        "spread": 2029
+      },
+      "duration_change_ns": {
+        "n": 3840,
+        "minimum": 0,
+        "median": 0.0,
+        "mean": 0,
+        "p95": 0,
+        "maximum": 0,
+        "spread": 0
+      }
+    },
+    "operation_summary": [
+      {
+        "operation_id": "D.w0.L6.combine",
+        "before_last_ns": 97247,
+        "after_last_ns": 97153,
+        "before_last_ranks": [
+          22,
+          34
+        ],
+        "after_last_ranks": [
+          19,
+          34
+        ],
+        "earliest_change_ns": -177,
+        "latest_change_ns": 258
+      },
+      {
+        "operation_id": "D.w0.L6.dispatch",
+        "before_last_ns": 15208,
+        "after_last_ns": 15208,
+        "before_last_ranks": [
+          102
+        ],
+        "after_last_ranks": [
+          102
+        ],
+        "earliest_change_ns": 0,
+        "latest_change_ns": 0
+      },
+      {
+        "operation_id": "D.w0.L7.combine",
+        "before_last_ns": 242536,
+        "after_last_ns": 241789,
+        "before_last_ranks": [
+          57
+        ],
+        "after_last_ranks": [
+          57
+        ],
+        "earliest_change_ns": -1771,
+        "latest_change_ns": -91
+      },
+      {
+        "operation_id": "D.w0.L7.dispatch",
+        "before_last_ns": 109021,
+        "after_last_ns": 108210,
+        "before_last_ranks": [
+          70
+        ],
+        "after_last_ranks": [
+          70
+        ],
+        "earliest_change_ns": -1517,
+        "latest_change_ns": 3
+      },
+      {
+        "operation_id": "D.w0.L8.combine",
+        "before_last_ns": 394543,
+        "after_last_ns": 393701,
+        "before_last_ranks": [
+          57
+        ],
+        "after_last_ranks": [
+          54
+        ],
+        "earliest_change_ns": -1645,
+        "latest_change_ns": 199
+      },
+      {
+        "operation_id": "D.w0.L8.dispatch",
+        "before_last_ns": 253260,
+        "after_last_ns": 252650,
+        "before_last_ranks": [
+          65
+        ],
+        "after_last_ranks": [
+          65
+        ],
+        "earliest_change_ns": -1148,
+        "latest_change_ns": -513
+      }
+    ],
+    "largest_advance": {
+      "identity": {
+        "operation_id": "D.w0.L7.combine",
+        "rank_id": 50,
+        "layer_id": 7,
+        "kind": "combine"
+      },
+      "before_start_ns": 108948,
+      "before_end_ns": 231191,
+      "after_start_ns": 108137,
+      "after_end_ns": 229420,
+      "start_change_ns": -811,
+      "end_change_ns": -1771,
+      "duration_change_ns": -960
+    },
+    "largest_regression": {
+      "identity": {
+        "operation_id": "D.w0.L6.combine",
+        "rank_id": 120,
+        "layer_id": 6,
+        "kind": "combine"
+      },
+      "before_start_ns": 18449,
+      "before_end_ns": 94531,
+      "after_start_ns": 18449,
+      "after_end_ns": 94789,
+      "start_change_ns": 0,
+      "end_change_ns": 258,
+      "duration_change_ns": 258
+    }
+  },
+  "all_port_wire_totals": [
+    {
+      "ports": 2688,
+      "business_payload_bytes": 1444423680,
+      "application_metadata_bytes": 11825760,
+      "padding_bytes": 1880760,
+      "data_protocol_overhead_bytes": 20691720,
+      "control_packet_bytes": 11953440,
+      "unattributed_bytes": 0,
+      "counted_packet_bytes": 1490775360,
+      "counted_packets": 1481220
+    },
+    {
+      "ports": 2688,
+      "business_payload_bytes": 1444423680,
+      "application_metadata_bytes": 11825760,
+      "padding_bytes": 1880760,
+      "data_protocol_overhead_bytes": 20691720,
+      "control_packet_bytes": 11953640,
+      "unattributed_bytes": 0,
+      "counted_packet_bytes": 1490775560,
+      "counted_packets": 1481225
+    }
+  ],
+  "complete_contribution_count": 433,
+  "delivery_change_distribution": {
+    "n": 433,
+    "minimum": -5208,
+    "median": -126,
+    "mean": -735.1824480369515,
+    "p95": 199,
+    "maximum": 1497,
+    "spread": 6705
+  },
+  "delivery_changes_sign": {
+    "earlier": 305,
+    "later": 72,
+    "unchanged": 56
+  },
+  "packet_pair_coverage": {
+    "baseline": 461,
+    "treatment": 461,
+    "matched": 461,
+    "missing_from_treatment_selected_outlets": 0,
+    "missing_is_not_zero_wait": true
+  },
+  "final_condition_transfers": {
+    "discovery-capture": [
+      {
+        "transfer_id": "4295068083",
+        "operation": "D.w0.L7.dispatch",
+        "src": 108,
+        "dst": 70,
+        "role": "status",
+        "send": 107573,
+        "ready": 107921,
+        "transaction": 108007
+      },
+      {
+        "transfer_id": "4295072147",
+        "operation": "D.w0.L7.dispatch",
+        "src": 124,
+        "dst": 70,
+        "role": "status",
+        "send": 106763,
+        "ready": 107109,
+        "transaction": 107193
+      },
+      {
+        "transfer_id": "4295150900",
+        "operation": "D.w0.L8.combine",
+        "src": 65,
+        "dst": 54,
+        "role": "status",
+        "send": 393751,
+        "ready": 393885,
+        "transaction": 393969
+      },
+      {
+        "transfer_id": "4295068140",
+        "operation": "D.w0.L7.dispatch",
+        "src": 108,
+        "dst": 98,
+        "role": "status",
+        "send": 106973,
+        "ready": 107192,
+        "transaction": 107234
+      },
+      {
+        "transfer_id": "4295065498",
+        "operation": "D.w0.L7.dispatch",
+        "src": 98,
+        "dst": 47,
+        "role": "status",
+        "send": 106837,
+        "ready": 107181,
+        "transaction": 107265
+      }
+    ],
+    "discovery-service-n1": [
+      {
+        "transfer_id": "4295068083",
+        "operation": "D.w0.L7.dispatch",
+        "src": 108,
+        "dst": 70,
+        "role": "status",
+        "send": 106059,
+        "ready": 106404,
+        "transaction": 106490
+      },
+      {
+        "transfer_id": "4295072147",
+        "operation": "D.w0.L7.dispatch",
+        "src": 124,
+        "dst": 70,
+        "role": "status",
+        "send": 106765,
+        "ready": 107110,
+        "transaction": 107194
+      },
+      {
+        "transfer_id": "4295150900",
+        "operation": "D.w0.L8.combine",
+        "src": 65,
+        "dst": 54,
+        "role": "status",
+        "send": 393113,
+        "ready": 393201,
+        "transaction": 393285
+      },
+      {
+        "transfer_id": "4295068140",
+        "operation": "D.w0.L7.dispatch",
+        "src": 108,
+        "dst": 98,
+        "role": "status",
+        "send": 105458,
+        "ready": 105678,
+        "transaction": 105720
+      },
+      {
+        "transfer_id": "4295065498",
+        "operation": "D.w0.L7.dispatch",
+        "src": 98,
+        "dst": 47,
+        "role": "status",
+        "send": 106744,
+        "ready": 107089,
+        "transaction": 107173
+      }
+    ]
+  },
+  "source_evidence": {
+    "discovery-capture-gates/summary.json": "f6db9b3641d4abc7ab20b74dc8884f54de18cf94b09344c4759bcf6cabea0cc8",
+    "discovery-service-n1-gates/summary.json": "c0560c4e7f025814d8ce2b650e7799022aea48204fba256c1d6b0753bbada230",
+    "discovery-service-n1-effect-complete.json": "637d40aa6b6074e99f637c918e4c76e5f163d2779fb68d291b07d8581a1906ba",
+    "discovery-capture-packets/summary.json": "84913d33ab109f9c26bdcb81b0866e40ef4907baf4570d879be4806eba363857",
+    "discovery-service-n1-packets/summary.json": "0a97eb70f2f87ca13c5ebb5150631521445a27bf66fcae72b2d44950cece8eca",
+    "discovery-capture/selection.json": "ee3409c695af39c7140f0d82a02c7d1fbe7c06ecaf4c52e52db28c55b67da9da",
+    "discovery-capture/equivalence.json": "fcce89dca46b309fa02c3092c1151d1c873339cd424ad662b24ef2329d4f04e5",
+    "discovery-effective-review.json": "35f5c11a120e9ef81c8a220859b85b91505b75832e8ea6899533f4190f1181a4",
+    "discovery-final-gate-transfers.json": "17ba1b6c88bb5c2598c1dbb5dc2312abd99edc85362879396c74d5ede777cec5"
+  },
+  "full_result_path": "runs/scaleup_issue_screening/network-screening-20261013/discovery-service-n1-effect-complete.json",
+  "limitations": [
+    "Directed service changes serialization and shared execution feedback; not pure removable queue time.",
+    "All selected FIFO integrals are complete; upstream arrival facts are partial for direct device ingress.",
+    "Same-outlet byte pairing does not capture full paths; changed timing fingerprints do not prove route changes.",
+    "Original compute, native request organization and synchronization assumptions remain; no hardware calibration claim."
+  ]
+}

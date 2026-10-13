@@ -4,6 +4,7 @@ Functional validation only; these generated data never enter normal screening.
 """
 import argparse
 from copy import deepcopy
+import os
 from pathlib import Path
 import shutil
 import sys
@@ -72,10 +73,32 @@ def check(output, backend, resume=False):
     effective=read(output/attempt/'raw/execution/effective_backend.json')['live_port_service']
     if len(effective['intervals'])!=1 or effective['intervals'][0]['rate_bps']!=800000000000:
         raise ValueError('Directed service object did not receive requested rate')
+    # Use only these freshly generated public runs for the all-rank reader.
+    # Preserve real case/manifest/slice identities; no historical target fixture.
+    from .archive import pack
+    from .network_timing import compare_all
+    cases=[output/'timing-baseline',output/'timing-treatment'];reviews=[]
+    for case, run in zip(cases,(output/'capture',output/attempt)):
+        case.mkdir()
+        shutil.copytree(run,case/'run',copy_function=os.link)
+        save(case/'case.json',dict(schema_version='issue-screening-case/1',owned_by='scaleup_issue_screening',synthetic_only=True))
+        shutil.copyfile(output/'detail.json',case/'observation.json')
+    source=pack(cases[0],output/'timing-source.tar.gz')
+    plans={str(p.relative_to(output/'slice')):digest(p) for p in (output/'slice/raw/graphs').glob('*/plan.json')}
+    for case in cases:
+        save(case/'selection.json',dict(slice=str(output/'slice'),slice_sha256=digest(output/'slice/slice.json'),
+            original_archive_sha256=source['archive_sha256']))
+        reviews.append(dict(selection_sha256=digest(case/'selection.json'),manifest_sha256=digest(case/'run/manifest.json'),plan_files=plans))
+    timing=compare_all(*cases,*reviews)
+    if not timing['endpoint_operations']['count'] or not timing['model_stages']['count']:
+        raise ValueError('Fresh all-rank reader omitted the synthetic workload')
+    save(output/'all-rank-timing.json',timing)
     save(output/'summary.json',dict(passed=True,synthetic_only=True,no_old_run_input=True,
         backend_sha256=digest(backend),program_sha256=digest(__file__),capture_equivalence=equivalence,
         directed_service_readback=effective,baseline_end_ns=report['simulation_end_ns'],
-        faster_end_ns=after['simulation_end_ns'],faster_is_not_a_required_test_result=True))
+        faster_end_ns=after['simulation_end_ns'],faster_is_not_a_required_test_result=True,
+        all_rank_timing_sha256=digest(output/'all-rank-timing.json'),
+        all_rank_endpoint_pairs=timing['endpoint_operations']['count'],all_rank_model_stage_pairs=timing['model_stages']['count']))
 
 
 def main():

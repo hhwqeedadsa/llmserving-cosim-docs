@@ -402,16 +402,16 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --output runs/scaleup_issue_screening/network-review-new/recurrence.json
 ```
 
-必要补采通过原始归档、显式压缩切片和固定选择准备。以下示例使用本轮已有选择与原 256 请求辅助档，不把它当成 1024 请求发现档。`NETWORK_NEW` 必须新建，`NETWORK_SLICE` 必须是与 `NETWORK_ARCHIVE` 相符的、已验证的原始压缩切片；恢复步骤沿用上文。先核算所有声明根目录的累计占用及归档峰值。已有旧产物时，这些命令不保证仍有空间重新执行。
+必要补采通过原始归档、显式压缩切片和固定选择准备。以下示例对应已补齐的原 1024 请求发现档，使用原始 `selection.json`。原 256 请求辅助结果继续保留，不能混用它的 `reference-selection.json`。`NETWORK_NEW` 必须新建，`NETWORK_SLICE` 必须是与 `NETWORK_ARCHIVE` 相符的、已验证的原始压缩切片；恢复步骤沿用上文。先核算所有声明根目录的累计占用及归档峰值。已有旧产物时，这些命令不保证仍有空间重新执行。
 
 ```bash
 NETWORK_OLD=runs/scaleup_issue_screening/network-screening-20261013
 NETWORK_NEW=runs/scaleup_issue_screening/network-replay-new
-NETWORK_ARCHIVE=runs/scaleup_issue_screening/archives/g0-b2-short.tar.gz
-NETWORK_SLICE=runs/scaleup_issue_screening/c1-organization-20261013/compact-slice
+NETWORK_ARCHIVE=runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz
+NETWORK_SLICE=runs/scaleup_issue_screening/network-screening-20261013/discovery-slice
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control prepare \
   --archive "$NETWORK_ARCHIVE" --slice "$NETWORK_SLICE" \
-  --selection "$NETWORK_OLD/reference-selection.json" \
+  --selection "$NETWORK_OLD/selection.json" \
   --backend build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service \
   --output "$NETWORK_NEW/capture"
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control run \
@@ -431,7 +431,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```bash
 PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_control prepare \
   --archive "$NETWORK_ARCHIVE" --slice "$NETWORK_SLICE" \
-  --selection "$NETWORK_OLD/reference-selection.json" --candidate N1 \
+  --selection "$NETWORK_OLD/selection.json" --candidate N1 \
   --baseline-review "$NETWORK_NEW/capture-gates/summary.json" \
   --backend build/m19-a3-resources/c1-organization/output/cosim/ns3.44-cosim-service \
   --output "$NETWORK_NEW/service"
@@ -446,9 +446,47 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
   --baseline "$NETWORK_NEW/capture-gates" --treatment "$NETWORK_NEW/service-gates" \
   --baseline-packets "$NETWORK_NEW/capture-packets" --treatment-packets "$NETWORK_NEW/service-packets" \
   --ports "$NETWORK_NEW/capture/port-equivalence.json" --case "$NETWORK_NEW/service" \
+  --baseline-case "$NETWORK_NEW/capture" --slice "$NETWORK_SLICE" \
   --output "$NETWORK_NEW/service-effect.json"
 ```
 
-`network_run_review` 可用 `--slice <迁移后路径>` 显式指定同一不可变切片，先核对其清单摘要；默认使用准备时记录的位置。它读取本次全部执行节点，核对原图及计算成本，分别检查原接收端、当次所有最晚端及基线最晚端；保留完整重排、归约、发送条件和资源持有者。`network_packets` 按真实包身份及业务字节范围关联所见上游到达、FIFO、出口服务和完整传输回调，缺失的前一跳不补零。`compare_network` 拒绝固定对象变化，保留全部配对交付及退化、未配对包、当次业务条件与后继计算。三个输出均为研究者核验资料，不能当作受限算法的公开输入。
+`network_run_review` 可用 `--slice <迁移后路径>` 显式指定同一不可变切片，先核对其清单摘要；默认使用准备时记录的位置。它读取本次全部执行节点，核对原图及计算成本，分别检查原接收端、当次所有最晚端及基线最晚端；保留完整重排、归约、发送条件和资源持有者。`network_packets` 按真实包身份及业务字节范围关联所见上游到达、FIFO、出口服务和完整传输回调，缺失的前一跳不补零。`compare_network` 拒绝固定对象变化，保留全部配对交付及退化、未配对包、当次业务条件与后继计算。`compare_network --baseline-case` 还核验原始清单及同一切片，配对全体 rank 的操作与模型阶段，保留开始、结束及持续时长的全部变化，并核对全部端口的业务/元数据/协议控制字节守恒；`--slice` 可指定迁移后的切片。三个输出均为研究者核验资料，不能当作受限算法的公开输入。
 
 无需重新运行即可查看本轮保存的 `capture-gates/`、`service-gates/`、`capture-packets/`、`service-packets/`、`service-effect-with-hops.json` 与 `recurrence.json`。完整执行位于 `capture.tar.gz`、`service-n1.tar.gz` 和各自的校验清单；若需重新解析原始记录，先按本页归档恢复命令检查预算。公开小型功能流程为 `python -m experiments.scaleup_issue_screening.check_network_replay --backend <已构建二进制> --output <新目录>`，同样在仓库根、上述 Python 环境和 `PYTHONPATH` 下执行；它只用公开合成示例，不能进入正常业务分析。
+
+
+### 原发现档的保存与有限信息比较
+
+已有结果无需重跑：原运行根目录中 `discovery-capture-gates/`、`discovery-service-n1-gates/` 保存完整完成条件，两个 `*-packets/` 保存逐包等待，`discovery-service-n1-effect-complete.json` 保存全 rank 配对及网络字节分类，`discovery-information/` 保存准备、判断和评价。完整 case 的归档为 `discovery-capture.tar.gz`、`discovery-service-n1.tar.gz`，各有逐文件校验清单；与原 256 请求的 `capture.tar.gz`、`service-n1.tar.gz` 区分。恢复后可用上文显式 `--slice` 指向保留的 `discovery-slice/`。本轮累计磁盘按最新授权保护在 64 GiB，原 16 个计量根目录及其他限制不变；已用 4/6 次目标运行，不为阅读或重分析重复启动后端。
+
+`network_information` 是本候选的小型离线信息检查。准备阶段把软件可知的操作与参与端对应、声明的源/目的工作量，以及公开端侧起止和队列窗口导出为 `input.json`；从内部事实生成的评价标签独立放在 `truth.json`。它检查当前 STORE 模板的端侧时间上下界确实涵盖所有实际网络传输，并拒绝时钟偏移、被动等价或摘要不符的输入。内部请求发起时间、路径、阶段和完成依赖不进入判断。
+
+以下在上文补采与逐包检查完成后执行，输出必须新建。也可以先恢复已保存的 case，显式替换 `--case`；不需要运行后端。
+
+```bash
+INFO_OUT="$NETWORK_NEW/information"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information prepare \
+  --case "$NETWORK_NEW/capture" --packets "$NETWORK_NEW/capture-packets" --output "$INFO_OUT"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information judge \
+  --input "$INFO_OUT/input.json" --output "$INFO_OUT/prediction.json"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information evaluate \
+  --input "$INFO_OUT/input.json" --prediction "$INFO_OUT/prediction.json" \
+  --truth "$INFO_OUT/truth.json" --output "$INFO_OUT/evaluation.json"
+```
+
+判断器仅输出在目标出口/窗口**可能**等待的应用操作：声明有正载荷、源操作已可能开始、目的操作尚可能未结束。端侧时间本身不证明排队，额外公开队列面积只确认等待量，不直接给出应用归属。评价对照完整 FIFO 事实及已有上游覆盖内的到达至 FIFO 事实，缺失上游不填零；峰值窗口和其余相关窗口分别报告，不能当作独立泛化样本。
+
+基线确有歧义时，最多加入下面这一种理想关系。准备器要求已有基线结果；判断器仅多读取 `relation.json`，不读取原运行、干预或评价标签。
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information prepare-mapping \
+  --case "$NETWORK_NEW/capture" --input "$INFO_OUT/input.json" --truth "$INFO_OUT/truth.json" \
+  --prediction "$INFO_OUT/prediction.json" --output "$INFO_OUT/relation.json"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information judge \
+  --input "$INFO_OUT/input.json" --mapping "$INFO_OUT/relation.json" --output "$INFO_OUT/mapping-prediction.json"
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup_issue_screening.network_information evaluate \
+  --input "$INFO_OUT/input.json" --prediction "$INFO_OUT/mapping-prediction.json" \
+  --truth "$INFO_OUT/truth.json" --output "$INFO_OUT/mapping-evaluation.json"
+```
+
+关系只含操作、出口与原 1000 ns 发送窗口，覆盖与基线相同。等待中的应用包此后必须在该出口发送，因此可用**后续**发送窗口排除已不可能等待的操作；不能仅凭当前窗口没有发送就排除仍在排队的包。操作完成在关系覆盖以外时保留未确定。此关系是准备器从真值投影的理想输入，尚未实现从实际观测恢复映射，也不能据它给出关键依赖或业务损失。功能检查沿用 `check_network`，其中包括歧义、未覆盖尾部、错误字段及判断输入隔离；不另开正式 E3/E4。

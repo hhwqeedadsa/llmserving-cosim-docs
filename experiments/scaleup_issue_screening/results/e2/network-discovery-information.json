@@ -1,0 +1,628 @@
+{
+  "schema_version": "issue-network-information-comparison/1",
+  "rule": {
+    "question": "Which incoming application operations can have packets waiting at this device-facing outlet/window?",
+    "bounds": "positive declared src/dst payload; source operation start < window end; destination operation end > window start",
+    "conditions": [
+      "endpoint_workload_topology",
+      "plus_public_queue"
+    ],
+    "scope": "all windows of the two selected outlets in the sealed passive capture range",
+    "primary": "previously selected peak windows; all other windows are related-case checks",
+    "not_inferred": [
+      "actual path",
+      "application presence from a queue alone",
+      "critical dependency",
+      "business loss"
+    ]
+  },
+  "input_counts": {
+    "endpoints": 768,
+    "flows": 63660,
+    "windows": 228
+  },
+  "checked_network_transfers": 193576,
+  "operation_meanings": {
+    "D.w0.L6.dispatch": "o000",
+    "D.w0.L6.combine": "o001",
+    "D.w0.L7.dispatch": "o002",
+    "D.w0.L7.combine": "o003",
+    "D.w0.L8.dispatch": "o004",
+    "D.w0.L8.combine": "o005"
+  },
+  "before": {
+    "primary": {
+      "windows": 2,
+      "positive_queue_windows": 2,
+      "known_application_wait_windows": 2,
+      "uniquely_localized_known_wait_windows": 2,
+      "ambiguous_known_wait_windows": 0,
+      "missed_known_operations": 0,
+      "queue_positive_no_known_application": 0
+    },
+    "related_check": {
+      "windows": 226,
+      "positive_queue_windows": 145,
+      "known_application_wait_windows": 132,
+      "uniquely_localized_known_wait_windows": 105,
+      "ambiguous_known_wait_windows": 27,
+      "missed_known_operations": 0,
+      "queue_positive_no_known_application": 13
+    }
+  },
+  "after": {
+    "primary": {
+      "windows": 2,
+      "positive_queue_windows": 2,
+      "known_application_wait_windows": 2,
+      "uniquely_localized_known_wait_windows": 2,
+      "ambiguous_known_wait_windows": 0,
+      "missed_known_operations": 0,
+      "queue_positive_no_known_application": 0
+    },
+    "related_check": {
+      "windows": 226,
+      "positive_queue_windows": 145,
+      "known_application_wait_windows": 132,
+      "uniquely_localized_known_wait_windows": 116,
+      "ambiguous_known_wait_windows": 16,
+      "missed_known_operations": 0,
+      "queue_positive_no_known_application": 13
+    }
+  },
+  "changed_windows": [
+    {
+      "sample": "s0080",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0080",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 80000,
+        "end_ns": 81000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0081",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0081",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 81000,
+        "end_ns": 82000,
+        "voq_byte_ns": 4184,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0082",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0082",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 82000,
+        "end_ns": 83000,
+        "voq_byte_ns": 9432,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0083",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0083",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 83000,
+        "end_ns": 84000,
+        "voq_byte_ns": 3144,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0084",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0084",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 84000,
+        "end_ns": 85000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0085",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0085",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 85000,
+        "end_ns": 86000,
+        "voq_byte_ns": 7268,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0086",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0086",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 86000,
+        "end_ns": 87000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 228696
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0087",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0087",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 87000,
+        "end_ns": 88000,
+        "voq_byte_ns": 247192,
+        "fifo_byte_ns": 910008
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0088",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0088",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 88000,
+        "end_ns": 89000,
+        "voq_byte_ns": 20824,
+        "fifo_byte_ns": 370464
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0089",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0089",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 89000,
+        "end_ns": 90000,
+        "voq_byte_ns": 341760,
+        "fifo_byte_ns": 484176
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0090",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0090",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 90000,
+        "end_ns": 91000,
+        "voq_byte_ns": 7878384,
+        "fifo_byte_ns": 3476400
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0107",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0107",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o002"
+      ],
+      "after": [],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0108",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0108",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o002",
+        "o003"
+      ],
+      "after": [
+        "o003"
+      ],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0109",
+      "candidate": "N1",
+      "window": {
+        "sample": "s0109",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 109000,
+        "end_ns": 110000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o002",
+        "o003"
+      ],
+      "after": [
+        "o003"
+      ],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0128",
+      "candidate": "N2",
+      "window": {
+        "sample": "s0128",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 14000,
+        "end_ns": 15000,
+        "voq_byte_ns": 128,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o000"
+      ],
+      "after": [],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0210",
+      "candidate": "N2",
+      "window": {
+        "sample": "s0210",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 96000,
+        "end_ns": 97000,
+        "voq_byte_ns": 13556,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o001",
+        "o002"
+      ],
+      "after": [
+        "o002"
+      ],
+      "known_waiting": [
+        "o002"
+      ],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0221",
+      "candidate": "N2",
+      "window": {
+        "sample": "s0221",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 64,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o002"
+      ],
+      "after": [],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    },
+    {
+      "sample": "s0222",
+      "candidate": "N2",
+      "window": {
+        "sample": "s0222",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "before": [
+        "o002",
+        "o003"
+      ],
+      "after": [
+        "o003"
+      ],
+      "known_waiting": [],
+      "complete_fifo": [],
+      "partial_arrival_to_fifo": []
+    }
+  ],
+  "primary_samples": [
+    {
+      "sample": "s0101",
+      "known_waiting_operations": [
+        "o002"
+      ],
+      "complete_fifo_operations": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo_operations": [
+        "o002"
+      ],
+      "app_packets_enqueued_without_upstream": 1,
+      "protocol_packets_with_fifo_wait": 0,
+      "primary": true,
+      "candidate": "N1",
+      "possible_operations": [
+        "o002"
+      ],
+      "queue_waiting": true,
+      "missed_known_operations": [],
+      "unconfirmed_possible_operations": [],
+      "unique_and_known": true
+    },
+    {
+      "sample": "s0214",
+      "known_waiting_operations": [
+        "o002"
+      ],
+      "complete_fifo_operations": [
+        "o002"
+      ],
+      "partial_arrival_to_fifo_operations": [
+        "o002"
+      ],
+      "app_packets_enqueued_without_upstream": 2,
+      "protocol_packets_with_fifo_wait": 4,
+      "primary": true,
+      "candidate": "N2",
+      "possible_operations": [
+        "o002"
+      ],
+      "queue_waiting": true,
+      "missed_known_operations": [],
+      "unconfirmed_possible_operations": [],
+      "unique_and_known": true
+    }
+  ],
+  "extra": {
+    "kind": "ideal operation-to-port transmission windows",
+    "records": 141,
+    "json_bytes": 18700,
+    "coverage_ns": [
+      0,
+      114000
+    ],
+    "window_ns": 1000,
+    "implemented_recovery": false
+  },
+  "source_evidence": {
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/mapping-evaluation.json": "26d2ddfbf5556ca601ab798818c5cad346a44cdcf078bc7d325806a635deec2c",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/input.json": "90b8563d811a1e152a2269059eaa988e9b9e5b0432c7ab9e3d8acfe0b793f0ce",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/relation.json": "ad838712f7f326a50efd302742f072693f7a70e7e3b26dbf94b5e1203f3d348f",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/prediction.json": "fb5850b37a5701d37d0e7e86b0be98e58d74c9f27fa15c329a248376bb4851d8",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/evaluation.json": "bd7e275e777d6ce35f4a2b8df7a0c484605a27e2055869c087ff1bb51e6b053c",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/truth.json": "a7252d221c91f5fc74e489ac8d254bab5f2a26f45f183171b7e7143730ddbdd9",
+    "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/mapping-prediction.json": "2851d0c2aad423a1214e8e0b5aff05850c3050812d7493e803bdc01a36d19535"
+  },
+  "limitations": [
+    "Unique primary attribution has no extra mapping gain.",
+    "Related windows are correlated and selected outlets are not a population; no general accuracy claim.",
+    "Known application waiting excludes unobserved upstream residence; no missing fact is assigned zero.",
+    "Multiple possible operations include truly mixed windows, not necessarily misclassification.",
+    "Queue-only records do not assert application traffic; mapping alone cannot give critical dependencies or business loss.",
+    "Relation is an ideal input from preparation; no mapping recovery or measurement algorithm has been implemented."
+  ]
+}

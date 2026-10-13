@@ -20,7 +20,8 @@ def packet_key(row):
         (r['message_category'],*r['task_byte_range']) for r in row['classified_ranges'])))
 
 
-def compare(baseline, treatment, baseline_packets, treatment_packets, ports, case, output):
+def compare(baseline, treatment, baseline_packets, treatment_packets, ports, case, output,
+            baseline_case=None, bundle=None):
     a,b=read(baseline/'summary.json'),read(treatment/'summary.json')
     for gates,packets in ((baseline,baseline_packets),(treatment,treatment_packets)):
         seal=read(packets/'summary.json')
@@ -91,6 +92,9 @@ def compare(baseline, treatment, baseline_packets, treatment_packets, ports, cas
             before_latest=x['completion']['latest_completion_dag'],after_latest=y['completion']['latest_completion_dag'],
             before_model_stages=x['model_stages'],after_model_stages=y['model_stages']))
     result=dict(schema_version='issue-network-service-effect/1',passed=True,
+        workload=dict(source_case_ids=sorted({c['case_id'] for c in control['discovery']['candidates']}),
+            original_archive_sha256=control['original_archive_sha256'],
+            slice_sha256=control['slice_sha256']),
         fixed_fields=fields,fixed_values={k:a[k] for k in fields if k not in ('fixed_attributes','plan_files')},
         source_hashes={str(p):digest(p) for p in (baseline/'summary.json',treatment/'summary.json',
             baseline_packets/'summary.json',treatment_packets/'summary.json',ports,case/'selection.json')},
@@ -107,7 +111,10 @@ def compare(baseline, treatment, baseline_packets, treatment_packets, ports, cas
         interpretation=['Directed service total effect includes serialization, actual route changes and future injection feedback.',
             'Packet comparisons are by declared business byte range, not unstable packet UIDs; absent selected-outlet matches are not assigned zero delay.',
             'All paired contributions are retained, including regressions and messages unrelated to the final gate.',
-            'This is the 256-request normal reference; it cannot quantify the 1024-request discovery case.'])
+            'This comparison quantifies only its bound source workload, not another request scale or prefix.'])
+    if baseline_case is not None:
+        from .network_timing import compare_all
+        result['all_rank_business']=compare_all(baseline_case,case,a,b,bundle)
     save(output,result)
     print(json.dumps(dict(last_model_compute_ns=result['last_model_compute_ns'],packet_pair_coverage=result['packet_pair_coverage'])))
 
@@ -116,8 +123,11 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     for n in ('baseline','treatment','baseline-packets','treatment-packets','ports','case','output'):
         p.add_argument('--'+n,type=Path,required=True)
+    p.add_argument('--baseline-case',type=Path,help='Also compare every rank operation and model stage from this sealed baseline case')
+    p.add_argument('--slice',type=Path,help='Relocated common immutable slice for --baseline-case')
     p.add_argument('--worker',action='store_true',help=argparse.SUPPRESS);a=p.parse_args()
-    if a.worker:compare(a.baseline,a.treatment,a.baseline_packets,a.treatment_packets,a.ports,a.case,a.output)
+    if a.slice is not None and a.baseline_case is None:p.error('--slice requires --baseline-case')
+    if a.worker:compare(a.baseline,a.treatment,a.baseline_packets,a.treatment_packets,a.ports,a.case,a.output,a.baseline_case,a.slice)
     else:
         from moe_ub_cosim.host_probe import probe
         r=probe([sys.executable,'-m',__spec__.name,*sys.argv[1:],'--worker'],

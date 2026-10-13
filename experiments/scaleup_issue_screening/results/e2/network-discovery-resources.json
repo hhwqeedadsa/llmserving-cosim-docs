@@ -1,0 +1,603 @@
+{
+  "schema_version": "issue-network-discovery-resources/1",
+  "limits": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 68719476736,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "authorization": "User prioritized complete preservation and relaxed the 56 GiB planning choice; 64 GiB cumulative protection, all original roots, other limits unchanged.",
+  "initial": {
+    "utc": "2026-10-13T14:24:50.894009+00:00",
+    "git_commit": "381895c",
+    "host": {
+      "rss_bytes": 8589934592,
+      "address_bytes": 12884901888,
+      "artifact_bytes": 68719476736,
+      "wall_seconds": 1800,
+      "min_free_bytes": 21474836480,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/build/v04-platform",
+        "/root/moe-ub-cosim/runs/v04-platform",
+        "/root/moe-ub-cosim/build/m10-resource-efficiency",
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+        "/root/moe-ub-cosim/build/m10-research-slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice",
+        "/root/moe-ub-cosim/runs/mapping_value",
+        "/root/moe-ub-cosim/runs/scaleup_observability",
+        "/root/moe-ub-cosim/runs/task-sync-20261008",
+        "/root/moe-ub-cosim/build/m17-send-state",
+        "/root/moe-ub-cosim/runs/m17-send-state",
+        "/root/moe-ub-cosim/build/m19-a3-resources",
+        "/root/moe-ub-cosim/runs/m19-a3-resources",
+        "/root/moe-ub-cosim/runs/m20-segment-facts",
+        "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+      ]
+    },
+    "backend_host": {
+      "rss_bytes": 51539607552,
+      "address_bytes": 60129542144,
+      "artifact_bytes": 68719476736,
+      "wall_seconds": 7200,
+      "min_free_bytes": 21474836480,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/build/v04-platform",
+        "/root/moe-ub-cosim/runs/v04-platform",
+        "/root/moe-ub-cosim/build/m10-resource-efficiency",
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+        "/root/moe-ub-cosim/build/m10-research-slice",
+        "/root/moe-ub-cosim/runs/v03-research-slice",
+        "/root/moe-ub-cosim/runs/mapping_value",
+        "/root/moe-ub-cosim/runs/scaleup_observability",
+        "/root/moe-ub-cosim/runs/task-sync-20261008",
+        "/root/moe-ub-cosim/build/m17-send-state",
+        "/root/moe-ub-cosim/runs/m17-send-state",
+        "/root/moe-ub-cosim/build/m19-a3-resources",
+        "/root/moe-ub-cosim/runs/m19-a3-resources",
+        "/root/moe-ub-cosim/runs/m20-segment-facts",
+        "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+      ]
+    },
+    "usage": {
+      "apparent_bytes": 49830230952,
+      "allocated_bytes": 50994024448
+    },
+    "free_bytes": 6451140198400,
+    "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+    "authorization": "\u8865\u9f50\u73b0\u6709\u4efb\u52a1\uff1b\u4f18\u5148\u5b8c\u6574\u4fdd\u5b58\uff0c\u4e0d\u4e3a56GiB\u53cd\u590d\u53d6\u820d\uff1b64GiB\u4f5c\u4e3a\u672c\u8f6e\u660e\u786e\u4fdd\u62a4\u989d\u5ea6",
+    "previous_target_runs": 2,
+    "target_run_limit": 6,
+    "discovery_archive": "runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz",
+    "platform_unchanged": true,
+    "inputs_unchanged": true
+  },
+  "stages": {
+    "discovery-capture/run/logs/resources-export/probe.json": {
+      "sha256": "4ae4fe0103ddfada09332f8ca5d2862c2f0154ae82f65bfc5b45d2df82a964ab",
+      "status": "completed",
+      "wall_seconds": 147.17225205153227,
+      "peak_sampled_group_rss_bytes": 54882304,
+      "peak_sampled_artifact_bytes": 53854580736,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 7831092
+    },
+    "discovery-capture/run/logs/resources-replay/probe.json": {
+      "sha256": "cfbbeb5c5191918219b7bcea38e8e6446589a3f18bc6431f0e9e5ef8e4f04e8d",
+      "status": "completed",
+      "wall_seconds": 347.3241556882858,
+      "peak_sampled_group_rss_bytes": 8069152768,
+      "peak_sampled_artifact_bytes": 53895233536,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 7831092
+    },
+    "discovery-capture-equivalent-resources/probe.json": {
+      "sha256": "7c0f9b0e4d8f68e4a49f3b5715807acf2210fc39f9e945c2b523e3d3d0e43686",
+      "status": "completed",
+      "wall_seconds": 185.84414908848703,
+      "peak_sampled_group_rss_bytes": 160145408,
+      "peak_sampled_artifact_bytes": 53856202752,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 178340
+    },
+    "discovery-capture-gates-resources/probe.json": {
+      "sha256": "d33cc24d1fe11dfed93ff84f3beda6e88ee7a8373789cbc999de86b948cfe0ff",
+      "status": "completed",
+      "wall_seconds": 71.84261439368129,
+      "peak_sampled_group_rss_bytes": 3338743808,
+      "peak_sampled_artifact_bytes": 53866237952,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 3407676
+    },
+    "discovery-capture-packets-resources/probe.json": {
+      "sha256": "1ff30b3ad034bf5d9e3308212b6c1736f644392ce6045168b2ff6f89d53a2a32",
+      "status": "completed",
+      "wall_seconds": 45.7333803512156,
+      "peak_sampled_group_rss_bytes": 7548928,
+      "peak_sampled_artifact_bytes": 53866438656,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 263712
+    },
+    "discovery-capture-prepare-resources/probe.json": {
+      "sha256": "6c18558e0a11bae01de5223e2fb82f1556f369508bd9870e90f0fc9433ecba40",
+      "status": "completed",
+      "wall_seconds": 42.85636962018907,
+      "peak_sampled_group_rss_bytes": 5382144,
+      "peak_sampled_artifact_bytes": 53063225344,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 91096
+    },
+    "discovery-compact-resources/probe.json": {
+      "sha256": "4891e053934364ebfa16d57d792a54b877f8add3854258ef14a71072f676c64b",
+      "status": "completed",
+      "wall_seconds": 89.7230510879308,
+      "peak_sampled_group_rss_bytes": 122511360,
+      "peak_sampled_artifact_bytes": 53056266240,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 121688
+    },
+    "discovery-information/evaluation.json-resources/probe.json": {
+      "sha256": "eeb207501e28b11e74a7147ddc2b8df3361743741d37e0578757611f25b6ff36",
+      "status": "completed",
+      "wall_seconds": 50.608432583510876,
+      "peak_sampled_group_rss_bytes": 7544832,
+      "peak_sampled_artifact_bytes": 54698164224,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 85600
+    },
+    "discovery-information/mapping-evaluation.json-resources/probe.json": {
+      "sha256": "4832704bdaf5a4825745b1864a4fdfd1623c60c67d41862c86527d604b8187d9",
+      "status": "completed",
+      "wall_seconds": 49.63042793609202,
+      "peak_sampled_group_rss_bytes": 5382144,
+      "peak_sampled_artifact_bytes": 54704803840,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 85380
+    },
+    "discovery-information/relation.json-resources/probe.json": {
+      "sha256": "e25f3789eccbc53fde4ca58845b0e8adb3bdd3f32739d7f0a54d383c5146152d",
+      "status": "completed",
+      "wall_seconds": 50.24641830287874,
+      "peak_sampled_group_rss_bytes": 5402624,
+      "peak_sampled_artifact_bytes": 54704623616,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 84112
+    },
+    "discovery-information-resources/probe.json": {
+      "sha256": "844a8639c18a2a95172790aa850448c743f7449ec10c7bc59d06613103f26b9b",
+      "status": "completed",
+      "wall_seconds": 49.39442031085491,
+      "peak_sampled_group_rss_bytes": 5378048,
+      "peak_sampled_artifact_bytes": 54697967616,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 978792
+    },
+    "discovery-restored-resources/probe.json": {
+      "sha256": "82c1dbb8fba79f8d6396f45b0dc441401458af66b68d684d0aa7d071cc17081f",
+      "status": "completed",
+      "wall_seconds": 82.90890632010996,
+      "peak_sampled_group_rss_bytes": 305201152,
+      "peak_sampled_artifact_bytes": 52886990848,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 318528
+    },
+    "discovery-service-n1/run/logs/resources-export/probe.json": {
+      "sha256": "173075d95eb80e5821332404db41c47f30487d230db73c7900673cd12acd1c8d",
+      "status": "completed",
+      "wall_seconds": 143.26236572116613,
+      "peak_sampled_group_rss_bytes": 54984704,
+      "peak_sampled_artifact_bytes": 54664253440,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 7834928
+    },
+    "discovery-service-n1/run/logs/resources-replay/probe.json": {
+      "sha256": "b1acb117b64966c779f972b77f30d07e75f200e431afd1803c048f00de9f2102",
+      "status": "completed",
+      "wall_seconds": 364.6901642717421,
+      "peak_sampled_group_rss_bytes": 8073355264,
+      "peak_sampled_artifact_bytes": 54644957184,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 7834928
+    },
+    "discovery-service-n1-effect-all.json-resources/probe.json": {
+      "sha256": "35a964c75ce6e656cd32ed3bf909707cbe5c07c2e518b982e549e1a1ecc82e94",
+      "status": "completed",
+      "wall_seconds": 63.32081189006567,
+      "peak_sampled_group_rss_bytes": 905093120,
+      "peak_sampled_artifact_bytes": 54691270656,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 3110572
+    },
+    "discovery-service-n1-effect-complete.json-resources/probe.json": {
+      "sha256": "2a8d992c8b2fb267db43c2b9601a3a0b0b404ef195ddf3ffafddf1daebe67b39",
+      "status": "completed",
+      "wall_seconds": 131.53691314347088,
+      "peak_sampled_group_rss_bytes": 904167424,
+      "peak_sampled_artifact_bytes": 54704611328,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 3110004
+    },
+    "discovery-service-n1-effect.json-resources/probe.json": {
+      "sha256": "127c78a7954e23f63bdbcace56674d0fea1103ebcbdc0451d482983ef43a1afd",
+      "status": "completed",
+      "wall_seconds": 49.048856016248465,
+      "peak_sampled_group_rss_bytes": 5341184,
+      "peak_sampled_artifact_bytes": 54678806528,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 459588
+    },
+    "discovery-service-n1-gates-resources/probe.json": {
+      "sha256": "fcf16bd643a4c9a14b3827df812e54407b63eba1541a440c4a85d1a97ab4dd4b",
+      "status": "completed",
+      "wall_seconds": 76.80224572308362,
+      "peak_sampled_group_rss_bytes": 3342446592,
+      "peak_sampled_artifact_bytes": 54674243584,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 3408216
+    },
+    "discovery-service-n1-packets-resources/probe.json": {
+      "sha256": "bb10d5a0636941a0db1795d9eb2648693717061ed6c79412557f341e7f0d2a42",
+      "status": "completed",
+      "wall_seconds": 49.36602479405701,
+      "peak_sampled_group_rss_bytes": 6483968,
+      "peak_sampled_artifact_bytes": 54674432000,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 272936
+    },
+    "discovery-service-n1-prepare-resources/probe.json": {
+      "sha256": "787940aed6f81b3922d315f29ebe857e432a3be3d1f2b89441e1c96ca6cf81cc",
+      "status": "completed",
+      "wall_seconds": 46.17372422479093,
+      "peak_sampled_group_rss_bytes": 5382144,
+      "peak_sampled_artifact_bytes": 53873397760,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 102892
+    },
+    "discovery-timing-workflow/baseline/logs/resources-export/probe.json": {
+      "sha256": "5090d1e9eb545e3e2ba46e19a5a0b98acdfd9fc6c5bb764b4dd0278eece55095",
+      "status": "completed",
+      "wall_seconds": 48.479258527979255,
+      "peak_sampled_group_rss_bytes": 7434240,
+      "peak_sampled_artifact_bytes": 54681288704,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 143036
+    },
+    "discovery-timing-workflow/baseline/logs/resources-run/probe.json": {
+      "sha256": "ef9d1400e3ac66eb7e02fe137781467aefae2024d68af64a77c00e2b6450f191",
+      "status": "completed",
+      "wall_seconds": 49.16806927137077,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "peak_sampled_artifact_bytes": 54681165824,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 95084
+    },
+    "discovery-timing-workflow/capture/logs/resources-export/probe.json": {
+      "sha256": "c8ce2e4ad390ea2f16b1a3a8a484f8f2d5c302bd5b0d7c5a49d6b8e11208d06b",
+      "status": "completed",
+      "wall_seconds": 49.48852526023984,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "peak_sampled_artifact_bytes": 54682853376,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 118760
+    },
+    "discovery-timing-workflow/capture/logs/resources-replay/probe.json": {
+      "sha256": "100ac288d7128494cd7472e0e3a9eb302ad86b66d02050002305ce80b755e9b3",
+      "status": "completed",
+      "wall_seconds": 50.04820315539837,
+      "peak_sampled_group_rss_bytes": 7434240,
+      "peak_sampled_artifact_bytes": 54682730496,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 88192
+    },
+    "discovery-timing-workflow/faster/logs/resources-export/probe.json": {
+      "sha256": "c70a09ff740f026af4a68922113e6d8164fc1ff188fe9543df9bf05fed2379c4",
+      "status": "completed",
+      "wall_seconds": 50.45852942764759,
+      "peak_sampled_group_rss_bytes": 6438912,
+      "peak_sampled_artifact_bytes": 54684291072,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 86700
+    },
+    "discovery-timing-workflow/faster/logs/resources-replay/probe.json": {
+      "sha256": "eeaa315a213b53dacb2a0f0cc0e2b974d9dea9038a5e03f07631b8319e475c28",
+      "status": "completed",
+      "wall_seconds": 49.99943829886615,
+      "peak_sampled_group_rss_bytes": 6443008,
+      "peak_sampled_artifact_bytes": 54684168192,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 86700
+    },
+    "discovery-timing-workflow/prepared/logs/resources/probe.json": {
+      "sha256": "55b629da42f84e6b1b16027396f8ab005aa8f8217120fd68681f40d65b547554",
+      "status": "completed",
+      "wall_seconds": 49.872850343585014,
+      "peak_sampled_group_rss_bytes": 7471104,
+      "peak_sampled_artifact_bytes": 54679400448,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 87120
+    },
+    "discovery-timing-workflow/timing-baseline/run/logs/resources-export/probe.json": {
+      "sha256": "c8ce2e4ad390ea2f16b1a3a8a484f8f2d5c302bd5b0d7c5a49d6b8e11208d06b",
+      "status": "completed",
+      "wall_seconds": 49.48852526023984,
+      "peak_sampled_group_rss_bytes": 7491584,
+      "peak_sampled_artifact_bytes": 54682853376,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 118760
+    },
+    "discovery-timing-workflow/timing-baseline/run/logs/resources-replay/probe.json": {
+      "sha256": "100ac288d7128494cd7472e0e3a9eb302ad86b66d02050002305ce80b755e9b3",
+      "status": "completed",
+      "wall_seconds": 50.04820315539837,
+      "peak_sampled_group_rss_bytes": 7434240,
+      "peak_sampled_artifact_bytes": 54682730496,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 88192
+    },
+    "discovery-timing-workflow/timing-treatment/run/logs/resources-export/probe.json": {
+      "sha256": "c70a09ff740f026af4a68922113e6d8164fc1ff188fe9543df9bf05fed2379c4",
+      "status": "completed",
+      "wall_seconds": 50.45852942764759,
+      "peak_sampled_group_rss_bytes": 6438912,
+      "peak_sampled_artifact_bytes": 54684291072,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 86700
+    },
+    "discovery-timing-workflow/timing-treatment/run/logs/resources-replay/probe.json": {
+      "sha256": "eeaa315a213b53dacb2a0f0cc0e2b974d9dea9038a5e03f07631b8319e475c28",
+      "status": "completed",
+      "wall_seconds": 49.99943829886615,
+      "peak_sampled_group_rss_bytes": 6443008,
+      "peak_sampled_artifact_bytes": 54684168192,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 86700
+    },
+    "discovery-timing-workflow-resources/probe.json": {
+      "sha256": "05272214f012d1e0ff80b7d8629ad1f337416d5bba95e60529b496dca697f0d7",
+      "status": "completed",
+      "wall_seconds": 400.0101975016296,
+      "peak_sampled_group_rss_bytes": 195182592,
+      "peak_sampled_artifact_bytes": 54684860416,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 147688
+    },
+    "discovery-capture.tar.gz-resources/probe.json": {
+      "sha256": "ec408f705a930eafd3ed7ef246c44319871bd745c3a88a6e64c693dd0f32c5a6",
+      "status": "completed",
+      "wall_seconds": 75.53195854462683,
+      "peak_sampled_group_rss_bytes": 85766144,
+      "peak_sampled_artifact_bytes": 54873415680,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 117488
+    },
+    "discovery-restored-release-0-resources/probe.json": {
+      "sha256": "f2bbfd679df7057b61cc503b819adcfdf1fb0a48f7958e5b6d3ec92fa6e5717b",
+      "status": "completed",
+      "wall_seconds": 65.33937230333686,
+      "peak_sampled_group_rss_bytes": 173813760,
+      "peak_sampled_artifact_bytes": 53520232448,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 181004
+    },
+    "discovery-service-n1.tar.gz-resources/probe.json": {
+      "sha256": "cdac6e25220ae1892c3252e6a457cc68164f079a96006b60fb6897888e265ceb",
+      "status": "completed",
+      "wall_seconds": 71.61396217346191,
+      "peak_sampled_group_rss_bytes": 81743872,
+      "peak_sampled_artifact_bytes": 54312292352,
+      "child_exit_code": 0,
+      "max_waited_child_rss_kib": 118560
+    }
+  },
+  "peak_sampled_artifact_bytes": 54873415680,
+  "final_measured_usage": {
+    "apparent_bytes": 51354701874,
+    "allocated_bytes": 52522278912
+  },
+  "final_free_bytes": 6445131030528,
+  "archives": {
+    "discovery-capture": {
+      "index_sha256": "15ce4e541815d684fb3f921292e435bcf66979de66ab3b2d2d455323a030e923",
+      "file_count": 28270,
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "95f6f0c158589f99bb1d317ec0080b6d321faba594dbf3b233c5d2c22bbc2fdf",
+      "archive_bytes": 201387957,
+      "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/discovery-capture",
+      "logical_bytes": 684184262,
+      "verified": true,
+      "expanded_released": true
+    },
+    "discovery-service-n1": {
+      "index_sha256": "cca0dbf0b4158cb2921ddcf1e161d25f2aab810d23088ccd23f37e7f5384c69c",
+      "file_count": 28266,
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "cc8fba10115f273beeb5e423f9f1e075bf021be0462397bb7980f2e822c5b3d8",
+      "archive_bytes": 200802009,
+      "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/discovery-service-n1",
+      "logical_bytes": 681567522,
+      "verified": true,
+      "expanded_released": true
+    }
+  },
+  "target_runs": {
+    "limit": 6,
+    "runs": [
+      {
+        "number": 1,
+        "case": "capture",
+        "purpose": "Merged passive details for N1 and N2 in the explicitly separate 256-request normal reference",
+        "status": "completed"
+      },
+      {
+        "number": 2,
+        "case": "service-n1-gzip",
+        "purpose": "One predeclared outlet service diagnostic in the unchanged normal 256-request reference",
+        "status": "completed",
+        "preflight_sha256": "26cfe74ea2ea2282d1e7cef3c274104c733a3665c61d0570a0b6cec258db3aef"
+      },
+      {
+        "number": 3,
+        "case": "discovery-capture",
+        "purpose": "Merged passive N1/N2 capture in the unchanged original 1024-request discovery workload",
+        "status": "completed",
+        "started_utc": "2026-10-13T14:30:08.054707+00:00",
+        "preflight_sha256": "b8e216f59bc247c0680fd546a2afec8d00cdb645493b8bb85cfeda97d16639c6",
+        "ended_utc": "2026-10-13T14:38:30.125532+00:00"
+      },
+      {
+        "number": 4,
+        "case": "discovery-service-n1",
+        "purpose": "One predeclared N1 local-service diagnostic in the original 1024-request discovery workload",
+        "status": "completed",
+        "started_utc": "2026-10-13T14:47:51.335373+00:00",
+        "preflight_sha256": "75224af3e190866bb50e3bf5618bb70e00702916f7bf93661553664b22380b55",
+        "ended_utc": "2026-10-13T14:56:26.981781+00:00"
+      }
+    ]
+  },
+  "checks": {
+    "network_unit_checks": 13,
+    "network_checks_log_sha256": "60b5edc8087e061f2f9c8555ca9c1875fac04657d569ed1c0f03fc9a75a17576",
+    "fresh_public_small_workflow": {
+      "passed": true,
+      "synthetic_only": true,
+      "no_old_run_input": true,
+      "backend_sha256": "41a0d9b46aab6490dda25f1552839629534da976a428d443476f9c990dd59af5",
+      "program_sha256": "d00897fbd4f0b88526e526de77e920a105f5386a5030abed37aa725cbf9cee21",
+      "capture_equivalence": {
+        "endpoint_ops": {
+          "records": 12,
+          "sha256": "052a2808036e9e96ef1127bdc56e3a027fd844c6da46178d29973bdb955fa1f3"
+        },
+        "local_deliveries": {
+          "records": 20,
+          "sha256": "1922fb7a41d2672b4a63b94674ef6afbbf1084e912fc2f4591e38fed0a486684"
+        },
+        "native_completions": {
+          "records": 46,
+          "sha256": "09a4ee7ee451b2a42202a9b465dd12565fe0c2ded25c282e54ec27e9b67c4041"
+        },
+        "native_starts": {
+          "records": 46,
+          "sha256": "a0faafff6edb5200a28a7732270e4b87f531b756d6111e4c2d2966ce470bfc36"
+        },
+        "node_execution": {
+          "records": 448,
+          "sha256": "c4da0030259c58aa17faf73bfce785f6e084cf1df7fb07a0aabae84490e2829c"
+        },
+        "operation_registry": {
+          "records": 4,
+          "sha256": "b55ada4fe2452bb71c1e8ac238627177ebe0d7dd4968a9b252b1aed5e27bcd06"
+        },
+        "operation_stages": {
+          "records": 90,
+          "sha256": "38068212455ff011970bd7f4a645cce387e1ff212eedf17d31322a8821eacb70"
+        },
+        "plan_summary": {
+          "records": 1,
+          "sha256": "d453622f35f8c3c5f794cafbab05859a331770a234feec82262f6eb21b7a16fa"
+        },
+        "planned_transfers": {
+          "records": 66,
+          "sha256": "cda8d63beaa37f1548a3dfdcf351409f172126a87cbfe4ec15c50af69bc17981"
+        },
+        "target_writes": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "transfer_registry": {
+          "records": 46,
+          "sha256": "4df8c2e0988951889152a9e3d33b8015a764a4b20242a2a4d00100717dfc5533"
+        },
+        "transfers": {
+          "records": 46,
+          "sha256": "9037817f17d572453e16d99d8ffa8902334eef7a2d776d27031a17b49c3f8682"
+        },
+        "wqe_completions": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "wqe_starts": {
+          "records": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "directed_service_readback": {
+        "intervals": [
+          {
+            "base_rate_bps": 400000000000,
+            "end_ns": 1000000,
+            "node_id": 4,
+            "port_id": 0,
+            "rate_bps": 800000000000,
+            "start_ns": 0
+          }
+        ],
+        "selection": "rate_at_successful_packet_start"
+      },
+      "baseline_end_ns": 3414,
+      "faster_end_ns": 3414,
+      "faster_is_not_a_required_test_result": true,
+      "all_rank_timing_sha256": "eeb1a86e75dfd4761ca52bf748cc37233bbac5839bb7928807efd3ab810d1bc8",
+      "all_rank_endpoint_pairs": 12,
+      "all_rank_model_stage_pairs": 40
+    },
+    "fresh_wire_categories": {
+      "before": {
+        "ports": 5,
+        "business_payload_bytes": 9217,
+        "application_metadata_bytes": 374,
+        "padding_bytes": 102,
+        "data_protocol_overhead_bytes": 1876,
+        "control_packet_bytes": 1024,
+        "unattributed_bytes": 0,
+        "counted_packet_bytes": 12593,
+        "counted_packets": 131
+      },
+      "after": {
+        "ports": 5,
+        "business_payload_bytes": 9217,
+        "application_metadata_bytes": 374,
+        "padding_bytes": 102,
+        "data_protocol_overhead_bytes": 1876,
+        "control_packet_bytes": 1024,
+        "unattributed_bytes": 0,
+        "counted_packet_bytes": 12593,
+        "counted_packets": 131
+      },
+      "passed": true
+    },
+    "no_platform_source_or_binary_change": true
+  },
+  "program_sha256": "cd0b2263666acb4121c66b677ca99390fd9bac1e55bf478b69e8aee2baea2476",
+  "retained": [
+    "All historical archives and other artifact roots",
+    "Verified full passive and N1 service archives",
+    "Original discovery compact shared slice",
+    "Full gate/packet/all-rank/information comparisons and every command/resource log",
+    "Fresh synthetic workflow, its source archive and inputs"
+  ],
+  "released": "Only newly expanded cases after full archive verification and the unchanged original-archive restoration; no old archive deleted.",
+  "caveat": "Sampled host measurements are not formal worst-case bounds. Historical logs and aliased synthetic paths are not additional executions; stage durations are not summed as disjoint research time.",
+  "memory_interpretation": "Both sampled process-group RSS and OS waited-child high-water RSS are reported. Short analyses can complete between group samples; use both, not a tiny sampled value as an exact peak. Neither is a proof of an unseen whole-tree maximum. RUSAGE_CHILDREN is cumulative within the supervisor process: a later export may retain the earlier backend high-water value. Do not attribute that value exclusively to export."
+}

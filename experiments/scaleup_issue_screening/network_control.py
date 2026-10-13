@@ -108,7 +108,7 @@ def prepare(archive, bundle, selection, backend, output, candidate=None, baselin
             'If downstream credit gates service, rate change alone need not test the mechanism; busy/idle and observed arrival evidence must be checked first.'],
         boundaries=['Service changes serialization and queueing together; total effect is not pure removable queue delay.',
                     'Shared execution can change packet paths and future injection; same seed does not imply same path.',
-                    'A normal 256-request auxiliary case does not establish the 1024-request discovery effect.']))
+                    'Conclusions apply to the bound source archive; auxiliary and discovery workloads cannot substitute for each other.']))
     save(output/'case.json',dict(schema_version='issue-screening-case/1',owned_by='scaleup_issue_screening',
         case_id='network-'+(candidate or 'capture'),platform_commit=accepted['platform_commit'],backend_sha256=digest(backend)))
     print('Prepared',len(ports),'ports; intervention',candidate)

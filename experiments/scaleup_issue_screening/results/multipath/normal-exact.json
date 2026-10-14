@@ -1,0 +1,709 @@
+{
+  "schema_version": "issue-normal-mechanism-review/1",
+  "source_manifest_sha256": "317cdc9a2e22d75c01dbf7fce7ac1b0be5a4992ce1ef2fde84d46b735b1fe0f7",
+  "prepared_sha256": "f81dd4e99fee7df7698e53c52cb7a6cdc53cefc48c5695fd3aef64a9f276e9ce",
+  "deep_sha256": "d8af2b783967d671fe02cf57a88ab4c907e9c3bd12bc45566b993b610ac42b77",
+  "evaluation_sha256": "34b2ff758ddd2d1819a462d1f9c4eac6a8926573a8470304deaa5a632d555c43",
+  "source_archive": "runs/scaleup_issue_screening/diagnostic-study-20261014/archives/target-r00.tar.gz",
+  "source_archive_index_sha256": "c8d3e5f70a579a72b8a20b9dca9d8bdabfa19058b29bcf6c0771f55e83e19363",
+  "coverage": {
+    "start_ns": 0,
+    "end_ns": 394911,
+    "captured_ports": 3584,
+    "public_ports": 2688,
+    "records": 19123879,
+    "complete": true
+  },
+  "event_counts": {
+    "qualifying_queue_events": 140,
+    "slow_service_events": 0,
+    "credit_witnesses": 0
+  },
+  "cases": [
+    {
+      "case_id": "multipath-1",
+      "problem": "multipath",
+      "fixed_selection": {
+        "peer_group": [
+          "destination",
+          78
+        ],
+        "outlets": [
+          [
+            799,
+            14
+          ],
+          [
+            801,
+            14
+          ]
+        ],
+        "planes": [
+          3,
+          5
+        ],
+        "packet_bytes": [
+          451260,
+          423400
+        ],
+        "relative_work_difference": 0.06173824402783318,
+        "t90_ns": [
+          325000,
+          270000
+        ],
+        "t90_difference_ns": 55000
+      },
+      "sides": [
+        {
+          "outlet": [
+            799,
+            14
+          ],
+          "all_packet_transmit": {
+            "bytes": 451260,
+            "t50_ns": 123598,
+            "t90_ns": 324776,
+            "t99_ns": 354953
+          },
+          "whole_business_arrival": {
+            "bytes": 436224,
+            "t50_ns": 123597,
+            "t90_ns": 324775,
+            "t99_ns": 354952
+          },
+          "whole_business_transmit": {
+            "bytes": 436224,
+            "t50_ns": 123598,
+            "t90_ns": 324776,
+            "t99_ns": 354953
+          },
+          "per_operation": {
+            "D.w0.L6.combine": {
+              "arrival": {
+                "bytes": 137216,
+                "t50_ns": 55533,
+                "t90_ns": 81687,
+                "t99_ns": 90887
+              },
+              "transmit": {
+                "bytes": 137216,
+                "t50_ns": 55534,
+                "t90_ns": 81688,
+                "t99_ns": 90888
+              },
+              "wire_work_bytes": 138760,
+              "categories": {
+                "business_data": 137216,
+                "combine_flag": 256
+              }
+            },
+            "D.w0.L6.dispatch": {
+              "arrival": {
+                "bytes": 11264,
+                "t50_ns": 3873,
+                "t90_ns": 5913,
+                "t99_ns": 5913
+              },
+              "transmit": {
+                "bytes": 11264,
+                "t50_ns": 3874,
+                "t90_ns": 5914,
+                "t99_ns": 5914
+              },
+              "wire_work_bytes": 13672,
+              "categories": {
+                "business_data": 11264,
+                "attached_metadata": 16,
+                "dispatch_count": 1216
+              }
+            },
+            "D.w0.L7.combine": {
+              "arrival": {
+                "bytes": 131072,
+                "t50_ns": 127744,
+                "t90_ns": 196716,
+                "t99_ns": 235817
+              },
+              "transmit": {
+                "bytes": 131072,
+                "t50_ns": 127745,
+                "t90_ns": 196717,
+                "t99_ns": 235818
+              },
+              "wire_work_bytes": 132532,
+              "categories": {
+                "business_data": 131072,
+                "combine_flag": 256
+              }
+            },
+            "D.w0.L7.dispatch": {
+              "arrival": {
+                "bytes": 15360,
+                "t50_ns": 92816,
+                "t90_ns": 93258,
+                "t99_ns": 93258
+              },
+              "transmit": {
+                "bytes": 15360,
+                "t50_ns": 92817,
+                "t90_ns": 93259,
+                "t99_ns": 93259
+              },
+              "wire_work_bytes": 17916,
+              "categories": {
+                "dispatch_count": 1280,
+                "business_data": 15360,
+                "attached_metadata": 16
+              }
+            },
+            "D.w0.L8.combine": {
+              "arrival": {
+                "bytes": 137216,
+                "t50_ns": 276288,
+                "t90_ns": 351854,
+                "t99_ns": 357937
+              },
+              "transmit": {
+                "bytes": 137216,
+                "t50_ns": 276289,
+                "t90_ns": 351855,
+                "t99_ns": 357938
+              },
+              "wire_work_bytes": 139028,
+              "categories": {
+                "business_data": 137216,
+                "combine_flag": 384
+              }
+            },
+            "D.w0.L8.dispatch": {
+              "arrival": {
+                "bytes": 4096,
+                "t50_ns": 216350,
+                "t90_ns": 216350,
+                "t99_ns": 216350
+              },
+              "transmit": {
+                "bytes": 4096,
+                "t50_ns": 216351,
+                "t90_ns": 216351,
+                "t99_ns": 216351
+              },
+              "wire_work_bytes": 6104,
+              "categories": {
+                "dispatch_count": 1056,
+                "business_data": 4096
+              }
+            }
+          },
+          "business_wait_ns": {
+            "n": 120,
+            "sum": 495,
+            "min": 0,
+            "median": 1,
+            "p95": 39,
+            "max": 55
+          },
+          "terminal_necessary_transfers": [
+            4295083511
+          ]
+        },
+        {
+          "outlet": [
+            801,
+            14
+          ],
+          "all_packet_transmit": {
+            "bytes": 423400,
+            "t50_ns": 125826,
+            "t90_ns": 269005,
+            "t99_ns": 348879
+          },
+          "whole_business_arrival": {
+            "bytes": 408576,
+            "t50_ns": 125825,
+            "t90_ns": 269004,
+            "t99_ns": 348878
+          },
+          "whole_business_transmit": {
+            "bytes": 408576,
+            "t50_ns": 125826,
+            "t90_ns": 269005,
+            "t99_ns": 348879
+          },
+          "per_operation": {
+            "D.w0.L6.combine": {
+              "arrival": {
+                "bytes": 112640,
+                "t50_ns": 45517,
+                "t90_ns": 79745,
+                "t99_ns": 87156
+              },
+              "transmit": {
+                "bytes": 112640,
+                "t50_ns": 45518,
+                "t90_ns": 79746,
+                "t99_ns": 87157
+              },
+              "wire_work_bytes": 114052,
+              "categories": {
+                "business_data": 112640,
+                "combine_flag": 320
+              }
+            },
+            "D.w0.L6.dispatch": {
+              "arrival": {
+                "bytes": 6144,
+                "t50_ns": 2483,
+                "t90_ns": 3719,
+                "t99_ns": 3719
+              },
+              "transmit": {
+                "bytes": 6144,
+                "t50_ns": 2484,
+                "t90_ns": 3720,
+                "t99_ns": 3720
+              },
+              "wire_work_bytes": 8628,
+              "categories": {
+                "business_data": 6144,
+                "attached_metadata": 32,
+                "dispatch_count": 1248
+              }
+            },
+            "D.w0.L7.combine": {
+              "arrival": {
+                "bytes": 135168,
+                "t50_ns": 127330,
+                "t90_ns": 193556,
+                "t99_ns": 235804
+              },
+              "transmit": {
+                "bytes": 135168,
+                "t50_ns": 127331,
+                "t90_ns": 193557,
+                "t99_ns": 235805
+              },
+              "wire_work_bytes": 136744,
+              "categories": {
+                "combine_flag": 288,
+                "business_data": 135168
+              }
+            },
+            "D.w0.L7.dispatch": {
+              "arrival": {
+                "bytes": 37888,
+                "t50_ns": 97945,
+                "t90_ns": 101813,
+                "t99_ns": 101813
+              },
+              "transmit": {
+                "bytes": 37888,
+                "t50_ns": 97946,
+                "t90_ns": 101814,
+                "t99_ns": 101814
+              },
+              "wire_work_bytes": 40400,
+              "categories": {
+                "dispatch_count": 1120,
+                "business_data": 37888,
+                "attached_metadata": 48
+              }
+            },
+            "D.w0.L8.combine": {
+              "arrival": {
+                "bytes": 106496,
+                "t50_ns": 263751,
+                "t90_ns": 339320,
+                "t99_ns": 348920
+              },
+              "transmit": {
+                "bytes": 106496,
+                "t50_ns": 263752,
+                "t90_ns": 339321,
+                "t99_ns": 348961
+              },
+              "wire_work_bytes": 108024,
+              "categories": {
+                "business_data": 106496,
+                "combine_flag": 352
+              }
+            },
+            "D.w0.L8.dispatch": {
+              "arrival": {
+                "bytes": 10240,
+                "t50_ns": 245905,
+                "t90_ns": 246032,
+                "t99_ns": 246032
+              },
+              "transmit": {
+                "bytes": 10240,
+                "t50_ns": 245906,
+                "t90_ns": 246033,
+                "t99_ns": 246033
+              },
+              "wire_work_bytes": 12512,
+              "categories": {
+                "dispatch_count": 1120,
+                "business_data": 10240,
+                "attached_metadata": 32
+              }
+            }
+          },
+          "business_wait_ns": {
+            "n": 112,
+            "sum": 623,
+            "min": 0,
+            "median": 1,
+            "p95": 41,
+            "max": 165
+          },
+          "terminal_necessary_transfers": []
+        }
+      ]
+    },
+    {
+      "case_id": "multipath-2",
+      "problem": "multipath",
+      "fixed_selection": {
+        "peer_group": [
+          "destination",
+          90
+        ],
+        "outlets": [
+          [
+            805,
+            10
+          ],
+          [
+            809,
+            10
+          ]
+        ],
+        "planes": [
+          2,
+          6
+        ],
+        "packet_bytes": [
+          452268,
+          415124
+        ],
+        "relative_work_difference": 0.08212829561233605,
+        "t90_ns": [
+          317000,
+          264000
+        ],
+        "t90_difference_ns": 53000
+      },
+      "sides": [
+        {
+          "outlet": [
+            805,
+            10
+          ],
+          "all_packet_transmit": {
+            "bytes": 452268,
+            "t50_ns": 124998,
+            "t90_ns": 316060,
+            "t99_ns": 381594
+          },
+          "whole_business_arrival": {
+            "bytes": 437248,
+            "t50_ns": 125895,
+            "t90_ns": 316059,
+            "t99_ns": 381593
+          },
+          "whole_business_transmit": {
+            "bytes": 437248,
+            "t50_ns": 125896,
+            "t90_ns": 316060,
+            "t99_ns": 381594
+          },
+          "per_operation": {
+            "D.w0.L6.combine": {
+              "arrival": {
+                "bytes": 133120,
+                "t50_ns": 41937,
+                "t90_ns": 78842,
+                "t99_ns": 94633
+              },
+              "transmit": {
+                "bytes": 133120,
+                "t50_ns": 41938,
+                "t90_ns": 78843,
+                "t99_ns": 94634
+              },
+              "wire_work_bytes": 134636,
+              "categories": {
+                "business_data": 133120,
+                "combine_flag": 256
+              }
+            },
+            "D.w0.L6.dispatch": {
+              "arrival": {
+                "bytes": 3072,
+                "t50_ns": 1986,
+                "t90_ns": 1986,
+                "t99_ns": 1986
+              },
+              "transmit": {
+                "bytes": 3072,
+                "t50_ns": 1987,
+                "t90_ns": 1987,
+                "t99_ns": 1987
+              },
+              "wire_work_bytes": 5064,
+              "categories": {
+                "business_data": 3072,
+                "attached_metadata": 16,
+                "dispatch_count": 1024
+              }
+            },
+            "D.w0.L7.combine": {
+              "arrival": {
+                "bytes": 133120,
+                "t50_ns": 122765,
+                "t90_ns": 165684,
+                "t99_ns": 232647
+              },
+              "transmit": {
+                "bytes": 133120,
+                "t50_ns": 122766,
+                "t90_ns": 165685,
+                "t99_ns": 232648
+              },
+              "wire_work_bytes": 134904,
+              "categories": {
+                "business_data": 133120,
+                "combine_flag": 384
+              }
+            },
+            "D.w0.L7.dispatch": {
+              "arrival": {
+                "bytes": 6144,
+                "t50_ns": 91934,
+                "t90_ns": 97385,
+                "t99_ns": 97385
+              },
+              "transmit": {
+                "bytes": 6144,
+                "t50_ns": 91935,
+                "t90_ns": 97386,
+                "t99_ns": 97386
+              },
+              "wire_work_bytes": 8148,
+              "categories": {
+                "dispatch_count": 992,
+                "business_data": 6144,
+                "attached_metadata": 32
+              }
+            },
+            "D.w0.L8.combine": {
+              "arrival": {
+                "bytes": 133120,
+                "t50_ns": 263330,
+                "t90_ns": 365518,
+                "t99_ns": 381675
+              },
+              "transmit": {
+                "bytes": 133120,
+                "t50_ns": 263331,
+                "t90_ns": 365519,
+                "t99_ns": 381676
+              },
+              "wire_work_bytes": 134816,
+              "categories": {
+                "business_data": 133120,
+                "combine_flag": 352
+              }
+            },
+            "D.w0.L8.dispatch": {
+              "arrival": {
+                "bytes": 28672,
+                "t50_ns": 236064,
+                "t90_ns": 240635,
+                "t99_ns": 240635
+              },
+              "transmit": {
+                "bytes": 28672,
+                "t50_ns": 236065,
+                "t90_ns": 240636,
+                "t99_ns": 240636
+              },
+              "wire_work_bytes": 31532,
+              "categories": {
+                "dispatch_count": 1312,
+                "business_data": 28672,
+                "attached_metadata": 64
+              }
+            }
+          },
+          "business_wait_ns": {
+            "n": 123,
+            "sum": 445,
+            "min": 1,
+            "median": 1,
+            "p95": 21,
+            "max": 58
+          },
+          "terminal_necessary_transfers": [
+            4295083751,
+            4295120883
+          ]
+        },
+        {
+          "outlet": [
+            809,
+            10
+          ],
+          "all_packet_transmit": {
+            "bytes": 415124,
+            "t50_ns": 123102,
+            "t90_ns": 263395,
+            "t99_ns": 368718
+          },
+          "whole_business_arrival": {
+            "bytes": 401408,
+            "t50_ns": 124485,
+            "t90_ns": 263394,
+            "t99_ns": 368799
+          },
+          "whole_business_transmit": {
+            "bytes": 401408,
+            "t50_ns": 124486,
+            "t90_ns": 263395,
+            "t99_ns": 368800
+          },
+          "per_operation": {
+            "D.w0.L6.combine": {
+              "arrival": {
+                "bytes": 122880,
+                "t50_ns": 30383,
+                "t90_ns": 75433,
+                "t99_ns": 85215
+              },
+              "transmit": {
+                "bytes": 122880,
+                "t50_ns": 30384,
+                "t90_ns": 75434,
+                "t99_ns": 85216
+              },
+              "wire_work_bytes": 124104,
+              "categories": {
+                "business_data": 122880,
+                "combine_flag": 160
+              }
+            },
+            "D.w0.L6.dispatch": {
+              "arrival": {
+                "bytes": 14336,
+                "t50_ns": 3646,
+                "t90_ns": 6576,
+                "t99_ns": 6576
+              },
+              "transmit": {
+                "bytes": 14336,
+                "t50_ns": 3647,
+                "t90_ns": 6596,
+                "t99_ns": 6596
+              },
+              "wire_work_bytes": 16816,
+              "categories": {
+                "business_data": 14336,
+                "attached_metadata": 32,
+                "dispatch_count": 1216
+              }
+            },
+            "D.w0.L7.combine": {
+              "arrival": {
+                "bytes": 126976,
+                "t50_ns": 126005,
+                "t90_ns": 190894,
+                "t99_ns": 194106
+              },
+              "transmit": {
+                "bytes": 126976,
+                "t50_ns": 126006,
+                "t90_ns": 190895,
+                "t99_ns": 194111
+              },
+              "wire_work_bytes": 128556,
+              "categories": {
+                "business_data": 126976,
+                "combine_flag": 320
+              }
+            },
+            "D.w0.L7.dispatch": {
+              "arrival": {
+                "bytes": 11264,
+                "t50_ns": 91731,
+                "t90_ns": 92963,
+                "t99_ns": 92963
+              },
+              "transmit": {
+                "bytes": 11264,
+                "t50_ns": 91732,
+                "t90_ns": 92964,
+                "t99_ns": 92964
+              },
+              "wire_work_bytes": 12952,
+              "categories": {
+                "business_data": 11264,
+                "attached_metadata": 16,
+                "dispatch_count": 832
+              }
+            },
+            "D.w0.L8.combine": {
+              "arrival": {
+                "bytes": 81920,
+                "t50_ns": 263394,
+                "t90_ns": 362251,
+                "t99_ns": 368799
+              },
+              "transmit": {
+                "bytes": 81920,
+                "t50_ns": 263395,
+                "t90_ns": 362252,
+                "t99_ns": 368800
+              },
+              "wire_work_bytes": 82776,
+              "categories": {
+                "combine_flag": 128,
+                "business_data": 81920
+              }
+            },
+            "D.w0.L8.dispatch": {
+              "arrival": {
+                "bytes": 44032,
+                "t50_ns": 243818,
+                "t90_ns": 246196,
+                "t99_ns": 246533
+              },
+              "transmit": {
+                "bytes": 44032,
+                "t50_ns": 243819,
+                "t90_ns": 246197,
+                "t99_ns": 246534
+              },
+              "wire_work_bytes": 46448,
+              "categories": {
+                "dispatch_count": 992,
+                "business_data": 44032,
+                "attached_metadata": 80
+              }
+            }
+          },
+          "business_wait_ns": {
+            "n": 109,
+            "sum": 380,
+            "min": 1,
+            "median": 1,
+            "p95": 20,
+            "max": 72
+          },
+          "terminal_necessary_transfers": []
+        }
+      ]
+    }
+  ],
+  "limits": "Normal finite related slice, not hardware calibration or production prevalence. Exact supplied coverage only."
+}

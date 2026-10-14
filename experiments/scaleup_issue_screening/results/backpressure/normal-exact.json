@@ -1,0 +1,193 @@
+{
+  "schema_version": "issue-normal-mechanism-review/1",
+  "source_manifest_sha256": "317cdc9a2e22d75c01dbf7fce7ac1b0be5a4992ce1ef2fde84d46b735b1fe0f7",
+  "prepared_sha256": "f81dd4e99fee7df7698e53c52cb7a6cdc53cefc48c5695fd3aef64a9f276e9ce",
+  "deep_sha256": "d8af2b783967d671fe02cf57a88ab4c907e9c3bd12bc45566b993b610ac42b77",
+  "evaluation_sha256": "34b2ff758ddd2d1819a462d1f9c4eac6a8926573a8470304deaa5a632d555c43",
+  "source_archive": "runs/scaleup_issue_screening/diagnostic-study-20261014/archives/target-r00.tar.gz",
+  "source_archive_index_sha256": "c8d3e5f70a579a72b8a20b9dca9d8bdabfa19058b29bcf6c0771f55e83e19363",
+  "coverage": {
+    "start_ns": 0,
+    "end_ns": 394911,
+    "captured_ports": 3584,
+    "public_ports": 2688,
+    "records": 19123879,
+    "complete": true
+  },
+  "event_counts": {
+    "qualifying_queue_events": 140,
+    "slow_service_events": 0,
+    "credit_witnesses": 0
+  },
+  "cases": [
+    {
+      "case_id": "backpressure-1",
+      "problem": "backpressure",
+      "fixed_selection": {
+        "switch_id": 768,
+        "port_id": 0,
+        "role": "device_bound",
+        "plane": 0,
+        "start_ns": 1000,
+        "end_ns": 3000,
+        "stratum": "waiting_low_service",
+        "positive_windows": 2,
+        "voq_byte_ns": 7332,
+        "fifo_byte_ns": 0,
+        "packet_bytes": 7332
+      },
+      "selected_packets": 6,
+      "whole_outlet_packets": 476,
+      "actual_all_tx_packets": 476,
+      "selected_business_packets": 2,
+      "interval_wait_metrics": {
+        "fifo_wait_ns": {
+          "n": 6,
+          "sum": 0,
+          "min": 0,
+          "median": 0,
+          "p95": 0,
+          "max": 0
+        },
+        "arrival_to_fifo_ns": {
+          "n": 6,
+          "sum": 6,
+          "min": 1,
+          "median": 1,
+          "p95": 1,
+          "max": 1
+        },
+        "arrival_to_tx_ns": {
+          "n": 6,
+          "sum": 6,
+          "min": 1,
+          "median": 1,
+          "p95": 1,
+          "max": 1
+        },
+        "busy_during_wait_ns": {
+          "n": 6,
+          "sum": 0,
+          "min": 0,
+          "median": 0,
+          "p95": 0,
+          "max": 0
+        }
+      },
+      "whole_wait_metrics": {
+        "fifo_wait_ns": {
+          "n": 476,
+          "sum": 2186,
+          "min": 0,
+          "median": 0,
+          "p95": 41,
+          "max": 81
+        },
+        "arrival_to_fifo_ns": {
+          "n": 476,
+          "sum": 837,
+          "min": 0,
+          "median": 1,
+          "p95": 2,
+          "max": 130
+        },
+        "arrival_to_tx_ns": {
+          "n": 476,
+          "sum": 3023,
+          "min": 0,
+          "median": 1,
+          "p95": 43,
+          "max": 211
+        }
+      },
+      "selected_missing_wire_arrival": 0,
+      "selected_business_missing_wire_arrival": 0,
+      "selected_terminal_gate_packets": []
+    },
+    {
+      "case_id": "backpressure-2",
+      "problem": "backpressure",
+      "fixed_selection": {
+        "switch_id": 768,
+        "port_id": 17,
+        "role": "inter_switch",
+        "plane": 0,
+        "start_ns": 1000,
+        "end_ns": 3000,
+        "stratum": "waiting_low_service",
+        "positive_windows": 2,
+        "voq_byte_ns": 6320,
+        "fifo_byte_ns": 0,
+        "packet_bytes": 6320
+      },
+      "selected_packets": 4,
+      "whole_outlet_packets": 662,
+      "actual_all_tx_packets": 662,
+      "selected_business_packets": 2,
+      "interval_wait_metrics": {
+        "fifo_wait_ns": {
+          "n": 4,
+          "sum": 0,
+          "min": 0,
+          "median": 0,
+          "p95": 0,
+          "max": 0
+        },
+        "arrival_to_fifo_ns": {
+          "n": 4,
+          "sum": 4,
+          "min": 1,
+          "median": 1,
+          "p95": 1,
+          "max": 1
+        },
+        "arrival_to_tx_ns": {
+          "n": 4,
+          "sum": 4,
+          "min": 1,
+          "median": 1,
+          "p95": 1,
+          "max": 1
+        },
+        "busy_during_wait_ns": {
+          "n": 4,
+          "sum": 0,
+          "min": 0,
+          "median": 0,
+          "p95": 0,
+          "max": 0
+        }
+      },
+      "whole_wait_metrics": {
+        "fifo_wait_ns": {
+          "n": 662,
+          "sum": 1385,
+          "min": 0,
+          "median": 0,
+          "p95": 0,
+          "max": 81
+        },
+        "arrival_to_fifo_ns": {
+          "n": 661,
+          "sum": 767,
+          "min": 0,
+          "median": 1,
+          "p95": 1,
+          "max": 57
+        },
+        "arrival_to_tx_ns": {
+          "n": 661,
+          "sum": 2152,
+          "min": 0,
+          "median": 1,
+          "p95": 2,
+          "max": 138
+        }
+      },
+      "selected_missing_wire_arrival": 0,
+      "selected_business_missing_wire_arrival": 0,
+      "selected_terminal_gate_packets": []
+    }
+  ],
+  "limits": "Normal finite related slice, not hardware calibration or production prevalence. Exact supplied coverage only."
+}

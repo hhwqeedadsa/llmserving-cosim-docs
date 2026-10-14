@@ -162,6 +162,12 @@ public:
     void UpdateCrdToReturn(uint8_t vlId, int32_t consumeCell, Ptr<UbPort> targetPort);
     bool CbfcConsumeCrd(Ptr<Packet> p);
     void SendCrdAck(Ptr<Packet> cbfcPkt, uint32_t targetPortId);
+    // Passive initial-state reads. Never run scheduling/credit tests here.
+    const std::vector<int32_t>& GetTransmitCredits() const { return m_crdTxfree; }
+    uint32_t GetCreditCellBytes() const
+    {
+        return uint32_t(m_cbfcCfg.m_flitLen) * m_cbfcCfg.m_nFlitPerCell;
+    }
 
 protected:
     void ControlCreditRestoreNotify(uint32_t nodeId,
@@ -172,6 +178,8 @@ protected:
     uint32_t m_portId;
     uint32_t m_nodeId;
     TracedCallback<uint32_t, uint32_t, std::vector<uint8_t>> m_traceControlCreditRestoreNotify;
+    TracedCallback<Ptr<UbIngressQueue>, uint32_t, int32_t, uint32_t, bool> m_traceCreditDecision;
+    TracedCallback<uint32_t, int32_t, int32_t> m_traceCreditState;
 
     /**
     * @brief cbfc相关参数配置

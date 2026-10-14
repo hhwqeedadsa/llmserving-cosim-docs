@@ -145,6 +145,14 @@ TypeId UbCbfc::GetTypeId(void)
         TypeId("ns3::UbCbfc")
             .SetParent<UbFlowControl>()
             .AddConstructor<UbCbfc>()
+            .AddTraceSource("CreditDecision",
+                            "The actual exclusive-CBFC head-size eligibility test; no extra test is run.",
+                            MakeTraceSourceAccessor(&UbCbfc::m_traceCreditDecision),
+                            "ns3::UbCbfc::CreditDecision")
+            .AddTraceSource("CreditState",
+                            "Exclusive-CBFC credit level after consume or control/piggyback restore.",
+                            MakeTraceSourceAccessor(&UbCbfc::m_traceCreditState),
+                            "ns3::UbCbfc::CreditState")
             .AddTraceSource("ControlCreditRestoreNotify",
                             "Observed restored control credits at the real flow-control receive path.",
                             MakeTraceSourceAccessor(&UbCbfc::m_traceControlCreditRestoreNotify),
@@ -224,6 +232,7 @@ bool UbCbfc::IsFcLimited(Ptr<UbIngressQueue> ingressQ)
 
     int32_t consumeCellNum = ceil((float)nextPktSize / (m_cbfcCfg.m_flitLen * m_cbfcCfg.m_nFlitPerCell));
     const bool blocked = m_crdTxfree[priority] < consumeCellNum;
+    m_traceCreditDecision(ingressQ, nextPktSize, m_crdTxfree[priority], consumeCellNum, blocked);
     if (m_creditBlockedLast[priority] != blocked) {
         utils::UbUtils::CbfcStateNotify(m_nodeId,
                                         m_portId,
@@ -332,6 +341,7 @@ bool UbCbfc::CbfcConsumeCrd(Ptr<Packet> p)
     NS_LOG_DEBUG("befor consume, m_crdTxfree[ " << (uint32_t)vlId << " ]: " << m_crdTxfree[vlId]);
     if (m_crdTxfree[vlId] >= consumeCellNum) {
         m_crdTxfree[vlId] -= consumeCellNum;
+        m_traceCreditState(vlId, m_crdTxfree[vlId], -consumeCellNum);
         utils::UbUtils::CbfcCreditLevelNotify(m_nodeId,
                                               m_portId,
                                               "CONSUME",
@@ -372,6 +382,8 @@ bool UbCbfc::CbfcRestoreCrd(Ptr<Packet> p)
             resumeCellGrainNum = port->m_credits[index];
             NS_LOG_DEBUG("before resume m_crdTxfree[ " << (uint32_t)index << " ]: " << m_crdTxfree[index]);
             m_crdTxfree[index] += resumeCellGrainNum * m_cbfcCfg.m_retCellGrainControlPacket;  // 粒度数量 * 粒度大小
+            m_traceCreditState(index, m_crdTxfree[index],
+                              resumeCellGrainNum * m_cbfcCfg.m_retCellGrainControlPacket);
             utils::UbUtils::CbfcCreditLevelNotify(m_nodeId,
                                                   m_portId,
                                                   "RESTORE",
@@ -553,6 +565,7 @@ UbCbfc::RestoreDataPacketCredit(Ptr<Packet> p)
     const uint8_t targetVl = header.GetCreditTargetVL();
     const int32_t restoreCells = m_cbfcCfg.m_retCellGrainDataPacket;
     m_crdTxfree[targetVl] += restoreCells;
+    m_traceCreditState(targetVl, m_crdTxfree[targetVl], restoreCells);
     utils::UbUtils::CbfcCreditLevelNotify(m_nodeId,
                                           m_portId,
                                           "RESTORE",

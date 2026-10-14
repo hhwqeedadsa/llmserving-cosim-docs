@@ -4,6 +4,8 @@ from copy import deepcopy
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
+import subprocess
+import sys
 
 from .network_offline import transfer_bounds
 from .network_bounds import judge_input, simplify, judge
@@ -154,6 +156,33 @@ class SourceBounds(unittest.TestCase):
 
 
 class PublicRecovery(unittest.TestCase):
+    def test_fresh_synthetic_cli_flow_with_separate_evaluation(self):
+        from .network_bound_review import evaluate
+        d,s,c=self.example()
+        c['windows'][1].update(counted_packets=2,counted_packet_bytes=200)
+        relation=dict(schema_version='issue-network-ideal-relation/1',input_sha256='unused',
+            start_ns=10,end_ns=30,records=[dict(operation=o,switch_id=10,port_id=1,start_ns=20,end_ns=30) for o in ('x','y')])
+        truth=dict(samples=[dict(sample=w['sample'],primary=False,candidate='synthetic',
+            known_waiting_operations=['x','y'],complete_fifo_operations=['x','y'],
+            partial_arrival_to_fifo_operations=[],app_packets_enqueued_without_upstream=0,
+            protocol_packets_with_fifo_wait=0) for w in d['windows']])
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);save(root/'input.json',d)
+            for v in (s,c,relation):v['input_sha256']=digest(root/'input.json')
+            for n,v in (('semantics',s),('counters',c),('relation',relation),('truth',truth)):save(root/(n+'.json'),v)
+            def cli(module,*args):
+                subprocess.run([sys.executable,'-m','experiments.scaleup_issue_screening.'+module,*map(str,args)],
+                    check=True,capture_output=True,text=True)
+            cli('network_bounds','simplify','--input',root/'input.json','--relation',root/'relation.json','--output',root/'boundary.json')
+            cli('network_bounds','judge','--input',root/'input.json','--semantics',root/'semantics.json',
+                '--relation',root/'boundary.json','--output',root/'ideal.json')
+            cli('network_recovery','recover','--input',root/'input.json','--semantics',root/'semantics.json',
+                '--counters',root/'counters.json','--output',root/'recovered.json')
+            for name in ('ideal','recovered'):
+                e=evaluate(read(root/'input.json'),read(root/(name+'.json'))['samples'],read(root/'truth.json'))
+                self.assertEqual(e['all']['windows'],2)
+                self.assertEqual(e['all']['scopes']['known_waiting_operations']['missed_known_operations'],0)
+
     def example(self):
         d,s,_=inputs()
         d['windows'].append(dict(d['windows'][0],sample='s1',start_ns=20,end_ns=30))

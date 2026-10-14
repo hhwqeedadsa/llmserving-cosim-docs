@@ -1,0 +1,1837 @@
+{
+  "schema_version": "issue-network-bound-comparison/1",
+  "rule": {
+    "version": "source-end-and-last-window/1",
+    "bounds": "per positive src/dst pair: floor(src_start)<window_end; ceil(dst_end)>window_start; and ceil(src_end)>window_start only for certified remote-delivery completion",
+    "rounding": "outward to the same public clock resolution in every condition",
+    "aggregation": "union of still-possible sources; never use destination start as packet lower bound",
+    "mapping": "last application transmission START window end; preserve destination-end capture guard",
+    "unknown": "missing records and uncovered future remain possible; empty queue is not final completion",
+    "scope": "offline application operation candidates, not protocol retirement or causal business loss"
+  },
+  "exact_full_simple_equivalence": {
+    "old": true,
+    "strong": true
+  },
+  "old_ambiguous_related": [
+    "s0020",
+    "s0022",
+    "s0023",
+    "s0024",
+    "s0025",
+    "s0061",
+    "s0062",
+    "s0063",
+    "s0064",
+    "s0065",
+    "s0066",
+    "s0067",
+    "s0068"
+  ],
+  "old_unique_gains": [
+    "s0024",
+    "s0025",
+    "s0067",
+    "s0068"
+  ],
+  "old_gains_resolved_by_strong": [],
+  "strong_remaining_ideal_unique_gains": [
+    "s0024",
+    "s0025",
+    "s0067",
+    "s0068"
+  ],
+  "differences": [
+    {
+      "window": {
+        "sample": "s0005",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 5000,
+        "end_ns": 6000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o000",
+          "o001"
+        ],
+        "old_full": [
+          "o001"
+        ],
+        "strong": [
+          "o000",
+          "o001"
+        ],
+        "strong_full": [
+          "o001"
+        ]
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0024",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 24000,
+        "end_ns": 25000,
+        "voq_byte_ns": 10412,
+        "fifo_byte_ns": 68760
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0025",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 25000,
+        "end_ns": 26000,
+        "voq_byte_ns": 22964,
+        "fifo_byte_ns": 210052
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0033",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 33000,
+        "end_ns": 34000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002",
+          "o003"
+        ],
+        "old_full": [
+          "o003"
+        ],
+        "strong": [
+          "o002",
+          "o003"
+        ],
+        "strong_full": [
+          "o003"
+        ]
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0067",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 27000,
+        "end_ns": 28000,
+        "voq_byte_ns": 7568,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0068",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 28000,
+        "end_ns": 29000,
+        "voq_byte_ns": 244904,
+        "fifo_byte_ns": 263972
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0073",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 33000,
+        "end_ns": 34000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002"
+        ],
+        "old_full": [],
+        "strong": [
+          "o002"
+        ],
+        "strong_full": []
+      },
+      "known": []
+    }
+  ],
+  "compact_information": {
+    "full_records": 56,
+    "full_record_fields": [
+      "operation",
+      "switch_id",
+      "port_id",
+      "start_ns",
+      "end_ns"
+    ],
+    "boundary_entries": 12,
+    "boundary_nonempty": 8,
+    "boundary_fields": [
+      "operation",
+      "switch_id",
+      "port_id",
+      "last_tx_window_end_ns",
+      "capture_complete"
+    ],
+    "process": "one pass over nonzero relation rows, then one lookup per candidate operation/port; not an online or SRAM cost"
+  },
+  "offline": {
+    "capture_start_ns": 0,
+    "capture_end_ns": 40000,
+    "maximum_future_capture_horizon_ns": 39000,
+    "boundary_states": {
+      "old_full": {
+        "last_transmission_window": 84,
+        "not_supplied": 384,
+        "future_uncovered": 12
+      },
+      "strong_full": {
+        "last_transmission_window": 84,
+        "not_supplied": 384,
+        "future_uncovered": 12
+      }
+    },
+    "interpretation": "All comparisons are retrospective. Ideal exclusions use the sealed future capture; endpoints are also complete offline observations."
+  },
+  "sources": {
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/input.json": "8d0a4a09da8469987df0d68c029da4058122cc1c869e0e2d5acb2bc2b466de8f",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256/semantics.json": "274e2e49c08330648b1ea0bf962927e9af9397a2556a2b8ef09170f5b5de2682",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/truth.json": "6871f0e817c07f25460895dd71564c5553cb924bac2ab87e0f2b5f0b969bf017",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/relation.json": "8f4983f0d6beeb9c2e9d32fc26b1f362f3b1b239ccf6a6422c8971df9bc51cf6",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison/rules.json": "7c99af11fdd0f08abcf8b36efad9b840253ecc854d9fab7605d6ef63d647cf31",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison/boundary.json": "23a48084c89941d6bd4d2d985b72e59b8f23cdd6441f31788cd5be9f6b193e3a",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison/summary.json": "4549f122ffd86db52e41c83e8e817524f54159b0792c7cc8bc7e8d0f39767dba",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256/audit.json": "d95b704adaef33b56c99d7470ad30a53d4ef2674762cc4a303abb5e1f1bfcc1b",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-recovery-evaluation.json": "2dda58287f287734dc583ec690316bbb08c7e1ef5a3a2f1ce52144cee7aa8594",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-rule-freeze.json": "a16d618e0264b74a24bddd1ad20b1e7c28320e44d90c85df0df35495f9a4af19",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-recovery-rule-freeze.json": "904e1c7dc2c5e28442d2f7e1d7130b08a3988fa09ec416cacabdf4768fe88250"
+  },
+  "programs": {
+    "/root/moe-ub-cosim/experiments/scaleup_issue_screening/network_bounds.py": "20d86059407fc86da2eb6d3cc511baf984f97ee23a5a098f4ab3f90d34559034",
+    "/root/moe-ub-cosim/experiments/scaleup_issue_screening/network_bound_review.py": "c804d27268b56c76317872b50245f77d7da1ac0a3aec12ea6d1cf544b860407a"
+  },
+  "limitations": [
+    "FIFO known set complete, upstream waiting only partially captured; unconfirmed is not automatically false.",
+    "Positive queue without known application remains unknown, not automatically protocol.",
+    "Related windows and nested request records are not independent statistical samples."
+  ],
+  "counts": {
+    "old": {
+      "all": {
+        "windows": 80,
+        "positive_queue": 55,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          },
+          "complete_fifo_operations": {
+            "known_windows": 13,
+            "unique_known": 7,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 83,
+            "windows_with_unconfirmed": 72
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 78,
+        "positive_queue": 53,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          },
+          "complete_fifo_operations": {
+            "known_windows": 11,
+            "unique_known": 5,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 83,
+            "windows_with_unconfirmed": 72
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 51,
+          "positive_queue": 51,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            },
+            "complete_fifo_operations": {
+              "known_windows": 13,
+              "unique_known": 7,
+              "multiple_possible_with_known": 6,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 51,
+              "windows_with_unconfirmed": 44
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 25,
+          "positive_queue": 0,
+          "zero_queue": 25,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 4,
+          "positive_queue": 4,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 4,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            }
+          }
+        }
+      }
+    },
+    "old_full": {
+      "all": {
+        "windows": 80,
+        "positive_queue": 55,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 51,
+            "unique_known": 42,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          },
+          "complete_fifo_operations": {
+            "known_windows": 13,
+            "unique_known": 10,
+            "multiple_possible_with_known": 3,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 76,
+            "windows_with_unconfirmed": 68
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 42,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 78,
+        "positive_queue": 53,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 49,
+            "unique_known": 40,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          },
+          "complete_fifo_operations": {
+            "known_windows": 11,
+            "unique_known": 8,
+            "multiple_possible_with_known": 3,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 76,
+            "windows_with_unconfirmed": 68
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 40,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 51,
+          "positive_queue": 51,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 51,
+              "unique_known": 42,
+              "multiple_possible_with_known": 9,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 7,
+              "windows_with_unconfirmed": 7
+            },
+            "complete_fifo_operations": {
+              "known_windows": 13,
+              "unique_known": 10,
+              "multiple_possible_with_known": 3,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 47,
+              "windows_with_unconfirmed": 41
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 42,
+              "multiple_possible_with_known": 9,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 7,
+              "windows_with_unconfirmed": 7
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 25,
+          "positive_queue": 0,
+          "zero_queue": 25,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 4,
+          "positive_queue": 4,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 4,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            }
+          }
+        }
+      }
+    },
+    "strong": {
+      "all": {
+        "windows": 80,
+        "positive_queue": 55,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          },
+          "complete_fifo_operations": {
+            "known_windows": 13,
+            "unique_known": 7,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 83,
+            "windows_with_unconfirmed": 72
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 78,
+        "positive_queue": 53,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          },
+          "complete_fifo_operations": {
+            "known_windows": 11,
+            "unique_known": 5,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 83,
+            "windows_with_unconfirmed": 72
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 43,
+            "windows_with_unconfirmed": 39
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 51,
+          "positive_queue": 51,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            },
+            "complete_fifo_operations": {
+              "known_windows": 13,
+              "unique_known": 7,
+              "multiple_possible_with_known": 6,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 51,
+              "windows_with_unconfirmed": 44
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 25,
+          "positive_queue": 0,
+          "zero_queue": 25,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 24
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 4,
+          "positive_queue": 4,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 4,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            }
+          }
+        }
+      }
+    },
+    "strong_full": {
+      "all": {
+        "windows": 80,
+        "positive_queue": 55,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 51,
+            "unique_known": 42,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          },
+          "complete_fifo_operations": {
+            "known_windows": 13,
+            "unique_known": 10,
+            "multiple_possible_with_known": 3,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 76,
+            "windows_with_unconfirmed": 68
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 42,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 78,
+        "positive_queue": 53,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 49,
+            "unique_known": 40,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          },
+          "complete_fifo_operations": {
+            "known_windows": 11,
+            "unique_known": 8,
+            "multiple_possible_with_known": 3,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 76,
+            "windows_with_unconfirmed": 68
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 40,
+            "multiple_possible_with_known": 9,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 36,
+            "windows_with_unconfirmed": 34
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 51,
+          "positive_queue": 51,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 51,
+              "unique_known": 42,
+              "multiple_possible_with_known": 9,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 7,
+              "windows_with_unconfirmed": 7
+            },
+            "complete_fifo_operations": {
+              "known_windows": 13,
+              "unique_known": 10,
+              "multiple_possible_with_known": 3,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 47,
+              "windows_with_unconfirmed": 41
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 42,
+              "multiple_possible_with_known": 9,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 7,
+              "windows_with_unconfirmed": 7
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 25,
+          "positive_queue": 0,
+          "zero_queue": 25,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 4,
+          "positive_queue": 4,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 4,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            }
+          }
+        }
+      }
+    }
+  },
+  "residual_ambiguity_samples": [
+    "s0020",
+    "s0022",
+    "s0023",
+    "s0024",
+    "s0025",
+    "s0061",
+    "s0062",
+    "s0063",
+    "s0064",
+    "s0065",
+    "s0066",
+    "s0067",
+    "s0068"
+  ],
+  "audit": {
+    "schema_version": "issue-network-source-end-audit/1",
+    "network_transfers": 120980,
+    "network_classes": {
+      "dispatch/data": 6053,
+      "dispatch/status": 96768,
+      "combine/data": 12106,
+      "combine/status": 6053
+    },
+    "minimum_source_end_slack_ns": {
+      "dispatch/data": 1372,
+      "dispatch/status": 80,
+      "combine/data": 140,
+      "combine/status": 0
+    },
+    "structural_outgoing_fences": {
+      "dispatch/data": 6097,
+      "dispatch/status": 97536,
+      "combine/data": 12150,
+      "combine/status": 6097
+    },
+    "classes": {
+      "D.w0.L6.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L6.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L7.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L7.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L8.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L8.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      }
+    },
+    "counterexamples": [],
+    "local_transfers": 900,
+    "planned_transfers": 121880,
+    "endpoints": 768,
+    "source_files": {
+      "python/moe_ub_cosim/a3.py": "b0de8991ae7482a9885d72be3f3450e11ec73fb5578b543722485461eeb8cf33",
+      "backend/a3_plan.cc": "f6d783145f4579a778f41ffaf0de0a511b5597552010991b578ff01b6a3a343d",
+      "backend/layer_plan.cc": "04694c9c6d2fa39ec35a986875b22ee6fefc0036b54e487958a9695d6f41a6f2",
+      "backend/ub_write_transfer.cc": "c8879f80458b2839357f3a8e218500865af4d9063fa78407c9dc1cab70af558a",
+      "backend/write_completion.cc": "d6efe548393413dc5ad8bf7cf2b345d5391ccf9cc32665ca1a3dcd5ae56c5751",
+      "backend/cosim_service.cc": "b37dcc309d8a4400be7f4a231d6ceca34e20bbbd1e7f0f29c059149cfae0ad2a"
+    },
+    "plan_hashes": {
+      "raw/graphs/g0/plan.json": "f10e8a598d984397041f85411ca6a9352c67fd65305d01d37bfc2949f9fc1c74"
+    },
+    "slice_sha256": "2231c3791044547053d63cf1250ee47905e86fa3e63c29f71d2a7c575cdd1b9b",
+    "archive_source_sha256": "1e058b6957a8a3beb586f9c8dc09bc5fb2f2770531929270112136434d8a3f52",
+    "manifest_sha256": "c086e08006d03c2c168fbea3c3d828a2fc9387877322852b4ea2756fdbb11661",
+    "semantics_sha256": "274e2e49c08330648b1ea0bf962927e9af9397a2556a2b8ef09170f5b5de2682",
+    "program_sha256": "71c3ac073a8594121e39cfed9a95b56bacb6b80e02288f2bf8c349cdf954ab99",
+    "distinction": "Remote data delivery bounds outgoing application data/status; ACK/credit and protocol retirement are not bounded by operator end. Local read completion alone is ineligible."
+  },
+  "recovery": {
+    "schema_version": "issue-network-recovery-evaluation/1",
+    "rule": {
+      "version": "public-nonzero-window-envelope/1",
+      "hypothesis": "An application packet waiting at an outlet must start transmission in a later compatible nonzero public packet window.",
+      "envelope": "Intersect positive packet windows with each positive source/destination temporal envelope; union sources. The last compatible window end is a conservative upper bound, not an estimated last application packet.",
+      "safe_unknown": "Missing windows or destination completion beyond capture cannot certify a final boundary.",
+      "control": "All protocol/metadata traffic remains eligible public traffic; do not subtract logical payload from wire bytes.",
+      "alternative": "If other application or protocol traffic fills all temporal opportunities, counters cannot tighten these bounds.",
+      "scope": "One fixed simple rule; a failed attempt does not prove universal unidentifiability."
+    },
+    "intervals": [
+      {
+        "operation": "o000",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": 0,
+        "last_possible_tx_window_end_ns": 5000,
+        "compatible_nonzero_windows": 5,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 5000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o001",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": 6000,
+        "last_possible_tx_window_end_ns": 26000,
+        "compatible_nonzero_windows": 10,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 24000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 2000
+      },
+      {
+        "operation": "o002",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": 20000,
+        "last_possible_tx_window_end_ns": 33000,
+        "compatible_nonzero_windows": 12,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 33000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o003",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": 34000,
+        "last_possible_tx_window_end_ns": 39000,
+        "compatible_nonzero_windows": 4,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 39000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o004",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": null,
+        "last_possible_tx_window_end_ns": null,
+        "compatible_nonzero_windows": 0,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": null,
+        "early_upper_bound": false,
+        "excess_upper_ns": null
+      },
+      {
+        "operation": "o005",
+        "switch_id": 802,
+        "port_id": 6,
+        "earliest_possible_tx_window_start_ns": null,
+        "last_possible_tx_window_end_ns": null,
+        "compatible_nonzero_windows": 0,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": null,
+        "early_upper_bound": false,
+        "excess_upper_ns": null
+      },
+      {
+        "operation": "o000",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": 1000,
+        "last_possible_tx_window_end_ns": 5000,
+        "compatible_nonzero_windows": 4,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 5000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o001",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": 5000,
+        "last_possible_tx_window_end_ns": 29000,
+        "compatible_nonzero_windows": 16,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 27000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 2000
+      },
+      {
+        "operation": "o002",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": 21000,
+        "last_possible_tx_window_end_ns": 33000,
+        "compatible_nonzero_windows": 12,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 33000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o003",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": 35000,
+        "last_possible_tx_window_end_ns": 40000,
+        "compatible_nonzero_windows": 5,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": 40000,
+        "early_upper_bound": false,
+        "excess_upper_ns": 0
+      },
+      {
+        "operation": "o004",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": null,
+        "last_possible_tx_window_end_ns": null,
+        "compatible_nonzero_windows": 0,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": null,
+        "early_upper_bound": false,
+        "excess_upper_ns": null
+      },
+      {
+        "operation": "o005",
+        "switch_id": 810,
+        "port_id": 2,
+        "earliest_possible_tx_window_start_ns": null,
+        "last_possible_tx_window_end_ns": null,
+        "compatible_nonzero_windows": 0,
+        "capture_complete": true,
+        "may_have_no_application_transmission": true,
+        "ideal_last_tx_window_end_ns": null,
+        "early_upper_bound": false,
+        "excess_upper_ns": null
+      }
+    ],
+    "early_upper_bounds": 0,
+    "sources": {
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/input.json": "8d0a4a09da8469987df0d68c029da4058122cc1c869e0e2d5acb2bc2b466de8f",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/truth.json": "6871f0e817c07f25460895dd71564c5553cb924bac2ab87e0f2b5f0b969bf017",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256/information/relation.json": "8f4983f0d6beeb9c2e9d32fc26b1f362f3b1b239ccf6a6422c8971df9bc51cf6",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256-recovered.json": "5404426833e38b490b290d21e188780ce7a58366945531ff195580e2f94652c5",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison/strong.json": "27d876a431af11af6483ce424e93ff41b7a8e9479d05edff3178ea96f99bc627",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison/strong_full.json": "e9c15e4ce9acd5b2b5138b29a21e9b2abff6d763dcb0c15ff172432c9624e181"
+    },
+    "program_sha256": "47cd43fba844a799289d8e3d6328dd043a1c57f92e85d353c5117b16d1219fcf",
+    "counts": {
+      "all": {
+        "windows": 80,
+        "positive_queue": 55,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 40,
+            "windows_with_unconfirmed": 38
+          },
+          "complete_fifo_operations": {
+            "known_windows": 13,
+            "unique_known": 7,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 80,
+            "windows_with_unconfirmed": 71
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 38,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 40,
+            "windows_with_unconfirmed": 38
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 78,
+        "positive_queue": 53,
+        "zero_queue": 25,
+        "positive_queue_application_unknown": 4,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 40,
+            "windows_with_unconfirmed": 38
+          },
+          "complete_fifo_operations": {
+            "known_windows": 11,
+            "unique_known": 5,
+            "multiple_possible_with_known": 6,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 80,
+            "windows_with_unconfirmed": 71
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 36,
+            "multiple_possible_with_known": 13,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 40,
+            "windows_with_unconfirmed": 38
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 51,
+          "positive_queue": 51,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            },
+            "complete_fifo_operations": {
+              "known_windows": 13,
+              "unique_known": 7,
+              "multiple_possible_with_known": 6,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 51,
+              "windows_with_unconfirmed": 44
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 38,
+              "multiple_possible_with_known": 13,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 11,
+              "windows_with_unconfirmed": 11
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 25,
+          "positive_queue": 0,
+          "zero_queue": 25,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 23
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 4,
+          "positive_queue": 4,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 4,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 4,
+              "windows_with_unconfirmed": 4
+            }
+          }
+        }
+      }
+    },
+    "cases": [
+      {
+        "sample": "s0005",
+        "window": {
+          "sample": "s0005",
+          "switch_id": 802,
+          "port_id": 6,
+          "receiver": 70,
+          "start_ns": 5000,
+          "end_ns": 6000,
+          "voq_byte_ns": 0,
+          "fifo_byte_ns": 0
+        },
+        "baseline": [
+          "o000",
+          "o001"
+        ],
+        "recovered": [
+          "o001"
+        ],
+        "ideal": [
+          "o001"
+        ],
+        "known": []
+      },
+      {
+        "sample": "s0024",
+        "window": {
+          "sample": "s0024",
+          "switch_id": 802,
+          "port_id": 6,
+          "receiver": 70,
+          "start_ns": 24000,
+          "end_ns": 25000,
+          "voq_byte_ns": 10412,
+          "fifo_byte_ns": 68760
+        },
+        "baseline": [
+          "o001",
+          "o002"
+        ],
+        "recovered": [
+          "o001",
+          "o002"
+        ],
+        "ideal": [
+          "o002"
+        ],
+        "known": [
+          "o002"
+        ]
+      },
+      {
+        "sample": "s0025",
+        "window": {
+          "sample": "s0025",
+          "switch_id": 802,
+          "port_id": 6,
+          "receiver": 70,
+          "start_ns": 25000,
+          "end_ns": 26000,
+          "voq_byte_ns": 22964,
+          "fifo_byte_ns": 210052
+        },
+        "baseline": [
+          "o001",
+          "o002"
+        ],
+        "recovered": [
+          "o001",
+          "o002"
+        ],
+        "ideal": [
+          "o002"
+        ],
+        "known": [
+          "o002"
+        ]
+      },
+      {
+        "sample": "s0033",
+        "window": {
+          "sample": "s0033",
+          "switch_id": 802,
+          "port_id": 6,
+          "receiver": 70,
+          "start_ns": 33000,
+          "end_ns": 34000,
+          "voq_byte_ns": 0,
+          "fifo_byte_ns": 0
+        },
+        "baseline": [
+          "o002",
+          "o003"
+        ],
+        "recovered": [
+          "o003"
+        ],
+        "ideal": [
+          "o003"
+        ],
+        "known": []
+      },
+      {
+        "sample": "s0067",
+        "window": {
+          "sample": "s0067",
+          "switch_id": 810,
+          "port_id": 2,
+          "receiver": 98,
+          "start_ns": 27000,
+          "end_ns": 28000,
+          "voq_byte_ns": 7568,
+          "fifo_byte_ns": 0
+        },
+        "baseline": [
+          "o001",
+          "o002"
+        ],
+        "recovered": [
+          "o001",
+          "o002"
+        ],
+        "ideal": [
+          "o002"
+        ],
+        "known": [
+          "o002"
+        ]
+      },
+      {
+        "sample": "s0068",
+        "window": {
+          "sample": "s0068",
+          "switch_id": 810,
+          "port_id": 2,
+          "receiver": 98,
+          "start_ns": 28000,
+          "end_ns": 29000,
+          "voq_byte_ns": 244904,
+          "fifo_byte_ns": 263972
+        },
+        "baseline": [
+          "o001",
+          "o002"
+        ],
+        "recovered": [
+          "o001",
+          "o002"
+        ],
+        "ideal": [
+          "o002"
+        ],
+        "known": [
+          "o002"
+        ]
+      },
+      {
+        "sample": "s0073",
+        "window": {
+          "sample": "s0073",
+          "switch_id": 810,
+          "port_id": 2,
+          "receiver": 98,
+          "start_ns": 33000,
+          "end_ns": 34000,
+          "voq_byte_ns": 0,
+          "fifo_byte_ns": 0
+        },
+        "baseline": [
+          "o002"
+        ],
+        "recovered": [],
+        "ideal": [],
+        "known": []
+      }
+    ]
+  },
+  "review_scope": "80 windows at 0-40 us; same 1000 ns precision and fixed rule hashes. This historically studied nested request subset is not an independent holdout."
+}

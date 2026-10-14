@@ -507,7 +507,7 @@ PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_offli
 PYTHONPATH=python:. python3 -m unittest experiments.scaleup_issue_screening.check_network_offline
 ```
 
-`information/` 保存重新准备的受限输入、旧预测、评价及理想关系；`reproduction.json` 核对旧结果全部逐窗集合。`audit.json` 核验执行源码、冻结图中每个源端完成节点覆盖的发送栅栏，以及全部应用网络传输的起止约束、身份、数据/状态类别与反例。`semantics.json` 仅提供按操作统一的完成语义，不能把审计内的逐传输答案交给判断器。`--previous` 可省略；`--slice` 必须是归档清单绑定的同一切片，可显式指定迁移后位置。命令受现有分析资源预算监控，报告在输出目录加 `-resources` 后缀的位置。
+`information/` 保存重新准备的受限输入、旧预测、评价及理想关系；`reproduction.json` 核对旧结果全部逐窗集合。`audit.json` 核验执行源码、冻结图中每个源端完成节点覆盖的发送栅栏，以及全部应用网络传输的起止约束、身份、数据/状态类别与反例。`semantics.json` 仅提供按操作统一的完成语义，不能把审计内的逐传输答案交给判断器。小型检查还从临时合成输入完整调用简化、判断和恢复命令，再独立评价，不依赖历史运行产物。`--previous` 可省略；`--slice` 必须是归档清单绑定的同一切片，可显式指定迁移后位置。命令受现有分析资源预算监控，报告在输出目录加 `-resources` 后缀的位置。
 
 
 对准备目录运行六组对照（旧/加强基线，各配无附加信息、完整理想关系、简化边界），命令仍只做离线分析：
@@ -547,3 +547,6 @@ PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_recov
 ```
 
 `intervals` 是公开非零计数与操作时间交集允许的范围；协议流量仍包含在内，不能解释成实际最后一个应用包的估计值。完整采集范围内无相关机会、窗口缺失和未来未覆盖分别处理；目的结束在采集范围外时仍不宣布操作已结束。评价另外报告理想值、上界过早次数、候选减少和已知等待遗漏。短暂无流量、队列为零以及逻辑字节减线上字节都不是本规则的完成证明。
+
+
+跨记录复核使用同一程序及冻结规则，替换为 `capture.tar.gz`、`capture-packets/` 和其绑定的 `runs/scaleup_issue_screening/c1-organization-20261013/compact-slice`，准备输出为新的 `offline-256-new`，不传 `--previous`。随后对该准备目录执行相同的比较、计数准备、恢复和评价命令。它采用归档中实际的 0～40 μs、80 个窗口，不把 1024 请求的时间范围强加给它。已保存结果可直接查看 `offline-256/`、`offline-256-comparison/` 与 `offline-256-recovery-evaluation.json`；不用重新执行或恢复完整 case。

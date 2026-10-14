@@ -1,0 +1,299 @@
+{
+  "schema_version": "issue-network-offline-resources/1",
+  "new_backend_runs": 0,
+  "completed_stage_probes": {
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison-resources/probe.json": {
+      "sha256": "b15fe9c2fc59d7161c81de68c1f142fb345436d7ee45364a6d0930dc5be4c9d2",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_bound_review",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison",
+        "--worker"
+      ],
+      "status": "completed",
+      "wall_seconds": 37.15317784063518,
+      "peak_sampled_group_rss_bytes": 6447104,
+      "max_waited_child_rss_kib": 71296,
+      "aggregate_artifact_bytes_before_report": 52586987520,
+      "peak_sampled_artifact_bytes": 52586987520,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-counters-resources/probe.json": {
+      "sha256": "4826e2a2ee5e17f2f82467e6fb6ca85c4587085e2516e9b8c3630dc46e0f0843",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "prepare",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--archive",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-counters"
+      ],
+      "status": "completed",
+      "wall_seconds": 47.857298370450735,
+      "peak_sampled_group_rss_bytes": 71864320,
+      "max_waited_child_rss_kib": 90476,
+      "aggregate_artifact_bytes_before_report": 52592738304,
+      "peak_sampled_artifact_bytes": 52592738304,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovery-evaluation.json-resources/probe.json": {
+      "sha256": "9cad489fe9215e0a6f373a976c72d75e32c57a33244003c7fa9884cabdb3d246",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "evaluate",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--comparison",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison",
+        "--prediction",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovered.json",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovery-evaluation.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 36.967056684195995,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "max_waited_child_rss_kib": 72760,
+      "aggregate_artifact_bytes_before_report": 52593864704,
+      "peak_sampled_artifact_bytes": 52593864704,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-resources/probe.json": {
+      "sha256": "52d3331fbf07f282dfe683b9c9723708d395484d68ac6fe2d9d1236d8f1d5609",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_offline",
+        "--archive",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture.tar.gz",
+        "--slice",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-slice",
+        "--packets",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture-packets",
+        "--previous",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-information",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--worker"
+      ],
+      "status": "completed",
+      "wall_seconds": 98.97153554297984,
+      "peak_sampled_group_rss_bytes": 3167694848,
+      "max_waited_child_rss_kib": 3625388,
+      "aggregate_artifact_bytes_before_report": 52580724736,
+      "peak_sampled_artifact_bytes": 52580724736,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison-resources/probe.json": {
+      "sha256": "4ec0a406120944674a39778d5d7f345888c4f90927888d79a8cafcd0c04c5543",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_bound_review",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison",
+        "--worker"
+      ],
+      "status": "completed",
+      "wall_seconds": 37.02038018591702,
+      "peak_sampled_group_rss_bytes": 7467008,
+      "max_waited_child_rss_kib": 69452,
+      "aggregate_artifact_bytes_before_report": 52628865024,
+      "peak_sampled_artifact_bytes": 52628865024,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-counters-resources/probe.json": {
+      "sha256": "b391d35cc3bb877a8ac41848f48a4e215a59c7c774fc0e42417afe731dc5054b",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "prepare",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256",
+        "--archive",
+        "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256-counters"
+      ],
+      "status": "completed",
+      "wall_seconds": 37.296677719801664,
+      "peak_sampled_group_rss_bytes": 6393856,
+      "max_waited_child_rss_kib": 92028,
+      "aggregate_artifact_bytes_before_report": 52630953984,
+      "peak_sampled_artifact_bytes": 52630953984,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-recovery-evaluation.json-resources/probe.json": {
+      "sha256": "e47694b4bd884256695ce68b9179cfb0fb65473fe99acc554d003e84c6b0f618",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "evaluate",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256",
+        "--comparison",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256-comparison",
+        "--prediction",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256-recovered.json",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256-recovery-evaluation.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 36.574577022343874,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "max_waited_child_rss_kib": 77652,
+      "aggregate_artifact_bytes_before_report": 52631375872,
+      "peak_sampled_artifact_bytes": 52631375872,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-256-resources/probe.json": {
+      "sha256": "d12b73af1dbf8c372d56e0ed857984f4548decbd522373beedfc4574a526111a",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_offline",
+        "--archive",
+        "runs/scaleup_issue_screening/network-screening-20261013/capture.tar.gz",
+        "--slice",
+        "runs/scaleup_issue_screening/c1-organization-20261013/compact-slice",
+        "--packets",
+        "runs/scaleup_issue_screening/network-screening-20261013/capture-packets",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-256",
+        "--worker"
+      ],
+      "status": "completed",
+      "wall_seconds": 68.33833030797541,
+      "peak_sampled_group_rss_bytes": 1827434496,
+      "max_waited_child_rss_kib": 2096316,
+      "aggregate_artifact_bytes_before_report": 52626612224,
+      "peak_sampled_artifact_bytes": 52626612224,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    },
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-inspection-resources/probe.json": {
+      "sha256": "93edddc9ef5c4907395f791807bb0153b03208cd306d2a9f4dc0b5a860e67011",
+      "command": [
+        "/usr/bin/python3",
+        "-c",
+        "import json\nfrom pathlib import Path\nfrom experiments.scaleup_issue_screening.consumer_review import Archive\nfrom experiments.scaleup_issue_screening.organization import resolved_members\nfrom experiments.scaleup_issue_screening.workflow import save\nr=Path(\"runs/scaleup_issue_screening/network-screening-20261013\")\na=Archive(r/\"discovery-capture.tar.gz\")\nnames=[\"selection.json\",\"run/raw/execution/result.json\",\"run/inputs/effective.json\",\"run/manifest.json\"]\nv={n:json.loads(d) for n,d in resolved_members(a,names)}\nsave(r/\"offline-source-inspection.json\",v)\nprint({n:list(d) for n,d in v.items()})\n"
+      ],
+      "status": "completed",
+      "wall_seconds": 36.899875273928046,
+      "peak_sampled_group_rss_bytes": 6447104,
+      "max_waited_child_rss_kib": 116560,
+      "aggregate_artifact_bytes_before_report": 52529405952,
+      "peak_sampled_artifact_bytes": 52529405952,
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      }
+    }
+  },
+  "fixed_budget": {
+    "rss_bytes": 8589934592,
+    "address_bytes": 12884901888,
+    "artifact_bytes": 68719476736,
+    "wall_seconds": 1800,
+    "min_free_bytes": 21474836480,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+    ]
+  },
+  "commands_path": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/commands.jsonl",
+  "acceptance_checks_sha256": "9425399ec32ed4ddcf8679728687211e8d515c0574ceb4ec7349dfe02b5620a4",
+  "unchanged_platform_and_dependencies": true,
+  "unchanged_original_information": true,
+  "initial_gib": 48.92182159423828,
+  "free_disk_bytes": 6427725615104,
+  "final_check_program_sha256": "42ac490550b8d9ac08868cefad9153ae93beae09176d2cc1a234e942f698680f",
+  "interpretation": "Existing archives, frozen graph audit and offline analysis only; no new backend, calibration or independent statistical repeat.",
+  "final_monitor": {
+    "path": "runs/scaleup_issue_screening/network-screening-20261013/offline-acceptance-resources/probe.json",
+    "sha256": "d32491be2219ea92ad916f915c6f2c1c161c93dc4d3456c703b4006cf8c244e7",
+    "wall_seconds": 36.491132808849216,
+    "aggregate_artifact_bytes_before_report": 52631474176,
+    "peak_sampled_group_rss_bytes": 7438336,
+    "max_waited_child_rss_kib": 78236
+  },
+  "tests": {
+    "count": 32,
+    "log": "runs/scaleup_issue_screening/network-screening-20261013/offline-interface-consistent-counts.stderr.log",
+    "sha256": "c02ae701703f748a66eda2b8f734a47a6a341096c027e76d1912be194daf8541",
+    "fresh_synthetic_cli_flow": true
+  }
+}

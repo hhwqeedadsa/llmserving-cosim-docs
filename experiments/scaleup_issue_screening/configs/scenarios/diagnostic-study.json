@@ -1,0 +1,25 @@
+{
+  "schema_version": "issue-diagnostic-study/1",
+  "capture_end_ns": 1000000,
+  "max_fact_records": 40000000,
+  "max_target_runs": 16,
+  "primary_cases": [
+    {"id":"r00","source":"g0-b8-short","purpose":"normal capture and full execution equivalence","service":[]},
+    {"id":"r01","source":"g0-b8-short","purpose":"short direct-outlet service deficit versus existing burst","service":[{"node_id":768,"port_id":6,"start_ns":2000,"end_ns":12000,"rate_bps":100000000000}]},
+    {"id":"r02","source":"g0-b8-short","purpose":"shared-link service deficit and unaffected destinations","service":[{"node_id":768,"port_id":18,"start_ns":1000,"end_ns":101000,"rate_bps":100000000000}]},
+    {"id":"r03","source":"g0-b8-short","purpose":"same-peer plane A service and late residual completion","service":[{"node_id":799,"port_id":14,"start_ns":200000,"end_ns":400000,"rate_bps":50000000000}]},
+    {"id":"r04","source":"g0-b8-short","purpose":"sustained direct-outlet deficit; test whether existing credits actually bind","service":[{"node_id":768,"port_id":6,"start_ns":0,"end_ns":400000,"rate_bps":4000000000}]},
+    {"id":"r05","source":"g0-b8-short","purpose":"same-peer plane B reference separates workload timing from plane identity","service":[{"node_id":801,"port_id":14,"start_ns":200000,"end_ns":400000,"rate_bps":50000000000}]},
+    {"id":"r06","source":"g0-b2-short","purpose":"frozen-rule related scale review and capture equivalence","service":[]},
+    {"id":"r07","source":"g0-b2-short","purpose":"frozen sustained-service review on smaller workload","service":[{"node_id":768,"port_id":6,"start_ns":0,"end_ns":400000,"rate_bps":4000000000}]}
+  ],
+  "rationale": {
+    "local_primary":"100 Gbit/s is one quarter of the fixed 400 Gbit/s outlet. During the already selected 10 us burst it permits 125000 bytes versus 491656 normal start bytes; not selected by intervention outcome.",
+    "shared_primary":"The same quarter rate on the selected shared outlet, over 100 us, tests a multi-destination resource and sparse service. No additional traffic is introduced.",
+    "plane_primary":"50 Gbit/s over the fixed later 200 us covers the previously observed t90 differences. Apply separately to the two already selected same-peer planes; actual work may differ.",
+    "sustained_alternative":"4 Gbit/s over 400 us permits 200000 bytes, below the observed 966628 whole-scope bytes at 768:6. This tests sustained service, not a promise of credit exhaustion: the 6553-cell per-link/VL budget and closed-loop phase constraints remain fixed.",
+    "negative_controls":"All other declared outlets, early/late periods outside each interval, peer plane, smaller workload, queue-empty periods and equal-rate natural bursts.",
+    "alternatives":"arrival timing, transient allocation, busy serialization, actual failed CBFC head checks, other necessary completions, changed path choice under the same fixed routing algorithm.",
+    "no_positive_requirement":"No new credit limit, endpoint delay, synchronization change or timing replay is permitted to create a positive result. Missing receiver-consumption backpressure remains uncovered."
+  }
+}

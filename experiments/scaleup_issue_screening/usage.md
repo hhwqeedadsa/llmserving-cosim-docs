@@ -52,3 +52,17 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python \
 输出目录必须是新目录；`summary.json` 保存检查结果，`case.tar.gz` 保存运行，`restored/` 保存经验证的恢复内容，旁边的 `*-resources/` 保存资源监控。此历史检查配置绑定 ns-3-UB `c0f1fe5`；示例二进制摘要为 `configs/scenarios/batch.json` 中的 `backend_sha256`。缺少该历史构建时，仍可运行前面的纯分析检查；不能传入不同依赖版本或修改版本检查绕过失败。新平台网络检查使用 `tests.check_network_replay --help` 及当前平台示例，与此历史配置分别绑定。
 
 分析方法只读取明确开放的目录或文件；真值、干预安排和完整图由准备与评价读取。输入目录使用中性标识，不能从文件名获得答案。完整命令和执行日志留在 runs，相应摘要与使用入口在 Git 中维护。无实际验证前，不新增示范运行命令或宣称操作可用。
+
+已验证的机制事实准备入口（在项目 Python 环境、仓库根目录运行）：
+
+```bash
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_run prepare \
+  --archive runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz \
+  --slice runs/scaleup_issue_screening/network-screening-20261013/discovery-slice \
+  --backend build/m19-a3-resources/network-facts/output/cosim/ns3.44-cosim-service \
+  --run-id r00 --output runs/scaleup_issue_screening/my-diagnostic-r00
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_facts \
+  --run runs/native-network --output runs/scaleup_issue_screening/my-prepared-facts
+```
+
+第一个命令只准备和校验封存切片，不启动目标后端；`r00` 等条件来自 `configs/scenarios/diagnostic-study.json`，源档案、切片、二进制和准备程序摘要写入 `selection.json`。第二个命令要求已成功运行并保存 `network_facts` 的目录；输出 `input/` 是诊断白名单，`private/` 是评价和机制核查资料，不能混用。`summary.json` 绑定全部文件摘要和真实覆盖。目标执行开始前仍须登记当前任务的总次数与资源。

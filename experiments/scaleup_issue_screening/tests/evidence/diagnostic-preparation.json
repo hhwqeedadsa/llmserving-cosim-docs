@@ -1,0 +1,162 @@
+{
+  "passed": true,
+  "interval_unit_checks": 3,
+  "public_small_preparation": {
+    "schema_version": "issue-diagnostic-preparation/1",
+    "source_manifest_sha256": "4b7a667cfa095201802c01a34484da1856180232dc19c558ab7c6d029fa2d2cc",
+    "source": "/root/moe-ub-cosim/runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-final/public-run",
+    "capture": {
+      "access_scope": "internal_truth_prepare_restricted_inputs_before_diagnosis",
+      "all_selected_ports_quiescent_at_execution_end": true,
+      "complete": true,
+      "credit_scope": "actual exclusive CBFC probes; bypassed control frames absent; generated head UID unknown",
+      "dropped_records": 0,
+      "end_ns": 47193,
+      "execution_end_ns": 47193,
+      "policy": {
+        "end_ns": 100000,
+        "max_records": 100000,
+        "ports": [
+          {
+            "node_id": 4,
+            "port_id": 0
+          },
+          {
+            "node_id": 4,
+            "port_id": 1
+          },
+          {
+            "node_id": 4,
+            "port_id": 2
+          },
+          {
+            "node_id": 4,
+            "port_id": 3
+          },
+          {
+            "node_id": 4,
+            "port_id": 4
+          }
+        ],
+        "schema_version": "moe-ub-network-facts/1"
+      },
+      "records": 2451,
+      "schema_version": "moe-ub-network-facts-capture/1",
+      "start_ns": 0
+    },
+    "events": {
+      "initial": 5,
+      "voq": 518,
+      "credit_decision": 280,
+      "fifo": 518,
+      "fifo_enqueue": 259,
+      "credit": 348,
+      "fifo_dequeue": 259,
+      "tx": 259,
+      "final": 5
+    },
+    "input_sha256": {
+      "endpoint_ops.jsonl.gz": "6e1e1388dbbef203a4b686b11b0b67e736355450f17aa3feb3651e8660d18fc9",
+      "schema.json": "b7065de6dcc83a6cb9a28fb00bded94f91b9837eff8a7fef4b455b3e3df58de4",
+      "windows.jsonl.gz": "58acbe843eae93a26fdf9c006dd729aef522f555b17563078f75996554a74163"
+    },
+    "private_sha256": {
+      "packets.jsonl.gz": "b04f6ca83f806775d13c4152e8badffa4aed8bcb399c6c24ce31d2473150cf50",
+      "ports.json": "d58c18109fbe96b9d53aef45778721e47a1131a8c9809dee23c716275e32fbbf",
+      "truth.json": "42aeccf7148dc5334759523810fcd3c558b12f0fb513209863280b40c98144c6"
+    },
+    "public_ports": 5,
+    "captured_ports": 5,
+    "packet_pending_peak": 2,
+    "packet_pending_at_end": 0,
+    "unconsumed_last_wire_entries": 138,
+    "credit_spells": 0,
+    "qualifying_queue_events": 0,
+    "program_sha256": "49ac96b72d2578efecdb83b3479a705fe00afd369a874dd2cfa175cfb87254b6",
+    "workload_scope": "completed execution or requested half-open capture, whichever ends first"
+  },
+  "source_preparation": {
+    "schema_version": "issue-diagnostic-selection/1",
+    "mode": "fifo",
+    "case": {
+      "id": "r00",
+      "source": "g0-b8-short",
+      "purpose": "normal capture and full execution equivalence",
+      "service": []
+    },
+    "rule_sha256": "65f82e185d7f8aefd423015baa9e8a55cde3f3bf28a33157455da82be300c177",
+    "original_archive": "/root/moe-ub-cosim/runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz",
+    "original_archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+    "original_manifest_sha256": "1826bd32d433f791ab57c76db6f6b86c160511ecec6f65b3af67c62ea8fd1251",
+    "slice": "/root/moe-ub-cosim/runs/scaleup_issue_screening/network-screening-20261013/discovery-slice",
+    "slice_sha256": "9c25156c6f811205722d759040d519e3e75a22a101d87fa9385d7bae7ba54bcd",
+    "backend_sha256": "4bbfc7856629a8f9b236125287e1ce1a583838c97bd519be98e85d290a3dccd8",
+    "program_sha256": "8f8d813fdfe644d4a9884e06c082277cdf8ad7623bf60ba2c86203fbf374c8e8",
+    "ports": 3584,
+    "detail_cases_sha256": "b7b7d69d3e8cf7713249d6f2a09b41245672794dc25fcbd95fe240ee03c4a37b",
+    "detail_ports": [
+      [
+        768,
+        0
+      ],
+      [
+        768,
+        6
+      ],
+      [
+        768,
+        17
+      ],
+      [
+        768,
+        18
+      ],
+      [
+        799,
+        14
+      ],
+      [
+        801,
+        14
+      ],
+      [
+        805,
+        10
+      ],
+      [
+        809,
+        10
+      ]
+    ],
+    "fixed": [
+      "graph",
+      "native requests",
+      "compute",
+      "FIFO",
+      "quotas",
+      "synchronization",
+      "topology",
+      "routing algorithm",
+      "random",
+      "credit geometry"
+    ]
+  },
+  "resources": {
+    "study-small-resources": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.160796247422695,
+      "peak_sampled_group_rss_bytes": 5353472,
+      "aggregate_artifact_bytes_before_report": 52828872704
+    },
+    "target/r00-prepare-resources": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.28941369429231,
+      "peak_sampled_group_rss_bytes": 5373952,
+      "aggregate_artifact_bytes_before_report": 52836040704
+    }
+  },
+  "target_backend_executed": false,
+  "public_build_checked": true
+}

@@ -116,3 +116,34 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
 ```
 
 该命令要求三个来源绑定一致，不运行后端。原生等待未拆分部分显式保留，不能将所有依赖边相加为可消除损失。
+
+## 汇总诊断、代价和主题证据
+
+八个固定条件的准备、判断、评价、业务、逐包及回调复核完成后，在仓库根目录运行：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python \
+  -m experiments.scaleup_issue_screening.analysis.diagnostic_compare \
+  --root runs/scaleup_issue_screening/diagnostic-study-20261014 \
+  --output runs/scaleup_issue_screening/my-comparison.json \
+  --summary-dir runs/scaleup_issue_screening/my-comparison-results
+```
+
+`--root` 下按固定条件 `r00`～`r07` 保存 `prepared-v3/<条件>/summary.json`、`judged-final/<条件>/`、`evaluated-final/<条件>/summary.json`、`business/<条件>/summary.json`、`deep-v3/<条件>/summary.json`、`feedback/<条件>.json`；另需同一规则的 `historical-final.json`。各公开模块通过 `--output` 放入对应位置。比较器验证摘要、正常补采等价及业务控制条件，拒绝混用规则或来源。
+
+主 JSON 是研究者侧完整比较，包含私有依赖见证，只保存在本地。可选 `--summary-dir` 生成三个主题的 `study.json`、`measurement_budget/comparison.json` 和 152 行 `metrics.csv`，仅保留聚合指标与来源摘要，不导出包身份或真实路由条目。项目结果目录保存的是这组聚合文件的逐字节副本。输出文件和摘要目录均须不存在；命令受分析预算监督，旁边的 `*-resources/` 保存命令、退出状态和资源记录。
+
+读取已有比较不需要重新运行后端。当前主记录为 `runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison.json`；主题汇总的研究入口见[本实验索引](README.md)。规则和事实准备的旧版本保留在各自本地目录，不作为最终比较输入。
+
+## 访问已归档的运行
+
+本轮 `r00`～`r03` 的展开副本已在逐文件校验后无损归档；比较器可直接校验其 `archives/target-rNN.tar.gz` 及索引，不要求同时恢复。查看原始运行时可以按需要恢复一个，目标位置必须不存在：
+
+```bash
+PYTHONPATH=python:. .venv/llmservingsim-native/bin/python \
+  -m experiments.scaleup_issue_screening.analysis.archive restore \
+  --input runs/scaleup_issue_screening/diagnostic-study-20261014/archives/target-r00.tar.gz \
+  --output runs/scaleup_issue_screening/diagnostic-study-20261014/target/r00
+```
+
+恢复会核对文件摘要、硬链接及累计空间，超过当前预算即失败，不自动扩大额度。不要一次性解压所有历史数据，也不要把恢复归档等同于再次执行仿真。原命令、平台和来源绑定保留在归档内；需要重分析时使用新的分析输出位置。

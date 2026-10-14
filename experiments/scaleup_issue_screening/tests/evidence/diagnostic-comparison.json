@@ -1,0 +1,37 @@
+{
+  "schema_version": "issue-diagnostic-comparison-acceptance/1",
+  "verified_utc": "2026-10-14T12:51:19.522439+00:00",
+  "unit_checks": 24,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-acceptance/commands.jsonl",
+  "unit_stdout_sha256": "53bf70151ee1507e0355bac70ab5ce6b7d5828d24410efc1b3ae6998ff34887b",
+  "unit_stderr_sha256": "0b9075e7201110dee60c619f7f9f59833477e74057d3891a6aa862e6c411152c",
+  "comparison": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison.json",
+    "sha256": "d11758f1e3dd8756b488e8723a12dc7b5aba7ca5a453538db9d61f53f55950a2",
+    "probe_sha256": "b16cb2750efbbdab52d0c8de46f7cf5bf2f7db0ff9fcc38ac64c1fa82a3b3043"
+  },
+  "program_sha256": "8c555630b11202efb213350ac7ee6778d7544e97ff170e74ff52e0ea043c518c",
+  "rule_sha256": "19febeb337f47b3a0a6eb7c2405d681d934a435a72b374ec1e6dacbe79990f72",
+  "source_bound_cases": 8,
+  "modes_per_case": 19,
+  "metric_rows": 152,
+  "normal_equivalent_cases": [
+    "r00",
+    "r06"
+  ],
+  "all_captures_complete_without_fact_loss": true,
+  "all_feedback_start_delays_explained": true,
+  "aggregate_copies_byte_identical": true,
+  "packet_and_restricted_route_fields_excluded": true,
+  "summary_sha256": {
+    "experiments/scaleup_issue_screening/results/multipath/study.json": "bf769d9618d11ff1ef0e6daed7d394d515ac5f4c5c4d030a70bcd931b9941539",
+    "experiments/scaleup_issue_screening/results/measurement_budget/metrics.csv": "202e4682447029616e7a9129178c77d6ef31218641f1155291ef5586af8b5168",
+    "experiments/scaleup_issue_screening/results/measurement_budget/comparison.json": "527bfc014009227a5ed1fe244d975347a94bd375eadaf95a6fc24ba4a0266c03",
+    "experiments/scaleup_issue_screening/results/backpressure/study.json": "eed0266ef4f0ee0921cfe0c42c4c40adca7f7b4f2975752dbcf23aa498fb6e69",
+    "experiments/scaleup_issue_screening/results/local_service/study.json": "34f11167be48254a0d45833f8becdc237168a395a4ed8a2d236f6bff287b9dc9"
+  },
+  "limits": [
+    "Resource completion is not semantic validation; execution validation and business invariants are separately bound.",
+    "No new backend invocation during comparison. No hardware collection or root-location accuracy claim."
+  ]
+}

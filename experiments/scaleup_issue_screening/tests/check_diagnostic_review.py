@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from ..analysis.diagnostic_deep import progress,distribution
 from ..analysis.diagnostic_historical import bounds
-from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity,service_event_score,filtered_histogram_cost
+from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity,service_event_score,filtered_histogram_cost,aggregate_review
 from ..analysis.diagnostic_feedback import latest_dependencies
 from ..analysis.workflow import save,digest
 
@@ -75,6 +75,22 @@ class ReviewMathTest(unittest.TestCase):
         r=filtered_histogram_cost(1,2)
         self.assertEqual((r['network_payload_bytes'],r['peak_network_bytes_per_1us'],r['predicate_bin_reads']),(224,224,66))
         self.assertEqual(filtered_histogram_cost(0,2)['network_payload_bytes'],88)
+
+    def test_published_mechanism_evidence_excludes_packet_and_route_sources(self):
+        import json
+        private=dict(packet_uid=42,sources=[dict(request_id='restricted-example',expert_ids=[7])])
+        review=dict(case_id='x',problem='local_service',fixed_selection=dict(port_id=1),
+            selected_packets=1,whole_outlet_packets=1,actual_all_tx_packets=1,
+            selected_business_packets=1,interval_wait_metrics=dict(max=12),whole_wait_metrics={},
+            selected_missing_wire_arrival=0,selected_business_missing_wire_arrival=0,
+            selected_terminal_gate_packets=[private])
+        exported=aggregate_review(review)
+        self.assertEqual(exported['interval_wait_metrics']['max'],12)
+        self.assertNotIn('restricted-example',json.dumps(exported))
+        review=dict(case_id='y',problem='multipath',fixed_selection={},sides=[dict(
+            outlet=[1,2],all_packet_transmit={},whole_business_arrival={},whole_business_transmit={},
+            per_operation={},business_wait_ns={},terminal_necessary_transfers=[private])])
+        self.assertNotIn('restricted-example',json.dumps(aggregate_review(review)))
 
 
 if __name__=='__main__':unittest.main()

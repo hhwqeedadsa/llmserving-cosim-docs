@@ -21,11 +21,13 @@ class DiagnosisTest(unittest.TestCase):
 
     def test_stronger_baselines_separate_service_from_load(self):
         slow=self.row(queue_peak_bytes=16384,waiting_ns=1000,queued_busy_ns=1000,
-            tx_bytes=5000,serial_work_ns=400,probes=2)
+            tx_bytes=5000,completed_packet_bytes=5000,completed_serial_ns=400,probes=2)
         self.assertEqual(classify(slow,1000,400000000000,'queues',self.rule),['queue_cause_unknown'])
         self.assertEqual(classify(slow,1000,400000000000,'service',self.rule),['local_service_deficit'])
-        busy=slow[:];busy[IX['serial_work_ns']]=100
+        busy=slow[:];busy[IX['completed_serial_ns']]=100
         self.assertEqual(classify(busy,1000,400000000000,'credit',self.rule),['busy_competition'])
+        unmeasured=busy[:];unmeasured[IX['completed_packet_bytes']]=0;unmeasured[IX['completed_serial_ns']]=0
+        self.assertEqual(classify(unmeasured,1000,400000000000,'credit',self.rule),['busy_service_rate_unknown'])
         unknown=busy[:];unknown[IX['queued_busy_ns']]=1
         self.assertEqual(classify(unknown,1000,400000000000,'credit',self.rule),['arrival_or_arbitration_or_credit_unknown'])
         slow[IX['blocked_probes']]=1
@@ -59,7 +61,7 @@ class DiagnosisTest(unittest.TestCase):
     def test_fresh_cli_contract_reads_only_allowlist_and_handles_zero_reports(self):
         with tempfile.TemporaryDirectory() as d:
             base=Path(d);p=base/'input';p.mkdir();out=base/'output'
-            meta=dict(schema_version='issue-local-measurements/2',start_ns=0,end_ns=4000,window_ns=1000,
+            meta=dict(schema_version='issue-local-measurements/3',start_ns=0,end_ns=4000,window_ns=1000,
                 fields=list(FIELDS),ports=[dict(switch_id=1,port_id=2,peer_node=3,peer_port=0,
                 role='device_bound',plane=0,peer_group=['destination',3],rate_bps=400000000000)],
                 rank_nodes=[dict(rank_id=0,node_id=3)],encoding='sparse',semantics='integrals',hardware_scope='test')

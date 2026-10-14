@@ -36,12 +36,14 @@ def classify(values,width,nominal,level,rule):
         if waiting:
             if level=='queues':labels=['queue_cause_unknown']
             else:
-                slow=x['tx_bytes']>=rule['minimum_service_bytes'] and x['serial_work_ns']>0 and \
-                    x['tx_bytes']*8*1e9<rule['service_rate_fraction']*nominal*x['serial_work_ns']
+                measured=x['completed_packet_bytes']>=rule['minimum_service_bytes'] and x['completed_serial_ns']>0
+                slow=measured and \
+                    x['completed_packet_bytes']*8*1e9<rule['service_rate_fraction']*nominal*x['completed_serial_ns']
                 if slow:labels.append('local_service_deficit')
                 if level=='credit' and x['blocked_probes']:labels.append('credit_gate_witness_root_unknown')
                 if not labels:
-                    labels.append('busy_competition' if x['queued_busy_ns']>=rule['busy_fraction']*x['waiting_ns'] else 'arrival_or_arbitration_or_credit_unknown')
+                    labels.append(('busy_competition' if measured else 'busy_service_rate_unknown') if
+                        x['queued_busy_ns']>=rule['busy_fraction']*x['waiting_ns'] else 'arrival_or_arbitration_or_credit_unknown')
         elif level=='credit' and x['blocked_probes']:labels=['credit_gate_witness_root_unknown']
     return labels
 
@@ -86,7 +88,7 @@ def judge(directory,rule_path,output):
     meta=read(directory/'schema.json');rule=read(rule_path);hist=read(directory/'queue_histograms.json')
     if set(meta)!={'schema_version','start_ns','end_ns','window_ns','fields','ports','encoding','semantics','hardware_scope','rank_nodes'}:
         raise ValueError('Diagnostic metadata allowlist mismatch')
-    if meta['schema_version']!='issue-local-measurements/2' or meta['fields']!=list(FIELDS) or meta['start_ns']!=0 or meta['window_ns']!=1000:
+    if meta['schema_version']!='issue-local-measurements/3' or meta['fields']!=list(FIELDS) or meta['start_ns']!=0 or meta['window_ns']!=1000:
         raise ValueError('Unsupported local measurement contract')
     end=meta['end_ns'];n=math.ceil(end/1000);points={(p['switch_id'],p['port_id']):p for p in meta['ports']}
     if not 0<end<=1000000 or not 0<len(points)<=4096:raise ValueError('Invalid declared study coverage')

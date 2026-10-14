@@ -22,7 +22,7 @@ class ExactLocalTest(unittest.TestCase):
             s.event(t,'tx',dict(packet_bytes=100,completion_delay_ns=duration,rate_bps=400000000000))
         s.event(1000,'final',{})
         self.assertEqual(s.windows[0][IX['busy_ns']],700)
-        self.assertEqual(s.windows[0][IX['serial_work_ns']],900)
+        self.assertEqual(s.windows[0][IX['completed_serial_ns']],900)
         self.assertEqual(s.windows[0][IX['queued_busy_ns']],700)
 
     def test_partial_window_does_not_extend_coverage(self):
@@ -35,5 +35,15 @@ class ExactLocalTest(unittest.TestCase):
         s=LocalState((1,2),1);s.event(0,'initial',dict(voq_bytes=0,fifo_bytes=0))
         s.event(1024,'voq',dict(bytes=8192));s.event(2048,'final',{})
         self.assertEqual(dict(s.histogram),{0:1,14:1})
+
+    def test_duration_is_visible_after_completion_and_not_beyond_capture(self):
+        s=LocalState((1,2),1,end_ns=1500);s.event(0,'initial',dict(voq_bytes=0,fifo_bytes=0))
+        s.event(900,'tx',dict(packet_bytes=100,completion_delay_ns=300,rate_bps=1))
+        s.event(950,'tx',dict(packet_bytes=200,completion_delay_ns=600,rate_bps=1))
+        s.event(1500,'final',{})
+        self.assertEqual(s.windows[0][IX['completed_packet_bytes']],0)
+        self.assertEqual(s.windows[1][IX['completed_packet_bytes']],100)
+        self.assertEqual(s.windows[1][IX['completed_serial_ns']],300)
+        self.assertEqual(s.max_pending_completions,2)
 
 if __name__=='__main__':unittest.main()

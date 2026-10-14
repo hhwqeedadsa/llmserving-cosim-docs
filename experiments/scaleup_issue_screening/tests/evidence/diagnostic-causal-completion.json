@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "unit_checks": 12,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/causal-tests/commands.jsonl",
+  "rule_sha256": "b1aff9ada5a3cc0c73868c72e9a332de5e035934f65ca15aa21ebb402f97c549",
+  "small_preparation": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/small/summary.json",
+  "small_evaluation_sha256": "2cff210241a32e4f88878a08d246d27b33087988eb4cad7b9e83cb9c4fccd16a",
+  "modes": 19,
+  "corrections": [
+    "full serialization counters are visible after completion only",
+    "unfinished serialization cannot support normal-service diagnosis",
+    "concurrent completion timing state is accounted"
+  ],
+  "superseded": "Prior /2 start-attributed serialization comparisons are preserved but excluded from final causal study",
+  "failed_invocation": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/causal-preparation-resources",
+    "reason": "orchestrator imported nonexistent diagnose name before reading inputs; corrected to judge; no backend launched"
+  }
+}

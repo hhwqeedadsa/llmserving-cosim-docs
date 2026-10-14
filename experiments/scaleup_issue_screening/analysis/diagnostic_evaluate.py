@@ -88,6 +88,8 @@ def evaluate(prepared,predictions,output):
         cost['continuous_queue_counter_updates']=updates['voq']+updates['fifo'] if level!='counters' else 0
         cost['continuous_arrival_counter_updates']=updates['fifo_enqueue'] if level!='counters' else 0
         cost['continuous_serial_work_updates']=updates['tx'] if level in ('service','credit') else 0
+        cost['completion_timing_state_bound_bytes']=sum(p['max_pending_serializations']*12 for p in pstats
+            if (p['node_id'],p['port_id']) in keys) if level in ('service','credit') else 0
         cost['continuous_credit_decision_updates']=updates['credit_decision'] if level=='credit' else 0
         if kind=='histogram':cost['required_existing_occupancy_state_updates']=updates['voq']+updates['fifo']
         cost['report_payload_plus_histogram_bytes']=cost.get('report_bytes',0)+cost.get('histogram_bytes',0)

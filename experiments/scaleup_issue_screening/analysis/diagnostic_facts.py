@@ -6,6 +6,7 @@ actual path joins, source paths and the service-control manifest remain private.
 import argparse
 from collections import Counter,defaultdict
 import gzip
+import heapq
 import json
 from pathlib import Path
 import sys
@@ -17,17 +18,19 @@ from .diagnostic_schema import FIELDS,IX
 
 class LocalState:
     """Exact positive-duration intervals; simultaneous moves create no wait."""
-    def __init__(self,key,nominal,width=1000):
+    def __init__(self,key,nominal,width=1000,end_ns=2**63-1):
         self.key=key;self.nominal=nominal;self.width=width
         self.time=0;self.voq=0;self.fifo=0;self.busy_until=0
         self.windows={};self.episodes=[];self.active=None;self.slow=[]
         self.events=Counter();self.fifo_pending={};self.waits=Counter();self.network_waits=Counter()
         self.histogram=Counter()
+        self.end_ns=end_ns;self.completions=[];self.max_pending_completions=0
 
     def row(self,t):return self.windows.setdefault(t//self.width,[0]*len(FIELDS))
 
     def advance(self,t):
         if t<self.time:raise ValueError('Local time went backwards')
+        while self.completions and self.completions[0]<=t:heapq.heappop(self.completions)
         start=self.time;q=self.voq+self.fifo
         if t>start:
             # Fixed 1024 ns instantaneous samples. Same-time state changes have
@@ -60,8 +63,17 @@ class LocalState:
         elif event=='fifo':self.fifo=d['bytes']
         elif event=='tx':
             r=self.row(t);r[IX['tx_bytes']]+=d['packet_bytes'];r[IX['tx_packets']]+=1
-            r[IX['serial_work_ns']]+=d['completion_delay_ns']
-            self.busy_until=max(self.busy_until,t+d['completion_delay_ns'])
+            done=t+d['completion_delay_ns']
+            # These counters become visible only after physical completion.
+            # Whole durations known internally at start are not early telemetry.
+            if done<self.end_ns:
+                completed=self.row(done)
+                completed[IX['completed_serial_ns']]+=d['completion_delay_ns']
+                completed[IX['completed_packet_bytes']]+=d['packet_bytes']
+            if done>t:
+                heapq.heappush(self.completions,done)
+                self.max_pending_completions=max(self.max_pending_completions,len(self.completions))
+            self.busy_until=max(self.busy_until,done)
             if d['rate_bps']<self.nominal:
                 self.slow.append((t,t+d['completion_delay_ns']))
         elif event=='fifo_enqueue':self.row(t)[IX['fifo_arrival_bytes']]+=d['packet_bytes']
@@ -83,7 +95,7 @@ def prepare(run,output):
     for l in net['topology']['links']:
         for a,b in (('src','dst'),('dst','src')):
             links[l[a],l[a+'_port']]=dict(peer=l[b],peer_port=l[b+'_port'],delay=l['delay_ns'],rate=l['rate_bps'])
-    states={(p['node_id'],p['port_id']):LocalState((p['node_id'],p['port_id']),links[p['node_id'],p['port_id']]['rate']) for p in capture['policy']['ports']}
+    states={(p['node_id'],p['port_id']):LocalState((p['node_id'],p['port_id']),links[p['node_id'],p['port_id']]['rate'],end_ns=end) for p in capture['policy']['ports']}
     if not set(scope)<=set(states):raise ValueError('Incomplete public outlet coverage')
     obs=read(run/'inputs/observation.json');deep={(r['switch_id'],r['port_id']) for r in obs['recording']['detail_ranges']}
     if any(c['offset_ns'] or c['drift_ppb'] for c in obs['clocks']):raise ValueError('This study requires aligned clocks')
@@ -140,6 +152,7 @@ def prepare(run,output):
                 x['start_ns']<e['end_ns'] and x['last_failed_ns']>=e['start_ns'] for x in credit_spells)
             truth.append(e)
         summaries.append(dict(node_id=k[0],port_id=k[1],events=dict(s.events),
+            max_pending_serializations=s.max_pending_completions,
             fifo_wait_histogram_ns=dict(s.waits),arrival_to_fifo_histogram_ns=dict(s.network_waits),
             packets_without_preceding_captured_wire=unmatched[k],
             voq_byte_ns=sum(r[IX['voq_byte_ns']] for r in s.windows.values()),
@@ -152,7 +165,7 @@ def prepare(run,output):
     meta=[]
     for k,p in sorted(scope.items()):
         meta.append({name:p[name] for name in ('switch_id','port_id','peer_node','peer_port','role','plane','peer_group','rate_bps')})
-    save(output/'input/schema.json',dict(schema_version='issue-local-measurements/2',start_ns=0,end_ns=end,window_ns=1000,
+    save(output/'input/schema.json',dict(schema_version='issue-local-measurements/3',start_ns=0,end_ns=end,window_ns=1000,
         fields=list(FIELDS),ports=meta,encoding='sparse_windows_explicit_zero_only_within_declared_coverage',
         rank_nodes=[dict(rank_id=r,node_id=n) for r,n in zip(report['rank_ids'],report['rank_to_ub_node'])],
         semantics='exact integrals and event counters; not instantaneous queue samples',

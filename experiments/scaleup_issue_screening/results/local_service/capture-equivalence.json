@@ -1,0 +1,52 @@
+{
+  "schema_version": "issue-diagnostic-capture-equivalence/1",
+  "passed": true,
+  "case_id": "r00",
+  "original_archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+  "selection_sha256": "00113dabf69a407daebd9eea87757030fa902d5e121ddc6b550c3a1734ed7d61",
+  "equivalence_sha256": "811331fb8fe3588a7c6ed7b8eae0fe0ceb95626d6be36556953754efc0a6e02d",
+  "port_equivalence_sha256": "21684d52e6b09c39eff7deefed739693fd3ba51129b8f0bc75559de042fe7cb2",
+  "ports_compared": 2688,
+  "record_files_compared": 8082,
+  "metadata_fields": [
+    "simulation_end_ns",
+    "service_finished_ns",
+    "random",
+    "network_drain",
+    "graph_completions",
+    "rank_resources",
+    "boundary_resources",
+    "resource_lifecycle"
+  ],
+  "simulation_end_ns": 394911,
+  "packet_wire_and_start_fingerprints_match": true,
+  "backend_executed": true,
+  "frontend_executed": false,
+  "independent_repeat": false,
+  "resources": {
+    "backend": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 462.27312643267214,
+      "peak_sampled_group_rss_bytes": 8086585344,
+      "aggregate_artifact_bytes_before_report": 53875191808
+    },
+    "export": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 541.9247258640826,
+      "peak_sampled_group_rss_bytes": 58294272,
+      "aggregate_artifact_bytes_before_report": 54193881088
+    },
+    "equivalence": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 190.12004845030606,
+      "peak_sampled_group_rss_bytes": 159055872,
+      "aggregate_artifact_bytes_before_report": 54208294912
+    }
+  },
+  "evidence": "runs/scaleup_issue_screening/diagnostic-study-20261014/target/r00",
+  "platform_commit": "582fb8f",
+  "ns3_commit": "fee9fbf6e471f2e1db93db16fbbc44a115dda0b1"
+}

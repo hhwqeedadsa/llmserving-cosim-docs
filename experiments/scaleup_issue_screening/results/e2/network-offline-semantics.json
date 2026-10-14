@@ -1,0 +1,190 @@
+{
+  "schema_version": "issue-network-offline-semantics/1",
+  "audit": {
+    "schema_version": "issue-network-source-end-audit/1",
+    "network_transfers": 193576,
+    "network_classes": {
+      "dispatch/data": 24202,
+      "dispatch/status": 96768,
+      "combine/data": 48404,
+      "combine/status": 24202
+    },
+    "minimum_source_end_slack_ns": {
+      "dispatch/data": 1372,
+      "dispatch/status": 80,
+      "combine/data": 284,
+      "combine/status": 196
+    },
+    "structural_outgoing_fences": {
+      "dispatch/data": 24396,
+      "dispatch/status": 97536,
+      "combine/data": 48598,
+      "combine/status": 24396
+    },
+    "classes": {
+      "D.w0.L6.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L6.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L7.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L7.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L8.dispatch": {
+        "kind": "dispatch",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      },
+      "D.w0.L8.combine": {
+        "kind": "combine",
+        "template": "cann_a3_v850_store_resources_v1",
+        "copy_fence": "data_ready",
+        "source_end_bounds_remote_delivery": true
+      }
+    },
+    "counterexamples": [],
+    "local_transfers": 1350,
+    "planned_transfers": 194926,
+    "endpoints": 768,
+    "source_files": {
+      "python/moe_ub_cosim/a3.py": "b0de8991ae7482a9885d72be3f3450e11ec73fb5578b543722485461eeb8cf33",
+      "backend/a3_plan.cc": "f6d783145f4579a778f41ffaf0de0a511b5597552010991b578ff01b6a3a343d",
+      "backend/layer_plan.cc": "04694c9c6d2fa39ec35a986875b22ee6fefc0036b54e487958a9695d6f41a6f2",
+      "backend/ub_write_transfer.cc": "c8879f80458b2839357f3a8e218500865af4d9063fa78407c9dc1cab70af558a",
+      "backend/write_completion.cc": "d6efe548393413dc5ad8bf7cf2b345d5391ccf9cc32665ca1a3dcd5ae56c5751",
+      "backend/cosim_service.cc": "b37dcc309d8a4400be7f4a231d6ceca34e20bbbd1e7f0f29c059149cfae0ad2a"
+    },
+    "plan_hashes": {
+      "raw/graphs/g0/plan.json": "62aa4d3856fc7232b5b24d00f4a7586991e78d1a4d81a3fa0a9f5f2fd60726f0"
+    },
+    "slice_sha256": "9c25156c6f811205722d759040d519e3e75a22a101d87fa9385d7bae7ba54bcd",
+    "archive_source_sha256": "30f1077abfe5ccdbebd82644d25f1e6671d441ea3b303adc347001191093764f",
+    "manifest_sha256": "1dbdca52e90bdc8d0b0d58e855b450689d4a97bb33d2a6f5ed7cd00f1d91220c",
+    "semantics_sha256": "8f72f88ddfc401e002c10e3567e309f92687b1b940c8a4183741048b756e5d90",
+    "program_sha256": "71c3ac073a8594121e39cfed9a95b56bacb6b80e02288f2bf8c349cdf954ab99",
+    "distinction": "Remote data delivery bounds outgoing application data/status; ACK/credit and protocol retirement are not bounded by operator end. Local read completion alone is ineligible."
+  },
+  "reproduction": {
+    "passed": true,
+    "checks": {
+      "input.json": true,
+      "relation.json": true,
+      "truth.json": true,
+      "old-prediction.json": true,
+      "old-evaluation.json": true,
+      "old-mapping-prediction.json": true,
+      "old-mapping-evaluation.json": true
+    },
+    "original_sources": {
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/mapping-evaluation.json": "26d2ddfbf5556ca601ab798818c5cad346a44cdcf078bc7d325806a635deec2c",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/input.json": "90b8563d811a1e152a2269059eaa988e9b9e5b0432c7ab9e3d8acfe0b793f0ce",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/relation.json": "ad838712f7f326a50efd302742f072693f7a70e7e3b26dbf94b5e1203f3d348f",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/prediction.json": "fb5850b37a5701d37d0e7e86b0be98e58d74c9f27fa15c329a248376bb4851d8",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/evaluation.json": "bd7e275e777d6ce35f4a2b8df7a0c484605a27e2055869c087ff1bb51e6b053c",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/truth.json": "a7252d221c91f5fc74e489ac8d254bab5f2a26f45f183171b7e7143730ddbdd9",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information/mapping-prediction.json": "2851d0c2aad423a1214e8e0b5aff05850c3050812d7493e803bdc01a36d19535"
+    },
+    "reproduced_sources": {
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/old-mapping-prediction.json": "2851d0c2aad423a1214e8e0b5aff05850c3050812d7493e803bdc01a36d19535",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/input.json": "90b8563d811a1e152a2269059eaa988e9b9e5b0432c7ab9e3d8acfe0b793f0ce",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/old-evaluation.json": "04fdb1b9e367aeb22cc4879a4dcd40b09807ec3fea6ccada0f8f18d0379cc38d",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/relation.json": "ad838712f7f326a50efd302742f072693f7a70e7e3b26dbf94b5e1203f3d348f",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/old-prediction.json": "b9fa906d9f90cf0b40115bdeea9d427ec13a80af413a3a2af636746ff5d7321d",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/truth.json": "f904f5d65fe9b314d0f5fd669da3e0ee9524e553412f74573ee4f42aa706a6b3",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/old-mapping-evaluation.json": "9756d7da6b55f092a5a334359c66efcb51fb057570862063b2f2dd0a8d1353d1"
+    },
+    "program_sha256": "71c3ac073a8594121e39cfed9a95b56bacb6b80e02288f2bf8c349cdf954ab99"
+  },
+  "resources": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "experiments.scaleup_issue_screening.network_offline",
+      "--archive",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture.tar.gz",
+      "--slice",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-slice",
+      "--packets",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture-packets",
+      "--previous",
+      "runs/scaleup_issue_screening/network-screening-20261013/discovery-information",
+      "--output",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+      "--worker"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-14T03:48:40.244078+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 68719476736,
+      "wall_seconds": 1800
+    },
+    "peak_sampled_group_rss_bytes": 3167694848,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/task-sync-20261008",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening",
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/build/m10-research-slice"
+    ],
+    "peak_sampled_artifact_bytes": 52580724736,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 51412981757,
+    "peak_sampled_artifact_allocated_bytes": 52580724736,
+    "process_group": 3255931,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-14T03:50:19.215609+00:00",
+    "wall_seconds": 98.97153554297984,
+    "max_waited_child_rss_kib": 3625388,
+    "artifact_bytes_before_report": 17211,
+    "aggregate_artifact_bytes_before_report": 52580724736,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 51412981757,
+      "allocated_bytes": 52580724736
+    }
+  },
+  "evidence": {
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/audit.json": "fd837be7fc863f8adda53f2057d2a2bfd0d3336dc799a8d2166710bd172fa441",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/semantics.json": "8f72f88ddfc401e002c10e3567e309f92687b1b940c8a4183741048b756e5d90",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/reproduction.json": "8df6b6bc40a6c1b12e6ec1d5bb6b16b7245222a2e2359207b913fb4efa54968e",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-resources/probe.json": "52d3331fbf07f282dfe683b9c9723708d395484d68ac6fe2d9d1236d8f1d5609"
+  },
+  "new_backend_runs": 0
+}

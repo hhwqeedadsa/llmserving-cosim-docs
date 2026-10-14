@@ -490,3 +490,21 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python -m experiments.scaleup
 ```
 
 关系只含操作、出口与原 1000 ns 发送窗口，覆盖与基线相同。等待中的应用包此后必须在该出口发送，因此可用**后续**发送窗口排除已不可能等待的操作；不能仅凭当前窗口没有发送就排除仍在排队的包。操作完成在关系覆盖以外时保留未确定。此关系是准备器从真值投影的理想输入，尚未实现从实际观测恢复映射，也不能据它给出关键依赖或业务损失。功能检查沿用 `check_network`，其中包括歧义、未覆盖尾部、错误字段及判断输入隔离；不另开正式 E3/E4。
+
+
+### 已有信息与源端结束的离线核验
+
+在仓库根使用已有 Python 环境执行。以下命令只读取归档与冻结图，不运行仿真；输出必须是新目录。`source/` 是经逐文件摘要核验后按需恢复的分析副本，不是完整可执行 case。原归档、旧输入和评价保留。
+
+```bash
+OFFLINE_ROOT=runs/scaleup_issue_screening/network-screening-20261013
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_offline \
+  --archive "$OFFLINE_ROOT/discovery-capture.tar.gz" \
+  --slice "$OFFLINE_ROOT/discovery-slice" \
+  --packets "$OFFLINE_ROOT/discovery-capture-packets" \
+  --previous "$OFFLINE_ROOT/discovery-information" \
+  --output "$OFFLINE_ROOT/offline-1024-new"
+PYTHONPATH=python:. python3 -m unittest experiments.scaleup_issue_screening.check_network_offline
+```
+
+`information/` 保存重新准备的受限输入、旧预测、评价及理想关系；`reproduction.json` 核对旧结果全部逐窗集合。`audit.json` 核验执行源码、冻结图中每个源端完成节点覆盖的发送栅栏，以及全部应用网络传输的起止约束、身份、数据/状态类别与反例。`semantics.json` 仅提供按操作统一的完成语义，不能把审计内的逐传输答案交给判断器。`--previous` 可省略；`--slice` 必须是归档清单绑定的同一切片，可显式指定迁移后位置。命令受现有分析资源预算监控，报告在输出目录加 `-resources` 后缀的位置。

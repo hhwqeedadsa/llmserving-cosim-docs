@@ -1,0 +1,32 @@
+{
+  "schema_version": "issue-native-line-export-acceptance/1",
+  "verified_utc": "2026-10-14T12:59:25.809707+00:00",
+  "prior_acceptance": {
+    "path": "experiments/scaleup_issue_screening/tests/evidence/diagnostic-comparison.json",
+    "sha256": "cffa34ebd5012322ef9e4e69e4579236179a7c8e444c1c1d78b63d7446597d6f"
+  },
+  "prior_outputs_retained": [
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison.json",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/final-results"
+  ],
+  "final_comparison": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison-lf.json",
+    "sha256": "81403f1b9321d4a62382cecfc5e3197804a4ea978b65969552f135edfcb95a77"
+  },
+  "final_summary_directory": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-results-lf",
+  "program_sha256": "9b29e3c39b1990e78bc65e22688b00f95be48b25b095523b39e047a076c104c9",
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-acceptance/commands.jsonl",
+  "probe_sha256": "abd445d450f18b4b9888fe56b7e234ff0b8e456a226b09ff32116d238a975c80",
+  "full_comparison_identical_except_program_digest": true,
+  "csv_rows_identical": 152,
+  "native_lf_bytes_only": true,
+  "restricted_fields_absent": true,
+  "additional_backend_runs": 0,
+  "current_summary_sha256": {
+    "experiments/scaleup_issue_screening/results/multipath/study.json": "6cc1ae1f0fc9be8a7ed82dc3b14d7e84ace2754c3c902a9c3964421fb338dd1f",
+    "experiments/scaleup_issue_screening/results/measurement_budget/metrics.csv": "84292ed7b291f0f911e9c35d62d05f5322a8cb8f7eff642f17dde81b51c07a4a",
+    "experiments/scaleup_issue_screening/results/measurement_budget/comparison.json": "2e5888ba9e413d60fc3804aa900b1424e340a7fa4a65d2a325bd06ea515020d5",
+    "experiments/scaleup_issue_screening/results/backpressure/study.json": "4d79a0714a2ad8fab6aa6b95f93846eb5bf7ea25dad5c48ee3a290fe9cd40f5d",
+    "experiments/scaleup_issue_screening/results/local_service/study.json": "e30aee07c26390867eaab5c798bc4d427c05a82e100c7c667657913b758bf911"
+  }
+}

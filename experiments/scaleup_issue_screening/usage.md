@@ -133,7 +133,7 @@ PYTHONPATH=python:. .venv/llmservingsim-native/bin/python \
 
 主 JSON 是研究者侧完整比较，包含私有依赖见证，只保存在本地。可选 `--summary-dir` 生成三个主题的 `study.json`、`measurement_budget/comparison.json` 和 152 行 `metrics.csv`，仅保留聚合指标与来源摘要，不导出包身份或真实路由条目。项目结果目录保存的是这组聚合文件的逐字节副本。输出文件和摘要目录均须不存在；命令受分析预算监督，旁边的 `*-resources/` 保存命令、退出状态和资源记录。
 
-读取已有比较不需要重新运行后端。当前主记录为 `runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison.json`；主题汇总的研究入口见[本实验索引](README.md)。规则和事实准备的旧版本保留在各自本地目录，不作为最终比较输入。
+读取已有比较不需要重新运行后端。当前主记录为 `runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison-lf.json`；主题汇总的研究入口见[本实验索引](README.md)。规则和事实准备的旧版本保留在各自本地目录，不作为最终比较输入。
 
 ## 访问已归档的运行
 

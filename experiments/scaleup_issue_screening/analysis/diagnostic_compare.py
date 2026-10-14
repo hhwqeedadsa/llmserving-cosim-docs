@@ -150,7 +150,7 @@ def summaries(comparison,comparison_path,historical_path,directory):
         'actual_peak_bytes_per_us','worst_peak_bytes_per_us','filtered_peak_bytes_per_us',
         'state_bytes','snapshot_reads','histogram_reads','overflow_records')
     with (directory/'measurement_budget/metrics.csv').open('w',newline='') as stream:
-        writer=csv.DictWriter(stream,fieldnames=columns);writer.writeheader()
+        writer=csv.DictWriter(stream,fieldnames=columns,lineterminator='\n');writer.writeheader()
         for name,c in measurement.items():
             for mode,m in c['modes'].items():
                 cost=m['cost'];p=m['payload_cost'];f=m['local_filtered_reference'];s=m['service_event_score']

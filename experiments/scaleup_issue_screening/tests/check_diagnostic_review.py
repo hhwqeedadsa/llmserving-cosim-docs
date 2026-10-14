@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from ..analysis.diagnostic_deep import progress,distribution
 from ..analysis.diagnostic_historical import bounds
-from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity,service_event_score
+from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity,service_event_score,filtered_histogram_cost
 from ..analysis.diagnostic_feedback import latest_dependencies
 from ..analysis.workflow import save,digest
 
@@ -31,7 +31,7 @@ class ReviewMathTest(unittest.TestCase):
             histogram_state_bytes=132,ring_bytes=88,completion_timing_state_bound_bytes=12)
         r=payload_cost(c,1000)
         self.assertEqual((r['combined_payload_bytes'],r['peak_network_bytes_per_1us'],
-            r['measured_counter_state_lower_bound_bytes']),(360,240,240))
+            r['accounted_measurement_state_bytes']),(360,240,240))
 
     def test_business_delta_keeps_new_latest_consumer(self):
         a=dict(simulation_end_ns=110,last_model_compute_ns=105,
@@ -70,6 +70,11 @@ class ReviewMathTest(unittest.TestCase):
         result=service_event_score(events,[p,p,q])
         self.assertEqual((result['detected_queue_events'],result['explained_as_service_events']),(2,1))
         self.assertIsNone(service_event_score([],[])['service_explanation_fraction'])
+
+    def test_filtered_histogram_retains_all_port_counters_and_coverage(self):
+        r=filtered_histogram_cost(1,2)
+        self.assertEqual((r['network_payload_bytes'],r['peak_network_bytes_per_1us'],r['predicate_bin_reads']),(224,224,66))
+        self.assertEqual(filtered_histogram_cost(0,2)['network_payload_bytes'],88)
 
 
 if __name__=='__main__':unittest.main()

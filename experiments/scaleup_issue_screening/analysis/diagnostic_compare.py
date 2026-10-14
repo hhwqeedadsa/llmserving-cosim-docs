@@ -20,9 +20,10 @@ def payload_cost(cost,end_ns):
     return dict(network_payload_bytes=total,common_software_payload_bytes=common,
         combined_payload_bytes=total+common,mean_network_bytes_per_second=total*1e9/end_ns,
         peak_network_bytes_per_1us=cost['peak_report_bytes_per_1us']+cost['histogram_bytes'],
-        measured_counter_state_lower_bound_bytes=cost['counter_bank_bytes']+cost['histogram_state_bytes']+
-            cost['ring_bytes']+cost.get('completion_timing_state_bound_bytes',0),
-        state_limit='Counter widths, histogram bins, record ring and completion timing only. Queue occupancy, last-update timestamps, scheduling/transport and snapshot storage are additional; no ASIC area claim.')
+        accounted_measurement_state_bytes=cost['counter_bank_bytes']+cost['histogram_state_bytes']+
+            cost['ring_bytes']+cost.get('completion_timing_state_bound_bytes',0)+cost.get('rng_state_bytes',0)+
+            cost.get('event_deduplication_state_bytes',0)+cost.get('sampling_control_state_bytes',0),
+        state_limit='Counter widths, histogram bins, record ring, completion timing, actual RNG state and bounded collection control. Queue occupancy, last-update timestamps, scheduling/transport and snapshot storage are additional; no ASIC area claim.')
 
 
 def business_delta(value,baseline):
@@ -71,6 +72,16 @@ def manifest_identity(root,name):
     return index['entries']['run/manifest.json']['sha256']
 
 
+def filtered_histogram_cost(candidate_ports,ports):
+    # Preserve every port's 24-byte final counters; only selected histogram
+    # exports (33 uint32 bins plus 4-byte resource ID) may be omitted.
+    total=ports*(24+20)+candidate_ports*136
+    return dict(candidate_records=candidate_ports,coverage_marker_bytes=ports*20,
+        network_payload_bytes=total,peak_network_bytes_per_1us=total,
+        same_diagnostic_outputs=True,additional_ring_bytes=0,predicate_bin_reads=ports*33,
+        assumptions='Same fixed-phase histogram and final counters. Local end-of-capture threshold filter, reliable coverage markers; full noncandidate histograms are not preserved. Continuous histogram reads/updates unchanged.')
+
+
 def service_event_score(events,predictions):
     by_port=defaultdict(list)
     for p in predictions:by_port[p['node_id'],p['port_id']].append(p)
@@ -89,7 +100,7 @@ def compare(root,output):
     study=read(CONFIG/'scenarios/diagnostic-study.json');result={};sources={};rule_sha=None
     for spec in study['primary_cases']:
         name=spec['id'];paths=dict(prepared=root/'prepared-v3'/name/'summary.json',
-            predictions=root/'judged-v3'/name/'summary.json',evaluation=root/'evaluated-v3'/name/'summary.json',
+            predictions=root/'judged-final'/name/'summary.json',evaluation=root/'evaluated-final'/name/'summary.json',
             business=root/'business'/name/'summary.json',deep=root/'deep-v3'/name/'summary.json',
             feedback=root/'feedback'/(name+'.json'))
         docs={k:read(p) for k,p in paths.items()};p,j,e,b,d=[docs[k] for k in ('prepared','predictions','evaluation','business','deep')]
@@ -131,6 +142,9 @@ def compare(root,output):
                 width=(96+sum(BITS[f] for f in FIELDSETS[spec_mode['fieldset']]))//8
                 extra['local_filtered_reference']=filtered_cost(records,j['ports'],j['end_ns'],width)
                 extra['local_filtered_reference']['predicate_evaluations']=v['cost']['records']
+                extra['local_filtered_reference']['prediction_sha256']=digest(paths['predictions'].parent/(mode+'.jsonl.gz'))
+            else:
+                extra['local_filtered_reference']=filtered_histogram_cost(len(records),j['ports'])
                 extra['local_filtered_reference']['prediction_sha256']=digest(paths['predictions'].parent/(mode+'.jsonl.gz'))
             modes[mode]=dict(**v,payload_cost=payload_cost(v['cost'],j['end_ns']),service_event_score=service_event_score(slow,records),**extra)
         result[name]=dict(condition=spec,manifest_sha256=manifest,baseline=baseline,

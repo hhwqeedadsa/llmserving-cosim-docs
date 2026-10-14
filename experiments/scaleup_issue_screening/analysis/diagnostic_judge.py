@@ -57,7 +57,9 @@ def merge(group):
 
 def sample(values,period,kind,seed,nominal,rule):
     """Return causal report (source window, delivery window) and overflow count."""
-    n=len(values);cap=math.ceil(n/period);reported=[];overflow=0
+    n=len(values);horizon=rule['report_budget_horizon_ns']
+    if horizon%1000 or not n*1000<=horizon<=1000000:raise ValueError('Capture exceeds predeclared collection budget horizon')
+    cap=math.ceil(horizon/1000/period);reported=[];overflow=0
     rng=random.Random(seed);last=deque(maxlen=rule['event_pre_windows']);post=0;next_trigger=0;seen=set()
     for i,row in enumerate(values):
         requested=[]
@@ -151,7 +153,7 @@ def judge(directory,rule_path,output):
                 cost['overflow_records']+=overflow
                 reports=[(i,i+1,at,values[i]) for i,at in chosen]
                 cost['base_windows_examined']+=n
-                cost['record_cap']+=math.ceil(n/period)
+                cost['record_cap']+=math.ceil(rule['report_budget_horizon_ns']/1000/period)
                 if kind=='event':cost['ring_bytes']+=rule['event_pre_windows']*width_bytes
             for a,b,at,value in reports:
                 begin=a*1000;finish=min(end,b*1000)
@@ -192,6 +194,12 @@ def judge(directory,rule_path,output):
             cost['base_windows_examined'] if kind=='event' else 2*cost['records'])
         cost['local_clock_or_rng_steps']=cost['base_windows_examined'] if kind in ('event','random') else cost['records']
         cost['histogram_state_bytes']=len(points)*33*4 if kind=='histogram' else 0
+        # Independent per-port streams use the actual CPython MT state, not an
+        # unimplemented small hardware RNG. Event deduplication is represented
+        # as a bounded bitmap of the predeclared base windows.
+        cost['rng_state_bytes']=len(points)*len(random.Random(0).getstate()[1])*4 if kind=='random' else 0
+        cost['event_deduplication_state_bytes']=len(points)*math.ceil(rule['report_budget_horizon_ns']/1000/8) if kind=='event' else 0
+        cost['sampling_control_state_bytes']=len(points)*(20 if kind=='event' else 8 if kind in ('periodic','random') else 0)
         cost['common_endpoint_records']=len(endpoints);cost['common_endpoint_payload_bytes']=len(endpoints)*32
         cost['common_stage_records']=len(stages);cost['common_stage_payload_bytes']=len(stages)*24
         cost['common_workload_payload_bytes']=len(work_by)*40
@@ -204,6 +212,8 @@ def judge(directory,rule_path,output):
         rule_sha256=digest(rule_path),program_sha256=digest(__file__),modes=modes,
         predictions={m:len(v) for m,v in predictions.items()},costs={m:dict(v) for m,v in costs.items()},
         counter_progress_ambiguous_pairs=len(pairs),endpoint_scope='static possible ranks; no private packet/operation mapping',
+        collection_budget_horizon_ns=rule['report_budget_horizon_ns'],
+        random_state_semantics='Independent CPython MT19937 streams: 625 uint32 slots including index; no Gaussian cache used',
         cost_boundaries='Counter widths and local replay costs, not JSON sizes or hardware implementation. Event counters still update continuously; source update counts are measured separately by evaluator.'))
     print('Diagnosed',len(points),'ports in',len(modes),'fixed conditions')
 

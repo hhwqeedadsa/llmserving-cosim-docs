@@ -34,6 +34,7 @@ class DiagnosisTest(unittest.TestCase):
         self.assertEqual(classify(slow,1000,400000000000,'credit',self.rule),['local_service_deficit','credit_gate_witness_root_unknown'])
 
     def test_causal_trigger_context_and_common_cap(self):
+        self.rule['report_budget_horizon_ns']=100000
         values=[self.row() for _ in range(100)]
         values[21]=self.row(blocked_probes=1)
         chosen,dropped=sample(values,10,'event',0,400000000000,self.rule)
@@ -47,10 +48,21 @@ class DiagnosisTest(unittest.TestCase):
             self.assertTrue(all(a<=b for a,b in reports));self.assertGreaterEqual(overflow,0)
 
     def test_random_is_fixed_and_overflow_is_explicit(self):
+        self.rule['report_budget_horizon_ns']=100000
         values=[self.row() for _ in range(100)]
         a=sample(values,10,'random',0,1,self.rule)
         self.assertEqual(a,sample(values,10,'random',0,1,self.rule))
         self.assertTrue(any(sample(values,10,'random',seed,1,self.rule)[1]>0 for seed in range(30)))
+
+    def test_unknown_future_termination_does_not_change_reported_prefix(self):
+        short=[self.row(blocked_probes=1) for _ in range(3)]
+        longer=short+[self.row() for _ in range(97)]
+        for kind in ('periodic','random','event'):
+            a,_=sample(short,10,kind,0,400000000000,self.rule)
+            b,_=sample(longer,10,kind,0,400000000000,self.rule)
+            self.assertEqual(a,[r for r in b if r[1]<3])
+        with self.assertRaisesRegex(ValueError,'budget horizon'):
+            sample([self.row()]*1001,10,'event',0,1,self.rule)
 
     def test_private_files_are_refused_before_reading(self):
         with tempfile.TemporaryDirectory() as d:

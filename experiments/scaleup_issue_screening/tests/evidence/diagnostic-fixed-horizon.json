@@ -1,0 +1,64 @@
+{
+  "frozen_utc": "2026-10-14T12:00:49.201304+00:00",
+  "rule": {
+    "schema_version": "issue-diagnostic-rule/3",
+    "service_counter_availability": "completed packet bytes and duration enter the window containing completion, never the window containing start",
+    "development_source": "g0-b8-short",
+    "review_source": "g0-b2-short",
+    "historical_aggregate_review": [
+      "g0-b4-short",
+      "g0-b8-long"
+    ],
+    "periods_us": [
+      1,
+      10,
+      50
+    ],
+    "strategy_periods_us": [
+      10,
+      50
+    ],
+    "queue_peak_bytes": 8192,
+    "minimum_window_wait_ns": 500,
+    "busy_fraction": 0.8,
+    "service_rate_fraction": 0.5,
+    "minimum_service_bytes": 4096,
+    "peer_work_relative_difference": 0.1,
+    "peer_progress_gap_ns": 10000,
+    "random_seed": 0,
+    "event_pre_windows": 1,
+    "event_post_windows": 1,
+    "event_cooldown_periods": 3,
+    "per_port_report_cap": "ceil(predeclared report_budget_horizon_ns / 1000 / period_us); independent of actual termination",
+    "sampling_object": "completed 1us local counter windows; never pretend these are instantaneous queue samples",
+    "realistic_reference": "port counters, common endpoint operations/topology, fixed-phase 1024ns queue histogram where that interface exists; not claimed to be available on A3",
+    "unknown_policy": "queue-only does not identify cause; no credit failure is not a continuous eligibility assertion; no actual same-head evidence means credit duration unknown",
+    "review_policy": "freeze before inspecting new smaller-scale labels; historical scales are related records, not independent generalization",
+    "report_budget_horizon_ns": 1000000
+  },
+  "rule_sha256": "19febeb337f47b3a0a6eb7c2405d681d934a435a72b374ec1e6dacbe79990f72",
+  "judge_sha256": "627c53d5d8811e4c30c8c6159f7d51e554e33ae872ae9377a8d71c4cc6c6dd5b",
+  "unit_checks": 23,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/fixed-horizon-tests/commands.jsonl",
+  "target_runs_at_freeze": [
+    "r00",
+    "r01",
+    "r02",
+    "r03",
+    "r04",
+    "r05"
+  ],
+  "smaller_scale_review_not_launched": true,
+  "correction": "Known 1ms budget replaces future actual-end-derived cap; no threshold/traffic/backend changes",
+  "old_outputs_preserved": [
+    "judged-v3",
+    "evaluated-v3"
+  ],
+  "final_outputs": [
+    "judged-final",
+    "evaluated-final"
+  ],
+  "small_final_evaluation_sha256": "b35b3cf4a0b1e8c37d85bb1e9c0b2ce772d0fe2761e9124bf0473c6fc65f5544",
+  "small_modes": 19,
+  "preservation": "Old judged-v3/evaluated-v3 are retained. Final comparisons use judged-final/evaluated-final; preparation and backend execution unchanged."
+}

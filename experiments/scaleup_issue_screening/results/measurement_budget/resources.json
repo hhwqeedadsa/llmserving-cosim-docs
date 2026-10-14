@@ -1,0 +1,274 @@
+{
+  "schema_version": "issue-diagnostic-host-resources/1",
+  "kind": "host_runtime_not_asic_collection_cost",
+  "measured_utc": "2026-10-14T12:46:38.695606+00:00",
+  "source": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/resource-review.json",
+    "sha256": "a1a7cde139f59c2d901a55b82c81fc8db7d730fd8091c0975956d70bd941f5a9"
+  },
+  "target_ledger": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/target-runs.json",
+    "sha256": "d710d22f2cc0164cadf3ca369df18b5815230e8228e78bc1dc3886145d613b3d"
+  },
+  "target_runs": 8,
+  "target_run_limit": 16,
+  "targets": {
+    "r00": {
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 541.9247258640826,
+        "peak_sampled_group_rss_bytes": 58294272,
+        "peak_sampled_artifact_bytes": 54199468032,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      },
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 462.27312643267214,
+        "peak_sampled_group_rss_bytes": 8086585344,
+        "peak_sampled_artifact_bytes": 53961064448,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      }
+    },
+    "r01": {
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 545.9616245031357,
+        "peak_sampled_group_rss_bytes": 59797504,
+        "peak_sampled_artifact_bytes": 56086392832,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      },
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 475.35839004069567,
+        "peak_sampled_group_rss_bytes": 8082767872,
+        "peak_sampled_artifact_bytes": 55784333312,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      }
+    },
+    "r02": {
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 544.2621823791414,
+        "peak_sampled_group_rss_bytes": 59858944,
+        "peak_sampled_artifact_bytes": 58315386880,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      },
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 481.853647550568,
+        "peak_sampled_group_rss_bytes": 8084086784,
+        "peak_sampled_artifact_bytes": 57696018432,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      }
+    },
+    "r03": {
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 550.491088848561,
+        "peak_sampled_group_rss_bytes": 57614336,
+        "peak_sampled_artifact_bytes": 59175694336,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      },
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 478.6933785881847,
+        "peak_sampled_group_rss_bytes": 8084758528,
+        "peak_sampled_artifact_bytes": 59462340608,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      }
+    },
+    "r04": {
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 481.86925397627056,
+        "peak_sampled_group_rss_bytes": 8084717568,
+        "peak_sampled_artifact_bytes": 59510652928,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      },
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 559.8690176904202,
+        "peak_sampled_group_rss_bytes": 59858944,
+        "peak_sampled_artifact_bytes": 60372865024,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      }
+    },
+    "r05": {
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 490.93710690177977,
+        "peak_sampled_group_rss_bytes": 8084099072,
+        "peak_sampled_artifact_bytes": 60282986496,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      },
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 549.7337408550084,
+        "peak_sampled_group_rss_bytes": 59314176,
+        "peak_sampled_artifact_bytes": 61049147392,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      }
+    },
+    "r06": {
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 272.75686350651085,
+        "peak_sampled_group_rss_bytes": 5917679616,
+        "peak_sampled_artifact_bytes": 61699407872,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      },
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 290.06872255168855,
+        "peak_sampled_group_rss_bytes": 54112256,
+        "peak_sampled_artifact_bytes": 62306402304,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      }
+    },
+    "r07": {
+      "resources-replay": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 308.1475632302463,
+        "peak_sampled_group_rss_bytes": 5924290560,
+        "peak_sampled_artifact_bytes": 63268880384,
+        "limits": {
+          "sampled_group_rss_bytes": 51539607552,
+          "per_process_address_bytes": 60129542144,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 7200
+        }
+      },
+      "resources-export": {
+        "status": "completed",
+        "child_exit_code": 0,
+        "wall_seconds": 296.3539565913379,
+        "peak_sampled_group_rss_bytes": 53899264,
+        "peak_sampled_artifact_bytes": 63353585664,
+        "limits": {
+          "sampled_group_rss_bytes": 8589934592,
+          "per_process_address_bytes": 12884901888,
+          "artifact_bytes": 68719476736,
+          "wall_seconds": 1800
+        }
+      }
+    }
+  },
+  "artifact_roots": [
+    "/root/moe-ub-cosim/build/v04-platform",
+    "/root/moe-ub-cosim/runs/v04-platform",
+    "/root/moe-ub-cosim/build/m10-resource-efficiency",
+    "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+    "/root/moe-ub-cosim/build/m10-research-slice",
+    "/root/moe-ub-cosim/runs/v03-research-slice",
+    "/root/moe-ub-cosim/runs/mapping_value",
+    "/root/moe-ub-cosim/runs/scaleup_observability",
+    "/root/moe-ub-cosim/runs/task-sync-20261008",
+    "/root/moe-ub-cosim/build/m17-send-state",
+    "/root/moe-ub-cosim/runs/m17-send-state",
+    "/root/moe-ub-cosim/build/m19-a3-resources",
+    "/root/moe-ub-cosim/runs/m19-a3-resources",
+    "/root/moe-ub-cosim/runs/m20-segment-facts",
+    "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+    "/root/moe-ub-cosim/runs/scaleup_issue_screening"
+  ],
+  "charged_bytes": 63592390656,
+  "peak_sampled_artifact_bytes": 63589937152,
+  "free_disk_bytes": 6377384210432,
+  "artifact_limit_bytes": 68719476736,
+  "min_free_bytes": 21474836480,
+  "analysis_peak_sampled_rss_bytes": 3744944128,
+  "notes": [
+    "Wall times are supervised stages, not simulated time. RSS is sampled owned-process-group RSS.",
+    "Shared original 16 artifact roots counted once by inode. Old sources retained; r00-r03 new expansions replaced by verified lossless archives.",
+    "This resource check is not a substitute for execution/record or research validation."
+  ],
+  "analysis_peak_source": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/causal-preparation-v3-resources/probe.json",
+    "sha256": "56f67ed55688d56dc7076e8d8c1423ad6a299290744481b3d29ee2ac6a4b8eb1"
+  }
+}

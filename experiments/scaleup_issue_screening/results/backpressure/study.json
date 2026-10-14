@@ -1,0 +1,3163 @@
+{
+  "schema_version": "issue-mechanism-study-summary/1",
+  "comparison": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/final-comparison-lf.json",
+    "sha256": "81403f1b9321d4a62382cecfc5e3197804a4ea978b65969552f135edfcb95a77"
+  },
+  "rule_sha256": "19febeb337f47b3a0a6eb7c2405d681d934a435a72b374ec1e6dacbe79990f72",
+  "study_sha256": "65f82e185d7f8aefd423015baa9e8a55cde3f3bf28a33157455da82be300c177",
+  "sources": {
+    "r00": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r00/summary.json",
+        "sha256": "f81dd4e99fee7df7698e53c52cb7a6cdc53cefc48c5695fd3aef64a9f276e9ce"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r00/summary.json",
+        "sha256": "1e0f5c47b3b137b220dd1c29831d19b22402d408f3ff91022387d966dd952b27"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r00/summary.json",
+        "sha256": "7e411251b39834a508f18dcda221cdc47338f60f181d4c8a6742df44777834e5"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r00/summary.json",
+        "sha256": "0100ea93d33c1598f3b06bf6d2250492fe419acae1ec40c75e6847e3aea5d82d"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r00/summary.json",
+        "sha256": "d8af2b783967d671fe02cf57a88ab4c907e9c3bd12bc45566b993b610ac42b77"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r00.json",
+        "sha256": "c3fc5a072ecf19c5fd3a1bd807ae84121ee96fe6ad1607848d04dac875663749"
+      }
+    },
+    "r01": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r01/summary.json",
+        "sha256": "89845090d8a8075ffb37558b22015342bc8a1c6c1c48524b53aaf1723955e4de"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r01/summary.json",
+        "sha256": "66c3976e88274a659139fad5bac21159ad45ffda0e11d85875a39982391e1b94"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r01/summary.json",
+        "sha256": "2d92749fef99faf456e45132419c49b5151c6e311750d050d36ba78fc6e7d882"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r01/summary.json",
+        "sha256": "8c13559d08d8968be026175aade3e47496ef14ae745ab1d076c4047469dfd471"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r01/summary.json",
+        "sha256": "bb17fbeea32faf873a53f9b664bd66b7d985830b59b12fd03665d79a1e59332a"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r01.json",
+        "sha256": "29d4b0155ef81a674aadc9a9bc1ee350ff7c75aa16dae164369ea6bd7a63c47f"
+      }
+    },
+    "r02": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r02/summary.json",
+        "sha256": "f0e3def526de64d9889937a9f58ebf841ddd91d399556bb5125ba37db744b63f"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r02/summary.json",
+        "sha256": "212b4f46f796d881bc37b09acac00fec9a32d8f8212c378e0db57a12233500cf"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r02/summary.json",
+        "sha256": "fb8e323c06a1c4892562e6428581b907b48b1154ad31827239c1e33287e823ee"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r02/summary.json",
+        "sha256": "5c003379c849fe40f4924a5ef48cab85c9909713b7c5eb6781879c1d2072a601"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r02/summary.json",
+        "sha256": "33369e2bef075e39a69b538e7b7954282773f507a15ae5c9c8bd1bee008d0194"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r02.json",
+        "sha256": "3b8aed4f97dfeccfabf463e73ab2744b6969510d363473d1f187e2b2d7ea90c9"
+      }
+    },
+    "r03": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r03/summary.json",
+        "sha256": "a5a57c636c49387183be2f244124e077285f4d742548f270a9f4b51890cb4bf7"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r03/summary.json",
+        "sha256": "9eac1a5039742808b36cf4d0ddda82c9a14376220238dc746181697561e7886b"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r03/summary.json",
+        "sha256": "7458786ad9bb7aeea408b59b7c26ef6812d70274bc04273840a11bc47f9b8b9f"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r03/summary.json",
+        "sha256": "29ca39bfca23ed4ab50bb0c04bc295ddf5b1f9d4e0464a4c33e2b75c09f82751"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r03/summary.json",
+        "sha256": "de854208827baef79e945c4f6099c9335f28af3209b72aabd8adeb37cde5dc06"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r03.json",
+        "sha256": "e5e4c793ffa242623338881d6b4ef08997a330ff7f84c5d156e58074b2f5398b"
+      }
+    },
+    "r04": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r04/summary.json",
+        "sha256": "457c53b6f409cd25593fd27024edf375bb06b990473351c761896f7036275b05"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r04/summary.json",
+        "sha256": "266dbbbfce533517733a201476d2e02b619740ecf1b8419004cb5283a43673a6"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r04/summary.json",
+        "sha256": "77b137740442265d4056476f24ad42ba57236d16ab3e61eb6af4571dfdc86cbe"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r04/summary.json",
+        "sha256": "96ca3815da6e40db7fa29c93f112fe30150ed2e1626cf49ad47797cff00ba7ea"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r04/summary.json",
+        "sha256": "b302be0aaf66d9d0b13af331fc0b2b72a141011df75515d596f5ee8dfd1de591"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r04.json",
+        "sha256": "6ed9f63a050e06843a4c79f709aee6c110bc94be681f1e0201235e195e53e68d"
+      }
+    },
+    "r05": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r05/summary.json",
+        "sha256": "938749bd5983ec6e2fa8bb4a017fb808f68a2bdf84093d0784eddf455bb12d5b"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r05/summary.json",
+        "sha256": "9d4958c1ac569205b913e8cf4eb2d092a06d8119ae6a242e7509566400909f75"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r05/summary.json",
+        "sha256": "c588bd56c1c5f65c4f0276b4251f6398b193639dfee866658e053d8d3f05efe5"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r05/summary.json",
+        "sha256": "ff69ebbedeb51442a086acce5dcf0a15c03029dfb367ee545731b930bda9174a"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r05/summary.json",
+        "sha256": "309a3c75c8fea7f8d1f5e4847ee26d46612b670a91e4ae79da6de0a09128edda"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r05.json",
+        "sha256": "49ea0c78fa99b87177e2fd70dae0fdd662b9e69a6388a8bf2c0563bc1e8e44fc"
+      }
+    },
+    "r06": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r06/summary.json",
+        "sha256": "d8dff650c0a76fb9566273224bd838f4d6ef38270a1fd2933808d6513979441e"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r06/summary.json",
+        "sha256": "ae6e6e86df37f67897a406c229ceb0adba91c23a45fd504477e65de5cae9479e"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r06/summary.json",
+        "sha256": "64f0ccff66024c992d35746c35d0dbf97ad59d8670cc3d486108e784e11b0927"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r06/summary.json",
+        "sha256": "72aafc339d93913d336fcfabacc34ec0f5845f6579cf6be7800bcc3bb4b3d026"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r06/summary.json",
+        "sha256": "04b6c0716b6de224be6af203c2bbd72299a19e7cc4b0e04b211039426d8c6169"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r06.json",
+        "sha256": "addeb078cda186976cace90834fef7089ec062c5f93d72ba90c8555996c38c1d"
+      }
+    },
+    "r07": {
+      "prepared": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/prepared-v3/r07/summary.json",
+        "sha256": "395f656f99f530913a21e082174192e0dc5586b561c71b04d583e63f69eaa11f"
+      },
+      "predictions": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/judged-final/r07/summary.json",
+        "sha256": "56778c799af95401a57729227f62dc64e59113124607d0331d4e8308c571d6a4"
+      },
+      "evaluation": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/evaluated-final/r07/summary.json",
+        "sha256": "a24d87db7789171b65854e31221c786a83726a2650536db4ea62e86d6fadf735"
+      },
+      "business": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r07/summary.json",
+        "sha256": "fed651e763c28ebede9d24b9d3fc42cfa961d5812b55ae40a87d08f40b96fd8f"
+      },
+      "deep": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r07/summary.json",
+        "sha256": "cee448ac0f4ae98168510ab3532e1f09942bbb53800c1b76fdc07233eb48ae28"
+      },
+      "feedback": {
+        "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r07.json",
+        "sha256": "27f0357fdbb10f3a083c65e1547ad6bfcc16244a38e96881c73f1cbaba84405d"
+      }
+    }
+  },
+  "summary_program_sha256": "9b29e3c39b1990e78bc65e22688b00f95be48b25b095523b39e047a076c104c9",
+  "problem": "backpressure",
+  "cases": {
+    "r00": {
+      "condition": {
+        "id": "r00",
+        "source": "g0-b8-short",
+        "purpose": "normal capture and full execution equivalence",
+        "service": []
+      },
+      "manifest_sha256": "317cdc9a2e22d75c01dbf7fce7ac1b0be5a4992ce1ef2fde84d46b735b1fe0f7",
+      "baseline": "r00",
+      "capture_end_ns": 394911,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": {
+        "passed": true,
+        "original_archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+        "original_manifest_sha256": "1826bd32d433f791ab57c76db6f6b86c160511ecec6f65b3af67c62ea8fd1251",
+        "replay_manifest_sha256": "317cdc9a2e22d75c01dbf7fce7ac1b0be5a4992ce1ef2fde84d46b735b1fe0f7",
+        "ports_compared": 2688,
+        "packet_wire_and_start_fingerprints_match": true,
+        "simulation_end_ns": 394911,
+        "equivalence_sha256": "811331fb8fe3588a7c6ed7b8eae0fe0ceb95626d6be36556953754efc0a6e02d",
+        "original_record_files": 8082
+      },
+      "captured_events": 19123879,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 31,
+      "feedback_nodes": 1286,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1456531,
+      "qualifying_queue_events": 140,
+      "qualifying_slow_service_events": 0,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1238,
+      "business": {
+        "simulation_delta_ns": 0,
+        "final_operator_delta_ns": 0,
+        "last_model_compute_delta_ns": 0,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 15208,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 97247,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 109021,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 242536,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 253260,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 394543,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 0,
+      "actual_controls": [],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 476,
+          "actual_all_tx_packets": 476,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 476,
+              "sum": 2186,
+              "min": 0,
+              "median": 0,
+              "p95": 41,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 476,
+              "sum": 837,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 130
+            },
+            "arrival_to_tx_ns": {
+              "n": 476,
+              "sum": 3023,
+              "min": 0,
+              "median": 1,
+              "p95": 43,
+              "max": 211
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 662,
+          "actual_all_tx_packets": 662,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 662,
+              "sum": 1385,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 661,
+              "sum": 767,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 57
+            },
+            "arrival_to_tx_ns": {
+              "n": 661,
+              "sum": 2152,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 138
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r01": {
+      "condition": {
+        "id": "r01",
+        "source": "g0-b8-short",
+        "purpose": "short direct-outlet service deficit versus existing burst",
+        "service": [
+          {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 2000,
+            "end_ns": 12000,
+            "rate_bps": 100000000000
+          }
+        ]
+      },
+      "manifest_sha256": "d5c54a7d1329ea93d86bf46bd4517634b2e2ff77bdbaf948fc92487506a5c631",
+      "baseline": "r00",
+      "capture_end_ns": 401973,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 19120583,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 32,
+      "feedback_nodes": 1266,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1461303,
+      "qualifying_queue_events": 143,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1293,
+      "business": {
+        "simulation_delta_ns": 7062,
+        "final_operator_delta_ns": 7062,
+        "last_model_compute_delta_ns": 7062,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 21654,
+            "end_delta_ns": 6446,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 103827,
+            "end_delta_ns": 6580,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 115527,
+            "end_delta_ns": 6506,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 249045,
+            "end_delta_ns": 6509,
+            "last_ranks": [
+              60
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 259855,
+            "end_delta_ns": 6595,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 401605,
+            "end_delta_ns": 7062,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 2,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 2000,
+            "end_ns": 12000,
+            "rate_bps": 100000000000
+          },
+          "actual_started_packets": 39,
+          "actual_rates_bps": {
+            "100000000000": 39
+          },
+          "actual_started_bytes": 126576,
+          "busy_union_within_interval_ns": 9928,
+          "actual_destination_packets": {
+            "6": 34
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 171,
+              "sum": 17872,
+              "min": 0,
+              "median": 62,
+              "p95": 329,
+              "max": 658
+            },
+            "arrival_to_fifo_ns": {
+              "n": 171,
+              "sum": 1515929,
+              "min": 1,
+              "median": 9866,
+              "p95": 14552,
+              "max": 14996
+            },
+            "arrival_to_tx_ns": {
+              "n": 171,
+              "sum": 1533801,
+              "min": 1,
+              "median": 9928,
+              "p95": 14614,
+              "max": 14996
+            },
+            "busy_during_wait_ns": {
+              "n": 171,
+              "sum": 1532469,
+              "min": 0,
+              "median": 9920,
+              "p95": 14587,
+              "max": 14967
+            }
+          },
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 477,
+          "actual_all_tx_packets": 477,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 477,
+              "sum": 1922,
+              "min": 0,
+              "median": 0,
+              "p95": 37,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 477,
+              "sum": 863,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 100
+            },
+            "arrival_to_tx_ns": {
+              "n": 477,
+              "sum": 2785,
+              "min": 0,
+              "median": 1,
+              "p95": 39,
+              "max": 181
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 629,
+          "actual_all_tx_packets": 629,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 629,
+              "sum": 2212,
+              "min": 0,
+              "median": 0,
+              "p95": 37,
+              "max": 115
+            },
+            "arrival_to_fifo_ns": {
+              "n": 628,
+              "sum": 1057,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 72
+            },
+            "arrival_to_tx_ns": {
+              "n": 628,
+              "sum": 3269,
+              "min": 0,
+              "median": 1,
+              "p95": 40,
+              "max": 153
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r02": {
+      "condition": {
+        "id": "r02",
+        "source": "g0-b8-short",
+        "purpose": "shared-link service deficit and unaffected destinations",
+        "service": [
+          {
+            "node_id": 768,
+            "port_id": 18,
+            "start_ns": 1000,
+            "end_ns": 101000,
+            "rate_bps": 100000000000
+          }
+        ]
+      },
+      "manifest_sha256": "cc9aff556941a6fc6943c7de8bbf48ef322b6a02b6eac28e075c095be52943be",
+      "baseline": "r00",
+      "capture_end_ns": 395640,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 19122152,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 33,
+      "feedback_nodes": 1330,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1456300,
+      "qualifying_queue_events": 144,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1179,
+      "business": {
+        "simulation_delta_ns": 729,
+        "final_operator_delta_ns": 729,
+        "last_model_compute_delta_ns": 729,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 15220,
+            "end_delta_ns": 12,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 97353,
+            "end_delta_ns": 106,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 109138,
+            "end_delta_ns": 117,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 243142,
+            "end_delta_ns": 606,
+            "last_ranks": [
+              46
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 253894,
+            "end_delta_ns": 634,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 395272,
+            "end_delta_ns": 729,
+            "last_ranks": [
+              48
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 21,
+            "earlier": 48,
+            "unchanged": 59
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 76,
+            "earlier": 51,
+            "unchanged": 1
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 127,
+            "earlier": 1,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 113,
+            "earlier": 15,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 127,
+            "earlier": 1,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 0,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 18,
+            "start_ns": 1000,
+            "end_ns": 101000,
+            "rate_bps": 100000000000
+          },
+          "actual_started_packets": 255,
+          "actual_rates_bps": {
+            "100000000000": 255
+          },
+          "actual_started_bytes": 271876,
+          "busy_union_within_interval_ns": 21743,
+          "actual_destination_packets": {
+            "49": 4,
+            "86": 4,
+            "71": 2,
+            "75": 4,
+            "17": 3,
+            "55": 1,
+            "33": 2,
+            "63": 1,
+            "102": 1,
+            "34": 2,
+            "19": 2,
+            "77": 2,
+            "57": 1,
+            "64": 1,
+            "37": 2,
+            "69": 3,
+            "44": 3,
+            "87": 1,
+            "30": 2,
+            "61": 1,
+            "109": 3,
+            "54": 2,
+            "89": 2,
+            "21": 3,
+            "121": 4,
+            "31": 3,
+            "73": 4,
+            "24": 3,
+            "68": 1,
+            "23": 3,
+            "111": 1,
+            "105": 2,
+            "66": 1,
+            "36": 2,
+            "81": 3,
+            "62": 1,
+            "84": 1,
+            "114": 3,
+            "88": 5,
+            "26": 1,
+            "94": 2,
+            "65": 2,
+            "124": 1,
+            "27": 1,
+            "20": 2,
+            "117": 2,
+            "70": 3,
+            "80": 2,
+            "116": 1,
+            "78": 3,
+            "95": 2,
+            "103": 1,
+            "47": 1,
+            "53": 1,
+            "35": 1,
+            "29": 2,
+            "43": 1,
+            "58": 4,
+            "115": 2,
+            "90": 1,
+            "48": 1,
+            "107": 1,
+            "22": 1,
+            "72": 1,
+            "127": 1,
+            "100": 1,
+            "112": 1,
+            "125": 1,
+            "119": 1,
+            "76": 1,
+            "113": 1,
+            "106": 1,
+            "101": 1,
+            "38": 1,
+            "50": 1
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 255,
+              "sum": 10086,
+              "min": 0,
+              "median": 0,
+              "p95": 251,
+              "max": 329
+            },
+            "arrival_to_fifo_ns": {
+              "n": 255,
+              "sum": 28600,
+              "min": 0,
+              "median": 1,
+              "p95": 745,
+              "max": 2383
+            },
+            "arrival_to_tx_ns": {
+              "n": 255,
+              "sum": 38686,
+              "min": 0,
+              "median": 1,
+              "p95": 946,
+              "max": 2634
+            },
+            "busy_during_wait_ns": {
+              "n": 255,
+              "sum": 38512,
+              "min": 0,
+              "median": 0,
+              "p95": 946,
+              "max": 2634
+            }
+          },
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 470,
+          "actual_all_tx_packets": 470,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 470,
+              "sum": 2593,
+              "min": 0,
+              "median": 0,
+              "p95": 50,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 470,
+              "sum": 966,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 128
+            },
+            "arrival_to_tx_ns": {
+              "n": 470,
+              "sum": 3559,
+              "min": 0,
+              "median": 1,
+              "p95": 54,
+              "max": 209
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 653,
+          "actual_all_tx_packets": 653,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 653,
+              "sum": 1314,
+              "min": 0,
+              "median": 0,
+              "p95": 7,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 652,
+              "sum": 769,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 42
+            },
+            "arrival_to_tx_ns": {
+              "n": 652,
+              "sum": 2083,
+              "min": 0,
+              "median": 1,
+              "p95": 11,
+              "max": 123
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r03": {
+      "condition": {
+        "id": "r03",
+        "source": "g0-b8-short",
+        "purpose": "same-peer plane A service and late residual completion",
+        "service": [
+          {
+            "node_id": 799,
+            "port_id": 14,
+            "start_ns": 200000,
+            "end_ns": 400000,
+            "rate_bps": 50000000000
+          }
+        ]
+      },
+      "manifest_sha256": "f32e1a08fa4d78036d08dd21547e7a84fa3ece7ff9f0f48a48923dd8037e83dd",
+      "baseline": "r00",
+      "capture_end_ns": 395061,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 19123606,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 32,
+      "feedback_nodes": 1110,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1456921,
+      "qualifying_queue_events": 144,
+      "qualifying_slow_service_events": 2,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1222,
+      "business": {
+        "simulation_delta_ns": 150,
+        "final_operator_delta_ns": 150,
+        "last_model_compute_delta_ns": 150,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 15208,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 97247,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 109021,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 242588,
+            "end_delta_ns": 52,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 253288,
+            "end_delta_ns": 28,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 394693,
+            "end_delta_ns": 150,
+            "last_ranks": [
+              60
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 40,
+            "earlier": 15,
+            "unchanged": 73
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 85,
+            "earlier": 43,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 76,
+            "earlier": 52,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 0,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 799,
+            "port_id": 14,
+            "start_ns": 200000,
+            "end_ns": 400000,
+            "rate_bps": 50000000000
+          },
+          "actual_started_packets": 149,
+          "actual_rates_bps": {
+            "50000000000": 149
+          },
+          "actual_started_bytes": 148072,
+          "busy_union_within_interval_ns": 23741,
+          "actual_destination_packets": {
+            "78": 82
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 149,
+              "sum": 8217,
+              "min": 0,
+              "median": 0,
+              "p95": 622,
+              "max": 659
+            },
+            "arrival_to_fifo_ns": {
+              "n": 149,
+              "sum": 1873,
+              "min": 0,
+              "median": 1,
+              "p95": 4,
+              "max": 817
+            },
+            "arrival_to_tx_ns": {
+              "n": 149,
+              "sum": 10090,
+              "min": 0,
+              "median": 1,
+              "p95": 623,
+              "max": 1476
+            },
+            "busy_during_wait_ns": {
+              "n": 149,
+              "sum": 9967,
+              "min": 0,
+              "median": 0,
+              "p95": 623,
+              "max": 1476
+            }
+          },
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 472,
+          "actual_all_tx_packets": 472,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 472,
+              "sum": 2182,
+              "min": 0,
+              "median": 0,
+              "p95": 41,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 472,
+              "sum": 959,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 130
+            },
+            "arrival_to_tx_ns": {
+              "n": 472,
+              "sum": 3141,
+              "min": 0,
+              "median": 1,
+              "p95": 49,
+              "max": 211
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 651,
+          "actual_all_tx_packets": 651,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 651,
+              "sum": 1716,
+              "min": 0,
+              "median": 0,
+              "p95": 13,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 650,
+              "sum": 809,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 57
+            },
+            "arrival_to_tx_ns": {
+              "n": 650,
+              "sum": 2525,
+              "min": 0,
+              "median": 1,
+              "p95": 20,
+              "max": 138
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r04": {
+      "condition": {
+        "id": "r04",
+        "source": "g0-b8-short",
+        "purpose": "sustained direct-outlet deficit; test whether existing credits actually bind",
+        "service": [
+          {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 0,
+            "end_ns": 400000,
+            "rate_bps": 4000000000
+          }
+        ]
+      },
+      "manifest_sha256": "6de42043c81df95965759c90de337cd36499430309001e91f9c8577e678080f0",
+      "baseline": "r00",
+      "capture_end_ns": 789174,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 19119075,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 31,
+      "feedback_nodes": 1279,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1461860,
+      "qualifying_queue_events": 149,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1237,
+      "business": {
+        "simulation_delta_ns": 394263,
+        "final_operator_delta_ns": 394263,
+        "last_model_compute_delta_ns": 394263,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 409423,
+            "end_delta_ns": 394215,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 491251,
+            "end_delta_ns": 394004,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 503272,
+            "end_delta_ns": 394251,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 637245,
+            "end_delta_ns": 394709,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 647889,
+            "end_delta_ns": 394629,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 788806,
+            "end_delta_ns": 394263,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 2,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 0,
+            "end_ns": 400000,
+            "rate_bps": 4000000000
+          },
+          "actual_started_packets": 71,
+          "actual_rates_bps": {
+            "4000000000": 71
+          },
+          "actual_started_bytes": 199712,
+          "busy_union_within_interval_ns": 397992,
+          "actual_destination_packets": {
+            "6": 60
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 202,
+              "sum": 405472,
+              "min": 0,
+              "median": 81,
+              "p95": 8247,
+              "max": 8247
+            },
+            "arrival_to_fifo_ns": {
+              "n": 202,
+              "sum": 61367978,
+              "min": 1,
+              "median": 392990,
+              "p95": 402218,
+              "max": 402768
+            },
+            "arrival_to_tx_ns": {
+              "n": 202,
+              "sum": 61773450,
+              "min": 1,
+              "median": 393035,
+              "p95": 402218,
+              "max": 402768
+            },
+            "busy_during_wait_ns": {
+              "n": 202,
+              "sum": 61771716,
+              "min": 0,
+              "median": 393017,
+              "p95": 402188,
+              "max": 402738
+            }
+          },
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 473,
+          "actual_all_tx_packets": 473,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 473,
+              "sum": 2116,
+              "min": 0,
+              "median": 0,
+              "p95": 41,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 473,
+              "sum": 821,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 101
+            },
+            "arrival_to_tx_ns": {
+              "n": 473,
+              "sum": 2937,
+              "min": 0,
+              "median": 1,
+              "p95": 46,
+              "max": 182
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 651,
+          "actual_all_tx_packets": 651,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 651,
+              "sum": 1853,
+              "min": 0,
+              "median": 0,
+              "p95": 20,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 650,
+              "sum": 960,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 69
+            },
+            "arrival_to_tx_ns": {
+              "n": 650,
+              "sum": 2813,
+              "min": 0,
+              "median": 1,
+              "p95": 23,
+              "max": 132
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r05": {
+      "condition": {
+        "id": "r05",
+        "source": "g0-b8-short",
+        "purpose": "same-peer plane B reference separates workload timing from plane identity",
+        "service": [
+          {
+            "node_id": 801,
+            "port_id": 14,
+            "start_ns": 200000,
+            "end_ns": 400000,
+            "rate_bps": 50000000000
+          }
+        ]
+      },
+      "manifest_sha256": "9039399cee06e7e2e6f9ae0cf5c7af0f48c64724c172ab210655b342a5ee506d",
+      "baseline": "r00",
+      "capture_end_ns": 395203,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 19124145,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 32,
+      "feedback_nodes": 1350,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 1456530,
+      "qualifying_queue_events": 143,
+      "qualifying_slow_service_events": 2,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 1235,
+      "business": {
+        "simulation_delta_ns": 292,
+        "final_operator_delta_ns": 292,
+        "last_model_compute_delta_ns": 292,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 15208,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 97247,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 109021,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 242508,
+            "end_delta_ns": -28,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 253142,
+            "end_delta_ns": -118,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 394835,
+            "end_delta_ns": 292,
+            "last_ranks": [
+              60
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 17,
+            "earlier": 48,
+            "unchanged": 63
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 4,
+            "earlier": 124,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 101,
+            "earlier": 27,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 0,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 801,
+            "port_id": 14,
+            "start_ns": 200000,
+            "end_ns": 400000,
+            "rate_bps": 50000000000
+          },
+          "actual_started_packets": 149,
+          "actual_rates_bps": {
+            "50000000000": 149
+          },
+          "actual_started_bytes": 150364,
+          "busy_union_within_interval_ns": 24106,
+          "actual_destination_packets": {
+            "78": 87
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 149,
+              "sum": 9405,
+              "min": 0,
+              "median": 0,
+              "p95": 657,
+              "max": 659
+            },
+            "arrival_to_fifo_ns": {
+              "n": 149,
+              "sum": 8741,
+              "min": 0,
+              "median": 1,
+              "p95": 449,
+              "max": 2251
+            },
+            "arrival_to_tx_ns": {
+              "n": 149,
+              "sum": 18146,
+              "min": 0,
+              "median": 1,
+              "p95": 987,
+              "max": 2260
+            },
+            "busy_during_wait_ns": {
+              "n": 149,
+              "sum": 18030,
+              "min": 0,
+              "median": 0,
+              "p95": 987,
+              "max": 2260
+            }
+          },
+          "shared_hop_necessary_transfer_count": 2
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 6,
+          "whole_outlet_packets": 477,
+          "actual_all_tx_packets": 477,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 6,
+              "sum": 6,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 6,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 477,
+              "sum": 2466,
+              "min": 0,
+              "median": 0,
+              "p95": 42,
+              "max": 82
+            },
+            "arrival_to_fifo_ns": {
+              "n": 477,
+              "sum": 884,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 130
+            },
+            "arrival_to_tx_ns": {
+              "n": 477,
+              "sum": 3350,
+              "min": 0,
+              "median": 1,
+              "p95": 55,
+              "max": 211
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 4,
+          "whole_outlet_packets": 653,
+          "actual_all_tx_packets": 653,
+          "selected_business_packets": 2,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 4,
+              "sum": 4,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 4,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 653,
+              "sum": 1532,
+              "min": 0,
+              "median": 0,
+              "p95": 8,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 652,
+              "sum": 769,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 57
+            },
+            "arrival_to_tx_ns": {
+              "n": 652,
+              "sum": 2301,
+              "min": 0,
+              "median": 1,
+              "p95": 10,
+              "max": 138
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r06": {
+      "condition": {
+        "id": "r06",
+        "source": "g0-b2-short",
+        "purpose": "frozen-rule related scale review and capture equivalence",
+        "service": []
+      },
+      "manifest_sha256": "fa0304cfb603c5b32e11e9416be3597e3e76039a32d9ec9cef08d95445e3b159",
+      "baseline": "r06",
+      "capture_end_ns": 110792,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": {
+        "passed": true,
+        "original_archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+        "original_manifest_sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58",
+        "replay_manifest_sha256": "fa0304cfb603c5b32e11e9416be3597e3e76039a32d9ec9cef08d95445e3b159",
+        "ports_compared": 2688,
+        "packet_wire_and_start_fingerprints_match": true,
+        "simulation_end_ns": 110792,
+        "equivalence_sha256": "ce31cc7f68b3e41d19babe911d4e62fadadb0a4365ca720e5e02a2a486ce3000",
+        "original_record_files": 8082
+      },
+      "captured_events": 9776639,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 30,
+      "feedback_nodes": 869,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 713142,
+      "qualifying_queue_events": 69,
+      "qualifying_slow_service_events": 0,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 345,
+      "business": {
+        "simulation_delta_ns": 0,
+        "final_operator_delta_ns": 0,
+        "last_model_compute_delta_ns": 0,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 5639,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              86
+            ],
+            "baseline_last_ranks": [
+              86
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 28906,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              123
+            ],
+            "baseline_last_ranks": [
+              123
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 33920,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              86
+            ],
+            "baseline_last_ranks": [
+              86
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 68720,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              27
+            ],
+            "baseline_last_ranks": [
+              27
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 73380,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              20
+            ],
+            "baseline_last_ranks": [
+              20
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 110700,
+            "end_delta_ns": 0,
+            "last_ranks": [
+              58
+            ],
+            "baseline_last_ranks": [
+              58
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 0,
+            "earlier": 0,
+            "unchanged": 128
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 0,
+      "actual_controls": [],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 25,
+          "whole_outlet_packets": 280,
+          "actual_all_tx_packets": 280,
+          "selected_business_packets": 1,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 25,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 25,
+              "sum": 24,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 25,
+              "sum": 24,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 25,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 280,
+              "sum": 261,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 280,
+              "sum": 336,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 40
+            },
+            "arrival_to_tx_ns": {
+              "n": 280,
+              "sum": 597,
+              "min": 0,
+              "median": 1,
+              "p95": 4,
+              "max": 83
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 27,
+          "whole_outlet_packets": 294,
+          "actual_all_tx_packets": 294,
+          "selected_business_packets": 0,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 27,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 27,
+              "sum": 28,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 2
+            },
+            "arrival_to_tx_ns": {
+              "n": 27,
+              "sum": 28,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 2
+            },
+            "busy_during_wait_ns": {
+              "n": 27,
+              "sum": 2,
+              "min": 0,
+              "median": 0,
+              "p95": 1,
+              "max": 1
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 294,
+              "sum": 251,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 294,
+              "sum": 569,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 103
+            },
+            "arrival_to_tx_ns": {
+              "n": 294,
+              "sum": 820,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 117
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    },
+    "r07": {
+      "condition": {
+        "id": "r07",
+        "source": "g0-b2-short",
+        "purpose": "frozen sustained-service review on smaller workload",
+        "service": [
+          {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 0,
+            "end_ns": 400000,
+            "rate_bps": 4000000000
+          }
+        ]
+      },
+      "manifest_sha256": "6c2894af3d1f142215dce96cfd5706749bee5bb6fae161e93f568f651ed82d78",
+      "baseline": "r06",
+      "capture_end_ns": 481872,
+      "capture_complete": true,
+      "dropped_fact_records": 0,
+      "normal_equivalence": null,
+      "captured_events": 9774784,
+      "covered_public_ports": 2688,
+      "captured_ports": 3584,
+      "complete_gates_reviewed": 34,
+      "feedback_nodes": 678,
+      "unexplained_start_delay_ns": 0,
+      "exact_queue_events": 719742,
+      "qualifying_queue_events": 59,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "ambiguous_counter_progress_pairs": 354,
+      "business": {
+        "simulation_delta_ns": 371080,
+        "final_operator_delta_ns": 371080,
+        "last_model_compute_delta_ns": 371080,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 373943,
+            "end_delta_ns": 368304,
+            "last_ranks": [
+              6
+            ],
+            "baseline_last_ranks": [
+              86
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 400977,
+            "end_delta_ns": 372071,
+            "last_ranks": [
+              58
+            ],
+            "baseline_last_ranks": [
+              123
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 404979,
+            "end_delta_ns": 371059,
+            "last_ranks": [
+              13
+            ],
+            "baseline_last_ranks": [
+              86
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 439861,
+            "end_delta_ns": 371141,
+            "last_ranks": [
+              30
+            ],
+            "baseline_last_ranks": [
+              27
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 444448,
+            "end_delta_ns": 371068,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              20
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 481780,
+            "end_delta_ns": 371080,
+            "last_ranks": [
+              58
+            ],
+            "baseline_last_ranks": [
+              58
+            ]
+          }
+        ],
+        "endpoint_counts": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "later": 128,
+            "earlier": 0,
+            "unchanged": 0
+          }
+        ]
+      },
+      "controlled_terminal_feedback_nodes": 3,
+      "actual_controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 0,
+            "end_ns": 400000,
+            "rate_bps": 4000000000
+          },
+          "actual_started_packets": 232,
+          "actual_rates_bps": {
+            "4000000000": 232
+          },
+          "actual_started_bytes": 199116,
+          "busy_union_within_interval_ns": 398204,
+          "actual_destination_packets": {
+            "6": 123
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 248,
+              "sum": 397476,
+              "min": 0,
+              "median": 79,
+              "p95": 8247,
+              "max": 8247
+            },
+            "arrival_to_fifo_ns": {
+              "n": 247,
+              "sum": 27787446,
+              "min": 1,
+              "median": 35198,
+              "p95": 326479,
+              "max": 370203
+            },
+            "arrival_to_tx_ns": {
+              "n": 247,
+              "sum": 28184891,
+              "min": 1,
+              "median": 35795,
+              "p95": 326510,
+              "max": 370234
+            },
+            "busy_during_wait_ns": {
+              "n": 247,
+              "sum": 28184769,
+              "min": 0,
+              "median": 35795,
+              "p95": 326510,
+              "max": 370234
+            }
+          },
+          "shared_hop_necessary_transfer_count": 1
+        }
+      ],
+      "fixed_case_reviews": [
+        {
+          "case_id": "backpressure-1",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 0,
+            "role": "device_bound",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 7332,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 7332
+          },
+          "selected_packets": 20,
+          "whole_outlet_packets": 279,
+          "actual_all_tx_packets": 279,
+          "selected_business_packets": 1,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 20,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 20,
+              "sum": 20,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "arrival_to_tx_ns": {
+              "n": 20,
+              "sum": 20,
+              "min": 1,
+              "median": 1,
+              "p95": 1,
+              "max": 1
+            },
+            "busy_during_wait_ns": {
+              "n": 20,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 279,
+              "sum": 293,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 279,
+              "sum": 330,
+              "min": 0,
+              "median": 1,
+              "p95": 2,
+              "max": 42
+            },
+            "arrival_to_tx_ns": {
+              "n": 279,
+              "sum": 623,
+              "min": 0,
+              "median": 1,
+              "p95": 3,
+              "max": 83
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        },
+        {
+          "case_id": "backpressure-2",
+          "problem": "backpressure",
+          "fixed_selection": {
+            "switch_id": 768,
+            "port_id": 17,
+            "role": "inter_switch",
+            "plane": 0,
+            "start_ns": 1000,
+            "end_ns": 3000,
+            "stratum": "waiting_low_service",
+            "positive_windows": 2,
+            "voq_byte_ns": 6320,
+            "fifo_byte_ns": 0,
+            "packet_bytes": 6320
+          },
+          "selected_packets": 21,
+          "whole_outlet_packets": 293,
+          "actual_all_tx_packets": 293,
+          "selected_business_packets": 0,
+          "interval_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 21,
+              "sum": 0,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 0
+            },
+            "arrival_to_fifo_ns": {
+              "n": 21,
+              "sum": 25,
+              "min": 1,
+              "median": 1,
+              "p95": 2,
+              "max": 2
+            },
+            "arrival_to_tx_ns": {
+              "n": 21,
+              "sum": 25,
+              "min": 1,
+              "median": 1,
+              "p95": 2,
+              "max": 2
+            },
+            "busy_during_wait_ns": {
+              "n": 21,
+              "sum": 5,
+              "min": 0,
+              "median": 0,
+              "p95": 2,
+              "max": 2
+            }
+          },
+          "whole_wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 293,
+              "sum": 291,
+              "min": 0,
+              "median": 0,
+              "p95": 0,
+              "max": 81
+            },
+            "arrival_to_fifo_ns": {
+              "n": 293,
+              "sum": 293,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 2
+            },
+            "arrival_to_tx_ns": {
+              "n": 293,
+              "sum": 584,
+              "min": 0,
+              "median": 1,
+              "p95": 1,
+              "max": 82
+            }
+          },
+          "selected_missing_wire_arrival": 0,
+          "selected_business_missing_wire_arrival": 0
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Related finite executions; control runs establish mechanism, not production frequency.",
+    "Static candidate endpoint scope is not proven downstream business impact.",
+    "No root claims means propagation accuracy unmeasured; no credit positive means recall undefined.",
+    "Collection is a causal replay of engineering interfaces, not implemented hardware."
+  ]
+}

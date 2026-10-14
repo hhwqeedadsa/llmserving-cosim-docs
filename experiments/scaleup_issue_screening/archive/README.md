@@ -2,7 +2,7 @@
 
 本页区分已经结束的研究分支，并保留原始方案、方法、结果和运行入口。当前要求仅见[现行方案](../plan.md)。历史判断有各自模型与观察范围，不代表整个 Scale-Up 问题域已经被充分探索。
 
-此次入口整理以主仓 `b345694fbc2faed8feebb425d43c60f765f7eee9` 为历史封存点。完整旧文档直接链接该提交，既保留原文和相对链接，也避免在新目录复制整套历史代码。下面标为迁移目标的路径尚不表示已经完成物理迁移。
+此次入口整理以主仓 `b345694fbc2faed8feebb425d43c60f765f7eee9` 为历史封存点。完整旧文档直接链接该提交，既保留原文和相对链接，也避免在新目录复制整套历史代码。下表同时给出本地文件的新位置；原始来源和版本继续以封存记录为准。
 
 ## 四个历史分区
 
@@ -19,22 +19,31 @@ C1、N1、N2 是历史候选标识，新研究的目录和对外报告使用问�
 
 固定版本的[使用说明][old-usage]包含所有历史命令、归档读取和分析入口；[任务快照][old-task]保存上一轮完成与资源记录。旧运行依赖当时代码、子模块与输入，不因后来的目录变更重新绑定版本。
 
-旧 results/e1、results/e2 及机器摘要当前仍在原位置，内容没有改变。其根目录报告、初始计划和多次 candidates 修改的更早版本也保留在 Git 历史。当前 plan_v0.1.md 与 candidates.md 只是历史导航，迁移检查完成后可以删除，不能继续作为并行执行方案。
+旧 results/e1、results/e2 已按下表迁移，机器摘要内容没有改变。[初始报告](initial_screening/README.md)、[跨分支核验全文](review.md)、[共享补证](delivery/README.md)及[历史资源](resources.md)在本地可读。初始计划和历次 candidates 的完整版本保留在上面的固定提交链接；过渡导航页已移除。
 
 ## 首批迁移对应表
 
-Codex 在本表细化实际路径对应，不另建迁移日记。原始记录与校验摘要保持，移动后的相对引用需修正；若旧文件内容被运行摘要绑定，保留原摘要和旧提交，另记新位置，不回写历史来源。
+本表记录实际路径对应，不另建迁移日记。原始记录与校验摘要保持，移动后的相对引用需修正；若旧文件内容被运行摘要绑定，保留原摘要和旧提交，另记新位置，不回写历史来源。
 
-| 当前内容 | 整理后的归属 | 本次交接处理 |
+| 旧路径（相对实验根目录） | 新路径 | 内容约束 |
 |---|---|---|
-| 原 plan_v0.1.md、历次 candidates.md、旧方法/命令/结论 | 本页固定版本入口；确有离线阅读需要时按问题归档 | 已建立固定链接，原计划位置保留短导航，未批量复制历史 |
-| 根目录仍在使用的准备、运行辅助、诊断与评价程序 | analysis/，按职责命名 | 尚未移动；先检查 import、CLI、ROOT 推导和归档路径 |
-| 根目录 check_*.py 和工具自检摘要 | tests/ 及其必要证据位置 | 尚未移动；不能改变检查含义或改写旧成功记录 |
-| 固定业务/网络、受控条件、采集策略配置 | configs/baseline、scenarios、observation | 尚未移动；保留值、生成规则及原配置摘要 |
-| results/e1 的正常探索 | archive/initial_screening 的结果分区 | 尚未移动；旧全文和机器结果继续可读 |
-| results/e2 内的 C1、网络案例、离线边界 | archive/sender_queue、network_cases、operation_boundary 的结果分区 | 尚未移动；共享证据保留单一原件并链接，不重复复制 |
-| 新的三类问题和采集成本结果 | results/local_service、backpressure、multipath、measurement_budget | 在实际产生内容时建立，不预建空结果 |
-| 原 runs 中的来源、归档、切片和大日志 | 保持原位置，由清单显式引用 | 不搬迁、不删除，不复制进 Git |
+| 根目录非 `check_` 的 Python 模块 | `analysis/<原文件名>` | 只调整导入、模块名、ROOT 推导和资源路径 |
+| 根目录 `check_*.py` | `tests/<原文件名>` | 保持测试含义及检查项 |
+| 根目录 `*summary.json` | `tests/evidence/historical/<原文件名>` | 原始字节及摘要不变 |
+| `configs/{backend-reference.yaml,fabric.json,layer-template.json,network-defaults.json,route-manifest.json,source-base.json,system.json}` | `configs/baseline/<原文件名>` | 原始字节及配置值不变 |
+| `configs/{batch.json,delivery-pairs.json,controls/,check/}` | `configs/scenarios/<原相对路径>` | 原始字节不变；check 为小型输入 |
+| `configs/{export-policy.json,facts.json,host.json,observation.json,record-policy.json}` | `configs/observation/<原文件名>` | 原始字节及预算不变 |
+| `results/e1/*` | `archive/initial_screening/*` | JSON 原始字节不变；Markdown 仅修正引用 |
+| `results/e2/network-offline*.json` | `archive/operation_boundary/<原文件名>` | 原始字节不变 |
+| `results/e2/network-*.json`（上述离线文件除外） | `archive/network_cases/<原文件名>` | 原始字节不变 |
+| `results/e2/*.json`（上述网络文件除外） | `archive/sender_queue/<原文件名>` | 原始字节不变 |
+| `results/e2/README.md` | `archive/review.md` | 跨分支报告保留单一原件，仅修正链接 |
+| `results/{delivery/,delivery-review.md,delivery-review-evidence.json,final-checks.json,resources.md,resources.json}` | `archive/<原相对路径>` | 共享补证不复制；JSON 原始字节不变 |
+| `delivery_method.md` | `archive/delivery_method.md` | 旧补证方法仅修正链接 |
+| `plan_v0.1.md`、`candidates.md` 过渡导航 | 本页固定版本入口 | 引用更新后删除过渡页；完整旧方案仍在 Git |
+| `runs/` 的来源、归档、切片和日志 | 原位置 | 不搬迁，不改写历史来源 |
+
+逐文件迁移映射、原始摘要及验收结果见 [迁移检查](../tests/evidence/migration.json)。该记录绑定迁移前 `cb9c116`；历史 JSON 中的旧代码路径、版本和摘要继续表示历史来源，不能当作当前模块路径使用。
 
 迁移验收要求见[现行方案第 10 节](../plan.md#10-目录文档和迁移要求)。先保存小型检查起点，进行目录重构，核对导入、帮助、链接和逐项分析结果，再开始新研究代码。旧模块不用大量兼容包装维持；历史运行通过固定版本复现。
 

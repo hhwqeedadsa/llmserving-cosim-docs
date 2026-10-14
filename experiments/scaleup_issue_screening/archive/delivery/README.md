@@ -1,0 +1,32 @@
+# E1/E2 补证与验收
+
+本次补齐 E1 的排队持续时长口径及 E2 的候选实际路径核验，统一检查通过。原七次业务运行和数值保留，增加四次从保存图出发的后端补采；不计作独立重复，不执行 E3/E4，也不改变平台或原资源上限。
+
+## 已交付的证据
+
+| 对象 | 核验与结果 | 证据 |
+|---|---|---|
+| 四个正常 case 的全部 2688 出口 | 从封存聚合计算虚拟输出队列（VOQ）和端口先进先出队列（FIFO）的非空时长上下界；保留窗口内不确定度及未观测边界 | [E1 时长说明](../initial_screening/README.md)、[四份摘要](durations) |
+| 基线补采 | 12 项传输、20 包、350 个潜在出口；原执行逐条一致 | [基线](paths/g0-b2-short.json) |
+| 专家成本减半补采 | 12 项传输、20 包、350 个潜在出口；原执行逐条一致 | [减半](paths/g0-b2-expert-half.json) |
+| 专家成本加倍补采 | 18 项传输、30 包、357 个潜在出口；原执行逐条一致 | [加倍](paths/g0-b2-expert-double.json) |
+| 替代完成条件补采 | 24 项传输、40 包、588 个潜在出口；原执行逐条一致 | [替代条件](paths/g0-b2-local-fence.json) |
+| 共有任务的实际路径 | 固定 12 项任务、20 包；三项对照分别有 14、10、20 包改变路径 | [比较](path-comparison.json) |
+| 统一验收 | 七个原包、四个新包摘要，二进制、随机状态、时刻、成员绑定、分析文件及资源限制均通过 | [验收](acceptance.json) |
+
+每次不扰动检查均覆盖全部执行节点、传输、阶段、资源与公开统计，以及全部 2688 个出口的数据包内容/发送时刻摘要。选中传输的分类字节、物理出口路径和最后一跳到达与数据就绪回调对齐。选定出口的精确队列状态积分与原面积一致；基线 350 个出口的精确非空时长还逐项落在 E1 原聚合给出的界限内。
+
+精确时长只适用于选定补采出口；其他正常输入只交付原聚合可证明的上下界，不能声称已恢复全网连续积压。端设备出口队列、原生资源持有者及逐包 VOQ 入队时刻仍未知。结果仍只支持一个候选 C1：供数准备与消费等待的传播；没有新增测量信息收益或全网无拥塞的结论。解释见 [E2](../review.md)和[研究结论](https://github.com/baoy21/moe-ub-cosim/blob/b345694fbc2faed8feebb425d43c60f765f7eee9/experiments/scaleup_issue_screening/conclusions.md)。
+
+## 产物与复核
+
+`runs/scaleup_issue_screening/delivery/` 保存以下资料：
+
+- `durations/<case>/`：逐出口上下界及相邻正面积窗口范围；基线成功目录为 `g0-b2-short-v2`。
+- `paths/<case>/`：逐包路径、任务签名和选定出口精确时长。
+- `archives/<case>.tar.gz` 及同名 `.json`：原运行、保存图、新补采、配置和日志，已逐文件核验并释放展开文件。
+- `path-comparison.json`、`acceptance.json`：统一比较和验收；对应资源目录保存实际命令、工作目录、退出码与日志。
+
+新包可用已有 `archive restore` 恢复，再公开验证其 `run/`、`detail/run/` 或检查 `slice/`。原七个包仍位于上一层 `archives/`。本次新增四包合计约 0.858 GiB，累计产物采样峰值 47.718 GiB，低于 48 GiB；资源详情见[汇总](../resources.md)及[补证资源](resources.json)。
+
+方法、操作和结果分别维护：[补证方法](../delivery_method.md)规定精度与选择，[操作说明](https://github.com/baoy21/moe-ub-cosim/blob/b345694fbc2faed8feebb425d43c60f765f7eee9/experiments/scaleup_issue_screening/usage.md)提供可复用命令，本页负责证据索引。[初次复核记录](../delivery-review-evidence.json)保留补证前缺口，不代表当前验收仍未完成。

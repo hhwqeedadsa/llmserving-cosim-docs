@@ -20,9 +20,9 @@
 
 ## 目录与实现边界
 
-当前主文档已经统一到上表。代码、测试、配置和历史结果的目标分区见[方案第 10 节](plan.md#10-目录文档和迁移要求)，仍需先独立迁移并通过小型检查，不能将入口整理视为全部重构完成。
+`analysis/` 保存准备、分析和评价程序；`tests/` 保存合成检查及检查摘要。配置按固定输入 `configs/baseline/`、场景及干预 `configs/scenarios/`、观测与导出 `configs/observation/` 分区。
 
-当前根目录的历史 Python 模块及 results/e1、results/e2 保留原作用直到完成迁移；新研究不继续向它们堆积阶段性文件。plan_v0.1.md 和 candidates.md 仅作为过渡历史链接，不是另一套当前要求。
+历史结果位于 `archive/initial_screening/`、`archive/sender_queue/`、`archive/network_cases/` 和 `archive/operation_boundary/`；跨分支补证保留单一原件。原始文件对应关系见[迁移索引](archive/README.md)。历史完整命令使用固定版本；当前模块统一从 `experiments.scaleup_issue_screening.analysis` 进入，检查模块从 `.tests` 进入。
 
 平台运行、记录与模型语义分别见[用户指南](../../docs/user_guide.md)、[记录格式](../../docs/record_storage.md)、[模型依据](../../docs/model_validation.md)。实验只使用公共命令与稳定读取接口，平台不导入本目录，诊断不能默认读取 truth 或原始执行图。
 

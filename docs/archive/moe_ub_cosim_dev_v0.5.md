@@ -2,7 +2,7 @@
 
 > 历史规范：M18～M21 平台部分已完成验收。正文保留实施前的要求；现行能力见[用户指南](../user_guide.md)和[模型依据](../model_validation.md)，完成证据见[M21 验收](../../fixtures/m21_platform/README.md)。实验进度仍由[当前任务](../tasks/current.md)维护。
 
-本版规定下一轮问题筛选所需的平台修正、内部记录和有限层段执行能力。它是待实施方案，不表示相应功能已经可用，也不自动改变软件发布版本或输入格式版本。进度与停止位置只维护在[当前任务](../tasks/current.md)；研究问题、实验输入与结果判断由[独立实验方案](../../experiments/scaleup_issue_screening/plan_v0.1.md)负责。
+本版规定下一轮问题筛选所需的平台修正、内部记录和有限层段执行能力。它是待实施方案，不表示相应功能已经可用，也不自动改变软件发布版本或输入格式版本。进度与停止位置只维护在[当前任务](../tasks/current.md)；研究问题、实验输入与结果判断由[独立实验方案](https://github.com/baoy21/moe-ub-cosim/blob/b345694fbc2faed8feebb425d43c60f765f7eee9/experiments/scaleup_issue_screening/plan_v0.1.md)负责。
 
 本版依据 2026-10-09 用户确认的下一阶段方案整理。未被本版明确调整的执行、观测与交付约束，继续遵循 [AGENTS.md](../../AGENTS.md)、[开发维护](../development.md)和既有规范。平台验收不要求性能提升、拥塞增加或测量方法有效。
 

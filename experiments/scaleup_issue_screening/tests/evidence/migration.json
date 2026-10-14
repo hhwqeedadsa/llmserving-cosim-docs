@@ -1,0 +1,1201 @@
+{
+  "schema_version": "issue-directory-migration/1",
+  "source_commit": "cb9c116",
+  "changes": "Paths/imports/module names only; no research rule, configuration value, simulation or historical result rewrite",
+  "file_count": 157,
+  "unchanged_configuration_and_machine_results": 112,
+  "unit_tests_before": 59,
+  "unit_tests_after": 59,
+  "production_modules_imported": 32,
+  "test_cli_help": 3,
+  "comparison": {
+    "records": [
+      256,
+      1024
+    ],
+    "modes": [
+      "old",
+      "old_full",
+      "old_simple",
+      "strong",
+      "strong_full",
+      "strong_simple",
+      "recovery"
+    ],
+    "window_decisions": 2156,
+    "all_prediction_fields_and_evaluations_equal": true,
+    "excluded_from_comparison": "Only program path/hash provenance; full prediction/reason/evaluation structures retained"
+  },
+  "fresh_offline_cli_test": "PublicRecovery.test_fresh_synthetic_cli_flow_with_separate_evaluation",
+  "fresh_public_workflow": {
+    "passed": true,
+    "synthetic_only": true,
+    "requests": 3,
+    "operations": 4,
+    "simulation_end_ns": 3414,
+    "archive": {
+      "schema_version": "issue-screening-archive/1",
+      "archive_sha256": "0a688564730d4d9fdc637ab2614a0eb350bdd334ea38d3adb24f7d9ac87916dc",
+      "archive_bytes": 254219,
+      "source_directory": "/root/moe-ub-cosim/runs/scaleup_issue_screening/diagnostic-study-20261014/migration-small-matched/case",
+      "logical_bytes": 2904183,
+      "verified": true,
+      "expanded_released": true
+    },
+    "public_run_and_freeze": true,
+    "restored_run_and_slice_validated": true,
+    "control": null
+  },
+  "first_small_attempt": {
+    "exit_code": 1,
+    "reason": "Backend/reference dependency revision mismatch",
+    "simulation_started": false,
+    "corrected_input": "Use existing historical binary matching c0f1fe5; do not change config or version check"
+  },
+  "log_directory": "runs/scaleup_issue_screening/diagnostic-study-20261014",
+  "sources": {
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/migration_check.py": "ffc94f861385f240f1a67d0b31e1fa6d4aa7b21f946d1299518a306248413965",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/before/analysis.json": "947dd5af3f294a3b57d12261b37ce4495ee589a6273163225755ef394b866b3e",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/after/analysis.json": "947dd5af3f294a3b57d12261b37ce4495ee589a6273163225755ef394b866b3e",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/before/commands.jsonl": "09dc1e2bc2f4feb1245fc24b7c3c3ac588d881912c21c979bc9f548a999df466",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/after/commands.jsonl": "dd6915604793055567f15104b25023a6d9340cb226136dae00165297e311c21b",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/commands.jsonl": "31b7132094372debeb338aac125b1d6aa2cc007ffb36497c5762f63690c4c26e",
+    "runs/scaleup_issue_screening/diagnostic-study-20261014/link-check.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "files": [
+    {
+      "old": "experiments/scaleup_issue_screening/analysis-check-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/analysis-check-summary.json",
+      "sha256": "94b6e28cd93893d3ea52cd177c54904ffedb920c54bedff6c483bcb995a3256c",
+      "after_sha256": "94b6e28cd93893d3ea52cd177c54904ffedb920c54bedff6c483bcb995a3256c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/analyze.py",
+      "new": "experiments/scaleup_issue_screening/analysis/analyze.py",
+      "sha256": "c236ce7a00779cab11ad3d058bca8f61c17a288dffedc6f77fe67769d2f1fc31",
+      "after_sha256": "a6abdfcfb2d19b2a2b00b14d9bd9b6bac277106b7e86cd1c6f308295aa82b180",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/archive-check-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/archive-check-summary.json",
+      "sha256": "979be9e49266d4bd92e47dc38a4614ca0e8e808e2a207814060ff2890fb7ab7f",
+      "after_sha256": "979be9e49266d4bd92e47dc38a4614ca0e8e808e2a207814060ff2890fb7ab7f",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/archive.py",
+      "new": "experiments/scaleup_issue_screening/analysis/archive.py",
+      "sha256": "6f162da8a30e9539141d136bed6ba98bd951ba960536a80f23efd2fb100699cf",
+      "after_sha256": "5c6965c8e4a8c1136060fddac6c91d99185fb538a8bb884e95163c49499d6d26",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_delivery.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_delivery.py",
+      "sha256": "391e533adebaec468c3c7643063624433d51e5df1d516738c2ed7890ab7b2f57",
+      "after_sha256": "772a9da20c7f53a9787a8bf24495ae4e78ab0ce0e8f64c0bab71db27ec0ed7eb",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_delivery_math.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_delivery_math.py",
+      "sha256": "bffb5b7b2f5d938bda0f97863713febe68c403c7224587c9775059032fd7bcd5",
+      "after_sha256": "4e505d2da6b7082c4679c362f292f06172f49c6748ebcfb705509b86a8bc7b85",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_network.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_network.py",
+      "sha256": "57a38218acb3f79d79caca6e357be7e33aa630f130fc52624e2cb5970ffdaa44",
+      "after_sha256": "183ad3e7bd9c5c8a77fdbfe4136b17cc00c80c9b682ef7a4406e0b3fa1d1bbc0",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_network_offline.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_network_offline.py",
+      "sha256": "be7b7a141b3daccaa9b9e7a69a3b9f3914dcb3f458ce1954ba2cceda404bf9c6",
+      "after_sha256": "2466afe4187947336ddd95365bacdd6393bf58cbf8c9cf5b59b0e12833a66871",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_network_replay.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_network_replay.py",
+      "sha256": "d00897fbd4f0b88526e526de77e920a105f5386a5030abed37aa725cbf9cee21",
+      "after_sha256": "9a75cdc463daf6725a20d474b998e6c0b6d1b6ce380e0ebace216f08038455af",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_small.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_small.py",
+      "sha256": "dc4534d42601b8d0550b770b9c217ab79a8ce182460b6193f3756ba2accfacdc",
+      "after_sha256": "c8a9012748fdc90665b176020e616d6536a9cd792998f0843f91aac635c11133",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/check_workflow.py",
+      "new": "experiments/scaleup_issue_screening/tests/check_workflow.py",
+      "sha256": "1857e3b701c67905c78ee751702ffd4a1b99bf4656689ac4f4dfd6dec5f7f88b",
+      "after_sha256": "efa501e39c2c7bda8c397beb6ae89326ddd405a2fd986d359536418897739ecd",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/compare.py",
+      "new": "experiments/scaleup_issue_screening/analysis/compare.py",
+      "sha256": "72b4abfef327e565679e5f3c91c083fdb468be02d8a477ab046dce1acc763172",
+      "after_sha256": "2617c9e09b49d1843f706378c1d618ff616c67671a6090f2038a8320b3bb8817",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/compare_controls.py",
+      "new": "experiments/scaleup_issue_screening/analysis/compare_controls.py",
+      "sha256": "9af86fc25f30e6cd52cf293531b5120dc5af1ab905a3ef3f0dc714a66f5c67bd",
+      "after_sha256": "7706c19d3f756c298aa2fc8f4f560e962bc1f0944250a384561bf0de7ddb2a83",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/compare_network.py",
+      "new": "experiments/scaleup_issue_screening/analysis/compare_network.py",
+      "sha256": "210562bd2af809543ca1d4b5b8be1001787aed4cb99e9326beb8a9834117b460",
+      "after_sha256": "210562bd2af809543ca1d4b5b8be1001787aed4cb99e9326beb8a9834117b460",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/compare_organization.py",
+      "new": "experiments/scaleup_issue_screening/analysis/compare_organization.py",
+      "sha256": "e74b1c67f0ca5f32b165548294c7da18f5181431f4ecbc8579d38c375fd97123",
+      "after_sha256": "e74b1c67f0ca5f32b165548294c7da18f5181431f4ecbc8579d38c375fd97123",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/compare_paths.py",
+      "new": "experiments/scaleup_issue_screening/analysis/compare_paths.py",
+      "sha256": "6a768f3181da18d06dd37bfcb87afe1321d0cdf811c3aab218e3b0e9b3d48c36",
+      "after_sha256": "6a768f3181da18d06dd37bfcb87afe1321d0cdf811c3aab218e3b0e9b3d48c36",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/backend-reference.yaml",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/backend-reference.yaml",
+      "sha256": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+      "after_sha256": "3f0218a51b21c46637bf9605ed571d44892936f35c507bc332e73657aa67530e",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/batch.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/batch.json",
+      "sha256": "0923930c77223adcd4358a8a703e1bf87ce2e10636c97f3a5c0c6b921c2288a5",
+      "after_sha256": "0923930c77223adcd4358a8a703e1bf87ce2e10636c97f3a5c0c6b921c2288a5",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/control-fence.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/control-fence.json",
+      "sha256": "d6916fd65e84ccf3a1fc2cddeb01a01d5eeb9d509bee4b50164bc29bb2f1fbaf",
+      "after_sha256": "d6916fd65e84ccf3a1fc2cddeb01a01d5eeb9d509bee4b50164bc29bb2f1fbaf",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/control-half.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/control-half.json",
+      "sha256": "ce1d348a63acfd1b80f54ea3c80c42f9aa559c1418d8fe4a8f5a355371831500",
+      "after_sha256": "ce1d348a63acfd1b80f54ea3c80c42f9aa559c1418d8fe4a8f5a355371831500",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/fabric.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/fabric.json",
+      "sha256": "f458ecc0ca145cd88aa0c13a4b24afb673584ec717c456eaa66293abf224b789",
+      "after_sha256": "f458ecc0ca145cd88aa0c13a4b24afb673584ec717c456eaa66293abf224b789",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/layers.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/layers.json",
+      "sha256": "f78f91ca41f268239ba3d172fc6bbed802136d4e434b48054e2c0e84d99bfa4c",
+      "after_sha256": "f78f91ca41f268239ba3d172fc6bbed802136d4e434b48054e2c0e84d99bfa4c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/observation.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/observation.json",
+      "sha256": "2f42c62e2766b5675342d3527ee8da5195a024ada14f26bcfeb81e8dc7975ec2",
+      "after_sha256": "2f42c62e2766b5675342d3527ee8da5195a024ada14f26bcfeb81e8dc7975ec2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/scenario.yaml",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/scenario.yaml",
+      "sha256": "a2bf46a4339041ccccadb0be93e7c9c3c720c22725a721b4763a4c6b5cc78f05",
+      "after_sha256": "a2bf46a4339041ccccadb0be93e7c9c3c720c22725a721b4763a4c6b5cc78f05",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/check/service.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/check/service.json",
+      "sha256": "2b51383e311dc131097ce8b0cec38472f87d1cec3fcadef67a6b3421e3c37468",
+      "after_sha256": "2b51383e311dc131097ce8b0cec38472f87d1cec3fcadef67a6b3421e3c37468",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/expert-double.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/expert-double.json",
+      "sha256": "fc4c484f6cb7b711c2980f4acf41c89a53df5a5814d5c3f6e3021396b49cba63",
+      "after_sha256": "fc4c484f6cb7b711c2980f4acf41c89a53df5a5814d5c3f6e3021396b49cba63",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/expert-half.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/expert-half.json",
+      "sha256": "c62fcc555db181709ad39dce4299aaff522aff0f658c71630555752000619402",
+      "after_sha256": "c62fcc555db181709ad39dce4299aaff522aff0f658c71630555752000619402",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/local-fence.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/local-fence.json",
+      "sha256": "8f29a70b1e9e621c87342ea41ad118e169e9cdfebfdf9f53e6f59f62a850d4c9",
+      "after_sha256": "8f29a70b1e9e621c87342ea41ad118e169e9cdfebfdf9f53e6f59f62a850d4c9",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/native-organization.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/native-organization.json",
+      "sha256": "8a0c5295932cca678e6a7e93e1322fa6911ad61a4fc8c98f9cbaeb1197086d8d",
+      "after_sha256": "8a0c5295932cca678e6a7e93e1322fa6911ad61a4fc8c98f9cbaeb1197086d8d",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/native-quota.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/native-quota.json",
+      "sha256": "c0505acb40d57924d7537be8295cb801c780c2bb25e78c13f53f6b083e9e3a66",
+      "after_sha256": "c0505acb40d57924d7537be8295cb801c780c2bb25e78c13f53f6b083e9e3a66",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/controls/network-screening.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/controls/network-screening.json",
+      "sha256": "c56221d645bb2c06214330f9b9d033c2be812630574ca595c9ad487e0b266733",
+      "after_sha256": "c56221d645bb2c06214330f9b9d033c2be812630574ca595c9ad487e0b266733",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/delivery-pairs.json",
+      "new": "experiments/scaleup_issue_screening/configs/scenarios/delivery-pairs.json",
+      "sha256": "5a847a3130a9153e4876f448aa43455ba9a84bd5b40ab0f0457e4130165cc98a",
+      "after_sha256": "5a847a3130a9153e4876f448aa43455ba9a84bd5b40ab0f0457e4130165cc98a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/export-policy.json",
+      "new": "experiments/scaleup_issue_screening/configs/observation/export-policy.json",
+      "sha256": "bb3110286c2ad6cf34e7522d24583b086072037b5a11fba59604f62e487acf3a",
+      "after_sha256": "bb3110286c2ad6cf34e7522d24583b086072037b5a11fba59604f62e487acf3a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/fabric.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/fabric.json",
+      "sha256": "cc28fafa41627f803fdce07cd79540975d4efa7a47d8201aa80651497905aad4",
+      "after_sha256": "cc28fafa41627f803fdce07cd79540975d4efa7a47d8201aa80651497905aad4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/facts.json",
+      "new": "experiments/scaleup_issue_screening/configs/observation/facts.json",
+      "sha256": "830ebe416f90dc75dca32ba1fee31bdf5ea1ade84dd4d436ca371e886bb4bfc3",
+      "after_sha256": "830ebe416f90dc75dca32ba1fee31bdf5ea1ade84dd4d436ca371e886bb4bfc3",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/host.json",
+      "new": "experiments/scaleup_issue_screening/configs/observation/host.json",
+      "sha256": "c9863d75b74db13a0687dc0075d479e110544ed8183ed7be7cf9394923dd1662",
+      "after_sha256": "c9863d75b74db13a0687dc0075d479e110544ed8183ed7be7cf9394923dd1662",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/layer-template.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/layer-template.json",
+      "sha256": "27936ce0d1b9e9f9ea76cb7c6b8484de25df638150fc54abaae92000e6cf966c",
+      "after_sha256": "27936ce0d1b9e9f9ea76cb7c6b8484de25df638150fc54abaae92000e6cf966c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/network-defaults.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/network-defaults.json",
+      "sha256": "878cd743f458d47c21808b6ebe04ad46ece6f07e65e5c874bbb2e09dacb5d9be",
+      "after_sha256": "878cd743f458d47c21808b6ebe04ad46ece6f07e65e5c874bbb2e09dacb5d9be",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/observation.json",
+      "new": "experiments/scaleup_issue_screening/configs/observation/observation.json",
+      "sha256": "eeda15ae00cb3e48210f5df89f10b0ef6201be59557f030a35f0267347c49ec9",
+      "after_sha256": "eeda15ae00cb3e48210f5df89f10b0ef6201be59557f030a35f0267347c49ec9",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/record-policy.json",
+      "new": "experiments/scaleup_issue_screening/configs/observation/record-policy.json",
+      "sha256": "ee79edc0ea926b94e8a3e1fa0451285c5a49333a60af313026c99ef44e2868ca",
+      "after_sha256": "ee79edc0ea926b94e8a3e1fa0451285c5a49333a60af313026c99ef44e2868ca",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/route-manifest.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/route-manifest.json",
+      "sha256": "b4fd468ed9b09fe2bd80568737891d0d0e5a32fdf8f83f5e24f8f9fdf77f3cdb",
+      "after_sha256": "b4fd468ed9b09fe2bd80568737891d0d0e5a32fdf8f83f5e24f8f9fdf77f3cdb",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/source-base.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/source-base.json",
+      "sha256": "10d4d05094ca04d359ed5476165952ea316515ec8a4b958b54251111a7ab956c",
+      "after_sha256": "10d4d05094ca04d359ed5476165952ea316515ec8a4b958b54251111a7ab956c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/configs/system.json",
+      "new": "experiments/scaleup_issue_screening/configs/baseline/system.json",
+      "sha256": "5e323e19d327ba40afa7073cca6d9df5fbbfd28aafae94ba250c4289ed9360c3",
+      "after_sha256": "5e323e19d327ba40afa7073cca6d9df5fbbfd28aafae94ba250c4289ed9360c3",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/consumer_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/consumer_review.py",
+      "sha256": "929342b738b0e00683de9fa3f2ec24fe270135206c6905154d11f7c8f29e0fec",
+      "after_sha256": "929342b738b0e00683de9fa3f2ec24fe270135206c6905154d11f7c8f29e0fec",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/control-tooling-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/control-tooling-summary.json",
+      "sha256": "338c2433f2680f49fb21ad2215c29844ace44b46e053bb7a3b649a3a256e0605",
+      "after_sha256": "338c2433f2680f49fb21ad2215c29844ace44b46e053bb7a3b649a3a256e0605",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/controls.py",
+      "new": "experiments/scaleup_issue_screening/analysis/controls.py",
+      "sha256": "c6ba8929c999818432e2d541c8fed78f97b5a24accbb32412d8a30e3b121c1ef",
+      "after_sha256": "c6ba8929c999818432e2d541c8fed78f97b5a24accbb32412d8a30e3b121c1ef",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/delivery-tooling-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/delivery-tooling-summary.json",
+      "sha256": "ea9d392e05af35a009b5ca6f73ad2f29dfeccbae7d33f000c525a1c781fed060",
+      "after_sha256": "ea9d392e05af35a009b5ca6f73ad2f29dfeccbae7d33f000c525a1c781fed060",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/delivery_method.md",
+      "new": "experiments/scaleup_issue_screening/archive/delivery_method.md",
+      "sha256": "8a41c23ea42545087ef8da5cb9e5ab13123df02b503a92269f385c53f2f029ce",
+      "after_sha256": "f064d11a94a2615bd9f49d9e96fdf878382bdf108b42c081e78f9644f06f78ea",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/duration_bounds.py",
+      "new": "experiments/scaleup_issue_screening/analysis/duration_bounds.py",
+      "sha256": "b0b522ec50508c134ed0e986a0e8a4bd55f6e5e6f864912464ef68f48cad82e6",
+      "after_sha256": "b0b522ec50508c134ed0e986a0e8a4bd55f6e5e6f864912464ef68f48cad82e6",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/fence-tooling-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/fence-tooling-summary.json",
+      "sha256": "b6a5794931f1736439bd93f980cc87fc2ff0208c13325ab838d991fc4c66640a",
+      "after_sha256": "b6a5794931f1736439bd93f980cc87fc2ff0208c13325ab838d991fc4c66640a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/forecast.py",
+      "new": "experiments/scaleup_issue_screening/analysis/forecast.py",
+      "sha256": "62f6a5794736f4bd19031d91475a2eb29af8fa6ca0b6b6ca107fe827380bc2c4",
+      "after_sha256": "62f6a5794736f4bd19031d91475a2eb29af8fa6ca0b6b6ca107fe827380bc2c4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/inspect_facts.py",
+      "new": "experiments/scaleup_issue_screening/analysis/inspect_facts.py",
+      "sha256": "daf751ecc1f40d3b6b9dd460f62dc5ffc33f416d992885f2b15e980d572c4d3a",
+      "after_sha256": "68af39e396cf0d935fd3bcc3d2a6bc57c910cffddf4f303260116be8e0d66997",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/mechanism_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/mechanism_review.py",
+      "sha256": "72b3f892b8104fe55a452dbeff1988042988e9d30b1f09abd8ed772ef373d187",
+      "after_sha256": "72b3f892b8104fe55a452dbeff1988042988e9d30b1f09abd8ed772ef373d187",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/native_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/native_review.py",
+      "sha256": "eae185d52a06d96255c999c2ba26be599104128dc2337107a38c45e371b46841",
+      "after_sha256": "3ee1c9ece8849b265627fdbd744fb3821535ad9012e5d19e4a7c4cd9ec043d8a",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_bound_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_bound_review.py",
+      "sha256": "c804d27268b56c76317872b50245f77d7da1ac0a3aec12ea6d1cf544b860407a",
+      "after_sha256": "e093435437f818c7f5c13ba7f2957cb57b5670a31b909fa22a320844e8bad922",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_bounds.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_bounds.py",
+      "sha256": "20d86059407fc86da2eb6d3cc511baf984f97ee23a5a098f4ab3f90d34559034",
+      "after_sha256": "20d86059407fc86da2eb6d3cc511baf984f97ee23a5a098f4ab3f90d34559034",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_control.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_control.py",
+      "sha256": "3a5afe6c7fb80c4a30ff3a2adc0c14d3e8df0b384576900cc5835ae70814cedb",
+      "after_sha256": "a202f5f9ea2fea420beb607f38d0c622ef3212be384a130dac6d33f5ab1f52b3",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_information.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_information.py",
+      "sha256": "48f1c81d72acac4516f07f6b41d706fa103ff33eaa9bdd2f93bbbcc5daa99ac5",
+      "after_sha256": "48f1c81d72acac4516f07f6b41d706fa103ff33eaa9bdd2f93bbbcc5daa99ac5",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_offline.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_offline.py",
+      "sha256": "71c3ac073a8594121e39cfed9a95b56bacb6b80e02288f2bf8c349cdf954ab99",
+      "after_sha256": "d5a1b5c1ac4cd870bba06d3fdf60cad6ab00f5901ce15a7b19a7d566dfbf773f",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_packets.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_packets.py",
+      "sha256": "f0c709e1e12d45a974b7e9cfd274e5bf5218d4b74ee49920552781126cfdaad6",
+      "after_sha256": "f0c709e1e12d45a974b7e9cfd274e5bf5218d4b74ee49920552781126cfdaad6",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_recovery.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_recovery.py",
+      "sha256": "47cd43fba844a799289d8e3d6328dd043a1c57f92e85d353c5117b16d1219fcf",
+      "after_sha256": "901e8f8c26f8779ec0501745275e321d8d51e89b7605da5187919ed7d6259a4b",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_review.py",
+      "sha256": "fd62392d5f5f64bcec4f3207239267dc81c544318fb82dbf35b9b9365e29c149",
+      "after_sha256": "fd62392d5f5f64bcec4f3207239267dc81c544318fb82dbf35b9b9365e29c149",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_run_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_run_review.py",
+      "sha256": "12af50ee89600e6619e8b4119bc365c8da33b1cafd74fa7103baed98b541f84f",
+      "after_sha256": "12af50ee89600e6619e8b4119bc365c8da33b1cafd74fa7103baed98b541f84f",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_screen.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_screen.py",
+      "sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "after_sha256": "2fe889378daf9af3d0f8eda95024b1da7250dc6d1dd4c473d0c03e7f3a7a5e1a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/network_timing.py",
+      "new": "experiments/scaleup_issue_screening/analysis/network_timing.py",
+      "sha256": "1739f6036d87feefcaaf512f49cea11492b50bbe42d2fcf87ad90fe4642f75fd",
+      "after_sha256": "1739f6036d87feefcaaf512f49cea11492b50bbe42d2fcf87ad90fe4642f75fd",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/organization.py",
+      "new": "experiments/scaleup_issue_screening/analysis/organization.py",
+      "sha256": "14ef9c005003c7bde8931dd4bf8ed3ab98cf292c5e3190ff9f7e008ee031f92f",
+      "after_sha256": "17fd76799d703ad0e1071890615d487701ad561e430d1cce9a24d3fde42f315e",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/organization_review.py",
+      "new": "experiments/scaleup_issue_screening/analysis/organization_review.py",
+      "sha256": "25d6a660456bfb221516a1210099586248965fd2a262ea64a6d51a75b34502f5",
+      "after_sha256": "ab04caab2058821a0b2f3bd235846081f8804ea461c1eaea6569937f7a0b0a51",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/organization_waits.py",
+      "new": "experiments/scaleup_issue_screening/analysis/organization_waits.py",
+      "sha256": "de0043eae6698a9c920a01c8659bf1e315ecf81313fc3bfa9fdbc8e122665df7",
+      "after_sha256": "de0043eae6698a9c920a01c8659bf1e315ecf81313fc3bfa9fdbc8e122665df7",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/path_analysis.py",
+      "new": "experiments/scaleup_issue_screening/analysis/path_analysis.py",
+      "sha256": "cdd590b5f12399cfb20999080e205ce575e5bdbb6fec3882fa425866b50f3594",
+      "after_sha256": "cdd590b5f12399cfb20999080e205ce575e5bdbb6fec3882fa425866b50f3594",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/path_replay.py",
+      "new": "experiments/scaleup_issue_screening/analysis/path_replay.py",
+      "sha256": "c193dfaefc229549529f9ab355e1519f280ac3d1179bcdf8fd086b95d637c0ba",
+      "after_sha256": "d10f982ae79002833e21b0032f2a72477657a75c2f57dc6a535fd68764b6da26",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery-review-evidence.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery-review-evidence.json",
+      "sha256": "f2ab1a2c3491bf1967c85d122242907b1b44dcff339634e564ec02e83fcf46b3",
+      "after_sha256": "f2ab1a2c3491bf1967c85d122242907b1b44dcff339634e564ec02e83fcf46b3",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery-review.md",
+      "new": "experiments/scaleup_issue_screening/archive/delivery-review.md",
+      "sha256": "0f82286d559ed20e65a0e82d9492141bd02abeadbceddfcb556b954ed5f21306",
+      "after_sha256": "c1c1dfbc5c7087d10238781837c89108ee0682cb5a6b81c992eb654a6b9f85c5",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/README.md",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/README.md",
+      "sha256": "ab5ffcf4434f0f66f36d266301f1f4f2ec7a3c2087591d0a021c5a5568147108",
+      "after_sha256": "a6c3749e1fb2355efdc65ebf5a70a5fe9f285088c45f92dbd993a72ee2783407",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/acceptance.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/acceptance.json",
+      "sha256": "bf35b10a92e52642f091620e158bdeb508014843d1ff53ecbb8de3a7c912dba4",
+      "after_sha256": "bf35b10a92e52642f091620e158bdeb508014843d1ff53ecbb8de3a7c912dba4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/durations/g0-b2-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/durations/g0-b2-short.json",
+      "sha256": "25d226376252a8b54f6b1c943262333bc6870bb00f37d8b943604a999466ab37",
+      "after_sha256": "25d226376252a8b54f6b1c943262333bc6870bb00f37d8b943604a999466ab37",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/durations/g0-b4-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/durations/g0-b4-short.json",
+      "sha256": "a9ab1a72eee26027dff2e4f322d7d51d84c21bef796691db10043b7e1bf54e9f",
+      "after_sha256": "a9ab1a72eee26027dff2e4f322d7d51d84c21bef796691db10043b7e1bf54e9f",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/durations/g0-b8-long.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/durations/g0-b8-long.json",
+      "sha256": "2b55f21be621be207c647ff5e0e97a6c8162f9c6bff80f57b901f3d4adfaa380",
+      "after_sha256": "2b55f21be621be207c647ff5e0e97a6c8162f9c6bff80f57b901f3d4adfaa380",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/durations/g0-b8-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/durations/g0-b8-short.json",
+      "sha256": "4ab2d9a751706724c1e92b94776022cdde438e48051aaf9bd05abcc2cf6708bd",
+      "after_sha256": "4ab2d9a751706724c1e92b94776022cdde438e48051aaf9bd05abcc2cf6708bd",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/path-comparison.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/path-comparison.json",
+      "sha256": "f7f03f7e931458f54de63900737e4ee37a56ab4d64bed68a355b6b4336b7cbd8",
+      "after_sha256": "f7f03f7e931458f54de63900737e4ee37a56ab4d64bed68a355b6b4336b7cbd8",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/paths/g0-b2-expert-double.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/paths/g0-b2-expert-double.json",
+      "sha256": "a369a4cdaacc9ef807abd253415d4810078cc576a5116a1249f66a226345b193",
+      "after_sha256": "a369a4cdaacc9ef807abd253415d4810078cc576a5116a1249f66a226345b193",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/paths/g0-b2-expert-half.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/paths/g0-b2-expert-half.json",
+      "sha256": "c1bd9652a31181e6a5be823b2234a0426510a2e2c6b446227f927b1397e874d0",
+      "after_sha256": "c1bd9652a31181e6a5be823b2234a0426510a2e2c6b446227f927b1397e874d0",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/paths/g0-b2-local-fence.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/paths/g0-b2-local-fence.json",
+      "sha256": "016498f5751d7aa06b1ba8db8f9634ca2c57cea754f3c6ed860bbf57d72e409a",
+      "after_sha256": "016498f5751d7aa06b1ba8db8f9634ca2c57cea754f3c6ed860bbf57d72e409a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/paths/g0-b2-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/paths/g0-b2-short.json",
+      "sha256": "85356aa0ddfe3ff6b1271ae3072a0cb866457252badf167edc3f8171bd2b2d09",
+      "after_sha256": "85356aa0ddfe3ff6b1271ae3072a0cb866457252badf167edc3f8171bd2b2d09",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/delivery/resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/delivery/resources.json",
+      "sha256": "06564a90b4cecd07700623fbae7e2a2a9d5e02c7992bf620332d4408b7db2123",
+      "after_sha256": "06564a90b4cecd07700623fbae7e2a2a9d5e02c7992bf620332d4408b7db2123",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/README.md",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/README.md",
+      "sha256": "5d6d0648c2001eb054874ba714bc28a752ee8422c5408bc79cdb9b2750c66bba",
+      "after_sha256": "bf350299aa5541d515b72a102f17834868aafd344157f98ecadf708c8b8b821d",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/archives.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/archives.json",
+      "sha256": "becde09582fd3ab5ac27f64be0c1395aac69ae30e4e1ea918fa1103d8c676ace",
+      "after_sha256": "becde09582fd3ab5ac27f64be0c1395aac69ae30e4e1ea918fa1103d8c676ace",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/comparison.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/comparison.json",
+      "sha256": "d1233f4feae3c17ec1c65d796dec1c4453be2b8e46e3fb4febfda9e29d48bd4c",
+      "after_sha256": "d1233f4feae3c17ec1c65d796dec1c4453be2b8e46e3fb4febfda9e29d48bd4c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b2-short-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b2-short-resources.json",
+      "sha256": "60c1ea366082715c557ad5bf3514be74a686369057f164f279b4a06ad26d8c57",
+      "after_sha256": "60c1ea366082715c557ad5bf3514be74a686369057f164f279b4a06ad26d8c57",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b2-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b2-short.json",
+      "sha256": "5cf7816c05567ff42c80b57aa826c3cc2492eec2faf6714455a069ed1c12eb50",
+      "after_sha256": "5cf7816c05567ff42c80b57aa826c3cc2492eec2faf6714455a069ed1c12eb50",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b4-short-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b4-short-resources.json",
+      "sha256": "d9d9b4fadb32296fd08603ba7ade04a9bcd8fca5ca773bde18aca9ab3d26ccfb",
+      "after_sha256": "d9d9b4fadb32296fd08603ba7ade04a9bcd8fca5ca773bde18aca9ab3d26ccfb",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b4-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b4-short.json",
+      "sha256": "13abe0e8ffcc3a90140a27d8def4889ab17141a69c76f726814971b33a00caea",
+      "after_sha256": "13abe0e8ffcc3a90140a27d8def4889ab17141a69c76f726814971b33a00caea",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b8-long-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b8-long-resources.json",
+      "sha256": "f9a48de56d88f9925790a3c13037515e573b0c7978118584f7f0e809a3c13968",
+      "after_sha256": "f9a48de56d88f9925790a3c13037515e573b0c7978118584f7f0e809a3c13968",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b8-long.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b8-long.json",
+      "sha256": "c4522af42ba9d87a3527d3bfb253f8a4f717c0804232d5f120c47be168faf6db",
+      "after_sha256": "c4522af42ba9d87a3527d3bfb253f8a4f717c0804232d5f120c47be168faf6db",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b8-short-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b8-short-resources.json",
+      "sha256": "edd8104a998d146217b44890ff90b9180a30c2a67a70fc241197f2e8dc90840e",
+      "after_sha256": "edd8104a998d146217b44890ff90b9180a30c2a67a70fc241197f2e8dc90840e",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/g0-b8-short.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/g0-b8-short.json",
+      "sha256": "0621a807eb92b9c8549a9cccbc76a47a8e93a6071e613dc56781847162e5373a",
+      "after_sha256": "0621a807eb92b9c8549a9cccbc76a47a8e93a6071e613dc56781847162e5373a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/long-disk-forecast.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/long-disk-forecast.json",
+      "sha256": "491bea1280b06f7ae3bfd08aa75d4011b3b66b1a49c096186d1f44ffce872b31",
+      "after_sha256": "491bea1280b06f7ae3bfd08aa75d4011b3b66b1a49c096186d1f44ffce872b31",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/long-disk-measured.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/long-disk-measured.json",
+      "sha256": "acaa93122c8340a0e945f8a767706baa4dcd9484ae9394575bca1428f314283b",
+      "after_sha256": "acaa93122c8340a0e945f8a767706baa4dcd9484ae9394575bca1428f314283b",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e1/short-resource-basis.json",
+      "new": "experiments/scaleup_issue_screening/archive/initial_screening/short-resource-basis.json",
+      "sha256": "9251eda937e58833a83d66969c8aab602a2742a645f1f3d12818ebd4de38dd3b",
+      "after_sha256": "9251eda937e58833a83d66969c8aab602a2742a645f1f3d12818ebd4de38dd3b",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/README.md",
+      "new": "experiments/scaleup_issue_screening/archive/review.md",
+      "sha256": "9e73d9210390165f5182a98e7f0c85aa553b1e1769cddf2ba09b58cd3b272aa3",
+      "after_sha256": "35a523b08d9f4b85a96df516604f325c0e16222e185f653f333b37253290af9d",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/baseline-facts.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/baseline-facts.json",
+      "sha256": "9bc534af0ac57e7b19630a88eac94e513c04e96640abc7bbdfebb283ef521289",
+      "after_sha256": "9bc534af0ac57e7b19630a88eac94e513c04e96640abc7bbdfebb283ef521289",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/baseline-restore-release.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/baseline-restore-release.json",
+      "sha256": "759d7309d4684c091a51455edca4c003b9e21737353fcfd4017a116026aef7bc",
+      "after_sha256": "759d7309d4684c091a51455edca4c003b9e21737353fcfd4017a116026aef7bc",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/baseline-witnesses.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/baseline-witnesses.json",
+      "sha256": "bc4b93f903df7b2f5eaf533d0724f324806a7f5dfd630018d97d65a580dde433",
+      "after_sha256": "bc4b93f903df7b2f5eaf533d0724f324806a7f5dfd630018d97d65a580dde433",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/baseline.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/baseline.json",
+      "sha256": "7a5f2e649174da5c9e07a2817b5e967381fa4207bf1c12127e5774abd488dafd",
+      "after_sha256": "7a5f2e649174da5c9e07a2817b5e967381fa4207bf1c12127e5774abd488dafd",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/budget.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/budget.json",
+      "sha256": "b1283d254aa4e3a41e83b2bed70a26d1702228290df278a35dd577f6dd3b8629",
+      "after_sha256": "b1283d254aa4e3a41e83b2bed70a26d1702228290df278a35dd577f6dd3b8629",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-capture-equivalence.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-capture-equivalence.json",
+      "sha256": "a7753029931410278d21890cf9f81f48c3f41e5265af9ec1d26bc1d5bf150769",
+      "after_sha256": "a7753029931410278d21890cf9f81f48c3f41e5265af9ec1d26bc1d5bf150769",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-fifo32-consumers.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-fifo32-consumers.json",
+      "sha256": "92a6e3d01de7a1409e15cc94b79cf5f1c0562767dabcafd64472f8635d654da0",
+      "after_sha256": "92a6e3d01de7a1409e15cc94b79cf5f1c0562767dabcafd64472f8635d654da0",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-fifo64-consumers.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-fifo64-consumers.json",
+      "sha256": "874bed48440ae28cfb0a501716a53cf7bd3da09db75acddd14cd082ac95212ad",
+      "after_sha256": "874bed48440ae28cfb0a501716a53cf7bd3da09db75acddd14cd082ac95212ad",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-initial-review.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-initial-review.json",
+      "sha256": "886850240dd55483c40ed6eed14fb5c977a3bfadb121cb35d727e6db6950e6d3",
+      "after_sha256": "886850240dd55483c40ed6eed14fb5c977a3bfadb121cb35d727e6db6950e6d3",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-native-review.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-native-review.json",
+      "sha256": "32a003dd3b3a8f6151831696d434374561a47efcdb2f0496caee38edf1689d6d",
+      "after_sha256": "32a003dd3b3a8f6151831696d434374561a47efcdb2f0496caee38edf1689d6d",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-effect.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-effect.json",
+      "sha256": "e0729a96260deae558244668259787a305a71982b1972cb56459582669d240f4",
+      "after_sha256": "e0729a96260deae558244668259787a305a71982b1972cb56459582669d240f4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-equivalence.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-equivalence.json",
+      "sha256": "c89c085c5db4de5c470ff2e80013ddc8a3cd626bdd4c18d1d0f63b4d81194c88",
+      "after_sha256": "c89c085c5db4de5c470ff2e80013ddc8a3cd626bdd4c18d1d0f63b4d81194c88",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-fifo.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-fifo.json",
+      "sha256": "a5892bd0d340f4adb1a934b2a6adfbf35b592adb32f09219aef28808df4780ca",
+      "after_sha256": "a5892bd0d340f4adb1a934b2a6adfbf35b592adb32f09219aef28808df4780ca",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-resources.json",
+      "sha256": "c7384533ccdca73d04b047ef13489a83d3b1483bb83a0c543f87d0e7c6c63965",
+      "after_sha256": "c7384533ccdca73d04b047ef13489a83d3b1483bb83a0c543f87d0e7c6c63965",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-rr.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-rr.json",
+      "sha256": "550ca1b969582ef67f76f86555c9870f4da5c48ee9b0d2a0105d6e72d68a3fa2",
+      "after_sha256": "550ca1b969582ef67f76f86555c9870f4da5c48ee9b0d2a0105d6e72d68a3fa2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-organization-waits.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-organization-waits.json",
+      "sha256": "ed45dcbb3bf09b5329c09cea597dc1eddd08b58530309abe2c348d7cc3fc6843",
+      "after_sha256": "ed45dcbb3bf09b5329c09cea597dc1eddd08b58530309abe2c348d7cc3fc6843",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-quota64-effect.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-quota64-effect.json",
+      "sha256": "28c196d5421b543b789bd73c67067cddea368938489591e59f5b26f37c96f425",
+      "after_sha256": "28c196d5421b543b789bd73c67067cddea368938489591e59f5b26f37c96f425",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-quota64-queue.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-quota64-queue.json",
+      "sha256": "53ad5c94addde72cc0fc9c604405a8cf4dbe05484bad18b9c2ea6bab69fbb82c",
+      "after_sha256": "53ad5c94addde72cc0fc9c604405a8cf4dbe05484bad18b9c2ea6bab69fbb82c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-resources.json",
+      "sha256": "a3e24510c302704379a175a0a7b1827c761d1301eb2c1abac6c6df40fff03df2",
+      "after_sha256": "a3e24510c302704379a175a0a7b1827c761d1301eb2c1abac6c6df40fff03df2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-source-review.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-source-review.json",
+      "sha256": "983c8c5fceaea8732b8514ab6eadb0712adc46cf6be5385478a0b0a8885248d9",
+      "after_sha256": "983c8c5fceaea8732b8514ab6eadb0712adc46cf6be5385478a0b0a8885248d9",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/c1-tooling-checks.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/c1-tooling-checks.json",
+      "sha256": "43ea1c136702728601d5a62a6ea905d49b4b135a2f01a4d4f226b3e0eecf2e5d",
+      "after_sha256": "43ea1c136702728601d5a62a6ea905d49b4b135a2f01a4d4f226b3e0eecf2e5d",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/comparison-checks.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/comparison-checks.json",
+      "sha256": "7fa859e57841f7a323ff7ef1a8d80ce73a708e9a74329ba0888c287f63b6bbb7",
+      "after_sha256": "7fa859e57841f7a323ff7ef1a8d80ce73a708e9a74329ba0888c287f63b6bbb7",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/comparison.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/comparison.json",
+      "sha256": "ab5556727ea56255e8c1bcf52232bafa18145f34a00a4899890f163bacfd5f91",
+      "after_sha256": "ab5556727ea56255e8c1bcf52232bafa18145f34a00a4899890f163bacfd5f91",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/expert-double-input-audit.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/expert-double-input-audit.json",
+      "sha256": "0f80a96b634d7e11aa3a1c17ee3e5e6b9ad3d74dbaa8a2bca565407aa0219496",
+      "after_sha256": "0f80a96b634d7e11aa3a1c17ee3e5e6b9ad3d74dbaa8a2bca565407aa0219496",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/expert-half-input-audit.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/expert-half-input-audit.json",
+      "sha256": "5f0acd09f68d4486c19e82f0e9aa43fccee8b5059d40ad06703c8e49062a187c",
+      "after_sha256": "5f0acd09f68d4486c19e82f0e9aa43fccee8b5059d40ad06703c8e49062a187c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/expert-half-sealed-input-audit.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/expert-half-sealed-input-audit.json",
+      "sha256": "3cf07af48a15d9940191c71f288906124841f130ffd74da8c977314354071ce8",
+      "after_sha256": "3cf07af48a15d9940191c71f288906124841f130ffd74da8c977314354071ce8",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-double-archive.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-double-archive.json",
+      "sha256": "9dd48fb909500a7523761519b758cc944c2ca20ee1e07063a332ed05a337ec28",
+      "after_sha256": "9dd48fb909500a7523761519b758cc944c2ca20ee1e07063a332ed05a337ec28",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-double-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-double-resources.json",
+      "sha256": "16deff7200c96847b31febdd1a52ea5c7b25461633a42a2b47150073615dc4c4",
+      "after_sha256": "16deff7200c96847b31febdd1a52ea5c7b25461633a42a2b47150073615dc4c4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-double.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-double.json",
+      "sha256": "06d71e0e400494ced825713ae156ec799c00140883d9dd16d73861b1ef3f87aa",
+      "after_sha256": "06d71e0e400494ced825713ae156ec799c00140883d9dd16d73861b1ef3f87aa",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-half-archive.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-half-archive.json",
+      "sha256": "197977c42edd50512b3cf50e7f3106afd42edaddc185046b416998332d264a6e",
+      "after_sha256": "197977c42edd50512b3cf50e7f3106afd42edaddc185046b416998332d264a6e",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-half-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-half-resources.json",
+      "sha256": "04adfcb356ef21a9cd5905d67f7c3085b60a9a877322fd3b28bbcadcd8a275ed",
+      "after_sha256": "04adfcb356ef21a9cd5905d67f7c3085b60a9a877322fd3b28bbcadcd8a275ed",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-expert-half.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-expert-half.json",
+      "sha256": "1ac95cca8eb495328bb5895e98ad0a448170ebf5dcbb355b1343f8012d1385cc",
+      "after_sha256": "1ac95cca8eb495328bb5895e98ad0a448170ebf5dcbb355b1343f8012d1385cc",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-local-fence-archive.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-local-fence-archive.json",
+      "sha256": "79d67b6ee0e37184d3a92fc654a5891619c86c23b80b30cc8ccdd55e7c66ff0f",
+      "after_sha256": "79d67b6ee0e37184d3a92fc654a5891619c86c23b80b30cc8ccdd55e7c66ff0f",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-local-fence-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-local-fence-resources.json",
+      "sha256": "cdaa4090a905379d56fddd1e576c314f4bef3b01aef6691f4347c0a294e36649",
+      "after_sha256": "cdaa4090a905379d56fddd1e576c314f4bef3b01aef6691f4347c0a294e36649",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/g0-b2-local-fence.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/g0-b2-local-fence.json",
+      "sha256": "e5e257ade3f3491ec87861db3fa86030e8af758d63f33564c540b9cd6db4ea2c",
+      "after_sha256": "e5e257ade3f3491ec87861db3fa86030e8af758d63f33564c540b9cd6db4ea2c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/local-fence-facts.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/local-fence-facts.json",
+      "sha256": "b9f2bea5fc052c1c226a91b60a8f1672259456deb2583b1b16d9af27b40d4bcc",
+      "after_sha256": "b9f2bea5fc052c1c226a91b60a8f1672259456deb2583b1b16d9af27b40d4bcc",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/local-fence-input-audit.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/local-fence-input-audit.json",
+      "sha256": "7e7661f269e44c6dda9010800c371e092950007b9a3b6f42af44955fdc70b6f4",
+      "after_sha256": "7e7661f269e44c6dda9010800c371e092950007b9a3b6f42af44955fdc70b6f4",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/local-fence-witnesses.json",
+      "new": "experiments/scaleup_issue_screening/archive/sender_queue/local-fence-witnesses.json",
+      "sha256": "24010c2ffc774d81dfcccdb7cda61e62dc68b7dbed953db99f52a9a0312d6240",
+      "after_sha256": "24010c2ffc774d81dfcccdb7cda61e62dc68b7dbed953db99f52a9a0312d6240",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-discovery-information.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-discovery-information.json",
+      "sha256": "25127e2f880544be5df25f32a3d231bbdb96ad27d72febf04785e523c0833679",
+      "after_sha256": "25127e2f880544be5df25f32a3d231bbdb96ad27d72febf04785e523c0833679",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-discovery-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-discovery-resources.json",
+      "sha256": "12780108c99f10d105d71419041027127e7d14e1a07bdcf5d3e58538e6e194ef",
+      "after_sha256": "12780108c99f10d105d71419041027127e7d14e1a07bdcf5d3e58538e6e194ef",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-discovery-verification.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-discovery-verification.json",
+      "sha256": "fc3a2f89651bb32d6fb3aa4393b99b510a09c2e6fbb765df799a48ed71d7bf1f",
+      "after_sha256": "fc3a2f89651bb32d6fb3aa4393b99b510a09c2e6fbb765df799a48ed71d7bf1f",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-disk-forecast.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-disk-forecast.json",
+      "sha256": "c9d006d0ba8fb9ad450bdded333dbc4f91e5c7b4a4752062dc120df592c68bf2",
+      "after_sha256": "c9d006d0ba8fb9ad450bdded333dbc4f91e5c7b4a4752062dc120df592c68bf2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-disposition.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-disposition.json",
+      "sha256": "fdde153e2eef21fc0afe7bba99c68956ade7a843ad35f6faecc13b998c90dbb2",
+      "after_sha256": "fdde153e2eef21fc0afe7bba99c68956ade7a843ad35f6faecc13b998c90dbb2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-offline-1024.json",
+      "new": "experiments/scaleup_issue_screening/archive/operation_boundary/network-offline-1024.json",
+      "sha256": "8d37547d01bb94fbafe9844263cb724effd8c0b195184d8e613de1f68929f227",
+      "after_sha256": "8d37547d01bb94fbafe9844263cb724effd8c0b195184d8e613de1f68929f227",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-offline-256.json",
+      "new": "experiments/scaleup_issue_screening/archive/operation_boundary/network-offline-256.json",
+      "sha256": "d71aeb622b824a0f3fa62a30a36853483b648d1186fdd422c1785873f6679ad1",
+      "after_sha256": "d71aeb622b824a0f3fa62a30a36853483b648d1186fdd422c1785873f6679ad1",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-offline-recovery.json",
+      "new": "experiments/scaleup_issue_screening/archive/operation_boundary/network-offline-recovery.json",
+      "sha256": "527d990b584db475dd26158137a202b22ef253410a18ff0ae480b485fb568d64",
+      "after_sha256": "527d990b584db475dd26158137a202b22ef253410a18ff0ae480b485fb568d64",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-offline-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/operation_boundary/network-offline-resources.json",
+      "sha256": "0886ed533ae29b73eb8b81487d7a57ad83aaa4ab60befe7fe3556950599b2189",
+      "after_sha256": "0886ed533ae29b73eb8b81487d7a57ad83aaa4ab60befe7fe3556950599b2189",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-offline-semantics.json",
+      "new": "experiments/scaleup_issue_screening/archive/operation_boundary/network-offline-semantics.json",
+      "sha256": "e5abccb9d3283198ee60583bd8b813fe1d4906ff15d4bfb419b8b275c28e0184",
+      "after_sha256": "e5abccb9d3283198ee60583bd8b813fe1d4906ff15d4bfb419b8b275c28e0184",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-resources.json",
+      "sha256": "50a5ce6dee5d49bbf536de6dca1a21a5b56e137e2ee0b581de9bfd070f81358c",
+      "after_sha256": "50a5ce6dee5d49bbf536de6dca1a21a5b56e137e2ee0b581de9bfd070f81358c",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-screening.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-screening.json",
+      "sha256": "a73881b2f45dcbcf950f3071246d25fe21a1c4c45133af57b5a5441463d4bdc2",
+      "after_sha256": "a73881b2f45dcbcf950f3071246d25fe21a1c4c45133af57b5a5441463d4bdc2",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/e2/network-service-effect.json",
+      "new": "experiments/scaleup_issue_screening/archive/network_cases/network-service-effect.json",
+      "sha256": "608269489a58ffa3d119fda353c40f7382b702fa50fb9f0281ee3386c50434da",
+      "after_sha256": "608269489a58ffa3d119fda353c40f7382b702fa50fb9f0281ee3386c50434da",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/final-checks.json",
+      "new": "experiments/scaleup_issue_screening/archive/final-checks.json",
+      "sha256": "89eebe5049173de184e8bdd1a6fc517977d31177b491ed0f6e128f6f3faed53a",
+      "after_sha256": "89eebe5049173de184e8bdd1a6fc517977d31177b491ed0f6e128f6f3faed53a",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/resources.json",
+      "new": "experiments/scaleup_issue_screening/archive/resources.json",
+      "sha256": "ec3c77d783e835e4dcae8ade02bdb0c923a602ed6d97202c1448c1d9428d525b",
+      "after_sha256": "ec3c77d783e835e4dcae8ade02bdb0c923a602ed6d97202c1448c1d9428d525b",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/results/resources.md",
+      "new": "experiments/scaleup_issue_screening/archive/resources.md",
+      "sha256": "e798d1807aba1e275e6f0d32d19377ceea1bf436cb59fc7cfefc8ba384e71f02",
+      "after_sha256": "d47a7bc01921867cd92b9a8feb40da7a7dde0dcc7c56d99e1a0dd69af0ddfee9",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/review_delivery.py",
+      "new": "experiments/scaleup_issue_screening/analysis/review_delivery.py",
+      "sha256": "42911140de4d3f5357de5f0115c320ef0ba085e304d01cb1e66db38d398e181f",
+      "after_sha256": "6c40f1c77d74b6ba10cc57d764530e695eca34bf706ad8d761d1d6e3c9f8795b",
+      "byte_identical": false
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/sealed-input-check-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/sealed-input-check-summary.json",
+      "sha256": "1221fb20ec436b3589b4e8ffa0fd004c95b95cfe75b784666edb7956363bad37",
+      "after_sha256": "1221fb20ec436b3589b4e8ffa0fd004c95b95cfe75b784666edb7956363bad37",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/tooling-summary.json",
+      "new": "experiments/scaleup_issue_screening/tests/evidence/historical/tooling-summary.json",
+      "sha256": "86cd7f2f4b828b2ff3e670a7ed001303a4e4fbce78bcc3a5ae17e41093e93c52",
+      "after_sha256": "86cd7f2f4b828b2ff3e670a7ed001303a4e4fbce78bcc3a5ae17e41093e93c52",
+      "byte_identical": true
+    },
+    {
+      "old": "experiments/scaleup_issue_screening/workflow.py",
+      "new": "experiments/scaleup_issue_screening/analysis/workflow.py",
+      "sha256": "cc68eaef151ed5d19103d8d68c41b4e40ee0e3b17bc77ebbd09e00b4e8285eb9",
+      "after_sha256": "ec9a7497dbbc150fa9079978df0858bb791924f2bc6512b938aad42b1a5652ef",
+      "byte_identical": false
+    }
+  ],
+  "local_markdown_targets_pass": true,
+  "resources": {
+    "before-resource": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 42.29824683628976,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 52643741696,
+      "aggregate_artifact_bytes_before_report": 52643741696
+    },
+    "after-resource": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 37.71325241215527,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_artifact_bytes": 52656005120,
+      "aggregate_artifact_bytes_before_report": 52656005120
+    },
+    "migration-small-resources": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 68.56326979212463,
+      "peak_sampled_group_rss_bytes": 149893120,
+      "peak_sampled_artifact_bytes": 52656373760,
+      "aggregate_artifact_bytes_before_report": 52656373760
+    },
+    "migration-small-matched-resources": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 152.14047110266984,
+      "peak_sampled_group_rss_bytes": 166141952,
+      "peak_sampled_artifact_bytes": 52659519488,
+      "aggregate_artifact_bytes_before_report": 52659519488
+    }
+  }
+}

@@ -56,3 +56,12 @@ moe-ub validate --run runs/native-queue
 ```
 
 `observation-queue.json` 选择 rank 2 从零时刻到 100000 ns 的请求队列，最多 100000 条记录，每条队列与在途请求合计最多 1024 项。输出 `truth/native_queue.jsonl` 是压缩存储中的逻辑表名，用 `stored_rows(Path('runs/native-queue/truth'), 'native_queue.jsonl')` 读取；`truth/native_queue_capture.json` 给出实际覆盖和完整性。字段见[请求队列格式](../../docs/record_storage.md#原生请求队列诊断)。这些内部身份只供机制核查，不属于算法可读的 `observed/`。启用记录不改变调度；超过任一记录上限会失败，不丢弃记录后宣称成功。
+
+需要核查交换出口的实际发送、队列变化和 CBFC（基于信用的流控）判断时，在同一次 `resolve` 后使用：
+
+```bash
+moe-ub run --config examples/native_first_round/run-network.json --output runs/native-network
+moe-ub validate --run runs/native-network
+```
+
+`observation-network.json` 记录节点 4 的五个出口，覆盖 `[0,100000)` ns，最多 100000 条。内部记录通过 `stored_rows(Path('runs/native-network/truth'), 'network_facts.jsonl')` 读取，覆盖见 `truth/network_facts_capture.json`。它记录真实发生的信用检查，不额外触发检查。非零信用仍可能小于当前队首所需单元数；一次检查失败不代表整个相邻时间段都被流控阻塞。字段和限制见[网络机制事实](../../docs/record_storage.md#网络机制事实)。

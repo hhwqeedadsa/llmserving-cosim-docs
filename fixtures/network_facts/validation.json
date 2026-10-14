@@ -1,0 +1,79 @@
+{
+  "schema_version": "network-facts-validation/1",
+  "passed": true,
+  "ns3_commit": "fee9fbf6e471f2e1db93db16fbbc44a115dda0b1",
+  "backend_sha256": "4bbfc7856629a8f9b236125287e1ce1a583838c97bd519be98e85d290a3dccd8",
+  "python_unit_tests": 222,
+  "credit_geometry_cpp_check": true,
+  "public_integration": {
+    "passed": true,
+    "cases": {
+      "on": {
+        "events": {
+          "initial": 5,
+          "voq": 548,
+          "credit_decision": 280,
+          "fifo": 548,
+          "fifo_enqueue": 274,
+          "credit": 373,
+          "fifo_dequeue": 274,
+          "tx": 274,
+          "final": 5
+        },
+        "simulation_end_ns": 50627,
+        "blocked_probes": 2,
+        "capture_end_ns": 50627
+      },
+      "boundary": {
+        "events": {
+          "initial": 5,
+          "voq": 46,
+          "credit_decision": 25,
+          "fifo": 45,
+          "fifo_enqueue": 23,
+          "credit": 25,
+          "fifo_dequeue": 22,
+          "tx": 22,
+          "final": 5
+        },
+        "simulation_end_ns": 50627,
+        "blocked_probes": 0,
+        "capture_end_ns": 3000
+      }
+    },
+    "passive_execution_and_wire": true,
+    "overflow_rejected": true,
+    "replay_identical": true,
+    "observed_private_separation": true,
+    "fresh_public_example": true
+  },
+  "evidence_root": "runs/scaleup_issue_screening/diagnostic-study-20261014",
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/commands.jsonl",
+  "integration_commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-final/commands.json",
+  "resources": {
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 163.67141781561077,
+    "peak_sampled_group_rss_bytes": 2089254912,
+    "aggregate_artifact_bytes_before_report": 52828712960
+  },
+  "preserved_failures": [
+    {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-build-resources",
+      "reason": "Public build refused uncommitted dependency; development build verified sources before commits"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-python-resources",
+      "reason": "System Python lacks protobuf; existing project venv passes 222 tests; no installation"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-small",
+      "reason": "Test-only 64 credits below unchanged 1024 control-return threshold stalled; valid small test uses explicit 32 return threshold; target baseline untouched"
+    },
+    {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/network-facts-small-credit-return",
+      "reason": "Reader incorrectly rejected valid zero-tick control serialization; fixed reader without changing backend timing"
+    }
+  ],
+  "scope": "Functional passive record validation, not hardware measurement or a target-scale research result"
+}

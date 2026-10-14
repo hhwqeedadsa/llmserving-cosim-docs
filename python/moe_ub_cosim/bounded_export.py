@@ -36,6 +36,7 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
     statistics='statistics' in observation
     if 'send_state' in observation:fields['observed'].append('endpoint_send_state.jsonl')
     if 'native_queue' in observation:fields['truth'].append('native_queue.jsonl')
+    if 'network_facts' in observation:fields['truth'].append('network_facts.jsonl')
     if 'max_request_records' in observation.get('native_queue',{}):fields['truth'].append('native_requests.jsonl')
     if statistics:fields['observed']+=['queue_windows.csv','endpoint_stages.jsonl']
     if 'recording' in observation:fields['truth'].append('message_attribution_windows.csv')
@@ -55,6 +56,13 @@ def export_bounded(raw,observation,ranks,max_ns,output,limits):
                 from .native_queue import export
                 capture=export(meta['execution'],meta['report'],observation,writer)
                 save(output/'truth/native_queue_capture.json',capture)
+            if 'network_facts' in observation:
+                from .network_facts import checked_rows
+                capture=meta['report']['network_facts_capture']
+                require(capture['policy']==observation['network_facts'],'Network facts policy was not captured')
+                for row in checked_rows(meta['execution'],meta['report']):
+                    writer.add('truth','network_facts.jsonl',row)
+                save(output/'truth/network_facts_capture.json',capture)
             save(output/'observed/public_config.json',public_config(ranks,meta['ports'],observation.get('resource_budget'),statistics=statistics,send_state=send_state))
             save(output/'truth/clock_models.json',dict(schema_version='moe-ub-clock-models/1',time_unit='ns',
                 drift_unit='parts_per_billion',rounding='floor',formula='floor((1000000000+drift_ppb)*t_ns/1000000000)+offset_ns',

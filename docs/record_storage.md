@@ -2,6 +2,22 @@
 
 本文件定义研究输出、原始执行记录、时间与字节口径，以及读取和资源预算。运行、采样与重放的操作步骤见[用户指南](user_guide.md)；完成事件和对象回收见[后端参考](../backend/README.md)。压缩与归档只改变保存方式，不改变业务消息、依赖和完成时刻。
 
+## 网络机制事实
+
+`moe-ub-observation-config/6` 在 `statistics`、`recording` 和有界存储之外接受 `network_facts`；可同时保留已有 `native_queue`、`send_state`。策略为：
+
+```json
+{"schema_version":"moe-ub-network-facts/1","ports":[{"node_id":4,"port_id":4}],"end_ns":100000,"max_records":100000}
+```
+
+端口上限 4096，覆盖从零开始，终点不超过仿真上限，记录数包括每端口的初始和最终记录。当前只支持独占 CBFC（基于信用的流控）。启用后不新增仿真事件、不重复调用仲裁，不修改队列、报文、路由或随机数。达到上限直接失败，不能把截断结果当成完整采集。
+
+原始 `network_facts` 与导出的 `truth/network_facts.jsonl` 包含连续序号、全局 `time_ns`、节点/出口、事件和数据。`initial` 声明队列、各虚通道信用和每信用单元字节数；`voq`、`fifo` 记录等待字节变化；FIFO 入队/出队保留包身份；`tx` 记录实际发送开始、字节、有效速率和完成延迟（含已配置帧间隔）；`credit` 记录实际消耗及控制帧/捎带归还后的余额；`credit_decision` 记录真实队首检查的报文长度、需要与可用单元及是否阻塞。生成式端点队列不提供包身份，转发队列可提供当前包 UID。绕过信用检查的控制报文没有该判断事件。
+
+`truth/network_facts_capture.json` 声明实际覆盖、完整性和记录数。`final` 是半开覆盖终点，边界状态从之前记录恢复；若执行先结束，则终点缩短到实际结束时刻。检查失败只证明该次队首无法通过信用条件，不能外推为连续阻塞；串行服务区间应取并集，不能把可能重叠的独立控制报文发送重复计时。信用余额非零也不一定够发送队首。
+
+公开读取接口 `moe_ub_cosim.network_facts.checked_rows(execution, report)` 流式校验序号、覆盖、信用变更和报文所需单元数；须消费完整迭代器才能完成末尾检查。导出记录用 `stored_rows(truth, 'network_facts.jsonl')` 读取。它是准备/评价用内部事实，含包 UID，不能直接交给诊断程序；需另行生成明确白名单的观测输入。`slice inspect` 声明此能力，`sample` 保持原策略，缺失资料不能离线补造。完整命令见[原生小例](../examples/native_first_round/README.md)。这些仿真钩子不代表目标芯片已有对应接口。
+
 ## 哪些文件可以交给研究算法
 
 `moe-ub run`、`sample` 和 `replay` 的研究结果采用相同的目录分工。算法仅以 `observed/` 为输入，其余目录用于复现、生成或评价。

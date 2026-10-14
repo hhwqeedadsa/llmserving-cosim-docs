@@ -35,6 +35,11 @@ build_exec(
 set_target_properties(cosim-native-runtime-test PROPERTIES
   CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
 build_exec(
+  EXECNAME cosim-network-facts-test
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/unit/network_facts_test.cc"
+  LIBRARIES_TO_LINK ${libunified-bus}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/cosim")
+build_exec(
   EXECNAME cosim-native-routing-test
   SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/../tests/integration/native_routing_test.cc"
   LIBRARIES_TO_LINK ${libunified-bus} ${libcore}

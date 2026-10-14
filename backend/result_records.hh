@@ -32,7 +32,7 @@ class ResultRecords
 {
     using Json = nlohmann::json;
   public:
-    ResultRecords(Json& report, Json policy, bool stages=false, bool send_state=false, bool native_queue=false, bool native_requests=false) : report_(report), policy_(std::move(policy)), stages_(stages)
+    ResultRecords(Json& report, Json policy, bool stages=false, bool send_state=false, bool native_queue=false, bool native_requests=false, bool network_facts=false) : report_(report), policy_(std::move(policy)), stages_(stages)
     {
         if (!policy_.is_null())
         {
@@ -43,6 +43,7 @@ class ResultRecords
             if(send_state) Register("send_state", "");
             if(native_queue) Register("native_queue", "");
             if(native_requests) Register("native_requests", "");
+            if(network_facts) Register("network_facts", "");
             for (const auto* field : {"transfers", "local_deliveries", "node_execution", "endpoint_ops",
                                      "operation_registry", "transfer_registry", "planned_transfers", "plan_summary"}) ordered_[field];
             if(stages_) ordered_["operation_stages"];

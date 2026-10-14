@@ -55,6 +55,16 @@ class ObservationRecordingTest(unittest.TestCase):
         t=deepcopy(c);t['switches'][0].update(start_local_ns=17,end_local_ns=33,period_ns=1)
         self.assertEqual(sampling_plan(c,t,[2,7,12],1000000),{(4,4):'detailed'})
 
+    def test_network_facts_are_private_and_cannot_be_added_by_sampling(self):
+        c=self.config();t=deepcopy(c)
+        t.update(schema_version='moe-ub-observation-config/6',network_facts=dict(
+            schema_version='moe-ub-network-facts/1',ports=[dict(node_id=4,port_id=4)],
+            end_ns=1000000,max_records=10000))
+        with self.assertRaises(ValueError):sampling_plan(c,t,[2,7,12],1000000)
+        self.assertEqual(sampling_plan(t,t,[2,7,12],1000000),{(4,4):'aggregate'})
+        self.assertEqual(backend_observation(t,[2,7,12],1000000)['schema_version'],'moe-ub-port-observation-set/7')
+        self.assertEqual(capabilities(t,[2,7,12],1000000)['network_facts_truth']['access_scope'],'internal_truth_not_observed')
+
     def test_partial_state_initial_is_not_a_left_limit_peak(self):
         events=[dict(event_kind=k,time_ns=t,voq_waiting_bytes=v,fifo_waiting_bytes=f) for k,t,v,f in
                 [('initial',10,11,0),('update',10,0,0),('update',15,0,3),('final',20,0,3)]]

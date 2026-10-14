@@ -1,0 +1,18 @@
+{
+  "schema_version": "issue-mechanism-screen-rule/1",
+  "scope_start_ns": 0,
+  "scope_end_ns": 1000000,
+  "window_ns": 1000,
+  "normal_cases": ["g0-b2-short", "g0-b4-short", "g0-b8-short", "g0-b8-long"],
+  "development_case": "g0-b8-short",
+  "review_cases": ["g0-b2-short", "g0-b4-short", "g0-b8-long"],
+  "busy_proxy_min_fraction": 0.8,
+  "low_service_proxy_max_fraction": 0.2,
+  "consecutive_positive_windows": 2,
+  "comparable_plane_work_relative_difference": 0.1,
+  "max_deep_cases_per_class": 2,
+  "selection": "From development record only: earliest sustained waiting plus high-start-byte service and earliest sustained waiting plus low-start-byte service, separately device-bound and inter-switch; plane pairs within 10% whole-scope transmitted bytes, rank by t90 difference then physical IDs. These are checks to perform, not causal labels.",
+  "excluded_historical_outlets": [[802, 6], [810, 2]],
+  "exclusion_reason": "Do not reopen the previously selected N1/N2 outlet experiments; retain them in global statistics.",
+  "causal_limits": "Positive-area adjacency is not continuous backlog; start-window bytes are not exact serialization busy time; absence of credit records is unknown, not zero blockage. No private identities or business improvements used for selection."
+}

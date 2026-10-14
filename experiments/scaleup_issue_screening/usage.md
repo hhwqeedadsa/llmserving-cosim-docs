@@ -508,3 +508,22 @@ PYTHONPATH=python:. python3 -m unittest experiments.scaleup_issue_screening.chec
 ```
 
 `information/` 保存重新准备的受限输入、旧预测、评价及理想关系；`reproduction.json` 核对旧结果全部逐窗集合。`audit.json` 核验执行源码、冻结图中每个源端完成节点覆盖的发送栅栏，以及全部应用网络传输的起止约束、身份、数据/状态类别与反例。`semantics.json` 仅提供按操作统一的完成语义，不能把审计内的逐传输答案交给判断器。`--previous` 可省略；`--slice` 必须是归档清单绑定的同一切片，可显式指定迁移后位置。命令受现有分析资源预算监控，报告在输出目录加 `-resources` 后缀的位置。
+
+
+对准备目录运行六组对照（旧/加强基线，各配无附加信息、完整理想关系、简化边界），命令仍只做离线分析：
+
+```bash
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_bound_review \
+  --prepared "$OFFLINE_ROOT/offline-1024" --output "$OFFLINE_ROOT/offline-comparison-new"
+```
+
+结果中的 `rules.json` 在读取评价标签前保存规则，`boundary.json` 是单独的简化输入；六份预测分别保存每窗候选、逐源排除原因、边界覆盖状态与未来记录范围。`*-evaluation.json` 分列完整 FIFO、部分上游及两者已知集合；`summary.json` 比较全部逐窗输出，并保留旧多候选窗口与真实混合。只有队列而无已知应用等待时仍输出未知。此命令有分析预算监控；判断器可独立调用，且不读取评价标签：
+
+```bash
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_bounds judge \
+  --input "$OFFLINE_ROOT/offline-1024/information/input.json" \
+  --semantics "$OFFLINE_ROOT/offline-1024/semantics.json" --mode strong \
+  --output "$OFFLINE_ROOT/strong-prediction-new.json"
+```
+
+可选 `--relation` 接受准备好的完整关系或简化边界文件。加强基线只对声明适用的远端交付完成语义使用源端结束，逐源筛选后取并集；异步本地返回不适用。理想边界仍保留“目的完成超出采集范围则未知”的相同保护。它描述发送开始所在窗口，不能解释成包已完成链路发送或协议已回收。

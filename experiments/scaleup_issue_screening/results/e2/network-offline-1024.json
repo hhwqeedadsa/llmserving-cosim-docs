@@ -1,0 +1,1607 @@
+{
+  "schema_version": "issue-network-bound-comparison/1",
+  "rule": {
+    "version": "source-end-and-last-window/1",
+    "bounds": "per positive src/dst pair: floor(src_start)<window_end; ceil(dst_end)>window_start; and ceil(src_end)>window_start only for certified remote-delivery completion",
+    "rounding": "outward to the same public clock resolution in every condition",
+    "aggregation": "union of still-possible sources; never use destination start as packet lower bound",
+    "mapping": "last application transmission START window end; preserve destination-end capture guard",
+    "unknown": "missing records and uncovered future remain possible; empty queue is not final completion",
+    "scope": "offline application operation candidates, not protocol retirement or causal business loss"
+  },
+  "exact_full_simple_equivalence": {
+    "old": true,
+    "strong": true
+  },
+  "old_ambiguous_related": [
+    "s0079",
+    "s0080",
+    "s0081",
+    "s0082",
+    "s0083",
+    "s0085",
+    "s0086",
+    "s0087",
+    "s0088",
+    "s0089",
+    "s0090",
+    "s0194",
+    "s0195",
+    "s0196",
+    "s0198",
+    "s0199",
+    "s0200",
+    "s0201",
+    "s0202",
+    "s0203",
+    "s0204",
+    "s0205",
+    "s0206",
+    "s0207",
+    "s0208",
+    "s0209",
+    "s0210"
+  ],
+  "old_unique_gains": [
+    "s0080",
+    "s0081",
+    "s0082",
+    "s0083",
+    "s0085",
+    "s0086",
+    "s0087",
+    "s0088",
+    "s0089",
+    "s0090",
+    "s0210"
+  ],
+  "old_gains_resolved_by_strong": [],
+  "strong_remaining_ideal_unique_gains": [
+    "s0080",
+    "s0081",
+    "s0082",
+    "s0083",
+    "s0085",
+    "s0086",
+    "s0087",
+    "s0088",
+    "s0089",
+    "s0090",
+    "s0210"
+  ],
+  "differences": [
+    {
+      "window": {
+        "sample": "s0080",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 80000,
+        "end_ns": 81000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0081",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 81000,
+        "end_ns": 82000,
+        "voq_byte_ns": 4184,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0082",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 82000,
+        "end_ns": 83000,
+        "voq_byte_ns": 9432,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0083",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 83000,
+        "end_ns": 84000,
+        "voq_byte_ns": 3144,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0084",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 84000,
+        "end_ns": 85000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0085",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 85000,
+        "end_ns": 86000,
+        "voq_byte_ns": 7268,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0086",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 86000,
+        "end_ns": 87000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 228696
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0087",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 87000,
+        "end_ns": 88000,
+        "voq_byte_ns": 247192,
+        "fifo_byte_ns": 910008
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0088",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 88000,
+        "end_ns": 89000,
+        "voq_byte_ns": 20824,
+        "fifo_byte_ns": 370464
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0089",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 89000,
+        "end_ns": 90000,
+        "voq_byte_ns": 341760,
+        "fifo_byte_ns": 484176
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0090",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 90000,
+        "end_ns": 91000,
+        "voq_byte_ns": 7878384,
+        "fifo_byte_ns": 3476400
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0107",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002"
+        ],
+        "old_full": [],
+        "strong": [
+          "o002"
+        ],
+        "strong_full": []
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0108",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002",
+          "o003"
+        ],
+        "old_full": [
+          "o003"
+        ],
+        "strong": [
+          "o002",
+          "o003"
+        ],
+        "strong_full": [
+          "o003"
+        ]
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0109",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 109000,
+        "end_ns": 110000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002",
+          "o003"
+        ],
+        "old_full": [
+          "o003"
+        ],
+        "strong": [
+          "o003"
+        ],
+        "strong_full": [
+          "o003"
+        ]
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0128",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 14000,
+        "end_ns": 15000,
+        "voq_byte_ns": 128,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o000"
+        ],
+        "old_full": [],
+        "strong": [
+          "o000"
+        ],
+        "strong_full": []
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0210",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 96000,
+        "end_ns": 97000,
+        "voq_byte_ns": 13556,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o001",
+          "o002"
+        ],
+        "old_full": [
+          "o002"
+        ],
+        "strong": [
+          "o001",
+          "o002"
+        ],
+        "strong_full": [
+          "o002"
+        ]
+      },
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "window": {
+        "sample": "s0221",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 64,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002"
+        ],
+        "old_full": [],
+        "strong": [
+          "o002"
+        ],
+        "strong_full": []
+      },
+      "known": []
+    },
+    {
+      "window": {
+        "sample": "s0222",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "possible": {
+        "old": [
+          "o002",
+          "o003"
+        ],
+        "old_full": [
+          "o003"
+        ],
+        "strong": [
+          "o002",
+          "o003"
+        ],
+        "strong_full": [
+          "o003"
+        ]
+      },
+      "known": []
+    }
+  ],
+  "compact_information": {
+    "full_records": 141,
+    "full_record_fields": [
+      "operation",
+      "switch_id",
+      "port_id",
+      "start_ns",
+      "end_ns"
+    ],
+    "boundary_entries": 12,
+    "boundary_nonempty": 8,
+    "boundary_fields": [
+      "operation",
+      "switch_id",
+      "port_id",
+      "last_tx_window_end_ns",
+      "capture_complete"
+    ],
+    "process": "one pass over nonzero relation rows, then one lookup per candidate operation/port; not an online or SRAM cost"
+  },
+  "offline": {
+    "capture_start_ns": 0,
+    "capture_end_ns": 114000,
+    "maximum_future_capture_horizon_ns": 113000,
+    "boundary_states": {
+      "old_full": {
+        "not_supplied": 1111,
+        "last_transmission_window": 245,
+        "future_uncovered": 12
+      },
+      "strong_full": {
+        "not_supplied": 1112,
+        "last_transmission_window": 244,
+        "future_uncovered": 12
+      }
+    },
+    "interpretation": "All comparisons are retrospective. Ideal exclusions use the sealed future capture; endpoints are also complete offline observations."
+  },
+  "sources": {
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/input.json": "90b8563d811a1e152a2269059eaa988e9b9e5b0432c7ab9e3d8acfe0b793f0ce",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/semantics.json": "8f72f88ddfc401e002c10e3567e309f92687b1b940c8a4183741048b756e5d90",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/truth.json": "f904f5d65fe9b314d0f5fd669da3e0ee9524e553412f74573ee4f42aa706a6b3",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/relation.json": "ad838712f7f326a50efd302742f072693f7a70e7e3b26dbf94b5e1203f3d348f",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison/rules.json": "6ee34114cca579f6dbce84f3c6e18cae0fcefb65fd1d38ab9a3d84eb0ded8b2f",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison/boundary.json": "534bdf809bd5120da126704f9773d521f9c3d96223ab1ba343c536a3ef8f7fdc"
+  },
+  "programs": {
+    "/root/moe-ub-cosim/experiments/scaleup_issue_screening/network_bounds.py": "20d86059407fc86da2eb6d3cc511baf984f97ee23a5a098f4ab3f90d34559034",
+    "/root/moe-ub-cosim/experiments/scaleup_issue_screening/network_bound_review.py": "c804d27268b56c76317872b50245f77d7da1ac0a3aec12ea6d1cf544b860407a"
+  },
+  "limitations": [
+    "FIFO known set complete, upstream waiting only partially captured; unconfirmed is not automatically false.",
+    "Positive queue without known application remains unknown, not automatically protocol.",
+    "Related windows and nested request records are not independent statistical samples."
+  ],
+  "counts": {
+    "old": {
+      "all": {
+        "windows": 228,
+        "positive_queue": 147,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 134,
+            "unique_known": 107,
+            "multiple_possible_with_known": 27,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 121,
+            "windows_with_unconfirmed": 115
+          },
+          "complete_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 36,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 205,
+            "windows_with_unconfirmed": 187
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 131,
+            "unique_known": 105,
+            "multiple_possible_with_known": 26,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 124,
+            "windows_with_unconfirmed": 117
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 226,
+        "positive_queue": 145,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 132,
+            "unique_known": 105,
+            "multiple_possible_with_known": 27,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 121,
+            "windows_with_unconfirmed": 115
+          },
+          "complete_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 34,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 205,
+            "windows_with_unconfirmed": 187
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 129,
+            "unique_known": 103,
+            "multiple_possible_with_known": 26,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 124,
+            "windows_with_unconfirmed": 117
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 134,
+          "positive_queue": 134,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 134,
+              "unique_known": 107,
+              "multiple_possible_with_known": 27,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 25
+            },
+            "complete_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 36,
+              "multiple_possible_with_known": 15,
+              "known_mixture_windows": 1,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 109,
+              "windows_with_unconfirmed": 97
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 131,
+              "unique_known": 105,
+              "multiple_possible_with_known": 26,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 27
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 81,
+          "positive_queue": 0,
+          "zero_queue": 81,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 84,
+              "windows_with_unconfirmed": 78
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 84,
+              "windows_with_unconfirmed": 78
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 84,
+              "windows_with_unconfirmed": 78
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 13,
+          "positive_queue": 13,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 13,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            }
+          }
+        }
+      }
+    },
+    "old_full": {
+      "all": {
+        "windows": 228,
+        "positive_queue": 147,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 134,
+            "unique_known": 118,
+            "multiple_possible_with_known": 16,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 103,
+            "windows_with_unconfirmed": 101
+          },
+          "complete_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 41,
+            "multiple_possible_with_known": 10,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 187,
+            "windows_with_unconfirmed": 179
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 131,
+            "unique_known": 116,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 106,
+            "windows_with_unconfirmed": 103
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 226,
+        "positive_queue": 145,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 132,
+            "unique_known": 116,
+            "multiple_possible_with_known": 16,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 103,
+            "windows_with_unconfirmed": 101
+          },
+          "complete_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 39,
+            "multiple_possible_with_known": 10,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 187,
+            "windows_with_unconfirmed": 179
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 129,
+            "unique_known": 114,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 106,
+            "windows_with_unconfirmed": 103
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 134,
+          "positive_queue": 134,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 134,
+              "unique_known": 118,
+              "multiple_possible_with_known": 16,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 14,
+              "windows_with_unconfirmed": 14
+            },
+            "complete_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 41,
+              "multiple_possible_with_known": 10,
+              "known_mixture_windows": 1,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 98,
+              "windows_with_unconfirmed": 92
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 131,
+              "unique_known": 116,
+              "multiple_possible_with_known": 15,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 17,
+              "windows_with_unconfirmed": 16
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 81,
+          "positive_queue": 0,
+          "zero_queue": 81,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 13,
+          "positive_queue": 13,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 13,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            }
+          }
+        }
+      }
+    },
+    "strong": {
+      "all": {
+        "windows": 228,
+        "positive_queue": 147,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 134,
+            "unique_known": 107,
+            "multiple_possible_with_known": 27,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 120,
+            "windows_with_unconfirmed": 115
+          },
+          "complete_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 36,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 204,
+            "windows_with_unconfirmed": 187
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 131,
+            "unique_known": 105,
+            "multiple_possible_with_known": 26,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 123,
+            "windows_with_unconfirmed": 117
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 226,
+        "positive_queue": 145,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 132,
+            "unique_known": 105,
+            "multiple_possible_with_known": 27,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 120,
+            "windows_with_unconfirmed": 115
+          },
+          "complete_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 34,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 204,
+            "windows_with_unconfirmed": 187
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 129,
+            "unique_known": 103,
+            "multiple_possible_with_known": 26,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 123,
+            "windows_with_unconfirmed": 117
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 134,
+          "positive_queue": 134,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 134,
+              "unique_known": 107,
+              "multiple_possible_with_known": 27,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 25,
+              "windows_with_unconfirmed": 25
+            },
+            "complete_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 36,
+              "multiple_possible_with_known": 15,
+              "known_mixture_windows": 1,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 109,
+              "windows_with_unconfirmed": 97
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 131,
+              "unique_known": 105,
+              "multiple_possible_with_known": 26,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 28,
+              "windows_with_unconfirmed": 27
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 81,
+          "positive_queue": 0,
+          "zero_queue": 81,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 83,
+              "windows_with_unconfirmed": 78
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 83,
+              "windows_with_unconfirmed": 78
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 83,
+              "windows_with_unconfirmed": 78
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 13,
+          "positive_queue": 13,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 13,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 12,
+              "windows_with_unconfirmed": 12
+            }
+          }
+        }
+      }
+    },
+    "strong_full": {
+      "all": {
+        "windows": 228,
+        "positive_queue": 147,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 134,
+            "unique_known": 118,
+            "multiple_possible_with_known": 16,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 103,
+            "windows_with_unconfirmed": 101
+          },
+          "complete_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 41,
+            "multiple_possible_with_known": 10,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 187,
+            "windows_with_unconfirmed": 179
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 131,
+            "unique_known": 116,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 106,
+            "windows_with_unconfirmed": 103
+          }
+        }
+      },
+      "primary": {
+        "windows": 2,
+        "positive_queue": 2,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "complete_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 2,
+            "unique_known": 2,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 0,
+            "windows_with_unconfirmed": 0
+          }
+        }
+      },
+      "related": {
+        "windows": 226,
+        "positive_queue": 145,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 132,
+            "unique_known": 116,
+            "multiple_possible_with_known": 16,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 103,
+            "windows_with_unconfirmed": 101
+          },
+          "complete_fifo_operations": {
+            "known_windows": 49,
+            "unique_known": 39,
+            "multiple_possible_with_known": 10,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 187,
+            "windows_with_unconfirmed": 179
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 129,
+            "unique_known": 114,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 106,
+            "windows_with_unconfirmed": 103
+          }
+        }
+      },
+      "strata": {
+        "known_application": {
+          "windows": 134,
+          "positive_queue": 134,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 134,
+              "unique_known": 118,
+              "multiple_possible_with_known": 16,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 14,
+              "windows_with_unconfirmed": 14
+            },
+            "complete_fifo_operations": {
+              "known_windows": 51,
+              "unique_known": 41,
+              "multiple_possible_with_known": 10,
+              "known_mixture_windows": 1,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 98,
+              "windows_with_unconfirmed": 92
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 131,
+              "unique_known": 116,
+              "multiple_possible_with_known": 15,
+              "known_mixture_windows": 2,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 17,
+              "windows_with_unconfirmed": 16
+            }
+          }
+        },
+        "zero_queue": {
+          "windows": 81,
+          "positive_queue": 0,
+          "zero_queue": 81,
+          "positive_queue_application_unknown": 0,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 79,
+              "windows_with_unconfirmed": 77
+            }
+          }
+        },
+        "positive_queue_application_unknown": {
+          "windows": 13,
+          "positive_queue": 13,
+          "zero_queue": 0,
+          "positive_queue_application_unknown": 13,
+          "scopes": {
+            "known_waiting_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            },
+            "complete_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            },
+            "partial_arrival_to_fifo_operations": {
+              "known_windows": 0,
+              "unique_known": 0,
+              "multiple_possible_with_known": 0,
+              "known_mixture_windows": 0,
+              "missed_known_operations": 0,
+              "unconfirmed_candidate_occurrences": 10,
+              "windows_with_unconfirmed": 10
+            }
+          }
+        }
+      }
+    }
+  },
+  "residual_ambiguity_samples": [
+    "s0079",
+    "s0080",
+    "s0081",
+    "s0082",
+    "s0083",
+    "s0085",
+    "s0086",
+    "s0087",
+    "s0088",
+    "s0089",
+    "s0090",
+    "s0194",
+    "s0195",
+    "s0196",
+    "s0198",
+    "s0199",
+    "s0200",
+    "s0201",
+    "s0202",
+    "s0203",
+    "s0204",
+    "s0205",
+    "s0206",
+    "s0207",
+    "s0208",
+    "s0209",
+    "s0210"
+  ],
+  "resources": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "experiments.scaleup_issue_screening.network_bound_review",
+      "--prepared",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+      "--output",
+      "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison",
+      "--worker"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-14T03:52:53.009641+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 68719476736,
+      "wall_seconds": 1800
+    },
+    "peak_sampled_group_rss_bytes": 6447104,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/runs/task-sync-20261008"
+    ],
+    "peak_sampled_artifact_bytes": 52586987520,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 51419188820,
+    "peak_sampled_artifact_allocated_bytes": 52586987520,
+    "process_group": 3257742,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-14T03:53:30.162816+00:00",
+    "wall_seconds": 37.15317784063518,
+    "max_waited_child_rss_kib": 71296,
+    "artifact_bytes_before_report": 1856,
+    "aggregate_artifact_bytes_before_report": 52586987520,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 51419188820,
+      "allocated_bytes": 52586987520
+    }
+  },
+  "local_summary": {
+    "path": "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison/summary.json",
+    "sha256": "5dc1795aab42f92c3fdc9614d1c4819fc89da227eeb5097c8026439f083452a4"
+  }
+}

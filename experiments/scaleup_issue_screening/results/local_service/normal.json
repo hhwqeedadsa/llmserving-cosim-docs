@@ -1,0 +1,1780 @@
+{
+  "schema_version": "issue-normal-mechanism-evidence/1",
+  "source_commit": "1d0cf94",
+  "source_runs_unchanged": true,
+  "selected_without_business_outcome": true,
+  "cases": [
+    {
+      "case": "g0-b2-short",
+      "summary_path": "runs/scaleup_issue_screening/diagnostic-study-20261014/normal/g0-b2-short/summary.json",
+      "summary_sha256": "3abfa298514e249fb885e57dde26a036d5e3197dc9773aead2570cbdbe0065c4",
+      "schema_version": "issue-mechanism-normal-screen/1",
+      "rule": {
+        "schema_version": "issue-mechanism-screen-rule/1",
+        "scope_start_ns": 0,
+        "scope_end_ns": 1000000,
+        "window_ns": 1000,
+        "normal_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-short",
+          "g0-b8-long"
+        ],
+        "development_case": "g0-b8-short",
+        "review_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-long"
+        ],
+        "busy_proxy_min_fraction": 0.8,
+        "low_service_proxy_max_fraction": 0.2,
+        "consecutive_positive_windows": 2,
+        "comparable_plane_work_relative_difference": 0.1,
+        "max_deep_cases_per_class": 2,
+        "selection": "From development record only: earliest sustained waiting plus high-start-byte service and earliest sustained waiting plus low-start-byte service, separately device-bound and inter-switch; plane pairs within 10% whole-scope transmitted bytes, rank by t90 difference then physical IDs. These are checks to perform, not causal labels.",
+        "excluded_historical_outlets": [
+          [
+            802,
+            6
+          ],
+          [
+            810,
+            2
+          ]
+        ],
+        "exclusion_reason": "Do not reopen the previously selected N1/N2 outlet experiments; retain them in global statistics.",
+        "causal_limits": "Positive-area adjacency is not continuous backlog; start-window bytes are not exact serialization busy time; absence of credit records is unknown, not zero blockage. No private identities or business improvements used for selection."
+      },
+      "rule_sha256": "c5516dadf087b4c3b7fb3317283b240b78f2ec3f8c324c069398921707e2615e",
+      "archive_sha256": "529061ce8ba431024c65bb1a7f3321064c1bde1e9a6a559c75ee773084b66941",
+      "members": {
+        "run/inputs/network/backend.json": {
+          "bytes": 1964204,
+          "sha256": "d09103a86c18da4652817328d04edeb9afb94c5cad29477718164b51dc97899d"
+        },
+        "run/manifest.json": {
+          "bytes": 4960390,
+          "sha256": "c1722ebf5d52e748f09e90980a57aa91fcc39d35c582bcb85e241184bb32ee58"
+        },
+        "run/metrics/validation.json": {
+          "bytes": 789231,
+          "sha256": "1e5684808f77cd60121bd515a5bc511ae7070b2691a12628fbe8bac3af7cfdcc"
+        },
+        "run/observed/public_config.json": {
+          "bytes": 458380,
+          "sha256": "d909bee75eb11079cf99a4e39e144d31cd136f88bd49aa92eecc7b23d8557515"
+        },
+        "run/observed/records/port_windows.csv.gz": {
+          "bytes": 1576303,
+          "sha256": "110bf775c0e4970571ff6823d359a9843191a1f9812232b3ba5888410ee5d2f1"
+        },
+        "run/observed/records/queue_windows.csv.gz": {
+          "bytes": 2920183,
+          "sha256": "719917c83f71606a53e091abbe380f0542670cc9540a02dc5bb05309a984eb96"
+        },
+        "run/observed/storage.json": {
+          "bytes": 931,
+          "sha256": "6917a2f850dc5b54548f09edec7b775b71cef6d9ba1e1f440f8c313d654a5758"
+        }
+      },
+      "scope_ns": [
+        0,
+        1000000
+      ],
+      "ports": 2688,
+      "roles": {
+        "device_bound": 896,
+        "inter_switch": 1792
+      },
+      "logical_windows": 2688000,
+      "stored_nonzero_windows": 155126,
+      "declared_zero_windows": 2532874,
+      "strata": {
+        "device_bound:waiting_low_service": 42726,
+        "device_bound:waiting_intermediate_service": 2886,
+        "device_bound:waiting_high_service": 99,
+        "device_bound:no_positive_wait": 45,
+        "inter_switch:waiting_intermediate_service": 4175,
+        "inter_switch:waiting_low_service": 105115,
+        "inter_switch:no_positive_wait": 80
+      },
+      "totals": {
+        "voq_byte_ns": 4146289488,
+        "fifo_byte_ns": 1995193768,
+        "packet_bytes": 387691112,
+        "packets": 772595
+      },
+      "adjacent_positive_groups": 52155,
+      "checks_by_stratum": {
+        "device_bound:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 0,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 11000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 11,
+          "voq_byte_ns": 34768,
+          "fifo_byte_ns": 784,
+          "packet_bytes": 31728
+        },
+        "device_bound:waiting_intermediate_service": {
+          "switch_id": 768,
+          "port_id": 8,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 2000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 433240,
+          "fifo_byte_ns": 1134668,
+          "packet_bytes": 33212
+        },
+        "device_bound:waiting_high_service": {
+          "switch_id": 768,
+          "port_id": 6,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 4000,
+          "stratum": "waiting_high_service",
+          "positive_windows": 3,
+          "voq_byte_ns": 159994348,
+          "fifo_byte_ns": 7859512,
+          "packet_bytes": 143148
+        },
+        "inter_switch:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 17,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 10000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 10,
+          "voq_byte_ns": 18708,
+          "fifo_byte_ns": 0,
+          "packet_bytes": 18736
+        },
+        "inter_switch:waiting_intermediate_service": {
+          "switch_id": 773,
+          "port_id": 26,
+          "role": "inter_switch",
+          "plane": 5,
+          "start_ns": 0,
+          "end_ns": 2000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 33100,
+          "fifo_byte_ns": 981512,
+          "packet_bytes": 28976
+        }
+      },
+      "comparable_plane_pairs": 2932,
+      "top_plane_pairs": [
+        {
+          "peer_group": [
+            "destination",
+            79
+          ],
+          "outlets": [
+            [
+              796,
+              15
+            ],
+            [
+              802,
+              15
+            ]
+          ],
+          "planes": [
+            0,
+            6
+          ],
+          "packet_bytes": [
+            102632,
+            102452
+          ],
+          "relative_work_difference": 0.0017538389586094006,
+          "t90_ns": [
+            74000,
+            104000
+          ],
+          "t90_difference_ns": 30000
+        },
+        {
+          "peer_group": [
+            "destination",
+            97
+          ],
+          "outlets": [
+            [
+              813,
+              1
+            ],
+            [
+              814,
+              1
+            ]
+          ],
+          "planes": [
+            3,
+            4
+          ],
+          "packet_bytes": [
+            146672,
+            134168
+          ],
+          "relative_work_difference": 0.08525144540198538,
+          "t90_ns": [
+            104000,
+            75000
+          ],
+          "t90_difference_ns": 29000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            7,
+            2
+          ],
+          "outlets": [
+            [
+              817,
+              18
+            ],
+            [
+              818,
+              18
+            ]
+          ],
+          "planes": [
+            0,
+            1
+          ],
+          "packet_bytes": [
+            121272,
+            118708
+          ],
+          "relative_work_difference": 0.021142555577544693,
+          "t90_ns": [
+            75000,
+            46000
+          ],
+          "t90_difference_ns": 29000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            7,
+            2
+          ],
+          "outlets": [
+            [
+              818,
+              18
+            ],
+            [
+              821,
+              18
+            ]
+          ],
+          "planes": [
+            1,
+            4
+          ],
+          "packet_bytes": [
+            118708,
+            129516
+          ],
+          "relative_work_difference": 0.08344914913987461,
+          "t90_ns": [
+            46000,
+            75000
+          ],
+          "t90_difference_ns": 29000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            7,
+            1
+          ],
+          "outlets": [
+            [
+              1111,
+              1
+            ],
+            [
+              1143,
+              1
+            ]
+          ],
+          "planes": [
+            0,
+            2
+          ],
+          "packet_bytes": [
+            110356,
+            122172
+          ],
+          "relative_work_difference": 0.09671610516321252,
+          "t90_ns": [
+            48000,
+            77000
+          ],
+          "t90_difference_ns": 29000
+        },
+        {
+          "peer_group": [
+            "destination",
+            11
+          ],
+          "outlets": [
+            [
+              769,
+              11
+            ],
+            [
+              771,
+              11
+            ]
+          ],
+          "planes": [
+            1,
+            3
+          ],
+          "packet_bytes": [
+            171700,
+            184304
+          ],
+          "relative_work_difference": 0.06838701276152444,
+          "t90_ns": [
+            75000,
+            103000
+          ],
+          "t90_difference_ns": 28000
+        },
+        {
+          "peer_group": [
+            "destination",
+            97
+          ],
+          "outlets": [
+            [
+              812,
+              1
+            ],
+            [
+              813,
+              1
+            ]
+          ],
+          "planes": [
+            2,
+            3
+          ],
+          "packet_bytes": [
+            152728,
+            146672
+          ],
+          "relative_work_difference": 0.03965219213241842,
+          "t90_ns": [
+            76000,
+            104000
+          ],
+          "t90_difference_ns": 28000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            2,
+            7
+          ],
+          "outlets": [
+            [
+              1138,
+              7
+            ],
+            [
+              1186,
+              7
+            ]
+          ],
+          "planes": [
+            2,
+            5
+          ],
+          "packet_bytes": [
+            117736,
+            117424
+          ],
+          "relative_work_difference": 0.002649996602568458,
+          "t90_ns": [
+            77000,
+            105000
+          ],
+          "t90_difference_ns": 28000
+        }
+      ],
+      "missing": [
+        "source device queue occupancy",
+        "credit eligibility and blocked intervals",
+        "exact serialization occupancy",
+        "per-packet complete waiting"
+      ],
+      "branch_labels_are_proxies_not_causes": true,
+      "program_sha256": "2153de4c85d25a47169f74200409fd98b37c8d30fc2f2bc177f539661ed34024",
+      "simulation_executed": false
+    },
+    {
+      "case": "g0-b4-short",
+      "summary_path": "runs/scaleup_issue_screening/diagnostic-study-20261014/normal/g0-b4-short/summary.json",
+      "summary_sha256": "47d067d327881e6ab3755686b91fd96fcef09df59b850a05b8c0d72267b55151",
+      "schema_version": "issue-mechanism-normal-screen/1",
+      "rule": {
+        "schema_version": "issue-mechanism-screen-rule/1",
+        "scope_start_ns": 0,
+        "scope_end_ns": 1000000,
+        "window_ns": 1000,
+        "normal_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-short",
+          "g0-b8-long"
+        ],
+        "development_case": "g0-b8-short",
+        "review_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-long"
+        ],
+        "busy_proxy_min_fraction": 0.8,
+        "low_service_proxy_max_fraction": 0.2,
+        "consecutive_positive_windows": 2,
+        "comparable_plane_work_relative_difference": 0.1,
+        "max_deep_cases_per_class": 2,
+        "selection": "From development record only: earliest sustained waiting plus high-start-byte service and earliest sustained waiting plus low-start-byte service, separately device-bound and inter-switch; plane pairs within 10% whole-scope transmitted bytes, rank by t90 difference then physical IDs. These are checks to perform, not causal labels.",
+        "excluded_historical_outlets": [
+          [
+            802,
+            6
+          ],
+          [
+            810,
+            2
+          ]
+        ],
+        "exclusion_reason": "Do not reopen the previously selected N1/N2 outlet experiments; retain them in global statistics.",
+        "causal_limits": "Positive-area adjacency is not continuous backlog; start-window bytes are not exact serialization busy time; absence of credit records is unknown, not zero blockage. No private identities or business improvements used for selection."
+      },
+      "rule_sha256": "c5516dadf087b4c3b7fb3317283b240b78f2ec3f8c324c069398921707e2615e",
+      "archive_sha256": "2e26aff26bc9ac2d1894c14309c11a56b5bab29bc7e2c0043757fe333677e33c",
+      "members": {
+        "run/inputs/network/backend.json": {
+          "bytes": 1964204,
+          "sha256": "d5f93d873bcb2bdd4f23ef6d2c24d98f8697e33cbc04ff1c8333267f8b77d521"
+        },
+        "run/manifest.json": {
+          "bytes": 5010122,
+          "sha256": "15830023b2190abf36d9c9bf892267fdc64c2b74678a6662559fd9839cd96658"
+        },
+        "run/metrics/validation.json": {
+          "bytes": 789629,
+          "sha256": "e77b315f78c5cf926a4e2ea0c3a8703c6b09a62058b6462c5a73721bbacebb16"
+        },
+        "run/observed/public_config.json": {
+          "bytes": 458380,
+          "sha256": "d909bee75eb11079cf99a4e39e144d31cd136f88bd49aa92eecc7b23d8557515"
+        },
+        "run/observed/records/port_windows.csv.gz": {
+          "bytes": 2890085,
+          "sha256": "bbf0b5658863bb1e518e151526a3799fef05a7174165747901cf898fc2ee0297"
+        },
+        "run/observed/records/queue_windows.csv.gz": {
+          "bytes": 4942672,
+          "sha256": "6d46197dc35502475f1ac4d1c57e3e4574a475f7727a958f56328067e1584fba"
+        },
+        "run/observed/storage.json": {
+          "bytes": 932,
+          "sha256": "f6c2fe845aa866e10bf3f4ba56212b7389a52e692e4a337a24ed832c9a21b80f"
+        }
+      },
+      "scope_ns": [
+        0,
+        1000000
+      ],
+      "ports": 2688,
+      "roles": {
+        "device_bound": 896,
+        "inter_switch": 1792
+      },
+      "logical_windows": 2688000,
+      "stored_nonzero_windows": 264955,
+      "declared_zero_windows": 2423045,
+      "strata": {
+        "device_bound:waiting_low_service": 69844,
+        "device_bound:waiting_intermediate_service": 5863,
+        "device_bound:waiting_high_service": 332,
+        "inter_switch:waiting_low_service": 179196,
+        "inter_switch:waiting_intermediate_service": 9425,
+        "inter_switch:no_positive_wait": 209,
+        "device_bound:no_positive_wait": 74,
+        "inter_switch:waiting_high_service": 12
+      },
+      "totals": {
+        "voq_byte_ns": 15619273312,
+        "fifo_byte_ns": 4137505232,
+        "packet_bytes": 755688488,
+        "packets": 1008371
+      },
+      "adjacent_positive_groups": 96417,
+      "checks_by_stratum": {
+        "device_bound:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 10,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 8000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 8,
+          "voq_byte_ns": 14320,
+          "fifo_byte_ns": 768,
+          "packet_bytes": 14396
+        },
+        "device_bound:waiting_intermediate_service": {
+          "switch_id": 787,
+          "port_id": 12,
+          "role": "device_bound",
+          "plane": 5,
+          "start_ns": 0,
+          "end_ns": 4000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 4,
+          "voq_byte_ns": 2156408,
+          "fifo_byte_ns": 2897312,
+          "packet_bytes": 79176
+        },
+        "device_bound:waiting_high_service": {
+          "switch_id": 768,
+          "port_id": 6,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 5000,
+          "stratum": "waiting_high_service",
+          "positive_windows": 4,
+          "voq_byte_ns": 275905460,
+          "fifo_byte_ns": 12672196,
+          "packet_bytes": 190260
+        },
+        "inter_switch:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 17,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 15000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 15,
+          "voq_byte_ns": 44636,
+          "fifo_byte_ns": 83984,
+          "packet_bytes": 44768
+        },
+        "inter_switch:waiting_intermediate_service": {
+          "switch_id": 768,
+          "port_id": 18,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 0,
+          "end_ns": 2000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 28108,
+          "fifo_byte_ns": 407824,
+          "packet_bytes": 28108
+        }
+      },
+      "comparable_plane_pairs": 3914,
+      "top_plane_pairs": [
+        {
+          "peer_group": [
+            "destination",
+            42
+          ],
+          "outlets": [
+            [
+              785,
+              10
+            ],
+            [
+              788,
+              10
+            ]
+          ],
+          "planes": [
+            3,
+            6
+          ],
+          "packet_bytes": [
+            237308,
+            242580
+          ],
+          "relative_work_difference": 0.021733036524033307,
+          "t90_ns": [
+            141000,
+            189000
+          ],
+          "t90_difference_ns": 48000
+        },
+        {
+          "peer_group": [
+            "destination",
+            42
+          ],
+          "outlets": [
+            [
+              783,
+              10
+            ],
+            [
+              788,
+              10
+            ]
+          ],
+          "planes": [
+            1,
+            6
+          ],
+          "packet_bytes": [
+            248724,
+            242580
+          ],
+          "relative_work_difference": 0.024702079413325615,
+          "t90_ns": [
+            143000,
+            189000
+          ],
+          "t90_difference_ns": 46000
+        },
+        {
+          "peer_group": [
+            "destination",
+            24
+          ],
+          "outlets": [
+            [
+              778,
+              8
+            ],
+            [
+              779,
+              8
+            ]
+          ],
+          "planes": [
+            3,
+            4
+          ],
+          "packet_bytes": [
+            192624,
+            184040
+          ],
+          "relative_work_difference": 0.04456350195198937,
+          "t90_ns": [
+            182000,
+            141000
+          ],
+          "t90_difference_ns": 41000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            8,
+            1
+          ],
+          "outlets": [
+            [
+              1160,
+              1
+            ],
+            [
+              1208,
+              1
+            ]
+          ],
+          "planes": [
+            3,
+            6
+          ],
+          "packet_bytes": [
+            260888,
+            263716
+          ],
+          "relative_work_difference": 0.010723657267666732,
+          "t90_ns": [
+            178000,
+            137000
+          ],
+          "t90_difference_ns": 41000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            7,
+            5
+          ],
+          "outlets": [
+            [
+              1191,
+              5
+            ],
+            [
+              1207,
+              5
+            ]
+          ],
+          "planes": [
+            5,
+            6
+          ],
+          "packet_bytes": [
+            257600,
+            258504
+          ],
+          "relative_work_difference": 0.0034970445331600286,
+          "t90_ns": [
+            181000,
+            140000
+          ],
+          "t90_difference_ns": 41000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            2,
+            7
+          ],
+          "outlets": [
+            [
+              1170,
+              7
+            ],
+            [
+              1186,
+              7
+            ]
+          ],
+          "planes": [
+            4,
+            5
+          ],
+          "packet_bytes": [
+            218344,
+            229244
+          ],
+          "relative_work_difference": 0.04754759121285617,
+          "t90_ns": [
+            138000,
+            178000
+          ],
+          "t90_difference_ns": 40000
+        },
+        {
+          "peer_group": [
+            "destination",
+            92
+          ],
+          "outlets": [
+            [
+              804,
+              12
+            ],
+            [
+              805,
+              12
+            ]
+          ],
+          "planes": [
+            1,
+            2
+          ],
+          "packet_bytes": [
+            261864,
+            244040
+          ],
+          "relative_work_difference": 0.06806586625118383,
+          "t90_ns": [
+            141000,
+            180000
+          ],
+          "t90_difference_ns": 39000
+        },
+        {
+          "peer_group": [
+            "destination",
+            23
+          ],
+          "outlets": [
+            [
+              775,
+              7
+            ],
+            [
+              776,
+              7
+            ]
+          ],
+          "planes": [
+            0,
+            1
+          ],
+          "packet_bytes": [
+            270248,
+            299164
+          ],
+          "relative_work_difference": 0.09665601476113436,
+          "t90_ns": [
+            179000,
+            141000
+          ],
+          "t90_difference_ns": 38000
+        }
+      ],
+      "missing": [
+        "source device queue occupancy",
+        "credit eligibility and blocked intervals",
+        "exact serialization occupancy",
+        "per-packet complete waiting"
+      ],
+      "branch_labels_are_proxies_not_causes": true,
+      "program_sha256": "2153de4c85d25a47169f74200409fd98b37c8d30fc2f2bc177f539661ed34024",
+      "simulation_executed": false
+    },
+    {
+      "case": "g0-b8-short",
+      "summary_path": "runs/scaleup_issue_screening/diagnostic-study-20261014/normal/g0-b8-short/summary.json",
+      "summary_sha256": "325f3e34c666825c2697611cc5022a0bb7cac0f969185f0585ec61381c61f52c",
+      "schema_version": "issue-mechanism-normal-screen/1",
+      "rule": {
+        "schema_version": "issue-mechanism-screen-rule/1",
+        "scope_start_ns": 0,
+        "scope_end_ns": 1000000,
+        "window_ns": 1000,
+        "normal_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-short",
+          "g0-b8-long"
+        ],
+        "development_case": "g0-b8-short",
+        "review_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-long"
+        ],
+        "busy_proxy_min_fraction": 0.8,
+        "low_service_proxy_max_fraction": 0.2,
+        "consecutive_positive_windows": 2,
+        "comparable_plane_work_relative_difference": 0.1,
+        "max_deep_cases_per_class": 2,
+        "selection": "From development record only: earliest sustained waiting plus high-start-byte service and earliest sustained waiting plus low-start-byte service, separately device-bound and inter-switch; plane pairs within 10% whole-scope transmitted bytes, rank by t90 difference then physical IDs. These are checks to perform, not causal labels.",
+        "excluded_historical_outlets": [
+          [
+            802,
+            6
+          ],
+          [
+            810,
+            2
+          ]
+        ],
+        "exclusion_reason": "Do not reopen the previously selected N1/N2 outlet experiments; retain them in global statistics.",
+        "causal_limits": "Positive-area adjacency is not continuous backlog; start-window bytes are not exact serialization busy time; absence of credit records is unknown, not zero blockage. No private identities or business improvements used for selection."
+      },
+      "rule_sha256": "c5516dadf087b4c3b7fb3317283b240b78f2ec3f8c324c069398921707e2615e",
+      "archive_sha256": "c11c1580a46bc7d340063c5a72ca9dc63d67dbd2f2b3c5e48cd40f1753aed8bf",
+      "members": {
+        "run/inputs/network/backend.json": {
+          "bytes": 1964204,
+          "sha256": "a7823f77e5383a61a1e5babdf8a53b0daa16d757e2d4e35532eb731a6b99ab7f"
+        },
+        "run/manifest.json": {
+          "bytes": 5109767,
+          "sha256": "1826bd32d433f791ab57c76db6f6b86c160511ecec6f65b3af67c62ea8fd1251"
+        },
+        "run/metrics/validation.json": {
+          "bytes": 789754,
+          "sha256": "b9fcd34173492788d5f8af5d32ef36a5abc278a034a747ba894f64d453874553"
+        },
+        "run/observed/public_config.json": {
+          "bytes": 458380,
+          "sha256": "d909bee75eb11079cf99a4e39e144d31cd136f88bd49aa92eecc7b23d8557515"
+        },
+        "run/observed/records/port_windows.csv.gz": {
+          "bytes": 5199876,
+          "sha256": "4b38c25364e2865f03d25a90459d19e3bbdf86b563d9ede6e03c58f30bb20679"
+        },
+        "run/observed/records/queue_windows.csv.gz": {
+          "bytes": 8671396,
+          "sha256": "aab685b1b7cb831e144d8a79a4f4dd4f145152326c841c5425e88f4d4df914d0"
+        },
+        "run/observed/storage.json": {
+          "bytes": 932,
+          "sha256": "5c3d04edacb9ad4ccc0bb83b4549e5ebbb7d8a131d9bacb3a5ff36981d08c13d"
+        }
+      },
+      "scope_ns": [
+        0,
+        1000000
+      ],
+      "ports": 2688,
+      "roles": {
+        "device_bound": 896,
+        "inter_switch": 1792
+      },
+      "logical_windows": 2688000,
+      "stored_nonzero_windows": 469230,
+      "declared_zero_windows": 2218770,
+      "strata": {
+        "device_bound:waiting_low_service": 119442,
+        "device_bound:waiting_intermediate_service": 11952,
+        "device_bound:waiting_high_service": 756,
+        "inter_switch:waiting_low_service": 315632,
+        "inter_switch:waiting_intermediate_service": 20407,
+        "inter_switch:no_positive_wait": 892,
+        "inter_switch:waiting_high_service": 27,
+        "device_bound:no_positive_wait": 122
+      },
+      "totals": {
+        "voq_byte_ns": 55528105092,
+        "fifo_byte_ns": 8506476380,
+        "packet_bytes": 1490775360,
+        "packets": 1481220
+      },
+      "adjacent_positive_groups": 187662,
+      "checks_by_stratum": {
+        "device_bound:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 0,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 3000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 7332,
+          "fifo_byte_ns": 0,
+          "packet_bytes": 7332
+        },
+        "device_bound:waiting_intermediate_service": {
+          "switch_id": 771,
+          "port_id": 8,
+          "role": "device_bound",
+          "plane": 3,
+          "start_ns": 1000,
+          "end_ns": 3000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 1347392,
+          "fifo_byte_ns": 1926956,
+          "packet_bytes": 44588
+        },
+        "device_bound:waiting_high_service": {
+          "switch_id": 768,
+          "port_id": 6,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 2000,
+          "end_ns": 12000,
+          "stratum": "waiting_high_service",
+          "positive_windows": 10,
+          "voq_byte_ns": 1374046960,
+          "fifo_byte_ns": 31449480,
+          "packet_bytes": 491656
+        },
+        "inter_switch:waiting_intermediate_service": {
+          "switch_id": 768,
+          "port_id": 18,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 4000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 3,
+          "voq_byte_ns": 137044,
+          "fifo_byte_ns": 263448,
+          "packet_bytes": 50072
+        },
+        "inter_switch:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 17,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 3000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 6320,
+          "fifo_byte_ns": 0,
+          "packet_bytes": 6320
+        }
+      },
+      "comparable_plane_pairs": 5049,
+      "top_plane_pairs": [
+        {
+          "peer_group": [
+            "destination",
+            78
+          ],
+          "outlets": [
+            [
+              799,
+              14
+            ],
+            [
+              801,
+              14
+            ]
+          ],
+          "planes": [
+            3,
+            5
+          ],
+          "packet_bytes": [
+            451260,
+            423400
+          ],
+          "relative_work_difference": 0.06173824402783318,
+          "t90_ns": [
+            325000,
+            270000
+          ],
+          "t90_difference_ns": 55000
+        },
+        {
+          "peer_group": [
+            "destination",
+            90
+          ],
+          "outlets": [
+            [
+              805,
+              10
+            ],
+            [
+              809,
+              10
+            ]
+          ],
+          "planes": [
+            2,
+            6
+          ],
+          "packet_bytes": [
+            452268,
+            415124
+          ],
+          "relative_work_difference": 0.08212829561233605,
+          "t90_ns": [
+            317000,
+            264000
+          ],
+          "t90_difference_ns": 53000
+        },
+        {
+          "peer_group": [
+            "destination",
+            78
+          ],
+          "outlets": [
+            [
+              799,
+              14
+            ],
+            [
+              802,
+              14
+            ]
+          ],
+          "planes": [
+            3,
+            6
+          ],
+          "packet_bytes": [
+            451260,
+            457364
+          ],
+          "relative_work_difference": 0.01334604385128694,
+          "t90_ns": [
+            325000,
+            273000
+          ],
+          "t90_difference_ns": 52000
+        },
+        {
+          "peer_group": [
+            "destination",
+            27
+          ],
+          "outlets": [
+            [
+              779,
+              11
+            ],
+            [
+              780,
+              11
+            ]
+          ],
+          "planes": [
+            4,
+            5
+          ],
+          "packet_bytes": [
+            491296,
+            514420
+          ],
+          "relative_work_difference": 0.044951595972162826,
+          "t90_ns": [
+            318000,
+            268000
+          ],
+          "t90_difference_ns": 50000
+        },
+        {
+          "peer_group": [
+            "destination",
+            78
+          ],
+          "outlets": [
+            [
+              796,
+              14
+            ],
+            [
+              799,
+              14
+            ]
+          ],
+          "planes": [
+            0,
+            3
+          ],
+          "packet_bytes": [
+            488152,
+            451260
+          ],
+          "relative_work_difference": 0.07557482095740671,
+          "t90_ns": [
+            275000,
+            325000
+          ],
+          "t90_difference_ns": 50000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            0,
+            1
+          ],
+          "outlets": [
+            [
+              1120,
+              1
+            ],
+            [
+              1184,
+              1
+            ]
+          ],
+          "planes": [
+            1,
+            5
+          ],
+          "packet_bytes": [
+            532016,
+            505308
+          ],
+          "relative_work_difference": 0.05020149769931732,
+          "t90_ns": [
+            312000,
+            263000
+          ],
+          "t90_difference_ns": 49000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            4,
+            15
+          ],
+          "outlets": [
+            [
+              797,
+              31
+            ],
+            [
+              802,
+              31
+            ]
+          ],
+          "planes": [
+            1,
+            6
+          ],
+          "packet_bytes": [
+            765404,
+            787892
+          ],
+          "relative_work_difference": 0.028541982911363485,
+          "t90_ns": [
+            312000,
+            360000
+          ],
+          "t90_difference_ns": 48000
+        },
+        {
+          "peer_group": [
+            "l2_down",
+            0,
+            1
+          ],
+          "outlets": [
+            [
+              1120,
+              1
+            ],
+            [
+              1200,
+              1
+            ]
+          ],
+          "planes": [
+            1,
+            6
+          ],
+          "packet_bytes": [
+            532016,
+            537116
+          ],
+          "relative_work_difference": 0.009495155608844272,
+          "t90_ns": [
+            312000,
+            264000
+          ],
+          "t90_difference_ns": 48000
+        }
+      ],
+      "missing": [
+        "source device queue occupancy",
+        "credit eligibility and blocked intervals",
+        "exact serialization occupancy",
+        "per-packet complete waiting"
+      ],
+      "branch_labels_are_proxies_not_causes": true,
+      "program_sha256": "2153de4c85d25a47169f74200409fd98b37c8d30fc2f2bc177f539661ed34024",
+      "simulation_executed": false
+    },
+    {
+      "case": "g0-b8-long",
+      "summary_path": "runs/scaleup_issue_screening/diagnostic-study-20261014/normal/g0-b8-long/summary.json",
+      "summary_sha256": "697d17654e588af1f826b6df6597ea0d7813b71bb9e012cdf8698000e416c79e",
+      "schema_version": "issue-mechanism-normal-screen/1",
+      "rule": {
+        "schema_version": "issue-mechanism-screen-rule/1",
+        "scope_start_ns": 0,
+        "scope_end_ns": 1000000,
+        "window_ns": 1000,
+        "normal_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-short",
+          "g0-b8-long"
+        ],
+        "development_case": "g0-b8-short",
+        "review_cases": [
+          "g0-b2-short",
+          "g0-b4-short",
+          "g0-b8-long"
+        ],
+        "busy_proxy_min_fraction": 0.8,
+        "low_service_proxy_max_fraction": 0.2,
+        "consecutive_positive_windows": 2,
+        "comparable_plane_work_relative_difference": 0.1,
+        "max_deep_cases_per_class": 2,
+        "selection": "From development record only: earliest sustained waiting plus high-start-byte service and earliest sustained waiting plus low-start-byte service, separately device-bound and inter-switch; plane pairs within 10% whole-scope transmitted bytes, rank by t90 difference then physical IDs. These are checks to perform, not causal labels.",
+        "excluded_historical_outlets": [
+          [
+            802,
+            6
+          ],
+          [
+            810,
+            2
+          ]
+        ],
+        "exclusion_reason": "Do not reopen the previously selected N1/N2 outlet experiments; retain them in global statistics.",
+        "causal_limits": "Positive-area adjacency is not continuous backlog; start-window bytes are not exact serialization busy time; absence of credit records is unknown, not zero blockage. No private identities or business improvements used for selection."
+      },
+      "rule_sha256": "c5516dadf087b4c3b7fb3317283b240b78f2ec3f8c324c069398921707e2615e",
+      "archive_sha256": "fb1870d4d884442011d8c73b76bd7ddaf7882b349390d81d948527d1966ab340",
+      "members": {
+        "run/inputs/network/backend.json": {
+          "bytes": 1964203,
+          "sha256": "9c9767f5065739877734d234723d2279f815a0b5cbc92128d9a5cbc505d8b440"
+        },
+        "run/manifest.json": {
+          "bytes": 5113316,
+          "sha256": "ca55c2ac25c98f3faf5d87a6dd6f301240020cffda2940e718e7ff170f0595c2"
+        },
+        "run/metrics/validation.json": {
+          "bytes": 798466,
+          "sha256": "a401a75f9182d33d5159116ad2b4ede9bd839766df60d9dbee65abadd275e981"
+        },
+        "run/observed/public_config.json": {
+          "bytes": 458380,
+          "sha256": "d909bee75eb11079cf99a4e39e144d31cd136f88bd49aa92eecc7b23d8557515"
+        },
+        "run/observed/records/port_windows.csv.gz": {
+          "bytes": 10581237,
+          "sha256": "507f8949cc50fba1a429ac0f518a78f871820c53e1daf6693191b66800f203dd"
+        },
+        "run/observed/records/queue_windows.csv.gz": {
+          "bytes": 17438804,
+          "sha256": "c4f606f07f3200cb8e94ad0b26f034b5ff4eea6d69fb1f8508f673ef4d2e58c5"
+        },
+        "run/observed/storage.json": {
+          "bytes": 940,
+          "sha256": "1e60f98d99e8fe7a50ad81559a6616cb680ba9793fedba5a830b2b26e4abcc92"
+        }
+      },
+      "scope_ns": [
+        0,
+        1000000
+      ],
+      "ports": 2688,
+      "roles": {
+        "device_bound": 896,
+        "inter_switch": 1792
+      },
+      "logical_windows": 2688000,
+      "stored_nonzero_windows": 943862,
+      "declared_zero_windows": 1744138,
+      "strata": {
+        "device_bound:waiting_low_service": 241619,
+        "device_bound:waiting_intermediate_service": 24792,
+        "device_bound:no_positive_wait": 271,
+        "device_bound:waiting_high_service": 1060,
+        "inter_switch:waiting_low_service": 635318,
+        "inter_switch:waiting_intermediate_service": 38972,
+        "inter_switch:no_positive_wait": 1806,
+        "inter_switch:waiting_high_service": 24
+      },
+      "totals": {
+        "voq_byte_ns": 63252961048,
+        "fifo_byte_ns": 14624730644,
+        "packet_bytes": 2984249008,
+        "packets": 2965380
+      },
+      "adjacent_positive_groups": 350639,
+      "checks_by_stratum": {
+        "device_bound:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 2,
+          "role": "device_bound",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 20000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 19,
+          "voq_byte_ns": 147876,
+          "fifo_byte_ns": 217728,
+          "packet_bytes": 36164
+        },
+        "device_bound:waiting_intermediate_service": {
+          "switch_id": 769,
+          "port_id": 0,
+          "role": "device_bound",
+          "plane": 1,
+          "start_ns": 1000,
+          "end_ns": 4000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 3,
+          "voq_byte_ns": 192876,
+          "fifo_byte_ns": 1221036,
+          "packet_bytes": 56440
+        },
+        "device_bound:waiting_high_service": {
+          "switch_id": 811,
+          "port_id": 8,
+          "role": "device_bound",
+          "plane": 1,
+          "start_ns": 1000,
+          "end_ns": 8000,
+          "stratum": "waiting_high_service",
+          "positive_windows": 7,
+          "voq_byte_ns": 665212280,
+          "fifo_byte_ns": 23598868,
+          "packet_bytes": 338564
+        },
+        "inter_switch:waiting_low_service": {
+          "switch_id": 768,
+          "port_id": 16,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 16000,
+          "stratum": "waiting_low_service",
+          "positive_windows": 15,
+          "voq_byte_ns": 34208,
+          "fifo_byte_ns": 2196,
+          "packet_bytes": 34388
+        },
+        "inter_switch:waiting_intermediate_service": {
+          "switch_id": 768,
+          "port_id": 23,
+          "role": "inter_switch",
+          "plane": 0,
+          "start_ns": 1000,
+          "end_ns": 3000,
+          "stratum": "waiting_intermediate_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 25332,
+          "fifo_byte_ns": 317628,
+          "packet_bytes": 24996
+        },
+        "inter_switch:waiting_high_service": {
+          "switch_id": 1215,
+          "port_id": 1,
+          "role": "inter_switch",
+          "plane": 6,
+          "start_ns": 3000,
+          "end_ns": 5000,
+          "stratum": "waiting_high_service",
+          "positive_windows": 2,
+          "voq_byte_ns": 4634452,
+          "fifo_byte_ns": 5852804,
+          "packet_bytes": 94344
+        }
+      },
+      "comparable_plane_pairs": 6355,
+      "top_plane_pairs": [
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            3
+          ],
+          "outlets": [
+            [
+              790,
+              19
+            ],
+            [
+              795,
+              19
+            ]
+          ],
+          "planes": [
+            1,
+            6
+          ],
+          "packet_bytes": [
+            930304,
+            864984
+          ],
+          "relative_work_difference": 0.07021360759493671,
+          "t90_ns": [
+            385000,
+            518000
+          ],
+          "t90_difference_ns": 133000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            11
+          ],
+          "outlets": [
+            [
+              791,
+              27
+            ],
+            [
+              794,
+              27
+            ]
+          ],
+          "planes": [
+            2,
+            5
+          ],
+          "packet_bytes": [
+            896248,
+            896640
+          ],
+          "relative_work_difference": 0.00043718772305496075,
+          "t90_ns": [
+            518000,
+            386000
+          ],
+          "t90_difference_ns": 132000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            6
+          ],
+          "outlets": [
+            [
+              789,
+              22
+            ],
+            [
+              794,
+              22
+            ]
+          ],
+          "planes": [
+            0,
+            5
+          ],
+          "packet_bytes": [
+            961216,
+            918984
+          ],
+          "relative_work_difference": 0.04393601438178307,
+          "t90_ns": [
+            391000,
+            519000
+          ],
+          "t90_difference_ns": 128000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            6
+          ],
+          "outlets": [
+            [
+              789,
+              22
+            ],
+            [
+              792,
+              22
+            ]
+          ],
+          "planes": [
+            0,
+            3
+          ],
+          "packet_bytes": [
+            961216,
+            908824
+          ],
+          "relative_work_difference": 0.054505959118449965,
+          "t90_ns": [
+            391000,
+            517000
+          ],
+          "t90_difference_ns": 126000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            3
+          ],
+          "outlets": [
+            [
+              790,
+              19
+            ],
+            [
+              793,
+              19
+            ]
+          ],
+          "planes": [
+            1,
+            4
+          ],
+          "packet_bytes": [
+            930304,
+            846424
+          ],
+          "relative_work_difference": 0.09016407539900935,
+          "t90_ns": [
+            385000,
+            511000
+          ],
+          "t90_difference_ns": 126000
+        },
+        {
+          "peer_group": [
+            "l1_up",
+            3,
+            3
+          ],
+          "outlets": [
+            [
+              790,
+              19
+            ],
+            [
+              794,
+              19
+            ]
+          ],
+          "planes": [
+            1,
+            5
+          ],
+          "packet_bytes": [
+            930304,
+            866524
+          ],
+          "relative_work_difference": 0.06855823472757293,
+          "t90_ns": [
+            385000,
+            510000
+          ],
+          "t90_difference_ns": 125000
+        },
+        {
+          "peer_group": [
+            "destination",
+            101
+          ],
+          "outlets": [
+            [
+              811,
+              5
+            ],
+            [
+              812,
+              5
+            ]
+          ],
+          "planes": [
+            1,
+            2
+          ],
+          "packet_bytes": [
+            1433372,
+            1338028
+          ],
+          "relative_work_difference": 0.06651727534792085,
+          "t90_ns": [
+            533000,
+            408000
+          ],
+          "t90_difference_ns": 125000
+        },
+        {
+          "peer_group": [
+            "destination",
+            36
+          ],
+          "outlets": [
+            [
+              782,
+              4
+            ],
+            [
+              784,
+              4
+            ]
+          ],
+          "planes": [
+            0,
+            2
+          ],
+          "packet_bytes": [
+            1619864,
+            1516576
+          ],
+          "relative_work_difference": 0.06376337766627321,
+          "t90_ns": [
+            529000,
+            406000
+          ],
+          "t90_difference_ns": 123000
+        }
+      ],
+      "missing": [
+        "source device queue occupancy",
+        "credit eligibility and blocked intervals",
+        "exact serialization occupancy",
+        "per-packet complete waiting"
+      ],
+      "branch_labels_are_proxies_not_causes": true,
+      "program_sha256": "2153de4c85d25a47169f74200409fd98b37c8d30fc2f2bc177f539661ed34024",
+      "simulation_executed": false
+    }
+  ],
+  "resources": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/usr/bin/python3",
+      "runs/scaleup_issue_screening/diagnostic-study-20261014/normal_batch.py"
+    ],
+    "cwd": "/root/moe-ub-cosim",
+    "started_utc": "2026-10-14T09:39:34.940519+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 8589934592,
+      "per_process_address_bytes": 12884901888,
+      "artifact_bytes": 68719476736,
+      "wall_seconds": 1800
+    },
+    "peak_sampled_group_rss_bytes": 1136082944,
+    "peak_sampled_processes": 2,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/root/moe-ub-cosim/runs/v04-platform",
+      "/root/moe-ub-cosim/build/m19-a3-resources",
+      "/root/moe-ub-cosim/runs/m19-a3-resources",
+      "/root/moe-ub-cosim/build/m10-resource-efficiency",
+      "/root/moe-ub-cosim/runs/scaleup_observability",
+      "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+      "/root/moe-ub-cosim/runs/v03-research-slice",
+      "/root/moe-ub-cosim/runs/m20-segment-facts",
+      "/root/moe-ub-cosim/build/m17-send-state",
+      "/root/moe-ub-cosim/runs/scaleup_issue_screening",
+      "/root/moe-ub-cosim/runs/m17-send-state",
+      "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+      "/root/moe-ub-cosim/runs/mapping_value",
+      "/root/moe-ub-cosim/build/m10-research-slice",
+      "/root/moe-ub-cosim/build/v04-platform",
+      "/root/moe-ub-cosim/runs/task-sync-20261008"
+    ],
+    "peak_sampled_artifact_bytes": 52698914816,
+    "min_free_bytes": 21474836480,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 51529199252,
+    "peak_sampled_artifact_allocated_bytes": 52698914816,
+    "process_group": 3288822,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-14T09:42:24.648011+00:00",
+    "wall_seconds": 169.70749511942267,
+    "max_waited_child_rss_kib": 1101108,
+    "artifact_bytes_before_report": 41471,
+    "aggregate_artifact_bytes_before_report": 52698914816,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 51529199252,
+      "allocated_bytes": 52698914816
+    }
+  }
+}

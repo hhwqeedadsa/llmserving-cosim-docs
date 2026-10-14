@@ -1,0 +1,161 @@
+{
+  "schema_version": "issue-mechanism-cases/1",
+  "basis_rule_sha256": "c5516dadf087b4c3b7fb3317283b240b78f2ec3f8c324c069398921707e2615e",
+  "source_summary_sha256": "325f3e34c666825c2697611cc5022a0bb7cac0f969185f0585ec61381c61f52c",
+  "max_deep_cases": 6,
+  "cases": [
+    {
+      "case_id": "local_service-1",
+      "problem": "local_service",
+      "normal_stratum": "device_bound:waiting_high_service",
+      "selection": {
+        "switch_id": 768,
+        "port_id": 6,
+        "role": "device_bound",
+        "plane": 0,
+        "start_ns": 2000,
+        "end_ns": 12000,
+        "stratum": "waiting_high_service",
+        "positive_windows": 10,
+        "voq_byte_ns": 1374046960,
+        "fifo_byte_ns": 31449480,
+        "packet_bytes": 491656
+      },
+      "status": "requires_actual_wait_service_and_credit_review"
+    },
+    {
+      "case_id": "local_service-2",
+      "problem": "local_service",
+      "normal_stratum": "inter_switch:waiting_intermediate_service",
+      "selection": {
+        "switch_id": 768,
+        "port_id": 18,
+        "role": "inter_switch",
+        "plane": 0,
+        "start_ns": 1000,
+        "end_ns": 4000,
+        "stratum": "waiting_intermediate_service",
+        "positive_windows": 3,
+        "voq_byte_ns": 137044,
+        "fifo_byte_ns": 263448,
+        "packet_bytes": 50072
+      },
+      "status": "requires_actual_wait_service_and_credit_review"
+    },
+    {
+      "case_id": "backpressure-1",
+      "problem": "backpressure",
+      "normal_stratum": "device_bound:waiting_low_service",
+      "selection": {
+        "switch_id": 768,
+        "port_id": 0,
+        "role": "device_bound",
+        "plane": 0,
+        "start_ns": 1000,
+        "end_ns": 3000,
+        "stratum": "waiting_low_service",
+        "positive_windows": 2,
+        "voq_byte_ns": 7332,
+        "fifo_byte_ns": 0,
+        "packet_bytes": 7332
+      },
+      "status": "requires_actual_wait_service_and_credit_review"
+    },
+    {
+      "case_id": "backpressure-2",
+      "problem": "backpressure",
+      "normal_stratum": "inter_switch:waiting_low_service",
+      "selection": {
+        "switch_id": 768,
+        "port_id": 17,
+        "role": "inter_switch",
+        "plane": 0,
+        "start_ns": 1000,
+        "end_ns": 3000,
+        "stratum": "waiting_low_service",
+        "positive_windows": 2,
+        "voq_byte_ns": 6320,
+        "fifo_byte_ns": 0,
+        "packet_bytes": 6320
+      },
+      "status": "requires_actual_wait_service_and_credit_review"
+    },
+    {
+      "case_id": "multipath-1",
+      "problem": "multipath",
+      "selection": {
+        "peer_group": [
+          "destination",
+          78
+        ],
+        "outlets": [
+          [
+            799,
+            14
+          ],
+          [
+            801,
+            14
+          ]
+        ],
+        "planes": [
+          3,
+          5
+        ],
+        "packet_bytes": [
+          451260,
+          423400
+        ],
+        "relative_work_difference": 0.06173824402783318,
+        "t90_ns": [
+          325000,
+          270000
+        ],
+        "t90_difference_ns": 55000
+      },
+      "status": "requires_stage_work_arrival_service_and_completion_review"
+    },
+    {
+      "case_id": "multipath-2",
+      "problem": "multipath",
+      "selection": {
+        "peer_group": [
+          "destination",
+          90
+        ],
+        "outlets": [
+          [
+            805,
+            10
+          ],
+          [
+            809,
+            10
+          ]
+        ],
+        "planes": [
+          2,
+          6
+        ],
+        "packet_bytes": [
+          452268,
+          415124
+        ],
+        "relative_work_difference": 0.08212829561233605,
+        "t90_ns": [
+          317000,
+          264000
+        ],
+        "t90_difference_ns": 53000
+      },
+      "status": "requires_stage_work_arrival_service_and_completion_review"
+    }
+  ],
+  "selection_is_not_causal_label": true,
+  "normal_primary": "g0-b8-short",
+  "frozen_review": [
+    "g0-b2-short",
+    "g0-b4-short",
+    "g0-b8-long"
+  ]
+}

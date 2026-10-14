@@ -2,52 +2,46 @@
 
 `moe-ub-cosim` 用于研究混合专家（MoE）模型推理中的计算、通信与交换机流量之间的关系。它根据推理请求生成计算与通信任务，在模拟网络中执行，再输出端侧操作记录和交换机端口流量统计。
 
-MoE 模型会为每个词元（Token）选择部分专家执行计算。当专家分布在不同设备上时，中间数据需要经过网络传送。这个项目让数据传输的实际完成时间决定后续计算何时开始，也决定服务端何时处理下一批请求，因此可以观察网络排队与推理调度之间的相互影响。
+MoE 模型为每个词元（Token）选择部分专家执行计算。当专家分布在不同设备上时，中间数据需要经过网络传送。数据传输的实际完成时间决定后续计算何时开始，也影响下一批请求的处理，因此可以观察网络排队与推理执行之间的相互影响。
 
 ## 系统怎样工作
 
 研究者提供模型与部署参数、推理请求、专家选择记录和网络配置。LLMServingSim 负责请求组批，本项目将各轮计算与通信转成执行图，ASTRA-sim 按依赖执行这些任务，ns-3-UB 模拟数据包传输、排队和链路竞争。计算使用配置的耗时模型，不执行模型的数值前向计算。
 
-研究数据包括端侧通信操作的起止时间，以及交换机端口按采样周期统计的包数和字节数。系统另外保存操作与实际网络数据之间的对应关系，供评价关联方法时使用；关联算法只读取观测数据。格式和读取方式见[输出数据说明](docs/record_storage.md)。
+研究数据包括端侧通信操作的起止时间，以及交换机端口按采样周期统计的包数和字节数。系统另外保存操作与实际网络数据之间的对应关系，供评价关联方法时使用；关联算法只读取明确开放的观测数据。格式和读取方式见[输出数据说明](docs/record_storage.md)。
 
-## 当前可以做什么
+## 当前能力与验证范围
 
-项目可以模拟同一设备上的多请求连续组批、多个模型层，以及共享网络的独立专家并行组。完成一次首轮仿真后，可以保存其任务图与事件，离线调整采样设置，或直接重跑后端以检查相同任务的网络执行。
+项目支持多请求连续组批、多层任务以及共享网络的独立专家并行组。首轮或明确初态的有限层段可保存任务图与事件，按已捕获能力重新采样，或重跑后端检查相同业务图在不同网络条件下的执行。
 
-通信可选择既有 WRITE/RTP 或原生 STORE/LOAD，并配置原生逐包喷洒、端侧准备耗时和物理出口服务区间。观测可保存队列等待统计与窗口聚合，或为指定端口和时间保留详细事件；再次采样的范围由保存的信息决定。[原生首轮示例](examples/native_first_round/README.md)给出无需外部数据的完整命令和配置。
+通信可选择既有 WRITE/RTP 或原生 STORE/LOAD，并配置原生逐包喷洒、端侧准备耗时和物理出口服务区间。观测可保存计数、队列等待及窗口聚合，或为指定端口和时间保留细节。[原生首轮示例](examples/native_first_round/README.md)给出不依赖外部数据的入口。
 
-还可显式记录每个计算端点的就绪待发数、实际发送槽占用数和容量，用于区分“没有待发任务”和“任务已就绪但发送槽占满”。采集、读取、采样和重放步骤见[发送资源示例](examples/send_state/README.md)。
+CM384/R1 已有 128 端点完整 61 块首轮的历史参考结果；修正后的 A3 局部资源模板另有有限连续层段验收，不能把两者混成同一模型的全量验证。A3 层段保留完整部署容量和原始层编号，明确声明初态，操作见[A3 层段示例](examples/a3_segment/README.md)。具体参数与范围见[CM384/R1 场景](docs/scenarios/cm384_r1.md)和[模型依据](docs/model_validation.md)。
 
-当前规模验证采用 CM384 部署背景下的 DeepSeek-R1 解码参考场景：128 个计算端点执行完整 61 块模型的首轮任务。同芯片内部通信按本地依赖处理，跨芯片通信使用 UB 网络。该场景结合公开路由、CANN 通信行为和参考计算耗时；目标 NPU 的耗时校准及完整 64 轮服务尚未完成。参数、依据和可开展的实验见[CM384/R1 参考场景](docs/scenarios/cm384_r1.md)。
+旧发送槽模板及其[发送资源示例](examples/send_state/README.md)继续保留原用途，不作为新 A3 模型中真实资源数量的硬件结论。
 
 ## 运行第一个例子
 
-先按[用户指南](docs/user_guide.md)完成 Linux 环境安装与后端构建，然后在仓库根目录运行：
+先按[用户指南](docs/user_guide.md)完成原生 Linux 环境安装与后端构建，然后在仓库根目录运行：
 
 ```bash
 moe-ub run --config examples/first_round/run.json --output runs/demo-run
 ```
 
-[随仓库提供的小例](examples/first_round/README.md)使用合成请求和专家选择，无需下载模型或真实路由数据。运行结束后，`runs/demo-run/observed/` 保存研究观测，`truth/` 保存用于评价的实际对应关系，其他目录保存输入、核验结果与日志。输出目录须使用新路径。
-
-保存首轮数据、修改采样周期和重放后端的完整步骤在[用户指南](docs/user_guide.md)中。
+[随仓库提供的小例](examples/first_round/README.md)使用合成请求和专家选择，无需下载模型或真实路由。运行后 observed 保存研究观测，truth 保存评价用对应关系，其他目录保存输入、核验结果与日志。输出目录须使用新路径。
 
 ## 文档导航
 
 | 我想了解 | 阅读入口 |
 |---|---|
-| 安装、运行、修改配置和复用结果 | [用户指南](docs/user_guide.md) |
-| 模块如何协作，网络如何影响计算与组批 | [系统架构](docs/architecture.md) |
-| 输出字段、采样时钟、零值窗口和文件读取 | [输出数据与存储](docs/record_storage.md) |
-| 计算、通信和容量模型的依据及近似 | [模型依据与验证范围](docs/model_validation.md) |
-| CM384/R1 的参数、真实路由与实验范围 | [参考场景](docs/scenarios/cm384_r1.md) |
-| 修改代码、管理依赖和选择测试 | [开发维护](docs/development.md)、[后端参考](backend/README.md) |
-| 平台依据与后续实验 | [v0.5 设计档案](docs/archive/moe_ub_cosim_dev_v0.5.md)、[正常业务问题筛选](experiments/scaleup_issue_screening/README.md) |
-| 当前任务、执行顺序与交接 | [当前任务](docs/tasks/current.md) |
-| 已完成实验 | [端网映射价值](experiments/mapping_value/README.md)、[Scale-Up 性能现象探索](experiments/scaleup_observability/README.md) |
+| 安装、运行、配置与复用 | [用户指南](docs/user_guide.md) |
+| 模块协作及实际完成反馈 | [系统架构](docs/architecture.md) |
+| 输出字段、采样、时间和字节口径 | [记录格式](docs/record_storage.md) |
+| 计算、通信和容量模型的依据 | [模型依据](docs/model_validation.md)、[CM384/R1 场景](docs/scenarios/cm384_r1.md) |
+| 代码、依赖、测试与维护 | [开发维护](docs/development.md)、[后端参考](backend/README.md) |
+| 三个实验目录的关系与历史范围 | [实验总索引](experiments/README.md) |
+| 当前研究问题和完整方案 | [研究入口](experiments/scaleup_issue_screening/README.md)、[实验方案](experiments/scaleup_issue_screening/plan.md) |
+| 实际进度、预算和交接 | [当前任务](docs/tasks/current.md) |
+| 既有研究结果 | [研究结论](experiments/scaleup_issue_screening/conclusions.md)、[历史分区](experiments/scaleup_issue_screening/archive/README.md) |
 
-v0.5 与问题筛选文档是下一阶段方案，不表示新模型已实现或研究实验已完成。
-
-开发进展与旧方案见[里程碑历史](docs/milestone_history.md)和[设计档案](docs/archive/README.md)。测试输入与已保存证据位于 [fixtures/](fixtures/)，通常无需在开始使用前逐份阅读。
-
-有限连续 MoE 层的准备、内部事实与后端回放见 [A3 层段示例](examples/a3_segment/README.md)。它保留完整模型容量和原层编号，并明确声明起始状态。
+平台里程碑与旧设计见[里程碑历史](docs/milestone_history.md)和[设计档案](docs/archive/README.md)。新实验方案、目录迁移目标和现有实现分别说明，文档交接不表示新实验已经完成。

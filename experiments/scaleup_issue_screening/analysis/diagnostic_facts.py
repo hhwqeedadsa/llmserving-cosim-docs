@@ -12,10 +12,7 @@ import sys
 from moe_ub_cosim.network_facts import checked_rows
 from .mechanism_screen import ports
 from .workflow import digest,host,read,save
-
-FIELDS=('voq_byte_ns','fifo_byte_ns','waiting_ns','busy_ns','queued_busy_ns','tx_bytes','tx_packets',
-        'probes','blocked_probes','queue_peak_bytes','serial_work_ns','fifo_arrival_bytes')
-IX={n:i for i,n in enumerate(FIELDS)}
+from .diagnostic_schema import FIELDS,IX
 
 
 class LocalState:
@@ -25,6 +22,7 @@ class LocalState:
         self.time=0;self.voq=0;self.fifo=0;self.busy_until=0
         self.windows={};self.episodes=[];self.active=None;self.slow=[]
         self.events=Counter();self.fifo_pending={};self.waits=Counter();self.network_waits=Counter()
+        self.histogram=Counter()
 
     def row(self,t):return self.windows.setdefault(t//self.width,[0]*len(FIELDS))
 
@@ -32,6 +30,10 @@ class LocalState:
         if t<self.time:raise ValueError('Local time went backwards')
         start=self.time;q=self.voq+self.fifo
         if t>start:
+            # Fixed 1024 ns instantaneous samples. Same-time state changes have
+            # settled before the next positive interval is visited.
+            samples=(t-1)//1024-(start-1)//1024
+            if samples:self.histogram[0 if q==0 else q.bit_length()]+=samples
             if q:
                 if self.active is None:self.active=dict(start_ns=start,end_ns=t,peak_bytes=q,queued_busy_ns=0,byte_ns=0)
                 self.active['end_ns']=t;self.active['peak_bytes']=max(self.active['peak_bytes'],q)
@@ -84,6 +86,7 @@ def prepare(run,output):
     states={(p['node_id'],p['port_id']):LocalState((p['node_id'],p['port_id']),links[p['node_id'],p['port_id']]['rate']) for p in capture['policy']['ports']}
     if not set(scope)<=set(states):raise ValueError('Incomplete public outlet coverage')
     obs=read(run/'inputs/observation.json');deep={(r['switch_id'],r['port_id']) for r in obs['recording']['detail_ranges']}
+    if any(c['offset_ns'] or c['drift_ppb'] for c in obs['clocks']):raise ValueError('This study requires aligned clocks')
     output.mkdir(parents=True);(output/'input').mkdir();(output/'private').mkdir()
     previous_tx={};pending={};blocked={};credit_spells=[];counts=Counter();max_pending=0;unmatched=Counter()
     with gzip.open(output/'private/packets.jsonl.gz','wt',compresslevel=6) as packet_out:
@@ -93,8 +96,9 @@ def prepare(run,output):
             if event=='credit_decision':
                 identity=k+(d['in_port'],d['vl'],d['packet_uid'])
                 if d['blocked']:
-                    blocked.setdefault(identity,dict(node_id=k[0],port_id=k[1],in_port=d['in_port'],vl=d['vl'],
-                        packet_uid=d['packet_uid'],start_ns=t,last_failed_ns=t,available=d['available_cells'],required=d['required_cells']))['last_failed_ns']=t
+                    spell=blocked.setdefault(identity,dict(node_id=k[0],port_id=k[1],in_port=d['in_port'],vl=d['vl'],
+                        packet_uid=d['packet_uid'],start_ns=t,last_failed_ns=t,failed_checks_ns=[],available=d['available_cells'],required=d['required_cells']))
+                    spell['last_failed_ns']=t;spell['failed_checks_ns'].append(t)
                 elif identity in blocked:
                     spell=blocked.pop(identity);spell.update(end_ns=t,resolution='same_head_eligible' if d['packet_uid'] is not None else 'generated_queue_eligible_head_identity_unknown')
                     credit_spells.append(spell)
@@ -148,14 +152,35 @@ def prepare(run,output):
     meta=[]
     for k,p in sorted(scope.items()):
         meta.append({name:p[name] for name in ('switch_id','port_id','peer_node','peer_port','role','plane','peer_group','rate_bps')})
-    save(output/'input/schema.json',dict(schema_version='issue-local-measurements/1',start_ns=0,end_ns=end,window_ns=1000,
+    save(output/'input/schema.json',dict(schema_version='issue-local-measurements/2',start_ns=0,end_ns=end,window_ns=1000,
         fields=list(FIELDS),ports=meta,encoding='sparse_windows_explicit_zero_only_within_declared_coverage',
+        rank_nodes=[dict(rank_id=r,node_id=n) for r,n in zip(report['rank_ids'],report['rank_to_ub_node'])],
         semantics='exact integrals and event counters; not instantaneous queue samples',
         hardware_scope='engineering counter assumptions; credit eligibility and service time are not claimed A3 profiler fields'))
+    save(output/'input/queue_histograms.json',dict(schema_version='issue-queue-histograms/1',period_ns=1024,
+        phase_ns=0,bins='0 means empty; k>0 means [2**(k-1),2**k) bytes',
+        ports=[dict(node_id=k[0],port_id=k[1],counts=dict(states[k].histogram)) for k in sorted(scope)]))
     # End-side operations are supplied unchanged as the common application baseline.
     from moe_ub_cosim.research_storage import stored_rows
     with gzip.open(output/'input/endpoint_ops.jsonl.gz','wt') as stream:
         for r in stored_rows(run/'observed','endpoint_ops.jsonl'):stream.write(json.dumps(r,separators=(',',':'))+'\n')
+    with gzip.open(output/'input/endpoint_stages.jsonl.gz','wt') as stream:
+        for r in stored_rows(run/'observed','endpoint_stages.jsonl'):stream.write(json.dumps(r,separators=(',',':'))+'\n')
+    # Software knows its own planned logical work; expose local aggregates,
+    # without cross-rank operation IDs, paths, packet IDs or actual timing.
+    from moe_ub_cosim.record_storage import iter_result
+    work=defaultdict(Counter)
+    for t in iter_result(ex,'planned_transfers',report):
+        for side in ('src','dst'):
+            key=t[side+'_rank'],t['operation_id'];prefix='send' if side=='src' else 'receive'
+            work[key][prefix+'_payload_bytes']+=t['payload_bytes'];work[key][prefix+'_transfers']+=1
+    workload=[]
+    for op in iter_result(ex,'operation_registry',report):
+        for endpoint in op['endpoint_records']:
+            workload.append(dict(rank_id=endpoint['rank_id'],local_record_id=endpoint['local_record_id'],
+                kind=op['kind'],**work[endpoint['rank_id'],op['operation_id']]))
+    save(output/'input/workload.json',dict(schema_version='issue-software-local-work/1',
+        meaning='planned logical bytes and transfer counts, includes local delivery; no per-plane allocation or wire overhead assumed',operations=workload))
     save(output/'private/truth.json',dict(episodes=truth,credit_checks=credit_spells,
         true_continuous_credit_block_intervals='not_inferred_from_probe_latches',
         event_definition='positive-duration queue episode, >=1us duration and >=8192-byte peak; adjacent windows are not events'))

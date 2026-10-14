@@ -66,3 +66,17 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
 ```
 
 第一个命令只准备和校验封存切片，不启动目标后端；`r00` 等条件来自 `configs/scenarios/diagnostic-study.json`，源档案、切片、二进制和准备程序摘要写入 `selection.json`。第二个命令要求已成功运行并保存 `network_facts` 的目录；输出 `input/` 是诊断白名单，`private/` 是评价和机制核查资料，不能混用。`summary.json` 绑定全部文件摘要和真实覆盖。目标执行开始前仍须登记当前任务的总次数与资源。
+
+受限判断与独立评价分别执行，已用合成公开运行走通：
+
+```bash
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_judge \
+  --input runs/scaleup_issue_screening/my-prepared-facts/input \
+  --output runs/scaleup_issue_screening/my-diagnosis
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_evaluate \
+  --prepared runs/scaleup_issue_screening/my-prepared-facts \
+  --predictions runs/scaleup_issue_screening/my-diagnosis \
+  --output runs/scaleup_issue_screening/my-evaluation
+```
+
+判断器拒绝含额外文件的输入目录；不要将 `private/`、原始运行、控制配置或评价结果放进去。规则默认取 `configs/observation/diagnostic-rule.json`，也可显式 `--rule` 指定已经预登记的版本。判断与评价各自保存来源摘要；重分析使用新输出目录，缺少事件时指标保留未定义状态。

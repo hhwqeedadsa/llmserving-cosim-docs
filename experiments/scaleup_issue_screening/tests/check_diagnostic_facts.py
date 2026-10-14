@@ -31,4 +31,9 @@ class ExactLocalTest(unittest.TestCase):
         self.assertEqual([r[IX['waiting_ns']] for r in s.windows.values()],[1000,250])
         self.assertEqual(s.episodes[0]['end_ns'],1250)
 
+    def test_fixed_phase_histogram_samples_settled_state(self):
+        s=LocalState((1,2),1);s.event(0,'initial',dict(voq_bytes=0,fifo_bytes=0))
+        s.event(1024,'voq',dict(bytes=8192));s.event(2048,'final',{})
+        self.assertEqual(dict(s.histogram),{0:1,14:1})
+
 if __name__=='__main__':unittest.main()

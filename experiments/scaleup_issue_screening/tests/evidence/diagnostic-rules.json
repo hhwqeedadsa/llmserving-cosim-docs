@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "unit_tests": 11,
+  "rule_sha256": "58f6fd79d9056f5aa1b96947980fee0a289f1f1fd565566f26e88f1d18c6ba41",
+  "fresh_allowlist_reader_test": true,
+  "zero_report_cost_case": true,
+  "causal_future_perturbation": true,
+  "event_denominators": true,
+  "small_preparation": "runs/scaleup_issue_screening/diagnostic-study-20261014/diagnostic-small-complete/summary.json",
+  "predictions": "runs/scaleup_issue_screening/diagnostic-study-20261014/diagnostic-small-complete-judged-v2/summary.json",
+  "evaluation": "runs/scaleup_issue_screening/diagnostic-study-20261014/diagnostic-small-complete-evaluated-v2/summary.json",
+  "validation": {
+    "status": "completed",
+    "child_exit_code": 0,
+    "wall_seconds": 41.06708222441375,
+    "peak_sampled_group_rss_bytes": 4292608,
+    "aggregate_artifact_bytes_before_report": 54081683456
+  },
+  "preserved_failure": {
+    "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/diagnostic-flow-small-resources",
+    "reason": "Zero-report mode omitted explicit zero report_bytes in Counter serialization; corrected and checked with empty/no-alarm input"
+  },
+  "fixed_before_smaller_scale_labels": true,
+  "target_evaluation_completed": false
+}

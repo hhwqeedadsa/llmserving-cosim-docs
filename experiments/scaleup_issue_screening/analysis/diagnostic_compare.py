@@ -5,6 +5,7 @@ totals distinguish exported bytes, local reads, update events and state bounds.
 """
 import argparse
 from collections import Counter
+import json
 from pathlib import Path
 import sys
 from .workflow import CONFIG,digest,host,read,save
@@ -26,9 +27,17 @@ def payload_cost(cost,end_ns):
 
 def business_delta(value,baseline):
     old={o['operation_id']:o for o in baseline['operations']}
+    endpoint_changes=[]
+    for op in value['operations']:
+        prior={r['rank_id']:r for r in old[op['operation_id']].get('endpoints',[])}
+        delta={r['rank_id']:r['end_local_ns']-prior[r['rank_id']]['end_local_ns'] for r in op.get('endpoints',[])}
+        endpoint_changes.append(dict(operation_id=op['operation_id'],
+            later_ranks=[r for r,d in delta.items() if d>0],earlier_ranks=[r for r,d in delta.items() if d<0],
+            unchanged_ranks=sum(d==0 for d in delta.values()),end_deltas_ns=delta))
     return dict(simulation_delta_ns=value['simulation_end_ns']-baseline['simulation_end_ns'],
         final_operator_delta_ns=max(o['end_ns'] for o in value['operations'])-max(o['end_ns'] for o in old.values()),
         last_model_compute_delta_ns=value['last_model_compute_ns']-baseline['last_model_compute_ns'],
+        endpoint_changes=endpoint_changes,endpoint_scope='Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers',
         operations=[dict(operation_id=o['operation_id'],end_ns=o['end_ns'],
             end_delta_ns=o['end_ns']-old[o['operation_id']]['end_ns'],last_ranks=o['last_ranks'],
             baseline_last_ranks=old[o['operation_id']]['last_ranks']) for o in value['operations']])
@@ -53,6 +62,15 @@ def filtered_cost(predictions,ports,end_ns,width):
         assumptions='Local same-rule predicate, loss-checked coverage marker. Same continuously updated counters and original snapshot schedule; no raw-counter or progress-CDF preservation claim.')
 
 
+def manifest_identity(root,name):
+    live=root/'target'/name/'run/manifest.json'
+    if live.exists():return digest(live)
+    archive=root/'archives'/('target-'+name+'.tar.gz');index=read(str(archive)+'.json')
+    if not index['verified'] or not index['expanded_released'] or digest(archive)!=index['archive_sha256']:
+        raise ValueError('Archived target is not a verified retained source')
+    return index['entries']['run/manifest.json']['sha256']
+
+
 def compare(root,output):
     root,output=Path(root),Path(output)
     if output.exists():raise ValueError('Comparison output must be new')
@@ -62,7 +80,7 @@ def compare(root,output):
             predictions=root/'judged-v3'/name/'summary.json',evaluation=root/'evaluated-v3'/name/'summary.json',
             business=root/'business'/name/'summary.json',deep=root/'deep-v3'/name/'summary.json')
         docs={k:read(p) for k,p in paths.items()};p,j,e,b,d=[docs[k] for k in ('prepared','predictions','evaluation','business','deep')]
-        manifest=digest(root/'target'/name/'run/manifest.json')
+        manifest=manifest_identity(root,name)
         if {p['source_manifest_sha256'],e['source_manifest_sha256'],b['manifest_sha256'],d['source_manifest_sha256']}!={manifest}:
             raise ValueError('Comparison source mismatch')
         if e['source_preparation_sha256']!=digest(paths['prepared']) or e['predictions_sha256']!=digest(paths['predictions']):
@@ -76,7 +94,12 @@ def compare(root,output):
         if spec['service'] and b['baseline_sha256']!=digest(root/'business'/baseline/'summary.json'):
             raise ValueError('Control lacks invariant-checked baseline')
         if not spec['service']:
-            eq=read(root/'target'/name/'equivalence.json')
+            live=root/'target'/name/'equivalence.json'
+            if live.exists():eq=read(live)
+            else:
+                from .consumer_review import Archive
+                archived=Archive(root/'archives'/('target-'+name+'.tar.gz'))
+                for _,data in archived.members(['equivalence.json']):eq=json.loads(data)
             if not eq['passed'] or eq['replay_manifest_sha256']!=manifest:raise ValueError('Normal capture lacks equivalence')
         sources[name]={k:dict(path=str(v),sha256=digest(v)) for k,v in paths.items()}
         modes={}

@@ -98,3 +98,15 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
 ```
 
 `--case` 是有 `selection.json` 和成功 `run/` 的对照目录。受控业务复核必须增加 `--baseline <对应正常业务摘要.json>`，以检查图、计划传输、计算成本、资源与随机条件不变。逐包复核要求同源准备与业务摘要，只在研究者侧连接内部身份；八个详细出口来自预先固定六例。历史入口要求 `mechanism_screen` 已完成规则指定的正常档位，输出界限而非缺失字段的假造准确率。输出必须是新位置，自动受分析预算监督。
+
+如最晚条件落在源端回调边界，可继续使用已有记录核验其前置提交：
+
+```bash
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_feedback \
+  --case runs/scaleup_issue_screening/my-diagnostic-r00 \
+  --business runs/scaleup_issue_screening/my-business \
+  --deep runs/scaleup_issue_screening/my-deep \
+  --output runs/scaleup_issue_screening/my-feedback.json
+```
+
+该命令要求三个来源绑定一致，不运行后端。原生等待未拆分部分显式保留，不能将所有依赖边相加为可消除损失。

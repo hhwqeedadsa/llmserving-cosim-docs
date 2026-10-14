@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "unit_checks": 8,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback-tests/commands.jsonl",
+  "sources": {
+    "r00": {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r00.json",
+      "sha256": "c3fc5a072ecf19c5fd3a1bd807ae84121ee96fe6ad1607848d04dac875663749",
+      "nodes": 1286
+    },
+    "r01": {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/feedback/r01.json",
+      "sha256": "29d4b0155ef81a674aadc9a9bc1ee350ff7c75aa16dae164369ea6bd7a63c47f",
+      "nodes": 1266
+    }
+  },
+  "scope": "Actual callback/source SEND dependency continuation; no new simulation or native scheduling change"
+}

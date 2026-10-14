@@ -1,8 +1,12 @@
 """Independent arithmetic checks for stage progress and historical bounds."""
 import unittest
+import tempfile
+from pathlib import Path
 from ..analysis.diagnostic_deep import progress,distribution
 from ..analysis.diagnostic_historical import bounds
-from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost
+from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity
+from ..analysis.diagnostic_feedback import latest_dependencies
+from ..analysis.workflow import save,digest
 
 
 class ReviewMathTest(unittest.TestCase):
@@ -44,6 +48,20 @@ class ReviewMathTest(unittest.TestCase):
         r=filtered_cost(rows,2,2000,88)
         self.assertEqual((r['candidate_records'],r['network_payload_bytes'],r['peak_network_bytes_per_1us']),(2,216,128))
         self.assertEqual(filtered_cost([],2,2000,88)['network_payload_bytes'],40)
+
+    def test_callback_source_start_keeps_all_tied_conditions(self):
+        times={1:dict(end_ns=5),2:dict(end_ns=9),3:dict(end_ns=9)}
+        self.assertEqual(latest_dependencies(dict(deps=[1,2,3]),times),(9,[2,3]))
+        self.assertEqual(latest_dependencies(dict(deps=[]),times),(0,[]))
+
+    def test_archived_source_requires_matching_retained_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);p=root/'archives/target-r00.tar.gz';p.parent.mkdir();p.write_bytes(b'bound test archive')
+            save(str(p)+'.json',dict(verified=True,expanded_released=True,archive_sha256=digest(p),
+                entries={'run/manifest.json':dict(sha256='expected-manifest')}))
+            self.assertEqual(manifest_identity(root,'r00'),'expected-manifest')
+            p.write_bytes(b'changed')
+            with self.assertRaises(ValueError):manifest_identity(root,'r00')
 
 
 if __name__=='__main__':unittest.main()

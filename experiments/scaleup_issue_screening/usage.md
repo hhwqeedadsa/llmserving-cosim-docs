@@ -527,3 +527,23 @@ PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_bound
 ```
 
 可选 `--relation` 接受准备好的完整关系或简化边界文件。加强基线只对声明适用的远端交付完成语义使用源端结束，逐源筛选后取并集；异步本地返回不适用。理想边界仍保留“目的完成超出采集范围则未知”的相同保护。它描述发送开始所在窗口，不能解释成包已完成链路发送或协议已回收。
+
+
+简单恢复只添加同一范围的公开发送计数。准备阶段核验归档身份、公开存储清单、逐行校验和与显式零窗口；恢复命令只读取三个指定文件，不读取归档、理想关系或真值。下面的 `offline-1024-comparison` 是上面六组对照的已完成输出。
+
+```bash
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_recovery prepare \
+  --prepared "$OFFLINE_ROOT/offline-1024" --archive "$OFFLINE_ROOT/discovery-capture.tar.gz" \
+  --output "$OFFLINE_ROOT/offline-counters-new"
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_recovery recover \
+  --input "$OFFLINE_ROOT/offline-1024/information/input.json" \
+  --semantics "$OFFLINE_ROOT/offline-1024/semantics.json" \
+  --counters "$OFFLINE_ROOT/offline-counters-new/counters.json" \
+  --output "$OFFLINE_ROOT/offline-recovered-new.json"
+PYTHONPATH=python:. python3 -m experiments.scaleup_issue_screening.network_recovery evaluate \
+  --prepared "$OFFLINE_ROOT/offline-1024" --comparison "$OFFLINE_ROOT/offline-1024-comparison" \
+  --prediction "$OFFLINE_ROOT/offline-recovered-new.json" \
+  --output "$OFFLINE_ROOT/offline-recovery-evaluation-new.json"
+```
+
+`intervals` 是公开非零计数与操作时间交集允许的范围；协议流量仍包含在内，不能解释成实际最后一个应用包的估计值。完整采集范围内无相关机会、窗口缺失和未来未覆盖分别处理；目的结束在采集范围外时仍不宣布操作已结束。评价另外报告理想值、上界过早次数、候选减少和已知等待遗漏。短暂无流量、队列为零以及逻辑字节减线上字节都不是本规则的完成证明。

@@ -153,4 +153,60 @@ class SourceBounds(unittest.TestCase):
         self.assertFalse(any(transfer_bounds(t,a,endpoints).values()))
 
 
+class PublicRecovery(unittest.TestCase):
+    def example(self):
+        d,s,_=inputs()
+        d['windows'].append(dict(d['windows'][0],sample='s1',start_ns=20,end_ns=30))
+        for r in d['endpoints']:r['end_ns']=30
+        c=dict(schema_version='issue-network-public-counts/1',input_sha256='unused',start_ns=10,end_ns=30,
+            windows=[dict(sample='s0',counted_packets=0,counted_packet_bytes=0,capture_complete=True),
+                     dict(sample='s1',counted_packets=1,counted_packet_bytes=100,capture_complete=True)])
+        return d,s,c
+
+    def test_short_silence_does_not_certify_completion(self):
+        from .network_recovery import recover_input
+        d,s,c=self.example();r=recover_input(d,s,c)
+        self.assertEqual(r['samples'][0]['possible_operations'],['x','y'])
+        self.assertTrue(all(i['last_possible_tx_window_end_ns']==30 for i in r['intervals']))
+
+    def test_missing_and_future_coverage_stay_unknown(self):
+        from .network_recovery import recover_input
+        d,s,c=self.example();c['windows'].pop()
+        self.assertEqual(recover_input(d,s,c)['samples'][0]['possible_operations'],['x','y'])
+        d,s,c=self.example()
+        for r in c['windows']:r.update(counted_packets=0,counted_packet_bytes=0)
+        for r in d['endpoints']:r['end_ns']=40
+        self.assertEqual(recover_input(d,s,c)['samples'][0]['possible_operations'],['x','y'])
+
+    def test_wire_bytes_are_not_subtracted_as_application_payload(self):
+        from .network_recovery import recover_input
+        d,s,c=self.example();a=recover_input(d,s,c)
+        c['windows'][1]['counted_packet_bytes']=10**6
+        self.assertEqual(a,recover_input(d,s,c))
+
+    def test_late_empty_counter_tail_can_certify_a_bound(self):
+        from .network_recovery import recover_input
+        d,s,c=self.example()
+        c['windows'][0].update(counted_packets=1,counted_packet_bytes=100)
+        c['windows'][1].update(counted_packets=0,counted_packet_bytes=0)
+        self.assertEqual(recover_input(d,s,c)['samples'][1]['possible_operations'],[])
+
+    def test_recovers_only_from_explicit_inputs(self):
+        from .network_recovery import recover
+        d,s,c=self.example()
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);inp=root/'input.json';sem=root/'semantics.json';cnt=root/'counts.json';out=root/'out.json'
+            save(inp,d);s['input_sha256']=c['input_sha256']=digest(inp);save(sem,s);save(cnt,c)
+            allowed={inp,sem,cnt,*[Path(__file__).with_name(n).resolve() for n in ('network_recovery.py','network_bounds.py')]}
+            original=Path.open
+            def guarded(path,mode='r',*args,**kwargs):
+                if 'r' in mode:self.assertIn(path,allowed)
+                return original(path,mode,*args,**kwargs)
+            with patch.object(Path,'open',guarded):recover(inp,sem,cnt,out)
+            self.assertEqual(read(out)['samples'][0]['possible_operations'],['x','y'])
+        c['truth']='forbidden'
+        from .network_recovery import recover_input
+        with self.assertRaises(ValueError):recover_input(d,s,c)
+
+
 if __name__=='__main__':unittest.main()

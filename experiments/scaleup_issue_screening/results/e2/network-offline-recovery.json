@@ -1,0 +1,982 @@
+{
+  "schema_version": "issue-network-recovery-evaluation/1",
+  "rule": {
+    "version": "public-nonzero-window-envelope/1",
+    "hypothesis": "An application packet waiting at an outlet must start transmission in a later compatible nonzero public packet window.",
+    "envelope": "Intersect positive packet windows with each positive source/destination temporal envelope; union sources. The last compatible window end is a conservative upper bound, not an estimated last application packet.",
+    "safe_unknown": "Missing windows or destination completion beyond capture cannot certify a final boundary.",
+    "control": "All protocol/metadata traffic remains eligible public traffic; do not subtract logical payload from wire bytes.",
+    "alternative": "If other application or protocol traffic fills all temporal opportunities, counters cannot tighten these bounds.",
+    "scope": "One fixed simple rule; a failed attempt does not prove universal unidentifiability."
+  },
+  "intervals": [
+    {
+      "operation": "o000",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": 1000,
+      "last_possible_tx_window_end_ns": 15000,
+      "compatible_nonzero_windows": 13,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 15000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 0
+    },
+    {
+      "operation": "o001",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": 16000,
+      "last_possible_tx_window_end_ns": 91000,
+      "compatible_nonzero_windows": 41,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 80000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 11000
+    },
+    {
+      "operation": "o002",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": 79000,
+      "last_possible_tx_window_end_ns": 107000,
+      "compatible_nonzero_windows": 27,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 107000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 0
+    },
+    {
+      "operation": "o003",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": 110000,
+      "last_possible_tx_window_end_ns": 114000,
+      "compatible_nonzero_windows": 4,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 114000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 0
+    },
+    {
+      "operation": "o004",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": null,
+      "last_possible_tx_window_end_ns": null,
+      "compatible_nonzero_windows": 0,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": null,
+      "early_upper_bound": false,
+      "excess_upper_ns": null
+    },
+    {
+      "operation": "o005",
+      "switch_id": 802,
+      "port_id": 6,
+      "earliest_possible_tx_window_start_ns": null,
+      "last_possible_tx_window_end_ns": null,
+      "compatible_nonzero_windows": 0,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": null,
+      "early_upper_bound": false,
+      "excess_upper_ns": null
+    },
+    {
+      "operation": "o000",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": 2000,
+      "last_possible_tx_window_end_ns": 15000,
+      "compatible_nonzero_windows": 12,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 14000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 1000
+    },
+    {
+      "operation": "o001",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": 17000,
+      "last_possible_tx_window_end_ns": 97000,
+      "compatible_nonzero_windows": 44,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 96000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 1000
+    },
+    {
+      "operation": "o002",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": 80000,
+      "last_possible_tx_window_end_ns": 108000,
+      "compatible_nonzero_windows": 27,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 107000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 1000
+    },
+    {
+      "operation": "o003",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": 109000,
+      "last_possible_tx_window_end_ns": 114000,
+      "compatible_nonzero_windows": 5,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": 114000,
+      "early_upper_bound": false,
+      "excess_upper_ns": 0
+    },
+    {
+      "operation": "o004",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": null,
+      "last_possible_tx_window_end_ns": null,
+      "compatible_nonzero_windows": 0,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": null,
+      "early_upper_bound": false,
+      "excess_upper_ns": null
+    },
+    {
+      "operation": "o005",
+      "switch_id": 810,
+      "port_id": 2,
+      "earliest_possible_tx_window_start_ns": null,
+      "last_possible_tx_window_end_ns": null,
+      "compatible_nonzero_windows": 0,
+      "capture_complete": true,
+      "may_have_no_application_transmission": true,
+      "ideal_last_tx_window_end_ns": null,
+      "early_upper_bound": false,
+      "excess_upper_ns": null
+    }
+  ],
+  "early_upper_bounds": 0,
+  "sources": {
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/input.json": "90b8563d811a1e152a2269059eaa988e9b9e5b0432c7ab9e3d8acfe0b793f0ce",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/truth.json": "f904f5d65fe9b314d0f5fd669da3e0ee9524e553412f74573ee4f42aa706a6b3",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024/information/relation.json": "ad838712f7f326a50efd302742f072693f7a70e7e3b26dbf94b5e1203f3d348f",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovered.json": "7ab859cc44bbbe337f99dddcd08f19501f07d6aab848b668037b7bf93c611b75",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison/strong.json": "dbe6ce492dce97a4e88f3c18ca43ce8733e943a5f16da2bea591b11a65263bd4",
+    "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison/strong_full.json": "ab0512bae72afea9b66d8cd57f5005cc7327e64b09c5b376050e2f07b0fe7b74"
+  },
+  "program_sha256": "47cd43fba844a799289d8e3d6328dd043a1c57f92e85d353c5117b16d1219fcf",
+  "counts": {
+    "all": {
+      "windows": 228,
+      "positive_queue": 147,
+      "zero_queue": 81,
+      "positive_queue_application_unknown": 13,
+      "scopes": {
+        "known_waiting_operations": {
+          "known_windows": 134,
+          "unique_known": 107,
+          "multiple_possible_with_known": 27,
+          "known_mixture_windows": 2,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 117,
+          "windows_with_unconfirmed": 114
+        },
+        "complete_fifo_operations": {
+          "known_windows": 51,
+          "unique_known": 36,
+          "multiple_possible_with_known": 15,
+          "known_mixture_windows": 1,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 201,
+          "windows_with_unconfirmed": 186
+        },
+        "partial_arrival_to_fifo_operations": {
+          "known_windows": 131,
+          "unique_known": 105,
+          "multiple_possible_with_known": 26,
+          "known_mixture_windows": 2,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 120,
+          "windows_with_unconfirmed": 116
+        }
+      }
+    },
+    "primary": {
+      "windows": 2,
+      "positive_queue": 2,
+      "zero_queue": 0,
+      "positive_queue_application_unknown": 0,
+      "scopes": {
+        "known_waiting_operations": {
+          "known_windows": 2,
+          "unique_known": 2,
+          "multiple_possible_with_known": 0,
+          "known_mixture_windows": 0,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 0,
+          "windows_with_unconfirmed": 0
+        },
+        "complete_fifo_operations": {
+          "known_windows": 2,
+          "unique_known": 2,
+          "multiple_possible_with_known": 0,
+          "known_mixture_windows": 0,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 0,
+          "windows_with_unconfirmed": 0
+        },
+        "partial_arrival_to_fifo_operations": {
+          "known_windows": 2,
+          "unique_known": 2,
+          "multiple_possible_with_known": 0,
+          "known_mixture_windows": 0,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 0,
+          "windows_with_unconfirmed": 0
+        }
+      }
+    },
+    "related": {
+      "windows": 226,
+      "positive_queue": 145,
+      "zero_queue": 81,
+      "positive_queue_application_unknown": 13,
+      "scopes": {
+        "known_waiting_operations": {
+          "known_windows": 132,
+          "unique_known": 105,
+          "multiple_possible_with_known": 27,
+          "known_mixture_windows": 2,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 117,
+          "windows_with_unconfirmed": 114
+        },
+        "complete_fifo_operations": {
+          "known_windows": 49,
+          "unique_known": 34,
+          "multiple_possible_with_known": 15,
+          "known_mixture_windows": 1,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 201,
+          "windows_with_unconfirmed": 186
+        },
+        "partial_arrival_to_fifo_operations": {
+          "known_windows": 129,
+          "unique_known": 103,
+          "multiple_possible_with_known": 26,
+          "known_mixture_windows": 2,
+          "missed_known_operations": 0,
+          "unconfirmed_candidate_occurrences": 120,
+          "windows_with_unconfirmed": 116
+        }
+      }
+    },
+    "strata": {
+      "known_application": {
+        "windows": 134,
+        "positive_queue": 134,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 134,
+            "unique_known": 107,
+            "multiple_possible_with_known": 27,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 25,
+            "windows_with_unconfirmed": 25
+          },
+          "complete_fifo_operations": {
+            "known_windows": 51,
+            "unique_known": 36,
+            "multiple_possible_with_known": 15,
+            "known_mixture_windows": 1,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 109,
+            "windows_with_unconfirmed": 97
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 131,
+            "unique_known": 105,
+            "multiple_possible_with_known": 26,
+            "known_mixture_windows": 2,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 28,
+            "windows_with_unconfirmed": 27
+          }
+        }
+      },
+      "zero_queue": {
+        "windows": 81,
+        "positive_queue": 0,
+        "zero_queue": 81,
+        "positive_queue_application_unknown": 0,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 80,
+            "windows_with_unconfirmed": 77
+          },
+          "complete_fifo_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 80,
+            "windows_with_unconfirmed": 77
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 80,
+            "windows_with_unconfirmed": 77
+          }
+        }
+      },
+      "positive_queue_application_unknown": {
+        "windows": 13,
+        "positive_queue": 13,
+        "zero_queue": 0,
+        "positive_queue_application_unknown": 13,
+        "scopes": {
+          "known_waiting_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 12,
+            "windows_with_unconfirmed": 12
+          },
+          "complete_fifo_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 12,
+            "windows_with_unconfirmed": 12
+          },
+          "partial_arrival_to_fifo_operations": {
+            "known_windows": 0,
+            "unique_known": 0,
+            "multiple_possible_with_known": 0,
+            "known_mixture_windows": 0,
+            "missed_known_operations": 0,
+            "unconfirmed_candidate_occurrences": 12,
+            "windows_with_unconfirmed": 12
+          }
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "sample": "s0080",
+      "window": {
+        "sample": "s0080",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 80000,
+        "end_ns": 81000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0081",
+      "window": {
+        "sample": "s0081",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 81000,
+        "end_ns": 82000,
+        "voq_byte_ns": 4184,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0082",
+      "window": {
+        "sample": "s0082",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 82000,
+        "end_ns": 83000,
+        "voq_byte_ns": 9432,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0083",
+      "window": {
+        "sample": "s0083",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 83000,
+        "end_ns": 84000,
+        "voq_byte_ns": 3144,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0084",
+      "window": {
+        "sample": "s0084",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 84000,
+        "end_ns": 85000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": []
+    },
+    {
+      "sample": "s0085",
+      "window": {
+        "sample": "s0085",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 85000,
+        "end_ns": 86000,
+        "voq_byte_ns": 7268,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0086",
+      "window": {
+        "sample": "s0086",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 86000,
+        "end_ns": 87000,
+        "voq_byte_ns": 11392,
+        "fifo_byte_ns": 228696
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0087",
+      "window": {
+        "sample": "s0087",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 87000,
+        "end_ns": 88000,
+        "voq_byte_ns": 247192,
+        "fifo_byte_ns": 910008
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0088",
+      "window": {
+        "sample": "s0088",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 88000,
+        "end_ns": 89000,
+        "voq_byte_ns": 20824,
+        "fifo_byte_ns": 370464
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0089",
+      "window": {
+        "sample": "s0089",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 89000,
+        "end_ns": 90000,
+        "voq_byte_ns": 341760,
+        "fifo_byte_ns": 484176
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0090",
+      "window": {
+        "sample": "s0090",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 90000,
+        "end_ns": 91000,
+        "voq_byte_ns": 7878384,
+        "fifo_byte_ns": 3476400
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0107",
+      "window": {
+        "sample": "s0107",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o002"
+      ],
+      "recovered": [],
+      "ideal": [],
+      "known": []
+    },
+    {
+      "sample": "s0108",
+      "window": {
+        "sample": "s0108",
+        "switch_id": 802,
+        "port_id": 6,
+        "receiver": 70,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o002",
+        "o003"
+      ],
+      "recovered": [
+        "o003"
+      ],
+      "ideal": [
+        "o003"
+      ],
+      "known": []
+    },
+    {
+      "sample": "s0128",
+      "window": {
+        "sample": "s0128",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 14000,
+        "end_ns": 15000,
+        "voq_byte_ns": 128,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o000"
+      ],
+      "recovered": [
+        "o000"
+      ],
+      "ideal": [],
+      "known": []
+    },
+    {
+      "sample": "s0210",
+      "window": {
+        "sample": "s0210",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 96000,
+        "end_ns": 97000,
+        "voq_byte_ns": 13556,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o001",
+        "o002"
+      ],
+      "recovered": [
+        "o001",
+        "o002"
+      ],
+      "ideal": [
+        "o002"
+      ],
+      "known": [
+        "o002"
+      ]
+    },
+    {
+      "sample": "s0221",
+      "window": {
+        "sample": "s0221",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 107000,
+        "end_ns": 108000,
+        "voq_byte_ns": 64,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o002"
+      ],
+      "recovered": [
+        "o002"
+      ],
+      "ideal": [],
+      "known": []
+    },
+    {
+      "sample": "s0222",
+      "window": {
+        "sample": "s0222",
+        "switch_id": 810,
+        "port_id": 2,
+        "receiver": 98,
+        "start_ns": 108000,
+        "end_ns": 109000,
+        "voq_byte_ns": 0,
+        "fifo_byte_ns": 0
+      },
+      "baseline": [
+        "o002",
+        "o003"
+      ],
+      "recovered": [
+        "o003"
+      ],
+      "ideal": [
+        "o003"
+      ],
+      "known": []
+    }
+  ],
+  "local_evaluation": {
+    "path": "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovery-evaluation.json",
+    "sha256": "002fc7c268d99c09d08c4e405a98db3192cee5d03fe22e2f652e32a4c13137af"
+  },
+  "rule_freeze": {
+    "rule": {
+      "version": "public-nonzero-window-envelope/1",
+      "hypothesis": "An application packet waiting at an outlet must start transmission in a later compatible nonzero public packet window.",
+      "envelope": "Intersect positive packet windows with each positive source/destination temporal envelope; union sources. The last compatible window end is a conservative upper bound, not an estimated last application packet.",
+      "safe_unknown": "Missing windows or destination completion beyond capture cannot certify a final boundary.",
+      "control": "All protocol/metadata traffic remains eligible public traffic; do not subtract logical payload from wire bytes.",
+      "alternative": "If other application or protocol traffic fills all temporal opportunities, counters cannot tighten these bounds.",
+      "scope": "One fixed simple rule; a failed attempt does not prove universal unidentifiability."
+    },
+    "program_sha256": "47cd43fba844a799289d8e3d6328dd043a1c57f92e85d353c5117b16d1219fcf",
+    "baseline_rule_freeze_sha256": "a16d618e0264b74a24bddd1ad20b1e7c28320e44d90c85df0df35495f9a4af19",
+    "development_inputs": "1024 input and baseline/ideal comparison; no 256 preparation/evaluation opened",
+    "expected_counterexample": "Old source operation remains open while later operation or protocol packets occupy compatible public windows; envelope stays wide.",
+    "limitations": "Not universal unidentifiability; no packet/byte classification or uniform plane split."
+  },
+  "rule_freeze_sha256": "904e1c7dc2c5e28442d2f7e1d7130b08a3988fa09ec416cacabdf4768fe88250",
+  "resources": {
+    "offline-1024-counters-resources": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "prepare",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--archive",
+        "runs/scaleup_issue_screening/network-screening-20261013/discovery-capture.tar.gz",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-counters"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-14T03:57:11.756947+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      },
+      "peak_sampled_group_rss_bytes": 71864320,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening",
+        "/root/moe-ub-cosim/build/m10-research-slice",
+        "/root/moe-ub-cosim/runs/mapping_value",
+        "/root/moe-ub-cosim/runs/scaleup_observability",
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+        "/root/moe-ub-cosim/build/v04-platform",
+        "/root/moe-ub-cosim/runs/m19-a3-resources",
+        "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+        "/root/moe-ub-cosim/build/m17-send-state",
+        "/root/moe-ub-cosim/runs/v03-research-slice",
+        "/root/moe-ub-cosim/runs/v04-platform",
+        "/root/moe-ub-cosim/runs/task-sync-20261008",
+        "/root/moe-ub-cosim/runs/m20-segment-facts",
+        "/root/moe-ub-cosim/runs/m17-send-state",
+        "/root/moe-ub-cosim/build/m19-a3-resources",
+        "/root/moe-ub-cosim/build/m10-resource-efficiency"
+      ],
+      "peak_sampled_artifact_bytes": 52592738304,
+      "min_free_bytes": 21474836480,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 51424888020,
+      "peak_sampled_artifact_allocated_bytes": 52592738304,
+      "process_group": 3259097,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-14T03:57:59.614231+00:00",
+      "wall_seconds": 47.857298370450735,
+      "max_waited_child_rss_kib": 90476,
+      "artifact_bytes_before_report": 3225,
+      "aggregate_artifact_bytes_before_report": 52592738304,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 51424888020,
+        "allocated_bytes": 52592738304
+      }
+    },
+    "offline-1024-recovery-evaluation.json-resources": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "experiments.scaleup_issue_screening.network_recovery",
+        "--worker",
+        "evaluate",
+        "--prepared",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024",
+        "--comparison",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-comparison",
+        "--prediction",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovered.json",
+        "--output",
+        "runs/scaleup_issue_screening/network-screening-20261013/offline-1024-recovery-evaluation.json"
+      ],
+      "cwd": "/root/moe-ub-cosim",
+      "started_utc": "2026-10-14T03:58:00.219540+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 8589934592,
+        "per_process_address_bytes": 12884901888,
+        "artifact_bytes": 68719476736,
+        "wall_seconds": 1800
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/root/moe-ub-cosim/runs/v04-platform",
+        "/root/moe-ub-cosim/runs/m20-segment-facts",
+        "/root/moe-ub-cosim/runs/m21-platform-acceptance",
+        "/root/moe-ub-cosim/runs/mapping_value",
+        "/root/moe-ub-cosim/runs/v03-research-slice",
+        "/root/moe-ub-cosim/runs/scaleup_observability",
+        "/root/moe-ub-cosim/runs/task-sync-20261008",
+        "/root/moe-ub-cosim/runs/m17-send-state",
+        "/root/moe-ub-cosim/runs/scaleup_issue_screening",
+        "/root/moe-ub-cosim/build/m17-send-state",
+        "/root/moe-ub-cosim/runs/m19-a3-resources",
+        "/root/moe-ub-cosim/build/m10-research-slice",
+        "/root/moe-ub-cosim/runs/v03-resource-efficiency",
+        "/root/moe-ub-cosim/build/m10-resource-efficiency",
+        "/root/moe-ub-cosim/build/m19-a3-resources",
+        "/root/moe-ub-cosim/build/v04-platform"
+      ],
+      "peak_sampled_artifact_bytes": 52593864704,
+      "min_free_bytes": 21474836480,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 51426005470,
+      "peak_sampled_artifact_allocated_bytes": 52593864704,
+      "process_group": 3259596,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-14T03:58:37.186590+00:00",
+      "wall_seconds": 36.967056684195995,
+      "max_waited_child_rss_kib": 72760,
+      "artifact_bytes_before_report": 496,
+      "aggregate_artifact_bytes_before_report": 52593864704,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 51426005470,
+        "allocated_bytes": 52593864704
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "passed": true,
+  "unit_checks": 21,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/event-metric-tests/commands.jsonl",
+  "check_sha256": "62f99c60ae3e1a4ff6bd1a673b5c76d93c81ec8fd9ba740388f480a626f8edce",
+  "actual_event_checks": {
+    "r00": {
+      "queues-10us": {
+        "slow_service_queue_events": 0,
+        "detected_queue_events": 0,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": null,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "service-1us": {
+        "slow_service_queue_events": 0,
+        "detected_queue_events": 0,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": null,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "credit-10us": {
+        "slow_service_queue_events": 0,
+        "detected_queue_events": 0,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": null,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "event-10us": {
+        "slow_service_queue_events": 0,
+        "detected_queue_events": 0,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": null,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      }
+    },
+    "r01": {
+      "queues-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": 0.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "service-1us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "credit-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "event-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      }
+    },
+    "r02": {
+      "queues-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 0,
+        "service_explanation_fraction": 0.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "service-1us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "credit-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      },
+      "event-10us": {
+        "slow_service_queue_events": 1,
+        "detected_queue_events": 1,
+        "explained_as_service_events": 1,
+        "service_explanation_fraction": 1.0,
+        "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+      }
+    }
+  },
+  "archive_validation_probe_sha256": "f22def85e30a1ae6043fb34c502fc7a7ce7ee7c3ef462c7d00a4f77690bd4b86",
+  "archive_validation": "completed",
+  "scope": "Event-level service explanations and retained-archive identity, not final all-condition acceptance"
+}

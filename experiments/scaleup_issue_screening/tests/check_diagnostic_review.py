@@ -4,7 +4,7 @@ import tempfile
 from pathlib import Path
 from ..analysis.diagnostic_deep import progress,distribution
 from ..analysis.diagnostic_historical import bounds
-from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity
+from ..analysis.diagnostic_compare import payload_cost,business_delta,filtered_cost,manifest_identity,service_event_score
 from ..analysis.diagnostic_feedback import latest_dependencies
 from ..analysis.workflow import save,digest
 
@@ -62,6 +62,14 @@ class ReviewMathTest(unittest.TestCase):
             self.assertEqual(manifest_identity(root,'r00'),'expected-manifest')
             p.write_bytes(b'changed')
             with self.assertRaises(ValueError):manifest_identity(root,'r00')
+
+    def test_service_explanation_counts_events_not_repeated_reports(self):
+        events=[dict(node_id=1,port_id=2,start_ns=a,end_ns=a+10) for a in (0,20)]
+        p=dict(node_id=1,port_id=2,start_ns=0,end_ns=5,labels=['local_service_deficit'])
+        q=dict(node_id=1,port_id=2,start_ns=20,end_ns=25,labels=['queue_cause_unknown'])
+        result=service_event_score(events,[p,p,q])
+        self.assertEqual((result['detected_queue_events'],result['explained_as_service_events']),(2,1))
+        self.assertIsNone(service_event_score([],[])['service_explanation_fraction'])
 
 
 if __name__=='__main__':unittest.main()

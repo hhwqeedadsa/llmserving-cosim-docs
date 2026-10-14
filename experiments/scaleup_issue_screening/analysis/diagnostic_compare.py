@@ -4,7 +4,7 @@ This is private evaluation, never an input generator for diagnosis. Resource
 totals distinguish exported bytes, local reads, update events and state bounds.
 """
 import argparse
-from collections import Counter
+from collections import Counter,defaultdict
 import json
 from pathlib import Path
 import sys
@@ -71,6 +71,18 @@ def manifest_identity(root,name):
     return index['entries']['run/manifest.json']['sha256']
 
 
+def service_event_score(events,predictions):
+    by_port=defaultdict(list)
+    for p in predictions:by_port[p['node_id'],p['port_id']].append(p)
+    detected=explained=0
+    for e in events:
+        hits=[p for p in by_port[e['node_id'],e['port_id']] if p['start_ns']<e['end_ns'] and p['end_ns']>e['start_ns']]
+        detected+=bool(hits);explained+=any('local_service_deficit' in p['labels'] for p in hits)
+    return dict(slow_service_queue_events=len(events),detected_queue_events=detected,
+        explained_as_service_events=explained,service_explanation_fraction=explained/len(events) if events else None,
+        limits='Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test.')
+
+
 def compare(root,output):
     root,output=Path(root),Path(output)
     if output.exists():raise ValueError('Comparison output must be new')
@@ -78,7 +90,8 @@ def compare(root,output):
     for spec in study['primary_cases']:
         name=spec['id'];paths=dict(prepared=root/'prepared-v3'/name/'summary.json',
             predictions=root/'judged-v3'/name/'summary.json',evaluation=root/'evaluated-v3'/name/'summary.json',
-            business=root/'business'/name/'summary.json',deep=root/'deep-v3'/name/'summary.json')
+            business=root/'business'/name/'summary.json',deep=root/'deep-v3'/name/'summary.json',
+            feedback=root/'feedback'/(name+'.json'))
         docs={k:read(p) for k,p in paths.items()};p,j,e,b,d=[docs[k] for k in ('prepared','predictions','evaluation','business','deep')]
         manifest=manifest_identity(root,name)
         if {p['source_manifest_sha256'],e['source_manifest_sha256'],b['manifest_sha256'],d['source_manifest_sha256']}!={manifest}:
@@ -87,6 +100,9 @@ def compare(root,output):
             raise ValueError('Evaluation binding mismatch')
         if d['prepared_sha256']!=digest(paths['prepared']) or d['business_sha256']!=digest(paths['business']):
             raise ValueError('Deep binding mismatch')
+        feedback=docs['feedback']
+        if feedback['manifest_sha256']!=manifest or feedback['business_sha256']!=digest(paths['business']) or feedback['deep_sha256']!=digest(paths['deep']):
+            raise ValueError('Feedback binding mismatch')
         rule_sha=rule_sha or e['rule_sha256']
         if e['rule_sha256']!=rule_sha or j['rule_sha256']!=rule_sha:raise ValueError('Rule changed between cases')
         baseline='r06' if spec['source']=='g0-b2-short' else 'r00'
@@ -103,18 +119,28 @@ def compare(root,output):
             if not eq['passed'] or eq['replay_manifest_sha256']!=manifest:raise ValueError('Normal capture lacks equivalence')
         sources[name]={k:dict(path=str(v),sha256=digest(v)) for k,v in paths.items()}
         modes={}
+        truth_path=paths['prepared'].parent/'private/truth.json'
+        if digest(truth_path)!=p['private_sha256']['truth.json']:raise ValueError('Private event evidence changed')
+        public=read(paths['prepared'].parent/'input/schema.json')
+        keys={(v['switch_id'],v['port_id']) for v in public['ports']}
+        slow=[v for v in read(truth_path)['episodes'] if v['qualifies'] and v['slow_service_overlap'] and (v['node_id'],v['port_id']) in keys]
         for mode,v in e['modes'].items():
             spec_mode=j['modes'][mode];extra={}
+            records=list(rows(paths['predictions'].parent/(mode+'.jsonl.gz')))
             if spec_mode['kind']!='histogram':
                 width=(96+sum(BITS[f] for f in FIELDSETS[spec_mode['fieldset']]))//8
-                extra['local_filtered_reference']=filtered_cost(rows(paths['predictions'].parent/(mode+'.jsonl.gz')),j['ports'],j['end_ns'],width)
+                extra['local_filtered_reference']=filtered_cost(records,j['ports'],j['end_ns'],width)
                 extra['local_filtered_reference']['predicate_evaluations']=v['cost']['records']
                 extra['local_filtered_reference']['prediction_sha256']=digest(paths['predictions'].parent/(mode+'.jsonl.gz'))
-            modes[mode]=dict(**v,payload_cost=payload_cost(v['cost'],j['end_ns']),**extra)
+            modes[mode]=dict(**v,payload_cost=payload_cost(v['cost'],j['end_ns']),service_event_score=service_event_score(slow,records),**extra)
         result[name]=dict(condition=spec,manifest_sha256=manifest,baseline=baseline,
             capture_end_ns=p['capture']['end_ns'],captured_events=sum(p['events'].values()),
             covered_public_ports=p['public_ports'],captured_ports=p['captured_ports'],
             business=business_delta(b,base),complete_gates_reviewed=len(b['reviewed_gates']),
+            feedback_nodes=len(feedback['nodes']),unexplained_start_delay_ns=sum(n['unexplained_ready_to_start_ns'] for n in feedback['nodes']),
+            controlled_terminal_witnesses=[n for n in feedback['nodes'] if any(
+                (v['node_id'],v['port_id']) in {(c['node_id'],c['port_id']) for c in spec['service']}
+                for v in n.get('callback',{}).get('terminal_packet_witnesses',[]))],
             exact_queue_events=e['positive_duration_queue_episodes'],qualifying_queue_events=e['qualifying_public_queue_events'],
             qualifying_slow_service_events=e['qualifying_with_slow_service'],credit_witnesses=e['credit_witnesses'],
             ambiguous_counter_progress_pairs=j['counter_progress_ambiguous_pairs'],

@@ -61,11 +61,17 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
   --slice runs/scaleup_issue_screening/network-screening-20261013/discovery-slice \
   --backend build/m19-a3-resources/network-facts/output/cosim/ns3.44-cosim-service \
   --run-id r00 --output runs/scaleup_issue_screening/my-diagnostic-r00
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_run run \
+  --output runs/scaleup_issue_screening/my-diagnostic-r00
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_run equivalent \
+  --archive runs/scaleup_issue_screening/archives/g0-b8-short.tar.gz \
+  --output runs/scaleup_issue_screening/my-diagnostic-r00
 PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_facts \
-  --run runs/native-network --output runs/scaleup_issue_screening/my-prepared-facts
+  --run runs/scaleup_issue_screening/my-diagnostic-r00/run \
+  --output runs/scaleup_issue_screening/my-prepared-facts
 ```
 
-第一个命令只准备和校验封存切片，不启动目标后端；`r00` 等条件来自 `configs/scenarios/diagnostic-study.json`，源档案、切片、二进制和准备程序摘要写入 `selection.json`。第二个命令要求已成功运行并保存 `network_facts` 的目录；输出 `input/` 是诊断白名单，`private/` 是评价和机制核查资料，不能混用。`summary.json` 绑定全部文件摘要和真实覆盖。目标执行开始前仍须登记当前任务的总次数与资源。
+第一个命令只准备和校验封存切片，不启动目标后端；`r00` 等条件来自 `configs/scenarios/diagnostic-study.json`，源档案、切片、二进制和准备程序摘要写入 `selection.json`。`run` 启动公开重放及校验；正常补采用 `equivalent` 对照原档案，受控运行不执行等价断言。事实准备要求已成功运行并保存 `network_facts` 的目录；输出 `input/` 是诊断白名单，`private/` 是评价和机制核查资料，不能混用。`summary.json` 绑定全部文件摘要和真实覆盖。目标执行开始前仍须登记当前任务的总次数与资源。
 
 受限判断与独立评价分别执行，已用合成公开运行走通：
 
@@ -89,7 +95,7 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
   --output runs/scaleup_issue_screening/my-business
 PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_deep \
   --case runs/scaleup_issue_screening/my-diagnostic-r00 \
-  --prepared runs/scaleup_issue_screening/my-prepared \
+  --prepared runs/scaleup_issue_screening/my-prepared-facts \
   --business runs/scaleup_issue_screening/my-business \
   --output runs/scaleup_issue_screening/my-deep
 PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_historical \

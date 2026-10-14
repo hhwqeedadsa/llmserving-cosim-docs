@@ -1,0 +1,558 @@
+{
+  "schema_version": "issue-service-control-review/1",
+  "cases": {
+    "r01": {
+      "manifest_sha256": "d5c54a7d1329ea93d86bf46bd4517634b2e2ff77bdbaf948fc92487506a5c631",
+      "archive": "runs/scaleup_issue_screening/diagnostic-study-20261014/archives/target-r01.tar.gz",
+      "archive_index_sha256": "bfa27ac699f4858fa55260b7966f145834ee8e60c8d43fb5352542f1e8983ef4",
+      "source_sha256": {
+        "business": "8c13559d08d8968be026175aade3e47496ef14ae745ab1d076c4047469dfd471",
+        "deep": "bb17fbeea32faf873a53f9b664bd66b7d985830b59b12fd03665d79a1e59332a",
+        "evaluation": "5bd216a3cc7aa9a532b9731b94e1e6d4eedcee37c146be3a6c7fc0b0cff9fef3"
+      },
+      "feedback_sha256": "29d4b0155ef81a674aadc9a9bc1ee350ff7c75aa16dae164369ea6bd7a63c47f",
+      "business": {
+        "simulation_delta_ns": 7062,
+        "final_operator_delta_ns": 7062,
+        "last_model_compute_delta_ns": 7062,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 21654,
+            "end_delta_ns": 6446,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 103827,
+            "end_delta_ns": 6580,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 115527,
+            "end_delta_ns": 6506,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 249045,
+            "end_delta_ns": 6509,
+            "last_ranks": [
+              60
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 259855,
+            "end_delta_ns": 6595,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 401605,
+            "end_delta_ns": 7062,
+            "last_ranks": [
+              57
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ]
+      },
+      "controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 6,
+            "start_ns": 2000,
+            "end_ns": 12000,
+            "rate_bps": 100000000000
+          },
+          "actual_started_packets": 39,
+          "actual_rates_bps": {
+            "100000000000": 39
+          },
+          "actual_started_bytes": 126576,
+          "busy_union_within_interval_ns": 9928,
+          "actual_destination_packets": {
+            "6": 34
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 171,
+              "sum": 17872,
+              "min": 0,
+              "median": 62,
+              "p95": 329,
+              "max": 658
+            },
+            "arrival_to_fifo_ns": {
+              "n": 171,
+              "sum": 1515929,
+              "min": 1,
+              "median": 9866,
+              "p95": 14552,
+              "max": 14996
+            },
+            "arrival_to_tx_ns": {
+              "n": 171,
+              "sum": 1533801,
+              "min": 1,
+              "median": 9928,
+              "p95": 14614,
+              "max": 14996
+            },
+            "busy_during_wait_ns": {
+              "n": 171,
+              "sum": 1532469,
+              "min": 0,
+              "median": 9920,
+              "p95": 14587,
+              "max": 14967
+            }
+          },
+          "terminal_gate_packets": [],
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "qualifying_queue_events": 143,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "diagnostic_event_checks": {
+        "queues-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 0,
+          "service_explanation_fraction": 0.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "service-1us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "credit-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "event-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        }
+      },
+      "feedback_nodes": 1266,
+      "controlled_terminal_witnesses": [
+        {
+          "rank_id": 102,
+          "node_id": 884,
+          "name": "copy-fence",
+          "kind": "EVENT",
+          "start_ns": 1348,
+          "end_ns": 19550,
+          "latest_start_dependencies": [
+            881
+          ],
+          "start_ready_ns": 1348,
+          "edges": [
+            {
+              "kind": "latest_start_dependency",
+              "rank_id": 102,
+              "node_id": 881
+            },
+            {
+              "kind": "actual_callback_source_submission",
+              "rank_id": 102,
+              "node_id": 882
+            }
+          ],
+          "resource_owners": [],
+          "unexplained_ready_to_start_ns": 0,
+          "callback": {
+            "transfer_id": 4294973915,
+            "field": "data_ready_ns",
+            "time_ns": 19550,
+            "pending_after_start": true,
+            "src_rank": 102,
+            "dst_rank": 6,
+            "submitted_ns": 1348,
+            "data_ready_ns": 19550,
+            "local_read_complete_ns": 7165,
+            "transaction_done_ns": 19634,
+            "terminal_packet_witnesses": [
+              {
+                "node_id": 768,
+                "port_id": 6,
+                "packet_uid": 28779,
+                "network_arrival_ns": 7209,
+                "tx_start_ns": 19448,
+                "completion_delay_ns": 82,
+                "rate_bps": 400000000000,
+                "downstream_wire_arrival_ns": 19550,
+                "arrival_to_tx_ns": 12239,
+                "busy_during_wait_ns": 12204
+              }
+            ],
+            "limit": "Submission-to-progress includes native waiting and network feedback; not assigned wholesale to an outlet"
+          }
+        },
+        {
+          "rank_id": 108,
+          "node_id": 636,
+          "name": "copy-fence",
+          "kind": "EVENT",
+          "start_ns": 2498,
+          "end_ns": 19384,
+          "latest_start_dependencies": [
+            633
+          ],
+          "start_ready_ns": 2498,
+          "edges": [
+            {
+              "kind": "latest_start_dependency",
+              "rank_id": 108,
+              "node_id": 633
+            },
+            {
+              "kind": "actual_callback_source_submission",
+              "rank_id": 108,
+              "node_id": 634
+            }
+          ],
+          "resource_owners": [],
+          "unexplained_ready_to_start_ns": 0,
+          "callback": {
+            "transfer_id": 4294974313,
+            "field": "data_ready_ns",
+            "time_ns": 19384,
+            "pending_after_start": true,
+            "src_rank": 108,
+            "dst_rank": 6,
+            "submitted_ns": 2498,
+            "data_ready_ns": 19384,
+            "local_read_complete_ns": 4839,
+            "transaction_done_ns": 19468,
+            "terminal_packet_witnesses": [
+              {
+                "node_id": 768,
+                "port_id": 6,
+                "packet_uid": 22754,
+                "network_arrival_ns": 5214,
+                "tx_start_ns": 19301,
+                "completion_delay_ns": 63,
+                "rate_bps": 400000000000,
+                "downstream_wire_arrival_ns": 19384,
+                "arrival_to_tx_ns": 14087,
+                "busy_during_wait_ns": 14053
+              }
+            ],
+            "limit": "Submission-to-progress includes native waiting and network feedback; not assigned wholesale to an outlet"
+          }
+        }
+      ],
+      "invariants_checked": [
+        "sealed graph",
+        "planned transfers",
+        "compute durations",
+        "native resource attributes/objects",
+        "random seed/run"
+      ],
+      "limits": "Same routing algorithm, not forced historical paths or launch times. Control total effect includes actual feedback; packet wait is not summed as business loss."
+    },
+    "r02": {
+      "manifest_sha256": "cc9aff556941a6fc6943c7de8bbf48ef322b6a02b6eac28e075c095be52943be",
+      "archive": "runs/scaleup_issue_screening/diagnostic-study-20261014/archives/target-r02.tar.gz",
+      "archive_index_sha256": "2a4a1c39dbbe8261d36f609ad683fa1b891188464dc18765824fed9e48d8b80a",
+      "source_sha256": {
+        "business": "5c003379c849fe40f4924a5ef48cab85c9909713b7c5eb6781879c1d2072a601",
+        "deep": "33369e2bef075e39a69b538e7b7954282773f507a15ae5c9c8bd1bee008d0194",
+        "evaluation": "197d90d33baeeaf9fbacbff3aba0cde7851e27ca4e23a45ff7581dc6310d77bb"
+      },
+      "feedback_sha256": "3b8aed4f97dfeccfabf463e73ab2744b6969510d363473d1f187e2b2d7ea90c9",
+      "business": {
+        "simulation_delta_ns": 729,
+        "final_operator_delta_ns": 729,
+        "last_model_compute_delta_ns": 729,
+        "endpoint_scope": "Observed counterfactual end changes, not individually additive queue-caused loss or only direct receivers",
+        "operations": [
+          {
+            "operation_id": "D.w0.L6.dispatch",
+            "end_ns": 15220,
+            "end_delta_ns": 12,
+            "last_ranks": [
+              102
+            ],
+            "baseline_last_ranks": [
+              102
+            ]
+          },
+          {
+            "operation_id": "D.w0.L6.combine",
+            "end_ns": 97353,
+            "end_delta_ns": 106,
+            "last_ranks": [
+              22,
+              34
+            ],
+            "baseline_last_ranks": [
+              22,
+              34
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.dispatch",
+            "end_ns": 109138,
+            "end_delta_ns": 117,
+            "last_ranks": [
+              70
+            ],
+            "baseline_last_ranks": [
+              70
+            ]
+          },
+          {
+            "operation_id": "D.w0.L7.combine",
+            "end_ns": 243142,
+            "end_delta_ns": 606,
+            "last_ranks": [
+              46
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.dispatch",
+            "end_ns": 253894,
+            "end_delta_ns": 634,
+            "last_ranks": [
+              65
+            ],
+            "baseline_last_ranks": [
+              65
+            ]
+          },
+          {
+            "operation_id": "D.w0.L8.combine",
+            "end_ns": 395272,
+            "end_delta_ns": 729,
+            "last_ranks": [
+              48
+            ],
+            "baseline_last_ranks": [
+              57
+            ]
+          }
+        ]
+      },
+      "controls": [
+        {
+          "requested": {
+            "node_id": 768,
+            "port_id": 18,
+            "start_ns": 1000,
+            "end_ns": 101000,
+            "rate_bps": 100000000000
+          },
+          "actual_started_packets": 255,
+          "actual_rates_bps": {
+            "100000000000": 255
+          },
+          "actual_started_bytes": 271876,
+          "busy_union_within_interval_ns": 21743,
+          "actual_destination_packets": {
+            "49": 4,
+            "86": 4,
+            "71": 2,
+            "75": 4,
+            "17": 3,
+            "55": 1,
+            "33": 2,
+            "63": 1,
+            "102": 1,
+            "34": 2,
+            "19": 2,
+            "77": 2,
+            "57": 1,
+            "64": 1,
+            "37": 2,
+            "69": 3,
+            "44": 3,
+            "87": 1,
+            "30": 2,
+            "61": 1,
+            "109": 3,
+            "54": 2,
+            "89": 2,
+            "21": 3,
+            "121": 4,
+            "31": 3,
+            "73": 4,
+            "24": 3,
+            "68": 1,
+            "23": 3,
+            "111": 1,
+            "105": 2,
+            "66": 1,
+            "36": 2,
+            "81": 3,
+            "62": 1,
+            "84": 1,
+            "114": 3,
+            "88": 5,
+            "26": 1,
+            "94": 2,
+            "65": 2,
+            "124": 1,
+            "27": 1,
+            "20": 2,
+            "117": 2,
+            "70": 3,
+            "80": 2,
+            "116": 1,
+            "78": 3,
+            "95": 2,
+            "103": 1,
+            "47": 1,
+            "53": 1,
+            "35": 1,
+            "29": 2,
+            "43": 1,
+            "58": 4,
+            "115": 2,
+            "90": 1,
+            "48": 1,
+            "107": 1,
+            "22": 1,
+            "72": 1,
+            "127": 1,
+            "100": 1,
+            "112": 1,
+            "125": 1,
+            "119": 1,
+            "76": 1,
+            "113": 1,
+            "106": 1,
+            "101": 1,
+            "38": 1,
+            "50": 1
+          },
+          "wait_metrics": {
+            "fifo_wait_ns": {
+              "n": 255,
+              "sum": 10086,
+              "min": 0,
+              "median": 0,
+              "p95": 251,
+              "max": 329
+            },
+            "arrival_to_fifo_ns": {
+              "n": 255,
+              "sum": 28600,
+              "min": 0,
+              "median": 1,
+              "p95": 745,
+              "max": 2383
+            },
+            "arrival_to_tx_ns": {
+              "n": 255,
+              "sum": 38686,
+              "min": 0,
+              "median": 1,
+              "p95": 946,
+              "max": 2634
+            },
+            "busy_during_wait_ns": {
+              "n": 255,
+              "sum": 38512,
+              "min": 0,
+              "median": 0,
+              "p95": 946,
+              "max": 2634
+            }
+          },
+          "terminal_gate_packets": [],
+          "shared_hop_necessary_transfer_count": 0
+        }
+      ],
+      "qualifying_queue_events": 144,
+      "qualifying_slow_service_events": 1,
+      "credit_witnesses": 0,
+      "diagnostic_event_checks": {
+        "queues-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 0,
+          "service_explanation_fraction": 0.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "service-1us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "credit-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        },
+        "event-10us": {
+          "slow_service_queue_events": 1,
+          "detected_queue_events": 1,
+          "explained_as_service_events": 1,
+          "service_explanation_fraction": 1.0,
+          "limits": "Any real slow serialization overlapping a qualifying continuous queue episode; mixed episodes may also contain nominal service. Not a report-count accuracy or injection-label test."
+        }
+      },
+      "feedback_nodes": 1330,
+      "controlled_terminal_witnesses": [],
+      "invariants_checked": [
+        "sealed graph",
+        "planned transfers",
+        "compute durations",
+        "native resource attributes/objects",
+        "random seed/run"
+      ],
+      "limits": "Same routing algorithm, not forced historical paths or launch times. Control total effect includes actual feedback; packet wait is not summed as business loss."
+    }
+  }
+}

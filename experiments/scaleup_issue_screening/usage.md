@@ -80,3 +80,21 @@ PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagn
 ```
 
 判断器拒绝含额外文件的输入目录；不要将 `private/`、原始运行、控制配置或评价结果放进去。规则默认取 `configs/observation/diagnostic-rule.json`，也可显式 `--rule` 指定已经预登记的版本。判断与评价各自保存来源摘要；重分析使用新输出目录，缺少事件时指标保留未定义状态。
+
+## 业务、逐包和历史复核
+
+```bash
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_business \
+  --case runs/scaleup_issue_screening/my-diagnostic-r00 \
+  --output runs/scaleup_issue_screening/my-business
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_deep \
+  --case runs/scaleup_issue_screening/my-diagnostic-r00 \
+  --prepared runs/scaleup_issue_screening/my-prepared \
+  --business runs/scaleup_issue_screening/my-business \
+  --output runs/scaleup_issue_screening/my-deep
+PYTHONPATH=python:. python -m experiments.scaleup_issue_screening.analysis.diagnostic_historical \
+  --normal-root runs/scaleup_issue_screening/my-normal \
+  --output runs/scaleup_issue_screening/my-historical-review.json
+```
+
+`--case` 是有 `selection.json` 和成功 `run/` 的对照目录。受控业务复核必须增加 `--baseline <对应正常业务摘要.json>`，以检查图、计划传输、计算成本、资源与随机条件不变。逐包复核要求同源准备与业务摘要，只在研究者侧连接内部身份；八个详细出口来自预先固定六例。历史入口要求 `mechanism_screen` 已完成规则指定的正常档位，输出界限而非缺失字段的假造准确率。输出必须是新位置，自动受分析预算监督。

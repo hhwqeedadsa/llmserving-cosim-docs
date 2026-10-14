@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "unit_checks": 6,
+  "commands": "runs/scaleup_issue_screening/diagnostic-study-20261014/review-tests/commands.jsonl",
+  "actual_checks": {
+    "business": {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/business/r00/summary.json",
+      "sha256": "0100ea93d33c1598f3b06bf6d2250492fe419acae1ec40c75e6847e3aea5d82d"
+    },
+    "deep": {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/deep-v3/r00/summary.json",
+      "sha256": "d8af2b783967d671fe02cf57a88ab4c907e9c3bd12bc45566b993b610ac42b77"
+    },
+    "historical": {
+      "path": "runs/scaleup_issue_screening/diagnostic-study-20261014/historical-review.json",
+      "sha256": "2c65c3aa4816ff2348a83d3a7e016135a742bd3cfd9c112fc803b1dd74b25cfd"
+    }
+  },
+  "comparison_scope": "Combined study comparison requires all eight final source-bound outputs; arithmetic and help checked here"
+}

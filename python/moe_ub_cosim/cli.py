@@ -19,6 +19,11 @@ def parser():
     resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
     resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
+    scaleout = sub.add_parser('scaleout', help='Prepare hierarchical single-plane UB networks; no RoCE/NIC or network execution')
+    sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
+    sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
+    sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
+    sp.add_argument('--output', type=Path, required=True, help='New portable scenario directory; does not execute a backend')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -78,6 +83,9 @@ def main(argv=None):
             _, manifest = prepare(args.config.resolve(), args.backend.resolve(), args.output.resolve())
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
+        elif args.command == 'scaleout':
+            from .scaleout import prepare
+            value = prepare(args.config, args.output)
         elif args.command == 'segment':
             if args.segment_command=='prepare':
                 from .segment import prepare

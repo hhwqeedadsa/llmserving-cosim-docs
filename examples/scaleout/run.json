@@ -1,0 +1,23 @@
+{
+  "schema_version": "moe-ub-run/1",
+  "host": {
+    "rss_bytes": 2147483648,
+    "address_bytes": 4294967296,
+    "artifact_bytes": 268435456,
+    "wall_seconds": 120,
+    "min_free_bytes": 8589934592,
+    "artifact_roots": []
+  },
+  "inputs": {
+    "service": "../../runs/scaleout-input/service.json",
+    "layer": "../../runs/scaleout-input/layer.json",
+    "system": "../../runs/scaleout-input/system.json",
+    "network": "../../runs/scaleout-input/network"
+  },
+  "observation": "observation.json",
+  "record_policy": "../native_first_round/record-policy.json",
+  "export_policy": "../native_first_round/export-policy.json",
+  "max_simulation_ns": 1000000,
+  "backend": "../../build/default/output/cosim/ns3.44-cosim-service",
+  "backend_timeout_seconds": 90
+}

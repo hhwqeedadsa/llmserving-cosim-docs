@@ -1,0 +1,83 @@
+{
+  "schema_version": "moe-ub-scaleout/1",
+  "scenario": {
+    "schema_version": "moe-ub-scenario-run/1",
+    "scenario_id": "scaleout-two-racks",
+    "basis": "selected_reference",
+    "service": "../native_first_round/service.json",
+    "layer": "../native_first_round/layers.json",
+    "system": "../native_first_round/system.json",
+    "backend": {
+      "reference_file": "../native_first_round/backend-reference.yaml",
+      "profile_by_role": {
+        "dispatch": "native_store",
+        "combine": "native_load"
+      },
+      "attributes": {
+        "ns3::UbSwitchAllocator::AllocationTime": "10ns",
+        "ns3::UbLdstInstance::ThreadNum": 3,
+        "ns3::UbLdstThread::StoreOutstanding": 32,
+        "ns3::UbLdstThread::LoadOutstanding": 32,
+        "ns3::UbLdstApi::RequestIdCount": 256,
+        "ns3::UbLdstApi::UsePacketSpray": true,
+        "ns3::UbLdstApi::UseShortestPaths": true
+      },
+      "globals": {},
+      "tp_max_data_payload_bytes": 4096,
+      "transport_channel_setup": "precreated"
+    },
+    "execution": {
+      "chunk_bytes": 1024,
+      "send_slots_per_rank": 2,
+      "seed": 1,
+      "run": 1
+    },
+    "observation": null,
+    "max_simulation_ns": 1000000
+  },
+  "shape": {
+    "racks": 2,
+    "servers_per_rack": 2,
+    "chips_per_server": 2,
+    "dies_per_chip": 1
+  },
+  "groups": [
+    {
+      "group_id": "ep0",
+      "rank_ids": [
+        2,
+        7,
+        12
+      ],
+      "rank_to_ub_node": [
+        0,
+        2,
+        4
+      ]
+    }
+  ],
+  "link_profiles": {
+    "device_access": {
+      "rate_bps": 400000000000,
+      "delay_ns": 20
+    },
+    "server_uplink": {
+      "rate_bps": 100000000000,
+      "delay_ns": 100
+    },
+    "rack_uplink": {
+      "rate_bps": 200000000000,
+      "delay_ns": 500
+    }
+  },
+  "node_defaults": {
+    "allocation_ns": 1,
+    "forward_ns": 10
+  },
+  "budget": {
+    "max_nodes": 32,
+    "max_links": 32,
+    "max_route_rows": 512,
+    "max_channels": 16
+  }
+}

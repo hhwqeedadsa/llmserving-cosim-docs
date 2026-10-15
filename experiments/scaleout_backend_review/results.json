@@ -1,0 +1,179 @@
+{
+  "schema_version": "backend-review-result/1",
+  "date": "2026-10-15",
+  "scope": "Alibaba time constructor semantics and direct-link RDMA message boundaries; no fabric, ASTRA or service validation",
+  "source_commit": "3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437",
+  "output": {
+    "default_resolution_is_ns": true,
+    "intended_ns": 7200,
+    "raw_constructor_ns": 7200000,
+    "explicit_constructor_ns": 7200,
+    "events_ns": [
+      7200,
+      7200000
+    ]
+  },
+  "steps": {
+    "configure-probe": {
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.5500646959990263,
+      "peak_sampled_group_rss_bytes": 14868480,
+      "peak_sampled_artifact_bytes": 189808640,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      },
+      "reason": "Ninja was absent from PATH; explicit CMAKE_MAKE_PROGRAM used next, same limits"
+    },
+    "configure-probe-02": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 3.2990205883979797,
+      "peak_sampled_group_rss_bytes": 42127360,
+      "peak_sampled_artifact_bytes": 193032192,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      }
+    },
+    "build-probe": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 27.983066979795694,
+      "peak_sampled_group_rss_bytes": 348377088,
+      "peak_sampled_artifact_bytes": 198123520,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 300.0
+      }
+    },
+    "time-run-probe": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.2737426422536373,
+      "peak_sampled_group_rss_bytes": 0,
+      "peak_sampled_artifact_bytes": 197996544,
+      "limits": {
+        "sampled_group_rss_bytes": 268435456,
+        "per_process_address_bytes": 536870912,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 15.0
+      }
+    },
+    "rdma-configure-probe": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.3499142695218325,
+      "peak_sampled_group_rss_bytes": 25522176,
+      "peak_sampled_artifact_bytes": 198819840,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 120.0
+      }
+    },
+    "rdma-build-probe": {
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 165.66463491506875,
+      "peak_sampled_group_rss_bytes": 518246400,
+      "peak_sampled_artifact_bytes": 238333952,
+      "limits": {
+        "sampled_group_rss_bytes": 2147483648,
+        "per_process_address_bytes": 4294967296,
+        "artifact_bytes": 536870912,
+        "wall_seconds": 300.0
+      }
+    }
+  },
+  "linked_ns3_libraries": [
+    "build/scaleout-alibaba-probe/output/lib/libns3.36.1-core.so"
+  ],
+  "rdma": {
+    "scope": "direct-link RDMA; no switch, ASTRA or UB",
+    "cases": [
+      {
+        "payload_bytes": 1000,
+        "message_bytes": 999,
+        "send_callbacks": 1,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": 10084,
+        "qp_complete_ns": 12088
+      },
+      {
+        "payload_bytes": 1000,
+        "message_bytes": 1000,
+        "send_callbacks": 1,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": 110084,
+        "qp_complete_ns": 112088
+      },
+      {
+        "payload_bytes": 1000,
+        "message_bytes": 1001,
+        "send_callbacks": 1,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": 210084,
+        "qp_complete_ns": 212092
+      },
+      {
+        "payload_bytes": 1000,
+        "message_bytes": 3000,
+        "send_callbacks": 3,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": 310084,
+        "qp_complete_ns": 312256
+      },
+      {
+        "payload_bytes": 9000,
+        "message_bytes": 8999,
+        "send_callbacks": 0,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": -1,
+        "qp_complete_ns": 412728
+      },
+      {
+        "payload_bytes": 9000,
+        "message_bytes": 9000,
+        "send_callbacks": 0,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": -1,
+        "qp_complete_ns": 512728
+      },
+      {
+        "payload_bytes": 9000,
+        "message_bytes": 9001,
+        "send_callbacks": 0,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": -1,
+        "qp_complete_ns": 612732
+      },
+      {
+        "payload_bytes": 9000,
+        "message_bytes": 27000,
+        "send_callbacks": 0,
+        "qp_callbacks": 1,
+        "first_send_callback_ns": -1,
+        "qp_complete_ns": 714176
+      }
+    ],
+    "all_qps_completed_once": true,
+    "all_send_callbacks_once": false
+  },
+  "reproduction": {
+    "entrypoint": "experiments/scaleout_backend_review/run_probes.py",
+    "network_semantics_validated": false,
+    "all_qps_completed_once": true,
+    "all_send_callbacks_once": false,
+    "output": "runs/scaleout_ns3_review_20261015/reproduce-final/",
+    "repeated_outputs_equal": true
+  }
+}

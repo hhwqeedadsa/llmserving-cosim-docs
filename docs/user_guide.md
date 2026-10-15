@@ -27,6 +27,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
+UB 分层基线可先用 `moe-ub scaleout prepare --config examples/scaleout/prepare.json --output runs/scaleout-prepared` 生成输入，再通过既有 `resolve` 与 `run` 执行。[分层网络小例](../examples/scaleout/README.md)说明设备接入、假设的服务器共享出口、机架出口、rank 放置与路径审计。准备步骤无需原生后端，只生成输入；当前范围为单平面、单骨干 UB 网络。它不能执行 RoCE；非 UB 后端的研究范围见[源码报告](reviews/scaleout_ns3_backends_20261015.md)。
+
 核查原生请求的 worker 额度、共享请求编号池和队首占用者时，可使用[原生小例的请求队列配置](../examples/native_first_round/README.md)。该有界记录只进入评价真值目录，算法输入仍为 `observed/`。
 
 需要观察发送槽是否占满、是否有已就绪任务等待时，使用[端侧发送资源小例](../examples/send_state/README.md)。它通过同一套 `resolve`、`run`、`slice`、`sample`、`replay` 和 `validate` 命令启用并读取记录，无需实验目录或历史产物。

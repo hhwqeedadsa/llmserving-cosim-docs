@@ -1,0 +1,139 @@
+{
+  "schema_version": "source-review/1",
+  "date": "2026-10-15",
+  "scope": "Source review; no full RDMA/ASTRA simulation validation",
+  "sources": [
+    {
+      "name": "astra",
+      "commit": "0210e24bf76f49b4111a73d1e419f6fee4f3f0b6",
+      "url": "https://github.com/baoy21/astra-sim",
+      "files": [
+        {
+          "path": "astra-sim/network_frontend/ns3/AstraSimNetwork.cc",
+          "sha256": "c99b11eab81acd6cd31d7b19ae1476977cc9bfc02d973474fc5d2a6c4f7367f8"
+        },
+        {
+          "path": "astra-sim/network_frontend/ns3/entry.h",
+          "sha256": "e1f3c2b3afcce10b0f513dc2979c01dd13ef838c4fb0a67880c56df87b924502"
+        },
+        {
+          "path": "build/astra_ns3/build.sh",
+          "sha256": "76c6598518c5f456291f43650a9ce247c8080e1c8408f915ea8992bc3515ebae"
+        }
+      ]
+    },
+    {
+      "name": "astra-network-ns3",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "url": "https://github.com/casys-kaist/astra-network-ns3",
+      "files": [
+        {
+          "path": "VERSION",
+          "sha256": "df0b0aa5095013d0e518b6734afb98c586f5952a703feec553cccd3e48a5b747"
+        },
+        {
+          "path": "README.md",
+          "sha256": "7341e138b93c8564ac889c0cf8e563badba0e60fc081e9fbcef424cc0b6d4d80"
+        },
+        {
+          "path": "scratch/common.h",
+          "sha256": "a2e6fca9d9231f7404a4d696532e3fb4bd894af39fc25886a78abb9c12ab8765"
+        },
+        {
+          "path": "scratch/config/config.txt",
+          "sha256": "1d674ba93f979828a42e903b64bac9eb24a65dc6fd1c4628e5a6c98891a4804d"
+        },
+        {
+          "path": "src/point-to-point/model/rdma-hw.cc",
+          "sha256": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305"
+        },
+        {
+          "path": "src/point-to-point/model/rdma-queue-pair.cc",
+          "sha256": "1599b159ed3ba0a8d027cbb754b21c187e2005aaddb2c24e43ec7321ff0fd613"
+        },
+        {
+          "path": "src/point-to-point/model/switch-node.cc",
+          "sha256": "cf3c49a36f658507b8241127f9a7a4c0e0ea396b10358a8106023b9d54e5f069"
+        }
+      ]
+    },
+    {
+      "name": "SimAI",
+      "commit": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+      "url": "https://github.com/aliyun/SimAI",
+      "files": [
+        {
+          "path": "astra-sim-alibabacloud/astra-sim/network_frontend/ns3/AstraSimNetwork.cc",
+          "sha256": "af91ae200d57938ea15f5a623616b82fd1278612b6a44d2e2264fe9ba5c7829c"
+        },
+        {
+          "path": "astra-sim-alibabacloud/astra-sim/network_frontend/ns3/entry.h",
+          "sha256": "fb47562eab31ad2bdaea948df948e240081e8c161b42ec41e1bd683ecf92c703"
+        },
+        {
+          "path": "astra-sim-alibabacloud/astra-sim/network_frontend/ns3/common.h",
+          "sha256": "d350ef879a1fcd4c5282c8a8317335e748bf654f890a2855349a8b8dba3757c9"
+        },
+        {
+          "path": "astra-sim-alibabacloud/inputs/topo/gen_Topo_Template.py",
+          "sha256": "ceb0f61dc92f9cd2898a231b43c22eddbed2cfb89ff71db346b0cc81db0bc1df"
+        },
+        {
+          "path": "astra-sim-alibabacloud/inputs/config/SimAI.conf",
+          "sha256": "1fe56bee9c2a0e0f27fdbe816c2c51c9254b5d5a6c5e05adaac347a758e77fcf"
+        }
+      ]
+    },
+    {
+      "name": "ns-3-alibabacloud",
+      "commit": "3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437",
+      "url": "https://github.com/aliyun/ns-3-alibabacloud",
+      "files": [
+        {
+          "path": "README.md",
+          "sha256": "1c3033f37984d9732a19272b419bbc78c2bf855e1f1e0f4c9556212048fa4e41"
+        },
+        {
+          "path": "simulation/VERSION",
+          "sha256": "5d63412ee89df99b53056e4d3030d4f6663c9b071f72fa629a1e679d80b7092f"
+        },
+        {
+          "path": "simulation/src/core/model/nstime.h",
+          "sha256": "2c775a38fdcdba2d1f642c24ac0f801b18f4b3fe77adbb7deab2f3cb098a7b89"
+        },
+        {
+          "path": "simulation/src/core/model/time.cc",
+          "sha256": "c9b19cffc238fc6e8d23d2611a9940469f3f6a4b30d8499221c669a0ca458d35"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/rdma-hw.cc",
+          "sha256": "99af828b2a93ddd786d34317cbf2af77f2b6d70c14784fc7617b1b41eb88e3db"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/rdma-queue-pair.cc",
+          "sha256": "b6f2abaecda2c5104010650f2f9ca07684c01f9071759f6cedcc82003e62fdb5"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/rdma-driver.cc",
+          "sha256": "a85df464d9b85593c29daed5c485a2993944fcfb690dc0c62184fe565ee5913b"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/qbb-net-device.cc",
+          "sha256": "8f0df21646f0ef6552e06a4961bd3bae772f534f89b5a45f0fe32408c0c6e0a2"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/switch-node.cc",
+          "sha256": "ca9155851134a9ff51b27dc13b96a3a383bae61136ea7026b567ccf9acece21b"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/switch-mmu.cc",
+          "sha256": "7450584de05056b1cd246d2ee546960e3ad66f16b44e309052d5186325487943"
+        },
+        {
+          "path": "simulation/src/point-to-point/model/nvswitch-node.cc",
+          "sha256": "e52d8adc768dec2c37bc29803a29323ee44eb8c72f366d0ee5fe914624ce6246"
+        }
+      ]
+    }
+  ]
+}

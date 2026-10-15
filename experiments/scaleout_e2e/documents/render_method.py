@@ -25,7 +25,7 @@ PALE, RULE = '#edf4f8', '#dce6ed'
 
 
 class Page:
-    def __init__(self, number, count, font):
+    def __init__(self, number, count, font, revision='v0.1', footer='拟实施方案，非实验结果'):
         self.number = number
         self.fig = plt.figure(figsize=(W / 72, H / 72), facecolor='white')
         self.ax = self.fig.add_axes([0, 0, 1, 1])
@@ -34,10 +34,10 @@ class Page:
         self.metric = ImageFont.truetype(str(font), size=1000)
         self.y = 71
         self.text(LEFT, 29, 'MOE NETWORK RESEARCH  /  SCALE-OUT', 8, MUTED)
-        self.text(W - RIGHT, 29, '方法审阅稿 · v0.1', 8, BLUE, align='right')
+        self.text(W - RIGHT, 29, f'方法审阅稿 · {revision}', 8, BLUE, align='right')
         self.ax.plot([LEFT, W - RIGHT], [46, 46], color=RULE, linewidth=.8)
         self.ax.plot([LEFT, W - RIGHT], [H - 37, H - 37], color=RULE, linewidth=.8)
-        self.text(LEFT, H - 25, '2026-10-15   |   拟实施方案，非实验结果', 8, MUTED)
+        self.text(LEFT, H - 25, f'2026-10-15   |   {footer}', 8, MUTED)
         self.text(W - RIGHT, H - 25, f'{number:02d} / {count:02d}', 8, MUTED, align='right')
 
     def text(self, x, y, value, size=10, color=INK, align='left'):
@@ -196,6 +196,8 @@ def main():
     parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[1] / 'plan.md')
     parser.add_argument('--output', type=Path, required=True, help='New PDF path')
     parser.add_argument('--font', type=Path, default=Path('/usr/share/fonts/truetype/wqy/wqy-microhei.ttc'))
+    parser.add_argument('--revision', default='v0.1')
+    parser.add_argument('--footer', default='拟实施方案，非实验结果')
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError('PDF output already exists; select a new revision/path')
@@ -205,11 +207,11 @@ def main():
     pages = source.decode().split('<!-- pagebreak -->')
     args.output.parent.mkdir(parents=True, exist_ok=True)
     matplotlib.rcParams.update({'pdf.fonttype': 42, 'pdf.compression': 6, 'text.usetex': False})
-    with PdfPages(args.output, metadata=dict(Title='小规模 Scale-Out 联合仿真实验方法 · 审阅稿 v0.1',
+    with PdfPages(args.output, metadata=dict(Title=f'小规模 Scale-Out 联合仿真实验方法 · 审阅稿 {args.revision}',
                   Author='MoE Scale-Out Research', Subject='Method review; no new simulation results',
                   CreationDate=None, ModDate=None)) as pdf:
         for number, content in enumerate(pages, 1):
-            page = Page(number, len(pages), args.font)
+            page = Page(number, len(pages), args.font, args.revision, args.footer)
             page.blocks(content)
             pdf.savefig(page.fig)
             plt.close(page.fig)

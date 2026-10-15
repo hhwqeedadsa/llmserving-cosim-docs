@@ -4,6 +4,10 @@
 
 ## 本轮新增范围
 
+2026-10-15 方法文档交付：按用户“先形成PDF审阅”的要求，校订[8页方法审阅稿 v0.2](../review_artifacts/ScaleOut实验方法_审阅稿_v0.2_20261015.pdf)，[可编辑原文](../../experiments/scaleout_e2e/documents/method_review_v0.2.md)。同步当前2层4波次、接收与ACK独立事件、EP4分组混杂、GPU成本及尾包恢复边界；区分千卡静态拓扑与当前小图逐包上限。已核对8页A4、嵌入字体、可搜索文本并预览全部页面，日志 `runs/scaleout_method_pdf_v02_20261015/`。本次仅修订文档，未新增仿真；下文v0.1“尚未实现”段落为历史记录，不能作为当前实现状态。
+
+2026-10-15 用户恢复小规模全流程实验，允许多尝试条件；不再停留于PDF审阅。当前执行G0原生RDMA物理/完成事件核查，再接入LLMServingSim与ASTRA及网络对照。根盘仍低于8GiB预留，已核实 `/dev/shm` 为独立252GiB tmpfs且可执行；本轮编译与临时运行使用专用 `/dev/shm/moe-scaleout-e2e-20261015/`，保留8GiB空闲，累计产物512MiB，RSS2GiB/地址空间4GiB、构建300s/并发2；运行按PDF小图预算。tmpfs产物另占宿主内存，按累计产物计入预算，不能作为持久备份；源码/小摘要回存仓库。保留原磁盘预算，不清理未知文件、不混链ns-3、不push。
+
 2026-10-15 后续目标：小规模Scale-Out基础仿真，形成LLMServingSim到非UB ns-3的完整流程，并可视化。用户最新要求先交PDF审阅；本阶段只整理方法，不启动实验，不将静态拓扑或离线回放当作在线闭环。方法原文在 [scaleout_e2e/plan.md](../../experiments/scaleout_e2e/plan.md)，[PDF审阅稿](../review_artifacts/ScaleOut实验方法_审阅稿_v0.1_20261015.pdf)采用8端点、5种拓扑、10个拟运行条件及G0—G3门槛。PDF已导出并核对8页A4、中文字体嵌入与可搜索文本；状态为待用户审阅。生成/预览不超过60s、RSS1GiB/地址空间2GiB、产物32MiB；日志 `runs/scaleout_method_pdf_20261015_final/`。没有新增网络执行或后端修改。
 
 2026-10-15 新需求：按用户两张图实现可参数化的非UB Scale-Out物理拓扑，覆盖两层leaf-spine、ToR—Agg—电交换Core、多rail与HPN参考双平面。每层数量、分组、fanout、NIC映射、端口与分层带宽可配置；生成固定后端可读取的拓扑、显式映射与审计，先小例与千卡静态生成验证。区别rail/plane/pod/segment，OCS改普通交换机；不宣称复现完整HPN协议或已接入非UB在线服务。生成/检查限300s、RSS1GiB/地址空间2GiB、产物128MiB；小型原生装载探针按既有构建预算，最多16交换机、不运行千卡逐包。只在本地提交、不push。

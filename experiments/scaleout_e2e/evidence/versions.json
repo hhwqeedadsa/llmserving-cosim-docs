@@ -1,0 +1,120 @@
+{
+  "platform_commit": "3897d8279232a1982c095d2e6f52b9b7aac45c48",
+  "source_sha256": {
+    "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+    "backend/rdma/targets.cmake": "86211241ea29eba164095059dfdefe77b3da7721617e98fe55cf6d56b703bd7c",
+    "backend/rdma/fabric.hh": "b9d22c44a920e47dd7576cec1b6977209460a1980e72000d9616b8568821913b",
+    "backend/rdma/fabric.cc": "af6211bc194e435c2b6783159fa8040b8330ab8966efc1769e6e8f06f46a7e4b",
+    "backend/rdma/probe.cc": "8dea2d8a58344aab270050ecce2a77f9f43170117ebd896eed8c776c40b76d7b",
+    "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+    "backend/rdma/astra_adapter.hh": "12bc2eae3e1b013118eba3a4b7f723af66ad3845542f6a31943953d2b3ffefab",
+    "backend/rdma/astra_adapter.cc": "678fe81abddfe37f6385da93e8e8ff6005310f8d991d2782a278e784bffad78d",
+    "backend/rdma/service.cc": "0ddb60ceb778c920e48f40e06625fc90fde90c801324e179d57e794a64b53301",
+    "backend/rdma/logging.cc": "134baef7c4ac2cc5a43260c8effae1c209a584f6b16b67af28817f9e3615eb60",
+    "python/moe_ub_cosim/scaleout_capacity.py": "408179558c50ae7dc01556d23954686ebdc2ab220db764fba15843fff7835a64",
+    "python/moe_ub_cosim/scaleout_topology.py": "290c580b969747b97232d8912c2d703cf2a4807a50aba7fb277238ade9415078",
+    "python/moe_ub_cosim/scaleout_rdma.py": "20adbdf24a5e05d17d9ca3683cac61addd75f835f2cf000fd8c3b1b3a6970cbd",
+    "python/moe_ub_cosim/scaleout_service.py": "628ba0d2ed49686a070a9f022e62d04489e8a5a2d79a73e0820eaa89062f5acb",
+    "python/moe_ub_cosim/scaleout_verify.py": "20a682f7687ce6c1d26802979dc75dfa41f2fb1921395b559e7b6cce2fcc35b4",
+    "python/moe_ub_cosim/generate.py": "493db00d06b6051e11aeafca75bf04b071327bda4dd77ba1de5f5df2c9fe7d44",
+    "python/moe_ub_cosim/cli.py": "19dcdb1a8bbe5d0165fc059cc26108496487d0abe35d76f636f52c6110023f6d",
+    "experiments/scaleout_e2e/run_matrix.py": "df8d4fbf84cf7ea3894c9d4f05a9104c1fb35dab63cdde6402f99c6ba84a0d11",
+    "experiments/scaleout_e2e/analyze.py": "b006ff0613cf23d574e4889a6e25bafe2e54d28ee4e385ca396bf3006dcc532f",
+    "experiments/scaleout_e2e/diagnostic_controls.py": "f86e36200d371371541755a209923237c8c66daf182591c8daed76962b63f937",
+    "experiments/scaleout_e2e/validate_execution.py": "cdeea5298786785a3d6e13a1c936e04848b96bc9f9144977fb3c96604a4e5ecb",
+    "experiments/scaleout_e2e/shared_fabric_check.py": "ab543221cb60a6231d2d040a0d4fbe01be86296bb0c4a14fbe4ffa1b80d1e449"
+  },
+  "native_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "binary_sha256": {
+    "probe": "838a3033c2521e80b5da7b0aa55b216317dce99948edc213a45db80957268b6f",
+    "service": "15a3bc8c83f368eebe9209edd492482eb25642eb3e855138153693101e393e18"
+  },
+  "serial_build_overlay_sha256": {
+    "qbb-remote-channel.cc": "de50d970d6c907b36e3207c2dd2c03fcaf4825ae68101f3f3065e645b537a648",
+    "qbb-helper.cc": "c8c0f99983e10f50837a3955df2558ef0d206e6a4b5b06c0018ea6bf2bdd319c"
+  },
+  "matrix_provenance": {
+    "script_sha256": "df8d4fbf84cf7ea3894c9d4f05a9104c1fb35dab63cdde6402f99c6ba84a0d11",
+    "platform_head": "f6364008d8a073c240bf52006beb9b73880242ab",
+    "completed": true,
+    "main_runs": 30,
+    "functional_service_runs": 1,
+    "protocol_probes": 5,
+    "network_backend": "single_native_ns3",
+    "hardware_calibrated": false,
+    "route_source": "synthetic",
+    "cases": [
+      [
+        "clos",
+        "T1",
+        4,
+        0,
+        8
+      ],
+      [
+        "leaf",
+        "T0",
+        4,
+        0,
+        8
+      ],
+      [
+        "single-plane",
+        "T2",
+        4,
+        0,
+        8
+      ],
+      [
+        "batch1",
+        "T1",
+        1,
+        0,
+        8
+      ],
+      [
+        "batch16",
+        "T1",
+        16,
+        0,
+        8
+      ],
+      [
+        "core50",
+        "T1-core50",
+        4,
+        0,
+        8
+      ],
+      [
+        "core25",
+        "T1-core25",
+        4,
+        0,
+        8
+      ],
+      [
+        "dual-plane",
+        "T3",
+        4,
+        0,
+        8
+      ],
+      [
+        "hotspot",
+        "T1",
+        4,
+        0.5,
+        8
+      ],
+      [
+        "ep4",
+        "T1",
+        4,
+        0,
+        4
+      ]
+    ]
+  },
+  "version_note": "Main matrix was run from an uncommitted worktree based on f636400. The later zero-cost ASTRA event fix has no applicable COMP nodes in any main/rail run (independently checked: 0). With that final backend the baseline result and all 36 semantic/Chakra files repeated byte-identically. All 31 runs were independently rechecked. Shared EP4 ran after platform commit. The final Python validation additionally removes a no-op GPU-label comparison; GPU label is descriptive."
+}

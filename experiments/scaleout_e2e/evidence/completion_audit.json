@@ -1,0 +1,118 @@
+{
+  "passed": true,
+  "platform_commit": "3897d8279232a1982c095d2e6f52b9b7aac45c48",
+  "checks": [
+    {
+      "requirement": "30 main real services across 10 conditions and 3 route seeds",
+      "passed": true,
+      "evidence": "matrix-03/summary.json"
+    },
+    {
+      "requirement": "All matrix commands have their predefined success/failure outcome",
+      "passed": true,
+      "evidence": "matrix-03/commands.json"
+    },
+    {
+      "requirement": "Five declared physical structures have expected switch layers",
+      "passed": true,
+      "evidence": {
+        "T0": {
+          "gpu": 8,
+          "tor": 4,
+          "agg": 0,
+          "core": 2
+        },
+        "T1": {
+          "gpu": 8,
+          "tor": 4,
+          "agg": 4,
+          "core": 2
+        },
+        "T2": {
+          "gpu": 8,
+          "tor": 4,
+          "agg": 2,
+          "core": 1
+        },
+        "T3": {
+          "gpu": 8,
+          "tor": 8,
+          "agg": 4,
+          "core": 2
+        },
+        "T4": {
+          "gpu": 8,
+          "tor": 4,
+          "agg": 4,
+          "core": 2
+        }
+      }
+    },
+    {
+      "requirement": "Actual native wave callbacks match frontend and cause next scheduling in all main/rail cases",
+      "passed": true,
+      "evidence": "Native result.service.waves equals frontend.history for all 31 services; 4 Decode steps per actual request"
+    },
+    {
+      "requirement": "Real incast exercises congestion feedback",
+      "passed": true,
+      "evidence": "matrix-03/incast/result.json"
+    },
+    {
+      "requirement": "Middle-loss recovery and tail-loss failure retained",
+      "passed": true,
+      "evidence": "matrix-03/{middle-loss,tail-loss}/result.json"
+    },
+    {
+      "requirement": "Concurrent cross-Pod EP4 groups share physical Agg exits in one execution",
+      "passed": true,
+      "evidence": "shared-01/service/{result,frontend}.json; shared-01/summary.json"
+    },
+    {
+      "requirement": "Independent repeat is byte-identical",
+      "passed": true,
+      "evidence": "validation-02/{validation.json,repeat/}"
+    },
+    {
+      "requirement": "Different model dimensions actually executed",
+      "passed": true,
+      "evidence": "validation-02/changed-model/"
+    },
+    {
+      "requirement": "Negative controls rejected mismatched evidence",
+      "passed": true,
+      "evidence": "validation-02/logs/reject-*"
+    },
+    {
+      "requirement": "Seven actual-data plots, vector PDFs and offline report saved persistently",
+      "passed": true,
+      "evidence": "/home/lry/moe-ub-cosim/docs/review_artifacts/scaleout_basic_20261015"
+    },
+    {
+      "requirement": "No external script/CDN/image dependency in offline report",
+      "passed": true,
+      "evidence": "report.html embeds PNG data URIs"
+    },
+    {
+      "requirement": "Raw evidence persisted outside tmpfs",
+      "passed": true,
+      "evidence": "/home/lry/moe-ub-cosim/runs/scaleout_e2e_20261015/evidence.tar.gz"
+    },
+    {
+      "requirement": "Final platform source equals recorded hashes",
+      "passed": true,
+      "evidence": "evidence/versions.json"
+    },
+    {
+      "requirement": "All changed-document local links resolve",
+      "passed": true,
+      "evidence": []
+    },
+    {
+      "requirement": "Git whitespace validation passes",
+      "passed": true,
+      "evidence": "git diff --check"
+    }
+  ],
+  "scope": "Small native Scale-Out online finite MoE experiments and visualization; hardware calibration/real routes/1024-GPU packet execution excluded explicitly."
+}

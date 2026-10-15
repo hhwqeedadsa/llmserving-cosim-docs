@@ -1,0 +1,202 @@
+{
+  "passed": true,
+  "ep_groups": [
+    [
+      0,
+      2,
+      4,
+      6
+    ],
+    [
+      1,
+      3,
+      5,
+      7
+    ]
+  ],
+  "finish_ns": 192154,
+  "verification": {
+    "passed": true,
+    "messages": 358,
+    "remote_payload_bytes": 1601536,
+    "verified_nodes": 972,
+    "waves": 8,
+    "finish_ns": 192154,
+    "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history"
+  },
+  "first_wave_start_ns": [
+    0,
+    0
+  ],
+  "shared_agg_egress_ports": [
+    {
+      "node": 10,
+      "port": 3,
+      "group_ids": [
+        0,
+        1
+      ],
+      "messages": 60,
+      "overlapping_interval_examples": [
+        {
+          "messages": [
+            2,
+            50
+          ],
+          "interval_ns": [
+            4286,
+            11303
+          ]
+        },
+        {
+          "messages": [
+            2,
+            52
+          ],
+          "interval_ns": [
+            4286,
+            11372
+          ]
+        },
+        {
+          "messages": [
+            2,
+            53
+          ],
+          "interval_ns": [
+            4286,
+            11372
+          ]
+        }
+      ],
+      "max_queue_bytes": 5672
+    },
+    {
+      "node": 11,
+      "port": 3,
+      "group_ids": [
+        0,
+        1
+      ],
+      "messages": 57,
+      "overlapping_interval_examples": [
+        {
+          "messages": [
+            1,
+            49
+          ],
+          "interval_ns": [
+            4203,
+            11213
+          ]
+        },
+        {
+          "messages": [
+            4,
+            49
+          ],
+          "interval_ns": [
+            4203,
+            11040
+          ]
+        },
+        {
+          "messages": [
+            14,
+            62
+          ],
+          "interval_ns": [
+            13212,
+            18428
+          ]
+        }
+      ],
+      "max_queue_bytes": 7732
+    },
+    {
+      "node": 14,
+      "port": 3,
+      "group_ids": [
+        0,
+        1
+      ],
+      "messages": 51,
+      "overlapping_interval_examples": [
+        {
+          "messages": [
+            6,
+            55
+          ],
+          "interval_ns": [
+            4120,
+            12246
+          ]
+        },
+        {
+          "messages": [
+            6,
+            58
+          ],
+          "interval_ns": [
+            4203,
+            11296
+          ]
+        },
+        {
+          "messages": [
+            7,
+            55
+          ],
+          "interval_ns": [
+            4203,
+            12318
+          ]
+        }
+      ],
+      "max_queue_bytes": 8564
+    },
+    {
+      "node": 15,
+      "port": 3,
+      "group_ids": [
+        0,
+        1
+      ],
+      "messages": 66,
+      "overlapping_interval_examples": [
+        {
+          "messages": [
+            10,
+            57
+          ],
+          "interval_ns": [
+            4203,
+            10874
+          ]
+        },
+        {
+          "messages": [
+            18,
+            69
+          ],
+          "interval_ns": [
+            12951,
+            19985
+          ]
+        },
+        {
+          "messages": [
+            21,
+            69
+          ],
+          "interval_ns": [
+            12951,
+            19860
+          ]
+        }
+      ],
+      "max_queue_bytes": 11080
+    }
+  ],
+  "interpretation": "One native process/fabric; both groups use the same physical Agg egresses. Overlapping message lifetimes are not an additive contention-delay estimate."
+}

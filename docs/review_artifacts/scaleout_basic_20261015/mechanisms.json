@@ -1,0 +1,462 @@
+{
+  "core50": {
+    "finish_ns": 217751,
+    "wave_duration_ns": [
+      53727,
+      53609,
+      55334,
+      55081
+    ],
+    "mean_receive_fct_ns": 6893.995222929936,
+    "source_payload_bytes": 1794048,
+    "same_actual_message_paths": true,
+    "network_predecessor_examples": [
+      {
+        "rank": 0,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12162,
+        "changed_start_ns": 13888,
+        "latest_dependency": "L0.dispatch.7-0.recv",
+        "latest_dependency_callback_ns": 13888,
+        "message_id": 49,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 13888
+      },
+      {
+        "rank": 0,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33178,
+        "changed_start_ns": 37937,
+        "latest_dependency": "L1.dispatch.5-0.recv",
+        "latest_dependency_callback_ns": 37937,
+        "message_id": 147,
+        "message_ready_ns": 27624,
+        "message_receive_ready_ns": 37937
+      },
+      {
+        "rank": 1,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 11909,
+        "changed_start_ns": 13431,
+        "latest_dependency": "L0.dispatch.7-1.recv",
+        "latest_dependency_callback_ns": 13431,
+        "message_id": 50,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 13431
+      },
+      {
+        "rank": 1,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33109,
+        "changed_start_ns": 37063,
+        "latest_dependency": "L1.dispatch.7-1.recv",
+        "latest_dependency_callback_ns": 37063,
+        "message_id": 162,
+        "message_ready_ns": 27766,
+        "message_receive_ready_ns": 37063
+      },
+      {
+        "rank": 2,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 11819,
+        "changed_start_ns": 13252,
+        "latest_dependency": "L0.dispatch.6-2.recv",
+        "latest_dependency_callback_ns": 13252,
+        "message_id": 44,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 13252
+      },
+      {
+        "rank": 2,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33199,
+        "changed_start_ns": 37421,
+        "latest_dependency": "L1.dispatch.5-2.recv",
+        "latest_dependency_callback_ns": 37421,
+        "message_id": 149,
+        "message_ready_ns": 27624,
+        "message_receive_ready_ns": 37421
+      },
+      {
+        "rank": 3,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12245,
+        "changed_start_ns": 14022,
+        "latest_dependency": "L0.dispatch.7-3.recv",
+        "latest_dependency_callback_ns": 14022,
+        "message_id": 52,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 14022
+      },
+      {
+        "rank": 3,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33553,
+        "changed_start_ns": 37750,
+        "latest_dependency": "L1.dispatch.7-3.recv",
+        "latest_dependency_callback_ns": 37750,
+        "message_id": 164,
+        "message_ready_ns": 27766,
+        "message_receive_ready_ns": 37750
+      },
+      {
+        "rank": 4,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12158,
+        "changed_start_ns": 12679,
+        "latest_dependency": "L0.dispatch.0-4.recv",
+        "latest_dependency_callback_ns": 12679,
+        "message_id": 3,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 12679
+      },
+      {
+        "rank": 4,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33246,
+        "changed_start_ns": 37135,
+        "latest_dependency": "L1.dispatch.3-4.recv",
+        "latest_dependency_callback_ns": 37135,
+        "message_id": 136,
+        "message_ready_ns": 26558,
+        "message_receive_ready_ns": 37135
+      },
+      {
+        "rank": 5,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12151,
+        "changed_start_ns": 13286,
+        "latest_dependency": "L0.dispatch.2-5.recv",
+        "latest_dependency_callback_ns": 13286,
+        "message_id": 18,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 13286
+      },
+      {
+        "rank": 5,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33196,
+        "changed_start_ns": 37260,
+        "latest_dependency": "L1.dispatch.2-5.recv",
+        "latest_dependency_callback_ns": 37260,
+        "message_id": 130,
+        "message_ready_ns": 26831,
+        "message_receive_ready_ns": 37260
+      },
+      {
+        "rank": 6,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12234,
+        "changed_start_ns": 13424,
+        "latest_dependency": "L0.dispatch.2-6.recv",
+        "latest_dependency_callback_ns": 13424,
+        "message_id": 19,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 13424
+      },
+      {
+        "rank": 6,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33340,
+        "changed_start_ns": 37394,
+        "latest_dependency": "L1.dispatch.2-6.recv",
+        "latest_dependency_callback_ns": 37394,
+        "message_id": 131,
+        "message_ready_ns": 26831,
+        "message_receive_ready_ns": 37394
+      },
+      {
+        "rank": 7,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12241,
+        "changed_start_ns": 12982,
+        "latest_dependency": "L0.dispatch.3-7.recv",
+        "latest_dependency_callback_ns": 12982,
+        "message_id": 27,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 12982
+      },
+      {
+        "rank": 7,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 32993,
+        "changed_start_ns": 36776,
+        "latest_dependency": "L1.dispatch.2-7.recv",
+        "latest_dependency_callback_ns": 36776,
+        "message_id": 132,
+        "message_ready_ns": 26831,
+        "message_receive_ready_ns": 36776
+      }
+    ]
+  },
+  "core25": {
+    "finish_ns": 265896,
+    "wave_duration_ns": [
+      65543,
+      63534,
+      66844,
+      69975
+    ],
+    "mean_receive_fct_ns": 7939.283439490446,
+    "source_payload_bytes": 1794048,
+    "same_actual_message_paths": true,
+    "network_predecessor_examples": [
+      {
+        "rank": 0,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12162,
+        "changed_start_ns": 17487,
+        "latest_dependency": "L0.dispatch.7-0.recv",
+        "latest_dependency_callback_ns": 17487,
+        "message_id": 49,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 17487
+      },
+      {
+        "rank": 0,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33178,
+        "changed_start_ns": 47297,
+        "latest_dependency": "L1.dispatch.5-0.recv",
+        "latest_dependency_callback_ns": 47297,
+        "message_id": 147,
+        "message_ready_ns": 33439,
+        "message_receive_ready_ns": 47297
+      },
+      {
+        "rank": 1,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 11909,
+        "changed_start_ns": 16482,
+        "latest_dependency": "L0.dispatch.7-1.recv",
+        "latest_dependency_callback_ns": 16482,
+        "message_id": 50,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 16482
+      },
+      {
+        "rank": 1,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33109,
+        "changed_start_ns": 45616,
+        "latest_dependency": "L1.dispatch.7-1.recv",
+        "latest_dependency_callback_ns": 45616,
+        "message_id": 162,
+        "message_ready_ns": 33522,
+        "message_receive_ready_ns": 45616
+      },
+      {
+        "rank": 2,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 11819,
+        "changed_start_ns": 16123,
+        "latest_dependency": "L0.dispatch.6-2.recv",
+        "latest_dependency_callback_ns": 16123,
+        "message_id": 44,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 16123
+      },
+      {
+        "rank": 2,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33199,
+        "changed_start_ns": 46394,
+        "latest_dependency": "L1.dispatch.5-2.recv",
+        "latest_dependency_callback_ns": 46394,
+        "message_id": 149,
+        "message_ready_ns": 33439,
+        "message_receive_ready_ns": 46394
+      },
+      {
+        "rank": 3,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12245,
+        "changed_start_ns": 17585,
+        "latest_dependency": "L0.dispatch.7-3.recv",
+        "latest_dependency_callback_ns": 17585,
+        "message_id": 52,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 17585
+      },
+      {
+        "rank": 3,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33553,
+        "changed_start_ns": 46889,
+        "latest_dependency": "L1.dispatch.7-3.recv",
+        "latest_dependency_callback_ns": 46889,
+        "message_id": 164,
+        "message_ready_ns": 33522,
+        "message_receive_ready_ns": 46889
+      },
+      {
+        "rank": 4,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12158,
+        "changed_start_ns": 14886,
+        "latest_dependency": "L0.dispatch.0-4.recv",
+        "latest_dependency_callback_ns": 14886,
+        "message_id": 3,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 14886
+      },
+      {
+        "rank": 4,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33246,
+        "changed_start_ns": 46527,
+        "latest_dependency": "L1.dispatch.3-4.recv",
+        "latest_dependency_callback_ns": 46527,
+        "message_id": 136,
+        "message_ready_ns": 31488,
+        "message_receive_ready_ns": 46527
+      },
+      {
+        "rank": 5,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12151,
+        "changed_start_ns": 16185,
+        "latest_dependency": "L0.dispatch.2-5.recv",
+        "latest_dependency_callback_ns": 16185,
+        "message_id": 18,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 16185
+      },
+      {
+        "rank": 5,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33196,
+        "changed_start_ns": 45593,
+        "latest_dependency": "L1.dispatch.2-5.recv",
+        "latest_dependency_callback_ns": 45593,
+        "message_id": 130,
+        "message_ready_ns": 31526,
+        "message_receive_ready_ns": 45593
+      },
+      {
+        "rank": 6,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12234,
+        "changed_start_ns": 16298,
+        "latest_dependency": "L0.dispatch.2-6.recv",
+        "latest_dependency_callback_ns": 16298,
+        "message_id": 19,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 16298
+      },
+      {
+        "rank": 6,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 33340,
+        "changed_start_ns": 46001,
+        "latest_dependency": "L1.dispatch.3-6.recv",
+        "latest_dependency_callback_ns": 46001,
+        "message_id": 138,
+        "message_ready_ns": 31488,
+        "message_receive_ready_ns": 46001
+      },
+      {
+        "rank": 7,
+        "consumer": "L0.experts",
+        "baseline_start_ns": 12241,
+        "changed_start_ns": 15500,
+        "latest_dependency": "L0.dispatch.3-7.recv",
+        "latest_dependency_callback_ns": 15500,
+        "message_id": 27,
+        "message_ready_ns": 4120,
+        "message_receive_ready_ns": 15500
+      },
+      {
+        "rank": 7,
+        "consumer": "L1.experts",
+        "baseline_start_ns": 32993,
+        "changed_start_ns": 46028,
+        "latest_dependency": "L1.dispatch.3-7.recv",
+        "latest_dependency_callback_ns": 46028,
+        "message_id": 139,
+        "message_ready_ns": 31488,
+        "message_receive_ready_ns": 46028
+      }
+    ]
+  },
+  "hotspot": {
+    "finish_ns": 209152,
+    "wave_duration_ns": [
+      52178,
+      51202,
+      53476,
+      52296
+    ],
+    "mean_receive_fct_ns": 6263.833916083916,
+    "source_payload_bytes": 1794048
+  },
+  "single-plane": {
+    "finish_ns": 206393,
+    "wave_duration_ns": [
+      51238,
+      51190,
+      52711,
+      51254
+    ],
+    "mean_receive_fct_ns": 6821.867834394904,
+    "source_payload_bytes": 1794048
+  },
+  "dual-plane": {
+    "finish_ns": 220101,
+    "wave_duration_ns": [
+      54740,
+      55366,
+      55410,
+      54585
+    ],
+    "mean_receive_fct_ns": 7188.105095541401,
+    "source_payload_bytes": 1794048
+  },
+  "baseline": {
+    "finish_ns": 193252,
+    "wave_duration_ns": [
+      48148,
+      47862,
+      48667,
+      48575
+    ]
+  },
+  "expert_counts": {
+    "clos": [
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32
+    ],
+    "hotspot": [
+      128,
+      24,
+      28,
+      28,
+      28,
+      22,
+      24,
+      26,
+      32,
+      22,
+      24,
+      26,
+      26,
+      28,
+      26,
+      20
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "main_and_rail_checks": 31,
+  "verified_nodes": 42712,
+  "zero_duration_nodes_in_main_matrix": 0,
+  "repeated_result_byte_identical": true,
+  "result_sha256": "2dffe7ae28698d4e2e896053009a4d795bba56b946bfcc47a2fc50e83d2b55a5",
+  "repeated_graph_files_byte_identical": 36,
+  "changed_model": {
+    "passed": true,
+    "output": "/dev/shm/moe-scaleout-e2e-20261015/validation-02/changed-model",
+    "finish_ns": 180765,
+    "waves": 4,
+    "messages": 652,
+    "verified_nodes": 1560,
+    "state": "finite_ready_KV_MoE_segment_online_service"
+  },
+  "rejected_corruptions": [
+    "ECN effective byte threshold",
+    "mixed loaded ns-3 builds",
+    "declared compute duration"
+  ],
+  "script_sha256": "cdeea5298786785a3d6e13a1c936e04848b96bc9f9144977fb3c96604a4e5ecb"
+}

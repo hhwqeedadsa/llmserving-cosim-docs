@@ -1,0 +1,1005 @@
+[
+  {
+    "condition": "clos",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 193252,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11272,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "clos",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 192678,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11308,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1814528
+    }
+  },
+  {
+    "condition": "clos",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 192849,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11864,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1826816
+    }
+  },
+  {
+    "condition": "leaf",
+    "topology": "T0",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 149799,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11272,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "leaf",
+    "topology": "T0",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 149933,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11272,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1814528
+    }
+  },
+  {
+    "condition": "leaf",
+    "topology": "T0",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 151332,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11780,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1826816
+    }
+  },
+  {
+    "condition": "single-plane",
+    "topology": "T2",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 206393,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 15716,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "single-plane",
+    "topology": "T2",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 204708,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 17632,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1814528
+    }
+  },
+  {
+    "condition": "single-plane",
+    "topology": "T2",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 206228,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 15872,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1826816
+    }
+  },
+  {
+    "condition": "batch1",
+    "topology": "T1",
+    "batch_per_rank": 1,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 218,
+    "remote_payload_bytes": 450560,
+    "verified_nodes": 692,
+    "waves": 4,
+    "finish_ns": 144027,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 5180,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 450560
+    }
+  },
+  {
+    "condition": "batch1",
+    "topology": "T1",
+    "batch_per_rank": 1,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 226,
+    "remote_payload_bytes": 491520,
+    "verified_nodes": 708,
+    "waves": 4,
+    "finish_ns": 144435,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 5396,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 491520
+    }
+  },
+  {
+    "condition": "batch1",
+    "topology": "T1",
+    "batch_per_rank": 1,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 218,
+    "remote_payload_bytes": 458752,
+    "verified_nodes": 692,
+    "waves": 4,
+    "finish_ns": 143068,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 5180,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 458752
+    }
+  },
+  {
+    "condition": "batch16",
+    "topology": "T1",
+    "batch_per_rank": 16,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 890,
+    "remote_payload_bytes": 7245824,
+    "verified_nodes": 2036,
+    "waves": 4,
+    "finish_ns": 391357,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 36544,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 7245824
+    }
+  },
+  {
+    "condition": "batch16",
+    "topology": "T1",
+    "batch_per_rank": 16,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 880,
+    "remote_payload_bytes": 7274496,
+    "verified_nodes": 2016,
+    "waves": 4,
+    "finish_ns": 393126,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 39864,
+    "ecn_ce_events": 5,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 7274496
+    }
+  },
+  {
+    "condition": "batch16",
+    "topology": "T1",
+    "batch_per_rank": 16,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 888,
+    "remote_payload_bytes": 7393280,
+    "verified_nodes": 2032,
+    "waves": 4,
+    "finish_ns": 393563,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 49960,
+    "ecn_ce_events": 40,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 7393280
+    }
+  },
+  {
+    "condition": "core50",
+    "topology": "T1-core50",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 217751,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 16404,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "core50",
+    "topology": "T1-core50",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 213929,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 18560,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1814528
+    }
+  },
+  {
+    "condition": "core50",
+    "topology": "T1-core50",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 215035,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 20836,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1826816
+    }
+  },
+  {
+    "condition": "core25",
+    "topology": "T1-core25",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 265896,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 20632,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "core25",
+    "topology": "T1-core25",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 263101,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 22704,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1814528
+    }
+  },
+  {
+    "condition": "core25",
+    "topology": "T1-core25",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 261802,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 26016,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1826816
+    }
+  },
+  {
+    "condition": "dual-plane",
+    "topology": "T3",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 628,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 220101,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11140,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 870400,
+      "1": 923648
+    }
+  },
+  {
+    "condition": "dual-plane",
+    "topology": "T3",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 584,
+    "remote_payload_bytes": 1814528,
+    "verified_nodes": 1424,
+    "waves": 4,
+    "finish_ns": 223732,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11176,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 937984,
+      "1": 876544
+    }
+  },
+  {
+    "condition": "dual-plane",
+    "topology": "T3",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 616,
+    "remote_payload_bytes": 1826816,
+    "verified_nodes": 1488,
+    "waves": 4,
+    "finish_ns": 220736,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 11392,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 933888,
+      "1": 892928
+    }
+  },
+  {
+    "condition": "hotspot",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0.5,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 572,
+    "remote_payload_bytes": 1794048,
+    "verified_nodes": 1400,
+    "waves": 4,
+    "finish_ns": 209152,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 9672,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1794048
+    }
+  },
+  {
+    "condition": "hotspot",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0.5,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 542,
+    "remote_payload_bytes": 1818624,
+    "verified_nodes": 1340,
+    "waves": 4,
+    "finish_ns": 212656,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 13428,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1818624
+    }
+  },
+  {
+    "condition": "hotspot",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0.5,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 574,
+    "remote_payload_bytes": 1835008,
+    "verified_nodes": 1404,
+    "waves": 4,
+    "finish_ns": 212404,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 9116,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1835008
+    }
+  },
+  {
+    "condition": "ep4",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 354,
+    "remote_payload_bytes": 1507328,
+    "verified_nodes": 964,
+    "waves": 8,
+    "finish_ns": 141596,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 8828,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1507328
+    }
+  },
+  {
+    "condition": "ep4",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 23,
+    "passed": true,
+    "messages": 346,
+    "remote_payload_bytes": 1572864,
+    "verified_nodes": 948,
+    "waves": 8,
+    "finish_ns": 143209,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 8828,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1572864
+    }
+  },
+  {
+    "condition": "ep4",
+    "topology": "T1",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "route_seed": 37,
+    "passed": true,
+    "messages": 354,
+    "remote_payload_bytes": 1552384,
+    "verified_nodes": 964,
+    "waves": 8,
+    "finish_ns": 143773,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 7564,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1552384
+    }
+  },
+  {
+    "condition": "isolated-ep4",
+    "topology": "T4",
+    "batch_per_rank": 4,
+    "hotspot_fraction": 0,
+    "ep_groups": [
+      [
+        0,
+        2,
+        4,
+        6
+      ],
+      [
+        1,
+        3,
+        5,
+        7
+      ]
+    ],
+    "route_seed": 11,
+    "passed": true,
+    "messages": 358,
+    "remote_payload_bytes": 1601536,
+    "verified_nodes": 972,
+    "waves": 8,
+    "finish_ns": 188290,
+    "evidence": "raw token routes, native messages, ASTRA issue/callback log, frontend completion history",
+    "max_queue_bytes": 9768,
+    "ecn_ce_events": 0,
+    "pfc_pause_events": 0,
+    "plane_payload_bytes": {
+      "0": 1601536
+    }
+  }
+]

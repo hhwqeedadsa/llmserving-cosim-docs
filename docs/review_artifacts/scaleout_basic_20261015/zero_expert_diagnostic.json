@@ -1,0 +1,25 @@
+{
+  "results": {
+    "balanced": {
+      "passed": true,
+      "messages": 628,
+      "remote_payload_bytes": 1794048,
+      "verified_nodes": 1512,
+      "waves": 4,
+      "finish_ns": 186847,
+      "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history"
+    },
+    "hotspot": {
+      "passed": true,
+      "messages": 572,
+      "remote_payload_bytes": 1794048,
+      "verified_nodes": 1400,
+      "waves": 4,
+      "finish_ns": 193856,
+      "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history"
+    }
+  },
+  "expert_cost_ns": 0,
+  "route_seed": 11,
+  "limit": "different reference regime; do not subtract this difference from the main result"
+}

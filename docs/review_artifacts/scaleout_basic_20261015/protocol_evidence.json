@@ -1,0 +1,102 @@
+{
+  "incast_completed": 64,
+  "ce_observations": 11489,
+  "pfc_pause_observations": 17,
+  "feedback_flows": 64,
+  "middle_loss": {
+    "ack_callbacks": 1,
+    "ack_ns": 25376,
+    "bytes": 4000,
+    "dcqcn_feedback_seen": false,
+    "dst": 4,
+    "first_packet_path": [
+      {
+        "node": 0,
+        "port": 1,
+        "time_ns": 0
+      },
+      {
+        "node": 8,
+        "port": 3,
+        "time_ns": 1083
+      },
+      {
+        "node": 10,
+        "port": 3,
+        "time_ns": 2166
+      },
+      {
+        "node": 16,
+        "port": 2,
+        "time_ns": 3249
+      },
+      {
+        "node": 14,
+        "port": 1,
+        "time_ns": 4332
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "time_ns": 5415
+      }
+    ],
+    "first_tx_ns": 0,
+    "id": 0,
+    "plane": 0,
+    "port": 10000,
+    "ready_ns": 0,
+    "receive_ready_ns": 19352,
+    "sender_rate_at_ack_bps": 100000000000,
+    "source_data_packets": 7,
+    "source_data_payload_bytes": 7000,
+    "src": 0
+  },
+  "tail_loss": {
+    "ack_callbacks": 0,
+    "ack_ns": null,
+    "bytes": 1001,
+    "dst": 4,
+    "first_packet_path": [
+      {
+        "node": 0,
+        "port": 1,
+        "time_ns": 0
+      },
+      {
+        "node": 8,
+        "port": 3,
+        "time_ns": 1083
+      },
+      {
+        "node": 10,
+        "port": 3,
+        "time_ns": 2166
+      },
+      {
+        "node": 16,
+        "port": 2,
+        "time_ns": 3249
+      },
+      {
+        "node": 14,
+        "port": 1,
+        "time_ns": 4332
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "time_ns": 5415
+      }
+    ],
+    "first_tx_ns": 0,
+    "id": 0,
+    "plane": 0,
+    "port": 10000,
+    "ready_ns": 0,
+    "receive_ready_ns": null,
+    "source_data_packets": 2,
+    "source_data_payload_bytes": 1001,
+    "src": 0
+  }
+}

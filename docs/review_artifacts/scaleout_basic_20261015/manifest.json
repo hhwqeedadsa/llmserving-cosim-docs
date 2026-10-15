@@ -1,0 +1,35 @@
+{
+  "source_runs": "/dev/shm/moe-scaleout-e2e-20261015/matrix-03",
+  "figures": [
+    "01_conditions",
+    "02_actual_topology",
+    "03_dispatch_hotspot",
+    "04_expert_distribution",
+    "05_astra_network_timeline",
+    "06_uplink_queue",
+    "07_zero_expert_diagnostic"
+  ],
+  "script_sha256": "b006ff0613cf23d574e4889a6e25bafe2e54d28ee4e385ca396bf3006dcc532f",
+  "hashes": {
+    "report.html": "008df1e3644e5d6066f2d7526face6f8ee62598634b6396bf354eadb9934de1c",
+    "zero_expert_diagnostic.json": "8662345ea9e70836a59de38df3881011b9bf41be6a24fc7199b9379beb9b82be",
+    "07_zero_expert_diagnostic.pdf": "c7062a3b7f86168d5df0ec4875568f3a2d47fe6c4fe0957d91a307a79c2448dd",
+    "07_zero_expert_diagnostic.png": "d987c30e19320acd295923abb78356a8a4bf3b33a456e928e248d26d589ee010",
+    "protocol_evidence.json": "3d8c28be9eae0a2f3cf92b68e06eea75950c76ed02b6499a695b428826a7c743",
+    "results.csv": "32d695dfb0452ad7dfbb543d3f9076319e6e8d7eec2b3162f20062c228b49a57",
+    "results.json": "8c1100ce3fb20fb93ca164618817060804463ee0b0a71bc9aa473c4bcd4578e3",
+    "mechanisms.json": "0b3732e170c1436afc8e2ebaed0b483b104abf155675e66150ed2a09a8990582",
+    "06_uplink_queue.pdf": "31158dd38a094598b1a4cc5b6582d45f3cacd1c7aca0bf41c1c4b76ebc1bce63",
+    "06_uplink_queue.png": "9a6dee167ebf8af10f9006453344f41dbeae2e743a377eb9c1f77a6f29b5a40e",
+    "05_astra_network_timeline.pdf": "cf5500e3c816a0f971d0b9801ffc54ceba4898c92ffd008b2f89d42c2a367fe5",
+    "05_astra_network_timeline.png": "4a94f6acfc879a9f83c08594eb12b7bf26883f15e48b6e0df0fec6d20b69625f",
+    "04_expert_distribution.pdf": "d7d894e1d955da7a9db044953b9f0ef4fa9be016566ca065673f0034bad303e1",
+    "04_expert_distribution.png": "1a0c89e8147dc64123606f31794f185e8dfa718a4914278348a4dec3db3675f4",
+    "03_dispatch_hotspot.pdf": "88b5a4135779b9dfa6531b6f990ab57f5099fbe8fe786a0b97e38878cd927bbd",
+    "03_dispatch_hotspot.png": "94887ce419ed4e6deb10b81804943629c1f3e052902be9814155b2c9a6439c13",
+    "02_actual_topology.pdf": "a82518e0d534ded8238939d6ef72914f8b15c51fb3629c6dc5c989d9e591e999",
+    "02_actual_topology.png": "269469534acf05ff2e5f37eafa2715c38e80d1a329f0abdaa59fdc1b40b1cc97",
+    "01_conditions.pdf": "dff5b26f38babde8104fa1a261f2e7ff0c7b1a7606626bedac578256ff56f8ad",
+    "01_conditions.png": "bacee6c3650b5e60fd948d3ca956c2e354bab6d3a320ef3efd32231967a3415a"
+  }
+}

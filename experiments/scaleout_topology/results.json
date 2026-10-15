@@ -1,0 +1,148 @@
+{
+  "schema_version": "moe-scaleout-topology-validation/1",
+  "passed": true,
+  "scope": "Static generation and independent functional checks; no native network execution",
+  "platform_commit": "a8791287ee3c29aa3b0865e54dbf745595f3847d",
+  "generator_sha256": "290c580b969747b97232d8912c2d703cf2a4807a50aba7fb277238ade9415078",
+  "validation_sha256": "6af2fb765e0a42440dfef78c29be387519a6dd55140d70b4bfcb3d2aa78ae0e0",
+  "run_directory": "runs/scaleout_topology_validation_20261015_final",
+  "tests_run": 23,
+  "examples": {
+    "1024-clos": {
+      "input_sha256": "16573b8d9357aef6f2f855bc2b0be1944eb962758d94c7e5c5a7e827f1b556fa",
+      "manifest_sha256": "3fe0f9adf34f37420dc753e1974ec288e120ef41ec365abb87b507849e49c683",
+      "counts": {
+        "gpus": 1024,
+        "servers": 128,
+        "tor": 128,
+        "agg": 128,
+        "core": 64,
+        "links": 3072
+      },
+      "link_tiers": {
+        "access": 1024,
+        "tor_agg": 1024,
+        "agg_core": 1024
+      },
+      "all_gpu_pairs_have_packet_switch_path": true,
+      "unreachable_unordered_gpu_pairs": 0,
+      "fixed_switch_counter_array_bytes": 10758400000,
+      "repeated_files_byte_identical": true,
+      "network_executed": false,
+      "warnings": []
+    },
+    "1024-hpn-inspired": {
+      "input_sha256": "d8fa58531eb9cc13807b586de3796cac0a02d78cd4f503ab19e998086a6487e6",
+      "manifest_sha256": "470f862279a2ab9556dcbc6969b501e8db38106eb3a6d57b149be7cee81e8a7d",
+      "counts": {
+        "gpus": 1024,
+        "servers": 128,
+        "tor": 64,
+        "agg": 32,
+        "core": 8,
+        "links": 2688
+      },
+      "link_tiers": {
+        "access": 2048,
+        "tor_agg": 512,
+        "agg_core": 128
+      },
+      "all_gpu_pairs_have_packet_switch_path": true,
+      "unreachable_unordered_gpu_pairs": 0,
+      "fixed_switch_counter_array_bytes": 3496480000,
+      "repeated_files_byte_identical": true,
+      "network_executed": false,
+      "warnings": []
+    },
+    "1024-leaf-spine": {
+      "input_sha256": "3675cde8907af5c58c9efa582fd5db7b2a567b37951ca90e25cbabd5522b35bf",
+      "manifest_sha256": "21ba4a01bd69503ea1bcc8a6791dbf4840ad01f3baace186633d11d81d33ef34",
+      "counts": {
+        "gpus": 1024,
+        "servers": 128,
+        "tor": 32,
+        "agg": 0,
+        "core": 32,
+        "links": 2048
+      },
+      "link_tiers": {
+        "access": 1024,
+        "tor_core": 1024
+      },
+      "all_gpu_pairs_have_packet_switch_path": true,
+      "unreachable_unordered_gpu_pairs": 0,
+      "fixed_switch_counter_array_bytes": 2151680000,
+      "repeated_files_byte_identical": true,
+      "network_executed": false,
+      "warnings": []
+    },
+    "1024-multirail": {
+      "input_sha256": "f44ea67e9610c5a43c254f92a408837afcdda23b3682c105e5bcdcc3b8d95fda",
+      "manifest_sha256": "453c267ff3812106bbe96463c6c046c296fce820532ddb9b3eadbea91d06d172",
+      "counts": {
+        "gpus": 1024,
+        "servers": 128,
+        "tor": 32,
+        "agg": 64,
+        "core": 32,
+        "links": 1408
+      },
+      "link_tiers": {
+        "access": 1024,
+        "tor_agg": 128,
+        "agg_core": 256
+      },
+      "all_gpu_pairs_have_packet_switch_path": false,
+      "unreachable_unordered_gpu_pairs": 458752,
+      "fixed_switch_counter_array_bytes": 4303360000,
+      "repeated_files_byte_identical": true,
+      "network_executed": false,
+      "warnings": [
+        "Some GPU pairs share no packet-switch domain. Full EP All-to-All requires explicit GPU relay/intra-host transfer or additional NICs; endpoints are not routers."
+      ]
+    },
+    "small-clos": {
+      "input_sha256": "d463ad9998826bf2c138006d36c3852fd3eaec01830dd3f7518ed8b254a46258",
+      "manifest_sha256": "44579ae426503769a871173ce5152d25befa62b5090e6cc5a45ea68a078d0783",
+      "counts": {
+        "gpus": 8,
+        "servers": 4,
+        "tor": 4,
+        "agg": 4,
+        "core": 2,
+        "links": 20
+      },
+      "link_tiers": {
+        "access": 8,
+        "tor_agg": 8,
+        "agg_core": 4
+      },
+      "all_gpu_pairs_have_packet_switch_path": true,
+      "unreachable_unordered_gpu_pairs": 0,
+      "fixed_switch_counter_array_bytes": 336200000,
+      "repeated_files_byte_identical": true,
+      "network_executed": false,
+      "warnings": []
+    }
+  },
+  "native_loader": {
+    "status": "not_run",
+    "free_disk_bytes": 8375705600,
+    "required_reserve_bytes": 8589934592,
+    "reason": "below_native_probe_disk_reserve"
+  },
+  "resource_checks": {
+    "subprocesses": 11,
+    "all_completed": true,
+    "sum_monitored_wall_seconds": 2.0197193659842014,
+    "peak_sampled_group_rss_bytes": 34955264,
+    "max_waited_child_rss_kib": 27884,
+    "peak_cumulative_artifact_bytes": 9707520
+  },
+  "documentation_check": {
+    "passed": true,
+    "files": 10,
+    "local_links": 155,
+    "missing": []
+  }
+}

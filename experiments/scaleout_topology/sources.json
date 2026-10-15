@@ -1,0 +1,49 @@
+{
+  "sources": [
+    {
+      "kind": "source",
+      "repository": "https://github.com/aliyun/SimAI",
+      "commit": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+      "path": "astra-sim-alibabacloud/inputs/topo/gen_Topo_Template.py",
+      "sha256": "ceb0f61dc92f9cd2898a231b43c22eddbed2cfb89ff71db346b0cc81db0bc1df"
+    },
+    {
+      "kind": "source",
+      "repository": "https://github.com/aliyun/SimAI",
+      "commit": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+      "path": "astra-sim-alibabacloud/astra-sim/network_frontend/ns3/common.h",
+      "sha256": "d350ef879a1fcd4c5282c8a8317335e748bf654f890a2855349a8b8dba3757c9"
+    },
+    {
+      "kind": "locked_source",
+      "repository": "https://github.com/casys-kaist/astra-network-ns3",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "scratch/common.h",
+      "sha256": "a2e6fca9d9231f7404a4d696532e3fb4bd894af39fc25886a78abb9c12ab8765"
+    },
+    {
+      "kind": "user_provided_figure",
+      "name": "032e067c03c3e7435a36ab872d6acfce.jpg",
+      "sha256": "3a012ebb7bfa7f8ee472731c0670bd737555de7796bc0eaa0feec0059cdd1349",
+      "availability": "Conversation attachment; not required for generation; not copied into repository"
+    },
+    {
+      "kind": "user_provided_figure",
+      "name": "ff258493de2230a4438a6433b0c4f275.png",
+      "sha256": "498505789074c167c33bb53dd7182dd9dcd735b63bd0daf21aabc34c888896e2",
+      "availability": "Conversation attachment; not required for generation; not copied into repository"
+    },
+    {
+      "kind": "publication_metadata",
+      "doi": "10.1145/3651890.3672265",
+      "title": "Alibaba HPN: A Data Center Network for Large Language Model Training",
+      "venue": "SIGCOMM 2024",
+      "metadata_checked": [
+        "Crossref",
+        "OpenAlex"
+      ],
+      "pdf_access": "ACM HTTP 403; full text not obtained",
+      "scope": "Figure-level structural reference; not complete HPN reproduction"
+    }
+  ]
+}

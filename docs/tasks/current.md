@@ -10,6 +10,8 @@
 
 原生装载保持pending：本轮磁盘检查低于8GiB预留，未构建/运行装载探针，未扩限或删除未知数据。原生格式只经过源码匹配与独立解析；不表示已执行千卡网络、分流/故障恢复、RDMA回调修复或非UB在线服务。该限制不影响本次物理生成器的静态结果。
 
+拓扑平台本地提交 `a879128`；独立验收及来源另作研究提交。完整命令与11个受限子任务退出状态在 `runs/scaleout_topology_validation_20261015_final/`，版本化[结果摘要](../../experiments/scaleout_topology/results.json)与[迭代记录](../iterations/20261015_scaleout_topology.md)已保存；原生依赖gitlink保持不变。
+
 2026-10-15：继续研究非 UB Scale-Out 的千卡资源可行性、batch/All-to-All/EP/DP 设计、真实 MoE 热点与所给 Hugging Face 路由数据；结合当前仓库交付架构及迭代布局规范。先做有界来源与资源探针，不启动千卡全栈重跑，不下载大型数据。全部在师兄仓库本地保存、不 push。
 
 用户已要求原始数据稍后再处理。本轮不依赖原始 JSON 的代码、研究和文档已完成；真实热点统计保持 pending，不反复请求路径。详细范围及证据见[本轮记录](../iterations/20261015_scaleout_scaling.md)。

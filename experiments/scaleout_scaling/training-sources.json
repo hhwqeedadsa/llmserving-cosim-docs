@@ -1,0 +1,104 @@
+{
+  "scope": "Source and paper review, not training execution or route statistics",
+  "date": "2026-10-15",
+  "sources": [
+    {
+      "name": "megatron-ref.json",
+      "url": "https://api.github.com/repos/NVIDIA/Megatron-LM/git/ref/heads/main",
+      "status": "read",
+      "bytes": 343,
+      "sha256": "93fe3aafe336a5906e4e068e8dbdba4d3364fafd4d790b6e3f390e28a8c83598"
+    },
+    {
+      "name": "hf-metadata.json",
+      "url": "https://huggingface.co/api/datasets/core12345/MoE_expert_selection_trace",
+      "status": "unavailable",
+      "reason": "URLError: <urlopen error timed out>"
+    },
+    {
+      "name": "deepseek-v3.html",
+      "url": "https://arxiv.org/html/2412.19437v1",
+      "status": "read",
+      "bytes": 550040,
+      "sha256": "4af6fcd13cccdf8d39e12efd22f09158d6034d6f341f72685d6f8c971e42dce5"
+    },
+    {
+      "name": "router.py",
+      "path": "megatron/core/transformer/moe/router.py",
+      "commit": "915b1d2d427e526dabc4a0b460562c257376025c",
+      "url": "https://api.github.com/repos/NVIDIA/Megatron-LM/contents/megatron/core/transformer/moe/router.py?ref=915b1d2d427e526dabc4a0b460562c257376025c",
+      "status": "read",
+      "bytes": 63533,
+      "sha256": "29f4e2e44e53b66d63d0befd045bd07efbf33cffccc86e73b2a7d7c1016fedcb",
+      "blob_sha": "5e8d92a7656afe5eb927958887f71ff30cfff47a",
+      "previous_attempt": {
+        "name": "router.py",
+        "url": "https://raw.githubusercontent.com/NVIDIA/Megatron-LM/915b1d2d427e526dabc4a0b460562c257376025c/megatron/core/transformer/moe/router.py",
+        "status": "unavailable",
+        "reason": "TimeoutError: The read operation timed out"
+      }
+    },
+    {
+      "name": "moe_utils.py",
+      "path": "megatron/core/transformer/moe/moe_utils.py",
+      "commit": "915b1d2d427e526dabc4a0b460562c257376025c",
+      "url": "https://api.github.com/repos/NVIDIA/Megatron-LM/contents/megatron/core/transformer/moe/moe_utils.py?ref=915b1d2d427e526dabc4a0b460562c257376025c",
+      "status": "read",
+      "bytes": 77934,
+      "sha256": "d1aff14179353c469d891aa367ca7dc8ff756add1999eb9b5e897a19ca234295",
+      "blob_sha": "aa60d2d3df038089878932959c85fa678bcb271b",
+      "previous_attempt": {
+        "name": "moe_utils.py",
+        "url": "https://raw.githubusercontent.com/NVIDIA/Megatron-LM/915b1d2d427e526dabc4a0b460562c257376025c/megatron/core/transformer/moe/moe_utils.py",
+        "status": "unavailable",
+        "reason": "TimeoutError: The read operation timed out"
+      }
+    },
+    {
+      "name": "token_dispatcher.py",
+      "path": "megatron/core/transformer/moe/token_dispatcher.py",
+      "commit": "915b1d2d427e526dabc4a0b460562c257376025c",
+      "url": "https://api.github.com/repos/NVIDIA/Megatron-LM/contents/megatron/core/transformer/moe/token_dispatcher.py?ref=915b1d2d427e526dabc4a0b460562c257376025c",
+      "status": "read",
+      "bytes": 107543,
+      "sha256": "518636f7fdd774247796ad5dc4ddcfd85be4e20b755e85ac763bf1a53d898a31",
+      "blob_sha": "1370ed2f830957f096181770866ba7e8a7da6a85",
+      "previous_attempt": {
+        "name": "token_dispatcher.py",
+        "url": "https://raw.githubusercontent.com/NVIDIA/Megatron-LM/915b1d2d427e526dabc4a0b460562c257376025c/megatron/core/transformer/moe/token_dispatcher.py",
+        "status": "unavailable",
+        "reason": "TimeoutError: The read operation timed out"
+      }
+    },
+    {
+      "name": "transformer_config.py",
+      "path": "megatron/core/transformer/transformer_config.py",
+      "commit": "915b1d2d427e526dabc4a0b460562c257376025c",
+      "url": "https://api.github.com/repos/NVIDIA/Megatron-LM/contents/megatron/core/transformer/transformer_config.py?ref=915b1d2d427e526dabc4a0b460562c257376025c",
+      "status": "read",
+      "bytes": 211132,
+      "sha256": "553c9f836df11ed43cb442ddd2346b374c1e6ae4fc7c1cabe271c986f6a1a2bc",
+      "blob_sha": "4c749ea1f970be62d2a829922af7eb9713528868",
+      "previous_attempt": {
+        "name": "transformer_config.py",
+        "url": "https://raw.githubusercontent.com/NVIDIA/Megatron-LM/915b1d2d427e526dabc4a0b460562c257376025c/megatron/core/transformer/transformer_config.py",
+        "status": "unavailable",
+        "reason": "TimeoutError: The read operation timed out"
+      }
+    },
+    {
+      "name": "SimAI MockNcclGroup",
+      "url": "https://github.com/aliyun/SimAI/blob/a57d765c5478f319c5f5ab6fdc53f9cc7f461743/SimCCL/src/mock/v2.30/MockNcclGroup.cc",
+      "commit": "a57d765c5478f319c5f5ab6fdc53f9cc7f461743",
+      "sha256": "91d84b6db95031d45c0b613bdc53d1324c0c7d9850dc74ca34280e957a4517f6",
+      "status": "read clean local fixed source"
+    },
+    {
+      "name": "ASTRA Ring",
+      "url": "https://github.com/baoy21/astra-sim/blob/0210e24bf76f49b4111a73d1e419f6fee4f3f0b6/astra-sim/system/collective/Ring.cc",
+      "commit": "0210e24bf76f49b4111a73d1e419f6fee4f3f0b6",
+      "sha256": "f4f0664cf7490c5a6b6873b73396cf62638d511d46bef3922e20cd9736946e83",
+      "status": "read locked source"
+    }
+  ]
+}

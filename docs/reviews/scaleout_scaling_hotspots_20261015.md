@@ -134,6 +134,8 @@ ASTRA推进后继、组完成 → 前端选择下一批/训练后继
 
 用户提供[MoE_expert_selection_trace](https://huggingface.co/datasets/core12345/MoE_expert_selection_trace)。本仓既有清单固定修订 `27febb7b2d24169560a9f6f83d38eb53f94916cf`，已用子集 `cognitivecomputations/DeepSeek-R1-AWQ/mmlu/`，证据见[来源清单](../../fixtures/m10_route_selection/README.md)。
 
+训练平衡尺度、节点限制路由、固定Megatron源码、SimAI等分All-to-All路径，以及专家频率相同而通信量不同的确定性反例，详见[训练热点补充研究](moe_training_hotspots_20261015.md)。这是论文/源码与工作量证据，不是真实训练trace统计。
+
 - 已使用的是 **AWQ 推理请求的 Prefill/Decode 路由**，不能据此判断训练过程中专家随优化器 step 的变化。没有据此判定整个远程数据集的全部目录都只含推理。
 - 原始 JSON 是 entry 列表：entry0 为 Prefill、后续 entry 为逐步 Decode；每个 entry 以原始 layer ID 为 key，MoE 层为 token×Top-K。R1 前3层dense/null，后58层256专家Top8。
 - 历史基准从13,922份目录记录中固定顺序筛选前1,145份，取得1,024份可用请求，排除缺层和不足64步的文件。该基准保存的是来源清单、摘要和映射，**当前 clone 不含原始 JSON**。

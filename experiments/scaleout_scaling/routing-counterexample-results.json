@@ -1,0 +1,275 @@
+{
+  "results": {
+    "source_kind": "synthetic_mechanism_examples",
+    "network_executed": false,
+    "real_training_data": false,
+    "scope": "Dispatch vector payload only; node coalescing and direct-rank transfer are alternative templates",
+    "window_semantics": "Fixed number of tokens, not physical time or measured microbatch boundaries",
+    "limits": "No packet headers, QP, compute, padding/drop, intra-server forwarding cost, wire bytes or completion time",
+    "cases": {
+      "hot_local": {
+        "expert_counts": [
+          8,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "rank_expert_inputs": [
+          16,
+          0,
+          0,
+          0
+        ],
+        "remote_rank_dispatch_bytes": 0,
+        "remote_rank_receive_bytes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "cross_server_dispatch_bytes_direct_rank": 0,
+        "cross_server_dispatch_bytes_node_coalesced": 0,
+        "token_window_rank_receive_bytes": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "max_rank_receive_bytes_per_token_window": 0
+      },
+      "hot_remote_colocated": {
+        "expert_counts": [
+          8,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "rank_expert_inputs": [
+          0,
+          0,
+          16,
+          0
+        ],
+        "remote_rank_dispatch_bytes": 64,
+        "remote_rank_receive_bytes": [
+          0,
+          0,
+          64,
+          0
+        ],
+        "cross_server_dispatch_bytes_direct_rank": 64,
+        "cross_server_dispatch_bytes_node_coalesced": 64,
+        "token_window_rank_receive_bytes": [
+          [
+            0,
+            0,
+            32,
+            0
+          ],
+          [
+            0,
+            0,
+            32,
+            0
+          ]
+        ],
+        "max_rank_receive_bytes_per_token_window": 32
+      },
+      "hot_remote_split": {
+        "expert_counts": [
+          8,
+          8,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "rank_expert_inputs": [
+          0,
+          0,
+          8,
+          8
+        ],
+        "remote_rank_dispatch_bytes": 128,
+        "remote_rank_receive_bytes": [
+          0,
+          0,
+          64,
+          64
+        ],
+        "cross_server_dispatch_bytes_direct_rank": 128,
+        "cross_server_dispatch_bytes_node_coalesced": 64,
+        "token_window_rank_receive_bytes": [
+          [
+            0,
+            0,
+            32,
+            32
+          ],
+          [
+            0,
+            0,
+            32,
+            32
+          ]
+        ],
+        "max_rank_receive_bytes_per_token_window": 32
+      },
+      "bursty_token_windows": {
+        "expert_counts": [
+          4,
+          4,
+          0,
+          0,
+          0,
+          0,
+          4,
+          4
+        ],
+        "rank_expert_inputs": [
+          0,
+          0,
+          8,
+          8
+        ],
+        "remote_rank_dispatch_bytes": 64,
+        "remote_rank_receive_bytes": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "cross_server_dispatch_bytes_direct_rank": 64,
+        "cross_server_dispatch_bytes_node_coalesced": 64,
+        "token_window_rank_receive_bytes": [
+          [
+            0,
+            0,
+            32,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            32
+          ]
+        ],
+        "max_rank_receive_bytes_per_token_window": 32
+      },
+      "mixed_token_windows": {
+        "expert_counts": [
+          4,
+          4,
+          0,
+          0,
+          0,
+          0,
+          4,
+          4
+        ],
+        "rank_expert_inputs": [
+          0,
+          0,
+          8,
+          8
+        ],
+        "remote_rank_dispatch_bytes": 64,
+        "remote_rank_receive_bytes": [
+          0,
+          0,
+          32,
+          32
+        ],
+        "cross_server_dispatch_bytes_direct_rank": 64,
+        "cross_server_dispatch_bytes_node_coalesced": 64,
+        "token_window_rank_receive_bytes": [
+          [
+            0,
+            0,
+            16,
+            16
+          ],
+          [
+            0,
+            0,
+            16,
+            16
+          ]
+        ],
+        "max_rank_receive_bytes_per_token_window": 16
+      }
+    },
+    "input_sha256": "e05ae8c7bf1aeb34c4325f0fb3b39db75287c18766806036c3d6a61fbda479c2",
+    "analysis_sha256": "1d686feb08c03f55ccdc80afbce9af2998bca6b98801d9b60290c011f13abbc6"
+  },
+  "validation": {
+    "scope": "Independent hand-counted payload checks; no network performance validation",
+    "checks": "local/direct/node-coalesced totals 0/64/128 and 0/64/64; same experts; token-window max 32/16 with same final rank matrix",
+    "passed": true,
+    "probe": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/scaleout_scaling/analysis/routing_counterexamples.py",
+        "--config",
+        "experiments/scaleout_scaling/configs/routing-counterexamples.json",
+        "--output",
+        "runs/scaleout_training_review_20261015/counterexamples-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-15T09:57:09.998659+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 268435456,
+        "per_process_address_bytes": 536870912,
+        "artifact_bytes": 16777216,
+        "wall_seconds": 15.0
+      },
+      "peak_sampled_group_rss_bytes": 7483392,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/home/lry/moe-ub-cosim/runs/scaleout_training_review_20261015"
+      ],
+      "peak_sampled_artifact_bytes": 1241088,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1185133,
+      "peak_sampled_artifact_allocated_bytes": 1241088,
+      "process_group": 3275953,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-15T09:57:10.139728+00:00",
+      "wall_seconds": 0.14107013493776321,
+      "max_waited_child_rss_kib": 16628,
+      "artifact_bytes_before_report": 4736,
+      "aggregate_artifact_bytes_before_report": 1241088,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1185133,
+        "allocated_bytes": 1241088
+      }
+    },
+    "same_counts_after_summary_budget_added": true
+  }
+}

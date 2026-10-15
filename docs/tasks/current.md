@@ -8,6 +8,10 @@
 
 用户已要求原始数据稍后再处理。本轮不依赖原始 JSON 的代码、研究和文档已完成；真实热点统计保持 pending，不反复请求路径。详细范围及证据见[本轮记录](../iterations/20261015_scaleout_scaling.md)。
 
+补充研究已完成：核查 DeepSeek-V3 v1 论文与 Megatron `915b1d2d...` 的4份路由/通信源码，补足训练平衡、节点限制、容量与padding依据；定位锁定SimAI/ASTRA的等分All-to-All路径；5个合成反例的跨机字节及窗口计数与手算一致。详见[训练热点报告](../reviews/moe_training_hotspots_20261015.md)和[结果](../../experiments/scaleout_scaling/routing-counterexample-results.json)。仅阅读小型公开材料，不安装训练框架、不获取原始路由；来源/日志 `runs/scaleout_training_review_20261015/`。实际核算限15s、RSS256MiB/地址空间512MiB、累计16MiB、磁盘预留8GiB；链接、来源hash和合成标签已检查，不触发平台/完整网络回归。
+
+本次“三项研究与解决方法”交付核对见[证据表](../reviews/scaleout_research_delivery_20261015.md)。研究方案和文档已交付；本页整体仍记录此前授权的更大范围后端任务，pending项不因研究交付而改为完成。
+
 ## 范围与次序
 
 1. 先理解调度、构图、ASTRA、唯一 ns-3 时钟、事务完成、观测与真值隔离，再确定修改。
@@ -39,6 +43,6 @@
 
 UB 平台基线已本地保存为 `5a3761f`。源码研究及探针另行本地提交；不 push。机器未配置 Git 作者，使用命令作用域 `Codex <codex@local.invalid>` 保存本任务提交，没有修改用户或全局 Git 配置。后续实现按非 UB 报告第 8 节从 RDMA 完成语义与网络微基准开始。
 
-非UB接口研究提交为 `b26e211`，本轮公共容量入口提交为 `50c94da`；本轮探针/报告/布局规范另作研究提交。所有gitlink保持原样，全部修改只在本地。
+非UB接口研究提交为 `b26e211`，公共容量入口提交为 `50c94da`，规模探针/报告/布局规范为 `09be7c6`；训练来源与反例另作研究提交。所有gitlink保持原样，全部修改只在本地。
 
 上轮 Scale-Up 筛选已完成，旧记录见 Git `dd7d8e8:docs/tasks/current.md` 与 [研究结论](../../experiments/scaleup_issue_screening/conclusions.md)，不重启其后续算法工作。

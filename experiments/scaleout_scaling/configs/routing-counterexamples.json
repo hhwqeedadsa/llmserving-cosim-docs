@@ -1,0 +1,20 @@
+{
+  "schema_version": "routing-counterexamples/1",
+  "source_kind": "synthetic_mechanism_examples",
+  "description": "Hand-selected tokens to separate expert frequency, placement, rank dedup and token-window membership; not training measurements.",
+  "vector_bytes": 8,
+  "ranks_per_server": 2,
+  "token_window_size": 4,
+  "cases": [
+    {"name": "hot_local", "expert_to_rank": [0,0,1,1,2,2,3,3], "source_rank": 0,
+     "expert_choices": [[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1]]},
+    {"name": "hot_remote_colocated", "expert_to_rank": [2,2,1,1,0,0,3,3], "source_rank": 0,
+     "expert_choices": [[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1]]},
+    {"name": "hot_remote_split", "expert_to_rank": [2,3,1,1,0,0,2,3], "source_rank": 0,
+     "expert_choices": [[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1],[0,1]]},
+    {"name": "bursty_token_windows", "expert_to_rank": [2,2,1,1,0,0,3,3], "source_rank": 0,
+     "expert_choices": [[0,1],[0,1],[0,1],[0,1],[6,7],[6,7],[6,7],[6,7]]},
+    {"name": "mixed_token_windows", "expert_to_rank": [2,2,1,1,0,0,3,3], "source_rank": 0,
+     "expert_choices": [[0,1],[6,7],[0,1],[6,7],[0,1],[6,7],[0,1],[6,7]]}
+  ]
+}

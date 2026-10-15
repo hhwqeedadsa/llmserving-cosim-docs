@@ -6,6 +6,8 @@
 
 运行前检查千卡 Scale-Out 的 batch、EP 组数、参考通信量和交换机数组开销，可用 `moe-ub scaleout capacity`，见[独立核算示例](../examples/scaleout_capacity/README.md)。它仅需基础 Python，不执行网络或校验显存；与 `scaleout prepare` 的 UB 输入生成用途不同。
 
+生成两层/三层 Clos、multi-rail 或 HPN 参考双平面的非UB物理拓扑，使用 `moe-ub scaleout topology --config examples/scaleout_topology/1024-hpn-inspired.json --output runs/topology-hpn-new`。各层数量、NIC映射、带宽与端口均在JSON中显式配置；完整参数、四套千卡配置与输出说明见[拓扑示例](../examples/scaleout_topology/README.md)。这一步只生成输入及连通性审计，不能直接交给当前UB的 `run`。
+
 ## 安装
 
 需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`scaleout topology` 的输出是静态物理输入，采用独立的 `moe-scaleout-physical-topology/1`、`moe-scaleout-topology-audit/1` 和 `moe-scaleout-topology-manifest/1`；不是本页的仿真观测或执行记录。图、NIC端口CSV、带宽/可达性审计及原生文本格式见[拓扑输出](../examples/scaleout_topology/README.md#输出与检查)，状态固定为 `generated_not_executed`。
+
 本文件定义研究输出、原始执行记录、时间与字节口径，以及读取和资源预算。运行、采样与重放的操作步骤见[用户指南](user_guide.md)；完成事件和对象回收见[后端参考](../backend/README.md)。压缩与归档只改变保存方式，不改变业务消息、依赖和完成时刻。
 
 ## 网络机制事实

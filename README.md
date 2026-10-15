@@ -20,6 +20,8 @@ MoE 模型为每个词元（Token）选择部分专家执行计算。当专家�
 
 [Scale-Out 核算命令](examples/scaleout_capacity/README.md)可修改模型通信维度、batch、EP 和两层 Clos 带宽，输出参考通信量及固定交换机数组开销；它不执行网络或验证 GPU 容量。千卡路线、训练/推理区别和热点研究见[规模与热点报告](docs/reviews/scaleout_scaling_hotspots_20261015.md)。
 
+[参数化电交换拓扑](examples/scaleout_topology/README.md)支持两层 leaf-spine、三层 ToR—Agg—Core、multi-rail 和 HPN 参考双平面，分别设置各层数量、上联、端口与带宽。提供四套1024 GPU配置，导出物理图、NIC映射、审计及ASTRA/SimAI文本输入；本命令不执行网络，非UB在线后端仍未接入。
+
 CM384/R1 已有 128 端点完整 61 块首轮的历史参考结果；修正后的 A3 局部资源模板另有有限连续层段验收，不能把两者混成同一模型的全量验证。A3 层段保留完整部署容量和原始层编号，明确声明初态，操作见[A3 层段示例](examples/a3_segment/README.md)。具体参数与范围见[CM384/R1 场景](docs/scenarios/cm384_r1.md)和[模型依据](docs/model_validation.md)。
 
 旧发送槽模板及其[发送资源示例](examples/send_state/README.md)继续保留原用途，不作为新 A3 模型中真实资源数量的硬件结论。

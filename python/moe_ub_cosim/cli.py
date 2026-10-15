@@ -19,7 +19,7 @@ def parser():
     resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
     resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
-    scaleout = sub.add_parser('scaleout', help='Plan Scale-Out capacity or prepare UB inputs; no network execution')
+    scaleout = sub.add_parser('scaleout', help='Generate packet-switch fabrics, plan capacity or prepare UB inputs; no network execution')
     sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
@@ -27,6 +27,9 @@ def parser():
     capacity = sc.add_parser('capacity', help='Estimate uniform MoE volume and fixed-array memory for a two-tier Clos; no latency prediction')
     capacity.add_argument('--config', type=Path, required=True, help='Capacity JSON, TP=PP=1 and one NIC/GPU; no external paths')
     capacity.add_argument('--output', type=Path, required=True, help='New directory for input and capacity.json; not simulation results')
+    topology = sc.add_parser('topology', help='Generate flexible Clos/Agg/multi-rail/plane fabrics and native RDMA topology files')
+    topology.add_argument('--config', type=Path, required=True, help='Topology JSON; counts, NIC rail map, layer rates and port limits')
+    topology.add_argument('--output', type=Path, required=True, help='New directory for physical graph, NIC map, audit and ASTRA/SimAI text inputs')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -87,7 +90,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'capacity':
+            if args.scaleout_command == 'topology':
+                from .scaleout_topology import execute
+                value = execute(args.config, args.output)
+            elif args.scaleout_command == 'capacity':
                 from .scaleout_capacity import execute
                 value = execute(args.config, args.output)
             else:

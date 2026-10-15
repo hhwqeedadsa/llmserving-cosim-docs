@@ -20,12 +20,12 @@ def write_message(stream, message):
     stream.write(body)
 
 
-def _schema(output):
+def _schema(output, protoc='protoc'):
     root = Path(__file__).resolve().parents[2]
     schema = root / 'third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra/schema/protobuf/et_def.proto'
     generated = output / 'schema'
     generated.mkdir()
-    command = ['protoc', '-I', str(schema.parent), '--python_out=' + str(generated), str(schema)]
+    command = [str(protoc), '-I', str(schema.parent), '--python_out=' + str(generated), str(schema)]
     result = subprocess.run(command, capture_output=True, text=True, check=False)
     (generated / 'compiler.json').write_text(json.dumps(dict(argv=command, cwd=str(Path.cwd()),
         exit_code=result.returncode, stdout=result.stdout, stderr=result.stderr), indent=2) + '\n')

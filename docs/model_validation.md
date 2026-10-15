@@ -10,6 +10,12 @@
 
 ## 计算模型
 
+### 非 UB Scale-Out 有限片段
+
+独立 `scaleout rdma-run` 入口执行 ready-KV MoE Decode 片段，不沿用以下完整 MLA/CANN 模型：默认 H=1024、FFN=4096、16 专家、Top-K=2、2 层4轮；attention/pack/expert/merge 为显式声明成本，GPU 类型仅是标签。context 用于请求与有限 KV 声明，不自动外推 attention 耗时。专家权重和 MHA 尺寸 KV 只覆盖该片段，不证明整模型可装入 A100 80GB。
+
+通信按 token×expert 分别计贡献，同 rank 项本地完成，其余按 rank 聚合为不等长直接成对 All-to-All-v；不声称复现 NCCL 或 DeepEP 算法。全部组与轮次共用唯一原生 RDMA ns-3。连续接收完整字节放行 RECV，完整 ACK 结束 SEND；实际事件推进 ASTRA 和下一轮 LLMServingSim 调度。合成路由、有限片段功能验证、硬件校准分别说明。延迟 ACK 未验证；尾包丢失无自动恢复的失败病例已保留，因此服务实验限定无故障。输入、输出和资源范围见[非 UB 小例](../examples/scaleout_rdma/README.md)。
+
 ### 完整 Decode 图
 
 Decode 指逐步生成新词元的解码阶段；MLA（多头潜在注意力）使用压缩的注意力缓存。当前完整模型入口 `moe-ub-configured-service/4` 使用 MLA `model/2`，张量并行 TP 和流水线并行 PP 均为 1，初态为 KV 已就绪。每个 rank 是参与分布式计算的逻辑成员，本平台不要求一个 rank 对应一个宿主进程。每个 rank 对本地选中的请求执行 embedding、各 Transformer 块、final norm、lm_head 和 sampling；没有本地请求的 rank 仍处理收到的专家工作与必要状态消息。

@@ -1,0 +1,107 @@
+"""Independent conservation and execution-causality audit of a native service run."""
+from collections import Counter
+from pathlib import Path
+import re
+
+from .scaleout_rdma import checked_json
+from .scaleout_topology import require
+
+
+def verify(directory):
+    directory=Path(directory).resolve()
+    result=checked_json(directory/'result.json',16777216)
+    frontend=checked_json(directory/'frontend.json',4194304)
+    require(result['passed'] and result['drained'] and result['service']['service_finished'] and
+            result['service']['active_graphs']==0, 'service did not drain')
+    libraries=[Path(x).resolve() for x in result['loaded_libraries'] if Path(x).name.startswith('libns3')]
+    require(len(libraries)>=5 and len({p.parent for p in libraries})==1 and
+            all(p.name.startswith('libns3.42-') and 'unified' not in p.name for p in libraries),
+            'service loaded mixed or UB ns-3 libraries')
+    pattern=re.compile(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+), node->name=.*?, node->type=\d+, graph_id=([^\s,]+)')
+    events={}
+    for path in sorted((directory/'log').glob('log*')):
+        for line in path.read_text().splitlines():
+            match=pattern.search(line)
+            if match:
+                kind,rank,tick,node,graph=match.groups(); key=graph,int(rank),int(node),kind
+                require(key not in events, 'duplicate ASTRA node event')
+                events[key]=int(tick)
+    flows={m['id']:m for m in result['messages']}
+    callbacks={m['id']:m for m in result['service']['message_callbacks']}
+    require(len(flows)==len(result['messages'])==len(callbacks), 'duplicate or missing message results')
+    descriptors={};node_count=0;total_bytes=0
+    config=checked_json(directory/'input.json',65536)
+    topology=checked_json(directory/'topology.json',1048576)
+    rdma=checked_json(directory/'rdma.json',65536)
+    physical={n['id']:n for n in topology['nodes']}
+    ports={(p['node'],p['port']):p for p in result['ports']}
+    for port in result['ports']:
+        if physical[port['node']]['kind']!='gpu':
+            threshold=rdma['ecn_by_rate'][str(port['rate_bps'])]
+            require(port['ecn_kmin_bytes']==threshold['kmin_bytes'] and port['ecn_kmax_bytes']==threshold['kmax_bytes'],
+                    'effective MMU ECN thresholds differ from byte-valued input')
+    h,bpe=config['model']['hidden_size'],config['model']['activation_bytes']
+    for history in frontend['history']:
+        graph=history['graph_id']; wave=checked_json(directory/'graphs'/graph/'wave.json',4194304)
+        nodes=wave['rank_nodes']; ranks=wave['rank_ids']
+        # Recompute the matrix from individual token choices, independently of
+        # the generator's preaggregated contribution table.
+        expected={}
+        for layer in wave['routes']:
+            matrix=Counter()
+            for token in layer['tokens']:
+                require(len(token['experts'])==len(set(token['experts']))==config['model']['top_k'], 'invalid Top-K')
+                for expert in token['experts']:
+                    require(0<=expert<config['model']['experts'], 'expert outside model')
+                    dst=ranks[expert//(config['model']['experts']//len(ranks))]
+                    if token['rank']!=dst:
+                        matrix[token['rank'],dst]+=h*bpe
+            for (src,dst),size in matrix.items():
+                expected[layer['layer'],'dispatch',src,dst]=size
+                expected[layer['layer'],'combine',dst,src]=size
+        actual={(m['layer'],m['phase'],m['src'],m['dst']):m['bytes'] for m in wave['messages']}
+        require(actual==expected and len(actual)==len(wave['messages']), 'routing to remote payload mismatch')
+        for m in wave['messages']:
+            identity=m['id']; require(identity not in descriptors, 'message identity reused across waves')
+            descriptors[identity]=m; flow=flows[identity]; cb=callbacks[identity]
+            require(flow['src']==m['src'] and flow['dst']==m['dst'] and flow['plane']==m['plane'] and
+                    flow['bytes']==flow['source_data_payload_bytes']==m['bytes'] and flow['ack_callbacks']==1,
+                    'message payload, path plane or completion mismatch')
+            require(history['start_ns']<=flow['ready_ns']<=flow['first_tx_ns']<=flow['receive_ready_ns']<=flow['ack_ns']<=history['finished_ns'],
+                    'network message time order violated')
+            require(cb['send_post_ns']==flow['ready_ns'] and cb['send_callback_ns']==flow['ack_ns'] and
+                    cb['recv_callback_ns']==max(cb['recv_post_ns'],flow['receive_ready_ns']), 'ASTRA message callback boundary mismatch')
+            current=m['src']
+            for hop in flow['first_packet_path']:
+                require(hop['node']==current, 'packet path is not a contiguous physical route')
+                if physical[current]['kind']!='gpu':
+                    require(physical[current]['plane']==m['plane'], 'packet crossed planes')
+                current=ports[current,hop['port']]['peer']
+            require(current==m['dst'], 'packet path did not reach its declared destination')
+            total_bytes+=m['bytes']
+        for rank,tasks in nodes.items():
+            rank=int(rank);by_id={n['id']:n for n in tasks}
+            require(len(by_id)==len(tasks), 'duplicate DAG node ID')
+            for task in tasks:
+                start=events[graph,rank,task['id'],'issue'];end=events[graph,rank,task['id'],'callback']
+                require(history['start_ns']<=start<=end<=history['finished_ns'], 'node escaped wave bounds')
+                for dep in task['deps']:
+                    require(dep in by_id and start>=events[graph,rank,dep,'callback'], 'ASTRA consumer ran before predecessor')
+                if task['kind']=='COMP':
+                    require(end-start==task['duration_ns'], 'declared compute duration did not execute')
+                else:
+                    cb=callbacks[task['message']['id']];prefix='send' if task['kind']=='SEND' else 'recv'
+                    require(start==cb[prefix+'_post_ns'] and end==cb[prefix+'_callback_ns'], 'graph/adapter callback mismatch')
+                node_count+=1
+    require(set(descriptors)==set(flows), 'extra network work outside frontend graphs')
+    # Actual next-wave start must equal the preceding wave's callback time.
+    for group_index in range(len(config['parallel']['groups'])):
+        waves=sorted((w for w in frontend['history'] if w['group_index']==group_index),key=lambda w:w['step'])
+        require(len(waves)==config['workload']['decode_steps'], 'missing Decode waves')
+        require(waves[0]['start_ns']==0 and all(b['start_ns']==a['finished_ns'] for a,b in zip(waves,waves[1:])),
+                'next batch did not follow the real preceding completion')
+    require(all(q['state']=='FINISHED' and len(q['intertoken_ns'])==config['workload']['decode_steps'] for q in frontend['requests']),
+            'request did not complete every Decode step')
+    return dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
+                waves=len(frontend['history']),finish_ns=result['finish_ns'],
+                evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')

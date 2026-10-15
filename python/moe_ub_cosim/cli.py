@@ -19,7 +19,7 @@ def parser():
     resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
     resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
-    scaleout = sub.add_parser('scaleout', help='Generate packet-switch fabrics, plan capacity or prepare UB inputs; no network execution')
+    scaleout = sub.add_parser('scaleout', help='Generate fabrics, estimate capacity, or execute independent native RDMA probes/services')
     sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
@@ -30,6 +30,27 @@ def parser():
     topology = sc.add_parser('topology', help='Generate flexible Clos/Agg/multi-rail/plane fabrics and native RDMA topology files')
     topology.add_argument('--config', type=Path, required=True, help='Topology JSON; counts, NIC rail map, layer rates and port limits')
     topology.add_argument('--output', type=Path, required=True, help='New directory for physical graph, NIC map, audit and ASTRA/SimAI text inputs')
+    rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probe and online service targets; no UB')
+    rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
+    rb.add_argument('--cmake', default='cmake')
+    rb.add_argument('--ninja', default='ninja')
+    rb.add_argument('--protobuf-prefix', type=Path, help='Existing Protobuf installation prefix; never installs dependencies')
+    rb.add_argument('--resume', action='store_true', help='Explicitly reconfigure an owned build after a source/configuration correction; keeps prior logs')
+    rp = sc.add_parser('rdma-probe', help='Execute bounded real RDMA messages on a generated small fabric; no frontend service yet')
+    rp.add_argument('--topology', type=Path, required=True, help='Directory produced by scaleout topology')
+    rp.add_argument('--config', type=Path, required=True, help='Explicit RDMA/ECN protocol JSON')
+    rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
+    rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
+    rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
+    run_rdma = sc.add_parser('rdma-run', help='Run a finite ready-KV MoE segment through LLMServingSim, ASTRA and one native RDMA ns-3')
+    run_rdma.add_argument('--config', type=Path, required=True, help='Synthetic model/workload/grouping and declared compute costs')
+    run_rdma.add_argument('--topology', type=Path, required=True, help='Generated physical topology directory')
+    run_rdma.add_argument('--protocol', type=Path, required=True, help='Explicit RDMA protocol JSON')
+    run_rdma.add_argument('--backend', type=Path, required=True, help='Native service executable from rdma-build')
+    run_rdma.add_argument('--output', type=Path, required=True, help='New bounded run directory')
+    run_rdma.add_argument('--protoc', default='protoc', help='Existing compiler for the pinned Chakra schema')
+    verify_rdma = sc.add_parser('rdma-check', help='Audit actual token bytes, ASTRA dependencies, callbacks and next-wave scheduling')
+    verify_rdma.add_argument('--run', type=Path, required=True, help='Completed native RDMA service directory')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -90,7 +111,20 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'topology':
+            if args.scaleout_command == 'rdma-check':
+                from .scaleout_verify import verify
+                value = verify(args.run)
+            elif args.scaleout_command == 'rdma-run':
+                from .scaleout_service import run
+                value = run(args.config,args.topology,args.protocol,args.backend,args.output,args.protoc)
+            elif args.scaleout_command == 'rdma-build':
+                from .scaleout_rdma import build
+                value = build(args.output, cmake=args.cmake, ninja=args.ninja,
+                              protobuf_prefix=args.protobuf_prefix, resume=args.resume)
+            elif args.scaleout_command == 'rdma-probe':
+                from .scaleout_rdma import probe
+                value = probe(args.topology, args.config, args.messages, args.backend, args.output)
+            elif args.scaleout_command == 'topology':
                 from .scaleout_topology import execute
                 value = execute(args.config, args.output)
             elif args.scaleout_command == 'capacity':

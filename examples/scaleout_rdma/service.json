@@ -1,0 +1,28 @@
+{
+  "schema_version": "moe-scaleout-service/1",
+  "model": {
+    "name": "synthetic-moe-segment-H1024-E16-K2",
+    "hidden_size": 1024,
+    "ffn_hidden_size": 4096,
+    "experts": 16,
+    "top_k": 2,
+    "activation_bytes": 2,
+    "layers": 2,
+    "gpu_type": "A100"
+  },
+  "workload": {
+    "batch_per_rank": 4,
+    "decode_steps": 4,
+    "context_tokens": 2048,
+    "route_seed": 11,
+    "hotspot_fraction": 0
+  },
+  "parallel": {"groups": [[0, 1, 2, 3, 4, 5, 6, 7]]},
+  "compute": {
+    "source": "declared_reference",
+    "attention_ns_per_token": 1000,
+    "pack_ns_per_token": 30,
+    "expert_ns_per_contribution": 100,
+    "merge_ns_per_token": 30
+  }
+}

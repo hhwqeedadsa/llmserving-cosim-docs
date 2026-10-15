@@ -16,11 +16,11 @@ MoE 模型为每个词元（Token）选择部分专家执行计算。当专家�
 
 通信可选择既有 WRITE/RTP 或原生 STORE/LOAD，并配置原生逐包喷洒、端侧准备耗时和物理出口服务区间。观测可保存计数、队列等待及窗口聚合，或为指定端口和时间保留细节。[原生首轮示例](examples/native_first_round/README.md)给出不依赖外部数据的入口。
 
-[UB 分层输入基线](examples/scaleout/README.md)提供设备—服务器出口—机架—骨干的拓扑生成、分层带宽、物理放置和路径审计，复用现有 `resolve/run`。它使用 UB 传输抽象，不代表 RoCE 或任意服务器的 NIC 架构。非 UB Scale-Out 的源码比较与接入设计见[ns-3 / Alibaba / ASTRA 研究](docs/reviews/scaleout_ns3_backends_20261015.md)；新在线后端尚未实现。
+[UB 分层输入基线](examples/scaleout/README.md)提供设备—服务器出口—机架—骨干的拓扑生成、分层带宽、物理放置和路径审计，复用现有 `resolve/run`。它使用 UB 传输抽象。独立的[非 UB RDMA 入口](examples/scaleout_rdma/README.md)使用 `scaleout rdma-build/rdma-run/rdma-check`，已打通实际 LLMServingSim 调度、ASTRA 和单一原生 ns-3 的有限多层、多轮 MoE 片段。两种后端分别构建，不混链；非 UB 入口的模型计算仍为声明成本，不代表整模型硬件性能。
 
 [Scale-Out 核算命令](examples/scaleout_capacity/README.md)可修改模型通信维度、batch、EP 和两层 Clos 带宽，输出参考通信量及固定交换机数组开销；它不执行网络或验证 GPU 容量。千卡路线、训练/推理区别和热点研究见[规模与热点报告](docs/reviews/scaleout_scaling_hotspots_20261015.md)。
 
-[参数化电交换拓扑](examples/scaleout_topology/README.md)支持两层 leaf-spine、三层 ToR—Agg—Core、multi-rail 和 HPN 参考双平面，分别设置各层数量、上联、端口与带宽。提供四套1024 GPU配置，导出物理图、NIC映射、审计及ASTRA/SimAI文本输入；本命令不执行网络，非UB在线后端仍未接入。
+[参数化电交换拓扑](examples/scaleout_topology/README.md)支持两层 leaf-spine、三层 ToR—Agg—Core、multi-rail 和 HPN 参考双平面，分别设置各层数量、上联、端口与带宽。提供四套1024 GPU静态配置；拓扑命令只生成输入，小图可通过独立 RDMA 入口真实执行。千卡逐包执行未验证。
 
 CM384/R1 已有 128 端点完整 61 块首轮的历史参考结果；修正后的 A3 局部资源模板另有有限连续层段验收，不能把两者混成同一模型的全量验证。A3 层段保留完整部署容量和原始层编号，明确声明初态，操作见[A3 层段示例](examples/a3_segment/README.md)。具体参数与范围见[CM384/R1 场景](docs/scenarios/cm384_r1.md)和[模型依据](docs/model_validation.md)。
 

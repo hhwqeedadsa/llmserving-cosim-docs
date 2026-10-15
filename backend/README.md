@@ -4,6 +4,8 @@
 
 ## 构建与程序入口
 
+非 UB Scale-Out 的独立入口位于 [rdma/](rdma/)，经公共 `scaleout rdma-build` 配置锁定 ASTRA 自带的 ns-3。`moe-rdma-probe` 做真实分组消息检查，`moe-rdma-service` 由实际 LLMServingSim 前端在线提交 Chakra 图；每 rank 保留 Sys，所有组共享 Fabric 和 Simulator。完成语义、串行构建兼容 overlay、观测及限制见[RDMA 小例](../examples/scaleout_rdma/README.md)。该入口只链接原生 RDMA ns-3；下面的生产 UB 入口及构建规则保持独立。
+
 构建由 ns-3-UB 的 CMake 工程进入，[inject.cmake](inject.cmake) 将本目录加入同一工程，不能直接以 `backend/` 作为 `cmake -S`。联合程序只链接这一套 ns-3-UB 库。适配器和 UB 使用 C++20，锁定 ASTRA 及日志桥接使用 C++17；日志桥接隔离上游日志头的编译差异。
 
 `moe-ub build` 构建生产入口 `cosim-service`，实际二进制路径写入构建目录的 `backend.json`。其余目标保留为功能检查，不是完整模型用户入口。

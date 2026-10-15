@@ -1,0 +1,304 @@
+"""Small ready-KV MoE service: pinned LLMServingSim -> Chakra/ASTRA -> native RDMA.
+
+Synthetic expert routes and declared compute costs are explicit inputs. This is
+a network experiment with a finite MoE segment, not a calibrated full LLM.
+"""
+from collections import Counter
+import hashlib
+import json
+import math
+from pathlib import Path
+import random
+import subprocess
+import sys
+
+from .generate import _schema, write_message
+from .scaleout_rdma import (ASTRA, ROOT, checked_json, digest, monitored, save,
+                            validate_probe, validate_protocol)
+from .scaleout_topology import fields, integer, require
+
+
+def validate(c, topology, rdma):
+    fields(c, 'schema_version model workload parallel compute', 'service')
+    require(c['schema_version'] == 'moe-scaleout-service/1', 'unsupported service schema')
+    m, w, p, cost = (c[k] for k in ('model', 'workload', 'parallel', 'compute'))
+    fields(m, 'name hidden_size ffn_hidden_size experts top_k activation_bytes layers gpu_type', 'model')
+    require(isinstance(m['name'], str) and 0 < len(m['name']) <= 128, 'invalid model name')
+    for k, lo, hi in [('hidden_size', 64, 8192), ('ffn_hidden_size', 64, 32768),
+                     ('experts', 2, 256), ('top_k', 1, 8), ('activation_bytes', 1, 4), ('layers', 1, 4)]:
+        integer(m[k], k, lo, hi)
+    require(m['top_k'] <= m['experts'], 'Top-K exceeds experts')
+    require(m['gpu_type'] in ('A100', 'H100', 'A800', 'H800', 'NONE'), 'invalid descriptive GPU label')
+    fields(w, 'batch_per_rank decode_steps context_tokens route_seed hotspot_fraction', 'workload')
+    for k, lo, hi in [('batch_per_rank', 1, 16), ('decode_steps', 2, 4),
+                     ('context_tokens', 16, 65536), ('route_seed', 1, 2**31-1)]:
+        integer(w[k], k, lo, hi)
+    require(type(w['hotspot_fraction']) in (int, float) and w['hotspot_fraction'] in (0, 0.5),
+            'first service supports balanced or exactly 50% hot tokens')
+    fields(p, 'groups', 'parallel')
+    gpus = sorted(n['id'] for n in topology['nodes'] if n['kind'] == 'gpu')
+    require(isinstance(p['groups'], list) and 1 <= len(p['groups']) <= 8, 'invalid EP groups')
+    flat = []
+    for group in p['groups']:
+        require(isinstance(group, list) and 2 <= len(group) <= 32, 'EP groups need at least two ranks')
+        for rank in group:
+            integer(rank, 'rank', 0, 31)
+        require(group == sorted(set(group)) and m['experts'] % len(group) == 0, 'EP group or expert placement invalid')
+        flat.extend(group)
+    require(sorted(flat) == gpus, 'EP groups must partition physical GPUs exactly')
+    fields(cost, 'source attention_ns_per_token pack_ns_per_token expert_ns_per_contribution merge_ns_per_token', 'compute')
+    require(cost['source'] == 'declared_reference', 'this service requires declared, uncalibrated compute costs')
+    for k in cost:
+        if k != 'source':
+            integer(cost[k], k, 0, 1000000)
+    validate_protocol(rdma)
+    require('drop_once' not in rdma, 'fault injection is a microprobe capability, not a service recovery claim')
+    # Preflight every directed pair in each plane, without using GPUs as routers.
+    planes = sorted({n['plane'] for n in topology['nodes'] if n['kind'] != 'gpu'})
+    for group in p['groups']:
+        for plane in planes:
+            for src in group:
+                for dst in group:
+                    if src != dst:
+                        validate_probe(topology, rdma, [dict(id=0, src=src, dst=dst, bytes=1, plane=plane, ready_ns=0)])
+    return len(gpus), len(planes)
+
+
+def routes(config, group, step, layer):
+    """A balanced synthetic choice multiset; hot case changes expert ownership.
+
+    IDs and permutations are deterministic for a condition/seed, independent of
+    network completion order. Top-K choices within a token never repeat.
+    """
+    m, w = config['model'], config['workload']
+    rng = random.Random(f"{w['route_seed']}:{group}:{step}:{layer}")
+    tokens = [(rank, slot) for rank in group for slot in range(w['batch_per_rank'])]
+    rng.shuffle(tokens)
+    order = list(range(m['experts'])); rng.shuffle(order)
+    hot_tokens = len(tokens)//2 if w['hotspot_fraction'] else 0
+    result = []
+    for i, (rank, slot) in enumerate(tokens):
+        choices = [order[(i*m['top_k']+j) % m['experts']] for j in range(m['top_k'])]
+        if w['hotspot_fraction']:
+            pool = [e for e in choices if e != 0]
+            pool += [e for e in order if e != 0 and e not in pool]
+            choices = ([0] + pool[:m['top_k']-1]) if i < hot_tokens else pool[:m['top_k']]
+        result.append(dict(rank=rank, slot=slot, experts=choices))
+    return sorted(result, key=lambda x:(x['rank'],x['slot']))
+
+
+def make_wave(config, group, group_index, step, planes):
+    m, w, cost = config['model'], config['workload'], config['compute']
+    graph = f'g{group_index}.w{step}'
+    nodes = {r: [] for r in group}; next_node = {r: 1 for r in group}; previous = {r: [] for r in group}
+    messages, route_rows = [], []
+    # Identity depends on logical work, never submission/completion order.
+    pair_counts=[len(g)*(len(g)-1) for g in config['parallel']['groups']]
+    pairs=len(group)*(len(group)-1)
+    base=step*m['layers']*2*sum(pair_counts)+m['layers']*2*sum(pair_counts[:group_index])
+
+    def node(rank, kind, name, deps, duration=0, message=None):
+        identity = next_node[rank]; next_node[rank] += 1
+        item = dict(id=identity, kind=kind, name=name, deps=sorted(set(deps)), duration_ns=duration)
+        if message is not None:
+            item['message'] = message
+        nodes[rank].append(item)
+        return identity
+
+    def leg(layer, name, matrix, dependencies, leg_index):
+        incoming = {r: [] for r in group}
+        for src in group:
+            for dst in group:
+                count = matrix.get((src, dst), 0)
+                if src == dst or not count:
+                    continue
+                si,di=group.index(src),group.index(dst)
+                pair_index=si*(len(group)-1)+(di if di<si else di-1)
+                identity = base + layer*2*pairs + leg_index*pairs + pair_index
+                stable = f'{graph}:{layer}:{name}:{src}:{dst}:{w["route_seed"]}'.encode()
+                plane = int.from_bytes(hashlib.sha256(stable).digest()[:8], 'big') % planes
+                message = dict(id=identity, tag=identity, src=src, dst=dst, bytes=count*m['hidden_size']*m['activation_bytes'],
+                               plane=plane, layer=layer, phase=name, contributions=count)
+                messages.append(message)
+                node(src, 'SEND', f'L{layer}.{name}.{src}-{dst}.send', [dependencies[src]], message=message)
+                incoming[dst].append(node(dst, 'RECV', f'L{layer}.{name}.{src}-{dst}.recv', [], message=message))
+        return incoming
+
+    for layer in range(m['layers']):
+        selected = routes(config, group, step, layer)
+        matrix, expert_counts, received = Counter(), Counter(), Counter()
+        for token in selected:
+            for expert in token['experts']:
+                dst = group[expert // (m['experts']//len(group))]
+                matrix[token['rank'], dst] += 1; expert_counts[expert] += 1; received[dst] += 1
+        route_rows.append(dict(layer=layer, tokens=selected, expert_counts=dict(expert_counts),
+            contributions=[dict(src=s,dst=d,count=n) for (s,d),n in sorted(matrix.items())]))
+        packed = {}
+        for r in group:
+            attention = node(r,'COMP',f'L{layer}.attention',previous[r],cost['attention_ns_per_token']*w['batch_per_rank'])
+            packed[r] = node(r,'COMP',f'L{layer}.pack',[attention],cost['pack_ns_per_token']*w['batch_per_rank'])
+        incoming = leg(layer,'dispatch',matrix,packed,0)
+        experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r]],
+                         cost['expert_ns_per_contribution']*received[r]) for r in group}
+        combine = Counter({(dst,src):n for (src,dst),n in matrix.items()})
+        returned = leg(layer,'combine',combine,experts,1)
+        previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r]],
+                           cost['merge_ns_per_token']*w['batch_per_rank'])] for r in group}
+    require(all(m['id'] < 50000 for m in messages), 'finite service identity/port budget exceeded')
+    return dict(schema_version='moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
+                group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
+                route_source='synthetic_balanced_or_explicit_hotspot', routes=route_rows)
+
+
+def export_wave(wave, directory, proto):
+    directory.mkdir()
+    save(directory/'wave.json', wave)
+    for rank in wave['rank_ids']:
+        with (directory/f'layer.{rank}.et').open('xb') as stream:
+            write_message(stream, proto.GlobalMetadata(version='moe-scaleout-wave/1'))
+            for task in wave['rank_nodes'][rank]:
+                n = proto.Node(id=task['id'], name=task['name'], data_deps=task['deps'])
+                n.attr.add(name='is_cpu_op', bool_val=False)
+                n.attr.add(name='num_ops', int64_val=0)
+                n.attr.add(name='tensor_size', uint64_val=0)
+                if task['kind'] == 'COMP':
+                    n.type = proto.COMP_NODE; n.duration_micros = task['duration_ns']  # Locked fork: ns.
+                else:
+                    msg = task['message']
+                    n.type = proto.COMM_SEND_NODE if task['kind'] == 'SEND' else proto.COMM_RECV_NODE
+                    n.attr.add(name='comm_size', int64_val=msg['bytes'])
+                    for k in ('src','dst','tag'):
+                        n.attr.add(name='comm_'+k, int32_val=msg[k])
+                write_message(stream,n)
+
+
+class Frontend:
+    def __init__(self, config, ranks, planes):
+        sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
+        from .configured_scheduler import ConfiguredScheduler
+        from serving.core.request import Request
+        self.config, self.planes = config, planes
+        m, w = config['model'], config['workload']; block_size = 16
+        self.schedulers, self.requests = {}, []
+        self.groups = config['parallel']['groups']; self.active = {}; self.steps = [0]*len(self.groups)
+        self.history = []; self.calls = 0
+        # Explicit local KV reservation for a finite ready-KV segment. This is a
+        # resource model declaration, not full-model A100 capacity validation.
+        kv_per_token = 2*m['layers']*m['hidden_size']*m['activation_bytes']
+        blocks = math.ceil((w['context_tokens']+w['decode_steps'])/block_size)
+        for rank in range(ranks):
+            group = next(g for g in self.groups if rank in g)
+            weights = 3*m['layers']*m['hidden_size']*m['ffn_hidden_size']*(m['experts']//len(group))*2
+            kv_blocks = blocks*w['batch_per_rank']
+            audit = dict(rank_id=rank,device_bytes=weights+kv_blocks*kv_per_token*block_size,
+                         weight_bytes=weights,non_kv_bytes=weights,kv_bytes_per_token=kv_per_token,
+                         kv_block_bytes=kv_per_token*block_size,kv_capacity_blocks=kv_blocks)
+            model = dict(name=m['name'],max_position_embeddings=w['context_tokens']+w['decode_steps'])
+            scheduler = ConfiguredScheduler(model,audit,block_size,w['batch_per_rank'],w['batch_per_rank'],w['batch_per_rank'])
+            for slot in range(w['batch_per_rank']):
+                request = Request(rank*w['batch_per_rank']+slot,m['name'],w['context_tokens'],
+                                  w['context_tokens']+w['decode_steps'],0,rank,is_init=False)
+                request.num_computed_tokens=w['context_tokens']-1
+                request.num_tokens_reached=w['context_tokens'];request.recent_end=0
+                require(scheduler.kv.allocate_slots(request, blocks*block_size-request.num_computed_tokens) is not None,
+                        'ready-KV reservation failed')
+                scheduler.add_decode(request); self.requests.append(request)
+            self.schedulers[rank]=scheduler
+
+    def decide(self, event, output, proto):
+        now=event['now_ns']
+        for completed in event['completed']:
+            graph=completed['graph_id']; index,batches,history = self.active.pop(graph)
+            require(completed['finished_ns']==now, 'completion clock mismatch')
+            for rank,batch in batches.items():
+                prompt,generated,_=self.schedulers[rank].add_done(batch.batch_id+1,rank,now)
+                require(prompt==0 and generated==len(batch.requests) and not self.schedulers[rank].inflight,
+                        'LLMServingSim completion mismatch')
+            history['finished_ns']=now; self.steps[index]+=1
+        submissions=[]
+        for index,group in enumerate(self.groups):
+            if self.steps[index]>=self.config['workload']['decode_steps'] or any(i==index for i,_,_ in self.active.values()):
+                continue
+            require(all(r in event['available_rank_ids'] for r in group), 'backend group unavailable')
+            batches={r:self.schedulers[r].schedule(now,r) for r in group}; self.calls+=len(group)
+            expected=self.config['workload']['batch_per_rank']
+            require(all(b is not None and b.num_prefill==0 and len(b.requests)==expected and
+                        set(b.scheduled_tokens.values())=={1} for b in batches.values()), 'invalid real Decode batch')
+            wave=make_wave(self.config,group,index,self.steps[index],self.planes)
+            directory=output/'graphs'/wave['graph_id'];export_wave(wave,directory,proto)
+            history=dict(graph_id=wave['graph_id'],group_index=index,step=self.steps[index],start_ns=now,
+                batch_request_ids={str(r):[q.id for q in b.requests] for r,b in batches.items()},
+                batch_ids={str(r):b.batch_id for r,b in batches.items()})
+            self.history.append(history); self.active[wave['graph_id']]=(index,batches,history)
+            submissions.append(str(directory))
+        finished=not self.active and all(self.steps[i]==self.config['workload']['decode_steps'] for i in range(len(self.groups)))
+        if finished:
+            require(all(s.is_request_empty() and s.kv.npu_pool.used_bytes()==0 for s in self.schedulers.values()),
+                    'final scheduler/KV state is not empty')
+        return dict(type='COMMIT',decision_id=event['decision_id'],now_ns=now,submissions=submissions,service_finished=finished)
+
+
+def worker(config_path, topology_path, protocol_path, backend, protoc, output):
+    output=Path(output); c=checked_json(config_path,65536)
+    t=checked_json(Path(topology_path)/'topology.json',1048576); rdma=checked_json(protocol_path,65536)
+    ranks,planes=validate(c,t,rdma); proto,_=_schema(output,protoc)
+    bootstrap=output/'bootstrap';bootstrap.mkdir();(output/'graphs').mkdir()
+    for r in range(ranks):
+        with (bootstrap/f'layer.{r}.et').open('xb') as stream:
+            write_message(stream,proto.GlobalMetadata(version='moe-scaleout-bootstrap/1'))
+    system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
+    save(output/'system.json',system)
+    frontend=Frontend(c,ranks,planes)
+    command=[backend,str(Path(topology_path)/'topology.json'),protocol_path,str(output/'system.json'),
+             str(bootstrap/'layer'),str(output/'result.json')]
+    transcript=[]; child=None
+    try:
+        with (output/'native.stderr.log').open('w') as errors,(output/'native.stdout.log').open('w') as logs:
+            child=subprocess.Popen(command,cwd=output,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=errors,text=True)
+            for line in child.stdout:
+                logs.write(line)
+                if not line.startswith('MOE_RDMA_EVENT '):
+                    continue
+                event=json.loads(line[len('MOE_RDMA_EVENT '):]); reply=frontend.decide(event,output,proto)
+                transcript.append(dict(event=event,reply=reply))
+                child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
+            code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
+    finally:
+        if child is not None and child.poll() is None:
+            child.terminate();child.wait(timeout=5)
+        save(output/'frontend.json',dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
+            scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
+            requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
+                           reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests]))
+    result=checked_json(output/'result.json',16777216)
+    require(result['passed'] and result['service']['service_finished'], 'service did not complete')
+
+
+def run(config, topology, protocol, backend, output, protoc='protoc'):
+    config,topology,protocol,backend,output=(Path(x).resolve() for x in (config,topology,protocol,backend,output))
+    c=checked_json(config,65536); t=checked_json(topology/'topology.json',1048576);rdma=checked_json(protocol,65536)
+    validate(c,t,rdma); require(backend.is_file(), 'missing native service executable')
+    output.mkdir(exist_ok=False)
+    save(output/'input.json',c)
+    save(output/'topology.json',t)
+    save(output/'rdma.json',rdma)
+    save(output/'provenance.json',dict(network='single_native_ns3_no_UB',compute_source=c['compute']['source'],
+        hardware_calibrated=False,route_source='synthetic',
+        hashes={str(p):digest(p) for p in [config,topology/'topology.json',protocol,backend,
+             ROOT/'third_party/LLMServingSim/serving/core/scheduler.py',Path(__file__)]}))
+    command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
+             str(backend),str(protoc),str(output)]
+    monitored(command,output/'execution',[output])
+    result=checked_json(output/'result.json',16777216)
+    require(result['passed'], 'service result failed')
+    from .scaleout_verify import verify
+    audit=verify(output)
+    save(output/'verification.json',audit)
+    return dict(passed=True,output=str(output),finish_ns=result['finish_ns'],waves=len(result['service']['waves']),
+                messages=len(result['messages']),verified_nodes=audit['verified_nodes'],
+                state='finite_ready_KV_MoE_segment_online_service')
+
+
+if __name__=='__main__':
+    require(sys.argv[1:2]==['--worker'] and len(sys.argv)==8, 'internal worker requires six paths')
+    worker(*sys.argv[2:])

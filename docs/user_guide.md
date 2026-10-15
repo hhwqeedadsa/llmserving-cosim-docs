@@ -4,6 +4,8 @@
 
 第一次使用时，先完成安装和小例运行。已有首轮数据包的使用者可直接阅读[保存与复用首轮](#保存与复用首轮)。模型与网络的工作方式见[系统架构](architecture.md)。
 
+运行前检查千卡 Scale-Out 的 batch、EP 组数、参考通信量和交换机数组开销，可用 `moe-ub scaleout capacity`，见[独立核算示例](../examples/scaleout_capacity/README.md)。它仅需基础 Python，不执行网络或校验显存；与 `scaleout prepare` 的 UB 输入生成用途不同。
+
 ## 安装
 
 需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。

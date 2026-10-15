@@ -19,11 +19,14 @@ def parser():
     resolve.add_argument('--config', type=Path, required=True, help='Scenario YAML; paths resolve from this file')
     resolve.add_argument('--backend', type=Path, required=True, help='Locked backend used to check parameters')
     resolve.add_argument('--output', type=Path, required=True, help='New resolved input directory')
-    scaleout = sub.add_parser('scaleout', help='Prepare hierarchical single-plane UB networks; no RoCE/NIC or network execution')
+    scaleout = sub.add_parser('scaleout', help='Plan Scale-Out capacity or prepare UB inputs; no network execution')
     sc = scaleout.add_subparsers(dest='scaleout_command', required=True)
     sp = sc.add_parser('prepare', help='Generate device/server/rack/spine inputs, explicit placement, paths and bandwidth cuts')
     sp.add_argument('--config', type=Path, required=True, help='Scale-Out JSON; source paths resolve from this file')
     sp.add_argument('--output', type=Path, required=True, help='New portable scenario directory; does not execute a backend')
+    capacity = sc.add_parser('capacity', help='Estimate uniform MoE volume and fixed-array memory for a two-tier Clos; no latency prediction')
+    capacity.add_argument('--config', type=Path, required=True, help='Capacity JSON, TP=PP=1 and one NIC/GPU; no external paths')
+    capacity.add_argument('--output', type=Path, required=True, help='New directory for input and capacity.json; not simulation results')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -84,8 +87,12 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            from .scaleout import prepare
-            value = prepare(args.config, args.output)
+            if args.scaleout_command == 'capacity':
+                from .scaleout_capacity import execute
+                value = execute(args.config, args.output)
+            else:
+                from .scaleout import prepare
+                value = prepare(args.config, args.output)
         elif args.command == 'segment':
             if args.segment_command=='prepare':
                 from .segment import prepare

@@ -1,0 +1,14 @@
+{
+  "schema_version": "moe-scaleout-capacity/1",
+  "parallel": {"world_gpus": 1024, "ep_size": 64, "tp_size": 1, "pp_size": 1},
+  "model": {"routed_experts": 256, "top_k": 8, "hidden_dim": 7168, "activation_bytes": 2, "moe_layers": 58},
+  "workload": {"phase": "decode", "sequences_per_rank": 1, "sequence_length": 1, "gradient_accumulation": 1},
+  "fabric": {
+    "gpus_per_server": 8, "nics_per_gpu": 1,
+    "leaf_count": 32, "spine_count": 32, "leaf_downlinks": 32, "leaf_uplinks": 32,
+    "leaf_port_capacity": 64, "spine_port_capacity": 32,
+    "nic_rate_bps": 400000000000, "uplink_rate_bps": 400000000000,
+    "include_nvswitch": true
+  },
+  "payload_bytes": 4096
+}

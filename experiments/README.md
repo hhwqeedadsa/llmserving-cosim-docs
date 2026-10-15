@@ -12,6 +12,7 @@
 | [scaleout_backend_review](scaleout_backend_review/README.md) | ASTRA/ns-3/Alibaba 接口、时间和 RDMA 完成边界 | 非UB源码与实际探针，不代表在线后端已接入 |
 | [scaleout_scaling](scaleout_scaling/README.md) | 千卡输入核算、交换机固定内存及热点研究设计 | 实际分配探针与估算；尚无千卡执行或真实训练热点统计 |
 | [scaleout_topology](scaleout_topology/README.md) | 两/三层Clos、Agg、multi-rail与HPN参考双平面的物理拓扑 | 公开CLI静态生成、连通性及确定性验收；未执行网络 |
+| [scaleout_e2e](scaleout_e2e/README.md) | 小规模LLMServingSim→ASTRA→非UB ns-3全流程与网络对照 | 方法/PDF待审阅，尚未开始新实验 |
 
 Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 

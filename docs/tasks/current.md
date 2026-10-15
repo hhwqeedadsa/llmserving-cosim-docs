@@ -4,6 +4,8 @@
 
 ## 本轮新增范围
 
+2026-10-15 后续目标：小规模Scale-Out基础仿真，形成LLMServingSim到非UB ns-3的完整流程，并可视化。用户最新要求先交PDF审阅；本阶段只整理方法，不启动实验，不将静态拓扑或离线回放当作在线闭环。方法原文在 [scaleout_e2e/plan.md](../../experiments/scaleout_e2e/plan.md)，[PDF审阅稿](../review_artifacts/ScaleOut实验方法_审阅稿_v0.1_20261015.pdf)采用8端点、5种拓扑、10个拟运行条件及G0—G3门槛。PDF已导出并核对8页A4、中文字体嵌入与可搜索文本；状态为待用户审阅。生成/预览不超过60s、RSS1GiB/地址空间2GiB、产物32MiB；日志 `runs/scaleout_method_pdf_20261015_final/`。没有新增网络执行或后端修改。
+
 2026-10-15 新需求：按用户两张图实现可参数化的非UB Scale-Out物理拓扑，覆盖两层leaf-spine、ToR—Agg—电交换Core、多rail与HPN参考双平面。每层数量、分组、fanout、NIC映射、端口与分层带宽可配置；生成固定后端可读取的拓扑、显式映射与审计，先小例与千卡静态生成验证。区别rail/plane/pod/segment，OCS改普通交换机；不宣称复现完整HPN协议或已接入非UB在线服务。生成/检查限300s、RSS1GiB/地址空间2GiB、产物128MiB；小型原生装载探针按既有构建预算，最多16交换机、不运行千卡逐包。只在本地提交、不push。
 
 本次拓扑生成与静态验收已完成：公共 `scaleout topology`、完整参数说明、四套1024 GPU配置和八卡小图已交付；23项相关检查及5套配置各两遍的逐字节复现通过。三层Clos为128/128/64个ToR/Agg/Core，HPN参考双平面为64/32/8；独立8rail示例如实报告458752个无序GPU对不可达。示例见[入口](../../examples/scaleout_topology/README.md)，结构与来源见[说明](../reviews/scaleout_topology_20261015.md)。研究侧完整日志与小摘要独立保存于 `experiments/scaleout_topology/`，本地提交分别保存平台与验收。

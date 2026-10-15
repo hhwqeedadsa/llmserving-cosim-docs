@@ -1,0 +1,197 @@
+{
+  "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/main/README.md",
+  "retrieved_utc": "2026-10-15T09:34:51.037971+00:00",
+  "ref": "moving main, no fixed git revision resolved",
+  "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+  "bytes": 32914,
+  "selected_lines": [
+    {
+      "line": 3,
+      "text": "DeepEP (DeepEveryParallel) is a high-performance communication library for machine learning training and inference. It provides high-throughput and low-latency expert-parallel (EP) all-to-all GPU kernels for MoE dispatch and combine, including FP8 dispatch, and NVLink weight and gradient exchange for redundant experts. It also offers experimental primitives for pipeline parallelism (PP), context parallelism (CP), data parallelism (DP), and remote memory access (Engram). Communication kernels are compiled at runtime via [DeepJIT](https://github.com/deepseek-ai/DeepJIT), with the supporting extension built during installation."
+    },
+    {
+      "line": 15,
+      "text": "  - Add `EPBuffer.lb_prefetch_weights` and `EPBuffer.lb_reduce_grads` for dynamic redundant experts: prefetch expert weights and quantization scales over NVLink before expert computation, then accumulate redundant experts' FP32 gradients into the original experts during backward. These primitives support the expert-replication approach explored by [MoonEP](https://github.com/MoonshotAI/MoonEP) and [UltraEP](https://github.com/Dots-Infra/UltraEP); see [Expert load balancing](#expert-load-balancing) for the API and integration requirements"
+    },
+    {
+      "line": 20,
+      "text": "- **V2 release**: A complete refactoring of expert parallelism, with support for larger scale-up and scale-out domains and the lightweight **NCCL Gin backend**."
+    },
+    {
+      "line": 30,
+      "text": "  - Larger scale-up & scale-out domain support"
+    },
+    {
+      "line": 32,
+      "text": "  - Both hybrid & direct modes remain supported"
+    },
+    {
+      "line": 33,
+      "text": "- **Engram** (experimental, with RDMA)"
+    },
+    {
+      "line": 34,
+      "text": "- **PP** (experimental, with RDMA)"
+    },
+    {
+      "line": 39,
+      "text": "- EP dispatch and combine require GPU SMs; zero-SM RDMA EP is not supported"
+    },
+    {
+      "line": 54,
+      "text": "- NVLink for intranode communication"
+    },
+    {
+      "line": 55,
+      "text": "- RDMA network for internode communication"
+    },
+    {
+      "line": 57,
+      "text": "Installation builds the host C++ extension against the CUDA and NCCL libraries. GPU kernels are compiled by DeepJIT for the current device at runtime, so installation does not require a visible GPU or `TORCH_CUDA_ARCH_LIST`. Keep the CUDA toolkit and host compiler available at runtime. Automatic bandwidth detection uses `nvidia-smi` and `ibstat`; `BucketBuffer` currently requires both NVLink and RDMA bandwidth to be detectable, even for a group using only one transport."
+    },
+    {
+      "line": 101,
+      "text": "The test scripts require NumPy and spawn local GPU workers. For multi-node tests, launch the same script on each node with a shared `MASTER_ADDR` and `MASTER_PORT`, setting `WORLD_SIZE` to the number of nodes and `RANK` to the node index. These are the conventions of `init_dist` in [deep_ep/utils/envs.py](deep_ep/utils/envs.py); adapt it to your cluster if needed. The tests default to `NCCL_IB_SL=1` and `EP_OVERRIDE_RDMA_SL=1` unless already set. Weight-prefetch and gradient-reduction tests use a single NVLink domain; PP tests require an RDMA-only group."
+    },
+    {
+      "line": 109,
+      "text": "Create and reuse a buffer for each EP group. All ranks must agree on `num_max_tokens_per_rank`; choose a common capacity covering the intended training, prefill, and decoding batches. The example below manages one EP group. Finish outstanding operations before replacing its buffer."
+    },
+    {
+      "line": 125,
+      "text": "               num_max_tokens_per_rank: int,"
+    },
+    {
+      "line": 135,
+      "text": "        group, num_max_tokens_per_rank, hidden,"
+    },
+    {
+      "line": 145,
+      "text": "        num_max_tokens_per_rank=num_max_tokens_per_rank,"
+    },
+    {
+      "line": 162,
+      "text": "`do_cpu_sync=True` obtains exact output sizes and CPU-side expert counts, commonly used for training and prefill. Set it to `False` when using GPU-side receive counts, as in decoding: outputs are allocated to the configured capacity, and the expert GEMMs must use `handle.psum_num_recv_tokens_per_expert` to identify valid expert ranges. A new routing decision needs a fresh dispatch; decoding alone does not make an old routing handle reusable."
+    },
+    {
+      "line": 174,
+      "text": "                     num_max_tokens_per_rank: int,"
+    },
+    {
+      "line": 176,
+      "text": "                     do_cpu_sync: bool = True,"
+    },
+    {
+      "line": 190,
+      "text": "        num_max_tokens_per_rank=num_max_tokens_per_rank,"
+    },
+    {
+      "line": 196,
+      "text": "        do_cpu_sync=do_cpu_sync,"
+    },
+    {
+      "line": 208,
+      "text": "    \"\"\"The backward pass of MoE dispatch is actually a combine.\"\"\""
+    },
+    {
+      "line": 245,
+      "text": "    \"\"\"The backward pass of MoE combine is actually a dispatch.\"\"\""
+    },
+    {
+      "line": 264,
+      "text": "# Use do_cpu_sync=False for decoding with GPU-side expert counts"
+    },
+    {
+      "line": 326,
+      "text": "The NVLink-only all-gather path also supports an external source with an explicitly supplied in-bucket `dsts`; use a session for general out-of-bucket inputs."
+    },
+    {
+      "line": 328,
+      "text": "All three collectives support NVLink, RDMA, and hybrid domains. NVLink reductions require NCCL multimem support. All-gather is driven by copy engines (`num_sms=0`); reduce-scatter and all-reduce use GPU SMs. See [the bucket tests](tests/bucket) and [allocation tests](tests/buffer/test_allocation.py) for examples, including registration with multiple communication groups."
+    },
+    {
+      "line": 332,
+      "text": "Dynamic expert replication spreads a heavily loaded expert's computation across additional GPUs. [MoonEP](https://github.com/MoonshotAI/MoonEP) explores online planning with dynamic redundant experts, weight prefetching, and gradient reduction. [UltraEP](https://github.com/Dots-Infra/UltraEP) ([paper](https://arxiv.org/abs/2606.04101)) plans replication and token rerouting from the current post-gating load, keeping expert replication within the NVLink domain. These works motivate the redundant-expert communication primitives exposed by `EPBuffer`."
+    },
+    {
+      "line": 335,
+      "text": "- `lb_reduce_grads(redundant_expert_grads, expert_grads, redundancy_mapping)` reads the redundant experts' FP32 gradients over NVLink and adds them into the original experts' gradients in place. Use the same mapping as the forward pass and initialize `expert_grads` with the local contribution, or zeros, before reduction."
+    },
+    {
+      "line": 337,
+      "text": "The caller supplies the replication plan, reroutes tokens to the chosen expert instances, and manages the expert GEMMs. Both exchange operations are collective within each NVLink domain: every rank in that domain must call them, including ranks with no assigned redundant slots. They run asynchronously on the communication stream and return an `EventOverlap`; call `.wait()` before consuming their results. `previous_event` can specify when the inputs are ready, and `num_sms=0` selects an analytical SM estimate."
+    },
+    {
+      "line": 339,
+      "text": "Reserve redundant weight and gradient storage with `lb_allocation_plan_or_num_bytes`, using a `BufferAllocator` plan or an aligned byte count. This LB region is separate from the EP dispatch/combine buffer. The redundant tensors must reside in it; original expert weights and gradients can use ordinary CUDA allocations. Plans must have the same shapes and allocation order on every rank in the NVLink domain."
+    },
+    {
+      "line": 341,
+      "text": "`redundancy_mapping` must be a contiguous CUDA int32 tensor of shape `[num_nvlink_ranks, num_redundant_experts]`, with identical contents on every rank in the domain. Entry `[r, c]` assigns an expert to redundant slot `c` on domain-local rank `r`, or is `-1` for an unused slot. Expert IDs are `owner_rank * num_local_experts + local_expert_idx`, using domain-local rank indices. Assign replicas to peers; a rank's own experts must not appear in its redundant slots. Unused slots are skipped."
+    },
+    {
+      "line": 343,
+      "text": "All weight and gradient tensors must be contiguous CUDA tensors. Weight tensors have leading dimension `num_local_experts` and redundant tensors `num_redundant_experts`; the trailing shapes may differ as long as each matching pair has the same byte count per expert, a multiple of `deep_ep.get_num_tma_alignment()` (32 bytes). All ranks in the domain must have the same `num_local_experts`. Gradient reduction takes two-dimensional FP32 tensors; flatten each expert's parameters into a row with the same byte alignment."
+    },
+    {
+      "line": 356,
+      "text": "    num_max_tokens_per_rank=num_max_tokens_per_rank,"
+    },
+    {
+      "line": 384,
+      "text": "`EngramBuffer` supports GPU/CPU storage and multi-layer fetches over RDMA. Use `get_storage_size_hint` and `get_theoretical_config` to size the buffer and its QPs, then `set_config` and `write` to populate the layer tables."
+    },
+    {
+      "line": 390,
+      "text": "`PPBuffer` provides `send(x, dst_rank_idx)` and `recv(x, src_rank_idx)` between adjacent ranks in an RDMA-only pipeline group. Set `num_max_tensor_bytes` and `num_max_inflight_tensors` at construction to reserve the send/recv slots. Inputs and outputs must be contiguous CUDA tensors with 32-byte-aligned pointers and sizes. See [PP tests](tests/pp/test_pp.py) for usage."
+    },
+    {
+      "line": 404,
+      "text": "| `EP_DEFAULT_RDMA_SL` | Unset | Set the Gin traffic class/service level when the buffer's `sl_idx` is not supplied. If both are unset, use NCCL's default. |"
+    },
+    {
+      "line": 405,
+      "text": "| `EP_OVERRIDE_RDMA_SL` | Unset | Override both `EP_DEFAULT_RDMA_SL` and the buffer's `sl_idx`. |"
+    },
+    {
+      "line": 406,
+      "text": "| `EP_DISABLE_GIN` | `0` | Skip Gin initialization for NVLink-only use. RDMA operations require Gin; this flag does not select another RDMA backend. |"
+    },
+    {
+      "line": 439,
+      "text": "When set during a package build, these variables are stored as import-time defaults: `EP_JIT_CACHE_DIR`, `EP_JIT_PRINT_COMPILER_COMMAND`, `EP_JIT_CPP_STANDARD`, `EP_NUM_TOPK_IDX_BITS`, `EP_NCCL_ROOT_DIR`, `EP_DEFAULT_RDMA_SL`, and `EP_OVERRIDE_RDMA_SL`. Existing environment values take precedence at import. Overriding `EP_NUM_TOPK_IDX_BITS` at runtime does not change the compiled index type."
+    },
+    {
+      "line": 452,
+      "text": "DeepEP is fully tested with InfiniBand networks. However, it is theoretically compatible with RDMA over Converged Ethernet (RoCE) as well."
+    },
+    {
+      "line": 463,
+      "text": "Select the RDMA service level through the buffer's `sl_idx` argument. The precedence is `EP_OVERRIDE_RDMA_SL` > `sl_idx` > `EP_DEFAULT_RDMA_SL` > NCCL's default. The fabric's SL-to-VL mapping determines which virtual lane carries that traffic."
+    },
+    {
+      "line": 475,
+      "text": "If the hardware supports it, we recommend using the following command to set the NIC's `PCI_ATOMIC_MODE` to improve RDMA atomic operation performance:"
+    },
+    {
+      "line": 490,
+      "text": "    - Using a low-latency protocol removes the extra RTT latency introduced by RDMA atomic OPs"
+    },
+    {
+      "line": 492,
+      "text": "    - A new backend implementation using TMA instructions for minimal SM usage and larger NVLink domain support"
+    },
+    {
+      "line": 494,
+      "text": "    - PCIe kernel support for non-NVLink environments"
+    },
+    {
+      "line": 498,
+      "text": "    - [Normal-SMFree](https://github.com/deepseek-ai/DeepEP/pull/347) Eliminating SM from RDMA path by decoupling comm-kernel execution from NIC token transfer, freeing SMs for compute"
+    },
+    {
+      "line": 508,
+      "text": "- [uccl/uccl-ep](https://github.com/uccl-project/uccl/tree/main/ep) - Enables running DeepEP on heterogeneous GPUs (e.g., Nvidia, AMD) and NICs (e.g., EFA, Broadcom, CX7)"
+    }
+  ]
+}

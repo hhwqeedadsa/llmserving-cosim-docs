@@ -1,6 +1,6 @@
 # 研究实验索引
 
-这里保存联合仿真平台上的研究问题、可复现配置、分析程序和结果。三个目录是前后不同阶段的实验，不是同时推进的三条独立主线。平台功能与实验分开验收，实际进度统一见[当前任务](../docs/tasks/current.md)。
+这里保存联合仿真平台上的研究问题、可复现配置、分析程序和结果。历史 Scale-Up 实验与新增非 UB Scale-Out 探针分别保留适用范围。平台功能与实验分开验收，实际进度统一见[当前任务](../docs/tasks/current.md)。
 
 ## 先选择正确的实验
 
@@ -8,9 +8,11 @@
 |---|---|---|
 | [mapping_value](mapping_value/README.md) | 早期 v0.4 条件下，完全正确的端网关系能否帮助排查 | 历史实验，先看其结论和适用条件，不套用为当前 A3 结果 |
 | [scaleup_observability](scaleup_observability/README.md) | 早期发送槽、LOAD 响应及观测对照 | 历史实验，部分现象依赖旧资源和通信模型，不能直接当作真实硬件痛点 |
-| [scaleup_issue_screening](scaleup_issue_screening/README.md) | A3 修正后的现象筛选；当前按三类网络机制研究诊断与采集成本 | 唯一当前研究入口，先读方案与结论，再按需要看方法和代码 |
+| [scaleup_issue_screening](scaleup_issue_screening/README.md) | A3 修正后的现象筛选，三类网络机制的诊断与采集成本 | 已完成的研究与结论，保留适用范围 |
+| [scaleout_backend_review](scaleout_backend_review/README.md) | ASTRA/ns-3/Alibaba 接口、时间和 RDMA 完成边界 | 非UB源码与实际探针，不代表在线后端已接入 |
+| [scaleout_scaling](scaleout_scaling/README.md) | 千卡输入核算、交换机固定内存及热点研究设计 | 实际分配探针与估算；尚无千卡执行或真实训练热点统计 |
 
-当前研究的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。它保留既有真实输入与计算趋势，检查诊断所需事实及其采集代价，不预定映射、时间同步或某个局部队列是最终课题。
+Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 
 ## 文档职责
 

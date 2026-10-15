@@ -1,0 +1,279 @@
+{
+  "schema_version": "scaleout-scaling-evidence/1",
+  "date": "2026-10-15",
+  "scope": "allocation-only measurement and algebraic capacity estimates; no network execution, no training trace statistics",
+  "input_platform_commit": "50c94dad434277e01343429f4d2d51e4272964fb",
+  "memory_probe": {
+    "initial": {
+      "count-0": {
+        "scope": "allocation only; no thousand-GPU simulation",
+        "switch_count": 0,
+        "sizeof_switch_node": 33665384,
+        "sizeof_nvswitch_node": 33665320,
+        "sizeof_switch_mmu": 188664,
+        "rss_before_bytes": 13991936,
+        "rss_after_bytes": 13991936
+      },
+      "count-8": {
+        "scope": "allocation only; no thousand-GPU simulation",
+        "switch_count": 8,
+        "sizeof_switch_node": 33665384,
+        "sizeof_nvswitch_node": 33665320,
+        "sizeof_switch_mmu": 188664,
+        "rss_before_bytes": 13930496,
+        "rss_after_bytes": 284463104
+      }
+    },
+    "unified_reproduction": {
+      "scope": "Allocation-only probe, not a network or thousand-GPU run",
+      "source_commit": "3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437",
+      "count-0": {
+        "scope": "allocation only; no thousand-GPU simulation",
+        "switch_count": 0,
+        "sizeof_switch_node": 33665384,
+        "sizeof_nvswitch_node": 33665320,
+        "sizeof_switch_mmu": 188664,
+        "rss_before_bytes": 13979648,
+        "rss_after_bytes": 13979648
+      },
+      "count-8": {
+        "scope": "allocation only; no thousand-GPU simulation",
+        "switch_count": 8,
+        "sizeof_switch_node": 33665384,
+        "sizeof_nvswitch_node": 33665320,
+        "sizeof_switch_mmu": 188664,
+        "rss_before_bytes": 13934592,
+        "rss_after_bytes": 284467200
+      }
+    },
+    "reproduction_provenance": {
+      "commit": "3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437",
+      "source": "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1",
+      "files": {
+        "simulation/src/point-to-point/model/switch-node.h": "f50f778e91e69c30aa3f5c61e19985c3429d6491d60d66c055fb330c758b9dda",
+        "simulation/src/point-to-point/model/switch-node.cc": "ca9155851134a9ff51b27dc13b96a3a383bae61136ea7026b567ccf9acece21b",
+        "simulation/src/point-to-point/model/nvswitch-node.h": "fd997cc982967e217e99f214ac1b0cb3e2c196715df9773492400e2f85e48121",
+        "simulation/src/point-to-point/model/nvswitch-node.cc": "e52d8adc768dec2c37bc29803a29323ee44eb8c72f366d0ee5fe914624ce6246",
+        "simulation/src/point-to-point/model/switch-mmu.h": "b98f7e15ff3a0d2fde60a1554ad92bf8b490a9745fdbee69bab607589db1d743"
+      },
+      "probe_sha256": "90e17319e3e97c59d53064bce62a3fc49b6b39c0ce50999bee0fd9b3a8c4db14",
+      "commands": [
+        {
+          "cwd": "/home/lry/moe-ub-cosim",
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "moe_ub_cosim.host_probe",
+            "--output-dir",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce/configure",
+            "--rss-bytes",
+            "2147483648",
+            "--address-bytes",
+            "4294967296",
+            "--artifact-bytes",
+            "536870912",
+            "--wall-seconds",
+            "120",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce",
+            "--min-free-bytes",
+            "8589934592",
+            "--",
+            "/home/lry/tools/venv/bin/cmake",
+            "-S",
+            "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1/simulation",
+            "-B",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "-G",
+            "Ninja",
+            "-DCMAKE_MAKE_PROGRAM=/home/lry/tools/venv/bin/ninja",
+            "-DNS3_ENABLED_MODULES=core;network;internet;point-to-point;applications",
+            "-DNS3_OUTPUT_DIRECTORY=/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe/output",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DNS3_WARNINGS_AS_ERRORS=OFF",
+            "-DNS3_PRECOMPILE_HEADERS=OFF",
+            "-DNS3_EXAMPLES=OFF",
+            "-DNS3_TESTS=OFF",
+            "-DNS3_MPI=OFF",
+            "-DNS3_MTP=OFF",
+            "-DNS3_PYTHON_BINDINGS=OFF"
+          ]
+        },
+        {
+          "cwd": "/home/lry/moe-ub-cosim",
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "moe_ub_cosim.host_probe",
+            "--output-dir",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce/build",
+            "--rss-bytes",
+            "2147483648",
+            "--address-bytes",
+            "4294967296",
+            "--artifact-bytes",
+            "536870912",
+            "--wall-seconds",
+            "300",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce",
+            "--min-free-bytes",
+            "8589934592",
+            "--",
+            "/home/lry/tools/venv/bin/cmake",
+            "--build",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "--target",
+            "scratch_scaleout-switch-memory",
+            "--parallel",
+            "2"
+          ]
+        },
+        {
+          "cwd": "/home/lry/moe-ub-cosim",
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "moe_ub_cosim.host_probe",
+            "--output-dir",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce/count-0",
+            "--rss-bytes",
+            "536870912",
+            "--address-bytes",
+            "1073741824",
+            "--artifact-bytes",
+            "536870912",
+            "--wall-seconds",
+            "15",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce",
+            "--min-free-bytes",
+            "8589934592",
+            "--",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe/output/scratch/ns3.36.1-scaleout-switch-memory",
+            "--count=0"
+          ]
+        },
+        {
+          "cwd": "/home/lry/moe-ub-cosim",
+          "argv": [
+            "/usr/bin/python3",
+            "-m",
+            "moe_ub_cosim.host_probe",
+            "--output-dir",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce/count-8",
+            "--rss-bytes",
+            "536870912",
+            "--address-bytes",
+            "1073741824",
+            "--artifact-bytes",
+            "536870912",
+            "--wall-seconds",
+            "15",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/data/research/ns-3-alibabacloud-3e0c7c1",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe",
+            "--artifact-root",
+            "/home/lry/moe-ub-cosim/runs/scaleout_scaling_20261015/memory-reproduce",
+            "--min-free-bytes",
+            "8589934592",
+            "--",
+            "/home/lry/moe-ub-cosim/build/scaleout-alibaba-probe/output/scratch/ns3.36.1-scaleout-switch-memory",
+            "--count=8"
+          ]
+        }
+      ]
+    },
+    "rss_delta_count_8_bytes": 270532608
+  },
+  "capacity_1024_decode": {
+    "schema_version": "moe-scaleout-capacity-result/1",
+    "state": "estimate_only",
+    "network_executed": false,
+    "hardware_fit_validated": false,
+    "parallel": {
+      "world_gpus": 1024,
+      "dense_attention_dp_ranks": 1024,
+      "ep_size": 64,
+      "expert_replica_groups": 16,
+      "experts_per_rank": 4,
+      "potential_directed_peer_pairs": 64512
+    },
+    "workload": {
+      "phase": "decode",
+      "tokens_per_rank_microbatch": 1,
+      "tokens_per_ep_group_microbatch": 64,
+      "global_sequences_per_microbatch": 1024,
+      "sequences_per_window": 1024,
+      "window": "one model forward batch/step",
+      "moe_legs": 2,
+      "expected_remote_expert_copies_per_token": 7.875,
+      "expected_remote_destination_ranks_per_token": 7.55581659502368
+    },
+    "logical_remote_rank_volume": {
+      "per_expert_copy": {
+        "dispatch_bytes_per_layer_microbatch": 115605504.0,
+        "combine_bytes_per_layer_microbatch": 115605504.0,
+        "all_moe_legs_bytes_per_microbatch": 13410238464.0,
+        "all_moe_legs_bytes_per_window": 13410238464.0,
+        "ideal_payload_packets_at_expected_volume": 3273984
+      },
+      "per_destination_rank_dedup": {
+        "dispatch_bytes_per_layer_microbatch": 110919871.18720971,
+        "combine_bytes_per_layer_microbatch": 110919871.18720971,
+        "all_moe_legs_bytes_per_microbatch": 12866705057.716328,
+        "all_moe_legs_bytes_per_window": 12866705057.716328,
+        "ideal_payload_packets_at_expected_volume": 3141286
+      }
+    },
+    "fabric": {
+      "servers": 128,
+      "ethernet_switches": 64,
+      "modeled_nvswitches": 128,
+      "nic_links": 1024,
+      "leaf_spine_links": 1024,
+      "leaf_downstream_bps": 12800000000000,
+      "leaf_upstream_bps": 12800000000000,
+      "down_to_up_capacity_ratio": 1.0
+    },
+    "memory": {
+      "scope": "m_bytes arrays only; excludes MMU, routing, packets, QPs, graphs and logs",
+      "locked_array_bytes_per_switch": 33620000,
+      "locked_ethernet_array_bytes": 2151680000,
+      "locked_nvswitch_array_bytes": 4303360000,
+      "locked_total_array_bytes": 6455040000,
+      "dynamic_port_array_design_estimate_bytes": 5773312,
+      "dynamic_port_allocation_implemented": false
+    },
+    "assumptions": [
+      "Uniform independent Top-K selections without replacement; equal experts per rank; no capacity drops or padding.",
+      "Two alternative logical communication templates; neither is an actual trace replay.",
+      "Combine uses the same vector size; training assumes equal-size forward/backward activations.",
+      "Remote rank bytes can travel inside a server; they are not Ethernet wire bytes.",
+      "No placement, cross-server fraction, routing, ACK/ECN/PFC, headers, gradient DP, recompute or compute costs.",
+      "Packet figure rounds aggregate expected volume; excludes per-flow rounding, acknowledgments and retransmissions.",
+      "One NIC per GPU, one link per leaf-spine pair, optional one modeled NVSwitch per server; not a hardware specification."
+    ],
+    "input_sha256": "06c85126f1cc49c40f4e3e7f42c549c2d2045e3f12720eb242bed8b67b41492e"
+  },
+  "raw_route_data_status": "pending user local path; no new original JSON acquired",
+  "runs": [
+    "runs/scaleout_scaling_20261015/memory-reproduce",
+    "runs/scaleout_scaling_20261015/capacity-decode",
+    "runs/scaleout_scaling_20261015/capacity-final"
+  ],
+  "platform_version_note": "Allocation probe and initial estimate ran from b26e211 with this task in the worktree; capacity CLI rerun after committing platform as 50c94dad434277e01343429f4d2d51e4272964fb and produced byte-identical capacity.json. Research documents were still uncommitted."
+}

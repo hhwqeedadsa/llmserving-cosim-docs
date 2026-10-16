@@ -81,7 +81,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
     }
   }
   Require(gpus_ > 0 && gpus_ <= gpu_limit && switches <= sw_limit && planes_ <= 16, "GPU/switch/plane budget exceeded");
-  adjacency_.resize(nodes_.GetN()); drivers_.resize(gpus_);
+  adjacency_.resize(nodes_.GetN()); drivers_.resize(gpus_);ports_.resize(nodes_.GetN());
+  reachable_.resize(gpus_*gpus_*planes_,0);
   InternetStackHelper internet; internet.Install(nodes_);
   unsigned edge_index=0;
   for(const auto& l : topology.at("links")) {
@@ -100,7 +101,9 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       Require(port == l.at(side ? "dst_port" : "src_port"), "native port differs from exported logical port");
       devices_[{host,port}] = dev;
       adjacency_[host].push_back({peer,port});
-      ports_[{host,port}] = {{"node",host},{"port",port},{"peer",peer},{"tier",l.at("tier")},
+      ports_[host].resize(port+1);
+      ports_[host][port].device=dev;
+      ports_[host][port].metadata = {{"node",host},{"port",port},{"peer",peer},{"tier",l.at("tier")},
           {"rate_bps",l.at("rate_bps")},{"delay_ns",l.at("delay_ns")},
           {"model_tx_bytes",0u},{"data_tx_bytes",0u},{"control_tx_bytes",0u},
           {"data_packets",0u},{"ecn_ce_seen",0u},{"pfc_pause",0u},{"pfc_resume",0u},{"max_queue_at_hook_bytes",0u}};
@@ -133,7 +136,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
         sw->m_mmu->kmin[n.port]=ecn.at("kmin_bytes");
         sw->m_mmu->kmax[n.port]=ecn.at("kmax_bytes");
         sw->m_mmu->pmax[n.port]=ecn.at("pmax");
-        const uint64_t delay=ports_.at({host,n.port}).at("delay_ns");
+        const uint64_t delay=ports_.at(host).at(n.port).metadata.at("delay_ns");
         sw->m_mmu->ConfigHdrm(n.port, rate / 1000000 * delay / 8000 * 3);
         sw->m_mmu->pfc_a_shift[n.port]=3;
       }
@@ -142,7 +145,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       Require(uint64_t(sw->m_mmu->total_hdrm)+sw->m_mmu->total_rsrv<sw->m_mmu->buffer_size,
               "headroom/reserve exceeds switch buffer");
       for(auto n:adjacency_[host]) {
-        auto& row=ports_.at({host,n.port});
+        auto& row=ports_.at(host).at(n.port).metadata;
         row["ecn_kmin_bytes"]=sw->m_mmu->kmin[n.port];row["ecn_kmax_bytes"]=sw->m_mmu->kmax[n.port];
         row["headroom_bytes"]=sw->m_mmu->headroom[n.port];
         row["initial_pfc_threshold_bytes"]=sw->m_mmu->GetPfcThreshold(n.port);
@@ -182,7 +185,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
         if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
         auto ip=Address(dst,plane);
         if(src<gpus_) {
-          drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[{src,dst,plane}]=true;
+          drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[(src*gpus_+dst)*planes_+plane]=true;
         } else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
       }
     }
@@ -191,14 +194,13 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
 
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");
-  Require(reachable_[{src,dst,plane}] && reachable_[{dst,src,plane}],"no data/ACK packet-switch path");
+  Require(reachable_[(src*gpus_+dst)*planes_+plane] && reachable_[(dst*gpus_+src)*planes_+plane],"no data/ACK packet-switch path");
   Require(id<2147483648u && !flows_.count(id) && flows_.size()<MaxMessages(),"message identity/count budget exceeded");
   // Stable across counterfactual runs even if completion order changes.
   const uint16_t port=10000+id%50000;
-  Json row={{"id",id},{"src",src},{"dst",dst},{"bytes",bytes},{"plane",plane},{"port",port},
-    {"ready_ns",Now()},{"first_tx_ns",nullptr},{"receive_ready_ns",nullptr},{"ack_ns",nullptr},
-    {"ack_callbacks",0},{"source_data_packets",0},{"source_data_payload_bytes",0},{"first_packet_path",Json::array()}};
-  flows_.emplace(id,Flow{row,std::move(done),std::move(received),false,false,src,dst,plane,bytes});
+  Flow flow;flow.done=std::move(done);flow.received=std::move(received);
+  flow.src=src;flow.dst=dst;flow.plane=plane;flow.bytes=bytes;flow.port=port;flow.ready=Now();
+  flows_.emplace(id,std::move(flow));
   if(topology_.contains("intra_host") && topology_.at("intra_host").at("enabled")==true &&
      topology_.at("nodes").at(src).at("server")==topology_.at("nodes").at(dst).at("server")) {
     SendLocal(id);return;
@@ -214,42 +216,41 @@ void Fabric::Acked(Ptr<RdmaQueuePair> qp) {
   Require(!flow.acked && qp->IsFinished(),"repeated or partial ACK completion");
   CheckReceived(qp->GetTag());
   Require(flow.data_ready,"ACK completion preceded receiver accepted all data");
-  flow.acked=true;flow.record["ack_callbacks"]=1;flow.record["ack_ns"]=Now();
-  flow.record["dcqcn_feedback_seen"]=!qp->mlx.m_first_cnp;
-  flow.record["sender_rate_at_ack_bps"]=qp->m_rate.GetBitRate();
+  flow.acked=true;flow.ack=Now();
+  flow.feedback=!qp->mlx.m_first_cnp;
+  flow.rate_at_ack=qp->m_rate.GetBitRate();
   // RdmaHw deletes its send QP after this trace returns. Do not load the next
   // graph or submit new work inside that cleanup stack.
   if(flow.done)Simulator::ScheduleNow(flow.done);
 }
 void Fabric::CheckReceived(uint64_t id) {
   auto& f=flows_.at(id); if(f.data_ready)return;
-  const uint16_t port=f.record.at("port");
+  const uint16_t port=f.port;
   auto rx=drivers_[f.dst]->m_rdma->GetRxQp(Address(f.dst,f.plane).Get(),Address(f.src,f.plane).Get(),port,port,3,false);
   if(rx && rx->ReceiverNextExpectedSeq>=f.bytes) {
-    f.data_ready=true;f.record["receive_ready_ns"]=Now();
+    f.data_ready=true;f.receive_ready=Now();
     if(f.received)Simulator::ScheduleNow(f.received);
   }
 }
 void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
-  auto& row=f->ports_.at({node,port}); const auto h=Header(p); const uint64_t size=p->GetSize();
-  row["model_tx_bytes"]=row.at("model_tx_bytes").get<uint64_t>()+size;
-  const std::string field=h.l3Prot==0x11?"data_tx_bytes":"control_tx_bytes";
-  row[field]=row.at(field).get<uint64_t>()+size;
+  auto& row=f->ports_.at(node).at(port); const auto h=Header(p); const uint64_t size=p->GetSize();
+  row.wire+=size;
+  if(h.l3Prot==0x11)row.data+=size;else row.control+=size;
   if(h.l3Prot!=0x11)return;
-  row["data_packets"]=row.at("data_packets").get<uint64_t>()+1;
+  ++row.packets;
   auto it=f->port_to_flow_.find({h.sip,h.dip,h.udp.sport}); if(it==f->port_to_flow_.end())return;
   auto& flow=f->flows_.at(it->second);
   if(node==flow.src) {
-    if(flow.record["first_tx_ns"].is_null())flow.record["first_tx_ns"]=Now();
-    flow.record["source_data_packets"]=flow.record["source_data_packets"].get<unsigned>()+1;
-    flow.record["source_data_payload_bytes"]=flow.record["source_data_payload_bytes"].get<uint64_t>()+size-h.GetSerializedSize();
+    if(flow.first_tx<0)flow.first_tx=Now();
+    ++flow.packets;
+    flow.payload+=size-h.GetSerializedSize();
   }
-  if(h.udp.seq==0)flow.record["first_packet_path"].push_back({{"node",node},{"port",port},{"time_ns",Now()}});
+  if(h.udp.seq==0)flow.path.push_back({node,port,Now()});
 }
 void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
   auto h=Header(p);
   if(h.l3Prot==0x11 && h.GetIpv4EcnBits()==3) {
-    auto& r=f->ports_.at({node,port});r["ecn_ce_seen"]=r.at("ecn_ce_seen").get<unsigned>()+1;
+    ++f->ports_.at(node).at(port).ecn;
   }
   if(node>=f->gpus_ || h.l3Prot!=0x11)return;
   auto it=f->port_to_flow_.find({h.sip,h.dip,h.udp.sport});
@@ -260,9 +261,10 @@ void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   }
 }
 void Fabric::QueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet>,uint32_t) {
-  auto device=f->devices_.at({node,port}); if(node<f->gpus_)return;
-  const auto bytes=device->GetQueue()->GetNBytesTotal();auto& row=f->ports_.at({node,port});
-  row["max_queue_at_hook_bytes"]=std::max(row.at("max_queue_at_hook_bytes").get<uint32_t>(),bytes);
+  if(node<f->gpus_)return;
+  auto& row=f->ports_.at(node).at(port);
+  const auto bytes=row.device->GetQueue()->GetNBytesTotal();
+  row.max_queue=std::max(row.max_queue,bytes);
   ++f->queue_observations_;
   if(!f->config_.contains("limits") || f->config_.at("limits").at("queue_capture")=="events") {
     const auto maximum=f->config_.contains("limits")?f->config_.at("limits").at("max_queue_events").get<uint64_t>():200000;
@@ -271,8 +273,8 @@ void Fabric::QueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet>,
   }
 }
 void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
-  auto& row=f->ports_.at({node,port});const auto key=type?"pfc_pause":"pfc_resume";
-  row[key]=row.at(key).get<unsigned>()+1;
+  auto& row=f->ports_.at(node).at(port);
+  if(type)++row.pause;else ++row.resume;
 }
 bool Fabric::Drained() const {
   for(const auto& flow:flows_)if(!flow.second.acked)return false;
@@ -288,10 +290,41 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue after enqueue/dequeue; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
-  // Terminal reporting consumes records instead of duplicating every flow's
-  // JSON tree. Called once after Run(); no packet/callback may follow it.
-  for(auto& item:flows_)r["messages"].push_back(std::move(item.second.record));
-  for(auto& item:ports_)r["ports"].push_back(std::move(item.second));
+  // Numeric observer state is converted only after Run(). Sort identities so
+  // hash-table lookup optimization cannot change exported ordering.
+  const auto time=[](int64_t value)->Json{return value<0?Json(nullptr):Json(value);};
+  std::vector<uint64_t> identities;
+  for(const auto& item:flows_)identities.push_back(item.first);
+  std::sort(identities.begin(),identities.end());
+  for(const auto id:identities) {
+    const auto& f=flows_.at(id);
+    Json row={{"id",id},{"src",f.src},{"dst",f.dst},{"bytes",f.bytes},{"plane",f.plane},{"port",f.port},
+      {"ready_ns",f.ready},{"first_tx_ns",time(f.first_tx)},{"receive_ready_ns",time(f.receive_ready)},{"ack_ns",time(f.ack)},
+      {"ack_callbacks",f.acked?1:0},{"source_data_packets",f.packets},{"source_data_payload_bytes",f.payload},
+      {"first_packet_path",Json::array()}};
+    for(const auto& hop:f.path)row["first_packet_path"].push_back({{"node",hop.node},{"port",hop.port},{"time_ns",hop.time}});
+    if(f.local) {
+      row["transport"]="intra_host_chunked_crossbar";
+      row["completion_kind"]="local_data_ready_no_RDMA_ACK";row["intra_host_chunks"]=f.chunks;
+      if(f.ingress_start>=0) {
+        row["intra_first_chunk"]={{"ingress_start_ns",f.ingress_start},{"ingress_end_ns",f.ingress_end}};
+        if(f.egress_start>=0) {
+          row["intra_first_chunk"]["egress_start_ns"]=f.egress_start;
+          row["intra_first_chunk"]["egress_end_ns"]=f.egress_end;
+        }
+      }
+    } else if(f.acked) {
+      row["dcqcn_feedback_seen"]=f.feedback;row["sender_rate_at_ack_bps"]=f.rate_at_ack;
+    }
+    r["messages"].push_back(std::move(row));
+  }
+  for(auto& node:ports_)for(unsigned index=1;index<node.size();++index) {
+    auto& p=node[index];Json row=std::move(p.metadata);
+    row["model_tx_bytes"]=p.wire;row["data_tx_bytes"]=p.data;row["control_tx_bytes"]=p.control;
+    row["data_packets"]=p.packets;row["ecn_ce_seen"]=p.ecn;row["pfc_pause"]=p.pause;row["pfc_resume"]=p.resume;
+    row["max_queue_at_hook_bytes"]=p.max_queue;
+    r["ports"].push_back(std::move(row));
+  }
   if(config_.contains("limits")) {
     r["queue_observations"]=queue_observations_;
     r["queue_capture"]=config_.at("limits").at("queue_capture");
@@ -309,9 +342,7 @@ void Fabric::SendLocal(uint64_t id) {
   const uint64_t rate=local.at("rate_bps"),chunk=local.at("chunk_bytes");
   const int64_t delay=local.at("delay_ns");
   Require(local.at("kind")=="nonblocking_chunked_crossbar" && rate>0 && chunk>0,"invalid local fabric");
-  flow.record["transport"]="intra_host_chunked_crossbar";
-  flow.record["completion_kind"]="local_data_ready_no_RDMA_ACK";
-  flow.record["intra_host_chunks"]=0;
+  flow.local=true;
   const unsigned src=flow.src,dst=flow.dst;
   const auto reserve=[this,rate](unsigned gpu,bool ingress,int64_t arrival,uint64_t size){
     auto key=std::make_pair(gpu,ingress);
@@ -332,23 +363,21 @@ void Fabric::SendLocal(uint64_t id) {
     const auto size=std::min(chunk,flow.bytes-offset);const auto interval=reserve(src,true,Now(),size);
     Simulator::Schedule(NanoSeconds(interval.first-Now()),[this,id,size,offset,interval](){
       auto& f=flows_.at(id);
-      if(f.record["first_tx_ns"].is_null())f.record["first_tx_ns"]=Now();
-      f.record["source_data_payload_bytes"]=f.record.at("source_data_payload_bytes").get<uint64_t>()+size;
-      f.record["intra_host_chunks"]=f.record.at("intra_host_chunks").get<uint64_t>()+1;
-      if(offset==0)f.record["intra_first_chunk"]={{"ingress_start_ns",interval.first},{"ingress_end_ns",interval.second}};
+      if(f.first_tx<0)f.first_tx=Now();
+      f.payload+=size;++f.chunks;
+      if(offset==0) {f.ingress_start=interval.first;f.ingress_end=interval.second;}
     });
     Simulator::Schedule(NanoSeconds(interval.second+delay-Now()),[this,id,dst,size,offset,delay,reserve](){
       const auto output=reserve(dst,false,Now(),size);
       if(offset==0) {
-        flows_.at(id).record["intra_first_chunk"]["egress_start_ns"]=output.first;
-        flows_.at(id).record["intra_first_chunk"]["egress_end_ns"]=output.second;
+        flows_.at(id).egress_start=output.first;
+        flows_.at(id).egress_end=output.second;
       }
       Simulator::Schedule(NanoSeconds(output.second+delay-Now()),[this,id,size](){
         auto& f=flows_.at(id);f.received_bytes+=size;
         Require(f.received_bytes<=f.bytes,"local received bytes exceeded message");
         if(f.received_bytes==f.bytes) {
-          f.data_ready=f.acked=true;f.record["receive_ready_ns"]=Now();f.record["ack_ns"]=Now();
-          f.record["ack_callbacks"]=1;
+          f.data_ready=f.acked=true;f.receive_ready=f.ack=Now();
           if(f.received)Simulator::ScheduleNow(f.received);
           if(f.done)Simulator::ScheduleNow(f.done);
         }

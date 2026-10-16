@@ -1,0 +1,42 @@
+{
+  "scope": "numeric observer representation and lookup only; no protocol/event/byte changes",
+  "source_sha256": {
+    "backend/rdma/astra_adapter.cc": "9b9c2335da865ae9cfd36166c76ac06e781d0dadf60687028edb529aa742a589",
+    "backend/rdma/astra_adapter.hh": "0988747496ac5cd23e759718b12a75a4194736b62d281a8039be8eac6d3e3aba",
+    "backend/rdma/fabric.cc": "7d684164d35bea5de18330b47852f879e0f464f62a711fe8fcaf6a55e87279ab",
+    "backend/rdma/fabric.hh": "492fe29dd220996271aa4eba7b63583da71eb40fe4f6d17d78841c013588d73d"
+  },
+  "service_sha256": "30ae5daf6cb7ec6d8d481ae4dff6262b8f048712c5c7519a98f47bb3fd9b8e43",
+  "complete_pairs": [
+    {
+      "before": "/dev/shm/moe-scaleout-128-20261016/experiment-04/qwen3-16",
+      "after": "/dev/shm/moe-scaleout-hotpath-20261016/gate16/qwen3-16",
+      "result_sha256": "019cb48c799c132ab8a23d5d29b414ab94b9f28d1537b5f71c21b41ea1a92abb",
+      "graph_files": 34,
+      "result_and_graphs_byte_identical": true
+    },
+    {
+      "before": "/dev/shm/moe-scaleout-128-20261016/legacy-regression-01",
+      "after": "/dev/shm/moe-scaleout-hotpath-20261016/legacy8",
+      "result_sha256": "ea9fddb798208e79707d4e124e038c54f67e1e9bad6119a8a2023205bab8953d",
+      "graph_files": 36,
+      "result_and_graphs_byte_identical": true
+    },
+    {
+      "before": "/dev/shm/moe-scaleout-128-20261016/experiment-05/qwen3-128",
+      "after": "/dev/shm/moe-scaleout-hotpath-20261016/full128/qwen3-128",
+      "result_sha256": "3dd5cd924ce912498c66776decbdb85ffe42ac4ca2b72b82fa14ac2fbc648e7b",
+      "graph_files": 258,
+      "result_and_graphs_byte_identical": true
+    }
+  ],
+  "source_matches_128_run": true,
+  "measured_speedup_claim": false,
+  "reason": "single trials with different known co-running workloads",
+  "scale1024": {
+    "status": "wall_limit",
+    "wall_budget_seconds": 600,
+    "complete": false
+  },
+  "simulation_executed_by_this_audit": false
+}

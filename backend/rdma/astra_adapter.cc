@@ -19,19 +19,18 @@ void Messages::Register(const Json& messages) {
     const auto id=m.at("id").get<uint64_t>();
     keys_.emplace(std::make_tuple(m.at("src").get<int>(),m.at("dst").get<int>(),m.at("tag").get<int>()),id);
     Operation op;op.src=m.at("src");op.dst=m.at("dst");op.plane=m.at("plane");op.bytes=m.at("bytes");
-    op.record={{"id",id},{"send_post_ns",nullptr},{"recv_post_ns",nullptr},
-      {"send_callback_ns",nullptr},{"recv_callback_ns",nullptr}};
+    op.id=id;
     operations_.emplace(id,std::move(op));
   }
 }
 void Messages::Deliver(uint64_t id) {
   auto& op=operations_.at(id);
   if(op.received && op.posted && !op.recv_called) {
-    op.recv_called=true;op.record["recv_callback_ns"]=Now();
+    op.recv_called=true;op.recv_callback=Now();
     auto callback=std::move(op.recv_done);callback();
   }
   if(op.acked && !op.send_called) {
-    op.send_called=true;op.record["send_callback_ns"]=Now();
+    op.send_called=true;op.send_callback=Now();
     auto callback=std::move(op.send_done);callback();
   }
 }
@@ -43,13 +42,13 @@ void Messages::Post(bool send,int rank,uint64_t bytes,int type,int peer,int tag,
   Require(bytes==op.bytes,"ASTRA count differs from descriptor");
   if(send) {
     Require(!op.sent,"SEND posted twice");op.sent=true;op.send_done=[callback,arg](){callback(arg);};
-    op.record["send_post_ns"]=Now();
+    op.send_post=Now();
     fabric_.Send(id,op.src,op.dst,bytes,op.plane,
       [this,id](){operations_.at(id).acked=true;Deliver(id);},
       [this,id](){operations_.at(id).received=true;Deliver(id);});
   } else {
     Require(!op.posted,"RECV posted twice");op.posted=true;op.recv_done=[callback,arg](){callback(arg);};
-    op.record["recv_post_ns"]=Now();
+    op.recv_post=Now();
     ns3::Simulator::ScheduleNow([this,id](){Deliver(id);});
   }
 }
@@ -62,7 +61,12 @@ bool Messages::Complete(const std::vector<uint64_t>& messages) const {
 }
 Json Messages::Report() {
   Json result=Json::array();
-  for(auto& item:operations_)result.push_back(std::move(item.second.record));
+  const auto time=[](int64_t value)->Json{return value<0?Json(nullptr):Json(value);};
+  for(const auto& item:operations_) {
+    const auto& op=item.second;
+    result.push_back({{"id",op.id},{"send_post_ns",time(op.send_post)},{"recv_post_ns",time(op.recv_post)},
+                     {"send_callback_ns",time(op.send_callback)},{"recv_callback_ns",time(op.recv_callback)}});
+  }
   return result;
 }
 AstraSim::timespec_t Adapter::sim_get_time() { return {AstraSim::NS,static_cast<long double>(Now())}; }

@@ -8,6 +8,7 @@
 #include <array>
 #include <map>
 #include <set>
+#include <unordered_map>
 
 namespace moe_rdma {
 using Json = nlohmann::json;
@@ -28,8 +29,14 @@ class Fabric {
   int64_t MaxSimNs() const { return config_.contains("limits") ? config_.at("limits").at("max_sim_ns").get<int64_t>() : 5000000; }
  private:
   struct Neighbor { unsigned peer, port; };
+  struct Hop { unsigned node,port;int64_t time; };
+  struct Port {
+    Json metadata;
+    ns3::Ptr<ns3::QbbNetDevice> device;
+    uint64_t wire=0,data=0,control=0,packets=0,ecn=0,pause=0,resume=0;
+    uint32_t max_queue=0;
+  };
   struct Flow {
-    Json record;
     Done done;
     Done received;
     bool data_ready = false, acked = false;
@@ -37,6 +44,21 @@ class Fabric {
     unsigned plane;
     uint64_t bytes;
     uint64_t received_bytes=0;
+    uint16_t port=0;
+    int64_t ready=0,first_tx=-1,receive_ready=-1,ack=-1;
+    uint64_t packets=0,payload=0,chunks=0,rate_at_ack=0;
+    bool local=false,feedback=false;
+    int64_t ingress_start=-1,ingress_end=-1,egress_start=-1,egress_end=-1;
+    std::vector<Hop> path;
+  };
+  struct EndpointHash {
+    size_t operator()(const std::tuple<uint32_t,uint32_t,uint16_t>& key) const noexcept {
+      uint64_t value=(uint64_t(std::get<0>(key))<<32)|std::get<1>(key);
+      value^=uint64_t(std::get<2>(key))*0x9e3779b97f4a7c15ull;
+      value=(value^(value>>30))*0xbf58476d1ce4e5b9ull;
+      value=(value^(value>>27))*0x94d049bb133111ebull;
+      return value^(value>>31);
+    }
   };
   static void Noop();
   static void TxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
@@ -52,11 +74,11 @@ class Fabric {
   std::vector<ns3::Ptr<ns3::RdmaDriver>> drivers_;
   std::vector<std::vector<Neighbor>> adjacency_;
   std::map<std::pair<unsigned,unsigned>, ns3::Ptr<ns3::QbbNetDevice>> devices_;
-  std::map<std::pair<unsigned,unsigned>, Json> ports_;
+  std::vector<std::vector<Port>> ports_;
   std::vector<std::array<uint64_t,4>> queue_events_;
-  std::map<std::tuple<unsigned,unsigned,unsigned>, bool> reachable_;
-  std::map<uint64_t, Flow> flows_;
-  std::map<std::tuple<uint32_t,uint32_t,uint16_t>, uint64_t> port_to_flow_;
+  std::vector<uint8_t> reachable_;
+  std::unordered_map<uint64_t, Flow> flows_;
+  std::unordered_map<std::tuple<uint32_t,uint32_t,uint16_t>, uint64_t,EndpointHash> port_to_flow_;
   std::map<std::pair<unsigned,bool>,int64_t> local_free_;
   std::map<std::pair<unsigned,bool>,Json> local_links_;
   uint64_t queue_observations_=0;

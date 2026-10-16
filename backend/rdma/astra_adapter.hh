@@ -17,7 +17,8 @@ class Messages {
     int src=0,dst=0;
     unsigned plane=0;
     uint64_t bytes=0;
-    Json record;
+    uint64_t id=0;
+    int64_t send_post=-1,recv_post=-1,send_callback=-1,recv_callback=-1;
     bool sent=false, posted=false, received=false, acked=false;
     bool send_called=false, recv_called=false;
     std::function<void()> send_done, recv_done;

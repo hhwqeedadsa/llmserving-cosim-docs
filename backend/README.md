@@ -8,6 +8,8 @@
 
 新 [百卡配置](../examples/scaleout_clos128/README.md)以 `rdma/2` 显式声明数量和宿主预算，`topology/2` 在同一 Simulator 增加分块机内织构。跨机按源/目的地址与线端口关联，保留完整 int32 逻辑 tag，冲突时拒绝。完整节点证据为 `log/astra_nodes.log`，不使用滚动诊断日志覆盖早期事件。`Fabric::Report()` 和 `Messages::Report()` 在最终 Run 结束后仅调用一次并转移记录所有权；之后不能再次 Run 或访问已消费记录。新配置终态 JSON 紧凑流式输出，字段语义不变。
 
+RDMA 端口、消息、路径和回调时间在执行中使用数值记录，终态才构造同字段 JSON；消息身份排序后导出，保持原顺序。流和端点查找用哈希表，端口按节点/设备编号索引，可达性为受 GPU/plane 上限约束的字节矩阵。它们不参与发包、选路或计算调度；[表示等价证据](../fixtures/scaleout_numeric_observer/README.md)分别验证旧 8 卡、完整 16/128 卡结果与任务图逐字节一致，不据此声称千卡已经完成。
+
 构建由 ns-3-UB 的 CMake 工程进入，[inject.cmake](inject.cmake) 将本目录加入同一工程，不能直接以 `backend/` 作为 `cmake -S`。联合程序只链接这一套 ns-3-UB 库。适配器和 UB 使用 C++20，锁定 ASTRA 及日志桥接使用 C++17；日志桥接隔离上游日志头的编译差异。
 
 `moe-ub build` 构建生产入口 `cosim-service`，实际二进制路径写入构建目录的 `backend.json`。其余目标保留为功能检查，不是完整模型用户入口。

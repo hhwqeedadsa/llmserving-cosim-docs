@@ -8,7 +8,19 @@
 
 ## 已记录的等待时间
 
+优先打开[离线 HTML 报告](../../docs/review_artifacts/scaleout_runtime_20261016/report.html)：直接双击文件即可查看，支持场景/版本筛选、等待/内存/模拟时间切换、单例详情、矩阵成本估算和 CSV/JSON 导出。全部数据和图表逻辑内嵌，不依赖网络、服务器、外部字体或 CDN。显示时间为北京时间，导出的原始时间戳保留 UTC。
+
 [运行成本报告](results/runtime_20261016/report.md)收录两种后端表示的 8 个已结束用例，保留[趋势 PNG](results/runtime_20261016/runtime_growth.png)、[矢量 PDF](results/runtime_20261016/runtime_growth.pdf)、CSV/JSON 与可独立重绘的小型证据。256/512 卡已完成，原版 Worker 分别约 172/346 秒；两种实现的千卡均在 600 秒限额内未完成。部分作业同机重叠，报告列出具体重叠，不把观测比值当作受控复杂度或优化加速比。当前目标为记录增长趋势，不再为千卡自动加预算或继续优化。
+
+使用 Python 标准库，从已有测量重新生成 HTML；输出及旁侧 manifest 必须尚不存在：
+
+```bash
+python3 experiments/scaleout_scaling/render_runtime_html.py \
+  --input experiments/scaleout_scaling/results/runtime_20261016/timings.json \
+  --output runs/runtime-report-new.html
+```
+
+页面只改变展示和估算，不改动测量或启动仿真。来源、模板、生成器和 HTML 的 SHA-256 保存在旁侧 manifest；模板为同目录 `runtime_report_template.html`。当前交互检查覆盖筛选、超时缺失值、键盘选择、估算输入和数据下载；本机没有可用浏览器，因此未生成浏览器截图。
 
 `timing.py` 只读取公开元数据，不加载大型 `result.json`，不执行仿真。保留 Worker 墙钟、命令墙钟、独立校验、模拟时间和内存的不同口径；超时记为右删失，完成时间留空。无需 GPU，也不把设备标签当作宿主硬件。使用已有 Matplotlib 与文泉驿字体，在新目录重绘：
 

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Scale-Out 仿真运行成本 · 实验报告</title>
+<style>
+:root{--ink:#142d3c;--muted:#617381;--blue:#14638a;--mint:#087e6c;--orange:#be6129;--line:#dfe6e9;--paper:#f5f7f8;--white:#fff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif;font-size:15px;line-height:1.7}a{color:var(--blue)}button,select,input{font:inherit}button,select{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #39a4b9;outline-offset:3px}header{background:#102c3d;color:#fff}header .wrap{padding-top:38px;padding-bottom:34px}.wrap{max-width:1240px;margin:auto;padding:0 32px}.eyebrow{font-size:12px;letter-spacing:.16em;color:#9ec2d3;font-weight:600}.head-row{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}h1{font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;line-height:1.3;margin:12px 0}header p{color:#c4d5de;margin:8px 0;max-width:800px}.tag{display:inline-block;border:1px solid #ffffff35;border-radius:99px;padding:4px 12px;white-space:nowrap;font-size:12px;color:#cbece6;margin-top:12px}.tabs{background:#fff;border-bottom:1px solid var(--line)}.tabs .wrap{display:flex;gap:28px;padding-top:11px;padding-bottom:11px;overflow:auto;white-space:nowrap}.tabs a{color:var(--muted);text-decoration:none;font-size:14px}.tabs a:hover{color:var(--blue)}main{padding-top:25px!important;padding-bottom:48px!important}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card,.panel{background:var(--white);border:1px solid var(--line);border-radius:14px}.card{padding:20px 22px}.card .label{font-size:13px;color:var(--muted)}.card strong{display:block;font-size:32px;line-height:1.35;letter-spacing:-.025em;margin:8px 0}.card p{margin:4px 0;font-size:13px;color:var(--muted)}.note{border-left:3px solid #d5a451;background:#fff8e9;padding:12px 16px;border-radius:0 9px 9px 0;color:#715322;font-size:13px;margin:18px 0 24px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:18px;margin:28px 0 14px}h2{font-size:21px;margin:0;line-height:1.4}h3{font-size:16px;margin:0 0 12px}.section-head p,.muted{font-size:13px;color:var(--muted);margin:5px 0 0}.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.filters label{font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}select,input{background:#fff;border:1px solid #cbd6dc;border-radius:7px;color:var(--ink);padding:7px 10px;max-width:100%}.toolbar{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:12px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.charts{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:20px}.chart-block{min-width:0}.chart-block h3{font-weight:600;font-size:15px;margin:0 0 4px}.chart-block p{font-size:12px;color:var(--muted);margin:0 0 6px}.chart-block svg{display:block;width:100%;height:auto}.chart-foot{font-size:12px;color:var(--muted);padding:0 22px 17px}.empty{padding:36px;color:var(--muted);font-size:14px}.detail{padding:20px 22px;background:#edf5f8;border-top:1px solid #d5e4eb;border-radius:0 0 14px 14px}.detail-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.detail-head h3{margin:0}.badge{font-size:12px;white-space:nowrap;border-radius:99px;padding:3px 9px;background:#edf7f0;color:#246542}.badge.timeout{background:#fff0e2;color:#94501e}.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.detail-grid span{display:block;font-size:12px;color:var(--muted)}.detail-grid b{font-size:15px;font-weight:600}.detail small{display:block;color:var(--muted);margin-top:13px;overflow-wrap:anywhere}.table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th,td{text-align:right;padding:13px 15px;border-bottom:1px solid #e8edef;font-variant-numeric:tabular-nums}th{font-size:12px;color:var(--muted);font-weight:600;background:#f8fafb}th:first-child,td:first-child,th:last-child,td:last-child{text-align:left}tbody tr:hover{background:#f2f8fb}tbody tr.selected{background:#eaf4f8}tbody tr{cursor:pointer}tbody tr:last-child td{border-bottom:0}td small{display:block;color:var(--muted);font-size:11px}.table-top{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{display:inline-block;font-size:11px;color:#806038;background:#fff4df;border-radius:5px;padding:1px 6px;margin-left:5px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.content{padding:22px}.content p{font-size:14px;margin:8px 0;color:#465d6b}.definitions{display:grid;grid-template-columns:155px 1fr;gap:10px;font-size:13px;margin:0}.definitions dt{font-weight:600}.definitions dd{margin:0;color:var(--muted)}.calc-row{display:flex;flex-wrap:wrap;gap:12px;margin:15px 0}.calc-row label{font-size:12px;display:flex;flex-direction:column;gap:4px;color:var(--muted)}.calc-row input{width:90px}.estimate{background:#eaf5f1;border-radius:10px;padding:15px 17px;font-size:13px;color:#216554}.estimate strong{font-size:25px;display:block;line-height:1.4}.btn{display:inline-block;background:#fff;color:var(--ink);border:1px solid #cbd6dc;border-radius:7px;padding:7px 12px;font-size:13px;text-decoration:none}.btn:hover{background:#eff5f8}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 3px}details{font-size:13px}summary{cursor:pointer;color:var(--blue)}.overlap{font-size:13px;padding-left:18px;color:var(--muted)}footer{font-size:12px;color:var(--muted);margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}.noscript{padding:14px;background:#fff0e2;color:#8c491e}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(max-width:850px){.section-head{align-items:flex-start;flex-direction:column}.charts,.two-col{grid-template-columns:1fr}.detail-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.wrap{padding-left:16px;padding-right:16px}.stats{grid-template-columns:1fr}.card{padding:16px 18px}.card strong{font-size:27px}.head-row{display:block}.tag{margin-top:0}.filters label{flex-wrap:wrap}.filters{gap:10px}.charts{padding:16px}.definitions{grid-template-columns:1fr;gap:3px}.definitions dd{margin-bottom:8px}.detail-head{align-items:flex-start;flex-direction:column}.tabs .wrap{gap:20px}.calc-row label:first-child{width:100%}}@media print{header{background:#fff;color:var(--ink)}header p,.eyebrow{color:var(--muted)}.tabs,.filters,.buttons,.calc-row,.tag{display:none}.wrap{max-width:none;padding:0 15px}.panel,.card{break-inside:avoid}.stats{gap:8px}.charts{grid-template-columns:1fr 1fr}body{background:white}.two-col{grid-template-columns:1fr}.note{background:#fafafa}.table-scroll{overflow:visible}table{font-size:10px}th,td{padding:8px 5px}footer{margin-top:15px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="head-row"><div><div class="eyebrow">MOE NETWORK RESEARCH / @@DATE@@</div><h1>规模增大，要等多久？</h1><p>Scale-Out 联合仿真实际运行成本。分别查看宿主等待、内存和模型内的业务时间。</p><p>@@SUMMARY@@</p></div><span class="tag">离线可用 · 数据已嵌入</span></div></div></header>
+<nav class="tabs" aria-label="报告导航"><div class="wrap"><a href="#trend">运行趋势</a><a href="#measurements">全部测量</a><a href="#budget">矩阵成本</a><a href="#method">指标与边界</a><a href="#sources">数据导出</a></div></nav>
+<main class="wrap">
+<noscript><div class="noscript">本页交互图表需要 JavaScript。摘要见页首；启用 JavaScript 后可离线查看全部测量与下载数据。</div></noscript>
+<section class="stats" id="stats" aria-label="主要结果"></section>
+<div class="note">读图前：EP 是专家并行。单副本 EP 随卡数增加，与固定 EP4、增加推理副本是两种工作量。部分运行在同一机器上重叠；超时点表示预算内未完成，不能当成完成耗时或受控加速比。</div>
+<section id="trend"><div class="section-head"><div><h2>运行趋势</h2><p>按业务分组分别绘制，点击数据点或表格行查看本次运行。</p></div><div class="filters"><label>场景<select id="family" aria-label="筛选场景"><option value="all">全部场景</option></select></label><label>版本<select id="version" aria-label="筛选实现版本"><option value="all">全部版本</option></select></label></div></div>
+<div class="panel"><div class="toolbar"><label for="metric">查看指标 <select id="metric"><option value="worker">实际等待 / 秒</option><option value="rss">采样峰值内存 / GiB</option><option value="simulation">模拟完成 / 毫秒</option></select></label><div class="legend" id="legend"></div></div><div id="charts" class="charts"></div><div id="chart-note" class="chart-foot"></div><div id="detail" class="detail" aria-live="polite"></div></div></section>
+<section id="measurements"><div class="section-head"><div><h2>全部测量</h2><p>完整命令、Worker 与独立校验的时间分别保留；“—”表示没有采集或未完成。</p></div><span id="row-count" class="muted"></span></div><div class="panel"><div class="table-scroll"><table><caption class="sr-only">按当前筛选条件展示的仿真运行测量</caption><thead><tr><th>GPU / 场景</th><th>版本</th><th>EP / 副本</th><th>Worker 秒</th><th>完整命令秒</th><th>独立校验秒</th><th>RSS GiB</th><th>模拟 ms</th><th>状态</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
+<div class="two-col" style="margin-top:26px"><section id="budget" class="panel content"><h2>参数矩阵要预留多久？</h2><p>选择一次已完成测量，按相同成本、单机顺序执行粗算。</p><div class="calc-row"><label>参考用例<select id="cost-case"></select></label><label>参数组合数<input id="combinations" type="number" min="1" max="10000" value="12"></label><label>每组重复<input id="repeats" type="number" min="1" max="1000" value="3"></label></div><div id="estimate" class="estimate" aria-live="polite"></div><p class="muted">不含编译、失败重试及额外分析。batch、模型、EP 或拓扑改变后，单例成本也可能改变。该估算不预测千卡完成时间。</p></section>
+<section id="method" class="panel content"><h2>这些时间分别指什么？</h2><dl class="definitions" style="margin-top:18px"><dt>Worker 墙钟时间</dt><dd>本机实际等待，包含初始化、构图、后端执行和写出；不是纯 ns-3 CPU 时间。</dd><dt>完整命令时间</dt><dd>公共运行命令的起止，还包含准备与自动校验。不能把它与 Worker 的差全部算作校验。</dd><dt>独立校验时间</dt><dd>额外调用检查命令的耗时；只有采集了起止时间的用例才填数值。</dd><dt>模拟完成时间</dt><dd>模型内业务事件的完成时刻，与宿主墙钟分开；超时运行没有最终值。</dd><dt>采样峰值内存</dt><dd>所属进程树的采样峰值 RSS；超时仅报告中止前观测，不能视为完整运行峰值。</dd></dl></section></div>
+<section class="panel content" style="margin-top:18px"><h2>配置与可比性</h2><p id="workload"></p><div class="two-col" style="margin-top:16px"><div><h3>已知同机重叠</h3><ul class="overlap" id="overlap"></ul><p class="muted">只核对本报告所收录的 Worker 区间；没有历史宿主负载或独占机器保证。每个用例一次实测，不据此估计稳定态分位数。</p></div><div><h3>研究范围</h3><p>当前为合成专家路由、声明计算成本。H100 是被模拟设备的标签，未做硬件校准；页面上的实际等待发生在宿主 CPU。</p><p id="machine" class="muted"></p><details><summary>展开版本对应关系</summary><div id="versions" style="overflow-wrap:anywhere"></div></details></div></div></section>
+<section id="sources" class="panel content" style="margin-top:18px"><div class="head-row"><div><h2>数据导出与保存</h2><p>下载完整测量或当前筛选结果。页面内嵌数据，无需联网或本地服务器；可直接转发此 HTML。</p></div><button id="print" class="btn" type="button">打印 / 保存为 PDF</button></div><div class="buttons"><button id="download-csv" class="btn" type="button">下载当前筛选 CSV</button><button id="download-json" class="btn" type="button">下载完整 JSON</button></div><p class="muted">原始测量时间戳保留 UTC；本页面展示时间使用北京时间（UTC+8）。筛选与成本估算不会修改实测数据。</p></section>
+<footer>MoE Scale-Out 联合仿真 · 来自已结束运行的公开测量产物 · 本页面不启动仿真</footer>
+</main>
+<script id="runtime-data" type="application/json">@@DATA@@</script>
+<script>
+"use strict";
+const DATA=JSON.parse(document.getElementById('runtime-data').textContent);
+const ALL=DATA.rows;
+const $=id=>document.getElementById(id);
+const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const number=(v,n=2)=>v===null||v===undefined?'—':Number(v).toLocaleString('zh-CN',{minimumFractionDigits:n,maximumFractionDigits:n});
+const versions=[...new Set(ALL.map(r=>r.implementation))].sort();
+const families=[...new Set(ALL.map(r=>r.family))].sort();
+const palette=['#14638a','#c9692e','#7a619b','#398a68'];
+const color=v=>palette[versions.indexOf(v)%palette.length];
+const versionName=v=>v==='8ed67508c8ac'?'原版记录':v==='30ae5daf6cb7'?'数值观测版':v;
+const familyName=f=>f==='single_EP_equals_N'?'单副本 · EP 随卡数增加':f.startsWith('fixed_EP')?`固定 ${f.replace('fixed_','').replace('_replicas','')} · 多副本` : f;
+const duration=s=>s>=3600?`${number(s/3600,2)} 小时`:s>=60?`${Math.floor(s/60)} 分 ${number(s%60,0)} 秒`:`${number(s,1)} 秒`;
+const utc8=t=>new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(t));
+const rowById=id=>ALL.find(r=>r.id===id);
+const status=r=>r.right_censored?`超时 · >${number(r.wall_limit_seconds,0)}s`:r.independently_verified?'完成 · 校验通过':r.status;
+const badge=r=>`<span class="badge${r.right_censored?' timeout':''}">${esc(status(r))}</span>`;
+let selected=ALL.find(r=>r.id==='baseline512')?.id||ALL[0].id;
+let current=ALL.slice();
+
+function fillSelect(id,items,label){$(id).innerHTML+=items.map(item=>`<option value="${esc(item)}">${esc(label(item))}</option>`).join('');}
+fillSelect('family',families,familyName);fillSelect('version',versions,versionName);
+const completed=ALL.filter(r=>r.independently_verified);
+$('cost-case').innerHTML=completed.map(r=>`<option value="${esc(r.id)}">${r.gpus} 卡 · EP${r.ep} · ${esc(versionName(r.implementation))}</option>`).join('');
+$('cost-case').value=completed.find(r=>r.id==='baseline512')?.id||completed[0]?.id||'';
+
+function renderStats(){
+ const base=ALL.find(r=>r.id==='baseline512');
+ const timeout=ALL.filter(r=>r.right_censored);
+ const max=timeout.length?Math.max(...timeout.map(r=>r.gpus)):Math.max(...ALL.map(r=>r.gpus));
+ $('stats').innerHTML=`<div class="card"><div class="label">收录实际运行</div><strong>${ALL.length} 次 <span style="font-size:16px;font-weight:400;color:var(--muted)">/ ${completed.length} 次通过校验</span></strong><p>按工作量和二进制版本分别比较。</p></div><div class="card"><div class="label">${base?'512 卡 · 原版 EP4':'完成运行'}</div><strong>${base?duration(base.worker_wall_seconds):completed.length+' 次'}</strong><p>${base?'Worker 等待；加完整命令处理与独立校验约 '+duration(base.command_wall_seconds+base.independent_check_wall_seconds):'完成状态以独立校验为准。'}</p></div><div class="card"><div class="label">${max} 卡运行边界</div><strong style="color:var(--orange)">${timeout.length?'预算内未完成':'已记录'}</strong><p>${timeout.length?timeout.length+' 次超时；界限 '+[...new Set(timeout.map(r=>r.wall_limit_seconds))].map(s=>number(s,0)+' 秒').join(' / '):'没有超时测量。'}</p></div>`;
+}
+
+const metrics={worker:{label:'实际等待 / 秒',value:r=>r.right_censored?r.wall_limit_seconds:r.worker_wall_seconds},rss:{label:'采样峰值内存 / GiB',value:r=>r.sampled_peak_rss_bytes/1024**3},simulation:{label:'模拟完成 / 毫秒',value:r=>r.simulation_finish_ns===null?null:r.simulation_finish_ns/1e6}};
+function chart(rows,family,metric){
+ const spec=metrics[metric],valid=rows.filter(r=>spec.value(r)!==null),W=550,H=300,left=62,right=25,top=30,bottom=48;
+ const xmax=Math.max(...rows.map(r=>r.gpus)),ymax=Math.max(0.01,...valid.map(spec.value))*1.28;
+ const x=g=>left+(W-left-right)*g/(xmax*1.09),y=v=>H-bottom-(H-top-bottom)*v/ymax;
+ let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(familyName(family)+'，'+spec.label)}"><text x="${left}" y="15" fill="#617381" font-size="11">${spec.label}</text>`;
+ for(let i=0;i<=4;i++){const value=ymax*i/4,yy=y(value);svg+=`<line x1="${left}" y1="${yy}" x2="${W-right}" y2="${yy}" stroke="#e6ecef"/><text x="${left-10}" y="${yy+4}" text-anchor="end" font-size="11" fill="#617381">${number(value,metric==='worker'?0:2)}</text>`;}
+ for(const gpu of [...new Set(rows.map(r=>r.gpus))].sort((a,b)=>a-b)){svg+=`<text x="${x(gpu)}" y="${H-25}" text-anchor="middle" font-size="11" fill="#617381">${gpu}</text>`;}
+ svg+=`<text x="${W-right}" y="${H-6}" text-anchor="end" fill="#617381" font-size="11">GPU 数</text>`;
+ for(const version of versions){
+  const points=valid.filter(r=>r.implementation===version).sort((a,b)=>a.gpus-b.gpus);
+  const done=points.filter(r=>!r.right_censored);
+  if(done.length>1)svg+=`<polyline points="${done.map(r=>x(r.gpus)+','+y(spec.value(r))).join(' ')}" stroke="${color(version)}" fill="none" stroke-width="2" opacity=".55"/>`;
+  for(const r of points){
+   const group=valid.filter(o=>o.gpus===r.gpus),index=group.findIndex(o=>o.id===r.id),offset=(index-(group.length-1)/2)*15;
+   const xx=x(r.gpus)+offset,yy=y(spec.value(r)),c=color(version),isTimeout=r.right_censored;
+   const label=metric==='worker'&&isTimeout?'>'+number(r.wall_limit_seconds,0):number(spec.value(r),metric==='worker'?1:2);
+   const tooltip=`${r.gpus}卡 · EP${r.ep} · ${versionName(version)}；${spec.label}：${label}；${status(r)}`;
+   svg+=`<g data-case="${esc(r.id)}" tabindex="0" role="button" aria-label="${esc(tooltip)}" style="cursor:pointer"><title>${esc(tooltip)}</title><circle cx="${xx}" cy="${yy}" r="15" fill="transparent"/>`;
+   if(isTimeout){svg+=`<path d="M${xx-6} ${yy+5} L${xx} ${yy-6} L${xx+6} ${yy+5} Z" fill="white" stroke="${c}" stroke-width="2"/>`;if(metric==='worker')svg+=`<path d="M${xx} ${yy-10}v-15m-4 5 4-5 4 5" fill="none" stroke="${c}" stroke-width="1.5"/>`;}
+   else svg+=`<circle cx="${xx}" cy="${yy}" r="5" fill="${c}" stroke="white" stroke-width="1.4"/>`;
+   if(r.id===selected)svg+=`<circle cx="${xx}" cy="${yy}" r="10" fill="none" stroke="${c}" stroke-width="1.5" opacity=".6"/>`;
+   const anchor=group.length>1?(index===0?'end':'start'):'middle';
+   const tx=xx+(group.length>1?(index===0?-9:9):0);
+   svg+=`<text x="${tx}" y="${yy+(isTimeout&&metric==='worker'?18:-11)}" text-anchor="${anchor}" font-size="11" fill="${c}">${esc(label)}</text></g>`;
+  }
+ }
+ svg+='</svg>';
+ const missing=rows.length-valid.length;
+ return `<div class="chart-block"><h3>${esc(familyName(family))}</h3><p>${family==='single_EP_equals_N'?'全局 token 与 EP 同时变化。':'每 GPU batch 相同，GPU 数与推理副本数同时增加。'}</p>${valid.length?svg:'<div class="empty">所选条件没有已完成的模拟时间。</div>'}${missing?`<p>${missing} 个未完成用例没有最终模拟时间，未绘制数值。</p>`:''}</div>`;
+}
+
+function renderDetail(){
+ const r=rowById(selected);if(!r)return;
+ const overlap=r.overlap_with.length?r.overlap_with.map(id=>`${id}（${number(r.overlap_seconds[id])} 秒）`).join('、'):'本报告收录范围内没有重叠；不代表宿主独占';
+ $('detail').innerHTML=`<div class="detail-head"><h3>${r.gpus} 卡 · EP${r.ep} / ${r.replicas} 副本 · ${esc(versionName(r.implementation))}</h3>${badge(r)}</div><div class="detail-grid"><div><span>Worker 实测观察</span><b>${number(r.worker_wall_seconds)} 秒${r.right_censored?' · 中止':''}</b></div><div><span>采样 RSS${r.right_censored?'（中止前）':''}</span><b>${number(r.sampled_peak_rss_bytes/1024**3)} GiB</b></div><div><span>拓扑 / 服务器</span><b>${r.pods} Pod / ${r.servers} 台</b></div><div><span>交换机 / 外部链路</span><b>${r.switches} / ${r.links}</b></div></div><small>ToR / Agg / Core：${r.counts.tor||0} / ${r.counts.agg||0} / ${r.counts.core||0}。${r.messages===null?'未完成，不填写最终消息或节点总数。':`已核验 ${number(r.messages,0)} 条消息、${number(r.verified_nodes,0)} 个图节点。`}</small><small>已知重叠：${esc(overlap)}。</small><small>北京时间：${utc8(r.started_utc)} → ${utc8(r.ended_utc)}；service SHA-256：${esc(r.service_sha256)}</small>`;
+}
+
+function render(){
+ current=ALL.filter(r=>($('family').value==='all'||r.family===$('family').value)&&($('version').value==='all'||r.implementation===$('version').value));
+ if(!current.some(r=>r.id===selected))selected=current[0]?.id||null;
+ const metric=$('metric').value;
+ $('legend').innerHTML=versions.filter(v=>current.some(r=>r.implementation===v)).map(v=>`<span><i class="dot" style="background:${color(v)}"></i>${esc(versionName(v))}</span>`).join('');
+ $('charts').innerHTML=current.length?families.filter(f=>current.some(r=>r.family===f)).map(f=>chart(current.filter(r=>r.family===f),f,metric)).join(''):'<div class="empty">当前筛选没有测量记录。</div>';
+ $('charts').style.gridTemplateColumns=new Set(current.map(r=>r.family)).size===1?'1fr':'';
+ $('chart-note').textContent=(metric==='rss'?'空心三角：超时前的采样峰值，最终峰值未知。':metric==='worker'?'空心三角与向上箭头：超过墙钟预算仍未完成。':'仅显示通过校验的最终模拟时间。')+' 同卡数的数据点略微错开以便区分版本；连线仅辅助阅读，没有拟合复杂度。';
+ $('row-count').textContent=`当前 ${current.length} / 全部 ${ALL.length} 次运行`;
+ $('rows').innerHTML=current.map(r=>`<tr data-case="${esc(r.id)}" tabindex="0" role="button" aria-label="查看 ${esc(r.id)}" class="${r.id===selected?'selected':''}"><td><b>${r.gpus} 卡</b><small>${esc(familyName(r.family))}</small></td><td>${esc(versionName(r.implementation))}<small>${esc(r.implementation)}</small></td><td>${r.ep} / ${r.replicas}</td><td>${r.right_censored?'>'+number(r.wall_limit_seconds,0):number(r.worker_wall_seconds)}</td><td>${number(r.command_wall_seconds)}</td><td>${number(r.independent_check_wall_seconds)}</td><td>${number(r.sampled_peak_rss_bytes/1024**3)}${r.right_censored?' *':''}</td><td>${r.simulation_finish_ns===null?'—':number(r.simulation_finish_ns/1e6,6)}</td><td>${badge(r)}${r.overlap_with.length?'<span class="pill">有重叠</span>':''}</td></tr>`).join('');
+ $('detail').hidden=!current.length;renderDetail();
+}
+
+function estimate(){
+ const r=rowById($('cost-case').value),n=Number($('combinations').value),reps=Number($('repeats').value);
+ if(!r||!Number.isInteger(n)||!Number.isInteger(reps)||n<1||n>10000||reps<1||reps>1000){$('estimate').textContent='请输入范围内的正整数：组合数 1–10000，重复数 1–1000。';return;}
+ const full=r.command_wall_seconds!==null&&r.independent_check_wall_seconds!==null;
+ const cost=full?r.command_wall_seconds+r.independent_check_wall_seconds:r.worker_wall_seconds;
+ $('estimate').innerHTML=`预计顺序执行<strong>${duration(cost*n*reps)}</strong>${n} 组 × ${reps} 次 × ${number(cost)} 秒 / 次。<br>参考${full?'完整命令＋独立校验':'仅 Worker，未包含缺失的命令和校验时间'}；${r.overlap_with.length?'参考测量含同机重叠。':'没有宿主独占保证。'}`;
+}
+function selectCase(event){const target=event.target.closest('[data-case]');if(target){selected=target.dataset.case;render();}}
+function selectKey(event){if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCase(event);}}
+for(const id of ['family','version','metric'])$(id).addEventListener('change',render);
+for(const id of ['charts','rows']){$(id).addEventListener('click',selectCase);$(id).addEventListener('keydown',selectKey);}
+for(const id of ['cost-case','combinations','repeats'])$(id).addEventListener('input',estimate);
+function download(name,text,type){const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('download-json').addEventListener('click',()=>download('scaleout-runtime-all.json',JSON.stringify(DATA,null,2),'application/json;charset=utf-8'));
+$('download-csv').addEventListener('click',()=>{const keys=Object.keys(ALL[0]);const cell=v=>'"'+String(v===null||v===undefined?'':typeof v==='object'?JSON.stringify(v):v).replace(/"/g,'""')+'"';const csv=[keys,...current.map(r=>keys.map(k=>r[k]))].map(row=>row.map(cell).join(',')).join('\r\n');download('scaleout-runtime-filtered.csv','\ufeff'+csv,'text/csv;charset=utf-8');});
+$('print').addEventListener('click',()=>window.print());
+const configurations=[...new Set(ALL.map(r=>`${r.model} · ${r.layers} 层 · 每 GPU batch=${r.batch_per_rank} · context=${r.context_tokens} · Decode ${r.decode_steps} 轮`))];
+$('workload').textContent=configurations.join('；')+'。';
+$('machine').textContent=`宿主：${DATA.machine.cpu_model}；${number(DATA.machine.mem_total_kib/1024**2,0)} GiB 系统内存。硬件信息为分析时快照。`;
+$('versions').innerHTML=versions.map(v=>`<p><b>${esc(versionName(v))}</b><br><code>${esc(ALL.find(r=>r.implementation===v).service_sha256)}</code></p>`).join('');
+const seen=new Set();$('overlap').innerHTML=ALL.flatMap(r=>r.overlap_with.map(id=>{const key=[r.id,id].sort().join('|');if(seen.has(key))return '';seen.add(key);return `<li>${esc(r.id)} ↔ ${esc(id)}：${number(r.overlap_seconds[id])} 秒。</li>`;})).join('')||'<li>本报告收录范围内没有已知重叠。</li>';
+renderStats();render();estimate();
+</script>
+</body>
+</html>

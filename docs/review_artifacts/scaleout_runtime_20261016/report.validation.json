@@ -1,0 +1,22 @@
+{
+  "embedded_measurements_match_source": true,
+  "no_external_resources": true,
+  "node_syntax_check_passed": true,
+  "interaction_checks": [
+    "8 initial rows and 2 censored",
+    "family and version filters",
+    "timeout has no simulated final time",
+    "partial RSS annotation",
+    "selected case details",
+    "keyboard selection",
+    "UTC+8 display",
+    "matrix estimate and invalid input",
+    "filtered CSV and full JSON download",
+    "print action",
+    "empty selection"
+  ],
+  "browser_screenshot_taken": false,
+  "simulation_executed": false,
+  "deterministic_html_rebuild": true,
+  "filtered_csv_roundtrip": true
+}

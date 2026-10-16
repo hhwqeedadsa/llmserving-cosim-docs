@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-16",
+  "purpose": "Method review evidence snapshot; no new execution",
+  "raw_evidence_storage": "temporary tmpfs; full persistent archive not yet delivered",
+  "document_generated_new_network_run": false,
+  "source_sha256": {
+    "summary.json": "b9885f110e1077155ecd7d0a868ebc5c4c6fa3a0c65b3a02712b7cf57845bf6d",
+    "gates.json": "94afc06bf8dce7d10ec0d23cd0ba6084667a01f830afeb0d499a0ce350ebeee9",
+    "commands.json": "e91c1f7b2c87852ed3cd52b05d7a7b2715e1794ee4221d5532fece5549d7dfa2",
+    "logs/service-128.stderr": "615433ff60d61a8cd9d75c1992d4fc6a70810666a59f6c03b34c47141edebee0",
+    "qwen3-128/execution/probe.json": "70265fd56b821ac54a7c72dd677b887c8faad4815e4c05f1d6b9baeb519b0507",
+    "topology-128/audit.json": "f6602b352616e389c92c5bfd00a780be61facd1275fe706b0f60c425a43a60ec"
+  },
+  "verified_cases": [
+    {
+      "gpus": 16,
+      "passed": true,
+      "messages": 18876,
+      "verified_nodes": 50168,
+      "waves": 2,
+      "finish_ns": 1846967,
+      "intra_host_payload_bytes": 43868160,
+      "inter_host_payload_bytes": 50200576
+    },
+    {
+      "gpus": 32,
+      "passed": true,
+      "messages": 43912,
+      "verified_nodes": 112656,
+      "waves": 2,
+      "finish_ns": 1966816,
+      "intra_host_payload_bytes": 43229184,
+      "inter_host_payload_bytes": 151838720
+    }
+  ],
+  "micro_gates": {
+    "passed": true,
+    "same_wire_port_distinct_endpoints": [
+      0,
+      50000
+    ],
+    "solo_local_finish_ns": 2605,
+    "incast_local_finish_ns": [
+      4936,
+      4973
+    ]
+  },
+  "case128": {
+    "status": "completed",
+    "child_exit_code": 0,
+    "peak_sampled_group_rss_bytes": 4241997824,
+    "wall_seconds": 214.91055823676288,
+    "service_verification_passed": false,
+    "error": "moe-ub: ('g0.w0', 0, 1, 'issue')",
+    "caution": "Worker completed is not service validation passed"
+  },
+  "platform_head": "db64eb56e6f33e987daecd334306b3684013e5a7",
+  "working_tree": "Platform changes uncommitted at time of method review"
+}

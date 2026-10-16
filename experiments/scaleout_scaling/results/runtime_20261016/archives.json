@@ -1,0 +1,24 @@
+[
+  {
+    "path": "runs/scaleout_scaling_20261016/campaign-01.tar.gz",
+    "sha256": "79cbf4ee968d210b2e190c388975d03571dd56150a60b5b208e36bce6fbf6498",
+    "archive_bytes": 201587765,
+    "files": 6440,
+    "uncompressed_file_bytes": 2544604167,
+    "all_member_contents_match_source": true,
+    "required_subtree": "campaign-01",
+    "required_subtree_complete": true,
+    "inventory_sha256": "b47cd48bce9d7cd18fdbdf6e561fc130f54f929e3ad433594f9c7b51df6a662d"
+  },
+  {
+    "path": "runs/scaleout_scaling_20261016/numeric-observer-01.tar.gz",
+    "sha256": "f51acfea737146d34db1575112a58751ed2a20421028e03735ab0784eb835169",
+    "archive_bytes": 193436936,
+    "files": 4265,
+    "uncompressed_file_bytes": 1876723553,
+    "all_member_contents_match_source": true,
+    "required_subtree": ".",
+    "required_subtree_complete": true,
+    "inventory_sha256": "77af07453a48cba77e9c4898148e9d86595d87a023bf03ef9eed0ada98f82a70"
+  }
+]

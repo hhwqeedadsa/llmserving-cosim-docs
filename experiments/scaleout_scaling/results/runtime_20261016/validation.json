@@ -1,0 +1,22 @@
+{
+  "measurements": 8,
+  "verified_completions": 6,
+  "right_censored_timeouts": 2,
+  "timeout_final_metrics_left_null": true,
+  "original_source_hashes_match": true,
+  "replot_byte_identical": [
+    "timings.csv",
+    "timings.json",
+    "evidence.json",
+    "report.md",
+    "runtime_growth.png",
+    "runtime_growth.pdf"
+  ],
+  "simulation_executed": false,
+  "fixed_dependencies_checked": 13,
+  "dependency_command": "bash scripts/check_deps.sh",
+  "dependency_exit_code": 0,
+  "source_cwd": "/home/lry/moe-ub-cosim",
+  "archive_member_comparison_passed": true,
+  "archive_audit_note": "First audit failed on sibling monitor directory mapping; corrected mapping, all members compared; no archive changed"
+}

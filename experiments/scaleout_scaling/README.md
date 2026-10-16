@@ -1,50 +1,62 @@
-# Scale-Out 规模核算与主机资源证据
+# 多 EP 副本共享三层 Clos 的规模验收
 
-问题：千卡 MoE 网络研究在启动完整仿真前，需要多少逻辑工作量和交换机内存？本目录交付一个实际 ns-3 对象分配探针及可复核摘要；它不执行千卡逐包仿真，不提供训练热点测量结果。
+原有的阿里 ns-3 交换机内存探针、规模期望核算与专家热点反例，完整保留在[规模与热点探针说明](probes_and_hotspots.md)，对应脚本/配置/历史结果保持原用途。下面是新增的实际联合执行路线，两者的来源和结论范围分别解释。
 
-公共容量核算及模型/batch/EP 配置见[用户示例](../../examples/scaleout_capacity/README.md)，网络路线与热点研究设计见[研究报告](../../docs/reviews/scaleout_scaling_hotspots_20261015.md)。平台代码不依赖本目录。
+本实验将完整形状 Qwen3-30B-A3B 的 ready-KV Decode 从百卡向 256 / 512 / 1024 卡扩展。每个 EP4 组持有一个完整模型的专家分片，集群中分别有 64 / 128 / 256 个推理副本；不是单个模型做 EP1024，也不包含训练 DP 梯度通信。每个 GPU 每轮 batch=1，运行完整 48 层及首尾图、两轮 Decode，全部组共享一个持续存在的非 UB ns-3 网络和仿真时间。
 
-## 复现交换机分配
+此处验证执行规模、分层路径、机内/跨机争用及资源边界；总请求量与网络规模同时改变，不计算强扩展加速比。大 EP 的通信行为另由[128 卡 EP128 基线](../scaleout_clos128/documents/README.md)及其配置覆盖。本实验不声称已经验证千卡全局单组 All-to-All。
 
-需要已存在的独立 `ns-3-alibabacloud` clone，固定提交 `3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437`。脚本不联网、不下载、不切换依赖，不修改主仓库 gitlink。只在研究 clone 中放入一个独立 scratch 程序；已有文件不同时拒绝覆盖。
+## 已记录的等待时间
 
-仓库根目录执行，输出须为新目录：
+[运行成本报告](results/runtime_20261016/report.md)收录两种后端表示的 8 个已结束用例，保留[趋势 PNG](results/runtime_20261016/runtime_growth.png)、[矢量 PDF](results/runtime_20261016/runtime_growth.pdf)、CSV/JSON 与可独立重绘的小型证据。256/512 卡已完成，原版 Worker 分别约 172/346 秒；两种实现的千卡均在 600 秒限额内未完成。部分作业同机重叠，报告列出具体重叠，不把观测比值当作受控复杂度或优化加速比。当前目标为记录增长趋势，不再为千卡自动加预算或继续优化。
 
-```bash
-PYTHONPATH=python python3 experiments/scaleout_scaling/run_memory_probe.py \
-  --source data/research/ns-3-alibabacloud-3e0c7c1 \
-  --build-dir build/scaleout-alibaba-probe \
-  --output runs/scaleout-memory-new \
-  --cmake /home/lry/tools/venv/bin/cmake \
-  --ninja /home/lry/tools/venv/bin/ninja
-```
-
-最后两个参数是本机工具路径，可换为本机已有 CMake/Ninja；默认从 PATH 查找。构建目录专用于阿里派生库，不使用 UB 或 ASTRA ns-3 的库。输入、构建、输出分别位于 `data/`、`build/`、`runs/`，均不提交 Git。
-
-配置限 120s、构建限 300s、各分配例限 15s；构建 RSS/地址空间 2/4GiB，短运行 512MiB/1GiB；来源、构建与本次输出累计 512MiB，磁盘保留 8GiB。失败不自动扩大限额。`provenance.json` 保存命令、版本和关键来源 SHA-256，`results.json` 保存程序输出，子目录保存资源、stdout 和 stderr。探针最多允许分配 16 个交换机，复现入口只运行 0、8。
-
-## 证据解释
-
-版本化摘要在 [results.json](results.json)。`sizeof` 是对象编译后大小；程序自己读取 `/proc/self/statm` 得到分配前后 RSS；外层 `host_probe` 还记录子进程 `max_waited_child_rss_kib`。短程序可能在采样间隔内完成，所以采样峰值可能漏掉内部分配，应同时读上述自测和系统等待值。
-
-8 个对象的 RSS 增长约 258MiB，证明这些数组会实际触碰内存。64 个 Ethernet 交换机和 128 个建模 NVSwitch 的固定数组约 6.01GiB 是依据源码计算，**并未实际创建这 192 个对象**。按实际端口分配后的大小也是设计估计，尚未修改依赖实现。
-
-`results.json` 中的核算结果是均匀路由的期望值，不是真实 MoE trace、线速字节、训练热点或网络性能测量。实际路由数据待用户提供后再做有来源约束的统计。
-
-## 专家热点的确定性反例
-
-[训练热点报告](../../docs/reviews/moe_training_hotspots_20261015.md)结合DeepSeek-V3论文和固定Megatron源码，解释全局/微批平衡、节点限制、drop/pad及通信split。阅读来源与失败访问记录保存于 [training-sources.json](training-sources.json)，未安装或执行训练框架。
-
-5个手选合成例子用于区分专家频率、放置、通信模板和token窗口。仓库根目录执行，仅需Python标准库，无需GPU/原始数据：
+`timing.py` 只读取公开元数据，不加载大型 `result.json`，不执行仿真。保留 Worker 墙钟、命令墙钟、独立校验、模拟时间和内存的不同口径；超时记为右删失，完成时间留空。无需 GPU，也不把设备标签当作宿主硬件。使用已有 Matplotlib 与文泉驿字体，在新目录重绘：
 
 ```bash
-python3 experiments/scaleout_scaling/analysis/routing_counterexamples.py \
-  --config experiments/scaleout_scaling/configs/routing-counterexamples.json \
-  --output runs/routing-counterexamples-new
+OPENBLAS_NUM_THREADS=1 python3 experiments/scaleout_scaling/timing.py \
+  --evidence experiments/scaleout_scaling/results/runtime_20261016/evidence.json \
+  --output runs/runtime-trend-new
 ```
 
-输入最多1MiB、64个条件、每条件4096个token/专家，密集统计数组累计最多262144个单元，输出目录必须不存在；只核算Dispatch向量payload，不调用平台或网络后端，不生成包或时延。`vector_bytes`、`ranks_per_server`、`token_window_size`显式定义尺寸和相邻rank的服务器归属；每个条件给出专家放置、同一源rank和完整专家选择列表。配置路径相对当前目录，无外部数据引用，不支持未知训练格式或训练实测声明。
+采集新运行时，改用可重复的 `--case 用例名称 /绝对路径/公开运行目录`；每例需要 `input.json`、`topology.json`、`provenance.json` 与 `execution/probe.json`，有校验与命令记录时一并读取。保存来源路径、内容和哈希，报告按二进制 SHA-256 及 EP 工作量分组；只有有时间戳的命令才填写时长。建议分析限120秒、RSS1 GiB/地址空间2 GiB、产物64 MiB，既有字体/依赖不自动安装。
 
-输出保存配置、输入/分析代码SHA-256及 `counterexamples.json`；[版本化结果](routing-counterexample-results.json)另保存有界运行和独立手算检查。专家频率相同，跨机逻辑字节仍可为0/64/128B；节点级聚合为0/64/64B。最终矩阵相同，4token窗口的目标rank峰值也可为32/16B。窗口无物理时间含义，不能解释为FCT或排队降低比例。
+## 拓扑与放置
 
-本轮实际执行限15s、RSS256MiB/地址空间512MiB，公开来源与运行目录累计16MiB，磁盘保留8GiB；命令和资源日志位于 `runs/scaleout_training_review_20261015/`。没有修改平台接口、依赖或后端行为。
+| GPU | Pod × server/Pod × GPU/server | ToR / Agg / Core | 外部链路 | EP4 副本 |
+|---|---|---|---:|---:|
+| 256 | 4 × 8 × 8 | 16 / 8 / 2 | 296 | 64 |
+| 512 | 8 × 8 × 8 | 32 / 16 / 2 | 592 | 128 |
+| 1024 | 8 × 16 × 8 | 32 / 16 / 2 | 1104 | 256 |
+
+每 Pod 4 ToR、2 Agg，ToR 连全部本 Pod Agg，每 Agg 连分组的一个 Core。外部各层 400 Gb/s、逐边 1 μs；机内声明为每 GPU 每方向 450 GB/s、100 ns 传播、16 KiB 分块的非阻塞织构抽象，边界同[平台示例](../../examples/scaleout_clos128/README.md)。不是等成本或无超售拓扑。
+
+每 EP 组为 `[r,r+1,r+N/2,r+N/2+1]`，其中 r 依次取第一半集群的偶数 rank。同一组有两个同服务器 GPU 对，分别处于不同 Pod；因此每个组既产生机内消息，也使用 Core 跨 Pod。rank 按实际拓扑的 server / Pod 归属核验，不仅依靠编号猜路径。
+
+1024 卡每 ToR 32 个 GPU 接入 12.8 Tb/s，2 条上联共 0.8 Tb/s，局部下/上比为 16:1；每 Pod 全 GPU 接入 51.2 Tb/s，2 个 Agg 的 Core 出口共 0.8 Tb/s，Pod 接入/跨 Pod 出口比为 64:1。该基线用于明确的有超售规模验收，后续的容量/机制对照要另行配对，不能当作生产网络容量推荐。
+
+## 复现与修改
+
+使用已具备前端依赖的 Python、已有 `protoc` 和已构建的非 UB 后端。在仓库根目录指定新目录：
+
+```bash
+export PYTHONPATH="$PWD/python"
+COSIM_PYTHON=/path/to/frontend/python
+COSIM_BACKEND=/path/to/rdma-build/backend.json
+COSIM_PROTOC=/path/to/protoc
+
+"$COSIM_PYTHON" experiments/scaleout_scaling/run.py \
+  --backend-json "$COSIM_BACKEND" --protoc "$COSIM_PROTOC" \
+  --output /dev/shm/scale-gates-new --sizes 256 512 1024
+```
+
+先只生成/审计配置可增加 `--prepare-only`；它不执行网络。`--sizes` 支持 128 / 256 / 512 / 1024，`--batch-per-rank` 支持 1..16，但更大 batch 仍须独立检查数量、时间和内存限额，不能保证任意组合通过。脚本写出 `inputs-N/{model,topology,protocol}.json`，后续改变模型、逐层带宽或 EP 放置时，复制修改这些显式输入，再用公共 `scaleout rdma-run` 到新目录运行。
+
+脚本通过公共 CLI 执行拓扑、服务和独立 `rdma-check`，不导入 tests 或平台执行驱动。它检查实际跨 Pod 包路径为 GPU→ToR→Agg→Core→Agg→ToR→GPU、机内/跨机 payload 均非零，以及每副本两轮实际完成。保存完整命令、输入、验证、资源和运行前源码/二进制 hash；结束时检查源码未在执行期间改变。源码或后端发生变化应新开一轮，不能将运行末尾版本冒充执行版本。
+
+单例协议显式限额：600 秒、RSS 6 GiB、地址空间 12 GiB、仿真 100 ms、结果 JSON 1 GiB、最多 100 万逻辑消息；全部用例累计产物 3 GiB、卷保留 8 GiB。建议再用公开 `moe_ub_cosim.host_probe` 包装整个脚本：2000 秒、相同内存限额与累计 3 GiB 目录预算。失败即停止并保留证据，不自动扩限、重跑或删断言。
+
+## 分析
+
+使用已有 Matplotlib/Pillow 与文泉驿字体的分析环境，给 `analyze.py` 传入已经通过校验的各运行目录和 128 卡实际拓扑目录。建议外层限制宿主 300 秒、RSS 4 GiB、地址空间 8 GiB和输出 64 MiB，并为原始结果所在卷保留空间。脚本逐例读取公开 JSON、输出分层线上字节/队列摘要/端口利用率、消息延迟和宿主资源，生成 CSV/JSON、4 组 PNG/矢量 PDF 与离线网页，不执行仿真。
+
+消息 FCT p99 是本窗口内跨机逻辑消息的描述统计；端口利用率按整个有限执行窗口与单方向链路容量计算，不能当作稳定态利用率。`summary` 队列没有完整时序，峰值本身不足以归因业务长尾。模型计算及路由仍为声明参考输入；设备标签不是硬件校准。

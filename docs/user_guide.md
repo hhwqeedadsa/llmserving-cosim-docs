@@ -31,7 +31,7 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
-**非 UB Scale-Out** 使用独立的 `scaleout rdma-build`、`rdma-probe`、`rdma-run` 和 `rdma-check`，操作见[RDMA 小例](../examples/scaleout_rdma/README.md)。支持参数化 Clos/Agg、multi-rail 与双 plane 小图，运行实际 LLMServingSim→ASTRA→单一原生 ns-3→下一轮调度。当前为声明计算成本的有限 MoE Decode 片段，不执行完整模型或训练。下面的普通 `run` 命令继续使用 UB 后端。
+**非 UB Scale-Out** 使用独立的 `scaleout rdma-build`、`rdma-probe`、`rdma-run` 和 `rdma-check`，操作见[RDMA 小例](../examples/scaleout_rdma/README.md)。支持参数化 Clos/Agg、multi-rail 与双 plane，运行实际 LLMServingSim→ASTRA→单一原生 ns-3→下一轮调度。[百卡完整形状示例](../examples/scaleout_clos128/README.md)增加三层 Clos、机内共享端口、完整 48 层 GQA MoE 图及显式预算，保留旧有限片段配置。均为声明计算成本与合成路由，不执行张量数值模型或训练。下面的普通 `run` 命令继续使用 UB 后端。
 
 UB 分层基线可先用 `moe-ub scaleout prepare --config examples/scaleout/prepare.json --output runs/scaleout-prepared` 生成输入，再通过既有 `resolve` 与 `run` 执行。[分层网络小例](../examples/scaleout/README.md)说明设备接入、假设的服务器共享出口、机架出口、rank 放置与路径审计。准备步骤无需原生后端，只生成输入；当前范围为单平面、单骨干 UB 网络。它不能执行 RoCE；非 UB 后端的研究范围见[源码报告](reviews/scaleout_ns3_backends_20261015.md)。
 

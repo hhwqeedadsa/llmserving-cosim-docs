@@ -5,7 +5,7 @@
 namespace moe_rdma {
 static int64_t Now() { return ns3::Simulator::Now().GetNanoSeconds(); }
 void Messages::Register(const Json& messages) {
-  Require(messages.is_array() && operations_.size()+messages.size()<=8192,"logical message budget exceeded");
+  Require(messages.is_array() && operations_.size()+messages.size()<=fabric_.MaxMessages(),"logical message budget exceeded");
   std::set<std::tuple<int,int,int>> incoming;
   std::set<uint64_t> ids;
   for(const auto& m:messages) {
@@ -18,7 +18,8 @@ void Messages::Register(const Json& messages) {
   for(const auto& m:messages) {
     const auto id=m.at("id").get<uint64_t>();
     keys_.emplace(std::make_tuple(m.at("src").get<int>(),m.at("dst").get<int>(),m.at("tag").get<int>()),id);
-    Operation op;op.descriptor=m;op.record={{"id",id},{"send_post_ns",nullptr},{"recv_post_ns",nullptr},
+    Operation op;op.src=m.at("src");op.dst=m.at("dst");op.plane=m.at("plane");op.bytes=m.at("bytes");
+    op.record={{"id",id},{"send_post_ns",nullptr},{"recv_post_ns",nullptr},
       {"send_callback_ns",nullptr},{"recv_callback_ns",nullptr}};
     operations_.emplace(id,std::move(op));
   }
@@ -38,12 +39,12 @@ void Messages::Post(bool send,int rank,uint64_t bytes,int type,int peer,int tag,
   Require(type==AstraSim::UINT8 && callback,"ASTRA native messages must use byte counts and a callback");
   const auto key=send?std::make_tuple(rank,peer,tag):std::make_tuple(peer,rank,tag);
   Require(keys_.count(key),"unregistered ASTRA message");
-  const auto id=keys_.at(key);auto& op=operations_.at(id);const auto& d=op.descriptor;
-  Require(bytes==d.at("bytes").get<uint64_t>(),"ASTRA count differs from descriptor");
+  const auto id=keys_.at(key);auto& op=operations_.at(id);
+  Require(bytes==op.bytes,"ASTRA count differs from descriptor");
   if(send) {
     Require(!op.sent,"SEND posted twice");op.sent=true;op.send_done=[callback,arg](){callback(arg);};
     op.record["send_post_ns"]=Now();
-    fabric_.Send(id,d.at("src"),d.at("dst"),bytes,d.at("plane"),
+    fabric_.Send(id,op.src,op.dst,bytes,op.plane,
       [this,id](){operations_.at(id).acked=true;Deliver(id);},
       [this,id](){operations_.at(id).received=true;Deliver(id);});
   } else {
@@ -52,16 +53,16 @@ void Messages::Post(bool send,int rank,uint64_t bytes,int type,int peer,int tag,
     ns3::Simulator::ScheduleNow([this,id](){Deliver(id);});
   }
 }
-bool Messages::Complete(const Json& messages) const {
-  for(const auto& m:messages) {
-    const auto& op=operations_.at(m.at("id").get<uint64_t>());
+bool Messages::Complete(const std::vector<uint64_t>& messages) const {
+  for(const auto id:messages) {
+    const auto& op=operations_.at(id);
     if(!op.send_called || !op.recv_called)return false;
   }
   return true;
 }
-Json Messages::Report() const {
+Json Messages::Report() {
   Json result=Json::array();
-  for(const auto& item:operations_)result.push_back(item.second.record);
+  for(auto& item:operations_)result.push_back(std::move(item.second.record));
   return result;
 }
 AstraSim::timespec_t Adapter::sim_get_time() { return {AstraSim::NS,static_cast<long double>(Now())}; }

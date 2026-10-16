@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+非 UB `/2` 的完整形状输入及独立输出见[百卡示例](../examples/scaleout_clos128/README.md)。`result.json` 保留原消息/端口语义，新增机内链路与显式执行限额；`queue_capture=summary` 只有观测计数和峰值，没有队列时序。`log/astra_nodes.log` 为完整 ASTRA issue/callback 审计源；校验优先读取它，不与重复的诊断滚动日志合并，文件存在但不完整会拒绝。兼容旧运行时才读取 `log/log*`，早期事件被覆盖的旧结果仍会失败，不补造事件。新 `/2` 结果用紧凑流式 JSON，旧 `/1` 保留原缩进格式。
+
 `scaleout topology` 的输出是静态物理输入，采用独立的 `moe-scaleout-physical-topology/1`、`moe-scaleout-topology-audit/1` 和 `moe-scaleout-topology-manifest/1`；不是本页的仿真观测或执行记录。图、NIC端口CSV、带宽/可达性审计及原生文本格式见[拓扑输出](../examples/scaleout_topology/README.md#输出与检查)，状态固定为 `generated_not_executed`。
 
 本文件定义研究输出、原始执行记录、时间与字节口径，以及读取和资源预算。运行、采样与重放的操作步骤见[用户指南](user_guide.md)；完成事件和对象回收见[后端参考](../backend/README.md)。压缩与归档只改变保存方式，不改变业务消息、依赖和完成时刻。

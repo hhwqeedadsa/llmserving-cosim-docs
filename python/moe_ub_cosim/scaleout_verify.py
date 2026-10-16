@@ -5,11 +5,42 @@ import re
 
 from .scaleout_rdma import checked_json
 from .scaleout_topology import require
+from .scaleout_limits import limits
+
+
+def node_events(directory):
+    """Read lossless node evidence, or the legacy logs for historical runs.
+
+    Never merge both: node events occur in both sinks. A present but empty or
+    truncated dedicated file must fail the subsequent completeness checks.
+    """
+    directory=Path(directory)
+    dedicated=directory/'log'/'astra_nodes.log'
+    paths=[dedicated] if dedicated.is_file() else sorted((directory/'log').glob('log*'))
+    pattern=re.compile(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+), node->name=.*?, node->type=\d+, graph_id=([^\s,]+)')
+    events={}
+    for path in paths:
+        with path.open() as stream:
+            for line in stream:
+                match=pattern.search(line)
+                if match:
+                    kind,rank,tick,node,graph=match.groups(); key=graph,int(rank),int(node),kind
+                    require(key not in events, 'duplicate ASTRA node event')
+                    events[key]=int(tick)
+    return events
+
+
+def event_time(events, graph, rank, node, kind):
+    key=graph,rank,node,kind
+    require(key in events, 'missing ASTRA node evidence '+str(key)+
+            '; inspect log completeness (legacy rotating logs can discard early events)')
+    return events[key]
 
 
 def verify(directory):
     directory=Path(directory).resolve()
-    result=checked_json(directory/'result.json',16777216)
+    rdma=checked_json(directory/'rdma.json',65536)
+    result=checked_json(directory/'result.json',limits(rdma)['result_json_bytes'])
     frontend=checked_json(directory/'frontend.json',4194304)
     require(result['passed'] and result['drained'] and result['service']['service_finished'] and
             result['service']['active_graphs']==0, 'service did not drain')
@@ -17,22 +48,13 @@ def verify(directory):
     require(len(libraries)>=5 and len({p.parent for p in libraries})==1 and
             all(p.name.startswith('libns3.42-') and 'unified' not in p.name for p in libraries),
             'service loaded mixed or UB ns-3 libraries')
-    pattern=re.compile(r'(issue|callback),sys->id=(\d+), tick=(\d+), node->id=(\d+), node->name=.*?, node->type=\d+, graph_id=([^\s,]+)')
-    events={}
-    for path in sorted((directory/'log').glob('log*')):
-        for line in path.read_text().splitlines():
-            match=pattern.search(line)
-            if match:
-                kind,rank,tick,node,graph=match.groups(); key=graph,int(rank),int(node),kind
-                require(key not in events, 'duplicate ASTRA node event')
-                events[key]=int(tick)
+    events=node_events(directory)
     flows={m['id']:m for m in result['messages']}
     callbacks={m['id']:m for m in result['service']['message_callbacks']}
     require(len(flows)==len(result['messages'])==len(callbacks), 'duplicate or missing message results')
     descriptors={};node_count=0;total_bytes=0
     config=checked_json(directory/'input.json',65536)
-    topology=checked_json(directory/'topology.json',1048576)
-    rdma=checked_json(directory/'rdma.json',65536)
+    topology=checked_json(directory/'topology.json',8388608)
     physical={n['id']:n for n in topology['nodes']}
     ports={(p['node'],p['port']):p for p in result['ports']}
     for port in result['ports']:
@@ -41,8 +63,9 @@ def verify(directory):
             require(port['ecn_kmin_bytes']==threshold['kmin_bytes'] and port['ecn_kmax_bytes']==threshold['kmax_bytes'],
                     'effective MMU ECN thresholds differ from byte-valued input')
     h,bpe=config['model']['hidden_size'],config['model']['activation_bytes']
+    local_payload=Counter()
     for history in frontend['history']:
-        graph=history['graph_id']; wave=checked_json(directory/'graphs'/graph/'wave.json',4194304)
+        graph=history['graph_id']; wave=checked_json(directory/'graphs'/graph/'wave.json',min(limits(rdma)['result_json_bytes'],268435456))
         nodes=wave['rank_nodes']; ranks=wave['rank_ids']
         # Recompute the matrix from individual token choices, independently of
         # the generator's preaggregated contribution table.
@@ -71,19 +94,39 @@ def verify(directory):
                     'network message time order violated')
             require(cb['send_post_ns']==flow['ready_ns'] and cb['send_callback_ns']==flow['ack_ns'] and
                     cb['recv_callback_ns']==max(cb['recv_post_ns'],flow['receive_ready_ns']), 'ASTRA message callback boundary mismatch')
-            current=m['src']
-            for hop in flow['first_packet_path']:
-                require(hop['node']==current, 'packet path is not a contiguous physical route')
-                if physical[current]['kind']!='gpu':
-                    require(physical[current]['plane']==m['plane'], 'packet crossed planes')
-                current=ports[current,hop['port']]['peer']
-            require(current==m['dst'], 'packet path did not reach its declared destination')
+            is_local=(topology.get('intra_host',{}).get('enabled',False) and
+                      physical[m['src']]['server']==physical[m['dst']]['server'])
+            require((flow.get('transport')=='intra_host_chunked_crossbar')==is_local,'intra/inter-host transport mismatch')
+            if is_local:
+                require(not flow['first_packet_path'] and flow['ack_ns']==flow['receive_ready_ns'],
+                        'intra-host model must not emit RDMA packets/ACK')
+                setting=topology['intra_host'];chunk=flow['intra_first_chunk']
+                duration=(min(m['bytes'],setting['chunk_bytes'])*8000000000+setting['rate_bps']-1)//setting['rate_bps']
+                require(chunk['ingress_start_ns']>=flow['ready_ns'] and
+                        chunk['ingress_end_ns']-chunk['ingress_start_ns']==duration and
+                        chunk['egress_start_ns']>=chunk['ingress_end_ns']+setting['delay_ns'] and
+                        chunk['egress_end_ns']-chunk['egress_start_ns']==duration and
+                        flow['receive_ready_ns']>=chunk['egress_end_ns']+setting['delay_ns'],
+                        'intra-host serialization/propagation constraint violated')
+                require(flow['intra_host_chunks']==(m['bytes']+setting['chunk_bytes']-1)//setting['chunk_bytes'],
+                        'local chunk count mismatch')
+                local_payload[m['src'],'to_switch']+=m['bytes']
+                local_payload[m['dst'],'from_switch']+=m['bytes']
+            else:
+                current=m['src']
+                for hop in flow['first_packet_path']:
+                    require(hop['node']==current, 'packet path is not a contiguous physical route')
+                    if physical[current]['kind']!='gpu':
+                        require(physical[current]['plane']==m['plane'], 'packet crossed planes')
+                    current=ports[current,hop['port']]['peer']
+                require(current==m['dst'], 'packet path did not reach its declared destination')
             total_bytes+=m['bytes']
         for rank,tasks in nodes.items():
             rank=int(rank);by_id={n['id']:n for n in tasks}
             require(len(by_id)==len(tasks), 'duplicate DAG node ID')
             for task in tasks:
-                start=events[graph,rank,task['id'],'issue'];end=events[graph,rank,task['id'],'callback']
+                start=event_time(events,graph,rank,task['id'],'issue')
+                end=event_time(events,graph,rank,task['id'],'callback')
                 require(history['start_ns']<=start<=end<=history['finished_ns'], 'node escaped wave bounds')
                 for dep in task['deps']:
                     require(dep in by_id and start>=events[graph,rank,dep,'callback'], 'ASTRA consumer ran before predecessor')
@@ -94,6 +137,8 @@ def verify(directory):
                     require(start==cb[prefix+'_post_ns'] and end==cb[prefix+'_callback_ns'], 'graph/adapter callback mismatch')
                 node_count+=1
     require(set(descriptors)==set(flows), 'extra network work outside frontend graphs')
+    actual_local={(p['gpu'],p['direction']):p['payload_bytes'] for p in result.get('intra_host_links',[])}
+    require(dict(local_payload)==actual_local,'intra-host physical link payload does not conserve messages')
     # Actual next-wave start must equal the preceding wave's callback time.
     for group_index in range(len(config['parallel']['groups'])):
         waves=sorted((w for w in frontend['history'] if w['group_index']==group_index),key=lambda w:w['step'])
@@ -102,6 +147,10 @@ def verify(directory):
                 'next batch did not follow the real preceding completion')
     require(all(q['state']=='FINISHED' and len(q['intertoken_ns'])==config['workload']['decode_steps'] for q in frontend['requests']),
             'request did not complete every Decode step')
-    return dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
+    report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
                 waves=len(frontend['history']),finish_ns=result['finish_ns'],
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')
+    if 'intra_host' in topology:
+        report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
+                      inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)
+    return report

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+非 UB 的 `service/1` 保留有限 MoE 片段；新增 `service/2` 支持完整 GQA MoE 结构尺寸、首尾/逐层图和权重＋KV 声明。`topology/2` 为同服务器不同 GPU 提供分块交换织构模型，按 GPU 入/出方向共享带宽；它与机外 RDMA 共用 Simulator，不冒称 NVLink 协议。`rdma/2` 显式声明执行限额，旧默认不扩容。Scale-Out 未缓存 KV 池按需创建元数据，保持原容量、FIFO 与引用计数；节点审计另存不滚动日志。配置、事件和边界见[完整形状百卡示例](../examples/scaleout_clos128/README.md)。两种服务 schema 均为合成路由、声明成本、ready-KV Decode，不执行数值模型或声称硬件校准。下面的有限片段说明对应旧配置，UB 路径的结构保持独立。
+
 非UB网络的物理输入生成由 `scaleout_topology.py` 独立负责，经公共 `scaleout topology` 导出带NIC/rail/plane映射的Clos/Agg拓扑。独立的 [RDMA 入口](../examples/scaleout_rdma/README.md)使用 `scaleout_service.py` 连接实际 LLMServingSim Scheduler、Chakra 图及 `backend/rdma/service.cc`；`astra_adapter.cc` 将 SEND/RECV 绑定到 `fabric.cc` 的原生 RDMA 网络。接收连续字节齐备后释放消费者，发送端完整 ACK 后释放发送；完成后返回前端再组批。多组、层、波次共享同一个原生 ns-3 实例，与下面的 UB 服务分别构建，不混链。当前限于合成路由、声明计算成本和 ready-KV 有限 MoE 片段，具体[参数和输出](../examples/scaleout_rdma/README.md)单独维护。
 
 moe-ub-cosim 将请求调度、模型任务生成和 UB 网络仿真连接起来。请求和专家选择决定需要执行的计算与通信；本次网络的实际完成事件决定后继任务何时开始，并影响下一轮组批。本文件说明这些模块如何协作。运行方法见[用户指南](user_guide.md)，通信接口见[后端参考](../backend/README.md)，模型近似和数据依据见[模型说明](model_validation.md)。

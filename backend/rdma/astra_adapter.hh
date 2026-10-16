@@ -10,11 +10,14 @@ class Messages {
   void Register(const Json& messages);
   void Post(bool send, int rank, uint64_t bytes, int type, int peer, int tag,
             void (*callback)(void*), void* argument);
-  bool Complete(const Json& messages) const;
-  Json Report() const;
+  bool Complete(const std::vector<uint64_t>& messages) const;
+  Json Report();
  private:
   struct Operation {
-    Json descriptor, record;
+    int src=0,dst=0;
+    unsigned plane=0;
+    uint64_t bytes=0;
+    Json record;
     bool sent=false, posted=false, received=false, acked=false;
     bool send_called=false, recv_called=false;
     std::function<void()> send_done, recv_done;

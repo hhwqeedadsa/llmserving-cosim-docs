@@ -24,8 +24,17 @@ def integer(value, label, minimum=1, maximum=4096):
 
 
 def validate(c):
-    fields(c, 'schema_version deployment fabric nic links port_limits budget', 'root')
-    require(c['schema_version'] == 'moe-scaleout-topology/1', 'unsupported schema')
+    extended = c.get('schema_version') == 'moe-scaleout-topology/2'
+    fields(c, 'schema_version deployment fabric nic links port_limits budget' + (' intra_host' if extended else ''), 'root')
+    require(c['schema_version'] in ('moe-scaleout-topology/1','moe-scaleout-topology/2'), 'unsupported schema')
+    if extended:
+        local = c['intra_host']
+        fields(local, 'kind enabled rate_bps delay_ns chunk_bytes', 'intra-host fabric')
+        require(local['kind'] == 'nonblocking_chunked_crossbar' and type(local['enabled']) is bool,
+                'invalid intra-host fabric model')
+        integer(local['rate_bps'], 'intra-host per-direction GPU link rate', 1, 10**15)
+        integer(local['delay_ns'], 'intra-host hop delay', 0, 1000000)
+        integer(local['chunk_bytes'], 'intra-host chunk', 64, 1048576)
     h, f, nic = (c[k] for k in ('deployment', 'fabric', 'nic'))
     fields(h, 'pods segments_per_pod servers_per_segment gpus_per_server gpu_type', 'deployment')
     for key in ('pods', 'segments_per_pod', 'servers_per_segment', 'gpus_per_server'):
@@ -170,7 +179,16 @@ def generate(c):
             for core in core_targets(sw['index'], f['cores_per_group'], f['agg_uplinks'], f['core_wiring']):
                 edge(sw['id'], switches['core', sw['plane'], sw['rail'], core], 'agg_core')
     require(len(links) == counts['links'], 'internal link count mismatch')
-    return dict(schema_version='moe-scaleout-physical-topology/1', nodes=nodes, links=links, nic_ports=nic_ports), audit(c, nodes, links, counts)
+    topology = dict(schema_version='moe-scaleout-physical-topology/1', nodes=nodes, links=links, nic_ports=nic_ports)
+    report = audit(c, nodes, links, counts)
+    if 'intra_host' in c:
+        topology['schema_version'] = 'moe-scaleout-physical-topology/2'
+        topology['intra_host'] = dict(c['intra_host'])
+        report['intra_host'] = dict(**c['intra_host'], servers=counts['servers'],
+            interpretation='One ingress and one egress link per GPU; nonblocking host crossbar. '
+                           'Chunked bandwidth model, not NVLink packet/credit protocol.')
+        report['native_text_scope'] = 'External RDMA fabric only; local fabric is in topology.json'
+    return topology, report
 
 
 def audit(c, nodes, links, counts):

@@ -42,11 +42,16 @@ void Fabric::Noop() {}
 
 Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), config_(config) {
   Require(Time::GetResolution() == Time::NS, "explicit nanosecond time resolution required");
-  Require(topology.at("schema_version") == "moe-scaleout-physical-topology/1", "wrong topology schema");
-  Require(config.at("schema_version") == "moe-scaleout-rdma/1", "wrong RDMA schema");
+  Require(topology.at("schema_version") == "moe-scaleout-physical-topology/1" ||
+          topology.at("schema_version") == "moe-scaleout-physical-topology/2", "wrong topology schema");
+  Require(config.at("schema_version") == "moe-scaleout-rdma/1" || config.at("schema_version") == "moe-scaleout-rdma/2", "wrong RDMA schema");
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
   const auto& ns = topology.at("nodes");
-  Require(ns.size() <= 64 && topology.at("links").size() <= 256, "native small-graph budget exceeded");
+  const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
+  const unsigned gpu_limit=limit("max_gpus",32),sw_limit=limit("max_switches",16),link_limit=limit("max_links",256);
+  Require(gpu_limit<=1024 && sw_limit<=256 && link_limit<=16384 && MaxMessages()<=1000000 && MaxSimNs()<=1000000000,
+          "execution limits exceed supported bounds");
+  Require(ns.size() <= gpu_limit+sw_limit && topology.at("links").size() <= link_limit, "native graph budget exceeded");
   unsigned switches = 0;
   // Validate counts before constructing SwitchNode's large fixed MMU arrays.
   unsigned gpu_count=0, switch_count=0;
@@ -57,7 +62,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       Require(n.at("plane").get<unsigned>() < 16, "plane budget exceeded");
     }
   }
-  Require(gpu_count > 0 && gpu_count <= 32 && switch_count <= 16,
+  Require(gpu_count > 0 && gpu_count <= gpu_limit && switch_count <= sw_limit,
           "GPU/switch budget exceeded before network allocation");
   for (const auto& n : ns) {
     Require(n.at("id") == nodes_.GetN(), "node IDs must be contiguous");
@@ -75,7 +80,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       nodes_.Add(sw);
     }
   }
-  Require(gpus_ > 0 && gpus_ <= 32 && switches <= 16 && planes_ <= 16, "GPU/switch/plane budget exceeded");
+  Require(gpus_ > 0 && gpus_ <= gpu_limit && switches <= sw_limit && planes_ <= 16, "GPU/switch/plane budget exceeded");
   adjacency_.resize(nodes_.GetN()); drivers_.resize(gpus_);
   InternetStackHelper internet; internet.Install(nodes_);
   unsigned edge_index=0;
@@ -187,13 +192,19 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");
   Require(reachable_[{src,dst,plane}] && reachable_[{dst,src,plane}],"no data/ACK packet-switch path");
-  Require(id<50000 && !flows_.count(id),"source port budget or duplicate message identity");
+  Require(id<2147483648u && !flows_.count(id) && flows_.size()<MaxMessages(),"message identity/count budget exceeded");
   // Stable across counterfactual runs even if completion order changes.
-  const uint16_t port=10000+id;
+  const uint16_t port=10000+id%50000;
   Json row={{"id",id},{"src",src},{"dst",dst},{"bytes",bytes},{"plane",plane},{"port",port},
     {"ready_ns",Now()},{"first_tx_ns",nullptr},{"receive_ready_ns",nullptr},{"ack_ns",nullptr},
     {"ack_callbacks",0},{"source_data_packets",0},{"source_data_payload_bytes",0},{"first_packet_path",Json::array()}};
-  flows_.emplace(id,Flow{row,std::move(done),std::move(received),false,false,src,dst,plane,bytes}); port_to_flow_[port]=id;
+  flows_.emplace(id,Flow{row,std::move(done),std::move(received),false,false,src,dst,plane,bytes});
+  if(topology_.contains("intra_host") && topology_.at("intra_host").at("enabled")==true &&
+     topology_.at("nodes").at(src).at("server")==topology_.at("nodes").at(dst).at("server")) {
+    SendLocal(id);return;
+  }
+  const auto key=std::make_tuple(Address(src,plane).Get(),Address(dst,plane).Get(),port);
+  Require(port_to_flow_.emplace(key,id).second,"RDMA endpoint/port identity collision; change bounded identity layout");
   drivers_[src]->AddQueuePair(src,dst,id,bytes,3,Address(src,plane),Address(dst,plane),port,port,0,
       config_.at("base_rtt_ns"),MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
 }
@@ -226,7 +237,7 @@ void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   row[field]=row.at(field).get<uint64_t>()+size;
   if(h.l3Prot!=0x11)return;
   row["data_packets"]=row.at("data_packets").get<uint64_t>()+1;
-  auto it=f->port_to_flow_.find(h.udp.sport); if(it==f->port_to_flow_.end())return;
+  auto it=f->port_to_flow_.find({h.sip,h.dip,h.udp.sport}); if(it==f->port_to_flow_.end())return;
   auto& flow=f->flows_.at(it->second);
   if(node==flow.src) {
     if(flow.record["first_tx_ns"].is_null())flow.record["first_tx_ns"]=Now();
@@ -241,7 +252,7 @@ void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
     auto& r=f->ports_.at({node,port});r["ecn_ce_seen"]=r.at("ecn_ce_seen").get<unsigned>()+1;
   }
   if(node>=f->gpus_ || h.l3Prot!=0x11)return;
-  auto it=f->port_to_flow_.find(h.udp.sport);
+  auto it=f->port_to_flow_.find({h.sip,h.dip,h.udp.sport});
   if(it!=f->port_to_flow_.end()) {
     const auto id=it->second;
     // MacRx fires before RdmaHw acceptance; inspect contiguous accepted bytes after it returns.
@@ -252,8 +263,12 @@ void Fabric::QueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet>,
   auto device=f->devices_.at({node,port}); if(node<f->gpus_)return;
   const auto bytes=device->GetQueue()->GetNBytesTotal();auto& row=f->ports_.at({node,port});
   row["max_queue_at_hook_bytes"]=std::max(row.at("max_queue_at_hook_bytes").get<uint32_t>(),bytes);
-  Require(f->queue_events_.size()<200000,"passive queue event budget exceeded");
-  f->queue_events_.push_back({static_cast<uint64_t>(Now()),node,port,bytes});
+  ++f->queue_observations_;
+  if(!f->config_.contains("limits") || f->config_.at("limits").at("queue_capture")=="events") {
+    const auto maximum=f->config_.contains("limits")?f->config_.at("limits").at("max_queue_events").get<uint64_t>():200000;
+    Require(f->queue_events_.size()<maximum,"passive queue event budget exceeded");
+    f->queue_events_.push_back({static_cast<uint64_t>(Now()),node,port,bytes});
+  }
 }
 void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
   auto& row=f->ports_.at({node,port});const auto key=type?"pfc_pause":"pfc_resume";
@@ -264,7 +279,7 @@ bool Fabric::Drained() const {
   for(auto driver:drivers_)if(!driver->m_rdma->m_qpMap.empty())return false;
   return true;
 }
-Json Fabric::Report() const {
+Json Fabric::Report() {
   Json r={{"native_network_executed",true},{"finish_ns",Now()},{"drained",Drained()},
     {"gpu_count",gpus_},{"switch_count",nodes_.GetN()-gpus_},{"planes",planes_},
     {"fault_drops",fault_drops_},
@@ -273,8 +288,72 @@ Json Fabric::Report() const {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue after enqueue/dequeue; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
-  for(const auto& item:flows_)r["messages"].push_back(item.second.record);
-  for(const auto& item:ports_)r["ports"].push_back(item.second);
+  // Terminal reporting consumes records instead of duplicating every flow's
+  // JSON tree. Called once after Run(); no packet/callback may follow it.
+  for(auto& item:flows_)r["messages"].push_back(std::move(item.second.record));
+  for(auto& item:ports_)r["ports"].push_back(std::move(item.second));
+  if(config_.contains("limits")) {
+    r["queue_observations"]=queue_observations_;
+    r["queue_capture"]=config_.at("limits").at("queue_capture");
+    r["execution_limits"]=config_.at("limits");
+  }
+  if(topology_.contains("intra_host")) {
+    r["intra_host_model"]=topology_.at("intra_host");r["intra_host_links"]=Json::array();
+    for(const auto& item:local_links_)r["intra_host_links"].push_back(item.second);
+  }
   return r;
+}
+
+void Fabric::SendLocal(uint64_t id) {
+  auto& flow=flows_.at(id);const auto local=topology_.at("intra_host");
+  const uint64_t rate=local.at("rate_bps"),chunk=local.at("chunk_bytes");
+  const int64_t delay=local.at("delay_ns");
+  Require(local.at("kind")=="nonblocking_chunked_crossbar" && rate>0 && chunk>0,"invalid local fabric");
+  flow.record["transport"]="intra_host_chunked_crossbar";
+  flow.record["completion_kind"]="local_data_ready_no_RDMA_ACK";
+  flow.record["intra_host_chunks"]=0;
+  const unsigned src=flow.src,dst=flow.dst;
+  const auto reserve=[this,rate](unsigned gpu,bool ingress,int64_t arrival,uint64_t size){
+    auto key=std::make_pair(gpu,ingress);
+    const int64_t start=std::max(arrival,local_free_[key]);
+    const int64_t duration=(size*8000000000ull+rate-1)/rate;
+    local_free_[key]=start+duration;
+    if(!local_links_.count(key))local_links_[key]={{"gpu",gpu},{"direction",ingress?"to_switch":"from_switch"},
+      {"server",topology_.at("nodes").at(gpu).at("server")},{"rate_bps",rate},{"payload_bytes",0ull},
+      {"busy_ns",0ull},{"max_wait_ns",0ull},{"chunks",0ull}};
+    auto& link=local_links_.at(key);
+    link["payload_bytes"]=link.at("payload_bytes").get<uint64_t>()+size;
+    link["busy_ns"]=link.at("busy_ns").get<uint64_t>()+duration;
+    link["chunks"]=link.at("chunks").get<uint64_t>()+1;
+    link["max_wait_ns"]=std::max(link.at("max_wait_ns").get<uint64_t>(),static_cast<uint64_t>(start-arrival));
+    return std::make_pair(start,start+duration);
+  };
+  for(uint64_t offset=0;offset<flow.bytes;offset+=chunk) {
+    const auto size=std::min(chunk,flow.bytes-offset);const auto interval=reserve(src,true,Now(),size);
+    Simulator::Schedule(NanoSeconds(interval.first-Now()),[this,id,size,offset,interval](){
+      auto& f=flows_.at(id);
+      if(f.record["first_tx_ns"].is_null())f.record["first_tx_ns"]=Now();
+      f.record["source_data_payload_bytes"]=f.record.at("source_data_payload_bytes").get<uint64_t>()+size;
+      f.record["intra_host_chunks"]=f.record.at("intra_host_chunks").get<uint64_t>()+1;
+      if(offset==0)f.record["intra_first_chunk"]={{"ingress_start_ns",interval.first},{"ingress_end_ns",interval.second}};
+    });
+    Simulator::Schedule(NanoSeconds(interval.second+delay-Now()),[this,id,dst,size,offset,delay,reserve](){
+      const auto output=reserve(dst,false,Now(),size);
+      if(offset==0) {
+        flows_.at(id).record["intra_first_chunk"]["egress_start_ns"]=output.first;
+        flows_.at(id).record["intra_first_chunk"]["egress_end_ns"]=output.second;
+      }
+      Simulator::Schedule(NanoSeconds(output.second+delay-Now()),[this,id,size](){
+        auto& f=flows_.at(id);f.received_bytes+=size;
+        Require(f.received_bytes<=f.bytes,"local received bytes exceeded message");
+        if(f.received_bytes==f.bytes) {
+          f.data_ready=f.acked=true;f.record["receive_ready_ns"]=Now();f.record["ack_ns"]=Now();
+          f.record["ack_callbacks"]=1;
+          if(f.received)Simulator::ScheduleNow(f.received);
+          if(f.done)Simulator::ScheduleNow(f.done);
+        }
+      });
+    });
+  }
 }
 }

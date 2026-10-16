@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <memory>
 #include <link.h>
 
@@ -41,7 +42,7 @@ class Service {
     for(auto it=waves_.begin();it!=waves_.end();) {
       auto& w=it->second;
       if(w.finished.size()!=w.ranks.size()) {++it;continue;}
-      Require(messages_.Complete(w.descriptor.at("messages")),"graph finished before matched message callbacks");
+      Require(messages_.Complete(w.messages),"graph finished before matched message callbacks");
       for(int rank:w.ranks) {
         Require(systems_[rank]->workload->can_load_graph(),"rank finished with live ASTRA resources");
         owners_[rank].clear();
@@ -50,6 +51,10 @@ class Service {
       history_.push_back({{"graph_id",it->first},{"start_ns",w.start},{"finished_ns",Now()},{"rank_ids",w.ranks}});
       it=waves_.erase(it);
     }
+    // Partial rank completions do not make an EP group schedulable. Suppress
+    // empty control round trips, preserving the initial decision and all
+    // actual group completions in this finite, no-new-arrivals service.
+    if(completed.empty() && decision_>0)return;
     Json available=Json::array();
     for(unsigned r=0;r<owners_.size();++r)if(owners_[r].empty())available.push_back(r);
     Json request={{"type","DECIDE"},{"decision_id",decision_},{"now_ns",Now()},
@@ -59,7 +64,7 @@ class Service {
     auto commit=Json::parse(line);
     Require(commit.at("type")=="COMMIT" && commit.at("decision_id")==decision_ && commit.at("now_ns")==Now(),
             "frontend commit identity/time mismatch");
-    ++decision_;Require(decision_<=256,"service decision budget exceeded");
+    ++decision_;Require(decision_<=4096,"service decision budget exceeded");
     const auto& submissions=commit.at("submissions");
     if(commit.at("service_finished")==true) {
       Require(submissions.empty() && waves_.empty() && fabric_.Drained(),"premature service termination");
@@ -86,7 +91,11 @@ class Service {
                 std::find(ranks.begin(),ranks.end(),dst)!=ranks.end(),"message leaves its EP group");
       }
       messages_.Register(descriptor.at("messages"));
-      waves_.emplace(id,Wave{descriptor,ranks,{},Now()});
+      // ETFeeder owns execution nodes; retaining rank_nodes/routes here would
+      // duplicate the entire full-model JSON for every concurrent EP group.
+      std::vector<uint64_t> message_ids;
+      for(const auto& message:descriptor.at("messages"))message_ids.push_back(message.at("id"));
+      waves_.emplace(id,Wave{std::move(message_ids),ranks,{},Now()});
       for(unsigned i=0;i<ranks.size();++i) {
         const int rank=ranks[i];owners_[rank]=id;auto* workload=systems_[rank]->workload;
         workload->hw_resource->configure_p2p_protocol_resources();
@@ -104,13 +113,13 @@ class Service {
     // All EP groups are installed before any graph injects work.
     for(int rank:activate)systems_[rank]->workload->activate_graph();
   }
-  Json Report() const {
+  Json Report() {
     return {{"service_finished",finished_},{"decisions",decision_},{"waves",history_},
       {"active_graphs",waves_.size()},{"message_callbacks",messages_.Report()}};
   }
  private:
   static int64_t Now(){return ns3::Simulator::Now().GetNanoSeconds();}
-  struct Wave { Json descriptor;std::vector<int> ranks;std::set<int> finished;int64_t start; };
+  struct Wave { std::vector<uint64_t> messages;std::vector<int> ranks;std::set<int> finished;int64_t start; };
   Fabric& fabric_;Messages messages_;
   std::vector<std::string> owners_;
   std::vector<bool> boot_done_;
@@ -134,11 +143,14 @@ int main(int argc,char** argv) {
     Fabric fabric(topology,config);
     int ranks=0;for(const auto& node:topology.at("nodes"))if(node.at("kind")=="gpu")++ranks;
     Service service(fabric,ranks,argv[4],argv[3]);
-    ns3::Simulator::Stop(ns3::MilliSeconds(5));ns3::Simulator::Run();
+    ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
     auto report=fabric.Report();report["service"]=service.Report();report["loaded_libraries"]=Json::array();
     dl_iterate_phdr(Libraries,&report["loaded_libraries"]);
     const bool passed=report["service"]["service_finished"]==true && fabric.Drained();report["passed"]=passed;
-    std::ofstream out(argv[5]);out<<report.dump(2)<<'\n';out.close();Require(bool(out),"cannot write result");
+    std::ofstream out(argv[5]);
+    if(config.contains("limits"))out<<report;
+    else out<<std::setw(2)<<report;
+    out<<'\n';out.close();Require(bool(out),"cannot write result");
     ns3::Simulator::Destroy();ShutdownLogging();
     Require(passed,"service incomplete; inspect result");return 0;
   } catch(const std::exception& error) {

@@ -16,16 +16,20 @@ from .generate import _schema, write_message
 from .scaleout_rdma import (ASTRA, ROOT, checked_json, digest, monitored, save,
                             validate_probe, validate_protocol)
 from .scaleout_topology import fields, integer, require
+from .scaleout_limits import limits
+from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
 
 
 def validate(c, topology, rdma):
     fields(c, 'schema_version model workload parallel compute', 'service')
-    require(c['schema_version'] == 'moe-scaleout-service/1', 'unsupported service schema')
+    extended=c['schema_version']=='moe-scaleout-service/2'
+    require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
+    budget=limits(rdma)
     m, w, p, cost = (c[k] for k in ('model', 'workload', 'parallel', 'compute'))
-    fields(m, 'name hidden_size ffn_hidden_size experts top_k activation_bytes layers gpu_type', 'model')
+    fields(m, 'name hidden_size ffn_hidden_size experts top_k activation_bytes layers gpu_type'+(' llm' if extended else ''), 'model')
     require(isinstance(m['name'], str) and 0 < len(m['name']) <= 128, 'invalid model name')
     for k, lo, hi in [('hidden_size', 64, 8192), ('ffn_hidden_size', 64, 32768),
-                     ('experts', 2, 256), ('top_k', 1, 8), ('activation_bytes', 1, 4), ('layers', 1, 4)]:
+                     ('experts', 2, 256), ('top_k', 1, 8), ('activation_bytes', 1, 4), ('layers', 1, 128 if extended else 4)]:
         integer(m[k], k, lo, hi)
     require(m['top_k'] <= m['experts'], 'Top-K exceeds experts')
     require(m['gpu_type'] in ('A100', 'H100', 'A800', 'H800', 'NONE'), 'invalid descriptive GPU label')
@@ -37,30 +41,39 @@ def validate(c, topology, rdma):
             'first service supports balanced or exactly 50% hot tokens')
     fields(p, 'groups', 'parallel')
     gpus = sorted(n['id'] for n in topology['nodes'] if n['kind'] == 'gpu')
-    require(isinstance(p['groups'], list) and 1 <= len(p['groups']) <= 8, 'invalid EP groups')
+    require(isinstance(p['groups'], list) and 1 <= len(p['groups']) <= budget['max_gpus']//2, 'invalid EP groups')
     flat = []
     for group in p['groups']:
-        require(isinstance(group, list) and 2 <= len(group) <= 32, 'EP groups need at least two ranks')
+        require(isinstance(group, list) and len(group)>=2, 'EP groups need at least two ranks')
+        require(len(group)<=budget['max_gpus'],'EP group exceeds configured GPU budget')
         for rank in group:
-            integer(rank, 'rank', 0, 31)
+            integer(rank, 'rank', 0, budget['max_gpus']-1)
         require(group == sorted(set(group)) and m['experts'] % len(group) == 0, 'EP group or expert placement invalid')
         flat.extend(group)
     require(sorted(flat) == gpus, 'EP groups must partition physical GPUs exactly')
-    fields(cost, 'source attention_ns_per_token pack_ns_per_token expert_ns_per_contribution merge_ns_per_token', 'compute')
+    fields(cost, 'source attention_ns_per_token pack_ns_per_token expert_ns_per_contribution merge_ns_per_token'+
+           (' '+' '.join(k+'_ns_per_token' for k in EXTRA_COSTS) if extended else ''), 'compute')
     require(cost['source'] == 'declared_reference', 'this service requires declared, uncalibrated compute costs')
     for k in cost:
         if k != 'source':
             integer(cost[k], k, 0, 1000000)
     validate_protocol(rdma)
+    if extended:
+        validate_llm(m,cost)
+        for group in p['groups']:capacity(c,len(group))
     require('drop_once' not in rdma, 'fault injection is a microprobe capability, not a service recovery claim')
     # Preflight every directed pair in each plane, without using GPUs as routers.
     planes = sorted({n['plane'] for n in topology['nodes'] if n['kind'] != 'gpu'})
+    probes=[]
     for group in p['groups']:
         for plane in planes:
             for src in group:
                 for dst in group:
                     if src != dst:
-                        validate_probe(topology, rdma, [dict(id=0, src=src, dst=dst, bytes=1, plane=plane, ready_ns=0)])
+                        probes.append(dict(id=len(probes),src=src,dst=dst,bytes=1,plane=plane,ready_ns=0))
+                        if len(probes)==128:
+                            validate_probe(topology,rdma,probes);probes=[]
+    if probes:validate_probe(topology,rdma,probes)
     return len(gpus), len(planes)
 
 
@@ -92,6 +105,7 @@ def make_wave(config, group, group_index, step, planes):
     graph = f'g{group_index}.w{step}'
     nodes = {r: [] for r in group}; next_node = {r: 1 for r in group}; previous = {r: [] for r in group}
     messages, route_rows = [], []
+    full=config['schema_version']=='moe-scaleout-service/2'
     # Identity depends on logical work, never submission/completion order.
     pair_counts=[len(g)*(len(g)-1) for g in config['parallel']['groups']]
     pairs=len(group)*(len(group)-1)
@@ -124,6 +138,8 @@ def make_wave(config, group, group_index, step, planes):
                 incoming[dst].append(node(dst, 'RECV', f'L{layer}.{name}.{src}-{dst}.recv', [], message=message))
         return incoming
 
+    if full:
+        previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*w['batch_per_rank'])] for r in group}
     for layer in range(m['layers']):
         selected = routes(config, group, step, layer)
         matrix, expert_counts, received = Counter(), Counter(), Counter()
@@ -135,8 +151,17 @@ def make_wave(config, group, group_index, step, planes):
             contributions=[dict(src=s,dst=d,count=n) for (s,d),n in sorted(matrix.items())]))
         packed = {}
         for r in group:
-            attention = node(r,'COMP',f'L{layer}.attention',previous[r],cost['attention_ns_per_token']*w['batch_per_rank'])
-            packed[r] = node(r,'COMP',f'L{layer}.pack',[attention],cost['pack_ns_per_token']*w['batch_per_rank'])
+            deps=previous[r]
+            if full:
+                deps=[node(r,'COMP',f'L{layer}.attention_norm',deps,cost['norm_ns_per_token']*w['batch_per_rank'])]
+            attention_cost=cost['attention_ns_per_token']
+            if full:attention_cost+=cost['attention_context_ns_per_token']*(w['context_tokens']+step)
+            attention = node(r,'COMP',f'L{layer}.attention',deps,attention_cost*w['batch_per_rank'])
+            deps=[attention]
+            if full:
+                residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*w['batch_per_rank'])
+                deps=[node(r,'COMP',f'L{layer}.ffn_norm',[residual],cost['norm_ns_per_token']*w['batch_per_rank'])]
+            packed[r] = node(r,'COMP',f'L{layer}.pack',deps,cost['pack_ns_per_token']*w['batch_per_rank'])
         incoming = leg(layer,'dispatch',matrix,packed,0)
         experts = {r:node(r,'COMP',f'L{layer}.experts',incoming[r]+[packed[r]],
                          cost['expert_ns_per_contribution']*received[r]) for r in group}
@@ -144,7 +169,15 @@ def make_wave(config, group, group_index, step, planes):
         returned = leg(layer,'combine',combine,experts,1)
         previous = {r:[node(r,'COMP',f'L{layer}.merge',returned[r]+[experts[r]],
                            cost['merge_ns_per_token']*w['batch_per_rank'])] for r in group}
-    require(all(m['id'] < 50000 for m in messages), 'finite service identity/port budget exceeded')
+        if full:
+            previous={r:[node(r,'COMP',f'L{layer}.ffn_residual',previous[r],cost['residual_ns_per_token']*w['batch_per_rank'])] for r in group}
+    if full:
+        for r in group:
+            deps=previous[r]
+            for stage in ('final_norm','lm_head','sampling'):
+                key='norm' if stage=='final_norm' else stage
+                deps=[node(r,'COMP',stage,deps,cost[key+'_ns_per_token']*w['batch_per_rank'])]
+    require(all(m['id'] < 2**31 for m in messages), 'ASTRA message tag range exceeded')
     return dict(schema_version='moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
                 group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
                 route_source='synthetic_balanced_or_explicit_hotspot', routes=route_rows)
@@ -176,6 +209,7 @@ class Frontend:
     def __init__(self, config, ranks, planes):
         sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
         from .configured_scheduler import ConfiguredScheduler
+        from .lazy_uncached_pool import LazyUncachedBlockPool
         from serving.core.request import Request
         self.config, self.planes = config, planes
         m, w = config['model'], config['workload']; block_size = 16
@@ -184,17 +218,20 @@ class Frontend:
         self.history = []; self.calls = 0
         # Explicit local KV reservation for a finite ready-KV segment. This is a
         # resource model declaration, not full-model A100 capacity validation.
-        kv_per_token = 2*m['layers']*m['hidden_size']*m['activation_bytes']
         blocks = math.ceil((w['context_tokens']+w['decode_steps'])/block_size)
         for rank in range(ranks):
             group = next(g for g in self.groups if rank in g)
-            weights = 3*m['layers']*m['hidden_size']*m['ffn_hidden_size']*(m['experts']//len(group))*2
+            declared=capacity(config,len(group));weights=declared['weight_bytes_per_rank']
+            kv_per_token=declared['kv_bytes_per_token']
             kv_blocks = blocks*w['batch_per_rank']
-            audit = dict(rank_id=rank,device_bytes=weights+kv_blocks*kv_per_token*block_size,
+            device_bytes=declared['device_bytes'] or (weights+kv_blocks*kv_per_token*block_size)
+            available_blocks=(device_bytes-weights)//(kv_per_token*block_size)
+            audit = dict(rank_id=rank,device_bytes=device_bytes,
                          weight_bytes=weights,non_kv_bytes=weights,kv_bytes_per_token=kv_per_token,
-                         kv_block_bytes=kv_per_token*block_size,kv_capacity_blocks=kv_blocks)
+                         kv_block_bytes=kv_per_token*block_size,kv_capacity_blocks=available_blocks)
             model = dict(name=m['name'],max_position_embeddings=w['context_tokens']+w['decode_steps'])
-            scheduler = ConfiguredScheduler(model,audit,block_size,w['batch_per_rank'],w['batch_per_rank'],w['batch_per_rank'])
+            scheduler = ConfiguredScheduler(model,audit,block_size,w['batch_per_rank'],w['batch_per_rank'],w['batch_per_rank'],
+                                            pool_factory=LazyUncachedBlockPool)
             for slot in range(w['batch_per_rank']):
                 request = Request(rank*w['batch_per_rank']+slot,m['name'],w['context_tokens'],
                                   w['context_tokens']+w['decode_steps'],0,rank,is_init=False)
@@ -240,7 +277,7 @@ class Frontend:
 
 def worker(config_path, topology_path, protocol_path, backend, protoc, output):
     output=Path(output); c=checked_json(config_path,65536)
-    t=checked_json(Path(topology_path)/'topology.json',1048576); rdma=checked_json(protocol_path,65536)
+    t=checked_json(Path(topology_path)/'topology.json',8388608); rdma=checked_json(protocol_path,65536)
     ranks,planes=validate(c,t,rdma); proto,_=_schema(output,protoc)
     bootstrap=output/'bootstrap';bootstrap.mkdir();(output/'graphs').mkdir()
     for r in range(ranks):
@@ -249,6 +286,7 @@ def worker(config_path, topology_path, protocol_path, backend, protoc, output):
     system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
     save(output/'system.json',system)
     frontend=Frontend(c,ranks,planes)
+    save(output/'capacity.json',dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]))
     command=[backend,str(Path(topology_path)/'topology.json'),protocol_path,str(output/'system.json'),
              str(bootstrap/'layer'),str(output/'result.json')]
     transcript=[]; child=None
@@ -270,13 +308,13 @@ def worker(config_path, topology_path, protocol_path, backend, protoc, output):
             scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
                            reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests]))
-    result=checked_json(output/'result.json',16777216)
+    result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'] and result['service']['service_finished'], 'service did not complete')
 
 
 def run(config, topology, protocol, backend, output, protoc='protoc'):
     config,topology,protocol,backend,output=(Path(x).resolve() for x in (config,topology,protocol,backend,output))
-    c=checked_json(config,65536); t=checked_json(topology/'topology.json',1048576);rdma=checked_json(protocol,65536)
+    c=checked_json(config,65536); t=checked_json(topology/'topology.json',8388608);rdma=checked_json(protocol,65536)
     validate(c,t,rdma); require(backend.is_file(), 'missing native service executable')
     output.mkdir(exist_ok=False)
     save(output/'input.json',c)
@@ -288,8 +326,8 @@ def run(config, topology, protocol, backend, output, protoc='protoc'):
              ROOT/'third_party/LLMServingSim/serving/core/scheduler.py',Path(__file__)]}))
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]
-    monitored(command,output/'execution',[output])
-    result=checked_json(output/'result.json',16777216)
+    monitored(command,output/'execution',[output],runtime=limits(rdma))
+    result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'], 'service result failed')
     from .scaleout_verify import verify
     audit=verify(output)

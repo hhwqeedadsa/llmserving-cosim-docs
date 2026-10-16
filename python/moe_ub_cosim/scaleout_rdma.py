@@ -11,6 +11,7 @@ import subprocess
 import sys
 
 from .scaleout_topology import require, fields, integer
+from .scaleout_limits import limits
 
 ROOT = Path(__file__).resolve().parents[2]
 ASTRA = ROOT / 'third_party/LLMServingSim/astra-sim'
@@ -34,8 +35,10 @@ def checked_json(path, maximum):
 
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
-           'switch_buffer_bytes ecn_by_rate seed' + (' drop_once' if 'drop_once' in c else ''), 'RDMA protocol')
-    require(c['schema_version'] == 'moe-scaleout-rdma/1' and type(c['cc_mode']) is int and c['cc_mode'] == 1,
+           'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
+           + (' drop_once' if 'drop_once' in c else ''), 'RDMA protocol')
+    limits(c)
+    require(c['schema_version'] in ('moe-scaleout-rdma/1','moe-scaleout-rdma/2') and type(c['cc_mode']) is int and c['cc_mode'] == 1,
             'only explicit native DCQCN mode 1 is currently supported')
     for key, minimum, maximum in [('payload_bytes', 64, 9000), ('chunk_bytes', 1, 1048576),
             ('ack_interval_bytes', 1, 9000), ('base_rtt_ns', 1, 1000000),
@@ -58,17 +61,19 @@ def validate_protocol(c):
         integer(c['drop_once']['sequence'], 'drop byte sequence', 0, 67108863)
 
 
-def monitored(command, output, artifacts, *, build=False):
+def monitored(command, output, artifacts, *, build=False, runtime=None):
+    budget = runtime or limits({'schema_version':'moe-scaleout-rdma/1'})
     argv = [sys.executable, '-m', 'moe_ub_cosim.host_probe', '--output-dir', str(output),
-            '--rss-bytes', str(2147483648 if build else 1073741824),
-            '--address-bytes', str(4294967296 if build else 2147483648),
-            '--artifact-bytes', '536870912', '--wall-seconds', '300' if build else '60',
+            '--rss-bytes', str(2147483648 if build else budget['rss_bytes']),
+            '--address-bytes', str(4294967296 if build else budget['address_bytes']),
+            '--artifact-bytes', str(536870912 if build else budget['artifact_bytes']),
+            '--wall-seconds', '300' if build else str(budget['wall_seconds']),
             '--min-free-bytes', '8589934592']
     for root in artifacts:
         argv.extend(['--artifact-root', str(root)])
     argv.extend(['--', *map(str, command)])
     try:
-        subprocess.run(argv, cwd=ROOT, check=True, timeout=330 if build else 90)
+        subprocess.run(argv, cwd=ROOT, check=True, timeout=330 if build else budget['wall_seconds']+30)
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
         raise RuntimeError('bounded RDMA command failed; inspect ' + str(output)) from error
 
@@ -153,10 +158,13 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
 
 def validate_probe(t, c, batch):
     validate_protocol(c)
-    require(t.get('schema_version') == 'moe-scaleout-physical-topology/1', 'wrong physical graph schema')
+    budget=limits(c)
+    require(t.get('schema_version') in ('moe-scaleout-physical-topology/1','moe-scaleout-physical-topology/2'), 'wrong physical graph schema')
     nodes = t['nodes']; gpus = {n['id'] for n in nodes if n['kind'] == 'gpu'}
-    require(len(nodes) <= 64 and len(nodes) - len(gpus) <= 16 and len(t['links']) <= 256, 'small native graph budget exceeded')
-    require(0 < len(gpus) <= 32, 'GPU budget exceeded')
+    require(len(nodes)-len(gpus) <= budget['max_switches'] and len(t['links']) <= budget['max_links'], 'native graph budget exceeded')
+    require(0 < len(gpus) <= budget['max_gpus'], 'GPU budget exceeded')
+    require((len(nodes)-len(gpus))*1025*1025*8*4 + 268435456 < budget['rss_bytes'],
+            'fixed switch counters alone exceed declared RSS budget')
     require(all(str(l['rate_bps']) in c['ecn_by_rate'] for l in t['links']), 'missing ECN threshold for link rate')
     require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
@@ -167,10 +175,10 @@ def validate_probe(t, c, batch):
     ids = set()
     for m in batch:
         fields(m, 'id src dst bytes plane ready_ns', 'probe message')
-        integer(m['id'], 'message id', minimum=0, maximum=49999)
+        integer(m['id'], 'message id', minimum=0, maximum=2**31-1)
         require(m['id'] not in ids, 'duplicate message id'); ids.add(m['id'])
-        integer(m['src'], 'source GPU', minimum=0, maximum=31)
-        integer(m['dst'], 'destination GPU', minimum=0, maximum=31)
+        integer(m['src'], 'source GPU', minimum=0, maximum=budget['max_gpus']-1)
+        integer(m['dst'], 'destination GPU', minimum=0, maximum=budget['max_gpus']-1)
         require(m['src'] in gpus and m['dst'] in gpus and m['src'] != m['dst'], 'invalid endpoint pair')
         integer(m['bytes'], 'message bytes', maximum=67108864)
         integer(m['plane'], 'message plane', minimum=0, maximum=15)
@@ -197,7 +205,7 @@ def validate_probe(t, c, batch):
 def probe(topology, config, messages, backend, output):
     topology, config, messages, backend, output = (Path(p).resolve() for p in (topology, config, messages, backend, output))
     c = checked_json(config, 65536)
-    t = checked_json(topology / 'topology.json', 1048576)
+    t = checked_json(topology / 'topology.json', 8388608)
     batch = checked_json(messages, 65536)
     validate_probe(t, c, batch)
     require(backend.is_file() and os.access(backend, os.X_OK), 'pass the native RDMA probe executable')
@@ -206,8 +214,8 @@ def probe(topology, config, messages, backend, output):
     command = [backend, topology/'topology.json', config, messages, output/'result.json']
     save(output/'inputs.json', dict(command=list(map(str, command)), native_commit=NATIVE_COMMIT,
         hashes={str(p):digest(p) for p in [topology/'topology.json',config,messages,backend]}))
-    monitored(command, output/'execution', [output])
-    result = checked_json(output/'result.json', 16777216)
+    monitored(command, output/'execution', [output],runtime=limits(c))
+    result = checked_json(output/'result.json', limits(c)['result_json_bytes'])
     require(result['passed'] and result['native_network_executed'], 'native probe did not finish cleanly')
     return dict(passed=True, output=str(output), messages=result['completed_messages'],
                 state='native_rdma_probe_executed_not_service')

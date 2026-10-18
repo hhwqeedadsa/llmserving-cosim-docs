@@ -1,0 +1,47 @@
+{
+  "id": "core12345/MoE_expert_selection_trace",
+  "sha": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "lastModified": "2026-05-16T00:27:17.000Z",
+  "private": false,
+  "gated": "auto",
+  "description": "\n\t\n\t\t\n\t\n\t\n\t\t📖 Introduction\n\t\n\nThis repository serves as a supplement to our paper \"Patterns behind Chaos: Forecasting Data Movement for Efficient Large-Scale MoE LLM Inference\".\nIt contains expert selection profiling traces of four top-tier MoE LLMs ranging from 235B to 1T (DeepSeek-R1, Kimi-K2-Thinking, Llama4-Marverick, and Qwen3-235B) across multiple benchmarks. For each query or request, we log the activated expert ID of every model layer of every generated token.\nWe provide analyses and… See the full description on the dataset page: https://huggingface.co/datasets/core12345/MoE_expert_selection_trace.",
+  "cardData": null,
+  "metadata_bytes": 8816011,
+  "sha256": "d6e25aa5d6d583d1dae72f78e010abad5839e8a85b3a53f0715ceba0178eb3c5",
+  "extensions": {
+    "": 1,
+    ".json": 99994,
+    ".gz": 4,
+    ".md": 1
+  },
+  "siblings": 100000,
+  "source_url": "https://hf-mirror.com/api/datasets/core12345/MoE_expert_selection_trace",
+  "inventory_completeness": "unverified: siblings contains exactly 100000 entries; visible counts are not dataset totals",
+  "visible_json_counts_by_model": {
+    "Qwen/Qwen3-235B-A22B-FP8": 23756,
+    "cognitivecomputations/DeepSeek-R1-AWQ": 24062,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct": 38592,
+    "moonshotai/Kimi-K2-Thinking": 13584
+  },
+  "visible_model_task_path_counts": {
+    "Qwen/Qwen3-235B-A22B-FP8/Chinese-SimpleQA": 3000,
+    "Qwen/Qwen3-235B-A22B-FP8/HuggingFaceH4": 30,
+    "Qwen/Qwen3-235B-A22B-FP8/livecodebench": 479,
+    "Qwen/Qwen3-235B-A22B-FP8/mmlu": 14042,
+    "Qwen/Qwen3-235B-A22B-FP8/mmlu_ZH_CN": 6205,
+    "cognitivecomputations/DeepSeek-R1-AWQ/Chinese-SimpleQA": 2020,
+    "cognitivecomputations/DeepSeek-R1-AWQ/HuggingFaceH4": 30,
+    "cognitivecomputations/DeepSeek-R1-AWQ/livecodebench": 440,
+    "cognitivecomputations/DeepSeek-R1-AWQ/mmlu": 13922,
+    "cognitivecomputations/DeepSeek-R1-AWQ/mmlu_ZH_CN": 7650,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct/HuggingFaceH4": 30,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct/hellaswag": 9999,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct/livecodebench": 479,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct/mmlu": 14042,
+    "meta-llama/Llama-4-Maverick-17B-128E-Instruct/mmlu_ZH_CN": 14042,
+    "moonshotai/Kimi-K2-Thinking/Chinese-SimpleQA": 3000,
+    "moonshotai/Kimi-K2-Thinking/HuggingFaceH4": 30,
+    "moonshotai/Kimi-K2-Thinking/livecodebench": 479,
+    "moonshotai/Kimi-K2-Thinking/mmlu": 10075
+  }
+}

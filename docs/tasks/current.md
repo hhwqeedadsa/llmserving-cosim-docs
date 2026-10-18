@@ -1,39 +1,26 @@
 # 当前任务与交接
 
-状态：`completed`。本轮回答 batch 修改、实际千卡拓扑、Scale-Up/Scale-Out 区别和网络改进方向，形成[配置与研究范围说明](../reviews/scaleout_configuration_and_research_scope.md)。已核对千卡原始 input/topology/probe 哈希，当前生成配置与原始输入逐对象一致；离线检查 B=1/B=4 图和四套候选拓扑。不启动新网络仿真，不实现待研究机制，只本地修改/提交，不 push。此前[离线 HTML](../review_artifacts/scaleout_runtime_20261016/report.html)、时间测量和归档保持原状。
+状态：`completed`。2026-10-18，按用户要求研究 `core12345/MoE_expert_selection_trace` 的结构及热点专家在Scale-Out研究中的用途。已核对公开元数据、论文v5、既有来源清单与解析器；新增有界离线热点统计工具和研究说明。只本地修改/提交，不push。
 
-本轮核查：batch/rank 可选1..16，基准为1；千卡为8 Pod、128服务器、32 ToR/16 Agg/2 Core、单rail单plane、256个EP4副本，历史运行仍为600秒超时。静态候选拓扑与实际执行配置分别说明；不把构图检查当作性能验证。说明中的改进均为建议，没有新增大规模运行或真实路由下载。
+## 本轮结果
 
-## 本轮结果与证据
-
-| 项目 | 结果与入口 |
+| 项目 | 结果与证据 |
 |---|---|
-| 实际运行成本 | [8 例运行成本报告](../../experiments/scaleout_scaling/results/runtime_20261016/report.md)，6 例完成且校验通过、2 例千卡超时；保留 CSV/JSON、PNG/矢量 PDF 与可重绘证据 |
-| 规模增长 | 原版 EP4 多副本：256/512 卡 Worker 171.66/345.93 秒；完整命令与独立校验分别另列。部分运行重叠，不作为受控复杂度或优化加速比 |
-| 千卡终态 | 两版均到 600 秒墙钟限额；原版采样 RSS 5.68 GiB、新版 4.45 GiB，仅中止前峰值。无最终模拟完成时间，不记成千卡验收通过 |
-| 模型与网络 | 完整 Qwen3-30B-A3B 48 层两轮 Decode，B=1、context=2048、声明计算/合成路由；同一非 UB ns-3 时钟内机内织构与跨 Pod RDMA |
-| 平台扩展 | 提交 `b8b965c`，完整形状、显式预算、机内抽象与百卡因果执行；[验收证据](../../fixtures/scaleout_scaled/README.md) |
-| 数值观测表示 | 提交 `3ca1622`；旧 8 卡、完整 16/128 卡的结果和 36/34/258 个图文件逐字节一致；[证据](../../fixtures/scaleout_numeric_observer/README.md) |
-| 方法审阅 | [v0.4 十页 PDF](../review_artifacts/ScaleOut实验方法_审阅稿_v0.4_20261016.pdf)及[原文](../../experiments/scaleout_clos128/documents/method_review_v0.4.md)；文档整理不启动仿真 |
+| 数据结构与使用方法 | [研究说明](../reviews/moe_trace_dataset_hotspots_20261018.md)：四模型目录、R1逐请求/入口/层/Top-K结构，Prefill/Decode分离，通信矩阵与专家放置关系 |
+| 原论文与差异 | 论文已研究相关性、热点和Prefill引导放置；第VI节实机指标排除All-to-All，本研究应验证跨机网络和端到端等待，不把已有观察当创新 |
+| 统计工具 | [操作说明](../../experiments/moe_trace_hotspots/README.md)：复用来源校验，逐层分阶段统计、共选计数和单请求token窗口，不执行网络或下载 |
+| 检查 | 4项人工计数/分母/层身份/窗口/来源hash/完整形状/预算检查通过；人工输入CLI成功，真实输入缺失时明确失败且不写伪结果 |
+| 来源 | [来源哈希与失败记录](../../experiments/moe_trace_hotspots/sources.json)、[目录摘要](../../experiments/moe_trace_hotspots/metadata-summary.json)；siblings恰好100000项，不声明总体计数完整 |
 
-## 时间口径与复现
+## 边界
 
-Worker 墙钟包括初始化、构图、后端执行和写出，不是纯 Simulator CPU 时间。公共命令墙钟还含准备与自动校验；独立检查命令单独记录，未采集处留空。模拟完成时间来自通过核验的结果；超时为右删失，不补最终时间或节点/消息总数。
+原始HF连接超时，公开镜像元数据可读取；README/raw为401，没有接受新的访问条款。当前clone缺少历史manifest中的真实路由，本轮没有下载、读取新的真实路由，没有真实热点Top榜或训练统计，也没有将数据接入非UB服务。
 
-报告按 EP=N 单副本、EP4 多副本及 service 二进制哈希分组。已核对 128/512 卡旧版重叠约197.62秒、新版128/1024卡重叠约158.79秒，未证明其他时段宿主独占。每点一次测量，不能宣称稳定统计或受控加速比。
+历史UB路线有真实路由读取能力；当前Scale-Out仍使用合成路由。接入应传递真实请求ID/来源入口并匹配模型结构，不能把R1专家取模用于Qwen3-30B。训练不能由推理数据替代；GPU时序校准、真实到达和物理放置仍需独立依据。
 
-[规模实验入口](../../experiments/scaleout_scaling/README.md)保留公开 CLI 运行、分析、时间采集与证据重绘。原阿里交换机内存探针、规模估算及训练热点反例完整移至[探针说明](../../experiments/scaleout_scaling/probes_and_hotspots.md)，未改变其原用途。[百卡实验](../../experiments/scaleout_clos128/README.md)保存完整模型结果和复现入口。
+本轮只新增离线研究工具与文档，不改变平台/后端、依赖或大规模运行预算。共选计数未控制边际热度，token窗口不是物理时间，Top-m重合不是预测准确率。
 
-单例扩展预算为600秒、RSS6 GiB/地址空间12 GiB、模拟100 ms；专用目录累计3 GiB、卷保留8 GiB。后续数值观测运行沿用同一预算，保留两次失败，不自动重跑。分析不加载大型结果 JSON，实际来源哈希和全部状态保存在报告证据中。
+## 前期工作入口
 
-## 检查与持久保存
-
-时间 CSV/JSON、说明和 PNG/PDF 从保存证据重绘后逐字节一致；已独立核对8个原始来源、6次校验、2次删失和已知重叠。当前四个数值观测源码哈希与128卡执行前来源一致，13个锁定依赖检查通过。初始归档审计误以为旧包仅有campaign目录，实际还含同级监控/预检/分析；修正目录映射后逐成员比对，不改变源包或略过内容检查。
-
-原始证据位于本地忽略目录：`runs/scaleout_clos128_20261016/evidence.tar.gz`、`runs/scaleout_scaling_20261016/campaign-01.tar.gz` 和 `numeric-observer-01.tar.gz`。两份规模归档共10705个成员逐文件hash与来源一致，[归档摘要](../../experiments/scaleout_scaling/results/runtime_20261016/archives.json)已随实验保存；不提交大型原始记录、构建对象或依赖源码。
-
-## 边界与历史
-
-真实 HF 原始路由仍按用户“先做别的”暂缓；没有 H100 实机校准、完整 NVLink/PCIe 模型、训练 DP 或生产 HPN 复现。当前千卡是多 EP4 副本共享有超售三层网络；不能外推千卡全局 All-to-All 或将扩规模本身当机制创新。旧 v0.3 方法稿中的128卡失败是滚动日志覆盖的历史状态，已通过完整节点日志修复，旧稿不覆盖改写。
-
-上轮小规模服务实验见[历史快照](../iterations/20261015_scaleout_e2e_status.md)与[原结果](../../experiments/scaleout_e2e/conclusions.md)。本轮记录增长趋势完成后不自动进入新矩阵或算法开发。
+- [batch、实际千卡拓扑和研究范围](../reviews/scaleout_configuration_and_research_scope.md)：千卡为256个EP4副本共享超售三层Clos，历史600秒超时，不声称全局千卡All-to-All通过。
+- [运行成本与证据](../../experiments/scaleout_scaling/results/runtime_20261016/report.md)、[离线HTML](../review_artifacts/scaleout_runtime_20261016/report.html)、[规模实验](../../experiments/scaleout_scaling/README.md)。原结果与大文件归档保持原状。

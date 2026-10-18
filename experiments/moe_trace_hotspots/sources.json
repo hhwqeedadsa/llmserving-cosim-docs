@@ -1,0 +1,40 @@
+{
+  "accessed_date": "2026-10-18",
+  "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "sources": [
+    {
+      "url": "https://hf-mirror.com/api/datasets/core12345/MoE_expert_selection_trace",
+      "file": "dataset-api.json",
+      "kind": "public_metadata_mirror",
+      "bytes": 8816011,
+      "sha256": "d6e25aa5d6d583d1dae72f78e010abad5839e8a85b3a53f0715ceba0178eb3c5"
+    },
+    {
+      "url": "https://hf-mirror.com/api/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf?recursive=false&limit=1000",
+      "file": "tree-root.json",
+      "kind": "public_tree_metadata_mirror",
+      "bytes": 599,
+      "sha256": "df39a186af4a882d9ab4e68047f35859880b226485ae719f3ebae7123d495ed6"
+    },
+    {
+      "url": "https://arxiv.org/html/2510.05497",
+      "resolved_version": "2510.05497v5",
+      "file": "paper.html",
+      "kind": "original_paper",
+      "bytes": 478660,
+      "sha256": "ea29c8cc1a0c1e8cfa815af439bf8440f73d989e07e7685899712afbc54a5387"
+    }
+  ],
+  "access_limits": [
+    {
+      "url": "https://huggingface.co/api/datasets/core12345/MoE_expert_selection_trace",
+      "result": "connect_timeout_8s"
+    },
+    {
+      "url": "https://hf-mirror.com/datasets/core12345/MoE_expert_selection_trace/raw/27febb7b2d24169560a9f6f83d38eb53f94916cf/README.md",
+      "result": "HTTP_401_gated_no_terms_accepted"
+    }
+  ],
+  "new_raw_route_files_read": 0,
+  "new_raw_route_bytes_downloaded": 0
+}

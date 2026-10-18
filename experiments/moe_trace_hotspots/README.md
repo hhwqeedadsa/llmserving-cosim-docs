@@ -2,6 +2,8 @@
 
 研究结论、数据结构、原论文已完成的工作及Scale-Out接入位置见[研究说明](../../docs/reviews/moe_trace_dataset_hotspots_20261018.md)。本目录的 `analyze.py` 只做统计，不下载文件、不运行模型或网络，也不修改当前Scale-Out服务。结果按模型、原始层号、Prefill/Decode分别保存。
 
+要把来源选择转为实际网络任务，使用独立的[Scale-Out回放示例](../../examples/scaleout_route_replay/README.md)。该例也可用作无原始数据时的离线CLI检查：将下面manifest换为`examples/scaleout_route_replay/manifest.json`并省略`--file-id`，即可分析4个明确标为人工构造的请求；其统计不代表真实数据分布。
+
 在仓库根目录，用包含现有来源校验器所需依赖的Python运行。先对已授权、已在本地的真实manifest选少量文件：
 
 ```bash

@@ -22,6 +22,22 @@ python3 experiments/scaleout_scaling/render_runtime_html.py \
 
 页面只改变展示和估算，不改动测量或启动仿真。来源、模板、生成器和 HTML 的 SHA-256 保存在旁侧 manifest；模板为同目录 `runtime_report_template.html`。当前交互检查覆盖筛选、超时缺失值、键盘选择、估算输入和数据下载；本机没有可用浏览器，因此未生成浏览器截图。
 
+网络结构页使用旁侧版本化`network_layouts.json`，8个用例对应5份去重后的实际物理输入，保存EP分组。全部交换机和上层连线按原输入绘制，GPU按Pod汇总；可选择源/目的GPU，查看同机、跨Pod及跨EP组的物理可达路径。一条计算所得的最短路径不能当作历史ECMP包路径。历史测量没有执行候选HPN/Multi-rail拓扑，也未执行本页新增的来源回放说明。
+
+原始保存输入仍在本机时，可重新验证hash并采集布局；输出须不存在：
+
+```bash
+python3 experiments/scaleout_scaling/collect_runtime_networks.py \
+  --evidence experiments/scaleout_scaling/results/runtime_20261016/evidence.json \
+  --output runs/network-layouts-new.json
+
+node experiments/scaleout_scaling/check_runtime_html.cjs \
+  docs/review_artifacts/scaleout_runtime_20261016/report.html \
+  experiments/scaleout_scaling/results/runtime_20261016/timings.json
+```
+
+无需保留旧运行即可用已提交的布局重新生成HTML；`--layouts`可指定另一个已核验布局文件。Node检查采用DOM桩，覆盖8份布局、路径物理边、端点不作中继、千卡EP4×256与容量比、所有新增控件及原有筛选/导出，不等同浏览器视觉验证。
+
 `timing.py` 只读取公开元数据，不加载大型 `result.json`，不执行仿真。保留 Worker 墙钟、命令墙钟、独立校验、模拟时间和内存的不同口径；超时记为右删失，完成时间留空。无需 GPU，也不把设备标签当作宿主硬件。使用已有 Matplotlib 与文泉驿字体，在新目录重绘：
 
 ```bash

@@ -12,20 +12,34 @@
 </head>
 <body>
 <header><div class="wrap"><div class="head-row"><div><div class="eyebrow">MOE NETWORK RESEARCH / @@DATE@@</div><h1>规模增大，要等多久？</h1><p>Scale-Out 联合仿真实际运行成本。分别查看宿主等待、内存和模型内的业务时间。</p><p>@@SUMMARY@@</p></div><span class="tag">离线可用 · 数据已嵌入</span></div></div></header>
-<nav class="tabs" aria-label="报告导航"><div class="wrap"><a href="#trend">运行趋势</a><a href="#measurements">全部测量</a><a href="#budget">矩阵成本</a><a href="#method">指标与边界</a><a href="#sources">数据导出</a></div></nav>
+<nav class="tabs" aria-label="报告导航"><div class="wrap"><a href="#trend">运行趋势</a><a href="#network">网络结构</a><a href="#measurements">全部测量</a><a href="#budget">矩阵成本</a><a href="#method">指标与边界</a><a href="#sources">数据导出</a></div></nav>
 <main class="wrap">
 <noscript><div class="noscript">本页交互图表需要 JavaScript。摘要见页首；启用 JavaScript 后可离线查看全部测量与下载数据。</div></noscript>
 <section class="stats" id="stats" aria-label="主要结果"></section>
 <div class="note">读图前：EP 是专家并行。单副本 EP 随卡数增加，与固定 EP4、增加推理副本是两种工作量。部分运行在同一机器上重叠；超时点表示预算内未完成，不能当成完成耗时或受控加速比。</div>
 <section id="trend"><div class="section-head"><div><h2>运行趋势</h2><p>按业务分组分别绘制，点击数据点或表格行查看本次运行。</p></div><div class="filters"><label>场景<select id="family" aria-label="筛选场景"><option value="all">全部场景</option></select></label><label>版本<select id="version" aria-label="筛选实现版本"><option value="all">全部版本</option></select></label></div></div>
 <div class="panel"><div class="toolbar"><label for="metric">查看指标 <select id="metric"><option value="worker">实际等待 / 秒</option><option value="rss">采样峰值内存 / GiB</option><option value="simulation">模拟完成 / 毫秒</option></select></label><div class="legend" id="legend"></div></div><div id="charts" class="charts"></div><div id="chart-note" class="chart-foot"></div><div id="detail" class="detail" aria-live="polite"></div></div></section>
+<section id="network"><div class="section-head"><div><h2>实际网络结构与任务放置</h2><p>随上方选中的测量切换；交换机和连线来自该次运行保存的物理输入。GPU按Pod汇总。</p></div></div>
+<div id="network-missing" class="note" hidden>缺少该次运行的物理输入，不按交换机数量猜测连线。</div>
+<div id="network-body" class="panel content"><h3 id="network-title"></h3><div id="network-svg" style="overflow:auto;margin:12px 0"></div>
+<p class="muted">A为Agg，T为ToR；Core是普通电交换机，无OCS。橙色为下面两端的一条可用最短路径，供理解结构，并非历史数据包的实际ECMP路径。</p>
+<div class="filters"><label>源GPU<input id="network-src" type="number" min="0" value="0"></label><label>目的GPU<input id="network-dst" type="number" min="0" value="1"></label><button id="network-local-example" type="button" class="btn">同机示例</button><button id="network-pod-example" type="button" class="btn">跨Pod示例</button></div>
+<p id="network-path" aria-live="polite" style="overflow-wrap:anywhere"></p><p id="network-ep" style="overflow-wrap:anywhere"></p><p id="network-capacity"></p><p id="network-local"></p>
+<div class="table-scroll"><table><thead><tr><th>链路层级</th><th>物理边数</th><th>每方向速率</th><th>每边传播</th></tr></thead><tbody id="network-links"></tbody></table></div>
+<p class="muted">千卡是256个EP4副本共享网络，两个千卡用例仍为超时。候选Multi-rail/HPN结构未作为这些历史测量的执行拓扑，不混入图中。</p></div></section>
 <section id="measurements"><div class="section-head"><div><h2>全部测量</h2><p>完整命令、Worker 与独立校验的时间分别保留；“—”表示没有采集或未完成。</p></div><span id="row-count" class="muted"></span></div><div class="panel"><div class="table-scroll"><table><caption class="sr-only">按当前筛选条件展示的仿真运行测量</caption><thead><tr><th>GPU / 场景</th><th>版本</th><th>EP / 副本</th><th>Worker 秒</th><th>完整命令秒</th><th>独立校验秒</th><th>RSS GiB</th><th>模拟 ms</th><th>状态</th></tr></thead><tbody id="rows"></tbody></table></div></div></section>
 <div class="two-col" style="margin-top:26px"><section id="budget" class="panel content"><h2>参数矩阵要预留多久？</h2><p>选择一次已完成测量，按相同成本、单机顺序执行粗算。</p><div class="calc-row"><label>参考用例<select id="cost-case"></select></label><label>参数组合数<input id="combinations" type="number" min="1" max="10000" value="12"></label><label>每组重复<input id="repeats" type="number" min="1" max="1000" value="3"></label></div><div id="estimate" class="estimate" aria-live="polite"></div><p class="muted">不含编译、失败重试及额外分析。batch、模型、EP 或拓扑改变后，单例成本也可能改变。该估算不预测千卡完成时间。</p></section>
 <section id="method" class="panel content"><h2>这些时间分别指什么？</h2><dl class="definitions" style="margin-top:18px"><dt>Worker 墙钟时间</dt><dd>本机实际等待，包含初始化、构图、后端执行和写出；不是纯 ns-3 CPU 时间。</dd><dt>完整命令时间</dt><dd>公共运行命令的起止，还包含准备与自动校验。不能把它与 Worker 的差全部算作校验。</dd><dt>独立校验时间</dt><dd>额外调用检查命令的耗时；只有采集了起止时间的用例才填数值。</dd><dt>模拟完成时间</dt><dd>模型内业务事件的完成时刻，与宿主墙钟分开；超时运行没有最终值。</dd><dt>采样峰值内存</dt><dd>所属进程树的采样峰值 RSS；超时仅报告中止前观测，不能视为完整运行峰值。</dd></dl></section></div>
 <section class="panel content" style="margin-top:18px"><h2>配置与可比性</h2><p id="workload"></p><div class="two-col" style="margin-top:16px"><div><h3>已知同机重叠</h3><ul class="overlap" id="overlap"></ul><p class="muted">只核对本报告所收录的 Worker 区间；没有历史宿主负载或独占机器保证。每个用例一次实测，不据此估计稳定态分位数。</p></div><div><h3>研究范围</h3><p>当前为合成专家路由、声明计算成本。H100 是被模拟设备的标签，未做硬件校准；页面上的实际等待发生在宿主 CPU。</p><p id="machine" class="muted"></p><details><summary>展开版本对应关系</summary><div id="versions" style="overflow-wrap:anywhere"></div></details></div></div></section>
+<section id="route-replay" class="panel content" style="margin-top:18px"><h2>专家热点数据怎样接入网络？</h2>
+<p>MoE_expert_selection_trace记录每个请求、每个token、每层选中的专家。它提供专家选择，不提供原集群的源GPU、专家位置、请求到达时间或网络包。</p>
+<ol><li>校验来源文件和SHA-256，保留模型、原层号和专家编号；Prefill与Decode分开统计。</li><li>在输入的route_replay中，明确每张卡每个请求槽对应哪个文件、从哪个Decode入口开始；不同并发请求使用不同原文件。</li><li>声明专家到GPU的放置。按实际选择和hidden×激活字节生成Dispatch/Combine；同卡留本地，同机走机内织构，跨机走原生ns-3 RDMA。</li><li>下一轮等待本轮真实完成事件；观察片段结束记为OBSERVATION_ENDED，不能当作模型EOS。</li></ol>
+<p>新接入口允许逐层静态重排，但保持每卡专家数相同，不增加免费副本。有限片段service/1可执行1—4个连续MoE层；完整结构service/2要求覆盖来源的所有层，当前仅支持全MoE的GQA结构，不能冒称已完整支持R1的Dense层与MLA。</p>
+<p class="muted">验证范围：公开的4卡人工样例已完成两轮联合执行和独立核验；它验证接口，不代表真实热点收益。原始受限路由仍未取得。本页历史测量继续使用原有合成路由，所有耗时与超时结果保持原样。重点对照是固定专家选择，改变专家放置、跨Pod位置与分层带宽，观察网络排队及Decode等待。</p></section>
 <section id="sources" class="panel content" style="margin-top:18px"><div class="head-row"><div><h2>数据导出与保存</h2><p>下载完整测量或当前筛选结果。页面内嵌数据，无需联网或本地服务器；可直接转发此 HTML。</p></div><button id="print" class="btn" type="button">打印 / 保存为 PDF</button></div><div class="buttons"><button id="download-csv" class="btn" type="button">下载当前筛选 CSV</button><button id="download-json" class="btn" type="button">下载完整 JSON</button></div><p class="muted">原始测量时间戳保留 UTC；本页面展示时间使用北京时间（UTC+8）。筛选与成本估算不会修改实测数据。</p></section>
 <footer>MoE Scale-Out 联合仿真 · 来自已结束运行的公开测量产物 · 本页面不启动仿真</footer>
 </main>
+<script id="network-data" type="application/json">@@NETWORKS@@</script>
 <script id="runtime-data" type="application/json">@@DATA@@</script>
 <script>
 "use strict";
@@ -109,7 +123,7 @@ function render(){
  $('chart-note').textContent=(metric==='rss'?'空心三角：超时前的采样峰值，最终峰值未知。':metric==='worker'?'空心三角与向上箭头：超过墙钟预算仍未完成。':'仅显示通过校验的最终模拟时间。')+' 同卡数的数据点略微错开以便区分版本；连线仅辅助阅读，没有拟合复杂度。';
  $('row-count').textContent=`当前 ${current.length} / 全部 ${ALL.length} 次运行`;
  $('rows').innerHTML=current.map(r=>`<tr data-case="${esc(r.id)}" tabindex="0" role="button" aria-label="查看 ${esc(r.id)}" class="${r.id===selected?'selected':''}"><td><b>${r.gpus} 卡</b><small>${esc(familyName(r.family))}</small></td><td>${esc(versionName(r.implementation))}<small>${esc(r.implementation)}</small></td><td>${r.ep} / ${r.replicas}</td><td>${r.right_censored?'>'+number(r.wall_limit_seconds,0):number(r.worker_wall_seconds)}</td><td>${number(r.command_wall_seconds)}</td><td>${number(r.independent_check_wall_seconds)}</td><td>${number(r.sampled_peak_rss_bytes/1024**3)}${r.right_censored?' *':''}</td><td>${r.simulation_finish_ns===null?'—':number(r.simulation_finish_ns/1e6,6)}</td><td>${badge(r)}${r.overlap_with.length?'<span class="pill">有重叠</span>':''}</td></tr>`).join('');
- $('detail').hidden=!current.length;renderDetail();
+ $('detail').hidden=!current.length;renderDetail();renderNetwork();
 }
 
 function estimate(){
@@ -133,6 +147,7 @@ $('workload').textContent=configurations.join('；')+'。';
 $('machine').textContent=`宿主：${DATA.machine.cpu_model}；${number(DATA.machine.mem_total_kib/1024**2,0)} GiB 系统内存。硬件信息为分析时快照。`;
 $('versions').innerHTML=versions.map(v=>`<p><b>${esc(versionName(v))}</b><br><code>${esc(ALL.find(r=>r.implementation===v).service_sha256)}</code></p>`).join('');
 const seen=new Set();$('overlap').innerHTML=ALL.flatMap(r=>r.overlap_with.map(id=>{const key=[r.id,id].sort().join('|');if(seen.has(key))return '';seen.add(key);return `<li>${esc(r.id)} ↔ ${esc(id)}：${number(r.overlap_seconds[id])} 秒。</li>`;})).join('')||'<li>本报告收录范围内没有已知重叠。</li>';
+@@NETWORK_SCRIPT@@
 renderStats();render();estimate();
 </script>
 </body>

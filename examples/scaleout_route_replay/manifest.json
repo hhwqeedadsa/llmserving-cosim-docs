@@ -1,0 +1,88 @@
+{
+  "schema_version": "moe-ub-route-manifest/1",
+  "source": {
+    "kind": "synthetic_test",
+    "dataset_id": "repo/scaleout-route-replay-example",
+    "dataset_revision": "example-v1",
+    "collector_model_id": "synthetic/route-replay-H256-E4-K2",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "float16",
+    "usage_terms": "repo-owned synthetic functional input",
+    "source_url": "examples/scaleout_route_replay",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision"
+    ]
+  },
+  "model": {
+    "name": "synthetic/route-replay-H256-E4-K2",
+    "hidden_dim": 256,
+    "num_layers": 4,
+    "routing_precision": "float16"
+  },
+  "layers": [
+    {
+      "layer_id": 0,
+      "kind": "dense",
+      "num_experts": 0,
+      "top_k": 0
+    },
+    {
+      "layer_id": 1,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    },
+    {
+      "layer_id": 2,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    },
+    {
+      "layer_id": 3,
+      "kind": "moe",
+      "num_experts": 4,
+      "top_k": 2
+    }
+  ],
+  "files": [
+    {
+      "file_id": "synthetic-request-0",
+      "original_path": "synthetic/route-replay/request-0.json",
+      "file": {
+        "path": "examples/scaleout_route_replay/routes/request-0.json",
+        "sha256": "dd3024fab68adb3b99cfbc1acd19599880a0c32df0840fdcc77b43ce5bbf33f7"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "synthetic-request-1",
+      "original_path": "synthetic/route-replay/request-1.json",
+      "file": {
+        "path": "examples/scaleout_route_replay/routes/request-1.json",
+        "sha256": "1278627dd534435d0f408d3e3b35edbd0823a34bdbb3b970b7acbbc5e62ab274"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "synthetic-request-2",
+      "original_path": "synthetic/route-replay/request-2.json",
+      "file": {
+        "path": "examples/scaleout_route_replay/routes/request-2.json",
+        "sha256": "645a8ad0046dda85d0a3e0f70b39c1d8eddd320c3497ef6319c2938cfeadac89"
+      },
+      "format": "token_layer_map_v1"
+    },
+    {
+      "file_id": "synthetic-request-3",
+      "original_path": "synthetic/route-replay/request-3.json",
+      "file": {
+        "path": "examples/scaleout_route_replay/routes/request-3.json",
+        "sha256": "0622469d9543a9b7cc1bdd0599a10e5c5d88454052626f07010ed7c0a13fa6b2"
+      },
+      "format": "token_layer_map_v1"
+    }
+  ]
+}

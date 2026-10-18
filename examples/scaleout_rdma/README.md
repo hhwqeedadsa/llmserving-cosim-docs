@@ -2,6 +2,8 @@
 
 本入口执行 ready-KV Decode 的有限 MoE 片段：锁定 LLMServingSim 的实际 Scheduler 组批，生成 Chakra 依赖图，由 ASTRA 调度，单一原生 ns-3 RDMA 网络执行数据包，再把完成事件返回调度器。默认 8 GPU 逻辑端点、2 层、4 轮，每 rank 4 个请求。它使用声明的计算成本和合成路由，不能当作完整模型或实机 A100 性能。
 
+需要用逐请求来源替换合成选择、改变专家放置时，使用[路由回放小例](../scaleout_route_replay/README.md)的可选`route_replay`输入。原件经hash和全形状校验，运行保存快照；默认合成配置保持原行为。
+
 ## 构建与运行
 
 使用已经具备 LLMServingSim 依赖及 Python protobuf 的 Python 环境，以及现有 CMake、Ninja、Protobuf；命令不会安装软件。`--protobuf-prefix` 指向带有 CMake 包配置的既有 Protobuf 安装。输出卷至少留 8 GiB。下面目录须不存在，父目录由使用者创建。

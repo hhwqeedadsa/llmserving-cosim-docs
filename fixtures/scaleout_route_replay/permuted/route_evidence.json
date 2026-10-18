@@ -1,0 +1,30 @@
+{
+  "source": {
+    "kind": "synthetic_test",
+    "dataset_id": "repo/scaleout-route-replay-example",
+    "dataset_revision": "example-v1",
+    "collector_model_id": "synthetic/route-replay-H256-E4-K2",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "float16",
+    "usage_terms": "repo-owned synthetic functional input",
+    "source_url": "examples/scaleout_route_replay",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision"
+    ]
+  },
+  "original_manifest": {
+    "path": "examples/scaleout_route_replay/manifest.json",
+    "sha256": "a27cf6794983d0fb548b28a8c303aad188592ab7514731f1e5b4180cb9a60252"
+  },
+  "input_bytes": 15674,
+  "requests": 4,
+  "source_layer_ids": [
+    1,
+    2
+  ],
+  "scope": "original_choices_declared_compute_and_deployment",
+  "eos_inferred": false,
+  "raw_snapshots": 4
+}

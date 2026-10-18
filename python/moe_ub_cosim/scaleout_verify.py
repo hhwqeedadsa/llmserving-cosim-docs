@@ -53,7 +53,11 @@ def verify(directory):
     callbacks={m['id']:m for m in result['service']['message_callbacks']}
     require(len(flows)==len(result['messages'])==len(callbacks), 'duplicate or missing message results')
     descriptors={};node_count=0;total_bytes=0
-    config=checked_json(directory/'input.json',65536)
+    config=checked_json(directory/'input.json',1048576)
+    replay=None
+    if 'route_replay' in config:
+        from .scaleout_replay import Replay
+        replay=Replay(config,directory)
     topology=checked_json(directory/'topology.json',8388608)
     physical={n['id']:n for n in topology['nodes']}
     ports={(p['node'],p['port']):p for p in result['ports']}
@@ -67,18 +71,44 @@ def verify(directory):
     for history in frontend['history']:
         graph=history['graph_id']; wave=checked_json(directory/'graphs'/graph/'wave.json',min(limits(rdma)['result_json_bytes'],268435456))
         nodes=wave['rank_nodes']; ranks=wave['rank_ids']
+        if replay:
+            require(wave.get('route_source')==replay.manifest['source']['kind'], 'wave source kind mismatch')
+        require(ranks==config['parallel']['groups'][history['group_index']] and
+                wave['decode_step']==history['step'], 'wave changed EP group or Decode step')
+        require(len(wave['routes'])==config['model']['layers'] and
+                [l['layer'] for l in wave['routes']]==list(range(config['model']['layers'])),
+                'missing/duplicate wave route layers')
         # Recompute the matrix from individual token choices, independently of
         # the generator's preaggregated contribution table.
         expected={}
         for layer in wave['routes']:
             matrix=Counter()
+            seen_tokens=set()
             for token in layer['tokens']:
+                key=token['rank'],token['slot']
+                require(key not in seen_tokens and token['rank'] in ranks and
+                        0<=token['slot']<config['workload']['batch_per_rank'], 'invalid/repeated token source')
+                seen_tokens.add(key)
                 require(len(token['experts'])==len(set(token['experts']))==config['model']['top_k'], 'invalid Top-K')
+                if replay:
+                    request_id=token['rank']*config['workload']['batch_per_rank']+token['slot']
+                    record=replay.records[request_id]
+                    offset=(history['step']*config['model']['layers']+layer['layer'])*config['model']['top_k']
+                    require(token['experts']==list(record['choices'][offset:offset+config['model']['top_k']]),
+                            'wave choices differ from hash-checked source')
+                    require(layer.get('source_layer_id')==replay.layers[layer['layer']] and token.get('source')==dict(
+                        request_id=request_id,file_id=record['file_id'],source_entry=record['first_decode_entry']+history['step'],
+                        source_token_row=0,source_layer_id=replay.layers[layer['layer']],sha256=record['source_file']['sha256']),
+                        'wave source identity/index mismatch')
                 for expert in token['experts']:
                     require(0<=expert<config['model']['experts'], 'expert outside model')
-                    dst=ranks[expert//(config['model']['experts']//len(ranks))]
+                    placement=config.get('route_replay',{}).get('expert_to_group_rank')
+                    owner=placement[layer['layer']][expert] if placement is not None else expert//(config['model']['experts']//len(ranks))
+                    dst=ranks[owner]
                     if token['rank']!=dst:
                         matrix[token['rank'],dst]+=h*bpe
+            require(seen_tokens=={(r,s) for r in ranks for s in range(config['workload']['batch_per_rank'])},
+                    'missing scheduled token routes')
             for (src,dst),size in matrix.items():
                 expected[layer['layer'],'dispatch',src,dst]=size
                 expected[layer['layer'],'combine',dst,src]=size
@@ -145,12 +175,23 @@ def verify(directory):
         require(len(waves)==config['workload']['decode_steps'], 'missing Decode waves')
         require(waves[0]['start_ns']==0 and all(b['start_ns']==a['finished_ns'] for a,b in zip(waves,waves[1:])),
                 'next batch did not follow the real preceding completion')
-    require(all(q['state']=='FINISHED' and len(q['intertoken_ns'])==config['workload']['decode_steps'] for q in frontend['requests']),
+    require(all(q['state']==('OBSERVATION_ENDED' if replay else 'FINISHED') and
+                (not replay or q['scheduler_state']=='FINISHED') and
+                len(q['intertoken_ns'])==config['workload']['decode_steps'] for q in frontend['requests']),
             'request did not complete every Decode step')
+    if replay:
+        require({q['id'] for q in frontend['requests']}==set(replay.records) and
+                len(frontend['requests'])==len(replay.records), 'missing/duplicate replay request')
+        require(all(q['initial_context_tokens']==replay.records[q['id']]['context_tokens']
+                    for q in frontend['requests']), 'replay initial context mismatch')
     report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
                 waves=len(frontend['history']),finish_ns=result['finish_ns'],
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')
     if 'intra_host' in topology:
         report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
                       inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)
+    if replay:
+        report.update(route_source=replay.manifest['source']['kind'],source_records_verified=sum(
+            len(g)*config['workload']['batch_per_rank']*config['model']['layers']*config['workload']['decode_steps']
+            for g in config['parallel']['groups']),eos_inferred=False)
     return report

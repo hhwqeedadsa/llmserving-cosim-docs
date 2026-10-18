@@ -20,7 +20,7 @@ def validate_llm(model, compute):
         integer(compute[key+'_ns_per_token'],key+' cost',0,1000000)
 
 
-def capacity(config, group_size):
+def capacity(config, group_size, contexts=None):
     m,w=config['model'],config['workload'];h,f,e,l=m['hidden_size'],m['ffn_hidden_size'],m['experts'],m['layers']
     expert=3*l*h*f*e
     if config['schema_version']=='moe-scaleout-service/1':
@@ -32,7 +32,9 @@ def capacity(config, group_size):
     replicated=s['vocab_size']*h*(1 if s['tied_embeddings'] else 2)+l*(2*h*q+2*h*kv+2*s['head_dim']+2*h+h*e)+h
     weight=(replicated+expert//group_size)*s['weight_bytes']
     kv_token=2*l*kv*m['activation_bytes']
-    kv_blocks=((w['context_tokens']+w['decode_steps']+15)//16)*w['batch_per_rank']
+    contexts=contexts if contexts is not None else [w['context_tokens']]*w['batch_per_rank']
+    require(len(contexts)==w['batch_per_rank'],'KV context vector differs from batch')
+    kv_blocks=sum((context+w['decode_steps']+15)//16 for context in contexts)
     kv_reserved=kv_blocks*16*kv_token
     require(weight+kv_reserved <= s['device_bytes'],'weights plus declared KV exceed GPU device memory')
     return dict(expert_parameters=expert,replicated_parameters=replicated,total_parameters=expert+replicated,

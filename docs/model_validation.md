@@ -12,6 +12,8 @@
 
 ### 非 UB Scale-Out 有限片段
 
+可选[来源回放](../examples/scaleout_route_replay/README.md)保留原始专家选择，部署、到达和成本仍是声明条件。已用人工4卡输入验证两轮网络反馈和等容量重排，未取得本数据集授权原件，不能声称真实热点收益。`service/1`只覆盖1—4个连续MoE层，KV仍为通用片段声明；`service/2`要求来源全层为所支持的GQA MoE结构，按逐请求实际context计算声明KV与attention成本，不支持完整R1的Dense层/MLA。当前服务专家数上限仍为256；离线统计工具支持至1024，二者范围不同。
+
 本节原默认值对应 `moe-scaleout-service/1`。新增 `/2` 的[完整形状示例](../examples/scaleout_clos128/README.md)来自锁定模型配置：Qwen3-30B-A3B-Instruct-2507，48 层、H2048、专家 FFN768、E128/Top8、Q/KV heads32/4、head_dim128。结构核算 30,532,122,624 参数；专家分片，attention/embedding 等组内复制，GQA KV 为每 token 98,304 B。显存检查为权重＋按请求块对齐的 KV，其余 workspace/激活/分配器开销没有硬件校准。完整依赖不等于数值模型执行，H100 标签不产生测量表。attention 声明成本含 context 和 Decode step 变化，不沿用旧片段的 MHA KV 近似。
 
 `topology/2` 的同机互连为 GPU→非阻塞织构→GPU，分块并竞争源入/目的出端口，具有显式带宽、传播和 FIFO；没有 NVLink 信用或织构内部争用模型。机内交付没有 RDMA ACK，兼容 `ack_ns` 与 `receive_ready_ns` 相等。跨机仍走下述 RDMA 路径。按需 KV 元数据与终态序列化只改变宿主表示，不减少逻辑容量、消息或依赖。功能证据与硬件依据分别报告。

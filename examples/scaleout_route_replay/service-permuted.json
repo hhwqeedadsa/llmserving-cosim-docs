@@ -1,0 +1,91 @@
+{
+  "schema_version": "moe-scaleout-service/1",
+  "model": {
+    "name": "synthetic/route-replay-H256-E4-K2",
+    "hidden_size": 256,
+    "ffn_hidden_size": 512,
+    "experts": 4,
+    "top_k": 2,
+    "activation_bytes": 2,
+    "layers": 2,
+    "gpu_type": "A100"
+  },
+  "workload": {
+    "batch_per_rank": 1,
+    "decode_steps": 2,
+    "context_tokens": 64,
+    "route_seed": 11,
+    "hotspot_fraction": 0
+  },
+  "parallel": {
+    "groups": [
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  },
+  "compute": {
+    "source": "declared_reference",
+    "attention_ns_per_token": 1000,
+    "pack_ns_per_token": 30,
+    "expert_ns_per_contribution": 100,
+    "merge_ns_per_token": 30
+  },
+  "route_replay": {
+    "manifest": {
+      "path": "examples/scaleout_route_replay/manifest.json",
+      "sha256": "a27cf6794983d0fb548b28a8c303aad188592ab7514731f1e5b4180cb9a60252"
+    },
+    "layer_ids": [
+      1,
+      2
+    ],
+    "requests": [
+      {
+        "rank_id": 0,
+        "slot": 0,
+        "file_id": "synthetic-request-0",
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 1,
+        "slot": 0,
+        "file_id": "synthetic-request-1",
+        "first_decode_entry": 2
+      },
+      {
+        "rank_id": 2,
+        "slot": 0,
+        "file_id": "synthetic-request-2",
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 3,
+        "slot": 0,
+        "file_id": "synthetic-request-3",
+        "first_decode_entry": 2
+      }
+    ],
+    "budget": {
+      "max_files": 4,
+      "max_bytes": 1048576
+    },
+    "expert_to_group_rank": [
+      [
+        2,
+        1,
+        0,
+        3
+      ],
+      [
+        2,
+        1,
+        0,
+        3
+      ]
+    ]
+  }
+}

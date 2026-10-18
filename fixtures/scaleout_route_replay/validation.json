@@ -1,0 +1,155 @@
+{
+  "synthetic_graphs_unchanged_vs_HEAD": 16,
+  "baseline": {
+    "passed": true,
+    "messages": 50,
+    "remote_payload_bytes": 25600,
+    "verified_nodes": 164,
+    "waves": 2,
+    "finish_ns": 68252,
+    "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history",
+    "intra_host_payload_bytes": 10240,
+    "inter_host_payload_bytes": 15360,
+    "route_source": "synthetic_test",
+    "source_records_verified": 16,
+    "eos_inferred": false
+  },
+  "permuted": {
+    "passed": true,
+    "messages": 50,
+    "remote_payload_bytes": 25600,
+    "verified_nodes": 164,
+    "waves": 2,
+    "finish_ns": 68204,
+    "evidence": "raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history",
+    "intra_host_payload_bytes": 9216,
+    "inter_host_payload_bytes": 16384,
+    "route_source": "synthetic_test",
+    "source_records_verified": 16,
+    "eos_inferred": false
+  },
+  "relocated_snapshot_verified": true,
+  "route_tamper_rejected": "Scale-Out topology: wave choices differ from hash-checked source",
+  "real_raw_dataset_read": false,
+  "schema_version": "scaleout-route-replay-validation/1",
+  "platform_base_commit": "6be2614734ddcec0707e3484b7466297e85be39f",
+  "limits": {
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 536870912,
+    "min_free_bytes": 8589934592
+  },
+  "rejected_attempt": {
+    "directory": "/home/lry/moe-ub-cosim/runs/scaleout_route_replay_20261018/baseline",
+    "reason": "disk_free_limit_before_worker",
+    "budget_increased": false
+  },
+  "commands": [
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "argv": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "examples/scaleout_route_replay/topology.json",
+        "--output",
+        "/dev/shm/moe-route-replay-20261018/topology"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.06389236450195312
+    },
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "argv": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "examples/scaleout_route_replay/service.json",
+        "--topology",
+        "/dev/shm/moe-route-replay-20261018/topology",
+        "--protocol",
+        "examples/scaleout_route_replay/rdma.json",
+        "--backend",
+        "/dev/shm/moe-scaleout-128-20261016/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-route-replay-20261018/baseline"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 1.1183090209960938
+    },
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "argv": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/dev/shm/moe-route-replay-20261018/baseline"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.06503748893737793
+    },
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "argv": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "examples/scaleout_route_replay/service-permuted.json",
+        "--topology",
+        "/dev/shm/moe-route-replay-20261018/topology",
+        "--protocol",
+        "examples/scaleout_route_replay/rdma.json",
+        "--backend",
+        "/dev/shm/moe-scaleout-128-20261016/build/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-route-replay-20261018/permuted"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.9694297313690186
+    },
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "argv": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-check",
+        "--run",
+        "/dev/shm/moe-route-replay-20261018/permuted"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.06409811973571777
+    }
+  ],
+  "source_hashes": {
+    "python/moe_ub_cosim/scaleout_replay.py": "2bc34449ecfc05ef2a79a4622112487bc6de84567ba10377044c97e79c9f71e3",
+    "python/moe_ub_cosim/scaleout_service.py": "37b7cba35a7f7cd6fd1fe8b73a641bceea923671b20ec50fe0fa50c5fcb038fd",
+    "python/moe_ub_cosim/scaleout_verify.py": "100b1a5b1b1fc7f8d51255a73d901aab6647ab0ec7e8eb96f4b96f897b8192d3",
+    "python/moe_ub_cosim/scaleout_llm.py": "35c934cfcd704993d75c6a9200ba97fa2314e8a4baf802a27a7ce5456e8f5029"
+  },
+  "executed_source_files": 4,
+  "platform_checks": {
+    "replay": 8,
+    "rdma": 5,
+    "scaled": 6
+  },
+  "raw_outputs_directory": "/dev/shm/moe-route-replay-20261018"
+}

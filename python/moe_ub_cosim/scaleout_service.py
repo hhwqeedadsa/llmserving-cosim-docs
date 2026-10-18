@@ -1,6 +1,6 @@
 """Small ready-KV MoE service: pinned LLMServingSim -> Chakra/ASTRA -> native RDMA.
 
-Synthetic expert routes and declared compute costs are explicit inputs. This is
+Synthetic or hash-checked source routes and declared compute costs are explicit inputs. This is
 a network experiment with a finite MoE segment, not a calibrated full LLM.
 """
 from collections import Counter
@@ -20,8 +20,8 @@ from .scaleout_limits import limits
 from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
 
 
-def validate(c, topology, rdma):
-    fields(c, 'schema_version model workload parallel compute', 'service')
+def validate(c, topology, rdma, replay=None):
+    fields(c, 'schema_version model workload parallel compute'+(' route_replay' if 'route_replay' in c else ''), 'service')
     extended=c['schema_version']=='moe-scaleout-service/2'
     require(c['schema_version'] in ('moe-scaleout-service/1','moe-scaleout-service/2'), 'unsupported service schema')
     budget=limits(rdma)
@@ -34,7 +34,7 @@ def validate(c, topology, rdma):
     require(m['top_k'] <= m['experts'], 'Top-K exceeds experts')
     require(m['gpu_type'] in ('A100', 'H100', 'A800', 'H800', 'NONE'), 'invalid descriptive GPU label')
     fields(w, 'batch_per_rank decode_steps context_tokens route_seed hotspot_fraction', 'workload')
-    for k, lo, hi in [('batch_per_rank', 1, 16), ('decode_steps', 2, 4),
+    for k, lo, hi in [('batch_per_rank', 1, 16), ('decode_steps', 1 if 'route_replay' in c else 2, 128 if 'route_replay' in c else 4),
                      ('context_tokens', 16, 65536), ('route_seed', 1, 2**31-1)]:
         integer(w[k], k, lo, hi)
     require(type(w['hotspot_fraction']) in (int, float) and w['hotspot_fraction'] in (0, 0.5),
@@ -58,9 +58,16 @@ def validate(c, topology, rdma):
         if k != 'source':
             integer(cost[k], k, 0, 1000000)
     validate_protocol(rdma)
+    if 'route_replay' in c:
+        require(w['hotspot_fraction']==0, 'synthetic hotspot cannot modify replay choices')
+        if replay is None:
+            from .scaleout_replay import Replay
+            replay=Replay(c,ROOT)
     if extended:
         validate_llm(m,cost)
-        for group in p['groups']:capacity(c,len(group))
+        for group in p['groups']:
+            for rank in group if replay else group[:1]:
+                capacity(c,len(group),replay.contexts(rank) if replay else None)
     require('drop_once' not in rdma, 'fault injection is a microprobe capability, not a service recovery claim')
     # Preflight every directed pair in each plane, without using GPUs as routers.
     planes = sorted({n['plane'] for n in topology['nodes'] if n['kind'] != 'gpu'})
@@ -100,7 +107,7 @@ def routes(config, group, step, layer):
     return sorted(result, key=lambda x:(x['rank'],x['slot']))
 
 
-def make_wave(config, group, group_index, step, planes):
+def make_wave(config, group, group_index, step, planes, replay=None):
     m, w, cost = config['model'], config['workload'], config['compute']
     graph = f'g{group_index}.w{step}'
     nodes = {r: [] for r in group}; next_node = {r: 1 for r in group}; previous = {r: [] for r in group}
@@ -141,22 +148,25 @@ def make_wave(config, group, group_index, step, planes):
     if full:
         previous={r:[node(r,'COMP','embedding',[],cost['embedding_ns_per_token']*w['batch_per_rank'])] for r in group}
     for layer in range(m['layers']):
-        selected = routes(config, group, step, layer)
+        selected = replay.routes(group,step,layer) if replay else routes(config, group, step, layer)
         matrix, expert_counts, received = Counter(), Counter(), Counter()
         for token in selected:
             for expert in token['experts']:
-                dst = group[expert // (m['experts']//len(group))]
+                dst = replay.owner(group,layer,expert) if replay else group[expert // (m['experts']//len(group))]
                 matrix[token['rank'], dst] += 1; expert_counts[expert] += 1; received[dst] += 1
         route_rows.append(dict(layer=layer, tokens=selected, expert_counts=dict(expert_counts),
             contributions=[dict(src=s,dst=d,count=n) for (s,d),n in sorted(matrix.items())]))
+        if replay:route_rows[-1]['source_layer_id']=replay.layers[layer]
         packed = {}
         for r in group:
             deps=previous[r]
             if full:
                 deps=[node(r,'COMP',f'L{layer}.attention_norm',deps,cost['norm_ns_per_token']*w['batch_per_rank'])]
             attention_cost=cost['attention_ns_per_token']
-            if full:attention_cost+=cost['attention_context_ns_per_token']*(w['context_tokens']+step)
-            attention = node(r,'COMP',f'L{layer}.attention',deps,attention_cost*w['batch_per_rank'])
+            if full and not replay:attention_cost+=cost['attention_context_ns_per_token']*(w['context_tokens']+step)
+            attention_duration=attention_cost*w['batch_per_rank']
+            if full and replay:attention_duration+=cost['attention_context_ns_per_token']*sum(x+step for x in replay.contexts(r))
+            attention = node(r,'COMP',f'L{layer}.attention',deps,attention_duration)
             deps=[attention]
             if full:
                 residual=node(r,'COMP',f'L{layer}.attention_residual',deps,cost['residual_ns_per_token']*w['batch_per_rank'])
@@ -180,7 +190,7 @@ def make_wave(config, group, group_index, step, planes):
     require(all(m['id'] < 2**31 for m in messages), 'ASTRA message tag range exceeded')
     return dict(schema_version='moe-scaleout-wave/1', graph_id=graph, rank_ids=group,
                 group_index=group_index, decode_step=step, messages=messages, rank_nodes=nodes,
-                route_source='synthetic_balanced_or_explicit_hotspot', routes=route_rows)
+                route_source=replay.manifest['source']['kind'] if replay else 'synthetic_balanced_or_explicit_hotspot', routes=route_rows)
 
 
 def export_wave(wave, directory, proto):
@@ -206,24 +216,25 @@ def export_wave(wave, directory, proto):
 
 
 class Frontend:
-    def __init__(self, config, ranks, planes):
+    def __init__(self, config, ranks, planes, replay=None):
         sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
         from .configured_scheduler import ConfiguredScheduler
         from .lazy_uncached_pool import LazyUncachedBlockPool
         from serving.core.request import Request
-        self.config, self.planes = config, planes
+        self.config, self.planes, self.replay = config, planes, replay
         m, w = config['model'], config['workload']; block_size = 16
         self.schedulers, self.requests = {}, []
         self.groups = config['parallel']['groups']; self.active = {}; self.steps = [0]*len(self.groups)
         self.history = []; self.calls = 0
         # Explicit local KV reservation for a finite ready-KV segment. This is a
         # resource model declaration, not full-model A100 capacity validation.
-        blocks = math.ceil((w['context_tokens']+w['decode_steps'])/block_size)
         for rank in range(ranks):
+            contexts=replay.contexts(rank) if replay else [w['context_tokens']]*w['batch_per_rank']
+            blocks=[math.ceil((context+w['decode_steps'])/block_size) for context in contexts]
             group = next(g for g in self.groups if rank in g)
-            declared=capacity(config,len(group));weights=declared['weight_bytes_per_rank']
+            declared=capacity(config,len(group),contexts);weights=declared['weight_bytes_per_rank']
             kv_per_token=declared['kv_bytes_per_token']
-            kv_blocks = blocks*w['batch_per_rank']
+            kv_blocks = sum(blocks)
             device_bytes=declared['device_bytes'] or (weights+kv_blocks*kv_per_token*block_size)
             available_blocks=(device_bytes-weights)//(kv_per_token*block_size)
             audit = dict(rank_id=rank,device_bytes=device_bytes,
@@ -233,11 +244,12 @@ class Frontend:
             scheduler = ConfiguredScheduler(model,audit,block_size,w['batch_per_rank'],w['batch_per_rank'],w['batch_per_rank'],
                                             pool_factory=LazyUncachedBlockPool)
             for slot in range(w['batch_per_rank']):
-                request = Request(rank*w['batch_per_rank']+slot,m['name'],w['context_tokens'],
-                                  w['context_tokens']+w['decode_steps'],0,rank,is_init=False)
-                request.num_computed_tokens=w['context_tokens']-1
-                request.num_tokens_reached=w['context_tokens'];request.recent_end=0
-                require(scheduler.kv.allocate_slots(request, blocks*block_size-request.num_computed_tokens) is not None,
+                context=contexts[slot]
+                request = Request(rank*w['batch_per_rank']+slot,m['name'],context,
+                                  context+w['decode_steps'],0,rank,is_init=False)
+                request.num_computed_tokens=context-1
+                request.num_tokens_reached=context;request.recent_end=0
+                require(scheduler.kv.allocate_slots(request, blocks[slot]*block_size-request.num_computed_tokens) is not None,
                         'ready-KV reservation failed')
                 scheduler.add_decode(request); self.requests.append(request)
             self.schedulers[rank]=scheduler
@@ -261,7 +273,7 @@ class Frontend:
             expected=self.config['workload']['batch_per_rank']
             require(all(b is not None and b.num_prefill==0 and len(b.requests)==expected and
                         set(b.scheduled_tokens.values())=={1} for b in batches.values()), 'invalid real Decode batch')
-            wave=make_wave(self.config,group,index,self.steps[index],self.planes)
+            wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
             directory=output/'graphs'/wave['graph_id'];export_wave(wave,directory,proto)
             history=dict(graph_id=wave['graph_id'],group_index=index,step=self.steps[index],start_ns=now,
                 batch_request_ids={str(r):[q.id for q in b.requests] for r,b in batches.items()},
@@ -276,17 +288,21 @@ class Frontend:
 
 
 def worker(config_path, topology_path, protocol_path, backend, protoc, output):
-    output=Path(output); c=checked_json(config_path,65536)
+    output=Path(output); c=checked_json(config_path,1048576)
     t=checked_json(Path(topology_path)/'topology.json',8388608); rdma=checked_json(protocol_path,65536)
-    ranks,planes=validate(c,t,rdma); proto,_=_schema(output,protoc)
+    from .scaleout_replay import Replay
+    replay=Replay(c,output) if 'route_replay' in c else None
+    ranks,planes=validate(c,t,rdma,replay); proto,_=_schema(output,protoc)
     bootstrap=output/'bootstrap';bootstrap.mkdir();(output/'graphs').mkdir()
     for r in range(ranks):
         with (bootstrap/f'layer.{r}.et').open('xb') as stream:
             write_message(stream,proto.GlobalMetadata(version='moe-scaleout-bootstrap/1'))
     system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
     save(output/'system.json',system)
-    frontend=Frontend(c,ranks,planes)
-    save(output/'capacity.json',dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]))
+    frontend=Frontend(c,ranks,planes,replay)
+    capacities=dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]) if not replay else dict(
+        per_rank=[dict(rank_id=r,**capacity(c,len(g),replay.contexts(r))) for g in c['parallel']['groups'] for r in g])
+    save(output/'capacity.json',capacities)
     command=[backend,str(Path(topology_path)/'topology.json'),protocol_path,str(output/'system.json'),
              str(bootstrap/'layer'),str(output/'result.json')]
     transcript=[]; child=None
@@ -304,26 +320,43 @@ def worker(config_path, topology_path, protocol_path, backend, protoc, output):
     finally:
         if child is not None and child.poll() is None:
             child.terminate();child.wait(timeout=5)
-        save(output/'frontend.json',dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
+        report=dict(history=frontend.history,transcript=transcript,scheduler_calls=frontend.calls,
             scheduler_source='pinned_LLMServingSim_ConfiguredScheduler_initialization_only',
             requests=[dict(id=q.id,state=q.status.name,computed_tokens=q.num_computed_tokens,
-                           reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests]))
+                           reached_tokens=q.num_tokens_reached,intertoken_ns=q.itl) for q in frontend.requests])
+        if replay:
+            report.update(route_source=replay.manifest['source']['kind'],completion_semantics='observation_window_ended_not_EOS')
+            for q in report['requests']:
+                q['scheduler_state']=q['state']
+                if q['state']=='FINISHED':q['state']='OBSERVATION_ENDED'
+                q['initial_context_tokens']=replay.records[q['id']]['context_tokens']
+        save(output/'frontend.json',report)
     result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'] and result['service']['service_finished'], 'service did not complete')
 
 
 def run(config, topology, protocol, backend, output, protoc='protoc'):
     config,topology,protocol,backend,output=(Path(x).resolve() for x in (config,topology,protocol,backend,output))
-    c=checked_json(config,65536); t=checked_json(topology/'topology.json',8388608);rdma=checked_json(protocol,65536)
-    validate(c,t,rdma); require(backend.is_file(), 'missing native service executable')
+    c=checked_json(config,1048576); t=checked_json(topology/'topology.json',8388608);rdma=checked_json(protocol,65536)
+    from .scaleout_replay import Replay
+    replay=Replay(c,ROOT) if 'route_replay' in c else None
+    validate(c,t,rdma,replay); require(backend.is_file(), 'missing native service executable')
     output.mkdir(exist_ok=False)
+    if replay:
+        require(replay.input_bytes<limits(rdma)['artifact_bytes'], 'route snapshots exhaust artifact budget')
+        c,evidence=replay.snapshot(output)
+        save(output/'route_evidence.json',evidence)
     save(output/'input.json',c)
     save(output/'topology.json',t)
     save(output/'rdma.json',rdma)
     save(output/'provenance.json',dict(network='single_native_ns3_no_UB',compute_source=c['compute']['source'],
-        hardware_calibrated=False,route_source='synthetic',
+        hardware_calibrated=False,route_source=replay.manifest['source']['kind'] if replay else 'synthetic',
         hashes={str(p):digest(p) for p in [config,topology/'topology.json',protocol,backend,
              ROOT/'third_party/LLMServingSim/serving/core/scheduler.py',Path(__file__)]}))
+    if replay:
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['hashes'][str(ROOT/'python/moe_ub_cosim/scaleout_replay.py')]=digest(ROOT/'python/moe_ub_cosim/scaleout_replay.py')
+        save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]
     monitored(command,output/'execution',[output],runtime=limits(rdma))

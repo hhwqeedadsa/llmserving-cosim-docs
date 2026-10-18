@@ -1,0 +1,36 @@
+{
+  "per_rank": [
+    {
+      "rank_id": 0,
+      "expert_parameters": 3145728,
+      "replicated_parameters": 0,
+      "weight_bytes_per_rank": 1572864,
+      "kv_bytes_per_token": 2048,
+      "device_bytes": null
+    },
+    {
+      "rank_id": 1,
+      "expert_parameters": 3145728,
+      "replicated_parameters": 0,
+      "weight_bytes_per_rank": 1572864,
+      "kv_bytes_per_token": 2048,
+      "device_bytes": null
+    },
+    {
+      "rank_id": 2,
+      "expert_parameters": 3145728,
+      "replicated_parameters": 0,
+      "weight_bytes_per_rank": 1572864,
+      "kv_bytes_per_token": 2048,
+      "device_bytes": null
+    },
+    {
+      "rank_id": 3,
+      "expert_parameters": 3145728,
+      "replicated_parameters": 0,
+      "weight_bytes_per_rank": 1572864,
+      "kv_bytes_per_token": 2048,
+      "device_bytes": null
+    }
+  ]
+}

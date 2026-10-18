@@ -1,6 +1,8 @@
 # 当前任务与交接
 
-状态：`completed`。2026-10-16，按用户要求将时间趋势报告整理为[离线 HTML](../review_artifacts/scaleout_runtime_20261016/report.html)，支持场景/版本筛选、指标切换、运行详情、矩阵成本估算和数据下载，保留超时与同机重叠说明。已核对8例嵌入数据与源文件一致、无外部资源、Node交互和确定性生成；未进行浏览器截图。此前测量与归档保持原状，本次不启动新仿真。只本地修改/提交，不 push。
+状态：`completed`。本轮回答 batch 修改、实际千卡拓扑、Scale-Up/Scale-Out 区别和网络改进方向，形成[配置与研究范围说明](../reviews/scaleout_configuration_and_research_scope.md)。已核对千卡原始 input/topology/probe 哈希，当前生成配置与原始输入逐对象一致；离线检查 B=1/B=4 图和四套候选拓扑。不启动新网络仿真，不实现待研究机制，只本地修改/提交，不 push。此前[离线 HTML](../review_artifacts/scaleout_runtime_20261016/report.html)、时间测量和归档保持原状。
+
+本轮核查：batch/rank 可选1..16，基准为1；千卡为8 Pod、128服务器、32 ToR/16 Agg/2 Core、单rail单plane、256个EP4副本，历史运行仍为600秒超时。静态候选拓扑与实际执行配置分别说明；不把构图检查当作性能验证。说明中的改进均为建议，没有新增大规模运行或真实路由下载。
 
 ## 本轮结果与证据
 

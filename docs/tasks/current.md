@@ -1,28 +1,19 @@
 # 当前任务与交接
 
-状态：`completed`。补全原运行报告的实际网络布局，并为非UB Scale-Out增加有来源的逐请求专家选择回放。代码和报告本地保存，不push。
+状态：`completed`。用户下载的4份R1/MMLU原件均可用，已更新实际文件清单、完成热点统计及4卡两层两轮非UB网络接入。保留原始文件，不下载更多原始路由，不push。
 
-## 平台结果
+## 结果与证据
 
-- 可选`route_replay`：按rank/slot指定独立来源文件和Decode入口，核对模型、原层号、E/K、SHA-256、完整原件形状及输入预算；保存可搬移快照，禁止循环补齐和EOF推断EOS。
-- 选择生成实际Chakra图，由网络完成回传推进下一轮；允许逐层等容量静态专家重排。按每请求实际context处理KV和完整GQA分支的声明attention成本。
-- [公开操作示例](../../examples/scaleout_route_replay/README.md)、[验收与命令记录](../../fixtures/scaleout_route_replay/README.md)：两组4卡人工输入均完成2轮，独立核验每组50条消息、164个节点、16条原始Decode层记录；快照搬移可复核，修改选择即使不改总字节也被拒绝。16张旧默认合成图内容不变。
-- 平台检查：回放8项、原RDMA5项、扩展形状6项通过。原根卷启动因8 GiB预留不足被拒绝且worker未启动，记录保留；后改用空间充足的内存盘，所有原预算保持不变。
+- 文件：1472、1808、2675、6447.json，总计8,193,641 B。用户确认来源为R1/MMLU；公开镜像固定修订目录的Git blob OID及大小逐一吻合，原件完整形状均通过，处理前后SHA-256未变化。
+- 每份61层（3个Dense、58个MoE）、256专家、Top-8、128个Decode入口；prompt分别105、28、10、6。旧推荐清单在本地备份，实际清单位于忽略的`data/moe-trace-small/manifest.json`及下方版本化研究目录。
+- 离线统计覆盖149个Prefill token和512个Decode token，分阶段逐层统计。例如原始层24的专家72出现179次（34.96%），以独立原件计数复核；仅描述这4请求，不作总体推断。
+- 非UB实际执行原层3—4、入口1—2、EP4、每卡batch1，4GPU/2服务器/2Pod。自动及独立检查通过：76条跨rank消息、216个图节点、16条真实来源Decode层记录；跨机1,691,648 B、机内917,504 B。下一轮等待实际完成，观察结束不推断EOS。
+- [完整报告、输入清单、统计摘要及复现](../../experiments/moe_trace_hotspots/results/four_requests_20261018/report.md)。完整统计和目录元数据保留于`runs/moe_trace_four_requests_20261018/`，网络原始输出保留于`/dev/shm/moe-real-four-20261018/`，Git不包含原始路由。
 
-## 报告和研究结果
+## 范围与验证
 
-- [原HTML报告](../review_artifacts/scaleout_runtime_20261016/report.html)新增实际ToR/Agg/Core连线、同机/跨Pod示例、源/目的GPU、EP组及容量比。交换机全绘制，GPU按Pod汇总；计算路径不是历史ECMP包路径。
-- 8个历史用例的物理输入与原SHA-256一致，去重为5份布局。嵌入测量与原JSON相同，6次完成和2次千卡超时保持原值；千卡仍是256个EP4副本，不声称EP1024完成。
-- [展示检查](../review_artifacts/scaleout_runtime_20261016/report.validation.json)：Node DOM桩覆盖全部布局、物理路径、新控件及原筛选/导出，重复生成HTML字节一致。本机无浏览器，未做截图或视觉验收。复现见[实验说明](../../experiments/scaleout_scaling/README.md)。
-- [数据集研究](../reviews/moe_trace_dataset_hotspots_20261018.md)保留四模型目录、R1原始结构、热点定义、原论文基线及网络研究方向；[离线工具](../../experiments/moe_trace_hotspots/README.md)4项检查通过，公开4请求人工输入CLI成功。来源元数据/论文哈希仍见该工具目录。
+来源固定版本已核验；采集软件、权重精确修订、原始GPU与激活dtype仍未知。网络使用声明的BF16向量、通用片段计算/KV及参考放置，不是完整R1 Dense/MLA或硬件校准。没有训练结论、优化收益或千卡新运行。
 
-## 使用边界
+分析按60秒、RSS1 GiB、地址空间2 GiB、产物128 MiB执行，状态completed；网络维持原小例60秒、RSS1 GiB、地址空间2 GiB、产物512 MiB和5 ms仿真限额，无扩限。平台和依赖源码未修改，不触发大规模回归。
 
-原始受限路由未取得，无新增真实热点排名、真实源网络复现或训练结论。人工样例证明接口，不证明优化收益。来源选择可以真实，部署、到达、激活dtype和计算时序仍需独立依据；不把R1专家取模用于Qwen3-30B。
-
-`service/1`执行1—4个连续MoE层，KV为通用片段声明；`service/2`回放要求支持的全MoE GQA结构及全层覆盖，不支持完整R1的Dense层/MLA。服务专家数上限仍为256，离线分析至1024。没有专家复制、动态迁移或DeepEP目的地去重；不下载大数据、不改依赖、不运行千卡、不增加预算。
-
-## 前期入口
-
-- [batch、千卡拓扑和研究范围](../reviews/scaleout_configuration_and_research_scope.md)。
-- [运行成本原始证据](../../experiments/scaleout_scaling/results/runtime_20261016/report.md)；原历史运行与大文件归档保持原状。
+原[HTML报告](../review_artifacts/scaleout_runtime_20261016/report.html)仅把数据访问说明改成历史时态，8条测量、6次完成和2次千卡超时保持原值；Node交互检查通过，重复生成字节一致，未做浏览器截图。来源回放平台验收仍见[前期4卡人工样例](../../fixtures/scaleout_route_replay/README.md)。

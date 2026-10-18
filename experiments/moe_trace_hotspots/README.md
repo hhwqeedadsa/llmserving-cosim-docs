@@ -4,6 +4,8 @@
 
 要把来源选择转为实际网络任务，使用独立的[Scale-Out回放示例](../../examples/scaleout_route_replay/README.md)。该例也可用作无原始数据时的离线CLI检查：将下面manifest换为`examples/scaleout_route_replay/manifest.json`并省略`--file-id`，即可分析4个明确标为人工构造的请求；其统计不代表真实数据分布。
 
+本机已收到4份用户下载的R1原件，均通过完整格式与固定版本目录摘要核对；可直接使用[四请求manifest与结果](results/four_requests_20261018/report.md)，无需下载更多数据。该组完成真实热点统计和4卡两层两轮网络接入，原件不提交Git。
+
 在仓库根目录，用包含现有来源校验器所需依赖的Python运行。先对已授权、已在本地的真实manifest选少量文件：
 
 ```bash

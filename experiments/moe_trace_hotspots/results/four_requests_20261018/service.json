@@ -1,0 +1,77 @@
+{
+  "schema_version": "moe-scaleout-service/1",
+  "model": {
+    "name": "deepseek-ai/DeepSeek-R1",
+    "hidden_size": 7168,
+    "ffn_hidden_size": 2048,
+    "experts": 256,
+    "top_k": 8,
+    "activation_bytes": 2,
+    "layers": 2,
+    "gpu_type": "A100"
+  },
+  "workload": {
+    "batch_per_rank": 1,
+    "decode_steps": 2,
+    "context_tokens": 128,
+    "route_seed": 11,
+    "hotspot_fraction": 0
+  },
+  "parallel": {
+    "groups": [
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  },
+  "compute": {
+    "source": "declared_reference",
+    "attention_ns_per_token": 1000,
+    "pack_ns_per_token": 30,
+    "expert_ns_per_contribution": 100,
+    "merge_ns_per_token": 30
+  },
+  "route_replay": {
+    "manifest": {
+      "path": "data/moe-trace-small/manifest.json",
+      "sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16"
+    },
+    "layer_ids": [
+      3,
+      4
+    ],
+    "requests": [
+      {
+        "rank_id": 0,
+        "slot": 0,
+        "file_id": "local-1472",
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 1,
+        "slot": 0,
+        "file_id": "local-1808",
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 2,
+        "slot": 0,
+        "file_id": "local-2675",
+        "first_decode_entry": 1
+      },
+      {
+        "rank_id": 3,
+        "slot": 0,
+        "file_id": "local-6447",
+        "first_decode_entry": 1
+      }
+    ],
+    "budget": {
+      "max_files": 4,
+      "max_bytes": 16777216
+    }
+  }
+}

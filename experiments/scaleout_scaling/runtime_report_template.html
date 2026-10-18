@@ -35,7 +35,7 @@
 <p>MoE_expert_selection_trace记录每个请求、每个token、每层选中的专家。它提供专家选择，不提供原集群的源GPU、专家位置、请求到达时间或网络包。</p>
 <ol><li>校验来源文件和SHA-256，保留模型、原层号和专家编号；Prefill与Decode分开统计。</li><li>在输入的route_replay中，明确每张卡每个请求槽对应哪个文件、从哪个Decode入口开始；不同并发请求使用不同原文件。</li><li>声明专家到GPU的放置。按实际选择和hidden×激活字节生成Dispatch/Combine；同卡留本地，同机走机内织构，跨机走原生ns-3 RDMA。</li><li>下一轮等待本轮真实完成事件；观察片段结束记为OBSERVATION_ENDED，不能当作模型EOS。</li></ol>
 <p>新接入口允许逐层静态重排，但保持每卡专家数相同，不增加免费副本。有限片段service/1可执行1—4个连续MoE层；完整结构service/2要求覆盖来源的所有层，当前仅支持全MoE的GQA结构，不能冒称已完整支持R1的Dense层与MLA。</p>
-<p class="muted">验证范围：公开的4卡人工样例已完成两轮联合执行和独立核验；它验证接口，不代表真实热点收益。原始受限路由仍未取得。本页历史测量继续使用原有合成路由，所有耗时与超时结果保持原样。重点对照是固定专家选择，改变专家放置、跨Pod位置与分层带宽，观察网络排队及Decode等待。</p></section>
+<p class="muted">验证范围：公开的4卡人工样例已完成两轮联合执行和独立核验；它验证接口，不代表真实热点收益。本报告最初生成时尚未取得原始路由；后续4请求真实路由接入结果另见仓库的四请求核验报告。本页历史测量继续使用原有合成路由，所有耗时与超时结果保持原样。重点对照是固定专家选择，改变专家放置、跨Pod位置与分层带宽，观察网络排队及Decode等待。</p></section>
 <section id="sources" class="panel content" style="margin-top:18px"><div class="head-row"><div><h2>数据导出与保存</h2><p>下载完整测量或当前筛选结果。页面内嵌数据，无需联网或本地服务器；可直接转发此 HTML。</p></div><button id="print" class="btn" type="button">打印 / 保存为 PDF</button></div><div class="buttons"><button id="download-csv" class="btn" type="button">下载当前筛选 CSV</button><button id="download-json" class="btn" type="button">下载完整 JSON</button></div><p class="muted">原始测量时间戳保留 UTC；本页面展示时间使用北京时间（UTC+8）。筛选与成本估算不会修改实测数据。</p></section>
 <footer>MoE Scale-Out 联合仿真 · 来自已结束运行的公开测量产物 · 本页面不启动仿真</footer>
 </main>

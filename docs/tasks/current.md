@@ -1,19 +1,15 @@
 # 当前任务与交接
 
-状态：`completed`。用户下载的4份R1/MMLU原件均可用，已更新实际文件清单、完成热点统计及4卡两层两轮非UB网络接入。保留原始文件，不下载更多原始路由，不push。
+状态：`completed`。已汇总自研究开始至2026-10-18的工作与规划，形成面向导师审阅的综合报告和离线HTML。仅修改文档，不构建、不启动仿真、不下载数据、不push。
 
-## 结果与证据
+## 交付
 
-- 文件：1472、1808、2675、6447.json，总计8,193,641 B。用户确认来源为R1/MMLU；公开镜像固定修订目录的Git blob OID及大小逐一吻合，原件完整形状均通过，处理前后SHA-256未变化。
-- 每份61层（3个Dense、58个MoE）、256专家、Top-8、128个Decode入口；prompt分别105、28、10、6。旧推荐清单在本地备份，实际清单位于忽略的`data/moe-trace-small/manifest.json`及下方版本化研究目录。
-- 离线统计覆盖149个Prefill token和512个Decode token，分阶段逐层统计。例如原始层24的专家72出现179次（34.96%），以独立原件计数复核；仅描述这4请求，不作总体推断。
-- 非UB实际执行原层3—4、入口1—2、EP4、每卡batch1，4GPU/2服务器/2Pod。自动及独立检查通过：76条跨rank消息、216个图节点、16条真实来源Decode层记录；跨机1,691,648 B、机内917,504 B。下一轮等待实际完成，观察结束不推断EOS。
-- [完整报告、输入清单、统计摘要及复现](../../experiments/moe_trace_hotspots/results/four_requests_20261018/report.md)。完整统计和目录元数据保留于`runs/moe_trace_four_requests_20261018/`，网络原始输出保留于`/dev/shm/moe-real-four-20261018/`，Git不包含原始路由。
+- [报告原文](../reviews/研究工作总报告_目标约束与ScaleOut网络路线_20261018.md)：先回答最终目标、限定约束、Scale-Out服务对象、研究维度与平台分工，再集中整理历史工作、真实结果、问题假设、分步目标、投稿/产品和仓库组织。
+- [离线阅读版](../review_artifacts/research_summary_20261018/report.html)：15个目录章节、15张表格、证据跳转，可浏览器打印；[生成器](../review_artifacts/research_summary_20261018/render.py)仅使用标准库。README已增加入口。
+- 区分旧仓工作、师兄已有基础及新增非UB工作；保留千卡两次超时、四请求代表性有限、GPU标签未校准、有限层段非完整请求指标等边界。前一任务原始结果仍见[四请求报告](../../experiments/moe_trace_hotspots/results/four_requests_20261018/report.md)。
 
-## 范围与验证
+## 核验与范围
 
-来源固定版本已核验；采集软件、权重精确修订、原始GPU与激活dtype仍未知。网络使用声明的BF16向量、通用片段计算/KV及参考放置，不是完整R1 Dense/MLA或硬件校准。没有训练结论、优化收益或千卡新运行。
+主仓内容基线`ccd6294`；开始时主仓及直接子模块干净。完成时31个Markdown本地引用、HTML本地链接与锚点、标签闭合、表格数量及hash均已检查，连续两次生成字节一致，`git diff --check`通过。记录见[verification.json](../review_artifacts/research_summary_20261018/verification.json)及同目录manifest；未做浏览器视觉检查或任何新的性能实验。
 
-分析按60秒、RSS1 GiB、地址空间2 GiB、产物128 MiB执行，状态completed；网络维持原小例60秒、RSS1 GiB、地址空间2 GiB、产物512 MiB和5 ms仿真限额，无扩限。平台和依赖源码未修改，不触发大规模回归。
-
-原[HTML报告](../review_artifacts/scaleout_runtime_20261016/report.html)仅把数据访问说明改成历史时态，8条测量、6次完成和2次千卡超时保持原值；Node交互检查通过，重复生成字节一致，未做浏览器截图。来源回放平台验收仍见[前期4卡人工样例](../../fixtures/scaleout_route_replay/README.md)。
+本任务按既有授权保存本地文档提交，不发布。原始路由、平台与依赖源码均未修改；后续计划仅作为报告，不自动启动下一项任务。

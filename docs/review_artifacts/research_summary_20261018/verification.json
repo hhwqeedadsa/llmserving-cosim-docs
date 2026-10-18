@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "scope": "documentation_only",
+  "working_directory": "/home/lry/moe-ub-cosim",
+  "render_command": "python3 docs/review_artifacts/research_summary_20261018/render.py",
+  "render_exit_code": 0,
+  "checks": [
+    "all Markdown local targets exist",
+    "all HTML local targets and internal anchors exist",
+    "balanced HTML nesting and unique IDs",
+    "table counts match Markdown source",
+    "source, renderer and HTML hashes recorded",
+    "two renderings are byte-identical"
+  ],
+  "markdown_local_links": 31,
+  "html_ids": 55,
+  "html_links": 94,
+  "tables": 15,
+  "external_assets": 0,
+  "new_simulations": 0,
+  "browser_visual_check": "not_performed",
+  "source_sha256": "42807ff2a0687c765c2d6e8a8b524304770ae5dd10a2482f0de72c60db7f72d7",
+  "html_sha256": "5bd55b3fd8e0ac26523e3873f7e44d24f464871db551e3521c252878d5c75656"
+}

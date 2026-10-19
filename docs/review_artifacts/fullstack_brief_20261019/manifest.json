@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-19",
+  "timezone": "Asia/Shanghai",
+  "scope": "presentation_and_manuscript_only_no_simulation",
+  "template": {
+    "path": "/home/lry/.codex/attachments/5e59ce9c-1aac-4954-818d-099f8154183a/PPT模板-用这个！！！.pptx",
+    "sha256": "fb20958128a2d2bac52d37fb679a6a452bfb22bb199cac9da27d56b08910d550",
+    "used_layout": "ppt/slideLayouts/slideLayout2.xml",
+    "preserved_design_parts": 26,
+    "design_byte_identical": true
+  },
+  "slide_count": 2,
+  "content_slides": 2,
+  "font": {
+    "family": "WenQuanYi Micro Hei",
+    "file": "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
+    "sha256": "2420e8078af796b19a3f6ef13de527a1a91c1e7171eea115926c614ced1009b3"
+  },
+  "generate_command": "python3 docs/review_artifacts/fullstack_brief_20261019/build_materials.py --template /path/to/original.pptx",
+  "source_hashes": {
+    "docs/architecture.md": "9727baea448c4df8c84f9fcc6b1c30163f0d0f79ddd9d9e1f77533b8d6649a84",
+    "experiments/scaleout_e2e/conclusions.md": "b2a74367fd336c980246edb47a7aa9425bd26df9cd3cf80583b06cd3d2e7068b",
+    "experiments/moe_trace_hotspots/results/four_requests_20261018/report.md": "1757edb64b10b027c55b615c048be959211ddbe210bc859be18bfe00ce77884d",
+    "experiments/scaleout_scaling/results/runtime_20261016/report.md": "33445fadd7e40cee7bd8517fefdbf0680cfee8b5a0e9cf27116a104c1bc3e30d",
+    "docs/reviews/scaleout_topology_20261015.md": "f6201a166e02f4b9427bbcb6dbf5ec12e4658dffd202093332587c2cd43d454f",
+    "docs/reviews/scaleout_configuration_and_research_scope.md": "59b70035f4fcb84955265cce29c359e65ff904b377b4f45260dceb7338a9c1b1"
+  },
+  "outputs": {
+    "全栈仿真思路与拟增细节_两页.pptx": "5f26dd40e9141bfe1bdaf2e4bb05ac9a68bb17163d1985350c147acac6ca8835",
+    "配套讲稿.docx": "8bed9660c3a51c076183b38fc14d433bab1658c8433ed9a852f4f665fdc755a1",
+    "讲稿.md": "0f2f72ddc94188f9aacaf5821609b42d4b1d4aad835fc9ab396ebdd7d535c68f"
+  },
+  "generator_sha256": "c613a1a4c1dec3505dabe0e3a76aa30eb1763f8d71c7ed5d013f74b9abd6e864",
+  "script_characters": [
+    746,
+    857
+  ]
+}

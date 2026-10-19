@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "date": "2026-10-19",
+  "timezone": "Asia/Shanghai",
+  "requirements": {
+    "use_user_template": {
+      "proven": true,
+      "sha256": "fb20958128a2d2bac52d37fb679a6a452bfb22bb199cac9da27d56b08910d550",
+      "design_parts_byte_identical": 26,
+      "both_slides_use_original_content_layout": true
+    },
+    "two_pages_of_material": {
+      "proven": true,
+      "pptx_slides": 2,
+      "pdf_pages": 2,
+      "cover_only_pages": 0
+    },
+    "current_fullstack_approach": {
+      "proven": true,
+      "evidence": "slide1 native task/feedback diagram; notes match manuscript"
+    },
+    "proposed_details": {
+      "proven": true,
+      "evidence": "slide2 four explicitly proposed network modeling dimensions and controlled validation route"
+    },
+    "companion_manuscript": {
+      "proven": true,
+      "formats": [
+        "Markdown",
+        "DOCX",
+        "PDF",
+        "PowerPoint notes"
+      ],
+      "pdf_pages": 2,
+      "all_body_text_matches": true
+    },
+    "rendered_content_complete": {
+      "proven": true,
+      "evidence": "PDF extraction contains every visible shape line and every manuscript paragraph"
+    }
+  },
+  "editable_native_shapes": true,
+  "notes_characters": [
+    767,
+    879
+  ],
+  "source_hashes_unchanged": true,
+  "pptx_docx_rebuild_byte_identical": true,
+  "template_unchanged": true,
+  "slides_renderer": "LibreOffice Impress 24.2.7.2",
+  "manuscript_pdf_renderer": "existing Matplotlib PDF backend",
+  "docx_validation": "OOXML package, exact body content, one explicit page break; no Writer/Word render on this machine",
+  "raster_previews": [
+    "preview/slide-1.png",
+    "preview/slide-2.png",
+    "preview/manuscript-1.png",
+    "preview/manuscript-2.png"
+  ],
+  "visual_review": "Final slide PDF and manuscript PDF inspected from raster previews; no text truncation or overlap observed",
+  "artifacts": {
+    "全栈仿真思路与拟增细节_两页.pptx": "5f26dd40e9141bfe1bdaf2e4bb05ac9a68bb17163d1985350c147acac6ca8835",
+    "全栈仿真思路与拟增细节_两页.pdf": "effe805b934b6e80128fa2c14677ed2c168df8e5abc8febe5bb8bdf868a33e85",
+    "配套讲稿.docx": "8bed9660c3a51c076183b38fc14d433bab1658c8433ed9a852f4f665fdc755a1",
+    "配套讲稿.pdf": "45ce6524c3b7f87681d65053497ef87b5160ef17b261e5c15bcb0c831cecb28c",
+    "讲稿.md": "0f2f72ddc94188f9aacaf5821609b42d4b1d4aad835fc9ab396ebdd7d535c68f"
+  },
+  "new_simulations": 0,
+  "dependency_installations": 0,
+  "pushed": false
+}

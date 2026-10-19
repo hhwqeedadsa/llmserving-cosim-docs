@@ -1,0 +1,33 @@
+{
+  "working_directory": "/home/lry/moe-ub-cosim",
+  "slides_command": [
+    "libreoffice",
+    "-env:UserInstallation=file:///home/lry/moe-ub-cosim/runs/fullstack_materials_20261019/lo_profile_metadata",
+    "--headless",
+    "--convert-to",
+    "pdf",
+    "--outdir",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/fullstack_brief_20261019",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/fullstack_brief_20261019/全栈仿真思路与拟增细节_两页.pptx"
+  ],
+  "slides_process_exit_code": 0,
+  "slides_export_verified_by": "Actual final two-page PDF, complete PDF text checks and raster previews",
+  "manuscript_command": [
+    "python3",
+    "docs/review_artifacts/fullstack_brief_20261019/render_manuscript.py"
+  ],
+  "manuscript_process_exit_code": 0,
+  "manuscript_export_verified_by": "Actual final two-page searchable PDF, full paragraph checks and raster previews",
+  "docx_writer_export": "Not available: local LibreOffice installation has Impress but no Writer module; DOCX source-loading attempts produced no PDF and are not recorded as successful export.",
+  "preview_commands": [
+    "pdftoppm -scale-to 1600 -png <slides.pdf> <preview/slide>",
+    "pdftoppm -scale-to 1500 -png <manuscript.pdf> <preview/manuscript>"
+  ],
+  "verification_command": [
+    "python3",
+    "docs/review_artifacts/fullstack_brief_20261019/verify_materials.py"
+  ],
+  "verification_exit_code": 0,
+  "no_dependency_installations": true,
+  "no_simulation_runs": true
+}

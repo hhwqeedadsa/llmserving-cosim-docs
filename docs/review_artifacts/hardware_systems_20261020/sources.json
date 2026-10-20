@@ -1,0 +1,212 @@
+{
+  "scope": "Read-only public-source snapshots; no dependencies installed or changed",
+  "max_source_bytes": 524288,
+  "max_total_bytes": 5242880,
+  "access_date": "2026-10-20 Asia/Shanghai",
+  "sources": [
+    {
+      "id": "deepep_readme",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/README.md?ref=main",
+      "accessed_utc": "2026-10-20T07:45:11.978485+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/main/README.md",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/main/README.md",
+      "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+      "bytes": 32914,
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+      "local_snapshot": "data/research/hardware_systems_20261020/deepep_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/8c949a4adbc4113bc4199ffb096ae1a7125f6a5d"
+    },
+    {
+      "id": "deepep_buffer",
+      "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/main/deep_ep/buffer.py",
+      "accessed_utc": "2026-10-20T07:42:10.209429+00:00",
+      "status": "failed",
+      "error": "The read operation timed out",
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/deepseek-ai/DeepEP/main/deep_ep/buffer.py",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "fallback_error": "curl: (22) The requested URL returned error: 404\n"
+    },
+    {
+      "id": "gpudirect",
+      "url": "https://docs.nvidia.com/cuda/gpudirect-rdma/index.html",
+      "accessed_utc": "2026-10-20T07:42:10.210825+00:00",
+      "status": 200,
+      "resolved_url": "https://docs.nvidia.com/cuda/gpudirect-rdma/index.html",
+      "bytes": 144435,
+      "sha256": "5c6a0e936d8c2414774e92d3128bb4f16b65be0f90dc6f06f32103f009cd5713",
+      "content_type": "text/html",
+      "last_modified": "Tue, 13 Oct 2026 15:28:39 GMT",
+      "local_snapshot": "data/research/hardware_systems_20261020/gpudirect.html"
+    },
+    {
+      "id": "accelsim_readme",
+      "url": "https://api.github.com/repos/accel-sim/accel-sim-framework/contents/README.md?ref=dev",
+      "accessed_utc": "2026-10-20T07:45:12.066644+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/accel-sim/accel-sim-framework/dev/README.md",
+        "status": "failed",
+        "error": "<urlopen error timed out>"
+      },
+      "public_url": "https://github.com/accel-sim/accel-sim-framework/blob/dev/README.md",
+      "git_blob_sha": "bbcbeaf06b30ce0920db4fe2f339cacb8a7f6ce5",
+      "bytes": 28044,
+      "sha256": "790f843930192329614c2e8b89da95c4a641f2944eb49d5e684fb3d9c616eb87",
+      "local_snapshot": "data/research/hardware_systems_20261020/accelsim_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/accel-sim/accel-sim-framework/git/blobs/bbcbeaf06b30ce0920db4fe2f339cacb8a7f6ce5"
+    },
+    {
+      "id": "gpgpusim_readme",
+      "url": "https://api.github.com/repos/gpgpu-sim/gpgpu-sim_distribution/contents/README.md?ref=dev",
+      "accessed_utc": "2026-10-20T07:45:12.084787+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/gpgpu-sim/gpgpu-sim_distribution/dev/README.md",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "public_url": "https://github.com/gpgpu-sim/gpgpu-sim_distribution/blob/dev/README.md",
+      "git_blob_sha": "666e9080838327b463c5db1461c97ef390e27e2c",
+      "bytes": 31566,
+      "sha256": "5cc4f546d06157a4360db7085db2b9cde82d86d5db398ad501f9bb77d02bec3e",
+      "local_snapshot": "data/research/hardware_systems_20261020/gpgpusim_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/gpgpu-sim/gpgpu-sim_distribution/git/blobs/666e9080838327b463c5db1461c97ef390e27e2c"
+    },
+    {
+      "id": "simbricks_readme",
+      "url": "https://api.github.com/repos/simbricks/simbricks/contents/README.md?ref=main",
+      "accessed_utc": "2026-10-20T07:45:11.566467+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/simbricks/simbricks/main/README.md",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "public_url": "https://github.com/simbricks/simbricks/blob/main/README.md",
+      "git_blob_sha": "7dd7e1a18d600969727f1349bca54f007b411fdb",
+      "bytes": 1783,
+      "sha256": "2dedc88a554d05f2ca1528a92bec86dae31d32812a494b51088ebfab9c730832",
+      "local_snapshot": "data/research/hardware_systems_20261020/simbricks_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/simbricks/simbricks/git/blobs/7dd7e1a18d600969727f1349bca54f007b411fdb"
+    },
+    {
+      "id": "firesim_readme",
+      "url": "https://api.github.com/repos/firesim/firesim/contents/README.md?ref=main",
+      "accessed_utc": "2026-10-20T07:45:11.723486+00:00",
+      "status": 200,
+      "first_attempt": {
+        "url": "https://raw.githubusercontent.com/firesim/firesim/main/README.md",
+        "status": "failed",
+        "error": "The read operation timed out"
+      },
+      "public_url": "https://github.com/firesim/firesim/blob/main/README.md",
+      "git_blob_sha": "dc752eb6dc7cb351e132e124710bdd54affc9bd7",
+      "bytes": 13247,
+      "sha256": "dc76baa254a2725f5eff2584be66669ce63727f1aa5cff979448e76ba7188a0d",
+      "local_snapshot": "data/research/hardware_systems_20261020/firesim_readme.txt",
+      "retrieval": "GitHub contents API; base64 decoded",
+      "immutable_blob_api": "https://api.github.com/repos/firesim/firesim/git/blobs/dc752eb6dc7cb351e132e124710bdd54affc9bd7"
+    },
+    {
+      "id": "gem5_gpu",
+      "url": "https://www.gem5.org/documentation/general_docs/gpu_models/gpufs",
+      "accessed_utc": "2026-10-20T07:42:10.217608+00:00",
+      "status": 200,
+      "resolved_url": "https://www.gem5.org/documentation/general_docs/gpu_models/gpufs",
+      "bytes": 42184,
+      "sha256": "3fad45bea515c9fdcacaebca051a17afd5f65eebaf1bc55f94292549f42391ea",
+      "content_type": "text/html; charset=utf-8",
+      "last_modified": "Fri, 10 Jul 2026 00:03:46 GMT",
+      "local_snapshot": "data/research/hardware_systems_20261020/gem5_gpu.html"
+    },
+    {
+      "id": "simai_readme",
+      "url": "https://raw.githubusercontent.com/aliyun/SimAI/master/README.md",
+      "accessed_utc": "2026-10-20T07:42:11.813978+00:00",
+      "status": "failed",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "id": "astra_readme",
+      "url": "https://raw.githubusercontent.com/astra-sim/astra-sim/master/README.md",
+      "accessed_utc": "2026-10-20T07:42:13.296413+00:00",
+      "status": "failed",
+      "error": "<urlopen error timed out>"
+    },
+    {
+      "id": "deepep_tags",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/tags?per_page=8",
+      "accessed_utc": "2026-10-20T07:48:26.741989+00:00",
+      "status": 200,
+      "bytes": 470,
+      "sha256": "fe13ad5eb9632426af8196244c5b8310e96670a2643a897a3fb1782d316268fe",
+      "local_snapshot": "data/research/hardware_systems_20261020/deepep_tags.json"
+    },
+    {
+      "id": "deepep_tree",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/deep_ep?ref=main",
+      "accessed_utc": "2026-10-20T07:48:26.742287+00:00",
+      "status": 200,
+      "bytes": 4026,
+      "sha256": "6988d913ece058bdc8ba3ef4ee9a5255eb8e2e2ab33ad9104d4352cff6dc56fa",
+      "local_snapshot": "data/research/hardware_systems_20261020/deepep_tree.json"
+    },
+    {
+      "id": "simbricks_arch",
+      "url": "https://docs.simbricks.io/learn/simulator-integration/",
+      "accessed_utc": "2026-10-20T07:48:26.742906+00:00",
+      "status": 200,
+      "bytes": 23531,
+      "sha256": "c504f6008ba3af5a4e89b5904bd0858f7c92cde253be9dda9cd1fdcd2e04dd30",
+      "local_snapshot": "data/research/hardware_systems_20261020/simbricks_arch.html"
+    },
+    {
+      "id": "simbricks_interfaces",
+      "url": "https://api.github.com/repos/simbricks/simbricks/contents/lib/simbricks?ref=main",
+      "accessed_utc": "2026-10-20T07:48:26.743310+00:00",
+      "status": 200,
+      "bytes": 8226,
+      "sha256": "1bafa3a56eae1c5f238a5129c2fe78ca4e84a9a37d40fd4aeeee1582a80ff4e1",
+      "local_snapshot": "data/research/hardware_systems_20261020/simbricks_interfaces.json"
+    },
+    {
+      "id": "deepep_v121_readme",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/README.md?ref=9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "accessed_utc": "2026-10-20T07:49:46.453583+00:00",
+      "status": 200,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/README.md",
+      "git_blob_sha": "211cace8dcaef15b8b2784ccfd179331e2d488df",
+      "bytes": 19320,
+      "sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+      "local_snapshot": "data/research/hardware_systems_20261020/deepep_v121_readme.txt",
+      "immutable_blob_api": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/211cace8dcaef15b8b2784ccfd179331e2d488df"
+    },
+    {
+      "id": "deepep_v121_buffer",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/deep_ep/buffer.py?ref=9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "accessed_utc": "2026-10-20T07:49:46.453985+00:00",
+      "status": 200,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/deep_ep/buffer.py",
+      "git_blob_sha": "505e9b8087c1570696b78324424183a52cf018e4",
+      "bytes": 40263,
+      "sha256": "e1be2065c2fddacf8c88adc303c22cbc642f27930efd98a81716d2fc2bebd94c",
+      "local_snapshot": "data/research/hardware_systems_20261020/deepep_v121_buffer.txt",
+      "immutable_blob_api": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/505e9b8087c1570696b78324424183a52cf018e4"
+    }
+  ],
+  "successful_bytes": 390009
+}

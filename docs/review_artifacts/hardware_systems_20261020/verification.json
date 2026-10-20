@@ -1,0 +1,58 @@
+{
+  "status": "passed",
+  "date": "2026-10-20 Asia/Shanghai",
+  "scope": "Research-material validation only",
+  "workdir": "/home/lry/moe-ub-cosim",
+  "checks": {
+    "source_code_excerpts_matched": 18,
+    "required_public_sources_available": 10,
+    "successful_snapshots_hash_verified": 13,
+    "public_source_bytes": 390009,
+    "public_excerpt_groups": 9,
+    "html_content_fragments_verified": 286,
+    "html_tables": 8,
+    "markdown_local_links_verified": 58,
+    "html_links_verified": 40,
+    "html_rebuild_byte_identical": true,
+    "hardware_inventory_verified_against_saved_outputs": true,
+    "git_diff_check_exit_code": 0,
+    "source_revisions_unchanged_during_review": true
+  },
+  "render_command": [
+    "python3",
+    "docs/review_artifacts/hardware_systems_20261020/render_report.py"
+  ],
+  "render_exit_code": 0,
+  "render_stdout": "Rendered 10 main sections; source/hash and all content fragments checked.",
+  "report_sha256": "48ef1d3f3162cadca9a191361e598631fbbaeb1ad016f86a12d28f080ca83465",
+  "html_sha256": "1dcbd767a37295ba70aad9f6a276765224b403ea23a19714d8d3ca9ff023b08f",
+  "not_performed": [
+    "No new ns-3 simulation or platform regression",
+    "No GPU/NIC performance benchmark",
+    "No hardware simulator build or execution",
+    "No browser-rendered visual inspection",
+    "No installation, dependency update, network reconfiguration or push"
+  ],
+  "requirements_audit": [
+    {
+      "requirement": "Macro/micro integration",
+      "evidence": "Report sections 1, 3, 6.1: resource feedback, timing and identity constraints",
+      "status": "addressed"
+    },
+    {
+      "requirement": "Hardware simulation feasibility",
+      "evidence": "Report sections 6, 7: tools, inputs, current hardware conditions and integration limits",
+      "status": "addressed"
+    },
+    {
+      "requirement": "Limits of pure network simulation and two system problems",
+      "evidence": "Report sections 2, 4, 5: 18 source excerpts, competing explanations and falsification",
+      "status": "addressed"
+    },
+    {
+      "requirement": "Whether the difference is solid",
+      "evidence": "Report section 8: observed modeling gaps separated from unverified material impact and novelty",
+      "status": "addressed"
+    }
+  ]
+}

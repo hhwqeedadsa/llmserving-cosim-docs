@@ -1,16 +1,25 @@
 # 当前任务与交接
 
-状态：`completed`。已使用用户提供的PPT模板制作两页全栈仿真材料，并交付逐页配套讲稿；日期按北京时间2026-10-19。仅制作材料，没有新增性能实验、硬件测量、依赖安装或push。
+状态：`completed`。2026-10-20完成宏观网络与微观硬件联合建模研究，交付报告、HTML及来源证据；只在本地整理研究材料，不安装工具、不升级依赖、不运行性能实验、不push。
 
-## 交付与范围
+## 本次目标与验收
 
-- [完整入口与来源](../review_artifacts/fullstack_brief_20261019/README.md)。两页均沿用用户模板的内容页布局；26个母版、布局、主题和媒体设计部件逐字节保留，原模板未修改。
-- [可编辑PPTX](../review_artifacts/fullstack_brief_20261019/全栈仿真思路与拟增细节_两页.pptx)、[两页PDF](../review_artifacts/fullstack_brief_20261019/全栈仿真思路与拟增细节_两页.pdf)：第一页为当前任务/依赖/网络/反馈链路，第二页为通信组织、物理连接、协议等待、校准及规模效率等拟增细节。
-- [讲稿原文](../review_artifacts/fullstack_brief_20261019/讲稿.md)、[DOCX](../review_artifacts/fullstack_brief_20261019/配套讲稿.docx)、[两页讲稿PDF](../review_artifacts/fullstack_brief_20261019/配套讲稿.pdf)。约1600字，正文同时保存在PPT逐页备注；现有和计划分别说明。
-- 保留ready-KV Decode、声明计算成本、真实四请求有限片段、千卡两次超时等边界，未把不同规模任务作为同工作量性能对比。
+- 区分ns-3框架可扩展性、当前RDMA模块的抽象和本仓库实际能力；逐项提供源码依据。
+- 结合原始文档/开源实现，说明GPU—NIC路径、内存/计算竞争、完成语义等细节，以及它们怎样影响网络结论。
+- 提炼两个系统级问题，给出竞争解释、控制变量、观测、否定条件和实施顺序；不把假设写成已测收益。
+- 比较测量校准的资源模型、GPU微架构仿真、整机协同仿真及RTL/FPGA仿真，给出适用范围和接入约束。
+- 交付可核对来源的研究报告和后续计划；核验链接、源码证据和能力边界后保存本地提交。
+
+## 本次交付与结论
+
+- [报告与证据入口](../review_artifacts/hardware_systems_20261020/README.md)、[完整报告](../reviews/宏微结合与硬件联合仿真研究_20261020.md)、[HTML阅读版](../review_artifacts/hardware_systems_20261020/report.html)。包含18段源码证据、公开来源与只读本机盘点。
+- 区分当前包级网络能力与端点内存/计算抽象；确认PCIe固定暂停钩子关闭、逐消息QP/速率重置、整包转发及线缆开销边界。它们是源码差异，显著性能影响尚未验证。
+- 两项优先问题：GPU—NIC路径与端点反压是否改变网络瓶颈；通信/计算争用是否改变端到端方案排序。给出较强校准基线、对照、观测、否定条件及分阶段实施路线。
+- 比较资源模型、Accel-Sim/GPGPU-Sim、gem5 AMD GPU、SimBricks、FireSim和RTL路线；区分DeepEP固定v1.2.1与当前V2。推荐先校准最小资源模型，必要时局部硬件仿真，不预设千卡周期级执行。
+- 本机枚举到6张A100和ConnectX-5；4个所见RDMA端口均DOWN，未验证两机连接，不进行网络配置。未实现新硬件模型或开展实测，创新性与优化收益仍需后续研究验证。
 
 ## 核验与证据
 
-开始时主仓干净，内容基线`d8da502`。PPTX实际由现有LibreOffice Impress渲染为两页PDF；讲稿阅读版由同一Markdown用现有Matplotlib排为两页。已检查实际栅格预览、文字完整性、模板身份、引用、OOXML关系、备注/DOCX与讲稿一致及重复生成一致性。当前机器没有Writer模块，DOCX不声称Word/Writer视觉验收。
+开始时主仓及直接子模块干净，基线`0b37b6a`。18段源码与原文/哈希匹配，10项必要公开来源已取得，13份成功快照哈希核对通过；HTML的286个正文片段、8张表、40个链接及58个Markdown本地链接已检查，重复生成字节一致。来源保留URL、内容哈希、可用的不可变Git blob接口及失败记录。详细检查写入本次verification；没有浏览器视觉验收、平台回归或性能仿真。
 
-[verification.json](../review_artifacts/fullstack_brief_20261019/verification.json)保存逐要求检查，[render_record.json](../review_artifacts/fullstack_brief_20261019/render_record.json)保存实际命令与渲染范围，manifest绑定模板与内容来源。README已增加入口。完成后只保存本地文档提交，不自动开始后续网络实验。
+上一任务两页PPT与讲稿保留在[原交付入口](../review_artifacts/fullstack_brief_20261019/README.md)，没有修改。本次仅保存本地文档提交，停止于研究核查与方案；后续硬件测量和模型扩展没有被标为完成。

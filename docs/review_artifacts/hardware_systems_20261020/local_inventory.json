@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-20 Asia/Shanghai",
+  "scope": "Read-only local inventory; no benchmark or hardware reconfiguration",
+  "gpus": [
+    {
+      "name": "NVIDIA A100 80GB PCIe",
+      "memory": "81920 MiB"
+    },
+    {
+      "name": "NVIDIA A100 80GB PCIe",
+      "memory": "81920 MiB"
+    },
+    {
+      "name": "NVIDIA A100-SXM4-80GB",
+      "memory": "81920 MiB"
+    },
+    {
+      "name": "NVIDIA A100-SXM4-80GB",
+      "memory": "81920 MiB"
+    },
+    {
+      "name": "NVIDIA A100 80GB PCIe",
+      "memory": "81920 MiB"
+    },
+    {
+      "name": "NVIDIA A100 80GB PCIe",
+      "memory": "81920 MiB"
+    }
+  ],
+  "rdma_ports": [
+    {
+      "state": "1: DOWN",
+      "phys_state": "3: Disabled",
+      "rate": "40 Gb/sec (4X QDR)",
+      "link_layer": "Ethernet"
+    },
+    {
+      "state": "1: DOWN",
+      "phys_state": "3: Disabled",
+      "rate": "40 Gb/sec (4X QDR)",
+      "link_layer": "Ethernet"
+    },
+    {
+      "state": "1: DOWN",
+      "phys_state": "3: Disabled",
+      "rate": "40 Gb/sec (4X QDR)",
+      "link_layer": "Ethernet"
+    },
+    {
+      "state": "1: DOWN",
+      "phys_state": "3: Disabled",
+      "rate": "40 Gb/sec (4X QDR)",
+      "link_layer": "Ethernet"
+    }
+  ],
+  "commands": [
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=name,memory.total",
+        "--format=csv,noheader"
+      ],
+      "returncode": 0,
+      "local_output": "data/research/hardware_systems_20261020/inventory-0.txt",
+      "sha256": "030feaa1f78e71d9aec5c2c6c850a0965eaa10306c419365ee3858179be2eccf"
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "topo",
+        "-m"
+      ],
+      "returncode": 0,
+      "local_output": "data/research/hardware_systems_20261020/inventory-1.txt",
+      "sha256": "12cb5fb232e7e6f2c406773fa291d7e410785596a50c624d1d6aa04a58f43483"
+    },
+    {
+      "command": [
+        "lspci",
+        "-nn"
+      ],
+      "returncode": 0,
+      "local_output": "data/research/hardware_systems_20261020/inventory-2.txt",
+      "sha256": "27913d45b3a4a86893d71d539c8a8dfd0f9206444e241e73d7c71c2c3b26ecb2"
+    },
+    {
+      "command": [
+        "bash",
+        "-lc",
+        "command -v nsys; command -v ibstat; command -v ibv_devinfo; command -v nvcc; command -v verilator"
+      ],
+      "returncode": 1,
+      "local_output": "data/research/hardware_systems_20261020/inventory-3.txt",
+      "sha256": "e24b1ea69ed5a4d1119cf244277664f28cf7653d8fe476e9cef5c0232af10bee"
+    }
+  ],
+  "limitations": [
+    "Enumeration is not a calibrated benchmark",
+    "No second host or end-to-end RDMA fabric verified",
+    "Reported link rate is not measured goodput"
+  ],
+  "tools_in_current_path": {
+    "nsys": null,
+    "ibstat": "/usr/sbin/ibstat",
+    "ibv_devinfo": "/usr/bin/ibv_devinfo",
+    "nvcc": null,
+    "verilator": null
+  },
+  "topology_summary": {
+    "nvlink_labels_seen": false,
+    "gpu3_to_nic0": "PIX",
+    "gpu0_to_nic0": "SYS",
+    "scope": "Reported attachment classes, not measured transfer rates"
+  }
+}

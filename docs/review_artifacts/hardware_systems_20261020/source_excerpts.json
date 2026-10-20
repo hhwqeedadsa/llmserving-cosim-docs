@@ -1,0 +1,212 @@
+[
+  {
+    "source_id": "deepep_v121_readme",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/README.md",
+    "sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+    "git_blob_sha": "211cace8dcaef15b8b2784ccfd179331e2d488df",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "forwarding data from NVLink domain to RDMA domain",
+        "line_in_snapshot_or_extracted_text": 5,
+        "excerpt": "To align with the group-limited gating algorithm proposed in the [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) paper, DeepEP offers a set of kernels optimized for asymmetric-domain bandwidth forwarding, such as forwarding data from NVLink domain to RDMA domain. These kernels deliver high throughput, making them suitable for both training and inference prefilling tasks. Additionally, they support SM (Streaming Multiprocessors) number control."
+      },
+      {
+        "pattern": "Ampere (SM80)",
+        "line_in_snapshot_or_extracted_text": 45,
+        "excerpt": "- Ampere (SM80), Hopper (SM90) GPUs, or other architectures with SM90 PTX ISA support"
+      },
+      {
+        "pattern": "hook-based communication-computation",
+        "line_in_snapshot_or_extracted_text": 7,
+        "excerpt": "For latency-sensitive inference decoding, DeepEP includes a set of low-latency kernels with pure RDMA to minimize delays. The library also introduces a hook-based communication-computation overlapping method that does not occupy any SM resource."
+      }
+    ]
+  },
+  {
+    "source_id": "deepep_v121_buffer",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/deep_ep/buffer.py",
+    "sha256": "e1be2065c2fddacf8c88adc303c22cbc642f27930efd98a81716d2fc2bebd94c",
+    "git_blob_sha": "505e9b8087c1570696b78324424183a52cf018e4",
+    "commit": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "def set_num_sms",
+        "line_in_snapshot_or_extracted_text": 144,
+        "excerpt": "def set_num_sms(new_num_sms: int) -> None:"
+      },
+      {
+        "pattern": "num_qps_per_rank: int",
+        "line_in_snapshot_or_extracted_text": 34,
+        "excerpt": "low_latency_mode: bool = False, num_qps_per_rank: int = 24,"
+      },
+      {
+        "pattern": "num_nvl_bytes: int",
+        "line_in_snapshot_or_extracted_text": 33,
+        "excerpt": "num_nvl_bytes: int = 0, num_rdma_bytes: int = 0,"
+      },
+      {
+        "pattern": "async_finish: the current stream",
+        "line_in_snapshot_or_extracted_text": 288,
+        "excerpt": "async_finish: the current stream will not wait for the communication kernels to be finished if set."
+      }
+    ]
+  },
+  {
+    "source_id": "deepep_readme",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/main/README.md",
+    "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+    "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "EP dispatch and combine require GPU SMs",
+        "line_in_snapshot_or_extracted_text": 39,
+        "excerpt": "- EP dispatch and combine require GPU SMs; zero-SM RDMA EP is not supported"
+      },
+      {
+        "pattern": "NVIDIA Hopper or newer GPUs",
+        "line_in_snapshot_or_extracted_text": 49,
+        "excerpt": "- NVIDIA Hopper or newer GPUs"
+      },
+      {
+        "pattern": "NCCL Gin backend",
+        "line_in_snapshot_or_extracted_text": 20,
+        "excerpt": "- **V2 release**: A complete refactoring of expert parallelism, with support for larger scale-up and scale-out domains and the lightweight **NCCL Gin backend**."
+      }
+    ]
+  },
+  {
+    "source_id": "accelsim_readme",
+    "url": "https://github.com/accel-sim/accel-sim-framework/blob/dev/README.md",
+    "sha256": "790f843930192329614c2e8b89da95c4a641f2944eb49d5e684fb3d9c616eb87",
+    "git_blob_sha": "bbcbeaf06b30ce0920db4fe2f339cacb8a7f6ce5",
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "It traces real SASS execution",
+        "line_in_snapshot_or_extracted_text": 6,
+        "excerpt": "It traces real SASS execution from NVIDIA hardware with NVBit and replays it on a detailed performance model (GPGPU-Sim 4.x), together with the AccelWattch power model."
+      },
+      {
+        "pattern": "H100-SASS",
+        "line_in_snapshot_or_extracted_text": 207,
+        "excerpt": "Pick a config: `H100-SASS` / `H200-SASS` for Hopper, or `QV100-SASS`, `A100-SASS`, etc. (see [`define-standard-cfgs.yml`](./util/job_launching/configs/define-standard-cfgs.yml))."
+      },
+      {
+        "pattern": "99% Pearson",
+        "line_in_snapshot_or_extracted_text": 19,
+        "excerpt": "> Validated across **34,000+ kernel instances** from **22 benchmark suites**, Accel-Sim 2.0 achieves a **99% Pearson correlation** and just **13.4% mean absolute cycle error** against real NVIDIA H100 silicon."
+      }
+    ]
+  },
+  {
+    "source_id": "simbricks_readme",
+    "url": "https://github.com/simbricks/simbricks/blob/main/README.md",
+    "sha256": "2dedc88a554d05f2ca1528a92bec86dae31d32812a494b51088ebfab9c730832",
+    "git_blob_sha": "7dd7e1a18d600969727f1349bca54f007b411fdb",
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "It modularly combines",
+        "line_in_snapshot_or_extracted_text": 12,
+        "excerpt": "simulation. It modularly combines and connects battle-tested simulators for the"
+      },
+      {
+        "pattern": "including applications, operating systems, and hardware RTL.",
+        "line_in_snapshot_or_extracted_text": 15,
+        "excerpt": "including applications, operating systems, and hardware RTL."
+      }
+    ]
+  },
+  {
+    "source_id": "firesim_readme",
+    "url": "https://github.com/firesim/firesim/blob/main/README.md",
+    "sha256": "dc76baa254a2725f5eff2584be66669ce63727f1aa5cff979448e76ba7188a0d",
+    "git_blob_sha": "dc752eb6dc7cb351e132e124710bdd54affc9bd7",
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "ASIC RTL with cycle-accurate",
+        "line_in_snapshot_or_extracted_text": 35,
+        "excerpt": "ASIC RTL with cycle-accurate hardware and software models for other system components (e.g. I/Os). FireSim can productively"
+      },
+      {
+        "pattern": "RISC-V",
+        "line_in_snapshot_or_extracted_text": 69,
+        "excerpt": "open RTL for RISC-V processors with a custom cycle-accurate network simulation."
+      }
+    ]
+  },
+  {
+    "source_id": "gem5_gpu",
+    "url": "https://www.gem5.org/documentation/general_docs/gpu_models/gpufs",
+    "sha256": "3fad45bea515c9fdcacaebca051a17afd5f65eebaf1bc55f94292549f42391ea",
+    "git_blob_sha": null,
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "Full System AMD GPU model",
+        "line_in_snapshot_or_extracted_text": 13,
+        "excerpt": "gem5: Full System AMD GPU model"
+      },
+      {
+        "pattern": "The ROCm software stack limits usage",
+        "line_in_snapshot_or_extracted_text": 497,
+        "excerpt": "The Full System GPU model is primarily designed to simulate discrete GPUs using a native software stack without modification. This means that the CPU portion of simulation is not configured for detailed simulation – only the GPU is detailed. The ROCm software stack limits usage to officially supported gfx9 devices listed in the ROCm documentation . Currently gem5 provides configurations for Vega10 (gfx900), MI210/MI250X (gfx90a), and MI300X (gfx942)."
+      }
+    ]
+  },
+  {
+    "source_id": "gpudirect",
+    "url": "https://docs.nvidia.com/cuda/gpudirect-rdma/index.html",
+    "sha256": "5c6a0e936d8c2414774e92d3128bb4f16b65be0f90dc6f06f32103f009cd5713",
+    "git_blob_sha": null,
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "Only CUDA synchronization and work submission APIs",
+        "line_in_snapshot_or_extracted_text": 539,
+        "excerpt": "Only CUDA synchronization and work submission APIs provide memory ordering of GPUDirect RDMA operations."
+      },
+      {
+        "pattern": "PCIe switches only",
+        "line_in_snapshot_or_extracted_text": 474,
+        "excerpt": "PCIe switches only"
+      },
+      {
+        "pattern": "Only CPU initiated CUDA APIs",
+        "line_in_snapshot_or_extracted_text": 546,
+        "excerpt": "Only CPU initiated CUDA APIs provide ordering of GPUDirect memory operations as observed by the GPU. That is, despite a third party device having issued all PCIE transactions, a running GPU kernel or copy operation may observe stale data or data that arrives out-of-order until a subsequent CPU initiated CUDA work submission or synchronization API. To ensure that memory updates are visible to CUDA kernels or copies, an implementation should ensure that all writes to the GPU BAR happen before control is returned to the CPU thread which will invoke the dependent CUDA API."
+      }
+    ]
+  },
+  {
+    "source_id": "simbricks_arch",
+    "url": "https://docs.simbricks.io/learn/simulator-integration/",
+    "sha256": "c504f6008ba3af5a4e89b5904bd0858f7c92cde253be9dda9cd1fdcd2e04dd30",
+    "git_blob_sha": null,
+    "commit": null,
+    "scope": "Author documentation/source statements; not independently reproduced benchmark results",
+    "snippets": [
+      {
+        "pattern": "An Adapter inside the simulator",
+        "line_in_snapshot_or_extracted_text": 380,
+        "excerpt": "An Adapter inside the simulator that implements the SimBricks protocol for the interfaces"
+      },
+      {
+        "pattern": "PCIe, Ethernet, memory",
+        "line_in_snapshot_or_extracted_text": 381,
+        "excerpt": "the simulator exposes (e.g. PCIe, Ethernet, memory) — see"
+      }
+    ]
+  }
+]

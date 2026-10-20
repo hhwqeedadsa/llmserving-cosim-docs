@@ -1,0 +1,85 @@
+{
+  "status": "passed",
+  "date": "2026-10-20",
+  "timezone": "Asia/Shanghai",
+  "requirements": {
+    "use_user_template": {
+      "proven": true,
+      "sha256": "fb20958128a2d2bac52d37fb679a6a452bfb22bb199cac9da27d56b08910d550",
+      "design_parts_byte_identical": 26,
+      "cover_uses_original_cover_layout": true,
+      "both_content_slides_use_original_content_layout": true
+    },
+    "three_pages_of_material": {
+      "proven": true,
+      "pptx_slides": 3,
+      "pdf_pages": 3,
+      "cover_pages": 1,
+      "content_pages": 2
+    },
+    "cover_identity": {
+      "proven": true,
+      "name": "李润宇",
+      "research": "MoE推理网络仿真",
+      "date": "2026年10月20日"
+    },
+    "current_fullstack_approach": {
+      "proven": true,
+      "evidence": "slide2 native task/feedback diagram; notes match manuscript"
+    },
+    "proposed_details": {
+      "proven": true,
+      "evidence": "slide3 four explicitly proposed network modeling dimensions and controlled validation route"
+    },
+    "scaleup_and_scaleout": {
+      "proven": true,
+      "evidence": "both paths present on content slides and in matching notes"
+    },
+    "companion_manuscript": {
+      "proven": true,
+      "formats": [
+        "Markdown",
+        "DOCX",
+        "PDF",
+        "PowerPoint notes"
+      ],
+      "pdf_pages": 3,
+      "all_body_text_matches": true
+    },
+    "rendered_content_complete": {
+      "proven": true,
+      "evidence": "PDF extraction contains every visible shape line and every manuscript paragraph"
+    }
+  },
+  "editable_native_shapes": true,
+  "notes_characters": [
+    184,
+    954,
+    905
+  ],
+  "source_hashes_unchanged": true,
+  "pptx_docx_rebuild_byte_identical": true,
+  "template_unchanged": true,
+  "slides_renderer": "LibreOffice Impress 24.2.7.2",
+  "manuscript_pdf_renderer": "existing Matplotlib PDF backend",
+  "docx_validation": "OOXML package, exact body content, two explicit page breaks; no Writer/Word render on this machine",
+  "raster_previews": [
+    "preview/manuscript-1.png",
+    "preview/slide-1.png",
+    "preview/manuscript-2.png",
+    "preview/slide-2.png",
+    "preview/slide-3.png",
+    "preview/manuscript-3.png"
+  ],
+  "visual_review": "Final slide PDF and manuscript PDF inspected from raster previews; no text truncation or overlap observed",
+  "artifacts": {
+    "MoE推理全栈联合仿真_三页_李润宇.pptx": "e8798129e005dd1bc8a59bad1c2283dde7a25a99fe38022c66b63951b04c2dc0",
+    "MoE推理全栈联合仿真_三页_李润宇.pdf": "81407b0a03c35e9e9646c169d4ca15feb510c538b1612e979468995e9233034d",
+    "配套讲稿.docx": "896334a27c53c52058e839892fc8ddc86b8a7b16d27767744c0163d412cf30c5",
+    "配套讲稿.pdf": "f72b9c5717fdd7e462ae1021cad235d253a65d2b69f6b0476961dd56dabba930",
+    "讲稿.md": "656d32191a6a4a03c89405456601cce0dda4cee3783858dc5aba35d363e661c6"
+  },
+  "new_simulations": 0,
+  "dependency_installations": 0,
+  "pushed": false
+}

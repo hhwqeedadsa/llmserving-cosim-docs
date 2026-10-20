@@ -41,7 +41,7 @@ moe-ub run --config examples/first_round/run.json --output runs/demo-run
 | 我想了解 | 阅读入口 |
 |---|---|
 | 宏观网络与微观硬件如何结合、当前ns-3缺项及系统级研究问题 | [研究报告](docs/reviews/宏微结合与硬件联合仿真研究_20261020.md)、[离线阅读版](docs/review_artifacts/hardware_systems_20261020/report.html) |
-| 用两页材料说明全栈仿真思路和拟增加的网络细节 | [PPT与配套讲稿](docs/review_artifacts/fullstack_brief_20261019/README.md) |
+| 用三页材料说明Scale-Up与Scale-Out全栈仿真、拟增加的网络细节及汇报人 | [PPT与配套讲稿](docs/review_artifacts/fullstack_brief_20261020/README.md)（[原两页版](docs/review_artifacts/fullstack_brief_20261019/README.md)） |
 | 从研究开始到当前的目标、约束、Scale-Out结果与后续路线 | [综合报告](docs/reviews/研究工作总报告_目标约束与ScaleOut网络路线_20261018.md)、[离线阅读版](docs/review_artifacts/research_summary_20261018/report.html) |
 | 安装、运行、配置与复用 | [用户指南](docs/user_guide.md) |
 | 模块协作及实际完成反馈 | [系统架构](docs/architecture.md) |

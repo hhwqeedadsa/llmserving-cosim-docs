@@ -1,0 +1,11 @@
+{
+  "input": "讲稿.md",
+  "input_sha256": "656d32191a6a4a03c89405456601cce0dda4cee3783858dc5aba35d363e661c6",
+  "output": "配套讲稿.pdf",
+  "output_sha256": "f72b9c5717fdd7e462ae1021cad235d253a65d2b69f6b0476961dd56dabba930",
+  "renderer": "existing Matplotlib PDF backend with embedded local CJK font",
+  "command": "python3 docs/review_artifacts/fullstack_brief_20261020/render_manuscript.py",
+  "renderer_sha256": "ed23f19368b113ca9ac9ba9bead998707bac2092bfdf9ac8db8bc8654f74af84",
+  "pages": 3,
+  "docx_word_writer_rendered": false
+}

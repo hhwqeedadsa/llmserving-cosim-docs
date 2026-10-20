@@ -1,0 +1,33 @@
+{
+  "working_directory": "/home/lry/moe-ub-cosim",
+  "slides_command": [
+    "libreoffice",
+    "-env:UserInstallation=file:///tmp/moe_fullstack_lo_20261020",
+    "--headless",
+    "--convert-to",
+    "pdf",
+    "--outdir",
+    "/tmp/moe_fullstack_verify_20261020",
+    "docs/review_artifacts/fullstack_brief_20261020/MoE推理全栈联合仿真_三页_李润宇.pptx"
+  ],
+  "slides_process_exit_code": 0,
+  "slides_export_verified_by": "Fresh three-page Impress PDF; extracted text matches the delivered PDF exactly. Binary PDF hashes differ, so byte-identical PDF rendering is not claimed.",
+  "manuscript_command": [
+    "python3",
+    "docs/review_artifacts/fullstack_brief_20261020/render_manuscript.py"
+  ],
+  "manuscript_process_exit_code": 0,
+  "manuscript_export_verified_by": "Delivered searchable three-page PDF, full paragraph checks and three raster previews; renderer metadata is in manuscript_render.json.",
+  "docx_writer_export": "Not available: local LibreOffice has Impress but no Writer module. DOCX OOXML and full text were checked but not visually rendered in Word or Writer.",
+  "preview_commands": [
+    "pdftoppm -scale-to 1600 -png <slides.pdf> <preview/slide>",
+    "pdftoppm -scale-to 1500 -png <manuscript.pdf> <preview/manuscript>"
+  ],
+  "verification_command": [
+    "python3",
+    "docs/review_artifacts/fullstack_brief_20261020/verify_materials.py"
+  ],
+  "verification_exit_code": 0,
+  "no_dependency_installations": true,
+  "no_simulation_runs": true
+}

@@ -118,8 +118,15 @@ def verify(directory):
             identity=m['id']; require(identity not in descriptors, 'message identity reused across waves')
             descriptors[identity]=m; flow=flows[identity]; cb=callbacks[identity]
             require(flow['src']==m['src'] and flow['dst']==m['dst'] and flow['plane']==m['plane'] and
-                    flow['bytes']==flow['source_data_payload_bytes']==m['bytes'] and flow['ack_callbacks']==1,
+                    flow['bytes']==m['bytes'] and flow['ack_callbacks']==1,
                     'message payload, path plane or completion mismatch')
+            if rdma.get('faults') or 'drop_once' in rdma:
+                require(flow.get('source_unique_data_payload_bytes')==m['bytes'] and
+                        flow.get('receiver_contiguous_bytes')==m['bytes'] and
+                        flow['source_data_payload_bytes']>=m['bytes'],
+                        'fault run must conserve unique source and accepted receiver bytes; retries counted separately')
+            else:
+                require(flow['source_data_payload_bytes']==m['bytes'], 'unexpected source retransmission in loss-free run')
             require(history['start_ns']<=flow['ready_ns']<=flow['first_tx_ns']<=flow['receive_ready_ns']<=flow['ack_ns']<=history['finished_ns'],
                     'network message time order violated')
             require(cb['send_post_ns']==flow['ready_ns'] and cb['send_callback_ns']==flow['ack_ns'] and
@@ -149,7 +156,10 @@ def verify(directory):
                     if physical[current]['kind']!='gpu':
                         require(physical[current]['plane']==m['plane'], 'packet crossed planes')
                     current=ports[current,hop['port']]['peer']
-                require(current==m['dst'], 'packet path did not reach its declared destination')
+                first_attempt_dropped=any(e[2]==current and e[4]==flow.get('first_packet_uid')
+                    for e in result.get('fault_injection',{}).get('events',[]))
+                require(current==m['dst'] or first_attempt_dropped,
+                        'first packet path neither reached destination nor ended at its injected drop')
             total_bytes+=m['bytes']
         for rank,tasks in nodes.items():
             rank=int(rank);by_id={n['id']:n for n in tasks}

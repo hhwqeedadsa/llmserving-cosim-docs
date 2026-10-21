@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+非UB的可选`packet_capture`与`fault_injection`存于`result.json`，属于全局时间和业务身份已关联的内部评价资料，不是策略输入。详细事件使用`columns`对应的数值数组，含设备发送、接收、接收错误丢弃和BEgressQueue入/出队；`complete`、`omitted_events`及`selection`说明所选范围是否完整。故障计数与详细采集开关独立，记录到达上限不停止传输。关闭详细记录且无故障时保留原结果字段。字段、序号、队列和包UID的准确口径及失败诊断入口见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
+
 非 UB `/2` 的完整形状输入及独立输出见[百卡示例](../examples/scaleout_clos128/README.md)。`result.json` 保留原消息/端口语义，新增机内链路与显式执行限额；`queue_capture=summary` 只有观测计数和峰值，没有队列时序。`log/astra_nodes.log` 为完整 ASTRA issue/callback 审计源；校验优先读取它，不与重复的诊断滚动日志合并，文件存在但不完整会拒绝。兼容旧运行时才读取 `log/log*`，早期事件被覆盖的旧结果仍会失败，不补造事件。新 `/2` 结果用紧凑流式 JSON，旧 `/1` 保留原缩进格式。
 
 非UB可选`route_replay`保存`route_evidence.json`及`routes/manifest.json`、所选原件快照，`input.json`使用运行内相对引用。`wave.json.routes`新增原层号和逐token来源（请求ID、文件ID、入口、token行、SHA-256）；`frontend.json`保存实际初始context，观察结束状态为`OBSERVATION_ENDED`，内部调度器有限长度状态另存`scheduler_state`。`capacity.json`在回放时逐rank列出按实际context计算的容量；无回放时保留原组级格式。独立核验先比对原件选择，再核算消息和执行因果。字段与完整流程见[来源回放示例](../examples/scaleout_route_replay/README.md)。

@@ -31,6 +31,33 @@ class RdmaTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'packet-switch path'):
             validate_probe(self.t,self.r,[dict(id=0,src=0,dst=4,bytes=999,plane=1,ready_ns=0)])
 
+    def test_fault_rules_validate_real_offsets_and_receive_ports(self):
+        batch=[dict(id=50000,src=0,dst=4,bytes=4000,plane=0,ready_ns=0)]
+        rule=dict(node=4,port=0,message_id=50000,kind='data',sequence=1000,start_ns=0,end_ns=5000000,count=2)
+        self.r['faults']=[rule]
+        validate_probe(self.t,self.r,batch)
+        rule['sequence']=1001
+        with self.assertRaisesRegex(ValueError,'actual data offset'):validate_probe(self.t,self.r,batch)
+        rule.update(kind='ack',node=0,sequence=4000)
+        validate_probe(self.t,self.r,batch)
+        rule['port']=1024
+        with self.assertRaisesRegex(ValueError,'node/port'):validate_probe(self.t,self.r,batch)
+
+    def test_capture_and_fault_budgets_reject_ambiguous_inputs(self):
+        self.r['packet_capture']=dict(nodes=[0,4],start_ns=0,end_ns=5000000,max_events=100)
+        validate_protocol(self.r)
+        self.r['packet_capture']['max_events']=True
+        with self.assertRaises(ValueError):validate_protocol(self.r)
+        self.r.pop('packet_capture')
+        self.r['faults']=[]
+        with self.assertRaises(ValueError):validate_protocol(self.r)
+        self.r['drop_once']=dict(message_id=0,dst_gpu=4,sequence=0)
+        with self.assertRaisesRegex(ValueError,'not both'):validate_protocol(self.r)
+        self.r.pop('faults')
+        self.r['drop_once']['dst_gpu']=8
+        with self.assertRaisesRegex(ValueError,'not a GPU'):
+            validate_probe(self.t,self.r,[dict(id=0,src=0,dst=4,bytes=4000,plane=0,ready_ns=0)])
+
     def test_ids_disjoint_across_groups_layers_steps(self):
         self.c['parallel']['groups']=[[0,2,4,6],[1,3,5,7]]
         ids=set()

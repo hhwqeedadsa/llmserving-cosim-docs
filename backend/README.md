@@ -4,6 +4,8 @@
 
 ## 构建与程序入口
 
+原生RDMA的确定性故障规则与包级记录由`Fabric`实现，消息身份仅通过原端点/端口被动关联，不写入包头。数据和ACK/NACK可在指定接收设备按次数与窗口丢弃；BEgressQueue与设备钩子的被动记录有明确上限。`scaleout rdma-diagnose`在执行结束后读取成功或失败结果，不参与调度。接口、完成/字节口径与协议限制见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
+
 非 UB Scale-Out 的独立入口位于 [rdma/](rdma/)，经公共 `scaleout rdma-build` 配置锁定 ASTRA 自带的 ns-3。`moe-rdma-probe` 做真实分组消息检查，`moe-rdma-service` 由实际 LLMServingSim 前端在线提交 Chakra 图；每 rank 保留 Sys，所有组共享 Fabric 和 Simulator。完成语义、串行构建兼容 overlay、观测及限制见[RDMA 小例](../examples/scaleout_rdma/README.md)。该入口只链接原生 RDMA ns-3；下面的生产 UB 入口及构建规则保持独立。
 
 新 [百卡配置](../examples/scaleout_clos128/README.md)以 `rdma/2` 显式声明数量和宿主预算，`topology/2` 在同一 Simulator 增加分块机内织构。跨机按源/目的地址与线端口关联，保留完整 int32 逻辑 tag，冲突时拒绝。完整节点证据为 `log/astra_nodes.log`，不使用滚动诊断日志覆盖早期事件。`Fabric::Report()` 和 `Messages::Report()` 在最终 Run 结束后仅调用一次并转移记录所有权；之后不能再次 Run 或访问已消费记录。新配置终态 JSON 紧凑流式输出，字段语义不变。

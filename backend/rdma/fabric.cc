@@ -19,21 +19,17 @@ static CustomHeader Header(Ptr<const Packet> p) {
   CustomHeader h(CustomHeader::L2_Header | CustomHeader::L3_Header | CustomHeader::L4_Header);
   h.getInt = 1; p->PeekHeader(h); return h;
 }
-class DropOnce final: public ErrorModel {
+class FaultModel final: public ErrorModel {
  public:
   static TypeId GetTypeId() {
-    static TypeId tid=TypeId("moe_rdma::DropOnce").SetParent<ErrorModel>().AddConstructor<DropOnce>();return tid;
+    static TypeId tid=TypeId("moe_rdma::FaultModel").SetParent<ErrorModel>().AddConstructor<FaultModel>();return tid;
   }
-  uint16_t port=0;uint32_t sequence=0;bool dropped=false;std::function<void()> observed;
+  std::function<bool(Ptr<Packet>)> corrupt;
  private:
   bool DoCorrupt(Ptr<Packet> p) override {
-    const auto h=Header(p);
-    if(!dropped && h.l3Prot==0x11 && h.udp.sport==port && h.udp.seq==sequence) {
-      dropped=true;observed();return true;
-    }
-    return false;
+    return corrupt(p);
   }
-  void DoReset() override { dropped=false; }
+  void DoReset() override {} // Rules belong to the Fabric's single execution.
 };
 Ipv4Address Fabric::Address(unsigned gpu, unsigned plane) const {
   return Ipv4Address(0x0b000001u + gpu * 32u + plane);
@@ -46,6 +42,24 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
           topology.at("schema_version") == "moe-scaleout-physical-topology/2", "wrong topology schema");
   Require(config.at("schema_version") == "moe-scaleout-rdma/1" || config.at("schema_version") == "moe-scaleout-rdma/2", "wrong RDMA schema");
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
+  Require(!(config.contains("drop_once") && config.contains("faults")), "choose drop_once or faults");
+  if(config.contains("packet_capture")) {
+    const auto& c=config.at("packet_capture");
+    capture_limit_=c.at("max_events");capture_start_=c.at("start_ns");capture_end_=c.at("end_ns");
+    Require(capture_limit_>0 && capture_limit_<=100000 && capture_start_>=0 && capture_end_>capture_start_ &&
+            capture_end_<=MaxSimNs(),"invalid bounded packet capture");
+    for(const auto& n:c.at("nodes"))capture_nodes_.insert(n.get<unsigned>());
+  }
+  if(config.contains("faults")) {
+    Require(config.at("faults").is_array() && config.at("faults").size()<=32,"fault rule budget exceeded");
+    for(const auto& rule:config.at("faults"))fault_rules_.push_back(rule);
+  }
+  if(config.contains("drop_once")) {
+    const auto& c=config.at("drop_once");
+    fault_rules_.push_back({{"node",c.at("dst_gpu")},{"port",0},{"message_id",c.at("message_id")},
+       {"kind","data"},{"sequence",c.at("sequence")},{"start_ns",0},{"end_ns",MaxSimNs()},{"count",1}});
+  }
+  fault_counts_.resize(fault_rules_.size(),0);
   const auto& ns = topology.at("nodes");
   const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
   const unsigned gpu_limit=limit("max_gpus",32),sw_limit=limit("max_switches",16),link_limit=limit("max_links",256);
@@ -64,6 +78,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   Require(gpu_count > 0 && gpu_count <= gpu_limit && switch_count <= sw_limit,
           "GPU/switch budget exceeded before network allocation");
+  if(config.contains("drop_once"))Require(config.at("drop_once").at("dst_gpu").get<unsigned>()<gpu_count,
+          "legacy drop destination is not a GPU");
   for (const auto& n : ns) {
     Require(n.at("id") == nodes_.GetN(), "node IDs must be contiguous");
     if(n.at("kind") == "gpu") {
@@ -109,17 +125,19 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
           {"data_packets",0u},{"ecn_ce_seen",0u},{"pfc_pause",0u},{"pfc_resume",0u},{"max_queue_at_hook_bytes",0u}};
       Require(dev->TraceConnectWithoutContext("PhyTxBegin", MakeBoundCallback(&Fabric::TxTrace,this,host,port)), "missing native PhyTxBegin");
       Require(dev->TraceConnectWithoutContext("MacRx", MakeBoundCallback(&Fabric::RxTrace,this,host,port)), "missing native MacRx");
-      Require(dev->GetQueue()->TraceConnectWithoutContext("BeqEnqueue", MakeBoundCallback(&Fabric::QueueTrace,this,host,port)), "missing BeqEnqueue");
-      Require(dev->GetQueue()->TraceConnectWithoutContext("BeqDequeue", MakeBoundCallback(&Fabric::QueueTrace,this,host,port)), "missing BeqDequeue");
+      if(capture_limit_)Require(dev->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&Fabric::DropTrace,this,host,port)),"missing native PhyRxDrop");
+      Require(dev->GetQueue()->TraceConnectWithoutContext("BeqEnqueue", MakeBoundCallback(&Fabric::QueueEnqueueTrace,this,host,port)), "missing BeqEnqueue");
+      Require(dev->GetQueue()->TraceConnectWithoutContext("BeqDequeue", MakeBoundCallback(&Fabric::QueueDequeueTrace,this,host,port)), "missing BeqDequeue");
       Require(dev->TraceConnectWithoutContext("QbbPfc", MakeBoundCallback(&Fabric::PfcTrace,this,host,port)), "missing QbbPfc");
       if(host < gpus_) {
         const unsigned plane=ns.at(peer).at("plane"); auto ip=nodes_.Get(host)->GetObject<Ipv4>();
         ip->AddAddress(ip->GetInterfaceForDevice(dev), Ipv4InterfaceAddress(Address(host,plane),Ipv4Mask("255.0.0.0")));
-        if(config.contains("drop_once") && host==config.at("drop_once").at("dst_gpu")) {
-          auto error=CreateObject<DropOnce>();error->port=10000+config.at("drop_once").at("message_id").get<unsigned>();
-          error->sequence=config.at("drop_once").at("sequence");error->observed=[this](){++fault_drops_;};
-          dev->SetAttribute("ReceiveErrorModel",PointerValue(error));
-        }
+      }
+      if(std::any_of(fault_rules_.begin(),fault_rules_.end(),[host,port](const Json& r){
+           return r.at("node")==host && (r.at("port")==0 || r.at("port")==port);})) {
+        auto error=CreateObject<FaultModel>();
+        error->corrupt=[this,host,port](Ptr<Packet> p){return Corrupt(host,port,p);};
+        dev->SetAttribute("ReceiveErrorModel",PointerValue(error));
       }
     }
   }
@@ -190,7 +208,56 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       }
     }
   }
+  for(const auto n:capture_nodes_)Require(n<nodes_.GetN(),"capture node absent from topology");
+  for(const auto& rule:fault_rules_) {
+    const unsigned n=rule.at("node"),p=rule.at("port");
+    Require(n<nodes_.GetN() && (p==0 || devices_.count({n,p})),"fault receive node/port absent from topology");
+    const std::string kind=rule.at("kind");
+    Require((kind=="data" || kind=="ack" || kind=="nack") && rule.at("count").get<unsigned>()>0 &&
+      rule.at("count").get<unsigned>()<=10000 && rule.at("start_ns").get<int64_t>()>=0 &&
+      rule.at("start_ns").get<int64_t>()<rule.at("end_ns").get<int64_t>() &&
+      rule.at("end_ns").get<int64_t>()<=MaxSimNs(),"invalid bounded fault rule");
+  }
 }
+
+// Internal, evaluation-only association. Never attach identity tags to packets.
+int64_t Fabric::PacketFlow(Ptr<const Packet> p) const {
+  const auto h=Header(p);
+  if(h.l3Prot!=0x11 && h.l3Prot!=0xfc && h.l3Prot!=0xfd)return -1;
+  const auto key=h.l3Prot==0x11?std::make_tuple(h.sip,h.dip,h.udp.sport):
+      std::make_tuple(h.dip,h.sip,h.ack.dport);
+  const auto it=port_to_flow_.find(key);
+  return it==port_to_flow_.end()?-1:static_cast<int64_t>(it->second);
+}
+void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Packet> p) {
+  if(!capture_limit_ || Now()<capture_start_ || Now()>=capture_end_ ||
+      (!capture_nodes_.empty() && !capture_nodes_.count(node)))return;
+  ++packet_observations_;
+  if(packet_events_.size()>=capture_limit_)return;
+  const auto h=Header(p);
+  const int64_t sequence=h.l3Prot==0x11?h.udp.seq:(h.l3Prot==0xfc || h.l3Prot==0xfd)?int64_t(h.ack.seq):-1;
+  packet_events_.push_back({Now(),node,port,event,static_cast<int64_t>(p->GetUid()),PacketFlow(p),
+      h.l3Prot,sequence,p->GetSize(),h.GetIpv4EcnBits(),
+      ports_.at(node).at(port).device->GetQueue()->GetNBytesTotal(),
+      h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-h.GetSerializedSize()):0});
+}
+bool Fabric::Corrupt(unsigned node,unsigned port,Ptr<Packet> p) {
+  const auto id=PacketFlow(p);if(id<0)return false;
+  const auto h=Header(p);const std::string kind=h.l3Prot==0x11?"data":h.l3Prot==0xfc?"ack":"nack";
+  const uint32_t sequence=h.l3Prot==0x11?h.udp.seq:h.ack.seq;
+  for(size_t i=0;i<fault_rules_.size();++i) {
+    const auto& r=fault_rules_[i];
+    if(r.at("node")==node && (r.at("port")==0 || r.at("port")==port) && r.at("message_id")==id &&
+       r.at("kind")==kind && r.at("sequence")==sequence && Now()>=r.at("start_ns").get<int64_t>() &&
+       Now()<r.at("end_ns").get<int64_t>() && fault_counts_[i]<r.at("count").get<unsigned>()) {
+      ++fault_counts_[i];++fault_drops_;
+      fault_events_.push_back({Now(),static_cast<int64_t>(i),node,port,static_cast<int64_t>(p->GetUid())});
+      return true; // First matching rule owns this drop; counters shared across rails.
+    }
+  }
+  return false;
+}
+void Fabric::DropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {f->PacketEvent(2,node,port,p);}
 
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");
@@ -233,6 +300,7 @@ void Fabric::CheckReceived(uint64_t id) {
   }
 }
 void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
+  f->PacketEvent(0,node,port,p);
   auto& row=f->ports_.at(node).at(port); const auto h=Header(p); const uint64_t size=p->GetSize();
   row.wire+=size;
   if(h.l3Prot==0x11)row.data+=size;else row.control+=size;
@@ -242,12 +310,17 @@ void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   auto& flow=f->flows_.at(it->second);
   if(node==flow.src) {
     if(flow.first_tx<0)flow.first_tx=Now();
+    if(flow.first_packet_uid<0)flow.first_packet_uid=p->GetUid();
     ++flow.packets;
-    flow.payload+=size-h.GetSerializedSize();
+    const uint64_t payload=size-h.GetSerializedSize();flow.payload+=payload;
+    Require(h.udp.seq<=flow.source_covered_bytes && uint64_t(h.udp.seq)+payload<=flow.bytes,
+            "source emitted a gap or bytes outside logical message");
+    flow.source_covered_bytes=std::max(flow.source_covered_bytes,uint64_t(h.udp.seq)+payload);
   }
-  if(h.udp.seq==0)flow.path.push_back({node,port,Now()});
+  if(h.udp.seq==0 && static_cast<int64_t>(p->GetUid())==flow.first_packet_uid)flow.path.push_back({node,port,Now()});
 }
 void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
+  f->PacketEvent(1,node,port,p);
   auto h=Header(p);
   if(h.l3Prot==0x11 && h.GetIpv4EcnBits()==3) {
     ++f->ports_.at(node).at(port).ecn;
@@ -272,6 +345,12 @@ void Fabric::QueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet>,
     f->queue_events_.push_back({static_cast<uint64_t>(Now()),node,port,bytes});
   }
 }
+void Fabric::QueueEnqueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p,uint32_t q) {
+  f->PacketEvent(3,node,port,p);QueueTrace(f,node,port,p,q);
+}
+void Fabric::QueueDequeueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p,uint32_t q) {
+  f->PacketEvent(4,node,port,p);QueueTrace(f,node,port,p,q);
+}
 void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
   auto& row=f->ports_.at(node).at(port);
   if(type)++row.pause;else ++row.resume;
@@ -288,7 +367,7 @@ Json Fabric::Report() {
     {"messages",Json::array()},{"ports",Json::array()},
     {"queue_events",queue_events_},{"queue_event_columns",{"time_ns","node","port","bytes"}},
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
-    {"queue_scope","BEgressQueue after enqueue/dequeue; excludes bytes already being serialized"},
+    {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
   // Numeric observer state is converted only after Run(). Sort identities so
   // hash-table lookup optimization cannot change exported ordering.
@@ -302,6 +381,13 @@ Json Fabric::Report() {
       {"ready_ns",f.ready},{"first_tx_ns",time(f.first_tx)},{"receive_ready_ns",time(f.receive_ready)},{"ack_ns",time(f.ack)},
       {"ack_callbacks",f.acked?1:0},{"source_data_packets",f.packets},{"source_data_payload_bytes",f.payload},
       {"first_packet_path",Json::array()}};
+    if(capture_limit_ || !fault_rules_.empty()) {
+      auto rx=f.local?Ptr<RdmaRxQueuePair>():drivers_[f.dst]->m_rdma->GetRxQp(Address(f.dst,f.plane).Get(),Address(f.src,f.plane).Get(),f.port,f.port,3,false);
+      row["receiver_contiguous_bytes"]=f.local?f.received_bytes:rx?rx->ReceiverNextExpectedSeq:0;
+      row["source_unique_data_payload_bytes"]=f.local?f.payload:f.source_covered_bytes;
+      row["first_packet_uid"]=f.first_packet_uid;
+      row["completion_state"]=f.acked?"complete":f.data_ready?"awaiting_sender_ack":"awaiting_contiguous_data";
+    }
     for(const auto& hop:f.path)row["first_packet_path"].push_back({{"node",hop.node},{"port",hop.port},{"time_ns",hop.time}});
     if(f.local) {
       row["transport"]="intra_host_chunked_crossbar";
@@ -317,6 +403,19 @@ Json Fabric::Report() {
       row["dcqcn_feedback_seen"]=f.feedback;row["sender_rate_at_ack_bps"]=f.rate_at_ack;
     }
     r["messages"].push_back(std::move(row));
+  }
+  if(capture_limit_) {
+    r["packet_capture"]={{"scope","evaluation_only_native_device_hooks"},{"selection",config_.at("packet_capture")},{"events",packet_events_},
+      {"columns",{"time_ns","node","port","event","packet_uid","message_id","ip_protocol","sequence","model_bytes","ecn","egress_queue_bytes","data_payload_bytes"}},
+      {"event_codes",{{"tx",0},{"rx",1},{"drop",2},{"beq_enqueue",3},{"beq_dequeue",4}}},{"protocol_codes",{{"data",17},{"ack",252},{"nack",253},{"pfc",254},{"cnp",255}}},
+      {"observations",packet_observations_},{"complete",packet_observations_==packet_events_.size()},
+      {"omitted_events",packet_observations_-packet_events_.size()},
+      {"notes","rx precedes protocol acceptance; drop is PhyRxDrop; BEgressQueue hooks exclude NIC data QP and separate high-priority ACK queue; UID is ns-3 packet lineage, not globally unique transmission; sequence is data offset or cumulative ACK/NACK next expected byte; -1 means unassociated"}};
+  }
+  if(!fault_rules_.empty()) {
+    r["fault_injection"]={{"rules",fault_rules_},{"drop_counts",fault_counts_},{"events",fault_events_},
+      {"event_columns",{"time_ns","rule_index","node","port","packet_uid"}},
+      {"scope","receive error model before MacRx; first matching rule; count shared across devices"}};
   }
   for(auto& node:ports_)for(unsigned index=1;index<node.size();++index) {
     auto& p=node[index];Json row=std::move(p.metadata);

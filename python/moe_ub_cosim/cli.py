@@ -51,6 +51,9 @@ def parser():
     run_rdma.add_argument('--protoc', default='protoc', help='Existing compiler for the pinned Chakra schema')
     verify_rdma = sc.add_parser('rdma-check', help='Audit actual token bytes, ASTRA dependencies, callbacks and next-wave scheduling')
     verify_rdma.add_argument('--run', type=Path, required=True, help='Completed native RDMA service directory')
+    diagnose_rdma = sc.add_parser('rdma-diagnose', help='Explain packet faults and outstanding callbacks in a completed or failed native run; evaluation only')
+    diagnose_rdma.add_argument('--run', type=Path, required=True, help='Native probe or service directory containing result.json, including failed runs')
+    diagnose_rdma.add_argument('--output', type=Path, required=True, help='New diagnosis JSON; input run is preserved')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -111,7 +114,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'rdma-check':
+            if args.scaleout_command == 'rdma-diagnose':
+                from .scaleout_diagnostics import diagnose
+                value = diagnose(args.run, args.output)
+            elif args.scaleout_command == 'rdma-check':
                 from .scaleout_verify import verify
                 value = verify(args.run)
             elif args.scaleout_command == 'rdma-run':

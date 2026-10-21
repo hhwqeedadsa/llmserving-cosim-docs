@@ -68,7 +68,6 @@ def validate(c, topology, rdma, replay=None):
         for group in p['groups']:
             for rank in group if replay else group[:1]:
                 capacity(c,len(group),replay.contexts(rank) if replay else None)
-    require('drop_once' not in rdma, 'fault injection is a microprobe capability, not a service recovery claim')
     # Preflight every directed pair in each plane, without using GPUs as routers.
     planes = sorted({n['plane'] for n in topology['nodes'] if n['kind'] != 'gpu'})
     probes=[]
@@ -79,8 +78,8 @@ def validate(c, topology, rdma, replay=None):
                     if src != dst:
                         probes.append(dict(id=len(probes),src=src,dst=dst,bytes=1,plane=plane,ready_ns=0))
                         if len(probes)==128:
-                            validate_probe(topology,rdma,probes);probes=[]
-    if probes:validate_probe(topology,rdma,probes)
+                            validate_probe(topology,rdma,probes,match_faults=False);probes=[]
+    if probes:validate_probe(topology,rdma,probes,match_faults=False)
     return len(gpus), len(planes)
 
 

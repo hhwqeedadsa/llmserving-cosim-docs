@@ -1,0 +1,376 @@
+{
+  "platform_base": "69612d7fd8cee4505977fad358c60e8405f2fe74",
+  "gate": {
+    "passed": true,
+    "probe_cases": 11,
+    "service_cases": 3,
+    "recovered_payload_bytes": 7000,
+    "capture_invariance": true,
+    "bounded_capture_invariance": true,
+    "failed_service_kept_result_and_frontend": true
+  },
+  "cases": {
+    "capture-bounded": {
+      "passed": true,
+      "fault_counts": [],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": false
+    },
+    "captured": {
+      "passed": true,
+      "fault_counts": [],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "early-ack": {
+      "passed": true,
+      "fault_counts": [
+        1
+      ],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "final-ack": {
+      "passed": false,
+      "fault_counts": [
+        1
+      ],
+      "completed": 0,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "lost-nack": {
+      "passed": false,
+      "fault_counts": [
+        1,
+        1
+      ],
+      "completed": 0,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "middle": {
+      "passed": true,
+      "fault_counts": [
+        1
+      ],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "plain": {
+      "passed": true,
+      "fault_counts": [],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": null
+    },
+    "repeat-middle": {
+      "passed": false,
+      "fault_counts": [
+        2
+      ],
+      "completed": 0,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "service-final-ack": {
+      "passed": false,
+      "fault_counts": [
+        1
+      ],
+      "completed": null,
+      "messages": 74,
+      "capture_complete": true
+    },
+    "service-middle": {
+      "passed": true,
+      "fault_counts": [
+        1
+      ],
+      "completed": null,
+      "messages": 160,
+      "capture_complete": true
+    },
+    "service-normal": {
+      "passed": true,
+      "fault_counts": [],
+      "completed": null,
+      "messages": 160,
+      "capture_complete": true
+    },
+    "switch-first": {
+      "passed": true,
+      "fault_counts": [
+        1
+      ],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "tail": {
+      "passed": false,
+      "fault_counts": [
+        1
+      ],
+      "completed": 0,
+      "messages": 1,
+      "capture_complete": true
+    },
+    "window-miss": {
+      "passed": true,
+      "fault_counts": [
+        0
+      ],
+      "completed": 1,
+      "messages": 1,
+      "capture_complete": true
+    }
+  },
+  "checks": [
+    {
+      "argv": [
+        "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "scaleout*test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "scaleout-unit.stdout",
+      "stderr": "scaleout-unit.stderr"
+    },
+    {
+      "argv": [
+        "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "send_state_test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "send-state-unit.stdout",
+      "stderr": "send-state-unit.stderr"
+    },
+    {
+      "argv": [
+        "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "operator_profile_test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "profile-unit.stdout",
+      "stderr": "profile-unit.stderr"
+    },
+    {
+      "argv": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "dependencies.stdout",
+      "stderr": "dependencies.stderr"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "stdout": "diff.stdout",
+      "stderr": "diff.stderr"
+    }
+  ],
+  "python_test_counts": {
+    "scaleout": 44,
+    "send_state": 4,
+    "operator_profile": 5
+  },
+  "native_sources": {
+    "backend/rdma/astra_adapter.cc": "9b9c2335da865ae9cfd36166c76ac06e781d0dadf60687028edb529aa742a589",
+    "backend/rdma/astra_adapter.hh": "0988747496ac5cd23e759718b12a75a4194736b62d281a8039be8eac6d3e3aba",
+    "backend/rdma/fabric.cc": "6c7e174d21e5be817b313498eccd85ced2b29498743df5ec3c3503403114c71b",
+    "backend/rdma/fabric.hh": "fb15dadeb83115c4b5f6e0fbbc848e9c46d037a9542cd7728d147f14b190320b",
+    "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+    "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+    "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+    "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+    "backend/rdma/service.cc": "9b29445255972e3bfc5d7cf2681c463e5406bee7c60650d207af3d6b0b99883b",
+    "backend/rdma/targets.cmake": "86211241ea29eba164095059dfdefe77b3da7721617e98fe55cf6d56b703bd7c"
+  },
+  "native_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "native_build_status": "completed",
+  "scaleup_cpp_record_test": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/dev/shm/moe-fault-20261021/send-state-test",
+      "/dev/shm/moe-fault-20261021/scaleup-records-output"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-21T09:37:01.006898+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 67108864,
+      "wall_seconds": 60.0
+    },
+    "peak_sampled_group_rss_bytes": 0,
+    "peak_sampled_processes": 0,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-fault-20261021/scaleup-records-run"
+    ],
+    "peak_sampled_artifact_bytes": 8192,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 286,
+    "peak_sampled_artifact_allocated_bytes": 8192,
+    "process_group": 1287494,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-21T09:37:01.031130+00:00",
+    "wall_seconds": 0.024229884147644043,
+    "max_waited_child_rss_kib": 9740,
+    "artifact_bytes_before_report": 286,
+    "aggregate_artifact_bytes_before_report": 8192,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 286,
+      "allocated_bytes": 8192
+    }
+  },
+  "default_probe_comparison": {
+    "passed": true,
+    "argv": [
+      "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "rdma-probe",
+      "--topology",
+      "/dev/shm/moe-fault-20261021/gate-queue-scope/topology",
+      "--config",
+      "/dev/shm/moe-fault-20261021/gate-queue-scope/plain.json",
+      "--messages",
+      "/dev/shm/moe-fault-20261021/default-messages.json",
+      "--backend",
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+      "--output",
+      "/dev/shm/moe-fault-20261021/current-default-scope"
+    ],
+    "exit_code": 0,
+    "cwd": "/home/lry/moe-ub-cosim",
+    "metadata_differences": {
+      "loaded_libraries": {
+        "previous": [
+          "linux-vdso.so.1",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-applications.so",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-point-to-point.so",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-internet.so",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-network.so",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-core.so",
+          "/lib/x86_64-linux-gnu/libstdc++.so.6",
+          "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/lib/x86_64-linux-gnu/libc.so.6",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-stats.so",
+          "/lib/x86_64-linux-gnu/libm.so.6",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-bridge.so",
+          "/dev/shm/moe-scaleout-e2e-20261015/native-03/output/lib/libns3.42-traffic-control.so",
+          "/lib64/ld-linux-x86-64.so.2"
+        ],
+        "current": [
+          "linux-vdso.so.1",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+          "/lib/x86_64-linux-gnu/libstdc++.so.6",
+          "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "/lib/x86_64-linux-gnu/libc.so.6",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+          "/lib/x86_64-linux-gnu/libm.so.6",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+          "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so",
+          "/lib64/ld-linux-x86-64.so.2"
+        ]
+      },
+      "queue_scope": {
+        "previous": "BEgressQueue after enqueue/dequeue; excludes bytes already being serialized",
+        "current": "BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"
+      }
+    },
+    "scope": "All message, port, path, callback and queue values identical; human-readable queue hook description corrected; loaded-library paths build-specific"
+  },
+  "limits": "No hardware performance calibration or full Scale-Up network rerun claimed",
+  "gate_directory": "gate-queue-scope",
+  "latest_compile": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/home/lry/tools/venv/bin/cmake",
+      "--build",
+      "/dev/shm/moe-fault-20261021/native/cmake",
+      "--target",
+      "moe-rdma-probe",
+      "moe-rdma-service",
+      "--parallel",
+      "2"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-21T09:43:16.429581+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 2147483648,
+      "per_process_address_bytes": 4294967296,
+      "artifact_bytes": 536870912,
+      "wall_seconds": 300.0
+    },
+    "peak_sampled_group_rss_bytes": 653250560,
+    "peak_sampled_processes": 10,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-fault-20261021/native"
+    ],
+    "peak_sampled_artifact_bytes": 244813824,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 242113505,
+    "peak_sampled_artifact_allocated_bytes": 244813824,
+    "process_group": 1289436,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-21T09:43:26.247801+00:00",
+    "wall_seconds": 9.818222623318434,
+    "max_waited_child_rss_kib": 612868,
+    "artifact_bytes_before_report": 54558,
+    "aggregate_artifact_bytes_before_report": 244813824,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 242113505,
+      "allocated_bytes": 244813824
+    }
+  }
+}

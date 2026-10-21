@@ -16,12 +16,12 @@ int main(int argc,char** argv) {
     auto messages=ReadJson(argv[3]);Require(messages.is_array() && messages.size()<=128,"message budget exceeded");
     unsigned done=0;
     for(const auto& m:messages) {
-      const auto start=m.at("ready_ns").get<int64_t>();Require(start>=0 && start<5000000,"message start outside time budget");
+      const auto start=m.at("ready_ns").get<int64_t>();Require(start>=0 && start<fabric.MaxSimNs(),"message start outside time budget");
       ns3::Simulator::Schedule(ns3::NanoSeconds(start),[&fabric,&done,m](){
         fabric.Send(m.at("id"),m.at("src"),m.at("dst"),m.at("bytes"),m.at("plane"),[&done](){++done;});
       });
     }
-    ns3::Simulator::Stop(ns3::MilliSeconds(5));ns3::Simulator::Run();
+    ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
     auto report=fabric.Report();report["completed_messages"]=done;report["loaded_libraries"]=Json::array();
     dl_iterate_phdr(Libraries,&report["loaded_libraries"]);
     const bool passed=done==messages.size() && fabric.Drained();report["passed"]=passed;

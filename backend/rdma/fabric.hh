@@ -46,7 +46,8 @@ class Fabric {
     uint64_t received_bytes=0;
     uint16_t port=0;
     int64_t ready=0,first_tx=-1,receive_ready=-1,ack=-1;
-    uint64_t packets=0,payload=0,chunks=0,rate_at_ack=0;
+    uint64_t packets=0,payload=0,chunks=0,rate_at_ack=0,source_covered_bytes=0;
+    int64_t first_packet_uid=-1;
     bool local=false,feedback=false;
     int64_t ingress_start=-1,ingress_end=-1,egress_start=-1,egress_end=-1;
     std::vector<Hop> path;
@@ -63,11 +64,17 @@ class Fabric {
   static void Noop();
   static void TxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void RxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
+  static void DropTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void QueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
+  static void QueueEnqueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
+  static void QueueDequeueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void PfcTrace(Fabric*, unsigned, unsigned, uint32_t);
   void Acked(ns3::Ptr<ns3::RdmaQueuePair> qp);
   void CheckReceived(uint64_t id);
   void SendLocal(uint64_t id);
+  int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
+  void PacketEvent(unsigned event, unsigned node, unsigned port, ns3::Ptr<const ns3::Packet>);
+  bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
   ns3::Ipv4Address Address(unsigned gpu, unsigned plane) const;
   Json topology_, config_;
   ns3::NodeContainer nodes_;
@@ -84,5 +91,13 @@ class Fabric {
   uint64_t queue_observations_=0;
   unsigned gpus_ = 0, planes_ = 0;
   unsigned fault_drops_ = 0;
+  std::vector<Json> fault_rules_;
+  std::vector<uint64_t> fault_counts_;
+  std::vector<std::array<int64_t,5>> fault_events_;
+  std::vector<std::array<int64_t,12>> packet_events_;
+  uint64_t packet_observations_ = 0;
+  std::set<unsigned> capture_nodes_;
+  uint64_t capture_limit_ = 0;
+  int64_t capture_start_ = 0, capture_end_ = 0;
 };
 }

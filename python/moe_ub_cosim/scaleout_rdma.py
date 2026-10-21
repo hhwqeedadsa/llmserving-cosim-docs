@@ -36,8 +36,8 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + (' drop_once' if 'drop_once' in c else ''), 'RDMA protocol')
-    limits(c)
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture') if key in c), 'RDMA protocol')
+    budget=limits(c)
     require(c['schema_version'] in ('moe-scaleout-rdma/1','moe-scaleout-rdma/2') and type(c['cc_mode']) is int and c['cc_mode'] == 1,
             'only explicit native DCQCN mode 1 is currently supported')
     for key, minimum, maximum in [('payload_bytes', 64, 9000), ('chunk_bytes', 1, 1048576),
@@ -55,10 +55,34 @@ def validate_protocol(c):
         integer(row['kmax_bytes'], 'kmax_bytes', row['kmin_bytes'], 16777216)
         require(type(row['pmax']) in (int, float) and 0 <= row['pmax'] <= 1, 'invalid ECN pmax')
     if 'drop_once' in c:
+        require('faults' not in c, 'choose drop_once or faults, not both')
         fields(c['drop_once'], 'message_id dst_gpu sequence', 'bounded fault injection')
         integer(c['drop_once']['message_id'], 'drop message', 0, 49999)
         integer(c['drop_once']['dst_gpu'], 'drop destination', 0, 31)
         integer(c['drop_once']['sequence'], 'drop byte sequence', 0, 67108863)
+    if 'faults' in c:
+        require(isinstance(c['faults'],list) and 1<=len(c['faults'])<=32, 'expected 1..32 bounded fault rules')
+        for rule in c['faults']:
+            fields(rule, 'node port message_id kind sequence start_ns end_ns count', 'fault rule')
+            integer(rule['node'], 'fault receive node', 0, budget['max_gpus']+budget['max_switches']-1)
+            integer(rule['port'], 'fault receive port (0=all)', 0, 1024)
+            integer(rule['message_id'], 'fault message', 0, 2**31-1)
+            require(rule['kind'] in ('data','ack','nack'), 'fault kind must be data, ack or nack')
+            integer(rule['sequence'], 'fault byte sequence', 0, 67108864)
+            integer(rule['start_ns'], 'fault start_ns', 0, budget['max_sim_ns']-1)
+            integer(rule['end_ns'], 'fault end_ns', rule['start_ns']+1, budget['max_sim_ns'])
+            integer(rule['count'], 'fault count', 1, 10000)
+    if 'packet_capture' in c:
+        capture=c['packet_capture']
+        fields(capture, 'nodes start_ns end_ns max_events', 'packet capture')
+        require(isinstance(capture['nodes'],list) and len(capture['nodes'])<=budget['max_gpus']+budget['max_switches'],
+                'capture nodes must be a bounded list (empty means all)')
+        for node in capture['nodes']:
+            integer(node,'capture node',0,budget['max_gpus']+budget['max_switches']-1)
+        require(len(set(capture['nodes']))==len(capture['nodes']), 'duplicate capture node')
+        integer(capture['start_ns'], 'capture start_ns', 0, budget['max_sim_ns']-1)
+        integer(capture['end_ns'], 'capture end_ns', capture['start_ns']+1, budget['max_sim_ns'])
+        integer(capture['max_events'], 'capture max_events', 1, 100000)
 
 
 def monitored(command, output, artifacts, *, build=False, runtime=None):
@@ -156,7 +180,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     return result
 
 
-def validate_probe(t, c, batch):
+def validate_probe(t, c, batch, *, match_faults=True):
     validate_protocol(c)
     budget=limits(c)
     require(t.get('schema_version') in ('moe-scaleout-physical-topology/1','moe-scaleout-physical-topology/2'), 'wrong physical graph schema')
@@ -169,6 +193,14 @@ def validate_probe(t, c, batch):
     require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}
+    if 'drop_once' in c:
+        require(c['drop_once']['dst_gpu'] in gpus, 'legacy drop destination is not a GPU')
+    for node in c.get('packet_capture',{}).get('nodes',[]):
+        require(node in by_id, 'capture node absent from topology')
+    for rule in c.get('faults',[]):
+        require(rule['node'] in by_id and (rule['port']==0 or any(
+            link[side]==rule['node'] and link[side+'_port']==rule['port']
+            for link in t['links'] for side in ('src','dst'))), 'fault receive node/port absent from topology')
     for link in t['links']:
         adjacency[link['src']].append(link['dst'])
         adjacency[link['dst']].append(link['src'])
@@ -182,7 +214,7 @@ def validate_probe(t, c, batch):
         require(m['src'] in gpus and m['dst'] in gpus and m['src'] != m['dst'], 'invalid endpoint pair')
         integer(m['bytes'], 'message bytes', maximum=67108864)
         integer(m['plane'], 'message plane', minimum=0, maximum=15)
-        integer(m['ready_ns'], 'message ready_ns', minimum=0, maximum=4999999)
+        integer(m['ready_ns'], 'message ready_ns', minimum=0, maximum=budget['max_sim_ns']-1)
         seen, todo = {m['src']}, [m['src']]
         while todo:
             for peer in adjacency[todo.pop()]:
@@ -195,11 +227,21 @@ def validate_probe(t, c, batch):
                 if by_id[peer]['plane'] == m['plane']:
                     seen.add(peer); todo.append(peer)
         require(m['dst'] in seen, 'message has no packet-switch path in the selected rail/plane')
-    if 'drop_once' in c:
+    if 'drop_once' in c and match_faults:
         fault=c['drop_once']; selected=[m for m in batch if m['id']==fault['message_id']]
         require(len(selected)==1 and selected[0]['dst']==fault['dst_gpu'] and
                 fault['sequence']<selected[0]['bytes'] and fault['sequence']%c['payload_bytes']==0,
                 'drop rule does not identify one actual destination data packet')
+    if match_faults:
+        for rule in c.get('faults',[]):
+            selected=[m for m in batch if m['id']==rule['message_id']]
+            require(len(selected)==1, 'fault message absent from probe')
+            m=selected[0]
+            if rule['kind']=='data':
+                require(rule['sequence']<m['bytes'] and rule['sequence']%c['payload_bytes']==0,
+                        'fault sequence is not an actual data offset')
+            else:
+                require(rule['sequence']<=m['bytes'], 'fault ACK/NACK sequence exceeds message bytes')
 
 
 def probe(topology, config, messages, backend, output):

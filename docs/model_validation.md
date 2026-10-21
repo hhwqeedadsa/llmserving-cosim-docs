@@ -20,7 +20,7 @@
 
 独立 `scaleout rdma-run` 入口执行 ready-KV MoE Decode 片段，不沿用以下完整 MLA/CANN 模型：默认 H=1024、FFN=4096、16 专家、Top-K=2、2 层4轮；attention/pack/expert/merge 为显式声明成本，GPU 类型仅是标签。context 用于请求与有限 KV 声明，不自动外推 attention 耗时。专家权重和 MHA 尺寸 KV 只覆盖该片段，不证明整模型可装入 A100 80GB。
 
-通信按 token×expert 分别计贡献，同 rank 项本地完成，其余按 rank 聚合为不等长直接成对 All-to-All-v；不声称复现 NCCL 或 DeepEP 算法。全部组与轮次共用唯一原生 RDMA ns-3。连续接收完整字节放行 RECV，完整 ACK 结束 SEND；实际事件推进 ASTRA 和下一轮 LLMServingSim 调度。合成路由、有限片段功能验证、硬件校准分别说明。延迟 ACK 未验证；尾包丢失无自动恢复的失败病例已保留，因此服务实验限定无故障。输入、输出和资源范围见[非 UB 小例](../examples/scaleout_rdma/README.md)。
+通信按 token×expert 分别计贡献，同 rank 项本地完成，其余按 rank 聚合为不等长直接成对 All-to-All-v；不声称复现 NCCL 或 DeepEP 算法。全部组与轮次共用唯一原生 RDMA ns-3。连续接收完整字节放行 RECV，完整 ACK 结束 SEND；实际事件推进 ASTRA 和下一轮 LLMServingSim 调度。合成路由、有限片段功能验证、硬件校准分别说明。延迟ACK未验证；当前锁定协议存在尾包、最终ACK和NACK丢失后可能停滞的限制。服务主基线仍是无故障；另提供确定性故障注入与失败诊断，不声称生产RDMA恢复精度。输入、输出和资源范围见[非 UB 小例](../examples/scaleout_rdma/README.md)与[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
 ### 完整 Decode 图
 

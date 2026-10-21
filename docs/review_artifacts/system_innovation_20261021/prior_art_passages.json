@@ -1,0 +1,287 @@
+[
+  {
+    "id": "lina",
+    "url": "https://arxiv.org/html/2210.17223v2",
+    "text_sha256": "3b5c3a808a5ba956a7d281f5e303dcb5eaa41034c0cdc42cb735c984c1917dad",
+    "passages": [
+      {
+        "search": "Lina tackles the design challenge",
+        "start_character": 29361,
+        "end_character": 30561,
+        "excerpt": " so these overheads can be largely overlapped with MoE computation.\n5.2 Popularity based Scheduling\nLina tackles the design challenge by exploiting the token-level expert selection pattern which we empirically establish now. Building upon this, we design a resource scheduler that replicates popular experts on proportionally more devices in order to better balance the workload.\nPattern in expert selection.\nExperts in MoE models are trained to specialize in different types of input. We find that a token’s expert selection demonstrates a pattern across the MoE layers. Tokens that have selected the same expert in layer ii tend to select the same expert again in layer i+1i+1.\nWe trace the expert selection of sampled tokens.\nFor each group of tokens that have selected the same expert in layer ii, we calculate the ratio of them that in the next layer also select one of the same top-kk experts ranked locally among the same group.\nFigure 9 plots this ratio averaged over token groups in two 12-layer MoE models.\nWe see 41.94% tokens exhibit this pattern when kk is 1 and 54.59% when kk is 2, and deeper layers see more tokens with this pattern.\nThis observation makes intuition sense. The gating"
+      },
+      {
+        "search": "Lina schedules an allreduce micro-op",
+        "start_character": 18230,
+        "end_character": 19430,
+        "excerpt": " partition all-to-all and allreduce tensors into small chunks, each of which then forms a micro-op. Lina schedules an allreduce micro-op only when there is no all-to-all waiting or ongoing so that all-to-all is guaranteed the full network bandwidth during its lifetime. Without prior information, tensor-partitioning and micro-ops can ensure that in most cases all-to-all can launch immediately and allreduce is not deferred excessively.\nMoE inference. We propose to dynamically adjust the device allocation for experts based on the expert popularity, so that is not all-to-all is not delayed by the trailing tokens, and its bandwidth utilization across links is balanced (Section 5).\nWe exploit the expert selection pattern across adjacent layers to estimate the expert popularity.\nBased upon the estimation, Lina performs scheduling at each layer to allocates proportionally more devices for popular experts and pack unpopular ones to fewer devices, and coordinate all-to-all correspondingly.\n4 Prioritizing All-to-All Training\nWe have shown that all-to-all is slowed down significantly if it overlaps with allreduce in the backward pass in MoE training.\nLina partitions the communication operation"
+      }
+    ]
+  },
+  {
+    "id": "comet",
+    "url": "https://arxiv.org/html/2502.19811v3",
+    "text_sha256": "bc7cb38a52e09fba2e5bc24a6e8af2adbc57c9c0f481941657d15f6785ded767",
+    "passages": [
+      {
+        "search": "To this end, we present Comet",
+        "start_character": 1858,
+        "end_character": 3058,
+        "excerpt": "troduce a notable impairment of computational efficiency and the latency concealing is sub-optimal.\nTo this end, we present Comet, an optimized MoE system with fine-grained communication-computation overlapping. Leveraging data dependency analysis and task rescheduling, Comet achieves precise fine-grained overlapping of communication and computation. Through adaptive workload assignment, Comet effectively eliminates fine-grained communication bottlenecks and enhances its adaptability across various scenarios.\nOur evaluation shows that Comet accelerates the execution of a single MoE layer by 1.96×1.96\\times1.96 × and for end-to-end execution, Comet delivers a 1.71×1.71\\times1.71 × speedup on average. Comet has been adopted in the production environment of clusters with ten-thousand-scale of GPUs, achieving savings of millions of GPU hours.\n\\correspondence\nNingxin Zheng, Haibin Lin, Quan Chen, Xin Liu\n\\checkdata[Project Page]https://github.com/bytedance/flux\n1 Introduction\nRecent advancements in large language models have revolutionized multiple domains, including natural language processing [36, 35], computer vision [16] and multi-modal perception [14, 3]. These achievements demonst"
+      },
+      {
+        "search": "3.2 Adaptive Workload Assignment",
+        "start_character": 365,
+        "end_character": 1565,
+        "excerpt": "ing\n3.1.1 How to decompose the shared tensor?\n3.1.2 How to reschedule the decomposed shared tensor?\n3.2 Adaptive Workload Assignment\n3.2.1 Thread block specialization\n3.2.2 Adaptive thread block assignment\n4 Implementation\n5 Evaluation\n5.1 Experimental Setup\n5.2 Overall Performance\n5.3 Detailed Evaluation on a Single MoE Layer\n5.4 Adaptiveness to Different Configurations\n5.5 Overhead Analysis\n6 Related Work\nCommunication optimization.\nComputation-communication overlapping.\n7 Conclusion\n1]ByteDance Seed\n2]Shanghai Jiao Tong University\n\\contribution[∘]Equal Contribution\n\\contribution[*]Work done at ByteDance Seed\n\\contribution[†]Corresponding authors\nComet: Fine-grained Computation-communication Overlapping for Mixture-of-Experts\nShulai Zhang\nNingxin Zheng\nHaibin Lin\nZiheng Jiang\nWenlei Bao\nChengquan Jiang\nQi Hou\nWeihao Cui\nSize Zheng\nLi-Wen Chang\nQuan Chen\nXin Liu\n[\n[\nAbstract\nMixture-of-experts (MoE) has been extensively employed to scale large language models to trillion-plus parameters while maintaining a fixed computational cost.\nThe development of large MoE models in the distributed scenario encounters the problem of large communication overhead. The inter-device communication "
+      }
+    ]
+  },
+  {
+    "id": "analytical_overlap",
+    "url": "https://arxiv.org/html/2609.07536v1",
+    "text_sha256": "863549817a6c3dfb7b30f696d13b4b601bf131a9067fa6e31030853d9aaecaf5",
+    "passages": [
+      {
+        "search": "We present a wave-quantized analytical model",
+        "start_character": 2324,
+        "end_character": 3524,
+        "excerpt": "\nconfiguration, potentially causing a communication backlog or reducing expert\ncompute parallelism.\nWe present a wave-quantized analytical model and\nlaunch-time resource manager for dependency-coupled overlap pipelines. Using\nthe current routed-tile counts, kernel occupancy, GPU residency constraints,\nand split-level readiness dependencies, it selects the communication-CTA count\nand resource partition before each kernel launch without candidate execution,\nper-workload profiling, or kernel recompilation. We integrate the method into\nthe public COMET A100 implementation in the FLUX codebase.\nWe evaluate three MoE models on four NVIDIA A100 GPUs under\nseveral parallelism strategies\nat the GEMM2+GatherRS operator,\ncomplete post-router MoE layer, and complete-model prefill levels.\nAcross 15 real-p90 workloads, the analytical selector achieves 3.22% mean\nregret relative to the measured oracle with a mean solver overhead of\n0.157 μ\\mus.\nOver COMET, our method achieves geometric-mean speedups of\n2.528×2.528\\times at the GEMM2+GatherRS operator, with a maximum of\n4.218×4.218\\times; 1.771×1.771\\times at the complete post-router MoE layer,\nwith a maximum of 2.584×2.584\\times; and 1.185×1.185\\"
+      },
+      {
+        "search": "not to complete online-serving or decode throughput.",
+        "start_character": 43880,
+        "end_character": 45080,
+        "excerpt": "result sets.\nAccordingly, these results apply to the complete-model prefill boundary\ndefined above, not to complete online-serving or decode throughput.\nTABLE VI: Geometric-mean complete-model prefill speedup of ours over each\nbackend with TP=2 and EP=2.\nModel\nCOMET\nMegatron core-TE\nFastMoE TP+NCCL\nGranite\n1.336×1.336\\times\n1.064×1.064\\times\n1.151×1.151\\times\nQwen\n1.211×1.211\\times\n1.002×1.002\\times\n1.125×1.125\\times\nDeepSeek-V2-Lite\n1.232×1.232\\times\n1.026×1.026\\times\n1.176×1.176\\times\nFig. 7: Pointwise speedup with TP=2/EP=2 at the GEMM2+GatherRS operator,\ncomplete post-router MoE layer, and complete-model prefill levels. Values are\nbaseline latency divided by our latency; green and red indicate speedup and\nslowdown. Underlines mark row\nmaxima, and OOM indicates an infeasible run. Megatron and FastMoE denote\nMegatron core-TE and FastMoE TP+NCCL.\nFig. 8: Speedup over COMET across the three four-GPU TP/EP configurations.\nBars show geometric means and whiskers show pointwise ranges:\n(a) GEMM2+GatherRS operator; (b) complete post-router MoE layer;\n(c) complete-model prefill.\nIV-F Cross-Configuration Summary\nFig. 8 summarizes the speedups over COMET across\nall three TP/EP configuratio"
+      },
+      {
+        "search": "NanoFlow jointly selects",
+        "start_character": 48470,
+        "end_character": 49670,
+        "excerpt": "d be allocated and scheduled across concurrent operators, communication tasks, and tiled workloads. NanoFlow jointly selects operation order and GPU resource allocation for LLM serving through profiling- and interference-aware search [18]. Lagom uses a unified cost model and measurement-guided iterative search to configure multiple computation and communication operators in distributed LLM training [19]. DeepEP V2 analytically determines SM and queue-pair requirements for expert-parallel communication from traffic and link characteristics [20], while Stream-K analyzes the wave-quantization loss caused by unevenly distributed GEMM tiles [21]. These studies establish the importance of resource contention, communication provisioning, and discrete work waves. Our work focuses on a narrower dependency-coupled MoE operator, combining non-preemptive CTA residency, wave quantization, and fine-grained readiness dependencies to select the compute–communication allocation analytically at launch time without per-shape profiling.\nVI Conclusion\nThis paper presents a launch-time resource manager for fine-grained\ncomputation–communication overlap in distributed MoE inference. Given the\nworkload, C"
+      }
+    ]
+  },
+  {
+    "id": "patterns",
+    "url": "https://arxiv.org/html/2510.05497v5",
+    "text_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+    "passages": [
+      {
+        "search": "prefill-aware expert placement algorithm",
+        "start_character": 3421,
+        "end_character": 4621,
+        "excerpt": " speedup across four\n200B–1000B models.\nOn existing GPU systems, our insights drive the\ndesign of a prefill-aware expert placement algorithm that achieves up to 1.25x speedup on MoE computation.\nOur work presents the first comprehensive data-centric analysis of\nlarge-scale MoE models together with a concrete design study applying the\nlearned lessons. Our profiling traces are publicly available at https://huggingface.co/datasets/core12345/MoE_expert_selection_trace.\nIndex Terms: Mixture of Experts, Large Language Model, Wafer-Scale GPU, Profiling, LLM Serving System\n00footnotetext: Accepted to ISCA 2026. This is the authors’ preprint version.\nI Introduction\nLarge Language Models (LLMs) have demonstrated remarkable capabilities across diverse domains, including programming assistance [1, 2], translation [3, 4], and chatbots [5, 6].\nSince the beginning of 2025, large-scale Mixture of Experts (MoE) LLMs (200B+ model with 100+ experts) have become the leading models for frontier LLMs [7] and the most widely used open weight models.\nUnlike dense LLMs that activate all model weights uniformly, MoE models dynamically route each token to only a subset of experts, introducing substantial dat"
+      },
+      {
+        "search": "24,000",
+        "start_character": 2925,
+        "end_character": 4125,
+        "excerpt": "filing across four state-of-the-art large-scale MoE models released in 2025 (200B-1000B) using over 24,000 requests spanning diverse workloads.\nWe perform systematic analysis from both temporal and spatial perspectives and distill six key insights to guide the design of diverse serving systems.\nWe verify these insights on both future wafer-scale GPU\narchitectures and existing GPU systems.\nOn wafer-scale GPUs, lightweight architectural modifications guided by\nour insights yield a 6.6x average speedup across four\n200B–1000B models.\nOn existing GPU systems, our insights drive the\ndesign of a prefill-aware expert placement algorithm that achieves up to 1.25x speedup on MoE computation.\nOur work presents the first comprehensive data-centric analysis of\nlarge-scale MoE models together with a concrete design study applying the\nlearned lessons. Our profiling traces are publicly available at https://huggingface.co/datasets/core12345/MoE_expert_selection_trace.\nIndex Terms: Mixture of Experts, Large Language Model, Wafer-Scale GPU, Profiling, LLM Serving System\n00footnotetext: Accepted to ISCA 2026. This is the authors’ preprint version.\nI Introduction\nLarge Language Models (LLMs) have demon"
+      }
+    ]
+  },
+  {
+    "id": "megascale_infer",
+    "url": "https://arxiv.org/html/2504.02263v4",
+    "text_sha256": "3504cafca5f7d8c3e185d2b6a859083a9e9fa94327030c2dc4036731bde3d11c",
+    "passages": [
+      {
+        "search": "We present MegaScale-Infer",
+        "start_character": 1468,
+        "end_character": 2668,
+        "excerpt": "e during inference, leading to substantially lower GPU utilization and increased operational costs.\nWe present MegaScale-Infer, an efficient and cost-effective system for serving large-scale MoE models. MegaScale-Infer disaggregates attention and FFN modules within each model layer, enabling independent scaling, tailored parallelism strategies, and heterogeneous deployment for both modules.\nTo fully exploit disaggregation in the presence of MoE’s sparsity, MegaScale-Infer introduces ping-pong pipeline parallelism, which partitions a request batch into micro-batches and shuttles them between attention and FFNs for inference. Combined with distinct model parallelism for each module, MegaScale-Infer effectively hides communication overhead and maximizes GPU utilization.\nTo adapt to disaggregated attention and FFN modules and minimize data transmission overhead (e.g., token dispatch), MegaScale-Infer provides a high-performance M2N communication library that eliminates unnecessary GPU-to-CPU data copies, group initialization overhead, and GPU synchronization. Experimental results indicate that MegaScale-Infer achieves up to 1.90×\\times× higher per-GPU throughput than state-of-the-art s"
+      },
+      {
+        "search": "ping-pong pipeline",
+        "start_character": 232,
+        "end_character": 1432,
+        "excerpt": "\n2.4 Opportunities and Challenges\n3 MegaScale-Infer Overview\n4 Disaggregated Expert Parallelism\n4.1 Ping-Pong Pipeline Parallelism\n4.2 Deployment Plan Search\n4.3 Heterogeneous Deployment\n5 High-Performance M2N Communication\n6 Implementation\n7 Evaluation\n7.1 Experimental Setup\n7.2 End-to-end Experiment\n7.3 Performance of M2N Communication\n7.4 Ablation Study\n8 Deployment Experience\n9 Related Work\n10 Conclusion\n\\svgsetup\ninkscapepath=i/svg-inkscape/\n\\svgpathsvg/\n1]ByteDance Seed\n2]Peking University\n\\contribution[∘]Equal Contribution\n\\contribution[*]Work done at ByteDance Seed\n\\contribution[†]Corresponding authors\nMegaScale-Infer: Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism\nRuidong Zhu\nZiheng Jiang\nChao Jin\nPeng Wu\nCesar A. Stuardo\nDongyang Wang\nXinlei Zhang\nHuaping Zhou\nHaoran Wei\nYang Cheng\nJianzhe Xiao\nXinyi Zhang\nLingjun Liu\nHaibin Lin\nLi-Wen Chang\nJianxi Ye\nXiao Yu\nXuanzhe Liu\nXin Jin\nXin Liu\n[\n[\nAbstract\nMixture-of-Experts (MoE) showcases tremendous potential to scale large language models (LLMs) with enhanced performance and reduced computational complexity. However, its sparsely activated architecture shifts feed-forward networks (FFNs) from being "
+      }
+    ]
+  },
+  {
+    "id": "llmservingsim2",
+    "url": "https://arxiv.org/html/2602.23036v2",
+    "text_sha256": "509007c1d49de92f5bcca7067d159c12c0c681e932ddc720735862bb0ca464ef",
+    "passages": [
+      {
+        "search": "This paper presents LLMServingSim 2.0",
+        "start_character": 2883,
+        "end_character": 4083,
+        "excerpt": "rogeneous hardware and disaggregated serving techniques within a unified, runtime-driven framework.\nThis paper presents LLMServingSim 2.0, a unified system-level simulator designed to make runtime-driven hardware–software interactions in heterogeneous and disaggregated LLM serving infrastructures explicit and analyzable. LLMServingSim 2.0 embeds serving decisions and hardware behavior into a single runtime loop, enabling interaction-aware modeling of batching, routing, placement, offloading, memory management, and power consumption. The simulator supports extensible integration of emerging accelerators and memory systems through profile-based modeling, while capturing dynamic serving behavior and system-level effects. We validate LLMServingSim 2.0 against real serving deployments, showing that it reproduces key performance, memory, and power metrics with an average error of 0.95%, while maintaining practical simulation times of around 10 minutes even for complex system configurations. These results demonstrate that LLMServingSim 2.0 provides a practical bridge between hardware innovation and serving-system design, enabling systematic exploration and co-design for next-generation LL"
+      },
+      {
+        "search": "During runtime, the simulator models synchronization",
+        "start_character": 26929,
+        "end_character": 28129,
+        "excerpt": " power information, while edges encode data dependencies that determine scheduling and parallelism.\nDuring runtime, the simulator models synchronization overhead, network contention, inter-device communication, and memory access latency based on cluster topology and configuration.\nTo support cluster-scale timing and memory evaluation, LLMServingSim 2.0 builds on a modified version of ASTRA-sim [56] and Chakra [57].\nThose existing frameworks, originally designed for simple and repetitive training patterns, are insufficient for modeling dynamic LLM inference serving.\nWe therefore extend both frameworks to support heterogeneous\ncompute fabrics and operator-driven execution graphs that\ncapture the dynamics of LLM inference and support\ninference-specific parallelism, such as expert parallelism.\nIn addition, LLMServingSim 2.0 integrates a refined memory model to capture bandwidth contention, KV movement, and memory sharing with higher fidelity.\nTo enable such modeling, we extend the memory hierarchy to include device memory, host memory, storage, and CXL-attached memory, and explicitly model memory sharing to capture cluster-wide effects.\nFurthermore, we add PIM operations beyond memory "
+      }
+    ]
+  },
+  {
+    "id": "simai",
+    "url": "https://github.com/aliyun/SimAI/blob/master/README.md",
+    "text_sha256": "c9dae7ba10cf20fad4c6b43583188ebbda9d7e6de63656faccf2041a3d71375b",
+    "passages": [
+      {
+        "search": "[2025/12]",
+        "start_character": 1419,
+        "end_character": 2619,
+        "excerpt": "or).\n  - Prefill-Decode Disaggregation memory planning (independent budgets for Prefill/Decode).\n\n- [2025/12] **SimAI 1.5 Released!** This release brings end-to-end simulation for multi-request **inference** workloads. Key features include:\n\n  - **Advanced Inference Simulation:** Model complex scenarios with Prefill/Decode separation.\n  - **Modern Model Support:** Now includes DeepSeek, Qwen3Moe and Qwen3Next. See [AICB's README](./aicb/README.md) for more detailed information.\n  - **Request Scheduling:** Request scheduling is now handled by a component adapted from Microsoft's [Vidur](https://github.com/microsoft/vidur). See [Vidur-Alibabacloud's README](./vidur-alibabacloud/README.md) for more detailed information.\n\n- [2025/11] [AICB](https://github.com/aliyun/aicb/tree/master) now supports generating **prefill/decode** inference workloads for **DeepSeek**, **Qwen3-MoE** and **Qwen3-Next**.\n\n- [2025/09] [AICB](https://github.com/aliyun/aicb/tree/master) now supports generating training workloads for DeepSeek. Thanks to [@parthpower](https://github.com/parthpower) for this contribution.\n\n- [2025/06] The code of SimCCL is first released in the branch [SimCCL](https://github.com/ali"
+      },
+      {
+        "search": "[2026/09]",
+        "start_character": 263,
+        "end_character": 1463,
+        "excerpt": "svg)](https://ennanzhai.github.io/pub/nsdi25spring-simai.pdf)\n\n# Latest News\n\n### Recent Updates\n\n- [2026/09] SimAI-CLEM -- Support for running large-scale CCL with a small number of GPUs for performance diagnosis and tuning. For detailed instructions on running SimAI-CLEM, please refer to [https://github.com/aliyun/SimAI-CLEM](https://github.com/aliyun/SimAI-CLEM). The SimAI-CLEM code is divided into the following two parts:\n  - The first part is located at https://github.com/aliyun/ns-3-alibabacloud/tree/dev/clem, which contains the incremental development for ns-3.\n  - The second part is in SimAI-CLEM, which contains the adaptation for CCL to support running large-scale CCL with a small number of GPUs.\n\n- [2026/08] **SimAI 1.7 Released!** Key updates:\n  - [SimCCL](https://github.com/aliyun/SimCCL): Updated to NCCL v2.30, decoupled from the SimAI main repository, and able to generate the flow model standalone for offline analysis.\n\n- [2026/04] **SimAI 1.6 Released!** Key updates:\n  - GPU memory modeling for inference simulation (parameter counting & KV cache).\n  - Linear interpolation for decode time estimation (replacing nearest-neighbor).\n  - Prefill-Decode Disaggregation memor"
+      },
+      {
+        "search": "GPU memory modeling for inference simulation",
+        "start_character": 1164,
+        "end_character": 2364,
+        "excerpt": "e flow model standalone for offline analysis.\n\n- [2026/04] **SimAI 1.6 Released!** Key updates:\n  - GPU memory modeling for inference simulation (parameter counting & KV cache).\n  - Linear interpolation for decode time estimation (replacing nearest-neighbor).\n  - Prefill-Decode Disaggregation memory planning (independent budgets for Prefill/Decode).\n\n- [2025/12] **SimAI 1.5 Released!** This release brings end-to-end simulation for multi-request **inference** workloads. Key features include:\n\n  - **Advanced Inference Simulation:** Model complex scenarios with Prefill/Decode separation.\n  - **Modern Model Support:** Now includes DeepSeek, Qwen3Moe and Qwen3Next. See [AICB's README](./aicb/README.md) for more detailed information.\n  - **Request Scheduling:** Request scheduling is now handled by a component adapted from Microsoft's [Vidur](https://github.com/microsoft/vidur). See [Vidur-Alibabacloud's README](./vidur-alibabacloud/README.md) for more detailed information.\n\n- [2025/11] [AICB](https://github.com/aliyun/aicb/tree/master) now supports generating **prefill/decode** inference workloads for **DeepSeek**, **Qwen3-MoE** and **Qwen3-Next**.\n\n- [2025/09] [AICB](https://github.com/"
+      }
+    ]
+  },
+  {
+    "id": "clem",
+    "url": "https://github.com/aliyun/SimAI-CLEM/blob/master/README.md",
+    "text_sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8",
+    "passages": [
+      {
+        "search": "SimAI-CLEM runs the vanilla CCL directly",
+        "start_character": 194,
+        "end_character": 1394,
+        "excerpt": "tor that achieves three key goals: easy-to-deploy, high fidelity and high scalability. To this end, SimAI-CLEM runs the vanilla CCL directly on the GPU hardware, while intercepting its P2P communication primitives and redirecting them to a mature network simulator. In addition, SimAI-CLEM incorporates several optimization techniques to enable a 96x increase in emulation scale on a single GPU.\n\nWe have implemented the network simulator of SimAI-CLEM based on the ns-3 component of SimAI, and adapt it to [NCCL](https://github.com/NVIDIA/nccl) v2.23.4 and [MSCCLExecutor](https://github.com/Azure/msccl-executor-nccl) v2.23.4. Experimental results show that SimAI-CLEM is capable of accurately modeling CCL's performance under non-stationary network conditions and after the deployment of optimization strategies. SimAI-CLEM offers valuable insights for optimizing CCLs, thereby enhancing the efficiency of end-to-end LLM training and inference.\n\n## Open-Source Roadmap\n\nWe are open-sourcing SimAI-CLEM in a step-by-step manner. The plan and the current status are summarized below:\n\n| Item | Status |\n| :--- | :----- |\n| SimAI-CLEM adaptation for [NCCL](https://github.com/NVIDIA/nccl) | ✅ Complet"
+      }
+    ]
+  },
+  {
+    "id": "vidur",
+    "url": "https://github.com/microsoft/vidur/blob/main/README.md",
+    "text_sha256": "e5ad589f16aeb588676b77c11be918addc976111bbb7944112922fca647ac51c",
+    "passages": [
+      {
+        "search": "Capacity planning",
+        "start_character": 625,
+        "end_character": 1825,
+        "excerpt": "aset/blob/master/data/AzureLLMInferenceTrace_conv.csv) trace on single `A100 80GB` at 6.45 QPS*\n\n1. Capacity planning and finding the best deployment configuration for your LLM deployments.\n   ![Config Search](./assets/llama70b_Chat1M_ttft_tbt_90_99_2.0_0.2.jpeg)\n*Capacity per dollar for different deployment configurations vs TTFT-P90 and TBT-P99 for LLaMA2-70B.*\n1. Quickly test new research ideas like new scheduling algorithms, optimizations like speculative decoding, etc.\n\n... all without access to GPUs except for a quick initial profiling phase 🎉. We highly recommend checking out our [MLSys'24 paper](https://arxiv.org/abs/2405.05465) and [talk](https://mlsys.org/virtual/2024/poster/2667) for more details.\n\n\n## Supported Models\n\n__Instructions on adding a new model to existing or new SKUs can be found [here](docs/profiling.md)__.\n\n| Model / Device | A100 80GB DGX | H100 DGX | 4xA100 80GB Pairwise NVLink Node | 8xA40 Pairwise NVLink Node |\n| --- | --- | --- | --- | --- |\n| `meta-llama/Meta-Llama-3-8B` | ✅ | ❌ | ✅ | ❌ |\n| `meta-llama/Meta-Llama-3-70B` | ✅ | ❌ | ✅ | ❌ |\n| `meta-llama/Llama-2-7b-hf` | ✅ | ✅ | ✅ | ✅ |\n| `codellama/CodeLlama-34b-Instruct-hf\"` | ✅ | ✅ | ✅ | ✅ |\n| `meta-"
+      },
+      {
+        "search": "initial profiling phase",
+        "start_character": 1055,
+        "end_character": 2255,
+        "excerpt": "s, optimizations like speculative decoding, etc.\n\n... all without access to GPUs except for a quick initial profiling phase 🎉. We highly recommend checking out our [MLSys'24 paper](https://arxiv.org/abs/2405.05465) and [talk](https://mlsys.org/virtual/2024/poster/2667) for more details.\n\n\n## Supported Models\n\n__Instructions on adding a new model to existing or new SKUs can be found [here](docs/profiling.md)__.\n\n| Model / Device | A100 80GB DGX | H100 DGX | 4xA100 80GB Pairwise NVLink Node | 8xA40 Pairwise NVLink Node |\n| --- | --- | --- | --- | --- |\n| `meta-llama/Meta-Llama-3-8B` | ✅ | ❌ | ✅ | ❌ |\n| `meta-llama/Meta-Llama-3-70B` | ✅ | ❌ | ✅ | ❌ |\n| `meta-llama/Llama-2-7b-hf` | ✅ | ✅ | ✅ | ✅ |\n| `codellama/CodeLlama-34b-Instruct-hf\"` | ✅ | ✅ | ✅ | ✅ |\n| `meta-llama/Llama-2-70b-hf` | ✅ | ✅ | ✅ | ✅ |\n| `internlm/internlm-20b` | ✅ | ✅ | ✅ | ✅ |\n| `Qwen/Qwen-72B` | ✅ | ✅ | ✅ | ✅ |\n\n* All models support a maximum context length of 4k except `Llama3-8B` and `Llama3-70B` which support 16k context length by passing additional CLI params:\n\n    ```text\n    --random_forrest_execution_time_predictor_config_prediction_max_prefill_chunk_size 16384 \\\n    --random_forrest_execution_time_predictor_"
+      }
+    ]
+  },
+  {
+    "id": "tutel",
+    "url": "https://github.com/microsoft/Tutel/blob/main/README.md",
+    "text_sha256": "b741d90ef5028bf1b53d71c1aed09099dbe2bbbc5c24d46adcbbfc9acb6c6fdc",
+    "passages": [
+      {
+        "search": "a2a_ffn_overlap_degree",
+        "start_character": 16309,
+        "end_character": 17509,
+        "excerpt": "m tutel.examples.helloworld_switch --batch_size=16\n\n  >> How to:\n    self._moe_layer.forward(x, .., a2a_ffn_overlap_degree=2)  # Control the switch of overlap granularity (1 for no overlapping)\n    self._moe_layer.forward(x, .., adaptive_r=1)              # Control the switch of parallelism (0 for DP, 1 for DP + EP, W / E for MP + EP, else for DP + MP + EP)\n    self._moe_layer.forward(x, .., capacity_factor=1)         # Control the switch of capacity_volume (positive for padding, negative for no-padding, 0 for dropless)\n    self._moe_layer.forward(x, .., top_k=1)                   # Control the switch of top_k sparsity\n```\n\n> Tutel v0.1: Optimize the Einsum Complexity of Data Dispatch Encoding and Decoding, add 2DH option to deal with All-to-All at scale:\n```sh\n  >> Example (suggest enabling 2DH only at scale, note that the value of --nproc_per_node MUST equal to total physical GPU counts per node, e.g. 8 for A100x8):\n    python3 -m torch.distributed.run --nproc_per_node=8 -m tutel.examples.helloworld --batch_size=16 --use_2dh\n```\n\n-----------\n## Getting Started\n\n### 1. Prepare Pytorch (if applicable):\n```\n* Prepare Recommended Pytorch >= 2.0.0:\n        #  Windows/Linux Pytorch for"
+      },
+      {
+        "search": "Add 2DH option",
+        "start_character": 16926,
+        "end_character": 18126,
+        "excerpt": " sparsity\n```\n\n> Tutel v0.1: Optimize the Einsum Complexity of Data Dispatch Encoding and Decoding, add 2DH option to deal with All-to-All at scale:\n```sh\n  >> Example (suggest enabling 2DH only at scale, note that the value of --nproc_per_node MUST equal to total physical GPU counts per node, e.g. 8 for A100x8):\n    python3 -m torch.distributed.run --nproc_per_node=8 -m tutel.examples.helloworld --batch_size=16 --use_2dh\n```\n\n-----------\n## Getting Started\n\n### 1. Prepare Pytorch (if applicable):\n```\n* Prepare Recommended Pytorch >= 2.0.0:\n        #  Windows/Linux Pytorch for NVIDIA CUDA >= 11.7:\n        python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118\n        #  Linux Pytorch for AMD ROCm >= 6.2.2:\n        python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.2.2\n        #  Windows/Linux Pytorch for CPU:\n        python3 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu\n```\n\n### 2. Tutel Installation:\n```\n* Option-1: Install Tutel Online:\n\n        $ python3 -m pip uninstall tutel -y\n        $ python3 -m pip install -v -U --no-build-isola"
+      }
+    ]
+  },
+  {
+    "id": "deepep_v121",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/README.md",
+    "text_sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+    "passages": [
+      {
+        "search": "set_num_sms",
+        "start_character": 6923,
+        "end_character": 8123,
+        "excerpt": ": Optional[Buffer] = None\n\n# Set the number of SMs to use\n# NOTES: this is a static variable\nBuffer.set_num_sms(24)\n\n\n# You may call this function at the framework initialization\ndef get_buffer(group: dist.ProcessGroup, hidden_bytes: int) -> Buffer:\n    global _buffer\n\n    # NOTES: you may also replace `get_*_config` with your auto-tuned results via all the tests\n    num_nvl_bytes, num_rdma_bytes = 0, 0\n    for config in (Buffer.get_dispatch_config(group.size()), Buffer.get_combine_config(group.size())):\n        num_nvl_bytes = max(config.get_nvl_buffer_size_hint(hidden_bytes, group.size()), num_nvl_bytes)\n        num_rdma_bytes = max(config.get_rdma_buffer_size_hint(hidden_bytes, group.size()), num_rdma_bytes)\n\n    # Allocate a buffer if not existed or not enough buffer size\n    if _buffer is None or _buffer.group != group or _buffer.num_nvl_bytes < num_nvl_bytes or _buffer.num_rdma_bytes < num_rdma_bytes:\n        _buffer = Buffer(group, num_nvl_bytes, num_rdma_bytes)\n    return _buffer\n\n\ndef get_hidden_bytes(x: torch.Tensor) -> int:\n    t = x[0] if isinstance(x, tuple) else x\n    return t.size(1) * max(t.element_size(), 2)\n\n\ndef dispatch_forward(x: Union[torch.Tensor, Tuple[torch"
+      },
+      {
+        "search": "low-latency",
+        "start_character": 43,
+        "end_character": 1243,
+        "excerpt": " tailored for Mixture-of-Experts (MoE) and expert parallelism (EP). It provides high-throughput and low-latency all-to-all GPU kernels, which are also known as MoE dispatch and combine. The library also supports low-precision operations, including FP8.\n\nTo align with the group-limited gating algorithm proposed in the [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) paper, DeepEP offers a set of kernels optimized for asymmetric-domain bandwidth forwarding, such as forwarding data from NVLink domain to RDMA domain. These kernels deliver high throughput, making them suitable for both training and inference prefilling tasks. Additionally, they support SM (Streaming Multiprocessors) number control.\n\nFor latency-sensitive inference decoding, DeepEP includes a set of low-latency kernels with pure RDMA to minimize delays. The library also introduces a hook-based communication-computation overlapping method that does not occupy any SM resource.\n\nNotice: the implementation in this library may have some slight differences from the [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) paper.\n\n## Performance\n\n### Normal kernels with NVLink and RDMA forwarding\n\nWe test normal kernel"
+      }
+    ]
+  },
+  {
+    "id": "deepep_v2",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/main/README.md",
+    "text_sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+    "passages": [
+      {
+        "search": "Analytical SM & QP count calculation",
+        "start_character": 2483,
+        "end_character": 3683,
+        "excerpt": "with an expanded layout for grouped expert GEMMs\n  - Larger scale-up & scale-out domain support\n  - Analytical SM & QP count calculation — no more auto-tuning needed\n  - Both hybrid & direct modes remain supported\n- **Engram** (experimental, with RDMA)\n- **PP** (experimental, with RDMA)\n- **Bucket collectives** (experimental) for CP and DP (all-gather, reduce-scatter, and all-reduce)\n\n### Notes\n\n- EP dispatch and combine require GPU SMs; zero-SM RDMA EP is not supported\n- Bucket, Engram, and PP are experimental features\n- Engram requires a NCCL build providing `ncclGinOptFlagsWarpGet`\n\n## Quick start\n\n### Requirements\n\n- Linux\n- Python 3.10 and above\n- NVIDIA Hopper or newer GPUs\n- CUDA Toolkit 13.1 and above for DeepJIT compilation, with support for the target GPU\n- A C++20 compiler and standard library with `std::format` support\n- PyTorch 2.10 and above, with CUDA support\n- NCCL 2.32.3 and above\n- NVLink for intranode communication\n- RDMA network for internode communication\n\nInstallation builds the host C++ extension against the CUDA and NCCL libraries. GPU kernels are compiled by DeepJIT for the current device at runtime, so installation does not require a visible GPU or `TORCH_"
+      },
+      {
+        "search": "EP dispatch and combine require GPU SMs",
+        "start_character": 2784,
+        "end_character": 3984,
+        "excerpt": "llectives** (experimental) for CP and DP (all-gather, reduce-scatter, and all-reduce)\n\n### Notes\n\n- EP dispatch and combine require GPU SMs; zero-SM RDMA EP is not supported\n- Bucket, Engram, and PP are experimental features\n- Engram requires a NCCL build providing `ncclGinOptFlagsWarpGet`\n\n## Quick start\n\n### Requirements\n\n- Linux\n- Python 3.10 and above\n- NVIDIA Hopper or newer GPUs\n- CUDA Toolkit 13.1 and above for DeepJIT compilation, with support for the target GPU\n- A C++20 compiler and standard library with `std::format` support\n- PyTorch 2.10 and above, with CUDA support\n- NCCL 2.32.3 and above\n- NVLink for intranode communication\n- RDMA network for internode communication\n\nInstallation builds the host C++ extension against the CUDA and NCCL libraries. GPU kernels are compiled by DeepJIT for the current device at runtime, so installation does not require a visible GPU or `TORCH_CUDA_ARCH_LIST`. Keep the CUDA toolkit and host compiler available at runtime. Automatic bandwidth detection uses `nvidia-smi` and `ibstat`; `BucketBuffer` currently requires both NVLink and RDMA bandwidth to be detectable, even for a group using only one transport.\n\n### Install NCCL dependency\n\nInst"
+      }
+    ]
+  },
+  {
+    "id": "coz",
+    "url": "https://github.com/plasma-umass/coz/blob/master/README.md",
+    "text_sha256": "45443e8af612112ebe73d8e3365918d849177d1c83c2c5035db9d6c5ba22f17e",
+    "passages": [
+      {
+        "search": "Causal profiling measures optimization potential",
+        "start_character": 1063,
+        "end_character": 2263,
+        "excerpt": "s about profilers: that optimizing highly-ranked code will have the greatest impact on performance. Causal profiling measures optimization potential for serial, parallel, and asynchronous programs without instrumentation of special handling for library calls and concurrency primitives. Instead, a causal profiler uses performance experiments to predict the effect of optimizations. This allows the profiler to establish causality: \"optimizing function X will have effect Y,\" exactly the measurement developers had assumed they were getting all along.\n\nFull details of Coz are available in our paper, [Coz: Finding Code\nthat Counts with Causal Profiling\n(pdf)](http://arxiv.org/pdf/1608.03676v1.pdf), SOSP 2015, October 2015\n(recipient of a Best Paper Award).\n\n[![Coz presentation at SOSP](http://img.youtube.com/vi/jE0V-p1odPg/0.jpg)](http://www.youtube.com/watch?v=jE0V-p1odPg&t=0m28s \"Coz presentation at SOSP\")\n\n## Installation\n\n### Pre-built Packages (Recommended)\n\nDownload the latest release for your platform from the [GitHub Releases page](https://github.com/plasma-umass/coz/releases).\n\n**Debian/Ubuntu (`.deb`):**\n```shell\n# Download the .deb for your architecture (amd64 or arm64)\nsudo dp"
+      },
+      {
+        "search": "It predicts what the impact",
+        "start_character": 423,
+        "end_character": 1623,
+        "excerpt": "lers. Coz\nemploys a novel technique called *causal profiling* that measures\noptimization potential. It predicts what the impact of optimizing code\nwill have on overall throughput or latency.\n\nProfiles generated by Coz show the \"bang for buck\" of optimizing a\nline of code in an application. In the below profile, almost every\neffort to optimize the performance of this line of code directly leads\nto an increase in overall performance, making it an excellent\ncandidate for optimization efforts.\n\n![Example Coz profile](https://github.com/plasma-umass/coz/blob/master/example-coz-output.png)\n\nCoz's measurement matches developers' assumptions about profilers: that optimizing highly-ranked code will have the greatest impact on performance. Causal profiling measures optimization potential for serial, parallel, and asynchronous programs without instrumentation of special handling for library calls and concurrency primitives. Instead, a causal profiler uses performance experiments to predict the effect of optimizations. This allows the profiler to establish causality: \"optimizing function X will have effect Y,\" exactly the measurement developers had assumed they were getting all along.\n\nFull de"
+      }
+    ]
+  },
+  {
+    "id": "nanoflow",
+    "url": "https://www.usenix.org/conference/osdi25/presentation/zhu-kan",
+    "text_sha256": "cc10e2b8d8c4b0d924100d7255aeb5ae0375f60103cb57cfc640638b7362208b",
+    "passages": [
+      {
+        "search": "NanoFlow automatically identifies",
+        "start_character": 2139,
+        "end_character": 3339,
+        "excerpt": "o-batches and duplicates operations to operate on each portion independently, enabling overlapping. NanoFlow automatically identifies the number, size, ordering, and GPU resource allocation of nano-batches to minimize the execution time, while considering the interference of concurrent operations. We evaluate NanoFlow's end-to-end serving throughput on several popular models such as LLaMA-2-70B, Mixtral 8×7B, LLaMA-3-8B, etc. With practical workloads, NanoFlow provides 1.91× throughput boost compared to state-of-the-art serving systems achieving 50% to 72 % of optimal throughput across popular models.\nOSDI '25 Open Access Sponsored byKing Abdullah University of Science and Technology (KAUST)\nOpen Access Media\nUSENIX is committed to Open Access to the research presented at our events. Papers and proceedings are freely available to everyone once the event begins. Any video, audio, and/or slides that are posted after the event are also free and open to everyone. Support USENIX and our commitment to Open Access.\nBibTeX\n@inproceedings {308776,\nauthor = {Kan Zhu and Yufei Gao and Yilong Zhao and Liangyu Zhao and Gefei Zuo and Yile Gu and Dedong Xie and Zihao Ye and Keisuke Kamahori and C"
+      }
+    ]
+  },
+  {
+    "id": "aalo_paper",
+    "url": "https://www.mosharaf.com/wp-content/uploads/aalo-sigcomm15.pdf",
+    "text_sha256": "47afa803cfc334699e863b33e061cd9d11a9cf77a6f4b71537dd145fdcf5f341",
+    "passages": [
+      {
+        "search": "D-CLAS",
+        "start_character": 1886,
+        "end_character": 3086,
+        "excerpt": "                                cache allocation [11]; for the network, it means all flows\nService (D-CLAS) to separate coflows into a small num-                                 must complete for the completion of a communication stage.\nber of priority queues based on how much they have al-                                 Indeed, decreasing a coflow’s completion time (CCT) can\nready sent across the cluster. By performing prioritization                            lead to faster completion of corresponding job [20, 25, 19].\nacross queues and by scheduling coflows in the FIFO order                                 However, inter-coflow scheduling to minimize the aver-\nwithin each queue, Aalo’s non-clairvoyant scheduler reduces                            age CCT is NP-hard [20]. Existing FIFO-based solutions,\ncoflow completion times while guaranteeing starvation free-                            e.g., Baraat [25] and Orchestra [19], compromise on perfor-\ndom. EC2 deployments and trace-driven simulations show                                 mance by multiplexing coflows to avoid head-of-line block-\nthat communication stages complete 1.93× faster on aver-                               ing."
+      },
+      {
+        "search": "without prior knowledge",
+        "start_character": 13,
+        "end_character": 1213,
+        "excerpt": "                             Efficient Coflow Scheduling\n                                           Without Prior Knowledge\n\n                                                         Mosharaf Chowdhury, Ion Stoica\n                                                                             UC Berkeley\n                                                      {mosharaf, istoica}@cs.berkeley.edu\n\n\nABSTRACT                                                                               1     Introduction\nInter-coflow scheduling improves application-level commu-                              Communication is crucial for analytics at scale [19, 8, 12,\nnication performance in data-parallel clusters. However, ex-                           20, 25]. Yet, until recently, researchers and practitioners have\nisting efficient schedulers require a priori coflow informa-                           largely overlooked application-level requirements when im-\ntion and ignore cluster dynamics like pipelining, task fail-                           proving network-level metrics like flow-level fairness and\nures, and speculative executions, which limit their applica-                           flow completion time ("
+      }
+    ]
+  }
+]

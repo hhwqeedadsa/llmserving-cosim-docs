@@ -1,0 +1,103 @@
+{
+  "platform_base": "aaa0364dfe3d93b1a50c8ee384b986c98413b9c8",
+  "gate": {
+    "passed": true,
+    "probe_cases": 11,
+    "service_cases": 9,
+    "pass_observer_invariance": true,
+    "legacy_default_equivalence": true,
+    "queue_order_and_capacity": true,
+    "ack_loss_retains_owner": true,
+    "independent_source_progress": true,
+    "explicit_decision_cost": true,
+    "intra_host_excluded": true,
+    "planes_share_source_quota": true,
+    "simultaneous_ack_native_map_vs_software_release": true
+  },
+  "fault_regression": {
+    "passed": true,
+    "probe_cases": 11,
+    "service_cases": 3,
+    "recovered_payload_bytes": 7000,
+    "capture_invariance": true,
+    "bounded_capture_invariance": true,
+    "failed_service_kept_result_and_frontend": true
+  },
+  "python_unit_tests": 51,
+  "cpp_unit_gate": "FIFO/round-robin capacity, ownership, ordering and causal input checks passed",
+  "dependencies_checked": 13,
+  "public_example": {
+    "passed": true,
+    "messages": 628,
+    "finish_ns": 516907
+  },
+  "initial_dual_plane_audit_rejection": {
+    "native_passed": true,
+    "reason": "moe-ub: Scale-Out topology: resource counts do not match all reconstructed owners",
+    "fixed_in": "independent lifecycle audit; same native binary"
+  },
+  "source_sha256": {
+    "backend/communication_admission.hh": "d1deabb966fcfc3bf3817275781879960389f67eb734dc71b8cbb507980f70da",
+    "backend/rdma/fabric.cc": "6015901e1ce041811dc6baa37b50703b49162f162904e6ddcc24cf696d3dfdba",
+    "backend/rdma/fabric.hh": "a169128ea6638bba9fe1afeb3a7a8cef861e7ba97754988514007c4d15a290be",
+    "python/moe_ub_cosim/scaleout_admission.py": "55a657263cc7603e2dc939825e4cea41852317cbec97b2562479cb8f306a4da9",
+    "python/moe_ub_cosim/scaleout_rdma.py": "9f4d0c29772d57b681750480281bc3fb4d143e664845f4ee486c091875bf8b0c",
+    "python/moe_ub_cosim/scaleout_diagnostics.py": "f1f269f25e3ecea933bf8c4e25598d368e47eebf0c95850be2d97c4c8378ca4d",
+    "python/moe_ub_cosim/scaleout_verify.py": "46c60fcc9aeb43d7219ea5093281c83747f40bb11a262d641b79bb6149e9c19d",
+    "tests/unit/communication_admission_test.cc": "315993ad06743d3692ce7e8b27a80d294b6e6db65c307439231e480f30ed4f8b",
+    "tests/unit/scaleout_admission_test.py": "40742ab2284da82aeedf705fd1d7b8f6f8428e036affcdb8d944b6dac5db269d",
+    "tests/integration/check_rdma_admission.py": "e01fd72612ef5b80bba1c9bef87caa217876b8ae185820b706bcc826dc2341d4"
+  },
+  "build_resources": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "/home/lry/tools/venv/bin/cmake",
+      "--build",
+      "/dev/shm/moe-fault-20261021/native/cmake",
+      "--target",
+      "moe-rdma-probe",
+      "moe-rdma-service",
+      "--parallel",
+      "2"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-21T10:04:40.961353+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 2147483648,
+      "per_process_address_bytes": 4294967296,
+      "artifact_bytes": 536870912,
+      "wall_seconds": 300.0
+    },
+    "peak_sampled_group_rss_bytes": 702586880,
+    "peak_sampled_processes": 10,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-fault-20261021/native"
+    ],
+    "peak_sampled_artifact_bytes": 247296000,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 244559648,
+    "peak_sampled_artifact_allocated_bytes": 247296000,
+    "process_group": 1294700,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-21T10:04:52.168089+00:00",
+    "wall_seconds": 11.206738574430346,
+    "max_waited_child_rss_kib": 661148,
+    "artifact_bytes_before_report": 59751,
+    "aggregate_artifact_bytes_before_report": 247296000,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 244559648,
+      "allocated_bytes": 247296000
+    }
+  },
+  "limitations": [
+    "Software quota, not hardware NIC/QP capacity.",
+    "No full Scale-Up network rerun or hardware calibration.",
+    "Successful gate is not evidence of optimization gain."
+  ]
+}

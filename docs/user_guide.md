@@ -33,6 +33,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 Scale-Out的包级故障与失败诊断见[丢包小例](../examples/scaleout_rdma_faults/README.md)。`scaleout rdma-diagnose --run <完成或失败目录> --output <新JSON>`可读取数据/ACK/NACK丢弃和未完成回调；详细记录默认关闭，按节点、窗口与条数有界开启。
 
+每源软件并发限额、FIFO/目的端轮转及有界资源生命周期见[准入小例](../examples/scaleout_rdma_admission/README.md)。它用于研究尚未发出的通信如何等待源端额度，不等同硬件NIC容量；完整ACK后确认发送QP映射移除才归还额度，可与丢包规则组合。
+
 **非 UB Scale-Out** 使用独立的 `scaleout rdma-build`、`rdma-probe`、`rdma-run` 和 `rdma-check`，操作见[RDMA 小例](../examples/scaleout_rdma/README.md)。支持参数化 Clos/Agg、multi-rail 与双 plane，运行实际 LLMServingSim→ASTRA→单一原生 ns-3→下一轮调度。[百卡完整形状示例](../examples/scaleout_clos128/README.md)增加三层 Clos、机内共享端口、完整 48 层 GQA MoE 图及显式预算，保留旧有限片段配置。计算成本为声明值，默认使用合成路由；[来源路由回放示例](../examples/scaleout_route_replay/README.md)可用经校验的逐请求选择替换路由并比较等容量专家重排。不执行张量数值模型或训练。下面的普通 `run` 命令继续使用 UB 后端。
 
 UB 分层基线可先用 `moe-ub scaleout prepare --config examples/scaleout/prepare.json --output runs/scaleout-prepared` 生成输入，再通过既有 `resolve` 与 `run` 执行。[分层网络小例](../examples/scaleout/README.md)说明设备接入、假设的服务器共享出口、机架出口、rank 放置与路径审计。准备步骤无需原生后端，只生成输入；当前范围为单平面、单骨干 UB 网络。它不能执行 RoCE；非 UB 后端的研究范围见[源码报告](reviews/scaleout_ns3_backends_20261015.md)。

@@ -4,11 +4,13 @@
 #include "ns3/internet-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/rdma-driver.h"
+#include "../communication_admission.hh"
 #include <functional>
 #include <array>
 #include <map>
 #include <set>
 #include <unordered_map>
+#include <memory>
 
 namespace moe_rdma {
 using Json = nlohmann::json;
@@ -48,6 +50,7 @@ class Fabric {
     int64_t ready=0,first_tx=-1,receive_ready=-1,ack=-1;
     uint64_t packets=0,payload=0,chunks=0,rate_at_ack=0,source_covered_bytes=0;
     int64_t first_packet_uid=-1;
+    int64_t admitted=-1,qp_registered=-1,resource_released=-1;
     bool local=false,feedback=false;
     int64_t ingress_start=-1,ingress_end=-1,egress_start=-1,egress_end=-1;
     std::vector<Hop> path;
@@ -72,6 +75,10 @@ class Fabric {
   void Acked(ns3::Ptr<ns3::RdmaQueuePair> qp);
   void CheckReceived(uint64_t id);
   void SendLocal(uint64_t id);
+  void Inject(uint64_t id);
+  void PumpAdmission(unsigned source);
+  void ReleaseSender(uint64_t id);
+  void Lifecycle(unsigned event,uint64_t id,unsigned source);
   int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
   void PacketEvent(unsigned event, unsigned node, unsigned port, ns3::Ptr<const ns3::Packet>);
   bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
@@ -99,5 +106,13 @@ class Fabric {
   std::set<unsigned> capture_nodes_;
   uint64_t capture_limit_ = 0;
   int64_t capture_start_ = 0, capture_end_ = 0;
+  bool resource_tracking_=false;
+  std::string admission_policy_="passthrough";
+  uint32_t admission_limit_=0;
+  int64_t decision_ns_=0;
+  std::vector<std::unique_ptr<moe_cosim::CommunicationAdmission>> admission_;
+  std::vector<bool> deciding_;
+  std::vector<std::array<int64_t,8>> lifecycle_events_;
+  uint64_t lifecycle_limit_=0,lifecycle_observations_=0;
 };
 }

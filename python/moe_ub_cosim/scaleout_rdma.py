@@ -36,8 +36,10 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture') if key in c), 'RDMA protocol')
     budget=limits(c)
+    from .scaleout_admission import validate_options
+    validate_options(c)
     require(c['schema_version'] in ('moe-scaleout-rdma/1','moe-scaleout-rdma/2') and type(c['cc_mode']) is int and c['cc_mode'] == 1,
             'only explicit native DCQCN mode 1 is currently supported')
     for key, minimum, maximum in [('payload_bytes', 64, 9000), ('chunk_bytes', 1, 1048576),
@@ -147,7 +149,8 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
                           '-DProtobuf_PROTOC_EXECUTABLE=' + str(prefix / 'bin/protoc')])
     provenance = dict(native_commit=NATIVE_COMMIT, commands=[], network_executed=False,
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-        sources={str(p.relative_to(ROOT)): digest(p) for p in sorted((ROOT/'backend/rdma').glob('*')) if p.is_file()})
+        sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
+            ROOT/'backend/communication_admission.hh']) if p.is_file()})
     if previous_build is not None:
         provenance['previous_build'] = previous_build
     lock = NS3 / '.lock-ns3_linux_build'
@@ -259,5 +262,7 @@ def probe(topology, config, messages, backend, output):
     monitored(command, output/'execution', [output],runtime=limits(c))
     result = checked_json(output/'result.json', limits(c)['result_json_bytes'])
     require(result['passed'] and result['native_network_executed'], 'native probe did not finish cleanly')
+    from .scaleout_admission import audit
+    audit(result)
     return dict(passed=True, output=str(output), messages=result['completed_messages'],
                 state='native_rdma_probe_executed_not_service')

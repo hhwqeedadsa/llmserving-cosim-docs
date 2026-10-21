@@ -44,6 +44,8 @@ def verify(directory):
     frontend=checked_json(directory/'frontend.json',4194304)
     require(result['passed'] and result['drained'] and result['service']['service_finished'] and
             result['service']['active_graphs']==0, 'service did not drain')
+    from .scaleout_admission import audit
+    admission_resources=audit(result)
     libraries=[Path(x).resolve() for x in result['loaded_libraries'] if Path(x).name.startswith('libns3')]
     require(len(libraries)>=5 and len({p.parent for p in libraries})==1 and
             all(p.name.startswith('libns3.42-') and 'unified' not in p.name for p in libraries),
@@ -129,7 +131,12 @@ def verify(directory):
                 require(flow['source_data_payload_bytes']==m['bytes'], 'unexpected source retransmission in loss-free run')
             require(history['start_ns']<=flow['ready_ns']<=flow['first_tx_ns']<=flow['receive_ready_ns']<=flow['ack_ns']<=history['finished_ns'],
                     'network message time order violated')
-            require(cb['send_post_ns']==flow['ready_ns'] and cb['send_callback_ns']==flow['ack_ns'] and
+            if 'admission_granted_ns' in flow:
+                require(flow['ready_ns']<=flow['admission_granted_ns']==flow['qp_registered_ns']<=flow['first_tx_ns'] and
+                        flow['ack_ns']<=flow['sender_resource_released_ns']<=history['finished_ns'] and
+                        flow['sender_qp_present'] is False, 'sender resource/admission boundary mismatch')
+            require(cb['send_post_ns']==flow['ready_ns'] and
+                    cb['send_callback_ns']==flow.get('sender_resource_released_ns',flow['ack_ns']) and
                     cb['recv_callback_ns']==max(cb['recv_post_ns'],flow['receive_ready_ns']), 'ASTRA message callback boundary mismatch')
             is_local=(topology.get('intra_host',{}).get('enabled',False) and
                       physical[m['src']]['server']==physical[m['dst']]['server'])
@@ -197,6 +204,8 @@ def verify(directory):
     report=dict(passed=True,messages=len(flows),remote_payload_bytes=total_bytes,verified_nodes=node_count,
                 waves=len(frontend['history']),finish_ns=result['finish_ns'],
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')
+    if admission_resources['available']:
+        report['admission_resources']=admission_resources
     if 'intra_host' in topology:
         report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
                       inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)

@@ -43,6 +43,17 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   Require(config.at("schema_version") == "moe-scaleout-rdma/1" || config.at("schema_version") == "moe-scaleout-rdma/2", "wrong RDMA schema");
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
   Require(!(config.contains("drop_once") && config.contains("faults")), "choose drop_once or faults");
+  resource_tracking_=config.contains("admission") || config.contains("lifecycle_capture");
+  if(config.contains("admission")) {
+    const auto& a=config.at("admission");admission_policy_=a.at("policy");
+    admission_limit_=a.at("max_active_per_source");decision_ns_=a.at("decision_ns");
+    Require(admission_limit_<=1024 && decision_ns_>=0 && decision_ns_<=1000000 &&
+      (admission_policy_!="passthrough" || decision_ns_==0),"invalid software admission budget");
+  }
+  if(config.contains("lifecycle_capture")) {
+    lifecycle_limit_=config.at("lifecycle_capture").at("max_events");
+    Require(lifecycle_limit_>0 && lifecycle_limit_<=100000,"invalid bounded lifecycle capture");
+  }
   if(config.contains("packet_capture")) {
     const auto& c=config.at("packet_capture");
     capture_limit_=c.at("max_events");capture_start_=c.at("start_ns");capture_end_=c.at("end_ns");
@@ -98,6 +109,11 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   Require(gpus_ > 0 && gpus_ <= gpu_limit && switches <= sw_limit && planes_ <= 16, "GPU/switch/plane budget exceeded");
   adjacency_.resize(nodes_.GetN()); drivers_.resize(gpus_);ports_.resize(nodes_.GetN());
+  if(resource_tracking_) {
+    deciding_.resize(gpus_,false);
+    for(unsigned src=0;src<gpus_;++src)admission_.push_back(std::make_unique<moe_cosim::CommunicationAdmission>(
+        admission_policy_,admission_limit_,MaxMessages()));
+  }
   reachable_.resize(gpus_*gpus_*planes_,0);
   InternetStackHelper internet; internet.Install(nodes_);
   unsigned edge_index=0;
@@ -274,8 +290,55 @@ void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned
   }
   const auto key=std::make_tuple(Address(src,plane).Get(),Address(dst,plane).Get(),port);
   Require(port_to_flow_.emplace(key,id).second,"RDMA endpoint/port identity collision; change bounded identity layout");
-  drivers_[src]->AddQueuePair(src,dst,id,bytes,3,Address(src,plane),Address(dst,plane),port,port,0,
+  if(resource_tracking_) {
+    admission_.at(src)->Request({id,dst,bytes,Now()},Now());Lifecycle(0,id,src);PumpAdmission(src);
+  } else Inject(id);
+}
+void Fabric::Inject(uint64_t id) {
+  auto& f=flows_.at(id);Require(f.admitted<0,"logical transfer injected twice");f.admitted=Now();
+  if(resource_tracking_)Lifecycle(1,id,f.src);
+  drivers_[f.src]->AddQueuePair(f.src,f.dst,id,f.bytes,3,Address(f.src,f.plane),Address(f.dst,f.plane),f.port,f.port,0,
       config_.at("base_rtt_ns"),MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
+  if(resource_tracking_) {
+    Require(bool(drivers_[f.src]->m_rdma->GetQp(Address(f.dst,f.plane).Get(),f.port,3)),"native QP not registered");
+    f.qp_registered=Now();Lifecycle(2,id,f.src);
+  }
+}
+void Fabric::PumpAdmission(unsigned src) {
+  auto& queue=*admission_.at(src);
+  if(deciding_.at(src) || !queue.Pending() || !queue.Available())return;
+  if(!decision_ns_) {
+    while(auto next=queue.Take(Now()))Inject(next->id);
+    return;
+  }
+  // One source-local decision at a time. Select only from the queue that is
+  // actually ready when this declared-cost event finishes; never poll at t=0.
+  deciding_.at(src)=true;Lifecycle(6,0,src);
+  Simulator::Schedule(NanoSeconds(decision_ns_),[this,src](){
+    deciding_.at(src)=false;
+    auto next=admission_.at(src)->Take(Now());
+    if(next)Inject(next->id);
+    PumpAdmission(src);
+  });
+}
+void Fabric::Lifecycle(unsigned event,uint64_t id,unsigned src) {
+  if(!lifecycle_limit_)return;
+  ++lifecycle_observations_;
+  if(lifecycle_events_.size()>=lifecycle_limit_)return;
+  const auto& q=*admission_.at(src);
+  lifecycle_events_.push_back({Now(),event,event==6?-1:static_cast<int64_t>(id),src,
+      static_cast<int64_t>(q.Active().size()),static_cast<int64_t>(q.Pending()),q.Limit(),
+      static_cast<int64_t>(drivers_.at(src)->m_rdma->m_qpMap.size())});
+}
+void Fabric::ReleaseSender(uint64_t id) {
+  auto& f=flows_.at(id);
+  Require(f.acked && f.resource_released<0 && !drivers_[f.src]->m_rdma->GetQp(Address(f.dst,f.plane).Get(),f.port,3),
+          "credit release must follow native QP cleanup, once");
+  admission_.at(f.src)->Complete(id,Now());f.resource_released=Now();Lifecycle(5,id,f.src);
+  // Older queued work gets the returned credit before the completing graph
+  // callback can produce new work. Data-ready never releases sender credits.
+  PumpAdmission(f.src);
+  if(f.done)f.done();
 }
 
 void Fabric::Acked(Ptr<RdmaQueuePair> qp) {
@@ -286,9 +349,11 @@ void Fabric::Acked(Ptr<RdmaQueuePair> qp) {
   flow.acked=true;flow.ack=Now();
   flow.feedback=!qp->mlx.m_first_cnp;
   flow.rate_at_ack=qp->m_rate.GetBitRate();
+  if(resource_tracking_)Lifecycle(4,qp->GetTag(),flow.src);
   // RdmaHw deletes its send QP after this trace returns. Do not load the next
   // graph or submit new work inside that cleanup stack.
-  if(flow.done)Simulator::ScheduleNow(flow.done);
+  if(resource_tracking_)Simulator::ScheduleNow([this,id=qp->GetTag()](){ReleaseSender(id);});
+  else if(flow.done)Simulator::ScheduleNow(flow.done);
 }
 void Fabric::CheckReceived(uint64_t id) {
   auto& f=flows_.at(id); if(f.data_ready)return;
@@ -296,6 +361,7 @@ void Fabric::CheckReceived(uint64_t id) {
   auto rx=drivers_[f.dst]->m_rdma->GetRxQp(Address(f.dst,f.plane).Get(),Address(f.src,f.plane).Get(),port,port,3,false);
   if(rx && rx->ReceiverNextExpectedSeq>=f.bytes) {
     f.data_ready=true;f.receive_ready=Now();
+    if(resource_tracking_)Lifecycle(3,id,f.src);
     if(f.received)Simulator::ScheduleNow(f.received);
   }
 }
@@ -358,6 +424,8 @@ void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
 bool Fabric::Drained() const {
   for(const auto& flow:flows_)if(!flow.second.acked)return false;
   for(auto driver:drivers_)if(!driver->m_rdma->m_qpMap.empty())return false;
+  if(resource_tracking_)for(unsigned src=0;src<gpus_;++src)
+    if(!admission_[src]->Active().empty() || admission_[src]->Pending() || deciding_[src])return false;
   return true;
 }
 Json Fabric::Report() {
@@ -381,12 +449,18 @@ Json Fabric::Report() {
       {"ready_ns",f.ready},{"first_tx_ns",time(f.first_tx)},{"receive_ready_ns",time(f.receive_ready)},{"ack_ns",time(f.ack)},
       {"ack_callbacks",f.acked?1:0},{"source_data_packets",f.packets},{"source_data_payload_bytes",f.payload},
       {"first_packet_path",Json::array()}};
-    if(capture_limit_ || !fault_rules_.empty()) {
+    if(capture_limit_ || !fault_rules_.empty() || resource_tracking_) {
       auto rx=f.local?Ptr<RdmaRxQueuePair>():drivers_[f.dst]->m_rdma->GetRxQp(Address(f.dst,f.plane).Get(),Address(f.src,f.plane).Get(),f.port,f.port,3,false);
       row["receiver_contiguous_bytes"]=f.local?f.received_bytes:rx?rx->ReceiverNextExpectedSeq:0;
       row["source_unique_data_payload_bytes"]=f.local?f.payload:f.source_covered_bytes;
       row["first_packet_uid"]=f.first_packet_uid;
-      row["completion_state"]=f.acked?"complete":f.data_ready?"awaiting_sender_ack":"awaiting_contiguous_data";
+      row["completion_state"]=f.acked?"complete":f.data_ready?"awaiting_sender_ack":
+          resource_tracking_ && !f.local && f.admitted<0?"awaiting_admission":"awaiting_contiguous_data";
+    }
+    if(resource_tracking_ && !f.local) {
+      row["admission_granted_ns"]=time(f.admitted);row["qp_registered_ns"]=time(f.qp_registered);
+      row["sender_resource_released_ns"]=time(f.resource_released);
+      row["sender_qp_present"]=bool(drivers_[f.src]->m_rdma->GetQp(Address(f.dst,f.plane).Get(),f.port,3));
     }
     for(const auto& hop:f.path)row["first_packet_path"].push_back({{"node",hop.node},{"port",hop.port},{"time_ns",hop.time}});
     if(f.local) {
@@ -404,6 +478,20 @@ Json Fabric::Report() {
     }
     r["messages"].push_back(std::move(row));
   }
+  if(resource_tracking_) {
+    Json sources=Json::array();
+    for(unsigned src=0;src<gpus_;++src)sources.push_back({{"src",src},{"active_ids",admission_[src]->Active()},
+      {"pending_ids",admission_[src]->PendingIds()},{"decision_pending",deciding_[src]?true:false},
+      {"native_send_qps",drivers_[src]->m_rdma->m_qpMap.size()}});
+    r["admission"]={{"policy",admission_policy_},{"max_active_per_source",admission_limit_},{"decision_ns",decision_ns_},
+      {"scope","inter_host_source_local_software_credits; zero limit is uncapped, not hardware capacity"},{"sources",sources}};
+  }
+  if(lifecycle_limit_)r["lifecycle_capture"]={{"scope","evaluation_only; sender credits and native QP, not GPU buffers"},
+      {"events",lifecycle_events_},{"columns",{"time_ns","event","message_id","source","active","pending","software_limit","native_send_qps"}},
+      {"event_codes",{{"request",0},{"grant",1},{"qp_registered",2},{"data_ready",3},{"ack_complete",4},{"qp_map_removed_credit_release",5},{"decision_start",6}}},
+      {"observations",lifecycle_observations_},{"complete",lifecycle_observations_==lifecycle_events_.size()},
+      {"omitted_events",lifecycle_observations_-lifecycle_events_.size()},
+      {"owner_scope","Grant/release deltas reconstruct the full active owner set from t=0 when capture is complete; final owner sets are in admission.sources"}};
   if(capture_limit_) {
     r["packet_capture"]={{"scope","evaluation_only_native_device_hooks"},{"selection",config_.at("packet_capture")},{"events",packet_events_},
       {"columns",{"time_ns","node","port","event","packet_uid","message_id","ip_protocol","sequence","model_bytes","ecn","egress_queue_bytes","data_payload_bytes"}},

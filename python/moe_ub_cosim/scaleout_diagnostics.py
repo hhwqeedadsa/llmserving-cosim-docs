@@ -27,12 +27,15 @@ def diagnose(run, output):
         if count>1:repeated[mid].append(dict(sequence=seq,transmissions=count))
     messages = []
     for identity, flow in sorted(flows.items()):
-        state = ('complete' if flow['ack_callbacks'] else
+        state = ('awaiting_admission' if 'admission_granted_ns' in flow and flow['admission_granted_ns'] is None else
+                 'awaiting_resource_release' if flow['ack_callbacks'] and 'sender_resource_released_ns' in flow and flow['sender_resource_released_ns'] is None else
+                 'complete' if flow['ack_callbacks'] else
                  'awaiting_sender_ack' if flow['receive_ready_ns'] is not None else 'awaiting_contiguous_data')
         messages.append(dict(id=identity, state=state, src=flow['src'], dst=flow['dst'],
             bytes=flow['bytes'], receiver_contiguous_bytes=flow.get('receiver_contiguous_bytes'),
             receive_ready_ns=flow['receive_ready_ns'], ack_ns=flow['ack_ns'],
             source_data_payload_bytes=flow['source_data_payload_bytes'],
+            **{k:flow[k] for k in ('admission_granted_ns','qp_registered_ns','sender_resource_released_ns','sender_qp_present') if k in flow},
             repeated_source_offsets_seen=repeated[identity],
             **{k:v for k,v in callbacks.get(identity, {}).items() if k!='id'}))
     waits, graphs = [], []
@@ -58,7 +61,9 @@ def diagnose(run, output):
                 waits.append(dict(graph_id=wave['graph_id'], rank=int(rank), node_id=node['id'],
                     name=node['name'], kind=node['kind'], message_id=mid,
                     issue_ns=events.get((*event_key,'issue')), callback_ns=events.get((*event_key,'callback')),
-                    state='not_injected' if mid not in flows else
+                    state='not_posted' if mid not in flows else
+                        'waiting_admission' if flows[mid].get('completion_state')=='awaiting_admission' else
+                        'waiting_resource_release' if node['kind']=='SEND' and flows[mid].get('ack_callbacks') else
                         'waiting_ack' if node['kind'] == 'SEND' else 'waiting_data',
                     direct_consumers=[dict(node_id=n['id'], name=n['name'], kind=n['kind'],
                         issue_ns=events.get((wave['graph_id'],int(rank),n['id'],'issue')),
@@ -66,6 +71,7 @@ def diagnose(run, output):
                                       for n in nodes if node['id'] in n['deps']]))
         if not events:progress.update(issued_nodes=None,completed_nodes=None)
         graphs.append(progress)
+    from .scaleout_admission import audit
     summary = dict(schema_version='moe-scaleout-diagnosis/1', scope='post_run_evaluation_only',
         passed=result['passed'], finish_ns=result['finish_ns'], drained=result['drained'],
         completion_counts=dict(Counter(m['state'] for m in messages)), messages=messages,
@@ -75,6 +81,7 @@ def diagnose(run, output):
         unmatched_fault_rules=[i for i, n in enumerate(faults.get('drop_counts', [])) if n == 0],
         outstanding_graph_edges=waits, graph_progress=graphs, node_evidence_available=bool(events),
         service=result.get('service'),
+        admission_resources=audit(result),
         limitations=['Capture completeness applies only to selected nodes and time window.',
             'Missing events in absent, filtered or truncated capture cannot prove no retransmission or feedback.',
             'Graph edges lacking callbacks may be unissued; direct consumers are dependencies, not measured delay attribution.',

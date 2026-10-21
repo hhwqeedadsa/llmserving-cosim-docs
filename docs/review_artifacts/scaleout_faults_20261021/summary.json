@@ -1,0 +1,990 @@
+{
+  "passed": true,
+  "scope": "8 endpoints, two interleaved EP4 groups, one layer, two ready-KV Decode steps; declared compute",
+  "target": {
+    "id": 1,
+    "tag": 1,
+    "src": 0,
+    "dst": 4,
+    "bytes": 6144,
+    "plane": 0,
+    "layer": 0,
+    "phase": "dispatch",
+    "contributions": 3
+  },
+  "cases": {
+    "baseline": {
+      "run_passed": true,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17673,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11649,
+        "receiver_contiguous_bytes": 6144,
+        "sender_rate_at_ack_bps": 100000000000,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "callbacks": {
+        "id": 1,
+        "recv_callback_ns": 11649,
+        "recv_post_ns": 0,
+        "send_callback_ns": 17673,
+        "send_post_ns": 4120
+      },
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 27088
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 27536
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 27088,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 53849
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 27536,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 54362
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "packet_events": 17888,
+      "fault_drop_counts": []
+    },
+    "middle-data": {
+      "run_passed": true,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 30268,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "ready_ns": 4120,
+        "receive_ready_ns": 24244,
+        "receiver_contiguous_bytes": 6144,
+        "sender_rate_at_ack_bps": 100000000000,
+        "source_data_packets": 13,
+        "source_data_payload_bytes": 11288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "callbacks": {
+        "id": 1,
+        "recv_callback_ns": 24244,
+        "recv_post_ns": 0,
+        "send_callback_ns": 30268,
+        "send_post_ns": 4120
+      },
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 38517
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 27536
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 27536,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 54030
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 38517,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 64417
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "packet_events": 18042,
+      "fault_drop_counts": [
+        1
+      ]
+    },
+    "final-ack": {
+      "run_passed": false,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11649,
+        "receiver_contiguous_bytes": 6144,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "callbacks": {
+        "id": 1,
+        "recv_callback_ns": 11649,
+        "recv_post_ns": 0,
+        "send_callback_ns": null,
+        "send_post_ns": 4120
+      },
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 27536
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 27536,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 54030
+        }
+      ],
+      "request_states": {
+        "FINISHED": 16,
+        "RUNNING": 16
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 63
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 4,
+          "name": "L0.dispatch.0-4.send",
+          "kind": "SEND",
+          "message_id": 1,
+          "issue_ns": 4120,
+          "callback_ns": null,
+          "state": "waiting_ack",
+          "direct_consumers": []
+        }
+      ],
+      "packet_events": 13488,
+      "fault_drop_counts": [
+        1
+      ]
+    },
+    "switch-first": {
+      "run_passed": true,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 29925,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "ready_ns": 4120,
+        "receive_ready_ns": 23901,
+        "receiver_contiguous_bytes": 6144,
+        "sender_rate_at_ack_bps": 100000000000,
+        "source_data_packets": 14,
+        "source_data_payload_bytes": 12288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "callbacks": {
+        "id": 1,
+        "recv_callback_ns": 23901,
+        "recv_post_ns": 0,
+        "send_callback_ns": 29925,
+        "send_post_ns": 4120
+      },
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 38168
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 27536
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 27536,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 54030
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 38168,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 64068
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "packet_events": 18044,
+      "fault_drop_counts": [
+        1
+      ]
+    }
+  },
+  "independent_group_completed_steps": 2,
+  "graph_identity_scope": "Every common submitted wave; offered requests fixed; stalled future waves do not exist",
+  "source_hashes": {
+    "backend/rdma/fabric.cc": "6c7e174d21e5be817b313498eccd85ced2b29498743df5ec3c3503403114c71b",
+    "backend/rdma/fabric.hh": "fb15dadeb83115c4b5f6e0fbbc848e9c46d037a9542cd7728d147f14b190320b",
+    "python/moe_ub_cosim/scaleout_verify.py": "31e07ec6303b3f180c844c7dce7fc816f6daa84fd6026832b639288005237a47",
+    "python/moe_ub_cosim/scaleout_diagnostics.py": "9c4d62d5176eb5db151e40a5ec07fd488af0695accf21680b0dfc4df7e28b3f1",
+    "experiments/scaleout_faults/run.py": "bbde2478313bb1bacf5d01bb0bd74fb545d5db4a910fe5eb4cf278f6474ad4b4"
+  },
+  "limitations": [
+    "Deterministic injected drops, not calibrated hardware fault rates.",
+    "Stalled means incomplete within 5ms; finite segment and fixed cost do not establish production SLO impact.",
+    "Workload arrivals and expert placement fixed; this is not a new admission strategy or recovery protocol."
+  ]
+}

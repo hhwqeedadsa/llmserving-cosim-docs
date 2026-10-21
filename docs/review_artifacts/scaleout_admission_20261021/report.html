@@ -1,0 +1,16 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scale-Out准入与丢包对照</title><style>
+body{font:16px/1.75 system-ui,sans-serif;margin:40px auto;padding:0 24px;max-width:1200px;color:#182438;background:#f5f7fa}
+h1{font-size:30px}table{border-collapse:collapse;background:white;width:100%;font-size:14px}th,td{border:1px solid #d6deea;padding:10px;text-align:right}th:first-child,td:first-child{text-align:left}th{background:#e6edf7}p,li{max-width:950px}a{color:#1659b2}.scroll{overflow-x:auto}.note{background:white;border-left:4px solid #2167bd;padding:16px}
+</style><h1>Scale-Out软件准入与丢包对照</h1>
+<p>固定8 GPU、两组EP4、32请求、1层2步ready-KV Decode，三层Clos 100G。声明计算成本及合成路由；这不是硬件容量校准或生产恢复验证。</p>
+<p class="note">队列变短不保证推理变快。软件并发限额、发送顺序、决策成本与故障分别比较；失败行不以5ms观察终点冒充业务完成时延。</p>
+<p>并发限为1条后，BE队列积分下降46.04%，整轮完成却从54.362 μs变为147.482 μs。FIFO与目的端轮转的实际获取序列完全相同，当前输入无法区分两策略。本轮没有观察到ECN标记、PFC暂停或DCQCN反馈，不能据此声称解决了拥塞控制问题。</p>
+<div class="scroll"><table><thead><tr><th>条件</th><th>状态</th><th>整轮完成 μs</th><th>相对透传倍数</th><th>单端口BE队列峰值 B</th><th>BE队列积分 B·ns</th><th>已获额度消息累计待发 ns</th><th>源数据字节含重传 B</th></tr></thead><tbody><tr><td>pass</td><td>完成</td><td>54.362</td><td>1.000</td><td>8912</td><td>63352868</td><td>0</td><td>389120</td></tr><tr><td>fifo1</td><td>完成</td><td>147.482</td><td>2.713</td><td>7468</td><td>34185716</td><td>1556594</td><td>389120</td></tr><tr><td>fifo2</td><td>完成</td><td>89.001</td><td>1.637</td><td>9588</td><td>56092144</td><td>521373</td><td>389120</td></tr><tr><td>rr1</td><td>完成</td><td>147.482</td><td>2.713</td><td>7468</td><td>34185716</td><td>1556594</td><td>389120</td></tr><tr><td>fifo1-cost10</td><td>完成</td><td>147.602</td><td>2.715</td><td>7468</td><td>34185716</td><td>1558754</td><td>389120</td></tr><tr><td>fifo1-data</td><td>完成</td><td>158.200</td><td>2.910</td><td>7468</td><td>30647280</td><td>1593321</td><td>394264</td></tr><tr><td>fifo1-ack</td><td>5ms内未完成</td><td>—</td><td>—</td><td>7468</td><td>23833916</td><td>959254</td><td>270336</td></tr></tbody></table></div>
+<h2>如何解释</h2><ul>
+<li>FIFO1与轮转1使用同一软件额度；透传与FIFO1/2有意改变软件允许的并发，物理资源保持不变。</li>
+<li>BE队列积分从完整、有类型事件按原生入出队时点重建，不含NIC数据QP及单独高优先ACK队列；累计量不能当作可消除的业务损失。</li>
+<li>数据齐备释放接收消费者，完整ACK后确认发送映射移除才归还软件额度。最终ACK丢失可让源端持续占用额度；另一组是否完成见原始前端历史。</li>
+<li>失败运行中未获额度的消息等待是截至5ms的删失量，单独保存在summary.json，不混入成功时延。</li>
+<li>本轮不证明新策略贡献，也不依据负收益另造热点。目标库QP复用、硬件共享资源与恢复机制仍需实机校准。</li></ul>
+<p><a href="summary.json">完整摘要与占用者</a> · <a href="target-timeline.json">目标消息与图进展</a></p></html>

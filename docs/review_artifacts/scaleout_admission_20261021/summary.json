@@ -1,0 +1,2266 @@
+{
+  "experiment": {
+    "scope": "fixed 8-GPU/two-EP4, one-layer, two-step declared-cost ready-KV Decode",
+    "platform_commit": "0a944bc1288151e7a29809924a5a46bf53c48fa9",
+    "sources": {
+      "backend/rdma/fabric.cc": "6015901e1ce041811dc6baa37b50703b49162f162904e6ddcc24cf696d3dfdba",
+      "backend/communication_admission.hh": "d1deabb966fcfc3bf3817275781879960389f67eb734dc71b8cbb507980f70da",
+      "python/moe_ub_cosim/scaleout_admission.py": "55a657263cc7603e2dc939825e4cea41852317cbec97b2562479cb8f306a4da9",
+      "experiments/scaleout_admission/run.py": "ecb45a8bbf956c92d777126a94e05674d56f76fb51c565a5a62e1464e18aa287"
+    },
+    "cases": [
+      {
+        "label": "pass",
+        "policy": "passthrough",
+        "software_limit": 0,
+        "decision_ns": 0,
+        "fault": null,
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "fifo1",
+        "policy": "fifo",
+        "software_limit": 1,
+        "decision_ns": 0,
+        "fault": null,
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "fifo2",
+        "policy": "fifo",
+        "software_limit": 2,
+        "decision_ns": 0,
+        "fault": null,
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "rr1",
+        "policy": "destination_round_robin",
+        "software_limit": 1,
+        "decision_ns": 0,
+        "fault": null,
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "fifo1-cost10",
+        "policy": "fifo",
+        "software_limit": 1,
+        "decision_ns": 10,
+        "fault": null,
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "fifo1-data",
+        "policy": "fifo",
+        "software_limit": 1,
+        "decision_ns": 0,
+        "fault": "data",
+        "passed": true,
+        "common_graphs": [
+          "g0.w0",
+          "g0.w1",
+          "g1.w0",
+          "g1.w1"
+        ]
+      },
+      {
+        "label": "fifo1-ack",
+        "policy": "fifo",
+        "software_limit": 1,
+        "decision_ns": 0,
+        "fault": "ack",
+        "passed": false,
+        "common_graphs": [
+          "g0.w0",
+          "g1.w0",
+          "g1.w1"
+        ]
+      }
+    ],
+    "target": {
+      "id": 1,
+      "tag": 1,
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "plane": 0,
+      "layer": 0,
+      "phase": "dispatch",
+      "contributions": 3
+    }
+  },
+  "cases": {
+    "pass": {
+      "label": "pass",
+      "policy": "passthrough",
+      "software_limit": 0,
+      "decision_ns": 0,
+      "fault": null,
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 54362,
+      "business_finished_ns": 54362,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 27088
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 27536
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 27088,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 53849
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 27536,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 54362
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 63352868,
+        "beq_peak_bytes": 8912,
+        "source_data_payload_bytes": 389120,
+        "model_wire_bytes_all_ports": 2239264,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 0,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1105103,
+        "data_to_ack_sum_ns": 490809,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17673,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11649,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17673,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 11649,
+        "recv_post_ns": 0,
+        "send_callback_ns": 17673,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 552,
+      "packet_events": 17888,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "0": 1.0,
+        "1": 1.0
+      },
+      "worst_group_ratio": 1.0
+    },
+    "fifo1": {
+      "label": "fifo1",
+      "policy": "fifo",
+      "software_limit": 1,
+      "decision_ns": 0,
+      "fault": null,
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 147482,
+      "business_finished_ns": 147482,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 73556
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 73646
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 73556,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 146898
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 73646,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 147482
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 34185716,
+        "beq_peak_bytes": 7468,
+        "source_data_payload_bytes": 389120,
+        "model_wire_bytes_all_ports": 2239264,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 1556594,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1052921,
+        "data_to_ack_sum_ns": 489954,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 25697,
+        "admission_granted_ns": 12648,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 12648
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 13731
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 14891
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 15974
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 17057
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 18140
+          }
+        ],
+        "first_packet_uid": 90,
+        "first_tx_ns": 12648,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 12648,
+        "ready_ns": 4120,
+        "receive_ready_ns": 19673,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 25697,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 19673,
+        "recv_post_ns": 0,
+        "send_callback_ns": 25697,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 552,
+      "packet_events": 17888,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "0": 2.7279615220338354,
+        "1": 2.7129612597034694
+      },
+      "worst_group_ratio": 2.7279615220338354
+    },
+    "fifo2": {
+      "label": "fifo2",
+      "policy": "fifo",
+      "software_limit": 2,
+      "decision_ns": 0,
+      "fault": null,
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 89001,
+      "business_finished_ns": 89001,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 44723
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 44704
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 44704,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 88987
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 44723,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 89001
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 56092144,
+        "beq_peak_bytes": 9588,
+        "source_data_payload_bytes": 389120,
+        "model_wire_bytes_all_ports": 2239264,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 521373,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1069276,
+        "data_to_ack_sum_ns": 490000,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17500,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17500,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": 17500,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 552,
+      "packet_events": 17888,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "1": 1.636933887642103,
+        "0": 1.6527883526156475
+      },
+      "worst_group_ratio": 1.6527883526156475
+    },
+    "rr1": {
+      "label": "rr1",
+      "policy": "destination_round_robin",
+      "software_limit": 1,
+      "decision_ns": 0,
+      "fault": null,
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 147482,
+      "business_finished_ns": 147482,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 73556
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 73646
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 73556,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 146898
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 73646,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 147482
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 34185716,
+        "beq_peak_bytes": 7468,
+        "source_data_payload_bytes": 389120,
+        "model_wire_bytes_all_ports": 2239264,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 1556594,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1052921,
+        "data_to_ack_sum_ns": 489954,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 25697,
+        "admission_granted_ns": 12648,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 12648
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 13731
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 14891
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 15974
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 17057
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 18140
+          }
+        ],
+        "first_packet_uid": 90,
+        "first_tx_ns": 12648,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 12648,
+        "ready_ns": 4120,
+        "receive_ready_ns": 19673,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 25697,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 19673,
+        "recv_post_ns": 0,
+        "send_callback_ns": 25697,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 552,
+      "packet_events": 17888,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "0": 2.7279615220338354,
+        "1": 2.7129612597034694
+      },
+      "worst_group_ratio": 2.7279615220338354
+    },
+    "fifo1-cost10": {
+      "label": "fifo1-cost10",
+      "policy": "fifo",
+      "software_limit": 1,
+      "decision_ns": 10,
+      "fault": null,
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 147602,
+      "business_finished_ns": 147602,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 73616
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 73706
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 73616,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 147018
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 73706,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 147602
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 34185716,
+        "beq_peak_bytes": 7468,
+        "source_data_payload_bytes": 389120,
+        "model_wire_bytes_all_ports": 2239264,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 1558754,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1052921,
+        "data_to_ack_sum_ns": 489954,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 25717,
+        "admission_granted_ns": 12668,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 12668
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 13751
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 14911
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 15994
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 17077
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 18160
+          }
+        ],
+        "first_packet_uid": 90,
+        "first_tx_ns": 12668,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 12668,
+        "ready_ns": 4120,
+        "receive_ready_ns": 19693,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 25717,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 19693,
+        "recv_post_ns": 0,
+        "send_callback_ns": 25717,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 644,
+      "packet_events": 17888,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "0": 2.7301899756727144,
+        "1": 2.715168684007211
+      },
+      "worst_group_ratio": 2.7301899756727144
+    },
+    "fifo1-data": {
+      "label": "fifo1-data",
+      "policy": "fifo",
+      "software_limit": 1,
+      "decision_ns": 0,
+      "fault": "data",
+      "passed": true,
+      "common_graphs": [
+        "g0.w0",
+        "g0.w1",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 158200,
+      "business_finished_ns": 158200,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 85118
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 73646
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 73646,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 147130
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 85118,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 158200
+        }
+      ],
+      "request_states": {
+        "FINISHED": 32
+      },
+      "messages": 92,
+      "submitted_message_bytes": 389120,
+      "queues": {
+        "beq_byte_ns": 30647280,
+        "beq_peak_bytes": 7468,
+        "source_data_payload_bytes": 394264,
+        "model_wire_bytes_all_ports": 2271712,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 1593321,
+        "pending_wait_censored_ns": 0,
+        "pending_messages": 0,
+        "software_active_gpu_ns": 1064757,
+        "data_to_ack_sum_ns": 490169,
+        "data_ready_without_ack_ids": []
+      },
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 38288,
+        "admission_granted_ns": 12648,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 12648
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 13731
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 14891
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 15974
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 17057
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 18140
+          }
+        ],
+        "first_packet_uid": 90,
+        "first_tx_ns": 12648,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 12648,
+        "ready_ns": 4120,
+        "receive_ready_ns": 32264,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 38288,
+        "source_data_packets": 13,
+        "source_data_payload_bytes": 11288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 32264,
+        "recv_post_ns": 0,
+        "send_callback_ns": 38288,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [1],
+      "final_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [],
+      "lifecycle_events": 552,
+      "packet_events": 18042,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "1": 2.7064861484124942,
+        "0": 2.937844713922264
+      },
+      "worst_group_ratio": 2.937844713922264
+    },
+    "fifo1-ack": {
+      "label": "fifo1-ack",
+      "policy": "fifo",
+      "software_limit": 1,
+      "decision_ns": 0,
+      "fault": "ack",
+      "passed": false,
+      "common_graphs": [
+        "g0.w0",
+        "g1.w0",
+        "g1.w1"
+      ],
+      "finish_ns": 5000000,
+      "business_finished_ns": null,
+      "group_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [0,1,2,3],
+            "2": [8,9,10,11],
+            "4": [16,17,18,19],
+            "6": [24,25,26,27]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 73646
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 73646,
+          "batch_request_ids": {
+            "1": [4,5,6,7],
+            "3": [12,13,14,15],
+            "5": [20,21,22,23],
+            "7": [28,29,30,31]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 147130
+        }
+      ],
+      "request_states": {
+        "RUNNING": 16,
+        "FINISHED": 16
+      },
+      "messages": 65,
+      "submitted_message_bytes": 282624,
+      "queues": {
+        "beq_byte_ns": 23833916,
+        "beq_peak_bytes": 7468,
+        "source_data_payload_bytes": 270336,
+        "model_wire_bytes_all_ports": 1547224,
+        "beq_final_bytes": 0,
+        "per_packet_residency_crosscheck": true,
+        "ce_data_rx_hook_observations": 0,
+        "pfc_pause_hook_observations": 0,
+        "messages_with_dcqcn_feedback": 0
+      },
+      "resources": {
+        "software_wait_granted_ns": 959254,
+        "pending_wait_censored_ns": 19958551,
+        "pending_messages": 4,
+        "software_active_gpu_ns": 5670367,
+        "data_to_ack_sum_ns": 317265,
+        "data_ready_without_ack_ids": [1]
+      },
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "admission_granted_ns": 12648,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 12648
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 13731
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 14891
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 15974
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 17057
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 18140
+          }
+        ],
+        "first_packet_uid": 90,
+        "first_tx_ns": 12648,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 12648,
+        "ready_ns": 4120,
+        "receive_ready_ns": 19673,
+        "receiver_contiguous_bytes": 6144,
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_callbacks": {
+        "id": 1,
+        "recv_callback_ns": 19673,
+        "recv_post_ns": 0,
+        "send_callback_ns": null,
+        "send_post_ns": 4120
+      },
+      "fault_drop_counts": [1],
+      "final_sources": [
+        {
+          "active_ids": [1],
+          "decision_pending": false,
+          "native_send_qps": 1,
+          "pending_ids": [2,12,13,14],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 56,
+          "completed_nodes": 44
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "outstanding_graph_edges": [
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 4,
+          "name": "L0.dispatch.0-4.send",
+          "kind": "SEND",
+          "message_id": 1,
+          "issue_ns": 4120,
+          "callback_ns": null,
+          "state": "waiting_ack",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 5,
+          "name": "L0.dispatch.0-6.send",
+          "kind": "SEND",
+          "message_id": 2,
+          "issue_ns": 4120,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 10,
+          "name": "L0.combine.0-2.send",
+          "kind": "SEND",
+          "message_id": 12,
+          "issue_ns": 12443,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 11,
+          "name": "L0.combine.0-4.send",
+          "kind": "SEND",
+          "message_id": 13,
+          "issue_ns": 12443,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 12,
+          "name": "L0.combine.0-6.send",
+          "kind": "SEND",
+          "message_id": 14,
+          "issue_ns": 12443,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 0,
+          "node_id": 15,
+          "name": "L0.combine.6-0.recv",
+          "kind": "RECV",
+          "message_id": 21,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 2,
+          "node_id": 10,
+          "name": "L0.combine.0-2.recv",
+          "kind": "RECV",
+          "message_id": 12,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 2,
+          "node_id": 15,
+          "name": "L0.combine.6-2.recv",
+          "kind": "RECV",
+          "message_id": 22,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 4,
+          "node_id": 10,
+          "name": "L0.combine.0-4.recv",
+          "kind": "RECV",
+          "message_id": 13,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 4,
+          "node_id": 15,
+          "name": "L0.combine.6-4.recv",
+          "kind": "RECV",
+          "message_id": 23,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node_id": 3,
+          "name": "L0.dispatch.0-6.recv",
+          "kind": "RECV",
+          "message_id": 2,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": [
+            {
+              "node_id": 9,
+              "name": "L0.experts",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node_id": 10,
+          "name": "L0.combine.0-6.recv",
+          "kind": "RECV",
+          "message_id": 14,
+          "issue_ns": 0,
+          "callback_ns": null,
+          "state": "waiting_admission",
+          "direct_consumers": [
+            {
+              "node_id": 16,
+              "name": "L0.merge",
+              "kind": "COMP",
+              "issue_ns": null,
+              "callback_ns": null
+            }
+          ]
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node_id": 13,
+          "name": "L0.combine.6-0.send",
+          "kind": "SEND",
+          "message_id": 21,
+          "issue_ns": null,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node_id": 14,
+          "name": "L0.combine.6-2.send",
+          "kind": "SEND",
+          "message_id": 22,
+          "issue_ns": null,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": []
+        },
+        {
+          "graph_id": "g0.w0",
+          "rank": 6,
+          "node_id": 15,
+          "name": "L0.combine.6-4.send",
+          "kind": "SEND",
+          "message_id": 23,
+          "issue_ns": null,
+          "callback_ns": null,
+          "state": "not_posted",
+          "direct_consumers": []
+        }
+      ],
+      "lifecycle_events": 368,
+      "packet_events": 12252,
+      "first_attempt_paths_fixed": true,
+      "completed_group_last_step_ratios": {
+        "1": 2.7064861484124942
+      },
+      "worst_group_ratio": null
+    }
+  },
+  "fifo_rr_actual_grants_equal": true,
+  "scope": "offline evaluation only; fixed declared-cost synthetic-route Decode, no hardware calibration"
+}

@@ -13,6 +13,8 @@
 | [scaleout_scaling](scaleout_scaling/README.md) | 千卡输入核算、交换机固定内存及热点研究设计 | 实际分配探针与估算；尚无千卡执行或真实训练热点统计 |
 | [scaleout_topology](scaleout_topology/README.md) | 两/三层Clos、Agg、multi-rail与HPN参考双平面的物理拓扑 | 公开CLI静态生成、连通性及确定性验收；未执行网络 |
 | [scaleout_e2e](scaleout_e2e/README.md) | 小规模LLMServingSim→ASTRA→非UB ns-3多层多轮与网络对照 | 30次主对照、共享网络/协议验收及7组可视化；声明成本与合成路由 |
+| [scaleout_faults](scaleout_faults/README.md) | 数据/ACK丢弃到协议、图节点与服务的传播 | 4组实际服务对照，保留恢复与5ms内失败，非生产恢复校准 |
+| [scaleout_admission](scaleout_admission/README.md) | 软件准入、发送资源与队列/业务指标分离 | 7组固定输入对照，保留无收益和ACK占用额度的故障传播 |
 
 Scale-Up 的[方案](scaleup_issue_screening/plan.md)覆盖本地竞争与服务不足、下游阻塞与排队传播、多平面推进差异。新增 Scale-Out 的[研究报告](../docs/reviews/scaleout_scaling_hotspots_20261015.md)关注跨机 All-to-All-v、多 EP 组和热点到网络资源的映射；不将旧 UB 结果改称 RDMA 结果。目录和迭代规范见[仓库组织方案](../docs/repository_layout.md)。
 

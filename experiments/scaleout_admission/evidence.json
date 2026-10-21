@@ -1,0 +1,108 @@
+{
+  "repeated_render_byte_equal": true,
+  "html_rows": 8,
+  "links": [
+    "summary.json",
+    "target-timeline.json"
+  ],
+  "browser_visual_review": false,
+  "platform_commit": "0a944bc1288151e7a29809924a5a46bf53c48fa9",
+  "source_sha256": {
+    "experiments/scaleout_admission/run.py": "ecb45a8bbf956c92d777126a94e05674d56f76fb51c565a5a62e1464e18aa287",
+    "experiments/scaleout_admission/analyze.py": "9f8b90a64d25d5797215170ffd94fff4413067e63549eac86246c2b59fcebd0e"
+  },
+  "artifacts": {
+    "report.html": "2e3354b3977deed6d92e7388de2ecd3f3f9a0acd4a697663967138a938d12f99",
+    "target-timeline.json": "496f5bbcaae5bc81158541f8cd3f8223c2dc5cca6f36e3b1c84257b2be18ed5c",
+    "summary.json": "8f2c58b22215a010bb84ee804a5522e69d2a0d6a973ce8f17ce6d6db085b828b"
+  },
+  "runtime_resources": [
+    {
+      "case": "fifo1-ack",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 1.182885054498911,
+      "rss_bytes": 463560704,
+      "artifact_bytes": 2756608
+    },
+    {
+      "case": "fifo1-data",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.4347308278083801,
+      "rss_bytes": 462716928,
+      "artifact_bytes": 3969024
+    },
+    {
+      "case": "fifo1-cost10",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.4106930643320084,
+      "rss_bytes": 462544896,
+      "artifact_bytes": 3948544
+    },
+    {
+      "case": "rr1",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.2847350630909204,
+      "rss_bytes": 463540224,
+      "artifact_bytes": 3936256
+    },
+    {
+      "case": "fifo2",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.318636316806078,
+      "rss_bytes": 463454208,
+      "artifact_bytes": 3928064
+    },
+    {
+      "case": "fifo1",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.4251547642052174,
+      "rss_bytes": 465891328,
+      "artifact_bytes": 3936256
+    },
+    {
+      "case": "pass",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.4136410970240831,
+      "rss_bytes": 459591680,
+      "artifact_bytes": 3928064
+    }
+  ],
+  "additional_complete_packet_feedback_check": {
+    "fifo1-ack": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "fifo1-data": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "fifo1-cost10": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "rr1": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "fifo2": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "fifo1": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    },
+    "pass": {
+      "cnp_tx_events": 0,
+      "pfc_tx_events": 0
+    }
+  },
+  "formatting_check": "Numeric rows compacted; all JSON values and HTML identical to precompact analysis."
+}

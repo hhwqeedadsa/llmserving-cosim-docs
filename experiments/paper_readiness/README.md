@@ -611,3 +611,19 @@ group_stage diagnostic python3 experiments/paper_readiness/analyze_group_witness
 每命令60秒/RSS1GiB/地址2GiB、单阶段32MiB、新产物64MiB/累计128MiB、预留8GiB；失败不抬限或重跑失败阶段。enumerate保存全部6090候选及Prefill最优值，optimize对69409副本预算/371超阈窗口求界。独立checker从四原件重算，使用不同配对枚举、指派DP与Pareto前沿；diagnostic只解释已选见证的Prefill代价与已有直方图，不增加优化条件。正式本轮仅迁移候选表、换cwd重复求界，oracle.json字节一致。
 
 固定结果打包入口为`build_group_capacity_review.py --work 工作目录 --output 仓库内新报告目录 --checkpoint 工作目录内的新检查点目录`；需要上述六个成功probe和重复核验，外层同样用host_probe，报告和checkpoint加入artifact-root。打包器要求checkpoint在work内且位于/dev/shm以保持产物卷预留；Git清单明确记录`tmpfs_volatile`，不将其当成持久备份。它核hash后归档原件、全部候选、见证、证书与脚本，不重跑网络或GPU。
+# 千卡失败产物的有限阶段审计（20261022）
+
+平台持久索引与计数增量`5264d11`、控制日志按行写出修复`0d8ee06`分别验收，不属于本研究的新网络执行。旧1024GPU实验为256个EP4副本、两轮ready-KV Decode；不是EP1024或训练DP。
+
+本次全量日志分析触及32MiB输出上限，失败保留。最终只交付baseline已写摘要的恢复与两案例stdout/尾部的独立核查；numeric全量计数缺失。发现历史worker块缓冲让保存的通知数落后于节点进度；未来层RECV可提前投递，issue层号也不是实际计算层进度。详细结果、失败和下一步判别见[HTML报告](../../docs/review_artifacts/scale1024_audit_20261022/report.html)与[方法/预算](scale1024_audit_protocol.md)。完整分析器已限制输出样本，但修改后未重跑全量，不标为验收通过。
+
+```bash
+python3 experiments/paper_readiness/check_scale1024_audit.py \
+  --summary /absolute/checkpoint/summary/summary.json \
+  --output /absolute/new-verification.json
+python3 experiments/paper_readiness/build_scale1024_review.py \
+  --summary-directory /absolute/checkpoint/summary \
+  --output /absolute/new-report-directory
+```
+
+检查器读取原有两个stdout与各1MiB节点尾部，并核对已固定的历史Git源码；原始目录不可用时不能仅靠摘要冒充原件复核。报告生成只读小型已核验产物。运行仍须使用协议声明的时间/内存/磁盘监控，不自动重跑千卡失败网络。

@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "summary_sha256": "82ee190c7322b33ffa0a21d4287e547024966357cbb228a96e58bada3e84605d",
+  "cases": {
+    "baseline": {
+      "saved_notifications": 221,
+      "tail_node_records": 9475,
+      "max_recorded_tick": 2479817
+    },
+    "numeric": {
+      "saved_notifications": 221,
+      "tail_node_records": 9424,
+      "max_recorded_tick": 3069520
+    }
+  },
+  "historical_source_verified": true,
+  "baseline_first_step_callback_balanced_waves": 256,
+  "scope": "independent stdout/tail/source identity; recovered whole-log counts checked internally, not independently re-enumerated",
+  "new_simulation_executed": false,
+  "full_audit_complete": false
+}

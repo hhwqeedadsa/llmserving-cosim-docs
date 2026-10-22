@@ -69,6 +69,8 @@
 
 真实路由8条件研究已独立核验：保持每请求/层专家边际热度的3组共选交换，modern direct跨rank Dispatch由69,409份增至79,432—79,600份（+14.44%—14.68%），专家贡献矩阵完全相同；累计去重矩阵相同的相位对照仍改变7,239/7,424个窗口矩阵。比值更均衡不代表绝对需求下降：8条件最大入量p50/p95都为3份，随机对照总量反而增加。独立枚举59,392窗口/950,272矩阵项，检查696个度数守恒单元、四原件和重复迁移结果；80文件检查点hash通过，归档约4.42MiB。见[报告HTML](../review_artifacts/route_controls_20261022/report.html)、[独立核验](../review_artifacts/route_controls_20261022/verification.json)与[复现命令](../../experiments/paper_readiness/README.md)。本轮是离线输入保真度的机制判别，不是训练或生产分布、包级执行、时延收益或新算法；不执行新网络/GPU，不改依赖。目标仍in_progress。
 
+Prefill放置强基线已核验：Patterns behind Chaos固定v5已有热点/共激活洞察及Prefill放置，不能作为本项目创新；其公开artifact固定`b059b85`的四份源码按tree/blob/hash复核，6次只读响应1,172,179B，无下载代码执行。按公开计数LPT适配EP4，规划只读Prefill、评价才读Decode；全量/最后最多10个token两种放置的计算最大输入p95均15→14，Dispatch副本69,409→80,596/79,515（+16.12%/+14.56%），不能换算时延净收益。独立核对22,272窗口/356,352矩阵项、174放置层及迁移重复。另以8选专家代数反例证明单专家与全部专家对统计相同仍可使P/Q放置通信量排序相反；不是生产发生率或新超图算法。第一次反例检查的奇偶预期标签写反已手算更正，保留失败且不重跑真实基线。86文件归档约1.51MiB，见[报告HTML](../review_artifacts/prefill_placement_20261022/report.html)、[源码与原文](../review_artifacts/prefill_placement_20261022/sources.json)、[核验](../review_artifacts/prefill_placement_20261022/verification.json)。本轮无GPU/ns-3、构建或依赖变更；论文目标仍in_progress。
+
 当前下一步：检验忽略共选或请求对齐是否改变网络方案排序，优先有依据的正常无故障对照；若强基线消除差异，应缩小或放弃该主张。执行前将现代窗口及事件与真实传输负载和provider回调相连，明确self-peer GIN的资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。当前可见硬件不满足现代网络校准条件，其他机器及第二节点仍未知，不假定具备。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

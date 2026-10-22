@@ -274,3 +274,71 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
 ```
 
 报告生成器复用仓库已有静态 HTML 渲染器，检查本地链接；未作浏览器视觉验收。归档包含原件、两轮准备与分析、五份原始 probe、研究脚本及报告；archive.json 自身和打包过程的 probe 不进入自身归档，打包 probe 另行保存。归档只复现这项离线研究，不包含完整现代网络/GPU 执行环境。
+
+## Prefill放置参考基线与两两统计边界
+
+[协议](placement_baselines_protocol.md)在看到三组放置结果前固定。[结果HTML](../../docs/review_artifacts/prefill_placement_20261022/report.html)区分已有论文的贡献、本轮真实输入核算和人工信息反例。Prefill频次LPT改善计算输入分布，同时增加去重Dispatch份数；不是时延测量。这里只适配作者固定源码的计数LPT，不执行其H100程序，不重现论文加速比。
+
+先从本地[检查点清单](../../docs/review_artifacts/prefill_placement_20261022/archive.json)恢复四原件和固定参考源码。归档路径按仓库根解析；也可恢复到隔离目录，将准备/检查的 `--source-root` 指向隔离目录。公开参考源码的只读获取方法如下；输出目录须不存在，files阶段每次最多两个文件，已有请求失败后不重试：
+
+```bash
+timeout 60s python3 experiments/paper_readiness/collect_placement_reference.py \
+  --phase identity --commit b059b85e071c03f14482dfbdd736327f41c3f724 \
+  --output data/research/my-placement-reference
+timeout 60s python3 experiments/paper_readiness/collect_placement_reference.py \
+  --phase files --paths zhongkai_test/main_ae.py zhongkai_test/placement_research.py \
+  --output data/research/my-placement-reference
+timeout 60s python3 experiments/paper_readiness/collect_placement_reference.py \
+  --phase files --paths zhongkai_test/run_moe_remap.py README.md \
+  --output data/research/my-placement-reference
+```
+
+每响应≤2MiB/20秒，全轮≤16MiB/120秒，只读Git API和固定blob，不安装或执行下载代码。脚本保存成功/失败及响应hash，固定commit通过完整tree和blob身份核对。已有正式缓存为 `data/research/placement_reference_20261022`；新路径用于独立恢复时替换下面的 `--reference-sources`。核对还需要前阶段固定Patterns v5的HTML/文本与来源清单，这两份原文也在本轮归档中，不重新下载。
+
+从仓库根执行研究；使用同一预算辅助函数记录每条公开脚本的命令、退出状态与资源。每命令60秒/RSS1GiB/地址2GiB，共享新产物64MiB、累计128MiB，卷预留8GiB；每阶段输出≤16MiB。各输出目录须不存在；失败保留，不提高限额。脚本中的断言是研究不变量，不能用 `python -O` 禁用。
+
+```bash
+COSIM_PREFILL_WORK=$(mktemp -d /dev/shm/moe-prefill-placement.XXXXXX)
+prefill_budget() {
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_PREFILL_WORK/$1-probe" --artifact-root "$COSIM_PREFILL_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- python3 "${@:2}"
+}
+prefill_budget prepare experiments/paper_readiness/prepare_placement_baselines.py \
+  --manifest data/moe-trace-small/manifest.json --source-root "$PWD" \
+  --output "$COSIM_PREFILL_WORK/prepared"
+prefill_budget plan experiments/paper_readiness/plan_placement_baselines.py \
+  --observed "$COSIM_PREFILL_WORK/prepared/observed" --output "$COSIM_PREFILL_WORK/planned"
+prefill_budget evaluate experiments/paper_readiness/evaluate_placement_baselines.py \
+  --prepared "$COSIM_PREFILL_WORK/prepared" --placements "$COSIM_PREFILL_WORK/planned" \
+  --output "$COSIM_PREFILL_WORK/evaluated"
+mkdir "$COSIM_PREFILL_WORK/relocated-observed"
+cp "$COSIM_PREFILL_WORK/prepared/observed/frequencies.json" "$COSIM_PREFILL_WORK/relocated-observed/"
+prefill_budget repeat-plan experiments/paper_readiness/plan_placement_baselines.py \
+  --observed "$COSIM_PREFILL_WORK/relocated-observed" --output "$COSIM_PREFILL_WORK/repeat-planned"
+prefill_budget check experiments/paper_readiness/check_placement_baselines.py \
+  --prepared "$COSIM_PREFILL_WORK/prepared" --placements "$COSIM_PREFILL_WORK/planned" \
+  --repeat-placements "$COSIM_PREFILL_WORK/repeat-planned" --evaluation "$COSIM_PREFILL_WORK/evaluated" \
+  --source-root "$PWD" --reference-sources data/research/placement_reference_20261022 \
+  --output "$COSIM_PREFILL_WORK/verified"
+```
+
+准备程序把entry0统计写入 observed/frequencies.json，未来路由写入 truth/decode.json；放置程序只读 observed。评价输出每条件/层/Decode位置的份数、最大入量、最大计算输入和矩阵；`matrix_bits` 与前节同义，`compute_by_rank` 用冒号分隔四rank计算贡献数。没有时钟、包或准确率输出。独立检查回到原件核算，使用逐rank扫描代替堆生成LPT，并手算验证同单专家/专家对统计却令放置通信量排序相反的人工例子。该例不作模型路由或生产发生率声明。
+
+生成报告和本地归档的命令如下。`--run` 下须有 prepare/plan/evaluate/repeat-plan/check 的probe与上述产物，`--verified` 可指向更正后的成功目录；历史失败probe会保留在归档与执行记录。打包只读取产物，不重跑研究。
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_PREFILL_WORK/review-probe" \
+  --artifact-root docs/review_artifacts/my-prefill-placement \
+  --artifact-root runs/my-prefill-placement-checkpoint \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/build_placement_baseline_review.py \
+  --run "$COSIM_PREFILL_WORK" --verified "$COSIM_PREFILL_WORK/verified" \
+  --reference-sources data/research/placement_reference_20261022 --source-root "$PWD" \
+  --output docs/review_artifacts/my-prefill-placement --checkpoint runs/my-prefill-placement-checkpoint
+```
+
+归档不含自身archive.json及尚未结束的打包probe；打包资源记录单独保存。固定原件、作者源码和计算计数可复现，不代表GPU、生产请求或完整现代网络执行可以复现。

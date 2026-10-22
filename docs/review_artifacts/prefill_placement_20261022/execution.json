@@ -1,0 +1,471 @@
+{
+  "cwd": "/home/lry/moe-ub-cosim",
+  "platform_base_commit": "dc3bb6a9f6d67439b5a822638cbf4b4edfe21d00",
+  "commands": [
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/check-corrected-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_placement_baselines.py",
+        "--prepared",
+        "/dev/shm/moe-prefill-placement-20261022/prepared",
+        "--placements",
+        "/dev/shm/moe-prefill-placement-20261022/planned",
+        "--repeat-placements",
+        "/dev/shm/moe-prefill-placement-20261022/repeat-planned",
+        "--evaluation",
+        "/dev/shm/moe-prefill-placement-20261022/evaluated",
+        "--source-root",
+        "/home/lry/moe-ub-cosim",
+        "--reference-sources",
+        "data/research/placement_reference_20261022",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/verified-corrected"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:27:17.333913+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 35876864,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 2711552,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2635575,
+      "peak_sampled_artifact_allocated_bytes": 2711552,
+      "process_group": 1695400,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:27:18.218954+00:00",
+      "wall_seconds": 0.8850496336817741,
+      "max_waited_child_rss_kib": 38108,
+      "artifact_bytes_before_report": 2443,
+      "aggregate_artifact_bytes_before_report": 2711552,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2635575,
+        "allocated_bytes": 2711552
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/check-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_placement_baselines.py",
+        "--prepared",
+        "/dev/shm/moe-prefill-placement-20261022/prepared",
+        "--placements",
+        "/dev/shm/moe-prefill-placement-20261022/planned",
+        "--repeat-placements",
+        "/dev/shm/moe-prefill-placement-20261022/repeat-planned",
+        "--evaluation",
+        "/dev/shm/moe-prefill-placement-20261022/evaluated",
+        "--source-root",
+        "/home/lry/moe-ub-cosim",
+        "--reference-sources",
+        "data/research/placement_reference_20261022",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/verified"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:26:04.998133+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 35872768,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 2666496,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2604402,
+      "peak_sampled_artifact_allocated_bytes": 2666496,
+      "process_group": 1695154,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:26:05.870056+00:00",
+      "wall_seconds": 0.8719339165836573,
+      "max_waited_child_rss_kib": 38104,
+      "artifact_bytes_before_report": 2955,
+      "aggregate_artifact_bytes_before_report": 2666496,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2604402,
+        "allocated_bytes": 2666496
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/evaluate-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/evaluate_placement_baselines.py",
+        "--prepared",
+        "/dev/shm/moe-prefill-placement-20261022/prepared",
+        "--placements",
+        "/dev/shm/moe-prefill-placement-20261022/planned",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/evaluated"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:23:23.850553+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 24313856,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 2486272,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2446085,
+      "peak_sampled_artifact_allocated_bytes": 2486272,
+      "process_group": 1694780,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:23:24.298026+00:00",
+      "wall_seconds": 0.4474874008446932,
+      "max_waited_child_rss_kib": 24768,
+      "artifact_bytes_before_report": 2036,
+      "aggregate_artifact_bytes_before_report": 2486272,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2446085,
+        "allocated_bytes": 2486272
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/plan-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/plan_placement_baselines.py",
+        "--observed",
+        "/dev/shm/moe-prefill-placement-20261022/prepared/observed",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/planned"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:23:23.648992+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 5365760,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1101824,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1072826,
+      "peak_sampled_artifact_allocated_bytes": 1101824,
+      "process_group": 1694775,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:23:23.775320+00:00",
+      "wall_seconds": 0.1263305153697729,
+      "max_waited_child_rss_kib": 17648,
+      "artifact_bytes_before_report": 577,
+      "aggregate_artifact_bytes_before_report": 1101824,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1072826,
+        "allocated_bytes": 1101824
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/prepare-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prepare_placement_baselines.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--source-root",
+        "/home/lry/moe-ub-cosim",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/prepared"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:22:51.322409+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26943488,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 999424,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 980906,
+      "peak_sampled_artifact_allocated_bytes": 999424,
+      "process_group": 1694658,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:22:51.553045+00:00",
+      "wall_seconds": 0.23064067028462887,
+      "max_waited_child_rss_kib": 27336,
+      "artifact_bytes_before_report": 787,
+      "aggregate_artifact_bytes_before_report": 999424,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 980906,
+        "allocated_bytes": 999424
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-prefill-placement-20261022/repeat-plan-probe",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/plan_placement_baselines.py",
+        "--observed",
+        "/dev/shm/moe-prefill-placement-20261022/relocated-observed",
+        "--output",
+        "/dev/shm/moe-prefill-placement-20261022/repeat-planned"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:26:04.773660+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-placement-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 2654208,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2599887,
+      "peak_sampled_artifact_allocated_bytes": 2654208,
+      "process_group": 1695146,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:26:04.902969+00:00",
+      "wall_seconds": 0.1293103750795126,
+      "max_waited_child_rss_kib": 17592,
+      "artifact_bytes_before_report": 578,
+      "aggregate_artifact_bytes_before_report": 2654208,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2599887,
+        "allocated_bytes": 2654208
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-placement-source-identity-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_placement_reference.py",
+        "--phase",
+        "identity",
+        "--output",
+        "data/research/placement_reference_20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:17:41.992350+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 22237184,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-placement-source-identity-probe-20261022",
+        "/home/lry/moe-ub-cosim/data/research/placement_reference_20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1265664,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1254153,
+      "peak_sampled_artifact_allocated_bytes": 1265664,
+      "process_group": 1693623,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:17:45.516514+00:00",
+      "wall_seconds": 3.524172792211175,
+      "max_waited_child_rss_kib": 25812,
+      "artifact_bytes_before_report": 211606,
+      "aggregate_artifact_bytes_before_report": 1265664,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1254153,
+        "allocated_bytes": 1265664
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-placement-source-files1-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_placement_reference.py",
+        "--phase",
+        "files",
+        "--paths",
+        "zhongkai_test/main_ae.py",
+        "zhongkai_test/placement_research.py",
+        "--output",
+        "data/research/placement_reference_20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:18:50.775429+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26501120,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-placement-source-files1-probe-20261022",
+        "/home/lry/moe-ub-cosim/data/research/placement_reference_20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1200128,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1180261,
+      "peak_sampled_artifact_allocated_bytes": 1200128,
+      "process_group": 1693874,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:18:53.384234+00:00",
+      "wall_seconds": 2.6088123321533203,
+      "max_waited_child_rss_kib": 25880,
+      "artifact_bytes_before_report": 6983,
+      "aggregate_artifact_bytes_before_report": 1200128,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1180261,
+        "allocated_bytes": 1200128
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-placement-source-files2-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_placement_reference.py",
+        "--phase",
+        "files",
+        "--paths",
+        "zhongkai_test/run_moe_remap.py",
+        "README.md",
+        "--output",
+        "data/research/placement_reference_20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:19:20.620809+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26533888,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-placement-source-files2-probe-20261022",
+        "/home/lry/moe-ub-cosim/data/research/placement_reference_20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1306624,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1277530,
+      "peak_sampled_artifact_allocated_bytes": 1306624,
+      "process_group": 1693984,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:19:23.161974+00:00",
+      "wall_seconds": 2.5411690399050713,
+      "max_waited_child_rss_kib": 25912,
+      "artifact_bytes_before_report": 7193,
+      "aggregate_artifact_bytes_before_report": 1306624,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1277530,
+        "allocated_bytes": 1306624
+      }
+    }
+  ],
+  "research_scripts": {
+    "collect_placement_reference.py": "729c8f75623e22f2522be70cc6584acc69c191db140d14cd267d22ae1a961137",
+    "prepare_placement_baselines.py": "fdaf7f7ef71e4a14a35ac5fd999deafa248df916a767656a8cdc825c037781c3",
+    "plan_placement_baselines.py": "25de5696e0333af4f0e2d14c28efac1716c0b40b452f9d9e495b98bdb2157c27",
+    "evaluate_placement_baselines.py": "9a8232dfd9932590cdac79101db6067354da427304186a90ca384ac98adffce4",
+    "check_placement_baselines.py": "045576fecbd2f1d6bdc9c204698d79137c35bd0f7d5d78bffa975f24fa738951",
+    "build_placement_baseline_review.py": "fc33da90416cfdee77036fa92fb5171f3629581e48860bb1f91d96358e7d8f36"
+  },
+  "failed_checker": {
+    "reason": "Initial expected P/Q counts assigned to the opposite parity family; hand enumeration corrected labels only",
+    "preserved_in_run": true,
+    "baseline_preparation_planning_evaluation_rerun": false
+  },
+  "downloaded_code_executed": false,
+  "gpu_executed": false,
+  "network_executed": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

@@ -1,0 +1,109 @@
+{
+  "identity": {
+    "repository": "zhongkaiyu/moe_exp_placement",
+    "commit": "b059b85e071c03f14482dfbdd736327f41c3f724",
+    "tree": "6ff036c4e90b29f1aff2e6e6c856c37ad84cf4a2"
+  },
+  "files": [
+    {
+      "path": "zhongkai_test/main_ae.py",
+      "bytes": 14482,
+      "blob": "b2b09f748e22f7d759ef8ae696232e8c21a67012",
+      "sha256": "082ca7842c033cd0b500b24e1155199afdc1985150886891fa1c472319859fb8",
+      "commit": "b059b85e071c03f14482dfbdd736327f41c3f724"
+    },
+    {
+      "path": "zhongkai_test/placement_research.py",
+      "bytes": 39605,
+      "blob": "06003c570d29cfdc990279da9ce90ec832f40987",
+      "sha256": "85151f811b59c71cb835bc1f3bfba07a46b2c87caf217bef81c367fe59aee1d2",
+      "commit": "b059b85e071c03f14482dfbdd736327f41c3f724"
+    },
+    {
+      "path": "zhongkai_test/run_moe_remap.py",
+      "bytes": 30416,
+      "blob": "cb0abd04c5b9ae8edb9b53258b5c723eb842b3a2",
+      "sha256": "b689e9e740f74e8960208050d8e73e52a2676cc42ff70e43ecdd22ffc7adda67",
+      "commit": "b059b85e071c03f14482dfbdd736327f41c3f724"
+    },
+    {
+      "path": "README.md",
+      "bytes": 9528,
+      "blob": "9b7ac5cdcfaa018aa86364274af340b84633027e",
+      "sha256": "3f518f0203761a570c45b4068fcdd2050d5b3d873a35e2ab6843119d3a75d4c0",
+      "commit": "b059b85e071c03f14482dfbdd736327f41c3f724"
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "zhongkai_test/placement_research.py",
+      "source_sha256": "85151f811b59c71cb835bc1f3bfba07a46b2c87caf217bef81c367fe59aee1d2",
+      "first_line": 73,
+      "last_line": 121,
+      "text": "def compute_frequencies(\n    dump_dir: str,\n    phase: str = \"prefill\",\n    balanced: bool = False,\n    file_list: list[str] | None = None,\n    tail_tokens: int | None = None,\n    max_new_tokens: int | None = None,\n    records: list[dict] | None = None,\n) -> dict[int, dict[int, float]]:\n    \"\"\"\n    统计每层每个 expert 的激活频率。\n\n    phase:          \"prefill\" 或 \"decode\"\n    balanced:       True 时每个 request 平权（count / num_tokens），仅对 prefill 有效\n    file_list:      要加载的文件名列表；None 表示加载 dump_dir 下所有 .json\n    tail_tokens:    仅对 prefill 有效，只统计每条请求最后 N 个 token\n    max_new_tokens: 仅对 decode 有效，只统计前 max_new_tokens-1 个 decode step\n    records:        预加载的 JSON records；不为 None 时跳过磁盘读取\n    \"\"\"\n    if records is None:\n        records = load_records(dump_dir, file_list)\n\n    freq: dict[int, dict[int, float]] = defaultdict(lambda: defaultdict(float))\n\n    for record in records:\n        if phase == \"prefill\":\n            prefill = record.get(\"prefill\", {})\n            for layer_str, token_experts_list in prefill.items():\n                lid = int(layer_str)\n                if tail_tokens is not None:\n                    token_experts_list = token_experts_list[-tail_tokens:]\n                num_tokens = len(token_experts_list)\n                weight = (1.0 / num_tokens) if (balanced and num_tokens > 0) else 1.0\n                for experts in token_experts_list:\n                    for eid in experts:\n                        freq[lid][eid] += weight\n        else:\n            decode_steps = record.get(\"decode_steps\", [])\n            if max_new_tokens is not None:\n                decode_steps = decode_steps[: max_new_tokens - 1]\n            for step in decode_steps:\n                for layer_str, experts in step.items():\n                    lid = int(layer_str)\n                    for eid in experts:\n                        freq[lid][eid] += 1.0\n\n    return freq\n\n\n"
+    },
+    {
+      "path": "zhongkai_test/placement_research.py",
+      "source_sha256": "85151f811b59c71cb835bc1f3bfba07a46b2c87caf217bef81c367fe59aee1d2",
+      "first_line": 239,
+      "last_line": 278,
+      "text": "def generate_greedy_placement(\n    freq: dict[int, dict[int, float]],\n    ep_size: int,\n) -> dict:\n    \"\"\"\n    贪心装箱（LPT — Longest Processing Time first）：\n    按频率从高到低排序所有 expert，依次分配给当前总负载最小的 GPU。\n    每个 GPU 恰好分到 num_local 个 expert，最小化 max GPU 负载。\n    \"\"\"\n    import heapq\n\n    sorted_layers, num_logical = _detect_model_params(freq)\n    num_local = num_logical // ep_size\n    assert num_logical % ep_size == 0\n\n    physical_to_logical_map = []\n    for lid in sorted_layers:\n        counts = freq[lid]\n        sorted_experts = sorted(range(num_logical), key=lambda e: -counts.get(e, 0))\n\n        # min-heap: (current_load, gpu_id, num_assigned)\n        heap = [(0.0, g, 0) for g in range(ep_size)]\n        gpu_slots: list[list[int]] = [[] for _ in range(ep_size)]\n\n        for eid in sorted_experts:\n            load, g, n = heapq.heappop(heap)\n            gpu_slots[g].append(eid)\n            n += 1\n            new_load = load + counts.get(eid, 0)\n            if n < num_local:\n                heapq.heappush(heap, (new_load, g, n))\n\n        row = []\n        for g in range(ep_size):\n            row.extend(gpu_slots[g])\n        physical_to_logical_map.append(row)\n\n    return {\"physical_to_logical_map\": physical_to_logical_map}\n\n\n"
+    },
+    {
+      "path": "zhongkai_test/placement_research.py",
+      "source_sha256": "85151f811b59c71cb835bc1f3bfba07a46b2c87caf217bef81c367fe59aee1d2",
+      "first_line": 842,
+      "last_line": 851,
+      "text": "    if strategy == \"prefill_greedy\":\n        freq = compute_frequencies(dump_dir, phase=\"prefill\", file_list=file_list,\n                                   records=records)\n        return generate_greedy_placement(freq, ep_size)\n\n    if strategy == \"prefill_last10_greedy\":\n        freq = compute_frequencies(dump_dir, phase=\"prefill\", file_list=file_list,\n                                   tail_tokens=10, records=records)\n        return generate_greedy_placement(freq, ep_size)\n\n"
+    },
+    {
+      "path": "zhongkai_test/main_ae.py",
+      "source_sha256": "082ca7842c033cd0b500b24e1155199afdc1985150886891fa1c472319859fb8",
+      "first_line": 232,
+      "last_line": 238,
+      "text": "    STRATEGY_DEFS = [\n        ('Default',      ['default', 'real_default'],                                      'max'),\n        ('Worst',        ['real_worst'],                                                    'first'),\n        ('Best',         ['real_best_better'],                                              'first'),\n        ('Remap(Ours)',  ['prefill_greedy', 'prefill_last10_greedy', 'prefill_greedy_optimal'], 'min'),\n        ('Dup(Ours)',    ['prefill_dup', 'prefill_dup_optimal'],                            'min'),\n    ]\n"
+    },
+    {
+      "path": "data/research/system_innovation_20261021/patterns.txt",
+      "source_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+      "first_line": 234,
+      "last_line": 263,
+      "text": "As shown in Figure 3(b), we analyze spatial patterns in expert selection for both single-expert activation imbalance and expert pair co-activation affinity.\nFor single experts, we examine statistical skewness and the factors affecting each expert’s activation. For expert pairs, we analyze co-activation properties across all two-expert combinations.\nIII-C1 Single Expert Activation Imbalance\n(Ob4)\nWe examine expert selection frequency at each layer, presenting results for layer 7 of Llama4 in Figure 8.\nWe observe pronounced skewness where a subset of experts is activated over 16 times more frequently than average. This workload imbalance suggests system designs should duplicate or decentralize frequently used experts.\nTo investigate selection patterns across different tasks, we analyze all 57 MMLU subjects spanning diverse fields, including biology, history, and math, etc [35].\nFigure 8(b) shows the top 10 most popular experts for each subject. Horizontal bright lines indicate certain experts are consistently activated regardless of subject, while remaining popular experts vary significantly between subjects, demonstrating both overlap and distinction in task-based expert selection.\nWe further examine task impact using the Chinese version of MMLU in MMLU Pro [36] with identical questions but different languages. Figure 8(c) reveals distinctly different patterns: although 5-6 experts remain popular across subjects, only two overlap with English MMLU’s most frequently selected experts. This confirms that task characteristics, including language, significantly influence expert selection, enabling task-aware serving systems that optimize expert distribution to balance workloads and reduce data movement.\nIII-C2 Expert Pair Co-activation Affinify\n(Ob5)\nBeyond single expert patterns, we observe spatial relations for expert pairs where certain experts are more likely to be co-activated. We present co-activation heatmaps in Figure 9(a)(b), where both axes indicate expert IDs. Each pixel represents an expert pair with values showing co-activation frequency normalized by theoretical random selection probability: p=2n⁡(n−1)p=\\frac{2}{n(n-1)}, where nn is the number of experts.\nBright dots appear with probabilities 20-40 times higher than theoretical values, indicating strong co-activation tendencies. All heatmaps exhibit central symmetry since expert pair (i,j)(i,j) equals (j,i)(j,i). In Deepseek’s heatmap Figure 9(a), frequently activated pairs lie between red lines forming bright squares, reflecting Deepseek’s routing restriction where tokens are routed only to adjacent nodes to reduce communication overhead. This suggests the potential of separating co-activated expert pairs to balance workload.\nWe quantify this relation by in Figure 9(c).\nThe top 10% of expert pairs account for 60-80% of total activations, indicating strong skewness.\nThis suggests the potential for separating co-activated expert pairs to balance the workload.\nWe only analyze Deepseek and Qwen since Llama selects one expert per MoE layer, eliminating co-activation relations.\nFig. 9:\nExpert-pair co-activation affinity. (a)(b) Heatmaps for DeepSeek and Qwen. (c) CDF of co-activated expert pairs across all layers: a small fraction of expert pairs accounts for the majority of co-activations.\nIII-C3 System Insights from Spatial Relation\nSpatial Relation enables coarse-grained, static strategies to address workload imbalance across the system. These strategies could be applied at system startup or during periodic redistribution (e.g., every 10 minutes) through appropriate task distribution.\n★Insight 3: Expert-placement-aware workload distribution (Ob4, Ob5). Employ expert placement information to design workload-balanced task distribution strategies.\nExpert placement in serving systems can change dynamically due to expert migration strategies. Therefore, when allocating workload to system units, expert placement should be considered for better workload balance. Besides, the design space for task allocation could be enlarged with emerging new systems.\nTraditional multi-GPU systems tend to allocate experts to local GPUs to avoid cross-unit communication.\nHowever, in multi-chiplet GPUs, we can consider allocating tasks to remote dies for better workload balance as inter-unit communication becomes faster.\n★Insight 4: Popular expert decentralization (Ob4). Duplicate or decentralize frequently used experts to balance workloads.\nExpert skewness causes workload imbalance and suboptimal resource utilization. Duplicating popular experts across multiple compute units distributes load more evenly. Additionally, avoiding co-location of highly popular experts in the same unit further enhances workload balance.\n★Insight 5: Expert-pair separation (Ob5).\nSeparate frequently co-activated expert pairs to maximize parallelism.\nCertain experts are frequently activated simultaneously, exhibiting strong co-activation patterns. Assigning these co-activated expert pairs to different compute units maximizes hardware parallelism and prevents workload concentration on specific units. However, separation also introduces cross-unit communication overhead. The effectiveness depends on system topology and batch size, requiring careful trade-off between parallelism benefits and communication costs."
+    },
+    {
+      "path": "data/research/system_innovation_20261021/patterns.txt",
+      "source_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+      "first_line": 539,
+      "last_line": 540,
+      "text": "Workload imbalance is one of the biggest challenges in large-scale MoE serving (200+ GPUs). EPLB [68] addresses this by dynamically adjusting expert placement, but it is triggered every 3000+ steps and relies on periodically collected profiling data [69]. A natural question then arises: how to set expert placement for the initial ∼\\sim1000 decode tokens when no profiling data are yet available? This is especially pressing for short-output requests, for which EPLB never collects enough data to be effective. Inspired by Insight 1, which reveals temporal correlation between prefill and decode stages, we propose leveraging prefill-stage expert selection information to guide expert placement for initial decode steps.\nAs shown in Figure 16, we design two placement algorithms (details in algorithm 2). The Remap-based algorithm keeps the number of experts per GPU unchanged and reassigns experts across GPUs for a more balanced workload: it sorts experts by decreasing roofline cost and greedily assigns each to the least-loaded GPU, subject to a uniform capacity of E/GE/G experts per GPU. The Duplication-based algorithm reserves extra expert slots on each GPU and uses prefill traces to duplicate hot experts, thereby avoiding congestion: starting from the default contiguous layout (e.g., experts 0–15 on GPU,0, 16–31 on GPU,1, etc.), it greedily adds up to RR extra replicas per GPU, selecting at each step the (expert, GPU) pair that maximally reduces the bottleneck load maxg⁡𝑙𝑜𝑎𝑑g\\max_{g}\\mathit{load}_{g}; tokens of a replicated expert are evenly split among all its copies. Both algorithms use a roofline-based cost model to estimate per-GPU load."
+    },
+    {
+      "path": "data/research/system_innovation_20261021/patterns.txt",
+      "source_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+      "first_line": 580,
+      "last_line": 594,
+      "text": "VI-B Methodology\nWe deploy Qwen3-235B with SGLang on 8×\\timesH100 GPUs with NVLink. We build a distributed profiler by inserting cuda.Event timers into SGLang to measure individual operations (attention, top-kk, all-to-all, and MoE) on each GPU independently.\nWe manipulate expert placement through SGLang’s init_expert_location interface and use DeepEP as the MoE backend.\nThe ep_dispatch_algorithm is set to “dynamic” so that tokens are evenly distributed across replicas of a duplicated expert.\nMetric.\nWe report MoE computation time, i.e., all three expert linear layers, excluding attention, all-to-all, and top-kk.\nModel and Benchmark.\nWe evaluate on Qwen3-235B (94 MoE layers, 128 experts per layer, 8 selected). We use MMLU and Global-MMLU datasets, following the original ordering. Batch sizes range from 64 to 16,384.\nBaselines.\nDefault is the standard contiguous placement used by Qwen and SGLang (experts 0–15 on GPU-0, 16–31 on GPU-1, etc.). Best and Worst are the theoretically optimal and worst placements generated with oracle decode-stage selections (not available in practice). Remap and Dup are our two prefill-guided strategies. For Dup, we use one extra slot per GPU, yielding 128+8=136 experts per layer.\nVI-C Results\nAs shown in Figure 17, Remap and Dup achieve speedups of 15.5% and 12.5% over Default, respectively, and deliver over 2×\\times speedup compared with Worst. Both remain within 10% of Best, which exploits oracle decode-stage information unavailable in practice, which demonstrates the effectiveness of our approach. Since the two algorithms perform comparably, one can choose between them to fit different memory and system constraints.\nWe note that our 8-GPU EP scale inherently limits the achievable improvement: with EP8, each GPU holds 16 experts per layer, so every GPU likely contains a mix of hot and cold experts, naturally yielding a relatively balanced workload even under the Default layout (the max/min execution-time ratio is only about 1.3×\\times). We expect greater speedups at larger EP scales where load imbalance is more pronounced.\nVII Discussion\nBoth the wafer-scale GPU architecture and the prefill-guided expert placement strategy serve as case studies demonstrating the practical applicability of our profiling insights, which constitute the paper’s primary contribution. Specifically, the wafer-scale GPU design follows Insight 3 for task allocation and leverages temporal relation insights (Insight 1 and part of Insight 2) to build a data-driven predictor. The prefill-guided placement strategy utilizes Insight 1 to guide decode-stage expert placement using information collected during prefill."
+    },
+    {
+      "path": "data/research/system_innovation_20261021/patterns.txt",
+      "source_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+      "first_line": 623,
+      "last_line": 640,
+      "text": "Case Study 1 is a CPU-runnable wafer-scale GPU simulator for MoE inference. It evaluates our expert allocation and prediction strategies across four large-scale MoE models and two chiplet topologies, reproducing Figure 12.\nCase Study 2 contains the real-GPU expert placement experiments and reproduces Figure 17 on an 8×\\timesH100 system. It requires a specialized GPU software stack. Both artifacts provide a main_ae.py workflow for downloading traces, running experiments, and generating figures.\nA.2 Artifact Check-List\nProgram: Python 3.\nRun-time environment: Linux with Python ≥\\geq 3.10.\nHardware: Case Study 1 requires a CPU server with ≥\\geq64 GB RAM. Case Study 2 requires an 8×\\timesNVIDIA H100 80 GB GPU server.\nOutput: Paper figures and CSV result files.\nDisk space: About 80 GB for one model and up to 300 GB for all four models.\nExperiment time: Case Study 1 takes 8–12 hours for one model or 18–36 hours for all models. Case Study 2 takes 12–16 hours.\nPublicly available: Yes.\nCode license: Apache-2.0.\nA.3 Description\nA.3.1 How to Access\nCase Study 1 (wafer-scale GPU simulator): GitHub: waferscale_gpu_moe_sim; DOI: 10.5281/zenodo.19617713.\nCase Study 2 (real-GPU expert placement): GitHub: moe_exp_placement; DOI: 10.5281/zenodo.19617695.\nEach repository contains a README.md with setup, execution, and troubleshooting instructions. The Zenodo archives provide persistent snapshots of the evaluated artifact versions.\nA.3.2 Hardware Dependencies\nCase Study 1 runs on a CPU server with at least 64 GB RAM and does not require a GPU. Case Study 2 requires an 8×\\timesNVIDIA H100 80 GB GPU server, CUDA 12.0 or newer, and about 300 GB of disk space. Reviewers without GPU access can still evaluate the primary simulator artifact."
+    }
+  ],
+  "paper": {
+    "id": "patterns",
+    "url": "https://arxiv.org/html/2510.05497v5",
+    "public_url": "https://arxiv.org/html/2510.05497v5",
+    "local_snapshot": "data/research/system_innovation_20261021/patterns.html",
+    "sha256": "ea29c8cc1a0c1e8cfa815af439bf8440f73d989e07e7685899712afbc54a5387",
+    "text_snapshot": "data/research/system_innovation_20261021/patterns.txt",
+    "text_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168"
+  },
+  "requests": 6,
+  "response_bytes": 1172179,
+  "request_wall_seconds": 8.201972449198365,
+  "downloaded_code_executed": false,
+  "repository_head_is_paper_evaluated_version_proved": false
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "moe-ub-host-probe/1",
+  "command": [
+    "python3",
+    "experiments/paper_readiness/build_placement_baseline_review.py",
+    "--run",
+    "/dev/shm/moe-prefill-placement-20261022",
+    "--verified",
+    "/dev/shm/moe-prefill-placement-20261022/verified-corrected",
+    "--reference-sources",
+    "data/research/placement_reference_20261022",
+    "--source-root",
+    "/home/lry/moe-ub-cosim",
+    "--source-probe",
+    "/dev/shm/moe-placement-source-identity-probe-20261022",
+    "--source-probe",
+    "/dev/shm/moe-placement-source-files1-probe-20261022",
+    "--source-probe",
+    "/dev/shm/moe-placement-source-files2-probe-20261022",
+    "--output",
+    "docs/review_artifacts/prefill_placement_20261022",
+    "--checkpoint",
+    "runs/prefill_placement_checkpoint_20261022"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "started_utc": "2026-10-22T17:34:22.421791+00:00",
+  "limits": {
+    "sampled_group_rss_bytes": 1073741824,
+    "per_process_address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "wall_seconds": 60.0
+  },
+  "peak_sampled_group_rss_bytes": 22806528,
+  "peak_sampled_processes": 1,
+  "status": "completed",
+  "workload_semantics_validated": false,
+  "artifact_roots": [
+    "/dev/shm/moe-prefill-placement-20261022/review-probe",
+    "/home/lry/moe-ub-cosim/runs/prefill_placement_checkpoint_20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/prefill_placement_20261022"
+  ],
+  "peak_sampled_artifact_bytes": 1843200,
+  "min_free_bytes": 8589934592,
+  "rss_scope": "owned_process_tree_including_detached_descendants",
+  "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+  "disk_sample_interval_seconds": 1.0,
+  "peak_sampled_artifact_apparent_bytes": 1813071,
+  "peak_sampled_artifact_allocated_bytes": 1843200,
+  "process_group": 1696496,
+  "child_exit_code": 0,
+  "remaining_live_group_pids": [],
+  "ended_utc": "2026-10-22T17:34:25.291341+00:00",
+  "wall_seconds": 2.8695519771426916,
+  "max_waited_child_rss_kib": 23080,
+  "artifact_bytes_before_report": 6936,
+  "aggregate_artifact_bytes_before_report": 1843200,
+  "aggregate_artifact_usage_before_report": {
+    "apparent_bytes": 1813071,
+    "allocated_bytes": 1843200
+  }
+}

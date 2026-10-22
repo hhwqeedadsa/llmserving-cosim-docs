@@ -1,0 +1,32 @@
+{
+  "dependencies_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "wall_seconds": 0.3398785088211298
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  "completed_resource_probes": 9,
+  "preserved_failed_probes": 1,
+  "peak_sampled_group_rss_bytes": 35876864,
+  "archive_files_rechecked": 86,
+  "markdown_links_checked": 69,
+  "python_asts_and_cli_help_checked": 6,
+  "total_new_artifact_bytes": 5958925,
+  "archive_sha256": "8afe19c3da31e7d8a7f4566d864d54526dbf6c46a48e4477edb2a2c105f94316",
+  "failure_did_not_rerun_real_route_baselines": true,
+  "network_executed": false,
+  "gpu_executed": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

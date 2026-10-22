@@ -1,0 +1,306 @@
+{
+  "files": [
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "src/point-to-point/model/rdma-hw.cc",
+      "sha256": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+      "bytes": 37639,
+      "git_blob_sha1": "33743cefbd53f8a5d874d4b788d9764bd98857a1"
+    },
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "src/point-to-point/model/rdma-hw.h",
+      "sha256": "f1aa349163e86261041de7139a3c8d4d8d4e27ce5b10313143fa565d46b2227d",
+      "bytes": 6466,
+      "git_blob_sha1": "7c63066e8142c9e1cf511c1ca9493cf3b21e34da"
+    },
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "src/point-to-point/model/rdma-queue-pair.h",
+      "sha256": "ffeb7f79eb76ebcd7361bdb1756db5249825d8b47c1c8cf4c5e06e6ba27a3302",
+      "bytes": 4044,
+      "git_blob_sha1": "b6afbd902e7d53ba6fbd8c9849f611daad7d60bc"
+    },
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "scratch/common.h",
+      "sha256": "a2e6fca9d9231f7404a4d696532e3fb4bd894af39fc25886a78abb9c12ab8765",
+      "bytes": 29582,
+      "git_blob_sha1": "fe5f4d6e9db63e95b8dc3120870f0feb8d99d9b1"
+    },
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "scratch/config/config_clos.txt",
+      "sha256": "a1a2e4e575b82bb41a6bf9939feb5080173fcc53cf9657e347d4ac175b311bde",
+      "bytes": 1421,
+      "git_blob_sha1": "7d99c08c41e239c39f039e0c58a383c44c88466d"
+    },
+    {
+      "repository": "native",
+      "commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+      "path": "README.md",
+      "sha256": "7341e138b93c8564ac889c0cf8e563badba0e60fc081e9fbcef424cc0b6d4d80",
+      "bytes": 1560,
+      "git_blob_sha1": "bca7c0a5370eb2319cc2639f42e08dc9b9ea16ca"
+    },
+    {
+      "repository": "alibaba",
+      "commit": "3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437",
+      "path": "simulation/src/point-to-point/model/rdma-hw.cc",
+      "sha256": "99af828b2a93ddd786d34317cbf2af77f2b6d70c14784fc7617b1b41eb88e3db",
+      "bytes": 42772,
+      "git_blob_sha1": "736969afdc59775b975a3cd74b0589d87ce7c677"
+    },
+    {
+      "repository": "platform",
+      "commit": "68ad3fe25a74045d7205ba93257a6aa5b51f6294",
+      "path": "backend/rdma/fabric.cc",
+      "sha256": "2ea18af6bd2463dbcbcf3f4316443a3dfee5e47c717e7a8dccbef97f2c57ba65",
+      "bytes": 40468,
+      "git_blob_sha1": "59f20754c90021b4227b6b9859fd04b04cf5db4b"
+    },
+    {
+      "repository": "platform",
+      "commit": "68ad3fe25a74045d7205ba93257a6aa5b51f6294",
+      "path": "backend/rdma/persistent_streams.cc",
+      "sha256": "a91ce789b10c4416c8921b51d7bb64aac5ec7166fc5e4c258fe7ea0de531e1ba",
+      "bytes": 19527,
+      "git_blob_sha1": "3985d956bbca21c20bfb2f75e8b0089533522e29"
+    }
+  ],
+  "control_functions": [
+    {
+      "function": "UpdateAlphaMlx",
+      "native_line": 667,
+      "alibaba_line": 814,
+      "tokens_identical": true,
+      "native_token_sha256": "02eda6f0ded04cd0e18740dd4198ddb6546d59d9a69d58fdd5a9962b22c8ec47",
+      "alibaba_token_sha256": "02eda6f0ded04cd0e18740dd4198ddb6546d59d9a69d58fdd5a9962b22c8ec47"
+    },
+    {
+      "function": "ScheduleUpdateAlphaMlx",
+      "native_line": 682,
+      "alibaba_line": 829,
+      "tokens_identical": true,
+      "native_token_sha256": "c39e71eb70fe2890980fb47d0d87589b27dfd46fe709722db811f5ee99c07e40",
+      "alibaba_token_sha256": "c39e71eb70fe2890980fb47d0d87589b27dfd46fe709722db811f5ee99c07e40"
+    },
+    {
+      "function": "cnp_received_mlx",
+      "native_line": 686,
+      "alibaba_line": 833,
+      "tokens_identical": true,
+      "native_token_sha256": "f9fcdae21c4aaba9dab8c988475249a0192759d7598ee57be1b34eb821cbfe4a",
+      "alibaba_token_sha256": "f9fcdae21c4aaba9dab8c988475249a0192759d7598ee57be1b34eb821cbfe4a"
+    },
+    {
+      "function": "CheckRateDecreaseMlx",
+      "native_line": 703,
+      "alibaba_line": 850,
+      "tokens_identical": true,
+      "native_token_sha256": "c22ae5ee584c0cbb4ba5b412a8b78f9f1e44a3d2f112c659e8aafef3dec12960",
+      "alibaba_token_sha256": "c22ae5ee584c0cbb4ba5b412a8b78f9f1e44a3d2f112c659e8aafef3dec12960"
+    },
+    {
+      "function": "ScheduleDecreaseRateMlx",
+      "native_line": 727,
+      "alibaba_line": 874,
+      "tokens_identical": true,
+      "native_token_sha256": "f5c43cc92847780702f6d2481faa4631b5aff45978bfc41fa218ccab43c96149",
+      "alibaba_token_sha256": "f5c43cc92847780702f6d2481faa4631b5aff45978bfc41fa218ccab43c96149"
+    },
+    {
+      "function": "RateIncEventTimerMlx",
+      "native_line": 731,
+      "alibaba_line": 878,
+      "tokens_identical": true,
+      "native_token_sha256": "d78d65b417e6adacae5b89e6d4b479afe2c9f4f3c3c339007de4faed22b589f0",
+      "alibaba_token_sha256": "d78d65b417e6adacae5b89e6d4b479afe2c9f4f3c3c339007de4faed22b589f0"
+    },
+    {
+      "function": "RateIncEventMlx",
+      "native_line": 736,
+      "alibaba_line": 883,
+      "tokens_identical": true,
+      "native_token_sha256": "db303b500e1a7cd6636d0b48d200cbbdc48b6a915fe3d3bbd5d2e8f27e0ed60e",
+      "alibaba_token_sha256": "db303b500e1a7cd6636d0b48d200cbbdc48b6a915fe3d3bbd5d2e8f27e0ed60e"
+    },
+    {
+      "function": "FastRecoveryMlx",
+      "native_line": 747,
+      "alibaba_line": 894,
+      "tokens_identical": true,
+      "native_token_sha256": "436fb8c23d6ca059bfc1cd814fa581a74295135fc1f476a0b22f1c336cfe49d7",
+      "alibaba_token_sha256": "436fb8c23d6ca059bfc1cd814fa581a74295135fc1f476a0b22f1c336cfe49d7"
+    },
+    {
+      "function": "ActiveIncreaseMlx",
+      "native_line": 756,
+      "alibaba_line": 903,
+      "tokens_identical": true,
+      "native_token_sha256": "e677a225da1426dc69702b02f87aa7e508f0a96ca514cdbca2de3cb48f012364",
+      "alibaba_token_sha256": "e677a225da1426dc69702b02f87aa7e508f0a96ca514cdbca2de3cb48f012364"
+    },
+    {
+      "function": "HyperIncreaseMlx",
+      "native_line": 772,
+      "alibaba_line": 919,
+      "tokens_identical": true,
+      "native_token_sha256": "2775c8467b53ae3c9b223bc6554f11f19cf0fbaf3c07207d4a3dabc7ed065b1e",
+      "alibaba_token_sha256": "2775c8467b53ae3c9b223bc6554f11f19cf0fbaf3c07207d4a3dabc7ed065b1e"
+    }
+  ],
+  "default_values": {
+    "RPTimer": "DoubleValue(1500.0)",
+    "EwmaGain": "DoubleValue(1.0 / 16)",
+    "AlphaResumInterval": "DoubleValue(55.0)",
+    "RateDecreaseInterval": "DoubleValue(4.0)",
+    "RateOnFirstCnp": "DoubleValue(1.0)",
+    "MinRate": "DataRateValue(DataRate(\"100Mb/s\"))"
+  },
+  "native_example_config": {
+    "CC_MODE": [
+      "12"
+    ],
+    "ALPHA_RESUME_INTERVAL": [
+      "1"
+    ],
+    "RP_TIMER": [
+      "900"
+    ],
+    "EWMA_GAIN": [
+      "0.00390625"
+    ],
+    "FAST_RECOVERY_TIMES": [
+      "1"
+    ],
+    "RATE_AI": [
+      "50Mb/s"
+    ],
+    "RATE_HAI": [
+      "100Mb/s"
+    ],
+    "MIN_RATE": [
+      "100Mb/s"
+    ]
+  },
+  "paper_excerpts": {
+    "np_generation": {
+      "start_line": 456,
+      "end_line": 461,
+      "text": "CNP is sent immediately. Then, the NIC generates at most\none CNP packet every N microseconds for the flow, if any\npacket that arrives within that time window was marked. We\nuse N = 50µs in our deployment. Processing a marked\npacket, and generating the CNP are expensive operations, so\nwe minimize the activity for each marked packet. We dis-"
+    },
+    "rate_increase_timer_and_bytes": {
+      "start_line": 527,
+      "end_line": 535,
+      "text": "Furthermore, RP increases its sending rate using a timer and\na byte counter, in a manner identical to QCN [17]. The byte\ncounter increases rate for every B bytes, while the timer in-\ncreases rate every T time units. The timer ensures that the\nflow can recover quickly even when its rate has dropped to\na low value. The two parameters can be tuned to achieve\nthe desired aggressiveness. The rate increase has two main\nphases: fast recovery, where the rate is rapidly increased to-\nwards fixed target rate for F = 5 successive iterations:"
+    },
+    "initial_parameters": {
+      "start_line": 873,
+      "end_line": 876,
+      "text": "We start with recommended parameters from QCN and\nDCTCP specifications. Specifically, B = 150KB, T =\n1.5ms, Kmin = Kmax = 40KB, Pmax = 1, and g = 1/16.\n529"
+    },
+    "initial_nonconvergence": {
+      "start_line": 918,
+      "end_line": 927,
+      "text": "Unfortunately we find that with these parameter values,\nthe flows cannot converge (innermost edge of Figure 11(a)).\nWith these settings, QCN byte counter dominates rate in-\ncrease, and the faster flow grows faster. QCN compensates\nfor this using probabilistic feedback, which DCQCN does\nnot have. Instead, the solution is to either slow down the byte\ncounter, or speed up the rate increase timer. Figure 11(a)\nshows that slowing down byte counter helps, but it reduces\nconvergence speed. Speeding up the timer (Figure 11(b))\nis better. Note that the timer cannot be smaller than 50µs,"
+    },
+    "final_parameters_and_scope": {
+      "start_line": 940,
+      "end_line": 955,
+      "text": "In conclusion, to achieve fast convergence to fairness, we\nconfigure RED-ECN on switches with Kmax = 200KB and\nPmax = 1%. We set Kmin = 5KB since we found it suf-\nficient to maintain 100% throughput. Though a 5KB Kmin\nseems shallow, the marking probability around Kmin is very\nlittle. Fluid model predicts that the stable queue length is\nusually one order of magnitude larger than 5KB Kmin. Our\ndeployment experience and experiments (see §6) confirm\nthis. We also set rate increase timer as 55us, and byte counter\nto 10MB. If the feedback delay is significantly different from\nthe value we assumed (e.g. if RTT is high), parameter values\nwill be different.\nThe queue length at the bottleneck depends on the value\nof g. We tested different g from 2:1 incast to 16:1 incast\n(Figure 12) and found smaller g leads to lower queue length\nand lower variation. Lower g leads to slightly slower conver-"
+    },
+    "hoti_collective_chunking": {
+      "start_line": 436,
+      "end_line": 439,
+      "text": "break each collective into four equally sized chunks and\nthen process them in a pipeline manner, similar to [37].\nE. Metric of Evaluation\nWe use various metrics to evaluate the performance and"
+    },
+    "hoti_tuning": {
+      "start_line": 490,
+      "end_line": 495,
+      "text": "parameters in switch to be set. We tuned the parameter in\nevery experiment to test against the best case of DCQCN. In\nthis case, there are no PFC generated and we get better link\nutilization with less queue buffer usage than the previous\ncase where a lot of PFCs were generated. Hence, we have\nlow latencies and also eliminating the problem which comes"
+    },
+    "hoti_overhead": {
+      "start_line": 724,
+      "end_line": 731,
+      "text": "introduce considerable overhead at the endpoints, requiring\nfrequent network feedback but offering little performance\nimprovements (for the single workload scenario). Note that\ncompared to the general datacenters, the overhead of CC\nalgorithms are much higher in distributed training since they\nuse high-performance network components (e.g., 400 Gbps\nNICs [38]) and also host multiple NICs per server node,\nwasting a lot of cycles at the endpoints to run CC algorithm."
+    }
+  },
+  "papers": [
+    {
+      "id": "dcqcn2015",
+      "url": "https://conferences.sigcomm.org/sigcomm/2015/pdf/papers/p523.pdf",
+      "accessed_utc": "2026-10-22T21:46:02.850679+00:00",
+      "http_status": 200,
+      "resolved_url": "https://conferences.sigcomm.org/sigcomm/2015/pdf/papers/p523.pdf",
+      "status": "read",
+      "bytes": 1524272,
+      "sha256": "879074a33b78ceb93f9f66d59b217fba9e7621320cc68bc47914747cf5cf31f8",
+      "wall_seconds": 3.0166687313467264,
+      "command": [
+        "/usr/bin/python3",
+        "/home/lry/moe-ub-cosim/experiments/paper_readiness/collect_dcqcn_papers.py",
+        "--output",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers",
+        "--fetch",
+        "dcqcn2015"
+      ],
+      "conversion": {
+        "command": [
+          "pdftotext",
+          "-layout",
+          "-nopgbrk",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers/dcqcn2015.pdf",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers/dcqcn2015.txt"
+        ],
+        "exitcode": 0
+      },
+      "text_bytes": 120480,
+      "text_sha256": "8e24d0ed58449e08dbee0b985e8f531dc423903fc7bbb7eba1c356a2ae577ef6"
+    },
+    {
+      "id": "roce_hoti2022",
+      "url": "https://arxiv.org/pdf/2207.10898",
+      "accessed_utc": "2026-10-22T21:46:06.078608+00:00",
+      "http_status": 200,
+      "resolved_url": "https://arxiv.org/pdf/2207.10898",
+      "status": "read",
+      "bytes": 571199,
+      "sha256": "0c9648a0d229a2c0badea8c36671447cd46e2b457581b8dc3bb91891b17cc75d",
+      "wall_seconds": 0.5783557668328285,
+      "command": [
+        "/usr/bin/python3",
+        "/home/lry/moe-ub-cosim/experiments/paper_readiness/collect_dcqcn_papers.py",
+        "--output",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers",
+        "--fetch",
+        "roce_hoti2022"
+      ],
+      "conversion": {
+        "command": [
+          "pdftotext",
+          "-layout",
+          "-nopgbrk",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers/roce_hoti2022.pdf",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers/roce_hoti2022.txt"
+        ],
+        "exitcode": 0
+      },
+      "text_bytes": 63347,
+      "text_sha256": "3a3828f8ce5b86e07484933d520af300432c613a799a19450c0afd61b37f6b75"
+    }
+  ],
+  "assertions": {
+    "per_marked_packet_ACK_CNP": true,
+    "NP_50us_holdoff_in_ReceiveUdp": false,
+    "standalone_ReceiveCnp_calls_DCQCN_update": false,
+    "DCQCN_rate_increase_has_byte_trigger_on_this_path": false,
+    "native_example_is_mode1": false,
+    "hardware_calibration_established": false
+  }
+}

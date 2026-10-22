@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "local_html_links": [
+    "witness.json",
+    "sources.json",
+    "summary.json",
+    "verification.json",
+    "maintenance.json",
+    "archive.json"
+  ],
+  "relocated_analysis_checked": true,
+  "archive_members_checked": 109,
+  "embedded_prior_members_checked": 97,
+  "new_network_runs": 0,
+  "hardware_calibrated": false,
+  "scope": "Fixed read-only audit; not research contribution or hardware accuracy validation",
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "checkouts": 13
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0
+  },
+  "package_monitor": "package-monitor.json",
+  "archive_sha256_rechecked": true,
+  "cumulative_monitored_stage_seconds": 7.247436556965113,
+  "cumulative_sampled_artifact_bytes": 35688448
+}

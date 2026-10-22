@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "prior_archive_sha256": "c001912e41653121ac4a995565877c344f302d3922d410de786a3a7af0b44dcc",
+  "prior_results_byte_identical": true,
+  "paper_passages_exact": true,
+  "snapshot_file_hashes_checked": 9,
+  "independent_endpoint_joins": 2293,
+  "source_packets": 9094,
+  "endpoint_events": 36373,
+  "density_oracle": "independent sorted-time bisect for each interval start; audit uses sliding two-pointer",
+  "cases": [
+    {
+      "case": "layer4-depth1",
+      "source_packets": 5160,
+      "endpoint_events": 20640,
+      "CE": 0,
+      "matched_ACK": 5160
+    },
+    {
+      "case": "layer4-depth8",
+      "source_packets": 3934,
+      "endpoint_events": 15733,
+      "CE": 2293,
+      "matched_ACK": 3933
+    }
+  ],
+  "witness": {
+    "case": "layer4-depth8",
+    "stream": 1,
+    "start_ns": 1702483,
+    "end_ns": 1752483,
+    "count": 109
+  },
+  "new_network_runs": 0,
+  "hardware_calibrated": false,
+  "scope": "prior fixed trajectory and source/paper agreement; no counterfactual latency or universal hardware claim"
+}

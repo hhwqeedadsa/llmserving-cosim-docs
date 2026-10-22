@@ -820,3 +820,56 @@ completion_stage relocated-compare 33554432 python3 experiments/paper_readiness/
 打包阶段仍用host_probe限60秒/RSS1GiB/地址2GiB/64MiB，把task、报告与checkpoint同时计入artifact-root；
 纳入文件最大96MiB、压缩包最大32MiB，并逐文件检查新包和内嵌旧包的hash。运行中的打包monitor与自身归档清单不纳入包内。
 报告保存命令、资源及适用范围；独立重分析不是独立请求验证，也没有重跑18个旧网络。
+
+## DCQCN反馈抽象核查（2026-10-22）
+
+本轮是只读模型审计，方法见[协议](dcqcn_validity_protocol.md)，结果见[HTML](../../docs/review_artifacts/dcqcn_validity_20261022/report.html)。
+核对DCQCN 2015、HOTI 2022、锁定ASTRA/Alibaba源码和既有两份Prefill端点轨迹，不执行新网络、不修参数、不重跑失败负载。
+[参考模式要求](dcqcn_reference_requirements.md)是后续设计，尚未实现或硬件校准。
+
+只读重分析需要：当前仓库及固定依赖；已存在的Alibaba `3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437`检出；
+旧Prefill检查点（[SHA256清单](../../docs/review_artifacts/prefill_pressure_20261022/archive.json)）；两篇PDF与提取文本。
+本轮检查点已包含这些文档、相关源码快照、旧包和最小旧轨迹；存于易失内存盘，没有持久备份。
+检查器接受旧包新路径`--prior-archive`，审计接受已存在的阿里检出路径`--alibaba-source`，均不自动下载依赖。
+平台源码按`68ad3fe`的Git blob核对，因此后续研究提交不会导致脚本要求主仓库HEAD仍停在旧提交；被核查平台文件仍须与其一致。
+
+从新目录重分析的示例（先将检查点中`raw/relocated-task`和`raw/prior-prefill.tar.gz`恢复到自己的目录，并核对旧包hash）：
+
+```bash
+export COSIM_DCQCN_REPO=/home/lry/moe-ub-cosim
+export COSIM_DCQCN_WORK=/dev/shm/my-dcqcn-audit
+# COSIM_DCQCN_WORK须事先建立，仅放本轮已恢复的输入；不能覆盖旧结果。
+# 以下函数只计当前阶段输出；同时人工核对整个任务累计≤64MiB/180秒。
+dcqcn_stage() {
+  local dcqcn_name="$1"
+  shift
+  PYTHONPATH="$COSIM_DCQCN_REPO/python" PYTHONDONTWRITEBYTECODE=1 \
+    python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_DCQCN_WORK/$dcqcn_name-monitor" \
+    --artifact-root "$COSIM_DCQCN_WORK/$dcqcn_name" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes 33554432 --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+dcqcn_stage audit-reviewed python3 "$COSIM_DCQCN_REPO/experiments/paper_readiness/audit_dcqcn_validity.py" \
+  --papers "$COSIM_DCQCN_WORK/papers" --task "$COSIM_DCQCN_WORK/relocated-task" \
+  --alibaba-source "$COSIM_DCQCN_REPO/data/research/ns-3-alibabacloud-3e0c7c1" \
+  --output "$COSIM_DCQCN_WORK/audit-reviewed"
+dcqcn_stage check python3 "$COSIM_DCQCN_REPO/experiments/paper_readiness/check_dcqcn_validity.py" \
+  --task "$COSIM_DCQCN_WORK/relocated-task" --audit "$COSIM_DCQCN_WORK/audit-reviewed" \
+  --papers "$COSIM_DCQCN_WORK/papers" --prior-archive "$COSIM_DCQCN_WORK/prior-prefill.tar.gz" \
+  --output "$COSIM_DCQCN_WORK/check"
+dcqcn_stage review python3 "$COSIM_DCQCN_REPO/experiments/paper_readiness/build_dcqcn_validity_review.py" \
+  --audit "$COSIM_DCQCN_WORK/audit-reviewed" --check "$COSIM_DCQCN_WORK/check" \
+  --output "$COSIM_DCQCN_WORK/review"
+```
+
+已有`papers`时无需联网。若文档未保存，可另外运行`collect_dcqcn_papers.py --output 新papers目录`，只请求固定两URL，
+每URL4MiB/硬限20秒/不重试，执行前先确认任务剩余预算。它调用已有`pdftotext -layout -nopgbrk`；
+还须对各PDF执行`pdftotext -raw -nopgbrk 文档.pdf 文档.raw.txt`，因为审计逐项定位原文摘录。
+PDF hash不同、提取器版本变化或原文定位失败都应保留并报告，不能放宽断言冒充原结果。
+
+`package_dcqcn_validity.py`只归档这次固定审计历史，不是通用实验启动器：它要求原失败audit、修正审计、独立check、迁移audit/check及7个结束monitor，
+先比较迁移结果（只规范输入根路径），再核对旧包hash和全部97个成员。传`--task 本轮目录 --original-task 原Prefill目录 --prior-members 原Prefill的checkpoint/members.json --output 仓库内新报告目录 --checkpoint 本轮目录内新检查点目录`。
+外层仍用host_probe，打包限32MiB、累计64MiB/180秒，task与报告均计入artifact-root。运行中的打包monitor不入快照；完成后将该probe记录另存报告目录。
+完整命令、退出状态和资源见`maintenance.json`与`package-monitor.json`，新包SHA256及逐文件核对见`archive.json`、`archive-members.json`。
+报告生成步骤本身不证明闭环模型或时延有效；通知位由固定源码及实际端点序号推导，旧轨迹没有直接保存ACK flags。

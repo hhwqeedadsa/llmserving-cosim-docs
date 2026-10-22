@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+固定原生mode1的反馈抽象与DCQCN 2015部署存在差异：`ReceiveUdp`逐标记数据包在ACK中置CNP位，此路径没有按流50us通知抑制；恢复仅有timer触发，未实现原文同时使用的发送字节触发。独立`ReceiveCnp`也未调用该mode1更新。ASTRA与Alibaba的10个控制函数去注释token一致，不能作为独立校准。已有Prefill长尾只能归于声明模型，不能直接推为真实MoE集群规律；论文参数也不是现代NIC通用校准值。源码、原文和既有包记录的核查见[反馈模型报告](review_artifacts/dcqcn_validity_20261022/report.html)，后续参考模式的[实施门槛](../experiments/paper_readiness/dcqcn_reference_requirements.md)尚未实现。
+
 原生queue_fence将多连接已预留前缀映射到真实ACK/响应进度，避免动态等待集合包含未来工作。一个回调中的捕获及MRT1完成仍是功能选择，不能当作GDAKI逐peer取样、CQ或GIN flush精度验证。来源和反例见[队列快照验收](../fixtures/queue_fences/README.md)。
 
 原生事务新增本地窗口等待，以实际解码后的LE64值决定功能程序是否继续，支持消费后清零。人工两轮验证及错误数据不放行不等于现代DeepEP或GPU可见性校准；模型没有给轮询添加实测代价。证据见[本地等待验收](../fixtures/local_memory_waits/README.md)。

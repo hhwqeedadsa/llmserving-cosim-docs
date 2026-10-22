@@ -1,0 +1,441 @@
+{
+  "platform_commit": "68ad3fe25a74045d7205ba93257a6aa5b51f6294",
+  "cwd": "/home/lry/moe-ub-cosim",
+  "stages": [
+    {
+      "stage": "collect",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/collect-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/collect_dcqcn_papers.py",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T21:46:02.730584+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 43495424,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/collect-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers"
+        ],
+        "peak_sampled_artifact_bytes": 2318336,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 2295048,
+        "peak_sampled_artifact_allocated_bytes": 2318336,
+        "process_group": 1749858,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:46:06.850427+00:00",
+        "wall_seconds": 4.119864033535123,
+        "max_waited_child_rss_kib": 22812,
+        "artifact_bytes_before_report": 12698,
+        "aggregate_artifact_bytes_before_report": 2318336,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 2295048,
+          "allocated_bytes": 2318336
+        }
+      }
+    },
+    {
+      "stage": "audit",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/audit-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/audit_dcqcn_validity.py",
+          "--papers",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers",
+          "--task",
+          "/dev/shm/moe-prefill-pressure-20261022",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T21:50:16.171552+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 7442432,
+        "peak_sampled_processes": 1,
+        "status": "child_failed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit"
+        ],
+        "peak_sampled_artifact_bytes": 208896,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 184658,
+        "peak_sampled_artifact_allocated_bytes": 208896,
+        "process_group": 1750679,
+        "child_exit_code": 1,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:50:16.302266+00:00",
+        "wall_seconds": 0.13071749918162823,
+        "max_waited_child_rss_kib": 16560,
+        "artifact_bytes_before_report": 1179,
+        "aggregate_artifact_bytes_before_report": 208896,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 184658,
+          "allocated_bytes": 208896
+        }
+      }
+    },
+    {
+      "stage": "audit-reviewed",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/audit_dcqcn_validity.py",
+          "--papers",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers",
+          "--task",
+          "/dev/shm/moe-prefill-pressure-20261022",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T21:50:57.948841+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 50495488,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed-monitor"
+        ],
+        "peak_sampled_artifact_bytes": 716800,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 685376,
+        "peak_sampled_artifact_allocated_bytes": 716800,
+        "process_group": 1750926,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:50:58.296270+00:00",
+        "wall_seconds": 0.3474357835948467,
+        "max_waited_child_rss_kib": 49312,
+        "artifact_bytes_before_report": 1140,
+        "aggregate_artifact_bytes_before_report": 716800,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 685376,
+          "allocated_bytes": 716800
+        }
+      }
+    },
+    {
+      "stage": "check",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/check-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_dcqcn_validity.py",
+          "--papers",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers",
+          "--task",
+          "/dev/shm/moe-prefill-pressure-20261022",
+          "--audit",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/check"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T21:53:34.465573+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 30638080,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/check-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/check"
+        ],
+        "peak_sampled_artifact_bytes": 40960,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 27551,
+        "peak_sampled_artifact_allocated_bytes": 40960,
+        "process_group": 1751418,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:53:34.806170+00:00",
+        "wall_seconds": 0.34059866331517696,
+        "max_waited_child_rss_kib": 37088,
+        "artifact_bytes_before_report": 1846,
+        "aggregate_artifact_bytes_before_report": 40960,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 27551,
+          "allocated_bytes": 40960
+        }
+      }
+    },
+    {
+      "stage": "review",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/review-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/build_dcqcn_validity_review.py",
+          "--audit",
+          "/dev/shm/moe-dcqcn-validity-20261022/audit-reviewed",
+          "--check",
+          "/dev/shm/moe-dcqcn-validity-20261022/check",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/review"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T21:55:50.129418+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 7438336,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/review-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/review"
+        ],
+        "peak_sampled_artifact_bytes": 102400,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 78346,
+        "peak_sampled_artifact_allocated_bytes": 102400,
+        "process_group": 1751727,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:55:50.259355+00:00",
+        "wall_seconds": 0.12993959710001945,
+        "max_waited_child_rss_kib": 13464,
+        "artifact_bytes_before_report": 557,
+        "aggregate_artifact_bytes_before_report": 102400,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 78346,
+          "allocated_bytes": 102400
+        }
+      }
+    },
+    {
+      "stage": "relocation-audit",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/relocation-audit-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "/home/lry/moe-ub-cosim/experiments/paper_readiness/audit_dcqcn_validity.py",
+          "--papers",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers",
+          "--task",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-task",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-audit"
+        ],
+        "cwd": "/dev/shm/moe-dcqcn-validity-20261022",
+        "started_utc": "2026-10-22T21:57:19.624912+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 51552256,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/relocation-audit-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-audit"
+        ],
+        "peak_sampled_artifact_bytes": 716800,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 685455,
+        "peak_sampled_artifact_allocated_bytes": 716800,
+        "process_group": 1751907,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T21:57:19.966400+00:00",
+        "wall_seconds": 0.3414894584566355,
+        "max_waited_child_rss_kib": 50344,
+        "artifact_bytes_before_report": 1141,
+        "aggregate_artifact_bytes_before_report": 716800,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 685455,
+          "allocated_bytes": 716800
+        }
+      }
+    },
+    {
+      "stage": "relocation-check",
+      "probe": "/dev/shm/moe-dcqcn-validity-20261022/relocation-check-monitor/probe.json",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "/home/lry/moe-ub-cosim/experiments/paper_readiness/check_dcqcn_validity.py",
+          "--task",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-task",
+          "--audit",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-audit",
+          "--papers",
+          "/dev/shm/moe-dcqcn-validity-20261022/papers",
+          "--prior-archive",
+          "/dev/shm/moe-dcqcn-validity-20261022/prior-prefill.tar.gz",
+          "--output",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-check"
+        ],
+        "cwd": "/dev/shm/moe-dcqcn-validity-20261022",
+        "started_utc": "2026-10-22T22:00:38.785823+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 30756864,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-dcqcn-validity-20261022/relocation-check-monitor",
+          "/dev/shm/moe-dcqcn-validity-20261022/relocated-check"
+        ],
+        "peak_sampled_artifact_bytes": 40960,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 27548,
+        "peak_sampled_artifact_allocated_bytes": 40960,
+        "process_group": 1752751,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:00:39.126229+00:00",
+        "wall_seconds": 0.3404054883867502,
+        "max_waited_child_rss_kib": 37204,
+        "artifact_bytes_before_report": 1843,
+        "aggregate_artifact_bytes_before_report": 40960,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 27548,
+          "allocated_bytes": 40960
+        }
+      }
+    }
+  ],
+  "measured_stage_wall_seconds": 5.75045052357018,
+  "peak_waited_child_rss_kib": 50344,
+  "network_executions": 0,
+  "gpu_executions": 0,
+  "builds": 0,
+  "dependency_changes": 0,
+  "downloads": {
+    "primary_paper_urls": 2,
+    "retries": 0
+  },
+  "failures": [
+    {
+      "stage": "audit",
+      "reason": "Comment text GetMicroSeconds was mistaken for a function call; corrected token/comment handling only.",
+      "preserved_source": "raw/failed-audit-source.py",
+      "simulator_modified": false
+    }
+  ],
+  "portability": {
+    "source_and_event_bytes_identical": true,
+    "check_and_witness_bytes_identical": true,
+    "feedback_summary_equal_except_input_root": true,
+    "execution_cwd": "/dev/shm/moe-dcqcn-validity-20261022"
+  },
+  "raw_conversion": {
+    "commands": [
+      [
+        "pdftotext",
+        "-raw",
+        "-nopgbrk",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers/dcqcn2015.pdf",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers/dcqcn2015.raw.txt"
+      ],
+      [
+        "pdftotext",
+        "-raw",
+        "-nopgbrk",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers/roce_hoti2022.pdf",
+        "/dev/shm/moe-dcqcn-validity-20261022/papers/roce_hoti2022.raw.txt"
+      ]
+    ],
+    "scope": "Previously completed extraction; not rerun during packaging",
+    "files": [
+      {
+        "path": "/dev/shm/moe-dcqcn-validity-20261022/papers/dcqcn2015.raw.txt",
+        "sha256": "b8c0fe9a5375615bd4305555e0b7f5cbfdc345f6e2f64cc9d253a036d7c3246a"
+      },
+      {
+        "path": "/dev/shm/moe-dcqcn-validity-20261022/papers/roce_hoti2022.raw.txt",
+        "sha256": "e5c3199d8c45374d90e80aa3c611f52c1c5e88fb72663cf9b97d245ecee998cf"
+      }
+    ]
+  },
+  "storage": {
+    "kind": "tmpfs_volatile",
+    "persistent_backup": false,
+    "root_free_bytes": 8017686528,
+    "tmpfs_free_bytes": 260714082304,
+    "reserve_bytes": 8589934592
+  },
+  "limits": {
+    "per_stage_wall_seconds": 60,
+    "cumulative_stage_seconds": 180,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "cumulative_artifact_bytes": 67108864,
+    "archive_bytes": 33554432
+  },
+  "packaging": "Packaging monitor and post-pack archive/final-check manifests are external; no live logs or self-manifests in archive."
+}

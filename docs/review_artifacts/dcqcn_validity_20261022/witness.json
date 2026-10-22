@@ -1,0 +1,1100 @@
+{
+  "case": "layer4-depth8",
+  "stream": 1,
+  "start_ns": 1702483,
+  "end_ns": 1752483,
+  "count": 109,
+  "scope": "actual ACK transmissions, CNP bits reconstructed from original native source; not standalone CNP packets",
+  "events": [
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3533,
+      "ack_uid": 3739,
+      "end_sequence": 218960,
+      "np_mark_ns": 1702483,
+      "ack_tx_ns": 1702483,
+      "ack_rx_ns": 1706521
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3534,
+      "ack_uid": 3743,
+      "end_sequence": 219960,
+      "np_mark_ns": 1702815,
+      "ack_tx_ns": 1702815,
+      "ack_rx_ns": 1706853
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3537,
+      "ack_uid": 3747,
+      "end_sequence": 220960,
+      "np_mark_ns": 1703147,
+      "ack_tx_ns": 1703147,
+      "ack_rx_ns": 1707185
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3541,
+      "ack_uid": 3755,
+      "end_sequence": 222960,
+      "np_mark_ns": 1703811,
+      "ack_tx_ns": 1703811,
+      "ack_rx_ns": 1707849
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3546,
+      "ack_uid": 3759,
+      "end_sequence": 224960,
+      "np_mark_ns": 1704475,
+      "ack_tx_ns": 1704475,
+      "ack_rx_ns": 1708513
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3551,
+      "ack_uid": 3765,
+      "end_sequence": 227960,
+      "np_mark_ns": 1705471,
+      "ack_tx_ns": 1705471,
+      "ack_rx_ns": 1709509
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3555,
+      "ack_uid": 3770,
+      "end_sequence": 229960,
+      "np_mark_ns": 1706135,
+      "ack_tx_ns": 1706135,
+      "ack_rx_ns": 1710173
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3559,
+      "ack_uid": 3774,
+      "end_sequence": 231424,
+      "np_mark_ns": 1706584,
+      "ack_tx_ns": 1706584,
+      "ack_rx_ns": 1710622
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3565,
+      "ack_uid": 3783,
+      "end_sequence": 234424,
+      "np_mark_ns": 1707623,
+      "ack_tx_ns": 1707623,
+      "ack_rx_ns": 1711661
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3566,
+      "ack_uid": 3785,
+      "end_sequence": 235424,
+      "np_mark_ns": 1707955,
+      "ack_tx_ns": 1707955,
+      "ack_rx_ns": 1711993
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3573,
+      "ack_uid": 3793,
+      "end_sequence": 238424,
+      "np_mark_ns": 1708951,
+      "ack_tx_ns": 1708951,
+      "ack_rx_ns": 1712989
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3575,
+      "ack_uid": 3794,
+      "end_sequence": 239424,
+      "np_mark_ns": 1709283,
+      "ack_tx_ns": 1709283,
+      "ack_rx_ns": 1713321
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3577,
+      "ack_uid": 3795,
+      "end_sequence": 240424,
+      "np_mark_ns": 1709615,
+      "ack_tx_ns": 1709615,
+      "ack_rx_ns": 1713653
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3581,
+      "ack_uid": 3797,
+      "end_sequence": 242424,
+      "np_mark_ns": 1710279,
+      "ack_tx_ns": 1710279,
+      "ack_rx_ns": 1714317
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3587,
+      "ack_uid": 3804,
+      "end_sequence": 245424,
+      "np_mark_ns": 1711275,
+      "ack_tx_ns": 1711275,
+      "ack_rx_ns": 1715313
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3590,
+      "ack_uid": 3808,
+      "end_sequence": 246888,
+      "np_mark_ns": 1711767,
+      "ack_tx_ns": 1711767,
+      "ack_rx_ns": 1715805
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3594,
+      "ack_uid": 3813,
+      "end_sequence": 248888,
+      "np_mark_ns": 1712431,
+      "ack_tx_ns": 1712431,
+      "ack_rx_ns": 1716469
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3596,
+      "ack_uid": 3815,
+      "end_sequence": 249888,
+      "np_mark_ns": 1712763,
+      "ack_tx_ns": 1712763,
+      "ack_rx_ns": 1716801
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3598,
+      "ack_uid": 3818,
+      "end_sequence": 250888,
+      "np_mark_ns": 1713095,
+      "ack_tx_ns": 1713095,
+      "ack_rx_ns": 1717133
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3600,
+      "ack_uid": 3820,
+      "end_sequence": 251888,
+      "np_mark_ns": 1713427,
+      "ack_tx_ns": 1713427,
+      "ack_rx_ns": 1717465
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3602,
+      "ack_uid": 3823,
+      "end_sequence": 252888,
+      "np_mark_ns": 1713759,
+      "ack_tx_ns": 1713759,
+      "ack_rx_ns": 1717797
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3604,
+      "ack_uid": 3824,
+      "end_sequence": 253888,
+      "np_mark_ns": 1714091,
+      "ack_tx_ns": 1714091,
+      "ack_rx_ns": 1718129
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3613,
+      "ack_uid": 3829,
+      "end_sequence": 257888,
+      "np_mark_ns": 1715434,
+      "ack_tx_ns": 1715434,
+      "ack_rx_ns": 1719472
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3617,
+      "ack_uid": 3833,
+      "end_sequence": 259888,
+      "np_mark_ns": 1716098,
+      "ack_tx_ns": 1716098,
+      "ack_rx_ns": 1720136
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3618,
+      "ack_uid": 3835,
+      "end_sequence": 260352,
+      "np_mark_ns": 1716215,
+      "ack_tx_ns": 1716215,
+      "ack_rx_ns": 1720253
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3620,
+      "ack_uid": 3837,
+      "end_sequence": 261352,
+      "np_mark_ns": 1716590,
+      "ack_tx_ns": 1716590,
+      "ack_rx_ns": 1720628
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3622,
+      "ack_uid": 3840,
+      "end_sequence": 262352,
+      "np_mark_ns": 1716922,
+      "ack_tx_ns": 1716922,
+      "ack_rx_ns": 1720960
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3628,
+      "ack_uid": 3847,
+      "end_sequence": 265352,
+      "np_mark_ns": 1717918,
+      "ack_tx_ns": 1717918,
+      "ack_rx_ns": 1721956
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3631,
+      "ack_uid": 3849,
+      "end_sequence": 266352,
+      "np_mark_ns": 1718250,
+      "ack_tx_ns": 1718250,
+      "ack_rx_ns": 1722288
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3632,
+      "ack_uid": 3852,
+      "end_sequence": 267352,
+      "np_mark_ns": 1718582,
+      "ack_tx_ns": 1718586,
+      "ack_rx_ns": 1722952
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3639,
+      "ack_uid": 3863,
+      "end_sequence": 270352,
+      "np_mark_ns": 1719578,
+      "ack_tx_ns": 1719582,
+      "ack_rx_ns": 1723661
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3644,
+      "ack_uid": 3876,
+      "end_sequence": 273352,
+      "np_mark_ns": 1720574,
+      "ack_tx_ns": 1720574,
+      "ack_rx_ns": 1724702
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3646,
+      "ack_uid": 3882,
+      "end_sequence": 274352,
+      "np_mark_ns": 1720906,
+      "ack_tx_ns": 1720906,
+      "ack_rx_ns": 1725049
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3653,
+      "ack_uid": 3908,
+      "end_sequence": 277816,
+      "np_mark_ns": 1722062,
+      "ack_tx_ns": 1722062,
+      "ack_rx_ns": 1726265
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3660,
+      "ack_uid": 3930,
+      "end_sequence": 280816,
+      "np_mark_ns": 1723058,
+      "ack_tx_ns": 1723065,
+      "ack_rx_ns": 1727306
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3670,
+      "ack_uid": 3965,
+      "end_sequence": 285816,
+      "np_mark_ns": 1724718,
+      "ack_tx_ns": 1724725,
+      "ack_rx_ns": 1729041
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3676,
+      "ack_uid": 3987,
+      "end_sequence": 288816,
+      "np_mark_ns": 1725714,
+      "ack_tx_ns": 1725714,
+      "ack_rx_ns": 1730082
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3677,
+      "ack_uid": 3991,
+      "end_sequence": 289280,
+      "np_mark_ns": 1725831,
+      "ack_tx_ns": 1725831,
+      "ack_rx_ns": 1730097
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3685,
+      "ack_uid": 4015,
+      "end_sequence": 292280,
+      "np_mark_ns": 1726870,
+      "ack_tx_ns": 1726870,
+      "ack_rx_ns": 1730966
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3688,
+      "ack_uid": 4023,
+      "end_sequence": 293280,
+      "np_mark_ns": 1727202,
+      "ack_tx_ns": 1727202,
+      "ack_rx_ns": 1731313
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3689,
+      "ack_uid": 4032,
+      "end_sequence": 294280,
+      "np_mark_ns": 1727534,
+      "ack_tx_ns": 1727541,
+      "ack_rx_ns": 1731660
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3692,
+      "ack_uid": 4041,
+      "end_sequence": 295280,
+      "np_mark_ns": 1727866,
+      "ack_tx_ns": 1727873,
+      "ack_rx_ns": 1732007
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3696,
+      "ack_uid": 4057,
+      "end_sequence": 297280,
+      "np_mark_ns": 1728530,
+      "ack_tx_ns": 1728537,
+      "ack_rx_ns": 1732701
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3701,
+      "ack_uid": 4081,
+      "end_sequence": 300280,
+      "np_mark_ns": 1729526,
+      "ack_tx_ns": 1729533,
+      "ack_rx_ns": 1733742
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3705,
+      "ack_uid": 4097,
+      "end_sequence": 302280,
+      "np_mark_ns": 1730190,
+      "ack_tx_ns": 1730190,
+      "ack_rx_ns": 1734436
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3708,
+      "ack_uid": 4105,
+      "end_sequence": 303280,
+      "np_mark_ns": 1730522,
+      "ack_tx_ns": 1730522,
+      "ack_rx_ns": 1734783
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3709,
+      "ack_uid": 4109,
+      "end_sequence": 303744,
+      "np_mark_ns": 1730639,
+      "ack_tx_ns": 1730639,
+      "ack_rx_ns": 1734798
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3725,
+      "ack_uid": 4117,
+      "end_sequence": 304744,
+      "np_mark_ns": 1731014,
+      "ack_tx_ns": 1731014,
+      "ack_rx_ns": 1735145
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3727,
+      "ack_uid": 4125,
+      "end_sequence": 305744,
+      "np_mark_ns": 1731346,
+      "ack_tx_ns": 1731346,
+      "ack_rx_ns": 1735492
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3729,
+      "ack_uid": 4133,
+      "end_sequence": 306744,
+      "np_mark_ns": 1731678,
+      "ack_tx_ns": 1731678,
+      "ack_rx_ns": 1735839
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3732,
+      "ack_uid": 4142,
+      "end_sequence": 307744,
+      "np_mark_ns": 1732010,
+      "ack_tx_ns": 1732010,
+      "ack_rx_ns": 1736346
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3734,
+      "ack_uid": 4151,
+      "end_sequence": 308744,
+      "np_mark_ns": 1732342,
+      "ack_tx_ns": 1732349,
+      "ack_rx_ns": 1736693
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3736,
+      "ack_uid": 4159,
+      "end_sequence": 309744,
+      "np_mark_ns": 1732674,
+      "ack_tx_ns": 1732681,
+      "ack_rx_ns": 1737040
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3738,
+      "ack_uid": 4167,
+      "end_sequence": 310744,
+      "np_mark_ns": 1733006,
+      "ack_tx_ns": 1733013,
+      "ack_rx_ns": 1737055
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3740,
+      "ack_uid": 4175,
+      "end_sequence": 311744,
+      "np_mark_ns": 1733338,
+      "ack_tx_ns": 1733345,
+      "ack_rx_ns": 1737402
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3742,
+      "ack_uid": 4183,
+      "end_sequence": 312744,
+      "np_mark_ns": 1733670,
+      "ack_tx_ns": 1733677,
+      "ack_rx_ns": 1737749
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3744,
+      "ack_uid": 4192,
+      "end_sequence": 313744,
+      "np_mark_ns": 1734002,
+      "ack_tx_ns": 1734009,
+      "ack_rx_ns": 1738096
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3746,
+      "ack_uid": 4199,
+      "end_sequence": 314744,
+      "np_mark_ns": 1734334,
+      "ack_tx_ns": 1734341,
+      "ack_rx_ns": 1738443
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3748,
+      "ack_uid": 4207,
+      "end_sequence": 315744,
+      "np_mark_ns": 1734666,
+      "ack_tx_ns": 1734666,
+      "ack_rx_ns": 1738790
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3750,
+      "ack_uid": 4215,
+      "end_sequence": 316744,
+      "np_mark_ns": 1734998,
+      "ack_tx_ns": 1734998,
+      "ack_rx_ns": 1739137
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3752,
+      "ack_uid": 4223,
+      "end_sequence": 317744,
+      "np_mark_ns": 1735330,
+      "ack_tx_ns": 1735330,
+      "ack_rx_ns": 1739484
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3754,
+      "ack_uid": 4228,
+      "end_sequence": 318208,
+      "np_mark_ns": 1735447,
+      "ack_tx_ns": 1735447,
+      "ack_rx_ns": 1739499
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3768,
+      "ack_uid": 4236,
+      "end_sequence": 319208,
+      "np_mark_ns": 1735822,
+      "ack_tx_ns": 1735822,
+      "ack_rx_ns": 1740178
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3769,
+      "ack_uid": 4244,
+      "end_sequence": 320208,
+      "np_mark_ns": 1736155,
+      "ack_tx_ns": 1736155,
+      "ack_rx_ns": 1740193
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3771,
+      "ack_uid": 4252,
+      "end_sequence": 321208,
+      "np_mark_ns": 1736486,
+      "ack_tx_ns": 1736486,
+      "ack_rx_ns": 1740540
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3772,
+      "ack_uid": 4260,
+      "end_sequence": 322208,
+      "np_mark_ns": 1736818,
+      "ack_tx_ns": 1736818,
+      "ack_rx_ns": 1740887
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3775,
+      "ack_uid": 4268,
+      "end_sequence": 323208,
+      "np_mark_ns": 1737150,
+      "ack_tx_ns": 1737150,
+      "ack_rx_ns": 1741394
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3776,
+      "ack_uid": 4274,
+      "end_sequence": 324208,
+      "np_mark_ns": 1737482,
+      "ack_tx_ns": 1737482,
+      "ack_rx_ns": 1741741
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3778,
+      "ack_uid": 4279,
+      "end_sequence": 325208,
+      "np_mark_ns": 1737814,
+      "ack_tx_ns": 1737814,
+      "ack_rx_ns": 1742088
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3779,
+      "ack_uid": 4285,
+      "end_sequence": 326208,
+      "np_mark_ns": 1738146,
+      "ack_tx_ns": 1738146,
+      "ack_rx_ns": 1742435
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3781,
+      "ack_uid": 4291,
+      "end_sequence": 327208,
+      "np_mark_ns": 1738478,
+      "ack_tx_ns": 1738478,
+      "ack_rx_ns": 1742782
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3782,
+      "ack_uid": 4298,
+      "end_sequence": 328208,
+      "np_mark_ns": 1738810,
+      "ack_tx_ns": 1738810,
+      "ack_rx_ns": 1743129
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3784,
+      "ack_uid": 4305,
+      "end_sequence": 329208,
+      "np_mark_ns": 1739142,
+      "ack_tx_ns": 1739142,
+      "ack_rx_ns": 1743476
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3786,
+      "ack_uid": 4311,
+      "end_sequence": 330208,
+      "np_mark_ns": 1739474,
+      "ack_tx_ns": 1739474,
+      "ack_rx_ns": 1743823
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3787,
+      "ack_uid": 4317,
+      "end_sequence": 331208,
+      "np_mark_ns": 1739806,
+      "ack_tx_ns": 1739806,
+      "ack_rx_ns": 1744170
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3789,
+      "ack_uid": 4323,
+      "end_sequence": 332208,
+      "np_mark_ns": 1740138,
+      "ack_tx_ns": 1740138,
+      "ack_rx_ns": 1744185
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3791,
+      "ack_uid": 4326,
+      "end_sequence": 332672,
+      "np_mark_ns": 1740255,
+      "ack_tx_ns": 1740255,
+      "ack_rx_ns": 1744532
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3799,
+      "ack_uid": 4332,
+      "end_sequence": 333672,
+      "np_mark_ns": 1740630,
+      "ack_tx_ns": 1740630,
+      "ack_rx_ns": 1744879
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3800,
+      "ack_uid": 4338,
+      "end_sequence": 334672,
+      "np_mark_ns": 1740962,
+      "ack_tx_ns": 1740962,
+      "ack_rx_ns": 1745226
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3802,
+      "ack_uid": 4344,
+      "end_sequence": 335672,
+      "np_mark_ns": 1741294,
+      "ack_tx_ns": 1741294,
+      "ack_rx_ns": 1745573
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3803,
+      "ack_uid": 4350,
+      "end_sequence": 336672,
+      "np_mark_ns": 1741626,
+      "ack_tx_ns": 1741626,
+      "ack_rx_ns": 1745920
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3806,
+      "ack_uid": 4356,
+      "end_sequence": 337672,
+      "np_mark_ns": 1741958,
+      "ack_tx_ns": 1741958,
+      "ack_rx_ns": 1746095
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3807,
+      "ack_uid": 4362,
+      "end_sequence": 338672,
+      "np_mark_ns": 1742290,
+      "ack_tx_ns": 1742290,
+      "ack_rx_ns": 1746442
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3809,
+      "ack_uid": 4368,
+      "end_sequence": 339672,
+      "np_mark_ns": 1742622,
+      "ack_tx_ns": 1742622,
+      "ack_rx_ns": 1746789
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3811,
+      "ack_uid": 4373,
+      "end_sequence": 340672,
+      "np_mark_ns": 1742954,
+      "ack_tx_ns": 1742954,
+      "ack_rx_ns": 1747136
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3812,
+      "ack_uid": 4376,
+      "end_sequence": 341672,
+      "np_mark_ns": 1743286,
+      "ack_tx_ns": 1743286,
+      "ack_rx_ns": 1747483
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3814,
+      "ack_uid": 4379,
+      "end_sequence": 342672,
+      "np_mark_ns": 1743618,
+      "ack_tx_ns": 1743618,
+      "ack_rx_ns": 1747830
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3816,
+      "ack_uid": 4381,
+      "end_sequence": 343672,
+      "np_mark_ns": 1743950,
+      "ack_tx_ns": 1743950,
+      "ack_rx_ns": 1748177
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3817,
+      "ack_uid": 4384,
+      "end_sequence": 344672,
+      "np_mark_ns": 1744282,
+      "ack_tx_ns": 1744282,
+      "ack_rx_ns": 1748524
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3819,
+      "ack_uid": 4386,
+      "end_sequence": 345672,
+      "np_mark_ns": 1744614,
+      "ack_tx_ns": 1744614,
+      "ack_rx_ns": 1748871
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3821,
+      "ack_uid": 4389,
+      "end_sequence": 346672,
+      "np_mark_ns": 1744946,
+      "ack_tx_ns": 1744946,
+      "ack_rx_ns": 1749218
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3822,
+      "ack_uid": 4390,
+      "end_sequence": 347136,
+      "np_mark_ns": 1745063,
+      "ack_tx_ns": 1745063,
+      "ack_rx_ns": 1749233
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3828,
+      "ack_uid": 4392,
+      "end_sequence": 348136,
+      "np_mark_ns": 1745438,
+      "ack_tx_ns": 1745438,
+      "ack_rx_ns": 1749580
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3830,
+      "ack_uid": 4395,
+      "end_sequence": 349136,
+      "np_mark_ns": 1745770,
+      "ack_tx_ns": 1745770,
+      "ack_rx_ns": 1749927
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3832,
+      "ack_uid": 4397,
+      "end_sequence": 350136,
+      "np_mark_ns": 1746102,
+      "ack_tx_ns": 1746102,
+      "ack_rx_ns": 1750274
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3834,
+      "ack_uid": 4399,
+      "end_sequence": 351136,
+      "np_mark_ns": 1746434,
+      "ack_tx_ns": 1746434,
+      "ack_rx_ns": 1750621
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3836,
+      "ack_uid": 4402,
+      "end_sequence": 352136,
+      "np_mark_ns": 1746766,
+      "ack_tx_ns": 1746766,
+      "ack_rx_ns": 1750968
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3838,
+      "ack_uid": 4404,
+      "end_sequence": 353136,
+      "np_mark_ns": 1747098,
+      "ack_tx_ns": 1747098,
+      "ack_rx_ns": 1751143
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3839,
+      "ack_uid": 4407,
+      "end_sequence": 354136,
+      "np_mark_ns": 1747430,
+      "ack_tx_ns": 1747430,
+      "ack_rx_ns": 1751490
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3841,
+      "ack_uid": 4409,
+      "end_sequence": 355136,
+      "np_mark_ns": 1747762,
+      "ack_tx_ns": 1747762,
+      "ack_rx_ns": 1751837
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3843,
+      "ack_uid": 4412,
+      "end_sequence": 356136,
+      "np_mark_ns": 1748094,
+      "ack_tx_ns": 1748094,
+      "ack_rx_ns": 1752184
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3845,
+      "ack_uid": 4415,
+      "end_sequence": 357136,
+      "np_mark_ns": 1748426,
+      "ack_tx_ns": 1748426,
+      "ack_rx_ns": 1752531
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3846,
+      "ack_uid": 4417,
+      "end_sequence": 358136,
+      "np_mark_ns": 1748758,
+      "ack_tx_ns": 1748758,
+      "ack_rx_ns": 1752878
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3848,
+      "ack_uid": 4421,
+      "end_sequence": 359136,
+      "np_mark_ns": 1749090,
+      "ack_tx_ns": 1749090,
+      "ack_rx_ns": 1753225
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3850,
+      "ack_uid": 4422,
+      "end_sequence": 360136,
+      "np_mark_ns": 1749422,
+      "ack_tx_ns": 1749422,
+      "ack_rx_ns": 1753572
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3853,
+      "ack_uid": 4425,
+      "end_sequence": 361136,
+      "np_mark_ns": 1749754,
+      "ack_tx_ns": 1749754,
+      "ack_rx_ns": 1753919
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3856,
+      "ack_uid": 4427,
+      "end_sequence": 361600,
+      "np_mark_ns": 1749871,
+      "ack_tx_ns": 1749871,
+      "ack_rx_ns": 1753934
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3872,
+      "ack_uid": 4431,
+      "end_sequence": 362600,
+      "np_mark_ns": 1750563,
+      "ack_tx_ns": 1750563,
+      "ack_rx_ns": 1754613
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "data_uid": 3878,
+      "ack_uid": 4435,
+      "end_sequence": 363600,
+      "np_mark_ns": 1751559,
+      "ack_tx_ns": 1751559,
+      "ack_rx_ns": 1755624
+    }
+  ]
+}

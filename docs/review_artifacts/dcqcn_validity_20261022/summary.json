@@ -1,0 +1,854 @@
+{
+  "cases": [
+    {
+      "case": "layer4-depth1",
+      "passed": true,
+      "observation_stop_ns": 1777657,
+      "completed_work": 344,
+      "offered_work": 344,
+      "source_data_packets": 5160,
+      "delivered_data_packets": 5160,
+      "unique_np_CE_packets": 0,
+      "inferred_CNP_ACKs_received": 0,
+      "ACKs_matched": 5160,
+      "standalone_CNP_hook_events": 0,
+      "streams": [
+        {
+          "stream": 1,
+          "source": 0,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 2,
+          "source": 0,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 3,
+          "source": 0,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 4,
+          "source": 2,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 6,
+          "source": 2,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 7,
+          "source": 2,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 8,
+          "source": 4,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 9,
+          "source": 4,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 11,
+          "source": 4,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 12,
+          "source": 6,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 13,
+          "source": 6,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        },
+        {
+          "stream": 14,
+          "source": 6,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        }
+      ]
+    },
+    {
+      "case": "layer4-depth8",
+      "passed": false,
+      "observation_stop_ns": 5000000,
+      "completed_work": 261,
+      "offered_work": 344,
+      "source_data_packets": 3934,
+      "delivered_data_packets": 3933,
+      "unique_np_CE_packets": 2293,
+      "inferred_CNP_ACKs_received": 2293,
+      "ACKs_matched": 3933,
+      "standalone_CNP_hook_events": 0,
+      "streams": [
+        {
+          "stream": 1,
+          "source": 0,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 523,
+            "minimum_gap_ns": 117,
+            "peak_count": 109,
+            "peak_window_start_ns": 1702483,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 523,
+            "minimum_gap_ns": 15,
+            "peak_count": 14,
+            "peak_window_start_ns": 1736346,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 523,
+            "minimum_gap_ns": 15,
+            "peak_count": 109,
+            "peak_window_start_ns": 1706521,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 523,
+            "minimum_gap_ns": 117,
+            "peak_count": 109,
+            "peak_window_start_ns": 1702483,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 2,
+          "source": 0,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 478,
+            "minimum_gap_ns": 117,
+            "peak_count": 54,
+            "peak_window_start_ns": 1881445,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 478,
+            "minimum_gap_ns": 4,
+            "peak_count": 10,
+            "peak_window_start_ns": 1921821,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 478,
+            "minimum_gap_ns": 4,
+            "peak_count": 54,
+            "peak_window_start_ns": 1887513,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 478,
+            "minimum_gap_ns": 117,
+            "peak_count": 54,
+            "peak_window_start_ns": 1881445,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 3,
+          "source": 0,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 484,
+            "minimum_gap_ns": 117,
+            "peak_count": 53,
+            "peak_window_start_ns": 1882109,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 484,
+            "minimum_gap_ns": 4,
+            "peak_count": 11,
+            "peak_window_start_ns": 1917689,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 484,
+            "minimum_gap_ns": 4,
+            "peak_count": 53,
+            "peak_window_start_ns": 1888177,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 484,
+            "minimum_gap_ns": 117,
+            "peak_count": 53,
+            "peak_window_start_ns": 1882109,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 4,
+          "source": 2,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 139,
+            "minimum_gap_ns": 117,
+            "peak_count": 51,
+            "peak_window_start_ns": 15951,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 139,
+            "minimum_gap_ns": 117,
+            "peak_count": 8,
+            "peak_window_start_ns": 1666174,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 139,
+            "minimum_gap_ns": 117,
+            "peak_count": 51,
+            "peak_window_start_ns": 19997,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 139,
+            "minimum_gap_ns": 117,
+            "peak_count": 51,
+            "peak_window_start_ns": 15959,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 6,
+          "source": 2,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 116,
+            "minimum_gap_ns": 347,
+            "peak_count": 39,
+            "peak_window_start_ns": 77451,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 116,
+            "minimum_gap_ns": 332,
+            "peak_count": 5,
+            "peak_window_start_ns": 1751563,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 116,
+            "minimum_gap_ns": 332,
+            "peak_count": 39,
+            "peak_window_start_ns": 43972,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 116,
+            "minimum_gap_ns": 347,
+            "peak_count": 39,
+            "peak_window_start_ns": 77451,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 7,
+          "source": 2,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 293,
+            "minimum_gap_ns": 117,
+            "peak_count": 86,
+            "peak_window_start_ns": 1814465,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 293,
+            "minimum_gap_ns": 4,
+            "peak_count": 13,
+            "peak_window_start_ns": 1902589,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 293,
+            "minimum_gap_ns": 4,
+            "peak_count": 87,
+            "peak_window_start_ns": 1824015,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 293,
+            "minimum_gap_ns": 117,
+            "peak_count": 86,
+            "peak_window_start_ns": 1814465,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 8,
+          "source": 4,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 59,
+            "minimum_gap_ns": 117,
+            "peak_count": 59,
+            "peak_window_start_ns": 20550,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 59,
+            "minimum_gap_ns": 50,
+            "peak_count": 7,
+            "peak_window_start_ns": 38496,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 59,
+            "minimum_gap_ns": 50,
+            "peak_count": 59,
+            "peak_window_start_ns": 26918,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 59,
+            "minimum_gap_ns": 50,
+            "peak_count": 59,
+            "peak_window_start_ns": 20621,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 9,
+          "source": 4,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 62,
+            "minimum_gap_ns": 332,
+            "peak_count": 56,
+            "peak_window_start_ns": 30535,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 62,
+            "minimum_gap_ns": 4,
+            "peak_count": 7,
+            "peak_window_start_ns": 65607,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 62,
+            "minimum_gap_ns": 4,
+            "peak_count": 56,
+            "peak_window_start_ns": 37502,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 62,
+            "minimum_gap_ns": 332,
+            "peak_count": 56,
+            "peak_window_start_ns": 30535,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 11,
+          "source": 4,
+          "destination": 6,
+          "np_marks_50us": {
+            "count": 60,
+            "minimum_gap_ns": 120,
+            "peak_count": 58,
+            "peak_window_start_ns": 16196,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 60,
+            "minimum_gap_ns": 120,
+            "peak_count": 7,
+            "peak_window_start_ns": 34134,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 60,
+            "minimum_gap_ns": 120,
+            "peak_count": 58,
+            "peak_window_start_ns": 20497,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 60,
+            "minimum_gap_ns": 120,
+            "peak_count": 58,
+            "peak_window_start_ns": 16200,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 12,
+          "source": 6,
+          "destination": 0,
+          "np_marks_50us": {
+            "count": 39,
+            "minimum_gap_ns": 624,
+            "peak_count": 35,
+            "peak_window_start_ns": 32273,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 39,
+            "minimum_gap_ns": 624,
+            "peak_count": 4,
+            "peak_window_start_ns": 42672,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 39,
+            "minimum_gap_ns": 624,
+            "peak_count": 35,
+            "peak_window_start_ns": 38598,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 39,
+            "minimum_gap_ns": 624,
+            "peak_count": 35,
+            "peak_window_start_ns": 32273,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 13,
+          "source": 6,
+          "destination": 2,
+          "np_marks_50us": {
+            "count": 40,
+            "minimum_gap_ns": 781,
+            "peak_count": 32,
+            "peak_window_start_ns": 25522,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_4us": {
+            "count": 40,
+            "minimum_gap_ns": 720,
+            "peak_count": 4,
+            "peak_window_start_ns": 51379,
+            "window_ns": 4000,
+            "window": "left-closed right-open"
+          },
+          "source_feedback_50us": {
+            "count": 40,
+            "minimum_gap_ns": 720,
+            "peak_count": 32,
+            "peak_window_start_ns": 31727,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          },
+          "ack_tx_50us": {
+            "count": 40,
+            "minimum_gap_ns": 781,
+            "peak_count": 32,
+            "peak_window_start_ns": 25596,
+            "window_ns": 50000,
+            "window": "left-closed right-open"
+          }
+        },
+        {
+          "stream": 14,
+          "source": 6,
+          "destination": 4,
+          "np_marks_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_4us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "source_feedback_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          },
+          "ack_tx_50us": {
+            "count": 0,
+            "minimum_gap_ns": null,
+            "peak_count": 0,
+            "peak_window_start_ns": null
+          }
+        }
+      ]
+    }
+  ],
+  "input_identities": [
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/observed/layer4-depth1.json",
+      "sha256": "3a5849e340fa346cf0f0619c1982cd1f4edc0d83925a29287b0f927600883ba8",
+      "bytes": 32815
+    },
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/run/layer4-depth1/result.json",
+      "sha256": "8bc4d78bdd9ea04d6b9087f93a8a3c88612f4acf5faaca89c1f70800c11ea216",
+      "bytes": 1172225
+    },
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/observed/protocol.json",
+      "sha256": "11fa2ababafc5f09a6247e3d0375c22d1c07f31cf9b3e0617676015ba513db5b",
+      "bytes": 965
+    },
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/observed/layer4-depth8.json",
+      "sha256": "bfd66073ce5a0b6c895d844a8c1079449c7fc766365693510a5dc7dfe7663999",
+      "bytes": 32815
+    },
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/run/layer4-depth8/result.json",
+      "sha256": "64e391777fc2095c8201ad57d57b8739cde789cc9fa33cc170fb7182d262eb16",
+      "bytes": 909166
+    },
+    {
+      "path": "/dev/shm/moe-prefill-pressure-20261022/observed/protocol.json",
+      "sha256": "11fa2ababafc5f09a6247e3d0375c22d1c07f31cf9b3e0617676015ba513db5b",
+      "bytes": 965
+    }
+  ],
+  "CNP_bit_scope": "inferred from fixed ReceiveUdp ECN-to-ACK branch and actual matched endpoint packets; ACK flags not in old packet capture",
+  "density_scope": "existing trajectory only; no filtered feedback closed-loop simulation or alternate completion prediction",
+  "network_reexecuted": false,
+  "hardware_calibrated": false
+}

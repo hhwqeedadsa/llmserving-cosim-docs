@@ -1,0 +1,74 @@
+{
+  "verified": true,
+  "archive_sha256": "59911c2cc3da6825bc127a1ed4babd9b71c5c760742d511830b2494d52ab3b0d",
+  "verified_members": 320,
+  "sources_match_snapshot": 208,
+  "syntax_files": 97,
+  "fixed_dependencies": 13,
+  "direction_correction_verified": true,
+  "network_inputs_unchanged_by_correction": true,
+  "new_network_runs": 1,
+  "reused_successful_runs": 2,
+  "additional_delivery_network_runs": 0,
+  "html_tables": 3,
+  "html_rows": 15,
+  "monitored_seconds_before_final": 14.50913181528449,
+  "final_stage_hard_wall_seconds": 60,
+  "stage_monitors": [
+    {
+      "stage": "analysis-monitor",
+      "wall_seconds": 0.5663446057587862
+    },
+    {
+      "stage": "check-explanation-monitor",
+      "wall_seconds": 1.4399980120360851
+    },
+    {
+      "stage": "check-final-monitor",
+      "wall_seconds": 1.4328670296818018
+    },
+    {
+      "stage": "check-monitor",
+      "wall_seconds": 1.3384002447128296
+    },
+    {
+      "stage": "deps-monitor",
+      "wall_seconds": 0.46823921985924244
+    },
+    {
+      "stage": "explanation-monitor",
+      "wall_seconds": 0.3437449764460325
+    },
+    {
+      "stage": "input-corrected-monitor",
+      "wall_seconds": 0.23994762264192104
+    },
+    {
+      "stage": "input-monitor",
+      "wall_seconds": 0.2348391804844141
+    },
+    {
+      "stage": "package-monitor",
+      "wall_seconds": 4.955346919596195
+    },
+    {
+      "stage": "review-monitor",
+      "wall_seconds": 0.13611833564937115
+    },
+    {
+      "stage": "run-monitor",
+      "wall_seconds": 2.8826365023851395
+    },
+    {
+      "stage": "syntax-monitor",
+      "wall_seconds": 0.47064916603267193
+    }
+  ],
+  "usage_before_final_receipt": {
+    "apparent_bytes": 36237054,
+    "allocated_bytes": 36519936
+  },
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "paper_main_contribution_established": false
+}

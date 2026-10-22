@@ -1,0 +1,51 @@
+{
+  "reason": "Combine returns owner->origin; first static table incorrectly counted it in the Dispatch direction",
+  "original_capacity": {
+    "path": "/dev/shm/moe-queue-underfill-20261022/input/truth/capacity.json",
+    "sha256": "5ea15e6321e0cb265d773115562b5f9fa12269ef43781ee0f6ddb9966430a26f",
+    "maximum_sender_peer": 60
+  },
+  "corrected_capacity": {
+    "path": "/dev/shm/moe-queue-underfill-20261022/input-corrected/truth/capacity.json",
+    "sha256": "b48d418fcdbf07d31b4937aaa3ef0aae58486aa3a70bd7de112dd4459383f3c7",
+    "maximum_sender_peer": 53
+  },
+  "global_provider_work_unchanged": 452,
+  "observed_files_byte_identical": [
+    {
+      "file": "d1-ai40-p001.json",
+      "sha256": "7742f6b45bae399d527e9994c16fa8e6bafee3b1e8f1c20549f227f96b5682a1"
+    },
+    {
+      "file": "d1024-ai40-p001.json",
+      "sha256": "e944ce89fe202218cdf6d70a9c6354c13493fe0694542903fe5bd0bd2ddcbc6f"
+    },
+    {
+      "file": "d8-ai40-p001.json",
+      "sha256": "fc0e768e7facc2c64aa73638663fd6b41def53dbe3f1215f59583e4b73472190"
+    },
+    {
+      "file": "index.json",
+      "sha256": "1a6111b7b230ef778830ac0d9de860a0af34bc1203aedf07bc9bcc19f1eb6995"
+    },
+    {
+      "file": "protocol-p001.json",
+      "sha256": "59f1f5d5e0a2e3d00e67f5da793c71d373aaabd320406f51dce971a77aca89dd"
+    },
+    {
+      "file": "topology.json",
+      "sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed"
+    }
+  ],
+  "old_producer_expression": "combine_put=pair_counts[src,dst]",
+  "new_producer_expression": "combine_put=pair_counts[dst,src]",
+  "old_checker_expression": "provider[src,dst]+=2",
+  "new_checker_expression": "provider[src,dst]+=1; provider[dst,src]+=1",
+  "superseded_checks": [
+    "checked/verification.json",
+    "checked-explanation/verification.json"
+  ],
+  "final_check": "checked-final/verification.json",
+  "network_inputs_or_results_changed": false,
+  "network_rerun": false
+}

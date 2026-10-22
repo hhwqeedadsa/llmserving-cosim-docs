@@ -1,0 +1,559 @@
+{
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/queue_underfill.py",
+          "analyze",
+          "--observed",
+          "/dev/shm/moe-queue-underfill-20261022/input/observed",
+          "--run",
+          "/dev/shm/moe-queue-underfill-20261022/run",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/analysis"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:33:56.358661+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 58945536,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/analysis-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/analysis"
+        ],
+        "peak_sampled_artifact_bytes": 16384,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 6045,
+        "peak_sampled_artifact_allocated_bytes": 16384,
+        "process_group": 1772722,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:33:56.925003+00:00",
+        "wall_seconds": 0.5663446057587862,
+        "max_waited_child_rss_kib": 62884,
+        "artifact_bytes_before_report": 1473,
+        "aggregate_artifact_bytes_before_report": 16384,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 6045,
+          "allocated_bytes": 16384
+        }
+      }
+    },
+    {
+      "stage": "check-explanation-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_queue_underfill.py",
+          "--task",
+          "/dev/shm/moe-queue-underfill-20261022",
+          "--explanation",
+          "/dev/shm/moe-queue-underfill-20261022/explanation",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/checked-explanation"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:35:35.557541+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 77864960,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/check-explanation-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/checked-explanation"
+        ],
+        "peak_sampled_artifact_bytes": 12288,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 4979,
+        "peak_sampled_artifact_allocated_bytes": 12288,
+        "process_group": 1772965,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:35:36.997530+00:00",
+        "wall_seconds": 1.4399980120360851,
+        "max_waited_child_rss_kib": 76040,
+        "artifact_bytes_before_report": 3616,
+        "aggregate_artifact_bytes_before_report": 12288,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 4979,
+          "allocated_bytes": 12288
+        }
+      }
+    },
+    {
+      "stage": "check-final-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_queue_underfill.py",
+          "--task",
+          "/dev/shm/moe-queue-underfill-20261022",
+          "--input",
+          "/dev/shm/moe-queue-underfill-20261022/input-corrected",
+          "--explanation",
+          "/dev/shm/moe-queue-underfill-20261022/explanation",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/checked-final"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:39:02.707912+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 75890688,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/check-final-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/checked-final"
+        ],
+        "peak_sampled_artifact_bytes": 12288,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 4980,
+        "peak_sampled_artifact_allocated_bytes": 12288,
+        "process_group": 1773616,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:39:04.140803+00:00",
+        "wall_seconds": 1.4328670296818018,
+        "max_waited_child_rss_kib": 76160,
+        "artifact_bytes_before_report": 3617,
+        "aggregate_artifact_bytes_before_report": 12288,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 4980,
+          "allocated_bytes": 12288
+        }
+      }
+    },
+    {
+      "stage": "check-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_queue_underfill.py",
+          "--task",
+          "/dev/shm/moe-queue-underfill-20261022",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/checked"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:34:10.636432+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 64491520,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/check-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/checked"
+        ],
+        "peak_sampled_artifact_bytes": 12288,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 4692,
+        "peak_sampled_artifact_allocated_bytes": 12288,
+        "process_group": 1772797,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:34:11.974817+00:00",
+        "wall_seconds": 1.3384002447128296,
+        "max_waited_child_rss_kib": 62980,
+        "artifact_bytes_before_report": 3366,
+        "aggregate_artifact_bytes_before_report": 12288,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 4692,
+          "allocated_bytes": 12288
+        }
+      }
+    },
+    {
+      "stage": "deps-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "bash",
+          "scripts/check_deps.sh"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:42:33.378936+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 23322624,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022"
+        ],
+        "peak_sampled_artifact_bytes": 9273344,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 9049509,
+        "peak_sampled_artifact_allocated_bytes": 9273344,
+        "process_group": 1774244,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:42:33.847168+00:00",
+        "wall_seconds": 0.46823921985924244,
+        "max_waited_child_rss_kib": 17584,
+        "artifact_bytes_before_report": 3729,
+        "aggregate_artifact_bytes_before_report": 9273344,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 9049509,
+          "allocated_bytes": 9273344
+        }
+      }
+    },
+    {
+      "stage": "explanation-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/queue_underfill.py",
+          "explain",
+          "--run",
+          "/dev/shm/moe-queue-underfill-20261022/run",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/explanation"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:35:22.663529+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 47706112,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/explanation-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/explanation"
+        ],
+        "peak_sampled_artifact_bytes": 24576,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 14164,
+        "peak_sampled_artifact_allocated_bytes": 24576,
+        "process_group": 1772936,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:35:23.007267+00:00",
+        "wall_seconds": 0.3437449764460325,
+        "max_waited_child_rss_kib": 53668,
+        "artifact_bytes_before_report": 973,
+        "aggregate_artifact_bytes_before_report": 24576,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 14164,
+          "allocated_bytes": 24576
+        }
+      }
+    },
+    {
+      "stage": "input-corrected-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/queue_underfill.py",
+          "prepare",
+          "--baseline",
+          "/dev/shm/moe-feedback-parameters-20261022",
+          "--manifest",
+          "data/moe-trace-small/manifest.json",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/input-corrected"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:39:02.388447+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 28622848,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/input-corrected-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/input-corrected"
+        ],
+        "peak_sampled_artifact_bytes": 118784,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 86149,
+        "peak_sampled_artifact_allocated_bytes": 118784,
+        "process_group": 1773609,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:39:02.628390+00:00",
+        "wall_seconds": 0.23994762264192104,
+        "max_waited_child_rss_kib": 28708,
+        "artifact_bytes_before_report": 774,
+        "aggregate_artifact_bytes_before_report": 118784,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 86149,
+          "allocated_bytes": 118784
+        }
+      }
+    },
+    {
+      "stage": "input-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/queue_underfill.py",
+          "prepare",
+          "--baseline",
+          "/dev/shm/moe-feedback-parameters-20261022",
+          "--manifest",
+          "data/moe-trace-small/manifest.json",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/input"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:33:28.064851+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 28442624,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/input-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/input"
+        ],
+        "peak_sampled_artifact_bytes": 118784,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 86148,
+        "peak_sampled_artifact_allocated_bytes": 118784,
+        "process_group": 1772577,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:33:28.299689+00:00",
+        "wall_seconds": 0.2348391804844141,
+        "max_waited_child_rss_kib": 28748,
+        "artifact_bytes_before_report": 773,
+        "aggregate_artifact_bytes_before_report": 118784,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 86148,
+          "allocated_bytes": 118784
+        }
+      }
+    },
+    {
+      "stage": "review-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/build_queue_underfill_review.py",
+          "--task",
+          "/dev/shm/moe-queue-underfill-20261022",
+          "--output",
+          "docs/review_artifacts/queue_underfill_20261022"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:42:23.169716+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 7471104,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022",
+          "/home/lry/moe-ub-cosim/docs/review_artifacts/queue_underfill_20261022"
+        ],
+        "peak_sampled_artifact_bytes": 9347072,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 9109238,
+        "peak_sampled_artifact_allocated_bytes": 9347072,
+        "process_group": 1774208,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:42:23.305835+00:00",
+        "wall_seconds": 0.13611833564937115,
+        "max_waited_child_rss_kib": 16592,
+        "artifact_bytes_before_report": 592,
+        "aggregate_artifact_bytes_before_report": 9347072,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 9109238,
+          "allocated_bytes": 9347072
+        }
+      }
+    },
+    {
+      "stage": "run-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/queue_underfill.py",
+          "run",
+          "--observed",
+          "/dev/shm/moe-queue-underfill-20261022/input/observed",
+          "--baseline",
+          "/dev/shm/moe-feedback-parameters-20261022",
+          "--backend",
+          "/dev/shm/moe-dcqcn-reference-20261022/bin/ns3.42-moe-rdma-stream-probe",
+          "--output",
+          "/dev/shm/moe-queue-underfill-20261022/run"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:33:40.652980+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 487063552,
+        "peak_sampled_processes": 4,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022/run-monitor",
+          "/dev/shm/moe-queue-underfill-20261022/run"
+        ],
+        "peak_sampled_artifact_bytes": 8892416,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 8819666,
+        "peak_sampled_artifact_allocated_bytes": 8892416,
+        "process_group": 1772625,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:33:43.535612+00:00",
+        "wall_seconds": 2.8826365023851395,
+        "max_waited_child_rss_kib": 399884,
+        "artifact_bytes_before_report": 9411,
+        "aggregate_artifact_bytes_before_report": 8892416,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 8819666,
+          "allocated_bytes": 8892416
+        }
+      }
+    },
+    {
+      "stage": "syntax-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "-c",
+          "import ast,pathlib,subprocess; files=list(pathlib.Path(\"experiments/paper_readiness\").glob(\"*.py\")); [ast.parse(p.read_text(),filename=str(p)) for p in files]; subprocess.run([\"git\",\"diff\",\"--check\"],check=True); print(\"Syntax and diff passed:\",len(files))"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:42:33.377492+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 134217728,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 75010048,
+        "peak_sampled_processes": 5,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-queue-underfill-20261022"
+        ],
+        "peak_sampled_artifact_bytes": 9273344,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 9049509,
+        "peak_sampled_artifact_allocated_bytes": 9273344,
+        "process_group": 1774243,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:42:33.848138+00:00",
+        "wall_seconds": 0.47064916603267193,
+        "max_waited_child_rss_kib": 56492,
+        "artifact_bytes_before_report": 1444,
+        "aggregate_artifact_bytes_before_report": 9273344,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 9049509,
+          "allocated_bytes": 9273344
+        }
+      }
+    }
+  ],
+  "monitored_seconds_before_packaging": 9.553784895688295,
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "raw_path": "/dev/shm/moe-queue-underfill-20261022"
+}

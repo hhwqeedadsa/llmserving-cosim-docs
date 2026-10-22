@@ -1054,3 +1054,74 @@ parameter_stage checked 33554432 python3 "$COSIM_PARAMETER_REPO/experiments/pape
 做源码/归档hash、旧包不变、兼容性、HTML/JSON、差异及累计预算核验。最终检查也须用host_probe，
 monitor目录名为`final-monitor`，输出文件必须不存在；它不重跑网络。
 根卷低于8GiB预留，大产物仅易失内存盘，尚无持久备份；保留ELF原RPATH，不承诺跨机器直接启动。
+
+## 软件发送额度与真实SQ容量（2026-10-22）
+
+[执行前方法](queue_underfill_protocol.md)与[中文报告](../../docs/review_artifacts/queue_underfill_20261022/report.html)
+检验此前depth1/8是否可以直接解释为现代provider的发送队列（SQ）容量。
+固定源码默认请求1024；这批冷启动工作按所选分支总共452项，每sender-peer最多53项，无法据此声称默认SQ已满。
+新增的1024软件额度条件业务ACK为457,910ns，比1和8都早，网络排空为482,849ns。
+不把软件额度当真实SQ、把0ns就绪当GPU调度，或将非单调排序解释为现代库的硬件收益。
+
+`queue_underfill.py prepare`核验缓存的固定源码tree/blob/hash与原始四请求，生成独立容量核算和三个公开工作声明。
+`run`按hash复用既有d1/d8-ai40-p001成功结果，只新执行d1024-ai40-p001；没有自动搜索或重试。
+`analyze`与`explain`只读observed/公开结果；`check_queue_underfill.py`才读原始路由和来源记录作独立核算。
+首次静态核算把Combine计到同向，最终更正为反向并保留原记录；网络声明和结果逐字节不变。
+当前代码第一次准备即生成正确方向，不需复现该错误。历史报告的`direction-correction.json`区分旧/新证据。
+
+下面在主仓库根目录执行，WORK必须不存在；四原件、三个源码缓存及其记录须位于原相对路径。
+它们可从本轮归档的`source/data/`及`source/docs/review_artifacts/`按相对位置恢复，不需重新联网。
+BASE可以是上一轮完整参数研究目录，或本轮包内恢复的`raw/`（提供同一输入与两个旧结果）；
+后者的`prior-inputs.json`也会验证最初执行的输入hash。原ELF依赖路径须可用，归档不是可迁移镜像。
+
+```bash
+export COSIM_UNDERFILL_REPO=/home/lry/moe-ub-cosim
+export COSIM_UNDERFILL_WORK=/dev/shm/my-queue-underfill
+export COSIM_UNDERFILL_BASE=/absolute/path/feedback-parameters
+export COSIM_UNDERFILL_BACKEND=/absolute/path/ns3.42-moe-rdma-stream-probe
+export PYTHONPATH="$COSIM_UNDERFILL_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_UNDERFILL_WORK"
+underfill_stage() {
+  local underfill_name="$1"
+  local underfill_bytes="$2"
+  shift 2
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_UNDERFILL_WORK/$underfill_name-monitor" \
+    --artifact-root "$COSIM_UNDERFILL_WORK/$underfill_name" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes "$underfill_bytes" --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+underfill_stage input 33554432 python3 "$COSIM_UNDERFILL_REPO/experiments/paper_readiness/queue_underfill.py" prepare \
+  --baseline "$COSIM_UNDERFILL_BASE" --manifest "$COSIM_UNDERFILL_REPO/data/moe-trace-small/manifest.json" \
+  --output "$COSIM_UNDERFILL_WORK/input"
+underfill_stage run 67108864 python3 "$COSIM_UNDERFILL_REPO/experiments/paper_readiness/queue_underfill.py" run \
+  --observed "$COSIM_UNDERFILL_WORK/input/observed" --baseline "$COSIM_UNDERFILL_BASE" \
+  --backend "$COSIM_UNDERFILL_BACKEND" --output "$COSIM_UNDERFILL_WORK/run"
+underfill_stage analysis 33554432 python3 "$COSIM_UNDERFILL_REPO/experiments/paper_readiness/queue_underfill.py" analyze \
+  --observed "$COSIM_UNDERFILL_WORK/input/observed" --run "$COSIM_UNDERFILL_WORK/run" \
+  --output "$COSIM_UNDERFILL_WORK/analysis"
+underfill_stage explanation 33554432 python3 "$COSIM_UNDERFILL_REPO/experiments/paper_readiness/queue_underfill.py" explain \
+  --run "$COSIM_UNDERFILL_WORK/run" --output "$COSIM_UNDERFILL_WORK/explanation"
+underfill_stage checked 33554432 python3 "$COSIM_UNDERFILL_REPO/experiments/paper_readiness/check_queue_underfill.py" \
+  --task "$COSIM_UNDERFILL_WORK" --explanation "$COSIM_UNDERFILL_WORK/explanation" \
+  --output "$COSIM_UNDERFILL_WORK/checked"
+```
+
+命令失败后停止剩余网络，保留`execution.json`与前缀，不能把5ms上限写成完成时间。
+检查器只有在`all_declared_completed`与对应`full_packet_verification`都为真时才支持完整验收。
+核验历史更正可用`--input 本轮目录/input-corrected`，它先要求全部observed文件与原input逐字节相同。
+当前软件额度≤4096的公开范围已覆盖1024，本轮没有扩大平台限制；现代plan的每rank16-token限制也保持不变。
+
+各阶段60秒/RSS1GiB/地址2GiB；运行64MiB，其余准备/分析/check各32MiB。
+仿真5ms、终态16MiB、端点100000事件、速率/状态各20000；操作者累计所有monitor和task/report/checkpoint用量，
+整轮≤300秒/128MiB、内存盘预留8GiB。失败不抬限或自动重跑。
+固定历史报告器`build_queue_underfill_review.py --task 本轮目录 --output 新报告目录`要求保留的更正前/后静态材料、
+`checked-final/`和`explanation/`；它不是任意新实验的通用报告器。
+归档前以同预算执行`bash scripts/check_deps.sh`并保存task/deps-monitor；
+`package_queue_underfill.py --task 本轮目录 --report 报告目录 --platform-checkpoint 平台checkpoint目录`
+在host_probe下把task/report同时计入128MiB，成员96MiB/压缩48MiB，核验648项嵌套平台成员后保存压缩运行时、
+实际库、四原件、11份源码与来源、三个结果和更正记录。运行中的package-monitor和归档自身不入快照。
+之后以`check_queue_underfill_delivery.py --task 本轮目录 --report 报告目录 --output 报告目录/final-check.json`
+做只读最终核验，使用task/final-monitor且仍限60秒/1GiB/2GiB/全轮128MiB。
+打包后的收据/最后任务状态由Git保存；原始大件和归档仅在易失内存盘，无持久备份，不push。

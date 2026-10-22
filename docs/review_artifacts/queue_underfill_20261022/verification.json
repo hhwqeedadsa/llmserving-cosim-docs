@@ -1,0 +1,45 @@
+{
+  "verified": true,
+  "all_declared_completed": true,
+  "cases": [
+    {
+      "case": "d1-ai40-p001",
+      "full_packet_verification": true,
+      "all_work_published_at_zero": false,
+      "result_sha256": "e4ae64814c64354197edb388aadb948be26cc2bc4ff5b4efb6e0c93a01d983e1"
+    },
+    {
+      "case": "d8-ai40-p001",
+      "full_packet_verification": true,
+      "all_work_published_at_zero": false,
+      "result_sha256": "383319d08752d9f432f3d09d0e75de9ded684cb22f8b02c966d86469b238c5f1"
+    },
+    {
+      "case": "d1024-ai40-p001",
+      "full_packet_verification": true,
+      "all_work_published_at_zero": true,
+      "result_sha256": "21f1a69946d96bc06ac22f17a74c96f38186d4cdd0a26c2f203e7098f9982216"
+    }
+  ],
+  "counts": {
+    "data_packets": 8100,
+    "endpoint_packet_joins": 16314,
+    "ack_packets": 8100,
+    "physical_ports": 120,
+    "work_callbacks_credit": 540,
+    "rp_state_events": 12426,
+    "cnp_packets": 114
+  },
+  "sources_verified": 11,
+  "conditional_cold_provider_work": 452,
+  "maximum_sender_peer_work": 53,
+  "source_requested_sq_depth": 1024,
+  "actual_sq_readback": false,
+  "software_credit_is_hardware_sq": false,
+  "static_physical_port_service_equal": true,
+  "new_network_runs": 1,
+  "reused_successful_runs": 2,
+  "modern_library_executed": false,
+  "hardware_calibrated": false,
+  "explanation_streams_checked": 36
+}

@@ -1,0 +1,74 @@
+{
+  "verified": true,
+  "stages": [
+    {
+      "stage": "analysis-monitor",
+      "wall_seconds": 0.5663446057587862
+    },
+    {
+      "stage": "check-explanation-monitor",
+      "wall_seconds": 1.4399980120360851
+    },
+    {
+      "stage": "check-final-monitor",
+      "wall_seconds": 1.4328670296818018
+    },
+    {
+      "stage": "check-monitor",
+      "wall_seconds": 1.3384002447128296
+    },
+    {
+      "stage": "deps-monitor",
+      "wall_seconds": 0.46823921985924244
+    },
+    {
+      "stage": "explanation-monitor",
+      "wall_seconds": 0.3437449764460325
+    },
+    {
+      "stage": "final-monitor",
+      "wall_seconds": 0.7692306470125914
+    },
+    {
+      "stage": "input-corrected-monitor",
+      "wall_seconds": 0.23994762264192104
+    },
+    {
+      "stage": "input-monitor",
+      "wall_seconds": 0.2348391804844141
+    },
+    {
+      "stage": "package-monitor",
+      "wall_seconds": 4.955346919596195
+    },
+    {
+      "stage": "review-monitor",
+      "wall_seconds": 0.13611833564937115
+    },
+    {
+      "stage": "run-monitor",
+      "wall_seconds": 2.8826365023851395
+    },
+    {
+      "stage": "syntax-monitor",
+      "wall_seconds": 0.47064916603267193
+    }
+  ],
+  "monitored_seconds_including_final": 15.278362462297082,
+  "task_and_report_usage": {
+    "apparent_bytes": 36244314,
+    "allocated_bytes": 36540416
+  },
+  "archive_bytes": 26997685,
+  "archive_sha256": "59911c2cc3da6825bc127a1ed4babd9b71c5c760742d511830b2494d52ab3b0d",
+  "verified_members": 320,
+  "nested_platform_members": 648,
+  "new_network_runs": 1,
+  "reused_successful_runs": 2,
+  "command_failures": 0,
+  "network_retries": 0,
+  "static_direction_corrections": 1,
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "scope": "Completed monitor records including source correction, packaging and final check; this small receipt and Git metadata are outside the archive snapshot"
+}

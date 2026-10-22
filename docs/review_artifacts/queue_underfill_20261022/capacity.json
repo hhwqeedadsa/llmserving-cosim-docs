@@ -1,0 +1,209 @@
+{
+  "source_token_counts": [
+    32,
+    28,
+    10,
+    6
+  ],
+  "remote_dispatch_writes": 180,
+  "total_provider_work": 452,
+  "per_sender_peer_upper_bounds": [
+    {
+      "src": 0,
+      "dst": 0,
+      "components": {
+        "dispatch_put": 0,
+        "combine_put": 0,
+        "barrier_signal": 4,
+        "rank_count": 0,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 5
+    },
+    {
+      "src": 0,
+      "dst": 1,
+      "components": {
+        "dispatch_put": 23,
+        "combine_put": 24,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 53
+    },
+    {
+      "src": 0,
+      "dst": 2,
+      "components": {
+        "dispatch_put": 22,
+        "combine_put": 9,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 37
+    },
+    {
+      "src": 0,
+      "dst": 3,
+      "components": {
+        "dispatch_put": 27,
+        "combine_put": 5,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 38
+    },
+    {
+      "src": 1,
+      "dst": 0,
+      "components": {
+        "dispatch_put": 24,
+        "combine_put": 23,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 53
+    },
+    {
+      "src": 1,
+      "dst": 1,
+      "components": {
+        "dispatch_put": 0,
+        "combine_put": 0,
+        "barrier_signal": 4,
+        "rank_count": 0,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 5
+    },
+    {
+      "src": 1,
+      "dst": 2,
+      "components": {
+        "dispatch_put": 18,
+        "combine_put": 9,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 33
+    },
+    {
+      "src": 1,
+      "dst": 3,
+      "components": {
+        "dispatch_put": 25,
+        "combine_put": 6,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 37
+    },
+    {
+      "src": 2,
+      "dst": 0,
+      "components": {
+        "dispatch_put": 9,
+        "combine_put": 22,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 37
+    },
+    {
+      "src": 2,
+      "dst": 1,
+      "components": {
+        "dispatch_put": 9,
+        "combine_put": 18,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 33
+    },
+    {
+      "src": 2,
+      "dst": 2,
+      "components": {
+        "dispatch_put": 0,
+        "combine_put": 0,
+        "barrier_signal": 4,
+        "rank_count": 0,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 5
+    },
+    {
+      "src": 2,
+      "dst": 3,
+      "components": {
+        "dispatch_put": 7,
+        "combine_put": 5,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 18
+    },
+    {
+      "src": 3,
+      "dst": 0,
+      "components": {
+        "dispatch_put": 5,
+        "combine_put": 27,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 38
+    },
+    {
+      "src": 3,
+      "dst": 1,
+      "components": {
+        "dispatch_put": 6,
+        "combine_put": 25,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 37
+    },
+    {
+      "src": 3,
+      "dst": 2,
+      "components": {
+        "dispatch_put": 5,
+        "combine_put": 7,
+        "barrier_signal": 4,
+        "rank_count": 1,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 18
+    },
+    {
+      "src": 3,
+      "dst": 3,
+      "components": {
+        "dispatch_put": 0,
+        "combine_put": 0,
+        "barrier_signal": 4,
+        "rank_count": 0,
+        "expert_count_block": 1
+      },
+      "cold_sq_work_upper_bound": 5
+    }
+  ],
+  "maximum_per_sender_peer": 53,
+  "effective_depth_condition": 1024,
+  "must_recycle_sq_slot_from_empty": false,
+  "network_packet_count_is_not_sq_count": true,
+  "modeled_modern_network": false
+}

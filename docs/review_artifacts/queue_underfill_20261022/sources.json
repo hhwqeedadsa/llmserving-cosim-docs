@@ -1,0 +1,205 @@
+{
+  "sources": [
+    {
+      "path": "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/common/compiled.cuh",
+      "sha256": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f",
+      "bytes": 2416,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/compiled.cuh",
+      "manifest": "docs/review_artifacts/modern_layout_20261022/sources.json",
+      "tree": "data/research/deepep_layout_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 81,
+          "text": "constexpr int kDefaultQPDepth = 1024;"
+        }
+      ]
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp",
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+      "bytes": 12061,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp",
+      "manifest": "docs/review_artifacts/deepep_modern_20261022/sources.json",
+      "tree": "data/research/deepep_modern_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 137,
+          "text": "        reqs.ginQueueDepth = qp_depth > 0 ? qp_depth : kDefaultQPDepth;"
+        }
+      ]
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "bytes": 11249,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+      "manifest": "docs/review_artifacts/deepep_modern_20261022/sources.json",
+      "tree": "data/research/deepep_modern_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 211,
+          "text": "                    num_bytes, remote_action, ncclGin_None(), ncclCoopThread(), ncclGin_None(),\n                    cuda::thread_scope_thread, cuda::thread_scope_device, ncclGinOptFlagsDefault | extra_options);"
+        }
+      ]
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "bytes": 11335,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "manifest": "docs/review_artifacts/deepep_modern_20261022/sources.json",
+      "tree": "data/research/deepep_modern_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 165,
+          "text": "            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.wait_signal<team_t, kNumTimeoutCycles>(i, rank_idx);"
+        }
+      ]
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+      "bytes": 20457,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "manifest": "docs/review_artifacts/deepep_modern_20261022/sources.json",
+      "tree": "data/research/deepep_modern_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 73,
+          "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag0, false, false, true>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+        },
+        {
+          "first_line": 394,
+          "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+        }
+      ]
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+      "bytes": 12081,
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "manifest": "docs/review_artifacts/deepep_modern_20261022/sources.json",
+      "tree": "data/research/deepep_modern_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 79,
+          "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag0, false, false, true>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+        },
+        {
+          "first_line": 241,
+          "text": "    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);"
+        }
+      ]
+    },
+    {
+      "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+      "bytes": 60093,
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+      "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "manifest": "docs/review_artifacts/nccl_gin_20261022/sources.json",
+      "tree": "data/research/nccl_gin_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 785,
+          "text": "  gdaki_ctx->qp_sq_size = queueDepth > 0 ? queueDepth : ncclParamGinGdakiQpDepth();\n\n  memset(&qp_init_attr, 0, sizeof(qp_init_attr));\n  qp_init_attr.gpu_dev = gdaki_ctx->gdev;\n  qp_init_attr.net_dev = gdaki_ctx->ndev;\n  qp_init_attr.ibpd = cComm->ib.pd;\n  qp_init_attr.sq_nwqe = gdaki_ctx->qp_sq_size;\n  qp_init_attr.nic_handler = (enum doca_gpu_dev_verbs_nic_handler)ncclParamGinGdakiNicHandler();"
+        }
+      ]
+    },
+    {
+      "path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "bytes": 35130,
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "manifest": "docs/review_artifacts/nccl_gin_20261022/sources.json",
+      "tree": "data/research/nccl_gin_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 110,
+          "text": "        doca_gpu_dev_verbs_put<resource_sharing_mode>(qp, raddr, laddr, bytes, codeOpt);\n      }"
+        }
+      ]
+    },
+    {
+      "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6",
+      "bytes": 49998,
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "manifest": "docs/review_artifacts/nccl_gin_20261022/sources.json",
+      "tree": "data/research/nccl_gin_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 60,
+          "text": "    num_chunks = num_chunks > 1 ? num_chunks : 1;\n\n    DOCA_GPUNETIO_VERBS_ASSERT(out_ticket != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp != NULL);\n    // DOCA_GPUNETIO_VERBS_ASSERT(qp->mem_type == DOCA_GPUNETIO_VERBS_MEM_TYPE_GPU);\n\n    base_wqe_idx =\n        doca_gpu_dev_verbs_reserve_wq_slots<resource_sharing_mode, DOCA_GPUNETIO_VERBS_QP_SQ,\n                                            cq_type>(qp, num_chunks, code_opt);\n#pragma unroll 1\n    for (uint64_t i = 0; i < num_chunks; i++) {\n        wqe_idx = base_wqe_idx + i;\n        size_ = remaining_size > DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE\n                    ? DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE"
+        },
+        {
+          "first_line": 305,
+          "text": "    num_chunks = num_chunks > 1 ? num_chunks : 1;\n\n    DOCA_GPUNETIO_VERBS_ASSERT(out_ticket != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp->mem_type == DOCA_GPUNETIO_VERBS_MEM_TYPE_GPU);\n\n    base_wqe_idx =\n        doca_gpu_dev_verbs_reserve_wq_slots<resource_sharing_mode, DOCA_GPUNETIO_VERBS_QP_SQ,\n                                            cq_type>(qp, num_chunks + 1, code_opt);\n\n#pragma unroll 1\n    for (uint64_t i = 0; i < num_chunks; i++) {\n        wqe_idx = base_wqe_idx + i;\n        size_ = remaining_size > DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE"
+        }
+      ]
+    },
+    {
+      "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+      "bytes": 56066,
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "manifest": "docs/review_artifacts/nccl_gin_20261022/sources.json",
+      "tree": "data/research/nccl_gin_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 96,
+          "text": "    const uint16_t nwqes = doca_gpu_dev_verbs_load_const(&qp->sq_wqe_num);\n    [[likely]] if (wqe_idx >= nwqes) {\n        doca_gpu_dev_verbs_poll_cq_at<resource_sharing_mode, qp_type, cq_type>(qp, wqe_idx - nwqes);\n    }\n}"
+        }
+      ]
+    },
+    {
+      "path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+      "sha256": "7d26e765bc83d05dddb4bf9fd8ecb9c5cd1e012e4cb1b47e6e29c28e9c6d502b",
+      "bytes": 19940,
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+      "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+      "manifest": "docs/review_artifacts/nccl_gin_20261022/sources.json",
+      "tree": "data/research/nccl_gin_20261022/tree.json",
+      "excerpts": [
+        {
+          "first_line": 167,
+          "text": "#define DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE_SHIFT 30\n#define DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE \\\n    (1ULL << DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE_SHIFT)  // 1GiB"
+        }
+      ]
+    }
+  ],
+  "requested_sq_depth": 1024,
+  "maximum_put_bytes_per_wqe": 1073741824,
+  "source_identity_verified": true,
+  "hardware_readback": false,
+  "cuda_or_nccl_executed": false,
+  "assumptions": [
+    "effective SQ size 1024",
+    "initially empty SQ",
+    "fresh direct, no inter-rank NVLink",
+    "one dispatch and local-reduction combine",
+    "no extra counters or unrelated jobs"
+  ],
+  "conclusion_scope": "Conditional SQ capacity bound; not actual provider timing or GPU scheduling"
+}

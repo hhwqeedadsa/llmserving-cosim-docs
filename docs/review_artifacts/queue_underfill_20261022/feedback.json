@@ -1,0 +1,405 @@
+{
+  "cases": [
+    {
+      "case": "d1-ai40-p001",
+      "streams": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 355945,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 501286,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 582882,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 359987,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 402347,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 560079,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 156744,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 174652,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 92767,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 96711,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 126208,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        }
+      ],
+      "last_business_ack_ns": 599715,
+      "physical_drain_ns": 599715,
+      "drain_after_business_ack_ns": 0,
+      "last_cnp_rx_ns": null,
+      "cnp_after_global_business_ack": 0,
+      "cnp_before_own_last_tx": 0,
+      "cnp_at_own_last_tx": 0,
+      "cnp_after_own_last_tx": 0
+    },
+    {
+      "case": "d8-ai40-p001",
+      "streams": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 265667,
+          "first_cnp_rx_ns": 25069,
+          "cnp_before_last_data_tx": 5,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 1,
+          "minimum_rate_at_actual_tx_bps": 3125000000,
+          "post_first_feedback_packets": 242
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 615471,
+          "first_cnp_rx_ns": 34503,
+          "cnp_before_last_data_tx": 8,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 390625000,
+          "post_first_feedback_packets": 203
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 1246980,
+          "first_cnp_rx_ns": 33447,
+          "cnp_before_last_data_tx": 8,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 390625000,
+          "post_first_feedback_packets": 285
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 340249,
+          "first_cnp_rx_ns": 22745,
+          "cnp_before_last_data_tx": 6,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 1562500000,
+          "post_first_feedback_packets": 266
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 226261,
+          "first_cnp_rx_ns": 33435,
+          "cnp_before_last_data_tx": 4,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 4,
+          "minimum_rate_at_actual_tx_bps": 6250000000,
+          "post_first_feedback_packets": 149
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 1084377,
+          "first_cnp_rx_ns": 33908,
+          "cnp_before_last_data_tx": 8,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 390625000,
+          "post_first_feedback_packets": 254
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 30418,
+          "first_cnp_rx_ns": 39205,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 30458,
+          "first_cnp_rx_ns": 61217,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 25562,
+          "first_cnp_rx_ns": 34843,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18050,
+          "first_cnp_rx_ns": 44399,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19348,
+          "first_cnp_rx_ns": 31723,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18130,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        }
+      ],
+      "last_business_ack_ns": 1259768,
+      "physical_drain_ns": 1259768,
+      "drain_after_business_ack_ns": 0,
+      "last_cnp_rx_ns": 383423,
+      "cnp_after_global_business_ack": 0,
+      "cnp_before_own_last_tx": 39,
+      "cnp_at_own_last_tx": 0,
+      "cnp_after_own_last_tx": 15
+    },
+    {
+      "case": "d1024-ai40-p001",
+      "streams": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 88822,
+          "first_cnp_rx_ns": 25069,
+          "cnp_before_last_data_tx": 2,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 5,
+          "minimum_rate_at_actual_tx_bps": 25000000000,
+          "post_first_feedback_packets": 242
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 78745,
+          "first_cnp_rx_ns": 34503,
+          "cnp_before_last_data_tx": 1,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 8,
+          "minimum_rate_at_actual_tx_bps": 50000000000,
+          "post_first_feedback_packets": 188
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 123229,
+          "first_cnp_rx_ns": 33447,
+          "cnp_before_last_data_tx": 2,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 7,
+          "minimum_rate_at_actual_tx_bps": 25000000000,
+          "post_first_feedback_packets": 268
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 89097,
+          "first_cnp_rx_ns": 22745,
+          "cnp_before_last_data_tx": 2,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 5,
+          "minimum_rate_at_actual_tx_bps": 25000000000,
+          "post_first_feedback_packets": 266
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 65145,
+          "first_cnp_rx_ns": 33435,
+          "cnp_before_last_data_tx": 1,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 7,
+          "minimum_rate_at_actual_tx_bps": 50000000000,
+          "post_first_feedback_packets": 132
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 94140,
+          "first_cnp_rx_ns": 33908,
+          "cnp_before_last_data_tx": 2,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 8,
+          "minimum_rate_at_actual_tx_bps": 25000000000,
+          "post_first_feedback_packets": 236
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 30418,
+          "first_cnp_rx_ns": 39225,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 30458,
+          "first_cnp_rx_ns": 61217,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 25562,
+          "first_cnp_rx_ns": 34843,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18050,
+          "first_cnp_rx_ns": 44399,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19348,
+          "first_cnp_rx_ns": 31723,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 2,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18130,
+          "first_cnp_rx_ns": null,
+          "cnp_before_last_data_tx": 0,
+          "cnp_at_last_data_tx": 0,
+          "cnp_after_last_data_tx": 0,
+          "minimum_rate_at_actual_tx_bps": 100000000000,
+          "post_first_feedback_packets": 0
+        }
+      ],
+      "last_business_ack_ns": 457910,
+      "physical_drain_ns": 482849,
+      "drain_after_business_ack_ns": 24939,
+      "last_cnp_rx_ns": 482849,
+      "cnp_after_global_business_ack": 1,
+      "cnp_before_own_last_tx": 10,
+      "cnp_at_own_last_tx": 0,
+      "cnp_after_own_last_tx": 50
+    }
+  ],
+  "public_results_only": true,
+  "interpretation": "Actual CNP/TX overlap; after-own-last-TX notifications cannot pace later data in this finite condition"
+}

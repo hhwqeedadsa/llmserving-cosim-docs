@@ -1,0 +1,210 @@
+{
+  "schema_version": "inference-resilience-study/1",
+  "history": {
+    "max_entries_per_source": 16,
+    "max_age_ns": 300000
+  },
+  "per_destination": {
+    "max_active": 1,
+    "max_bytes": 8192
+  },
+  "selector": {
+    "src": 0,
+    "dst": 4,
+    "phase": "dispatch"
+  },
+  "cases": [
+    {
+      "name": "b4-normal-h0-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b4-normal-h0-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b4-normal-h1-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b4-normal-h1-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b4-short-h0-s0",
+      "batch": 4,
+      "initial_rto_ns": 2000,
+      "history": false,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b4-short-h0-s1",
+      "batch": 4,
+      "initial_rto_ns": 2000,
+      "history": false,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b4-short-h1-s0",
+      "batch": 4,
+      "initial_rto_ns": 2000,
+      "history": true,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b4-short-h1-s1",
+      "batch": 4,
+      "initial_rto_ns": 2000,
+      "history": true,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b1-normal-h0-s0",
+      "batch": 1,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b1-normal-h0-s1",
+      "batch": 1,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b1-normal-h1-s0",
+      "batch": 1,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b1-normal-h1-s1",
+      "batch": 1,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b1-short-h0-s0",
+      "batch": 1,
+      "initial_rto_ns": 2000,
+      "history": false,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b1-short-h0-s1",
+      "batch": 1,
+      "initial_rto_ns": 2000,
+      "history": false,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b1-short-h1-s0",
+      "batch": 1,
+      "initial_rto_ns": 2000,
+      "history": true,
+      "shares": false,
+      "fault": "none"
+    },
+    {
+      "name": "b1-short-h1-s1",
+      "batch": 1,
+      "initial_rto_ns": 2000,
+      "history": true,
+      "shares": true,
+      "fault": "none"
+    },
+    {
+      "name": "b4-single-h0-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": false,
+      "fault": "single"
+    },
+    {
+      "name": "b4-single-h0-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": true,
+      "fault": "single"
+    },
+    {
+      "name": "b4-single-h1-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": false,
+      "fault": "single"
+    },
+    {
+      "name": "b4-single-h1-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": true,
+      "fault": "single"
+    },
+    {
+      "name": "b4-persistent-h0-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": false,
+      "fault": "persistent"
+    },
+    {
+      "name": "b4-persistent-h0-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": false,
+      "shares": true,
+      "fault": "persistent"
+    },
+    {
+      "name": "b4-persistent-h1-s0",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": false,
+      "fault": "persistent"
+    },
+    {
+      "name": "b4-persistent-h1-s1",
+      "batch": 4,
+      "initial_rto_ns": 40000,
+      "history": true,
+      "shares": true,
+      "fault": "persistent"
+    }
+  ]
+}

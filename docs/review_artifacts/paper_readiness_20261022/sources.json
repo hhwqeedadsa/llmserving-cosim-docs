@@ -1,0 +1,526 @@
+{
+  "reused_primary_sources": [
+    {
+      "id": "lina",
+      "url": "https://arxiv.org/html/2210.17223v2",
+      "public_url": "https://arxiv.org/html/2210.17223v2",
+      "local_snapshot": "data/research/system_innovation_20261021/lina.html",
+      "sha256": "4ecfeb8e20aa20fe5e1d9c6243323df940d67807a36876e0f31670f10d129d72",
+      "text_snapshot": "data/research/system_innovation_20261021/lina.txt",
+      "text_sha256": "3b5c3a808a5ba956a7d281f5e303dcb5eaa41034c0cdc42cb735c984c1917dad"
+    },
+    {
+      "id": "comet",
+      "url": "https://arxiv.org/html/2502.19811",
+      "public_url": "https://arxiv.org/html/2502.19811v3",
+      "local_snapshot": "data/research/system_innovation_20261021/comet.html",
+      "sha256": "18f6df2f2082a32130223322648b634b4ad2e2e5fdd94d00faea0120a8d5b3f8",
+      "text_snapshot": "data/research/system_innovation_20261021/comet.txt",
+      "text_sha256": "bc7cb38a52e09fba2e5bc24a6e8af2adbc57c9c0f481941657d15f6785ded767"
+    },
+    {
+      "id": "analytical_overlap",
+      "url": "https://arxiv.org/html/2609.07536",
+      "public_url": "https://arxiv.org/html/2609.07536v1",
+      "local_snapshot": "data/research/system_innovation_20261021/analytical_overlap.html",
+      "sha256": "375c8d09d3abaad6c56627d66c9a0060b9244e2fad5a5358b3c2432ea09fae40",
+      "text_snapshot": "data/research/system_innovation_20261021/analytical_overlap.txt",
+      "text_sha256": "863549817a6c3dfb7b30f696d13b4b601bf131a9067fa6e31030853d9aaecaf5"
+    },
+    {
+      "id": "patterns",
+      "url": "https://arxiv.org/html/2510.05497v5",
+      "public_url": "https://arxiv.org/html/2510.05497v5",
+      "local_snapshot": "data/research/system_innovation_20261021/patterns.html",
+      "sha256": "ea29c8cc1a0c1e8cfa815af439bf8440f73d989e07e7685899712afbc54a5387",
+      "text_snapshot": "data/research/system_innovation_20261021/patterns.txt",
+      "text_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168"
+    },
+    {
+      "id": "megascale_infer",
+      "url": "https://arxiv.org/html/2504.02263",
+      "public_url": "https://arxiv.org/html/2504.02263v4",
+      "local_snapshot": "data/research/system_innovation_20261021/megascale_infer.html",
+      "sha256": "2525c8ab0e9290f528aa9b22f80400c7aba84d6c14629480ac445a6e2ef09e05",
+      "text_snapshot": "data/research/system_innovation_20261021/megascale_infer.txt",
+      "text_sha256": "3504cafca5f7d8c3e185d2b6a859083a9e9fa94327030c2dc4036731bde3d11c"
+    },
+    {
+      "id": "llmservingsim2",
+      "url": "https://arxiv.org/html/2602.23036",
+      "public_url": "https://arxiv.org/html/2602.23036v2",
+      "local_snapshot": "data/research/system_innovation_20261021/llmservingsim2.html",
+      "sha256": "d77c1caf6bcc43ef63b229bcc1a4907c9223e283a4e9da41dfddf845409992fa",
+      "text_snapshot": "data/research/system_innovation_20261021/llmservingsim2.txt",
+      "text_sha256": "509007c1d49de92f5bcca7067d159c12c0c681e932ddc720735862bb0ca464ef"
+    },
+    {
+      "id": "simai",
+      "url": "https://api.github.com/repos/aliyun/SimAI/contents/README.md",
+      "public_url": "https://github.com/aliyun/SimAI/blob/master/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/simai.md",
+      "sha256": "c9dae7ba10cf20fad4c6b43583188ebbda9d7e6de63656faccf2041a3d71375b",
+      "text_snapshot": "data/research/system_innovation_20261021/simai.txt",
+      "text_sha256": "c9dae7ba10cf20fad4c6b43583188ebbda9d7e6de63656faccf2041a3d71375b",
+      "git_blob_sha": "553af97e39a40bb20546b05d27b9c3347be5db28"
+    },
+    {
+      "id": "clem",
+      "url": "https://api.github.com/repos/aliyun/SimAI-CLEM/contents/README.md",
+      "public_url": "https://github.com/aliyun/SimAI-CLEM/blob/master/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/clem.md",
+      "sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8",
+      "text_snapshot": "data/research/system_innovation_20261021/clem.txt",
+      "text_sha256": "b285917e8af5703f22b146d5337468068da8e2ce61e711aff925907062fa42f8",
+      "git_blob_sha": "33b9fb962463789a9f483e93ccfba8576eaa3e44"
+    },
+    {
+      "id": "vidur",
+      "url": "https://api.github.com/repos/microsoft/vidur/contents/README.md",
+      "public_url": "https://github.com/microsoft/vidur/blob/main/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/vidur.md",
+      "sha256": "e5ad589f16aeb588676b77c11be918addc976111bbb7944112922fca647ac51c",
+      "text_snapshot": "data/research/system_innovation_20261021/vidur.txt",
+      "text_sha256": "e5ad589f16aeb588676b77c11be918addc976111bbb7944112922fca647ac51c",
+      "git_blob_sha": "d0def19e71c008ffaed04114d1434882df61211e"
+    },
+    {
+      "id": "tutel",
+      "url": "https://api.github.com/repos/microsoft/tutel/contents/README.md",
+      "public_url": "https://github.com/microsoft/Tutel/blob/main/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/tutel.md",
+      "sha256": "b741d90ef5028bf1b53d71c1aed09099dbe2bbbc5c24d46adcbbfc9acb6c6fdc",
+      "text_snapshot": "data/research/system_innovation_20261021/tutel.txt",
+      "text_sha256": "b741d90ef5028bf1b53d71c1aed09099dbe2bbbc5c24d46adcbbfc9acb6c6fdc",
+      "git_blob_sha": "7f22f8c41c7b59c515e1ad28587b6e98a9af4e75"
+    },
+    {
+      "id": "deepep_v121",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/README.md?ref=9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/deepep_v121.md",
+      "sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+      "text_snapshot": "data/research/system_innovation_20261021/deepep_v121.txt",
+      "text_sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b",
+      "git_blob_sha": "211cace8dcaef15b8b2784ccfd179331e2d488df"
+    },
+    {
+      "id": "deepep_v2",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/contents/README.md",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/main/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/deepep_v2.md",
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+      "text_snapshot": "data/research/system_innovation_20261021/deepep_v2.txt",
+      "text_sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+      "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d"
+    },
+    {
+      "id": "coz",
+      "url": "https://api.github.com/repos/plasma-umass/coz/contents/README.md",
+      "public_url": "https://github.com/plasma-umass/coz/blob/master/README.md",
+      "local_snapshot": "data/research/system_innovation_20261021/coz.md",
+      "sha256": "45443e8af612112ebe73d8e3365918d849177d1c83c2c5035db9d6c5ba22f17e",
+      "text_snapshot": "data/research/system_innovation_20261021/coz.txt",
+      "text_sha256": "45443e8af612112ebe73d8e3365918d849177d1c83c2c5035db9d6c5ba22f17e",
+      "git_blob_sha": "544dd02b39bcce0a7adbace99d043633ee5716fd"
+    },
+    {
+      "id": "nanoflow",
+      "url": "https://www.usenix.org/conference/osdi25/presentation/zhu-kan",
+      "local_snapshot": "data/research/system_innovation_20261021/nanoflow.html",
+      "sha256": "ff6dbf9afffc858a4d4d46838ef879aadf3548ecba1c751d7400431c0fa652df",
+      "text_snapshot": "data/research/system_innovation_20261021/nanoflow.txt",
+      "text_sha256": "cc10e2b8d8c4b0d924100d7255aeb5ae0375f60103cb57cfc640638b7362208b"
+    },
+    {
+      "id": "aalo_paper",
+      "url": "https://www.mosharaf.com/wp-content/uploads/aalo-sigcomm15.pdf",
+      "local_snapshot": "data/research/system_innovation_20261021/aalo_paper.pdf",
+      "sha256": "a1f64e6c3557bf4ae6e92200daf745b911d4906dd30faaf259df3f7ea466e64e",
+      "text_snapshot": "data/research/system_innovation_20261021/aalo_paper.txt",
+      "text_sha256": "47afa803cfc334699e863b33e061cd9d11a9cf77a6f4b71537dd145fdcf5f341"
+    }
+  ],
+  "new_primary_sources": {
+    "sources": [
+      {
+        "id": "rfc6298",
+        "url": "https://www.rfc-editor.org/rfc/rfc6298.txt",
+        "accessed_utc": "2026-10-22T10:58:45.595206+00:00",
+        "http_status": 200,
+        "resolved_url": "https://www.rfc-editor.org/rfc/rfc6298.txt",
+        "status": "read",
+        "bytes": 22454,
+        "sha256": "f3a6d937c0a7653bd431fdbbdcd7920f4e9d9cdb6134fa9db7a74b90d215edf6",
+        "passages": [
+          {
+            "line": 126,
+            "text": "         set RTO <- 1 second, though the \"backing off\" on repeated"
+          },
+          {
+            "line": 187,
+            "text": "   TCP MUST use Karn's algorithm [KP87] for taking RTT samples.  That"
+          },
+          {
+            "line": 203,
+            "text": "   Karn's algorithm)."
+          },
+          {
+            "line": 265,
+            "text": "   (5.5) The host MUST set RTO <- RTO * 2 (\"back off the timer\").  The"
+          },
+          {
+            "line": 267,
+            "text": "         an upper bound to this doubling operation."
+          },
+          {
+            "line": 270,
+            "text": "         seconds (for the value of RTO after the doubling operation"
+          },
+          {
+            "line": 296,
+            "text": "   RTO back down after it has been subject to exponential back off (rule"
+          },
+          {
+            "line": 300,
+            "text": "   backing off the timer multiple times as it is likely that the current"
+          },
+          {
+            "line": 329,
+            "text": "   will still back off its timer in the face of an incorrectly"
+          },
+          {
+            "line": 418,
+            "text": "   [KP87]  Karn, P. and C. Partridge, \"Improving Round-Trip Time"
+          }
+        ]
+      },
+      {
+        "id": "rfc9040",
+        "url": "https://www.rfc-editor.org/rfc/rfc9040.txt",
+        "accessed_utc": "2026-10-22T10:58:45.596897+00:00",
+        "http_status": 200,
+        "resolved_url": "https://www.rfc-editor.org/rfc/rfc9040.txt",
+        "status": "read",
+        "bytes": 73296,
+        "sha256": "95c6263d3b6ec0f1edd5ba3856d1a7530254b20377ace876ae342551a2deecbe",
+        "passages": [
+          {
+            "line": 20,
+            "text": "   description of sharing TCP state, as typically represented in TCP"
+          },
+          {
+            "line": 61,
+            "text": "   6.  Temporal Sharing"
+          },
+          {
+            "line": 63,
+            "text": "     6.2.  Updates to the TCB Cache"
+          },
+          {
+            "line": 65,
+            "text": "   7.  Ensemble Sharing"
+          },
+          {
+            "line": 67,
+            "text": "     7.2.  Updates to the TCB Cache"
+          },
+          {
+            "line": 69,
+            "text": "   8.  Issues with TCB Information Sharing"
+          },
+          {
+            "line": 72,
+            "text": "     8.3.  Problems with Sharing Based on IP Address"
+          },
+          {
+            "line": 83,
+            "text": "   Appendix A.  TCB Sharing History"
+          },
+          {
+            "line": 84,
+            "text": "   Appendix B.  TCP Option Sharing and Caching"
+          },
+          {
+            "line": 102,
+            "text": "   properties.  As originally specified and usually implemented, most"
+          },
+          {
+            "line": 104,
+            "text": "   implementations share certain TCB information across connections to"
+          },
+          {
+            "line": 105,
+            "text": "   the same host [RFC2140].  Such sharing is intended to lead to better"
+          },
+          {
+            "line": 108,
+            "text": "   and other applications [Be94] [Br02].  This sharing of state is"
+          },
+          {
+            "line": 113,
+            "text": "   This document updates RFC 2140's discussion of TCB state sharing and"
+          },
+          {
+            "line": 115,
+            "text": "   sharing affects only TCB initialization [RFC2140] and thus has no"
+          },
+          {
+            "line": 117,
+            "text": "   established or on interoperability.  Path information shared across"
+          },
+          {
+            "line": 122,
+            "text": "   observations about TCB sharing in this document apply similarly to"
+          },
+          {
+            "line": 147,
+            "text": "   focus of sharing as described in this document.  Note that terms are"
+          },
+          {
+            "line": 148,
+            "text": "   used as originally introduced where possible; in some cases,"
+          },
+          {
+            "line": 210,
+            "text": "   +TFOinfo:  information cached when a TFO connection is established,"
+          },
+          {
+            "line": 225,
+            "text": "      Per-connection shared state"
+          },
+          {
+            "line": 246,
+            "text": "   the protocol for establishing the initial shared state about the"
+          },
+          {
+            "line": 253,
+            "text": "   We distinguish two other classes of shared micro-state that are"
+          },
+          {
+            "line": 258,
+            "text": "   sendMSS, MMS_R, MMS_S, RTT) or are already cached and shared on that"
+          },
+          {
+            "line": 264,
+            "text": "   Not all of the TCB state is necessarily shareable.  In particular,"
+          },
+          {
+            "line": 268,
+            "text": "   not shareable.  These are discussed further in Appendix B."
+          },
+          {
+            "line": 272,
+            "text": "   send window sharing and is not independently affected by sharing."
+          },
+          {
+            "line": 276,
+            "text": "   There are two cases of TCB interdependence.  Temporal sharing occurs"
+          },
+          {
+            "line": 279,
+            "text": "   i.e., in sequence.  Ensemble sharing occurs when a currently active"
+          },
+          {
+            "line": 283,
+            "text": "6.  Temporal Sharing"
+          },
+          {
+            "line": 285,
+            "text": "   The TCB data cache is accessed in two ways: it is read to initialize"
+          },
+          {
+            "line": 290,
+            "text": "   TCBs for new connections can be initialized using cached context from"
+          },
+          {
+            "line": 294,
+            "text": "              | Cached TCB   | New TCB                     |"
+          },
+          {
+            "line": 296,
+            "text": "              | old_MMS_S    | old_MMS_S or not cached (2) |"
+          },
+          {
+            "line": 298,
+            "text": "              | old_MMS_R    | old_MMS_R or not cached (2) |"
+          },
+          {
+            "line": 315,
+            "text": "              Table 1: Temporal Sharing - TCB Initialization"
+          },
+          {
+            "line": 317,
+            "text": "   (1)  Note that PMTU is cached at the IP layer [RFC1191] [RFC4821]."
+          },
+          {
+            "line": 319,
+            "text": "   (2)  Note that some values are not cached when they are computed"
+          },
+          {
+            "line": 324,
+            "text": "   shared.  Additional information on some specific TCP options and"
+          },
+          {
+            "line": 325,
+            "text": "   sharing is provided in Appendix B."
+          },
+          {
+            "line": 328,
+            "text": "                   | Cached          | New             |"
+          },
+          {
+            "line": 335,
+            "text": "                        Table 2: Temporal Sharing -"
+          },
+          {
+            "line": 338,
+            "text": "6.2.  Updates to the TCB Cache"
+          },
+          {
+            "line": 340,
+            "text": "   During a connection, the TCB cache can be updated based on events of"
+          },
+          {
+            "line": 345,
+            "text": "     | Cached TCB   | Current TCB   | When?       | New Cached TCB  |"
+          }
+        ]
+      },
+      {
+        "id": "nsdi26_cfp",
+        "url": "https://www.usenix.org/conference/nsdi26/call-for-papers",
+        "accessed_utc": "2026-10-22T10:58:45.597470+00:00",
+        "http_status": 200,
+        "resolved_url": "https://www.usenix.org/conference/nsdi26/call-for-papers",
+        "status": "read",
+        "bytes": 115690,
+        "sha256": "5b2d7c70f622bf9e8e0db94e8bdd3dce8f75189bd2e4d3ec6b0d28db3e130d2b",
+        "passages": [
+          {
+            "line": 44,
+            "text": "NSDI focuses on the design principles, implementation, and practical evaluation of networked and distributed systems. Our goal is to bring together researchers from across the networking and systems community to foster a broad approach to addressing overlapping research challenges."
+          },
+          {
+            "line": 45,
+            "text": "NSDI provides a high-quality forum for presenting results and discussing ideas that further the knowledge and understanding of the networked systems community as a whole, continue a significant research dialog, or push the architectural boundaries of network services."
+          },
+          {
+            "line": 47,
+            "text": "NSDI invites any innovative solution for a significant problem involving networked systems, including topics from within the following list:"
+          },
+          {
+            "line": 50,
+            "text": "Distributed storage, caching, and query processing systems"
+          },
+          {
+            "line": 86,
+            "text": "Authors are free to submit SIGCOMM '25 rejected papers to NSDI '26 fall and significant extensions of HotNets '26 accepted papers to NSDI '26 fall, provided that the notifications from these conferences occur before the full paper submission deadlines for NSDI."
+          },
+          {
+            "line": 88,
+            "text": "NSDI '26 also solicits papers that describe the design, implementation, analysis, and experience with large-scale, operational systems and networks. We encourage the submission of papers that disprove or strengthen existing assumptions, deepen the understanding of existing problems, and validate known techniques at scales or environments in which they were never used or tested before. Such operational papers need not present new ideas or results to be accepted; indeed, new ideas or results will not inﬂuence whether the papers are accepted. Note that the rules regarding submission and anonymization are different for operational systems track papers. Since the evaluation of operational systems track papers requires understanding the real-world use of the system, papers in this track will be reviewed in a more limited double-blind process. Authors' names should be withheld, as usual. However, in contrast to other papers, authors need not anonymize the content of their submission in any other way—they may keep company names, links, real system names, etc., as appropriate for the paper. Please note that you cannot switch tracks for your paper after submission since the submission rules differ."
+          },
+          {
+            "line": 92,
+            "text": "NSDI '26 is double-blind, meaning that authors should make a good faith effort to anonymize papers. Note that the operational track papers have different rules as described above. As an author, you should not identify yourself in the paper either explicitly or by implication (e.g., through the references or acknowledgments). However, only non-destructive anonymization is required. For example, system names may be left de-anonymized, if the system name is important for a reviewer to be able to evaluate the work. Please take the following steps when preparing your submission:"
+          },
+          {
+            "line": 98,
+            "text": "If you need to reference another submission at NSDI '26 on a related topic, reference it as follows: \"A related paper describes the design and implementation of our compiler [24].\" with the corresponding citation: \"[24] Under submission. Details omitted for double-blind reviewing.\""
+          },
+          {
+            "line": 118,
+            "text": "Papers describing experiments with users or user data (e.g., network traﬃc, passwords, social network information), should follow the basic principles of ethical research, e.g., beneﬁcence (maximizing the beneﬁts to an individual or to society while minimizing harm to the individual), minimal risk (appropriateness of the risk versus beneﬁt ratio), voluntary consent, respect for privacy, and limited deception. When appropriate, authors are encouraged to include a subsection describing these issues. Authors may want to consult the Menlo Report for further information on ethical principles, or the Allman/Paxson IMC '07 paper for guidance on ethical data sharing."
+          },
+          {
+            "line": 128,
+            "text": "To encourage broader code and data sharing within the NSDI community, the conference will also present a \"Community Award\" for the best paper whose code and/or data set is made publicly available by the ﬁnal paper deadline. Authors who would like their paper to be considered for this award will have the opportunity to tag their paper during the submission process"
+          },
+          {
+            "line": 171,
+            "text": "Yashar Ganjali, University of Toronto"
+          },
+          {
+            "line": 317,
+            "text": "Artifact Evaluation Committee Co-Chairs"
+          },
+          {
+            "line": 320,
+            "text": "Artifact Evaluation Committee"
+          },
+          {
+            "line": 346,
+            "text": "Umakant Kulkarni, Purdue University"
+          }
+        ]
+      },
+      {
+        "id": "sigcomm26_cfp",
+        "url": "https://conferences.sigcomm.org/sigcomm/2026/cfp/",
+        "accessed_utc": "2026-10-22T10:58:45.598165+00:00",
+        "http_status": 200,
+        "resolved_url": "https://conferences.sigcomm.org/sigcomm/2026/cfp/",
+        "status": "read",
+        "bytes": 40452,
+        "sha256": "fa1d6a7b651371565a062fe493202709782dfbd0583ebba13ed36f545b66bd64",
+        "passages": [
+          {
+            "line": 60,
+            "text": "Room Sharing"
+          },
+          {
+            "line": 65,
+            "text": "The ACM SIGCOMM 2026 conference seeks papers describing significant research contributions or significant deployment experiences in communication networks and networked systems. SIGCOMM takes a broad view of networking which includes (but is not limited to):"
+          },
+          {
+            "line": 79,
+            "text": "Research track submissions should significantly advance the state of the art in networking by, for instance, proposing and developing novel ideas or by rigorously evaluating or re-evaluating existing ideas."
+          },
+          {
+            "line": 82,
+            "text": "community cannot duplicate (for instance, for reasons of scale). Please note there are significant changes to the experience track which are described below in the \"new this year\" section."
+          },
+          {
+            "line": 130,
+            "text": "significant concerns that were not discovered during the earlier reviews."
+          },
+          {
+            "line": 185,
+            "text": "Papers must follow basic precepts of ethical research and subscribe to community norms. Misrepresentation, plagiarism, and coercion and abuse related to authorship or review are unacceptable at SIGCOMM. Works must also show respect for norms around privacy, secure storage of sensitive data, voluntary and informed consent for human subjects and users who might be placed at risk, avoiding deceptive practices when not essential, beneficence (maximizing benefits while minimizing potential harm), and risk mitigation. Authors may want to consult the Menlo Report and the ACM ethics policy for further information on ethical principles, and they may find the Allman/Paxson paper in IMC 2007 helpful for a perspective on ethical data sharing."
+          },
+          {
+            "line": 204,
+            "text": "evaluate the ethical soundness of the work just as they evaluate its technical soundness."
+          },
+          {
+            "line": 218,
+            "text": "Important: In light of recent events at other ACM conferences, this year we will be validating"
+          },
+          {
+            "line": 221,
+            "text": "Artifact Evaluation for Accepted Papers"
+          },
+          {
+            "line": 223,
+            "text": "to the Artifact Evaluation process. Artifact Evaluation is run by a separate committee that will"
+          },
+          {
+            "line": 225,
+            "text": "Participation in Artifact Evaluation is voluntary and has no influence on paper acceptance, but it"
+          },
+          {
+            "line": 226,
+            "text": "is strongly encouraged. Papers that go through the Artifact Evaluation process successfully will"
+          },
+          {
+            "line": 227,
+            "text": "receive badges printed on the papers themselves. Additional details on the Artifact Evaluation"
+          }
+        ]
+      }
+    ],
+    "scope": "primary standards and official venue pages; no simulator execution"
+  },
+  "scope": "15 existing originals hash-verified; four fresh bounded primary documents; targeted review, not an exhaustive novelty search"
+}

@@ -1,0 +1,164 @@
+{
+  "claims": [
+    {
+      "id": "C01",
+      "claim": "有限Decode与共享包级网络有实际反馈",
+      "state": "supported_within_scope",
+      "evidence": [
+        {
+          "path": "backend/rdma/service.cc",
+          "sha256": "b9abd12a6a2b3733d017b7640fb7cc7e07e08669b43eba39ebd0e1d04437e2e0"
+        },
+        {
+          "path": "docs/review_artifacts/inference_resilience_20261022/verification.json",
+          "sha256": "7ec5bd135cb9495d30b25851d6bbf5aa784ee11df2961bccee896493dbfc9228"
+        }
+      ],
+      "limit": "仅选定模拟模型，非完整硬件精确"
+    },
+    {
+      "id": "C02",
+      "claim": "四请求可代表MoE生产/训练路由",
+      "state": "unsupported",
+      "evidence": [
+        {
+          "path": "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+          "sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16"
+        }
+      ],
+      "limit": "四个用户选定推理请求，不能推广训练或总体"
+    },
+    {
+      "id": "C03",
+      "claim": "本轮已提供生产p99改善",
+      "state": "missing",
+      "evidence": [],
+      "limit": "有限片段与确定性重放，缺持续到达和独立请求统计"
+    },
+    {
+      "id": "C04",
+      "claim": "1024卡长工作量完整执行已完成",
+      "state": "contradicted",
+      "evidence": [
+        {
+          "path": "experiments/scaleout_scaling/results/runtime_20261016/report.md",
+          "sha256": "33445fadd7e40cee7bd8517fefdbf0680cfee8b5a0e9cf27116a104c1bc3e30d"
+        }
+      ],
+      "limit": "两实现600秒超时；不说明任何千卡小用例都不可能"
+    },
+    {
+      "id": "C05",
+      "claim": "A100小形状profile已校准R1跨机性能",
+      "state": "unsupported",
+      "evidence": [
+        {
+          "path": "docs/model_validation.md",
+          "sha256": "675bf76912379d5c48b2a8aa283b8c5cf0ae24c91e10c561c136d4b33840b287"
+        }
+      ],
+      "limit": "22项小形状测量不能跨形状/库/网络外推"
+    },
+    {
+      "id": "C06",
+      "claim": "Karn与缓存历史自身足以构成新贡献",
+      "state": "unproven",
+      "evidence": [
+        {
+          "path": "docs/review_artifacts/paper_readiness_20261022/sources.json",
+          "sha256": "de1b162099c0c440a11a125b2be3e9c70b4c5d90e0b801249b5022bbd3fde768"
+        }
+      ],
+      "limit": "经典思想有明确先例；RDMA特定贡献需另外证明"
+    },
+    {
+      "id": "C07",
+      "claim": "每源3槽/16384B是实测硬件额度",
+      "state": "missing",
+      "evidence": [
+        {
+          "path": "backend/communication_admission.hh",
+          "sha256": "5afc6a84570b253e4c2298ff2992f2b4ec542fd083f3aee717ee0c59935dcd0c"
+        },
+        {
+          "path": "backend/README.md",
+          "sha256": "1716367ea2824c93fef196aa404ba3fb3380d31771db7571f04b790f86b9c63e"
+        }
+      ],
+      "limit": "当前是软件约束，未校准实际NIC/QP或GPU缓冲"
+    },
+    {
+      "id": "C08",
+      "claim": "取消字节额度使整个执行不变",
+      "state": "partially_contradicted",
+      "evidence": [
+        {
+          "path": "docs/review_artifacts/paper_readiness_20261022/summary.json",
+          "sha256": "a20f5827e315de482844d2b2365faec48f0653f5be5350e3a205a3ddde3948cc"
+        }
+      ],
+      "limit": "聚合完成不变；batch4五条消息改变，40/41交换准入"
+    },
+    {
+      "id": "C09",
+      "claim": "故障影响完全由软件准入限制导致",
+      "state": "contradicted",
+      "evidence": [
+        {
+          "path": "docs/review_artifacts/paper_readiness_20261022/summary.json",
+          "sha256": "a20f5827e315de482844d2b2365faec48f0653f5be5350e3a205a3ddde3948cc"
+        }
+      ],
+      "limit": "透传准入等待为0，但单ACK故障仍使业务延迟"
+    },
+    {
+      "id": "C10",
+      "claim": "当前恢复机制已有请求级故障隔离",
+      "state": "contradicted",
+      "evidence": [
+        {
+          "path": "docs/review_artifacts/inference_resilience_20261022/completion_audit.md",
+          "sha256": "afb408da9306dff3aef1edb62de9eddf188b4be9d33f13f46c3b1704052a874d"
+        }
+      ],
+      "limit": "重试耗尽终止共享执行"
+    },
+    {
+      "id": "C11",
+      "claim": "现有工作已足以支撑A类或最佳论文",
+      "state": "not_established",
+      "evidence": [
+        {
+          "path": "docs/reviews/A类论文研究基础审计与实证路线_20261022.md",
+          "sha256": "32d23310f2c6cb990ca453046d46cc21abac5610aaa8f8b73585999245a63bd8"
+        }
+      ],
+      "limit": "问题重要性、近邻差异、校准、强基线和泛化尚不充分"
+    },
+    {
+      "id": "C12",
+      "claim": "每逻辑消息新建QP与目标MoE库等价",
+      "state": "unproven",
+      "evidence": [
+        {
+          "path": "backend/rdma/fabric.cc",
+          "sha256": "2df91eb4a8d9fbe54341bc252e1dacebf77da561681a8fbe265d167966e42f90"
+        },
+        {
+          "path": "backend/rdma/service.cc",
+          "sha256": "b9abd12a6a2b3733d017b7640fb7cc7e07e08669b43eba39ebd0e1d04437e2e0"
+        },
+        {
+          "path": "python/moe_ub_cosim/scaleout_service.py",
+          "sha256": "29ab401c7a57bd18765d00a17b60a54b33cd97c9cab842ac70ee900c172706aa"
+        },
+        {
+          "path": "experiments/paper_readiness/api_semantics.md",
+          "sha256": "94ed5bcf997e28f51ff2ad4902b540217a9e695184866fca94ab26d1f1dee1c1"
+        }
+      ],
+      "limit": "当前模型每消息AddQueuePair；固定库示例复用Buffer并按专家数配置QP，需内核与实测核对"
+    }
+  ],
+  "scope": "evidence assessment; no numerical readiness score, acceptance or award guarantee"
+}

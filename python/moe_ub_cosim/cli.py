@@ -73,7 +73,7 @@ def parser():
     rs = sc.add_parser('rdma-stream-probe', help='Execute causal byte writes on persistent native QPs with ACK-based queue credit; not GIN/GPU visibility')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
     rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN protocol, ACK interval 1, no legacy recovery/admission/fault options')
-    rs.add_argument('--config', type=Path, required=True, help='Explicit NIC-bound streams and work dependencies on actual accepted/acked callbacks')
+    rs.add_argument('--config', type=Path, required=True, help='NIC-bound streams and actual accepted/acked dependencies; work/1 has fixed 16/64 counts, work/2 declares limits (up to 128/8192)')
     rs.add_argument('--backend', type=Path, required=True, help='stream_probe executable returned by rdma-build')
     rs.add_argument('--output', type=Path, required=True, help='New bounded result directory; maximum 60s/1GiB RSS/64MiB output')
     run_rdma = sc.add_parser('rdma-run', help='Run ready-KV MoE with synthetic or source-checked routes through LLMServingSim, ASTRA and native RDMA ns-3')

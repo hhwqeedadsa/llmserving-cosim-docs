@@ -1,0 +1,129 @@
+{
+  "passed": true,
+  "public_commands": 15,
+  "direct_native_commands": 1,
+  "expected_rejections": 5,
+  "normal": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 63050,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "depth2": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 57026,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "concurrent": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 50777,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "repeat_byte_identical": true,
+  "same_network_clock": true,
+  "hardware_calibrated": false,
+  "modern_GIN_executed": false,
+  "wall_seconds": 9.46937995031476,
+  "output_bytes": 1100504,
+  "indexed": {
+    "differential": {
+      "work": 48,
+      "source_packets": 163,
+      "payload_bytes": 137873,
+      "finish_ns": 52410,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "reordered": {
+      "work": 6,
+      "source_packets": 35,
+      "payload_bytes": 31457,
+      "finish_ns": 64169,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "expanded": {
+      "work": 192,
+      "source_packets": 672,
+      "payload_bytes": 563568,
+      "finish_ns": 104228,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "reference_backend_sha256": "34c81f99226d87b6c5c66adbbd8c2278041000d9e6ac33c0fd77f05f3bbd0b7e",
+    "results_byte_identical": true,
+    "expanded_repeat_byte_identical": true,
+    "native_budget_rejection": true
+  },
+  "backend_sha256": "c2143fee19dd24e24400049fdfb6996e3be0a627e41bc34d10312e4b0cb50e33",
+  "source_sha256": {
+    "backend/rdma/fabric.hh": "3f3e25c162d1a5ab6292fd26964ae3e97e1c3d173e4af270eca5b806f72db5f4",
+    "backend/rdma/fabric.cc": "4d85b5d049c435ec4612c286caf0e2bc277dcb8a8297ad22be750b8672dd5869",
+    "backend/rdma/persistent_streams.hh": "b6acfd0ea38f5d2c2ef68d758d74a73c6383ccdf88a6763d125e5ff93cd7a419",
+    "backend/rdma/persistent_streams.cc": "33cf55c71493758d72e44b90934529c94af99c7d78fdaacb165469496427cc65",
+    "backend/rdma/stream_probe.cc": "05810df0cef30ca51370d7743b18be98529427f3c8f586b43dfa8118ff4e2c77",
+    "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "python/moe_ub_cosim/scaleout_streams.py": "f3eaf8029e2af42fbee182dc1c3c397928404e23565a0b12526ba81354e4c9b1",
+    "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+    "python/moe_ub_cosim/cli.py": "f0f8f542ff4c1e9ca04bf588158a3d56d80d7d548fa7e5b6365a30af9ce0c921",
+    "tests/integration/check_persistent_stream_workflow.py": "01bb03c49d03f0ab4cbaf1d062aba795688596f9eea762d70477a138766bc55b",
+    "examples/scaleout_rdma_streams/work.json": "723d35f9a08bb2321886a8c9c056822ba2940f143455a178933379b8742f01e3"
+  }
+}

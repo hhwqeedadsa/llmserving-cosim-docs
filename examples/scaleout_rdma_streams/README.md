@@ -21,22 +21,31 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 ## 输入与事件
 
-`moe-rdma-stream-work/1`包含`streams`和`work`，完整输入见[work.json](work.json)。
+`moe-rdma-stream-work/1`包含`streams`和`work`，完整输入见[work.json](work.json)。需要超过原小例计数时使用`moe-rdma-stream-work/2`，在根对象增加明确的`limits`，其他字段及事件语义相同。例如：
+
+```json
+"schema_version": "moe-rdma-stream-work/2",
+"limits": {"max_streams": 24, "max_work": 192}
+```
+
+这是完整JSON对象中的两个字段，不是可独立执行的配置。连接与工作仍须填写；v2不自动创建流量或提高宿主/观测预算。`max_streams`支持1—128，`max_work`支持1—8192；v1保持16/64且拒绝`limits`。超过声明数量在执行前拒绝，原生二进制也检查数量，失败不自动扩大预算。
 
 | 字段 | 意义与当前范围 |
 |---|---|
-| streams | 1—16条连接；id唯一，src/dst为不同GPU，plane明确；初始提供给NIC的字节为0 |
+| streams | v1为1—16条；v2不超过`limits.max_streams`。id唯一，src/dst为不同GPU，plane明确；初始提供给NIC的字节为0 |
 | wire_port | 10000—65535、全局唯一的线端端口，整个连接不变；影响常规ECMP，不由工作ID更换 |
 | source_nic/destination_nic | GPU物理设备端口，必须与地址/plane唯一可达的正向及反向NIC一致；多候选时拒绝，不能用哈希替代绑定 |
 | queue_depth | 1—4096内的2的幂；按ACK释放的功能额度，不是实测NIC/CQ或GPU缓冲深度 |
-| work | 共1—64条，id唯一、引用已有stream，bytes为1—1MiB，每连接累计≤64MiB |
+| work | v1共1—64条；v2不超过`limits.max_work`。id唯一、引用已有stream，bytes为1—1MiB，每连接累计≤64MiB |
 | after | 最多64项不重复依赖，引用输入中较早工作的accepted或acked；空列表在0ns就绪，无预设后续时刻 |
 
 `accepted`表示原生接收端连续字节前缀覆盖该工作，不表示GPU可见。`acked`表示源收到覆盖该工作的真实累计ACK；本例据此释放队列条目，不当作现代GIN flush或生产CQ精确语义。提交先reserve，槽可写后才prepare/publish；只有已发布字节增加QP的可发送前缀。
 
 默认6次传输共31,457B。work1等work0接收后就绪，深度1使其等ACK后才发布；后续工作检查空闲后追加。另一连接同时向相同目的GPU传输，共享同一网络状态与时钟。999/1001B等尺寸检查包边界；14,464/14,400B也只是操作数，不是一次现代MoE调用。拓扑的A100标签没有GPU测量含义。
 
-本模式独占Fabric传输入口，不能混用旧Send、软件准入、恢复/故障、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；没有通用ACK超时重传。端点上限沿用小型原生验证，当前CLI rank≤31，不是千卡入口。
+本模式独占Fabric传输入口，不能混用旧Send、软件准入、恢复/故障、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；没有通用ACK超时重传。v1仍限制rank≤31；v2按协议的`max_gpus`及实际图检查端点，协议v1默认32GPU。协议v2虽支持更大的图，持久入口本次只验收8GPU上的24连接/192工作，不代表千卡已验证；固定交换机计数器的内存检查和宿主RSS上限仍生效。
+
+内部按唯一线端端口查连接，以有序累计前缀处理发布、接收和ACK，实际发送序号通过二分查找工作边界（允许原生NACK回退）。依赖只在真实回调发生后释放，以输入顺序处理同时就绪的工作。它们减少宿主扫描，不修改包、QP信用、网络时间或路径规则；没有新增网络性能收益主张。
 
 ## 输出与预算
 
@@ -44,6 +53,8 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 `qp_creations=1`表示一个连接对象只创建一次；`scheduler_reinsertions`计空闲成员被原生调度器移出后恢复的次数，不是重建QP。全部预期工作ACK、在途帧与设备/ACK队列排空后才关闭连接并取消其拥塞计时器；不能将“QP map非空”等同活跃传输，也不能因应用完成提前删连接。
 
-目录另含`inputs.json`的命令、原生版本和输入/二进制hash，以及`execution/`的stdout、stderr与资源监控。沿用协议仿真时间上限；宿主最多60秒、RSS1GiB、地址2GiB、产物64MiB，卷预留8GiB。被动Tx观测最多200,000项；超限/无法排空保留失败，不自动扩限或覆盖重跑。
+目录另含`inputs.json`的命令、原生版本和输入/二进制hash，以及`execution/`的stdout、stderr与资源监控。工作输入JSON最多8MiB。沿用协议仿真时间上限；宿主最多60秒、RSS1GiB、地址2GiB、产物64MiB，卷预留8GiB。被动Tx观测最多200,000项（所有物理端口Tx，非仅源数据包）；超限/无法排空保留失败，不自动扩限或覆盖重跑。计数上限不是保证其任意组合均能在这些预算内完成。
 
 人工独立核算、深度对照、并发根工作、重复和非法绑定的实际执行见[验收](../../fixtures/persistent_streams/README.md)。完成时间只描述此功能模型，不能将加深未校准队列后的变化写成优化收益。
+
+索引修改前后同输入结果、显式计数和多轮扩展检查见[扩展验收](../../fixtures/indexed_streams/README.md)。

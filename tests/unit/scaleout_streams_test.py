@@ -51,5 +51,40 @@ class StreamInputTests(unittest.TestCase):
         topology=deepcopy(self.topology);topology['intra_host']=dict(enabled=True)
         with self.assertRaises(ValueError):validate(topology,self.protocol,self.config)
 
+    def test_explicit_v2_counts_and_no_implicit_upgrade(self):
+        config=deepcopy(self.config)
+        config['schema_version']='moe-rdma-stream-work/2'
+        config['limits']=dict(max_streams=2,max_work=128)
+        config['work']=[dict(id=i,stream=0,bytes=1,after=[]) for i in range(128)]
+        validate(self.topology,self.protocol,config)
+        config['limits']['max_work']=127
+        with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+        config['schema_version']='moe-rdma-stream-work/1';del config['limits']
+        with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+
+    def test_reject_v2_budget_types_bounds_and_missing_fields(self):
+        config=deepcopy(self.config);config['schema_version']='moe-rdma-stream-work/2'
+        for value in ({},dict(max_streams=1,max_work=64),dict(max_streams=129,max_work=64),
+                      dict(max_streams=16,max_work=8193),dict(max_streams=16,max_work=True),
+                      dict(max_streams=16,max_work=64,extra=1)):
+            config['limits']=value
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+        config['schema_version']='moe-rdma-stream-work/1';config['limits']=dict(max_streams=16,max_work=64)
+        with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+
+    def test_v2_endpoint_budget_is_separate_from_stream_counts(self):
+        from moe_ub_cosim.scaleout_limits import DEFAULTS
+        protocol=deepcopy(self.protocol);protocol['schema_version']='moe-scaleout-rdma/2'
+        protocol['limits']=dict(DEFAULTS,max_gpus=40)
+        topology=dict(schema_version='moe-scaleout-physical-topology/1',
+            nodes=[dict(id=i,kind='gpu') for i in range(40)]+[dict(id=40,kind='tor',plane=0)],
+            links=[dict(src=i,dst=40,src_port=1,dst_port=i+1,rate_bps=100000000000) for i in range(40)])
+        config=deepcopy(self.config);config['streams'][0]['src']=32
+        with self.assertRaises(ValueError):validate(topology,protocol,config)
+        config['schema_version']='moe-rdma-stream-work/2';config['limits']=dict(max_streams=2,max_work=6)
+        validate(topology,protocol,config)
+        protocol['limits']['max_gpus']=32
+        with self.assertRaises(ValueError):validate(topology,protocol,config)
+
 
 if __name__=='__main__':unittest.main()

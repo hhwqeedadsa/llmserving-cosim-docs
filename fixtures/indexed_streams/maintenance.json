@@ -1,0 +1,937 @@
+{
+  "scope": "platform functional acceptance, not research gain",
+  "output": "/dev/shm/moe-stream-indexed-20261022",
+  "storage": "tmpfs_volatile_not_persistently_backed_up",
+  "dependencies_changed": false,
+  "builds": {
+    "build-stream": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/tools/venv/lib/python3.12/site-packages/cmake/data/bin/cmake",
+        "--build",
+        "/dev/shm/moe-fault-20261021/native/cmake",
+        "--target",
+        "moe-rdma-stream-probe",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:32:16.295194+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 576987136,
+      "peak_sampled_processes": 6,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma",
+        "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-stream-probe.dir"
+      ],
+      "peak_sampled_artifact_bytes": 33509376,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 33482289,
+      "peak_sampled_artifact_allocated_bytes": 33509376,
+      "process_group": 1720474,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:32:27.934420+00:00",
+      "wall_seconds": 11.639243979007006,
+      "max_waited_child_rss_kib": 540536,
+      "artifact_bytes_before_report": 57292,
+      "aggregate_artifact_bytes_before_report": 33509376,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 33482289,
+        "allocated_bytes": 33509376
+      }
+    },
+    "build-transactions": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/tools/venv/lib/python3.12/site-packages/cmake/data/bin/cmake",
+        "--build",
+        "/dev/shm/moe-fault-20261021/native/cmake",
+        "--target",
+        "moe-rdma-transaction-probe",
+        "--parallel",
+        "1"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:32:49.766098+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 579026944,
+      "peak_sampled_processes": 6,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma",
+        "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-transaction-probe.dir"
+      ],
+      "peak_sampled_artifact_bytes": 37613568,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 37322577,
+      "peak_sampled_artifact_allocated_bytes": 37613568,
+      "process_group": 1720609,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:33:07.504241+00:00",
+      "wall_seconds": 17.73815350793302,
+      "max_waited_child_rss_kib": 539380,
+      "artifact_bytes_before_report": 86879,
+      "aggregate_artifact_bytes_before_report": 37613568,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 37322577,
+        "allocated_bytes": 37613568
+      }
+    },
+    "build-reference": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-c",
+        "import json,subprocess; from pathlib import Path; commands=json.loads(Path(\"/dev/shm/moe-stream-indexed-20261022/reference-build-commands.json\").read_text()); [subprocess.run(c[\"argv\"],cwd=c[\"cwd\"],check=True,timeout=50) for c in commands]"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:37:23.454739+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 560099328,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 19771392,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 18645930,
+      "peak_sampled_artifact_allocated_bytes": 19771392,
+      "process_group": 1721747,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:37:34.606271+00:00",
+      "wall_seconds": 11.151533026248217,
+      "max_waited_child_rss_kib": 534480,
+      "artifact_bytes_before_report": 46518,
+      "aggregate_artifact_bytes_before_report": 19771392,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 18645930,
+        "allocated_bytes": 19771392
+      }
+    }
+  },
+  "workflows": {
+    "remote_transaction": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 66394,
+        "final_atomic_value": 10
+      },
+      "depth2": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 42272,
+        "final_atomic_value": 10
+      },
+      "segmented": {
+        "operations": 6,
+        "source_packets": 12,
+        "transported_payload_bytes": 545,
+        "finish_ns": 66411,
+        "final_atomic_value": 10
+      },
+      "repeat_byte_identical": true,
+      "application_id_renaming_wire_and_time_invariant": true,
+      "output_bytes_before_summary": 189636,
+      "wall_seconds": 4.59847367182374,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "f059f137a68386539c5b4ce78cc46a3bb7f0f316c32222cc8de710ae8fe3d410",
+        "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+        "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+        "backend/rdma/persistent_streams.hh": "b6acfd0ea38f5d2c2ef68d758d74a73c6383ccdf88a6763d125e5ff93cd7a419",
+        "backend/rdma/persistent_streams.cc": "33cf55c71493758d72e44b90934529c94af99c7d78fdaacb165469496427cc65",
+        "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+        "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+        "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+        "python/moe_ub_cosim/cli.py": "f0f8f542ff4c1e9ca04bf588158a3d56d80d7d548fa7e5b6365a30af9ce0c921",
+        "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+        "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+        "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af"
+      },
+      "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+    },
+    "local_memory_wait": {
+      "passed": true,
+      "public_commands": 8,
+      "normal": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "greater": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "failure_probes": {
+        "missing-increment": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 1,
+          "conjunction": [
+            false,
+            true
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        },
+        "wrong-payload": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 2,
+          "conjunction": [
+            true,
+            false
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        }
+      },
+      "expected_rejections": 3,
+      "local_conditions_checked": 6,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "shared_clock": true,
+      "modern_deepep_executed": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "f059f137a68386539c5b4ce78cc46a3bb7f0f316c32222cc8de710ae8fe3d410",
+        "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+        "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+        "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+        "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+        "examples/scaleout_rdma_transactions/local-waits.json": "fa201a506a5d1c0b64a4eea6e664b5781b54207adb05d4e336103f091fdf0ac4",
+        "tests/integration/check_local_memory_wait_workflow.py": "151af20d8f1c5b950f63a5d9653853897c786471c4c1d8b4aceb0bd494c246d6",
+        "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af"
+      },
+      "output_bytes": 262868,
+      "wall_seconds": 4.613031677901745
+    },
+    "queue_fence": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 49870,
+        "final_atomic_value": null
+      },
+      "reserved_tail": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 65032,
+        "final_atomic_value": null
+      },
+      "empty_snapshot": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 36180,
+        "final_atomic_value": null
+      },
+      "snapshot_excludes_future_work": true,
+      "snapshot_includes_unpublished_reserved_work": true,
+      "empty_snapshot_does_not_wait_for_future_work": true,
+      "first_fence_completed_ns": 13690,
+      "uncovered_tail_completed_ns": 16413,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "same_network_clock": true,
+      "modern_GIN_flush_validated": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+        "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+        "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+        "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+        "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+        "examples/scaleout_rdma_transactions/queue-fences.json": "7ee7f99582e4c93dfa6fa3d3404f7001bb8b7fd53025437dd9d73c20d08087f8",
+        "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af",
+        "tests/integration/check_queue_fence_workflow.py": "d30767e8fb76d6885b887deee67f758a971cde7405cdb37ee9003ec7cfa4a2c1"
+      },
+      "output_bytes": 3287075,
+      "wall_seconds": 4.092625837773085
+    }
+  },
+  "monitors": {
+    "workflow-final-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "tests/integration/check_persistent_stream_workflow.py",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--reference-backend",
+        "/dev/shm/moe-stream-indexed-20261022/reference-stream-probe",
+        "--output",
+        "/dev/shm/moe-stream-indexed-20261022/workflow-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:34:59.650411+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 431521792,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 6848512,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 6273412,
+      "peak_sampled_artifact_allocated_bytes": 6848512,
+      "process_group": 1721238,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:35:09.474868+00:00",
+      "wall_seconds": 9.824477028101683,
+      "max_waited_child_rss_kib": 369268,
+      "artifact_bytes_before_report": 37348,
+      "aggregate_artifact_bytes_before_report": 6848512,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 6273412,
+        "allocated_bytes": 6848512
+      }
+    },
+    "regression-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess,sys,json; from pathlib import Path; root=Path(\"/dev/shm/moe-stream-indexed-20261022\"); commands=[[sys.executable,\"tests/integration/check_\"+name+\"_workflow.py\",\"--backend\",\"/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-transaction-probe\",\"--output\",str(root/name)] for name in (\"remote_transaction\",\"local_memory_wait\",\"queue_fence\")]; (root/\"regression-commands.json\").write_text(json.dumps(commands,indent=2)+\"\\n\"); [subprocess.run(cmd,check=True,timeout=55) for cmd in commands]"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:35:25.991282+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 440393728,
+      "peak_sampled_processes": 5,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 11177984,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 10075312,
+      "peak_sampled_artifact_allocated_bytes": 11177984,
+      "process_group": 1721312,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:35:39.751324+00:00",
+      "wall_seconds": 13.760041492059827,
+      "max_waited_child_rss_kib": 368292,
+      "artifact_bytes_before_report": 53531,
+      "aggregate_artifact_bytes_before_report": 11177984,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 10075312,
+        "allocated_bytes": 11177984
+      }
+    },
+    "verified-workflow-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "tests/integration/check_persistent_stream_workflow.py",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--reference-backend",
+        "/dev/shm/moe-stream-indexed-20261022/verified-reference-stream-probe",
+        "--output",
+        "/dev/shm/moe-stream-indexed-20261022/verified-workflow"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:38:14.117501+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 429535232,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stream-indexed-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 21217280,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 19791535,
+      "peak_sampled_artifact_allocated_bytes": 21217280,
+      "process_group": 1721998,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:38:23.816471+00:00",
+      "wall_seconds": 9.698975989595056,
+      "max_waited_child_rss_kib": 369280,
+      "artifact_bytes_before_report": 36834,
+      "aggregate_artifact_bytes_before_report": 21217280,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 19791535,
+        "allocated_bytes": 21217280
+      }
+    }
+  },
+  "public_commands": [
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "topology-input.json",
+        "--output",
+        "topology"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.0641648955643177
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "work.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "normal"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7660923637449741
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "deep.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "deep"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.766057038679719
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "concurrent.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "concurrent"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7161450013518333
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "work.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "repeat"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7164657395333052
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "future.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "future"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 1,
+      "expected_exitcode": 1,
+      "wall_seconds": 0.06493343040347099
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "wrong-nic.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "wrong-nic"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 1,
+      "expected_exitcode": 1,
+      "wall_seconds": 0.7660207897424698
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "differential.json",
+        "--backend",
+        "/dev/shm/moe-stream-indexed-20261022/verified-reference-stream-probe",
+        "--output",
+        "reference"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.8167024273425341
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "differential.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "indexed"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7165527865290642
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "reordered.json",
+        "--backend",
+        "/dev/shm/moe-stream-indexed-20261022/verified-reference-stream-probe",
+        "--output",
+        "reference-reordered"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7665861789137125
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "reordered.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "indexed-reordered"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.7164645995944738
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "expanded.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "expanded"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.9166300166398287
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "expanded.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "expanded-repeat"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 0,
+      "expected_exitcode": 0,
+      "wall_seconds": 0.9664928764104843
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "exceeded-max_streams.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "exceeded-max_streams"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 1,
+      "expected_exitcode": 1,
+      "wall_seconds": 0.064354432746768
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "topology",
+        "--protocol",
+        "protocol.json",
+        "--config",
+        "exceeded-max_work.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "exceeded-max_work"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 1,
+      "expected_exitcode": 1,
+      "wall_seconds": 0.0640128031373024
+    },
+    {
+      "argv": [
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "/dev/shm/moe-stream-indexed-20261022/verified-workflow/topology/topology.json",
+        "/dev/shm/moe-stream-indexed-20261022/verified-workflow/protocol.json",
+        "/dev/shm/moe-stream-indexed-20261022/verified-workflow/exceeded-max_work.json",
+        "/dev/shm/moe-stream-indexed-20261022/verified-workflow/native-rejected.json"
+      ],
+      "cwd": "/dev/shm/moe-stream-indexed-20261022/verified-workflow",
+      "exitcode": 1,
+      "expected_exitcode": 1,
+      "wall_seconds": 0.4625954423099756
+    }
+  ],
+  "regression_commands": [
+    [
+      "/usr/bin/python3",
+      "tests/integration/check_remote_transaction_workflow.py",
+      "--backend",
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-transaction-probe",
+      "--output",
+      "/dev/shm/moe-stream-indexed-20261022/remote_transaction"
+    ],
+    [
+      "/usr/bin/python3",
+      "tests/integration/check_local_memory_wait_workflow.py",
+      "--backend",
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-transaction-probe",
+      "--output",
+      "/dev/shm/moe-stream-indexed-20261022/local_memory_wait"
+    ],
+    [
+      "/usr/bin/python3",
+      "tests/integration/check_queue_fence_workflow.py",
+      "--backend",
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-transaction-probe",
+      "--output",
+      "/dev/shm/moe-stream-indexed-20261022/queue_fence"
+    ]
+  ],
+  "reference": {
+    "head": "ba0212593d8dd3c5b0c54f182ecfe52aa063e106",
+    "binary_sha256": "34c81f99226d87b6c5c66adbbd8c2278041000d9e6ac33c0fd77f05f3bbd0b7e",
+    "source_sha256": {
+      "backend/rdma/persistent_streams.cc": "d80ca02844bb753f0f407debc9b1243369edc8c4801b5e8df86ae3d62e87207e",
+      "backend/rdma/persistent_streams.hh": "5efdb588acd88e9903da277208e9d2025f36c6e499af2c1bd3c90f87ea7ee181",
+      "backend/rdma/stream_probe.cc": "5ffe239685857c9142f5e3bdd4fd7259da68e328c8941b7afaa2e6e88597b139"
+    }
+  },
+  "unit_checks": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/unit",
+      "-p",
+      "scaleout_streams_test.py",
+      "-v"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "tests": 7
+  },
+  "reference_source": {
+    "commit": "ba0212593d8dd3c5b0c54f182ecfe52aa063e106",
+    "sources": {
+      "backend/rdma/stream_probe.cc": "5ffe239685857c9142f5e3bdd4fd7259da68e328c8941b7afaa2e6e88597b139",
+      "backend/rdma/persistent_streams.cc": "d80ca02844bb753f0f407debc9b1243369edc8c4801b5e8df86ae3d62e87207e",
+      "backend/rdma/persistent_streams.hh": "5efdb588acd88e9903da277208e9d2025f36c6e499af2c1bd3c90f87ea7ee181"
+    },
+    "dependency_locks_unchanged": true,
+    "scope": "frozen HEAD stream sources; existing unchanged fabric and pinned libraries"
+  },
+  "reference_build_commands": [
+    {
+      "cwd": "/dev/shm/moe-fault-20261021/native/cmake",
+      "argv": [
+        "/usr/bin/c++",
+        "-DNS3_BUILD_PROFILE_RELEASE",
+        "-DPROJECT_SOURCE_PATH=\"/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3\"",
+        "-D__LINUX__",
+        "-I/dev/shm/moe-fault-20261021/native/output/include",
+        "-I/home/lry/moe-ub-cosim/backend/rdma",
+        "-I/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/helper",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-semantic-interposition",
+        "-Wall",
+        "-O0",
+        "-Wpedantic",
+        "-o",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/stream_probe.cc.o",
+        "-c",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/stream_probe.cc"
+      ]
+    },
+    {
+      "cwd": "/dev/shm/moe-fault-20261021/native/cmake",
+      "argv": [
+        "/usr/bin/c++",
+        "-DNS3_BUILD_PROFILE_RELEASE",
+        "-DPROJECT_SOURCE_PATH=\"/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3\"",
+        "-D__LINUX__",
+        "-I/dev/shm/moe-fault-20261021/native/output/include",
+        "-I/home/lry/moe-ub-cosim/backend/rdma",
+        "-I/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/helper",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-fPIE",
+        "-fno-semantic-interposition",
+        "-Wall",
+        "-O0",
+        "-Wpedantic",
+        "-o",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/persistent_streams.cc.o",
+        "-c",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/persistent_streams.cc"
+      ]
+    },
+    {
+      "cwd": "/dev/shm/moe-fault-20261021/native/cmake",
+      "argv": [
+        "/usr/bin/c++",
+        "-O3",
+        "-DNDEBUG",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/stream_probe.cc.o",
+        "/dev/shm/moe-stream-indexed-20261022/reference-source/persistent_streams.cc.o",
+        "-o",
+        "/dev/shm/moe-stream-indexed-20261022/verified-reference-stream-probe",
+        "-L/dev/shm/moe-fault-20261021/native/output/lib",
+        "-Wl,-rpath,/dev/shm/moe-fault-20261021/native/output/lib",
+        "-Wl,--no-as-needed",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libmoe-rdma-fabric.a",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "-Wl,--as-needed",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "-Wl,--no-as-needed",
+        "-Wl,--as-needed"
+      ]
+    }
+  ],
+  "initial_reference_provenance_gap_resolved": true,
+  "reference_rebuild_byte_identical": true,
+  "shared_fabric_and_queue_match_reference_commit": true,
+  "cli_help_verified": true,
+  "git_diff_check_passed": true
+}

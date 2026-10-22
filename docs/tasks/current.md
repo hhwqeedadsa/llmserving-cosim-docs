@@ -13,9 +13,13 @@
 
 ## 当前范围和预算
 
+本轮平台任务：核查并移除持久字节路径逐包扫描全部连接/历史工作的开销；新增显式`moe-rdma-stream-work/2`计数预算（最多128连接/8192工作），保留v1的16/64默认及事务入口范围。相同输入的包、事件及结果须与改前二进制完全一致；扩展用例验证24连接/192工作、扇入依赖、ACK信用及重复执行。只使用公开CLI；不修改固定依赖或现代性能定义，不把本增量称为千卡完成。先保存旧二进制，再增量构建两个受影响目标；构建每命令60秒/RSS1GiB/地址2GiB，单阶段产物64MiB（构建登记既有目录的增量文件）、新任务累计128MiB、预留8GiB，所有大产物放`/dev/shm/moe-stream-indexed-20261022/`（易失）。每网络子命令≤60秒/1GiB/2GiB/5ms/64MiB，全部检查累计300秒；失败保留不自动加限。另只读旧千卡日志头尾以判断已进入哪个阶段，不重跑600秒失败用例。平台验收和历史研究审计分别提交。
+
 不改固定依赖、不安装、不下载模型或大型数据；复用已校验的一手资料和本机原始数据。必要公开页面只读请求设每页2MiB、总16MiB、单请求20秒、总120秒，失败保留。新研究放`experiments/paper_readiness/`，结果放`/dev/shm/moe-paper-readiness-20261022/`。首个判别研究16条件（2 batch×4额度模式×2故障），各条件60秒/RSS1GiB/地址2GiB/仿真5ms；每次sweep300秒，累计产物128MiB，卷预留8GiB。没有硬件校准含义，不因结果不理想抬限或制造热点。无新现象不自动扩矩阵。
 
 ## 当前进展与前阶段
+
+本轮平台持久字节增量验收完成，论文目标仍in_progress：连接按端口索引、工作按发布/接收/ACK前缀推进，发包按累计序号二分定位，应用依赖只由真实回调更新后继；v2明确配置最多128连接/8192工作，v1和事务入口默认16/64不变。固定`ba02125`源重建基线与保存二进制hash相同；12连接/48工作及后列工作先就绪两例的新旧完整result逐字节相同。最终15条公开CLI+1次原生拒绝核对24连接/192工作/672源包/563568B及信用/扇入/重复/5类预期失败，另24条事务/本地条件/队列前缀CLI回归和7项输入检查通过。仅8GPU功能范围，无千卡、现代性能或加速比主张。两目标增量构建及基线重建均在60秒/1GiB/2GiB/64MiB内；全新累计128MiB、预留8GiB，578文件检查点落本机磁盘并逐hash核对，未改依赖/安装/联网/GPU。见[验收](../../fixtures/indexed_streams/README.md)、[核验](../../fixtures/indexed_streams/verification.json)、[维护](../../fixtures/indexed_streams/maintenance.json)和[归档](../../fixtures/indexed_streams/archive.json)。下一步只读审计旧千卡执行进度；本增量入口不是历史service工作路径，不能声称修复了旧1024超时。
 
 本轮整组/容量精确界完成，论文目标仍in_progress：105种配对×24rank双射/层，共6090配对/146160带标签放置；全/尾Prefill各58层，已有分层贪心全部达到最大聚合计数负载最优，暂停把改配对贪心作为创新。未来Decode全知的最佳全局计算输入p95为14；阈值13即使不限通信至少793窗口超限，超过允许371。限制总副本≤连续69409时仍可达14，最少副本见证66676/371超阈；若无计算约束，最少副本64998。后解释核查显示见证全/尾Prefill峰值54/56层更差，不能把改变目标/读取未来当更好装箱；p99 17→16但最大值仍22，均非时延。独立40320全排列规范化/子集指派DP/Pareto前沿回查原件，核验6090候选/779520计算窗口、7424见证和连续窗口、Prefill最优与相邻不可行阈值；换cwd仅候选表重复oracle字节一致。13依赖与AST/help通过，65文件临时归档逐hash通过约1.37MiB。根卷约6.1GiB低于8GiB产物预留，完整检查点位于/dev/shm，明确tmpfs_volatile/未持久备份，Git只存小型代码摘要；不清理其他文件。每命令60秒/1GiB/地址2GiB、单阶段32MiB、新产物64MiB/累计128MiB、预留8GiB；无联网/GPU/新网络/构建/依赖变化。见[HTML报告](../review_artifacts/group_capacity_20261022/report.html)、[独立核验](../review_artifacts/group_capacity_20261022/verification.json)、[证书](../review_artifacts/group_capacity_20261022/certificates.json)、[临时归档](../review_artifacts/group_capacity_20261022/archive.json)、[协议](../../experiments/paper_readiness/group_capacity_protocol.md)与[复现](../../experiments/paper_readiness/README.md)。
 

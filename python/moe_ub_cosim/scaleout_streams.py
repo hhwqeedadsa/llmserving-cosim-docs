@@ -6,17 +6,32 @@ from .scaleout_rdma import checked_json, digest, limits, monitored, save, valida
 from .scaleout_topology import fields, integer, require
 
 
+def stream_limits(config):
+    schema=config.get('schema_version')
+    require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2'),'unsupported stream work schema')
+    fields(config,'schema_version streams work'+(' limits' if schema.endswith('/2') else ''),'stream work root')
+    if schema.endswith('/1'):
+        return dict(max_streams=16,max_work=64)
+    value=config['limits']
+    fields(value,'max_streams max_work','stream limits')
+    integer(value['max_streams'],'max_streams',1,128)
+    integer(value['max_work'],'max_work',1,8192)
+    return dict(value)
+
+
 def validate(topology, protocol, config):
-    fields(config,'schema_version streams work','stream work root')
-    require(config['schema_version']=='moe-rdma-stream-work/1','unsupported stream work schema')
+    counts=stream_limits(config)
+    budget=limits(protocol)
+    max_gpus=min(32,budget['max_gpus']) if config['schema_version'].endswith('/1') else budget['max_gpus']
     require(not any(k in protocol for k in ('admission','recovery','faults','drop_once','lifecycle_capture')),
             'stream probe excludes legacy admission/recovery/fault/lifecycle modes')
     require(not topology.get('intra_host',{}).get('enabled',False),'stream probe does not use intra-host bypass')
-    require(isinstance(config['streams'],list) and 1<=len(config['streams'])<=16,'require 1..16 streams')
+    require(isinstance(config['streams'],list) and 1<=len(config['streams'])<=counts['max_streams'],
+            'stream count exceeds declared budget')
     ids,ports,checks=set(),set(),[]
     for s in config['streams']:
         fields(s,'id src dst plane wire_port source_nic destination_nic queue_depth','stream declaration')
-        for k,lo,hi in [('id',0,65535),('src',0,31),('dst',0,31),('plane',0,15),
+        for k,lo,hi in [('id',0,65535),('src',0,max_gpus-1),('dst',0,max_gpus-1),('plane',0,15),
                         ('wire_port',10000,65535),('source_nic',1,1024),('destination_nic',1,1024),('queue_depth',1,4096)]:
             integer(s[k],k,lo,hi)
         require(s['queue_depth']&(s['queue_depth']-1)==0,'queue depth must be power of two')
@@ -25,7 +40,8 @@ def validate(topology, protocol, config):
         # These descriptors validate topology only and are NEVER simulated.
         checks.append(dict(id=s['id'],src=s['src'],dst=s['dst'],plane=s['plane'],bytes=1,ready_ns=0))
     validate_probe(topology,protocol,checks)
-    require(isinstance(config['work'],list) and 1<=len(config['work'])<=64,'require 1..64 work items')
+    require(isinstance(config['work'],list) and 1<=len(config['work'])<=counts['max_work'],
+            'work count exceeds declared budget')
     seen,totals=set(),{i:0 for i in ids}
     for w in config['work']:
         fields(w,'id stream bytes after','stream work')
@@ -45,7 +61,7 @@ def validate(topology, protocol, config):
 
 def probe(topology, protocol, config, backend, output):
     topology,protocol,config,backend,output=(Path(p).resolve() for p in (topology,protocol,config,backend,output))
-    t,c,w=(checked_json(p,n) for p,n in ((topology/'topology.json',8388608),(protocol,65536),(config,65536)))
+    t,c,w=(checked_json(p,n) for p,n in ((topology/'topology.json',8388608),(protocol,65536),(config,8388608)))
     validate(t,c,w)
     require(backend.is_file() and os.access(backend,os.X_OK),'pass the existing native stream-probe executable')
     budget=limits(c)

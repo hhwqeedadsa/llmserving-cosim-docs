@@ -9,7 +9,10 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
   CustomHeader h(CustomHeader::L2_Header|CustomHeader::L3_Header|CustomHeader::L4_Header);
   h.getInt=1;packet->PeekHeader(h);return h;
 }
-PersistentStreams::PersistentStreams(Fabric& fabric):fabric_(fabric) {
+PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
+PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):fabric_(fabric),limits_(limits) {
+  Require(limits.streams>0 && limits.streams<=128 && limits.work>0 && limits.work<=8192,
+          "persistent stream count limits out of supported range");
   Require(!fabric_.persistent_stream_mode_ && fabric_.flows_.empty() && !fabric_.resource_tracking_ && !fabric_.recovery_ &&
           fabric_.fault_rules_.empty(),"stream probe excludes legacy sends/admission/recovery/fault injection");
   Require(!fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
@@ -32,8 +35,8 @@ PersistentStreams::PersistentStreams(Fabric& fabric):fabric_(fabric) {
 }
 void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plane,uint16_t wire_port,
                             unsigned source_nic,unsigned destination_nic,unsigned depth) {
-  Require(!closed_ && streams_.size()<16 && !streams_.count(id) && src<fabric_.gpus_ && dst<fabric_.gpus_ &&
-          src!=dst && plane<fabric_.planes_ && wire_port>=10000 && !wire_ports_.count(wire_port),"invalid stream identity/binding");
+  Require(!closed_ && streams_.size()<limits_.streams && !streams_.count(id) && src<fabric_.gpus_ && dst<fabric_.gpus_ &&
+          src!=dst && plane<fabric_.planes_ && wire_port>=10000 && !wire_streams_.count(wire_port),"invalid stream identity/binding");
   auto sip=fabric_.Address(src,plane),dip=fabric_.Address(dst,plane);
   auto shw=fabric_.drivers_[src]->m_rdma,dhw=fabric_.drivers_[dst]->m_rdma;
   // This scope needs explicit one-NIC reachability per address/plane. Do not
@@ -41,9 +44,9 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
   Require(shw->m_rtTable[dip.Get()]==std::vector<int>{static_cast<int>(source_nic)} &&
           dhw->m_rtTable[sip.Get()]==std::vector<int>{static_cast<int>(destination_nic)},"stream requires unique declared source and reverse NIC routes");
   Require(source_nic<shw->m_nic.size() && destination_nic<dhw->m_nic.size(),"stream NIC missing");
-  GinWorkQueue validate_depth(depth,64);(void)validate_depth;
-  auto [it,inserted]=streams_.try_emplace(id,src,dst,plane,source_nic,destination_nic,wire_port,depth);
-  Require(inserted,"stream insertion failed");wire_ports_.insert(wire_port);
+  GinWorkQueue validate_depth(depth,limits_.work);(void)validate_depth;
+  auto [it,inserted]=streams_.try_emplace(id,src,dst,plane,source_nic,destination_nic,wire_port,depth,limits_.work);
+  Require(inserted,"stream insertion failed");wire_streams_.emplace(wire_port,id);
   // A zero-byte initial prefix creates NO data and reserves NO future bytes.
   // The native scheduler may remove its idle membership; the object/map/rate
   // state persists, and later append restores only scheduler membership.
@@ -66,7 +69,7 @@ void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payloa
   Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
 }
 void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Bytes payload,Done accepted,Done acked) {
-  Require(!closed_ && streams_.count(stream) && !work_ids_.count(work) && work_ids_.size()<64 &&
+  Require(!closed_ && streams_.count(stream) && !work_ids_.count(work) && work_ids_.size()<limits_.work &&
           bytes>0 && bytes<=1024*1024,"invalid stream work or work budget");
   auto& s=streams_.at(stream);
   Require(s.submitted_bytes+bytes<=64*1024*1024,"stream byte/sequence budget exceeded");
@@ -79,7 +82,8 @@ void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Byt
 }
 void PersistentStreams::Pump(Stream& s) {
   Require(fabric_.drivers_[s.src]->m_rdma->GetQp(s.qp->dip.Get(),s.wire_port,3)==s.qp,"persistent QP identity changed");
-  for(auto& w:s.work) if(w.published<0 && s.queue.CanPrepare(w.ticket)) {
+  while(s.published_prefix<s.work.size() && s.queue.CanPrepare(s.work[s.published_prefix].ticket)) {
+    auto& w=s.work[s.published_prefix++];
     s.queue.Prepare(w.ticket);s.queue.PublishThrough(w.ticket+1);
     const auto consumed=s.queue.ConsumePublished();Require(consumed && consumed->work_id==w.id,"stream work consumption mismatch");
     w.begin=s.qp->m_size;w.end=w.begin+w.bytes;w.published=StreamNow();
@@ -93,15 +97,18 @@ void PersistentStreams::Pump(Stream& s) {
     nic.dev->TriggerTransmit(); // Does not reset nextAvail, seq, rate or alpha.
   }
 }
+PersistentStreams::Stream* PersistentStreams::ByPort(uint16_t port) {
+  auto it=wire_streams_.find(port);
+  return it==wire_streams_.end()?nullptr:&streams_.at(it->second);
+}
 PersistentStreams::Stream* PersistentStreams::Match(unsigned node,const CustomHeader& h,bool source) {
-  for(auto& entry:streams_) {
-    auto& s=entry.second;
-    if(source) {
-      if(node==s.src && h.sip==s.qp->dip.Get() && h.dip==s.qp->sip.Get() &&
-         h.ack.dport==s.wire_port && h.ack.sport==s.wire_port && h.ack.pg==3)return &s;
-    } else if(node==s.dst && h.sip==s.qp->sip.Get() && h.dip==s.qp->dip.Get() &&
-              h.udp.sport==s.wire_port && h.udp.dport==s.wire_port && h.udp.pg==3)return &s;
-  }
+  auto s=ByPort(source?h.ack.dport:h.udp.dport);
+  if(!s)return nullptr;
+  if(source) {
+    if(node==s->src && h.sip==s->qp->dip.Get() && h.dip==s->qp->sip.Get() &&
+       h.ack.sport==s->wire_port && h.ack.pg==3)return s;
+  } else if(node==s->dst && h.sip==s->qp->sip.Get() && h.dip==s->qp->dip.Get() &&
+            h.udp.sport==s->wire_port && h.udp.pg==3)return s;
   return nullptr;
 }
 int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h) {
@@ -114,7 +121,8 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     // native QpComplete: an ACKed published prefix is not connection close.
     if(h.l3Prot==0xFD)hw->RecoverQueue(s->qp);
     if((h.ack.flags>>qbbHeader::FLAG_CNP)&1)hw->cnp_received_mlx(s->qp);
-    for(auto& w:s->work) if(w.published>=0 && w.acked<0 && w.end<=s->qp->snd_una) {
+    while(s->acked_prefix<s->published_prefix && s->work[s->acked_prefix].end<=s->qp->snd_una) {
+      auto& w=s->work[s->acked_prefix];
       w.acked=StreamNow();++s->acked_prefix;s->queue.CompleteThrough(w.ticket+1);
       if(w.acked_callback)Simulator::ScheduleNow(w.acked_callback);
     }
@@ -144,7 +152,8 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
 void PersistentStreams::CheckAccepted(Stream& s) {
   auto rx=fabric_.drivers_[s.dst]->m_rdma->GetRxQp(s.qp->dip.Get(),s.qp->sip.Get(),s.wire_port,s.wire_port,3,false);
   Require(bool(rx),"stream receiver state absent after acceptance");
-  for(auto& w:s.work) if(w.published>=0 && w.received<0 && w.end<=rx->ReceiverNextExpectedSeq) {
+  while(s.accepted_prefix<s.published_prefix && s.work[s.accepted_prefix].end<=rx->ReceiverNextExpectedSeq) {
+    auto& w=s.work[s.accepted_prefix];
     w.received=StreamNow();++s.accepted_prefix;
     if(w.accepted_callback)Simulator::ScheduleNow(w.accepted_callback);
   }
@@ -152,8 +161,12 @@ void PersistentStreams::CheckAccepted(Stream& s) {
 Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   auto found=streams_.find(qp->GetTag());Require(found!=streams_.end() && found->second.qp==qp,"foreign QP in stream packet generator");
   auto& s=found->second;
-  auto it=std::find_if(s.work.begin(),s.work.end(),[&](const Work& w){return w.published>=0 && w.begin<=qp->snd_nxt && qp->snd_nxt<w.end;});
-  Require(it!=s.work.end(),"stream packet covers unpublished bytes");
+  // Sequence lookup also handles native NACK rewind; a forward-only TX cursor
+  // would silently select the wrong work after RecoverQueue.
+  const auto end=s.work.begin()+s.published_prefix;
+  auto it=std::upper_bound(s.work.begin(),end,qp->snd_nxt,
+    [](uint64_t sequence,const Work& w){return sequence<w.end;});
+  Require(it!=end && it->begin<=qp->snd_nxt,"stream packet covers unpublished bytes");
   auto hw=fabric_.drivers_[node]->m_rdma;
   // Native header and packet generation, capped at this work boundary. No
   // operation ID is encoded and neighbouring writes are never coalesced.
@@ -174,12 +187,12 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
 void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,Ptr<const Packet> packet) {
   ++self->inflight_;Require(++self->observations_<=200000,"stream packet observation budget exceeded");
   auto h=StreamHeader(packet);
-  if(h.l3Prot==0x11)for(auto& item:self->streams_) {
-    auto& s=item.second;
+  if(h.l3Prot==0x11)if(auto stream=self->ByPort(h.udp.sport)) {
+    auto& s=*stream;
     if(node==s.src && h.sip==s.qp->sip.Get() && h.dip==s.qp->dip.Get() && h.udp.sport==s.wire_port) {
       Require(port==s.source_nic,"stream transmitted on wrong bound NIC");
       ++s.packets;s.tx_payload+=packet->GetSize()-h.GetSerializedSize();
-      self->source_packets_.push_back({StreamNow(),static_cast<int64_t>(item.first),node,s.dst,port,
+      self->source_packets_.push_back({StreamNow(),static_cast<int64_t>(s.qp->GetTag()),node,s.dst,port,
         h.udp.seq,static_cast<int64_t>(packet->GetSize()-h.GetSerializedSize()),static_cast<int64_t>(packet->GetUid())});
       if(s.receiver) {
         const auto size=packet->GetSize()-h.GetSerializedSize();self->captured_payload_bytes_+=size;
@@ -187,7 +200,7 @@ void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,P
         Bytes bytes(size);packet->CreateFragment(h.GetSerializedSize(),size)->CopyData(bytes.data(),size);
         static const char digits[]="0123456789abcdef";std::string hex;hex.reserve(size*2);
         for(auto byte:bytes){hex+=digits[byte>>4];hex+=digits[byte&15];}
-        self->payload_packets_.push_back({{"time_ns",StreamNow()},{"stream",item.first},{"sequence",h.udp.seq},{"hex",hex}});
+        self->payload_packets_.push_back({{"time_ns",StreamNow()},{"stream",s.qp->GetTag()},{"sequence",h.udp.seq},{"hex",hex}});
       }
     }
   }

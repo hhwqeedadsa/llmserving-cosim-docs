@@ -57,6 +57,8 @@
 
 窗口接入核查发现平台语义缺陷并已修正：现代屏障signal和非NVLink专家计数块发给自己仍走GIN/self-peer QP；旧plan/1将其全当本地旁路。新plan/manifest/2新增gin_self分类、保留专家块发送区并明确拒绝旧清单。人工两call四rank的40项self GIN经源码链和独立分类核对，15项单元检查、15条计划流程及10条事件回归通过，见[更正与验收](../../fixtures/modern_self_gin/README.md)。没有新网络或硬件执行；自发GIN的物理回环路径和成本未定义，不能补为零或跨交换机流量。
 
-当前下一步：先独立重核受影响的真实路由provider请求分类，保留旧结果与更正说明，再补现代buffer/信号窗口与运行事件映射。self-peer GIN、provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。设备信息仍待原询问回复，不假定可用硬件。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
+真实路由self-peer更正已独立复核：平台`c08cbb9`，9条公开CLI生成486操作/2,334事件，其中364跨rank GIN、80 self-peer GIN、42本地旁路。80/444约18%仅为API请求比例，不是线上字节或耗时。对照已核hash的历史归档，80项path/verb更正、64项专家块新增发送区，完整DAG/slot/layout及跨rank结果保持不变。7个暂扣探针、四原件16条选择和三份重复产物核对通过；新检查点约651KiB。见[更正报告HTML](../review_artifacts/modern_self_gin_20261022/report.html)、[独立复核](../review_artifacts/modern_self_gin_20261022/verification.json)与[维护记录](../review_artifacts/modern_self_gin_20261022/maintenance.json)。没有执行网络、硬件或性能对照；旧报告保留其固定版本。
+
+当前下一步：补现代buffer/信号窗口与运行事件映射，并先明确self-peer GIN的provider资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。设备信息仍待原询问回复，不假定可用硬件。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "source_files": 4,
+  "original_choices_rechecked": 16,
+  "historical_archive_sha256": "2acd5c17f91770f93c5846301a4d4daeda780f51d761fc5f8ac415e3ff67aa07",
+  "changed_paths": 80,
+  "changed_verbs": 80,
+  "added_expert_source_regions": 64,
+  "identical_event_DAG": true,
+  "identical_slots_and_layout": true,
+  "unchanged_historical_cross_rank_results": true,
+  "gin_controls_independently_counted": 368,
+  "independent_dependency_probes": {
+    "normal": 0,
+    "local_completion": 32,
+    "target_visibility": 29,
+    "final_signal_tail": 0,
+    "zero_block": 32,
+    "self_signal_credit": 32,
+    "self_zero_block": 32
+  },
+  "repeated_outputs_byte_identical": true,
+  "html_links": 8,
+  "browser_visual_acceptance": false,
+  "network_execution": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

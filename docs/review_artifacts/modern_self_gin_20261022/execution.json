@@ -1,0 +1,15 @@
+{
+  "state": "passed",
+  "wall_seconds": 1.1531303580850363,
+  "peak_child_rss_kib": 33556,
+  "commands": 9,
+  "cwd": "/home/lry/moe-ub-cosim",
+  "argv": [
+    "experiments/paper_readiness/modern_operations.py",
+    "--manifest",
+    "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+    "--output",
+    "/dev/shm/moe-modern-self-gin-study-20261022"
+  ],
+  "input_bytes": 8193641
+}

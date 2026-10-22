@@ -1,0 +1,138 @@
+{
+  "state": "passed",
+  "cwd": "/home/lry/moe-ub-cosim",
+  "platform_commit": "c08cbb98acdb9a8b3bbc97fa959e0ca28ea817e8",
+  "study_execution": {
+    "state": "passed",
+    "wall_seconds": 1.1531303580850363,
+    "peak_child_rss_kib": 33556,
+    "commands": 9,
+    "cwd": "/home/lry/moe-ub-cosim",
+    "argv": [
+      "experiments/paper_readiness/modern_operations.py",
+      "--manifest",
+      "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+      "--output",
+      "/dev/shm/moe-modern-self-gin-study-20261022"
+    ],
+    "input_bytes": 8193641
+  },
+  "review_host_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "python3",
+      "experiments/paper_readiness/review_self_gin.py",
+      "--run",
+      "/dev/shm/moe-modern-self-gin-study-20261022",
+      "--reference",
+      "docs/review_artifacts/modern_operations_20261022",
+      "--output",
+      "docs/review_artifacts/modern_self_gin_20261022",
+      "--checkpoint",
+      "runs/modern_self_gin_study_checkpoint_20261022"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-22T15:32:29.055837+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 67108864,
+      "wall_seconds": 60.0
+    },
+    "peak_sampled_group_rss_bytes": 38854656,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-modern-self-gin-review-20261022"
+    ],
+    "peak_sampled_artifact_bytes": 8192,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 3195,
+    "peak_sampled_artifact_allocated_bytes": 8192,
+    "process_group": 1670604,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-22T15:32:30.263780+00:00",
+    "wall_seconds": 1.2079506870359182,
+    "max_waited_child_rss_kib": 38968,
+    "artifact_bytes_before_report": 3195,
+    "aggregate_artifact_bytes_before_report": 8192,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 3195,
+      "allocated_bytes": 8192
+    }
+  },
+  "verification_command": "python3 runs/modern_self_gin_study_checkpoint_20261022/maintenance_check.py",
+  "maintenance_script_sha256": "034e699ce0b4febc4359e4bfb4a4495080dfb8dbd5895346a93bcd319ba7ea8d",
+  "review_stdout": "{\"passed\": true, \"paths\": {\"gin_self\": 80, \"rdma\": 364, \"local\": 42}, \"gin_controls\": 368, \"historical_fields_verified\": true, \"probes\": {\"normal\": 0, \"local_completion\": 32, \"target_visibility\": 29, \"final_signal_tail\": 0, \"zero_block\": 32, \"self_signal_credit\": 32, \"self_zero_block\": 32}, \"checkpoint_bytes\": 666329}\n",
+  "review_stderr": "",
+  "archived_files_verified": 46,
+  "archived_bytes": 666329,
+  "archive_sha256": "7c748d054b3cd4a2a06565bf0ce9c30f6dfb59c210177f986976a86b2042f401",
+  "source_checks": [
+    {
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736"
+    },
+    {
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e"
+    },
+    {
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+      "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58"
+    },
+    {
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1"
+    },
+    {
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29"
+    },
+    {
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868"
+    },
+    {
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/gin__funcs.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+      "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1"
+    }
+  ],
+  "markdown_links_checked": 51,
+  "html_links_checked": 8,
+  "script_sha256": {
+    "experiments/paper_readiness/modern_operations.py": "28dc3ae00f847b3c89355aae50462de41fd3243814c624a1e26db02ae463aaff",
+    "experiments/paper_readiness/review_self_gin.py": "0122404434fbe8e4b15ecf103894cc8045f29b287eaf31c794d6b600d603a640"
+  },
+  "later_document_sha256": {
+    "experiments/paper_readiness/README.md": "a07e2c7211ab9dee3a31671e8524c17b1df603e3f6b3dd0f166c7c861561a571",
+    "experiments/paper_readiness/modern_backend_contract.md": "ebf732ac3dae19a9dd5357bbeb80bab21bc6878cfdbcf3f4f6abd01fdd706ae8",
+    "docs/tasks/current.md": "8cea4e01bb801bc45d15f9fe1d99c58ea496cba2aabe0824d5136e53d2eaeec1"
+  },
+  "dependency_check": "bash scripts/check_deps.sh: exit 0, 13 fixed and clean checkouts; main repository research edits pending",
+  "initial_maintenance_failure": "exit 1: link check examined maintenance.json before it was written; deferred only this self-reference until after save; no research rerun or changed result",
+  "archive_scope": "Created before later README/spec/task/maintenance edits; those later files are not in checkpoint.",
+  "browser_visual_acceptance": false,
+  "network_execution": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

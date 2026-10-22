@@ -8,6 +8,8 @@
 
 物理端点不可达、原子事务/可见性未定义或记录预算不足时明确失败。硬件未知时可交付有范围的功能模型，但不宣称时延校准。普通字节流路径不能代替原子路径，也不能混接UB和原生ns-3。
 
+必须按具体API分支区分本地旁路和self-peer GIN：本范围内token与rank count存在显式本地指针路径；专家计数bulk put及四次屏障signal即使src=dst仍调用GIN。固定GDAKI会创建并连接self-peer QP，故这类请求必须保留provider资源需求。源码只证明接口及资源关系，未证明物理回环路径、是否经过外部链路或固定服务代价。当前plan/2以`gin_self`单独分类；原生字节及MRT1事务入口拒绝src=dst是尚未支持的能力，不能以此跳过请求、改为零成本事件或任意交换机路由。证据见[self-peer更正](../../docs/reviews/现代GIN自发请求与网络基线更正_20261022.md)。
+
 ## 2. 分层状态及标识
 
 | 对象 | 持久键或字段 | 生命周期与用途 |
@@ -15,7 +17,7 @@
 | 专家并行组/团队 | communicator、WORLD/RAIL/LSA映射、rank到物理GPU | 组间可共享物理链路；不共享不属于同一运行时的信号窗口 |
 | GIN连接 | communicator、connectionId、本地NIC、远端设备、可达rail | 在建连时绑定；不能每消息重新用ECMP选一张NIC |
 | GIN上下文 | connectionId、local contextId | 映射自应用索引i的模/整除；记录请求量、实际分配量和实际活跃量 |
-| 面向peer的QP | provider实例、contextId、peer、传输状态 | 空队列时持续存在，保留序号、拥塞与重试状态；关闭需满足排空条件 |
+| 面向peer的QP | provider实例、contextId、peer、传输状态 | 包括self-peer；空队列时持续存在，保留序号、拥塞与重试状态；关闭需满足排空条件 |
 | 工作条目 | operationId、QP、ticket、verb、远端窗口/偏移、epoch、操作数或源buffer | 就绪后才能reserve；操作、WQE和包分别编号 |
 | buffer区域 | owner、window、offset、length、epoch | 数据就绪和复用权限分开；重叠写需显式依赖或拒绝 |
 | flush/wait | 调用时各相关QP的覆盖位置、目标值、内存序 | 只等待已定义前缀或信号条件，不将未来操作纳入完成条件 |
@@ -76,6 +78,7 @@ GDAKI的MLX5特定可见性作为provider规则单独实现，不能冒充通用
 | CQ与数据可见是否混淆 | 延迟完成反馈，但允许目标先满足可见条件 | 消费可按已满足条件推进，源槽不能提前复用；记录两者反压 |
 | Aggregate是否被误作发送 | 先准备聚合条目，稍后非聚合提交 | 前者不得提前发包，后者仅推进已准备工作；全聚合尾项按API约束处理 |
 | signal是否普通流 | 一次原子增量、重复传输及目标wait | 重传不能重复增量；不是按收到若干字节就释放wait |
+| self-peer是否被漏掉 | 同rank token旁路，对照同rank专家计数put与屏障signal | 后两类保留GIN提交、源完成及目标可见；无依据的物理回环成本明确不支持，不能自动给外部流量或零成本 |
 | NIC选择是否被ECMP替代 | 固定context到connection到NIC，交换机保持原选路 | 发端端口必须匹配绑定；链路无可达路时拒绝 |
 | 多组是否真正共享网络 | 两组发向共同物理瓶颈，与分离链路对照 | 队列状态在一次执行中相互影响，不用独立结果相加 |
 

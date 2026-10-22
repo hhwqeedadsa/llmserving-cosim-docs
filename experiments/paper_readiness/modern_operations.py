@@ -86,6 +86,7 @@ def main():
             clock='selected entry/layer order only; no observed arrivals or launch times',full_r1_deployment_verified=False))
         cli('plan',['modern-deepep-plan','--config',out/'input.json','--output',out/'plan'])
         plan=json.loads((out/'plan/plan.json').read_text())
+        assert plan['schema_version']=='moe-modern-deepep-partial-order/2'
         expected=[];pair_counts=Counter();expert_counts=Counter()
         for ci,call in enumerate(calls):
             for src,rows in enumerate(call['tokens']):
@@ -106,13 +107,28 @@ def main():
         actual=[(o['call'],o['phase'],o['kind'],o['src'],o['dst'],o.get('token'),o['operand_bytes'],
                  tuple(o.get('topk_positions',[]))) for o in plan['operations']]
         assert Counter(actual)==Counter(expected)
-        zero=[];dispatch_connections=Counter();combine_connections=Counter()
+        # Independent API branch accounting. Endpoint equality alone cannot
+        # classify self-peer signal or bulk expert blocks as a local bypass.
+        expected_paths=Counter()
+        for ci,phase,kind,src,dst,token,nbytes,positions in expected:
+            path=('rdma' if src!=dst else 'gin_self' if kind in ('barrier_signal','expert_count_block') else 'local')
+            expected_paths[path]+=1
+        assert Counter(o['path'] for o in plan['operations'])==expected_paths
+        zero=[];self_zero=[];dispatch_connections=Counter();combine_connections=Counter()
+        provider_connections=Counter();self_connections=Counter()
         for op in plan['operations']:
             ci,src,dst=op['call'],op['src'],op['dst']
             if op['kind']=='rank_count':assert op['value']==-pair_counts[ci,src,dst]-1
             if op['kind']=='expert_count_block':
                 assert op['values']==[-expert_counts[ci,src,e]-1 for e in range(64*dst,64*(dst+1))]
+                assert op['source']==dict(region='workspace_send_expert_counts',element_offset=64*dst,element_bytes=8,epoch=2*ci)
                 if src!=dst and all(v==-1 for v in op['values']):zero.append(op)
+                if src==dst and all(v==-1 for v in op['values']):self_zero.append(op)
+            if op['path']=='gin_self':
+                assert src==dst and op['verb'] in ('gin_signal_inc64','gin_put') and op['binding']['context_index']==0
+                self_connections[op['binding']['connection']]+=1
+            if op['path']!='local' and not (op['phase']=='combine' and op['kind']=='token_data'):
+                provider_connections[op['binding']['connection']]+=1
             if src!=dst and op['kind']=='token_data':
                 if op['phase']=='dispatch':
                     assert op['binding']['context_index']==1 and op['binding']['connection']==1
@@ -127,12 +143,17 @@ def main():
                     # SM=index%2, rotated warp=index//2 -> context=index.
                     assert 0<=index<4
                     combine_connections[index%2]+=1
+        provider_connections.update(combine_connections)
+        assert expected_paths['gin_self']==len(calls)*5*4
+        assert sum(provider_connections.values())==expected_paths['gin_self']+expected_paths['rdma']
         assert all(slot['group_size']==1 for slot in plan['slots'])
         remote=[o for o in plan['operations'] if o['src']!=o['dst']]
         first=next(o for o in remote if o['kind']=='token_data' and o['phase']=='dispatch')
         probes=dict(normal=None,local_completion=first['events']['local_complete'],
                     target_visibility=first['events']['visible'],final_signal_tail='m3.combine.exit.s0.d1.local_complete')
         if zero:probes['zero_block']=zero[0]['events']['visible']
+        probes['self_signal_credit']='m0.dispatch.entry.s0.d0.local_complete'
+        if self_zero:probes['self_zero_block']=self_zero[0]['events']['visible']
         results={}
         for name,held in probes.items():
             args=['modern-deepep-check','--plan',out/'plan','--output',out/(name+'.json')]
@@ -148,6 +169,13 @@ def main():
             events=len(plan['events']),operations=len(actual),symbolic_slots=len(plan['slots']),
             source_files=4,source_rows=len(selected),independently_enumerated_operations=len(expected),
             remote_operation_counts=dict(Counter((o['phase']+'.'+o['kind']) for o in remote)),
+            operation_paths=dict(expected_paths),
+            gin_self_by_kind=dict(Counter(o['kind'] for o in plan['operations'] if o['path']=='gin_self')),
+            gin_self_operand_bytes=sum(o['operand_bytes'] for o in plan['operations'] if o['path']=='gin_self'),
+            gin_provider_requests=expected_paths['gin_self']+expected_paths['rdma'],
+            provider_requests_by_connection_given_unique_slots=dict(provider_connections),
+            self_peer_requests_by_connection=dict(self_connections),
+            all_zero_self_expert_blocks=len(self_zero),
             remote_operand_bytes=dict((phase,sum(o['operand_bytes'] for o in remote if o['phase']==phase and o['kind']=='token_data'))
                                       for phase in ('dispatch','combine')),
             all_zero_remote_expert_blocks=len(zero),dispatch_data_by_declared_connection=dict(dispatch_connections),
@@ -155,7 +183,7 @@ def main():
             slot_order_ambiguity='none within each source/destination in this batch1 selection; not true for general batch',
             probes={k:dict(withheld=v['withheld'],blocked=len(v['blocked_completions'])) for k,v in results.items()},
             repeat_outputs_byte_identical=3,network_execution=False,latency_predicted=False,hardware_calibrated=False,
-            scope='source-level operation counts and conditional connection arithmetic; not packet/traffic timing')
+            scope='source-level API request counts, including self-peer GIN; not WQE, packet or timing counts')
         save(out/'summary.json',summary)
         assert sum(p.stat().st_size for p in out.rglob('*') if p.is_file())<=16*2**20
         assert resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss<=2**20

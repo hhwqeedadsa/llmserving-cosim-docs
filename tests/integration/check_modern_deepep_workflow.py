@@ -40,8 +40,14 @@ def main():
         assert result.returncode==expected,name
         return json.loads((out/(name+'.stdout')).read_text()) if expected==0 else None
     generated=cli('generate',['modern-deepep-plan','--config','input.json','--output','plan'])
+    compiled=json.loads((out/'plan/plan.json').read_text())
+    assert compiled['schema_version']=='moe-modern-deepep-partial-order/2'
+    assert generated['schema_version']=='moe-modern-deepep-manifest/2'
+    assert sum(o['path']=='gin_self' for o in compiled['operations'])==40
     checks={}
     for name,held in [('normal',None),('zero_block','m0.dispatch.expert_count.s2.d1.visible'),
+                      ('self_zero_block','m0.dispatch.expert_count.s2.d2.visible'),
+                      ('self_signal_credit','m0.dispatch.entry.s0.d0.local_complete'),
                       ('local_completion','m0.dispatch.data.s0.t0.d1.local_complete'),
                       ('target_visibility','m0.dispatch.data.s0.t0.d1.visible'),
                       ('final_signal_tail','m1.combine.exit.s0.d1.local_complete')]:
@@ -50,7 +56,7 @@ def main():
         checks[name]=cli(name,argv)
     assert checks['normal']['all_completions_reachable']
     assert checks['final_signal_tail']['all_completions_reachable']
-    for name in ('zero_block','local_completion','target_visibility'):
+    for name in ('zero_block','self_zero_block','self_signal_credit','local_completion','target_visibility'):
         assert all(f'm1.combine.r{r}.complete' in checks[name]['blocked_completions'] for r in range(4))
     cli('unknown',['modern-deepep-check','--plan','plan','--output','unknown.json',
                    '--withhold','missing-event'],expected=1)
@@ -69,6 +75,12 @@ def main():
     path.write_text(json.dumps(manifest))
     cli('wrong-scope',['modern-deepep-check','--plan','wrong-scope','--output','wrong-scope.json'],expected=1)
     assert not (out/'wrong-scope.json').exists()
+    shutil.copytree(out/'plan',out/'old-schema')
+    path=out/'old-schema/manifest.json';manifest=json.loads(path.read_text())
+    manifest['schema_version']='moe-modern-deepep-manifest/1';path.write_text(json.dumps(manifest))
+    cli('old-schema',['modern-deepep-check','--plan','old-schema','--output','old-schema.json'],expected=1)
+    assert not (out/'old-schema.json').exists()
+    assert 'recompile saved input' in (out/'old-schema.stderr').read_text()
     config=json.loads((out/'input.json').read_text());config['execution']['mode']='hybrid'
     (out/'unsupported.json').write_text(json.dumps(config))
     cli('unsupported',['modern-deepep-plan','--config','unsupported.json','--output','unsupported'],expected=1)
@@ -76,10 +88,10 @@ def main():
     usage=resource.getrusage(resource.RUSAGE_CHILDREN)
     total=sum(p.stat().st_size for p in out.rglob('*') if p.is_file())
     assert total<=8*2**20 and usage.ru_maxrss<=2**20 and time.monotonic()-started<60
-    result=dict(passed=True,public_commands=len(commands),expected_rejections=4,
+    result=dict(passed=True,public_commands=len(commands),expected_rejections=5,
         event_count=generated['event_count'],operation_count=generated['operation_count'],slot_count=generated['slot_count'],
         three_repeat_outputs_byte_identical=True,portable_check_identical=True,fresh_cwd=True,
-        network_execution=False,slots_resolved=False,hardware_calibrated=False,
+        network_execution=False,slots_resolved=False,hardware_calibrated=False,self_peer_gin_operations=40,
         wall_seconds=time.monotonic()-started,peak_child_rss_kib=usage.ru_maxrss,output_bytes=total,
         source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
             (ROOT/'python/moe_ub_cosim/modern_deepep_plan.py',ROOT/'examples/modern_deepep_partial_order/input.json')})

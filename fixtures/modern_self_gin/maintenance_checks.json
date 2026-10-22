@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "unit_command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/unit",
+    "-p",
+    "modern_deepep*_test.py"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "env": {
+    "PYTHONPATH": "python",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "exitcode": 0,
+  "unit_tests": 15,
+  "source_blob_and_sha256_verified": 7,
+  "source_downloads": 0,
+  "network_execution": false,
+  "source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_plan.py": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e",
+    "tests/unit/modern_deepep_plan_test.py": "f1e31e6f58c2fb9fcca33ee0cb1c72e855ece1df968f10cb0b4c09cf84cfbe92",
+    "tests/integration/check_modern_deepep_workflow.py": "d0be059a0711659a9bd6d14569d079c5efc5a1649f8658c46fb461913d357a4c"
+  },
+  "source_basis_sha256": "112c15843e64a7a54bc5cea11a4bb4edba706155aa20acfcbc6e9c2c387d8c7e",
+  "local_links_checked": 163,
+  "archive": {
+    "path": "runs/modern_self_gin_checkpoint_20261022/checkpoint.tar.gz",
+    "bytes": 180695,
+    "sha256": "0edca8f2a8ecb63f5f2fd76ffb5c442caa1124ba1005f229558d589f68c83d86",
+    "verified_files": 97
+  }
+}

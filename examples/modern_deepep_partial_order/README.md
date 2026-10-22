@@ -33,6 +33,10 @@ CLI路径相对当前工作目录；输出目录/文件必须不存在，父目�
 
 每个`operations`记录包含数据或控制操作、源/目标rank、操作数字节、逻辑region/epoch/偏移、上下文绑定及issued/accepted/visible/local_complete事件。四种事件是未来后端的语义义务，不是已测时间点；local_complete不自动等同远端GPU可见。barrier signal的8B是信号值宽度，不能当线上包长。
 
+当前输出为`moe-modern-deepep-partial-order/2`、清单为`moe-modern-deepep-manifest/2`，输入格式不变。`path`分为`local`（显式本地指针/存储旁路）、`gin_self`（发给自己但经过GIN及self-peer QP）和`rdma`（经过GIN发给其他rank）。固定源码中的屏障signal和专家计数块即使src=dst也走GIN；rank计数的put_value及token本地复制才旁路。self-peer的物理回环路径和服务成本尚未建模，不能直接略去，也不能按普通跨rank链路发包。expert计数块另保留`source`的发送区region、epoch和元素偏移，目标区与源区分开。
+
+旧版`/1`将所有同rank操作归为local，遗漏了provider资源分类。`modern-deepep-check`明确拒绝旧清单，请用保存的`input.json`重新执行plan；不自动修改历史结果或把旧性能结论迁移到新版本。更正依据及新流程见[自发GIN语义验收](../../fixtures/modern_self_gin/README.md)。
+
 Dispatch按目的rank去重，每token/目的只传一份含metadata和对齐的布局；另交换编码为`-count-1`的rank计数及专家计数块，包括零值。计数和数据角色可以并行；输入中不能预先填通信发起时刻。入口/出口屏障、flush覆盖、epilogue、专家阶段和相邻调用的buffer复用均保留。flush还覆盖此前已发起但尚未完成的信号尾部；其目标可见保证仍需匹配provider实现和校准。
 
 Dispatch的`slots`是运行时原子分配的符号变量，同一call/source/destination组内应映射成0到group_size-1的双射。计划没有把它们提前赋值。Combine的`binding.kind=from_dispatch_slot`保存来源rank前缀及槽公式，取得实际slot后才知道通道/连接；各通道内的循环顺序也须届时解析。`deferred_constraints`列明这些未执行约束。数组排列是保存格式，不代表不可比较操作的GPU发起顺序。

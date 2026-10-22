@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "public_commands": 10,
+  "expected_rejections": 4,
+  "event_count": 1076,
+  "allocated_slots": 16,
+  "independently_checked_combine_bindings": 16,
+  "repeated_output_byte_identical": true,
+  "relocated_output_byte_identical": true,
+  "fresh_cwd": true,
+  "simulated_packets": false,
+  "queues_executed": false,
+  "hardware_calibrated": false,
+  "wall_seconds": 1.356600221246481,
+  "peak_child_rss_kib": 20788,
+  "output_bytes": 853288,
+  "source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_runtime.py": "72ee9a199b2b4e712b396e89ecc3986e1dd46e0f7338f1bab4574c5620e3480d",
+    "python/moe_ub_cosim/modern_deepep_plan.py": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e",
+    "python/moe_ub_cosim/cli.py": "c2ca4e19f84d656a65741ad681c6cb74165f2dc43d59efc3c9facdf683cd0cca",
+    "tests/integration/check_modern_runtime_workflow.py": "9ea85a22f283096716b645d870993e4a879208ec7ff0d4e359d6bef4bf7b722e",
+    "tests/unit/modern_deepep_runtime_test.py": "2fd2632f9cc21ce612b5b3d81fcc5b4cd33d2b95195041b59005c117509709ef",
+    "examples/modern_deepep_partial_order/input.json": "94e5821d85a604c92840580a187d8b39b93ab12db036773038f00bd78b4146a4"
+  }
+}

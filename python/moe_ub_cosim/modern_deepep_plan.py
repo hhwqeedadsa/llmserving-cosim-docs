@@ -132,8 +132,13 @@ def compile_plan(config):
         accepted = event(name+'.accepted', 'accepted', dst, [issued], operation=name)
         visible = event(name+'.visible', 'visible', dst, [accepted, *visible_deps], operation=name)
         complete = event(name+'.local_complete', 'local_complete', src, [accepted], operation=name)
+        # Peer equality is not an API bypass: NCCLGin.signal and bulk put still
+        # enter GDAKI on a self peer. Only explicit symmetric-pointer branches
+        # avoid provider work. A self-peer QP is NOT a switch/fabric route.
+        path = ('rdma' if src != dst else
+                'gin_self' if attrs['verb'].startswith('gin_') else 'local')
         row = dict(id=name, call=ci, phase=phase, kind=kind, src=src, dst=dst, operand_bytes=nbytes,
-                   path='local' if src == dst else 'rdma', binding=binding, target=target,
+                   path=path, binding=binding, target=target,
                    events=dict(issued=issued, accepted=accepted, visible=visible, local_complete=complete), **attrs)
         operations.append(row);history[src].append(row)
         return row
@@ -157,7 +162,7 @@ def compile_plan(config):
                 signals[src, dst] = operation(f'm{ci}.{phase}.{which}.s{src}.d{dst}', ci, phase,
                     'barrier_signal', src, dst, 8, [gates[src]], context_assignment(0,x,src),
                     dict(region='gin_signal_slots', slot=src, rolling_target=number),
-                    visible_deps=visible, verb='gin_signal_inc64' if src != dst else 'local_signal_inc64',
+                    visible_deps=visible, verb='gin_signal_inc64',
                     value=1, atomic_wire_bytes_unknown=True)
         return {r:event(f'm{ci}.{phase}.{which}.r{r}.ready', 'barrier_ready', r,
                 [gates[r], *[signals[s,r]['events']['visible'] for s in range(ranks)]],
@@ -220,7 +225,9 @@ def compile_plan(config):
                     context_assignment(0,x,src),
                     dict(region='workspace_recv_expert_counts',element_offset=src*local_experts,
                          element_bytes=8,epoch=2*ci),
-                    verb='gin_put' if src != dst else 'local_copy',values=block,aggregate_requests=False)
+                    verb='gin_put',values=block,aggregate_requests=False,
+                    source=dict(region='workspace_send_expert_counts',element_offset=dst*local_experts,
+                                element_bytes=8,epoch=2*ci))
         counted = {r:event(f'm{ci}.dispatch.r{r}.counts_ready','counts_ready',r,
             [counts[s,r,k]['events']['visible'] for s in range(ranks) for k in ('rank','expert')]) for r in range(ranks)}
         producers = {r:event(f'm{ci}.dispatch.r{r}.producer_join','producer_join',r,
@@ -259,8 +266,11 @@ def compile_plan(config):
     for op in operations:
         key = op['path']+'_'+op['phase']+'_'+op['kind']
         summary[key+'_operations'] += 1;summary[key+'_operand_bytes'] += op['operand_bytes']
-    return dict(schema_version='moe-modern-deepep-partial-order/1',
+    return dict(schema_version='moe-modern-deepep-partial-order/2',
         source=dict(deepep=REVISION,nccl=NCCL_REVISION), operations=operations,events=events,slots=slots,
+        path_semantics=dict(local='explicit local pointer/store bypass; no GIN request',
+            gin_self='GIN request to self-peer QP; provider resources required; physical loopback and cost unmodeled',
+            rdma='GIN request to another rank; physical route and NIC reachability not validated'),
         layout=dict(dispatch_put_bytes=dbytes,combine_put_bytes=cbytes,
             dispatch_buffer_bytes=(ranks+1)*cap*dbytes,
             combine_buffer_bytes=(planes+ranks)*cap*cbytes,
@@ -277,7 +287,8 @@ def compile_plan(config):
             visibility='required provider obligations, not measured events; no cross-NIC calibration',
             concurrent_order='incomparable operations have no preselected WQE, slot or issue order',
             unknowns=['GPU launch/scheduling cost','provider WQE/atomic splitting and CQ modes',
-                      'cross-NIC visibility and memory ordering','retry/buffer lifetime','topology reachability']))
+                      'cross-NIC visibility and memory ordering','retry/buffer lifetime','topology reachability',
+                      'self-peer GIN loopback service and physical path']))
 
 
 def execute(config_path, output):
@@ -289,7 +300,7 @@ def execute(config_path, output):
     plan = compile_plan(config)
     require(len(reachable(plan)) == len(plan['events']), 'cyclic modern plan')
     plan_raw = encoded(plan)
-    manifest = dict(schema_version='moe-modern-deepep-manifest/1',state='offline_symbolic_partial_order_only',
+    manifest = dict(schema_version='moe-modern-deepep-manifest/2',state='offline_symbolic_partial_order_only',
                     input_sha256=hashlib.sha256(raw).hexdigest(),plan_sha256=hashlib.sha256(plan_raw).hexdigest(),
                     event_count=len(plan['events']),operation_count=len(plan['operations']),slot_count=len(plan['slots']),
                     plan_bytes=len(plan_raw),summary=plan['summary'],simulated_packets=False)
@@ -308,7 +319,8 @@ def check(directory, output, withheld=()):
     manifest_raw, manifest = read(directory/'manifest.json',MAX_INPUT)
     fields(manifest,'schema_version state input_sha256 plan_sha256 event_count operation_count slot_count '
            'plan_bytes summary simulated_packets','modern manifest')
-    require(manifest['schema_version'] == 'moe-modern-deepep-manifest/1', 'unsupported modern manifest')
+    require(manifest['schema_version'] == 'moe-modern-deepep-manifest/2',
+            'require modern manifest/2; recompile saved input to include self-peer GIN operations')
     require(manifest['state']=='offline_symbolic_partial_order_only' and manifest['simulated_packets'] is False,
             'modern manifest must declare offline, unsimulated scope')
     require(hashlib.sha256(raw).hexdigest()==manifest['plan_sha256'] and

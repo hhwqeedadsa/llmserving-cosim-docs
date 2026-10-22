@@ -68,6 +68,38 @@ class ModernPlanTests(unittest.TestCase):
                     result = resolve_combine_channel(op['binding'],slot,self.config['execution'],op['src'])
                     self.assertLess(result['context_index'],5)
 
+    def test_self_peer_is_not_a_local_api_bypass(self):
+        # Source branches differ by API. All barrier signals and expert blocks
+        # call GIN; data and put_value take explicit self-pointer branches.
+        gin_self = []
+        for ci,call in enumerate(self.config['calls']):
+            for rank in range(4):
+                for phase in ('dispatch','combine'):
+                    for which in ('entry','exit'):
+                        op=self.ops[f'm{ci}.{phase}.{which}.s{rank}.d{rank}']
+                        self.assertEqual((op['path'],op['verb']),('gin_self','gin_signal_inc64'))
+                        gin_self.append(op['id'])
+                block=self.ops[f'm{ci}.dispatch.expert_count.s{rank}.d{rank}']
+                self.assertEqual((block['path'],block['verb']),('gin_self','gin_put'))
+                self.assertEqual(block['source']['element_offset'],2*rank)
+                gin_self.append(block['id'])
+                count=self.ops[f'm{ci}.dispatch.rank_count.s{rank}.d{rank}']
+                self.assertEqual((count['path'],count['verb']),('local','local_store'))
+        self.assertEqual(len(gin_self),40)
+        self.assertEqual(set(gin_self),{o['id'] for o in self.ops.values() if o['path']=='gin_self'})
+        self.assertTrue(all(o['src']==o['dst'] and not o['verb'].startswith('gin_')
+                            for o in self.ops.values() if o['path']=='local'))
+        self.assertTrue(all(o['src']!=o['dst'] and o['verb'].startswith('gin_')
+                            for o in self.ops.values() if o['path']=='rdma'))
+        # Even a rank with no input tokens posts its zero expert block to self.
+        zero=self.ops['m0.dispatch.expert_count.s2.d2']
+        self.assertEqual(zero['values'],[-1,-1])
+        self.assertEqual(zero['path'],'gin_self')
+        self.assertIn(zero['events']['local_complete'],self.ancestors('m0.dispatch.exit.s2.d2.issued'))
+        held=reachable(self.plan,[zero['events']['visible']])
+        self.assertFalse(any(f'm1.combine.r{r}.complete' in held for r in range(4)))
+        self.assertEqual(self.plan['schema_version'],'moe-modern-deepep-partial-order/2')
+
     def test_data_does_not_wait_for_remote_counts_or_visible_data(self):
         issued = 'm0.dispatch.data.s0.t0.d1.issued'
         parents = self.ancestors(issued)

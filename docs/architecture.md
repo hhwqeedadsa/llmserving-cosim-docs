@@ -6,6 +6,8 @@
 
 `modern_deepep_plan.py`通过独立公开命令编译固定现代direct的无时间操作部分顺序，保留Dispatch原子slot和由其决定的Combine通道公式；数据、计数和屏障的必要依赖与在未来运行时才可解析的顺序分别保存。它尚未驱动队列核心或下面的在线服务，使用范围见[现代计划](../examples/modern_deepep_partial_order/README.md)。
 
+现代plan/manifest现为`/2`，将显式本地旁路、GIN self-peer和跨rank GIN分开。屏障和专家计数块的self-peer操作保留provider资源与完成义务；不能按src==dst直接跳过。旧清单拒绝并要求从保存输入重新编译，依据见[自发GIN更正](../fixtures/modern_self_gin/README.md)。
+
 `modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，但没有接入C++队列或网络回调，不能替代在线服务。
 
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。

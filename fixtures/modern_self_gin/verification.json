@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "public_commands": 15,
+  "expected_rejections": 5,
+  "event_count": 1076,
+  "operation_count": 224,
+  "slot_count": 16,
+  "three_repeat_outputs_byte_identical": true,
+  "portable_check_identical": true,
+  "fresh_cwd": true,
+  "network_execution": false,
+  "slots_resolved": false,
+  "hardware_calibrated": false,
+  "self_peer_gin_operations": 40,
+  "wall_seconds": 1.5865973327308893,
+  "peak_child_rss_kib": 21820,
+  "output_bytes": 1890149,
+  "source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_plan.py": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e",
+    "examples/modern_deepep_partial_order/input.json": "94e5821d85a604c92840580a187d8b39b93ab12db036773038f00bd78b4146a4"
+  }
+}

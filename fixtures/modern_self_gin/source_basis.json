@@ -1,0 +1,132 @@
+{
+  "scope": "source API/resource semantics, not hardware timing or physical loopback path",
+  "sources": [
+    {
+      "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+      "excerpts": [
+        {
+          "line_start": 172,
+          "text": "    void signal(const int& dst_rank_idx, const remote_action_t& remote_action) const {\n        IS_TEAM_WORLD_RAIL({\n            gin.signal(TEAM_WORLD_RAIL(), dst_rank_idx, remote_action);\n        });\n    }\n\n    template <typename team_t, int64_t kNumTimeoutCycles>\n    __device__ __forceinline__"
+        },
+        {
+          "line_start": 218,
+          "text": "    __device__ __forceinline__\n    void put(void* recv_sym_ptr, void* send_sym_ptr, const int64_t& num_bytes, const int& dst_rank_idx,\n             const int& extra_options = 0,\n             const remote_action_t& remote_action = remote_action_t()) const {\n        // NOTES: local or NVLink put will also go through NIC via this API\n        put<team_t>(recv_sym_ptr, nccl_window, reinterpret_cast<void*>(lsa_base_ptr), send_sym_ptr,\n                    num_bytes, dst_rank_idx, extra_options, remote_action);\n    }\n"
+        },
+        {
+          "line_start": 227,
+          "text": "    template <typename team_t, typename dtype_t>\n    __device__ __forceinline__\n    void put_value(dtype_t* sym_ptr, const dtype_t& value, const int& dst_rank_idx,\n                   const int& extra_options = 0) const {\n        const auto dst_ptr = get_sym_ptr<team_t>(sym_ptr, dst_rank_idx);\n        if (dst_ptr != nullptr) {\n            ptx::st_relaxed_sys(dst_ptr, value);\n        } else {\n            EP_DEVICE_ASSERT((not std::is_same_v<team_t, ncclTeamTagLsa>));\n            gin.putValue(TEAM_WORLD_RAIL(),\n                         dst_rank_idx,\n                         nccl_window, reinterpret_cast<int64_t>(sym_ptr) - lsa_base_ptr,\n                         value,\n                         ncclGin_None(),\n                         ncclCoopThread(),\n                         ncclGin_None(),\n                         cuda::thread_scope_thread,\n                         cuda::thread_scope_device,\n                         ncclGinOptFlagsDefault | extra_options);\n        }\n    }\n"
+        },
+        {
+          "line_start": 60,
+          "text": "        return reinterpret_cast<uint64_t>(ptr) - lsa_base_ptr;\n    }\n\n    // ReSharper disable once CppNotAllPathsReturnValue\n    template <typename team_t, typename dtype_t = void*>\n    __device__ __forceinline__\n    dtype_t* get_sym_ptr(dtype_t* ptr, const int& dst_rank_idx) const {\n        IS_TEAM_RAIL({\n            return team_rail.rank == dst_rank_idx ? ptr : nullptr;\n        })\n\n        IS_TEAM_WORLD_LSA({\n            constexpr bool kIsTeamLSA = (std::is_same_v<team_t, ncclTeamTagLsa>);\n\n            // Team world and not accessible by symmetric pointers\n            if (not is_nvlink_accessible<team_t>(dst_rank_idx))\n                return nullptr;\n\n            // Translate into NVLink rank index\n            const auto dst_nvl_rank_idx = kIsTeamLSA ?\n                dst_rank_idx : (dst_rank_idx - team_rail.rank * team_lsa.nRanks);\n\n            // Local rank bypass\n            // TODO(NCCL): support this\n            if (dst_nvl_rank_idx == team_lsa.rank)\n                return ptr;\n\n            // Get base ptr\n            const auto dst_ptr = ncclGetLsaPointer(\n                nccl_window, get_sym_offset(ptr), dst_nvl_rank_idx);\n            return static_cast<dtype_t*>(dst_ptr);\n        });\n    }\n\n    // NOTES: take care of this function when `team_t` is not LSA"
+        }
+      ]
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "excerpts": [
+        {
+          "line_start": 161,
+          "text": "    if (sm_idx == 0) {\n        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot\n        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.wait_signal<team_t, kNumTimeoutCycles>(i, rank_idx);\n    }\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+      "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "excerpts": [
+        {
+          "line_start": 170,
+          "text": "            } else {\n                // RDMA bulk copy\n                for (int i = thread_idx; i < kNumRanks; i += kNumNotifyThreads) {\n                    const auto src_ptr = workspace_layout.get_scaleup_expert_count_ptr<true>() + kNumExpertsPerRank * i;\n                    const auto dst_ptr = workspace_layout.get_scaleup_expert_count_ptr<false>() + kNumExpertsPerRank * rank_idx;\n                    gin.put<team_t>(dst_ptr, src_ptr, kNumExpertsPerRank * sizeof(int64_t), i);\n                }\n            }\n\n            // This is necessary, as the waited results will rewrite the shared memory"
+        },
+        {
+          "line_start": 362,
+          "text": "                    ptx::tma_store_1d(send_buffer_ptr, tma_buffer.get_base_ptr(), tma_buffer.get_num_bytes<false>());\n                ptx::tma_store_commit();\n                __syncwarp();\n            }\n\n            // Issue TMA NVLink stores\n            EP_STATIC_ASSERT(kNumTopk <= 32, \"Invalid top-k selection\");\n            const auto dst_ptr = stored_dst_slot_idx >= 0 ?\n                gin.get_sym_ptr<team_t>(recv_buffer.get_token_buffer(stored_dst_slot_idx).get_base_ptr(), stored_dst_rank_idx) :\n                nullptr;\n            if (dst_ptr != nullptr)\n                ptx::tma_store_1d(dst_ptr, tma_buffer.get_base_ptr(), tma_buffer.get_num_bytes<false>());\n            ptx::tma_store_commit();\n            __syncwarp();\n\n            // Issue RDMA put\n            if constexpr (not kIsScaleupNVLink) {\n                // Wait the send buffer store to arrive\n                ptx::tma_store_wait<1>();\n                __syncwarp();\n\n                // NOTES: we should skip the NVLink accessible ranks\n                if (stored_dst_slot_idx >= 0 and dst_ptr == nullptr) {\n                    gin.put<team_t>(recv_buffer.get_token_buffer(stored_dst_slot_idx).get_base_ptr(),\n                                    send_buffer_ptr, tma_buffer.get_num_bytes<false>(), stored_dst_rank_idx);\n                }\n                __syncwarp();"
+        }
+      ]
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "excerpts": [
+        {
+          "line_start": 94,
+          "text": "\n        // Directly to the remote or via RDMA\n        const bool nvlink_bypass = gin.is_nvlink_accessible<team_t>(src_rank_idx);\n        layout::TokenLayout master_token_buffer = [=]() {\n            // NVLink bypass\n            if (nvlink_bypass) {\n                auto token_buffer = recv_buffer.get_rank_buffer(kUseRankLayout ? rank_idx : src_topk_idx).get_token_buffer(src_token_idx);\n                token_buffer.set_base_ptr(gin.get_sym_ptr<team_t>(token_buffer.get_base_ptr(), src_rank_idx));\n                return token_buffer;\n            }\n\n            // Use RDMA\n            return send_buffer.get_rank_buffer(src_rank_idx).get_token_buffer(src_token_idx);\n        }();\n"
+        },
+        {
+          "line_start": 229,
+          "text": "        // Wait send buffer's TMA store and issue RDMA send\n        // NOTES: `kDoExpandedSend` mode has already issued\n        if (not kDoExpandedSend and not nvlink_bypass and ptx::elect_one_sync()) {\n            ptx::tma_store_wait();\n            const auto dst_ptr = recv_buffer.get_rank_buffer(kUseRankLayout ? rank_idx : src_topk_idx)\n                .get_token_buffer(src_token_idx).get_base_ptr();\n            gin.put<team_t>(dst_ptr, master_token_buffer.get_base_ptr(),\n                            master_token_buffer.get_num_bytes<false>(), src_rank_idx);\n        }"
+        }
+      ]
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "excerpts": [
+        {
+          "line_start": 55,
+          "text": "  uint64_t signalOpArg, bool hasCounter, ncclGinCounter_t counterId, bool hasDescriptor,\n  ncclGinDescriptorSmem* descriptor, cuda::thread_scope required, cuda::thread_scope given, uint32_t optFlags) {\n  using nccl::utility::loadConst;\n  coop.sync();\n  if (coop.thread_rank() == 0) {\n    ncclGinGdakiGPUContext* gdaki = &((struct ncclGinGdakiGPUContext*)ctx.handle)[ctx.contextId];\n    doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + peer;\n    doca_gpu_dev_verbs_qp* companion_qp;\n    ncclGinGdakiMemHandle* dstMh = (ncclGinGdakiMemHandle*)dstWin;\n    ncclGinGdakiMemHandle* srcMh = (ncclGinGdakiMemHandle*)srcWin;\n    uint32_t codeOpt = nccl::gin::gdaki::docaOptFlagsFromGinOptFlags(optFlags);\n\n    doca_gpu_dev_verbs_addr raddr, laddr;\n    if (hasWins) {\n      raddr.addr = dstOff;\n      raddr.key = loadConst(loadConst(&dstMh->rkeys) + peer);"
+        },
+        {
+          "line_start": 109,
+          "text": "      } else {\n        doca_gpu_dev_verbs_put<resource_sharing_mode>(qp, raddr, laddr, bytes, codeOpt);\n      }\n    } else {\n      if (hasCounter) {\n        doca_gpu_dev_verbs_signal_counter<DOCA_GPUNETIO_VERBS_SIGNAL_OP_ADD, resource_sharing_mode>(\n          qp, sig_raddr, sig_laddr, signalOpArg, companion_qp, counter_raddr, counter_laddr, 1, codeOpt);\n      } else {\n        doca_gpu_dev_verbs_signal<DOCA_GPUNETIO_VERBS_SIGNAL_OP_ADD, resource_sharing_mode>(qp, sig_raddr, sig_laddr,\n                                                                                            signalOpArg, codeOpt);\n      }\n    }"
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "excerpts": [
+        {
+          "line_start": 870,
+          "text": "  }\n\n  qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;\n  if (nqps > nqps_for_comm) {\n    DOCACHECKGOTO(doca_gpu_verbs_create_qp_list_hl(&qp_init_attr, nqps - nqps_for_comm, &gdaki_ctx->self_gqp_list),\n                  status, out);\n    for (int qp_idx = nqps_for_comm; qp_idx < nqps; qp_idx++) {\n      gdaki_ctx->gqps[qp_idx] = &gdaki_ctx->self_gqp_list->qps[qp_idx - nqps_for_comm];\n\n      DOCACHECKGOTO(doca_verbs_qp_get_qpn(gdaki_ctx->gqps[qp_idx]->qp, &qpn), status, out);\n      INFO(NCCL_NET, \"[%d] Created a self-loop peer QP: qp_idx=%d, qpn=%#x\", rank, qp_idx, qpn);\n    }\n  }"
+        },
+        {
+          "line_start": 925,
+          "text": "\n  for (int ctx_idx = 0; ctx_idx < ncontexts; ctx_idx++) {\n    int qp_idx = rank + ctx_idx * nranks;\n    if (gdaki_ctx->gqps[qp_idx] == nullptr) continue;\n    struct gdaki_exch_info exch_info;\n    gdakiFillExchInfo(&exch_info, gdaki_ctx, gdaki_ctx->gqps[nqps_for_comm + ctx_idx]);\n    NCCLCHECKGOTO(gdakiConnectQp(gdaki_ctx, gdaki_ctx->gqps[qp_idx], &exch_info), status, out);\n    DOCACHECKGOTO(doca_verbs_qp_get_qpn(gdaki_ctx->gqps[qp_idx]->qp, &qpn), status, out);\n    INFO(NCCL_NET, \"[%d] Connected self-loop QP: qp_idx=%d, main_qpn=%#x, peer_qpn=%#x\", rank, qp_idx, qpn,\n         exch_info.qpn);\n  }\n\n  for (int qp_idx = 0; qp_idx < nqps_per_rank; qp_idx++) {\n    int peer_qp_idx = nqps_for_comm + qp_idx;\n    int local_qp_idx = qp_idx * nranks + rank;\n    if (gdaki_ctx->gqps[local_qp_idx] == nullptr) continue;\n    struct gdaki_exch_info exch_info;\n    gdakiFillExchInfo(&exch_info, gdaki_ctx, gdaki_ctx->gqps[local_qp_idx]);\n    NCCLCHECKGOTO(gdakiConnectQp(gdaki_ctx, gdaki_ctx->gqps[peer_qp_idx], &exch_info), status, out);\n    DOCACHECKGOTO(doca_verbs_qp_get_qpn(gdaki_ctx->gqps[peer_qp_idx]->qp, &qpn), status, out);\n    INFO(NCCL_NET, \"[%d] Connected self-loop peer QP: qp_idx=%d, qpn=%#x, main_qpn=%#x\", rank, peer_qp_idx, qpn,\n         exch_info.qpn);\n  }\n\n  if (needCompanion) {"
+        }
+      ]
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+      "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h",
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/gin__funcs.h",
+      "excerpts": [
+        {
+          "line_start": 886,
+          "text": "template <unsigned beMask>\ntemplate <typename RemoteAction, typename Coop, typename DescriptorSmem>\nNCCL_DEVICE_INLINE void ncclGin_BackendMask<beMask>::signal(ncclTeam team, int peer, RemoteAction action, Coop coop,\n                                                            DescriptorSmem descriptor, cuda::thread_scope givenRelease,\n                                                            cuda::thread_scope requiredRelease,\n                                                            uint32_t optFlags) const {\n  using nccl::gin::internal::teamRankToGinRank;\n  coop.sync();\n  if (coop.thread_rank() == 0) {\n    ncclGinCall<ncclGinApi_Put>(this->_makeCtx(), ncclCoopThread(), teamRankToGinRank(this->comm, team, peer),\n                                /*hasWins=*/false, nullptr, 0, nullptr, 0, 0,\n                                ncclGin_getSignalDescriptor(*this, action), ncclGin_getSignalOp(action),\n                                ncclGin_getSignalOpArg(action),\n                                /*hasCounter=*/false, 0, ncclGin_isDescriptor(descriptor),\n                                ncclGin_getDescriptor(descriptor), requiredRelease, givenRelease, optFlags);\n  }\n  coop.sync();\n}"
+        }
+      ]
+    }
+  ],
+  "correction": "self peer signal and bulk expert count remain GIN; explicit pointer paths alone are local bypass"
+}

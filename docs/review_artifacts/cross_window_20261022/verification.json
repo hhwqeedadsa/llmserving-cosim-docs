@@ -1,0 +1,326 @@
+{
+  "verified": true,
+  "all_declared_completed": true,
+  "checks": [
+    {
+      "name": "d1-ai40-p001",
+      "full_verification": true,
+      "first_window_prefix_identical": true,
+      "critical_second_window_trace": {
+        "work": {
+          "accepted_ns": 1193362,
+          "acked_ns": 1199430,
+          "begin": 766592,
+          "bytes": 14464,
+          "end": 781056,
+          "id": 251,
+          "published_ns": 1181435,
+          "ready_ns": 599715,
+          "stream": 3,
+          "ticket": 53
+        },
+        "last_source_packet": {
+          "time_ns": 1182597,
+          "stream": 3,
+          "src": 0,
+          "dst": 6,
+          "nic": 1,
+          "sequence": 780592,
+          "payload_bytes": 464,
+          "packet_uid": 10784
+        },
+        "second_window_first_tx": 599881,
+        "nonoverlapping_spans_ns": {
+          "ready_to_first_tx": 166,
+          "first_to_last_tx": 582716,
+          "last_tx_to_accepted": 10765,
+          "accepted_to_acked": 6068
+        },
+        "second_window_ce_packets": 0,
+        "second_window_cnp_rx": []
+      },
+      "per_window_static_bound_ns": 443791.36,
+      "second_window_ce_packets": 0,
+      "second_window_first_ce_rx_by_stream": {},
+      "post_boundary_cnp": []
+    },
+    {
+      "name": "d8-ai40-p001",
+      "full_verification": true,
+      "first_window_prefix_identical": true,
+      "critical_second_window_trace": {
+        "work": {
+          "accepted_ns": 3027180,
+          "acked_ns": 3033248,
+          "begin": 766592,
+          "bytes": 14464,
+          "end": 781056,
+          "id": 251,
+          "published_ns": 2620173,
+          "ready_ns": 1259768,
+          "stream": 3,
+          "ticket": 53
+        },
+        "last_source_packet": {
+          "time_ns": 3020460,
+          "stream": 3,
+          "src": 0,
+          "dst": 6,
+          "nic": 1,
+          "sequence": 780592,
+          "payload_bytes": 464,
+          "packet_uid": 10860
+        },
+        "second_window_first_tx": 1259934,
+        "nonoverlapping_spans_ns": {
+          "ready_to_first_tx": 166,
+          "first_to_last_tx": 1760526,
+          "last_tx_to_accepted": 6720,
+          "accepted_to_acked": 6068
+        },
+        "second_window_ce_packets": 0,
+        "second_window_cnp_rx": []
+      },
+      "per_window_static_bound_ns": 443791.36,
+      "second_window_ce_packets": 64,
+      "second_window_first_ce_rx_by_stream": {
+        "12": 1310637,
+        "13": 1311218,
+        "11": 1290560,
+        "8": 1293556,
+        "9": 1310222
+      },
+      "post_boundary_cnp": [
+        {
+          "stream": 11,
+          "generated_ns": 1290560,
+          "received_ns": 1294613,
+          "first_second_window_ce_rx_ns": 1290560,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 8,
+          "generated_ns": 1293556,
+          "received_ns": 1299654,
+          "first_second_window_ce_rx_ns": 1293556,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 9,
+          "generated_ns": 1310222,
+          "received_ns": 1316305,
+          "first_second_window_ce_rx_ns": 1310222,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 12,
+          "generated_ns": 1310637,
+          "received_ns": 1316720,
+          "first_second_window_ce_rx_ns": 1310637,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 13,
+          "generated_ns": 1311218,
+          "received_ns": 1317301,
+          "first_second_window_ce_rx_ns": 1311218,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 11,
+          "generated_ns": 1340560,
+          "received_ns": 1344609,
+          "first_second_window_ce_rx_ns": 1290560,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 8,
+          "generated_ns": 1343556,
+          "received_ns": 1349624,
+          "first_second_window_ce_rx_ns": 1293556,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 9,
+          "generated_ns": 1360222,
+          "received_ns": 1366290,
+          "first_second_window_ce_rx_ns": 1310222,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 12,
+          "generated_ns": 1360637,
+          "received_ns": 1366731,
+          "first_second_window_ce_rx_ns": 1310637,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 13,
+          "generated_ns": 1361218,
+          "received_ns": 1367286,
+          "first_second_window_ce_rx_ns": 1311218,
+          "generated_before_any_second_window_ce": false
+        }
+      ]
+    },
+    {
+      "name": "d1024-ai40-p001",
+      "full_verification": true,
+      "first_window_prefix_identical": true,
+      "critical_second_window_trace": {
+        "work": {
+          "accepted_ns": 3379082,
+          "acked_ns": 3385150,
+          "begin": 708736,
+          "bytes": 14464,
+          "end": 723200,
+          "id": 316,
+          "published_ns": 457910,
+          "ready_ns": 457910,
+          "stream": 7,
+          "ticket": 49
+        },
+        "last_source_packet": {
+          "time_ns": 3372362,
+          "stream": 7,
+          "src": 2,
+          "dst": 6,
+          "nic": 1,
+          "sequence": 722736,
+          "payload_bytes": 464,
+          "packet_uid": 10867
+        },
+        "second_window_first_tx": 458076,
+        "nonoverlapping_spans_ns": {
+          "ready_to_first_tx": 166,
+          "first_to_last_tx": 2914286,
+          "last_tx_to_accepted": 6720,
+          "accepted_to_acked": 6068
+        },
+        "second_window_ce_packets": 0,
+        "second_window_cnp_rx": [
+          {
+            "alpha": 1.0,
+            "alpha_due_ns": 538526,
+            "byte_rounds": 0,
+            "kind": "cnp_received",
+            "model_bytes": 48,
+            "np_due_ns": 526781,
+            "np_pending": false,
+            "packet_uid": 6059,
+            "published_bytes": 723200,
+            "rate_bps": 100000000,
+            "recovery_due_ns": 538526,
+            "remaining_bytes": 10000000,
+            "snd_una": 362600,
+            "stream": 7,
+            "target_bps": 195312500,
+            "time_ns": 483526,
+            "timer_rounds": 0
+          }
+        ]
+      },
+      "per_window_static_bound_ns": 443791.36,
+      "second_window_ce_packets": 46,
+      "second_window_first_ce_rx_by_stream": {
+        "12": 508576,
+        "13": 509240,
+        "11": 487329,
+        "8": 491653,
+        "9": 508908
+      },
+      "post_boundary_cnp": [
+        {
+          "stream": 7,
+          "generated_ns": 476781,
+          "received_ns": 483526,
+          "first_second_window_ce_rx_ns": null,
+          "generated_before_any_second_window_ce": true
+        },
+        {
+          "stream": 11,
+          "generated_ns": 487329,
+          "received_ns": 491382,
+          "first_second_window_ce_rx_ns": 487329,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 8,
+          "generated_ns": 491653,
+          "received_ns": 497751,
+          "first_second_window_ce_rx_ns": 491653,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 12,
+          "generated_ns": 508576,
+          "received_ns": 514659,
+          "first_second_window_ce_rx_ns": 508576,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 9,
+          "generated_ns": 508908,
+          "received_ns": 514991,
+          "first_second_window_ce_rx_ns": 508908,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 13,
+          "generated_ns": 509240,
+          "received_ns": 515338,
+          "first_second_window_ce_rx_ns": 509240,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 11,
+          "generated_ns": 537329,
+          "received_ns": 541367,
+          "first_second_window_ce_rx_ns": 487329,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 8,
+          "generated_ns": 541653,
+          "received_ns": 547721,
+          "first_second_window_ce_rx_ns": 491653,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 12,
+          "generated_ns": 558576,
+          "received_ns": 564644,
+          "first_second_window_ce_rx_ns": 508576,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 9,
+          "generated_ns": 558908,
+          "received_ns": 565766,
+          "first_second_window_ce_rx_ns": 508908,
+          "generated_before_any_second_window_ce": false
+        },
+        {
+          "stream": 13,
+          "generated_ns": 559240,
+          "received_ns": 565308,
+          "first_second_window_ce_rx_ns": 509240,
+          "generated_before_any_second_window_ce": false
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "rp_state_events": 22546,
+    "data_packets": 16200,
+    "endpoint_uid_joins": 32534,
+    "ack_packets": 16200,
+    "physical_ports": 120,
+    "work_callbacks_and_credit": 1080,
+    "carry_streams": 36,
+    "cnp_packets": 134
+  },
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "network_reexecuted": false
+}

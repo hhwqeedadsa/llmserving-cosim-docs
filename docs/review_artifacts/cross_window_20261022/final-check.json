@@ -1,0 +1,62 @@
+{
+  "verified": true,
+  "source_snapshots_matched": 190,
+  "python_syntax_checked": 103,
+  "archive_sha256": "549269965df772943ebe7bbd557f5448308f60728f08020c8e815c896af31626",
+  "archive_members_previously_verified": 299,
+  "nested_platform_members_previously_verified": 648,
+  "network_runs": 3,
+  "network_reexecuted": false,
+  "monitored_seconds_before_final": 27.70238650403917,
+  "allocated_bytes_before_final": 55816192,
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "seconds": 1.424407210201025,
+      "exit_code": 0
+    },
+    {
+      "stage": "check-chain-monitor",
+      "seconds": 3.2336196303367615,
+      "exit_code": 0
+    },
+    {
+      "stage": "check-final-monitor",
+      "seconds": 1.2197242677211761,
+      "exit_code": 1
+    },
+    {
+      "stage": "check-monitor",
+      "seconds": 3.2274953443557024,
+      "exit_code": 0
+    },
+    {
+      "stage": "deps-monitor",
+      "seconds": 0.45987037755548954,
+      "exit_code": 0
+    },
+    {
+      "stage": "input-monitor",
+      "seconds": 0.23525805957615376,
+      "exit_code": 0
+    },
+    {
+      "stage": "package-monitor",
+      "seconds": 5.848966712132096,
+      "exit_code": 0
+    },
+    {
+      "stage": "review-monitor",
+      "seconds": 0.13056080229580402,
+      "exit_code": 0
+    },
+    {
+      "stage": "run-monitor",
+      "seconds": 11.92248409986496,
+      "exit_code": 0
+    }
+  ],
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "paper_main_contribution_established": false
+}

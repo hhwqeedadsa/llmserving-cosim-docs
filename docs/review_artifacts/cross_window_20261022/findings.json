@@ -1,0 +1,27 @@
+{
+  "single_window_ranking": [
+    1024,
+    1,
+    8
+  ],
+  "two_window_total_ranking": [
+    1,
+    8,
+    1024
+  ],
+  "deep_second_over_first": 6.39260990150903,
+  "deep_actual_over_two_cold": 3.696304950754515,
+  "critical_old_pending_cnp": {
+    "stream": 7,
+    "generated_ns": 476781,
+    "received_ns": 483526,
+    "first_second_window_ce_rx_ns": null,
+    "generated_before_any_second_window_ce": true
+  },
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "paper_main_contribution_established": false,
+  "mechanism_calibrated": false,
+  "independent_load": false,
+  "modern_provider_executed": false
+}

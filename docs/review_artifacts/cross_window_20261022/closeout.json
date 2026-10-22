@@ -1,0 +1,73 @@
+{
+  "stage_complete": true,
+  "paper_goal_complete": false,
+  "monitored_wall_seconds": 28.171333070844412,
+  "allocated_bytes_before_closeout": 55701504,
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "wall_seconds": 1.424407210201025,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "check-chain-monitor",
+      "wall_seconds": 3.2336196303367615,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "check-final-monitor",
+      "wall_seconds": 1.2197242677211761,
+      "exit_code": 1,
+      "status": "child_failed"
+    },
+    {
+      "stage": "check-monitor",
+      "wall_seconds": 3.2274953443557024,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "deps-monitor",
+      "wall_seconds": 0.45987037755548954,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "final-monitor",
+      "wall_seconds": 0.4689465668052435,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "input-monitor",
+      "wall_seconds": 0.23525805957615376,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "package-monitor",
+      "wall_seconds": 5.848966712132096,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "review-monitor",
+      "wall_seconds": 0.13056080229580402,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "run-monitor",
+      "wall_seconds": 11.92248409986496,
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "raw_path": "/dev/shm/moe-cross-window-20261022",
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "source_commit_before_phase": "71df2e7d1f29306e65d91285ecf70051c2a687db",
+  "next_question": "Verify real invocation readiness/gaps and provider connection behavior before attributing practical loss or designing an optimizer."
+}

@@ -1,0 +1,125 @@
+"""Render a Chinese review from completed cross-window public evidence."""
+import argparse
+import html
+import json
+from pathlib import Path
+import shutil
+
+
+def load(p): return json.loads(p.read_text())
+
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    for k in ('task','output'):p.add_argument('--'+k,type=Path,required=True)
+    a=p.parse_args(); assert not a.output.exists()
+    s=load(a.task/'analysis/summary.json');v=load(a.task/'checked-chain/verification.json')
+    assert v['all_declared_completed'] and v['verified'] and s['new_network_runs']==3
+    cases={c['depth']:c for c in s['cases']};checked={c['name']:c for c in v['checks']}
+    assert all(all(c['first_window_prefix'].values()) for c in cases.values())
+    deep=cases[1024];critical=checked[deep['name']]['critical_second_window_trace']
+    assert critical['work']['stream']==7 and critical['second_window_ce_packets']==0
+    old_feedback=next(c for c in checked[deep['name']]['post_boundary_cnp'] if c['stream']==7)
+    assert old_feedback['generated_before_any_second_window_ce'] and old_feedback['first_second_window_ce_rx_ns'] is None
+    carry=next(c for c in deep['carry'] if c['stream']==7)
+    assert carry['first_second_window_tx']['rate_bps']==195312500 and carry['last_logged_before_boundary']['np_pending']
+    a.output.mkdir()
+    for name,src in [('summary.json',a.task/'analysis/summary.json'),('verification.json',a.task/'checked-chain/verification.json'),
+        ('protocol.md',Path(__file__).with_name('cross_window_protocol.md'))]:shutil.copyfile(src,a.output/name)
+    facts=dict(single_window_ranking=[1024,1,8],two_window_total_ranking=[1,8,1024],
+        deep_second_over_first=deep['windows'][1]['duration_ns']/deep['windows'][0]['duration_ns'],
+        deep_actual_over_two_cold=deep['total_business_ack_ns']/(2*deep['boundary_ns']),
+        critical_old_pending_cnp=old_feedback,raw_volatile=True,persistent_backup=False,
+        paper_main_contribution_established=False,mechanism_calibrated=False,
+        independent_load=False,modern_provider_executed=False)
+    (a.output/'findings.json').write_text(json.dumps(facts,ensure_ascii=False,indent=2)+'\n')
+    table='\n'.join('| '+' | '.join(map(str,(d,c['windows'][0]['duration_ns'],c['windows'][1]['duration_ns'],
+        c['total_business_ack_ns'],f"{c['windows'][1]['duration_ns']/c['windows'][0]['duration_ns']:.3f}",
+        sum(x['slow_tx_before_any_post_boundary_cnp'] for x in c['carry']))))+' |' for d,c in cases.items())
+    chain='\n'.join('| '+' | '.join(map(str,(c['depth'],checked[c['name']]['critical_second_window_trace']['work']['stream'],
+        *checked[c['name']]['critical_second_window_trace']['nonoverlapping_spans_ns'].values())))+' |' for c in cases.values())
+    text=f'''# 单窗口最快，不等于连续通信最快
+
+同一组MoE数据连续发送两轮后，原来单窗口最快的软件额度1024变成两轮总耗时最长。第一轮457,910ns，第二轮2,927,240ns；两轮共3,385,150ns，而两次独立冷启动相加只有915,820ns，相差约{facts['deep_actual_over_two_cold']:.2f}倍。这说明本参考模型中必须保留连接状态，不能把每轮独立运行后相加。它没有证明真实MoE应该选择额度1，也没有形成新优化算法或论文主贡献。
+
+## 本轮服务的问题与限定范围
+
+研究跨节点专家并行（EP）Dispatch数据在共享Scale-Out网络上的排队、反馈和源端限速。固定既有四份R1-AWQ/MMLU请求、entry0/层4、32/28/10/6共76 token，H7168/E256/Top8、连续等容量专家映射、每token按目的rank去重。每轮180份14,464B写，共2,603,520B和2700个数据包；重复同一轮仅为时间机制探针，不是新的请求、独立留出、不同层、训练或生产分布。
+
+EP4位于8GPU Clos的0/2/4/6，接入100G、上层25G、链路1us。固定12条持久QP（队列对）、NIC、线端口、ECMP（等价多路径）和seed11。后端是锁定ASTRA原生RDMA ns-3，不是UB；每条件内部只有一套Simulator，网络、序号和拥塞状态连续存在。未运行LLMServingSim请求调度、GPU计算、Combine、现代DeepEP/GIN控制或真实网卡，未作硬件校准。
+
+固定figure7_reference/1、AI40/HAI50Mb/s、阈值间pmax0.01、ECN阈值32,768/131,072B、NP50us、alpha55us、恢复55us和既有其余参数。额度1/8/1024是按完整ACK释放的软件发布额度，不等同真实SQ容量。上一轮源码核查已表明，所选单次fresh调用不能据此声称默认1024 SQ耗尽；本轮也没有改变这个判断。
+
+## 怎样避免人为安排通信时间
+
+第一轮所有根工作0ns就绪。第二轮每一份写都等待第一轮每条连接的最后工作ACK，共12项真实依赖；由实际完成回调解锁，没有填写固定开始时间。依赖发生前不预留或发布未来工作。第二轮开始时保留QP速率、alpha、恢复timer、待发通知、累计序号和nextAvail；不重建QP，不先排空控制包，也不把两次独立运行拼接。
+
+本轮只新增3次网络执行，全部首次完成，没有网络重跑、调参或扩矩阵。旧3个冷启动成功结果按输入、拓扑、协议、二进制和结果hash核对，只读作为第一轮基准。第一轮全部工作回调，以及边界前数据、端点包、速率采样和控制事件都与旧结果一致。边界同纳秒开始的新工作不混入旧前缀。
+
+## 结果：冷启动的排序发生变化
+
+全部时间为ns，第二轮耗时从共同就绪到该轮最后ACK。最后业务ACK与最终网络排空在这3个两轮条件中相同，但这不改变上一轮单窗口中两者不同的事实。
+
+| 软件额度 | 第一轮耗时 | 第二轮耗时 | 两轮总耗时 | 第二轮/第一轮 | 第二轮任意本流后续CNP前的低速TX包数 |
+|---|---:|---:|---:|---:|---:|
+{table}
+
+第一轮排序是1024、1、8；两轮总耗时排序变成1、8、1024。1024的第二轮是第一轮的{facts['deep_second_over_first']:.2f}倍。额度1两轮均无CE（拥塞标记）或CNP（拥塞通知）；8和1024第二轮分别有64和46个CE包。总CE/CNP或队列峰值不足以解释完成排序，不能只按这些总数调优。
+
+两轮、三个条件的数据与必要ACK在每个物理出口的字节完全一致；逐轮最忙出口服务下界均443,791.36ns。该下界仍然正确，但不能解释持续连接的限速和恢复等待；下界以上的差值也不等于全部可消除的优化空间。
+
+## 机制证据：第一轮留下的状态真的进入第二轮
+
+1024条件第二轮在457,910ns就绪。stream7第一包458,076ns发出，实际TX采样速率195,312,500bit/s；其第一轮仍有pending通知。476,781ns旧NP周期产生CNP，483,526ns到达源端，把状态速率降到100Mb/s。stream7整个第二轮没有任何CE包，因此这条通知可由旧pending解释；不能把所有边界后生成的CNP都叫第二轮新拥塞。该通知在旧单窗口中482,849ns到达；两轮中经过真实竞争后晚677ns，没有照搬旧反馈时间。
+
+stream7随后成为1024条件最后完成连接：第二轮最后数据TX在3,372,362ns，连续接收完成3,379,082ns，ACK在3,385,150ns。其14,464B末写早在457,910ns已发布，没有等软件额度；网络接收与ACK尾部仅6,720+6,068ns。首次TX后到最后TX的跨度包含正常发送服务、源端pacing及可能的设备竞争，不能全部写成可消除限速等待。100Mb/s是反馈处理后的状态值；第二轮实际TX采样最低147,656,250bit/s，两个口径不能混用。
+
+额度8最后完成的是stream3，第二轮第一包的实际TX速率1,181,257,610bit/s。该连接第二轮没有CE，也没有后续CNP，仍需要1,773,480ns完成第二轮，进一步说明旧控制状态和恢复在新工作中可见。全条件所有2251/2625个“本流边界后首CNP前低速包”分别对应1024/8；这是实际时间关系，不是删除反馈或重置控制器的反事实收益。
+
+下面只沿各条件最后完成连接分解第二轮，不相加其他连接的重叠等待：
+
+| 额度 | 最后完成stream | 就绪到该连接首次TX | 首次到最后TX | 最后TX到末写接收完成 | 接收到ACK |
+|---|---:|---:|---:|---:|---:|
+{chain}
+
+各行四段之和等于第二轮耗时。该分解是一条实际完成见证，不是完整资源因果图或唯一关键路径。
+
+## 核验、复现与维护记录
+
+独立检查读取四原始路由并按专家区间重新枚举，核对16,200数据包、16,200 ACK、134 CNP，共32,534个端点UID关联；核对120物理端口条件、1080份写的依赖/发布/连续接收/ACK信用、22,546条NP/RP相关控制状态及36条跨窗口连接记录。包捕获在端点，逐跳路径由固定ECMP独立重建并与物理出口计数守恒核对，不宣称已有逐交换机包抓取。每条件12条QP各只创建一次，全部正常排空，无丢包、PFC或重传。
+
+基础检查首次通过后补充末包时间分解时，检查器把“无CE连接”的空列表传给min而失败。只修正研究检查器空列表处理；失败stderr与监控保留在check-final-monitor，随后checked-chain完成独立核验。未改网络输入、平台、预算或重跑仿真。原始基础检查也保留。
+
+实验入口见仓库experiments/paper_readiness/README.md的“持久连接跨窗口”部分；本页附summary.json、verification.json、findings.json、protocol.md。检查点按成员hash保存实际输入、冷基准、三次新结果、四原件、研究/平台源码和固定runtime。大件只在易失内存盘，没有持久备份；包保留原ELF路径依赖，不是可直接跨机器执行的镜像。
+
+## 对论文方向的实际影响
+
+保留“当前功能参考中，连续状态会改变同一有限Dispatch负载的完成排序”；收缩“单窗口更深额度最快可推广持续服务”及“每轮独立仿真可代替连续执行”。本轮证实了建模必要性，经典拥塞状态延续本身不是新贡献，也不能据这3个条件宣称浅额度普遍最优。
+
+下一步优先验证真实调用之间到底空闲多久、何时真正准备好写，以及现代provider实际使用哪些连接/发布规则。只在获得独立路由、真实调用间隔和匹配NIC测量后，再检验这个效应是否仍大于链路服务量强基线，并决定是否值得设计网络优化。目前未建立现代库端到端性能基线、千卡泛化或A类论文主贡献，研究目标继续进行中。
+'''
+    (a.output/'report.md').write_text(text)
+    # Minimal dependency-free Markdown rendering for this fixed, table-heavy report.
+    blocks=[]; table_rows=[]
+    def flush():
+        if table_rows:
+            header,*body=table_rows
+            blocks.append('<div class="table"><table><thead><tr>'+''.join('<th>'+html.escape(x)+'</th>' for x in header)+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+html.escape(x)+'</td>' for x in row)+'</tr>' for row in body)+'</tbody></table></div>')
+            table_rows.clear()
+    for line in text.splitlines():
+        if line.startswith('|'):
+            cells=[x.strip() for x in line.strip('|').split('|')]
+            if all(set(x)<=set('-: ') for x in cells):continue
+            table_rows.append(cells);continue
+        flush()
+        if not line:continue
+        if line.startswith('# '):blocks.append('<h1>'+html.escape(line[2:])+'</h1>')
+        elif line.startswith('## '):blocks.append('<h2>'+html.escape(line[3:])+'</h2>')
+        else:blocks.append('<p>'+html.escape(line)+'</p>')
+    flush()
+    links=' '.join(f'<a href="{n}">{label}</a>' for n,label in [('summary.json','完整结果'),('verification.json','独立核验'),('findings.json','结论范围'),('protocol.md','执行前方法'),('report.md','Markdown原文')])
+    (a.output/'report.html').write_text('<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>持久连接跨窗口核查</title><style>body{max-width:1120px;margin:40px auto;padding:0 22px;font:17px/1.85 system-ui;color:#172b3b;background:#f7f9fc}h1{line-height:1.35}h2{margin-top:2em}p{margin:1em 0}.table{overflow:auto}table{width:100%;border-collapse:collapse;background:white;font-size:14px}td,th{padding:10px;border:1px solid #ccd7df;text-align:right}th{background:#e2edf5}a{color:#145d97;margin-right:12px}nav{padding:14px;background:#e2edf5}</style><nav>'+links+'</nav>'+''.join(blocks)+'</html>')
+    print(json.dumps(dict(report=True,output=str(a.output))))
+
+
+if __name__=='__main__':main()

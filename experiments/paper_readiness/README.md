@@ -1125,3 +1125,62 @@ underfill_stage checked 33554432 python3 "$COSIM_UNDERFILL_REPO/experiments/pape
 之后以`check_queue_underfill_delivery.py --task 本轮目录 --report 报告目录 --output 报告目录/final-check.json`
 做只读最终核验，使用task/final-monitor且仍限60秒/1GiB/2GiB/全轮128MiB。
 打包后的收据/最后任务状态由Git保存；原始大件和归档仅在易失内存盘，无持久备份，不push。
+
+## 持久连接跨窗口
+
+[执行前方法](cross_window_protocol.md)和[中文报告](../../docs/review_artifacts/cross_window_20261022/report.html)
+检验同一有限Dispatch负载重复两轮时，冷启动排序能否延续。三个条件各在一套原生ns-3中运行；
+第二轮由第一轮每连接末写的真实ACK触发，保留12条QP和拥塞状态。
+重复的是四个已见请求的同一窗口，不是独立输入、真实连续推理、现代GIN或硬件校准。
+
+主仓库根目录执行，WORK须不存在；BASE为上一轮queue-underfill完整目录，或其归档恢复的raw目录。
+它须含3份已核hash冷结果、input/observed、analysis/summary.json与run/execution.json；
+四原件仍按manifest相对路径放置。BACKEND为同一已验证二进制，原ELF依赖路径须存在。
+
+```bash
+export COSIM_CROSS_REPO=/home/lry/moe-ub-cosim
+export COSIM_CROSS_WORK=/dev/shm/my-cross-window
+export COSIM_CROSS_BASE=/absolute/path/queue-underfill
+export COSIM_CROSS_BACKEND=/absolute/path/ns3.42-moe-rdma-stream-probe
+export COSIM_CROSS_PLATFORM=/absolute/path/dcqcn-reference/checkpoint
+export PYTHONPATH="$COSIM_CROSS_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_CROSS_WORK"
+cross_stage() {
+  local cross_name="$1"
+  local cross_bytes="$2"
+  shift 2
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_CROSS_WORK/$cross_name-monitor" \
+    --artifact-root "$COSIM_CROSS_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes "$cross_bytes" --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+cross_stage input 33554432 python3 experiments/paper_readiness/cross_window.py prepare \
+  --baseline "$COSIM_CROSS_BASE" --manifest data/moe-trace-small/manifest.json --output "$COSIM_CROSS_WORK/input"
+cross_stage run 67108864 python3 experiments/paper_readiness/cross_window.py run \
+  --observed "$COSIM_CROSS_WORK/input/observed" --backend "$COSIM_CROSS_BACKEND" --output "$COSIM_CROSS_WORK/run"
+cross_stage analysis 67108864 python3 experiments/paper_readiness/cross_window.py analyze \
+  --observed "$COSIM_CROSS_WORK/input/observed" --run "$COSIM_CROSS_WORK/run" --output "$COSIM_CROSS_WORK/analysis"
+cross_stage check-chain 67108864 python3 experiments/paper_readiness/check_cross_window.py \
+  --task "$COSIM_CROSS_WORK" --output "$COSIM_CROSS_WORK/checked-chain"
+cross_stage review 67108864 python3 experiments/paper_readiness/build_cross_window_review.py \
+  --task "$COSIM_CROSS_WORK" --output "$COSIM_CROSS_WORK/review"
+cross_stage deps 67108864 bash scripts/check_deps.sh
+```
+
+失败立即停止，不自动重试或增大预算。runner最多3次新增网络，任一失败后保留前缀并停止剩余条件。
+分析与checker可记录未完成，但固定历史报告器只接收3次完整成功且与冷前缀一致的结果。
+每命令60秒/RSS1GiB/地址2GiB、仿真5ms/终态16MiB、端点100000、速率/控制各20000；
+准备/分析/check单阶段32MiB、runner64MiB、累计受监控300秒及128MiB，卷预留8GiB。
+上例artifact-root累计包含WORK，64MiB是该阶段的累计磁盘检查，并未扩大各子命令限制。
+
+归档与最后检查分别在相同60秒/1GiB/2GiB下执行，artifact-root为WORK、总限128MiB：
+`package_cross_window.py --task WORK --report WORK/review --platform-checkpoint PLATFORM`；
+`check_cross_window_delivery.py --task WORK --report WORK/review --output WORK/review/final-check.json`。
+监控名分别package-monitor和final-monitor。归档先逐hash核验648项已有平台成员，再嵌入压缩平台包，
+连同输入/新旧结果/四原件/源码/二进制及实际库，成员≤96MiB、压缩≤48MiB。
+最后可把review的小型文档复制到Git报告目录，大件仅在易失内存盘，无持久备份。
+
+历史check-final-monitor保留的是补充关键连接分析时min空列表的检查器错误；当前代码已修，
+从新目录执行无需制造该失败，打包与最终检查只在存在该监控时核对其明确原因，不要求新执行失败。

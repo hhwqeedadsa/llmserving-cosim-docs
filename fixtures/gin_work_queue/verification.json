@@ -8,7 +8,7 @@
         "--version"
       ],
       "exitcode": 0,
-      "wall_seconds": 0.004367366433143616
+      "wall_seconds": 0.003534482792019844
     },
     {
       "argv": [
@@ -21,17 +21,17 @@
         "-I/home/lry/moe-ub-cosim/backend",
         "/home/lry/moe-ub-cosim/tests/unit/gin_work_queue_test.cc",
         "-o",
-        "/home/lry/moe-ub-cosim/runs/gin_work_queue_final_20261022/gin-work-queue-test"
+        "/dev/shm/moe-gin-batch-final-check-20261022/gin-work-queue-test"
       ],
       "exitcode": 0,
-      "wall_seconds": 0.7664676662534475
+      "wall_seconds": 1.0167945139110088
     },
     {
       "argv": [
-        "/home/lry/moe-ub-cosim/runs/gin_work_queue_final_20261022/gin-work-queue-test"
+        "/dev/shm/moe-gin-batch-final-check-20261022/gin-work-queue-test"
       ],
       "exitcode": 0,
-      "wall_seconds": 0.00614110566675663
+      "wall_seconds": 0.011758245527744293
     }
   ],
   "network_execution": false,
@@ -44,18 +44,19 @@
     "output_bytes": 8388608
   },
   "sources": {
-    "backend/rdma/gin_work_queue.hh": "97186f80c0552f86500f5c1a02dcc28aba48662a3b562be8a9138e06aa3849fd",
-    "tests/unit/gin_work_queue_test.cc": "48de0c51216379cf89848def9b012b79eb1fe5b94e55ba7be1ea5b5f48919569"
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "tests/unit/gin_work_queue_test.cc": "d7958ac8b5b9f267c3e5b473075f8a9e1d2c10b8117c0bffbe5c8d3b09d9d9c2"
   },
   "checks": {
     "passed": true,
-    "checks": 3241,
+    "checks": 4976,
     "explored_states": 49,
+    "batch_explored_states": 122,
     "appended_work": 1024,
     "network_execution": false,
     "timed": false
   },
-  "wall_seconds": 0.7802250608801842,
-  "peak_child_rss_kib": 107744,
-  "output_bytes_before_manifest": 155425
+  "wall_seconds": 1.0349485352635384,
+  "peak_child_rss_kib": 121044,
+  "output_bytes_before_manifest": 219442
 }

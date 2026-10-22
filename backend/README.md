@@ -4,7 +4,9 @@
 
 独立头文件[gin_work_queue.hh](rdma/gin_work_queue.hh)提供未接入网络的C++17资源状态。它将取得ticket、槽可写、描述符准备、doorbell发布、NIC消费和累计CQ完成分开；完成前缀限制环形槽复用，flush保存调用时的reserved前缀，队列空闲时可继续追加。`Reserve(work_id, operation)`要求队列内work_id唯一，同一应用operation允许拆成多个工作。调用方只能在应用依赖实际满足后reserve，并须用provider真实完成回调推进CQ；该类没有远端数据真值、时钟或调度器，不会自动发包或唤醒GPU消费者。
 
-深度显式取1—4096内的2的幂，单对象最多记录65,536个工作，额度耗尽明确拒绝。每个核心work表示一个槽条目；可变长度描述符的连续多槽reservation尚未实现，不能把任意put API逐个映射成单槽。上述上限是当前功能检查预算，不是硬件规格。`ResolveGinContext`按声明的连接数分解应用索引，并用传入设备表映射本地设备；它不探测NIC、验证拓扑或创建物理QP。该模块没有接入`Fabric`，不表示在线QP复用、原子协议或现代DeepEP已实现。接口阶段与功能复核见[独立检查](../fixtures/gin_work_queue/README.md)。下面原生服务保持现有行为。
+`ReserveBatch(vector<WorkSpec>)`在一次reservation中取得连续多个WQE条目，每条仍有独立work_id。整段末尾槽满足CQ复用条件后才允许准备该段任意条目；发布可以覆盖多个完整reservation，但不能截在其中间。完成前缀可以逐WQE推进，不将整个应用operation强制视为一次完成。这里只支持显式前缀发布与正常availability检查，不实现CPU_PROXY_FREE_FLOW或SKIP_AVAILABILITY_CHECK；也不由字节数猜测WQE数、WQEBB大小或包数。
+
+深度显式取1—4096内的2的幂，单对象最多记录65,536个工作；每次reservation长度1—depth，超出明确拒绝。后一限制是当前支持边界，避免整段等待自身尚未发布前缀；不是provider或硬件上限的声明。`Reserve`等价单条`ReserveBatch`，旧调用保持其行为。`ResolveGinContext`按声明的连接数分解应用索引，并用传入设备表映射本地设备；它不探测NIC、验证拓扑或创建物理QP。该模块没有接入`Fabric`，不表示在线QP复用、原子协议或现代DeepEP已实现。接口阶段与功能复核见[独立检查](../fixtures/gin_work_queue/README.md)。下面原生服务保持现有行为。
 
 ## 现有原生服务扩展
 

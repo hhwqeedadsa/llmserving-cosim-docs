@@ -1,0 +1,84 @@
+{
+  "nccl_commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+  "scope": "source-derived normal availability and explicit-prefix reservation rules; no compiled provider validation",
+  "sources": [
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+      "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "excerpts": [
+        {
+          "meaning": "reserve range",
+          "occurrences": [
+            {
+              "line": 117,
+              "text": "doca_gpu_dev_verbs_atomic_add<uint64_t, resource_sharing_mode>(&qp->sq_rsvd_index, count);"
+            }
+          ]
+        },
+        {
+          "meaning": "wait range tail",
+          "occurrences": [
+            {
+              "line": 120,
+              "text": "qp, wqe_idx + count - 1);"
+            }
+          ]
+        },
+        {
+          "meaning": "range readiness",
+          "occurrences": [
+            {
+              "line": 240,
+              "text": "qp->sq_ready_index, from_wqe_idx, to_wqe_idx);"
+            }
+          ]
+        },
+        {
+          "meaning": "free flow exception",
+          "occurrences": [
+            {
+              "line": 237,
+              "text": "doca_gpu_dev_verbs_mark_wqes_ready_free_flow(qp, from_wqe_idx, to_wqe_idx, code_opt);"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6",
+      "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "excerpts": [
+        {
+          "meaning": "put range",
+          "occurrences": [
+            {
+              "line": 68,
+              "text": "cq_type>(qp, num_chunks, code_opt);"
+            },
+            {
+              "line": 611,
+              "text": "cq_type>(qp, num_chunks, code_opt);"
+            }
+          ]
+        },
+        {
+          "meaning": "put signal range",
+          "occurrences": [
+            {
+              "line": 313,
+              "text": "cq_type>(qp, num_chunks + 1, code_opt);"
+            },
+            {
+              "line": 607,
+              "text": "cq_type>(qp, num_chunks + 1, code_opt);"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

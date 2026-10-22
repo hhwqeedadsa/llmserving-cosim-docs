@@ -27,11 +27,14 @@ inline GinContextAssignment ResolveGinContext(uint32_t index, uint32_t requested
 
 // Untimed resource core for ONE persistent peer/context work queue. Not linked
 // into Fabric yet. No packet, atomic, remote visibility or CQE format is modeled.
-// A caller may reserve ONLY when application dependencies have actually fired;
+// Explicit-prefix publication model, not CPU_PROXY_FREE_FLOW or SKIP_AVAILABILITY_CHECK.
+// Batch reservations cover contiguous WQE entries, NOT descriptor bytes or
+// packets. A caller may reserve ONLY when dependencies have actually fired;
 // the queue has no access to future plans or remote/evaluation state.
 class GinWorkQueue {
  public:
   struct Work { uint64_t ticket, work_id, operation; };
+  struct WorkSpec { uint64_t work_id, operation; };
   struct State {
     uint64_t reserved, prepared_prefix, published, consumed, completed;
     bool closed;
@@ -45,18 +48,33 @@ class GinWorkQueue {
   }
 
   uint64_t Reserve(uint64_t work_id, uint64_t operation) {
+    return ReserveBatch({{work_id, operation}});
+  }
+
+  // Provider source reserves count entries with one atomic add, then waits
+  // until the LAST reserved slot is available before writing any of the range.
+  // This bounded core rejects ranges larger than depth: waiting for that entire
+  // range without posting its own prefix could otherwise self-deadlock.
+  uint64_t ReserveBatch(const std::vector<WorkSpec>& entries) {
     Open();
-    if (work_.size() >= maximum_ || seen_.count(work_id))
-      throw std::invalid_argument("GIN reservation budget exceeded or work ID repeated");
+    if (entries.empty() || entries.size() > depth_ || entries.size() > maximum_ - work_.size())
+      throw std::invalid_argument("GIN reservation range exceeds depth or lifetime budget");
+    std::unordered_set<uint64_t> incoming;
+    for (const auto& entry : entries)
+      if (seen_.count(entry.work_id) || !incoming.insert(entry.work_id).second)
+        throw std::invalid_argument("GIN work ID repeated within queue or reservation");
     const uint64_t ticket = work_.size();
-    work_.push_back({work_id, operation, false});
-    seen_.insert(work_id);
+    const uint64_t end = ticket + entries.size();
+    for (const auto& entry : entries) {
+      work_.push_back({entry.work_id, entry.operation, end, false});
+      seen_.insert(entry.work_id);
+    }
     return ticket;
   }
 
   bool CanPrepare(uint64_t ticket) const {
     return !closed_ && ticket < work_.size() && !work_[ticket].prepared &&
-           ticket < completed_ + depth_;
+           work_[ticket].reservation_end <= completed_ + depth_;
   }
 
   void Prepare(uint64_t ticket) {
@@ -72,8 +90,9 @@ class GinWorkQueue {
   // Preparation alone never publishes work or consumes NIC resources.
   void PublishThrough(uint64_t exclusive) {
     Open();
-    if (exclusive < published_ || exclusive > prepared_)
-      throw std::logic_error("GIN publication cannot regress or cross an unprepared slot");
+    if (exclusive < published_ || exclusive > prepared_ ||
+        (exclusive && work_[exclusive - 1].reservation_end != exclusive))
+      throw std::logic_error("GIN publication cannot regress, cross unprepared work or split a reservation");
     published_ = exclusive;
   }
 
@@ -114,7 +133,7 @@ class GinWorkQueue {
   }
 
  private:
-  struct Entry { uint64_t work_id, operation; bool prepared; };
+  struct Entry { uint64_t work_id, operation, reservation_end; bool prepared; };
   void Open() const {
     if (closed_) throw std::logic_error("GIN queue is closed");
   }

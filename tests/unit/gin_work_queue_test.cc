@@ -9,6 +9,7 @@ using moe_rdma::GinWorkQueue;
 using moe_rdma::ResolveGinContext;
 static unsigned checks = 0;
 static unsigned explored_states = 0;
+static unsigned batch_explored_states = 0;
 
 static void Check(bool value) {
   if (!value) throw std::runtime_error("GIN work queue check failed");
@@ -146,6 +147,105 @@ static void LongAppend() {
   q.Close();
 }
 
+static void BatchReservation() {
+  GinWorkQueue q(4, 12);
+  Check(q.ReserveBatch({{1, 9}, {2, 9}, {3, 9}}) == 0);
+  const auto flush = q.FlushTarget();
+  Check(flush == 3);
+  Check(q.ReserveBatch({{4, 10}, {5, 10}}) == 3);
+  // Ticket 3 has an unused physical slot but its range also needs ticket 4,
+  // whose previous ring owner (ticket 0) is not complete yet.
+  Check(!q.CanPrepare(3) && !q.CanPrepare(4));
+  Reject([&] { q.Prepare(3); });
+  q.Prepare(0);
+  Reject([&] { q.PublishThrough(1); }); // No partial publication of a range.
+  q.Prepare(2);q.Prepare(1);q.PublishThrough(3);
+  for (unsigned i=0;i<3;++i) Check(q.ConsumePublished()->ticket == i);
+  Check(!q.CanPrepare(3)); // NIC consumption is not CQ feedback.
+  q.CompleteThrough(1);
+  Check(q.CanPrepare(3) && q.CanPrepare(4));
+  q.Prepare(4);q.Prepare(3);q.PublishThrough(5);
+  Check(q.ConsumePublished()->work_id == 4);
+  Check(q.ConsumePublished()->work_id == 5);
+  q.CompleteThrough(3);
+  Check(q.FlushComplete(flush) && !q.Drained());
+  q.CompleteThrough(5);Check(q.Drained());
+  Check(q.ReserveBatch({{6, 11}, {7, 11}, {8, 11}, {9, 11}}) == 5);
+  for (unsigned i=5;i<9;++i) q.Prepare(i);
+  q.PublishThrough(9);
+  for (unsigned i=5;i<9;++i) Check(q.ConsumePublished()->ticket == i);
+  q.CompleteThrough(9);Check(q.Drained());
+  const auto before = q.Snapshot();
+  Reject([&] { q.ReserveBatch({}); });
+  Reject([&] { q.ReserveBatch({{10,1},{11,1},{12,1},{13,1},{14,1}}); });
+  Reject([&] { q.ReserveBatch({{10,1},{10,1}}); });
+  Reject([&] { q.ReserveBatch({{10,1},{1,1}}); });
+  Check(q.Snapshot().reserved == before.reserved); // Rejections change nothing.
+  Check(q.ReserveBatch({{10,12},{11,12},{12,12}}) == 9);
+  Reject([&] { q.ReserveBatch({{13,1}}); });
+}
+
+// Independent per-slot lifecycle plus previous physical owner oracle. Ranges
+// [0,2), [2,3), [3,5) use a four-slot ring, including a wrapping reservation.
+static void ExploreBatchInterleavings() {
+  struct Node { GinWorkQueue queue; std::array<unsigned, 5> stage; };
+  const std::array<unsigned,4> boundaries{0,2,3,5};
+  std::deque<Node> todo;
+  std::set<std::array<unsigned,5>> seen;
+  auto add = [&](Node node) {
+    if (seen.insert(node.stage).second) todo.push_back(std::move(node));
+  };
+  add({GinWorkQueue(4,5),{0,0,0,0,0}});
+  while (!todo.empty()) {
+    auto node=todo.front();todo.pop_front();++batch_explored_states;
+    const auto prefix = [&](unsigned threshold) {
+      uint64_t n=0;
+      for (auto stage:node.stage) { if (stage<threshold) break; ++n; }
+      return n;
+    };
+    const auto state=node.queue.Snapshot();
+    Check(state.reserved==prefix(1) && state.prepared_prefix==prefix(2));
+    Check(state.published==prefix(3) && state.consumed==prefix(4) && state.completed==prefix(5));
+    Check(node.queue.Drained()==(prefix(1)==prefix(5)));
+    for (uint64_t target=0;target<=prefix(1);++target)
+      Check(node.queue.FlushComplete(target)==(target<=prefix(5)));
+    for (unsigned range=0;range<3;++range) {
+      const auto begin=boundaries[range],end=boundaries[range+1];
+      bool all_available=true;
+      for (unsigned i=begin;i<end;++i)
+        if (i>=4 && node.stage[i-4]!=5) all_available=false;
+      for (unsigned i=begin;i<end;++i) {
+        const bool writable=node.stage[i]==1 && all_available;
+        Check(node.queue.CanPrepare(i)==writable);
+        if (writable) {
+          auto next=node;next.queue.Prepare(i);next.stage[i]=2;add(std::move(next));
+        }
+      }
+      if (prefix(1)==begin) {
+        auto next=node;std::vector<GinWorkQueue::WorkSpec> entries;
+        for (unsigned i=begin;i<end;++i) { entries.push_back({100+i,range});next.stage[i]=1; }
+        Check(next.queue.ReserveBatch(entries)==begin);add(std::move(next));
+      }
+      if (end>prefix(3) && end<=prefix(2)) {
+        auto next=node;next.queue.PublishThrough(end);
+        for (uint64_t i=prefix(3);i<end;++i) next.stage[i]=3;
+        add(std::move(next));
+      }
+    }
+    if (prefix(4)<prefix(3)) {
+      auto next=node;const auto work=next.queue.ConsumePublished();
+      Check(work && work->work_id==100+prefix(4));
+      next.stage[prefix(4)]=4;add(std::move(next));
+    }
+    for (uint64_t end=prefix(5)+1;end<=prefix(4);++end) {
+      auto next=node;next.queue.CompleteThrough(end);
+      for (uint64_t i=prefix(5);i<end;++i) next.stage[i]=5;
+      add(std::move(next));
+    }
+  }
+  Check(seen.count({5,5,5,5,5})==1);
+}
+
 // An independent per-work lifecycle oracle. It has no queue prefix counters:
 // slot reuse is permitted only when the prior owner of that ring slot finished.
 // Explore all legal event interleavings for three works and a two-slot ring.
@@ -208,8 +308,9 @@ static void ExploreInterleavings() {
 
 int main() {
   SlotAndPublication();FlushAndIdleReuse();IsolatedQueuesAndBinding();InvalidAndBudget();LongAppend();
-  ExploreInterleavings();
+  ExploreInterleavings();BatchReservation();ExploreBatchInterleavings();
   std::cout << "{\"passed\":true,\"checks\":" << checks
             << ",\"explored_states\":" << explored_states
+            << ",\"batch_explored_states\":" << batch_explored_states
             << ",\"appended_work\":1024,\"network_execution\":false,\"timed\":false}\n";
 }

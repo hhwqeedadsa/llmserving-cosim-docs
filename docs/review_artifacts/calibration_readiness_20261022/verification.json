@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "recorded_commands_checked": 9,
+  "gpu_csv_rows_checked": 6,
+  "topology_relationships_checked": 100,
+  "sysfs_snapshot_ports_checked": 4,
+  "python_metadata_environments": 2,
+  "sysfs_is_recorded_snapshot_not_current_live_device_access": true,
+  "complete_perftest_help_exit_one_preserved": true,
+  "source_requirements_excerpts_checked": 4,
+  "html_links": 7,
+  "browser_visual_acceptance": false,
+  "input_summary_sha256": "c0f0695d5a4d40c358f5bf92fb28a35e8c54129322b5a9a1a71225b75d202da0",
+  "input_commands_sha256": "bfe28cbf68b53832adb2c9f6b409807ca4e0f1ec7aad3b3a99ae2e798bc93208",
+  "script_sha256": {
+    "experiments/paper_readiness/inspect_calibration_environment.py": "1cbadff05321a3266b245883d04116b01755a6fafb342e942209dfc7e7d500a5",
+    "experiments/paper_readiness/review_calibration_readiness.py": "66bef29683798f37fdb1f9e577bc76cf286bd53cf6ca84d2c462dbe1d4886b97"
+  },
+  "no_hardware_benchmark_evidence": true,
+  "network_execution": false,
+  "goal_complete": false
+}

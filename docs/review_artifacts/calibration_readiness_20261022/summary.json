@@ -1,0 +1,363 @@
+{
+  "schema_version": "moe-calibration-readiness/1",
+  "state": "read_only_inspection_completed",
+  "inspected_utc": "2026-10-22T16:16:02.086213+00:00",
+  "gpus": [
+    {
+      "index": 0,
+      "name": "NVIDIA A100 80GB PCIe",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    },
+    {
+      "index": 1,
+      "name": "NVIDIA A100 80GB PCIe",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    },
+    {
+      "index": 2,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    },
+    {
+      "index": 3,
+      "name": "NVIDIA A100-SXM4-80GB",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    },
+    {
+      "index": 4,
+      "name": "NVIDIA A100 80GB PCIe",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    },
+    {
+      "index": 5,
+      "name": "NVIDIA A100 80GB PCIe",
+      "compute_capability": "8.0",
+      "memory_mib": 81920,
+      "driver_version": "610.43.02"
+    }
+  ],
+  "gpu_nic_relationships": {
+    "GPU0": {
+      "GPU0": "X",
+      "GPU1": "PXB",
+      "GPU2": "NODE",
+      "GPU3": "SYS",
+      "GPU4": "SYS",
+      "GPU5": "SYS",
+      "NIC0": "SYS",
+      "NIC1": "SYS",
+      "NIC2": "SYS",
+      "NIC3": "SYS"
+    },
+    "GPU1": {
+      "GPU0": "PXB",
+      "GPU1": "X",
+      "GPU2": "NODE",
+      "GPU3": "SYS",
+      "GPU4": "SYS",
+      "GPU5": "SYS",
+      "NIC0": "SYS",
+      "NIC1": "SYS",
+      "NIC2": "SYS",
+      "NIC3": "SYS"
+    },
+    "GPU2": {
+      "GPU0": "NODE",
+      "GPU1": "NODE",
+      "GPU2": "X",
+      "GPU3": "SYS",
+      "GPU4": "SYS",
+      "GPU5": "SYS",
+      "NIC0": "SYS",
+      "NIC1": "SYS",
+      "NIC2": "SYS",
+      "NIC3": "SYS"
+    },
+    "GPU3": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "X",
+      "GPU4": "NODE",
+      "GPU5": "NODE",
+      "NIC0": "PIX",
+      "NIC1": "PIX",
+      "NIC2": "PXB",
+      "NIC3": "PXB"
+    },
+    "GPU4": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "NODE",
+      "GPU4": "X",
+      "GPU5": "PXB",
+      "NIC0": "NODE",
+      "NIC1": "NODE",
+      "NIC2": "NODE",
+      "NIC3": "NODE"
+    },
+    "GPU5": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "NODE",
+      "GPU4": "PXB",
+      "GPU5": "X",
+      "NIC0": "NODE",
+      "NIC1": "NODE",
+      "NIC2": "NODE",
+      "NIC3": "NODE"
+    },
+    "NIC0": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "PIX",
+      "GPU4": "NODE",
+      "GPU5": "NODE",
+      "NIC0": "X",
+      "NIC1": "PIX",
+      "NIC2": "PXB",
+      "NIC3": "PXB"
+    },
+    "NIC1": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "PIX",
+      "GPU4": "NODE",
+      "GPU5": "NODE",
+      "NIC0": "PIX",
+      "NIC1": "X",
+      "NIC2": "PXB",
+      "NIC3": "PXB"
+    },
+    "NIC2": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "PXB",
+      "GPU4": "NODE",
+      "GPU5": "NODE",
+      "NIC0": "PXB",
+      "NIC1": "PXB",
+      "NIC2": "X",
+      "NIC3": "PIX"
+    },
+    "NIC3": {
+      "GPU0": "SYS",
+      "GPU1": "SYS",
+      "GPU2": "SYS",
+      "GPU3": "PXB",
+      "GPU4": "NODE",
+      "GPU5": "NODE",
+      "NIC0": "PXB",
+      "NIC1": "PXB",
+      "NIC2": "PIX",
+      "NIC3": "X"
+    }
+  },
+  "gpu_nvlink_pair_observed": false,
+  "sysfs_rdma_devices": [
+    {
+      "device": "mlx5_0",
+      "ports": [
+        {
+          "port": "1",
+          "state": "1: DOWN",
+          "phys_state": "3: Disabled",
+          "rate": "40 Gb/sec (4X QDR)",
+          "link_layer": "Ethernet",
+          "active": false,
+          "active_rate_observed": null
+        }
+      ]
+    },
+    {
+      "device": "mlx5_1",
+      "ports": [
+        {
+          "port": "1",
+          "state": "1: DOWN",
+          "phys_state": "3: Disabled",
+          "rate": "40 Gb/sec (4X QDR)",
+          "link_layer": "Ethernet",
+          "active": false,
+          "active_rate_observed": null
+        }
+      ]
+    },
+    {
+      "device": "mlx5_2",
+      "ports": [
+        {
+          "port": "1",
+          "state": "1: DOWN",
+          "phys_state": "3: Disabled",
+          "rate": "40 Gb/sec (4X QDR)",
+          "link_layer": "Ethernet",
+          "active": false,
+          "active_rate_observed": null
+        }
+      ]
+    },
+    {
+      "device": "mlx5_3",
+      "ports": [
+        {
+          "port": "1",
+          "state": "1: DOWN",
+          "phys_state": "3: Disabled",
+          "rate": "40 Gb/sec (4X QDR)",
+          "link_layer": "Ethernet",
+          "active": false,
+          "active_rate_observed": null
+        }
+      ]
+    }
+  ],
+  "uverbs_nodes": 0,
+  "verbs_hcas": 0,
+  "tools": {
+    "nvcc": {
+      "found_in_PATH": false,
+      "exitcode": null,
+      "version_text": ""
+    },
+    "ib_write_bw": {
+      "found_in_PATH": true,
+      "exitcode": 1,
+      "version_text": "Version: 6.20",
+      "help_output_recognized": true,
+      "help_advertises_use_cuda": false
+    },
+    "ib_atomic_bw": {
+      "found_in_PATH": true,
+      "exitcode": 1,
+      "version_text": "Version: 6.20"
+    }
+  },
+  "python_environments": [
+    {
+      "environment": 0,
+      "metadata": {
+        "torch": null,
+        "nvidia-nccl-cu12": null,
+        "nvidia-nccl-cu13": null
+      },
+      "metadata_read_succeeded": true
+    },
+    {
+      "environment": 1,
+      "metadata": {
+        "torch": null,
+        "nvidia-nccl-cu12": null,
+        "nvidia-nccl-cu13": null
+      },
+      "metadata_read_succeeded": true
+    }
+  ],
+  "modern_requirements": {
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "readme_sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+    "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+    "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/README.md",
+    "excerpts": [
+      {
+        "first_line": 49,
+        "text": "- NVIDIA Hopper or newer GPUs"
+      },
+      {
+        "first_line": 50,
+        "text": "- CUDA Toolkit 13.1 and above for DeepJIT compilation, with support for the target GPU"
+      },
+      {
+        "first_line": 52,
+        "text": "- PyTorch 2.10 and above, with CUDA support"
+      },
+      {
+        "first_line": 53,
+        "text": "- NCCL 2.32.3 and above"
+      }
+    ]
+  },
+  "gates": [
+    {
+      "requirement": "visible Hopper-or-newer candidate GPU",
+      "state": "failed",
+      "evidence": {
+        "eligible_indices": [],
+        "observed_gpus": 6
+      }
+    },
+    {
+      "requirement": "usable RDMA device interface",
+      "state": "failed",
+      "evidence": {
+        "uverbs_nodes": 0,
+        "enumerated_hcas": 0
+      }
+    },
+    {
+      "requirement": "active RDMA port",
+      "state": "failed",
+      "evidence": {
+        "active_ports": 0
+      }
+    },
+    {
+      "requirement": "CUDA Toolkit >=13.1 available in inspected PATH",
+      "state": "failed",
+      "evidence": {
+        "nvcc_found_in_PATH": false
+      }
+    },
+    {
+      "requirement": "PyTorch >=2.10 with CUDA in selected Python",
+      "state": "failed",
+      "evidence": [
+        {
+          "environment": 0,
+          "metadata": {
+            "torch": null,
+            "nvidia-nccl-cu12": null,
+            "nvidia-nccl-cu13": null
+          },
+          "metadata_read_succeeded": true
+        },
+        {
+          "environment": 1,
+          "metadata": {
+            "torch": null,
+            "nvidia-nccl-cu12": null,
+            "nvidia-nccl-cu13": null
+          },
+          "metadata_read_succeeded": true
+        }
+      ]
+    },
+    {
+      "requirement": "fixed NCCL/provider loaded build and second-node reachability",
+      "state": "unknown",
+      "evidence": "Package metadata, driver version and a sysfs rate do not prove provider/runtime identity or a reachable peer."
+    }
+  ],
+  "modern_network_calibration_ready": false,
+  "any_benchmark_or_traffic_executed": false,
+  "cuda_context_created": false,
+  "rdma_context_created": false,
+  "dependency_changes": false,
+  "scope": "Only this process/container view at capture time; not total cluster inventory.",
+  "wall_seconds": 1.6001108642667532
+}

@@ -61,6 +61,8 @@
 
 现代窗口增量已实现：公开`modern-deepep-window-replay`将已解析操作映射到共享应用注册区和独立provider信号域，检查源读lease、跨epoch写覆盖、计数消费清零与滚动signal/shadow。12份固定源码身份及原始结构体宿主ABI核对，workspace结构15,831,168B/分配16MiB；不是CUDA构建或显存测量。24项相关单元检查、新cwd的12条CLI/5次拒绝及旧计划/事件回归通过，详见[窗口范围与验收](../../fixtures/modern_windows/README.md)。影子状态没有接收真实负载，token数值、GPU内存序与完整buffer寿命仍未验证，不构成现代性能基线。
 
-当前下一步：将现代窗口及事件与真实传输负载和provider回调相连，先明确self-peer GIN的资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。设备信息仍待原询问回复，不假定可用硬件。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
+实机校准条件已作只读核查：当前进程可见6张A100 80GB/SM8.0，无Hopper候选；sysfs所见4个mlx5端口Down/Disabled，verbs枚举0 HCA且无uverbs节点。当前PATH无nvcc，两个明确选择的Python无torch/NCCL分发元数据。没有创建GPU/RDMA上下文、发送流量或改变配置。固定现代README要求Hopper+及对应CUDA/PyTorch/NCCL；已有A100测量不能冒充该分支校准。报告与后续判别实验见[校准条件HTML](../review_artifacts/calibration_readiness_20261022/report.html)。环境只读脚本可独立重用，仍不证明性能或论文贡献。
+
+当前下一步：将现代窗口及事件与真实传输负载和provider回调相连，先明确self-peer GIN的资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。当前可见硬件不满足现代网络校准条件，其他机器及第二节点仍未知，不假定具备。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

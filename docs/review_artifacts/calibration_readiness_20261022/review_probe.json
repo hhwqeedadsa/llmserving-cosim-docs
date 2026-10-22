@@ -1,0 +1,49 @@
+{
+  "schema_version": "moe-ub-host-probe/1",
+  "command": [
+    "python3",
+    "experiments/paper_readiness/review_calibration_readiness.py",
+    "--run",
+    "/dev/shm/moe-calibration-readiness-final-20261022",
+    "--output",
+    "docs/review_artifacts/calibration_readiness_20261022",
+    "--checkpoint",
+    "runs/calibration_readiness_checkpoint_20261022"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "started_utc": "2026-10-22T16:22:29.642333+00:00",
+  "limits": {
+    "sampled_group_rss_bytes": 1073741824,
+    "per_process_address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "wall_seconds": 60.0
+  },
+  "peak_sampled_group_rss_bytes": 7442432,
+  "peak_sampled_processes": 1,
+  "status": "completed",
+  "workload_semantics_validated": false,
+  "artifact_roots": [
+    "/dev/shm/moe-calibration-review-probe-20261022",
+    "/home/lry/moe-ub-cosim/runs/calibration_readiness_checkpoint_20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/calibration_readiness_20261022"
+  ],
+  "peak_sampled_artifact_bytes": 90112,
+  "min_free_bytes": 8589934592,
+  "rss_scope": "owned_process_tree_including_detached_descendants",
+  "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+  "disk_sample_interval_seconds": 1.0,
+  "peak_sampled_artifact_apparent_bytes": 67805,
+  "peak_sampled_artifact_allocated_bytes": 90112,
+  "process_group": 1681983,
+  "child_exit_code": 0,
+  "remaining_live_group_pids": [],
+  "ended_utc": "2026-10-22T16:22:29.770549+00:00",
+  "wall_seconds": 0.12821727991104126,
+  "max_waited_child_rss_kib": 18616,
+  "artifact_bytes_before_report": 542,
+  "aggregate_artifact_bytes_before_report": 90112,
+  "aggregate_artifact_usage_before_report": {
+    "apparent_bytes": 67805,
+    "allocated_bytes": 90112
+  }
+}

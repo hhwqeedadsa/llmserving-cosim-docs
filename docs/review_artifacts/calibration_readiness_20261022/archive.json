@@ -1,0 +1,128 @@
+{
+  "path": "runs/calibration_readiness_checkpoint_20261022/checkpoint.tar.gz",
+  "sha256": "fa4149aa5b1b391ce11e99a69535d9221dd118ae476857227cc4832fea53e8c1",
+  "bytes": 42594,
+  "verified_files": 30,
+  "files": {
+    "saved_run/summary.json": {
+      "bytes": 8405,
+      "sha256": "c0f0695d5a4d40c358f5bf92fb28a35e8c54129322b5a9a1a71225b75d202da0"
+    },
+    "saved_run/8.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/8.stdout": {
+      "bytes": 68,
+      "sha256": "28d22340773837a6afab7329441b533a7ce15b52867678db376f38424a59a86b"
+    },
+    "saved_run/7.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/7.stdout": {
+      "bytes": 68,
+      "sha256": "28d22340773837a6afab7329441b533a7ce15b52867678db376f38424a59a86b"
+    },
+    "saved_run/6.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/6.stdout": {
+      "bytes": 6791,
+      "sha256": "553d4c765c248e7cac9b01814b4868611c56e016182828696ba091e75ad43104"
+    },
+    "saved_run/5.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/5.stdout": {
+      "bytes": 14,
+      "sha256": "839d9aae776e607f96703a010b3ee6b0e0e501def2d3af59b3ae0a4aa4591d40"
+    },
+    "saved_run/4.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/4.stdout": {
+      "bytes": 14,
+      "sha256": "839d9aae776e607f96703a010b3ee6b0e0e501def2d3af59b3ae0a4aa4591d40"
+    },
+    "saved_run/2.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/2.stdout": {
+      "bytes": 15,
+      "sha256": "58f1eef46b1902f8089cf65944ffd0a03017bacd03aa066abab222fad7ef312f"
+    },
+    "saved_run/1.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/1.stdout": {
+      "bytes": 1320,
+      "sha256": "7fab17bbe61b5c2003ed5e14cefc2181fbcac7c1ea96192fc0645e4409a40d8a"
+    },
+    "saved_run/commands.json": {
+      "bytes": 2300,
+      "sha256": "bfe28cbf68b53832adb2c9f6b409807ca4e0f1ec7aad3b3a99ae2e798bc93208"
+    },
+    "saved_run/0.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "saved_run/0.stdout": {
+      "bytes": 288,
+      "sha256": "c868cbda25a1f23e135abf59b502e5aa9ff3a76bb7b614abbabadc50887622ea"
+    },
+    "docs/review_artifacts/calibration_readiness_20261022/summary.json": {
+      "bytes": 8405,
+      "sha256": "c0f0695d5a4d40c358f5bf92fb28a35e8c54129322b5a9a1a71225b75d202da0"
+    },
+    "docs/review_artifacts/calibration_readiness_20261022/report.html": {
+      "bytes": 10399,
+      "sha256": "d0633a14cbef4091f3667993629061f7db9fd146fc4d347ec47b6ffdd9f3bbb3"
+    },
+    "docs/review_artifacts/calibration_readiness_20261022/verification.json": {
+      "bytes": 1008,
+      "sha256": "eef8e60d85888a2af451c4a74708cf14c12f12a31c00a1fd1af613f3d21afe8f"
+    },
+    "docs/reviews/现代通信校准条件与论文验证路线_20261022.md": {
+      "bytes": 8512,
+      "sha256": "55ccf573ac901ceb9d2ffb9a926400c698f6be8a6a224e1519b156ef2210884b"
+    },
+    "experiments/paper_readiness/inspect_calibration_environment.py": {
+      "bytes": 10554,
+      "sha256": "1cbadff05321a3266b245883d04116b01755a6fafb342e942209dfc7e7d500a5"
+    },
+    "experiments/paper_readiness/review_calibration_readiness.py": {
+      "bytes": 7688,
+      "sha256": "66bef29683798f37fdb1f9e577bc76cf286bd53cf6ca84d2c462dbe1d4886b97"
+    },
+    "data/research/deepep_modern_20261022/sources/README.md": {
+      "bytes": 32914,
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb"
+    },
+    "data/research/deepep_modern_20261022/ref.json": {
+      "bytes": 334,
+      "sha256": "6fee9f344dc2f3dee32f7b87ab5aaba48ae6863261cb01925c6d6a03b602dabd"
+    },
+    "data/research/deepep_modern_20261022/tree.json": {
+      "bytes": 41120,
+      "sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+    },
+    "data/research/deepep_modern_20261022/tree-source.json": {
+      "bytes": 729,
+      "sha256": "def35320df7bece11440acf028c1aac71a64016ca599efe8873b56cdd3f6169d"
+    },
+    "data/research/deepep_modern_20261022/file-sources.json": {
+      "bytes": 3882,
+      "sha256": "57421e17fbacff170c381c5c6f5dba39e6bc515473337ce2456a22af1ba00fbc"
+    },
+    "data/research/deepep_modern_20261022/file-sources-completion.json": {
+      "bytes": 4524,
+      "sha256": "120411690b23171f97cdb8edb86a84a6a5e27c0fe6c2194e6b96328c7e9ece5c"
+    }
+  }
+}

@@ -201,3 +201,14 @@ timeout 60s python3 experiments/paper_readiness/review_self_gin.py \
 所有输出目录须不存在。四原件须按manifest恢复；历史归档须按`--reference`目录的`archive.json`恢复至其`path`，并通过SHA256检查，不能拿当前plan替代历史输入。第一个命令执行9条公开CLI并保存资源与退出状态，第二个命令独立核对原始选择、操作差异、全部事件/slot/layout及7个暂扣探针。沿用上节300秒研究、单命令60秒/RSS1GiB/地址2GiB、产物16MiB及预留8GiB预算，不执行网络、不联网或重新下载原件。新检查点包含四原件、当前公开产物、报告及两个研究脚本，不包含后来维护的README、实施规范和任务页；历史归档仍须单独保留。
 
 更正后有364个跨rank GIN请求、80个self-peer GIN请求、42个本地旁路操作；80/444约18%只是GIN API请求比例。跨rank字节量、事件依赖、slot与布局保持不变。self-peer不等于交换机流量，其物理回环路径、NIC服务和完成代价未定义；当前原生事务入口拒绝src=dst，因此不能将本结果写成现代端到端网络执行、时延或优化收益。
+
+校准前可使用只读环境检查，不导入torch、不创建CUDA/RDMA上下文或发送流量：
+
+```bash
+timeout 60s python3 experiments/paper_readiness/inspect_calibration_environment.py \
+  --python /usr/bin/python3 --output /dev/shm/my-calibration-readiness
+```
+
+可重复`--python`明确指定其他已存在的解释器；不扫描全盘、安装工具或启用网卡。输出含原始本地命令日志及去除GPU UUID、网卡GUID/IP等身份字段的`summary.json`。输出目录须不存在，父目录存在，卷预留8GiB；单读取命令≤10秒、整轮≤60秒/RSS1GiB/地址2GiB，产物≤4MiB。命令不可用、超时或未确认的能力保留其状态，不换工具自动重试；不能把环境检查结束理解为性能校准通过。所用固定DeepEP README仍须按来源缓存恢复并通过Git树/blob/SHA256核查。
+
+当前可见6张A100但无Hopper候选，verbs枚举0 HCA且无uverbs节点，4个sysfs端口均Down。rate字段不能作为可用带宽，包元数据缺失也仅限明确检查的Python。实机验证条件与后续实验设计见[校准报告](../../docs/reviews/现代通信校准条件与论文验证路线_20261022.md)。

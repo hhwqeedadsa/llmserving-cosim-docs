@@ -401,3 +401,72 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
 ```
 
 归档包含原件、输入、原始包/队列结果、分析、核验、精确命令和必要脚本，逐文件校验SHA；不包含自身清单、正在运行的打包probe或原生二进制。重建应使用锁定源码和公开rdma-build，不能假设其他机器的动态库二进制hash相同。原始产物和本轮默认128MiB累计预算由记录中的artifact_roots核算；全部生产样本、硬件准确性及千卡完整推理仍未验证。
+
+## 固定分组后的节点映射强基线
+
+设计见[mapping_baseline_protocol.md](mapping_baseline_protocol.md)，结论见[HTML报告](../../docs/review_artifacts/mapping_baseline_20261022/report.html)。固定三种分组，分别保留原编号、用Prefill最小化归一化远端副本、用Prefill最小化最大出口服务量，共9条件。静态模型固定upper25G/seed11；服务量不是完成时延。准备调用公开topology，规划只读observed，评价才读Decode；独立检查回查原件并与上一轮真实数据/ACK路径对照，不执行新网络。
+
+本轮Hugging Face目录连接失败，原始响应0B，没有新请求留出组。失败collection.json和当时的collector-attempt.py均保存在检查点。初版urllib的20秒socket timeout实际允许40.07秒请求，已改为20秒子进程墙钟deadline，未重试远程采集；外层60秒监控在原失败中正常生效。不要把本轮采集失败说成原四份原始路由未取得。
+
+复现数值不需要联网。以下使用本轮保留的失败collection记录；检查点展开后可将 `COSIM_MAPPING_HOLDOUT` 指向 `saved_run/holdout`，将参考路径指向 `reference_packet_result.json`。原四份JSON及manifest和固定placements须在指定source-root下可用。
+
+```bash
+COSIM_MAPPING_WORK=$(mktemp -d /dev/shm/moe-mapping-baseline.XXXXXX)
+COSIM_MAPPING_HOLDOUT=/dev/shm/moe-mapping-holdout-20261022
+COSIM_MAPPING_REFERENCE=/dev/shm/moe-dispatch-network-run-20261022/upper25g-prefill_all_lpt/result.json
+mapping_budget() {
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_MAPPING_WORK/$1-probe" --artifact-root "$COSIM_MAPPING_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- python3 "${@:2}"
+}
+mapping_budget prepare experiments/paper_readiness/mapping_baseline.py prepare \
+  --manifest data/moe-trace-small/manifest.json --source-root "$PWD" \
+  --placements docs/review_artifacts/prefill_placement_20261022/placements.json \
+  --holdout "$COSIM_MAPPING_HOLDOUT" --output "$COSIM_MAPPING_WORK/prepared"
+mapping_budget plan experiments/paper_readiness/mapping_baseline.py plan \
+  --observed "$COSIM_MAPPING_WORK/prepared/observed" --output "$COSIM_MAPPING_WORK/planned"
+mkdir "$COSIM_MAPPING_WORK/relocated-observed"
+cp "$COSIM_MAPPING_WORK/prepared/observed/inputs.json" "$COSIM_MAPPING_WORK/relocated-observed/"
+mapping_budget repeat-plan experiments/paper_readiness/mapping_baseline.py plan \
+  --observed "$COSIM_MAPPING_WORK/relocated-observed" --output "$COSIM_MAPPING_WORK/repeat-planned"
+mapping_budget evaluate experiments/paper_readiness/mapping_baseline.py evaluate \
+  --prepared "$COSIM_MAPPING_WORK/prepared" --planned "$COSIM_MAPPING_WORK/planned" \
+  --output "$COSIM_MAPPING_WORK/evaluated"
+mapping_budget check experiments/paper_readiness/check_mapping_baseline.py \
+  --prepared "$COSIM_MAPPING_WORK/prepared" --planned "$COSIM_MAPPING_WORK/planned" \
+  --repeat-planned "$COSIM_MAPPING_WORK/repeat-planned" --evaluation "$COSIM_MAPPING_WORK/evaluated" \
+  --reference-result "$COSIM_MAPPING_REFERENCE" --output "$COSIM_MAPPING_WORK/verified"
+mapping_budget bound experiments/paper_readiness/mapping_baseline_bound.py \
+  --prepared "$COSIM_MAPPING_WORK/prepared" --evaluation "$COSIM_MAPPING_WORK/evaluated" \
+  --output "$COSIM_MAPPING_WORK/bound"
+mapping_budget bound-check experiments/paper_readiness/check_mapping_bound.py \
+  --prepared "$COSIM_MAPPING_WORK/prepared" --evaluation "$COSIM_MAPPING_WORK/evaluated" \
+  --bound "$COSIM_MAPPING_WORK/bound" --output "$COSIM_MAPPING_WORK/bound-verified"
+```
+
+bound入口读取未来Decode，只供结果后的机制核查，不可用于部署规划。它计算K−1宽松下界和未来全知、每层固定排列的副本oracle；检查器以子集动态规划独立验证，不共享优化实现。不要将该oracle标为可实现收益或新算法。
+
+只有需要另一个事先固定的新请求组时才运行采集入口：`collect_mapping_holdout.py --output /绝对路径/不存在的目录`，通过同一60秒/RSS/磁盘host_probe包裹；固定revision、首个目录响应的文件名/大小规则、4份/单份4MiB/总16MiB，不重试或按结果替换。本研究的命令和失败状态已保存，指标复现不要重新联网。采集脚本只处理公开JSON，不执行下载代码。
+
+HTML与完整本地归档入口如下；八个stage分别保存输入、决策、评价、独立核查和失败资料。单阶段32MiB、宿主命令60秒/RSS1GiB/地址2GiB，共享新产物64MiB/累计128MiB，卷预留8GiB。失败保留停止，不自动扩预算。
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_MAPPING_WORK/review-probe" --artifact-root "$COSIM_MAPPING_WORK" \
+  --artifact-root docs/review_artifacts/my-mapping-baseline --artifact-root runs/my-mapping-checkpoint \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/build_mapping_review.py \
+  --stage "prepared=$COSIM_MAPPING_WORK/prepared" --stage "planned=$COSIM_MAPPING_WORK/planned" \
+  --stage "evaluation=$COSIM_MAPPING_WORK/evaluated" --stage "repeat_planned=$COSIM_MAPPING_WORK/repeat-planned" \
+  --stage "verification=$COSIM_MAPPING_WORK/verified" --stage "bound=$COSIM_MAPPING_WORK/bound" \
+  --stage "bound_verification=$COSIM_MAPPING_WORK/bound-verified" --stage "holdout=$COSIM_MAPPING_HOLDOUT" \
+  --probe "$COSIM_MAPPING_WORK/prepare-probe" --probe "$COSIM_MAPPING_WORK/plan-probe" \
+  --probe "$COSIM_MAPPING_WORK/repeat-plan-probe" --probe "$COSIM_MAPPING_WORK/evaluate-probe" \
+  --probe "$COSIM_MAPPING_WORK/check-probe" --probe "$COSIM_MAPPING_WORK/bound-probe" \
+  --probe "$COSIM_MAPPING_WORK/bound-check-probe" --reference-result "$COSIM_MAPPING_REFERENCE" \
+  --output docs/review_artifacts/my-mapping-baseline --checkpoint runs/my-mapping-checkpoint
+```
+
+打包只读，不重跑研究。原始windows.csv、完整候选计划、逐层下界、原件及参考包记录在归档中逐文件核hash；Git保存九条件摘要和下界摘要。归档不含自身清单和正在运行的打包probe，打包资源单独记录。报告对应固定研究事实，不能把修改输入后的文件直接替换为已有结论。

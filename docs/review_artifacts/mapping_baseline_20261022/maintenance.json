@@ -1,0 +1,58 @@
+{
+  "html_local_links_checked": 10,
+  "markdown_local_links_checked": 77,
+  "archive_verified_files": 81,
+  "archive_sha256": "3ca4847702c55a5a20dab7cf7af5d24f6b2bfaf3fafe5f00fac94f9fcab3d711",
+  "archived_current_source_hashes_match": true,
+  "ast_scripts_checked": 6,
+  "cli_help_checks": 9,
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "checked": 13
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  "new_task_apparent_bytes": 5966526,
+  "new_task_limit_bytes": 134217728,
+  "new_task_roots": [
+    "/dev/shm/moe-mapping-bound-20261022",
+    "/dev/shm/moe-mapping-bound-check-probe-20261022",
+    "/dev/shm/moe-mapping-bound-probe-20261022",
+    "/dev/shm/moe-mapping-bound-verified-20261022",
+    "/dev/shm/moe-mapping-check-probe-20261022",
+    "/dev/shm/moe-mapping-evaluate-probe-20261022",
+    "/dev/shm/moe-mapping-evaluated-20261022",
+    "/dev/shm/moe-mapping-fetch-probe-20261022",
+    "/dev/shm/moe-mapping-holdout-20261022",
+    "/dev/shm/moe-mapping-plan-probe-20261022",
+    "/dev/shm/moe-mapping-planned-20261022",
+    "/dev/shm/moe-mapping-prepare-probe-20261022",
+    "/dev/shm/moe-mapping-prepared-20261022",
+    "/dev/shm/moe-mapping-relocated-observed-20261022",
+    "/dev/shm/moe-mapping-repeat-plan-probe-20261022",
+    "/dev/shm/moe-mapping-repeat-planned-20261022",
+    "/dev/shm/moe-mapping-review-probe-20261022",
+    "/dev/shm/moe-mapping-verified-20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/mapping_baseline_20261022",
+    "/home/lry/moe-ub-cosim/runs/mapping_baseline_checkpoint_20261022"
+  ],
+  "packaging_probe_in_archive": false,
+  "post_packaging_maintenance_in_archive": false,
+  "attempted_request_did_not_meet_20s_wall_limit": true,
+  "corrected_collector_not_remotely_retried": true,
+  "independent_holdout_requests": false,
+  "new_network_executed": false,
+  "gpu_executed": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

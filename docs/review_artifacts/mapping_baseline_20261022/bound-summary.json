@@ -1,0 +1,56 @@
+{
+  "results": [
+    {
+      "cohort": 0,
+      "base": 0,
+      "base_name": "contiguous",
+      "identity_copies": 69409,
+      "total_group_coverage": 92948,
+      "token_count": 29696,
+      "coverage_k_histogram": {
+        "1": 1,
+        "2": 2791,
+        "3": 20251,
+        "4": 6653
+      },
+      "universal_per_token_lower_bound": 63252,
+      "best_future_fixed_permutation_copies": 67390
+    },
+    {
+      "cohort": 0,
+      "base": 1,
+      "base_name": "prefill_all_lpt",
+      "identity_copies": 80596,
+      "total_group_coverage": 107448,
+      "token_count": 29696,
+      "coverage_k_histogram": {
+        "2": 598,
+        "3": 10140,
+        "4": 18958
+      },
+      "universal_per_token_lower_bound": 77752,
+      "best_future_fixed_permutation_copies": 79354
+    },
+    {
+      "cohort": 0,
+      "base": 2,
+      "base_name": "prefill_tail10_lpt",
+      "identity_copies": 79515,
+      "total_group_coverage": 106089,
+      "token_count": 29696,
+      "coverage_k_histogram": {
+        "1": 2,
+        "2": 832,
+        "3": 11025,
+        "4": 17837
+      },
+      "universal_per_token_lower_bound": 76393,
+      "best_future_fixed_permutation_copies": 78228
+    }
+  ],
+  "full_bound_sha256": "70a8f5fa1e7a00242d86896a39679e32752c5f0f8a7024fa46d21274ba77a081",
+  "full_bound_archive_member": "saved_run/bound/bound.json",
+  "oracle_reads_future": true,
+  "oracle_is_deployable": false,
+  "post_result_mechanism_check": true
+}

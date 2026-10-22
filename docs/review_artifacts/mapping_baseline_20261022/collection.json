@@ -1,0 +1,21 @@
+{
+  "dataset": "core12345/MoE_expert_selection_trace",
+  "revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "prefix": "cognitivecomputations/DeepSeek-R1-AWQ/mmlu",
+  "requests": [
+    {
+      "url": "https://huggingface.co/api/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf/cognitivecomputations/DeepSeek-R1-AWQ/mmlu?limit=1000",
+      "file": "tree.json",
+      "error_type": "URLError",
+      "http_error_code": null,
+      "wall_seconds": 40.07006782665849
+    }
+  ],
+  "completed": false,
+  "selection_rule": "First four numerically sorted JSON basenames in first directory response, excluding old files, each <=4MiB; no content-dependent replacements",
+  "raw_limit_bytes": 4194304,
+  "total_response_limit_bytes": 16777216,
+  "total_wall_limit_seconds": 57,
+  "total_response_bytes": 0,
+  "wall_seconds": 40.07068501599133
+}

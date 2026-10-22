@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+原生在线service的`native.stdout.log`按完整行写出；worker接收一条后端控制记录后，先提交给操作系统文件缓冲，再处理前端回复。它减少宿主超时/终止时Python块缓冲导致的整行丢失，不保证断电持久性，也不说明任务已完成。历史版本采用块缓冲，其失败日志中的完成通知数只能作下限；ASTRA异步节点日志也可能有未刷出的尾部。终态仍以成功的`result.json`和独立核验为准。
+
 原生事务`transactions.queue_fences`记录操作的捕获/完成时刻及每个连接的固定target/covered_operations；等待未完成时completed_ns为−1，日志不编码进报文。字段与同ns内捕获规则见[队列前缀等待](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。
 
 原生事务的`transactions.local_events`记录提交GPU读到的本地条件、observed_value和可选reset_to；与`target_events`共用`order`，用于离线核对同ns内的先后，不影响报文。顶层`pending_operations`在截止时保存未提交操作及其当前local_wait，便于区别条件不满足与网络已排空；字段见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。

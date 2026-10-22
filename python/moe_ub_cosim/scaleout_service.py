@@ -306,7 +306,9 @@ def worker(config_path, topology_path, protocol_path, backend, protoc, output):
              str(bootstrap/'layer'),str(output/'result.json')]
     transcript=[]; child=None
     try:
-        with (output/'native.stderr.log').open('w') as errors,(output/'native.stdout.log').open('w') as logs:
+        # A host-budget kill must not lose already-read complete control lines
+        # in Python's block buffer. This is not fsync/power-loss durability.
+        with (output/'native.stderr.log').open('w') as errors,(output/'native.stdout.log').open('w',buffering=1) as logs:
             child=subprocess.Popen(command,cwd=output,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=errors,text=True)
             for line in child.stdout:
                 logs.write(line)

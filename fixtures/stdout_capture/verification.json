@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "result_byte_identical": true,
+  "node_log_byte_identical": true,
+  "frontend_equal_after_only_run_path_normalization": true,
+  "stdout_control_events_equal": true,
+  "stdout_host_timestamps_excluded": true,
+  "finite_service_verified": true,
+  "verified_nodes": 1512,
+  "messages": 628,
+  "waves": 4,
+  "finish_ns": 193252,
+  "buffer_loss_probes": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-c",
+        "import sys; f=open(sys.argv[1],'w',buffering=int(sys.argv[2])); f.write('MOE_RDMA_EVENT {\"type\":\"DECIDE\",\"decision_id\":1}\\n'); print('ready',flush=True); sys.stdin.read(1)",
+        "/dev/shm/moe-stdout-capture-20261022/block-killed.log",
+        "-1"
+      ],
+      "child_exit_code": -9,
+      "bytes_after_write_before_kill": 0,
+      "bytes_after_kill": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-c",
+        "import sys; f=open(sys.argv[1],'w',buffering=int(sys.argv[2])); f.write('MOE_RDMA_EVENT {\"type\":\"DECIDE\",\"decision_id\":1}\\n'); print('ready',flush=True); sys.stdin.read(1)",
+        "/dev/shm/moe-stdout-capture-20261022/line-killed.log",
+        "1"
+      ],
+      "child_exit_code": -9,
+      "bytes_after_write_before_kill": 49,
+      "bytes_after_kill": 49
+    }
+  ],
+  "scope": "line buffering protects completed lines from process kill; not fsync or hardware calibration",
+  "new_dependencies": false,
+  "source_sha256": "ae7ff34be328b6f961c63982e896559649d9e152b04a0fb4d36ec382fbd1f3d5",
+  "monitors": {
+    "before-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "examples/scaleout_rdma/service.json",
+        "--topology",
+        "/dev/shm/moe-stdout-capture-20261022/topology",
+        "--protocol",
+        "examples/scaleout_rdma/rdma.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-stdout-capture-20261022/before"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:51:16.416280+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 498348032,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stdout-capture-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 4210688,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4024969,
+      "peak_sampled_artifact_allocated_bytes": 4210688,
+      "process_group": 1724616,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:51:18.746888+00:00",
+      "wall_seconds": 2.3306112587451935,
+      "max_waited_child_rss_kib": 384060,
+      "artifact_bytes_before_report": 7844,
+      "aggregate_artifact_bytes_before_report": 4210688,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4024969,
+        "allocated_bytes": 4210688
+      }
+    },
+    "after-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--config",
+        "examples/scaleout_rdma/service.json",
+        "--topology",
+        "/dev/shm/moe-stdout-capture-20261022/topology",
+        "--protocol",
+        "examples/scaleout_rdma/rdma.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-stdout-capture-20261022/after"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:52:24.431291+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 497651712,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-stdout-capture-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 8388608,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 8036538,
+      "peak_sampled_artifact_allocated_bytes": 8388608,
+      "process_group": 1724875,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:52:26.844371+00:00",
+      "wall_seconds": 2.4130842611193657,
+      "max_waited_child_rss_kib": 381616,
+      "artifact_bytes_before_report": 8234,
+      "aggregate_artifact_bytes_before_report": 8388608,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 8036538,
+        "allocated_bytes": 8388608
+      }
+    }
+  }
+}

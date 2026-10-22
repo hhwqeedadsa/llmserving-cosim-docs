@@ -1,0 +1,1190 @@
+{
+  "platform_commit": "7630b98908197651113b65827c3a65fe1076e2b2",
+  "cases": {
+    "pass": {
+      "passed": true,
+      "finish_or_stop_ns": 54362,
+      "last_complete_ack_ns": 54362,
+      "queue_area_byte_ns": 63352868,
+      "peak_queue_bytes": 8912,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 32768,
+      "source_payload_bytes": 389120,
+      "posted_logical_bytes": 389120,
+      "endpoint_ce_receives": 0,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 0,
+      "sender_rates_at_complete_ack_bps": [
+        100000000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 0,
+        "sender_to_first_packet": 7304,
+        "data_delivery": 606990,
+        "confirmation_tail": 490809,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 458313728,
+      "result_json_bytes": 121231,
+      "admission_sources": [
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ]
+    },
+    "count3": {
+      "passed": true,
+      "finish_or_stop_ns": 63545,
+      "last_complete_ack_ns": 63545,
+      "queue_area_byte_ns": 69269180,
+      "peak_queue_bytes": 8912,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 18432,
+      "source_payload_bytes": 389120,
+      "posted_logical_bytes": 389120,
+      "endpoint_ce_receives": 0,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 0,
+      "sender_rates_at_complete_ack_bps": [
+        100000000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 149944,
+        "sender_to_first_packet": 3983,
+        "data_delivery": 594004,
+        "confirmation_tail": 490824,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 457408512,
+      "result_json_bytes": 121227,
+      "admission_sources": [
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ]
+    },
+    "bytes-fifo": {
+      "passed": true,
+      "finish_or_stop_ns": 122068,
+      "last_complete_ack_ns": 122068,
+      "queue_area_byte_ns": 43422304,
+      "peak_queue_bytes": 9624,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 8192,
+      "source_payload_bytes": 389120,
+      "posted_logical_bytes": 389120,
+      "endpoint_ce_receives": 0,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 0,
+      "sender_rates_at_complete_ack_bps": [
+        100000000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 743351,
+        "sender_to_first_packet": 1826,
+        "data_delivery": 574436,
+        "confirmation_tail": 490010,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 457412608,
+      "result_json_bytes": 121421,
+      "admission_sources": [
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ]
+    },
+    "bytes-rr": {
+      "passed": true,
+      "finish_or_stop_ns": 113045,
+      "last_complete_ack_ns": 113045,
+      "queue_area_byte_ns": 41323132,
+      "peak_queue_bytes": 9624,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 8192,
+      "source_payload_bytes": 389120,
+      "posted_logical_bytes": 389120,
+      "endpoint_ce_receives": 0,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 0,
+      "sender_rates_at_complete_ack_bps": [
+        100000000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 645426,
+        "sender_to_first_packet": 1826,
+        "data_delivery": 573061,
+        "confirmation_tail": 490015,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 458346496,
+      "result_json_bytes": 121381,
+      "admission_sources": [
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ]
+    },
+    "bytes-ack": {
+      "passed": false,
+      "finish_or_stop_ns": 5000000,
+      "last_complete_ack_ns": 122068,
+      "queue_area_byte_ns": 34341436,
+      "peak_queue_bytes": 9624,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 8192,
+      "source_payload_bytes": 286720,
+      "posted_logical_bytes": 294912,
+      "endpoint_ce_receives": 0,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 0,
+      "sender_rates_at_complete_ack_bps": [
+        100000000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 539047,
+        "sender_to_first_packet": 1079,
+        "data_delivery": 410045,
+        "confirmation_tail": 343400,
+        "sender_cleanup": 0
+      },
+      "open_stages": [
+        {
+          "id": 1,
+          "name": "confirmation_tail",
+          "elapsed_ns": 4988524
+        },
+        {
+          "id": 13,
+          "name": "software_admission",
+          "elapsed_ns": 4986781
+        },
+        {
+          "id": 14,
+          "name": "software_admission",
+          "elapsed_ns": 4986781
+        }
+      ],
+      "peak_sampled_group_rss_bytes": 456364032,
+      "result_json_bytes": 94213,
+      "admission_sources": [
+        {
+          "active_bytes": 6144,
+          "active_ids": [
+            1
+          ],
+          "decision_pending": false,
+          "native_send_qps": 1,
+          "pending_bytes": 8192,
+          "pending_ids": [
+            13,
+            14
+          ],
+          "src": 0
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_bytes": 0,
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_bytes": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 62,
+          "completed_nodes": 57
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ]
+    },
+    "incast-full": {
+      "passed": true,
+      "finish_or_stop_ns": 5000000,
+      "last_complete_ack_ns": 84281,
+      "queue_area_byte_ns": 28096606272,
+      "peak_queue_bytes": 245640,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 131072,
+      "source_payload_bytes": 917504,
+      "posted_logical_bytes": 917504,
+      "endpoint_ce_receives": 790,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 7,
+      "sender_rates_at_complete_ack_bps": [
+        100000000,
+        781250000,
+        3125000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 0,
+        "sender_to_first_packet": 0,
+        "data_delivery": 419292,
+        "confirmation_tail": 34136,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 391569408,
+      "result_json_bytes": 5381140,
+      "admission_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": []
+    },
+    "incast-summary": {
+      "passed": true,
+      "finish_or_stop_ns": 5000000,
+      "last_complete_ack_ns": 84281,
+      "queue_area_byte_ns": 28096606272,
+      "peak_queue_bytes": 245640,
+      "final_queue_bytes": 0,
+      "peak_active_logical_bytes": 131072,
+      "source_payload_bytes": 917504,
+      "posted_logical_bytes": 917504,
+      "endpoint_ce_receives": 790,
+      "pfc_pause_notifications": 0,
+      "completed_flows_with_dcqcn_feedback": 7,
+      "sender_rates_at_complete_ack_bps": [
+        100000000,
+        781250000,
+        3125000000
+      ],
+      "completed_stage_sums_ns": {
+        "software_admission": 0,
+        "sender_to_first_packet": 0,
+        "data_delivery": 419292,
+        "confirmation_tail": 34136,
+        "sender_cleanup": 0
+      },
+      "open_stages": [],
+      "peak_sampled_group_rss_bytes": 373780480,
+      "result_json_bytes": 41831,
+      "admission_sources": [
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 0
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 1
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 2
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 3
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 4
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 5
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 6
+        },
+        {
+          "active_ids": [],
+          "decision_pending": false,
+          "native_send_qps": 0,
+          "pending_ids": [],
+          "src": 7
+        }
+      ],
+      "graph_progress": []
+    }
+  },
+  "target": {
+    "id": 1,
+    "tag": 1,
+    "src": 0,
+    "dst": 4,
+    "bytes": 6144,
+    "plane": 0,
+    "layer": 0,
+    "phase": "dispatch",
+    "contributions": 3
+  },
+  "target_timelines": {
+    "pass": {
+      "id": 1,
+      "state": "complete",
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "receiver_contiguous_bytes": 6144,
+      "receive_ready_ns": 11649,
+      "ack_ns": 17673,
+      "source_data_payload_bytes": 6144,
+      "stage_times": {
+        "available": true,
+        "complete": true,
+        "durations_ns": {
+          "software_admission": 0,
+          "sender_to_first_packet": 83,
+          "data_delivery": 7446,
+          "confirmation_tail": 6024,
+          "sender_cleanup": 0
+        },
+        "open_stage": null,
+        "scope": "Disjoint elapsed stages, not queue delay attribution; data delivery includes serialization, propagation and recovery."
+      },
+      "sender_progress": {
+        "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+        "snd_nxt_bytes": 6144,
+        "snd_una_bytes": 6144
+      },
+      "admission_granted_ns": 4120,
+      "qp_registered_ns": 4120,
+      "sender_resource_released_ns": 17673,
+      "sender_qp_present": false,
+      "repeated_source_offsets_seen": [],
+      "recv_callback_ns": 11649,
+      "recv_post_ns": 0,
+      "send_callback_ns": 17673,
+      "send_post_ns": 4120
+    },
+    "count3": {
+      "id": 1,
+      "state": "complete",
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "receiver_contiguous_bytes": 6144,
+      "receive_ready_ns": 11649,
+      "ack_ns": 17730,
+      "source_data_payload_bytes": 6144,
+      "stage_times": {
+        "available": true,
+        "complete": true,
+        "durations_ns": {
+          "software_admission": 0,
+          "sender_to_first_packet": 83,
+          "data_delivery": 7446,
+          "confirmation_tail": 6081,
+          "sender_cleanup": 0
+        },
+        "open_stage": null,
+        "scope": "Disjoint elapsed stages, not queue delay attribution; data delivery includes serialization, propagation and recovery."
+      },
+      "sender_progress": {
+        "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+        "snd_nxt_bytes": 6144,
+        "snd_una_bytes": 6144
+      },
+      "admission_granted_ns": 4120,
+      "qp_registered_ns": 4120,
+      "sender_resource_released_ns": 17730,
+      "sender_qp_present": false,
+      "repeated_source_offsets_seen": [],
+      "recv_callback_ns": 11649,
+      "recv_post_ns": 0,
+      "send_callback_ns": 17730,
+      "send_post_ns": 4120
+    },
+    "bytes-fifo": {
+      "id": 1,
+      "state": "complete",
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "receiver_contiguous_bytes": 6144,
+      "receive_ready_ns": 11476,
+      "ack_ns": 17500,
+      "source_data_payload_bytes": 6144,
+      "stage_times": {
+        "available": true,
+        "complete": true,
+        "durations_ns": {
+          "software_admission": 0,
+          "sender_to_first_packet": 83,
+          "data_delivery": 7273,
+          "confirmation_tail": 6024,
+          "sender_cleanup": 0
+        },
+        "open_stage": null,
+        "scope": "Disjoint elapsed stages, not queue delay attribution; data delivery includes serialization, propagation and recovery."
+      },
+      "sender_progress": {
+        "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+        "snd_nxt_bytes": 6144,
+        "snd_una_bytes": 6144
+      },
+      "admission_granted_ns": 4120,
+      "qp_registered_ns": 4120,
+      "sender_resource_released_ns": 17500,
+      "sender_qp_present": false,
+      "repeated_source_offsets_seen": [],
+      "recv_callback_ns": 11476,
+      "recv_post_ns": 0,
+      "send_callback_ns": 17500,
+      "send_post_ns": 4120
+    },
+    "bytes-rr": {
+      "id": 1,
+      "state": "complete",
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "receiver_contiguous_bytes": 6144,
+      "receive_ready_ns": 11476,
+      "ack_ns": 17500,
+      "source_data_payload_bytes": 6144,
+      "stage_times": {
+        "available": true,
+        "complete": true,
+        "durations_ns": {
+          "software_admission": 0,
+          "sender_to_first_packet": 83,
+          "data_delivery": 7273,
+          "confirmation_tail": 6024,
+          "sender_cleanup": 0
+        },
+        "open_stage": null,
+        "scope": "Disjoint elapsed stages, not queue delay attribution; data delivery includes serialization, propagation and recovery."
+      },
+      "sender_progress": {
+        "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+        "snd_nxt_bytes": 6144,
+        "snd_una_bytes": 6144
+      },
+      "admission_granted_ns": 4120,
+      "qp_registered_ns": 4120,
+      "sender_resource_released_ns": 17500,
+      "sender_qp_present": false,
+      "repeated_source_offsets_seen": [],
+      "recv_callback_ns": 11476,
+      "recv_post_ns": 0,
+      "send_callback_ns": 17500,
+      "send_post_ns": 4120
+    },
+    "bytes-ack": {
+      "id": 1,
+      "state": "awaiting_sender_ack",
+      "src": 0,
+      "dst": 4,
+      "bytes": 6144,
+      "receiver_contiguous_bytes": 6144,
+      "receive_ready_ns": 11476,
+      "ack_ns": null,
+      "source_data_payload_bytes": 6144,
+      "stage_times": {
+        "available": true,
+        "complete": false,
+        "durations_ns": {
+          "software_admission": 0,
+          "sender_to_first_packet": 83,
+          "data_delivery": 7273,
+          "confirmation_tail": null,
+          "sender_cleanup": null
+        },
+        "open_stage": {
+          "name": "confirmation_tail",
+          "elapsed_ns": 4988524
+        },
+        "scope": "Disjoint elapsed stages, not queue delay attribution; data delivery includes serialization, propagation and recovery."
+      },
+      "sender_progress": {
+        "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+        "snd_nxt_bytes": 6144,
+        "snd_una_bytes": 6000
+      },
+      "admission_granted_ns": 4120,
+      "qp_registered_ns": 4120,
+      "sender_resource_released_ns": null,
+      "sender_qp_present": true,
+      "repeated_source_offsets_seen": [],
+      "recv_callback_ns": 11476,
+      "recv_post_ns": 0,
+      "send_callback_ns": null,
+      "send_post_ns": 4120
+    }
+  },
+  "fifo_rr_actual_grant_sequence_equal": false,
+  "incast_full_summary_execution_equal": true,
+  "fifo_rr_per_source_message_order_equal": false,
+  "rr_bypass_events": [
+    {
+      "time_ns": 13070,
+      "source": 1,
+      "selected_id": 38,
+      "selected_bytes": 2048,
+      "fifo_head_id": 36,
+      "fifo_head_bytes": 8192,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        25,
+        26
+      ]
+    },
+    {
+      "time_ns": 22720,
+      "source": 4,
+      "selected_id": 19,
+      "selected_bytes": 2048,
+      "fifo_head_id": 18,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        8
+      ]
+    },
+    {
+      "time_ns": 26358,
+      "source": 3,
+      "selected_id": 41,
+      "selected_bytes": 2048,
+      "fifo_head_id": 39,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        29
+      ]
+    },
+    {
+      "time_ns": 27051,
+      "source": 4,
+      "selected_id": 20,
+      "selected_bytes": 4096,
+      "fifo_head_id": 18,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 6144,
+      "active_ids": [
+        19
+      ]
+    },
+    {
+      "time_ns": 52896,
+      "source": 0,
+      "selected_id": 50,
+      "selected_bytes": 2048,
+      "fifo_head_id": 49,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 2048,
+      "active_ids": [
+        48
+      ]
+    },
+    {
+      "time_ns": 61846,
+      "source": 0,
+      "selected_id": 60,
+      "selected_bytes": 6144,
+      "fifo_head_id": 49,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 6144,
+      "active_ids": [
+        50
+      ]
+    },
+    {
+      "time_ns": 61846,
+      "source": 2,
+      "selected_id": 64,
+      "selected_bytes": 2048,
+      "fifo_head_id": 63,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 2048,
+      "active_ids": [
+        52,
+        53
+      ]
+    },
+    {
+      "time_ns": 74624,
+      "source": 2,
+      "selected_id": 65,
+      "selected_bytes": 4096,
+      "fifo_head_id": 63,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        53
+      ]
+    },
+    {
+      "time_ns": 77467,
+      "source": 3,
+      "selected_id": 88,
+      "selected_bytes": 4096,
+      "fifo_head_id": 87,
+      "fifo_head_bytes": 8192,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        77
+      ]
+    },
+    {
+      "time_ns": 78600,
+      "source": 5,
+      "selected_id": 91,
+      "selected_bytes": 4096,
+      "fifo_head_id": 90,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        79
+      ]
+    },
+    {
+      "time_ns": 82691,
+      "source": 5,
+      "selected_id": 92,
+      "selected_bytes": 4096,
+      "fifo_head_id": 90,
+      "fifo_head_bytes": 6144,
+      "remaining_logical_bytes": 4096,
+      "active_ids": [
+        91
+      ]
+    },
+    {
+      "time_ns": 83574,
+      "source": 0,
+      "selected_id": 62,
+      "selected_bytes": 4096,
+      "fifo_head_id": 61,
+      "fifo_head_bytes": 4096,
+      "remaining_logical_bytes": 8192,
+      "active_ids": []
+    }
+  ],
+  "common_injected_message_first_paths_equal": true,
+  "incast_source_cnp_transmissions": 0,
+  "incast_record_events": 32208,
+  "scope": "offline_evaluation; separate MoE service and synthetic transport cases"
+}

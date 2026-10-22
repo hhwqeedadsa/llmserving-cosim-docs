@@ -1,43 +1,28 @@
 # 当前任务与交接
 
-状态：`in_progress`。2026-10-22按用户要求继续完善Scale-Out仿真结构；只在本地修改和提交，不push。下面2026-10-21成果作为前阶段证据保留，不代表本轮验收。
+状态：`completed`。2026-10-22完成用户要求的Scale-Out网络与系统结构改进、修改方案和小规模实践。本地保存与提交，不push；完成后不自动开展下一候选功能。
 
-## 本轮目标与验收
+## 本轮交付
 
-- 实施可选每源活跃逻辑字节额度，与消息数同时约束；FIFO保序、轮转按目的端队首选择，不把逻辑额度称作硬件在途窗口。
-- 实施不依赖详细包记录的逐交换机出口队列积分，规范原生入/出队钩子的前后状态；补充源端确认进度及离线阶段时间分解。
-- 根据实证缺陷形成网络与系统修改方案；恢复协议、分块、QP复用和千卡扩展须明确依据与前置条件，不伪造ACK或提前释放资源。
-- 平台与独立研究分别验证和本地提交；默认兼容、观测不扰动、容量/字节守恒、截断记录和ACK故障均须实际核验。
-- 新产物放`/dev/shm/moe-structure-20261022/`；复用已锁定原生构建，不使用主仓UB构建。沿用下述资源预算。持久卷仅余约4.1GiB，大产物留在共享内存，不删除未知文件。
-- 起点`8712976`主仓干净，13依赖检查通过；已保存修改前probe/service。源码核查：原生`ReceiveAck`/`RecoverQueue`依赖NACK，没有通用ACK超时恢复，最终ACK丢失不能外推生产RDMA恢复能力。
-- 平台实现及小规模验收完成：[功能证据](../../fixtures/scaleout_structure/README.md)。新增11probe/3服务、原准入11probe/9服务、原故障11probe/3服务及55项Python/2个C++检查通过，公开字节额度示例628消息完成。独立对照研究与整体修改报告待完成，任务仍进行中。
+- [整体报告](../reviews/ScaleOut仿真结构改进与实践_20261022.md)、[HTML阅读版](../review_artifacts/scaleout_structure_20261022/architecture.html)：最终目标、服务对象、限定约束、前端图输入、三项已实施修改、八项后续工作的依据与验收。
+- 平台本地提交`7630b98`：每源消息数/完整逻辑字节双约束，严格FIFO及可容纳目的端轮转；常量空间交换机队列积分；源QP确认进度与离线阶段诊断。默认保留旧执行，单条超额拒绝，完整ACK与原生发送映射移除后才归还额度。同机crossbar排除、跨plane共享，不解释成硬件NIC容量。
+- [平台功能门](../../fixtures/scaleout_structure/README.md)：新增11probe/3实际服务、原准入11probe/9服务、原故障11probe/3服务通过；55项Python、2个C++检查通过；公开`bytes8192.json`完成4波628消息1512节点、423082ns。默认与修改前实际二进制一致，完整/截断/无明细观测等价。
+- [独立研究](../../experiments/scaleout_structure/README.md)、[结果](../../experiments/scaleout_structure/results.md)、[数值HTML](../review_artifacts/scaleout_structure_20261022/report.html)：固定8GPU交错EP4、一层两步Decode的5组条件，另2组独立incast观测校验。研究与平台分别提交，不导入测试驱动。
 
-## 范围与验收
+## 发现与限制
 
-- 核查当前Scale-Up、Scale-Out代码与已有实验，不将既有平台集成或热点统计直接算作论文创新。
-- 给出主要研究问题、候选方法、与相关工作的差异、明确的实现修改位置、强基线、消融、否定条件和执行顺序。
-- 提供Markdown与便于审阅的HTML报告，区分已证实事实、候选假设和待实施能力；核查本地引用、来源和渲染内容。
-- 实施报告主线所需的资源/完成事件、有界观测和准入基线，默认保留原行为；候选策略先证明问题，条件分支不无条件展开。
-- 增加可复现的数据/ACK/NACK丢包规则，追踪包→连续接收→发送回收→计算依赖→服务推进，保留恢复和失败病例；不以补造重传协议掩盖模型缺陷。
-- 平台、研究实验分别验证和本地提交，不push；不安装依赖、不运行大型矩阵或千卡任务。Scale-Up使用已有状态记录作相关回归，Scale-Out不链接UB。
-- 资源预算：使用独立共享内存任务目录；每次构建300秒、并发2、RSS2GiB/地址4GiB、产物512MiB；每次运行60秒、RSS1GiB/地址2GiB、产物512MiB、仿真5ms。卷预留8GiB，失败不自动扩容。持久磁盘仅保存小型证据和压缩归档。
+- 8192B字节额度下，轮转113045ns、FIFO122068ns，前者快7.39%，仍较透传54362ns慢107.95%；逻辑字节约束确实生效，实际逐源grant身份顺序发生变化。减少队列积分不能推出降低峰值或改善业务。
+- 最终ACK故障：目标6144B已接收、源确认6000B，资源未回收，5ms预算内未完成；交换机末态队列为0。没有伪造恢复。锁定库依赖NACK重传，无通用ACK超时恢复；生产可靠性不能据此推断。
+- 独立7→1、每源128KiB压力校验：790次端点CE接收，7流见DCQCN反馈，独立CNP包为0，反馈由ACK/NACK标志承载；PFC暂停通知0。完整/summary执行逐字段一致，结果文件5381140B→41831B，汇总积分一致。这不是MoE真实热点或训练测量。
+- 计算仍为A100标签与声明成本，未新测硬件、未跑千卡或完整Scale-Up网络。恢复协议、真实通信分块、QP复用及动态交换机存储仅给出有依据的实施路线，本轮未实现。未做浏览器视觉验收。
 
-既有[三页汇报材料](../review_artifacts/fullstack_brief_20261020/README.md)、[宏微结合研究](../review_artifacts/hardware_systems_20261020/README.md)和[综合报告](../reviews/研究工作总报告_目标约束与ScaleOut网络路线_20261018.md)作为研究基础，保持原件。
+## 资源与证据
 
-## 报告交付与核验
+- 起点`8712976`主仓干净；13锁定依赖检查前后通过，未修改依赖、安装或混链UB。构建复用`/dev/shm/moe-fault-20261021/native`，12份构建源hash与当前源码核对一致；主仓`build/scaleout`为UB，不混用。
+- 新运行根`/dev/shm/moe-structure-20261022/`，原始成功/失败结果、命令、资源与源码快照在该目录。构建300秒、并发2/RSS2GiB/地址4GiB；单次运行60秒/RSS1GiB/地址2GiB/仿真5ms/产物512MiB，研究累计256MiB，运行卷预留8GiB，失败不自动扩容。
+- 持久卷余量约4.1GiB，所有大产物在共享内存；仅保存约2.83MB压缩证据至`runs/scaleout_structure_20261022/evidence.tar.gz`，1926份文件逐一核验，归档hash见[archive.json](../review_artifacts/scaleout_structure_20261022/archive.json)。它是本机备份；共享内存会随重启丢失。
+- [交付核对](../review_artifacts/scaleout_structure_20261022/completion_audit.md)：原报告所有段落/表格内容和本地链接核验通过；HTML重复生成、研究重复分析逐字节一致。
 
-- [完整报告](../reviews/系统视角的仿真器创新方案与修改建议_20261021.md)、[HTML阅读版](../review_artifacts/system_innovation_20261021/report.html)、[来源与复核入口](../review_artifacts/system_innovation_20261021/README.md)。
-- 主候选为“资源释放与服务关键性共同决定通信准入”；安全跨轮推进与决策导向精度选择为条件分支。已有机制、实现缺项、候选创新和验证标准分别说明，不把新颖性或收益标为已验证。
-- 14段源码与15份公开原始资料的内容摘要核对通过；HTML的348个正文片段、9张表和本地引用检查通过，重复生成逐字节一致。该报告交付阶段未进行平台回归、仿真或硬件性能测量；后续实现证据见下。未进行浏览器视觉验收。
-- 旧报告的“未修改平台”指报告交付时；本阶段实施与检查证据将在本页维护，旧报告不改写成实现验收。
+## 前阶段入口
 
-## 实施状态
-
-- 13个固定依赖检查通过；本次原生RDMA构建入口为`/dev/shm/moe-fault-20261021/native/backend.json`，主仓`build/scaleout`实际是UB构建，不能混用。构建来源和资源日志随证据归档。
-- 故障平台已完成：数据/ACK/NACK、接收节点/端口、窗口与次数；默认关闭的有界逐包记录；失败运行诊断。11探针和3次实际服务功能门通过，开启/截断记录不改变执行；重传字节与唯一业务字节分别核验。证据见[功能门](../../fixtures/scaleout_faults/README.md)。
-- 独立研究已完成四次两组EP4服务对照；最终ACK丢失时故障组64节点完成63个，仅SEND未回调，另一组完成两步。见[结果](../../experiments/scaleout_faults/results.md)和[HTML](../review_artifacts/scaleout_faults_20261021/report.html)。这不是生产恢复校准或候选策略收益证据。
-- 已授权空间清理：旧`a100_ep_runtime`仍包含当前Python依赖、报告与未提交源码，保留目录；1180个旧trace及12个大日志压缩后逐文件校验并移除明文，累计净释放10,416,142,717 B（约9.70 GiB）。归档、校验与日志在`runs/maintenance_20261021/`，旧根目录有恢复说明。
-- 资源与准入平台已实现：每源GPU跨plane共享的软件额度、FIFO/目的端轮转、显式决策成本及有界生命周期；数据就绪不归还额度，完整ACK后确认发送QP映射移除才归还。11探针/9真实服务功能门通过，默认与旧可执行、透传/截断观测等价；双plane同纳秒ACK另验证原生映射移除与软件释放的不同事件顺序。见[资源功能门](../../fixtures/scaleout_admission/README.md)。这不代表硬件QP容量或GPU缓冲寿命已校准。
-- 准入独立研究完成7组固定输入对照：FIFO1队列积分下降46.04%，整体完成从54.362μs增加到147.482μs；FIFO与轮转实际获取序列完全相同，无ECN/PFC/DCQCN反馈。最终ACK丢失占住额度，另4条已提交通信不能发包，故障组64节点完成44，另一组完成两步。见[分析](../../experiments/scaleout_admission/results.md)、[HTML](../review_artifacts/scaleout_admission_20261021/report.html)及[交付核对](../review_artifacts/scaleout_admission_20261021/completion_audit.md)。这些是机制与负面结果，不是新策略收益或生产恢复结论。
-- 平台故障功能已本地提交`5174c07`。53项相关Python单元检查、既有UB发送状态C++记录器检查及13个锁定子模块检查通过；未重新运行完整Scale-Up网络。HTML正文与包事件表已检查、重复生成一致，未做浏览器视觉验收。完整本轮输入、失败原因、命令及资源日志已校验归档至`runs/scaleout_faults_20261021/evidence.tar.gz`。
-- 资源平台已本地提交`0a944bc`；本轮51项Scale-Out Python、纯C++所有权检查和原故障11探针/3服务回归通过，公开fifo2配置628消息完整完成。准入功能证据与7组研究分别归档至`runs/scaleout_admission_20261021/`、`runs/scaleout_admission_experiment_20261021/`。重复分析逐字节一致，摘要与当前源码hash、本地链接、3份归档hash核对通过；未浏览器验收或新增硬件测量。下一轮须先有真实通信库/硬件资源及代表性争用依据，再决定复杂策略、QP复用或安全跨轮推进。
+保留[原创新建议报告](../reviews/系统视角的仿真器创新方案与修改建议_20261021.md)、[故障研究](../../experiments/scaleout_faults/results.md)、[消息数准入研究](../../experiments/scaleout_admission/results.md)及[前阶段验收](../review_artifacts/scaleout_admission_20261021/completion_audit.md)。旧报告是交付快照，其阶段断言应按绑定版本复核，不改写成新实施状态。

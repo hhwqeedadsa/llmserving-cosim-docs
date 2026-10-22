@@ -1,5 +1,7 @@
 # 用户指南
 
+原生事务功能例另可用[local-waits.json](../examples/scaleout_rdma_transactions/local-waits.json)验证实际接收数据满足条件后再继续、消费后清零的两轮执行，沿用`rdma-transaction-probe`。输入与范围见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。它不执行现代DeepEP或GPU轮询。
+
 Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`bytes8192.json`，可同时调整消息数和逻辑字节额度，关闭队列明细但保留全程精确队列积分。`rdma-diagnose`查看源端确认进度和分阶段等待；单条消息超过字节限额时须显式调整，不会自动拆分或放宽。
 
 本指南说明怎样安装仿真环境、运行小例，以及复用一次执行结果开展采样和网络重放实验。统一命令为 `moe-ub`，也可用 `python -m moe_ub_cosim` 执行相同操作。

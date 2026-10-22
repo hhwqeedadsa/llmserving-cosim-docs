@@ -47,5 +47,21 @@ class TransactionInputTests(unittest.TestCase):
             protocol = deepcopy(self.protocol); protocol[key] = {}
             with self.assertRaises(ValueError): validate(self.topology, protocol, self.config)
 
+    def test_local_waits_are_owned_bounded_and_typed(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-waits.json').read_text())
+        validate(self.topology, self.protocol, original)
+        for key, value in [('key', 8), ('address', 4097), ('address', 4153), ('compare', 'gt'),
+                           ('value', -1), ('value', True), ('reset_to', 2**64), ('owner', 0)]:
+            c = deepcopy(original); c['operations'][3]['local_wait'][0][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        for waits in ([], [None], original['operations'][3]['local_wait'][:1]*2):
+            c = deepcopy(original); c['operations'][3]['local_wait'] = waits
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+    def test_local_waits_do_not_bypass_existing_write_order_or_depth(self):
+        c = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-waits.json').read_text())
+        c['operations'][5]['after'] = []
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
 
 if __name__ == '__main__': unittest.main()

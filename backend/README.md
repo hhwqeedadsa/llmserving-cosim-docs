@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`RemoteMemory`提供有owner/key/范围限制的本地LE64读写，`RemoteTransactions`用它执行eq/ge条件等待和可选消费清零；调用者只读当前提交连接src的窗口。远端应用与本地消费的离线order记录共用序列，不参与线上协议；见[接口与限制](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。
+
 `remote_memory.hh`实现MRT1解码、窗口权限/范围检查及串行put/fetch-add，`remote_transactions.hh/.cc`将其接入持久原生载体；`transaction_probe.cc`提供独立功能入口。普通写入按请求ACK完成，原子另等实际返回值，同上下文按前缀回收；不把应用完成当作网络排空。MRT1与原生载体的组合不是RoCE/GIN provider或硬件成本模型，输入、事件、分层限制与验收见[远端事务](../examples/scaleout_rdma_transactions/README.md)。
 
 ## GIN工作队列功能核心

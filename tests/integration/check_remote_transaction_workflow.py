@@ -22,6 +22,9 @@ def audit(result, config, mtu):
     rows = {op['id']: op for op in tx['operations']}
     specs = {op['id']: op for op in config['operations']}
     assert rows.keys() == specs.keys()
+    local_by_id = {e['operation']: e for e in tx['local_events']}
+    assert len(local_by_id) == len(tx['local_events'])
+    assert set(local_by_id) == {op['id'] for op in specs.values() if 'local_wait' in op}
     bindings = {(r['connection'], r['sequence']): r for r in rows.values()}
     source_bytes, frames = {}, {}
     packets = net['source_packets']; capture = net['source_payload_packets']
@@ -59,7 +62,11 @@ def audit(result, config, mtu):
         assert (f['verb'], f['key'], f['address'], f['body']) == (1 if op['verb'] == 'put' else 2, op['key'], op['address'], expected_body)
         ready = max((rows[d['operation']][dict(applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
                      for d in op['after']), default=0)
-        assert row['ready_ns'] == ready <= row['published_ns'] <= row['applied_ns'] < row['request_acked_ns']
+        if 'local_wait' in op:
+            assert row['ready_ns'] == local_by_id[row['id']]['time_ns'] >= ready
+        else:
+            assert row['ready_ns'] == ready
+        assert row['ready_ns'] <= row['published_ns'] <= row['applied_ns'] < row['request_acked_ns']
         assert f['work']['ready_ns'] == row['published_ns'] == f['work']['published_ns']
         assert f['work']['accepted_ns'] == row['applied_ns'] and f['work']['acked_ns'] == row['request_acked_ns']
         if op['verb'] == 'put':
@@ -77,8 +84,27 @@ def audit(result, config, mtu):
     memory = {(w['owner'], w['key']): bytearray.fromhex(w['hex']) for w in config['windows']}
     windows = {(w['owner'], w['key']): w for w in config['windows']}
     assert len(tx['target_events']) == len(specs) and tx['duplicate_requests'] == 0
+    events = sorted(tx['target_events']+tx['local_events'], key=lambda e: e['order'])
+    assert [e['order'] for e in events] == list(range(len(events)))
     last_time = -1
-    for event in tx['target_events']:
+    for event in events:
+        if 'conditions' in event:
+            assert event['time_ns'] >= last_time; last_time = event['time_ns']
+            op = specs[event['operation']]; owner = connections[op['connection']]['src']
+            assert event['owner'] == owner and len(event['conditions']) == len(op['local_wait'])
+            # Evaluate all predicates before any reset, from independently
+            # reconstructed actual request bytes, not the source operation table.
+            for observed, condition in zip(event['conditions'], op['local_wait']):
+                key = owner, condition['key']; offset = condition['address']-windows[key]['address']
+                value = int.from_bytes(memory[key][offset:offset+8], 'little')
+                expected = dict(condition, owner=owner, observed_value=value, matched=True)
+                assert observed == expected
+                assert value == condition['value'] if condition['compare'] == 'eq' else value >= condition['value']
+            for condition in op['local_wait']:
+                if 'reset_to' in condition:
+                    key = owner, condition['key']; offset = condition['address']-windows[key]['address']
+                    memory[key][offset:offset+8] = condition['reset_to'].to_bytes(8, 'little')
+            continue
         assert event['time_ns'] >= last_time and not event['duplicate']; last_time = event['time_ns']
         c, seq = event['connection'], event['sequence']; row = bindings[c, seq]; f = frames[c*2, seq]
         assert (event['verb'], event['key'], event['address'], bytes.fromhex(event['body_hex'])) == (f['verb'], f['key'], f['address'], f['body'])

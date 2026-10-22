@@ -52,6 +52,28 @@ int main(){
   }
   RemoteMemory denied;denied.Register({4,7,4096,false,std::vector<uint8_t>(16,0)});
   Reject([&]{denied.Apply(0,4,add);});
+  // Local LE64 accesses do not grant any other GPU authority. Local application
+  // stores are distinct from remote atomic permission and protocol sequences.
+  Check(memory.Load64(4,7,4096)==1);
+  memory.Store64(4,7,4096,0xfedcba9876543210ULL);
+  Check(memory.Load64(4,7,4096)==0xfedcba9876543210ULL);
+  Check(memory.Windows()[0].bytes[0]==0x10 && memory.Windows()[0].bytes[7]==0xfe);
+  denied.Store64(4,7,4096,9);Check(denied.Load64(4,7,4096)==9);
+  for(unsigned mode=0;mode<5;++mode) {
+    const auto address=mode==2?4097ULL:mode==3?4153ULL:mode==4?UINT64_MAX:4096ULL;
+    const auto owner=mode==0?5u:4u,key=mode==1?8u:7u;
+    Reject([&]{memory.Load64(owner,key,address);});
+    Reject([&]{memory.Store64(owner,key,address,0);});
+    Check(memory.Load64(4,7,4096)==0xfedcba9876543210ULL);
+  }
+  RemoteMemory consumed;consumed.Register({4,7,4096,true,std::vector<uint8_t>(8,0)});
+  auto signal=add;signal.body=MemoryInteger(1);
+  Check(consumed.Apply(0,4,signal).old_value==0);
+  Check(consumed.Load64(4,7,4096)==1);consumed.Store64(4,7,4096,0);
+  const auto replay=consumed.Apply(0,4,signal);
+  Check(replay.duplicate && replay.old_value==0 && consumed.Load64(4,7,4096)==0);
+  signal.sequence=1;
+  Check(!consumed.Apply(0,4,signal).duplicate && consumed.Load64(4,7,4096)==1);
   Reject([&]{memory.Register({4,8,4104,true,std::vector<uint8_t>(16,0)});});
   Reject([&]{memory.Register({4,7,8192,true,std::vector<uint8_t>(16,0)});});
   for(unsigned mode=0;mode<4;++mode){

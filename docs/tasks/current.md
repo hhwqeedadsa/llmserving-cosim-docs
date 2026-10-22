@@ -63,6 +63,8 @@
 
 实机校准条件已作只读核查：当前进程可见6张A100 80GB/SM8.0，无Hopper候选；sysfs所见4个mlx5端口Down/Disabled，verbs枚举0 HCA且无uverbs节点。当前PATH无nvcc，两个明确选择的Python无torch/NCCL分发元数据。没有创建GPU/RDMA上下文、发送流量或改变配置。固定现代README要求Hopper+及对应CUDA/PyTorch/NCCL；已有A100测量不能冒充该分支校准。报告与后续判别实验见[校准条件HTML](../review_artifacts/calibration_readiness_20261022/report.html)。环境只读脚本可独立重用，仍不证明性能或论文贡献。
 
+本地接收窗口等待增量完成：`rdma-transaction-probe`支持提交GPU的LE64条件与可选消费清零，由实际收到的MRT1字节驱动下一轮。新cwd的8条CLI核对两轮10事务/14源包/560B及6个本地条件；少计数/错数据均保持7个后续操作等待且不清零、不偷发。独立实际包解码和内存重放、重复/id改名不扰动、6项输入检查/479项内存断言、旧8条事务CLI回归通过。增量构建只用固定原生ns-3；没有现代DeepEP/GPU/GIN执行，仍属功能模型。详见[范围与验收](../../fixtures/local_memory_waits/README.md)。
+
 当前下一步：将现代窗口及事件与真实传输负载和provider回调相连，先明确self-peer GIN的资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。当前可见硬件不满足现代网络校准条件，其他机器及第二节点仍未知，不假定具备。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

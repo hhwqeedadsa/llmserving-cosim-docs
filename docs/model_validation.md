@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+原生事务新增本地窗口等待，以实际解码后的LE64值决定功能程序是否继续，支持消费后清零。人工两轮验证及错误数据不放行不等于现代DeepEP或GPU可见性校准；模型没有给轮询添加实测代价。证据见[本地等待验收](../fixtures/local_memory_waits/README.md)。
+
 独立远端事务入口已用实际包负载传递地址、key、数据、原子增量和旧值，目标功能状态按接收事件执行。MRT1帧、反向普通字节流及原子后等待请求ACK+回复均是显式功能选择，不等价于真实RoCE报文、Atomic ACK或GIN CQ；没有NIC原子服务时间、GPU可见性或现代应用映射。来源核查、重复应用检查与真实网络功能测试分开记录，见[远端事务验收](../fixtures/remote_transactions/README.md)。不能用此入口的时延判断现代DeepEP性能或方法收益。
 
 独立持久字节路径已实际使用原生ns-3接收/ACK、DCQCN和包生成，保留连接对象与累计序号，不通过填入未来总字节阻止连接结束。后续工作在真实前驱回调后reserve，按ACK归还信用是明确的未校准功能选择，不能代替GIN flush、真实CQE或GPU源buffer寿命。它没有原子signal、目标窗口、现代Python事件接入或生产负载代表性，见[范围与实包验收](../fixtures/persistent_streams/README.md)。

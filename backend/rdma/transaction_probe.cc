@@ -33,7 +33,7 @@ int main(int argc,char** argv) {
       for(std::size_t i=0;i<operations.size();++i)if(!submitted[i]) {
         bool ready=true;
         for(const auto& d:operations[i].at("after"))ready=ready && transactions.Occurred(d.at("operation"),d.at("event"));
-        if(ready){submitted[i]=true;transactions.Submit(operations[i]);}
+        if(ready && transactions.LocalReady(operations[i])){submitted[i]=true;transactions.Submit(operations[i]);}
       }
       complete=0;
       for(const auto& op:operations)if(transactions.Occurred(op.at("id"),"completed"))++complete;
@@ -44,6 +44,9 @@ int main(int argc,char** argv) {
     transactions.changed=progress;ns3::Simulator::ScheduleNow(progress);
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
     auto result=fabric.Report();result["transactions"]=transactions.Report();result["completed_operations"]=complete;
+    result["pending_operations"]=Json::array();
+    for(std::size_t i=0;i<operations.size();++i)if(!submitted[i])
+      result["pending_operations"].push_back({{"id",operations[i].at("id")},{"local_wait",transactions.LocalWaits(operations[i])}});
     result["loaded_libraries"]=Json::array();dl_iterate_phdr(Libraries,&result["loaded_libraries"]);
     const bool passed=finished && complete==operations.size() && transactions.Drained() && fabric.Drained();
     result["passed"]=passed;

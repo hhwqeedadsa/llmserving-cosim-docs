@@ -41,6 +41,29 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
       w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
   transport_.changed=[this](){if(changed)changed();};
 }
+Json RemoteTransactions::LocalWaits(const Json& input) const {
+  Json out=Json::array();
+  if(!input.contains("local_wait"))return out;
+  const auto owner=connections_.at(input.at("connection")).src;
+  const auto& waits=input.at("local_wait");
+  Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid local wait budget");
+  std::set<std::pair<uint32_t,uint64_t>> seen;
+  for(const auto& condition:waits) {
+    Require(condition.is_object() && condition.size()==(condition.contains("reset_to")?5u:4u),"invalid local wait fields");
+    const auto key=condition.at("key").get<uint32_t>();
+    const auto address=condition.at("address").get<uint64_t>(),expected=condition.at("value").get<uint64_t>();
+    const auto compare=condition.at("compare").get<std::string>();
+    Require((compare=="eq" || compare=="ge") && seen.emplace(key,address).second,"invalid/repeated local wait");
+    const auto value=memory_.Load64(owner,key,address);
+    Json row=condition;row["owner"]=owner;row["observed_value"]=value;
+    row["matched"]=compare=="eq"?value==expected:value>=expected;out.push_back(row);
+  }
+  return out;
+}
+bool RemoteTransactions::LocalReady(const Json& input) const {
+  for(const auto& condition:LocalWaits(input))if(!condition.at("matched").get<bool>())return false;
+  return true;
+}
 void RemoteTransactions::Submit(const Json& input) {
   const auto id=input.at("id").get<uint64_t>(),connection=input.at("connection").get<uint64_t>();
   Require(operations_.size()<32 && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
@@ -53,7 +76,18 @@ void RemoteTransactions::Submit(const Json& input) {
     op.request.verb=MemoryFrame::FetchAdd;op.request.body=MemoryInteger(input.at("value"));
   }
   EncodeMemoryFrame(op.request);
-  op.ticket=c.queue.Reserve(id,id);c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
+  const auto observations=LocalWaits(input);
+  for(const auto& condition:observations)Require(condition.at("matched"),"submit before target-local wait satisfied");
+  op.ticket=c.queue.Reserve(id,id);
+  // Check all conditions before any consume, using only this GPU's received
+  // memory. Source operation truth never supplies a value to the predicates.
+  if(!observations.empty()) {
+    for(const auto& condition:observations)if(condition.contains("reset_to"))
+      memory_.Store64(c.src,condition.at("key"),condition.at("address"),condition.at("reset_to"));
+    local_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",id},
+      {"owner",c.src},{"conditions",observations}});
+  }
+  c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
   auto& c=connections_.at(connection);
@@ -75,7 +109,7 @@ void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
   // and target state. Source operation metadata is used below only to report the
   // application event, not to decide what to write or return.
   const auto result=memory_.Apply(connection,c.dst,frame);
-  target_events_.push_back({{"time_ns",MemoryNow()},{"connection",connection},{"sequence",frame.sequence},
+  target_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"connection",connection},{"sequence",frame.sequence},
     {"verb",frame.verb},{"key",frame.key},{"address",frame.address},{"body_hex",MemoryHex(frame.body)},
     {"duplicate",result.duplicate},{"old_value",result.old_value}});
   Require(frame.sequence<c.operations.size(),"target request has no submitted application observer");
@@ -143,6 +177,8 @@ Json RemoteTransactions::Report() const {
       {"queue_depth",item.second.queue.Depth()},{"reserved",q.reserved},{"published",q.published},
       {"completed",q.completed},{"closed",q.closed}});
   }
-  out["target_events"]=target_events_;out["transport"]=transport_.Report();return out;
+  out["target_events"]=target_events_;out["local_events"]=local_events_;
+  out["local_wait_scope"]="functional local LE64 eq/ge, optional consume; no GPU coherence or polling cost";
+  out["transport"]=transport_.Report();return out;
 }
 }

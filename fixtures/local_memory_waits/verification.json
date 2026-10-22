@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "public_commands": 8,
+  "normal": {
+    "operations": 10,
+    "source_packets": 14,
+    "transported_payload_bytes": 560,
+    "finish_ns": 66382,
+    "final_atomic_value": 0
+  },
+  "greater": {
+    "operations": 10,
+    "source_packets": 14,
+    "transported_payload_bytes": 560,
+    "finish_ns": 66382,
+    "final_atomic_value": 0
+  },
+  "failure_probes": {
+    "missing-increment": {
+      "completed": 3,
+      "pending": 7,
+      "actual_count": 1,
+      "conjunction": [
+        false,
+        true
+      ],
+      "no_partial_reset": true,
+      "no_future_packets": true
+    },
+    "wrong-payload": {
+      "completed": 3,
+      "pending": 7,
+      "actual_count": 2,
+      "conjunction": [
+        true,
+        false
+      ],
+      "no_partial_reset": true,
+      "no_future_packets": true
+    }
+  },
+  "expected_rejections": 3,
+  "local_conditions_checked": 6,
+  "repeat_byte_identical": true,
+  "id_renaming_wire_invariant": true,
+  "shared_clock": true,
+  "modern_deepep_executed": false,
+  "hardware_calibrated": false,
+  "source_sha256": {
+    "backend/rdma/remote_memory.hh": "f059f137a68386539c5b4ce78cc46a3bb7f0f316c32222cc8de710ae8fe3d410",
+    "backend/rdma/remote_transactions.hh": "705117cccc315572722bfd57ce3d5e55587c493b66bf888992c7e992ee5637f9",
+    "backend/rdma/remote_transactions.cc": "4c00c255d7fd507804a8ea38f365f7b002ad58fd5d61e4b3438fe6c1d35ffb82",
+    "backend/rdma/transaction_probe.cc": "ec05a3f6f370b6cead9d6491e7da728de3e4035627519835fb6261f1a681bba2",
+    "python/moe_ub_cosim/scaleout_transactions.py": "0b7dc72b66a18b87eea471731387aaf3197a833a3e54a533b902a33982cab469",
+    "examples/scaleout_rdma_transactions/local-waits.json": "fa201a506a5d1c0b64a4eea6e664b5781b54207adb05d4e336103f091fdf0ac4",
+    "tests/integration/check_local_memory_wait_workflow.py": "151af20d8f1c5b950f63a5d9653853897c786471c4c1d8b4aceb0bd494c246d6",
+    "tests/integration/check_remote_transaction_workflow.py": "29c4449b7dfb2aec82ce1bae05714307db7d63ada03d70460b749f38623f904d"
+  },
+  "output_bytes": 261129,
+  "wall_seconds": 4.8862515445798635
+}

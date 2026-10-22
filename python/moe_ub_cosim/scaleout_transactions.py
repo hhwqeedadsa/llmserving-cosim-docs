@@ -59,7 +59,8 @@ def validate(topology, protocol, config):
     seen, ancestors, accesses = set(), {}, []
     for op in operations:
         require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
-        fields(op, 'id connection verb key address after '+('hex' if op['verb'] == 'put' else 'value'), 'operation')
+        fields(op, 'id connection verb key address after '+('hex' if op['verb'] == 'put' else 'value')+
+               (' local_wait' if 'local_wait' in op else ''), 'operation')
         integer(op['id'], 'operation id', 0, 65535)
         integer(op['connection'], 'operation connection', 0, 7)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
@@ -76,6 +77,24 @@ def validate(topology, protocol, config):
             length = 8
         require(window['address'] <= op['address'] and op['address']+length <= window['address']+size,
                 'remote address out of bounds')
+        if 'local_wait' in op:
+            waits = op['local_wait']
+            require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
+            local_owner, locations = by_id[op['connection']]['src'], set()
+            for wait in waits:
+                require(isinstance(wait, dict), 'local wait must be an object')
+                fields(wait, 'key address compare value'+(' reset_to' if 'reset_to' in wait else ''), 'local wait')
+                integer(wait['key'], 'local key', 1, 2**32-1)
+                integer(wait['address'], 'local address', 0, 2**64-1)
+                integer(wait['value'], 'local wait value', 0, 2**64-1)
+                if 'reset_to' in wait: integer(wait['reset_to'], 'local consume value', 0, 2**64-1)
+                location = local_owner, wait['key']
+                require(location in registered and wait['compare'] in ('eq', 'ge'), 'unknown local owner/key or comparison')
+                local_window, local_size = registered[location]
+                require(wait['address']%8 == 0 and local_window['address'] <= wait['address'] and
+                        wait['address']+8 <= local_window['address']+local_size, 'local wait address out of bounds/unaligned')
+                item = wait['key'], wait['address']
+                require(item not in locations, 'repeated local wait location'); locations.add(item)
         require(isinstance(op['after'], list) and len(op['after']) <= 32, 'invalid operation dependencies')
         deps, parents = set(), set()
         for d in op['after']:

@@ -108,7 +108,26 @@ class RemoteMemory {
     return result;
   }
   const std::vector<Window>& Windows() const {return windows_;}
+  // Target-local functional accesses; no GPU coherence or polling delay.
+  uint64_t Load64(unsigned owner,uint32_t key,uint64_t address) const {
+    const auto& w=LocalWindow(owner,key,address);
+    uint64_t value=0;
+    for(unsigned i=0;i<8;++i)value|=uint64_t(w.bytes[address-w.address+i])<<(8*i);
+    return value;
+  }
+  void Store64(unsigned owner,uint32_t key,uint64_t address,uint64_t value) {
+    const auto& found=LocalWindow(owner,key,address);
+    auto& w=windows_.at(static_cast<std::size_t>(&found-windows_.data()));
+    for(unsigned i=0;i<8;++i)w.bytes[address-w.address+i]=value>>(8*i);
+  }
  private:
+  const Window& LocalWindow(unsigned owner,uint32_t key,uint64_t address) const {
+    const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
+    MemoryCheck(it!=windows_.end() && address%8==0 && address>=it->address &&
+                address-it->address<=it->bytes.size() && 8<=it->bytes.size()-(address-it->address),
+                "invalid local 64-bit memory access");
+    return *it;
+  }
   struct Saved {unsigned owner;std::vector<uint8_t> bytes;Result result;};
   struct Context {uint64_t next=0;std::map<uint64_t,Saved> saved;};
   std::vector<Window> windows_;

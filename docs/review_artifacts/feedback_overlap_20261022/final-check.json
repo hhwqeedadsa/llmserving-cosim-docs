@@ -1,0 +1,81 @@
+{
+  "verified": true,
+  "new_network_runs": 4,
+  "network_retry": false,
+  "source_hashes_matching_archive": 190,
+  "archive_sha256": "3b5700d6c30b55fe19a075046cb2a97bdef46a5f7ce94a85363c6c5a8fe2d7df",
+  "verified_members": 313,
+  "nested_platform_members_verified": 648,
+  "restored_prior_files": 11,
+  "comparison_relocated_equal_after_root_normalization": true,
+  "relocation_command": {
+    "command": [
+      "/usr/bin/python3",
+      "/home/lry/moe-ub-cosim/experiments/paper_readiness/compare_feedback_windows.py",
+      "--short-task",
+      "/dev/shm/moe-feedback-overlap-20261022/relocated-short",
+      "--long-task",
+      "/dev/shm/moe-feedback-overlap-20261022",
+      "--output",
+      "/dev/shm/moe-feedback-overlap-20261022/comparison-relocated"
+    ],
+    "cwd": "/dev/shm/moe-feedback-overlap-20261022",
+    "exit_code": 0
+  },
+  "monitored_seconds_before_final": 19.975914066657424,
+  "task_usage_before_final": {
+    "apparent_bytes": 42590963,
+    "allocated_bytes": 42852352
+  },
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "seconds": 0.5553952176123857
+    },
+    {
+      "stage": "check-monitor",
+      "seconds": 1.6706027407199144
+    },
+    {
+      "stage": "check-refined-monitor",
+      "seconds": 1.791185887530446
+    },
+    {
+      "stage": "comparison-monitor",
+      "seconds": 0.12875167466700077
+    },
+    {
+      "stage": "deps-monitor",
+      "seconds": 0.45482293143868446
+    },
+    {
+      "stage": "input-monitor",
+      "seconds": 0.23500021547079086
+    },
+    {
+      "stage": "package-monitor",
+      "seconds": 5.228392776101828
+    },
+    {
+      "stage": "review-monitor",
+      "seconds": 0.1287456639111042
+    },
+    {
+      "stage": "run-monitor",
+      "seconds": 9.548741240054369
+    },
+    {
+      "stage": "source-check-monitor",
+      "seconds": 0.23427571915090084
+    }
+  ],
+  "platform_changed": false,
+  "post_archive_only": true,
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "paper_main_contribution_established": false,
+  "limits": {
+    "cumulative_seconds": 300,
+    "cumulative_bytes": 134217728
+  }
+}

@@ -1,0 +1,452 @@
+{
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/feedback_overlap.py",
+          "analyze",
+          "--observed",
+          "/dev/shm/moe-feedback-overlap-20261022/input/observed",
+          "--run",
+          "/dev/shm/moe-feedback-overlap-20261022/run",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/analysis"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T22:54:16.386514+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 60108800,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/analysis-monitor",
+          "/dev/shm/moe-feedback-overlap-20261022/analysis"
+        ],
+        "peak_sampled_artifact_bytes": 143360,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 130568,
+        "peak_sampled_artifact_allocated_bytes": 143360,
+        "process_group": 1764436,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:54:16.941907+00:00",
+        "wall_seconds": 0.5553952176123857,
+        "max_waited_child_rss_kib": 63820,
+        "artifact_bytes_before_report": 1636,
+        "aggregate_artifact_bytes_before_report": 143360,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 130568,
+          "allocated_bytes": 143360
+        }
+      }
+    },
+    {
+      "stage": "check-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_feedback_overlap.py",
+          "--task",
+          "/dev/shm/moe-feedback-overlap-20261022",
+          "--analysis",
+          "/dev/shm/moe-feedback-overlap-20261022/analysis",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/checked"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T22:56:08.835453+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 74235904,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/checked",
+          "/dev/shm/moe-feedback-overlap-20261022/check-monitor"
+        ],
+        "peak_sampled_artifact_bytes": 20480,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 16026,
+        "peak_sampled_artifact_allocated_bytes": 20480,
+        "process_group": 1764650,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:56:10.506051+00:00",
+        "wall_seconds": 1.6706027407199144,
+        "max_waited_child_rss_kib": 72496,
+        "artifact_bytes_before_report": 4109,
+        "aggregate_artifact_bytes_before_report": 20480,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 16026,
+          "allocated_bytes": 20480
+        }
+      }
+    },
+    {
+      "stage": "check-refined-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/check_feedback_overlap.py",
+          "--task",
+          "/dev/shm/moe-feedback-overlap-20261022",
+          "--analysis",
+          "/dev/shm/moe-feedback-overlap-20261022/analysis",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/checked-refined"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T22:58:26.286124+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 70344704,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/check-refined-monitor",
+          "/dev/shm/moe-feedback-overlap-20261022/checked-refined"
+        ],
+        "peak_sampled_artifact_bytes": 28672,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 20693,
+        "peak_sampled_artifact_allocated_bytes": 28672,
+        "process_group": 1765171,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:58:28.077294+00:00",
+        "wall_seconds": 1.791185887530446,
+        "max_waited_child_rss_kib": 72792,
+        "artifact_bytes_before_report": 4360,
+        "aggregate_artifact_bytes_before_report": 28672,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 20693,
+          "allocated_bytes": 28672
+        }
+      }
+    },
+    {
+      "stage": "comparison-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/compare_feedback_windows.py",
+          "--short-task",
+          "/dev/shm/moe-feedback-factorial-20261022",
+          "--long-task",
+          "/dev/shm/moe-feedback-overlap-20261022",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/comparison"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:00:41.525374+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 7438336,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/comparison-monitor",
+          "/dev/shm/moe-feedback-overlap-20261022/comparison"
+        ],
+        "peak_sampled_artifact_bytes": 12288,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 4107,
+        "peak_sampled_artifact_allocated_bytes": 12288,
+        "process_group": 1765451,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:00:41.654126+00:00",
+        "wall_seconds": 0.12875167466700077,
+        "max_waited_child_rss_kib": 22488,
+        "artifact_bytes_before_report": 546,
+        "aggregate_artifact_bytes_before_report": 12288,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 4107,
+          "allocated_bytes": 12288
+        }
+      }
+    },
+    {
+      "stage": "deps-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "bash",
+          "scripts/check_deps.sh"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:05:15.247921+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 24465408,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/deps-monitor"
+        ],
+        "peak_sampled_artifact_bytes": 8192,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 3648,
+        "peak_sampled_artifact_allocated_bytes": 8192,
+        "process_group": 1766239,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:05:15.702735+00:00",
+        "wall_seconds": 0.45482293143868446,
+        "max_waited_child_rss_kib": 20748,
+        "artifact_bytes_before_report": 3648,
+        "aggregate_artifact_bytes_before_report": 8192,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 3648,
+          "allocated_bytes": 8192
+        }
+      }
+    },
+    {
+      "stage": "input-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/feedback_overlap.py",
+          "prepare",
+          "--manifest",
+          "data/moe-trace-small/manifest.json",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/input"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T22:53:22.295179+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 31637504,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/input-monitor",
+          "/dev/shm/moe-feedback-overlap-20261022/input"
+        ],
+        "peak_sampled_artifact_bytes": 135168,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 105964,
+        "peak_sampled_artifact_allocated_bytes": 135168,
+        "process_group": 1764132,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:53:22.530179+00:00",
+        "wall_seconds": 0.23500021547079086,
+        "max_waited_child_rss_kib": 30896,
+        "artifact_bytes_before_report": 779,
+        "aggregate_artifact_bytes_before_report": 135168,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 105964,
+          "allocated_bytes": 135168
+        }
+      }
+    },
+    {
+      "stage": "review-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/build_feedback_overlap_review.py",
+          "--task",
+          "/dev/shm/moe-feedback-overlap-20261022",
+          "--output",
+          "docs/review_artifacts/feedback_overlap_20261022"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:03:07.357431+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 7479296,
+        "peak_sampled_processes": 1,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/review-monitor",
+          "/home/lry/moe-ub-cosim/docs/review_artifacts/feedback_overlap_20261022"
+        ],
+        "peak_sampled_artifact_bytes": 196608,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 170188,
+        "peak_sampled_artifact_allocated_bytes": 196608,
+        "process_group": 1765916,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:03:07.486177+00:00",
+        "wall_seconds": 0.1287456639111042,
+        "max_waited_child_rss_kib": 13496,
+        "artifact_bytes_before_report": 549,
+        "aggregate_artifact_bytes_before_report": 196608,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 170188,
+          "allocated_bytes": 196608
+        }
+      }
+    },
+    {
+      "stage": "run-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "experiments/paper_readiness/feedback_overlap.py",
+          "run",
+          "--observed",
+          "/dev/shm/moe-feedback-overlap-20261022/input/observed",
+          "--backend",
+          "/dev/shm/moe-dcqcn-reference-20261022/bin/ns3.42-moe-rdma-stream-probe",
+          "--output",
+          "/dev/shm/moe-feedback-overlap-20261022/run"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T22:53:38.023909+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 67108864,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 485040128,
+        "peak_sampled_processes": 4,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/run-monitor",
+          "/dev/shm/moe-feedback-overlap-20261022/run"
+        ],
+        "peak_sampled_artifact_bytes": 11685888,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 11581425,
+        "peak_sampled_artifact_allocated_bytes": 11685888,
+        "process_group": 1764212,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T22:53:47.572648+00:00",
+        "wall_seconds": 9.548741240054369,
+        "max_waited_child_rss_kib": 401156,
+        "artifact_bytes_before_report": 31821,
+        "aggregate_artifact_bytes_before_report": 11685888,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 11581425,
+          "allocated_bytes": 11685888
+        }
+      }
+    },
+    {
+      "stage": "source-check-monitor",
+      "record": {
+        "schema_version": "moe-ub-host-probe/1",
+        "command": [
+          "python3",
+          "-"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "started_utc": "2026-10-22T23:05:51.373851+00:00",
+        "limits": {
+          "sampled_group_rss_bytes": 1073741824,
+          "per_process_address_bytes": 2147483648,
+          "artifact_bytes": 33554432,
+          "wall_seconds": 60.0
+        },
+        "peak_sampled_group_rss_bytes": 19083264,
+        "peak_sampled_processes": 2,
+        "status": "completed",
+        "workload_semantics_validated": false,
+        "artifact_roots": [
+          "/dev/shm/moe-feedback-overlap-20261022/source-check-monitor"
+        ],
+        "peak_sampled_artifact_bytes": 8192,
+        "min_free_bytes": 8589934592,
+        "rss_scope": "owned_process_tree_including_detached_descendants",
+        "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+        "disk_sample_interval_seconds": 1.0,
+        "peak_sampled_artifact_apparent_bytes": 793,
+        "peak_sampled_artifact_allocated_bytes": 8192,
+        "process_group": 1766568,
+        "child_exit_code": 0,
+        "remaining_live_group_pids": [],
+        "ended_utc": "2026-10-22T23:05:51.608125+00:00",
+        "wall_seconds": 0.23427571915090084,
+        "max_waited_child_rss_kib": 14468,
+        "artifact_bytes_before_report": 793,
+        "aggregate_artifact_bytes_before_report": 8192,
+        "aggregate_artifact_usage_before_report": {
+          "apparent_bytes": 793,
+          "allocated_bytes": 8192
+        }
+      }
+    }
+  ],
+  "monitored_seconds_before_packaging": 14.747521290555596,
+  "raw_path": "/dev/shm/moe-feedback-overlap-20261022",
+  "raw_volatile": true,
+  "persistent_backup": false
+}

@@ -922,3 +922,60 @@ ECMP/全物理端口字节守恒、工作接收/ACK及源信用，额外输出�
 必须在上述host_probe下另限60秒/1GiB/2GiB，计入task与report，累计128MiB，归档32MiB/成员64MiB。
 运行中的目录须命名`package-monitor`，不入自己的快照。它检查其他monitor结束且成功（明确保留的首次归档失败单列），实际包内逐成员hash复核。
 ELF保留旧RPATH，不能称可迁移镜像；本机实际原始件及归档只在易失内存盘，无持久备份。
+
+## 真实长度差异与反馈后发包（2026-10-22）
+
+[执行前方法](feedback_overlap_protocol.md)固定四请求各最多32个token（32/28/10/6）、层4，
+depth1/8×恢复55/110us共4条件；其他拓扑、工作格式和参考控制器值不变。
+[结果HTML](../../docs/review_artifacts/feedback_overlap_20261022/report.html)记录：本模型深度8反而更慢，
+且反馈后确有持续数据、源端限速见证；不是现代NIC校准、参数推荐或新算法。
+
+从新目录使用现有参考模式二进制和4个原文件，不需要重新构建或下载：
+
+```bash
+export COSIM_OVERLAP_REPO=/home/lry/moe-ub-cosim
+export COSIM_OVERLAP_WORK=/dev/shm/my-feedback-overlap
+export COSIM_OVERLAP_BACKEND=/absolute/path/ns3.42-moe-rdma-stream-probe
+export PYTHONPATH="$COSIM_OVERLAP_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_OVERLAP_WORK"
+overlap_stage() {
+  local overlap_name="$1"
+  local overlap_bytes="$2"
+  shift 2
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_OVERLAP_WORK/$overlap_name-monitor" \
+    --artifact-root "$COSIM_OVERLAP_WORK/$overlap_name" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes "$overlap_bytes" --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+overlap_stage input 33554432 python3 "$COSIM_OVERLAP_REPO/experiments/paper_readiness/feedback_overlap.py" prepare \
+  --manifest "$COSIM_OVERLAP_REPO/data/moe-trace-small/manifest.json" --output "$COSIM_OVERLAP_WORK/input"
+overlap_stage run 67108864 python3 "$COSIM_OVERLAP_REPO/experiments/paper_readiness/feedback_overlap.py" run \
+  --observed "$COSIM_OVERLAP_WORK/input/observed" --backend "$COSIM_OVERLAP_BACKEND" --output "$COSIM_OVERLAP_WORK/run"
+overlap_stage analysis 33554432 python3 "$COSIM_OVERLAP_REPO/experiments/paper_readiness/feedback_overlap.py" analyze \
+  --observed "$COSIM_OVERLAP_WORK/input/observed" --run "$COSIM_OVERLAP_WORK/run" --output "$COSIM_OVERLAP_WORK/analysis"
+overlap_stage checked-refined 33554432 python3 "$COSIM_OVERLAP_REPO/experiments/paper_readiness/check_feedback_overlap.py" \
+  --task "$COSIM_OVERLAP_WORK" --analysis "$COSIM_OVERLAP_WORK/analysis" --output "$COSIM_OVERLAP_WORK/checked-refined"
+```
+
+首次网络失败即停止剩余条件，不自动重试或扩限。`run/execution.json`保存失败与未执行项；
+随后只读`analyze`可描述可用的终止前缀，完成时间保持未知。checker仅对成功条件作完整包验收，
+输出`all_declared_completed`与各条件`full_packet_verification`，不能只见`verified`就宣称全完成。
+原件/truth只由准备与独立checker读；分析仅用observed/公开输出。每阶段预算不相加，整轮含归档≤128MiB/300秒。
+
+与旧短窗比较是可选的事后只读核对，不影响4条件独立执行：
+
+```bash
+overlap_stage comparison 33554432 python3 "$COSIM_OVERLAP_REPO/experiments/paper_readiness/compare_feedback_windows.py" \
+  --short-task /absolute/path/short-study --long-task "$COSIM_OVERLAP_WORK" --output "$COSIM_OVERLAP_WORK/comparison"
+```
+
+它核对二进制、拓扑/协议、连接和控制器有效参数、前6个token的目的映射；输入扩展也改变矩阵和总字节，不能称纯长度干预或独立留出。
+固定报告`build_feedback_overlap_review.py --task 本轮目录 --output 新报告目录`要求4组完成、`checked-refined/`和`comparison/`。
+`package_feedback_overlap.py --task 本轮目录 --report 报告目录 --platform-checkpoint 原平台检查点目录 --short-study 原短窗目录 --papers 已有论文目录`
+只归档原始结果、源码/4原件、实际运行时、用于比较的两个旧短窗条件与DCQCN原论文；不执行新网络。
+包内`prior-short/`可用来重算比较，不能用它冒充全部16个旧条件已被再次包级核验。
+归档器在host_probe下另限60秒/1GiB/2GiB，task与report同时计入128MiB预算，成员64MiB、压缩包32MiB，
+并排除运行中的`package-monitor`。它核验648项原平台成员，再嵌入压缩原件、避免重复展开ns-3库；
+旧功能工作量不作为研究输入。ELF保留原RPATH，归档不是可迁移镜像；原始件与归档仅易失内存盘、无持久备份。

@@ -1,0 +1,52 @@
+{
+  "schema_version": "moe-ub-host-probe/1",
+  "command": [
+    "python3",
+    "experiments/paper_readiness/package_feedback_overlap.py",
+    "--task",
+    "/dev/shm/moe-feedback-overlap-20261022",
+    "--report",
+    "docs/review_artifacts/feedback_overlap_20261022",
+    "--platform-checkpoint",
+    "/dev/shm/moe-dcqcn-reference-20261022/checkpoint",
+    "--short-study",
+    "/dev/shm/moe-feedback-factorial-20261022",
+    "--papers",
+    "/dev/shm/moe-dcqcn-validity-20261022/papers"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "started_utc": "2026-10-22T23:06:04.274755+00:00",
+  "limits": {
+    "sampled_group_rss_bytes": 1073741824,
+    "per_process_address_bytes": 2147483648,
+    "artifact_bytes": 134217728,
+    "wall_seconds": 60.0
+  },
+  "peak_sampled_group_rss_bytes": 53813248,
+  "peak_sampled_processes": 1,
+  "status": "completed",
+  "workload_semantics_validated": false,
+  "artifact_roots": [
+    "/dev/shm/moe-feedback-overlap-20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/feedback_overlap_20261022"
+  ],
+  "peak_sampled_artifact_bytes": 41132032,
+  "min_free_bytes": 8589934592,
+  "rss_scope": "owned_process_tree_including_detached_descendants",
+  "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+  "disk_sample_interval_seconds": 1.0,
+  "peak_sampled_artifact_apparent_bytes": 40880074,
+  "peak_sampled_artifact_allocated_bytes": 41132032,
+  "process_group": 1766643,
+  "child_exit_code": 0,
+  "remaining_live_group_pids": [],
+  "ended_utc": "2026-10-22T23:06:09.503147+00:00",
+  "wall_seconds": 5.228392776101828,
+  "max_waited_child_rss_kib": 60744,
+  "artifact_bytes_before_report": 12705,
+  "aggregate_artifact_bytes_before_report": 41132032,
+  "aggregate_artifact_usage_before_report": {
+    "apparent_bytes": 40880074,
+    "allocated_bytes": 41132032
+  }
+}

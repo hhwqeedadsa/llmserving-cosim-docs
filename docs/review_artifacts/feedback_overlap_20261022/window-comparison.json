@@ -1,0 +1,131 @@
+{
+  "verified_matching_network_and_controller": true,
+  "comparisons": [
+    {
+      "depth": 1,
+      "short_acked_ns": 157970,
+      "long_acked_ns": 599715,
+      "short_post_feedback_packets": 0,
+      "long_post_feedback_packets": 0,
+      "short_shape": {
+        "work": 60,
+        "source_copies": [
+          15,
+          14,
+          15,
+          16
+        ],
+        "destination_copies": [
+          13,
+          16,
+          15,
+          16
+        ]
+      },
+      "long_shape": {
+        "work": 180,
+        "source_copies": [
+          72,
+          67,
+          25,
+          16
+        ],
+        "destination_copies": [
+          38,
+          38,
+          45,
+          59
+        ]
+      }
+    },
+    {
+      "depth": 8,
+      "short_acked_ns": 120675,
+      "long_acked_ns": 1440733,
+      "short_post_feedback_packets": 0,
+      "long_post_feedback_packets": 1630,
+      "short_shape": {
+        "work": 60,
+        "source_copies": [
+          15,
+          14,
+          15,
+          16
+        ],
+        "destination_copies": [
+          13,
+          16,
+          15,
+          16
+        ]
+      },
+      "long_shape": {
+        "work": 180,
+        "source_copies": [
+          72,
+          67,
+          25,
+          16
+        ],
+        "destination_copies": [
+          38,
+          38,
+          45,
+          59
+        ]
+      }
+    }
+  ],
+  "depth8_minus_depth1_short_ns": -37295,
+  "depth8_minus_depth1_long_ns": 841018,
+  "ranking_reversed": true,
+  "raw_identities": [
+    {
+      "task": "/dev/shm/moe-feedback-factorial-20261022",
+      "path": "input/observed/d1-n50000-r55000-b48.json",
+      "sha256": "6395d72e830e16a3e76efb1a4129bca5d5252ff678c78a3c7dcae3e6be0831a1"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-factorial-20261022",
+      "path": "run/d1-n50000-r55000-b48/result.json",
+      "sha256": "42e72ba66277e1fc42c0ac02ffb088e44186709ebe1779d80b15231532b75ac0"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-overlap-20261022",
+      "path": "input/observed/d1-r55000.json",
+      "sha256": "fbc3d734c41887fd05fe39c5552d1de3bd89cd04afce73393aa5c743b3829c18"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-overlap-20261022",
+      "path": "run/d1-r55000/result.json",
+      "sha256": "0955ccd504ad7798fbca7dd5195c751e3f0508fa808cedbbb98f735eabce521a"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-factorial-20261022",
+      "path": "input/observed/d8-n50000-r55000-b48.json",
+      "sha256": "dadf2a146240d86caadd855ee216bc994b49cdecda0dcb1df55e8fdfc36a8697"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-factorial-20261022",
+      "path": "run/d8-n50000-r55000-b48/result.json",
+      "sha256": "443ae350382473a9a76d9383ea03efb00644faac80d890f78bda0b7f9501a478"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-overlap-20261022",
+      "path": "input/observed/d8-r55000.json",
+      "sha256": "c0874c661a5becec275d84308806a88b5417b3b6610e9ab4c8215c7100b54c16"
+    },
+    {
+      "task": "/dev/shm/moe-feedback-overlap-20261022",
+      "path": "run/d8-r55000/result.json",
+      "sha256": "82db48d58af3c25852afd02ca99cc5f1b0b8c8a6179dfc2f3e15be29f8ef5f34"
+    }
+  ],
+  "backend_sha256": "9fdb9e0fe6e43ffa08b89ba74de4c1d7594f65c7f10781cccd8e6a1826074e19",
+  "limitations": [
+    "post-result comparison, not independent holdout",
+    "prefix expansion changes total work and routed matrix, not a pure scalar-length intervention",
+    "only source work counts and passive recording caps differ beyond selected workload",
+    "not a production tuning recommendation"
+  ]
+}

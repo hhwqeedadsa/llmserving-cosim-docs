@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "source_hashes_match": true,
+  "native_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "native_sources_sha256": {
+    "src/point-to-point/model/rdma-hw.cc": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+    "src/point-to-point/model/rdma-queue-pair.cc": "1599b159ed3ba0a8d027cbb754b21c187e2005aaddb2c24e43ec7321ff0fd613",
+    "src/point-to-point/model/qbb-net-device.cc": "9e5e8662e07340294d7129e96c87cef6812a0be38a24545e1c50eaa24e54b805"
+  },
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "checked_dependencies": 13
+  },
+  "unit_checks": {
+    "input_tests": 4,
+    "deepep_regressions": 23,
+    "exitcode": 0
+  },
+  "legacy_probe": {
+    "output": "/dev/shm/moe-stream-legacy-regression-20261022",
+    "passed": true,
+    "messages": 4
+  },
+  "build": {
+    "output": "/dev/shm/moe-stream-isolation-build-20261022",
+    "state": "incremental_native_targets_built_not_a_clean_build",
+    "sources_unchanged_in_dependencies": true,
+    "new_source_local_warnings": false,
+    "existing_native_and_legacy_warnings_retained": true,
+    "touched_build_artifacts_bytes": 22403264,
+    "touched_build_artifacts": {
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe": 3884104,
+      "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe": 3415752,
+      "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-stream-probe.dir/home/lry/moe-ub-cosim/backend/rdma/persistent_streams.cc.o": 3074576,
+      "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-stream-probe.dir/home/lry/moe-ub-cosim/backend/rdma/stream_probe.cc.o": 1443872,
+      "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-probe.dir/home/lry/moe-ub-cosim/backend/rdma/probe.cc.o": 1247968,
+      "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-fabric.dir/home/lry/moe-ub-cosim/backend/rdma/fabric.cc.o": 6000800,
+      "/dev/shm/moe-fault-20261021/native/cmake/CMakeFiles/moe-rdma-fabric.dir/home/lry/moe-ub-cosim/backend/rdma/recovery.cc.o": 3336192
+    },
+    "artifact_monitor_scope": "process time/RSS/address and log outputs; touched build files separately enumerated"
+  },
+  "preserved_initial_failure": {
+    "output": "/dev/shm/moe-stream-build-check-20261022",
+    "reason": "cmake absent from PATH; subsequent build used existing absolute tool path; no installation or budget increase"
+  },
+  "local_markdown_links": 249
+}

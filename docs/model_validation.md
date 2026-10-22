@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+独立持久字节路径已实际使用原生ns-3接收/ACK、DCQCN和包生成，保留连接对象与累计序号，不通过填入未来总字节阻止连接结束。后续工作在真实前驱回调后reserve，按ACK归还信用是明确的未校准功能选择，不能代替GIN flush、真实CQE或GPU源buffer寿命。它没有原子signal、目标窗口、现代Python事件接入或生产负载代表性，见[范围与实包验收](../fixtures/persistent_streams/README.md)。
+
 现代direct的离线`modern-deepep-plan`固定新版本源码，按目的rank去重并采用完整BF16通信布局，保留计数块、屏障和未解析的接收slot/Combine通道公式。它尚未驱动GPU、队列核心或网络，不能作为现代DeepEP时延模型；支持的分支、声明的launch参数和未验证条件见[现代计划](../examples/modern_deepep_partial_order/README.md)。下面在线rank聚合及v1说明保留各自版本范围。
 
 新增事件核心执行slot双射、Combine通道内接收序号递增及Dispatch同token分配后的warp同步。最后一项来自固定`dispatch.cuh`中slot atomic后的`__syncwarp()`，不能由旧符号DAG中“每条put只依赖自己的slot”自动保证；旧静态闭包只代表必要依赖，不保证整个执行合法。事件核心的回调由调用者提供，功能测试中的人工完成不具备网络或硬件含义。验收见[动态执行范围](../fixtures/modern_deepep_runtime/README.md)。

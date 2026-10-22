@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`rdma-stream-probe`的`result.json.persistent_transport`独立保存`streams`、`work`、`source_packets`和列名。工作区间`begin/end`为累计字节序号，`ready/published/accepted/acked_ns`来自同一网络时钟，未发生项为-1；accepted不是GPU可见，acked不是精确GIN本地完成。源包记录含现有packet_uid、端点/NIC/序号/有效负载，不修改包头。`physical_drained`含在途帧与队列检查，`closed`另表连接关闭；顶层messages为空，不能用旧消息诊断器替代本模式核查。输入、预算与完整字段解释见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
+
 `scaleout modern-deepep-plan`另用`moe-modern-deepep-partial-order/1`，保存完整token布局、数据/计数/signal操作、四类完成义务、未赋值的slot及Combine绑定公式。`deferred_constraints`仍需未来运行时执行；排序的JSON数组不是GPU提交顺序。其manifest与check均声明未模拟包，不能与在线观测混用，字段与约束见[现代计划示例](../examples/modern_deepep_partial_order/README.md)。
 
 `modern-deepep-replay`读取`moe-modern-deepep-actions/1`的有序事件ID列表，输出`moe-modern-deepep-execution/1`。`allocated_slots`仅包含已触发的分配，`log`在issued事件中保存解析后的binding/target；Combine还保存`receive_index`。`ready_events`表示可以触发，不表示已经完成或已经reserve；`all_application_complete`与`all_events_fired`分开。输入、actions与plan各有SHA-256，记录没有物理时间，不能充当包、吞吐或排队数据。新输出拒绝覆盖；总预算包含输入、actions和结果。保存原输入及actions后可以跨目录复核。

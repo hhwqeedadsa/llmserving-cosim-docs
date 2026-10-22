@@ -1,0 +1,15 @@
+{
+  "schema_version": "moe-rdma-stream-work/1",
+  "streams": [
+    {"id": 0, "src": 0, "dst": 4, "plane": 0, "wire_port": 21000, "source_nic": 1, "destination_nic": 1, "queue_depth": 1},
+    {"id": 1, "src": 1, "dst": 4, "plane": 0, "wire_port": 21001, "source_nic": 1, "destination_nic": 1, "queue_depth": 2}
+  ],
+  "work": [
+    {"id": 0, "stream": 0, "bytes": 999, "after": []},
+    {"id": 1, "stream": 0, "bytes": 1001, "after": [{"work": 0, "event": "accepted"}]},
+    {"id": 2, "stream": 0, "bytes": 576, "after": [{"work": 1, "event": "acked"}]},
+    {"id": 3, "stream": 1, "bytes": 14464, "after": []},
+    {"id": 4, "stream": 0, "bytes": 14400, "after": [{"work": 2, "event": "acked"}, {"work": 3, "event": "accepted"}]},
+    {"id": 5, "stream": 0, "bytes": 17, "after": [{"work": 4, "event": "acked"}]}
+  ]
+}

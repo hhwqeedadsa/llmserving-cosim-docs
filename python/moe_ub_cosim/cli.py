@@ -48,7 +48,7 @@ def parser():
     mr.add_argument('--config', type=Path, required=True, help='Same input as modern-deepep-plan')
     mr.add_argument('--actions', type=Path, required=True, help='Explicit event IDs in occurrence order; full or prefix transcript')
     mr.add_argument('--output', type=Path, required=True, help='New JSON file containing execution log, resolved slots and enabled next events')
-    rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probe and online service targets; no UB')
+    rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probes and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
     rb.add_argument('--ninja', default='ninja')
@@ -60,6 +60,12 @@ def parser():
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
+    rs = sc.add_parser('rdma-stream-probe', help='Execute causal byte writes on persistent native QPs with ACK-based queue credit; not GIN/GPU visibility')
+    rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
+    rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN protocol, ACK interval 1, no legacy recovery/admission/fault options')
+    rs.add_argument('--config', type=Path, required=True, help='Explicit NIC-bound streams and work dependencies on actual accepted/acked callbacks')
+    rs.add_argument('--backend', type=Path, required=True, help='stream_probe executable returned by rdma-build')
+    rs.add_argument('--output', type=Path, required=True, help='New bounded result directory; maximum 60s/1GiB RSS/64MiB output')
     run_rdma = sc.add_parser('rdma-run', help='Run ready-KV MoE with synthetic or source-checked routes through LLMServingSim, ASTRA and native RDMA ns-3')
     run_rdma.add_argument('--config', type=Path, required=True, help='Model/workload/groups, declared compute, and optional source-checked route_replay')
     run_rdma.add_argument('--topology', type=Path, required=True, help='Generated physical topology directory')
@@ -137,7 +143,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'modern-deepep-replay':
+            if args.scaleout_command == 'rdma-stream-probe':
+                from .scaleout_streams import probe
+                value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'modern-deepep-replay':
                 from .modern_deepep_runtime import replay
                 value = replay(args.config, args.actions, args.output)
             elif args.scaleout_command == 'modern-deepep-plan':

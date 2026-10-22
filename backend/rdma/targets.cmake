@@ -16,6 +16,14 @@ build_exec(
   IGNORE_PCH)
 target_include_directories(moe-rdma-probe PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
 set_target_properties(moe-rdma-probe PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
+build_exec(
+  EXECNAME moe-rdma-stream-probe
+  SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/stream_probe.cc" "${CMAKE_CURRENT_LIST_DIR}/persistent_streams.cc"
+  LIBRARIES_TO_LINK moe-rdma-fabric ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications}
+  EXECUTABLE_DIRECTORY_PATH "${CMAKE_OUTPUT_DIRECTORY}/moe-rdma"
+  IGNORE_PCH)
+target_include_directories(moe-rdma-stream-probe PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
+set_target_properties(moe-rdma-stream-probe PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 add_library(moe-rdma-logging STATIC "${CMAKE_CURRENT_LIST_DIR}/logging.cc")
 target_link_libraries(moe-rdma-logging PUBLIC AstraSim)
 target_include_directories(moe-rdma-logging PRIVATE "${MOE_ASTRA}/extern/helper")
@@ -29,4 +37,4 @@ build_exec(
 target_include_directories(moe-rdma-service PRIVATE "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
 set_target_properties(moe-rdma-service PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)
 file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/moe-rdma-targets.json" CONTENT
-  "{\"probe\":\"$<TARGET_FILE:moe-rdma-probe>\",\"service\":\"$<TARGET_FILE:moe-rdma-service>\",\"ns3_core\":\"$<TARGET_FILE:ns3::libcore>\"}\n")
+  "{\"probe\":\"$<TARGET_FILE:moe-rdma-probe>\",\"stream_probe\":\"$<TARGET_FILE:moe-rdma-stream-probe>\",\"service\":\"$<TARGET_FILE:moe-rdma-service>\",\"ns3_core\":\"$<TARGET_FILE:ns3::libcore>\"}\n")

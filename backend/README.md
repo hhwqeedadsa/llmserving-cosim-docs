@@ -10,6 +10,8 @@
 
 ## 现有原生服务扩展
 
+新增独立`PersistentStreams`与`moe-rdma-stream-probe`使用同一原生Fabric的设备回调，实现空闲可追加的持久字节连接、真实接收/ACK前缀和ACK释放的GinWorkQueue信用。连接显式绑定唯一源/反向NIC；实际收发决定后继就绪。它独占Fabric传输入口并拒绝旧Send混用，没有接入现代计划、原子事务或GPU可见性，不改变下面在线服务的语义。见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
+
 原生RDMA准入控制器`communication_admission.hh`支持消息数和逻辑字节双约束。`queue_integral.hh`保存每出口常量状态，`rdma/fabric.cc`将出队前钩子规范为出队后状态，核对字节守恒后积分，不需要每包历史或采样事件。源QP序号和阶段耗时只用于离线报告。配置见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 可选超时恢复由`retransmission_timer.hh`和专用协议模块`rdma/recovery.cc`实现，经原生NIC的实际发送/接收回调接入，与被动观测分离。源端按累计ACK进展计时，有限重试、指数退避；超时调用原生`RecoverQueue`和`TriggerTransmit`，重复数据在接收端生成真实累计ACK。控制器不读取全局接收真值驱动发送。默认原生模式不增加协议行为，依赖无修改。服务结束在扩展模式中还等待实际网络排空；耗尽重试停止整个共享仿真并保留失败时资源，不补造成功。参数和边界见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。

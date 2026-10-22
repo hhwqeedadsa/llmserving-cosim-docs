@@ -162,7 +162,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     previous = lock.read_bytes() if lock.exists() else None
     try:
         for name, cmd in [('configure', configure), ('compile', [cmake, '--build', directory / 'cmake',
-                  '--target', 'moe-rdma-probe', 'moe-rdma-service', '--parallel', '2'])]:
+                  '--target', 'moe-rdma-probe', 'moe-rdma-stream-probe', 'moe-rdma-service', '--parallel', '2'])]:
             provenance['commands'].append(dict(cwd=str(ROOT), argv=list(map(str, cmd))))
             save(directory / 'provenance.json', provenance)
             monitored(cmd, logs / name, [directory], build=True)
@@ -183,7 +183,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
             all(Path(p).resolve().is_relative_to(directory / 'output') for p in native_libraries),
             'binary links another ns-3 build or unresolved libraries')
     result = dict(passed=True, **targets, native_commit=NATIVE_COMMIT,
-                  linked_ns3_libraries=native_libraries, state='native_rdma_probe_and_service_built_not_executed')
+                  linked_ns3_libraries=native_libraries, state='native_rdma_probes_and_service_built_not_executed')
     save(directory / 'backend.json', result)
     return result
 

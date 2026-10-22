@@ -296,6 +296,7 @@ void Fabric::DropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p
 }
 
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
+  Require(!persistent_stream_mode_,"legacy byte messages cannot share a persistent-stream controller");
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");
   Require(reachable_[(src*gpus_+dst)*planes_+plane] && reachable_[(dst*gpus_+src)*planes_+plane],"no data/ACK packet-switch path");
   Require(id<2147483648u && !flows_.count(id) && flows_.size()<MaxMessages(),"message identity/count budget exceeded");

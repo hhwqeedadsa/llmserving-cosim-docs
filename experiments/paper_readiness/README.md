@@ -470,3 +470,61 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
 ```
 
 打包只读，不重跑研究。原始windows.csv、完整候选计划、逐层下界、原件及参考包记录在归档中逐文件核hash；Git保存九条件摘要和下界摘要。归档不含自身清单和正在运行的打包probe，打包资源单独记录。报告对应固定研究事实，不能把修改输入后的文件直接替换为已有结论。
+
+## 分组路由约束与结论修正
+
+本轮先回查旧8条件，再补cap4与within32各3种子，共14条件。前者只增加“每token最多4个原始32专家逻辑组”的必要条件；后者保持每token逻辑组计数，作为连续放置下通信不变的负对照。两者均保持每source/层专家边际次数，不是可执行模型推理。协议见[routing_constraint_protocol.md](routing_constraint_protocol.md)，实际结果与近邻MoETuner对比见[中文HTML](../../docs/review_artifacts/routing_constraints_20261022/report.html)。旧无约束交换约79%—80%超出参考组数限制，其+14.5%左右通信增幅不能推广；cap4为约−1%，within32完整矩阵不变。旧原始结果与归档保留。
+
+复现不联网。先从校验过的本轮检查点恢复四原件到主仓库`data/moe-trace-small/`，恢复旧observed到自己的输入目录，按[archive.json](../../docs/review_artifacts/routing_constraints_20261022/archive.json)逐文件核hash。检查点成员`old_observed/`是旧公开输入，不是truth；`saved_run/prepared/observed/`是本轮六条件。`COSIM_ROUTING_OLD`应指向前者。脚本默认相对自身定位主仓库，换cwd不改变原件根目录。
+
+以下在主仓库根执行。`COSIM_ROUTING_WORK`必须为不存在的目录，阶段输出不能覆盖旧目录。每命令60秒/RSS1GiB/地址2GiB；host_probe合并记账工作目录，新产物64MiB、累计128MiB、预留8GiB。准备在生成前核hash并检查原件；原件超限直接停止，不过滤样本或放松上限。
+
+```bash
+COSIM_ROUTING_WORK=/dev/shm/my-routing-constraint-study
+COSIM_ROUTING_OLD=/绝对路径/已恢复的old_observed
+mkdir "$COSIM_ROUTING_WORK"
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_ROUTING_WORK/prepare-probe" --artifact-root "$COSIM_ROUTING_WORK" \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/routing_constraints.py prepare \
+  --manifest data/moe-trace-small/manifest.json --old-observed "$COSIM_ROUTING_OLD" \
+  --output "$COSIM_ROUTING_WORK/prepared"
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_ROUTING_WORK/analyze-probe" --artifact-root "$COSIM_ROUTING_WORK" \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/routing_constraints.py analyze \
+  --old-observed "$COSIM_ROUTING_OLD" --new-observed "$COSIM_ROUTING_WORK/prepared/observed" \
+  --output "$COSIM_ROUTING_WORK/analyzed"
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_ROUTING_WORK/check-probe" --artifact-root "$COSIM_ROUTING_WORK" \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/check_routing_constraints.py \
+  --manifest data/moe-trace-small/manifest.json --old-observed "$COSIM_ROUTING_OLD" \
+  --prepared "$COSIM_ROUTING_WORK/prepared" --analysis "$COSIM_ROUTING_WORK/analyzed" \
+  --placements docs/review_artifacts/prefill_placement_20261022/placements.json \
+  --output "$COSIM_ROUTING_WORK/verified"
+```
+
+分析只读取observed。独立checker另读四原件与truth，逐窗口重算而不导入生成/分析脚本；还检查参考cap、within32逐token组计数与物理计数、边际热度、旧统计及LPT组跨度。可另用相同prepare参数生成`repeat-prepared`，再用checker的`--repeat-prepared`比较12份非执行日志产物；正式本轮已换cwd完成此核对。不要重复执行同一输出目录。
+
+打包器要求上述四个probe和重复准备结果全部存在，并使用固定本轮结果与报告；它不是任意输入的通用结论生成器。`--work`下还需有`repeat-prepare-probe`，`--source-probe`指本轮采集资源记录。`--sources`和`--holdout-failure`分别恢复自本轮归档的`sources/`与`prior_failed_holdout/`；两份config恢复自`reference_configs/`。
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_ROUTING_WORK/review-probe" --artifact-root "$COSIM_ROUTING_WORK" \
+  --artifact-root docs/review_artifacts/my-routing-review --artifact-root runs/my-routing-checkpoint \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/build_routing_review.py \
+  --work "$COSIM_ROUTING_WORK" --old-observed "$COSIM_ROUTING_OLD" \
+  --sources /绝对路径/恢复的sources --source-probe /绝对路径/恢复的saved_run/source_probe \
+  --holdout-failure /绝对路径/恢复的prior_failed_holdout \
+  --reference-config /绝对路径/reference_configs/deepseek_v3_config.json \
+  --reference-config /绝对路径/reference_configs/deepseek_R1_0528_config.json \
+  --output docs/review_artifacts/my-routing-review --checkpoint runs/my-routing-checkpoint
+```
+
+来源采集器`collect_placement_sources.py --output 新目录`只用于新的明确资料采集，沿同一probe预算包裹；本轮已取得固定MoETuner v1，HF元数据超时0B，没有重试。复现指标不运行它。`collect_mapping_holdout.py`在本轮修正递归subject目录查询、名称排序与同名拒绝，但修正版未远端执行；原失败脚本及记录在检查点中，不宣称新请求已经取得。文献比较不是穷尽检索，MoETuner优化器尚未复现，旧本机config也不是历史采集模型身份的证明。

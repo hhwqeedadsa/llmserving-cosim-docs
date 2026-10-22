@@ -1,0 +1,78 @@
+{
+  "primary_sources": [
+    {
+      "id": "moetuner_v1",
+      "url": "https://arxiv.org/html/2502.06643v1",
+      "sha256": "e7291b909720505d938a8d30d1bdf8fa2a3f8486491277bbaf20d28de346412b",
+      "bytes": 218757,
+      "text_sha256": "c1f1f35089701c00e1cfc926dea86b2d296e372ee1c04e0b86bd4c1a5c992ab2",
+      "archive_member": "sources/moetuner-v1.html",
+      "publication_status": "arXiv v1; no venue status inferred"
+    },
+    {
+      "id": "patterns_v5",
+      "url": "https://arxiv.org/html/2510.05497v5",
+      "sha256": "ea29c8cc1a0c1e8cfa815af439bf8440f73d989e07e7685899712afbc54a5387",
+      "text_sha256": "1b356cd1b4725c540110ef745e9f2702cfb8ca716131d29f4276f877da912168",
+      "archive_member": "sources/patterns.html"
+    }
+  ],
+  "locators": [
+    {
+      "source": "moetuner_v1",
+      "exact_locator": "token routing dependency across layers",
+      "line": 213
+    },
+    {
+      "source": "moetuner_v1",
+      "exact_locator": "4EP-2TP and 4EP-4TP",
+      "line": 1014
+    },
+    {
+      "source": "moetuner_v1",
+      "exact_locator": "tolerance of 0.025",
+      "line": 1019
+    },
+    {
+      "source": "patterns_v5",
+      "exact_locator": "separation also introduces cross-unit communication overhead",
+      "line": 263
+    },
+    {
+      "source": "patterns_v5",
+      "exact_locator": "depends on system topology and batch size",
+      "line": 263
+    }
+  ],
+  "supplemental_configs": [
+    {
+      "name": "deepseek_v3_config.json",
+      "sha256": "b9661c76f4b23d5fb1db1e00a6ec1fa3ffba940c54bbe8df01b8e32fa07fd0d7",
+      "fields": {
+        "n_group": 8,
+        "topk_group": 4,
+        "num_experts_per_tok": 8,
+        "topk_method": "noaux_tc",
+        "num_routed_experts": 256
+      },
+      "trace_collector_identity_proven": false
+    },
+    {
+      "name": "deepseek_R1_0528_config.json",
+      "sha256": "79ddea672a62e95d3f0be27be434375538e1988975971cffcf87c96c1de84a65",
+      "fields": {
+        "n_group": 8,
+        "topk_group": 4,
+        "num_experts_per_tok": 8,
+        "topk_method": "noaux_tc",
+        "n_routed_experts": 256
+      },
+      "trace_collector_identity_proven": false
+    }
+  ],
+  "collector_model_revision": null,
+  "logical32_groups": "declared reference hypothesis",
+  "unavailable": "HF model metadata timed out with 0 bytes; no retry and no historical collector revision recovered",
+  "literature_search_exhaustive": false,
+  "moetuner_optimizer_reproduced": false
+}

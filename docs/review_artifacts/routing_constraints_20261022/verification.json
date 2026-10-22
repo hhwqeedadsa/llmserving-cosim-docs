@@ -1,0 +1,27 @@
+{
+  "completed": true,
+  "counts": {
+    "conditions": 14,
+    "windows": 103936,
+    "matrix_entries": 1662976,
+    "tokens": 415744,
+    "marginal_cells": 2088,
+    "within_group_count_tokens": 89088
+  },
+  "raw_sources_sha256": [
+    "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+    "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+    "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+    "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+  ],
+  "summary_sha256": "b38009bb82a13c52c97e424127fe1ef21b81220cf15c628d011c1038174471ed",
+  "windows_sha256": "92b8ef8d2897988b39401f47a7d3b8489a64fb489c3b4fa43ed2ad4fb3e5e483",
+  "repeat_files": 12,
+  "old_result_counts_unchanged": true,
+  "all_within32_matrices_identical": true,
+  "all_new_expert_margins_identical": true,
+  "all_new_routes_cap_consistent": true,
+  "network_executed": false,
+  "checker_sha256": "623f516bb59b3666afcc9e4a3a75fb334f02a0156509ac593c18891d5e79663f",
+  "model_collector_revision_unknown": true
+}

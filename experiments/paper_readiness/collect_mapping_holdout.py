@@ -25,7 +25,7 @@ def main():
     assert not out.exists() and shutil.disk_usage(out.parent).free>=8*2**30+16*2**20
     out.mkdir();start=time.monotonic();requests=[];total=0
     report=dict(dataset=REPO,revision=REV,prefix=PREFIX,requests=requests,completed=False,
-        selection_rule='First four numerically sorted JSON basenames in first directory response, excluding old files, each <=4MiB; no content-dependent replacements',
+        selection_rule='First four JSON paths sorted by numeric basename then path in first recursive tree response, excluding old basenames, each <=4MiB; no pagination or content-dependent replacements',
         raw_limit_bytes=4*2**20,total_response_limit_bytes=16*2**20,total_wall_limit_seconds=57)
     def fetch(url,target,cap):
         nonlocal total
@@ -48,11 +48,15 @@ def main():
         finally:
             row['wall_seconds']=time.monotonic()-t;report['total_response_bytes']=total;save(out/'collection.json',report)
     try:
-        tree_url='https://huggingface.co/api/datasets/'+REPO+'/tree/'+REV+'/'+quote(PREFIX,safe='/')+'?limit=1000'
+        # mmlu contains subject subdirectories, not directly the request files.
+        # This correction was made after the original timed-out acquisition;
+        # it does not repair that historical run or imply remote verification.
+        tree_url='https://huggingface.co/api/datasets/'+REPO+'/tree/'+REV+'/'+quote(PREFIX,safe='/')+'?recursive=true&limit=1000'
         listing=json.loads(fetch(tree_url,out/'tree.json',2*2**20));assert isinstance(listing,list)
         candidates=[r for r in listing if r['type']=='file' and Path(r['path']).suffix=='.json'
             and Path(r['path']).stem.isdecimal() and Path(r['path']).name not in OLD and 0<r['size']<=4*2**20]
-        selected=sorted(candidates,key=lambda r:int(Path(r['path']).stem))[:4];assert len(selected)==4
+        selected=sorted(candidates,key=lambda r:(int(Path(r['path']).stem),r['path']))[:4];assert len(selected)==4
+        assert len({Path(r['path']).name for r in selected})==4, 'Ambiguous duplicate output basenames; stop'
         report['selection']=selected;save(out/'collection.json',report)
         for row in selected:
             assert row['path'].startswith(PREFIX+'/') and Path(row['path']).name not in OLD

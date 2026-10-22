@@ -1,0 +1,28 @@
+{
+  "requests": [
+    {
+      "file": "moetuner-v1.html",
+      "url": "https://arxiv.org/html/2502.06643v1",
+      "exit_code": 0,
+      "http_status": "200",
+      "wall_seconds": 0.4561860039830208,
+      "bytes_retained": 218757,
+      "sha256": "e7291b909720505d938a8d30d1bdf8fa2a3f8486491277bbaf20d28de346412b"
+    },
+    {
+      "file": "model.json",
+      "url": "https://huggingface.co/api/models/cognitivecomputations/DeepSeek-R1-AWQ",
+      "exit_code": 28,
+      "http_status": "000",
+      "wall_seconds": 20.011540872976184,
+      "bytes_retained": 0
+    }
+  ],
+  "wall_seconds": 20.01467762887478,
+  "downloaded_code_executed": false,
+  "per_request_cap_bytes": 2097152,
+  "per_request_wall_seconds": 20,
+  "total_cap_bytes": 16777216,
+  "retried": false,
+  "model_revision_not_trace_collector_revision": true
+}

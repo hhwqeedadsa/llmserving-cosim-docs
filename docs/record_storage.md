@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`scaleout deepep-plan`的`plan.json`是无时间戳的离线输入计划，含操作、逻辑连接key、buffer epoch和事件前驱，不是执行或硬件观测。`manifest.json`保存原输入与计划SHA-256，`deepep-check`另写依赖闭包、暂扣事件与不能到达的计算完成节点。操作数字节不等于网络包长，字段见[操作计划示例](../examples/deepep_partial_order/README.md)。
+
 非UB新增可选的活跃逻辑字节额度、源QP序号和阶段耗时。`queue_metrics=true`为全部交换机出口增加常量空间的全程队列积分，独立于包记录截断及summary模式。旧`queue_events`保持原格式，不能直接解释为减字节后状态。字段、单位与覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 非UB的可选`packet_capture`与`fault_injection`存于`result.json`，属于全局时间和业务身份已关联的内部评价资料，不是策略输入。详细事件使用`columns`对应的数值数组，含设备发送、接收、接收错误丢弃和BEgressQueue入/出队；`complete`、`omitted_events`及`selection`说明所选范围是否完整。故障计数与详细采集开关独立，记录到达上限不停止传输。关闭详细记录且无故障时保留原结果字段。字段、序号、队列和包UID的准确口径及失败诊断入口见[丢包小例](../examples/scaleout_rdma_faults/README.md)。

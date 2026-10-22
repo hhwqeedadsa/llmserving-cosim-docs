@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+离线的`scaleout deepep-plan`由`deepep_plan.py`生成固定DeepEP低延迟路径的应用部分顺序，区分逐专家数据、零token通知、逻辑QP上下文和计算流事件。`deepep-check`检查保存表示并计算无时间依赖闭包；它不调用前端调度、ASTRA或网络，不改变下述在线服务。接口与尚未建模的队列、完成和缓冲语义见[操作计划示例](../examples/deepep_partial_order/README.md)。
+
 非 UB Scale-Out 的可选 `recovery.mode=go_back_n` 在原生 NIC 协议回调上维护源端 ACK 进展计时，超时经原生发送调度重传，接收端重复数据用真实反向 ACK 响应。数据就绪、完整确认、QP 清理和软件额度释放保持分开；全部图完成后等待尾部网络流量排空。重试耗尽停止整个共享仿真，保留业务与资源状态供离线诊断，不返回正常完成。默认原生模式与依赖保持原行为；详细机制与参数见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
 
 源端协议状态在`source_recovery.hh`中组合计时器和可选Karn RTT估计，不包含ns-3对象或评价真值；`rdma/recovery.cc`负责实际NIC/QP/事件接入，`recovery_records.hh`只保存共享上限内的记录。配置校验、独立RTT重放、协议审计和条件证书在Python分层实现。代码边界、确认缺失与源额度阻塞的关系见[推理通信脆弱性](communication_fragility.md)。

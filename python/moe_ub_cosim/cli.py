@@ -30,6 +30,13 @@ def parser():
     topology = sc.add_parser('topology', help='Generate flexible Clos/Agg/multi-rail/plane fabrics and native RDMA topology files')
     topology.add_argument('--config', type=Path, required=True, help='Topology JSON; counts, NIC rail map, layer rates and port limits')
     topology.add_argument('--output', type=Path, required=True, help='New directory for physical graph, NIC map, audit and ASTRA/SimAI text inputs')
+    dp = sc.add_parser('deepep-plan', help='Compile an offline pinned DeepEP low-latency application partial order; no network/GPU execution')
+    dp.add_argument('--config', type=Path, required=True, help='Explicit choices, default compute-stream-wait/no-hook API and logical single-NIC RDMA-only mode')
+    dp.add_argument('--output', type=Path, required=True, help='New directory for input, operation/event plan and hash manifest')
+    dc = sc.add_parser('deepep-check', help='Check plan integrity and untimed event reachability; withholding is not packet loss simulation')
+    dc.add_argument('--plan', type=Path, required=True, help='Directory from deepep-plan')
+    dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
+    dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
     rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probe and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
@@ -119,7 +126,13 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'sweep':
+            if args.scaleout_command == 'deepep-plan':
+                from .deepep_plan import execute
+                value = execute(args.config, args.output)
+            elif args.scaleout_command == 'deepep-check':
+                from .deepep_plan import check
+                value = check(args.plan, args.output, args.withhold)
+            elif args.scaleout_command == 'sweep':
                 from .scaleout_sweep import run
                 value=run(args.config,args.backend,args.output,args.protoc)
             elif args.scaleout_command == 'rdma-diagnose':

@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "public_commands": 8,
+  "expected_rejections": 2,
+  "fresh_cwd": true,
+  "frontend_or_native_backend_required": false,
+  "portable_check_identical": true,
+  "simulated_packets": false,
+  "hardware_calibrated": false,
+  "event_count": 728,
+  "operation_count": 160,
+  "unit_checks": 9,
+  "topology_regression_checks": 10,
+  "scope": "offline plan interface/causality only; no library, network or hardware execution",
+  "sources": [
+    {
+      "path": "python/moe_ub_cosim/deepep_plan.py",
+      "sha256": "acf45ca9b56fe967ebacace5121cf6a11f6f1274cb8b812891202678cec2dbdc"
+    },
+    {
+      "path": "python/moe_ub_cosim/cli.py",
+      "sha256": "1354f162da22e4217dfd9784b4f141b6b824b67273f652bd2150b39e66d06294"
+    },
+    {
+      "path": "examples/deepep_partial_order/input.json",
+      "sha256": "903ed02ab7afc5d66c52d2c002a75e92ba891e0732cd4b2ec742fc8385cba52c"
+    },
+    {
+      "path": "tests/unit/deepep_plan_test.py",
+      "sha256": "691ea2ef9c8ce975c07bc7c17b460645ab63784c55bde76fa81fc5b0a0b0bf0d"
+    },
+    {
+      "path": "tests/integration/check_deepep_workflow.py",
+      "sha256": "c4027a0bf5887149f6f7dd20f459e56019cee2401dde6afcfe22bba447fae5d5"
+    }
+  ]
+}

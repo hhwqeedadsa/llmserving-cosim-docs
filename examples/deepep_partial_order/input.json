@@ -1,0 +1,26 @@
+{
+  "schema_version": "moe-deepep-ll-plan-input/1",
+  "model": {
+    "experts": 8,
+    "top_k": 2,
+    "hidden_size": 7168,
+    "dispatch_format": "bf16"
+  },
+  "execution": {
+    "ranks": 4,
+    "api": "compute_stream_wait_no_hook",
+    "cross_rank_path": "rdma_only",
+    "nics_per_rank": 1,
+    "max_tokens_per_rank": 1
+  },
+  "calls": [
+    {"name": "first", "tokens": [[[2, 3]], [[0, 1]], [[6, 7]], [[4, 5]]]},
+    {"name": "second", "tokens": [[[2, 3]], [[0, 1]], [[6, 7]], [[4, 5]]]}
+  ],
+  "limits": {
+    "max_events": 8192,
+    "max_operations": 2048,
+    "max_input_bytes": 65536,
+    "max_output_bytes": 2097152
+  }
+}

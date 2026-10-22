@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "experiments/paper_readiness/analyze_route_controls.py",
+    "--observed",
+    "/dev/shm/moe-route-controls-prepared-20261022/observed",
+    "--output",
+    "/dev/shm/moe-route-controls-analysis-20261022"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "completed": true,
+  "wall_seconds": 1.7726027369499207,
+  "peak_rss_kib": 39148,
+  "script_sha256": "0dc44b42200eaba6247fe9ce07048b7ba9b42d283f45052bfe37b71edb7af156",
+  "summary_sha256": "f087cb4dacfbfe59d9afc76749e18132a25acdbae8afc356fe6599491d80e399",
+  "windows_sha256": "adbef7850a217a5f74d6ed02c6fab0181e0d50a57ed6e23dfd27adf0a120bb2a"
+}

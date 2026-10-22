@@ -212,3 +212,65 @@ timeout 60s python3 experiments/paper_readiness/inspect_calibration_environment.
 可重复`--python`明确指定其他已存在的解释器；不扫描全盘、安装工具或启用网卡。输出含原始本地命令日志及去除GPU UUID、网卡GUID/IP等身份字段的`summary.json`。输出目录须不存在，父目录存在，卷预留8GiB；单读取命令≤10秒、整轮≤60秒/RSS1GiB/地址2GiB，产物≤4MiB。命令不可用、超时或未确认的能力保留其状态，不换工具自动重试；不能把环境检查结束理解为性能校准通过。所用固定DeepEP README仍须按来源缓存恢复并通过Git树/blob/SHA256核查。
 
 当前可见6张A100但无Hopper候选，verbs枚举0 HCA且无uverbs节点，4个sysfs端口均Down。rate字段不能作为可用带宽，包元数据缺失也仅限明确检查的Python。实机验证条件与后续实验设计见[校准报告](../../docs/reviews/现代通信校准条件与论文验证路线_20261022.md)。
+
+## 真实路由：共选、相位与专家放置对照
+
+本研究只做离线 Dispatch 数据操作数核算。固定四份原件、EP4、每 rank 一个 Decode token、256 专家/Top8、58 层和 128 个 Decode 位置；八组条件及可保持/改变的因素见[协议](route_controls_protocol.md)。原始与共选交换的专家频次相同，副本数仍从 69,409 变为 79,432—79,600；累计矩阵相同的相位对照也改变窗口分布。详细结果、比值指标的局限和后续网络验证见[HTML](../../docs/review_artifacts/route_controls_20261022/report.html)。
+
+使用 Python 标准库，不安装、不下载、不构建。先按 manifest 恢复本机四份原件；来源和逐文件 hash 见正式结果目录的 manifest.json。原件不是公开 Git 文件，仓库的本地[检查点清单](../../docs/review_artifacts/route_controls_20261022/archive.json)记录其归档和恢复路径。也可将归档中的 data/ 恢复到隔离目录，再将下列 `--source-root` 改为该目录；manifest 中的文件路径按 source-root 解析。
+
+从仓库根执行下面五条研究命令。辅助函数为每条命令施加 60 秒/RSS1GiB/地址2GiB，所有本轮临时产物共同受 64MiB 限制，卷预留 8GiB；准备和分析内部各有 16MiB 输出限制。累计新产物不超过 128MiB。输出目录和核验文件必须不存在；失败保留，不自动重跑或抬限。不要用 `python -O` 禁用脚本中的研究不变量检查。
+
+```bash
+COSIM_ROUTE_WORK=$(mktemp -d /dev/shm/moe-route-controls.XXXXXX)
+route_budget() {
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_ROUTE_WORK/$1-probe" --artifact-root "$COSIM_ROUTE_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes 67108864 --wall-seconds 60 --min-free-bytes 8589934592 \
+    -- python3 "${@:2}"
+}
+route_budget prepare experiments/paper_readiness/prepare_route_controls.py \
+  --manifest data/moe-trace-small/manifest.json \
+  --config experiments/paper_readiness/route_controls.json \
+  --source-root "$PWD" --output "$COSIM_ROUTE_WORK/prepared"
+route_budget analyze experiments/paper_readiness/analyze_route_controls.py \
+  --observed "$COSIM_ROUTE_WORK/prepared/observed" --output "$COSIM_ROUTE_WORK/analysis"
+route_budget repeat-prepare experiments/paper_readiness/prepare_route_controls.py \
+  --manifest data/moe-trace-small/manifest.json \
+  --config experiments/paper_readiness/route_controls.json \
+  --source-root "$PWD" --output "$COSIM_ROUTE_WORK/repeat-prepared"
+route_budget repeat-analyze experiments/paper_readiness/analyze_route_controls.py \
+  --observed "$COSIM_ROUTE_WORK/repeat-prepared/observed" --output "$COSIM_ROUTE_WORK/repeat-analysis"
+route_budget check experiments/paper_readiness/check_route_controls.py \
+  --prepared "$COSIM_ROUTE_WORK/prepared" --analysis "$COSIM_ROUTE_WORK/analysis" \
+  --repeat-prepared "$COSIM_ROUTE_WORK/repeat-prepared" \
+  --repeat-analysis "$COSIM_ROUTE_WORK/repeat-analysis" \
+  --source-root "$PWD" --output "$COSIM_ROUTE_WORK/verification.json"
+```
+
+`prepared/observed/` 含五份路由张量、四份放置图及八条件索引；`truth/` 含固定配置、来源和交换日志，分析不能读取它。`analysis/windows.csv` 的每行对应一个条件/层/Decode 位置，`matrix_bits` 是 16 个按 source、destination 行优先排列的 0/1 值，含零对角线；一项表示该 source 的 token 是否要向该 destination 发一份数据。份数不是包数，矩阵不含控制流。零远端数据时入量比值为空，不补成 0。summary.json 使用 nearest-rank 经验分位数；窗口相关，不能当独立生产样本。
+
+独立检查读取原件和评价真值，通过另一路逐目的枚举，核对全部矩阵、分位数、专家度数、相位和容量，并比较新目录重复产物；另外输出事后追加的绝对最大入量/比值分母诊断。重复不要求 execution.json 逐字节一致，因为它记录实际路径与资源。上述脚本不导入平台生成器、tests 或 fixture。
+
+生成 HTML 和带逐文件 hash 的本地检查点时，使用已成功完成的五份 probe；结果目录和 checkpoint 目录须位于仓库内且尚不存在：
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_ROUTE_WORK/review-probe" \
+  --artifact-root docs/review_artifacts/my-route-controls \
+  --artifact-root runs/my-route-controls-checkpoint \
+  --rss-bytes 1073741824 --address-bytes 2147483648 \
+  --artifact-bytes 67108864 --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/build_route_controls_review.py \
+  --prepared "$COSIM_ROUTE_WORK/prepared" --analysis "$COSIM_ROUTE_WORK/analysis" \
+  --repeat-prepared "$COSIM_ROUTE_WORK/repeat-prepared" \
+  --repeat-analysis "$COSIM_ROUTE_WORK/repeat-analysis" \
+  --verification "$COSIM_ROUTE_WORK/verification.json" --source-root "$PWD" \
+  --probe "$COSIM_ROUTE_WORK/prepare-probe" --probe "$COSIM_ROUTE_WORK/analyze-probe" \
+  --probe "$COSIM_ROUTE_WORK/repeat-prepare-probe" --probe "$COSIM_ROUTE_WORK/repeat-analyze-probe" \
+  --probe "$COSIM_ROUTE_WORK/check-probe" \
+  --output docs/review_artifacts/my-route-controls --checkpoint runs/my-route-controls-checkpoint
+```
+
+报告生成器复用仓库已有静态 HTML 渲染器，检查本地链接；未作浏览器视觉验收。归档包含原件、两轮准备与分析、五份原始 probe、研究脚本及报告；archive.json 自身和打包过程的 probe 不进入自身归档，打包 probe 另行保存。归档只复现这项离线研究，不包含完整现代网络/GPU 执行环境。

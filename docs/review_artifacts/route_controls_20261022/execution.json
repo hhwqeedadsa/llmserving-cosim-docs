@@ -1,0 +1,270 @@
+{
+  "platform_base_commit": "73566f19114484ee8bc2b7b770bb54f07bc6c151",
+  "research_scripts": {
+    "prepare_route_controls.py": "61e7ff0e01d056517b9a36415e7208631932075e182c0634a8c32e07fcc9cfad",
+    "analyze_route_controls.py": "0dc44b42200eaba6247fe9ce07048b7ba9b42d283f45052bfe37b71edb7af156",
+    "check_route_controls.py": "ad6cab32504ecc9c23a72a038d59959b94a93cd338ea180a35f08535deebb892",
+    "build_route_controls_review.py": "dff6613397b8235e57e5e92962049b73cda2463063fff46d4141adbc80978c97"
+  },
+  "cwd": "/home/lry/moe-ub-cosim",
+  "environment": {
+    "PYTHONPATH": "python",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "probe_directory": "/dev/shm/moe-route-controls-prepare-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prepare_route_controls.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--config",
+        "experiments/paper_readiness/route_controls.json",
+        "--output",
+        "/dev/shm/moe-route-controls-prepared-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T16:59:00.798433+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 35700736,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-route-controls-prepared-20261022",
+        "/dev/shm/moe-route-controls-prepare-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 4792320,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4758165,
+      "peak_sampled_artifact_allocated_bytes": 4792320,
+      "process_group": 1689801,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T16:59:06.334187+00:00",
+      "wall_seconds": 5.535762012004852,
+      "max_waited_child_rss_kib": 34864,
+      "artifact_bytes_before_report": 13411,
+      "aggregate_artifact_bytes_before_report": 4792320,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4758165,
+        "allocated_bytes": 4792320
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-route-controls-analysis-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_route_controls.py",
+        "--observed",
+        "/dev/shm/moe-route-controls-prepared-20261022/observed",
+        "--output",
+        "/dev/shm/moe-route-controls-analysis-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:00:21.554355+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 40087552,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-route-controls-analysis-probe-20261022",
+        "/dev/shm/moe-route-controls-analysis-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 4169728,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4152458,
+      "peak_sampled_artifact_allocated_bytes": 4169728,
+      "process_group": 1690078,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:00:23.437414+00:00",
+      "wall_seconds": 1.8830805756151676,
+      "max_waited_child_rss_kib": 43244,
+      "artifact_bytes_before_report": 4744,
+      "aggregate_artifact_bytes_before_report": 4169728,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4152458,
+        "allocated_bytes": 4169728
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-route-controls-repeat-prepare-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prepare_route_controls.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--config",
+        "experiments/paper_readiness/route_controls.json",
+        "--output",
+        "/dev/shm/moe-route-controls-repeat-prepared-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:00:21.554168+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 34693120,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-route-controls-repeat-prepare-probe-20261022",
+        "/dev/shm/moe-route-controls-repeat-prepared-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 4792320,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4758468,
+      "peak_sampled_artifact_allocated_bytes": 4792320,
+      "process_group": 1690077,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:00:27.248394+00:00",
+      "wall_seconds": 5.694229613989592,
+      "max_waited_child_rss_kib": 33880,
+      "artifact_bytes_before_report": 13707,
+      "aggregate_artifact_bytes_before_report": 4792320,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4758468,
+        "allocated_bytes": 4792320
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-route-controls-repeat-analysis-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_route_controls.py",
+        "--observed",
+        "/dev/shm/moe-route-controls-repeat-prepared-20261022/observed",
+        "--output",
+        "/dev/shm/moe-route-controls-repeat-analysis-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:02:31.805474+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 39047168,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-route-controls-repeat-analysis-probe-20261022",
+        "/dev/shm/moe-route-controls-repeat-analysis-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 4169728,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4152729,
+      "peak_sampled_artifact_allocated_bytes": 4169728,
+      "process_group": 1690417,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:02:33.785970+00:00",
+      "wall_seconds": 1.9805187154561281,
+      "max_waited_child_rss_kib": 42228,
+      "artifact_bytes_before_report": 5002,
+      "aggregate_artifact_bytes_before_report": 4169728,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4152729,
+        "allocated_bytes": 4169728
+      }
+    },
+    {
+      "probe_directory": "/dev/shm/moe-route-controls-check-probe-20261022",
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_route_controls.py",
+        "--prepared",
+        "/dev/shm/moe-route-controls-prepared-20261022",
+        "--analysis",
+        "/dev/shm/moe-route-controls-analysis-20261022",
+        "--repeat-prepared",
+        "/dev/shm/moe-route-controls-repeat-prepared-20261022",
+        "--repeat-analysis",
+        "/dev/shm/moe-route-controls-repeat-analysis-20261022",
+        "--source-root",
+        "/home/lry/moe-ub-cosim",
+        "--output",
+        "/dev/shm/moe-route-controls-verification-20261022.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T17:05:30.227760+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 48730112,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-route-controls-verification-20261022.json",
+        "/dev/shm/moe-route-controls-check-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 20480,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 15683,
+      "peak_sampled_artifact_allocated_bytes": 20480,
+      "process_group": 1691027,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T17:05:34.564707+00:00",
+      "wall_seconds": 4.336958708241582,
+      "max_waited_child_rss_kib": 47588,
+      "artifact_bytes_before_report": 15683,
+      "aggregate_artifact_bytes_before_report": 20480,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 15683,
+        "allocated_bytes": 20480
+      }
+    }
+  ],
+  "network_executed": false,
+  "hardware_calibrated": false,
+  "goal_complete": false,
+  "read_only_network_requests": 0,
+  "new_downloads": 0,
+  "builds": 0,
+  "dependency_changes": 0
+}

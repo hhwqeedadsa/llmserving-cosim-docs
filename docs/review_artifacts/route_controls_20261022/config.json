@@ -1,0 +1,13 @@
+{
+  "schema_version": "moe-route-controls/1",
+  "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+  "ranks": 4,
+  "experts": 256,
+  "top_k": 8,
+  "decode_entries": 128,
+  "source_layers": [3, 60],
+  "phase_offsets": [0, 17, 43, 79],
+  "swap_seeds": [2026102201, 2026102202, 2026102203],
+  "swap_attempts_per_cell": 4096,
+  "placement_seeds": [2026102211, 2026102212, 2026102213]
+}

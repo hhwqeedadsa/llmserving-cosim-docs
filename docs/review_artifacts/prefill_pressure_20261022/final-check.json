@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "monitored_stages": 8,
+  "expected_failed_stages": 3,
+  "total_monitored_wall_seconds": 12.318468257784843,
+  "artifact_apparent_bytes_before_final_record": 15940093,
+  "artifact_allocated_bytes_before_final_record": 16138240,
+  "cumulative_budget_bytes": 134217728,
+  "wall_budget_seconds": 300,
+  "source_hashes_current": true,
+  "read_only_audit_byte_identical": true,
+  "local_html_links_checked": 5,
+  "browser_visual_acceptance": false,
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "checkouts_verified": 13
+  },
+  "network_runs": {
+    "completed": 1,
+    "time_censored": 1,
+    "not_started": 2,
+    "retries": 0
+  },
+  "archive_hash_checked": true,
+  "archive_members_verified": 97,
+  "prior_members_verified": 298,
+  "archive_storage": "tmpfs_volatile_not_persistent_backup",
+  "root_volume_reserve_preflight_failed_and_preserved": true,
+  "large_outputs_kept_on_tmpfs": true,
+  "post_package_record_not_in_archive": true,
+  "goal_complete": false
+}

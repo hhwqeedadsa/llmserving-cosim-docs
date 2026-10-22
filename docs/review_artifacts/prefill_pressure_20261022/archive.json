@@ -1,0 +1,15 @@
+{
+  "path": "/dev/shm/moe-prefill-pressure-20261022/checkpoint/checkpoint.tar.gz",
+  "sha256": "c001912e41653121ac4a995565877c344f302d3922d410de786a3a7af0b44dcc",
+  "bytes": 13127556,
+  "files": 97,
+  "all_member_hashes_verified": true,
+  "failed_network_and_checker_preserved": true,
+  "prior_archive_embedded": true,
+  "prior_archive_sha256": "ed96f14fa9797431203f0ec48a6bec7572bf1002a3f3355fed2184432d1cfc33",
+  "prior_member_hashes_verified": 298,
+  "raw_requests_and_native_runtime_in_prior_archive": true,
+  "storage": "tmpfs_volatile_not_persistent_backup",
+  "running_package_probe_and_self_manifest_excluded": true,
+  "restore": "Extract into new directories; read-only audit needs the four manifest request paths and recorded native/runtime paths restored and hash checked. Prior archive supplies them; original RPATH is retained, not a portable runtime image."
+}

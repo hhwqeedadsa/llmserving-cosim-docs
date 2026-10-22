@@ -1,5 +1,47 @@
 # 论文基础审计与强基线判别
 
+## 真实Prefill压力与失败前缀
+
+[执行前方法](prefill_pressure_protocol.md)固定四请求entry0全Prefill、层4/32、depth1/8共4条件。
+[实际HTML](../../docs/review_artifacts/prefill_pressure_20261022/report.html)保留1次完成、1次5ms未完成及2次未执行。
+深度8出现ECN及反馈降速；这不是生产优化结论，1500μs恢复定时器来自当前ns-3默认值，未硬件校准。
+失败没有延长时限或重跑。源长度、专家计算贡献和目的rank去重流量分别说明。
+
+优先只读复核。原始目录仍在本机时，在仓库根执行下列命令；输出目录及monitor目录必须新建。
+检查点恢复时按[archive.json](../../docs/review_artifacts/prefill_pressure_20261022/archive.json)核hash，再恢复`raw/`，
+内嵌旧包提供四原件和固定native/runtime。当前审计同时核对原输入日志中的绝对runtime路径，迁移后须显式恢复这些路径及原件，
+不是一个无需准备环境的运行镜像。不要为了只读核验执行`run`子命令。
+
+```bash
+COSIM_PREFILL_WORK=/dev/shm/moe-prefill-pressure-20261022
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/my-prefill-readonly-monitor --artifact-root /dev/shm/my-prefill-readonly \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 33554432 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/audit_prefill_pressure.py \
+  --task "$COSIM_PREFILL_WORK" --output /dev/shm/my-prefill-readonly
+```
+
+审计回查全部4个声明输入、4份原件、2个实际网络记录及停止规则；不是4个网络条件都成功。
+已完成条件核对端点包和全部物理端口精确计数；时限前缀只核对已接收/已注入路径上下界，不能称完整逐跳捕获。
+源码反馈重建独立于网络执行，遇到同纳秒外部事件与定时器歧义时明确不认证该连接的精确发包间隔；
+最小重建速率与“实际发包时的最小重建速率”分开，不将空闲后的定时器状态当成实际限速观测。
+第一次检查器错误假定未发布工作已有字节区间，原失败脚本和日志保留；更正为在发布后检查真实区间，没有修改平台。
+
+`prefill_pressure.py prepare --manifest 清单 --output 新目录`生成4个固定工作输入，
+`run --observed 新目录/observed --backend 固定二进制 --output 新目录/run`通过公开CLI按首次失败停止。
+运行必须使用协议中的host_probe：60秒/RSS1GiB/地址2GiB/64MiB；准备及只读分析32MiB，累计128MiB/300秒、预留8GiB。
+本轮已有终态，指标复核不执行新网络。脚本`analyze`子命令要求4个条件全部完成，当前4条件研究未完成，因此没有执行或验收该全条件分析入口；
+本轮交付使用上面的独立前缀审计，不能把删去失败条件后的结果冒充完整矩阵。
+
+`package_prefill_pressure.py --task 原始目录 --output 仓库内新报告目录 --checkpoint 原始目录内的新内存盘归档目录
+--prior-archive 旧Dispatch检查点 --prior-members 对应members.json --monitors 七个阶段目录`生成本轮固定事实报告。
+七阶段依次为prepare、run、第一次失败prefix、prefix-v2、prefix-v3、prefix-repeat、根卷空间检查失败的package；状态必须为成功/失败/失败/成功/成功/成功/失败。
+它要求最后两次只读审计的两份JSON字节一致，保留失败与未执行状态，复核固定ns-3库身份，并逐hash验证新归档和内嵌旧包。
+打包也用60秒/RSS1GiB/地址2GiB/64MiB的host_probe，把原始目录、报告和归档计入总量。根卷在正式打包前降至8GiB预留线以下，
+因此完整归档改放`/dev/shm`，同样检查8GiB预留；仅小型报告进入仓库，原空间检查失败保留。归档明确为易失，不能称持久备份。
+没有扩大产物、内存或时间预算，也没有重新执行失败网络。
+
 跨窗口/ECMP网络判别使用固定四请求、层4/32的Decode入口5/6、三放置、两上层速率与三个种子，共18条件。方法见[执行前协议](dispatch_validation_protocol.md)，结果见[HTML报告](../../docs/review_artifacts/dispatch_validation_20261022/report.html)。窗口此前已有离线统计，仅新增包级评价，不称独立留出。结果把总数据量、端点负载与已知链路服务量基线分开，不以此申明新放置算法或现代完整通信库。
 
 使用已有原生stream-probe和新的输出父目录，设置本仓库绝对`PYTHONPATH`。每一步按协议用公开`python -m moe_ub_cosim.host_probe`包住：60秒/RSS1GiB/地址2GiB，运行器64MiB，其余32MiB，全部累计128MiB/300秒、卷预留8GiB；正式命令见报告维护记录。placement原件可从[前阶段检查点](../../docs/review_artifacts/prefill_placement_20261022/archive.json)的`saved_run/planned/placements.json`恢复，本次检查点也保存同一原件和原始四请求。

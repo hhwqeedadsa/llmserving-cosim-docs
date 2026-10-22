@@ -1,0 +1,438 @@
+{
+  "monitors": [
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prefill_pressure.py",
+        "prepare",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:05:33.421245+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 31830016,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "/dev/shm/moe-prefill-pressure-20261022-prepare-monitor"
+      ],
+      "peak_sampled_artifact_bytes": 270336,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 234050,
+      "peak_sampled_artifact_allocated_bytes": 270336,
+      "process_group": 1740835,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:05:33.658224+00:00",
+      "wall_seconds": 0.23697010427713394,
+      "max_waited_child_rss_kib": 31084,
+      "artifact_bytes_before_report": 1075,
+      "aggregate_artifact_bytes_before_report": 270336,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 234050,
+        "allocated_bytes": 270336
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prefill_pressure.py",
+        "run",
+        "--observed",
+        "/dev/shm/moe-prefill-pressure-20261022/observed",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/run"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:05:49.614420+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 439054336,
+      "peak_sampled_processes": 4,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022-run-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022/run"
+      ],
+      "peak_sampled_artifact_bytes": 2207744,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2133972,
+      "peak_sampled_artifact_allocated_bytes": 2207744,
+      "process_group": 1740848,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:05:54.743945+00:00",
+      "wall_seconds": 5.129527144134045,
+      "max_waited_child_rss_kib": 377536,
+      "artifact_bytes_before_report": 17703,
+      "aggregate_artifact_bytes_before_report": 2207744,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2133972,
+        "allocated_bytes": 2207744
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_prefill_pressure.py",
+        "--task",
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:12:41.299201+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 49029120,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2839,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 1742139,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:12:42.307636+00:00",
+      "wall_seconds": 1.0084383133798838,
+      "max_waited_child_rss_kib": 52296,
+      "artifact_bytes_before_report": 2839,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2839,
+        "allocated_bytes": 8192
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_prefill_pressure.py",
+        "--task",
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-v2"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:13:33.894537+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 48672768,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-v2-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-v2"
+      ],
+      "peak_sampled_artifact_bytes": 90112,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 83491,
+      "peak_sampled_artifact_allocated_bytes": 90112,
+      "process_group": 1742342,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:13:35.233360+00:00",
+      "wall_seconds": 1.338826885446906,
+      "max_waited_child_rss_kib": 51692,
+      "artifact_bytes_before_report": 5006,
+      "aggregate_artifact_bytes_before_report": 90112,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 83491,
+        "allocated_bytes": 90112
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_prefill_pressure.py",
+        "--task",
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-v3"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:14:54.078194+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 49020928,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-v3-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-v3"
+      ],
+      "peak_sampled_artifact_bytes": 94208,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 86781,
+      "peak_sampled_artifact_allocated_bytes": 94208,
+      "process_group": 1742578,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:14:55.407960+00:00",
+      "wall_seconds": 1.3297760114073753,
+      "max_waited_child_rss_kib": 51792,
+      "artifact_bytes_before_report": 5327,
+      "aggregate_artifact_bytes_before_report": 94208,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 86781,
+        "allocated_bytes": 94208
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_prefill_pressure.py",
+        "--task",
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-repeat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:18:05.720117+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 49057792,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-repeat-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022/prefix-repeat"
+      ],
+      "peak_sampled_artifact_bytes": 94208,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 86777,
+      "peak_sampled_artifact_allocated_bytes": 94208,
+      "process_group": 1743191,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:18:07.074024+00:00",
+      "wall_seconds": 1.3539002742618322,
+      "max_waited_child_rss_kib": 52788,
+      "artifact_bytes_before_report": 5323,
+      "aggregate_artifact_bytes_before_report": 94208,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 86777,
+        "allocated_bytes": 94208
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/package_prefill_pressure.py",
+        "--task",
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "--output",
+        "docs/review_artifacts/prefill_pressure_20261022",
+        "--checkpoint",
+        "runs/prefill_pressure_checkpoint_20261022",
+        "--prior-archive",
+        "runs/dispatch_validation_checkpoint_20261022/checkpoint.tar.gz",
+        "--prior-members",
+        "runs/dispatch_validation_checkpoint_20261022/members.json",
+        "--monitors",
+        "/dev/shm/moe-prefill-pressure-20261022-prepare-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022-run-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-v2-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-v3-monitor",
+        "/dev/shm/moe-prefill-pressure-20261022-prefix-repeat-monitor"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T21:20:11.123230+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 7442432,
+      "peak_sampled_processes": 1,
+      "status": "child_failed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-prefill-pressure-20261022",
+        "/dev/shm/moe-prefill-pressure-20261022-package-monitor",
+        "/home/lry/moe-ub-cosim/runs/prefill_pressure_checkpoint_20261022",
+        "/home/lry/moe-ub-cosim/docs/review_artifacts/prefill_pressure_20261022"
+      ],
+      "peak_sampled_artifact_bytes": 2732032,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2611622,
+      "peak_sampled_artifact_allocated_bytes": 2732032,
+      "process_group": 1743598,
+      "child_exit_code": 1,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T21:20:11.259165+00:00",
+      "wall_seconds": 0.13593791238963604,
+      "max_waited_child_rss_kib": 18652,
+      "artifact_bytes_before_report": 884,
+      "aggregate_artifact_bytes_before_report": 2732032,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2611622,
+        "allocated_bytes": 2732032
+      }
+    }
+  ],
+  "commands": [
+    {
+      "label": "topology",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-prefill-pressure-20261022/observed/topology.json",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/run/topology"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06420259922742844
+    },
+    {
+      "label": "layer4-depth1",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-prefill-pressure-20261022/run/topology",
+        "--protocol",
+        "/dev/shm/moe-prefill-pressure-20261022/observed/protocol.json",
+        "--config",
+        "/dev/shm/moe-prefill-pressure-20261022/observed/layer4-depth1.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/run/layer4-depth1"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 2.6203591115772724
+    },
+    {
+      "label": "layer4-depth8",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-prefill-pressure-20261022/run/topology",
+        "--protocol",
+        "/dev/shm/moe-prefill-pressure-20261022/observed/protocol.json",
+        "--config",
+        "/dev/shm/moe-prefill-pressure-20261022/observed/layer4-depth8.json",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "/dev/shm/moe-prefill-pressure-20261022/run/layer4-depth8"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "wall_seconds": 2.269031535834074
+    }
+  ],
+  "platform_start_commit": "03efe13",
+  "package_start_head": "03efe13ce207178f5b55b495c5c69b5fc126a1cc",
+  "source_sha256": {
+    "prefill_pressure.py": "04e85e28795372f6a7004ad291e32ed6b6c53164ebf64f53d3e02f4c641b08dc",
+    "audit_prefill_pressure.py": "86f27d29c94fb0caea88706037b36053e23cd8edd650f0a050ec26d6f36c9cde",
+    "package_prefill_pressure.py": "8178f8508b76eb536a4f31771daab6500b24584bc8e10daaf8675eea17e40c61",
+    "prefill_pressure_protocol.md": "f6703d3aeda5b8956a69954b9e9d4e7be19819881591b9d33c81a130a477c448",
+    "check_dispatch_network.py": "5a9f84382224e11991c350c63dc07865bda7d1b261b7df2c00dc2afe9b8811d2",
+    "analyze_dispatch_validation.py": "4c771b08b48ae0a07838787ad321a8a27eb1b2926fb79bbf3a956fff4d7745cd",
+    "README.md": "a18fc1d84282f0c9d1019438ffde4fa3ed39e9205a1e810a2b0d296be470a6c8"
+  },
+  "source_correction": {
+    "failed_stage": "prefix-monitor",
+    "reason": "Checker incorrectly assumed unpublished work already had byte sequence intervals; native Pump assigns them only when published. Unpublished begin/end correctly remain zero.",
+    "failed_source_sha256": "a97ddfc9dda64099089f066d2428fd4eb9b6e8491cbe7c3d04734c0a434b20af",
+    "correction": "Branch explicitly on publication and retain missing acceptance/ACK; no platform/network/budget change, rerun only corrected read-only audit to new directory."
+  },
+  "storage_correction": {
+    "failed_probe": "/dev/shm/moe-prefill-pressure-20261022-package-monitor",
+    "reason": "Root filesystem free space dropped below the 8GiB artifact reserve before packaging; no output/checkpoint created.",
+    "root_free_bytes_observed": 8029896704,
+    "reserve_bytes": 8589934592,
+    "action": "Move large checkpoint to /dev/shm, keep small versioned review in repository. Same artifact, memory, wall and tmpfs-free limits; no deletions or network retry. Archive is explicitly volatile."
+  },
+  "interpretation": "1 completed network, 1 5ms-censored failure, 2 not started; network, first checker and root-disk packaging failures retained; only audit repeated",
+  "no_install_build_download_dependency_or_platform_change": true,
+  "goal_complete": false,
+  "package_probe_excluded_while_running": true
+}

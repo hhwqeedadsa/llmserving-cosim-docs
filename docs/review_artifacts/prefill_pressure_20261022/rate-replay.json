@@ -1,0 +1,3042 @@
+{
+  "streams": [
+    {
+      "case": "layer4-depth1",
+      "stream": 1,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 1199,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 19648,
+      "largest_gap": {
+        "start_ns": 3486,
+        "next_ns": 23134,
+        "observed_gap_ns": 19648,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 19608.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 2,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 989,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 29925,
+      "largest_gap": {
+        "start_ns": 3526,
+        "next_ns": 33451,
+        "observed_gap_ns": 29925,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 29885.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 3,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 1349,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 29549,
+      "largest_gap": {
+        "start_ns": 3566,
+        "next_ns": 33115,
+        "observed_gap_ns": 29549,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 29509.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 4,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 359,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 19399,
+      "largest_gap": {
+        "start_ns": 37219,
+        "next_ns": 56618,
+        "observed_gap_ns": 19399,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 19359.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 6,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 269,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 29875,
+      "largest_gap": {
+        "start_ns": 3526,
+        "next_ns": 33401,
+        "observed_gap_ns": 29875,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 29835.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 7,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 374,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 31154,
+      "largest_gap": {
+        "start_ns": 35793,
+        "next_ns": 66947,
+        "observed_gap_ns": 31154,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 31114.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 8,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 134,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 19258,
+      "largest_gap": {
+        "start_ns": 3486,
+        "next_ns": 22744,
+        "observed_gap_ns": 19258,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 19218.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 9,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 134,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 24044,
+      "largest_gap": {
+        "start_ns": 107283,
+        "next_ns": 131327,
+        "observed_gap_ns": 24044,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 24004.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 11,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 104,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 15750,
+      "largest_gap": {
+        "start_ns": 62404,
+        "next_ns": 78154,
+        "observed_gap_ns": 15750,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 15710.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 12,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 74,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 24247,
+      "largest_gap": {
+        "start_ns": 3486,
+        "next_ns": 27733,
+        "observed_gap_ns": 24247,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 24207.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 13,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 89,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 24666,
+      "largest_gap": {
+        "start_ns": 77519,
+        "next_ns": 102185,
+        "observed_gap_ns": 24666,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 24626.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth1",
+      "stream": 14,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 74,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 12529,
+      "largest_gap": {
+        "start_ns": 41891,
+        "next_ns": 54420,
+        "observed_gap_ns": 12529,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 40.0,
+        "residual_ns": 12489.0
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 1,
+      "feedback_events": 523,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 981,
+      "minimum_spacing_residual_ns": -0.47245812905350704,
+      "rate_limited_intervals_within_100ns": 807,
+      "floor_rate_intervals_within_1ns": 39,
+      "max_source_gap_ns": 82880,
+      "largest_gap": {
+        "start_ns": 56409,
+        "next_ns": 139289,
+        "observed_gap_ns": 82880,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 0.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 20293,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 24293,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 28293,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 32293,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 36293,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 40293,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 44293,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 48293,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 52293,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 56293,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1624293,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1700293,
+          "rate_bps": 45942573267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1704293,
+          "rate_bps": 42172228539,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1708293,
+          "rate_bps": 38711302687,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1712293,
+          "rate_bps": 35534402796,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1716293,
+          "rate_bps": 32618219859,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1720293,
+          "rate_bps": 29941357756,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1724293,
+          "rate_bps": 26702082685,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1728293,
+          "rate_bps": 23813256083,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1732293,
+          "rate_bps": 21236963871,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1736293,
+          "rate_bps": 18939393793,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1740293,
+          "rate_bps": 16890391651,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1744293,
+          "rate_bps": 15063065547,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1748293,
+          "rate_bps": 13433432945,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1752293,
+          "rate_bps": 11980105917,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1756293,
+          "rate_bps": 10684010437,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1760293,
+          "rate_bps": 9528136045,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1764293,
+          "rate_bps": 8497312599,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1768293,
+          "rate_bps": 7578011173,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1772293,
+          "rate_bps": 6758166499,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1776293,
+          "rate_bps": 5861522657,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1780293,
+          "rate_bps": 5083841581,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1784293,
+          "rate_bps": 4409339814,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1788293,
+          "rate_bps": 3824327978,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1792293,
+          "rate_bps": 3316932942,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1796293,
+          "rate_bps": 2876856851,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1800293,
+          "rate_bps": 2495168122,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1804293,
+          "rate_bps": 2164120177,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1808293,
+          "rate_bps": 1876994219,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1812293,
+          "rate_bps": 1627962872,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1816293,
+          "rate_bps": 1411971910,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1820293,
+          "rate_bps": 1224637680,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1824293,
+          "rate_bps": 1062158132,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1828293,
+          "rate_bps": 921235657,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1832293,
+          "rate_bps": 777860636,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1836293,
+          "rate_bps": 656799554,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1840293,
+          "rate_bps": 554579618,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1844293,
+          "rate_bps": 468268516,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1848293,
+          "rate_bps": 395390303,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1852293,
+          "rate_bps": 333854373,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1856293,
+          "rate_bps": 281895488,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1860293,
+          "rate_bps": 238023140,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1864293,
+          "rate_bps": 200978793,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1868293,
+          "rate_bps": 169699783,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1872293,
+          "rate_bps": 143288831,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1876293,
+          "rate_bps": 120988305,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1880293,
+          "rate_bps": 102158485,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1884293,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3400293,
+          "rate_bps": 25075000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3504293,
+          "rate_bps": 24262845493,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3508293,
+          "rate_bps": 23476995869,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3512293,
+          "rate_bps": 22716599139,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3516293,
+          "rate_bps": 21980830908,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3520293,
+          "rate_bps": 21268893484,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3524293,
+          "rate_bps": 20580015011,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3528293,
+          "rate_bps": 19913448632,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3532293,
+          "rate_bps": 19268471680,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3536293,
+          "rate_bps": 18081250579,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3540293,
+          "rate_bps": 16967179750,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3544293,
+          "rate_bps": 15921752061,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3548293,
+          "rate_bps": 14940738085,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3552293,
+          "rate_bps": 14020168991,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3556293,
+          "rate_bps": 13156320485,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3560293,
+          "rate_bps": 12345697746,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3564293,
+          "rate_bps": 11585021284,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3568293,
+          "rate_bps": 10871213674,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3572293,
+          "rate_bps": 10201387105,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3576293,
+          "rate_bps": 9572831699,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3580293,
+          "rate_bps": 8983004546,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3584293,
+          "rate_bps": 8429519416,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3588293,
+          "rate_bps": 7910137106,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3592293,
+          "rate_bps": 7206025892,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3596293,
+          "rate_bps": 6564590280,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3600293,
+          "rate_bps": 5980251277,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3604293,
+          "rate_bps": 5447926498,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3608293,
+          "rate_bps": 4962985960,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3612293,
+          "rate_bps": 4521211813,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3616293,
+          "rate_bps": 4118761654,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3620293,
+          "rate_bps": 3752135105,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3624293,
+          "rate_bps": 3418143371,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3628293,
+          "rate_bps": 3113881504,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3632293,
+          "rate_bps": 2836703137,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3636293,
+          "rate_bps": 2584197464,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3640293,
+          "rate_bps": 2354168276,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3644293,
+          "rate_bps": 2144614856,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3648293,
+          "rate_bps": 1898626631,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3652293,
+          "rate_bps": 1680853359,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3656293,
+          "rate_bps": 1488058773,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3660293,
+          "rate_bps": 1317377806,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3664293,
+          "rate_bps": 1166274018,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3668293,
+          "rate_bps": 1032501898,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3672293,
+          "rate_bps": 914073496,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3676293,
+          "rate_bps": 809228882,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3680293,
+          "rate_bps": 716409989,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3684293,
+          "rate_bps": 634237462,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3688293,
+          "rate_bps": 561490158,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3692293,
+          "rate_bps": 497087001,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3696293,
+          "rate_bps": 440070913,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3700293,
+          "rate_bps": 389594594,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3704293,
+          "rate_bps": 335526015,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3708293,
+          "rate_bps": 288961163,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3712293,
+          "rate_bps": 248858657,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3716293,
+          "rate_bps": 214321643,
+          "kind": "decrease"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 2,
+      "feedback_events": 478,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 646,
+      "minimum_spacing_residual_ns": -0.4996006576793661,
+      "rate_limited_intervals_within_100ns": 485,
+      "floor_rate_intervals_within_1ns": 38,
+      "max_source_gap_ns": 83119,
+      "largest_gap": {
+        "start_ns": 1637017,
+        "next_ns": 1720136,
+        "observed_gap_ns": 83119,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 239.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 27271,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 31271,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 35271,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 39271,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 43271,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 47271,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 51271,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 55271,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 59271,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 63271,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1683271,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1759271,
+          "rate_bps": 45942573267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1763271,
+          "rate_bps": 42172228539,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1767271,
+          "rate_bps": 38711302687,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1771271,
+          "rate_bps": 35534402796,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1775271,
+          "rate_bps": 32618219859,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1779271,
+          "rate_bps": 29941357756,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1783271,
+          "rate_bps": 26702082685,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1787271,
+          "rate_bps": 23813256083,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1791271,
+          "rate_bps": 21236963871,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1795271,
+          "rate_bps": 18939393793,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1799271,
+          "rate_bps": 16890391651,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1803271,
+          "rate_bps": 15063065547,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1807271,
+          "rate_bps": 13433432945,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1811271,
+          "rate_bps": 11980105917,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1815271,
+          "rate_bps": 10684010437,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1819271,
+          "rate_bps": 9528136045,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1823271,
+          "rate_bps": 8497312599,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1827271,
+          "rate_bps": 7578011173,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1831271,
+          "rate_bps": 6758166499,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1835271,
+          "rate_bps": 6027018618,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1839271,
+          "rate_bps": 5227380265,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1843271,
+          "rate_bps": 4533834416,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1847271,
+          "rate_bps": 3932305183,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1851271,
+          "rate_bps": 3410584206,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1855271,
+          "rate_bps": 2958082876,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1859271,
+          "rate_bps": 2565617435,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1863271,
+          "rate_bps": 2225222584,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1867271,
+          "rate_bps": 1929989827,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1871271,
+          "rate_bps": 1673927255,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1875271,
+          "rate_bps": 1451837940,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1879271,
+          "rate_bps": 1259214460,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1883271,
+          "rate_bps": 1092147417,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1887271,
+          "rate_bps": 947246095,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1891271,
+          "rate_bps": 821569644,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1895271,
+          "rate_bps": 693705982,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1899271,
+          "rate_bps": 585742174,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1903271,
+          "rate_bps": 494581138,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1911271,
+          "rate_bps": 417607803,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1915271,
+          "rate_bps": 352614088,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1919271,
+          "rate_bps": 297735565,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1923271,
+          "rate_bps": 251397972,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1927271,
+          "rate_bps": 212272055,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1931271,
+          "rate_bps": 179235437,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1935271,
+          "rate_bps": 151340419,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1939271,
+          "rate_bps": 127786797,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1943271,
+          "rate_bps": 107898905,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1947271,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3447271,
+          "rate_bps": 25075000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3519271,
+          "rate_bps": 24345889638,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3523271,
+          "rate_bps": 23637979752,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3527271,
+          "rate_bps": 22950653891,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3531271,
+          "rate_bps": 22283313530,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3535271,
+          "rate_bps": 21635377546,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3539271,
+          "rate_bps": 21006281715,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3543271,
+          "rate_bps": 19777207134,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3547271,
+          "rate_bps": 18620045533,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3551271,
+          "rate_bps": 17530589294,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3555271,
+          "rate_bps": 16504876986,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3559271,
+          "rate_bps": 15539178961,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3563271,
+          "rate_bps": 14629983791,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3567271,
+          "rate_bps": 13773985502,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3571271,
+          "rate_bps": 12968071552,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3575271,
+          "rate_bps": 12209311514,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3579271,
+          "rate_bps": 11494946419,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3583271,
+          "rate_bps": 10822378725,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3587271,
+          "rate_bps": 10189162872,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3591271,
+          "rate_bps": 9592996389,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3595271,
+          "rate_bps": 9031711523,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3599271,
+          "rate_bps": 8254054130,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3603271,
+          "rate_bps": 7543355366,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3607271,
+          "rate_bps": 6893849893,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3611271,
+          "rate_bps": 6300268785,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3615271,
+          "rate_bps": 5757796787,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3619271,
+          "rate_bps": 5262033251,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3623271,
+          "rate_bps": 4808956439,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3627271,
+          "rate_bps": 4394890897,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3631271,
+          "rate_bps": 4016477637,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3635271,
+          "rate_bps": 3670646891,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3639271,
+          "rate_bps": 3354593208,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3643271,
+          "rate_bps": 3065752693,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3647271,
+          "rate_bps": 2801782210,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3651271,
+          "rate_bps": 2560540376,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3655271,
+          "rate_bps": 2273832686,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3659271,
+          "rate_bps": 2019228102,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3663271,
+          "rate_bps": 1793131990,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3667271,
+          "rate_bps": 1592352211,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3671271,
+          "rate_bps": 1414054056,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3675271,
+          "rate_bps": 1255720223,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3679271,
+          "rate_bps": 1115115276,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3683271,
+          "rate_bps": 990254083,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3687271,
+          "rate_bps": 879373792,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3691271,
+          "rate_bps": 780908940,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3695271,
+          "rate_bps": 693469351,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3699271,
+          "rate_bps": 615820508,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3703271,
+          "rate_bps": 546866127,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3707271,
+          "rate_bps": 485632675,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3711271,
+          "rate_bps": 419478173,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3715271,
+          "rate_bps": 362335457,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3719271,
+          "rate_bps": 312976913,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3723271,
+          "rate_bps": 270342154,
+          "kind": "decrease"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 3,
+      "feedback_events": 484,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 684,
+      "minimum_spacing_residual_ns": -0.49955481904635235,
+      "rate_limited_intervals_within_100ns": 515,
+      "floor_rate_intervals_within_1ns": 19,
+      "max_source_gap_ns": 82908,
+      "largest_gap": {
+        "start_ns": 1638009,
+        "next_ns": 1720917,
+        "observed_gap_ns": 82908,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 28.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 29070,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 33070,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 37070,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 41070,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 45070,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 49070,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 53070,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 57070,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 61070,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 65070,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1681070,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1765070,
+          "rate_bps": 45942573267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1769070,
+          "rate_bps": 42172228539,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1773070,
+          "rate_bps": 38711302687,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1777070,
+          "rate_bps": 35534402796,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1781070,
+          "rate_bps": 32618219859,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1785070,
+          "rate_bps": 29089342267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1789070,
+          "rate_bps": 25942244463,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1793070,
+          "rate_bps": 23135622717,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1797070,
+          "rate_bps": 20632641839,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1801070,
+          "rate_bps": 18400451739,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1805070,
+          "rate_bps": 16409756290,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1809070,
+          "rate_bps": 14634428834,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1813070,
+          "rate_bps": 13051169287,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1817070,
+          "rate_bps": 11639198338,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1821070,
+          "rate_bps": 10379984733,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1825070,
+          "rate_bps": 9257002066,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1829070,
+          "rate_bps": 8255511877,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1833070,
+          "rate_bps": 7362370221,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1837070,
+          "rate_bps": 6565855162,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1841070,
+          "rate_bps": 5694726344,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1845070,
+          "rate_bps": 4939175070,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1849070,
+          "rate_bps": 4283867020,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1853070,
+          "rate_bps": 3715502363,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1857070,
+          "rate_bps": 3222545832,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1861070,
+          "rate_bps": 2794992608,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1865070,
+          "rate_bps": 2424165267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1869070,
+          "rate_bps": 2102537669,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1873070,
+          "rate_bps": 1823582207,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1877070,
+          "rate_bps": 1581637331,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1881070,
+          "rate_bps": 1371792638,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1885070,
+          "rate_bps": 1189789217,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1889070,
+          "rate_bps": 1031933210,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1893070,
+          "rate_bps": 895020845,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1897070,
+          "rate_bps": 755725724,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1901070,
+          "rate_bps": 638109574,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1905070,
+          "rate_bps": 538798423,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1917070,
+          "rate_bps": 454943402,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1921070,
+          "rate_bps": 384139022,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1925070,
+          "rate_bps": 324354167,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1929070,
+          "rate_bps": 273873831,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1933070,
+          "rate_bps": 231249920,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1937070,
+          "rate_bps": 195259713,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1941070,
+          "rate_bps": 164870783,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1945070,
+          "rate_bps": 139211385,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1949070,
+          "rate_bps": 117545446,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3449070,
+          "rate_bps": 25083772723,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3505070,
+          "rate_bps": 24354407275,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3509070,
+          "rate_bps": 23646249720,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3513070,
+          "rate_bps": 22958683391,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3517070,
+          "rate_bps": 22291109554,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3521070,
+          "rate_bps": 21642946884,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3525070,
+          "rate_bps": 21013630958,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3529070,
+          "rate_bps": 20402613767,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3533070,
+          "rate_bps": 19809363234,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3537070,
+          "rate_bps": 19233362756,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3541070,
+          "rate_bps": 18674110749,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3545070,
+          "rate_bps": 17581491162,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3549070,
+          "rate_bps": 16552800593,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3553070,
+          "rate_bps": 15584298564,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3557070,
+          "rate_bps": 14672463452,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3561070,
+          "rate_bps": 13813979684,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3565070,
+          "rate_bps": 13005725680,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3569070,
+          "rate_bps": 12244762504,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3573070,
+          "rate_bps": 11528323176,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3577070,
+          "rate_bps": 10853802612,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3581070,
+          "rate_bps": 10218748151,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3585070,
+          "rate_bps": 9620850637,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3589070,
+          "rate_bps": 9057936023,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3593070,
+          "rate_bps": 8527957463,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3597070,
+          "rate_bps": 8028987874,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3601070,
+          "rate_bps": 7337667989,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3605070,
+          "rate_bps": 6705872815,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3609070,
+          "rate_bps": 6128477096,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3613070,
+          "rate_bps": 5600796876,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3617070,
+          "rate_bps": 5118551502,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3621070,
+          "rate_bps": 4677828898,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3625070,
+          "rate_bps": 4275053830,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3629070,
+          "rate_bps": 3906958900,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3633070,
+          "rate_bps": 3570558046,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3637070,
+          "rate_bps": 3263122312,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3641070,
+          "rate_bps": 2982157715,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3645070,
+          "rate_bps": 2725385010,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3649070,
+          "rate_bps": 2490721204,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3653070,
+          "rate_bps": 2276262654,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3657070,
+          "rate_bps": 2021385983,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3661070,
+          "rate_bps": 1795048249,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3665070,
+          "rate_bps": 1594053903,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3669070,
+          "rate_bps": 1415565207,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3673070,
+          "rate_bps": 1257062168,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3677070,
+          "rate_bps": 1116306961,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3681070,
+          "rate_bps": 991312333,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3685070,
+          "rate_bps": 880313548,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3689070,
+          "rate_bps": 781743470,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3693070,
+          "rate_bps": 694210437,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3697070,
+          "rate_bps": 616478614,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3701070,
+          "rate_bps": 547450544,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3705070,
+          "rate_bps": 486151654,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3709070,
+          "rate_bps": 431716496,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3713070,
+          "rate_bps": 372906635,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3717070,
+          "rate_bps": 322108050,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3721070,
+          "rate_bps": 278229417,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3729070,
+          "rate_bps": 240328078,
+          "kind": "decrease"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 4,
+      "feedback_events": 139,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 359,
+      "minimum_spacing_residual_ns": -0.45996326566438483,
+      "rate_limited_intervals_within_100ns": 274,
+      "floor_rate_intervals_within_1ns": 20,
+      "max_source_gap_ns": 82880,
+      "largest_gap": {
+        "start_ns": 96935,
+        "next_ns": 179815,
+        "observed_gap_ns": 82880,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 0.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 19000,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 23000,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 27000,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 31000,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 35000,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 39000,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 43000,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 47000,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 51000,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 55000,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1627000,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1651000,
+          "rate_bps": 45376661139,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1655000,
+          "rate_bps": 41139687835,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1659000,
+          "rate_bps": 37298335150,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1663000,
+          "rate_bps": 33815662640,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1667000,
+          "rate_bps": 29798782380,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1671000,
+          "rate_bps": 26259057549,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1675000,
+          "rate_bps": 23139808015,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1679000,
+          "rate_bps": 20391086541,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1683000,
+          "rate_bps": 17968879001,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1687000,
+          "rate_bps": 15834399599,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1691000,
+          "rate_bps": 13953469810,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1699000,
+          "rate_bps": 12295971093,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3199000,
+          "rate_bps": 31172985546,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4699000,
+          "rate_bps": 40611492773,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 6,
+      "feedback_events": 116,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [
+        {
+          "time_ns": 269543,
+          "kind": "sample"
+        }
+      ],
+      "spacing_verified_without_equal_time_ambiguity": false,
+      "source_intervals": 269,
+      "minimum_spacing_residual_ns": -0.07999999999992724,
+      "rate_limited_intervals_within_100ns": 157,
+      "floor_rate_intervals_within_1ns": 21,
+      "max_source_gap_ns": 82880,
+      "largest_gap": {
+        "start_ns": 103783,
+        "next_ns": 186663,
+        "observed_gap_ns": 82880,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 0.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 25543,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 29543,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 33543,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 37543,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 41543,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 45543,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 49543,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 53543,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 57543,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 61543,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1669543,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1749543,
+          "rate_bps": 45942573267,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1753543,
+          "rate_bps": 42172228539,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1757543,
+          "rate_bps": 38711302687,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3257543,
+          "rate_bps": 44380651343,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4757543,
+          "rate_bps": 47215325671,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 7,
+      "feedback_events": 293,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 374,
+      "minimum_spacing_residual_ns": -0.48687147223699867,
+      "rate_limited_intervals_within_100ns": 216,
+      "floor_rate_intervals_within_1ns": 19,
+      "max_source_gap_ns": 83726,
+      "largest_gap": {
+        "start_ns": 1679443,
+        "next_ns": 1763169,
+        "observed_gap_ns": 83726,
+        "replay_rate_bps": 100000000,
+        "rate_spacing_ns": 82880.0,
+        "residual_ns": 846.0
+      },
+      "rate_changes": [
+        {
+          "time_ns": 27837,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 31837,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 35837,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 39837,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 43837,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 47837,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 51837,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 55837,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 59837,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 63837,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1679837,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 1791837,
+          "rate_bps": 46199287438,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1795837,
+          "rate_bps": 42644838357,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1799837,
+          "rate_bps": 39363859041,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1803837,
+          "rate_bps": 36335309460,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1807837,
+          "rate_bps": 33539768349,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1811837,
+          "rate_bps": 30959308662,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1815837,
+          "rate_bps": 28577382612,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1819837,
+          "rate_bps": 26378715554,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1823837,
+          "rate_bps": 24349208034,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1827837,
+          "rate_bps": 22475845371,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1831837,
+          "rate_bps": 20746614199,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1835837,
+          "rate_bps": 19150425429,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1839837,
+          "rate_bps": 17170678734,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1843837,
+          "rate_bps": 15395595742,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1847837,
+          "rate_bps": 13804018578,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1851837,
+          "rate_bps": 12376976643,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1855837,
+          "rate_bps": 11097460494,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1859837,
+          "rate_bps": 9950219101,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1863837,
+          "rate_bps": 8921578069,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1867837,
+          "rate_bps": 7999276642,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1871837,
+          "rate_bps": 7172321567,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1875837,
+          "rate_bps": 6430856059,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1879837,
+          "rate_bps": 5766042315,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1883837,
+          "rate_bps": 5169956172,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1887837,
+          "rate_bps": 4635492659,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1891837,
+          "rate_bps": 4156281306,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1895837,
+          "rate_bps": 3623580867,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1899837,
+          "rate_bps": 3159155344,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1903837,
+          "rate_bps": 2754254108,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1907837,
+          "rate_bps": 2401248076,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1911837,
+          "rate_bps": 2093485966,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1915837,
+          "rate_bps": 1825168975,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1919837,
+          "rate_bps": 1591241518,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 3419837,
+          "rate_bps": 25820620759,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4919837,
+          "rate_bps": 37935310379,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 8,
+      "feedback_events": 59,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 134,
+      "minimum_spacing_residual_ns": 40.0,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 261,
+      "largest_gap": {
+        "start_ns": 9268,
+        "next_ns": 9529,
+        "observed_gap_ns": 261,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 82.88,
+        "residual_ns": 178.12
+      },
+      "rate_changes": [
+        {
+          "time_ns": 30919,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 34919,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 38919,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 42919,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 46919,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 50919,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 54919,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 58919,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 62919,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 66919,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1578919,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3078919,
+          "rate_bps": 75025000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4578919,
+          "rate_bps": 87512500000,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 9,
+      "feedback_events": 62,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 134,
+      "minimum_spacing_residual_ns": 40.120000000000005,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 257,
+      "largest_gap": {
+        "start_ns": 7576,
+        "next_ns": 7833,
+        "observed_gap_ns": 257,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 82.88,
+        "residual_ns": 174.12
+      },
+      "rate_changes": [
+        {
+          "time_ns": 38772,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 42772,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 46772,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 50772,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 54772,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 58772,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 62772,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 66772,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 70772,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 74772,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1598772,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3098772,
+          "rate_bps": 75025000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4598772,
+          "rate_bps": 87512500000,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 11,
+      "feedback_events": 60,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 25000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 104,
+      "minimum_spacing_residual_ns": 1.240000000000009,
+      "rate_limited_intervals_within_100ns": 18,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 423,
+      "largest_gap": {
+        "start_ns": 25645,
+        "next_ns": 26068,
+        "observed_gap_ns": 423,
+        "replay_rate_bps": 25000000000,
+        "rate_spacing_ns": 331.52,
+        "residual_ns": 91.48000000000002
+      },
+      "rate_changes": [
+        {
+          "time_ns": 20849,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 24849,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 28849,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 32849,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 36849,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 40849,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 44849,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 48849,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 52849,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 56849,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1572849,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3072849,
+          "rate_bps": 75025000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4572849,
+          "rate_bps": 87512500000,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 12,
+      "feedback_events": 39,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 74,
+      "minimum_spacing_residual_ns": 80.0,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 257,
+      "largest_gap": {
+        "start_ns": 8477,
+        "next_ns": 8734,
+        "observed_gap_ns": 257,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 82.88,
+        "residual_ns": 174.12
+      },
+      "rate_changes": [
+        {
+          "time_ns": 36168,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 40168,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 44168,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 48168,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 52168,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 56168,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 60168,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 64168,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 68168,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 72168,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1596168,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3096168,
+          "rate_bps": 75025000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4596168,
+          "rate_bps": 87512500000,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 13,
+      "feedback_events": 40,
+      "minimum_replayed_rate_bps": 100000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 89,
+      "minimum_spacing_residual_ns": 0.12000000000000455,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 261,
+      "largest_gap": {
+        "start_ns": 13724,
+        "next_ns": 13985,
+        "observed_gap_ns": 261,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 82.88,
+        "residual_ns": 178.12
+      },
+      "rate_changes": [
+        {
+          "time_ns": 35728,
+          "rate_bps": 50000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 39728,
+          "rate_bps": 25000000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 43728,
+          "rate_bps": 12500000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 47728,
+          "rate_bps": 6250000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 51728,
+          "rate_bps": 3125000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 55728,
+          "rate_bps": 1562500000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 59728,
+          "rate_bps": 781250000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 63728,
+          "rate_bps": 390625000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 67728,
+          "rate_bps": 195312500,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 71728,
+          "rate_bps": 100000000,
+          "kind": "decrease"
+        },
+        {
+          "time_ns": 1603728,
+          "rate_bps": 50050000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 3103728,
+          "rate_bps": 75025000000,
+          "kind": "increase"
+        },
+        {
+          "time_ns": 4603728,
+          "rate_bps": 87512500000,
+          "kind": "increase"
+        }
+      ],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    },
+    {
+      "case": "layer4-depth8",
+      "stream": 14,
+      "feedback_events": 0,
+      "minimum_replayed_rate_bps": 100000000000,
+      "minimum_replayed_rate_at_actual_tx_bps": 100000000000,
+      "equal_time_ambiguities": [],
+      "spacing_verified_without_equal_time_ambiguity": true,
+      "source_intervals": 74,
+      "minimum_spacing_residual_ns": 80.12,
+      "rate_limited_intervals_within_100ns": 0,
+      "floor_rate_intervals_within_1ns": 0,
+      "max_source_gap_ns": 257,
+      "largest_gap": {
+        "start_ns": 8394,
+        "next_ns": 8651,
+        "observed_gap_ns": 257,
+        "replay_rate_bps": 100000000000,
+        "rate_spacing_ns": 82.88,
+        "residual_ns": 174.12
+      },
+      "rate_changes": [],
+      "rate_changes_scope": "reconstructed from fixed source and received feedback, not directly sampled NIC state"
+    }
+  ],
+  "scope": "Fixed-source DCQCN reconstructed from observed endpoint ACK sequence and ECN; not directly measured provider state"
+}

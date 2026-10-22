@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "case": "layer4-depth1",
+      "passed": true,
+      "observation_end_ns": 1777657,
+      "completion_ns": 1777657,
+      "work_count": 344,
+      "accepted_work": 344,
+      "acked_work": 344,
+      "not_yet_acked_work": 0,
+      "source_copies": [
+        236,
+        67,
+        25,
+        16
+      ],
+      "destination_copies": [
+        38,
+        95,
+        89,
+        122
+      ],
+      "source_copy_max_to_mean": 2.744186046511628,
+      "destination_copy_max_to_mean": 1.4186046511627908,
+      "expert_peak_to_mean": 4.724832214765101,
+      "destination_expert_contributions": [
+        335,
+        342,
+        212,
+        303
+      ],
+      "minimum_full_work_port_service_ns": 1133102.08,
+      "busiest_declared_port": {
+        "node": 8,
+        "port": 3,
+        "peer": 10,
+        "rate_bps": 25000000000,
+        "model_bytes": 3540944
+      },
+      "sent_payload_bytes": 4975616,
+      "declared_payload_bytes": 4975616,
+      "source_packets": 5160,
+      "endpoint_capture_events": 20640,
+      "received_ce_packets": 0,
+      "ecn_hook_observations": 0,
+      "pfc_pause": 0,
+      "max_queue_bytes": 33664,
+      "publication_wait_work_count": 332,
+      "result_sha256": "8bc4d78bdd9ea04d6b9087f93a8a3c88612f4acf5faaca89c1f70800c11ea216",
+      "port_check_scope": "exact counts for completed run; delivered/injected path bounds for time-censored prefix"
+    },
+    {
+      "case": "layer4-depth8",
+      "passed": false,
+      "observation_end_ns": 5000000,
+      "completion_ns": null,
+      "work_count": 344,
+      "accepted_work": 261,
+      "acked_work": 261,
+      "not_yet_acked_work": 83,
+      "source_copies": [
+        236,
+        67,
+        25,
+        16
+      ],
+      "destination_copies": [
+        38,
+        95,
+        89,
+        122
+      ],
+      "source_copy_max_to_mean": 2.744186046511628,
+      "destination_copy_max_to_mean": 1.4186046511627908,
+      "expert_peak_to_mean": 4.724832214765101,
+      "destination_expert_contributions": [
+        335,
+        342,
+        212,
+        303
+      ],
+      "minimum_full_work_port_service_ns": 1133102.08,
+      "busiest_declared_port": {
+        "node": 8,
+        "port": 3,
+        "peer": 10,
+        "rate_bps": 25000000000,
+        "model_bytes": 3540944
+      },
+      "sent_payload_bytes": 3794104,
+      "declared_payload_bytes": 4975616,
+      "source_packets": 3934,
+      "endpoint_capture_events": 15733,
+      "received_ce_packets": 2293,
+      "ecn_hook_observations": 9662,
+      "pfc_pause": 0,
+      "max_queue_bytes": 299044,
+      "publication_wait_work_count": 198,
+      "result_sha256": "64e391777fc2095c8201ad57d57b8739cde789cc9fa33cc170fb7182d262eb16",
+      "port_check_scope": "exact counts for completed run; delivered/injected path bounds for time-censored prefix"
+    }
+  ],
+  "source_packets_checked": 9094,
+  "endpoint_capture_events_checked": 36373,
+  "physical_port_bounds_checked": 80,
+  "raw_requests_checked": 4,
+  "declared_conditions_checked": 4,
+  "network_conditions_executed": 2,
+  "network_conditions_complete": 1,
+  "network_conditions_time_censored": 1,
+  "network_conditions_not_started": 2,
+  "no_new_network_or_retry": true,
+  "whole_run_latency_for_failed_case_unknown": true,
+  "rate_replay_source_sha256": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+  "defaults": {
+    "MinRate": "DataRateValue(DataRate(\"100Mb/s\"))",
+    "RPTimer": "DoubleValue(1500.0)",
+    "RateDecreaseInterval": "DoubleValue(4.0)",
+    "AlphaResumInterval": "DoubleValue(55.0)",
+    "EwmaGain": "DoubleValue(1.0 / 16)",
+    "RateOnFirstCnp": "DoubleValue(1.0)",
+    "ClampTargetRate": "BooleanValue(false)",
+    "FastRecoveryTimes": "UintegerValue(5)",
+    "RateAI": "DataRateValue(DataRate(\"5Mb/s\"))",
+    "RateHAI": "DataRateValue(DataRate(\"50Mb/s\"))",
+    "RateBound": "BooleanValue(true)"
+  },
+  "source_hashes": {
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+    "backend/rdma/fabric.cc": "4d85b5d049c435ec4612c286caf0e2bc277dcb8a8297ad22be750b8672dd5869",
+    "backend/rdma/persistent_streams.cc": "33cf55c71493758d72e44b90934529c94af99c7d78fdaacb165469496427cc65",
+    "backend/rdma/stream_probe.cc": "05810df0cef30ca51370d7743b18be98529427f3c8f586b43dfa8118ff4e2c77"
+  },
+  "hardware_calibrated": false,
+  "modern_GIN_modeled": false,
+  "goal_complete": false
+}

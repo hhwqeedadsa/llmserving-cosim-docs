@@ -1,0 +1,61 @@
+{
+  "schema_version": "moe-ub-host-probe/1",
+  "command": [
+    "python3",
+    "experiments/paper_readiness/package_prefill_pressure.py",
+    "--task",
+    "/dev/shm/moe-prefill-pressure-20261022",
+    "--output",
+    "docs/review_artifacts/prefill_pressure_20261022",
+    "--checkpoint",
+    "/dev/shm/moe-prefill-pressure-20261022/checkpoint",
+    "--prior-archive",
+    "runs/dispatch_validation_checkpoint_20261022/checkpoint.tar.gz",
+    "--prior-members",
+    "runs/dispatch_validation_checkpoint_20261022/members.json",
+    "--monitors",
+    "/dev/shm/moe-prefill-pressure-20261022-prepare-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-run-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-prefix-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-prefix-v2-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-prefix-v3-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-prefix-repeat-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022-package-monitor"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "started_utc": "2026-10-22T21:21:54.530499+00:00",
+  "limits": {
+    "sampled_group_rss_bytes": 1073741824,
+    "per_process_address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "wall_seconds": 60.0
+  },
+  "peak_sampled_group_rss_bytes": 34095104,
+  "peak_sampled_processes": 1,
+  "status": "completed",
+  "workload_semantics_validated": false,
+  "artifact_roots": [
+    "/dev/shm/moe-prefill-pressure-20261022-package-tmpfs-monitor",
+    "/dev/shm/moe-prefill-pressure-20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/prefill_pressure_20261022"
+  ],
+  "peak_sampled_artifact_bytes": 16031744,
+  "min_free_bytes": 8589934592,
+  "rss_scope": "owned_process_tree_including_detached_descendants",
+  "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+  "disk_sample_interval_seconds": 1.0,
+  "peak_sampled_artifact_apparent_bytes": 15887490,
+  "peak_sampled_artifact_allocated_bytes": 16031744,
+  "process_group": 1744008,
+  "child_exit_code": 0,
+  "remaining_live_group_pids": [],
+  "ended_utc": "2026-10-22T21:21:56.315577+00:00",
+  "wall_seconds": 1.7850916124880314,
+  "max_waited_child_rss_kib": 35580,
+  "artifact_bytes_before_report": 4538,
+  "aggregate_artifact_bytes_before_report": 16031744,
+  "aggregate_artifact_usage_before_report": {
+    "apparent_bytes": 15887490,
+    "allocated_bytes": 16031744
+  }
+}

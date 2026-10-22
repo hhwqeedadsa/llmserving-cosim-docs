@@ -69,6 +69,21 @@ MoE 使用 per-expert-copy 语义：一次专家贡献为 hidden_size × activat
 
 队列事件来自 BEgressQueue 入/出队之后，列为 `[time_ns,node,port,bytes]`，不含已进入链路串行化的数据。线上字节为原生模型中的 Packet 大小，未额外模拟 Ethernet preamble/FCS/IFG。Rx QP 的已接收状态保留至本次 Fabric 销毁，不能把它称为待完成接收。
 
+## 可选宿主阶段计时
+
+在上面的 `rdma-run` 命令追加 `--host-timing`，会额外保存 `worker_host.jsonl` 和 `native_host.jsonl`。默认关闭，不生成这两个文件，不修改网络结果格式。使用配套新构建的 service；旧二进制不接受这个可选参数。
+
+```bash
+python -m moe_ub_cosim scaleout host-timing-check \
+  --run /path/to/service-result --output /path/to/new-host-summary.json
+```
+
+该命令也接受失败目录中已经落盘的记录前缀。`passed=true` 只表示记录解析通过，`all_traces_complete` 单独表示两个记录器是否正常结束；服务成功仍由 `rdma-check` 核验。读取不会补造未结束阶段的耗时。
+
+宿主阶段用于区分初始化、前端组图/导出、阻塞交互、图载入/激活、事件执行及报告开销。它使用 Linux 单调时钟和本进程 CPU，单位 ns，与仿真的 GPU/网络纳秒不同。后端 `simulator_run` 包含 `control_exchange`、`commit_parse`、`graph_load`、`graph_activate` 等子阶段；`control_exchange` 又包含 `frontend_wait`。汇总提供含子阶段的 inclusive 和扣除直接子阶段的 exclusive，不能相加嵌套阶段，也不能把 Python 与 native 重叠的墙钟时间相加。`simulator_run` 的 exclusive 仍包含 ns-3、ASTRA、未细分回调和观测开销，不能称为纯包 CPU。CPU 包含该进程所有线程，可大于墙钟时间，不含子进程。
+
+原始记录逐行刷新，有每文件16MiB读取和65,536条记录上限；额外I/O会影响宿主耗时。记录格式、截断与消息计数口径见[输出数据](../../docs/record_storage.md#原生rdma宿主阶段记录)。
+
 ## 限制与资源
 
 小图最多 32 GPU、16 交换机、64 总节点、256 条物理边；服务累计最多 8192 条逻辑消息、256 次决策，队列观测最多20万事件。单例最多5 ms仿真时间、宿主60秒、RSS1 GiB、地址空间2 GiB；构建并发2、300秒、RSS2 GiB/地址空间4 GiB，产物上限512 MiB，卷预留8 GiB。达到限额保留失败，不自动扩限。

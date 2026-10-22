@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+本轮从干净`727bfcd`继续，上一轮属实质进展。平台任务新增可选`rdma-run --host-timing`：仅在worker/native旁路记录宿主CLOCK_MONOTONIC与本进程CPU阶段，不参与网络时钟或控制协议；native含初始化、阻塞前端交互、图加载/激活、Run、报告和清理，Python含验证/schema/前端/导出/决策/等待。维护嵌套关系，禁止相加嵌套或跨进程重叠时间；不能将Run剩余时间称纯包CPU。可选常数计数器记录应用消息注册、SEND/RECV提交及回调，解释未来接收等待，不改匹配/完成。先保存原service，再增量构建一个目标；旧/新无观测/新有观测三组8GPU公开运行须网络result、节点日志和控制事件保持一致。单命令60秒/RSS1GiB/地址2GiB、构建64MiB（登记目标对象/可执行目录）、每运行32MiB；新任务累计128MiB、卷预留8GiB，目录`/dev/shm/moe-host-timing-20261022/`，全流程累计300秒。无安装/下载/依赖变更，不重跑旧600秒千卡，不自动加限。平台验收和后续规模研究分别提交；若小例观测可靠，再单独预注册一个有限规模诊断。
+
 本轮平台任务：核查并移除持久字节路径逐包扫描全部连接/历史工作的开销；新增显式`moe-rdma-stream-work/2`计数预算（最多128连接/8192工作），保留v1的16/64默认及事务入口范围。相同输入的包、事件及结果须与改前二进制完全一致；扩展用例验证24连接/192工作、扇入依赖、ACK信用及重复执行。只使用公开CLI；不修改固定依赖或现代性能定义，不把本增量称为千卡完成。先保存旧二进制，再增量构建两个受影响目标；构建每命令60秒/RSS1GiB/地址2GiB，单阶段产物64MiB（构建登记既有目录的增量文件）、新任务累计128MiB、预留8GiB，所有大产物放`/dev/shm/moe-stream-indexed-20261022/`（易失）。每网络子命令≤60秒/1GiB/2GiB/5ms/64MiB，全部检查累计300秒；失败保留不自动加限。另只读旧千卡日志头尾以判断已进入哪个阶段，不重跑600秒失败用例。平台验收和历史研究审计分别提交。
 
 后续研究审计范围：只读baseline/numeric两个1024卡旧目录的现有stdout、资源清单及ASTRA节点日志，流式读取每日志≤512MiB、两例累计≤1GiB原始节点记录，不加载全部文本进内存，不运行新网络。按实际组完成通知、图载入/激活和issue/callback前缀说明已达阶段及仍缺证据，区分终止前观测与终态；异步日志尾部缺失不补成死锁/丢包。每命令60秒/RSS1GiB/地址2GiB、阶段产物32MiB、新产物64MiB/累计128MiB、预留8GiB。计划记录于`experiments/paper_readiness/scale1024_audit_protocol.md`，结果`/dev/shm/moe-scale1024-audit-20261022/`；小型摘要与报告入Git，完整记录保留旧目录、不搬大日志。
@@ -22,6 +24,8 @@
 不改固定依赖、不安装、不下载模型或大型数据；复用已校验的一手资料和本机原始数据。必要公开页面只读请求设每页2MiB、总16MiB、单请求20秒、总120秒，失败保留。新研究放`experiments/paper_readiness/`，结果放`/dev/shm/moe-paper-readiness-20261022/`。首个判别研究16条件（2 batch×4额度模式×2故障），各条件60秒/RSS1GiB/地址2GiB/仿真5ms；每次sweep300秒，累计产物128MiB，卷预留8GiB。没有硬件校准含义，不因结果不理想抬限或制造热点。无新现象不自动扩矩阵。
 
 ## 当前进展与前阶段
+
+宿主阶段旁路计时平台验收完成：公开`rdma-run --host-timing`与`host-timing-check`，分进程记录CLOCK_MONOTONIC/本进程CPU及嵌套，不改变网络时钟/协议。旧727bfcd原生二进制、新版关闭、新版开启三组8GPU公开流程完整result及ASTRA节点日志逐字节一致，628消息/4轮/1,512节点、193252ns；前端仅归一化输出路径相同，控制事件相同。原始记录独立重建全部exclusive和跨进程交互包含关系，最终SEND/RECV提交/回调各628，未完成差额0；6项新计时单元及7项RDMA输入回归、13依赖检查通过。不完整前缀由真实记录复制截取，只证明读取语义，不是实际超时。service增量构建13.73秒/采样RSS816,398,336B，公开流程约7.54秒，预算均满足；254文件约4.0MiB本机持久检查点全部hash通过。见[范围与验收](../../fixtures/host_timing/README.md)。尚未执行新增千卡或归因其CPU，不将小例单次时间称加速收益。论文目标仍in_progress。
 
 旧千卡审计取得有限实质证据，未完成双案例全量验收：baseline/numeric尾部已记录tick为2.479817/3.069520ms，分别出现w1第10层Dispatch/第24层Attention，不能称最终完成。两份stdout均保存221个w0完成通知；恢复的baseline完整摘要却有256个w0的issue/callback全部配平，并出现全部256个w1。按hash匹配历史前端`b8b965c`/blob`0ad28dd`的轮次条件，221只能作保存下限，块缓冲缺陷已独立修复。w1最大issue层均47而callback层仅8—11；源码RECV空依赖允许未来层预投递，不能以issue层数/215060个前缀差额推导计算进度、堵塞或死锁。完整审计先后因截断图名、stdout头时间戳差异的错误假设失败，第三阶段保存完整差集触32MiB输出上限；失败保留未抬限/重跑千卡。恢复已写baseline摘要，只新增两例各1MiB尾部/小型stdout/固定历史源码独立核验；numeric全量计数仍缺。全量分析器已限制32样本，但未重新执行，不标为通过。全部42文件本机磁盘检查点逐hash通过（含失败，不含旧大日志）。见[HTML报告](../review_artifacts/scale1024_audit_20261022/report.html)、[有限核验](../review_artifacts/scale1024_audit_20261022/verification.json)、[失败与命令](../review_artifacts/scale1024_audit_20261022/maintenance.json)、[归档](../review_artifacts/scale1024_audit_20261022/archive.json)与[协议](../../experiments/paper_readiness/scale1024_audit_protocol.md)。下一步优先补宿主初始化/ET/同步交互/事件执行/报告分阶段观测及未来接收对象计数，不据现有超时给出网络CPU归因或盲目重跑1024。论文目标仍in_progress。
 

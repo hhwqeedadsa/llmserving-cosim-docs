@@ -12,6 +12,7 @@ class Messages {
             void (*callback)(void*), void* argument);
   bool Complete(const std::vector<uint64_t>& messages) const;
   Json Report();
+  Json HostCounters() const;
  private:
   struct Operation {
     int src=0,dst=0;
@@ -27,6 +28,7 @@ class Messages {
   Fabric& fabric_;
   std::map<uint64_t,Operation> operations_;
   std::map<std::tuple<int,int,int>,uint64_t> keys_;
+  uint64_t send_posts_=0,recv_posts_=0,send_callbacks_=0,recv_callbacks_=0;
 };
 
 class Adapter final: public AstraSim::AstraNetworkAPI {

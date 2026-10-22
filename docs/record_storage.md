@@ -388,3 +388,23 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 显式`admission.per_destination`在结果保留同名份额。完整生命周期核对每次准入/释放的全源与目的端占用；诊断新增`destination_eligible_head_ids/eligible_head_ids/destination_owners`，区分全局字节不足与`destination_shares_full`。无配置不增加这些字段，失败所有者不会为诊断提前释放。
 
 `scaleout sweep`根目录保存原清单、解析配置、来源、全条件命令、总资源采样及`summary.json/csv`；各条件目录保存输入、拓扑、实际运行与诊断。`matches_expectations=true`表示清单中的每个实际结果符合显式预期，不把预期失败改成`passed=true`；前端未完成的时刻为null，网络失败停止与成功排空使用不同语义，CSV空白对应null。条件间为独立运行，共同图hash只核验明确比较组。
+
+## 原生RDMA宿主阶段记录
+
+`scaleout rdma-run --host-timing` 的两份 JSONL 使用 `moe-host-phase-trace/1`。它们不属于网络 `result.json`，不参与计算或网络调度。实际用法与计时边界见[RDMA示例](../examples/scaleout_rdma/README.md#可选宿主阶段计时)。开启时 `provenance.json` 记录选项、格式版本和 Python 记录模块 hash；原生可执行文件 hash 仍按原方式保存。
+
+| 记录 | 字段与含义 |
+|---|---|
+| header | writer=`python/native`、pid、wall_clock=`CLOCK_MONOTONIC`、cpu_clock=`CLOCK_PROCESS_CPUTIME_ID`、unit=`ns` |
+| begin | id、parent、name、wall_ns、cpu_ns；parent=0为根，其他必须指向当前最内层阶段 |
+| end | id、wall_ns、cpu_ns，必须后进先出结束 |
+| snapshot | name、wall_ns、cpu_ns、values；计数是该记录时点的事实 |
+| footer | complete、spans；native正常返回才写true，Python失败时可写false |
+
+两个进程的墙钟使用同一台 Linux 的单调时钟起点，可检查交互区间包含关系。CPU起点各自独立，不能比较绝对值。计时覆盖记录器内部的阶段范围，不能代表完整CLI启动/退出；操作系统调度和记录I/O也有开销。原始记录保持嵌套，不从跨进程等待推断网络仿真时间。
+
+稳定读取接口 `moe_ub_cosim.host_timing.read_trace(path)` 每文件最多16MiB、65,536条，校验格式、ID、嵌套、单调时钟和footer。返回 `completed_spans`、`open_spans`、按阶段聚合的 `phases` 和 `snapshots`。完整阶段的 inclusive 是 end−begin，exclusive 扣除同进程直接子阶段。未闭合阶段不提供耗时；最后未带换行的一条记录视为未完成写入，标记 `trailing_partial_record=true`；完整但错误的JSON、交叉结束或重复ID仍报错。正常footer之后出现任何记录也报错。
+
+公开 `scaleout host-timing-check --run DIR --output NEW.json` 保存 `moe-host-phase-summary/1`，省略逐阶段明细但保留聚合、open_spans和快照。允许缺失一个记录器，写入 `missing_writers`；`passed=true` 表示已存在的记录前缀合法，只有两个记录器都有true footer时 `all_traces_complete=true`。两者都不证明网络或请求成功。输入和旧分析文件不会覆盖。
+
+native的 `message_resources` 在图激活后记录，`message_resources_final` 在Run正常返回后记录。`registered_messages` 是整个运行累计保留的逻辑消息数；`send_posts/recv_posts` 是应用提交数，`send_callbacks/recv_callbacks` 是已触发的完成回调数；`outstanding_*_callbacks` 为前两者之差。它们不是物理QP存活数、GPU可见状态或逐包计数，未来层RECV可能提前登记。超时只能使用最后一份已有快照，不能外推终止瞬间的计数。`ns3_events.processed_events` 使用锁定ns-3的 `Simulator::GetEventCount()`，也包含非包事件，不能当数据包数。

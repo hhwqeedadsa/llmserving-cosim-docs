@@ -18,6 +18,7 @@ from .scaleout_rdma import (ASTRA, ROOT, checked_json, digest, monitored, save,
 from .scaleout_topology import fields, integer, require
 from .scaleout_limits import limits
 from .scaleout_llm import EXTRA_COSTS, capacity, validate_llm
+from .host_timing import HostTiming
 
 
 def validate(c, topology, rdma, replay=None):
@@ -215,12 +216,13 @@ def export_wave(wave, directory, proto):
 
 
 class Frontend:
-    def __init__(self, config, ranks, planes, replay=None):
+    def __init__(self, config, ranks, planes, replay=None, timing=None):
         sys.path.insert(0, str(ROOT/'third_party/LLMServingSim'))
         from .configured_scheduler import ConfiguredScheduler
         from .lazy_uncached_pool import LazyUncachedBlockPool
         from serving.core.request import Request
         self.config, self.planes, self.replay = config, planes, replay
+        self.timing=timing or HostTiming()
         m, w = config['model'], config['workload']; block_size = 16
         self.schedulers, self.requests = {}, []
         self.groups = config['parallel']['groups']; self.active = {}; self.steps = [0]*len(self.groups)
@@ -272,8 +274,10 @@ class Frontend:
             expected=self.config['workload']['batch_per_rank']
             require(all(b is not None and b.num_prefill==0 and len(b.requests)==expected and
                         set(b.scheduled_tokens.values())=={1} for b in batches.values()), 'invalid real Decode batch')
-            wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
-            directory=output/'graphs'/wave['graph_id'];export_wave(wave,directory,proto)
+            with self.timing.span('wave_build'):
+                wave=make_wave(self.config,group,index,self.steps[index],self.planes,self.replay)
+            directory=output/'graphs'/wave['graph_id']
+            with self.timing.span('wave_export'):export_wave(wave,directory,proto)
             history=dict(graph_id=wave['graph_id'],group_index=index,step=self.steps[index],start_ns=now,
                 batch_request_ids={str(r):[q.id for q in b.requests] for r,b in batches.items()},
                 batch_ids={str(r):b.batch_id for r,b in batches.items()})
@@ -286,35 +290,52 @@ class Frontend:
         return dict(type='COMMIT',decision_id=event['decision_id'],now_ns=now,submissions=submissions,service_finished=finished)
 
 
-def worker(config_path, topology_path, protocol_path, backend, protoc, output):
-    output=Path(output); c=checked_json(config_path,1048576)
-    t=checked_json(Path(topology_path)/'topology.json',8388608); rdma=checked_json(protocol_path,65536)
+def worker(config_path, topology_path, protocol_path, backend, protoc, output, host_timing=False):
+    timing=HostTiming(Path(output)/'worker_host.jsonl' if host_timing else None)
+    complete=False
+    try:
+        with timing.span('worker_total'):
+            _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing,host_timing)
+        complete=True
+    finally:timing.close(complete)
+
+
+def _worker(config_path,topology_path,protocol_path,backend,protoc,output,timing,host_timing):
+    output=Path(output)
+    with timing.span('input_read'):
+        c=checked_json(config_path,1048576)
+        t=checked_json(Path(topology_path)/'topology.json',8388608); rdma=checked_json(protocol_path,65536)
     from .scaleout_replay import Replay
     replay=Replay(c,output) if 'route_replay' in c else None
-    ranks,planes=validate(c,t,rdma,replay); proto,_=_schema(output,protoc)
+    with timing.span('input_validate'):ranks,planes=validate(c,t,rdma,replay)
+    with timing.span('schema_setup'):proto,_=_schema(output,protoc)
     bootstrap=output/'bootstrap';bootstrap.mkdir();(output/'graphs').mkdir()
     for r in range(ranks):
         with (bootstrap/f'layer.{r}.et').open('xb') as stream:
             write_message(stream,proto.GlobalMetadata(version='moe-scaleout-bootstrap/1'))
     system=json.loads((ROOT/'examples/native_first_round/system.json').read_text())
     save(output/'system.json',system)
-    frontend=Frontend(c,ranks,planes,replay)
+    with timing.span('frontend_init'):frontend=Frontend(c,ranks,planes,replay,timing)
     capacities=dict(groups=[dict(rank_ids=g,**capacity(c,len(g))) for g in c['parallel']['groups']]) if not replay else dict(
         per_rank=[dict(rank_id=r,**capacity(c,len(g),replay.contexts(r))) for g in c['parallel']['groups'] for r in g])
     save(output/'capacity.json',capacities)
     command=[backend,str(Path(topology_path)/'topology.json'),protocol_path,str(output/'system.json'),
              str(bootstrap/'layer'),str(output/'result.json')]
+    if host_timing:command.append(str(output/'native_host.jsonl'))
     transcript=[]; child=None
     try:
         # A host-budget kill must not lose already-read complete control lines
         # in Python's block buffer. This is not fsync/power-loss durability.
         with (output/'native.stderr.log').open('w') as errors,(output/'native.stdout.log').open('w',buffering=1) as logs:
             child=subprocess.Popen(command,cwd=output,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=errors,text=True)
-            for line in child.stdout:
+            while True:
+                with timing.span('native_output_wait'):line=child.stdout.readline()
+                if not line:break
                 logs.write(line)
                 if not line.startswith('MOE_RDMA_EVENT '):
                     continue
-                event=json.loads(line[len('MOE_RDMA_EVENT '):]); reply=frontend.decide(event,output,proto)
+                event=json.loads(line[len('MOE_RDMA_EVENT '):])
+                with timing.span('frontend_decide'):reply=frontend.decide(event,output,proto)
                 transcript.append(dict(event=event,reply=reply))
                 child.stdin.write(json.dumps(reply)+'\n');child.stdin.flush()
             code=child.wait();require(code==0, 'native service failed; inspect native.stderr.log')
@@ -331,12 +352,12 @@ def worker(config_path, topology_path, protocol_path, backend, protoc, output):
                 q['scheduler_state']=q['state']
                 if q['state']=='FINISHED':q['state']='OBSERVATION_ENDED'
                 q['initial_context_tokens']=replay.records[q['id']]['context_tokens']
-        save(output/'frontend.json',report)
-    result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
+        with timing.span('frontend_report_write'):save(output/'frontend.json',report)
+    with timing.span('native_result_read'):result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'] and result['service']['service_finished'], 'service did not complete')
 
 
-def run(config, topology, protocol, backend, output, protoc='protoc'):
+def run(config, topology, protocol, backend, output, protoc='protoc', *, host_timing=False):
     config,topology,protocol,backend,output=(Path(x).resolve() for x in (config,topology,protocol,backend,output))
     c=checked_json(config,1048576); t=checked_json(topology/'topology.json',8388608);rdma=checked_json(protocol,65536)
     from .scaleout_replay import Replay
@@ -358,8 +379,15 @@ def run(config, topology, protocol, backend, output, protoc='protoc'):
         provenance=checked_json(output/'provenance.json',65536)
         provenance['hashes'][str(ROOT/'python/moe_ub_cosim/scaleout_replay.py')]=digest(ROOT/'python/moe_ub_cosim/scaleout_replay.py')
         save(output/'provenance.json',provenance)
+    if host_timing:
+        provenance=checked_json(output/'provenance.json',65536)
+        provenance['host_timing']=dict(enabled=True,schema_version='moe-host-phase-trace/1')
+        module=ROOT/'python/moe_ub_cosim/host_timing.py'
+        provenance['hashes'][str(module)]=digest(module)
+        save(output/'provenance.json',provenance)
     command=[sys.executable,'-m','moe_ub_cosim.scaleout_service','--worker',str(output/'input.json'),str(output),str(output/'rdma.json'),
              str(backend),str(protoc),str(output)]
+    if host_timing:command.append('--host-timing')
     monitored(command,output/'execution',[output],runtime=limits(rdma))
     result=checked_json(output/'result.json',limits(rdma)['result_json_bytes'])
     require(result['passed'], 'service result failed')
@@ -372,5 +400,7 @@ def run(config, topology, protocol, backend, output, protoc='protoc'):
 
 
 if __name__=='__main__':
-    require(sys.argv[1:2]==['--worker'] and len(sys.argv)==8, 'internal worker requires six paths')
-    worker(*sys.argv[2:])
+    timed=sys.argv[-1:] == ['--host-timing']
+    require(sys.argv[1:2]==['--worker'] and len(sys.argv)==(9 if timed else 8), 'internal worker requires six paths and optional --host-timing')
+    paths=sys.argv[2:-1] if timed else sys.argv[2:]
+    worker(*paths,host_timing=timed)

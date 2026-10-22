@@ -38,6 +38,8 @@
 
 非 UB Scale-Out 的独立入口位于 [rdma/](rdma/)，经公共 `scaleout rdma-build` 配置锁定 ASTRA 自带的 ns-3。`moe-rdma-probe` 做真实分组消息检查，`moe-rdma-service` 由实际 LLMServingSim 前端在线提交 Chakra 图；每 rank 保留 Sys，所有组共享 Fabric 和 Simulator。完成语义、串行构建兼容 overlay、观测及限制见[RDMA 小例](../examples/scaleout_rdma/README.md)。该入口只链接原生 RDMA ns-3；下面的生产 UB 入口及构建规则保持独立。
 
+`moe-rdma-service TOPOLOGY RDMA SYSTEM BOOTSTRAP_PREFIX NEW_RESULT [NEW_HOST_TIMING.jsonl]` 的最后一个参数为可选宿主旁路计时，由公开 `rdma-run --host-timing` 传入。它不读取或更新ns-3时钟、不安排事件、不改控制消息；默认关闭。阶段、嵌套、计数及失败前缀语义统一见[输出数据](../docs/record_storage.md#原生rdma宿主阶段记录)。
+
 新 [百卡配置](../examples/scaleout_clos128/README.md)以 `rdma/2` 显式声明数量和宿主预算，`topology/2` 在同一 Simulator 增加分块机内织构。跨机按源/目的地址与线端口关联，保留完整 int32 逻辑 tag，冲突时拒绝。完整节点证据为 `log/astra_nodes.log`，不使用滚动诊断日志覆盖早期事件。`Fabric::Report()` 和 `Messages::Report()` 在最终 Run 结束后仅调用一次并转移记录所有权；之后不能再次 Run 或访问已消费记录。新配置终态 JSON 紧凑流式输出，字段语义不变。
 
 RDMA 端口、消息、路径和回调时间在执行中使用数值记录，终态才构造同字段 JSON；消息身份排序后导出，保持原顺序。流和端点查找用哈希表，端口按节点/设备编号索引，可达性为受 GPU/plane 上限约束的字节矩阵。它们不参与发包、选路或计算调度；[表示等价证据](../fixtures/scaleout_numeric_observer/README.md)分别验证旧 8 卡、完整 16/128 卡结果与任务图逐字节一致，不据此声称千卡已经完成。

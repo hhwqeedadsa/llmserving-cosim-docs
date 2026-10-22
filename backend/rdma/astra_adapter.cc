@@ -26,11 +26,11 @@ void Messages::Register(const Json& messages) {
 void Messages::Deliver(uint64_t id) {
   auto& op=operations_.at(id);
   if(op.received && op.posted && !op.recv_called) {
-    op.recv_called=true;op.recv_callback=Now();
+    op.recv_called=true;op.recv_callback=Now();++recv_callbacks_;
     auto callback=std::move(op.recv_done);callback();
   }
   if(op.acked && !op.send_called) {
-    op.send_called=true;op.send_callback=Now();
+    op.send_called=true;op.send_callback=Now();++send_callbacks_;
     auto callback=std::move(op.send_done);callback();
   }
 }
@@ -42,13 +42,13 @@ void Messages::Post(bool send,int rank,uint64_t bytes,int type,int peer,int tag,
   Require(bytes==op.bytes,"ASTRA count differs from descriptor");
   if(send) {
     Require(!op.sent,"SEND posted twice");op.sent=true;op.send_done=[callback,arg](){callback(arg);};
-    op.send_post=Now();
+    op.send_post=Now();++send_posts_;
     fabric_.Send(id,op.src,op.dst,bytes,op.plane,
       [this,id](){operations_.at(id).acked=true;Deliver(id);},
       [this,id](){operations_.at(id).received=true;Deliver(id);});
   } else {
     Require(!op.posted,"RECV posted twice");op.posted=true;op.recv_done=[callback,arg](){callback(arg);};
-    op.recv_post=Now();
+    op.recv_post=Now();++recv_posts_;
     ns3::Simulator::ScheduleNow([this,id](){Deliver(id);});
   }
 }
@@ -68,6 +68,12 @@ Json Messages::Report() {
                      {"send_callback_ns",time(op.send_callback)},{"recv_callback_ns",time(op.recv_callback)}});
   }
   return result;
+}
+Json Messages::HostCounters() const {
+  return {{"registered_messages",operations_.size()},{"send_posts",send_posts_},{"recv_posts",recv_posts_},
+    {"send_callbacks",send_callbacks_},{"recv_callbacks",recv_callbacks_},
+    {"outstanding_send_callbacks",send_posts_-send_callbacks_},
+    {"outstanding_recv_callbacks",recv_posts_-recv_callbacks_}};
 }
 AstraSim::timespec_t Adapter::sim_get_time() { return {AstraSim::NS,static_cast<long double>(Now())}; }
 void Adapter::sim_schedule(AstraSim::timespec_t delta,void(*callback)(void*),void* arg) {

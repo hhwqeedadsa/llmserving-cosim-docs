@@ -83,6 +83,10 @@ def parser():
     run_rdma.add_argument('--backend', type=Path, required=True, help='Native service executable from rdma-build')
     run_rdma.add_argument('--output', type=Path, required=True, help='New bounded run directory')
     run_rdma.add_argument('--protoc', default='protoc', help='Existing compiler for the pinned Chakra schema')
+    run_rdma.add_argument('--host-timing', action='store_true', help='Write optional worker/native host wall and process-CPU phase traces; not simulated GPU/network time')
+    ht = sc.add_parser('host-timing-check', help='Read optional host phases, including flushed timeout prefixes; does not assert service success')
+    ht.add_argument('--run', type=Path, required=True, help='rdma-run directory with worker_host.jsonl and/or native_host.jsonl')
+    ht.add_argument('--output', type=Path, required=True, help='New summary JSON; never add nested or cross-process wall times')
     verify_rdma = sc.add_parser('rdma-check', help='Audit actual token bytes, ASTRA dependencies, callbacks and next-wave scheduling')
     verify_rdma.add_argument('--run', type=Path, required=True, help='Completed native RDMA service directory')
     diagnose_rdma = sc.add_parser('rdma-diagnose', help='Audit recovery/RTT, conditional timeout bounds, source credits and callbacks; completed or failed runs, evaluation only')
@@ -153,7 +157,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'rdma-transaction-probe':
+            if args.scaleout_command == 'host-timing-check':
+                from .host_timing import check
+                value = check(args.run,args.output)
+            elif args.scaleout_command == 'rdma-transaction-probe':
                 from .scaleout_transactions import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
             elif args.scaleout_command == 'rdma-stream-probe':
@@ -188,7 +195,7 @@ def main(argv=None):
                 value = verify(args.run)
             elif args.scaleout_command == 'rdma-run':
                 from .scaleout_service import run
-                value = run(args.config,args.topology,args.protocol,args.backend,args.output,args.protoc)
+                value = run(args.config,args.topology,args.protocol,args.backend,args.output,args.protoc,host_timing=args.host_timing)
             elif args.scaleout_command == 'rdma-build':
                 from .scaleout_rdma import build
                 value = build(args.output, cmake=args.cmake, ninja=args.ninja,

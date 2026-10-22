@@ -18,6 +18,8 @@ Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`byt
 
 同一输入可用`scaleout modern-deepep-replay --config ... --actions ... --output ...`核验显式事件序列，按已发生的slot分配解析Combine通道和顺序。它不生成完成回调、时延或包；事件序列格式、Python功能接口与限制见该示例的“逐事件执行”。
 
+进一步检查相对窗口、源缓冲使用期限、计数清零及滚动信号，可用`scaleout modern-deepep-window-replay`，参数与replay相同。它只维护调用者事件驱动的影子状态，未验证传输负载或GPU内存序；完整用法见该示例的“窗口、计数与源缓冲检查”。
+
 需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。
 
 ```bash

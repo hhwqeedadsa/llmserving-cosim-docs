@@ -48,6 +48,10 @@ def parser():
     mr.add_argument('--config', type=Path, required=True, help='Same input as modern-deepep-plan')
     mr.add_argument('--actions', type=Path, required=True, help='Explicit event IDs in occurrence order; full or prefix transcript')
     mr.add_argument('--output', type=Path, required=True, help='New JSON file containing execution log, resolved slots and enabled next events')
+    mw = sc.add_parser('modern-deepep-window-replay', help='Check caller events against relative windows, source leases, count resets and rolling signals; no transport')
+    mw.add_argument('--config', type=Path, required=True, help='Same bounded input as modern-deepep-plan')
+    mw.add_argument('--actions', type=Path, required=True, help='Explicit event IDs; callbacks are declarations, not network observations')
+    mw.add_argument('--output', type=Path, required=True, help='New JSON file with execution, relative window map and shadow state')
     rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probes and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
@@ -157,6 +161,9 @@ def main(argv=None):
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
             elif args.scaleout_command == 'modern-deepep-replay':
                 from .modern_deepep_runtime import replay
+                value = replay(args.config, args.actions, args.output)
+            elif args.scaleout_command == 'modern-deepep-window-replay':
+                from .modern_deepep_windows import replay
                 value = replay(args.config, args.actions, args.output)
             elif args.scaleout_command == 'modern-deepep-plan':
                 from .modern_deepep_plan import execute

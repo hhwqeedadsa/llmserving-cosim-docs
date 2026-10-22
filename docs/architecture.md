@@ -10,6 +10,8 @@
 
 `modern_deepep_runtime.py`提供独立的`ModernDeepEPRuntime`事件核心与`modern-deepep-replay`。调用者逐项触发已满足依赖的事件，核心不自动完成操作；实际触发slot分配时才增加计数，取得同一owner的全部slot后建立Combine通道内顺序。它额外保留Dispatch同token全部目标slot原子分配后的warp同步。事件日志可以离线核验，但没有接入C++队列或网络回调，不能替代在线服务。
 
+`modern_deepep_windows.py`在事件核心外增加相对窗口解析、跨epoch源读保护、计数消费清零及滚动信号影子状态，公开入口为`modern-deepep-window-replay`。应用主窗口与provider索引信号分开，source local_complete与target visible分开；它不编码或接收真实负载，也未接入C++资源与网络时钟。功能范围及宿主结构体核查见[窗口验收](../fixtures/modern_windows/README.md)。
+
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。
 
 离线的`scaleout deepep-plan`由`deepep_plan.py`生成固定DeepEP低延迟路径的应用部分顺序，区分逐专家数据、零token通知、逻辑QP上下文和计算流事件。`deepep-check`检查保存表示并计算无时间依赖闭包；它不调用前端调度、ASTRA或网络，不改变下述在线服务。接口与尚未建模的队列、完成和缓冲语义见[操作计划示例](../examples/deepep_partial_order/README.md)。

@@ -81,3 +81,31 @@ state = runtime.snapshot()
 `operation(id)`只允许读取已就绪或已经发起的操作，返回绑定和目标偏移的副本，供未来适配器在提交前检查。该调用不reserve队列、不提交WQE，也不释放buffer。`accepted/visible/local_complete`必须分别由未来provider实现报告；目前没有该实现，不能在研究程序里遍历ready并自动制造完成，再称作网络仿真。`all_application_complete`不表示所有信号尾部都完成，`all_events_fired`也不构成物理网络排空证明。
 
 命令沿用相同模型与事件数上限，actions文件≤16MiB且事件数≤配置max_events，输入+actions+结果≤max_output_bytes≤16MiB；卷预留8GiB，输出文件及父目录规则与check相同。人工功能用例、独立事件顺序核验和拒绝条件见[事件核心验收](../../fixtures/modern_deepep_runtime/README.md)。
+
+## 窗口、计数与源缓冲检查
+
+用相同配置和事件序列检查相对窗口地址、发送源的使用期限、计数消费清零和滚动信号：
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout modern-deepep-window-replay \
+  --config examples/modern_deepep_partial_order/input.json \
+  --actions examples/modern_deepep_partial_order/actions-prefix.json \
+  --output runs/my-modern-window-prefix.json
+```
+
+示例仍只触发一个begin事件；不会自动制造网络完成。Python接口为`moe_ub_cosim.modern_deepep_windows.ModernDeepEPWindowRuntime(config)`，提供相同的`ready/operation/fire/snapshot`方法。`operation`增加`memory`中的源、目标映射；只有实际分配slot后才返回Dispatch目标地址。命令与replay采用相同输入、总产物及预留空间限制。
+
+| 状态 | 表达方式 |
+|---|---|
+| 应用主窗口 | workspace从0开始，EP buffer从16MiB开始；偏移相对抽象注册区，不是GPU虚拟地址或rkey |
+| 计数 | send/recv为同一workspace中不同区域；rank与expert子区连续，收到编码负值才算已发布，消费后重置为0 |
+| GIN索引信号 | 独立provider域，按owner/context/slot定位；64位值及本地shadow连续累加，不映射进应用workspace |
+| 跨轮复用 | epoch用于说明版本，不能把同一物理偏移当成不同内存；Dispatch和Combine共享EP区 |
+| 源读保护 | bulk put与远端token issue后取得只读lease（使用记录），收到local_complete后释放；visible不会释放，重叠写会拒绝 |
+| 本地token | Dispatch从TMA共享内存复制，Combine本地归约写目标；不伪造GIN源读保护 |
+
+固定源码的`EPSignals`含较大的静态数组，按C++数据布局为15,831,168B，按2MiB分配粒度取整后为16MiB。这是分支布局，不是已测显存占用或单次网络流量。`layout.shared_ep_buffer_allocation_bytes`此前只表示EP数据区；完整主窗口还包括workspace，亦不包含权重、KV、NCCL队列及其他内存。
+
+输出`moe-modern-deepep-window-execution/1`保留事件核心字段，增加`windows`、逐issue的`memory_log`及`memory_state`。计数和信号是根据调用者宣告的visible回调与操作数更新的影子状态；没有接收真实传输负载，也没有核对token数值或GPU内存序。源写版本在首个相关issue处建立检查边界，不表示测得TMA或notify reduction时刻。`tracked_source_lifetime_validated=true`只覆盖这些显式相对范围；完整`buffer_lifetime_validated`仍为false。self-peer也保留请求及源读义务，但未赋予回环路径或服务代价。
+
+源码身份、原始结构体的宿主ABI检查、新目录公开流程及失败记录见[窗口验收](../../fixtures/modern_windows/README.md)。该接口不能用来给现代DeepEP排性能名次；后续仍需将完成回调、实际负载和provider服务接入同一网络时钟。

@@ -1,0 +1,345 @@
+{
+  "state": "passed",
+  "cwd": "/home/lry/moe-ub-cosim",
+  "parent_commit": "1357700d7c013106b1f8eb63a3eb0b1983246240",
+  "platform_source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_windows.py": "e0963522d3a0e9a44a3a3b2a5733d4db633b7fd5e5c54751b451a548150a861f",
+    "python/moe_ub_cosim/cli.py": "d32f309f1ce28b933544b8a544a3552bb8882b32e64d4a0af5b41cb37c515b28",
+    "python/moe_ub_cosim/modern_deepep_plan.py": "b4035bc7e537940d0160162604a82acc770b34c66ae9f5e8a1272db647a6ed1e",
+    "python/moe_ub_cosim/modern_deepep_runtime.py": "72ee9a199b2b4e712b396e89ecc3986e1dd46e0f7338f1bab4574c5620e3480d",
+    "python/moe_ub_cosim/deepep_plan.py": "acf45ca9b56fe967ebacace5121cf6a11f6f1274cb8b812891202678cec2dbdc",
+    "tests/unit/modern_deepep_windows_test.py": "d77edec8a34a555318df853c374713eff6646813c21a386613a9f1273c525e52",
+    "tests/integration/check_modern_windows_workflow.py": "7f8bc723d1a74d50a15fca8893d7fdefab62401f8f6883c3ec8f95c4acfd77d8",
+    "tests/integration/check_modern_runtime_workflow.py": "9ea85a22f283096716b645d870993e4a879208ec7ff0d4e359d6bef4bf7b722e",
+    "tests/integration/check_modern_deepep_workflow.py": "d0be059a0711659a9bd6d14569d079c5efc5a1649f8658c46fb461913d357a4c",
+    "fixtures/modern_windows/check_sources.py": "07af35551358ee01831a18e8d30d2370ea4f5dbd742a37c95317ffed68a12273"
+  },
+  "document_sha256": {
+    "docs/architecture.md": "73c672aef4bad7aba86d3c908cb8f15f26fff6cf540fe14df7d17aeb04bb4601",
+    "docs/model_validation.md": "f1f3ee1181c3dd066c15c16549015ac4bcb43effccc761176a74ed2cbf06475f",
+    "docs/record_storage.md": "92a7852e605baf59899d0f501812f36bfc215a2a218ff9575009a17c40935d1b",
+    "docs/user_guide.md": "e8d2570b0b0fe5011ea13f7161093fcbcab0fb4eba4b02a3c2b535404dee2623",
+    "docs/tasks/current.md": "7af9053f2836de2dd459c7c06715c1ecf0b3bc6687365c3a6a269acf72d6822d",
+    "examples/modern_deepep_partial_order/README.md": "8f36965c2983dcbe29306048497ae45cabce0ce38086529522354f5b32a7e03d",
+    "fixtures/modern_windows/README.md": "b526af6bb105806c486dab76f4a7276a4a97d3c6aaede5f8e3d61464996d06de"
+  },
+  "probes": {
+    "final-unit": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-p",
+        "modern_deepep*_test.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T15:59:26.316035+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26517504,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-modern-window-final-unit-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2507,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 1677321,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T15:59:27.313556+00:00",
+      "wall_seconds": 0.9975316971540451,
+      "max_waited_child_rss_kib": 25896,
+      "artifact_bytes_before_report": 2507,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2507,
+        "allocated_bytes": 8192
+      }
+    },
+    "final-source": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "fixtures/modern_windows/check_sources.py",
+        "--output",
+        "/dev/shm/moe-modern-window-final-source-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T16:00:32.728325+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 71839744,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-modern-window-final-source-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1591,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 1677668,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T16:00:33.180009+00:00",
+      "wall_seconds": 0.45168998651206493,
+      "max_waited_child_rss_kib": 60720,
+      "artifact_bytes_before_report": 1591,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1591,
+        "allocated_bytes": 8192
+      }
+    },
+    "final-workflow": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "tests/integration/check_modern_windows_workflow.py",
+        "--output",
+        "/dev/shm/moe-modern-window-final-workflow-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T15:59:26.315706+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 42422272,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-modern-window-final-workflow-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 12288,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5918,
+      "peak_sampled_artifact_allocated_bytes": 12288,
+      "process_group": 1677320,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T15:59:28.202640+00:00",
+      "wall_seconds": 1.8869397789239883,
+      "max_waited_child_rss_kib": 21800,
+      "artifact_bytes_before_report": 5918,
+      "aggregate_artifact_bytes_before_report": 12288,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5918,
+        "allocated_bytes": 12288
+      }
+    },
+    "old-plan": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "tests/integration/check_modern_deepep_workflow.py",
+        "--output",
+        "/dev/shm/moe-modern-window-old-plan-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T15:59:26.316617+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 40361984,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-modern-window-old-plan-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 12288,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5183,
+      "peak_sampled_artifact_allocated_bytes": 12288,
+      "process_group": 1677322,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T15:59:28.085283+00:00",
+      "wall_seconds": 1.768673598766327,
+      "max_waited_child_rss_kib": 21844,
+      "artifact_bytes_before_report": 5183,
+      "aggregate_artifact_bytes_before_report": 12288,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5183,
+        "allocated_bytes": 12288
+      }
+    },
+    "old-runtime": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "tests/integration/check_modern_runtime_workflow.py",
+        "--output",
+        "/dev/shm/moe-modern-window-old-runtime-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T15:59:38.886458+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 40333312,
+      "peak_sampled_processes": 2,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-modern-window-old-runtime-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 8192,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 4836,
+      "peak_sampled_artifact_allocated_bytes": 8192,
+      "process_group": 1677361,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T15:59:40.313929+00:00",
+      "wall_seconds": 1.4274778831750154,
+      "max_waited_child_rss_kib": 20780,
+      "artifact_bytes_before_report": 4836,
+      "aggregate_artifact_bytes_before_report": 8192,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 4836,
+        "allocated_bytes": 8192
+      }
+    }
+  },
+  "unit_stdout": "",
+  "unit_stderr": "........................\n----------------------------------------------------------------------\nRan 24 tests in 0.838s\n\nOK\n",
+  "source_audit": [
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "/dev/shm/moe-modern-window-final-source-20261022/layout.cc",
+        "-o",
+        "/dev/shm/moe-modern-window-final-source-20261022/layout"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exitcode": 0
+    },
+    {
+      "argv": [
+        "/dev/shm/moe-modern-window-final-source-20261022/layout"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exitcode": 0
+    }
+  ],
+  "window_workflow": {
+    "passed": true,
+    "public_commands": 12,
+    "expected_rejections": 5,
+    "events": 1076,
+    "independently_mapped_operations": 224,
+    "paths": {
+      "gin_self": 40,
+      "rdma": 172,
+      "local": 12
+    },
+    "independently_counted_peak_source_leases": 1,
+    "self_source_completion_withheld": true,
+    "concurrent_puts_sharing_one_source_independently_verified": 2,
+    "consumed_count_generations": 8,
+    "signal_value_and_shadow": 8,
+    "full_outputs_byte_identical": true,
+    "relocated_output_byte_identical": true,
+    "fresh_cwd": true,
+    "output_bytes": 1141111,
+    "peak_child_rss_kib": 21800,
+    "wall_seconds": 1.7339086458086967,
+    "source_sha256": {
+      "python/moe_ub_cosim/modern_deepep_windows.py": "e0963522d3a0e9a44a3a3b2a5733d4db633b7fd5e5c54751b451a548150a861f",
+      "python/moe_ub_cosim/cli.py": "d32f309f1ce28b933544b8a544a3552bb8882b32e64d4a0af5b41cb37c515b28",
+      "tests/unit/modern_deepep_windows_test.py": "d77edec8a34a555318df853c374713eff6646813c21a386613a9f1273c525e52",
+      "tests/integration/check_modern_windows_workflow.py": "7f8bc723d1a74d50a15fca8893d7fdefab62401f8f6883c3ec8f95c4acfd77d8"
+    },
+    "network_executed": false,
+    "hardware_calibrated": false,
+    "transport_payload_verified": false
+  },
+  "initial_source_failure": {
+    "command": [
+      "python3",
+      "fixtures/modern_windows/check_sources.py",
+      "--output",
+      "/dev/shm/moe-modern-window-source-20261022"
+    ],
+    "exitcode": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"/home/lry/moe-ub-cosim/fixtures/modern_windows/check_sources.py\", line 100, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/lry/moe-ub-cosim/fixtures/modern_windows/check_sources.py\", line 46, in main\n    assert tree['sha']==commit and not tree['truncated']\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "correction": "Resolve NCCL commit->tree through hashed identity and commit snapshots; accept its files-*.json manifest format. No source or dependency changed, no network retry."
+  },
+  "html_or_browser_check": false,
+  "local_document_links_checked": 211,
+  "dependency_check": {
+    "command": "bash scripts/check_deps.sh",
+    "exitcode": 0,
+    "checked": 13,
+    "dependency_changes": false
+  },
+  "maintenance_command": "python3 runs/modern_windows_checkpoint_20261022/save_checkpoint.py",
+  "maintenance_script_sha256": "237aeb1e2888e712ea7f883de69bf73af1d70ef5f12b400312b4af94644b4cb4",
+  "archive": {
+    "path": "runs/modern_windows_checkpoint_20261022/checkpoint.tar.gz",
+    "sha256": "ae3ef8049b2e73e6086bc69eed5a5fb1a5c2adeb478470206ff53e53d5b4e5b1",
+    "bytes": 531662,
+    "raw_bytes": 5146462,
+    "verified_files": 229
+  },
+  "archive_scope": "Includes final sources, docs, fixture proof and raw workflow/source/probe records, but excludes archive.json/maintenance.json to avoid recursive hashes. Host binary omitted; layout.cc retained.",
+  "limits": {
+    "wall_seconds_per_command": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "new_bytes": 67108864,
+    "cumulative_bytes": 134217728,
+    "min_free_bytes": 8589934592
+  },
+  "network_executed": false,
+  "cuda_compiled": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

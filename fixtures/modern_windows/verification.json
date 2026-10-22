@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "public_commands": 12,
+  "expected_rejections": 5,
+  "events": 1076,
+  "independently_mapped_operations": 224,
+  "paths": {
+    "gin_self": 40,
+    "rdma": 172,
+    "local": 12
+  },
+  "independently_counted_peak_source_leases": 1,
+  "self_source_completion_withheld": true,
+  "concurrent_puts_sharing_one_source_independently_verified": 2,
+  "consumed_count_generations": 8,
+  "signal_value_and_shadow": 8,
+  "full_outputs_byte_identical": true,
+  "relocated_output_byte_identical": true,
+  "fresh_cwd": true,
+  "output_bytes": 1141111,
+  "peak_child_rss_kib": 21800,
+  "wall_seconds": 1.7339086458086967,
+  "source_sha256": {
+    "python/moe_ub_cosim/modern_deepep_windows.py": "e0963522d3a0e9a44a3a3b2a5733d4db633b7fd5e5c54751b451a548150a861f",
+    "python/moe_ub_cosim/cli.py": "d32f309f1ce28b933544b8a544a3552bb8882b32e64d4a0af5b41cb37c515b28",
+    "tests/unit/modern_deepep_windows_test.py": "d77edec8a34a555318df853c374713eff6646813c21a386613a9f1273c525e52",
+    "tests/integration/check_modern_windows_workflow.py": "7f8bc723d1a74d50a15fca8893d7fdefab62401f8f6883c3ec8f95c4acfd77d8"
+  },
+  "network_executed": false,
+  "hardware_calibrated": false,
+  "transport_payload_verified": false
+}

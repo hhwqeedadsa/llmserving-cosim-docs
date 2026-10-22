@@ -59,6 +59,8 @@
 
 真实路由self-peer更正已独立复核：平台`c08cbb9`，9条公开CLI生成486操作/2,334事件，其中364跨rank GIN、80 self-peer GIN、42本地旁路。80/444约18%仅为API请求比例，不是线上字节或耗时。对照已核hash的历史归档，80项path/verb更正、64项专家块新增发送区，完整DAG/slot/layout及跨rank结果保持不变。7个暂扣探针、四原件16条选择和三份重复产物核对通过；新检查点约651KiB。见[更正报告HTML](../review_artifacts/modern_self_gin_20261022/report.html)、[独立复核](../review_artifacts/modern_self_gin_20261022/verification.json)与[维护记录](../review_artifacts/modern_self_gin_20261022/maintenance.json)。没有执行网络、硬件或性能对照；旧报告保留其固定版本。
 
-当前下一步：补现代buffer/信号窗口与运行事件映射，并先明确self-peer GIN的provider资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。设备信息仍待原询问回复，不假定可用硬件。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
+现代窗口增量已实现：公开`modern-deepep-window-replay`将已解析操作映射到共享应用注册区和独立provider信号域，检查源读lease、跨epoch写覆盖、计数消费清零与滚动signal/shadow。12份固定源码身份及原始结构体宿主ABI核对，workspace结构15,831,168B/分配16MiB；不是CUDA构建或显存测量。24项相关单元检查、新cwd的12条CLI/5次拒绝及旧计划/事件回归通过，详见[窗口范围与验收](../../fixtures/modern_windows/README.md)。影子状态没有接收真实负载，token数值、GPU内存序与完整buffer寿命仍未验证，不构成现代性能基线。
+
+当前下一步：将现代窗口及事件与真实传输负载和provider回调相连，先明确self-peer GIN的资源关系和不支持边界。provider报文、原子并发额度、响应调度和可见性都须有范围依据；MRT1仅用于功能验证，不能包装成现代GIN成本。设备信息仍待原询问回复，不假定可用硬件。基线语义与成本可验证后再对比正常无故障真实路由排队和方法排序。四请求不能复制为千卡生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

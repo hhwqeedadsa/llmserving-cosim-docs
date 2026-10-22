@@ -8,6 +8,8 @@
 
 现代plan/1的同rank路径分类已发现错误：固定源码的signal与非NVLink专家计数块仍走GIN，GDAKI为self-peer创建回环QP；token与rank count才有本地指针旁路。plan/2已纠正分类并保留专家块发送区信息。物理回环路径与成本仍未知，不能推为交换机负载或零成本；历史结论的引用须附此[更正依据](../fixtures/modern_self_gin/README.md)。
 
+窗口核心按固定源码将workspace与EP buffer映射到同一相对注册区，将GIN索引信号保留在provider独立域。原始BarrierSignals/EPSignals数据声明经替换CUDA限定词的宿主C++编译核对全部8个成员偏移；这只证明所选32/64位ABI的数据布局，未编译CUDA或测量硬件。事件驱动的计数/信号是影子状态，token数值、实际负载、GPU内存序及完整buffer寿命仍未验证；证据与检查边界见[窗口核心](../fixtures/modern_windows/README.md)。
+
 新增事件核心执行slot双射、Combine通道内接收序号递增及Dispatch同token分配后的warp同步。最后一项来自固定`dispatch.cuh`中slot atomic后的`__syncwarp()`，不能由旧符号DAG中“每条put只依赖自己的slot”自动保证；旧静态闭包只代表必要依赖，不保证整个执行合法。事件核心的回调由调用者提供，功能测试中的人工完成不具备网络或硬件含义。验收见[动态执行范围](../fixtures/modern_deepep_runtime/README.md)。
 
 原生Scale-Out新增逻辑字节准入额度，用于对照不同消息大小下的软件注入控制；这不是已校准的NIC在途窗口或GPU缓冲容量。交换机队列积分来自规范化的原生BEgressQueue变化，源QP快照和阶段耗时为执行证据。默认锁定RDMA库依赖NACK触发重传，没有通用ACK超时恢复；项目可选恢复扩展见下文，不能据此推断生产RoCE可靠性。配置和覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。

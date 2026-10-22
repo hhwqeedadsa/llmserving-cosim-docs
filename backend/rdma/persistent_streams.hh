@@ -15,6 +15,8 @@ class PersistentStreams {
   using Done = std::function<void()>;
   explicit PersistentStreams(Fabric& fabric);
   PersistentStreams(Fabric& fabric, Limits limits);
+  // Passive samples in existing callbacks; no timers or periodic polling.
+  void ConfigureRateCapture(const Json& config);
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);
   void Submit(uint64_t stream, uint64_t work, uint64_t bytes, Done accepted, Done acked);
@@ -55,6 +57,22 @@ class PersistentStreams {
   void Enqueue(uint64_t stream, uint64_t work, uint64_t bytes, Bytes payload, Done accepted, Done acked);
   void CheckAccepted(Stream&);
   void Notify();
+  struct RateState {
+    uint64_t rate, target, maximum, snd_nxt, snd_una, published;
+    int64_t next_avail;
+    double alpha;
+    uint32_t stage;
+    bool first_cnp, alpha_cnp, decrease_cnp;
+  };
+  struct RateSample {
+    int64_t time, uid, sequence;
+    uint64_t stream;
+    unsigned event, bytes, cnp;
+    RateState state;
+  };
+  static RateState ReadRate(const Stream&);
+  static Json RateValues(const RateState&);
+  void SampleRate(const Stream&, unsigned event, ns3::Ptr<const ns3::Packet>, uint64_t sequence, unsigned bytes, unsigned cnp);
   static void Tx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   static void Rx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   Fabric& fabric_;
@@ -68,5 +86,8 @@ class PersistentStreams {
   std::vector<std::array<int64_t,8>> source_packets_;
   Json payload_packets_=Json::array();
   uint64_t captured_payload_bytes_=0;
+  uint64_t rate_limit_=0;
+  int64_t rate_start_=0,rate_end_=0;
+  std::vector<RateSample> rate_samples_;
 };
 }

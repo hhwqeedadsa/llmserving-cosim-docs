@@ -9,7 +9,8 @@ from .scaleout_topology import fields, integer, require
 def stream_limits(config):
     schema=config.get('schema_version')
     require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2'),'unsupported stream work schema')
-    fields(config,'schema_version streams work'+(' limits' if schema.endswith('/2') else ''),'stream work root')
+    fields(config,'schema_version streams work'+(' limits' if schema.endswith('/2') else '')
+           +(' source_rate_capture' if 'source_rate_capture' in config else ''),'stream work root')
     if schema.endswith('/1'):
         return dict(max_streams=16,max_work=64)
     value=config['limits']
@@ -22,6 +23,12 @@ def stream_limits(config):
 def validate(topology, protocol, config):
     counts=stream_limits(config)
     budget=limits(protocol)
+    if 'source_rate_capture' in config:
+        capture=config['source_rate_capture']
+        fields(capture,'start_ns end_ns max_events','source rate capture')
+        integer(capture['start_ns'],'source rate start_ns',0,budget['max_sim_ns']-1)
+        integer(capture['end_ns'],'source rate end_ns',capture['start_ns']+1,budget['max_sim_ns'])
+        integer(capture['max_events'],'source rate max_events',1,100000)
     max_gpus=min(32,budget['max_gpus']) if config['schema_version'].endswith('/1') else budget['max_gpus']
     require(not any(k in protocol for k in ('admission','recovery','faults','drop_once','lifecycle_capture')),
             'stream probe excludes legacy admission/recovery/fault/lifecycle modes')

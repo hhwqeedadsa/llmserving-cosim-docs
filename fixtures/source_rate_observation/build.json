@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "original_runtime_unchanged": true,
+  "steps": 16,
+  "preserved_failure": "build-link-moe-rdma-service",
+  "fix": "resolve existing relative AstraSim archive against original CMake cwd; no source or budget changes",
+  "wall_seconds": 64.35431779921055,
+  "backend_paths": {
+    "moe-rdma-stream-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-stream-probe",
+    "moe-rdma-transaction-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-transaction-probe",
+    "moe-rdma-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-probe",
+    "moe-rdma-service": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-service"
+  }
+}

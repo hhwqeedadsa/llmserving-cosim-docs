@@ -1,0 +1,407 @@
+{
+  "scope": "platform only; passive rate snapshots and effective attribute reporting; no new research workload or calibration",
+  "base_head": "29f55d4a5f23629281342f778fc568a4a4e7991b",
+  "original_runtime_unchanged": true,
+  "build": {
+    "passed": true,
+    "original_runtime_unchanged": true,
+    "steps": 16,
+    "preserved_failure": "build-link-moe-rdma-service",
+    "fix": "resolve existing relative AstraSim archive against original CMake cwd; no source or budget changes",
+    "wall_seconds": 64.35431779921055,
+    "backend_paths": {
+      "moe-rdma-stream-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-stream-probe",
+      "moe-rdma-transaction-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-transaction-probe",
+      "moe-rdma-probe": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-probe",
+      "moe-rdma-service": "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-service"
+    }
+  },
+  "source_capture": {
+    "normal": {
+      "source_packets": 35,
+      "ack_pairs": 35,
+      "first_cnp_transitions": 0,
+      "cnp_ack_pairs": 0,
+      "sample_count": 105,
+      "minimum_rate_at_tx_bps": 100000000000,
+      "minimum_final_rate_bps": 100000000000,
+      "finish_ns": 63050,
+      "old_off_on_network_identical": true
+    },
+    "ecn": {
+      "source_packets": 213,
+      "ack_pairs": 213,
+      "first_cnp_transitions": 3,
+      "cnp_ack_pairs": 167,
+      "sample_count": 639,
+      "minimum_rate_at_tx_bps": 6250000000,
+      "minimum_final_rate_bps": 6250000000,
+      "finish_ns": 41338,
+      "old_off_on_network_identical": true
+    },
+    "passed": true,
+    "hardware_calibrated": false,
+    "public_commands": 12,
+    "native_rejections": 1,
+    "preserved_expected_failures": 3,
+    "output_bytes": 2535663,
+    "wall_seconds": 9.076627464964986,
+    "repeat_identical": true,
+    "window_filter_exact": true,
+    "backend_sha256": "9f5427cd74646c3bf749e75abd42f9267e07f97aaa7e32df832164adf690944a",
+    "reference_backend_sha256": "c2143fee19dd24e24400049fdfb6996e3be0a627e41bc34d10312e4b0cb50e33"
+  },
+  "persistent_regression": {
+    "passed": true,
+    "public_commands": 7,
+    "direct_native_commands": 0,
+    "expected_rejections": 2,
+    "normal": {
+      "work": 6,
+      "source_packets": 35,
+      "payload_bytes": 31457,
+      "finish_ns": 63050,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "depth2": {
+      "work": 6,
+      "source_packets": 35,
+      "payload_bytes": 31457,
+      "finish_ns": 57026,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "concurrent": {
+      "work": 6,
+      "source_packets": 35,
+      "payload_bytes": 31457,
+      "finish_ns": 50777,
+      "native_libraries": [
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+        "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+      ]
+    },
+    "repeat_byte_identical": true,
+    "same_network_clock": true,
+    "hardware_calibrated": false,
+    "modern_GIN_executed": false,
+    "wall_seconds": 3.984899587929249,
+    "output_bytes": 177781,
+    "indexed": {},
+    "backend_sha256": "9f5427cd74646c3bf749e75abd42f9267e07f97aaa7e32df832164adf690944a",
+    "source_sha256": {
+      "backend/rdma/fabric.hh": "40dc01e3f52e5fdae31de95f361da8c0a650fe7d13bdd0d5d32ab2740f2991aa",
+      "backend/rdma/fabric.cc": "2ea18af6bd2463dbcbcf3f4316443a3dfee5e47c717e7a8dccbef97f2c57ba65",
+      "backend/rdma/persistent_streams.hh": "9e13eca742ad0d25b12a973ae33d4cf73bc9fa92e28e14dbe99c52c5be3dab17",
+      "backend/rdma/persistent_streams.cc": "a91ce789b10c4416c8921b51d7bb64aac5ec7166fc5e4c258fe7ea0de531e1ba",
+      "backend/rdma/stream_probe.cc": "3ad568351cca266e5bb8263f2043f025b1cdd7b5b5977a44ae46377f5f80c5b4",
+      "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+      "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+      "python/moe_ub_cosim/scaleout_streams.py": "8d5f44eeb1972adb0d9763a785237f7ef6a807f498f21e0d934904c35e980d8c",
+      "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+      "python/moe_ub_cosim/cli.py": "d99e6bacfeade984747c0d783ead9eff3fec5691f5e6801cf9b9693e325196fb",
+      "tests/integration/check_persistent_stream_workflow.py": "01bb03c49d03f0ab4cbaf1d062aba795688596f9eea762d70477a138766bc55b",
+      "examples/scaleout_rdma_streams/work.json": "723d35f9a08bb2321886a8c9c056822ba2940f143455a178933379b8742f01e3"
+    }
+  },
+  "transaction_regression": {
+    "passed": true,
+    "public_commands": 8,
+    "expected_rejections": 2,
+    "normal": {
+      "operations": 6,
+      "source_packets": 10,
+      "transported_payload_bytes": 416,
+      "finish_ns": 66394,
+      "final_atomic_value": 10
+    },
+    "depth2": {
+      "operations": 6,
+      "source_packets": 10,
+      "transported_payload_bytes": 416,
+      "finish_ns": 42272,
+      "final_atomic_value": 10
+    },
+    "segmented": {
+      "operations": 6,
+      "source_packets": 12,
+      "transported_payload_bytes": 545,
+      "finish_ns": 66411,
+      "final_atomic_value": 10
+    },
+    "repeat_byte_identical": true,
+    "application_id_renaming_wire_and_time_invariant": true,
+    "output_bytes_before_summary": 206681,
+    "wall_seconds": 4.7543331403285265,
+    "source_sha256": {
+      "backend/rdma/remote_memory.hh": "f059f137a68386539c5b4ce78cc46a3bb7f0f316c32222cc8de710ae8fe3d410",
+      "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+      "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+      "backend/rdma/persistent_streams.hh": "9e13eca742ad0d25b12a973ae33d4cf73bc9fa92e28e14dbe99c52c5be3dab17",
+      "backend/rdma/persistent_streams.cc": "a91ce789b10c4416c8921b51d7bb64aac5ec7166fc5e4c258fe7ea0de531e1ba",
+      "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+      "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+      "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+      "python/moe_ub_cosim/cli.py": "d99e6bacfeade984747c0d783ead9eff3fec5691f5e6801cf9b9693e325196fb",
+      "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+      "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+      "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af"
+    },
+    "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+  },
+  "legacy_probe": {
+    "passed": true,
+    "network_identical_after_only_new_metadata_removed": true,
+    "messages": 4,
+    "finish_ns": 5000000,
+    "max_ack_ns": 312688,
+    "finish_ns_scope": "probe observation stop, not last message ACK"
+  },
+  "legacy_service": {
+    "service": {
+      "network_identical_after_only_new_metadata_removed": true,
+      "finish_ns": 54243,
+      "messages": 160,
+      "astra_node_log_byte_identical": true,
+      "frontend_equal_after_path_normalization": true
+    },
+    "passed": true,
+    "hardware_calibrated": false,
+    "public_commands": 3,
+    "wall_seconds": 3.2913679890334606,
+    "source_sha256": "be8c6c1f23d65cdf1eb308c4d29db150a1fc7c7ace0c1cd086d06a4b2c6d1d83"
+  },
+  "units": [
+    {
+      "command": "PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/unit -p scaleout_streams_test.py",
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exitcode": 0,
+      "tests": 8
+    },
+    {
+      "command": "PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/unit -p scaleout_rdma_test.py",
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exitcode": 0,
+      "tests": 7
+    }
+  ],
+  "dependency_check": {
+    "command": "bash scripts/check_deps.sh",
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "checkouts": 13
+  },
+  "failures": [
+    {
+      "path": "build-link-moe-rdma-service",
+      "reason": "isolated linker retained scratch/lib/libAstraSim.a relative to old CMake cwd",
+      "resolution": "resolved that existing archive to absolute path; only corrected link executed"
+    },
+    {
+      "path": "legacy/service-old-monitor",
+      "reason": "test requested decode_steps=1, below public service minimum2; rejected before execution",
+      "resolution": "test input corrected to legal2; only service comparison executed in legacy-service, existing probe results reused"
+    },
+    {
+      "path": "package-monitor",
+      "reason": "manifest included live monitor samples.jsonl; independent checksum verification rejected changing bytes",
+      "resolution": "keep failed archive and logs; exclude live monitor and prior generated archive from new snapshot, no network rerun",
+      "preserved_failed_archive": "/dev/shm/moe-rate-observation-20261022/checkpoint/checkpoint.tar.gz",
+      "failed_archive_sha256": "996b6b214f222a5d2af20759b7ecf16eb2938447c053447365ab8eec0a0a42aa"
+    }
+  ],
+  "budgets": {
+    "per_stage_wall_seconds": 60,
+    "per_stage_rss_bytes": 1073741824,
+    "per_stage_address_bytes": 2147483648,
+    "cumulative_bytes": 134217728,
+    "cumulative_monitored_wall_seconds": 300,
+    "min_free_bytes": 8589934592
+  },
+  "raw_root": "/dev/shm/moe-rate-observation-20261022",
+  "retention": "tmpfs only; volatile and no persistent backup",
+  "root_free_bytes": 8023871488,
+  "tmpfs_free_bytes": 260776722432,
+  "measured_monitors": [
+    {
+      "path": "acceptance-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 9.236662149429321,
+      "rss_bytes": 447148032
+    },
+    {
+      "path": "build-archive/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.15083437971770763,
+      "rss_bytes": 4284416
+    },
+    {
+      "path": "build-astra_adapter/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.247774977236986,
+      "rss_bytes": 490106880
+    },
+    {
+      "path": "build-fabric/probe.json",
+      "status": "completed",
+      "wall_seconds": 10.505326189100742,
+      "rss_bytes": 720392192
+    },
+    {
+      "path": "build-link-moe-rdma-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5706464201211929,
+      "rss_bytes": 113573888
+    },
+    {
+      "path": "build-link-moe-rdma-service/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.36172525212168694,
+      "rss_bytes": 113946624
+    },
+    {
+      "path": "build-link-moe-rdma-stream-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5815283097326756,
+      "rss_bytes": 106291200
+    },
+    {
+      "path": "build-link-moe-rdma-transaction-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5821093264967203,
+      "rss_bytes": 133173248
+    },
+    {
+      "path": "build-link-service-absolute/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8755822759121656,
+      "rss_bytes": 203997184
+    },
+    {
+      "path": "build-logging/probe.json",
+      "status": "completed",
+      "wall_seconds": 2.6021874845027924,
+      "rss_bytes": 321298432
+    },
+    {
+      "path": "build-persistent_streams/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.148833168670535,
+      "rss_bytes": 582246400
+    },
+    {
+      "path": "build-probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.144779780879617,
+      "rss_bytes": 476139520
+    },
+    {
+      "path": "build-recovery/probe.json",
+      "status": "completed",
+      "wall_seconds": 6.059567308053374,
+      "rss_bytes": 448122880
+    },
+    {
+      "path": "build-remote_transactions/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.804935932159424,
+      "rss_bytes": 553324544
+    },
+    {
+      "path": "build-service/probe.json",
+      "status": "completed",
+      "wall_seconds": 10.01697745732963,
+      "rss_bytes": 788733952
+    },
+    {
+      "path": "build-stream_probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.454924957826734,
+      "rss_bytes": 504885248
+    },
+    {
+      "path": "build-transaction_probe/probe.json",
+      "status": "completed",
+      "wall_seconds": 5.246584579348564,
+      "rss_bytes": 503255040
+    },
+    {
+      "path": "legacy/probe-new-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.816024037078023,
+      "rss_bytes": 399757312
+    },
+    {
+      "path": "legacy/probe-old-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7961479462683201,
+      "rss_bytes": 399691776
+    },
+    {
+      "path": "legacy/service-old-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.15723177790641785,
+      "rss_bytes": 8523776
+    },
+    {
+      "path": "legacy/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1317054908722639,
+      "rss_bytes": 7442432
+    },
+    {
+      "path": "legacy-service/service-new-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5696363151073456,
+      "rss_bytes": 495112192
+    },
+    {
+      "path": "legacy-service/service-old-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5550609268248081,
+      "rss_bytes": 494039040
+    },
+    {
+      "path": "legacy-service/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1283267643302679,
+      "rss_bytes": 7438336
+    },
+    {
+      "path": "stream-regression-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.129317041486502,
+      "rss_bytes": 422293504
+    },
+    {
+      "path": "transaction-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 4.9522823840379715,
+      "rss_bytes": 425578496
+    }
+  ],
+  "exclusive_recorded_wall_seconds": 87.82671263255179
+}

@@ -1,0 +1,35 @@
+{
+  "normal": {
+    "source_packets": 35,
+    "ack_pairs": 35,
+    "first_cnp_transitions": 0,
+    "cnp_ack_pairs": 0,
+    "sample_count": 105,
+    "minimum_rate_at_tx_bps": 100000000000,
+    "minimum_final_rate_bps": 100000000000,
+    "finish_ns": 63050,
+    "old_off_on_network_identical": true
+  },
+  "ecn": {
+    "source_packets": 213,
+    "ack_pairs": 213,
+    "first_cnp_transitions": 3,
+    "cnp_ack_pairs": 167,
+    "sample_count": 639,
+    "minimum_rate_at_tx_bps": 6250000000,
+    "minimum_final_rate_bps": 6250000000,
+    "finish_ns": 41338,
+    "old_off_on_network_identical": true
+  },
+  "passed": true,
+  "hardware_calibrated": false,
+  "public_commands": 12,
+  "native_rejections": 1,
+  "preserved_expected_failures": 3,
+  "output_bytes": 2535663,
+  "wall_seconds": 9.076627464964986,
+  "repeat_identical": true,
+  "window_filter_exact": true,
+  "backend_sha256": "9f5427cd74646c3bf749e75abd42f9267e07f97aaa7e32df832164adf690944a",
+  "reference_backend_sha256": "c2143fee19dd24e24400049fdfb6996e3be0a627e41bc34d10312e4b0cb50e33"
+}

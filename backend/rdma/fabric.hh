@@ -90,6 +90,7 @@ class Fabric {
   bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
   ns3::Ipv4Address Address(unsigned gpu, unsigned plane) const;
   Json topology_, config_;
+  Json rdma_parameters_=Json::array();
   ns3::NodeContainer nodes_;
   std::vector<ns3::Ptr<ns3::RdmaDriver>> drivers_;
   std::vector<std::vector<Neighbor>> adjacency_;

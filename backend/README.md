@@ -18,6 +18,8 @@
 
 新增独立`PersistentStreams`与`moe-rdma-stream-probe`使用同一原生Fabric的设备回调，实现空闲可追加的持久字节连接、真实接收/ACK前缀和ACK释放的GinWorkQueue信用。连接显式绑定唯一源/反向NIC；实际收发决定后继就绪。它独占Fabric传输入口并拒绝旧Send混用，没有接入现代计划、原子事务或GPU可见性，不改变下面在线服务的语义。见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
 
+Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一导出`rdma_parameters`，不替换原生默认值。持久字节入口可选有界`source_rate_capture`，在已有源TX及ACK处理前后同步读状态，无额外仿真事件；不改变包或完成条件。详细单位、采样阶段和容量失败语义见[输出说明](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。
+
 持久路径按线端端口索引连接、按已发布/接收/ACK前缀推进工作，发送按序号二分定位工作以支持原生NACK回退。`stream-work/2`允许显式最多128连接/8192工作；v1及事务入口仍默认16/64。应用依赖按真实回调更新后继，输入顺序是就绪平局规则；没有独立仿真时钟、预设完成或修改协议事件。验收范围见[索引与计数](../fixtures/indexed_streams/README.md)。
 
 原生RDMA准入控制器`communication_admission.hh`支持消息数和逻辑字节双约束。`queue_integral.hh`保存每出口常量状态，`rdma/fabric.cc`将出队前钩子规范为出队后状态，核对字节守恒后积分，不需要每包历史或采样事件。源QP序号和阶段耗时只用于离线报告。配置见[准入示例](../examples/scaleout_rdma_admission/README.md)。

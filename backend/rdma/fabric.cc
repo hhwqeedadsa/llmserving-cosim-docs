@@ -210,6 +210,22 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       hw->SetAttribute("TotalPauseTimes",UintegerValue(0));
       drivers_[host]=CreateObject<RdmaDriver>(); auto driver=drivers_[host];
       driver->SetNode(nodes_.Get(host)); driver->SetRdmaHw(hw); nodes_.Get(host)->AggregateObject(driver); driver->Init();
+      // Read effective attributes from the initialized object, including defaults.
+      // This is provenance, not a calibrated configuration or a new override.
+      Json attributes=Json::object();
+      for(const auto* key:{"MinRate","RateAI","RateHAI"}) {
+        DataRateValue value;hw->GetAttribute(key,value);attributes[key]=value.Get().GetBitRate();
+      }
+      for(const auto* key:{"EwmaGain","RateOnFirstCnp","RPTimer","RateDecreaseInterval","AlphaResumInterval"}) {
+        DoubleValue value;hw->GetAttribute(key,value);attributes[key]=value.Get();
+      }
+      for(const auto* key:{"ClampTargetRate","RateBound","L2BackToZero"}) {
+        BooleanValue value;hw->GetAttribute(key,value);attributes[key]=value.Get();
+      }
+      for(const auto* key:{"FastRecoveryTimes","CcMode","Mtu","L2ChunkSize","L2AckInterval","TotalPauseTimes"}) {
+        UintegerValue value;hw->GetAttribute(key,value);attributes[key]=value.Get();
+      }
+      rdma_parameters_.push_back({{"node",host},{"attributes",attributes}});
       Require(driver->TraceConnectWithoutContext("QpComplete",MakeCallback(&Fabric::Acked,this)),"missing ACK-completion trace");
       if(recovery_)recovery_->Attach(host,hw);
     }
@@ -489,6 +505,15 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
+  r["rdma_parameters"]={{"object_type","ns3::RdmaHw"},{"sample_phase","after_driver_init_before_QPs"},
+    {"hosts",rdma_parameters_},{"hardware_calibrated",false},
+    {"fabric_overrides",{"CcMode","Mtu","L2ChunkSize","L2AckInterval","L2BackToZero","TotalPauseTimes"}},
+    {"other_attribute_source","pinned native defaults; no DCQCN parameter overrides in this adapter"},
+    {"units",{{"MinRate","bit/s"},{"RateAI","bit/s"},{"RateHAI","bit/s"},
+      {"RPTimer","us"},{"RateDecreaseInterval","us"},{"AlphaResumInterval","us"},
+      {"EwmaGain","ratio"},{"RateOnFirstCnp","ratio"},{"ClampTargetRate","boolean"},{"RateBound","boolean"},
+      {"L2BackToZero","boolean"},{"FastRecoveryTimes","count"},{"CcMode","enum"},{"Mtu","bytes"},
+      {"L2ChunkSize","bytes"},{"L2AckInterval","bytes"},{"TotalPauseTimes","count"}}}};
   if(recovery_) {
     r["recovery"]=recovery_->Report();r["recovery"]["inflight_packets"]=inflight_packets_;
     r["recovery"]["finish_waiting_for_drain"]=bool(finish_);

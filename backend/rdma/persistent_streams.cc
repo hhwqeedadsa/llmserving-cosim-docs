@@ -33,6 +33,33 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):fabric_(fabri
       Require(device->TraceConnectWithoutContext("MacRx",MakeBoundCallback(&PersistentStreams::Rx,this,node,port)),"missing stream Rx hook");
     }
 }
+void PersistentStreams::ConfigureRateCapture(const Json& config) {
+  Require(streams_.empty() && !rate_limit_ && config.is_object() && config.size()==3,
+          "source_rate_capture requires start_ns/end_ns/max_events before streams open");
+  for(const auto* key:{"start_ns","end_ns","max_events"})
+    Require(config.at(key).is_number_integer(),"source_rate_capture fields must be integers");
+  Require(config.at("start_ns")>=0 && config.at("end_ns")>config.at("start_ns") &&
+          config.at("end_ns")<=fabric_.MaxSimNs() && config.at("max_events")>=1 && config.at("max_events")<=100000,
+          "invalid source_rate_capture window or event budget");
+  rate_start_=config.at("start_ns");rate_end_=config.at("end_ns");rate_limit_=config.at("max_events");
+}
+PersistentStreams::RateState PersistentStreams::ReadRate(const Stream& s) {
+  const auto& q=*s.qp;
+  return {q.m_rate.GetBitRate(),q.mlx.m_targetRate.GetBitRate(),q.m_max_rate.GetBitRate(),
+    q.snd_nxt,q.snd_una,q.m_size,q.m_nextAvail.GetNanoSeconds(),q.mlx.m_alpha,q.mlx.m_rpTimeStage,
+    q.mlx.m_first_cnp,q.mlx.m_alpha_cnp_arrived,q.mlx.m_decrease_cnp_arrived};
+}
+Json PersistentStreams::RateValues(const RateState& s) {
+  return Json::array({s.rate,s.target,s.maximum,s.snd_nxt,s.snd_una,s.published,s.next_avail,
+    s.alpha,s.stage,s.first_cnp,s.alpha_cnp,s.decrease_cnp});
+}
+void PersistentStreams::SampleRate(const Stream& s,unsigned event,Ptr<const Packet> packet,
+                                   uint64_t sequence,unsigned bytes,unsigned cnp) {
+  if(!rate_limit_ || StreamNow()<rate_start_ || StreamNow()>=rate_end_)return;
+  Require(rate_samples_.size()<rate_limit_,"source rate observation budget exceeded");
+  rate_samples_.push_back({StreamNow(),static_cast<int64_t>(packet->GetUid()),static_cast<int64_t>(sequence),
+    s.qp->GetTag(),event,bytes,cnp,ReadRate(s)});
+}
 void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plane,uint16_t wire_port,
                             unsigned source_nic,unsigned destination_nic,unsigned depth) {
   Require(!closed_ && streams_.size()<limits_.streams && !streams_.count(id) && src<fabric_.gpus_ && dst<fabric_.gpus_ &&
@@ -116,11 +143,14 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
   if(h.l3Prot==0xFC || h.l3Prot==0xFD) {
     auto s=Match(node,h,true);Require(s,"unexpected ACK in exclusive stream execution");
     Require(h.ack.seq<=s->qp->snd_nxt,"stream ACK covers unsent bytes");
+    const auto cnp=(h.ack.flags>>qbbHeader::FLAG_CNP)&1;
+    SampleRate(*s,1,packet,h.ack.seq,packet->GetSize(),cnp);
     s->qp->Acknowledge(h.ack.seq);
     // Keep normal native NACK and DCQCN feedback handling, but do NOT invoke
     // native QpComplete: an ACKed published prefix is not connection close.
     if(h.l3Prot==0xFD)hw->RecoverQueue(s->qp);
     if((h.ack.flags>>qbbHeader::FLAG_CNP)&1)hw->cnp_received_mlx(s->qp);
+    SampleRate(*s,2,packet,h.ack.seq,packet->GetSize(),cnp);
     while(s->acked_prefix<s->published_prefix && s->work[s->acked_prefix].end<=s->qp->snd_una) {
       auto& w=s->work[s->acked_prefix];
       w.acked=StreamNow();++s->acked_prefix;s->queue.CompleteThrough(w.ticket+1);
@@ -191,6 +221,7 @@ void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,P
     auto& s=*stream;
     if(node==s.src && h.sip==s.qp->sip.Get() && h.dip==s.qp->dip.Get() && h.udp.sport==s.wire_port) {
       Require(port==s.source_nic,"stream transmitted on wrong bound NIC");
+      self->SampleRate(s,0,packet,h.udp.seq,packet->GetSize(),0);
       ++s.packets;s.tx_payload+=packet->GetSize()-h.GetSerializedSize();
       self->source_packets_.push_back({StreamNow(),static_cast<int64_t>(s.qp->GetTag()),node,s.dst,port,
         h.udp.seq,static_cast<int64_t>(packet->GetSize()-h.GetSerializedSize()),static_cast<int64_t>(packet->GetUid())});
@@ -241,6 +272,24 @@ Json PersistentStreams::Report() const {
   result["source_packets"]=source_packets_;
   if(!payload_packets_.empty())result["source_payload_packets"]=payload_packets_;
   result["source_packet_columns"]={"time_ns","stream","src","dst","nic","sequence","payload_bytes","packet_uid"};
+  if(rate_limit_) {
+    Json samples=Json::array(),final=Json::array();
+    for(const auto& s:rate_samples_) {
+      Json row=Json::array({s.time,s.stream,s.event,s.uid,s.sequence,s.bytes,s.cnp});
+      for(const auto& value:RateValues(s.state))row.push_back(value);
+      samples.push_back(std::move(row));
+    }
+    for(const auto& item:streams_)final.push_back({{"stream",item.first},{"state",RateValues(ReadRate(item.second))}});
+    result["source_rate_capture"]={{"start_ns",rate_start_},{"end_ns",rate_end_},{"max_events",rate_limit_},
+      {"samples",samples},{"final_time_ns",StreamNow()},{"final_states",final},
+      {"columns",{"time_ns","stream","event","packet_uid","sequence","model_bytes","ack_cnp",
+        "rate_bps","target_rate_bps","max_rate_bps","snd_nxt","snd_una","published_bytes","next_avail_ns",
+        "alpha","recovery_stage","first_cnp","alpha_cnp_arrived","decrease_cnp_arrived"}},
+      {"state_columns",{"rate_bps","target_rate_bps","max_rate_bps","snd_nxt","snd_una","published_bytes","next_avail_ns",
+        "alpha","recovery_stage","first_cnp","alpha_cnp_arrived","decrease_cnp_arrived"}},
+      {"event_codes",{{"source_tx_before_PktSent",0},{"ack_before_transport_processing",1},{"ack_after_feedback_before_Pump",2}}},
+      {"scope","passive source snapshots only, not continuous timer transitions; TX next_avail is before this packet's PktSent; ACK event includes native NACK; final states are outside capture window and may include idle rate decay; rates are modeled QP state, not measured throughput"}};
+  }
   for(const auto& item:streams_) {
     const auto& s=item.second;
     result["streams"].push_back({{"id",item.first},{"src",s.src},{"dst",s.dst},{"plane",s.plane},{"wire_port",s.wire_port},

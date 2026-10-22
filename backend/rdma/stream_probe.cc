@@ -29,6 +29,7 @@ int main(int argc,char** argv) {
     } else Require(!input.contains("limits"),"v1 stream work has fixed limits");
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     Fabric fabric(ReadJson(argv[1]),config);PersistentStreams transport(fabric,limits);
+    if(input.contains("source_rate_capture"))transport.ConfigureRateCapture(input.at("source_rate_capture"));
     Require(input.at("streams").is_array() && !input.at("streams").empty() && input.at("streams").size()<=limits.streams,"stream count budget exceeded");
     for(const auto& s:input.at("streams"))transport.Open(s.at("id"),s.at("src"),s.at("dst"),s.at("plane"),
       s.at("wire_port"),s.at("source_nic"),s.at("destination_nic"),s.at("queue_depth"));

@@ -24,6 +24,20 @@ class StreamInputTests(unittest.TestCase):
         config=deepcopy(self.config);config['streams'][0]['queue_depth']=4096
         validate(self.topology,self.protocol,config)
 
+    def test_source_rate_capture_types_window_and_budget(self):
+        config=deepcopy(self.config)
+        valid=dict(start_ns=0,end_ns=5000000,max_events=1000)
+        config['source_rate_capture']=valid
+        validate(self.topology,self.protocol,config)
+        for key,values in [('start_ns',[-1,True,5000000]),('end_ns',[0,5000001,True,1.5]),
+                           ('max_events',[0,100001,True,'100'])]:
+            for value in values:
+                config['source_rate_capture']=dict(valid,**{key:value})
+                with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+        for value in ({},dict(valid,period_ns=1),dict(start_ns=0,max_events=1)):
+            config['source_rate_capture']=value
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+
     def test_reject_future_dependency_unknown_event_and_guessed_time(self):
         for after in ([dict(work=5,event='accepted')],[dict(work=0,event='visible')],
                       [dict(work=0,event='acked'),dict(work=0,event='acked')]):

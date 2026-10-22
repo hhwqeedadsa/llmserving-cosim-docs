@@ -49,6 +49,26 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 ## 输出与预算
 
+### 可选的源端速率观测
+
+需要核查拥塞反馈时，在工作输入JSON根对象增加以下字段（v1/v2均支持），其他`streams/work`保持完整：
+
+```json
+"source_rate_capture": {"start_ns": 0, "end_ns": 5000000, "max_events": 10000}
+```
+
+它是`--config`中的字段，不放入RDMA协议配置。`start_ns/end_ns`为同一仿真时钟的左闭右开区间，须满足`0 ≤ start_ns < end_ns ≤ max_sim_ns`；`max_events`为1—100000的整数，布尔值不算整数。省略时不保存速率序列。使用原来的`rdma-stream-probe`命令运行修改后的输入即可，无需新增命令。当前仅该字节入口提供采样开关，事务/在线服务仍只报告下面的有效属性。
+
+开启后，`persistent_transport.source_rate_capture`保存`columns/samples`：源数据包`PhyTxBegin`时采样一次，每个收到的ACK/NACK在原有处理前、反馈后各采样一次；没有新增定时器或仿真事件。字段包含packet_uid、字节序号、模型包长、ACK的CNP位、QP当前/目标/最大速率（bit/s）、`alpha`、恢复阶段、累计发送/确认/发布前缀以及`next_avail_ns`。事件名称及码保存在`event_codes`，数组须按列名解读，不按固定偏移猜测。
+
+TX钩子发生在该包的`PktSent`更新之前：`next_avail_ns`仍是此前状态，不是本包发出后的下次发送预测。ACK的后采样发生在队列`Pump`前，不包括随后可能发布的工作。`final_states`按`state_columns`读取，是报告时刻的状态，不受采样时间窗限制；可能包含空闲期间降速。没有周期性采样定时器内部的每次变化，不能视为连续速率轨迹，也不能把QP速率当实测速率或吞吐率。
+
+计数到上限后再遇到合格事件时明确失败，保留执行stderr；不会静默截断、扩大上限或用不完整采样冒充完整记录。这与允许截断的`packet_capture`不同。采样上限之外，原有宿主、仿真、结果JSON与产物预算仍生效。数据属于离线诊断材料，不是在线策略的可读观测。
+
+所有原生Fabric入口的顶层`rdma_parameters`记录每个GPU端`RdmaHw`初始化后、QP创建前实际读回的属性值，包括未覆盖的MinRate、RPTimer、alpha/降速周期、恢复次数和增速量；`units`说明单位，`fabric_overrides`列出适配器显式设置项，其他项来自固定原生默认值。速率单位bit/s，三个控制周期的单位是**微秒**。此增量没有修改默认值或新增DCQCN调参接口。不能将默认RPTimer=1500us或MinRate=100Mb/s当作当前硬件校准结果。
+
+### 传输记录
+
 `result.json.persistent_transport`保存连接状态、每工作`ready_ns/published_ns/accepted_ns/acked_ns`、累计`begin/end`序号、被动源包记录和物理排空状态。纳秒来自同一个Simulator。按已有端点与序号离线关联工作，不向包头添加工作ID；包不会跨越工作边界。
 
 `qp_creations=1`表示一个连接对象只创建一次；`scheduler_reinsertions`计空闲成员被原生调度器移出后恢复的次数，不是重建QP。全部预期工作ACK、在途帧与设备/ACK队列排空后才关闭连接并取消其拥塞计时器；不能将“QP map非空”等同活跃传输，也不能因应用完成提前删连接。

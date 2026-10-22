@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+原生Scale-Out可同时按活跃消息数、整条逻辑payload字节约束源端准入，单条消息过大时拒绝。发送协议进度来自源QP，仅用于离线导出；`queue_metrics`以每出口常量空间累计全程交换机队列积分，独立于详细包记录。`scaleout_metrics.py`离线分解生命周期阶段，不作为在线策略输入。配置与边界见[准入示例](../examples/scaleout_rdma_admission/README.md)。
+
 非 UB 的 `service/1` 保留有限 MoE 片段；新增 `service/2` 支持完整 GQA MoE 结构尺寸、首尾/逐层图和权重＋KV 声明。`topology/2` 为同服务器不同 GPU 提供分块交换织构模型，按 GPU 入/出方向共享带宽；它与机外 RDMA 共用 Simulator，不冒称 NVLink 协议。`rdma/2` 显式声明执行限额，旧默认不扩容。Scale-Out 未缓存 KV 池按需创建元数据，保持原容量、FIFO 与引用计数；节点审计另存不滚动日志。配置、事件和边界见[完整形状百卡示例](../examples/scaleout_clos128/README.md)。两种服务 schema 默认使用合成路由，支持可选来源回放；均为声明成本、ready-KV Decode，不执行数值模型或声称硬件校准。下面的有限片段说明对应旧配置，UB 路径的结构保持独立。
 
 非UB网络的物理输入生成由 `scaleout_topology.py` 独立负责，经公共 `scaleout topology` 导出带NIC/rail/plane映射的Clos/Agg拓扑。独立的 [RDMA 入口](../examples/scaleout_rdma/README.md)使用 `scaleout_service.py` 连接实际 LLMServingSim Scheduler、Chakra 图及 `backend/rdma/service.cc`；`astra_adapter.cc` 将 SEND/RECV 绑定到 `fabric.cc` 的原生 RDMA 网络。接收连续字节齐备后释放消费者，发送端完整 ACK 后释放发送；完成后返回前端再组批。多组、层、波次共享同一个原生 ns-3 实例，与下面的 UB 服务分别构建，不混链。来源选择经`scaleout_replay.py`校验和快照，图中保留文件/原层/入口身份，网络完成后推进入口；支持逐层等容量静态专家重排。具体范围及输入见[路由回放](../examples/scaleout_route_replay/README.md)，默认有限片段的[参数和输出](../examples/scaleout_rdma/README.md)单独维护。

@@ -1,0 +1,1933 @@
+{
+  "structure-gates-final": {
+    "summary": {
+      "passed": true,
+      "probe_cases": 11,
+      "oversize_preflight": true,
+      "service_cases": 3,
+      "byte_budget_shared_across_planes": true,
+      "intra_host_excluded_from_byte_budget": true,
+      "queue_integrals_independently_reconstructed": true,
+      "packet_residence_crosscheck": true,
+      "metrics_observation_invariant": true,
+      "truncated_and_summary_exact": true,
+      "byte_ownership": true,
+      "strict_fifo_and_eligible_peer_rotation": true,
+      "source_progress_and_ack_stall": true
+    },
+    "sha256": "282f15fd46dfba2402ccaf363437fc3cdd42d785b839305c3a3cb4f321e9e960",
+    "commands": [
+      {
+        "name": "topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/examples/scaleout_rdma/small-clos-100g.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "count",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/count.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/count"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "count-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/count",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/count-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "zero",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/zero.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/zero"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "zero-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/zero",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/zero-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/fifo.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/fifo"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/fifo",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/fifo-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "rr",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/rr.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/rr"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "rr-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/rr",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/rr-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "cost",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/cost.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/cost"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "cost-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/cost",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/cost-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/capture.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/capture"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/capture",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/capture-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "truncated",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/truncated.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/truncated"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "truncated-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/truncated",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/truncated-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "summary",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/summary.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/summary"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "summary-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/summary",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/summary-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "ack",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/ack.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/ack"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "ack-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/ack",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/ack-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "oversize",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/fifo.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/oversize.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/oversize"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "service-off",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service.json",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-off.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-off"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-metrics",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service.json",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-metrics.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-metrics"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-bytes",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service.json",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-bytes.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/service-bytes"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "dual-topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual-topology.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "dual",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual-topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual-messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/dual"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local-topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local-topology.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local-topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local-messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/structure-gates-final/local"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      }
+    ]
+  },
+  "admission-regression": {
+    "summary": {
+      "passed": true,
+      "probe_cases": 11,
+      "service_cases": 9,
+      "pass_observer_invariance": true,
+      "legacy_default_equivalence": true,
+      "queue_order_and_capacity": true,
+      "ack_loss_retains_owner": true,
+      "independent_source_progress": true,
+      "explicit_decision_cost": true,
+      "intra_host_excluded": true,
+      "planes_share_source_quota": true,
+      "simultaneous_ack_native_map_vs_software_release": true
+    },
+    "sha256": "99f141521406d7122a3fb746f1143862eae23fe32d82c5d8ce9968e4d70ec717",
+    "commands": [
+      {
+        "name": "topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/examples/scaleout_rdma/small-clos-100g.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "default",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/default.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/default"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "default-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/default",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/default-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "pass",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/pass.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/pass"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "pass-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/pass",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/pass-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture-only",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/capture-only.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/capture-only"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture-only-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/capture-only",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/capture-only-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "truncated",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/truncated.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/truncated"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "truncated-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/truncated",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/truncated-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo1",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo1.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo1"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo1-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo1",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo1-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo2",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo2.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo2"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "fifo2-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo2",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/fifo2-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "rr1",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/rr1.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/rr1"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "rr1-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/rr1",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/rr1-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "decision-cost",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/decision-cost.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/decision-cost"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "decision-cost-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/decision-cost",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/decision-cost-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "ack-stall",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/ack-stall.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/ack-stall"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "ack-stall-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/ack-stall",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/ack-stall-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "previous",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/default.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-structure-20261022/previous-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/previous"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-default",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-default.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-default"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-pass",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-pass.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-pass"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-fifo",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-fifo.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-fifo"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-rr",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-rr.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-rr"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-previous",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-previous.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-structure-20261022/previous-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-previous"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-stalled",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-stalled.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-stalled"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "service-stalled-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-stalled",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/service-stalled-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local-topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-topology.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local-default",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-default.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-default"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local-pass",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-pass.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-pass"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "local-fifo",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-fifo.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/local-fifo"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "dual-topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-topology.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "dual-pass",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-pass.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-pass"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "dual-fifo",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-fifo.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/admission-regression/dual-fifo"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      }
+    ]
+  },
+  "fault-regression": {
+    "summary": {
+      "passed": true,
+      "probe_cases": 11,
+      "service_cases": 3,
+      "recovered_payload_bytes": 7000,
+      "capture_invariance": true,
+      "bounded_capture_invariance": true,
+      "failed_service_kept_result_and_frontend": true
+    },
+    "sha256": "b35ca4fe4db129e7569616c93e65cb635c77cce71d2ca328072e4ec12c90d407",
+    "commands": [
+      {
+        "name": "topology",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/home/lry/moe-ub-cosim/examples/scaleout_rdma/small-clos-100g.json",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "plain",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/plain.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/plain"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "plain-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/plain",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/plain-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "captured",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/captured.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/captured"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "captured-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/captured",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/captured-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "middle",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/middle.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/middle"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "middle-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/middle",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/middle-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "tail",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/tail.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/tail"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "tail-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/tail",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/tail-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "early-ack",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/early-ack.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/early-ack"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "early-ack-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/early-ack",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/early-ack-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "final-ack",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/final-ack.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/final-ack"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "final-ack-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/final-ack",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/final-ack-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "lost-nack",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/lost-nack.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/lost-nack"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "lost-nack-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/lost-nack",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/lost-nack-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "repeat-middle",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/repeat-middle.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/repeat-middle"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "repeat-middle-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/repeat-middle",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/repeat-middle-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "switch-first",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/switch-first.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/switch-first"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "switch-first-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/switch-first",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/switch-first-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture-bounded",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/capture-bounded.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/capture-bounded"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "capture-bounded-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/capture-bounded",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/capture-bounded-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "window-miss",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-probe",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/window-miss.json",
+          "--messages",
+          "/dev/shm/moe-structure-20261022/fault-regression/messages.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-probe",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/window-miss"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "window-miss-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/window-miss",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/window-miss-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-normal",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-normal.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-normal"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-normal-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-normal",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-normal-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-middle",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-middle.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-middle"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-middle-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-middle",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-middle-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      },
+      {
+        "name": "service-final-ack",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-run",
+          "--topology",
+          "/dev/shm/moe-structure-20261022/fault-regression/topology",
+          "--protocol",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-final-ack.json",
+          "--config",
+          "/dev/shm/moe-structure-20261022/fault-regression/service.json",
+          "--backend",
+          "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-service",
+          "--protoc",
+          "/home/lry/tools/protobuf/bin/protoc",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-final-ack"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 1,
+        "expected_success": false
+      },
+      {
+        "name": "service-final-ack-diagnose",
+        "argv": [
+          "/home/lry/a100_ep_runtime/\u7b2c04\u8f6e_\u4eff\u771f\u5e73\u53f0\u9a8c\u8bc1_20260917/LLMServingSim/venv/bin/python",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-diagnose",
+          "--run",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-final-ack",
+          "--output",
+          "/dev/shm/moe-structure-20261022/fault-regression/service-final-ack-diagnosis.json"
+        ],
+        "cwd": "/home/lry/moe-ub-cosim",
+        "exit_code": 0,
+        "expected_success": true
+      }
+    ]
+  },
+  "public_example": {
+    "passed": true,
+    "finish_ns": 423082
+  },
+  "build": {
+    "backend/communication_admission.hh": "71f7819376bee034c884e05b17869ea552f005fe85f5acbd4a3279271db21aed",
+    "backend/queue_integral.hh": "5a020da9bc650b2294bcdcc41003989e8ca2a333395bac033ee1a6ebac166f0e",
+    "backend/rdma/astra_adapter.cc": "9b9c2335da865ae9cfd36166c76ac06e781d0dadf60687028edb529aa742a589",
+    "backend/rdma/astra_adapter.hh": "0988747496ac5cd23e759718b12a75a4194736b62d281a8039be8eac6d3e3aba",
+    "backend/rdma/fabric.cc": "2977529eebc638e9c82a900147a4fcdd739030f7ede169592dbe408bffa925a0",
+    "backend/rdma/fabric.hh": "ec848070e163841d4413e31074d6d56f86271761591632652c32d1a8edc9ace3",
+    "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+    "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+    "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+    "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+    "backend/rdma/service.cc": "9b29445255972e3bfc5d7cf2681c463e5406bee7c60650d207af3d6b0b99883b",
+    "backend/rdma/targets.cmake": "86211241ea29eba164095059dfdefe77b3da7721617e98fe55cf6d56b703bd7c"
+  }
+}

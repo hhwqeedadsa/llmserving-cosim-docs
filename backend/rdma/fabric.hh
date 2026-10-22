@@ -5,6 +5,7 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/rdma-driver.h"
 #include "../communication_admission.hh"
+#include "../queue_integral.hh"
 #include <functional>
 #include <array>
 #include <map>
@@ -37,6 +38,7 @@ class Fabric {
     ns3::Ptr<ns3::QbbNetDevice> device;
     uint64_t wire=0,data=0,control=0,packets=0,ecn=0,pause=0,resume=0;
     uint32_t max_queue=0;
+    moe_cosim::QueueIntegral integral;
   };
   struct Flow {
     Done done;
@@ -109,6 +111,8 @@ class Fabric {
   bool resource_tracking_=false;
   std::string admission_policy_="passthrough";
   uint32_t admission_limit_=0;
+  uint64_t admission_byte_limit_=0;
+  bool byte_tracking_=false,queue_metrics_=false;
   int64_t decision_ns_=0;
   std::vector<std::unique_ptr<moe_cosim::CommunicationAdmission>> admission_;
   std::vector<bool> deciding_;

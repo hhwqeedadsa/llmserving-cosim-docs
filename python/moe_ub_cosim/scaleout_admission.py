@@ -7,10 +7,12 @@ from .scaleout_topology import fields, integer, require
 def validate_options(protocol):
     if 'admission' in protocol:
         a=protocol['admission']
-        fields(a,'policy max_active_per_source decision_ns','software admission')
+        fields(a,'policy max_active_per_source decision_ns'+(' max_active_bytes_per_source' if 'max_active_bytes_per_source' in a else ''),'software admission')
         require(a['policy'] in ('passthrough','fifo','destination_round_robin'),'unknown admission policy')
         integer(a['max_active_per_source'],'software active limit',0,1024)
         integer(a['decision_ns'],'source-local decision cost',0,1000000)
+        integer(a.get('max_active_bytes_per_source',0),'software active logical byte limit',0,1073741824)
+        require(a['policy']!='passthrough' or not a.get('max_active_bytes_per_source',0),'passthrough cannot enforce a byte cap')
         require((a['max_active_per_source']==0 and a['decision_ns']==0) if a['policy']=='passthrough'
                 else a['max_active_per_source']>0, 'passthrough must be uncapped/zero-cost; controlled policies need positive limit')
     if 'lifecycle_capture' in protocol:
@@ -27,6 +29,7 @@ def audit(result):
     if 'admission' not in result:return dict(available=False,reconstructed=False)
     final=result['admission'];capture=result.get('lifecycle_capture')
     sources=final['sources'];limit=final['max_active_per_source']
+    byte_limit=final.get('max_active_bytes_per_source',0)
     require(len({s['src'] for s in sources})==len(sources),'duplicate admission source')
     flows={f['id']:f for f in result['messages']}
     require(len(flows)==len(result['messages']),'duplicate admission message identity')
@@ -37,10 +40,17 @@ def audit(result):
         for identity in s['active_ids']+s['pending_ids']:
             require(identity in flows and flows[identity]['src']==s['src'],'owner belongs to wrong source')
             require(flows[identity].get('transport')!='intra_host_chunked_crossbar','local transfer consumes RDMA quota')
+        if 'max_active_bytes_per_source' in final:
+            for name in ('active','pending'):
+                require(all(type(flows[i].get('bytes')) is int and flows[i]['bytes']>0 for i in s[name+'_ids']),
+                        'byte ownership requires positive logical payload sizes')
+                require(s[name+'_bytes']==sum(flows[i]['bytes'] for i in s[name+'_ids']),'final logical byte ownership mismatch')
+            require(not byte_limit or s['active_bytes']<=byte_limit,'software byte capacity exceeded')
         if result['passed']:
             require(not s['active_ids'] and not s['pending_ids'] and not s['decision_pending'] and
                     s['native_send_qps']==0,'successful run retained sender resources')
     summary=dict(available=True,reconstructed=False,policy=final['policy'],software_limit=limit,
+        software_byte_limit=byte_limit,
         final_sources=sources,scope='offline_evaluation_only',
         notes='Software quota only; does not infer GPU buffers, hardware QP capacity or a unique causal blocker.')
     if not capture or not capture['complete']:
@@ -54,30 +64,47 @@ def audit(result):
     active,pending,qps=defaultdict(set),defaultdict(set),defaultdict(set)
     requested,granted,registered,received,acked,released=set(),set(),set(),set(),set(),set()
     source_ids={s['src'] for s in sources};waits=[];previous=-1
-    peak=defaultdict(int);omitted_snapshots=0
+    peak=defaultdict(int);peak_bytes=defaultdict(int);omitted_snapshots=0
+    order=defaultdict(list);last_peer={}
+    def held(src):return sum(flows[i].get('bytes',0) for i in active[src])
+    def candidate(src):
+        if not order[src] or (limit and len(active[src])>=limit):return None
+        def fits(mid):return not byte_limit or flows[mid]['bytes']<=byte_limit-held(src)
+        if final['policy']!='destination_round_robin':return order[src][0] if fits(order[src][0]) else None
+        heads={}
+        for mid in order[src]:heads.setdefault(flows[mid]['dst'],mid)
+        peers=sorted(heads);previous_peer=last_peer.get(src,-1)
+        for peer in [p for p in peers if p>previous_peer]+[p for p in peers if p<=previous_peer]:
+            if fits(heads[peer]):return heads[peer]
+        return None
     for row in capture['events']:
         require(len(row)==8 and all(type(x) is int for x in row),'invalid lifecycle event types')
         t,event,mid,src,count,queued,capacity,native=row
         require(t>=previous and src in source_ids and capacity==limit,'lifecycle clock/source/capacity mismatch')
         previous=t
         if event==6:
-            require(mid==-1 and pending[src] and (not limit or len(active[src])<limit),
+            require(mid==-1 and candidate(src) is not None,
                     'decision event without eligible ready work')
         else:
             require(mid in flows and flows[mid]['src']==src,'lifecycle message/source mismatch')
             flow=flows[mid]
             if event==0:
                 require(mid not in requested and t==flow['ready_ns'],'duplicate or mistimed admission request')
-                requested.add(mid);pending[src].add(mid)
+                requested.add(mid);pending[src].add(mid);order[src].append(mid)
                 # Deltas from t=0 retain the full occupying set for capacity>1.
                 if active[src]:
                     if len(waits)<256:
                         waits.append(dict(message_id=mid,source=src,time_ns=t,active_owner_ids=sorted(active[src]),
-                            capacity_full=bool(limit and len(active[src])>=limit)))
+                            capacity_full=bool(limit and len(active[src])>=limit),
+                            active_logical_bytes=held(src),
+                            insufficient_logical_bytes=bool(byte_limit and flow['bytes']>byte_limit-held(src))))
                     else:omitted_snapshots+=1
             elif event==1:
                 require(mid in pending[src] and mid not in granted and t==flow['admission_granted_ns'],
                         'grant without one prior ready request')
+                require(mid==candidate(src),'grant violates queue policy or logical byte eligibility')
+                order[src].remove(mid)
+                if final['policy']=='destination_round_robin':last_peer[src]=flow['dst']
                 pending[src].remove(mid);active[src].add(mid);granted.add(mid)
             elif event==2:
                 require(mid in active[src] and mid not in registered and t==flow['qp_registered_ns'],'invalid QP registration')
@@ -96,7 +123,9 @@ def audit(result):
         require(count==len(active[src]) and queued==len(pending[src]) and native==len(qps[src]),
                 'resource counts do not match all reconstructed owners')
         require(not limit or count<=limit,'software active capacity exceeded')
+        require(not byte_limit or held(src)<=byte_limit,'software active byte capacity exceeded')
         peak[src]=max(peak[src],count)
+        peak_bytes[src]=max(peak_bytes[src],held(src))
         if event==4:
             # Pinned RdmaHw::QpComplete invokes the trace, then synchronously
             # erases m_qpMap after Noop application notification. Its stack
@@ -114,6 +143,7 @@ def audit(result):
         require(requested==released and not any(s['decision_pending'] for s in sources),'successful run did not release admission resources')
     summary.update(reconstructed=True,requests=len(requested),grants=len(granted),releases=len(released),
         peak_active={str(src):n for src,n in peak.items()},request_owner_snapshots=waits,
+        peak_active_logical_bytes={str(src):n for src,n in peak_bytes.items()},
         omitted_owner_snapshots=omitted_snapshots,
         owner_snapshot_scope='First 256 nonempty request snapshots; full grant/release ledger remains available.')
     return summary

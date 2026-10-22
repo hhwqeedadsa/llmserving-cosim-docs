@@ -44,9 +44,12 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
   Require(!(config.contains("drop_once") && config.contains("faults")), "choose drop_once or faults");
   resource_tracking_=config.contains("admission") || config.contains("lifecycle_capture");
+  queue_metrics_=config.value("queue_metrics",false);
   if(config.contains("admission")) {
     const auto& a=config.at("admission");admission_policy_=a.at("policy");
     admission_limit_=a.at("max_active_per_source");decision_ns_=a.at("decision_ns");
+    byte_tracking_=a.contains("max_active_bytes_per_source");
+    admission_byte_limit_=a.value("max_active_bytes_per_source",uint64_t(0));
     Require(admission_limit_<=1024 && decision_ns_>=0 && decision_ns_<=1000000 &&
       (admission_policy_!="passthrough" || decision_ns_==0),"invalid software admission budget");
   }
@@ -112,7 +115,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   if(resource_tracking_) {
     deciding_.resize(gpus_,false);
     for(unsigned src=0;src<gpus_;++src)admission_.push_back(std::make_unique<moe_cosim::CommunicationAdmission>(
-        admission_policy_,admission_limit_,MaxMessages()));
+        admission_policy_,admission_limit_,MaxMessages(),admission_byte_limit_));
   }
   reachable_.resize(gpus_*gpus_*planes_,0);
   InternetStackHelper internet; internet.Install(nodes_);
@@ -306,7 +309,7 @@ void Fabric::Inject(uint64_t id) {
 }
 void Fabric::PumpAdmission(unsigned src) {
   auto& queue=*admission_.at(src);
-  if(deciding_.at(src) || !queue.Pending() || !queue.Available())return;
+  if(deciding_.at(src) || !queue.Eligible())return;
   if(!decision_ns_) {
     while(auto next=queue.Take(Now()))Inject(next->id);
     return;
@@ -412,9 +415,19 @@ void Fabric::QueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet>,
   }
 }
 void Fabric::QueueEnqueueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p,uint32_t q) {
+  if(f->queue_metrics_ && node>=f->gpus_) {
+    auto& row=f->ports_.at(node).at(port);const auto bytes=row.device->GetQueue()->GetNBytesTotal();
+    Require(uint64_t(row.integral.Bytes())+p->GetSize()==bytes,"enqueue occupancy inconsistent with previous post-state");
+    row.integral.Change(Now(),bytes);
+  }
   f->PacketEvent(3,node,port,p);QueueTrace(f,node,port,p,q);
 }
 void Fabric::QueueDequeueTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p,uint32_t q) {
+  if(f->queue_metrics_ && node>=f->gpus_) {
+    auto& row=f->ports_.at(node).at(port);const auto bytes=row.device->GetQueue()->GetNBytesTotal();
+    Require(bytes>=p->GetSize() && row.integral.Bytes()==bytes,"dequeue occupancy inconsistent with previous post-state");
+    row.integral.Change(Now(),bytes-p->GetSize()); // Native trace fires before byte subtraction.
+  }
   f->PacketEvent(4,node,port,p);QueueTrace(f,node,port,p,q);
 }
 void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
@@ -461,6 +474,12 @@ Json Fabric::Report() {
       row["admission_granted_ns"]=time(f.admitted);row["qp_registered_ns"]=time(f.qp_registered);
       row["sender_resource_released_ns"]=time(f.resource_released);
       row["sender_qp_present"]=bool(drivers_[f.src]->m_rdma->GetQp(Address(f.dst,f.plane).Get(),f.port,3));
+      // Read only source protocol state. A pending request has no native QP;
+      // after native cleanup the full ACK is known from the completion trace.
+      auto qp=drivers_[f.src]->m_rdma->GetQp(Address(f.dst,f.plane).Get(),f.port,3);
+      row["sender_progress"]={{"scope","source_QP_snapshot; no timeout/recovery is inferred"},
+        {"snd_una_bytes",qp?Json(qp->snd_una):f.acked?Json(f.bytes):Json(nullptr)},
+        {"snd_nxt_bytes",qp?Json(qp->snd_nxt):f.acked?Json(f.bytes):Json(nullptr)}};
     }
     for(const auto& hop:f.path)row["first_packet_path"].push_back({{"node",hop.node},{"port",hop.port},{"time_ns",hop.time}});
     if(f.local) {
@@ -485,6 +504,14 @@ Json Fabric::Report() {
       {"native_send_qps",drivers_[src]->m_rdma->m_qpMap.size()}});
     r["admission"]={{"policy",admission_policy_},{"max_active_per_source",admission_limit_},{"decision_ns",decision_ns_},
       {"scope","inter_host_source_local_software_credits; zero limit is uncapped, not hardware capacity"},{"sources",sources}};
+    if(byte_tracking_) {
+      r["admission"]["max_active_bytes_per_source"]=admission_byte_limit_;
+      r["admission"]["byte_scope"]="Sum of full logical payloads from grant through sender resource release; not NIC in-flight bytes or GPU memory";
+      for(unsigned src=0;src<gpus_;++src) {
+        auto& source=r["admission"]["sources"][src];
+        source["active_bytes"]=admission_[src]->ActiveBytes();source["pending_bytes"]=admission_[src]->PendingBytes();
+      }
+    }
   }
   if(lifecycle_limit_)r["lifecycle_capture"]={{"scope","evaluation_only; sender credits and native QP, not GPU buffers"},
       {"events",lifecycle_events_},{"columns",{"time_ns","event","message_id","source","active","pending","software_limit","native_send_qps"}},
@@ -510,8 +537,14 @@ Json Fabric::Report() {
     row["model_tx_bytes"]=p.wire;row["data_tx_bytes"]=p.data;row["control_tx_bytes"]=p.control;
     row["data_packets"]=p.packets;row["ecn_ce_seen"]=p.ecn;row["pfc_pause"]=p.pause;row["pfc_resume"]=p.resume;
     row["max_queue_at_hook_bytes"]=p.max_queue;
+    if(queue_metrics_ && row.at("node").get<unsigned>()>=gpus_) {
+      Require(p.integral.Bytes()==p.device->GetQueue()->GetNBytesTotal(),"final passive queue state differs from native queue");
+      row["queue_metrics"]={{"area_byte_ns",p.integral.Area(Now())},{"peak_bytes",p.integral.Peak()},
+        {"final_bytes",p.integral.Bytes()},{"changes",p.integral.Events()}};
+    }
     r["ports"].push_back(std::move(row));
   }
+  if(queue_metrics_)r["queue_metrics_scope"]="All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture";
   if(config_.contains("limits")) {
     r["queue_observations"]=queue_observations_;
     r["queue_capture"]=config_.at("limits").at("queue_capture");

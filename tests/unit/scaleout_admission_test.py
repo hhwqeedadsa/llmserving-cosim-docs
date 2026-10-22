@@ -40,6 +40,19 @@ class AdmissionAuditTest(unittest.TestCase):
             with self.subTest(row=row,column=column):
                 with self.assertRaises(ValueError):audit(d)
 
+    def test_byte_config_and_ownership(self):
+        a=dict(policy='fifo',max_active_per_source=2,decision_ns=0,max_active_bytes_per_source=100)
+        validate_options(dict(admission=a))
+        for value in (True,-1,1073741825):
+            with self.assertRaises(ValueError):validate_options(dict(admission=dict(a,max_active_bytes_per_source=value)))
+        with self.assertRaises(ValueError):validate_options(dict(admission=dict(a,policy='passthrough',max_active_per_source=0)))
+        d=completed();d['messages'][0]['bytes']=100
+        d['admission']['max_active_bytes_per_source']=100
+        d['admission']['sources'][0].update(active_bytes=0,pending_bytes=0)
+        self.assertEqual(audit(d)['peak_active_logical_bytes']['0'],100)
+        d['admission']['max_active_bytes_per_source']=99
+        with self.assertRaises(ValueError):audit(d)
+
     def test_data_ready_does_not_release_owner(self):
         d=completed();cap=d['lifecycle_capture']
         cap['events'][4][1]=5

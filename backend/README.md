@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+原生RDMA准入控制器`communication_admission.hh`支持消息数和逻辑字节双约束。`queue_integral.hh`保存每出口常量状态，`rdma/fabric.cc`将出队前钩子规范为出队后状态，核对字节守恒后积分，不需要每包历史或采样事件。源QP序号和阶段耗时只用于离线报告，不补造原生库尚无的ACK超时恢复。配置见[准入示例](../examples/scaleout_rdma_admission/README.md)。
+
 本目录将 ASTRA 的任务执行与 ns-3-UB 的事件、协议和网络状态连接起来，负责图装载、控制协议、收发匹配、完成回调及原始观测。整体过程见[系统架构](../docs/architecture.md)；普通运行与构建使用[用户指南](../docs/user_guide.md)中的 `moe-ub` 命令。本文件供修改后端或编写集成检查时查阅，不记录逐次开发结果。
 
 ## 构建与程序入口

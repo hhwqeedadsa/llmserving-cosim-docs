@@ -5,6 +5,7 @@ from pathlib import Path
 from .scaleout_rdma import checked_json, save
 from .scaleout_topology import require
 from .scaleout_verify import node_events
+from .scaleout_metrics import phase_intervals, network_summary
 
 
 def diagnose(run, output):
@@ -35,6 +36,8 @@ def diagnose(run, output):
             bytes=flow['bytes'], receiver_contiguous_bytes=flow.get('receiver_contiguous_bytes'),
             receive_ready_ns=flow['receive_ready_ns'], ack_ns=flow['ack_ns'],
             source_data_payload_bytes=flow['source_data_payload_bytes'],
+            stage_times=phase_intervals(flow,result['finish_ns']),
+            **({'sender_progress':flow['sender_progress']} if 'sender_progress' in flow else {}),
             **{k:flow[k] for k in ('admission_granted_ns','qp_registered_ns','sender_resource_released_ns','sender_qp_present') if k in flow},
             repeated_source_offsets_seen=repeated[identity],
             **{k:v for k,v in callbacks.get(identity, {}).items() if k!='id'}))
@@ -82,6 +85,7 @@ def diagnose(run, output):
         outstanding_graph_edges=waits, graph_progress=graphs, node_evidence_available=bool(events),
         service=result.get('service'),
         admission_resources=audit(result),
+        network_queues=network_summary(result),
         limitations=['Capture completeness applies only to selected nodes and time window.',
             'Missing events in absent, filtered or truncated capture cannot prove no retransmission or feedback.',
             'Graph edges lacking callbacks may be unissued; direct consumers are dependencies, not measured delay attribution.',

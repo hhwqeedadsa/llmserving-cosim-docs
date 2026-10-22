@@ -46,6 +46,9 @@ def verify(directory):
             result['service']['active_graphs']==0, 'service did not drain')
     from .scaleout_admission import audit
     admission_resources=audit(result)
+    from .scaleout_metrics import phase_intervals, network_summary
+    network_queues=network_summary(result)
+    for flow in result['messages']:phase_intervals(flow,result['finish_ns'])
     libraries=[Path(x).resolve() for x in result['loaded_libraries'] if Path(x).name.startswith('libns3')]
     require(len(libraries)>=5 and len({p.parent for p in libraries})==1 and
             all(p.name.startswith('libns3.42-') and 'unified' not in p.name for p in libraries),
@@ -206,6 +209,7 @@ def verify(directory):
                 evidence='raw token routes, native messages/MMU thresholds/paths, ASTRA issue/callback log, frontend completion history')
     if admission_resources['available']:
         report['admission_resources']=admission_resources
+    if network_queues['available']:report['network_queues']=network_queues
     if 'intra_host' in topology:
         report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
                       inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)

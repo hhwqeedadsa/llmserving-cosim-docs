@@ -16,7 +16,7 @@ def without_observers(result):
     for key in ('admission','lifecycle_capture'):r.pop(key,None)
     for f in r['messages']:
         for key in ('admission_granted_ns','qp_registered_ns','sender_resource_released_ns',
-                    'sender_qp_present','completion_state','receiver_contiguous_bytes',
+                    'sender_qp_present','sender_progress','completion_state','receiver_contiguous_bytes',
                     'source_unique_data_payload_bytes','first_packet_uid'):
             f.pop(key,None)
     return r

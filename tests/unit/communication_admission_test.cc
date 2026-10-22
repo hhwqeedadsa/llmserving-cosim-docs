@@ -26,5 +26,21 @@ int main() {
   for(uint64_t id:{9,5,2}) {pass.Request({id,1,1,0},0);Check(pass.Take(0)->id==id);}
   Check(pass.Active().size()==3);Reject([&]{pass.Request({1,1,1,0},0);});
   Reject([]{Queue bad("fifo",0,1);});Reject([]{Queue bad("passthrough",1,1);});
+  // Equal count limits do not imply equal logical payload exposure. Strict FIFO
+  // does not bypass its head; round-robin may serve another eligible peer head.
+  for(const auto policy:{"fifo","destination_round_robin"}) {
+    Queue bytes(policy,3,20,5000);
+    bytes.Request({1,1,4000,0},0);Check(bytes.Take(0)->id==1);
+    bytes.Request({2,1,2000,0},0);bytes.Request({3,2,1000,0},0);
+    Check(bytes.Available() && bytes.ActiveBytes()==4000 && bytes.PendingBytes()==3000);
+    if(std::string(policy)=="fifo")Check(!bytes.Eligible() && !bytes.Take(0));
+    else {Check(bytes.Eligible() && bytes.Take(0)->id==3);Check(bytes.ActiveBytes()==5000);}
+    bytes.Complete(1,10);Check(bytes.Take(10)->id==2);
+    if(std::string(policy)=="fifo")Check(bytes.Take(10)->id==3);
+    bytes.Complete(2,11);bytes.Complete(3,11);Check(!bytes.ActiveBytes() && !bytes.PendingBytes());
+    Reject([&]{bytes.Request({4,2,5001,11},11);});
+    bytes.Request({4,2,5000,11},11);Check(bytes.Take(11)->id==4);
+  }
+  Reject([]{Queue bad("passthrough",0,1,1);});
   std::cout<<"FIFO/round-robin capacity, ownership, ordering and causal input checks passed\n";
 }

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+非UB新增可选的活跃逻辑字节额度、源QP序号和阶段耗时。`queue_metrics=true`为全部交换机出口增加常量空间的全程队列积分，独立于包记录截断及summary模式。旧`queue_events`保持原格式，不能直接解释为减字节后状态。字段、单位与覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。
+
 非UB的可选`packet_capture`与`fault_injection`存于`result.json`，属于全局时间和业务身份已关联的内部评价资料，不是策略输入。详细事件使用`columns`对应的数值数组，含设备发送、接收、接收错误丢弃和BEgressQueue入/出队；`complete`、`omitted_events`及`selection`说明所选范围是否完整。故障计数与详细采集开关独立，记录到达上限不停止传输。关闭详细记录且无故障时保留原结果字段。字段、序号、队列和包UID的准确口径及失败诊断入口见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
 启用软件准入或生命周期观测时，新增`admission`终态和消息资源时刻；可选`lifecycle_capture`为申请、获取、QP登记、数据齐备、ACK及发送映射移除/软件额度归还的增量。`rdma-check`独立核对完整记录及全部所有者，`rdma-diagnose`支持失败末态。截断时明确不重建历史，不把数据齐备解释为发送额度或GPU缓冲释放。字段、边界和快照上限见[准入示例](../examples/scaleout_rdma_admission/README.md)。

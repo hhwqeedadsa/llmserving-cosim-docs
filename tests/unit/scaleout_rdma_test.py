@@ -44,6 +44,9 @@ class RdmaTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'node/port'):validate_probe(self.t,self.r,batch)
 
     def test_capture_and_fault_budgets_reject_ambiguous_inputs(self):
+        for value in (0,1,'true',None):
+            with self.assertRaisesRegex(ValueError,'boolean'):validate_protocol(dict(self.r,queue_metrics=value))
+        validate_protocol(dict(self.r,queue_metrics=True))
         self.r['packet_capture']=dict(nodes=[0,4],start_ns=0,end_ns=5000000,max_events=100)
         validate_protocol(self.r)
         self.r['packet_capture']['max_events']=True

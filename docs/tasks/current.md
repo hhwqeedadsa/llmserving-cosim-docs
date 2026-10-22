@@ -22,6 +22,7 @@
 - 新运行根`/dev/shm/moe-structure-20261022/`，原始成功/失败结果、命令、资源与源码快照在该目录。构建300秒、并发2/RSS2GiB/地址4GiB；单次运行60秒/RSS1GiB/地址2GiB/仿真5ms/产物512MiB，研究累计256MiB，运行卷预留8GiB，失败不自动扩容。
 - 持久卷余量约4.1GiB，所有大产物在共享内存；仅保存约2.83MB压缩证据至`runs/scaleout_structure_20261022/evidence.tar.gz`，1926份文件逐一核验，归档hash见[archive.json](../review_artifacts/scaleout_structure_20261022/archive.json)。它是本机备份；共享内存会随重启丢失。
 - [交付核对](../review_artifacts/scaleout_structure_20261022/completion_audit.md)：原报告所有段落/表格内容和本地链接核验通过；HTML重复生成、研究重复分析逐字节一致。
+- 完成前按当前源码再次核验：[审计记录](../review_artifacts/scaleout_structure_20261022/goal_audit.json)。12份构建源码和1926份归档文件hash一致；56份运行资源/阶段审计、18份实际服务输出的图/字节/回调/排空重核通过，55项Python与2个C++当前检查通过。没有重新启动仿真或把未实现的后续路线算为本轮成果。
 
 ## 前阶段入口
 

@@ -2,6 +2,8 @@
 
 `scaleout modern-deepep-plan`另用`moe-modern-deepep-partial-order/1`，保存完整token布局、数据/计数/signal操作、四类完成义务、未赋值的slot及Combine绑定公式。`deferred_constraints`仍需未来运行时执行；排序的JSON数组不是GPU提交顺序。其manifest与check均声明未模拟包，不能与在线观测混用，字段与约束见[现代计划示例](../examples/modern_deepep_partial_order/README.md)。
 
+`modern-deepep-replay`读取`moe-modern-deepep-actions/1`的有序事件ID列表，输出`moe-modern-deepep-execution/1`。`allocated_slots`仅包含已触发的分配，`log`在issued事件中保存解析后的binding/target；Combine还保存`receive_index`。`ready_events`表示可以触发，不表示已经完成或已经reserve；`all_application_complete`与`all_events_fired`分开。输入、actions与plan各有SHA-256，记录没有物理时间，不能充当包、吞吐或排队数据。新输出拒绝覆盖；总预算包含输入、actions和结果。保存原输入及actions后可以跨目录复核。
+
 `scaleout deepep-plan`的`plan.json`是无时间戳的离线输入计划，含操作、逻辑连接key、buffer epoch和事件前驱，不是执行或硬件观测。`manifest.json`保存原输入与计划SHA-256，`deepep-check`另写依赖闭包、暂扣事件与不能到达的计算完成节点。操作数字节不等于网络包长，字段见[操作计划示例](../examples/deepep_partial_order/README.md)。
 
 非UB新增可选的活跃逻辑字节额度、源QP序号和阶段耗时。`queue_metrics=true`为全部交换机出口增加常量空间的全程队列积分，独立于包记录截断及summary模式。旧`queue_events`保持原格式，不能直接解释为减字节后状态。字段、单位与覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。

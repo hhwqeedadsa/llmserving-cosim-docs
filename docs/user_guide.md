@@ -16,6 +16,8 @@ Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`byt
 
 现代direct分支使用独立的`scaleout modern-deepep-plan`与`modern-deepep-check`，支持BF16、目的rank去重、计数块、屏障与动态接收slot的符号表示。该入口也不执行网络或解析动态slot，不支持hybrid；输入、上限和新目录流程见[现代操作计划](../examples/modern_deepep_partial_order/README.md)。
 
+同一输入可用`scaleout modern-deepep-replay --config ... --actions ... --output ...`核验显式事件序列，按已发生的slot分配解析Combine通道和顺序。它不生成完成回调、时延或包；事件序列格式、Python功能接口与限制见该示例的“逐事件执行”。
+
 需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。
 
 ```bash

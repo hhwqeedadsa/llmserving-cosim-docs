@@ -44,6 +44,10 @@ def parser():
     mc.add_argument('--plan', type=Path, required=True)
     mc.add_argument('--output', type=Path, required=True, help='New JSON file')
     mc.add_argument('--withhold', action='append', default=[], help='Exact event ID; repeatable logic probe, not packet loss')
+    mr = sc.add_parser('modern-deepep-replay', help='Validate caller event transcripts with dynamic slots/channel order; no provider, queue or network simulation')
+    mr.add_argument('--config', type=Path, required=True, help='Same input as modern-deepep-plan')
+    mr.add_argument('--actions', type=Path, required=True, help='Explicit event IDs in occurrence order; full or prefix transcript')
+    mr.add_argument('--output', type=Path, required=True, help='New JSON file containing execution log, resolved slots and enabled next events')
     rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probe and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
@@ -133,7 +137,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'modern-deepep-plan':
+            if args.scaleout_command == 'modern-deepep-replay':
+                from .modern_deepep_runtime import replay
+                value = replay(args.config, args.actions, args.output)
+            elif args.scaleout_command == 'modern-deepep-plan':
                 from .modern_deepep_plan import execute
                 value = execute(args.config, args.output)
             elif args.scaleout_command == 'modern-deepep-check':

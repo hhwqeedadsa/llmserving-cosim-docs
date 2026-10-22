@@ -49,4 +49,31 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout modern-deepep-check \
 
 示例rank2无token，但其零计数块仍是必要依赖。`--withhold`可重复，必须使用确实存在的完整事件ID；它仅计算假设暂扣事件后的可达闭包，不是丢包、超时或时延实验。`passed=true`表示表示完整且检查执行成功；`all_completions_reachable=false`表示有被阻塞的应用阶段。未知事件、篡改、超预算及不支持的模式报错，不写正常结果。
 
-新目录独立流程与单元反例见[验收](../../fixtures/modern_deepep_plan/README.md)。动态约束尚未执行，包级后端、持久QP、原子去重、CQ/源buffer和实机校准均未由本计划完成。
+新目录独立流程与单元反例见[计划验收](../../fixtures/modern_deepep_plan/README.md)。计划本身不执行动态约束；独立事件核心的用法如下。包级后端、持久QP、原子去重、CQ/源buffer和实机校准均未由本计划完成。
+
+## 逐事件执行
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout modern-deepep-replay \
+  --config examples/modern_deepep_partial_order/input.json \
+  --actions examples/modern_deepep_partial_order/actions-prefix.json \
+  --output runs/my-modern-prefix.json
+```
+
+`actions`只含`schema_version="moe-modern-deepep-actions/1"`及`events`字符串数组，按声明发生的顺序列出计划事件ID。示例只触发rank0的kernel begin，不假造后续完成；空数组可查询最初就绪事件。可提供完整序列或任意合法前缀。结果中的`ready_events`列出下一步允许触发的事件，调用者仍需根据真实调度或完成回调选择。CLI核验这份声明是否满足依赖，不能证明这些事件曾在真实设备发生。
+
+Python公开功能接口位于`moe_ub_cosim.modern_deepep_runtime`：
+
+```python
+from moe_ub_cosim.modern_deepep_runtime import ModernDeepEPRuntime
+runtime = ModernDeepEPRuntime(config)  # 与计划入口相同的配置对象
+runtime.ready()                      # 查询，不推进
+runtime.fire("m0.dispatch.r0.begin")  # 仅在调用者实际开始该阶段时触发
+state = runtime.snapshot()
+```
+
+`fire(id)`仅记录一个已就绪事件，不递归发起传输。重复、未知、前驱未完成的事件会拒绝。slot分配触发时才增加对应call/source/destination计数器，不能自行传入slot值；同token的全部目标slot分配结束后才允许put。Combine按实际slot与source前缀取得接收序号，解析SM、warp、context、connection及声明设备。同一owner/SM/rotated-warp的下一次归约必须等前一接收序号的put发起，不等待其完成；不同通道保持并发。
+
+`operation(id)`只允许读取已就绪或已经发起的操作，返回绑定和目标偏移的副本，供未来适配器在提交前检查。该调用不reserve队列、不提交WQE，也不释放buffer。`accepted/visible/local_complete`必须分别由未来provider实现报告；目前没有该实现，不能在研究程序里遍历ready并自动制造完成，再称作网络仿真。`all_application_complete`不表示所有信号尾部都完成，`all_events_fired`也不构成物理网络排空证明。
+
+命令沿用相同模型与事件数上限，actions文件≤16MiB且事件数≤配置max_events，输入+actions+结果≤max_output_bytes≤16MiB；卷预留8GiB，输出文件及父目录规则与check相同。人工功能用例、独立事件顺序核验和拒绝条件见[事件核心验收](../../fixtures/modern_deepep_runtime/README.md)。

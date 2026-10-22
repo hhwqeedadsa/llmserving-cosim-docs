@@ -1,0 +1,454 @@
+{
+  "scope": "original four-request Decode routes; conditional traffic operand accounting only",
+  "deployment": {
+    "ranks": 4,
+    "batch_per_rank": 1,
+    "expert_placement": "contiguous_equal_64_per_rank",
+    "precision": "BF16 assumed for hidden-byte accounting",
+    "cross_rank_path": "RDMA-only assumed",
+    "synchronization": "equal Decode entry; no observed request arrival or launch times"
+  },
+  "windows": 7424,
+  "individual_token_layer_rows": 29696,
+  "independent_matrix_entries_checked": 118784,
+  "old_per_expert_remote_dispatch_contributions": 176567,
+  "direct_remote_dispatch_token_copies": 69409,
+  "old_hidden_operand_bytes": 2531264512,
+  "direct_hidden_operand_bytes": 995047424,
+  "hidden_byte_scope": "hidden elements only; metadata, padding, counters, barriers, responses and wire headers excluded",
+  "full_off_rank_fanout_windows": 181,
+  "equal_incoming_direct_windows": 330,
+  "zero_remote_windows": 0,
+  "per_window_incoming_max_to_mean": {
+    "per_expert": {
+      "count": 7424,
+      "minimum": 1.0,
+      "p50": 1.5,
+      "p95": 2.074074074074074,
+      "maximum": 2.8333333333333335
+    },
+    "direct": {
+      "count": 7424,
+      "minimum": 1.0,
+      "p50": 1.3333333333333333,
+      "p95": 1.5,
+      "maximum": 2.4
+    }
+  },
+  "per_window_compute_expert_inputs_rank_max_to_mean": {
+    "count": 7424,
+    "minimum": 1.0,
+    "p50": 1.5,
+    "p95": 1.875,
+    "maximum": 2.75
+  },
+  "aggregate_dispatch_operand_copies": {
+    "per_expert": [
+      [
+        0,
+        15201,
+        14440,
+        14708
+      ],
+      [
+        14532,
+        0,
+        14937,
+        15004
+      ],
+      [
+        14196,
+        14342,
+        0,
+        15216
+      ],
+      [
+        14860,
+        14162,
+        14969,
+        0
+      ]
+    ],
+    "direct": [
+      [
+        0,
+        5826,
+        5728,
+        5776
+      ],
+      [
+        5804,
+        0,
+        5843,
+        5868
+      ],
+      [
+        5669,
+        5734,
+        0,
+        5900
+      ],
+      [
+        5742,
+        5696,
+        5823,
+        0
+      ]
+    ]
+  },
+  "by_layer": [
+    {
+      "source_layer": 3,
+      "windows": 128,
+      "old_remote_contributions": 3021,
+      "direct_remote_token_copies": 1169
+    },
+    {
+      "source_layer": 4,
+      "windows": 128,
+      "old_remote_contributions": 2990,
+      "direct_remote_token_copies": 1212
+    },
+    {
+      "source_layer": 5,
+      "windows": 128,
+      "old_remote_contributions": 3050,
+      "direct_remote_token_copies": 1170
+    },
+    {
+      "source_layer": 6,
+      "windows": 128,
+      "old_remote_contributions": 3107,
+      "direct_remote_token_copies": 1245
+    },
+    {
+      "source_layer": 7,
+      "windows": 128,
+      "old_remote_contributions": 3025,
+      "direct_remote_token_copies": 1185
+    },
+    {
+      "source_layer": 8,
+      "windows": 128,
+      "old_remote_contributions": 2952,
+      "direct_remote_token_copies": 1192
+    },
+    {
+      "source_layer": 9,
+      "windows": 128,
+      "old_remote_contributions": 3017,
+      "direct_remote_token_copies": 1182
+    },
+    {
+      "source_layer": 10,
+      "windows": 128,
+      "old_remote_contributions": 3060,
+      "direct_remote_token_copies": 1183
+    },
+    {
+      "source_layer": 11,
+      "windows": 128,
+      "old_remote_contributions": 3021,
+      "direct_remote_token_copies": 1197
+    },
+    {
+      "source_layer": 12,
+      "windows": 128,
+      "old_remote_contributions": 3222,
+      "direct_remote_token_copies": 1212
+    },
+    {
+      "source_layer": 13,
+      "windows": 128,
+      "old_remote_contributions": 3179,
+      "direct_remote_token_copies": 1213
+    },
+    {
+      "source_layer": 14,
+      "windows": 128,
+      "old_remote_contributions": 3045,
+      "direct_remote_token_copies": 1224
+    },
+    {
+      "source_layer": 15,
+      "windows": 128,
+      "old_remote_contributions": 3001,
+      "direct_remote_token_copies": 1168
+    },
+    {
+      "source_layer": 16,
+      "windows": 128,
+      "old_remote_contributions": 3002,
+      "direct_remote_token_copies": 1195
+    },
+    {
+      "source_layer": 17,
+      "windows": 128,
+      "old_remote_contributions": 3032,
+      "direct_remote_token_copies": 1205
+    },
+    {
+      "source_layer": 18,
+      "windows": 128,
+      "old_remote_contributions": 3047,
+      "direct_remote_token_copies": 1171
+    },
+    {
+      "source_layer": 19,
+      "windows": 128,
+      "old_remote_contributions": 2931,
+      "direct_remote_token_copies": 1175
+    },
+    {
+      "source_layer": 20,
+      "windows": 128,
+      "old_remote_contributions": 3083,
+      "direct_remote_token_copies": 1187
+    },
+    {
+      "source_layer": 21,
+      "windows": 128,
+      "old_remote_contributions": 3123,
+      "direct_remote_token_copies": 1211
+    },
+    {
+      "source_layer": 22,
+      "windows": 128,
+      "old_remote_contributions": 3074,
+      "direct_remote_token_copies": 1186
+    },
+    {
+      "source_layer": 23,
+      "windows": 128,
+      "old_remote_contributions": 3181,
+      "direct_remote_token_copies": 1209
+    },
+    {
+      "source_layer": 24,
+      "windows": 128,
+      "old_remote_contributions": 3024,
+      "direct_remote_token_copies": 1203
+    },
+    {
+      "source_layer": 25,
+      "windows": 128,
+      "old_remote_contributions": 3091,
+      "direct_remote_token_copies": 1199
+    },
+    {
+      "source_layer": 26,
+      "windows": 128,
+      "old_remote_contributions": 3087,
+      "direct_remote_token_copies": 1225
+    },
+    {
+      "source_layer": 27,
+      "windows": 128,
+      "old_remote_contributions": 3012,
+      "direct_remote_token_copies": 1184
+    },
+    {
+      "source_layer": 28,
+      "windows": 128,
+      "old_remote_contributions": 3117,
+      "direct_remote_token_copies": 1199
+    },
+    {
+      "source_layer": 29,
+      "windows": 128,
+      "old_remote_contributions": 3155,
+      "direct_remote_token_copies": 1215
+    },
+    {
+      "source_layer": 30,
+      "windows": 128,
+      "old_remote_contributions": 3142,
+      "direct_remote_token_copies": 1231
+    },
+    {
+      "source_layer": 31,
+      "windows": 128,
+      "old_remote_contributions": 2951,
+      "direct_remote_token_copies": 1179
+    },
+    {
+      "source_layer": 32,
+      "windows": 128,
+      "old_remote_contributions": 3206,
+      "direct_remote_token_copies": 1235
+    },
+    {
+      "source_layer": 33,
+      "windows": 128,
+      "old_remote_contributions": 2894,
+      "direct_remote_token_copies": 1171
+    },
+    {
+      "source_layer": 34,
+      "windows": 128,
+      "old_remote_contributions": 3086,
+      "direct_remote_token_copies": 1203
+    },
+    {
+      "source_layer": 35,
+      "windows": 128,
+      "old_remote_contributions": 2805,
+      "direct_remote_token_copies": 1121
+    },
+    {
+      "source_layer": 36,
+      "windows": 128,
+      "old_remote_contributions": 2877,
+      "direct_remote_token_copies": 1159
+    },
+    {
+      "source_layer": 37,
+      "windows": 128,
+      "old_remote_contributions": 3091,
+      "direct_remote_token_copies": 1236
+    },
+    {
+      "source_layer": 38,
+      "windows": 128,
+      "old_remote_contributions": 2991,
+      "direct_remote_token_copies": 1188
+    },
+    {
+      "source_layer": 39,
+      "windows": 128,
+      "old_remote_contributions": 3065,
+      "direct_remote_token_copies": 1179
+    },
+    {
+      "source_layer": 40,
+      "windows": 128,
+      "old_remote_contributions": 3000,
+      "direct_remote_token_copies": 1193
+    },
+    {
+      "source_layer": 41,
+      "windows": 128,
+      "old_remote_contributions": 3140,
+      "direct_remote_token_copies": 1244
+    },
+    {
+      "source_layer": 42,
+      "windows": 128,
+      "old_remote_contributions": 2918,
+      "direct_remote_token_copies": 1176
+    },
+    {
+      "source_layer": 43,
+      "windows": 128,
+      "old_remote_contributions": 3211,
+      "direct_remote_token_copies": 1230
+    },
+    {
+      "source_layer": 44,
+      "windows": 128,
+      "old_remote_contributions": 3237,
+      "direct_remote_token_copies": 1217
+    },
+    {
+      "source_layer": 45,
+      "windows": 128,
+      "old_remote_contributions": 3201,
+      "direct_remote_token_copies": 1249
+    },
+    {
+      "source_layer": 46,
+      "windows": 128,
+      "old_remote_contributions": 2855,
+      "direct_remote_token_copies": 1179
+    },
+    {
+      "source_layer": 47,
+      "windows": 128,
+      "old_remote_contributions": 3259,
+      "direct_remote_token_copies": 1241
+    },
+    {
+      "source_layer": 48,
+      "windows": 128,
+      "old_remote_contributions": 3043,
+      "direct_remote_token_copies": 1189
+    },
+    {
+      "source_layer": 49,
+      "windows": 128,
+      "old_remote_contributions": 3145,
+      "direct_remote_token_copies": 1197
+    },
+    {
+      "source_layer": 50,
+      "windows": 128,
+      "old_remote_contributions": 3114,
+      "direct_remote_token_copies": 1209
+    },
+    {
+      "source_layer": 51,
+      "windows": 128,
+      "old_remote_contributions": 3129,
+      "direct_remote_token_copies": 1206
+    },
+    {
+      "source_layer": 52,
+      "windows": 128,
+      "old_remote_contributions": 2674,
+      "direct_remote_token_copies": 1131
+    },
+    {
+      "source_layer": 53,
+      "windows": 128,
+      "old_remote_contributions": 3042,
+      "direct_remote_token_copies": 1217
+    },
+    {
+      "source_layer": 54,
+      "windows": 128,
+      "old_remote_contributions": 2953,
+      "direct_remote_token_copies": 1190
+    },
+    {
+      "source_layer": 55,
+      "windows": 128,
+      "old_remote_contributions": 2825,
+      "direct_remote_token_copies": 1149
+    },
+    {
+      "source_layer": 56,
+      "windows": 128,
+      "old_remote_contributions": 3216,
+      "direct_remote_token_copies": 1212
+    },
+    {
+      "source_layer": 57,
+      "windows": 128,
+      "old_remote_contributions": 2915,
+      "direct_remote_token_copies": 1186
+    },
+    {
+      "source_layer": 58,
+      "windows": 128,
+      "old_remote_contributions": 2967,
+      "direct_remote_token_copies": 1199
+    },
+    {
+      "source_layer": 59,
+      "windows": 128,
+      "old_remote_contributions": 3022,
+      "direct_remote_token_copies": 1177
+    },
+    {
+      "source_layer": 60,
+      "windows": 128,
+      "old_remote_contributions": 2944,
+      "direct_remote_token_copies": 1200
+    }
+  ],
+  "packet_execution": false,
+  "latency_predicted": false,
+  "is_training_trace": false,
+  "is_production_sample": false,
+  "full_model_deployment_verified": false
+}

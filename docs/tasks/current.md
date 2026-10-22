@@ -37,6 +37,8 @@
 
 现代候选已固定`f6aa38fe06cd4a0489e7730365d4e0114970a2f3`，12份源码/blob/hash、18摘录核对。真实16条选择下，direct Dispatch按目的rank去重，91个跨rank专家贡献变成38份token put；计数是48个rank值+48个专家块put，不能沿用旧版3,072次原子通知推断瓶颈或创新。现代QP索引按SM/通道共享，direct核心Dispatch/Combine确有入口/出口屏障；关闭hybrid时逻辑scaleout=1也可能有物理跨节点RDMA。FULL/RAIL连接约束影响multi-rail基线可部署性。见[现代源码与后端改法](../review_artifacts/deepep_modern_20261022/report.html)及[独立选择核算](../review_artifacts/deepep_modern_20261022/accounting.json)。没有执行现代库、NCCL provider或新网络，源码要求Hopper+而当前硬件匹配未确认。
 
-当前下一步：核查固定NCCL provider的GIN上下文/连接/事务/flush和资源边界，完善现代操作依赖规范；结合实际设备信息决定可校准目标，再实现持续连接与追加工作的最小后端改法。不得先加QP复用标签、提前加入未来数据或删屏障制造收益。校准后再对比正常无故障真实路由共享网络中的排队和方法排序，恢复只作补充。可用两机RDMA设备信息已询问，未答复前不假定资源。四请求不能复制为千卡真实生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
+固定NCCL v2.32.3-1/`12df1a1`的18份GIN/GDAKI源码已核对。确认上下文索引按连接数分解、连接绑定本地设备、peer QP持久存在、CQ反馈限制槽复用；flush本地源复用与远端可见分开，AggregateRequests跳过doorbell而非合并操作。2,209次映射算术核查及全路由7,424窗口/118,784矩阵项核算完成：逐专家176,567份跨rank贡献经modern direct去重变为69,409份token，目的rank入量最大/均值p95从2.074降为1.5，仍非均匀。这是条件操作数核算，没有时延或包执行。见[源码/路由报告](../review_artifacts/nccl_gin_20261022/report.html)、[实施规范](../../experiments/paper_readiness/modern_backend_contract.md)及[重复/迁移复核](../review_artifacts/nccl_gin_20261022/followup.json)。
+
+当前下一步：依现代规范实现独立版本的操作输入与有限队列功能核心；结合实际设备信息选择可校准目标，之后接入持久连接和provider事务。不得先加QP复用标签、提前加入未来数据或删屏障制造收益。校准后再对比正常无故障真实路由共享网络中的排队和方法排序，恢复只作补充。可用两机RDMA设备信息已询问，未答复前不假定资源。四请求不能复制为千卡真实生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

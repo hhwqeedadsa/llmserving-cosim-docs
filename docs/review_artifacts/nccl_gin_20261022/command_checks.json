@@ -1,0 +1,49 @@
+[
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "py_compile",
+      "/home/lry/moe-ub-cosim/experiments/paper_readiness/collect_nccl_gin.py",
+      "/home/lry/moe-ub-cosim/experiments/paper_readiness/audit_nccl_gin.py",
+      "/home/lry/moe-ub-cosim/experiments/paper_readiness/check_nccl_gin.py",
+      "experiments/paper_readiness/direct_route_accounting.py"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.0479920469224453,
+    "output": ""
+  },
+  {
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.08787912502884865,
+    "output": ""
+  },
+  {
+    "argv": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.3442539516836405,
+    "output": "WARN: main repository has local file changes; review before committing\n   M docs/tasks/current.md\n   M experiments/paper_readiness/README.md\n  ?? docs/review_artifacts/nccl_gin_20261022/\n  ?? \"docs/reviews/NCCL_GIN\\350\\265\\204\\346\\272\\220\\350\\257\\255\\344\\271\\211\\344\\270\\216\\347\\234\\237\\345\\256\\236\\350\\267\\257\\347\\224\\261\\347\\275\\221\\347\\273\\234\\345\\201\\217\\346\\226\\234_20261022.md\"\n  ?? experiments/paper_readiness/audit_nccl_gin.py\n  ?? experiments/paper_readiness/check_nccl_gin.py\n  ?? experiments/paper_readiness/collect_nccl_gin.py\n  ?? experiments/paper_readiness/direct_route_accounting.py\n  ?? experiments/paper_readiness/modern_backend_contract.md\nREAD: . @ a2b9699dd6a282c9ffe0592ee1e16b2ad1326993\nREAD: third_party/LLMServingSim @ dfd0d0594e8f19bd783ab6851af47c6cf1380b30\nREAD: third_party/LLMServingSim/astra-sim @ 0210e24bf76f49b4111a73d1e419f6fee4f3f0b6\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 3964b1d41cb5f7b51004c316b0eae1a3713c2498\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.\n"
+  },
+  {
+    "check": "Initial staged CSV integrity",
+    "exitcode": 1,
+    "reason": "Git text=auto normalized CRLF CSV; localized -text added and single path re-added with --renormalize; experiment data unchanged"
+  },
+  {
+    "check": "Git staged CSV bytes, changed Markdown local links and staged whitespace",
+    "staged_csv_sha256": "7f361082ef62588841ebf610c145db92003d9d0bbae2d7f5169259eacad069e0",
+    "markdown_local_links": 38,
+    "exitcode": 0
+  }
+]

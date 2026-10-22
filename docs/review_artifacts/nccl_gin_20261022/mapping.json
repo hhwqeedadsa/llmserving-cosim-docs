@@ -1,0 +1,140 @@
+{
+  "scope": "source-expression arithmetic only; no CUDA or GIN execution",
+  "connection_counts_checked": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "requested_contexts_checked": [
+    1,
+    32
+  ],
+  "context_index_comparisons": 2209,
+  "examples": [
+    {
+      "tokens_per_rank": 1,
+      "channels": [
+        {
+          "sm": 0,
+          "warp": 0,
+          "tokens": [
+            0
+          ],
+          "gin_context_index": 1,
+          "connection": 1,
+          "local_context": 0
+        }
+      ],
+      "control_context_index": 0,
+      "control_connection": 0,
+      "active_data_connections": [
+        1
+      ]
+    },
+    {
+      "tokens_per_rank": 8,
+      "channels": [
+        {
+          "sm": 0,
+          "warp": 0,
+          "tokens": [
+            0
+          ],
+          "gin_context_index": 1,
+          "connection": 1,
+          "local_context": 0
+        },
+        {
+          "sm": 0,
+          "warp": 1,
+          "tokens": [
+            2
+          ],
+          "gin_context_index": 3,
+          "connection": 1,
+          "local_context": 1
+        },
+        {
+          "sm": 0,
+          "warp": 2,
+          "tokens": [
+            4
+          ],
+          "gin_context_index": 1,
+          "connection": 1,
+          "local_context": 0
+        },
+        {
+          "sm": 0,
+          "warp": 3,
+          "tokens": [
+            6
+          ],
+          "gin_context_index": 3,
+          "connection": 1,
+          "local_context": 1
+        },
+        {
+          "sm": 1,
+          "warp": 0,
+          "tokens": [
+            1
+          ],
+          "gin_context_index": 2,
+          "connection": 0,
+          "local_context": 1
+        },
+        {
+          "sm": 1,
+          "warp": 1,
+          "tokens": [
+            3
+          ],
+          "gin_context_index": 4,
+          "connection": 0,
+          "local_context": 2
+        },
+        {
+          "sm": 1,
+          "warp": 2,
+          "tokens": [
+            5
+          ],
+          "gin_context_index": 2,
+          "connection": 0,
+          "local_context": 1
+        },
+        {
+          "sm": 1,
+          "warp": 3,
+          "tokens": [
+            7
+          ],
+          "gin_context_index": 4,
+          "connection": 0,
+          "local_context": 2
+        }
+      ],
+      "control_context_index": 0,
+      "control_connection": 0,
+      "active_data_connections": [
+        0,
+        1
+      ]
+    }
+  ],
+  "example_parameters": {
+    "sms": 2,
+    "dispatch_warps": 4,
+    "active_call_qps": 5,
+    "allocated_contexts": 6,
+    "connections": 2,
+    "local_gin_devices": [
+      "declared_nic0",
+      "declared_nic1"
+    ]
+  },
+  "measured": false,
+  "packets": false
+}

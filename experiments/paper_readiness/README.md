@@ -100,4 +100,52 @@ timeout 60s python3 experiments/paper_readiness/audit_deepep_modern.py \
   --checkpoint runs/my-modern-checkpoint
 ```
 
-原始路由和前阶段公开input仍须从对应检查点恢复。每响应2MiB/20秒、最多3并发，两个文件批次总12份，连同目录查询累计≤16MiB/120秒；失败和重复批次拒绝，不能用新批次名重试同一失败文件。离线审核的检查点≤4MiB原始内容，卷预留8GiB。源码调用核算和实际包、时延、设备支持严格分开；NCCL provider尚未核对，源码采集失败不会降级成其他版本。两次报告构建分别发现自引用检查顺序和迁移导航路径错误，已修正并保留失败；最终跨目录复核通过，源码证据与选择核算两个JSON逐字节一致。实际命令、退出状态和归档复核见[执行记录](../../docs/review_artifacts/deepep_modern_20261022/execution.json)，没有重跑网络。
+原始路由和前阶段公开input仍须从对应检查点恢复。每响应2MiB/20秒、最多3并发，两个文件批次总12份，连同目录查询累计≤16MiB/120秒；失败和重复批次拒绝，不能用新批次名重试同一失败文件。离线审核的检查点≤4MiB原始内容，卷预留8GiB。源码调用核算和实际包、时延、设备支持严格分开；该次现代DeepEP核查尚未包含NCCL provider，后续结果见下文。源码采集失败不会降级成其他版本。两次报告构建分别发现自引用检查顺序和迁移导航路径错误，已修正并保留失败；最终跨目录复核通过，源码证据与选择核算两个JSON逐字节一致。实际命令、退出状态和归档复核见[执行记录](../../docs/review_artifacts/deepep_modern_20261022/execution.json)，没有重跑网络。
+
+固定NCCL v2.32.3-1的GIN/GDAKI源码核查与四请求全部Decode路由核算见[报告](../../docs/review_artifacts/nccl_gin_20261022/report.html)。只核算fresh-routing direct Dispatch的数据操作数，不产生包或时延。18份NCCL来源使用完整Git树/blob/SHA256验证；缓存可从[检查点](../../docs/review_artifacts/nccl_gin_20261022/archive.json)恢复，也可按下列固定tag读取公开源码。首次身份查询解析tag到提交，正式审核严格核对`12df1a11afad322be5a204a2db890161cbf8131d`，不能替换版本。
+
+```bash
+timeout 60s python3 experiments/paper_readiness/collect_nccl_gin.py \
+  --phase identity --tag v2.32.3-1 --output data/research/my-nccl-gin
+timeout 60s python3 experiments/paper_readiness/collect_nccl_gin.py \
+  --phase files --output data/research/my-nccl-gin \
+  --paths docs/userguide/source/api/device_gin.rst src/include/nccl_device/gin.h \
+  src/include/nccl_device/impl/gin__funcs.h src/include/nccl_device/gin/gdaki/gin_gdaki.h \
+  src/transport/net_ib/gdaki/gin_host_gdaki.cc src/gin/gin_host.cc
+timeout 60s python3 experiments/paper_readiness/collect_nccl_gin.py \
+  --phase files --batch queue --output data/research/my-nccl-gin \
+  --paths src/include/nccl_device/core.h \
+  src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh \
+  src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh \
+  src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh \
+  src/include/nccl_device/gin/gin_device_common.h src/transport/net_ib/gin.cc
+timeout 60s python3 experiments/paper_readiness/collect_nccl_gin.py \
+  --phase files --batch contract --output data/research/my-nccl-gin \
+  --paths src/include/nccl_device/host.h \
+  src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h \
+  plugins/gin/README.md src/include/nccl_device/impl/core__funcs.h \
+  src/devcomm/devcomm_v23000.cc src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h
+```
+
+每批最多6份、并发3、每响应2MiB/20秒，身份与三个批次累计≤16MiB/120秒；失败不提高限额或换批次重取。以下离线操作不联网。所有输出目录需不存在，使用已有四原件和现代源码缓存；源码审核还读取前阶段版本化来源清单。manifest和原件路径按仓库根恢复，不是任意模型参数扫描工具。
+
+```bash
+timeout 60s python3 experiments/paper_readiness/direct_route_accounting.py \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json \
+  --output /dev/shm/my-direct-routes
+timeout 60s python3 experiments/paper_readiness/audit_nccl_gin.py \
+  --source-dir data/research/my-nccl-gin --routes /dev/shm/my-direct-routes \
+  --output runs/my-nccl-review --checkpoint runs/my-nccl-checkpoint
+```
+
+每命令60秒/RSS1GiB/地址2GiB；路由结果≤8MiB，审核归档原始内容≤8MiB，磁盘预留8GiB。输出包括逐窗口CSV、来源、上下文映射、HTML及hash核验的本地tar。另将核算输出到第二个新目录，再将审核输出到另一仓库内目录，执行：
+
+```bash
+timeout 60s python3 experiments/paper_readiness/check_nccl_gin.py \
+  --review docs/review_artifacts/nccl_gin_20261022 \
+  --repeat-routes /dev/shm/my-direct-routes \
+  --relocated runs/my-nccl-review \
+  --output runs/my-gin-repeat-check.json
+```
+
+该检查读取两份归档并逐文件核hash，比较三个路由结果与六个跨目录稳定结果，检查两份HTML本地链接。执行资源字段与相对导航允许不同；没有浏览器视觉验收。正式结果覆盖7,424窗口、118,784矩阵项，现代去重后的69,409份跨rank token仍有目的rank不均，但不能由此推断拥塞或加速。后续实现要求集中在[现代后端规范](modern_backend_contract.md)，尚未接入网络。

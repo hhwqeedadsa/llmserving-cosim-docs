@@ -1,0 +1,323 @@
+{
+  "identity": {
+    "tag": "v2.32.3-1",
+    "accessed_utc": "2026-10-22T12:32:00.101418+00:00",
+    "argv": [
+      "experiments/paper_readiness/collect_nccl_gin.py",
+      "--phase",
+      "identity",
+      "--output",
+      "data/research/nccl_gin_20261022"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "requests": [
+      {
+        "url": "https://api.github.com/repos/NVIDIA/nccl/git/ref/tags/v2.32.3-1",
+        "file": "ref.json",
+        "bytes": 341,
+        "sha256": "67d897b48b5813b519912fc8f0837f8dd6f2ee8abd2a117f23f386577bce5cbf"
+      },
+      {
+        "url": "https://api.github.com/repos/NVIDIA/nccl/git/commits/12df1a11afad322be5a204a2db890161cbf8131d",
+        "file": "commit.json",
+        "bytes": 2706,
+        "sha256": "9cb1b82d20fea745ef3fa25813a2585edd4d16f84d7e7731e7e552dc72ded77c"
+      },
+      {
+        "url": "https://api.github.com/repos/NVIDIA/nccl/git/trees/de760d9f34b52dee589604eeeccef9a09df8a979?recursive=1",
+        "file": "tree.json",
+        "bytes": 418713,
+        "sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+      }
+    ],
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "tree": "de760d9f34b52dee589604eeeccef9a09df8a979",
+    "status": "read",
+    "elapsed_seconds": 3.7796874921768904
+  },
+  "batches": [
+    {
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "tag": "v2.32.3-1",
+      "sources": [
+        {
+          "path": "src/include/nccl_device/host.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "12cb0491ca873503b5aed78c193fecafd53f2127",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/12cb0491ca873503b5aed78c193fecafd53f2127",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/host.h",
+          "response_bytes": 14235,
+          "status": "read",
+          "bytes": 10123,
+          "sha256": "8f0435f3bca1b0c5ba93ade3fb2bed473142dc1269ca8d4d0885b952f0c31ed6"
+        },
+        {
+          "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+          "response_bytes": 27761,
+          "status": "read",
+          "bytes": 19940,
+          "sha256": "7d26e765bc83d05dddb4bf9fd8ecb9c5cd1e012e4cb1b47e6e29c28e9c6d502b"
+        },
+        {
+          "path": "plugins/gin/README.md",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "8fa1362cc637c370b38f22a8152ce36ecd1a8e9e",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/8fa1362cc637c370b38f22a8152ce36ecd1a8e9e",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/plugins/gin/README.md",
+          "response_bytes": 23991,
+          "status": "read",
+          "bytes": 17205,
+          "sha256": "16fc0461773150880ea40861ebc75cee026d70f906a38f1512545ebe72a6a277"
+        },
+        {
+          "path": "src/include/nccl_device/impl/core__funcs.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "426a564293a36b3b610342dd684f4290d6343f7d",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/426a564293a36b3b610342dd684f4290d6343f7d",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/core__funcs.h",
+          "response_bytes": 17253,
+          "status": "read",
+          "bytes": 12313,
+          "sha256": "6048cd4d7f03cbf2d3d13a21bf978cdcc67474144d80298d4011ba74a18d7c98"
+        },
+        {
+          "path": "src/devcomm/devcomm_v23000.cc",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "2fbbd070384dc20c02321fdb82a248260acfbf90",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/2fbbd070384dc20c02321fdb82a248260acfbf90",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/devcomm/devcomm_v23000.cc",
+          "response_bytes": 13296,
+          "status": "read",
+          "bytes": 9443,
+          "sha256": "542f18ac73588c16eb4d9c8515a03f857d9d189ce1bfa9cf5d84c5ce64cdad1d"
+        },
+        {
+          "path": "src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "6463df77e130c46876d9e8d391ea5f7703fa4ea2",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/6463df77e130c46876d9e8d391ea5f7703fa4ea2",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h",
+          "response_bytes": 2166,
+          "status": "read",
+          "bytes": 1365,
+          "sha256": "9ebddcf9c292b7aec10244e06c95c8310ab39f186b5faa86dfbe8bb87b003d11"
+        }
+      ],
+      "batch_response_bytes": 98702,
+      "batch_elapsed_seconds": 2.2255242224782705,
+      "cumulative_response_bytes": 1121498,
+      "cumulative_elapsed_seconds": 11.438181757926941,
+      "argv": [
+        "experiments/paper_readiness/collect_nccl_gin.py",
+        "--phase",
+        "files",
+        "--batch",
+        "contract",
+        "--output",
+        "data/research/nccl_gin_20261022",
+        "--paths",
+        "src/include/nccl_device/host.h",
+        "src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+        "plugins/gin/README.md",
+        "src/include/nccl_device/impl/core__funcs.h",
+        "src/devcomm/devcomm_v23000.cc",
+        "src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "kernel_execution": false,
+      "dependency_change": false
+    },
+    {
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "tag": "v2.32.3-1",
+      "sources": [
+        {
+          "path": "docs/userguide/source/api/device_gin.rst",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/device_gin.rst",
+          "response_bytes": 26533,
+          "status": "read",
+          "bytes": 19048,
+          "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b"
+        },
+        {
+          "path": "src/include/nccl_device/gin.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "24ba3855188d15ac47c2b107552b2b31e3c1273c",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/24ba3855188d15ac47c2b107552b2b31e3c1273c",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin.h",
+          "response_bytes": 40839,
+          "status": "read",
+          "bytes": 29433,
+          "sha256": "539868dc2af9a421c43db0327287f14db74fb407b5c0c96057a7302b42c203bb"
+        },
+        {
+          "path": "src/include/nccl_device/impl/gin__funcs.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h",
+          "response_bytes": 112063,
+          "status": "read",
+          "bytes": 81127,
+          "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d"
+        },
+        {
+          "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+          "response_bytes": 48687,
+          "status": "read",
+          "bytes": 35130,
+          "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e"
+        },
+        {
+          "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/976ab919d4ee438147f635d247721704bd511868",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+          "response_bytes": 83081,
+          "status": "read",
+          "bytes": 60093,
+          "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361"
+        },
+        {
+          "path": "src/gin/gin_host.cc",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/gin/gin_host.cc",
+          "response_bytes": 31943,
+          "status": "read",
+          "bytes": 22975,
+          "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81"
+        }
+      ],
+      "batch_response_bytes": 343146,
+      "batch_elapsed_seconds": 2.8418925423175097,
+      "cumulative_response_bytes": 764906,
+      "cumulative_elapsed_seconds": 6.6215800344944,
+      "argv": [
+        "experiments/paper_readiness/collect_nccl_gin.py",
+        "--phase",
+        "files",
+        "--output",
+        "data/research/nccl_gin_20261022",
+        "--paths",
+        "docs/userguide/source/api/device_gin.rst",
+        "src/include/nccl_device/gin.h",
+        "src/include/nccl_device/impl/gin__funcs.h",
+        "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+        "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+        "src/gin/gin_host.cc"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "kernel_execution": false,
+      "dependency_change": false
+    },
+    {
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "tag": "v2.32.3-1",
+      "sources": [
+        {
+          "path": "src/include/nccl_device/core.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "266164d1bc5a1fcd11becbe5ab41424cfec83d17",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/266164d1bc5a1fcd11becbe5ab41424cfec83d17",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/core.h",
+          "response_bytes": 11226,
+          "status": "read",
+          "bytes": 7940,
+          "sha256": "960017f8ff67e004a7e66a9309a4a062e45aa4543df33f25e35148cb7d518b95"
+        },
+        {
+          "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/910b710c56bd8d0da730270cda9f521ee8e4fd83",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+          "response_bytes": 77533,
+          "status": "read",
+          "bytes": 56066,
+          "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8"
+        },
+        {
+          "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "ba8ddf40b1584160dbe6c45831692b8194e0f400",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/ba8ddf40b1584160dbe6c45831692b8194e0f400",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh",
+          "response_bytes": 35515,
+          "status": "read",
+          "bytes": 25567,
+          "sha256": "c5fbe2079b8e7e792d72917b4eb58297b885fb0a3d7c3a1b25d58d143a828a5f"
+        },
+        {
+          "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/3dda5b1c442bbb287c573e629e390ccbe807df86",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+          "response_bytes": 69173,
+          "status": "read",
+          "bytes": 49998,
+          "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6"
+        },
+        {
+          "path": "src/include/nccl_device/gin/gin_device_common.h",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "ec55a3c9144dda97a3413a4bdb2ec5824cf0d4ef",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/ec55a3c9144dda97a3413a4bdb2ec5824cf0d4ef",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gin_device_common.h",
+          "response_bytes": 13242,
+          "status": "read",
+          "bytes": 9404,
+          "sha256": "14b096a95044f2a68c88ef7559e9a56819f02295b04be044018ede7ca68914ee"
+        },
+        {
+          "path": "src/transport/net_ib/gin.cc",
+          "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+          "git_blob_sha": "29c539c9df3a0aeda003af85482dcc3ef3b580ee",
+          "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/29c539c9df3a0aeda003af85482dcc3ef3b580ee",
+          "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gin.cc",
+          "response_bytes": 51201,
+          "status": "read",
+          "bytes": 36954,
+          "sha256": "daec2c0f1818797a0ec70b253aef7d631a01112e0116b63103d653cf2d725c03"
+        }
+      ],
+      "batch_response_bytes": 257890,
+      "batch_elapsed_seconds": 2.5910775009542704,
+      "cumulative_response_bytes": 1022796,
+      "cumulative_elapsed_seconds": 9.21265753544867,
+      "argv": [
+        "experiments/paper_readiness/collect_nccl_gin.py",
+        "--phase",
+        "files",
+        "--batch",
+        "queue",
+        "--output",
+        "data/research/nccl_gin_20261022",
+        "--paths",
+        "src/include/nccl_device/core.h",
+        "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+        "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh",
+        "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+        "src/include/nccl_device/gin/gin_device_common.h",
+        "src/transport/net_ib/gin.cc"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "kernel_execution": false,
+      "dependency_change": false
+    }
+  ]
+}

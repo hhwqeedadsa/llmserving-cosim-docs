@@ -1,0 +1,39 @@
+{
+  "status": "passed",
+  "deterministic_route_outputs": {
+    "summary.json": "1935b65d88ab4a35d211a70489c35092715afdb3f5149a1e16285e2fde33c739",
+    "provenance.json": "ac5db81affa7889cf0b1a49a94efe37390d1298753ebc58981bdb49b068ea7d3",
+    "windows.csv": "7f361082ef62588841ebf610c145db92003d9d0bbae2d7f5169259eacad069e0"
+  },
+  "relocation_stable_outputs": {
+    "sources.json": "f86950be360bae577856b6f5aca562e8769da831e94bd0122452c72299db06f6",
+    "mapping.json": "29c7f9a79c5cb943ffc6a304efaa3b67deb83e316186dac52b1bf648bad0a24c",
+    "collection.json": "dfbe3501d67698544b894b7065a96aa6b782dcf76676380dfca8dba6ca19cfa3",
+    "routes-summary.json": "1935b65d88ab4a35d211a70489c35092715afdb3f5149a1e16285e2fde33c739",
+    "routes-provenance.json": "ac5db81affa7889cf0b1a49a94efe37390d1298753ebc58981bdb49b068ea7d3",
+    "routes-windows.csv": "7f361082ef62588841ebf610c145db92003d9d0bbae2d7f5169259eacad069e0"
+  },
+  "archives": [
+    {
+      "archive": "runs/nccl_gin_20261022/checkpoint.tar.gz",
+      "sha256": "712490b51c7e23efdea2f88dc5b36b70789ab4676c76858aaf101cd417c3532f",
+      "verified_files": 43
+    },
+    {
+      "archive": "runs/nccl_gin_relocated_checkpoint_20261022/checkpoint.tar.gz",
+      "sha256": "8d81da441b9c2892fce97a53beb6f39b09186e7cc22720390e0edd675e299084",
+      "verified_files": 43
+    }
+  ],
+  "local_html_link_counts": [
+    13,
+    13
+  ],
+  "wall_seconds": 0.041768629103899,
+  "peak_rss_kib": 18624,
+  "execution_metadata_expected_to_differ": true,
+  "browser_visual_acceptance": false,
+  "network_execution": false,
+  "hardware_calibrated": false,
+  "paper_goal_complete": false
+}

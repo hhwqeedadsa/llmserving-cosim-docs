@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "experiments/paper_readiness/direct_route_accounting.py",
+    "--manifest",
+    "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+    "--output",
+    "/dev/shm/moe-direct-route-accounting-20261022"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "state": "completed",
+  "wall_seconds": 0.41814733296632767,
+  "peak_rss_kib": 30592,
+  "budgets": {
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "output_bytes": 8388608
+  },
+  "summary_sha256": "1935b65d88ab4a35d211a70489c35092715afdb3f5149a1e16285e2fde33c739",
+  "windows_sha256": "7f361082ef62588841ebf610c145db92003d9d0bbae2d7f5169259eacad069e0"
+}

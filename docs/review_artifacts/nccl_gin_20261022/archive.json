@@ -1,0 +1,181 @@
+{
+  "path": "runs/nccl_gin_20261022/checkpoint.tar.gz",
+  "sha256": "712490b51c7e23efdea2f88dc5b36b70789ab4676c76858aaf101cd417c3532f",
+  "bytes": 257764,
+  "verified_files": 43,
+  "files": {
+    "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp": {
+      "bytes": 12061,
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh": {
+      "bytes": 11335,
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh": {
+      "bytes": 11249,
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068"
+    },
+    "data/research/nccl_gin_20261022/commit.json": {
+      "bytes": 2706,
+      "sha256": "9cb1b82d20fea745ef3fa25813a2585edd4d16f84d7e7731e7e552dc72ded77c"
+    },
+    "data/research/nccl_gin_20261022/files-contract.json": {
+      "bytes": 4568,
+      "sha256": "4c254545d88f70febbc89fe3eaf83858f7f7d933a2b3dc67104b49d8540e7156"
+    },
+    "data/research/nccl_gin_20261022/files-first.json": {
+      "bytes": 4391,
+      "sha256": "66a3511050a74bf43188092943f9ef5197ed8e4e604f4e9bf24979b4562a32e6"
+    },
+    "data/research/nccl_gin_20261022/files-queue.json": {
+      "bytes": 4868,
+      "sha256": "b210559028179931b891062d1cfdb27da7a82f28739a58c48b26b2dc5847bc36"
+    },
+    "data/research/nccl_gin_20261022/identity.json": {
+      "bytes": 1206,
+      "sha256": "f5562418e34c67bf18affd9a63436b09fd8258b9ae878eb19544b90b2cdca158"
+    },
+    "data/research/nccl_gin_20261022/ref.json": {
+      "bytes": 341,
+      "sha256": "67d897b48b5813b519912fc8f0837f8dd6f2ee8abd2a117f23f386577bce5cbf"
+    },
+    "data/research/nccl_gin_20261022/sources/docs/userguide/source/api/device_gin.rst": {
+      "bytes": 19048,
+      "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b"
+    },
+    "data/research/nccl_gin_20261022/sources/plugins/gin/README.md": {
+      "bytes": 17205,
+      "sha256": "16fc0461773150880ea40861ebc75cee026d70f906a38f1512545ebe72a6a277"
+    },
+    "data/research/nccl_gin_20261022/sources/src/devcomm/devcomm_v23000.cc": {
+      "bytes": 9443,
+      "sha256": "542f18ac73588c16eb4d9c8515a03f857d9d189ce1bfa9cf5d84c5ce64cdad1d"
+    },
+    "data/research/nccl_gin_20261022/sources/src/gin/gin_host.cc": {
+      "bytes": 22975,
+      "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/core.h": {
+      "bytes": 7940,
+      "sha256": "960017f8ff67e004a7e66a9309a4a062e45aa4543df33f25e35148cb7d518b95"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin.h": {
+      "bytes": 29433,
+      "sha256": "539868dc2af9a421c43db0327287f14db74fb407b5c0c96057a7302b42c203bb"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h": {
+      "bytes": 35130,
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h": {
+      "bytes": 1365,
+      "sha256": "9ebddcf9c292b7aec10244e06c95c8310ab39f186b5faa86dfbe8bb87b003d11"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gin_device_common.h": {
+      "bytes": 9404,
+      "sha256": "14b096a95044f2a68c88ef7559e9a56819f02295b04be044018ede7ca68914ee"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/host.h": {
+      "bytes": 10123,
+      "sha256": "8f0435f3bca1b0c5ba93ade3fb2bed473142dc1269ca8d4d0885b952f0c31ed6"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/core__funcs.h": {
+      "bytes": 12313,
+      "sha256": "6048cd4d7f03cbf2d3d13a21bf978cdcc67474144d80298d4011ba74a18d7c98"
+    },
+    "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/gin__funcs.h": {
+      "bytes": 81127,
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h": {
+      "bytes": 19940,
+      "sha256": "7d26e765bc83d05dddb4bf9fd8ecb9c5cd1e012e4cb1b47e6e29c28e9c6d502b"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh": {
+      "bytes": 25567,
+      "sha256": "c5fbe2079b8e7e792d72917b4eb58297b885fb0a3d7c3a1b25d58d143a828a5f"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh": {
+      "bytes": 49998,
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh": {
+      "bytes": 56066,
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc": {
+      "bytes": 60093,
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361"
+    },
+    "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gin.cc": {
+      "bytes": 36954,
+      "sha256": "daec2c0f1818797a0ec70b253aef7d631a01112e0116b63103d653cf2d725c03"
+    },
+    "data/research/nccl_gin_20261022/tree.json": {
+      "bytes": 418713,
+      "sha256": "c4bbf500304593e3e83de591b39dc6a554b22c8c0ad0d296cb8f55d6f7e4638f"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/collection.json": {
+      "bytes": 16275,
+      "sha256": "dfbe3501d67698544b894b7065a96aa6b782dcf76676380dfca8dba6ca19cfa3"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/execution.json": {
+      "bytes": 875,
+      "sha256": "bae4d66e8e58dd70e7ed9b8ab794a3e459ca23a9de4d9e69d650088124afb14f"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/mapping.json": {
+      "bytes": 2703,
+      "sha256": "29c7f9a79c5cb943ffc6a304efaa3b67deb83e316186dac52b1bf648bad0a24c"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/report.html": {
+      "bytes": 12511,
+      "sha256": "29d83001f19688cfc9caf04ac55c824b7bb5e56493a7c22d210d42f3c273159f"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/routes-execution.json": {
+      "bytes": 684,
+      "sha256": "2b3c36f7e949b9661b7a0b6c8d1963767dd52feea3bf77f5076eb5198cf88e97"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/routes-provenance.json": {
+      "bytes": 2020,
+      "sha256": "ac5db81affa7889cf0b1a49a94efe37390d1298753ebc58981bdb49b068ea7d3"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/routes-summary.json": {
+      "bytes": 10503,
+      "sha256": "1935b65d88ab4a35d211a70489c35092715afdb3f5149a1e16285e2fde33c739"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/routes-windows.csv": {
+      "bytes": 391886,
+      "sha256": "7f361082ef62588841ebf610c145db92003d9d0bbae2d7f5169259eacad069e0"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/sources.json": {
+      "bytes": 25292,
+      "sha256": "f86950be360bae577856b6f5aca562e8769da831e94bd0122452c72299db06f6"
+    },
+    "docs/review_artifacts/nccl_gin_20261022/verification.json": {
+      "bytes": 975,
+      "sha256": "6afdac5df498e0be6239e4b32c932e095c016ccab3ea02e4d8955fe104b7815d"
+    },
+    "docs/reviews/NCCL_GIN资源语义与真实路由网络偏斜_20261022.md": {
+      "bytes": 10561,
+      "sha256": "40ccc32a4c62d5f687c41aeaf6cf7d3181f7d8ca78eec5cc827f16dc8b790605"
+    },
+    "experiments/paper_readiness/audit_nccl_gin.py": {
+      "bytes": 14671,
+      "sha256": "c16240e5e533f1b4c958d88b0433ff2cb75e62420c947f2e617d76f3288e062b"
+    },
+    "experiments/paper_readiness/collect_nccl_gin.py": {
+      "bytes": 6433,
+      "sha256": "e48cd20cc8979645d8510515bf4a13ca33033ad1a9c80c7769993c5da50ed3fa"
+    },
+    "experiments/paper_readiness/direct_route_accounting.py": {
+      "bytes": 8662,
+      "sha256": "9f238b766cfd3419b3463d78c0a07b35396fef9e67763a8551238170c5070ee1"
+    },
+    "experiments/paper_readiness/modern_backend_contract.md": {
+      "bytes": 9046,
+      "sha256": "8e62d705b4c0f7d780c0fbc8084bba9a25c062cafe9eb4b2761d36f090971dfc"
+    }
+  },
+  "scope": "fixed source and offline accounting; raw routes remain in prior four-request checkpoint"
+}

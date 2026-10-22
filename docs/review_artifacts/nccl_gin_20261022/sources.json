@@ -1,0 +1,351 @@
+{
+  "nccl_commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+  "nccl_tag": "v2.32.3-1",
+  "sources": [
+    {
+      "path": "src/include/nccl_device/host.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "12cb0491ca873503b5aed78c193fecafd53f2127",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/12cb0491ca873503b5aed78c193fecafd53f2127",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/host.h",
+      "response_bytes": 14235,
+      "status": "read",
+      "bytes": 10123,
+      "sha256": "8f0435f3bca1b0c5ba93ade3fb2bed473142dc1269ca8d4d0885b952f0c31ed6"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/b8ccf5b96050af0b9ed06c9766dcec51c1f6556a",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+      "response_bytes": 27761,
+      "status": "read",
+      "bytes": 19940,
+      "sha256": "7d26e765bc83d05dddb4bf9fd8ecb9c5cd1e012e4cb1b47e6e29c28e9c6d502b"
+    },
+    {
+      "path": "plugins/gin/README.md",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "8fa1362cc637c370b38f22a8152ce36ecd1a8e9e",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/8fa1362cc637c370b38f22a8152ce36ecd1a8e9e",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/plugins/gin/README.md",
+      "response_bytes": 23991,
+      "status": "read",
+      "bytes": 17205,
+      "sha256": "16fc0461773150880ea40861ebc75cee026d70f906a38f1512545ebe72a6a277"
+    },
+    {
+      "path": "src/include/nccl_device/impl/core__funcs.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "426a564293a36b3b610342dd684f4290d6343f7d",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/426a564293a36b3b610342dd684f4290d6343f7d",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/core__funcs.h",
+      "response_bytes": 17253,
+      "status": "read",
+      "bytes": 12313,
+      "sha256": "6048cd4d7f03cbf2d3d13a21bf978cdcc67474144d80298d4011ba74a18d7c98"
+    },
+    {
+      "path": "src/devcomm/devcomm_v23000.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "2fbbd070384dc20c02321fdb82a248260acfbf90",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/2fbbd070384dc20c02321fdb82a248260acfbf90",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/devcomm/devcomm_v23000.cc",
+      "response_bytes": 13296,
+      "status": "read",
+      "bytes": 9443,
+      "sha256": "542f18ac73588c16eb4d9c8515a03f857d9d189ce1bfa9cf5d84c5ce64cdad1d"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6463df77e130c46876d9e8d391ea5f7703fa4ea2",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/6463df77e130c46876d9e8d391ea5f7703fa4ea2",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki_device_host_common.h",
+      "response_bytes": 2166,
+      "status": "read",
+      "bytes": 1365,
+      "sha256": "9ebddcf9c292b7aec10244e06c95c8310ab39f186b5faa86dfbe8bb87b003d11"
+    },
+    {
+      "path": "docs/userguide/source/api/device_gin.rst",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/device_gin.rst",
+      "response_bytes": 26533,
+      "status": "read",
+      "bytes": 19048,
+      "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b"
+    },
+    {
+      "path": "src/include/nccl_device/gin.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "24ba3855188d15ac47c2b107552b2b31e3c1273c",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/24ba3855188d15ac47c2b107552b2b31e3c1273c",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin.h",
+      "response_bytes": 40839,
+      "status": "read",
+      "bytes": 29433,
+      "sha256": "539868dc2af9a421c43db0327287f14db74fb407b5c0c96057a7302b42c203bb"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h",
+      "response_bytes": 112063,
+      "status": "read",
+      "bytes": 81127,
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "response_bytes": 48687,
+      "status": "read",
+      "bytes": 35130,
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/976ab919d4ee438147f635d247721704bd511868",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "response_bytes": 83081,
+      "status": "read",
+      "bytes": 60093,
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/gin/gin_host.cc",
+      "response_bytes": 31943,
+      "status": "read",
+      "bytes": 22975,
+      "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81"
+    },
+    {
+      "path": "src/include/nccl_device/core.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "266164d1bc5a1fcd11becbe5ab41424cfec83d17",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/266164d1bc5a1fcd11becbe5ab41424cfec83d17",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/core.h",
+      "response_bytes": 11226,
+      "status": "read",
+      "bytes": 7940,
+      "sha256": "960017f8ff67e004a7e66a9309a4a062e45aa4543df33f25e35148cb7d518b95"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "response_bytes": 77533,
+      "status": "read",
+      "bytes": 56066,
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "ba8ddf40b1584160dbe6c45831692b8194e0f400",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/ba8ddf40b1584160dbe6c45831692b8194e0f400",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_cq.cuh",
+      "response_bytes": 35515,
+      "status": "read",
+      "bytes": 25567,
+      "sha256": "c5fbe2079b8e7e792d72917b4eb58297b885fb0a3d7c3a1b25d58d143a828a5f"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "response_bytes": 69173,
+      "status": "read",
+      "bytes": 49998,
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gin_device_common.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "ec55a3c9144dda97a3413a4bdb2ec5824cf0d4ef",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/ec55a3c9144dda97a3413a4bdb2ec5824cf0d4ef",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gin_device_common.h",
+      "response_bytes": 13242,
+      "status": "read",
+      "bytes": 9404,
+      "sha256": "14b096a95044f2a68c88ef7559e9a56819f02295b04be044018ede7ca68914ee"
+    },
+    {
+      "path": "src/transport/net_ib/gin.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "29c539c9df3a0aeda003af85482dcc3ef3b580ee",
+      "url": "https://api.github.com/repos/NVIDIA/nccl/git/blobs/29c539c9df3a0aeda003af85482dcc3ef3b580ee",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gin.cc",
+      "response_bytes": 51201,
+      "status": "read",
+      "bytes": 36954,
+      "sha256": "daec2c0f1818797a0ec70b253aef7d631a01112e0116b63103d653cf2d725c03"
+    }
+  ],
+  "deepep_sources": [
+    {
+      "path": "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp",
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3"
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3"
+    },
+    {
+      "path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3"
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "docs/userguide/source/api/device_gin.rst",
+      "first_line": 75,
+      "last_line": 78,
+      "excerpt": "      Ensures that all the pending transfer operations scheduled by any threads of *coop* are locally consumed. For put\n      operations, this means that the source buffers are safe to reuse; this makes no claims regarding the completion\n      status on the remote peer(s). For get operations, this means that the data is visible to the local rank.\n"
+    },
+    {
+      "path": "docs/userguide/source/api/device_gin.rst",
+      "first_line": 102,
+      "last_line": 104,
+      "excerpt": "   Since NCCL 2.30.5, there are two types of signals: *strong* and *weak*. Strong signals imply the visibility of all the\n   preceding puts to the same peer on the same context. Weak signals imply only the visibility of the put data the signal is\n   attached to."
+    },
+    {
+      "path": "src/include/nccl_device/host.h",
+      "first_line": 50,
+      "last_line": 56,
+      "excerpt": "  int ginContextCount; // This is a hint, the actual context count in the devcomm may not match.\n  int ginSignalCount; // Guaranteed to start at id=0\n  int ginCounterCount; // Guaranteed to start at id=0\n  ncclGinConnectionType_t ginConnectionType;\n  bool ginExclusiveContexts;\n  int ginQueueDepth;\n  int ginTrafficClass;"
+    },
+    {
+      "path": "src/include/nccl_device/host.h",
+      "first_line": 103,
+      "last_line": 104,
+      "excerpt": "    true,                                        /* ginStrongSignalsRequired */ \\\n    true,                                        /* ginVaSignalsRequired */     \\"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "first_line": 255,
+      "last_line": 267,
+      "excerpt": "  devComm->ginStrongLegacySignals = reqs->ginStrongSignalsRequired;\n\n  // Allocate contexts\n  int nContextsTotal = reqs->ginContextCount;\n  devComm->ginConnectionCount = backend->ginCommCount;\n  if (!reqs->ginExclusiveContexts) {\n    // TODO: check if a shared devComm in the list could match our requirements.\n  }\n\n  nContextsTotal = ROUNDUP(nContextsTotal, backend->ginCommCount);\n  devComm->ginContextCount = nContextsTotal;\n  int nContextsPerComm = nContextsTotal / backend->ginCommCount;\n  INFO(NCCL_INIT,"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "first_line": 186,
+      "last_line": 188,
+      "excerpt": "      NCCLCHECKGOTO(backend->ncclGin->listen(backend->ginInstance, localGinDevs[commIdx % nLocalGinDevs],\n                                             allHandles + NCCL_NET_HANDLE_MAXSIZE * comm->rank,\n                                             &listenComms[backendIdx]),"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "first_line": 331,
+      "last_line": 336,
+      "excerpt": "  if (requestedStride % connectedStride != 0) {\n    WARN(\"Cannot create DevComm with the requested GIN rank stride %d, this comm only supports strides that are \"\n         \"multiples of %d\",\n         requestedStride, connectedStride);\n    ret = ncclInvalidUsage;\n    goto end;"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 117,
+      "last_line": 129,
+      "excerpt": "  // this->connectionId = contextIndex % comm.ginConnectionCount;\n  gin->connectionId = comm.ginConnectionCount == 3 ? uint32_t(contextIndex) % 3 // 3 is only non power of 2\n                                                     :\n                                                     contextIndex & (comm.ginConnectionCount - 1); // powers of 2\n  // gin->contextId = contextIndex / comm.ginConnectionCount;\n  gin->contextId = comm.ginConnectionCount == 3 ?\n                     uint32_t(contextIndex) / 3 // 3 is only non power of 2\n                     :\n                     contextIndex >> (comm.ginConnectionCount == 4 ? 2 : comm.ginConnectionCount - 1); // powers of 2\n\n  gin->_ginBackend = comm.ginNetDeviceTypes[gin->connectionId];\n  gin->_ginHandle = comm.ginHandles[gin->connectionId];\n  gin->_signalShadows = comm.ginSignalShadows + contextIndex * comm.ginSignalCount;"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 241,
+      "last_line": 243,
+      "excerpt": "  desc.isStrong = net.comm.ginStrongLegacySignals;\n  return desc;\n}"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 291,
+      "last_line": 293,
+      "excerpt": "  desc.isStrong = net.comm.ginStrongLegacySignals;\n  return desc;\n}"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 344,
+      "last_line": 346,
+      "excerpt": "  desc.isStrong = net.comm.ginStrongLegacySignals;\n  return desc;\n}"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 403,
+      "last_line": 405,
+      "excerpt": "  desc.isStrong = net.comm.ginStrongLegacySignals;\n  return desc;\n}"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 44,
+      "last_line": 49,
+      "excerpt": "NCCL_DEVICE_INLINE uint32_t docaOptFlagsFromGinOptFlags(uint32_t ginOptFlags) {\n  return DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT |\n         (!!(ginOptFlags & ncclGinOptFlagsMaySkipCreditCheck) *\n          DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_AVAILABILITY_CHECK) |\n         (!!(ginOptFlags & ncclGinOptFlagsAggregateRequests) * DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_DB_RINGING);\n}"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 653,
+      "last_line": 658,
+      "excerpt": "  // GDAKI runs over MLX5 NICs, which flush every previously-received put when any signal arrives, so\n  // the capability is unconditional. Returning a compile-time constant lets a GDAKI-only kernel elide\n  // the world-barrier fence path.\n  NCCL_DEVICE_INLINE static bool call(ncclGinCtx) {\n    return true;\n  }"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 393,
+      "last_line": 438,
+      "excerpt": "NCCL_DEVICE_INLINE static ncclResult_t flushImplModeCore(ncclGinCtx ctx, Coop coop, cuda::memory_order ord,\n                                                         uint32_t* abortFlag, uint64_t timeoutCycles) {\n  (void)timeoutCycles; // referenced only when HasTimeout is true\n  using nccl::utility::loadConst;\n  using nccl::utility::testAbort;\n\n  ncclGinGdakiGPUContext* gdaki = &((struct ncclGinGdakiGPUContext*)ctx.handle)[ctx.contextId];\n  doca_gpu_dev_verbs_qp* qps = loadConst(&gdaki->gdqp);\n  uint32_t steps = 0;\n  uint64_t startCycle = 0;\n  (void)startCycle; // referenced only when HasTimeout is true\n  if NCCL_IF_CONSTEXPR (HasTimeout) startCycle = clock64();\n\n  NVCC_PRAGMA_UNROLL_DISABLED\n  for (int peer = coop.thread_rank(); peer < ctx.nRanks; peer += coop.size()) {\n    uint64_t ticket = doca_gpu_dev_verbs_atomic_read<uint64_t, resource_sharing_mode>(&qps[peer].sq_rsvd_index);\n    if (ticket == 0) continue; // No need to poll if there are no outstanding operations\n    --ticket;\n\n    // doca_gpu_dev_verbs_wait blocks indefinitely; only usable when there's\n    // no deadline AND no abort flag to honor.\n    if NCCL_IF_CONSTEXPR (!HasTimeout) {\n      if (abortFlag == nullptr) {\n        doca_gpu_dev_verbs_wait<resource_sharing_mode>(&qps[peer], ticket);\n        continue;\n      }\n    }\n\n    NVCC_PRAGMA_UNROLL_DISABLED\n    while (true) {\n      int status = doca_gpu_dev_verbs_poll_one_cq_at<resource_sharing_mode>(&qps[peer], ticket);\n      if (status == 0) break;\n      if NCCL_IF_CONSTEXPR (HasTimeout) {\n        if (clock64() - startCycle >= timeoutCycles) return ncclTimeout;\n      }\n      if (testAbort(abortFlag, steps)) {\n        if NCCL_IF_CONSTEXPR (HasTimeout) {\n          cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n          return ncclSuccess;\n        } else break; // Original non-timeout path advances to the next peer on abort.\n      }\n    }\n  }\n  cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n  return ncclSuccess;\n}"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 621,
+      "last_line": 628,
+      "excerpt": "  const int nqps_per_rank = ncontexts;\n  const int nqps_for_comm = nqps_per_rank * nranks;  // Number of QPs for communication\n  const int nqps_for_comm_this_rank = nqps_for_comm / rankStride;\n  const bool needCompanion = (nCounters > 0);\n  const int ncompanion_qps = needCompanion ? nqps_for_comm * 2 : 0;  // Number of companion QPs for communication\n                                                                      // Double because we connect to self.\n  const int nqps = nqps_per_rank * (nranks + 1);  // +1 for the local rank.\n                                   // The last group is the responder of the local rank."
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 785,
+      "last_line": 792,
+      "excerpt": "  gdaki_ctx->qp_sq_size = queueDepth > 0 ? queueDepth : ncclParamGinGdakiQpDepth();\n\n  memset(&qp_init_attr, 0, sizeof(qp_init_attr));\n  qp_init_attr.gpu_dev = gdaki_ctx->gdev;\n  qp_init_attr.net_dev = gdaki_ctx->ndev;\n  qp_init_attr.ibpd = cComm->ib.pd;\n  qp_init_attr.sq_nwqe = gdaki_ctx->qp_sq_size;\n  qp_init_attr.nic_handler = (enum doca_gpu_dev_verbs_nic_handler)ncclParamGinGdakiNicHandler();"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "first_line": 96,
+      "last_line": 100,
+      "excerpt": "    const uint16_t nwqes = doca_gpu_dev_verbs_load_const(&qp->sq_wqe_num);\n    [[likely]] if (wqe_idx >= nwqes) {\n        doca_gpu_dev_verbs_poll_cq_at<resource_sharing_mode, qp_type, cq_type>(qp, wqe_idx - nwqes);\n    }\n}"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "first_line": 117,
+      "last_line": 121,
+      "excerpt": "        doca_gpu_dev_verbs_atomic_add<uint64_t, resource_sharing_mode>(&qp->sq_rsvd_index, count);\n    if (!(code_opt & DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_AVAILABILITY_CHECK))\n        doca_gpu_dev_verbs_wait_until_slot_available<resource_sharing_mode, qp_type, cq_type>(\n            qp, wqe_idx + count - 1);\n    return wqe_idx;"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "first_line": 477,
+      "last_line": 514,
+      "excerpt": "/* **************************************** SIGNAL **************************************** */\n\ntemplate <enum doca_gpu_dev_verbs_signal_op sig_op,\n          enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode =\n              DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU,\n          enum doca_gpu_dev_verbs_nic_handler nic_handler = DOCA_GPUNETIO_VERBS_NIC_HANDLER_AUTO,\n          enum doca_gpu_dev_verbs_cq_type cq_type = DOCA_GPUNETIO_VERBS_CQ_UNKNOWN>\n__device__ static __forceinline__ void doca_gpu_dev_verbs_signal_thread(\n    struct doca_gpu_dev_verbs_qp *qp, struct doca_gpu_dev_verbs_addr sig_raddr,\n    struct doca_gpu_dev_verbs_addr sig_laddr, uint64_t sig_val,\n    doca_gpu_dev_verbs_ticket_t *out_ticket,\n    uint32_t code_opt = DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT) {\n    uint64_t wqe_idx;\n    struct doca_gpu_dev_verbs_wqe *wqe_ptr;\n\n    DOCA_GPUNETIO_VERBS_ASSERT(out_ticket != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp != NULL);\n    // DOCA_GPUNETIO_VERBS_ASSERT(qp->mem_type == DOCA_GPUNETIO_VERBS_MEM_TYPE_GPU);\n\n    wqe_idx = doca_gpu_dev_verbs_reserve_wq_slots<resource_sharing_mode, DOCA_GPUNETIO_VERBS_QP_SQ,\n                                                  cq_type>(qp, 1, code_opt);\n    wqe_ptr = doca_gpu_dev_verbs_get_wqe_ptr(qp, wqe_idx);\n\n    doca_gpu_dev_verbs_wqe_prepare_atomic(\n        qp, wqe_ptr, wqe_idx, DOCA_GPUNETIO_IB_MLX5_OPCODE_ATOMIC_FA,\n        doca_gpu_dev_verbs_get_ctrl_flags<DOCA_GPUNETIO_VERBS_QP_SQ, cq_type>(qp, code_opt),\n        sig_raddr.addr, sig_raddr.key, sig_laddr.addr, sig_laddr.key, sizeof(uint64_t), sig_val, 0);\n\n    doca_gpu_dev_verbs_mark_wqes_ready<resource_sharing_mode>(qp, wqe_idx, wqe_idx);\n\n    // mark_wqes_ready has already called fence.release with sufficiently strong scope. No need to\n    // call it again in submit.\n    constexpr enum doca_gpu_dev_verbs_sync_scope submit_sync_scope =\n        (resource_sharing_mode == DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU)\n            ? DOCA_GPUNETIO_VERBS_SYNC_SCOPE_THREAD\n            : DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU;\n    doca_gpu_dev_verbs_submit<resource_sharing_mode, submit_sync_scope, nic_handler>(\n        qp, wqe_idx + 1, code_opt);"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/common/doca_gpunetio_verbs_def.h",
+      "first_line": 167,
+      "last_line": 169,
+      "excerpt": "#define DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE_SHIFT 30\n#define DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE \\\n    (1ULL << DOCA_GPUNETIO_VERBS_MAX_TRANSFER_SIZE_SHIFT)  // 1GiB"
+    }
+  ],
+  "library_execution": false,
+  "hardware_calibrated": false
+}

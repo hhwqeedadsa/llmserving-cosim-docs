@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "experiments/paper_readiness/audit_nccl_gin.py",
+    "--source-dir",
+    "data/research/nccl_gin_20261022",
+    "--routes",
+    "/dev/shm/moe-direct-route-accounting-20261022",
+    "--output",
+    "docs/review_artifacts/nccl_gin_20261022",
+    "--checkpoint",
+    "runs/nccl_gin_20261022"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "state": "completed_offline_checks",
+  "wall_seconds_before_archive": 0.04676547087728977,
+  "peak_rss_kib": 24812,
+  "budgets": {
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "archive_raw_bytes": 8388608
+  },
+  "prior_preflight": {
+    "status": "failed_then_corrected",
+    "reason": "peer loop locator occurred in more than one function; replaced by unique flushImplModeCore locator",
+    "network_retry": false,
+    "budget_increase": false
+  },
+  "network_execution": false
+}

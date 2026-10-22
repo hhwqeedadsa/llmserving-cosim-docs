@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "public_commands": 8,
+  "expected_rejections": 2,
+  "normal": {
+    "operations": 6,
+    "source_packets": 52,
+    "transported_payload_bytes": 47960,
+    "finish_ns": 49870,
+    "final_atomic_value": null
+  },
+  "reserved_tail": {
+    "operations": 6,
+    "source_packets": 52,
+    "transported_payload_bytes": 47960,
+    "finish_ns": 65032,
+    "final_atomic_value": null
+  },
+  "empty_snapshot": {
+    "operations": 6,
+    "source_packets": 52,
+    "transported_payload_bytes": 47960,
+    "finish_ns": 36180,
+    "final_atomic_value": null
+  },
+  "snapshot_excludes_future_work": true,
+  "snapshot_includes_unpublished_reserved_work": true,
+  "empty_snapshot_does_not_wait_for_future_work": true,
+  "first_fence_completed_ns": 13690,
+  "uncovered_tail_completed_ns": 16413,
+  "repeat_byte_identical": true,
+  "id_renaming_wire_invariant": true,
+  "same_network_clock": true,
+  "modern_GIN_flush_validated": false,
+  "hardware_calibrated": false,
+  "source_sha256": {
+    "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+    "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+    "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+    "examples/scaleout_rdma_transactions/queue-fences.json": "7ee7f99582e4c93dfa6fa3d3404f7001bb8b7fd53025437dd9d73c20d08087f8",
+    "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af",
+    "tests/integration/check_queue_fence_workflow.py": "d30767e8fb76d6885b887deee67f758a971cde7405cdb37ee9003ec7cfa4a2c1"
+  },
+  "output_bytes": 3287212,
+  "wall_seconds": 4.411745859310031
+}

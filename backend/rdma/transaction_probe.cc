@@ -33,7 +33,9 @@ int main(int argc,char** argv) {
       for(std::size_t i=0;i<operations.size();++i)if(!submitted[i]) {
         bool ready=true;
         for(const auto& d:operations[i].at("after"))ready=ready && transactions.Occurred(d.at("operation"),d.at("event"));
-        if(ready && transactions.LocalReady(operations[i])){submitted[i]=true;transactions.Submit(operations[i]);}
+        if(ready && transactions.LocalReady(operations[i]) && transactions.QueueFenceReady(operations[i])) {
+          submitted[i]=true;transactions.Submit(operations[i]);
+        }
       }
       complete=0;
       for(const auto& op:operations)if(transactions.Occurred(op.at("id"),"completed"))++complete;

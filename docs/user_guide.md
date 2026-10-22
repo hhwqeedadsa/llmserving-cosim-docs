@@ -1,5 +1,7 @@
 # 用户指南
 
+原生事务还可用[queue-fences.json](../examples/scaleout_rdma_transactions/queue-fences.json)验证多连接固定前缀等待，沿用`rdma-transaction-probe`，详见[输入与边界](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。它等待已预留工作，不自动等待未来提交或提供真实GIN flush代价。
+
 原生事务功能例另可用[local-waits.json](../examples/scaleout_rdma_transactions/local-waits.json)验证实际接收数据满足条件后再继续、消费后清零的两轮执行，沿用`rdma-transaction-probe`。输入与范围见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。它不执行现代DeepEP或GPU轮询。
 
 Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`bytes8192.json`，可同时调整消息数和逻辑字节额度，关闭队列明细但保留全程精确队列积分。`rdma-diagnose`查看源端确认进度和分阶段等待；单条消息超过字节限额时须显式调整，不会自动拆分或放宽。

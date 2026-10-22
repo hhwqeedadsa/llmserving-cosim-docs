@@ -25,6 +25,20 @@ def audit(result, config, mtu):
     local_by_id = {e['operation']: e for e in tx['local_events']}
     assert len(local_by_id) == len(tx['local_events'])
     assert set(local_by_id) == {op['id'] for op in specs.values() if 'local_wait' in op}
+    fence_by_id = {e['operation']: e for e in tx['queue_fences']}
+    assert set(fence_by_id) == {op['id'] for op in specs.values() if 'queue_fence' in op}
+    for identity, fence in fence_by_id.items():
+        op = specs[identity]
+        assert fence['owner'] == connections[op['connection']]['src']
+        assert [t['connection'] for t in fence['targets']] == op['queue_fence']
+        ends = [fence['captured_ns']]
+        for target in fence['targets']:
+            covered = sorted((r for r in rows.values() if r['connection'] == target['connection'] and
+                              r['sequence'] < target['target']), key=lambda r: r['sequence'])
+            assert target['covered_operations'] == [r['id'] for r in covered] and len(covered) == target['target']
+            assert all(r['ready_ns'] <= fence['captured_ns'] for r in covered)
+            ends.extend(r['completed_ns'] for r in covered)
+        assert fence['completed_ns'] == max(ends)
     bindings = {(r['connection'], r['sequence']): r for r in rows.values()}
     source_bytes, frames = {}, {}
     packets = net['source_packets']; capture = net['source_payload_packets']
@@ -64,6 +78,9 @@ def audit(result, config, mtu):
                      for d in op['after']), default=0)
         if 'local_wait' in op:
             assert row['ready_ns'] == local_by_id[row['id']]['time_ns'] >= ready
+        elif 'queue_fence' in op:
+            assert fence_by_id[row['id']]['captured_ns'] == ready
+            assert row['ready_ns'] == fence_by_id[row['id']]['completed_ns']
         else:
             assert row['ready_ns'] == ready
         assert row['ready_ns'] <= row['published_ns'] <= row['applied_ns'] < row['request_acked_ns']
@@ -127,7 +144,8 @@ def audit(result, config, mtu):
     assert native and len({str(Path(p).parent) for p in native}) == 1 and all('unified-bus' not in p for p in native)
     assert result['finish_ns'] >= max(w['acked_ns'] for w in net['work'])
     return dict(operations=len(specs), source_packets=len(packets), transported_payload_bytes=sum(map(len, source_bytes.values())),
-                finish_ns=result['finish_ns'], final_atomic_value=int.from_bytes(memory[4, 7][:8], 'little'))
+                finish_ns=result['finish_ns'], final_atomic_value=int.from_bytes(memory[4, 7][:8], 'little')
+                if any(op['verb'] == 'fetch_add' for op in specs.values()) else None)
 
 
 def main():

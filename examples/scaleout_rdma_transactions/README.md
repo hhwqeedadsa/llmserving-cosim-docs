@@ -66,6 +66,20 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-probe \
 
 默认例完成10个事务、14个源数据包、560B载体有效负载；包含4个原子旧值返回，不含ACK及其他包头。两类反例分别改变原子增量和数据内容：二者均有7个后续操作等待，且不提前清零。重复结果逐字节一致，应用id改名不改变线上字节与时间。数字只说明本功能例，不能推断真实通信库成本；来源范围与复核见[等待功能验收](../../fixtures/local_memory_waits/README.md)。
 
+## 等待调用时已有的工作前缀
+
+将`--config`改为[queue-fences.json](queue-fences.json)，可以验证同一源GPU的两条连接如何完成已有工作，再发出一个标记。操作可选`"queue_fence": [0, 1]`，其中数字引用connections的id，含1—8个不重复且由本操作提交GPU拥有的连接。
+
+当本操作的`after`满足时，运行时**只捕获一次**所选队列已经预留的工作数；这些前缀全部完成后才提交本操作。之后追加的工作不会扩大原快照。已预留但因额度不足而尚未发布的工作仍被纳入；空队列的目标是0，不会等待未来提交。
+
+这个功能等待的是MRT1应用队列的ACK/原子返回完成，不是实际GIN flush、GPU源可复用或远端GPU可见。选中队列在一个功能回调中捕获；固定GDAKI源码按协作线程逐peer读取reserved索引，并非保证全局原子快照。现代应用接入必须保留生产者汇合及实际provider覆盖规则，不能用本例代替它们。
+
+同一操作暂不允许同时配置`local_wait`和`queue_fence`，需要分成明确的应用步骤。输入数组在同一次progress中按顺序尝试提交，独立根工作不是一个隐含的生产者汇合：若将fence操作放在生产者之前且没有前驱，它会捕获空快照，标记可在数据之前发出。使用者必须按应用协议建立依赖。
+
+`transactions.queue_fences`保存operation、owner、captured_ns、completed_ns及各连接的target/covered_operations。时间来自同一个网络时钟，未完成为−1。covered_operations仅用于离线核验，等待本身查询固定队列前缀，不用全局真值推断未来完成。快照捕获后尚未提交的操作仍列在顶层pending_operations；没有人为补齐完成。
+
+默认例6个事务、52个源数据包、47,960B载体有效负载，第一次等待覆盖两个早期put，第二次覆盖新增工作。两次运行和id改名分别核验结果确定性及线上字节不变；另验证深度1下预留但未发布的工作、空快照和非本地连接拒绝。输入与全部功能边界见[队列快照验收](../../fixtures/queue_fences/README.md)。这些数字不用于真实通信库性能排序。
+
 ## 实际传了什么
 
 MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连接内事务序号、远端地址、远端key及body长度；字段宽度为4/4/8/8/4/4B。put body为实际字节，fetch-add body为8B增量，reply body为8B旧值且地址/key为0。事务序号负责请求/响应匹配，**应用operation id不写入报文**，不改变NIC绑定、优先级或选路。

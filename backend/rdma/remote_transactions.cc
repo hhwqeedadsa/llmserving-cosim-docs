@@ -64,6 +64,31 @@ bool RemoteTransactions::LocalReady(const Json& input) const {
   for(const auto& condition:LocalWaits(input))if(!condition.at("matched").get<bool>())return false;
   return true;
 }
+bool RemoteTransactions::QueueFenceReady(const Json& input) {
+  if(!input.contains("queue_fence"))return true;
+  const auto id=std::to_string(input.at("id").get<uint64_t>());
+  const auto owner=connections_.at(input.at("connection")).src;
+  Require(!input.contains("local_wait"),"queue fence and local wait require separate application steps");
+  if(!queue_fences_.contains(id)) {
+    const auto& selected=input.at("queue_fence");
+    Require(selected.is_array() && !selected.empty() && selected.size()<=8,"invalid queue fence budget");
+    Json targets=Json::array();std::set<uint64_t> seen;
+    for(const auto& value:selected) {
+      const auto connection=value.get<uint64_t>();
+      Require(seen.insert(connection).second && connections_.count(connection) &&
+              connections_.at(connection).src==owner,"queue fence must select unique source-owned connections");
+      const auto& c=connections_.at(connection);
+      targets.push_back({{"connection",connection},{"target",c.queue.FlushTarget()},{"covered_operations",c.operations}});
+    }
+    queue_fences_[id]={{"operation",input.at("id")},{"owner",owner},{"captured_ns",MemoryNow()},
+                       {"completed_ns",-1},{"targets",targets}};
+  }
+  auto& fence=queue_fences_[id];
+  if(fence.at("completed_ns").get<int64_t>()>=0)return true;
+  for(const auto& target:fence.at("targets"))
+    if(!connections_.at(target.at("connection")).queue.FlushComplete(target.at("target")))return false;
+  fence["completed_ns"]=MemoryNow();return true;
+}
 void RemoteTransactions::Submit(const Json& input) {
   const auto id=input.at("id").get<uint64_t>(),connection=input.at("connection").get<uint64_t>();
   Require(operations_.size()<32 && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
@@ -78,6 +103,11 @@ void RemoteTransactions::Submit(const Json& input) {
   EncodeMemoryFrame(op.request);
   const auto observations=LocalWaits(input);
   for(const auto& condition:observations)Require(condition.at("matched"),"submit before target-local wait satisfied");
+  if(input.contains("queue_fence")) {
+    const auto name=std::to_string(id);
+    Require(queue_fences_.contains(name) && queue_fences_.at(name).at("completed_ns").get<int64_t>()>=0,
+            "submit before captured queue fence completed");
+  }
   op.ticket=c.queue.Reserve(id,id);
   // Check all conditions before any consume, using only this GPU's received
   // memory. Source operation truth never supplies a value to the predicates.
@@ -179,6 +209,9 @@ Json RemoteTransactions::Report() const {
   }
   out["target_events"]=target_events_;out["local_events"]=local_events_;
   out["local_wait_scope"]="functional local LE64 eq/ge, optional consume; no GPU coherence or polling cost";
+  out["queue_fences"]=Json::array();
+  for(const auto& fence:queue_fences_.items())out["queue_fences"].push_back(fence.value());
+  out["queue_fence_scope"]="snapshot of source-owned MRT1 application queue prefixes, ACK/response completion; not GIN flush or GPU source reuse";
   out["transport"]=transport_.Report();return out;
 }
 }

@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "public_commands": 8,
+  "normal": {
+    "operations": 10,
+    "source_packets": 14,
+    "transported_payload_bytes": 560,
+    "finish_ns": 66382,
+    "final_atomic_value": 0
+  },
+  "greater": {
+    "operations": 10,
+    "source_packets": 14,
+    "transported_payload_bytes": 560,
+    "finish_ns": 66382,
+    "final_atomic_value": 0
+  },
+  "failure_probes": {
+    "missing-increment": {
+      "completed": 3,
+      "pending": 7,
+      "actual_count": 1,
+      "conjunction": [
+        false,
+        true
+      ],
+      "no_partial_reset": true,
+      "no_future_packets": true
+    },
+    "wrong-payload": {
+      "completed": 3,
+      "pending": 7,
+      "actual_count": 2,
+      "conjunction": [
+        true,
+        false
+      ],
+      "no_partial_reset": true,
+      "no_future_packets": true
+    }
+  },
+  "expected_rejections": 3,
+  "local_conditions_checked": 6,
+  "repeat_byte_identical": true,
+  "id_renaming_wire_invariant": true,
+  "shared_clock": true,
+  "modern_deepep_executed": false,
+  "hardware_calibrated": false,
+  "source_sha256": {
+    "backend/rdma/remote_memory.hh": "f059f137a68386539c5b4ce78cc46a3bb7f0f316c32222cc8de710ae8fe3d410",
+    "backend/rdma/remote_transactions.hh": "59b1628c4cbabeacf5c0d73bfedd3502b57f8ea48d46962605dff3f58af83003",
+    "backend/rdma/remote_transactions.cc": "9d4ce8f0b9cf8f3ae043aab2f6c444e6b2e96063c8457c3779609e656724386e",
+    "backend/rdma/transaction_probe.cc": "4fb6ca5716b2510bf1fb10449612e11ece5ae05d2f9aa41a9d1ce0f4d0f5a152",
+    "python/moe_ub_cosim/scaleout_transactions.py": "ce82855d3e981f42df6fa40acacb15d7cb4908da91e35740b7030bac0cd8977e",
+    "examples/scaleout_rdma_transactions/local-waits.json": "fa201a506a5d1c0b64a4eea6e664b5781b54207adb05d4e336103f091fdf0ac4",
+    "tests/integration/check_local_memory_wait_workflow.py": "151af20d8f1c5b950f63a5d9653853897c786471c4c1d8b4aceb0bd494c246d6",
+    "tests/integration/check_remote_transaction_workflow.py": "745fe2fb1d9983bcace46b77ae75b5823904acd78cd04b4a1d8ab0b004e797af"
+  },
+  "output_bytes": 262602,
+  "wall_seconds": 4.774884443730116
+}

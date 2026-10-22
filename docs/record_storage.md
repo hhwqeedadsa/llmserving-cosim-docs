@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+原生事务`transactions.queue_fences`记录操作的捕获/完成时刻及每个连接的固定target/covered_operations；等待未完成时completed_ns为−1，日志不编码进报文。字段与同ns内捕获规则见[队列前缀等待](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。
+
 原生事务的`transactions.local_events`记录提交GPU读到的本地条件、observed_value和可选reset_to；与`target_events`共用`order`，用于离线核对同ns内的先后，不影响报文。顶层`pending_operations`在截止时保存未提交操作及其当前local_wait，便于区别条件不满足与网络已排空；字段见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。
 
 `rdma-transaction-probe`的`result.json.transactions`保存操作六种时刻、原子返回值、最终窗口、队列前缀及目标实际应用事件；底层记录在`transport`。payload接收模式另含`source_payload_packets`的实际发出有效载荷hex，可按stream/sequence独立还原MRT1帧。目标事件及操作匹配仅供离线核查，不提供给算法；`applied`不代表GPU可见，`completed`不代表真实GIN CQE。字段、预算和层次见[远端事务输出](../examples/scaleout_rdma_transactions/README.md#输出与完成)。

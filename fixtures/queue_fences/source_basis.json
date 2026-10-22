@@ -1,0 +1,52 @@
+{
+  "records": [
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "local_cache": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "bytes": 11335,
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "excerpts": [
+        {
+          "first_line": 148,
+          "text": "        for (int i = global_warp_idx; i < num_qps; i += kNumSMs * kNumWarps) {"
+        },
+        {
+          "first_line": 165,
+          "text": "            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});"
+        }
+      ]
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "local_cache": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "bytes": 35130,
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "excerpts": [
+        {
+          "first_line": 407,
+          "text": "  for (int peer = coop.thread_rank(); peer < ctx.nRanks; peer += coop.size()) {"
+        },
+        {
+          "first_line": 408,
+          "text": "    uint64_t ticket = doca_gpu_dev_verbs_atomic_read<uint64_t, resource_sharing_mode>(&qps[peer].sq_rsvd_index);"
+        },
+        {
+          "first_line": 416,
+          "text": "        doca_gpu_dev_verbs_wait<resource_sharing_mode>(&qps[peer], ticket);"
+        }
+      ]
+    }
+  ],
+  "prior_identity_basis": "fixtures/modern_windows/source_basis.json",
+  "prior_identity_basis_sha256": "9d9f62e5b13b8b0e799caf6ee30611199b757608d4fb25e6ac96bb8b1e74efea",
+  "verification": "Cached SHA256 and Git blob rechecked against previously verified commit/tree identity; no new network collection or CUDA compile.",
+  "functional_choice": "One functional callback captures all selected MRT1 source queue prefixes. GDAKI peer capture is cooperative/iterative, and MRT1 completion is not CQ or GPU source-safe.",
+  "cuda_compiled": false,
+  "hardware_calibrated": false
+}

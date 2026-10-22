@@ -60,7 +60,7 @@ def validate(topology, protocol, config):
     for op in operations:
         require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
         fields(op, 'id connection verb key address after '+('hex' if op['verb'] == 'put' else 'value')+
-               (' local_wait' if 'local_wait' in op else ''), 'operation')
+               (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else ''), 'operation')
         integer(op['id'], 'operation id', 0, 65535)
         integer(op['connection'], 'operation connection', 0, 7)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
@@ -77,6 +77,15 @@ def validate(topology, protocol, config):
             length = 8
         require(window['address'] <= op['address'] and op['address']+length <= window['address']+size,
                 'remote address out of bounds')
+        if 'queue_fence' in op:
+            selected = op['queue_fence']
+            require('local_wait' not in op, 'queue fence and local wait require separate application steps')
+            require(isinstance(selected, list) and 1 <= len(selected) <= 8, 'require 1..8 queue fence connections')
+            for connection in selected:
+                integer(connection, 'queue fence connection', 0, 7)
+                require(connection in by_id and by_id[connection]['src'] == by_id[op['connection']]['src'],
+                        'queue fence must select source-owned connections')
+            require(len(set(selected)) == len(selected), 'repeated queue fence connection')
         if 'local_wait' in op:
             waits = op['local_wait']
             require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')

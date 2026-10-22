@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+原生事务另支持`queue_fence`，在操作前驱满足时捕获提交GPU所拥有连接的已预留前缀，并按实际ACK/响应完成推进；后续工作不扩张旧目标。这是MRT1功能队列屏障，仍未绑定现代GIN flush或GPU源缓冲，见[前缀等待](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。
+
 `RemoteTransactions`另支持提交GPU读取本地接收窗口的LE64条件等待与消费；值来自实际请求解码后的内存，全部条件满足才推进。它与远端应用记录使用同一网络时钟，但不提供GPU内存序或轮询成本；两轮例见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。
 
 独立`RemoteTransactions`在持久载体上增加MRT1实际负载编码、目标窗口解析、put/fetch-add、返回值流及按事务完成回收的工作额度。原子请求ACK不释放其队列槽，返回值实际到达后才能推进；应用完成后仍等反向确认和物理排空。`remote_memory.hh`不访问源工作表，`remote_transactions.cc`负责网络接入与本地应用事件；公开入口为`rdma-transaction-probe`。它不是RoCE/GIN时延模型，现代事件核心尚未接入，见[远端事务示例](../examples/scaleout_rdma_transactions/README.md)。

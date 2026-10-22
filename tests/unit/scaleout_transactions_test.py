@@ -63,5 +63,16 @@ class TransactionInputTests(unittest.TestCase):
         c['operations'][5]['after'] = []
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
+    def test_queue_fence_selects_only_local_connections(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/queue-fences.json').read_text())
+        validate(self.topology, self.protocol, original)
+        for selected in ([], [0, 0], [False], [8], [7], '0'):
+            c = deepcopy(original); c['operations'][2]['queue_fence'] = selected
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['connections'][1]['src'] = 1
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['operations'][2]['local_wait'] = [dict(key=7,address=4096,compare='eq',value=0)]
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
 
 if __name__ == '__main__': unittest.main()

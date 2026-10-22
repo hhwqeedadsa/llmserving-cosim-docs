@@ -1,0 +1,11 @@
+{
+  "platform_commit": "bc8dd6fc743372e49124d5761c2dbf79279ae966",
+  "inputs": {
+    "protocol.json": "2c3e8afaf15f64166e38e20b026d8f83aa39a9ab1328a1f1ea483fbbc52529c5",
+    "service.json": "03c2ba6ae54fac6c90a8f4ca517490903de967395d5ceae764e41bc457e0bf2c",
+    "topology.json": "ac5b24f6343959f39355e3d0e563100637337029511d2350f4aeaa5a9939786a"
+  },
+  "protocol_sha256": "b20409a0203b578be9f4609eb10cfcccdf3c2f12b131bbe9bddac291a94d73cb",
+  "preparation_source_sha256": "d1de6c0e3311018b8557f3fd617f34ac6c70ec531002b9ed2e90be9d4b2481c7",
+  "workload": "one finite synthetic layer, two decode steps; 256 EP4 replicas sharing one 1024GPU fabric"
+}

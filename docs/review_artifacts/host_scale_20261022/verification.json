@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "all_inter_host_first_paths_independently_checked": true,
+  "all_local_paths_and_callback_boundaries_checked": true,
+  "all_replica_wave_pairs_checked": true,
+  "network": {
+    "inter_host_messages": 3666,
+    "actual_source_data_packets": 3666,
+    "actual_source_payload_bytes": 8376320,
+    "intra_host_messages": 1824,
+    "payload_bytes": {
+      "inter_host": 8376320,
+      "intra_host": 4153344
+    },
+    "egress_hops": {
+      "6": 3666
+    },
+    "ecn_ce_seen": 0,
+    "pfc_pause": 0,
+    "pfc_resume": 0,
+    "max_queue_at_hook_bytes": 118392,
+    "min_inter_host_ready_to_receive_ns": 6252,
+    "max_inter_host_ready_to_receive_ns": 9808,
+    "ns3_events": 128987
+  },
+  "native_total_wall_ns": 20372811399,
+  "native_disjoint_wall_ns": {
+    "\u7f51\u7edc\u521d\u59cb\u5316": 8213812420,
+    "ASTRA\u521d\u59cb\u5316": 2683303145,
+    "\u540c\u6b65\u524d\u7aef\u4ea4\u4e92": 2809071151,
+    "\u56fe\u8f7d\u5165\u4e0e\u6fc0\u6d3b": 2219179491,
+    "Run\u5176\u4ed6\u6267\u884c": 2815238439,
+    "\u62a5\u544a\u6784\u9020\u4e0e\u5199\u51fa": 589286697,
+    "\u5176\u4f59\u5bbf\u4e3b\u5f00\u9500": 1042920056
+  },
+  "native_initialization_fraction": 0.534885213021453,
+  "external_wall_seconds": 23.07019677758217,
+  "peak_sampled_group_rss_bytes": 2728607744,
+  "external_wall_outside_worker_root_seconds": 1.5779445335821691,
+  "simulated_finish_ns": 44589,
+  "verified_nodes": 19172,
+  "scope": "single bounded synthetic functional/host diagnostic, no full model, speedup, congestion or hardware claim"
+}

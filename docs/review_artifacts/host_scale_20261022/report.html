@@ -1,0 +1,15 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>千卡短任务：执行与宿主成本</title><style>body{font:17px/1.8 system-ui,sans-serif;max-width:980px;margin:40px auto;padding:0 22px;color:#172538}h1{line-height:1.3}table{border-collapse:collapse;width:100%}th,td{border-bottom:1px solid #cbd5e1;padding:10px;text-align:left}aside{padding:16px;background:#edf5fc;border-left:4px solid #3677b5}code{font-size:.9em}a{color:#175ca6}</style>
+<h1>千卡短任务已跑通，完整模型规模仍待验证</h1><p>2026-10-22 · 平台 bc8dd6f · 一次预注册运行</p>
+<aside>1,024个GPU逻辑端点、50台交换机、1,104条外部链路；256个EP4副本在同一个持续网络中完成512张图、5,490条消息。仿真完成时间44,589 ns；实际宿主约23.07秒，采样RSS峰值2.54 GiB。</aside>
+<h2>这次到底执行了什么</h2><p>输入是人工MoE层段：隐藏维1024、16专家、每token选2专家，batch/rank=1、已有上下文2048、1层×2轮Decode。每组4张卡跨两个Pod，两张卡在同一服务器。所有副本共用一套ns-3网络、时钟和排队状态。A100只是标签，未运行GPU数值计算。它不是此前48层Qwen模型，也不是EP1024、训练DP或现代DeepEP。</p>
+<h2>网络执行的实际证据</h2><p>独立逐token重算4,096次专家贡献，其中3,059次交付到其他rank，Dispatch与Combine合计12,529,664 B。跨服务器8,376,320 B、机内4,153,344 B；同GPU贡献仅保留本地依赖。</p>
+<p>跨机3,666条消息实际发出3,666个源数据包，每条消息的首包都核对了GPU→ToR→Agg→Core→Agg→ToR→GPU六跳路径；机内1,824条消息使用显式crossbar，未冒充RDMA包。所有应用提交和完成回调配平，完整ASTRA日志核验19,172个任务节点。</p>
+<p>端口记录ECN=0、PFC pause=0，入出队钩子队列峰值118,392 B。这次短任务没有触发ECN/PFC，不能作为拥塞长尾机制或优化收益证据。跨机ready到连续接收完成为6,252—9,808 ns，不能等同请求推理时延。</p>
+<h2>宿主时间花在哪里</h2><p>以下各项在native根区间内互不重叠，合计20.373秒；不把Python的生成时间再加一次。初始化合计占53.5%。</p>
+<table><tr><th>阶段</th><th>墙钟耗时</th><th>native占比</th></tr><tr><td>网络初始化</td><td>8.214 s</td><td>40.3%</td></tr><tr><td>ASTRA初始化</td><td>2.683 s</td><td>13.2%</td></tr><tr><td>同步前端交互</td><td>2.809 s</td><td>13.8%</td></tr><tr><td>图载入与激活</td><td>2.219 s</td><td>10.9%</td></tr><tr><td>Run其他执行</td><td>2.815 s</td><td>13.8%</td></tr><tr><td>报告构造与写出</td><td>0.589 s</td><td>2.9%</td></tr><tr><td>其余宿主开销</td><td>1.043 s</td><td>5.1%</td></tr></table>
+<p>Run其他执行混合ns-3事件、ASTRA、回调、日志和观测开销，不能称为纯包CPU。外部命令约23.07秒，含前置校验、进程启动和结束核验；worker根之外约1.58秒，未进一步分摊。CPU包含进程内全部线程，可大于墙钟。</p>
+<h2>它支持什么结论</h2><p>千卡的物理网络和有限任务可以在当前预算内完整执行，不能把历史超时简单解释为“千卡根本无法运行”。短任务中初始化占主导；它与旧48层实验的工作量相差很大，不能据此解释旧超时比例，也不能计算新旧加速比。</p>
+<p>研究主问题仍需在代表性通信量、真实热点和共享上层链路中形成可证伪机制，再通过强基线、留出请求和硬件依据验证。当前结果是可用规模与成本边界，尚不是A类论文主贡献。</p>
+<h2>范围与证据</h2><p>单命令60秒、RSS6GiB/地址12GiB、仿真5ms、产物64MiB；研究累计128MiB、预留8GiB。没有重跑旧600秒任务、安装、下载、修改依赖或扩大失败预算。</p>
+<p><a href="analysis.json">完整输入/体积/阶段分析</a> · <a href="verification.json">独立路径与计数核验</a> · <a href="maintenance.json">命令与资源记录</a></p><p>方法：experiments/paper_readiness/host_scale_protocol.md。正式报告另存本机归档清单archive.json；自定义复核目录不自动创建备份。</p></html>

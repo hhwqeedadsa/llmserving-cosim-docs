@@ -1,5 +1,31 @@
 # 论文基础审计与强基线判别
 
+新增的千卡短任务用于判别宿主成本，执行前范围见[方法](host_scale_protocol.md)，实际结果见[HTML报告](../../docs/review_artifacts/host_scale_20261022/report.html)。固定平台`bc8dd6f`，单次1024GPU/256个EP4副本、人工1层×2轮Decode在同一网络完成；不替代旧48层模型、现代DeepEP或硬件校准。准备脚本不导入平台私有生成器，分析只读公开产物和稳定计时读取接口；路径/消息/回调再由独立脚本核验。
+
+复现使用新的目录和已有前端依赖环境，`PYTHONPATH`设为本仓库`python`的绝对路径。以下各命令按方法中的时间/内存/磁盘预算分别监测，`rdma-run`内部也使用输入的显式资源限额；失败不自动重试。
+
+```bash
+python experiments/paper_readiness/host_scale.py prepare --output /dev/shm/my-host-scale-new
+python -m moe_ub_cosim scaleout topology \
+  --config /dev/shm/my-host-scale-new/topology.json --output /dev/shm/my-host-scale-new/topology
+python -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/my-host-scale-new/run-monitor \
+  --rss-bytes 6442450944 --address-bytes 12884901888 \
+  --artifact-bytes 67108864 --wall-seconds 60 --min-free-bytes 8589934592 \
+  --artifact-root /dev/shm/my-host-scale-new/run -- \
+  python -m moe_ub_cosim scaleout rdma-run \
+  --config /dev/shm/my-host-scale-new/service.json --topology /dev/shm/my-host-scale-new/topology \
+  --protocol /dev/shm/my-host-scale-new/protocol.json --backend /absolute/path/to/service \
+  --protoc /absolute/path/to/protoc --host-timing --output /dev/shm/my-host-scale-new/run
+python experiments/paper_readiness/host_scale.py analyze \
+  --run /dev/shm/my-host-scale-new/run --output /dev/shm/my-host-scale-new/analysis
+python experiments/paper_readiness/check_host_scale.py \
+  --run /dev/shm/my-host-scale-new/run --analysis /dev/shm/my-host-scale-new/analysis/analysis.json \
+  --monitor /dev/shm/my-host-scale-new/run-monitor/probe.json --output /dev/shm/my-host-scale-new/review
+```
+
+最后的review页面同时生成`analysis.json`、`verification.json`和`maintenance.json`，可直接查看。正式报告目录另存完整流程命令、输入与逐hash核对的本机归档`archive.json`；自定义复核不自动创建备份。完整命令及退出状态见正式报告的维护记录；失败时只执行前缀分析，不执行要求完整结果的路径核验。
+
 首个问题是：此前观察到的源端资源传播，在去掉未经硬件校准的软件字节/槽限制后是否仍存在？本实验筛查机制依赖性，不设计新策略、不以正收益为通过标准。
 
 固定此前8GPU合成MoE层段、相同路由、计算和100G Clos；batch/rank1、4。每个batch四种准入：3槽/16384B；3槽/无字节上限；64槽/无字节上限；软件透传。各模式无故障与单最终ACK丢失一次，共16条件。恢复使用正常40μs初值，历史与目的端份额均关闭。透传仅取消外加软件额度，原生网卡链路和网络协议仍执行，不等于无限硬件。

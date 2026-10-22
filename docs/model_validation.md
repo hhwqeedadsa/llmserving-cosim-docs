@@ -14,7 +14,7 @@
 
 ### 非 UB Scale-Out 有限片段
 
-可选[来源回放](../examples/scaleout_route_replay/README.md)保留原始专家选择，部署、到达和成本仍是声明条件。已用人工4卡输入验证两轮网络反馈和等容量重排，未取得本数据集授权原件，不能声称真实热点收益。`service/1`只覆盖1—4个连续MoE层，KV仍为通用片段声明；`service/2`要求来源全层为所支持的GQA MoE结构，按逐请求实际context计算声明KV与attention成本，不支持完整R1的Dense层/MLA。当前服务专家数上限仍为256；离线统计工具支持至1024，二者范围不同。
+可选[来源回放](../examples/scaleout_route_replay/README.md)保留原始专家选择，部署、到达和成本仍是声明条件。人工4卡输入已验证两轮反馈和等容量重排；之后已取得并核验四份真实R1-AWQ/MMLU请求原件，完成4卡、两层、两步的原生网络执行，见[四请求证据](../experiments/moe_trace_hotspots/results/four_requests_20261018/report.md)。四请求不代表训练或生产总体，也没有证明真实热点优化收益。`service/1`只覆盖1—4个连续MoE层，KV仍为通用片段声明；`service/2`要求来源全层为所支持的GQA MoE结构，按逐请求实际context计算声明KV与attention成本，不支持完整R1的Dense层/MLA。当前服务专家数上限仍为256；离线统计工具支持至1024，二者范围不同。
 
 本节原默认值对应 `moe-scaleout-service/1`。新增 `/2` 的[完整形状示例](../examples/scaleout_clos128/README.md)来自锁定模型配置：Qwen3-30B-A3B-Instruct-2507，48 层、H2048、专家 FFN768、E128/Top8、Q/KV heads32/4、head_dim128。结构核算 30,532,122,624 参数；专家分片，attention/embedding 等组内复制，GQA KV 为每 token 98,304 B。显存检查为权重＋按请求块对齐的 KV，其余 workspace/激活/分配器开销没有硬件校准。完整依赖不等于数值模型执行，H100 标签不产生测量表。attention 声明成本含 context 和 Decode step 变化，不沿用旧片段的 MHA KV 近似。
 
@@ -23,6 +23,8 @@
 独立 `scaleout rdma-run` 入口执行 ready-KV MoE Decode 片段，不沿用以下完整 MLA/CANN 模型：默认 H=1024、FFN=4096、16 专家、Top-K=2、2 层4轮；attention/pack/expert/merge 为显式声明成本，GPU 类型仅是标签。context 用于请求与有限 KV 声明，不自动外推 attention 耗时。专家权重和 MHA 尺寸 KV 只覆盖该片段，不证明整模型可装入 A100 80GB。
 
 通信按 token×expert 分别计贡献，同 rank 项本地完成，其余按 rank 聚合为不等长直接成对 All-to-All-v；不声称复现 NCCL 或 DeepEP 算法。全部组与轮次共用唯一原生 RDMA ns-3。连续接收完整字节放行 RECV，完整 ACK 结束 SEND；实际事件推进 ASTRA 和下一轮 LLMServingSim 调度。合成路由、有限片段功能验证、硬件校准分别说明。延迟ACK未验证；默认原生协议存在尾包、最终ACK和NACK丢失后可能停滞的限制。可选 `go_back_n` 扩展提供源端ACK进展超时、指数退避和有限重试，接收重复数据通过真实ACK重新确认；故障注入与离线诊断可用于对照。服务主基线仍是无故障，不声称生产RDMA恢复精度。输入、输出和资源范围见[非 UB 小例](../examples/scaleout_rdma/README.md)与[丢包小例](../examples/scaleout_rdma_faults/README.md)。
+
+固定DeepEP v1.2.1低延迟路径的源码核查进一步明确了适用边界：该库按peer/本地expert选择已有QP，逐贡献发送数据，另发包括零token在内的count/flag，并用双buffer及CUDA事件控制复用。当前Scale-Out按rank聚合、每消息新建QP，没有显式表达这些应用通知；完整接收字节也未建模GPU flag可见与接收kernel完成。二者不能视为等价实现。该差异是抽象范围，不使已有抽象模型功能验收失效，也不由操作数量推断时延误差。具体固定源码、四请求核算和建模修正条件见[通信语义审计](reviews/DeepEP低延迟通信语义与建模修正_20261022.md)。
 
 ### 可选原生 RDMA 恢复扩展的依据
 

@@ -1,0 +1,168 @@
+{
+  "path": "runs/deepep_semantics_verified_20261022/checkpoint.tar.gz",
+  "bytes": 695273,
+  "sha256": "dc9ec41bebb02c8af7f5274552ed62f19bd66aca17049966885f3fbc0ff1ffc4",
+  "uncompressed_bytes": 8749789,
+  "files": {
+    "data/moe-trace-small/1472.json": {
+      "bytes": 2804150,
+      "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+    },
+    "data/moe-trace-small/1808.json": {
+      "bytes": 1945385,
+      "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+    },
+    "data/moe-trace-small/2675.json": {
+      "bytes": 1744578,
+      "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+    },
+    "data/moe-trace-small/6447.json": {
+      "bytes": 1699528,
+      "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+    },
+    "data/research/deepep_semantics_20261022/file-sources.json": {
+      "bytes": 4680,
+      "sha256": "0181a96a783b0c217e3889a4a28878c5ac0e01bf3d1851be42367a0e23b72fdb"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/deep_ep.cpp": {
+      "bytes": 76678,
+      "sha256": "de03cc5b5e2d05b3dc521ab1bfd419f3d94bfaa5385ee3c05e0052295a6e138d"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/deep_ep.hpp": {
+      "bytes": 8558,
+      "sha256": "acd71eb8bc6301559045137f1c91bff19d8b1404671a173870af03cd81ddcfd6"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/event.hpp": {
+      "bytes": 1103,
+      "sha256": "6ebd65e0e8aacd11d1271f8b5d124fc735e1eafc63a1c9370e79e19a9239063c"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/kernels/buffer.cuh": {
+      "bytes": 4987,
+      "sha256": "33f3a10ef0d6ba0728613b3ce08d019d0846403810e9abee8124e4715bd6245a"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh": {
+      "bytes": 21149,
+      "sha256": "1c5353a768a27a4b7d349bb50215cb54f8767934247f7caef7a8f331c2f2bbd2"
+    },
+    "data/research/deepep_semantics_20261022/sources/csrc/kernels/internode_ll.cu": {
+      "bytes": 53128,
+      "sha256": "91d374c7354d2c92716c23793b6beec65d47cb22498eb22a7954dda0d880161e"
+    },
+    "data/research/deepep_semantics_20261022/sources/deep_ep/utils.py": {
+      "bytes": 3861,
+      "sha256": "e60e4da066fccd7bf42372b81976de1f753ca3dc7229390b06de1aec24b39b2f"
+    },
+    "data/research/deepep_semantics_20261022/tree-source.json": {
+      "bytes": 353,
+      "sha256": "6bf928a2e561c52338aa442736535e32fe35dc0b0b182b595d228b61c5dc690b"
+    },
+    "data/research/deepep_semantics_20261022/tree.json": {
+      "bytes": 9235,
+      "sha256": "f1ac279e4bb5bec7d12c9df8979078009c29f52f7038bad70c256852dac81080"
+    },
+    "data/research/hardware_systems_20261020/deepep_v121_buffer.txt": {
+      "bytes": 40263,
+      "sha256": "e1be2065c2fddacf8c88adc303c22cbc642f27930efd98a81716d2fc2bebd94c"
+    },
+    "data/research/hardware_systems_20261020/deepep_v121_readme.txt": {
+      "bytes": 19320,
+      "sha256": "92b2e14c11d26491f4157fbba424f28c56c1d9e640437eef2b3473b0a107c29b"
+    },
+    "docs/model_validation.md": {
+      "bytes": 28924,
+      "sha256": "ad85f7b2f0a4e39fc3cd7d0e521dc4dd1a58f21a14ddb4e5eccac879a4d6c9e1"
+    },
+    "docs/review_artifacts/deepep_semantics_20261022/audit.json": {
+      "bytes": 67125,
+      "sha256": "87746ea53e7e9de71cdca3f54983fc47fa2482080c53c024f9a0750a5a85276e"
+    },
+    "docs/review_artifacts/deepep_semantics_20261022/execution.json": {
+      "bytes": 2816,
+      "sha256": "ef0d9008283da314f20c73ea6263568931d82eb5a549457ee342c6f0544bdc37"
+    },
+    "docs/review_artifacts/deepep_semantics_20261022/report.html": {
+      "bytes": 14025,
+      "sha256": "2ed27864e7fad117cadb76f020f4f4c61de3afe4e6673d05c8461968bf1b0ccd"
+    },
+    "docs/review_artifacts/deepep_semantics_20261022/verification.json": {
+      "bytes": 829,
+      "sha256": "51bfa62a7eeec18c7f99350759ec0dcb2ba746be6888e3b1d9a5aee6b38182d6"
+    },
+    "docs/review_artifacts/paper_readiness_20261022/claims.json": {
+      "bytes": 6240,
+      "sha256": "ecd3a735d70906d17ac00c9e8751e52455a4c3e57dbe95e34fc2a18a60262022"
+    },
+    "docs/reviews/DeepEP低延迟通信语义与建模修正_20261022.md": {
+      "bytes": 11775,
+      "sha256": "bf0b46eb8839efb86d10ed418f39c5aeff797e0783b9c9da999996a75594cbfc"
+    },
+    "docs/tasks/current.md": {
+      "bytes": 6117,
+      "sha256": "b65f8f71c443a490aa2a0524c9de68334d2c32e7bb43729585c1c02f0b0c1b02"
+    },
+    "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json": {
+      "bytes": 8531,
+      "sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16"
+    },
+    "experiments/paper_readiness/README.md": {
+      "bytes": 5398,
+      "sha256": "f999dea813800e7844d607da4b3ee30ad3d39321ed08a4531f5b49d2ad7e3c15"
+    },
+    "experiments/paper_readiness/analyze.py": {
+      "bytes": 8731,
+      "sha256": "dac4fdd08ab05b95a1adfa6dc42eceab250fc3b181c8159e028a920b94e6e4d8"
+    },
+    "experiments/paper_readiness/api_semantics.md": {
+      "bytes": 2869,
+      "sha256": "94ed5bcf997e28f51ff2ad4902b540217a9e695184866fca94ab26d1f1dee1c1"
+    },
+    "experiments/paper_readiness/audit_deepep.py": {
+      "bytes": 17546,
+      "sha256": "3d123b70ea75ff7be1ac9d271fea7190eea2ec5f244d385a5dd0f7d6ff940c35"
+    },
+    "experiments/paper_readiness/build_deepep_review.py": {
+      "bytes": 1285,
+      "sha256": "e81040d030f24d543bf22242ba66eac15d41a27d1c06610c3b6f1dbec5ac841c"
+    },
+    "experiments/paper_readiness/check_deepep_audit.py": {
+      "bytes": 7046,
+      "sha256": "70574173d18dde3ee3d541dbda70ad00e398b84f29ca409b9bdbe4c1992a2372"
+    },
+    "experiments/paper_readiness/checkpoint_deepep.py": {
+      "bytes": 3803,
+      "sha256": "58ece214d30b618ea024b0112c67e2d364ebde4dbcc84c547a5e4059064cace5"
+    },
+    "experiments/paper_readiness/collect_deepep.py": {
+      "bytes": 4285,
+      "sha256": "cb19998dea25077cd260716ebb3b7d12890dbd5b64d14aaa95978995a92961a4"
+    },
+    "experiments/paper_readiness/collect_standards.py": {
+      "bytes": 3353,
+      "sha256": "c241b26411fbe05b96d6c461caa0edcb3a262f6c1d172fecb761a55bd463f8f4"
+    },
+    "experiments/paper_readiness/run.py": {
+      "bytes": 4965,
+      "sha256": "12205db2d8b099c6d3bebe9db7082f96a2ccc0285239a46eb742d3628d5233db"
+    },
+    "experiments/paper_readiness/verify.py": {
+      "bytes": 4574,
+      "sha256": "1ed8b1b1550bec3291262c2d34b999ab28476de34fb49624f68446b19649fc21"
+    },
+    "saved_run/graphs/g0.w0/wave.json": {
+      "bytes": 46323,
+      "sha256": "86f38040136c8927518245eddc0a269ff2e9205409698ae222f9485eec95bbb1"
+    },
+    "saved_run/graphs/g0.w1/wave.json": {
+      "bytes": 54773,
+      "sha256": "f57f55d79e36b3080609d32e96fd69d02942a242c7485bb6d3b672b74163d82c"
+    },
+    "saved_run/input.json": {
+      "bytes": 1500,
+      "sha256": "97e9b4926ba0630c6de9a33215053eb96ec336c3d8cb45ff3a59b37be4e51462"
+    }
+  },
+  "verified_files": 39,
+  "scope": "local static-audit recovery; not full simulator, hardware calibration or paper completion",
+  "graphs_restore_subdirectory": "saved_run",
+  "data_restore": "Restore data/ paths relative to repository root; do not overwrite unknown files"
+}

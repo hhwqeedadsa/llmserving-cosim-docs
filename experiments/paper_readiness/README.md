@@ -20,3 +20,42 @@ python experiments/paper_readiness/analyze.py \
 2026-10-22结果见[强基线判别](../../docs/review_artifacts/paper_readiness_20261022/screening.html)，总体评价见[论文评估](../../docs/review_artifacts/paper_readiness_20261022/report.html)。移除字节额度不改变整体完成，但batch4局部准入/消息时序有变化；非约束并发与透传的执行证据一致，软件准入等待为0。故障影响在透传下仍存在。结果不证明真实硬件存在3槽限制，也不作为新算法收益。
 
 `collect_standards.py`只读取固定的两份RFC和两页官方征稿，逐页2MiB、20秒，失败记为unavailable；无自动重试。已有15份相关工作原文复用本机固定快照并重新核hash，没有重新下载。评估状态在当前任务页维护，不将本轮判别完成等同论文研究完成。
+
+后续G1已完成固定DeepEP v1.2.1的九份源码/说明核验与四请求离线核算，见[通信语义审计HTML](../../docs/review_artifacts/deepep_semantics_20261022/report.html)。当前模型没有声称复现DeepEP；本轮具体说明哪些差异阻止将抽象实验推广到其低延迟路径，没有改变网络执行。
+
+```bash
+python3 experiments/paper_readiness/audit_deepep.py \
+  --source-dir data/research/deepep_semantics_20261022 \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json \
+  --graphs /dev/shm/moe-real-four-20261018/service \
+  --output /dev/shm/my-deepep-audit
+```
+
+`--graphs`可省略。脚本只读标准源码与公开保存的wave，不调用平台内部生成器；数据量核算与网络包执行分开。所有输出目录需为新目录。固定源码获取命令如下，只读GitHub Git API，七个blob并发最多3、每响应2MiB/20秒、总120秒/16MiB，不安装、不执行源文件，失败不自动重试：
+
+```bash
+timeout 120s python3 experiments/paper_readiness/collect_deepep.py \
+  --phase tree --output data/research/deepep_semantics_20261022
+timeout 120s python3 experiments/paper_readiness/collect_deepep.py \
+  --phase files --paths csrc/deep_ep.cpp csrc/deep_ep.hpp \
+  csrc/kernels/buffer.cuh csrc/kernels/internode_ll.cu \
+  csrc/kernels/ibgda_device.cuh csrc/event.hpp deep_ep/utils.py \
+  --output data/research/deepep_semantics_20261022
+```
+
+另两份`README.md`、`deep_ep/buffer.py`复用`data/research/hardware_systems_20261020/`中固定blob缓存，身份由版本化来源清单及同一完整Git树共同验证；不能用main文件代替。恢复来源缓存、四份路由和两份既有wave的本地检查点见[归档清单](../../docs/review_artifacts/deepep_semantics_20261022/archive.json)，它不是完整生产实验或论文完成证据。
+
+独立检查示例（`--repeat`指相同输入另一个新目录的离线核算，不必重跑网络）：
+
+```bash
+python3 experiments/paper_readiness/build_deepep_review.py \
+  --output docs/review_artifacts/deepep_semantics_20261022
+python3 experiments/paper_readiness/check_deepep_audit.py \
+  --audit docs/review_artifacts/deepep_semantics_20261022/audit.json \
+  --repeat /dev/shm/my-deepep-audit/audit.json \
+  --html docs/review_artifacts/deepep_semantics_20261022/report.html \
+  --graphs /dev/shm/moe-real-four-20261018/service \
+  --output /dev/shm/my-deepep-verification.json
+```
+
+wave路径按公开运行目录内的相对位置记录。恢复归档后，可把核算与独立检查的`--graphs`均指向解压后的`saved_run/`；来源缓存仍按清单相对仓库根的路径恢复。相同输入的离线核算要求逐字节一致，迁移后的两份wave也按原hash核对。检查点只含核算需要的公开JSON，不含重新执行整个网络所需的全部二进制与产物。

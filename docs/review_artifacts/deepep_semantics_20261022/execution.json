@@ -1,0 +1,73 @@
+{
+  "scope": "Static audit only; command records taken from actual executed calls; no network rerun.",
+  "source_collection": {
+    "manifest": "data/research/deepep_semantics_20261022/file-sources.json",
+    "tree_manifest": "data/research/deepep_semantics_20261022/tree-source.json",
+    "all_seven_status": "read",
+    "response_bytes": 244726
+  },
+  "failed_attempts": [
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "reason": "Source locator expected one two-buffer warning, found dispatch and combine warnings.",
+      "output": "/dev/shm/moe-deepep-audit-20261022",
+      "network_executed": false,
+      "correction": "Explicitly locate both low-latency APIs; preserve throughput occurrences and assertions."
+    },
+    {
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 1,
+      "reason": "Source locator expected two async_finish descriptions, found five including throughput APIs.",
+      "output": "/dev/shm/moe-deepep-audit-accepted-20261022",
+      "network_executed": false,
+      "correction": "Explicitly locate both low-latency APIs; preserve throughput occurrences and assertions."
+    }
+  ],
+  "final_audits": [
+    {
+      "argv": [
+        "python3",
+        "experiments/paper_readiness/audit_deepep.py",
+        "--source-dir",
+        "data/research/deepep_semantics_20261022",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--graphs",
+        "/dev/shm/moe-real-four-20261018/service",
+        "--output",
+        "/dev/shm/moe-deepep-final-checks-20261022/original"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.31487562879920006
+    },
+    {
+      "argv": [
+        "python3",
+        "experiments/paper_readiness/audit_deepep.py",
+        "--source-dir",
+        "data/research/deepep_semantics_20261022",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--graphs",
+        "/dev/shm/moe-deepep-final-checks-20261022/saved_run",
+        "--output",
+        "/dev/shm/moe-deepep-final-checks-20261022/relocated"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.315475270152092
+    }
+  ],
+  "relocated_graph_input_byte_identical": true,
+  "platform_or_dependency_behavior_changed": false,
+  "checkpoint_failed_attempt": {
+    "exit_code": 1,
+    "stage": "checkpoint_metadata_after_tar_member_hash_verification",
+    "reason": "relative output path compared with absolute repository root; ValueError before archive index write",
+    "correction": "resolve checkpoint output before path validation",
+    "partial_archive_preserved": "runs/deepep_semantics_20261022/checkpoint.tar.gz",
+    "network_executed": false
+  }
+}

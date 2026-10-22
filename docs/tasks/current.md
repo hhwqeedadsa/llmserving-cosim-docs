@@ -25,6 +25,10 @@
 
 评估与实证路线见[报告HTML](../review_artifacts/paper_readiness_20261022/report.html)、[16条件判别](../review_artifacts/paper_readiness_20261022/screening.html)、[语义疑点](../../experiments/paper_readiness/api_semantics.md)。16份公开重新诊断通过，分析确定性重复、来源/主张hash与HTML链接核对完成；检查点归档约1.10MiB、1157文件校验。它只证明审计与筛选检查点，不证明论文目标完成。具体见[verification](../review_artifacts/paper_readiness_20261022/verification.json)与[archive](../review_artifacts/paper_readiness_20261022/archive.json)。
 
-后续首先固定目标库内核/运行时，核查QP复用、数据可见、buffer与完成事件，不能先靠删屏障或放宽资源制造收益。可用两机RDMA设备信息已询问，在答复前继续不依赖新设备的源码核查；不把历史硬件盘点当当前可用集群。真实语义、校准、留出负载、强基线和较大规模仍有实质工作，整体状态保持in_progress。
+后续G1静态核查已形成实质结果：取得固定DeepEP v1.2.1七份源码，复用两份固定缓存，共九份与同一完整Git树/blob/hash核对。确认按peer/expert访问已有RC池、逐贡献数据put、包括零token的count/flag、双buffer和CUDA事件。当前rank聚合/逐消息建QP与该路径不等价，C12据此收紧；不声称测得真实NIC恢复/RTT状态，也没有修改后端或锁定依赖。模型依据中“真实原件仍未取得”的过时说明已纠正。
+
+四份真实路由的7,424个四请求/层窗口离线核算完成。声明四rank、batch1、关闭跨rank P2P时，单阶段非自身count为5,701,632次，其中96.90%对应零token；不是同数包或线上字节。既有两层/两步公开输出的76条消息逐条匹配抽象数据量，但不包含6,144次目标库count/flag操作。新证据见[G1报告HTML](../review_artifacts/deepep_semantics_20261022/report.html)、[精确源码与核算](../review_artifacts/deepep_semantics_20261022/audit.json)、[独立检查](../review_artifacts/deepep_semantics_20261022/verification.json)。独立枚举7,602,176个source/expert项、25份摘录及两份wave hash；公开input/wave迁移后离线重复逐字节一致，没有执行新网络或测量硬件。前两次定位器未区分重复API说明而失败，原因保留。
+
+下一步先形成可验收的目标库操作模式，分开数据/通知、QP与WQE、接收可见/发送完成/buffer复用，再决定原生后端追加工作接口的最小改法；不得先加QP复用标签、提前加入未来数据或删屏障制造收益。校准后再对比正常无故障真实路由共享网络中的排队和方法排序，恢复只作补充。可用两机RDMA设备信息已询问，未答复前不假定资源。四请求不能复制为千卡真实生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

@@ -54,7 +54,7 @@
       "evidence": [
         {
           "path": "docs/model_validation.md",
-          "sha256": "675bf76912379d5c48b2a8aa283b8c5cf0ae24c91e10c561c136d4b33840b287"
+          "sha256": "ad85f7b2f0a4e39fc3cd7d0e521dc4dd1a58f21a14ddb4e5eccac879a4d6c9e1"
         }
       ],
       "limit": "22项小形状测量不能跨形状/库/网络外推"
@@ -130,15 +130,15 @@
       "evidence": [
         {
           "path": "docs/reviews/A类论文研究基础审计与实证路线_20261022.md",
-          "sha256": "32d23310f2c6cb990ca453046d46cc21abac5610aaa8f8b73585999245a63bd8"
+          "sha256": "adf5326003bdb0aca2dcf75b93c702dfebaa2203f696188f1946e770a61c43ec"
         }
       ],
       "limit": "问题重要性、近邻差异、校准、强基线和泛化尚不充分"
     },
     {
       "id": "C12",
-      "claim": "每逻辑消息新建QP与目标MoE库等价",
-      "state": "unproven",
+      "claim": "每逻辑消息新建QP与固定DeepEP v1.2.1低延迟路径等价",
+      "state": "contradicted_for_fixed_low_latency_path",
       "evidence": [
         {
           "path": "backend/rdma/fabric.cc",
@@ -155,9 +155,17 @@
         {
           "path": "experiments/paper_readiness/api_semantics.md",
           "sha256": "94ed5bcf997e28f51ff2ad4902b540217a9e695184866fca94ab26d1f1dee1c1"
+        },
+        {
+          "path": "docs/review_artifacts/deepep_semantics_20261022/audit.json",
+          "sha256": "87746ea53e7e9de71cdca3f54983fc47fa2482080c53c024f9a0750a5a85276e"
+        },
+        {
+          "path": "docs/reviews/DeepEP低延迟通信语义与建模修正_20261022.md",
+          "sha256": "bf0b46eb8839efb86d10ed418f39c5aeff797e0783b9c9da999996a75594cbfc"
         }
       ],
-      "limit": "当前模型每消息AddQueuePair；固定库示例复用Buffer并按专家数配置QP，需内核与实测核对"
+      "limit": "固定内核按peer/expert选择已有RC池并推进WQE状态；当前按消息建/删QP。另缺零token count/flag、打包与GPU完成语义；未实测时延或网卡恢复状态。"
     }
   ],
   "scope": "evidence assessment; no numerical readiness score, acceptance or award guarantee"

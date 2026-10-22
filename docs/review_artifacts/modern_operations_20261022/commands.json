@@ -1,0 +1,122 @@
+[
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-plan",
+      "--config",
+      "/dev/shm/moe-modern-real-operations-20261022/input.json",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/plan"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11697446368634701
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-check",
+      "--plan",
+      "/dev/shm/moe-modern-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/normal.json"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11867384798824787
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-check",
+      "--plan",
+      "/dev/shm/moe-modern-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/local_completion.json",
+      "--withhold",
+      "m0.dispatch.data.s0.t0.d1.local_complete"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11739515326917171
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-check",
+      "--plan",
+      "/dev/shm/moe-modern-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/target_visibility.json",
+      "--withhold",
+      "m0.dispatch.data.s0.t0.d1.visible"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.12082928232848644
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-check",
+      "--plan",
+      "/dev/shm/moe-modern-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/final_signal_tail.json",
+      "--withhold",
+      "m3.combine.exit.s0.d1.local_complete"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11921539530158043
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-check",
+      "--plan",
+      "/dev/shm/moe-modern-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/zero_block.json",
+      "--withhold",
+      "m0.dispatch.expert_count.s0.d3.visible"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11841399408876896
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "modern-deepep-plan",
+      "--config",
+      "/dev/shm/moe-modern-real-operations-20261022/input.json",
+      "--output",
+      "/dev/shm/moe-modern-real-operations-20261022/repeat"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exitcode": 0,
+    "wall_seconds": 0.11873731575906277
+  }
+]

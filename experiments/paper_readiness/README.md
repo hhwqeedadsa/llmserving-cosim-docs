@@ -168,3 +168,19 @@ timeout 60s python3 experiments/paper_readiness/audit_modern_layout.py \
 ```
 
 审核输出11份来源记录/摘录、320种布局核算与对应源码快照，总≤2MiB，CPU60秒/地址2GiB，预留8GiB。不编译CUDA、不执行通信库。H7168/Top8/BF16的Dispatch put为14,464B，选定本地归约Combine put为14,400B，均不能当线上总字节。Dispatch动态slot会影响Combine的通道绑定，后续计划不能提前写死该顺序。
+
+现代真实路由研究固定平台`fc5de83`，通过公开新入口编译相同四原件的entry1/2、层3/4，共四次调用。输入由实验自己的准备过程生成，不引用测试配置或平台内部图函数。每rank一个原始请求token、连续专家、BF16及两GIN连接等条件均在provenance中声明，不是实机配置。
+
+```bash
+timeout 60s python3 experiments/paper_readiness/modern_operations.py \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json \
+  --output /dev/shm/my-modern-real-operations
+timeout 60s python3 experiments/paper_readiness/build_modern_operation_review.py \
+  --run /dev/shm/my-modern-real-operations \
+  --output docs/review_artifacts/my-modern-real-review \
+  --checkpoint runs/my-modern-real-checkpoint
+```
+
+所有输出目录须不存在。研究最多300秒，单子进程≤60秒/CPU60秒/地址2GiB，RSS验收≤1GiB；产物≤16MiB、卷预留8GiB；外层示例采用更紧的60秒，不自动扩限或重跑。审核检查点原始内容≤16MiB，包含四原件、公开产物、实验脚本和报告，不重复保存第二份plan。来源版本、命令及资源见[现代真实路由报告](../../docs/review_artifacts/modern_operations_20261022/report.html)。
+
+独立枚举486个操作/2,334事件，5个依赖暂扣探针另用反向后继集合核对。38个远端Dispatch在声明配置中全选连接1，38个Combine为连接0/1各23/15；仅为条件源码算术，不是线上利用率。batch1各source/destination的slot组大小均为1，因此本选择没有组内次序歧义；更大batch仍须运行时解析，不能据此固定token顺序。尚未执行现代网络或证明算法收益。

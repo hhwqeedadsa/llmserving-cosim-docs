@@ -1,0 +1,65 @@
+{
+  "platform_commit": "fc5de83658053488a5c93f7628bd653577cdd108",
+  "events": 2334,
+  "operations": 486,
+  "symbolic_slots": 51,
+  "source_files": 4,
+  "source_rows": 16,
+  "independently_enumerated_operations": 486,
+  "remote_operation_counts": {
+    "dispatch.barrier_signal": 96,
+    "dispatch.token_data": 38,
+    "dispatch.rank_count": 48,
+    "dispatch.expert_count_block": 48,
+    "combine.barrier_signal": 96,
+    "combine.token_data": 38
+  },
+  "remote_operand_bytes": {
+    "dispatch": 549632,
+    "combine": 547200
+  },
+  "all_zero_remote_expert_blocks": 10,
+  "dispatch_data_by_declared_connection": {
+    "1": 38
+  },
+  "combine_data_by_connection_given_unique_slots": {
+    "0": 23,
+    "1": 15
+  },
+  "slot_order_ambiguity": "none within each source/destination in this batch1 selection; not true for general batch",
+  "probes": {
+    "normal": {
+      "withheld": [],
+      "blocked": 0
+    },
+    "local_completion": {
+      "withheld": [
+        "m0.dispatch.data.s0.t0.d1.local_complete"
+      ],
+      "blocked": 32
+    },
+    "target_visibility": {
+      "withheld": [
+        "m0.dispatch.data.s0.t0.d1.visible"
+      ],
+      "blocked": 29
+    },
+    "final_signal_tail": {
+      "withheld": [
+        "m3.combine.exit.s0.d1.local_complete"
+      ],
+      "blocked": 0
+    },
+    "zero_block": {
+      "withheld": [
+        "m0.dispatch.expert_count.s0.d3.visible"
+      ],
+      "blocked": 32
+    }
+  },
+  "repeat_outputs_byte_identical": 3,
+  "network_execution": false,
+  "latency_predicted": false,
+  "hardware_calibrated": false,
+  "scope": "source-level operation counts and conditional connection arithmetic; not packet/traffic timing"
+}

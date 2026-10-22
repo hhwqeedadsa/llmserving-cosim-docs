@@ -1,0 +1,318 @@
+{
+  "manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+  "source": {
+    "kind": "published_model_trace",
+    "dataset_id": "core12345/MoE_expert_selection_trace",
+    "dataset_revision": "27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "collector_model_id": "cognitivecomputations/DeepSeek-R1-AWQ",
+    "collector_model_revision": null,
+    "runtime_revision": null,
+    "precision": "awq_4bit",
+    "usage_terms": "Files downloaded by the user from the published dataset and supplied locally for analysis. No access terms accepted or credentials used by the agent; original dataset citation/access conditions apply; license not independently verified.",
+    "source_url": "https://huggingface.co/datasets/core12345/MoE_expert_selection_trace/tree/27febb7b2d24169560a9f6f83d38eb53f94916cf",
+    "unknown_fields": [
+      "collector_model_revision",
+      "runtime_revision",
+      "license",
+      "collector_hardware",
+      "activation_dtype",
+      "request_eos_reason"
+    ]
+  },
+  "files": [
+    {
+      "path": "data/moe-trace-small/1472.json",
+      "sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255"
+    },
+    {
+      "path": "data/moe-trace-small/1808.json",
+      "sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092"
+    },
+    {
+      "path": "data/moe-trace-small/2675.json",
+      "sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd"
+    },
+    {
+      "path": "data/moe-trace-small/6447.json",
+      "sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+    }
+  ],
+  "selections": [
+    {
+      "call": 0,
+      "rank": 0,
+      "source_entry": 1,
+      "source_layer": 3,
+      "source_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "choices": [
+        66,
+        116,
+        128,
+        133,
+        141,
+        146,
+        153,
+        138
+      ]
+    },
+    {
+      "call": 0,
+      "rank": 1,
+      "source_entry": 1,
+      "source_layer": 3,
+      "source_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "choices": [
+        56,
+        69,
+        84,
+        86,
+        129,
+        164,
+        169,
+        42
+      ]
+    },
+    {
+      "call": 0,
+      "rank": 2,
+      "source_entry": 1,
+      "source_layer": 3,
+      "source_sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "choices": [
+        9,
+        48,
+        54,
+        56,
+        116,
+        129,
+        142,
+        16
+      ]
+    },
+    {
+      "call": 0,
+      "rank": 3,
+      "source_entry": 1,
+      "source_layer": 3,
+      "source_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "choices": [
+        9,
+        32,
+        40,
+        163,
+        164,
+        202,
+        209,
+        56
+      ]
+    },
+    {
+      "call": 1,
+      "rank": 0,
+      "source_entry": 1,
+      "source_layer": 4,
+      "source_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "choices": [
+        18,
+        21,
+        40,
+        49,
+        59,
+        176,
+        253,
+        27
+      ]
+    },
+    {
+      "call": 1,
+      "rank": 1,
+      "source_entry": 1,
+      "source_layer": 4,
+      "source_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "choices": [
+        0,
+        15,
+        36,
+        66,
+        76,
+        130,
+        155,
+        74
+      ]
+    },
+    {
+      "call": 1,
+      "rank": 2,
+      "source_entry": 1,
+      "source_layer": 4,
+      "source_sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "choices": [
+        49,
+        66,
+        162,
+        168,
+        169,
+        186,
+        201,
+        165
+      ]
+    },
+    {
+      "call": 1,
+      "rank": 3,
+      "source_entry": 1,
+      "source_layer": 4,
+      "source_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "choices": [
+        66,
+        76,
+        138,
+        165,
+        186,
+        230,
+        235,
+        131
+      ]
+    },
+    {
+      "call": 2,
+      "rank": 0,
+      "source_entry": 2,
+      "source_layer": 3,
+      "source_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "choices": [
+        123,
+        146,
+        150,
+        160,
+        175,
+        189,
+        197,
+        126
+      ]
+    },
+    {
+      "call": 2,
+      "rank": 1,
+      "source_entry": 2,
+      "source_layer": 3,
+      "source_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "choices": [
+        10,
+        14,
+        21,
+        47,
+        120,
+        125,
+        249,
+        31
+      ]
+    },
+    {
+      "call": 2,
+      "rank": 2,
+      "source_entry": 2,
+      "source_layer": 3,
+      "source_sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "choices": [
+        1,
+        9,
+        42,
+        54,
+        92,
+        133,
+        151,
+        25
+      ]
+    },
+    {
+      "call": 2,
+      "rank": 3,
+      "source_entry": 2,
+      "source_layer": 3,
+      "source_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "choices": [
+        0,
+        134,
+        196,
+        227,
+        236,
+        250,
+        252,
+        223
+      ]
+    },
+    {
+      "call": 3,
+      "rank": 0,
+      "source_entry": 2,
+      "source_layer": 4,
+      "source_sha256": "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+      "choices": [
+        21,
+        75,
+        160,
+        171,
+        178,
+        182,
+        244,
+        250
+      ]
+    },
+    {
+      "call": 3,
+      "rank": 1,
+      "source_entry": 2,
+      "source_layer": 4,
+      "source_sha256": "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+      "choices": [
+        28,
+        66,
+        80,
+        156,
+        200,
+        201,
+        210,
+        0
+      ]
+    },
+    {
+      "call": 3,
+      "rank": 2,
+      "source_entry": 2,
+      "source_layer": 4,
+      "source_sha256": "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+      "choices": [
+        21,
+        25,
+        45,
+        114,
+        193,
+        207,
+        222,
+        15
+      ]
+    },
+    {
+      "call": 3,
+      "rank": 3,
+      "source_entry": 2,
+      "source_layer": 4,
+      "source_sha256": "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96",
+      "choices": [
+        40,
+        49,
+        122,
+        134,
+        138,
+        151,
+        241,
+        139
+      ]
+    }
+  ],
+  "deployment": "hypothetical EP4, one original request/rank, contiguous experts, RDMA-only FULL declared",
+  "launch": "SM/warp/contexts and two local NIC identifiers declared; not hardware configuration",
+  "clock": "selected entry/layer order only; no observed arrivals or launch times",
+  "full_r1_deployment_verified": false
+}

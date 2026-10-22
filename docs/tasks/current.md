@@ -45,6 +45,8 @@
 
 平台现代操作输入增量完成：公开`scaleout modern-deepep-plan/modern-deepep-check`，独立schema表达fresh direct/BF16/expanded本地归约、完整数据布局、rank/专家块计数、滚动屏障、覆盖旧信号尾部的flush、共享buffer epoch和epilogue。Dispatch slot保持符号变量，Combine通道按实际slot解析；动态双射和通道顺序仍是未执行约束。16项单元检查通过；人工四rank新cwd的12条CLI检查1,076事件/224操作/16符号slot，含4类拒绝，重复三产物及迁移check一致。见[接口与范围](../../examples/modern_deepep_partial_order/README.md)、[验收](../../fixtures/modern_deepep_plan/README.md)。没有网络/GPU执行，不能视为现代在线库已实现。
 
-当前下一步：用平台公开入口将既有真实路由转换为现代计划并独立核对来源、操作和关键依赖；随后实现动态slot/通道顺序的事件推进，扩展实际provider所需多槽资源接口，再接持久连接和事务。结合已有询问待答的设备信息决定可校准目标，不假定硬件可用。不得先加QP复用标签、提前加入未来数据或删屏障制造收益。校准后再对比正常无故障真实路由共享网络中的排队和方法排序，恢复只作补充。四请求不能复制为千卡真实生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
+现代真实路由研究完成：平台固定`fc5de83`，四原件entry1/2、层3/4经7条公开命令生成486操作/2,334事件，独立枚举全部操作并回查16条原始选择。远端Dispatch/Combine各38份；在声明两连接/2SM配置中前者全走连接1，后者连接0/1为23/15，不能当利用率或性能。5个暂扣探针由独立后继枚举核对；三份重复产物一致，41文件本地检查点hash通过，最大子进程RSS32,436KiB。见[现代真实路由报告](../review_artifacts/modern_operations_20261022/report.html)。本选择每source/destination至多一个token，slot无组内歧义；一般batch仍需动态解析。
+
+当前下一步：实现动态slot/通道顺序的事件推进，扩展实际provider所需多槽资源接口，再接持久连接和事务。结合已有询问待答的设备信息决定可校准目标，不假定硬件可用。不得先加QP复用标签、提前加入未来数据或删屏障制造收益。校准后再对比正常无故障真实路由共享网络中的排队和方法排序，恢复只作补充。四请求不能复制为千卡真实生产样本，1024卡长工作量完整执行仍未完成；留出数据、强基线、匹配校准与规模泛化仍缺失，论文目标保持in_progress。
 
 上一阶段平台`52e1afb`、研究`bfa2e7d`、收尾`bf57681`，证据见[前阶段核对](../review_artifacts/inference_resilience_20261022/completion_audit.md)。旧阶段记录与原始产物保留，不修改为新目标已经完成。

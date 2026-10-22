@@ -1,0 +1,36 @@
+{
+  "source_files": 4,
+  "original_choices_rechecked": 16,
+  "independent_descendant_checks": {
+    "normal": {
+      "blocked_completions": 0,
+      "matches": true
+    },
+    "local_completion": {
+      "blocked_completions": 32,
+      "matches": true
+    },
+    "target_visibility": {
+      "blocked_completions": 29,
+      "matches": true
+    },
+    "final_signal_tail": {
+      "blocked_completions": 0,
+      "matches": true
+    },
+    "zero_block": {
+      "blocked_completions": 32,
+      "matches": true
+    }
+  },
+  "repeated_outputs": {
+    "input.json": "b78e76038e7cfe1a526a0fc8f7394e898b6567f7dfc5bcb27746d37ef4adab80",
+    "plan.json": "0c8df579222257dbce4a1006595bba7dd44284f5e87171e9483af6c93dc7627e",
+    "manifest.json": "ff2b1d98419c0240d07af6e593a95fdd8219f4a46d111bc7300316a01cdccd24"
+  },
+  "html_local_links": 10,
+  "browser_visual_acceptance": false,
+  "packet_execution": false,
+  "hardware_calibrated": false,
+  "goal_complete": false
+}

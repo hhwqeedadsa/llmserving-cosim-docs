@@ -53,12 +53,26 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
   Require(bool(it->second.qp),"stream QP creation failed");
 }
 void PersistentStreams::Submit(uint64_t stream,uint64_t work,uint64_t bytes,Done accepted,Done acked) {
+  Enqueue(stream,work,bytes,{},std::move(accepted),std::move(acked));
+}
+void PersistentStreams::SetReceiver(uint64_t stream,std::function<void(Bytes)> receiver) {
+  Require(!closed_ && streams_.count(stream) && streams_.at(stream).work.empty() &&
+          !streams_.at(stream).receiver && bool(receiver),"invalid stream payload receiver");
+  streams_.at(stream).receiver=std::move(receiver);
+}
+void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payload,Done acked) {
+  const auto bytes=payload.size();
+  Require(streams_.count(stream) && bool(streams_.at(stream).receiver),"payload stream has no receiver");
+  Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
+}
+void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Bytes payload,Done accepted,Done acked) {
   Require(!closed_ && streams_.count(stream) && !work_ids_.count(work) && work_ids_.size()<64 &&
           bytes>0 && bytes<=1024*1024,"invalid stream work or work budget");
   auto& s=streams_.at(stream);
   Require(s.submitted_bytes+bytes<=64*1024*1024,"stream byte/sequence budget exceeded");
   const auto ticket=s.queue.Reserve(work,work);
   Work w;w.id=work;w.bytes=bytes;w.ticket=ticket;w.ready=StreamNow();
+  w.payload=std::move(payload);
   w.accepted_callback=std::move(accepted);w.acked_callback=std::move(acked);
   s.work.push_back(std::move(w));s.submitted_bytes+=bytes;work_ids_.insert(work);
   Pump(s);Notify();
@@ -106,10 +120,24 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     }
     Pump(*s);hw->m_nic[s->source_nic].dev->TriggerTransmit();Notify();return 0;
   }
+  uint64_t before=0;
+  Stream* data_stream=nullptr;
+  if(h.l3Prot==0x11) {
+    data_stream=Match(node,h,false);Require(data_stream,"unexpected data in exclusive stream execution");
+    auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
+    if(rx)before=rx->ReceiverNextExpectedSeq;
+  }
   const auto result=hw->Receive(packet,h);
   if(h.l3Prot==0x11) {
-    auto s=Match(node,h,false);Require(s,"unexpected data in exclusive stream execution");
-    CheckAccepted(*s);
+    auto& s=*data_stream;
+    auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
+    if(s.receiver && rx->ReceiverNextExpectedSeq>before) {
+      const auto size=packet->GetSize()-h.GetSerializedSize();
+      Require(h.udp.seq==before && rx->ReceiverNextExpectedSeq==before+size,"unsupported overlapping payload acceptance");
+      Bytes payload(size);packet->CreateFragment(h.GetSerializedSize(),size)->CopyData(payload.data(),size);
+      Simulator::ScheduleNow([callback=s.receiver,payload=std::move(payload)]() mutable {callback(std::move(payload));});
+    }
+    CheckAccepted(s);
   }
   Notify();return result;
 }
@@ -130,7 +158,17 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   // Native header and packet generation, capped at this work boundary. No
   // operation ID is encoded and neighbouring writes are never coalesced.
   const auto mtu=hw->m_mtu;hw->m_mtu=std::min<uint64_t>(mtu,it->end-qp->snd_nxt);
-  try { auto packet=hw->GetNxtPacket(qp);hw->m_mtu=mtu;return packet; }
+  try {
+    const auto begin=qp->snd_nxt;
+    auto packet=hw->GetNxtPacket(qp);hw->m_mtu=mtu;
+    if(!it->payload.empty()) {
+      const auto h=StreamHeader(packet);const auto size=packet->GetSize()-h.GetSerializedSize();
+      auto framed=packet->CreateFragment(0,h.GetSerializedSize());
+      framed->AddAtEnd(Create<Packet>(it->payload.data()+begin-it->begin,size));
+      return framed;
+    }
+    return packet;
+  }
   catch(...) { hw->m_mtu=mtu;throw; }
 }
 void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,Ptr<const Packet> packet) {
@@ -143,6 +181,14 @@ void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,P
       ++s.packets;s.tx_payload+=packet->GetSize()-h.GetSerializedSize();
       self->source_packets_.push_back({StreamNow(),static_cast<int64_t>(item.first),node,s.dst,port,
         h.udp.seq,static_cast<int64_t>(packet->GetSize()-h.GetSerializedSize()),static_cast<int64_t>(packet->GetUid())});
+      if(s.receiver) {
+        const auto size=packet->GetSize()-h.GetSerializedSize();self->captured_payload_bytes_+=size;
+        Require(self->captured_payload_bytes_<=2*1024*1024,"payload capture exceeds 2MiB");
+        Bytes bytes(size);packet->CreateFragment(h.GetSerializedSize(),size)->CopyData(bytes.data(),size);
+        static const char digits[]="0123456789abcdef";std::string hex;hex.reserve(size*2);
+        for(auto byte:bytes){hex+=digits[byte>>4];hex+=digits[byte&15];}
+        self->payload_packets_.push_back({{"time_ns",StreamNow()},{"stream",item.first},{"sequence",h.udp.seq},{"hex",hex}});
+      }
     }
   }
 }
@@ -180,6 +226,7 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(!payload_packets_.empty())result["source_payload_packets"]=payload_packets_;
   result["source_packet_columns"]={"time_ns","stream","src","dst","nic","sequence","payload_bytes","packet_uid"};
   for(const auto& item:streams_) {
     const auto& s=item.second;

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+独立`RemoteTransactions`在持久载体上增加MRT1实际负载编码、目标窗口解析、put/fetch-add、返回值流及按事务完成回收的工作额度。原子请求ACK不释放其队列槽，返回值实际到达后才能推进；应用完成后仍等反向确认和物理排空。`remote_memory.hh`不访问源工作表，`remote_transactions.cc`负责网络接入与本地应用事件；公开入口为`rdma-transaction-probe`。它不是RoCE/GIN时延模型，现代事件核心尚未接入，见[远端事务示例](../examples/scaleout_rdma_transactions/README.md)。
+
 独立网络增量`PersistentStreams`通过设备Receive/packet-generator回调使用同一原生Simulator，保留连接并按实际接收/ACK推进工作，公开入口为`rdma-stream-probe`。它已连接GinWorkQueue的单条工作资源状态，信用按完整ACK释放；现代Python事件核心尚未接到这里。原子事务、GPU可见与源buffer寿命待实现，不能作为现代DeepEP网络基线，见[持久字节传输](../examples/scaleout_rdma_streams/README.md)。
 
 `modern_deepep_plan.py`通过独立公开命令编译固定现代direct的无时间操作部分顺序，保留Dispatch原子slot和由其决定的Combine通道公式；数据、计数和屏障的必要依赖与在未来运行时才可解析的顺序分别保存。它尚未驱动队列核心或下面的在线服务，使用范围见[现代计划](../examples/modern_deepep_partial_order/README.md)。

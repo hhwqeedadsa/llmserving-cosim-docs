@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`remote_memory.hh`实现MRT1解码、窗口权限/范围检查及串行put/fetch-add，`remote_transactions.hh/.cc`将其接入持久原生载体；`transaction_probe.cc`提供独立功能入口。普通写入按请求ACK完成，原子另等实际返回值，同上下文按前缀回收；不把应用完成当作网络排空。MRT1与原生载体的组合不是RoCE/GIN provider或硬件成本模型，输入、事件、分层限制与验收见[远端事务](../examples/scaleout_rdma_transactions/README.md)。
+
 ## GIN工作队列功能核心
 
 独立头文件[gin_work_queue.hh](rdma/gin_work_queue.hh)提供未接入网络的C++17资源状态。它将取得ticket、槽可写、描述符准备、doorbell发布、NIC消费和累计CQ完成分开；完成前缀限制环形槽复用，flush保存调用时的reserved前缀，队列空闲时可继续追加。`Reserve(work_id, operation)`要求队列内work_id唯一，同一应用operation允许拆成多个工作。调用方只能在应用依赖实际满足后reserve，并须用provider真实完成回调推进CQ；该类没有远端数据真值、时钟或调度器，不会自动发包或唤醒GPU消费者。

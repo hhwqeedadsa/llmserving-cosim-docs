@@ -1,0 +1,45 @@
+{
+  "passed": true,
+  "public_commands": 8,
+  "expected_rejections": 2,
+  "normal": {
+    "operations": 6,
+    "source_packets": 10,
+    "transported_payload_bytes": 416,
+    "finish_ns": 66394,
+    "final_atomic_value": 10
+  },
+  "depth2": {
+    "operations": 6,
+    "source_packets": 10,
+    "transported_payload_bytes": 416,
+    "finish_ns": 42272,
+    "final_atomic_value": 10
+  },
+  "segmented": {
+    "operations": 6,
+    "source_packets": 12,
+    "transported_payload_bytes": 545,
+    "finish_ns": 66411,
+    "final_atomic_value": 10
+  },
+  "repeat_byte_identical": true,
+  "application_id_renaming_wire_and_time_invariant": true,
+  "output_bytes_before_summary": 187314,
+  "wall_seconds": 4.450570989400148,
+  "source_sha256": {
+    "backend/rdma/remote_memory.hh": "aefb7cf7a0163ef8fd96a81611e6a64f32654010e75891cbe95ab667d5b1c962",
+    "backend/rdma/remote_transactions.hh": "4fb5ba3783b92f4684124c2a23d13766dec07d268153780e454e75c050e7e720",
+    "backend/rdma/remote_transactions.cc": "c3a7b6f2eb264ee11e8af3981d0726a29768090f2bde85f565db9c58ead2b7a6",
+    "backend/rdma/persistent_streams.hh": "5efdb588acd88e9903da277208e9d2025f36c6e499af2c1bd3c90f87ea7ee181",
+    "backend/rdma/persistent_streams.cc": "d80ca02844bb753f0f407debc9b1243369edc8c4801b5e8df86ae3d62e87207e",
+    "backend/rdma/transaction_probe.cc": "cdb1018fc81d4cd30f34138f4cc346feddf7cd3ea73ad882c7806ba5efa951e3",
+    "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+    "python/moe_ub_cosim/scaleout_transactions.py": "78237da346e0f8fe49396d219628ac7b5b12233390e6a6c0aa6a5035896ece38",
+    "python/moe_ub_cosim/cli.py": "c2ca4e19f84d656a65741ad681c6cb74165f2dc43d59efc3c9facdf683cd0cca",
+    "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+    "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+    "tests/integration/check_remote_transaction_workflow.py": "5a46d76a0646b037f82a705f138ea0255809e364eadcacc3bc1a68f41ce7e41b"
+  },
+  "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+}

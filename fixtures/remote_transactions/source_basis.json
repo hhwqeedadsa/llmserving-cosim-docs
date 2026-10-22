@@ -1,0 +1,175 @@
+{
+  "scope": "source semantics versus explicitly non-equivalent MRT1 functional design; no GPU/NIC calibration",
+  "source_read": {
+    "requests": 3,
+    "total_response_bytes": 83033,
+    "max_single_response_bytes": 2097152,
+    "timeout_seconds_per_request": 20,
+    "no_retries": true
+  },
+  "nccl_commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+  "nccl": [
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "local_path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "url": "https://raw.githubusercontent.com/NVIDIA/nccl/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "excerpts": [
+        {
+          "anchor": "doca_gpu_dev_verbs_addr sig_raddr, sig_laddr;",
+          "matching_lines": [
+            74,
+            175
+          ],
+          "selected_occurrence": 0,
+          "line_start": 74,
+          "text": "    doca_gpu_dev_verbs_addr sig_raddr, sig_laddr;\n    if (hasSignal) {\n      if (signalOp == ncclGinSignalInc) signalOpArg = 1;\n      sig_raddr.addr = signalOffset;\n      sig_raddr.key = signalKey;\n      sig_laddr.addr = 0;\n      sig_laddr.key = loadConst(&gdaki->sink_buffer_lkey);\n    }\n"
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6",
+      "local_path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "url": "https://raw.githubusercontent.com/NVIDIA/nccl/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "excerpts": [
+        {
+          "anchor": "__device__ static __forceinline__ void doca_gpu_dev_verbs_signal_thread(",
+          "matching_lines": [
+            484
+          ],
+          "selected_occurrence": 0,
+          "line_start": 484,
+          "text": "__device__ static __forceinline__ void doca_gpu_dev_verbs_signal_thread(\n    struct doca_gpu_dev_verbs_qp *qp, struct doca_gpu_dev_verbs_addr sig_raddr,\n    struct doca_gpu_dev_verbs_addr sig_laddr, uint64_t sig_val,\n    doca_gpu_dev_verbs_ticket_t *out_ticket,\n    uint32_t code_opt = DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT) {\n    uint64_t wqe_idx;\n    struct doca_gpu_dev_verbs_wqe *wqe_ptr;\n\n    DOCA_GPUNETIO_VERBS_ASSERT(out_ticket != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp != NULL);\n    // DOCA_GPUNETIO_VERBS_ASSERT(qp->mem_type == DOCA_GPUNETIO_VERBS_MEM_TYPE_GPU);\n\n    wqe_idx = doca_gpu_dev_verbs_reserve_wq_slots<resource_sharing_mode, DOCA_GPUNETIO_VERBS_QP_SQ,\n                                                  cq_type>(qp, 1, code_opt);\n    wqe_ptr = doca_gpu_dev_verbs_get_wqe_ptr(qp, wqe_idx);\n\n    doca_gpu_dev_verbs_wqe_prepare_atomic(\n        qp, wqe_ptr, wqe_idx, DOCA_GPUNETIO_IB_MLX5_OPCODE_ATOMIC_FA,\n        doca_gpu_dev_verbs_get_ctrl_flags<DOCA_GPUNETIO_VERBS_QP_SQ, cq_type>(qp, code_opt),\n        sig_raddr.addr, sig_raddr.key, sig_laddr.addr, sig_laddr.key, sizeof(uint64_t), sig_val, 0);\n\n    doca_gpu_dev_verbs_mark_wqes_ready<resource_sharing_mode>(qp, wqe_idx, wqe_idx);\n\n    // mark_wqes_ready has already called fence.release with sufficiently strong scope. No need to\n    // call it again in submit.\n    constexpr enum doca_gpu_dev_verbs_sync_scope submit_sync_scope =\n        (resource_sharing_mode == DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU)\n            ? DOCA_GPUNETIO_VERBS_SYNC_SCOPE_THREAD\n            : DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU;\n    doca_gpu_dev_verbs_submit<resource_sharing_mode, submit_sync_scope, nic_handler>(\n        qp, wqe_idx + 1, code_opt);\n\n    *out_ticket = wqe_idx;\n}\n\ntemplate <enum doca_gpu_dev_verbs_signal_op sig_op,\n          enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode =\n              DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU,\n          enum doca_gpu_dev_verbs_nic_handler nic_handler = DOCA_GPUNETIO_VERBS_NIC_HANDLER_AUTO,"
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+      "local_path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "url": "https://raw.githubusercontent.com/NVIDIA/nccl/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "excerpts": [
+        {
+          "anchor": "__device__ static __forceinline__ void doca_gpu_dev_verbs_wqe_prepare_atomic(",
+          "matching_lines": [
+            985
+          ],
+          "selected_occurrence": 0,
+          "line_start": 985,
+          "text": "__device__ static __forceinline__ void doca_gpu_dev_verbs_wqe_prepare_atomic(\n    struct doca_gpu_dev_verbs_qp *qp, struct doca_gpu_dev_verbs_wqe *wqe_ptr,\n    const uint16_t wqe_idx, const uint32_t opcode,\n    enum doca_gpu_dev_verbs_wqe_ctrl_flags ctrl_flags, const uint64_t raddr, const uint32_t rkey,\n    const uint64_t laddr, const uint32_t lkey, const uint32_t bytes, const uint64_t compare_add,\n    const uint64_t swap_add) {\n    struct doca_gpunetio_ib_mlx5_wqe_ctrl_seg cseg;\n    struct doca_gpunetio_ib_mlx5_wqe_raddr_seg rseg;\n    struct doca_gpunetio_ib_mlx5_wqe_atomic_seg atseg;\n    struct doca_gpunetio_ib_mlx5_wqe_data_seg dseg;\n\n    cseg.opmod_idx_opcode = doca_gpu_dev_verbs_bswap32(\n        ((uint32_t)wqe_idx << DOCA_GPUNETIO_VERBS_WQE_IDX_SHIFT) | opcode);\n    cseg.qpn_ds = doca_gpu_dev_verbs_load_const(&qp->sq_num_shift8_be_4ds);\n    cseg.fm_ce_se = ctrl_flags;\n\n    rseg.raddr = doca_gpu_dev_verbs_bswap64(raddr);\n#if DOCA_GPUNETIO_VERBS_MKEY_SWAPPED == 1\n    rseg.rkey = rkey;\n#else\n    rseg.rkey = doca_gpu_dev_verbs_bswap32(rkey);\n#endif\n\n    atseg.swap_add = doca_gpu_dev_verbs_bswap64(\n        opcode == DOCA_GPUNETIO_IB_MLX5_OPCODE_ATOMIC_FA ? compare_add : swap_add);\n    atseg.compare = doca_gpu_dev_verbs_bswap64(compare_add);\n\n    dseg.byte_count = doca_gpu_dev_verbs_bswap32(bytes);\n#if DOCA_GPUNETIO_VERBS_MKEY_SWAPPED == 1\n    dseg.lkey = lkey;\n#else\n    dseg.lkey = doca_gpu_dev_verbs_bswap32(lkey);\n#endif\n    dseg.addr = doca_gpu_dev_verbs_bswap64(laddr);\n\n    doca_gpu_dev_verbs_store_wqe_seg((uint64_t *)&(wqe_ptr->dseg0), (uint64_t *)&(cseg));\n    doca_gpu_dev_verbs_store_wqe_seg((uint64_t *)&(wqe_ptr->dseg1), (uint64_t *)&(rseg));\n    doca_gpu_dev_verbs_store_wqe_seg((uint64_t *)&(wqe_ptr->dseg2), (uint64_t *)&(atseg));\n    doca_gpu_dev_verbs_store_wqe_seg((uint64_t *)&(wqe_ptr->dseg3), (uint64_t *)&(dseg));\n}\n\n/**\n * @brief Prepare an Extended Atomic WQE\n *\n * @param qp - Queue Pair (QP)\n * @param send_wr - Send Work Request to be prepared"
+        }
+      ]
+    }
+  ],
+  "linux_ref": "v6.12",
+  "linux": [
+    {
+      "path": "drivers/infiniband/sw/rxe/rxe_req.c",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_req.c",
+      "http_status": 200,
+      "bytes": 20319,
+      "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+      "status": "read",
+      "elapsed_seconds": 1.4223844483494759,
+      "local_path": "data/research/rc_atomic_20261022/rxe_req.c",
+      "excerpts": [
+        {
+          "anchor": "case IB_WR_ATOMIC_FETCH_AND_ADD:",
+          "matching_lines": [
+            280
+          ],
+          "selected_occurrence": 0,
+          "line_start": 280,
+          "text": "\tcase IB_WR_ATOMIC_FETCH_AND_ADD:\n\t\treturn IB_OPCODE_RC_FETCH_ADD;\n\n\tcase IB_WR_SEND_WITH_INV:\n\t\tif (qp->req.opcode == IB_OPCODE_RC_SEND_FIRST ||"
+        }
+      ]
+    },
+    {
+      "path": "drivers/infiniband/sw/rxe/rxe_resp.c",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c",
+      "http_status": 200,
+      "bytes": 40930,
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+      "status": "read",
+      "elapsed_seconds": 3.6768662333488464,
+      "local_path": "data/research/rc_atomic_20261022/rxe_resp.c",
+      "excerpts": [
+        {
+          "anchor": "static enum resp_states atomic_reply(",
+          "matching_lines": [
+            690
+          ],
+          "selected_occurrence": 0,
+          "line_start": 690,
+          "text": "static enum resp_states atomic_reply(struct rxe_qp *qp,\n\t\t\t\t     struct rxe_pkt_info *pkt)\n{\n\tstruct rxe_mr *mr = qp->resp.mr;\n\tstruct resp_res *res = qp->resp.res;\n\tint err;\n\n\tif (!res) {\n\t\tres = rxe_prepare_res(qp, pkt, RXE_ATOMIC_MASK);\n\t\tqp->resp.res = res;\n\t}\n\n\tif (!res->replay) {\n\t\tu64 iova = qp->resp.va + qp->resp.offset;\n\n\t\terr = rxe_mr_do_atomic_op(mr, iova, pkt->opcode,\n\t\t\t\t\t  atmeth_comp(pkt),\n\t\t\t\t\t  atmeth_swap_add(pkt),\n\t\t\t\t\t  &res->atomic.orig_val);\n\t\tif (err)\n\t\t\treturn err;\n\n\t\tqp->resp.msn++;\n\n\t\t/* next expected psn, read handles this separately */\n\t\tqp->resp.psn = (pkt->psn + 1) & BTH_PSN_MASK;\n\t\tqp->resp.ack_psn = qp->resp.psn;\n\n\t\tqp->resp.opcode = pkt->opcode;\n\t\tqp->resp.status = IB_WC_SUCCESS;\n\t}\n\n\treturn RESPST_ACKNOWLEDGE;\n}"
+        },
+        {
+          "anchor": "static enum resp_states duplicate_request(",
+          "matching_lines": [
+            1275
+          ],
+          "selected_occurrence": 0,
+          "line_start": 1275,
+          "text": "static enum resp_states duplicate_request(struct rxe_qp *qp,\n\t\t\t\t\t  struct rxe_pkt_info *pkt)\n{\n\tenum resp_states rc;\n\tu32 prev_psn = (qp->resp.ack_psn - 1) & BTH_PSN_MASK;\n\n\tif (pkt->mask & RXE_SEND_MASK ||\n\t    pkt->mask & RXE_WRITE_MASK) {\n\t\t/* SEND. Ack again and cleanup. C9-105. */\n\t\tsend_ack(qp, AETH_ACK_UNLIMITED, prev_psn);\n\t\treturn RESPST_CLEANUP;\n\t} else if (pkt->mask & RXE_FLUSH_MASK) {\n\t\tstruct resp_res *res;\n\n\t\t/* Find the operation in our list of responder resources. */\n\t\tres = find_resource(qp, pkt->psn);\n\t\tif (res) {\n\t\t\tres->replay = 1;\n\t\t\tres->cur_psn = pkt->psn;\n\t\t\tqp->resp.res = res;\n\t\t\trc = RESPST_PROCESS_FLUSH;\n\t\t\tgoto out;\n\t\t}\n\n\t\t/* Resource not found. Class D error. Drop the request. */\n\t\trc = RESPST_CLEANUP;\n\t\tgoto out;\n\t} else if (pkt->mask & RXE_READ_MASK) {\n\t\tstruct resp_res *res;\n\n\t\tres = find_resource(qp, pkt->psn);\n\t\tif (!res) {\n\t\t\t/* Resource not found. Class D error.  Drop the\n\t\t\t * request.\n\t\t\t */\n\t\t\trc = RESPST_CLEANUP;\n\t\t\tgoto out;\n\t\t} else {\n\t\t\t/* Ensure this new request is the same as the previous\n\t\t\t * one or a subset of it.\n\t\t\t */\n\t\t\tu64 iova = reth_va(pkt);\n\t\t\tu32 resid = reth_len(pkt);\n\n\t\t\tif (iova < res->read.va_org ||\n\t\t\t    resid > res->read.length ||\n\t\t\t    (iova + resid) > (res->read.va_org +\n\t\t\t\t\t      res->read.length)) {\n\t\t\t\trc = RESPST_CLEANUP;\n\t\t\t\tgoto out;\n\t\t\t}\n\n\t\t\tif (reth_rkey(pkt) != res->read.rkey) {\n\t\t\t\trc = RESPST_CLEANUP;\n\t\t\t\tgoto out;\n\t\t\t}\n\n\t\t\tres->cur_psn = pkt->psn;\n\t\t\tres->state = (pkt->psn == res->first_psn) ?\n\t\t\t\t\trdatm_res_state_new :\n\t\t\t\t\trdatm_res_state_replay;\n\t\t\tres->replay = 1;\n\n\t\t\t/* Reset the resource, except length. */\n\t\t\tres->read.va_org = iova;\n\t\t\tres->read.va = iova;\n\t\t\tres->read.resid = resid;\n\n\t\t\t/* Replay the RDMA read reply. */\n\t\t\tqp->resp.res = res;\n\t\t\trc = RESPST_READ_REPLY;\n\t\t\tgoto out;\n\t\t}\n\t} else {\n\t\tstruct resp_res *res;\n\n\t\t/* Find the operation in our list of responder resources. */\n\t\tres = find_resource(qp, pkt->psn);\n\t\tif (res) {\n\t\t\tres->replay = 1;\n\t\t\tres->cur_psn = pkt->psn;\n\t\t\tqp->resp.res = res;\n\t\t\trc = pkt->mask & RXE_ATOMIC_MASK ?\n\t\t\t\t\tRESPST_ATOMIC_REPLY :\n\t\t\t\t\tRESPST_ATOMIC_WRITE_REPLY;\n\t\t\tgoto out;\n\t\t}"
+        },
+        {
+          "anchor": "static int send_atomic_ack(",
+          "matching_lines": [
+            1193
+          ],
+          "selected_occurrence": 0,
+          "line_start": 1193,
+          "text": "static int send_atomic_ack(struct rxe_qp *qp, u8 syndrome, u32 psn)\n{\n\tint ret = send_common_ack(qp, syndrome, psn,\n\t\t\tIB_OPCODE_RC_ATOMIC_ACKNOWLEDGE, \"ATOMIC ACK\");\n\n\t/* have to clear this since it is used to trigger\n\t * long read replies\n\t */\n\tqp->resp.res = NULL;\n\treturn ret;\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "drivers/infiniband/sw/rxe/rxe_hdr.h",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_hdr.h",
+      "http_status": 200,
+      "bytes": 21784,
+      "sha256": "51794cf32a71c7db7e5bcea72fb372dd5149999b19ed67e473130e56e8081e02",
+      "status": "read",
+      "elapsed_seconds": 1.9230804685503244,
+      "local_path": "data/research/rc_atomic_20261022/rxe_hdr.h",
+      "excerpts": [
+        {
+          "anchor": "struct rxe_atmeth {",
+          "matching_lines": [
+            659
+          ],
+          "selected_occurrence": 0,
+          "line_start": 659,
+          "text": "struct rxe_atmeth {\n\t__be64\t\t\tva;\n\t__be32\t\t\trkey;\n\t__be64\t\t\tswap_add;\n\t__be64\t\t\tcomp;\n} __packed;\n\nstatic inline u64 __atmeth_va(void *arg)"
+        },
+        {
+          "anchor": "struct rxe_atmack {",
+          "matching_lines": [
+            852
+          ],
+          "selected_occurrence": 0,
+          "line_start": 852,
+          "text": "struct rxe_atmack {\n\t__be64\t\t\torig;\n};\n"
+        }
+      ]
+    }
+  ],
+  "supported_source_facts": [
+    "GDAKI signal reserves an atomic FA WQE with target address/key and an 8-byte local sink",
+    "RC atomic response returns the original value; duplicate request replay must not reapply the add",
+    "Native carrier uses UDP/SeqTs and ordinary ACK, not RoCE BTH/atomic/ICRC"
+  ],
+  "explicit_model_choices": [
+    "MRT1 32-byte functional frame header and ordinary reverse persistent byte stream are not source-derived RoCE costs",
+    "target serial application on arrival, LE64 model windows, modulo2^64 add, no NIC service delay or GPU visibility",
+    "application in-order credit release requires request ACK and atomic reply; not a calibrated GIN CQ",
+    "bounded lifetime duplicate cache, not RC PSN resource lifetime or actual loss recovery"
+  ],
+  "native_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "native_sources": {
+    "src/point-to-point/model/rdma-hw.cc": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+    "src/point-to-point/model/rdma-queue-pair.cc": "1599b159ed3ba0a8d027cbb754b21c187e2005aaddb2c24e43ec7321ff0fd613",
+    "src/point-to-point/model/qbb-net-device.cc": "9e5e8662e07340294d7129e96c87cef6812a0be38a24545e1c50eaa24e54b805"
+  }
+}

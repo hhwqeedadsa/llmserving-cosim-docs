@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`rdma-transaction-probe`的`result.json.transactions`保存操作六种时刻、原子返回值、最终窗口、队列前缀及目标实际应用事件；底层记录在`transport`。payload接收模式另含`source_payload_packets`的实际发出有效载荷hex，可按stream/sequence独立还原MRT1帧。目标事件及操作匹配仅供离线核查，不提供给算法；`applied`不代表GPU可见，`completed`不代表真实GIN CQE。字段、预算和层次见[远端事务输出](../examples/scaleout_rdma_transactions/README.md#输出与完成)。
+
 `rdma-stream-probe`的`result.json.persistent_transport`独立保存`streams`、`work`、`source_packets`和列名。工作区间`begin/end`为累计字节序号，`ready/published/accepted/acked_ns`来自同一网络时钟，未发生项为-1；accepted不是GPU可见，acked不是精确GIN本地完成。源包记录含现有packet_uid、端点/NIC/序号/有效负载，不修改包头。`physical_drained`含在途帧与队列检查，`closed`另表连接关闭；顶层messages为空，不能用旧消息诊断器替代本模式核查。输入、预算与完整字段解释见[持久字节小例](../examples/scaleout_rdma_streams/README.md)。
 
 `scaleout modern-deepep-plan`另用`moe-modern-deepep-partial-order/1`，保存完整token布局、数据/计数/signal操作、四类完成义务、未赋值的slot及Combine绑定公式。`deferred_constraints`仍需未来运行时执行；排序的JSON数组不是GPU提交顺序。其manifest与check均声明未模拟包，不能与在线观测混用，字段与约束见[现代计划示例](../examples/modern_deepep_partial_order/README.md)。

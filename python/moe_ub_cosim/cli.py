@@ -60,6 +60,12 @@ def parser():
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
+    rt = sc.add_parser('rdma-transaction-probe', help='Execute addressed put/fetch-add and actual network responses; functional MRT1, not GIN/RoCE timing')
+    rt.add_argument('--topology', type=Path, required=True)
+    rt.add_argument('--protocol', type=Path, required=True)
+    rt.add_argument('--config', type=Path, required=True)
+    rt.add_argument('--backend', type=Path, required=True, help='transaction_probe executable from rdma-build')
+    rt.add_argument('--output', type=Path, required=True, help='New bounded result directory')
     rs = sc.add_parser('rdma-stream-probe', help='Execute causal byte writes on persistent native QPs with ACK-based queue credit; not GIN/GPU visibility')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
     rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN protocol, ACK interval 1, no legacy recovery/admission/fault options')
@@ -143,7 +149,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'rdma-stream-probe':
+            if args.scaleout_command == 'rdma-transaction-probe':
+                from .scaleout_transactions import probe
+                value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'rdma-stream-probe':
                 from .scaleout_streams import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
             elif args.scaleout_command == 'modern-deepep-replay':

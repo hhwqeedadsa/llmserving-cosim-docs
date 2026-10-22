@@ -16,6 +16,11 @@ class PersistentStreams {
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);
   void Submit(uint64_t stream, uint64_t work, uint64_t bytes, Done accepted, Done acked);
+  using Bytes = std::vector<uint8_t>;
+  // Optional functional payload transport. Receiver sees ONLY newly accepted
+  // packet bytes, never source Work metadata or a lookup of a remote operation.
+  void SetReceiver(uint64_t stream, std::function<void(Bytes)> receiver);
+  void SubmitPayload(uint64_t stream, uint64_t work, Bytes payload, Done acked);
   bool Drained() const;
   void Close();
   Json Report() const;
@@ -25,6 +30,7 @@ class PersistentStreams {
     uint64_t id, bytes, ticket, begin=0, end=0;
     int64_t ready=-1, published=-1, received=-1, acked=-1;
     Done accepted_callback, acked_callback;
+    Bytes payload;
   };
   struct Stream {
     unsigned src, dst, plane, source_nic, destination_nic;
@@ -34,6 +40,7 @@ class PersistentStreams {
     std::deque<Work> work;
     uint64_t submitted_bytes=0, accepted_prefix=0, acked_prefix=0, packets=0, tx_payload=0;
     unsigned scheduler_insertions=0;
+    std::function<void(Bytes)> receiver;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth)
       : src(s),dst(d),plane(p),source_nic(sn),destination_nic(dn),wire_port(w),queue(depth,64) {}
   };
@@ -41,6 +48,7 @@ class PersistentStreams {
   ns3::Ptr<ns3::Packet> Next(unsigned node, ns3::Ptr<ns3::RdmaQueuePair> qp);
   Stream* Match(unsigned node, const ns3::CustomHeader& header, bool source);
   void Pump(Stream&);
+  void Enqueue(uint64_t stream, uint64_t work, uint64_t bytes, Bytes payload, Done accepted, Done acked);
   void CheckAccepted(Stream&);
   void Notify();
   static void Tx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
@@ -53,5 +61,7 @@ class PersistentStreams {
   bool closed_=false, notification_pending_=false;
   uint64_t observations_=0;
   std::vector<std::array<int64_t,8>> source_packets_;
+  Json payload_packets_=Json::array();
+  uint64_t captured_payload_bytes_=0;
 };
 }

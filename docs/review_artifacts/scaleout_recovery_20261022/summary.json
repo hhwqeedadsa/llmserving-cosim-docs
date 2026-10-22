@@ -1,0 +1,2195 @@
+{
+  "platform_commit": "0fb863a673066cf5c310d3abdadbbcaf2ed976f1",
+  "analysis_sha256": "f4d12e267074a779ab7c674c52a48612d3d295207dd234fadc9cb9004e3acee0",
+  "target": {
+    "id": 1,
+    "tag": 1,
+    "src": 0,
+    "dst": 4,
+    "bytes": 6144,
+    "plane": 0,
+    "layer": 0,
+    "phase": "dispatch",
+    "contributions": 3
+  },
+  "cases": {
+    "native-clean": {
+      "passed": true,
+      "finish_or_stop_ns": 122068,
+      "failure": null,
+      "completed_messages": 92,
+      "submitted_messages": 92,
+      "source_payload_bytes": 389120,
+      "final_queue_bytes": 0,
+      "queue_area_byte_ns": 43422304,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17500,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17500,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": null,
+      "source0_resources": {
+        "active_bytes": 0,
+        "active_ids": [],
+        "decision_pending": false,
+        "native_send_qps": 0,
+        "pending_bytes": 0,
+        "pending_ids": [],
+        "src": 0
+      },
+      "target_recovery_events": [],
+      "total_timeout_retransmissions": 0,
+      "receiver_duplicate_acks": 0,
+      "recovery_audit": {
+        "available": false
+      },
+      "pending_messages": [
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 30512,
+          "admission_granted_ns": 17500,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 4,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 17583
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "time_ns": 18666
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "time_ns": 19749
+            },
+            {
+              "node": 16,
+              "port": 2,
+              "time_ns": 20832
+            },
+            {
+              "node": 14,
+              "port": 1,
+              "time_ns": 21915
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "time_ns": 22998
+            }
+          ],
+          "first_packet_uid": 175,
+          "first_tx_ns": 17583,
+          "id": 13,
+          "plane": 0,
+          "port": 10013,
+          "qp_registered_ns": 17500,
+          "ready_ns": 13219,
+          "receive_ready_ns": 24431,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 30512,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        },
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 39129,
+          "admission_granted_ns": 26021,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 6,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 26021
+            },
+            {
+              "node": 8,
+              "port": 4,
+              "time_ns": 27104
+            },
+            {
+              "node": 11,
+              "port": 3,
+              "time_ns": 28264
+            },
+            {
+              "node": 17,
+              "port": 2,
+              "time_ns": 29347
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "time_ns": 30430
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "time_ns": 31513
+            }
+          ],
+          "first_packet_uid": 272,
+          "first_tx_ns": 26021,
+          "id": 14,
+          "plane": 0,
+          "port": 10014,
+          "qp_registered_ns": 26021,
+          "ready_ns": 13219,
+          "receive_ready_ns": 33105,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 39129,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48783
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48783,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 96789
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "target_callback": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": 17500,
+        "send_post_ns": 4120
+      }
+    },
+    "recovery-clean": {
+      "passed": true,
+      "finish_or_stop_ns": 122068,
+      "failure": null,
+      "completed_messages": 92,
+      "submitted_messages": 92,
+      "source_payload_bytes": 389120,
+      "final_queue_bytes": 0,
+      "queue_area_byte_ns": 43422304,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17500,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17500,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 40000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 0,
+        "timeout_retransmissions": 0
+      },
+      "source0_resources": {
+        "active_bytes": 0,
+        "active_ids": [],
+        "decision_pending": false,
+        "native_send_qps": 0,
+        "pending_bytes": 0,
+        "pending_ids": [],
+        "src": 0
+      },
+      "target_recovery_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "total_timeout_retransmissions": 0,
+      "receiver_duplicate_acks": 0,
+      "recovery_audit": {
+        "available": true,
+        "failed": false,
+        "failed_ids": [],
+        "source_states": 92,
+        "timeout_retransmissions": 0,
+        "duplicate_ack_responses": 0,
+        "reconstructed": true,
+        "scope": "offline protocol audit; no source policy access to receiver/global truth",
+        "completed": 92,
+        "exhausted": 0
+      },
+      "pending_messages": [
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 30512,
+          "admission_granted_ns": 17500,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 4,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 17583
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "time_ns": 18666
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "time_ns": 19749
+            },
+            {
+              "node": 16,
+              "port": 2,
+              "time_ns": 20832
+            },
+            {
+              "node": 14,
+              "port": 1,
+              "time_ns": 21915
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "time_ns": 22998
+            }
+          ],
+          "first_packet_uid": 175,
+          "first_tx_ns": 17583,
+          "id": 13,
+          "plane": 0,
+          "port": 10013,
+          "qp_registered_ns": 17500,
+          "ready_ns": 13219,
+          "receive_ready_ns": 24431,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 30512,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        },
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 39129,
+          "admission_granted_ns": 26021,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 6,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 26021
+            },
+            {
+              "node": 8,
+              "port": 4,
+              "time_ns": 27104
+            },
+            {
+              "node": 11,
+              "port": 3,
+              "time_ns": 28264
+            },
+            {
+              "node": 17,
+              "port": 2,
+              "time_ns": 29347
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "time_ns": 30430
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "time_ns": 31513
+            }
+          ],
+          "first_packet_uid": 272,
+          "first_tx_ns": 26021,
+          "id": 14,
+          "plane": 0,
+          "port": 10014,
+          "qp_registered_ns": 26021,
+          "ready_ns": 13219,
+          "receive_ready_ns": 33105,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 39129,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48783
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48783,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 96789
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "target_callback": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": 17500,
+        "send_post_ns": 4120
+      }
+    },
+    "native-loss": {
+      "passed": false,
+      "finish_or_stop_ns": 5000000,
+      "failure": null,
+      "completed_messages": 65,
+      "submitted_messages": 68,
+      "source_payload_bytes": 286720,
+      "final_queue_bytes": 0,
+      "queue_area_byte_ns": 34341436,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6000
+        },
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": null,
+      "source0_resources": {
+        "active_bytes": 6144,
+        "active_ids": [
+          1
+        ],
+        "decision_pending": false,
+        "native_send_qps": 1,
+        "pending_bytes": 8192,
+        "pending_ids": [
+          13,
+          14
+        ],
+        "src": 0
+      },
+      "target_recovery_events": [],
+      "total_timeout_retransmissions": 0,
+      "receiver_duplicate_acks": 0,
+      "recovery_audit": {
+        "available": false
+      },
+      "pending_messages": [
+        {
+          "ack_callbacks": 0,
+          "ack_ns": null,
+          "admission_granted_ns": null,
+          "bytes": 4096,
+          "completion_state": "awaiting_admission",
+          "dst": 4,
+          "first_packet_path": [],
+          "first_packet_uid": -1,
+          "first_tx_ns": null,
+          "id": 13,
+          "plane": 0,
+          "port": 10013,
+          "qp_registered_ns": null,
+          "ready_ns": 13219,
+          "receive_ready_ns": null,
+          "receiver_contiguous_bytes": 0,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": null,
+            "snd_una_bytes": null
+          },
+          "sender_qp_present": false,
+          "sender_resource_released_ns": null,
+          "source_data_packets": 0,
+          "source_data_payload_bytes": 0,
+          "source_unique_data_payload_bytes": 0,
+          "src": 0
+        },
+        {
+          "ack_callbacks": 0,
+          "ack_ns": null,
+          "admission_granted_ns": null,
+          "bytes": 4096,
+          "completion_state": "awaiting_admission",
+          "dst": 6,
+          "first_packet_path": [],
+          "first_packet_uid": -1,
+          "first_tx_ns": null,
+          "id": 14,
+          "plane": 0,
+          "port": 10014,
+          "qp_registered_ns": null,
+          "ready_ns": 13219,
+          "receive_ready_ns": null,
+          "receiver_contiguous_bytes": 0,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": null,
+            "snd_una_bytes": null
+          },
+          "sender_qp_present": false,
+          "sender_resource_released_ns": null,
+          "source_data_packets": 0,
+          "source_data_payload_bytes": 0,
+          "source_unique_data_payload_bytes": 0,
+          "src": 0
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 62,
+          "completed_nodes": 57
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "target_callback": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": null,
+        "send_post_ns": 4120
+      }
+    },
+    "recovery-loss": {
+      "passed": true,
+      "finish_or_stop_ns": 131105,
+      "failure": null,
+      "completed_messages": 92,
+      "submitted_messages": 92,
+      "source_payload_bytes": 389264,
+      "final_queue_bytes": 0,
+      "queue_area_byte_ns": 47206592,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 69660,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 69660,
+        "source_data_packets": 8,
+        "source_data_payload_bytes": 6288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 40000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 1,
+        "timeout_retransmissions": 1
+      },
+      "source0_resources": {
+        "active_bytes": 0,
+        "active_ids": [],
+        "decision_pending": false,
+        "native_send_qps": 0,
+        "pending_bytes": 0,
+        "pending_ids": [],
+        "src": 0
+      },
+      "target_recovery_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          69660,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "total_timeout_retransmissions": 1,
+      "receiver_duplicate_acks": 1,
+      "recovery_audit": {
+        "available": true,
+        "failed": false,
+        "failed_ids": [],
+        "source_states": 92,
+        "timeout_retransmissions": 1,
+        "duplicate_ack_responses": 1,
+        "reconstructed": true,
+        "scope": "offline protocol audit; no source policy access to receiver/global truth",
+        "completed": 92,
+        "exhausted": 0
+      },
+      "pending_messages": [
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 82691,
+          "admission_granted_ns": 69660,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 4,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 69660
+            },
+            {
+              "node": 8,
+              "port": 3,
+              "time_ns": 70743
+            },
+            {
+              "node": 10,
+              "port": 3,
+              "time_ns": 71826
+            },
+            {
+              "node": 16,
+              "port": 2,
+              "time_ns": 72909
+            },
+            {
+              "node": 14,
+              "port": 1,
+              "time_ns": 73992
+            },
+            {
+              "node": 12,
+              "port": 1,
+              "time_ns": 75075
+            }
+          ],
+          "first_packet_uid": 481,
+          "first_tx_ns": 69660,
+          "id": 13,
+          "plane": 0,
+          "port": 10013,
+          "qp_registered_ns": 69660,
+          "ready_ns": 13219,
+          "receive_ready_ns": 76667,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 82691,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        },
+        {
+          "ack_callbacks": 1,
+          "ack_ns": 82774,
+          "admission_granted_ns": 69660,
+          "bytes": 4096,
+          "completion_state": "complete",
+          "dcqcn_feedback_seen": false,
+          "dst": 6,
+          "first_packet_path": [
+            {
+              "node": 0,
+              "port": 1,
+              "time_ns": 69743
+            },
+            {
+              "node": 8,
+              "port": 4,
+              "time_ns": 70826
+            },
+            {
+              "node": 11,
+              "port": 3,
+              "time_ns": 71909
+            },
+            {
+              "node": 17,
+              "port": 2,
+              "time_ns": 72992
+            },
+            {
+              "node": 15,
+              "port": 2,
+              "time_ns": 74075
+            },
+            {
+              "node": 13,
+              "port": 1,
+              "time_ns": 75158
+            }
+          ],
+          "first_packet_uid": 484,
+          "first_tx_ns": 69743,
+          "id": 14,
+          "plane": 0,
+          "port": 10014,
+          "qp_registered_ns": 69660,
+          "ready_ns": 13219,
+          "receive_ready_ns": 76750,
+          "receiver_contiguous_bytes": 4096,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": 4096,
+            "snd_una_bytes": 4096
+          },
+          "sender_qp_present": false,
+          "sender_rate_at_ack_bps": 100000000000,
+          "sender_resource_released_ns": 82774,
+          "source_data_packets": 5,
+          "source_data_payload_bytes": 4096,
+          "source_unique_data_payload_bytes": 4096,
+          "src": 0
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 82774
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122594
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 82774,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 131105
+        }
+      ],
+      "target_callback": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": 69660,
+        "send_post_ns": 4120
+      }
+    },
+    "persistent-loss": {
+      "passed": false,
+      "finish_or_stop_ns": 297486,
+      "failure": {
+        "message_id": 1,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 297486
+      },
+      "completed_messages": 65,
+      "submitted_messages": 68,
+      "source_payload_bytes": 287008,
+      "final_queue_bytes": 0,
+      "queue_area_byte_ns": 34344604,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6000
+        },
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_packets": 9,
+        "source_data_payload_bytes": 6432,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6000,
+        "current_rto_ns": 160000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 2,
+        "source": 0,
+        "state": "retry_exhausted",
+        "timeout_expiries": 3,
+        "timeout_retransmissions": 2
+      },
+      "source0_resources": {
+        "active_bytes": 6144,
+        "active_ids": [
+          1
+        ],
+        "decision_pending": false,
+        "native_send_qps": 1,
+        "pending_bytes": 8192,
+        "pending_ids": [
+          13,
+          14
+        ],
+        "src": 0
+      },
+      "target_recovery_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          137486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          160000,
+          297486
+        ],
+        [
+          297486,
+          4,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          160000,
+          -1
+        ]
+      ],
+      "total_timeout_retransmissions": 2,
+      "receiver_duplicate_acks": 2,
+      "recovery_audit": {
+        "available": true,
+        "failed": true,
+        "failed_ids": [
+          1
+        ],
+        "source_states": 66,
+        "timeout_retransmissions": 2,
+        "duplicate_ack_responses": 2,
+        "reconstructed": true,
+        "scope": "offline protocol audit; no source policy access to receiver/global truth",
+        "completed": 65,
+        "exhausted": 1
+      },
+      "pending_messages": [
+        {
+          "ack_callbacks": 0,
+          "ack_ns": null,
+          "admission_granted_ns": null,
+          "bytes": 4096,
+          "completion_state": "awaiting_admission",
+          "dst": 4,
+          "first_packet_path": [],
+          "first_packet_uid": -1,
+          "first_tx_ns": null,
+          "id": 13,
+          "plane": 0,
+          "port": 10013,
+          "qp_registered_ns": null,
+          "ready_ns": 13219,
+          "receive_ready_ns": null,
+          "receiver_contiguous_bytes": 0,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": null,
+            "snd_una_bytes": null
+          },
+          "sender_qp_present": false,
+          "sender_resource_released_ns": null,
+          "source_data_packets": 0,
+          "source_data_payload_bytes": 0,
+          "source_unique_data_payload_bytes": 0,
+          "src": 0
+        },
+        {
+          "ack_callbacks": 0,
+          "ack_ns": null,
+          "admission_granted_ns": null,
+          "bytes": 4096,
+          "completion_state": "awaiting_admission",
+          "dst": 6,
+          "first_packet_path": [],
+          "first_packet_uid": -1,
+          "first_tx_ns": null,
+          "id": 14,
+          "plane": 0,
+          "port": 10014,
+          "qp_registered_ns": null,
+          "ready_ns": 13219,
+          "receive_ready_ns": null,
+          "receiver_contiguous_bytes": 0,
+          "sender_progress": {
+            "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+            "snd_nxt_bytes": null,
+            "snd_una_bytes": null
+          },
+          "sender_qp_present": false,
+          "sender_resource_released_ns": null,
+          "source_data_packets": 0,
+          "source_data_payload_bytes": 0,
+          "source_unique_data_payload_bytes": 0,
+          "src": 0
+        }
+      ],
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 62,
+          "completed_nodes": 57
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "target_callback": {
+        "id": 1,
+        "recv_callback_ns": 11476,
+        "recv_post_ns": 0,
+        "send_callback_ns": null,
+        "send_post_ns": 4120
+      }
+    }
+  },
+  "loss_free_execution_identical": true,
+  "common_graphs_identical": true,
+  "common_first_paths_identical": true,
+  "scope": "offline evaluation, synthetic ready-KV Decode, declared compute and RTO"
+}

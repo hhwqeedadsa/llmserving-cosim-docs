@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "build_sources_verified": 15,
+  "local_markdown_links_verified": 17,
+  "analysis_repeat_identical": true,
+  "html_repeat_identical": true,
+  "platform_commit": "0fb863a673066cf5c310d3abdadbbcaf2ed976f1",
+  "analysis_command": [
+    "python3",
+    "experiments/scaleout_recovery/analyze.py",
+    "--input",
+    "/dev/shm/moe-recovery-20261022/experiment",
+    "--output",
+    "/dev/shm/moe-recovery-20261022/analysis-repeated"
+  ],
+  "analysis_exit_code": 0,
+  "scope": "source/hash/link/repeated offline analysis; no extra simulation"
+}

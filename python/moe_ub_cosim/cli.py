@@ -37,6 +37,13 @@ def parser():
     dc.add_argument('--plan', type=Path, required=True, help='Directory from deepep-plan')
     dc.add_argument('--output', type=Path, required=True, help='New JSON file with dependency closure and blocked device kernel completions')
     dc.add_argument('--withhold', action='append', default=[], help='Exact event ID to withhold from closure; repeatable')
+    mp = sc.add_parser('modern-deepep-plan', help='Compile pinned modern direct BF16 operations with symbolic Dispatch slots; no network/GPU execution')
+    mp.add_argument('--config', type=Path, required=True, help='Fresh direct RDMA-only, expanded/local reduction and explicit launch/context declarations')
+    mp.add_argument('--output', type=Path, required=True, help='New directory for input, symbolic operation/event plan and hash manifest')
+    mc = sc.add_parser('modern-deepep-check', help='Check modern symbolic plan integrity and untimed closure; does not resolve slots or execute queues')
+    mc.add_argument('--plan', type=Path, required=True)
+    mc.add_argument('--output', type=Path, required=True, help='New JSON file')
+    mc.add_argument('--withhold', action='append', default=[], help='Exact event ID; repeatable logic probe, not packet loss')
     rb = sc.add_parser('rdma-build', help='Build independent locked ASTRA RDMA probe and online service targets; no UB')
     rb.add_argument('--output', type=Path, required=True, help='New isolated build directory on a volume with at least 8GiB free')
     rb.add_argument('--cmake', default='cmake')
@@ -126,7 +133,13 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'deepep-plan':
+            if args.scaleout_command == 'modern-deepep-plan':
+                from .modern_deepep_plan import execute
+                value = execute(args.config, args.output)
+            elif args.scaleout_command == 'modern-deepep-check':
+                from .modern_deepep_plan import check
+                value = check(args.plan, args.output, args.withhold)
+            elif args.scaleout_command == 'deepep-plan':
                 from .deepep_plan import execute
                 value = execute(args.config, args.output)
             elif args.scaleout_command == 'deepep-check':

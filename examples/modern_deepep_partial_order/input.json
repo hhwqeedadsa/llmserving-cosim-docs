@@ -1,0 +1,25 @@
+{
+  "schema_version": "moe-modern-deepep-input/1",
+  "model": {"experts": 8, "top_k": 2, "hidden_size": 256, "precision": "bf16"},
+  "execution": {
+    "ranks": 4,
+    "max_tokens_per_rank": 4,
+    "mode": "direct_rdma_only_fresh",
+    "stream": "compute_wait_no_deferred_epilogue",
+    "expanded_layout": true,
+    "allow_multiple_reduction": true,
+    "expert_alignment": 1,
+    "num_sms": 2,
+    "dispatch_warps": 2,
+    "combine_warps": 2,
+    "call_contexts": 5,
+    "requested_contexts": 5,
+    "connections": 2,
+    "local_devices": [[0, 1], [0, 1], [0, 1], [0, 1]]
+  },
+  "calls": [
+    {"name": "first", "tokens": [[[2, 3], [2, 4], [4, 6]], [[0, 4]], [], [[6, 7]]]},
+    {"name": "second", "tokens": [[[2, 3], [2, 4], [4, 6]], [[0, 4]], [], [[6, 7]]]}
+  ],
+  "limits": {"max_events": 8192, "max_operations": 2048, "max_input_bytes": 1048576, "max_output_bytes": 4194304}
+}

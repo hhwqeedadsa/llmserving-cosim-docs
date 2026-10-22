@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests/unit",
+    "-p",
+    "*deepep_plan_test.py",
+    "-v"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "exitcode": 0,
+  "wall_seconds": 0.23554041050374508,
+  "unit_tests": 16,
+  "changed_markdown_local_links": 182,
+  "stdout_path": "runs/modern_deepep_checks_20261022/unit.stdout",
+  "stderr_path": "runs/modern_deepep_checks_20261022/unit.stderr"
+}

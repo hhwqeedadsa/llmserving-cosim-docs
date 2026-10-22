@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+`modern_deepep_plan.py`通过独立公开命令编译固定现代direct的无时间操作部分顺序，保留Dispatch原子slot和由其决定的Combine通道公式；数据、计数和屏障的必要依赖与在未来运行时才可解析的顺序分别保存。它尚未驱动队列核心或下面的在线服务，使用范围见[现代计划](../examples/modern_deepep_partial_order/README.md)。
+
 `backend/rdma/gin_work_queue.hh`是独立的无时间资源核心，验证持久工作队列的槽复用、提交前缀和累计完成；尚未接入下述在线网络或现代应用计划。它的完成输入必须由未来provider回调提供，不能用作包时延、远端可见或现代库性能证据，详见[后端接口](../backend/README.md#gin工作队列功能核心)。
 
 离线的`scaleout deepep-plan`由`deepep_plan.py`生成固定DeepEP低延迟路径的应用部分顺序，区分逐专家数据、零token通知、逻辑QP上下文和计算流事件。`deepep-check`检查保存表示并计算无时间依赖闭包；它不调用前端调度、ASTRA或网络，不改变下述在线服务。接口与尚未建模的队列、完成和缓冲语义见[操作计划示例](../examples/deepep_partial_order/README.md)。

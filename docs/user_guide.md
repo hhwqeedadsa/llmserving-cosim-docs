@@ -14,6 +14,8 @@ Scale-Out[准入示例](../examples/scaleout_rdma_admission/README.md)新增`byt
 
 仅检查固定DeepEP低延迟操作依赖时，可用基础Python执行`scaleout deepep-plan`与`deepep-check`；不需要前端包、原生构建或GPU。新目录流程和零token通知反例见[操作计划示例](../examples/deepep_partial_order/README.md)，其输出不预测网络性能。
 
+现代direct分支使用独立的`scaleout modern-deepep-plan`与`modern-deepep-check`，支持BF16、目的rank去重、计数块、屏障与动态接收slot的符号表示。该入口也不执行网络或解析动态slot，不支持hybrid；输入、上限和新目录流程见[现代操作计划](../examples/modern_deepep_partial_order/README.md)。
+
 需要原生 Linux、Python 3.10 或更新版本、支持 C++20 的编译器、CMake 3.24 或更新版本、Ninja、Git、`protoc`，以及 protobuf 和 zlib 的开发库。小例使用合成输入，无需 GPU、模型权重或路由数据账户。主仓库及其维护依赖需要相应的 Git 读取权限。
 
 ```bash

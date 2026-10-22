@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+现代direct的离线`modern-deepep-plan`固定新版本源码，按目的rank去重并采用完整BF16通信布局，保留计数块、屏障和未解析的接收slot/Combine通道公式。它尚未驱动GPU、队列核心或网络，不能作为现代DeepEP时延模型；支持的分支、声明的launch参数和未验证条件见[现代计划](../examples/modern_deepep_partial_order/README.md)。下面在线rank聚合及v1说明保留各自版本范围。
+
 原生Scale-Out新增逻辑字节准入额度，用于对照不同消息大小下的软件注入控制；这不是已校准的NIC在途窗口或GPU缓冲容量。交换机队列积分来自规范化的原生BEgressQueue变化，源QP快照和阶段耗时为执行证据。默认锁定RDMA库依赖NACK触发重传，没有通用ACK超时恢复；项目可选恢复扩展见下文，不能据此推断生产RoCE可靠性。配置和覆盖范围见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 本页说明仿真中的计算、通信和容量分别依据什么、采用哪些近似，以及现有验证能支持什么结论。运行方法见[用户指南](user_guide.md)，模块与执行顺序见[系统架构](architecture.md)，完整参考场景见 [CM384 / DeepSeek-R1](scenarios/cm384_r1.md)。

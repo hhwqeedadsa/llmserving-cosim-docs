@@ -1,0 +1,924 @@
+{
+  "manifest_sha256": "caf6870f867e3307c52873a4fa1491c9225ff77f9735742b8a74313f80717a16",
+  "placements_sha256": "dcdf9220498839182591250f114d85f75bbe851e376c9bf828a82c384964d3e7",
+  "selections": [
+    [
+      [
+        66,
+        116,
+        128,
+        133,
+        141,
+        146,
+        153,
+        138
+      ],
+      [
+        123,
+        146,
+        150,
+        160,
+        175,
+        189,
+        197,
+        126
+      ],
+      [
+        21,
+        24,
+        110,
+        112,
+        113,
+        134,
+        237,
+        108
+      ],
+      [
+        24,
+        32,
+        40,
+        77,
+        84,
+        90,
+        209,
+        59
+      ]
+    ],
+    [
+      [
+        56,
+        69,
+        84,
+        86,
+        129,
+        164,
+        169,
+        42
+      ],
+      [
+        10,
+        14,
+        21,
+        47,
+        120,
+        125,
+        249,
+        31
+      ],
+      [
+        11,
+        30,
+        66,
+        89,
+        104,
+        235,
+        249,
+        79
+      ],
+      [
+        6,
+        133,
+        137,
+        142,
+        215,
+        243,
+        247,
+        149
+      ]
+    ],
+    [
+      [
+        9,
+        48,
+        54,
+        56,
+        116,
+        129,
+        142,
+        16
+      ],
+      [
+        1,
+        9,
+        42,
+        54,
+        92,
+        133,
+        151,
+        25
+      ],
+      [
+        39,
+        41,
+        50,
+        82,
+        84,
+        154,
+        171,
+        67
+      ],
+      [
+        21,
+        41,
+        52,
+        69,
+        77,
+        105,
+        126,
+        47
+      ]
+    ],
+    [
+      [
+        9,
+        32,
+        40,
+        163,
+        164,
+        202,
+        209,
+        56
+      ],
+      [
+        0,
+        134,
+        196,
+        227,
+        236,
+        250,
+        252,
+        223
+      ],
+      [
+        11,
+        16,
+        66,
+        69,
+        192,
+        221,
+        236,
+        0
+      ],
+      [
+        6,
+        20,
+        68,
+        210,
+        215,
+        243,
+        247,
+        204
+      ]
+    ]
+  ],
+  "work_source_mapping": {
+    "contiguous": [
+      {
+        "work": 1,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 2,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 4,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 6,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 8,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 9,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 12,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 14,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 17,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 18,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 19,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 20,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 23,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 24,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 25,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 28,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 30,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 33,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 34,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 35,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 36,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 39,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 40,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 41,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 44,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 45,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 49,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 51,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 52,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 54,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 55,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 56,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 57,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 60,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 61,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 1
+      }
+    ],
+    "prefill_all_lpt": [
+      {
+        "work": 1,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 2,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 3,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 4,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 6,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 7,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 8,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 9,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 12,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 13,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 14,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 17,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 18,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 19,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 20,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 22,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 24,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 25,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 27,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 3
+      },
+      {
+        "work": 28,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 29,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 30,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 33,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 34,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 35,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 36,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 38,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 39,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 40,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 41,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 43,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 3
+      },
+      {
+        "work": 44,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 45,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 46,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 49,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 50,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 51,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 54,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 55,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 56,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 57,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 59,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 3
+      },
+      {
+        "work": 61,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 62,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 2
+      }
+    ],
+    "prefill_tail10_lpt": [
+      {
+        "work": 1,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 2,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 3,
+        "entry": 1,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 4,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 6,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 7,
+        "entry": 1,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 8,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 9,
+        "entry": 1,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 12,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 13,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 14,
+        "entry": 1,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 17,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 18,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 19,
+        "entry": 2,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 20,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 22,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 23,
+        "entry": 2,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 24,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 25,
+        "entry": 2,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 28,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 29,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 30,
+        "entry": 2,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 33,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 34,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 35,
+        "entry": 3,
+        "source_rank": 0,
+        "destination_rank": 3
+      },
+      {
+        "work": 36,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 39,
+        "entry": 3,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 40,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 0
+      },
+      {
+        "work": 41,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 43,
+        "entry": 3,
+        "source_rank": 2,
+        "destination_rank": 3
+      },
+      {
+        "work": 44,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 45,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 46,
+        "entry": 3,
+        "source_rank": 3,
+        "destination_rank": 2
+      },
+      {
+        "work": 49,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 1
+      },
+      {
+        "work": 50,
+        "entry": 4,
+        "source_rank": 0,
+        "destination_rank": 2
+      },
+      {
+        "work": 52,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 0
+      },
+      {
+        "work": 54,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 2
+      },
+      {
+        "work": 55,
+        "entry": 4,
+        "source_rank": 1,
+        "destination_rank": 3
+      },
+      {
+        "work": 57,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 1
+      },
+      {
+        "work": 59,
+        "entry": 4,
+        "source_rank": 2,
+        "destination_rank": 3
+      },
+      {
+        "work": 60,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 0
+      },
+      {
+        "work": 61,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 1
+      },
+      {
+        "work": 62,
+        "entry": 4,
+        "source_rank": 3,
+        "destination_rank": 2
+      }
+    ]
+  },
+  "input_bytes": 8193641,
+  "logical_to_gpu": [
+    0,
+    2,
+    4,
+    6
+  ],
+  "raw_launch_times_observed": false,
+  "latency_calibrated": false,
+  "full_modern_library_modeled": false
+}

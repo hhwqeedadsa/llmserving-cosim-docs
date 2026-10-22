@@ -1,0 +1,82 @@
+{
+  "passed": true,
+  "switch_ports": 192,
+  "switch_ecmp_choices": 32040,
+  "packet_lineages": 7320,
+  "physical_transmissions": 39360,
+  "work_callbacks": 244,
+  "capture_events": 142800,
+  "rounds": 24,
+  "cases": [
+    {
+      "case": "all100g-contiguous",
+      "works": 35,
+      "packets": 1050,
+      "capture_events": 20700,
+      "result_sha256": "46f315c0e9e04efad690597708ca2ffd46c223dad7940866257906e275051e78"
+    },
+    {
+      "case": "all100g-prefill_all_lpt",
+      "works": 44,
+      "packets": 1320,
+      "capture_events": 25680,
+      "result_sha256": "2402534203db76b0b79f80edc6e295b1cf0e7f20548a59ba1f263827a8f6ed0f"
+    },
+    {
+      "case": "all100g-prefill_tail10_lpt",
+      "works": 43,
+      "packets": 1290,
+      "capture_events": 25020,
+      "result_sha256": "62dcd3236427df06b9f95686892f2e5e9833805c8dc0410d696e468574614fa9"
+    },
+    {
+      "case": "upper25g-contiguous",
+      "works": 35,
+      "packets": 1050,
+      "capture_events": 20700,
+      "result_sha256": "8daea1ecc6752e2f8f45c43e198eb5ff6ab10aa740f2d76c53b2f1a7f4d8f3cf"
+    },
+    {
+      "case": "upper25g-prefill_all_lpt",
+      "works": 44,
+      "packets": 1320,
+      "capture_events": 25680,
+      "result_sha256": "a6d56f5be363f8f473f23c8fe509ef142aed8477f535150e0ce4449bcfb1faf9"
+    },
+    {
+      "case": "upper25g-prefill_tail10_lpt",
+      "works": 43,
+      "packets": 1290,
+      "capture_events": 25020,
+      "result_sha256": "a5afd65c08f656a2be44ce417a9437134d973dcc72a3614da6bbd03e66179be0"
+    }
+  ],
+  "summary_sha256": "ea2db8613b850ebc4997a7652073b8adbb92a8ee29ed6044b6e6b375d8b7da76",
+  "repeat_result_byte_identical": true,
+  "repeat_analysis_byte_identical": true,
+  "independent_raw_requests": 4,
+  "independent_routes": 16,
+  "max_data_bytes_after_dequeue": 32580,
+  "native_libraries_sha256": {
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so": "04097544c76201d41a1ca80d5762b38e3fdfc4672a480d7d1f6b75bc4c38b54b",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557"
+  },
+  "platform_source_sha256": {
+    "backend/rdma/fabric.cc": "4d85b5d049c435ec4612c286caf0e2bc277dcb8a8297ad22be750b8672dd5869",
+    "backend/rdma/persistent_streams.cc": "d80ca02844bb753f0f407debc9b1243369edc8c4801b5e8df86ae3d62e87207e",
+    "backend/rdma/stream_probe.cc": "5ffe239685857c9142f5e3bdd4fd7259da68e328c8941b7afaa2e6e88597b139",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc": "cf3c49a36f658507b8241127f9a7a4c0e0ea396b10358a8106023b9d54e5f069",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25"
+  },
+  "modern_GIN_modeled": false,
+  "hardware_calibrated": false,
+  "full_inference_validated": false,
+  "goal_complete": false
+}

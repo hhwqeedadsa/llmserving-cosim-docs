@@ -1,0 +1,54 @@
+{
+  "ast_scripts_checked": 5,
+  "cli_help_scripts_checked": 5,
+  "html_local_links_checked": 9,
+  "markdown_local_links_checked": 71,
+  "archive_verified_files": 155,
+  "archive_sha256": "93b9790fcf103a08ad012971bdabc9c565f3caa4b0449472b118ab9cc914944a",
+  "archived_current_code_hashes_match": true,
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "checked": 13,
+    "main_worktree_changes_expected": true
+  },
+  "diff_check": {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  "new_task_apparent_bytes": 11455476,
+  "new_task_limit_bytes": 134217728,
+  "new_task_roots": [
+    "/dev/shm/moe-dispatch-network-review-probe-20261022",
+    "/dev/shm/moe-dispatch-network-routing-verified-20261022",
+    "/dev/shm/moe-dispatch-network-routing-check-probe-20261022",
+    "/dev/shm/moe-dispatch-network-verified-20261022",
+    "/dev/shm/moe-dispatch-network-check-fixed-probe-20261022",
+    "/dev/shm/moe-dispatch-network-check-probe-20261022",
+    "/dev/shm/moe-dispatch-network-repeat-analyzed-20261022",
+    "/dev/shm/moe-dispatch-network-repeat-analysis-probe-20261022",
+    "/dev/shm/moe-dispatch-network-analyzed-20261022",
+    "/dev/shm/moe-dispatch-network-analysis-probe-20261022",
+    "/dev/shm/moe-dispatch-network-run-20261022",
+    "/dev/shm/moe-dispatch-network-run-probe-20261022",
+    "/dev/shm/moe-dispatch-network-prepared-20261022",
+    "/dev/shm/moe-dispatch-network-prepare-probe-20261022",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/dispatch_network_20261022",
+    "/home/lry/moe-ub-cosim/runs/dispatch_network_checkpoint_20261022"
+  ],
+  "packaging_probe_in_archive": false,
+  "post_packaging_maintenance_in_archive": false,
+  "network_executed": true,
+  "gpu_executed": false,
+  "hardware_calibrated": false,
+  "goal_complete": false,
+  "git_csv_bytes_preserved": true,
+  "csv_preservation_rule": ".gitattributes: exact reviewed CSV path -text !eol whitespace=cr-at-eol"
+}

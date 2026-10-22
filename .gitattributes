@@ -2,6 +2,8 @@
 *.md text eol=lf
 # Preserve the uploaded experiment plan byte-for-byte and its documented SHA-256.
 experiments/scaleup_observability/plan_v0.1.md -text !eol
+# Keep the reviewed packet-study CSV identical to its archived SHA-256.
+docs/review_artifacts/dispatch_network_20261022/ports.csv -text !eol whitespace=cr-at-eol
 *.sh text eol=lf
 *.py text eol=lf
 *.json text eol=lf

@@ -342,3 +342,62 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
 ```
 
 归档不含自身archive.json及尚未结束的打包probe；打包资源记录单独保存。固定原件、作者源码和计算计数可复现，不代表GPU、生产请求或完整现代网络执行可以复现。
+
+## Prefill放置的包级Dispatch数据实验
+
+固定协议见[dispatch_network_protocol.md](dispatch_network_protocol.md)，结果与解释见[报告](../../docs/review_artifacts/dispatch_network_20261022/report.html)。这是EP4、层3、Decode位置1—4的六条件数据传输微基准，另固定重复一次；不执行计算、Combine、控制操作、自发GIN或现代完整库。下一轮依赖上一轮全部实际ACK。配置固定输入范围与放置SHA，不能直接改几个字段后仍把它当作同一研究；新研究须另行声明选择规则与范围。
+
+需要四份既有原件及manifest、前阶段保存的placements.json，以及按固定依赖构建的原生stream_probe。公开构建方法见[持久字节入口](../../examples/scaleout_rdma_streams/README.md)，已有可用二进制无需重建。本轮复用 `/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe`，其SHA、加载库和命令保存在结果的execution/verification中，没有安装、构建、联网或GPU执行。
+
+从仓库根执行，先将 `COSIM_DISPATCH_BACKEND` 设置为已有二进制绝对路径。每命令60秒/RSS1GiB/地址2GiB/产物64MiB，整个六条件加重复运行器同样60秒；仿真5ms，卷预留8GiB。各阶段输出须不存在，失败保存且停止，不提高限额或重跑失败的网络；代码断言不可用 `python -O` 关闭。
+
+```bash
+COSIM_DISPATCH_BACKEND=/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe
+COSIM_DISPATCH_WORK=$(mktemp -d /dev/shm/moe-dispatch-network.XXXXXX)
+dispatch_budget() {
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_DISPATCH_WORK/$1-probe" --artifact-root "$COSIM_DISPATCH_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- python3 "${@:2}"
+}
+dispatch_budget prepare experiments/paper_readiness/prepare_dispatch_network.py \
+  --manifest data/moe-trace-small/manifest.json \
+  --placements docs/review_artifacts/prefill_placement_20261022/placements.json \
+  --config experiments/paper_readiness/dispatch_network.json --source-root "$PWD" \
+  --output "$COSIM_DISPATCH_WORK/prepared"
+dispatch_budget run experiments/paper_readiness/run_dispatch_network.py \
+  --observed "$COSIM_DISPATCH_WORK/prepared/observed" --backend "$COSIM_DISPATCH_BACKEND" \
+  --output "$COSIM_DISPATCH_WORK/run"
+dispatch_budget analyze experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed "$COSIM_DISPATCH_WORK/prepared/observed" --run "$COSIM_DISPATCH_WORK/run" \
+  --output "$COSIM_DISPATCH_WORK/analysis"
+dispatch_budget repeat-analyze experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed "$COSIM_DISPATCH_WORK/prepared/observed" --run "$COSIM_DISPATCH_WORK/run" \
+  --output "$COSIM_DISPATCH_WORK/repeat-analysis"
+dispatch_budget check experiments/paper_readiness/check_dispatch_network.py \
+  --prepared "$COSIM_DISPATCH_WORK/prepared" --run "$COSIM_DISPATCH_WORK/run" \
+  --analysis "$COSIM_DISPATCH_WORK/analysis" --repeat-analysis "$COSIM_DISPATCH_WORK/repeat-analysis" \
+  --source-root "$PWD" --output "$COSIM_DISPATCH_WORK/verified"
+```
+
+输出中observed只含协议、物理配置和按目的rank去重的工作，truth保留原件身份和工作来源。分析只读取observed及公开结果，保存summary、rounds、packets.csv、ports.csv；独立检查回查原件、序号、所有数据及ACK路径、32位ECMP哈希、逐出口队列积分和回调因果。包的message_id为-1，关联使用被动源包记录、字节序号和实际端点，不向包头添加工作ID。队列积分不能当作可消除的业务损失。
+
+只读打包命令如下；若检查器曾失败，另外以 `--probe` 逐项传入失败和更正后的probe，保留原因。报告文案对应固定研究事实，不用于替换输入后的自动论文结论。
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir "$COSIM_DISPATCH_WORK/review-probe" --artifact-root "$COSIM_DISPATCH_WORK" \
+  --artifact-root docs/review_artifacts/my-dispatch-network --artifact-root runs/my-dispatch-checkpoint \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/build_dispatch_network_review.py \
+  --prepared "$COSIM_DISPATCH_WORK/prepared" --run "$COSIM_DISPATCH_WORK/run" \
+  --analysis "$COSIM_DISPATCH_WORK/analysis" --repeat-analysis "$COSIM_DISPATCH_WORK/repeat-analysis" \
+  --verified "$COSIM_DISPATCH_WORK/verified" --source-root "$PWD" \
+  --probe "$COSIM_DISPATCH_WORK/prepare-probe" --probe "$COSIM_DISPATCH_WORK/run-probe" \
+  --probe "$COSIM_DISPATCH_WORK/analyze-probe" --probe "$COSIM_DISPATCH_WORK/repeat-analyze-probe" \
+  --probe "$COSIM_DISPATCH_WORK/check-probe" \
+  --output docs/review_artifacts/my-dispatch-network --checkpoint runs/my-dispatch-checkpoint
+```
+
+归档包含原件、输入、原始包/队列结果、分析、核验、精确命令和必要脚本，逐文件校验SHA；不包含自身清单、正在运行的打包probe或原生二进制。重建应使用锁定源码和公开rdma-build，不能假设其他机器的动态库二进制hash相同。原始产物和本轮默认128MiB累计预算由记录中的artifact_roots核算；全部生产样本、硬件准确性及千卡完整推理仍未验证。

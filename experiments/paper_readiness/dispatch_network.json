@@ -1,0 +1,14 @@
+{
+  "schema_version": "moe-dispatch-data-study/1",
+  "placements_sha256": "dcdf9220498839182591250f114d85f75bbe851e376c9bf828a82c384964d3e7",
+  "source_layer": 3,
+  "decode_entries": [1, 2, 3, 4],
+  "logical_to_gpu": [0, 2, 4, 6],
+  "placement_conditions": ["contiguous", "prefill_all_lpt", "prefill_tail10_lpt"],
+  "network_profiles": {"all100g": 100000000000, "upper25g": 25000000000},
+  "token_bytes": 14464,
+  "queue_depth": 1,
+  "wire_port_base": 21000,
+  "repeat_condition": "contiguous",
+  "repeat_network": "all100g"
+}

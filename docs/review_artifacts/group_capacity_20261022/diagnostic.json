@@ -1,0 +1,740 @@
+{
+  "post_result_explanation_only": true,
+  "extra_optimization_conditions": 0,
+  "oracle_sha256": "2f11674f56758fb13f0d5bfe15e307789ed61b04eddd41a264c00dba169262df",
+  "tradeoffs": [
+    {
+      "view": "all",
+      "worse_layers": 54,
+      "equal_layers": 4,
+      "maximum_absolute_increase": 150,
+      "by_layer": [
+        {
+          "layer": 3,
+          "witness_prefill_max": 331,
+          "optimal_prefill_max": 315,
+          "increase": 16
+        },
+        {
+          "layer": 4,
+          "witness_prefill_max": 334,
+          "optimal_prefill_max": 321,
+          "increase": 13
+        },
+        {
+          "layer": 5,
+          "witness_prefill_max": 323,
+          "optimal_prefill_max": 310,
+          "increase": 13
+        },
+        {
+          "layer": 6,
+          "witness_prefill_max": 333,
+          "optimal_prefill_max": 305,
+          "increase": 28
+        },
+        {
+          "layer": 7,
+          "witness_prefill_max": 372,
+          "optimal_prefill_max": 299,
+          "increase": 73
+        },
+        {
+          "layer": 8,
+          "witness_prefill_max": 367,
+          "optimal_prefill_max": 316,
+          "increase": 51
+        },
+        {
+          "layer": 9,
+          "witness_prefill_max": 332,
+          "optimal_prefill_max": 309,
+          "increase": 23
+        },
+        {
+          "layer": 10,
+          "witness_prefill_max": 362,
+          "optimal_prefill_max": 340,
+          "increase": 22
+        },
+        {
+          "layer": 11,
+          "witness_prefill_max": 358,
+          "optimal_prefill_max": 324,
+          "increase": 34
+        },
+        {
+          "layer": 12,
+          "witness_prefill_max": 352,
+          "optimal_prefill_max": 308,
+          "increase": 44
+        },
+        {
+          "layer": 13,
+          "witness_prefill_max": 377,
+          "optimal_prefill_max": 322,
+          "increase": 55
+        },
+        {
+          "layer": 14,
+          "witness_prefill_max": 400,
+          "optimal_prefill_max": 322,
+          "increase": 78
+        },
+        {
+          "layer": 15,
+          "witness_prefill_max": 371,
+          "optimal_prefill_max": 335,
+          "increase": 36
+        },
+        {
+          "layer": 16,
+          "witness_prefill_max": 431,
+          "optimal_prefill_max": 335,
+          "increase": 96
+        },
+        {
+          "layer": 17,
+          "witness_prefill_max": 354,
+          "optimal_prefill_max": 321,
+          "increase": 33
+        },
+        {
+          "layer": 18,
+          "witness_prefill_max": 363,
+          "optimal_prefill_max": 310,
+          "increase": 53
+        },
+        {
+          "layer": 19,
+          "witness_prefill_max": 396,
+          "optimal_prefill_max": 330,
+          "increase": 66
+        },
+        {
+          "layer": 20,
+          "witness_prefill_max": 342,
+          "optimal_prefill_max": 321,
+          "increase": 21
+        },
+        {
+          "layer": 21,
+          "witness_prefill_max": 375,
+          "optimal_prefill_max": 309,
+          "increase": 66
+        },
+        {
+          "layer": 22,
+          "witness_prefill_max": 434,
+          "optimal_prefill_max": 322,
+          "increase": 112
+        },
+        {
+          "layer": 23,
+          "witness_prefill_max": 356,
+          "optimal_prefill_max": 305,
+          "increase": 51
+        },
+        {
+          "layer": 24,
+          "witness_prefill_max": 409,
+          "optimal_prefill_max": 326,
+          "increase": 83
+        },
+        {
+          "layer": 25,
+          "witness_prefill_max": 372,
+          "optimal_prefill_max": 327,
+          "increase": 45
+        },
+        {
+          "layer": 26,
+          "witness_prefill_max": 364,
+          "optimal_prefill_max": 340,
+          "increase": 24
+        },
+        {
+          "layer": 27,
+          "witness_prefill_max": 348,
+          "optimal_prefill_max": 348,
+          "increase": 0
+        },
+        {
+          "layer": 28,
+          "witness_prefill_max": 394,
+          "optimal_prefill_max": 334,
+          "increase": 60
+        },
+        {
+          "layer": 29,
+          "witness_prefill_max": 532,
+          "optimal_prefill_max": 382,
+          "increase": 150
+        },
+        {
+          "layer": 30,
+          "witness_prefill_max": 327,
+          "optimal_prefill_max": 314,
+          "increase": 13
+        },
+        {
+          "layer": 31,
+          "witness_prefill_max": 351,
+          "optimal_prefill_max": 312,
+          "increase": 39
+        },
+        {
+          "layer": 32,
+          "witness_prefill_max": 414,
+          "optimal_prefill_max": 412,
+          "increase": 2
+        },
+        {
+          "layer": 33,
+          "witness_prefill_max": 382,
+          "optimal_prefill_max": 382,
+          "increase": 0
+        },
+        {
+          "layer": 34,
+          "witness_prefill_max": 424,
+          "optimal_prefill_max": 309,
+          "increase": 115
+        },
+        {
+          "layer": 35,
+          "witness_prefill_max": 395,
+          "optimal_prefill_max": 361,
+          "increase": 34
+        },
+        {
+          "layer": 36,
+          "witness_prefill_max": 385,
+          "optimal_prefill_max": 320,
+          "increase": 65
+        },
+        {
+          "layer": 37,
+          "witness_prefill_max": 436,
+          "optimal_prefill_max": 354,
+          "increase": 82
+        },
+        {
+          "layer": 38,
+          "witness_prefill_max": 450,
+          "optimal_prefill_max": 448,
+          "increase": 2
+        },
+        {
+          "layer": 39,
+          "witness_prefill_max": 437,
+          "optimal_prefill_max": 336,
+          "increase": 101
+        },
+        {
+          "layer": 40,
+          "witness_prefill_max": 408,
+          "optimal_prefill_max": 317,
+          "increase": 91
+        },
+        {
+          "layer": 41,
+          "witness_prefill_max": 380,
+          "optimal_prefill_max": 330,
+          "increase": 50
+        },
+        {
+          "layer": 42,
+          "witness_prefill_max": 339,
+          "optimal_prefill_max": 339,
+          "increase": 0
+        },
+        {
+          "layer": 43,
+          "witness_prefill_max": 321,
+          "optimal_prefill_max": 321,
+          "increase": 0
+        },
+        {
+          "layer": 44,
+          "witness_prefill_max": 386,
+          "optimal_prefill_max": 329,
+          "increase": 57
+        },
+        {
+          "layer": 45,
+          "witness_prefill_max": 394,
+          "optimal_prefill_max": 317,
+          "increase": 77
+        },
+        {
+          "layer": 46,
+          "witness_prefill_max": 538,
+          "optimal_prefill_max": 405,
+          "increase": 133
+        },
+        {
+          "layer": 47,
+          "witness_prefill_max": 358,
+          "optimal_prefill_max": 325,
+          "increase": 33
+        },
+        {
+          "layer": 48,
+          "witness_prefill_max": 404,
+          "optimal_prefill_max": 332,
+          "increase": 72
+        },
+        {
+          "layer": 49,
+          "witness_prefill_max": 358,
+          "optimal_prefill_max": 352,
+          "increase": 6
+        },
+        {
+          "layer": 50,
+          "witness_prefill_max": 354,
+          "optimal_prefill_max": 315,
+          "increase": 39
+        },
+        {
+          "layer": 51,
+          "witness_prefill_max": 326,
+          "optimal_prefill_max": 302,
+          "increase": 24
+        },
+        {
+          "layer": 52,
+          "witness_prefill_max": 349,
+          "optimal_prefill_max": 332,
+          "increase": 17
+        },
+        {
+          "layer": 53,
+          "witness_prefill_max": 338,
+          "optimal_prefill_max": 309,
+          "increase": 29
+        },
+        {
+          "layer": 54,
+          "witness_prefill_max": 376,
+          "optimal_prefill_max": 354,
+          "increase": 22
+        },
+        {
+          "layer": 55,
+          "witness_prefill_max": 425,
+          "optimal_prefill_max": 316,
+          "increase": 109
+        },
+        {
+          "layer": 56,
+          "witness_prefill_max": 444,
+          "optimal_prefill_max": 410,
+          "increase": 34
+        },
+        {
+          "layer": 57,
+          "witness_prefill_max": 374,
+          "optimal_prefill_max": 311,
+          "increase": 63
+        },
+        {
+          "layer": 58,
+          "witness_prefill_max": 422,
+          "optimal_prefill_max": 353,
+          "increase": 69
+        },
+        {
+          "layer": 59,
+          "witness_prefill_max": 414,
+          "optimal_prefill_max": 360,
+          "increase": 54
+        },
+        {
+          "layer": 60,
+          "witness_prefill_max": 336,
+          "optimal_prefill_max": 325,
+          "increase": 11
+        }
+      ]
+    },
+    {
+      "view": "tail10",
+      "worse_layers": 56,
+      "equal_layers": 2,
+      "maximum_absolute_increase": 47,
+      "by_layer": [
+        {
+          "layer": 3,
+          "witness_prefill_max": 92,
+          "optimal_prefill_max": 83,
+          "increase": 9
+        },
+        {
+          "layer": 4,
+          "witness_prefill_max": 84,
+          "optimal_prefill_max": 81,
+          "increase": 3
+        },
+        {
+          "layer": 5,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 76,
+          "increase": 11
+        },
+        {
+          "layer": 6,
+          "witness_prefill_max": 80,
+          "optimal_prefill_max": 78,
+          "increase": 2
+        },
+        {
+          "layer": 7,
+          "witness_prefill_max": 93,
+          "optimal_prefill_max": 79,
+          "increase": 14
+        },
+        {
+          "layer": 8,
+          "witness_prefill_max": 96,
+          "optimal_prefill_max": 86,
+          "increase": 10
+        },
+        {
+          "layer": 9,
+          "witness_prefill_max": 88,
+          "optimal_prefill_max": 80,
+          "increase": 8
+        },
+        {
+          "layer": 10,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 77,
+          "increase": 10
+        },
+        {
+          "layer": 11,
+          "witness_prefill_max": 94,
+          "optimal_prefill_max": 73,
+          "increase": 21
+        },
+        {
+          "layer": 12,
+          "witness_prefill_max": 100,
+          "optimal_prefill_max": 76,
+          "increase": 24
+        },
+        {
+          "layer": 13,
+          "witness_prefill_max": 117,
+          "optimal_prefill_max": 78,
+          "increase": 39
+        },
+        {
+          "layer": 14,
+          "witness_prefill_max": 113,
+          "optimal_prefill_max": 91,
+          "increase": 22
+        },
+        {
+          "layer": 15,
+          "witness_prefill_max": 103,
+          "optimal_prefill_max": 86,
+          "increase": 17
+        },
+        {
+          "layer": 16,
+          "witness_prefill_max": 97,
+          "optimal_prefill_max": 76,
+          "increase": 21
+        },
+        {
+          "layer": 17,
+          "witness_prefill_max": 94,
+          "optimal_prefill_max": 85,
+          "increase": 9
+        },
+        {
+          "layer": 18,
+          "witness_prefill_max": 80,
+          "optimal_prefill_max": 76,
+          "increase": 4
+        },
+        {
+          "layer": 19,
+          "witness_prefill_max": 108,
+          "optimal_prefill_max": 82,
+          "increase": 26
+        },
+        {
+          "layer": 20,
+          "witness_prefill_max": 82,
+          "optimal_prefill_max": 82,
+          "increase": 0
+        },
+        {
+          "layer": 21,
+          "witness_prefill_max": 112,
+          "optimal_prefill_max": 96,
+          "increase": 16
+        },
+        {
+          "layer": 22,
+          "witness_prefill_max": 95,
+          "optimal_prefill_max": 83,
+          "increase": 12
+        },
+        {
+          "layer": 23,
+          "witness_prefill_max": 86,
+          "optimal_prefill_max": 78,
+          "increase": 8
+        },
+        {
+          "layer": 24,
+          "witness_prefill_max": 88,
+          "optimal_prefill_max": 79,
+          "increase": 9
+        },
+        {
+          "layer": 25,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 79,
+          "increase": 8
+        },
+        {
+          "layer": 26,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 76,
+          "increase": 11
+        },
+        {
+          "layer": 27,
+          "witness_prefill_max": 83,
+          "optimal_prefill_max": 79,
+          "increase": 4
+        },
+        {
+          "layer": 28,
+          "witness_prefill_max": 97,
+          "optimal_prefill_max": 93,
+          "increase": 4
+        },
+        {
+          "layer": 29,
+          "witness_prefill_max": 120,
+          "optimal_prefill_max": 73,
+          "increase": 47
+        },
+        {
+          "layer": 30,
+          "witness_prefill_max": 83,
+          "optimal_prefill_max": 80,
+          "increase": 3
+        },
+        {
+          "layer": 31,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 81,
+          "increase": 6
+        },
+        {
+          "layer": 32,
+          "witness_prefill_max": 102,
+          "optimal_prefill_max": 102,
+          "increase": 0
+        },
+        {
+          "layer": 33,
+          "witness_prefill_max": 91,
+          "optimal_prefill_max": 84,
+          "increase": 7
+        },
+        {
+          "layer": 34,
+          "witness_prefill_max": 88,
+          "optimal_prefill_max": 80,
+          "increase": 8
+        },
+        {
+          "layer": 35,
+          "witness_prefill_max": 99,
+          "optimal_prefill_max": 77,
+          "increase": 22
+        },
+        {
+          "layer": 36,
+          "witness_prefill_max": 88,
+          "optimal_prefill_max": 75,
+          "increase": 13
+        },
+        {
+          "layer": 37,
+          "witness_prefill_max": 101,
+          "optimal_prefill_max": 82,
+          "increase": 19
+        },
+        {
+          "layer": 38,
+          "witness_prefill_max": 97,
+          "optimal_prefill_max": 87,
+          "increase": 10
+        },
+        {
+          "layer": 39,
+          "witness_prefill_max": 96,
+          "optimal_prefill_max": 81,
+          "increase": 15
+        },
+        {
+          "layer": 40,
+          "witness_prefill_max": 94,
+          "optimal_prefill_max": 75,
+          "increase": 19
+        },
+        {
+          "layer": 41,
+          "witness_prefill_max": 92,
+          "optimal_prefill_max": 80,
+          "increase": 12
+        },
+        {
+          "layer": 42,
+          "witness_prefill_max": 76,
+          "optimal_prefill_max": 74,
+          "increase": 2
+        },
+        {
+          "layer": 43,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 85,
+          "increase": 2
+        },
+        {
+          "layer": 44,
+          "witness_prefill_max": 84,
+          "optimal_prefill_max": 83,
+          "increase": 1
+        },
+        {
+          "layer": 45,
+          "witness_prefill_max": 85,
+          "optimal_prefill_max": 77,
+          "increase": 8
+        },
+        {
+          "layer": 46,
+          "witness_prefill_max": 110,
+          "optimal_prefill_max": 85,
+          "increase": 25
+        },
+        {
+          "layer": 47,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 74,
+          "increase": 13
+        },
+        {
+          "layer": 48,
+          "witness_prefill_max": 113,
+          "optimal_prefill_max": 81,
+          "increase": 32
+        },
+        {
+          "layer": 49,
+          "witness_prefill_max": 84,
+          "optimal_prefill_max": 73,
+          "increase": 11
+        },
+        {
+          "layer": 50,
+          "witness_prefill_max": 92,
+          "optimal_prefill_max": 78,
+          "increase": 14
+        },
+        {
+          "layer": 51,
+          "witness_prefill_max": 87,
+          "optimal_prefill_max": 75,
+          "increase": 12
+        },
+        {
+          "layer": 52,
+          "witness_prefill_max": 103,
+          "optimal_prefill_max": 77,
+          "increase": 26
+        },
+        {
+          "layer": 53,
+          "witness_prefill_max": 91,
+          "optimal_prefill_max": 76,
+          "increase": 15
+        },
+        {
+          "layer": 54,
+          "witness_prefill_max": 86,
+          "optimal_prefill_max": 80,
+          "increase": 6
+        },
+        {
+          "layer": 55,
+          "witness_prefill_max": 91,
+          "optimal_prefill_max": 86,
+          "increase": 5
+        },
+        {
+          "layer": 56,
+          "witness_prefill_max": 85,
+          "optimal_prefill_max": 84,
+          "increase": 1
+        },
+        {
+          "layer": 57,
+          "witness_prefill_max": 100,
+          "optimal_prefill_max": 88,
+          "increase": 12
+        },
+        {
+          "layer": 58,
+          "witness_prefill_max": 96,
+          "optimal_prefill_max": 76,
+          "increase": 20
+        },
+        {
+          "layer": 59,
+          "witness_prefill_max": 89,
+          "optimal_prefill_max": 85,
+          "increase": 4
+        },
+        {
+          "layer": 60,
+          "witness_prefill_max": 97,
+          "optimal_prefill_max": 77,
+          "increase": 20
+        }
+      ]
+    }
+  ],
+  "compute_input_distributions": {
+    "oracle_witness": {
+      "count": 7424,
+      "minimum": 8,
+      "maximum": 22,
+      "p50": 12,
+      "p95": 14,
+      "p99": 16
+    },
+    "contiguous": {
+      "count": 7424,
+      "minimum": 8,
+      "maximum": 22,
+      "p50": 12,
+      "p95": 15,
+      "p99": 17
+    }
+  },
+  "reads_future_decode": true,
+  "deployable": false,
+  "latency_predicted": false
+}

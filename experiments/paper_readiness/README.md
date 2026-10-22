@@ -572,3 +572,42 @@ eplb_stage check python3 experiments/paper_readiness/check_eplb_groups.py \
 `collect_topology_baselines.py`默认只读NeurIPS2022目录与ExFlow精确标题的arXiv元数据；`--source NAME=HTTPS_URL`用于从前一步实际取得的精确链接取文，单批最多3请求。各响应2MiB/20秒，整轮累计16MiB，由host_probe限60秒；不重试、换源、执行下载代码或初始化依赖。本轮TA-MoE正文/补充及固定gate、EPLB固定README/源码已取得，ExFlow PDF超大小上限未取得；复现指标不重新联网。
 
 `build_eplb_review.py --work 工作目录 --source-group NAME=目录 --source-probe PROBE目录 --output 仓库内新报告目录 --checkpoint 仓库内新归档目录`生成固定本轮报告与逐文件hash检查点。`--source-group`必须提供`discovery/primary/paper/commits/trees/code`六项，source probe按六阶段分别传入。它要求prepare/plan/evaluate/repeat-plan/check五个probe与核验结果，单独用同样预算的host_probe包裹，并将报告/归档路径加入artifact-root。报告对应固定事实，不能用任意新输入自动生成原结论。
+
+## 整组容量约束的精确空间
+
+[协议](group_capacity_protocol.md)先限定可行域：8逻辑组两两配对、4rank各64专家、零冗余、每层放置在128位置内不变；[结果HTML](../../docs/review_artifacts/group_capacity_20261022/report.html)说明为何原Prefill计数目标已最优，而未来Decode oracle仍有有限空间。oracle明确读取truth和未来数据，不是可部署方法，不报告时延或论文收益。
+
+原始四文件仍按manifest恢复到`data/moe-trace-small/`。参考分层放置可从已核验的上轮持久检查点中读取指定成员；下面所有路径均须新建，在仓库根执行。根卷不足8GiB预留时，不把大结果/归档写到根卷，保持相同预算，使用空间充足的/dev/shm。它是易失临时存储，不能称为持久备份。
+
+```bash
+COSIM_GROUP_WORK=/dev/shm/my-group-capacity
+mkdir "$COSIM_GROUP_WORK"
+tar -xOf runs/eplb_groups_checkpoint_20261022/checkpoint.tar.gz \
+  saved_run/planned/placements.json > "$COSIM_GROUP_WORK/reference_placements.json"
+group_stage() {
+  local group_stage_name=$1
+  shift
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_GROUP_WORK/$group_stage_name-probe" --artifact-root "$COSIM_GROUP_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+group_stage prepare python3 experiments/paper_readiness/prepare_placement_baselines.py \
+  --manifest data/moe-trace-small/manifest.json --output "$COSIM_GROUP_WORK/prepared"
+group_stage enumerate python3 experiments/paper_readiness/group_capacity_oracle.py enumerate \
+  --prepared "$COSIM_GROUP_WORK/prepared" --reference-placements "$COSIM_GROUP_WORK/reference_placements.json" \
+  --output "$COSIM_GROUP_WORK/enumerated"
+group_stage optimize python3 experiments/paper_readiness/group_capacity_oracle.py optimize \
+  --candidates "$COSIM_GROUP_WORK/enumerated" --output "$COSIM_GROUP_WORK/optimized"
+cp -r "$COSIM_GROUP_WORK/enumerated" "$COSIM_GROUP_WORK/relocated-candidates"
+group_stage repeat-optimize python3 experiments/paper_readiness/group_capacity_oracle.py optimize \
+  --candidates "$COSIM_GROUP_WORK/relocated-candidates" --output "$COSIM_GROUP_WORK/repeat-optimized"
+group_stage check python3 experiments/paper_readiness/check_group_capacity.py \
+  --work "$COSIM_GROUP_WORK" --repeat "$COSIM_GROUP_WORK/repeat-optimized" --output "$COSIM_GROUP_WORK/verified"
+group_stage diagnostic python3 experiments/paper_readiness/analyze_group_witness.py \
+  --work "$COSIM_GROUP_WORK" --output "$COSIM_GROUP_WORK/diagnostic"
+```
+
+每命令60秒/RSS1GiB/地址2GiB、单阶段32MiB、新产物64MiB/累计128MiB、预留8GiB；失败不抬限或重跑失败阶段。enumerate保存全部6090候选及Prefill最优值，optimize对69409副本预算/371超阈窗口求界。独立checker从四原件重算，使用不同配对枚举、指派DP与Pareto前沿；diagnostic只解释已选见证的Prefill代价与已有直方图，不增加优化条件。正式本轮仅迁移候选表、换cwd重复求界，oracle.json字节一致。
+
+固定结果打包入口为`build_group_capacity_review.py --work 工作目录 --output 仓库内新报告目录 --checkpoint 工作目录内的新检查点目录`；需要上述六个成功probe和重复核验，外层同样用host_probe，报告和checkpoint加入artifact-root。打包器要求checkpoint在work内且位于/dev/shm以保持产物卷预留；Git清单明确记录`tmpfs_volatile`，不将其当成持久备份。它核hash后归档原件、全部候选、见证、证书与脚本，不重跑网络或GPU。

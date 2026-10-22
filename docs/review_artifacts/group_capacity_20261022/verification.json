@@ -1,0 +1,26 @@
+{
+  "completed": true,
+  "raw_source_hashes": [
+    "3085c39e9b9950a7e68f30eed8517eaecbfe3d0ad75d813925ff788a1c164255",
+    "c8c9cf4917498a2195960dbd9c65e9efe027af6606db098d40b0db8f7c266092",
+    "848633cf8afa1c9247d9cdaf5968bb09a5f2e2d409387f4a333ce7a6e35390cd",
+    "265c8e66cfb49da12be0d8037cd7a8be6997f4207bcb0a48ca3c616bbe253b96"
+  ],
+  "canonical_permutations": 40320,
+  "distinct_pairings": 105,
+  "candidates_checked": 6090,
+  "assignment_dp_checks": 6090,
+  "compute_windows_checked": 779520,
+  "witness_windows_checked": 7424,
+  "baseline_windows_checked": 7424,
+  "repeat_files": 1,
+  "oracle_sha256": "2f11674f56758fb13f0d5bfe15e307789ed61b04eddd41a264c00dba169262df",
+  "candidates_sha256": "1fe10e77fe1b53b81fd619418c31a1fc4dc0182448ac8be62e9666e54c868830",
+  "checker_sha256": "a5ff846aeba815876b61503038b351a7d33cdeece497e80917870758fe30ab2d",
+  "best_p95": 14,
+  "witness_copies": 66676,
+  "reads_future_decode": true,
+  "deployable": false,
+  "network_executed": false,
+  "hardware_calibrated": false
+}

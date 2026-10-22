@@ -1,0 +1,103 @@
+{
+  "pareto_threshold_checks": [
+    {
+      "threshold": 11,
+      "minimum_copies": null,
+      "feasible": false,
+      "peak_states": 49,
+      "transitions": 9377
+    },
+    {
+      "threshold": 13,
+      "minimum_copies": null,
+      "feasible": false,
+      "peak_states": 130,
+      "transitions": 139975
+    },
+    {
+      "threshold": 14,
+      "minimum_copies": 66676,
+      "feasible": true,
+      "exceedances": 371,
+      "peak_states": 230,
+      "transitions": 667259
+    },
+    {
+      "threshold": 20,
+      "minimum_copies": 64998,
+      "feasible": true,
+      "exceedances": 6,
+      "peak_states": 7,
+      "transitions": 12453
+    },
+    {
+      "threshold": 32,
+      "minimum_copies": 64998,
+      "feasible": true,
+      "exceedances": 0,
+      "peak_states": 1,
+      "transitions": 3118
+    }
+  ],
+  "minimum_exceedances_without_copy_budget": {
+    "8": 7289,
+    "9": 6447,
+    "10": 4875,
+    "11": 3127,
+    "12": 1696,
+    "13": 793,
+    "14": 308,
+    "15": 80,
+    "16": 7,
+    "17": 2,
+    "18": 0,
+    "19": 0,
+    "20": 0,
+    "21": 0,
+    "22": 0,
+    "23": 0,
+    "24": 0,
+    "25": 0,
+    "26": 0,
+    "27": 0,
+    "28": 0,
+    "29": 0,
+    "30": 0,
+    "31": 0,
+    "32": 0
+  },
+  "minimum_total_copies_without_compute_constraint": 64998,
+  "witness_histogram": {
+    "8": 15,
+    "9": 556,
+    "10": 1374,
+    "11": 1730,
+    "12": 1603,
+    "13": 1094,
+    "14": 681,
+    "15": 188,
+    "16": 115,
+    "17": 34,
+    "18": 27,
+    "19": 3,
+    "20": 3,
+    "22": 1
+  },
+  "baseline_histogram": {
+    "8": 23,
+    "9": 503,
+    "10": 1311,
+    "11": 1659,
+    "12": 1496,
+    "13": 1053,
+    "14": 639,
+    "15": 387,
+    "16": 189,
+    "17": 101,
+    "18": 42,
+    "19": 15,
+    "20": 4,
+    "21": 1,
+    "22": 1
+  }
+}

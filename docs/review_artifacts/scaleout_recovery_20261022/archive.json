@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "source_root": "/dev/shm/moe-recovery-20261022",
+  "backup": "/home/lry/moe-ub-cosim/runs/scaleout_recovery_20261022/evidence.tar.gz",
+  "archive_bytes": 11646956,
+  "archive_sha256": "a49721c39057f7621c5658c00bf9b590cfc96874e733dc4252d625e202289ba6",
+  "verified_regular_files": 2823,
+  "manifest": "moe-recovery-20261022/archive-manifest.json",
+  "scope": "local ignored compressed backup, not remote backup; includes original failures, source snapshots and build evidence, not full native libraries"
+}

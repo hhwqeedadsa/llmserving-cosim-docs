@@ -8,9 +8,9 @@ namespace moe_cosim {
 class RetransmissionTimer {
  public:
   enum class Expiry { Retry, Exhausted };
-  RetransmissionTimer(uint64_t bytes,int64_t initial,int64_t maximum,unsigned retries):
-      bytes_(bytes),initial_(initial),maximum_(maximum),rto_(initial),limit_(retries) {
-    if(!bytes || initial<1 || maximum<initial || maximum>1000000000 || retries<1 || retries>16)
+  RetransmissionTimer(uint64_t bytes,int64_t initial,int64_t maximum,unsigned retries,int64_t minimum=0):
+      bytes_(bytes),initial_(initial),minimum_(minimum?minimum:initial),maximum_(maximum),rto_(initial),limit_(retries) {
+    if(!bytes || minimum_<1 || initial<minimum_ || maximum<initial || maximum>1000000000 || retries<1 || retries>16)
       throw std::invalid_argument("Invalid declared retransmission timer bounds");
   }
   void Sent(uint64_t end,int64_t now) {
@@ -19,11 +19,13 @@ class RetransmissionTimer {
     high_=std::max(high_,end);
     if(deadline_<0 && high_>ack_)deadline_=now+rto_;
   }
-  bool Confirm(uint64_t ack,int64_t now) {
+  bool Confirm(uint64_t ack,int64_t now,int64_t reset_rto=0) {
     Time(now);
     if(failed_ || ack>high_)throw std::logic_error("ACK exceeds actually transmitted source bytes");
     if(ack<=ack_)return false; // Duplicate or stale feedback never postpones timeout.
-    ack_=ack;retries_=0;rto_=initial_;
+    const auto next=reset_rto?reset_rto:initial_;
+    if(next<minimum_ || next>maximum_)throw std::logic_error("ACK reset RTO outside declared bounds");
+    ack_=ack;retries_=0;rto_=next;
     deadline_=high_>ack_?now+rto_:-1;
     return true;
   }
@@ -51,7 +53,7 @@ class RetransmissionTimer {
     now_=now;
   }
   uint64_t bytes_,ack_=0,high_=0,total_=0,expiries_=0;
-  int64_t initial_,maximum_,rto_,deadline_=-1,now_=0;
+  int64_t initial_,minimum_,maximum_,rto_,deadline_=-1,now_=0;
   unsigned limit_,retries_=0;
   bool failed_=false;
 };

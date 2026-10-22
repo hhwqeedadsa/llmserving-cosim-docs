@@ -1,0 +1,270 @@
+{
+  "run_root": "/dev/shm/moe-fragility-20261022",
+  "adaptive": {
+    "passed": true,
+    "probe_cases": 10,
+    "service_cases": 3,
+    "source_only_rtt_replay": true,
+    "conservative_karn_ambiguity": true,
+    "finite_silence_bound": true,
+    "short_initial_rto_bootstrap_limit_observed": true,
+    "capture_invariant": true,
+    "dual_plane_estimator_isolation": true
+  },
+  "fixed_regression": {
+    "passed": true,
+    "probe_cases": 19,
+    "service_cases": 5,
+    "default_native_equivalence": true,
+    "lossless_extension_equivalence": true,
+    "tail_ack_nack_recovery": true,
+    "late_duplicate_feedback_once": true,
+    "finite_retry_terminal_failure": true,
+    "pending_credit_resumes": true,
+    "receiver_duplicate_ack_is_real_packet": true,
+    "capture_invariance": true,
+    "network_and_timer_drain": true,
+    "exact_deadline_feedback": true,
+    "simulation_limit_distinct_from_retry_failure": true,
+    "dual_plane_timer_isolation": true,
+    "intra_host_excluded": true
+  },
+  "formal": {
+    "passed": true,
+    "states": 1602,
+    "transitions": 28692,
+    "terminal_complete_states": 270,
+    "terminal_failed_states": 31,
+    "scope": "bounded production-core exploration, not unbounded proof or native NIC verification"
+  },
+  "unit_cases": 66,
+  "cpp_programs": 4,
+  "cases": {
+    "clean": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "9859b4cdc8368eac7e18476d10b896cd761745ec02afc118659561b5453530e0",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 0,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 12771,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "sender_resource_released_ns": 12771,
+        "source_data_payload_bytes": 4000
+      }
+    },
+    "final-ack": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "766923e1465b394e771f21160133e6375873e589f648a84ed385403e6cd097be",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 62776,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "sender_resource_released_ns": 62776,
+        "source_data_payload_bytes": 5000
+      }
+    },
+    "tail": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "fcd232763f16ed4daa54af602552bf4f365769aa5062b7981d34a87ddef2a14e",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 62776,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 56752,
+        "sender_resource_released_ns": 62776,
+        "source_data_payload_bytes": 5000
+      }
+    },
+    "lost-nack": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "4fc386a505ae489c642b7bf1ad8625228dd7aae68711e4cbf0cedc188663d1fd",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 62776,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 56752,
+        "sender_resource_released_ns": 62776,
+        "source_data_payload_bytes": 7000
+      }
+    },
+    "repeated-data": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "c2ec7495ab3eed91b66963014b508a0db0b0b2dd6356723432ec59b884dcc8ca",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 62776,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 56752,
+        "sender_resource_released_ns": 62776,
+        "source_data_payload_bytes": 10000
+      }
+    },
+    "persistent": {
+      "passed": false,
+      "finish_ns": 275650,
+      "failure": {
+        "message_id": 50000,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 275650
+      },
+      "result_sha256": "ab3185a100dd5bfc0a793986900c289a2fa9de33e8de4adf9fcaa2c28f192b0c",
+      "source_states": 1,
+      "rtt_samples": 1,
+      "timeout_retransmissions": 2,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "sender_resource_released_ns": null,
+        "source_data_payload_bytes": 6000
+      }
+    },
+    "short": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "d19135aa883d3b532281dad302ef651598805742c29823de2f7f54b36b7ecbad",
+      "source_states": 1,
+      "rtt_samples": 0,
+      "timeout_retransmissions": 2,
+      "discarded_probes": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 12771,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "sender_resource_released_ns": 12771,
+        "source_data_payload_bytes": 12000
+      }
+    },
+    "dual": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "failure": null,
+      "result_sha256": "03042b724cffae74cb43f8a33f4caf047f5773c0dd21e03240d44ce97bba21ab",
+      "source_states": 2,
+      "rtt_samples": 2,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 41906,
+        "bytes": 4000,
+        "id": 0,
+        "receive_ready_ns": 4581,
+        "sender_resource_released_ns": 41906,
+        "source_data_payload_bytes": 5000
+      }
+    },
+    "service-clean": {
+      "passed": true,
+      "finish_ns": 248176,
+      "failure": null,
+      "result_sha256": "7ecda9004b925d3230d60d2f95519904a36bdcf12dd6511ff5ef0f4f9647e579",
+      "source_states": 160,
+      "rtt_samples": 160,
+      "timeout_retransmissions": 0,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 8460,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "sender_resource_released_ns": 8460,
+        "source_data_payload_bytes": 2048
+      }
+    },
+    "service-ack": {
+      "passed": true,
+      "finish_ns": 254866,
+      "failure": null,
+      "result_sha256": "d0148dd18026e2ef8ab80d4f9841be83b3fd6d400ac3dd7edc2e733db4b8aaca",
+      "source_states": 160,
+      "rtt_samples": 160,
+      "timeout_retransmissions": 1,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 25000,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "sender_resource_released_ns": 25000,
+        "source_data_payload_bytes": 2096
+      }
+    },
+    "service-persistent": {
+      "passed": false,
+      "finish_ns": 96110,
+      "failure": {
+        "message_id": 0,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 96110
+      },
+      "result_sha256": "b86ab8239866ee87594e7afe4a9b80aa8fbe442570be1cfb50ce71660b6b519c",
+      "source_states": 46,
+      "rtt_samples": 44,
+      "timeout_retransmissions": 2,
+      "discarded_probes": 0,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "sender_resource_released_ns": null,
+        "source_data_payload_bytes": 2144
+      }
+    }
+  },
+  "public_service": {
+    "passed": true,
+    "messages": 628,
+    "verified_nodes": 1512,
+    "waves": 4,
+    "finish_ns": 976709
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "moe-scaleout-rdma/1",
+  "cc_mode": 1,
+  "payload_bytes": 1000,
+  "chunk_bytes": 4000,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "100000000000": {
+      "kmin_bytes": 32768,
+      "kmax_bytes": 131072,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "admission": {
+    "policy": "fifo",
+    "max_active_per_source": 1,
+    "decision_ns": 0
+  },
+  "lifecycle_capture": {
+    "max_events": 100000
+  },
+  "queue_metrics": true,
+  "packet_capture": {
+    "nodes": [],
+    "start_ns": 0,
+    "end_ns": 5000000,
+    "max_events": 100000
+  },
+  "recovery": {
+    "mode": "go_back_n",
+    "initial_rto_ns": 2000,
+    "max_rto_ns": 64000,
+    "max_retries": 8,
+    "max_events": 100000,
+    "rtt_estimator": {
+      "kind": "karn",
+      "min_rto_ns": 1000,
+      "granularity_ns": 1
+    }
+  }
+}

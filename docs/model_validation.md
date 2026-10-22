@@ -28,9 +28,9 @@
 
 [恢复示例](../examples/scaleout_rdma_recovery/README.md)明确声明字节序号 Go-Back-N 行为：实际发送后计时，源端只使用实际累计 ACK；新进展重置超时，旧反馈不延期，超时倍增并限制重试。接收端只根据自己的连续接收序号识别完整重复包，按原生 ACK 包格式重新确认。源端不读取接收端或交换机真值。实际发送仍由锁定原生 NIC 的仲裁、速率和 PFC 决定。
 
-计时原则参考 [RFC 6298 第5节](https://www.rfc-editor.org/rfc/rfc6298#section-5)，它是 TCP 文献，仅用于说明 ACK 进展和退避原则；本扩展未实现其 RTT 估计或 TCP 拥塞控制。[Linux v6.12 RXE 接收器 duplicate_request](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c#L1275)在重复 SEND/WRITE 时重新发送 ACK，[RXE 完成器](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c#L771)对未确认请求有限重试并在耗尽时报告错误。这些源码支持重试/重复确认的设计动机，不表示本实现复刻了 RXE 的 PSN、重试状态机或生产网卡。
+计时原则参考 [RFC 6298 第5节](https://www.rfc-editor.org/rfc/rfc6298#section-5)，它是 TCP 文献，仅用于说明 ACK 进展和退避原则；固定模式不估计RTT；新增可选估计采用相同平滑原则，但采样、舍入和超时下限另有明确声明，不实现TCP拥塞控制。[Linux v6.12 RXE 接收器 duplicate_request](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c#L1275)在重复 SEND/WRITE 时重新发送 ACK，[RXE 完成器](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c#L771)对未确认请求有限重试并在耗尽时报告错误。这些源码支持重试/重复确认的设计动机，不表示本实现复刻了 RXE 的 PSN、重试状态机或生产网卡。
 
-功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。尚缺硬件 RTO 校准、自适应超时、真实通信库分块、QP 复用和千卡故障执行证据。
+功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现，尚缺硬件RTO校准、跨QP历史、真实通信库分块、QP复用和千卡故障执行证据。
 
 ### 完整 Decode 图
 

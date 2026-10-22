@@ -354,3 +354,13 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 `inflight_packets` 为当前已发出但尚未被下一跳接收/丢弃的逐跳包数，只用于最终排空，不参与发送端恢复。服务完成还要求源计时器、发送 QP、软件额度、交换机队列和 ACK 队列排空。`failure.reason=recovery_retry_exhausted` 带失败消息与时刻；`simulation_time_limit` 单独表示预算到期。失败时保留原始未完成消息与占用额度，不把它们填成正常完成或释放。
 
 `scaleout rdma-diagnose` 离线读取这些字段；它与端口、接收端、图依赖的关联属于评价真值，不能直接输入在线策略。公开配置和运行见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
+
+### 可选RTT采样及条件证据
+
+仅在`recovery.rtt_estimator`显式配置时，源状态增加`rtt`：`samples`为有效样本数，`discarded_probes`为作废的待测包数；`srtt_ns`、`rttvar_ns`、`base_rto_ns`单位为ns，未取得样本时前两项为0、基准为初始值。`ambiguity_until_bytes`为重传歧义屏障；`probe_end_bytes`为最近待测包末字节，`probe_sent_ns=-1`表示当前没有活动测量。每QP独立，不共享接收端或其他QP的估计。
+
+`rtt_events`列为`[time_ns,event,message_id,start_or_ack,end_bytes]`。事件0为实际源数据包（起始与结束字节），1/2为ACK/NACK（累计序号、end=0），3为超时决策（后两项0）。事件列名和编码随结果导出。它与原源事件、接收重复确认事件共享同一个`max_events`，完整性和遗漏数按三者合计；截断不改变协议。完整记录才按独立整数公式重算估计，并核对实际源payload总数、最高字节、ACK进展和超时次数。
+
+`rdma-diagnose.recovery.silence_bounds`在完整源事件下输出仍未完成消息的计时区间起点、重置RTO、无新ACK进展预算和失败截止。重试耗尽时校验实际失败时刻精确相等；其他原因先停止则只证明在界前停止。它不覆盖准入/首次发送前等待，不是请求SLO。
+
+`source_credit_obstructions`从真实末态所有者核算槽数、held字节、剩余字节和当前策略的候选队首，指出是否满足准入不等式，并列出已收齐却仍未确认的占用者。它是离线快照，不提供连续等待归因或永久阻塞证明。定义、证明与反例见[推理通信脆弱性](communication_fragility.md)，公开配置见[自适应示例](../examples/scaleout_rdma_adaptive/README.md)。

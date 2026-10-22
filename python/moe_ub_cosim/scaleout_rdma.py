@@ -42,15 +42,8 @@ def validate_protocol(c):
     validate_options(c)
     if 'queue_metrics' in c:require(type(c['queue_metrics']) is bool,'queue_metrics must be boolean')
     if 'recovery' in c:
-        recovery=c['recovery']
-        require(isinstance(recovery,dict),'recovery must be an object')
-        require(recovery.get('mode') in ('native','go_back_n'),'unknown recovery mode')
-        fields(recovery,'mode' if recovery['mode']=='native' else 'mode initial_rto_ns max_rto_ns max_retries max_events','recovery')
-        if recovery['mode']=='go_back_n':
-            integer(recovery['initial_rto_ns'],'initial recovery RTO',1,budget['max_sim_ns'])
-            integer(recovery['max_rto_ns'],'maximum recovery RTO',recovery['initial_rto_ns'],1000000000)
-            integer(recovery['max_retries'],'recovery retries without ACK progress',1,16)
-            integer(recovery['max_events'],'recovery capture events',0,100000)
+        from .scaleout_recovery_config import validate as validate_recovery
+        validate_recovery(c['recovery'],budget['max_sim_ns'])
     require(c['schema_version'] in ('moe-scaleout-rdma/1','moe-scaleout-rdma/2') and type(c['cc_mode']) is int and c['cc_mode'] == 1,
             'only explicit native DCQCN mode 1 is currently supported')
     for key, minimum, maximum in [('payload_bytes', 64, 9000), ('chunk_bytes', 1, 1048576),
@@ -161,7 +154,8 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     provenance = dict(native_commit=NATIVE_COMMIT, commands=[], network_executed=False,
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
-            ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh']) if p.is_file()})
+            ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh',
+            ROOT/'backend/ack_rtt_estimator.hh',ROOT/'backend/source_recovery.hh']) if p.is_file()})
     if previous_build is not None:
         provenance['previous_build'] = previous_build
     lock = NS3 / '.lock-ns3_linux_build'

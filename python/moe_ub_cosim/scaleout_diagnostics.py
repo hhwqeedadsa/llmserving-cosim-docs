@@ -78,6 +78,7 @@ def diagnose(run, output):
         graphs.append(progress)
     from .scaleout_admission import audit
     from .scaleout_recovery import audit as recovery_audit
+    from .scaleout_reliability import credit_obstructions
     summary = dict(schema_version='moe-scaleout-diagnosis/1', scope='post_run_evaluation_only',
         passed=result['passed'], finish_ns=result['finish_ns'], drained=result['drained'],
         completion_counts=dict(Counter(m['state'] for m in messages)), messages=messages,
@@ -90,6 +91,7 @@ def diagnose(run, output):
         admission_resources=audit(result),
         network_queues=network_summary(result),
         recovery=recovery_audit(result),failure=failure or None,
+        source_credit_obstructions=credit_obstructions(result),
         limitations=['Capture completeness applies only to selected nodes and time window.',
             'Missing events in absent, filtered or truncated capture cannot prove no retransmission or feedback.',
             'Graph edges lacking callbacks may be unissued; direct consumers are dependencies, not measured delay attribution.',

@@ -51,7 +51,7 @@ def parser():
     run_rdma.add_argument('--protoc', default='protoc', help='Existing compiler for the pinned Chakra schema')
     verify_rdma = sc.add_parser('rdma-check', help='Audit actual token bytes, ASTRA dependencies, callbacks and next-wave scheduling')
     verify_rdma.add_argument('--run', type=Path, required=True, help='Completed native RDMA service directory')
-    diagnose_rdma = sc.add_parser('rdma-diagnose', help='Audit optional recovery, packet faults and outstanding callbacks in a completed or failed native run; evaluation only')
+    diagnose_rdma = sc.add_parser('rdma-diagnose', help='Audit recovery/RTT, conditional timeout bounds, source credits and callbacks; completed or failed runs, evaluation only')
     diagnose_rdma.add_argument('--run', type=Path, required=True, help='Native probe or service directory containing result.json, including failed runs')
     diagnose_rdma.add_argument('--output', type=Path, required=True, help='New diagnosis JSON; input run is preserved')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')

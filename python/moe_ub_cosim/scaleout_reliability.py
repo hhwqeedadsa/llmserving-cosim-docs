@@ -51,10 +51,23 @@ def credit_obstructions(result):
             candidates=list(heads.values())
         else:candidates=pending[:1]
         byte_eligible=[f['id'] for f in candidates if fits(f)]
-        eligible=bool(count_available and byte_eligible)
+        shares=a.get('per_destination')
+        destination_eligible=[];peer_owners={}
+        if shares:
+            for f in active:peer_owners.setdefault(f['dst'],[]).append(f)
+            require(all(len(fs)<=shares['max_active'] and sum(f['bytes'] for f in fs)<=shares['max_bytes']
+                        for fs in peer_owners.values()),'credit certificate exceeds destination share')
+            for f in candidates:
+                owners=peer_owners.get(f['dst'],[])
+                if len(owners)<shares['max_active'] and f['bytes']+sum(o['bytes'] for o in owners)<=shares['max_bytes']:
+                    destination_eligible.append(f['id'])
+        else:destination_eligible=[f['id'] for f in candidates]
+        combined=[mid for mid in byte_eligible if mid in destination_eligible]
+        eligible=bool(count_available and combined)
         if not pending:reason='no_pending_work'
         elif not count_available:reason='source_message_slots_full'
         elif not byte_eligible:reason='fifo_head_bytes_do_not_fit' if a['policy']=='fifo' else 'no_peer_head_bytes_fit'
+        elif not combined:reason='destination_shares_full'
         elif s['decision_pending']:reason='eligible_waiting_local_decision'
         else:reason='eligible_at_execution_stop'
         sources.append(dict(source=s['src'],active_count=len(active),count_limit=count_limit,
@@ -64,5 +77,8 @@ def credit_obstructions(result):
             pending_ids=s['pending_ids'],candidate_head_ids=[f['id'] for f in candidates],
             byte_eligible_head_ids=byte_eligible,policy_eligible_now=eligible,reason=reason,
             decision_pending=s['decision_pending']))
+        if shares:sources[-1].update(destination_eligible_head_ids=destination_eligible,eligible_head_ids=combined,
+            per_destination=shares,destination_owners=[dict(destination=peer,active_owner_ids=[f['id'] for f in owners],
+                active_count=len(owners),held_logical_bytes=sum(f['bytes'] for f in owners)) for peer,owners in sorted(peer_owners.items())])
     return dict(available=True,sources=sources,
         scope='offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim')

@@ -16,6 +16,34 @@ def adaptive():
     return d
 
 class RttTest(unittest.TestCase):
+    def test_bounded_history_replay_and_seed_corruption(self):
+        d=adaptive();d['finish_ns']=11;f=d['messages'][0];f.update(dst=4,plane=0)
+        d['messages'].append(dict(f,id=9,ack_ns=11,sender_resource_released_ns=11))
+        r=d['recovery'];r['config']['history']=dict(max_entries_per_source=1,max_age_ns=100)
+        r['states'][0].update(seed_rto_ns=10,history_hit=False)
+        second=deepcopy(r['states'][0]);second.update(id=9,seed_rto_ns=17,history_hit=True);r['states'].append(second)
+        r['events'] += [[6,0,0,9,0,1000,0,17,23],[11,3,0,9,1000,1000,0,17,-1]]
+        r['rtt_events'] += [[6,0,9,0,1000],[11,1,9,1000,0]];r['observations']=8
+        r['history']=dict(hits=1,misses=1,expirations=0,evictions=0,updates=2,entries=[dict(source=0,
+            destination_ipv4=0x0b000001+4*32,rto_ns=17,evidence_ns=11,access_serial=3)])
+        self.assertTrue(audit(d)['rtt']['history_reconstructed'])
+        for corrupt in ('seed','hit','history','age'):
+            bad=deepcopy(d)
+            if corrupt=='seed':bad['recovery']['states'][1]['seed_rto_ns']=10
+            elif corrupt=='hit':bad['recovery']['states'][1]['history_hit']=False
+            elif corrupt=='history':bad['recovery']['history']['entries'][0]['rto_ns']=18
+            else:bad['recovery']['config']['history']['max_age_ns']=1
+            with self.subTest(corrupt=corrupt):
+                with self.assertRaises(ValueError):audit(bad)
+
+    def test_history_config_requires_bounds_and_adaptive(self):
+        c=adaptive()['recovery']['config'];c['history']=dict(max_entries_per_source=2,max_age_ns=100);validate(c,100)
+        for key,value in [('max_entries_per_source',0),('max_entries_per_source',257),('max_entries_per_source',True),('max_age_ns',0),('max_age_ns',1000000001),('extra',1)]:
+            bad=deepcopy(c);bad['history'][key]=value
+            with self.assertRaises(ValueError):validate(bad,100)
+        c.pop('rtt_estimator')
+        with self.assertRaises(ValueError):validate(c,100)
+
     def test_spec_replay_and_corrupt_sample(self):
         self.assertEqual(audit(adaptive())['rtt']['samples'],1)
         for key,value in [('samples',2),('srtt_ns',6),('rttvar_ns',2),('base_rto_ns',18),('probe_sent_ns',0)]:

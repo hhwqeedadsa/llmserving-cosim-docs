@@ -42,5 +42,25 @@ int main() {
     bytes.Request({4,2,5000,11},11);Check(bytes.Take(11)->id==4);
   }
   Reject([]{Queue bad("passthrough",0,1,1);});
+  // One bad destination cannot take the second slot/byte share; its FIFO head
+  // remains pending while another destination runs. No fault-owned release.
+  Queue protected_rr("destination_round_robin",3,20,8192,1,4096);
+  protected_rr.Request({1,4,4096,0},0);Check(protected_rr.Take(0)->id==1);
+  protected_rr.Request({2,4,4096,0},0);protected_rr.Request({3,6,4096,0},0);
+  Check(protected_rr.Take(0)->id==3);Check(!protected_rr.Take(0));
+  Check(protected_rr.ActiveBytes()==8192 && protected_rr.PendingIds()==std::vector<uint64_t>({2}));
+  protected_rr.Complete(3,1);Check(!protected_rr.Eligible()); // Peer4 still owns its share.
+  protected_rr.Complete(1,2);Check(protected_rr.Take(2)->id==2);protected_rr.Complete(2,3);
+  Check(!protected_rr.ActiveBytes() && protected_rr.Active().empty());
+  Reject([&]{protected_rr.Request({4,4,4097,3},3);});
+  for(const auto policy:{"fifo","passthrough"})Reject([&]{Queue bad(policy,3,20,8192,1,4096);});
+  Reject([]{Queue bad("destination_round_robin",3,20,8192,3,4096);});
+  Reject([]{Queue bad("destination_round_robin",3,20,8192,1,8192);});
+  Reject([]{Queue bad("destination_round_robin",3,20,8192,0,4096);});
+  // Byte share can bind before peer slots, including heterogeneous sizes.
+  Queue peer_bytes("destination_round_robin",4,20,100,2,60);
+  for(auto task:std::vector<Queue::Ready>{{1,1,40,0},{2,1,30,0},{3,2,40,0}})peer_bytes.Request(task,0);
+  Check(peer_bytes.Take(0)->id==1);Check(peer_bytes.Take(0)->id==3);Check(!peer_bytes.Take(0));
+  peer_bytes.Complete(1,1);Check(peer_bytes.Take(1)->id==2);
   std::cout<<"FIFO/round-robin capacity, ownership, ordering and causal input checks passed\n";
 }

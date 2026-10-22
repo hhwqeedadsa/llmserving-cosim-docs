@@ -1,0 +1,56 @@
+{
+  "schema_version": "moe-scaleout-rdma/2",
+  "cc_mode": 1,
+  "payload_bytes": 1000,
+  "chunk_bytes": 4000,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "100000000000": {
+      "kmin_bytes": 32768,
+      "kmax_bytes": 131072,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "admission": {
+    "policy": "destination_round_robin",
+    "max_active_per_source": 3,
+    "decision_ns": 0
+  },
+  "queue_metrics": true,
+  "lifecycle_capture": {
+    "max_events": 100000
+  },
+  "limits": {
+    "max_gpus": 32,
+    "max_switches": 16,
+    "max_links": 256,
+    "max_messages": 8192,
+    "max_queue_events": 1,
+    "queue_capture": "summary",
+    "max_sim_ns": 5000000,
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 536870912,
+    "result_json_bytes": 16777216
+  },
+  "recovery": {
+    "mode": "go_back_n",
+    "initial_rto_ns": 2000,
+    "max_rto_ns": 64000,
+    "max_retries": 8,
+    "max_events": 100000,
+    "rtt_estimator": {
+      "kind": "karn",
+      "min_rto_ns": 1000,
+      "granularity_ns": 1
+    },
+    "history": {
+      "max_entries_per_source": 16,
+      "max_age_ns": 300000
+    }
+  }
+}

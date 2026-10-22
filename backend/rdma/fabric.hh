@@ -115,6 +115,8 @@ class Fabric {
   std::string admission_policy_="passthrough";
   uint32_t admission_limit_=0;
   uint64_t admission_byte_limit_=0;
+  uint32_t admission_peer_limit_=0;
+  uint64_t admission_peer_bytes_=0;
   bool byte_tracking_=false,queue_metrics_=false;
   int64_t decision_ns_=0;
   std::vector<std::unique_ptr<moe_cosim::CommunicationAdmission>> admission_;

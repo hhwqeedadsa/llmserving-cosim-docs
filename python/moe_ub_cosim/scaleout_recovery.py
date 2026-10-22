@@ -6,10 +6,14 @@ def audit(result):
     if 'recovery' not in result:return dict(available=False)
     r=result['recovery'];c=r['config'];states=r['states'];flows={f['id']:f for f in result['messages']}
     require(len({s['id'] for s in states})==len(states),'duplicate recovery state')
+    state_by_id={s['id']:s for s in states}
     totals=0;failed=[];adaptive=c.get('rtt_estimator');floor=adaptive['min_rto_ns'] if adaptive else c['initial_rto_ns']
     for s in states:
         require(s['id'] in flows,'recovery state lacks an actual message')
         f=flows[s['id']];ack,high=s['acknowledged_bytes'],s['highest_sent_bytes']
+        if 'history' in c:
+            require(c['initial_rto_ns']<=s['seed_rto_ns']<=c['max_rto_ns'] and type(s['history_hit']) is bool,
+                    'invalid history-seeded initial RTO')
         require(s['source']==f['src'] and 0<=ack<=high<=f['bytes'] and high==f['source_unique_data_payload_bytes'],
                 'recovery source sequence/identity mismatch')
         require(s['timeout_expiries']==s['timeout_retransmissions']+(s['state']=='retry_exhausted'),
@@ -44,6 +48,14 @@ def audit(result):
         network_ids={f['id'] for f in flows.values() if f.get('transport')!='intra_host_chunked_crossbar'}
         require({s['id'] for s in states}==network_ids,'successful recovery omitted source transmission state')
     saved=len(r['events'])+len(r['receiver_events'])+len(r.get('rtt_events',[]))
+    if 'history' in c:
+        h=r['history'];counts={}
+        for entry in h['entries']:counts[entry['source']]=counts.get(entry['source'],0)+1
+        require(all(n<=c['history']['max_entries_per_source'] for n in counts.values()),'history exceeds per-source capacity')
+        require(len({(e['source'],e['destination_ipv4']) for e in h['entries']})==len(h['entries']),
+                'duplicate recovery history key')
+        require(all(1<=e['rto_ns']<=c['max_rto_ns'] and 0<=e['evidence_ns']<=result['finish_ns'] for e in h['entries']),
+                'history snapshot has invalid RTO/time')
     require(saved<=c['max_events'] and r['observations']==saved+r['omitted_events'] and
             r['complete']==(r['omitted_events']==0),'recovery capture completeness is misleading')
     summary=dict(available=True,failed=r['failed'],failed_ids=failed,source_states=len(states),
@@ -69,6 +81,9 @@ def audit(result):
         if old:require(ack>=old[0] and high>=old[1],'source progress went backwards')
         if event==0:
             require((old is None or old[-1]==-1) and high>ack and deadline==t+rto,'timer start without new outstanding source bytes')
+            if old is None and 'history' in c:
+                state=state_by_id[mid]
+                require(rto==state['seed_rto_ns'],'first timer does not use independently replayed history seed')
         elif event in (1,3):
             expected_rto=progress_rtos.get((mid,t,ack)) if adaptive else c['initial_rto_ns']
             require(old is not None and t<=old[-1] and ack>old[0] and count==0 and rto==expected_rto and

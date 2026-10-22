@@ -19,6 +19,23 @@ def completed():
 
 
 class AdmissionAuditTest(unittest.TestCase):
+    def test_per_destination_closed_bounds_and_snapshot(self):
+        a=dict(policy='destination_round_robin',max_active_per_source=3,decision_ns=0,
+               max_active_bytes_per_source=8192,per_destination=dict(max_active=1,max_bytes=4096))
+        validate_options(dict(admission=a))
+        for patch in [dict(policy='fifo'),dict(max_active_per_source=1),dict(max_active_bytes_per_source=4096),
+                      dict(per_destination=dict(max_active=True,max_bytes=4096)),
+                      dict(per_destination=dict(max_active=0,max_bytes=4096)),
+                      dict(per_destination=dict(max_active=1,max_bytes=0)),
+                      dict(per_destination=dict(max_active=1,max_bytes=4096,extra=1))]:
+            with self.subTest(patch=patch):
+                with self.assertRaises(ValueError):validate_options(dict(admission=dict(a,**patch)))
+        d=completed();d.pop('lifecycle_capture');d['passed']=False
+        d['admission'].update(a);s=d['admission']['sources'][0]
+        d['messages'][0].update(dst=4,bytes=4096)
+        d['messages'].append(dict(d['messages'][0],id=9))
+        s.update(active_ids=[8,9],active_bytes=8192,pending_bytes=0,native_send_qps=2)
+        with self.assertRaisesRegex(ValueError,'per-destination'):audit(d)
     def test_closed_options_and_numeric_types(self):
         for policy in ('fifo','destination_round_robin','passthrough'):
             a=dict(policy=policy,max_active_per_source=0 if policy=='passthrough' else 2,decision_ns=0)

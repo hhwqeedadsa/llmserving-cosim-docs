@@ -30,7 +30,9 @@
 
 计时原则参考 [RFC 6298 第5节](https://www.rfc-editor.org/rfc/rfc6298#section-5)，它是 TCP 文献，仅用于说明 ACK 进展和退避原则；固定模式不估计RTT；新增可选估计采用相同平滑原则，但采样、舍入和超时下限另有明确声明，不实现TCP拥塞控制。[Linux v6.12 RXE 接收器 duplicate_request](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c#L1275)在重复 SEND/WRITE 时重新发送 ACK，[RXE 完成器](https://github.com/torvalds/linux/blob/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c#L771)对未确认请求有限重试并在耗尽时报告错误。这些源码支持重试/重复确认的设计动机，不表示本实现复刻了 RXE 的 PSN、重试状态机或生产网卡。
 
-功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现，尚缺硬件RTO校准、跨QP历史、真实通信库分块、QP复用和千卡故障执行证据。
+功能验证覆盖尾包、最终 ACK、NACK、连续丢失、过短超时、同刻 ACK/超时、双 plane、资源释放和真实前端推进；覆盖范围见[验收](../fixtures/scaleout_recovery/README.md)。重试耗尽采用整个共享运行终止，保留资源到诊断/销毁，不模拟单 QP 错误向应用传播后的继续执行。默认原生模式逐字段兼容、记录截断不改变协议，均已单独检查。显式可选Karn RTT估计已加入：每QP单个待测原始包，重传/NACK/超时作废歧义样本，采用平滑RTT与偏差生成有界基准RTO；无配置仍固定超时。精确更新与条件证明见[推理通信脆弱性](communication_fragility.md)。这不是完整RFC6298/TCP或RoCE实现，尚缺硬件RTO校准、真实通信库分块、QP复用和千卡故障执行证据。
+
+可选跨QP恢复历史仅传递本源先前有效RTT和超时退避形成的保守RTO，每源容量/年龄/LRU独立，目的地址包含plane身份；不预测ECMP下一条路径，不伪造RTT样本。目的端份额是软件逻辑占用上限，不是网卡硬件保护或请求级容错。公开配置与验证范围见[恢复与资源保护](../examples/scaleout_rdma_resilience/README.md)。两者可能减少重复发送或保护健康候选，也可能降低并发、延后故障检测；不能预设业务收益。
 
 ### 完整 Decode 图
 

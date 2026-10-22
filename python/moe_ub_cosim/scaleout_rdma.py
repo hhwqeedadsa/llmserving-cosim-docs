@@ -155,7 +155,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
             ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh',
-            ROOT/'backend/ack_rtt_estimator.hh',ROOT/'backend/source_recovery.hh']) if p.is_file()})
+            ROOT/'backend/ack_rtt_estimator.hh',ROOT/'backend/source_recovery.hh',ROOT/'backend/recovery_history.hh']) if p.is_file()})
     if previous_build is not None:
         provenance['previous_build'] = previous_build
     lock = NS3 / '.lock-ns3_linux_build'
@@ -225,6 +225,9 @@ def validate_probe(t, c, batch, *, match_faults=True):
         local=t.get('intra_host',{}).get('enabled',False) and by_id[m['src']]['server']==by_id[m['dst']]['server']
         require(not byte_cap or local or m['bytes']<=byte_cap,
                 'message exceeds max_active_bytes_per_source; increase budget or regenerate smaller logical messages')
+        peer_cap=c.get('admission',{}).get('per_destination',{}).get('max_bytes',0)
+        require(not peer_cap or local or m['bytes']<=peer_cap,
+                'message exceeds per_destination.max_bytes; change explicit share or logical messages')
         integer(m['plane'], 'message plane', minimum=0, maximum=15)
         integer(m['ready_ns'], 'message ready_ns', minimum=0, maximum=budget['max_sim_ns']-1)
         seen, todo = {m['src']}, [m['src']]

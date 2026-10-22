@@ -357,10 +357,16 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 
 ### 可选RTT采样及条件证据
 
-仅在`recovery.rtt_estimator`显式配置时，源状态增加`rtt`：`samples`为有效样本数，`discarded_probes`为作废的待测包数；`srtt_ns`、`rttvar_ns`、`base_rto_ns`单位为ns，未取得样本时前两项为0、基准为初始值。`ambiguity_until_bytes`为重传歧义屏障；`probe_end_bytes`为最近待测包末字节，`probe_sent_ns=-1`表示当前没有活动测量。每QP独立，不共享接收端或其他QP的估计。
+仅在`recovery.rtt_estimator`显式配置时，源状态增加`rtt`：`samples`为有效样本数，`discarded_probes`为作废的待测包数；`srtt_ns`、`rttvar_ns`、`base_rto_ns`单位为ns，未取得样本时前两项为0、基准为该QP初值。`ambiguity_until_bytes`为重传歧义屏障；`probe_end_bytes`为最近待测包末字节，`probe_sent_ns=-1`表示当前没有活动测量。采样状态每QP独立，不共享接收端真值；显式历史仅影响新QP的初值。
 
 `rtt_events`列为`[time_ns,event,message_id,start_or_ack,end_bytes]`。事件0为实际源数据包（起始与结束字节），1/2为ACK/NACK（累计序号、end=0），3为超时决策（后两项0）。事件列名和编码随结果导出。它与原源事件、接收重复确认事件共享同一个`max_events`，完整性和遗漏数按三者合计；截断不改变协议。完整记录才按独立整数公式重算估计，并核对实际源payload总数、最高字节、ACK进展和超时次数。
 
 `rdma-diagnose.recovery.silence_bounds`在完整源事件下输出仍未完成消息的计时区间起点、重置RTO、无新ACK进展预算和失败截止。重试耗尽时校验实际失败时刻精确相等；其他原因先停止则只证明在界前停止。它不覆盖准入/首次发送前等待，不是请求SLO。
 
 `source_credit_obstructions`从真实末态所有者核算槽数、held字节、剩余字节和当前策略的候选队首，指出是否满足准入不等式，并列出已收齐却仍未确认的占用者。它是离线快照，不提供连续等待归因或永久阻塞证明。定义、证明与反例见[推理通信脆弱性](communication_fragility.md)，公开配置见[自适应示例](../examples/scaleout_rdma_adaptive/README.md)。
+
+显式`recovery.history`时，源状态另存`seed_rto_ns/history_hit`，`recovery.history`结果保存命中、未命中、到期、淘汰、证据更新次数与有界`entries`。每项含`source/destination_ipv4/rto_ns/evidence_ns/access_serial`，LRU序号在本源递增；最终条目不因报告而清除，查询/更新先按本源证据年龄淘汰。完整`rtt_events`足以独立重放有效样本、退避、初值与缓存；日志截断时不声称重建。超时形成的缓存更新不计为RTT样本。
+
+显式`admission.per_destination`在结果保留同名份额。完整生命周期核对每次准入/释放的全源与目的端占用；诊断新增`destination_eligible_head_ids/eligible_head_ids/destination_owners`，区分全局字节不足与`destination_shares_full`。无配置不增加这些字段，失败所有者不会为诊断提前释放。
+
+`scaleout sweep`根目录保存原清单、解析配置、来源、全条件命令、总资源采样及`summary.json/csv`；各条件目录保存输入、拓扑、实际运行与诊断。`matches_expectations=true`表示清单中的每个实际结果符合显式预期，不把预期失败改成`passed=true`；前端未完成的时刻为null，网络失败停止与成功排空使用不同语义，CSV空白对应null。条件间为独立运行，共同图hash只核验明确比较组。

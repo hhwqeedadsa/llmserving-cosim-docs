@@ -58,6 +58,11 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
     admission_limit_=a.at("max_active_per_source");decision_ns_=a.at("decision_ns");
     byte_tracking_=a.contains("max_active_bytes_per_source");
     admission_byte_limit_=a.value("max_active_bytes_per_source",uint64_t(0));
+    if(a.contains("per_destination")) {
+      admission_peer_limit_=a.at("per_destination").at("max_active");
+      admission_peer_bytes_=a.at("per_destination").at("max_bytes");
+      Require(admission_peer_limit_>0 && admission_peer_bytes_>0,"explicit per-destination shares must be positive");
+    }
     Require(admission_limit_<=1024 && decision_ns_>=0 && decision_ns_<=1000000 &&
       (admission_policy_!="passthrough" || decision_ns_==0),"invalid software admission budget");
   }
@@ -123,7 +128,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   if(resource_tracking_) {
     deciding_.resize(gpus_,false);
     for(unsigned src=0;src<gpus_;++src)admission_.push_back(std::make_unique<moe_cosim::CommunicationAdmission>(
-        admission_policy_,admission_limit_,MaxMessages(),admission_byte_limit_));
+        admission_policy_,admission_limit_,MaxMessages(),admission_byte_limit_,admission_peer_limit_,admission_peer_bytes_));
   }
   reachable_.resize(gpus_*gpus_*planes_,0);
   InternetStackHelper internet; internet.Install(nodes_);
@@ -545,6 +550,7 @@ Json Fabric::Report() {
       {"native_send_qps",drivers_[src]->m_rdma->m_qpMap.size()}});
     r["admission"]={{"policy",admission_policy_},{"max_active_per_source",admission_limit_},{"decision_ns",decision_ns_},
       {"scope","inter_host_source_local_software_credits; zero limit is uncapped, not hardware capacity"},{"sources",sources}};
+    if(admission_peer_limit_)r["admission"]["per_destination"]={{"max_active",admission_peer_limit_},{"max_bytes",admission_peer_bytes_}};
     if(byte_tracking_) {
       r["admission"]["max_active_bytes_per_source"]=admission_byte_limit_;
       r["admission"]["byte_scope"]="Sum of full logical payloads from grant through sender resource release; not NIC in-flight bytes or GPU memory";

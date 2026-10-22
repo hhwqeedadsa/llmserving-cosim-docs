@@ -6,6 +6,8 @@
 
 恢复代码进一步分为纯协议`source_recovery.hh`、可选Karn采样`ack_rtt_estimator.hh`、ns-3接入`rdma/recovery.cc`和纯被动记录`rdma/recovery_records.hh`。RTT样本仅来自源实际发包与反馈，重传/NACK/超时作废歧义样本，每QP最多一个待测包。无配置时保留固定超时。Python配置、RTT重放、协议审计和条件终止/额度证据分别维护；[自适应示例](../examples/scaleout_rdma_adaptive/README.md)提供用户入口，[形式化说明](../docs/communication_fragility.md)说明不变量、证明假设与有限状态检查范围。
 
+可选`recovery_history.hh`只存源端有效RTT或超时退避形成的保守初值，每源独立容量、年龄与LRU，目的地址隔离plane，不改已有QP计时器。`CommunicationAdmission`可在总槽/字节内进一步限制单一目的GPU占用并跳过不合份额的队首；不按故障真值分类、不提前释放所有者。独立离线重放核对历史、准入和条件证书，公开配置见[恢复与源资源保护](../examples/scaleout_rdma_resilience/README.md)。
+
 本目录将 ASTRA 的任务执行与 ns-3-UB 的事件、协议和网络状态连接起来，负责图装载、控制协议、收发匹配、完成回调及原始观测。整体过程见[系统架构](../docs/architecture.md)；普通运行与构建使用[用户指南](../docs/user_guide.md)中的 `moe-ub` 命令。本文件供修改后端或编写集成检查时查阅，不记录逐次开发结果。
 
 ## 构建与程序入口

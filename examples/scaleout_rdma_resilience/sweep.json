@@ -1,0 +1,84 @@
+{
+  "schema_version": "moe-scaleout-sweep/1",
+  "base": {
+    "topology": "../scaleout_rdma/small-clos-100g.json",
+    "service": "service.json",
+    "protocol": "combined-service.json"
+  },
+  "budget": {
+    "wall_seconds": 300,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 268435456
+  },
+  "cases": [
+    {
+      "name": "reference",
+      "patches": {
+        "protocol": {
+          "recovery": {
+            "initial_rto_ns": 40000,
+            "max_rto_ns": 160000,
+            "history": null
+          },
+          "admission": {
+            "per_destination": null
+          }
+        }
+      },
+      "comparison_group": "batch4"
+    },
+    {
+      "name": "combined",
+      "patches": {},
+      "comparison_group": "batch4"
+    },
+    {
+      "name": "batch1",
+      "patches": {
+        "service": {
+          "workload": {
+            "batch_per_rank": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "smaller-model",
+      "patches": {
+        "service": {
+          "model": {
+            "name": "synthetic-H512-E8-K2",
+            "hidden_size": 512,
+            "ffn_hidden_size": 2048,
+            "experts": 8
+          },
+          "workload": {
+            "batch_per_rank": 2
+          }
+        }
+      }
+    },
+    {
+      "name": "access-50g",
+      "patches": {
+        "topology": {
+          "links": {
+            "access": {
+              "rate_bps": 50000000000
+            }
+          }
+        },
+        "protocol": {
+          "ecn_by_rate": {
+            "50000000000": {
+              "kmin_bytes": 32768,
+              "kmax_bytes": 131072,
+              "pmax": 1.0
+            }
+          }
+        }
+      }
+    }
+  ]
+}

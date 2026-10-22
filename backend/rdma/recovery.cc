@@ -20,6 +20,18 @@ RdmaRecovery::RdmaRecovery(const Json& c,std::function<void(uint64_t)> failed):o
     if(minimum_<1 || granularity_<1)throw std::invalid_argument("Explicit RTT estimator requires positive bounds");
   }
   moe_cosim::SourceRecovery validate(1,initial_,maximum_,limit_,minimum_,granularity_);
+  if(c.contains("history")) {
+    if(!c.contains("rtt_estimator"))throw std::invalid_argument("Recovery history requires explicit RTT estimator");
+    const auto& h=c.at("history");
+    moe_cosim::RecoveryHistory validate_history(h.at("max_entries_per_source"),h.at("max_age_ns"),maximum_);
+  }
+}
+moe_cosim::RecoveryHistory* RdmaRecovery::History(unsigned node) {
+  if(!options_.contains("history"))return nullptr;
+  auto& history=histories_[node];
+  if(!history)history=std::make_unique<moe_cosim::RecoveryHistory>(
+      options_.at("history").at("max_entries_per_source"),options_.at("history").at("max_age_ns"),maximum_);
+  return history.get();
 }
 RdmaRecovery::~RdmaRecovery(){
   for(auto& item:states_)Simulator::Cancel(item.second->event);
@@ -46,8 +58,13 @@ void RdmaRecovery::Arm(uint64_t id,State& s) {
 void RdmaRecovery::Sent(RdmaRecovery* self,unsigned node,RdmaHw* hw,Ptr<RdmaQueuePair> qp,Ptr<Packet> p,Time gap) {
   hw->PktSent(qp,p,gap); // Preserve native pacing and congestion control.
   const auto id=qp->GetTag();auto it=self->states_.find(id);
-  if(it==self->states_.end())it=self->states_.emplace(id,std::make_unique<State>(node,hw,qp,
-      self->initial_,self->maximum_,self->limit_,self->minimum_,self->granularity_)).first;
+  if(it==self->states_.end()) {
+    auto seed=moe_cosim::RecoveryHistory::Seed{self->initial_,false};
+    if(auto history=self->History(node))seed=history->Start({node,qp->dip.Get()},Now(),self->initial_);
+    auto state=std::make_unique<State>(node,hw,qp,seed.rto,self->maximum_,self->limit_,self->minimum_,self->granularity_);
+    state->history_hit=seed.hit;
+    it=self->states_.emplace(id,std::move(state)).first;
+  }
   auto& s=*it->second;const auto old=s.protocol.Timer().Deadline();
   CustomHeader h(CustomHeader::L2_Header|CustomHeader::L3_Header|CustomHeader::L4_Header);h.getInt=1;p->PeekHeader(h);
   s.protocol.Sent(h.udp.seq,qp->snd_nxt,Now());
@@ -72,7 +89,10 @@ int RdmaRecovery::Receive(RdmaRecovery* self,unsigned node,RdmaHw* hw,Ptr<Packet
   auto it=self->states_.find(qp->GetTag());
   if(it==self->states_.end())throw std::logic_error("Feedback for QP without an actual source transmission");
   auto& s=*it->second;
+  const auto samples=s.protocol.Rtt()?s.protocol.Rtt()->Samples():0;
   const bool progress=s.protocol.Confirm(h.ack.seq,Now(),h.l3Prot==0xfd);
+  if(auto history=self->History(node))if(s.protocol.Rtt()->Samples()>samples)
+    history->Observe(s.history_key,Now(),s.protocol.Rtt()->BaseRto());
   self->records_.Rtt(Now(),h.l3Prot==0xfd?2:1,qp->GetTag(),h.ack.seq,0);
   if(progress)self->Event(s.protocol.Timer().Complete()?3:1,qp->GetTag(),s);
   else {++self->old_feedback_;self->Event(6,qp->GetTag(),s);}
@@ -94,6 +114,7 @@ void RdmaRecovery::Fire(uint64_t id) {
     failure_(id);return;
   }
   Event(2,id,s);
+  if(auto history=History(s.node))history->Observe(s.history_key,Now(),s.protocol.Timer().Rto());
   // Reset the source cursor only. Native QP arbitration/pacing/PFC/DCQCN still
   // decide when actual retransmission packets may enter the physical link.
   s.hw->RecoverQueue(s.qp);
@@ -126,6 +147,9 @@ RdmaRecovery::Json RdmaRecovery::Report() const {
       {"highest_sent_bytes",t.High()},{"retries_since_progress",t.Retries()},{"timeout_retransmissions",t.TotalRetries()},
       {"timeout_expiries",t.Expiries()},{"current_rto_ns",t.Rto()},{"deadline_ns",t.Deadline()},
       {"state",t.Failed()?"retry_exhausted":t.Complete()?"complete":"waiting_ack"}});
+    if(options_.contains("history")) {
+      states.back()["seed_rto_ns"]=s.seed_rto;states.back()["history_hit"]=s.history_hit;
+    }
     if(s.protocol.Rtt()) {
       const auto& e=*s.protocol.Rtt();
       states.back()["rtt"]={{"samples",e.Samples()},{"discarded_probes",e.DiscardedProbes()},
@@ -134,6 +158,21 @@ RdmaRecovery::Json RdmaRecovery::Report() const {
     }
   }
   auto result=records_.Report();
+  if(options_.contains("history")) {
+    Json entries=Json::array();
+    uint64_t hits=0,misses=0,expirations=0,evictions=0,updates=0;
+    for(const auto& source:histories_) {
+      const auto& history=*source.second;
+      hits+=history.Hits();misses+=history.Misses();expirations+=history.Expirations();
+      evictions+=history.Evictions();updates+=history.Updates();
+      for(const auto& item:history.Entries())entries.push_back({{"source",item.first.first},
+        {"destination_ipv4",item.first.second},{"rto_ns",item.second.rto},
+        {"evidence_ns",item.second.evidence_ns},{"access_serial",item.second.access}});
+    }
+    result["history"]={{"hits",hits},{"misses",misses},{"expirations",expirations},{"evictions",evictions},
+      {"updates",updates},{"entries",entries},
+      {"scope","independent per-source bounded seeds; destination address separates peers and planes; lazy expiry at local access/update; timeout evidence is not an RTT sample"}};
+  }
   result.update({{"config",options_},{"scope","declared source-ACK timer and receiver duplicate ACK extension; native pacing/queues/routes preserved"},
     {"failed",failed_},{"states",states},{"duplicate_ack_responses",duplicate_acks_},{"old_feedback_packets",old_feedback_}});
   return result;

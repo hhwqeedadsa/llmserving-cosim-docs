@@ -54,6 +54,11 @@ def parser():
     diagnose_rdma = sc.add_parser('rdma-diagnose', help='Audit recovery/RTT, conditional timeout bounds, source credits and callbacks; completed or failed runs, evaluation only')
     diagnose_rdma.add_argument('--run', type=Path, required=True, help='Native probe or service directory containing result.json, including failed runs')
     diagnose_rdma.add_argument('--output', type=Path, required=True, help='New diagnosis JSON; input run is preserved')
+    sweep=sc.add_parser('sweep',help='Run an explicit bounded case list; vary model/batch/topology/protocol, retain failures and compare common graphs')
+    sweep.add_argument('--config',type=Path,required=True,help='Sweep JSON; base paths resolve from its directory; object patches merge, null deletes optional keys')
+    sweep.add_argument('--backend',type=Path,required=True,help='Native service executable from rdma-build')
+    sweep.add_argument('--protoc',default='protoc',help='Existing pinned-schema compiler')
+    sweep.add_argument('--output',type=Path,required=True,help='New output directory with aggregate wall/memory/disk limits')
     segment=sub.add_parser('segment',help='Prepare or freeze finite consecutive MoE blocks with an explicit initial state')
     commands=segment.add_subparsers(dest='segment_command',required=True)
     prepare=commands.add_parser('prepare',help='Select original layer IDs and Decode step; preserve full model capacity')
@@ -114,7 +119,10 @@ def main(argv=None):
             value = dict(passed=True, output=str(args.output.resolve()), state=manifest['state'],
                          scenario_id=manifest['scenario_id'])
         elif args.command == 'scaleout':
-            if args.scaleout_command == 'rdma-diagnose':
+            if args.scaleout_command == 'sweep':
+                from .scaleout_sweep import run
+                value=run(args.config,args.backend,args.output,args.protoc)
+            elif args.scaleout_command == 'rdma-diagnose':
                 from .scaleout_diagnostics import diagnose
                 value = diagnose(args.run, args.output)
             elif args.scaleout_command == 'rdma-check':

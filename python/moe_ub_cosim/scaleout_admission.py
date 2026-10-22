@@ -7,7 +7,8 @@ from .scaleout_topology import fields, integer, require
 def validate_options(protocol):
     if 'admission' in protocol:
         a=protocol['admission']
-        fields(a,'policy max_active_per_source decision_ns'+(' max_active_bytes_per_source' if 'max_active_bytes_per_source' in a else ''),'software admission')
+        fields(a,'policy max_active_per_source decision_ns'+''.join(' '+k for k in
+               ('max_active_bytes_per_source','per_destination') if k in a),'software admission')
         require(a['policy'] in ('passthrough','fifo','destination_round_robin'),'unknown admission policy')
         integer(a['max_active_per_source'],'software active limit',0,1024)
         integer(a['decision_ns'],'source-local decision cost',0,1000000)
@@ -15,6 +16,12 @@ def validate_options(protocol):
         require(a['policy']!='passthrough' or not a.get('max_active_bytes_per_source',0),'passthrough cannot enforce a byte cap')
         require((a['max_active_per_source']==0 and a['decision_ns']==0) if a['policy']=='passthrough'
                 else a['max_active_per_source']>0, 'passthrough must be uncapped/zero-cost; controlled policies need positive limit')
+        if 'per_destination' in a:
+            p=a['per_destination'];require(isinstance(p,dict),'per_destination must be an object')
+            fields(p,'max_active max_bytes','per-destination share')
+            require(a['policy']=='destination_round_robin','per-destination limits require destination round-robin')
+            integer(p['max_active'],'per-destination active share',1,a['max_active_per_source']-1)
+            integer(p['max_bytes'],'per-destination byte share',1,a.get('max_active_bytes_per_source',0)-1)
     if 'lifecycle_capture' in protocol:
         fields(protocol['lifecycle_capture'],'max_events','lifecycle capture')
         integer(protocol['lifecycle_capture']['max_events'],'lifecycle max_events',1,100000)
@@ -30,6 +37,18 @@ def audit(result):
     final=result['admission'];capture=result.get('lifecycle_capture')
     sources=final['sources'];limit=final['max_active_per_source']
     byte_limit=final.get('max_active_bytes_per_source',0)
+    peer_limit=final.get('per_destination')
+    def peer_fits(owners,mid):
+        if not peer_limit:return True
+        flow=flows[mid];same=[flows[i] for i in owners if flows[i]['dst']==flow['dst']]
+        return len(same)<peer_limit['max_active'] and sum(f['bytes'] for f in same)+flow['bytes']<=peer_limit['max_bytes']
+    def check_peers(owners):
+        if peer_limit:
+            by_peer=defaultdict(list)
+            for mid in owners:by_peer[flows[mid]['dst']].append(mid)
+            for ids in by_peer.values():
+                require(len(ids)<=peer_limit['max_active'] and sum(flows[i]['bytes'] for i in ids)<=peer_limit['max_bytes'],
+                        'per-destination ownership exceeds declared share')
     require(len({s['src'] for s in sources})==len(sources),'duplicate admission source')
     flows={f['id']:f for f in result['messages']}
     require(len(flows)==len(result['messages']),'duplicate admission message identity')
@@ -40,6 +59,8 @@ def audit(result):
         for identity in s['active_ids']+s['pending_ids']:
             require(identity in flows and flows[identity]['src']==s['src'],'owner belongs to wrong source')
             require(flows[identity].get('transport')!='intra_host_chunked_crossbar','local transfer consumes RDMA quota')
+            if peer_limit:require(flows[identity]['bytes']<=peer_limit['max_bytes'],'message exceeds per-destination byte share')
+        check_peers(s['active_ids'])
         if 'max_active_bytes_per_source' in final:
             for name in ('active','pending'):
                 require(all(type(flows[i].get('bytes')) is int and flows[i]['bytes']>0 for i in s[name+'_ids']),
@@ -69,7 +90,7 @@ def audit(result):
     def held(src):return sum(flows[i].get('bytes',0) for i in active[src])
     def candidate(src):
         if not order[src] or (limit and len(active[src])>=limit):return None
-        def fits(mid):return not byte_limit or flows[mid]['bytes']<=byte_limit-held(src)
+        def fits(mid):return (not byte_limit or flows[mid]['bytes']<=byte_limit-held(src)) and peer_fits(active[src],mid)
         if final['policy']!='destination_round_robin':return order[src][0] if fits(order[src][0]) else None
         heads={}
         for mid in order[src]:heads.setdefault(flows[mid]['dst'],mid)
@@ -124,6 +145,7 @@ def audit(result):
                 'resource counts do not match all reconstructed owners')
         require(not limit or count<=limit,'software active capacity exceeded')
         require(not byte_limit or held(src)<=byte_limit,'software active byte capacity exceeded')
+        check_peers(active[src])
         peak[src]=max(peak[src],count)
         peak_bytes[src]=max(peak_bytes[src],held(src))
         if event==4:

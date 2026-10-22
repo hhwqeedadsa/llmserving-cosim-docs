@@ -1,0 +1,4427 @@
+{
+  "platform_commit": "5e092a1cbd6e25b8cd27f3f81e6f152a1a230ff0",
+  "analysis_sha256": "0f99731a9c934bf7de77cd423c962565ae7990af098d28f9546e06da02b2f51d",
+  "target": {
+    "id": 1,
+    "tag": 1,
+    "src": 0,
+    "dst": 4,
+    "bytes": 6144,
+    "plane": 0,
+    "layer": 0,
+    "phase": "dispatch",
+    "contributions": 3
+  },
+  "cases": {
+    "fixed-clean": {
+      "passed": true,
+      "network_finish_or_stop_ns": 122068,
+      "frontend_complete_ns": 122068,
+      "network_drain_after_frontend_ns": 0,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 389120,
+      "timeout_retransmissions": 0,
+      "rtt_samples": 0,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17500,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17500,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 40000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 0,
+        "timeout_retransmissions": 0
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 43422304,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 8000
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48783
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48783,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 96789
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "result_sha256": "4fb5fec42e40395c883615fef94580f09d35cc71376d51e10438b969992f8f8c"
+    },
+    "adaptive-clean": {
+      "passed": true,
+      "network_finish_or_stop_ns": 122068,
+      "frontend_complete_ns": 122068,
+      "network_drain_after_frontend_ns": 0,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 389120,
+      "timeout_retransmissions": 0,
+      "rtt_samples": 92,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17500,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17500,
+        "source_data_packets": 7,
+        "source_data_payload_bytes": 6144,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 37566,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "rtt": {
+          "ambiguity_until_bytes": 0,
+          "base_rto_ns": 37566,
+          "discarded_probes": 0,
+          "probe_end_bytes": 1000,
+          "probe_sent_ns": -1,
+          "rttvar_ns": 6261,
+          "samples": 1,
+          "srtt_ns": 12522
+        },
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 0,
+        "timeout_retransmissions": 0
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          37566,
+          54291
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          37566,
+          54540
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          37566,
+          54796
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          37566,
+          54886
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          37566,
+          54969
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          37566,
+          55052
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          37566,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 43422304,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 8000
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48783
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48783,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 96789
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "result_sha256": "cf27929b779f5a3b752e9e91e2f61f7e9683d7c849ba1d6e65b098421a63b95e"
+    },
+    "fixed-loss": {
+      "passed": true,
+      "network_finish_or_stop_ns": 131105,
+      "frontend_complete_ns": 131105,
+      "network_drain_after_frontend_ns": 0,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 389264,
+      "timeout_retransmissions": 1,
+      "rtt_samples": 0,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 69660,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 69660,
+        "source_data_packets": 8,
+        "source_data_payload_bytes": 6288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 40000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 1,
+        "timeout_retransmissions": 1
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          69660,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 47206592,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 8020
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 82774
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122594
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 82774,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 131105
+        }
+      ],
+      "result_sha256": "43968109c8ac1666717342fdc5b7769db305d10211f1f18f943f50412113f8a1"
+    },
+    "adaptive-loss": {
+      "passed": true,
+      "network_finish_or_stop_ns": 128363,
+      "frontend_complete_ns": 128363,
+      "network_drain_after_frontend_ns": 0,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 389264,
+      "timeout_retransmissions": 1,
+      "rtt_samples": 92,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 67160,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 67160,
+        "source_data_packets": 8,
+        "source_data_payload_bytes": 6288,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 37566,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "rtt": {
+          "ambiguity_until_bytes": 6144,
+          "base_rto_ns": 37566,
+          "discarded_probes": 0,
+          "probe_end_bytes": 1000,
+          "probe_sent_ns": -1,
+          "rttvar_ns": 6261,
+          "samples": 1,
+          "srtt_ns": 12522
+        },
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 1,
+        "timeout_retransmissions": 1
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          37566,
+          54291
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          37566,
+          54540
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          37566,
+          54796
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          37566,
+          54886
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          37566,
+          54969
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          37566,
+          55052
+        ],
+        [
+          55052,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          75132,
+          130184
+        ],
+        [
+          67160,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          37566,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 46046820,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 8020
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 80274
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122457
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 80274,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 128363
+        }
+      ],
+      "result_sha256": "fb5235dc9152b0ca6e2bf9ff4070623c0f20a1badc7bff555265834585dd7a75"
+    },
+    "fixed-persistent": {
+      "passed": false,
+      "network_finish_or_stop_ns": 297486,
+      "frontend_complete_ns": null,
+      "network_drain_after_frontend_ns": null,
+      "submitted_messages": 68,
+      "completed_messages": 65,
+      "source_payload_bytes": 287008,
+      "timeout_retransmissions": 2,
+      "rtt_samples": 0,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 2,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6000
+        },
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_packets": 9,
+        "source_data_payload_bytes": 6432,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6000,
+        "current_rto_ns": 160000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 2,
+        "source": 0,
+        "state": "retry_exhausted",
+        "timeout_expiries": 3,
+        "timeout_retransmissions": 2
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          137486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          160000,
+          297486
+        ],
+        [
+          297486,
+          4,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          160000,
+          -1
+        ]
+      ],
+      "conditional_bounds": [
+        {
+          "id": 1,
+          "origin_ns": 17486,
+          "reset_rto_ns": 40000,
+          "no_progress_budget_ns": 280000,
+          "failure_deadline_ns": 297486,
+          "outcome": "failed_at_bound",
+          "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+        }
+      ],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 1,
+            "count_limit": 3,
+            "held_logical_bytes": 6144,
+            "byte_limit": 8192,
+            "remaining_bytes": 2048,
+            "active_owner_ids": [
+              1
+            ],
+            "data_ready_but_unconfirmed_owner_ids": [
+              1
+            ],
+            "pending_ids": [
+              13,
+              14
+            ],
+            "candidate_head_ids": [
+              13
+            ],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "fifo_head_bytes_do_not_fit",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 34344604,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 5872
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 62,
+          "completed_nodes": 57
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "result_sha256": "7d9c098ae99e875ce3651f1e606462b25ff6085f4427c6313a11a9a0be9de8f1"
+    },
+    "adaptive-persistent": {
+      "passed": false,
+      "network_finish_or_stop_ns": 280448,
+      "frontend_complete_ns": null,
+      "network_drain_after_frontend_ns": null,
+      "submitted_messages": 68,
+      "completed_messages": 65,
+      "source_payload_bytes": 287008,
+      "timeout_retransmissions": 2,
+      "rtt_samples": 66,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 2,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "awaiting_sender_ack",
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6000
+        },
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_packets": 9,
+        "source_data_payload_bytes": 6432,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6000,
+        "current_rto_ns": 150264,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 2,
+        "rtt": {
+          "ambiguity_until_bytes": 6144,
+          "base_rto_ns": 37566,
+          "discarded_probes": 0,
+          "probe_end_bytes": 1000,
+          "probe_sent_ns": -1,
+          "rttvar_ns": 6261,
+          "samples": 1,
+          "srtt_ns": 12522
+        },
+        "source": 0,
+        "state": "retry_exhausted",
+        "timeout_expiries": 3,
+        "timeout_retransmissions": 2
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          37566,
+          54291
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          37566,
+          54540
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          37566,
+          54796
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          37566,
+          54886
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          37566,
+          54969
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          37566,
+          55052
+        ],
+        [
+          55052,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          75132,
+          130184
+        ],
+        [
+          130184,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          150264,
+          280448
+        ],
+        [
+          280448,
+          4,
+          0,
+          1,
+          6000,
+          6144,
+          2,
+          150264,
+          -1
+        ]
+      ],
+      "conditional_bounds": [
+        {
+          "id": 1,
+          "origin_ns": 17486,
+          "reset_rto_ns": 37566,
+          "no_progress_budget_ns": 262962,
+          "failure_deadline_ns": 280448,
+          "outcome": "failed_at_bound",
+          "assumptions": "source timer armed; no subsequent cumulative ACK progress; simulator processes timer events"
+        }
+      ],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 1,
+            "count_limit": 3,
+            "held_logical_bytes": 6144,
+            "byte_limit": 8192,
+            "remaining_bytes": 2048,
+            "active_owner_ids": [
+              1
+            ],
+            "data_ready_but_unconfirmed_owner_ids": [
+              1
+            ],
+            "pending_ids": [
+              13,
+              14
+            ],
+            "candidate_head_ids": [
+              13
+            ],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "fifo_head_bytes_do_not_fit",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 34341436,
+        "peak_port_bytes": 9624,
+        "final_bytes": 0,
+        "queue_changes": 5872
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 62,
+          "completed_nodes": 57
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          }
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 60951
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 60951,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122068
+        }
+      ],
+      "result_sha256": "13c309f5bdbac47c321870bedd49583151f3be104919746fb354fd7e920728c7"
+    },
+    "fixed-short": {
+      "passed": true,
+      "network_finish_or_stop_ns": 128641,
+      "frontend_complete_ns": 122641,
+      "network_drain_after_frontend_ns": 6000,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 1167360,
+      "timeout_retransmissions": 184,
+      "rtt_samples": 0,
+      "discarded_rtt_probes": 0,
+      "duplicate_ack_responses": 944,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17739,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17739,
+        "source_data_packets": 21,
+        "source_data_payload_bytes": 18432,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 2000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 2,
+        "timeout_retransmissions": 2
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          2000,
+          6203
+        ],
+        [
+          6203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          1,
+          4000,
+          10203
+        ],
+        [
+          10203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          2,
+          8000,
+          18203
+        ],
+        [
+          16962,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          2000,
+          18962
+        ],
+        [
+          17290,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          2000,
+          19290
+        ],
+        [
+          17385,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          2000,
+          19385
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          2000,
+          19486
+        ],
+        [
+          17731,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          2000,
+          19731
+        ],
+        [
+          17735,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          2000,
+          19735
+        ],
+        [
+          17739,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          2000,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 158347692,
+        "peak_port_bytes": 9948,
+        "final_bytes": 0,
+        "queue_changes": 24000
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48823
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 61172
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48823,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 97296
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 61172,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122641
+        }
+      ],
+      "result_sha256": "1fc2fa4f71e7159883233938c71d244253271b62b10d83474dad187ecff55305"
+    },
+    "adaptive-short": {
+      "passed": true,
+      "network_finish_or_stop_ns": 128641,
+      "frontend_complete_ns": 122641,
+      "network_drain_after_frontend_ns": 6000,
+      "submitted_messages": 92,
+      "completed_messages": 92,
+      "source_payload_bytes": 1167360,
+      "timeout_retransmissions": 184,
+      "rtt_samples": 0,
+      "discarded_rtt_probes": 92,
+      "duplicate_ack_responses": 944,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 17739,
+        "admission_granted_ns": 4120,
+        "bytes": 6144,
+        "completion_state": "complete",
+        "dcqcn_feedback_seen": false,
+        "dst": 4,
+        "first_packet_path": [
+          {
+            "node": 0,
+            "port": 1,
+            "time_ns": 4203
+          },
+          {
+            "node": 8,
+            "port": 4,
+            "time_ns": 5286
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "time_ns": 6369
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "time_ns": 7452
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "time_ns": 8535
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "time_ns": 9618
+          }
+        ],
+        "first_packet_uid": 8,
+        "first_tx_ns": 4203,
+        "id": 1,
+        "plane": 0,
+        "port": 10001,
+        "qp_registered_ns": 4120,
+        "ready_ns": 4120,
+        "receive_ready_ns": 11476,
+        "receiver_contiguous_bytes": 6144,
+        "sender_progress": {
+          "scope": "source_QP_snapshot; no timeout/recovery is inferred",
+          "snd_nxt_bytes": 6144,
+          "snd_una_bytes": 6144
+        },
+        "sender_qp_present": false,
+        "sender_rate_at_ack_bps": 100000000000,
+        "sender_resource_released_ns": 17739,
+        "source_data_packets": 21,
+        "source_data_payload_bytes": 18432,
+        "source_unique_data_payload_bytes": 6144,
+        "src": 0
+      },
+      "target_recovery": {
+        "acknowledged_bytes": 6144,
+        "current_rto_ns": 2000,
+        "deadline_ns": -1,
+        "highest_sent_bytes": 6144,
+        "id": 1,
+        "retries_since_progress": 0,
+        "rtt": {
+          "ambiguity_until_bytes": 6144,
+          "base_rto_ns": 2000,
+          "discarded_probes": 1,
+          "probe_end_bytes": 1000,
+          "probe_sent_ns": -1,
+          "rttvar_ns": 0,
+          "samples": 0,
+          "srtt_ns": 0
+        },
+        "source": 0,
+        "state": "complete",
+        "timeout_expiries": 2,
+        "timeout_retransmissions": 2
+      },
+      "target_protocol_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          2000,
+          6203
+        ],
+        [
+          6203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          1,
+          4000,
+          10203
+        ],
+        [
+          10203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          2,
+          8000,
+          18203
+        ],
+        [
+          16962,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          2000,
+          18962
+        ],
+        [
+          17290,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          2000,
+          19290
+        ],
+        [
+          17385,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          2000,
+          19385
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          2000,
+          19486
+        ],
+        [
+          17731,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          2000,
+          19731
+        ],
+        [
+          17735,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          2000,
+          19735
+        ],
+        [
+          17739,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          2000,
+          -1
+        ]
+      ],
+      "conditional_bounds": [],
+      "source_credit_obstructions": {
+        "available": true,
+        "sources": [
+          {
+            "source": 0,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 1,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 2,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 3,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 4,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 5,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 6,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          },
+          {
+            "source": 7,
+            "active_count": 0,
+            "count_limit": 3,
+            "held_logical_bytes": 0,
+            "byte_limit": 8192,
+            "remaining_bytes": 8192,
+            "active_owner_ids": [],
+            "data_ready_but_unconfirmed_owner_ids": [],
+            "pending_ids": [],
+            "candidate_head_ids": [],
+            "byte_eligible_head_ids": [],
+            "policy_eligible_now": false,
+            "reason": "no_pending_work",
+            "decision_pending": false
+          }
+        ],
+        "scope": "offline exact end-state eligibility inequalities; no queue-delay attribution or permanent-blocking claim"
+      },
+      "queue_metrics": {
+        "available": true,
+        "scope": "All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture",
+        "switch_ports": 32,
+        "area_byte_ns": 158347692,
+        "peak_port_bytes": 9948,
+        "final_bytes": 0,
+        "queue_changes": 24000
+      },
+      "graph_progress": [
+        {
+          "graph_id": "g0.w0",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g0.w1",
+          "declared_nodes": 64,
+          "issued_nodes": 64,
+          "completed_nodes": 64
+        },
+        {
+          "graph_id": "g1.w0",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        },
+        {
+          "graph_id": "g1.w1",
+          "declared_nodes": 60,
+          "issued_nodes": 60,
+          "completed_nodes": 60
+        }
+      ],
+      "frontend_history": [
+        {
+          "graph_id": "g0.w0",
+          "group_index": 0,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 0,
+            "2": 0,
+            "4": 0,
+            "6": 0
+          },
+          "finished_ns": 48823
+        },
+        {
+          "graph_id": "g1.w0",
+          "group_index": 1,
+          "step": 0,
+          "start_ns": 0,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 0,
+            "3": 0,
+            "5": 0,
+            "7": 0
+          },
+          "finished_ns": 61172
+        },
+        {
+          "graph_id": "g0.w1",
+          "group_index": 0,
+          "step": 1,
+          "start_ns": 48823,
+          "batch_request_ids": {
+            "0": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "2": [
+              8,
+              9,
+              10,
+              11
+            ],
+            "4": [
+              16,
+              17,
+              18,
+              19
+            ],
+            "6": [
+              24,
+              25,
+              26,
+              27
+            ]
+          },
+          "batch_ids": {
+            "0": 1,
+            "2": 1,
+            "4": 1,
+            "6": 1
+          },
+          "finished_ns": 97296
+        },
+        {
+          "graph_id": "g1.w1",
+          "group_index": 1,
+          "step": 1,
+          "start_ns": 61172,
+          "batch_request_ids": {
+            "1": [
+              4,
+              5,
+              6,
+              7
+            ],
+            "3": [
+              12,
+              13,
+              14,
+              15
+            ],
+            "5": [
+              20,
+              21,
+              22,
+              23
+            ],
+            "7": [
+              28,
+              29,
+              30,
+              31
+            ]
+          },
+          "batch_ids": {
+            "1": 1,
+            "3": 1,
+            "5": 1,
+            "7": 1
+          },
+          "finished_ns": 122641
+        }
+      ],
+      "result_sha256": "b6d900734d7bf982df326ce0572cb6af6b7136790dd7c514cd37decfca332156"
+    }
+  },
+  "packet_components": {
+    "fixed-loss": {
+      "49": {
+        "id": 49,
+        "last_sequence": 6000,
+        "last_packet_uid": 724,
+        "source_emission_span_ns": 671,
+        "link_serialization_and_propagation_ns": 6084,
+        "switch_queue_residence_ns": 753,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 7508,
+        "ack_tail_ns": 6024,
+        "ports": [
+          {
+            "node": 8,
+            "port": 4,
+            "enqueue_ns": 97356,
+            "dequeue_ns": 97667,
+            "residence_ns": 311
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "enqueue_ns": 98681,
+            "dequeue_ns": 98916,
+            "residence_ns": 235
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "enqueue_ns": 99930,
+            "dequeue_ns": 99999,
+            "residence_ns": 69
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "enqueue_ns": 101013,
+            "dequeue_ns": 101082,
+            "residence_ns": 69
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "enqueue_ns": 102096,
+            "dequeue_ns": 102165,
+            "residence_ns": 69
+          }
+        ]
+      },
+      "60": {
+        "id": 60,
+        "last_sequence": 6000,
+        "last_packet_uid": 846,
+        "source_emission_span_ns": 498,
+        "link_serialization_and_propagation_ns": 4056,
+        "switch_queue_residence_ns": 207,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 4761,
+        "ack_tail_ns": 4016,
+        "ports": [
+          {
+            "node": 8,
+            "port": 3,
+            "enqueue_ns": 110715,
+            "dequeue_ns": 110784,
+            "residence_ns": 69
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "enqueue_ns": 111798,
+            "dequeue_ns": 111867,
+            "residence_ns": 69
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "enqueue_ns": 112881,
+            "dequeue_ns": 112950,
+            "residence_ns": 69
+          }
+        ]
+      },
+      "62": {
+        "id": 62,
+        "last_sequence": 4000,
+        "last_packet_uid": 919,
+        "source_emission_span_ns": 592,
+        "link_serialization_and_propagation_ns": 6066,
+        "switch_queue_residence_ns": 360,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 7018,
+        "ack_tail_ns": 6024,
+        "ports": [
+          {
+            "node": 8,
+            "port": 4,
+            "enqueue_ns": 119666,
+            "dequeue_ns": 119727,
+            "residence_ns": 61
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "enqueue_ns": 120738,
+            "dequeue_ns": 120810,
+            "residence_ns": 72
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "enqueue_ns": 121821,
+            "dequeue_ns": 121893,
+            "residence_ns": 72
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "enqueue_ns": 122904,
+            "dequeue_ns": 122976,
+            "residence_ns": 72
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "enqueue_ns": 123987,
+            "dequeue_ns": 124070,
+            "residence_ns": 83
+          }
+        ]
+      }
+    },
+    "adaptive-loss": {
+      "49": {
+        "id": 49,
+        "last_sequence": 6000,
+        "last_packet_uid": 721,
+        "source_emission_span_ns": 671,
+        "link_serialization_and_propagation_ns": 6084,
+        "switch_queue_residence_ns": 345,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 7100,
+        "ack_tail_ns": 6024,
+        "ports": [
+          {
+            "node": 8,
+            "port": 4,
+            "enqueue_ns": 94856,
+            "dequeue_ns": 94925,
+            "residence_ns": 69
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "enqueue_ns": 95939,
+            "dequeue_ns": 96008,
+            "residence_ns": 69
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "enqueue_ns": 97022,
+            "dequeue_ns": 97091,
+            "residence_ns": 69
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "enqueue_ns": 98105,
+            "dequeue_ns": 98174,
+            "residence_ns": 69
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "enqueue_ns": 99188,
+            "dequeue_ns": 99257,
+            "residence_ns": 69
+          }
+        ]
+      },
+      "60": {
+        "id": 60,
+        "last_sequence": 6000,
+        "last_packet_uid": 837,
+        "source_emission_span_ns": 498,
+        "link_serialization_and_propagation_ns": 4056,
+        "switch_queue_residence_ns": 290,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 4844,
+        "ack_tail_ns": 4016,
+        "ports": [
+          {
+            "node": 8,
+            "port": 3,
+            "enqueue_ns": 107807,
+            "dequeue_ns": 107876,
+            "residence_ns": 69
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "enqueue_ns": 108890,
+            "dequeue_ns": 109042,
+            "residence_ns": 152
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "enqueue_ns": 110056,
+            "dequeue_ns": 110125,
+            "residence_ns": 69
+          }
+        ]
+      },
+      "62": {
+        "id": 62,
+        "last_sequence": 4000,
+        "last_packet_uid": 910,
+        "source_emission_span_ns": 592,
+        "link_serialization_and_propagation_ns": 6066,
+        "switch_queue_residence_ns": 443,
+        "other_forwarding_ns": 0,
+        "data_delivery_ns": 7101,
+        "ack_tail_ns": 6024,
+        "ports": [
+          {
+            "node": 8,
+            "port": 4,
+            "enqueue_ns": 116841,
+            "dequeue_ns": 116902,
+            "residence_ns": 61
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "enqueue_ns": 117913,
+            "dequeue_ns": 117985,
+            "residence_ns": 72
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "enqueue_ns": 118996,
+            "dequeue_ns": 119068,
+            "residence_ns": 72
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "enqueue_ns": 120079,
+            "dequeue_ns": 120151,
+            "residence_ns": 72
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "enqueue_ns": 121162,
+            "dequeue_ns": 121328,
+            "residence_ns": 166
+          }
+        ]
+      }
+    }
+  },
+  "common_graphs_identical": true,
+  "common_first_paths_identical": true,
+  "clean_and_short_execution_pairs_identical": true,
+  "scope": "offline synthetic inference reliability evaluation; no hardware calibration"
+}

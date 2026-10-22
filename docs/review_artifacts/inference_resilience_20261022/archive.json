@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "archive": "runs/inference_resilience_20261022/evidence.tar.gz",
+  "bytes": 19681282,
+  "sha256": "c75ed4adf2742e6096f55a117d094c231c8f0f23474ae5fa6fd2567038a61a30",
+  "verified_file_count": 6482,
+  "manifest_sha256": "6a9e6d96cfe76a0e2f85f075c6ddcb2c4978b764040a1f73dc0f9c72366a5748",
+  "study_bytes": 21662691,
+  "other_evidence_bytes": 178782361,
+  "source_commit": "bfa2e7d14f0d369f372a76716832c086a2526bdd",
+  "argv": [
+    "/usr/bin/python3",
+    "docs/review_artifacts/inference_resilience_20261022/archive_evidence.py",
+    "--run-root",
+    "/dev/shm/moe-delivery-20261022",
+    "--output",
+    "/home/lry/moe-ub-cosim/runs/inference_resilience_20261022/evidence.tar.gz",
+    "--index",
+    "/home/lry/moe-ub-cosim/docs/review_artifacts/inference_resilience_20261022/archive.json"
+  ],
+  "cwd": "/home/lry/moe-ub-cosim",
+  "raw_evidence_root": "/dev/shm/moe-delivery-20261022",
+  "raw_evidence_preserved": true,
+  "scope": "committed implementation/study snapshot plus success/failure evidence; closure documents committed separately"
+}

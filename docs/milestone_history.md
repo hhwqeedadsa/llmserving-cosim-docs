@@ -49,3 +49,5 @@ M0 至 M5 对应 v0.2，M6 至 M10 对应 v0.3，M11 至 M16 对应 v0.4，M18 �
 ## 文档整理
 
 2026-10-05 完成主仓文档职责划分、术语说明、重复记录压缩和导航整理，发布于 [749c8c5](https://github.com/baoy21/moe-ub-cosim/commit/749c8c55fce4e5199888b63b3ae56cf55d7d92ef)。检查范围及结果见[当时的任务记录](https://github.com/baoy21/moe-ub-cosim/blob/749c8c55fce4e5199888b63b3ae56cf55d7d92ef/docs/tasks/current.md)。这次交付仅调整文档，源码、配置、测试输入、依赖与原验收结论不变。
+
+2026-10-22 完成Scale-Out推理恢复历史、目的端份额和统一参数实验入口（平台`52e1afb`）；独立24条件及4次包补采解释正负结果（研究`bfa2e7d`），仅本地提交。范围、来源、失败保留和6482文件持久归档见[本阶段交付核对](review_artifacts/inference_resilience_20261022/completion_audit.md)，不宣称请求级容错、千卡或硬件精度。

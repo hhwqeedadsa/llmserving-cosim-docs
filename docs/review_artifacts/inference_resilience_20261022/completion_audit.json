@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "criteria": [
+    {
+      "goal": "网络与系统方法实践",
+      "passed": true,
+      "evidence": "platform 52e1afb; fixed/adaptive/resilience accepted gates"
+    },
+    {
+      "goal": "业务反馈与包级机制解释",
+      "passed": true,
+      "evidence": "24-case research bfa2e7d; 4 exact packet replays; signed negative findings"
+    },
+    {
+      "goal": "可修改参数与公开完整流程",
+      "passed": true,
+      "evidence": "public-delivery five conditions; terminal sweep gates"
+    },
+    {
+      "goal": "审阅、复现、失败保留与来源归档",
+      "passed": true,
+      "evidence": "verification.json and archive.json"
+    },
+    {
+      "goal": "只本地修改和提交、不push",
+      "passed": true,
+      "evidence": "local Git commits; no push executed"
+    }
+  ],
+  "markdown_links_checked": 111,
+  "archive_sha256_rechecked": true,
+  "archive_files": 6482,
+  "platform_commit": "52e1afb5f707f34a7b7ed8ab82bdba0edc63a582",
+  "research_commit": "bfa2e7d14f0d369f372a76716832c086a2526bdd",
+  "final_schema_runs": 91,
+  "failed_runs_retained": 14,
+  "limitations": [
+    "no request-level fault isolation",
+    "no new thousand-GPU execution evidence",
+    "no real-hotspot or GPU hardware calibration",
+    "no browser visual acceptance"
+  ],
+  "scope": "closure records outside archived study snapshot; no additional simulations"
+}

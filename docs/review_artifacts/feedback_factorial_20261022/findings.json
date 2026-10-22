@@ -1,0 +1,48 @@
+{
+  "conditions": 16,
+  "factor_ranges": {
+    "depth": {
+      "pairs": 8,
+      "minimum_delta_ns": -37295,
+      "maximum_delta_ns": -35685,
+      "minimum_percent": -23.60891308476293,
+      "maximum_percent": -22.58973222763816
+    },
+    "np_ns": {
+      "pairs": 8,
+      "minimum_delta_ns": -1312,
+      "maximum_delta_ns": 0,
+      "minimum_percent": -1.0729034632211643,
+      "maximum_percent": 0.0
+    },
+    "recovery_ns": {
+      "pairs": 8,
+      "minimum_delta_ns": 0,
+      "maximum_delta_ns": 0,
+      "minimum_percent": 0.0,
+      "maximum_percent": 0.0
+    },
+    "cnp_bytes": {
+      "pairs": 8,
+      "minimum_delta_ns": 0,
+      "maximum_delta_ns": 1490,
+      "minimum_percent": 0.0,
+      "maximum_percent": 1.2334947638561244
+    }
+  },
+  "feedback_stream_conditions": 88,
+  "data_packets_after_first_cnp": 0,
+  "tx_samples_below_line_rate": 0,
+  "independent_counts": {
+    "data_packets": 14400,
+    "endpoint_packets": 29446,
+    "ack_packets": 14400,
+    "port_conservation_checks": 640,
+    "work_callback_checks": 960,
+    "rp_state_events": 20436,
+    "cnp_packets": 646
+  },
+  "paper_main_contribution_established": false,
+  "raw_artifacts_volatile": true,
+  "persistent_backup": false
+}

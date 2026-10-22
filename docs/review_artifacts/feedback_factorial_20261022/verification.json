@@ -1,0 +1,1536 @@
+{
+  "verified": true,
+  "conditions": 16,
+  "counts": {
+    "data_packets": 14400,
+    "endpoint_packets": 29446,
+    "ack_packets": 14400,
+    "port_conservation_checks": 640,
+    "work_callback_checks": 960,
+    "rp_state_events": 20436,
+    "cnp_packets": 646
+  },
+  "cases": [
+    {
+      "case": "d1-n5000-r5000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n5000-r5000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n5000-r55000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n5000-r55000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n50000-r5000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n50000-r5000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n50000-r55000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d1-n50000-r55000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 57224,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 118334,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 128467,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 37219,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 110440,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 141137,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 79177,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 103202,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 47774,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 92372,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 116348,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 55602,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "0dc202cb3a9da8518f9bfc7157d2b18addfceb49a82574e93fdba2136c9a34de",
+      "source_rate_samples": 2700,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n5000-r5000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14416,
+          "first_cnp_rx_ns": 16296,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16892,
+          "first_cnp_rx_ns": 23289,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18154,
+          "first_cnp_rx_ns": 25103,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15014,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15658,
+          "first_cnp_rx_ns": 21557,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16916,
+          "first_cnp_rx_ns": 23840,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 16960,
+          "first_cnp_rx_ns": 26956,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18222,
+          "first_cnp_rx_ns": 36148,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 16852,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18066,
+          "first_cnp_rx_ns": 34633,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19364,
+          "first_cnp_rx_ns": 31635,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18146,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "8a4e5a5c6ba3896a3b4aaa83a330739dfdb8d1dd2e4c1f882ef1fbd9faabd6eb",
+      "source_rate_samples": 2966,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n5000-r5000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14453,
+          "first_cnp_rx_ns": 17117,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16966,
+          "first_cnp_rx_ns": 22903,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18228,
+          "first_cnp_rx_ns": 25112,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15375,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15695,
+          "first_cnp_rx_ns": 21892,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16953,
+          "first_cnp_rx_ns": 24301,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 17034,
+          "first_cnp_rx_ns": 27554,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18296,
+          "first_cnp_rx_ns": 34904,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 17313,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18218,
+          "first_cnp_rx_ns": 29067,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19512,
+          "first_cnp_rx_ns": 32605,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18302,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "bbe7344fba01ce33d69545cb2a8dbfed1e8dd932ea552be85de2d26be050cc94",
+      "source_rate_samples": 2968,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n5000-r55000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14416,
+          "first_cnp_rx_ns": 16296,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16892,
+          "first_cnp_rx_ns": 23289,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18154,
+          "first_cnp_rx_ns": 25103,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15014,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15658,
+          "first_cnp_rx_ns": 21557,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16916,
+          "first_cnp_rx_ns": 23840,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 16960,
+          "first_cnp_rx_ns": 26956,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18222,
+          "first_cnp_rx_ns": 36148,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 16852,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18066,
+          "first_cnp_rx_ns": 34633,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19364,
+          "first_cnp_rx_ns": 31635,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18146,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "8a4e5a5c6ba3896a3b4aaa83a330739dfdb8d1dd2e4c1f882ef1fbd9faabd6eb",
+      "source_rate_samples": 2966,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n5000-r55000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14453,
+          "first_cnp_rx_ns": 17117,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16966,
+          "first_cnp_rx_ns": 22903,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18228,
+          "first_cnp_rx_ns": 25112,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15375,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15695,
+          "first_cnp_rx_ns": 21892,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16953,
+          "first_cnp_rx_ns": 24301,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 17034,
+          "first_cnp_rx_ns": 27554,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18296,
+          "first_cnp_rx_ns": 34904,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 17313,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18218,
+          "first_cnp_rx_ns": 29067,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19512,
+          "first_cnp_rx_ns": 32605,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18302,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "bbe7344fba01ce33d69545cb2a8dbfed1e8dd932ea552be85de2d26be050cc94",
+      "source_rate_samples": 2968,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n50000-r5000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14416,
+          "first_cnp_rx_ns": 16296,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16888,
+          "first_cnp_rx_ns": 23289,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18150,
+          "first_cnp_rx_ns": 24760,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15014,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15658,
+          "first_cnp_rx_ns": 21557,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16916,
+          "first_cnp_rx_ns": 23840,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 16960,
+          "first_cnp_rx_ns": 26937,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18222,
+          "first_cnp_rx_ns": 36148,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 16852,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18062,
+          "first_cnp_rx_ns": 34558,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19360,
+          "first_cnp_rx_ns": 31620,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18142,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "612e426120144cede0e7e1c81fcee474044e0149830ad308182c4cb50f147471",
+      "source_rate_samples": 2756,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n50000-r5000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14453,
+          "first_cnp_rx_ns": 17117,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16925,
+          "first_cnp_rx_ns": 22903,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18187,
+          "first_cnp_rx_ns": 25030,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15375,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15695,
+          "first_cnp_rx_ns": 21892,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16953,
+          "first_cnp_rx_ns": 24301,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 17034,
+          "first_cnp_rx_ns": 27558,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18296,
+          "first_cnp_rx_ns": 35762,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 17313,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18173,
+          "first_cnp_rx_ns": 29203,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19471,
+          "first_cnp_rx_ns": 32613,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18257,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "9ec774ebe898561e7f89f7139de4a6d57206807430f450e69e06f20b2792750a",
+      "source_rate_samples": 2756,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n50000-r55000-b48",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14416,
+          "first_cnp_rx_ns": 16296,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16888,
+          "first_cnp_rx_ns": 23289,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18150,
+          "first_cnp_rx_ns": 24760,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15014,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15658,
+          "first_cnp_rx_ns": 21557,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16916,
+          "first_cnp_rx_ns": 23840,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 16960,
+          "first_cnp_rx_ns": 26937,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18222,
+          "first_cnp_rx_ns": 36148,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 16852,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18062,
+          "first_cnp_rx_ns": 34558,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19360,
+          "first_cnp_rx_ns": 31620,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18142,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "612e426120144cede0e7e1c81fcee474044e0149830ad308182c4cb50f147471",
+      "source_rate_samples": 2756,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    },
+    {
+      "case": "d8-n50000-r55000-b512",
+      "stream_feedback_timing": [
+        {
+          "stream": 1,
+          "last_data_tx_ns": 14453,
+          "first_cnp_rx_ns": 17117,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 2,
+          "last_data_tx_ns": 16925,
+          "first_cnp_rx_ns": 22903,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 3,
+          "last_data_tx_ns": 18187,
+          "first_cnp_rx_ns": 25030,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 4,
+          "last_data_tx_ns": 10746,
+          "first_cnp_rx_ns": 15375,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 6,
+          "last_data_tx_ns": 15695,
+          "first_cnp_rx_ns": 21892,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 7,
+          "last_data_tx_ns": 16953,
+          "first_cnp_rx_ns": 24301,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 8,
+          "last_data_tx_ns": 17034,
+          "first_cnp_rx_ns": 27558,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 9,
+          "last_data_tx_ns": 18296,
+          "first_cnp_rx_ns": 35762,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 11,
+          "last_data_tx_ns": 14548,
+          "first_cnp_rx_ns": 17313,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 12,
+          "last_data_tx_ns": 18173,
+          "first_cnp_rx_ns": 29203,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 13,
+          "last_data_tx_ns": 19471,
+          "first_cnp_rx_ns": 32613,
+          "data_packets_after_first_cnp": 0
+        },
+        {
+          "stream": 14,
+          "last_data_tx_ns": 18257,
+          "first_cnp_rx_ns": null,
+          "data_packets_after_first_cnp": 0
+        }
+      ],
+      "source_timeline_sha256": "9ec774ebe898561e7f89f7139de4a6d57206807430f450e69e06f20b2792750a",
+      "source_rate_samples": 2756,
+      "actual_tx_samples": 900,
+      "tx_samples_below_line_rate": 0
+    }
+  ],
+  "paired_timeline_checks": [
+    {
+      "factor": "depth",
+      "low": "d1-n5000-r5000-b48",
+      "high": "d8-n5000-r5000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n5000-r5000-b512",
+      "high": "d8-n5000-r5000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n5000-r55000-b48",
+      "high": "d8-n5000-r55000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n5000-r55000-b512",
+      "high": "d8-n5000-r55000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n50000-r5000-b48",
+      "high": "d8-n50000-r5000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n50000-r5000-b512",
+      "high": "d8-n50000-r5000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n50000-r55000-b48",
+      "high": "d8-n50000-r55000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "depth",
+      "low": "d1-n50000-r55000-b512",
+      "high": "d8-n50000-r55000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "np_ns",
+      "low": "d1-n5000-r5000-b48",
+      "high": "d1-n50000-r5000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "np_ns",
+      "low": "d1-n5000-r5000-b512",
+      "high": "d1-n50000-r5000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "np_ns",
+      "low": "d1-n5000-r55000-b48",
+      "high": "d1-n50000-r55000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "np_ns",
+      "low": "d1-n5000-r55000-b512",
+      "high": "d1-n50000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "np_ns",
+      "low": "d8-n5000-r5000-b48",
+      "high": "d8-n50000-r5000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "np_ns",
+      "low": "d8-n5000-r5000-b512",
+      "high": "d8-n50000-r5000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "np_ns",
+      "low": "d8-n5000-r55000-b48",
+      "high": "d8-n50000-r55000-b48",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "np_ns",
+      "low": "d8-n5000-r55000-b512",
+      "high": "d8-n50000-r55000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d1-n5000-r5000-b48",
+      "high": "d1-n5000-r55000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d1-n5000-r5000-b512",
+      "high": "d1-n5000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d1-n50000-r5000-b48",
+      "high": "d1-n50000-r55000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d1-n50000-r5000-b512",
+      "high": "d1-n50000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d8-n5000-r5000-b48",
+      "high": "d8-n5000-r55000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d8-n5000-r5000-b512",
+      "high": "d8-n5000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d8-n50000-r5000-b48",
+      "high": "d8-n50000-r55000-b48",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "recovery_ns",
+      "low": "d8-n50000-r5000-b512",
+      "high": "d8-n50000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d1-n5000-r5000-b48",
+      "high": "d1-n5000-r5000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d1-n5000-r55000-b48",
+      "high": "d1-n5000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d1-n50000-r5000-b48",
+      "high": "d1-n50000-r5000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d1-n50000-r55000-b48",
+      "high": "d1-n50000-r55000-b512",
+      "source_timelines_equal": true
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d8-n5000-r5000-b48",
+      "high": "d8-n5000-r5000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d8-n5000-r55000-b48",
+      "high": "d8-n5000-r55000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d8-n50000-r5000-b48",
+      "high": "d8-n50000-r5000-b512",
+      "source_timelines_equal": false
+    },
+    {
+      "factor": "cnp_bytes",
+      "low": "d8-n50000-r55000-b48",
+      "high": "d8-n50000-r55000-b512",
+      "source_timelines_equal": false
+    }
+  ],
+  "first_cost_divergence": {
+    "stream": 2,
+    "sequence": 43392,
+    "source_gpu": 0,
+    "source_packet_delay_ns": 37,
+    "predecessors": [
+      {
+        "case": "d8-n5000-r5000-b48",
+        "node": 0,
+        "protocol": 255,
+        "preceding_tx_ns": 10965,
+        "preceding_bytes": 48,
+        "rounded_serialization_ns": 4,
+        "data_tx_ns": 10969,
+        "data_follows_frame_end": true
+      },
+      {
+        "case": "d8-n5000-r5000-b512",
+        "node": 0,
+        "protocol": 255,
+        "preceding_tx_ns": 10965,
+        "preceding_bytes": 512,
+        "rounded_serialization_ns": 41,
+        "data_tx_ns": 11006,
+        "data_follows_frame_end": true
+      }
+    ]
+  },
+  "raw_input_reads_only_in_checker": true,
+  "network_runs": 0,
+  "scope": "Endpoint UID joins, independent ECMP/port conservation and RP/NP functional state; not hardware calibration"
+}

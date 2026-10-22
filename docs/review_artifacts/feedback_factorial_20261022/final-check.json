@@ -1,0 +1,78 @@
+{
+  "verified": true,
+  "platform_commit": "591c62a",
+  "new_network_runs": 16,
+  "no_network_retry": true,
+  "source_hashes_matching_archive": 188,
+  "archive_members": 403,
+  "nested_platform_members": 648,
+  "archive_sha256": "90688e17bf8bd118d74a5b5b8ee58238f76b40a7cadb2a802f31a07492108aa2",
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "status": "completed",
+      "seconds": 0.5665314421057701
+    },
+    {
+      "stage": "check-final-monitor",
+      "status": "completed",
+      "seconds": 2.235628928989172
+    },
+    {
+      "stage": "check-monitor",
+      "status": "completed",
+      "seconds": 2.1149580273777246
+    },
+    {
+      "stage": "deps-monitor",
+      "status": "completed",
+      "seconds": 0.44789151288568974
+    },
+    {
+      "stage": "failed-package-monitor",
+      "status": "child_failed",
+      "seconds": 0.3631765190511942
+    },
+    {
+      "stage": "package-monitor",
+      "status": "completed",
+      "seconds": 5.295565539970994
+    },
+    {
+      "stage": "prepare-monitor",
+      "status": "completed",
+      "seconds": 0.23590997606515884
+    },
+    {
+      "stage": "review-monitor",
+      "status": "completed",
+      "seconds": 0.1303117796778679
+    },
+    {
+      "stage": "run-monitor",
+      "status": "completed",
+      "seconds": 21.40402089804411
+    },
+    {
+      "stage": "source-check-monitor",
+      "status": "completed",
+      "seconds": 0.2360302172601223
+    }
+  ],
+  "monitored_seconds_before_final": 33.0300248414278,
+  "task_usage_before_final": {
+    "apparent_bytes": 43119441,
+    "allocated_bytes": 43536384
+  },
+  "limits": {
+    "cumulative_wall_seconds": 300,
+    "cumulative_artifact_bytes": 134217728,
+    "archive_bytes": 33554432
+  },
+  "preserved_failure": "initial package member plan exceeded 64MiB; original code/log retained, same limits after embedding existing checkpoint",
+  "checks": "Python syntax, all source archive hashes, archive SHA256, JSON and git diff checks; packet/state checks separately recorded",
+  "post_archive_only": true,
+  "persistent_backup": false,
+  "raw_volatile": true,
+  "paper_main_contribution_established": false
+}

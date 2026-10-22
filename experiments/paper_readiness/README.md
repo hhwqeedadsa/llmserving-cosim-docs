@@ -825,7 +825,7 @@ completion_stage relocated-compare 33554432 python3 experiments/paper_readiness/
 
 本轮是只读模型审计，方法见[协议](dcqcn_validity_protocol.md)，结果见[HTML](../../docs/review_artifacts/dcqcn_validity_20261022/report.html)。
 核对DCQCN 2015、HOTI 2022、锁定ASTRA/Alibaba源码和既有两份Prefill端点轨迹，不执行新网络、不修参数、不重跑失败负载。
-[参考模式要求](dcqcn_reference_requirements.md)是后续设计，尚未实现或硬件校准。
+[参考模式要求](dcqcn_reference_requirements.md)保留当时设计；后续功能实现见[平台验收](../../fixtures/dcqcn_reference/README.md)，仍未硬件校准。
 
 只读重分析需要：当前仓库及固定依赖；已存在的Alibaba `3e0c7c1bfbbe9f77890ddcf5e5b9c79fc6dd7437`检出；
 旧Prefill检查点（[SHA256清单](../../docs/review_artifacts/prefill_pressure_20261022/archive.json)）；两篇PDF与提取文本。
@@ -873,3 +873,52 @@ PDF hash不同、提取器版本变化或原文定位失败都应保留并报告
 外层仍用host_probe，打包限32MiB、累计64MiB/180秒，task与报告均计入artifact-root。运行中的打包monitor不入快照；完成后将该probe记录另存报告目录。
 完整命令、退出状态和资源见`maintenance.json`与`package-monitor.json`，新包SHA256及逐文件核对见`archive.json`、`archive-members.json`。
 报告生成步骤本身不证明闭环模型或时延有效；通知位由固定源码及实际端点序号推导，旧轨迹没有直接保存ACK flags。
+
+## 短时Dispatch反馈分因素对照（2026-10-22）
+
+方法见[执行前方案](feedback_factorial_protocol.md)，结果见[HTML](../../docs/review_artifacts/feedback_factorial_20261022/report.html)。
+固定参考机制下，4因素完整16条件使用公开持久字节入口；不使用平台测试生成器，不重跑此前失败的完整Prefill。
+60次真实路由数据写的结果显示：恢复周期改变不影响业务ACK，所有有反馈连接都在首个CNP到达前发完自身数据；
+反馈帧大小则有真实网口服务差异。它是短负载适用性判别，不是新算法或千卡性能结果。
+
+已有固定依赖、已验收参考模式二进制和四份原件时，从新目录执行：
+
+```bash
+export COSIM_FEEDBACK_REPO=/home/lry/moe-ub-cosim
+export COSIM_FEEDBACK_WORK=/dev/shm/my-feedback-factorial
+export COSIM_FEEDBACK_BACKEND=/absolute/path/ns3.42-moe-rdma-stream-probe
+export PYTHONPATH="$COSIM_FEEDBACK_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_FEEDBACK_WORK"
+feedback_stage() {
+  local feedback_name="$1"
+  local feedback_budget="$2"
+  shift 2
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_FEEDBACK_WORK/$feedback_name-monitor" \
+    --artifact-root "$COSIM_FEEDBACK_WORK/$feedback_name" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes "$feedback_budget" --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+feedback_stage input 33554432 python3 "$COSIM_FEEDBACK_REPO/experiments/paper_readiness/feedback_factorial.py" prepare \
+  --manifest "$COSIM_FEEDBACK_REPO/data/moe-trace-small/manifest.json" --output "$COSIM_FEEDBACK_WORK/input"
+feedback_stage run 67108864 python3 "$COSIM_FEEDBACK_REPO/experiments/paper_readiness/feedback_factorial.py" run \
+  --observed "$COSIM_FEEDBACK_WORK/input/observed" --backend "$COSIM_FEEDBACK_BACKEND" --output "$COSIM_FEEDBACK_WORK/run"
+feedback_stage analysis 33554432 python3 "$COSIM_FEEDBACK_REPO/experiments/paper_readiness/feedback_factorial.py" analyze \
+  --observed "$COSIM_FEEDBACK_WORK/input/observed" --run "$COSIM_FEEDBACK_WORK/run" --output "$COSIM_FEEDBACK_WORK/analysis"
+feedback_stage checked-final 33554432 python3 "$COSIM_FEEDBACK_REPO/experiments/paper_readiness/check_feedback_factorial.py" \
+  --task "$COSIM_FEEDBACK_WORK" --analysis "$COSIM_FEEDBACK_WORK/analysis" --output "$COSIM_FEEDBACK_WORK/checked-final"
+```
+
+阶段失败即停止，不执行后续命令、不抬限重试。逐阶段同时核对任务累计≤128MiB/300秒；不把各阶段限额相加作为许可。
+准备程序只取各原件前6个Prefill token；分析程序不读truth，独立checker另读原件、核验NP/RP状态、端点UID、
+ECMP/全物理端口字节守恒、工作接收/ACK及源信用，额外输出第一处帧成本分歧与每连接首个反馈/最后发包时间。
+没有交换机逐跳抓包时，只称端点抓包加全端口统计互证。
+
+`build_feedback_review.py --task 本轮目录 --output 新报告目录`生成静态HTML/Markdown及小摘要，不执行网络。
+`package_feedback_factorial.py --task 本轮目录 --report 已生成报告目录 --platform-checkpoint 已有平台检查点目录`只归档已结束记录、源文件、4个原件、二进制及实际共享库；
+固定归档器核验平台检查点SHA256及648个成员后嵌入压缩原件，ns-3库不重复展开；研究输入与运行不读取其中的功能测试工作量。
+首次展开库的归档清单超过64MiB而失败，原脚本/日志保留；采用嵌套检查点后仍保持相同限额，没有网络重跑。
+必须在上述host_probe下另限60秒/1GiB/2GiB，计入task与report，累计128MiB，归档32MiB/成员64MiB。
+运行中的目录须命名`package-monitor`，不入自己的快照。它检查其他monitor结束且成功（明确保留的首次归档失败单列），实际包内逐成员hash复核。
+ELF保留旧RPATH，不能称可迁移镜像；本机实际原始件及归档只在易失内存盘，无持久备份。

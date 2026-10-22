@@ -1,0 +1,47 @@
+{
+  "reason": "DCQCN 2015 §5.2: 110us discussion concerns alpha interval tau-prime, not recovery T",
+  "correction": "The old 110us recovery condition is a self-chosen sensitivity, not a replication of that passage",
+  "historical_archive": {
+    "path": "/dev/shm/moe-feedback-overlap-20261022/checkpoint/checkpoint.tar.gz",
+    "sha256": "3b5700d6c30b55fe19a075046cb2a97bdef46a5f7ce94a85363c6c5a8fe2d7df",
+    "unchanged": true
+  },
+  "historical_summary_sha256": "9c8766d59c39da668177d68e69c52edfafdfe8f6c411638a090d9c905530159d",
+  "historical_four_results_unchanged": true,
+  "preregistration_original_prefix_preserved": true,
+  "compatibility_byte_identical": true,
+  "compatibility_sha256": "6a55a450585ff9c7dca1660c8f0cedf628a0399bfa789cdd73104e93abf845da",
+  "corrected_files": [
+    {
+      "path": "experiments/paper_readiness/feedback_overlap_protocol.md",
+      "historical_member": "source/experiments/paper_readiness/feedback_overlap_protocol.md",
+      "historical_sha256": "c1860fa912eeaa4d1a2ad5a78049e99f481e2333e7fd455ece4f3c32c92754c9",
+      "corrected_sha256": "6fb2085cf448e1e7b58b66a4222fc3f7d8b57afd862a4790f9ccc0e1131911f2"
+    },
+    {
+      "path": "experiments/paper_readiness/build_feedback_overlap_review.py",
+      "historical_member": "source/experiments/paper_readiness/build_feedback_overlap_review.py",
+      "historical_sha256": "f62269ac788219d853533579696b1cc2c686c558eb877811d9f4ab989328cdcc",
+      "corrected_sha256": "0b5ff3c2dd8157d6d94d13b9a5ee9f663085795a36a46c1194c7e684360a0ca3"
+    },
+    {
+      "path": "docs/review_artifacts/feedback_overlap_20261022/protocol.md",
+      "historical_member": "report/protocol.md",
+      "historical_sha256": "c1860fa912eeaa4d1a2ad5a78049e99f481e2333e7fd455ece4f3c32c92754c9",
+      "corrected_sha256": "6fb2085cf448e1e7b58b66a4222fc3f7d8b57afd862a4790f9ccc0e1131911f2"
+    },
+    {
+      "path": "docs/review_artifacts/feedback_overlap_20261022/report.md",
+      "historical_member": "report/report.md",
+      "historical_sha256": "561448f3c516f62b43ca50e67ff49c604243ac9b889fcf2b5eb672766052f95a",
+      "corrected_sha256": "13ddb06bacb7ee893df00c58610d929641aef621d4cd1f095c0994e402ac159c"
+    },
+    {
+      "path": "docs/review_artifacts/feedback_overlap_20261022/report.html",
+      "historical_member": "report/report.html",
+      "historical_sha256": "78b8f3e816ad3be69e5e7a0ee4980ace20bfe241209ad45cd23e571d3e685331",
+      "corrected_sha256": "3b1830d7fd0bc77a37f9b99640b3cc8c4bc7dde08ea0e3cd7b5f8e4640ba7a01"
+    }
+  ],
+  "historical_receipts_scope": "Old receipts describe old archived snapshots; this erratum records the later documentation changes"
+}

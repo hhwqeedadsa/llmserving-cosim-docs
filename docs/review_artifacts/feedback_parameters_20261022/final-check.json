@@ -1,0 +1,66 @@
+{
+  "verified": true,
+  "archive_sha256": "6a86f4ba6a26ef7ad7226c5db515c9175810c95fe9af1979f8a49b4354a0c041",
+  "verified_members": 357,
+  "source_files_match_snapshot": 195,
+  "report_files_match_snapshot": 9,
+  "syntax_files": 92,
+  "git_diff_check": true,
+  "fixed_dependencies": 13,
+  "old_oracle_verification_byte_identical": true,
+  "historical_archive_unchanged": true,
+  "explicit_erratum_verified": true,
+  "html_tables": 2,
+  "html_rows": 22,
+  "report_json_valid": true,
+  "new_network_runs": 6,
+  "hash_verified_reused_successes": 2,
+  "additional_network_runs_in_delivery": 0,
+  "stage_monitors": [
+    {
+      "stage": "analysis-monitor",
+      "seconds": 0.7793490905314684
+    },
+    {
+      "stage": "check-monitor",
+      "seconds": 3.1173384487628937
+    },
+    {
+      "stage": "compat-monitor",
+      "seconds": 1.7937353793531656
+    },
+    {
+      "stage": "deps-monitor",
+      "seconds": 0.46774215064942837
+    },
+    {
+      "stage": "input-monitor",
+      "seconds": 0.2355191335082054
+    },
+    {
+      "stage": "package-monitor",
+      "seconds": 6.690119061619043
+    },
+    {
+      "stage": "review-monitor",
+      "seconds": 1.1156994346529245
+    },
+    {
+      "stage": "run-monitor",
+      "seconds": 14.519249830394983
+    },
+    {
+      "stage": "syntax-monitor",
+      "seconds": 0.46713911183178425
+    }
+  ],
+  "monitored_seconds_before_final_stage": 29.185891641303897,
+  "final_stage_hard_wall_limit_seconds": 60,
+  "task_and_report_usage_before_final_receipt": {
+    "apparent_bytes": 54456544,
+    "allocated_bytes": 54759424
+  },
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "paper_main_contribution_established": false
+}

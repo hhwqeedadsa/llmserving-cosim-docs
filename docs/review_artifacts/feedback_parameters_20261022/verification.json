@@ -1,0 +1,105 @@
+{
+  "verified": true,
+  "all_declared_completed": true,
+  "counts": {
+    "data_packets": 21600,
+    "endpoint_packet_joins": 43430,
+    "ack_packets": 21600,
+    "physical_ports": 320,
+    "work_callbacks_credit": 1440,
+    "rp_state_events": 31162,
+    "cnp_packets": 230
+  },
+  "cases": [
+    {
+      "case": "d1-ai5-p1",
+      "full_verification": true,
+      "rp_state_events": 2712,
+      "result_sha256": "0955ccd504ad7798fbca7dd5195c751e3f0508fa808cedbbb98f735eabce521a",
+      "execution_kind": "reused_success"
+    },
+    {
+      "case": "d1-ai5-p001",
+      "full_verification": true,
+      "rp_state_events": 2712,
+      "result_sha256": "0955ccd504ad7798fbca7dd5195c751e3f0508fa808cedbbb98f735eabce521a",
+      "execution_kind": "new"
+    },
+    {
+      "case": "d1-ai40-p1",
+      "full_verification": true,
+      "rp_state_events": 2712,
+      "result_sha256": "e4ae64814c64354197edb388aadb948be26cc2bc4ff5b4efb6e0c93a01d983e1",
+      "execution_kind": "new"
+    },
+    {
+      "case": "d1-ai40-p001",
+      "full_verification": true,
+      "rp_state_events": 2712,
+      "result_sha256": "e4ae64814c64354197edb388aadb948be26cc2bc4ff5b4efb6e0c93a01d983e1",
+      "execution_kind": "new"
+    },
+    {
+      "case": "d8-ai5-p1",
+      "full_verification": true,
+      "rp_state_events": 5265,
+      "result_sha256": "82db48d58af3c25852afd02ca99cc5f1b0b8c8a6179dfc2f3e15be29f8ef5f34",
+      "execution_kind": "reused_success"
+    },
+    {
+      "case": "d8-ai5-p001",
+      "full_verification": true,
+      "rp_state_events": 4950,
+      "result_sha256": "2cb8d0d8e5815928fd9c742ab1fd8b1f90b88f7c4406232983311c03c2a72a8a",
+      "execution_kind": "new"
+    },
+    {
+      "case": "d8-ai40-p1",
+      "full_verification": true,
+      "rp_state_events": 5207,
+      "result_sha256": "c605a9c4df82d25d5af6d9a44bc4829c30ef1110c37f00ad4f013469e94ac6ee",
+      "execution_kind": "new"
+    },
+    {
+      "case": "d8-ai40-p001",
+      "full_verification": true,
+      "rp_state_events": 4892,
+      "result_sha256": "383319d08752d9f432f3d09d0e75de9ded684cb22f8b02c966d86469b238c5f1",
+      "execution_kind": "new"
+    }
+  ],
+  "comparisons": [
+    {
+      "depth": 1,
+      "pmax": 1.0,
+      "AI5_to40_CNP_sequences_equal": true
+    },
+    {
+      "depth": 1,
+      "pmax": 0.01,
+      "AI5_to40_CNP_sequences_equal": true
+    },
+    {
+      "depth": 8,
+      "pmax": 1.0,
+      "AI5_to40_CNP_sequences_equal": true
+    },
+    {
+      "depth": 8,
+      "pmax": 0.01,
+      "AI5_to40_CNP_sequences_equal": true
+    }
+  ],
+  "new_network_runs": 6,
+  "reused_successful_runs": 2,
+  "pmax_evidence": "hashed public protocol plus fixed Fabric direct assignment, not a hardware readback",
+  "hardware_calibrated": false,
+  "source_audit": {
+    "pdf_sha256": "879074a33b78ceb93f9f66d59b217fba9e7621320cc68bc47914747cf5cf31f8",
+    "text_sha256": "8e24d0ed58449e08dbee0b985e8f531dc423903fc7bbb7eba1c356a2ae577ef6",
+    "source_mmu_sha256": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25",
+    "alpha_and_recovery_distinct": true,
+    "probability_above_kmax_is_one": true,
+    "correction": "110us primary-source discussion concerns alpha interval tau-prime, not recovery timer T"
+  }
+}

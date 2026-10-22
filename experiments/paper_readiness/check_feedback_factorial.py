@@ -105,7 +105,7 @@ def check_rp(events, config):
             s['timer_rounds']+=1
             s['recovery_due_ns']+=config['recovery_interval_ns']
             if max(s['timer_rounds'],s['byte_rounds'])>=5:
-                step=50000000 if min(s['timer_rounds'],s['byte_rounds'])>5 else 5000000
+                step=config['hyper_bps'] if min(s['timer_rounds'],s['byte_rounds'])>5 else config['additive_bps']
                 s['target_bps']=min(100000000000,s['target_bps']+step)
             s['rate_bps']=max(100000000,min(100000000000,(s['rate_bps']+s['target_bps'])//2))
         elif kind=='rp_alpha':

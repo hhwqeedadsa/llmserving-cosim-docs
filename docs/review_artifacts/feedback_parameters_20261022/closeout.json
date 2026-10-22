@@ -1,0 +1,61 @@
+{
+  "verified": true,
+  "stages": [
+    {
+      "stage": "analysis-monitor",
+      "wall_seconds": 0.7793490905314684
+    },
+    {
+      "stage": "check-monitor",
+      "wall_seconds": 3.1173384487628937
+    },
+    {
+      "stage": "compat-monitor",
+      "wall_seconds": 1.7937353793531656
+    },
+    {
+      "stage": "deps-monitor",
+      "wall_seconds": 0.46774215064942837
+    },
+    {
+      "stage": "final-monitor",
+      "wall_seconds": 0.8859739527106285
+    },
+    {
+      "stage": "input-monitor",
+      "wall_seconds": 0.2355191335082054
+    },
+    {
+      "stage": "package-monitor",
+      "wall_seconds": 6.690119061619043
+    },
+    {
+      "stage": "review-monitor",
+      "wall_seconds": 1.1156994346529245
+    },
+    {
+      "stage": "run-monitor",
+      "wall_seconds": 14.519249830394983
+    },
+    {
+      "stage": "syntax-monitor",
+      "wall_seconds": 0.46713911183178425
+    }
+  ],
+  "monitored_seconds_including_final": 30.071865594014525,
+  "task_and_report_usage": {
+    "apparent_bytes": 54463969,
+    "allocated_bytes": 54779904
+  },
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "archive_sha256": "6a86f4ba6a26ef7ad7226c5db515c9175810c95fe9af1979f8a49b4354a0c041",
+  "archive_bytes": 31056753,
+  "verified_members": 357,
+  "nested_platform_members": 648,
+  "new_network_runs": 6,
+  "reused_successful_runs": 2,
+  "failures": 0,
+  "retries": 0,
+  "scope": "All completed monitor records including packaging and final checks; this small receipt and Git metadata are not embedded in the archive"
+}

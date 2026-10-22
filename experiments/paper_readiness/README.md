@@ -979,3 +979,78 @@ overlap_stage comparison 33554432 python3 "$COSIM_OVERLAP_REPO/experiments/paper
 归档器在host_probe下另限60秒/1GiB/2GiB，task与report同时计入128MiB预算，成员64MiB、压缩包32MiB，
 并排除运行中的`package-monitor`。它核验648项原平台成员，再嵌入压缩原件、避免重复展开ns-3库；
 旧功能工作量不作为研究输入。ELF保留原RPATH，归档不是可迁移镜像；原始件与归档仅易失内存盘、无持久备份。
+
+## 并发排序的参数依赖判别（2026-10-22）
+
+[执行前方法](feedback_parameter_protocol.md)固定depth1/8×AI5/40Mb/s×pmax1/0.01共8条件。
+[报告](../../docs/review_artifacts/feedback_parameters_20261022/report.html)中6次新增、2次成功基准按hash复用；
+深度8在四个配对中仍较慢。只有一个种子、四个已见请求和小Clos，不表示统计泛化、现代NIC校准或新算法。
+`pmax=0.01`只修改阈值区间内的标记概率，超过kmax仍全部标记。
+旧110us引文指alpha更新周期而非恢复T，见[显式勘误](../../docs/review_artifacts/feedback_parameters_20261022/erratum.json)；
+旧预注册原文、网络结果和旧归档保留。
+
+以下命令在主仓库执行。输入是同四个原始JSON、已有参考二进制和前轮窗口声明；不需下载或构建。
+`COSIM_PARAMETER_WORK`必须不存在。各命令失败就停止，检查执行状态后再做只读诊断，不自动重新执行网络。
+
+```bash
+export COSIM_PARAMETER_REPO=/home/lry/moe-ub-cosim
+export COSIM_PARAMETER_WORK=/dev/shm/my-feedback-parameters
+export COSIM_PARAMETER_BASE=/absolute/path/feedback-overlap
+export COSIM_PARAMETER_BACKEND=/absolute/path/ns3.42-moe-rdma-stream-probe
+export COSIM_PARAMETER_PAPERS=/absolute/path/papers
+export PYTHONPATH="$COSIM_PARAMETER_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_PARAMETER_WORK"
+parameter_stage() {
+  local parameter_name="$1"
+  local parameter_bytes="$2"
+  shift 2
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_PARAMETER_WORK/$parameter_name-monitor" \
+    --artifact-root "$COSIM_PARAMETER_WORK/$parameter_name" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 \
+    --artifact-bytes "$parameter_bytes" --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+parameter_stage input 33554432 python3 "$COSIM_PARAMETER_REPO/experiments/paper_readiness/feedback_parameters.py" prepare \
+  --baseline "$COSIM_PARAMETER_BASE" --manifest "$COSIM_PARAMETER_REPO/data/moe-trace-small/manifest.json" \
+  --output "$COSIM_PARAMETER_WORK/input"
+parameter_stage run 67108864 python3 "$COSIM_PARAMETER_REPO/experiments/paper_readiness/feedback_parameters.py" run \
+  --observed "$COSIM_PARAMETER_WORK/input/observed" --backend "$COSIM_PARAMETER_BACKEND" \
+  --output "$COSIM_PARAMETER_WORK/run"
+parameter_stage analysis 33554432 python3 "$COSIM_PARAMETER_REPO/experiments/paper_readiness/feedback_parameters.py" analyze \
+  --observed "$COSIM_PARAMETER_WORK/input/observed" --run "$COSIM_PARAMETER_WORK/run" \
+  --output "$COSIM_PARAMETER_WORK/analysis"
+parameter_stage checked 33554432 python3 "$COSIM_PARAMETER_REPO/experiments/paper_readiness/check_feedback_parameters.py" \
+  --task "$COSIM_PARAMETER_WORK" --papers "$COSIM_PARAMETER_PAPERS" --output "$COSIM_PARAMETER_WORK/checked"
+```
+
+上面从新目录执行全部8条件。若要按本轮方式只执行6个，在`run`命令添加
+`--reuse-baseline "$COSIM_PARAMETER_BASE"`，它逐hash核对旧成功条件的输入、拓扑、协议、二进制、结果，
+保留`prior-inputs.json`与`reuse.json`；不能复用失败或不完整结果。`execution.json`区分新增、复用、失败和未执行。
+不添加该选项时，prepare仍需前轮声明来保持固定工作/协议，但不复用其网络结果。
+归档中的`prior-overlap/`足够提供这些声明和两个可复用结果，`source/data/`提供原始JSON；
+准备/checker按仓库相对路径读原件，恢复时须放回对应位置并核hash。
+
+每阶段60秒/RSS1GiB/地址2GiB；运行器64MiB，准备/分析/check各32MiB，
+端点100,000事件、状态及速率记录各20,000、仿真5ms、终态16MiB。
+阶段限额不能相加；操作者须累计所有monitor的wall_seconds与任务/报告/归档磁盘量，整轮≤300秒/128MiB，
+内存盘预留8GiB。失败/截断保留前缀且完成时间未知，不抬限、不搜索更多参数、不重跑旧失败Prefill。
+分析只读observed和公开输出；准备/独立checker才读truth/原件。
+
+研究oracle的AI/HAI参数化可只读回查旧4条件，不执行网络：
+`check_feedback_overlap.py --task 前轮目录 --analysis 前轮目录/analysis --output 新兼容核验目录`。
+本轮`compat/verification.json`与旧`checked-refined/verification.json`逐字节相同。
+该oracle的其他固定假设没有推广成任意控制器验证。
+
+固定历史报告生成器为`build_feedback_parameter_review.py --task 本轮目录 --baseline 前轮原始目录 --output 新报告目录`，
+它要求6新增+2复用、兼容核验与未改动的旧完整归档，以审计历史引文更正；不是任意复现实验的通用报告器。
+归档入口为`package_feedback_parameters.py --task 本轮目录 --report 报告目录 --platform-checkpoint 平台checkpoint目录 --baseline 前轮目录 --papers 论文目录`。
+仍用host_probe限定60秒/1GiB/2GiB；task与report一起计入128MiB，成员96MiB、压缩48MiB。
+它逐hash核验全部当前成员与648项嵌套平台成员，保存四个旧成功条件、原始四请求、实际动态库出处、
+一手论文和勘误前文档快照；旧完整研究包只记录hash，不重复嵌入。运行中的package-monitor及归档自身不入快照。
+打包后收据、最终检查和最后的任务状态不在包内快照，由Git保存。
+打包前先在同样预算内执行`bash scripts/check_deps.sh`，将受监控记录保存在task/deps-monitor；
+打包后用`check_feedback_parameter_delivery.py --task 本轮目录 --report 报告目录 --baseline 前轮目录 --output 报告目录/final-check.json`
+做源码/归档hash、旧包不变、兼容性、HTML/JSON、差异及累计预算核验。最终检查也须用host_probe，
+monitor目录名为`final-monitor`，输出文件必须不存在；它不重跑网络。
+根卷低于8GiB预留，大产物仅易失内存盘，尚无持久备份；保留ELF原RPATH，不承诺跨机器直接启动。

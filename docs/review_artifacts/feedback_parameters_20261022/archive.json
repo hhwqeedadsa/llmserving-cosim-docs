@@ -1,0 +1,86 @@
+{
+  "path": "/dev/shm/moe-feedback-parameters-20261022/checkpoint/checkpoint.tar.gz",
+  "bytes": 31056753,
+  "sha256": "6a86f4ba6a26ef7ad7226c5db515c9175810c95fe9af1979f8a49b4354a0c041",
+  "verified_members": 357,
+  "member_bytes": 80136879,
+  "nested_platform_members_verified": 648,
+  "runtime": [
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-applications.so",
+      "sha256": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-point-to-point.so",
+      "sha256": "04097544c76201d41a1ca80d5762b38e3fdfc4672a480d7d1f6b75bc4c38b54b"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-internet.so",
+      "sha256": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-network.so",
+      "sha256": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-core.so",
+      "sha256": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa"
+    },
+    {
+      "original_path": "/lib/x86_64-linux-gnu/libstdc++.so.6",
+      "archive_path": "runtime/lib/libstdc++.so.6",
+      "sha256": "1fd75fe70354a416d75aef22bcae68c47bd25d20e2d0568c30b1a9838cf62f11"
+    },
+    {
+      "original_path": "/lib/x86_64-linux-gnu/libm.so.6",
+      "archive_path": "runtime/lib/libm.so.6",
+      "sha256": "fce00b6f25f459cf4ae0b7fae4257909a1a8a86f9149e7c029a5d617baf1ccd0"
+    },
+    {
+      "original_path": "/lib/x86_64-linux-gnu/libgcc_s.so.1",
+      "archive_path": "runtime/lib/libgcc_s.so.1",
+      "sha256": "d93224d2b0dab4247598be683adca02f5cf00586f99c187579cd7e92058fb7cb"
+    },
+    {
+      "original_path": "/lib/x86_64-linux-gnu/libc.so.6",
+      "archive_path": "runtime/lib/libc.so.6",
+      "sha256": "3a15d66867d83762c7f2f1e37359cb8f6c5743edb369c65285cb0b1c4f7498bf"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-stats.so",
+      "sha256": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-bridge.so",
+      "sha256": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c"
+    },
+    {
+      "original_path": "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so",
+      "archive_path": "prior-platform/checkpoint.tar.gz::raw/runtime/libns3.42-traffic-control.so",
+      "sha256": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557"
+    },
+    {
+      "original_path": "/lib64/ld-linux-x86-64.so.2",
+      "archive_path": "runtime/lib/ld-linux-x86-64.so.2",
+      "sha256": "c20a2dc8917c755f02b94049356320fe1f62ac7d9f8994731f807d9df39302da"
+    }
+  ],
+  "binary_sha256": "9fdb9e0fe6e43ffa08b89ba74de4c1d7594f65c7f10781cccd8e6a1826074e19",
+  "source_head": "b9467f1f1957d69254e4478fe82fbbf3bec90739",
+  "source_worktree_has_research_edits": true,
+  "volatile": true,
+  "persistent_backup": false,
+  "runtime_portability": "Original ELF RPATH remains; not a portable runtime image",
+  "prior_overlap_scope": "Four old successful conditions plus citation snapshots and receipts; old full archive is referenced by hash, not embedded",
+  "excluded": "Active package monitor and archive itself; receipts/final checks added after packaging are external to this snapshot",
+  "new_network_runs": 6,
+  "reused_successful_runs": 2,
+  "no_additional_network_execution": true
+}

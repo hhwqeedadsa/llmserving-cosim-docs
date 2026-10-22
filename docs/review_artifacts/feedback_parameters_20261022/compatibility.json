@@ -1,0 +1,563 @@
+{
+  "verified": true,
+  "counts": {
+    "data_packets": 10800,
+    "endpoint_packet_joins": 21722,
+    "ack_packets": 10800,
+    "physical_port_checks": 160,
+    "work_callback_credit_checks": 720,
+    "reference_state_checks": 15857,
+    "cnp_packets": 122
+  },
+  "cases": [
+    {
+      "case": "d1-r55000",
+      "full_packet_verification": true,
+      "reference_states": 2712,
+      "streams": [
+        {
+          "stream": 1,
+          "source_payload_bytes": 332672,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 2,
+          "source_payload_bytes": 318208,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 3,
+          "source_payload_bytes": 390528,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 4,
+          "source_payload_bytes": 347136,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 6,
+          "source_payload_bytes": 260352,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 7,
+          "source_payload_bytes": 361600,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 8,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 9,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 11,
+          "source_payload_bytes": 101248,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 12,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 13,
+          "source_payload_bytes": 86784,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 14,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        }
+      ],
+      "source_timeline_sha256": "af679e279bd1ad108031bde536ea1c4d72af8c304aada0cdcc4615e9cc3af9cf",
+      "final_work_witness": {
+        "work": 71,
+        "stream": 3,
+        "ready_ns": 0,
+        "published_ns": 581720,
+        "publication_owner": {
+          "accepted_ns": 575652,
+          "acked_ns": 581720,
+          "begin": 361600,
+          "bytes": 14464,
+          "end": 376064,
+          "id": 69,
+          "published_ns": 563725,
+          "ready_ns": 0,
+          "stream": 3,
+          "ticket": 25
+        },
+        "first_source_tx_ns": 581720,
+        "last_source_tx_ns": 582882,
+        "last_source_uid": 5384,
+        "last_source_sequence": 390064,
+        "last_source_rate_bps": 100000000000,
+        "data_rx_ns": 593647,
+        "ack_tx_ns": 593647,
+        "ack_rx_ns": 599715,
+        "source_to_data_rx_ns": 10765,
+        "data_rx_to_ack_rx_ns": 6068,
+        "minimum_last_data_path_ns": 6720,
+        "minimum_final_ack_path_ns": 6068,
+        "actual_final_data_and_ack_have_no_extra_wait": false
+      },
+      "strict_pacing_witness_count": 0,
+      "largest_pacing_witness": null
+    },
+    {
+      "case": "d1-r110000",
+      "full_packet_verification": true,
+      "reference_states": 2712,
+      "streams": [
+        {
+          "stream": 1,
+          "source_payload_bytes": 332672,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 2,
+          "source_payload_bytes": 318208,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 3,
+          "source_payload_bytes": 390528,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 4,
+          "source_payload_bytes": 347136,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 6,
+          "source_payload_bytes": 260352,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 7,
+          "source_payload_bytes": 361600,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 8,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 9,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 11,
+          "source_payload_bytes": 101248,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 12,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 13,
+          "source_payload_bytes": 86784,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 14,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        }
+      ],
+      "source_timeline_sha256": "af679e279bd1ad108031bde536ea1c4d72af8c304aada0cdcc4615e9cc3af9cf",
+      "final_work_witness": {
+        "work": 71,
+        "stream": 3,
+        "ready_ns": 0,
+        "published_ns": 581720,
+        "publication_owner": {
+          "accepted_ns": 575652,
+          "acked_ns": 581720,
+          "begin": 361600,
+          "bytes": 14464,
+          "end": 376064,
+          "id": 69,
+          "published_ns": 563725,
+          "ready_ns": 0,
+          "stream": 3,
+          "ticket": 25
+        },
+        "first_source_tx_ns": 581720,
+        "last_source_tx_ns": 582882,
+        "last_source_uid": 5384,
+        "last_source_sequence": 390064,
+        "last_source_rate_bps": 100000000000,
+        "data_rx_ns": 593647,
+        "ack_tx_ns": 593647,
+        "ack_rx_ns": 599715,
+        "source_to_data_rx_ns": 10765,
+        "data_rx_to_ack_rx_ns": 6068,
+        "minimum_last_data_path_ns": 6720,
+        "minimum_final_ack_path_ns": 6068,
+        "actual_final_data_and_ack_have_no_extra_wait": false
+      },
+      "strict_pacing_witness_count": 0,
+      "largest_pacing_witness": null
+    },
+    {
+      "case": "d8-r55000",
+      "full_packet_verification": true,
+      "reference_states": 5265,
+      "streams": [
+        {
+          "stream": 1,
+          "source_payload_bytes": 332672,
+          "first_cnp_rx_ns": 16296,
+          "packets_after_first_cnp": 278,
+          "tx_below_line_rate": 278
+        },
+        {
+          "stream": 2,
+          "source_payload_bytes": 318208,
+          "first_cnp_rx_ns": 23289,
+          "packets_after_first_cnp": 234,
+          "tx_below_line_rate": 234
+        },
+        {
+          "stream": 3,
+          "source_payload_bytes": 390528,
+          "first_cnp_rx_ns": 24760,
+          "packets_after_first_cnp": 304,
+          "tx_below_line_rate": 304
+        },
+        {
+          "stream": 4,
+          "source_payload_bytes": 347136,
+          "first_cnp_rx_ns": 15014,
+          "packets_after_first_cnp": 298,
+          "tx_below_line_rate": 298
+        },
+        {
+          "stream": 6,
+          "source_payload_bytes": 260352,
+          "first_cnp_rx_ns": 21557,
+          "packets_after_first_cnp": 181,
+          "tx_below_line_rate": 181
+        },
+        {
+          "stream": 7,
+          "source_payload_bytes": 361600,
+          "first_cnp_rx_ns": 23840,
+          "packets_after_first_cnp": 277,
+          "tx_below_line_rate": 277
+        },
+        {
+          "stream": 8,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": 26937,
+          "packets_after_first_cnp": 22,
+          "tx_below_line_rate": 22
+        },
+        {
+          "stream": 9,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": 34775,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 11,
+          "source_payload_bytes": 101248,
+          "first_cnp_rx_ns": 16852,
+          "packets_after_first_cnp": 36,
+          "tx_below_line_rate": 36
+        },
+        {
+          "stream": 12,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": 32201,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 13,
+          "source_payload_bytes": 86784,
+          "first_cnp_rx_ns": 31731,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 14,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        }
+      ],
+      "source_timeline_sha256": "eef7e97452f4e6094da0225526f25bb3a9181f590f8115d13a715875add83711",
+      "final_work_witness": {
+        "work": 71,
+        "stream": 3,
+        "ready_ns": 0,
+        "published_ns": 374769,
+        "publication_owner": {
+          "accepted_ns": 368301,
+          "acked_ns": 374769,
+          "begin": 260352,
+          "bytes": 14464,
+          "end": 274816,
+          "id": 50,
+          "published_ns": 218461,
+          "ready_ns": 0,
+          "stream": 3,
+          "ticket": 18
+        },
+        "first_source_tx_ns": 1290422,
+        "last_source_tx_ns": 1427945,
+        "last_source_uid": 5459,
+        "last_source_sequence": 390064,
+        "last_source_rate_bps": 851249407,
+        "data_rx_ns": 1434665,
+        "ack_tx_ns": 1434665,
+        "ack_rx_ns": 1440733,
+        "source_to_data_rx_ns": 6720,
+        "data_rx_to_ack_rx_ns": 6068,
+        "minimum_last_data_path_ns": 6720,
+        "minimum_final_ack_path_ns": 6068,
+        "actual_final_data_and_ack_have_no_extra_wait": true
+      },
+      "strict_pacing_witness_count": 646,
+      "largest_pacing_witness": {
+        "stream": 3,
+        "packet_uid": 5079,
+        "time_ns": 471349,
+        "rate_bps": 585937500,
+        "next_avail_ns": 471349,
+        "sequence": 298280,
+        "published_bytes": 390528,
+        "work": 56,
+        "work_published_ns": 259429,
+        "prior_physical_tx_end_ns": 457287,
+        "source_nic_idle_ns": 14062,
+        "scope": "NIC idle before a paced TX; this is not a sum of removable business delay"
+      }
+    },
+    {
+      "case": "d8-r110000",
+      "full_packet_verification": true,
+      "reference_states": 5168,
+      "streams": [
+        {
+          "stream": 1,
+          "source_payload_bytes": 332672,
+          "first_cnp_rx_ns": 16296,
+          "packets_after_first_cnp": 278,
+          "tx_below_line_rate": 278
+        },
+        {
+          "stream": 2,
+          "source_payload_bytes": 318208,
+          "first_cnp_rx_ns": 23289,
+          "packets_after_first_cnp": 234,
+          "tx_below_line_rate": 234
+        },
+        {
+          "stream": 3,
+          "source_payload_bytes": 390528,
+          "first_cnp_rx_ns": 24760,
+          "packets_after_first_cnp": 304,
+          "tx_below_line_rate": 304
+        },
+        {
+          "stream": 4,
+          "source_payload_bytes": 347136,
+          "first_cnp_rx_ns": 15014,
+          "packets_after_first_cnp": 298,
+          "tx_below_line_rate": 298
+        },
+        {
+          "stream": 6,
+          "source_payload_bytes": 260352,
+          "first_cnp_rx_ns": 21557,
+          "packets_after_first_cnp": 181,
+          "tx_below_line_rate": 181
+        },
+        {
+          "stream": 7,
+          "source_payload_bytes": 361600,
+          "first_cnp_rx_ns": 23840,
+          "packets_after_first_cnp": 277,
+          "tx_below_line_rate": 277
+        },
+        {
+          "stream": 8,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": 26937,
+          "packets_after_first_cnp": 22,
+          "tx_below_line_rate": 22
+        },
+        {
+          "stream": 9,
+          "source_payload_bytes": 130176,
+          "first_cnp_rx_ns": 34775,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 11,
+          "source_payload_bytes": 101248,
+          "first_cnp_rx_ns": 16852,
+          "packets_after_first_cnp": 36,
+          "tx_below_line_rate": 36
+        },
+        {
+          "stream": 12,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": 32201,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 13,
+          "source_payload_bytes": 86784,
+          "first_cnp_rx_ns": 31731,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        },
+        {
+          "stream": 14,
+          "source_payload_bytes": 72320,
+          "first_cnp_rx_ns": null,
+          "packets_after_first_cnp": 0,
+          "tx_below_line_rate": 0
+        }
+      ],
+      "source_timeline_sha256": "333f37c6e0005bd1dff5dda2a0da8983311e6d18265191399d12c6e497c646d6",
+      "final_work_witness": {
+        "work": 71,
+        "stream": 3,
+        "ready_ns": 0,
+        "published_ns": 374369,
+        "publication_owner": {
+          "accepted_ns": 368301,
+          "acked_ns": 374369,
+          "begin": 260352,
+          "bytes": 14464,
+          "end": 274816,
+          "id": 50,
+          "published_ns": 218461,
+          "ready_ns": 0,
+          "stream": 3,
+          "ticket": 18
+        },
+        "first_source_tx_ns": 1362952,
+        "last_source_tx_ns": 1507608,
+        "last_source_uid": 5459,
+        "last_source_sequence": 390064,
+        "last_source_rate_bps": 805946655,
+        "data_rx_ns": 1514328,
+        "ack_tx_ns": 1514328,
+        "ack_rx_ns": 1520396,
+        "source_to_data_rx_ns": 6720,
+        "data_rx_to_ack_rx_ns": 6068,
+        "minimum_last_data_path_ns": 6720,
+        "minimum_final_ack_path_ns": 6068,
+        "actual_final_data_and_ack_have_no_extra_wait": true
+      },
+      "strict_pacing_witness_count": 648,
+      "largest_pacing_witness": {
+        "stream": 7,
+        "packet_uid": 5077,
+        "time_ns": 482129,
+        "rate_bps": 390625000,
+        "next_avail_ns": 482129,
+        "sequence": 291280,
+        "published_bytes": 361600,
+        "work": 125,
+        "work_published_ns": 268261,
+        "prior_physical_tx_end_ns": 460995,
+        "source_nic_idle_ns": 21134,
+        "scope": "NIC idle before a paced TX; this is not a sum of removable business delay"
+      }
+    }
+  ],
+  "pair_checks": [
+    {
+      "depth": 1,
+      "feedback_generation_tx_rx_sequences_equal": true,
+      "final_work_same": true,
+      "final_ack_delta_ns": 0,
+      "last_source_tx_delta_ns": 0,
+      "final_data_and_ack_residuals_equal": true
+    },
+    {
+      "depth": 8,
+      "feedback_generation_tx_rx_sequences_equal": true,
+      "final_work_same": true,
+      "final_ack_delta_ns": 79663,
+      "last_source_tx_delta_ns": 79663,
+      "final_data_and_ack_residuals_equal": true
+    }
+  ],
+  "unexecuted": [],
+  "network_runs": 0,
+  "hardware_calibrated": false,
+  "endpoint_capture_and_port_projection_only": true,
+  "all_declared_completed": true
+}

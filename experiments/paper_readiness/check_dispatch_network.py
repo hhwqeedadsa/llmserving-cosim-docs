@@ -32,6 +32,8 @@ def main():
         p.add_argument('--'+name.replace('_','-'), type=Path, required=True)
     p.add_argument('--source-root', type=Path, default=ROOT)
     a=p.parse_args(); observed=a.prepared/'observed'; truth=a.prepared/'truth'; idx=load(observed/'index.json'); cfg=idx['config']
+    dependency_event=idx.get('dependency_event','acked')
+    assert dependency_event in ('accepted','acked')
     windows=cfg.get('source_windows') or [dict(layer=cfg['source_layer'],entry=e) for e in cfg['decode_entries']]
     assert len(windows)==4
     summary=load(a.analysis/'summary.json'); all_rounds=load(a.analysis/'rounds.json')
@@ -61,7 +63,7 @@ def main():
                     if src==dst or not any(owners[e]==dst for e in choices[src][step]): continue
                     work=step*16+4*src+dst; current.append(work)
                     expected[work]=dict(id=work,stream=4*src+dst,bytes=14464,
-                        after=[dict(work=w,event='acked') for w in previous])
+                        after=[dict(work=w,event=dependency_event) for w in previous])
             previous=current
         input_work=load(observed/('work-'+condition+'.json'))
         assert input_work['work']==list(expected.values())
@@ -217,8 +219,10 @@ def main():
         assert len(source_rows)==sum(e[0][6]==17 for e in by_uid.values())
         for wid,w in work.items():
             assert w['accepted_ns']==max(received[wid]) and w['acked_ns']==min(acked[wid])
-            ready=0 if wid//16==0 else max(prev['acked_ns'] for prev in work.values() if prev['id']//16==wid//16-1)
+            ready=0 if wid//16==0 else max(prev[dependency_event+'_ns'] for prev in work.values() if prev['id']//16==wid//16-1)
             assert w['ready_ns']==ready and w['published_ns']>=ready
+            predecessors=[p for p in work.values() if p['stream']==w['stream'] and p['end']<=w['begin']]
+            if predecessors:assert w['published_ns']>=max(p['acked_ns'] for p in predecessors)
             assert w['published_ns']<=min(r[0][0] for r in source_rows.values() if r[1]==wid)
             assert (w['end']-w['begin'],w['bytes'])==(14464,14464)
             totals['work_callbacks']+=1
@@ -241,7 +245,8 @@ def main():
             b=r['busiest_port'];key=b['node'],b['port'];round_bytes=round_load[r['step']]
             assert b['model_bytes']==round_bytes[key] and b['peer']==endpoints[key][0] and b['tier']==endpoints[key][4]
             assert b['serialization_lower_bound_ns']==max(v*8e9/endpoints[k][2] for k,v in round_bytes.items())
-        assert sum(r['duration_ns'] for r in case_rounds)==case_summary['acked_ns']==max(w['acked_ns'] for w in work.values())
+        assert case_summary['acked_ns']==max(w['acked_ns'] for w in work.values())
+        if dependency_event=='acked':assert sum(r['duration_ns'] for r in case_rounds)==case_summary['acked_ns']
         assert case_summary['finish_ns']==x['finish_ns']==max(e[0] for rows in by_uid.values() for e in rows)
         assert case_summary['accepted_ns']==max(w['accepted_ns'] for w in work.values())
         assert case_summary['work_count']==len(work) and case_summary['data_source_packets']==len(source_rows)
@@ -271,6 +276,7 @@ def main():
         summary_sha256=sha(a.analysis/'summary.json'),repeat_result_byte_identical=True if repeated else None,
         repeat_network_run_performed=repeated,repeat_analysis_byte_identical=True,
         independent_raw_requests=4,independent_routes=16,max_data_bytes_after_dequeue=max_post_dequeue_data,
+        dependency_event=dependency_event,same_stream_publication_waits_previous_ack=True,
         native_libraries_sha256=libraries,platform_source_sha256=sources,
         modern_GIN_modeled=False,hardware_calibrated=False,full_inference_validated=False,goal_complete=False))
     print(json.dumps(dict(passed=True,**totals)))

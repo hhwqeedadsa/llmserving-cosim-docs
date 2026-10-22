@@ -1,0 +1,591 @@
+{
+  "monitors": [
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prepare_completion_semantics.py",
+        "--baseline",
+        "/dev/shm/moe-dispatch-validation-20261022",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:42:55.349287+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 7487488,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-prepare-monitor",
+        "/dev/shm/moe-completion-semantics-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 163840,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 107935,
+      "peak_sampled_artifact_allocated_bytes": 163840,
+      "process_group": 1736074,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:42:55.479930+00:00",
+      "wall_seconds": 0.13064365461468697,
+      "max_waited_child_rss_kib": 18656,
+      "artifact_bytes_before_report": 532,
+      "aggregate_artifact_bytes_before_report": 163840,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 107935,
+        "allocated_bytes": 163840
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/run_dispatch_validation.py",
+        "--observed",
+        "/dev/shm/moe-completion-semantics-20261022/observed",
+        "--backend",
+        "/dev/shm/moe-fault-20261021/native/output/moe-rdma/ns3.42-moe-rdma-stream-probe",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/run"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:43:58.070319+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 436359168,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-run-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/run"
+      ],
+      "peak_sampled_artifact_bytes": 19898368,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 19428244,
+      "peak_sampled_artifact_allocated_bytes": 19898368,
+      "process_group": 1736216,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:44:18.607529+00:00",
+      "wall_seconds": 20.53721307963133,
+      "max_waited_child_rss_kib": 379068,
+      "artifact_bytes_before_report": 66737,
+      "aggregate_artifact_bytes_before_report": 19898368,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 19428244,
+        "allocated_bytes": 19898368
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_dispatch_network.py",
+        "--observed",
+        "/dev/shm/moe-completion-semantics-20261022/observed",
+        "--run",
+        "/dev/shm/moe-completion-semantics-20261022/run",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:45:05.667398+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 71094272,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-analysis-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/analysis"
+      ],
+      "peak_sampled_artifact_bytes": 2486272,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2470704,
+      "peak_sampled_artifact_allocated_bytes": 2486272,
+      "process_group": 1736422,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:45:07.564475+00:00",
+      "wall_seconds": 1.8970812689512968,
+      "max_waited_child_rss_kib": 71476,
+      "artifact_bytes_before_report": 4436,
+      "aggregate_artifact_bytes_before_report": 2486272,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2470704,
+        "allocated_bytes": 2486272
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_dispatch_network.py",
+        "--observed",
+        "/dev/shm/moe-completion-semantics-20261022/observed",
+        "--run",
+        "/dev/shm/moe-completion-semantics-20261022/run",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/repeat-analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:45:05.670897+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 70062080,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-repeat-analysis-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/repeat-analysis"
+      ],
+      "peak_sampled_artifact_bytes": 2486272,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2470706,
+      "peak_sampled_artifact_allocated_bytes": 2486272,
+      "process_group": 1736423,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:45:07.568438+00:00",
+      "wall_seconds": 1.8975571412593126,
+      "max_waited_child_rss_kib": 70468,
+      "artifact_bytes_before_report": 4438,
+      "aggregate_artifact_bytes_before_report": 2486272,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2470706,
+        "allocated_bytes": 2486272
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_dispatch_network.py",
+        "--prepared",
+        "/dev/shm/moe-completion-semantics-20261022",
+        "--run",
+        "/dev/shm/moe-completion-semantics-20261022/run",
+        "--analysis",
+        "/dev/shm/moe-completion-semantics-20261022/analysis",
+        "--repeat-analysis",
+        "/dev/shm/moe-completion-semantics-20261022/repeat-analysis",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/checked"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:45:21.546484+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 83447808,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-check-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/checked"
+      ],
+      "peak_sampled_artifact_bytes": 49152,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 40611,
+      "peak_sampled_artifact_allocated_bytes": 49152,
+      "process_group": 1736438,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:45:36.270211+00:00",
+      "wall_seconds": 14.723746851086617,
+      "max_waited_child_rss_kib": 81492,
+      "artifact_bytes_before_report": 33888,
+      "aggregate_artifact_bytes_before_report": 49152,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 40611,
+        "allocated_bytes": 49152
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_completion_semantics.py",
+        "--baseline",
+        "/dev/shm/moe-dispatch-validation-20261022",
+        "--candidate",
+        "/dev/shm/moe-completion-semantics-20261022",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/compared"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:47:36.613903+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 84185088,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-compare-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/compared"
+      ],
+      "peak_sampled_artifact_bytes": 241664,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 234575,
+      "peak_sampled_artifact_allocated_bytes": 241664,
+      "process_group": 1736871,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:47:38.137893+00:00",
+      "wall_seconds": 1.5239951238036156,
+      "max_waited_child_rss_kib": 82212,
+      "artifact_bytes_before_report": 3760,
+      "aggregate_artifact_bytes_before_report": 241664,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 234575,
+        "allocated_bytes": 241664
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_dispatch_network.py",
+        "--prepared",
+        "/dev/shm/moe-dispatch-validation-20261022",
+        "--run",
+        "/dev/shm/moe-dispatch-validation-20261022/run",
+        "--analysis",
+        "/dev/shm/moe-dispatch-validation-20261022/analysis",
+        "--repeat-analysis",
+        "/dev/shm/moe-dispatch-validation-20261022/repeat-analysis",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/baseline-rechecked"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:52:19.730202+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 84172800,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-baseline-recheck-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/baseline-rechecked"
+      ],
+      "peak_sampled_artifact_bytes": 49152,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 40104,
+      "peak_sampled_artifact_allocated_bytes": 49152,
+      "process_group": 1737899,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:52:34.237261+00:00",
+      "wall_seconds": 14.507065305486321,
+      "max_waited_child_rss_kib": 82200,
+      "artifact_bytes_before_report": 33384,
+      "aggregate_artifact_bytes_before_report": 49152,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 40104,
+        "allocated_bytes": 49152
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_completion_semantics.py",
+        "--baseline",
+        "/dev/shm/moe-dispatch-validation-20261022",
+        "--candidate",
+        "/dev/shm/moe-completion-semantics-20261022",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/compared-portable"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:52:31.463768+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 84713472,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-portable-compare-monitor",
+        "/dev/shm/moe-completion-semantics-20261022/compared-portable"
+      ],
+      "peak_sampled_artifact_bytes": 241664,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 234324,
+      "peak_sampled_artifact_allocated_bytes": 241664,
+      "process_group": 1737928,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:52:32.917512+00:00",
+      "wall_seconds": 1.453749580308795,
+      "max_waited_child_rss_kib": 82728,
+      "artifact_bytes_before_report": 3509,
+      "aggregate_artifact_bytes_before_report": 241664,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 234324,
+        "allocated_bytes": 241664
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/analyze_completion_semantics.py",
+        "--baseline",
+        "/dev/shm/moe-completion-semantics-20261022-relocated-inputs/baseline",
+        "--candidate",
+        "/dev/shm/moe-completion-semantics-20261022-relocated-inputs/candidate",
+        "--output",
+        "/dev/shm/moe-completion-semantics-20261022/compared-relocated"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T20:56:33.380405+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 84017152,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-completion-semantics-20261022-relocated-compare-monitor",
+        "/dev/shm/moe-completion-semantics-20261022-relocated-inputs",
+        "/dev/shm/moe-completion-semantics-20261022/compared-relocated"
+      ],
+      "peak_sampled_artifact_bytes": 253952,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 239885,
+      "peak_sampled_artifact_allocated_bytes": 253952,
+      "process_group": 1738702,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T20:56:34.833281+00:00",
+      "wall_seconds": 1.4528831224888563,
+      "max_waited_child_rss_kib": 82048,
+      "artifact_bytes_before_report": 3628,
+      "aggregate_artifact_bytes_before_report": 253952,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 239885,
+        "allocated_bytes": 253952
+      }
+    }
+  ],
+  "execution": {
+    "completed": true,
+    "commands": 24,
+    "conditions": 18,
+    "backend_sha256": "c2143fee19dd24e24400049fdfb6996e3be0a627e41bc34d10312e4b0cb50e33",
+    "observed_index_sha256": "2a77066cd0281aacb212b518768b9b0cfe762927d2a09640be7d647b64cdc8db",
+    "platform_base_commit": "a6229b898a3a13549aea5d2fbebc372f09d2f1bd",
+    "new_network_runs": 18,
+    "modern_GIN_executed": false,
+    "hardware_calibrated": false,
+    "full_inference_modeled": false
+  },
+  "package_start_head": "a6229b898a3a13549aea5d2fbebc372f09d2f1bd",
+  "sources_sha256": {
+    "completion_semantics_protocol.md": "9abf65ac6bf46b630c1a5a1e55ea6a828eec383a6ac9f4d12e3654b91908c800",
+    "prepare_completion_semantics.py": "cfa92a1081417ccd715b7e1f919c428299c188c3f43b8e9770ed1e2bb2d293de",
+    "run_dispatch_validation.py": "c3300925557a27a8574c1c1c22dc2eba20ace4795ffcb498a722d77eda360c90",
+    "analyze_dispatch_network.py": "64d4710ed59e040efc64bc101a50c9444d428a3cdf454b6aadc5cf5ec17a29da",
+    "check_dispatch_network.py": "5a9f84382224e11991c350c63dc07865bda7d1b261b7df2c00dc2afe9b8811d2",
+    "analyze_completion_semantics.py": "63570590c82e18016ae3d785601231f85b9edd9af9cf703e03f12e00393cd161",
+    "package_completion_semantics.py": "fb50f9019498a40ed727de44ec7f7c417bbd413f218570976eeecaac116df002",
+    "README.md": "b09f65d960fa27b7f3b2ad1810e21eb4fb0c6ef4c3918b3cb4361b8ad683d15b"
+  },
+  "baseline_identity": {
+    "directory": "/dev/shm/moe-dispatch-validation-20261022",
+    "observed_index_sha256": "eb54bc33c3b5723bcdc55bfecde9363896ea381b3115312c6f6a9b65e44bd44a",
+    "result_identities": {
+      "s11-all100g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-all100g-contiguous/result.json",
+        "sha256": "d436ad5c6c332a7360cff667de59df1a8d2617672f983c0d1b6974cd77ad69d3",
+        "bytes": 913054
+      },
+      "s11-all100g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-all100g-prefill_all_lpt/result.json",
+        "sha256": "263119eb3a4b0a3cb14c526054a8e40658af7a9cae7139559874687fda595a64",
+        "bytes": 1183644
+      },
+      "s11-all100g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-all100g-prefill_tail10_lpt/result.json",
+        "sha256": "e7d13b2cc1621ac0e94ff057979e06cb366ae6497ecfc70fc084bdce00c9f3b8",
+        "bytes": 1083119
+      },
+      "s11-upper25g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-upper25g-contiguous/result.json",
+        "sha256": "799c5fe752fe42223615bc0302d05ba7b2eb6ea939f73962df7b0bd133440a93",
+        "bytes": 920143
+      },
+      "s11-upper25g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-upper25g-prefill_all_lpt/result.json",
+        "sha256": "bd5a12d3bdfbe657886735132465b1c058fbd709aafe7cc32472e1777cf0e5ef",
+        "bytes": 1198311
+      },
+      "s11-upper25g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s11-upper25g-prefill_tail10_lpt/result.json",
+        "sha256": "60e2b7b4e633f1044143b2072fc3d2b7f2b179cbfd630c44b41f8314983772be",
+        "bytes": 1096711
+      },
+      "s29-all100g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-all100g-contiguous/result.json",
+        "sha256": "bedb51d1f0db20901f65aaec2b81e352f0896d10ea74c6d6a8e0c0128f7caffb",
+        "bytes": 912337
+      },
+      "s29-all100g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-all100g-prefill_all_lpt/result.json",
+        "sha256": "1ac012407fbd1131e4bba830f7b6243c01515498ca988df5f72dc480661869ef",
+        "bytes": 1182415
+      },
+      "s29-all100g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-all100g-prefill_tail10_lpt/result.json",
+        "sha256": "ff243b5fb32257626ef3afa7092a4364d5d287386530556aba8b6d4eb0cc377a",
+        "bytes": 1082023
+      },
+      "s29-upper25g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-upper25g-contiguous/result.json",
+        "sha256": "ed7e9dae96f671feb2c957b511270619c54e1f765ae5fc1d53341adeee8417f1",
+        "bytes": 917825
+      },
+      "s29-upper25g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-upper25g-prefill_all_lpt/result.json",
+        "sha256": "c8d1890885186d89486c9ab38216b1d8c98c1670b7abfd859a787c70b2cb7b76",
+        "bytes": 1194250
+      },
+      "s29-upper25g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s29-upper25g-prefill_tail10_lpt/result.json",
+        "sha256": "cd7cd20239114cbe9b818bc50c61c76c272aecb7b6e99b24d45fe8f2c6de7293",
+        "bytes": 1091689
+      },
+      "s47-all100g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-all100g-contiguous/result.json",
+        "sha256": "109abfceb0a203af3ace3c436784c45aa33d9bf459c20e44b7212977951032d2",
+        "bytes": 912890
+      },
+      "s47-all100g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-all100g-prefill_all_lpt/result.json",
+        "sha256": "44493fc6647205290c7be4926533fe5039c360e656114186f13882ea40eacf71",
+        "bytes": 1183513
+      },
+      "s47-all100g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-all100g-prefill_tail10_lpt/result.json",
+        "sha256": "260c0831fa0fa7259183495fa5d2f4017837c712e395f88d048722c243f11a11",
+        "bytes": 1082970
+      },
+      "s47-upper25g-contiguous": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-upper25g-contiguous/result.json",
+        "sha256": "2f964ac0d8220fe7d9e02f2084381ca5637165ddc668937ce782c1fa900ec65a",
+        "bytes": 919798
+      },
+      "s47-upper25g-prefill_all_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-upper25g-prefill_all_lpt/result.json",
+        "sha256": "582cf2e0ad2887920243908f601a85721a9f76e8c35c7579aa0f7cebde650868",
+        "bytes": 1196535
+      },
+      "s47-upper25g-prefill_tail10_lpt": {
+        "path": "/dev/shm/moe-dispatch-validation-20261022/run/s47-upper25g-prefill_tail10_lpt/result.json",
+        "sha256": "139a8a74fd8d3b594f29db1d2644b9f79efbe7600a9425b9e1dc58b1a4057cdf",
+        "bytes": 1095231
+      }
+    },
+    "packet_verification_sha256": "ff55368724f11402e76128d96501e5ce482113ca158c7a2151e7116b0f76053f",
+    "changes": [
+      {
+        "condition": "contiguous",
+        "dependencies": 224,
+        "work": 36
+      },
+      {
+        "condition": "prefill_all_lpt",
+        "dependencies": 385,
+        "work": 45
+      },
+      {
+        "condition": "prefill_tail10_lpt",
+        "dependencies": 331,
+        "work": 42
+      }
+    ]
+  },
+  "preparation_note": {
+    "action": "Copied unchanged truth snapshots before network execution for independent checker",
+    "preparer_correction": "truth copy added; no network run occurred before this correction"
+  },
+  "native_or_dependencies_changed": false,
+  "original_network_repeated": false,
+  "only_readonly_analysis_repeated": true,
+  "calibration": false,
+  "modern_GIN": false,
+  "portability": "Comparison uses content hashes, not the saved baseline directory. Raw CLI logs retain original paths. Full packet checker still needs saved runtime paths or explicit restoration.",
+  "package_probe": "Sibling package-monitor recorded separately; excluded while running to avoid self-reference."
+}

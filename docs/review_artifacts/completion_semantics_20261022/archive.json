@@ -1,0 +1,15 @@
+{
+  "path": "/home/lry/moe-ub-cosim/runs/completion_semantics_checkpoint_20261022/checkpoint.tar.gz",
+  "sha256": "1c6742711543be70943e3bab13af9e93d804c762abcd38d0c8650ec0c0958390",
+  "bytes": 15860203,
+  "files": 290,
+  "all_member_hashes_verified": true,
+  "storage": "local_persistent_disk_not_remote_backup",
+  "prior_archive_embedded": true,
+  "prior_archive_sha256": "ed96f14fa9797431203f0ec48a6bec7572bf1002a3f3355fed2184432d1cfc33",
+  "prior_archive_all_members_verified": true,
+  "original_requests_and_native_runtime_in_prior_archive": true,
+  "includes_self_archive_manifest": false,
+  "includes_running_packaging_probe": false,
+  "restore": "Extract this archive to a new directory; extract baseline/checkpoint.tar.gz into another new directory. Compare its raw/ against this archive raw/ using saved sources. Native RPATH and raw input paths remain unchanged; a portable comparison is not a portable runtime image."
+}

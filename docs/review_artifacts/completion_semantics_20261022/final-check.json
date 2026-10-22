@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "monitors_count": 10,
+  "total_monitored_wall_seconds": 63.141279585659504,
+  "statuses": {
+    "moe-completion-semantics-20261022-analysis-monitor": "completed",
+    "moe-completion-semantics-20261022-baseline-recheck-monitor": "completed",
+    "moe-completion-semantics-20261022-check-monitor": "completed",
+    "moe-completion-semantics-20261022-compare-monitor": "completed",
+    "moe-completion-semantics-20261022-package-monitor": "completed",
+    "moe-completion-semantics-20261022-portable-compare-monitor": "completed",
+    "moe-completion-semantics-20261022-prepare-monitor": "completed",
+    "moe-completion-semantics-20261022-relocated-compare-monitor": "completed",
+    "moe-completion-semantics-20261022-repeat-analysis-monitor": "completed",
+    "moe-completion-semantics-20261022-run-monitor": "completed"
+  },
+  "cumulative_allocated_bytes_before_this_record": 42283008,
+  "cumulative_apparent_bytes_before_this_record": 41614976,
+  "cumulative_budget_bytes": 134217728,
+  "wall_budget_seconds": 300,
+  "dependency_check": {
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "exit_code": 0,
+    "checkouts_verified": 13
+  },
+  "saved_source_hashes_current": true,
+  "comparison_relocation_byte_identical": true,
+  "archive_hash_rechecked": true,
+  "post_package_record_not_in_archive": true,
+  "network_run_repeated": false,
+  "goal_complete": false
+}

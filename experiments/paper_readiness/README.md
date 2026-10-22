@@ -685,3 +685,96 @@ python3 experiments/paper_readiness/build_scale1024_review.py \
 ```
 
 检查器读取原有两个stdout与各1MiB节点尾部，并核对已固定的历史Git源码；原始目录不可用时不能仅靠摘要冒充原件复核。报告生成只读小型已核验产物。运行仍须使用协议声明的时间/内存/磁盘监控，不自动重跑千卡失败网络。
+# 窗口完成条件的网络敏感性（20261022）
+
+沿用已核验的18组Dispatch结果，仅将下一窗口的应用依赖从`acked`改为`accepted`；源队列仍等真实ACK释放槽。
+方法见[执行前协议](completion_semantics_protocol.md)，结果见[中文HTML](../../docs/review_artifacts/completion_semantics_20261022/report.html)。
+本轮最终ACK缩短0.733%—15.964%，18次放置两两排序无变化。这是独立字节写入的模型假设对照，不代表GPU可见性、完整推理或可部署加速。
+
+已有结果可只读复核，无需联网、构建或重跑网络。先按[归档清单](../../docs/review_artifacts/completion_semantics_20261022/archive.json)核对检查点hash，
+解包本轮检查点到一个新目录，再将其中`baseline/checkpoint.tar.gz`解包到另一个新目录；两者分别含`raw/`。
+下列比较器按内容hash识别基准，原来记录的绝对目录只作来源说明。`COSIM_COMPLETION_WORK`指本轮解包后的`raw/`，`COSIM_COMPLETION_BASE`指上轮解包后的`raw/`。
+比较器需要两者已保存的`observed/`、`run/`、`analysis/`、`checked/`，不读取外部原件或truth。
+
+```bash
+COSIM_COMPLETION_WORK=/绝对路径/本轮解包目录/raw
+COSIM_COMPLETION_BASE=/绝对路径/上轮解包目录/raw
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/my-completion-comparison-monitor \
+  --artifact-root /dev/shm/my-completion-comparison \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 33554432 \
+  --wall-seconds 60 --min-free-bytes 8589934592 \
+  -- python3 experiments/paper_readiness/analyze_completion_semantics.py \
+  --baseline "$COSIM_COMPLETION_BASE" --candidate "$COSIM_COMPLETION_WORK" \
+  --output /dev/shm/my-completion-comparison
+```
+
+只有明确需要重新执行这18组条件时才采用下面的完整流程。基准须已完成原包级核验和重复分析，固定后端及ns-3库须与其hash一致。
+新目录必须不存在，失败保留停止，不自动增限重试。基准完整包检查器仍核对原输入日志中的绝对runtime路径及本机固定源文件；
+迁移目录后的只读配对成功不能替代完整runtime恢复验收。原始四请求、二进制和库均保存在嵌套的旧检查点中，二进制原RPATH也保留，
+不是一套可直接迁移的运行镜像。
+
+在仓库根执行；`COSIM_COMPLETION_BACKEND`填写与基准一致的公开`rdma-stream-probe`二进制。
+当前固定规模为18新条件、每次最多5ms仿真/100000捕获事件/16MiB终态，累计128MiB/300秒、卷预留8GiB；
+单命令60秒/RSS1GiB/地址2GiB，运行阶段64MiB，准备和分析32MiB。阶段输出不能覆盖旧目录。
+
+```bash
+COSIM_COMPLETION_BASE=/绝对路径/已验收基准目录
+COSIM_COMPLETION_WORK=/dev/shm/my-new-completion-study
+COSIM_COMPLETION_BACKEND=/绝对路径/ns3.42-moe-rdma-stream-probe
+completion_stage() {
+  local completion_name=$1 completion_limit=$2
+  shift 2
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_COMPLETION_WORK-$completion_name-monitor" \
+    --artifact-root "$COSIM_COMPLETION_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes "$completion_limit" \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+completion_stage prepare 33554432 python3 experiments/paper_readiness/prepare_completion_semantics.py \
+  --baseline "$COSIM_COMPLETION_BASE" --output "$COSIM_COMPLETION_WORK"
+completion_stage run 67108864 python3 experiments/paper_readiness/run_dispatch_validation.py \
+  --observed "$COSIM_COMPLETION_WORK/observed" --backend "$COSIM_COMPLETION_BACKEND" \
+  --output "$COSIM_COMPLETION_WORK/run"
+completion_stage analysis 33554432 python3 experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed "$COSIM_COMPLETION_WORK/observed" --run "$COSIM_COMPLETION_WORK/run" \
+  --output "$COSIM_COMPLETION_WORK/analysis"
+completion_stage repeat-analysis 33554432 python3 experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed "$COSIM_COMPLETION_WORK/observed" --run "$COSIM_COMPLETION_WORK/run" \
+  --output "$COSIM_COMPLETION_WORK/repeat-analysis"
+completion_stage check 33554432 python3 experiments/paper_readiness/check_dispatch_network.py \
+  --prepared "$COSIM_COMPLETION_WORK" --run "$COSIM_COMPLETION_WORK/run" \
+  --analysis "$COSIM_COMPLETION_WORK/analysis" --repeat-analysis "$COSIM_COMPLETION_WORK/repeat-analysis" \
+  --output "$COSIM_COMPLETION_WORK/checked"
+completion_stage compare 33554432 python3 experiments/paper_readiness/analyze_completion_semantics.py \
+  --baseline "$COSIM_COMPLETION_BASE" --candidate "$COSIM_COMPLETION_WORK" \
+  --output "$COSIM_COMPLETION_WORK/compared"
+completion_stage baseline-recheck 33554432 python3 experiments/paper_readiness/check_dispatch_network.py \
+  --prepared "$COSIM_COMPLETION_BASE" --run "$COSIM_COMPLETION_BASE/run" \
+  --analysis "$COSIM_COMPLETION_BASE/analysis" --repeat-analysis "$COSIM_COMPLETION_BASE/repeat-analysis" \
+  --output "$COSIM_COMPLETION_WORK/baseline-rechecked"
+completion_stage portable-compare 33554432 python3 experiments/paper_readiness/analyze_completion_semantics.py \
+  --baseline "$COSIM_COMPLETION_BASE" --candidate "$COSIM_COMPLETION_WORK" \
+  --output "$COSIM_COMPLETION_WORK/compared-portable"
+mkdir "$COSIM_COMPLETION_WORK-relocated-baseline"
+for completion_component in observed run analysis checked; do
+  ln -s "$COSIM_COMPLETION_BASE/$completion_component" \
+    "$COSIM_COMPLETION_WORK-relocated-baseline/$completion_component"
+done
+completion_stage relocated-compare 33554432 python3 experiments/paper_readiness/analyze_completion_semantics.py \
+  --baseline "$COSIM_COMPLETION_WORK-relocated-baseline" --candidate "$COSIM_COMPLETION_WORK" \
+  --output "$COSIM_COMPLETION_WORK/compared-relocated"
+```
+
+包分析仅读observed与公开输出；独立检查器另外读取truth和四份原件，核对真实接收/ACK回调、逐包选路和队列积分。
+比较器核对只改依赖事件、包形状/路径及端口总量一致，追踪每个等待工作的旧ACK占槽者。
+完成区间会跨窗口重叠，不能把`rounds.json`的各窗口ACK时长相加，也不能直接沿用旧逐窗服务量之和作为整段下界。
+
+`package_completion_semantics.py`是固定本轮的只读报告和打包器，不执行网络，不用于任意新输入自动生成旧结论。
+它要求`compared/`、`compared-portable/`、`compared-relocated/`逐字节一致，两个条件都经过完整包检查，9份已结束的monitor均成功。
+`--task`、`--baseline`、`--output`、`--checkpoint`、`--prior-archive`、`--prior-members`均为路径，
+`--monitors`传上述9个monitor目录。`--output`和`--checkpoint`必须是仓库内新目录；旧检查点hash取自上轮已提交的`archive.json`。
+实际本轮准备维护说明位于`preparation-maintenance.json`；从头复现没有该补拷贝步骤时应记录自己的实际过程，不能复制旧记录冒充。
+打包阶段仍用host_probe限60秒/RSS1GiB/地址2GiB/64MiB，把task、报告与checkpoint同时计入artifact-root；
+纳入文件最大96MiB、压缩包最大32MiB，并逐文件检查新包和内嵌旧包的hash。运行中的打包monitor与自身归档清单不纳入包内。
+报告保存命令、资源及适用范围；独立重分析不是独立请求验证，也没有重跑18个旧网络。

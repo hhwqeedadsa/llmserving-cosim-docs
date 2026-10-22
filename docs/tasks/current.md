@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+本轮从干净`a6229b8`完成18组窗口语义敏感性、只读报告与本机归档，只把非首窗口依赖从acked改accepted，真实源槽仍由旧ACK释放。预注册[方法](../../experiments/paper_readiness/completion_semantics_protocol.md)。每命令60秒/1GiB/地址2GiB/仿真5ms、终态16MiB/100000事件；运行器64MiB、准备分析32MiB、累计128MiB/300秒、预留8GiB；目录`/dev/shm/moe-completion-semantics-20261022/`。打包64MiB，纳入原文件至多96MiB、压缩包32MiB，嵌入并重新核验前轮13MB检查点，避免重复展开旧全部原始文件。10个受监控阶段累计63.14秒，产物约40.33MiB，均未触限。旧网络不重跑；平台/依赖不改、不构建安装下载。独立路由或匹配GPU/RDMA资源的可选补充仍待用户回复，当前工作不依赖它。
+
 本轮从干净`4ecf681`转入网络跨窗口/ECMP判别：固定四请求、Prefill三放置，源窗口(层4,入口5/6)、(层32,入口5/6)，3种子11/29/47×全100G/上层25G共18个Dispatch数据条件。先前全量离线看过这些数据，只称新包级窗口，不称独立留出。12持久连接、depth1，真实ACK推进四窗，共享一个Simulator；不加计算/Combine/现代GIN/硬件含义。预注册[方法](../../experiments/paper_readiness/dispatch_validation_protocol.md)。所有命令60秒/1GiB/地址2GiB/仿真5ms，运行器64MiB、单终态16MiB/100000捕获事件，累计128MiB/300秒/预留8GiB，产物`/dev/shm/moe-dispatch-validation-20261022/`。平台/依赖不变、不构建安装下载，失败保留不抬限重试。检验总量/最大端点/实际出口服务量对完成排序的解释，保留反例和未知，不将已知网络感知放置当创新。
 
 平台已固定`bc8dd6f`，转入独立研究：单个1024GPU人工短任务，256个EP4推理副本，batch/rank1、H1024/E16/Top2、1层×2轮；历史Clos布局，同一原生网络，不重跑旧48层600秒。预注册[方法](../../experiments/paper_readiness/host_scale_protocol.md)，只判别有限工作能否完成及宿主阶段，不作生产/现代通信库/加速结论。每网络命令60秒/RSS6GiB/地址12GiB（沿用历史内存上限）/仿真5ms/产物64MiB，准备分析1GiB/2GiB/32MiB；研究累计128MiB、卷预留8GiB、流程180秒，输出`/dev/shm/moe-host-scale-20261022/`。失败保留，不抬限重试；无构建安装下载依赖变化。
@@ -28,6 +30,8 @@
 不改固定依赖、不安装、不下载模型或大型数据；复用已校验的一手资料和本机原始数据。必要公开页面只读请求设每页2MiB、总16MiB、单请求20秒、总120秒，失败保留。新研究放`experiments/paper_readiness/`，结果放`/dev/shm/moe-paper-readiness-20261022/`。首个判别研究16条件（2 batch×4额度模式×2故障），各条件60秒/RSS1GiB/地址2GiB/仿真5ms；每次sweep300秒，累计产物128MiB，卷预留8GiB。没有硬件校准含义，不因结果不理想抬限或制造热点。无新现象不自动扩矩阵。
 
 ## 当前进展与前阶段
+
+窗口完成条件敏感性完成18组新增网络及只读复核：同一四请求/四窗口、三放置、两速率、三seed，只改after.event。22,140包形状/路径及720物理端口发送计数完全一致，最终ACK缩短0.733%—15.964%；18次放置两两排序无变化，连续仍全部最快。accepted仅是传输层连续接收，不是GPU可见或源buffer可复用；270工作先就绪再等同连接旧ACK，最长6,230ns，全部发布时间等于max(应用就绪,旧ACK释放)。逐窗口ACK区间重叠，相加会多计18,072—18,690ns；旧逐窗服务量求和不能直接作为新条件整体下界。给出真实包和应用依赖的一条精确见证，另记录信用占用者，不称完整资源因果图或全部可消除时间。独立核对22,140包/116,280物理发送/94,140哈希选择/738回调/576出口积分/72窗口；旧ACK分支重核验通过，包分析及内容hash识别、根目录迁移后的配对结果均字节一致，无网络重跑。新增网络运行器20.54秒/采样RSS436,359,168B，无ECN/PFC/丢包，无GPU/现代GIN/完整推理/硬件收益含义。290文件、15,860,203B本机持久检查点逐hash通过，内嵌旧298文件检查点也全部核验；13项固定依赖检查通过。见[HTML](../review_artifacts/completion_semantics_20261022/report.html)、[完整配对](../review_artifacts/completion_semantics_20261022/comparison.json)、[最终检查](../review_artifacts/completion_semantics_20261022/final-check.json)及[方法](../../experiments/paper_readiness/completion_semantics_protocol.md)。本轮只收敛模型假设问题，论文主贡献仍未成立；下一步优先真实在线语义、独立输入和校准，而非继续扩大静态放置矩阵。目标保持in_progress。
 
 跨窗口/ECMP网络研究完成18个固定条件及独立核验：四请求层4/32、Decode入口5/6，三放置×两上层速率×三种子11/29/47。连续/全Prefill/尾Prefill各36/45/42份，整段6网络配置连续全部最快；尾Prefill少6.67%份数却5/6配置更慢（其中1例仅4ns，实际意义很小），两种LPT的排序随选路改变。相同连续输入在25G上层总时长91.465—109.656us，最大逐窗跨seed跨度21.59%；这些是固定范围，不是总体统计。18次整段两两比较中总量13一致/5反向，GPU最大份数全并列，含ACK接入服务量12一致/6并列；按每窗最忙物理出口求和的已知下界17一致/1并列（4ns），72次逐窗60一致/其余并列、无反向。静态投影只读输入/拓扑/seed，2284出口负载与实包精确一致；计算代码在执行后实现，只作描述性核对，不作前瞻策略收益。逐包独立核对22140路径/116280物理发送/94140哈希选择/738工作回调/576出口积分/72窗完成分解；四份分析重复字节一致，没有重复新网络。无ECN/PFC/丢包，最大出队后data队列32580B。运行器20.70秒/采样RSS436,838,400B，各阶段预算均通过；未改平台、依赖、构建或GPU。298文件本机持久检查点全部hash通过，约12.39MiB，含四原件/固定二进制与ns-3库；无远端备份含义。见[报告HTML](../review_artifacts/dispatch_validation_20261022/report.html)、[独立指标核验](../review_artifacts/dispatch_validation_20261022/verification.json)、[包级核验](../review_artifacts/dispatch_validation_20261022/packet-verification.json)和[方法](../../experiments/paper_readiness/dispatch_validation_protocol.md)。简单链路基线已很强，收缩以新配对/复杂统计为创新的候选；仍缺独立请求、现代在线语义/匹配校准和超出已有基线的贡献，论文目标保持in_progress。
 

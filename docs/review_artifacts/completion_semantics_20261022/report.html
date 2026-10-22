@@ -1,0 +1,60 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Scale-out窗口完成语义：网络实验复核</title>
+<style>body{font:16px/1.8 system-ui,sans-serif;max-width:1180px;margin:36px auto;padding:0 22px;color:#1c3045;background:#fbfcfe}
+h1,h2{line-height:1.4}h2{margin-top:32px}aside{padding:18px;background:#eaf3fb;border-left:4px solid #246392}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px 10px;border-bottom:1px solid #d3deea;text-align:left}
+th{background:#edf2f7}.scroll{overflow:auto}a{color:#125b99}code{background:#edf1f5;padding:2px 4px}nav{line-height:2.2}
+</style></head><body><h1>相同数据、相同路径，完成条件会怎样影响网络结果？</h1>
+<p>2026-10-22 · Scale-out原生RDMA ns-3 · 固定18组配对 · 平台起点a6229b8</p>
+<aside><b>结果：</b>最终ACK时间缩短0.733%—15.964%，三种专家放置的18次两两排序全部保持。
+数据包形状、路径和端口总发送量一致。因此，时序依赖影响绝对时间，但本轮未推翻之前的放置排序。
+这是模型假设敏感性，不能当成真实推理加速或已成立的论文贡献。</aside>
+<nav><a href="comparison.json">完整配对与等待前驱</a> · <a href="metrics.json">18组指标</a> ·
+<a href="packet-verification.json">新条件逐包核验</a> · <a href="baseline-verification.json">旧条件重新核验</a> ·
+<a href="maintenance.json">命令、资源与版本</a> · <a href="protocol.md">执行前固定方法</a> · <a href="archive.json">本机检查点</a></nav>
+<h2>实际做了什么</h2><p>沿用四个R1真实路由请求，取(层4,入口5/6)、(层32,入口5/6)四个窗口。
+EP4逻辑rank映射到四台服务器、两个Pod的GPU 0/2/4/6；物理拓扑含8个GPU、4个ToR、4个汇聚、2个核心交换机，
+四个GPU实际承载任务。接入100Gb/s，上层100或25Gb/s，每链路传播1μs，ECMP种子11/29/47。
+每份Dispatch数据14,464B，12条持久连接，每连接队列深度1。</p>
+<p>比较连续放置、按全部Prefill统计分配、按尾部10个Prefill token统计分配三种既有方案。
+后两者使用LPT（优先分配较重专家的负载均衡规则）。本轮没有改变放置，只将后续窗口的应用依赖从前窗全部
+<code>acked</code>改为全部<code>accepted</code>。原18组网络结果只读保留，新增18组真实网络执行，全部窗口共享同一网络与仿真时钟。</p>
+<h2>三个时刻必须分开</h2><table><tr><th>时刻</th><th>本模型的含义</th><th>对后续传输的作用</th></tr>
+<tr><td>accepted：连续接收</td><td>目标传输层已连续收到工作对应的字节</td><td>新条件用它满足下一窗口的应用依赖</td></tr>
+<tr><td>ready：应用就绪</td><td>声明的前驱事件都已发生</td><td>不保证本连接还有可用发送槽</td></tr>
+<tr><td>acked：发送方确认</td><td>发送方收到覆盖相应字节的实际ACK</td><td>两组都用它释放原队列槽；深度仍为1</td></tr></table>
+<p>每个工作实际发布时间都满足：<code>published = max(应用就绪时间, 同连接上一工作ACK时间)</code>。
+新条件中共有270个工作已就绪却等槽，最长6,230ns。
+例如seed11/上层25G/连续放置中，工作29在21,551ns就绪，仍等工作13的ACK到27,781ns才发布，等待6,230ns。</p>
+<p><b>适用边界：</b>这里是独立字节写入，不复用真实张量源缓冲。accepted不代表GPU可见、计算可启动或源buffer安全复用；
+未执行计算、Combine、完整现代DeepEP/GIN或真实GPU。协议ACK也不是现代通信库的完整完成语义。</p>
+<h2>18组实际结果</h2><p>时间单位μs；差异百分比=(原最终ACK−新最终ACK)/原最终ACK。表示模型条件变化，不是可部署优化的收益。</p>
+<div class="scroll"><table><tr><th>种子/带宽/放置</th><th>传输份数</th><th>原全ACK依赖</th><th>新连续接收依赖</th><th>时间缩短</th><th>等槽工作数</th><th>最长等槽μs</th></tr><tr><td>s11-all100g-contiguous</td><td>36</td><td>64.071</td><td>56.912</td><td>11.174%</td><td>14</td><td>6.083</td></tr><tr><td>s11-all100g-prefill_all_lpt</td><td>45</td><td>67.850</td><td>61.826</td><td>8.878%</td><td>23</td><td>6.083</td></tr><tr><td>s11-all100g-prefill_tail10_lpt</td><td>42</td><td>69.008</td><td>68.010</td><td>1.446%</td><td>18</td><td>6.056</td></tr><tr><td>s11-upper25g-contiguous</td><td>36</td><td>106.713</td><td>98.204</td><td>7.974%</td><td>9</td><td>6.230</td></tr><tr><td>s11-upper25g-prefill_all_lpt</td><td>45</td><td>126.330</td><td>113.450</td><td>10.196%</td><td>14</td><td>6.166</td></tr><tr><td>s11-upper25g-prefill_tail10_lpt</td><td>42</td><td>130.766</td><td>122.810</td><td>6.084%</td><td>12</td><td>6.196</td></tr><tr><td>s29-all100g-contiguous</td><td>36</td><td>63.825</td><td>56.924</td><td>10.812%</td><td>14</td><td>6.079</td></tr><tr><td>s29-all100g-prefill_all_lpt</td><td>45</td><td>64.380</td><td>60.538</td><td>5.968%</td><td>24</td><td>6.162</td></tr><tr><td>s29-all100g-prefill_tail10_lpt</td><td>42</td><td>64.384</td><td>63.233</td><td>1.788%</td><td>19</td><td>6.024</td></tr><tr><td>s29-upper25g-contiguous</td><td>36</td><td>91.465</td><td>77.341</td><td>15.442%</td><td>13</td><td>6.226</td></tr><tr><td>s29-upper25g-prefill_all_lpt</td><td>45</td><td>112.353</td><td>103.272</td><td>8.083%</td><td>12</td><td>6.226</td></tr><tr><td>s29-upper25g-prefill_tail10_lpt</td><td>42</td><td>111.417</td><td>102.264</td><td>8.215%</td><td>9</td><td>6.226</td></tr><tr><td>s47-all100g-contiguous</td><td>36</td><td>64.075</td><td>56.924</td><td>11.160%</td><td>14</td><td>6.079</td></tr><tr><td>s47-all100g-prefill_all_lpt</td><td>45</td><td>67.850</td><td>61.743</td><td>9.001%</td><td>23</td><td>6.162</td></tr><tr><td>s47-all100g-prefill_tail10_lpt</td><td>42</td><td>69.008</td><td>68.502</td><td>0.733%</td><td>18</td><td>6.024</td></tr><tr><td>s47-upper25g-contiguous</td><td>36</td><td>109.656</td><td>92.150</td><td>15.964%</td><td>8</td><td>6.226</td></tr><tr><td>s47-upper25g-prefill_all_lpt</td><td>45</td><td>126.201</td><td>108.564</td><td>13.975%</td><td>15</td><td>6.230</td></tr><tr><td>s47-upper25g-prefill_tail10_lpt</td><td>42</td><td>130.226</td><td>114.342</td><td>12.197%</td><td>11</td><td>6.230</td></tr></table></div>
+<p>每个网络配置内三种放置两两比较，共18次，排序变化0次。连续放置全部最快，尾部Prefill相对全量Prefill仍5/6更慢。
+这些是固定小样本的逐条件结果，没有总体显著性或独立留出集含义。</p>
+<h2>为什么不能再把各窗口耗时相加</h2><p>新条件让前一窗口ACK尚未返回时，下一窗口已就绪；以下是seed11/100G/连续放置的真实时间：</p>
+<div class="scroll"><table><tr><th>窗口</th><th>就绪ns</th><th>发布范围ns</th><th>全连续接收ns</th><th>全ACK ns</th><th>就绪时前窗未ACK工作数</th></tr><tr><td>0</td><td>0</td><td>0—0</td><td>9,985</td><td>16,009</td><td>0</td></tr><tr><td>1</td><td>9,985</td><td>9,985—16,009</td><td>23,686</td><td>29,769</td><td>10</td></tr><tr><td>2</td><td>23,686</td><td>23,686—29,527</td><td>37,144</td><td>43,227</td><td>5</td></tr><tr><td>3</td><td>37,144</td><td>37,144—43,227</td><td>50,888</td><td>56,912</td><td>4</td></tr></table></div>
+<p>不同窗口的“就绪到全ACK”区间发生重叠。18组中，直接相加会比整段最终ACK多算18,072—18,690ns。
+旧实验按串行ACK窗口求和的链路服务量指标不能直接沿用于本条件的整体下界。本轮仅将整段单个物理出口的累计模型字节×8/速率取最大值，
+作为不含传播、源信用和依赖的服务量下界；没有把它当作完成时间。</p>
+<h2>时间差能追到哪些真实事件</h2><p>同一例的最终ACK从64,071ns变为56,912ns。以下各自选一条应用前驱见证；并列前驱保存在JSON中。</p>
+<p><b>全ACK依赖：</b>工作13/acked [0, 16,009] → 工作23/acked [16,009, 32,097] → 工作41/acked [32,097, 47,979] → 工作51/acked [47,979, 64,071]</p><p><b>连续接收依赖：</b>工作13/accepted [0, 9,985] → 工作29/accepted [9,985, 23,686] → 工作40/accepted [23,686, 37,144] → 工作56/acked [37,144, 56,912]</p><div class="scroll"><table><tr><th>所选见证的时间组成（ns）</th><th>全ACK依赖</th><th>连续接收依赖</th></tr>
+<tr><td>源队列槽等待（旧ACK释放）</td><td>0</td><td>17,948</td></tr><tr><td>发布至所选数据尾包首次发送</td><td>14,184</td><td>7,100</td></tr><tr><td>数据序列化</td><td>960</td><td>960</td></tr><tr><td>数据传播</td><td>24,000</td><td>24,000</td></tr><tr><td>数据交换机等待</td><td>831</td><td>880</td></tr><tr><td>ACK生成间隔</td><td>0</td><td>0</td></tr><tr><td>ACK序列化</td><td>96</td><td>24</td></tr><tr><td>ACK传播</td><td>24,000</td><td>6,000</td></tr><tr><td>ACK交换机等待</td><td>0</td><td>0</td></tr><tr><th>合计</th><th>64,071</th><th>56,912</th></tr></table></div>
+<p>每段都由真实数据/ACK时间与队列记录分解，连接起来恰好覆盖整段时间。这只是应用依赖的一条见证，
+源队列等待另记录其占槽旧工作；不是展开全部资源竞争的完整因果图。发布至尾包发送也包含传输发包过程，不能全部叫交换机拥塞或可消除损失。</p>
+<h2>验证到了哪里</h2><p>配对核对22,140条数据/ACK包的形状与物理路径、720个物理端口计数，全部一致（仅排除时间戳与包UID）。
+新条件独立检查116,280次物理发送、94,140次ECMP选择、738个工作回调、576个交换出口队列积分、72个窗口。
+两次只读包分析逐字节一致；修订后的比较器按内容hash识别旧结果，再分析所得JSON也逐字节一致。
+另建真实根目录、以目录符号链接指向未改变的原输入，迁移根目录后的比较结果也逐字节一致；未复制大文件或重跑网络。
+原ACK条件用修改后的检查器重新核验通过，没有重跑旧网络。全部无ECN、PFC或丢包，所以不能据此证明拥塞控制长尾。</p>
+<p>18个新增网络条件及6次拓扑CLI共耗宿主20.54秒，进程树采样峰值RSS
+416.14MiB。这是仿真器宿主资源，不是GPU显存或推理耗时。
+无安装、下载、依赖变化或平台构建。准备阶段补拷贝未变化truth供独立核验，记录已保存，发生在网络执行前。</p>
+<h2>对论文方向的实际影响与下一步</h2><p>这轮排除了“此前放置排序仅由全ACK窗口造成”的解释，但也说明只有流量和路径计数不足以精确确定完成时间。
+尚未证明新的网络机制或算法；之前的简单链路基线很强，下一步应先针对它解释不了的真实在线依赖研究，避免用更多参数组合替代贡献。</p>
+<ol><li>先完成现代通信库完成事件、可见性、源缓冲寿命与队列信用的逐项对应及最小验收；本轮accepted配置不能替代这一工作。</li>
+<li>补独立请求与可匹配的GPU/RDMA实测，对真实并发、共享链路和热点变化进行校准；当前四请求不足以证明泛化。</li>
+<li>固定强链路基线与现有拓扑感知方法，只有出现不能由简单机制解释且有实际影响的问题，才进入新策略和留出评价。</li>
+<li>千卡证据仍仅有此前1层×2轮、256个EP4副本的人工短任务；完整48层真实推理和EP1024均未验收。</li></ol>
+<p>论文研究目标保持进行中。本地检查点包含本轮全部原始记录与上轮已验证检查点，逐文件核hash；不是远端备份或可直接迁移的运行镜像。</p>
+</body></html>

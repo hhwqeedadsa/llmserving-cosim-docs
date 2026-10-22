@@ -1,0 +1,169 @@
+{
+  "passed": true,
+  "switch_ports": 576,
+  "switch_ecmp_choices": 94140,
+  "packet_lineages": 22140,
+  "physical_transmissions": 116280,
+  "work_callbacks": 738,
+  "capture_events": 420840,
+  "rounds": 72,
+  "cases": [
+    {
+      "case": "s11-all100g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "33ae6028f278751a07881a097f4d93a5f14f95e9f6675ce139f9a0fdeb296678"
+    },
+    {
+      "case": "s11-all100g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "53dc8fa8e84e0b6d1b4dbfbd56817190be7ce2a61d8e7ef0c659e0b22f1459d1"
+    },
+    {
+      "case": "s11-all100g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "b3a216eb10eca0a3d431e14d8b95c2380e4a3738237693f4c93560aaec66578e"
+    },
+    {
+      "case": "s11-upper25g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "51a51acbe737c5a843a12fd791c72c1acf689ede0d32c6cf628e3ad2b0834ad6"
+    },
+    {
+      "case": "s11-upper25g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "f4f4afa5b654ea82e023bbe0132d3184ec95f9c9abf67cdfd300e4982b429591"
+    },
+    {
+      "case": "s11-upper25g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "049755d18ce0fe4558d630f2c0c7cdfc1a7fe2ed2fa9a482e51ccbe638a6fdd7"
+    },
+    {
+      "case": "s29-all100g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "f1a2c10cfedefe4f8140e6a1fc24c1a2a3c5edff438f0bb86b7792ba2a592cb0"
+    },
+    {
+      "case": "s29-all100g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "53206002c58a505c296957e2eae487b1fe9b40f721aa9da749d64056c5c0cc7f"
+    },
+    {
+      "case": "s29-all100g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "18c35258da4511fda5ba366b8126b5725d175f06381f1cac62022adb9d66f3c1"
+    },
+    {
+      "case": "s29-upper25g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "d1a3bd35e11659fad7dd8cbb0a6333e2b5bf121e4c772a9397839f45e30ecf21"
+    },
+    {
+      "case": "s29-upper25g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "da012badc8783dfb5c35819ab33a2135710ef87bb9d282ed6b538c8ad7ec3570"
+    },
+    {
+      "case": "s29-upper25g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "b554bfee9f0262e4454e83401e3da121756bdbd2be522f19bd53e41fddbee056"
+    },
+    {
+      "case": "s47-all100g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "a059c6a318480fca55090a1d6f88ab123282190d4db68147b53c97c1dd74912d"
+    },
+    {
+      "case": "s47-all100g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "446ade24be8f1df3f9be7a84f2c42d075eeb8a6a08952dd743788f1f23416e28"
+    },
+    {
+      "case": "s47-all100g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "aa5a0d347343eb1e67687e1253dc38d2ee2b9dd313c3625724a805d0c08b437c"
+    },
+    {
+      "case": "s47-upper25g-contiguous",
+      "works": 36,
+      "packets": 1080,
+      "capture_events": 20160,
+      "result_sha256": "7b31d6681dc25a40c06845fcc9dbba237877d3f6ca42f84bd29ec9dc8f400861"
+    },
+    {
+      "case": "s47-upper25g-prefill_all_lpt",
+      "works": 45,
+      "packets": 1350,
+      "capture_events": 26100,
+      "result_sha256": "4c89eba4a1386eddd72f838d57f85b885b2d3edcdcd6b556130278fceebfadc0"
+    },
+    {
+      "case": "s47-upper25g-prefill_tail10_lpt",
+      "works": 42,
+      "packets": 1260,
+      "capture_events": 23880,
+      "result_sha256": "6c0d6c06c32e1b3fd2432f5acf3c227db00ee4d6af51591812c3b0f0524057f8"
+    }
+  ],
+  "summary_sha256": "08601b95a9725c0d6fd975ab653fc7d67d57b574f71842ab3a45dd4ac36fbe4a",
+  "repeat_result_byte_identical": null,
+  "repeat_network_run_performed": false,
+  "repeat_analysis_byte_identical": true,
+  "independent_raw_requests": 4,
+  "independent_routes": 16,
+  "max_data_bytes_after_dequeue": 32580,
+  "dependency_event": "accepted",
+  "same_stream_publication_waits_previous_ack": true,
+  "native_libraries_sha256": {
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so": "04097544c76201d41a1ca80d5762b38e3fdfc4672a480d7d1f6b75bc4c38b54b",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+    "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557"
+  },
+  "platform_source_sha256": {
+    "backend/rdma/fabric.cc": "4d85b5d049c435ec4612c286caf0e2bc277dcb8a8297ad22be750b8672dd5869",
+    "backend/rdma/persistent_streams.cc": "33cf55c71493758d72e44b90934529c94af99c7d78fdaacb165469496427cc65",
+    "backend/rdma/stream_probe.cc": "05810df0cef30ca51370d7743b18be98529427f3c8f586b43dfa8118ff4e2c77",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc": "cf3c49a36f658507b8241127f9a7a4c0e0ea396b10358a8106023b9d54e5f069",
+    "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc": "95243e0f3f2d15e0ea87990e01731fad92984e8ec9a6bb00872ee6bf50070a25"
+  },
+  "modern_GIN_modeled": false,
+  "hardware_calibrated": false,
+  "full_inference_validated": false,
+  "goal_complete": false
+}

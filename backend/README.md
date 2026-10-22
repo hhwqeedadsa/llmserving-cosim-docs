@@ -1,6 +1,8 @@
 # 联合后端接口与执行规则
 
-原生RDMA准入控制器`communication_admission.hh`支持消息数和逻辑字节双约束。`queue_integral.hh`保存每出口常量状态，`rdma/fabric.cc`将出队前钩子规范为出队后状态，核对字节守恒后积分，不需要每包历史或采样事件。源QP序号和阶段耗时只用于离线报告，不补造原生库尚无的ACK超时恢复。配置见[准入示例](../examples/scaleout_rdma_admission/README.md)。
+原生RDMA准入控制器`communication_admission.hh`支持消息数和逻辑字节双约束。`queue_integral.hh`保存每出口常量状态，`rdma/fabric.cc`将出队前钩子规范为出队后状态，核对字节守恒后积分，不需要每包历史或采样事件。源QP序号和阶段耗时只用于离线报告。配置见[准入示例](../examples/scaleout_rdma_admission/README.md)。
+
+可选超时恢复由`retransmission_timer.hh`和专用协议模块`rdma/recovery.cc`实现，经原生NIC的实际发送/接收回调接入，与被动观测分离。源端按累计ACK进展计时，有限重试、指数退避；超时调用原生`RecoverQueue`和`TriggerTransmit`，重复数据在接收端生成真实累计ACK。控制器不读取全局接收真值驱动发送。默认原生模式不增加协议行为，依赖无修改。服务结束在扩展模式中还等待实际网络排空；耗尽重试停止整个共享仿真并保留失败时资源，不补造成功。参数和边界见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
 
 本目录将 ASTRA 的任务执行与 ns-3-UB 的事件、协议和网络状态连接起来，负责图装载、控制协议、收发匹配、完成回调及原始观测。整体过程见[系统架构](../docs/architecture.md)；普通运行与构建使用[用户指南](../docs/user_guide.md)中的 `moe-ub` 命令。本文件供修改后端或编写集成检查时查阅，不记录逐次开发结果。
 

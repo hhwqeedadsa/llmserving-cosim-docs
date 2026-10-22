@@ -1,0 +1,602 @@
+{
+  "run_root": "/dev/shm/moe-recovery-20261022",
+  "summaries": {
+    "gates-final": {
+      "passed": true,
+      "probe_cases": 19,
+      "service_cases": 5,
+      "default_native_equivalence": true,
+      "lossless_extension_equivalence": true,
+      "tail_ack_nack_recovery": true,
+      "late_duplicate_feedback_once": true,
+      "finite_retry_terminal_failure": true,
+      "pending_credit_resumes": true,
+      "receiver_duplicate_ack_is_real_packet": true,
+      "capture_invariance": true,
+      "network_and_timer_drain": true,
+      "exact_deadline_feedback": true,
+      "simulation_limit_distinct_from_retry_failure": true,
+      "dual_plane_timer_isolation": true,
+      "intra_host_excluded": true
+    },
+    "regression-faults": {
+      "passed": true,
+      "probe_cases": 11,
+      "service_cases": 3,
+      "recovered_payload_bytes": 7000,
+      "capture_invariance": true,
+      "bounded_capture_invariance": true,
+      "failed_service_kept_result_and_frontend": true
+    },
+    "regression-admission": {
+      "passed": true,
+      "probe_cases": 11,
+      "service_cases": 9,
+      "pass_observer_invariance": true,
+      "legacy_default_equivalence": true,
+      "queue_order_and_capacity": true,
+      "ack_loss_retains_owner": true,
+      "independent_source_progress": true,
+      "explicit_decision_cost": true,
+      "intra_host_excluded": true,
+      "planes_share_source_quota": true,
+      "simultaneous_ack_native_map_vs_software_release": true
+    },
+    "regression-structure": {
+      "passed": true,
+      "probe_cases": 11,
+      "oversize_preflight": true,
+      "service_cases": 3,
+      "byte_budget_shared_across_planes": true,
+      "intra_host_excluded_from_byte_budget": true,
+      "queue_integrals_independently_reconstructed": true,
+      "packet_residence_crosscheck": true,
+      "metrics_observation_invariant": true,
+      "truncated_and_summary_exact": true,
+      "byte_ownership": true,
+      "strict_fifo_and_eligible_peer_rotation": true,
+      "source_progress_and_ack_stall": true
+    }
+  },
+  "cases": {
+    "native": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "1dfd60896508c0bcf30bedf6a5a48f2234f1f20a72842bf84bc5bdffad6fd1d2",
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 12771,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 12771,
+        "source_data_payload_bytes": 4000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "tail": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "afd188941c6b6605fc2a73e4456128787fb4f49edececfbd7ac2d1234076190a",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 0,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 6,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 65210,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 59186,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 65210,
+        "source_data_payload_bytes": 5000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "final-ack": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "a04d50dfc661a8cb33920b48f94d678d04489135d0b689fbeb36ae469cbedc0b",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 1,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 7,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 65210,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 65210,
+        "source_data_payload_bytes": 5000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "lost-nack": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "5aed053f443a391a9ee5e7fa732420444648de4f0b168acebbe6d4d57eda77b1",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 0,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 6,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 65210,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 59186,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 65210,
+        "source_data_payload_bytes": 7000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "two-acks": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "c70288ed8e71843453094928abd11a4184e265fe1f6de6910f2dae929a626fec",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 2,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 9,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 2,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 145210,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 145210,
+        "source_data_payload_bytes": 6000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "exhausted": {
+      "passed": false,
+      "finish_ns": 292688,
+      "drained": false,
+      "failure": {
+        "message_id": 50000,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 292688
+      },
+      "result_sha256": "e12a44a0f8fdf87122e2e9a5828e1804c67089c1ae1304d49cd667c67eec01d4",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 2,
+        "failed": true,
+        "inflight_packets": 0,
+        "observations": 9,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 2,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_payload_bytes": 6000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "short-rto": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "8118751a1f697188cbc58de6ddb8c85b8cc9d6fede9f6d77e53ded6378777a87",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 8,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 15,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 2,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 12771,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 12771,
+        "source_data_payload_bytes": 12000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "boundary": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "d15237f50bacbe1bb2444db86783db82691c5ce00ef201be14dbe23dd52a093d",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 1,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 4,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 12522,
+        "bytes": 1000,
+        "id": 50000,
+        "receive_ready_ns": 6498,
+        "receiver_contiguous_bytes": 1000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 12522,
+        "source_data_payload_bytes": 2000,
+        "source_unique_data_payload_bytes": 1000
+      }
+    },
+    "budget-before-timeout": {
+      "passed": false,
+      "finish_ns": 5000000,
+      "drained": false,
+      "failure": {
+        "reason": "simulation_time_limit",
+        "scope": "simulation budget expired before drain; not a transport retry-exhaustion event",
+        "time_ns": 5000000
+      },
+      "result_sha256": "b2f1e3084df11413e83823392cd861764ce5bb3957029ebb0cb8bcbd0ca9987a",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 0,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 4,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 0,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 6747,
+        "receiver_contiguous_bytes": 4000,
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_payload_bytes": 4000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "dual": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "1e6cfdbec411675c326403aae5a28e21663599ae20d078c100a39f57dcb5a670",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 1,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 6,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 48348,
+        "bytes": 1000,
+        "id": 0,
+        "receive_ready_ns": 4332,
+        "receiver_contiguous_bytes": 1000,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 48348,
+        "source_data_payload_bytes": 2000,
+        "source_unique_data_payload_bytes": 1000
+      }
+    },
+    "local": {
+      "passed": true,
+      "finish_ns": 5000000,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "38d1d2e68aa1a0ed9e90e06ec6367e82a0d3eef71a3ded0d9b8cd94e2d2137b8",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 0,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 0,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 218,
+        "bytes": 4000,
+        "id": 50000,
+        "receive_ready_ns": 218,
+        "receiver_contiguous_bytes": 4000,
+        "source_data_payload_bytes": 4000,
+        "source_unique_data_payload_bytes": 4000
+      }
+    },
+    "service-native": {
+      "passed": true,
+      "finish_ns": 248176,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "43339968f1ad03c5c37d489e1cc530f0445bb00514a704b90216150ebd44269e",
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 8460,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "receiver_contiguous_bytes": 2048,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 8460,
+        "source_data_payload_bytes": 2048,
+        "source_unique_data_payload_bytes": 2048
+      }
+    },
+    "service-clean": {
+      "passed": true,
+      "finish_ns": 248176,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "68f9268da203982ffc250cde832cff73eb6a13d5100779f591ee7123f7a75b4f",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 0,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 768,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 0,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 8460,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "receiver_contiguous_bytes": 2048,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 8460,
+        "source_data_payload_bytes": 2048,
+        "source_unique_data_payload_bytes": 2048
+      }
+    },
+    "service-final-ack": {
+      "passed": true,
+      "finish_ns": 282344,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "9194637c9ce3a0faeead764d0ba0e9a5d0f21b6ad0b1032bd028738ca3563a53",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 1,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 770,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 1,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 52478,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "receiver_contiguous_bytes": 2048,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 52478,
+        "source_data_payload_bytes": 2096,
+        "source_unique_data_payload_bytes": 2048
+      }
+    },
+    "service-short": {
+      "passed": true,
+      "finish_ns": 251196,
+      "drained": true,
+      "failure": null,
+      "result_sha256": "90e7bb966b947f53da5c5b5405efb79c5866df4037d95a3dde34d388c71c01f9",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 1124,
+        "failed": false,
+        "inflight_packets": 0,
+        "observations": 2188,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 296,
+      "target": {
+        "ack_callbacks": 1,
+        "ack_ns": 8460,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "receiver_contiguous_bytes": 2048,
+        "sender_qp_present": false,
+        "sender_resource_released_ns": 8460,
+        "source_data_payload_bytes": 4096,
+        "source_unique_data_payload_bytes": 2048
+      }
+    },
+    "service-exhausted": {
+      "passed": false,
+      "finish_ns": 288456,
+      "drained": false,
+      "failure": {
+        "message_id": 0,
+        "reason": "recovery_retry_exhausted",
+        "scope": "whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown",
+        "time_ns": 288456
+      },
+      "result_sha256": "ef12959331620e7f06f31063ad5b01e78259f6137bdafa6f8894f969bb28786e",
+      "recovery": {
+        "complete": true,
+        "duplicate_ack_responses": 2,
+        "failed": true,
+        "inflight_packets": 0,
+        "observations": 230,
+        "old_feedback_packets": 0,
+        "omitted_events": 0
+      },
+      "total_timeout_retransmissions": 2,
+      "target": {
+        "ack_callbacks": 0,
+        "ack_ns": null,
+        "bytes": 2048,
+        "id": 0,
+        "receive_ready_ns": 6376,
+        "receiver_contiguous_bytes": 2048,
+        "sender_qp_present": true,
+        "sender_resource_released_ns": null,
+        "source_data_payload_bytes": 2144,
+        "source_unique_data_payload_bytes": 2048
+      }
+    }
+  },
+  "python_unit_cases": 60,
+  "cpp_tests": [
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Ibackend",
+        "tests/unit/retransmission_timer_test.cc",
+        "-o",
+        "/dev/shm/moe-recovery-20261022/retransmission_timer-test"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/dev/shm/moe-recovery-20261022/retransmission_timer-test"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Ibackend",
+        "tests/unit/communication_admission_test.cc",
+        "-o",
+        "/dev/shm/moe-recovery-20261022/communication_admission-test"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/dev/shm/moe-recovery-20261022/communication_admission-test"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "g++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-Ibackend",
+        "tests/unit/queue_integral_test.cc",
+        "-o",
+        "/dev/shm/moe-recovery-20261022/queue_integral-test"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "/dev/shm/moe-recovery-20261022/queue_integral-test"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "external_sources": [
+    {
+      "name": "rfc6298",
+      "url": "https://www.rfc-editor.org/rfc/rfc6298.txt",
+      "bytes": 22454,
+      "sha256": "f3a6d937c0a7653bd431fdbbdcd7920f4e9d9cdb6134fa9db7a74b90d215edf6"
+    },
+    {
+      "name": "rxe_comp-v6.12",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_comp.c",
+      "bytes": 20772,
+      "sha256": "c2c59b186cbeef632b5b03f82d78df7492abd0b6139748363f813a7e6133aeee"
+    },
+    {
+      "name": "rxe_resp-v6.12",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c",
+      "bytes": 40930,
+      "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59"
+    }
+  ]
+}

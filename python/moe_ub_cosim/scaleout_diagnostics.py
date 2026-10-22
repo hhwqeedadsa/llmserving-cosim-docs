@@ -16,6 +16,7 @@ def diagnose(run, output):
     faults = result.get('fault_injection', {})
     flows = {m['id']: m for m in result['messages']}
     callbacks = {m['id']: m for m in result.get('service', {}).get('message_callbacks', [])}
+    failure=result.get('failure',{})
     traces = []
     if capture:
         columns = capture['columns']
@@ -28,7 +29,8 @@ def diagnose(run, output):
         if count>1:repeated[mid].append(dict(sequence=seq,transmissions=count))
     messages = []
     for identity, flow in sorted(flows.items()):
-        state = ('awaiting_admission' if 'admission_granted_ns' in flow and flow['admission_granted_ns'] is None else
+        state = ('retry_exhausted' if failure.get('message_id')==identity and failure.get('reason')=='recovery_retry_exhausted' else
+                 'awaiting_admission' if 'admission_granted_ns' in flow and flow['admission_granted_ns'] is None else
                  'awaiting_resource_release' if flow['ack_callbacks'] and 'sender_resource_released_ns' in flow and flow['sender_resource_released_ns'] is None else
                  'complete' if flow['ack_callbacks'] else
                  'awaiting_sender_ack' if flow['receive_ready_ns'] is not None else 'awaiting_contiguous_data')
@@ -75,6 +77,7 @@ def diagnose(run, output):
         if not events:progress.update(issued_nodes=None,completed_nodes=None)
         graphs.append(progress)
     from .scaleout_admission import audit
+    from .scaleout_recovery import audit as recovery_audit
     summary = dict(schema_version='moe-scaleout-diagnosis/1', scope='post_run_evaluation_only',
         passed=result['passed'], finish_ns=result['finish_ns'], drained=result['drained'],
         completion_counts=dict(Counter(m['state'] for m in messages)), messages=messages,
@@ -86,6 +89,7 @@ def diagnose(run, output):
         service=result.get('service'),
         admission_resources=audit(result),
         network_queues=network_summary(result),
+        recovery=recovery_audit(result),failure=failure or None,
         limitations=['Capture completeness applies only to selected nodes and time window.',
             'Missing events in absent, filtered or truncated capture cannot prove no retransmission or feedback.',
             'Graph edges lacking callbacks may be unissued; direct consumers are dependencies, not measured delay attribution.',

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+非 UB Scale-Out 的可选 `recovery.mode=go_back_n` 在原生 NIC 协议回调上维护源端 ACK 进展计时，超时经原生发送调度重传，接收端重复数据用真实反向 ACK 响应。数据就绪、完整确认、QP 清理和软件额度释放保持分开；全部图完成后等待尾部网络流量排空。重试耗尽停止整个共享仿真，保留业务与资源状态供离线诊断，不返回正常完成。默认原生模式与依赖保持原行为；详细机制与参数见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。
+
 原生Scale-Out可同时按活跃消息数、整条逻辑payload字节约束源端准入，单条消息过大时拒绝。发送协议进度来自源QP，仅用于离线导出；`queue_metrics`以每出口常量空间累计全程交换机队列积分，独立于详细包记录。`scaleout_metrics.py`离线分解生命周期阶段，不作为在线策略输入。配置与边界见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 非 UB 的 `service/1` 保留有限 MoE 片段；新增 `service/2` 支持完整 GQA MoE 结构尺寸、首尾/逐层图和权重＋KV 声明。`topology/2` 为同服务器不同 GPU 提供分块交换织构模型，按 GPU 入/出方向共享带宽；它与机外 RDMA 共用 Simulator，不冒称 NVLink 协议。`rdma/2` 显式声明执行限额，旧默认不扩容。Scale-Out 未缓存 KV 池按需创建元数据，保持原容量、FIFO 与引用计数；节点审计另存不滚动日志。配置、事件和边界见[完整形状百卡示例](../examples/scaleout_clos128/README.md)。两种服务 schema 默认使用合成路由，支持可选来源回放；均为声明成本、ready-KV Decode，不执行数值模型或声称硬件校准。下面的有限片段说明对应旧配置，UB 路径的结构保持独立。

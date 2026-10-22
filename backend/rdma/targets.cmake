@@ -4,7 +4,7 @@ if(TARGET ns3::libunified-bus OR NOT TARGET ns3::libpoint-to-point OR NOT TARGET
   message(FATAL_ERROR "RDMA targets require the locked ASTRA native ns-3, without UB")
 endif()
 include("${CMAKE_CURRENT_LIST_DIR}/serial_native.cmake")
-add_library(moe-rdma-fabric STATIC "${CMAKE_CURRENT_LIST_DIR}/fabric.cc")
+add_library(moe-rdma-fabric STATIC "${CMAKE_CURRENT_LIST_DIR}/fabric.cc" "${CMAKE_CURRENT_LIST_DIR}/recovery.cc")
 target_include_directories(moe-rdma-fabric PUBLIC "${CMAKE_CURRENT_LIST_DIR}" "${MOE_ASTRA}/extern/helper")
 target_link_libraries(moe-rdma-fabric PUBLIC ${libcore} ${libnetwork} ${libinternet} ${libpoint-to-point} ${libapplications})
 set_target_properties(moe-rdma-fabric PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON)

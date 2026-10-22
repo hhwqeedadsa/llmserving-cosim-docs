@@ -344,3 +344,13 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 有限层段输入为 `configured-service/5`，其 `execution.segment`（`moe-ub-model-segment/1`）声明原始连续层、Decode 步骤、请求上下文、入口与 KV 已就绪、空网络从 0 ns 开始和完整部署容量。对应计划为 `model-segment-plan/1`，部署为 `service-deployment/6`，保存包为 `research-slice/3`。相关计算只覆盖所选完整块，不执行 embedding、末尾归一化、lm_head 和 sampling。结果 `completion_scope=selected_segment_only`，前端一轮推进仅是执行驱动，不是完整生成 Token；回放范围为 `dependency_driven_frozen_finite_segment`。
 
 通过已核验文件准备的层段在 `inputs/preparation.json.route_evidence` 保留来源修订、文件摘要、原始层和行号、请求上下文及精度差异。`run.json.input_evidence` 绑定准备结果；运行检查服务与层输入摘要，并核对来源记录覆盖和实际专家选择。图与运行清单据此区分 `published_model_trace` 和合成输入，保存包携带同一证据。运行和回放无需重新读取原始轨迹文件；改变路由或范围须重新准备。紧凑 JSON 只省去空白，不改变字段和核验条件。
+
+## 非 UB Scale-Out 恢复记录
+
+显式 `recovery.mode=go_back_n` 时，`result.json.recovery` 保存配置、逐消息源端状态、超时/重复确认计数及有界事件。默认原生模式不增加此字段。`highest_sent_bytes` 是实际发送最高字节，`acknowledged_bytes` 只来自真实累计 ACK；`timeout_retransmissions` 为超时重传决策数，不含原生 NACK 重传，不等于包数。`retries_since_progress` 为上次 ACK 进展后的次数；`deadline_ns=-1` 表示未计时，可能是当前已发字节都已确认、正常完成或重试耗尽，须结合状态判断。
+
+源事件列为 `[time_ns,event,source,message_id,acknowledged_bytes,highest_sent_bytes,retries_since_progress,rto_ns,deadline_ns]`，事件码随 `event_codes` 导出。`receiver_events` 保存接收端本地的重复包偏移和重新确认序号，具体列随输出提供。两类事件共享 `max_events`；累计观察数与遗漏数独立保存。完整日志才重放计时、退避、确认和终态；截断时 `rdma-diagnose.recovery.reconstructed=false`，仍检查计数与原生终态，不补造缺失事件。
+
+`inflight_packets` 为当前已发出但尚未被下一跳接收/丢弃的逐跳包数，只用于最终排空，不参与发送端恢复。服务完成还要求源计时器、发送 QP、软件额度、交换机队列和 ACK 队列排空。`failure.reason=recovery_retry_exhausted` 带失败消息与时刻；`simulation_time_limit` 单独表示预算到期。失败时保留原始未完成消息与占用额度，不把它们填成正常完成或释放。
+
+`scaleout rdma-diagnose` 离线读取这些字段；它与端口、接收端、图依赖的关联属于评价真值，不能直接输入在线策略。公开配置和运行见[恢复示例](../examples/scaleout_rdma_recovery/README.md)。

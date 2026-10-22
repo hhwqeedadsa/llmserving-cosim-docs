@@ -49,6 +49,8 @@ def verify(directory):
     from .scaleout_metrics import phase_intervals, network_summary
     network_queues=network_summary(result)
     for flow in result['messages']:phase_intervals(flow,result['finish_ns'])
+    from .scaleout_recovery import audit as recovery_audit
+    recovery_resources=recovery_audit(result)
     libraries=[Path(x).resolve() for x in result['loaded_libraries'] if Path(x).name.startswith('libns3')]
     require(len(libraries)>=5 and len({p.parent for p in libraries})==1 and
             all(p.name.startswith('libns3.42-') and 'unified' not in p.name for p in libraries),
@@ -125,7 +127,7 @@ def verify(directory):
             require(flow['src']==m['src'] and flow['dst']==m['dst'] and flow['plane']==m['plane'] and
                     flow['bytes']==m['bytes'] and flow['ack_callbacks']==1,
                     'message payload, path plane or completion mismatch')
-            if rdma.get('faults') or 'drop_once' in rdma:
+            if rdma.get('faults') or 'drop_once' in rdma or rdma.get('recovery',{}).get('mode')=='go_back_n':
                 require(flow.get('source_unique_data_payload_bytes')==m['bytes'] and
                         flow.get('receiver_contiguous_bytes')==m['bytes'] and
                         flow['source_data_payload_bytes']>=m['bytes'],
@@ -210,6 +212,7 @@ def verify(directory):
     if admission_resources['available']:
         report['admission_resources']=admission_resources
     if network_queues['available']:report['network_queues']=network_queues
+    if recovery_resources['available']:report['recovery']=recovery_resources
     if 'intra_host' in topology:
         report.update(intra_host_payload_bytes=sum(local_payload.values())//2,
                       inter_host_payload_bytes=total_bytes-sum(local_payload.values())//2)

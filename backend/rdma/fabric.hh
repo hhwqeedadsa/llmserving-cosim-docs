@@ -6,6 +6,7 @@
 #include "ns3/rdma-driver.h"
 #include "../communication_admission.hh"
 #include "../queue_integral.hh"
+#include "recovery.hh"
 #include <functional>
 #include <array>
 #include <map>
@@ -26,6 +27,7 @@ class Fabric {
   void Send(uint64_t id, uint32_t src, uint32_t dst, uint64_t bytes, unsigned plane, Done acked,
             Done received = {});
   bool Drained() const;
+  void FinishWhenDrained(Done);
   Json Report();
   unsigned Planes() const { return planes_; }
   uint64_t MaxMessages() const { return config_.contains("limits") ? config_.at("limits").at("max_messages").get<uint64_t>() : 8192; }
@@ -81,6 +83,7 @@ class Fabric {
   void PumpAdmission(unsigned source);
   void ReleaseSender(uint64_t id);
   void Lifecycle(unsigned event,uint64_t id,unsigned source);
+  void CheckDrain();
   int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
   void PacketEvent(unsigned event, unsigned node, unsigned port, ns3::Ptr<const ns3::Packet>);
   bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
@@ -118,5 +121,9 @@ class Fabric {
   std::vector<bool> deciding_;
   std::vector<std::array<int64_t,8>> lifecycle_events_;
   uint64_t lifecycle_limit_=0,lifecycle_observations_=0;
+  std::unique_ptr<RdmaRecovery> recovery_;
+  int64_t inflight_packets_=0,failure_id_=-1,failure_ns_=-1;
+  Done finish_;
+  bool drain_check_pending_=false;
 };
 }

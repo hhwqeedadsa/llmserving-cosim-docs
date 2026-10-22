@@ -43,7 +43,15 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   Require(config.at("schema_version") == "moe-scaleout-rdma/1" || config.at("schema_version") == "moe-scaleout-rdma/2", "wrong RDMA schema");
   Require(config.at("cc_mode") == 1, "first native adapter accepts DCQCN=1 only");
   Require(!(config.contains("drop_once") && config.contains("faults")), "choose drop_once or faults");
-  resource_tracking_=config.contains("admission") || config.contains("lifecycle_capture");
+  if(config.contains("recovery")) {
+    const auto& c=config.at("recovery");const std::string mode=c.at("mode");
+    Require(mode=="native" || mode=="go_back_n","unknown recovery mode");
+    if(mode=="go_back_n")recovery_=std::make_unique<RdmaRecovery>(c,[this](uint64_t id){
+      failure_id_=id;failure_ns_=Now();Simulator::Stop();
+    });
+    else Require(c.size()==1,"native recovery mode has no override parameters");
+  }
+  resource_tracking_=config.contains("admission") || config.contains("lifecycle_capture") || bool(recovery_);
   queue_metrics_=config.value("queue_metrics",false);
   if(config.contains("admission")) {
     const auto& a=config.at("admission");admission_policy_=a.at("policy");
@@ -144,7 +152,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
           {"data_packets",0u},{"ecn_ce_seen",0u},{"pfc_pause",0u},{"pfc_resume",0u},{"max_queue_at_hook_bytes",0u}};
       Require(dev->TraceConnectWithoutContext("PhyTxBegin", MakeBoundCallback(&Fabric::TxTrace,this,host,port)), "missing native PhyTxBegin");
       Require(dev->TraceConnectWithoutContext("MacRx", MakeBoundCallback(&Fabric::RxTrace,this,host,port)), "missing native MacRx");
-      if(capture_limit_)Require(dev->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&Fabric::DropTrace,this,host,port)),"missing native PhyRxDrop");
+      if(capture_limit_ || recovery_)Require(dev->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&Fabric::DropTrace,this,host,port)),"missing native PhyRxDrop");
       Require(dev->GetQueue()->TraceConnectWithoutContext("BeqEnqueue", MakeBoundCallback(&Fabric::QueueEnqueueTrace,this,host,port)), "missing BeqEnqueue");
       Require(dev->GetQueue()->TraceConnectWithoutContext("BeqDequeue", MakeBoundCallback(&Fabric::QueueDequeueTrace,this,host,port)), "missing BeqDequeue");
       Require(dev->TraceConnectWithoutContext("QbbPfc", MakeBoundCallback(&Fabric::PfcTrace,this,host,port)), "missing QbbPfc");
@@ -198,6 +206,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       drivers_[host]=CreateObject<RdmaDriver>(); auto driver=drivers_[host];
       driver->SetNode(nodes_.Get(host)); driver->SetRdmaHw(hw); nodes_.Get(host)->AggregateObject(driver); driver->Init();
       Require(driver->TraceConnectWithoutContext("QpComplete",MakeCallback(&Fabric::Acked,this)),"missing ACK-completion trace");
+      if(recovery_)recovery_->Attach(host,hw);
     }
   }
   RdmaEgressQueue::ack_q_idx=0;
@@ -276,7 +285,10 @@ bool Fabric::Corrupt(unsigned node,unsigned port,Ptr<Packet> p) {
   }
   return false;
 }
-void Fabric::DropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {f->PacketEvent(2,node,port,p);}
+void Fabric::DropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
+  if(f->recovery_) {Require(f->inflight_packets_>0,"drop without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
+  f->PacketEvent(2,node,port,p);
+}
 
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
   Require(src<gpus_ && dst<gpus_ && src!=dst && bytes>0 && bytes<=64*1024*1024 && plane<planes_,"invalid message");
@@ -369,6 +381,7 @@ void Fabric::CheckReceived(uint64_t id) {
   }
 }
 void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
+  if(f->recovery_)++f->inflight_packets_;
   f->PacketEvent(0,node,port,p);
   auto& row=f->ports_.at(node).at(port); const auto h=Header(p); const uint64_t size=p->GetSize();
   row.wire+=size;
@@ -389,6 +402,7 @@ void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   if(h.udp.seq==0 && static_cast<int64_t>(p->GetUid())==flow.first_packet_uid)flow.path.push_back({node,port,Now()});
 }
 void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
+  if(f->recovery_) {Require(f->inflight_packets_>0,"receive without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
   f->PacketEvent(1,node,port,p);
   auto h=Header(p);
   if(h.l3Prot==0x11 && h.GetIpv4EcnBits()==3) {
@@ -439,7 +453,26 @@ bool Fabric::Drained() const {
   for(auto driver:drivers_)if(!driver->m_rdma->m_qpMap.empty())return false;
   if(resource_tracking_)for(unsigned src=0;src<gpus_;++src)
     if(!admission_[src]->Active().empty() || admission_[src]->Pending() || deciding_[src])return false;
+  if(recovery_) {
+    if(!recovery_->Idle() || inflight_packets_)return false;
+    for(const auto& node:ports_)for(const auto& port:node)if(port.device && port.device->GetQueue()->GetNBytesTotal())return false;
+    for(const auto& driver:drivers_)for(const auto& nic:driver->m_rdma->m_nic)
+      if(nic.dev && nic.dev->GetRdmaQueue()->m_ackQ->GetNPackets())return false;
+  }
   return true;
+}
+void Fabric::FinishWhenDrained(Done done) {
+  Require(!finish_,"finish requested twice");
+  if(!recovery_) {Require(Drained(),"premature service termination");done();return;}
+  finish_=std::move(done);CheckDrain();
+}
+void Fabric::CheckDrain() {
+  if(!finish_ || drain_check_pending_)return;
+  drain_check_pending_=true;
+  Simulator::ScheduleNow([this](){
+    drain_check_pending_=false;
+    if(finish_ && Drained()) {auto done=std::move(finish_);finish_={};done();}
+  });
 }
 Json Fabric::Report() {
   Json r={{"native_network_executed",true},{"finish_ns",Now()},{"drained",Drained()},
@@ -450,6 +483,14 @@ Json Fabric::Report() {
     {"wire_byte_scope","Native model packet sizes; excludes unmodelled Ethernet preamble/FCS/IFG"},
     {"queue_scope","BEgressQueue native hooks: enqueue after byte addition; dequeue before byte subtraction; excludes bytes already being serialized"},
     {"rx_qp_scope","Accepted receive state retained until Fabric teardown; no waiting receives at service completion"}};
+  if(recovery_) {
+    r["recovery"]=recovery_->Report();r["recovery"]["inflight_packets"]=inflight_packets_;
+    r["recovery"]["finish_waiting_for_drain"]=bool(finish_);
+    if(failure_id_>=0)r["failure"]={{"reason","recovery_retry_exhausted"},{"message_id",failure_id_},{"time_ns",failure_ns_},
+      {"scope","whole shared simulation stopped; no successful callbacks or credits synthesized; live resources retained for diagnosis until teardown"}};
+    else if(Now()>=MaxSimNs() && !Drained())r["failure"]={{"reason","simulation_time_limit"},{"time_ns",Now()},
+      {"scope","simulation budget expired before drain; not a transport retry-exhaustion event"}};
+  }
   // Numeric observer state is converted only after Run(). Sort identities so
   // hash-table lookup optimization cannot change exported ordering.
   const auto time=[](int64_t value)->Json{return value<0?Json(nullptr):Json(value);};

@@ -33,6 +33,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 ## 运行小例
 
+Scale-Out 可选源端超时重传、接收端重复 ACK、有限重试失败和真实服务恢复，见[恢复小例](../examples/scaleout_rdma_recovery/README.md)。默认保留原生协议。更改完整 RDMA 配置中的 `recovery`，无需修改前端模型图；较短超时会增加重复流量，示例参数未做硬件校准。
+
 Scale-Out的包级故障与失败诊断见[丢包小例](../examples/scaleout_rdma_faults/README.md)。`scaleout rdma-diagnose --run <完成或失败目录> --output <新JSON>`可读取数据/ACK/NACK丢弃和未完成回调；详细记录默认关闭，按节点、窗口与条数有界开启。
 
 每源软件并发限额、FIFO/目的端轮转及有界资源生命周期见[准入小例](../examples/scaleout_rdma_admission/README.md)。它用于研究尚未发出的通信如何等待源端额度，不等同硬件NIC容量；完整ACK后确认发送QP映射移除才归还额度，可与丢包规则组合。

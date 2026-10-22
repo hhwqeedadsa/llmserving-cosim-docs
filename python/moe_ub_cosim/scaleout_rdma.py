@@ -36,11 +36,21 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery') if key in c), 'RDMA protocol')
     budget=limits(c)
     from .scaleout_admission import validate_options
     validate_options(c)
     if 'queue_metrics' in c:require(type(c['queue_metrics']) is bool,'queue_metrics must be boolean')
+    if 'recovery' in c:
+        recovery=c['recovery']
+        require(isinstance(recovery,dict),'recovery must be an object')
+        require(recovery.get('mode') in ('native','go_back_n'),'unknown recovery mode')
+        fields(recovery,'mode' if recovery['mode']=='native' else 'mode initial_rto_ns max_rto_ns max_retries max_events','recovery')
+        if recovery['mode']=='go_back_n':
+            integer(recovery['initial_rto_ns'],'initial recovery RTO',1,budget['max_sim_ns'])
+            integer(recovery['max_rto_ns'],'maximum recovery RTO',recovery['initial_rto_ns'],1000000000)
+            integer(recovery['max_retries'],'recovery retries without ACK progress',1,16)
+            integer(recovery['max_events'],'recovery capture events',0,100000)
     require(c['schema_version'] in ('moe-scaleout-rdma/1','moe-scaleout-rdma/2') and type(c['cc_mode']) is int and c['cc_mode'] == 1,
             'only explicit native DCQCN mode 1 is currently supported')
     for key, minimum, maximum in [('payload_bytes', 64, 9000), ('chunk_bytes', 1, 1048576),
@@ -151,7 +161,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     provenance = dict(native_commit=NATIVE_COMMIT, commands=[], network_executed=False,
         platform_head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         sources={str(p.relative_to(ROOT)): digest(p) for p in sorted([*(ROOT/'backend/rdma').glob('*'),
-            ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh']) if p.is_file()})
+            ROOT/'backend/communication_admission.hh',ROOT/'backend/queue_integral.hh',ROOT/'backend/retransmission_timer.hh']) if p.is_file()})
     if previous_build is not None:
         provenance['previous_build'] = previous_build
     lock = NS3 / '.lock-ns3_linux_build'
@@ -272,5 +282,7 @@ def probe(topology, config, messages, backend, output):
     from .scaleout_metrics import network_summary, phase_intervals
     network_summary(result)
     for flow in result['messages']:phase_intervals(flow,result['finish_ns'])
+    from .scaleout_recovery import audit as recovery_audit
+    recovery_audit(result)
     return dict(passed=True, output=str(output), messages=result['completed_messages'],
                 state='native_rdma_probe_executed_not_service')

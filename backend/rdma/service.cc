@@ -67,8 +67,8 @@ class Service {
     ++decision_;Require(decision_<=4096,"service decision budget exceeded");
     const auto& submissions=commit.at("submissions");
     if(commit.at("service_finished")==true) {
-      Require(submissions.empty() && waves_.empty() && fabric_.Drained(),"premature service termination");
-      finished_=true;ns3::Simulator::Stop();return;
+      Require(submissions.empty() && waves_.empty(),"premature service termination");
+      fabric_.FinishWhenDrained([this](){finished_=true;ns3::Simulator::Stop();});return;
     }
     Require(!submissions.empty() || !waves_.empty(),"frontend and network made no progress");
     std::vector<int> activate;

@@ -1,0 +1,300 @@
+{
+  "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+  "sources": [
+    {
+      "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/compiled.cuh",
+      "response_bytes": 3616,
+      "status": "read",
+      "bytes": 2416,
+      "sha256": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/common/math.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "1ec4c67279fb3337d3beed2cb410e551c289a338",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/1ec4c67279fb3337d3beed2cb410e551c289a338",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/math.cuh",
+      "response_bytes": 3708,
+      "status": "read",
+      "bytes": 2483,
+      "sha256": "b49dbcb9d3fa5fb5afd77bc95c0ec68c2047c8dfadd1b53978d0d05d5656201f"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/workspace.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "f31b43a8ebac4051b4d5231f15130b797dcebaa0",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/f31b43a8ebac4051b4d5231f15130b797dcebaa0",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/workspace.cuh",
+      "response_bytes": 6600,
+      "status": "read",
+      "bytes": 4583,
+      "sha256": "2961ef4a948023e2e3ba2b2bb34805b1a41e9b84ecf41d6a1ca804cfdf7fdb27"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "c7aedcdd8f8704940826fe234a2676bd4935c5af",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/c7aedcdd8f8704940826fe234a2676bd4935c5af",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+      "response_bytes": 10416,
+      "status": "read",
+      "bytes": 7352,
+      "sha256": "b3dbed25cdb6e7b26e9e2635ce69e28e41749da946036c3a60abe813518d538d"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "b9c76ec854dc4829df43470cd1d1a0da17fff28a",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/b9c76ec854dc4829df43470cd1d1a0da17fff28a",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh",
+      "response_bytes": 22821,
+      "status": "read",
+      "bytes": 16356,
+      "sha256": "4120d4f9d13a59ffa463c0b7d519cf6801af68ca48e518fab6acfe68713053ad"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "2b24a93ce8be9a1acda3bf3c0cd7e73f63d54309",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/2b24a93ce8be9a1acda3bf3c0cd7e73f63d54309",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh",
+      "response_bytes": 10652,
+      "status": "read",
+      "bytes": 7524,
+      "sha256": "1ccceb5a22b9669638901892d9438d0778d4985fb3eb78dd331dd755a40f7701"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "response_bytes": 8076,
+      "status": "read",
+      "bytes": 5653,
+      "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "response_bytes": 28471,
+      "status": "read",
+      "bytes": 20457,
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "response_bytes": 16931,
+      "status": "read",
+      "bytes": 12081,
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/732c598ca1986636c300036533141ebeb49a320e",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "response_bytes": 15905,
+      "status": "read",
+      "bytes": 11335,
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f"
+    },
+    {
+      "path": "csrc/buffers/ep.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+      "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp",
+      "response_bytes": 83697,
+      "status": "read",
+      "bytes": 60540,
+      "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193"
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+      "first_line": 67,
+      "excerpt": "constexpr int kNumTMAAlignmentBytes = 32;\nconstexpr int kNumRDMAAlignmentBytes = 64;\nconstexpr int kNumAllocationAlignmentBytes = 2 * 1024 * 1024;\nstatic_assert(kNumRDMAAlignmentBytes % kNumTMAAlignmentBytes == 0);"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+      "first_line": 81,
+      "excerpt": "constexpr int kDefaultQPDepth = 1024;"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "first_line": 25,
+      "excerpt": "        num_metadata_bytes(num_topk * (sizeof(int) + sizeof(float)) +\n                           (with_metadata ? (1 + num_topk) * sizeof(int) : 0)),\n        base(base) {"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "first_line": 34,
+      "excerpt": "        const auto num_data_bytes = math::align<int>(\n            math::align(num_hidden_bytes, kNumTMAAlignmentBytes) +\n            math::align(num_sf_bytes, kNumTMAAlignmentBytes) +\n            math::align(num_metadata_bytes, kNumTMAAlignmentBytes), kNumRDMAAlignmentBytes);\n        const auto num_bytes =\n            num_data_bytes + math::align<int>(kWithMBarrier ? sizeof(ptx::mbarrier) : 0, kNumTMAAlignmentBytes);"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "first_line": 341,
+      "excerpt": "                    stored_dst_slot_idx = atomicAdd(workspace_layout.get_scaleup_atomic_sender_counter() + stored_dst_rank_idx, 1);"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "first_line": 277,
+      "excerpt": "        const auto token_start = dispatch_warp_idx * kNumSMs + sm_idx;\n        const auto token_stride = kNumDispatchWarps * kNumSMs;"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "first_line": 155,
+      "excerpt": "                gin.put_value<team_t>(dst_rank_counter, static_cast<int64_t>(rank_count[i]), i,\n                                      ncclGinOptFlagsAggregateRequests);"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "first_line": 84,
+      "excerpt": "    int num_tokens_per_warp = math::ceil_div(num_reduced_tokens, kNumSMs * kNumWarps);\n    const int token_start_idx = num_tokens_per_warp * global_warp_idx;\n    const int token_end_idx = min(token_start_idx + num_tokens_per_warp, num_reduced_tokens);"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "first_line": 90,
+      "excerpt": "        const int src_token_idx = __ldg(src_metadata + i * kMetadataStride) % kNumMaxTokensPerRank;\n        const int src_rank_topk_idx = __ldg(src_metadata + i * kMetadataStride + 1);\n        const int src_rank_idx = src_rank_topk_idx / kNumTopk;\n        const int src_topk_idx = src_rank_topk_idx % kNumTopk;"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+      "first_line": 9,
+      "excerpt": "constexpr bool use_rank_layout() {\n    if constexpr (not kAllowMultipleReduction)\n        return false;\n    return kNumRanks <= kNumTopk;\n}"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/common/math.cuh",
+      "first_line": 32,
+      "excerpt": "    return -value - static_cast<dtype_t>(1);"
+    }
+  ],
+  "collection": {
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "sources": [
+      {
+        "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/compiled.cuh",
+        "response_bytes": 3616,
+        "status": "read",
+        "bytes": 2416,
+        "sha256": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/common/math.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "1ec4c67279fb3337d3beed2cb410e551c289a338",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/1ec4c67279fb3337d3beed2cb410e551c289a338",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/math.cuh",
+        "response_bytes": 3708,
+        "status": "read",
+        "bytes": 2483,
+        "sha256": "b49dbcb9d3fa5fb5afd77bc95c0ec68c2047c8dfadd1b53978d0d05d5656201f"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/layout/ep/workspace.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "f31b43a8ebac4051b4d5231f15130b797dcebaa0",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/f31b43a8ebac4051b4d5231f15130b797dcebaa0",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/workspace.cuh",
+        "response_bytes": 6600,
+        "status": "read",
+        "bytes": 4583,
+        "sha256": "2961ef4a948023e2e3ba2b2bb34805b1a41e9b84ecf41d6a1ca804cfdf7fdb27"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "c7aedcdd8f8704940826fe234a2676bd4935c5af",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/c7aedcdd8f8704940826fe234a2676bd4935c5af",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+        "response_bytes": 10416,
+        "status": "read",
+        "bytes": 7352,
+        "sha256": "b3dbed25cdb6e7b26e9e2635ce69e28e41749da946036c3a60abe813518d538d"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "b9c76ec854dc4829df43470cd1d1a0da17fff28a",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/b9c76ec854dc4829df43470cd1d1a0da17fff28a",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh",
+        "response_bytes": 22821,
+        "status": "read",
+        "bytes": 16356,
+        "sha256": "4120d4f9d13a59ffa463c0b7d519cf6801af68ca48e518fab6acfe68713053ad"
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "2b24a93ce8be9a1acda3bf3c0cd7e73f63d54309",
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/2b24a93ce8be9a1acda3bf3c0cd7e73f63d54309",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh",
+        "response_bytes": 10652,
+        "status": "read",
+        "bytes": 7524,
+        "sha256": "1ccceb5a22b9669638901892d9438d0778d4985fb3eb78dd331dd755a40f7701"
+      }
+    ],
+    "response_bytes": 99267,
+    "elapsed_seconds": 4.257555382326245,
+    "batch_elapsed_seconds": 2.059979250654578,
+    "argv": [
+      "experiments/paper_readiness/collect_deepep_modern.py",
+      "--phase",
+      "files",
+      "--source-cache",
+      "data/research/deepep_modern_20261022",
+      "--output",
+      "data/research/deepep_layout_20261022",
+      "--paths",
+      "deep_ep/include/deep_ep/common/compiled.cuh",
+      "deep_ep/include/deep_ep/common/math.cuh",
+      "deep_ep/include/deep_ep/layout/ep/workspace.cuh",
+      "deep_ep/include/deep_ep/impls/ep/combine_utils.cuh",
+      "deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh",
+      "deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "scope": "read-only fixed sources; no kernel execution or dependency update"
+  },
+  "cached_tree_origin": {
+    "source_cache": "/home/lry/moe-ub-cosim/data/research/deepep_modern_20261022",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "identity_sha256": "def35320df7bece11440acf028c1aac71a64016ca599efe8873b56cdd3f6169d",
+    "tree_request_reused": true,
+    "new_tree_network_requests": 0,
+    "purpose": "separate bounded supplemental source question; prior package remains intact"
+  },
+  "layout_comparisons": 320,
+  "r1_bf16_top8": {
+    "hidden_bytes": 14336,
+    "dispatch_metadata_bytes": 100,
+    "dispatch_put_bytes": 14464,
+    "combine_metadata_bytes": 64,
+    "combine_put_bytes": 14400
+  },
+  "kernel_execution": false,
+  "packet_execution": false,
+  "measured": false,
+  "conclusions": [
+    "Dispatch source-local per-destination slot allocation is concurrent, not token order",
+    "Combine channel assignment depends on Dispatch slot order and received rank prefix sums",
+    "Top-k input may be 64-bit but communication TokenLayout indices are 32-bit",
+    "Default QP depth 1024 is source configuration, not measured runtime depth"
+  ]
+}

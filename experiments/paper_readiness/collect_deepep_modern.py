@@ -13,6 +13,7 @@ import json
 from pathlib import Path, PurePosixPath
 import resource
 import re
+import shutil
 import sys
 import time
 from urllib.request import Request, urlopen
@@ -44,13 +45,15 @@ def main():
     p.add_argument('--paths', nargs='*')
     p.add_argument('--batch', default='first', help='Unique collection name; never retries or overwrites a batch')
     p.add_argument('--commit', help='Full immutable commit for tree phase; omit only for initial discovery')
+    p.add_argument('--source-cache', type=Path,
+                   help='Files phase only: seed a new bounded source package from verified cached identity/tree; no tree request')
     a = p.parse_args()
     resource.setrlimit(resource.RLIMIT_AS, (2*2**30, 2*2**30))
     resource.setrlimit(resource.RLIMIT_CPU, (60, 60))
     begin = time.monotonic()
     out = a.output.resolve()
     if a.phase == 'tree':
-        assert not a.paths
+        assert not a.paths and a.source_cache is None
         assert a.commit is None or re.fullmatch('[0-9a-f]{40}', a.commit)
         out.mkdir(parents=True, exist_ok=False)
         record = dict(accessed_utc=datetime.now(timezone.utc).isoformat(), requests=[],
@@ -89,6 +92,23 @@ def main():
 
     assert a.commit is None and a.paths and len(a.paths) <= 6 and len(set(a.paths)) == len(a.paths)
     assert re.fullmatch('[a-z0-9_]{1,32}', a.batch)
+    if a.source_cache is not None:
+        assert not out.exists()
+        cached = a.source_cache.resolve()
+        identity = json.loads((cached/'tree-source.json').read_text())
+        assert identity['status'] == 'read' and len(identity['requests']) == 2
+        for name, record in zip(('ref.json', 'tree.json'), identity['requests']):
+            raw = (cached/name).read_bytes()
+            assert len(raw) == record['bytes'] <= LIMIT and digest(raw) == record['sha256']
+        tree = json.loads((cached/'tree.json').read_text())
+        assert tree['sha'] == identity['commit'] and not tree['truncated']
+        out.mkdir(parents=True)
+        for name in ('ref.json', 'tree.json', 'tree-source.json'):
+            shutil.copy2(cached/name, out/name)
+        save(out/'cache-origin.json', dict(source_cache=str(cached), commit=identity['commit'],
+            identity_sha256=digest((cached/'tree-source.json').read_bytes()),
+            tree_request_reused=True, new_tree_network_requests=0,
+            purpose='separate bounded supplemental source question; prior package remains intact'))
     destination = out/('file-sources.json' if a.batch == 'first' else 'file-sources-'+a.batch+'.json')
     assert not destination.exists()
     previous = json.loads((out/'tree-source.json').read_text())

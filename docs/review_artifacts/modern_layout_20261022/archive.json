@@ -1,0 +1,30 @@
+{
+  "path": "runs/deepep_layout_checkpoint_20261022/checkpoint.tar.gz",
+  "sha256": "b7e39b1ebee899e78c4f88ffb7c4440c61226ccd65824836a9afc3bed7e1319a",
+  "bytes": 53691,
+  "verified_files": 21,
+  "files": {
+    "data/research/deepep_layout_20261022/ref.json": "6fee9f344dc2f3dee32f7b87ab5aaba48ae6863261cb01925c6d6a03b602dabd",
+    "data/research/deepep_layout_20261022/tree.json": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd",
+    "data/research/deepep_layout_20261022/tree-source.json": "def35320df7bece11440acf028c1aac71a64016ca599efe8873b56cdd3f6169d",
+    "data/research/deepep_layout_20261022/cache-origin.json": "01f9733051c19b561f1dbcc052f9a1c449694d7547eb39a0545aeeb9848ae40f",
+    "data/research/deepep_layout_20261022/file-sources.json": "fe2c70734832a6fcfbca95936b0fe1b57a5813ab4952d5df863d936c55fba436",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/common/math.cuh": "b49dbcb9d3fa5fb5afd77bc95c0ec68c2047c8dfadd1b53978d0d05d5656201f",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/common/compiled.cuh": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/layout/ep/workspace.cuh": "2961ef4a948023e2e3ba2b2bb34805b1a41e9b84ecf41d6a1ca804cfdf7fdb27",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine_utils.cuh": "b3dbed25cdb6e7b26e9e2635ce69e28e41749da946036c3a60abe813518d538d",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh": "1ccceb5a22b9669638901892d9438d0778d4985fb3eb78dd331dd755a40f7701",
+    "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh": "4120d4f9d13a59ffa463c0b7d519cf6801af68ca48e518fab6acfe68713053ad",
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/layout/ep/token.cuh": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6",
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+    "data/research/deepep_modern_20261022/sources/csrc/buffers/ep.hpp": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+    "experiments/paper_readiness/collect_deepep_modern.py": "dc6e7c1b09fd02a77522c101a966304c4d40c656f0b8556c68636e3dc87dcd6a",
+    "experiments/paper_readiness/audit_modern_layout.py": "1b680447a049681de992082c2f3d9b4318b1c3b976dbe8bafa1c7a3775c54531",
+    "docs/reviews/\u73b0\u4ee3\u901a\u4fe1\u5e03\u5c40\u4e0e\u5e76\u53d1\u69fd\u4f4d_20261022.md": "96ad6be174890baf34daa13fee0fd7b2db520e0e2bcc5307e1f1789dc6df93a9",
+    "docs/review_artifacts/modern_layout_20261022/sources.json": "593131711ed104af2cf13b161526f133a5df6959d7836365b6dae7c31ae86dfb",
+    "docs/review_artifacts/deepep_modern_20261022/sources.json": "7c8c8532e1756568f0407c8e4820712afcb3a5ea1a095f43b58432f62b62fd9a"
+  },
+  "packet_execution": false
+}

@@ -149,3 +149,22 @@ timeout 60s python3 experiments/paper_readiness/check_nccl_gin.py \
 ```
 
 该检查读取两份归档并逐文件核hash，比较三个路由结果与六个跨目录稳定结果，检查两份HTML本地链接。执行资源字段与相对导航允许不同；没有浏览器视觉验收。正式结果覆盖7,424窗口、118,784矩阵项，现代去重后的69,409份跨rank token仍有目的rank不均，但不能由此推断拥塞或加速。后续实现要求集中在[现代后端规范](modern_backend_contract.md)，尚未接入网络。
+
+后续布局核查见[布局与并发槽报告](../../docs/reviews/现代通信布局与并发槽位_20261022.md)。为确认完整put长度及Combine通道依赖，新增独立的六文件来源包；不修改原12文件快照或提高其限额。`--source-cache`仅在files阶段把已验hash的身份/目录复制到新来源包，记录缓存来源，不重复查询树。以下读取仍是每批最多6文件、每响应2MiB/20秒、并发3、整体16MiB/120秒；失败不重试。原件与此前来源均在本机时，审核完全离线。
+
+```bash
+timeout 60s python3 experiments/paper_readiness/collect_deepep_modern.py \
+  --phase files --source-cache data/research/deepep_modern_20261022 \
+  --output data/research/my-deepep-layout \
+  --paths deep_ep/include/deep_ep/common/compiled.cuh \
+  deep_ep/include/deep_ep/common/math.cuh deep_ep/include/deep_ep/layout/ep/workspace.cuh \
+  deep_ep/include/deep_ep/impls/ep/combine_utils.cuh \
+  deep_ep/include/deep_ep/impls/ep/dispatch_copy_epilogue.cuh \
+  deep_ep/include/deep_ep/impls/ep/combine_reduce_epilogue.cuh
+timeout 60s python3 experiments/paper_readiness/audit_modern_layout.py \
+  --source-dir data/research/my-deepep-layout \
+  --base-source-dir data/research/deepep_modern_20261022 \
+  --output runs/my-deepep-layout-audit
+```
+
+审核输出11份来源记录/摘录、320种布局核算与对应源码快照，总≤2MiB，CPU60秒/地址2GiB，预留8GiB。不编译CUDA、不执行通信库。H7168/Top8/BF16的Dispatch put为14,464B，选定本地归约Combine put为14,400B，均不能当线上总字节。Dispatch动态slot会影响Combine的通道绑定，后续计划不能提前写死该顺序。

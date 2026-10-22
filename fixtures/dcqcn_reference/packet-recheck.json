@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "new_network_runs": 0,
+  "conditions": {
+    "reference-on": {
+      "source_packets": 411,
+      "CE": 370,
+      "CNP": 22,
+      "CNP_path_hops": 118,
+      "maximum_CNP_source_queue_wait_ns": 4,
+      "nonzero_CNP_source_queue_waits": 4,
+      "state_checks": 891,
+      "event_counts": {
+        "source_sent": 411,
+        "np_mark": 370,
+        "cnp_generated": 22,
+        "cnp_tx": 22,
+        "cnp_received": 22,
+        "rp_timer": 33,
+        "rp_alpha": 6,
+        "qp_close": 3,
+        "rp_bytes": 2
+      },
+      "maximum_CNP_switch_wait_ns": 0,
+      "nonzero_CNP_switch_waits": 0,
+      "final_work_ACK_ns": 58414,
+      "physical_finish_ns": 58414
+    },
+    "paper-parameters": {
+      "source_packets": 411,
+      "CE": 370,
+      "CNP": 6,
+      "CNP_path_hops": 32,
+      "maximum_CNP_source_queue_wait_ns": 4,
+      "nonzero_CNP_source_queue_waits": 3,
+      "state_checks": 802,
+      "event_counts": {
+        "source_sent": 411,
+        "np_mark": 370,
+        "cnp_generated": 6,
+        "cnp_tx": 6,
+        "cnp_received": 6,
+        "qp_close": 3
+      },
+      "maximum_CNP_switch_wait_ns": 0,
+      "nonzero_CNP_switch_waits": 0,
+      "final_work_ACK_ns": 56035,
+      "physical_finish_ns": 62929
+    },
+    "reverse-background": {
+      "source_packets": 477,
+      "CE": 370,
+      "CNP": 23,
+      "CNP_path_hops": 124,
+      "maximum_CNP_source_queue_wait_ns": 4,
+      "nonzero_CNP_source_queue_waits": 4,
+      "state_checks": 960,
+      "event_counts": {
+        "source_sent": 477,
+        "np_mark": 370,
+        "cnp_generated": 23,
+        "cnp_tx": 23,
+        "cnp_received": 23,
+        "rp_timer": 32,
+        "rp_bytes": 3,
+        "rp_alpha": 5,
+        "qp_close": 4
+      },
+      "maximum_CNP_switch_wait_ns": 0,
+      "nonzero_CNP_switch_waits": 0,
+      "final_work_ACK_ns": 58551,
+      "physical_finish_ns": 58551
+    }
+  }
+}

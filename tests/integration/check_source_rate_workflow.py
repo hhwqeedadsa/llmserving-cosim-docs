@@ -17,6 +17,9 @@ def network_only(result):
     result=deepcopy(result)
     result.pop('rdma_parameters',None)
     result['persistent_transport'].pop('source_rate_capture',None)
+    # Controller math can add a direct libm dependency without changing the
+    # loaded library identities or network; preserve identities, sort order.
+    result['loaded_libraries']=sorted(result['loaded_libraries'])
     return result
 
 

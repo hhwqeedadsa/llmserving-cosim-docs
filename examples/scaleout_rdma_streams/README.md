@@ -49,6 +49,41 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 ## 输出与预算
 
+### 可选的独立拥塞反馈参考模式
+
+工作输入可增加`dcqcn_reference`；完整示例见[work-reference.json](work-reference.json)。运行时把上面命令的`--config`换成这个文件即可。
+省略该字段保留原有逐包ACK反馈模式。新模式只支持独立持久字节入口，尚未接入在线LLMServingSim服务、现代GIN或事务配置，不表示完成了生产RoCE仿真。
+
+所有字段均须显式填写：
+
+| 字段 | 单位和约束 | 作用 |
+|---|---|---|
+| mode | 固定`figure7_reference/1` | 文献机制加明确建模选择，不是网卡型号 |
+| np_interval_ns | 1—max_sim_ns，ns | 目的端每流通知生成间隔；示例50,000 |
+| alpha_interval_ns | 大于np_interval_ns且≤max_sim_ns，ns | 无新通知时alpha衰减；示例55,000 |
+| recovery_interval_ns | 1—max_sim_ns，ns | 发送端恢复timer；示例55,000 |
+| recovery_bytes | 512—1,073,741,824，B | 实际发出模型帧的字节恢复阈值；示例10,000,000 |
+| min_rate_bps | 正整数、≤源NIC速率 | 当前速率下限，单位bit/s |
+| additive_bps / hyper_bps | 正整数、各≤10^15 | 加性/固定超增步长，bit/s；目标速率不超过源NIC速率 |
+| fast_recovery_rounds | 1—100 | 图7中的F；按触发后两个独立计数器判定阶段 |
+| gain | 数字且0＜gain≤1 | alpha的EWMA增益；示例1/256 |
+| cnp_model_bytes | 30—512，B | 原生CnHeader＋IPv4＋PPP＋填充的总模型帧长；示例48 |
+| max_events | 1—100000 | 反馈事件日志的硬上限，超限失败，不静默截断 |
+
+`min_rate_bps`、两个增速步长也各限≤10^15。整数不接受布尔值。N、K、恢复周期、字节阈值、g、F的示例值参考DCQCN 2015；最小速率与固定增速步长是显式声明值，**整套配置不是原论文部署复刻，也不是A100/H100/NIC校准表**。原生帧省略实际RoCE头、Ethernet开销和NIC处理代价，不能直接由本例延迟判断生产收益。
+
+目的端仅根据实际收到的CE数据包产生通知：首次立即生成，周期内多标记保留pending，周期末按pending生成；空闲后重新立即通知。NP周期从生成/入队开始，实际发送还要竞争本地和反向网络。恰好到期的标记统一先结算旧周期、再归入新周期，避免回调插入顺序改变通知数。其他RP同纳秒事件按ns-3事件FIFO顺序执行，并保留事件记录顺序。
+
+独立CNP使用IP协议255，实际经过原生高优先级队列、序列化、传播和ECMP。固定上游对CNP遗漏了哈希第三字的初始化；平台`CnpSwitch`只在局部选路元数据中投影为ACK分支，采用CNP源/目的IP和重复的fid作为两端口输入。包本身仍是255，不更改负载、字节或优先级；默认数据/ACK选路继续用原生路径。这个规则是本平台的明确选择，不能当作生产交换机的RoCE哈希字段。
+
+发送端只在实际CNP到达后按原文式1降速/更新alpha，并重置恢复timer、字节剩余额及两个阶段计数器。在源端`PhyTxBegin`之后的原生`PktSent`阶段按整帧模型长度累积字节，每个阈值推进一次字节阶段；不是逐字节或尾比特发完时采样，timer独立推进时间阶段。按图7先递增触发方计数，再以`max(T,BC)<F`判快速恢复、以`min(T,BC)>F`判超增，其余为加性恢复。速率除法向下取整并钳制上下限；超增采用声明的固定步长，没有补入未核对的QCN加速规则。
+
+本模式关闭旧ACK-CNP控制，避免同一反馈被两套控制器处理；ACK仍只推进确认前缀/队列信用，CNP不释放工作或创建完成。QP空闲时保留状态；所有预期工作ACK后还须排空pending NP通知、在途反馈及设备队列，才取消空闲timer并关闭。**最后工作ACK与顶层物理排空finish可能不同**，不能将控制尾部算成业务等待。
+
+`persistent_transport.dcqcn_reference`记录有效配置、格式/选路/时钟范围及有界`events`，包含生成、实际发送、到达、alpha、两种恢复和关闭事件；按数组顺序解释同纳秒状态。旧顶层`rdma_parameters`仍描述原生对象属性；启用参考模式后，控制器有效值应读取`dcqcn_reference.config`，不能拿未使用的原生默认恢复周期解释结果。
+
+可同时开启下节的被动速率采样；新增事件3/4分别是独立CNP处理前后，序号0不表示确认前缀，旧名`ack_cnp`在这两类事件里仅表示“这是通知”，不是ACK标志。ACK事件1/2的通知位必须为0。功能oracle、真实反向排队及旧模式对照见[参考模式验收](../../fixtures/dcqcn_reference/README.md)。
+
 ### 可选的源端速率观测
 
 需要核查拥塞反馈时，在工作输入JSON根对象增加以下字段（v1/v2均支持），其他`streams/work`保持完整：

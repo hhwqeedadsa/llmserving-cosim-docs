@@ -1,6 +1,6 @@
 # DCQCN参考模式的实施门槛
 
-本文是后续平台工作的设计要求，**尚未实现**。依据见[反馈抽象审计](../../docs/review_artifacts/dcqcn_validity_20261022/report.html)。目标是区分当前ACK反馈抽象与明确的一手参考机制，避免未经校准的拥塞状态成为MoE网络结论的前提；不是照抄2015年的参数来代表现代网卡。
+本文规定后续平台工作的设计门槛。持久字节入口现已实现有明确边界的`figure7_reference/1`，机制范围和功能证据见[平台验收](../../fixtures/dcqcn_reference/README.md)；硬件匹配与研究对照仍未完成。依据见[反馈抽象审计](../../docs/review_artifacts/dcqcn_validity_20261022/report.html)。目标是区分当前ACK反馈抽象与明确的一手参考机制，避免未经校准的拥塞状态成为MoE网络结论的前提；不是照抄2015年的参数来代表现代网卡。
 
 ## 模型分层
 

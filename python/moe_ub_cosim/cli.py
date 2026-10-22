@@ -70,7 +70,7 @@ def parser():
     rt.add_argument('--config', type=Path, required=True)
     rt.add_argument('--backend', type=Path, required=True, help='transaction_probe executable from rdma-build')
     rt.add_argument('--output', type=Path, required=True, help='New bounded result directory')
-    rs = sc.add_parser('rdma-stream-probe', help='Execute persistent native byte writes; optional bounded source_rate_capture in work config; not GIN/GPU visibility')
+    rs = sc.add_parser('rdma-stream-probe', help='Execute persistent native byte writes; optional source_rate_capture or dcqcn_reference; not GIN/GPU visibility or hardware calibration')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
     rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN protocol, ACK interval 1, no legacy recovery/admission/fault options')
     rs.add_argument('--config', type=Path, required=True, help='NIC-bound streams, causal dependencies and optional source_rate_capture; work/1 fixed 16/64 counts, work/2 declares up to 128/8192')

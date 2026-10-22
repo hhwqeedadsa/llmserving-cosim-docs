@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "condition": {
+    "source_packets": 1460,
+    "CE": 370,
+    "CNP": 23,
+    "CNP_path_hops": 124,
+    "maximum_CNP_source_queue_wait_ns": 78,
+    "nonzero_CNP_source_queue_waits": 22,
+    "state_checks": 2004,
+    "event_counts": {
+      "source_sent": 1460,
+      "np_mark": 370,
+      "cnp_generated": 23,
+      "cnp_tx": 23,
+      "cnp_received": 23,
+      "rp_timer": 73,
+      "rp_bytes": 3,
+      "rp_alpha": 25,
+      "qp_close": 4
+    },
+    "maximum_CNP_switch_wait_ns": 79,
+    "nonzero_CNP_switch_waits": 15,
+    "final_work_ACK_ns": 101208,
+    "physical_finish_ns": 101208
+  },
+  "new_network_runs": 1,
+  "hardware_calibrated": false,
+  "reason": "64KiB background drained before CNPs; 1MiB keeps actual reverse traffic active, within original per-work/clock limits"
+}

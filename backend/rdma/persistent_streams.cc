@@ -1,5 +1,7 @@
 #include "persistent_streams.hh"
 #include "ns3/custom-header.h"
+#include "ns3/cn-header.h"
+#include "ns3/ppp-header.h"
 #include <algorithm>
 
 namespace moe_rdma {
@@ -43,6 +45,97 @@ void PersistentStreams::ConfigureRateCapture(const Json& config) {
           "invalid source_rate_capture window or event budget");
   rate_start_=config.at("start_ns");rate_end_=config.at("end_ns");rate_limit_=config.at("max_events");
 }
+void PersistentStreams::ConfigureDcqcnReference(const Json& c) {
+  Require(streams_.empty() && !reference_limit_ && c.is_object() && c.size()==12 &&
+          c.at("mode")=="figure7_reference/1","invalid dcqcn_reference mode/fields or late configuration");
+  for(const auto* key:{"np_interval_ns","alpha_interval_ns","recovery_interval_ns","recovery_bytes",
+      "min_rate_bps","additive_bps","hyper_bps","fast_recovery_rounds","cnp_model_bytes","max_events"})
+    Require(c.at(key).is_number_integer() && c.at(key)>0,"dcqcn_reference fields must be positive integers");
+  for(const auto* key:{"np_interval_ns","alpha_interval_ns","recovery_interval_ns"})
+    Require(c.at(key)<=fabric_.MaxSimNs(),"reference interval exceeds simulation horizon");
+  Require(c.at("alpha_interval_ns")>c.at("np_interval_ns") &&
+          c.at("recovery_bytes")>=512 && c.at("recovery_bytes")<=1073741824 &&
+          c.at("fast_recovery_rounds")<=100 && c.at("cnp_model_bytes")>=30 && c.at("cnp_model_bytes")<=512 &&
+          c.at("max_events")<=100000,"reference parameters out of supported range");
+  for(const auto* key:{"min_rate_bps","additive_bps","hyper_bps"})
+    Require(c.at(key)<=1000000000000000ull,"reference rate parameter exceeds supported range");
+  const auto& gain=c.at("gain");
+  Require(gain.is_number() && !gain.is_boolean() && gain>0 && gain<=1,"invalid reference gain");
+  reference_config_=c;reference_limit_=c.at("max_events");
+  for(unsigned node=0;node<fabric_.drivers_.size();++node)
+    for(auto& nic:fabric_.drivers_[node]->m_rdma->m_nic)if(nic.dev)
+      nic.dev->m_rdmaPktSent=MakeCallback(&PersistentStreams::PacketSent,this,node);
+}
+void PersistentStreams::ReferenceLog(Stream& s,const char* kind,Ptr<const Packet> packet) {
+  Require(reference_events_.size()<reference_limit_,"reference feedback event budget exceeded");
+  const auto& r=*s.reference;
+  reference_events_.push_back({{"time_ns",StreamNow()},{"stream",s.qp->GetTag()},{"kind",kind},
+    {"packet_uid",packet?static_cast<int64_t>(packet->GetUid()):-1},{"model_bytes",packet?packet->GetSize():0},
+    {"rate_bps",r.rp.Rate()},{"target_bps",r.rp.Target()},{"alpha",r.rp.AlphaValue()},
+    {"timer_rounds",r.rp.TimerRounds()},{"byte_rounds",r.rp.ByteRounds()},{"remaining_bytes",r.rp.Remaining()},
+    {"np_pending",r.np.Pending()},{"np_due_ns",r.np.Deadline()},
+    {"alpha_due_ns",r.rp.AlphaDue()},{"recovery_due_ns",r.rp.RecoveryDue()},
+    {"snd_una",s.qp->snd_una},{"published_bytes",s.qp->m_size}});
+}
+void PersistentStreams::ScheduleNp(Stream& s) {
+  auto& r=*s.reference;Simulator::Cancel(r.np_event);
+  if(r.np.Deadline()>=0)r.np_event=Simulator::Schedule(NanoSeconds(r.np.Deadline()-StreamNow()),
+    &PersistentStreams::ReferenceNpTimer,this,s.qp->GetTag());
+}
+void PersistentStreams::SendCnp(Stream& s) {
+  auto& r=*s.reference;
+  CnHeader notice(s.wire_port,3,3,0,0);
+  auto p=Create<Packet>(reference_config_.at("cnp_model_bytes").get<unsigned>()-30);
+  p->AddHeader(notice);
+  Ipv4Header ip;ip.SetSource(s.qp->dip);ip.SetDestination(s.qp->sip);ip.SetProtocol(0xff);
+  ip.SetTtl(64);ip.SetIdentification(r.ipid++);ip.SetPayloadSize(p->GetSize());p->AddHeader(ip);
+  PppHeader link;link.SetProtocol(0x0021);p->AddHeader(link);
+  Require(p->GetSize()==reference_config_.at("cnp_model_bytes"),"CNP model frame size mismatch");
+  ReferenceLog(s,"cnp_generated",p);
+  auto device=fabric_.drivers_[s.dst]->m_rdma->m_nic[s.destination_nic].dev;
+  device->RdmaEnqueueHighPrioQ(p);device->TriggerTransmit();
+}
+void PersistentStreams::ReferenceMark(Stream& s,Ptr<const Packet> packet) {
+  ReferenceLog(s,"np_mark",packet);
+  if(s.reference->np.Mark(StreamNow()))SendCnp(s);
+  ScheduleNp(s);
+}
+void PersistentStreams::ReferenceNpTimer(uint64_t id) {
+  auto& s=streams_.at(id);
+  if(s.reference->np.Expire(StreamNow()))SendCnp(s);
+  ScheduleNp(s);Notify();
+}
+void PersistentStreams::ApplyReferenceRate(Stream& s) {
+  const auto& r=s.reference->rp;
+  auto hw=fabric_.drivers_[s.src]->m_rdma;
+  hw->ChangeRate(s.qp,DataRate(r.Rate()));
+  s.qp->mlx.m_targetRate=DataRate(r.Target());s.qp->mlx.m_alpha=r.AlphaValue();
+  s.qp->mlx.m_rpTimeStage=std::max(r.TimerRounds(),r.ByteRounds());
+  s.qp->mlx.m_first_cnp=!r.Active();
+}
+void PersistentStreams::ScheduleRp(Stream& s) {
+  auto& r=*s.reference;Simulator::Cancel(r.alpha_event);Simulator::Cancel(r.recovery_event);
+  r.alpha_event=Simulator::Schedule(NanoSeconds(r.rp.AlphaDue()-StreamNow()),&PersistentStreams::ReferenceAlpha,this,s.qp->GetTag());
+  r.recovery_event=Simulator::Schedule(NanoSeconds(r.rp.RecoveryDue()-StreamNow()),&PersistentStreams::ReferenceRecovery,this,s.qp->GetTag());
+}
+void PersistentStreams::ReferenceAlpha(uint64_t id) {
+  auto& s=streams_.at(id);auto& r=*s.reference;
+  r.rp.Alpha(StreamNow());ApplyReferenceRate(s);ReferenceLog(s,"rp_alpha");
+  r.alpha_event=Simulator::Schedule(NanoSeconds(r.rp.AlphaDue()-StreamNow()),&PersistentStreams::ReferenceAlpha,this,id);
+}
+void PersistentStreams::ReferenceRecovery(uint64_t id) {
+  auto& s=streams_.at(id);auto& r=*s.reference;
+  r.rp.Timer(StreamNow());ApplyReferenceRate(s);ReferenceLog(s,"rp_timer");
+  r.recovery_event=Simulator::Schedule(NanoSeconds(r.rp.RecoveryDue()-StreamNow()),&PersistentStreams::ReferenceRecovery,this,id);
+}
+void PersistentStreams::PacketSent(unsigned node,Ptr<RdmaQueuePair> qp,Ptr<Packet> packet,Time gap) {
+  fabric_.drivers_[node]->m_rdma->PktSent(qp,packet,gap);
+  auto& s=streams_.at(qp->GetTag());Require(s.src==node && s.qp==qp && bool(s.reference),"foreign reference TX");
+  const auto count=s.reference->rp.Sent(packet->GetSize());
+  if(count)ApplyReferenceRate(s);
+  ReferenceLog(s,"source_sent",packet);
+  if(count)ReferenceLog(s,"rp_bytes");
+}
 PersistentStreams::RateState PersistentStreams::ReadRate(const Stream& s) {
   const auto& q=*s.qp;
   return {q.m_rate.GetBitRate(),q.mlx.m_targetRate.GetBitRate(),q.m_max_rate.GetBitRate(),
@@ -81,6 +174,12 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
                     MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
   it->second.qp=shw->GetQp(dip.Get(),wire_port,3);
   Require(bool(it->second.qp),"stream QP creation failed");
+  if(reference_limit_) {
+    const auto& c=reference_config_;
+    DcqcnRpConfig rc{c.at("alpha_interval_ns"),c.at("recovery_interval_ns"),c.at("recovery_bytes"),
+      c.at("min_rate_bps"),c.at("additive_bps"),c.at("hyper_bps"),c.at("fast_recovery_rounds"),c.at("gain")};
+    it->second.reference=std::make_unique<Stream::Reference>(c.at("np_interval_ns"),rc,it->second.qp->m_max_rate.GetBitRate());
+  }
 }
 void PersistentStreams::Submit(uint64_t stream,uint64_t work,uint64_t bytes,Done accepted,Done acked) {
   Enqueue(stream,work,bytes,{},std::move(accepted),std::move(acked));
@@ -140,6 +239,15 @@ PersistentStreams::Stream* PersistentStreams::Match(unsigned node,const CustomHe
 }
 int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h) {
   auto hw=fabric_.drivers_[node]->m_rdma;
+  if(h.l3Prot==0xff && reference_limit_) {
+    auto s=ByPort(h.cnp.fid);
+    Require(s && node==s->src && h.sip==s->qp->dip.Get() && h.dip==s->qp->sip.Get() &&
+            h.cnp.qIndex==3 && h.cnp.ecnBits==3,"unexpected independent CNP");
+    SampleRate(*s,3,packet,0,packet->GetSize(),1);
+    s->reference->rp.Cnp(StreamNow());ApplyReferenceRate(*s);ScheduleRp(*s);
+    ReferenceLog(*s,"cnp_received",packet);SampleRate(*s,4,packet,0,packet->GetSize(),1);
+    hw->m_nic[s->source_nic].dev->TriggerTransmit();Notify();return 0;
+  }
   if(h.l3Prot==0xFC || h.l3Prot==0xFD) {
     auto s=Match(node,h,true);Require(s,"unexpected ACK in exclusive stream execution");
     Require(h.ack.seq<=s->qp->snd_nxt,"stream ACK covers unsent bytes");
@@ -149,7 +257,8 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     // Keep normal native NACK and DCQCN feedback handling, but do NOT invoke
     // native QpComplete: an ACKed published prefix is not connection close.
     if(h.l3Prot==0xFD)hw->RecoverQueue(s->qp);
-    if((h.ack.flags>>qbbHeader::FLAG_CNP)&1)hw->cnp_received_mlx(s->qp);
+    if(s->reference)Require(!cnp,"reference ACK must not carry legacy CNP feedback");
+    else if(cnp)hw->cnp_received_mlx(s->qp);
     SampleRate(*s,2,packet,h.ack.seq,packet->GetSize(),cnp);
     while(s->acked_prefix<s->published_prefix && s->work[s->acked_prefix].end<=s->qp->snd_una) {
       auto& w=s->work[s->acked_prefix];
@@ -165,7 +274,9 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
     if(rx)before=rx->ReceiverNextExpectedSeq;
   }
-  const auto result=hw->Receive(packet,h);
+  auto accepted_header=h;
+  if(data_stream && data_stream->reference)accepted_header.m_tos&=~3u;
+  const auto result=hw->Receive(packet,accepted_header);
   if(h.l3Prot==0x11) {
     auto& s=*data_stream;
     auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
@@ -176,6 +287,7 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
       Simulator::ScheduleNow([callback=s.receiver,payload=std::move(payload)]() mutable {callback(std::move(payload));});
     }
     CheckAccepted(s);
+    if(s.reference && h.GetIpv4EcnBits()==3)ReferenceMark(s,packet);
   }
   Notify();return result;
 }
@@ -217,6 +329,11 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
 void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,Ptr<const Packet> packet) {
   ++self->inflight_;Require(++self->observations_<=200000,"stream packet observation budget exceeded");
   auto h=StreamHeader(packet);
+  if(h.l3Prot==0xff && self->reference_limit_ && node<self->fabric_.gpus_) {
+    auto s=self->ByPort(h.cnp.fid);
+    Require(s && node==s->dst && port==s->destination_nic,"CNP transmitted on wrong bound NIC");
+    self->ReferenceLog(*s,"cnp_tx",packet);
+  }
   if(h.l3Prot==0x11)if(auto stream=self->ByPort(h.udp.sport)) {
     auto& s=*stream;
     if(node==s.src && h.sip==s.qp->sip.Get() && h.dip==s.qp->dip.Get() && h.udp.sport==s.wire_port) {
@@ -248,7 +365,8 @@ void PersistentStreams::Notify() {
 }
 bool PersistentStreams::Drained() const {
   if(inflight_)return false;
-  for(const auto& item:streams_)if(!item.second.queue.Drained() || item.second.qp->snd_una!=item.second.qp->m_size)return false;
+  for(const auto& item:streams_)if(!item.second.queue.Drained() || item.second.qp->snd_una!=item.second.qp->m_size ||
+      (item.second.reference && item.second.reference->np.Pending()))return false;
   for(const auto& ports:fabric_.ports_)for(const auto& p:ports)if(p.device && p.device->GetQueue()->GetNBytesTotal())return false;
   for(const auto& driver:fabric_.drivers_)for(const auto& nic:driver->m_rdma->m_nic)
     if(nic.dev && nic.dev->GetRdmaQueue()->m_ackQ->GetNPackets())return false;
@@ -258,6 +376,10 @@ void PersistentStreams::Close() {
   Require(!closed_ && Drained(),"stream close before physical drain or repeated close");
   for(auto& item:streams_) {
     auto& s=item.second;s.queue.Close();
+    if(s.reference) {
+      Simulator::Cancel(s.reference->np_event);Simulator::Cancel(s.reference->alpha_event);Simulator::Cancel(s.reference->recovery_event);
+      ReferenceLog(s,"qp_close");
+    }
     Simulator::Cancel(s.qp->mlx.m_eventUpdateAlpha);Simulator::Cancel(s.qp->mlx.m_eventDecreaseRate);Simulator::Cancel(s.qp->mlx.m_rpTimer);
     auto hw=fabric_.drivers_[s.src]->m_rdma;hw->DeleteQueuePair(s.qp);
     auto& group=hw->m_nic[s.source_nic].qpGrp->m_qps;
@@ -270,6 +392,14 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(reference_limit_) {
+    result["dcqcn_reference"]={{"config",reference_config_},{"events",reference_events_},
+      {"cnp_route","native ECMP over CNP IP source/destination and fid repeated as two 16-bit ports; local metadata projection only"},
+      {"wire_format","native 8-byte CnHeader + IPv4 + PPP + declared padding; not a production RoCE frame"},
+      {"np_clock","period starts at generation/enqueue, not physical TX; pending notifications drain before QP close"},
+      {"rp_clock","CNP arrival updates rate; timers and actual source model-frame bytes recover it; same-ns RP events follow ns-3 FIFO event order"},
+      {"scope","functional Figure6/7 reference with declared fixed hyper step and integer rate rounding; not hardware calibration or exact QCN implementation"}};
+  }
   if(!payload_packets_.empty())result["source_payload_packets"]=payload_packets_;
   result["source_packet_columns"]={"time_ns","stream","src","dst","nic","sequence","payload_bytes","packet_uid"};
   if(rate_limit_) {
@@ -289,6 +419,12 @@ Json PersistentStreams::Report() const {
         "alpha","recovery_stage","first_cnp","alpha_cnp_arrived","decrease_cnp_arrived"}},
       {"event_codes",{{"source_tx_before_PktSent",0},{"ack_before_transport_processing",1},{"ack_after_feedback_before_Pump",2}}},
       {"scope","passive source snapshots only, not continuous timer transitions; TX next_avail is before this packet's PktSent; ACK event includes native NACK; final states are outside capture window and may include idle rate decay; rates are modeled QP state, not measured throughput"}};
+    if(reference_limit_) {
+      auto& capture=result["source_rate_capture"];
+      capture["event_codes"]["cnp_before_reference_processing"]=3;
+      capture["event_codes"]["cnp_after_reference_processing"]=4;
+      capture["scope"]="passive snapshots of explicitly configured reference controller; TX before PktSent, ACK changes transport only, independent CNP changes RP; not native MLX timer trace or hardware throughput";
+    }
   }
   for(const auto& item:streams_) {
     const auto& s=item.second;

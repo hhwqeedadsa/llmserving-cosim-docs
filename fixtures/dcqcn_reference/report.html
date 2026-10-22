@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>独立拥塞反馈参考模式：平台验收</title><style>body{font:16px/1.8 system-ui,sans-serif;max-width:1080px;margin:36px auto;padding:0 22px;color:#19364d;background:#f9fbfd}h1,h2{line-height:1.4}aside{padding:18px;background:#eaf3fb;border-left:5px solid #3875a9}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:10px;border:1px solid #d5e0e8;text-align:left}th{background:#eaf0f6}a{color:#155f9f}code{background:#edf1f4;padding:2px 4px}</style>
+<h1>拥塞通知真正走过反向网络后，才改变发送速率</h1>
+<p>2026-10-22 · 平台增量 · 固定原生RDMA ns-3 · 无依赖升级</p>
+<aside>已完成可执行的功能参考通路：按流通知抑制 → 独立CNP实际排队/选路/传输 → 发送端降速与双触发恢复。ACK仍只负责确认和队列信用。
+这是模型修正的功能验收，尚无硬件校准、现代完整通信库、真实Prefill重跑或论文优化收益。</aside>
+<h2>做了哪些实质修改</h2><p>默认逐包ACK反馈保持原有行为。可选<code>figure7_reference/1</code>用同一Simulator执行NP周期和pending、真实CNP、RP的alpha与时间/实际源帧字节两个恢复计数器。
+旧后端对CNP遗漏ECMP哈希第三字；平台仅在选路元数据中明确fid投影，线上报文仍为协议255，固定依赖没有改动。</p>
+<h2>实际包级功能结果</h2><p>时间单位ns。以下条件参数/背景工作不同，不能把行间时间差当成优化收益。</p><table><tr><th>人工条件</th><th>源数据包</th><th>CE</th><th>CNP</th><th>最后业务ACK</th><th>网络排空</th></tr><tr><td>短周期功能用例</td><td>411</td><td>370</td><td>22</td><td>58414</td><td>58414</td></tr><tr><td>文献周期/字节示例＋声明成本</td><td>411</td><td>370</td><td>6</td><td>56035</td><td>62929</td></tr><tr><td>64KiB反向背景</td><td>477</td><td>370</td><td>23</td><td>58551</td><td>58551</td></tr><tr><td>1MiB忙反向背景</td><td>1460</td><td>370</td><td>23</td><td>101208</td><td>101208</td></tr></table>
+<p>四条件共4,657条协议状态与398个CNP路径跳经独立数值/路径核对。忙反向例实际CNP源队列最大等待78ns，15处交换机等待非零、最大79ns，反馈没有绕过真实网络。
+文献周期例在56,035ns已收到全部业务ACK，仍要到62,929ns才排空控制反馈；业务完成与网络finish需要分别使用。</p>
+<h2>怎样确认没有偷用完成或重复反馈</h2><p>NP通知时间从实际目的端CE序列重算；RP数值从实际CNP到达和源帧TX字节重放，并核对发包时QP速率与可发送时刻。
+ACK前后只允许确认前缀变化，独立CNP前后确认前缀不变。QP跨工作只创建一次；pending通知、在途包和队列排空后才关闭。</p>
+<p>326项纯状态断言、9项Python输入检查通过。旧速率观测12条、持久7条、远端事务8条公开回归通过；默认新旧网络完全一致，仅规范动态库枚举顺序。
+首次检查器把数学库加载顺序也强制相等而失败，旧脚本和结果保留；修正后复用hash一致的成功结果，没有重复跑旧网络。有意日志容量溢出明确失败、不截断或抬限。</p>
+<h2>还不能支持哪些论文结论</h2><p>本模式采用声明的原生帧成本、固定超增步长、取整与关闭规则，不能声称复刻生产RoCE或原论文整套部署。
+模式切换同时改变机制、参数和反向服务量，整模式差异不能归因于某一个周期。没有重跑旧失败Prefill、没有校准硬件或取得独立负载，主论文贡献仍未成立。</p>
+<p>下一步需独立预注册机制对照，检验可信参考是否改变实际系统选择，并继续使用出口服务量和已有网络感知放置强基线。若候选现象消失，就收缩研究，不能调参制造它。</p>
+<h2>证据入口</h2><p><a href="README.md">范围与复现命令</a> · <a href="verification.json">功能核验</a> · <a href="reverse-busy.json">忙反向路径</a> · <a href="packet-recheck.json">只读包重分析</a> · <a href="sources.json">来源/模型选择</a> · <a href="build.json">构建</a> · <a href="maintenance.json">命令与资源</a> · <a href="archive.json">检查点</a></p>
+<p>原始检查点仅保存在/dev/shm，易失且未持久备份；Git保存源码和本报告。归档含旧RPATH二进制，不是可迁移运行时镜像。</p></html>

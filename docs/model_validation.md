@@ -1,6 +1,8 @@
 # 模型依据与适用范围
 
-固定原生mode1的反馈抽象与DCQCN 2015部署存在差异：`ReceiveUdp`逐标记数据包在ACK中置CNP位，此路径没有按流50us通知抑制；恢复仅有timer触发，未实现原文同时使用的发送字节触发。独立`ReceiveCnp`也未调用该mode1更新。ASTRA与Alibaba的10个控制函数去注释token一致，不能作为独立校准。已有Prefill长尾只能归于声明模型，不能直接推为真实MoE集群规律；论文参数也不是现代NIC通用校准值。源码、原文和既有包记录的核查见[反馈模型报告](review_artifacts/dcqcn_validity_20261022/report.html)，后续参考模式的[实施门槛](../experiments/paper_readiness/dcqcn_reference_requirements.md)尚未实现。
+固定原生mode1的反馈抽象与DCQCN 2015部署存在差异：`ReceiveUdp`逐标记数据包在ACK中置CNP位，此路径没有按流50us通知抑制；恢复仅有timer触发，未实现原文同时使用的发送字节触发。独立`ReceiveCnp`也未调用该mode1更新。ASTRA与Alibaba的10个控制函数去注释token一致，不能作为独立校准。已有Prefill长尾只能归于声明模型，不能直接推为真实MoE集群规律；论文参数也不是现代NIC通用校准值。源码、原文和既有包记录的核查见[反馈模型报告](review_artifacts/dcqcn_validity_20261022/report.html)，参考模式的要求见[实施门槛](../experiments/paper_readiness/dcqcn_reference_requirements.md)。
+
+可选`figure7_reference/1`已在持久字节入口接入按流NP周期、实际独立CNP、RP降速及timer/实际发送字节两种恢复，ACK信用保持独立；CNP选路通过平台局部元数据投影补足原生未初始化哈希字。它是带声明取整、固定超增步长及原生帧成本的功能参考，未硬件校准，也未接现代GIN或在线推理。人工反向排队和状态重放只验收实现，不能作为新优化收益；适用范围及证据见[平台验收](../fixtures/dcqcn_reference/README.md)。
 
 原生queue_fence将多连接已预留前缀映射到真实ACK/响应进度，避免动态等待集合包含未来工作。一个回调中的捕获及MRT1完成仍是功能选择，不能当作GDAKI逐peer取样、CQ或GIN flush精度验证。来源和反例见[队列快照验收](../fixtures/queue_fences/README.md)。
 

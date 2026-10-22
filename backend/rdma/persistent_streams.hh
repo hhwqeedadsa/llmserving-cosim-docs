@@ -1,6 +1,7 @@
 #pragma once
 #include "fabric.hh"
 #include "gin_work_queue.hh"
+#include "dcqcn_reference.hh"
 #include "ns3/rdma-hw.h"
 #include <deque>
 
@@ -17,6 +18,7 @@ class PersistentStreams {
   PersistentStreams(Fabric& fabric, Limits limits);
   // Passive samples in existing callbacks; no timers or periodic polling.
   void ConfigureRateCapture(const Json& config);
+  void ConfigureDcqcnReference(const Json& config);
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);
   void Submit(uint64_t stream, uint64_t work, uint64_t bytes, Done accepted, Done acked);
@@ -37,6 +39,13 @@ class PersistentStreams {
     Bytes payload;
   };
   struct Stream {
+    struct Reference {
+      DcqcnNp np;
+      DcqcnRp rp;
+      ns3::EventId np_event,alpha_event,recovery_event;
+      uint16_t ipid=0;
+      Reference(int64_t period,DcqcnRpConfig config,uint64_t maximum):np(period),rp(config,maximum) {}
+    };
     unsigned src, dst, plane, source_nic, destination_nic;
     uint16_t wire_port;
     ns3::Ptr<ns3::RdmaQueuePair> qp;
@@ -46,6 +55,7 @@ class PersistentStreams {
     std::size_t published_prefix=0;
     unsigned scheduler_insertions=0;
     std::function<void(Bytes)> receiver;
+    std::unique_ptr<Reference> reference;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth,unsigned maximum)
       : src(s),dst(d),plane(p),source_nic(sn),destination_nic(dn),wire_port(w),queue(depth,maximum) {}
   };
@@ -57,6 +67,16 @@ class PersistentStreams {
   void Enqueue(uint64_t stream, uint64_t work, uint64_t bytes, Bytes payload, Done accepted, Done acked);
   void CheckAccepted(Stream&);
   void Notify();
+  void ReferenceLog(Stream&,const char*,ns3::Ptr<const ns3::Packet> packet=nullptr);
+  void ReferenceMark(Stream&,ns3::Ptr<const ns3::Packet>);
+  void ReferenceNpTimer(uint64_t stream);
+  void ScheduleNp(Stream&);
+  void SendCnp(Stream&);
+  void ScheduleRp(Stream&);
+  void ReferenceAlpha(uint64_t stream);
+  void ReferenceRecovery(uint64_t stream);
+  void ApplyReferenceRate(Stream&);
+  void PacketSent(unsigned node,ns3::Ptr<ns3::RdmaQueuePair>,ns3::Ptr<ns3::Packet>,ns3::Time);
   struct RateState {
     uint64_t rate, target, maximum, snd_nxt, snd_una, published;
     int64_t next_avail;
@@ -89,5 +109,7 @@ class PersistentStreams {
   uint64_t rate_limit_=0;
   int64_t rate_start_=0,rate_end_=0;
   std::vector<RateSample> rate_samples_;
+  Json reference_config_,reference_events_=Json::array();
+  uint64_t reference_limit_=0;
 };
 }

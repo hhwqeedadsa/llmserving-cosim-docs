@@ -38,6 +38,19 @@ class StreamInputTests(unittest.TestCase):
             config['source_rate_capture']=value
             with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
 
+    def test_reference_feedback_configuration(self):
+        example=json.loads((ROOT/'examples/scaleout_rdma_streams/work-reference.json').read_text())
+        validate(self.topology,self.protocol,example)
+        reference=example['dcqcn_reference']
+        for key,value in [('mode','calibrated'),('gain',True),('gain',float('nan')),('gain',0),
+                          ('max_events',True),('recovery_bytes',1),('cnp_model_bytes',29),
+                          ('alpha_interval_ns',50000),('min_rate_bps',-1)]:
+            config=deepcopy(example);config['dcqcn_reference'][key]=value
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+        for wrong in ({},dict(reference,unknown=1)):
+            config=deepcopy(example);config['dcqcn_reference']=wrong
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,config)
+
     def test_reject_future_dependency_unknown_event_and_guessed_time(self):
         for after in ([dict(work=5,event='accepted')],[dict(work=0,event='visible')],
                       [dict(work=0,event='acked'),dict(work=0,event='acked')]):

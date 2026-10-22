@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "public_commands": 7,
+  "direct_native_commands": 0,
+  "expected_rejections": 2,
+  "normal": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 63050,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "depth2": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 57026,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "concurrent": {
+    "work": 6,
+    "source_packets": 35,
+    "payload_bytes": 31457,
+    "finish_ns": 50777,
+    "native_libraries": [
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so"
+    ]
+  },
+  "repeat_byte_identical": true,
+  "same_network_clock": true,
+  "hardware_calibrated": false,
+  "modern_GIN_executed": false,
+  "wall_seconds": 3.8290837593376637,
+  "output_bytes": 177681,
+  "indexed": {},
+  "backend_sha256": "9fdb9e0fe6e43ffa08b89ba74de4c1d7594f65c7f10781cccd8e6a1826074e19",
+  "source_sha256": {
+    "backend/rdma/fabric.hh": "40dc01e3f52e5fdae31de95f361da8c0a650fe7d13bdd0d5d32ab2740f2991aa",
+    "backend/rdma/fabric.cc": "1327f6c7bbd4eb1f0681ea734c6498e67586e51468747610664ec1a22d5e5238",
+    "backend/rdma/persistent_streams.hh": "e5884a1f987800eeadf965b18d8edfc8ea475801f13f314e7002a8226ce75905",
+    "backend/rdma/persistent_streams.cc": "e7175b028cdf6a5bfc6a8c2d7fe6e5bd001bcbd8ccd939870f35d74abe7642de",
+    "backend/rdma/stream_probe.cc": "46c01133026668f0cf21e8530310a50975940ec9788c1496c7343e6bd7762cac",
+    "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "python/moe_ub_cosim/scaleout_streams.py": "ea0c1db45983a910c6b8f9e255e807d4f503d4ec59dd93d74a1351e5ce998862",
+    "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+    "python/moe_ub_cosim/cli.py": "6443cb5ef1ed2165abaed5f9dbbf9c3fc258795a3f83ca2729ccb7c1fc480c86",
+    "tests/integration/check_persistent_stream_workflow.py": "01bb03c49d03f0ab4cbaf1d062aba795688596f9eea762d70477a138766bc55b",
+    "examples/scaleout_rdma_streams/work.json": "723d35f9a08bb2321886a8c9c056822ba2940f143455a178933379b8742f01e3"
+  }
+}

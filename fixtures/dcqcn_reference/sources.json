@@ -1,0 +1,17 @@
+{
+  "platform_base": "3ea76c6be92d533fef2b3bff3a1278fd4954020a",
+  "native": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "paper": {
+    "url": "https://conferences.sigcomm.org/sigcomm/2015/pdf/papers/p523.pdf",
+    "sha256": "879074a33b78ceb93f9f66d59b217fba9e7621320cc68bc47914747cf5cf31f8",
+    "read_sections": "3.1, Figures6/7 and equations1-4;5 parameter context",
+    "new_downloads": 0
+  },
+  "model_choices": [
+    "NP generation/enqueue starts N; pending drains before QP close",
+    "strict Figure7 counters; fixed HAI step from declared native convention; integer bps floor",
+    "native CnHeader/IP/PPP/padding is not real RoCE format or calibrated NIC service",
+    "CNP local metadata hash projection; actual packet protocol remains255"
+  ],
+  "hardware_calibrated": false
+}

@@ -10,7 +10,8 @@ def stream_limits(config):
     schema=config.get('schema_version')
     require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2'),'unsupported stream work schema')
     fields(config,'schema_version streams work'+(' limits' if schema.endswith('/2') else '')
-           +(' source_rate_capture' if 'source_rate_capture' in config else ''),'stream work root')
+           +(' source_rate_capture' if 'source_rate_capture' in config else '')
+           +(' dcqcn_reference' if 'dcqcn_reference' in config else ''),'stream work root')
     if schema.endswith('/1'):
         return dict(max_streams=16,max_work=64)
     value=config['limits']
@@ -23,6 +24,22 @@ def stream_limits(config):
 def validate(topology, protocol, config):
     counts=stream_limits(config)
     budget=limits(protocol)
+    if 'dcqcn_reference' in config:
+        reference=config['dcqcn_reference']
+        fields(reference,'mode np_interval_ns alpha_interval_ns recovery_interval_ns recovery_bytes min_rate_bps '
+               'additive_bps hyper_bps fast_recovery_rounds gain cnp_model_bytes max_events','DCQCN reference')
+        require(reference['mode']=='figure7_reference/1','unknown DCQCN reference mode')
+        for key in ('np_interval_ns','alpha_interval_ns','recovery_interval_ns'):
+            integer(reference[key],key,1,budget['max_sim_ns'])
+        require(reference['alpha_interval_ns']>reference['np_interval_ns'],'alpha interval must exceed NP interval')
+        integer(reference['recovery_bytes'],'recovery_bytes',512,1073741824)
+        integer(reference['fast_recovery_rounds'],'fast_recovery_rounds',1,100)
+        integer(reference['cnp_model_bytes'],'cnp_model_bytes',30,512)
+        integer(reference['max_events'],'reference max_events',1,100000)
+        for key in ('min_rate_bps','additive_bps','hyper_bps'):
+            integer(reference[key],key,1,1000000000000000)
+        gain=reference['gain']
+        require(type(gain) in (int,float) and 0<gain<=1,'reference gain must be numeric in (0,1]')
     if 'source_rate_capture' in config:
         capture=config['source_rate_capture']
         fields(capture,'start_ns end_ns max_events','source rate capture')

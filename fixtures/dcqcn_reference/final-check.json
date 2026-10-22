@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "archive_members_verified": 648,
+  "html_local_links_checked": true,
+  "source_and_runtime_hashes_checked": true,
+  "dependency_check": {
+    "command": "bash scripts/check_deps.sh",
+    "exitcode": 0,
+    "checkouts": 13
+  },
+  "total_protocol_states": 4657,
+  "total_CNP_path_hops": 398,
+  "hardware_calibrated": false,
+  "goal_complete": false,
+  "package_monitor": "package-monitor.json",
+  "cumulative_monitored_seconds": 87.7327378578484,
+  "peak_cumulative_artifact_bytes": 138674176,
+  "archive_hash_rechecked": true,
+  "python_syntax_checked": true,
+  "post_archive_documentation": "Clarified whole-frame byte accounting occurs after PhyTxBegin in native PktSent; no code/network change"
+}

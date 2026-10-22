@@ -3,6 +3,7 @@
 #include "ns3/error-model.h"
 #include "ns3/rdma-hw.h"
 #include "ns3/switch-node.h"
+#include "cnp_switch.hh"
 #include <algorithm>
 #include <fstream>
 #include <queue>
@@ -115,7 +116,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
     } else {
       ++switches;
       planes_ = std::max(planes_, n.at("plane").get<unsigned>() + 1);
-      auto sw = CreateObject<SwitchNode>();
+      auto sw = CreateObject<CnpSwitch>();
       sw->SetAttribute("EcnEnabled", BooleanValue(true));
       sw->SetAttribute("CcMode", UintegerValue(1));
       sw->SetAttribute("AckHighPrio", UintegerValue(1));

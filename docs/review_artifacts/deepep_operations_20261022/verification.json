@@ -1,0 +1,30 @@
+{
+  "scope": "offline operation counts, reverse reachability and review integrity",
+  "raw_files_verified": 4,
+  "selected_choice_rows": 16,
+  "public_commands": 6,
+  "independent": {
+    "reverse_reachability_probes": {
+      "normal": 0,
+      "zero_count": 29,
+      "flag": 25,
+      "sender_done": 0
+    },
+    "logical_contexts": 768,
+    "context_and_path_operations_checked": 8448
+  },
+  "repeated_artifact_files_byte_identical": 3,
+  "source_files_verified": 4,
+  "exact_source_excerpts": 8,
+  "maximum_child_rss_kib": 94572,
+  "longest_command_seconds": 0.6254495643079281,
+  "local_html_links": 8,
+  "browser_visual_acceptance": false,
+  "input_sha256": "feeea9d4cbff7a9fb8ef670f4091a539d6ddb5ec9a8b6fa3147f66c7325362ba",
+  "plan_sha256": "cb8f71b62d2701b8d49f6b197137459695cf004010bdd5e70bd7a160e2c85a08",
+  "report_sha256": "ab854c514a14c0d2e6d0c58f1820d6214f4646b92aae42483a673c1c1a8823ac",
+  "source_buffer_reuse_validated": false,
+  "packet_execution": false,
+  "hardware_calibrated": false,
+  "overall_paper_ready": false
+}

@@ -1,0 +1,81 @@
+{
+  "sources": [
+    {
+      "path": "data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh",
+      "sha256": "1c5353a768a27a4b7d349bb50215cb54f8767934247f7caef7a8f331c2f2bbd2",
+      "git_blob_sha": "7fab70c13f0e21081831a401f5140ceed1d970a2",
+      "revision": "9af0e0d0e74f3577af1979c9b9e1ac2cad0104ee",
+      "immutable_blob_api": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/7fab70c13f0e21081831a401f5140ceed1d970a2",
+      "scope": "fixed source"
+    },
+    {
+      "path": "data/research/system_innovation_20261021/deepep_v2.txt",
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+      "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+      "revision": null,
+      "immutable_blob_api": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+      "scope": "fixed README blob only; kernel not audited"
+    },
+    {
+      "path": "backend/rdma/fabric.cc",
+      "sha256": "2df91eb4a8d9fbe54341bc252e1dacebf77da561681a8fbe265d167966e42f90",
+      "scope": "current locked model path"
+    },
+    {
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc",
+      "sha256": "05ab2df2fade62914e394c96e3190bfcb6558f1dc4f07c0f3370f2f49896c305",
+      "scope": "current locked model path"
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh",
+      "first_line": 411,
+      "last_line": 421,
+      "excerpt": "    ctrl_seg.opmod_idx_opcode = HtoBE32(MLX5_OPCODE_ATOMIC_MASKED_FA | (wqe_idx << 8) | 0x08000000);\n    auto atomic_32_masked_fa_seg = reinterpret_cast<ibgda_atomic_32_masked_fa_seg_t*>(&atomic_seg_1);\n    atomic_32_masked_fa_seg->add_data = HtoBE32(value);\n    atomic_32_masked_fa_seg->field_boundary = 0;\n\n    ctrl_seg.qpn_ds = HtoBE32((qp->qpn << 8) | 4);\n    ctrl_seg.fm_ce_se = MLX5_WQE_CTRL_CQ_UPDATE;\n\n    data_seg.byte_count = HtoBE32(sizeof(int));\n    data_seg.lkey = lkey;\n    data_seg.addr = HtoBE64(laddr);"
+    },
+    {
+      "path": "data/research/deepep_semantics_20261022/sources/csrc/kernels/ibgda_device.cuh",
+      "first_line": 446,
+      "last_line": 447,
+      "excerpt": "        ibgda_write_amo_add_wqe(qp, value, reinterpret_cast<uint64_t>(qp->ibuf.buf),\n                                qp->ibuf.lkey, raddr, rkey, my_wqe_idx, &wqe_ptrs);"
+    },
+    {
+      "path": "data/research/system_innovation_20261021/deepep_v2.txt",
+      "first_line": 18,
+      "last_line": 18,
+      "excerpt": "  - Fully remove V1, including its APIs, NVSHMEM backend, and legacy documentation. NVSHMEM is no longer a dependency"
+    },
+    {
+      "path": "data/research/system_innovation_20261021/deepep_v2.txt",
+      "first_line": 20,
+      "last_line": 20,
+      "excerpt": "- **V2 release**: A complete refactoring of expert parallelism, with support for larger scale-up and scale-out domains and the lightweight **NCCL Gin backend**."
+    },
+    {
+      "path": "backend/rdma/fabric.cc",
+      "first_line": 298,
+      "last_line": 298,
+      "excerpt": "void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {"
+    },
+    {
+      "path": "backend/rdma/fabric.cc",
+      "first_line": 320,
+      "last_line": 321,
+      "excerpt": "  drivers_[f.src]->AddQueuePair(f.src,f.dst,id,f.bytes,3,Address(f.src,f.plane),Address(f.dst,f.plane),f.port,f.port,0,\n      config_.at(\"base_rtt_ns\"),MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));"
+    },
+    {
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc",
+      "first_line": 597,
+      "last_line": 615,
+      "excerpt": "Ptr<Packet> RdmaHw::GetNxtPacket(Ptr<RdmaQueuePair> qp){\n\tuint32_t payload_size = qp->GetBytesLeft();\n\tif (m_mtu < payload_size)\n\t\tpayload_size = m_mtu;\n\tPtr<Packet> p = Create<Packet> (payload_size);\n\t// add SeqTsHeader\n\tSeqTsHeader seqTs;\n\tseqTs.SetSeq (qp->snd_nxt);\n\tseqTs.SetPG (qp->m_pg);\n\tp->AddHeader (seqTs);\n\t// add udp header\n\tUdpHeader udpHeader;\n\tudpHeader.SetDestinationPort (qp->dport);\n\tudpHeader.SetSourcePort (qp->sport);\n\tp->AddHeader (udpHeader);\n\t// add ipv4 header\n\tIpv4Header ipHeader;\n\tipHeader.SetSource (qp->sip);\n\tipHeader.SetDestination (qp->dip);"
+    },
+    {
+      "path": "third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/rdma-hw.cc",
+      "first_line": 489,
+      "last_line": 500,
+      "excerpt": "int RdmaHw::Receive(Ptr<Packet> p, CustomHeader &ch){\n\tif (ch.l3Prot == 0x11){ // UDP\n\t\tReceiveUdp(p, ch);\n\t}else if (ch.l3Prot == 0xFF){ // CNP\n\t\tReceiveCnp(p, ch);\n\t}else if (ch.l3Prot == 0xFD){ // NACK\n\t\tReceiveAck(p, ch);\n\t}else if (ch.l3Prot == 0xFC){ // ACK\n\t\tReceiveAck(p, ch);\n\t}\n\treturn 0;\n}"
+    }
+  ],
+  "caution": "No atomic wire cost, NIC completion timing, modern kernel semantics or paper novelty is proved"
+}

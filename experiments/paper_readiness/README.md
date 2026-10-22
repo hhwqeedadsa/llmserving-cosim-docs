@@ -59,3 +59,17 @@ python3 experiments/paper_readiness/check_deepep_audit.py \
 ```
 
 wave路径按公开运行目录内的相对位置记录。恢复归档后，可把核算与独立检查的`--graphs`均指向解压后的`saved_run/`；来源缓存仍按清单相对仓库根的路径恢复。相同输入的离线核算要求逐字节一致，迁移后的两份wave也按原hash核对。检查点只含核算需要的公开JSON，不含重新执行整个网络所需的全部二进制与产物。
+
+真实路由操作研究使用平台`0cc140f`的公开离线入口，见[结果报告](../../docs/review_artifacts/deepep_operations_20261022/report.html)。它从同四份原件选取两层、两步，共四次MoE调用，声明EP4、BF16、等量连续专家、单NIC且关闭跨rank P2P。没有执行完整模型或网络，不提供时延与吞吐预测。
+
+```bash
+python3 experiments/paper_readiness/deepep_operations.py \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json \
+  --output /dev/shm/my-deepep-real-operations
+python3 experiments/paper_readiness/build_operation_review.py \
+  --run /dev/shm/my-deepep-real-operations \
+  --output docs/review_artifacts/my-deepep-operation-review \
+  --checkpoint runs/my-deepep-operation-checkpoint
+```
+
+输出目录均须不存在。第一个命令独立核算操作与原件、执行六条公开命令并保存Linux wait4资源统计；单命令60秒/RSS1GiB/地址2GiB，整轮300秒/64MiB新产物，预留8GiB。第二个命令核对固定源码hash、逻辑上下文和反向后继可达性，验证三个重复产物及本地HTML链接，生成不超过32MiB原始内容的本地tar检查点。报告正文的证据链接指向本仓库版本化的正式结果目录；自定义目录用于复核，不改写正式结果。归档不重复保存第二份plan，恢复来源和平台后可用公开命令重新生成。当前结果为8,448操作/33,968事件，零count仍是必要依赖；不证明通知是性能瓶颈，也不验证源buffer、物理QP、现代DeepEP内核或硬件包级行为。

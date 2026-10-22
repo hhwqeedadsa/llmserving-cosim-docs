@@ -1,0 +1,152 @@
+[
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-plan",
+      "--config",
+      "/dev/shm/moe-deepep-real-operations-20261022/input.json",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/plan"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.3586139939725399,
+    "sampled_tree_peak_rss_kib": 46912,
+    "resource": {
+      "peak_rss_kib": 57152,
+      "user_seconds": 0.300705,
+      "system_seconds": 0.038960999999999996,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-check",
+      "--plan",
+      "/dev/shm/moe-deepep-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/normal.json"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.6181150283664465,
+    "sampled_tree_peak_rss_kib": 91500,
+    "resource": {
+      "peak_rss_kib": 94572,
+      "user_seconds": 0.54259,
+      "system_seconds": 0.050053999999999994,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-check",
+      "--plan",
+      "/dev/shm/moe-deepep-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/zero_count.json",
+      "--withhold",
+      "m0.d.count.s0.e64.visible"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.6214178763329983,
+    "sampled_tree_peak_rss_kib": 91472,
+    "resource": {
+      "peak_rss_kib": 94544,
+      "user_seconds": 0.525054,
+      "system_seconds": 0.06089,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-check",
+      "--plan",
+      "/dev/shm/moe-deepep-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/flag.json",
+      "--withhold",
+      "m0.c.flag.d0.e64.visible"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.6222777105867863,
+    "sampled_tree_peak_rss_kib": 91496,
+    "resource": {
+      "peak_rss_kib": 94568,
+      "user_seconds": 0.523349,
+      "system_seconds": 0.057706999999999994,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-check",
+      "--plan",
+      "/dev/shm/moe-deepep-real-operations-20261022/plan",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/sender_done.json",
+      "--withhold",
+      "m0.d.data.s0.t0.e66.sender_done"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.6254495643079281,
+    "sampled_tree_peak_rss_kib": 84320,
+    "resource": {
+      "peak_rss_kib": 94560,
+      "user_seconds": 0.535094,
+      "system_seconds": 0.063772,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  },
+  {
+    "argv": [
+      "/usr/bin/python3",
+      "-m",
+      "moe_ub_cosim",
+      "scaleout",
+      "deepep-plan",
+      "--config",
+      "/dev/shm/moe-deepep-real-operations-20261022/input.json",
+      "--output",
+      "/dev/shm/moe-deepep-real-operations-20261022/repeat"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "reason": null,
+    "wall_seconds": 0.3673347719013691,
+    "sampled_tree_peak_rss_kib": 51576,
+    "resource": {
+      "peak_rss_kib": 56548,
+      "user_seconds": 0.296726,
+      "system_seconds": 0.040097999999999995,
+      "measurement": "Linux wait4 child rusage; sampled process-tree RSS separately"
+    }
+  }
+]

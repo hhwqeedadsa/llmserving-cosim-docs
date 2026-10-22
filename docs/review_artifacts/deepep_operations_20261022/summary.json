@@ -1,0 +1,55 @@
+{
+  "scope": "original four-request choices in an untimed application partial order; not packet simulation",
+  "platform_commit": "0cc140f869cc95ab477356b2646b2fe3a42c1314",
+  "plan_sha256": "cb8f71b62d2701b8d49f6b197137459695cf004010bdd5e70bd7a160e2c85a08",
+  "input_sha256": "feeea9d4cbff7a9fb8ef670f4091a539d6ddb5ec9a8b6fa3147f66c7325362ba",
+  "events": 33968,
+  "operations": 8448,
+  "remote_operations": {
+    "data": 182,
+    "count": 3072,
+    "flag": 3072
+  },
+  "zero_contribution_remote_notifications": {
+    "count": 2981,
+    "flag": 2981
+  },
+  "remote_bf16_data_operand_bytes": 2610608,
+  "source_identities_verified": 4,
+  "individual_choice_rows_verified": 16,
+  "independently_enumerated_operations": 8448,
+  "repeated_artifact_files_byte_identical": 3,
+  "probes": {
+    "normal": {
+      "withheld": [],
+      "blocked": 0,
+      "reachable": 32
+    },
+    "zero_count": {
+      "withheld": [
+        "m0.d.count.s0.e64.visible"
+      ],
+      "blocked": 29,
+      "reachable": 3
+    },
+    "flag": {
+      "withheld": [
+        "m0.c.flag.d0.e64.visible"
+      ],
+      "blocked": 25,
+      "reachable": 7
+    },
+    "sender_done": {
+      "withheld": [
+        "m0.d.data.s0.t0.e66.sender_done"
+      ],
+      "blocked": 0,
+      "reachable": 32
+    }
+  },
+  "source_buffer_reuse_validated": false,
+  "hardware_calibrated": false,
+  "latency_predicted": false,
+  "packet_execution": false,
+  "overall_paper_ready": false
+}

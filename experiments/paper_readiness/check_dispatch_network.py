@@ -32,6 +32,8 @@ def main():
         p.add_argument('--'+name.replace('_','-'), type=Path, required=True)
     p.add_argument('--source-root', type=Path, default=ROOT)
     a=p.parse_args(); observed=a.prepared/'observed'; truth=a.prepared/'truth'; idx=load(observed/'index.json'); cfg=idx['config']
+    windows=cfg.get('source_windows') or [dict(layer=cfg['source_layer'],entry=e) for e in cfg['decode_entries']]
+    assert len(windows)==4
     summary=load(a.analysis/'summary.json'); all_rounds=load(a.analysis/'rounds.json')
     assert summary['observed_index_sha256']==sha(observed/'index.json') and not summary['analysis_reads_truth']
     for name,key in (('ports.csv','ports_csv_sha256'),('packets.csv','packets_csv_sha256'),('rounds.json','rounds_sha256')):
@@ -45,13 +47,13 @@ def main():
     choices=[]
     for row in manifest['files']:
         file=a.source_root/row['file']['path']; assert sha(file)==row['file']['sha256']
-        raw=load(file); choices.append([raw[e][str(cfg['source_layer'])][0] for e in cfg['decode_entries']])
+        raw=load(file); choices.append([raw[w['entry']][str(w['layer'])][0] for w in windows])
     assert choices==provenance['selections']
     independent_work={}
     for condition in cfg['placement_conditions']:
-        owners=maps[condition][0]; assert Counter(owners)=={r:64 for r in range(4)}
         expected={}; previous=[]
         for step in range(4):
+            owners=maps[condition][windows[step]['layer']-3]; assert Counter(owners)=={r:64 for r in range(4)}
             current=[]
             for src in range(4):
                 # Scan rank membership independently of the preparation set expression.
@@ -65,8 +67,10 @@ def main():
         assert input_work['work']==list(expected.values())
         assert [(s['id'],s['src'],s['dst'],s['wire_port'],s['source_nic'],s['destination_nic'],s['queue_depth']) for s in input_work['streams']]==[
             (4*s+d,2*s,2*d,21000+4*s+d,1,1,1) for s in range(4) for d in range(4) if s!=d]
-        assert provenance['work_source_mapping'][condition]==[dict(work=w,entry=1+w//16,
-            source_rank=(w%16)//4,destination_rank=w%4) for w in expected]
+        expected_mapping=[dict(work=w,entry=windows[w//16]['entry'],
+            source_rank=(w%16)//4,destination_rank=w%4,
+            **(dict(layer=windows[w//16]['layer']) if 'source_windows' in cfg else {})) for w in expected]
+        assert provenance['work_source_mapping'][condition]==expected_mapping
         independent_work[condition]=expected
     with (a.analysis/'packets.csv').open() as f: packet_csv=list(csv.DictReader(f))
     with (a.analysis/'ports.csv').open() as f: port_csv=list(csv.DictReader(f))
@@ -86,7 +90,7 @@ def main():
                 libraries[name]=sha(Path(name))
         physical=load(a.run/('topology-'+network)/'topology.json'); endpoints={}; adjacency=defaultdict(list)
         for link in physical['links']:
-            expected_rate=100000000000 if link['tier']=='access' or network=='all100g' else 25000000000
+            expected_rate=100000000000 if link['tier']=='access' else cfg['network_profiles'][network]
             assert link['rate_bps']==expected_rate and link['delay_ns']==1000
             for n,pn,peer,pp in ((link['src'],link['src_port'],link['dst'],link['dst_port']),
                                   (link['dst'],link['dst_port'],link['src'],link['src_port'])):
@@ -186,7 +190,8 @@ def main():
             for sent in tx[1:]:
                 candidates=[pn for (n,pn),(peer,pp,rate,delay,tier) in endpoints.items()
                     if n==sent[1] and distance[peer]==distance[n]-1]
-                selected=candidates[ecmp([0x0b000001+src*32,0x0b000001+dst*32,wire|(wire<<16)],11+sent[1])%len(candidates)]
+                seed=cfg.get('network_seeds',{}).get(network,11)
+                selected=candidates[ecmp([0x0b000001+src*32,0x0b000001+dst*32,wire|(wire<<16)],seed+sent[1])%len(candidates)]
                 assert selected==sent[2]
                 totals['switch_ecmp_choices']+=1
             if protocol==17:
@@ -249,17 +254,22 @@ def main():
         assert (b['peer'],b['tier'],b['rate_bps'],b['model_tx_bytes'])==(endpoints[key][0],endpoints[key][4],endpoints[key][2],port_tx[key]['model'])
         audited.append(dict(case=case,works=len(work),packets=len(by_uid),capture_events=len(capture['events']),result_sha256=sha(result_path)))
         totals['capture_events']+=len(capture['events']);totals['rounds']+=4
-    assert len(packet_csv)==totals['packet_lineages'] and len(summary['cases'])==6
+    assert len(packet_csv)==totals['packet_lineages'] and len(summary['cases'])==len(cfg['network_profiles'])*len(cfg['placement_conditions'])
     assert len(port_csv)==sum(len(load(a.run/r['case']/'result.json')['ports']) for r in summary['cases'])
-    assert (a.run/'repeat/result.json').read_bytes()==(a.run/'all100g-contiguous/result.json').read_bytes()
-    execution=load(a.run/'execution.json');assert execution['completed'] and execution['commands']==9
+    repeated='repeat_condition' in cfg
+    if repeated:
+        reference=cfg['repeat_network']+'-'+cfg['repeat_condition']
+        assert (a.run/'repeat/result.json').read_bytes()==(a.run/reference/'result.json').read_bytes()
+    execution=load(a.run/'execution.json')
+    assert execution['completed'] and execution['commands']==len(cfg['network_profiles'])*(1+len(cfg['placement_conditions']))+int(repeated)
     for row in load(a.run/'commands.json'):assert row['exit_code']==0
     for name in ('backend/rdma/fabric.cc','backend/rdma/persistent_streams.cc','backend/rdma/stream_probe.cc','backend/rdma/gin_work_queue.hh',
         'third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-node.cc',
         'third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3/src/point-to-point/model/switch-mmu.cc'):
         sources[name]=sha(ROOT/name)
     a.output.mkdir();save(a.output/'verification.json',dict(passed=True,**totals,cases=audited,
-        summary_sha256=sha(a.analysis/'summary.json'),repeat_result_byte_identical=True,repeat_analysis_byte_identical=True,
+        summary_sha256=sha(a.analysis/'summary.json'),repeat_result_byte_identical=True if repeated else None,
+        repeat_network_run_performed=repeated,repeat_analysis_byte_identical=True,
         independent_raw_requests=4,independent_routes=16,max_data_bytes_after_dequeue=max_post_dequeue_data,
         native_libraries_sha256=libraries,platform_source_sha256=sources,
         modern_GIN_modeled=False,hardware_calibrated=False,full_inference_validated=False,goal_complete=False))

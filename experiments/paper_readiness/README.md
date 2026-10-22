@@ -1,5 +1,37 @@
 # 论文基础审计与强基线判别
 
+跨窗口/ECMP网络判别使用固定四请求、层4/32的Decode入口5/6、三放置、两上层速率与三个种子，共18条件。方法见[执行前协议](dispatch_validation_protocol.md)，结果见[HTML报告](../../docs/review_artifacts/dispatch_validation_20261022/report.html)。窗口此前已有离线统计，仅新增包级评价，不称独立留出。结果把总数据量、端点负载与已知链路服务量基线分开，不以此申明新放置算法或现代完整通信库。
+
+使用已有原生stream-probe和新的输出父目录，设置本仓库绝对`PYTHONPATH`。每一步按协议用公开`python -m moe_ub_cosim.host_probe`包住：60秒/RSS1GiB/地址2GiB，运行器64MiB，其余32MiB，全部累计128MiB/300秒、卷预留8GiB；正式命令见报告维护记录。placement原件可从[前阶段检查点](../../docs/review_artifacts/prefill_placement_20261022/archive.json)的`saved_run/planned/placements.json`恢复，本次检查点也保存同一原件和原始四请求。
+
+```bash
+python experiments/paper_readiness/prepare_dispatch_validation.py \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json \
+  --placements /path/to/hash-checked/placements.json --output /dev/shm/my-dispatch-validation-new
+python experiments/paper_readiness/run_dispatch_validation.py \
+  --observed /dev/shm/my-dispatch-validation-new/observed \
+  --backend /absolute/path/to/native-stream-probe --output /dev/shm/my-dispatch-validation-new/run
+python experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed /dev/shm/my-dispatch-validation-new/observed --run /dev/shm/my-dispatch-validation-new/run \
+  --output /dev/shm/my-dispatch-validation-new/analysis
+python experiments/paper_readiness/analyze_dispatch_network.py \
+  --observed /dev/shm/my-dispatch-validation-new/observed --run /dev/shm/my-dispatch-validation-new/run \
+  --output /dev/shm/my-dispatch-validation-new/repeat-analysis
+python experiments/paper_readiness/check_dispatch_network.py \
+  --prepared /dev/shm/my-dispatch-validation-new --run /dev/shm/my-dispatch-validation-new/run \
+  --analysis /dev/shm/my-dispatch-validation-new/analysis --repeat-analysis /dev/shm/my-dispatch-validation-new/repeat-analysis \
+  --output /dev/shm/my-dispatch-validation-new/checked
+python experiments/paper_readiness/analyze_dispatch_validation.py \
+  --observed /dev/shm/my-dispatch-validation-new/observed --run /dev/shm/my-dispatch-validation-new/run \
+  --analysis /dev/shm/my-dispatch-validation-new/analysis --output /dev/shm/my-dispatch-validation-new/metrics
+python experiments/paper_readiness/check_dispatch_validation_metrics.py \
+  --observed /dev/shm/my-dispatch-validation-new/observed --run /dev/shm/my-dispatch-validation-new/run \
+  --analysis /dev/shm/my-dispatch-validation-new/analysis --metrics /dev/shm/my-dispatch-validation-new/metrics/metrics.json \
+  --packet-check /dev/shm/my-dispatch-validation-new/checked/verification.json --output /dev/shm/my-dispatch-validation-new/review
+```
+
+最后一步生成独立核验、指标和HTML；正式报告的其他证据链接由检查点打包补齐。自定义复核目录可直接读取生成的两个JSON；不会自动备份，也不能把仅分析重复当作网络重复。分析器不读`truth/`，独立包核验才读取原始请求及Prefill放置。静态服务量计算代码在执行后实现，已逐出口与实际包发送量核对，只作基线检验，不是前瞻策略评测。
+
 新增的千卡短任务用于判别宿主成本，执行前范围见[方法](host_scale_protocol.md)，实际结果见[HTML报告](../../docs/review_artifacts/host_scale_20261022/report.html)。固定平台`bc8dd6f`，单次1024GPU/256个EP4副本、人工1层×2轮Decode在同一网络完成；不替代旧48层模型、现代DeepEP或硬件校准。准备脚本不导入平台私有生成器，分析只读公开产物和稳定计时读取接口；路径/消息/回调再由独立脚本核验。
 
 复现使用新的目录和已有前端依赖环境，`PYTHONPATH`设为本仓库`python`的绝对路径。以下各命令按方法中的时间/内存/磁盘预算分别监测，`rdma-run`内部也使用输入的显式资源限额；失败不自动重试。

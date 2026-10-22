@@ -1,0 +1,55 @@
+{
+  "passed": true,
+  "actual_rounds": 72,
+  "actual_whole_run_comparisons": 18,
+  "actual_port_services_checked": 2284,
+  "comparisons_recomputed_from_actual_transport_and_packets": true,
+  "round_comparison_counts": {
+    "work_count": {
+      "agrees": 49,
+      "metric_tie": 15,
+      "both_tie": 3,
+      "latency_tie": 5
+    },
+    "max_gpu_data_copies": {
+      "metric_tie": 64,
+      "both_tie": 8
+    },
+    "endpoint_service_ns": {
+      "agrees": 36,
+      "metric_tie": 28,
+      "both_tie": 8
+    },
+    "static_max_port_service_ns": {
+      "agrees": 60,
+      "latency_tie": 4,
+      "metric_tie": 4,
+      "both_tie": 4
+    }
+  },
+  "overall_comparison_counts": {
+    "work_count": {
+      "agrees": 13,
+      "reverses": 5
+    },
+    "max_gpu_data_copies": {
+      "metric_tie": 18
+    },
+    "endpoint_service_ns": {
+      "agrees": 12,
+      "metric_tie": 6
+    },
+    "static_max_port_service_ns": {
+      "agrees": 17,
+      "metric_tie": 1
+    }
+  },
+  "raw_packet_audit": {
+    "packet_lineages": 22140,
+    "physical_transmissions": 116280,
+    "switch_ecmp_choices": 94140,
+    "work_callbacks": 738,
+    "capture_events": 420840
+  },
+  "scope": "bounded descriptive baseline test; same four requests; no prospective optimization/hardware/modern GIN claim"
+}

@@ -1,0 +1,3078 @@
+{
+  "rows": [
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 16009,
+      "accepted_duration_ns": 9985,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 16088,
+      "accepted_duration_ns": 10064,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 3658.56,
+      "ack_duration_ns": 15882,
+      "accepted_duration_ns": 9858,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16092,
+      "accepted_duration_ns": 10068,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16092,
+      "accepted_duration_ns": 10068,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4801.28,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-all100g",
+      "seed": 11,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4801.28,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27619,
+      "accepted_duration_ns": 21551,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27783,
+      "accepted_duration_ns": 21715,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 10063.36,
+      "ack_duration_ns": 23360,
+      "accepted_duration_ns": 17292,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27951,
+      "accepted_duration_ns": 21883,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27918,
+      "accepted_duration_ns": 21850,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32804,
+      "accepted_duration_ns": 26736,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32804,
+      "accepted_duration_ns": 26736,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32804,
+      "accepted_duration_ns": 26736,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32804,
+      "accepted_duration_ns": 26736,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19205.12,
+      "ack_duration_ns": 32579,
+      "accepted_duration_ns": 26511,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32804,
+      "accepted_duration_ns": 26736,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s11-upper25g",
+      "seed": 11,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19205.12,
+      "ack_duration_ns": 32579,
+      "accepted_duration_ns": 26511,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 16009,
+      "accepted_duration_ns": 9985,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 15965,
+      "accepted_duration_ns": 9941,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 3658.56,
+      "ack_duration_ns": 15882,
+      "accepted_duration_ns": 9858,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 15969,
+      "accepted_duration_ns": 9945,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16092,
+      "accepted_duration_ns": 10068,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-all100g",
+      "seed": 29,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16096,
+      "accepted_duration_ns": 10072,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 10063.36,
+      "ack_duration_ns": 22931,
+      "accepted_duration_ns": 16863,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 9832.96,
+      "ack_duration_ns": 22849,
+      "accepted_duration_ns": 16781,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 9832.96,
+      "ack_duration_ns": 22589,
+      "accepted_duration_ns": 16521,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 10293.76,
+      "ack_duration_ns": 23096,
+      "accepted_duration_ns": 17028,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 15095.04,
+      "ack_duration_ns": 28077,
+      "accepted_duration_ns": 22009,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 15095.04,
+      "ack_duration_ns": 28122,
+      "accepted_duration_ns": 22054,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 15095.04,
+      "ack_duration_ns": 28077,
+      "accepted_duration_ns": 22009,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 15095.04,
+      "ack_duration_ns": 28077,
+      "accepted_duration_ns": 22009,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27939,
+      "accepted_duration_ns": 21871,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27882,
+      "accepted_duration_ns": 21814,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27714,
+      "accepted_duration_ns": 21646,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s29-upper25g",
+      "seed": 29,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27882,
+      "accepted_duration_ns": 21814,
+      "static_projection_port_count": 31
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 16013,
+      "accepted_duration_ns": 9989,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 3716.16,
+      "ack_duration_ns": 16088,
+      "accepted_duration_ns": 10064,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 3658.56,
+      "ack_duration_ns": 15886,
+      "accepted_duration_ns": 9862,
+      "static_projection_port_count": 30
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16088,
+      "accepted_duration_ns": 10064,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 3773.76,
+      "ack_duration_ns": 16092,
+      "accepted_duration_ns": 10068,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4916.48,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4916.48,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4916.48,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17254,
+      "accepted_duration_ns": 11230,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-all100g",
+      "seed": 47,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 4858.88,
+      "ack_duration_ns": 17250,
+      "accepted_duration_ns": 11226,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27634,
+      "accepted_duration_ns": 21566,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3716.16,
+      "static_max_port_service_ns": 14634.24,
+      "ack_duration_ns": 27759,
+      "accepted_duration_ns": 21691,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 8,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3658.56,
+      "static_max_port_service_ns": 14403.84,
+      "ack_duration_ns": 26366,
+      "accepted_duration_ns": 20298,
+      "static_projection_port_count": 30
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27897,
+      "accepted_duration_ns": 21829,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 14864.64,
+      "ack_duration_ns": 27867,
+      "accepted_duration_ns": 21799,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19665.92,
+      "ack_duration_ns": 32792,
+      "accepted_duration_ns": 26724,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 12,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19665.92,
+      "ack_duration_ns": 32750,
+      "accepted_duration_ns": 26682,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19665.92,
+      "ack_duration_ns": 32792,
+      "accepted_duration_ns": 26724,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 0,
+      "source_window": {
+        "layer": 4,
+        "entry": 5
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32525,
+      "accepted_duration_ns": 26457,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 1,
+      "source_window": {
+        "layer": 4,
+        "entry": 6
+      },
+      "work_count": 11,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32567,
+      "accepted_duration_ns": 26499,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 2,
+      "source_window": {
+        "layer": 32,
+        "entry": 5
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32567,
+      "accepted_duration_ns": 26499,
+      "static_projection_port_count": 32
+    },
+    {
+      "network": "s47-upper25g",
+      "seed": 47,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "step": 3,
+      "source_window": {
+        "layer": 32,
+        "entry": 6
+      },
+      "work_count": 10,
+      "max_gpu_data_copies": 3,
+      "endpoint_service_ns": 3773.76,
+      "static_max_port_service_ns": 19435.52,
+      "ack_duration_ns": 32567,
+      "accepted_duration_ns": 26499,
+      "static_projection_port_count": 32
+    }
+  ],
+  "pair_comparisons": [
+    {
+      "network": "s11-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16009,
+      "right_ack_ns": 16092,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16009,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16092,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17254,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "both_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "latency_tie"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 15882,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 15882,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17254,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "metric_tie"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16092,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16092,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17250,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "latency_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "latency_tie"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27619,
+      "right_ack_ns": 27918,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27619,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27918,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27783,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27783,
+      "right_ack_ns": 32579,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32804,
+      "right_ack_ns": 32579,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 23360,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 23360,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32804,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "latency_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "both_tie"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27951,
+      "right_ack_ns": 32804,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27951,
+      "right_ack_ns": 32579,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32804,
+      "right_ack_ns": 32579,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16009,
+      "right_ack_ns": 16092,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16009,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16092,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "metric_tie"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 15965,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 15965,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16096,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "both_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "both_tie"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 15882,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 15882,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16096,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "latency_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "both_tie"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 15969,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "metric_tie"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 15969,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "metric_tie"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16096,
+      "right_ack_ns": 16096,
+      "metrics": {
+        "work_count": "latency_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "both_tie"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 22931,
+      "right_ack_ns": 28077,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 22931,
+      "right_ack_ns": 27939,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 28077,
+      "right_ack_ns": 27939,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 22849,
+      "right_ack_ns": 28122,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 22849,
+      "right_ack_ns": 27882,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 28122,
+      "right_ack_ns": 27882,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 22589,
+      "right_ack_ns": 28077,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 22589,
+      "right_ack_ns": 27714,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 28077,
+      "right_ack_ns": 27714,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 23096,
+      "right_ack_ns": 28077,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 23096,
+      "right_ack_ns": 27882,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 28077,
+      "right_ack_ns": 27882,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16013,
+      "right_ack_ns": 16092,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16013,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16092,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17254,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "both_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "latency_tie"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 15886,
+      "right_ack_ns": 17254,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 15886,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17254,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 16088,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 17250,
+      "right_ack_ns": 17250,
+      "metrics": {
+        "work_count": "latency_tie",
+        "max_gpu_data_copies": "both_tie",
+        "endpoint_service_ns": "both_tie",
+        "static_max_port_service_ns": "latency_tie"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27634,
+      "right_ack_ns": 27867,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 0,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27634,
+      "right_ack_ns": 32525,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 0,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27867,
+      "right_ack_ns": 32525,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27759,
+      "right_ack_ns": 32792,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 1,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27759,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 1,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32792,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 26366,
+      "right_ack_ns": 32750,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 2,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 26366,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 2,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32750,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 27897,
+      "right_ack_ns": 32792,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 3,
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 27897,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "metric_tie",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "step": 3,
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 32792,
+      "right_ack_ns": 32567,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    }
+  ],
+  "comparison_counts": {
+    "work_count": {
+      "agrees": 49,
+      "metric_tie": 15,
+      "both_tie": 3,
+      "latency_tie": 5
+    },
+    "max_gpu_data_copies": {
+      "metric_tie": 64,
+      "both_tie": 8
+    },
+    "endpoint_service_ns": {
+      "agrees": 36,
+      "metric_tie": 28,
+      "both_tie": 8
+    },
+    "static_max_port_service_ns": {
+      "agrees": 60,
+      "latency_tie": 4,
+      "metric_tie": 4,
+      "both_tie": 4
+    }
+  },
+  "seed_sensitivity": [
+    {
+      "step": 0,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 16009,
+      "max_ack_ns": 16013,
+      "relative_spread": 0.0002498594540570929,
+      "observations": {
+        "11": 16009,
+        "29": 16009,
+        "47": 16013
+      }
+    },
+    {
+      "step": 0,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 16092,
+      "max_ack_ns": 16092,
+      "relative_spread": 0.0,
+      "observations": {
+        "11": 16092,
+        "29": 16092,
+        "47": 16092
+      }
+    },
+    {
+      "step": 0,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17254,
+      "relative_spread": 0.07194333996023856,
+      "observations": {
+        "11": 17254,
+        "29": 16096,
+        "47": 17254
+      }
+    },
+    {
+      "step": 0,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 22931,
+      "max_ack_ns": 27634,
+      "relative_spread": 0.20509354149404735,
+      "observations": {
+        "11": 27619,
+        "29": 22931,
+        "47": 27634
+      }
+    },
+    {
+      "step": 0,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 27867,
+      "max_ack_ns": 28077,
+      "relative_spread": 0.007535795026375283,
+      "observations": {
+        "11": 27918,
+        "29": 28077,
+        "47": 27867
+      }
+    },
+    {
+      "step": 0,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 27939,
+      "max_ack_ns": 32804,
+      "relative_spread": 0.17412935323383086,
+      "observations": {
+        "11": 32804,
+        "29": 27939,
+        "47": 32525
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 15965,
+      "max_ack_ns": 16088,
+      "relative_spread": 0.007704353272784215,
+      "observations": {
+        "11": 16088,
+        "29": 15965,
+        "47": 16088
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17254,
+      "relative_spread": 0.07194333996023856,
+      "observations": {
+        "11": 17254,
+        "29": 16096,
+        "47": 17254
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17254,
+      "relative_spread": 0.07194333996023856,
+      "observations": {
+        "11": 17254,
+        "29": 16096,
+        "47": 17254
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 22849,
+      "max_ack_ns": 27783,
+      "relative_spread": 0.21593942842137512,
+      "observations": {
+        "11": 27783,
+        "29": 22849,
+        "47": 27759
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 28122,
+      "max_ack_ns": 32804,
+      "relative_spread": 0.166488869923903,
+      "observations": {
+        "11": 32804,
+        "29": 28122,
+        "47": 32792
+      }
+    },
+    {
+      "step": 1,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 27882,
+      "max_ack_ns": 32579,
+      "relative_spread": 0.16845993831145542,
+      "observations": {
+        "11": 32579,
+        "29": 27882,
+        "47": 32567
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 15882,
+      "max_ack_ns": 15886,
+      "relative_spread": 0.0002518574486840448,
+      "observations": {
+        "11": 15882,
+        "29": 15882,
+        "47": 15886
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17254,
+      "relative_spread": 0.07194333996023856,
+      "observations": {
+        "11": 17254,
+        "29": 16096,
+        "47": 17254
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17250,
+      "relative_spread": 0.07169483101391651,
+      "observations": {
+        "11": 17250,
+        "29": 16096,
+        "47": 17250
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 22589,
+      "max_ack_ns": 26366,
+      "relative_spread": 0.16720527690468812,
+      "observations": {
+        "11": 23360,
+        "29": 22589,
+        "47": 26366
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 28077,
+      "max_ack_ns": 32804,
+      "relative_spread": 0.16835844285358123,
+      "observations": {
+        "11": 32804,
+        "29": 28077,
+        "47": 32750
+      }
+    },
+    {
+      "step": 2,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 27714,
+      "max_ack_ns": 32804,
+      "relative_spread": 0.183661687233889,
+      "observations": {
+        "11": 32804,
+        "29": 27714,
+        "47": 32567
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 100000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 15969,
+      "max_ack_ns": 16092,
+      "relative_spread": 0.007702423445425512,
+      "observations": {
+        "11": 16092,
+        "29": 15969,
+        "47": 16088
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17250,
+      "relative_spread": 0.07169483101391651,
+      "observations": {
+        "11": 17250,
+        "29": 16096,
+        "47": 17250
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 100000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 16096,
+      "max_ack_ns": 17250,
+      "relative_spread": 0.07169483101391651,
+      "observations": {
+        "11": 17250,
+        "29": 16096,
+        "47": 17250
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 25000000000,
+      "condition": "contiguous",
+      "min_ack_ns": 23096,
+      "max_ack_ns": 27951,
+      "relative_spread": 0.2102095600969865,
+      "observations": {
+        "11": 27951,
+        "29": 23096,
+        "47": 27897
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_all_lpt",
+      "min_ack_ns": 28077,
+      "max_ack_ns": 32804,
+      "relative_spread": 0.16835844285358123,
+      "observations": {
+        "11": 32804,
+        "29": 28077,
+        "47": 32792
+      }
+    },
+    {
+      "step": 3,
+      "upper_rate_bps": 25000000000,
+      "condition": "prefill_tail10_lpt",
+      "min_ack_ns": 27882,
+      "max_ack_ns": 32579,
+      "relative_spread": 0.16845993831145542,
+      "observations": {
+        "11": 32579,
+        "29": 27882,
+        "47": 32567
+      }
+    }
+  ],
+  "overall_rankings": [
+    {
+      "network": "s11-all100g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 64071,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 14864.64
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 67850,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 18350.4
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 69008,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 19320.32
+        }
+      ]
+    },
+    {
+      "network": "s11-upper25g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 106713,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 53966.08
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 126330,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 73171.2
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 130766,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 77281.28
+        }
+      ]
+    },
+    {
+      "network": "s29-all100g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 63825,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 14864.64
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 64380,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 15095.04
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 64384,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 15095.04
+        }
+      ]
+    },
+    {
+      "network": "s29-upper25g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 91465,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 40023.04
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 111417,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 59228.159999999996
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 112353,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 60380.16
+        }
+      ]
+    },
+    {
+      "network": "s47-all100g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 64075,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 14864.64
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 67850,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 18523.199999999997
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 69008,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 19435.52
+        }
+      ]
+    },
+    {
+      "network": "s47-upper25g",
+      "conditions": [
+        {
+          "condition": "contiguous",
+          "acked_ns": 109656,
+          "work_count": 36,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 14864.64,
+          "static_max_port_service_ns": 58536.96
+        },
+        {
+          "condition": "prefill_all_lpt",
+          "acked_ns": 126201,
+          "work_count": 45,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 73862.4
+        },
+        {
+          "condition": "prefill_tail10_lpt",
+          "acked_ns": 130226,
+          "work_count": 42,
+          "max_gpu_data_copies": 12,
+          "endpoint_service_ns": 15095.04,
+          "static_max_port_service_ns": 77742.08
+        }
+      ]
+    }
+  ],
+  "static_projection_checks": 2284,
+  "overall_comparisons": [
+    {
+      "network": "s11-all100g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 64071,
+      "right_ack_ns": 67850,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 64071,
+      "right_ack_ns": 69008,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-all100g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 67850,
+      "right_ack_ns": 69008,
+      "metrics": {
+        "work_count": "reverses",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 106713,
+      "right_ack_ns": 126330,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 106713,
+      "right_ack_ns": 130766,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s11-upper25g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 126330,
+      "right_ack_ns": 130766,
+      "metrics": {
+        "work_count": "reverses",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 63825,
+      "right_ack_ns": 64380,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 63825,
+      "right_ack_ns": 64384,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-all100g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 64380,
+      "right_ack_ns": 64384,
+      "metrics": {
+        "work_count": "reverses",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "metric_tie"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 91465,
+      "right_ack_ns": 112353,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 91465,
+      "right_ack_ns": 111417,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s29-upper25g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 112353,
+      "right_ack_ns": 111417,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 64075,
+      "right_ack_ns": 67850,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 64075,
+      "right_ack_ns": 69008,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-all100g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 67850,
+      "right_ack_ns": 69008,
+      "metrics": {
+        "work_count": "reverses",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "left": "contiguous",
+      "right": "prefill_all_lpt",
+      "left_ack_ns": 109656,
+      "right_ack_ns": 126201,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "left": "contiguous",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 109656,
+      "right_ack_ns": 130226,
+      "metrics": {
+        "work_count": "agrees",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "agrees",
+        "static_max_port_service_ns": "agrees"
+      }
+    },
+    {
+      "network": "s47-upper25g",
+      "left": "prefill_all_lpt",
+      "right": "prefill_tail10_lpt",
+      "left_ack_ns": 126201,
+      "right_ack_ns": 130226,
+      "metrics": {
+        "work_count": "reverses",
+        "max_gpu_data_copies": "metric_tie",
+        "endpoint_service_ns": "metric_tie",
+        "static_max_port_service_ns": "agrees"
+      }
+    }
+  ],
+  "overall_comparison_counts": {
+    "work_count": {
+      "agrees": 13,
+      "reverses": 5
+    },
+    "max_gpu_data_copies": {
+      "metric_tie": 18
+    },
+    "endpoint_service_ns": {
+      "agrees": 12,
+      "metric_tie": 6
+    },
+    "static_max_port_service_ns": {
+      "agrees": 17,
+      "metric_tie": 1
+    }
+  },
+  "scope": "post-run evaluation of fixed descriptive metrics; static metric uses only input; no prospective policy or independent-request claim"
+}

@@ -1,0 +1,7922 @@
+[
+  {
+    "case": "s11-all100g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 9985,
+    "acked_ns": 16009,
+    "duration_ns": 16009,
+    "critical": [
+      {
+        "work": 13,
+        "data_uid": 147,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 219,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "6>13>14>16>10>9>2",
+        "ack_path": "2>9>11>17>15>13>6",
+        "data_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 47
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s11-all100g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 16009,
+    "accepted_ns": 26073,
+    "acked_ns": 32097,
+    "duration_ns": 16088,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 258,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 2,
+      "port": 1,
+      "peer": 9,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s11-all100g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 32097,
+    "accepted_ns": 41955,
+    "acked_ns": 47979,
+    "duration_ns": 15882,
+    "critical": [
+      {
+        "work": 41,
+        "data_uid": 658,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 92,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>14>16>10>9>2",
+        "ack_path": "2>9>10>16>14>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 6
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 4,
+      "port": 1,
+      "peer": 12,
+      "tier": "access",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 3658.56
+    }
+  },
+  {
+    "case": "s11-all100g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 47979,
+    "accepted_ns": 58047,
+    "acked_ns": 64071,
+    "duration_ns": 16092,
+    "critical": [
+      {
+        "work": 51,
+        "data_uid": 928,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 262,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 7
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 10068,
+    "acked_ns": 16092,
+    "duration_ns": 16092,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 162,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 262,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 47
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 16092,
+    "accepted_ns": 27322,
+    "acked_ns": 33346,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 33346,
+    "accepted_ns": 44576,
+    "acked_ns": 50600,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 837,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 50600,
+    "accepted_ns": 61826,
+    "acked_ns": 67850,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1183,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 11230,
+    "acked_ns": 17254,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 163,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 17254,
+    "accepted_ns": 28484,
+    "acked_ns": 34508,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60016,
+      "serialization_lower_bound_ns": 4801.28
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 34508,
+    "accepted_ns": 45734,
+    "acked_ns": 51758,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 809,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s11-all100g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 51758,
+    "accepted_ns": 62984,
+    "acked_ns": 69008,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1109,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60016,
+      "serialization_lower_bound_ns": 4801.28
+    }
+  },
+  {
+    "case": "s11-upper25g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 21551,
+    "acked_ns": 27619,
+    "duration_ns": 27619,
+    "critical": [
+      {
+        "work": 13,
+        "data_uid": 147,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11305,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "6>13>14>16>10>9>2",
+        "ack_path": "2>9>11>17>15>13>6",
+        "data_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 6018
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5100
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 14,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s11-upper25g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 27619,
+    "accepted_ns": 49334,
+    "acked_ns": 55402,
+    "duration_ns": 27783,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11429,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 10906
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 339
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 3,
+      "peer": 10,
+      "tier": "tor_agg",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s11-upper25g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 55402,
+    "accepted_ns": 72694,
+    "acked_ns": 78762,
+    "duration_ns": 23360,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 643,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 2364,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 8208,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 7300
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 429
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 307
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 3,
+      "peer": 10,
+      "tier": "tor_agg",
+      "model_bytes": 31448,
+      "serialization_lower_bound_ns": 10063.36
+    }
+  },
+  {
+    "case": "s11-upper25g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 78762,
+    "accepted_ns": 100645,
+    "acked_ns": 106713,
+    "duration_ns": 27951,
+    "critical": [
+      {
+        "work": 51,
+        "data_uid": 928,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11597,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 10741
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 684
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 21850,
+    "acked_ns": 27918,
+    "duration_ns": 27918,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 162,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11564,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 11071
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 309
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 3,
+      "peer": 10,
+      "tier": "tor_agg",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 27918,
+    "accepted_ns": 54654,
+    "acked_ns": 60722,
+    "duration_ns": 32804,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16450,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 11026
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5252
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 60722,
+    "accepted_ns": 87458,
+    "acked_ns": 93526,
+    "duration_ns": 32804,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 837,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16450,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 11026
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5252
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 93526,
+    "accepted_ns": 120262,
+    "acked_ns": 126330,
+    "duration_ns": 32804,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1183,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16450,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 11056
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5222
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 26736,
+    "acked_ns": 32804,
+    "duration_ns": 32804,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 163,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16450,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 11041
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5237
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 32804,
+    "accepted_ns": 59315,
+    "acked_ns": 65383,
+    "duration_ns": 32579,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16225,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 10891
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5162
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60016,
+      "serialization_lower_bound_ns": 19205.12
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 65383,
+    "accepted_ns": 92119,
+    "acked_ns": 98187,
+    "duration_ns": 32804,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 809,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16450,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 10996
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5282
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s11-upper25g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 98187,
+    "accepted_ns": 124698,
+    "acked_ns": 130766,
+    "duration_ns": 32579,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1109,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16225,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 10891
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5162
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 60016,
+      "serialization_lower_bound_ns": 19205.12
+    }
+  },
+  {
+    "case": "s29-all100g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 9985,
+    "acked_ns": 16009,
+    "duration_ns": 16009,
+    "critical": [
+      {
+        "work": 13,
+        "data_uid": 147,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 219,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "6>13>15>17>11>9>2",
+        "ack_path": "2>9>11>17>15>13>6",
+        "data_waits": [
+          {
+            "node": 13,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 83
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 47
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s29-all100g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 16009,
+    "accepted_ns": 25950,
+    "acked_ns": 31974,
+    "duration_ns": 15965,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 135,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 2,
+      "port": 1,
+      "peer": 9,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s29-all100g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 31974,
+    "accepted_ns": 41832,
+    "acked_ns": 47856,
+    "duration_ns": 15882,
+    "critical": [
+      {
+        "work": 41,
+        "data_uid": 658,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 92,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>15>17>11>9>2",
+        "ack_path": "2>9>10>16>14>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 3
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 4,
+      "port": 1,
+      "peer": 12,
+      "tier": "access",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 3658.56
+    }
+  },
+  {
+    "case": "s29-all100g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 47856,
+    "accepted_ns": 57801,
+    "acked_ns": 63825,
+    "duration_ns": 15969,
+    "critical": [
+      {
+        "work": 51,
+        "data_uid": 928,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 139,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>11>17>15>13>6",
+        "ack_path": "6>13>15>17>11>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 6
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 47
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 10068,
+    "acked_ns": 16092,
+    "duration_ns": 16092,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 162,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 262,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 47
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 16092,
+    "accepted_ns": 26164,
+    "acked_ns": 32188,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 32188,
+    "accepted_ns": 42260,
+    "acked_ns": 48284,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 837,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 48284,
+    "accepted_ns": 58356,
+    "acked_ns": 64380,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1183,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 10072,
+    "acked_ns": 16096,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 163,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 16096,
+    "accepted_ns": 26168,
+    "acked_ns": 32192,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 32192,
+    "accepted_ns": 42264,
+    "acked_ns": 48288,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 809,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-all100g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 48288,
+    "accepted_ns": 58360,
+    "acked_ns": 64384,
+    "duration_ns": 16096,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1109,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 266,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 54
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s29-upper25g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 16863,
+    "acked_ns": 22931,
+    "duration_ns": 22931,
+    "critical": [
+      {
+        "work": 9,
+        "data_uid": 146,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 6617,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>15>17>11>9>2",
+        "ack_path": "2>9>10>16>14>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 6001
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 302
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 127
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 15,
+      "port": 2,
+      "peer": 13,
+      "tier": "tor_agg",
+      "model_bytes": 31448,
+      "serialization_lower_bound_ns": 10063.36
+    }
+  },
+  {
+    "case": "s29-upper25g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 22931,
+    "accepted_ns": 39712,
+    "acked_ns": 45780,
+    "duration_ns": 22849,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 6495,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>10>16>14>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6016
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 292
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 15,
+      "port": 2,
+      "peer": 13,
+      "tier": "tor_agg",
+      "model_bytes": 30728,
+      "serialization_lower_bound_ns": 9832.96
+    }
+  },
+  {
+    "case": "s29-upper25g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 45780,
+    "accepted_ns": 62301,
+    "acked_ns": 68369,
+    "duration_ns": 22589,
+    "critical": [
+      {
+        "work": 41,
+        "data_uid": 658,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 6275,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>15>17>11>9>2",
+        "ack_path": "2>9>10>16>14>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 6121
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 154
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 15,
+      "port": 2,
+      "peer": 13,
+      "tier": "tor_agg",
+      "model_bytes": 30728,
+      "serialization_lower_bound_ns": 9832.96
+    }
+  },
+  {
+    "case": "s29-upper25g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 68369,
+    "accepted_ns": 85397,
+    "acked_ns": 91465,
+    "duration_ns": 23096,
+    "critical": [
+      {
+        "work": 50,
+        "data_uid": 926,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 6782,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 90
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 202
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 172
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 8,
+      "port": 3,
+      "peer": 10,
+      "tier": "tor_agg",
+      "model_bytes": 32168,
+      "serialization_lower_bound_ns": 10293.76
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 22009,
+    "acked_ns": 28077,
+    "duration_ns": 28077,
+    "critical": [
+      {
+        "work": 2,
+        "data_uid": 116,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 2364,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 12925,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 7480
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5258
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 15095.04
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 28077,
+    "accepted_ns": 50131,
+    "acked_ns": 56199,
+    "duration_ns": 28122,
+    "critical": [
+      {
+        "work": 18,
+        "data_uid": 489,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11808,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5303
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 15095.04
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 56199,
+    "accepted_ns": 78208,
+    "acked_ns": 84276,
+    "duration_ns": 28077,
+    "critical": [
+      {
+        "work": 34,
+        "data_uid": 832,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11763,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5258
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 15095.04
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 84276,
+    "accepted_ns": 106285,
+    "acked_ns": 112353,
+    "duration_ns": 28077,
+    "critical": [
+      {
+        "work": 50,
+        "data_uid": 1179,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11763,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5258
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 15095.04
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 21871,
+    "acked_ns": 27939,
+    "duration_ns": 27939,
+    "critical": [
+      {
+        "work": 2,
+        "data_uid": 159,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11625,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5123
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 27939,
+    "accepted_ns": 49753,
+    "acked_ns": 55821,
+    "duration_ns": 27882,
+    "critical": [
+      {
+        "work": 18,
+        "data_uid": 489,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11568,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5063
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 55821,
+    "accepted_ns": 77467,
+    "acked_ns": 83535,
+    "duration_ns": 27714,
+    "critical": [
+      {
+        "work": 34,
+        "data_uid": 806,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11400,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6198
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5003
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s29-upper25g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 83535,
+    "accepted_ns": 105349,
+    "acked_ns": 111417,
+    "duration_ns": 27882,
+    "critical": [
+      {
+        "work": 50,
+        "data_uid": 1106,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11568,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>10>16>14>12>4",
+        "ack_path": "4>12>14>16>10>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 6318
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 5063
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 14,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 12,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 10,
+      "port": 3,
+      "peer": 16,
+      "tier": "agg_core",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s47-all100g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 9989,
+    "acked_ns": 16013,
+    "duration_ns": 16013,
+    "critical": [
+      {
+        "work": 9,
+        "data_uid": 146,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 223,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>15>17>11>9>2",
+        "ack_path": "2>9>11>17>15>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 123
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 11
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s47-all100g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 16013,
+    "accepted_ns": 26077,
+    "acked_ns": 32101,
+    "duration_ns": 16088,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 258,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 2,
+      "port": 1,
+      "peer": 9,
+      "tier": "access",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 3716.16
+    }
+  },
+  {
+    "case": "s47-all100g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 32101,
+    "accepted_ns": 41963,
+    "acked_ns": 47987,
+    "duration_ns": 15886,
+    "critical": [
+      {
+        "work": 41,
+        "data_uid": 658,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 96,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "4>12>15>17>11>9>2",
+        "ack_path": "2>9>11>17>15>12>4",
+        "data_waits": [
+          {
+            "node": 12,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 3
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 47
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 1,
+            "peer": 12,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 12,
+            "port": 1,
+            "peer": 4,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 4,
+      "port": 1,
+      "peer": 12,
+      "tier": "access",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 3658.56
+    }
+  },
+  {
+    "case": "s47-all100g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 47987,
+    "accepted_ns": 58051,
+    "acked_ns": 64075,
+    "duration_ns": 16088,
+    "critical": [
+      {
+        "work": 51,
+        "data_uid": 928,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 258,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>11>17>15>13>6",
+        "ack_path": "6>13>15>17>11>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 166
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 43
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 0,
+      "port": 1,
+      "peer": 8,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 10068,
+    "acked_ns": 16092,
+    "duration_ns": 16092,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 162,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 262,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 126
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 47
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 9,
+      "port": 1,
+      "peer": 2,
+      "tier": "access",
+      "model_bytes": 47172,
+      "serialization_lower_bound_ns": 3773.76
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 16092,
+    "accepted_ns": 27322,
+    "acked_ns": 33346,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 4916.48
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 33346,
+    "accepted_ns": 44576,
+    "acked_ns": 50600,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 837,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 4916.48
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 50600,
+    "accepted_ns": 61826,
+    "acked_ns": 67850,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1183,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 4916.48
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 11230,
+    "acked_ns": 17254,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 163,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 17254,
+    "accepted_ns": 28484,
+    "acked_ns": 34508,
+    "duration_ns": 17254,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1424,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 10
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 34508,
+    "accepted_ns": 45734,
+    "acked_ns": 51758,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 809,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s47-all100g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 51758,
+    "accepted_ns": 62984,
+    "acked_ns": 69008,
+    "duration_ns": 17250,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1109,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 240,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 1420,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 24,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 43
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 1328
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 43
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 6
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 4858.88
+    }
+  },
+  {
+    "case": "s47-upper25g-contiguous",
+    "step": 0,
+    "work_count": 10,
+    "ready_ns": 0,
+    "accepted_ns": 21566,
+    "acked_ns": 27634,
+    "duration_ns": 27634,
+    "critical": [
+      {
+        "work": 13,
+        "data_uid": 147,
+        "ack_uid": 299,
+        "components": {
+          "source_tail_offset_ns": 3526,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11320,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "6>13>15>17>11>9>2",
+        "ack_path": "2>9>10>16>14>13>6",
+        "data_waits": [
+          {
+            "node": 13,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 6033
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5115
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 11,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 9,
+            "port": 3,
+            "peer": 10,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 2,
+            "peer": 14,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 15,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s47-upper25g-contiguous",
+    "step": 1,
+    "work_count": 8,
+    "ready_ns": 27634,
+    "accepted_ns": 49325,
+    "acked_ns": 55393,
+    "duration_ns": 27759,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 419,
+        "ack_uid": 539,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11405,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10741
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 480
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 45732,
+      "serialization_lower_bound_ns": 14634.24
+    }
+  },
+  {
+    "case": "s47-upper25g-contiguous",
+    "step": 2,
+    "work_count": 8,
+    "ready_ns": 55393,
+    "accepted_ns": 75691,
+    "acked_ns": 81759,
+    "duration_ns": 26366,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 643,
+        "ack_uid": 779,
+        "components": {
+          "source_tail_offset_ns": 2364,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11214,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 7195
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 375
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 202
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 3442
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 15,
+      "port": 2,
+      "peer": 13,
+      "tier": "tor_agg",
+      "model_bytes": 45012,
+      "serialization_lower_bound_ns": 14403.84
+    }
+  },
+  {
+    "case": "s47-upper25g-contiguous",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 81759,
+    "accepted_ns": 103588,
+    "acked_ns": 109656,
+    "duration_ns": 27897,
+    "critical": [
+      {
+        "work": 51,
+        "data_uid": 928,
+        "ack_uid": 1079,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11543,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "0>8>11>17>15>13>6",
+        "ack_path": "6>13>15>17>11>8>0",
+        "data_waits": [
+          {
+            "node": 8,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 6241
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5115
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 187
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 4,
+            "peer": 15,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 15,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 17,
+            "port": 1,
+            "peer": 11,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 11,
+            "port": 1,
+            "peer": 8,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 8,
+            "port": 1,
+            "peer": 0,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_all_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 21799,
+    "acked_ns": 27867,
+    "duration_ns": 27867,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 162,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 11513,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10846
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 495
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 46452,
+      "serialization_lower_bound_ns": 14864.64
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_all_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 27867,
+    "accepted_ns": 54591,
+    "acked_ns": 60659,
+    "duration_ns": 32792,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16438,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10906
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5348
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 19665.92
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_all_lpt",
+    "step": 2,
+    "work_count": 12,
+    "ready_ns": 60659,
+    "accepted_ns": 87341,
+    "acked_ns": 93409,
+    "duration_ns": 32750,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 837,
+        "ack_uid": 1019,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16396,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10846
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5378
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 19665.92
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_all_lpt",
+    "step": 3,
+    "work_count": 11,
+    "ready_ns": 93409,
+    "accepted_ns": 120133,
+    "acked_ns": 126201,
+    "duration_ns": 32792,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1183,
+        "ack_uid": 1349,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16438,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10846
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5408
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 61456,
+      "serialization_lower_bound_ns": 19665.92
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_tail10_lpt",
+    "step": 0,
+    "work_count": 11,
+    "ready_ns": 0,
+    "accepted_ns": 26457,
+    "acked_ns": 32525,
+    "duration_ns": 32525,
+    "critical": [
+      {
+        "work": 7,
+        "data_uid": 163,
+        "ack_uid": 329,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16171,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10846
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5153
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_tail10_lpt",
+    "step": 1,
+    "work_count": 11,
+    "ready_ns": 32525,
+    "accepted_ns": 59024,
+    "acked_ns": 65092,
+    "duration_ns": 32567,
+    "critical": [
+      {
+        "work": 23,
+        "data_uid": 493,
+        "ack_uid": 659,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16213,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10741
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5288
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_tail10_lpt",
+    "step": 2,
+    "work_count": 10,
+    "ready_ns": 65092,
+    "accepted_ns": 91591,
+    "acked_ns": 97659,
+    "duration_ns": 32567,
+    "critical": [
+      {
+        "work": 39,
+        "data_uid": 809,
+        "ack_uid": 959,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16213,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10846
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5183
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  },
+  {
+    "case": "s47-upper25g-prefill_tail10_lpt",
+    "step": 3,
+    "work_count": 10,
+    "ready_ns": 97659,
+    "accepted_ns": 124158,
+    "acked_ns": 130226,
+    "duration_ns": 32567,
+    "critical": [
+      {
+        "work": 55,
+        "data_uid": 1109,
+        "ack_uid": 1259,
+        "components": {
+          "source_tail_offset_ns": 3566,
+          "data_serialization_ns": 720,
+          "data_propagation_ns": 6000,
+          "data_switch_wait_ns": 16213,
+          "ack_generation_gap_ns": 0,
+          "ack_serialization_ns": 68,
+          "ack_propagation_ns": 6000,
+          "ack_switch_wait_ns": 0
+        },
+        "data_path": "2>9>11>17>15>13>6",
+        "ack_path": "6>13>14>16>10>9>2",
+        "data_waits": [
+          {
+            "node": 9,
+            "port": 4,
+            "peer": 11,
+            "tier": "tor_agg",
+            "wait_ns": 10741
+          },
+          {
+            "node": 11,
+            "port": 3,
+            "peer": 17,
+            "tier": "agg_core",
+            "wait_ns": 5288
+          },
+          {
+            "node": 17,
+            "port": 2,
+            "peer": 15,
+            "tier": "agg_core",
+            "wait_ns": 172
+          },
+          {
+            "node": 15,
+            "port": 2,
+            "peer": 13,
+            "tier": "tor_agg",
+            "wait_ns": 12
+          },
+          {
+            "node": 13,
+            "port": 1,
+            "peer": 6,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ],
+        "ack_waits": [
+          {
+            "node": 13,
+            "port": 3,
+            "peer": 14,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 14,
+            "port": 3,
+            "peer": 16,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 16,
+            "port": 1,
+            "peer": 10,
+            "tier": "agg_core",
+            "wait_ns": 0
+          },
+          {
+            "node": 10,
+            "port": 2,
+            "peer": 9,
+            "tier": "tor_agg",
+            "wait_ns": 0
+          },
+          {
+            "node": 9,
+            "port": 1,
+            "peer": 2,
+            "tier": "access",
+            "wait_ns": 0
+          }
+        ]
+      }
+    ],
+    "busiest_port": {
+      "node": 11,
+      "port": 3,
+      "peer": 17,
+      "tier": "agg_core",
+      "model_bytes": 60736,
+      "serialization_lower_bound_ns": 19435.52
+    }
+  }
+]

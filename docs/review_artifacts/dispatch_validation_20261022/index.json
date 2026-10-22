@@ -1,0 +1,117 @@
+{
+  "config": {
+    "schema_version": "moe-dispatch-validation/1",
+    "source_windows": [
+      {
+        "layer": 4,
+        "entry": 5
+      },
+      {
+        "layer": 4,
+        "entry": 6
+      },
+      {
+        "layer": 32,
+        "entry": 5
+      },
+      {
+        "layer": 32,
+        "entry": 6
+      }
+    ],
+    "placements_sha256": "dcdf9220498839182591250f114d85f75bbe851e376c9bf828a82c384964d3e7",
+    "logical_to_gpu": [
+      0,
+      2,
+      4,
+      6
+    ],
+    "token_bytes": 14464,
+    "queue_depth": 1,
+    "wire_port_base": 21000,
+    "placement_conditions": [
+      "contiguous",
+      "prefill_all_lpt",
+      "prefill_tail10_lpt"
+    ],
+    "network_profiles": {
+      "s11-all100g": 100000000000,
+      "s11-upper25g": 25000000000,
+      "s29-all100g": 100000000000,
+      "s29-upper25g": 25000000000,
+      "s47-all100g": 100000000000,
+      "s47-upper25g": 25000000000
+    },
+    "network_seeds": {
+      "s11-all100g": 11,
+      "s11-upper25g": 11,
+      "s29-all100g": 29,
+      "s29-upper25g": 29,
+      "s47-all100g": 47,
+      "s47-upper25g": 47
+    }
+  },
+  "artifacts": {
+    "protocol-s11-all100g.json": {
+      "sha256": "4fc87b8430a407b84ff137a6c4aa54403e41cb8300890a2f9b0b926372467cc9",
+      "bytes": 925
+    },
+    "protocol-s11-upper25g.json": {
+      "sha256": "4fc87b8430a407b84ff137a6c4aa54403e41cb8300890a2f9b0b926372467cc9",
+      "bytes": 925
+    },
+    "protocol-s29-all100g.json": {
+      "sha256": "d29d852cda5fe6b49bab34d5278892866b79ac8018c27637c3ceb88c8a210b77",
+      "bytes": 925
+    },
+    "protocol-s29-upper25g.json": {
+      "sha256": "d29d852cda5fe6b49bab34d5278892866b79ac8018c27637c3ceb88c8a210b77",
+      "bytes": 925
+    },
+    "protocol-s47-all100g.json": {
+      "sha256": "cb17ea7abc6fae61e195b6dc7104b9bed4920cd8953016f68c570d66ae73012f",
+      "bytes": 925
+    },
+    "protocol-s47-upper25g.json": {
+      "sha256": "cb17ea7abc6fae61e195b6dc7104b9bed4920cd8953016f68c570d66ae73012f",
+      "bytes": 925
+    },
+    "topology-s11-all100g.json": {
+      "sha256": "0d5602a4fdfca77832299ec277d6399c7a4ef1e024b1133ebf0bd45f8af81136",
+      "bytes": 1099
+    },
+    "topology-s11-upper25g.json": {
+      "sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed",
+      "bytes": 1096
+    },
+    "topology-s29-all100g.json": {
+      "sha256": "0d5602a4fdfca77832299ec277d6399c7a4ef1e024b1133ebf0bd45f8af81136",
+      "bytes": 1099
+    },
+    "topology-s29-upper25g.json": {
+      "sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed",
+      "bytes": 1096
+    },
+    "topology-s47-all100g.json": {
+      "sha256": "0d5602a4fdfca77832299ec277d6399c7a4ef1e024b1133ebf0bd45f8af81136",
+      "bytes": 1099
+    },
+    "topology-s47-upper25g.json": {
+      "sha256": "1d92d5c3497fb42dcede3fabd7a49328973b3acc145944696c18d83f09a781ed",
+      "bytes": 1096
+    },
+    "work-contiguous.json": {
+      "sha256": "e11c773c3dafe85598284b1f02b2e1f175bf88c752588f979b12449d1d50a3e0",
+      "bytes": 21246
+    },
+    "work-prefill_all_lpt.json": {
+      "sha256": "bc9fbf9839c289e1aa5b4b52634bea22104f2b4f1a866c86ac6f512ab5abdf02",
+      "bytes": 33329
+    },
+    "work-prefill_tail10_lpt.json": {
+      "sha256": "cf5a293bd06bff4f9445fe4bd9cdc15d544e534f90c3b98ca151451915c27ef4",
+      "bytes": 29267
+    }
+  },
+  "scope": "new packet windows and ECMP seeds, same four requests; Dispatch data only"
+}

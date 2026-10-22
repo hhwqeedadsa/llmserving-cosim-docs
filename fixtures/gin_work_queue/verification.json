@@ -1,0 +1,61 @@
+{
+  "state": "passed",
+  "cwd": "/home/lry/moe-ub-cosim",
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/c++",
+        "--version"
+      ],
+      "exitcode": 0,
+      "wall_seconds": 0.004367366433143616
+    },
+    {
+      "argv": [
+        "/usr/bin/c++",
+        "-std=c++17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic",
+        "-I/home/lry/moe-ub-cosim/backend",
+        "/home/lry/moe-ub-cosim/tests/unit/gin_work_queue_test.cc",
+        "-o",
+        "/home/lry/moe-ub-cosim/runs/gin_work_queue_final_20261022/gin-work-queue-test"
+      ],
+      "exitcode": 0,
+      "wall_seconds": 0.7664676662534475
+    },
+    {
+      "argv": [
+        "/home/lry/moe-ub-cosim/runs/gin_work_queue_final_20261022/gin-work-queue-test"
+      ],
+      "exitcode": 0,
+      "wall_seconds": 0.00614110566675663
+    }
+  ],
+  "network_execution": false,
+  "timed": false,
+  "hardware_calibrated": false,
+  "budgets": {
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "output_bytes": 8388608
+  },
+  "sources": {
+    "backend/rdma/gin_work_queue.hh": "97186f80c0552f86500f5c1a02dcc28aba48662a3b562be8a9138e06aa3849fd",
+    "tests/unit/gin_work_queue_test.cc": "48de0c51216379cf89848def9b012b79eb1fe5b94e55ba7be1ea5b5f48919569"
+  },
+  "checks": {
+    "passed": true,
+    "checks": 3241,
+    "explored_states": 49,
+    "appended_work": 1024,
+    "network_execution": false,
+    "timed": false
+  },
+  "wall_seconds": 0.7802250608801842,
+  "peak_child_rss_kib": 107744,
+  "output_bytes_before_manifest": 155425
+}

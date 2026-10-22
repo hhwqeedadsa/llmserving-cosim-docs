@@ -1,0 +1,584 @@
+{
+  "platform_base_commit": "14363c9de0fc108e35535dba04a2f519eb1abaa9",
+  "probes": [
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/prepare_placement_baselines.py",
+        "--manifest",
+        "data/moe-trace-small/manifest.json",
+        "--output",
+        "/dev/shm/moe-eplb-groups-20261022/prepared"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:57:51.356920+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26947584,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-eplb-groups-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 999424,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 980906,
+      "peak_sampled_artifact_allocated_bytes": 999424,
+      "process_group": 1713298,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:57:51.593061+00:00",
+      "wall_seconds": 0.23614281602203846,
+      "max_waited_child_rss_kib": 27340,
+      "artifact_bytes_before_report": 787,
+      "aggregate_artifact_bytes_before_report": 999424,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 980906,
+        "allocated_bytes": 999424
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/plan_eplb_groups.py",
+        "--observed",
+        "/dev/shm/moe-eplb-groups-20261022/prepared/observed",
+        "--reference-placements",
+        "docs/review_artifacts/prefill_placement_20261022/placements.json",
+        "--reference-source",
+        "/dev/shm/moe-topology-baselines-code-20261022/eplb.py",
+        "--output",
+        "/dev/shm/moe-eplb-groups-20261022/planned"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:58:05.618707+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 7499776,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-eplb-groups-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1183744,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1149997,
+      "peak_sampled_artifact_allocated_bytes": 1183744,
+      "process_group": 1713333,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:58:05.747950+00:00",
+      "wall_seconds": 0.1292457263916731,
+      "max_waited_child_rss_kib": 17656,
+      "artifact_bytes_before_report": 836,
+      "aggregate_artifact_bytes_before_report": 1183744,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1149997,
+        "allocated_bytes": 1183744
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/evaluate_placement_baselines.py",
+        "--prepared",
+        "/dev/shm/moe-eplb-groups-20261022/prepared",
+        "--placements",
+        "/dev/shm/moe-eplb-groups-20261022/planned",
+        "--output",
+        "/dev/shm/moe-eplb-groups-20261022/evaluated"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:58:29.907861+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 26398720,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-eplb-groups-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 3600384,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 3556843,
+      "peak_sampled_artifact_allocated_bytes": 3600384,
+      "process_group": 1713371,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:58:30.707089+00:00",
+      "wall_seconds": 0.7992413118481636,
+      "max_waited_child_rss_kib": 25780,
+      "artifact_bytes_before_report": 3352,
+      "aggregate_artifact_bytes_before_report": 3600384,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 3556843,
+        "allocated_bytes": 3600384
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "/home/lry/moe-ub-cosim/experiments/paper_readiness/plan_eplb_groups.py",
+        "--observed",
+        "/dev/shm/moe-eplb-groups-20261022/relocated-observed",
+        "--reference-placements",
+        "/home/lry/moe-ub-cosim/docs/review_artifacts/prefill_placement_20261022/placements.json",
+        "--reference-source",
+        "/dev/shm/moe-topology-baselines-code-20261022/eplb.py",
+        "--output",
+        "/dev/shm/moe-eplb-groups-20261022/repeat-planned"
+      ],
+      "cwd": "/dev/shm",
+      "started_utc": "2026-10-22T18:58:30.815502+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 7499776,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-eplb-groups-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 3854336,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 3788056,
+      "peak_sampled_artifact_allocated_bytes": 3854336,
+      "process_group": 1713378,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:58:30.947399+00:00",
+      "wall_seconds": 0.13189967535436153,
+      "max_waited_child_rss_kib": 17656,
+      "artifact_bytes_before_report": 838,
+      "aggregate_artifact_bytes_before_report": 3854336,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 3788056,
+        "allocated_bytes": 3854336
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_eplb_groups.py",
+        "--work",
+        "/dev/shm/moe-eplb-groups-20261022",
+        "--source-commits",
+        "/dev/shm/moe-topology-baselines-commits-20261022",
+        "--source-trees",
+        "/dev/shm/moe-topology-baselines-trees-20261022",
+        "--source-code",
+        "/dev/shm/moe-topology-baselines-code-20261022",
+        "--output",
+        "/dev/shm/moe-eplb-groups-20261022/verified"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T19:00:03.236146+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 37548032,
+      "peak_sampled_processes": 1,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-eplb-groups-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 3878912,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 3795453,
+      "peak_sampled_artifact_allocated_bytes": 3878912,
+      "process_group": 1713657,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T19:00:04.140102+00:00",
+      "wall_seconds": 0.9039666838943958,
+      "max_waited_child_rss_kib": 36668,
+      "artifact_bytes_before_report": 2828,
+      "aggregate_artifact_bytes_before_report": 3878912,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 3795453,
+        "allocated_bytes": 3878912
+      }
+    }
+  ],
+  "source_probes": [
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-discovery-20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:52:03.068200+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 43732992,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-discovery-20261022",
+        "/dev/shm/moe-topology-baselines-discovery-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 1978368,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 1954608,
+      "peak_sampled_artifact_allocated_bytes": 1978368,
+      "process_group": 1712137,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:52:07.149578+00:00",
+      "wall_seconds": 4.081386160105467,
+      "max_waited_child_rss_kib": 18724,
+      "artifact_bytes_before_report": 11368,
+      "aggregate_artifact_bytes_before_report": 1978368,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 1954608,
+        "allocated_bytes": 1978368
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-primary-20261022",
+        "--source",
+        "ta-moe-abstract.html=https://proceedings.neurips.cc/paper_files/paper/2022/hash/8b465dd58ac50e1b0b22894fd581f62f-Abstract-Conference.html",
+        "--source",
+        "exflow-v2.pdf=https://arxiv.org/pdf/2401.08383v2"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:52:52.289472+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 39624704,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-primary-20261022",
+        "/dev/shm/moe-topology-baselines-primary-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 45056,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 15020,
+      "peak_sampled_artifact_allocated_bytes": 45056,
+      "process_group": 1712330,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:52:53.390475+00:00",
+      "wall_seconds": 1.1010064631700516,
+      "max_waited_child_rss_kib": 17708,
+      "artifact_bytes_before_report": 3113,
+      "aggregate_artifact_bytes_before_report": 45056,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 15020,
+        "allocated_bytes": 45056
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-paper-20261022",
+        "--source",
+        "ta-moe.pdf=https://proceedings.neurips.cc/paper_files/paper/2022/file/8b465dd58ac50e1b0b22894fd581f62f-Paper-Conference.pdf",
+        "--source",
+        "ta-moe-supplement.pdf=https://proceedings.neurips.cc/paper_files/paper/2022/file/8b465dd58ac50e1b0b22894fd581f62f-Supplemental-Conference.pdf"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:53:32.062440+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 42643456,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-paper-20261022",
+        "/dev/shm/moe-topology-baselines-paper-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 839680,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 809990,
+      "peak_sampled_artifact_allocated_bytes": 839680,
+      "process_group": 1712526,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:53:34.255810+00:00",
+      "wall_seconds": 2.1933804024010897,
+      "max_waited_child_rss_kib": 18724,
+      "artifact_bytes_before_report": 6597,
+      "aggregate_artifact_bytes_before_report": 839680,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 809990,
+        "allocated_bytes": 839680
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-commits-20261022",
+        "--source",
+        "ta-moe-commit.json=https://api.github.com/repos/Chen-Chang/TA-MoE/commits?per_page=1",
+        "--source",
+        "eplb-commit.json=https://api.github.com/repos/deepseek-ai/EPLB/commits?per_page=1"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:54:31.351758+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 42737664,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-commits-probe-20261022",
+        "/dev/shm/moe-topology-baselines-commits-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 36864,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 10117,
+      "peak_sampled_artifact_allocated_bytes": 36864,
+      "process_group": 1712738,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:54:32.468677+00:00",
+      "wall_seconds": 1.1169360615313053,
+      "max_waited_child_rss_kib": 16612,
+      "artifact_bytes_before_report": 3399,
+      "aggregate_artifact_bytes_before_report": 36864,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 10117,
+        "allocated_bytes": 36864
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-trees-20261022",
+        "--source",
+        "ta-moe-tree.json=https://api.github.com/repos/Chen-Chang/TA-MoE/git/trees/16f0f795e6484f9b95487cdc6df4389c984cdcaa?recursive=1",
+        "--source",
+        "eplb-tree.json=https://api.github.com/repos/deepseek-ai/EPLB/git/trees/f788d971bdb799daca6a4f5afd13a1508249f008?recursive=1"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:54:57.164710+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 41820160,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-trees-20261022",
+        "/dev/shm/moe-topology-baselines-trees-probe-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 200704,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 171572,
+      "peak_sampled_artifact_allocated_bytes": 200704,
+      "process_group": 1712792,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:54:58.830216+00:00",
+      "wall_seconds": 1.6655139476060867,
+      "max_waited_child_rss_kib": 18740,
+      "artifact_bytes_before_report": 4836,
+      "aggregate_artifact_bytes_before_report": 200704,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 171572,
+        "allocated_bytes": 200704
+      }
+    },
+    {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/collect_topology_baselines.py",
+        "--output",
+        "/dev/shm/moe-topology-baselines-code-20261022",
+        "--source",
+        "eplb-README.md=https://raw.githubusercontent.com/deepseek-ai/EPLB/d52c72d5b2f2fb4c41afbf8eb21366820239913d/README.md",
+        "--source",
+        "eplb.py=https://raw.githubusercontent.com/deepseek-ai/EPLB/d52c72d5b2f2fb4c41afbf8eb21366820239913d/eplb.py",
+        "--source",
+        "ta-gshard-gate.py=https://raw.githubusercontent.com/Chen-Chang/TA-MoE/b3aff038bba430f34790e1cd196821d37da7226a/examples/language_model/moe/dygraph/moe/gate/gshard_gate.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-22T18:55:39.049423+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 33554432,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 55762944,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-topology-baselines-code-probe-20261022",
+        "/dev/shm/moe-topology-baselines-code-20261022"
+      ],
+      "peak_sampled_artifact_bytes": 53248,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 22013,
+      "peak_sampled_artifact_allocated_bytes": 53248,
+      "process_group": 1712910,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-22T18:55:40.258907+00:00",
+      "wall_seconds": 1.2094926163554192,
+      "max_waited_child_rss_kib": 17684,
+      "artifact_bytes_before_report": 3938,
+      "aggregate_artifact_bytes_before_report": 53248,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 22013,
+        "allocated_bytes": 53248
+      }
+    }
+  ],
+  "scripts_sha256": {
+    "prepare_placement_baselines.py": "fdaf7f7ef71e4a14a35ac5fd999deafa248df916a767656a8cdc825c037781c3",
+    "evaluate_placement_baselines.py": "9a8232dfd9932590cdac79101db6067354da427304186a90ca384ac98adffce4",
+    "plan_eplb_groups.py": "7dfa8df0edd8f3802b88575caba121526ded175d2a8ca69bd5b2beef0e00687f",
+    "check_eplb_groups.py": "9a20913531c2e1820fd4b913030b5b41d29bb20088f58b8895d230e57c74c83f",
+    "collect_topology_baselines.py": "097745851f126fe1f10bbdb7f7dd0fb0e460746cde03d16bb3796ca228b2d044",
+    "build_eplb_review.py": "333663b129fe79e38795bfc38787d93ba9922ed4497a41db7ed65d829655ec41",
+    "eplb_group_protocol.md": "bead9bd45c4b1a453c9c85b71f31c96142cd329c6be9c5ba2a9274e648670e06",
+    "README.md": "ee9c12bda5ca2dc30111268fbd5eb524c5fd70c1129c03e0984f83bf3f87a2bf"
+  },
+  "group_weight_tie_layers": {
+    "eplb_hier_all_adapter": [
+      6,
+      20,
+      23,
+      30,
+      32,
+      46
+    ],
+    "eplb_hier_tail10_adapter": [
+      4,
+      5,
+      7,
+      10,
+      12,
+      18,
+      21,
+      22,
+      24,
+      27,
+      28,
+      31,
+      37,
+      38,
+      40,
+      45,
+      47,
+      50,
+      52,
+      55,
+      56,
+      57,
+      58,
+      60
+    ]
+  },
+  "upstream_eplb_runtime_executed": false,
+  "new_network_executed": false,
+  "gpu_executed": false,
+  "goal_complete": false
+}

@@ -1,0 +1,132 @@
+{
+  "completed": true,
+  "archive_sha_verified": true,
+  "archived_files_hash_checked": 144,
+  "html_links_checked": 15,
+  "scripts_match_manifest": true,
+  "syntax_cli_help_checked": [
+    "collect_topology_baselines.py",
+    "plan_eplb_groups.py",
+    "check_eplb_groups.py",
+    "build_eplb_review.py"
+  ],
+  "dependency_check_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "bash",
+      "scripts/check_deps.sh"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-22T19:05:03.796253+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 67108864,
+      "wall_seconds": 60.0
+    },
+    "peak_sampled_group_rss_bytes": 20226048,
+    "peak_sampled_processes": 2,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-eplb-groups-20261022"
+    ],
+    "peak_sampled_artifact_bytes": 3895296,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 3802305,
+    "peak_sampled_artifact_allocated_bytes": 3895296,
+    "process_group": 1714588,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-22T19:05:04.247544+00:00",
+    "wall_seconds": 0.4512999076396227,
+    "max_waited_child_rss_kib": 19684,
+    "artifact_bytes_before_report": 3812,
+    "aggregate_artifact_bytes_before_report": 3895296,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 3802305,
+      "allocated_bytes": 3895296
+    }
+  },
+  "packaging_probe": {
+    "schema_version": "moe-ub-host-probe/1",
+    "command": [
+      "python3",
+      "experiments/paper_readiness/build_eplb_review.py",
+      "--work",
+      "/dev/shm/moe-eplb-groups-20261022",
+      "--source-group",
+      "discovery=/dev/shm/moe-topology-baselines-discovery-20261022",
+      "--source-group",
+      "primary=/dev/shm/moe-topology-baselines-primary-20261022",
+      "--source-group",
+      "paper=/dev/shm/moe-topology-baselines-paper-20261022",
+      "--source-group",
+      "commits=/dev/shm/moe-topology-baselines-commits-20261022",
+      "--source-group",
+      "trees=/dev/shm/moe-topology-baselines-trees-20261022",
+      "--source-group",
+      "code=/dev/shm/moe-topology-baselines-code-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-discovery-probe-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-primary-probe-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-paper-probe-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-commits-probe-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-trees-probe-20261022",
+      "--source-probe",
+      "/dev/shm/moe-topology-baselines-code-probe-20261022",
+      "--output",
+      "docs/review_artifacts/eplb_groups_20261022",
+      "--checkpoint",
+      "runs/eplb_groups_checkpoint_20261022"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "started_utc": "2026-10-22T19:05:03.791480+00:00",
+    "limits": {
+      "sampled_group_rss_bytes": 1073741824,
+      "per_process_address_bytes": 2147483648,
+      "artifact_bytes": 67108864,
+      "wall_seconds": 60.0
+    },
+    "peak_sampled_group_rss_bytes": 22646784,
+    "peak_sampled_processes": 1,
+    "status": "completed",
+    "workload_semantics_validated": false,
+    "artifact_roots": [
+      "/dev/shm/moe-eplb-groups-20261022",
+      "/home/lry/moe-ub-cosim/runs/eplb_groups_checkpoint_20261022",
+      "/home/lry/moe-ub-cosim/docs/review_artifacts/eplb_groups_20261022"
+    ],
+    "peak_sampled_artifact_bytes": 6443008,
+    "min_free_bytes": 8589934592,
+    "rss_scope": "owned_process_tree_including_detached_descendants",
+    "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+    "disk_sample_interval_seconds": 1.0,
+    "peak_sampled_artifact_apparent_bytes": 6319887,
+    "peak_sampled_artifact_allocated_bytes": 6443008,
+    "process_group": 1714586,
+    "child_exit_code": 0,
+    "remaining_live_group_pids": [],
+    "ended_utc": "2026-10-22T19:05:07.665966+00:00",
+    "wall_seconds": 3.874490447342396,
+    "max_waited_child_rss_kib": 24164,
+    "artifact_bytes_before_report": 9473,
+    "aggregate_artifact_bytes_before_report": 6443008,
+    "aggregate_artifact_usage_before_report": {
+      "apparent_bytes": 6319887,
+      "allocated_bytes": 6443008
+    }
+  },
+  "diff_whitespace_check_exit_code": 0,
+  "archive_includes_this_maintenance": false,
+  "new_network_executed": false,
+  "gpu_executed": false,
+  "goal_complete": false
+}

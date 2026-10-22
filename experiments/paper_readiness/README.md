@@ -528,3 +528,47 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
 ```
 
 来源采集器`collect_placement_sources.py --output 新目录`只用于新的明确资料采集，沿同一probe预算包裹；本轮已取得固定MoETuner v1，HF元数据超时0B，没有重试。复现指标不运行它。`collect_mapping_holdout.py`在本轮修正递归subject目录查询、名称排序与同名拒绝，但修正版未远端执行；原失败脚本及记录在检查点中，不宣称新请求已经取得。文献比较不是穷尽检索，MoETuner优化器尚未复现，旧本机config也不是历史采集模型身份的证明。
+
+## 分层EPLB强基线与拓扑感知近邻
+
+方法先见[eplb_group_protocol.md](eplb_group_protocol.md)，实际结果见[报告HTML](../../docs/review_artifacts/eplb_groups_20261022/report.html)。本轮对比五条件：连续、全/尾Prefill单专家计数LPT、全/尾Prefill组计数的分层EPLB思路适配。固定EP4/四节点各一个活动GPU、256物理专家、零额外副本；不执行官方torch代码，显式定义平局规则，不声称原版运行时复现。分层副本接近连续，但计算输入p95没有保住单专家LPT的改善；不是新方法收益或延迟结论。
+
+指标复现不联网、不安装。按[归档清单](../../docs/review_artifacts/eplb_groups_20261022/archive.json)恢复四原件到`data/moe-trace-small/`，其余资料恢复到自己的输入目录；下例`COSIM_EPLB_INPUT`是恢复根，含`sources/code/`、`sources/commits/`、`sources/trees/`。创建新的工作目录，在主仓库根执行。已有准备与评价脚本通过CLI复用，平台没有新增功能或依赖。
+
+```bash
+COSIM_EPLB_WORK=/dev/shm/my-eplb-groups
+COSIM_EPLB_INPUT=/绝对路径/已恢复的检查点根
+mkdir "$COSIM_EPLB_WORK"
+eplb_stage() {
+  local eplb_stage_name=$1
+  shift
+  PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_EPLB_WORK/$eplb_stage_name-probe" --artifact-root "$COSIM_EPLB_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+eplb_stage prepare python3 experiments/paper_readiness/prepare_placement_baselines.py \
+  --manifest data/moe-trace-small/manifest.json --output "$COSIM_EPLB_WORK/prepared"
+eplb_stage plan python3 experiments/paper_readiness/plan_eplb_groups.py \
+  --observed "$COSIM_EPLB_WORK/prepared/observed" \
+  --reference-placements docs/review_artifacts/prefill_placement_20261022/placements.json \
+  --reference-source "$COSIM_EPLB_INPUT/sources/code/eplb.py" --output "$COSIM_EPLB_WORK/planned"
+eplb_stage evaluate python3 experiments/paper_readiness/evaluate_placement_baselines.py \
+  --prepared "$COSIM_EPLB_WORK/prepared" --placements "$COSIM_EPLB_WORK/planned" \
+  --output "$COSIM_EPLB_WORK/evaluated"
+cp -r "$COSIM_EPLB_WORK/prepared/observed" "$COSIM_EPLB_WORK/relocated-observed"
+eplb_stage repeat-plan python3 experiments/paper_readiness/plan_eplb_groups.py \
+  --observed "$COSIM_EPLB_WORK/relocated-observed" \
+  --reference-placements docs/review_artifacts/prefill_placement_20261022/placements.json \
+  --reference-source "$COSIM_EPLB_INPUT/sources/code/eplb.py" --output "$COSIM_EPLB_WORK/repeat-planned"
+eplb_stage check python3 experiments/paper_readiness/check_eplb_groups.py \
+  --work "$COSIM_EPLB_WORK" --source-commits "$COSIM_EPLB_INPUT/sources/commits" \
+  --source-trees "$COSIM_EPLB_INPUT/sources/trees" --source-code "$COSIM_EPLB_INPUT/sources/code" \
+  --output "$COSIM_EPLB_WORK/verified"
+```
+
+每命令60秒/RSS1GiB/地址2GiB，单阶段32MiB、新产物64MiB/累计128MiB、预留8GiB，输出目录必须新建。准备将Decode与来源放truth；规划仅读observed和已固定的Prefill放置/公开源码身份，checker回查原件、逐决策最小负载、逐窗口矩阵、分布和配对。正式本轮的observed重复还换了cwd；该操作是离线规划，未重跑模型或网络。
+
+`collect_topology_baselines.py`默认只读NeurIPS2022目录与ExFlow精确标题的arXiv元数据；`--source NAME=HTTPS_URL`用于从前一步实际取得的精确链接取文，单批最多3请求。各响应2MiB/20秒，整轮累计16MiB，由host_probe限60秒；不重试、换源、执行下载代码或初始化依赖。本轮TA-MoE正文/补充及固定gate、EPLB固定README/源码已取得，ExFlow PDF超大小上限未取得；复现指标不重新联网。
+
+`build_eplb_review.py --work 工作目录 --source-group NAME=目录 --source-probe PROBE目录 --output 仓库内新报告目录 --checkpoint 仓库内新归档目录`生成固定本轮报告与逐文件hash检查点。`--source-group`必须提供`discovery/primary/paper/commits/trees/code`六项，source probe按六阶段分别传入。它要求prepare/plan/evaluate/repeat-plan/check五个probe与核验结果，单独用同样预算的host_probe包裹，并将报告/归档路径加入artifact-root。报告对应固定事实，不能用任意新输入自动生成原结论。

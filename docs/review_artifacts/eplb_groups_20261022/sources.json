@@ -1,0 +1,207 @@
+{
+  "collections": {
+    "discovery": {
+      "requests": [
+        {
+          "name": "neurips2022.html",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2022",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 3.9201913960278034,
+          "bytes": 1936963,
+          "sha256": "a7a50e3897323a5f71bbf5bc71dbc42a4397a6ec6ab9cc6350ece1c895b6951d"
+        },
+        {
+          "name": "exflow-arxiv.xml",
+          "url": "https://export.arxiv.org/api/query?search_query=ti%3A%22Exploiting+inter-layer+expert+affinity%22&start=0&max_results=3",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.9764724504202604,
+          "bytes": 3958,
+          "sha256": "50826d5feb9eed8f1f449548662b97068d40f6b7637484cff999d8ca434ec781"
+        }
+      ],
+      "wall_seconds": 3.926103515550494,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    },
+    "primary": {
+      "requests": [
+        {
+          "name": "ta-moe-abstract.html",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2022/hash/8b465dd58ac50e1b0b22894fd581f62f-Abstract-Conference.html",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 1.015316816046834,
+          "bytes": 9793,
+          "sha256": "3ef9fabdebf6dc7beeed9f2fdb126d3741ad74b909f39bf8cd1996be4486f767"
+        },
+        {
+          "name": "exflow-v2.pdf",
+          "url": "https://arxiv.org/pdf/2401.08383v2",
+          "exit_code": 63,
+          "http_status": "200",
+          "wall_seconds": 0.2401225995272398,
+          "bytes": 0
+        }
+      ],
+      "wall_seconds": 1.016596507281065,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    },
+    "paper": {
+      "requests": [
+        {
+          "name": "ta-moe.pdf",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2022/file/8b465dd58ac50e1b0b22894fd581f62f-Paper-Conference.pdf",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 2.082507409155369,
+          "bytes": 669773,
+          "sha256": "3350b1d868ac0a36fb54e5a52662b7fda801acb0eeb0afccfbf3223db1f227e1"
+        },
+        {
+          "name": "ta-moe-supplement.pdf",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2022/file/8b465dd58ac50e1b0b22894fd581f62f-Supplemental-Conference.pdf",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 1.6305658351629972,
+          "bytes": 131135,
+          "sha256": "a7d2b3a96ea637f7401932483fde1f171c82cd3aed08425f281b49d022ff6ab9"
+        }
+      ],
+      "wall_seconds": 2.084899675101042,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    },
+    "commits": {
+      "requests": [
+        {
+          "name": "ta-moe-commit.json",
+          "url": "https://api.github.com/repos/Chen-Chang/TA-MoE/commits?per_page=1",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.9865962043404579,
+          "bytes": 1718,
+          "sha256": "fd667ac4484a0b259b26a2f1ff1a9ae4f49ffe09879c7e5cf674e251d01427eb"
+        },
+        {
+          "name": "eplb-commit.json",
+          "url": "https://api.github.com/repos/deepseek-ai/EPLB/commits?per_page=1",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.925011208280921,
+          "bytes": 2815,
+          "sha256": "4d576434b4834365363cbe0597c31f9992dfecefc442e91d5bd47eb0d2ccee36"
+        }
+      ],
+      "wall_seconds": 0.9876477476209402,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    },
+    "trees": {
+      "requests": [
+        {
+          "name": "ta-moe-tree.json",
+          "url": "https://api.github.com/repos/Chen-Chang/TA-MoE/git/trees/16f0f795e6484f9b95487cdc6df4389c984cdcaa?recursive=1",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 1.4926115423440933,
+          "bytes": 162719,
+          "sha256": "5c757e01dff284a01d5867186dea27838749512d682f0bd333336d17d92b7fb9"
+        },
+        {
+          "name": "eplb-tree.json",
+          "url": "https://api.github.com/repos/deepseek-ai/EPLB/git/trees/f788d971bdb799daca6a4f5afd13a1508249f008?recursive=1",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.8920120019465685,
+          "bytes": 1578,
+          "sha256": "07bf3ab56ea52cabf2731c32ae93c642c47b845bf706e06e3d19cffda4711ff8"
+        }
+      ],
+      "wall_seconds": 1.4938306026160717,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    },
+    "code": {
+      "requests": [
+        {
+          "name": "eplb-README.md",
+          "url": "https://raw.githubusercontent.com/deepseek-ai/EPLB/d52c72d5b2f2fb4c41afbf8eb21366820239913d/README.md",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.7576762437820435,
+          "bytes": 3131,
+          "sha256": "897fa18b928858d6f4241fa910377125fbbc16fba8868b8c121eb5a8c30336ef"
+        },
+        {
+          "name": "eplb.py",
+          "url": "https://raw.githubusercontent.com/deepseek-ai/EPLB/d52c72d5b2f2fb4c41afbf8eb21366820239913d/eplb.py",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 0.8943318482488394,
+          "bytes": 7912,
+          "sha256": "25b37ccd83aef2369c68f2b4bb596608a4f289956d97d9a3504bfd3159459e29"
+        },
+        {
+          "name": "ta-gshard-gate.py",
+          "url": "https://raw.githubusercontent.com/Chen-Chang/TA-MoE/b3aff038bba430f34790e1cd196821d37da7226a/examples/language_model/moe/dygraph/moe/gate/gshard_gate.py",
+          "exit_code": 0,
+          "http_status": "200",
+          "wall_seconds": 1.0381957292556763,
+          "bytes": 3415,
+          "sha256": "ae8ea8d9839e3b66b230aa3389b2d53432458d150200b2064846e05df5d20605"
+        }
+      ],
+      "wall_seconds": 1.040134096518159,
+      "retried": false,
+      "per_response_bytes": 2097152,
+      "per_request_seconds": 20,
+      "downloaded_code_executed": false
+    }
+  },
+  "total_retained_response_bytes": 2934910,
+  "primary_documents": [
+    {
+      "id": "ta-moe",
+      "pdf_sha256": "3350b1d868ac0a36fb54e5a52662b7fda801acb0eeb0afccfbf3223db1f227e1",
+      "text_sha256": "8501714e048c372027f0fe85d6b7ecfe4c2d4e10910130fea5acc85eff9f11c6",
+      "archive_member": "sources/paper/ta-moe.pdf",
+      "extraction_command": [
+        "pdftotext",
+        "-layout",
+        "/dev/shm/moe-topology-baselines-paper-20261022/ta-moe.pdf",
+        "/dev/shm/moe-topology-baselines-paper-20261022/ta-moe.txt"
+      ]
+    },
+    {
+      "id": "ta-moe-supplement",
+      "pdf_sha256": "a7d2b3a96ea637f7401932483fde1f171c82cd3aed08425f281b49d022ff6ab9",
+      "text_sha256": "0cefbbf9add3198de500989caac2d259cfb8ee8077ef6b09d0135d93d4066ba1",
+      "archive_member": "sources/paper/ta-moe-supplement.pdf",
+      "extraction_command": [
+        "pdftotext",
+        "-layout",
+        "/dev/shm/moe-topology-baselines-paper-20261022/ta-moe-supplement.pdf",
+        "/dev/shm/moe-topology-baselines-paper-20261022/ta-moe-supplement.txt"
+      ]
+    }
+  ],
+  "downloaded_code_executed": false,
+  "paper_source": "Official NeurIPS 2022 full text and supplement",
+  "exflow_scope": "arXiv v2 author metadata/abstract only; PDF refused by size cap, not retried",
+  "eplb_scope": "Fixed source read and blob verified; independent no-replica/one-active-GPU-per-node count adapter",
+  "ta_scope": "Fixed gate read and blob verified; training auxiliary loss not run on frozen routes",
+  "literature_search_exhaustive": false
+}

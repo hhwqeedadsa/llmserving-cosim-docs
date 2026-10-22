@@ -1,0 +1,44 @@
+{
+  "pairs": [
+    {
+      "view": "all",
+      "adapter_vs_flat_lpt": {
+        "direct_copies": {
+          "lower": 5459,
+          "equal": 1257,
+          "higher": 708
+        },
+        "incoming_max": {
+          "lower": 265,
+          "equal": 7145,
+          "higher": 14
+        },
+        "compute_max": {
+          "lower": 1993,
+          "equal": 1289,
+          "higher": 4142
+        }
+      }
+    },
+    {
+      "view": "tail10",
+      "adapter_vs_flat_lpt": {
+        "direct_copies": {
+          "lower": 5342,
+          "equal": 1267,
+          "higher": 815
+        },
+        "incoming_max": {
+          "lower": 289,
+          "equal": 7112,
+          "higher": 23
+        },
+        "compute_max": {
+          "lower": 2095,
+          "equal": 1324,
+          "higher": 4005
+        }
+      }
+    }
+  ]
+}

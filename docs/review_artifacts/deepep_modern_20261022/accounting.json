@@ -1,0 +1,315 @@
+{
+  "scope": "conditional source-call accounting: fresh routing, direct mode, all off-rank destinations RDMA; no execution",
+  "source_identity_files_verified": 4,
+  "selected_raw_rows_verified": 16,
+  "invocation_count": 4,
+  "ranks": 4,
+  "experts": 256,
+  "hidden": 7168,
+  "remote_expert_contributions": 91,
+  "direct_dispatch_distinct_token_destination_puts": 38,
+  "independent_destination_range_count": 38,
+  "dispatch_hidden_tensor_bytes_per_contribution_model": 1304576,
+  "dispatch_hidden_tensor_bytes_per_deduplicated_model": 544768,
+  "hidden_bytes_scope": "BF16 hidden elements only; excludes metadata, alignment, counters, barriers, protocol, local/NVLink traffic",
+  "per_call": [
+    {
+      "call": 0,
+      "remote_contributions": 25,
+      "distinct_token_destination_puts": 8
+    },
+    {
+      "call": 1,
+      "remote_contributions": 16,
+      "distinct_token_destination_puts": 9
+    },
+    {
+      "call": 2,
+      "remote_contributions": 22,
+      "distinct_token_destination_puts": 9
+    },
+    {
+      "call": 3,
+      "remote_contributions": 28,
+      "distinct_token_destination_puts": 12
+    }
+  ],
+  "dispatch_off_rank_rank_count_put_value_calls": 48,
+  "dispatch_off_rank_expert_count_bulk_put_calls": 48,
+  "dispatch_count_call_operand_bytes": 24960,
+  "dispatch_count_scope": "rank int64 plus E/ranks int64 expert block; no barrier or GIN aggregation/wire inference",
+  "selected_core_kernel_barriers": 16,
+  "selected_core_kernel_off_rank_signal_api_calls": 192,
+  "barriers_scope": "two internal barriers per direct Dispatch/Combine kernel; not a full host/epilogue/NCCL inventory",
+  "rows": [
+    {
+      "call": 0,
+      "src": 0,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 2
+    },
+    {
+      "call": 0,
+      "src": 0,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 6
+    },
+    {
+      "call": 0,
+      "src": 1,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 2
+    },
+    {
+      "call": 0,
+      "src": 1,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 3
+    },
+    {
+      "call": 0,
+      "src": 2,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 5
+    },
+    {
+      "call": 0,
+      "src": 2,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 0,
+      "src": 3,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 4
+    },
+    {
+      "call": 0,
+      "src": 3,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 2
+    },
+    {
+      "call": 1,
+      "src": 0,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 1
+    },
+    {
+      "call": 1,
+      "src": 0,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 1
+    },
+    {
+      "call": 1,
+      "src": 1,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 3
+    },
+    {
+      "call": 1,
+      "src": 1,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 2
+    },
+    {
+      "call": 1,
+      "src": 2,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 1
+    },
+    {
+      "call": 1,
+      "src": 2,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 1,
+      "src": 2,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 1
+    },
+    {
+      "call": 1,
+      "src": 3,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 2
+    },
+    {
+      "call": 1,
+      "src": 3,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 4
+    },
+    {
+      "call": 2,
+      "src": 0,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 2
+    },
+    {
+      "call": 2,
+      "src": 0,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 5
+    },
+    {
+      "call": 2,
+      "src": 0,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 1
+    },
+    {
+      "call": 2,
+      "src": 1,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 5
+    },
+    {
+      "call": 2,
+      "src": 1,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 1
+    },
+    {
+      "call": 2,
+      "src": 2,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 5
+    },
+    {
+      "call": 2,
+      "src": 2,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 2,
+      "src": 3,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 1
+    },
+    {
+      "call": 2,
+      "src": 3,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 1
+    },
+    {
+      "call": 3,
+      "src": 0,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 3,
+      "src": 0,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 4
+    },
+    {
+      "call": 3,
+      "src": 0,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 2
+    },
+    {
+      "call": 3,
+      "src": 1,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 2
+    },
+    {
+      "call": 3,
+      "src": 1,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 1
+    },
+    {
+      "call": 3,
+      "src": 1,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 3
+    },
+    {
+      "call": 3,
+      "src": 2,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 4
+    },
+    {
+      "call": 3,
+      "src": 2,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 3,
+      "src": 2,
+      "token": 0,
+      "dst": 3,
+      "expert_contributions": 3
+    },
+    {
+      "call": 3,
+      "src": 3,
+      "token": 0,
+      "dst": 0,
+      "expert_contributions": 2
+    },
+    {
+      "call": 3,
+      "src": 3,
+      "token": 0,
+      "dst": 1,
+      "expert_contributions": 1
+    },
+    {
+      "call": 3,
+      "src": 3,
+      "token": 0,
+      "dst": 2,
+      "expert_contributions": 4
+    }
+  ],
+  "packets_inferred": false,
+  "latency_predicted": false,
+  "hardware_compatible_verified": false
+}

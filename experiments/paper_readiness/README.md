@@ -73,3 +73,31 @@ python3 experiments/paper_readiness/build_operation_review.py \
 ```
 
 输出目录均须不存在。第一个命令独立核算操作与原件、执行六条公开命令并保存Linux wait4资源统计；单命令60秒/RSS1GiB/地址2GiB，整轮300秒/64MiB新产物，预留8GiB。第二个命令核对固定源码hash、逻辑上下文和反向后继可达性，验证三个重复产物及本地HTML链接，生成不超过32MiB原始内容的本地tar检查点。报告正文的证据链接指向本仓库版本化的正式结果目录；自定义目录用于复核，不改写正式结果。归档不重复保存第二份plan，恢复来源和平台后可用公开命令重新生成。当前结果为8,448操作/33,968事件，零count仍是必要依赖；不证明通知是性能瓶颈，也不验证源buffer、物理QP、现代DeepEP内核或硬件包级行为。
+
+现代候选的12份固定源码和原始选择核对见[后端实现约束](../../docs/review_artifacts/deepep_modern_20261022/report.html)。现代direct按目的rank去重、批量交换计数，并有明确核心kernel屏障；不以v1作为唯一强基线。`collect_deepep_modern.py`只读GitHub Git API，不安装库或更改依赖。首次发现可不传commit，正式复现必须指定固定提交：
+
+```bash
+timeout 60s python3 experiments/paper_readiness/collect_deepep_modern.py \
+  --phase tree --commit f6aa38fe06cd4a0489e7730365d4e0114970a2f3 \
+  --output data/research/my-modern-source
+timeout 60s python3 experiments/paper_readiness/collect_deepep_modern.py \
+  --phase files --output data/research/my-modern-source \
+  --paths README.md csrc/buffers/ep.hpp \
+  deep_ep/include/deep_ep/comm/handle.cuh \
+  deep_ep/include/deep_ep/impls/ep/dispatch.cuh \
+  deep_ep/include/deep_ep/impls/ep/combine.cuh \
+  deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh
+timeout 60s python3 experiments/paper_readiness/collect_deepep_modern.py \
+  --phase files --batch completion --output data/research/my-modern-source \
+  --paths deep_ep/include/deep_ep/comm/barrier.cuh \
+  deep_ep/include/deep_ep/impls/comm/barrier.cuh \
+  csrc/kernels/comm/context.cpp csrc/kernels/comm/symmetric.hpp \
+  deep_ep/include/deep_ep/layout/ep/token.cuh \
+  deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh
+timeout 60s python3 experiments/paper_readiness/audit_deepep_modern.py \
+  --source-dir data/research/my-modern-source \
+  --output docs/review_artifacts/my-modern-review \
+  --checkpoint runs/my-modern-checkpoint
+```
+
+原始路由和前阶段公开input仍须从对应检查点恢复。每响应2MiB/20秒、最多3并发，两个文件批次总12份，连同目录查询累计≤16MiB/120秒；失败和重复批次拒绝，不能用新批次名重试同一失败文件。离线审核的检查点≤4MiB原始内容，卷预留8GiB。源码调用核算和实际包、时延、设备支持严格分开；NCCL provider尚未核对，源码采集失败不会降级成其他版本。两次报告构建分别发现自引用检查顺序和迁移导航路径错误，已修正并保留失败；最终跨目录复核通过，源码证据与选择核算两个JSON逐字节一致。实际命令、退出状态和归档复核见[执行记录](../../docs/review_artifacts/deepep_modern_20261022/execution.json)，没有重跑网络。

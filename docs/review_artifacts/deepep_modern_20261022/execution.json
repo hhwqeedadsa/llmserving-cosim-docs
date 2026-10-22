@@ -1,0 +1,69 @@
+{
+  "cwd": "/home/lry/moe-ub-cosim",
+  "network_executed": false,
+  "installed": false,
+  "dependencies_changed": false,
+  "successful_audit_command": [
+    "timeout",
+    "60s",
+    "python3",
+    "experiments/paper_readiness/audit_deepep_modern.py",
+    "--source-dir",
+    "data/research/deepep_modern_20261022",
+    "--output",
+    "docs/review_artifacts/deepep_modern_20261022",
+    "--checkpoint",
+    "runs/deepep_modern_accepted_20261022"
+  ],
+  "successful_audit_exit": 0,
+  "relocated_audit_command": [
+    "timeout",
+    "60s",
+    "python3",
+    "experiments/paper_readiness/audit_deepep_modern.py",
+    "--source-dir",
+    "data/research/deepep_modern_20261022",
+    "--output",
+    "runs/deepep_modern_relocated_20261022",
+    "--checkpoint",
+    "runs/deepep_modern_relocated_archive_20261022"
+  ],
+  "relocated_audit_exit": 0,
+  "repeated_byte_identical": [
+    "accounting.json",
+    "sources.json"
+  ],
+  "failed_attempts": [
+    {
+      "exit_code": 1,
+      "path": "runs/deepep_modern_failed_prelink_20261022",
+      "reason": "self-link check ran before verification.json existed",
+      "correction": "defer self-link existence checks until files generated"
+    },
+    {
+      "exit_code": 1,
+      "path": "runs/deepep_modern_recheck_20261022",
+      "reason": "old navigation assumed docs/review_artifacts output parent",
+      "correction": "derive relative nav from actual output and precheck non-self links"
+    }
+  ],
+  "archives_rechecked": [
+    {
+      "path": "runs/deepep_operations_20261022/checkpoint.tar.gz",
+      "files_verified": 46,
+      "bytes": 1070730
+    },
+    {
+      "path": "runs/deepep_modern_accepted_20261022/checkpoint.tar.gz",
+      "files_verified": 25,
+      "bytes": 90354
+    },
+    {
+      "path": "runs/deepep_modern_relocated_archive_20261022/checkpoint.tar.gz",
+      "files_verified": 25,
+      "bytes": 90723
+    }
+  ],
+  "hardware_calibrated": false,
+  "paper_goal_complete": false
+}

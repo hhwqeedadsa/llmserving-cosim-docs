@@ -1,0 +1,109 @@
+{
+  "path": "runs/deepep_modern_accepted_20261022/checkpoint.tar.gz",
+  "bytes": 90354,
+  "sha256": "8ce15c8974f2e36fd8865b919f87d86b202a0d46566e457475ae62e5d828a2b9",
+  "verified_files": 25,
+  "files": {
+    "data/research/deepep_modern_20261022/file-sources-completion.json": {
+      "bytes": 4524,
+      "sha256": "120411690b23171f97cdb8edb86a84a6a5e27c0fe6c2194e6b96328c7e9ece5c"
+    },
+    "data/research/deepep_modern_20261022/file-sources.json": {
+      "bytes": 3882,
+      "sha256": "57421e17fbacff170c381c5c6f5dba39e6bc515473337ce2456a22af1ba00fbc"
+    },
+    "data/research/deepep_modern_20261022/ref.json": {
+      "bytes": 334,
+      "sha256": "6fee9f344dc2f3dee32f7b87ab5aaba48ae6863261cb01925c6d6a03b602dabd"
+    },
+    "data/research/deepep_modern_20261022/sources/README.md": {
+      "bytes": 32914,
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb"
+    },
+    "data/research/deepep_modern_20261022/sources/csrc/buffers/ep.hpp": {
+      "bytes": 60540,
+      "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193"
+    },
+    "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp": {
+      "bytes": 12061,
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a"
+    },
+    "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/symmetric.hpp": {
+      "bytes": 14628,
+      "sha256": "fa24a2333e387330d36de768657dfb0a79b17200a41332bf2682e6afd21b1311"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh": {
+      "bytes": 11335,
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh": {
+      "bytes": 11249,
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/comm/barrier.cuh": {
+      "bytes": 2093,
+      "sha256": "8ce31ac69b8a249d5bcc76f4c99ccedc6cf11eef51435b268914c8f6c8fd5188"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh": {
+      "bytes": 12081,
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh": {
+      "bytes": 20457,
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh": {
+      "bytes": 33159,
+      "sha256": "7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh": {
+      "bytes": 36817,
+      "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9"
+    },
+    "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/layout/ep/token.cuh": {
+      "bytes": 5653,
+      "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6"
+    },
+    "data/research/deepep_modern_20261022/tree-source.json": {
+      "bytes": 729,
+      "sha256": "def35320df7bece11440acf028c1aac71a64016ca599efe8873b56cdd3f6169d"
+    },
+    "data/research/deepep_modern_20261022/tree.json": {
+      "bytes": 41120,
+      "sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+    },
+    "docs/review_artifacts/deepep_modern_20261022/accounting.json": {
+      "bytes": 5992,
+      "sha256": "de86ae517e6cfb1a6a468ff174449c1930963b44ee2b4ccf53fbfd33d10d13e8"
+    },
+    "docs/review_artifacts/deepep_modern_20261022/collection.json": {
+      "bytes": 9870,
+      "sha256": "7d18f66f9e92847740669c3be1c5cc04b6c096d0b3d281b8fcc6fce3d91602bb"
+    },
+    "docs/review_artifacts/deepep_modern_20261022/report.html": {
+      "bytes": 13293,
+      "sha256": "aeec1c7778a00e0826f3d8b4ba1843a0d20983ef6babcffa3bb72468d27da79b"
+    },
+    "docs/review_artifacts/deepep_modern_20261022/sources.json": {
+      "bytes": 21334,
+      "sha256": "7c8c8532e1756568f0407c8e4820712afcb3a5ea1a095f43b58432f62b62fd9a"
+    },
+    "docs/review_artifacts/deepep_modern_20261022/verification.json": {
+      "bytes": 672,
+      "sha256": "c10ef31c84f941e85582e05dbad54ca2eeb248356b41d961b6f17b1b28649279"
+    },
+    "docs/reviews/现代DeepEP与ScaleOut后端实现约束_20261022.md": {
+      "bytes": 11474,
+      "sha256": "847adf52a3d7fce07d5cc2c96f314e8cbc2f8d167833e94ccc690b4dbdadc54e"
+    },
+    "experiments/paper_readiness/audit_deepep_modern.py": {
+      "bytes": 13148,
+      "sha256": "e29fb120c227f86cff16c49b9050dcb5b15a7907552d74469e073d40bbee6e67"
+    },
+    "experiments/paper_readiness/collect_deepep_modern.py": {
+      "bytes": 7350,
+      "sha256": "22c13c514aa92193636b1bd653ac6066a8f6ca799751ef62ea7c8f69a5d11a6b"
+    }
+  },
+  "source_scope": "modern fixed source and audit only; original real routes in prior operation checkpoint"
+}

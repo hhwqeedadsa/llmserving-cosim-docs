@@ -1,0 +1,189 @@
+{
+  "tree": {
+    "accessed_utc": "2026-10-22T12:16:59.842688+00:00",
+    "requests": [
+      {
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/ref/heads/main",
+        "bytes": 334,
+        "sha256": "6fee9f344dc2f3dee32f7b87ab5aaba48ae6863261cb01925c6d6a03b602dabd"
+      },
+      {
+        "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/trees/f6aa38fe06cd4a0489e7730365d4e0114970a2f3?recursive=1",
+        "bytes": 41120,
+        "sha256": "cff0af9ecd9cc8212d6dbeec55ac03abf755b3e2c445477ef54f066e948756fd"
+      }
+    ],
+    "purpose": "pin current public source for comparison; no hardware compatibility assumed",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "status": "read",
+    "elapsed_seconds": 2.197576131671667
+  },
+  "batches": [
+    {
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sources": [
+        {
+          "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/732c598ca1986636c300036533141ebeb49a320e",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+          "response_bytes": 15905,
+          "status": "read",
+          "bytes": 11335,
+          "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/impls/comm/barrier.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "2c573f14b27ab0a88484073205e1b460bbb0d61a",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/2c573f14b27ab0a88484073205e1b460bbb0d61a",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/comm/barrier.cuh",
+          "response_bytes": 3170,
+          "status": "read",
+          "bytes": 2093,
+          "sha256": "8ce31ac69b8a249d5bcc76f4c99ccedc6cf11eef51435b268914c8f6c8fd5188"
+        },
+        {
+          "path": "csrc/kernels/comm/context.cpp",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/d26fdac9a7b280617653f1b6775587d056e85a28",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp",
+          "response_bytes": 16907,
+          "status": "read",
+          "bytes": 12061,
+          "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a"
+        },
+        {
+          "path": "csrc/kernels/comm/symmetric.hpp",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "30f1ac3b972cd674424824e0152697a6cef0c682",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/30f1ac3b972cd674424824e0152697a6cef0c682",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/symmetric.hpp",
+          "response_bytes": 20441,
+          "status": "read",
+          "bytes": 14628,
+          "sha256": "fa24a2333e387330d36de768657dfb0a79b17200a41332bf2682e6afd21b1311"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/token.cuh",
+          "response_bytes": 8076,
+          "status": "read",
+          "bytes": 5653,
+          "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "631dd01710c7c2cd07502327ac099b2a86438ef9",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/631dd01710c7c2cd07502327ac099b2a86438ef9",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+          "response_bytes": 45971,
+          "status": "read",
+          "bytes": 33159,
+          "sha256": "7a5091f7acd501fe0500564d1ef775e10150d880512e178e6c6bb40285eb1248"
+        }
+      ],
+      "response_bytes": 393460,
+      "elapsed_seconds": 7.372329382225871,
+      "batch_elapsed_seconds": 2.3887935765087605,
+      "argv": [
+        "experiments/paper_readiness/collect_deepep_modern.py",
+        "--phase",
+        "files",
+        "--batch",
+        "completion",
+        "--paths",
+        "deep_ep/include/deep_ep/comm/barrier.cuh",
+        "deep_ep/include/deep_ep/impls/comm/barrier.cuh",
+        "csrc/kernels/comm/context.cpp",
+        "csrc/kernels/comm/symmetric.hpp",
+        "deep_ep/include/deep_ep/layout/ep/token.cuh",
+        "deep_ep/include/deep_ep/impls/ep/hybrid_combine.cuh",
+        "--output",
+        "data/research/deepep_modern_20261022"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "scope": "read-only fixed sources; no kernel execution or dependency update"
+    },
+    {
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "sources": [
+        {
+          "path": "README.md",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/README.md",
+          "response_bytes": 45637,
+          "status": "read",
+          "bytes": 32914,
+          "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb"
+        },
+        {
+          "path": "csrc/buffers/ep.hpp",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp",
+          "response_bytes": 83697,
+          "status": "read",
+          "bytes": 60540,
+          "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/b459a34a7d9012a95ca9821b947a60e5819fa736",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+          "response_bytes": 15785,
+          "status": "read",
+          "bytes": 11249,
+          "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+          "response_bytes": 28471,
+          "status": "read",
+          "bytes": 20457,
+          "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+          "response_bytes": 16931,
+          "status": "read",
+          "bytes": 12081,
+          "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93"
+        },
+        {
+          "path": "deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+          "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+          "git_blob_sha": "0cb8e7da20940881c945720b45dd0eeea8feffc1",
+          "url": "https://api.github.com/repos/deepseek-ai/DeepEP/git/blobs/0cb8e7da20940881c945720b45dd0eeea8feffc1",
+          "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/hybrid_dispatch.cuh",
+          "response_bytes": 51015,
+          "status": "read",
+          "bytes": 36817,
+          "sha256": "d7e6e98aeb605392c668bf46de3520072f02b61f145cfc5779dd9c32f0e73db9"
+        }
+      ],
+      "response_bytes": 282990,
+      "elapsed_seconds": 4.983535805717111,
+      "scope": "read-only fixed sources; no kernel execution or dependency update"
+    }
+  ]
+}

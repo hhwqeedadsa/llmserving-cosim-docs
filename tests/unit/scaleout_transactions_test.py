@@ -102,5 +102,26 @@ class TransactionInputTests(unittest.TestCase):
             c['operations'].append(dict(id=100+i,kind='local',rank=0,duration_ns=0,after=[]))
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
+    def test_v3_source_owner_range_and_exclusive_payload(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/source-windows.json').read_text())
+        validate(self.topology, self.protocol, original)
+        for key, value in [('key', 8), ('key', True), ('address', 4095), ('address', 5120),
+                           ('address', True), ('bytes', 0), ('bytes', True), ('bytes', 32769), ('owner', 0)]:
+            c = deepcopy(original); c['operations'][0]['source'][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['operations'][0]['hex'] = '00'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['operations'][1]['source'] = c['operations'][0]['source']
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+    def test_v3_source_model_and_own_reset_are_explicit(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/source-windows.json').read_text())
+        c = deepcopy(original); c['source_model']['release'] = 'accepted'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['operations'][0]['local_wait'] = [dict(key=7,address=4096,compare='eq',value=0,reset_to=0)]
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['schema_version'] = 'moe-rdma-transactions/2'; del c['source_model']
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
 
 if __name__ == '__main__': unittest.main()

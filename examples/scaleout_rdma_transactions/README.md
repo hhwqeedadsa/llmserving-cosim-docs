@@ -110,6 +110,27 @@ v2输出增加`local_model/local_work/completed_local_work/pending_local_work`�
 
 默认人工例完成10个远端事务、6个本地节点，发出14个源数据包/560B载体负载。错误计数或数据均停在3个已完成事务，7个后继不发送；5ms截止保留已消费但仍排队的节点。旧v1逐字节对照及独立包/内存重放见[验收](../../fixtures/transaction_local_stages/README.md)。这些是功能检查，没有执行LLMServingSim、现代GIN或GPU校准。
 
+## 将实际接收内容作为后续发送的数据
+
+将运行命令的`--config`改为[source-windows.json](source-windows.json)。该人工例在同一网络中执行GPU0→GPU4→GPU1→GPU0，后两跳读取本次实际收到的窗口，而非从任务文件复制预设内容。使用`moe-rdma-transactions/3`，保留v2的`kind/local_model`，根增加：
+
+```json
+"source_model": {
+  "capture": "registered_window_at_publish/1",
+  "release": "transaction_completed/1"
+}
+```
+
+远端put只选一种负载：原有`hex`或`"source": {"key": 8, "address": 8192, "bytes": 257}`。source属于本连接的src，不能指定owner；范围须完整处于其注册窗口，长度1—32768B。原子操作不能指定source，source也不能与本操作local_wait的reset范围重叠，需要拆成明确步骤。
+
+提交put时取得源范围的读使用记录（lease），即使因队列深度不足而尚未发布，也保持保护。真正发布时从当前注册窗口快照实际字节，编码进MRT1。直到本事务请求ACK并按序完成才释放；多个重叠读可共存，所有读完成后才能覆写。普通远端写、原子写和本地reset均不能覆盖活跃源范围；多个reset先全部检查再执行，避免只消费一半条件。
+
+此处只实现**发布时快照和MRT1完成保护**，没有逐包GPU读取、真实CQ或source-safe成本。本地处理节点本身尚无数值输入和输入保护；若在本地处理期间、后继put提交之前合法覆写窗口，后继会发送新内容。它不能证明处理读到了哪一代输入，应用接入仍需定义计算读写与复用协议。
+
+v3的`transactions`增加`source_model/source_events/active_source_leases`。source_events含operation、owner/key/address/bytes、order/time_ns、kind（acquired/captured/released）；captured另含实际hex。order与接收应用和本地消费共用，便于离线重放，不参与报文或选路。运行期冲突退出1，保留`passed=false`、`execution_error`和实际部分结果；截止保留未完成lease，不伪造释放。输入验证失败仍不生成结果，v1/v2字段保持。
+
+人工例核验6个远端事务、3个本地阶段，27个源数据包、1,525B载体负载。只修改初始窗口即可改变全部后续转发内容；同源排队保护、三类覆写拒绝、提交前覆写对照、截止、旧版逐字节比较及独立实包重放见[源窗口验收](../../fixtures/source_windows/README.md)。这些结果不表示现代MoE性能或优化收益。
+
 ## 实际传了什么
 
 MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连接内事务序号、远端地址、远端key及body长度；字段宽度为4/4/8/8/4/4B。put body为实际字节，fetch-add body为8B增量，reply body为8B旧值且地址/key为0。事务序号负责请求/响应匹配，**应用operation id不写入报文**，不改变NIC绑定、优先级或选路。

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+transactions/3在同一持久网络中串接“实际接收窗口→后续put”。源范围从提交到事务完成期间保留读使用记录，发布时才读取当前内存；普通写/原子/reset不能覆盖活跃范围。`Drained`要求没有残留读记录。该路径没有接入现代Python事件核心，本地处理阶段也尚未保护数值输入，见[源窗口](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)。
+
 事务入口的transactions/2将实际窗口条件消费、本地串行处理和后续远端事务接在同一个原生ns-3时钟上；入队时消费、每GPU一个FIFO槽、实际完成才放行后继，本地尾部保留QP。它独立于stream-work/3和现代Python事件核心，处理耗时为声明值，见[事务本地阶段](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。
 
 持久字节入口新增stream-work/3：实际网络接收/ACK回调可以解锁本地处理，本地处理在每GPU一个抽象串行槽上按声明耗时执行，再解锁后续写。全部使用同一原生ns-3时钟，处理期间QP与拥塞反馈保持；不与现代Python事件核心自动连通。具体事件和队列规则见[本地阶段](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。

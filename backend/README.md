@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按owner和物理范围保护活跃读；`RemoteTransactions`在提交时取得保护、发布时快照、实际事务完成时释放，排队也保留保护。多个条件reset先全部检查。运行期冲突保存部分结果后失败，不将冲突变成虚构的硬件等待；见[源窗口接口](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)。本地处理输入尚无lease，MRT1的ACK保护不等价GPU源安全完成。
+
 `transaction_probe.cc`新增transactions/2混合节点：实际本地接收窗口条件满足并消费后，进入每GPU声明耗时的FIFO处理槽，完成再解锁后继事务。`RemoteTransactions::AdmitLocal`只消费本GPU条件，不预留网络工作；本地尾部保持持久连接。入队消费不代表buffer租约或GPU可见。输入、截止状态和限制见[事务本地处理](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1字段和执行保持。
 
 `stream_probe.cc`支持stream-work/3的因果本地阶段：每GPU一个声明耗时的非抢占FIFO槽，由实际接收/ACK和本地完成事件释放后继；已排队节点优先于新解锁节点。同一原生Simulator保留本地处理期间的QP及控制器状态，全部节点完成且传输物理排空才关闭连接。新节点字段、整数类型、GPU身份及依赖事件由原生入口复核；旧v1/v2接口保持。它不是CUDA或现代GIN执行，见[公开输入和限制](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。

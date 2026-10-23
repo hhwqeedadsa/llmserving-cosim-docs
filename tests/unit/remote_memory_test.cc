@@ -85,5 +85,33 @@ int main(){
     unsigned calls=0;
     MemoryFrameDecoder decoder;Reject([&]{decoder.Feed(bad,[&](const MemoryFrame&){++calls;});});Check(calls==0);
   }
+  // Enumerate every nonempty subrange against one read lease. Expected overlap
+  // is an independent byte-index set intersection, including boundary touches.
+  RemoteMemory guarded;guarded.Register({0,5,8192,true,std::vector<uint8_t>(64,7)});
+  guarded.Register({1,5,8192,true,std::vector<uint8_t>(64,9)});
+  guarded.AcquireRead(1,{0,5,8200,16});guarded.AcquireRead(2,{0,5,8200,16});
+  for(unsigned begin=0;begin<64;++begin)for(unsigned length=1;length<=64-begin;++length) {
+    bool overlap=false;for(unsigned i=begin;i<begin+length;++i)overlap=overlap || (i>=8 && i<24);
+    bool rejected=false;try{guarded.CheckWritable(0,5,8192+begin,length);}catch(const std::exception&){rejected=true;}
+    Check(rejected==overlap);guarded.CheckWritable(1,5,8192+begin,length);
+  }
+  Check(guarded.ReadBytes(0,5,8201,3)==std::vector<uint8_t>(3,7));
+  for(unsigned mode=0;mode<5;++mode) {
+    Reject([&]{guarded.AcquireRead(3,{mode==0?2u:0u,mode==1?6u:5u,mode==2?8191ULL:mode==3?UINT64_MAX:8192ULL,mode==4?0ULL:8ULL});});
+    Check(guarded.ReadLeases().size()==2);
+  }
+  Reject([&]{guarded.AcquireRead(1,{0,5,8192,8});});
+  auto before=guarded.Windows()[0].bytes;
+  MemoryFrame overwrite;overwrite.verb=MemoryFrame::Put;overwrite.key=5;overwrite.address=8200;overwrite.body={1,2,3};
+  Reject([&]{guarded.Apply(0,0,overwrite);});Check(guarded.Windows()[0].bytes==before);
+  auto atomic=overwrite;atomic.verb=MemoryFrame::FetchAdd;atomic.body=MemoryInteger(1);
+  Reject([&]{guarded.Apply(1,0,atomic);});Check(guarded.Windows()[0].bytes==before);
+  Reject([&]{guarded.Store64(0,5,8200,0);});Check(guarded.Windows()[0].bytes==before);
+  guarded.ReleaseRead(1);Reject([&]{guarded.Store64(0,5,8200,0);});
+  guarded.ReleaseRead(2);guarded.Store64(0,5,8200,0);Check(guarded.Load64(0,5,8200)==0);
+  Check(!guarded.Apply(1,0,atomic).duplicate && guarded.Load64(0,5,8200)==1);
+  guarded.AcquireRead(4,{0,5,8200,8});
+  Check(guarded.Apply(1,0,atomic).duplicate && guarded.Load64(0,5,8200)==1);
+  guarded.ReleaseRead(4);Reject([&]{guarded.ReleaseRead(4);});
   std::cout<<"{\"passed\":true,\"checks\":"<<checks<<",\"network_execution\":false}\n";
 }

@@ -34,12 +34,17 @@ def _local_waits(waits, owner, registered):
 
 
 def validate(topology, protocol, config):
-    local_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/2'
-    fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else ''), 'transaction root')
-    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2'), 'unsupported transaction schema')
+    local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3')
+    source_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3'
+    fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
+           (' source_model' if source_mode else ''), 'transaction root')
+    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3'), 'unsupported transaction schema')
     if local_mode:
         require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
                 'unsupported transaction local model')
+    if source_mode:
+        require(config['source_model'] == dict(capture='registered_window_at_publish/1', release='transaction_completed/1'),
+                'unsupported transaction source model')
     connections = config['connections']
     require(isinstance(connections, list) and 1 <= len(connections) <= 8, 'require 1..8 connections')
     by_id, streams = {}, []
@@ -111,7 +116,9 @@ def validate(topology, protocol, config):
         remote_count += 1
         require(remote_count <= 32, 'remote transaction budget exceeded')
         require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
-        fields(op, 'id connection verb key address after '+('hex' if op['verb'] == 'put' else 'value')+
+        from_source = 'source' in op
+        require(not from_source or (source_mode and op['verb'] == 'put' and 'hex' not in op), 'source requires v3 put without hex')
+        fields(op, 'id connection verb key address after '+('source' if from_source else 'hex' if op['verb'] == 'put' else 'value')+
                (' kind' if local_mode else '')+
                (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else ''), 'operation')
         integer(op['connection'], 'operation connection', 0, 7)
@@ -121,7 +128,19 @@ def validate(topology, protocol, config):
         key = by_id[op['connection']]['dst'], op['key']
         require(key in registered, 'unknown remote owner/key')
         window, size = registered[key]
-        if op['verb'] == 'put':
+        if from_source:
+            source = op['source']
+            fields(source, 'key address bytes', 'put source')
+            integer(source['key'], 'source key', 1, 2**32-1)
+            integer(source['address'], 'source address', 0, 2**64-1)
+            integer(source['bytes'], 'source bytes', 1, 32768)
+            source_key = by_id[op['connection']]['src'], source['key']
+            require(source_key in registered, 'unknown source owner/key')
+            source_window, source_size = registered[source_key]
+            length = source['bytes']
+            require(source_window['address'] <= source['address'] and
+                    source['address']+length <= source_window['address']+source_size, 'source address out of bounds')
+        elif op['verb'] == 'put':
             length = _hex(op['hex'], 32768, 'put')
         else:
             integer(op['value'], 'atomic addend', 0, 2**64-1)
@@ -140,6 +159,10 @@ def validate(topology, protocol, config):
             require(len(set(selected)) == len(selected), 'repeated queue fence connection')
         if 'local_wait' in op:
             _local_waits(op['local_wait'], by_id[op['connection']]['src'], registered)
+            if from_source:
+                require(all('reset_to' not in w or w['address']+8 <= source['address'] or
+                            source['address']+length <= w['address'] for w in op['local_wait']),
+                        'source overlaps own condition reset; use separate steps')
         for prior, prior_key, n in accesses:
             if key == prior_key and op['address'] < prior['address']+n and prior['address'] < op['address']+length:
                 require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in parents,
@@ -168,7 +191,7 @@ def probe(topology, protocol, config, backend, output):
     require(result['passed'] and result['native_network_executed'] and result['drained'] and
             transport['physical_drained'] and transport['closed'] and result['completed_operations'] == remote_count,
             'remote memory transaction probe incomplete')
-    if w['schema_version'] == 'moe-rdma-transactions/2':
+    if w['schema_version'] in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3'):
         require(result['completed_local_work']+remote_count == len(w['operations']), 'local transaction work incomplete')
     return dict(passed=True, output=str(output), completed_operations=result['completed_operations'],
                 state='functional_native_remote_memory_transactions_not_GIN_timing', hardware_calibrated=False)

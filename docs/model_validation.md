@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+transactions/3已通过实际包解码和独立内存重放核验接收内容的多跳转发。发布快照、提交至MRT1完成的读保护均为显式功能选择，不是GPU逐包DMA、真实CQ或provider成本。提交前覆写对照证明本地处理输入寿命仍未建模；测试通过不代表完整应用复用正确。见[源窗口验收与限制](../fixtures/source_windows/README.md)。没有新增GPU测量、现代应用或千卡规模结果。
+
 transactions/2的本地处理同样使用声明耗时，区别是可以由实际解码接收窗口的LE64条件和消费驱动。条件入队时清零，排队不锁定数据，不能证明完整buffer寿命、GPU可见或数值计算正确；部分全局applied依赖只是功能编排。它未连接现代计划/provider或匹配GPU测量，不能当作现代MoE性能基线。功能反例、FIFO和截止核验见[事务本地阶段](../fixtures/transaction_local_stages/README.md)。
 
 stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个非抢占槽，仅验证实际网络回调、资源排队和后续发送的因果关系。它不从GPU型号推导成本，不模拟SM/显存/CUDA并发，不把接收前缀当GPU可见，也未接入现代DeepEP计划或生产请求。旧v1/v2真实网络结果、人工端点包/ACK和截止前缀的独立核查见[验收](../fixtures/local_stages/README.md)。

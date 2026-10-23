@@ -19,7 +19,14 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transport_(fabric) {
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
-          input.at("schema_version")=="moe-rdma-transactions/2","wrong transaction schema");
+          input.at("schema_version")=="moe-rdma-transactions/2" ||
+          input.at("schema_version")=="moe-rdma-transactions/3","wrong transaction schema");
+  source_mode_=input.at("schema_version")=="moe-rdma-transactions/3";
+  if(source_mode_) {
+    source_model_=input.at("source_model");
+    Require(source_model_==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},
+            "unsupported transaction source model");
+  }
   Require(input.at("connections").is_array() && !input.at("connections").empty() && input.at("connections").size()<=8,
           "transaction connection budget exceeded");
   for(const auto& c:input.at("connections")) {
@@ -80,6 +87,9 @@ void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observa
   if(observations.empty())return;
   const auto owner=LocalOwner(input);
   for(const auto& condition:observations)Require(condition.at("matched"),"consume before local conditions satisfied");
+  // Precheck every reset before the first write, including outstanding readers.
+  for(const auto& condition:observations)if(condition.contains("reset_to"))
+    memory_.CheckWritable(owner,condition.at("key"),condition.at("address"),8);
   for(const auto& condition:observations)if(condition.contains("reset_to"))
     memory_.Store64(owner,condition.at("key"),condition.at("address"),condition.at("reset_to"));
   local_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",input.at("id")},
@@ -88,6 +98,33 @@ void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observa
 void RemoteTransactions::AdmitLocal(const Json& input) {
   Require(input.at("kind")=="local","local admission requires local kind");
   ConsumeConditions(input,LocalWaits(input));
+}
+RemoteMemory::ReadLease RemoteTransactions::Source(const Json& input) const {
+  Require(source_mode_ && input.at("verb")=="put" && !input.contains("hex"),"source requires v3 put without hex");
+  const auto& s=input.at("source");
+  Require(s.is_object() && s.size()==3,"invalid source fields");
+  auto integer=[&](const char* key,uint64_t maximum) {
+    const auto& v=s.at(key);
+    Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid source integer");
+    const auto n=v.get<uint64_t>();Require(n<=maximum,"source integer out of bounds");return n;
+  };
+  const auto owner=connections_.at(input.at("connection")).src;
+  RemoteMemory::ReadLease range{owner,static_cast<uint32_t>(integer("key",UINT32_MAX)),integer("address",UINT64_MAX),integer("bytes",32768)};
+  memory_.CheckRead(range);
+  // Consuming a counter inside this same source would change the data before
+  // publication. Require separate application steps instead of picking an order.
+  for(const auto& w:LocalWaits(input))if(w.contains("reset_to")) {
+    const auto address=w.at("address").get<uint64_t>();
+    Require(address+8<=range.address || range.address+range.bytes<=address,"source overlaps own condition reset");
+  }
+  return range;
+}
+void RemoteTransactions::ValidateSource(const Json& input) const {if(input.contains("source"))Source(input);}
+void RemoteTransactions::SourceEvent(uint64_t id,const char* kind,RemoteMemory::ReadLease s,const std::vector<uint8_t>* bytes) {
+  Json row={{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",id},{"kind",kind},
+    {"owner",s.owner},{"key",s.key},{"address",s.address},{"bytes",s.bytes}};
+  if(bytes)row["hex"]=MemoryHex(*bytes);
+  source_events_.push_back(row);
 }
 bool RemoteTransactions::QueueFenceReady(const Json& input) {
   if(!input.contains("queue_fence"))return true;
@@ -120,7 +157,12 @@ void RemoteTransactions::Submit(const Json& input) {
   auto& c=connections_.at(connection);
   Operation op;op.id=id;op.connection=connection;op.ready=MemoryNow();
   op.request.sequence=c.operations.size();op.request.address=input.at("address");op.request.key=input.at("key");
-  if(input.at("verb")=="put") {op.request.verb=MemoryFrame::Put;op.request.body=MemoryUnhex(input.at("hex"));}
+  if(input.at("verb")=="put") {
+    op.request.verb=MemoryFrame::Put;
+    if(input.contains("source")) {
+      op.source=Source(input);op.has_source=true;op.request.body.resize(op.source.bytes); // length only, never sent before capture
+    } else op.request.body=MemoryUnhex(input.at("hex"));
+  }
   else {
     Require(input.at("verb")=="fetch_add","unsupported memory transaction verb");
     op.request.verb=MemoryFrame::FetchAdd;op.request.body=MemoryInteger(input.at("value"));
@@ -137,6 +179,7 @@ void RemoteTransactions::Submit(const Json& input) {
   // Check all conditions before any consume, using only this GPU's received
   // memory. Source operation truth never supplies a value to the predicates.
   ConsumeConditions(input,observations);
+  if(op.has_source) {memory_.AcquireRead(id,op.source);SourceEvent(id,"acquired",op.source);}
   c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
@@ -144,6 +187,11 @@ void RemoteTransactions::Pump(uint64_t connection) {
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
     if(op.published>=0 || !c.queue.CanPrepare(op.ticket))continue;
+    if(op.has_source) {
+      const auto& s=op.source;
+      op.request.body=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);
+      SourceEvent(id,"captured",s,&op.request.body);
+    }
     c.queue.Prepare(op.ticket);c.queue.PublishThrough(op.ticket+1);
     const auto work=c.queue.ConsumePublished();Require(work && work->work_id==id,"transaction queue consumption mismatch");
     op.published=MemoryNow();
@@ -188,6 +236,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
     if(op.completed>=0)continue;
     if(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0))break;
     op.completed=MemoryNow();c.queue.CompleteThrough(op.ticket+1);
+    if(op.has_source) {memory_.ReleaseRead(id);SourceEvent(id,"released",op.source);}
   }
   Pump(connection);if(changed)ns3::Simulator::ScheduleNow(changed);
 }
@@ -198,6 +247,7 @@ bool RemoteTransactions::Occurred(uint64_t id,const std::string& event) const {
   Require(event=="completed","unsupported transaction event");return it->second.completed>=0;
 }
 bool RemoteTransactions::Drained() const {
+  if(!memory_.ReadLeases().empty())return false;
   for(const auto& item:connections_)if(!item.second.queue.Drained() || !item.second.requests.Empty() || !item.second.responses.Empty())return false;
   return transport_.Drained();
 }
@@ -232,6 +282,13 @@ Json RemoteTransactions::Report() const {
   out["queue_fences"]=Json::array();
   for(const auto& fence:queue_fences_.items())out["queue_fences"].push_back(fence.value());
   out["queue_fence_scope"]="snapshot of source-owned MRT1 application queue prefixes, ACK/response completion; not GIN flush or GPU source reuse";
+  if(source_mode_) {
+    out["source_model"]=source_model_;out["source_events"]=source_events_;out["active_source_leases"]=Json::array();
+    for(const auto& item:memory_.ReadLeases()) {
+      const auto& s=item.second;
+      out["active_source_leases"].push_back({{"operation",item.first},{"owner",s.owner},{"key",s.key},{"address",s.address},{"bytes",s.bytes}});
+    }
+  }
   out["transport"]=transport_.Report();return out;
 }
 }

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+transactions/3仅在`transactions`新增`source_model/source_events/active_source_leases`。source_events中的acquired/captured/released与target_events/local_events共用order和网络ns时钟；captured记录实际读取hex，未完成记录不补release。v3运行期异常保留`execution_error`及部分实际状态并退出1，输入错误不生成结果。字段范围见[源窗口输出](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)；v1/v2无这些新增字段。
+
 transactions/2新增顶层`local_model/local_work/completed_local_work/pending_local_work`；local_work的ready/start/completed分别表示入队、占用GPU抽象串行槽、实际完成，单位ns，未发生为−1。completed_operations只计远端。local_events也可引用本地节点，其消费发生在入队时；pending_local_work的当前条件不能反推入队前值，具体见[事务本地处理输出](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1无这些新字段。
 
 持久字节入口stream-work/3新增顶层`local_work`（`id/rank/duration_ns/ready_ns/start_ns/completed_ns`）、`local_model`和`completed_local_work`；时刻均为同一ns-3时钟的ns，未发生为-1。本地完成不会生成网络写记录；顶层`completed_work`计全部节点，`persistent_transport.work`仅计写。时限失败也保存实际前缀，不用定时器目标填充完成。旧v1/v2字段不变，详见[输入与输出](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。

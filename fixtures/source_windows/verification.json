@@ -1,0 +1,229 @@
+{
+  "passed": true,
+  "normal": {
+    "source_puts": 4,
+    "captured_source_puts": 4,
+    "active_source_leases": 0,
+    "applied": 6,
+    "source_packets": 27,
+    "payload_bytes": 1525,
+    "incomplete_wire_streams": 0,
+    "memory_windows": 3
+  },
+  "complete_audit": {
+    "operations": 6,
+    "source_packets": 27,
+    "transported_payload_bytes": 1525,
+    "finish_ns": 598270,
+    "final_atomic_value": 0
+  },
+  "source_events": [
+    {
+      "address": 4096,
+      "bytes": 257,
+      "key": 7,
+      "kind": "acquired",
+      "operation": 0,
+      "order": 0,
+      "owner": 0,
+      "time_ns": 0
+    },
+    {
+      "address": 4096,
+      "bytes": 257,
+      "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+      "key": 7,
+      "kind": "captured",
+      "operation": 0,
+      "order": 1,
+      "owner": 0,
+      "time_ns": 0
+    },
+    {
+      "address": 4096,
+      "bytes": 257,
+      "key": 7,
+      "kind": "released",
+      "operation": 0,
+      "order": 3,
+      "owner": 0,
+      "time_ns": 12102
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "key": 8,
+      "kind": "acquired",
+      "operation": 2,
+      "order": 6,
+      "owner": 4,
+      "time_ns": 58138
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+      "key": 8,
+      "kind": "captured",
+      "operation": 2,
+      "order": 7,
+      "owner": 4,
+      "time_ns": 58138
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "key": 8,
+      "kind": "acquired",
+      "operation": 3,
+      "order": 8,
+      "owner": 4,
+      "time_ns": 58138
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "key": 8,
+      "kind": "released",
+      "operation": 2,
+      "order": 10,
+      "owner": 4,
+      "time_ns": 70240
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+      "key": 8,
+      "kind": "captured",
+      "operation": 3,
+      "order": 11,
+      "owner": 4,
+      "time_ns": 70240
+    },
+    {
+      "address": 8192,
+      "bytes": 257,
+      "key": 8,
+      "kind": "released",
+      "operation": 3,
+      "order": 13,
+      "owner": 4,
+      "time_ns": 82342
+    },
+    {
+      "address": 12288,
+      "bytes": 257,
+      "key": 9,
+      "kind": "acquired",
+      "operation": 4,
+      "order": 15,
+      "owner": 1,
+      "time_ns": 94216
+    },
+    {
+      "address": 12288,
+      "bytes": 257,
+      "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+      "key": 9,
+      "kind": "captured",
+      "operation": 4,
+      "order": 16,
+      "owner": 1,
+      "time_ns": 94216
+    },
+    {
+      "address": 12288,
+      "bytes": 257,
+      "key": 9,
+      "kind": "released",
+      "operation": 4,
+      "order": 18,
+      "owner": 1,
+      "time_ns": 98270
+    }
+  ],
+  "changed_only_initial_window_changes_all_forwarded_bytes": true,
+  "source_readers_overlap": true,
+  "pre_submit_overwrite_changes_publish_snapshot": true,
+  "local_stage_input_lifetime_modeled": false,
+  "repeat_byte_identical": true,
+  "id_renaming_wire_invariant": true,
+  "missing_count": {
+    "source_puts": 1,
+    "captured_source_puts": 1,
+    "active_source_leases": 0,
+    "applied": 2,
+    "source_packets": 7,
+    "payload_bytes": 369,
+    "incomplete_wire_streams": 0,
+    "memory_windows": 3
+  },
+  "source_conflicts": {
+    "overwrite-put": {
+      "source_puts": 3,
+      "captured_source_puts": 2,
+      "active_source_leases": 2,
+      "applied": 3,
+      "source_packets": 17,
+      "payload_bytes": 947,
+      "incomplete_wire_streams": 0,
+      "memory_windows": 3
+    },
+    "overwrite-atomic": {
+      "source_puts": 3,
+      "captured_source_puts": 2,
+      "active_source_leases": 2,
+      "applied": 2,
+      "source_packets": 13,
+      "payload_bytes": 698,
+      "incomplete_wire_streams": 0,
+      "memory_windows": 3
+    },
+    "local-reset": {
+      "source_puts": 3,
+      "captured_source_puts": 2,
+      "active_source_leases": 2,
+      "applied": 2,
+      "source_packets": 8,
+      "payload_bytes": 433,
+      "incomplete_wire_streams": 1,
+      "memory_windows": 3
+    }
+  },
+  "cutoff": {
+    "source_puts": 1,
+    "captured_source_puts": 1,
+    "active_source_leases": 1,
+    "applied": 0,
+    "source_packets": 5,
+    "payload_bytes": 289,
+    "incomplete_wire_streams": 0,
+    "memory_windows": 3
+  },
+  "legacy_byte_identical": [
+    "work",
+    "local-waits",
+    "queue-fences",
+    "local-stages"
+  ],
+  "literal_v3_equal": true,
+  "invalid_cli_and_native": [
+    "wrong-model",
+    "foreign-source",
+    "bool-length",
+    "long-source",
+    "extra-owner",
+    "double-payload",
+    "atomic-source",
+    "own-reset"
+  ],
+  "commands": 37,
+  "public_commands": 29,
+  "native_commands": 8,
+  "output_bytes": 2952767,
+  "wall_seconds": 20.26244629174471,
+  "backend_sha256": "f50f11cc238f03b6149ddc68ac5a6677498a4b01e1ecce79c9388ff96a14cd88",
+  "reference_sha256": "35411fafc88dce69bd0ad960a24c905ab954137b63e231fb058b6d49f279632a",
+  "scope": "functional memory snapshot at publication and ACK guards; no GPU/GIN calibration or MoE execution"
+}

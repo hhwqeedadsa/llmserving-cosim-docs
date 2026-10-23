@@ -1,0 +1,270 @@
+{
+  "passed": true,
+  "flows": {
+    "remote": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 66394,
+        "final_atomic_value": 10
+      },
+      "depth2": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 42272,
+        "final_atomic_value": 10
+      },
+      "segmented": {
+        "operations": 6,
+        "source_packets": 12,
+        "transported_payload_bytes": 545,
+        "finish_ns": 66411,
+        "final_atomic_value": 10
+      },
+      "repeat_byte_identical": true,
+      "application_id_renaming_wire_and_time_invariant": true,
+      "output_bytes_before_summary": 206543,
+      "wall_seconds": 4.753493817523122,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "6ba971151ca545b3424d809fa2653cac3811243da1d3943632896d2d8a9aa70d",
+        "backend/rdma/remote_transactions.hh": "56ea27c9140af949c2f61b82ecda859dad994f5b9ff82898c33cc992c7da38ff",
+        "backend/rdma/remote_transactions.cc": "7abf66d9a55558fcf918f36c6bf47242a8b3e4e936128034baaf5386d544e3af",
+        "backend/rdma/persistent_streams.hh": "e5884a1f987800eeadf965b18d8edfc8ea475801f13f314e7002a8226ce75905",
+        "backend/rdma/persistent_streams.cc": "e7175b028cdf6a5bfc6a8c2d7fe6e5bd001bcbd8ccd939870f35d74abe7642de",
+        "backend/rdma/transaction_probe.cc": "42bdba32d799ddcbfffdcfb4d5d35f6250032e6601ec31c1e3bc7295f8677110",
+        "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+        "python/moe_ub_cosim/scaleout_transactions.py": "a515739d8b5ecc4461f3de61dea5f7ed31518550571ba98d5b71e10a8f8649da",
+        "python/moe_ub_cosim/cli.py": "07346b40ddf5b10b153471f66a54dc80f211778cf68a2c7a6615fc219b54ae9e",
+        "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+        "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+        "tests/integration/check_remote_transaction_workflow.py": "e7f4267c07c47ada50be474bf4bb92ea7ab82b8aa10537a06c6725c3d951b2b7"
+      },
+      "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+    },
+    "wait": {
+      "passed": true,
+      "public_commands": 8,
+      "normal": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "greater": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "failure_probes": {
+        "missing-increment": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 1,
+          "conjunction": [
+            false,
+            true
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        },
+        "wrong-payload": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 2,
+          "conjunction": [
+            true,
+            false
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        }
+      },
+      "expected_rejections": 3,
+      "local_conditions_checked": 6,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "shared_clock": true,
+      "modern_deepep_executed": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "6ba971151ca545b3424d809fa2653cac3811243da1d3943632896d2d8a9aa70d",
+        "backend/rdma/remote_transactions.hh": "56ea27c9140af949c2f61b82ecda859dad994f5b9ff82898c33cc992c7da38ff",
+        "backend/rdma/remote_transactions.cc": "7abf66d9a55558fcf918f36c6bf47242a8b3e4e936128034baaf5386d544e3af",
+        "backend/rdma/transaction_probe.cc": "42bdba32d799ddcbfffdcfb4d5d35f6250032e6601ec31c1e3bc7295f8677110",
+        "python/moe_ub_cosim/scaleout_transactions.py": "a515739d8b5ecc4461f3de61dea5f7ed31518550571ba98d5b71e10a8f8649da",
+        "examples/scaleout_rdma_transactions/local-waits.json": "fa201a506a5d1c0b64a4eea6e664b5781b54207adb05d4e336103f091fdf0ac4",
+        "tests/integration/check_local_memory_wait_workflow.py": "151af20d8f1c5b950f63a5d9653853897c786471c4c1d8b4aceb0bd494c246d6",
+        "tests/integration/check_remote_transaction_workflow.py": "e7f4267c07c47ada50be474bf4bb92ea7ab82b8aa10537a06c6725c3d951b2b7"
+      },
+      "output_bytes": 283500,
+      "wall_seconds": 4.754760647192597
+    },
+    "fence": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 49870,
+        "final_atomic_value": null
+      },
+      "reserved_tail": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 65032,
+        "final_atomic_value": null
+      },
+      "empty_snapshot": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 36180,
+        "final_atomic_value": null
+      },
+      "snapshot_excludes_future_work": true,
+      "snapshot_includes_unpublished_reserved_work": true,
+      "empty_snapshot_does_not_wait_for_future_work": true,
+      "first_fence_completed_ns": 13690,
+      "uncovered_tail_completed_ns": 16413,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "same_network_clock": true,
+      "modern_GIN_flush_validated": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_transactions.hh": "56ea27c9140af949c2f61b82ecda859dad994f5b9ff82898c33cc992c7da38ff",
+        "backend/rdma/remote_transactions.cc": "7abf66d9a55558fcf918f36c6bf47242a8b3e4e936128034baaf5386d544e3af",
+        "backend/rdma/transaction_probe.cc": "42bdba32d799ddcbfffdcfb4d5d35f6250032e6601ec31c1e3bc7295f8677110",
+        "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+        "python/moe_ub_cosim/scaleout_transactions.py": "a515739d8b5ecc4461f3de61dea5f7ed31518550571ba98d5b71e10a8f8649da",
+        "examples/scaleout_rdma_transactions/queue-fences.json": "7ee7f99582e4c93dfa6fa3d3404f7001bb8b7fd53025437dd9d73c20d08087f8",
+        "tests/integration/check_remote_transaction_workflow.py": "e7f4267c07c47ada50be474bf4bb92ea7ab82b8aa10537a06c6725c3d951b2b7",
+        "tests/integration/check_queue_fence_workflow.py": "d30767e8fb76d6885b887deee67f758a971cde7405cdb37ee9003ec7cfa4a2c1"
+      },
+      "output_bytes": 3305568,
+      "wall_seconds": 4.684414453804493
+    },
+    "local": {
+      "passed": true,
+      "normal": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 714304,
+        "final_atomic_value": 0
+      },
+      "local_work": [
+        {
+          "completed_ns": 106042,
+          "duration_ns": 100000,
+          "id": 13,
+          "rank": 4,
+          "ready_ns": 6042,
+          "start_ns": 6042
+        },
+        {
+          "completed_ns": 146042,
+          "duration_ns": 40000,
+          "id": 10,
+          "rank": 4,
+          "ready_ns": 18096,
+          "start_ns": 106042
+        },
+        {
+          "completed_ns": 300000,
+          "duration_ns": 300000,
+          "id": 12,
+          "rank": 1,
+          "ready_ns": 0,
+          "start_ns": 0
+        },
+        {
+          "completed_ns": 146042,
+          "duration_ns": 0,
+          "id": 14,
+          "rank": 4,
+          "ready_ns": 146042,
+          "start_ns": 146042
+        },
+        {
+          "completed_ns": 190184,
+          "duration_ns": 20000,
+          "id": 11,
+          "rank": 4,
+          "ready_ns": 170184,
+          "start_ns": 170184
+        },
+        {
+          "completed_ns": 714304,
+          "duration_ns": 500000,
+          "id": 15,
+          "rank": 0,
+          "ready_ns": 214304,
+          "start_ns": 214304
+        }
+      ],
+      "endpoint_frames_checked": 14,
+      "failures": {
+        "missing-count": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 1
+        },
+        "wrong-data": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 2
+        },
+        "cutoff": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 0
+        }
+      },
+      "repeat_byte_identical": true,
+      "renaming_wire_invariant": true,
+      "fifo_old_queue_first": true,
+      "legacy_byte_identical": [
+        "work",
+        "local-waits",
+        "queue-fences"
+      ],
+      "remote_only_v2_equal": true,
+      "invalid_cli_and_native": [
+        "bool-rank",
+        "switch-rank",
+        "bool-duration",
+        "wrong-event",
+        "extra-time",
+        "wrong-model",
+        "wrong-kind",
+        "foreign-window",
+        "bool-condition"
+      ],
+      "commands": 33,
+      "wall_seconds": 15.539241537451744,
+      "output_bytes": 1703380,
+      "backend_sha256": "f50f11cc238f03b6149ddc68ac5a6677498a4b01e1ecce79c9388ff96a14cd88",
+      "reference_sha256": "f35af564ddebb4d3919c4d30090324f63eb2588e907226f17267c5ec67ee6d5d",
+      "scope": "functional declared-duration stages; no GPU visibility, modern GIN or hardware calibration"
+    }
+  },
+  "final_binary_sha256": "f50f11cc238f03b6149ddc68ac5a6677498a4b01e1ecce79c9388ff96a14cd88"
+}

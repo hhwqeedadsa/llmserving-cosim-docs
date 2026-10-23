@@ -22,9 +22,12 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
-    const bool local_mode=input.at("schema_version")=="moe-rdma-transactions/2";
+    const bool source_mode=input.at("schema_version")=="moe-rdma-transactions/3";
+    const bool local_mode=source_mode || input.at("schema_version")=="moe-rdma-transactions/2";
     if(local_mode) {
-      Keys(input,{"schema_version","connections","windows","operations","local_model"});
+      std::vector<std::string> keys={"schema_version","connections","windows","operations","local_model"};
+      if(source_mode)keys.push_back("source_model");
+      Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
@@ -52,7 +55,8 @@ int main(int argc,char** argv) {
         } else {
           keys.insert(keys.end(),{"connection","verb","key","address"});
           Require(op.at("verb")=="put" || op.at("verb")=="fetch_add","unsupported transaction verb");
-          keys.push_back(op.at("verb")=="put"?"hex":"value");
+          Require(!op.contains("source") || (source_mode && op.at("verb")=="put" && !op.contains("hex")),"source requires v3 put without hex");
+          keys.push_back(op.contains("source")?"source":op.at("verb")=="put"?"hex":"value");
           Integer(op.at("connection"),7);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
           if(op.at("verb")=="fetch_add")Integer(op.at("value"),UINT64_MAX);
           if(op.contains("queue_fence"))keys.push_back("queue_fence");
@@ -61,6 +65,7 @@ int main(int argc,char** argv) {
         if(op.contains("local_wait"))keys.push_back("local_wait");
         Keys(op,keys);
         if(op.contains("local_wait"))transactions.LocalWaits(op); // validate even blocked predicates
+        transactions.ValidateSource(op);
       }
       if(local[i])++local_count;else ++remote_count;
       Require(local_count<=16 && remote_count<=32,"transaction kind count budget exceeded");
@@ -104,13 +109,13 @@ int main(int argc,char** argv) {
           ready=ready && (local[parent]?local_times[parent][2]>=0:transactions.Occurred(d.at("operation"),d.at("event")));
         }
         if(ready && transactions.LocalReady(operations[i]) && transactions.QueueFenceReady(operations[i])) {
-          submitted[i]=true;
           if(local[i]) {
             transactions.AdmitLocal(operations[i]);
+            submitted[i]=true;
             local_times[i][0]=ns3::Simulator::Now().GetNanoSeconds();
             const auto rank=operations[i].at("rank").get<unsigned>();
             local_queues[rank].push_back(i);pump_local(rank);
-          } else transactions.Submit(operations[i]);
+          } else {transactions.Submit(operations[i]);submitted[i]=true;}
         }
       }
       complete=0;
@@ -120,7 +125,11 @@ int main(int argc,char** argv) {
       }
     };
     transactions.changed=progress;ns3::Simulator::ScheduleNow(progress);
-    ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
+    ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));
+    std::string run_error;
+    if(source_mode) {
+      try {ns3::Simulator::Run();}catch(const std::exception& e) {run_error=e.what();}
+    } else ns3::Simulator::Run();
     auto result=fabric.Report();result["transactions"]=transactions.Report();result["completed_operations"]=complete;
     result["pending_operations"]=Json::array();
     for(std::size_t i=0;i<operations.size();++i)if(!local[i] && !submitted[i])
@@ -137,7 +146,8 @@ int main(int argc,char** argv) {
       }
     }
     result["loaded_libraries"]=Json::array();dl_iterate_phdr(Libraries,&result["loaded_libraries"]);
-    const bool passed=finished && complete==remote_count && local_complete==local_count && transactions.Drained() && fabric.Drained();
+    const bool passed=run_error.empty() && finished && complete==remote_count && local_complete==local_count && transactions.Drained() && fabric.Drained();
+    if(!run_error.empty())result["execution_error"]=run_error;
     result["passed"]=passed;
     std::ofstream out(argv[4]);out<<result.dump()<<'\n';out.close();Require(bool(out),"cannot write transaction report");
     ns3::Simulator::Destroy();Require(passed,"incomplete native transaction execution; inspect report");

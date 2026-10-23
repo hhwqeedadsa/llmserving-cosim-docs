@@ -67,6 +67,7 @@ class RemoteMemory {
  public:
   struct Window {unsigned owner;uint32_t key;uint64_t address;bool atomic;std::vector<uint8_t> bytes;};
   struct Result {bool duplicate;bool atomic;uint64_t old_value;};
+  struct ReadLease {unsigned owner;uint32_t key;uint64_t address,bytes;};
   void Register(Window window) {
     MemoryCheck(windows_.size()<16 && window.key && !window.bytes.empty() && window.bytes.size()<=65536 &&
                 window.address<=UINT64_MAX-window.bytes.size(),"invalid remote memory window");
@@ -97,6 +98,8 @@ class RemoteMemory {
     MemoryCheck(frame.address>=it->address && frame.address-it->address<=it->bytes.size() &&
                 length<=it->bytes.size()-(frame.address-it->address),"remote memory address out of bounds");
     const auto offset=frame.address-it->address;
+    if(frame.verb==MemoryFrame::FetchAdd)MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
+    CheckWritable(owner,frame.key,frame.address,length);
     Result result{false,frame.verb==MemoryFrame::FetchAdd,0};
     if(result.atomic) {
       MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
@@ -108,6 +111,32 @@ class RemoteMemory {
     return result;
   }
   const std::vector<Window>& Windows() const {return windows_;}
+  std::vector<uint8_t> ReadBytes(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
+    const auto& w=Range(owner,key,address,bytes);
+    MemoryCheck(bytes<=32768,"source read length exceeded");
+    return {w.bytes.begin()+(address-w.address),w.bytes.begin()+(address-w.address)+bytes};
+  }
+  void AcquireRead(uint64_t identity,ReadLease lease) {
+    MemoryCheck(!leases_.count(identity) && leases_.size()<32,"invalid source read lease identity/budget");
+    CheckRead(lease);
+    leases_.emplace(identity,lease);
+  }
+  void CheckRead(ReadLease lease) const {
+    Range(lease.owner,lease.key,lease.address,lease.bytes);
+    MemoryCheck(lease.bytes<=32768,"source read lease length exceeded");
+  }
+  void ReleaseRead(uint64_t identity) {
+    MemoryCheck(leases_.erase(identity)==1,"unknown source read lease release");
+  }
+  const std::map<uint64_t,ReadLease>& ReadLeases() const {return leases_;}
+  void CheckWritable(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
+    Range(owner,key,address,bytes);
+    for(const auto& item:leases_) {
+      const auto& r=item.second;
+      if(r.owner==owner)MemoryCheck(address+bytes<=r.address || r.address+r.bytes<=address,
+                                   "write overlaps active source read lease");
+    }
+  }
   // Target-local functional accesses; no GPU coherence or polling delay.
   uint64_t Load64(unsigned owner,uint32_t key,uint64_t address) const {
     const auto& w=LocalWindow(owner,key,address);
@@ -117,10 +146,17 @@ class RemoteMemory {
   }
   void Store64(unsigned owner,uint32_t key,uint64_t address,uint64_t value) {
     const auto& found=LocalWindow(owner,key,address);
+    CheckWritable(owner,key,address,8);
     auto& w=windows_.at(static_cast<std::size_t>(&found-windows_.data()));
     for(unsigned i=0;i<8;++i)w.bytes[address-w.address+i]=value>>(8*i);
   }
  private:
+  const Window& Range(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
+    const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
+    MemoryCheck(it!=windows_.end() && bytes>0 && address>=it->address && address-it->address<=it->bytes.size() &&
+                bytes<=it->bytes.size()-(address-it->address),"invalid source memory range");
+    return *it;
+  }
   const Window& LocalWindow(unsigned owner,uint32_t key,uint64_t address) const {
     const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
     MemoryCheck(it!=windows_.end() && address%8==0 && address>=it->address &&
@@ -131,6 +167,7 @@ class RemoteMemory {
   struct Saved {unsigned owner;std::vector<uint8_t> bytes;Result result;};
   struct Context {uint64_t next=0;std::map<uint64_t,Saved> saved;};
   std::vector<Window> windows_;
+  std::map<uint64_t,ReadLease> leases_;
   std::map<uint64_t,Context> contexts_;
 };
 }

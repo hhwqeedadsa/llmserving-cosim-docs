@@ -85,7 +85,9 @@ def audit(result, config, mtu, allow_partial=False):
         assert offset == len(data)
     for row in rows.values():
         op = specs[row['id']]; f = frames[row['connection']*2, row['sequence']]
-        expected_body = bytes.fromhex(op['hex']) if op['verb'] == 'put' else op['value'].to_bytes(8, 'big')
+        captured = {e['operation']: e for e in tx.get('source_events', []) if e['kind'] == 'captured'}
+        expected_body = (bytes.fromhex(captured[op['id']]['hex']) if 'source' in op else
+                         bytes.fromhex(op['hex']) if op['verb'] == 'put' else op['value'].to_bytes(8, 'big'))
         assert (f['verb'], f['key'], f['address'], f['body']) == (1 if op['verb'] == 'put' else 2, op['key'], op['address'], expected_body)
         ready = max(((local_rows if all_specs[d['operation']].get('kind') == 'local' else rows)[d['operation']][dict(applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
                      for d in op['after']), default=0)
@@ -111,13 +113,66 @@ def audit(result, config, mtu, allow_partial=False):
         # In-order completion may additionally wait for earlier work.
         previous = [r['completed_ns'] for r in rows.values() if r['connection'] == row['connection'] and r['sequence'] < row['sequence']]
         assert row['completed_ns'] == max([row['request_acked_ns'], row['response_ns'], *previous])
+    assert len(tx['target_events']) == len(rows) and tx['duplicate_requests'] == 0
+    memory = audit_memory(tx, config, frames, rows)
+    for c in connections.values():
+        ordered = sorted((r for r in rows.values() if r['connection'] == c['id']), key=lambda r: r['sequence'])
+        for index, row in enumerate(ordered):
+            release = ordered[index-c['queue_depth']]['completed_ns'] if index >= c['queue_depth'] else 0
+            assert row['published_ns'] == max(row['ready_ns'], release)
+    for s in net['streams']:
+        assert s['qp_creations'] == 1 and s['snd_nxt'] == s['snd_una'] == s['submitted_bytes']
+    native = [p for p in result['loaded_libraries'] if Path(p).name.startswith('libns3')]
+    assert native and len({str(Path(p).parent) for p in native}) == 1 and all('unified-bus' not in p for p in native)
+    assert result['finish_ns'] >= max(w['acked_ns'] for w in net['work'])
+    atomics = [op for op in specs.values() if op['verb'] == 'fetch_add']
+    final_atomic = None
+    if atomics:
+        op = atomics[0]; key = connections[op['connection']]['dst'], op['key']
+        base = next(w['address'] for w in config['windows'] if (w['owner'], w['key']) == key)
+        final_atomic = int.from_bytes(memory[key][op['address']-base:op['address']-base+8], 'little')
+    return dict(operations=len(rows), source_packets=len(packets), transported_payload_bytes=sum(map(len, source_bytes.values())),
+                finish_ns=result['finish_ns'], final_atomic_value=final_atomic)
+
+
+def audit_memory(tx, config, frames, rows):
+    # Independent byte/lease replay also accepts an in-flight prefix: only
+    # actually applied target frames must already be complete in source bytes.
+    connections = {c['id']: c for c in config['connections']}
+    all_specs = {op['id']: op for op in config['operations']}
+    bindings = {(r['connection'], r['sequence']): r for r in rows.values()}
     memory = {(w['owner'], w['key']): bytearray.fromhex(w['hex']) for w in config['windows']}
     windows = {(w['owner'], w['key']): w for w in config['windows']}
-    assert len(tx['target_events']) == len(rows) and tx['duplicate_requests'] == 0
-    events = sorted(tx['target_events']+tx['local_events'], key=lambda e: e['order'])
+    events = sorted(tx['target_events']+tx['local_events']+tx.get('source_events', []), key=lambda e: e['order'])
     assert [e['order'] for e in events] == list(range(len(events)))
     last_time = -1
+    leases = {}
+
+    def writable(owner, address, length):
+        assert all(s['owner'] != owner or address+length <= s['address'] or
+                   s['address']+s['bytes'] <= address for s in leases.values())
+
     for event in events:
+        assert event['time_ns'] >= last_time; last_time = event['time_ns']
+        if 'kind' in event:
+            identity = event['operation']; op = all_specs[identity]; source = op['source']
+            owner = connections[op['connection']]['src']; s = dict(operation=identity, owner=owner, **source)
+            assert {k: event[k] for k in s} == s
+            row = rows[identity]
+            if event['kind'] == 'acquired':
+                assert identity not in leases and event['time_ns'] == row['ready_ns']
+                leases[identity] = s
+            elif event['kind'] == 'captured':
+                assert leases[identity] == s and event['time_ns'] == row['published_ns']
+                key = owner, source['key']; offset = source['address']-windows[key]['address']
+                data = bytes(memory[key][offset:offset+source['bytes']])
+                assert len(data) == source['bytes'] and data == bytes.fromhex(event['hex'])
+                frame = frames.get((row['connection']*2, row['sequence']))
+                if frame is not None: assert frame['body'] == data
+            else:
+                assert event['kind'] == 'released' and leases.pop(identity) == s
+                assert event['time_ns'] == row['completed_ns'] >= 0
+            continue
         if 'conditions' in event:
             assert event['time_ns'] >= last_time; last_time = event['time_ns']
             op = all_specs[event['operation']]
@@ -133,6 +188,9 @@ def audit(result, config, mtu, allow_partial=False):
                 assert value == condition['value'] if condition['compare'] == 'eq' else value >= condition['value']
             for condition in op['local_wait']:
                 if 'reset_to' in condition:
+                    writable(owner, condition['address'], 8)
+            for condition in op['local_wait']:
+                if 'reset_to' in condition:
                     key = owner, condition['key']; offset = condition['address']-windows[key]['address']
                     memory[key][offset:offset+8] = condition['reset_to'].to_bytes(8, 'little')
             continue
@@ -141,25 +199,17 @@ def audit(result, config, mtu, allow_partial=False):
         assert (event['verb'], event['key'], event['address'], bytes.fromhex(event['body_hex'])) == (f['verb'], f['key'], f['address'], f['body'])
         assert event['time_ns'] == row['applied_ns']
         key = connections[c]['dst'], f['key']; offset = f['address']-windows[key]['address']
+        writable(key[0], f['address'], len(f['body']) if f['verb'] == 1 else 8)
         if f['verb'] == 1: memory[key][offset:offset+len(f['body'])] = f['body']
         else:
             old = int.from_bytes(memory[key][offset:offset+8], 'little')
-            assert old == event['old_value'] == row['returned_value']
+            assert old == event['old_value']
+            if 'returned_value' in row: assert old == row['returned_value']
             memory[key][offset:offset+8] = ((old+int.from_bytes(f['body'], 'big'))%(2**64)).to_bytes(8, 'little')
     assert {(w['owner'], w['key']): bytes.fromhex(w['hex']) for w in tx['windows']} == memory
-    for c in connections.values():
-        ordered = sorted((r for r in rows.values() if r['connection'] == c['id']), key=lambda r: r['sequence'])
-        for index, row in enumerate(ordered):
-            release = ordered[index-c['queue_depth']]['completed_ns'] if index >= c['queue_depth'] else 0
-            assert row['published_ns'] == max(row['ready_ns'], release)
-    for s in net['streams']:
-        assert s['qp_creations'] == 1 and s['snd_nxt'] == s['snd_una'] == s['submitted_bytes']
-    native = [p for p in result['loaded_libraries'] if Path(p).name.startswith('libns3')]
-    assert native and len({str(Path(p).parent) for p in native}) == 1 and all('unified-bus' not in p for p in native)
-    assert result['finish_ns'] >= max(w['acked_ns'] for w in net['work'])
-    return dict(operations=len(rows), source_packets=len(packets), transported_payload_bytes=sum(map(len, source_bytes.values())),
-                finish_ns=result['finish_ns'], final_atomic_value=int.from_bytes(memory[4, 7][:8], 'little')
-                if any(op['verb'] == 'fetch_add' for op in specs.values()) else None)
+    if 'active_source_leases' in tx:
+        assert tx['active_source_leases'] == [leases[i] for i in sorted(leases)]
+    return memory
 
 
 def main():

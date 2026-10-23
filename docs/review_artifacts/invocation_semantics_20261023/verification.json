@@ -1,0 +1,101 @@
+{
+  "verified": true,
+  "sources": 19,
+  "excerpts": 29,
+  "source_task_assignments": 1080,
+  "connection_projections": 18,
+  "cases": [
+    {
+      "num_sms": 4,
+      "shared_memory_bytes": 65536,
+      "dispatch_warps": 4,
+      "active_sender_peer_contexts": 36,
+      "active_data_contexts": [
+        1,
+        2,
+        3
+      ],
+      "maximum_puts_per_sender_peer_context": 9,
+      "writes": 180
+    },
+    {
+      "num_sms": 4,
+      "shared_memory_bytes": 131072,
+      "dispatch_warps": 8,
+      "active_sender_peer_contexts": 35,
+      "active_data_contexts": [
+        1,
+        2,
+        3
+      ],
+      "maximum_puts_per_sender_peer_context": 10,
+      "writes": 180
+    },
+    {
+      "num_sms": 8,
+      "shared_memory_bytes": 65536,
+      "dispatch_warps": 4,
+      "active_sender_peer_contexts": 76,
+      "active_data_contexts": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "maximum_puts_per_sender_peer_context": 5,
+      "writes": 180
+    },
+    {
+      "num_sms": 8,
+      "shared_memory_bytes": 131072,
+      "dispatch_warps": 8,
+      "active_sender_peer_contexts": 77,
+      "active_data_contexts": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "maximum_puts_per_sender_peer_context": 5,
+      "writes": 180
+    },
+    {
+      "num_sms": 16,
+      "shared_memory_bytes": 65536,
+      "dispatch_warps": 4,
+      "active_sender_peer_contexts": 36,
+      "active_data_contexts": [
+        1,
+        2,
+        5,
+        6
+      ],
+      "maximum_puts_per_sender_peer_context": 8,
+      "writes": 180
+    },
+    {
+      "num_sms": 16,
+      "shared_memory_bytes": 131072,
+      "dispatch_warps": 8,
+      "active_sender_peer_contexts": 18,
+      "active_data_contexts": [
+        1,
+        2
+      ],
+      "maximum_puts_per_sender_peer_context": 15,
+      "writes": 180
+    }
+  ],
+  "source_code_executed": false,
+  "network_executed": false,
+  "conditional_shared_memory_only": true,
+  "actual_hardware_configuration_known": false,
+  "independent_load": false,
+  "main_paper_contribution_established": false
+}

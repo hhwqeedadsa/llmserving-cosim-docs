@@ -1,0 +1,82 @@
+{
+  "phase_complete": true,
+  "paper_goal_complete": false,
+  "monitored_seconds": 5.340098209679127,
+  "allocated_bytes_before_closeout": 12767232,
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "seconds": 0.13796334899961948,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "check-final-monitor",
+      "seconds": 0.2444783840328455,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "check-monitor",
+      "seconds": 0.14036911353468895,
+      "exit_code": 1,
+      "status": "child_failed"
+    },
+    {
+      "stage": "collect-monitor",
+      "seconds": 1.876234544441104,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "deps-monitor",
+      "seconds": 0.4692500066012144,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "final-monitor",
+      "seconds": 0.16118182241916656,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "input-monitor",
+      "seconds": 0.12969485856592655,
+      "exit_code": 1,
+      "status": "child_failed"
+    },
+    {
+      "stage": "input-ready-monitor",
+      "seconds": 0.2429241854697466,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "package-monitor",
+      "seconds": 1.2093179672956467,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "recovery-monitor",
+      "seconds": 0.5867953803390265,
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "stage": "review-monitor",
+      "seconds": 0.14188859798014164,
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ],
+  "raw_path": "/dev/shm/moe-invocation-semantics-20261023",
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "new_network_runs": 0,
+  "new_source_requests": 6,
+  "repeated_source_requests": 0,
+  "source_commit_before_phase": "14f844c06c3d835fbc352a8a89d13fb3b954c27c",
+  "next_question": "Use actual device/context/NIC bindings and real readiness/visibility events for a strong persistent-network baseline before claiming practical CC loss or optimization."
+}

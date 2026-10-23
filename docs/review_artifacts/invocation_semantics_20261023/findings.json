@@ -1,0 +1,47 @@
+{
+  "real_invocation_gap_known": false,
+  "actual_hopper_shared_memory_known": false,
+  "api_default_hybrid": true,
+  "direct_automatic_requested_contexts": 17,
+  "direct_recommended_contexts": "min(SM,9,allocated)",
+  "hybrid_automatic_requested_contexts": [
+    65,
+    129
+  ],
+  "persistent_context_within_reused_buffer": true,
+  "flush_does_not_specify_cnp_drain_or_cc_reset": true,
+  "source_code_cannot_prove_hardware_cc_behavior": true,
+  "route_shapes": [
+    {
+      "file": "1472.json",
+      "entries": 129,
+      "all_entry_keys_are_numeric_layers": true,
+      "explicit_call_timestamp_field": false
+    },
+    {
+      "file": "1808.json",
+      "entries": 129,
+      "all_entry_keys_are_numeric_layers": true,
+      "explicit_call_timestamp_field": false
+    },
+    {
+      "file": "2675.json",
+      "entries": 129,
+      "all_entry_keys_are_numeric_layers": true,
+      "explicit_call_timestamp_field": false
+    },
+    {
+      "file": "6447.json",
+      "entries": 129,
+      "all_entry_keys_are_numeric_layers": true,
+      "explicit_call_timestamp_field": false
+    }
+  ],
+  "modern_library_executed": false,
+  "hardware_calibrated": false,
+  "previous_cross_window_network_results_invalidated": false,
+  "previous_results_support_production_recommendation": false,
+  "main_paper_contribution_established": false,
+  "raw_volatile": true,
+  "persistent_backup": false
+}

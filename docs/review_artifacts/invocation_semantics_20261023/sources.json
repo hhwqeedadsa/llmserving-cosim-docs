@@ -1,0 +1,340 @@
+{
+  "sources": [
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/deep_ep/buffers/ep.py",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "9b8a95364413b3de0c3fd5061280088e5f58b272",
+      "sha256": "a8f72c3975bbf0433b7c2bad7574053c2b8b42296c2d692336beade92b4ed737",
+      "bytes": 51176,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/buffers/ep.py"
+    },
+    {
+      "path": "csrc/kernels/ep/dispatch.hpp",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/kernels/ep/dispatch.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "953af9f7d7e8b2901d3109e96e9ce49f8f2ea834",
+      "sha256": "a811a8602c8d552366494deb566c1fd4c7b243b34e294a60036d0a79848cb1a5",
+      "bytes": 10075,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/ep/dispatch.hpp"
+    },
+    {
+      "path": "csrc/kernels/ep/combine.hpp",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/kernels/ep/combine.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "39baaa126ff3cb8778f46d20c6df17ff8ade022c",
+      "sha256": "42f71363c302e764cca1db7e57e50b0c8861e43a479b29cf6dc922f1518eff05",
+      "bytes": 8668,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/ep/combine.hpp"
+    },
+    {
+      "path": "csrc/comm/stream.hpp",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/comm/stream.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "41b612cc06b7b9485e0c6cd4ca05a1bace1151f8",
+      "sha256": "b9a5de2d39c71b2ee826fb84f7bd53ac68eed6d95190188cfeab1c4e00a2d947",
+      "bytes": 784,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/comm/stream.hpp"
+    },
+    {
+      "path": "csrc/utils/event.hpp",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/csrc/utils/event.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "adc57941c6264082c14555327d54b8b1a5d9602f",
+      "sha256": "27d1eb1ca27d033e72ddbcdaea92224971e5dbb68cc74f2d5aef6f588f32ac8d",
+      "bytes": 988,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/utils/event.hpp"
+    },
+    {
+      "path": "deep_ep/utils/event.py",
+      "cache_path": "data/research/invocation_semantics_20261023/sources/deep_ep/utils/event.py",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "f8aadf826afdb9ccf8a864d363037ea5f6f25f04",
+      "sha256": "db7e5b40d6e401104a2bb72a2cd7859c9d4cc6d8225677073c56356c75d4def9",
+      "bytes": 4255,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/utils/event.py"
+    },
+    {
+      "path": "csrc/buffers/ep.hpp",
+      "cache_path": "data/research/deepep_modern_20261022/sources/csrc/buffers/ep.hpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+      "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+      "bytes": 60540,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp"
+    },
+    {
+      "path": "csrc/kernels/comm/context.cpp",
+      "cache_path": "data/research/deepep_modern_20261022/sources/csrc/kernels/comm/context.cpp",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+      "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+      "bytes": 12061,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+      "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/handle.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "bytes": 11249,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "bytes": 11335,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+      "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+      "bytes": 20457,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+      "bytes": 12081,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "cache_path": "data/research/deepep_modern_20261022/sources/deep_ep/include/deep_ep/layout/ep/token.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ee1a9b91d6313c3e417d2ff800587fe27e2e9836",
+      "sha256": "3510d2832b3aeaa99746cb2c3423bf68c6719e0ca56cd4eb408e9b533dbd58e6",
+      "bytes": 5653,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/layout/ep/token.cuh"
+    },
+    {
+      "path": "README.md",
+      "cache_path": "data/research/deepep_modern_20261022/sources/README.md",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "8c949a4adbc4113bc4199ffb096ae1a7125f6a5d",
+      "sha256": "86415f7fc11381dceb14c112b6c602103d975936444601666ab1fcfd65e8fceb",
+      "bytes": 32914,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/README.md"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/common/compiled.cuh",
+      "cache_path": "data/research/deepep_layout_20261022/sources/deep_ep/include/deep_ep/common/compiled.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "55e55d595d3682e1c9bf4d470a66a961e7b49aac",
+      "sha256": "5adc25fabb787db1106387f01693c8cbdd7d302545ee11c3794529b1e4720f0f",
+      "bytes": 2416,
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/common/compiled.cuh"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "cache_path": "data/research/nccl_gin_20261022/sources/src/gin/gin_host.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+      "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81",
+      "bytes": 22975,
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/gin/gin_host.cc"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "cache_path": "data/research/nccl_gin_20261022/sources/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+      "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+      "bytes": 60093,
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "cache_path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/impl/gin__funcs.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+      "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+      "bytes": 81127,
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/impl/gin__funcs.h"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "cache_path": "data/research/nccl_gin_20261022/sources/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "bytes": 35130,
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h"
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "first_line": 328,
+      "text": "        if num_allocated_qps == 0:\n            # Hybrid mode will consume more QPs\n            # The extra QP is for notify warps\n            if self.allow_hybrid_mode:\n                num_allocated_qps = 65 if check_fast_rdma_atomic_support() else 129\n            else:\n                num_allocated_qps = 17\n        self.num_allocated_qps = num_allocated_qps\n"
+    },
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "first_line": 554,
+      "text": "        num_qps = min(num_sms, 8 + 1)\n\n        # For hybrid mode, we encourage every channel (and notify) to have an independent QP\n        if self.allow_hybrid_mode:\n            num_qps = num_sms * 16 + 1\n\n        return min(num_qps, self.num_allocated_qps)\n"
+    },
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "first_line": 816,
+      "text": "        num_sms = handle.num_sms if num_sms == 0 else align(num_sms, 2)\n        num_qps = self.get_theoretical_num_qps(num_sms) if num_qps == 0 else num_qps\n        assert num_qps <= self.num_allocated_qps, f'Allocated QPs are not enough'"
+    },
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "first_line": 512,
+      "text": "        if self.num_scaleout_ranks > 1 and (rdma_traffic / rdma_gbs) > (nvlink_traffic / nvlink_gbs):\n            bounded_traffic, bounded_gbs = rdma_traffic, rdma_gbs\n        else:\n            bounded_traffic, bounded_gbs = nvlink_traffic, nvlink_gbs\n\n        # Calculate SM count\n        # NOTES: will try to use more SMs if not overlap with compute\n        num_device_sms = torch.cuda.get_device_properties('cuda').multi_processor_count\n        num_sms = num_device_sms  # No traffic, e.g., EP=1\n        if bounded_traffic > 0:\n            num_sms = max(\n                # Dispatch\n                bounded_gbs / bounded_traffic * sm_read / sm_read_gbs,\n                bounded_gbs / bounded_traffic * sm_write / sm_write_gbs,\n                # Combine\n                bounded_gbs / bounded_traffic * (sm_write - nvlink_traffic) / sm_read_gbs,\n                bounded_gbs / bounded_traffic * (sm_read + nvlink_traffic) / sm_write_gbs,\n            )"
+    },
+    {
+      "path": "deep_ep/buffers/ep.py",
+      "first_line": 353,
+      "text": "        self.num_scaleout_ranks, self.num_scaleup_ranks = self.get_logical_domain_size()\n        self.scaleout_rank_idx = self.rank_idx // self.num_scaleup_ranks\n        self.scaleup_rank_idx = self.rank_idx % self.num_scaleup_ranks\n\n        # Physical rank indices\n        self.num_rdma_ranks, self.num_nvlink_ranks = self.get_physical_domain_size()"
+    },
+    {
+      "path": "csrc/buffers/ep.hpp",
+      "first_line": 73,
+      "text": "        context = std::make_shared<comm::Context>(\n            nccl_comm, symmetric::shared_comm_t{}, num_ranks, rank_idx,\n            num_workspace_bytes, num_buffer_bytes + num_lb_buffer_bytes, 0, true,\n            allow_hybrid_mode, sl_idx, num_allocated_qps,\n            0, num_cpu_timeout_secs, num_gpu_timeout_secs);"
+    },
+    {
+      "path": "csrc/buffers/ep.hpp",
+      "first_line": 127,
+      "text": "        if (previous_event.has_value()) {\n            comm::stream_wait(comm_stream, previous_event.value());\n        } else {\n            comm::stream_wait(comm_stream, compute_stream);\n        }"
+    },
+    {
+      "path": "csrc/buffers/ep.hpp",
+      "first_line": 159,
+      "text": "        if (async_with_compute_stream) {\n            event = EventHandle(comm_stream);\n\n            // NOTES: this environment only applies to V2 APIs\n            if (get_env<int>(\"EP_AVOID_RECORD_STREAM\", 0)) {\n                event->tensors_to_record = tensors;\n            } else {\n                for (auto& t: tensors) if (t.has_value()) {\n                    t->record_stream(compute_stream);\n                    t->record_stream(comm_stream);\n                }\n            }\n        } else {\n            comm::stream_wait(compute_stream, comm_stream);\n        }"
+    },
+    {
+      "path": "csrc/kernels/comm/context.cpp",
+      "first_line": 135,
+      "text": "        reqs.ginContextCount = num_allocated_qps;\n        reqs.ginExclusiveContexts = true;\n        reqs.ginQueueDepth = qp_depth > 0 ? qp_depth : kDefaultQPDepth;\n\n        // Customized RDMA barrier needs extra signals"
+    },
+    {
+      "path": "csrc/kernels/comm/context.cpp",
+      "first_line": 244,
+      "text": "void Context::finalize() {\n    EP_HOST_ASSERT(not finalized);\n    if (rdma_storage_windows_gpu != nullptr) {\n        CUDA_RUNTIME_CHECK(cudaFree(rdma_storage_windows_gpu));\n        rdma_storage_windows_gpu = nullptr;\n    }\n    for (const auto storage_window: rdma_storage_windows)\n        NCCL_CHECK(ncclCommWindowDeregister(comm, storage_window));\n    rdma_storage_windows.clear();\n    local_rdma_storage_ptr = nullptr;\n\n    // Deregister window\n    NCCL_CHECK(ncclCommWindowDeregister(comm, window));\n    symmetric_memory.reset();\n\n    // Barrier can no longer be used\n    barrier_signals = nullptr;\n\n    // Destroy device communicator\n    NCCL_CHECK(ncclDevCommDestroy(comm, static_cast<ncclDevComm_t*>(dev_comm.ptr)));\n    free(dev_comm.ptr);\n    finalized = true;\n}\n\n}  // namespace deep_ep::comm"
+    },
+    {
+      "path": "csrc/kernels/ep/dispatch.hpp",
+      "first_line": 20,
+      "text": "constexpr int kNumNotifyWarps = 4;\n\nstatic int get_num_notify_smem_bytes(const int& num_ranks, const int& num_experts) {\n    return math::align(num_ranks + num_experts, kNumNotifyWarps * 32) * sizeof(int);\n}"
+    },
+    {
+      "path": "csrc/kernels/ep/dispatch.hpp",
+      "first_line": 77,
+      "text": "        num_dispatch_warps = std::min<int>(\n            (num_smem_bytes - num_notify_smem_bytes) / token_layout.get_num_bytes<true>(), 32 - num_notify_warps);\n        num_threads = (num_notify_warps + num_dispatch_warps) * 32;"
+    },
+    {
+      "path": "csrc/comm/stream.hpp",
+      "first_line": 20,
+      "text": "static void stream_wait(const at::cuda::CUDAStream& stream, const at::cuda::CUDAStream& event_stream) {\n    EP_HOST_ASSERT(stream.id() != event_stream.id());\n    stream.unwrap().wait(create_event(event_stream));\n}\n"
+    },
+    {
+      "path": "csrc/utils/event.hpp",
+      "first_line": 29,
+      "text": "    void current_stream_wait() const { at::cuda::getCurrentCUDAStream().unwrap().wait(*event); }"
+    },
+    {
+      "path": "deep_ep/utils/event.py",
+      "first_line": 39,
+      "text": "    def current_stream_wait(self, release_handle: bool = False) -> Any:\n        \"\"\"\n        The current stream `torch.cuda.current_stream()` waits for the event to be finished.\n\n        Returns:\n            result: the return value of the registered hook, or `None` if no hook is registered.\n        \"\"\"\n        assert self.event is not None\n        self.event.current_stream_wait()\n\n        # Call epilogue hook\n        result = None\n        if self.hook_after_wait is not None:\n            result = self.hook_after_wait()\n            self.hook_after_wait = None\n\n        # In `self.event`, we also have some V2 APIs storing tensors to record in it,\n        # So, after waiting the current stream, those tensors can be released by deleting `self.event`\n        # However, you better do it by yourself (to be compatible with multi-stream waits)\n        if release_handle:\n            self.event = None\n        return result\n\n    def wait(self) -> Any:"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "first_line": 62,
+      "text": "    // Only one QP\n    if constexpr (kNumQPs == 1)\n        return {0, kSharingGrid};\n\n    // The notify warp always use 1 SM and 1 QP"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "first_line": 66,
+      "text": "    // The notify warp always use 1 SM and 1 QP\n    if (is_notify_warp)\n        return {0, kSharingCTA};\n"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "first_line": 82,
+      "text": "        // All SMs share all QPs\n        const auto global_channel_idx = sm_idx * kNumChannelsPerSM + channel_in_sm_idx;\n        return {kQPStartIdx + (global_channel_idx % kNumAvailableQPs), kSharingGrid};\n    }"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "first_line": 146,
+      "text": "    // Flush all QPs by all SMs (only needed for release semantics)\n    if constexpr (kFlushStores) {\n        for (int i = global_warp_idx; i < num_qps; i += kNumSMs * kNumWarps) {\n            ncclGin(nccl_dev_comm, i, NCCL_GIN_RESOURCE_SHARING_CTA).flush(ncclCoopWarp());\n        }\n\n        // World-team barriers may mix direct NVLink writes with GIN signals, so a system-scope\n        // threadfence is required to make the NVLink writes visible before publishing the barrier\n        if constexpr (std::is_same_v<team_t, ncclTeamTagWorld>)\n            ptx::fence_acq_rel_sys();\n\n        // NOTES: we can not use `kNumSMs` to judge, as maybe only part of the SMs will call this function\n        (gridDim.x > 1) ? cooperative_groups::this_grid().sync() : __syncthreads();\n    }\n\n    if (sm_idx == 0) {\n        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "first_line": 162,
+      "text": "        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot\n        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.wait_signal<team_t, kNumTimeoutCycles>(i, rank_idx);\n    }"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "first_line": 277,
+      "text": "        const auto token_start = dispatch_warp_idx * kNumSMs + sm_idx;\n        const auto token_stride = kNumDispatchWarps * kNumSMs;\n        for (int token_idx = token_start; token_idx < num_tokens; token_idx += token_stride) {"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+      "first_line": 393,
+      "text": "    // Barrier to ensure data arrival\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kDispatchTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n"
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "first_line": 240,
+      "text": "    // Final barrier to ensure data arrival\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n}"
+    },
+    {
+      "path": "src/include/nccl_device/impl/gin__funcs.h",
+      "first_line": 114,
+      "text": "  gin->nConnections = comm.ginConnectionCount;\n\n  static_assert(NCCL_GIN_MAX_CONNECTIONS == 4, \"Required for following modulo hack to work.\");\n  // this->connectionId = contextIndex % comm.ginConnectionCount;\n  gin->connectionId = comm.ginConnectionCount == 3 ? uint32_t(contextIndex) % 3 // 3 is only non power of 2\n                                                     :\n                                                     contextIndex & (comm.ginConnectionCount - 1); // powers of 2\n  // gin->contextId = contextIndex / comm.ginConnectionCount;\n  gin->contextId = comm.ginConnectionCount == 3 ?\n                     uint32_t(contextIndex) / 3 // 3 is only non power of 2\n                     :\n                     contextIndex >> (comm.ginConnectionCount == 4 ? 2 : comm.ginConnectionCount - 1); // powers of 2\n\n  gin->_ginBackend = comm.ginNetDeviceTypes[gin->connectionId];\n  gin->_ginHandle = comm.ginHandles[gin->connectionId];"
+    },
+    {
+      "path": "src/gin/gin_host.cc",
+      "first_line": 264,
+      "text": "  nContextsTotal = ROUNDUP(nContextsTotal, backend->ginCommCount);\n  devComm->ginContextCount = nContextsTotal;\n  int nContextsPerComm = nContextsTotal / backend->ginCommCount;\n  INFO(NCCL_INIT,"
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 621,
+      "text": "  const int nqps_per_rank = ncontexts;\n  const int nqps_for_comm = nqps_per_rank * nranks;  // Number of QPs for communication\n  const int nqps_for_comm_this_rank = nqps_for_comm / rankStride;"
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 408,
+      "text": "    uint64_t ticket = doca_gpu_dev_verbs_atomic_read<uint64_t, resource_sharing_mode>(&qps[peer].sq_rsvd_index);\n    if (ticket == 0) continue; // No need to poll if there are no outstanding operations\n    --ticket;\n\n    // doca_gpu_dev_verbs_wait blocks indefinitely; only usable when there's\n    // no deadline AND no abort flag to honor.\n    if NCCL_IF_CONSTEXPR (!HasTimeout) {\n      if (abortFlag == nullptr) {\n        doca_gpu_dev_verbs_wait<resource_sharing_mode>(&qps[peer], ticket);\n        continue;"
+    },
+    {
+      "path": "README.md",
+      "first_line": 160,
+      "text": "Training, inference prefilling, and inference decoding use the same `EPBuffer` dispatch and combine APIs. The example uses an expanded layout for grouped expert GEMMs and defers the forward epilogues until the framework waits for their results. Set `expert_alignment` to the grouped GEMM's token alignment; for DeepGEMM, use `deep_gemm.get_mk_alignment_for_contiguous_layout()`."
+    },
+    {
+      "path": "README.md",
+      "first_line": 138,
+      "text": "    if _buffer is not None and _buffer.group == group and _buffer.num_bytes >= required_bytes:\n        _num_comm_sms = _buffer.get_theoretical_num_sms(num_experts, num_topk)\n        return _buffer"
+    }
+  ],
+  "api_defaults": {
+    "__init__": {
+      "allow_hybrid_mode": true,
+      "prefer_overlap_with_compute": true,
+      "num_allocated_qps": 0
+    },
+    "dispatch": {
+      "num_sms": 0,
+      "num_qps": 0,
+      "async_with_compute_stream": false
+    },
+    "combine": {
+      "num_sms": 0,
+      "num_qps": 0,
+      "async_with_compute_stream": false
+    }
+  },
+  "downloaded_code_executed": false
+}

@@ -1184,3 +1184,60 @@ cross_stage deps 67108864 bash scripts/check_deps.sh
 
 历史check-final-monitor保留的是补充关键连接分析时min空列表的检查器错误；当前代码已修，
 从新目录执行无需制造该失败，打包与最终检查只在存在该监控时核对其明确原因，不要求新执行失败。
+
+## 真实调用、默认上下文与数据分配
+
+[执行前方法](invocation_semantics_protocol.md)、[中文审计](../../docs/review_artifacts/invocation_semantics_20261023/report.html)
+与[现代后端新增门槛](modern_backend_contract.md#8-调用间隔与默认连接配置的新增实施门槛)
+核对固定DeepEP/NCCL的Python默认、Context寿命、CUDA流依赖、flush及SM/warp数据分配。
+只有源码身份和离线工作分布核算；没有执行下载代码、GPU或新网络。
+SM和假设共享内存条件不代表实际Hopper配置，不能把计数换算成时延或multi-rail利用率。
+
+复现前从检查点的source/按相对路径恢复6份新缓存、旧DeepEP/NCCL树/commit及19份所需源码，
+四原件按manifest路径放置。原缓存缺失且确需获取时可执行
+`python3 experiments/paper_readiness/collect_invocation_sources.py --output data/research/新的缓存目录`；
+输出必须不存在并位于主仓库内，6个URL各请求一次/20秒/2MiB，核对缓存固定树的blob，失败不换版本重试。
+已有有效缓存时直接复用，不重新下载。下载代码只作为数据解析。
+
+主仓库根目录执行，WORK须不存在，CACHE为仓库内有效缓存：
+
+```bash
+export COSIM_INV_REPO=/home/lry/moe-ub-cosim
+export COSIM_INV_WORK=/dev/shm/my-invocation-semantics
+export COSIM_INV_CACHE="$COSIM_INV_REPO/data/research/invocation_semantics_20261023"
+export PYTHONPATH="$COSIM_INV_REPO/python"
+export PYTHONDONTWRITEBYTECODE=1
+mkdir "$COSIM_INV_WORK"
+invocation_stage() {
+  local invocation_name="$1"
+  shift
+  python3 -m moe_ub_cosim.host_probe \
+    --output-dir "$COSIM_INV_WORK/$invocation_name-monitor" --artifact-root "$COSIM_INV_WORK" \
+    --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 33554432 \
+    --wall-seconds 60 --min-free-bytes 8589934592 -- "$@"
+}
+invocation_stage input-ready python3 experiments/paper_readiness/invocation_semantics.py prepare \
+  --sources "$COSIM_INV_CACHE" --manifest data/moe-trace-small/manifest.json --output "$COSIM_INV_WORK/input-ready"
+invocation_stage analysis python3 experiments/paper_readiness/invocation_semantics.py analyze \
+  --observed "$COSIM_INV_WORK/input-ready/observed" --output "$COSIM_INV_WORK/analysis"
+invocation_stage check-final python3 experiments/paper_readiness/check_invocation_semantics.py \
+  --input "$COSIM_INV_WORK/input-ready" --analysis "$COSIM_INV_WORK/analysis" \
+  --collection "$COSIM_INV_CACHE" --output "$COSIM_INV_WORK/checked-final"
+invocation_stage review python3 experiments/paper_readiness/build_invocation_review.py \
+  --input "$COSIM_INV_WORK/input-ready" --analysis "$COSIM_INV_WORK/analysis" \
+  --verification "$COSIM_INV_WORK/checked-final" --output "$COSIM_INV_WORK/review"
+invocation_stage deps bash scripts/check_deps.sh
+```
+
+当前prepare已修相对路径处理，checker保留摘录末尾空行；无需复现历史input-monitor/check-monitor失败。
+若存在这两项历史错误，打包核对原因并保留；其他失败停止，不自动重试/抬限。
+分析只读observed，checker重读原件并从SM/warp循环枚举，逐项核对1080个分配与18个连接投影。
+
+`deliver_invocation_review.py package --task WORK --report WORK/review --collection CACHE`
+之后执行`deliver_invocation_review.py replay --task WORK --report WORK/review --collection CACHE --output WORK/recovery`，
+再执行`deliver_invocation_review.py check --task WORK --report WORK/review --collection CACHE --output WORK/review/final-check.json`。
+分别使用package-monitor、recovery-monitor和final-monitor，在相同60秒/1GiB/2GiB下把WORK累计产物限为64MiB。
+replay只恢复归档source成员，从新源码根和新cwd运行准备/分析/check，要求observed、核算和独立核验逐字节一致；
+不联网、不重跑网络，也不导入下载的DeepEP Python。最后检查同时要求该恢复证据。
+整轮累计受监控240秒/64MiB（含≤1MiB新缓存），成员32MiB/压缩16MiB，卷预留8GiB；
+报告、来源和源码小件可复制入Git，原始记录/归档仅易失内存盘，无持久备份。

@@ -109,6 +109,10 @@ class Fabric {
   std::vector<uint64_t> fault_counts_;
   std::vector<std::array<int64_t,5>> fault_events_;
   std::vector<std::array<int64_t,12>> packet_events_;
+  std::vector<std::array<int64_t,7>> wire_headers_;
+  std::map<std::array<int64_t,7>,uint64_t> wire_header_indices_;
+  std::vector<uint64_t> event_wire_headers_;
+  bool capture_wire_headers_=false;
   uint64_t packet_observations_ = 0;
   std::set<unsigned> capture_nodes_;
   uint64_t capture_limit_ = 0;

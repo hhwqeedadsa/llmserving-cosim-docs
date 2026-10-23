@@ -73,6 +73,10 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   if(config.contains("packet_capture")) {
     const auto& c=config.at("packet_capture");
+    if(c.contains("wire_headers")) {
+      Require(c.at("wire_headers").is_boolean(),"wire_headers must be boolean");
+      capture_wire_headers_=c.at("wire_headers").get<bool>();
+    }
     capture_limit_=c.at("max_events");capture_start_=c.at("start_ns");capture_end_=c.at("end_ns");
     Require(capture_limit_>0 && capture_limit_<=100000 && capture_start_>=0 && capture_end_>capture_start_ &&
             capture_end_<=MaxSimNs(),"invalid bounded packet capture");
@@ -290,6 +294,15 @@ void Fabric::PacketEvent(unsigned event,unsigned node,unsigned port,Ptr<const Pa
       h.l3Prot,sequence,p->GetSize(),h.GetIpv4EcnBits(),
       ports_.at(node).at(port).device->GetQueue()->GetNBytesTotal(),
       h.l3Prot==0x11?static_cast<int64_t>(p->GetSize()-h.GetSerializedSize()):0});
+  if(capture_wire_headers_) {
+    const bool data=h.l3Prot==0x11;
+    const bool ack=h.l3Prot==0xfc || h.l3Prot==0xfd;
+    const std::array<int64_t,7> header={static_cast<int64_t>(p->GetUid()),h.sip,h.dip,h.l3Prot,
+      data?h.udp.sport:ack?h.ack.sport:0,data?h.udp.dport:ack?h.ack.dport:0,data || ack};
+    const auto [it,inserted]=wire_header_indices_.emplace(header,wire_headers_.size());
+    if(inserted)wire_headers_.push_back(header);
+    event_wire_headers_.push_back(it->second);
+  }
 }
 bool Fabric::Corrupt(unsigned node,unsigned port,Ptr<Packet> p) {
   const auto id=PacketFlow(p);if(id<0)return false;
@@ -600,6 +613,10 @@ Json Fabric::Report() {
       {"observations",packet_observations_},{"complete",packet_observations_==packet_events_.size()},
       {"omitted_events",packet_observations_-packet_events_.size()},
       {"notes","rx precedes protocol acceptance; drop is PhyRxDrop; BEgressQueue hooks exclude NIC data QP and separate high-priority ACK queue; UID is ns-3 packet lineage, not globally unique transmission; sequence is data offset or cumulative ACK/NACK next expected byte; -1 means unassociated"}};
+    if(capture_wire_headers_)r["packet_capture"]["wire_headers"]={
+      {"columns",{"packet_uid","ip_src","ip_dst","ip_protocol","source_port","destination_port","ports_present"}},
+      {"headers",wire_headers_},{"event_header_indices",event_wire_headers_},
+      {"scope","actual native header fields, deduplicated by full row in first-saved-event order; one index per saved event, same capture bounds; IPv4 addresses are numeric; UDP17 and qbb ACK252/NACK253 ports, otherwise ports_present=0 and ports=0; UID is lineage, not a unique transmission; evaluation only"}};
   }
   if(!fault_rules_.empty()) {
     r["fault_injection"]={{"rules",fault_rules_},{"drop_counts",fault_counts_},{"events",fault_events_},

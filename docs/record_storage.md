@@ -32,6 +32,8 @@ transactions/2新增顶层`local_model/local_work/completed_local_work/pending_l
 
 非UB的可选`packet_capture`与`fault_injection`存于`result.json`，属于全局时间和业务身份已关联的内部评价资料，不是策略输入。详细事件使用`columns`对应的数值数组，含设备发送、接收、接收错误丢弃和BEgressQueue入/出队；`complete`、`omitted_events`及`selection`说明所选范围是否完整。故障计数与详细采集开关独立，记录到达上限不停止传输。关闭详细记录且无故障时保留原结果字段。字段、序号、队列和包UID的准确口径及失败诊断入口见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
+`packet_capture.wire_headers=true`可选保存实际IPv4/UDP或原生ACK/NACK端口头。结果的`wire_headers.headers`按完整头元组去重，`event_header_indices[i]`指向第i个已保存事件的头行，避免同UID不同头的歧义；行顺序为首次出现。未支持协议的`ports_present=0`、端口=0。表不覆盖未保存事件或窗口外packet，不能由表中没有某QP推断该QP不存在。默认关闭，无新增字段；它不改写现有message_id为内部stream ID。
+
 启用软件准入或生命周期观测时，新增`admission`终态和消息资源时刻；可选`lifecycle_capture`为申请、获取、QP登记、数据齐备、ACK及发送映射移除/软件额度归还的增量。`rdma-check`独立核对完整记录及全部所有者，`rdma-diagnose`支持失败末态。截断时明确不重建历史，不把数据齐备解释为发送额度或GPU缓冲释放。字段、边界和快照上限见[准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 非 UB `/2` 的完整形状输入及独立输出见[百卡示例](../examples/scaleout_clos128/README.md)。`result.json` 保留原消息/端口语义，新增机内链路与显式执行限额；`queue_capture=summary` 只有观测计数和峰值，没有队列时序。`log/astra_nodes.log` 为完整 ASTRA issue/callback 审计源；校验优先读取它，不与重复的诊断滚动日志合并，文件存在但不完整会拒绝。兼容旧运行时才读取 `log/log*`，早期事件被覆盖的旧结果仍会失败，不补造事件。新 `/2` 结果用紧凑流式 JSON，旧 `/1` 保留原缩进格式。

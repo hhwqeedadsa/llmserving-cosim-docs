@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "steps": 14,
+  "old_runtime_unchanged": true,
+  "binaries": {
+    "ns3.42-moe-rdma-service": {
+      "path": "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+      "sha256": "af5bb029524b962f1367c5f16fb44d7246cbc622ac60346516125c29c2bc9ac9"
+    },
+    "ns3.42-moe-rdma-probe": {
+      "path": "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-probe",
+      "sha256": "37fd962d833b4e506566e5521afce128fc9de70a0b62015a6a6123c0859fe268"
+    },
+    "ns3.42-moe-rdma-transaction-probe": {
+      "path": "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-transaction-probe",
+      "sha256": "56381f62a0e91017590f8758c646142311dae46d71e98f5f6ab62acd8d2c8e55"
+    },
+    "ns3.42-moe-rdma-stream-probe": {
+      "path": "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-stream-probe",
+      "sha256": "aa531fbee822483b768265a0d32771ac31d5e1b45cd57846d11770b2db071608"
+    }
+  },
+  "source_hashes": {
+    "backend/rdma/inject.cmake": "41eb6d214905d81b6c7da60ae29042ca2403a79f8375bb332f917974baf66546",
+    "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+    "backend/rdma/fabric.hh": "771649e91567b84c78706cba8acac44d901d8cfd9bc18d71842a251909057d00",
+    "backend/rdma/fabric.cc": "3eb3be41d95fecd97a6d666cd632e8e5093a82b7dcdfbfeb6bb4d63439f9be42",
+    "backend/rdma/probe.cc": "6f2820c6b9f595d01349f1e00aa5d0c55e86c024f05790353077d18ee7692a71",
+    "backend/rdma/serial_native.cmake": "a8c7a97dea061d58a2faf17f56a0f477b0fc704ec509be9a0180fd6b1ff2b344",
+    "backend/rdma/astra_adapter.hh": "29c09c9d808c7e19bbdca5647d55f4bb161046c878595662faf8819bbc86feb2",
+    "backend/rdma/astra_adapter.cc": "89fcc1c78944b570b4b3f8747b5e04cca4185f56cfdc3cff799945cc30ecf303",
+    "backend/rdma/service.cc": "3e1019dfea8cb958b1ac8e7d4d7ee674e13543806e52b64405327df011e75338",
+    "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+    "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+    "backend/rdma/recovery.cc": "7b3fe217d9944776a9f094192c3a13407dcda62cbd88033ef16b42d0d5b1b8a3",
+    "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c",
+    "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+    "backend/rdma/persistent_streams.hh": "e5884a1f987800eeadf965b18d8edfc8ea475801f13f314e7002a8226ce75905",
+    "backend/rdma/persistent_streams.cc": "e7175b028cdf6a5bfc6a8c2d7fe6e5bd001bcbd8ccd939870f35d74abe7642de",
+    "backend/rdma/stream_probe.cc": "942b7fd85f96f105e7a9b0a25147ee8f20efbf7c95cc80bd186b220977b52d86",
+    "backend/rdma/remote_memory.hh": "9144382635de93da383c6737f4fc146e5d440bc8ebdb0c5be0764c39b2e35ffc",
+    "backend/rdma/remote_transactions.hh": "ae8297b7f9e7a074551ff51af0c3edcd9ac74952e391d19deea18b5a227bd183",
+    "backend/rdma/remote_transactions.cc": "10b70aa4725812df9844567018aa361bbf6303fc84526cd6f951b2411b7a1553",
+    "backend/rdma/transaction_probe.cc": "8c9a9668e02f6bfd4397b17527f76e09f06b50a9687e726afa0e7f860cd399e0",
+    "backend/rdma/host_timing.hh": "7114fcab1d671d7961a4fdfc33e3e19a1cedc5de3ca907e49097573a68ff7d8c",
+    "backend/rdma/dcqcn_reference.hh": "b80eac69407c3d1fd670bb2c5da9a27a04b67faa6a83b322f61673b84bbfc60c",
+    "backend/rdma/cnp_switch.hh": "3f1166d5487c6c43b075ede4b4af96e0d30a3e93c43527e83ea61fbee63fefb5"
+  },
+  "wall_seconds": 59.30269269272685
+}

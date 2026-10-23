@@ -1,0 +1,22 @@
+{
+  "local": {
+    "passed": true,
+    "commands": 30,
+    "wall_seconds": 15.450688181445003,
+    "evidence": "/dev/shm/moe-wire-headers-20261023/local/verification.json"
+  },
+  "transactions": {
+    "passed": true,
+    "commands": 37,
+    "wall_seconds": 20.887493615970016,
+    "evidence": "/dev/shm/moe-wire-headers-20261023/transactions/verification.json"
+  },
+  "unit_tests": 7,
+  "fixed_dependencies": 13,
+  "preserved_failure": {
+    "stage": "accept",
+    "reason": "test topology exceeds default max_switches=16; stopped before native simulation",
+    "correction": "smaller topology, unchanged limits",
+    "evidence": "/dev/shm/moe-wire-headers-20261023/accept-monitor"
+  }
+}

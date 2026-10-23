@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "default_result_byte_identical": true,
+  "enabled_original_fields_identical": true,
+  "explicit_false_original_fields_identical": true,
+  "truncated_saved_prefix_verified": true,
+  "selected_events_verified": true,
+  "native_type_rejection": true,
+  "full": {
+    "events": 616,
+    "header_rows": 28,
+    "ambiguous_endpoint_sequence_groups": 5
+  },
+  "selected": {
+    "events": 16,
+    "header_rows": 16,
+    "ambiguous_endpoint_sequence_groups": 5
+  },
+  "work": 6,
+  "public_commands": 7,
+  "backend_sha256": "aa531fbee822483b768265a0d32771ac31d5e1b45cd57846d11770b2db071608",
+  "reference_backend_sha256": "136b22dc81e0b72d801575fe1d32f4f258a0c9648567c61400d02ddfbc218a4d",
+  "wall_seconds": 4.75766028277576
+}

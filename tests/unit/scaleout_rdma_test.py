@@ -49,6 +49,13 @@ class RdmaTest(unittest.TestCase):
         validate_protocol(dict(self.r,queue_metrics=True))
         self.r['packet_capture']=dict(nodes=[0,4],start_ns=0,end_ns=5000000,max_events=100)
         validate_protocol(self.r)
+        for value in (True,False):
+            self.r['packet_capture']['wire_headers']=value
+            validate_protocol(self.r)
+        for value in (0,1,'true',None):
+            self.r['packet_capture']['wire_headers']=value
+            with self.assertRaisesRegex(ValueError,'wire_headers must be boolean'):validate_protocol(self.r)
+        self.r['packet_capture'].pop('wire_headers')
         self.r['packet_capture']['max_events']=True
         with self.assertRaises(ValueError):validate_protocol(self.r)
         self.r.pop('packet_capture')

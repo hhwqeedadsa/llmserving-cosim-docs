@@ -80,7 +80,9 @@ def validate_protocol(c):
             integer(rule['count'], 'fault count', 1, 10000)
     if 'packet_capture' in c:
         capture=c['packet_capture']
-        fields(capture, 'nodes start_ns end_ns max_events', 'packet capture')
+        fields(capture, 'nodes start_ns end_ns max_events'+(' wire_headers' if 'wire_headers' in capture else ''), 'packet capture')
+        if 'wire_headers' in capture:
+            require(type(capture['wire_headers']) is bool, 'wire_headers must be boolean')
         require(isinstance(capture['nodes'],list) and len(capture['nodes'])<=budget['max_gpus']+budget['max_switches'],
                 'capture nodes must be a bounded list (empty means all)')
         for node in capture['nodes']:

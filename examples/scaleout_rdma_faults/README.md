@@ -50,6 +50,10 @@ python -m moe_ub_cosim scaleout rdma-diagnose \
 
 到条数上限后停止保存详细事件，继续仿真并累计遗漏数；`complete=false`明确表示所选范围内的记录不全，不影响传输。完整性仅针对所选节点和时间范围；关闭、筛选或截断时，未看到事件不能证明它没发生。
 
+需要按实际线上四元组区分同端点、同累计序号的不同QP时，在现有`packet_capture`中增加`"wire_headers": true`（严格布尔，默认关闭）。`packet_capture.wire_headers`输出`columns/headers`表及与原`events`一一对应的`event_header_indices`。表保留packet_uid、32位数值IPv4源/目的、协议、源/目的端口和ports_present，按完整元组去重，顺序为首次保留事件；同UID不同头可有多个表项，不能只按UID猜配对。UDP17解析UDP端口，ACK252/NACK253解析原生qbb头端口；其他协议ports_present=0、端口为0，没有TCP或生产RoCE解析保证。
+
+该表仅覆盖实际保存的事件，与原捕获共用节点/时间/条数边界；截断或筛选后不保证能看到一个包的生成端。它来自只读PeekHeader，不添加内部stream标签，也不改变包、选路或仿真事件；仍是评价资料，不是策略输入。关闭时不增加结果字段。
+
 `egress_queue_bytes`是钩子当时的原生读数：入队事件在加字节之后，出队事件在减字节之前，因此出队读数仍含正在选出的包。原有`queue_events`数值保持原行为，本轮更正`queue_scope`的旧描述；不能把相邻读数都当作出队后状态积分。TX/RX事件处读的是该设备当前出口队列，不代表这个接收包的入队等待。
 
 ## 结果怎么看

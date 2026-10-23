@@ -14,6 +14,9 @@ class RemoteTransactions {
   // Consume only an admitted local node's already-satisfied local predicates.
   // Admission is separate from starting its declared-duration GPU lane.
   void AdmitLocal(const Json& operation);
+  void ValidateLocalMemory(const Json& operation) const;
+  void StartLocal(const Json& operation);
+  void CompleteLocal(const Json& operation);
   void ValidateSource(const Json& operation) const;
   bool QueueFenceReady(const Json& operation);
   bool Occurred(uint64_t operation,const std::string& event) const;
@@ -45,6 +48,13 @@ class RemoteTransactions {
   void ConsumeConditions(const Json& operation,const Json& observations);
   RemoteMemory::ReadLease Source(const Json& operation) const;
   void SourceEvent(uint64_t id,const char* kind,RemoteMemory::ReadLease source,const std::vector<uint8_t>* bytes=nullptr);
+  struct LocalCopy {
+    RemoteMemory::ReadLease source,target;
+    std::vector<uint8_t> captured;
+    bool started=false,completed=false;
+  };
+  LocalCopy Copy(const Json& operation) const;
+  void LocalMemoryEvent(uint64_t id,const char* kind,const LocalCopy& copy,const std::vector<uint8_t>* bytes=nullptr);
   PersistentStreams transport_;
   RemoteMemory memory_;
   std::map<uint64_t,Connection> connections_;
@@ -54,6 +64,9 @@ class RemoteTransactions {
   Json queue_fences_=Json::object();
   bool source_mode_=false;
   Json source_model_,source_events_=Json::array();
+  bool local_memory_mode_=false;
+  Json local_memory_model_,local_memory_events_=Json::array();
+  std::map<uint64_t,LocalCopy> local_copies_;
 };
 std::vector<uint8_t> MemoryUnhex(const std::string&);
 std::string MemoryHex(const std::vector<uint8_t>&);

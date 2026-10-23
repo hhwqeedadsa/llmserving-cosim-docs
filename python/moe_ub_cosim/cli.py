@@ -64,7 +64,7 @@ def parser():
     rp.add_argument('--messages', type=Path, required=True, help='Bounded microprobe message array, not an LLM workload')
     rp.add_argument('--backend', type=Path, required=True, help='Executable returned by rdma-build')
     rp.add_argument('--output', type=Path, required=True, help='New result directory on a volume with at least 8GiB free')
-    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 transactions; v2 adds local stages, v3 reads protected source windows; not GIN/RoCE timing')
+    rt = sc.add_parser('rdma-transaction-probe', help='Execute native MRT1 transactions; v2 adds local stages, v3 reads protected source windows, v4 guards local copy I/O; not GIN/RoCE timing')
     rt.add_argument('--topology', type=Path, required=True)
     rt.add_argument('--protocol', type=Path, required=True)
     rt.add_argument('--config', type=Path, required=True)

@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+transactions/4新增`local_memory_model/local_memory_events/active_local_memory_leases`；acquired/captured/committed/released记录本地输入/输出的实际保护和访问，与全部内存事件共用order/ns。source_events仍仅含远端put。本地截止保留未完成记录、已开始的源快照和旧输出，未开始者没有capture；pending当前条件不可读时附`local_wait_error`，详见[字段与失败](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。v1/v2/v3没有这些新增字段。
+
 transactions/3仅在`transactions`新增`source_model/source_events/active_source_leases`。source_events中的acquired/captured/released与target_events/local_events共用order和网络ns时钟；captured记录实际读取hex，未完成记录不补release。v3运行期异常保留`execution_error`及部分实际状态并退出1，输入错误不生成结果。字段范围见[源窗口输出](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)；v1/v2无这些新增字段。
 
 transactions/2新增顶层`local_model/local_work/completed_local_work/pending_local_work`；local_work的ready/start/completed分别表示入队、占用GPU抽象串行槽、实际完成，单位ns，未发生为−1。completed_operations只计远端。local_events也可引用本地节点，其消费发生在入队时；pending_local_work的当前条件不能反推入队前值，具体见[事务本地处理输出](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1无这些新字段。

@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+transactions/4支持local节点显式copy源/目标：`AdmitLocal`先检查全部冲突，再消费并保护输入/独占输出；`StartLocal`读取实际字节，`CompleteLocal`先提交输出再释放记录，最后由probe标记完成。`RemoteMemory`将输出独占检查应用于源读、LE64、put/原子/reset；只允许持有该输出记录的提交写出。记录覆盖排队与运行，原生截止及异常保留前缀，见[本地输入输出](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。这是声明耗时的字节复制功能，未声明copy节点的旧语义保持。
+
 transactions/3的put可从注册源窗口读取实际字节。`RemoteMemory`按owner和物理范围保护活跃读；`RemoteTransactions`在提交时取得保护、发布时快照、实际事务完成时释放，排队也保留保护。多个条件reset先全部检查。运行期冲突保存部分结果后失败，不将冲突变成虚构的硬件等待；见[源窗口接口](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)。本地处理输入尚无lease，MRT1的ACK保护不等价GPU源安全完成。
 
 `transaction_probe.cc`新增transactions/2混合节点：实际本地接收窗口条件满足并消费后，进入每GPU声明耗时的FIFO处理槽，完成再解锁后继事务。`RemoteTransactions::AdmitLocal`只消费本GPU条件，不预留网络工作；本地尾部保持持久连接。入队消费不代表buffer租约或GPU可见。输入、截止状态和限制见[事务本地处理](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1字段和执行保持。

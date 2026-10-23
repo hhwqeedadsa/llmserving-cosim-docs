@@ -80,7 +80,7 @@ def prefix_audit(result, config, mtu):
             frames[stream, seq] = dict(verb=verb, address=address, key=key, body=bytes(data[offset+32:offset+32+length]))
             offset += 32+length
         partial += offset < len(data)
-    memory = audit_memory(tx, config, frames, rows)
+    memory = audit_memory(tx, config, frames, rows, result.get('local_work', []))
     # All physically submitted source puts acquire one guard; a still-queued
     # one has no capture or packet. No completion is invented at the cutoff.
     for identity, row in rows.items():

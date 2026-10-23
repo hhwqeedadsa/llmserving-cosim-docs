@@ -113,5 +113,32 @@ int main(){
   guarded.AcquireRead(4,{0,5,8200,8});
   Check(guarded.Apply(1,0,atomic).duplicate && guarded.Load64(0,5,8200)==1);
   guarded.ReleaseRead(4);Reject([&]{guarded.ReleaseRead(4);});
+  RemoteMemory outputs;outputs.Register({0,5,8192,true,std::vector<uint8_t>(64,7)});
+  outputs.Register({1,5,8192,true,std::vector<uint8_t>(64,9)});
+  outputs.AcquireWrite(1,{0,5,8200,16});
+  for(unsigned begin=0;begin<64;++begin)for(unsigned length=1;length<=64-begin;++length) {
+    bool overlap=false;for(unsigned i=begin;i<begin+length;++i)overlap=overlap || (i>=8 && i<24);
+    bool read=false,write=false;
+    try{outputs.CheckReadable(0,5,8192+begin,length);}catch(const std::exception&){read=true;}
+    try{outputs.CheckWritable(0,5,8192+begin,length);}catch(const std::exception&){write=true;}
+    Check(read==overlap);Check(write==overlap);outputs.CheckReadable(1,5,8192+begin,length);
+  }
+  Reject([&]{outputs.AcquireRead(2,{0,5,8200,8});});
+  Reject([&]{outputs.AcquireWrite(2,{0,5,8200,8});});
+  Reject([&]{outputs.Load64(0,5,8200);});Reject([&]{outputs.ReadBytes(0,5,8200,8);});
+  Reject([&]{outputs.Store64(0,5,8200,1);});
+  overwrite.sequence=0;Reject([&]{outputs.Apply(0,0,overwrite);});
+  Reject([&]{outputs.CommitWrite(9,std::vector<uint8_t>(16,3));});
+  Reject([&]{outputs.CommitWrite(1,std::vector<uint8_t>(15,3));});
+  Check(outputs.Windows()[0].bytes==std::vector<uint8_t>(64,7));
+  outputs.CommitWrite(1,std::vector<uint8_t>(16,3));
+  Reject([&]{outputs.ReadBytes(0,5,8200,8);}); // commit is not release
+  outputs.ReleaseWrite(1);Check(outputs.ReadBytes(0,5,8200,16)==std::vector<uint8_t>(16,3));
+  Reject([&]{outputs.ReleaseWrite(1);});
+  Check(!outputs.Apply(0,0,overwrite).duplicate);
+  outputs.AcquireWrite(2,{0,5,8200,16});Check(outputs.Apply(0,0,overwrite).duplicate);
+  outputs.ReleaseWrite(2);outputs.AcquireRead(3,{0,5,8200,16});
+  Reject([&]{outputs.AcquireWrite(4,{0,5,8200,16});});Check(outputs.WriteLeases().empty());
+  outputs.ReleaseRead(3);outputs.AcquireWrite(4,{0,5,8200,16});outputs.ReleaseWrite(4);
   std::cout<<"{\"passed\":true,\"checks\":"<<checks<<",\"network_execution\":false}\n";
 }

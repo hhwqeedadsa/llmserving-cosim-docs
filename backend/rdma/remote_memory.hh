@@ -112,16 +112,21 @@ class RemoteMemory {
   }
   const std::vector<Window>& Windows() const {return windows_;}
   std::vector<uint8_t> ReadBytes(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
+    CheckReadable(owner,key,address,bytes);
     const auto& w=Range(owner,key,address,bytes);
     MemoryCheck(bytes<=32768,"source read length exceeded");
     return {w.bytes.begin()+(address-w.address),w.bytes.begin()+(address-w.address)+bytes};
   }
   void AcquireRead(uint64_t identity,ReadLease lease) {
-    MemoryCheck(!leases_.count(identity) && leases_.size()<32,"invalid source read lease identity/budget");
+    MemoryCheck(!leases_.count(identity) && leases_.size()<48,"invalid source read lease identity/budget");
     CheckRead(lease);
     leases_.emplace(identity,lease);
   }
   void CheckRead(ReadLease lease) const {
+    CheckRange(lease);
+    CheckReadable(lease.owner,lease.key,lease.address,lease.bytes);
+  }
+  void CheckRange(ReadLease lease) const {
     Range(lease.owner,lease.key,lease.address,lease.bytes);
     MemoryCheck(lease.bytes<=32768,"source read lease length exceeded");
   }
@@ -129,6 +134,33 @@ class RemoteMemory {
     MemoryCheck(leases_.erase(identity)==1,"unknown source read lease release");
   }
   const std::map<uint64_t,ReadLease>& ReadLeases() const {return leases_;}
+  void CheckReadable(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
+    Range(owner,key,address,bytes);
+    for(const auto& item:writers_) {
+      const auto& w=item.second;
+      if(w.owner==owner)MemoryCheck(address+bytes<=w.address || w.address+w.bytes<=address,
+                                   "read overlaps active local output lease");
+    }
+  }
+  void AcquireWrite(uint64_t identity,ReadLease lease) {
+    MemoryCheck(!writers_.count(identity) && writers_.size()<16,"invalid local output lease identity/budget");
+    MemoryCheck(lease.bytes<=32768,"local output length exceeded");
+    CheckWritable(lease.owner,lease.key,lease.address,lease.bytes);
+    writers_.emplace(identity,lease);
+  }
+  void CommitWrite(uint64_t identity,const std::vector<uint8_t>& bytes) {
+    MemoryCheck(writers_.count(identity),"unknown local output lease commit");
+    const auto& w=writers_.at(identity);
+    MemoryCheck(bytes.size()==w.bytes,"local output size mismatch");
+    // AcquireWrite excludes readers and other writers. Keep the reservation
+    // until the caller records the commit and explicitly releases it.
+    auto& window=const_cast<Window&>(Range(w.owner,w.key,w.address,w.bytes));
+    std::copy(bytes.begin(),bytes.end(),window.bytes.begin()+(w.address-window.address));
+  }
+  void ReleaseWrite(uint64_t identity) {
+    MemoryCheck(writers_.erase(identity)==1,"unknown local output lease release");
+  }
+  const std::map<uint64_t,ReadLease>& WriteLeases() const {return writers_;}
   void CheckWritable(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
     Range(owner,key,address,bytes);
     for(const auto& item:leases_) {
@@ -136,9 +168,15 @@ class RemoteMemory {
       if(r.owner==owner)MemoryCheck(address+bytes<=r.address || r.address+r.bytes<=address,
                                    "write overlaps active source read lease");
     }
+    for(const auto& item:writers_) {
+      const auto& w=item.second;
+      if(w.owner==owner)MemoryCheck(address+bytes<=w.address || w.address+w.bytes<=address,
+                                   "write overlaps active local output lease");
+    }
   }
   // Target-local functional accesses; no GPU coherence or polling delay.
   uint64_t Load64(unsigned owner,uint32_t key,uint64_t address) const {
+    CheckReadable(owner,key,address,8);
     const auto& w=LocalWindow(owner,key,address);
     uint64_t value=0;
     for(unsigned i=0;i<8;++i)value|=uint64_t(w.bytes[address-w.address+i])<<(8*i);
@@ -168,6 +206,7 @@ class RemoteMemory {
   struct Context {uint64_t next=0;std::map<uint64_t,Saved> saved;};
   std::vector<Window> windows_;
   std::map<uint64_t,ReadLease> leases_;
+  std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;
 };
 }

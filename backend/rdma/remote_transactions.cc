@@ -20,8 +20,15 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transport_(fabric) {
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
           input.at("schema_version")=="moe-rdma-transactions/2" ||
-          input.at("schema_version")=="moe-rdma-transactions/3","wrong transaction schema");
-  source_mode_=input.at("schema_version")=="moe-rdma-transactions/3";
+          input.at("schema_version")=="moe-rdma-transactions/3" ||
+          input.at("schema_version")=="moe-rdma-transactions/4","wrong transaction schema");
+  local_memory_mode_=input.at("schema_version")=="moe-rdma-transactions/4";
+  source_mode_=local_memory_mode_ || input.at("schema_version")=="moe-rdma-transactions/3";
+  if(local_memory_mode_) {
+    local_memory_model_=input.at("local_memory_model");
+    Require(local_memory_model_==Json{{"mode","guarded_copy/1"},{"acquire","admission/1"},
+      {"capture","start/1"},{"commit","completion/1"}},"unsupported local memory model");
+  }
   if(source_mode_) {
     source_model_=input.at("source_model");
     Require(source_model_==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},
@@ -97,7 +104,64 @@ void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observa
 }
 void RemoteTransactions::AdmitLocal(const Json& input) {
   Require(input.at("kind")=="local","local admission requires local kind");
+  if(input.contains("copy")) {
+    const auto id=input.at("id").get<uint64_t>();auto copy=Copy(input);
+    Require(!local_copies_.count(id) && local_copies_.size()<16,"invalid local copy identity/budget");
+    // All potential conflicts precede condition consumption and acquisition.
+    memory_.CheckRead(copy.source);
+    memory_.CheckWritable(copy.target.owner,copy.target.key,copy.target.address,copy.target.bytes);
+    ConsumeConditions(input,LocalWaits(input));
+    memory_.AcquireRead(65536+id,copy.source);memory_.AcquireWrite(id,copy.target);
+    local_copies_.emplace(id,copy);LocalMemoryEvent(id,"acquired",copy);return;
+  }
   ConsumeConditions(input,LocalWaits(input));
+}
+RemoteTransactions::LocalCopy RemoteTransactions::Copy(const Json& input) const {
+  Require(local_memory_mode_ && input.at("kind")=="local","copy requires v4 local node");
+  const auto owner=input.at("rank").get<unsigned>();const auto& copy=input.at("copy");
+  Require(copy.is_object() && copy.size()==2 && copy.contains("source") && copy.contains("target"),"invalid local copy fields");
+  auto range=[&](const Json& value,bool source,uint64_t bytes=0) {
+    Require(value.is_object() && value.size()==(source?3u:2u),"invalid local copy range fields");
+    auto integer=[&](const char* key,uint64_t maximum) {
+      const auto& v=value.at(key);
+      Require(v.is_number_integer() && (v.is_number_unsigned() || v.get<int64_t>()>=0),"invalid local copy integer");
+      const auto n=v.get<uint64_t>();Require(n<=maximum,"local copy integer out of bounds");return n;
+    };
+    RemoteMemory::ReadLease result{owner,static_cast<uint32_t>(integer("key",UINT32_MAX)),integer("address",UINT64_MAX),source?integer("bytes",32768):bytes};
+    memory_.CheckRange(result);return result;
+  };
+  LocalCopy result;result.source=range(copy.at("source"),true);result.target=range(copy.at("target"),false,result.source.bytes);
+  const auto& a=result.source;const auto& b=result.target;
+  Require(a.address+a.bytes<=b.address || b.address+b.bytes<=a.address,"local copy source/target overlap");
+  for(const auto& w:LocalWaits(input))if(w.contains("reset_to")) {
+    const auto address=w.at("address").get<uint64_t>();
+    Require((address+8<=a.address || a.address+a.bytes<=address) &&
+            (address+8<=b.address || b.address+b.bytes<=address),"local copy overlaps own condition reset");
+  }
+  return result;
+}
+void RemoteTransactions::ValidateLocalMemory(const Json& input) const {if(input.contains("copy"))Copy(input);}
+void RemoteTransactions::LocalMemoryEvent(uint64_t id,const char* kind,const LocalCopy& copy,const std::vector<uint8_t>* bytes) {
+  auto range=[](const auto& r){return Json{{"owner",r.owner},{"key",r.key},{"address",r.address},{"bytes",r.bytes}};};
+  Json row={{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",id},{"kind",kind},
+    {"source",range(copy.source)},{"target",range(copy.target)}};
+  if(bytes)row["hex"]=MemoryHex(*bytes);
+  local_memory_events_.push_back(row);
+}
+void RemoteTransactions::StartLocal(const Json& input) {
+  if(!input.contains("copy"))return;
+  const auto id=input.at("id").get<uint64_t>();auto& copy=local_copies_.at(id);
+  Require(!copy.started && !copy.completed,"duplicate local copy start");
+  const auto& s=copy.source;copy.captured=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);copy.started=true;
+  LocalMemoryEvent(id,"captured",copy,&copy.captured);
+}
+void RemoteTransactions::CompleteLocal(const Json& input) {
+  if(!input.contains("copy"))return;
+  const auto id=input.at("id").get<uint64_t>();auto& copy=local_copies_.at(id);
+  Require(copy.started && !copy.completed,"invalid local copy completion");
+  memory_.CommitWrite(id,copy.captured);LocalMemoryEvent(id,"committed",copy,&copy.captured);
+  memory_.ReleaseRead(65536+id);memory_.ReleaseWrite(id);copy.completed=true;
+  LocalMemoryEvent(id,"released",copy);
 }
 RemoteMemory::ReadLease RemoteTransactions::Source(const Json& input) const {
   Require(source_mode_ && input.at("verb")=="put" && !input.contains("hex"),"source requires v3 put without hex");
@@ -247,7 +311,7 @@ bool RemoteTransactions::Occurred(uint64_t id,const std::string& event) const {
   Require(event=="completed","unsupported transaction event");return it->second.completed>=0;
 }
 bool RemoteTransactions::Drained() const {
-  if(!memory_.ReadLeases().empty())return false;
+  if(!memory_.ReadLeases().empty() || !memory_.WriteLeases().empty())return false;
   for(const auto& item:connections_)if(!item.second.queue.Drained() || !item.second.requests.Empty() || !item.second.responses.Empty())return false;
   return transport_.Drained();
 }
@@ -285,8 +349,18 @@ Json RemoteTransactions::Report() const {
   if(source_mode_) {
     out["source_model"]=source_model_;out["source_events"]=source_events_;out["active_source_leases"]=Json::array();
     for(const auto& item:memory_.ReadLeases()) {
+      if(item.first>=65536)continue; // local-copy readers have a separate namespace/report
       const auto& s=item.second;
       out["active_source_leases"].push_back({{"operation",item.first},{"owner",s.owner},{"key",s.key},{"address",s.address},{"bytes",s.bytes}});
+    }
+  }
+  if(local_memory_mode_) {
+    out["local_memory_model"]=local_memory_model_;out["local_memory_events"]=local_memory_events_;
+    out["active_local_memory_leases"]=Json::array();
+    for(const auto& item:local_copies_)if(!item.second.completed) {
+      auto range=[](const auto& r){return Json{{"owner",r.owner},{"key",r.key},{"address",r.address},{"bytes",r.bytes}};};
+      out["active_local_memory_leases"].push_back({{"operation",item.first},
+        {"source",range(item.second.source)},{"target",range(item.second.target)}});
     }
   }
   out["transport"]=transport_.Report();return out;

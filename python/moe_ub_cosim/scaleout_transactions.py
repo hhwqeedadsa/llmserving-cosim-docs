@@ -34,17 +34,21 @@ def _local_waits(waits, owner, registered):
 
 
 def validate(topology, protocol, config):
-    local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3')
-    source_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3'
+    local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4')
+    memory_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4'
+    source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
-           (' source_model' if source_mode else ''), 'transaction root')
-    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3'), 'unsupported transaction schema')
+           (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else ''), 'transaction root')
+    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4'), 'unsupported transaction schema')
     if local_mode:
         require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
                 'unsupported transaction local model')
     if source_mode:
         require(config['source_model'] == dict(capture='registered_window_at_publish/1', release='transaction_completed/1'),
                 'unsupported transaction source model')
+    if memory_mode:
+        require(config['local_memory_model'] == dict(mode='guarded_copy/1', acquire='admission/1', capture='start/1', commit='completion/1'),
+                'unsupported local memory model')
     connections = config['connections']
     require(isinstance(connections, list) and 1 <= len(connections) <= 8, 'require 1..8 connections')
     by_id, streams = {}, []
@@ -104,11 +108,30 @@ def validate(topology, protocol, config):
             require(item not in deps, 'repeated dependency'); deps.add(item)
             parents.update(ancestors[d['operation']]); parents.add(d['operation'])
         if kind == 'local':
-            fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else ''), 'local transaction node')
+            fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else '')+
+                   (' copy' if 'copy' in op and memory_mode else ''), 'local transaction node')
             integer(op['rank'], 'local rank', 0, 31)
             require(op['rank'] in gpus, 'local rank is not a topology GPU')
             integer(op['duration_ns'], 'local duration', 0, protocol.get('limits', {}).get('max_sim_ns', 5000000))
             if 'local_wait' in op: _local_waits(op['local_wait'], op['rank'], registered)
+            if 'copy' in op:
+                copy = op['copy']; fields(copy, 'source target', 'local copy')
+                source, target = copy['source'], copy['target']
+                fields(source, 'key address bytes', 'local copy source'); fields(target, 'key address', 'local copy target')
+                integer(source['bytes'], 'local copy bytes', 1, 32768)
+                for item in (source, target):
+                    integer(item['key'], 'local copy key', 1, 2**32-1)
+                    integer(item['address'], 'local copy address', 0, 2**64-1)
+                    key = op['rank'], item['key']
+                    require(key in registered, 'unknown local copy owner/key')
+                    window, size = registered[key]
+                    require(window['address'] <= item['address'] and item['address']+source['bytes'] <= window['address']+size,
+                            'local copy range out of bounds')
+                    require(all('reset_to' not in w or w['address']+8 <= item['address'] or
+                                item['address']+source['bytes'] <= w['address'] for w in op.get('local_wait', [])),
+                            'local copy overlaps own condition reset')
+                require(source['address']+source['bytes'] <= target['address'] or
+                        target['address']+source['bytes'] <= source['address'], 'local copy source/target overlap')
             local_count += 1
             require(local_count <= 16, 'local transaction node budget exceeded')
             kinds[op['id']] = kind; ancestors[op['id']] = parents
@@ -191,7 +214,7 @@ def probe(topology, protocol, config, backend, output):
     require(result['passed'] and result['native_network_executed'] and result['drained'] and
             transport['physical_drained'] and transport['closed'] and result['completed_operations'] == remote_count,
             'remote memory transaction probe incomplete')
-    if w['schema_version'] in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3'):
+    if w['schema_version'] in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4'):
         require(result['completed_local_work']+remote_count == len(w['operations']), 'local transaction work incomplete')
     return dict(passed=True, output=str(output), completed_operations=result['completed_operations'],
                 state='functional_native_remote_memory_transactions_not_GIN_timing', hardware_calibrated=False)

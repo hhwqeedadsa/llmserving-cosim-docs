@@ -1,0 +1,498 @@
+{
+  "passed": true,
+  "flows": {
+    "remote": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 66394,
+        "final_atomic_value": 10
+      },
+      "depth2": {
+        "operations": 6,
+        "source_packets": 10,
+        "transported_payload_bytes": 416,
+        "finish_ns": 42272,
+        "final_atomic_value": 10
+      },
+      "segmented": {
+        "operations": 6,
+        "source_packets": 12,
+        "transported_payload_bytes": 545,
+        "finish_ns": 66411,
+        "final_atomic_value": 10
+      },
+      "repeat_byte_identical": true,
+      "application_id_renaming_wire_and_time_invariant": true,
+      "output_bytes_before_summary": 206562,
+      "wall_seconds": 4.847917964681983,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "9144382635de93da383c6737f4fc146e5d440bc8ebdb0c5be0764c39b2e35ffc",
+        "backend/rdma/remote_transactions.hh": "ae8297b7f9e7a074551ff51af0c3edcd9ac74952e391d19deea18b5a227bd183",
+        "backend/rdma/remote_transactions.cc": "10b70aa4725812df9844567018aa361bbf6303fc84526cd6f951b2411b7a1553",
+        "backend/rdma/persistent_streams.hh": "e5884a1f987800eeadf965b18d8edfc8ea475801f13f314e7002a8226ce75905",
+        "backend/rdma/persistent_streams.cc": "e7175b028cdf6a5bfc6a8c2d7fe6e5bd001bcbd8ccd939870f35d74abe7642de",
+        "backend/rdma/transaction_probe.cc": "8c9a9668e02f6bfd4397b17527f76e09f06b50a9687e726afa0e7f860cd399e0",
+        "backend/rdma/targets.cmake": "c736c697af66157414c8b7c46affc82d50db042c3c47ebb43511cc40051b10ac",
+        "python/moe_ub_cosim/scaleout_transactions.py": "2c21e28d493fe523dcee18942f82a765319c15b9eb2a0e43630a6e946f0102e2",
+        "python/moe_ub_cosim/cli.py": "407c920a8569e01c648a62a28de8f08ba8da94be87563446139ec1e97bda2ee2",
+        "python/moe_ub_cosim/scaleout_rdma.py": "24efb32a29fadeaddac64bfdfe50afb89f03283b5226b03d72c789114410178a",
+        "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+        "tests/integration/check_remote_transaction_workflow.py": "da5798dc64287ecbcdfcd97bfa2e1c1d2e7c0c710fc04a4690f442c60a764032"
+      },
+      "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+    },
+    "wait": {
+      "passed": true,
+      "public_commands": 8,
+      "normal": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "greater": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 66382,
+        "final_atomic_value": 0
+      },
+      "failure_probes": {
+        "missing-increment": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 1,
+          "conjunction": [
+            false,
+            true
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        },
+        "wrong-payload": {
+          "completed": 3,
+          "pending": 7,
+          "actual_count": 2,
+          "conjunction": [
+            true,
+            false
+          ],
+          "no_partial_reset": true,
+          "no_future_packets": true
+        }
+      },
+      "expected_rejections": 3,
+      "local_conditions_checked": 6,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "shared_clock": true,
+      "modern_deepep_executed": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_memory.hh": "9144382635de93da383c6737f4fc146e5d440bc8ebdb0c5be0764c39b2e35ffc",
+        "backend/rdma/remote_transactions.hh": "ae8297b7f9e7a074551ff51af0c3edcd9ac74952e391d19deea18b5a227bd183",
+        "backend/rdma/remote_transactions.cc": "10b70aa4725812df9844567018aa361bbf6303fc84526cd6f951b2411b7a1553",
+        "backend/rdma/transaction_probe.cc": "8c9a9668e02f6bfd4397b17527f76e09f06b50a9687e726afa0e7f860cd399e0",
+        "python/moe_ub_cosim/scaleout_transactions.py": "2c21e28d493fe523dcee18942f82a765319c15b9eb2a0e43630a6e946f0102e2",
+        "examples/scaleout_rdma_transactions/local-waits.json": "fa201a506a5d1c0b64a4eea6e664b5781b54207adb05d4e336103f091fdf0ac4",
+        "tests/integration/check_local_memory_wait_workflow.py": "151af20d8f1c5b950f63a5d9653853897c786471c4c1d8b4aceb0bd494c246d6",
+        "tests/integration/check_remote_transaction_workflow.py": "da5798dc64287ecbcdfcd97bfa2e1c1d2e7c0c710fc04a4690f442c60a764032"
+      },
+      "output_bytes": 283011,
+      "wall_seconds": 4.601564291864634
+    },
+    "fence": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "normal": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 49870,
+        "final_atomic_value": null
+      },
+      "reserved_tail": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 65032,
+        "final_atomic_value": null
+      },
+      "empty_snapshot": {
+        "operations": 6,
+        "source_packets": 52,
+        "transported_payload_bytes": 47960,
+        "finish_ns": 36180,
+        "final_atomic_value": null
+      },
+      "snapshot_excludes_future_work": true,
+      "snapshot_includes_unpublished_reserved_work": true,
+      "empty_snapshot_does_not_wait_for_future_work": true,
+      "first_fence_completed_ns": 13690,
+      "uncovered_tail_completed_ns": 16413,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "same_network_clock": true,
+      "modern_GIN_flush_validated": false,
+      "hardware_calibrated": false,
+      "source_sha256": {
+        "backend/rdma/remote_transactions.hh": "ae8297b7f9e7a074551ff51af0c3edcd9ac74952e391d19deea18b5a227bd183",
+        "backend/rdma/remote_transactions.cc": "10b70aa4725812df9844567018aa361bbf6303fc84526cd6f951b2411b7a1553",
+        "backend/rdma/transaction_probe.cc": "8c9a9668e02f6bfd4397b17527f76e09f06b50a9687e726afa0e7f860cd399e0",
+        "backend/rdma/gin_work_queue.hh": "2616252a1620bee3ebb89c603914d7476d904b9a9b9ec2a68e67fcc4f04c3b22",
+        "python/moe_ub_cosim/scaleout_transactions.py": "2c21e28d493fe523dcee18942f82a765319c15b9eb2a0e43630a6e946f0102e2",
+        "examples/scaleout_rdma_transactions/queue-fences.json": "7ee7f99582e4c93dfa6fa3d3404f7001bb8b7fd53025437dd9d73c20d08087f8",
+        "tests/integration/check_remote_transaction_workflow.py": "da5798dc64287ecbcdfcd97bfa2e1c1d2e7c0c710fc04a4690f442c60a764032",
+        "tests/integration/check_queue_fence_workflow.py": "d30767e8fb76d6885b887deee67f758a971cde7405cdb37ee9003ec7cfa4a2c1"
+      },
+      "output_bytes": 3305363,
+      "wall_seconds": 4.604996623471379
+    },
+    "local": {
+      "passed": true,
+      "normal": {
+        "operations": 10,
+        "source_packets": 14,
+        "transported_payload_bytes": 560,
+        "finish_ns": 714304,
+        "final_atomic_value": 0
+      },
+      "local_work": [
+        {
+          "completed_ns": 106042,
+          "duration_ns": 100000,
+          "id": 13,
+          "rank": 4,
+          "ready_ns": 6042,
+          "start_ns": 6042
+        },
+        {
+          "completed_ns": 146042,
+          "duration_ns": 40000,
+          "id": 10,
+          "rank": 4,
+          "ready_ns": 18096,
+          "start_ns": 106042
+        },
+        {
+          "completed_ns": 300000,
+          "duration_ns": 300000,
+          "id": 12,
+          "rank": 1,
+          "ready_ns": 0,
+          "start_ns": 0
+        },
+        {
+          "completed_ns": 146042,
+          "duration_ns": 0,
+          "id": 14,
+          "rank": 4,
+          "ready_ns": 146042,
+          "start_ns": 146042
+        },
+        {
+          "completed_ns": 190184,
+          "duration_ns": 20000,
+          "id": 11,
+          "rank": 4,
+          "ready_ns": 170184,
+          "start_ns": 170184
+        },
+        {
+          "completed_ns": 714304,
+          "duration_ns": 500000,
+          "id": 15,
+          "rank": 0,
+          "ready_ns": 214304,
+          "start_ns": 214304
+        }
+      ],
+      "endpoint_frames_checked": 14,
+      "failures": {
+        "missing-count": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 1
+        },
+        "wrong-data": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 2
+        },
+        "cutoff": {
+          "operations": 3,
+          "source_packets": 5,
+          "transported_payload_bytes": 200,
+          "finish_ns": 5000000,
+          "final_atomic_value": 0
+        }
+      },
+      "repeat_byte_identical": true,
+      "renaming_wire_invariant": true,
+      "fifo_old_queue_first": true,
+      "legacy_byte_identical": [
+        "work",
+        "local-waits",
+        "queue-fences"
+      ],
+      "remote_only_v2_equal": true,
+      "invalid_cli_and_native": [
+        "bool-rank",
+        "switch-rank",
+        "bool-duration",
+        "wrong-event",
+        "extra-time",
+        "wrong-model",
+        "wrong-kind",
+        "foreign-window",
+        "bool-condition"
+      ],
+      "commands": 33,
+      "wall_seconds": 15.961331579834223,
+      "output_bytes": 1702997,
+      "backend_sha256": "34d325f159f98c3d329e7f6cf65db346886777eb7fae9c46cfbe945784ebabd9",
+      "reference_sha256": "f35af564ddebb4d3919c4d30090324f63eb2588e907226f17267c5ec67ee6d5d",
+      "scope": "functional declared-duration stages; no GPU visibility, modern GIN or hardware calibration"
+    },
+    "source": {
+      "passed": true,
+      "normal": {
+        "source_puts": 4,
+        "captured_source_puts": 4,
+        "active_source_leases": 0,
+        "applied": 6,
+        "source_packets": 27,
+        "payload_bytes": 1525,
+        "incomplete_wire_streams": 0,
+        "memory_windows": 3
+      },
+      "complete_audit": {
+        "operations": 6,
+        "source_packets": 27,
+        "transported_payload_bytes": 1525,
+        "finish_ns": 598270,
+        "final_atomic_value": 0
+      },
+      "source_events": [
+        {
+          "address": 4096,
+          "bytes": 257,
+          "key": 7,
+          "kind": "acquired",
+          "operation": 0,
+          "order": 0,
+          "owner": 0,
+          "time_ns": 0
+        },
+        {
+          "address": 4096,
+          "bytes": 257,
+          "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+          "key": 7,
+          "kind": "captured",
+          "operation": 0,
+          "order": 1,
+          "owner": 0,
+          "time_ns": 0
+        },
+        {
+          "address": 4096,
+          "bytes": 257,
+          "key": 7,
+          "kind": "released",
+          "operation": 0,
+          "order": 3,
+          "owner": 0,
+          "time_ns": 12102
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "key": 8,
+          "kind": "acquired",
+          "operation": 2,
+          "order": 6,
+          "owner": 4,
+          "time_ns": 58138
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+          "key": 8,
+          "kind": "captured",
+          "operation": 2,
+          "order": 7,
+          "owner": 4,
+          "time_ns": 58138
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "key": 8,
+          "kind": "acquired",
+          "operation": 3,
+          "order": 8,
+          "owner": 4,
+          "time_ns": 58138
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "key": 8,
+          "kind": "released",
+          "operation": 2,
+          "order": 10,
+          "owner": 4,
+          "time_ns": 70240
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+          "key": 8,
+          "kind": "captured",
+          "operation": 3,
+          "order": 11,
+          "owner": 4,
+          "time_ns": 70240
+        },
+        {
+          "address": 8192,
+          "bytes": 257,
+          "key": 8,
+          "kind": "released",
+          "operation": 3,
+          "order": 13,
+          "owner": 4,
+          "time_ns": 82342
+        },
+        {
+          "address": 12288,
+          "bytes": 257,
+          "key": 9,
+          "kind": "acquired",
+          "operation": 4,
+          "order": 15,
+          "owner": 1,
+          "time_ns": 94216
+        },
+        {
+          "address": 12288,
+          "bytes": 257,
+          "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb010203040506",
+          "key": 9,
+          "kind": "captured",
+          "operation": 4,
+          "order": 16,
+          "owner": 1,
+          "time_ns": 94216
+        },
+        {
+          "address": 12288,
+          "bytes": 257,
+          "key": 9,
+          "kind": "released",
+          "operation": 4,
+          "order": 18,
+          "owner": 1,
+          "time_ns": 98270
+        }
+      ],
+      "changed_only_initial_window_changes_all_forwarded_bytes": true,
+      "source_readers_overlap": true,
+      "pre_submit_overwrite_changes_publish_snapshot": true,
+      "local_stage_input_lifetime_modeled": false,
+      "repeat_byte_identical": true,
+      "id_renaming_wire_invariant": true,
+      "missing_count": {
+        "source_puts": 1,
+        "captured_source_puts": 1,
+        "active_source_leases": 0,
+        "applied": 2,
+        "source_packets": 7,
+        "payload_bytes": 369,
+        "incomplete_wire_streams": 0,
+        "memory_windows": 3
+      },
+      "source_conflicts": {
+        "overwrite-put": {
+          "source_puts": 3,
+          "captured_source_puts": 2,
+          "active_source_leases": 2,
+          "applied": 3,
+          "source_packets": 17,
+          "payload_bytes": 947,
+          "incomplete_wire_streams": 0,
+          "memory_windows": 3
+        },
+        "overwrite-atomic": {
+          "source_puts": 3,
+          "captured_source_puts": 2,
+          "active_source_leases": 2,
+          "applied": 2,
+          "source_packets": 13,
+          "payload_bytes": 698,
+          "incomplete_wire_streams": 0,
+          "memory_windows": 3
+        },
+        "local-reset": {
+          "source_puts": 3,
+          "captured_source_puts": 2,
+          "active_source_leases": 2,
+          "applied": 2,
+          "source_packets": 8,
+          "payload_bytes": 433,
+          "incomplete_wire_streams": 1,
+          "memory_windows": 3
+        }
+      },
+      "cutoff": {
+        "source_puts": 1,
+        "captured_source_puts": 1,
+        "active_source_leases": 1,
+        "applied": 0,
+        "source_packets": 5,
+        "payload_bytes": 289,
+        "incomplete_wire_streams": 0,
+        "memory_windows": 3
+      },
+      "legacy_byte_identical": [
+        "work",
+        "local-waits",
+        "queue-fences",
+        "local-stages"
+      ],
+      "literal_v3_equal": true,
+      "invalid_cli_and_native": [
+        "wrong-model",
+        "foreign-source",
+        "bool-length",
+        "long-source",
+        "extra-owner",
+        "double-payload",
+        "atomic-source",
+        "own-reset"
+      ],
+      "commands": 37,
+      "public_commands": 29,
+      "native_commands": 8,
+      "output_bytes": 2951118,
+      "wall_seconds": 20.132254373282194,
+      "backend_sha256": "34d325f159f98c3d329e7f6cf65db346886777eb7fae9c46cfbe945784ebabd9",
+      "reference_sha256": "35411fafc88dce69bd0ad960a24c905ab954137b63e231fb058b6d49f279632a",
+      "scope": "functional memory snapshot at publication and ACK guards; no GPU/GIN calibration or MoE execution"
+    }
+  }
+}

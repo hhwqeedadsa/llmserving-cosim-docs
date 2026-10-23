@@ -131,6 +131,27 @@ v3的`transactions`增加`source_model/source_events/active_source_leases`。sou
 
 人工例核验6个远端事务、3个本地阶段，27个源数据包、1,525B载体负载。只修改初始窗口即可改变全部后续转发内容；同源排队保护、三类覆写拒绝、提交前覆写对照、截止、旧版逐字节比较及独立实包重放见[源窗口验收](../../fixtures/source_windows/README.md)。这些结果不表示现代MoE性能或优化收益。
 
+## 本地处理显式读取输入和写出输出
+
+将`--config`改为[local-io.json](local-io.json)，可以执行“实际接收→本地复制到另一地址→后继put读取输出”。使用`moe-rdma-transactions/4`，沿用v3字段，根增加：
+
+```json
+"local_memory_model": {
+  "mode": "guarded_copy/1", "acquire": "admission/1",
+  "capture": "start/1", "commit": "completion/1"
+}
+```
+
+local节点可选`"copy": {"source": {"key": 8, "address": 8192, "bytes": 257}, "target": {"key": 8, "address": 8576}}`。两个范围都属于本节点rank，target长度等于source长度（1—32768B），须完整处于注册窗口。源目标和本节点reset均不得重叠，不接受额外owner、target bytes或其他字段。没有copy的本地节点仍只有声明耗时，不自动取得任何数据保护。
+
+全部条件满足后先检查源可读、目标可独占写、全部reset可写，再消费条件并入队。源读和目标写的使用记录从**入队**持续到完成，包括等待本地串行槽的时间。多个源读允许重叠；输出区在此期间不能被其他源读、LE64条件读、put、原子或reset访问，其他写也不能覆盖输入。冲突退出1并保留部分状态，不把功能错误换算成硬件等待。
+
+真正开始时读取当前源字节，声明处理时间到期后一次写入目标，再释放两个记录并标记完成。零时长也经过事件调度。后继put由本地completed依赖放行，读取这个实际输出；完成后输入、输出可以按应用依赖合法复用。该模型只做**字节原样复制**，处理时长仍是声明值，不是专家矩阵计算、CUDA DMA或内存带宽模型，保护区间也是显式功能规则，不能作为真实GPU时延依据。
+
+v4的transactions新增`local_memory_model/local_memory_events/active_local_memory_leases`。每项事件含operation、order、time_ns、kind及source/target范围；kind依次为acquired/captured/committed/released，capture和commit另含实际hex。所有内存事件共用order，原有source_events只记录远端put的源保护。截止保留已取得而未释放的本地记录，未完成就不写输出。若失败后的当前条件因输出独占而不可读，pending项保存`local_wait=[]`及`local_wait_error`，不会用此空列表表示条件已满足，也不让报告读取再次失败而丢掉原始错误。
+
+人工例完成7个远端事务和4个本地节点，其中2个声明了copy；实包、排队/运行期冲突、源共享、截止、新旧比较和恢复范围见[本地输入输出验收](../../fixtures/local_io/README.md)。该规则补齐了这个显式复制程序的输入输出保护，未声明copy的节点以及完整现代MoE仍不具备这项保证。
+
 ## 实际传了什么
 
 MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连接内事务序号、远端地址、远端key及body长度；字段宽度为4/4/8/8/4/4B。put body为实际字节，fetch-add body为8B增量，reply body为8B旧值且地址/key为0。事务序号负责请求/响应匹配，**应用operation id不写入报文**，不改变NIC绑定、优先级或选路。

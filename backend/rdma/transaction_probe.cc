@@ -22,11 +22,13 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
-    const bool source_mode=input.at("schema_version")=="moe-rdma-transactions/3";
+    const bool local_memory_mode=input.at("schema_version")=="moe-rdma-transactions/4";
+    const bool source_mode=local_memory_mode || input.at("schema_version")=="moe-rdma-transactions/3";
     const bool local_mode=source_mode || input.at("schema_version")=="moe-rdma-transactions/2";
     if(local_mode) {
       std::vector<std::string> keys={"schema_version","connections","windows","operations","local_model"};
       if(source_mode)keys.push_back("source_model");
+      if(local_memory_mode)keys.push_back("local_memory_model");
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }
@@ -52,6 +54,7 @@ int main(int argc,char** argv) {
           const auto rank=Integer(op.at("rank"),31);
           Require(gpus.count(static_cast<unsigned>(rank)),"local transaction rank is not a GPU");
           Integer(op.at("duration_ns"),fabric.MaxSimNs());
+          if(op.contains("copy")) {Require(local_memory_mode,"copy requires v4");keys.push_back("copy");}
         } else {
           keys.insert(keys.end(),{"connection","verb","key","address"});
           Require(op.at("verb")=="put" || op.at("verb")=="fetch_add","unsupported transaction verb");
@@ -66,6 +69,7 @@ int main(int argc,char** argv) {
         Keys(op,keys);
         if(op.contains("local_wait"))transactions.LocalWaits(op); // validate even blocked predicates
         transactions.ValidateSource(op);
+        transactions.ValidateLocalMemory(op);
       }
       if(local[i])++local_count;else ++remote_count;
       Require(local_count<=16 && remote_count<=32,"transaction kind count budget exceeded");
@@ -94,7 +98,9 @@ int main(int argc,char** argv) {
       if(local_busy.count(rank) || queue.empty())return;
       const auto i=queue.front();queue.pop_front();local_busy.insert(rank);
       local_times[i][1]=ns3::Simulator::Now().GetNanoSeconds();
+      transactions.StartLocal(operations[i]);
       ns3::Simulator::Schedule(ns3::NanoSeconds(operations[i].at("duration_ns").get<int64_t>()),[&,rank,i]() {
+        transactions.CompleteLocal(operations[i]);
         Require(local_busy.erase(rank)==1 && local_times[i][2]<0,"duplicate transaction local completion");
         local_times[i][2]=ns3::Simulator::Now().GetNanoSeconds();++local_complete;
         // An older admitted node retains precedence over a newly unlocked node.
@@ -131,9 +137,17 @@ int main(int argc,char** argv) {
       try {ns3::Simulator::Run();}catch(const std::exception& e) {run_error=e.what();}
     } else ns3::Simulator::Run();
     auto result=fabric.Report();result["transactions"]=transactions.Report();result["completed_operations"]=complete;
+    auto pending=[&](const Json& op) {
+      Json row={{"id",op.at("id")}};
+      try {row["local_wait"]=transactions.LocalWaits(op);}catch(const std::exception& e) {
+        if(!local_memory_mode)throw;
+        row["local_wait"]=Json::array();row["local_wait_error"]=e.what();
+      }
+      return row;
+    };
     result["pending_operations"]=Json::array();
     for(std::size_t i=0;i<operations.size();++i)if(!local[i] && !submitted[i])
-      result["pending_operations"].push_back({{"id",operations[i].at("id")},{"local_wait",transactions.LocalWaits(operations[i])}});
+      result["pending_operations"].push_back(pending(operations[i]));
     if(local_mode) {
       result["local_model"]=input.at("local_model");result["local_work"]=Json::array();
       result["completed_local_work"]=local_complete;result["pending_local_work"]=Json::array();
@@ -141,8 +155,10 @@ int main(int argc,char** argv) {
         result["local_work"].push_back(Json{{"id",operations[i].at("id")},{"rank",operations[i].at("rank")},
           {"duration_ns",operations[i].at("duration_ns")},{"ready_ns",local_times[i][0]},
           {"start_ns",local_times[i][1]},{"completed_ns",local_times[i][2]}});
-        if(local_times[i][2]<0)result["pending_local_work"].push_back(Json{{"id",operations[i].at("id")},
-          {"admitted",static_cast<bool>(submitted[i])},{"local_wait",transactions.LocalWaits(operations[i])}});
+        if(local_times[i][2]<0) {
+          auto row=pending(operations[i]);row["admitted"]=static_cast<bool>(submitted[i]);
+          result["pending_local_work"].push_back(row);
+        }
       }
     }
     result["loaded_libraries"]=Json::array();dl_iterate_phdr(Libraries,&result["loaded_libraries"]);

@@ -114,7 +114,7 @@ def audit(result, config, mtu, allow_partial=False):
         previous = [r['completed_ns'] for r in rows.values() if r['connection'] == row['connection'] and r['sequence'] < row['sequence']]
         assert row['completed_ns'] == max([row['request_acked_ns'], row['response_ns'], *previous])
     assert len(tx['target_events']) == len(rows) and tx['duplicate_requests'] == 0
-    memory = audit_memory(tx, config, frames, rows)
+    memory = audit_memory(tx, config, frames, rows, result.get('local_work', []))
     for c in connections.values():
         ordered = sorted((r for r in rows.values() if r['connection'] == c['id']), key=lambda r: r['sequence'])
         for index, row in enumerate(ordered):
@@ -135,7 +135,7 @@ def audit(result, config, mtu, allow_partial=False):
                 finish_ns=result['finish_ns'], final_atomic_value=final_atomic)
 
 
-def audit_memory(tx, config, frames, rows):
+def audit_memory(tx, config, frames, rows, local_work=()):
     # Independent byte/lease replay also accepts an in-flight prefix: only
     # actually applied target frames must already be complete in source bytes.
     connections = {c['id']: c for c in config['connections']}
@@ -143,17 +143,57 @@ def audit_memory(tx, config, frames, rows):
     bindings = {(r['connection'], r['sequence']): r for r in rows.values()}
     memory = {(w['owner'], w['key']): bytearray.fromhex(w['hex']) for w in config['windows']}
     windows = {(w['owner'], w['key']): w for w in config['windows']}
-    events = sorted(tx['target_events']+tx['local_events']+tx.get('source_events', []), key=lambda e: e['order'])
+    events = sorted(tx['target_events']+tx['local_events']+tx.get('source_events', [])+tx.get('local_memory_events', []), key=lambda e: e['order'])
     assert [e['order'] for e in events] == list(range(len(events)))
     last_time = -1
     leases = {}
+    writers, copies, captures = {}, {}, {}
+    local_rows = {r['id']: r for r in local_work}
+
+    def overlap(a, b):
+        return a['owner'] == b['owner'] and bool(set(range(a['address'], a['address']+a['bytes'])) &
+                                                set(range(b['address'], b['address']+b['bytes'])))
+
+    def readable(owner, address, length):
+        assert all(not overlap(dict(owner=owner,address=address,bytes=length), w) for w in writers.values())
 
     def writable(owner, address, length):
         assert all(s['owner'] != owner or address+length <= s['address'] or
                    s['address']+s['bytes'] <= address for s in leases.values())
+        assert all(not overlap(dict(owner=owner,address=address,bytes=length), w) for w in writers.values())
 
     for event in events:
         assert event['time_ns'] >= last_time; last_time = event['time_ns']
+        if 'source' in event and 'kind' in event:
+            identity = event['operation']; op = all_specs[identity]; row = local_rows[identity]
+            source = dict(owner=op['rank'], **op['copy']['source'])
+            target = dict(owner=op['rank'], **op['copy']['target'], bytes=source['bytes'])
+            assert event['source'] == source and event['target'] == target and not overlap(source, target)
+            key = ('local', identity)
+            if event['kind'] == 'acquired':
+                assert identity not in copies and event['time_ns'] == row['ready_ns']
+                readable(source['owner'], source['address'], source['bytes'])
+                writable(target['owner'], target['address'], target['bytes'])
+                leases[key] = source; writers[identity] = target
+                copies[identity] = dict(operation=identity, source=source, target=target)
+            elif event['kind'] == 'captured':
+                assert identity in copies and identity not in captures and event['time_ns'] == row['start_ns']
+                location = source['owner'], source['key']; offset = source['address']-windows[location]['address']
+                data = bytes(memory[location][offset:offset+source['bytes']]);assert data == bytes.fromhex(event['hex'])
+                captures[identity] = data
+            elif event['kind'] == 'committed':
+                assert identity in copies and event['time_ns'] == row['completed_ns'] >= 0
+                assert captures[identity] == bytes.fromhex(event['hex'])
+                assert writers.pop(identity) == target
+                writable(target['owner'], target['address'], target['bytes'])
+                location = target['owner'], target['key']; offset = target['address']-windows[location]['address']
+                memory[location][offset:offset+source['bytes']] = captures[identity]
+                writers[identity] = target
+            else:
+                assert event['kind'] == 'released' and event['time_ns'] == row['completed_ns'] >= 0
+                assert leases.pop(key) == source and writers.pop(identity) == target
+                copies.pop(identity)
+            continue
         if 'kind' in event:
             identity = event['operation']; op = all_specs[identity]; source = op['source']
             owner = connections[op['connection']]['src']; s = dict(operation=identity, owner=owner, **source)
@@ -161,6 +201,7 @@ def audit_memory(tx, config, frames, rows):
             row = rows[identity]
             if event['kind'] == 'acquired':
                 assert identity not in leases and event['time_ns'] == row['ready_ns']
+                readable(owner, source['address'], source['bytes'])
                 leases[identity] = s
             elif event['kind'] == 'captured':
                 assert leases[identity] == s and event['time_ns'] == row['published_ns']
@@ -181,6 +222,7 @@ def audit_memory(tx, config, frames, rows):
             # Evaluate all predicates before any reset, from independently
             # reconstructed actual request bytes, not the source operation table.
             for observed, condition in zip(event['conditions'], op['local_wait']):
+                readable(owner, condition['address'], 8)
                 key = owner, condition['key']; offset = condition['address']-windows[key]['address']
                 value = int.from_bytes(memory[key][offset:offset+8], 'little')
                 expected = dict(condition, owner=owner, observed_value=value, matched=True)
@@ -208,7 +250,9 @@ def audit_memory(tx, config, frames, rows):
             memory[key][offset:offset+8] = ((old+int.from_bytes(f['body'], 'big'))%(2**64)).to_bytes(8, 'little')
     assert {(w['owner'], w['key']): bytes.fromhex(w['hex']) for w in tx['windows']} == memory
     if 'active_source_leases' in tx:
-        assert tx['active_source_leases'] == [leases[i] for i in sorted(leases)]
+        assert tx['active_source_leases'] == [leases[i] for i in sorted(k for k in leases if isinstance(k, int))]
+    if 'active_local_memory_leases' in tx:
+        assert tx['active_local_memory_leases'] == [copies[i] for i in sorted(copies)]
     return memory
 
 

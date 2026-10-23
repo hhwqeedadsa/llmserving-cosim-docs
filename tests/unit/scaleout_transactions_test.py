@@ -124,4 +124,26 @@ class TransactionInputTests(unittest.TestCase):
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
 
+    def test_v4_owned_copy_ranges_and_nonoverlap(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-io.json').read_text())
+        validate(self.topology, self.protocol, original)
+        for side, key, value in [('source', 'bytes', True), ('source', 'bytes', 0), ('source', 'bytes', 32769),
+                                  ('source', 'key', 7), ('source', 'owner', 4), ('source', 'address', -1),
+                                  ('target', 'address', 8192), ('target', 'address', 9600),
+                                  ('target', 'address', True), ('target', 'owner', 4), ('target', 'bytes', 257)]:
+            c = deepcopy(original); next(o for o in c['operations'] if o['id'] == 1)['copy'][side][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+    def test_v4_model_own_reset_and_old_schema_rejection(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-io.json').read_text())
+        for address in [8192, 8576]:
+            c = deepcopy(original)
+            next(o for o in c['operations'] if o['id'] == 1)['local_wait'] = [dict(key=8,address=address,compare='eq',value=0,reset_to=0)]
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['local_memory_model']['capture'] = 'admission/1'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['schema_version'] = 'moe-rdma-transactions/3'; del c['local_memory_model']
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+
 if __name__ == '__main__': unittest.main()

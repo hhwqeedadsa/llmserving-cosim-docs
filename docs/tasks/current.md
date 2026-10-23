@@ -13,18 +13,22 @@
 
 ## 当前范围和预算
 
+用户要求深度清理后恢复主线。已清除可再生缓存、未使用旧环境、构建和已逐字节核对的派生trace，原件/唯一证据保留或无损压缩；详情`runs/disk_cleanup_20261023/`。共享Btrfs并发占用，不把文件减少写成df净增量。现在完成平台收尾，接续反馈时延泛化对照；不push。
+
 按用户最新目标，首先回答：(1)现有丢包后如何恢复、影响通信效率多少；(2)在原有条件下如何修改或简化以提升效率；(3)提升空间多大。论文标准与创新审计仍保留，不把RTO调参称新机制。上轮恢复价值筛选已完成，是实质进展，但不是丢包性能证据。
 
 本轮完成[固定任务丢包恢复成本与空间](../../experiments/loss_recovery_cost/protocol.md)13组实际服务网络对照：8GPU/两EP4/batch4/H1024-E16-Top2/1层2步/100G Clos/每源3消息8192B FIFO不变，每条件92消息/389120B，52任务图与首尝试路径核对。中间数据NACK重发3144B、业务不变；40μs尾数据/最终ACK单次丢失只多144B，业务分别晚12040/9037ns。20μs保持相同重复量，较40μs同故障业务早12036ns(8.97%)/9029ns(6.89%)，相对正常参考仍有4/8ns。12μs无故障产生60超时/237568B重复量(+61.05%)，业务晚370ns/网络排空晚12370ns；目标首次正常反馈12522ns晚于计时器。无故障原生/40/20以及中间故障原生/40/20共有执行字段相等。只是当前模型的参数改进，不是现代GIN、生产默认或新论文机制。
 
 独立包/端口/序号核对312个捕获源消息、逐事件重放源ACK计时，目标进展对应真实反馈，三类篡改被拒绝；捕获仅GPU0/4。复用服务/9源码/8库身份不变。13宿主监控正常且无遗留子进程，驱动22.77秒、服务监控合17.74秒、峰值采样RSS460582912B。227成员/7058302B原文、压缩675854B检查点核hash，新源码根/空cwd离线复算三份产物逐字节一致，无网络重跑。原件`/dev/shm/moe-loss-recovery-cost-20261023/`约23.3MB，单命令60秒/RSS1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB，全轮300秒/192MiB含归档及8GiB预留保持。无安装下载/构建/GPU/依赖更改或旧Prefill/1024失败重跑。见[研究报告](../reviews/丢包恢复机制_通信代价与优化空间_20261023.md)、[HTML](../review_artifacts/loss_recovery_cost_20261023/report.html)、[离线复现](../review_artifacts/loss_recovery_cost_20261023/reproduction.json)与[收尾](../review_artifacts/loss_recovery_cost_20261023/closeout.json)。原件易失无持久备份，研究单独本地提交、不push。
 
-完整目标仍in_progress：须继续反馈时延/并发泛化，并为持久stream/事务明确丢包重放、完成信用与重复副作用。当前这些入口拒绝旧fault/recovery模式，不能直接开启或把参考模型冒充现代通信；20μs不改平台默认。原平台前缀发布待独立收尾，未混入研究提交。
+完整目标仍in_progress：须继续反馈时延/并发泛化，并为持久stream/事务明确丢包重放、完成信用与重复副作用。当前这些入口拒绝旧fault/recovery模式，不能直接开启或把参考模型冒充现代通信；20μs不改平台默认。前缀发布平台已独立收尾，后续研究不依赖tests/fixture。
 
 第二阶段恢复保留筛选见[报告](../reviews/MoE在途恢复价值与状态存活判别_20261023.md)与[复现](../review_artifacts/recovery_value_20261023/reproduction.json)：约68%仅为全部健康结果完成时的条件任务数上界，实际收益下界0；原件`/dev/shm/moe-recovery-value-20261023/`。论文主贡献仍未成立，不能把该上界当作丢包时延收益。
 
 
 研究筛选结果：优先候选为“不丢弃健康端有效结果的MoE在途请求恢复”，不是已成立创新。新核对EEP的在途请求失败/客户端重试边界、固定NCCL abort/shrink、Varuna操作恢复、ByteExpress等近邻，保存六份固定源码与14次选读响应身份。独立CPU检查10个有限条件、415个网络顺序/630个消费交错；通知代际、双缓冲回绕和弱撤权各有条件反例，强退出/同QP/不重叠区间对照未发现反例，不能称生产漏洞或性能收益。子集DP和最后写入oracle独立复核并拒绝两种篡改。见[报告](../reviews/创新点筛选与MoE安全恢复候选_20261023.md)、[HTML](../review_artifacts/recovery_safety_20261023/report.html)及[独立核验](../review_artifacts/recovery_safety_20261023/verification.json)。60成员/4,032,914B检查点、压缩765,616B逐hash核验；新源码根/空cwd离线3命令复现6份产物逐字节相同，固定六份源码blob/tree重新核对，没有新网络/GPU执行。见[归档](../review_artifacts/recovery_safety_20261023/archive.json)、[恢复](../review_artifacts/recovery_safety_20261023/recovery.json)和[收尾](../review_artifacts/recovery_safety_20261023/closeout.json)。原件易失、无持久备份。下一步先检验健康端有效结果是否足够多、恢复总时延是否由权重恢复等更大成本主导；若强基线足够或收益不足，不开发新优化器。论文目标仍in_progress。
+
+从`3fa6d5a`完成[事务准备与前缀发布](submission_prefix_spec.md)：v5可选显式前缀模式，同连接聚合只准备、非聚合发布，prepared回调驱动在线后继，真实ACK/原子回复后回收；默认不变。32命令独立验收、7类原生拒绝、3类篡改拒绝、3种真实截止及跨连接隔离通过；17项输入单元与事务/在线/稀疏回归通过，13固定依赖不变。563成员/约60.4MB归档含两入口与8库，新源码根/空cwd执行3公开命令、2小网络，除库路径外完整结果相等；首次checker误计系统库的失败保留并修复，仅重核已有成功结果，未重跑网络。见[验收](../../fixtures/submission_prefix/README.md)、[恢复](../../fixtures/submission_prefix/recovery.json)和[收尾](../../fixtures/submission_prefix/closeout.json)。每命令60秒/1GiB/地址2GiB、仿真5ms/结果16MiB、全阶段480秒/192MiB及8GiB预留保持。仅本地提交，不push；MRT1功能规则不当作现代GIN成本或论文贡献。
 
 从`614f501`完成[有界稀疏注册窗口](transaction_sparse_windows_spec.md)：transactions/5支持同owner/key的64MiB内逻辑范围及每窗256个4KiB实际页，零初值显式声明，零读取不分配，不改变网络时钟/报文。三18MiB窗口按现代EP4/H7168/Top8布局在2^32基址上实际发送14,464B→copy→转发，合计54MiB逻辑范围/60KiB页字节、456源包；只改初值即改变后续实际字节。稠密/稀疏与一次性/在线两组差分除窗口表示/session外完整结果一致。6条公开命令、16条原生拒绝、6,483项独立稀疏断言、6,758项旧核心断言、16输入单元、37本地I/O命令、在线反馈回归及4条v1/v2新旧差分通过；页限失败不部分写或推进序号，三种篡改被独立checker拒绝。9阶段隔离构建两入口/两核心检查，13固定依赖及15旧运行文件hash不变，未全量构建依赖。980成员/80,748,236B检查点逐hash核验，压缩15,353,766B含两入口/8库；新源码根/cwd的3条公开命令、2次网络除库路径外结果一致，395源码身份核对。见[验收](../../fixtures/sparse_windows/README.md)、[恢复](../../fixtures/sparse_windows/recovery.json)及[收尾](../../fixtures/sparse_windows/closeout.json)。单命令60秒/1GiB/地址2GiB/64MiB、总480秒/192MiB、仿真5ms/结果16MiB和8GiB预留保持；收尾前监控90.36秒、目录96,009,602B，最终检查也通过，无遗留子进程。原件`/dev/shm/moe-sparse-windows-20261023/`易失无持久备份；无安装下载/GPU/依赖更改或旧失败重跑，仅本地提交不push。驻留页不含容器/索引，不是RSS或GPU显存；零耗时copy和模式数据仅功能验证，完整现代事件/self/可见性/专家数值/校准与资源规模仍缺。此轮补地址表示，不能当时延收益或论文主贡献；整体目标仍in_progress。
 

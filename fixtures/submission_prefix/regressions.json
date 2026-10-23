@@ -1,0 +1,141 @@
+{
+  "transaction-regression": {
+    "passed": true,
+    "public_commands": 8,
+    "expected_rejections": 2,
+    "normal": {
+      "operations": 6,
+      "source_packets": 10,
+      "transported_payload_bytes": 416,
+      "finish_ns": 66394,
+      "final_atomic_value": 10
+    },
+    "depth2": {
+      "operations": 6,
+      "source_packets": 10,
+      "transported_payload_bytes": 416,
+      "finish_ns": 42272,
+      "final_atomic_value": 10
+    },
+    "segmented": {
+      "operations": 6,
+      "source_packets": 12,
+      "transported_payload_bytes": 545,
+      "finish_ns": 66411,
+      "final_atomic_value": 10
+    },
+    "repeat_byte_identical": true,
+    "application_id_renaming_wire_and_time_invariant": true,
+    "output_bytes_before_summary": 207953,
+    "wall_seconds": 4.796146793290973,
+    "source_sha256": {
+      "backend/rdma/remote_memory.hh": "78db0506c005f1de788e1c6e6468b077c7aa712ecdffc4ef0709a83d2e1ab31a",
+      "backend/rdma/remote_transactions.hh": "b1372f16d8c330b49e0c15e34985778b2f114831f9b3edd25b99254607fa5f5c",
+      "backend/rdma/remote_transactions.cc": "9c3d728dd054595000696f543477c3630afa8735019373af246435ec974cefa0",
+      "backend/rdma/persistent_streams.hh": "e5884a1f987800eeadf965b18d8edfc8ea475801f13f314e7002a8226ce75905",
+      "backend/rdma/persistent_streams.cc": "e7175b028cdf6a5bfc6a8c2d7fe6e5bd001bcbd8ccd939870f35d74abe7642de",
+      "backend/rdma/transaction_probe.cc": "dc3b0f1a7fdd8db05f4b21aa80dd000d9a95e48bb0783a23bb7f2ef32a502683",
+      "backend/rdma/targets.cmake": "1f5a87670042794bb74171f8abf0bb6ea8386bb9d390cf6e7021d73c2258d761",
+      "python/moe_ub_cosim/scaleout_transactions.py": "eb48a33bd7553cb756a0e6969f2aa6a4e3cb2b6c188dd2d5b636a900f7f9566c",
+      "python/moe_ub_cosim/cli.py": "8c6ecb4d402d3dc1f57d29e1e517c491981a73ffce912c65c23b2cb935a690eb",
+      "python/moe_ub_cosim/scaleout_rdma.py": "8412eb108ff94fb35b59385736055547f90caa33a03556da051290641825edaa",
+      "examples/scaleout_rdma_transactions/work.json": "0bdaf9dd0902ac4d391bc14a52d5db02d15435d82d3e8a83cd9c008cf8f05f43",
+      "tests/integration/check_remote_transaction_workflow.py": "728d82aede8b8d1b1a47ba62016341a57928ac6c4011f77cdffd719ac650dda1"
+    },
+    "scope": "artificial functional tests; no modern application, RoCE timing, hardware calibration or research gain"
+  },
+  "session-regression": {
+    "passed": true,
+    "all_at_once_original_fields_equal": true,
+    "all_at_once_events": 48,
+    "online_events": 48,
+    "online_endpoint_frames": 8,
+    "actual_return_driven_conditions": [
+      {
+        "initial_value": 7,
+        "actual_returned_value": 7,
+        "derived_put_value": 107,
+        "events": 11,
+        "qp_creations": 1,
+        "finish_ns": 24140
+      },
+      {
+        "initial_value": 19,
+        "actual_returned_value": 19,
+        "derived_put_value": 119,
+        "events": 11,
+        "qp_creations": 1,
+        "finish_ns": 24140
+      }
+    ],
+    "native_preflight_failures": [
+      "batch-invalid",
+      "wrong-time",
+      "wrong-sequence",
+      "early-finish",
+      "eof",
+      "bool-value",
+      "duplicate-id",
+      "future-dependency",
+      "over-budget",
+      "idle-empty",
+      "oversized"
+    ],
+    "cutoff_actual_prefix_verified": true,
+    "future_work_not_preloaded": true,
+    "native_shared_clock": true,
+    "deliberate_host_delay_did_not_change_original_times": true,
+    "modern_deepep_connected": false,
+    "hardware_calibrated": false,
+    "public_commands": 3,
+    "wall_seconds": 10.008456569164991,
+    "backend_sha256": "e86e5048ae69cd7b9cdfc472ce8ef14d3218f7f7b3431714ee5a8d988ab2a908",
+    "reference_sha256": "6399e27cc3dd34a758ffa0d8a442893bce6c2a2924c3ab06ca6487ce680b918d"
+  },
+  "sparse-regression": {
+    "passed": true,
+    "public_commands": 6,
+    "direct_native_rejections": [
+      "bool-size-probe",
+      "bool-size-session",
+      "huge-size-probe",
+      "huge-size-session",
+      "unknown-fill-probe",
+      "unknown-fill-session",
+      "overlap-probe",
+      "overlap-session",
+      "past-end-probe",
+      "past-end-session",
+      "too-many-segments-probe",
+      "too-many-segments-session",
+      "too-many-initial-bytes-probe",
+      "too-many-initial-bytes-session",
+      "address-overflow-probe",
+      "address-overflow-session"
+    ],
+    "dense_sparse_all_other_fields_equal": true,
+    "high_offset_online_all_other_fields_equal": true,
+    "modern_layout_bytes": 18874368,
+    "logical_window_bytes": 56623104,
+    "resident_page_bytes": 61440,
+    "actual_data_bytes_per_put": 14464,
+    "high_offset_source_packets": 456,
+    "changed_initial_bytes_changed_actual_forwarding": true,
+    "modern_deepep_connected": false,
+    "hardware_calibrated": false,
+    "wall_seconds": 6.119066812098026,
+    "binary_sha256": {
+      "ns3.42-moe-rdma-transaction-probe": "6399e27cc3dd34a758ffa0d8a442893bce6c2a2924c3ab06ca6487ce680b918d",
+      "ns3.42-moe-rdma-transaction-session": "e86e5048ae69cd7b9cdfc472ce8ef14d3218f7f7b3431714ee5a8d988ab2a908"
+    }
+  },
+  "unit": {
+    "passed": true,
+    "count": 17
+  },
+  "dependencies": {
+    "passed": true,
+    "fixed_checkouts": 13,
+    "evidence": "bash scripts/check_deps.sh; 2026-10-23; all pinned heads and states agree"
+  }
+}

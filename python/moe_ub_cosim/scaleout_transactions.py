@@ -57,9 +57,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     sparse_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/5'
     memory_mode = sparse_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4')
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
+    explicit = isinstance(config, dict) and 'submission_model' in config
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
-           (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else ''), 'transaction root')
+           (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
+    if explicit:
+        require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
     if local_mode:
         require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
                 'unsupported transaction local model')
@@ -122,7 +125,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             fields(d, 'operation event', 'transaction dependency')
             integer(d['operation'], 'dependency operation', 0, 65535)
             require(d['operation'] in kinds and d['event'] in (
-                ('completed',) if kinds[d['operation']] == 'local' else ('applied', 'request_acked', 'completed')),
+                ('completed',) if kinds[d['operation']] == 'local' else (('prepared',) if explicit else ())+('applied', 'request_acked', 'completed')),
                 'dependency must reference an earlier matching node event')
             item = d['operation'], d['event']
             require(item not in deps, 'repeated dependency'); deps.add(item)
@@ -162,8 +165,9 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         from_source = 'source' in op
         require(not from_source or (source_mode and op['verb'] == 'put' and 'hex' not in op), 'source requires v3 put without hex')
         fields(op, 'id connection verb key address after '+('source' if from_source else 'hex' if op['verb'] == 'put' else 'value')+
-               (' kind' if local_mode else '')+
+               (' kind' if local_mode else '')+(' aggregate_requests' if explicit else '')+
                (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else ''), 'operation')
+        if explicit: require(type(op['aggregate_requests']) is bool, 'aggregate_requests must be boolean')
         integer(op['connection'], 'operation connection', 0, 7)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
         integer(op['address'], 'operation address', 0, 2**64-1)

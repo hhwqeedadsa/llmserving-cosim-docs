@@ -292,3 +292,5 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 `rdma/transaction_session.cc`单独链接原生Fabric/RemoteTransactions，通过有界DECIDE/COMMIT逐事件反馈后追加工作。`transaction_session_validation.hh`只校验声明字段、范围和因果关系，实际字节与lease检查留在真实准入/发布阶段；不会为验证未来节点读取当前输出。`OperationProgress()`只导出实际事务状态，不包含远端窗口真值。会话物理排空由PersistentStreams检查，显式Close之后再验证Fabric资源排空；现代provider语义和校准不由此实现。公开接口见[会话使用](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
 
 transactions/5在两事务入口上支持RemoteMemory稀疏窗口：逻辑范围不因页未分配而缩小，zero-fill读取不分配，写入先检查所有新页额度再更改内容；原子拒绝不推进序号/响应缓存，本地copy拒绝保留未完成输出使用记录。v1—4仍为原稠密存储。细节见[窗口输入与输出](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
+
+事务v5可选显式前缀发布：`aggregate_requests=true`只准备，`false`发布同连接已准备前缀；真实prepared回调、源捕获和ACK/原子回复完成分别处理。默认模式不变，不自动补发布；它不是物理门铃或完整GIN/RoCE模型，见[输入与边界](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。

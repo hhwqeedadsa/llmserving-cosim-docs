@@ -107,7 +107,7 @@ def audit(result, config, mtu, allow_partial=False):
         expected_body = (bytes.fromhex(captured[op['id']]['hex']) if 'source' in op else
                          bytes.fromhex(op['hex']) if op['verb'] == 'put' else op['value'].to_bytes(8, 'big'))
         assert (f['verb'], f['key'], f['address'], f['body']) == (1 if op['verb'] == 'put' else 2, op['key'], op['address'], expected_body)
-        ready = max(((local_rows if all_specs[d['operation']].get('kind') == 'local' else rows)[d['operation']][dict(applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
+        ready = max(((local_rows if all_specs[d['operation']].get('kind') == 'local' else rows)[d['operation']][dict(prepared='prepared_ns', applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
                      for d in op['after']), default=0)
         if 'local_wait' in op:
             assert row['ready_ns'] == local_by_id[row['id']]['time_ns'] >= ready
@@ -137,7 +137,19 @@ def audit(result, config, mtu, allow_partial=False):
         ordered = sorted((r for r in rows.values() if r['connection'] == c['id']), key=lambda r: r['sequence'])
         for index, row in enumerate(ordered):
             release = ordered[index-c['queue_depth']]['completed_ns'] if index >= c['queue_depth'] else 0
-            assert row['published_ns'] == max(row['ready_ns'], release)
+            expected_prepared = max(row['ready_ns'], release)
+            if 'submission_model' in config:
+                assert row['prepared_ns'] == expected_prepared
+                trigger = next(r for r in ordered[index:] if not specs[r['id']]['aggregate_requests'])
+                assert row['published_ns'] == trigger['prepared_ns']
+            else:
+                assert row['published_ns'] == expected_prepared
+    if 'submission_model' in config:
+        expected_publications = [dict(connection=r['connection'], exclusive=r['ticket']+1,
+            operation=r['id'], time_ns=r['prepared_ns']) for r in rows.values() if not specs[r['id']]['aggregate_requests']]
+        key = lambda e: (e['connection'], e['exclusive'])
+        assert tx['submission']['mode'] == 'explicit_prefix/1'
+        assert sorted(tx['submission']['publications'], key=key) == sorted(expected_publications, key=key)
     for s in net['streams']:
         assert s['qp_creations'] == 1 and s['snd_nxt'] == s['snd_una'] == s['submitted_bytes']
     native = [p for p in result['loaded_libraries'] if Path(p).name.startswith('libns3')]

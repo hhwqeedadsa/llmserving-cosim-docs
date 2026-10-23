@@ -28,7 +28,7 @@ def save(path, value):
 def validate_events(result):
     rows = {op['id']: op for op in result['transactions']['operations']}
     locals_ = {op['id']: op for op in result['local_work']}
-    names = dict(submitted='ready_ns', published='published_ns', applied='applied_ns',
+    names = dict(prepared='prepared_ns', submitted='ready_ns', published='published_ns', applied='applied_ns',
                  request_acked='request_acked_ns', response='response_ns', completed='completed_ns',
                  local_admitted='ready_ns', local_started='start_ns')
     found = set()
@@ -41,7 +41,7 @@ def validate_events(result):
         if 'returned_value' in e:
             assert e['event'] in ('completed', 'response') and e['returned_value'] == source['returned_value']
     expected = {(identity, event) for identity, row in rows.items() for event, field in names.items()
-                if event not in ('local_admitted', 'local_started') and row[field] >= 0}
+                if event not in ('local_admitted', 'local_started') and field in row and row[field] >= 0}
     expected.update((identity, event) for identity, row in locals_.items()
                     for event, field in [('local_admitted', 'ready_ns'), ('local_started', 'start_ns'), ('completed', 'completed_ns')]
                     if row[field] >= 0)

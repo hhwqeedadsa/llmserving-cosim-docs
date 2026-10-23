@@ -130,6 +130,7 @@ class NativeTransactionSession:
                         0 <= row['time_ns'] <= event['now_ns'], 'unknown or future session transition')
                 allowed = ('local_admitted', 'local_started', 'completed') if known[row['operation']]['kind'] == 'local' else (
                     'submitted', 'published', 'applied', 'request_acked', 'response', 'completed')
+                if 'submission_model' in self.config and known[row['operation']]['kind'] == 'remote': allowed += ('prepared',)
                 require(row['event'] in allowed, 'unknown session transition kind')
                 key = row['operation'], row['event']
                 require(key not in self._delivered and key not in incoming, 'duplicate session callback')

@@ -43,6 +43,22 @@ class TransactionInputTests(unittest.TestCase):
         c['schema_version'] = 'moe-rdma-transactions/4'
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
+    def test_explicit_submission_model_and_typed_prepared_dependency(self):
+        c = json.loads((ROOT/'examples/scaleout_rdma_transactions/submission-prefix.json').read_text())
+        validate(self.topology, self.protocol, c)
+        for mode in ('missing', 'integer', 'local', 'unknown', 'unselected'):
+            bad = deepcopy(c)
+            if mode == 'missing': del bad['operations'][0]['aggregate_requests']
+            elif mode == 'integer': bad['operations'][0]['aggregate_requests'] = 1
+            elif mode == 'local': bad['operations'][1]['aggregate_requests'] = True
+            elif mode == 'unknown': bad['submission_model']['mode'] = 'unknown'
+            else:
+                del bad['submission_model']
+                for op in bad['operations']: op.pop('aggregate_requests', None)
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, bad)
+        bad = deepcopy(self.config); bad['submission_model'] = c['submission_model']
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, bad)
+
     def test_remote_authority_bounds_permissions(self):
         for key, value in [('key', 8), ('address', 4097), ('value', -1), ('value', True), ('value', 2**64)]:
             c = deepcopy(self.config); c['operations'][1][key] = value

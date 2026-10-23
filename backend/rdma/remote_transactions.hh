@@ -30,9 +30,9 @@ class RemoteTransactions {
   struct Operation {
     uint64_t id=0,connection=0,ticket=0;
     MemoryFrame request;
-    int64_t ready=-1,published=-1,applied=-1,request_ack=-1,response=-1,completed=-1;
+    int64_t prepared=-1,ready=-1,published=-1,applied=-1,request_ack=-1,response=-1,completed=-1;
     uint64_t returned_value=0;
-    bool has_source=false;
+    bool aggregate=false,has_source=false;
     RemoteMemory::ReadLease source{};
   };
   struct Connection {
@@ -43,6 +43,8 @@ class RemoteTransactions {
     Connection(unsigned s,unsigned d,unsigned depth):src(s),dst(d),queue(depth,32) {}
   };
   void Pump(uint64_t connection);
+  void PumpExplicit(uint64_t connection);
+  void Send(Operation& op);
   void Retire(uint64_t connection);
   void Request(uint64_t connection,const MemoryFrame& frame);
   void Response(uint64_t connection,const MemoryFrame& frame);
@@ -64,6 +66,8 @@ class RemoteTransactions {
   uint64_t transport_work_=0,duplicates_=0,memory_order_=0;
   Json target_events_=Json::array(),local_events_=Json::array();
   Json queue_fences_=Json::object();
+  bool explicit_submission_=false;
+  Json publications_=Json::array();
   bool source_mode_=false;
   Json source_model_,source_events_=Json::array();
   bool local_memory_mode_=false;

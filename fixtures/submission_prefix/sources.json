@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+  "tree_sha": "de760d9f34b52dee589604eeeccef9a09df8a979",
+  "sources": [
+    {
+      "path": "docs/userguide/source/api/device_gin.rst",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+      "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/device_gin.rst",
+      "excerpts": [
+        {
+          "first": 70,
+          "last": 80,
+          "text": "      *bufType* specifies the physical memory composition of the source and destination buffers (see\n      :ref:`devapi_segment_types`); it defaults to ``ncclGin_SegmentDevice``.\n\n   .. cpp:function:: void flush(Coop coop, cuda::memory_order ord = cuda::memory_order_acquire)\n\n      Ensures that all the pending transfer operations scheduled by any threads of *coop* are locally consumed. For put\n      operations, this means that the source buffers are safe to reuse; this makes no claims regarding the completion\n      status on the remote peer(s). For get operations, this means that the data is visible to the local rank.\n\n   .. cpp:function:: void flushAsync(ncclTeam team, uint32_t peer, ncclGinRequest_t* request, Coop coop = ncclCoopThread{}, \\\n        uint32_t optFlags = ncclGinOptFlagsDefault, DescriptorSmem descriptor = ncclGin_None{})"
+        }
+      ]
+    },
+    {
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+      "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "excerpts": [
+        {
+          "first": 43,
+          "last": 51,
+          "text": "\nNCCL_DEVICE_INLINE uint32_t docaOptFlagsFromGinOptFlags(uint32_t ginOptFlags) {\n  return DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT |\n         (!!(ginOptFlags & ncclGinOptFlagsMaySkipCreditCheck) *\n          DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_AVAILABILITY_CHECK) |\n         (!!(ginOptFlags & ncclGinOptFlagsAggregateRequests) * DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_DB_RINGING);\n}\n\ntemplate <enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode, typename Coop>"
+        },
+        {
+          "first": 393,
+          "last": 438,
+          "text": "NCCL_DEVICE_INLINE static ncclResult_t flushImplModeCore(ncclGinCtx ctx, Coop coop, cuda::memory_order ord,\n                                                         uint32_t* abortFlag, uint64_t timeoutCycles) {\n  (void)timeoutCycles; // referenced only when HasTimeout is true\n  using nccl::utility::loadConst;\n  using nccl::utility::testAbort;\n\n  ncclGinGdakiGPUContext* gdaki = &((struct ncclGinGdakiGPUContext*)ctx.handle)[ctx.contextId];\n  doca_gpu_dev_verbs_qp* qps = loadConst(&gdaki->gdqp);\n  uint32_t steps = 0;\n  uint64_t startCycle = 0;\n  (void)startCycle; // referenced only when HasTimeout is true\n  if NCCL_IF_CONSTEXPR (HasTimeout) startCycle = clock64();\n\n  NVCC_PRAGMA_UNROLL_DISABLED\n  for (int peer = coop.thread_rank(); peer < ctx.nRanks; peer += coop.size()) {\n    uint64_t ticket = doca_gpu_dev_verbs_atomic_read<uint64_t, resource_sharing_mode>(&qps[peer].sq_rsvd_index);\n    if (ticket == 0) continue; // No need to poll if there are no outstanding operations\n    --ticket;\n\n    // doca_gpu_dev_verbs_wait blocks indefinitely; only usable when there's\n    // no deadline AND no abort flag to honor.\n    if NCCL_IF_CONSTEXPR (!HasTimeout) {\n      if (abortFlag == nullptr) {\n        doca_gpu_dev_verbs_wait<resource_sharing_mode>(&qps[peer], ticket);\n        continue;\n      }\n    }\n\n    NVCC_PRAGMA_UNROLL_DISABLED\n    while (true) {\n      int status = doca_gpu_dev_verbs_poll_one_cq_at<resource_sharing_mode>(&qps[peer], ticket);\n      if (status == 0) break;\n      if NCCL_IF_CONSTEXPR (HasTimeout) {\n        if (clock64() - startCycle >= timeoutCycles) return ncclTimeout;\n      }\n      if (testAbort(abortFlag, steps)) {\n        if NCCL_IF_CONSTEXPR (HasTimeout) {\n          cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n          return ncclSuccess;\n        } else break; // Original non-timeout path advances to the next peer on abort.\n      }\n    }\n  }\n  cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n  return ncclSuccess;\n}"
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "910b710c56bd8d0da730270cda9f521ee8e4fd83",
+      "sha256": "fa84c6402f05bd58ea1e5d8eb8d4ead02161aba966ea3297b90ed652878cd8e8",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_qp.cuh",
+      "excerpts": [
+        {
+          "first": 502,
+          "last": 560,
+          "text": "__device__ static inline void doca_gpu_dev_verbs_submit_db_no_dbr(\n    struct doca_gpu_dev_verbs_qp *qp, uint64_t prod_index,\n    uint32_t code_opt = DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT) {\n    if (!(code_opt & DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_DB_RINGING)) {\n        uint64_t old_prod_index =\n            doca_gpu_dev_verbs_atomic_max<uint64_t, resource_sharing_mode, true>(&qp->sq_wqe_pi,\n                                                                                 prod_index);\n        if (old_prod_index < prod_index)\n            doca_gpu_dev_verbs_ring_db<sync_scope>(qp, prod_index, code_opt);\n    }\n}\n\n/**\n * @brief Submit a work request to the NIC using the DB protocol.\n *\n * @param qp - Queue Pair (QP)\n * @param prod_index - Producer index\n */\ntemplate <enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode =\n              DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU,\n          enum doca_gpu_dev_verbs_sync_scope sync_scope = DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU,\n          enum doca_gpu_dev_verbs_qp_type qp_type = DOCA_GPUNETIO_VERBS_QP_SQ>\n__device__ static __forceinline__ void doca_gpu_dev_verbs_submit_db(\n    struct doca_gpu_dev_verbs_qp *qp, uint64_t prod_index,\n    uint32_t code_opt = DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT) {\n    if (!(code_opt & DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_SKIP_DB_RINGING)) {\n        doca_gpu_dev_verbs_lock<resource_sharing_mode>(&qp->sq_lock);\n\n        uint64_t old_prod_index =\n            doca_gpu_dev_verbs_atomic_max<uint64_t, resource_sharing_mode, true>(&qp->sq_wqe_pi,\n                                                                                 prod_index);\n        if (old_prod_index < prod_index) {\n            // Early rining of the DB to push WQEs to the NIC ASAP.\n            doca_gpu_dev_verbs_ring_db<sync_scope>(qp, prod_index, code_opt);\n\n            // In case the recovery path is triggered, the later DB ringing will cover for\n            // correctness.\n            doca_priv_gpu_dev_verbs_update_dbr<qp_type>(qp, prod_index);\n\n            // Use at least either GPU or Sys synchronization scope for the second DB ringing.\n            constexpr enum doca_gpu_dev_verbs_sync_scope second_db_sync_scope =\n                (sync_scope <= DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU)\n                    ? sync_scope\n                    : DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU;\n            doca_gpu_dev_verbs_ring_db<second_db_sync_scope>(qp, prod_index, code_opt);\n        }\n\n        doca_gpu_dev_verbs_unlock<resource_sharing_mode>(&qp->sq_lock);\n    }\n}\n\n/**\n * @brief Submit a work request to the NIC using the BlueFlame protocol.\n * This function requires a single thread. Users must pass a pointer to a WQE stored in shared\n * memory. Hopper or a newer generation is required to leaverage the BlueFlame protocol.\n *\n * @param qp - Queue Pair (QP)\n * @param prod_index - Producer index\n * @param smem_wqe - WQE to be submitted directly to the NIC. The buffer must be in shared memory."
+        }
+      ]
+    },
+    {
+      "path": "src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+      "git_blob_sha": "3dda5b1c442bbb287c573e629e390ccbe807df86",
+      "sha256": "e75f82a971ad18d19150a68521707233867169c294d2a1f64d933063f674cbb6",
+      "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/doca-gpunetio/include/device/doca_gpunetio_dev_verbs_onesided.cuh",
+      "excerpts": [
+        {
+          "first": 200,
+          "last": 241,
+          "text": "\ntemplate <typename T,\n          enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode =\n              DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU,\n          enum doca_gpu_dev_verbs_nic_handler nic_handler = DOCA_GPUNETIO_VERBS_NIC_HANDLER_AUTO,\n          enum doca_gpu_dev_verbs_cq_type cq_type = DOCA_GPUNETIO_VERBS_CQ_UNKNOWN>\n__device__ static __forceinline__ void doca_gpu_dev_verbs_p_thread(\n    struct doca_gpu_dev_verbs_qp *qp, struct doca_gpu_dev_verbs_addr raddr, T value,\n    doca_gpu_dev_verbs_ticket_t *out_ticket,\n    uint32_t code_opt = DOCA_GPUNETIO_VERBS_GPU_CODE_OPT_DEFAULT) {\n    uint64_t wqe_idx;\n    struct doca_gpu_dev_verbs_wqe *wqe_ptr;\n\n    DOCA_GPUNETIO_VERBS_ASSERT(out_ticket != NULL);\n    DOCA_GPUNETIO_VERBS_ASSERT(qp != NULL);\n    // DOCA_GPUNETIO_VERBS_ASSERT(qp->mem_type == DOCA_GPUNETIO_VERBS_MEM_TYPE_GPU);\n\n    wqe_idx = doca_gpu_dev_verbs_reserve_wq_slots<resource_sharing_mode, DOCA_GPUNETIO_VERBS_QP_SQ,\n                                                  cq_type>(qp, 1, code_opt);\n    wqe_ptr = doca_gpu_dev_verbs_get_wqe_ptr(qp, wqe_idx);\n\n    doca_gpu_dev_verbs_prepare_inl_rdma_write_wqe_header(\n        qp, wqe_ptr, wqe_idx,\n        doca_gpu_dev_verbs_get_ctrl_flags<DOCA_GPUNETIO_VERBS_QP_SQ, cq_type>(qp, code_opt),\n        raddr.addr, raddr.key, sizeof(T));\n    doca_gpu_dev_verbs_prepare_inl_rdma_write_wqe_data<T>(qp, wqe_ptr, value);\n    doca_gpu_dev_verbs_mark_wqes_ready<resource_sharing_mode>(qp, wqe_idx, wqe_idx);\n\n    // mark_wqes_ready has already called fence.release with sufficiently strong scope. No need to\n    // call it again in submit.\n    constexpr enum doca_gpu_dev_verbs_sync_scope submit_sync_scope =\n        (resource_sharing_mode == DOCA_GPUNETIO_VERBS_RESOURCE_SHARING_MODE_GPU)\n            ? DOCA_GPUNETIO_VERBS_SYNC_SCOPE_THREAD\n            : DOCA_GPUNETIO_VERBS_SYNC_SCOPE_GPU;\n    doca_gpu_dev_verbs_submit<resource_sharing_mode, submit_sync_scope, nic_handler>(\n        qp, wqe_idx + 1, code_opt);\n\n    *out_ticket = wqe_idx;\n}\n\ntemplate <typename T,\n          enum doca_gpu_dev_verbs_resource_sharing_mode resource_sharing_mode ="
+        }
+      ]
+    }
+  ],
+  "scope": "logical explicit-prefix adapter; not physical MMIO count, GPU timing or all flush branches"
+}

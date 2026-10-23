@@ -24,6 +24,10 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
           input.at("schema_version")=="moe-rdma-transactions/4" ||
           input.at("schema_version")=="moe-rdma-transactions/5","wrong transaction schema");
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
+  explicit_submission_=input.contains("submission_model");
+  if(explicit_submission_)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
+  if(!explicit_submission_)for(const auto& op:input.at("operations"))
+    Require(!op.contains("aggregate_requests"),"aggregate_requests requires explicit submission");
   local_memory_mode_=sparse || input.at("schema_version")=="moe-rdma-transactions/4";
   source_mode_=local_memory_mode_ || input.at("schema_version")=="moe-rdma-transactions/3";
   if(local_memory_mode_) {
@@ -227,7 +231,12 @@ void RemoteTransactions::Submit(const Json& input) {
   const auto id=input.at("id").get<uint64_t>(),connection=input.at("connection").get<uint64_t>();
   Require(operations_.size()<32 && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
   auto& c=connections_.at(connection);
-  Operation op;op.id=id;op.connection=connection;op.ready=MemoryNow();
+  Operation op;
+  if(explicit_submission_) {
+    Require(input.at("aggregate_requests").is_boolean(),"aggregate_requests must be boolean");
+    op.aggregate=input.at("aggregate_requests").get<bool>();
+  }
+  op.id=id;op.connection=connection;op.ready=MemoryNow();
   op.request.sequence=c.operations.size();op.request.address=input.at("address");op.request.key=input.at("key");
   if(input.at("verb")=="put") {
     op.request.verb=MemoryFrame::Put;
@@ -255,6 +264,7 @@ void RemoteTransactions::Submit(const Json& input) {
   c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
+  if(explicit_submission_) {PumpExplicit(connection);return;}
   auto& c=connections_.at(connection);
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
@@ -272,6 +282,37 @@ void RemoteTransactions::Pump(uint64_t connection) {
       w.request_ack=MemoryNow();Retire(connection);
     });
   }
+}
+// Preparation handles descriptors only; source bytes remain protected from
+// admission and are captured when the logical prefix becomes NIC-consumable.
+void RemoteTransactions::PumpExplicit(uint64_t connection) {
+  auto& c=connections_.at(connection);
+  bool prepared=false;
+  for(const auto id:c.operations) {
+    auto& op=operations_.at(id);
+    if(op.prepared>=0 || !c.queue.CanPrepare(op.ticket))continue;
+    c.queue.Prepare(op.ticket);op.prepared=MemoryNow();prepared=true;
+    if(!op.aggregate) {
+      c.queue.PublishThrough(op.ticket+1);
+      publications_.push_back({{"connection",connection},{"exclusive",op.ticket+1},
+        {"operation",id},{"time_ns",MemoryNow()}});
+      while(const auto work=c.queue.ConsumePublished())Send(operations_.at(work->work_id));
+    }
+  }
+  if(prepared && changed)ns3::Simulator::ScheduleNow(changed);
+}
+void RemoteTransactions::Send(Operation& op) {
+  Require(op.prepared>=0 && op.published<0,"invalid transaction publication");
+  if(op.has_source) {
+    const auto& s=op.source;
+    op.request.body=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);
+    SourceEvent(op.id,"captured",s,&op.request.body);
+  }
+  op.published=MemoryNow();const auto id=op.id,connection=op.connection;
+  transport_.SubmitPayload(connection*2,transport_work_++,EncodeMemoryFrame(op.request),[this,id,connection](){
+    auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
+    w.request_ack=MemoryNow();Retire(connection);
+  });
 }
 void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
   auto& c=connections_.at(connection);
@@ -314,6 +355,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
 }
 bool RemoteTransactions::Occurred(uint64_t id,const std::string& event) const {
   const auto it=operations_.find(id);if(it==operations_.end())return false;
+  if(explicit_submission_ && event=="prepared")return it->second.prepared>=0;
   if(event=="applied")return it->second.applied>=0;
   if(event=="request_acked")return it->second.request_ack>=0;
   Require(event=="completed","unsupported transaction event");return it->second.completed>=0;
@@ -336,6 +378,7 @@ Json RemoteTransactions::OperationProgress() const {
       {"verb",op.request.verb==MemoryFrame::Put?"put":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
       {"applied_ns",op.applied},{"request_acked_ns",op.request_ack},{"response_ns",op.response},{"completed_ns",op.completed}};
     if(op.request.verb==MemoryFrame::FetchAdd && op.response>=0)value["returned_value"]=op.returned_value;
+    if(explicit_submission_)value["prepared_ns"]=op.prepared;
     rows.push_back(value);
   }
   return rows;
@@ -363,6 +406,7 @@ Json RemoteTransactions::Report() const {
       {"queue_depth",item.second.queue.Depth()},{"reserved",q.reserved},{"published",q.published},
       {"completed",q.completed},{"closed",q.closed}});
   }
+  if(explicit_submission_)out["submission"]={{"mode","explicit_prefix/1"},{"publications",publications_}};
   out["target_events"]=target_events_;out["local_events"]=local_events_;
   out["local_wait_scope"]="functional local LE64 eq/ge, optional consume; no GPU coherence or polling cost";
   out["queue_fences"]=Json::array();

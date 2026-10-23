@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "commands": 32,
+  "real_source_packets": 5,
+  "publication_ns": 20000,
+  "actual_atomic_old_value": 7,
+  "actual_prepared_callback_drives_online_submission": true,
+  "default_previous_equal": true,
+  "all_false_except_new_fields_equal": true,
+  "online_except_session_equal": true,
+  "partial_cases": [
+    "depth-one",
+    "aggregate-tail",
+    "fence-does-not-publish"
+  ],
+  "source_protected_while_unpublished": true,
+  "invalid_batch_registered_nothing": true,
+  "native_rejection_classes": [
+    "missing-flag",
+    "integer-flag",
+    "unknown-mode",
+    "local-flag",
+    "old-schema",
+    "unselected-flag",
+    "unselected-prepared"
+  ],
+  "oracle_mutations_rejected": [
+    "prepared-time",
+    "publication-prefix",
+    "early-source-packet"
+  ],
+  "hardware_calibrated": false,
+  "binaries": {
+    "/dev/shm/moe-submission-prefix-20261023/rebuild/bin/ns3.42-moe-rdma-transaction-probe": "6399e27cc3dd34a758ffa0d8a442893bce6c2a2924c3ab06ca6487ce680b918d",
+    "/dev/shm/moe-submission-prefix-20261023/rebuild/bin/ns3.42-moe-rdma-transaction-session": "e86e5048ae69cd7b9cdfc472ce8ef14d3218f7f7b3431714ee5a8d988ab2a908",
+    "/dev/shm/moe-sparse-windows-20261023/bin/ns3.42-moe-rdma-transaction-probe": "db82016c0975183cc41771718024b64bd3fbee769c6343b153e7909fc05a98c2"
+  }
+}

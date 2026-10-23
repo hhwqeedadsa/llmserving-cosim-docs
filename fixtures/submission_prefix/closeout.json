@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "monitored_stages": 8,
+  "monitored_seconds": 89.52010187506676,
+  "peak_sampled_tree_rss_bytes": 635580416,
+  "task_tree_bytes": 116540073,
+  "limit_bytes": 201326592,
+  "old_runtime_hashes_unchanged": 19,
+  "unit_tests": 17,
+  "pinned_dependencies": 13,
+  "restored_public_commands": 3,
+  "restored_native_runs": 2,
+  "local_links_checked": 249,
+  "preserved_checker_failure": true,
+  "checker_fixed_without_network_rerun": true,
+  "original_acceptance_retained": true,
+  "platform_default_unchanged": true,
+  "storage": "tmpfs, volatile; no persistent backup",
+  "modern_GIN": false,
+  "hardware_calibrated": false,
+  "paper_contribution": false
+}

@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "members_checked": 563,
+  "member_bytes": 60383379,
+  "archive_bytes": 11743594,
+  "archive_sha256": "4b44e5f010335a1ee32e81bd6ef2dd9e66aed29f405762a778f1b826cb30d19c",
+  "public_commands": 3,
+  "new_network_executions": 2,
+  "new_source_root": true,
+  "empty_cwd": true,
+  "packaged_native_libraries": 8,
+  "results_except_library_paths_equal": true,
+  "independent_byte_oracle": true,
+  "host_python_and_system_libraries_required": true,
+  "initial_checker_failure": "counted all loader/system libraries as eight ns-3 libraries; corrected to filter libns3; no runtime defect",
+  "correction_used_existing_successful_network_outputs": true,
+  "network_rerun_for_checker_fix": false,
+  "source_delta": {
+    "fixtures/submission_prefix/checkpoint.py": {
+      "archived": "390545dd376f3cddef0252818a73b9d4bf6ee398812373e3c26996bbc4796549",
+      "current": "7f2d6404bf3813f820bdd07bb61ecc62cbfefdaef717b308951794899f3578df"
+    }
+  },
+  "corrected_checker_sha256": "7f2d6404bf3813f820bdd07bb61ecc62cbfefdaef717b308951794899f3578df",
+  "storage": "tmpfs, volatile; no persistent backup",
+  "hardware_calibrated": false
+}

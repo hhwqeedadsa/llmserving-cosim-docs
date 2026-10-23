@@ -76,8 +76,9 @@ class TransactionSession {
     Json events=Json::array();
     for(const auto& op:transactions_.OperationProgress()) {
       const auto id=op.at("id").get<uint64_t>();
-      for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"published","published_ns"},{"applied","applied_ns"},
+      for(const auto& pair:std::vector<std::pair<std::string,std::string>>{{"submitted","ready_ns"},{"prepared","prepared_ns"},{"published","published_ns"},{"applied","applied_ns"},
           {"request_acked","request_acked_ns"},{"response","response_ns"},{"completed","completed_ns"}}) {
+        if(!op.contains(pair.second))continue;
         const auto t=op.at(pair.second).get<int64_t>();
         if(t>=0 && delivered_.emplace(id,pair.first).second) {
           Json e={{"operation",id},{"event",pair.first},{"time_ns",t}};

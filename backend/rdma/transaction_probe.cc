@@ -24,6 +24,8 @@ int main(int argc,char** argv) {
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
     const bool sparse_mode=input.at("schema_version")=="moe-rdma-transactions/5";
+    const bool explicit_submission=input.contains("submission_model");
+    Require(!explicit_submission || sparse_mode,"submission model requires v5");
     const bool local_memory_mode=sparse_mode || input.at("schema_version")=="moe-rdma-transactions/4";
     const bool source_mode=local_memory_mode || input.at("schema_version")=="moe-rdma-transactions/3";
     const bool local_mode=source_mode || input.at("schema_version")=="moe-rdma-transactions/2";
@@ -31,6 +33,7 @@ int main(int argc,char** argv) {
       std::vector<std::string> keys={"schema_version","connections","windows","operations","local_model"};
       if(source_mode)keys.push_back("source_model");
       if(local_memory_mode)keys.push_back("local_memory_model");
+      if(explicit_submission)keys.push_back("submission_model");
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }
@@ -65,6 +68,7 @@ int main(int argc,char** argv) {
           keys.push_back(op.contains("source")?"source":op.at("verb")=="put"?"hex":"value");
           Integer(op.at("connection"),7);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
           if(op.at("verb")=="fetch_add")Integer(op.at("value"),UINT64_MAX);
+          if(explicit_submission)keys.push_back("aggregate_requests");
           if(op.contains("queue_fence"))keys.push_back("queue_fence");
           Require(!(op.contains("queue_fence") && op.contains("local_wait")),"queue fence and local wait require separate steps");
         }
@@ -84,7 +88,7 @@ int main(int argc,char** argv) {
         const auto kind=d.at("event").get<std::string>();
         Require(index.count(d.at("operation")) && index.at(d.at("operation"))<i,"dependency must name an earlier operation");
         Require(local[index.at(d.at("operation"))]?kind=="completed":
-          (kind=="applied" || kind=="request_acked" || kind=="completed"),"dependency must match predecessor kind");
+          ((explicit_submission && kind=="prepared") || kind=="applied" || kind=="request_acked" || kind=="completed"),"dependency must match predecessor kind");
         Require(dependencies.emplace(d.at("operation").get<uint64_t>(),kind).second,"repeated transaction dependency");
       }
     }

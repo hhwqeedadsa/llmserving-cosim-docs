@@ -13,8 +13,12 @@ inline void SessionKeys(const Json& value,const std::vector<std::string>& keys) 
   for(const auto& key:keys)Require(value.contains(key),"missing session field");
 }
 inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_t max_ns) {
-  SessionKeys(input,{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"});
+  const bool explicit_submission=input.contains("submission_model");
+  auto root_keys=std::vector<std::string>{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"};
+  if(explicit_submission)root_keys.push_back("submission_model");
+  SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
+  if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
   Require(sparse || input.at("schema_version")=="moe-rdma-transactions/4","session requires transactions/4 or /5");
   Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported session local model");
   Require(input.at("source_model")==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},"unsupported session source model");
@@ -76,6 +80,10 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     std::vector<std::string> keys={"id","kind","after"};
     if(is_local)keys.insert(keys.end(),{"rank","duration_ns"});
     else {keys.insert(keys.end(),{"connection","verb","key","address"});keys.push_back(op.contains("source")?"source":op.at("verb")=="put"?"hex":"value");}
+    if(explicit_submission && !is_local) {
+      keys.push_back("aggregate_requests");
+      Require(op.at("aggregate_requests").is_boolean(),"aggregate_requests must be boolean");
+    }
     if(op.contains("local_wait"))keys.push_back("local_wait");
     if(op.contains("copy")) {Require(is_local,"copy requires local node");keys.push_back("copy");}
     if(op.contains("queue_fence")) {Require(!is_local && !op.contains("local_wait"),"invalid session queue fence");keys.push_back("queue_fence");}
@@ -85,7 +93,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     for(const auto& d:op.at("after")) {
       SessionKeys(d,{"operation","event"});const auto p=SessionInteger(d.at("operation"),65535);
       const auto e=d.at("event").get<std::string>();
-      Require(local.count(p) && (local.at(p)?e=="completed":(e=="applied" || e=="request_acked" || e=="completed")) && deps.emplace(p,e).second,"invalid session dependency target/event");
+      Require(local.count(p) && (local.at(p)?e=="completed":((explicit_submission && e=="prepared") || e=="applied" || e=="request_acked" || e=="completed")) && deps.emplace(p,e).second,"invalid session dependency target/event");
       parents.insert(p);parents.insert(ancestors.at(p).begin(),ancestors.at(p).end());
     }
     uint64_t owner;

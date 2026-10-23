@@ -234,3 +234,21 @@ PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
 v5结果窗口不含展开的`hex`，改为`bytes`、`initialization`、`resident_bytes`及按offset升序的`pages: [{offset, hex}]`。每页保存4096B，最后一页按逻辑末端截短；未列出的页读零。`resident_bytes`只统计本仿真器的页字节，不含索引/容器/事务缓存，更不是GPU占用、进程RSS或网络流量。其他实际包、队列、内存事件及完成字段沿用v4。结果仍受16MiB预算约束，输入允许的最大组合不保证输出预算内成功；超限保留监控前缀，不自动增限。
 
 原生事务和在线入口均支持v5；v1—4继续使用原窗口格式，不自动转换。独立字节重放、稠密差分、页限失败不产生部分写、原生非法声明拒绝及恢复见[稀疏窗口验收](../../fixtures/sparse_windows/README.md)。
+
+## 准备工作后统一发布
+
+需要区分“描述符已准备”和“NIC可以开始消费”时，使用v5的[前缀发布小例](submission-prefix.json)。在上述probe或session命令中替换`--config`即可，拓扑、协议和预算沿用原命令。根字段增加：
+
+```json
+"submission_model": {"mode": "explicit_prefix/1"}
+```
+
+启用后，每个`remote`节点必须声明布尔`aggregate_requests`：`true`只准备，不发布；`false`准备自己后，发布**同一connection中到自己为止的已准备前缀**。它不合并put/原子请求，不发布其他连接，不创建新QP，也不改变ACK或原子返回的完成要求。未选此模式时不能填写该字段，v1—4及v5默认行为保持。
+
+远端前驱可以使用`after: [{"operation": 0, "event": "prepared"}]`。该事件由实际队列额度可用并完成准备时产生，session也会把它反馈给前端；提交成功不代表已经准备。源窗口仍从提交开始保护，真正发布时才捕获字节，完成后释放。示例先准备put，再由prepared回调启动声明为20μs的本地工作，最后非聚合的原子请求发布两项工作；20μs前同连接没有数据包。这是人工功能程序，没有测量门铃或GPU成本。
+
+队列槽不足时，后续工作可能尚未准备；若前面的聚合工作一直没有发布，整个程序会在真实仿真截止时保留未完成状态。最后一项也设`true`不会自动补发布。`queue_fence`只等待调用时已预留的前缀，也不会替应用发布；使用时须显式安排一个可以获得槽的非聚合工作。不能通过自动加深队列或补完成掩盖阻塞。
+
+启用模式的`transactions.operations`增加`prepared_ns`，未发生为−1；`transactions.submission`保存`mode`和`publications`，每次含`connection/operation/exclusive/time_ns`。exclusive是从0开始的队列ticket的排他上界，表示逻辑前缀，不是网络包数或物理MMIO门铃次数。同一纳秒的两次显式发布仍是两条记录。prepared、published、目标applied、request_acked、response和completed分别保留，均不能直接等同GPU可见。
+
+此模型依据固定provider源码中的跳过门铃语义，只验证显式发布边界；不模拟所有GIN flush、CPU代理或硬件信用优化。持久事务仍拒绝旧式fault/recovery配置。独立包核验、阻塞反例、在线回调、默认行为差分和恢复见[验收记录](../../fixtures/submission_prefix/README.md)。

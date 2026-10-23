@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+transactions/5可选`submission_model.mode=explicit_prefix/1`将准备与发布分开：实际队列额度允许时产生prepared，非聚合操作发布同一连接的已准备前缀，源字节在发布时捕获。在线前端可等待真实prepared回调；ACK/原子回复完成后才归还额度，未发布尾部不自动补齐。它是MRT1功能规则，不是物理门铃或现代GIN成本，见[前缀发布](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。
+
 transactions/5沿用v4事务/本地copy/在线反馈，只把显式零初始化的主窗口存储改为有界稀疏页。访问先按owner/key/逻辑范围和活跃使用记录检查，实际写先验证整段页容量，再修改字节；不引入额外仿真事件、页面时延或GPU行为。范围见[稀疏窗口](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
 
 原生`rdma-transaction-session`与Python`NativeTransactionSession`连接实际事务回调和动态前端提交：只在当前ns-3时刻交换命令，工作注册、应用依赖满足、发布、目标应用、请求ACK、原子回复和本地完成分别记录。物理空闲期间保留QP，显式结束才关闭资源。默认因果前端把完整程序留在Python侧，未来节点不预载后端；现代事件核心尚未接上此接口，self-peer和GPU可见性仍不支持。见[在线会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。

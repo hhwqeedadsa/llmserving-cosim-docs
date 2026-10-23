@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "cases": {
+    "toy": {
+      "cases": 24,
+      "token_puts": 4,
+      "remote_token_puts": 4,
+      "remote_operand_bytes": 2304,
+      "nonzero_profile_rows": 2,
+      "connection_changing_tokens": 4,
+      "profiles_identical": true,
+      "distinct_slot_allocations": 24,
+      "discriminating_slot_order_control": true
+    },
+    "real": {
+      "cases": 3,
+      "token_puts": 149,
+      "remote_token_puts": 117,
+      "remote_operand_bytes": 1684800,
+      "nonzero_profile_rows": 88,
+      "connection_changing_tokens": 0,
+      "profiles_identical": true,
+      "distinct_slot_allocations": 1,
+      "discriminating_slot_order_control": false
+    }
+  },
+  "projected_quantity": "Combine token put operand counts/bytes by declared mapping",
+  "network_executed": false,
+  "hardware_calibrated": false,
+  "timing_equivalence_proved": false,
+  "main_paper_contribution_established": false
+}

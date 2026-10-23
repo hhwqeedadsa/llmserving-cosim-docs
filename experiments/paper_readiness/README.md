@@ -1241,3 +1241,26 @@ replay只恢复归档source成员，从新源码根和新cwd运行准备/分析/
 不联网、不重跑网络，也不导入下载的DeepEP Python。最后检查同时要求该恢复证据。
 整轮累计受监控240秒/64MiB（含≤1MiB新缓存），成员32MiB/压缩16MiB，卷预留8GiB；
 报告、来源和源码小件可复制入Git，原始记录/归档仅易失内存盘，无持久备份。
+
+
+## 并发槽位与静态连接需求
+
+固定现代direct布局下的Combine静态需求及其约简边界见[报告](../../docs/reviews/并发槽位与连接需求可约简边界_20261023.md)，执行前条件见[方法](slot_projection_protocol.md)。27份完整声明transcript只验证无时间语义；真实三策略实际只有一种slot分配，不能当作三种不同并发顺序或硬件性能证据。48-token输入保持16-token/rank上限，没有新网络/GPU执行。
+
+以下命令在仓库根执行，各输出须不存在、父目录须存在。先创建新的工作父目录，再分别用host_probe包住每一步：60秒、RSS1GiB、地址2GiB、阶段32MiB和8GiB卷预留，累计240秒/128MiB。数据准备需要已核验的四份用户原件；其余步骤只读已保存输入/计划/log。`execute`使用公开事件API生成transcript，再通过29条公开CLI进行计划/重放校验，不导入测试或私有图生成器。
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/slot_projection.py prepare \
+  --manifest experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json --output /dev/shm/my-slot-study/input
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/slot_projection.py execute \
+  --observed /dev/shm/my-slot-study/input/observed --output /dev/shm/my-slot-study/run
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/slot_projection.py analyze \
+  --observed /dev/shm/my-slot-study/input/observed --run /dev/shm/my-slot-study/run --output /dev/shm/my-slot-study/analysis
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/slot_projection.py analyze \
+  --observed /dev/shm/my-slot-study/input/observed --run /dev/shm/my-slot-study/run --output /dev/shm/my-slot-study/repeat
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/check_slot_projection.py \
+  --input /dev/shm/my-slot-study/input --run /dev/shm/my-slot-study/run --analysis /dev/shm/my-slot-study/analysis \
+  --repeat /dev/shm/my-slot-study/repeat --output /dev/shm/my-slot-study/verification.json
+```
+
+分析用区间交集公式，独立checker直接执行每warp的整数序号循环，并检查原件、全部事件前驱、动态token槽位、地址及通道顺序。`*-profile.json`中的`token_puts`按`path`区分：本地行为是旁路拷贝，其名义通道行不是实际QP/NIC流量；只有rdma行计跨rank put操作数。数据是操作数字节，不是WQE、线上包或排队时间。

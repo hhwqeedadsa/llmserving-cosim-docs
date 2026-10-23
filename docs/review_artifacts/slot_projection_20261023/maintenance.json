@@ -1,0 +1,147 @@
+{
+  "base_commit": "ee1f3c9",
+  "monitors": [
+    {
+      "path": "analysis-fixed-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.15111068822443485,
+      "peak_rss_bytes": 7499776,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "analysis-monitor/probe.json",
+      "status": "child_failed",
+      "exitcode": 1,
+      "wall_seconds": 0.15810954943299294,
+      "peak_rss_bytes": 7442432,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "check-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.2510458528995514,
+      "peak_rss_bytes": 26632192,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_slot_projection.py",
+        "--input",
+        "/dev/shm/moe-slot-projection-20261023/input",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--analysis",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed",
+        "--repeat",
+        "/dev/shm/moe-slot-projection-20261023/repeat",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/verification-final.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "check-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.25104968808591366,
+      "peak_rss_bytes": 26386432,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_slot_projection.py",
+        "--input",
+        "/dev/shm/moe-slot-projection-20261023/input",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--analysis",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed",
+        "--repeat",
+        "/dev/shm/moe-slot-projection-20261023/repeat",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "execute-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 4.587055092677474,
+      "peak_rss_bytes": 48660480,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "execute",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/run"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.24152122251689434,
+      "peak_rss_bytes": 25133056,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "prepare",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    },
+    {
+      "path": "repeat-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.15088942646980286,
+      "peak_rss_bytes": 8560640,
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/repeat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim"
+    }
+  ],
+  "failed_analysis_preserved": true,
+  "analysis_correction": "Remove extra requirement that the real-case schedules must differ; require the predeclared toy witness, report real negative result",
+  "first_analysis_implementation_preserved": false,
+  "event_execution_rerun_after_failure": false,
+  "real_event_orders_modified": false,
+  "network_or_GPU_execution": false,
+  "dependency_changes": false
+}

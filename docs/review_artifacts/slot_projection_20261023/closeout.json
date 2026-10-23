@@ -1,0 +1,320 @@
+{
+  "phase_complete": true,
+  "goal_status": "in_progress",
+  "paper_goal_complete": false,
+  "main_contribution_established": false,
+  "monitored_seconds": 13.919096108525991,
+  "top_level_monitors_only": true,
+  "peak_sampled_group_rss_bytes": 48660480,
+  "task_usage_before_closeout": {
+    "apparent_bytes": 26575005,
+    "allocated_bytes": 27516928
+  },
+  "tmpfs_free_bytes": 260236845056,
+  "budgets": {
+    "command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "stage_bytes": 33554432,
+    "cumulative_seconds": 240,
+    "cumulative_bytes": 134217728,
+    "archive_member_bytes": 50331648,
+    "archive_compressed_bytes": 16777216,
+    "tmpfs_reserve_bytes": 8589934592
+  },
+  "monitors": [
+    {
+      "stage": "analysis-fixed-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.15111068822443485,
+      "peak_sampled_group_rss_bytes": 7499776,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "analysis-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 0.15810954943299294,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "check-final-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_slot_projection.py",
+        "--input",
+        "/dev/shm/moe-slot-projection-20261023/input",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--analysis",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed",
+        "--repeat",
+        "/dev/shm/moe-slot-projection-20261023/repeat",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/verification-final.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.2510458528995514,
+      "peak_sampled_group_rss_bytes": 26632192,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "check-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_slot_projection.py",
+        "--input",
+        "/dev/shm/moe-slot-projection-20261023/input",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--analysis",
+        "/dev/shm/moe-slot-projection-20261023/analysis-fixed",
+        "--repeat",
+        "/dev/shm/moe-slot-projection-20261023/repeat",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.25104968808591366,
+      "peak_sampled_group_rss_bytes": 26386432,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "deps-monitor",
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.4893362373113632,
+      "peak_sampled_group_rss_bytes": 18006016,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "execute-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "execute",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/run"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.587055092677474,
+      "peak_sampled_group_rss_bytes": 48660480,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "final-monitor",
+      "command": [
+        "python3",
+        "/dev/shm/moe-slot-projection-20261023/final_check.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.4937957599759102,
+      "peak_sampled_group_rss_bytes": 29052928,
+      "min_free_bytes": 0
+    },
+    {
+      "stage": "final-reserve-monitor",
+      "command": [
+        "python3",
+        "/dev/shm/moe-slot-projection-20261023/final_check.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.5013941898941994,
+      "peak_sampled_group_rss_bytes": 20463616,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "package-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/package_slot_projection.py",
+        "--task",
+        "/dev/shm/moe-slot-projection-20261023",
+        "--output",
+        "docs/review_artifacts/slot_projection_20261023",
+        "--checkpoint",
+        "/dev/shm/moe-slot-projection-20261023/checkpoint"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 1.3943483624607325,
+      "peak_sampled_group_rss_bytes": 24600576,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "prepare-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "prepare",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/input"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.24152122251689434,
+      "peak_sampled_group_rss_bytes": 25133056,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "repeat-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/repeat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.15088942646980286,
+      "peak_sampled_group_rss_bytes": 8560640,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "replay-analysis-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/recovery/raw/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/recovery/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/recovery/analysis"
+      ],
+      "cwd": "/dev/shm/moe-slot-projection-20261023/recovery/source",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.14928827621042728,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "replay-check-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_slot_projection.py",
+        "--input",
+        "/dev/shm/moe-slot-projection-20261023/recovery/raw/input",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/recovery/run",
+        "--analysis",
+        "/dev/shm/moe-slot-projection-20261023/recovery/analysis",
+        "--repeat",
+        "/dev/shm/moe-slot-projection-20261023/recovery/repeat",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/recovery/verification.json"
+      ],
+      "cwd": "/dev/shm/moe-slot-projection-20261023/recovery/source",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.2675936874002218,
+      "peak_sampled_group_rss_bytes": 26574848,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "replay-execute-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "execute",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/recovery/raw/input/observed",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/recovery/run"
+      ],
+      "cwd": "/dev/shm/moe-slot-projection-20261023/recovery/source",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.678423622623086,
+      "peak_sampled_group_rss_bytes": 42487808,
+      "min_free_bytes": 8589934592
+    },
+    {
+      "stage": "replay-repeat-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/slot_projection.py",
+        "analyze",
+        "--observed",
+        "/dev/shm/moe-slot-projection-20261023/recovery/raw/input/observed",
+        "--run",
+        "/dev/shm/moe-slot-projection-20261023/recovery/run",
+        "--output",
+        "/dev/shm/moe-slot-projection-20261023/recovery/repeat"
+      ],
+      "cwd": "/dev/shm/moe-slot-projection-20261023/recovery/source",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.15413445234298706,
+      "peak_sampled_group_rss_bytes": 7442432,
+      "min_free_bytes": 8589934592
+    }
+  ],
+  "archive_sha256": "db21c0132e3c6f072aa5f586fdd93d376f86aa57e477b67a0ea4f6eed35997a8",
+  "raw_path": "/dev/shm/moe-slot-projection-20261023",
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "network_executed": false,
+  "GPU_executed": false,
+  "failed_analysis_preserved": true,
+  "first_analysis_implementation_preserved": false,
+  "event_execution_rerun_after_failure": false,
+  "monitoring_exception": "final-monitor specified min_free_bytes=0; retained without alteration. Final checker repeated only for resource validation under final-reserve-monitor with 8GiB reserve; no network/GPU or event workflow rerun.",
+  "stage_accounting": "Recovery stages monitored recovery/ at 32MiB; cumulative task size plus stage budget was checked separately. Top-level receipts exclude nested CLI time to avoid double counting.",
+  "next_question": "Connect actual application readiness, provider progress and persistent network callbacks, with explicit self-peer service and matching calibration; static demand does not establish timing equivalence."
+}

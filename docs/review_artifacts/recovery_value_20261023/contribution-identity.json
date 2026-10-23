@@ -1,0 +1,421 @@
+{
+  "schema": "moe-recovery-contribution-identity/1",
+  "cases": 36,
+  "naive_physical_owner_only_failures": 36,
+  "missing_subset_safe_cases": 36,
+  "discard_touched_owner_safe_cases": 36,
+  "replay_work_histogram": {
+    "4": 12,
+    "6": 24
+  },
+  "witness": {
+    "failed_owner": 0,
+    "relocation": {
+      "0": 1,
+      "1": 1
+    },
+    "selective_recomputed_contributions": 2,
+    "discard_touched_owner_recomputed_contributions": 4,
+    "naive_duplicate_contributions": 2,
+    "cached_groups": {
+      "1": [
+        64,
+        65
+      ],
+      "2": [
+        128,
+        129
+      ],
+      "3": [
+        192,
+        193
+      ]
+    },
+    "required_logical_experts": [
+      0,
+      1,
+      64,
+      65,
+      128,
+      129,
+      192,
+      193
+    ],
+    "naive_contribution_multiplicity": {
+      "0": 1,
+      "1": 1,
+      "64": 2,
+      "65": 2,
+      "128": 1,
+      "129": 1,
+      "192": 1,
+      "193": 1
+    }
+  },
+  "cases_detail": [
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 1,
+        "1": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 1,
+        "1": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 1,
+        "1": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 2,
+        "1": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 2,
+        "1": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 2,
+        "1": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 3,
+        "1": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 3,
+        "1": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 0,
+      "relocation": {
+        "0": 3,
+        "1": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 0,
+        "65": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 0,
+        "65": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 0,
+        "65": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 2,
+        "65": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 2,
+        "65": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 2,
+        "65": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 3,
+        "65": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 3,
+        "65": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 1,
+      "relocation": {
+        "64": 3,
+        "65": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 0,
+        "129": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 0,
+        "129": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 0,
+        "129": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 1,
+        "129": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 1,
+        "129": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 1,
+        "129": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 3,
+        "129": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 3,
+        "129": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 2,
+      "relocation": {
+        "128": 3,
+        "129": 3
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 0,
+        "193": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 0,
+        "193": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 0,
+        "193": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 1,
+        "193": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 1,
+        "193": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 1,
+        "193": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 2,
+        "193": 0
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 2,
+        "193": 1
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 6,
+      "naive_duplicate_contributions": 4
+    },
+    {
+      "failed_owner": 3,
+      "relocation": {
+        "192": 2,
+        "193": 2
+      },
+      "selective_recomputed_contributions": 2,
+      "discard_touched_owner_recomputed_contributions": 4,
+      "naive_duplicate_contributions": 2
+    }
+  ],
+  "interpretation": "finite set/multiplicity model, no execution of actual library recovery",
+  "minimum_identity": "request/token/layer/round/input-and-weight-version plus logical contribution subset",
+  "per_expert_output_cache_required": false,
+  "measured_latency": false
+}

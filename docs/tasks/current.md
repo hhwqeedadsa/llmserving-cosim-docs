@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-按用户最新要求先明确创新点：本轮完成第一阶段[网络、系统与恢复安全候选判别](../../experiments/recovery_safety/protocol.md)，将网络调度、故障隔离/安全恢复、正确性检查与仿真方法分开；先给强基线、威胁/故障模型和可证伪条件，再做有界独立检查。仅本地源码和一手资料核查、CPU有限状态枚举，不执行GPU、依赖升级、大型下载或旧失败工作负载。新原件`/dev/shm/moe-recovery-safety-20261023/`；每阶段60秒、RSS1GiB/地址2GiB/64MiB，总180秒/128MiB、tmpfs预留8GiB。前缀发布平台已通过两轮小例/边界检查，尚欠受影响回归、指南及恢复打包，暂不扩展或宣称完成；不混入本轮研究提交。论文主贡献仍未成立。
+按用户最新要求先明确创新点，本轮完成第二阶段[状态存活与恢复保留价值判别](../../experiments/recovery_value/protocol.md)，仍未成立论文主贡献。固定DeepEP三源码重新核SHA256/blob/tree，读取两份NVIDIA官方文档：不能从健康硬件或trap函数名默认错误后CUDA状态可复用，也未实测具体错误码。四原始Decode请求构造EP4的7,424窗口、59,392个单owner失败/源存活条件，独立区间oracle逐行核验并拒绝三类篡改。乐观地全部健康结果完成时，相比受影响token当前MoE层重做可少做约68%的token—专家任务；实际收益下界0，无时延/性能结论。旧owner局部归约已可表示该上界，无逐专家输出缓存必要性证据；36种有限重放置显示保留旧结果再整新owner重做会重复贡献，缺失逻辑集合或丢弃被涉及旧owner后重做两强对照正确，不是真实库漏洞。
+
+见[报告](../reviews/MoE在途恢复价值与状态存活判别_20261023.md)、[HTML](../review_artifacts/recovery_value_20261023/report.html)、[独立核验](../review_artifacts/recovery_value_20261023/verification.json)与[收尾](../review_artifacts/recovery_value_20261023/closeout.json)。25成员/1,710,018B最终检查点逐hash通过；新源码根/空cwd离线三命令复算五份确定性产物逐字节一致。监控阶段11.21秒，资料采集保守预留60秒后共71.21秒；原件约90.0MB，保持每命令60秒/1GiB/地址2GiB/64MiB、总180秒/128MiB与tmpfs预留8GiB。首次/usr/bin/time缺失在分析启动前127退出，改用版本化Python包装器；新身份小例加入后生成另一份最终归档，初版保留，没有提高限额。原件`/dev/shm/moe-recovery-value-20261023/`易失无持久备份。无GPU/新网络执行、安装、依赖修改或旧失败Prefill/1024重跑；仅研究本地提交不push，平台前缀发布仍待独立收尾。
+
+下一步须先绑定非致命错误返回、缓冲存活、实际provider旧写退出/可见性与同版本可用权重，再比较操作级重放和owner级强基线；不开发建立在trap后状态照常可用假设上的优化器，不把68%条件任务数当加速。总体研究目标保持in_progress。
 
 
 研究筛选结果：优先候选为“不丢弃健康端有效结果的MoE在途请求恢复”，不是已成立创新。新核对EEP的在途请求失败/客户端重试边界、固定NCCL abort/shrink、Varuna操作恢复、ByteExpress等近邻，保存六份固定源码与14次选读响应身份。独立CPU检查10个有限条件、415个网络顺序/630个消费交错；通知代际、双缓冲回绕和弱撤权各有条件反例，强退出/同QP/不重叠区间对照未发现反例，不能称生产漏洞或性能收益。子集DP和最后写入oracle独立复核并拒绝两种篡改。见[报告](../reviews/创新点筛选与MoE安全恢复候选_20261023.md)、[HTML](../review_artifacts/recovery_safety_20261023/report.html)及[独立核验](../review_artifacts/recovery_safety_20261023/verification.json)。60成员/4,032,914B检查点、压缩765,616B逐hash核验；新源码根/空cwd离线3命令复现6份产物逐字节相同，固定六份源码blob/tree重新核对，没有新网络/GPU执行。见[归档](../review_artifacts/recovery_safety_20261023/archive.json)、[恢复](../review_artifacts/recovery_safety_20261023/recovery.json)和[收尾](../review_artifacts/recovery_safety_20261023/closeout.json)。原件易失、无持久备份。下一步先检验健康端有效结果是否足够多、恢复总时延是否由权重恢复等更大成本主导；若强基线足够或收益不足，不开发新优化器。论文目标仍in_progress。

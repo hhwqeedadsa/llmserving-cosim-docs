@@ -1,0 +1,95 @@
+{
+  "fixed": [
+    {
+      "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+      "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+      "excerpts": [
+        {
+          "first": 30,
+          "last": 48,
+          "text": "template <int64_t kNumTimeoutCycles, typename func_t>\n__device__ __forceinline__ void timeout_while(const bool& condition, const func_t& func,\n                                              int64_t start_clock = 0) {\n    // User may share a start clock for multiple waits\n    if (start_clock == 0)\n        start_clock = clock64();\n\n    while (condition) {\n        const bool timeout = clock64() - start_clock >= kNumTimeoutCycles;\n        if (func(timeout))\n            break;\n\n        if (timeout) {\n            // Wait another 1 second to let all threads print information and trap\n            start_clock = clock64();\n            while (clock64() - start_clock < kNumOneSecCycles) {}\n            ptx::trap();\n        }\n    }"
+        }
+      ]
+    },
+    {
+      "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+      "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+      "excerpts": [
+        {
+          "first": 178,
+          "last": 200,
+          "text": "    template <typename team_t, int64_t kNumTimeoutCycles>\n    __device__ __forceinline__\n    void wait_signal(const int& signal_idx, const int& rank_idx) const {\n        IS_TEAM_WORLD_RAIL({\n            // NOTES: signals are rolling counters, whose width follows the shadow counter type\n            const auto shadow_ptr = gin.getSignalShadowPtr(signal_idx);\n            const auto target = ++(*shadow_ptr);\n            const auto result = gin.waitSignal(\n                ncclCoopThread(), signal_idx, target, sizeof(*shadow_ptr) * 8,\n                cuda::memory_order_acquire, kNumTimeoutCycles);\n            if (result != ncclSuccess) {\n                const auto signal = gin.readSignal(signal_idx, sizeof(*shadow_ptr) * 8, cuda::memory_order_acquire);\n                // This waiting thread owns the shadow entry; reload only for diagnostics\n                // to avoid keeping target live into the timeout path.\n                const uint64_t timeout_target = *static_cast<const volatile uint64_t*>(shadow_ptr);\n                printf(\"DeepEP Gin signal timeout, rank: %d, signal_idx: %d, signal: %lu, target: %lu\\n\",\n                       rank_idx, signal_idx, signal, timeout_target);\n                ptx::trap();\n            }\n        });\n    }\n\n    // TODO: can we always use a single window?"
+        }
+      ]
+    },
+    {
+      "path": "deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+      "git_blob_sha": "ba223750d3e8d3cb1623e4856becc36d4ab41eb1",
+      "sha256": "90d98b54151c854611b36f16757d7bca37d4d46a684ede5b1418f069218c2c93",
+      "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/combine.cuh",
+      "excerpts": [
+        {
+          "first": 112,
+          "last": 175,
+          "text": "        constexpr int kHiddenVec = kHidden * sizeof(nv_bfloat16) / sizeof(combine_vec_t);\n\n        // Read source indices for expand mode\n        int stored_topk_slot_idx = -1;\n        if constexpr (kUseExpandedLayout) {\n            if (lane_idx < kNumTopk)\n                stored_topk_slot_idx = __ldg(src_metadata + i * kMetadataStride + (2 + lane_idx));\n            __syncwarp();\n        }\n\n        // 3 cases:\n        //  - no expand + no reduce, or expand + no reduce\n        //  - expand + reduce\n        //  - expand + send all\n        auto reduce_valid_mask = ptx::gather(stored_topk_slot_idx >= 0);\n        auto no_local_reduce = not kUseExpandedLayout or (kAllowMultipleReduction and __popc(reduce_valid_mask) == 1);\n        if (no_local_reduce) {\n            int token_idx_in_tensor = i;\n            if constexpr (kUseExpandedLayout)\n                token_idx_in_tensor = ptx::exchange(stored_topk_slot_idx, ptx::get_master_lane_idx(reduce_valid_mask));\n\n            // No reduce\n            if (ptx::elect_one_sync()) {\n                const auto load_ptr =\n                    math::advance_ptr(x, static_cast<int64_t>(token_idx_in_tensor) * kNumHiddenBytes);\n                ptx::tma_store_wait();\n                ptx::tma_load_1d(tma_buffer.get_base_ptr(), load_ptr, mbarrier_ptr, kNumHiddenBytes);\n                ptx::mbarrier_arrive_and_set_tx(mbarrier_ptr, kNumHiddenBytes);\n                ptx::mbarrier_wait_and_flip_phase(mbarrier_ptr, phase);\n                ptx::tma_store_1d(master_token_buffer.get_base_ptr(), tma_buffer.get_base_ptr(), kNumHiddenBytes);\n                ptx::tma_store_commit();\n            }\n            __syncwarp();\n        } else if constexpr (kAllowMultipleReduction) {\n            // Do local reduction\n            // Sort valid top-k indices to front\n            int topk_slot_idx[kNumTopk];\n            compute_topk_slots(\n                topk_slot_idx, reduce_valid_mask,\n                [=](const int& idx) {\n                    return ptx::exchange(stored_topk_slot_idx, idx);\n                }\n            );\n\n            // Reduce into shared memory\n            constexpr int kUnrollFactor = get_max_unroll_factor<kHiddenVec, 4>();\n            combine_reduce<kHiddenVec, kUnrollFactor, math::constexpr_ceil_div(kNumTopk, kNumRanks)>(\n                lane_idx, topk_slot_idx, static_cast<combine_vec_t*>(tma_buffer.get_base_ptr()),\n                /* Get source base */ [=](const int& slot_idx) {\n                    return math::advance_ptr<combine_vec_t>(\n                        x, slot_idx * static_cast<int64_t>(kNumHiddenBytes));\n                },\n                /* Wait buffer release */ [=]() {\n                    ptx::tma_store_wait();\n                    __syncwarp();\n                }\n            );\n            ptx::tma_store_fence();\n            __syncwarp();\n\n            // Issue TMA stores\n            if (ptx::elect_one_sync()) {\n                ptx::tma_store_1d(master_token_buffer.get_base_ptr(), tma_buffer.get_base_ptr(), kNumHiddenBytes);\n                ptx::tma_store_commit();"
+        },
+        {
+          "first": 239,
+          "last": 255,
+          "text": "\n    // Final barrier to ensure data arrival\n    comm::gpu_barrier<kIsScaleupNVLink, 1, kNumRanks,\n                      kNumSMs, kNumThreads, kNumQPs, kNumTimeoutCycles, comm::kCombineTag1, true, true, false>(\n        gin, workspace_layout.get_barrier_signals(), 0, rank_idx, sm_idx, thread_idx);\n}\n\n}  // namespace deep_ep::ep"
+        }
+      ]
+    }
+  ],
+  "remote": [
+    {
+      "id": "ptx",
+      "url": "https://docs.nvidia.com/cuda/parallel-thread-execution/index.html",
+      "accessed_utc": "2026-10-23T07:09:04.888805+00:00",
+      "status_code": 200,
+      "resolved_url": "https://docs.nvidia.com/cuda/parallel-thread-execution/index.html",
+      "status": "read",
+      "bytes": 3928317,
+      "sha256": "f1e14ad07468e26bf3724e41be86f3a68ab7914bcf0fc9824a6ad31a1eb2ec26",
+      "excerpts": [
+        {
+          "marker": "9.7.21.4. Miscellaneous Instructions: trap",
+          "text": "9.7.21.4. Miscellaneous Instructions: trap\n9.7.21.5. Miscellaneous Instructions: setmaxnreg\n10. Special Registers\n10.1. Special Registers: %tid\n10.2. Special Registers: %ntid\n10.3. Special Registers: %laneid\n10.4. Special Registers: %warpid\n10.5. Special Registers: %nwarpid\n10.6. Special Registers: %ctaid\n10.7. Special Registers: %nctaid\n10.8. Special Registers: %smid\n10.9. Special Registers: %nsmid\n10.10. Special Registers: %gridid\n10.11. Special Registers: %is_explicit_cluster\n10.12. Special Registers: %clusterid\n10.13. Special Registers: %nclusterid\n10.14. Special Registers: %cluster_ctaid\n10.15. Special Registers: %cluster_nctaid\n10.16. Special Registers: %cluster_ctarank\n10.17. Special Registers: %cluster_nctarank\n10.18. Special Registers: %lanemask_eq\n10.19. Special Registers: %lanem"
+        }
+      ]
+    },
+    {
+      "id": "runtime_errors",
+      "url": "https://docs.nvidia.com/cuda/archive/12.8.0/cuda-runtime-api/group__CUDART__TYPES.html",
+      "accessed_utc": "2026-10-23T07:09:04.890809+00:00",
+      "status_code": 200,
+      "resolved_url": "https://docs.nvidia.com/cuda/archive/12.8.0/cuda-runtime-api/group__CUDART__TYPES.html",
+      "status": "read",
+      "bytes": 478887,
+      "sha256": "e3511a9d41187f174ccea55923c4f636eae32739848aab8dcdf0c96440aab75e",
+      "excerpts": [
+        {
+          "marker": "cudaErrorAssert = 710",
+          "text": "cudaErrorAssert = 710\nAn assert triggered in device code during kernel execution. The device cannot be used again. All existing allocations are\ninvalid. To continue using CUDA, the process must be terminated and relaunched.\ncudaErrorTooManyPeers = 711\nThis error indicates that the hardware resources required to enable peer access have been exhausted for one or more of the\ndevices passed to cudaEnablePeerAccess().\ncud"
+        },
+        {
+          "marker": "cudaErrorIllegalInstruction = 715",
+          "text": "cudaErrorIllegalInstruction = 715\nThe device encountered an illegal instruction during kernel execution This leaves the process in an inconsistent state and\nany further CUDA work will return the same error. To continue using CUDA, the process must be terminated and relaunched.\ncudaErrorMisalignedAddress = 716\nThe device encountered a load or store instruction on a memory address which is not aligned. This leaves the process in an\ninconsistent sta"
+        },
+        {
+          "marker": "cudaErrorLaunchFailure = 719",
+          "text": "cudaErrorLaunchFailure = 719\nAn exception occurred on the device while executing a kernel. Common causes include dereferencing an invalid device pointer\nand accessing out of bounds shared memory. Less common cases can be system specific - more information about these cases can\nbe found in the system specific user guide. This leaves the process in an inconsistent state and any further CUDA work will\nreturn the same error. To continue using CUDA, the process must be terminated and relaunched.\ncudaErrorCooperativeLaunchTooLarge = 720\nThis error indicates that the number of blocks launched per grid for a kernel that was launched via either cudaLaunchCooperativeKernel or cudaLaunchCooperativeKernelMultiDevice exceeds the maximum number of blocks as allowed by cudaOccupancyMaxActiveBlocksPerMultiprocessor or cudaOccupancyMaxActiveBlocksPerMulti"
+        }
+      ]
+    }
+  ],
+  "gpu_executed": false,
+  "error_mapping_of_specific_kernel": "not established by static documentation"
+}

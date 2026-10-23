@@ -1,0 +1,82 @@
+{
+  "schema": "moe-recovery-value/1",
+  "windows": 7424,
+  "token_layer_units": 29696,
+  "cases": 59392,
+  "groups": [
+    {
+      "mode": "source_survives",
+      "cases": 29696,
+      "totals": {
+        "valid_tokens": 118784,
+        "lost_source_tokens": 0,
+        "affected_tokens": 92948,
+        "whole_layer_tasks": 950272,
+        "affected_token_replay_tasks": 743584,
+        "missing_owner_tasks": 237568,
+        "healthy_tasks_on_affected_tokens": 506016,
+        "whole_layer_owner_vectors": 371792,
+        "affected_token_owner_vectors": 299872,
+        "missing_owner_vectors": 92948,
+        "healthy_vectors_on_affected_tokens": 206924,
+        "healthy_expert_vectors_on_affected_tokens": 506016
+      },
+      "affected_tokens_histogram": {
+        "0": 82,
+        "1": 959,
+        "2": 5140,
+        "3": 12351,
+        "4": 11164
+      },
+      "work_saved_vs_affected_token_replay_fraction": 0.6805095322115592,
+      "owner_output_hidden_bytes_on_affected_tokens": 2966462464,
+      "expert_output_hidden_bytes_on_affected_tokens": 7254245376,
+      "max_case_owner_output_hidden_bytes": 172032,
+      "max_case_expert_output_hidden_bytes": 401408
+    },
+    {
+      "mode": "colocated_rank_failure",
+      "cases": 29696,
+      "totals": {
+        "valid_tokens": 89088,
+        "lost_source_tokens": 29696,
+        "affected_tokens": 69409,
+        "whole_layer_tasks": 712704,
+        "affected_token_replay_tasks": 555272,
+        "missing_owner_tasks": 176567,
+        "healthy_tasks_on_affected_tokens": 378705,
+        "whole_layer_owner_vectors": 278844,
+        "affected_token_owner_vectors": 224048,
+        "missing_owner_vectors": 69409,
+        "healthy_vectors_on_affected_tokens": 154639,
+        "healthy_expert_vectors_on_affected_tokens": 378705
+      },
+      "affected_tokens_histogram": {
+        "0": 339,
+        "1": 3368,
+        "2": 11926,
+        "3": 14063
+      },
+      "work_saved_vs_affected_token_replay_fraction": 0.6820171015286202,
+      "owner_output_hidden_bytes_on_affected_tokens": 2216904704,
+      "expert_output_hidden_bytes_on_affected_tokens": 5429114880,
+      "max_case_owner_output_hidden_bytes": 129024,
+      "max_case_expert_output_hidden_bytes": 301056
+    }
+  ],
+  "hidden_vector_bytes": 14336,
+  "scope": {
+    "deployment": "hypothetical EP4, one token/source, expert//64",
+    "dtype": "BF16 reference, not inferred from AWQ",
+    "completion": "optimistic: all healthy owner results complete and reusable",
+    "alternative_weights": "required for completion, not provided by trace",
+    "work_unit": "one token-expert evaluation; not constant time/FLOPs",
+    "totals": "sum over counterfactual single-owner failures, not simultaneous memory",
+    "actual_savings_lower_bound": 0,
+    "packet_execution": false,
+    "gpu_execution": false,
+    "latency_claim": false,
+    "production_failure_sample": false,
+    "source_survival_or_timestamps_observed": false
+  }
+}

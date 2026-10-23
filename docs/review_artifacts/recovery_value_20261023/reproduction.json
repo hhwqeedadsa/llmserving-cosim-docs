@@ -1,0 +1,62 @@
+{
+  "passed": true,
+  "members_checked": 25,
+  "archive_bytes": 1710018,
+  "archive_sha256": "36b2fb9429bc3d1737592ff7cd4e5d15a44003076ea43b25cbcbec615b878a80",
+  "deterministic_outputs_equal": {
+    "summary.json": true,
+    "inputs.json": true,
+    "cases.csv": true,
+    "verification.json": true,
+    "contribution-identity.json": true
+  },
+  "executions": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source/experiments/recovery_value/account.py",
+        "--repo",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source",
+        "--manifest",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source/experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/final/recomputed"
+      ],
+      "cwd": "/dev/shm/moe-recovery-value-20261023/final/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source/experiments/recovery_value/verify.py",
+        "--repo",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source",
+        "--manifest",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source/experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--account",
+        "/dev/shm/moe-recovery-value-20261023/final/recomputed",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/final/reverification.json"
+      ],
+      "cwd": "/dev/shm/moe-recovery-value-20261023/final/empty-cwd",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-recovery-value-20261023/final/restored/source/experiments/recovery_value/contribution_identity.py",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/final/contribution-identity.json"
+      ],
+      "cwd": "/dev/shm/moe-recovery-value-20261023/final/empty-cwd",
+      "exit_code": 0
+    }
+  ],
+  "storage": "tmpfs; volatile, no persistent backup",
+  "offline": true,
+  "gpu_executed": false,
+  "scope": "CPU work/representation bounds; no network or official documentation refetch"
+}

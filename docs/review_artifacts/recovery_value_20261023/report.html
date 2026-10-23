@@ -1,0 +1,68 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MoE在途恢复价值判别</title><style>body{font-family:system-ui,sans-serif;background:#f4f6fa;color:#172334;margin:0;line-height:1.85}main{max-width:1060px;margin:36px auto;padding:30px 38px;background:white;border-radius:14px}h1{font-size:1.9rem}h2{margin-top:2.2rem;color:#173f65}p,li{max-width:94ch}a{color:#155eaa}code{background:#edf2f7;padding:2px 4px;overflow-wrap:anywhere}.table{overflow:auto}table{border-collapse:collapse;width:100%;font-size:.94rem}td,th{padding:10px 12px;border:1px solid #d8e0e9;text-align:left;vertical-align:top}th{background:#edf4fc}nav{background:#edf4fc;padding:12px;border-radius:8px}@media(max-width:700px){main{margin:0;padding:18px}h1{font-size:1.45rem}}</style><main><nav>证据：<a href="summary.json">工作量摘要</a> · <a href="verification.json">独立核验</a> · <a href="sources.json">来源</a> · <a href="contribution-identity.json">迁移身份检查</a> · <a href="reproduction.json">离线复现</a></nav><h1>MoE 在途恢复：创新候选、保留价值与状态存活</h1>
+<p>2026-10-23。目标仍是围绕 MoE scale-out 网络形成有实质贡献的研究。本轮完成第二阶段判别：查明恢复所依赖的状态条件，计算有多少工作理论上值得保留，再用专家迁移小例检查重做语义。尚未实现或测量真实系统恢复，论文主贡献仍未成立。</p>
+<h2>1. 先明确创新候选</h2>
+<p>研究问题收窄为：<strong>网络或部分专家端故障后，能否在有限缓冲和旧传输尚未完全退出的约束下，保留仍有效的在途结果，只补缺失贡献，继续完成请求？</strong></p>
+<p>网络是主线：连接出错不应在没有必要时扩大为整个 EP 组的结果丢弃；但源端收到ACK、目标数据到达、GPU可见、专家计算完成和旧写退出是不同事件，不能用一个“完成”标志替代。系统负责提供结果身份和有效性，恢复负责补齐，安全约束决定何时允许继续或必须失败退出。</p>
+<p>相比已有工作，真正待证明的差异是“在途请求能安全保留什么、怎样低成本补做、对服务是否有价值”。成员收缩、多rail、重试、日志、代际、缓冲隔离和专家迁移都已有大量研究，不能分别包装为创新。只有在同信息、同冗余资源的强基线上仍有明显差距，候选才值得进入完整实现。</p>
+<div class="table"><table><thead><tr><th>角度</th><th>本项目要回答的问题</th><th>当前证据与边界</th></tr></thead><tbody>
+<tr><td>网络</td><td>部分连接失败时，哪些旧写必须退出，哪些不冲突结果还能使用？</td><td>上轮有限交错模型有条件反例；未绑定真实provider退出/可见性保证</td></tr>
+<tr><td>系统</td><td>有效结果的保存粒度是否必须到单个专家？</td><td>本轮发现旧owner局部归约结果足以表达乐观保留上界；需要逻辑贡献身份</td></tr>
+<tr><td>恢复</td><td>保留结果相比当前层重算、操作级重放能节省什么？</td><td>得到条件任务数上界；没有故障时刻和完成时序，实际收益下界仍为0</td></tr>
+<tr><td>缺陷发现</td><td>专家迁移和旧结果混用是否重复累计？</td><td>36种有限重放置有抽象反例；没有受支持真实恢复调用的漏洞复现</td></tr>
+<tr><td>安全</td><td>故障peer仍有写权限时，保存的结果能否被污染？</td><td>合作式有限旧工作与恶意持key方必须分开，不能用前者证明跨信任隔离</td></tr>
+</tbody></table></div>
+<h2>2. 实际做了什么</h2>
+<p>新增独立研究目录，未修改平台或依赖，也未使用测试fixture作为研究驱动。重新核对固定 DeepEP 的超时等待、局部归约和最终屏障三份源码，检查SHA256、Git blob及缓存树身份；只读两份 NVIDIA 官方文档。</p>
+<p>对四份原始Decode路由逐项核算：128个Decode序号、58个MoE层，共7,424个人工对齐窗口。每个窗口枚举一个失败owner的四种位置，再区分源独立存活与源/专家卡合并部署，得到59,392条条件记录。它们来自四个请求，不是59,392个独立样本，也没有假设这些故障真实发生。</p>
+<p>第二个程序重新读取原始专家ID，用四个明确的ID区间逐项检查全部记录与汇总，不导入分析器；删除案例、夸大保留量、把失效源当作存活三类篡改均被拒绝。另用固定Top8/四owner的有限贡献多重集模型检查迁移后重复累计。</p>
+<h2>3. 第一个关键发现：先确认健康状态是否真的还能用</h2>
+<p>固定 DeepEP <code>f6aa38f</code> 的部分超时路径调用 <code>ptx::trap()</code>，Combine末尾还有全rank屏障。只因某token没选失败卡，并不能推出原库允许它独立退休；也不能在仿真中把超时简单改成“跳过对端、继续计算”。</p>
+<p><a href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#miscellaneous-instructions-trap">NVIDIA PTX文档</a>对<code>trap</code>的描述是“Abort execution and generate an interrupt to the host CPU”。<a href="https://docs.nvidia.com/cuda/archive/12.8.0/cuda-runtime-api/group__CUDART__TYPES.html">CUDA 12.8运行时错误文档</a>分别说明：<code>cudaErrorAssert</code>会使已有分配无效；<code>cudaErrorIllegalInstruction</code>和<code>cudaErrorLaunchFailure</code>会使后续CUDA工作持续返回同一错误，需要终止并重启进程。</p>
+<p>这些文档<strong>没有证明本例内核的trap一定对应哪一个错误码</strong>。本轮没有编译/执行该内核，也没有实测错误后的上下文和缓冲存活。它们足以否定“健康GPU硬件没坏，所以其进程中的结果一定能原位继续使用”这一默认假设。</p>
+<div class="table"><table><thead><tr><th>故障情况</th><th>能否直接沿用本轮保留上界</th></tr></thead><tbody>
+<tr><td>链路/连接不可达，但执行端、请求源、缓冲和上下文都有效</td><td>仍需旧写退出、GPU可见性和重放语义保证；单纯换路也许已足够</td></tr>
+<tr><td>专家进程失败，请求源独立存活</td><td>必须有可用的同版本专家权重，并保证健康进程能从错误路径返回</td></tr>
+<tr><td>源端与失败专家卡合并部署</td><td>本例每个条件有一个源token不再计为可恢复；若有外部KV/请求备份，应作为另一种部署单独评价</td></tr>
+<tr><td>其他健康端等待内核进入致命CUDA错误</td><td>原位复用不能作为默认能力；需事先设计非致命退出或明确的外部恢复状态</td></tr>
+</tbody></table></div>
+<p>本轮决定：在错误返回与状态存活条件明确以前，不实现以“trap后缓冲照常可用”为前提的恢复优化器。</p>
+<h2>4. 第二个发现：有条件的工作量空间，但不能当成加速</h2>
+<p>参考部署为EP4、每源一个token、256个专家连续均分为每卡64个、Top8。BF16只用于隐藏向量字节参考，并非从AWQ权重量化推断激活类型。假设所有健康owner的必要结果都已完成且可复用，失败owner结果不可用。</p>
+<p>对照保留同样有效的当前层输入、KV和历史token，不让基线重算全部请求前缀。</p>
+<div class="table"><table><thead><tr><th>累计条件任务数</th><th>请求源独立存活</th><th>源/专家合并部署，排除失效源</th></tr></thead><tbody>
+<tr><td>所有有效token的当前MoE层重做</td><td>950,272</td><td>712,704</td></tr>
+<tr><td>仅受影响token的当前MoE层重做</td><td>743,584</td><td>555,272</td></tr>
+<tr><td>仅缺失owner的token—专家贡献需要重做</td><td>237,568</td><td>176,567</td></tr>
+<tr><td>相对受影响token重做，乐观可避免任务比例</td><td>68.05%</td><td>68.20%</td></tr>
+</tbody></table></div>
+<p>“任务”是一项token—专家计算，不是固定执行时间或固定FLOPs。各失败位置是反事实条件，不能相加当一次实际执行。源独立存活时，各条件中约78.25%的有效token选择了失败owner；这只说明逻辑依赖覆盖广，并不等于这些请求必然失败或其余请求能绕过库屏障。</p>
+<p>68%的数字只是“全部健康结果恰好已完成且有效”时的任务数空间。trace没有完成时刻、激活数值、故障点或KV状态，实际可保留收益可能为0。专家权重不可用时，更不能完成补做。不能据此宣称68%时延降低，也不能拿它与EEP论文的秒级专家覆盖恢复直接相除。</p>
+<p>操作级重放若已能以同样的状态和开销达到“只补缺失贡献”，本候选在任务数上不再有优势。</p>
+<h2>5. 第三个发现：无需默认逐专家保存输出</h2>
+<p>固定Combine源码在允许多次归约的相应路径中，会先合并同一owner上该token的多个专家结果，再发送一份局部结果。因此表示健康贡献时，可以保留一份“token、旧贡献集合、局部归约向量”，而非为每位专家保存一份完整向量。</p>
+<p>H=7168、参考BF16时，纯隐藏向量为14,336B。只考虑受故障影响token的健康部分：</p>
+<div class="table"><table><thead><tr><th>单条件最大隐藏向量表示量</th><th>按旧owner局部结果保存</th><th>按单专家输出保存</th></tr></thead><tbody>
+<tr><td>请求源独立存活</td><td>168 KiB</td><td>392 KiB</td></tr>
+<tr><td>源/专家合并部署，排除失效源</td><td>126 KiB</td><td>294 KiB</td></tr>
+</tbody></table></div>
+<p>这不是新增显存测量，也不是完整恢复成本：未计权重、输入、代际、地址、日志、对齐、复制和保留时间；已有缓冲能否直接复用尚不明确。跨条件累计表示量中，owner方案约为专家方案的41%，同样不能当作同时驻留内存。数学归约覆盖相同也不证明GPU浮点逐位相等。</p>
+<p>本轮决定：没有证据支持先增加逐专家输出缓存和复杂完成日志，优先保留更简单的owner级强基线。</p>
+<h2>6. 第四个发现：迁移后不能只认物理卡号</h2>
+<p>最小例选择8个专家，原来每个owner承担2个。owner0失败后，专家0、1迁到owner1；owner1原有专家64、65的局部结果已经保留。</p>
+<p>如果恢复时重新计算owner1的全部四个专家，然后再加上保留的64、65结果，64、65会累计两次。安全的两种办法是：保留旧结果、只重做缺失逻辑专家0、1；或者丢弃owner1原有局部结果，完整重做其新的分组。</p>
+<p>有限模型枚举4种失败位置、每次2个缺失专家向3个健康owner重放置的9种情况，共36种。“保留旧结果再加整张新owner结果”的做法均出现重复；只补缺失逻辑集合、或丢弃被涉及旧owner的结果再重做，两种强对照都覆盖正确。前者重做2项，后者重做4或6项。</p>
+<p>这是刻意构造的集合覆盖模型，不能称为DeepEP/EEP漏洞、生产发生率或新算法。它提示恢复状态应记录<strong>旧结果代表的逻辑贡献集合</strong>，不能只记录当前物理owner；该集合可由既有Top-K与旧放置确定，不要求逐专家保存数值。必要身份还包括请求、token、层、轮次、输入和权重版本。</p>
+<h2>7. 与近邻的差异及下一步门槛</h2>
+<p><a href="https://arxiv.org/html/2605.10670v1">EEP v1第3.1节</a>明确把故障时在途请求交给客户端重试，并在forward pass之间修复覆盖。第3.4—3.6节已有可变peer表、GPU侧故障检测、专家覆盖与稳定图指针；因此“非致命退出”“修复成员”也不能单独当本项目创新。Varuna的操作执行识别、ByteExpress的缓冲所有权与重试、经典延迟回收同样是必须比较的基础，详见<a href="../../reviews/创新点筛选与MoE安全恢复候选_20261023.md">上一阶段近邻核查</a>。</p>
+<p>接下来按以下门槛推进，不继续泛化堆功能：</p>
+<ol>
+<li>明确一种可执行的网络故障与状态模型：先选请求源仍存活、同版本替代权重已就绪的情形。区分链路不可达与rank失效；若现有换路/操作重放已经足够，就采用已有方法。</li>
+<li>确认退出和可见性：实际provider能否保证旧写退出、内核能否非致命结束、保留缓冲是否仍有效。只有源码名字或通知到达不够；当前本机条件仍不满足固定现代分支的匹配GPU/RDMA校准要求。</li>
+<li>确认强基线仍有差距：同样的输入/KV保存、备份权重和内存预算下，比较只补缺失贡献、丢弃被涉及旧owner后重做、当前层重做。网络/复制/日志/稳态成本全部计入，不能只比任务数。</li>
+<li>差距成立后才接入真实完成反馈与有限恢复缓冲。必须检查迟到写、重复通知、专家迁移、缓冲回绕和多次故障；没有退出证据就明确回退，不能默认为安全。</li>
+<li>最后扩到多EP共享、多rail、分层带宽和大规模；分别记录网络实际执行与宿主资源。四请求不能复制成千卡生产负载。只有对独立负载的服务延迟/成功率有证据，才形成论文性能主张。</li>
+</ol>
+<p>当前最有价值的结果，是将候选的前置条件和强基线进一步说清，并排除了“逐专家保存必然必要”“物理卡号足以判定结果身份”“硬件没坏就能继续使用CUDA状态”三项未经验证的假设。候选仍保留，但不宣称已形成A类论文主贡献。</p>
+<h2>8. 证据和复现</h2>
+<p>代码与公开运行方式见<a href="../../../experiments/recovery_value/README.md">研究目录</a>。机器摘要、固定来源与官方摘录、独立核验、贡献身份模型、离线恢复记录见同名<a href="report.html">HTML与产物目录</a>。CPU确定性产物在新源码根、空cwd离线复算；原件和归档保存在<code>/dev/shm/moe-recovery-value-20261023/</code>，为易失存储，尚无持久备份。</p>
+<p>首次资源包装命令因本机没有<code>/usr/bin/time</code>而以127退出，分析程序当时尚未启动；随后改用版本化Python资源记录器，没有安装软件或提高预算。初版离线检查点先验证计数分析；加入贡献身份小例后创建另一份最终检查点，原检查点保留。没有覆盖失败记录，也没有重跑旧失败Prefill/1024或新增GPU/网络实验。</p></main></html>

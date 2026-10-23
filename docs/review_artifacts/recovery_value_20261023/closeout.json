@@ -1,0 +1,211 @@
+{
+  "state": "stage_complete; paper_goal_active",
+  "host_simulation": "no GPU/network simulation",
+  "source_collection": {
+    "command": [
+      "timeout",
+      "60s",
+      "python3",
+      "-B",
+      "experiments/recovery_value/collect_sources.py",
+      "--repo",
+      "/home/lry/moe-ub-cosim",
+      "--output",
+      "/dev/shm/moe-recovery-value-20261023/sources"
+    ],
+    "cwd": "/home/lry/moe-ub-cosim",
+    "exit_code": 0,
+    "actual_elapsed_not_measured": true,
+    "budget_seconds_reserved": 60
+  },
+  "preflight_failure": {
+    "command": [
+      "timeout",
+      "60s",
+      "/usr/bin/time",
+      "-v",
+      "-o",
+      "/dev/shm/moe-recovery-value-20261023/account.resources.txt",
+      "python3",
+      "-B",
+      "experiments/recovery_value/account.py",
+      "--repo",
+      "/home/lry/moe-ub-cosim",
+      "--manifest",
+      "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+      "--output",
+      "/dev/shm/moe-recovery-value-20261023/account"
+    ],
+    "exit_code": 127,
+    "stderr": "timeout: failed to run command /usr/bin/time: No such file or directory",
+    "analysis_started": false,
+    "resolution": "versioned Python runner; no installation or larger budget"
+  },
+  "recorded_stages": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/account.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/account"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 1.0655399933457375,
+      "peak_sampled_rss_bytes": 56745984,
+      "child_ru_maxrss_kib": 55416,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 0,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/contribution_identity.py",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/contribution-identity.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 0.05293458327651024,
+      "peak_sampled_rss_bytes": 0,
+      "child_ru_maxrss_kib": 12420,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 6.813573790714145,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/reproduce.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--run",
+        "/dev/shm/moe-recovery-value-20261023",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 4.287885399535298,
+      "peak_sampled_rss_bytes": 21323776,
+      "child_ru_maxrss_kib": 104664,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 6.866508373990655,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/reproduce.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--run",
+        "/dev/shm/moe-recovery-value-20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 4.113221058622003,
+      "peak_sampled_rss_bytes": 21266432,
+      "child_ru_maxrss_kib": 105664,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 2.700352732092142,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/build_review.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--run",
+        "/dev/shm/moe-recovery-value-20261023",
+        "--output",
+        "docs/review_artifacts/recovery_value_20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 0.05391708016395569,
+      "peak_sampled_rss_bytes": 0,
+      "child_ru_maxrss_kib": 23776,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 11.154393773525953,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "experiments/recovery_value/verify.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--manifest",
+        "experiments/moe_trace_hotspots/results/four_requests_20261018/manifest.json",
+        "--account",
+        "/dev/shm/moe-recovery-value-20261023/account",
+        "--output",
+        "/dev/shm/moe-recovery-value-20261023/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": null,
+      "wall_seconds": 1.6348127387464046,
+      "peak_sampled_rss_bytes": 105099264,
+      "child_ru_maxrss_kib": 103660,
+      "source_acquisition_reserved_seconds": 60,
+      "preceding_stage_seconds": 1.0655399933457375,
+      "limits": {
+        "wall_seconds": 60,
+        "rss_bytes": 1073741824,
+        "cumulative_bytes": 134217728
+      }
+    }
+  ],
+  "monitored_stage_wall_seconds": 11.208310853689909,
+  "source_reservation_plus_stage_seconds": 71.20831085368991,
+  "run_tree_bytes": 89996395,
+  "cumulative_limit_bytes": 134217728,
+  "ast_checked_scripts": 7,
+  "local_html_links_checked": 8,
+  "snapshot_source_equals_current": true,
+  "archive_members": 25,
+  "final_deterministic_outputs_equal": 5,
+  "platform_changes_included": false,
+  "pushed": false,
+  "persistent_backup": false,
+  "followup": "validate nonfatal error return, buffer survival and provider exit with a matching real runtime before performance claims"
+}

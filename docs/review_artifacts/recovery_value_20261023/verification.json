@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "cases_checked": 59392,
+  "raw_token_partitions_checked": 29696,
+  "oracle": "original expert IDs intersect each of four explicit owner ranges; no account.py import",
+  "tamper_rejections": [
+    "deleted_case",
+    "inflated_retention",
+    "lost_source_counted_alive"
+  ],
+  "arithmetic": "set coverage only; no numerical expert outputs or floating-point equivalence",
+  "sha256": {
+    "cases.csv": "9e516e52997e80deb57436a1a7e9413a6bbfbd671b3e118b9dcb60c1926ef268",
+    "summary.json": "b96cc1e2da652bb9d3f86fb1e49dd737d605bb3cd4ddb781c643ce492ed71980",
+    "inputs.json": "243c744ee5bd032bef0812d0be67fe82d8d0f07d4ba7a7ff596e9c908e9df8b9"
+  }
+}

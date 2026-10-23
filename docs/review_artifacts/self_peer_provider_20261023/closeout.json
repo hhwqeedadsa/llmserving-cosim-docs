@@ -1,0 +1,64 @@
+{
+  "verified": true,
+  "matching_archived_source_files": 16,
+  "python_ast_files": 8,
+  "assembled_original_functions_verified": true,
+  "completed_top_level_monitors": [
+    {
+      "stage": "archive-monitor",
+      "wall_seconds": 0.34727537631988525,
+      "peak_sampled_group_rss_bytes": 21209088
+    },
+    {
+      "stage": "build-monitor",
+      "wall_seconds": 2.8707757275551558,
+      "peak_sampled_group_rss_bytes": 318124032
+    },
+    {
+      "stage": "check-monitor",
+      "wall_seconds": 0.13254650495946407,
+      "peak_sampled_group_rss_bytes": 7458816
+    },
+    {
+      "stage": "deps-monitor",
+      "wall_seconds": 0.47227901220321655,
+      "peak_sampled_group_rss_bytes": 19116032
+    },
+    {
+      "stage": "execute-monitor",
+      "wall_seconds": 0.1327119916677475,
+      "peak_sampled_group_rss_bytes": 4227072
+    },
+    {
+      "stage": "extract-monitor",
+      "wall_seconds": 0.1330250520259142,
+      "peak_sampled_group_rss_bytes": 7471104
+    },
+    {
+      "stage": "prepare-monitor",
+      "wall_seconds": 0.1296628974378109,
+      "peak_sampled_group_rss_bytes": 7499776
+    },
+    {
+      "stage": "recover-monitor",
+      "wall_seconds": 4.257347879931331,
+      "peak_sampled_group_rss_bytes": 371179520
+    },
+    {
+      "stage": "report-monitor",
+      "wall_seconds": 0.14395882934331894,
+      "peak_sampled_group_rss_bytes": 7442432
+    }
+  ],
+  "cumulative_top_level_wall_seconds": 8.619583271443844,
+  "allocated_file_bytes": 6316032,
+  "notes": "Recovery submonitors are included in recover wall time, not added twice.",
+  "no_platform_behavior_change": true,
+  "no_dependency_change": true,
+  "network_executed": false,
+  "vendor_runtime_executed": false,
+  "paper_contribution_established": false,
+  "checked_local_links": 259,
+  "toolchain": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+}

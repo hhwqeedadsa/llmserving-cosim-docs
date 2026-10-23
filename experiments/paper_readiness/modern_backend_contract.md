@@ -119,3 +119,11 @@ GDAKI的MLX5特定可见性作为provider规则单独实现，不能冒充通用
 现代DeepEP自定义路径先flush所用contexts，再通过context0通知。GDAKI宣告MLX5到达signal刷新已收到put，但其跨context/连接/NIC的物理可见性覆盖范围仍未在本环境验证；上述源码差异不证明DeepEP缺陷。实施时须逐项保存数据context/QP、连接、设备和目标可见性域映射，及signal覆盖依据。未有保证时，不能把原生字节ACK直接转成全部`visible`事件，或在收到context0通知后遍历解锁其他域的token。
 
 强基线须分别定义固定DeepEP自定义协议及明确选用的NCCL all-context协议：包括allocated/active contexts、self-peer请求、flush与signal数、源完成和目标消费，不能偷偷换屏障再将差异归因于网络算法。两者即使跨机数据字节相同，必要控制量也可能不同；API调用数不等于包或成本。缺少目标域能力与匹配校准时，完整现代性能比较仍不通过；允许无时间源码/依赖核验，不能补零成本全局可见性。
+
+## 11. Self-peer资源及集群/EP规模
+
+[固定源码执行核查](../../docs/reviews/self_peer_provider_20261023.md)在记录型API替身上执行原文，确认FULL路径的每个self主QP连接独立responder QP，且反向连接回主QP。两个对象均保留建连属性；不能合为同一个QP或因此复制一次应用事务。self循环不传远端分支的LAG端口亲和，默认0；responder列表创建前显式改用VALID_DBR（静态证据）。这些事实不确定物理回环路线或时延，不能支持跳过self操作、自动零成本或自动经过外部交换机。
+
+固定DeepEP Context初始化沿用`ginCounterCount=0`，该路径不覆盖此字段，故本配置无companion QP。FULL且rankStride=1、EP组R、请求Q个context、C个GIN connection时，allocated A=ceil(Q/C)×C，每GPU主QP为A×R，另有A个self responder，总A×(R+1)。这是持久对象配置核算，不是执行、HBM/CQ容量或活跃流量证据；不套用RAIL/CUSTOM_STRIDE。C也不自动等同C个独立物理NIC。
+
+规模输入必须分开集群GPU数、每组EP规模、组数与物理映射，并另列DP/TP/PP和其通信。增加同规模EP组与扩大单EP组不是同一实验。当前现代前端的支持上限及千卡执行缺项不因本资源投影而改变；后续先测实际对象内存/调度开销，再选择保留必要状态的稀疏实例化方案，不能用本表直接承诺千卡可运行。

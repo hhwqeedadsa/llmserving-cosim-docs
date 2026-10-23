@@ -1290,3 +1290,26 @@ python3 experiments/paper_readiness/check_multiconnection_visibility.py \
 `multiconnection_visibility.py --repo /ABS/REPO --output /ABS/NEW_SOURCE_DIR`负责来源准备，复用固定缓存并最多补取3个小源码。失败的请求保留；已有部分输出时，`--finish-unrequested`只取尚未请求的文件，绝不重试已记录文件。当前复现checker核对本轮实际的“一次超时、两次成功”收据；另一次全成功的资料采集属于新的来源执行，不能修改这份历史收据来匹配。缺少必需函数体时分析失败，不用缺失头文件补写实现。
 
 `package_multiconnection_visibility.py`提供`report/archive/recover`三个离线阶段，均需`--repo /ABS/REPO --root /ABS/THIS_RUN --output /ABS/REPORT_DIR`。归档包含固定来源、输入需求表、研究源码、成功/失败日志与校验清单；恢复从新源码根/cwd、空PYTHONPATH执行分析/重复/独立核验，不执行collector或下载代码。归档成员≤48MiB/压缩≤16MiB。原始件和检查点仅易失内存盘，无持久备份；仓库中的HTML与JSON是小型证据摘要。
+
+## Self-peer provider 源码执行核查
+
+[方法与预算](self_peer_provider_protocol.md)、[中文说明](../../docs/reviews/self_peer_provider_20261023.md)。这是普通CPU上的原文控制流核验；外部API全为记录型替身，不是厂商运行时、网络或硬件校准，也不测千卡性能。
+
+已有固定来源缓存时，先以`host_probe`按本轮预算执行准备（每命令60秒/RSS1GiB/地址2GiB/32MiB/卷预留8GiB）。输出及其父目录应预先分别保持不存在/存在。也可以从检查点恢复`sources/`，跳过准备，不需要联网。
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/my-self-prepare-monitor \
+  --rss-bytes 1073741824 --address-bytes 2147483648 \
+  --artifact-bytes 33554432 --wall-seconds 60 --min-free-bytes 8589934592 \
+  --artifact-root /dev/shm/my-self-sources -- \
+  python3 experiments/paper_readiness/self_peer_provider.py prepare \
+  --repo /ABS/REPO --output /dev/shm/my-self-sources
+python3 experiments/paper_readiness/run_self_peer_provider.py \
+  --source /dev/shm/my-self-sources --output /dev/shm/my-self-run \
+  --json-include /ABS/REPO/third_party/LLMServingSim/astra-sim/extern/helper
+```
+
+runner自动在新cwd执行提取、严格C++17编译、源码片段执行、独立核验及确定性重复，每阶段使用同样资源上限并累计检查300秒。无需继承PYTHONPATH；产物为`verification.json`、`run.json`、`receipts.json`及各阶段日志。原始输入包含三份NCCL源码与一份DeepEP Context、完整树和固定身份；缺缓存时先按`sources.json`记录的固定仓库/commit/path获取并核hash，不自动下载或改依赖。
+
+`package_self_peer_provider.py archive/recover/report --repo /ABS/REPO --root /ABS/THIS_RUN --output /ABS/REPORT_DIR`提供归档、恢复和HTML。恢复在新源码根使用快照中的研究工具、资源监控模块和带许可证的固定JSON头重新编译，检查原始结果和verification逐字节一致。检查点成员上限32MiB/压缩16MiB，只保存在易失内存盘；仍需宿主Linux、Python3、g++及系统C++头/运行库。无网络/GPU、依赖安装或完整离线工具链承诺。

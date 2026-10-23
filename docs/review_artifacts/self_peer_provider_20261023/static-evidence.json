@@ -1,0 +1,145 @@
+[
+  {
+    "path": "nccl/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "needle": "qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+    "first_line": 794,
+    "lines": [
+      "  if (ncclParamGinGdakiUseReliableDB())",
+      "    qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_NO_DBR_HW;",
+      "  else qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+      "  qp_init_attr.comp_channel = gdaki_ctx->docaEvent;",
+      "",
+      "  if (nqps_for_comm_this_rank > 0) {"
+    ]
+  },
+  {
+    "path": "nccl/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "needle": "qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+    "first_line": 812,
+    "lines": [
+      "        if ((qp_init_attr.send_dbr_mode_ext == DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_NO_DBR_SW_EMULATED) &&",
+      "            ncclParamGinGdakiUseReliableDB() == 2) {",
+      "          qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+      "          goto retry_create_qp_group_list_hl;",
+      "        }",
+      ""
+    ]
+  },
+  {
+    "path": "nccl/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "needle": "qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+    "first_line": 848,
+    "lines": [
+      "        if ((qp_init_attr.send_dbr_mode_ext == DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_NO_DBR_SW_EMULATED) &&",
+      "            ncclParamGinGdakiUseReliableDB() == 2) {",
+      "          qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+      "          goto retry_create_qp_list_hl;",
+      "        }",
+      ""
+    ]
+  },
+  {
+    "path": "nccl/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "needle": "qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+    "first_line": 870,
+    "lines": [
+      "  }",
+      "",
+      "  qp_init_attr.send_dbr_mode_ext = DOCA_GPUNETIO_VERBS_SEND_DBR_MODE_EXT_VALID_DBR;",
+      "  if (nqps > nqps_for_comm) {",
+      "    DOCACHECKGOTO(doca_gpu_verbs_create_qp_list_hl(&qp_init_attr, nqps - nqps_for_comm, &gdaki_ctx->self_gqp_list),",
+      "                  status, out);"
+    ]
+  },
+  {
+    "path": "nccl/src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "needle": "const bool needCompanion = (nCounters > 0);",
+    "first_line": 622,
+    "lines": [
+      "  const int nqps_for_comm = nqps_per_rank * nranks;  // Number of QPs for communication",
+      "  const int nqps_for_comm_this_rank = nqps_for_comm / rankStride;",
+      "  const bool needCompanion = (nCounters > 0);",
+      "  const int ncompanion_qps = needCompanion ? nqps_for_comm * 2 : 0;  // Number of companion QPs for communication",
+      "                                                                      // Double because we connect to self.",
+      "  const int nqps = nqps_per_rank * (nranks + 1);  // +1 for the local rank."
+    ]
+  },
+  {
+    "path": "nccl/src/gin/gin_host.cc",
+    "needle": "nContextsTotal = ROUNDUP(nContextsTotal, backend->ginCommCount);",
+    "first_line": 262,
+    "lines": [
+      "  }",
+      "",
+      "  nContextsTotal = ROUNDUP(nContextsTotal, backend->ginCommCount);",
+      "  devComm->ginContextCount = nContextsTotal;",
+      "  int nContextsPerComm = nContextsTotal / backend->ginCommCount;",
+      "  INFO(NCCL_INIT,"
+    ]
+  },
+  {
+    "path": "nccl/src/gin/gin_host.cc",
+    "needle": "reqs->ginCounterCount,",
+    "first_line": 342,
+    "lines": [
+      "  ginConfig = {",
+      "    reqs->ginSignalCount,",
+      "    reqs->ginCounterCount,",
+      "    nContextsPerComm,",
+      "    reqs->ginQueueDepth,",
+      "    reqs->ginTrafficClass != NCCL_CONFIG_UNDEF_INT ? reqs->ginTrafficClass : comm->config.trafficClass,"
+    ]
+  },
+  {
+    "path": "nccl/src/include/nccl_device/host.h",
+    "needle": "/* ginCounterCount */",
+    "first_line": 95,
+    "lines": [
+      "    4,                                           /* ginContextCount */         \\",
+      "    0,                                           /* ginSignalCount */          \\",
+      "    0,                                           /* ginCounterCount */         \\",
+      "    NCCL_GIN_CONNECTION_NONE,                    /* ginConnectionType */       \\",
+      "    false,                                       /* ginExclusiveContexts */    \\",
+      "    0,                                           /* ginQueueDepth */           \\"
+    ]
+  },
+  {
+    "path": "deepep/csrc/kernels/comm/context.cpp",
+    "needle": "reqs = NCCL_DEV_COMM_REQUIREMENTS_INITIALIZER;",
+    "first_line": 120,
+    "lines": [
+      "",
+      "    // Initialize NCCL device communicator",
+      "    ncclDevCommRequirements_t reqs = NCCL_DEV_COMM_REQUIREMENTS_INITIALIZER;",
+      "    reqs.lsaMultimem = enable_lsa_multimem;",
+      "    if (get_env(\"EP_DISABLE_GIN\", 0) == 0) {",
+      "        EP_HOST_ASSERT("
+    ]
+  },
+  {
+    "path": "deepep/csrc/kernels/comm/context.cpp",
+    "needle": "reqs.ginConnectionType = allow_hybrid_mode ?",
+    "first_line": 143,
+    "lines": [
+      "            reqs.ginConnectionType = NCCL_GIN_CONNECTION_CUSTOM_STRIDE;",
+      "        } else {",
+      "            reqs.ginConnectionType = allow_hybrid_mode ? NCCL_GIN_CONNECTION_RAIL : NCCL_GIN_CONNECTION_FULL;",
+      "        }",
+      "",
+      "        // SL index"
+    ]
+  },
+  {
+    "path": "deepep/csrc/kernels/comm/context.cpp",
+    "needle": "reqs.ginSignalCount = num_ranks + 2 * 2;",
+    "first_line": 138,
+    "lines": [
+      "",
+      "        // Customized RDMA barrier needs extra signals",
+      "        reqs.ginSignalCount = num_ranks + 2 * 2;",
+      "        if (allow_hybrid_mode and num_rdma_storage_bytes > 0) {",
+      "            reqs.ginCustomStride = gin_min_stride;",
+      "            reqs.ginConnectionType = NCCL_GIN_CONNECTION_CUSTOM_STRIDE;"
+    ]
+  }
+]

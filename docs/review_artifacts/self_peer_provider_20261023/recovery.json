@@ -1,0 +1,25 @@
+{
+  "recovered": true,
+  "checkpoint_members_verified": 58,
+  "new_source_root": true,
+  "new_cwd": true,
+  "empty_parent_pythonpath": true,
+  "rebuilt_from_snapshots": true,
+  "repeated_execution_byte_identical": true,
+  "identical_results": [
+    {
+      "original": "execute-monitor/stdout.log",
+      "recovered": "execute-monitor/stdout.log",
+      "sha256": "b5c41ecf02c74db37e600c04bf796b0be5e4931e9b2c2655b534185994ae1e2a"
+    },
+    {
+      "original": "verification.json",
+      "recovered": "verification.json",
+      "sha256": "af75643bae8bb7e8bce40633d868be916618714271611723670f7e45ad13ba67"
+    }
+  ],
+  "identical_extracted_files": 11,
+  "requires_host_python_compiler_and_system_libraries": true,
+  "network_executed": false,
+  "GPU_executed": false
+}

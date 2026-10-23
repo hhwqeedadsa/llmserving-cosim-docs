@@ -1,0 +1,3109 @@
+{
+  "schema": "moe-loss-recovery-cost/1",
+  "cases": [
+    {
+      "name": "native-clean",
+      "rto_ns": null,
+      "fault": "clean",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389120,
+      "gpu_port_model_tx_bytes": 428768,
+      "all_hop_model_tx_bytes": 2239264,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 17500,
+      "target_payload_bytes": 6144,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 0,
+      "source_payload_efficiency": 1.0,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "native-middle",
+      "rto_ns": null,
+      "fault": "middle",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 392264,
+      "gpu_port_model_tx_bytes": 432104,
+      "all_hop_model_tx_bytes": 2259280,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 24081,
+      "target_ack_ns": 30105,
+      "target_payload_bytes": 9288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 3144,
+      "source_payload_efficiency": 0.9919849897008137,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "r40-clean",
+      "rto_ns": 40000,
+      "fault": "clean",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389120,
+      "gpu_port_model_tx_bytes": 428768,
+      "all_hop_model_tx_bytes": 2239264,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 17500,
+      "target_payload_bytes": 6144,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 0,
+      "source_payload_efficiency": 1.0,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "r40-middle",
+      "rto_ns": 40000,
+      "fault": "middle",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 392264,
+      "gpu_port_model_tx_bytes": 432104,
+      "all_hop_model_tx_bytes": 2259280,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 24081,
+      "target_ack_ns": 30105,
+      "target_payload_bytes": 9288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 3144,
+      "source_payload_efficiency": 0.9919849897008137,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "r40-tail",
+      "rto_ns": 40000,
+      "fault": "tail",
+      "frontend_complete_ns": 134108,
+      "network_finish_ns": 134108,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389264,
+      "gpu_port_model_tx_bytes": 428948,
+      "all_hop_model_tx_bytes": 2240344,
+      "timeout_decisions": 1,
+      "messages": 92,
+      "target_receive_ready_ns": 63570,
+      "target_ack_ns": 69660,
+      "target_payload_bytes": 6288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 144,
+      "source_payload_efficiency": 0.9996300711085536,
+      "fault_cost_vs_same_rto_clean_ns": 12040,
+      "signed_gap_vs_r40_clean_ns": 12040
+    },
+    {
+      "name": "r40-ack",
+      "rto_ns": 40000,
+      "fault": "ack",
+      "frontend_complete_ns": 131105,
+      "network_finish_ns": 131105,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389264,
+      "gpu_port_model_tx_bytes": 428996,
+      "all_hop_model_tx_bytes": 2240632,
+      "timeout_decisions": 1,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 69660,
+      "target_payload_bytes": 6288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 144,
+      "source_payload_efficiency": 0.9996300711085536,
+      "fault_cost_vs_same_rto_clean_ns": 9037,
+      "signed_gap_vs_r40_clean_ns": 9037
+    },
+    {
+      "name": "r20-clean",
+      "rto_ns": 20000,
+      "fault": "clean",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389120,
+      "gpu_port_model_tx_bytes": 428768,
+      "all_hop_model_tx_bytes": 2239264,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 17500,
+      "target_payload_bytes": 6144,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 0,
+      "source_payload_efficiency": 1.0,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "r20-middle",
+      "rto_ns": 20000,
+      "fault": "middle",
+      "frontend_complete_ns": 122068,
+      "network_finish_ns": 122068,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 392264,
+      "gpu_port_model_tx_bytes": 432104,
+      "all_hop_model_tx_bytes": 2259280,
+      "timeout_decisions": 0,
+      "messages": 92,
+      "target_receive_ready_ns": 24081,
+      "target_ack_ns": 30105,
+      "target_payload_bytes": 9288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 3144,
+      "source_payload_efficiency": 0.9919849897008137,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 0
+    },
+    {
+      "name": "r20-tail",
+      "rto_ns": 20000,
+      "fault": "tail",
+      "frontend_complete_ns": 122072,
+      "network_finish_ns": 122072,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389264,
+      "gpu_port_model_tx_bytes": 428948,
+      "all_hop_model_tx_bytes": 2240344,
+      "timeout_decisions": 1,
+      "messages": 92,
+      "target_receive_ready_ns": 43570,
+      "target_ack_ns": 49594,
+      "target_payload_bytes": 6288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 144,
+      "source_payload_efficiency": 0.9996300711085536,
+      "fault_cost_vs_same_rto_clean_ns": 4,
+      "signed_gap_vs_r40_clean_ns": 4
+    },
+    {
+      "name": "r20-ack",
+      "rto_ns": 20000,
+      "fault": "ack",
+      "frontend_complete_ns": 122076,
+      "network_finish_ns": 122076,
+      "drain_after_frontend_ns": 0,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 389264,
+      "gpu_port_model_tx_bytes": 428996,
+      "all_hop_model_tx_bytes": 2240632,
+      "timeout_decisions": 1,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 49594,
+      "target_payload_bytes": 6288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 144,
+      "source_payload_efficiency": 0.9996300711085536,
+      "fault_cost_vs_same_rto_clean_ns": 8,
+      "signed_gap_vs_r40_clean_ns": 8
+    },
+    {
+      "name": "r12-clean",
+      "rto_ns": 12000,
+      "fault": "clean",
+      "frontend_complete_ns": 122438,
+      "network_finish_ns": 134438,
+      "drain_after_frontend_ns": 12000,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 626688,
+      "gpu_port_model_tx_bytes": 690864,
+      "all_hop_model_tx_bytes": 3811840,
+      "timeout_decisions": 60,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 17500,
+      "target_payload_bytes": 12288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 237568,
+      "source_payload_efficiency": 0.6209150326797386,
+      "fault_cost_vs_same_rto_clean_ns": 0,
+      "signed_gap_vs_r40_clean_ns": 370
+    },
+    {
+      "name": "r12-tail",
+      "rto_ns": 12000,
+      "fault": "tail",
+      "frontend_complete_ns": 122520,
+      "network_finish_ns": 134520,
+      "drain_after_frontend_ns": 12000,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 626832,
+      "gpu_port_model_tx_bytes": 691044,
+      "all_hop_model_tx_bytes": 3812920,
+      "timeout_decisions": 61,
+      "messages": 92,
+      "target_receive_ready_ns": 23476,
+      "target_ack_ns": 29500,
+      "target_payload_bytes": 12432,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 237712,
+      "source_payload_efficiency": 0.6207723919646732,
+      "fault_cost_vs_same_rto_clean_ns": 82,
+      "signed_gap_vs_r40_clean_ns": 452
+    },
+    {
+      "name": "r12-ack",
+      "rto_ns": 12000,
+      "fault": "ack",
+      "frontend_complete_ns": 122520,
+      "network_finish_ns": 134520,
+      "drain_after_frontend_ns": 12000,
+      "logical_payload_bytes": 389120,
+      "actual_source_payload_bytes": 626688,
+      "gpu_port_model_tx_bytes": 690864,
+      "all_hop_model_tx_bytes": 3811840,
+      "timeout_decisions": 60,
+      "messages": 92,
+      "target_receive_ready_ns": 11476,
+      "target_ack_ns": 28725,
+      "target_payload_bytes": 12288,
+      "target_logical_bytes": 6144,
+      "repeated_source_payload_bytes": 237568,
+      "source_payload_efficiency": 0.6209150326797386,
+      "fault_cost_vs_same_rto_clean_ns": 82,
+      "signed_gap_vs_r40_clean_ns": 452
+    }
+  ],
+  "comparisons": [
+    {
+      "candidate": "r20-clean",
+      "baseline": "r40-clean",
+      "frontend_saved_ns": 0,
+      "frontend_saved_fraction": 0.0,
+      "source_payload_change_bytes": 0,
+      "network_finish_saved_ns": 0
+    },
+    {
+      "candidate": "r20-middle",
+      "baseline": "r40-middle",
+      "frontend_saved_ns": 0,
+      "frontend_saved_fraction": 0.0,
+      "source_payload_change_bytes": 0,
+      "network_finish_saved_ns": 0
+    },
+    {
+      "candidate": "r20-tail",
+      "baseline": "r40-tail",
+      "frontend_saved_ns": 12036,
+      "frontend_saved_fraction": 0.0897485608613953,
+      "source_payload_change_bytes": 0,
+      "network_finish_saved_ns": 12036
+    },
+    {
+      "candidate": "r20-ack",
+      "baseline": "r40-ack",
+      "frontend_saved_ns": 9029,
+      "frontend_saved_fraction": 0.06886846420807749,
+      "source_payload_change_bytes": 0,
+      "network_finish_saved_ns": 9029
+    },
+    {
+      "candidate": "r12-clean",
+      "baseline": "r40-clean",
+      "frontend_saved_ns": -370,
+      "frontend_saved_fraction": -0.0030310974211095456,
+      "source_payload_change_bytes": 237568,
+      "network_finish_saved_ns": -12370
+    },
+    {
+      "candidate": "r12-tail",
+      "baseline": "r40-tail",
+      "frontend_saved_ns": 11588,
+      "frontend_saved_fraction": 0.08640796969606586,
+      "source_payload_change_bytes": 237568,
+      "network_finish_saved_ns": -412
+    },
+    {
+      "candidate": "r12-ack",
+      "baseline": "r40-ack",
+      "frontend_saved_ns": 8585,
+      "frontend_saved_fraction": 0.06548186568018001,
+      "source_payload_change_bytes": 237424,
+      "network_finish_saved_ns": -3415
+    }
+  ],
+  "scope": {
+    "fixed_tasks": true,
+    "graph_hashes_checked": 52,
+    "independent_requests": 0,
+    "synthetic_routes": true,
+    "modern_GIN": false,
+    "gpu_execution": false,
+    "hardware_calibrated": false,
+    "random_loss_probability_estimated": false,
+    "parameter_tuning_is_new_algorithm": false,
+    "loss_free_gap_is_universal_lower_bound": false
+  },
+  "verification": {
+    "packet_source_message_checks": 312,
+    "rejected_tampering": [
+      "inflated_source_payload",
+      "premature_timeout",
+      "corrupted_packet_payload"
+    ],
+    "timer_source": "source ACK progress, actual event deadlines; no receiver truth"
+  },
+  "evidence": {
+    "native-clean": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            17500,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 0,
+        "target_drop_events": []
+      },
+      "timers": {
+        "available": false,
+        "timeout_decisions": 0
+      },
+      "target_timer_events": [],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "native-middle": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            17403,
+            3000,
+            1000
+          ],
+          [
+            17486,
+            4000,
+            1000
+          ],
+          [
+            17569,
+            5000,
+            1000
+          ],
+          [
+            17652,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17403,
+            253,
+            3000
+          ],
+          [
+            29925,
+            252,
+            4000
+          ],
+          [
+            30008,
+            252,
+            5000
+          ],
+          [
+            30091,
+            252,
+            6000
+          ],
+          [
+            30105,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 3144,
+        "target_drop_events": [
+          {
+            "time_ns": 11296,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 48,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 3000,
+            "model_bytes": 1036,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 1000
+          }
+        ]
+      },
+      "timers": {
+        "available": false,
+        "timeout_decisions": 0
+      },
+      "target_timer_events": [],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r40-clean": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            17500,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 0,
+        "target_drop_events": []
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 0,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r40-middle": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            17403,
+            3000,
+            1000
+          ],
+          [
+            17486,
+            4000,
+            1000
+          ],
+          [
+            17569,
+            5000,
+            1000
+          ],
+          [
+            17652,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17403,
+            253,
+            3000
+          ],
+          [
+            29925,
+            252,
+            4000
+          ],
+          [
+            30008,
+            252,
+            5000
+          ],
+          [
+            30091,
+            252,
+            6000
+          ],
+          [
+            30105,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 3144,
+        "target_drop_events": [
+          {
+            "time_ns": 11296,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 48,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 3000,
+            "model_bytes": 1036,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 1000
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 0,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17403,
+          6,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          29925,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          69925
+        ],
+        [
+          30008,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          70008
+        ],
+        [
+          30091,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          70091
+        ],
+        [
+          30105,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r40-tail": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            57486,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            69660,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 144,
+        "target_drop_events": [
+          {
+            "time_ns": 11476,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 66,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 6000,
+            "model_bytes": 180,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 144
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 1,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          69660,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r40-ack": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            57486,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            69660,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 144,
+        "target_drop_events": [
+          {
+            "time_ns": 17500,
+            "node": 0,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 121,
+            "message_id": 1,
+            "ip_protocol": 252,
+            "sequence": 6144,
+            "model_bytes": 48,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 1,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          40000,
+          44203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          40000,
+          56725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          40000,
+          56974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          40000,
+          57230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          40000,
+          57320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          40000,
+          57403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          40000,
+          57486
+        ],
+        [
+          57486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          80000,
+          137486
+        ],
+        [
+          69660,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          40000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r20-clean": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            17500,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 0,
+        "target_drop_events": []
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 0,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          20000,
+          24203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          20000,
+          36725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          20000,
+          36974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          20000,
+          37230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          20000,
+          37320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          20000,
+          37403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          20000,
+          37486
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          20000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r20-middle": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            17403,
+            3000,
+            1000
+          ],
+          [
+            17486,
+            4000,
+            1000
+          ],
+          [
+            17569,
+            5000,
+            1000
+          ],
+          [
+            17652,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17403,
+            253,
+            3000
+          ],
+          [
+            29925,
+            252,
+            4000
+          ],
+          [
+            30008,
+            252,
+            5000
+          ],
+          [
+            30091,
+            252,
+            6000
+          ],
+          [
+            30105,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 3144,
+        "target_drop_events": [
+          {
+            "time_ns": 11296,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 48,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 3000,
+            "model_bytes": 1036,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 1000
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 0,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          20000,
+          24203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          20000,
+          36725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          20000,
+          36974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          20000,
+          37230
+        ],
+        [
+          17403,
+          6,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          20000,
+          37230
+        ],
+        [
+          29925,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          20000,
+          49925
+        ],
+        [
+          30008,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          20000,
+          50008
+        ],
+        [
+          30091,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          20000,
+          50091
+        ],
+        [
+          30105,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          20000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r20-tail": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            37486,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            49594,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 144,
+        "target_drop_events": [
+          {
+            "time_ns": 11476,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 66,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 6000,
+            "model_bytes": 180,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 144
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 1,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          20000,
+          24203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          20000,
+          36725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          20000,
+          36974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          20000,
+          37230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          20000,
+          37320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          20000,
+          37403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          20000,
+          37486
+        ],
+        [
+          37486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          40000,
+          77486
+        ],
+        [
+          49594,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          20000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r20-ack": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            37486,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            49594,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 144,
+        "target_drop_events": [
+          {
+            "time_ns": 17500,
+            "node": 0,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 121,
+            "message_id": 1,
+            "ip_protocol": 252,
+            "sequence": 6144,
+            "model_bytes": 48,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 1,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          20000,
+          24203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          20000,
+          36725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          20000,
+          36974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          20000,
+          37230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          20000,
+          37320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          20000,
+          37403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          20000,
+          37486
+        ],
+        [
+          37486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          40000,
+          77486
+        ],
+        [
+          49594,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          20000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r12-clean": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            16203,
+            0,
+            1000
+          ],
+          [
+            16286,
+            1000,
+            1000
+          ],
+          [
+            16369,
+            2000,
+            1000
+          ],
+          [
+            16452,
+            3000,
+            1000
+          ],
+          [
+            16535,
+            4000,
+            1000
+          ],
+          [
+            16618,
+            5000,
+            1000
+          ],
+          [
+            16701,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            17500,
+            252,
+            6144
+          ],
+          [
+            28725,
+            252,
+            6144
+          ],
+          [
+            29064,
+            252,
+            6144
+          ],
+          [
+            29237,
+            252,
+            6144
+          ],
+          [
+            29320,
+            252,
+            6144
+          ],
+          [
+            29403,
+            252,
+            6144
+          ],
+          [
+            29486,
+            252,
+            6144
+          ],
+          [
+            29500,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 6144,
+        "target_drop_events": []
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 60,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          12000,
+          16203
+        ],
+        [
+          16203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          1,
+          24000,
+          40203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          12000,
+          28725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          12000,
+          28974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          12000,
+          29230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          12000,
+          29320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          12000,
+          29403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          17500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          12000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r12-tail": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            16203,
+            0,
+            1000
+          ],
+          [
+            16286,
+            1000,
+            1000
+          ],
+          [
+            16369,
+            2000,
+            1000
+          ],
+          [
+            16452,
+            3000,
+            1000
+          ],
+          [
+            16535,
+            4000,
+            1000
+          ],
+          [
+            16618,
+            5000,
+            1000
+          ],
+          [
+            16701,
+            6000,
+            144
+          ],
+          [
+            29486,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            28725,
+            252,
+            6000
+          ],
+          [
+            29064,
+            252,
+            6000
+          ],
+          [
+            29237,
+            252,
+            6000
+          ],
+          [
+            29320,
+            252,
+            6000
+          ],
+          [
+            29403,
+            252,
+            6000
+          ],
+          [
+            29486,
+            252,
+            6000
+          ],
+          [
+            29500,
+            252,
+            6144
+          ],
+          [
+            41594,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 6288,
+        "target_drop_events": [
+          {
+            "time_ns": 11476,
+            "node": 4,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 66,
+            "message_id": 1,
+            "ip_protocol": 17,
+            "sequence": 6000,
+            "model_bytes": 180,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 144
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 61,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          12000,
+          16203
+        ],
+        [
+          16203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          1,
+          24000,
+          40203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          12000,
+          28725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          12000,
+          28974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          12000,
+          29230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          12000,
+          29320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          12000,
+          29403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          28725,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29064,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29237,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29320,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29403,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29486,
+          6,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          29486,
+          2,
+          0,
+          1,
+          6000,
+          6144,
+          1,
+          24000,
+          53486
+        ],
+        [
+          29500,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          12000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    },
+    "r12-ack": {
+      "packets": {
+        "source_messages_checked": 24,
+        "target_source_tx": [
+          [
+            4203,
+            0,
+            1000
+          ],
+          [
+            4369,
+            1000,
+            1000
+          ],
+          [
+            4459,
+            2000,
+            1000
+          ],
+          [
+            4542,
+            3000,
+            1000
+          ],
+          [
+            4625,
+            4000,
+            1000
+          ],
+          [
+            4708,
+            5000,
+            1000
+          ],
+          [
+            4791,
+            6000,
+            144
+          ],
+          [
+            16203,
+            0,
+            1000
+          ],
+          [
+            16286,
+            1000,
+            1000
+          ],
+          [
+            16369,
+            2000,
+            1000
+          ],
+          [
+            16452,
+            3000,
+            1000
+          ],
+          [
+            16535,
+            4000,
+            1000
+          ],
+          [
+            16618,
+            5000,
+            1000
+          ],
+          [
+            16701,
+            6000,
+            144
+          ]
+        ],
+        "target_received_feedback": [
+          [
+            16725,
+            252,
+            1000
+          ],
+          [
+            16974,
+            252,
+            2000
+          ],
+          [
+            17230,
+            252,
+            3000
+          ],
+          [
+            17320,
+            252,
+            4000
+          ],
+          [
+            17403,
+            252,
+            5000
+          ],
+          [
+            17486,
+            252,
+            6000
+          ],
+          [
+            28725,
+            252,
+            6144
+          ],
+          [
+            29064,
+            252,
+            6144
+          ],
+          [
+            29237,
+            252,
+            6144
+          ],
+          [
+            29320,
+            252,
+            6144
+          ],
+          [
+            29403,
+            252,
+            6144
+          ],
+          [
+            29486,
+            252,
+            6144
+          ],
+          [
+            29500,
+            252,
+            6144
+          ]
+        ],
+        "target_repeated_payload_bytes": 6144,
+        "target_drop_events": [
+          {
+            "time_ns": 17500,
+            "node": 0,
+            "port": 1,
+            "event": 2,
+            "packet_uid": 121,
+            "message_id": 1,
+            "ip_protocol": 252,
+            "sequence": 6144,
+            "model_bytes": 48,
+            "ecn": 0,
+            "egress_queue_bytes": 0,
+            "data_payload_bytes": 0
+          }
+        ]
+      },
+      "timers": {
+        "available": true,
+        "timeout_decisions": 60,
+        "source_states": 92
+      },
+      "target_timer_events": [
+        [
+          4203,
+          0,
+          0,
+          1,
+          0,
+          1000,
+          0,
+          12000,
+          16203
+        ],
+        [
+          16203,
+          2,
+          0,
+          1,
+          0,
+          6144,
+          1,
+          24000,
+          40203
+        ],
+        [
+          16725,
+          1,
+          0,
+          1,
+          1000,
+          6144,
+          0,
+          12000,
+          28725
+        ],
+        [
+          16974,
+          1,
+          0,
+          1,
+          2000,
+          6144,
+          0,
+          12000,
+          28974
+        ],
+        [
+          17230,
+          1,
+          0,
+          1,
+          3000,
+          6144,
+          0,
+          12000,
+          29230
+        ],
+        [
+          17320,
+          1,
+          0,
+          1,
+          4000,
+          6144,
+          0,
+          12000,
+          29320
+        ],
+        [
+          17403,
+          1,
+          0,
+          1,
+          5000,
+          6144,
+          0,
+          12000,
+          29403
+        ],
+        [
+          17486,
+          1,
+          0,
+          1,
+          6000,
+          6144,
+          0,
+          12000,
+          29486
+        ],
+        [
+          28725,
+          3,
+          0,
+          1,
+          6144,
+          6144,
+          0,
+          12000,
+          -1
+        ]
+      ],
+      "target_first_feedback_after_first_tx_ns": 12522
+    }
+  }
+}

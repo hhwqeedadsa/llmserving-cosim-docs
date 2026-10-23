@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "archive_members_checked": 227,
+  "uncompressed_bytes": 7058302,
+  "archive_bytes": 675854,
+  "archive_sha256": "65fa4cc862e77fe8c0ee63eef6e2af974278d17bc6c8f8afa8fbc9fc68996b81",
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/dev/shm/moe-loss-recovery-cost-20261023/recovery/restored/source/experiments/loss_recovery_cost/analyze.py",
+    "--input",
+    "/dev/shm/moe-loss-recovery-cost-20261023/recovery/restored/input",
+    "--output",
+    "/dev/shm/moe-loss-recovery-cost-20261023/recovery/analysis"
+  ],
+  "cwd": "/dev/shm/moe-loss-recovery-cost-20261023/recovery/empty-cwd",
+  "exit_code": 0,
+  "outputs_equal": {
+    "summary.json": true,
+    "results.md": true,
+    "report.html": true
+  },
+  "wall_seconds": 0.8401378002017736,
+  "peak_child_rss_kib": 32000,
+  "task_tree_bytes": 23251933,
+  "network_rerun": false,
+  "gpu_executed": false,
+  "storage": "tmpfs, volatile; no persistent backup",
+  "archive_scope": "offline packet/timer analysis; no runtime binaries, libraries or Python packages"
+}

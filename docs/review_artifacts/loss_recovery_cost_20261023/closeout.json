@@ -1,0 +1,60 @@
+{
+  "state": "stage_completed; full_goal_active",
+  "simulations": 13,
+  "shared_graphs_checked": 52,
+  "cpu_driver_wall_seconds": 22.76745158061385,
+  "service_monitor_wall_seconds": 17.73658019118011,
+  "max_sampled_service_process_tree_rss_bytes": 460582912,
+  "service_monitors_completed_without_live_children": true,
+  "build_source_identities_checked": 9,
+  "runtime_libraries_unchanged": 8,
+  "native_middle_controls_equal": true,
+  "analyses": [
+    {
+      "command": [
+        "timeout",
+        "60s",
+        "python3",
+        "-B",
+        "experiments/loss_recovery_cost/analyze.py",
+        "--input",
+        "/dev/shm/moe-loss-recovery-cost-20261023",
+        "--output",
+        "/dev/shm/moe-loss-recovery-cost-20261023/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": "initial independent check"
+    },
+    {
+      "command": [
+        "timeout",
+        "60s",
+        "python3",
+        "-B",
+        "experiments/loss_recovery_cost/analyze.py",
+        "--input",
+        "/dev/shm/moe-loss-recovery-cost-20261023",
+        "--output",
+        "/dev/shm/moe-loss-recovery-cost-20261023/analysis-final"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reason": "added packet/feedback matching, packet tamper rejection and generated numeric prose"
+    }
+  ],
+  "source_packet_messages_checked": 312,
+  "tamper_rejections": 3,
+  "reproduction": "/dev/shm/moe-loss-recovery-cost-20261023/recovery/reproduction.json",
+  "run_tree_bytes": 23252971,
+  "cumulative_budget_bytes": 201326592,
+  "network_repeated_after_analysis": false,
+  "hardware_calibrated": false,
+  "pushed": false,
+  "persistent_backup": false,
+  "residual_requirements": [
+    "feedback-delay/concurrency generalization",
+    "persistent-QP loss/replay semantics",
+    "validated improvement beyond classical timer configuration"
+  ]
+}

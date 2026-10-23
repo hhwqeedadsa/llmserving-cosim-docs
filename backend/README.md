@@ -286,3 +286,7 @@ CANN/原生 `layer-fixture/3` 可附加 `endpoint_prepare`：`schema_version="mo
 ## 有限原始层段
 
 `model-segment-plan/1` 复用完整模型成本与 A3 资源图，只执行声明的连续原始 MoE 块，保留原层号。C++ 从完整模型、成本、原始子层输入与 `segment` 初态独立重建，拒绝范围或上下文不一致。`service-deployment/6` 固定该范围，协议提交不能中途改变。布局、事件和容量边界见[输出数据](../docs/record_storage.md)及[公开小例](../examples/a3_segment/README.md)。A3 STORE 的局部与分类到达时刻取自原生请求形成及真实目标交付回调；这些被动字段不调度事件、不改变包或路径。
+
+## 原生事务在线会话
+
+`rdma/transaction_session.cc`单独链接原生Fabric/RemoteTransactions，通过有界DECIDE/COMMIT逐事件反馈后追加工作。`transaction_session_validation.hh`只校验声明字段、范围和因果关系，实际字节与lease检查留在真实准入/发布阶段；不会为验证未来节点读取当前输出。`OperationProgress()`只导出实际事务状态，不包含远端窗口真值。会话物理排空由PersistentStreams检查，显式Close之后再验证Fabric资源排空；现代provider语义和校准不由此实现。公开接口见[会话使用](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。

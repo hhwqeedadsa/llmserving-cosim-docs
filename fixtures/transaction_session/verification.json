@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "all_at_once_original_fields_equal": true,
+  "all_at_once_events": 48,
+  "online_events": 48,
+  "online_endpoint_frames": 8,
+  "actual_return_driven_conditions": [
+    {
+      "initial_value": 7,
+      "actual_returned_value": 7,
+      "derived_put_value": 107,
+      "events": 11,
+      "qp_creations": 1,
+      "finish_ns": 24140
+    },
+    {
+      "initial_value": 19,
+      "actual_returned_value": 19,
+      "derived_put_value": 119,
+      "events": 11,
+      "qp_creations": 1,
+      "finish_ns": 24140
+    }
+  ],
+  "native_preflight_failures": [
+    "batch-invalid",
+    "wrong-time",
+    "wrong-sequence",
+    "early-finish",
+    "eof",
+    "bool-value",
+    "duplicate-id",
+    "future-dependency",
+    "over-budget",
+    "idle-empty",
+    "oversized"
+  ],
+  "cutoff_actual_prefix_verified": true,
+  "future_work_not_preloaded": true,
+  "native_shared_clock": true,
+  "deliberate_host_delay_did_not_change_original_times": true,
+  "modern_deepep_connected": false,
+  "hardware_calibrated": false,
+  "public_commands": 3,
+  "wall_seconds": 9.451321678236127,
+  "backend_sha256": "b5077dd257dcb4714c74c589a2592ba2f44ab724ee238b9352abca8951d6acbe",
+  "reference_sha256": "56381f62a0e91017590f8758c646142311dae46d71e98f5f6ab62acd8d2c8e55"
+}

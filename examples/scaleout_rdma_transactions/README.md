@@ -171,3 +171,46 @@ MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连�
 预算沿用原生协议仿真上限；宿主每例≤60秒、RSS1GiB、地址2GiB、输出64MiB、卷预留8GiB。至多64条载体工作（32请求加32回复），源包观测≤200,000项，捕获有效载荷≤2MiB。失败保留日志，不抬限重跑。输入JSON≤4MiB，功能实验不调用旧软件准入、恢复、故障、生命周期采集或机内bypass。
 
 来源、独立字节核算、分包、并发、重复输入和边界见[验收与语义限制](../../fixtures/remote_transactions/README.md)。下一项必要能力是现代buffer/信号窗口与事件核心的在线映射，以及有根据的provider报文与可见性模型；本例不能直接接上现代计划就宣称已获得可信性能基线。
+
+## 在线追加工作与实际回调
+
+`rdma-transaction-session`让前端根据本次实际接收、ACK、原子回复和本地完成继续提交事务。它使用同一原生网络时钟与持续存在的QP；前端计算/等待所花的宿主时间不计入仿真时钟。MRT1规则和v4范围保持，不是现代GIN、GPU可见性或硬件校准。
+
+默认前端读取普通v4程序，但完整程序只保留在Python侧；后端启动文件`initial.json`的operations为空。只有`after`中的真实事件全部发生后，前端才递交对应节点。节点自身的`local_wait`、队列前缀和资源准入继续由原生后端检查。
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-session \
+  --topology /ABS/TOPOLOGY_DIR --protocol examples/scaleout_rdma/rdma.json \
+  --config examples/scaleout_rdma_transactions/session-program.json \
+  --backend /ABS/ns3.42-moe-rdma-transaction-session --output /dev/shm/NEW_SESSION
+```
+
+后端由`rdma-build`的`transaction_session`字段返回，使用方式与已有probe相同。所有产物目录必须新建，tmpfs预留8GiB；公开命令限制60秒、RSS1GiB/地址2GiB、64MiB产物，仿真默认5ms、结果16MiB，不自动扩限。
+
+需要根据真实返回值构造后继时，使用`moe_ub_cosim.transaction_session.NativeTransactionSession`。`receive()`返回当前DECIDE（或成功结束时的None），`commit(nodes, finish=False)`只能回应这一决策。初始化传v4对象且operations为空；每次提交保留历史ID及依赖，累积32远端/16本地、8连接/16窗口，不能复用ID。调用者不得发送完成通知或未来就绪时刻。自定义驱动必须整体放在公开`host_probe`下；客户端另有60秒宿主截止，异常关闭仅回收其自己启动的子进程。
+
+可复制的[驱动示例](session_driver.py)读取[两节点程序](session-program.json)，先发原子加3，取得实际旧值后再生成“旧值+100”的小端写数据。把窗口初值从7改成19，第二次实际写入会从107变成119，无需修改后端或预先填结果：
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
+  --output-dir /dev/shm/NEW_SESSION_MONITOR --wall-seconds 60 \
+  --rss-bytes 1073741824 --address-bytes 2147483648 --artifact-bytes 67108864 \
+  --artifact-root /dev/shm/NEW_SESSION --min-free-bytes 8589934592 -- \
+  python3 examples/scaleout_rdma_transactions/session_driver.py \
+  --topology /ABS/TOPOLOGY_DIR --protocol examples/scaleout_rdma/rdma.json \
+  --config examples/scaleout_rdma_transactions/session-program.json \
+  --backend /ABS/ns3.42-moe-rdma-transaction-session --output /dev/shm/NEW_SESSION
+```
+
+`native.stdout.log`与`control.jsonl`逐完整行保存；`native-command.json`登记原生命令、cwd和输入hash。最终result增加`session`的注册时刻、实际事件及决策数；包、内存与v4本地记录仍按原格式保存。命令最多1MiB，256次决策；整体命令的字段/范围/依赖校验失败不会执行同批有效前部，运行期内存冲突则保留已发生的实际部分状态，不回滚网络。
+
+| 回调 | 功能含义 |
+|---|---|
+| submitted / published | 应用依赖满足后提交 / 已有队列信用且发布实际请求 |
+| applied | 目标端从真实请求字节执行put或原子；不等于GPU visible |
+| request_acked | 原生请求字节累计ACK到达源 |
+| response | 实际原子旧值回复到达源；附returned_value |
+| completed | MRT1本地完成（请求ACK与必要回复、前序完成），或本地节点真实完成 |
+| local_admitted / local_started | 本地条件消费并入队 / 占用该GPU的声明处理槽 |
+
+会话的`drained=true`表示当前已注册工作、本地槽与物理传输均空闲，QP仍保留；前端可以继续提交下一轮。只有显式`finish=true`才关闭持久连接，此后最终Fabric的`drained`还验证QP资源已清空。EOF、错误决策或实际截止不是成功；运行期错误保留partial result，宿主强制终止可能只留下已刷出的前缀和监控记录。self-peer仍拒绝，不能补成零成本或虚构外部路径。现代事件核心尚未接入，验收边界见[在线会话验收](../../fixtures/transaction_session/README.md)。

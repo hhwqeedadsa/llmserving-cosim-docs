@@ -320,19 +320,23 @@ void RemoteTransactions::Close() {
   for(auto& item:connections_)item.second.queue.Close();
   transport_.Close();
 }
-Json RemoteTransactions::Report() const {
-  Json out={{"schema_version","moe-rdma-transaction-result/1"},{"operations",Json::array()},{"windows",Json::array()},
-    {"connections",Json::array()},{"duplicate_requests",duplicates_},{"gpu_visibility_modeled",false},
-    {"hardware_calibrated",false},{"roce_wire_equivalent",false},
-    {"scope","MRT1 functional addressed put/fetch-add with actual native byte request/response transport; not a GIN timing baseline"}};
+Json RemoteTransactions::OperationProgress() const {
+  Json rows=Json::array();
   for(const auto& item:operations_) {
     const auto& op=item.second;
     Json value={{"id",op.id},{"connection",op.connection},{"sequence",op.request.sequence},{"ticket",op.ticket},
       {"verb",op.request.verb==MemoryFrame::Put?"put":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
       {"applied_ns",op.applied},{"request_acked_ns",op.request_ack},{"response_ns",op.response},{"completed_ns",op.completed}};
     if(op.request.verb==MemoryFrame::FetchAdd && op.response>=0)value["returned_value"]=op.returned_value;
-    out["operations"].push_back(value);
+    rows.push_back(value);
   }
+  return rows;
+}
+Json RemoteTransactions::Report() const {
+  Json out={{"schema_version","moe-rdma-transaction-result/1"},{"operations",OperationProgress()},{"windows",Json::array()},
+    {"connections",Json::array()},{"duplicate_requests",duplicates_},{"gpu_visibility_modeled",false},
+    {"hardware_calibrated",false},{"roce_wire_equivalent",false},
+    {"scope","MRT1 functional addressed put/fetch-add with actual native byte request/response transport; not a GIN timing baseline"}};
   for(const auto& w:memory_.Windows())out["windows"].push_back({{"owner",w.owner},{"key",w.key},{"address",w.address},
     {"allow_atomic",w.atomic},{"hex",MemoryHex(w.bytes)}});
   for(const auto& item:connections_) {

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+原生`rdma-transaction-session`与Python`NativeTransactionSession`连接实际事务回调和动态前端提交：只在当前ns-3时刻交换命令，工作注册、应用依赖满足、发布、目标应用、请求ACK、原子回复和本地完成分别记录。物理空闲期间保留QP，显式结束才关闭资源。默认因果前端把完整程序留在Python侧，未来节点不预载后端；现代事件核心尚未接上此接口，self-peer和GPU可见性仍不支持。见[在线会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
+
 transactions/4把本地显式copy接到实际窗口：入队保护源/目标，实际开始读源，完成事件写目标并释放，再解锁后继put。队列、源读、独占输出、事务和物理网络共同参与排空；错误不改成隐式等待，截止不补输出。见[本地输入输出](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。该能力只适用于声明copy的节点，不是现代事件/provider在线集成。
 
 transactions/3在同一持久网络中串接“实际接收窗口→后续put”。源范围从提交到事务完成期间保留读使用记录，发布时才读取当前内存；普通写/原子/reset不能覆盖活跃范围。`Drained`要求没有残留读记录。该路径没有接入现代Python事件核心，本地处理阶段也尚未保护数值输入，见[源窗口](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)。

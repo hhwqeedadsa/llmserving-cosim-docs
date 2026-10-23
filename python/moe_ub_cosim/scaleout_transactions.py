@@ -33,7 +33,7 @@ def _local_waits(waits, owner, registered):
         require(item not in locations, 'repeated local wait location'); locations.add(item)
 
 
-def validate(topology, protocol, config):
+def validate(topology, protocol, config, *, allow_no_remote=False):
     local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4')
     memory_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4'
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
@@ -87,7 +87,7 @@ def validate(topology, protocol, config):
                     prior['address']+n <= w['address'], 'overlapping remote windows')
         registered[key] = w, length
     operations = config['operations']
-    require(isinstance(operations, list) and 1 <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
+    require(isinstance(operations, list) and (0 if allow_no_remote else 1) <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
     kinds, ancestors, accesses = {}, {}, []
     remote_count = local_count = 0
     for op in operations:
@@ -191,7 +191,7 @@ def validate(topology, protocol, config):
                 require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in parents,
                         'overlapping non-atomic memory writes require explicit causal order')
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
-    require(remote_count > 0, 'transaction probe requires remote work')
+    require(allow_no_remote or remote_count > 0, 'transaction probe requires remote work')
 
 
 def probe(topology, protocol, config, backend, output):

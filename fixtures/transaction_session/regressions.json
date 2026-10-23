@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "commands": 37,
+  "public_commands": 29,
+  "direct_native_commands": 8,
+  "wall_seconds": 20.064184149727225,
+  "backend_sha256": "5f2a092dc7a0e3e128a1acbaa4bfbfb7481d0d3bfb947dd8b42d27522e39a626",
+  "reference_sha256": "56381f62a0e91017590f8758c646142311dae46d71e98f5f6ab62acd8d2c8e55",
+  "transaction_input_unit_tests": 15,
+  "rdma_input_unit_tests": 7,
+  "fixed_dependencies_checked": 13,
+  "preserved_failures": [
+    {
+      "stage": "build-transaction_session",
+      "cause": "ambiguous nlohmann JSON integral conversion in set.insert; fixed with explicit get<uint64_t>",
+      "limits_unchanged": true
+    },
+    {
+      "stage": "build-resume-invalid-source.py",
+      "cause": "temporary build-resume script string replacement modified the function declaration; SyntaxError before starting a child; corrected script retained"
+    },
+    {
+      "stage": "accept/all-at-once",
+      "cause": "pre-close Fabric::Drained requires QP deletion, while persistent idle QPs must survive; fixed by using transport physical drain, then requiring Fabric drain after explicit Close",
+      "limits_unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "checkpoint_members_checked": 930,
+  "new_source_root": true,
+  "new_cwd": true,
+  "original_parent_pythonpath_not_inherited": true,
+  "restored_native_libraries": true,
+  "public_commands": 3,
+  "fresh_native_functional_executions": 2,
+  "normalized_results": [
+    {
+      "name": "cli",
+      "result_equal_except_library_paths": true,
+      "library_basenames_identical": true,
+      "loaded_native_libraries": 8,
+      "independent_byte_memory_audit": {
+        "operations": 2,
+        "source_packets": 3,
+        "transported_payload_bytes": 120,
+        "finish_ns": 24140,
+        "final_atomic_value": 10
+      }
+    },
+    {
+      "name": "driver",
+      "result_equal_except_library_paths": true,
+      "library_basenames_identical": true,
+      "loaded_native_libraries": 8,
+      "independent_byte_memory_audit": {
+        "operations": 2,
+        "source_packets": 3,
+        "transported_payload_bytes": 120,
+        "finish_ns": 24140,
+        "final_atomic_value": 10
+      }
+    }
+  ],
+  "hardware_calibrated": false,
+  "modern_deepep_connected": false,
+  "host_system_libraries_still_required": true
+}

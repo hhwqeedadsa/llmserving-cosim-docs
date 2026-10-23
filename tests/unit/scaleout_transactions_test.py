@@ -20,6 +20,13 @@ class TransactionInputTests(unittest.TestCase):
         c = deepcopy(self.config); c['connections'][0]['queue_depth'] = 3
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
+    def test_empty_registration_does_not_relax_probe_or_range_checks(self):
+        c = deepcopy(self.config); c['operations'] = []
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        validate(self.topology, self.protocol, c, allow_no_remote=True)
+        c['windows'][0]['address'] = True
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c, allow_no_remote=True)
+
     def test_remote_authority_bounds_permissions(self):
         for key, value in [('key', 8), ('address', 4097), ('value', -1), ('value', True), ('value', 2**64)]:
             c = deepcopy(self.config); c['operations'][1][key] = value

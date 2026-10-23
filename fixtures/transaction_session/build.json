@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "steps": 7,
+  "old_runtime_unchanged": true,
+  "binaries": {
+    "ns3.42-moe-rdma-transaction-session": {
+      "path": "/dev/shm/moe-transaction-session-20261023/bin/ns3.42-moe-rdma-transaction-session",
+      "sha256": "b5077dd257dcb4714c74c589a2592ba2f44ab724ee238b9352abca8951d6acbe"
+    },
+    "ns3.42-moe-rdma-transaction-session-before-drain-fix": {
+      "path": "/dev/shm/moe-transaction-session-20261023/bin/ns3.42-moe-rdma-transaction-session-before-drain-fix",
+      "sha256": "babaf1f64f45f4e486698d446de04b9fbe986aaa7de9ebd28896aabc43242a60"
+    },
+    "ns3.42-moe-rdma-transaction-probe": {
+      "path": "/dev/shm/moe-transaction-session-20261023/bin/ns3.42-moe-rdma-transaction-probe",
+      "sha256": "5f2a092dc7a0e3e128a1acbaa4bfbfb7481d0d3bfb947dd8b42d27522e39a626"
+    }
+  }
+}

@@ -23,6 +23,8 @@ class RemoteTransactions {
   bool Drained() const;
   void Close();
   Json Report() const;
+  // Actual operation transitions only; no remote memory/payload truth.
+  Json OperationProgress() const;
   std::function<void()> changed;
  private:
   struct Operation {

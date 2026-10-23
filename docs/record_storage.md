@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+在线事务result新增`session`：registrations记录operation/time_ns/decision_id，events记录实际operation/event/time_ns及必要returned_value；decisions为已接受COMMIT数量，finished只在显式结束且全部排空后为true。所有ns来自同一原生时钟。DECIDE.drained表示当前工作与物理网络空闲而QP保留，不等同最终Fabric.drained的资源清空。controller日志control.jsonl分别记录native/frontend消息，完整窗口/包真值仅在最终报告，协议错误不转为完成事件。详见[在线字段](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
+
 transactions/4新增`local_memory_model/local_memory_events/active_local_memory_leases`；acquired/captured/committed/released记录本地输入/输出的实际保护和访问，与全部内存事件共用order/ns。source_events仍仅含远端put。本地截止保留未完成记录、已开始的源快照和旧输出，未开始者没有capture；pending当前条件不可读时附`local_wait_error`，详见[字段与失败](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。v1/v2/v3没有这些新增字段。
 
 transactions/3仅在`transactions`新增`source_model/source_events/active_source_leases`。source_events中的acquired/captured/released与target_events/local_events共用order和网络ns时钟；captured记录实际读取hex，未完成记录不补release。v3运行期异常保留`execution_error`及部分实际状态并退出1，输入错误不生成结果。字段范围见[源窗口输出](../examples/scaleout_rdma_transactions/README.md#将实际接收内容作为后续发送的数据)；v1/v2无这些新增字段。

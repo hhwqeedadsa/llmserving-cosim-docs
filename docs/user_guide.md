@@ -228,3 +228,7 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 `facts --run RUN --config FACTS.json --output DETAIL` 离线核对并导出指定 graph/rank/层的内部事实，输入必须是带有封存任务图的原始公共运行。配置、数量及空间上限见示例；超过范围或预算会失败。详细记录在 `DETAIL/truth/`，覆盖清单在 `DETAIL/facts.json`，资源日志在 `DETAIL/logs/resources/`。这些字段仅供核验与评价，不能作为只允许读 `observed/` 的分析输入。
 
 `segment freeze --from-run RUN --output SLICE [--storage copy|hardlink]` 保存完成的层段。`copy` 默认独立复制，`hardlink` 适合同一文件系统中不可修改的共享输入；选择前按产物大小预留磁盘。随后使用已有 `slice inspect`、`sample`、`replay`、`validate`。原 `slice create` 的完整首轮约束保持不变。层段回放只接受初态与范围完整声明的 `research-slice/3`；图内条件变化需要重新运行前端。
+
+## 逐事件追加原生事务
+
+需要前端根据本次真实网络完成继续递交工作时，使用`scaleout rdma-transaction-session`或公开`NativeTransactionSession`类。它沿用v4实际字节/本地copy模型，不是现代GIN端到端仿真；示例、资源预算及动态返回值驱动见[在线事务会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。

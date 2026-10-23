@@ -70,6 +70,9 @@ def parser():
     rt.add_argument('--config', type=Path, required=True)
     rt.add_argument('--backend', type=Path, required=True, help='transaction_probe executable from rdma-build')
     rt.add_argument('--output', type=Path, required=True, help='New bounded result directory')
+    session = sc.add_parser('rdma-transaction-session', help='Submit v4 work after actual native callbacks on one persistent network; not modern GIN/GPU timing')
+    for name in ('topology', 'protocol', 'config', 'backend', 'output'):
+        session.add_argument('--'+name, type=Path, required=True)
     rs = sc.add_parser('rdma-stream-probe', help='Execute persistent native byte writes; optional source_rate_capture or dcqcn_reference; not GIN/GPU visibility or hardware calibration')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
     rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN protocol, ACK interval 1, no legacy recovery/admission/fault options')
@@ -163,6 +166,9 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-transaction-probe':
                 from .scaleout_transactions import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'rdma-transaction-session':
+                from .transaction_session import run
+                value = run(args.topology, args.protocol, args.config, args.backend, args.output)
             elif args.scaleout_command == 'rdma-stream-probe':
                 from .scaleout_streams import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)

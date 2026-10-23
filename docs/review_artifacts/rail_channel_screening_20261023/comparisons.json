@@ -1,0 +1,38 @@
+[
+  {
+    "upper_rate_bps": 100000000000,
+    "policy": "rotate",
+    "finish_reduction_ns": -1162,
+    "finish_reduction_fraction": -0.024038063715349608,
+    "port_service_reduction_ns": -1202,
+    "remaining_difference_ns": 40,
+    "service_fraction_of_observed_difference": 1.0344234079173837
+  },
+  {
+    "upper_rate_bps": 100000000000,
+    "policy": "local_lpt",
+    "finish_reduction_ns": 2344,
+    "finish_reduction_fraction": 0.048489863467107985,
+    "port_service_reduction_ns": 2344,
+    "remaining_difference_ns": 0,
+    "service_fraction_of_observed_difference": 1.0
+  },
+  {
+    "upper_rate_bps": 25000000000,
+    "policy": "rotate",
+    "finish_reduction_ns": -4808,
+    "finish_reduction_fraction": -0.030760962751596267,
+    "port_service_reduction_ns": -4808,
+    "remaining_difference_ns": 0,
+    "service_fraction_of_observed_difference": 1.0
+  },
+  {
+    "upper_rate_bps": 25000000000,
+    "policy": "local_lpt",
+    "finish_reduction_ns": 9391,
+    "finish_reduction_fraction": 0.06008240457575719,
+    "port_service_reduction_ns": 9391,
+    "remaining_difference_ns": 0,
+    "service_fraction_of_observed_difference": 1.0
+  }
+]

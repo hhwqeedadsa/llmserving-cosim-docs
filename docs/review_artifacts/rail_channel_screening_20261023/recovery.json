@@ -1,0 +1,49 @@
+{
+  "recovered": true,
+  "checked_checkpoint_members": 134,
+  "new_source_root": true,
+  "new_cwd": true,
+  "empty_parent_pythonpath": true,
+  "public_research_commands": 3,
+  "byte_identical_artifacts": [
+    {
+      "path": "plans/identity.json",
+      "sha256": "3425232b60d78b49e3fcedbd52894d72f5cb7fb9cdd38c0a0a3933ed9c4817cd"
+    },
+    {
+      "path": "plans/local_lpt.json",
+      "sha256": "2d6bfbef728b38708dbc6e68e6b06fea3d5df1a763cf56153ee7c81e8df43994"
+    },
+    {
+      "path": "plans/projection.json",
+      "sha256": "f4510f481192ded2d2221129b89624dfd38ca0ecec94663dd8a58c7ac157902f"
+    },
+    {
+      "path": "plans/rotate.json",
+      "sha256": "4994bfe88b31a8018103538b5a41ec27eac4231574e11a5911486f7486ec50a8"
+    },
+    {
+      "path": "analysis/comparisons.json",
+      "sha256": "24b00ff6b03c5e9c3ee780fde881014b9f7cddd6fb6b33e9493371145196949d"
+    },
+    {
+      "path": "analysis/conditions.json",
+      "sha256": "10ec7e8e2334f6364c97e62010df70111361f1f8451dbd3f04b100702c831b89"
+    },
+    {
+      "path": "analysis/ports.json",
+      "sha256": "d0f3271536181953b112765c03e75a70c3df4fabd6a1d1024b6ffe02f483dde8"
+    },
+    {
+      "path": "analysis/scope.json",
+      "sha256": "bf98d38ef299d82c5c53545c24feb1c4d6b538e8636122794594a1ee4156449f"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "f39a996ed654eb34851a38c9df94f6f3a1a9a5726d70408d7aa3b53b52326cd7"
+    }
+  ],
+  "network_reexecuted": false,
+  "native_binary_in_archive": false,
+  "scope": "offline replanning and reanalysis of the original six network records"
+}

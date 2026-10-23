@@ -1,0 +1,70 @@
+{
+  "verified": true,
+  "network_conditions": 6,
+  "source_packets": 10530,
+  "ack_packets": 10530,
+  "physical_transmissions": 99720,
+  "work_checked": 702,
+  "original_source_destination_tokens": 117,
+  "permutation_policies_verified": 3,
+  "ack_identity_scope": "endpoint/plane/sequence multiset and terminal arrival time candidates; no ACK QP id in public capture",
+  "cases": [
+    {
+      "condition": "100000000000-identity",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 48340,
+      "directed_port_service_ns": 35818,
+      "result_sha256": "a0364044dde9b0a22f546a9a7d9288eda18b25ec31a349d4b3ba85d5dfb7e3ff"
+    },
+    {
+      "condition": "100000000000-rotate",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 49502,
+      "directed_port_service_ns": 37020,
+      "result_sha256": "106daa3f23ad24fb6d3e7aa0d530d6b663578200daaca098a0f00b65b93526a2"
+    },
+    {
+      "condition": "100000000000-local_lpt",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 45996,
+      "directed_port_service_ns": 33474,
+      "result_sha256": "a2e47b2449f1c571373d7990944b1029d280a70c75525e5c3764189114830bfc"
+    },
+    {
+      "condition": "25000000000-identity",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 156302,
+      "directed_port_service_ns": 143032,
+      "result_sha256": "04f0270eadddf44112f9a8a3b63d004790c495a4c876bf3b5b68026485b05fa5"
+    },
+    {
+      "condition": "25000000000-rotate",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 161110,
+      "directed_port_service_ns": 147840,
+      "result_sha256": "c8b951f4d5aed45f4599e9b5cbe580c6c90cc14861110d024ed7a9c9b56ac92d"
+    },
+    {
+      "condition": "25000000000-local_lpt",
+      "checked_source_packets": 1755,
+      "checked_ack_packets": 1755,
+      "checked_work": 117,
+      "finish_ns": 146911,
+      "directed_port_service_ns": 133641,
+      "result_sha256": "2f50272a64616845072c7bcc86b777dd71f00fd8564d78c00a7fb29700db74e9"
+    }
+  ],
+  "modern_end_to_end": false,
+  "hardware_calibrated": false,
+  "new_algorithm_proven": false
+}

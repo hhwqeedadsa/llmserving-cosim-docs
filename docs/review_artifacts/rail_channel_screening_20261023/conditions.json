@@ -1,0 +1,314 @@
+[
+  {
+    "condition": "100000000000-identity",
+    "policy": "identity",
+    "upper_rate_bps": 100000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 76,
+    "last_accepted_ns": 42316,
+    "last_acked_ns": 48340,
+    "finish_ns": 48340,
+    "max_directed_port_service_ns": 35818,
+    "finish_minus_port_bound_ns": 12522,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 446636
+      }
+    ],
+    "maximum_source_tokens": 22,
+    "maximum_destination_tokens": 20,
+    "max_queue_bytes": 123164,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 1070,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  },
+  {
+    "condition": "100000000000-rotate",
+    "policy": "rotate",
+    "upper_rate_bps": 100000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 78,
+    "last_accepted_ns": 43478,
+    "last_acked_ns": 49502,
+    "finish_ns": 49502,
+    "max_directed_port_service_ns": 37020,
+    "finish_minus_port_bound_ns": 12482,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 461640
+      }
+    ],
+    "maximum_source_tokens": 23,
+    "maximum_destination_tokens": 22,
+    "max_queue_bytes": 112708,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 960,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "policy": "local_lpt",
+    "upper_rate_bps": 100000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 76,
+    "last_accepted_ns": 39972,
+    "last_acked_ns": 45996,
+    "finish_ns": 45996,
+    "max_directed_port_service_ns": 33474,
+    "finish_minus_port_bound_ns": 12522,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 417348
+      }
+    ],
+    "maximum_source_tokens": 21,
+    "maximum_destination_tokens": 19,
+    "max_queue_bytes": 99956,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 1110,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  },
+  {
+    "condition": "25000000000-identity",
+    "policy": "identity",
+    "upper_rate_bps": 25000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 76,
+    "last_accepted_ns": 150234,
+    "last_acked_ns": 156302,
+    "finish_ns": 156302,
+    "max_directed_port_service_ns": 143032,
+    "finish_minus_port_bound_ns": 13270,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 446636
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 446636
+      }
+    ],
+    "maximum_source_tokens": 22,
+    "maximum_destination_tokens": 20,
+    "max_queue_bytes": 353856,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 3950,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  },
+  {
+    "condition": "25000000000-rotate",
+    "policy": "rotate",
+    "upper_rate_bps": 25000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 78,
+    "last_accepted_ns": 155042,
+    "last_acked_ns": 161110,
+    "finish_ns": 161110,
+    "max_directed_port_service_ns": 147840,
+    "finish_minus_port_bound_ns": 13270,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 461640
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 461640
+      }
+    ],
+    "maximum_source_tokens": 23,
+    "maximum_destination_tokens": 22,
+    "max_queue_bytes": 365216,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 3990,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "policy": "local_lpt",
+    "upper_rate_bps": 25000000000,
+    "writes": 117,
+    "source_data_packets": 1755,
+    "source_payload_bytes": 1692288,
+    "qp_objects": 96,
+    "active_qps": 76,
+    "last_accepted_ns": 140843,
+    "last_acked_ns": 146911,
+    "finish_ns": 146911,
+    "max_directed_port_service_ns": 133641,
+    "finish_minus_port_bound_ns": 13270,
+    "bottleneck_ports": [
+      {
+        "node": 9,
+        "port": 3,
+        "peer": 10,
+        "tier": "tor_agg",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 10,
+        "port": 2,
+        "peer": 13,
+        "tier": "agg_core",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 12,
+        "port": 1,
+        "peer": 11,
+        "tier": "tor_agg",
+        "model_tx_bytes": 417348
+      },
+      {
+        "node": 13,
+        "port": 2,
+        "peer": 12,
+        "tier": "agg_core",
+        "model_tx_bytes": 417348
+      }
+    ],
+    "maximum_source_tokens": 21,
+    "maximum_destination_tokens": 19,
+    "max_queue_bytes": 327456,
+    "pfc_pause_events": 0,
+    "ecn_ce_port_observations": 3920,
+    "packet_capture_events": 59460,
+    "physical_drained": true
+  }
+]

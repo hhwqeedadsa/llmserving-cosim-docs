@@ -1,0 +1,3266 @@
+[
+  {
+    "condition": "100000000000-identity",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 233700,
+    "serialized_service_ns": 18750,
+    "frame_sizes": {
+      "48": 180,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 340888,
+    "serialized_service_ns": 27344,
+    "frame_sizes": {
+      "48": 225,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 270072,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 278712,
+    "serialized_service_ns": 22356,
+    "frame_sizes": {
+      "48": 180,
+      "500": 18,
+      "1036": 252
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 325884,
+    "serialized_service_ns": 26142,
+    "frame_sizes": {
+      "48": 225,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 218696,
+    "serialized_service_ns": 17548,
+    "frame_sizes": {
+      "48": 180,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 175844,
+    "serialized_service_ns": 14122,
+    "frame_sizes": {
+      "48": 225,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 75020,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 86540,
+    "serialized_service_ns": 6970,
+    "frame_sizes": {
+      "48": 240,
+      "500": 5,
+      "1036": 70
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 14400,
+    "model_tx_bytes": 179444,
+    "serialized_service_ns": 14422,
+    "frame_sizes": {
+      "48": 300,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 190848,
+    "serialized_service_ns": 15324,
+    "frame_sizes": {
+      "48": 225,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 12960,
+    "model_tx_bytes": 193008,
+    "serialized_service_ns": 15504,
+    "frame_sizes": {
+      "48": 270,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 27224,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 16946,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 27224,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 190128,
+    "serialized_service_ns": 15264,
+    "frame_sizes": {
+      "48": 210,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 3600,
+    "model_tx_bytes": 243664,
+    "serialized_service_ns": 19532,
+    "frame_sizes": {
+      "48": 75,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 16946,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 27224,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 16946,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 16946,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 27224,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 240900,
+    "serialized_service_ns": 19350,
+    "frame_sizes": {
+      "48": 330,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 240180,
+    "serialized_service_ns": 19290,
+    "frame_sizes": {
+      "48": 315,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 35818,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 20972,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 35818,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 232980,
+    "serialized_service_ns": 18690,
+    "frame_sizes": {
+      "48": 165,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 300080,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 308000,
+    "serialized_service_ns": 24700,
+    "frame_sizes": {
+      "48": 165,
+      "500": 20,
+      "1036": 280
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 20972,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 35818,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 20972,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 20972,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-identity",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 35818,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 232980,
+    "serialized_service_ns": 18690,
+    "frame_sizes": {
+      "48": 165,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 341608,
+    "serialized_service_ns": 27404,
+    "frame_sizes": {
+      "48": 240,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 248704,
+    "serialized_service_ns": 19952,
+    "frame_sizes": {
+      "48": 180,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 345092,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 355892,
+    "serialized_service_ns": 28546,
+    "frame_sizes": {
+      "48": 225,
+      "500": 23,
+      "1036": 322
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 188688,
+    "serialized_service_ns": 15144,
+    "frame_sizes": {
+      "48": 180,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 205852,
+    "serialized_service_ns": 16526,
+    "frame_sizes": {
+      "48": 225,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 90024,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 100104,
+    "serialized_service_ns": 8052,
+    "frame_sizes": {
+      "48": 210,
+      "500": 6,
+      "1036": 84
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 150040,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 165880,
+    "serialized_service_ns": 13340,
+    "frame_sizes": {
+      "48": 330,
+      "500": 10,
+      "1036": 140
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 175844,
+    "serialized_service_ns": 14122,
+    "frame_sizes": {
+      "48": 225,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 191568,
+    "serialized_service_ns": 15384,
+    "frame_sizes": {
+      "48": 240,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 26022,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 16886,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 26022,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 188688,
+    "serialized_service_ns": 15144,
+    "frame_sizes": {
+      "48": 180,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 4320,
+    "model_tx_bytes": 214376,
+    "serialized_service_ns": 17188,
+    "frame_sizes": {
+      "48": 90,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 16886,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 26022,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 16886,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 16886,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 26022,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 255904,
+    "serialized_service_ns": 20552,
+    "frame_sizes": {
+      "48": 330,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 16560,
+    "model_tx_bytes": 241620,
+    "serialized_service_ns": 19410,
+    "frame_sizes": {
+      "48": 345,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 37020,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 21032,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 37020,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 234420,
+    "serialized_service_ns": 18810,
+    "frame_sizes": {
+      "48": 195,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 7200,
+    "model_tx_bytes": 337288,
+    "serialized_service_ns": 27044,
+    "frame_sizes": {
+      "48": 150,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 21032,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 37020,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 21032,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 21032,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-rotate",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 37020,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 262988,
+    "serialized_service_ns": 21094,
+    "frame_sizes": {
+      "48": 165,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 300080,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 311600,
+    "serialized_service_ns": 25000,
+    "frame_sizes": {
+      "48": 240,
+      "500": 20,
+      "1036": 280
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 270072,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 278712,
+    "serialized_service_ns": 22356,
+    "frame_sizes": {
+      "48": 180,
+      "500": 18,
+      "1036": 252
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 325884,
+    "serialized_service_ns": 26142,
+    "frame_sizes": {
+      "48": 225,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 189408,
+    "serialized_service_ns": 15204,
+    "frame_sizes": {
+      "48": 195,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 205132,
+    "serialized_service_ns": 16466,
+    "frame_sizes": {
+      "48": 210,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 90024,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 102264,
+    "serialized_service_ns": 8232,
+    "frame_sizes": {
+      "48": 255,
+      "500": 6,
+      "1036": 84
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 150040,
+    "control_tx_bytes": 13680,
+    "model_tx_bytes": 163720,
+    "serialized_service_ns": 13160,
+    "frame_sizes": {
+      "48": 285,
+      "500": 10,
+      "1036": 140
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 177284,
+    "serialized_service_ns": 14242,
+    "frame_sizes": {
+      "48": 255,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 12960,
+    "model_tx_bytes": 193008,
+    "serialized_service_ns": 15504,
+    "frame_sizes": {
+      "48": 270,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 29568,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 15864,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 29568,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 203692,
+    "serialized_service_ns": 16346,
+    "frame_sizes": {
+      "48": 180,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 4320,
+    "model_tx_bytes": 259388,
+    "serialized_service_ns": 20794,
+    "frame_sizes": {
+      "48": 90,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 15864,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 29568,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 15864,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 15864,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 29568,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 14400,
+    "model_tx_bytes": 254464,
+    "serialized_service_ns": 20432,
+    "frame_sizes": {
+      "48": 300,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 240180,
+    "serialized_service_ns": 19290,
+    "frame_sizes": {
+      "48": 315,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 33474,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 22054,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 33474,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 219416,
+    "serialized_service_ns": 17608,
+    "frame_sizes": {
+      "48": 195,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 285076,
+    "control_tx_bytes": 7200,
+    "model_tx_bytes": 292276,
+    "serialized_service_ns": 23438,
+    "frame_sizes": {
+      "48": 150,
+      "500": 19,
+      "1036": 266
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 22054,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 33474,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 22054,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 22054,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 33474,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 233700,
+    "serialized_service_ns": 18750,
+    "frame_sizes": {
+      "48": 180,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 340888,
+    "serialized_service_ns": 27344,
+    "frame_sizes": {
+      "48": 225,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 270072,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 278712,
+    "serialized_service_ns": 22356,
+    "frame_sizes": {
+      "48": 180,
+      "500": 18,
+      "1036": 252
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 325884,
+    "serialized_service_ns": 26142,
+    "frame_sizes": {
+      "48": 225,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 218696,
+    "serialized_service_ns": 17548,
+    "frame_sizes": {
+      "48": 180,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 175844,
+    "serialized_service_ns": 14122,
+    "frame_sizes": {
+      "48": 225,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 75020,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 86540,
+    "serialized_service_ns": 6970,
+    "frame_sizes": {
+      "48": 240,
+      "500": 5,
+      "1036": 70
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 14400,
+    "model_tx_bytes": 179444,
+    "serialized_service_ns": 14422,
+    "frame_sizes": {
+      "48": 300,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 190848,
+    "serialized_service_ns": 15324,
+    "frame_sizes": {
+      "48": 225,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 12960,
+    "model_tx_bytes": 193008,
+    "serialized_service_ns": 15504,
+    "frame_sizes": {
+      "48": 270,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 108701,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 67454,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 108701,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 190128,
+    "serialized_service_ns": 15264,
+    "frame_sizes": {
+      "48": 210,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 3600,
+    "model_tx_bytes": 243664,
+    "serialized_service_ns": 19532,
+    "frame_sizes": {
+      "48": 75,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 67454,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 108701,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 67454,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 210892,
+    "serialized_service_ns": 67454,
+    "frame_sizes": {
+      "48": 330,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 339448,
+    "serialized_service_ns": 108701,
+    "frame_sizes": {
+      "48": 195,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 240900,
+    "serialized_service_ns": 19350,
+    "frame_sizes": {
+      "48": 330,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 240180,
+    "serialized_service_ns": 19290,
+    "frame_sizes": {
+      "48": 315,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 143032,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 83453,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 143032,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 232980,
+    "serialized_service_ns": 18690,
+    "frame_sizes": {
+      "48": 165,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 300080,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 308000,
+    "serialized_service_ns": 24700,
+    "frame_sizes": {
+      "48": 165,
+      "500": 20,
+      "1036": 280
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 83453,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 143032,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 83453,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 20880,
+    "model_tx_bytes": 260944,
+    "serialized_service_ns": 83453,
+    "frame_sizes": {
+      "48": 435,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-identity",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 435116,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 446636,
+    "serialized_service_ns": 143032,
+    "frame_sizes": {
+      "48": 240,
+      "500": 29,
+      "1036": 406
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 232980,
+    "serialized_service_ns": 18690,
+    "frame_sizes": {
+      "48": 165,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 341608,
+    "serialized_service_ns": 27404,
+    "frame_sizes": {
+      "48": 240,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 248704,
+    "serialized_service_ns": 19952,
+    "frame_sizes": {
+      "48": 180,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 345092,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 355892,
+    "serialized_service_ns": 28546,
+    "frame_sizes": {
+      "48": 225,
+      "500": 23,
+      "1036": 322
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 188688,
+    "serialized_service_ns": 15144,
+    "frame_sizes": {
+      "48": 180,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 205852,
+    "serialized_service_ns": 16526,
+    "frame_sizes": {
+      "48": 225,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 90024,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 100104,
+    "serialized_service_ns": 8052,
+    "frame_sizes": {
+      "48": 210,
+      "500": 6,
+      "1036": 84
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 150040,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 165880,
+    "serialized_service_ns": 13340,
+    "frame_sizes": {
+      "48": 330,
+      "500": 10,
+      "1036": 140
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 175844,
+    "serialized_service_ns": 14122,
+    "frame_sizes": {
+      "48": 225,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 191568,
+    "serialized_service_ns": 15384,
+    "frame_sizes": {
+      "48": 240,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 103893,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 67229,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 103893,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 188688,
+    "serialized_service_ns": 15144,
+    "frame_sizes": {
+      "48": 180,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 4320,
+    "model_tx_bytes": 214376,
+    "serialized_service_ns": 17188,
+    "frame_sizes": {
+      "48": 90,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 67229,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 103893,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 67229,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 210172,
+    "serialized_service_ns": 67229,
+    "frame_sizes": {
+      "48": 315,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 324444,
+    "serialized_service_ns": 103893,
+    "frame_sizes": {
+      "48": 195,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 15840,
+    "model_tx_bytes": 255904,
+    "serialized_service_ns": 20552,
+    "frame_sizes": {
+      "48": 330,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 16560,
+    "model_tx_bytes": 241620,
+    "serialized_service_ns": 19410,
+    "frame_sizes": {
+      "48": 345,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 147840,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 83678,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 147840,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 234420,
+    "serialized_service_ns": 18810,
+    "frame_sizes": {
+      "48": 195,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 330088,
+    "control_tx_bytes": 7200,
+    "model_tx_bytes": 337288,
+    "serialized_service_ns": 27044,
+    "frame_sizes": {
+      "48": 150,
+      "500": 22,
+      "1036": 308
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 83678,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 147840,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 83678,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 21600,
+    "model_tx_bytes": 261664,
+    "serialized_service_ns": 83678,
+    "frame_sizes": {
+      "48": 450,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-rotate",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 450120,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 461640,
+    "serialized_service_ns": 147840,
+    "frame_sizes": {
+      "48": 240,
+      "500": 30,
+      "1036": 420
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 0,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 7920,
+    "model_tx_bytes": 262988,
+    "serialized_service_ns": 21094,
+    "frame_sizes": {
+      "48": 165,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 0,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 300080,
+    "control_tx_bytes": 11520,
+    "model_tx_bytes": 311600,
+    "serialized_service_ns": 25000,
+    "frame_sizes": {
+      "48": 240,
+      "500": 20,
+      "1036": 280
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 1,
+    "port": 1,
+    "peer": 4,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 270072,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 278712,
+    "serialized_service_ns": 22356,
+    "frame_sizes": {
+      "48": 180,
+      "500": 18,
+      "1036": 252
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 1,
+    "port": 2,
+    "peer": 9,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 315084,
+    "control_tx_bytes": 10800,
+    "model_tx_bytes": 325884,
+    "serialized_service_ns": 26142,
+    "frame_sizes": {
+      "48": 225,
+      "500": 21,
+      "1036": 294
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 2,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 189408,
+    "serialized_service_ns": 15204,
+    "frame_sizes": {
+      "48": 195,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 2,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 10080,
+    "model_tx_bytes": 205132,
+    "serialized_service_ns": 16466,
+    "frame_sizes": {
+      "48": 210,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 3,
+    "port": 1,
+    "peer": 6,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 90024,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 102264,
+    "serialized_service_ns": 8232,
+    "frame_sizes": {
+      "48": 255,
+      "500": 6,
+      "1036": 84
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 3,
+    "port": 2,
+    "peer": 11,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 150040,
+    "control_tx_bytes": 13680,
+    "model_tx_bytes": 163720,
+    "serialized_service_ns": 13160,
+    "frame_sizes": {
+      "48": 285,
+      "500": 10,
+      "1036": 140
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 4,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 165044,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 177284,
+    "serialized_service_ns": 14242,
+    "frame_sizes": {
+      "48": 255,
+      "500": 11,
+      "1036": 154
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 4,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 12960,
+    "model_tx_bytes": 193008,
+    "serialized_service_ns": 15504,
+    "frame_sizes": {
+      "48": 270,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 4,
+    "port": 3,
+    "peer": 5,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 118092,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 5,
+    "port": 1,
+    "peer": 4,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 63096,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 5,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 118092,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 6,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 195052,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 203692,
+    "serialized_service_ns": 16346,
+    "frame_sizes": {
+      "48": 180,
+      "500": 13,
+      "1036": 182
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 6,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 4320,
+    "model_tx_bytes": 259388,
+    "serialized_service_ns": 20794,
+    "frame_sizes": {
+      "48": 90,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 6,
+    "port": 3,
+    "peer": 7,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 63096,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 7,
+    "port": 1,
+    "peer": 6,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 118092,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 7,
+    "port": 2,
+    "peer": 8,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 63096,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 8,
+    "port": 1,
+    "peer": 5,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 180048,
+    "control_tx_bytes": 17280,
+    "model_tx_bytes": 197328,
+    "serialized_service_ns": 63096,
+    "frame_sizes": {
+      "48": 360,
+      "500": 12,
+      "1036": 168
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 8,
+    "port": 2,
+    "peer": 7,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 360096,
+    "control_tx_bytes": 8640,
+    "model_tx_bytes": 368736,
+    "serialized_service_ns": 118092,
+    "frame_sizes": {
+      "48": 180,
+      "500": 24,
+      "1036": 336
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 9,
+    "port": 1,
+    "peer": 0,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 240064,
+    "control_tx_bytes": 14400,
+    "model_tx_bytes": 254464,
+    "serialized_service_ns": 20432,
+    "frame_sizes": {
+      "48": 300,
+      "500": 16,
+      "1036": 224
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 9,
+    "port": 2,
+    "peer": 1,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 225060,
+    "control_tx_bytes": 15120,
+    "model_tx_bytes": 240180,
+    "serialized_service_ns": 19290,
+    "frame_sizes": {
+      "48": 315,
+      "500": 15,
+      "1036": 210
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 9,
+    "port": 3,
+    "peer": 10,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 133641,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 10,
+    "port": 1,
+    "peer": 9,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 87811,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 10,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 133641,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 11,
+    "port": 1,
+    "peer": 2,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 210056,
+    "control_tx_bytes": 9360,
+    "model_tx_bytes": 219416,
+    "serialized_service_ns": 17608,
+    "frame_sizes": {
+      "48": 195,
+      "500": 14,
+      "1036": 196
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 11,
+    "port": 2,
+    "peer": 3,
+    "tier": "access",
+    "rate_bps": 100000000000,
+    "data_tx_bytes": 285076,
+    "control_tx_bytes": 7200,
+    "model_tx_bytes": 292276,
+    "serialized_service_ns": 23438,
+    "frame_sizes": {
+      "48": 150,
+      "500": 19,
+      "1036": 266
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 11,
+    "port": 3,
+    "peer": 12,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 87811,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 12,
+    "port": 1,
+    "peer": 11,
+    "tier": "tor_agg",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 133641,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 12,
+    "port": 2,
+    "peer": 13,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 87811,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 13,
+    "port": 1,
+    "peer": 10,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 255068,
+    "control_tx_bytes": 19440,
+    "model_tx_bytes": 274508,
+    "serialized_service_ns": 87811,
+    "frame_sizes": {
+      "48": 405,
+      "500": 17,
+      "1036": 238
+    }
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "node": 13,
+    "port": 2,
+    "peer": 12,
+    "tier": "agg_core",
+    "rate_bps": 25000000000,
+    "data_tx_bytes": 405108,
+    "control_tx_bytes": 12240,
+    "model_tx_bytes": 417348,
+    "serialized_service_ns": 133641,
+    "frame_sizes": {
+      "48": 255,
+      "500": 27,
+      "1036": 378
+    }
+  }
+]

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+transactions/5沿用v4事务/本地copy/在线反馈，只把显式零初始化的主窗口存储改为有界稀疏页。访问先按owner/key/逻辑范围和活跃使用记录检查，实际写先验证整段页容量，再修改字节；不引入额外仿真事件、页面时延或GPU行为。范围见[稀疏窗口](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
+
 原生`rdma-transaction-session`与Python`NativeTransactionSession`连接实际事务回调和动态前端提交：只在当前ns-3时刻交换命令，工作注册、应用依赖满足、发布、目标应用、请求ACK、原子回复和本地完成分别记录。物理空闲期间保留QP，显式结束才关闭资源。默认因果前端把完整程序留在Python侧，未来节点不预载后端；现代事件核心尚未接上此接口，self-peer和GPU可见性仍不支持。见[在线会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
 
 transactions/4把本地显式copy接到实际窗口：入队保护源/目标，实际开始读源，完成事件写目标并释放，再解锁后继put。队列、源读、独占输出、事务和物理网络共同参与排空；错误不改成隐式等待，截止不补输出。见[本地输入输出](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。该能力只适用于声明copy的节点，不是现代事件/provider在线集成。

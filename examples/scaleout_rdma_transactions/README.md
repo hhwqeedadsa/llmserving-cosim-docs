@@ -214,3 +214,23 @@ PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
 | local_admitted / local_started | 本地条件消费并入队 / 占用该GPU的声明处理槽 |
 
 会话的`drained=true`表示当前已注册工作、本地槽与物理传输均空闲，QP仍保留；前端可以继续提交下一轮。只有显式`finish=true`才关闭持久连接，此后最终Fabric的`drained`还验证QP资源已清空。EOF、错误决策或实际截止不是成功；运行期错误保留partial result，宿主强制终止可能只留下已刷出的前缀和监控记录。self-peer仍拒绝，不能补成零成本或虚构外部路径。现代事件核心尚未接入，验收边界见[在线会话验收](../../fixtures/transaction_session/README.md)。
+
+## 使用大地址范围与稀疏初值
+
+需要保留现代布局的高偏移地址时，使用`moe-rdma-transactions/5`和[稀疏小例](sparse-windows.json)。v5保留v4所有根字段和节点规则，只把每个窗口的完整`hex`改为逻辑长度与初始段：
+
+```json
+{
+  "owner": 0, "key": 7, "address": 4294967296, "allow_atomic": true,
+  "bytes": 18874368, "initialization": "zero_fill/1",
+  "segments": [{"offset": 17008640, "hex": "01020304"}]
+}
+```
+
+`address`和操作地址是同一模拟地址空间的绝对字节地址；`offset`相对本窗口。全部未给出的初值由**输入显式声明为零**，不表示未知模型张量为零。窗口逻辑长度1—64MiB，初值至多32个不重叠段、合计64KiB；零段列表允许。实际写入以4KiB页保存，每窗口最多256页/1MiB，含初始化页。零读取不分配页，写零也分配，已分配页在本次运行中不回收。逻辑长度、地址越界、所有key权限及读/写使用记录继续检查；页容量不足时整个本次写拒绝，不部分写入或推进事务序号。
+
+使用上面的普通probe或在线session命令，把`--config`换成`examples/scaleout_rdma_transactions/sparse-windows.json`即可；需要本次更新构建的对应入口。此例在三个18MiB窗口内实际发送14,464B、复制并转发，同时执行小型原子与条件清零。窗口长度、staging偏移和数据长度对应声明的EP4/H7168/Top8布局；数据是功能模式，处理时长声明为零，**不是完整MoE、专家计算或真实GPU性能**。不能据此比较部署时延，self及可见性限制保持。
+
+v5结果窗口不含展开的`hex`，改为`bytes`、`initialization`、`resident_bytes`及按offset升序的`pages: [{offset, hex}]`。每页保存4096B，最后一页按逻辑末端截短；未列出的页读零。`resident_bytes`只统计本仿真器的页字节，不含索引/容器/事务缓存，更不是GPU占用、进程RSS或网络流量。其他实际包、队列、内存事件及完成字段沿用v4。结果仍受16MiB预算约束，输入允许的最大组合不保证输出预算内成功；超限保留监控前缀，不自动增限。
+
+原生事务和在线入口均支持v5；v1—4继续使用原窗口格式，不自动转换。独立字节重放、稠密差分、页限失败不产生部分写、原生非法声明拒绝及恢复见[稀疏窗口验收](../../fixtures/sparse_windows/README.md)。

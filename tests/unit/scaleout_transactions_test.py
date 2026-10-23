@@ -27,6 +27,22 @@ class TransactionInputTests(unittest.TestCase):
         c['windows'][0]['address'] = True
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c, allow_no_remote=True)
 
+    def test_v5_sparse_initialization_and_logical_extent(self):
+        c = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-io.json').read_text())
+        c['schema_version'] = 'moe-rdma-transactions/5'
+        for w in c['windows']:
+            data = w.pop('hex'); w.update(bytes=18*2**20, initialization='zero_fill/1', segments=[dict(offset=0, hex=data)])
+        validate(self.topology, self.protocol, c)
+        for key, value in [('bytes', True), ('bytes', 0), ('bytes', 64*2**20+1),
+                           ('initialization', 'unknown'), ('segments', [dict(offset=True, hex='00')]),
+                           ('segments', [dict(offset=18*2**20, hex='00')]),
+                           ('segments', [dict(offset=1, hex='0000'), dict(offset=2, hex='ff')]),
+                           ('segments', [dict(offset=0, hex='00'*32769), dict(offset=40000, hex='00'*32768)])]:
+            bad = deepcopy(c); bad['windows'][0][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, bad)
+        c['schema_version'] = 'moe-rdma-transactions/4'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
     def test_remote_authority_bounds_permissions(self):
         for key, value in [('key', 8), ('address', 4097), ('value', -1), ('value', True), ('value', 2**64)]:
             c = deepcopy(self.config); c['operations'][1][key] = value

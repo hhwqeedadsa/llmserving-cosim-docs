@@ -14,6 +14,25 @@ def _hex(text, maximum, name):
     return len(text)//2
 
 
+def sparse_window_size(window):
+    """Validate declared zero storage; never allocate the logical window."""
+    integer(window['bytes'], 'sparse window bytes', 1, 64*2**20)
+    require(window['initialization'] == 'zero_fill/1', 'unsupported sparse initialization')
+    segments = window['segments']
+    require(isinstance(segments, list) and len(segments) <= 32, 'sparse initialization segment budget exceeded')
+    ranges, total = [], 0
+    for segment in segments:
+        fields(segment, 'offset hex', 'sparse initialization segment')
+        integer(segment['offset'], 'sparse initialization offset', 0, window['bytes']-1)
+        size = _hex(segment['hex'], 65536, 'sparse initialization')
+        start, end = segment['offset'], segment['offset']+size
+        total += size
+        require(end <= window['bytes'] and total <= 65536, 'sparse initialization range/byte budget exceeded')
+        require(all(end <= a or b <= start for a, b in ranges), 'overlapping sparse initialization')
+        ranges.append((start, end))
+    return window['bytes']
+
+
 def _local_waits(waits, owner, registered):
     require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
     locations = set()
@@ -34,12 +53,13 @@ def _local_waits(waits, owner, registered):
 
 
 def validate(topology, protocol, config, *, allow_no_remote=False):
-    local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4')
-    memory_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4'
+    local_mode = isinstance(config, dict) and config.get('schema_version') in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5')
+    sparse_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/5'
+    memory_mode = sparse_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/4')
     source_mode = memory_mode or (isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/3')
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else ''), 'transaction root')
-    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4'), 'unsupported transaction schema')
+    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if local_mode:
         require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
                 'unsupported transaction local model')
@@ -73,12 +93,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     gpus = {n['id'] for n in topology['nodes'] if n['kind'] == 'gpu'}
     registered = {}
     for w in windows:
-        fields(w, 'owner key address allow_atomic hex', 'remote window')
+        fields(w, 'owner key address allow_atomic '+('bytes initialization segments' if sparse_mode else 'hex'), 'remote window')
         integer(w['owner'], 'window owner', 0, 31)
         integer(w['key'], 'remote key', 1, 2**32-1)
         integer(w['address'], 'window address', 0, 2**64-1)
         require(w['owner'] in gpus and isinstance(w['allow_atomic'], bool), 'invalid window owner/permission')
-        length = _hex(w['hex'], 65536, 'window')
+        length = sparse_window_size(w) if sparse_mode else _hex(w['hex'], 65536, 'window')
         require(w['address']+length <= 2**64-1, 'window address wraps')
         key = w['owner'], w['key']
         require(key not in registered, 'repeated owner/remote key')
@@ -214,7 +234,7 @@ def probe(topology, protocol, config, backend, output):
     require(result['passed'] and result['native_network_executed'] and result['drained'] and
             transport['physical_drained'] and transport['closed'] and result['completed_operations'] == remote_count,
             'remote memory transaction probe incomplete')
-    if w['schema_version'] in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4'):
+    if w['schema_version'] in ('moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'):
         require(result['completed_local_work']+remote_count == len(w['operations']), 'local transaction work incomplete')
     return dict(passed=True, output=str(output), completed_operations=result['completed_operations'],
                 state='functional_native_remote_memory_transactions_not_GIN_timing', hardware_calibrated=False)

@@ -13,6 +13,24 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class SparseByteOracle:
+    """Independent byte dictionary; no production page-storage implementation."""
+    def __init__(self, size):
+        self.size, self.values, self.touched = size, {}, set()
+
+    def __getitem__(self, part):
+        assert isinstance(part, slice) and part.step is None and 0 <= part.start <= part.stop <= self.size
+        return bytes(self.values.get(i, 0) for i in range(part.start, part.stop))
+
+    def __setitem__(self, part, value):
+        assert isinstance(part, slice) and part.step is None and 0 <= part.start < part.stop <= self.size
+        assert len(value) == part.stop-part.start
+        for i, byte in zip(range(part.start, part.stop), value):
+            self.touched.add(i//4096)
+            if byte: self.values[i] = byte
+            else: self.values.pop(i, None)
+
+
 def audit(result, config, mtu, allow_partial=False):
     assert result['native_network_executed']
     if not allow_partial:
@@ -141,7 +159,17 @@ def audit_memory(tx, config, frames, rows, local_work=()):
     connections = {c['id']: c for c in config['connections']}
     all_specs = {op['id']: op for op in config['operations']}
     bindings = {(r['connection'], r['sequence']): r for r in rows.values()}
-    memory = {(w['owner'], w['key']): bytearray.fromhex(w['hex']) for w in config['windows']}
+    memory = {}
+    for w in config['windows']:
+        if 'hex' in w:
+            data = bytearray.fromhex(w['hex'])
+        else:
+            assert w['initialization'] == 'zero_fill/1'
+            data = SparseByteOracle(w['bytes'])
+            for segment in w['segments']:
+                body = bytes.fromhex(segment['hex']); offset = segment['offset']
+                data[offset:offset+len(body)] = body
+        memory[w['owner'], w['key']] = data
     windows = {(w['owner'], w['key']): w for w in config['windows']}
     events = sorted(tx['target_events']+tx['local_events']+tx.get('source_events', [])+tx.get('local_memory_events', []), key=lambda e: e['order'])
     assert [e['order'] for e in events] == list(range(len(events)))
@@ -248,7 +276,22 @@ def audit_memory(tx, config, frames, rows, local_work=()):
             assert old == event['old_value']
             if 'returned_value' in row: assert old == row['returned_value']
             memory[key][offset:offset+8] = ((old+int.from_bytes(f['body'], 'big'))%(2**64)).to_bytes(8, 'little')
-    assert {(w['owner'], w['key']): bytes.fromhex(w['hex']) for w in tx['windows']} == memory
+    assert {(w['owner'], w['key']) for w in tx['windows']} == set(memory)
+    for w in tx['windows']:
+        expected = memory[w['owner'], w['key']]
+        if isinstance(expected, SparseByteOracle):
+            spec = windows[w['owner'], w['key']]
+            assert all(w[k] == spec[k] for k in ('owner', 'key', 'address', 'allow_atomic', 'bytes', 'initialization'))
+            assert len(w['pages']) <= 256 and w['resident_bytes'] == 4096*len(w['pages'])
+            assert [p['offset'] for p in w['pages']] == sorted(page*4096 for page in expected.touched)
+            reported = {}
+            for page in w['pages']:
+                offset = page['offset']; body = bytes.fromhex(page['hex'])
+                assert len(body) == min(4096, expected.size-offset)
+                reported.update((offset+i, value) for i, value in enumerate(body) if value)
+            assert reported == expected.values
+        else:
+            assert bytes.fromhex(w['hex']) == expected
     if 'active_source_leases' in tx:
         assert tx['active_source_leases'] == [leases[i] for i in sorted(k for k in leases if isinstance(k, int))]
     if 'active_local_memory_leases' in tx:

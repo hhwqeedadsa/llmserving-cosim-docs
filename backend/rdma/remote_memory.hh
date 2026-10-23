@@ -65,15 +65,40 @@ class MemoryFrameDecoder {
 };
 class RemoteMemory {
  public:
-  struct Window {unsigned owner;uint32_t key;uint64_t address;bool atomic;std::vector<uint8_t> bytes;};
+  struct Window {
+    unsigned owner;uint32_t key;uint64_t address;bool atomic;std::vector<uint8_t> bytes;
+    uint64_t logical_bytes=0;
+    std::map<uint64_t,std::vector<uint8_t>> pages;
+  };
+  static constexpr uint64_t PageBytes=4096,MaxPages=256,MaxLogicalBytes=64*1024*1024;
+  static uint64_t Size(const Window& w) {return w.logical_bytes?w.logical_bytes:w.bytes.size();}
+  void RegisterSparse(unsigned owner,uint32_t key,uint64_t address,bool atomic,uint64_t length,
+                      const std::vector<std::pair<uint64_t,std::vector<uint8_t>>>& segments) {
+    MemoryCheck(length>0 && length<=MaxLogicalBytes && address<=UINT64_MAX-length && segments.size()<=32,
+                "invalid sparse window extent/segments");
+    Window window{owner,key,address,atomic,{},length,{}};
+    uint64_t initialized=0;std::vector<std::pair<uint64_t,uint64_t>> used;
+    for(const auto& [offset,bytes]:segments) {
+      MemoryCheck(!bytes.empty() && offset<=length && bytes.size()<=length-offset,
+                  "invalid sparse initialization range");
+      initialized+=bytes.size();MemoryCheck(initialized<=65536,"sparse initialization byte budget exceeded");
+      for(const auto& [start,end]:used)MemoryCheck(offset+bytes.size()<=start || end<=offset,"overlapping sparse initialization");
+      used.emplace_back(offset,offset+bytes.size());Write(window,offset,bytes);
+    }
+    Register(std::move(window));
+  }
   struct Result {bool duplicate;bool atomic;uint64_t old_value;};
   struct ReadLease {unsigned owner;uint32_t key;uint64_t address,bytes;};
   void Register(Window window) {
-    MemoryCheck(windows_.size()<16 && window.key && !window.bytes.empty() && window.bytes.size()<=65536 &&
-                window.address<=UINT64_MAX-window.bytes.size(),"invalid remote memory window");
+    MemoryCheck(windows_.size()<16 && window.key && Size(window)>0 &&
+                (window.logical_bytes?(window.bytes.empty() && window.logical_bytes<=MaxLogicalBytes && window.pages.size()<=MaxPages):
+                 (window.bytes.size()<=65536 && window.pages.empty())) &&
+                window.address<=UINT64_MAX-Size(window),"invalid remote memory window");
+    for(const auto& [page,bytes]:window.pages)
+      MemoryCheck(page<=(Size(window)-1)/PageBytes && bytes.size()==PageBytes,"invalid sparse resident page");
     for(const auto& w:windows_)if(w.owner==window.owner) {
       MemoryCheck(w.key!=window.key,"remote key repeated for owner");
-      MemoryCheck(window.address+window.bytes.size()<=w.address || w.address+w.bytes.size()<=window.address,
+      MemoryCheck(window.address+Size(window)<=w.address || w.address+Size(w)<=window.address,
                   "overlapping remote memory windows");
     }
     windows_.push_back(std::move(window));
@@ -95,18 +120,19 @@ class RemoteMemory {
     auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==frame.key;});
     MemoryCheck(it!=windows_.end(),"unknown remote memory key/owner");
     const auto length=frame.verb==MemoryFrame::Put?frame.body.size():8;
-    MemoryCheck(frame.address>=it->address && frame.address-it->address<=it->bytes.size() &&
-                length<=it->bytes.size()-(frame.address-it->address),"remote memory address out of bounds");
+    MemoryCheck(frame.address>=it->address && frame.address-it->address<=Size(*it) &&
+                length<=Size(*it)-(frame.address-it->address),"remote memory address out of bounds");
     const auto offset=frame.address-it->address;
     if(frame.verb==MemoryFrame::FetchAdd)MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
     CheckWritable(owner,frame.key,frame.address,length);
     Result result{false,frame.verb==MemoryFrame::FetchAdd,0};
     if(result.atomic) {
       MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
-      for(unsigned i=0;i<8;++i)result.old_value|=uint64_t(it->bytes[offset+i])<<(8*i);
+      for(unsigned i=0;i<8;++i)result.old_value|=uint64_t(Byte(*it,offset+i))<<(8*i);
       const uint64_t updated=result.old_value+MemoryRead(frame.body.data(),8);
-      for(unsigned i=0;i<8;++i)it->bytes[offset+i]=updated>>(8*i);
-    } else std::copy(frame.body.begin(),frame.body.end(),it->bytes.begin()+offset);
+      std::vector<uint8_t> bytes(8);for(unsigned i=0;i<8;++i)bytes[i]=updated>>(8*i);
+      Write(*it,offset,bytes);
+    } else Write(*it,offset,frame.body);
     state.saved.emplace(frame.sequence,Saved{owner,encoded,result});++state.next;
     return result;
   }
@@ -115,7 +141,7 @@ class RemoteMemory {
     CheckReadable(owner,key,address,bytes);
     const auto& w=Range(owner,key,address,bytes);
     MemoryCheck(bytes<=32768,"source read length exceeded");
-    return {w.bytes.begin()+(address-w.address),w.bytes.begin()+(address-w.address)+bytes};
+    std::vector<uint8_t> out(bytes);for(uint64_t i=0;i<bytes;++i)out[i]=Byte(w,address-w.address+i);return out;
   }
   void AcquireRead(uint64_t identity,ReadLease lease) {
     MemoryCheck(!leases_.count(identity) && leases_.size()<48,"invalid source read lease identity/budget");
@@ -155,7 +181,7 @@ class RemoteMemory {
     // AcquireWrite excludes readers and other writers. Keep the reservation
     // until the caller records the commit and explicitly releases it.
     auto& window=const_cast<Window&>(Range(w.owner,w.key,w.address,w.bytes));
-    std::copy(bytes.begin(),bytes.end(),window.bytes.begin()+(w.address-window.address));
+    Write(window,w.address-window.address,bytes);
   }
   void ReleaseWrite(uint64_t identity) {
     MemoryCheck(writers_.erase(identity)==1,"unknown local output lease release");
@@ -179,26 +205,42 @@ class RemoteMemory {
     CheckReadable(owner,key,address,8);
     const auto& w=LocalWindow(owner,key,address);
     uint64_t value=0;
-    for(unsigned i=0;i<8;++i)value|=uint64_t(w.bytes[address-w.address+i])<<(8*i);
+    for(unsigned i=0;i<8;++i)value|=uint64_t(Byte(w,address-w.address+i))<<(8*i);
     return value;
   }
   void Store64(unsigned owner,uint32_t key,uint64_t address,uint64_t value) {
     const auto& found=LocalWindow(owner,key,address);
     CheckWritable(owner,key,address,8);
     auto& w=windows_.at(static_cast<std::size_t>(&found-windows_.data()));
-    for(unsigned i=0;i<8;++i)w.bytes[address-w.address+i]=value>>(8*i);
+    std::vector<uint8_t> bytes(8);for(unsigned i=0;i<8;++i)bytes[i]=value>>(8*i);
+    Write(w,address-w.address,bytes);
   }
  private:
+  static uint8_t Byte(const Window& w,uint64_t offset) {
+    if(!w.logical_bytes)return w.bytes.at(offset);
+    const auto page=w.pages.find(offset/PageBytes);
+    return page==w.pages.end()?0:page->second.at(offset%PageBytes);
+  }
+  static void Write(Window& w,uint64_t offset,const std::vector<uint8_t>& bytes) {
+    MemoryCheck(!bytes.empty() && offset<=Size(w) && bytes.size()<=Size(w)-offset,"invalid memory write range");
+    if(!w.logical_bytes) {std::copy(bytes.begin(),bytes.end(),w.bytes.begin()+offset);return;}
+    const auto first=offset/PageBytes,last=(offset+bytes.size()-1)/PageBytes;
+    uint64_t missing=0;for(auto p=first;p<=last;++p)missing+=!w.pages.count(p);
+    MemoryCheck(w.pages.size()+missing<=MaxPages,"sparse resident page budget exceeded");
+    // Range/page admission precedes ANY write, including an existing first page.
+    for(auto p=first;p<=last;++p)if(!w.pages.count(p))w.pages.emplace(p,std::vector<uint8_t>(PageBytes,0));
+    for(uint64_t i=0;i<bytes.size();++i)w.pages.at((offset+i)/PageBytes).at((offset+i)%PageBytes)=bytes[i];
+  }
   const Window& Range(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
     const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
-    MemoryCheck(it!=windows_.end() && bytes>0 && address>=it->address && address-it->address<=it->bytes.size() &&
-                bytes<=it->bytes.size()-(address-it->address),"invalid source memory range");
+    MemoryCheck(it!=windows_.end() && bytes>0 && address>=it->address && address-it->address<=Size(*it) &&
+                bytes<=Size(*it)-(address-it->address),"invalid source memory range");
     return *it;
   }
   const Window& LocalWindow(unsigned owner,uint32_t key,uint64_t address) const {
     const auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==key;});
     MemoryCheck(it!=windows_.end() && address%8==0 && address>=it->address &&
-                address-it->address<=it->bytes.size() && 8<=it->bytes.size()-(address-it->address),
+                address-it->address<=Size(*it) && 8<=Size(*it)-(address-it->address),
                 "invalid local 64-bit memory access");
     return *it;
   }

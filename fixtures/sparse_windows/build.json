@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "steps": 9,
+  "old_runtime_hashes_unchanged": 15,
+  "binaries": {
+    "sparse_remote_memory_test": {
+      "sha256": "d694c35fac835fe737c08a5d220789ffb0c56cd2233a9d0d5694602686ee98ae",
+      "bytes": 65544
+    },
+    "remote_memory_test": {
+      "sha256": "44213f93fb13d4fd0ecfea1d0421456d12aa28be250e405d3451b8878138a9dc",
+      "bytes": 70032
+    },
+    "ns3.42-moe-rdma-transaction-session": {
+      "sha256": "da7139c1b04a6a3ae854bb13814fffa0bc22579b6c6ef1e8b2e0bc5a377dea5a",
+      "bytes": 5277360
+    },
+    "ns3.42-moe-rdma-transaction-probe": {
+      "sha256": "db82016c0975183cc41771718024b64bd3fbee769c6343b153e7909fc05a98c2",
+      "bytes": 5141840
+    }
+  }
+}

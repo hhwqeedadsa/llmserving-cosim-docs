@@ -1,4 +1,5 @@
 #include "remote_transactions.hh"
+#include "transaction_session_validation.hh"
 #include <fstream>
 #include <iostream>
 #include <link.h>
@@ -22,7 +23,8 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
-    const bool local_memory_mode=input.at("schema_version")=="moe-rdma-transactions/4";
+    const bool sparse_mode=input.at("schema_version")=="moe-rdma-transactions/5";
+    const bool local_memory_mode=sparse_mode || input.at("schema_version")=="moe-rdma-transactions/4";
     const bool source_mode=local_memory_mode || input.at("schema_version")=="moe-rdma-transactions/3";
     const bool local_mode=source_mode || input.at("schema_version")=="moe-rdma-transactions/2";
     if(local_mode) {
@@ -34,6 +36,7 @@ int main(int argc,char** argv) {
     }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
+    if(sparse_mode)ValidateSessionProgram(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     Fabric fabric(topology,config);RemoteTransactions transactions(fabric,input);
     std::set<unsigned> gpus;
     for(const auto& n:topology.at("nodes"))if(n.at("kind")=="gpu")gpus.insert(n.at("id").get<unsigned>());

@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "archive_members_verified": 980,
+  "new_source_root": true,
+  "new_cwd": true,
+  "restored_native_libraries": 8,
+  "public_commands": 3,
+  "fresh_native_executions": 2,
+  "results": [
+    {
+      "name": "probe",
+      "all_fields_except_library_paths_equal": true,
+      "independent_byte_replay": {
+        "operations": 3,
+        "source_packets": 456,
+        "transported_payload_bytes": 29072,
+        "finish_ns": 31977,
+        "final_atomic_value": 0
+      }
+    },
+    {
+      "name": "session",
+      "all_fields_except_library_paths_equal": true,
+      "independent_byte_replay": {
+        "operations": 3,
+        "source_packets": 456,
+        "transported_payload_bytes": 29072,
+        "finish_ns": 31977,
+        "final_atomic_value": 0
+      }
+    }
+  ],
+  "host_system_libraries_still_required": true,
+  "modern_deepep_connected": false,
+  "hardware_calibrated": false
+}

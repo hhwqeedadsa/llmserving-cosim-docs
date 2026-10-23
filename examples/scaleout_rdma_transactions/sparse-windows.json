@@ -1,0 +1,174 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 1,
+      "src": 4,
+      "dst": 1,
+      "plane": 0,
+      "request_port": 24002,
+      "response_port": 24003,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 7,
+      "address": 4294967296,
+      "allow_atomic": true,
+      "bytes": 18874368,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 17008640,
+          "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f40"
+        }
+      ]
+    },
+    {
+      "owner": 4,
+      "key": 8,
+      "address": 4294967296,
+      "allow_atomic": true,
+      "bytes": 18874368,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 49216,
+          "hex": "0700000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 1,
+      "key": 9,
+      "address": 4294967296,
+      "allow_atomic": true,
+      "bytes": 18874368,
+      "initialization": "zero_fill/1",
+      "segments": []
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 8,
+      "address": 4311744512,
+      "source": {
+        "key": 7,
+        "address": 4311975936,
+        "bytes": 14464
+      },
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 0,
+      "copy": {
+        "source": {
+          "key": 8,
+          "address": 4311744512,
+          "bytes": 14464
+        },
+        "target": {
+          "key": 8,
+          "address": 4311810048
+        }
+      },
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 9,
+      "address": 4311748606,
+      "source": {
+        "key": 8,
+        "address": 4311810048,
+        "bytes": 14464
+      },
+      "after": [
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "fetch_add",
+      "key": 8,
+      "address": 4295016512,
+      "value": 3,
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 0,
+      "local_wait": [
+        {
+          "key": 8,
+          "address": 4295016512,
+          "compare": "eq",
+          "value": 10,
+          "reset_to": 0
+        }
+      ],
+      "after": [
+        {
+          "operation": 3,
+          "event": "applied"
+        }
+      ]
+    }
+  ],
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  }
+}

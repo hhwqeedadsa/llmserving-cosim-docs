@@ -14,7 +14,8 @@ inline void SessionKeys(const Json& value,const std::vector<std::string>& keys) 
 }
 inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_t max_ns) {
   SessionKeys(input,{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"});
-  Require(input.at("schema_version")=="moe-rdma-transactions/4","session requires transactions/4");
+  const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
+  Require(sparse || input.at("schema_version")=="moe-rdma-transactions/4","session requires transactions/4 or /5");
   Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported session local model");
   Require(input.at("source_model")==Json{{"capture","registered_window_at_publish/1"},{"release","transaction_completed/1"}},"unsupported session source model");
   Require(input.at("local_memory_model")==Json{{"mode","guarded_copy/1"},{"acquire","admission/1"},{"capture","start/1"},{"commit","completion/1"}},"unsupported session local memory model");
@@ -37,10 +38,23 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   std::map<std::pair<uint64_t,uint64_t>,Window> windows;
   const auto& ws=input.at("windows");Require(ws.is_array() && !ws.empty() && ws.size()<=16,"session window budget exceeded");
   for(const auto& w:ws) {
-    SessionKeys(w,{"owner","key","address","allow_atomic","hex"});
+    SessionKeys(w,sparse?std::vector<std::string>{"owner","key","address","allow_atomic","bytes","initialization","segments"}:
+      std::vector<std::string>{"owner","key","address","allow_atomic","hex"});
     const auto owner=SessionInteger(w.at("owner"),31),key=SessionInteger(w.at("key"),UINT32_MAX),address=SessionInteger(w.at("address"));
-    const auto size=MemoryUnhex(w.at("hex").get<std::string>()).size();
-    Require(gpus.count(owner) && key>0 && size>0 && size<=65536 && address<=UINT64_MAX-size && w.at("allow_atomic").is_boolean(),"invalid session window");
+    uint64_t size;
+    if(sparse) {
+      size=SessionInteger(w.at("bytes"),RemoteMemory::MaxLogicalBytes);
+      Require(size>0 && w.at("initialization")=="zero_fill/1" && w.at("segments").is_array() && w.at("segments").size()<=32,"invalid sparse window");
+      uint64_t total=0;std::vector<std::pair<uint64_t,uint64_t>> used;
+      for(const auto& s:w.at("segments")) {
+        SessionKeys(s,{"offset","hex"});const auto offset=SessionInteger(s.at("offset"),size-1);
+        const auto bytes=MemoryUnhex(s.at("hex").get<std::string>()).size();
+        total+=bytes;Require(bytes>0 && bytes<=size-offset && total<=65536,"invalid sparse initialization range/bytes");
+        for(const auto& [a,b]:used)Require(offset+bytes<=a || b<=offset,"overlapping sparse initialization");
+        used.emplace_back(offset,offset+bytes);
+      }
+    } else {size=MemoryUnhex(w.at("hex").get<std::string>()).size();Require(size>0 && size<=65536,"invalid dense window size");}
+    Require(gpus.count(owner) && key>0 && address<=UINT64_MAX-size && w.at("allow_atomic").is_boolean(),"invalid session window");
     for(const auto& [location,prior]:windows)if(location.first==owner)
       Require(address+size<=prior.address || prior.address+prior.bytes<=address,"overlapping session windows");
     Require(windows.emplace(std::pair{owner,key},Window{address,size,w.at("allow_atomic")}).second,"repeated session window key");

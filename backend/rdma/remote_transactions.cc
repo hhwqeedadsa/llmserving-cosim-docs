@@ -21,8 +21,10 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
           input.at("schema_version")=="moe-rdma-transactions/2" ||
           input.at("schema_version")=="moe-rdma-transactions/3" ||
-          input.at("schema_version")=="moe-rdma-transactions/4","wrong transaction schema");
-  local_memory_mode_=input.at("schema_version")=="moe-rdma-transactions/4";
+          input.at("schema_version")=="moe-rdma-transactions/4" ||
+          input.at("schema_version")=="moe-rdma-transactions/5","wrong transaction schema");
+  const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
+  local_memory_mode_=sparse || input.at("schema_version")=="moe-rdma-transactions/4";
   source_mode_=local_memory_mode_ || input.at("schema_version")=="moe-rdma-transactions/3";
   if(local_memory_mode_) {
     local_memory_model_=input.at("local_memory_model");
@@ -52,8 +54,14 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
   }
   Require(input.at("windows").is_array() && !input.at("windows").empty() && input.at("windows").size()<=16,
           "invalid remote windows");
-  for(const auto& w:input.at("windows"))memory_.Register({w.at("owner"),w.at("key"),w.at("address"),
-      w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
+  for(const auto& w:input.at("windows")) {
+    if(sparse) {
+      Require(w.at("initialization")=="zero_fill/1","unsupported sparse initialization");
+      std::vector<std::pair<uint64_t,std::vector<uint8_t>>> segments;
+      for(const auto& s:w.at("segments"))segments.emplace_back(s.at("offset"),MemoryUnhex(s.at("hex")));
+      memory_.RegisterSparse(w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),w.at("bytes"),segments);
+    } else memory_.Register({w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
+  }
   transport_.changed=[this](){if(changed)changed();};
 }
 unsigned RemoteTransactions::LocalOwner(const Json& input) const {
@@ -337,8 +345,18 @@ Json RemoteTransactions::Report() const {
     {"connections",Json::array()},{"duplicate_requests",duplicates_},{"gpu_visibility_modeled",false},
     {"hardware_calibrated",false},{"roce_wire_equivalent",false},
     {"scope","MRT1 functional addressed put/fetch-add with actual native byte request/response transport; not a GIN timing baseline"}};
-  for(const auto& w:memory_.Windows())out["windows"].push_back({{"owner",w.owner},{"key",w.key},{"address",w.address},
-    {"allow_atomic",w.atomic},{"hex",MemoryHex(w.bytes)}});
+  for(const auto& w:memory_.Windows()) {
+    Json row={{"owner",w.owner},{"key",w.key},{"address",w.address},{"allow_atomic",w.atomic}};
+    if(w.logical_bytes) {
+      row["bytes"]=w.logical_bytes;row["initialization"]="zero_fill/1";row["pages"]=Json::array();
+      row["resident_bytes"]=w.pages.size()*RemoteMemory::PageBytes;
+      for(const auto& [page,bytes]:w.pages) {
+        const auto offset=page*RemoteMemory::PageBytes,length=std::min(RemoteMemory::PageBytes,w.logical_bytes-offset);
+        row["pages"].push_back({{"offset",offset},{"hex",MemoryHex({bytes.begin(),bytes.begin()+length})}});
+      }
+    } else row["hex"]=MemoryHex(w.bytes);
+    out["windows"].push_back(row);
+  }
   for(const auto& item:connections_) {
     const auto q=item.second.queue.Snapshot();
     out["connections"].push_back({{"id",item.first},{"src",item.second.src},{"dst",item.second.dst},

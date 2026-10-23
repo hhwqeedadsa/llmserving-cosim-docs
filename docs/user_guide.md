@@ -232,3 +232,5 @@ CM384 与 DeepSeek-R1 的参数来源、当前可用数据和未校准部分见[
 ## 逐事件追加原生事务
 
 需要前端根据本次真实网络完成继续递交工作时，使用`scaleout rdma-transaction-session`或公开`NativeTransactionSession`类。它沿用v4实际字节/本地copy模型，不是现代GIN端到端仿真；示例、资源预算及动态返回值驱动见[在线事务会话](../examples/scaleout_rdma_transactions/README.md#在线追加工作与实际回调)。
+
+大地址范围可选transactions/5稀疏窗口：显式零初值加局部hex，保留绝对地址和访问保护；probe/session均可执行。逻辑长度与本机页存储分开，不能作为GPU显存模型。输入、输出及可复制配置见[稀疏窗口](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。

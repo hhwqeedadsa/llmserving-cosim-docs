@@ -20,7 +20,7 @@ from .scaleout_transactions import validate
 
 
 class NativeTransactionSession:
-    """Receive actual transitions, then commit newly constructed v4 nodes.
+    """Receive actual transitions, then commit newly constructed v4/v5 nodes.
 
     Host controller execution does not advance simulated time. No callback
     equates target applied, request ACK, returned value, or completion to GPU
@@ -31,8 +31,8 @@ class NativeTransactionSession:
         self.topology, self.protocol = Path(topology).resolve(), Path(protocol).resolve()
         self.backend, self.output = Path(backend).resolve(), Path(output).resolve()
         self.config = deepcopy(initial)
-        require(self.config.get('schema_version') == 'moe-rdma-transactions/4' and self.config.get('operations') == [],
-                'session requires v4 initial configuration with empty operations')
+        require(self.config.get('schema_version') in ('moe-rdma-transactions/4', 'moe-rdma-transactions/5') and self.config.get('operations') == [],
+                'session requires v4/v5 initial configuration with empty operations')
         self.t = checked_json(self.topology, 8388608)
         self.p = checked_json(self.protocol, 65536)
         validate(self.t, self.p, self.config, allow_no_remote=True)
@@ -191,7 +191,7 @@ def run(topology, protocol, config, backend, output):
     topology, protocol, config, backend, output = (Path(p).resolve() for p in (topology, protocol, config, backend, output))
     t, p, w = (checked_json(path, size) for path, size in
                ((topology/'topology.json', 8388608), (protocol, 65536), (config, 4*2**20)))
-    require(w.get('schema_version') == 'moe-rdma-transactions/4', 'session frontend requires transactions/4')
+    require(w.get('schema_version') in ('moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'session frontend requires transactions/4 or /5')
     validate(t, p, w)
     require(backend.is_file() and os.access(backend, os.X_OK), 'missing transaction-session executable')
     output.mkdir(exist_ok=False)

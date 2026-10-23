@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "archive_members_checked": 898,
+  "uncompressed_bytes": 30761368,
+  "archive_bytes": 2991399,
+  "archive_sha256": "80a1f8eb5a084d4cedc08e78ff811ba1bdadf8c9d88f63814b9d3a5c6fe24d0d",
+  "command": [
+    "/usr/bin/python3",
+    "-B",
+    "/dev/shm/moe-recovery-delay-20261023/recovery54/restored/source/experiments/recovery_delay/analyze.py",
+    "--input",
+    "/dev/shm/moe-recovery-delay-20261023/recovery54/restored/input",
+    "--output",
+    "/dev/shm/moe-recovery-delay-20261023/recovery54/analysis"
+  ],
+  "cwd": "/dev/shm/moe-recovery-delay-20261023/recovery54/empty-cwd",
+  "exit_code": 0,
+  "outputs_equal": {
+    "summary.json": true,
+    "results.md": true,
+    "report.html": true
+  },
+  "wall_seconds": 3.512371316552162,
+  "peak_child_rss_kib": 85188,
+  "task_tree_bytes": 155360685,
+  "network_rerun": false,
+  "gpu_executed": false,
+  "storage": "tmpfs, volatile; no persistent backup",
+  "archive_scope": "offline packet/timer analysis; no runtime binaries, libraries or Python packages"
+}

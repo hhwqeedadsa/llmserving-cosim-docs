@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-用户要求深度清理后恢复主线。已清除可再生缓存、未使用旧环境、构建和已逐字节核对的派生trace，原件/唯一证据保留或无损压缩；详情`runs/disk_cleanup_20261023/`。共享Btrfs并发占用，不把文件减少写成df净增量。现在完成平台收尾，接续反馈时延泛化对照；不push。
+平台前缀发布已本地提交`aec2bb4`。本轮[反馈时延泛化](../../experiments/recovery_delay/protocol.md)已完成45个预登记条件及9个执行前另登记的Karn80强基线，共54次实际网络；没有重跑原条件。固定8GPU/两EP4/batch4/100G Clos/每源3消息8192B，改变每跳传播500/2000/4000ns、恢复策略和一次尾数据/ACK丢失。独立核对216图、1296个捕获源消息，源ACK计时/Karn/有限历史重放及3种篡改拒绝通过；捕获只覆盖GPU0/4。短超时在长反馈路径无故障也会重复发送；Karn80解决本轮健康冷启动误判，但真实丢失仍可能比固定强基线慢，不把经典参数改进当创新。见[报告](../reviews/ScaleOut恢复稳健性与清理交付_20261023.md)、[HTML](../review_artifacts/recovery_delay_20261023/report.html)、[收尾](../review_artifacts/recovery_delay_20261023/closeout.json)和[离线复现](../review_artifacts/recovery_delay_20261023/reproduction.json)。
+
+54份宿主监控完成，无遗留驱动/服务PID；监控合72.354秒，峰值采样RSS460,513,280B，驱动累计95.149秒（已包含主45条件）。研究树约155.4MB<256MiB；单命令60秒/1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB和tmpfs8GiB预留保持。中间准备/分析时间未全部保存，不称完整阶段耗时实测。898成员/30,761,368B离线归档逐hash核对，新源码根/空cwd复算三份产物逐字节相同，无网络重跑；2,991,399B归档已另存本地持久目录`runs/recovery_delay_checkpoint_20261023/`，见[备份收据](../review_artifacts/recovery_delay_20261023/persistent_backup.json)。源码/实际服务/8原生库hash不变，无安装下载、GPU、依赖更改或旧Prefill/1024失败重跑。研究独立本地提交，不push。
+
+深度清理完成：累计净减少可见文件5,279,514,709B（4.917GiB），保留源码、模型、真实路由、唯一测量内容、当前Python和原生运行环境；历史日志与原始profile无损压缩核验。详细清单和恢复说明在`runs/disk_cleanup_20261023/`。共享Btrfs可用量波动，不能把文件减少写成df净增量。清理后已恢复主线并完成上述研究交付；论文目标仍进行中。
 
 按用户最新目标，首先回答：(1)现有丢包后如何恢复、影响通信效率多少；(2)在原有条件下如何修改或简化以提升效率；(3)提升空间多大。论文标准与创新审计仍保留，不把RTO调参称新机制。上轮恢复价值筛选已完成，是实质进展，但不是丢包性能证据。
 
@@ -21,7 +25,7 @@
 
 独立包/端口/序号核对312个捕获源消息、逐事件重放源ACK计时，目标进展对应真实反馈，三类篡改被拒绝；捕获仅GPU0/4。复用服务/9源码/8库身份不变。13宿主监控正常且无遗留子进程，驱动22.77秒、服务监控合17.74秒、峰值采样RSS460582912B。227成员/7058302B原文、压缩675854B检查点核hash，新源码根/空cwd离线复算三份产物逐字节一致，无网络重跑。原件`/dev/shm/moe-loss-recovery-cost-20261023/`约23.3MB，单命令60秒/RSS1GiB/地址2GiB/64MiB、仿真5ms/结果16MiB，全轮300秒/192MiB含归档及8GiB预留保持。无安装下载/构建/GPU/依赖更改或旧Prefill/1024失败重跑。见[研究报告](../reviews/丢包恢复机制_通信代价与优化空间_20261023.md)、[HTML](../review_artifacts/loss_recovery_cost_20261023/report.html)、[离线复现](../review_artifacts/loss_recovery_cost_20261023/reproduction.json)与[收尾](../review_artifacts/loss_recovery_cost_20261023/closeout.json)。原件易失无持久备份，研究单独本地提交、不push。
 
-完整目标仍in_progress：须继续反馈时延/并发泛化，并为持久stream/事务明确丢包重放、完成信用与重复副作用。当前这些入口拒绝旧fault/recovery模式，不能直接开启或把参考模型冒充现代通信；20μs不改平台默认。前缀发布平台已独立收尾，后续研究不依赖tests/fixture。
+完整目标仍in_progress：反馈时延泛化已完成，后续须检验并发及代表性负载，并为持久stream/事务明确丢包重放、完成信用与重复副作用。当前这些入口拒绝旧fault/recovery模式，不能直接开启或把参考模型冒充现代通信；20μs不改平台默认。前缀发布平台已独立收尾，后续研究不依赖tests/fixture。
 
 第二阶段恢复保留筛选见[报告](../reviews/MoE在途恢复价值与状态存活判别_20261023.md)与[复现](../review_artifacts/recovery_value_20261023/reproduction.json)：约68%仅为全部健康结果完成时的条件任务数上界，实际收益下界0；原件`/dev/shm/moe-recovery-value-20261023/`。论文主贡献仍未成立，不能把该上界当作丢包时延收益。
 

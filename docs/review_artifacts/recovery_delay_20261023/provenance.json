@@ -1,0 +1,2871 @@
+{
+  "platform_head": "aec2bb4edce1acde1658000e6b5843a78271bbb9",
+  "runtime": {
+    "binary": "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+    "sha256": "af5bb029524b962f1367c5f16fb44d7246cbc622ac60346516125c29c2bc9ac9",
+    "sources": {
+      "backend/rdma/fabric.hh": "771649e91567b84c78706cba8acac44d901d8cfd9bc18d71842a251909057d00",
+      "backend/rdma/fabric.cc": "3eb3be41d95fecd97a6d666cd632e8e5093a82b7dcdfbfeb6bb4d63439f9be42",
+      "backend/rdma/astra_adapter.hh": "29c09c9d808c7e19bbdca5647d55f4bb161046c878595662faf8819bbc86feb2",
+      "backend/rdma/astra_adapter.cc": "89fcc1c78944b570b4b3f8747b5e04cca4185f56cfdc3cff799945cc30ecf303",
+      "backend/rdma/service.cc": "3e1019dfea8cb958b1ac8e7d4d7ee674e13543806e52b64405327df011e75338",
+      "backend/rdma/logging.cc": "535806de03c3f2805022f9875c062d9091c94f9552692e6155fe9be1fc463db9",
+      "backend/rdma/recovery.hh": "51f15d2c463b729c357ec1845770e110194da9908372cbf567b4961549fd90f4",
+      "backend/rdma/recovery.cc": "7b3fe217d9944776a9f094192c3a13407dcda62cbd88033ef16b42d0d5b1b8a3",
+      "backend/rdma/recovery_records.hh": "864c8e7977876bf0759eef849124983f8b61fe84d7cbc8b2ebda9c3ad2cf392c"
+    },
+    "libraries": {
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so": "04097544c76201d41a1ca80d5762b38e3fdfc4672a480d7d1f6b75bc4c38b54b",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so": "08b8382fcb6c7469dd0542229883eca67357bb28feb9edff3fbae07d7817b4ec",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so": "28376cb47a4d969a53cf19dbe64bfbc3b6375e936144d2355d8157daede20c98",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so": "2ebf9e8bd0ff4c0c970f076f2bfe3ef5da54c240a2f2c02a4a4ce786459c2557",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so": "62ef37cf30cfd6bb9178e7624ee9e8f86d1433ff4706c6f2c954f1993bfd0e0c",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so": "631755f823937a40d2a851c0c3aded254efc1cd956f50b19bb0f471da8c27fc9",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so": "0d216548195c7324dbf850040050396aa79e359c848e5bdd898ed9635435b1ef",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so": "9975681ae1df71e900cbdd6b6379f0605524cd399b632ea7c5a5fb4bdc5dccaa"
+    }
+  },
+  "primary_input_hashes_at_run": {
+    "protocol.md": "122b86e0b009b84f2018bae1a41a40f8f7cf7deb74d3bfa5469cde3abbaa76a4",
+    "run.py": "ec7f8f74b5fcdc104421415f097092636423ca7289d1dd4dbaaeecdbb38389e8",
+    "service.json": "1f1b5e44c640fb9fef6d0fc792524f75e005773a0d8493f217c05157df793d28",
+    "protocol.json": "7e342c5d0161e1319f8950728434d452b60a326e1e695b56388a35fb59c4c04a",
+    "topology.json": "0698011163426629c8db05f871949a629b0a044c5cd6866a17d366a85afbe56b"
+  },
+  "bootstrap_input_hashes_at_run": {
+    "protocol.md": "462cbe43b4bcb2e86387c1eabec45f1f39f86014220482c23fecbb4e3885f474",
+    "run.py": "f0adcbea65b3f43b0694e01f670ac9b316dab9139a8e5e42e866a9512d8a422e",
+    "service.json": "1f1b5e44c640fb9fef6d0fc792524f75e005773a0d8493f217c05157df793d28",
+    "protocol.json": "7e342c5d0161e1319f8950728434d452b60a326e1e695b56388a35fb59c4c04a",
+    "topology.json": "0698011163426629c8db05f871949a629b0a044c5cd6866a17d366a85afbe56b",
+    "analyze.py": "d125e159a157323eff8f0916837a125375ba86cbc341e2c4e1502f476dbbab77",
+    "reproduce.py": "a62082029421a2b1434dd60b99e9a7c73a2a0e78ae3eaae907383cc13cc31972"
+  },
+  "current_experiment_source_hashes": {
+    "experiments/recovery_delay/protocol.md": "462cbe43b4bcb2e86387c1eabec45f1f39f86014220482c23fecbb4e3885f474",
+    "experiments/recovery_delay/run.py": "f0adcbea65b3f43b0694e01f670ac9b316dab9139a8e5e42e866a9512d8a422e",
+    "experiments/recovery_delay/service.json": "1f1b5e44c640fb9fef6d0fc792524f75e005773a0d8493f217c05157df793d28",
+    "experiments/recovery_delay/protocol.json": "7e342c5d0161e1319f8950728434d452b60a326e1e695b56388a35fb59c4c04a",
+    "experiments/recovery_delay/topology.json": "0698011163426629c8db05f871949a629b0a044c5cd6866a17d366a85afbe56b",
+    "experiments/recovery_delay/analyze.py": "11348463d6082c20a89e371f90f2308529db494271cf3432a814305cb3a872ba",
+    "experiments/recovery_delay/reproduce.py": "82d37e9a48093333744eed5d65b603a8e46a1d5edc0d2fae087ac886bfefa277",
+    "experiments/recovery_delay/README.md": "8fb94ece1c79975b2e33becb1e8823726d00c951ea0d348d159516b44d7bcaaa"
+  },
+  "original_root": "/dev/shm/moe-recovery-delay-20261023",
+  "public_commands": [
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/topology-500.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06439194642007351
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/topology-2000.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06420553661882877
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/topology-4000.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06423688121140003
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4764746688306332
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11434739455580711
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5755402520298958
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11460630781948566
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5713202841579914
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11499474756419659
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6709373835474253
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1148344837129116
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5703068114817142
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11446760408580303
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5674879476428032
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed20-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11466763913631439
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6204204056411982
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11411913484334946
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4793496672064066
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11447035148739815
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.585583383217454
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-fixed40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11461743898689747
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5190142523497343
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11452928185462952
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5732725895941257
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11451635882258415
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.567875288426876
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-karn40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11450843513011932
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6186180841177702
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1145387552678585
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5677990578114986
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11487717926502228
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4705484081059694
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d500-history40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11452626064419746
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5679398346692324
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11441374942660332
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.568000329658389
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11445653811097145
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5675597917288542
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11472395248711109
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.668356742709875
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11441151984035969
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.7711290512233973
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11447410844266415
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.7197944521903992
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed20-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11503221839666367
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5240770801901817
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11440350115299225
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4721242003142834
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11431699618697166
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4688045028597116
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-fixed40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11453092470765114
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4687964096665382
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11463995091617107
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5684905834496021
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11458729393780231
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4697922877967358
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-karn40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11463262885808945
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4684490207582712
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11446228250861168
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5683148466050625
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11467842012643814
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6175467651337385
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d2000-history40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11494254879653454
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4685617703944445
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11436777003109455
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4675516840070486
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11430200189352036
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4172805212438107
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11450809985399246
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6734603438526392
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11565018817782402
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6701044291257858
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11436525918543339
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6676246412098408
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed20-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1144227609038353
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6671711914241314
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1144113726913929
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5671701170504093
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11432424932718277
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5679297484457493
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-fixed40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11465238779783249
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6856678891927004
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11446006782352924
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.6197216343134642
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11558410711586475
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.8239994291216135
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-karn40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11439614929258823
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5700446050614119
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11445027776062489
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5682044047862291
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1143285408616066
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.567806527018547
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/d4000-history40-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11453604139387608
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/topology-500.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-500"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06432334892451763
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/topology-2000.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-2000"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06418707594275475
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/topology-4000.json",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-4000"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.06429710425436497
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5738760214298964
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11448944732546806
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5209701769053936
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11466009356081486
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-500",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5704437121748924
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d500-karn80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11448950134217739
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5698481630533934
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.114407729357481
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4704898186028004
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11481880769133568
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-2000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5692789275199175
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d2000-karn80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11436265893280506
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-clean.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-clean"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.5712037365883589
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-clean",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-clean-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1148160919547081
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-tail.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-tail"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.4795138165354729
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-tail",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-tail-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.11462208069860935
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-run",
+        "--topology",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/fabric-4000",
+        "--protocol",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-ack.json",
+        "--config",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/service.json",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-ack"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 1.668166609480977
+    },
+    {
+      "command": [
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-diagnose",
+        "--run",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-ack",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80/d4000-karn80-ack-diagnosis.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "wall_seconds": 0.1145200114697218
+    }
+  ],
+  "driver_receipts": {
+    "resume-launch.json": {
+      "pid": 1955594,
+      "command": [
+        "timeout",
+        "290s",
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "experiments/recovery_delay/run.py",
+        "--resume",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--runtime-manifest",
+        "/dev/shm/moe-wire-headers-20261023/build-verification.json",
+        "--library-manifest",
+        "/dev/shm/moe-wire-headers-20261023/old-runtime.json",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "initial_completed_conditions": 5
+    },
+    "bootstrap-launch.json": {
+      "pid": 1958717,
+      "command": [
+        "timeout",
+        "210s",
+        "/home/lry/a100_ep_runtime/第04轮_仿真平台验证_20260917/LLMServingSim/venv/bin/python",
+        "-B",
+        "experiments/recovery_delay/run.py",
+        "--bootstrap-baseline",
+        "/dev/shm/moe-recovery-delay-20261023",
+        "--backend",
+        "/dev/shm/moe-wire-headers-20261023/bin/ns3.42-moe-rdma-service",
+        "--runtime-manifest",
+        "/dev/shm/moe-wire-headers-20261023/build-verification.json",
+        "--library-manifest",
+        "/dev/shm/moe-wire-headers-20261023/old-runtime.json",
+        "--protoc",
+        "/home/lry/tools/protobuf/bin/protoc",
+        "--output",
+        "/dev/shm/moe-recovery-delay-20261023/bootstrap80"
+      ]
+    }
+  },
+  "monitor_summaries": [
+    {
+      "case": "d500-fixed80-clean",
+      "wall_seconds": 1.2535532489418983,
+      "peak_sampled_group_rss_bytes": 456560640,
+      "process_group": 1954383,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed80-tail",
+      "wall_seconds": 1.337833484634757,
+      "peak_sampled_group_rss_bytes": 453001216,
+      "process_group": 1954440,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed80-ack",
+      "wall_seconds": 1.3639321718364954,
+      "peak_sampled_group_rss_bytes": 452276224,
+      "process_group": 1954479,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed20-clean",
+      "wall_seconds": 1.3793315943330526,
+      "peak_sampled_group_rss_bytes": 455249920,
+      "process_group": 1954519,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed20-tail",
+      "wall_seconds": 1.3306016605347395,
+      "peak_sampled_group_rss_bytes": 456388608,
+      "process_group": 1954577,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed20-ack",
+      "wall_seconds": 1.3346835765987635,
+      "peak_sampled_group_rss_bytes": 455430144,
+      "process_group": 1955598,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed40-clean",
+      "wall_seconds": 1.3319073747843504,
+      "peak_sampled_group_rss_bytes": 459771904,
+      "process_group": 1955644,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed40-tail",
+      "wall_seconds": 1.240087179467082,
+      "peak_sampled_group_rss_bytes": 455393280,
+      "process_group": 1955683,
+      "status": "completed"
+    },
+    {
+      "case": "d500-fixed40-ack",
+      "wall_seconds": 1.346327193081379,
+      "peak_sampled_group_rss_bytes": 456400896,
+      "process_group": 1955722,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn40-clean",
+      "wall_seconds": 1.2827268801629543,
+      "peak_sampled_group_rss_bytes": 458625024,
+      "process_group": 1955761,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn40-tail",
+      "wall_seconds": 1.3407762292772532,
+      "peak_sampled_group_rss_bytes": 456503296,
+      "process_group": 1955800,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn40-ack",
+      "wall_seconds": 1.3550372384488583,
+      "peak_sampled_group_rss_bytes": 458383360,
+      "process_group": 1955839,
+      "status": "completed"
+    },
+    {
+      "case": "d500-history40-clean",
+      "wall_seconds": 1.3510998729616404,
+      "peak_sampled_group_rss_bytes": 460443648,
+      "process_group": 1955878,
+      "status": "completed"
+    },
+    {
+      "case": "d500-history40-tail",
+      "wall_seconds": 1.3502177130430937,
+      "peak_sampled_group_rss_bytes": 456364032,
+      "process_group": 1955925,
+      "status": "completed"
+    },
+    {
+      "case": "d500-history40-ack",
+      "wall_seconds": 1.2450106348842382,
+      "peak_sampled_group_rss_bytes": 457342976,
+      "process_group": 1955964,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed80-clean",
+      "wall_seconds": 1.343403648585081,
+      "peak_sampled_group_rss_bytes": 454410240,
+      "process_group": 1956003,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed80-tail",
+      "wall_seconds": 1.340643797069788,
+      "peak_sampled_group_rss_bytes": 459464704,
+      "process_group": 1956045,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed80-ack",
+      "wall_seconds": 1.3337308373302221,
+      "peak_sampled_group_rss_bytes": 455380992,
+      "process_group": 1956122,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed20-clean",
+      "wall_seconds": 1.447301022708416,
+      "peak_sampled_group_rss_bytes": 459460608,
+      "process_group": 1956190,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed20-tail",
+      "wall_seconds": 1.4841554407030344,
+      "peak_sampled_group_rss_bytes": 458452992,
+      "process_group": 1956236,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed20-ack",
+      "wall_seconds": 1.4746296014636755,
+      "peak_sampled_group_rss_bytes": 459489280,
+      "process_group": 1956282,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed40-clean",
+      "wall_seconds": 1.3160850200802088,
+      "peak_sampled_group_rss_bytes": 456400896,
+      "process_group": 1956321,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed40-tail",
+      "wall_seconds": 1.2296295128762722,
+      "peak_sampled_group_rss_bytes": 457527296,
+      "process_group": 1956363,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-fixed40-ack",
+      "wall_seconds": 1.2334728837013245,
+      "peak_sampled_group_rss_bytes": 458317824,
+      "process_group": 1956402,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn40-clean",
+      "wall_seconds": 1.2662833277136087,
+      "peak_sampled_group_rss_bytes": 458444800,
+      "process_group": 1956441,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn40-tail",
+      "wall_seconds": 1.3366035651415586,
+      "peak_sampled_group_rss_bytes": 457510912,
+      "process_group": 1956480,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn40-ack",
+      "wall_seconds": 1.2244535721838474,
+      "peak_sampled_group_rss_bytes": 457588736,
+      "process_group": 1956519,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-history40-clean",
+      "wall_seconds": 1.2342175897210836,
+      "peak_sampled_group_rss_bytes": 459694080,
+      "process_group": 1956559,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-history40-tail",
+      "wall_seconds": 1.347800936549902,
+      "peak_sampled_group_rss_bytes": 457596928,
+      "process_group": 1956599,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-history40-ack",
+      "wall_seconds": 1.3730784803628922,
+      "peak_sampled_group_rss_bytes": 456331264,
+      "process_group": 1956638,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed80-clean",
+      "wall_seconds": 1.2561195809394121,
+      "peak_sampled_group_rss_bytes": 457515008,
+      "process_group": 1956684,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed80-tail",
+      "wall_seconds": 1.2493728958070278,
+      "peak_sampled_group_rss_bytes": 459403264,
+      "process_group": 1956723,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed80-ack",
+      "wall_seconds": 1.2092795316129923,
+      "peak_sampled_group_rss_bytes": 459653120,
+      "process_group": 1956763,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed20-clean",
+      "wall_seconds": 1.4489411134272814,
+      "peak_sampled_group_rss_bytes": 457531392,
+      "process_group": 1956803,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed20-tail",
+      "wall_seconds": 1.4441920053213835,
+      "peak_sampled_group_rss_bytes": 454352896,
+      "process_group": 1956851,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed20-ack",
+      "wall_seconds": 1.4494463838636875,
+      "peak_sampled_group_rss_bytes": 457576448,
+      "process_group": 1956903,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed40-clean",
+      "wall_seconds": 1.4469360299408436,
+      "peak_sampled_group_rss_bytes": 456540160,
+      "process_group": 1956949,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed40-tail",
+      "wall_seconds": 1.332318129017949,
+      "peak_sampled_group_rss_bytes": 458510336,
+      "process_group": 1957003,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-fixed40-ack",
+      "wall_seconds": 1.3336986117064953,
+      "peak_sampled_group_rss_bytes": 459468800,
+      "process_group": 1957042,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn40-clean",
+      "wall_seconds": 1.4673890676349401,
+      "peak_sampled_group_rss_bytes": 457355264,
+      "process_group": 1957082,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn40-tail",
+      "wall_seconds": 1.342766847461462,
+      "peak_sampled_group_rss_bytes": 458637312,
+      "process_group": 1957121,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn40-ack",
+      "wall_seconds": 1.5631318483501673,
+      "peak_sampled_group_rss_bytes": 458547200,
+      "process_group": 1957167,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-history40-clean",
+      "wall_seconds": 1.3433540873229504,
+      "peak_sampled_group_rss_bytes": 460513280,
+      "process_group": 1957206,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-history40-tail",
+      "wall_seconds": 1.352971389889717,
+      "peak_sampled_group_rss_bytes": 458539008,
+      "process_group": 1957246,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-history40-ack",
+      "wall_seconds": 1.3340123947709799,
+      "peak_sampled_group_rss_bytes": 459481088,
+      "process_group": 1957286,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn80-clean",
+      "wall_seconds": 1.3568405639380217,
+      "peak_sampled_group_rss_bytes": 453107712,
+      "process_group": 1958724,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn80-tail",
+      "wall_seconds": 1.3181940242648125,
+      "peak_sampled_group_rss_bytes": 459517952,
+      "process_group": 1958763,
+      "status": "completed"
+    },
+    {
+      "case": "d500-karn80-ack",
+      "wall_seconds": 1.3516198806464672,
+      "peak_sampled_group_rss_bytes": 459509760,
+      "process_group": 1958802,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn80-clean",
+      "wall_seconds": 1.3265847843140364,
+      "peak_sampled_group_rss_bytes": 457592832,
+      "process_group": 1958841,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn80-tail",
+      "wall_seconds": 1.2464762218296528,
+      "peak_sampled_group_rss_bytes": 457515008,
+      "process_group": 1958887,
+      "status": "completed"
+    },
+    {
+      "case": "d2000-karn80-ack",
+      "wall_seconds": 1.3309962507337332,
+      "peak_sampled_group_rss_bytes": 458559488,
+      "process_group": 1958926,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn80-clean",
+      "wall_seconds": 1.3276200164109468,
+      "peak_sampled_group_rss_bytes": 457412608,
+      "process_group": 1958965,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn80-tail",
+      "wall_seconds": 1.2440480068325996,
+      "peak_sampled_group_rss_bytes": 458637312,
+      "process_group": 1959004,
+      "status": "completed"
+    },
+    {
+      "case": "d4000-karn80-ack",
+      "wall_seconds": 1.4490719083696604,
+      "peak_sampled_group_rss_bytes": 458506240,
+      "process_group": 1959043,
+      "status": "completed"
+    }
+  ],
+  "interruption": {
+    "case": "d500-fixed20-ack",
+    "reason": "external controller interruption; no execution directory/result/monitor or live original process",
+    "native_network_reexecuted": false
+  },
+  "scope": {
+    "synthetic": true,
+    "modern_GIN": false,
+    "GPU_executed": false,
+    "hardware_calibrated": false,
+    "independent_stochastic_repetitions": 0,
+    "new_algorithm": false,
+    "captured_nodes": [
+      0,
+      4
+    ]
+  }
+}

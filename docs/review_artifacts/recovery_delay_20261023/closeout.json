@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "conditions": 54,
+  "primary_conditions": 45,
+  "supplementary_conditions": 9,
+  "network_executions": 54,
+  "source_hashes_verified": 9,
+  "runtime_binaries_verified": 1,
+  "library_hashes_verified": 8,
+  "monitors_completed": 54,
+  "monitor_wall_seconds": 72.35399686358869,
+  "peak_sampled_group_rss_bytes": 460513280,
+  "driver_cumulative_wall_seconds": 95.14934306405485,
+  "driver_timing_note": "bootstrap wall_seconds already includes primary; do not add primary a second time",
+  "all_recorded_cli_wall_seconds": 91.49272989854217,
+  "final_offline_replay_wall_seconds": 3.512371316552162,
+  "previous45_offline_replay_wall_seconds": 2.956463912501931,
+  "finalization_verification_wall_seconds": 0.21388292498886585,
+  "task_tree_apparent_bytes": 155367522,
+  "task_tree_budget_bytes": 268435456,
+  "tmpfs_free_bytes": 258812768256,
+  "tmpfs_min_free_bytes": 8589934592,
+  "analysis_checks": {
+    "graphs": 216,
+    "captured_source_messages": 1296,
+    "source_only_rtt_and_timer_replay": true,
+    "mutations_rejected": [
+      "premature_timeout",
+      "inflated_source_payload",
+      "fabricated_history_hit"
+    ],
+    "all_same_delay_identities_equal": true,
+    "all_same_delay_first_paths_equal": true,
+    "karn_history_shared_execution_equal": {
+      "500-clean": true,
+      "500-tail": true,
+      "500-ack": true,
+      "2000-clean": true,
+      "2000-tail": true,
+      "2000-ack": true
+    }
+  },
+  "network_rerun": false,
+  "GPU_executed": false,
+  "hardware_calibrated": false,
+  "persistent_backup": "persistent_backup.json",
+  "monitor_and_driver_pids_all_exited": true,
+  "budget_note": "driver and recorded replay timings are reported separately; intervening analysis/preparation command times were not all persisted, so this is not a complete measured stage CPU/wall total",
+  "full_research_goal_complete": false,
+  "fixed_dependency_checkouts_verified": 13,
+  "python_syntax_valid": true,
+  "experiment_JSON_valid": true,
+  "changed_markdown_local_targets_exist": true,
+  "public_script_help_exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "git_diff_check_passed": true
+}

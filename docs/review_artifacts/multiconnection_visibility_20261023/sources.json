@@ -1,0 +1,101 @@
+[
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "docs/userguide/source/api/device_gin.rst",
+    "blob": "4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+    "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b",
+    "size": 19048,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/include/nccl_device/gin.h",
+    "blob": "24ba3855188d15ac47c2b107552b2b31e3c1273c",
+    "sha256": "539868dc2af9a421c43db0327287f14db74fb407b5c0c96057a7302b42c203bb",
+    "size": 29433,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/include/nccl_device/impl/gin__funcs.h",
+    "blob": "cfcd5470bbedca8be3d0657fc002bf950814c0f1",
+    "sha256": "8ed25a57375cef3856c81a49be3b89024e567bd1e1dbe6f39ebffb1e7836255d",
+    "size": 81127,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+    "blob": "6ad2c76b3e88e3419298c7b6772c399246a8bc29",
+    "sha256": "510dae47c9c4e9b8a1dd58c63e9197e4b69f8c6dbc559cb3e7aed7ee41e54b9e",
+    "size": 35130,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "blob": "976ab919d4ee438147f635d247721704bd511868",
+    "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+    "size": 60093,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/gin/gin_host.cc",
+    "blob": "b4ec6c2a4056031f540edf2271acb5fc801fa6c6",
+    "sha256": "402adfd2097ca25a8abd4e0151511ad933cbcb9841f941230078827e89880d81",
+    "size": 22975,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/devcomm/devcomm_v23000.cc",
+    "blob": "2fbbd070384dc20c02321fdb82a248260acfbf90",
+    "sha256": "542f18ac73588c16eb4d9c8515a03f857d9d189ce1bfa9cf5d84c5ce64cdad1d",
+    "size": 9443,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "deepep",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "blob": "732c598ca1986636c300036533141ebeb49a320e",
+    "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+    "size": 11335,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "deepep",
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+    "blob": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+    "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+    "size": 11249,
+    "origin": "existing verified cache"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "blob": "4e95c39021c6ec377e16b16536b912f5c630c658",
+    "sha256": "bea2811ba641c4191037ba4aa0ab1ae8dd900eabe0894b0b74ffe7a50bde8146",
+    "size": 11209,
+    "origin": "one fixed-revision HTTPS source response"
+  },
+  {
+    "project": "nccl",
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "path": "src/include/nccl_device/impl/barrier__funcs.h",
+    "blob": "0834ef50bc2348857a7e990f4ab18b11faf44ec2",
+    "sha256": "038c07f5e2b3d520e4701fbfe1608b015e13cee85b1d981606c172dc98ed9c88",
+    "size": 10217,
+    "origin": "one fixed-revision HTTPS source response"
+  }
+]

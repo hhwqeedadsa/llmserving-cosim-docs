@@ -1,0 +1,54 @@
+[
+  {
+    "name": "local_completion_only",
+    "events": 10,
+    "reachable_subsets": 41,
+    "complete_topological_orders": 360,
+    "consume_implies_both_visible": false,
+    "counterexample_prefix": [
+      "receive0",
+      "local0",
+      "receive1",
+      "local1",
+      "flush",
+      "signal0",
+      "visible0",
+      "wait",
+      "consume"
+    ]
+  },
+  {
+    "name": "one_visibility_domain",
+    "events": 10,
+    "reachable_subsets": 35,
+    "complete_topological_orders": 210,
+    "consume_implies_both_visible": false,
+    "counterexample_prefix": [
+      "receive0",
+      "local0",
+      "receive1",
+      "local1",
+      "flush",
+      "visible0",
+      "signal0",
+      "wait",
+      "consume"
+    ]
+  },
+  {
+    "name": "explicit_all_domain_capability",
+    "events": 10,
+    "reachable_subsets": 32,
+    "complete_topological_orders": 132,
+    "consume_implies_both_visible": true,
+    "counterexample_prefix": null
+  },
+  {
+    "name": "per_domain_signals",
+    "events": 11,
+    "reachable_subsets": 36,
+    "complete_topological_orders": 316,
+    "consume_implies_both_visible": true,
+    "counterexample_prefix": null
+  }
+]

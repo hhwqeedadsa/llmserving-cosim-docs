@@ -1,0 +1,55 @@
+{
+  "source_files": 11,
+  "excerpt_occurrences": 21,
+  "generic_all_context_barrier_issues_per_context": true,
+  "deepep_custom_barrier_context": 0,
+  "unconditional_generic_flush_remote_visibility": false,
+  "gdaki_physical_visibility_domain_verified": false,
+  "library_bug_proven": false,
+  "simulated_packets": false,
+  "GPU_executed": false,
+  "independent_requests": false,
+  "timing_predictions": false,
+  "profile_sha256": "2cf764f37095971ecb347c7295edf7d6f522ffb5240f6a050e5926b2d6224b5a",
+  "observed_combine_remote_puts_by_declared_connection": {
+    "0": 59,
+    "1": 58
+  },
+  "observed_combine_operand_bytes_by_declared_connection": {
+    "0": 849600,
+    "1": 835200
+  },
+  "observed_combine_remote_puts_by_context": {
+    "0": 17,
+    "1": 17,
+    "2": 16,
+    "3": 15,
+    "4": 15,
+    "5": 14,
+    "6": 11,
+    "7": 12
+  },
+  "profile_scope": "previously seen EP4 48-token prefix, declared 8 contexts/2 connections, not measured NICs",
+  "illustrative_barrier_API_counts": {
+    "ranks": 4,
+    "requested_contexts": 17,
+    "connections": 2,
+    "allocated_contexts": 18,
+    "custom_single_context": {
+      "total": 16,
+      "remote": 12,
+      "self": 4
+    },
+    "generic_all_allocated_contexts": {
+      "total": 288,
+      "remote": 216,
+      "self": 72
+    },
+    "scope": "one barrier including self; API calls, not WQEs/packets/cost or a like-for-like optimization"
+  },
+  "unresolved": [
+    "GDAKI receiving visibility domain across contexts/connections/NICs",
+    "self-peer physical service and calibrated completion/visibility costs",
+    "active hardware/configuration and independent requests"
+  ]
+}

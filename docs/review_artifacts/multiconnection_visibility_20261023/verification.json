@@ -1,0 +1,44 @@
+{
+  "verified": true,
+  "source_files": 11,
+  "commit_tree_blob_sha256_checked": true,
+  "excerpt_occurrences": 21,
+  "finite_cases": [
+    {
+      "name": "local_completion_only",
+      "complete_orders": 360,
+      "orders_with_early_consume": 88,
+      "enumerated_prefixes": 1489
+    },
+    {
+      "name": "one_visibility_domain",
+      "complete_orders": 210,
+      "orders_with_early_consume": 26,
+      "enumerated_prefixes": 1045
+    },
+    {
+      "name": "explicit_all_domain_capability",
+      "complete_orders": 132,
+      "orders_with_early_consume": 0,
+      "enumerated_prefixes": 811
+    },
+    {
+      "name": "per_domain_signals",
+      "complete_orders": 316,
+      "orders_with_early_consume": 0,
+      "enumerated_prefixes": 1731
+    }
+  ],
+  "total_complete_topological_orders": 1018,
+  "repeated_analysis_files": [
+    "cases.json",
+    "excerpts.json",
+    "finite-results.json",
+    "summary.json"
+  ],
+  "failed_source_request_not_retried": true,
+  "missing_header_not_required_for_implementation_body_claims": true,
+  "source_CODE_executed": false,
+  "network_or_GPU_simulated": false,
+  "hardware_counterexample_claimed": false
+}

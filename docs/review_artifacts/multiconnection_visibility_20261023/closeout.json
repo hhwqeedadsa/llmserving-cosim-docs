@@ -1,0 +1,213 @@
+{
+  "phase_complete": true,
+  "goal_status": "in_progress",
+  "paper_goal_complete": false,
+  "main_contribution_established": false,
+  "source_base_commit": "538e30bd032f5df26efc9da3c95ac971812f4e5a",
+  "monitored_seconds": 19.9917801450938,
+  "monitors": [
+    {
+      "stage": "analysis-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_multiconnection_visibility.py",
+        "--source",
+        "/dev/shm/moe-multiconnection-visibility-20261023/sources",
+        "--profile",
+        "docs/review_artifacts/slot_projection_20261023/real-profile.json",
+        "--output",
+        "/dev/shm/moe-multiconnection-visibility-20261023/analysis"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.13636360689997673,
+      "peak_sampled_group_rss_bytes": 7499776
+    },
+    {
+      "stage": "check-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/check_multiconnection_visibility.py",
+        "--source",
+        "/dev/shm/moe-multiconnection-visibility-20261023/sources",
+        "--profile",
+        "docs/review_artifacts/slot_projection_20261023/real-profile.json",
+        "--analysis",
+        "/dev/shm/moe-multiconnection-visibility-20261023/analysis",
+        "--repeat",
+        "/dev/shm/moe-multiconnection-visibility-20261023/repeat",
+        "--output",
+        "/dev/shm/moe-multiconnection-visibility-20261023/verification.json"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.13976013101637363,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "stage": "collect-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/multiconnection_visibility.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--output",
+        "/dev/shm/moe-multiconnection-visibility-20261023/sources"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "child_failed",
+      "exit_code": 1,
+      "wall_seconds": 15.619796689599752,
+      "peak_sampled_group_rss_bytes": 40386560
+    },
+    {
+      "stage": "deps-monitor",
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.461897736415267,
+      "peak_sampled_group_rss_bytes": 24428544
+    },
+    {
+      "stage": "final-monitor",
+      "command": [
+        "python3",
+        "/dev/shm/moe-multiconnection-visibility-20261023/final_check.py"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.2611161880195141,
+      "peak_sampled_group_rss_bytes": 25559040
+    },
+    {
+      "stage": "package-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/package_multiconnection_visibility.py",
+        "archive",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--root",
+        "/dev/shm/moe-multiconnection-visibility-20261023",
+        "--output",
+        "docs/review_artifacts/multiconnection_visibility_20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.2448973711580038,
+      "peak_sampled_group_rss_bytes": 20156416
+    },
+    {
+      "stage": "recovery-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/package_multiconnection_visibility.py",
+        "recover",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--root",
+        "/dev/shm/moe-multiconnection-visibility-20261023",
+        "--output",
+        "docs/review_artifacts/multiconnection_visibility_20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.3596860934048891,
+      "peak_sampled_group_rss_bytes": 41422848
+    },
+    {
+      "stage": "repeat-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/audit_multiconnection_visibility.py",
+        "--source",
+        "/dev/shm/moe-multiconnection-visibility-20261023/sources",
+        "--profile",
+        "docs/review_artifacts/slot_projection_20261023/real-profile.json",
+        "--output",
+        "/dev/shm/moe-multiconnection-visibility-20261023/repeat"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.14003700017929077,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "stage": "report-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/package_multiconnection_visibility.py",
+        "report",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--root",
+        "/dev/shm/moe-multiconnection-visibility-20261023",
+        "--output",
+        "docs/review_artifacts/multiconnection_visibility_20261023"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 0.14185173995792866,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "stage": "unrequested-monitor",
+      "command": [
+        "python3",
+        "experiments/paper_readiness/multiconnection_visibility.py",
+        "--repo",
+        "/home/lry/moe-ub-cosim",
+        "--output",
+        "/dev/shm/moe-multiconnection-visibility-20261023/sources",
+        "--finish-unrequested"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.4863735884428024,
+      "peak_sampled_group_rss_bytes": 42487808
+    }
+  ],
+  "task_usage_before_closeout": {
+    "apparent_bytes": 2263087,
+    "allocated_bytes": 2600960
+  },
+  "tmpfs_free_bytes": 260234297344,
+  "raw_path": "/dev/shm/moe-multiconnection-visibility-20261023",
+  "raw_volatile": true,
+  "persistent_backup": false,
+  "archive_sha256": "e3e34f8644ccba377d64ad6b34c39329db551258cb05514396e75d4ade567a0d",
+  "source_requests": 3,
+  "successful_source_requests": 2,
+  "failed_source_requests": 1,
+  "failed_source_request_retried": false,
+  "first_collector_implementation_preserved": true,
+  "collector_change": "Retain failed header request; finish only two unrequested implementation blobs. No retry of header or external source execution.",
+  "new_network_simulations": 0,
+  "GPU_executed": false,
+  "platform_or_dependency_changes": false,
+  "report_monitor_scope": "report-monitor counted raw root; small report directory included in package/recovery/final monitors and final cumulative accounting. No claim of earlier sampling of that directory.",
+  "budgets": {
+    "command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "stage_bytes": 33554432,
+    "cumulative_seconds": 240,
+    "cumulative_bytes": 134217728,
+    "archive_members_bytes": 50331648,
+    "archive_compressed_bytes": 16777216,
+    "tmpfs_reserve_bytes": 8589934592
+  },
+  "next_question": "Implement explicit provider visibility coverage and callbacks under the fixed application protocol; obtain matching hardware calibration before ranking network strategies."
+}

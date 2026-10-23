@@ -111,3 +111,11 @@ GDAKI的MLX5特定可见性作为provider规则单独实现，不能冒充通用
 这个结论只约简静态需求核算。token身份、目标地址、局部归约、真实就绪和按通道发起的依赖仍须保留；不能用连接总字节直接替代事件执行、WQE或包，也不能由总量相同推断排队/完成时间相同。固定参数、完整数据布局、控制/self-peer、provider和校准门槛均不变。
 
 人工4-token的24个合法全排列提供了同一token跨连接而总量不变的见证；真实48-token输入的3种已注册就绪策略实际只有1种slot排列，缺少不同顺序的实证对照，该负结果保留。静态区间公式有源码及独立整数枚举依据，不将这3次执行写成3种不同并发分配或生产性能证据。该有限性质本身不是论文主贡献。
+
+## 10. 通知覆盖范围与强基线的新增门槛
+
+[多context屏障审计](../../docs/reviews/多连接屏障与远端可见性_20261023.md)取得固定NCCL的`impl/gin_barrier__funcs.h`和`impl/barrier__funcs.h`：`ncclGinAllContexts`分支按**每个已分配context**发signal并逐context等待，不只是每连接或每NIC一次；同一NIC上的不同QP也不能仅凭名称合并其顺序。单context构造仍保留自身范围，不把全部NCCL屏障统称为全context。NCCL另有利用`FlushesAllPutsOnAnySignal`能力的分层优化，故不能从全context分支反推所有真实系统都必须使用同样控制请求数。
+
+现代DeepEP自定义路径先flush所用contexts，再通过context0通知。GDAKI宣告MLX5到达signal刷新已收到put，但其跨context/连接/NIC的物理可见性覆盖范围仍未在本环境验证；上述源码差异不证明DeepEP缺陷。实施时须逐项保存数据context/QP、连接、设备和目标可见性域映射，及signal覆盖依据。未有保证时，不能把原生字节ACK直接转成全部`visible`事件，或在收到context0通知后遍历解锁其他域的token。
+
+强基线须分别定义固定DeepEP自定义协议及明确选用的NCCL all-context协议：包括allocated/active contexts、self-peer请求、flush与signal数、源完成和目标消费，不能偷偷换屏障再将差异归因于网络算法。两者即使跨机数据字节相同，必要控制量也可能不同；API调用数不等于包或成本。缺少目标域能力与匹配校准时，完整现代性能比较仍不通过；允许无时间源码/依赖核验，不能补零成本全局可见性。

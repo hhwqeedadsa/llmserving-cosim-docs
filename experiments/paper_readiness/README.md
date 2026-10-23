@@ -1264,3 +1264,29 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 experiments/paper_readiness/
 ```
 
 分析用区间交集公式，独立checker直接执行每warp的整数序号循环，并检查原件、全部事件前驱、动态token槽位、地址及通道顺序。`*-profile.json`中的`token_puts`按`path`区分：本地行为是旁路拷贝，其名义通道行不是实际QP/NIC流量；只有rdma行计跨rank put操作数。数据是操作数字节，不是WQE、线上包或排队时间。
+
+## 多context屏障与远端可见性
+
+[报告](../../docs/reviews/多连接屏障与远端可见性_20261023.md)和[执行前方法](multiconnection_visibility_protocol.md)区分固定DeepEP的flush/context0通知、NCCL all-context屏障与GDAKI能力。源码差异不是硬件反例。有限模型只是检查明确声明的依赖是否足以推出目标可见，不测时间或发生概率。
+
+以下在仓库根执行；工作父目录须先存在，输出须不存在。`--source`应指向从本轮归档恢复的`sources/`，或由collector取得且已核验的固定来源；不会在分析/checker中联网。每步通过`host_probe`限制60秒/RSS1GiB/地址2GiB/阶段32MiB/卷预留8GiB，整轮累计240秒/128MiB。profile复用上轮已见48-token前缀的公开需求表，无新请求或网络执行。
+
+```bash
+python3 experiments/paper_readiness/audit_multiconnection_visibility.py \
+  --source /dev/shm/my-visibility/sources \
+  --profile docs/review_artifacts/slot_projection_20261023/real-profile.json \
+  --output /dev/shm/my-visibility/analysis
+python3 experiments/paper_readiness/audit_multiconnection_visibility.py \
+  --source /dev/shm/my-visibility/sources \
+  --profile docs/review_artifacts/slot_projection_20261023/real-profile.json \
+  --output /dev/shm/my-visibility/repeat
+python3 experiments/paper_readiness/check_multiconnection_visibility.py \
+  --source /dev/shm/my-visibility/sources \
+  --profile docs/review_artifacts/slot_projection_20261023/real-profile.json \
+  --analysis /dev/shm/my-visibility/analysis --repeat /dev/shm/my-visibility/repeat \
+  --output /dev/shm/my-visibility/verification.json
+```
+
+`multiconnection_visibility.py --repo /ABS/REPO --output /ABS/NEW_SOURCE_DIR`负责来源准备，复用固定缓存并最多补取3个小源码。失败的请求保留；已有部分输出时，`--finish-unrequested`只取尚未请求的文件，绝不重试已记录文件。当前复现checker核对本轮实际的“一次超时、两次成功”收据；另一次全成功的资料采集属于新的来源执行，不能修改这份历史收据来匹配。缺少必需函数体时分析失败，不用缺失头文件补写实现。
+
+`package_multiconnection_visibility.py`提供`report/archive/recover`三个离线阶段，均需`--repo /ABS/REPO --root /ABS/THIS_RUN --output /ABS/REPORT_DIR`。归档包含固定来源、输入需求表、研究源码、成功/失败日志与校验清单；恢复从新源码根/cwd、空PYTHONPATH执行分析/重复/独立核验，不执行collector或下载代码。归档成员≤48MiB/压缩≤16MiB。原始件和检查点仅易失内存盘，无持久备份；仓库中的HTML与JSON是小型证据摘要。

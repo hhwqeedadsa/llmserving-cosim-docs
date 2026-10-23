@@ -1,0 +1,170 @@
+[
+  {
+    "project": "nccl",
+    "path": "docs/userguide/source/api/device_gin.rst",
+    "needle": "makes no claims regarding the completion",
+    "line": 76,
+    "start_line": 74,
+    "text": "\n      Ensures that all the pending transfer operations scheduled by any threads of *coop* are locally consumed. For put\n      operations, this means that the source buffers are safe to reuse; this makes no claims regarding the completion\n      status on the remote peer(s). For get operations, this means that the data is visible to the local rank.\n\n   .. cpp:function:: void flushAsync(ncclTeam team, uint32_t peer, ncclGinRequest_t* request, Coop coop = ncclCoopThread{}, \\"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/gin.h",
+    "needle": "preceding puts on this context to the same peer",
+    "line": 343,
+    "start_line": 341,
+    "text": "    // Action to take on peer when put completes.\n    // For strong signals: guarantees this put AND all\n    // preceding puts on this context to the same peer are settled.\n    // For weak signals: only guarantees the bundled put is settled.\n    typename RemoteAction = ncclGin_None, // one of ncclGin_{None|StrongVASignal[Inc|Add]|WeakVASignal[Inc|Add],\n                                          // StrongSignal[Inc|Add]|WeakSignal[Inc|Add]}"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/gin.h",
+    "needle": "preceding puts on this context to the same peer",
+    "line": 366,
+    "start_line": 364,
+    "text": "    typename T,\n    // Action to take on peer when put completes.\n    // For strong signals: guarantees this put AND all preceding puts on this context to the same peer are settled.\n    // For weak signals: only guarantees the bundled put is settled.\n    typename RemoteAction = ncclGin_None, // one of ncclGin_{None|StrongVASignal[Inc|Add]|WeakVASignal[Inc|Add],\n                                          // StrongSignal[Inc|Add]|WeakSignal[Inc|Add]}"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "needle": "this->fenceAllContexts = true;",
+    "line": 45,
+    "start_line": 43,
+    "text": "  : ncclGinBarrierSession_internal<Coop>{coop, ncclGin(allCtx.comm, 0), team, handle, (int)barrierIndex} {\n  this->signal = handle.signal0 + barrierIndex * team.nRanks;\n  this->fenceAllContexts = true;\n}\n#endif\n"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "needle": "signals and puts on different QPs are",
+    "line": 132,
+    "start_line": 130,
+    "text": "  int nPeerSigs = (fence & ncclGinFenceLevel::Put) ? this->team.nRanks : this->team.nRanks - 1;\n  if (this->fenceAllContexts) {\n    // Signal on each context, not just context 0: signals and puts on different QPs are\n    // not ordered at the receiving NIC, so a ctx-0 signal could overtake an in-flight\n    // ctx-X put. Each context has its own signal memory and shadow slot for the same\n    // signal id, so no extra slot allocation is needed."
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "needle": "int total = nCtx * nPeerSigs;",
+    "line": 137,
+    "start_line": 135,
+    "text": "    // signal id, so no extra slot allocation is needed.\n    int nCtx = (int)this->net.comm.ginContextCount;\n    int total = nCtx * nPeerSigs;\n    NVCC_PRAGMA_UNROLL_DISABLED\n    for (int i = this->coop.thread_rank(); i < total; i += this->coop.size()) {\n      // Unflatten i back into (ctx, peerStep): ctx picks the GIN context to signal on,"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "needle": "if ((fence & ncclGinFenceLevel::Put) && !this->net._supportsStrongSignal())",
+    "line": 123,
+    "start_line": 121,
+    "text": "  }\n\n  if ((fence & ncclGinFenceLevel::Put) && !this->net._supportsStrongSignal()) {\n    fenceFlush(nccl::utility::acquireOrderOf(ord));\n  }\n"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin_barrier__funcs.h",
+    "needle": "this->team.nRanks : this->team.nRanks - 1",
+    "line": 130,
+    "start_line": 128,
+    "text": "  // visibility guarantee as puts to other peers. Peer rotation `peer = (rank+1+i) % nRanks`\n  // spreads the load and visits self last (only when Put is requested).\n  int nPeerSigs = (fence & ncclGinFenceLevel::Put) ? this->team.nRanks : this->team.nRanks - 1;\n  if (this->fenceAllContexts) {\n    // Signal on each context, not just context 0: signals and puts on different QPs are\n    // not ordered at the receiving NIC, so a ctx-0 signal could overtake an in-flight"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/barrier__funcs.h",
+    "needle": "this->gin.thing._flushesAllPutsOnAnySignal()",
+    "line": 115,
+    "start_line": 113,
+    "text": "\n  // Optimize for the auto-flush fence path.\n  if (this->outerDenseGinBar.present && this->gin.thing._flushesAllPutsOnAnySignal()) {\n    *needsLsaBarrier = this->innerLsaBar.present;\n    *needsRailGinBarrier = this->outerRailGinBar.present;\n    *needsDenseGinBarrier = false;"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/barrier__funcs.h",
+    "needle": "*needsProducerFlush = true;",
+    "line": 119,
+    "start_line": 117,
+    "text": "    *needsRailGinBarrier = this->outerRailGinBar.present;\n    *needsDenseGinBarrier = false;\n    *needsProducerFlush = true;\n    return;\n  }\n"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/barrier__funcs.h",
+    "needle": "Push this rank's own puts out before the barrier",
+    "line": 146,
+    "start_line": 144,
+    "text": "  selectBarrierAlgo(fence, &needsLsaBarrier, &needsRailGinBarrier, &needsDenseGinBarrier, &needsProducerFlush);\n  if (needsProducerFlush) {\n    // Push this rank's own puts out before the barrier so peers' auto-flush makes them visible.\n    this->gin.thing.flush(this->coop, nccl::utility::releaseOrderOf(ord));\n  }\n  if (needsLsaBarrier) {"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/barrier__funcs.h",
+    "needle": "Push this rank's own puts out before the barrier",
+    "line": 172,
+    "start_line": 170,
+    "text": "\n  if (needsProducerFlush) {\n    // Push this rank's own puts out before the barrier so peers' auto-flush makes them visible.\n    uint64_t startCycle = clock64();\n    flushResult = this->gin.thing.flush(this->coop, nccl::utility::releaseOrderOf(ord), ncclGin_None{}, timeoutCycles);\n    uint64_t elapsed = clock64() - startCycle;"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+    "needle": "flush every previously-received put when any signal arrives",
+    "line": 653,
+    "start_line": 651,
+    "text": "template <>\nstruct ncclGinApi_FlushesAllPutsOnAnySignal<NCCL_NET_DEVICE_GIN_GDAKI> {\n  // GDAKI runs over MLX5 NICs, which flush every previously-received put when any signal arrives, so\n  // the capability is unconditional. Returning a compile-time constant lets a GDAKI-only kernel elide\n  // the world-barrier fence path.\n  NCCL_DEVICE_INLINE static bool call(ncclGinCtx) {"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+    "needle": "req->sq_rsvd_index = n;",
+    "line": 334,
+    "start_line": 332,
+    "text": "\n  const uint64_t n = doca_gpu_dev_verbs_atomic_read<uint64_t, doca_sharing_mode>(&qp->sq_rsvd_index);\n  req->sq_rsvd_index = n;\n}\n\ntemplate <bool HasTimeout, enum doca_gpu_dev_verbs_resource_sharing_mode doca_sharing_mode>"
+  },
+  {
+    "project": "nccl",
+    "path": "src/gin/gin_host.cc",
+    "needle": "localGinDevs[commIdx % nLocalGinDevs]",
+    "line": 186,
+    "start_line": 184,
+    "text": "\n    for (int commIdx = 0; commIdx < backend->ginCommCount; commIdx++) {\n      NCCLCHECKGOTO(backend->ncclGin->listen(backend->ginInstance, localGinDevs[commIdx % nLocalGinDevs],\n                                             allHandles + NCCL_NET_HANDLE_MAXSIZE * comm->rank,\n                                             &listenComms[backendIdx]),\n                    ret, fail);"
+  },
+  {
+    "project": "nccl",
+    "path": "src/gin/gin_host.cc",
+    "needle": "localGinDevs[commIdx % nLocalGinDevs]",
+    "line": 191,
+    "start_line": 189,
+    "text": "                    ret, fail);\n\n      NCCLCHECKGOTO(backend->ncclGin->getProperties(localGinDevs[commIdx % nLocalGinDevs], backend->ginProps + commIdx),\n                    ret, fail);\n\n      NCCLCHECKGOTO(bootstrapAllGather(comm->bootstrap, allHandles, NCCL_NET_HANDLE_MAXSIZE), ret, fail);"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin__funcs.h",
+    "needle": "gin->connectionId = comm.ginConnectionCount == 3",
+    "line": 118,
+    "start_line": 116,
+    "text": "  static_assert(NCCL_GIN_MAX_CONNECTIONS == 4, \"Required for following modulo hack to work.\");\n  // this->connectionId = contextIndex % comm.ginConnectionCount;\n  gin->connectionId = comm.ginConnectionCount == 3 ? uint32_t(contextIndex) % 3 // 3 is only non power of 2\n                                                     :\n                                                     contextIndex & (comm.ginConnectionCount - 1); // powers of 2\n  // gin->contextId = contextIndex / comm.ginConnectionCount;"
+  },
+  {
+    "project": "nccl",
+    "path": "src/include/nccl_device/impl/gin__funcs.h",
+    "needle": "gin->contextId = comm.ginConnectionCount == 3",
+    "line": 122,
+    "start_line": 120,
+    "text": "                                                     contextIndex & (comm.ginConnectionCount - 1); // powers of 2\n  // gin->contextId = contextIndex / comm.ginConnectionCount;\n  gin->contextId = comm.ginConnectionCount == 3 ?\n                     uint32_t(contextIndex) / 3 // 3 is only non power of 2\n                     :\n                     contextIndex >> (comm.ginConnectionCount == 4 ? 2 : comm.ginConnectionCount - 1); // powers of 2"
+  },
+  {
+    "project": "deepep",
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "needle": "for (int i = global_warp_idx; i < num_qps;",
+    "line": 148,
+    "start_line": 146,
+    "text": "    // Flush all QPs by all SMs (only needed for release semantics)\n    if constexpr (kFlushStores) {\n        for (int i = global_warp_idx; i < num_qps; i += kNumSMs * kNumWarps) {\n            ncclGin(nccl_dev_comm, i, NCCL_GIN_RESOURCE_SHARING_CTA).flush(ncclCoopWarp());\n        }\n"
+  },
+  {
+    "project": "deepep",
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "needle": "const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0,",
+    "line": 163,
+    "start_line": 161,
+    "text": "    if (sm_idx == 0) {\n        // Use QP 0 to do barrier: signal slot `rank_idx` on every rank, then wait for every rank's slot\n        const NCCLGin barrier_gin(nccl_dev_comm, gin.nccl_window, 0, NCCL_GIN_RESOURCE_SHARING_CTA);\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)\n            barrier_gin.signal<team_t>(i, ncclGin_SignalInc{static_cast<ncclGinSignal_t>(rank_idx)});\n        for (int i = thread_idx; i < kNumRanks; i += kNumThreads)"
+  },
+  {
+    "project": "deepep",
+    "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+    "needle": "gin.waitSignal(",
+    "line": 185,
+    "start_line": 183,
+    "text": "            const auto shadow_ptr = gin.getSignalShadowPtr(signal_idx);\n            const auto target = ++(*shadow_ptr);\n            const auto result = gin.waitSignal(\n                ncclCoopThread(), signal_idx, target, sizeof(*shadow_ptr) * 8,\n                cuda::memory_order_acquire, kNumTimeoutCycles);\n            if (result != ncclSuccess) {"
+  }
+]

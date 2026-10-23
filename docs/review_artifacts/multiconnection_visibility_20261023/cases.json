@@ -1,0 +1,147 @@
+[
+  {
+    "name": "local_completion_only",
+    "deps": {
+      "receive0": [],
+      "receive1": [],
+      "local0": [
+        "receive0"
+      ],
+      "local1": [
+        "receive1"
+      ],
+      "visible0": [
+        "receive0"
+      ],
+      "visible1": [
+        "receive1"
+      ],
+      "flush": [
+        "local0",
+        "local1"
+      ],
+      "signal0": [
+        "flush"
+      ],
+      "wait": [
+        "signal0"
+      ],
+      "consume": [
+        "wait"
+      ]
+    },
+    "signals": 1,
+    "contract": "abstract target-visibility prerequisites; not a GDAKI hardware model"
+  },
+  {
+    "name": "one_visibility_domain",
+    "deps": {
+      "receive0": [],
+      "receive1": [],
+      "local0": [
+        "receive0"
+      ],
+      "local1": [
+        "receive1"
+      ],
+      "visible0": [
+        "receive0"
+      ],
+      "visible1": [
+        "receive1"
+      ],
+      "flush": [
+        "local0",
+        "local1"
+      ],
+      "signal0": [
+        "flush",
+        "visible0"
+      ],
+      "wait": [
+        "signal0"
+      ],
+      "consume": [
+        "wait"
+      ]
+    },
+    "signals": 1,
+    "contract": "abstract target-visibility prerequisites; not a GDAKI hardware model"
+  },
+  {
+    "name": "explicit_all_domain_capability",
+    "deps": {
+      "receive0": [],
+      "receive1": [],
+      "local0": [
+        "receive0"
+      ],
+      "local1": [
+        "receive1"
+      ],
+      "visible0": [
+        "receive0"
+      ],
+      "visible1": [
+        "receive1"
+      ],
+      "flush": [
+        "local0",
+        "local1"
+      ],
+      "signal0": [
+        "flush",
+        "visible0",
+        "visible1"
+      ],
+      "wait": [
+        "signal0"
+      ],
+      "consume": [
+        "wait"
+      ]
+    },
+    "signals": 1,
+    "contract": "abstract target-visibility prerequisites; not a GDAKI hardware model"
+  },
+  {
+    "name": "per_domain_signals",
+    "deps": {
+      "receive0": [],
+      "receive1": [],
+      "local0": [
+        "receive0"
+      ],
+      "local1": [
+        "receive1"
+      ],
+      "visible0": [
+        "receive0"
+      ],
+      "visible1": [
+        "receive1"
+      ],
+      "flush": [
+        "local0",
+        "local1"
+      ],
+      "signal0": [
+        "flush",
+        "visible0"
+      ],
+      "signal1": [
+        "flush",
+        "visible1"
+      ],
+      "wait": [
+        "signal0",
+        "signal1"
+      ],
+      "consume": [
+        "wait"
+      ]
+    },
+    "signals": 2,
+    "contract": "two abstract visibility domains, explicitly covered separately"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "network_orders": 415,
+  "independently_replayed_counterexamples": 4,
+  "method": "subset-DP order count and last-write byte oracle; not an exhaustive implementation proof",
+  "rejected_mutations": [
+    "removed-order",
+    "changed-consumed-value"
+  ],
+  "input_sha256": "ab57ff469e3a72ca5ac7c7a61750a1f623cad558cde469266952283c938e8e51"
+}

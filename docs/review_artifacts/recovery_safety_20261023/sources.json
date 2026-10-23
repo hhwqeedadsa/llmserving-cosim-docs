@@ -1,0 +1,305 @@
+{
+  "fixed": {
+    "passed": true,
+    "sources": [
+      {
+        "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "732c598ca1986636c300036533141ebeb49a320e",
+        "sha256": "e4361353f31a2f3a36e019bb2ef013991017a205c16ab92f76f9da2a2652260f",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/barrier.cuh",
+        "excerpts": [
+          {
+            "first": 30,
+            "last": 48,
+            "text": "template <int64_t kNumTimeoutCycles, typename func_t>\n__device__ __forceinline__ void timeout_while(const bool& condition, const func_t& func,\n                                              int64_t start_clock = 0) {\n    // User may share a start clock for multiple waits\n    if (start_clock == 0)\n        start_clock = clock64();\n\n    while (condition) {\n        const bool timeout = clock64() - start_clock >= kNumTimeoutCycles;\n        if (func(timeout))\n            break;\n\n        if (timeout) {\n            // Wait another 1 second to let all threads print information and trap\n            start_clock = clock64();\n            while (clock64() - start_clock < kNumOneSecCycles) {}\n            ptx::trap();\n        }\n    }"
+          }
+        ]
+      },
+      {
+        "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "b459a34a7d9012a95ca9821b947a60e5819fa736",
+        "sha256": "24c321c8bc35a09620b7c842c9333f64d7e208faa45b832241deab430f65f068",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/comm/handle.cuh",
+        "excerpts": [
+          {
+            "first": 178,
+            "last": 200,
+            "text": "    template <typename team_t, int64_t kNumTimeoutCycles>\n    __device__ __forceinline__\n    void wait_signal(const int& signal_idx, const int& rank_idx) const {\n        IS_TEAM_WORLD_RAIL({\n            // NOTES: signals are rolling counters, whose width follows the shadow counter type\n            const auto shadow_ptr = gin.getSignalShadowPtr(signal_idx);\n            const auto target = ++(*shadow_ptr);\n            const auto result = gin.waitSignal(\n                ncclCoopThread(), signal_idx, target, sizeof(*shadow_ptr) * 8,\n                cuda::memory_order_acquire, kNumTimeoutCycles);\n            if (result != ncclSuccess) {\n                const auto signal = gin.readSignal(signal_idx, sizeof(*shadow_ptr) * 8, cuda::memory_order_acquire);\n                // This waiting thread owns the shadow entry; reload only for diagnostics\n                // to avoid keeping target live into the timeout path.\n                const uint64_t timeout_target = *static_cast<const volatile uint64_t*>(shadow_ptr);\n                printf(\"DeepEP Gin signal timeout, rank: %d, signal_idx: %d, signal: %lu, target: %lu\\n\",\n                       rank_idx, signal_idx, signal, timeout_target);\n                ptx::trap();\n            }\n        });\n    }\n\n    // TODO: can we always use a single window?"
+          },
+          {
+            "first": 204,
+            "last": 216,
+            "text": "    void put(void* recv_sym_ptr, const ncclWindow_t& send_window, const void* send_window_base_ptr, const void* send_ptr,\n             const int64_t& num_bytes, const int& dst_rank_idx, const int& extra_options = 0,\n             const remote_action_t& remote_action = remote_action_t()) const {\n        IS_TEAM_WORLD_RAIL({\n            gin.put(TEAM_WORLD_RAIL(), dst_rank_idx,\n                    nccl_window, reinterpret_cast<int64_t>(recv_sym_ptr) - lsa_base_ptr,\n                    send_window, reinterpret_cast<int64_t>(send_ptr) - reinterpret_cast<int64_t>(send_window_base_ptr),\n                    num_bytes, remote_action, ncclGin_None(), ncclCoopThread(), ncclGin_None(),\n                    cuda::thread_scope_thread, cuda::thread_scope_device, ncclGinOptFlagsDefault | extra_options);\n        });\n    }\n\n    template <typename team_t,"
+          }
+        ]
+      },
+      {
+        "path": "deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "3bacfc60c10fb7e4b21e6d6c57e64cbdb6ae9a58",
+        "sha256": "447ec0ef779bb2a74f7efa8ece04254c2036ab4000999f566356d6f94df9335a",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/deep_ep/include/deep_ep/impls/ep/dispatch.cuh",
+        "excerpts": [
+          {
+            "first": 180,
+            "last": 201,
+            "text": "            ptx::named_barrier<kNumNotifyThreads>(kNotifyBarrierIndex);\n\n            // Wait for rank and expert count\n            const auto start_clock = clock64();\n            for (int i = thread_idx; i < kNumRanks + kNumExperts; i += kNumNotifyThreads) {\n                comm::timeout_while<kNumTimeoutCycles>([=](const bool& is_last_check) {\n                    // NOTES: the global memory type has 64 bits\n                    const auto count = static_cast<int>(\n                        ptx::ld_volatile<int64_t>(workspace_layout.get_scaleup_rank_expert_count_ptr<false>() + i));\n                    const auto decoded = math::encode_decode_positive(count);\n                    if (math::is_decoded_positive_ready(decoded)) {\n                        workspace_layout.get_scaleup_rank_expert_count_ptr<false>()[i] = 0;\n                        rank_expert_count[i] = decoded;\n                        return true;\n                    }\n\n                    if (is_last_check)\n                        printf(\"DeepEP notify timeout, rank: %d, thread: %d, count: %d\\n\", rank_idx, i, decoded);\n                    return false;\n                }, start_clock);\n            }\n            ptx::named_barrier<kNumNotifyThreads>(kNotifyBarrierIndex);"
+          }
+        ]
+      },
+      {
+        "path": "csrc/buffers/ep.hpp",
+        "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+        "git_blob_sha": "04f4dbfddeaf1cf8b0cf7006cc723e1323839210",
+        "sha256": "e00e92a793b8e5a448db6f704ccd2c391ff9943cba30ec470c9d3945460c0193",
+        "public_url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/buffers/ep.hpp",
+        "excerpts": [
+          {
+            "first": 649,
+            "last": 663,
+            "text": "                        }\n                        return ss.str();\n                    };\n                    if (ready) {\n                        if (get_env<int>(\"EP_BUFFER_DEBUG\"))\n                            printf(\"%s\\n\", get_buffer_info().c_str());\n                        break;\n                    }\n\n                    // Timeout checks\n                    const auto now = std::chrono::high_resolution_clock::now();\n                    if (std::chrono::duration_cast<std::chrono::seconds>(now - start_cpu_time).count() > context->num_cpu_timeout_secs)\n                        throw EPExceptionWithLineInfo(\"Dispatch CPU wait\", get_buffer_info());\n                }\n            } else {"
+          }
+        ]
+      },
+      {
+        "path": "docs/userguide/source/api/device_gin.rst",
+        "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+        "git_blob_sha": "4905d1f30ed10020ff42dbc8c6892d95b2c239aa",
+        "sha256": "0bda79556657c279de5c37a10e3beccc3c17b16fbbc1831a524bec65b9d97f6b",
+        "public_url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/device_gin.rst",
+        "excerpts": [
+          {
+            "first": 33,
+            "last": 50,
+            "text": "                      cuda::thread_scope alreadyReleased, cuda::thread_scope expected_scope, SegmentType bufType)\n\n      Schedules a device-initiated, one-sided data transfer operation from a local buffer to a remote buffer on a peer.\n\n      *peer* is a rank within *team* (see :ref:`devapi_teams`); it may refer to the local rank (a loopback).  The destination\n      and source buffers are each specified using the window (*dstWnd*, *srcWnd*) and a byte-based offset (*dstOffset*,\n      *srcOffset*).  *bytes* specifies the data transfer count in bytes. If GIN is initialized with connection\n      type :c:enumerator:`NCCL_GIN_CONNECTION_RAIL <ncclGinConnectionType_t.NCCL_GIN_CONNECTION_RAIL>`, *peer* must be within the same rail team as the local rank.\n\n      Arguments beyond the first seven are optional.  *remoteAction* and *localAction* specify actions\n      to undertake on the destination peer and on the local rank when the payload has been settled and the input has been\n      consumed (respectively).  They default to ``ncclGin_None`` (no action); other options include\n      ``ncclGin_Signal{Inc|Add}`` (for *remoteAction*) and ``ncclGin_CounterInc`` (for *localAction*); see\n      :ref:`devapi_signals` below for more details.  *coop* indicates the set of threads participating in this operation (see\n      :ref:`devapi_coops`); it defaults to ``ncclCoopThread`` (a single device thread), which is the recommended model.\n      *bufType* specifies the physical memory composition of the source and destination buffers (see\n      :ref:`devapi_segment_types`); it defaults to ``ncclGin_SegmentDevice``.\n"
+          },
+          {
+            "first": 70,
+            "last": 79,
+            "text": "      *bufType* specifies the physical memory composition of the source and destination buffers (see\n      :ref:`devapi_segment_types`); it defaults to ``ncclGin_SegmentDevice``.\n\n   .. cpp:function:: void flush(Coop coop, cuda::memory_order ord = cuda::memory_order_acquire)\n\n      Ensures that all the pending transfer operations scheduled by any threads of *coop* are locally consumed. For put\n      operations, this means that the source buffers are safe to reuse; this makes no claims regarding the completion\n      status on the remote peer(s). For get operations, this means that the data is visible to the local rank.\n\n   .. cpp:function:: void flushAsync(ncclTeam team, uint32_t peer, ncclGinRequest_t* request, Coop coop = ncclCoopThread{}, \\"
+          },
+          {
+            "first": 95,
+            "last": 108,
+            "text": "--------------------\n\n.. cpp:type:: ncclGinSignal_t\n\n   Signals are used to trigger actions on remote peers, most commonly on the completion of a :cpp:func:`ncclGin::put` operation.  They each\n   have a 64-bit integer value associated with them that can be manipulated atomically.\n\n   Since NCCL 2.30.5, there are two types of signals: *strong* and *weak*. Strong signals imply the visibility of all the\n   preceding puts to the same peer on the same context. Weak signals imply only the visibility of the put data the signal is\n   attached to.\n\n.. cpp:struct:: ncclGin_StrongSignalInc\n\n   .. cpp:member:: ncclGinSignal_t signal"
+          }
+        ]
+      }
+    ]
+  },
+  "remote": [
+    {
+      "id": "nccl_errors",
+      "url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/communicators.html",
+      "accessed_utc": "2026-10-23T06:32:25.580939+00:00",
+      "status_code": 200,
+      "resolved_url": "https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/communicators.html",
+      "status": "read",
+      "bytes": 151490,
+      "sha256": "d57dd63c2061fc170ec14039f4d949f097addaa7c8d59428ca240eecc0caf33a",
+      "snapshot": "sources/nccl_errors.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 31682,
+        "text": "For more advanced recovery, the ncclCommShrink function with NCCL_SHRINK_ABORT can be used to create a new communicator\nby removing failed ranks from the existing communicator while safely handling in"
+      }
+    },
+    {
+      "id": "elastic",
+      "url": "https://docs.pytorch.org/docs/stable/elastic/run.html",
+      "accessed_utc": "2026-10-23T06:32:25.582027+00:00",
+      "status_code": 200,
+      "resolved_url": "https://docs.pytorch.org/docs/stable/elastic/run.html",
+      "status": "read",
+      "bytes": 1686,
+      "sha256": "e98aeb19c2a71b05ecb60f83332b73b416edfac079165cbc9fe5b54b55335b27",
+      "snapshot": "sources/elastic.html",
+      "content_scope": "redirect_only; use elastic_versioned for substantive content"
+    },
+    {
+      "id": "redmark",
+      "url": "https://www.usenix.org/conference/usenixsecurity21/presentation/rothenberger",
+      "accessed_utc": "2026-10-23T06:32:25.582663+00:00",
+      "status_code": 200,
+      "resolved_url": "https://www.usenix.org/conference/usenixsecurity21/presentation/rothenberger",
+      "status": "read",
+      "bytes": 36745,
+      "sha256": "b532e30eeeadb3075a1bffc52a5e0bdfbc584c4d58a497d633d0d73efc0ed8dc",
+      "snapshot": "sources/redmark.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 989,
+        "text": "ReDMArk shows that current security mechanisms of IB-based architectures are insufficient against both in-network attackers and attackers located on end hosts, thus affecting not only secrecy, but als"
+      }
+    },
+    {
+      "id": "moe_fault_search",
+      "url": "https://export.arxiv.org/api/query?search_query=all:mixture-of-experts+AND+all:fault&start=0&max_results=5",
+      "accessed_utc": "2026-10-23T06:32:25.583145+00:00",
+      "status_code": 200,
+      "resolved_url": "https://export.arxiv.org/api/query?search_query=all:mixture-of-experts+AND+all:fault&start=0&max_results=5",
+      "status": "read",
+      "bytes": 12055,
+      "sha256": "262aff3adf85c126f73cfcc5377365462ad34ec3bc23d2849b4829c9286208fb",
+      "snapshot": "sources/moe_fault_search.html",
+      "content_scope": "search metadata, not paper-body verification or comprehensive novelty search"
+    },
+    {
+      "id": "rdma_recovery_search",
+      "url": "https://export.arxiv.org/api/query?search_query=all:RDMA+AND+all:recovery&start=0&max_results=5",
+      "accessed_utc": "2026-10-23T06:32:26.517937+00:00",
+      "status_code": 200,
+      "resolved_url": "https://export.arxiv.org/api/query?search_query=all:RDMA+AND+all:recovery&start=0&max_results=5",
+      "status": "read",
+      "bytes": 14244,
+      "sha256": "df24927e633ca7f2bf980aaa1d29d93296c6b199d56f4548e1397328277f9d53",
+      "snapshot": "sources/rdma_recovery_search.html",
+      "content_scope": "search metadata, not paper-body verification or comprehensive novelty search"
+    },
+    {
+      "id": "varuna",
+      "url": "https://arxiv.org/html/2603.28001v1",
+      "accessed_utc": "2026-10-23T06:38:30.325611+00:00",
+      "status_code": 200,
+      "resolved_url": "https://arxiv.org/html/2603.28001v1",
+      "status": "read",
+      "bytes": 213507,
+      "sha256": "bba0246882cd34c248d19807f79c76ff6b196d68a647537c5f3c9fe2bf604abb",
+      "snapshot": "sources-followup/varuna.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 30359,
+        "text": "A rare corner case exists where the original operation succeeds but the inline log-write fails. We treat this as a low-probability event in practice: the inline write is only 8 bytes and its send wind"
+      }
+    },
+    {
+      "id": "byteexpress",
+      "url": "https://arxiv.org/html/2610.12815v2",
+      "accessed_utc": "2026-10-23T06:38:30.326656+00:00",
+      "status_code": 200,
+      "resolved_url": "https://arxiv.org/html/2610.12815v2",
+      "status": "read",
+      "bytes": 232090,
+      "sha256": "af89e2411ec47c8bdc74ebe1c70b3738c40a7786cc72e3a68466ab5c25638403",
+      "snapshot": "sources-followup/byteexpress.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 44949,
+        "text": "The measurements in this paper do not establish exactly-once execution or quantify availability under all failure modes.\nFigure 16: PS performance in a production recommendation inference workload: me"
+      }
+    },
+    {
+      "id": "optinic",
+      "url": "https://arxiv.org/html/2512.22743v1",
+      "accessed_utc": "2026-10-23T06:38:30.328374+00:00",
+      "status_code": 200,
+      "resolved_url": "https://arxiv.org/html/2512.22743v1",
+      "status": "read",
+      "bytes": 303074,
+      "sha256": "16592f408aea71d2fe084e5edaa05261bc625f0d472e809f736f619f2ebd9946",
+      "snapshot": "sources-followup/optinic.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 3496,
+        "text": "Unlike traditional RDMA, which signals completion only after complete data delivery, OptiNIC introduces adaptive timeouts to trigger forward progress when data may be lost or delayed.\nOptiNIC retains "
+      }
+    },
+    {
+      "id": "moc",
+      "url": "https://arxiv.org/html/2408.04307v3",
+      "accessed_utc": "2026-10-23T06:38:30.329708+00:00",
+      "status_code": 200,
+      "resolved_url": "https://arxiv.org/html/2408.04307v3",
+      "status": "read",
+      "bytes": 346920,
+      "sha256": "f99af29ef98f7f77bddb2adce79e4f95be438b37630e987fd5d856d5b523465d",
+      "snapshot": "sources-followup/moc.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 683,
+        "text": "Partial Experts Checkpointing\n3.1 Analysis\n3.1.1 Checkpoint Size\n3.1.2 Impact on Model Accuracy\n3.2 Partial Experts Selection\n4 Fully Sharded Checkpointing\n4.1 Equal Sharding for Expert Part\n4.2 Equal"
+      }
+    },
+    {
+      "id": "elastic_versioned",
+      "url": "https://docs.pytorch.org/docs/2.14/elastic/run.html",
+      "accessed_utc": "2026-10-23T06:38:31.644352+00:00",
+      "status_code": 200,
+      "resolved_url": "https://docs.pytorch.org/docs/2.14/elastic/run.html",
+      "status": "read",
+      "bytes": 701212,
+      "sha256": "ae00a1e04be2afe89b959bd7e7bd55bd430127b92e4c15fdf62c88a03ab77809",
+      "snapshot": "sources-followup/elastic_versioned.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 104570,
+        "text": "Worker failure: For a training job with n workers, if k<=n workers fail all workers\nare stopped and restarted up to max_restarts.\nAgent failure: An agent failure results in a local worker group failur"
+      }
+    },
+    {
+      "id": "moe_recovery_search",
+      "url": "https://export.arxiv.org/api/query?search_query=all:expert+AND+all:inference+AND+(all:failure+OR+all:recovery)&start=0&max_results=5",
+      "accessed_utc": "2026-10-23T06:38:31.864081+00:00",
+      "status_code": 200,
+      "resolved_url": "https://export.arxiv.org/api/query?search_query=all:expert+AND+all:inference+AND+(all:failure+OR+all:recovery)&start=0&max_results=5",
+      "status": "read",
+      "bytes": 13771,
+      "sha256": "05281f60149c7aafbe42d387f3d4dd0929ff0ceaaad25ae55bdafc9ba7c63862",
+      "snapshot": "sources-followup/moe_recovery_search.html",
+      "content_scope": "search metadata, not paper-body verification or comprehensive novelty search"
+    },
+    {
+      "id": "eep",
+      "url": "https://arxiv.org/html/2605.10670v1",
+      "accessed_utc": "2026-10-23T06:40:18.484894+00:00",
+      "status_code": 200,
+      "resolved_url": "https://arxiv.org/html/2605.10670v1",
+      "status": "read",
+      "bytes": 450094,
+      "sha256": "5d42002e6cc1704ce574d062b9bee3abc9f9e918835f048ab1cae4a11946c0a7",
+      "snapshot": "sources-targeted/eep.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 23101,
+        "text": "Requests in flight at the moment of failure are reported as failed and must be retried by the client; EEP does not buffer or internally retry failed requests, keeping the recovery path simple and the "
+      }
+    },
+    {
+      "id": "rcu",
+      "url": "https://www.kernel.org/doc/html/latest/RCU/whatisRCU.html",
+      "accessed_utc": "2026-10-23T06:40:18.486248+00:00",
+      "status_code": 200,
+      "resolved_url": "https://www.kernel.org/doc/html/latest/RCU/whatisRCU.html",
+      "status": "read",
+      "bytes": 106621,
+      "sha256": "bb802b12f79d64ff177e46f7b5969363398172e439e7beafc1fb13b63608073e",
+      "snapshot": "sources-targeted/rcu.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 11805,
+        "text": "grace periods\nbe delayed. This property results in system resilience in face\nof denial-of-service attacks. Code using call_rcu() should limit\nupdate rate in order to gain this same sort of resilience."
+      }
+    },
+    {
+      "id": "nccl_fixed_comms",
+      "url": "https://raw.githubusercontent.com/NVIDIA/nccl/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/comms.rst",
+      "accessed_utc": "2026-10-23T06:40:18.486772+00:00",
+      "status_code": 200,
+      "resolved_url": "https://raw.githubusercontent.com/NVIDIA/nccl/12df1a11afad322be5a204a2db890161cbf8131d/docs/userguide/source/api/comms.rst",
+      "status": "read",
+      "bytes": 17790,
+      "sha256": "931758edc972605dd5e0ccd7bb9fbbe9abdde7346fa5cfea72480b3a1132a29f",
+      "snapshot": "sources-targeted/nccl_fixed_comms.html",
+      "content_scope": "selected primary document",
+      "passage": {
+        "character_offset": 6188,
+        "text": "NCCL_SHRINK_ABORT* when shrinking after an error on the parent communicator.\nSpecifically, when using *NCCL_SHRINK_DEFAULT*, there should not be any outstanding NCCL operations on the *comm* to avoid "
+      }
+    }
+  ],
+  "downloaded_bytes": 2601299,
+  "novelty_search_complete": false,
+  "scope": "source identity and selected scope checks; no production exploit or performance proof"
+}

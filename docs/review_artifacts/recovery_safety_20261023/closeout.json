@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "local_html_links_checked": 3,
+  "source_scripts_unchanged": 5,
+  "monitored_stages": 8,
+  "monitored_wall_seconds": 24.069450153037906,
+  "all_stages_completed": true,
+  "remaining_live_group_pids": [],
+  "downloaded_source_bytes": 2601299,
+  "archive": {
+    "passed": true,
+    "members": 60,
+    "member_bytes": 4032914,
+    "compressed_bytes": 765616,
+    "sha256": "b7654a7905ddbaa5e28048953cec74d920196fd950cf3071475e9e0afe917fed",
+    "includes_binaries": false,
+    "storage": "tmpfs_volatile",
+    "persistent_backup": false
+  },
+  "recovery_outputs": 6,
+  "scope": "research source, document, evidence and offline-recovery audit; no platform functional or production performance claim",
+  "platform_prefix_work_remains_uncommitted": true,
+  "paper_contribution_established": false,
+  "task_record_updated": true,
+  "maintenance_note": "First task-record string replacement did not match and raised ValueError after evidence checks; corrected using the actual current marker; no experiment rerun or budget change.",
+  "commit_note": "Initial commit rejected because no configured Git identity. Reuse established previous-commit identity Codex <codex@local.invalid> for this command only; no local/global configuration change."
+}

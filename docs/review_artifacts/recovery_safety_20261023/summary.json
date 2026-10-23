@@ -1,0 +1,774 @@
+{
+  "schema_version": "moe-recovery-safety-screen/1",
+  "passed": true,
+  "cases": [
+    {
+      "name": "clear_and_reuse",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": false,
+        "wait": false,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 34,
+        "consumer_interleavings": 91,
+        "unsafe_interleavings": 25,
+        "wrong_generation_at_consume": 24,
+        "old_write_after_consume": 1
+      },
+      "counterexample": {
+        "trace": [
+          "old_data",
+          "timeout",
+          "reuse",
+          "old_notice",
+          "consume",
+          "new_data",
+          "new_notice",
+          "old_ack"
+        ],
+        "failures": [
+          "wrong_generation_at_consume"
+        ],
+        "observed": null,
+        "consumed": true
+      }
+    },
+    {
+      "name": "notice_generation_only",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 34,
+        "consumer_interleavings": 55,
+        "unsafe_interleavings": 10,
+        "old_write_after_consume": 1,
+        "wrong_generation_at_consume": 9
+      },
+      "counterexample": {
+        "trace": [
+          "timeout",
+          "reuse",
+          "new_data",
+          "new_notice",
+          "consume",
+          "old_data",
+          "old_notice",
+          "old_ack"
+        ],
+        "failures": [
+          "old_write_after_consume"
+        ],
+        "observed": 1,
+        "consumed": true
+      }
+    },
+    {
+      "name": "two_buffers_one_recovery",
+      "parameters": {
+        "generation": 1,
+        "slot": 1,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 34,
+        "consumer_interleavings": 55
+      },
+      "counterexample": null
+    },
+    {
+      "name": "two_buffers_wrap",
+      "parameters": {
+        "generation": 2,
+        "slot": 0,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse_one",
+        "middle_data",
+        "middle_notice",
+        "middle_consume",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse_one"
+        ],
+        [
+          "reuse_one",
+          "middle_data"
+        ],
+        [
+          "middle_data",
+          "middle_notice"
+        ],
+        [
+          "middle_notice",
+          "middle_consume"
+        ],
+        [
+          "middle_consume",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 164,
+        "consumer_interleavings": 219,
+        "unsafe_interleavings": 10,
+        "old_write_after_consume": 1,
+        "wrong_generation_at_consume": 9
+      },
+      "counterexample": {
+        "trace": [
+          "timeout",
+          "reuse_one",
+          "middle_data",
+          "middle_notice",
+          "middle_consume",
+          "reuse",
+          "new_data",
+          "new_notice",
+          "consume",
+          "old_data",
+          "old_notice",
+          "old_ack"
+        ],
+        "failures": [
+          "old_write_after_consume"
+        ],
+        "observed": 2,
+        "consumed": true
+      }
+    },
+    {
+      "name": "global_old_queue_retirement",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": true,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ],
+        [
+          "old_ack",
+          "reuse"
+        ]
+      ],
+      "counts": {
+        "network_orders": 3,
+        "consumer_interleavings": 3
+      },
+      "counterexample": null
+    },
+    {
+      "name": "selective_same_range_wait",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": true,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ],
+        [
+          "old_ack",
+          "reuse"
+        ]
+      ],
+      "counts": {
+        "network_orders": 3,
+        "consumer_interleavings": 3
+      },
+      "counterexample": null
+    },
+    {
+      "name": "selective_disjoint_range",
+      "parameters": {
+        "generation": 1,
+        "slot": 1,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 34,
+        "consumer_interleavings": 55
+      },
+      "counterexample": null
+    },
+    {
+      "name": "same_qp_order_and_generation",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": false,
+        "ordered": true,
+        "revoke": false,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_data",
+        "old_notice",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_data",
+          "old_notice"
+        ],
+        [
+          "old_notice",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ],
+        [
+          "old_notice",
+          "new_data"
+        ]
+      ],
+      "counts": {
+        "network_orders": 21,
+        "consumer_interleavings": 27
+      },
+      "counterexample": null
+    },
+    {
+      "name": "key_change_without_dma_retirement",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": true,
+        "fence": false
+      },
+      "events": [
+        "timeout",
+        "revoke",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_validate",
+        "old_dma",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "revoke"
+        ],
+        [
+          "revoke",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_validate",
+          "old_dma"
+        ],
+        [
+          "old_dma",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ]
+      ],
+      "counts": {
+        "network_orders": 55,
+        "consumer_interleavings": 83,
+        "unsafe_interleavings": 12,
+        "old_write_after_consume": 2,
+        "wrong_generation_at_consume": 10
+      },
+      "counterexample": {
+        "trace": [
+          "old_validate",
+          "timeout",
+          "revoke",
+          "reuse",
+          "new_data",
+          "new_notice",
+          "consume",
+          "old_dma",
+          "old_ack"
+        ],
+        "failures": [
+          "old_write_after_consume"
+        ],
+        "observed": 1,
+        "consumed": true
+      }
+    },
+    {
+      "name": "key_change_with_dma_retirement",
+      "parameters": {
+        "generation": 1,
+        "slot": 0,
+        "tagged": true,
+        "wait": false,
+        "ordered": false,
+        "revoke": true,
+        "fence": true
+      },
+      "events": [
+        "timeout",
+        "revoke",
+        "fence",
+        "reuse",
+        "new_data",
+        "new_notice",
+        "old_validate",
+        "old_dma",
+        "old_ack"
+      ],
+      "edges": [
+        [
+          "timeout",
+          "revoke"
+        ],
+        [
+          "revoke",
+          "fence"
+        ],
+        [
+          "fence",
+          "reuse"
+        ],
+        [
+          "reuse",
+          "new_data"
+        ],
+        [
+          "new_data",
+          "new_notice"
+        ],
+        [
+          "old_validate",
+          "old_dma"
+        ],
+        [
+          "old_dma",
+          "old_ack"
+        ],
+        [
+          "timeout",
+          "old_ack"
+        ],
+        [
+          "old_dma",
+          "fence"
+        ]
+      ],
+      "counts": {
+        "network_orders": 33,
+        "consumer_interleavings": 39
+      },
+      "counterexample": null
+    }
+  ],
+  "isolation": {
+    "pending": [
+      {
+        "owner": 4,
+        "range": [
+          0,
+          128
+        ],
+        "authority": [
+          0,
+          4096
+        ],
+        "signals": [
+          0
+        ],
+        "authorized_signals": [
+          0,
+          1
+        ]
+      }
+    ],
+    "rows": [
+      {
+        "request": {
+          "id": "same_bytes",
+          "owner": 4,
+          "range": [
+            0,
+            128
+          ],
+          "signal": 0
+        },
+        "cooperative": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "retired_wqes_cooperative": [],
+        "retired_wqes_live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "authority_revoked_and_dma_retired": []
+      },
+      {
+        "request": {
+          "id": "disjoint_expert_bytes",
+          "owner": 4,
+          "range": [
+            128,
+            256
+          ],
+          "signal": 1
+        },
+        "cooperative": [],
+        "live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "retired_wqes_cooperative": [],
+        "retired_wqes_live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "authority_revoked_and_dma_retired": []
+      },
+      {
+        "request": {
+          "id": "disjoint_bytes_shared_signal",
+          "owner": 4,
+          "range": [
+            256,
+            384
+          ],
+          "signal": 0
+        },
+        "cooperative": [
+          "possible_signal_update"
+        ],
+        "live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "retired_wqes_cooperative": [],
+        "retired_wqes_live_key_holder": [
+          "possible_data_write",
+          "possible_signal_update"
+        ],
+        "authority_revoked_and_dma_retired": []
+      },
+      {
+        "request": {
+          "id": "other_gpu",
+          "owner": 5,
+          "range": [
+            0,
+            128
+          ],
+          "signal": 0
+        },
+        "cooperative": [],
+        "live_key_holder": [],
+        "retired_wqes_cooperative": [],
+        "retired_wqes_live_key_holder": [],
+        "authority_revoked_and_dma_retired": []
+      }
+    ],
+    "scope": "declared interval/domain illustration; no production placement or timing measurement"
+  },
+  "scope": "finite conditional recovery model; not DeepEP execution, an exploit, performance or a novel algorithm proof",
+  "same_qp_and_global_retirement_controls_safe": true,
+  "production_vulnerability_demonstrated": false,
+  "source_sha256": "994ac8afebbbf957bdf768c24aadb891e5105be6a7e2020703c82f63960021ba"
+}

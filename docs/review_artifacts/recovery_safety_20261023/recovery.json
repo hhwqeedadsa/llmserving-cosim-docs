@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/source/experiments/recovery_safety/check_model.py",
+        "--output",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/new/model"
+      ],
+      "cwd": "/dev/shm/moe-recovery-safety-20261023/recovery/empty-cwd",
+      "exitcode": 0,
+      "pythonpath": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/source/experiments/recovery_safety/verify.py",
+        "--summary",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/new/model/summary.json",
+        "--output",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/new/verification.json"
+      ],
+      "cwd": "/dev/shm/moe-recovery-safety-20261023/recovery/empty-cwd",
+      "exitcode": 0,
+      "pythonpath": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/source/experiments/recovery_safety/build_review.py",
+        "--run",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/raw",
+        "--output",
+        "/dev/shm/moe-recovery-safety-20261023/recovery/new/review"
+      ],
+      "cwd": "/dev/shm/moe-recovery-safety-20261023/recovery/empty-cwd",
+      "exitcode": 0,
+      "pythonpath": ""
+    }
+  ],
+  "archive_members_verified": 60,
+  "new_source_root": true,
+  "new_cwd": true,
+  "fixed_source_files_verified": 5,
+  "outputs_byte_identical": [
+    {
+      "file": "model/summary.json",
+      "sha256": "ab57ff469e3a72ca5ac7c7a61750a1f623cad558cde469266952283c938e8e51"
+    },
+    {
+      "file": "verification.json",
+      "sha256": "e7096d6a7e77147db23411aafcb381ec146ffd1519ac780c268de60f635085d8"
+    },
+    {
+      "file": "review/summary.json",
+      "sha256": "ab57ff469e3a72ca5ac7c7a61750a1f623cad558cde469266952283c938e8e51"
+    },
+    {
+      "file": "review/sources.json",
+      "sha256": "820dd7ce155d55831f72da316626392c131131eb18b8ad948ab96efbf8c56fbe"
+    },
+    {
+      "file": "review/inputs.json",
+      "sha256": "c2612be5af3ddc81c6ff2e6d2c61d42addf9326111f9f0563e8ba1fd23c397d9"
+    },
+    {
+      "file": "review/report.html",
+      "sha256": "da086453af7b07c38bb8a6b6836b9bf8e8a6298d712102d263dc2b533eaadb0f"
+    }
+  ],
+  "new_network_executions": 0,
+  "new_gpu_executions": 0,
+  "scope": "offline CPU model/report replay, not dependency build or real RDMA recovery"
+}

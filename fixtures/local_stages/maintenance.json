@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "base_commit": "19adead01d0896a05e77650e03d1aa4077f6a46c",
+  "python_unit_tests": 13,
+  "dependency_checkouts": 13,
+  "old_runtime_hashes_unchanged": true,
+  "monitors": [
+    {
+      "path": "acceptance-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 14.805390235036612,
+      "rss": 425197568
+    },
+    {
+      "path": "compile-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 5.272105731070042,
+      "rss": 510685184
+    },
+    {
+      "path": "compile-fixed-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 5.3079892713576555,
+      "rss": 508583936
+    },
+    {
+      "path": "compile-monitor/probe.json",
+      "status": "child_failed",
+      "exitcode": 1,
+      "wall_seconds": 3.7998193819075823,
+      "rss": 470528000
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.39661238342523575,
+      "rss": 19120128
+    },
+    {
+      "path": "legacy-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 9.928566744551063,
+      "rss": 430465024
+    },
+    {
+      "path": "legacy-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 9.918742889538407,
+      "rss": 431857664
+    },
+    {
+      "path": "link-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.5998512208461761,
+      "rss": 110772224
+    },
+    {
+      "path": "link-fixed-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.47797225415706635,
+      "rss": 111108096
+    },
+    {
+      "path": "unit-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.17910709790885448,
+      "rss": 7438336
+    },
+    {
+      "path": "unit-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 0.14587084390223026,
+      "rss": 7503872
+    },
+    {
+      "path": "workflow-final-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 15.136362411081791,
+      "rss": 424226816
+    },
+    {
+      "path": "workflow-monitor/probe.json",
+      "status": "completed",
+      "exitcode": 0,
+      "wall_seconds": 14.145721659064293,
+      "rss": 425308160
+    }
+  ],
+  "total_monitored_wall_seconds": 80.11411212384701,
+  "peak_sampled_rss_bytes": 510685184,
+  "code_sha256": {
+    "backend/rdma/stream_probe.cc": "942b7fd85f96f105e7a9b0a25147ee8f20efbf7c95cc80bd186b220977b52d86",
+    "python/moe_ub_cosim/scaleout_streams.py": "6c89cff57fb5e71ca6f2b46eaddc01b5c5bedd3e85e5dc4497bdae58e86af83e",
+    "tests/integration/check_local_stage_workflow.py": "decabb8b81f9359d476f40c9c04e20eb7abf07c19d8ded074dd1a5f00463ca17",
+    "tests/unit/scaleout_streams_test.py": "6e54158db05672c7066ed7b91cad2d0a9432068853975fe9a2d76d046d5d8881"
+  },
+  "raw_path": "/dev/shm/moe-local-stages-20261023",
+  "persistent_backup": false,
+  "hardware_calibrated": false,
+  "modern_GIN_executed": false
+}

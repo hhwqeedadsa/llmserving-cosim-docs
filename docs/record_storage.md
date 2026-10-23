@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+持久字节入口stream-work/3新增顶层`local_work`（`id/rank/duration_ns/ready_ns/start_ns/completed_ns`）、`local_model`和`completed_local_work`；时刻均为同一ns-3时钟的ns，未发生为-1。本地完成不会生成网络写记录；顶层`completed_work`计全部节点，`persistent_transport.work`仅计写。时限失败也保存实际前缀，不用定时器目标填充完成。旧v1/v2字段不变，详见[输入与输出](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。
+
 原生Fabric的顶层`rdma_parameters`保存每个端点初始化后读回的有效属性、单位与适配器覆盖来源。持久字节入口可选`persistent_transport.source_rate_capture`在已有TX/ACK回调内保存QP速率及拥塞状态；时间窗左闭右开，达到容量后再次采样明确失败，终态另列且不受时间窗限制。它不是连续定时器轨迹、测量吞吐或硬件校准，详见[速率观测及字段口径](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。
 
 原生在线service的`native.stdout.log`按完整行写出；worker接收一条后端控制记录后，先提交给操作系统文件缓冲，再处理前端回复。它减少宿主超时/终止时Python块缓冲导致的整行丢失，不保证断电持久性，也不说明任务已完成。历史版本采用块缓冲，其失败日志中的完成通知数只能作下限；ASTRA异步节点日志也可能有未刷出的尾部。终态仍以成功的`result.json`和独立核验为准。

@@ -8,10 +8,11 @@ from .scaleout_topology import fields, integer, require
 
 def stream_limits(config):
     schema=config.get('schema_version')
-    require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2'),'unsupported stream work schema')
-    fields(config,'schema_version streams work'+(' limits' if schema.endswith('/2') else '')
+    require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2','moe-rdma-stream-work/3'),'unsupported stream work schema')
+    fields(config,'schema_version streams work'+(' limits' if not schema.endswith('/1') else '')
            +(' source_rate_capture' if 'source_rate_capture' in config else '')
-           +(' dcqcn_reference' if 'dcqcn_reference' in config else ''),'stream work root')
+           +(' dcqcn_reference' if 'dcqcn_reference' in config else '')
+           +(' local_model' if schema.endswith('/3') else ''),'stream work root')
     if schema.endswith('/1'):
         return dict(max_streams=16,max_work=64)
     value=config['limits']
@@ -24,6 +25,11 @@ def stream_limits(config):
 def validate(topology, protocol, config):
     counts=stream_limits(config)
     budget=limits(protocol)
+    local_mode=config['schema_version'].endswith('/3')
+    if local_mode:
+        fields(config['local_model'],'mode duration_source','local model')
+        require(config['local_model']==dict(mode='serial_per_gpu/1',duration_source='declared_ns'),
+                'local model requires serial_per_gpu/1 and declared_ns')
     if 'dcqcn_reference' in config:
         reference=config['dcqcn_reference']
         fields(reference,'mode np_interval_ns alpha_interval_ns recovery_interval_ns recovery_bytes min_rate_bps '
@@ -66,21 +72,34 @@ def validate(topology, protocol, config):
     validate_probe(topology,protocol,checks)
     require(isinstance(config['work'],list) and 1<=len(config['work'])<=counts['max_work'],
             'work count exceeds declared budget')
-    seen,totals=set(),{i:0 for i in ids}
+    seen,totals={}, {i:0 for i in ids}
+    gpus={n['id'] for n in topology['nodes'] if n['kind']=='gpu'}
     for w in config['work']:
-        fields(w,'id stream bytes after','stream work')
-        integer(w['id'],'work id',0,65535);integer(w['stream'],'work stream',0,65535)
-        integer(w['bytes'],'work bytes',1,1024*1024)
-        require(w['id'] not in seen and w['stream'] in ids,'repeated work or unknown stream')
+        kind=w.get('kind') if local_mode else 'write'
+        require(kind in ('write','local'),'unknown work kind')
+        fields(w,('id kind rank duration_ns after' if kind=='local' else 'id stream bytes after'+(' kind' if local_mode else '')),'stream work')
+        integer(w['id'],'work id',0,65535)
+        require(w['id'] not in seen,'repeated work id')
+        if kind=='local':
+            integer(w['rank'],'local rank',0,budget['max_gpus']-1)
+            require(w['rank'] in gpus,'local rank is not a topology GPU')
+            integer(w['duration_ns'],'local duration_ns',0,budget['max_sim_ns'])
+        else:
+            integer(w['stream'],'work stream',0,65535);integer(w['bytes'],'work bytes',1,1024*1024)
+            require(w['stream'] in ids,'unknown stream')
         require(isinstance(w['after'],list) and len(w['after'])<=64,'invalid causal dependencies')
         deps=set()
         for d in w['after']:
             fields(d,'work event','stream dependency')
             integer(d['work'],'dependency work',0,65535)
-            require(d['work'] in seen and d['event'] in ('accepted','acked'),'dependency must name earlier accepted/acked work')
+            require(d['work'] in seen,'dependency must name an earlier work')
+            require(d['event'] in (('completed',) if seen[d['work']]=='local' else ('accepted','acked')),
+                    'dependency event does not match predecessor kind')
             key=(d['work'],d['event']);require(key not in deps,'repeated dependency');deps.add(key)
-        seen.add(w['id']);totals[w['stream']]+=w['bytes']
-        require(totals[w['stream']]<=64*1024*1024,'stream sequence budget exceeded')
+        seen[w['id']]=kind
+        if kind=='write':
+            totals[w['stream']]+=w['bytes']
+            require(totals[w['stream']]<=64*1024*1024,'stream sequence budget exceeded')
 
 
 def probe(topology, protocol, config, backend, output):

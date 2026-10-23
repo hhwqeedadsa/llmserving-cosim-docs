@@ -1,0 +1,135 @@
+{
+  "passed": true,
+  "monitors": [
+    {
+      "path": "acceptance-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 14.805390235036612,
+      "peak_rss_bytes": 425197568
+    },
+    {
+      "path": "archive-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 4.37686481885612,
+      "peak_rss_bytes": 46219264
+    },
+    {
+      "path": "closeout-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6576539725065231,
+      "peak_rss_bytes": 52424704
+    },
+    {
+      "path": "compile-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.272105731070042,
+      "peak_rss_bytes": 510685184
+    },
+    {
+      "path": "compile-fixed-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 5.3079892713576555,
+      "peak_rss_bytes": 508583936
+    },
+    {
+      "path": "compile-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 3.7998193819075823,
+      "peak_rss_bytes": 470528000
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.39661238342523575,
+      "peak_rss_bytes": 19120128
+    },
+    {
+      "path": "legacy-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 9.928566744551063,
+      "peak_rss_bytes": 430465024
+    },
+    {
+      "path": "legacy-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 9.918742889538407,
+      "peak_rss_bytes": 431857664
+    },
+    {
+      "path": "link-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5998512208461761,
+      "peak_rss_bytes": 110772224
+    },
+    {
+      "path": "link-fixed-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.47797225415706635,
+      "peak_rss_bytes": 111108096
+    },
+    {
+      "path": "replay-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 15.364383259788156,
+      "peak_rss_bytes": 428032000
+    },
+    {
+      "path": "unit-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.17910709790885448,
+      "peak_rss_bytes": 7438336
+    },
+    {
+      "path": "unit-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.14587084390223026,
+      "peak_rss_bytes": 7503872
+    },
+    {
+      "path": "workflow-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 15.136362411081791,
+      "peak_rss_bytes": 424226816
+    },
+    {
+      "path": "workflow-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 14.145721659064293,
+      "peak_rss_bytes": 425308160
+    }
+  ],
+  "total_monitored_wall_seconds": 100.5130141749978,
+  "peak_sampled_rss_bytes": 510685184,
+  "task_usage_bytes": {
+    "apparent_bytes": 46719228,
+    "allocated_bytes": 49532928
+  },
+  "free_tmpfs_bytes": 260264296448,
+  "budgets": {
+    "each_command_seconds": 60,
+    "phase_seconds": 300,
+    "phase_artifact_bytes": 201326592,
+    "sim_ns": 5000000,
+    "result_bytes": 16777216
+  },
+  "raw_path": "/dev/shm/moe-local-stages-20261023",
+  "persistent_backup": false,
+  "goal_status": "in_progress",
+  "paper_main_contribution_established": false
+}

@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "result_files_byte_identical": 14,
+  "files": [
+    "cutoff/result.json",
+    "feedback/result.json",
+    "fifo/result.json",
+    "local/result.json",
+    "repeat/result.json",
+    "v1-default-new/result.json",
+    "v1-default-old/result.json",
+    "v1-reference-new/result.json",
+    "v1-reference-old/result.json",
+    "v2-default-new/result.json",
+    "v2-default-old/result.json",
+    "v2-reference-new/result.json",
+    "v2-reference-old/result.json",
+    "write-only-v3/result.json"
+  ],
+  "source_root": "/dev/shm/moe-local-stages-20261023/recovered/source",
+  "output_root": "/dev/shm/moe-local-stages-20261023/recovered/replay",
+  "public_commands": 23,
+  "direct_native_commands": 7,
+  "independent_source_cwd": true,
+  "original_runtime_RPATH_preserved": true,
+  "portable_image": false,
+  "hardware_calibrated": false
+}

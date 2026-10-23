@@ -49,6 +49,26 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 ## 输出与预算
 
+### 网络回调与本地处理交替执行
+
+将运行命令的`--config`换为[local-stages.json](local-stages.json)，即可使用`moe-rdma-stream-work/3`。它在同一ns-3时钟内执行“接收/ACK→本地处理→后续写”，保留等待期间的连接、字节序号和拥塞状态，无需填写后续通信的绝对开始时刻。
+
+v3保留v2的显式`limits`，增加必填`local_model`：
+
+```json
+"local_model": {"mode": "serial_per_gpu/1", "duration_source": "declared_ns"}
+```
+
+所有工作须填写`kind`。`write`使用`id/kind/stream/bytes/after`；`local`使用`id/kind/rank/duration_ns/after`。`rank`须是图中真实存在的GPU，`duration_ns`为0到协议`max_sim_ns`之间的整数，单位ns，不接受布尔值。每个GPU只有一个抽象串行处理槽，非抢占；不同GPU可并行，网络独立推进。该槽不预留显存、SM或NIC资源。v3的`limits.max_work`统计写和本地节点的总数，最高仍为8192。
+
+依赖只引用输入中较早的工作。写工作提供`accepted/acked`，本地工作只提供`completed`；跨类型事件、未知字段和绝对`ready_ns`均由CLI拒绝。本地工作在实际前驱全部完成后排队，按就绪入队顺序执行；同一回调释放的一批工作按输入顺序，同纳秒的不同回调保留ns-3事件顺序。已经排队的工作优先于刚被解锁的工作。未来写在其实际前驱完成前不会预留发送槽或发布字节。
+
+人工示例包含3次写、5项本地处理。GPU4上两项工作由同一次接收解锁并串行执行；GPU1独立执行400,000ns，后续写还须等它完成。零时长工作依然通过实际仿真事件完成。最后一项本地工作晚于最后ACK，连接继续保留到全部工作完成并且网络物理排空。
+
+`result.json`仅在v3增加`local_model`、`local_work`、`completed_local_work`。`local_work`按输入顺序保存`id/rank/duration_ns/ready_ns/start_ns/completed_ns`；三个时刻分别是实际入队、开始和完成，未发生为-1。顶层`completed_work`统计写和本地节点，`persistent_transport.work`仍只包含真实写。到达仿真时限时命令失败但保留结果前缀，已安排的未来完成时间不会写成已完成。v1/v2没有这些新增字段。
+
+这是**声明耗时的功能模型**，没有GPU实测、CUDA并发、现代DeepEP调用或GIN可见性。`accepted`仍只是连续接收前缀，不能据此认定GPU已可读。改变`duration_ns`可检查间隔与网络状态的相互作用，不能当作更换A100/H100或实际MoE计算的预测。包级因果、队列、旧格式兼容与时限检查见[本地阶段验收](../../fixtures/local_stages/README.md)。
+
 ### 可选的独立拥塞反馈参考模式
 
 工作输入可增加`dcqcn_reference`；完整示例见[work-reference.json](work-reference.json)。运行时把上面命令的`--config`换成这个文件即可。

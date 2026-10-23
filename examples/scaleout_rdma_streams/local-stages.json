@@ -1,0 +1,19 @@
+{
+  "schema_version": "moe-rdma-stream-work/3",
+  "limits": {"max_streams": 2, "max_work": 8},
+  "local_model": {"mode": "serial_per_gpu/1", "duration_source": "declared_ns"},
+  "streams": [
+    {"id": 0, "src": 0, "dst": 4, "plane": 0, "wire_port": 21000, "source_nic": 1, "destination_nic": 1, "queue_depth": 1},
+    {"id": 1, "src": 4, "dst": 0, "plane": 0, "wire_port": 21001, "source_nic": 1, "destination_nic": 1, "queue_depth": 1}
+  ],
+  "work": [
+    {"id": 0, "kind": "write", "stream": 0, "bytes": 14464, "after": []},
+    {"id": 1, "kind": "local", "rank": 4, "duration_ns": 200000, "after": [{"work": 0, "event": "accepted"}]},
+    {"id": 2, "kind": "local", "rank": 4, "duration_ns": 3000, "after": [{"work": 0, "event": "accepted"}]},
+    {"id": 3, "kind": "local", "rank": 1, "duration_ns": 400000, "after": []},
+    {"id": 4, "kind": "write", "stream": 1, "bytes": 1001, "after": [{"work": 1, "event": "completed"}]},
+    {"id": 5, "kind": "local", "rank": 4, "duration_ns": 0, "after": [{"work": 4, "event": "acked"}, {"work": 2, "event": "completed"}]},
+    {"id": 6, "kind": "write", "stream": 0, "bytes": 17, "after": [{"work": 5, "event": "completed"}, {"work": 3, "event": "completed"}]},
+    {"id": 7, "kind": "local", "rank": 4, "duration_ns": 20000, "after": [{"work": 6, "event": "accepted"}]}
+  ]
+}

@@ -10,6 +10,33 @@ ROOT=Path(__file__).resolve().parents[2]
 
 
 class StreamInputTests(unittest.TestCase):
+    def local_config(self):
+        return json.loads((ROOT/'examples/scaleout_rdma_streams/local-stages.json').read_text())
+
+    def test_local_stages(self):
+        validate(self.topology,self.protocol,self.local_config())
+
+    def test_local_dependency_kinds(self):
+        for index,event in ((1,'completed'),(4,'acked')):
+            c=self.local_config();c['work'][index]['after'][0]['event']=event
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,c)
+
+    def test_local_numbers(self):
+        for key,value in (('rank',8),('rank',True),('duration_ns',True),('duration_ns',-1),('duration_ns',5000001)):
+            c=self.local_config();c['work'][1][key]=value
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,c)
+
+    def test_local_model_and_fields(self):
+        for change in ('model','kind','stream','absolute','budget','legacy'):
+            c=self.local_config()
+            if change=='model':c['local_model']['duration_source']='calibrated'
+            elif change=='kind':c['work'][1]['kind']='compute'
+            elif change=='stream':c['work'][1]['stream']=0
+            elif change=='absolute':c['work'][1]['ready_ns']=0
+            elif change=='budget':c['limits']['max_work']=7
+            else:c['schema_version']='moe-rdma-stream-work/2'
+            with self.assertRaises(ValueError):validate(self.topology,self.protocol,c)
+
     def setUp(self):
         self.config=json.loads((ROOT/'examples/scaleout_rdma_streams/work.json').read_text())
         self.protocol=json.loads((ROOT/'examples/scaleout_rdma/rdma.json').read_text())

@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+持久字节入口新增stream-work/3：实际网络接收/ACK回调可以解锁本地处理，本地处理在每GPU一个抽象串行槽上按声明耗时执行，再解锁后续写。全部使用同一原生ns-3时钟，处理期间QP与拥塞反馈保持；不与现代Python事件核心自动连通。具体事件和队列规则见[本地阶段](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。
+
 原生事务另支持`queue_fence`，在操作前驱满足时捕获提交GPU所拥有连接的已预留前缀，并按实际ACK/响应完成推进；后续工作不扩张旧目标。这是MRT1功能队列屏障，仍未绑定现代GIN flush或GPU源缓冲，见[前缀等待](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。
 
 `RemoteTransactions`另支持提交GPU读取本地接收窗口的LE64条件等待与消费；值来自实际请求解码后的内存，全部条件满足才推进。它与远端应用记录使用同一网络时钟，但不提供GPU内存序或轮询成本；两轮例见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。

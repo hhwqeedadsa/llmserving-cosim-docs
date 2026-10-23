@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "archive_members_checked": 179,
+  "new_source_root": true,
+  "new_cwd": true,
+  "empty_parent_pythonpath": true,
+  "research_commands": 2,
+  "byte_identical_artifacts": [
+    {
+      "path": "analysis/100000000000-identity-graph.json",
+      "sha256": "af2ae4e584cd041e3f5ce1b38c68019c0ea4b7baf40fcade98e06125f641d44f"
+    },
+    {
+      "path": "analysis/100000000000-local_lpt-graph.json",
+      "sha256": "7d97fc82355c5641e22ca42009737dfb6d5b10918eaa9322445e3e608926b516"
+    },
+    {
+      "path": "analysis/100000000000-rotate-graph.json",
+      "sha256": "3e439a04f9b92ab2b1bb7f756f5dec402de19769b8dc9592f05b08d81a32c778"
+    },
+    {
+      "path": "analysis/25000000000-identity-graph.json",
+      "sha256": "61b75469be8d0d2727a107d5e7bf64237d1b3a418db4ebb4be12cc82ceeb1b78"
+    },
+    {
+      "path": "analysis/25000000000-local_lpt-graph.json",
+      "sha256": "8736402ed0dbbb3ad0cfab0a6334eea772b0380c3798b3eff819ec81a1d00205"
+    },
+    {
+      "path": "analysis/25000000000-rotate-graph.json",
+      "sha256": "40934653281346c065fbb979c0e6d9495792444e889717a71f5531e45c367570"
+    },
+    {
+      "path": "analysis/conditions.json",
+      "sha256": "e59813450c521fd9337c8f0e41357971242006d4773856f8a37ef18ac8f235a8"
+    },
+    {
+      "path": "analysis/scope.json",
+      "sha256": "231d4c779e58ff2184e3aa0d2694a48f761a3831d17cfc880e02ca750dd2615f"
+    },
+    {
+      "path": "verification.json",
+      "sha256": "a4f425e9610981687326580d098ee62f3bd75a1678933ef8247e381fd5783a29"
+    }
+  ],
+  "network_reexecuted": false,
+  "binaries_required_for_offline_analysis": false
+}

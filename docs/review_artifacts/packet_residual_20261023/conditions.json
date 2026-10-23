@@ -1,0 +1,158 @@
+[
+  {
+    "condition": "100000000000-identity",
+    "original_fields_equal": true,
+    "finish_ns": 48340,
+    "max_port_service_ns": 35818,
+    "finish_minus_max_port_service_ns": 12522,
+    "witness": {
+      "serialization_ns": 34340,
+      "propagation_ns": 14000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 661,
+    "critical_path_propagation_range_ns": [
+      12000,
+      14000
+    ],
+    "critical_transmissions": 2978,
+    "maximum_predecessor_ties": 3708,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  },
+  {
+    "condition": "100000000000-rotate",
+    "original_fields_equal": true,
+    "finish_ns": 49502,
+    "max_port_service_ns": 37020,
+    "finish_minus_max_port_service_ns": 12482,
+    "witness": {
+      "serialization_ns": 37502,
+      "propagation_ns": 12000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 701,
+    "critical_path_propagation_range_ns": [
+      12000,
+      12000
+    ],
+    "critical_transmissions": 2762,
+    "maximum_predecessor_ties": 3721,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  },
+  {
+    "condition": "100000000000-local_lpt",
+    "original_fields_equal": true,
+    "finish_ns": 45996,
+    "max_port_service_ns": 33474,
+    "finish_minus_max_port_service_ns": 12522,
+    "witness": {
+      "serialization_ns": 21996,
+      "propagation_ns": 24000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 378,
+    "critical_path_propagation_range_ns": [
+      12000,
+      24000
+    ],
+    "critical_transmissions": 4635,
+    "maximum_predecessor_ties": 3737,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  },
+  {
+    "condition": "25000000000-identity",
+    "original_fields_equal": true,
+    "finish_ns": 156302,
+    "max_port_service_ns": 143032,
+    "finish_minus_max_port_service_ns": 13270,
+    "witness": {
+      "serialization_ns": 144302,
+      "propagation_ns": 12000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 687,
+    "critical_path_propagation_range_ns": [
+      12000,
+      12000
+    ],
+    "critical_transmissions": 2706,
+    "maximum_predecessor_ties": 3427,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  },
+  {
+    "condition": "25000000000-rotate",
+    "original_fields_equal": true,
+    "finish_ns": 161110,
+    "max_port_service_ns": 147840,
+    "finish_minus_max_port_service_ns": 13270,
+    "witness": {
+      "serialization_ns": 149110,
+      "propagation_ns": 12000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 702,
+    "critical_path_propagation_range_ns": [
+      12000,
+      12000
+    ],
+    "critical_transmissions": 2763,
+    "maximum_predecessor_ties": 3437,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  },
+  {
+    "condition": "25000000000-local_lpt",
+    "original_fields_equal": true,
+    "finish_ns": 146911,
+    "max_port_service_ns": 133641,
+    "finish_minus_max_port_service_ns": 13270,
+    "witness": {
+      "serialization_ns": 134911,
+      "propagation_ns": 12000,
+      "source_boundary_gap_ns": 0,
+      "dispatch_boundary_gap_ns": 0
+    },
+    "witness_transmissions": 672,
+    "critical_path_propagation_range_ns": [
+      12000,
+      12000
+    ],
+    "critical_transmissions": 2646,
+    "maximum_predecessor_ties": 3369,
+    "all_tx_boundary_gap_sums_ns": {},
+    "critical_source_gap_ns": 0,
+    "critical_dispatch_gap_ns": 0,
+    "source_data_packets": 1755,
+    "ack_packets": 1755,
+    "physical_tx": 16620
+  }
+]

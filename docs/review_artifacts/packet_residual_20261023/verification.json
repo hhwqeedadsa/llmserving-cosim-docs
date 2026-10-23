@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "conditions": [
+    {
+      "condition": "100000000000-identity",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 2978,
+      "finish_ns": 48340
+    },
+    {
+      "condition": "100000000000-rotate",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 2762,
+      "finish_ns": 49502
+    },
+    {
+      "condition": "100000000000-local_lpt",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 4635,
+      "finish_ns": 45996
+    },
+    {
+      "condition": "25000000000-identity",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 2706,
+      "finish_ns": 156302
+    },
+    {
+      "condition": "25000000000-rotate",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 2763,
+      "finish_ns": 161110
+    },
+    {
+      "condition": "25000000000-local_lpt",
+      "original_fields_equal": true,
+      "data_packets": 1755,
+      "ack_packets": 1755,
+      "physical_tx": 16620,
+      "work_completions": 117,
+      "critical_tx": 2646,
+      "finish_ns": 146911
+    }
+  ],
+  "rejected_corruptions": [
+    "ack_port",
+    "propagation_edge",
+    "gap"
+  ],
+  "total_data_packets": 10530,
+  "total_ack_packets": 10530,
+  "total_physical_tx": 99720,
+  "total_work_completions": 702,
+  "counterfactual_performance_verified": false,
+  "hardware_calibrated": false
+}

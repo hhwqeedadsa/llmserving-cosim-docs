@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "author_snapshots_match": 9,
+  "old_runtime_hashes_unchanged": 9,
+  "native_source_files": 5,
+  "local_links_checked": 18,
+  "independent_verification": true,
+  "public_network_commands": 8,
+  "observation_conditions": 6,
+  "original_result_fields_identical": true,
+  "independent_new_performance_samples": false,
+  "offline_identical_json_artifacts": 9,
+  "stage_monitors": [
+    {
+      "path": "analyze-monitor/probe.json",
+      "wall_seconds": 5.757111119106412,
+      "peak_sampled_group_rss_bytes": 139603968
+    },
+    {
+      "path": "analyze-ties-monitor/probe.json",
+      "wall_seconds": 5.128103602677584,
+      "peak_sampled_group_rss_bytes": 138350592
+    },
+    {
+      "path": "archive-monitor/probe.json",
+      "wall_seconds": 8.431905763223767,
+      "peak_sampled_group_rss_bytes": 24211456
+    },
+    {
+      "path": "check-monitor/probe.json",
+      "wall_seconds": 7.725653991103172,
+      "peak_sampled_group_rss_bytes": 183037952
+    },
+    {
+      "path": "check-ties-monitor/probe.json",
+      "wall_seconds": 7.669061968103051,
+      "peak_sampled_group_rss_bytes": 184995840
+    },
+    {
+      "path": "network-monitor/probe.json",
+      "wall_seconds": 12.75250636599958,
+      "peak_sampled_group_rss_bytes": 459685888
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "wall_seconds": 0.13828319124877453,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "path": "recover-monitor/probe.json",
+      "wall_seconds": 13.33336916565895,
+      "peak_sampled_group_rss_bytes": 213778432
+    },
+    {
+      "path": "report-final-monitor/probe.json",
+      "wall_seconds": 0.13263577409088612,
+      "peak_sampled_group_rss_bytes": 7491584
+    },
+    {
+      "path": "report-monitor/probe.json",
+      "wall_seconds": 0.13125450164079666,
+      "peak_sampled_group_rss_bytes": 7495680
+    },
+    {
+      "path": "report-repo-monitor/probe.json",
+      "wall_seconds": 0.13111567683517933,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "path": "source-monitor/probe.json",
+      "wall_seconds": 0.13272695243358612,
+      "peak_sampled_group_rss_bytes": 7442432
+    }
+  ],
+  "network_monitors": [
+    {
+      "path": "network/100000000000-identity/execution/probe.json",
+      "wall_seconds": 1.7424759026616812,
+      "peak_sampled_group_rss_bytes": 409927680
+    },
+    {
+      "path": "network/100000000000-local_lpt/execution/probe.json",
+      "wall_seconds": 1.766297634691,
+      "peak_sampled_group_rss_bytes": 408637440
+    },
+    {
+      "path": "network/100000000000-rotate/execution/probe.json",
+      "wall_seconds": 1.727716663852334,
+      "peak_sampled_group_rss_bytes": 408952832
+    },
+    {
+      "path": "network/25000000000-identity/execution/probe.json",
+      "wall_seconds": 1.8428610507398844,
+      "peak_sampled_group_rss_bytes": 407425024
+    },
+    {
+      "path": "network/25000000000-local_lpt/execution/probe.json",
+      "wall_seconds": 1.8599692285060883,
+      "peak_sampled_group_rss_bytes": 409341952
+    },
+    {
+      "path": "network/25000000000-rotate/execution/probe.json",
+      "wall_seconds": 1.7433363050222397,
+      "peak_sampled_group_rss_bytes": 409575424
+    }
+  ],
+  "elapsed_stage_seconds": 61.46372807212174,
+  "research_bytes": 116481616,
+  "platform_bytes": 92511257,
+  "combined_bytes": 208992873,
+  "tmpfs_free_bytes": 259653537792,
+  "root_report_bytes": 21894,
+  "root_volume_free_bytes": 7747641344,
+  "storage": "tmpfs_volatile",
+  "persistent_backup": false,
+  "paper_contribution_established": false
+}

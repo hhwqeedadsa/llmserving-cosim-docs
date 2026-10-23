@@ -43,3 +43,28 @@ PYTHONPATH=python python3 -m moe_ub_cosim.host_probe \
 `package.py archive/recover/report --repo /ABS/REPO --root /ABS/THIS_RUN --output /ABS/REPORT_DIR`保存固定输入、源码、完整六份网络结果和日志；恢复在新源码根/cwd离线重新规划、分析和独立核验。**恢复不重跑网络，也不包含二进制及共享库**，不能当跨机网络执行复现。原始件和检查点仅易失内存盘，无持久备份；仓库保存小型HTML/JSON摘要。
 
 独立checker核对四原件、逐warp/context、全体源包分段和每个数据/ACK包的完整物理端口路径，再独立累计端口服务时间。ACK按端点/plane/累计序号多重集及末端到达时间候选核对；现有公开捕获不含ACK的QP标识，不能声称逐QP ACK身份观测。端口服务时间按固定原生ns-3的DataRate及Time近邻纳秒取整；多个端口服务量不相加为完成时间。
+
+## 逐包完成链残差核查
+
+这项后续核查使用已验收的可选实际报文头，解决上一轮ACK连接身份歧义；上一轮归档与结果保持原样。[方法](residual_protocol.md)与[实际结果](../../docs/reviews/packet_residual_20261023.md)分别维护。只重采同样六个条件，去掉新增记录后完整结果字段须相等；不是独立新样本，也不是预测器。所需输入是上一轮完整工作目录或其恢复件，不能只给HTML摘要。
+
+以下为受监控子命令，使用上述`host_probe`形式逐条限制60秒/1GiB/地址2GiB/64MiB，阶段产物根分别指定；全轮480秒/128MiB、六次网络总≤360秒，归档成员64MiB/压缩24MiB，卷预留8GiB。新目录的父目录先创建；各输出目录或输出JSON不得已存在。
+
+```bash
+python3 experiments/rail_channel_screening/residual.py prepare \
+  --previous-root /ABS/PREVIOUS_RAIL_RUN --output /dev/shm/my-residual/input
+python3 experiments/rail_channel_screening/residual.py capture-source \
+  --repo /ABS/REPO --output /dev/shm/my-residual/time-basis
+python3 experiments/rail_channel_screening/run.py \
+  --repo /ABS/REPO --observed /dev/shm/my-residual/input/observed \
+  --plans /dev/shm/my-residual/input/plans --backend /ABS/NEW_STREAM_BINARY \
+  --expected-backend-sha256 NEW_BINARY_SHA256 --output /dev/shm/my-residual/network
+python3 experiments/rail_channel_screening/residual.py analyze \
+  --inputs /dev/shm/my-residual/input --network /dev/shm/my-residual/network \
+  --output /dev/shm/my-residual/analysis-ties
+python3 experiments/rail_channel_screening/residual_check.py \
+  --inputs /dev/shm/my-residual/input --network /dev/shm/my-residual/network \
+  --analysis /dev/shm/my-residual/analysis-ties --output /dev/shm/my-residual/verification-ties.json
+```
+
+本轮原生stream二进制SHA256为`aa531fbee822483b768265a0d32771ac31d5e1b45cd57846d11770b2db071608`，平台提交`9ee311b`。重新构建需显式记录自己的hash和工具链。`residual_package.py report/archive/recover --repo /ABS/REPO --root /ABS/THIS_RESIDUAL_RUN --output /ABS/REPORT_DIR`依次生成报告、核hash打包、换源码根与cwd离线重分析；恢复不执行ns-3、不需要旧二进制，不证明跨机网络复现。保留全部最大前驱和终态ACK并列项；所选链只是一条加性见证，传播项的最小/最大值遍历全部临界前驱计算，不能把其视为反事实不可改变成本。

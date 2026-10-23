@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+transactions/2的本地处理同样使用声明耗时，区别是可以由实际解码接收窗口的LE64条件和消费驱动。条件入队时清零，排队不锁定数据，不能证明完整buffer寿命、GPU可见或数值计算正确；部分全局applied依赖只是功能编排。它未连接现代计划/provider或匹配GPU测量，不能当作现代MoE性能基线。功能反例、FIFO和截止核验见[事务本地阶段](../fixtures/transaction_local_stages/README.md)。
+
 stream-work/3的本地阶段使用输入显式声明的ns耗时，每GPU单个非抢占槽，仅验证实际网络回调、资源排队和后续发送的因果关系。它不从GPU型号推导成本，不模拟SM/显存/CUDA并发，不把接收前缀当GPU可见，也未接入现代DeepEP计划或生产请求。旧v1/v2真实网络结果、人工端点包/ACK和截止前缀的独立核查见[验收](../fixtures/local_stages/README.md)。
 
 固定原生mode1的反馈抽象与DCQCN 2015部署存在差异：`ReceiveUdp`逐标记数据包在ACK中置CNP位，此路径没有按流50us通知抑制；恢复仅有timer触发，未实现原文同时使用的发送字节触发。独立`ReceiveCnp`也未调用该mode1更新。ASTRA与Alibaba的10个控制函数去注释token一致，不能作为独立校准。已有Prefill长尾只能归于声明模型，不能直接推为真实MoE集群规律；论文参数也不是现代NIC通用校准值。源码、原文和既有包记录的核查见[反馈模型报告](review_artifacts/dcqcn_validity_20261022/report.html)，参考模式的要求见[实施门槛](../experiments/paper_readiness/dcqcn_reference_requirements.md)。

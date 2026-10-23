@@ -80,6 +80,36 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-probe \
 
 默认例6个事务、52个源数据包、47,960B载体有效负载，第一次等待覆盖两个早期put，第二次覆盖新增工作。两次运行和id改名分别核验结果确定性及线上字节不变；另验证深度1下预留但未发布的工作、空快照和非本地连接拒绝。输入与全部功能边界见[队列快照验收](../../fixtures/queue_fences/README.md)。这些数字不用于真实通信库性能排序。
 
+## 接收条件与本地处理交替执行
+
+将运行命令的`--config`改为[local-stages.json](local-stages.json)，执行“收到数据和计数→本地处理→下一轮通知”。使用`moe-rdma-transactions/2`，根字段增加：
+
+```json
+"local_model": {"mode": "serial_per_gpu/1", "duration_source": "declared_ns"}
+```
+
+v2每个operations节点必须有`kind`。`remote`保留v1远端事务字段；`local`只含`id/kind/rank/duration_ns/after`和可选`local_wait`，例如：
+
+```json
+{"id": 10, "kind": "local", "rank": 4, "duration_ns": 40000,
+ "after": [], "local_wait": [
+   {"key": 7, "address": 4096, "compare": "eq", "value": 2, "reset_to": 0},
+   {"key": 7, "address": 4112, "compare": "eq", "value": 11}
+ ]}
+```
+
+`rank`须是拓扑中的GPU，编号0—31。`duration_ns`是0至协议`max_sim_ns`内的整数，默认上限5,000,000ns。它是用户声明的处理时间，没有从GPU型号、算子或batch自动估计。每GPU一个非抢占串行槽，不同GPU可以并行；零时长也经过ns-3调度事件。v2至多32个远端事务和16个本地节点，至少一个远端事务。这是有界功能入口，不能据此声称支持千卡MoE执行。
+
+本地节点的`after`引用数组中的较早节点：远端前驱可等applied/request_acked/completed，本地前驱只能等completed。它没有connection/verb/queue_fence或绝对ready时间。`local_wait`只读本节点rank的实际接收窗口。
+
+前驱和全部窗口条件满足时，节点**入队时就消费/reset条件**，不等开始执行。排队期间不占网络工作额度。已排队节点先于刚解锁节点执行；处理实际完成后，后继远端事务才可提交。QP、拥塞状态和整个网络保持在同一时钟中，本地尾部未完成时不提前关闭连接。
+
+入队语义不锁定输入内存，也不保留buffer租约。生产者若提前覆盖数据，模型不能证明处理读到的数值正确；应用须建立复用协议。applied及条件满足不等于GPU可见，声明处理时间不能当作实测CUDA成本。示例部分applied依赖仅用于功能编排，不能直接当作现实源GPU可获得的通知。
+
+v2输出增加`local_model/local_work/completed_local_work/pending_local_work`四个顶层字段。`local_work`含id/rank/duration_ns/ready_ns/start_ns/completed_ns；ready表示入队、start表示取得本地槽、completed表示实际定时事件已执行，未发生为−1。`completed_operations`仍只数远端事务；`pending_operations`只列未提交的远端事务，已提交未完成须查看transactions.operations。`pending_local_work`含id/admitted/当前local_wait，已入队节点可能已消费清零，不能据当前条件值推断从未就绪。
+
+默认人工例完成10个远端事务、6个本地节点，发出14个源数据包/560B载体负载。错误计数或数据均停在3个已完成事务，7个后继不发送；5ms截止保留已消费但仍排队的节点。旧v1逐字节对照及独立包/内存重放见[验收](../../fixtures/transaction_local_stages/README.md)。这些是功能检查，没有执行LLMServingSim、现代GIN或GPU校准。
+
 ## 实际传了什么
 
 MRT1帧用网络字节序编码，32B头依次是magic=0x4d525431、verb、连接内事务序号、远端地址、远端key及body长度；字段宽度为4/4/8/8/4/4B。put body为实际字节，fetch-add body为8B增量，reply body为8B旧值且地址/key为0。事务序号负责请求/响应匹配，**应用operation id不写入报文**，不改变NIC绑定、优先级或选路。

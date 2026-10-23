@@ -11,6 +11,9 @@ class RemoteTransactions {
   void Submit(const Json& operation);
   Json LocalWaits(const Json& operation) const;
   bool LocalReady(const Json& operation) const;
+  // Consume only an admitted local node's already-satisfied local predicates.
+  // Admission is separate from starting its declared-duration GPU lane.
+  void AdmitLocal(const Json& operation);
   bool QueueFenceReady(const Json& operation);
   bool Occurred(uint64_t operation,const std::string& event) const;
   bool Drained() const;
@@ -35,6 +38,8 @@ class RemoteTransactions {
   void Retire(uint64_t connection);
   void Request(uint64_t connection,const MemoryFrame& frame);
   void Response(uint64_t connection,const MemoryFrame& frame);
+  unsigned LocalOwner(const Json& operation) const;
+  void ConsumeConditions(const Json& operation,const Json& observations);
   PersistentStreams transport_;
   RemoteMemory memory_;
   std::map<uint64_t,Connection> connections_;

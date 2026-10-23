@@ -1,0 +1,11 @@
+{
+  "kind": "report_checker_error",
+  "failure": "final link check compared an unresolved relative Path to the absolute not-yet-created closeout receipt; simulation/recovery were successful",
+  "failed_monitor": "/dev/shm/moe-transaction-stages-20261023/final-check-monitor/probe.json",
+  "first_script_sha256": "6d0dd7449e73aac55ff3f48e546d6beaea96f477a4f42ac37862a0aa13e1e527",
+  "fix": "resolve link before comparison; preserve and explicitly classify this one failed report check",
+  "network_oracle_unchanged": true,
+  "budget_increased": false,
+  "network_rerun": false,
+  "archive_scope": "checkpoint precedes final-report checker; report failure and final metadata retained outside checkpoint"
+}

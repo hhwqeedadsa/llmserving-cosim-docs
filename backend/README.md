@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`transaction_probe.cc`新增transactions/2混合节点：实际本地接收窗口条件满足并消费后，进入每GPU声明耗时的FIFO处理槽，完成再解锁后继事务。`RemoteTransactions::AdmitLocal`只消费本GPU条件，不预留网络工作；本地尾部保持持久连接。入队消费不代表buffer租约或GPU可见。输入、截止状态和限制见[事务本地处理](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1字段和执行保持。
+
 `stream_probe.cc`支持stream-work/3的因果本地阶段：每GPU一个声明耗时的非抢占FIFO槽，由实际接收/ACK和本地完成事件释放后继；已排队节点优先于新解锁节点。同一原生Simulator保留本地处理期间的QP及控制器状态，全部节点完成且传输物理排空才关闭连接。新节点字段、整数类型、GPU身份及依赖事件由原生入口复核；旧v1/v2接口保持。它不是CUDA或现代GIN执行，见[公开输入和限制](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。
 
 `RemoteTransactions::QueueFenceReady`只捕获一次源端队列前缀，通过GinWorkQueue的FlushComplete查询实际进度；coverage日志不参与执行。完成来自MRT1应用队列，不是GIN CQ/源buffer保证，见[快照边界](../fixtures/queue_fences/README.md)。

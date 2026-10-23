@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scale-Out 接收条件与本地处理验收</title>
+<style>body{font:17px/1.8 system-ui,sans-serif;color:#183147;background:#f3f6fa;max-width:1000px;margin:40px auto;padding:0 24px}article{background:white;padding:28px 38px;border-radius:12px}h1{font-size:28px}h2{font-size:22px;margin-top:28px}table{border-collapse:collapse;width:100%}td,th{border:1px solid #dbe3ec;padding:10px;text-align:left}code{background:#eaf0f7;padding:2px 5px}a{color:#0766a1}.scope{border-left:4px solid #cb8a16;padding:12px;background:#fff6df}</style>
+<article><h1>Scale-Out：收到数据后处理，再继续通信</h1>
+<p>本轮补上实际接收窗口、本地排队处理与后续网络事务之间的因果链。全部共用一个原生 ns-3 网络和时钟，处理中连接与网络状态继续保留。没有向远端查询“应该收到什么”来放行本地任务。</p>
+<p class="scope">这是仿真平台功能验收。本地处理耗时由用户声明，尚无GPU测量；未执行现代DeepEP/GIN，也没有证明性能收益或论文主贡献。</p>
+<h2>新增能力</h2><p><code>moe-rdma-transactions/2</code>区分远端事务和本地阶段。接收计数和数据同时满足时，本地节点入队并消费计数；每GPU一个串行槽，实际完成后才能发后继事务。不同GPU可重叠，旧排队工作优先，零时长经过调度事件。</p>
+<h2>实际核验结果</h2><table><tr><th>检查</th><th>结果</th></tr>
+<tr><td>人工两轮</td><td>10事务、6本地节点、14源包、560B载体负载；逐包解码和窗口重放通过</td></tr>
+<tr><td>排队</td><td>GPU4在18,096ns消费入队，106,042ns开始，146,042ns完成；后继无提前发送</td></tr>
+<tr><td>错误计数/数据</td><td>仅3个事务完成，7个后继等待；不清零、不偷发</td></tr>
+<tr><td>5ms截止</td><td>保留已消费但仍排队状态，长处理和未发生的后继均未补造完成</td></tr>
+<tr><td>兼容性</td><td>三组v1新旧二进制逐字节相同；纯远端v2仅多四个说明字段</td></tr>
+<tr><td>回归</td><td>三组旧流程24条CLI、10项输入检查、13项固定依赖检查通过</td></tr></table>
+<p>新流程24条公开CLI和9条原生命令，其中对9类非法输入分别检查两种入口拒绝。源负载独立解码、端点RX/ACK、同GPU FIFO、跨GPU重叠和仅本地尾部均有记录。ACK口径限定于已验证的非重叠人工例，未声称一般多流端口解码。</p>
+<h2>仍需解决的系统与网络问题</h2><p>入队清零不保证数据在排队期间不被覆盖。还要把现代调用、provider完成和buffer复用协议接入实际网络，明确自发通信的物理路径，并取得匹配硬件校准。当前小例不代表千卡生产MoE负载，不能将固定MRT1报文当真实RoCE原子成本。</p>
+<h2>复核入口</h2><p><a href="../../../fixtures/transaction_local_stages/README.md">方法与限制</a> · <a href="../../../fixtures/transaction_local_stages/verification.json">主验证</a> · <a href="../../../fixtures/transaction_local_stages/regression.json">回归</a> · <a href="../../../fixtures/transaction_local_stages/archive.json">检查点</a> · <a href="../../../fixtures/transaction_local_stages/replay.json">恢复核验</a> · <a href="../../../fixtures/transaction_local_stages/closeout.json">资源收尾</a></p>
+<p>原始件位于易失内存盘，无持久备份。仅本地修改和提交，不push。论文目标保持进行中。</p></article></html>

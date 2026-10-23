@@ -14,9 +14,32 @@ def _hex(text, maximum, name):
     return len(text)//2
 
 
+def _local_waits(waits, owner, registered):
+    require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
+    locations = set()
+    for wait in waits:
+        require(isinstance(wait, dict), 'local wait must be an object')
+        fields(wait, 'key address compare value'+(' reset_to' if 'reset_to' in wait else ''), 'local wait')
+        integer(wait['key'], 'local key', 1, 2**32-1)
+        integer(wait['address'], 'local address', 0, 2**64-1)
+        integer(wait['value'], 'local wait value', 0, 2**64-1)
+        if 'reset_to' in wait: integer(wait['reset_to'], 'local consume value', 0, 2**64-1)
+        location = owner, wait['key']
+        require(location in registered and wait['compare'] in ('eq', 'ge'), 'unknown local owner/key or comparison')
+        window, size = registered[location]
+        require(wait['address']%8 == 0 and window['address'] <= wait['address'] and
+                wait['address']+8 <= window['address']+size, 'local wait address out of bounds/unaligned')
+        item = wait['key'], wait['address']
+        require(item not in locations, 'repeated local wait location'); locations.add(item)
+
+
 def validate(topology, protocol, config):
-    fields(config, 'schema_version connections windows operations', 'transaction root')
-    require(config['schema_version'] == 'moe-rdma-transactions/1', 'unsupported transaction schema')
+    local_mode = isinstance(config, dict) and config.get('schema_version') == 'moe-rdma-transactions/2'
+    fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else ''), 'transaction root')
+    require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2'), 'unsupported transaction schema')
+    if local_mode:
+        require(config['local_model'] == dict(mode='serial_per_gpu/1', duration_source='declared_ns'),
+                'unsupported transaction local model')
     connections = config['connections']
     require(isinstance(connections, list) and 1 <= len(connections) <= 8, 'require 1..8 connections')
     by_id, streams = {}, []
@@ -55,17 +78,46 @@ def validate(topology, protocol, config):
                     prior['address']+n <= w['address'], 'overlapping remote windows')
         registered[key] = w, length
     operations = config['operations']
-    require(isinstance(operations, list) and 1 <= len(operations) <= 32, 'require 1..32 operations')
-    seen, ancestors, accesses = set(), {}, []
+    require(isinstance(operations, list) and 1 <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
+    kinds, ancestors, accesses = {}, {}, []
+    remote_count = local_count = 0
     for op in operations:
+        require(isinstance(op, dict), 'transaction node must be an object')
+        kind = op.get('kind') if local_mode else 'remote'
+        require(kind in ('remote', 'local'), 'unsupported transaction node kind')
+        integer(op.get('id'), 'operation id', 0, 65535)
+        require(op['id'] not in kinds, 'repeated operation id')
+        require(isinstance(op.get('after'), list) and len(op['after']) <= 32, 'invalid operation dependencies')
+        deps, parents = set(), set()
+        for d in op['after']:
+            fields(d, 'operation event', 'transaction dependency')
+            integer(d['operation'], 'dependency operation', 0, 65535)
+            require(d['operation'] in kinds and d['event'] in (
+                ('completed',) if kinds[d['operation']] == 'local' else ('applied', 'request_acked', 'completed')),
+                'dependency must reference an earlier matching node event')
+            item = d['operation'], d['event']
+            require(item not in deps, 'repeated dependency'); deps.add(item)
+            parents.update(ancestors[d['operation']]); parents.add(d['operation'])
+        if kind == 'local':
+            fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else ''), 'local transaction node')
+            integer(op['rank'], 'local rank', 0, 31)
+            require(op['rank'] in gpus, 'local rank is not a topology GPU')
+            integer(op['duration_ns'], 'local duration', 0, protocol.get('limits', {}).get('max_sim_ns', 5000000))
+            if 'local_wait' in op: _local_waits(op['local_wait'], op['rank'], registered)
+            local_count += 1
+            require(local_count <= 16, 'local transaction node budget exceeded')
+            kinds[op['id']] = kind; ancestors[op['id']] = parents
+            continue
+        remote_count += 1
+        require(remote_count <= 32, 'remote transaction budget exceeded')
         require(isinstance(op, dict) and op.get('verb') in ('put', 'fetch_add'), 'unsupported transaction verb')
         fields(op, 'id connection verb key address after '+('hex' if op['verb'] == 'put' else 'value')+
+               (' kind' if local_mode else '')+
                (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else ''), 'operation')
-        integer(op['id'], 'operation id', 0, 65535)
         integer(op['connection'], 'operation connection', 0, 7)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
         integer(op['address'], 'operation address', 0, 2**64-1)
-        require(op['id'] not in seen and op['connection'] in by_id, 'repeated operation/unknown connection')
+        require(op['connection'] in by_id, 'unknown connection')
         key = by_id[op['connection']]['dst'], op['key']
         require(key in registered, 'unknown remote owner/key')
         window, size = registered[key]
@@ -87,38 +139,13 @@ def validate(topology, protocol, config):
                         'queue fence must select source-owned connections')
             require(len(set(selected)) == len(selected), 'repeated queue fence connection')
         if 'local_wait' in op:
-            waits = op['local_wait']
-            require(isinstance(waits, list) and 1 <= len(waits) <= 8, 'require 1..8 local wait conditions')
-            local_owner, locations = by_id[op['connection']]['src'], set()
-            for wait in waits:
-                require(isinstance(wait, dict), 'local wait must be an object')
-                fields(wait, 'key address compare value'+(' reset_to' if 'reset_to' in wait else ''), 'local wait')
-                integer(wait['key'], 'local key', 1, 2**32-1)
-                integer(wait['address'], 'local address', 0, 2**64-1)
-                integer(wait['value'], 'local wait value', 0, 2**64-1)
-                if 'reset_to' in wait: integer(wait['reset_to'], 'local consume value', 0, 2**64-1)
-                location = local_owner, wait['key']
-                require(location in registered and wait['compare'] in ('eq', 'ge'), 'unknown local owner/key or comparison')
-                local_window, local_size = registered[location]
-                require(wait['address']%8 == 0 and local_window['address'] <= wait['address'] and
-                        wait['address']+8 <= local_window['address']+local_size, 'local wait address out of bounds/unaligned')
-                item = wait['key'], wait['address']
-                require(item not in locations, 'repeated local wait location'); locations.add(item)
-        require(isinstance(op['after'], list) and len(op['after']) <= 32, 'invalid operation dependencies')
-        deps, parents = set(), set()
-        for d in op['after']:
-            fields(d, 'operation event', 'transaction dependency')
-            integer(d['operation'], 'dependency operation', 0, 65535)
-            require(d['operation'] in seen and d['event'] in ('applied', 'request_acked', 'completed'),
-                    'dependency must reference an earlier operation event')
-            item = d['operation'], d['event']
-            require(item not in deps, 'repeated dependency'); deps.add(item)
-            parents.update(ancestors[d['operation']]); parents.add(d['operation'])
+            _local_waits(op['local_wait'], by_id[op['connection']]['src'], registered)
         for prior, prior_key, n in accesses:
             if key == prior_key and op['address'] < prior['address']+n and prior['address'] < op['address']+length:
                 require(op['verb'] == prior['verb'] == 'fetch_add' or prior['id'] in parents,
                         'overlapping non-atomic memory writes require explicit causal order')
-        seen.add(op['id']); ancestors[op['id']] = parents; accesses.append((op, key, length))
+        kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
+    require(remote_count > 0, 'transaction probe requires remote work')
 
 
 def probe(topology, protocol, config, backend, output):
@@ -137,8 +164,11 @@ def probe(topology, protocol, config, backend, output):
     monitored(command, output/'execution', [output], runtime=budget)
     result = checked_json(output/'result.json', budget['result_json_bytes'])
     transport = result['transactions']['transport']
+    remote_count = sum(op.get('kind') != 'local' for op in w['operations'])
     require(result['passed'] and result['native_network_executed'] and result['drained'] and
-            transport['physical_drained'] and transport['closed'] and result['completed_operations'] == len(w['operations']),
+            transport['physical_drained'] and transport['closed'] and result['completed_operations'] == remote_count,
             'remote memory transaction probe incomplete')
+    if w['schema_version'] == 'moe-rdma-transactions/2':
+        require(result['completed_local_work']+remote_count == len(w['operations']), 'local transaction work incomplete')
     return dict(passed=True, output=str(output), completed_operations=result['completed_operations'],
                 state='functional_native_remote_memory_transactions_not_GIN_timing', hardware_calibrated=False)

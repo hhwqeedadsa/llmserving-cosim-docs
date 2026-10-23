@@ -1,0 +1,212 @@
+{
+  "passed": true,
+  "commands": {
+    "transaction_probe.cc": [
+      "/usr/bin/c++",
+      "-DNS3_BUILD_PROFILE_RELEASE",
+      "-DPROJECT_SOURCE_PATH=\"/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3\"",
+      "-D__LINUX__",
+      "-I/dev/shm/moe-fault-20261021/native/output/include",
+      "-I/home/lry/moe-ub-cosim/backend/rdma",
+      "-I/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/helper",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++20",
+      "-fPIE",
+      "-fno-semantic-interposition",
+      "-Wall",
+      "-O0",
+      "-Wpedantic",
+      "-MD",
+      "-MT",
+      "/dev/shm/moe-transaction-stages-20261023/objects/transaction_probe.cc.o",
+      "-MF",
+      "/dev/shm/moe-transaction-stages-20261023/objects/transaction_probe.cc.o.d",
+      "-o",
+      "/dev/shm/moe-transaction-stages-20261023/objects/transaction_probe.cc.o",
+      "-c",
+      "/home/lry/moe-ub-cosim/backend/rdma/transaction_probe.cc"
+    ],
+    "remote_transactions.cc": [
+      "/usr/bin/c++",
+      "-DNS3_BUILD_PROFILE_RELEASE",
+      "-DPROJECT_SOURCE_PATH=\"/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3\"",
+      "-D__LINUX__",
+      "-I/dev/shm/moe-fault-20261021/native/output/include",
+      "-I/home/lry/moe-ub-cosim/backend/rdma",
+      "-I/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/helper",
+      "-O3",
+      "-DNDEBUG",
+      "-std=c++20",
+      "-fPIE",
+      "-fno-semantic-interposition",
+      "-Wall",
+      "-O0",
+      "-Wpedantic",
+      "-MD",
+      "-MT",
+      "/dev/shm/moe-transaction-stages-20261023/objects/remote_transactions.cc.o",
+      "-MF",
+      "/dev/shm/moe-transaction-stages-20261023/objects/remote_transactions.cc.o.d",
+      "-o",
+      "/dev/shm/moe-transaction-stages-20261023/objects/remote_transactions.cc.o",
+      "-c",
+      "/home/lry/moe-ub-cosim/backend/rdma/remote_transactions.cc"
+    ],
+    "link": [
+      "/usr/bin/c++",
+      "-O3",
+      "-DNDEBUG",
+      "/dev/shm/moe-transaction-stages-20261023/objects/transaction_probe.cc.o",
+      "/dev/shm/moe-transaction-stages-20261023/objects/remote_transactions.cc.o",
+      "/dev/shm/moe-dcqcn-reference-20261022/objects/persistent_streams.cc.o",
+      "-o",
+      "/dev/shm/moe-transaction-stages-20261023/bin/ns3.42-moe-rdma-transaction-probe",
+      "-L/dev/shm/moe-fault-20261021/native/output/lib",
+      "-Wl,-rpath,/dev/shm/moe-fault-20261021/native/output/lib",
+      "-Wl,--no-as-needed",
+      "/dev/shm/moe-dcqcn-reference-20261022/objects/libmoe-rdma-fabric.a",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-applications.so",
+      "-Wl,--as-needed",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-point-to-point.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-internet.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-bridge.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-traffic-control.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-network.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-stats.so",
+      "/dev/shm/moe-fault-20261021/native/output/lib/libns3.42-core.so",
+      "-Wl,--no-as-needed",
+      "-Wl,--as-needed"
+    ]
+  },
+  "monitor_receipts": {
+    "compile-probe-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "/dev/shm/moe-transaction-stages-20261023/build.py",
+        "transaction_probe.cc"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-23T02:00:15.476219+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 546308096,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-transaction-stages-20261023"
+      ],
+      "peak_sampled_artifact_bytes": 2265088,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 2238301,
+      "peak_sampled_artifact_allocated_bytes": 2265088,
+      "process_group": 1808196,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-23T02:00:20.952442+00:00",
+      "wall_seconds": 5.476229859516025,
+      "max_waited_child_rss_kib": 522032,
+      "artifact_bytes_before_report": 22951,
+      "aggregate_artifact_bytes_before_report": 2265088,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 2238301,
+        "allocated_bytes": 2265088
+      }
+    },
+    "compile-remote-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "/dev/shm/moe-transaction-stages-20261023/build.py",
+        "remote_transactions.cc"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-23T02:04:33.350300+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 568201216,
+      "peak_sampled_processes": 3,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-transaction-stages-20261023"
+      ],
+      "peak_sampled_artifact_bytes": 5115904,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 5076153,
+      "peak_sampled_artifact_allocated_bytes": 5115904,
+      "process_group": 1809079,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-23T02:04:39.256733+00:00",
+      "wall_seconds": 5.906454481184483,
+      "max_waited_child_rss_kib": 543412,
+      "artifact_bytes_before_report": 24633,
+      "aggregate_artifact_bytes_before_report": 5115904,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 5076153,
+        "allocated_bytes": 5115904
+      }
+    },
+    "link-monitor": {
+      "schema_version": "moe-ub-host-probe/1",
+      "command": [
+        "python3",
+        "/dev/shm/moe-transaction-stages-20261023/build.py",
+        "link"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "started_utc": "2026-10-23T02:04:53.626558+00:00",
+      "limits": {
+        "sampled_group_rss_bytes": 1073741824,
+        "per_process_address_bytes": 2147483648,
+        "artifact_bytes": 67108864,
+        "wall_seconds": 60.0
+      },
+      "peak_sampled_group_rss_bytes": 148582400,
+      "peak_sampled_processes": 4,
+      "status": "completed",
+      "workload_semantics_validated": false,
+      "artifact_roots": [
+        "/dev/shm/moe-transaction-stages-20261023"
+      ],
+      "peak_sampled_artifact_bytes": 9846784,
+      "min_free_bytes": 8589934592,
+      "rss_scope": "owned_process_tree_including_detached_descendants",
+      "artifact_accounting": "max_unique_file_apparent_and_file_directory_allocated_bytes",
+      "disk_sample_interval_seconds": 1.0,
+      "peak_sampled_artifact_apparent_bytes": 9799330,
+      "peak_sampled_artifact_allocated_bytes": 9846784,
+      "process_group": 1809218,
+      "child_exit_code": 0,
+      "remaining_live_group_pids": [],
+      "ended_utc": "2026-10-23T02:04:54.176111+00:00",
+      "wall_seconds": 0.5495543126016855,
+      "max_waited_child_rss_kib": 129380,
+      "artifact_bytes_before_report": 2006,
+      "aggregate_artifact_bytes_before_report": 9846784,
+      "aggregate_artifact_usage_before_report": {
+        "apparent_bytes": 9799330,
+        "allocated_bytes": 9846784
+      }
+    }
+  },
+  "native_dependency_commit": "3964b1d41cb5f7b51004c316b0eae1a3713c2498",
+  "no_dependency_changes": true
+}

@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "normal": {
+    "operations": 10,
+    "source_packets": 14,
+    "transported_payload_bytes": 560,
+    "finish_ns": 714304,
+    "final_atomic_value": 0
+  },
+  "local_work": [
+    {
+      "completed_ns": 106042,
+      "duration_ns": 100000,
+      "id": 13,
+      "rank": 4,
+      "ready_ns": 6042,
+      "start_ns": 6042
+    },
+    {
+      "completed_ns": 146042,
+      "duration_ns": 40000,
+      "id": 10,
+      "rank": 4,
+      "ready_ns": 18096,
+      "start_ns": 106042
+    },
+    {
+      "completed_ns": 300000,
+      "duration_ns": 300000,
+      "id": 12,
+      "rank": 1,
+      "ready_ns": 0,
+      "start_ns": 0
+    },
+    {
+      "completed_ns": 146042,
+      "duration_ns": 0,
+      "id": 14,
+      "rank": 4,
+      "ready_ns": 146042,
+      "start_ns": 146042
+    },
+    {
+      "completed_ns": 190184,
+      "duration_ns": 20000,
+      "id": 11,
+      "rank": 4,
+      "ready_ns": 170184,
+      "start_ns": 170184
+    },
+    {
+      "completed_ns": 714304,
+      "duration_ns": 500000,
+      "id": 15,
+      "rank": 0,
+      "ready_ns": 214304,
+      "start_ns": 214304
+    }
+  ],
+  "endpoint_frames_checked": 14,
+  "failures": {
+    "missing-count": {
+      "operations": 3,
+      "source_packets": 5,
+      "transported_payload_bytes": 200,
+      "finish_ns": 5000000,
+      "final_atomic_value": 1
+    },
+    "wrong-data": {
+      "operations": 3,
+      "source_packets": 5,
+      "transported_payload_bytes": 200,
+      "finish_ns": 5000000,
+      "final_atomic_value": 2
+    },
+    "cutoff": {
+      "operations": 3,
+      "source_packets": 5,
+      "transported_payload_bytes": 200,
+      "finish_ns": 5000000,
+      "final_atomic_value": 0
+    }
+  },
+  "repeat_byte_identical": true,
+  "renaming_wire_invariant": true,
+  "fifo_old_queue_first": true,
+  "legacy_byte_identical": [
+    "work",
+    "local-waits",
+    "queue-fences"
+  ],
+  "remote_only_v2_equal": true,
+  "invalid_cli_and_native": [
+    "bool-rank",
+    "switch-rank",
+    "bool-duration",
+    "wrong-event",
+    "extra-time",
+    "wrong-model",
+    "wrong-kind",
+    "foreign-window",
+    "bool-condition"
+  ],
+  "commands": 33,
+  "wall_seconds": 15.692538119852543,
+  "output_bytes": 1704642,
+  "backend_sha256": "35411fafc88dce69bd0ad960a24c905ab954137b63e231fb058b6d49f279632a",
+  "reference_sha256": "f35af564ddebb4d3919c4d30090324f63eb2588e907226f17267c5ec67ee6d5d",
+  "scope": "functional declared-duration stages; no GPU visibility, modern GIN or hardware calibration",
+  "public_commands": 24,
+  "direct_native_commands": 9,
+  "source_sha256": {
+    "tests/integration/check_transaction_local_stage_workflow.py": "791f03cd1968bb6992a606b6d2416d291430347ad2bed0c954eda3538e939215",
+    "tests/integration/check_remote_transaction_workflow.py": "34a7f899b554d706aef9dd718d3be44df576c1d7b6b5065dc263225d65d500a4"
+  }
+}

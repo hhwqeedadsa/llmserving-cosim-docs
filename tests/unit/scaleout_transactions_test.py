@@ -74,5 +74,33 @@ class TransactionInputTests(unittest.TestCase):
         c = deepcopy(original); c['operations'][2]['local_wait'] = [dict(key=7,address=4096,compare='eq',value=0)]
         with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
 
+    def test_v2_local_nodes_and_typed_event_boundaries(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-stages.json').read_text())
+        validate(self.topology, self.protocol, original)
+        for key, value in [('rank', True), ('rank', 8), ('duration_ns', True), ('duration_ns', -1),
+                           ('duration_ns', 5000001), ('kind', 'compute'), ('ready_ns', 0),
+                           ('connection', 0), ('queue_fence', [0])]:
+            c = deepcopy(original); c['operations'][3][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['operations'][7]['after'][0]['event'] = 'request_acked'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+    def test_v2_local_consumption_checks_owned_window(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-stages.json').read_text())
+        for key, value in [('value', True), ('reset_to', -1), ('key', 8), ('address', 4097), ('owner', 4)]:
+            c = deepcopy(original); c['operations'][4]['local_wait'][0][key] = value
+            with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
+    def test_v2_model_and_separate_work_budgets(self):
+        original = json.loads((ROOT/'examples/scaleout_rdma_transactions/local-stages.json').read_text())
+        c = deepcopy(original); c['local_model']['duration_source'] = 'measured'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original); c['schema_version'] = 'moe-rdma-transactions/1'
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+        c = deepcopy(original)
+        for i in range(16):
+            c['operations'].append(dict(id=100+i,kind='local',rank=0,duration_ns=0,after=[]))
+        with self.assertRaises(ValueError): validate(self.topology, self.protocol, c)
+
 
 if __name__ == '__main__': unittest.main()

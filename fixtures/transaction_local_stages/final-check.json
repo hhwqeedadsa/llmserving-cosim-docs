@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "source_files": 201,
+  "python_AST_files": 99,
+  "local_links_checked": 21,
+  "archive_hash_verified": true,
+  "old_runtime_sha256": {
+    "/dev/shm/moe-dcqcn-reference-20261022/bin/ns3.42-moe-rdma-transaction-probe": "f35af564ddebb4d3919c4d30090324f63eb2588e907226f17267c5ec67ee6d5d",
+    "/dev/shm/moe-local-stages-20261023/bin/ns3.42-moe-rdma-stream-probe": "136b22dc81e0b72d801575fe1d32f4f258a0c9648567c61400d02ddfbc218a4d",
+    "/dev/shm/moe-rate-observation-20261022/bin/ns3.42-moe-rdma-transaction-probe": "95581988a0358a1f260f8c74e25f5e4b4fed6e87726922492ce449cd40c67709"
+  },
+  "old_runtime_unchanged": true,
+  "recovery_verified": true,
+  "git_diff_check": true,
+  "monitored_wall_seconds_excluding_current": 121.16224314644933,
+  "monitor_records": 16,
+  "completed_monitor_records": 15,
+  "preserved_report_check_failures": [
+    "final-check-monitor"
+  ],
+  "peak_sampled_group_rss_bytes": 568201216,
+  "artifact_apparent_bytes": 87073439,
+  "artifact_allocated_bytes": 89890816,
+  "cumulative_artifact_limit_bytes": 201326592,
+  "monitored_wall_limit_seconds": 480,
+  "archive_member_limit_bytes": 134217728,
+  "archive_compressed_limit_bytes": 50331648,
+  "tmpfs_min_free_bytes": 8589934592,
+  "raw_root": "/dev/shm/moe-transaction-stages-20261023",
+  "persistent_backup": false,
+  "dependency_changes": false,
+  "gpu_executed": false,
+  "modern_GIN_executed": false,
+  "hardware_calibrated": false,
+  "paper_contribution_established": false,
+  "goal_status": "in_progress",
+  "scope": "functional mixed transactions only; host dependencies remain; final monitor attached after exit"
+}

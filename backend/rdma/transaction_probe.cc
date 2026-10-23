@@ -2,10 +2,19 @@
 #include <fstream>
 #include <iostream>
 #include <link.h>
+#include <deque>
 using namespace moe_rdma;
 static int Libraries(dl_phdr_info* info,std::size_t,void* data) {
   if(info->dlpi_name && info->dlpi_name[0])static_cast<Json*>(data)->push_back(info->dlpi_name);
   return 0;
+}
+static void Keys(const Json& value,const std::vector<std::string>& keys) {
+  Require(value.is_object() && value.size()==keys.size(),"wrong transaction node fields");
+  for(const auto& key:keys)Require(value.contains(key),"missing transaction node field");
+}
+static uint64_t Integer(const Json& value,uint64_t maximum) {
+  Require(value.is_number_integer() && (value.is_number_unsigned() || value.get<int64_t>()>=0),"invalid transaction node integer");
+  const auto result=value.get<uint64_t>();Require(result<=maximum,"transaction node integer out of bounds");return result;
 }
 int main(int argc,char** argv) {
   try {
@@ -13,33 +22,100 @@ int main(int argc,char** argv) {
     std::ifstream exists(argv[4]);Require(!exists.good(),"transaction output already exists");
     ns3::Time::SetResolution(ns3::Time::NS);
     const auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
+    const bool local_mode=input.at("schema_version")=="moe-rdma-transactions/2";
+    if(local_mode) {
+      Keys(input,{"schema_version","connections","windows","operations","local_model"});
+      Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
+    }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
-    Fabric fabric(ReadJson(argv[1]),config);RemoteTransactions transactions(fabric,input);
+    const auto topology=ReadJson(argv[1]);
+    Fabric fabric(topology,config);RemoteTransactions transactions(fabric,input);
+    std::set<unsigned> gpus;
+    for(const auto& n:topology.at("nodes"))if(n.at("kind")=="gpu")gpus.insert(n.at("id").get<unsigned>());
     const auto& operations=input.at("operations");
-    Require(operations.is_array() && !operations.empty() && operations.size()<=32,"transaction count budget exceeded");
+    Require(operations.is_array() && !operations.empty() && operations.size()<=(local_mode?48u:32u),"transaction count budget exceeded");
     std::map<uint64_t,std::size_t> index;
+    std::vector<bool> local(operations.size(),false);
+    unsigned remote_count=0,local_count=0;
     for(std::size_t i=0;i<operations.size();++i) {
+      const auto& op=operations[i];
+      if(local_mode) {
+        Integer(op.at("id"),65535);
+        const auto kind=op.at("kind").get<std::string>();
+        Require(kind=="local" || kind=="remote","unsupported transaction node kind");local[i]=kind=="local";
+        std::vector<std::string> keys={"id","kind","after"};
+        if(local[i]) {
+          keys.insert(keys.end(),{"rank","duration_ns"});
+          const auto rank=Integer(op.at("rank"),31);
+          Require(gpus.count(static_cast<unsigned>(rank)),"local transaction rank is not a GPU");
+          Integer(op.at("duration_ns"),fabric.MaxSimNs());
+        } else {
+          keys.insert(keys.end(),{"connection","verb","key","address"});
+          Require(op.at("verb")=="put" || op.at("verb")=="fetch_add","unsupported transaction verb");
+          keys.push_back(op.at("verb")=="put"?"hex":"value");
+          Integer(op.at("connection"),7);Integer(op.at("key"),UINT32_MAX);Integer(op.at("address"),UINT64_MAX);
+          if(op.at("verb")=="fetch_add")Integer(op.at("value"),UINT64_MAX);
+          if(op.contains("queue_fence"))keys.push_back("queue_fence");
+          Require(!(op.contains("queue_fence") && op.contains("local_wait")),"queue fence and local wait require separate steps");
+        }
+        if(op.contains("local_wait"))keys.push_back("local_wait");
+        Keys(op,keys);
+        if(op.contains("local_wait"))transactions.LocalWaits(op); // validate even blocked predicates
+      }
+      if(local[i])++local_count;else ++remote_count;
+      Require(local_count<=16 && remote_count<=32,"transaction kind count budget exceeded");
       Require(index.emplace(operations[i].at("id"),i).second,"duplicate operation id");
       Require(operations[i].at("after").is_array() && operations[i].at("after").size()<=32,"invalid operation dependencies");
+      std::set<std::pair<uint64_t,std::string>> dependencies;
       for(const auto& d:operations[i].at("after")) {
+        if(local_mode) {Keys(d,{"operation","event"});Integer(d.at("operation"),65535);}
         const auto kind=d.at("event").get<std::string>();
-        Require(index.count(d.at("operation")) && index.at(d.at("operation"))<i &&
-          (kind=="applied" || kind=="request_acked" || kind=="completed"),"dependency must name an earlier operation event");
+        Require(index.count(d.at("operation")) && index.at(d.at("operation"))<i,"dependency must name an earlier operation");
+        Require(local[index.at(d.at("operation"))]?kind=="completed":
+          (kind=="applied" || kind=="request_acked" || kind=="completed"),"dependency must match predecessor kind");
+        Require(dependencies.emplace(d.at("operation").get<uint64_t>(),kind).second,"repeated transaction dependency");
       }
     }
+    Require(remote_count>0,"transaction probe requires remote work");
     std::vector<bool> submitted(operations.size(),false);bool finished=false;
-    unsigned complete=0;
-    std::function<void()> progress=[&](){
+    unsigned complete=0,local_complete=0;
+    std::vector<std::array<int64_t,3>> local_times(operations.size(),std::array<int64_t,3>{-1,-1,-1});
+    std::map<unsigned,std::deque<std::size_t>> local_queues;
+    std::set<unsigned> local_busy;
+    std::function<void()> progress;
+    std::function<void(unsigned)> pump_local;
+    pump_local=[&](unsigned rank) {
+      auto& queue=local_queues[rank];
+      if(local_busy.count(rank) || queue.empty())return;
+      const auto i=queue.front();queue.pop_front();local_busy.insert(rank);
+      local_times[i][1]=ns3::Simulator::Now().GetNanoSeconds();
+      ns3::Simulator::Schedule(ns3::NanoSeconds(operations[i].at("duration_ns").get<int64_t>()),[&,rank,i]() {
+        Require(local_busy.erase(rank)==1 && local_times[i][2]<0,"duplicate transaction local completion");
+        local_times[i][2]=ns3::Simulator::Now().GetNanoSeconds();++local_complete;
+        // An older admitted node retains precedence over a newly unlocked node.
+        pump_local(rank);progress();
+      });
+    };
+    progress=[&](){
       for(std::size_t i=0;i<operations.size();++i)if(!submitted[i]) {
         bool ready=true;
-        for(const auto& d:operations[i].at("after"))ready=ready && transactions.Occurred(d.at("operation"),d.at("event"));
+        for(const auto& d:operations[i].at("after")) {
+          const auto parent=index.at(d.at("operation"));
+          ready=ready && (local[parent]?local_times[parent][2]>=0:transactions.Occurred(d.at("operation"),d.at("event")));
+        }
         if(ready && transactions.LocalReady(operations[i]) && transactions.QueueFenceReady(operations[i])) {
-          submitted[i]=true;transactions.Submit(operations[i]);
+          submitted[i]=true;
+          if(local[i]) {
+            transactions.AdmitLocal(operations[i]);
+            local_times[i][0]=ns3::Simulator::Now().GetNanoSeconds();
+            const auto rank=operations[i].at("rank").get<unsigned>();
+            local_queues[rank].push_back(i);pump_local(rank);
+          } else transactions.Submit(operations[i]);
         }
       }
       complete=0;
-      for(const auto& op:operations)if(transactions.Occurred(op.at("id"),"completed"))++complete;
-      if(!finished && complete==operations.size() && transactions.Drained()) {
+      for(std::size_t i=0;i<operations.size();++i)if(!local[i] && transactions.Occurred(operations[i].at("id"),"completed"))++complete;
+      if(!finished && complete==remote_count && local_complete==local_count && transactions.Drained()) {
         finished=true;transactions.Close();ns3::Simulator::Stop();
       }
     };
@@ -47,10 +123,21 @@ int main(int argc,char** argv) {
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
     auto result=fabric.Report();result["transactions"]=transactions.Report();result["completed_operations"]=complete;
     result["pending_operations"]=Json::array();
-    for(std::size_t i=0;i<operations.size();++i)if(!submitted[i])
+    for(std::size_t i=0;i<operations.size();++i)if(!local[i] && !submitted[i])
       result["pending_operations"].push_back({{"id",operations[i].at("id")},{"local_wait",transactions.LocalWaits(operations[i])}});
+    if(local_mode) {
+      result["local_model"]=input.at("local_model");result["local_work"]=Json::array();
+      result["completed_local_work"]=local_complete;result["pending_local_work"]=Json::array();
+      for(std::size_t i=0;i<operations.size();++i)if(local[i]) {
+        result["local_work"].push_back(Json{{"id",operations[i].at("id")},{"rank",operations[i].at("rank")},
+          {"duration_ns",operations[i].at("duration_ns")},{"ready_ns",local_times[i][0]},
+          {"start_ns",local_times[i][1]},{"completed_ns",local_times[i][2]}});
+        if(local_times[i][2]<0)result["pending_local_work"].push_back(Json{{"id",operations[i].at("id")},
+          {"admitted",static_cast<bool>(submitted[i])},{"local_wait",transactions.LocalWaits(operations[i])}});
+      }
+    }
     result["loaded_libraries"]=Json::array();dl_iterate_phdr(Libraries,&result["loaded_libraries"]);
-    const bool passed=finished && complete==operations.size() && transactions.Drained() && fabric.Drained();
+    const bool passed=finished && complete==remote_count && local_complete==local_count && transactions.Drained() && fabric.Drained();
     result["passed"]=passed;
     std::ofstream out(argv[4]);out<<result.dump()<<'\n';out.close();Require(bool(out),"cannot write transaction report");
     ns3::Simulator::Destroy();Require(passed,"incomplete native transaction execution; inspect report");

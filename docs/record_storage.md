@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+transactions/2新增顶层`local_model/local_work/completed_local_work/pending_local_work`；local_work的ready/start/completed分别表示入队、占用GPU抽象串行槽、实际完成，单位ns，未发生为−1。completed_operations只计远端。local_events也可引用本地节点，其消费发生在入队时；pending_local_work的当前条件不能反推入队前值，具体见[事务本地处理输出](../examples/scaleout_rdma_transactions/README.md#接收条件与本地处理交替执行)。v1无这些新字段。
+
 持久字节入口stream-work/3新增顶层`local_work`（`id/rank/duration_ns/ready_ns/start_ns/completed_ns`）、`local_model`和`completed_local_work`；时刻均为同一ns-3时钟的ns，未发生为-1。本地完成不会生成网络写记录；顶层`completed_work`计全部节点，`persistent_transport.work`仅计写。时限失败也保存实际前缀，不用定时器目标填充完成。旧v1/v2字段不变，详见[输入与输出](../examples/scaleout_rdma_streams/README.md#网络回调与本地处理交替执行)。
 
 原生Fabric的顶层`rdma_parameters`保存每个端点初始化后读回的有效属性、单位与适配器覆盖来源。持久字节入口可选`persistent_transport.source_rate_capture`在已有TX/ACK回调内保存QP速率及拥塞状态；时间窗左闭右开，达到容量后再次采样明确失败，终态另列且不受时间窗限制。它不是连续定时器轨迹、测量吞吐或硬件校准，详见[速率观测及字段口径](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。

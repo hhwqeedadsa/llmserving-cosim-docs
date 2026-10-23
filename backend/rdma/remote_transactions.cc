@@ -18,7 +18,8 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
   for(auto byte:bytes){text+=digits[byte>>4];text+=digits[byte&15];}return text;
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transport_(fabric) {
-  Require(input.at("schema_version")=="moe-rdma-transactions/1","wrong transaction schema");
+  Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
+          input.at("schema_version")=="moe-rdma-transactions/2","wrong transaction schema");
   Require(input.at("connections").is_array() && !input.at("connections").empty() && input.at("connections").size()<=8,
           "transaction connection budget exceeded");
   for(const auto& c:input.at("connections")) {
@@ -41,17 +42,28 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):transpo
       w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
   transport_.changed=[this](){if(changed)changed();};
 }
+unsigned RemoteTransactions::LocalOwner(const Json& input) const {
+  if(input.value("kind",std::string())=="local")return input.at("rank").get<unsigned>();
+  return connections_.at(input.at("connection")).src;
+}
 Json RemoteTransactions::LocalWaits(const Json& input) const {
   Json out=Json::array();
   if(!input.contains("local_wait"))return out;
-  const auto owner=connections_.at(input.at("connection")).src;
+  const auto owner=LocalOwner(input);
   const auto& waits=input.at("local_wait");
   Require(waits.is_array() && !waits.empty() && waits.size()<=8,"invalid local wait budget");
   std::set<std::pair<uint32_t,uint64_t>> seen;
   for(const auto& condition:waits) {
     Require(condition.is_object() && condition.size()==(condition.contains("reset_to")?5u:4u),"invalid local wait fields");
-    const auto key=condition.at("key").get<uint32_t>();
-    const auto address=condition.at("address").get<uint64_t>(),expected=condition.at("value").get<uint64_t>();
+    auto integer=[&](const char* name,uint64_t maximum=UINT64_MAX) {
+      const auto& value=condition.at(name);
+      Require(value.is_number_integer() && (value.is_number_unsigned() || value.get<int64_t>()>=0),"invalid local condition integer");
+      const auto n=value.get<uint64_t>();Require(n<=maximum,"local condition integer out of bounds");return n;
+    };
+    const auto key=static_cast<uint32_t>(integer("key",UINT32_MAX));
+    Require(key>0,"local condition key must be nonzero");
+    const auto address=integer("address"),expected=integer("value");
+    if(condition.contains("reset_to"))integer("reset_to");
     const auto compare=condition.at("compare").get<std::string>();
     Require((compare=="eq" || compare=="ge") && seen.emplace(key,address).second,"invalid/repeated local wait");
     const auto value=memory_.Load64(owner,key,address);
@@ -63,6 +75,19 @@ Json RemoteTransactions::LocalWaits(const Json& input) const {
 bool RemoteTransactions::LocalReady(const Json& input) const {
   for(const auto& condition:LocalWaits(input))if(!condition.at("matched").get<bool>())return false;
   return true;
+}
+void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observations) {
+  if(observations.empty())return;
+  const auto owner=LocalOwner(input);
+  for(const auto& condition:observations)Require(condition.at("matched"),"consume before local conditions satisfied");
+  for(const auto& condition:observations)if(condition.contains("reset_to"))
+    memory_.Store64(owner,condition.at("key"),condition.at("address"),condition.at("reset_to"));
+  local_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",input.at("id")},
+    {"owner",owner},{"conditions",observations}});
+}
+void RemoteTransactions::AdmitLocal(const Json& input) {
+  Require(input.at("kind")=="local","local admission requires local kind");
+  ConsumeConditions(input,LocalWaits(input));
 }
 bool RemoteTransactions::QueueFenceReady(const Json& input) {
   if(!input.contains("queue_fence"))return true;
@@ -111,12 +136,7 @@ void RemoteTransactions::Submit(const Json& input) {
   op.ticket=c.queue.Reserve(id,id);
   // Check all conditions before any consume, using only this GPU's received
   // memory. Source operation truth never supplies a value to the predicates.
-  if(!observations.empty()) {
-    for(const auto& condition:observations)if(condition.contains("reset_to"))
-      memory_.Store64(c.src,condition.at("key"),condition.at("address"),condition.at("reset_to"));
-    local_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",id},
-      {"owner",c.src},{"conditions",observations}});
-  }
+  ConsumeConditions(input,observations);
   c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {

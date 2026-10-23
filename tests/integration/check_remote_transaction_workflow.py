@@ -13,18 +13,31 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def audit(result, config, mtu):
-    assert result['passed'] and result['native_network_executed'] and result['drained']
+def audit(result, config, mtu, allow_partial=False):
+    assert result['native_network_executed']
+    if not allow_partial:
+        assert result['passed'] and result['drained']
     tx = result['transactions']; net = tx['transport']
     assert not tx['roce_wire_equivalent'] and not tx['gpu_visibility_modeled'] and not tx['hardware_calibrated']
-    assert net['physical_drained'] and net['closed'] and net['inflight_packets'] == 0
+    assert net['physical_drained'] and net['inflight_packets'] == 0
+    if not allow_partial: assert net['closed']
     connections = {c['id']: c for c in config['connections']}
     rows = {op['id']: op for op in tx['operations']}
-    specs = {op['id']: op for op in config['operations']}
-    assert rows.keys() == specs.keys()
+    all_specs = {op['id']: op for op in config['operations']}
+    specs = {i: op for i, op in all_specs.items() if op.get('kind') != 'local'}
+    local_rows = {op['id']: op for op in result.get('local_work', [])}
+    assert local_rows.keys() == {i for i, op in all_specs.items() if op.get('kind') == 'local'}
+    if allow_partial:
+        # The bounded partial fixtures stop after every submitted remote has
+        # completed. This oracle deliberately rejects arbitrary in-flight cuts.
+        assert rows.keys() <= specs.keys()
+        assert {r['id'] for r in result['pending_operations']} == specs.keys()-rows.keys()
+    else:
+        assert rows.keys() == specs.keys()
     local_by_id = {e['operation']: e for e in tx['local_events']}
     assert len(local_by_id) == len(tx['local_events'])
-    assert set(local_by_id) == {op['id'] for op in specs.values() if 'local_wait' in op}
+    admitted = set(rows) | {i for i, r in local_rows.items() if r['ready_ns'] >= 0}
+    assert set(local_by_id) == {i for i in admitted if 'local_wait' in all_specs[i]}
     fence_by_id = {e['operation']: e for e in tx['queue_fences']}
     assert set(fence_by_id) == {op['id'] for op in specs.values() if 'queue_fence' in op}
     for identity, fence in fence_by_id.items():
@@ -74,7 +87,7 @@ def audit(result, config, mtu):
         op = specs[row['id']]; f = frames[row['connection']*2, row['sequence']]
         expected_body = bytes.fromhex(op['hex']) if op['verb'] == 'put' else op['value'].to_bytes(8, 'big')
         assert (f['verb'], f['key'], f['address'], f['body']) == (1 if op['verb'] == 'put' else 2, op['key'], op['address'], expected_body)
-        ready = max((rows[d['operation']][dict(applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
+        ready = max(((local_rows if all_specs[d['operation']].get('kind') == 'local' else rows)[d['operation']][dict(applied='applied_ns', request_acked='request_acked_ns', completed='completed_ns')[d['event']]]
                      for d in op['after']), default=0)
         if 'local_wait' in op:
             assert row['ready_ns'] == local_by_id[row['id']]['time_ns'] >= ready
@@ -100,14 +113,15 @@ def audit(result, config, mtu):
         assert row['completed_ns'] == max([row['request_acked_ns'], row['response_ns'], *previous])
     memory = {(w['owner'], w['key']): bytearray.fromhex(w['hex']) for w in config['windows']}
     windows = {(w['owner'], w['key']): w for w in config['windows']}
-    assert len(tx['target_events']) == len(specs) and tx['duplicate_requests'] == 0
+    assert len(tx['target_events']) == len(rows) and tx['duplicate_requests'] == 0
     events = sorted(tx['target_events']+tx['local_events'], key=lambda e: e['order'])
     assert [e['order'] for e in events] == list(range(len(events)))
     last_time = -1
     for event in events:
         if 'conditions' in event:
             assert event['time_ns'] >= last_time; last_time = event['time_ns']
-            op = specs[event['operation']]; owner = connections[op['connection']]['src']
+            op = all_specs[event['operation']]
+            owner = op['rank'] if op.get('kind') == 'local' else connections[op['connection']]['src']
             assert event['owner'] == owner and len(event['conditions']) == len(op['local_wait'])
             # Evaluate all predicates before any reset, from independently
             # reconstructed actual request bytes, not the source operation table.
@@ -143,7 +157,7 @@ def audit(result, config, mtu):
     native = [p for p in result['loaded_libraries'] if Path(p).name.startswith('libns3')]
     assert native and len({str(Path(p).parent) for p in native}) == 1 and all('unified-bus' not in p for p in native)
     assert result['finish_ns'] >= max(w['acked_ns'] for w in net['work'])
-    return dict(operations=len(specs), source_packets=len(packets), transported_payload_bytes=sum(map(len, source_bytes.values())),
+    return dict(operations=len(rows), source_packets=len(packets), transported_payload_bytes=sum(map(len, source_bytes.values())),
                 finish_ns=result['finish_ns'], final_atomic_value=int.from_bytes(memory[4, 7][:8], 'little')
                 if any(op['verb'] == 'fetch_add' for op in specs.values()) else None)
 

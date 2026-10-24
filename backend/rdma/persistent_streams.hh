@@ -3,6 +3,7 @@
 #include "gin_work_queue.hh"
 #include "dcqcn_reference.hh"
 #include "selective_repeat.hh"
+#include "nack_grace.hh"
 #include "ns3/rdma-hw.h"
 #include <deque>
 
@@ -23,6 +24,8 @@ class PersistentStreams {
   void ConfigureRateCapture(const Json& config);
   void ConfigureDcqcnReference(const Json& config);
   static void ValidateDcqcnReference(const Json& config,int64_t max_ns);
+  // Called by native entry points before Fabric allocates a network.
+  static void ValidateReordering(const Json& recovery,int64_t max_ns);
   void ValidateFaultBindings() const;
   void Open(uint64_t id, unsigned src, unsigned dst, unsigned plane, uint16_t wire_port,
             unsigned source_nic, unsigned destination_nic, unsigned depth);
@@ -68,8 +71,10 @@ class PersistentStreams {
     std::unique_ptr<moe_cosim::SourceRecovery> recovery;
     std::unique_ptr<moe_cosim::SelectiveSender> selective_sender;
     std::unique_ptr<moe_cosim::SelectiveReceiver> selective_receiver;
+    std::unique_ptr<moe_cosim::NackGrace> nack_grace;
+    int64_t grace_trigger_uid=-1;
     std::map<uint32_t,ns3::Ptr<ns3::Packet>> reorder_packets;
-    ns3::EventId recovery_event;
+    ns3::EventId recovery_event,grace_event;
     int64_t failure_ns=-1;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth,unsigned maximum)
       : src(s),dst(d),plane(p),source_nic(sn),destination_nic(dn),wire_port(w),queue(depth,maximum) {}
@@ -110,6 +115,11 @@ class PersistentStreams {
   void SampleRate(const Stream&, unsigned event, ns3::Ptr<const ns3::Packet>, uint64_t sequence, unsigned bytes, unsigned cnp);
   void ArmRecovery(Stream&);
   void RecoveryTimeout(uint64_t stream);
+  Json GraceState(const Stream&) const;
+  void GraceLog(Stream&,const char*,const Json&,int64_t uid=-1,int64_t cumulative=-1,bool nack=false);
+  void GraceFeedback(Stream&,ns3::Ptr<const ns3::Packet>,uint64_t cumulative,bool nack);
+  void GraceTimeout(uint64_t stream);
+  void CancelGrace(Stream&,const char* reason,bool rto=false);
   void DuplicateAck(Stream&, ns3::CustomHeader&, ns3::Ptr<ns3::RdmaRxQueuePair>);
   int SelectiveReceive(Stream&,ns3::Ptr<ns3::Packet>,ns3::CustomHeader&);
   void SelectiveLog(Stream&,const char*,ns3::Ptr<const ns3::Packet>,const moe_cosim::SelectiveAck&);
@@ -147,6 +157,9 @@ class PersistentStreams {
   bool selective_mode_=false;
   uint64_t selective_capacity_=0,selective_window_=0;
   Json selective_events_=Json::array();
+  int64_t grace_wait_=0;
+  uint64_t grace_limit_=0;
+  Json grace_events_=Json::array();
   std::map<unsigned,uint64_t> payload_used_,payload_peak_;
   Json payload_events_=Json::array();
 };

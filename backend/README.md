@@ -318,3 +318,5 @@ transactions/5在两事务入口上支持RemoteMemory稀疏窗口：逻辑范围
 事务v5可选显式前缀发布：`aggregate_requests=true`只准备，`false`发布同连接已准备前缀；真实prepared回调、源捕获和ACK/原子回复完成分别处理。默认模式不变，不自动补发布；它不是物理门铃或完整GIN/RoCE模型，见[输入与边界](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。
 
 持久字节与MRT1事务可选工作根`transport_recovery`，通过`PersistentStreams`在本次原生回调中组合`SourceRecovery`：发布只Extend合法前缀，PktSent记录真实TX高水位，ACK/NACK约束实际发出范围，超时仅回退游标。重复包补发真实累计ACK且不重复交付payload，drop钩子回收在途计数，逐work仍只释放一次。Fabric的`stream_packet_ids_`仅供包捕获和显式故障关联，分开于旧Flow映射，不驱动源端协议。旧回调默认不变；前缀确认不代表Close。配置、故障stream命名、状态输出和失败保存见[持久恢复](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)与[规范](../docs/tasks/persistent_recovery_spec.md)。这不是现代GIN/GPU可见性或硬件校准证据。
+
+可选`transport_recovery.reordering.mode=nack_grace/1`为选择重传增加固定源端NACK等待，RTO独立保留，同一前缀重复NACK不续期。native在Fabric之前拒绝非法新字段，定时动作独立记录，不伪装线上反馈。真实确认推进取消、RTO抢占、耗尽隔离和v5事务probe已通过包级核验；输入、已测边界及未覆盖的同ns/session组合见[用户示例](../examples/scaleout_nack_grace/README.md)与[功能验收](../fixtures/nack_grace_edges/README.md)。它是未经硬件校准的经典强基线，不是论文创新。

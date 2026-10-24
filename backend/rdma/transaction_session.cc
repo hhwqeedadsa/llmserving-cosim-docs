@@ -224,6 +224,7 @@ int main(int argc,char** argv) {
     ValidateSessionProgram(initial,topology,max_ns);
     Require(initial.at("operations").empty(),"session initial operations must be empty");
     ns3::RngSeedManager::SetSeed(protocol.at("seed"));
+    PersistentStreams::ValidateReordering(initial.value("transport_recovery",Json()),protocol.contains("limits")?protocol.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     Fabric fabric(topology,protocol);TransactionSession session(fabric,topology,initial);
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));std::string error;
     try {ns3::Simulator::Run();}catch(const std::exception& e){error=e.what();}

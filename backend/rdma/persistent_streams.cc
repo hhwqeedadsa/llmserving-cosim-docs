@@ -22,8 +22,9 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
           (fabric_.fault_rules_.empty() || !recovery.is_null()),"stream faults require explicit persistent recovery; legacy sends/admission/recovery excluded");
   if(!recovery.is_null()) {
     const auto& c=recovery;
+    ValidateReordering(c,fabric_.MaxSimNs());
     selective_mode_=c.value("mode",std::string())=="selective_repeat/1";
-    Require(c.is_object() && c.size()==5u+unsigned(c.contains("rtt_estimator"))+unsigned(c.contains("on_exhausted"))+2u*unsigned(selective_mode_) &&
+    Require(c.is_object() && c.size()==5u+unsigned(c.contains("rtt_estimator"))+unsigned(c.contains("on_exhausted"))+unsigned(c.contains("reordering"))+2u*unsigned(selective_mode_) &&
             (c.at("mode")=="go_back_n/1" || selective_mode_),
             "invalid persistent recovery mode/fields");
     const auto policy=c.value("on_exhausted",std::string("stop_simulation"));
@@ -42,6 +43,10 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
       selective_window_=integer("inflight_bytes",mtu,2*1024*1024);
       Require(selective_window_+mtu-1<=selective_capacity_,"selective capacity must cover packet window overshoot");
       Require(c.at("max_events")>0,"selective mode requires complete bounded event records");
+      if(c.contains("reordering")) {
+        grace_wait_=c.at("reordering").at("wait_ns");
+        grace_limit_=c.at("reordering").at("max_events");
+      }
     }
     if(c.contains("rtt_estimator")) {
       const auto& r=c.at("rtt_estimator");
@@ -75,7 +80,24 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
 }
 PersistentStreams::~PersistentStreams() {
   fabric_.network_state_changed_={};
-  for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
+  for(auto& item:streams_) {
+    Simulator::Cancel(item.second.recovery_event);
+    Simulator::Cancel(item.second.grace_event);
+  }
+}
+void PersistentStreams::ValidateReordering(const Json& c,int64_t max_ns) {
+  if(!c.is_object() || !c.contains("reordering"))return;
+  Require(c.value("mode",std::string())=="selective_repeat/1","reordering requires selective_repeat/1");
+  const auto& r=c.at("reordering");
+  Require(r.is_object() && r.size()==3 && r.at("mode")=="nack_grace/1",
+          "invalid reordering mode/fields");
+  Require(c.at("initial_rto_ns").is_number_integer() && c.at("initial_rto_ns")>=1 &&
+          c.at("initial_rto_ns")<=max_ns,"invalid initial RTO for reordering");
+  Require(r.at("wait_ns").is_number_integer() && r.at("wait_ns")>=1 &&
+          r.at("wait_ns")<=c.at("initial_rto_ns") && r.at("wait_ns")<=1000000000,
+          "reordering wait must be positive and no greater than initial RTO");
+  Require(r.at("max_events").is_number_integer() && r.at("max_events")>=1 && r.at("max_events")<=100000,
+          "invalid reordering event budget");
 }
 void PersistentStreams::ValidateFaultBindings() const {
   for(const auto& r:fabric_.fault_rules_)
@@ -206,6 +228,7 @@ void PersistentStreams::ArmRecovery(Stream& s) {
 }
 void PersistentStreams::RecoveryTimeout(uint64_t id) {
   auto& s=streams_.at(id);const auto expiry=s.recovery->Expire(StreamNow());
+  CancelGrace(s,"rto",true);
   recovery_records_->Rtt(StreamNow(),3,id,0,0);
   if(expiry==moe_cosim::RetransmissionTimer::Expiry::Exhausted) {
     s.failure_ns=StreamNow();
@@ -235,13 +258,60 @@ void PersistentStreams::RecoveryTimeout(uint64_t id) {
       }
       nic.dev->TriggerTransmit();Notify();return;
     }
-    for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
+    for(auto& item:streams_) {
+      Simulator::Cancel(item.second.recovery_event);
+      CancelGrace(item.second,"stop_simulation");
+    }
     Simulator::Stop();return;
   }
   RecoveryRecord(s,2);
   auto hw=fabric_.drivers_[s.src]->m_rdma;hw->RecoverQueue(s.qp);
   if(s.selective_sender)s.qp->snd_nxt=s.selective_sender->Skip(s.qp->snd_nxt);
   ArmRecovery(s);Pump(s);Notify();
+}
+Json PersistentStreams::GraceState(const Stream& s) const {
+  return {{"prefix",s.nack_grace->Prefix()},{"deadline_ns",s.nack_grace->Deadline()},
+    {"serviced",s.nack_grace->Serviced()},{"trigger_feedback_uid",s.grace_trigger_uid}};
+}
+void PersistentStreams::GraceLog(Stream& s,const char* kind,const Json& before,int64_t uid,int64_t cumulative,bool nack) {
+  Require(grace_events_.size()<grace_limit_,"NACK grace event budget exceeded");
+  grace_events_.push_back({{"time_ns",StreamNow()},{"stream",s.qp->GetTag()},{"kind",kind},
+    {"feedback_uid",uid},{"cumulative_ack",cumulative},{"nack",nack},
+    {"before",before},{"after",GraceState(s)},{"snd_una",s.qp->snd_una},
+    {"highest_sent_bytes",s.recovery?s.recovery->Timer().High():0},
+    {"rto_deadline_ns",s.recovery?s.recovery->Timer().Deadline():-1}});
+}
+void PersistentStreams::GraceFeedback(Stream& s,Ptr<const Packet> packet,uint64_t cumulative,bool nack) {
+  auto& g=*s.nack_grace;const auto before=GraceState(s);const auto old=g.Deadline();
+  g.Feedback(StreamNow(),cumulative,nack);
+  if(g.Deadline()!=old || g.Prefix()!=before.at("prefix").get<uint64_t>()) {
+    Simulator::Cancel(s.grace_event);
+    s.grace_trigger_uid=g.Deadline()<0?-1:static_cast<int64_t>(packet->GetUid());
+    if(g.Deadline()>=0)
+      s.grace_event=Simulator::Schedule(NanoSeconds(g.Deadline()-StreamNow()),&PersistentStreams::GraceTimeout,this,s.qp->GetTag());
+  }
+  GraceLog(s,"feedback",before,packet->GetUid(),cumulative,nack);
+}
+void PersistentStreams::CancelGrace(Stream& s,const char* reason,bool rto) {
+  if(!s.nack_grace)return;
+  const auto before=GraceState(s);
+  Simulator::Cancel(s.grace_event);
+  if(rto)s.nack_grace->Rto();else s.nack_grace->Cancel();
+  s.grace_trigger_uid=-1;
+  GraceLog(s,reason,before);
+}
+void PersistentStreams::GraceTimeout(uint64_t id) {
+  auto& s=streams_.at(id);auto& g=*s.nack_grace;
+  const auto before=GraceState(s);
+  Require(!closed_ && s.failure_ns<0 && g.Deadline()==StreamNow(),"stale NACK grace timer");
+  const auto rto=s.recovery->Timer().Deadline();
+  if(rto>=0 && rto<=StreamNow()) {CancelGrace(s,"rto_due",true);return;}
+  Require(g.Prefix()==s.qp->snd_una && s.qp->snd_una<s.recovery->Timer().High(),"NACK grace without actual source hole");
+  Require(g.Expire(StreamNow()),"NACK grace expired early");
+  s.grace_trigger_uid=-1;GraceLog(s,"retry",before);
+  fabric_.drivers_[s.src]->m_rdma->RecoverQueue(s.qp);
+  s.qp->snd_nxt=s.selective_sender->Skip(s.qp->snd_nxt);
+  Pump(s);fabric_.drivers_[s.src]->m_rdma->m_nic[s.source_nic].dev->TriggerTransmit();Notify();
 }
 void PersistentStreams::TerminalFeedback(Stream& s,Ptr<const Packet> packet,unsigned protocol,uint64_t sequence) {
   ++terminal_feedback_count_;
@@ -373,6 +443,7 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
   if(selective_mode_) {
     auto& s=it->second;
     s.selective_sender=std::make_unique<moe_cosim::SelectiveSender>();
+    if(grace_wait_)s.nack_grace=std::make_unique<moe_cosim::NackGrace>(grace_wait_);
     s.selective_receiver=std::make_unique<moe_cosim::SelectiveReceiver>(selective_capacity_);
     s.qp->SetWin(selective_window_);s.qp->SetVarWin(false);
   }
@@ -519,7 +590,8 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     // native QpComplete: an ACKed published prefix is not connection close.
     if(s->selective_sender) {
       s->selective_sender->Feedback(h.ack.seq,selective_ack,s->recovery->Timer().High());
-      if(h.l3Prot==0xFD && s->selective_sender->FastRetry(h.ack.seq)) {
+      if(s->nack_grace)GraceFeedback(*s,packet,h.ack.seq,h.l3Prot==0xFD);
+      else if(h.l3Prot==0xFD && s->selective_sender->FastRetry(h.ack.seq)) {
         hw->RecoverQueue(s->qp);SelectiveLog(*s,"fast_retransmit",packet,selective_ack);
       }
       s->qp->snd_nxt=s->selective_sender->Skip(s->qp->snd_nxt);
@@ -666,6 +738,7 @@ void PersistentStreams::Close() {
   for(auto& item:streams_) {
     auto& s=item.second;s.queue.Close();
     Simulator::Cancel(s.recovery_event);
+    CancelGrace(s,"close");
     if(s.reference) {
       Simulator::Cancel(s.reference->np_event);Simulator::Cancel(s.reference->alpha_event);Simulator::Cancel(s.reference->recovery_event);
       ReferenceLog(s,"qp_close");
@@ -682,6 +755,14 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(grace_wait_) {
+    Json states=Json::array();
+    for(const auto& [id,s]:streams_) {
+      auto row=GraceState(s);row["stream"]=id;states.push_back(row);
+    }
+    result["nack_grace"]={{"config",recovery_config_.at("reordering")},{"states",states},{"events",grace_events_},
+      {"scope","classical fixed source NACK grace; actual feedback only; one retry per prefix; independent RTO remains active; not RACK/IRN or calibrated hardware"}};
+  }
   if(selective_mode_) {
     Json states=Json::array();
     for(const auto& [id,s]:streams_) {

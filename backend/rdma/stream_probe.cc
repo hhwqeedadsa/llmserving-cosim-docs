@@ -48,6 +48,7 @@ int main(int argc,char** argv) {
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
     Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
+    PersistentStreams::ValidateReordering(input.value("transport_recovery",Json()),config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     Fabric fabric(topology,config);PersistentStreams transport(fabric,limits,input.value("transport_recovery",Json()));
     std::set<unsigned> gpu_ids;
     if(local_mode) {

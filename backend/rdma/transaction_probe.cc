@@ -48,6 +48,7 @@ int main(int argc,char** argv) {
     const auto topology=ReadJson(argv[1]);
     if(sparse_mode || input.contains("registration_model") || input.contains("registrations") || input.contains("application_window_model") || input.contains("application_windows"))
       ValidateSessionProgram(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
+    PersistentStreams::ValidateReordering(input.value("transport_recovery",Json()),config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     Fabric fabric(topology,config);RemoteTransactions transactions(fabric,input);
     std::set<unsigned> gpus;
     for(const auto& n:topology.at("nodes"))if(n.at("kind")=="gpu")gpus.insert(n.at("id").get<unsigned>());

@@ -43,6 +43,14 @@ def validate(topology, protocol, config):
                     'selective capacity must cover packet window overshoot')
             require(type(c.get('max_events')) is int and c['max_events']>0,'selective mode requires complete event records')
             del legacy['receive_buffer_bytes'];del legacy['inflight_bytes']
+            if 'reordering' in c:
+                r=c['reordering']
+                fields(r,'mode wait_ns max_events','reordering')
+                require(r['mode']=='nack_grace/1','invalid reordering mode')
+                integer(c.get('initial_rto_ns'),'initial_rto_ns',1,budget['max_sim_ns'])
+                integer(r['wait_ns'],'reordering wait_ns',1,min(c['initial_rto_ns'],1000000000))
+                integer(r['max_events'],'reordering max_events',1,100000)
+                del legacy['reordering']
         policy=legacy.pop('on_exhausted','stop_simulation')
         require(policy in ('stop_simulation','isolate_stream'),'invalid persistent on_exhausted policy')
         validate_recovery(legacy,budget['max_sim_ns'])

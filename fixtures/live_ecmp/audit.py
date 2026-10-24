@@ -100,7 +100,8 @@ def audit(topology, protocol, work, result):
             # Physical TX later than convergence need not be newly selected:
             # old queued packets retain the decision made at enqueue.
             if physical and not visible: late_good[node] += 1
-            if node == 8 and 6000 < now < 16000 and physical: late_good['pending8_after_other_update'] += 1
+            pending = {v['event_index'] for v in physical}-{v['event_index'] for v in visible}
+            if node == 8 and 6000 < now < 16000 and pending: late_good['pending8_after_other_update'] += 1
         if e['event'] == 5:
             closing = any(now == d['time_ns'] and node in (d['src'], d['dst']) and
                 e['port'] == (d['src_port'] if node == d['src'] else d['dst_port']) for d in downs)

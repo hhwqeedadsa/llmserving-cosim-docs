@@ -7,6 +7,7 @@ from .scaleout_rdma import checked_json, digest, limits, monitored, save, NATIVE
 from .scaleout_streams import validate as validate_streams
 from .scaleout_topology import fields, integer, require
 from .memory_registrations import validate_registrations
+from .application_windows import validate_application_windows
 
 
 def _hex(text, maximum, name):
@@ -62,6 +63,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
            (' transport_recovery' if 'transport_recovery' in config else '')+
+           (' application_window_model' if 'application_window_model' in config else '')+(' application_windows' if 'application_windows' in config else '')+
            (' registration_model' if 'registration_model' in config else '')+(' registrations' if 'registrations' in config else '')+
            (' buffer_model' if 'buffer_model' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
@@ -143,7 +145,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                 safe_parents.update(effects[d['operation']])
         if kind == 'local':
             fields(op, 'id kind rank duration_ns after'+(' local_wait' if 'local_wait' in op else '')+
-                   (' copy' if 'copy' in op and memory_mode else ''), 'local transaction node')
+                   (' copy' if 'copy' in op and memory_mode else '')+(' application_uses' if 'application_uses' in op else '')+
+                   (' release_window' if 'release_window' in op else ''), 'local transaction node')
             integer(op['rank'], 'local rank', 0, 31)
             require(op['rank'] in gpus, 'local rank is not a topology GPU')
             integer(op['duration_ns'], 'local duration', 0, protocol.get('limits', {}).get('max_sim_ns', 5000000))
@@ -178,7 +181,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         require(not from_source or (source_mode and op['verb'] == 'put' and 'hex' not in op), 'source requires v3 put without hex')
         fields(op, 'id connection verb key address after '+('source' if from_source else 'hex' if op['verb'] == 'put' else 'value')+
                (' kind' if local_mode else '')+(' aggregate_requests' if explicit else '')+
-               (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else ''), 'operation')
+               (' local_wait' if 'local_wait' in op else '')+(' queue_fence' if 'queue_fence' in op else '')+
+               (' application_uses' if 'application_uses' in op else '')+(' release_window' if 'release_window' in op else ''), 'operation')
         if explicit: require(type(op['aggregate_requests']) is bool, 'aggregate_requests must be boolean')
         integer(op['connection'], 'operation connection', 0, 7)
         integer(op['key'], 'operation remote key', 1, 2**32-1)
@@ -244,6 +248,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         effects[op['id']] = completed_effects
         remote_history.append(op)
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
+    validate_application_windows(config, registered, by_id)
     require(allow_no_remote or remote_count > 0, 'transaction probe requires remote work')
     if 'buffer_model' in config:
         _bounded_buffers(config, registered, by_id)

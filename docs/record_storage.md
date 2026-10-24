@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+仅启用`application_window_model.mode=local_views/1`时增加`transactions.application_windows`：`views`保存原id/owner/window_key/address/bytes及closed、active_operations；`backing_domains`按owner/window_key保存application_refs、registration_ids和state；`events`保存共同内存order、time_ns、operation和kind（acquire/release含views，close含view/owner/window_key/remaining_application_refs）。最后引用为0的state=`no_application_refs_provider_pending`；provider_retirement_modeled恒false，不可用该字段推断安全复用。默认不加字段。详见[窗口示例](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。
+
 只有启用`registration_model.mode=nic_scoped_aliases/1`时，事务结果增加`transactions.registration_model/registrations`，原样报告静态owner/NIC/rkey到window_key及子范围的权限；`transactions.target_events`增加`destination_nic`。`windows`始终只报告物理存储一次，本地source/copy中的key仍是存储key。默认无这些新增字段；session已有`session.registrations`是操作提交记录，含义不同。详见[多NIC示例](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)。
 
 显式`buffer_model.target_delivery="carrier_once_put/1"`时，结果增加`transactions.target_delivery`：`mode`、`scope`及`contexts`。每项context保存实际`context/next_sequence/retained_requests/retained_encoded_bytes`；后两项从真实请求缓存计算，在本模式为0。`buffer_retention.owners[].target_cache_bytes`也为0，配置额度必须0；解码临时内容、序号元数据、包与观测不在内。缺省没有新增对象，完整请求缓存语义保持，详见[有序put](../examples/scaleout_rdma_transactions/README.md#有序put不保留完整请求缓存)。

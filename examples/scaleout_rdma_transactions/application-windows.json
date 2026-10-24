@@ -1,0 +1,223 @@
+{
+  "schema_version": "moe-rdma-transactions/4",
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2
+    },
+    {
+      "id": 1,
+      "src": 0,
+      "dst": 4,
+      "plane": 1,
+      "request_port": 24002,
+      "response_port": 24003,
+      "source_nic": 2,
+      "destination_nic": 2,
+      "queue_depth": 2
+    },
+    {
+      "id": 2,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24004,
+      "response_port": 24005,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": false,
+      "hex": "0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f40"
+    },
+    {
+      "owner": 4,
+      "key": 9,
+      "address": 8192,
+      "allow_atomic": true,
+      "hex": "a1a2a3a4a5a6a7a80000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 100,
+      "release_window": 10,
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 100,
+      "application_uses": [
+        11
+      ],
+      "copy": {
+        "source": {
+          "key": 9,
+          "address": 8192,
+          "bytes": 8
+        },
+        "target": {
+          "key": 9,
+          "address": 8224
+        }
+      },
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 100,
+      "release_window": 11,
+      "after": [
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 21,
+      "address": 8192,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 8
+      },
+      "application_uses": [
+        1
+      ],
+      "after": [
+        {
+          "operation": 2,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 100,
+      "release_window": 1,
+      "after": [
+        {
+          "operation": 3,
+          "event": "completed"
+        }
+      ]
+    }
+  ],
+  "registration_model": {
+    "mode": "nic_scoped_aliases/1"
+  },
+  "registrations": [
+    {
+      "id": 0,
+      "owner": 4,
+      "nic": 1,
+      "key": 21,
+      "window_key": 9,
+      "address": 8192,
+      "bytes": 16,
+      "allow_atomic": false
+    },
+    {
+      "id": 1,
+      "owner": 4,
+      "nic": 2,
+      "key": 21,
+      "window_key": 9,
+      "address": 8192,
+      "bytes": 16,
+      "allow_atomic": false
+    },
+    {
+      "id": 2,
+      "owner": 4,
+      "nic": 2,
+      "key": 22,
+      "window_key": 9,
+      "address": 8192,
+      "bytes": 8,
+      "allow_atomic": true
+    },
+    {
+      "id": 3,
+      "owner": 0,
+      "nic": 1,
+      "key": 31,
+      "window_key": 7,
+      "address": 4144,
+      "bytes": 16,
+      "allow_atomic": false
+    }
+  ],
+  "application_window_model": {
+    "mode": "local_views/1"
+  },
+  "application_windows": [
+    {
+      "id": 1,
+      "owner": 0,
+      "window_key": 7,
+      "address": 4096,
+      "bytes": 64
+    },
+    {
+      "id": 10,
+      "owner": 4,
+      "window_key": 9,
+      "address": 8192,
+      "bytes": 64
+    },
+    {
+      "id": 11,
+      "owner": 4,
+      "window_key": 9,
+      "address": 8192,
+      "bytes": 64
+    }
+  ]
+}

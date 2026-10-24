@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+`local_views/1`依据固定NCCL窗口/底层分配引用关系，只实现输入声明的本地视图和使用寿命：多个视图共享现有存储/注册。未执行可复用flags/handles/跨rank协商，未模拟provider退出、DMA fence或真实注销。最后视图关闭后真实MRT1包仍可通过静态权限写入，这是功能边界，不是上游漏洞。依据见[生命周期核查](reviews/窗口注销合法边界与底层注册复用_20261024.md)，功能验收见[本地窗口](../fixtures/application_windows/README.md)。
+
 `nic_scoped_aliases/1`仅表达目标NIC作用域内的静态远端权限；依据是前期固定NCCL源码核对的同地址按连接/backend注册事实，不能把该事实等同于完整provider模型。人工双NIC实包核验共享字节、子范围、原子权限及反向返回，本地lease和副作用排序不能被rkey别名绕过。它没有模拟PD、查找后并发DMA、注销、重新注册、逐句柄失败或实测成本，不能证明生产漏洞或安全恢复；[验收](../fixtures/nic_registration/README.md)区分功能证据和后续缺项。
 
 可选有界缓冲模式只限制命名的数据内容：注册窗口、MRT1重传副本、累计请求缓存和本地copy快照；源lease是引用，捕获临时向量峰值另列。元数据、解码临时对象、包、观测hex和报告副本均不在这些额度内，不能据此声称总RSS或GPU显存有界。ACK回收与失败背压已用实际包核查，尚无GPU/NIC容量校准、连续服务缓存淘汰或旧远端访问撤销保证，见[验收范围](../fixtures/bounded_buffers/README.md)。

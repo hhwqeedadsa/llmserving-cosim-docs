@@ -1,0 +1,30 @@
+{
+  "actual_networks_before_restore": 6,
+  "additional_expected_native_rejection_sessions": 1,
+  "baseline": "8f0869a",
+  "cli_rejections": 18,
+  "cpp_view_assertions": 6668,
+  "explicit_session_common_full_result_equal": true,
+  "full_default_legacy_bytes_equal": true,
+  "hardware_calibrated": false,
+  "independent_audits": [
+    "dense",
+    "sparse",
+    "explicit",
+    "session",
+    "online"
+  ],
+  "native_rejections": 18,
+  "online_candidate_atomicity": {
+    "api_continuation_completed": true,
+    "api_rejection_preserves_live_state": true,
+    "native_expected_exit": 1,
+    "native_rejects_entire_candidate_before_mutation": true,
+    "schema_version": "application-windows-online/1"
+  },
+  "paper_innovation_established": false,
+  "provider_retirement_implemented": false,
+  "public_variants_exact": true,
+  "python_distinct_units": 59,
+  "schema_version": "application-windows-verification/1"
+}

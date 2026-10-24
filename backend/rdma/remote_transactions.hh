@@ -1,6 +1,7 @@
 #pragma once
 #include "persistent_streams.hh"
 #include "remote_memory.hh"
+#include "application_windows.hh"
 
 namespace moe_rdma {
 // Functional addressed transactions over MRT1/native byte streams. Not a GIN
@@ -59,6 +60,12 @@ class RemoteTransactions {
   };
   LocalCopy Copy(const Json& operation) const;
   void LocalMemoryEvent(uint64_t id,const char* kind,const LocalCopy& copy,const std::vector<uint8_t>* bytes=nullptr);
+  void CheckApplicationUse(const Json&) const;
+  void AcquireApplicationUse(const Json&);
+  void ReleaseApplicationUse(uint64_t id);
+  ApplicationWindows application_windows_;
+  bool application_window_mode_=false;
+  Json application_events_=Json::array();
   PersistentStreams transport_;
   RemoteMemory memory_;
   std::map<uint64_t,Connection> connections_;

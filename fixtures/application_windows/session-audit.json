@@ -1,0 +1,19 @@
+{
+  "actual_source_completed_ns": 12360,
+  "actual_source_packets": 1,
+  "actual_target_rx_ns": 6336,
+  "backing_domains": 2,
+  "lifecycle_events": 7,
+  "schema_version": "application-windows-independent-audit/1",
+  "static_authority_survives_local_view_release": true,
+  "tampering_rejected": [
+    "close_time",
+    "reference_count",
+    "wire_body",
+    "final_memory",
+    "provider_claim"
+  ],
+  "target_last_view_closed_ns": 300,
+  "views": 3,
+  "wire_payload_bytes": 40
+}

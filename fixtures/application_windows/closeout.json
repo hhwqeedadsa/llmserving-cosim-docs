@@ -1,0 +1,275 @@
+{
+  "additional_expected_native_rejection_sessions": 1,
+  "artifact_usage": {
+    "/dev/shm/moe-application-windows-20261024": {
+      "allocated_bytes": 96468992,
+      "apparent_bytes": 94268010
+    },
+    "/home/lry/moe-ub-cosim/runs/application_windows_checkpoint_20261024": {
+      "allocated_bytes": 12623872,
+      "apparent_bytes": 12183846
+    }
+  },
+  "baseline": "8f0869a",
+  "built_source_and_reused_object_and_fixed_library_hashes_unchanged": true,
+  "cli_rejections": 18,
+  "completed_networks_rerun_for_checker_fix": 0,
+  "conservative_nested_monitor_seconds": 55.125372933223844,
+  "cpp_view_assertions": 6668,
+  "dependency_changes": 0,
+  "downloads": 0,
+  "expected_native_failure_prefix_preserved": true,
+  "final_file_management_allowance_seconds": 10,
+  "final_receipts_reserve_bytes": 262144,
+  "gpu_execution": false,
+  "hardware_calibrated": false,
+  "monitor_count": 46,
+  "monitored_seconds_budget": 600,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/audit-dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.15234010107815266
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/audit-explicit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1547646000981331
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/audit-online-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.15551328286528587
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/audit-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14536425657570362
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/audit-sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14474548771977425
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/compile-core-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7763645201921463
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/compile-remote_transactions-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 8.505275217816234
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/compile-transaction_probe-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 8.255759006366134
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/compile-transaction_session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 8.23242967762053
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/core-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.040347952395677567
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/dense/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7595476731657982
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.0055528283119202
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/deps-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.46446755714714527
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/explicit/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7585186194628477
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/explicit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.0134479328989983
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/final-probe-help-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13072594068944454
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/help-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.15745319239795208
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/legacy/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7558069154620171
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/legacy-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.012999802827835
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/link-transaction-probe-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6783992238342762
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/link-transaction-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6722068339586258
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/online-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5597298629581928
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/pack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 9.714541666209698
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12882518023252487
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-explicit-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1289114486426115
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-live-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13103177957236767
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-online-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1280954536050558
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.126812644302845
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-audit-sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1301182210445404
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12498709186911583
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/portable-user-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9824300613254309
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/public-variants-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1368233636021614
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/reject-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.9970561973750591
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/restored/public-run/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.751967454329133
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/session/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8663810584694147
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1011359561234713
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/sparse/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7615206483751535
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.0253668669611216
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1273320559412241
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-application_windows_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12256923876702785
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-bounded_buffers_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13304567895829678
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-memory_registrations_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12669981643557549
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-scaleout_transactions_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.23334073089063168
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-transaction_effect_order_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1340937837958336
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/unit-transaction_session_alarms_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2387690581381321
+    },
+    {
+      "path": "/dev/shm/moe-application-windows-20261024/persist-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2417569924145937
+    }
+  ],
+  "native_rejections": 18,
+  "network_executions": 7,
+  "no_live_monitored_groups": true,
+  "not_total_calendar_time": true,
+  "paper_innovation_established": false,
+  "peak_sampled_group_rss_bytes": 682594304,
+  "per_command_limits_increased": false,
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/application_windows_checkpoint_20261024/checkpoint.tar.gz",
+  "persistent_archive_sha256": "1f4e319e7fa451b198b1538c602d34cddb1707fbb287680f19918c0c569c3ff1",
+  "phase_budget_bytes": 268435456,
+  "provider_retirement_implemented": false,
+  "python_distinct_units": 59,
+  "schema_version": "application-windows-closeout/1",
+  "total_usage_upper_bytes": 109355008,
+  "unexpected_failures": 0
+}

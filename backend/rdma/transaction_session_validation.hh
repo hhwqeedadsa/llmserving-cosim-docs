@@ -3,6 +3,7 @@
 #include "transaction_effect_order.hh"
 #include "bounded_buffers.hh"
 #include "memory_registrations.hh"
+#include "application_window_validation.hh"
 
 namespace moe_rdma {
 // Pure admission validation. Never inspect a live byte value/lease to validate
@@ -21,7 +22,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   if(explicit_submission)root_keys.push_back("submission_model");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
-  for(const auto* name:{"registration_model","registrations"})if(input.contains(name))root_keys.push_back(name);
+  for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
   if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
@@ -96,6 +97,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     if(op.contains("local_wait"))keys.push_back("local_wait");
     if(op.contains("copy")) {Require(is_local,"copy requires local node");keys.push_back("copy");}
     if(op.contains("queue_fence")) {Require(!is_local && !op.contains("local_wait"),"invalid session queue fence");keys.push_back("queue_fence");}
+    for(const auto* name:{"application_uses","release_window"})if(op.contains(name))keys.push_back(name);
     SessionKeys(op,keys);
     Require(op.at("after").is_array() && op.at("after").size()<=32,"invalid session dependencies");
     std::set<std::pair<uint64_t,std::string>> deps;std::set<uint64_t> parents;
@@ -158,5 +160,6 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   }
   ValidateTransactionEffectOrder(input);
   ValidateBoundedBuffers(input);
+  ValidateApplicationWindows(input);
 }
 }

@@ -69,6 +69,29 @@ python3 -B fixtures/nic_registration/audit.py \
 
 也可用`rdma-transaction-session`和对应session二进制运行同一配置。示例使用两plane各100Gbps接入的NIC1/2（loopback为0）；不是给单端口额外增加带宽。独立核验按捕获的真实入站端口解码MRT1、重放存储并检查返回值，范围见[功能验收](../../fixtures/nic_registration/README.md)。这是静态功能权限，不模拟Protection Domain（保护域）、动态撤销、逐句柄退出、DMA在途寿命或注册成本，不能据此判定失败窗口可安全复用或计算恢复性能。
 
+## 应用窗口关闭与底层注册分开
+
+v4/v5可选成对的`application_window_model={"mode":"local_views/1"}`与`application_windows`，要求已有NIC静态注册。每个视图为`id/owner/window_key/address/bytes`，1—32个、id唯一、范围在物理窗口内。它们是输入声明的本地应用引用，共享底层字节和已有注册，不执行真实注册协商或创建新MR。
+
+操作的`application_uses`列出1—8个本GPU的开放视图。启用模式后，source、copy两端和local_wait的每个本地范围必须由其中某一视图完整覆盖。实际准入时开始使用，实际操作completed时结束；prepared、目标applied和单独ACK都不能代替完成。纯local节点的`release_window: id`在声明duration结束时释放一个视图，不能同时含copy/wait/uses。静态检查要求关闭依赖此前使用的completed（可传递），并保守拒绝所有在已声明关闭后添加的使用；数组顺序本身不证明完成。运行时还会检查开放状态和活跃使用。
+
+[application-windows.json](application-windows.json)依次关闭第一个目标视图、经第二个视图复制8B、关闭第二个视图，然后发送方经自己的视图发包，最后关闭源视图。示例用已有任务依赖编排功能反例；不是分布式故障检测算法，发送准入不读取目标视图状态。先生成上节NIC拓扑，再执行：
+
+```bash
+PYTHONPATH=python python3 -B -m moe_ub_cosim scaleout rdma-transaction-probe \
+  --topology runs/nic-topology \
+  --protocol examples/scaleout_rdma_transactions/nic-registration-rdma.json \
+  --config examples/scaleout_rdma_transactions/application-windows.json \
+  --backend build/native-transactions/output/moe-rdma/ns3.42-moe-rdma-transaction-probe \
+  --output runs/application-windows
+python3 -B fixtures/application_windows/audit.py \
+  --result runs/application-windows/result.json \
+  --work examples/scaleout_rdma_transactions/application-windows.json \
+  --output runs/application-windows-audit.json
+```
+
+也可换用session命令及对应二进制；在线完整候选在改变运行状态前检查。事务结果`application_windows`分别报告视图、共享底层域与acquire/release/close事件。最后应用引用为0时状态为`no_application_refs_provider_pending`，不是注销完成或安全复用：NIC/rkey仍有效，实际到达的数据继续修改物理字节。没有模拟MR退出、DMA、CUDA可见性或真实成本；不能据此宣称生产漏洞或恢复性能。验收见[范围与证据](../../fixtures/application_windows/README.md)。
+
 ## 根据实际收到的值推进下一轮
 
 将运行命令的`--config`改为[local-waits.json](local-waits.json)，可以执行两轮目标端计数消费和通知。GPU0、GPU1向GPU4发送数据/计数；GPU4只有在本地收到的计数和数据**同时**符合条件时，才清零计数并通知两端进入下一轮。两个阶段共用一张网络、同一时钟和持久连接，不输入固定通信时刻。它是人工功能程序，不是MoE推理或现代DeepEP执行。

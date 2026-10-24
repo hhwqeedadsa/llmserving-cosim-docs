@@ -1,5 +1,7 @@
 # 用户指南
 
+事务功能小例新增[应用窗口引用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)：在v4/v5中检查本地使用寿命，区分视图关闭和底层MR退出；沿用公开probe/session命令。
+
 原生事务还可用[queue-fences.json](../examples/scaleout_rdma_transactions/queue-fences.json)验证多连接固定前缀等待，沿用`rdma-transaction-probe`，详见[输入与边界](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。它等待已预留工作，不自动等待未来提交或提供真实GIN flush代价。
 
 原生事务功能例另可用[local-waits.json](../examples/scaleout_rdma_transactions/local-waits.json)验证实际接收数据满足条件后再继续、消费后清零的两轮执行，沿用`rdma-transaction-probe`。输入与范围见[本地窗口等待](../examples/scaleout_rdma_transactions/README.md#根据实际收到的值推进下一轮)。它不执行现代DeepEP或GPU轮询。

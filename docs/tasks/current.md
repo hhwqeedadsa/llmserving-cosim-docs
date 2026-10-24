@@ -13,6 +13,12 @@
 
 ## 当前范围和预算
 
+当前平台`completed`：[应用窗口引用与本地使用寿命](application_window_spec.md)，基线`8f0869a`。v4/v5可选`local_views/1`实现共享物理分配上的本地应用子窗口，source/copy/wait覆盖、实际准入至completed使用、local完成释放引用，静态completed闭包及运行时双重检查。最后引用归零只标provider待处理，真实NIC/rkey仍授权实包，不把视图释放冒充公开注销/安全复用，也不让发送方读取目标窗口状态。
+
+59项不同Python单元、6,668项C++独立断言、CLI/native各18非法条件、13固定依赖检查通过。四种v4/v5/前缀/在线流程均1远端+4本地、12,460ns；目标最后视图300ns释放，实际包6,336ns仍写入，源ACK12,360ns才释放使用。默认新/旧完整result逐字节相同；显式前缀与session除session对象外完整结果相同。Python在线拒绝保留活会话并继续完成，原生整批非法候选保存未执行前缀，均无部分注册/执行；不称生产漏洞或性能收益。
+
+持久包`runs/application_windows_checkpoint_20261024/`为634成员/11,714,635B，新源码根/空cwd公开拓扑和网络执行通过，八库从包内加载，完整结果除库路径外相同，五份离线和新网络审计逐字节一致。共7次健康网络及1次预期原生准入失败会话，46监控（含嵌套）保守55.13秒、峰值约650.97MiB，原件/恢复/持久/收据预留共约104.29MiB；600秒/256MiB及每命令60秒/1GiB/地址2GiB/64MiB、网络5ms/result16MiB和磁盘预留保持。无意外失败、无已完成网络为修checker而重跑、无遗留受监控PID；仅复用固定八库增量构建三个事务消费者/两入口，没有依赖变化、安装下载、GPU或旧失败研究重跑。见[验收](../../fixtures/application_windows/README.md)、[功能核验](../../fixtures/application_windows/verification.json)、[恢复](../../fixtures/application_windows/recovery.json)及[预算收尾](../../fixtures/application_windows/closeout.json)。上一目标轮目录清理没有推进研究能力，本轮已完成实质平台能力和新证据。仅本地提交、不push，整体论文目标仍in_progress。
+
 当前研究`completed`：[窗口生命周期与合法恢复边界](../../experiments/window_lifecycle/README.md)，平台固定`08bf585`。12份固定原文/14摘录、4精确原函数与432合成CPU条件独立核验：相同底层分配/flags/handles经跨rank一致性检查可共享注册，窗口offset和GIN handle保留该关系；公开注销成功不等于最后底层引用或全MR已退出。18条件成功但其他引用仍存、72条件成功但下层报错（54未获全退出/18全退出后错误），36条件外层报错但MR已退出；不是故障率、真实DMA或库漏洞。DeepEP正常destroy先做带前后CPU同步/flush的通信域屏障，注册有集合信息交换/屏障；公开注销本函数没有该bootstrap集合屏障，不能混称。当前静态NIC权限不足以表达应用窗口/底层注册引用，不能直接加revoked就宣称恢复。
 
 6次固定小源码/文档请求共191,375原文字节，每次约0.87—1.47秒、无重试；平台/依赖不改，无GPU/provider/ns-3。87成员/303,615B包保存于`runs/window_lifecycle_checkpoint_20261024/`；新源码根/空cwd重编译CPU原函数并复算，五份输出逐字节一致，四类语义篡改拒绝、13固定依赖通过。14份原始监控约10.60秒，含原件/恢复/持久副本和128KiB收据预留共4,968,448B；300秒/64MiB、每命令60秒/1GiB/地址2GiB/16MiB及磁盘预留保持，无遗留受监控进程，最终文件管理另预留10秒。初稿的provider计数名改为lower_error并补两份底层共享摘录，仅重分析已有CPU记录；包后中文报告补清CPU片段/整库区别，hash差异保留，未重跑已完成原函数。见[报告](../reviews/窗口注销合法边界与底层注册复用_20261024.md)、[核验](../../experiments/window_lifecycle/results/20261024/verification.json)、[恢复](../../experiments/window_lifecycle/results/20261024/replay.json)及[收尾](../../experiments/window_lifecycle/results/20261024/closeout.json)。本研究阶段完成，仅本地提交不push；合法故障并发、完整abort、校准、性能价值和论文创新仍未成立，整体目标in_progress，不自动启动性能矩阵。
@@ -25,7 +31,7 @@
 
 55成员/164,367B包保存到`runs/registration_fanout_checkpoint_20261024/`，新源码根/空cwd重编译并复算，生成C++、1,120行调用记录、摘录/摘要/核验共5份逐字节一致，3类语义篡改拒绝、13固定依赖检查通过。全部监控正常完成，无新获取、GPU/provider/ns-3执行或平台/依赖变化；预算与hash见[收尾](../../experiments/registration_fanout/results/20261024/closeout.json)，结论见[中文报告](../reviews/共享窗口多连接撤销与部分失败_20261024.md)。180监控秒/32MiB、每命令60秒/1GiB/地址2GiB/16MiB及tmpfs8GiB/根盘64MiB预留保持；最终文件管理保守预留10秒/128KiB，仅本地提交不push。
 
-下一平台门槛：先表达应用窗口—底层分配/注册域—分段—逐连接句柄及共享引用，保留flags/handles/跨rank一致性约束，再实现逐句柄退出、未知和元数据状态；独立逻辑窗口不能自动充当独立MR。当前已保留真实destination_nic并由载体检查入站端口，尚无上述应用窗口引用、动态注销/重注册/provider退出或在途DMA模型。公开注销结果不能直接作为全覆盖退出事件；在线方法如果需要逐项收据，须说明实际接口/可见信息和代价。保留正常provider强保证、协同排空、独立底层分配及备用窗口强基线，再按同资源和真实完成检验正常任务停顿。未有合法故障调用、代表性负载和校准前不跑性能矩阵，整体论文目标仍`in_progress`。
+下一平台门槛：在已实现的本地应用视图/底层域引用之上，继续表达分段—逐连接句柄及provider退出、未知和元数据状态；静态给定共享关系不能代替flags/handles/跨rank协商。当前实际destination_nic由载体检查，但仍无动态注销/重注册、逐句柄退出、并发DMA或实测成本。公开注销结果不能直接作为全覆盖退出事件，算法若需要逐项收据须核清实际接口/可见信息及代价；最后应用引用为0不能授权物理字节复用。保留正常provider强保证、协同排空、独立底层分配及备用窗口强基线，之后按同资源和真实完成检验正常任务停顿。未有合法故障调用、代表性负载和校准前不跑性能矩阵；整体论文目标仍`in_progress`。
 
 本轮研究`completed`：[目标授权撤销与旧访问退出](../../experiments/target_retirement_contract/README.md)，平台保持`a30296c`。12份固定源码/12个精确原函数/16项主张核验通过；mlx5正常MR撤销明确提供DMA退出强保证，弱改key基线不成立。RXE快速MR失效、普通USER注销和异常超时必须分开；CPU替身分支不是合法应用并发、真实DMA或生产漏洞。现代共享主窗口没有免费按专家撤权依据，整MR退出须保留为强基线。
 

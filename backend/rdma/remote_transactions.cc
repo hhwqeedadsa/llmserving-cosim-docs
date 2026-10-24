@@ -2,6 +2,7 @@
 #include "transaction_effect_order.hh"
 #include "bounded_buffers.hh"
 #include "memory_registrations.hh"
+#include "application_window_validation.hh"
 
 namespace moe_rdma {
 static int64_t MemoryNow(){return ns3::Simulator::Now().GetNanoSeconds();}
@@ -86,10 +87,34 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     memory_.ConfigureRegistrations();
     for(const auto& r:registrations)memory_.RegisterAccess(r);
   }
+  ValidateApplicationWindows(input);
+  application_window_mode_=input.contains("application_window_model");
+  for(const auto& v:ApplicationWindowViews(input))application_windows_.Add(v);
   transport_.changed=[this](){
     if(bounded_buffers_)for(const auto& [id,c]:connections_)Pump(id);
     if(changed)changed();
   };
+}
+void RemoteTransactions::CheckApplicationUse(const Json& input) const {
+  if(!application_window_mode_)return;
+  const auto owner=LocalOwner(input);
+  for(const auto& value:input.value("application_uses",Json::array())) {
+    const auto& v=application_windows_.Get(value.get<uint64_t>());
+    Require(v.owner==owner && !v.closed,"application use requires owned open view");
+  }
+}
+void RemoteTransactions::AcquireApplicationUse(const Json& input) {
+  if(!application_window_mode_)return;
+  const auto ids=input.value("application_uses",std::vector<uint64_t>{});
+  application_windows_.Acquire(input.at("id"),LocalOwner(input),ids);
+  if(!ids.empty())application_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},
+    {"operation",input.at("id")},{"kind","acquire"},{"views",ids}});
+}
+void RemoteTransactions::ReleaseApplicationUse(uint64_t id) {
+  if(!application_window_mode_)return;
+  const auto ids=application_windows_.Release(id);
+  if(!ids.empty())application_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},
+    {"operation",id},{"kind","release"},{"views",ids}});
 }
 unsigned RemoteTransactions::LocalOwner(const Json& input) const {
   if(input.value("kind",std::string())=="local")return input.at("rank").get<unsigned>();
@@ -97,6 +122,7 @@ unsigned RemoteTransactions::LocalOwner(const Json& input) const {
 }
 Json RemoteTransactions::LocalWaits(const Json& input) const {
   Json out=Json::array();
+  CheckApplicationUse(input);
   if(!input.contains("local_wait"))return out;
   const auto owner=LocalOwner(input);
   const auto& waits=input.at("local_wait");
@@ -139,6 +165,7 @@ void RemoteTransactions::ConsumeConditions(const Json& input,const Json& observa
 }
 void RemoteTransactions::AdmitLocal(const Json& input) {
   Require(input.at("kind")=="local","local admission requires local kind");
+  CheckApplicationUse(input);
   if(input.contains("copy")) {
     const auto id=input.at("id").get<uint64_t>();auto copy=Copy(input);
     Require(!local_copies_.count(id) && local_copies_.size()<16,"invalid local copy identity/budget");
@@ -147,9 +174,10 @@ void RemoteTransactions::AdmitLocal(const Json& input) {
     memory_.CheckWritable(copy.target.owner,copy.target.key,copy.target.address,copy.target.bytes);
     ConsumeConditions(input,LocalWaits(input));
     memory_.AcquireRead(65536+id,copy.source);memory_.AcquireWrite(id,copy.target);
-    local_copies_.emplace(id,copy);LocalMemoryEvent(id,"acquired",copy);return;
+    local_copies_.emplace(id,copy);LocalMemoryEvent(id,"acquired",copy);AcquireApplicationUse(input);return;
   }
   ConsumeConditions(input,LocalWaits(input));
+  AcquireApplicationUse(input);
 }
 RemoteTransactions::LocalCopy RemoteTransactions::Copy(const Json& input) const {
   Require(local_memory_mode_ && input.at("kind")=="local","copy requires v4 local node");
@@ -195,13 +223,22 @@ void RemoteTransactions::StartLocal(const Json& input) {
   LocalMemoryEvent(id,"captured",copy,&copy.captured);
 }
 void RemoteTransactions::CompleteLocal(const Json& input) {
-  if(!input.contains("copy"))return;
+  if(input.contains("release_window")) {
+    Require(application_window_mode_,"release window requires model");
+    const auto id=input.at("release_window").get<uint64_t>();
+    application_windows_.Close(id,input.at("rank"));const auto& v=application_windows_.Get(id);
+    application_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"operation",input.at("id")},
+      {"kind","close"},{"view",id},{"owner",v.owner},{"window_key",v.key},
+      {"remaining_application_refs",application_windows_.References(v.owner,v.key)}});
+  }
+  if(!input.contains("copy")){ReleaseApplicationUse(input.at("id"));return;}
   const auto id=input.at("id").get<uint64_t>();auto& copy=local_copies_.at(id);
   Require(copy.started && !copy.completed,"invalid local copy completion");
   memory_.CommitWrite(id,copy.captured);LocalMemoryEvent(id,"committed",copy,&copy.captured);
   memory_.ReleaseRead(65536+id);memory_.ReleaseWrite(id);copy.completed=true;
   LocalMemoryEvent(id,"released",copy);
   if(bounded_buffers_)std::vector<uint8_t>().swap(copy.captured);
+  ReleaseApplicationUse(id);
 }
 RemoteMemory::ReadLease RemoteTransactions::Source(const Json& input) const {
   Require(source_mode_ && input.at("verb")=="put" && !input.contains("hex"),"source requires v3 put without hex");
@@ -258,6 +295,7 @@ bool RemoteTransactions::QueueFenceReady(const Json& input) {
 void RemoteTransactions::Submit(const Json& input) {
   const auto id=input.at("id").get<uint64_t>(),connection=input.at("connection").get<uint64_t>();
   Require(operations_.size()<32 && !operations_.count(id) && connections_.count(connection),"invalid transaction work");
+  CheckApplicationUse(input);
   auto& c=connections_.at(connection);
   Operation op;
   if(explicit_submission_) {
@@ -290,6 +328,7 @@ void RemoteTransactions::Submit(const Json& input) {
   // memory. Source operation truth never supplies a value to the predicates.
   ConsumeConditions(input,observations);
   if(op.has_source) {memory_.AcquireRead(id,op.source);SourceEvent(id,"acquired",op.source);}
+  AcquireApplicationUse(input);
   c.operations.push_back(id);operations_.emplace(id,std::move(op));Pump(connection);
 }
 void RemoteTransactions::Pump(uint64_t connection) {
@@ -383,6 +422,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
     if(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0))break;
     op.completed=MemoryNow();c.queue.CompleteThrough(op.ticket+1);
     if(op.has_source) {memory_.ReleaseRead(id);SourceEvent(id,"released",op.source);}
+    ReleaseApplicationUse(id);
   }
   Pump(connection);if(changed)ns3::Simulator::ScheduleNow(changed);
 }
@@ -394,7 +434,7 @@ bool RemoteTransactions::Occurred(uint64_t id,const std::string& event) const {
   Require(event=="completed","unsupported transaction event");return it->second.completed>=0;
 }
 bool RemoteTransactions::Drained() const {
-  if(!memory_.ReadLeases().empty() || !memory_.WriteLeases().empty())return false;
+  if(!memory_.ReadLeases().empty() || !memory_.WriteLeases().empty() || !application_windows_.Drained())return false;
   for(const auto& item:connections_)if(!item.second.queue.Drained() || !item.second.requests.Empty() || !item.second.responses.Empty())return false;
   return transport_.Drained();
 }
@@ -437,6 +477,21 @@ Json RemoteTransactions::Report() const {
     out["registration_model"]={{"mode","nic_scoped_aliases/1"}};out["registrations"]=Json::array();
     for(const auto& r:memory_.Registrations())out["registrations"].push_back({{"id",r.id},{"owner",r.owner},{"nic",r.nic},
       {"key",r.key},{"window_key",r.window_key},{"address",r.address},{"bytes",r.bytes},{"allow_atomic",r.atomic}});
+  }
+  if(application_window_mode_) {
+    Json views=Json::array(),domains=Json::array();std::set<std::pair<unsigned,uint32_t>> backing;
+    for(const auto& [id,v]:application_windows_.Views()) {
+      views.push_back({{"id",id},{"owner",v.owner},{"window_key",v.key},{"address",v.address},{"bytes",v.bytes},
+        {"closed",v.closed},{"active_operations",v.users}});backing.emplace(v.owner,v.key);
+    }
+    for(const auto& [owner,key]:backing) {
+      const auto refs=application_windows_.References(owner,key);Json aliases=Json::array();
+      for(const auto& r:memory_.Registrations())if(r.owner==owner && r.window_key==key)aliases.push_back(r.id);
+      domains.push_back({{"owner",owner},{"window_key",key},{"application_refs",refs},{"registration_ids",aliases},
+        {"state",refs?"application_refs_live":"no_application_refs_provider_pending"}});
+    }
+    out["application_windows"]={{"mode","local_views/1"},{"views",views},{"backing_domains",domains},{"events",application_events_},
+      {"provider_retirement_modeled",false},{"scope","declared local application views only; static NIC permissions remain active; not public deregistration, MR/DMA retirement or safe storage reuse"}};
   }
   for(const auto& item:connections_) {
     const auto q=item.second.queue.Snapshot();

@@ -61,6 +61,7 @@ class PersistentStreams {
     std::unique_ptr<Reference> reference;
     std::unique_ptr<moe_cosim::SourceRecovery> recovery;
     ns3::EventId recovery_event;
+    int64_t failure_ns=-1;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth,unsigned maximum)
       : src(s),dst(d),plane(p),source_nic(sn),destination_nic(dn),wire_port(w),queue(depth,maximum) {}
   };
@@ -102,6 +103,8 @@ class PersistentStreams {
   void RecoveryTimeout(uint64_t stream);
   void DuplicateAck(Stream&, ns3::CustomHeader&, ns3::Ptr<ns3::RdmaRxQueuePair>);
   void RecoveryRecord(Stream&, unsigned code);
+  void TerminalFeedback(Stream&,ns3::Ptr<const ns3::Packet>,unsigned protocol,uint64_t sequence);
+  bool WireIdle() const;
   static void Tx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   static void Rx(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
   static void Drop(PersistentStreams*,unsigned,unsigned,ns3::Ptr<const ns3::Packet>);
@@ -125,5 +128,8 @@ class PersistentStreams {
   std::unique_ptr<RecoveryRecords> recovery_records_;
   uint64_t duplicate_acks_=0, old_feedback_=0;
   int64_t failed_stream_=-1, failure_ns_=-1;
+  bool isolate_failures_=false;
+  uint64_t terminal_feedback_count_=0;
+  Json terminal_feedback_=Json::array();
 };
 }

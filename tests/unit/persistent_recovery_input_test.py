@@ -36,4 +36,15 @@ class RecoveryInput(unittest.TestCase):
   w=json.loads((ROOT/'examples/scaleout_rdma_transactions/work.json').read_text());w['transport_recovery']=self.r
   self.p['faults']=[dict(node=4,port=0,message_id=1,kind='ack',sequence=48,count=1,start_ns=0,end_ns=5000000)]
   transactions(self.t,self.p,w)
+ def test_exhaustion_policy_is_optional_and_shared_with_transactions(self):
+  for policy in ['stop_simulation','isolate_stream']:
+   w=deepcopy(self.w);w['transport_recovery']['on_exhausted']=policy
+   validate(self.t,self.p,w)
+   tx=json.loads((ROOT/'examples/scaleout_rdma_transactions/work.json').read_text())
+   tx['transport_recovery']=w['transport_recovery'];transactions(self.t,self.p,tx)
+ def test_exhaustion_policy_does_not_accept_other_types_or_unknown_values(self):
+  for policy in [None,True,0,[],{},'isolate_connection','retry_forever']:
+   with self.subTest(policy=policy):
+    w=deepcopy(self.w);w['transport_recovery']['on_exhausted']=policy
+    with self.assertRaises(ValueError):validate(self.t,self.p,w)
 if __name__=='__main__':unittest.main()

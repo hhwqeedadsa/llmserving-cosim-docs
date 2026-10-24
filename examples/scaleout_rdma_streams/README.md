@@ -161,3 +161,9 @@ TX钩子发生在该包的`PktSent`更新之前：`next_avail_ns`仍是此前状
 输出`persistent_transport.recovery`包括各stream的已发布/实际已发/ACK前缀、截止时间、重试、可选RTT估计、重复ACK计数及失败原因。`events`沿用源端恢复列名，其中`message_id`同样表示stream；`prefix_published`是事件5，`complete`仅表示当前已发布前缀确认，不表示连接关闭。记录完整性由`complete/omitted_events`给出。`source_packets`统计全部实际重传，`inflight_packets/physical_drained/closed`区分排空与关闭。可与显式独立CNP参考模式组合。
 
 同一字段也支持事务v1—v5及v4/v5在线会话，真实字节重传不重复执行远端put/fetch-add。MRT1仍是功能编码，接收不等于GPU可见。能力与边界见[平台验收](../../fixtures/persistent_recovery/README.md)；这不是新拥塞控制或恢复算法的性能结论。
+
+`transport_recovery` 可选 `"on_exhausted":"isolate_stream"`，让一条源端单向流耗尽重试后，其他流仍在同一网络上执行；默认值 `stop_simulation` 保持原先全局停止。故障源从本地发送调度器移出，保留连接、真实序号和未确认工作。失败后才就绪的工作仍可在原有有限预算内入队，但保持未发布；不会重新发包或释放信用。未完成的事务源读租约继续保留。已经发出的包仍可能在目标写入或产生真实回复；迟到 ACK/NACK/CNP 仅记录，不恢复失败源。对端不会因此自动获得错误通知。
+
+使用 [work-isolation.json](work-isolation.json) 和 [rdma-isolation.json](rdma-isolation.json) 可检查同一GPU/NIC上的两条连接：stream0耗尽后冻结，stream1在100微秒才就绪并继续完成；另有一项故障流工作留在队列中。沿用本页运行命令替换 `--config/--protocol`，预期退出1，查看输出目录的部分 `result.json`。这是人工故障功能例，声明的超时与本地等待均非硬件测量。
+
+隔离失败仍退出1并保存部分 `result.json`，不表示整个任务成功，也不能正常Close。传输结果中的 `recovery.failures` 列出全部本地源失败，旧 `failure` 保留首个失败；`source_isolation` 分别记录 `wire_idle`（在途包、设备队列与待生成通知排空）、`healthy_registered_work_drained`（已入队的健康流工作已ACK）和 `failed_resources_released:false`。健康条件不包含尚未满足依赖而未入队的工作。`terminal_feedback` 保存有界迟到反馈，`terminal_feedback_packets` 为总数，`terminal_feedback_complete` 表示是否完整。线端空闲不代表远端退出证书，也不代表失败源资源可复用。见[隔离验收](../../fixtures/source_stream_isolation/README.md)。

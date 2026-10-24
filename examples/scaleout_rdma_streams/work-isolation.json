@@ -1,0 +1,81 @@
+{
+  "schema_version": "moe-rdma-stream-work/3",
+  "limits": {
+    "max_streams": 2,
+    "max_work": 8
+  },
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "transport_recovery": {
+    "mode": "go_back_n/1",
+    "initial_rto_ns": 10000,
+    "max_rto_ns": 40000,
+    "max_retries": 2,
+    "max_events": 10000,
+    "on_exhausted": "isolate_stream"
+  },
+  "streams": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21000,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 1,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2
+    }
+  ],
+  "work": [
+    {
+      "id": 0,
+      "kind": "write",
+      "stream": 0,
+      "bytes": 32,
+      "after": []
+    },
+    {
+      "id": 10,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 100000,
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "write",
+      "stream": 1,
+      "bytes": 32,
+      "after": [
+        {
+          "work": 10,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "write",
+      "stream": 0,
+      "bytes": 16,
+      "after": [
+        {
+          "work": 10,
+          "event": "completed"
+        }
+      ]
+    }
+  ]
+}

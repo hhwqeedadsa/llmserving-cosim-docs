@@ -32,7 +32,10 @@ def validate(topology, protocol, config):
         require(isinstance(c,dict) and c.get('mode')=='go_back_n/1','invalid persistent recovery mode')
         require('history' not in c,'persistent recovery retains per-connection evidence; history seeds unsupported')
         from .scaleout_recovery_config import validate as validate_recovery
-        validate_recovery(dict(c,mode='go_back_n'),budget['max_sim_ns'])
+        legacy=dict(c,mode='go_back_n')
+        policy=legacy.pop('on_exhausted','stop_simulation')
+        require(policy in ('stop_simulation','isolate_stream'),'invalid persistent on_exhausted policy')
+        validate_recovery(legacy,budget['max_sim_ns'])
     local_mode=config['schema_version'].endswith('/3')
     if local_mode:
         fields(config['local_model'],'mode duration_source','local model')

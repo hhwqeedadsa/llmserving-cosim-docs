@@ -21,8 +21,11 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
           (fabric_.fault_rules_.empty() || !recovery.is_null()),"stream faults require explicit persistent recovery; legacy sends/admission/recovery excluded");
   if(!recovery.is_null()) {
     const auto& c=recovery;
-    Require(c.is_object() && c.size()==(c.contains("rtt_estimator")?6u:5u) && c.at("mode")=="go_back_n/1",
+    Require(c.is_object() && c.size()==5u+unsigned(c.contains("rtt_estimator"))+unsigned(c.contains("on_exhausted")) && c.at("mode")=="go_back_n/1",
             "invalid persistent recovery mode/fields");
+    const auto policy=c.value("on_exhausted",std::string("stop_simulation"));
+    Require(policy=="stop_simulation" || policy=="isolate_stream","invalid persistent on_exhausted policy");
+    isolate_failures_=policy=="isolate_stream";
     auto integer=[&](const char* key,int64_t low,int64_t high) {
       const auto& v=c.at(key);Require(v.is_number_integer() && v>=low && v<=high,"invalid persistent recovery integer");
       return v.get<int64_t>();
@@ -183,20 +186,43 @@ void PersistentStreams::RecoveryRecord(Stream& s,unsigned code) {
 void PersistentStreams::ArmRecovery(Stream& s) {
   Simulator::Cancel(s.recovery_event);
   const auto deadline=s.recovery->Timer().Deadline();
-  if(deadline>=0 && failed_stream_<0 && !closed_)
+  if(deadline>=0 && s.failure_ns<0 && !closed_)
     s.recovery_event=Simulator::Schedule(NanoSeconds(deadline-StreamNow()),&PersistentStreams::RecoveryTimeout,this,s.qp->GetTag());
 }
 void PersistentStreams::RecoveryTimeout(uint64_t id) {
   auto& s=streams_.at(id);const auto expiry=s.recovery->Expire(StreamNow());
   recovery_records_->Rtt(StreamNow(),3,id,0,0);
   if(expiry==moe_cosim::RetransmissionTimer::Expiry::Exhausted) {
-    failed_stream_=id;failure_ns_=StreamNow();RecoveryRecord(s,4);
+    s.failure_ns=StreamNow();
+    if(failed_stream_<0){failed_stream_=id;failure_ns_=StreamNow();}
+    RecoveryRecord(s,4);
+    if(isolate_failures_) {
+      // Stop only this local producer. Keep the QP map and all true sequence
+      // state; removal does not retract already transmitted remote writes.
+      auto& nic=fabric_.drivers_[s.src]->m_rdma->m_nic[s.source_nic];
+      auto& group=nic.qpGrp->m_qps;
+      group.erase(std::remove(group.begin(),group.end(),s.qp),group.end());
+      Simulator::Cancel(s.qp->mlx.m_eventUpdateAlpha);Simulator::Cancel(s.qp->mlx.m_eventDecreaseRate);
+      Simulator::Cancel(s.qp->mlx.m_rpTimer);
+      if(s.reference) {
+        Simulator::Cancel(s.reference->alpha_event);Simulator::Cancel(s.reference->recovery_event);
+        // Receiver NP may still send real CNP for already-in-flight bytes.
+      }
+      nic.dev->TriggerTransmit();Notify();return;
+    }
     for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
     Simulator::Stop();return;
   }
   RecoveryRecord(s,2);
   auto hw=fabric_.drivers_[s.src]->m_rdma;hw->RecoverQueue(s.qp);
   ArmRecovery(s);Pump(s);Notify();
+}
+void PersistentStreams::TerminalFeedback(Stream& s,Ptr<const Packet> packet,unsigned protocol,uint64_t sequence) {
+  ++terminal_feedback_count_;
+  const auto maximum=recovery_config_.at("max_events").get<uint64_t>();
+  if(terminal_feedback_.size()<maximum)
+    terminal_feedback_.push_back({{"time_ns",StreamNow()},{"stream",s.qp->GetTag()},
+      {"source",s.src},{"packet_uid",packet->GetUid()},{"ip_protocol",protocol},{"sequence",sequence}});
 }
 void PersistentStreams::DuplicateAck(Stream& s,CustomHeader& h,Ptr<RdmaRxQueuePair> rx) {
   qbbHeader ack;ack.SetSeq(rx->ReceiverNextExpectedSeq);ack.SetPG(h.udp.pg);
@@ -274,6 +300,10 @@ void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Byt
   Require(!closed_ && streams_.count(stream) && !work_ids_.count(work) && work_ids_.size()<limits_.work &&
           bytes>0 && bytes<=1024*1024,"invalid stream work or work budget");
   auto& s=streams_.at(stream);
+  // Application work may become ready after a local source failure (including
+  // replies triggered by real in-flight requests). Retain it within the same
+  // finite queue budget; Pump keeps the failed producer frozen. Rejecting here
+  // would throw out of a remote receive callback and stop unrelated streams.
   Require(s.submitted_bytes+bytes<=64*1024*1024,"stream byte/sequence budget exceeded");
   const auto ticket=s.queue.Reserve(work,work);
   Work w;w.id=work;w.bytes=bytes;w.ticket=ticket;w.ready=StreamNow();
@@ -283,6 +313,7 @@ void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Byt
   Pump(s);Notify();
 }
 void PersistentStreams::Pump(Stream& s) {
+  if(s.failure_ns>=0)return;
   Require(fabric_.drivers_[s.src]->m_rdma->GetQp(s.qp->dip.Get(),s.wire_port,3)==s.qp,"persistent QP identity changed");
   while(s.published_prefix<s.work.size() && s.queue.CanPrepare(s.work[s.published_prefix].ticket)) {
     auto& w=s.work[s.published_prefix++];
@@ -329,6 +360,7 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     auto s=ByPort(h.cnp.fid);
     Require(s && node==s->src && h.sip==s->qp->dip.Get() && h.dip==s->qp->sip.Get() &&
             h.cnp.qIndex==3 && h.cnp.ecnBits==3,"unexpected independent CNP");
+    if(s->failure_ns>=0) {TerminalFeedback(*s,packet,h.l3Prot,0);Notify();return 0;}
     SampleRate(*s,3,packet,0,packet->GetSize(),1);
     s->reference->rp.Cnp(StreamNow());ApplyReferenceRate(*s);ScheduleRp(*s);
     ReferenceLog(*s,"cnp_received",packet);SampleRate(*s,4,packet,0,packet->GetSize(),1);
@@ -336,6 +368,10 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
   }
   if(h.l3Prot==0xFC || h.l3Prot==0xFD) {
     auto s=Match(node,h,true);Require(s,"unexpected ACK in exclusive stream execution");
+    if(s->failure_ns>=0) {
+      Require(h.ack.seq<=s->recovery->Timer().High(),"terminal ACK covers unsent bytes");
+      TerminalFeedback(*s,packet,h.l3Prot,h.ack.seq);Notify();return 0;
+    }
     if(s->recovery) {
       const bool progress=s->recovery->Confirm(h.ack.seq,StreamNow(),h.l3Prot==0xfd);
       recovery_records_->Rtt(StreamNow(),h.l3Prot==0xfd?2:1,s->qp->GetTag(),h.ack.seq,0);
@@ -398,6 +434,7 @@ void PersistentStreams::CheckAccepted(Stream& s) {
 Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   auto found=streams_.find(qp->GetTag());Require(found!=streams_.end() && found->second.qp==qp,"foreign QP in stream packet generator");
   auto& s=found->second;
+  Require(s.failure_ns<0,"failed source stream remained in NIC scheduler");
   // Sequence lookup also handles native NACK rewind; a forward-only TX cursor
   // would silently select the wrong work after RecoverQueue.
   const auto end=s.work.begin()+s.published_prefix;
@@ -463,9 +500,13 @@ void PersistentStreams::Notify() {
 }
 bool PersistentStreams::Drained() const {
   if(failed_stream_>=0)return false;
-  if(inflight_)return false;
   for(const auto& item:streams_)if(!item.second.queue.Drained() || item.second.qp->snd_una!=item.second.qp->m_size ||
       (item.second.reference && item.second.reference->np.Pending()))return false;
+  return WireIdle();
+}
+bool PersistentStreams::WireIdle() const {
+  if(inflight_)return false;
+  for(const auto& item:streams_)if(item.second.reference && item.second.reference->np.Pending())return false;
   for(const auto& ports:fabric_.ports_)for(const auto& p:ports)if(p.device && p.device->GetQueue()->GetNBytesTotal())return false;
   for(const auto& driver:fabric_.drivers_)for(const auto& nic:driver->m_rdma->m_nic)
     if(nic.dev && nic.dev->GetRdmaQueue()->m_ackQ->GetNPackets())return false;
@@ -509,6 +550,18 @@ Json PersistentStreams::Report() const {
     r["identity_scope"]="message_id in records and fault rules means persistent stream ID; sequences cover the whole connection";
     r["complete_scope"]="complete denotes ACKed published prefix; connection persists until explicit Close";
     if(failed_stream_>=0)r["failure"]={{"reason","retry_exhausted"},{"stream",failed_stream_},{"time_ns",failure_ns_}};
+    if(isolate_failures_) {
+      r["failures"]=Json::array();bool healthy_drained=true;
+      for(const auto& [id,s]:streams_) {
+        if(s.failure_ns>=0)r["failures"].push_back({{"stream",id},{"source",s.src},{"time_ns",s.failure_ns}});
+        else if(!s.queue.Drained() || s.qp->snd_una!=s.qp->m_size)healthy_drained=false;
+      }
+      result["source_isolation"]={{"scope","source stream only; no peer failure notification or write revocation"},
+        {"wire_idle",WireIdle()},{"healthy_registered_work_drained",healthy_drained},
+        {"failed_resources_released",false},{"terminal_feedback_packets",terminal_feedback_count_},
+        {"terminal_feedback_complete",terminal_feedback_count_==terminal_feedback_.size()},
+        {"terminal_feedback",terminal_feedback_}};
+    }
     result["recovery"]=r;
   }
   if(reference_limit_) {

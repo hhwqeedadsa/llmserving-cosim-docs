@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "platform_base": "7d5d468",
+  "isolated_failure_cases": 13,
+  "independent_source_packets": 132,
+  "independent_terminal_feedback": 39,
+  "independent_target_effects": 13,
+  "tampering_rejections": 3,
+  "distinct_related_unit_tests": 46,
+  "default_stream_and_transaction_complete_reports_byte_equal": true,
+  "public_regression_commands": {
+    "streams": 7,
+    "transactions": 8,
+    "session": 3,
+    "prefix": 32,
+    "effect_order": 4
+  },
+  "fixed_dependencies": 13,
+  "late_submission_initial_failure_preserved": true,
+  "actual_session_healthy_completion_ns": 112090,
+  "archive": {
+    "passed": true,
+    "sha256": "bbce33410746b66343080f7f6ae54f7a0f32531dc3b18c3e161feb25645a14ee",
+    "archive_bytes": 14418209,
+    "plain_bytes": 70528755,
+    "members": 1483,
+    "bundled_ns3_libraries": 8,
+    "scope": "source and prebuilt runtime replay; not offline third-party rebuild"
+  },
+  "recovery": {
+    "passed": true,
+    "network_replays": 3,
+    "complete_results_equal_except_library_directory": true,
+    "offline_audit_byte_equal": true,
+    "all_members_hash_unchanged": true,
+    "source": "/dev/shm/moe-source-isolation-20261024/restored/source",
+    "cwd": "/dev/shm/moe-source-isolation-20261024/restore-replay/empty",
+    "packaged_ns3_libraries": 8,
+    "scope": "prebuilt replay; host loader/glibc/libstdc++ still required"
+  },
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/source_stream_isolation_checkpoint_20261024/checkpoint.tar.gz",
+  "unique_actual_monitor_records": 114,
+  "conservative_nested_monitor_seconds": 165.88832274265587,
+  "peak_sampled_group_rss_bytes": 653324288,
+  "task_storage": {
+    "apparent_bytes": 156721661,
+    "allocated_bytes": 162717696
+  },
+  "persistent_storage": {
+    "apparent_bytes": 14660717,
+    "allocated_bytes": 14675968
+  },
+  "combined_budget_charge_bytes": 177393664,
+  "budget": {
+    "seconds": 450,
+    "bytes": 201326592,
+    "per_command_seconds": 60,
+    "per_command_rss_bytes": 1073741824
+  },
+  "research_scope": "functional correctness only; no MoE completion/performance/hardware/innovation claim"
+}

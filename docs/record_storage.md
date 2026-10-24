@@ -428,3 +428,5 @@ A3 资源模板的原生 STORE 结果在 `transfers` 行内附加 `local_facts`�
 native的 `message_resources` 在图激活后记录，`message_resources_final` 在Run正常返回后记录。`registered_messages` 是整个运行累计保留的逻辑消息数；`send_posts/recv_posts` 是应用提交数，`send_callbacks/recv_callbacks` 是已触发的完成回调数；`outstanding_*_callbacks` 为前两者之差。它们不是物理QP存活数、GPU可见状态或逐包计数，未来层RECV可能提前登记。超时只能使用最后一份已有快照，不能外推终止瞬间的计数。`ns3_events.processed_events` 使用锁定ns-3的 `Simulator::GetEventCount()`，也包含非包事件，不能当数据包数。
 
 持久恢复记录位于stream结果`persistent_transport.recovery`或事务结果`transactions.transport.recovery`。源端序号、字节、时间、重试与记录完整性规则见[持久恢复输出](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)；这些路径中的message_id解释为连接stream ID，complete事件表示当前已发布前缀ACK，并非连接关闭。
+
+显式 `on_exhausted:isolate_stream` 时，同一传输对象新增 `source_isolation`，恢复对象新增全部源端 `failures`；字段、迟到反馈截断及未释放资源的解释见上述持久恢复输出。默认全局停止模式不新增这些结果字段。源端失败不撤回在途写，也不通知对端，不能将它当作安全重用接收窗口的依据。

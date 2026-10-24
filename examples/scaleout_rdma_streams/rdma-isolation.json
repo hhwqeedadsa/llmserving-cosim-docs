@@ -1,0 +1,40 @@
+{
+  "schema_version": "moe-scaleout-rdma/1",
+  "cc_mode": 1,
+  "payload_bytes": 1000,
+  "chunk_bytes": 4000,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "100000000000": {
+      "kmin_bytes": 32768,
+      "kmax_bytes": 131072,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "packet_capture": {
+    "nodes": [
+      0,
+      1,
+      4
+    ],
+    "start_ns": 0,
+    "end_ns": 5000000,
+    "max_events": 30000,
+    "wire_headers": true
+  },
+  "faults": [
+    {
+      "node": 4,
+      "port": 0,
+      "message_id": 0,
+      "kind": "data",
+      "sequence": 0,
+      "count": 10,
+      "start_ns": 0,
+      "end_ns": 5000000
+    }
+  ]
+}

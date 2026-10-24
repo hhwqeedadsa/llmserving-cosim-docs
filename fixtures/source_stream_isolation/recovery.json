@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "network_replays": 3,
+  "complete_results_equal_except_library_directory": true,
+  "offline_audit_byte_equal": true,
+  "all_members_hash_unchanged": true,
+  "source": "/dev/shm/moe-source-isolation-20261024/restored/source",
+  "cwd": "/dev/shm/moe-source-isolation-20261024/restore-replay/empty",
+  "packaged_ns3_libraries": 8,
+  "scope": "prebuilt replay; host loader/glibc/libstdc++ still required"
+}

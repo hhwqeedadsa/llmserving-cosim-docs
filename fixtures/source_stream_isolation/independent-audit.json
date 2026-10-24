@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "cases": {
+    "accept/delayed-healthy/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    },
+    "accept/healthy-own-recovery/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    },
+    "accept/independent-cnp/result.json": {
+      "source_packets": 40,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    },
+    "accept/late-ack-target-effect/result.json": {
+      "source_packets": 4,
+      "terminal_feedback": 4,
+      "target_effects": 2,
+      "active_leases": 2
+    },
+    "accept/response-source-failure/result.json": {
+      "source_packets": 7,
+      "terminal_feedback": 0,
+      "target_effects": 2,
+      "active_leases": 0
+    },
+    "accept/transaction-leases/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 2,
+      "active_leases": 1
+    },
+    "accept/two-failures/result.json": {
+      "source_packets": 6,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    },
+    "edges/sparse-leases/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 2,
+      "active_leases": 1
+    },
+    "edges/terminal-cnp/result.json": {
+      "source_packets": 31,
+      "terminal_feedback": 35,
+      "target_effects": 0
+    },
+    "late-submit-after/late-submit/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    },
+    "online-failure/online/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 2,
+      "active_leases": 1
+    },
+    "shared-source/late-generated-response/result.json": {
+      "source_packets": 9,
+      "terminal_feedback": 0,
+      "target_effects": 3,
+      "active_leases": 0
+    },
+    "shared-source/same-nic/result.json": {
+      "source_packets": 5,
+      "terminal_feedback": 0,
+      "target_effects": 0
+    }
+  },
+  "tampering_rejected": [
+    "missing-feedback",
+    "ack-after-failure",
+    "wrong-target-bytes"
+  ]
+}

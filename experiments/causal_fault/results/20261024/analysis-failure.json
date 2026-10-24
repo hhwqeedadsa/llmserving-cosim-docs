@@ -1,0 +1,9 @@
+{
+  "failure": "verifier_v1_assumed_feedback_generation_equals_physical_tx",
+  "evidence": "verification-monitor/stderr.log",
+  "correction": "feedback generation precedes or equals TX; match data at generation time",
+  "network_reruns": 0,
+  "second_failure": "negative test selected a root with no predecessors, so replacing [] with [] was not a mutation",
+  "second_correction": "select first constraint with nonempty prerequisites",
+  "second_evidence": "verification-final-monitor/stderr.log"
+}

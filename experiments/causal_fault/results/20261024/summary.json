@@ -1,0 +1,126 @@
+{
+  "schema_version": "moe-causal-fault-summary/1",
+  "cases": {
+    "healthy-gbn": {
+      "group_completion_ns": 397833,
+      "physical_finish_ns": 401964,
+      "last_write_ack_ns": 397833,
+      "last_write_receive_ns": 391765,
+      "unique_payload_bytes": 2609152,
+      "tx_payload_bytes": 2609152,
+      "timeouts": 0,
+      "peak_reorder_sum_bytes": 0,
+      "packet_events": 52404,
+      "physical_tx": 14466,
+      "physical_drop": 0,
+      "windows": [
+        {
+          "graph_id": "g0.w0",
+          "completion_ns": 160915,
+          "last_merge_ns": 156907
+        },
+        {
+          "graph_id": "g0.w1",
+          "completion_ns": 397833,
+          "last_merge_ns": 391795
+        }
+      ]
+    },
+    "failed-gbn": {
+      "group_completion_ns": 586258,
+      "physical_finish_ns": 586258,
+      "last_write_ack_ns": 586258,
+      "last_write_receive_ns": 580190,
+      "unique_payload_bytes": 2609152,
+      "tx_payload_bytes": 3055872,
+      "timeouts": 2,
+      "peak_reorder_sum_bytes": 0,
+      "packet_events": 58709,
+      "physical_tx": 16195,
+      "physical_drop": 3,
+      "windows": [
+        {
+          "graph_id": "g0.w0",
+          "completion_ns": 325175,
+          "last_merge_ns": 321167
+        },
+        {
+          "graph_id": "g0.w1",
+          "completion_ns": 586258,
+          "last_merge_ns": 580220
+        }
+      ]
+    },
+    "healthy-selective": {
+      "group_completion_ns": 397733,
+      "physical_finish_ns": 401871,
+      "last_write_ack_ns": 397733,
+      "last_write_receive_ns": 391661,
+      "unique_payload_bytes": 2609152,
+      "tx_payload_bytes": 2609152,
+      "timeouts": 0,
+      "peak_reorder_sum_bytes": 0,
+      "packet_events": 52404,
+      "physical_tx": 14466,
+      "physical_drop": 0,
+      "windows": [
+        {
+          "graph_id": "g0.w0",
+          "completion_ns": 160790,
+          "last_merge_ns": 156780
+        },
+        {
+          "graph_id": "g0.w1",
+          "completion_ns": 397733,
+          "last_merge_ns": 391691
+        }
+      ]
+    },
+    "failed-selective": {
+      "group_completion_ns": 576245,
+      "physical_finish_ns": 576245,
+      "last_write_ack_ns": 576245,
+      "last_write_receive_ns": 570173,
+      "unique_payload_bytes": 2609152,
+      "tx_payload_bytes": 2895872,
+      "timeouts": 1,
+      "peak_reorder_sum_bytes": 123344,
+      "packet_events": 55979,
+      "physical_tx": 15449,
+      "physical_drop": 3,
+      "windows": [
+        {
+          "graph_id": "g0.w0",
+          "completion_ns": 301935,
+          "last_merge_ns": 297925
+        },
+        {
+          "graph_id": "g0.w1",
+          "completion_ns": 576245,
+          "last_merge_ns": 570203
+        }
+      ]
+    }
+  },
+  "contrasts": [
+    {
+      "mode": "gbn",
+      "group_delta_ns": 188425,
+      "step_delta_ns": [
+        164260,
+        188425
+      ],
+      "extra_payload_bytes": 446720
+    },
+    {
+      "mode": "selective",
+      "group_delta_ns": 178512,
+      "step_delta_ns": [
+        141145,
+        178512
+      ],
+      "extra_payload_bytes": 286720
+    }
+  ],
+  "scope": "saved legacy contribution-copy reference, declared compute, no ASTRA replay/modern GIN/calibration/holdout"
+}

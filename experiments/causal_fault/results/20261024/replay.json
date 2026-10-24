@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "members_verified": 156,
+  "archive_sha256": "4034021f907e43bdabaea44d249812ff8ba2320d406af79076eba60a280d57f2",
+  "byte_identical": {
+    "analysis": true,
+    "mechanism": true,
+    "verification": true
+  },
+  "new_source_root": true,
+  "empty_cwd": true,
+  "empty_pythonpath": true,
+  "network_executions": 0,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-fault-20261024/restored/source/experiments/causal_fault/analyze.py",
+        "--observed",
+        "/dev/shm/moe-causal-fault-20261024/restored/inputs/observed",
+        "--planned",
+        "/dev/shm/moe-causal-fault-20261024/restored/planned",
+        "--network",
+        "/dev/shm/moe-causal-fault-20261024/restored/network",
+        "--output",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-fault-20261024/restored/empty-cwd",
+      "pythonpath": "",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-fault-20261024/restored/source/experiments/causal_fault/mechanism.py",
+        "--network",
+        "/dev/shm/moe-causal-fault-20261024/restored/network",
+        "--analysis",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-analysis.json",
+        "--output",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-mechanism.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-fault-20261024/restored/empty-cwd",
+      "pythonpath": "",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-fault-20261024/restored/source/experiments/causal_fault/verify.py",
+        "--repository",
+        "/dev/shm/moe-causal-fault-20261024/restored/source",
+        "--stage",
+        "/dev/shm/moe-causal-fault-20261024/restored",
+        "--analysis",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-analysis.json",
+        "--mechanism",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-mechanism.json",
+        "--output",
+        "/dev/shm/moe-causal-fault-20261024/restored/replayed-verification.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-fault-20261024/restored/empty-cwd",
+      "pythonpath": "",
+      "exit_code": 0
+    }
+  ],
+  "scope": "offline verification on this host; original network runtime remains an external dependency"
+}

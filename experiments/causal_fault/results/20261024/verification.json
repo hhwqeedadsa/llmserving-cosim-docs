@@ -1,0 +1,69 @@
+{
+  "passed": true,
+  "cases": {
+    "healthy-gbn": {
+      "messages": 76,
+      "original_nodes": 216,
+      "local_work": 70,
+      "group_completion_ns": 397833,
+      "source_packets": 1352,
+      "physical_transmissions": 14466,
+      "physical_drops": 0,
+      "packet_events": 52404,
+      "window_never_binding": true,
+      "actual_callbacks": true,
+      "all_original_dependencies": true
+    },
+    "failed-gbn": {
+      "messages": 76,
+      "original_nodes": 216,
+      "local_work": 70,
+      "group_completion_ns": 586258,
+      "source_packets": 1579,
+      "physical_transmissions": 16195,
+      "physical_drops": 3,
+      "packet_events": 58709,
+      "window_never_binding": true,
+      "actual_callbacks": true,
+      "all_original_dependencies": true
+    },
+    "healthy-selective": {
+      "messages": 76,
+      "original_nodes": 216,
+      "local_work": 70,
+      "group_completion_ns": 397733,
+      "source_packets": 1352,
+      "physical_transmissions": 14466,
+      "physical_drops": 0,
+      "packet_events": 52404,
+      "window_never_binding": true,
+      "actual_callbacks": true,
+      "all_original_dependencies": true
+    },
+    "failed-selective": {
+      "messages": 76,
+      "original_nodes": 216,
+      "local_work": 70,
+      "group_completion_ns": 576245,
+      "source_packets": 1499,
+      "physical_transmissions": 15449,
+      "physical_drops": 3,
+      "packet_events": 55979,
+      "window_never_binding": true,
+      "actual_callbacks": true,
+      "all_original_dependencies": true
+    }
+  },
+  "rejected_tamper_classes": [
+    "ACK_callback",
+    "compute_duration",
+    "dependency_removed",
+    "packet_arrival",
+    "selective_feedback",
+    "latest_predecessor",
+    "queue_witness"
+  ],
+  "raw_route_projection_verified": true,
+  "all_first_dispatch_losses_and_feedback_verified": true,
+  "scope": "source, graph and packet correctness; not hardware calibration, modern fidelity or research novelty"
+}

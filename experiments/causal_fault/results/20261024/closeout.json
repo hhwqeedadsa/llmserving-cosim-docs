@@ -1,0 +1,204 @@
+{
+  "passed": true,
+  "platform_commit": "0477866b195fb3c3e73075a733c9f9370197ad20",
+  "actual_networks": 4,
+  "phase_closed": true,
+  "original_terminal_monitors": 26,
+  "conservative_nested_monitored_wall_seconds": 123.15846383571625,
+  "final_management_wall_reserve_seconds": 10,
+  "peak_process_tree_rss_bytes": 533180416,
+  "stage_restored_archive_persistent_and_result_logical_bytes": 56122033,
+  "stage_restored_archive_persistent_and_result_allocated_bytes": 56852480,
+  "final_source_and_receipt_reserve_bytes": 1048576,
+  "limits": {
+    "cumulative_monitored_seconds": 480,
+    "cumulative_artifact_bytes": 268435456,
+    "per_command_wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "execution_artifact_bytes": 100663296,
+    "simulated_ns": 5000000,
+    "result_json_bytes": 16777216
+  },
+  "checkpoint": {
+    "sha256": "4034021f907e43bdabaea44d249812ff8ba2320d406af79076eba60a280d57f2",
+    "compressed_bytes": 3060958,
+    "members": 156,
+    "uncompressed_bytes": 28614045,
+    "scope": "four saved network results and standalone standard-library offline source replay; no native runtime/clean build/modern fidelity"
+  },
+  "persistent_archive_hash_verified": true,
+  "all_archive_members_reverified": true,
+  "six_current_research_python_files_equal_archived": true,
+  "three_offline_jsons_byte_identical": true,
+  "prepared_inputs_after_guard_change_byte_identical": true,
+  "binary_and_eight_libraries_hash_unchanged": true,
+  "fixed_dependencies_check": "dependencies-monitor/stdout.log",
+  "no_platform_or_dependency_changes": true,
+  "no_build_install_download_gpu_or_push": true,
+  "no_successful_network_rerun": true,
+  "failed_offline_checks_preserved": [
+    "verification-monitor",
+    "verification-final-monitor"
+  ],
+  "remaining_original_monitored_processes": 0,
+  "scope": "bounded saved-DAG reference experiment; original native runtime external; modern fidelity/calibration/generalization/full thousand-GPU and paper novelty unresolved",
+  "monitor_receipts": [
+    {
+      "path": "frozen-platform-guard-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.26329774782061577
+    },
+    {
+      "path": "replay-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 22.79651104286313
+    },
+    {
+      "path": "checkpoint-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.9028969462960958
+    },
+    {
+      "path": "verification-final-corrected-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 19.76562463119626
+    },
+    {
+      "path": "verification-final-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 17.378541763871908
+    },
+    {
+      "path": "dependencies-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4594131838530302
+    },
+    {
+      "path": "mechanism-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.008074538782239
+    },
+    {
+      "path": "verification-strong-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 14.293775096535683
+    },
+    {
+      "path": "verification-corrected-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 13.123645175248384
+    },
+    {
+      "path": "verification-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 1.0961729753762484
+    },
+    {
+      "path": "analysis-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.864930920302868
+    },
+    {
+      "path": "failed-selective-network-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.5147783681750298
+    },
+    {
+      "path": "failed-selective-plan-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.14160999841988087
+    },
+    {
+      "path": "healthy-selective-network-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.4885322600603104
+    },
+    {
+      "path": "healthy-selective-plan-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13783600367605686
+    },
+    {
+      "path": "failed-gbn-network-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.287346675992012
+    },
+    {
+      "path": "failed-gbn-plan-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.1351685393601656
+    },
+    {
+      "path": "healthy-gbn-network-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.225255597382784
+    },
+    {
+      "path": "healthy-gbn-plan-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13964843936264515
+    },
+    {
+      "path": "topology-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.1323156524449587
+    },
+    {
+      "path": "run-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 11.634219789877534
+    },
+    {
+      "path": "prepare-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.23547121323645115
+    },
+    {
+      "path": "network/failed-selective/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.1844005957245827
+    },
+    {
+      "path": "network/healthy-selective/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 2.1369490660727024
+    },
+    {
+      "path": "network/failed-gbn/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.9555386491119862
+    },
+    {
+      "path": "network/healthy-gbn/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 1.8565089646726847
+    }
+  ]
+}

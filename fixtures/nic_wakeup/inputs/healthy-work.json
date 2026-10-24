@@ -1,0 +1,77 @@
+{
+  "schema_version": "moe-rdma-stream-work/3",
+  "limits": {
+    "max_streams": 2,
+    "max_work": 16
+  },
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "streams": [
+    {
+      "id": 2,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21002,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    },
+    {
+      "id": 8,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "wire_port": 21008,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    }
+  ],
+  "work": [
+    {
+      "id": 0,
+      "kind": "write",
+      "stream": 2,
+      "bytes": 5000,
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "write",
+      "stream": 8,
+      "bytes": 3000,
+      "after": []
+    },
+    {
+      "id": 2,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 100,
+      "after": [
+        {
+          "work": 0,
+          "event": "accepted"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "write",
+      "stream": 2,
+      "bytes": 2000,
+      "after": [
+        {
+          "work": 0,
+          "event": "acked"
+        },
+        {
+          "work": 2,
+          "event": "completed"
+        }
+      ]
+    }
+  ]
+}

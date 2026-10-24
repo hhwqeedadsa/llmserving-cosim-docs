@@ -1,0 +1,275 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    },
+    {
+      "id": 1,
+      "src": 4,
+      "dst": 1,
+      "plane": 0,
+      "request_port": 24002,
+      "response_port": 24003,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    }
+  ],
+  "windows": [
+    {
+      "owner": 0,
+      "key": 7,
+      "address": 4096,
+      "bytes": 65536,
+      "allow_atomic": true,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 0,
+          "hex": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132435465768798a9bacbdcedfe0f2031425364758697a8b9cadbecfd0e1f30415263748596a7b8c9daebfc0d1e2f405162738495a6b7c8d9eafb0c1d2e3f5061728394a5b6c7d8e9fa0b1c2d3e4f60718293a4b5c6d7e8f90a1b2c3d4e5f708192a3b4c5d6e7f8091a2b3c4d5e6f8091a2b3c4d5e6f708192a3b4c5d6e7f90a1b2c3d4e5f60718293a4b5c6d7e8fa0b1c2d3e4f5061728394a5b6c7d8e9fb0c1d2e3f405162738495a6b7c8d9eafc0d1e2f30415263748596a7b8c9daebfd0e1f2031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899a"
+        }
+      ]
+    },
+    {
+      "owner": 4,
+      "key": 8,
+      "address": 8192,
+      "bytes": 65536,
+      "allow_atomic": true,
+      "initialization": "zero_fill/1",
+      "segments": [
+        {
+          "offset": 4096,
+          "hex": "0700000000000000"
+        }
+      ]
+    },
+    {
+      "owner": 1,
+      "key": 9,
+      "address": 12288,
+      "bytes": 65536,
+      "allow_atomic": true,
+      "initialization": "zero_fill/1",
+      "segments": []
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 8,
+      "address": 8192,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 2600
+      },
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "fetch_add",
+      "key": 8,
+      "address": 12288,
+      "value": 3,
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 10,
+      "copy": {
+        "source": {
+          "key": 8,
+          "address": 8192,
+          "bytes": 2600
+        },
+        "target": {
+          "key": 8,
+          "address": 16384
+        }
+      },
+      "local_wait": [
+        {
+          "key": 8,
+          "address": 12288,
+          "compare": "eq",
+          "value": 10,
+          "reset_to": 0
+        }
+      ],
+      "after": [
+        {
+          "operation": 1,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "put",
+      "key": 9,
+      "address": 12288,
+      "source": {
+        "key": 8,
+        "address": 16384,
+        "bytes": 2600
+      },
+      "after": [
+        {
+          "operation": 2,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 1000,
+      "copy": {
+        "source": {
+          "key": 7,
+          "address": 4096,
+          "bytes": 2600
+        },
+        "target": {
+          "key": 7,
+          "address": 24576
+        }
+      },
+      "after": [
+        {
+          "operation": 0,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "fetch_add",
+      "key": 9,
+      "address": 16384,
+      "value": 1,
+      "after": [
+        {
+          "operation": 3,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "kind": "local",
+      "rank": 1,
+      "duration_ns": 0,
+      "copy": {
+        "source": {
+          "key": 9,
+          "address": 12288,
+          "bytes": 2600
+        },
+        "target": {
+          "key": 9,
+          "address": 24576
+        }
+      },
+      "local_wait": [
+        {
+          "key": 9,
+          "address": 16384,
+          "compare": "eq",
+          "value": 1,
+          "reset_to": 0
+        }
+      ],
+      "after": [
+        {
+          "operation": 5,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 8,
+      "address": 32768,
+      "hex": "6b00000000000000",
+      "after": [
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    }
+  ],
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "dcqcn_reference": {
+    "mode": "figure7_reference/1",
+    "np_interval_ns": 50000,
+    "alpha_interval_ns": 55000,
+    "recovery_interval_ns": 55000,
+    "recovery_bytes": 10000000,
+    "min_rate_bps": 100000000,
+    "additive_bps": 5000000,
+    "hyper_bps": 50000000,
+    "fast_recovery_rounds": 5,
+    "gain": 0.00390625,
+    "cnp_model_bytes": 48,
+    "max_events": 10000
+  },
+  "transport_recovery": {
+    "mode": "selective_repeat/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 10000,
+    "receive_buffer_bytes": 8192,
+    "inflight_bytes": 4000,
+    "reordering": {
+      "mode": "nack_grace/1",
+      "wait_ns": 16000,
+      "max_events": 10000
+    }
+  }
+}

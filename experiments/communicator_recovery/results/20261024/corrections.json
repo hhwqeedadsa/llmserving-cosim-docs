@@ -1,0 +1,18 @@
+{
+  "schema_version": "communicator-recovery-corrections/1",
+  "source_prepare_failures": [
+    {
+      "reason": "DeepEP cache has ref/tree-source provenance rather than commit.json",
+      "remote_requests_before_failure": 0
+    },
+    {
+      "reason": "resume attempted to recreate already existing provenance directory",
+      "remote_requests_before_failure": 0
+    }
+  ],
+  "initial_compile_failure": "recording NCCL_IF_CONSTEXPR macro duplicated if; corrected to constexpr",
+  "original_function_and_statement_bytes_unchanged": true,
+  "completed_source_requests_repeated": 0,
+  "completed_cpu_records_rerun_for_fix": 0,
+  "failed_artifacts_preserved": true
+}

@@ -13,6 +13,12 @@
 
 ## 当前范围和预算
 
+当前研究`completed`：[通信域恢复与外部GIN内核适用范围](../../experiments/communicator_recovery/README.md)，平台固定`917e42d`。官方窗口注销要求buffer无NCCL访问；已有Revoke和SHRINK_ABORT须保留为强基线。外部devComm创建不自动赋内部abort指针，GIN等待分支与用户内核终止不能合并；没有证明Revoke/Shrink失效或真实GPU挂死。16份固定全文、20摘录、5精确原函数/2语句及208合成CPU条件由独立整数/调用顺序oracle核验；不是整库、合法故障并发、DMA或性能证据。
+
+4次固定小原文请求取得230,030B，无重试；未改平台/依赖、无GPU/provider/ns-3执行。132成员/478,774B检查点保存在`runs/communicator_recovery_checkpoint_20261024/`，新源码根/空cwd离线重编译后，生成源码、208记录、摘录、摘要和核验五份逐字节一致。8类不安全归档在创建目标目录前拒绝，13固定依赖通过。17份原始监控共10.27秒、峰值约129.94MiB；其中3份准备/编译失败原样保留，仅修缓存接续与替身宏，原函数字节未改，不重复成功请求或已完成CPU记录来修检查。原件/恢复/持久副本及256KiB收据预留共8,044,544B，无遗留受监控进程，最终文件管理另预留10秒。包是收尾前快照，之后收据单独保存。见[中文报告](../reviews/通信域恢复与外部GIN内核边界_20261024.md)、[独立核验](../../experiments/communicator_recovery/results/20261024/verification.json)、[离线恢复](../../experiments/communicator_recovery/results/20261024/replay.json)及[预算收尾](../../experiments/communicator_recovery/results/20261024/closeout.json)。仅本地提交不push；本研究阶段完成，整体论文目标仍`in_progress`，不自动启动恢复实现或性能矩阵。
+
+预算：每命令60秒、采样RSS1GiB/地址2GiB/产物16MiB；阶段累计300受监控秒/64MiB（含恢复和持久副本），tmpfs预留8GiB、根盘64MiB。最多6次固定小原文请求，各8秒/响应1MiB，不重试；CPU精确函数检查可使用明确替身，不执行整库、CUDA/provider/ns-3/上游安装脚本，不安装/升级/下载大型数据或二进制。保留失败和原文身份，研究与平台分别提交，仅本地不push。
+
 当前平台`completed`：[应用窗口引用与本地使用寿命](application_window_spec.md)，基线`8f0869a`。v4/v5可选`local_views/1`实现共享物理分配上的本地应用子窗口，source/copy/wait覆盖、实际准入至completed使用、local完成释放引用，静态completed闭包及运行时双重检查。最后引用归零只标provider待处理，真实NIC/rkey仍授权实包，不把视图释放冒充公开注销/安全复用，也不让发送方读取目标窗口状态。
 
 59项不同Python单元、6,668项C++独立断言、CLI/native各18非法条件、13固定依赖检查通过。四种v4/v5/前缀/在线流程均1远端+4本地、12,460ns；目标最后视图300ns释放，实际包6,336ns仍写入，源ACK12,360ns才释放使用。默认新/旧完整result逐字节相同；显式前缀与session除session对象外完整结果相同。Python在线拒绝保留活会话并继续完成，原生整批非法候选保存未执行前缀，均无部分注册/执行；不称生产漏洞或性能收益。
@@ -31,7 +37,7 @@
 
 55成员/164,367B包保存到`runs/registration_fanout_checkpoint_20261024/`，新源码根/空cwd重编译并复算，生成C++、1,120行调用记录、摘录/摘要/核验共5份逐字节一致，3类语义篡改拒绝、13固定依赖检查通过。全部监控正常完成，无新获取、GPU/provider/ns-3执行或平台/依赖变化；预算与hash见[收尾](../../experiments/registration_fanout/results/20261024/closeout.json)，结论见[中文报告](../reviews/共享窗口多连接撤销与部分失败_20261024.md)。180监控秒/32MiB、每命令60秒/1GiB/地址2GiB/16MiB及tmpfs8GiB/根盘64MiB预留保持；最终文件管理保守预留10秒/128KiB，仅本地提交不push。
 
-下一平台门槛：在已实现的本地应用视图/底层域引用之上，继续表达分段—逐连接句柄及provider退出、未知和元数据状态；静态给定共享关系不能代替flags/handles/跨rank协商。当前实际destination_nic由载体检查，但仍无动态注销/重注册、逐句柄退出、并发DMA或实测成本。公开注销结果不能直接作为全覆盖退出事件，算法若需要逐项收据须核清实际接口/可见信息及代价；最后应用引用为0不能授权物理字节复用。保留正常provider强保证、协同排空、独立底层分配及备用窗口强基线，之后按同资源和真实完成检验正常任务停顿。未有合法故障调用、代表性负载和校准前不跑性能矩阵；整体论文目标仍`in_progress`。
+下一平台门槛：先核清内部工作与外部CUDA/GIN生产者由谁停止、哪个完成证据满足无访问前提，再表达Revoke异步完成、剩余rank集合参与Shrink和新资源初始化。之后才接分段—逐连接MR退出、未知/元数据状态、注册/key交换及rank/专家状态重建；这些条件不能共用一个BOOL。静态共享关系不能代替flags/handles/跨rank协商，最后应用引用为0不能授权物理字节复用。保留现有Revoke/Shrink、正常provider强退出、协同排空、独立底层分配及备用窗口强基线，使用同等内存/MR/控制信息和合法调用范围比较正常任务停顿。合法故障并发、代表性负载、实测成本和校准尚缺，不预设恢复收益或启动性能矩阵；整体论文目标仍`in_progress`。
 
 本轮研究`completed`：[目标授权撤销与旧访问退出](../../experiments/target_retirement_contract/README.md)，平台保持`a30296c`。12份固定源码/12个精确原函数/16项主张核验通过；mlx5正常MR撤销明确提供DMA退出强保证，弱改key基线不成立。RXE快速MR失效、普通USER注销和异常超时必须分开；CPU替身分支不是合法应用并发、真实DMA或生产漏洞。现代共享主窗口没有免费按专家撤权依据，整MR退出须保留为强基线。
 

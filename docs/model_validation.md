@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+固定NCCL官方文档要求窗口注销前保证对应buffer无NCCL访问；已有Revoke（保留资源）及SHRINK_ABORT（新通信域不与父域共享资源）必须作为恢复强基线。外部devComm的abort指针选择、GIN等待分支与DeepEP用户内核终止的区别，见[恢复适用性核查](reviews/通信域恢复与外部GIN内核边界_20261024.md)。该研究只执行精确CPU片段及记录替身，未实现真实恢复、证明用户CUDA生产者退出或校准成本。
+
 `local_views/1`依据固定NCCL窗口/底层分配引用关系，只实现输入声明的本地视图和使用寿命：多个视图共享现有存储/注册。未执行可复用flags/handles/跨rank协商，未模拟provider退出、DMA fence或真实注销。最后视图关闭后真实MRT1包仍可通过静态权限写入，这是功能边界，不是上游漏洞。依据见[生命周期核查](reviews/窗口注销合法边界与底层注册复用_20261024.md)，功能验收见[本地窗口](../fixtures/application_windows/README.md)。
 
 `nic_scoped_aliases/1`仅表达目标NIC作用域内的静态远端权限；依据是前期固定NCCL源码核对的同地址按连接/backend注册事实，不能把该事实等同于完整provider模型。人工双NIC实包核验共享字节、子范围、原子权限及反向返回，本地lease和副作用排序不能被rkey别名绕过。它没有模拟PD、查找后并发DMA、注销、重新注册、逐句柄失败或实测成本，不能证明生产漏洞或安全恢复；[验收](../fixtures/nic_registration/README.md)区分功能证据和后续缺项。

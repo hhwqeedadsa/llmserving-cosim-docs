@@ -1,0 +1,202 @@
+[
+  {
+    "end_line": 3383,
+    "id": "SET_FLAGS",
+    "kind": "executed_original",
+    "path": "src/init.cc",
+    "project": "nccl",
+    "sha256": "29a008de037b7a8aba51bb9bd822cc271d5b8e6a00c3fcb5da9abc3a37677c43",
+    "start_line": 3373,
+    "text": "static ncclResult_t setCommAbortFlags(ncclComm_t comm, int value) {\n  // Set abort flags\n  uint32_t uval = static_cast<uint32_t>(value);\n  if (comm->childAbortFlag != nullptr) {\n    COMPILER_ATOMIC_STORE(comm->childAbortFlag, uval, std::memory_order_release);\n    COMPILER_ATOMIC_STORE(comm->childAbortFlagDev, uval, std::memory_order_release);\n  }\n  COMPILER_ATOMIC_STORE(comm->abortFlag, uval, std::memory_order_release);\n  COMPILER_ATOMIC_STORE(comm->abortFlagDev, uval, std::memory_order_release);\n  return ncclSuccess;\n}"
+  },
+  {
+    "end_line": 3422,
+    "id": "REVOKE_ASYNC",
+    "kind": "executed_original",
+    "path": "src/init.cc",
+    "project": "nccl",
+    "sha256": "b0b410a1718ad74864f1a3832265758d22435af29ee7a17a4b2f8c39c82d5d77",
+    "start_line": 3391,
+    "text": "static ncclResult_t commRevokeAsync(struct ncclAsyncJob* job_) {\n  struct ncclCommRevokeAsyncJob* job = (struct ncclCommRevokeAsyncJob*)job_;\n  ncclComm_t comm = job->comm;\n  ncclResult_t res = ncclSuccess;\n  NCCLCHECKGOTO(PtrCheck(comm, \"CommRevokeAsync\", \"comm\"), res, exit);\n  INFO(NCCL_DESTROY, \"CommRevokeAsync START comm %p rank %d nRanks %d nNodes %d localRank %d cudaDev %d\", comm,\n       comm->rank, comm->nRanks, comm->nNodes, comm->localRank, comm->cudaDev);\n  CUDACHECKGOTO(cudaSetDevice(comm->cudaDev), res, exit);\n  NCCLCHECKGOTO(ncclStrongStreamSynchronize(&comm->sharedRes->hostStream), res, exit);\n  NCCLCHECKGOTO(ncclStrongStreamSynchronize(&comm->sharedRes->deviceStream), res, exit);\n  NCCLCHECKGOTO(ncclCommPollEventCallbacks(comm, /*waitSome=*/true), res, exit);\n  NCCLCHECKGOTO(ncclCommPollCallbacks(comm, /*waitSome=*/false), res, exit);\n  {\n    ncclResult_t _tmpret = ncclSuccess;\n    if ((_tmpret = ncclProxyStop(comm)) != ncclSuccess) {\n      INFO(NCCL_DESTROY | NCCL_PROXY, \"comm 0x%\" PRIx64 \" rank %d proxy stop error %d\", comm->commHash, comm->rank,\n           _tmpret);\n    }\n    if (comm->proxyState && comm->proxyRefCountOld == 0 && comm->proxyState->thread.joinable()) {\n      comm->proxyState->thread.join();\n      if (comm->proxyState->threadUDS.joinable()) {\n        // UDS support\n        comm->proxyState->threadUDS.join();\n      }\n    }\n  }\n  NCCLCHECKGOTO(setCommAbortFlags(comm, 0), res, exit);\nexit:\n  (void)ncclCommSetAsyncError(comm, res);\n  INFO(NCCL_DESTROY, \"CommRevokeAsync END comm %p result %d\", comm, res);\n  return res;\n}"
+  },
+  {
+    "end_line": 3679,
+    "id": "SHRINK",
+    "kind": "executed_original",
+    "path": "src/init.cc",
+    "project": "nccl",
+    "sha256": "4a6d5b7f3c9bdf5590a2e1605d6f181dc3117fa839c916c0e7887cfd6998d2e9",
+    "start_line": 3653,
+    "text": "ncclResult_t ncclCommShrink(ncclComm_t comm, int* excludeRanksList, int excludeRanksCount, ncclComm_t* newcomm,\n                            ncclConfig_t* config, int shrinkFlags) {\n  NVTX3_RANGE(NcclNvtxParamsCommShrink)\n  ncclResult_t res = ncclSuccess;\n  NCCLCHECK(ncclGroupStartInternal());\n  // Handle error mode by setting abort flags and waiting for kernels to complete and unset the flags\n  // to avoid bootstrap issues\n  if (shrinkFlags & NCCL_SHRINK_ABORT) {\n    NCCLCHECKGOTO(setCommAbortFlags(comm, 1), res, exit);\n    NCCLCHECKGOTO(ncclStrongStreamSynchronize(&comm->sharedRes->deviceStream), res, exit);\n    NCCLCHECKGOTO(setCommAbortFlags(comm, 0), res, exit);\n  }\n  NCCLCHECKGOTO(ncclCommInitChildComm(comm, newcomm, /*isShrink=*/true, shrinkFlags, /*color=*/0, /*key=*/comm->rank,\n                                      excludeRanksList, excludeRanksCount, config, __func__),\n                res, exit);\n\nexit:\n  (void)ncclGroupErrCheck(res);\n  NCCLCHECK(ncclGroupEndInternal());\n\n  if (newcomm && *newcomm) {\n    NVTX3_RANGE_ADD_PAYLOAD(CommShrink, NcclNvtxParamsCommShrinkSchema,\n                            NVTX3_PAYLOAD(comm->commHash, comm->nRanks, comm->rank, comm->cudaDev, excludeRanksCount));\n  }\n\n  return res;\n}"
+  },
+  {
+    "end_line": 378,
+    "id": "WAIT_CORE",
+    "kind": "executed_original",
+    "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+    "project": "nccl",
+    "sha256": "3a65c28d014143a882eb6f47e4db110367732391bc2041e26c699771ab7a6702",
+    "start_line": 337,
+    "text": "template <bool HasTimeout, enum doca_gpu_dev_verbs_resource_sharing_mode doca_sharing_mode>\nNCCL_DEVICE_INLINE static ncclResult_t waitImplCore(ncclGinCtx ctx, ncclGinRequest_t& request, cuda::memory_order ord,\n                                                    uint32_t* abortFlag, uint64_t timeoutCycles) {\n  using nccl::utility::loadConst;\n  using nccl::utility::testAbort;\n  (void)timeoutCycles; // referenced only when HasTimeout is true\n  ncclGinGdakiRequest& req = reinterpret_cast<ncclGinGdakiRequest&>(request);\n  ncclGinGdakiGPUContext* gdaki = &((struct ncclGinGdakiGPUContext*)ctx.handle)[ctx.contextId];\n  doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + req.peer;\n  if (req.sq_rsvd_index == 0) return ncclSuccess;\n  const doca_gpu_dev_verbs_ticket_t pollIdx = static_cast<doca_gpu_dev_verbs_ticket_t>(req.sq_rsvd_index - 1u);\n\n  // doca_gpu_dev_verbs_wait blocks indefinitely, so it can only be used when\n  // the caller has no deadline AND no abort flag to honor.\n  if NCCL_IF_CONSTEXPR (!HasTimeout) {\n    if (abortFlag == nullptr) {\n      doca_gpu_dev_verbs_wait<doca_sharing_mode>(qp, pollIdx);\n      cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n      return ncclSuccess;\n    }\n  }\n\n  uint32_t steps = 0;\n  uint64_t startCycle = 0;\n  (void)startCycle; // referenced only when HasTimeout is true\n  if NCCL_IF_CONSTEXPR (HasTimeout) startCycle = clock64();\n  NVCC_PRAGMA_UNROLL_DISABLED\n  while (true) {\n    int status = doca_gpu_dev_verbs_poll_one_cq_at<doca_sharing_mode>(qp, pollIdx);\n    if (status == 0) {\n      cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n      return ncclSuccess;\n    }\n    if NCCL_IF_CONSTEXPR (HasTimeout) {\n      if (clock64() - startCycle >= timeoutCycles) return ncclTimeout;\n    }\n    if (testAbort(abortFlag, steps)) {\n      cuda::atomic_thread_fence(ord, cuda::thread_scope_system);\n      return ncclSuccess;\n    }\n  }\n}"
+  },
+  {
+    "end_line": 98,
+    "id": "HOST_TEST_ABORT",
+    "kind": "executed_original",
+    "path": "src/include/nccl_device/utility.h",
+    "project": "nccl",
+    "sha256": "8a7afe984359cdaffcbb7de2487c9e266bb549fd8c9cfac4b0ca5fff1fd0d89e",
+    "start_line": 89,
+    "text": "static NCCL_DEVICE_INLINE bool testAbort(uint32_t* abortFlag, uint32_t& steps) {\n  const uint32_t maxSteps = 10000;\n  if (++steps < maxSteps) {\n    return false;\n  } else {\n    volatile uint32_t* ptr = (volatile uint32_t*)abortFlag;\n    steps = 0;\n    return ptr != nullptr && *ptr != 0;\n  }\n}"
+  },
+  {
+    "end_line": 1510,
+    "id": "EXTERNAL_ABORT_SELECTION",
+    "kind": "executed_original",
+    "path": "src/dev_runtime.cc",
+    "project": "nccl",
+    "sha256": "8f726b357270546be590a0b77a5a26d85f34268b5dfe4c9e1b89362da0816818",
+    "start_line": 1510,
+    "text": "if (isInternal) outDevComm->abortFlag = comm->abortFlagDev;"
+  },
+  {
+    "end_line": 3583,
+    "id": "RESOURCE_SHARING",
+    "kind": "executed_original",
+    "path": "src/init.cc",
+    "project": "nccl",
+    "sha256": "3011bfdf9526c4775a0cdf1b5f40f3bbc0d75318f9a216773cd9d0c9968b2a86",
+    "start_line": 3581,
+    "text": "comm->shareResources =\n      !comm->revokedFlag &&\n      (isShrink ? (!(flags & NCCL_SHRINK_ABORT) && comm->config.shrinkShare) : comm->config.splitShare);"
+  },
+  {
+    "end_line": 182,
+    "id": "revoke_contract",
+    "kind": "static_source",
+    "path": "docs/userguide/source/api/comms.rst",
+    "project": "nccl",
+    "sha256": "d1fc93d721a61a6bcad52409184b200d94f84388e7f0f141d3bfbcde8e6186f6",
+    "start_line": 171,
+    "text": "ncclCommRevoke\n--------------\n\n.. c:function:: ncclResult_t ncclCommRevoke(ncclComm_t comm, int revokeFlags)\n\nRevokes in-flight operations on a communicator without destroying resources. Successful return may be *ncclInProgress* (non-blocking) while revocation completes asynchronously; applications can query *ncclCommGetAsyncError* until it returns *ncclSuccess*.\n\n*revokeFlags* must be set to *NCCL_REVOKE_DEFAULT* (0). Other values are reserved for future use.\n\nAfter revoke completes, the communicator is quiesced and safe for destroy, split, and shrink. Launching new collectives on a revoked communicator returns *ncclInvalidUsage*. Calling *ncclCommFinalize* after revoke is not supported. Resource sharing via *splitShare*/*shrinkShare* is disabled when the parent communicator is revoked.\n\nncclCommFinalize\n"
+  },
+  {
+    "end_line": 125,
+    "id": "shrink_contract",
+    "kind": "static_source",
+    "path": "docs/userguide/source/api/comms.rst",
+    "project": "nccl",
+    "sha256": "273ccda88c5064d417b9183372284d78fca3609cf51be08af65d3cd59f5cdabf",
+    "start_line": 109,
+    "text": "ncclCommShrink\n--------------\n\n.. c:function:: ncclResult_t ncclCommShrink(ncclComm_t comm, int* excludeRanksList, int excludeRanksCount, ncclComm_t* newcomm, ncclConfig_t* config, int shrinkFlags)\n\nThe *ncclCommShrink* function creates a new communicator by removing specified ranks from an existing communicator.\nIt is a collective function that must be called by all participating ranks in the newly created communicator.\nRanks that are part of *excludeRanksList* should not call this function.\nThe original ranks listed in *excludeRanksList* (of size *excludeRanksCount*) will be excluded from the new communicator.\nWithin the new communicator, ranks will be updated to maintain a contiguous set of ids.\nIf the new communicator needs a special configuration, it can be passed as *config*; otherwise, setting config to NULL will make the new communicator inherit the configuration of the parent communicator.\n\nThe *shrinkFlags* parameter controls the behavior of the operation. Use *NCCL_SHRINK_DEFAULT* (or *0*) for normal operation, or *NCCL_SHRINK_ABORT* when shrinking after an error on the parent communicator.\nSpecifically, when using *NCCL_SHRINK_DEFAULT*, there should not be any outstanding NCCL operations on the *comm* to avoid potential deadlocks. Further, if the parent communicator has the flag config.shrinkShare set to 1, NCCL will reuse the parent communicator resources.\nOn the other hand, when using *NCCL_SHRINK_ABORT*, NCCL will automatically abort any outstanding operations on the parent communicator, and no resources will be shared between the parent and the newly created communicator.\n\nncclCommGetUniqueId\n"
+  },
+  {
+    "end_line": 294,
+    "id": "deregister_precondition",
+    "kind": "static_source",
+    "path": "docs/userguide/source/api/comms.rst",
+    "project": "nccl",
+    "sha256": "04477bf63f60736984a91d9866958797d75e85b12680660e92c86edf856b2f56",
+    "start_line": 289,
+    "text": "------------------------\n\n.. c:function:: ncclResult_t ncclCommWindowDeregister(ncclComm_t comm, ncclWindow_t win)\n\nDeregister NCCL window represented by *win* under communicator *comm*. Deregistration is local to the rank, and\ncaller needs to make sure the corresponding buffer within the window is not being accessed by any NCCL operation.\n"
+  },
+  {
+    "end_line": 1510,
+    "id": "device_zero_and_abort",
+    "kind": "static_source",
+    "path": "src/dev_runtime.cc",
+    "project": "nccl",
+    "sha256": "03bfa81361b9a19d428034e65f5e3ddfb3d1930561b1f1b192c2de93ab069b1c",
+    "start_line": 1497,
+    "text": "  }\n\n  memset(outDevComm, 0, sizeof(*outDevComm));\n  outDevComm->ucLeId = NCCL_LE_ID_INVALID;\n  outDevComm->mcLeId = NCCL_LE_ID_INVALID;\n  outDevComm->magic = NCCL_API_MAGIC;\n  outDevComm->version = deviceCodeVersion;\n  outDevComm->rank = comm->rank;\n  outDevComm->nRanks = comm->nRanks;\n  outDevComm->nRanks_rcp32 = idivRcp32(comm->nRanks);\n  outDevComm->lsaRank = devr->lsaSelf;\n  outDevComm->lsaSize = devr->lsaSize;\n  outDevComm->lsaSize_rcp32 = idivRcp32(devr->lsaSize);\n  if (isInternal) outDevComm->abortFlag = comm->abortFlagDev;\n"
+  },
+  {
+    "end_line": 1788,
+    "id": "external_create",
+    "kind": "static_source",
+    "path": "src/dev_runtime.cc",
+    "project": "nccl",
+    "sha256": "9acc5f2ea8918e48adc0cb7d8e70c245c0b67f226fd50a7fe5e81713323a394d",
+    "start_line": 1781,
+    "text": "static ncclResult_t ncclDevrCommCreateJob(struct ncclAsyncJob* job_) {\n  struct ncclDevrCommCreateAsyncJob* job = (struct ncclDevrCommCreateAsyncJob*)job_;\n  ncclResult_t ret = ncclSuccess;\n\n  CUDACHECKGOTO(cudaSetDevice(job->comm->cudaDev), ret, fail);\n  NCCLCHECKGOTO(ncclDevrCommCreateInternal(job->comm, job->reqs, job->outDevComm, /*isInternal=*/false,\n                                           job->deviceCodeVersion),\n                ret, fail);\n"
+  },
+  {
+    "end_line": 1003,
+    "id": "gin_flush",
+    "kind": "static_source",
+    "path": "src/include/nccl_device/impl/gin__funcs.h",
+    "project": "nccl",
+    "sha256": "4f5a3c749ff5e58dda0561f2e9a7270515619396c158fd553bbb4f66a6348e54",
+    "start_line": 997,
+    "text": "NCCL_DEVICE_INLINE void ncclGinFlush_v2(ncclGin_C* net, ncclCoopAny coop, cuda::memory_order ord, bool isDescriptor,\n                                        ncclGinDescriptorSmem* descriptor) {\n  coop.sync();\n  ncclGinCtx ctx = ncclGin_C_makeCtx(net);\n  ncclGinCall<ncclGinApi_Flush>(ctx, coop, isDescriptor, descriptor, ord, net->comm.abortFlag);\n  coop.sync();\n}\n"
+  },
+  {
+    "end_line": 1395,
+    "id": "gin_signal_wait",
+    "kind": "static_source",
+    "path": "src/include/nccl_device/impl/gin__funcs.h",
+    "project": "nccl",
+    "sha256": "9febbd6f4e9542d633f84a99390bbaa84c7f8d411fda75fa7f81f600d741f15f",
+    "start_line": 1368,
+    "text": "#endif\n\n#ifdef __CUDACC__\ntemplate <unsigned beMask>\ntemplate <typename Coop>\nNCCL_DEVICE_INLINE void ncclGin_BackendMask<beMask>::waitSignal(Coop coop, ncclGinSignal_t signal, uint64_t least,\n                                                                int bits, cuda::memory_order ord) const {\n  coop.sync();\n  if (coop.thread_rank() == 0) {\n    auto sig = ncclGinCall<ncclGinApi_GetSignalPtr>(this->_makeCtx(), signal);\n    (void)nccl::gin::internal::waitRollingLessEq</*EnableTimeout=*/false>(sig, least, bits, ord, this->comm.abortFlag,\n                                                                          0ULL);\n  }\n  coop.sync();\n}\n\ntemplate <unsigned beMask>\ntemplate <typename Coop>\nNCCL_DEVICE_INLINE ncclResult_t ncclGin_BackendMask<beMask>::waitSignal(\n  Coop coop, ncclGinSignal_t signal, uint64_t least, int bits, cuda::memory_order ord, uint64_t timeoutCycles) const {\n  ncclResult_t ret = ncclSuccess;\n  coop.sync();\n  if (coop.thread_rank() == 0) {\n    auto sig = ncclGinCall<ncclGinApi_GetSignalPtr>(this->_makeCtx(), signal);\n    ret = nccl::gin::internal::waitRollingLessEq</*EnableTimeout=*/true>(sig, least, bits, ord, this->comm.abortFlag,\n                                                                         timeoutCycles);\n  }\n  coop.sync();\n"
+  },
+  {
+    "end_line": 164,
+    "id": "deepep_create",
+    "kind": "static_source",
+    "path": "csrc/kernels/comm/context.cpp",
+    "project": "deepep",
+    "sha256": "485c076773ce80148084c961270e7eaec520d85b8642547ff6569e10ed54c843",
+    "start_line": 122,
+    "text": "    ncclDevCommRequirements_t reqs = NCCL_DEV_COMM_REQUIREMENTS_INITIALIZER;\n    reqs.lsaMultimem = enable_lsa_multimem;\n    if (get_env(\"EP_DISABLE_GIN\", 0) == 0) {\n        EP_HOST_ASSERT(\n            (allow_hybrid_mode ? props.railedGinType : props.ginType) != NCCL_GIN_TYPE_NONE and\n            \"NCCL GIN is unavailable. This is usually due to a network configuration issue, \"\n            \"such as `allow_hybrid_mode=0` (disable direct RDMA kernels) in multi-plane network.\");\n        EP_HOST_ASSERT(\n            props.ginSupport[NCCL_GIN_TYPE_GDAKI] and\n            \"NCCL GDAKI is unavailable for this communicator.\");\n\n        gin_min_stride = props.ginMinStride;\n        reqs.ginType = NCCL_GIN_TYPE_GDAKI;\n        reqs.ginContextCount = num_allocated_qps;\n        reqs.ginExclusiveContexts = true;\n        reqs.ginQueueDepth = qp_depth > 0 ? qp_depth : kDefaultQPDepth;\n\n        // Customized RDMA barrier needs extra signals\n        reqs.ginSignalCount = num_ranks + 2 * 2;\n        if (allow_hybrid_mode and num_rdma_storage_bytes > 0) {\n            reqs.ginCustomStride = gin_min_stride;\n            reqs.ginConnectionType = NCCL_GIN_CONNECTION_CUSTOM_STRIDE;\n        } else {\n            reqs.ginConnectionType = allow_hybrid_mode ? NCCL_GIN_CONNECTION_RAIL : NCCL_GIN_CONNECTION_FULL;\n        }\n\n        // SL index\n        if (std::getenv(\"EP_DEFAULT_RDMA_SL\") != nullptr)\n            reqs.ginTrafficClass = get_env<int>(\"EP_DEFAULT_RDMA_SL\");\n        if (sl_idx.has_value())\n            reqs.ginTrafficClass = sl_idx.value();\n        if (std::getenv(\"EP_OVERRIDE_RDMA_SL\") != nullptr)\n            reqs.ginTrafficClass = get_env<int>(\"EP_OVERRIDE_RDMA_SL\");\n    }\n#if NCCL_VERSION_CODE >= NCCL_VERSION(2, 31, 0)\n    reqs.useRuntimeVersion = true;\n    dev_comm.ptr = malloc(props.devCommRuntimeVersionSize);\n#else\n    EP_HOST_ASSERT(NCCL_VERSION_CODE == nccl_runtime_version and \"Prior to NCCL 2.31, NCCL compile-time and runtime versions must be the same. Please re-compile DeepEP.\");\n    dev_comm.ptr = malloc(sizeof(ncclDevComm_t));\n#endif\n    EP_HOST_ASSERT(dev_comm.ptr != nullptr);\n    NCCL_CHECK(ncclDevCommCreate(comm, &reqs, static_cast<ncclDevComm_t*>(dev_comm.ptr)));\n"
+  },
+  {
+    "end_line": 50,
+    "id": "deepep_abort_wrapper",
+    "kind": "static_source",
+    "path": "csrc/kernels/comm/context.cpp",
+    "project": "deepep",
+    "sha256": "8c0c7d52344fa6eed0142bee7de6f9f17e6462298bca9b39636f6b720544771d",
+    "start_line": 45,
+    "text": "\nvoid destroy_nccl_comm(const int64_t& nccl_comm) {\n    NCCL_CHECK(ncclCommAbort(reinterpret_cast<ncclComm_t>(nccl_comm)));\n    if (get_env<int>(\"EP_BUFFER_DEBUG\"))\n        printf(\"NCCL host communicator aborted\\n\");\n}\n"
+  },
+  {
+    "end_line": 199,
+    "id": "deepep_flush_wait",
+    "kind": "static_source",
+    "path": "deep_ep/include/deep_ep/comm/handle.cuh",
+    "project": "deepep",
+    "sha256": "1f58a47d2b384917fabf83ea9963bfd2e3d26932bee34b7f1fd7457ad5db1bd2",
+    "start_line": 148,
+    "text": "\n    template <typename coop_t = ncclCoopThread>\n    __device__ __forceinline__\n    void flush() const {\n        gin.flush(coop_t());\n    }\n\n    template <typename team_t, typename coop_t = ncclCoopThread>\n    __device__ __forceinline__\n    void flush_async(const int& src_rank_idx, ncclGinRequest_t* request,\n                     const int& extra_options = 0) const {\n        IS_TEAM_WORLD_RAIL({\n            gin.flushAsync(\n                TEAM_WORLD_RAIL(),\n                src_rank_idx,\n                request,\n                coop_t(),\n                ncclGinOptFlagsDefault | extra_options\n            );\n        });\n    }\n\n    template <typename team_t, typename remote_action_t>\n    __device__ __forceinline__\n    void signal(const int& dst_rank_idx, const remote_action_t& remote_action) const {\n        IS_TEAM_WORLD_RAIL({\n            gin.signal(TEAM_WORLD_RAIL(), dst_rank_idx, remote_action);\n        });\n    }\n\n    template <typename team_t, int64_t kNumTimeoutCycles>\n    __device__ __forceinline__\n    void wait_signal(const int& signal_idx, const int& rank_idx) const {\n        IS_TEAM_WORLD_RAIL({\n            // NOTES: signals are rolling counters, whose width follows the shadow counter type\n            const auto shadow_ptr = gin.getSignalShadowPtr(signal_idx);\n            const auto target = ++(*shadow_ptr);\n            const auto result = gin.waitSignal(\n                ncclCoopThread(), signal_idx, target, sizeof(*shadow_ptr) * 8,\n                cuda::memory_order_acquire, kNumTimeoutCycles);\n            if (result != ncclSuccess) {\n                const auto signal = gin.readSignal(signal_idx, sizeof(*shadow_ptr) * 8, cuda::memory_order_acquire);\n                // This waiting thread owns the shadow entry; reload only for diagnostics\n                // to avoid keeping target live into the timeout path.\n                const uint64_t timeout_target = *static_cast<const volatile uint64_t*>(shadow_ptr);\n                printf(\"DeepEP Gin signal timeout, rank: %d, signal_idx: %d, signal: %lu, target: %lu\\n\",\n                       rank_idx, signal_idx, signal, timeout_target);\n                ptx::trap();\n            }\n        });\n    }\n\n"
+  },
+  {
+    "end_line": 47,
+    "id": "deepep_timeout_trap",
+    "kind": "static_source",
+    "path": "deep_ep/include/deep_ep/comm/barrier.cuh",
+    "project": "deepep",
+    "sha256": "6eb11d74fabae87d9a38a511de49a8522cbb93d594a00dcc3570893fe007074a",
+    "start_line": 30,
+    "text": "template <int64_t kNumTimeoutCycles, typename func_t>\n__device__ __forceinline__ void timeout_while(const bool& condition, const func_t& func,\n                                              int64_t start_clock = 0) {\n    // User may share a start clock for multiple waits\n    if (start_clock == 0)\n        start_clock = clock64();\n\n    while (condition) {\n        const bool timeout = clock64() - start_clock >= kNumTimeoutCycles;\n        if (func(timeout))\n            break;\n\n        if (timeout) {\n            // Wait another 1 second to let all threads print information and trap\n            start_clock = clock64();\n            while (clock64() - start_clock < kNumOneSecCycles) {}\n            ptx::trap();\n        }\n"
+  },
+  {
+    "end_line": 247,
+    "id": "remaining_window_cleanup",
+    "kind": "static_source",
+    "path": "src/dev_runtime.cc",
+    "project": "nccl",
+    "sha256": "06372ba7a5152ef3b84338a4d45adcfe98a2c39b5e9a845af457eca9c2a4c667",
+    "start_line": 235,
+    "text": "  // During abort or any other cases, users might not call deregister API for\n  // symmetric window objects, we need to destroy all remaining window objects\n  // that are not deregistered by user to avoid memory leaks here.\n  CUDACHECKIGNORE(cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking));\n  while (devr->winSortedCount > 0) {\n    struct ncclDevrWindow* win = devr->winSorted[0].win;\n    NCCLCHECKIGNORE(symWindowDestroy(comm, win->vidmem, stream), ret);\n  }\n  CUDACHECKIGNORE(cudaStreamSynchronize(stream));\n\n  NCCLCHECKIGNORE(symTeamDestroyAll(comm), ret);\n\n  // delete windowTable\n"
+  },
+  {
+    "end_line": 3960,
+    "id": "gin_error_query",
+    "kind": "static_source",
+    "path": "src/init.cc",
+    "project": "nccl",
+    "sha256": "d2bd00620798b5804d29e9dbfa7f5ebdc8fbc44d958ef42d7e452fb979ad8b9a",
+    "start_line": 3943,
+    "text": "  /* Check gin status */\n  if (*asyncError == ncclSuccess && comm->sharedRes && comm->sharedRes->ginState.connected) {\n    struct ncclGinState* ginState = &comm->sharedRes->ginState;\n    // Gin progress thread status\n    if (ginState->proxyThreadsCreated) {\n      *asyncError = COMPILER_ATOMIC_LOAD(&comm->sharedRes->ginState.asyncResult, std::memory_order_acquire);\n    }\n    // Gin side errors, also works when we have no GIN progress thread.\n    if (*asyncError == ncclSuccess) {\n      bool ginError;\n      NCCLCHECK(ncclGinQueryLastError(&comm->sharedRes->ginState, &ginError));\n      if (ginError) {\n        WARN(\"GIN Error detected\");\n        *asyncError = ncclRemoteError;\n      }\n    }\n  }\n\n"
+  }
+]

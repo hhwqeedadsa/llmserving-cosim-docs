@@ -1,0 +1,13 @@
+{
+  "rejected_before_destination_creation": [
+    "traversal",
+    "symlink",
+    "duplicate",
+    "wrong_hash",
+    "root_member",
+    "file_parent",
+    "member_cap",
+    "byte_cap"
+  ],
+  "schema_version": "communicator-recovery-bundle-checks/1"
+}

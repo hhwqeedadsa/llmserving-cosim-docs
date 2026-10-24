@@ -1,0 +1,73 @@
+{
+  "archive_restore_does_not_execute_code": true,
+  "archive_snapshot_before_final_receipts": true,
+  "artifact_totals": {
+    "allocated_bytes": 7782400,
+    "apparent_bytes": 6845145
+  },
+  "artifact_usage_by_root": {
+    "/dev/shm/moe-communicator-recovery-20261024": {
+      "allocated_bytes": 1982464,
+      "apparent_bytes": 1704134
+    },
+    "/dev/shm/moe-communicator-recovery-package-20261024": {
+      "allocated_bytes": 503808,
+      "apparent_bytes": 499595
+    },
+    "/dev/shm/moe-communicator-recovery-recomputed-20261024": {
+      "allocated_bytes": 204800,
+      "apparent_bytes": 180418
+    },
+    "/dev/shm/moe-communicator-recovery-restored-20261024": {
+      "allocated_bytes": 2273280,
+      "apparent_bytes": 1993645
+    },
+    "/home/lry/moe-ub-cosim/experiments/communicator_recovery": {
+      "allocated_bytes": 118784,
+      "apparent_bytes": 81667
+    },
+    "/home/lry/moe-ub-cosim/runs/communicator_recovery_checkpoint_20261024": {
+      "allocated_bytes": 2699264,
+      "apparent_bytes": 2385686
+    }
+  },
+  "checkpoint": "/home/lry/moe-ub-cosim/runs/communicator_recovery_checkpoint_20261024",
+  "expected_preserved_failed_monitors": [
+    "build-monitor/probe.json",
+    "sources-monitor/probe.json",
+    "sources-resume-monitor/probe.json"
+  ],
+  "failed_artifacts_preserved": true,
+  "final_bookkeeping_bytes_reserved": 262144,
+  "final_bookkeeping_seconds_reserved": 10,
+  "five_replay_outputs_byte_identical": true,
+  "fixed_source_requests": 4,
+  "installed_or_upgraded_dependencies": false,
+  "monitor_count": 17,
+  "monitor_status_counts": {
+    "child_failed": 3,
+    "completed": 14
+  },
+  "monitored_seconds": 10.262723717838526,
+  "new_network_or_gpu_executions": 0,
+  "new_source_bytes": 230030,
+  "offline_replay_executes_documented_cpu_research_code": true,
+  "overall_goal_status": "in_progress",
+  "peak_sampled_group_rss_bytes": 136249344,
+  "performance_innovation_or_hardware_guarantees_proven": false,
+  "phase_bytes_limit": 67108864,
+  "phase_seconds_limit": 300,
+  "phase_status": "completed",
+  "platform_commit": "917e42d",
+  "platform_or_dependency_changes": false,
+  "recorded_process_groups_absent": true,
+  "remaining_live_group_pids": [],
+  "root_free_bytes": 80126160896,
+  "schema_version": "communicator-recovery-closeout/1",
+  "seconds_with_reserve": 20.262723717838526,
+  "source_bytes": 668242,
+  "source_files": 16,
+  "tmpfs_free_bytes": 256894128128,
+  "total_charged_bytes_with_reserve": 8044544,
+  "unsafe_archive_cases_rejected": 8
+}

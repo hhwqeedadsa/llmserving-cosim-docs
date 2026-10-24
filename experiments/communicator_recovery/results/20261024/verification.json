@@ -1,0 +1,17 @@
+{
+  "excerpts": 20,
+  "gpu_or_provider_executed": false,
+  "independent_call_order_and_integer_oracle": true,
+  "original_statements": 2,
+  "schema_version": "communicator-recovery-verification/1",
+  "source_files": 16,
+  "synthetic_conditions": 208,
+  "unsupported_conclusions_and_trace_tampering_rejected": [
+    "revoke_success_proves_mr_retirement",
+    "deregistration_requires_no_access",
+    "external_abort_pointer_absent",
+    "shrink_abort_never_shares",
+    "abort_poll_count"
+  ],
+  "whole_original_functions": 5
+}

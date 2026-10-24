@@ -1,0 +1,30 @@
+{
+  "comparisons": {
+    "build/source-harness.cc": {
+      "bytes": 15186,
+      "sha256": "c32afb7d98ae57fcde1e292d4ca56cd3b0e5f3bc12703ce964113f1ee849715c"
+    },
+    "evidence.json": {
+      "bytes": 23717,
+      "sha256": "477aa63a1ab9cfcdeaf6db6761826dd201a460614843be1f254b8bb54088cf8f"
+    },
+    "records.jsonl": {
+      "bytes": 44065,
+      "sha256": "d92acff640fdc629b94730c17415551de0df5976e279b748745cababb36e0d65"
+    },
+    "summary.json": {
+      "bytes": 816,
+      "sha256": "bf34204b873c9625b48c8a8377a4aca7cc913c16d955fdc5b3b4ae7a45679551"
+    },
+    "verification.json": {
+      "bytes": 527,
+      "sha256": "c5c982ee4a50a9e486037c1199ac806ddda66bcc22d924d55e54810ec8e17d51"
+    }
+  },
+  "empty_cwd": true,
+  "five_outputs_byte_identical": true,
+  "gpu_or_provider_execution": false,
+  "network_requests": 0,
+  "new_source_root": true,
+  "schema_version": "communicator-recovery-replay/1"
+}

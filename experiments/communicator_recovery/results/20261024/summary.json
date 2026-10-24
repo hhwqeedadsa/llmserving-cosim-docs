@@ -1,0 +1,25 @@
+{
+  "arbitrary_user_kernel_quiescence_proven": false,
+  "conditions": 208,
+  "deregistration_requires_no_access": true,
+  "external_abort_pointer_absent": true,
+  "hardware_or_gpu_executed": false,
+  "kinds": {
+    "gin_wait": 72,
+    "revoke_async": 84,
+    "sharing": 32,
+    "shrink": 20
+  },
+  "performance_or_innovation_proven": false,
+  "revoke_success_proves_mr_retirement": false,
+  "revoked_never_shares": true,
+  "schema_version": "communicator-recovery-summary/1",
+  "shrink_abort_never_shares": true,
+  "source_scope": "five exact functions and two exact statements under explicit CPU recording substitutes",
+  "supported_failure_recovery_for_deepep_proven": false,
+  "wait_recording_stops": {
+    "recording_blocking_wait": 4,
+    "recording_poll_cap": 1
+  },
+  "worker_proxy_stop_errors_ignored": 12
+}

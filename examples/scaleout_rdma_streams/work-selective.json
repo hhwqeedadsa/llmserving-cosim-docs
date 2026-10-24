@@ -1,0 +1,108 @@
+{
+  "schema_version": "moe-rdma-stream-work/3",
+  "dcqcn_reference": {
+    "mode": "figure7_reference/1",
+    "np_interval_ns": 50000,
+    "alpha_interval_ns": 55000,
+    "recovery_interval_ns": 55000,
+    "recovery_bytes": 10000000,
+    "min_rate_bps": 100000000,
+    "additive_bps": 5000000,
+    "hyper_bps": 50000000,
+    "fast_recovery_rounds": 5,
+    "gain": 0.00390625,
+    "cnp_model_bytes": 48,
+    "max_events": 10000
+  },
+  "streams": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21002,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    },
+    {
+      "id": 1,
+      "src": 2,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 21006,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 8
+    }
+  ],
+  "work": [
+    {
+      "id": 0,
+      "kind": "write",
+      "stream": 0,
+      "bytes": 16000,
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "write",
+      "stream": 1,
+      "bytes": 9000,
+      "after": []
+    },
+    {
+      "id": 2,
+      "kind": "local",
+      "rank": 0,
+      "duration_ns": 100000,
+      "after": [
+        {
+          "work": 0,
+          "event": "acked"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "write",
+      "stream": 0,
+      "bytes": 17,
+      "after": [
+        {
+          "work": 2,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "write",
+      "stream": 1,
+      "bytes": 31,
+      "after": [
+        {
+          "work": 1,
+          "event": "accepted"
+        }
+      ]
+    }
+  ],
+  "limits": {
+    "max_streams": 2,
+    "max_work": 5
+  },
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "transport_recovery": {
+    "mode": "selective_repeat/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 10000,
+    "receive_buffer_bytes": 8192,
+    "inflight_bytes": 4000
+  }
+}

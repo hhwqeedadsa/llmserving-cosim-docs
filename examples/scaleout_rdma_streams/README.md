@@ -134,6 +134,25 @@ TX钩子发生在该包的`PktSent`更新之前：`next_avail_ns`仍是此前状
 
 索引修改前后同输入结果、显式计数和多轮扩展检查见[扩展验收](../../fixtures/indexed_streams/README.md)。
 
+## 可选的有界选择重传
+
+将上述公开运行命令的`--config`换为[work-selective.json](work-selective.json)，`--protocol`仍用`examples/scaleout_rdma/rdma.json`。该正常小例含两个连接及“实际ACK→100,000ns本地处理→17B追加写”；主动丢包需要在协议中另填下节的`faults`。已有二进制须包含本功能。
+
+`transport_recovery.mode`设为`selective_repeat/1`，保留下节的`initial_rto_ns/max_rto_ns/max_retries/max_events`，可选Karn估计和`on_exhausted`，再显式增加两个字段：
+
+| 字段 | 约束与含义 |
+|---|---|
+| receive_buffer_bytes | 每连接乱序有效负载容量，MTU到2MiB；必须≥`inflight_bytes + payload_bytes - 1` |
+| inflight_bytes | 每连接原生固定发送窗口，MTU到2MiB；按包起点判窗，最后一包最多越过窗口`payload_bytes-1`字节 |
+
+须同时提供完整`dcqcn_reference`，且`max_events`为1—100000。整数不接受布尔值。示例窗口4,000B、缓冲8,192B、初始RTO80,000ns；这些是功能参数，不是校准的带宽时延积。每连接最多保留4096个乱序包、发送侧最多4096个确认区间；另受原有工作、源字节、事件和宿主预算约束。
+
+接收端保留实际乱序包，仅在缺口填上后推进连续前缀。真实ACK/NACK携带16B大端`MSR1`扩展（magic、收到区间的begin/end、valid）；源端只依据已收到的反馈跳过已确认范围，每个累计缺口最多快速重传一次，其余等待实际确认或RTO。选择确认本身不释放工作信用，累计ACK才释放；反馈丢失仍可能造成重复发送。在途及交换机排队包不会被取消。
+
+扩展替换了原模型ACK的14B填充，故实际ACK/NACK模型帧为50B，较原48B增加2B；不能将16B扩展直接写成净增16B，也不能据此推算生产RoCE开销。这是独立字节入口的参考传输基线，不支持MRT1负载接收、在线服务或现代GIN，不是IRN复刻。
+
+启用后`persistent_transport.selective_repeat`包含容量、窗口、`states`和`events`。状态含连续接收前缀、缓冲当前/峰值字节、拒收数及源已确认区间；事件含真实数据到达、反馈生成/到达和快速重传，时间单位ns、区间为连接累计字节。`extension_hex`保存反馈的实际扩展字节。事件上限与恢复记录分别执行，超限明确失败。独立逐包、队列、完成回调检查与限制见[选择重传验收](../../fixtures/selective_repeat/README.md)。
+
 ## 可选的持久连接丢包恢复
 
 把运行命令的`--config`换为[work-recovery.json](work-recovery.json)，`--protocol`换为[rdma-loss.json](rdma-loss.json)。完整示例有两个持久连接和六项写工作；它在真实接收端丢弃stream0对前999B的首次ACK，检查实际重传、接收端补ACK及后续累计序号。故障是否命中看`fault_injection.drop_counts`，示例应为`[1]`。已有二进制须包含本功能，否则重新使用公开`rdma-build`构建。

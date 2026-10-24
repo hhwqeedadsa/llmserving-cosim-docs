@@ -1,0 +1,289 @@
+{
+  "passed": true,
+  "parent_baseline": "c01cf2d",
+  "phase": "platform functional selective-repeat baseline",
+  "overall_research_status": "in_progress",
+  "actual_network_executions": 12,
+  "network_execution_budget": 12,
+  "monitor_count": 34,
+  "monitored_wall_seconds_including_nested_conservatively": 44.522236648947,
+  "final_file_management_reserve_seconds": 10,
+  "stage_wall_budget_seconds": 600,
+  "peak_sampled_group_rss_bytes": 679731200,
+  "disk_trees": {
+    "/dev/shm/moe-selective-repeat-20261024": {
+      "apparent_bytes": 125537411,
+      "allocated_bytes": 127795200
+    },
+    "runs/selective_repeat_checkpoint_20261024": {
+      "apparent_bytes": 10534765,
+      "allocated_bytes": 10567680
+    },
+    "fixtures/selective_repeat": {
+      "apparent_bytes": 47742,
+      "allocated_bytes": 69632
+    }
+  },
+  "charged_bytes_including_receipt_reserve": 139481088,
+  "receipt_reserve_bytes": 1048576,
+  "cumulative_disk_budget_bytes": 268435456,
+  "per_command_wall_seconds": 60,
+  "per_command_rss_bytes": 1073741824,
+  "per_process_address_bytes": 2147483648,
+  "per_command_artifact_bytes": 67108864,
+  "simulation_limit_ns": 5000000,
+  "result_limit_bytes": 16777216,
+  "all_original_monitors_terminal": true,
+  "monitors": [
+    {
+      "path": "audit-complete-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24117565155029297,
+      "peak_sampled_group_rss_bytes": 21458944
+    },
+    {
+      "path": "audit-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13778436556458473,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "path": "checks-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 6.548682475462556,
+      "peak_sampled_group_rss_bytes": 394158080
+    },
+    {
+      "path": "compile-oracle-bound-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.7843172699213028,
+      "peak_sampled_group_rss_bytes": 116854784
+    },
+    {
+      "path": "compile-oracle-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.8801932968199253,
+      "peak_sampled_group_rss_bytes": 115818496
+    },
+    {
+      "path": "compile-persistent_streams-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 9.084139611572027,
+      "peak_sampled_group_rss_bytes": 679731200
+    },
+    {
+      "path": "compile-stream_probe-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 6.190449262037873,
+      "peak_sampled_group_rss_bytes": 533819392
+    },
+    {
+      "path": "deps-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.4330063294619322,
+      "peak_sampled_group_rss_bytes": 22360064
+    },
+    {
+      "path": "link-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5460168346762657,
+      "peak_sampled_group_rss_bytes": 119570432
+    },
+    {
+      "path": "network/ack-loss/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5691173486411572,
+      "peak_sampled_group_rss_bytes": 370970624
+    },
+    {
+      "path": "network/default-new/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6464276127517223,
+      "peak_sampled_group_rss_bytes": 369733632
+    },
+    {
+      "path": "network/default-old/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.6480100005865097,
+      "peak_sampled_group_rss_bytes": 370819072
+    },
+    {
+      "path": "network/feedback-ecn/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.8637693431228399,
+      "peak_sampled_group_rss_bytes": 384409600
+    },
+    {
+      "path": "network/head/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5492369253188372,
+      "peak_sampled_group_rss_bytes": 371904512
+    },
+    {
+      "path": "network/healthy/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5535525549203157,
+      "peak_sampled_group_rss_bytes": 371798016
+    },
+    {
+      "path": "network/karn-tail/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5527512449771166,
+      "peak_sampled_group_rss_bytes": 370917376
+    },
+    {
+      "path": "network/link-failure/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5399548970162868,
+      "peak_sampled_group_rss_bytes": 371933184
+    },
+    {
+      "path": "network/middle/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5383347421884537,
+      "peak_sampled_group_rss_bytes": 371769344
+    },
+    {
+      "path": "network/sack-loss/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5425484385341406,
+      "peak_sampled_group_rss_bytes": 370876416
+    },
+    {
+      "path": "network/tail/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5459008291363716,
+      "peak_sampled_group_rss_bytes": 370745344
+    },
+    {
+      "path": "package-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 8.949038852006197,
+      "peak_sampled_group_rss_bytes": 45887488
+    },
+    {
+      "path": "persist-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.1233944520354271,
+      "peak_sampled_group_rss_bytes": 5316608
+    },
+    {
+      "path": "persistent-input-fixed-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24203220568597317,
+      "peak_sampled_group_rss_bytes": 21192704
+    },
+    {
+      "path": "persistent-input-monitor/probe.json",
+      "status": "child_failed",
+      "child_exit_code": 1,
+      "wall_seconds": 0.13836817257106304,
+      "peak_sampled_group_rss_bytes": 5353472
+    },
+    {
+      "path": "portable/fresh-network/execution/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5449957195669413,
+      "peak_sampled_group_rss_bytes": 371814400
+    },
+    {
+      "path": "portable-link-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.5712858289480209,
+      "peak_sampled_group_rss_bytes": 127991808
+    },
+    {
+      "path": "portable-verify-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.35023392364382744,
+      "peak_sampled_group_rss_bytes": 35209216
+    },
+    {
+      "path": "python-input-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.13196192309260368,
+      "peak_sampled_group_rss_bytes": 7442432
+    },
+    {
+      "path": "python-selective-final-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.24611246027052402,
+      "peak_sampled_group_rss_bytes": 22257664
+    },
+    {
+      "path": "python-selective-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.12740912474691868,
+      "peak_sampled_group_rss_bytes": 7503872
+    },
+    {
+      "path": "restore-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.8968527056276798,
+      "peak_sampled_group_rss_bytes": 41549824
+    },
+    {
+      "path": "restored-verify-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.330163836479187,
+      "peak_sampled_group_rss_bytes": 39104512
+    },
+    {
+      "path": "state-oracle-bound-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.2433969657868147,
+      "peak_sampled_group_rss_bytes": 2162688
+    },
+    {
+      "path": "state-oracle-monitor/probe.json",
+      "status": "completed",
+      "child_exit_code": 0,
+      "wall_seconds": 0.23162144422531128,
+      "peak_sampled_group_rss_bytes": 2113536
+    }
+  ],
+  "preserved_failures": [
+    "persistent recovery unit fixture missing required delay_ns; four KeyErrors retained; corrected to1000ns without changing validation",
+    "fresh replay checker compared literal bin/../lib paths to canonical paths; network succeeded; offline checker fixed without network rerun"
+  ],
+  "dependencies_checked": 13,
+  "original_native_inputs_and_binary_hash_unchanged": true,
+  "persistent_archive_sha256": "6f63ef9d9f3b3d4884f12060f32f3b7445a4f0825a50444d24e3622bf755f38c",
+  "installed_or_downloaded": false,
+  "gpu_executed": false,
+  "native_dependency_changed": false,
+  "pushed": false,
+  "scope": "same Linux host incremental binary and independently audited byte transport; no MoE gain, production RoCE/IRN, modern GIN, hardware calibration or thousand-GPU completion claim"
+}

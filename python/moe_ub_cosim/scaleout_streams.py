@@ -29,10 +29,18 @@ def validate(topology, protocol, config):
     recovery='transport_recovery' in config
     if recovery:
         c=config['transport_recovery']
-        require(isinstance(c,dict) and c.get('mode')=='go_back_n/1','invalid persistent recovery mode')
+        require(isinstance(c,dict) and c.get('mode') in ('go_back_n/1','selective_repeat/1'),'invalid persistent recovery mode')
         require('history' not in c,'persistent recovery retains per-connection evidence; history seeds unsupported')
         from .scaleout_recovery_config import validate as validate_recovery
         legacy=dict(c,mode='go_back_n')
+        if c['mode']=='selective_repeat/1':
+            require('dcqcn_reference' in config,'selective reference requires independent DCQCN reference')
+            integer(c.get('receive_buffer_bytes'),'receive_buffer_bytes',protocol['payload_bytes'],2*1024*1024)
+            integer(c.get('inflight_bytes'),'inflight_bytes',protocol['payload_bytes'],2*1024*1024)
+            require(c['receive_buffer_bytes']>=c['inflight_bytes']+protocol['payload_bytes']-1,
+                    'selective capacity must cover packet window overshoot')
+            require(type(c.get('max_events')) is int and c['max_events']>0,'selective mode requires complete event records')
+            del legacy['receive_buffer_bytes'];del legacy['inflight_bytes']
         policy=legacy.pop('on_exhausted','stop_simulation')
         require(policy in ('stop_simulation','isolate_stream'),'invalid persistent on_exhausted policy')
         validate_recovery(legacy,budget['max_sim_ns'])

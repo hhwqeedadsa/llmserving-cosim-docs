@@ -2,6 +2,7 @@
 #include "fabric.hh"
 #include "gin_work_queue.hh"
 #include "dcqcn_reference.hh"
+#include "selective_repeat.hh"
 #include "ns3/rdma-hw.h"
 #include <deque>
 
@@ -63,6 +64,9 @@ class PersistentStreams {
     std::function<void(Bytes)> receiver;
     std::unique_ptr<Reference> reference;
     std::unique_ptr<moe_cosim::SourceRecovery> recovery;
+    std::unique_ptr<moe_cosim::SelectiveSender> selective_sender;
+    std::unique_ptr<moe_cosim::SelectiveReceiver> selective_receiver;
+    std::map<uint32_t,ns3::Ptr<ns3::Packet>> reorder_packets;
     ns3::EventId recovery_event;
     int64_t failure_ns=-1;
     Stream(unsigned s,unsigned d,unsigned p,unsigned sn,unsigned dn,uint16_t w,unsigned depth,unsigned maximum)
@@ -105,6 +109,8 @@ class PersistentStreams {
   void ArmRecovery(Stream&);
   void RecoveryTimeout(uint64_t stream);
   void DuplicateAck(Stream&, ns3::CustomHeader&, ns3::Ptr<ns3::RdmaRxQueuePair>);
+  int SelectiveReceive(Stream&,ns3::Ptr<ns3::Packet>,ns3::CustomHeader&);
+  void SelectiveLog(Stream&,const char*,ns3::Ptr<const ns3::Packet>,const moe_cosim::SelectiveAck&);
   void RecoveryRecord(Stream&, unsigned code);
   void TerminalFeedback(Stream&,ns3::Ptr<const ns3::Packet>,unsigned protocol,uint64_t sequence);
   bool WireIdle() const;
@@ -136,6 +142,9 @@ class PersistentStreams {
   Json terminal_feedback_=Json::array();
   uint64_t payload_capacity_=0;
   bool release_payload_on_isolation_=false;
+  bool selective_mode_=false;
+  uint64_t selective_capacity_=0,selective_window_=0;
+  Json selective_events_=Json::array();
   std::map<unsigned,uint64_t> payload_used_,payload_peak_;
   Json payload_events_=Json::array();
 };

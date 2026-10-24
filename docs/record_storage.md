@@ -447,4 +447,6 @@ native的 `message_resources` 在图激活后记录，`message_resources_final` 
 
 持久恢复记录位于stream结果`persistent_transport.recovery`或事务结果`transactions.transport.recovery`。源端序号、字节、时间、重试与记录完整性规则见[持久恢复输出](../examples/scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)；这些路径中的message_id解释为连接stream ID，complete事件表示当前已发布前缀ACK，并非连接关闭。
 
+独立字节入口启用`selective_repeat/1`时另保存`persistent_transport.selective_repeat`：容量/窗口和包越界上限、逐连接缓冲状态、源选择确认区间，以及按真实回调顺序保存的事件。反馈`extension_hex`为16B实际MSR1扩展，模型帧50B；数据事件的`receiver_prefix/reorder_bytes`来自该次接收后状态。时间单位ns、范围为半开累计字节区间，日志只供离线核查。字段、独立事件上限与适用范围见[选择重传输出](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)。
+
 显式 `on_exhausted:isolate_stream` 时，同一传输对象新增 `source_isolation`，恢复对象新增全部源端 `failures`；字段、迟到反馈截断及未释放资源的解释见上述持久恢复输出。默认全局停止模式不新增这些结果字段。源端失败不撤回在途写，也不通知对端，不能将它当作安全重用接收窗口的依据。

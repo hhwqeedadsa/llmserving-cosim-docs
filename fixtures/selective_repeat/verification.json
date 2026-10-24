@@ -1,0 +1,226 @@
+{
+  "passed": true,
+  "parent_baseline": "c01cf2d",
+  "actual_network_executions": 12,
+  "independently_audited_selective_cases": {
+    "ack-loss": {
+      "passed": true,
+      "source_packets": 16,
+      "source_payload_bytes": 14048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 192,
+        "rx": 191,
+        "physical_drop": 1
+      },
+      "actual_feedback_received": 15,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "feedback-ecn": {
+      "passed": true,
+      "source_packets": 258,
+      "source_payload_bytes": 256048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 3120,
+        "rx": 3120
+      },
+      "actual_feedback_received": 258,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "head": {
+      "passed": true,
+      "source_packets": 18,
+      "source_payload_bytes": 16048,
+      "peak_reorder_bytes": {
+        "0": 3000
+      },
+      "physical": {
+        "tx": 210,
+        "rx": 209,
+        "physical_drop": 1
+      },
+      "actual_feedback_received": 17,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "healthy": {
+      "passed": true,
+      "source_packets": 27,
+      "source_payload_bytes": 25048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 324,
+        "rx": 324
+      },
+      "actual_feedback_received": 27,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "karn-tail": {
+      "passed": true,
+      "source_packets": 16,
+      "source_payload_bytes": 14048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 186,
+        "rx": 185,
+        "physical_drop": 1
+      },
+      "actual_feedback_received": 15,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "link-failure": {
+      "passed": true,
+      "source_packets": 31,
+      "source_payload_bytes": 29048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 328,
+        "rx": 328
+      },
+      "actual_feedback_received": 27,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "middle": {
+      "passed": true,
+      "source_packets": 17,
+      "source_payload_bytes": 15048,
+      "peak_reorder_bytes": {
+        "0": 2000
+      },
+      "physical": {
+        "tx": 198,
+        "rx": 197,
+        "physical_drop": 1
+      },
+      "actual_feedback_received": 16,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "sack-loss": {
+      "passed": true,
+      "source_packets": 17,
+      "source_payload_bytes": 15048,
+      "peak_reorder_bytes": {
+        "0": 3000
+      },
+      "physical": {
+        "tx": 198,
+        "rx": 196,
+        "physical_drop": 2
+      },
+      "actual_feedback_received": 15,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    },
+    "tail": {
+      "passed": true,
+      "source_packets": 16,
+      "source_payload_bytes": 14048,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 186,
+        "rx": 185,
+        "physical_drop": 1
+      },
+      "actual_feedback_received": 15,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ]
+    }
+  },
+  "python_distinct_tests": 26,
+  "cpu_checks": {
+    "checks": 578671,
+    "permutations": 720,
+    "capacities": 6,
+    "passed": true
+  },
+  "malformed_classes_python_and_native": 12,
+  "evidence_mutation_classes": [
+    "feedback_wire_bytes",
+    "receiver_prefix",
+    "premature_work_acceptance",
+    "source_sequence"
+  ],
+  "default_complete_result_equal": true,
+  "fresh_public_workflow": {
+    "passed": true,
+    "public_commands": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "topology",
+          "--config",
+          "/dev/shm/moe-selective-repeat-20261024/portable/inputs/topology.json",
+          "--output",
+          "/dev/shm/moe-selective-repeat-20261024/portable/fresh-topology"
+        ],
+        "cwd": "/dev/shm/moe-selective-repeat-20261024/portable/empty-cwd",
+        "exit_code": 0
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "-B",
+          "-m",
+          "moe_ub_cosim",
+          "scaleout",
+          "rdma-stream-probe",
+          "--topology",
+          "/dev/shm/moe-selective-repeat-20261024/portable/fresh-topology",
+          "--protocol",
+          "/dev/shm/moe-selective-repeat-20261024/portable/inputs/healthy-protocol.json",
+          "--config",
+          "/dev/shm/moe-selective-repeat-20261024/portable/inputs/healthy-work.json",
+          "--backend",
+          "/dev/shm/moe-selective-repeat-20261024/portable/bin/stream-probe",
+          "--output",
+          "/dev/shm/moe-selective-repeat-20261024/portable/fresh-network"
+        ],
+        "cwd": "/dev/shm/moe-selective-repeat-20261024/portable/empty-cwd",
+        "exit_code": 0
+      }
+    ],
+    "new_source_root": true,
+    "empty_cwd": true,
+    "complete_result_equal_except_library_paths": true,
+    "eight_libraries_loaded_from_package": true,
+    "scope": "same Linux host; portable incremental binary, not a clean native build or cross-machine guarantee"
+  },
+  "original_native_inputs_and_binary_hash_unchanged": true,
+  "checkout_source_sha256": {
+    "backend/rdma/persistent_streams.cc": "85bed3b1c4c61f3455d0f2760b3dcb415781e4cf42a22831dd6f03e3d5ceab31",
+    "backend/rdma/persistent_streams.hh": "d28c6ceec14905061074f947eab87255910bad96c1e77761a24926ab6c611942",
+    "backend/rdma/selective_repeat.hh": "b1fd43f06631511e45f8711886b9594edb957fa5c06158844c356999d72dbe21",
+    "python/moe_ub_cosim/scaleout_streams.py": "fe688a696e93fbf5396d808caeff8925ed167ce26838141f07055df83b1fa493"
+  },
+  "dependencies_checked": 13,
+  "scope": "bounded byte reference functional acceptance; not IRN reproduction, modern GIN, hardware calibration or research gain"
+}

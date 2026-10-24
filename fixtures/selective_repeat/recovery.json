@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "archive": {
+    "archive_bytes": 10502704,
+    "archive_sha256": "6f63ef9d9f3b3d4884f12060f32f3b7445a4f0825a50444d24e3622bf755f38c",
+    "members": 575,
+    "uncompressed_bytes": 51251443
+  },
+  "restore": {
+    "bytes_verified": 51251443,
+    "members_verified": 575,
+    "network_executed": false,
+    "passed": true
+  },
+  "offline": {
+    "passed": true,
+    "network_executed": false,
+    "restored_source_root": true,
+    "empty_cwd": true,
+    "nine_case_audit_byte_equal": true,
+    "fresh_result_independently_audited": true,
+    "default_complete_result_equal": true,
+    "eight_original_libraries_hash_equal": true,
+    "rejected_archive_classes": [
+      "traversal",
+      "absolute",
+      "backslash",
+      "duplicate",
+      "symlink",
+      "parent_collision",
+      "hash_mismatch",
+      "undeclared"
+    ],
+    "command": [
+      "/usr/bin/python3",
+      "-B",
+      "/dev/shm/moe-selective-repeat-20261024/restored/source/fixtures/selective_repeat/audit.py",
+      "--stage",
+      "/dev/shm/moe-selective-repeat-20261024/restored/runtime",
+      "--output",
+      "/dev/shm/moe-selective-repeat-20261024/restored-audit/audit.json"
+    ],
+    "cwd": "/dev/shm/moe-selective-repeat-20261024/restored-audit/empty-cwd"
+  },
+  "persistent_archive_sha256_equal": true,
+  "no_new_network_execution": true
+}

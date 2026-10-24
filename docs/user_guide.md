@@ -53,6 +53,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 检查同一原生连接在多次传输和空闲后是否保留序号，可用`scaleout rdma-stream-probe --topology ... --protocol ... --config ... --backend ... --output ...`。后续工作按真实接收/ACK回调就绪；它是独立字节传输检查，不执行现代MoE或GPU可见性。构建输出的`stream_probe`路径、输入和上限见[持久传输小例](../examples/scaleout_rdma_streams/README.md)。
 
+需要比较丢包恢复时，该字节入口还提供[有界选择重传](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)：配置真实扩展确认、乱序缓冲和发送窗口，使用既有运行命令。它是强传输参考基线，未接入在线推理服务。
+
 该字节入口支持在工作输入中增加`source_rate_capture`，按已有包与ACK回调记录源端速率；所有原生入口另记录实际生效的`rdma_parameters`。配置、单位与采样边界见[源端速率观测](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。
 
 检查目标地址、内存写入和原子旧值返回，可用`scaleout rdma-transaction-probe`，构建清单入口为`transaction_probe`。这是经实际网络请求/回复推进的MRT1功能模型，尚不是RoCE/GIN性能基线；新目录命令、输入、事件及限制见[远端事务小例](../examples/scaleout_rdma_transactions/README.md)。

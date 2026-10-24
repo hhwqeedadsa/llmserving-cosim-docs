@@ -21,7 +21,9 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
           (fabric_.fault_rules_.empty() || !recovery.is_null()),"stream faults require explicit persistent recovery; legacy sends/admission/recovery excluded");
   if(!recovery.is_null()) {
     const auto& c=recovery;
-    Require(c.is_object() && c.size()==5u+unsigned(c.contains("rtt_estimator"))+unsigned(c.contains("on_exhausted")) && c.at("mode")=="go_back_n/1",
+    selective_mode_=c.value("mode",std::string())=="selective_repeat/1";
+    Require(c.is_object() && c.size()==5u+unsigned(c.contains("rtt_estimator"))+unsigned(c.contains("on_exhausted"))+2u*unsigned(selective_mode_) &&
+            (c.at("mode")=="go_back_n/1" || selective_mode_),
             "invalid persistent recovery mode/fields");
     const auto policy=c.value("on_exhausted",std::string("stop_simulation"));
     Require(policy=="stop_simulation" || policy=="isolate_stream","invalid persistent on_exhausted policy");
@@ -33,6 +35,13 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
     const auto initial=integer("initial_rto_ns",1,fabric_.MaxSimNs());
     const auto maximum=integer("max_rto_ns",initial,1000000000);
     integer("max_retries",1,16);integer("max_events",0,100000);
+    if(selective_mode_) {
+      const auto mtu=fabric_.config_.at("payload_bytes").get<uint64_t>();
+      selective_capacity_=integer("receive_buffer_bytes",mtu,2*1024*1024);
+      selective_window_=integer("inflight_bytes",mtu,2*1024*1024);
+      Require(selective_window_+mtu-1<=selective_capacity_,"selective capacity must cover packet window overshoot");
+      Require(c.at("max_events")>0,"selective mode requires complete bounded event records");
+    }
     if(c.contains("rtt_estimator")) {
       const auto& r=c.at("rtt_estimator");
       Require(r.is_object() && r.size()==3 && r.at("kind")=="karn" &&
@@ -227,6 +236,7 @@ void PersistentStreams::RecoveryTimeout(uint64_t id) {
   }
   RecoveryRecord(s,2);
   auto hw=fabric_.drivers_[s.src]->m_rdma;hw->RecoverQueue(s.qp);
+  if(s.selective_sender)s.qp->snd_nxt=s.selective_sender->Skip(s.qp->snd_nxt);
   ArmRecovery(s);Pump(s);Notify();
 }
 void PersistentStreams::TerminalFeedback(Stream& s,Ptr<const Packet> packet,unsigned protocol,uint64_t sequence) {
@@ -248,6 +258,51 @@ void PersistentStreams::DuplicateAck(Stream& s,CustomHeader& h,Ptr<RdmaRxQueuePa
   recovery_records_->Receiver({StreamNow(),s.dst,h.sip,h.dip,h.udp.sport,h.udp.dport,rx->ReceiverNextExpectedSeq,h.udp.seq});
   auto dev=fabric_.drivers_[s.dst]->m_rdma->m_nic[s.destination_nic].dev;
   dev->RdmaEnqueueHighPrioQ(packet);dev->TriggerTransmit();
+}
+void PersistentStreams::SelectiveLog(Stream& s,const char* kind,Ptr<const Packet> packet,const moe_cosim::SelectiveAck& ack) {
+  Require(selective_events_.size()<recovery_config_.at("max_events").get<uint64_t>(),"selective event budget exceeded");
+  const auto h=StreamHeader(packet);
+  Json row={{"time_ns",StreamNow()},{"kind",kind},{"stream",s.qp->GetTag()},
+    {"packet_uid",packet->GetUid()},{"ip_protocol",h.l3Prot},{"model_bytes",packet->GetSize()},
+    {"sack_begin",ack.begin},{"sack_end",ack.end},{"sack_valid",ack.received}};
+  if(h.l3Prot==0xfc || h.l3Prot==0xfd) {
+    row["cumulative_ack"]=h.ack.seq;
+    std::array<uint8_t,16> bytes{};
+    packet->CreateFragment(h.GetSerializedSize(),16)->CopyData(bytes.data(),bytes.size());
+    static const char digits[]="0123456789abcdef";std::string hex;
+    for(auto b:bytes){hex+=digits[b>>4];hex+=digits[b&15];}row["extension_hex"]=hex;
+  } else {
+    row["sequence"]=h.udp.seq;row["receiver_prefix"]=s.selective_receiver->Prefix();
+    row["reorder_bytes"]=s.selective_receiver->Used();
+  }
+  selective_events_.push_back(std::move(row));
+}
+int PersistentStreams::SelectiveReceive(Stream& s,Ptr<Packet> packet,CustomHeader& h) {
+  auto hw=fabric_.drivers_[s.dst]->m_rdma;
+  auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,true);
+  const auto before=s.selective_receiver->Prefix();
+  const auto size=packet->GetSize()-h.GetSerializedSize();
+  Require(size>0 && size<=fabric_.config_.at("payload_bytes").get<uint64_t>() &&
+          uint64_t(h.udp.seq)+size<=64*1024*1024,"invalid selective data range");
+  const auto ack=s.selective_receiver->Receive(h.udp.seq,h.udp.seq+size);
+  if(ack.received && s.selective_receiver->Held().count(h.udp.seq))s.reorder_packets.emplace(h.udp.seq,packet);
+  for(auto it=s.reorder_packets.begin();it!=s.reorder_packets.end();) {
+    if(!s.selective_receiver->Held().count(it->first))it=s.reorder_packets.erase(it);else ++it;
+  }
+  Require(s.reorder_packets.size()==s.selective_receiver->Held().size(),"selective retained packet/range mismatch");
+  rx->ReceiverNextExpectedSeq=s.selective_receiver->Prefix();
+  SelectiveLog(s,"data_received",packet,ack);
+  qbbHeader feedback;feedback.SetSeq(rx->ReceiverNextExpectedSeq);feedback.SetPG(h.udp.pg);
+  feedback.SetSport(h.udp.dport);feedback.SetDport(h.udp.sport);feedback.SetIntHeader(h.udp.ih);
+  const auto bytes=ack.Encode();auto response=Create<Packet>(bytes.data(),bytes.size());response->AddHeader(feedback);
+  Ipv4Header ip;ip.SetDestination(Ipv4Address(h.sip));ip.SetSource(Ipv4Address(h.dip));
+  ip.SetProtocol(h.udp.seq>before?0xfd:0xfc);ip.SetTtl(64);ip.SetPayloadSize(response->GetSize());ip.SetIdentification(rx->m_ipid++);
+  response->AddHeader(ip);hw->AddHeader(response,0x800);
+  SelectiveLog(s,"feedback_generated",response,ack);
+  auto dev=hw->m_nic[s.destination_nic].dev;dev->RdmaEnqueueHighPrioQ(response);dev->TriggerTransmit();
+  CheckAccepted(s);
+  if(h.GetIpv4EcnBits()==3)ReferenceMark(s,packet);
+  Notify();return 0;
 }
 PersistentStreams::RateState PersistentStreams::ReadRate(const Stream& s) {
   const auto& q=*s.qp;
@@ -278,6 +333,7 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
           dhw->m_rtTable[sip.Get()]==std::vector<int>{static_cast<int>(destination_nic)},"stream requires unique declared source and reverse NIC routes");
   Require(source_nic<shw->m_nic.size() && destination_nic<dhw->m_nic.size(),"stream NIC missing");
   GinWorkQueue validate_depth(depth,limits_.work);(void)validate_depth;
+  Require(!selective_mode_ || reference_limit_,"selective reference requires independent DCQCN reference");
   auto [it,inserted]=streams_.try_emplace(id,src,dst,plane,source_nic,destination_nic,wire_port,depth,limits_.work);
   Require(inserted,"stream insertion failed");wire_streams_.emplace(wire_port,id);
   // A zero-byte initial prefix creates NO data and reserves NO future bytes.
@@ -287,6 +343,12 @@ void PersistentStreams::Open(uint64_t id,unsigned src,unsigned dst,unsigned plan
                     MakeCallback(&Fabric::Noop),MakeCallback(&Fabric::Noop));
   it->second.qp=shw->GetQp(dip.Get(),wire_port,3);
   Require(bool(it->second.qp),"stream QP creation failed");
+  if(selective_mode_) {
+    auto& s=it->second;
+    s.selective_sender=std::make_unique<moe_cosim::SelectiveSender>();
+    s.selective_receiver=std::make_unique<moe_cosim::SelectiveReceiver>(selective_capacity_);
+    s.qp->SetWin(selective_window_);s.qp->SetVarWin(false);
+  }
   if(recovery_records_)fabric_.stream_packet_ids_.emplace(std::make_tuple(sip.Get(),dip.Get(),wire_port),id);
   if(reference_limit_) {
     const auto& c=reference_config_;
@@ -299,7 +361,7 @@ void PersistentStreams::Submit(uint64_t stream,uint64_t work,uint64_t bytes,Done
   Enqueue(stream,work,bytes,{},std::move(accepted),std::move(acked));
 }
 void PersistentStreams::SetReceiver(uint64_t stream,std::function<void(Bytes)> receiver) {
-  Require(!closed_ && streams_.count(stream) && streams_.at(stream).work.empty() &&
+  Require(!selective_mode_ && !closed_ && streams_.count(stream) && streams_.at(stream).work.empty() &&
           !streams_.at(stream).receiver && bool(receiver),"invalid stream payload receiver");
   streams_.at(stream).receiver=std::move(receiver);
 }
@@ -309,7 +371,7 @@ void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payloa
   Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
 }
 void PersistentStreams::ConfigurePayloadPool(uint64_t bytes,bool release_on_isolation) {
-  Require(streams_.empty() && !payload_capacity_ && bytes>=33 && bytes<=2*1024*1024,
+  Require(!selective_mode_ && streams_.empty() && !payload_capacity_ && bytes>=33 && bytes<=2*1024*1024,
           "invalid payload pool configuration");
   Require(!release_on_isolation || isolate_failures_,"payload release requires source isolation");
   payload_capacity_=bytes;release_payload_on_isolation_=release_on_isolation;
@@ -366,6 +428,7 @@ void PersistentStreams::Pump(Stream& s) {
     }
   }
   auto& nic=fabric_.drivers_[s.src]->m_rdma->m_nic[s.source_nic];
+  if(s.selective_sender)s.qp->snd_nxt=s.selective_sender->Skip(s.qp->snd_nxt);
   if(s.qp->GetBytesLeft()) {
     if(std::find(nic.qpGrp->m_qps.begin(),nic.qpGrp->m_qps.end(),s.qp)==nic.qpGrp->m_qps.end()) {
       nic.qpGrp->AddQp(s.qp);++s.scheduler_insertions;
@@ -405,6 +468,15 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
       Require(h.ack.seq<=s->recovery->Timer().High(),"terminal ACK covers unsent bytes");
       TerminalFeedback(*s,packet,h.l3Prot,h.ack.seq);Notify();return 0;
     }
+    moe_cosim::SelectiveAck selective_ack;
+    if(s->selective_sender) {
+      Require(packet->GetSize()==h.GetSerializedSize()+16,"wrong selective feedback extension size");
+      std::array<uint8_t,16> bytes{};
+      packet->CreateFragment(h.GetSerializedSize(),16)->CopyData(bytes.data(),bytes.size());
+      selective_ack=moe_cosim::SelectiveAck::Decode(bytes);
+      s->selective_sender->Validate(h.ack.seq,selective_ack,s->recovery->Timer().High());
+      SelectiveLog(*s,"feedback_received",packet,selective_ack);
+    }
     if(s->recovery) {
       const bool progress=s->recovery->Confirm(h.ack.seq,StreamNow(),h.l3Prot==0xfd);
       recovery_records_->Rtt(StreamNow(),h.l3Prot==0xfd?2:1,s->qp->GetTag(),h.ack.seq,0);
@@ -418,7 +490,13 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     s->qp->Acknowledge(h.ack.seq);
     // Keep normal native NACK and DCQCN feedback handling, but do NOT invoke
     // native QpComplete: an ACKed published prefix is not connection close.
-    if(h.l3Prot==0xFD)hw->RecoverQueue(s->qp);
+    if(s->selective_sender) {
+      s->selective_sender->Feedback(h.ack.seq,selective_ack,s->recovery->Timer().High());
+      if(h.l3Prot==0xFD && s->selective_sender->FastRetry(h.ack.seq)) {
+        hw->RecoverQueue(s->qp);SelectiveLog(*s,"fast_retransmit",packet,selective_ack);
+      }
+      s->qp->snd_nxt=s->selective_sender->Skip(s->qp->snd_nxt);
+    } else if(h.l3Prot==0xFD)hw->RecoverQueue(s->qp);
     if(s->reference)Require(!cnp,"reference ACK must not carry legacy CNP feedback");
     else if(cnp)hw->cnp_received_mlx(s->qp);
     SampleRate(*s,2,packet,h.ack.seq,packet->GetSize(),cnp);
@@ -439,6 +517,7 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
   Stream* data_stream=nullptr;
   if(h.l3Prot==0x11) {
     data_stream=Match(node,h,false);Require(data_stream,"unexpected data in exclusive stream execution");
+    if(data_stream->selective_receiver)return SelectiveReceive(*data_stream,packet,h);
     auto rx=hw->GetRxQp(h.dip,h.sip,h.udp.dport,h.udp.sport,3,false);
     if(rx)before=rx->ReceiverNextExpectedSeq;
   }
@@ -488,6 +567,7 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   try {
     const auto begin=qp->snd_nxt;
     auto packet=hw->GetNxtPacket(qp);hw->m_mtu=mtu;
+    if(s.selective_sender)qp->snd_nxt=s.selective_sender->Skip(qp->snd_nxt);
     if(!it->payload.empty()) {
       const auto h=StreamHeader(packet);const auto size=packet->GetSize()-h.GetSerializedSize();
       auto framed=packet->CreateFragment(0,h.GetSerializedSize());
@@ -541,7 +621,8 @@ void PersistentStreams::Notify() {
 bool PersistentStreams::Drained() const {
   if(failed_stream_>=0)return false;
   for(const auto& item:streams_)if(!item.second.queue.Drained() || item.second.qp->snd_una!=item.second.qp->m_size ||
-      (item.second.reference && item.second.reference->np.Pending()))return false;
+      (item.second.reference && item.second.reference->np.Pending()) ||
+      (item.second.selective_receiver && item.second.selective_receiver->Used()))return false;
   return WireIdle();
 }
 bool PersistentStreams::WireIdle() const {
@@ -574,6 +655,24 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(selective_mode_) {
+    Json states=Json::array();
+    for(const auto& [id,s]:streams_) {
+      Json held=Json::array(),received=Json::array();
+      for(const auto& [begin,end]:s.selective_receiver->Held())held.push_back({begin,end});
+      for(const auto& [begin,end]:s.selective_sender->Received())received.push_back({begin,end});
+      states.push_back({{"stream",id},{"receiver_prefix",s.selective_receiver->Prefix()},
+        {"reorder_bytes",s.selective_receiver->Used()},{"peak_reorder_bytes",s.selective_receiver->Peak()},
+        {"rejected_packets",s.selective_receiver->Rejected()},{"held_ranges",held},{"source_sacked_ranges",received},
+        {"native_window_bytes",s.qp->GetWin()}});
+    }
+    result["selective_repeat"]={{"receive_buffer_bytes",selective_capacity_},{"inflight_bytes",selective_window_},
+      {"max_packet_overshoot_bytes",fabric_.config_.at("payload_bytes").get<uint64_t>()-1},
+      {"max_reorder_packets_per_stream",moe_cosim::SelectiveReceiver::kMaxPackets},
+      {"states",states},{"events",selective_events_},
+      {"wire_format","MSR1 16-byte big-endian magic/begin/end/valid after native ACK header; actual model bytes, not production RoCE"},
+      {"scope","bounded byte-only selective-repeat reference, not IRN reproduction, modern GIN or hardware calibration; source uses received feedback only"}};
+  }
   if(payload_capacity_) {
     Json owners=Json::array(),held=Json::array();
     for(const auto& [source,used]:payload_used_)owners.push_back({{"source",source},{"used_bytes",used},{"peak_bytes",payload_peak_.at(source)}});

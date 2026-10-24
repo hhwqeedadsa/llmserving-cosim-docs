@@ -8,7 +8,7 @@ from moe_ub_cosim.scaleout_transactions import validate as transactions
 ROOT=Path(__file__).resolve().parents[2]
 class RecoveryInput(unittest.TestCase):
  def setUp(self):
-  self.t=dict(schema_version='moe-scaleout-physical-topology/1',nodes=[dict(id=i,kind='gpu') for i in range(8)]+[dict(id=8,kind='tor',plane=0)],links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000) for i in range(8)])
+  self.t=dict(schema_version='moe-scaleout-physical-topology/1',nodes=[dict(id=i,kind='gpu') for i in range(8)]+[dict(id=8,kind='tor',plane=0)],links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000,delay_ns=1000) for i in range(8)])
   self.p=json.loads((ROOT/'examples/scaleout_rdma/rdma.json').read_text())
   self.w=json.loads((ROOT/'examples/scaleout_rdma_streams/work.json').read_text())
   self.r=dict(mode='go_back_n/1',initial_rto_ns=80000,max_rto_ns=640000,max_retries=3,max_events=10000)

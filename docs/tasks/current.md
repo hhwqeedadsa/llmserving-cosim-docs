@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台`in_progress`：[显式self-peer服务与共享目标内存](self_peer_service_spec.md)，基线`7549219`。为v5事务增加独立声明FIFO和实际内存服务，保留源保护/NIC权限/原子旧值及本地条件反馈，不制造self网络ACK或交换机流量。完整现代映射仍未接入，context planner保持拒绝self。固定4次网络和独立核验；600受监控秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB，网络1ms/result16MiB。只增量编译3个消费者、链接2入口，固定依赖/旧库不动，无下载/GPU/push；平台和性能研究分开。
+
 当前平台`completed`：[Context身份到实际事务连接](context_transaction_binding_spec.md)，基线`32f508d`。公开`rdma-context-plan/check`保留communicator/source/context/peer身份，映射到明确NIC与既有MRT1请求/响应载体。固定3次真实网络完成：健康/首包真实丢失各6远端+1本地、4binding/8载体，跨20us本地阶段复用；原子旧值17/最终20，目标各应用一次。故障组80us真实重传，其他3binding已先完成；第三次为新Python根/空cwd/包内8库独立单put，前两网络不重跑，3份离线JSON逐字节一致。
 
 66项相关Python单元、11类公开结果/4类独立oracle/3类输入角色与派生篡改、6类不安全归档拒绝通过。首次健康加载历史RPATH位置同hash库，保留事实；后两网络由显式加载器实际使用包内库。一次恢复启动因cwd导入旧fixture被断言拒绝，核实未启动网络后用`-P`完成原定第三次，不计作第四次网络；失败日志保留。现有输入收据native_commit是基线常量，本组另存真实native HEAD和源码/程序/库hash。最终包及预算收尾见[验收](../../fixtures/context_transactions/README.md)、[中文报告](../reviews/Context连接身份绑定与实包恢复验收_20261024.md)和[收尾](../../fixtures/context_transactions/closeout.json)。450受监控秒/256MiB及单命令60秒/1GiB/地址2GiB/96MiB、网络1ms/result16MiB保持；无构建、安装下载、GPU或依赖变化，仅本地提交、不push。

@@ -294,14 +294,7 @@ namespace ns3 {
 				m_rdmaPktSent(lastQp, p, m_tInterframeGap);
 			}else { // no packet to send
 				NS_LOG_INFO("PAUSE prohibits send at node " << m_node->GetId());
-				Time t = Simulator::GetMaximumSimulationTime();
-				for (uint32_t i = 0; i < m_rdmaEQ->GetFlowCount(); i++){
-					Ptr<RdmaQueuePair> qp = m_rdmaEQ->GetQp(i);
-					t = Min(qp->m_nextAvail, t);
-				}
-				if (m_nextSend.IsExpired() && t < Simulator::GetMaximumSimulationTime() && t > Simulator::Now()){
-					m_nextSend = Simulator::Schedule(t - Simulator::Now(), &QbbNetDevice::DequeueAndTransmit, this);
-				}
+				ScheduleNextSend();
 			}
 			return;
 		}else{   //switch, doesn't care about qcn, just send
@@ -329,14 +322,7 @@ namespace ns3 {
 			}else{ //No queue can deliver any packet
 				NS_LOG_INFO("PAUSE prohibits send at node " << m_node->GetId());
 				if (m_node->GetNodeType() == 0 && m_qcnEnabled){ //nothing to send, possibly due to qcn flow control, if so reschedule sending
-					Time t = Simulator::GetMaximumSimulationTime();
-					for (uint32_t i = 0; i < m_rdmaEQ->GetFlowCount(); i++){
-						Ptr<RdmaQueuePair> qp = m_rdmaEQ->GetQp(i);
-						t = Min(qp->m_nextAvail, t);
-					}
-					if (m_nextSend.IsExpired() && t < Simulator::GetMaximumSimulationTime() && t > Simulator::Now()){
-						m_nextSend = Simulator::Schedule(t - Simulator::Now(), &QbbNetDevice::DequeueAndTransmit, this);
-					}
+					ScheduleNextSend();
 				}
 			}
 		}
@@ -564,11 +550,32 @@ namespace ns3 {
 		}
 	}
 
-	void QbbNetDevice::UpdateNextAvail(Time t){
-		if (!m_nextSend.IsExpired() && t < m_nextSend){
-			Simulator::Cancel(m_nextSend);
-			Time delta = t < Simulator::Now() ? Time(0) : t - Simulator::Now();
-			m_nextSend = Simulator::Schedule(delta, &QbbNetDevice::DequeueAndTransmit, this);
+	void QbbNetDevice::ScheduleNextSend(void){
+		Time next = Simulator::GetMaximumSimulationTime();
+		if (m_linkUp && m_node && m_node->GetNodeType() == 0 && m_txMachineState == READY){
+			for (uint32_t i = 0; i < m_rdmaEQ->GetFlowCount(); ++i){
+				Ptr<RdmaQueuePair> qp = m_rdmaEQ->GetQp(i);
+				// An exhausted, paused, or window-blocked QP cannot become
+				// sendable just because its old pacing deadline has passed.
+				if (!m_paused[qp->m_pg] && qp->GetBytesLeft() > 0 && !qp->IsWinBound()){
+					next = Min(next, qp->m_nextAvail);
+				}
+			}
 		}
+		if (next == Simulator::GetMaximumSimulationTime()){
+			Simulator::Cancel(m_nextSend);
+			return;
+		}
+		next = Max(next, Simulator::Now());
+		// Keep an earlier pending callback; it will reevaluate actual state.
+		// A newly offered earlier QP must not wait for a later old callback.
+		if (m_nextSend.IsExpired() || next < m_nextSend){
+			Simulator::Cancel(m_nextSend);
+			m_nextSend = Simulator::Schedule(next - Simulator::Now(), &QbbNetDevice::DequeueAndTransmit, this);
+		}
+	}
+
+	void QbbNetDevice::UpdateNextAvail(Time){
+		ScheduleNextSend();
 	}
 } // namespace ns3

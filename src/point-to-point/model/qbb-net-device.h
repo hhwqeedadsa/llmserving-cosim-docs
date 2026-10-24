@@ -147,6 +147,9 @@ protected:
   /// Look for an available packet and send it using TransmitStart(p)
   virtual void DequeueAndTransmit(void);
 
+  /// Arm the earliest paced QP that can send once its rate deadline arrives.
+  void ScheduleNextSend(void);
+
   /// Resume a paused queue and call DequeueAndTransmit()
   virtual void Resume(unsigned qIndex);
 

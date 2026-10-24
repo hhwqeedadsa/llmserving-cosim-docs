@@ -651,13 +651,13 @@ void RdmaHw::ChangeRate(Ptr<RdmaQueuePair> qp, DataRate new_rate){
 	Time sendingTime = qp->m_rate.CalculateBytesTxTime(qp->lastPktSize);
 	Time new_sendintTime = new_rate.CalculateBytesTxTime(qp->lastPktSize);
 	qp->m_nextAvail = qp->m_nextAvail + new_sendintTime - sendingTime;
+	// Eligibility for a variable window must observe the new rate as well.
+	qp->m_rate = new_rate;
 	// update nic's next avail event
 	uint32_t nic_idx = GetNicIdxOfQp(qp);
 	m_nic[nic_idx].dev->UpdateNextAvail(qp->m_nextAvail);
 	#endif
 
-	// change to new rate
-	qp->m_rate = new_rate;
 }
 
 #define PRINT_LOG 0

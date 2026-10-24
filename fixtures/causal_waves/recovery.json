@@ -1,0 +1,205 @@
+{
+  "auditor_sha256": "7a14eb7011fea9b8b78864df9f6305afc99322084c6a8ac2c66bdc6b276529da",
+  "compiled_full_work_and_mapping_byte_equal": true,
+  "empty_cwd": true,
+  "four_offline_audits_byte_equal": true,
+  "full_frontend_two_steps_and_48_layers_preserved": true,
+  "independent_inverse_rank_projection": true,
+  "long_case": {
+    "astra_scheduling_equivalence": false,
+    "finish_ns": 2666303,
+    "frontend_nodes": 7284,
+    "group_finish_ns": {
+      "g0.w0": 1336743,
+      "g0.w1": 2666303
+    },
+    "hardware_calibrated": false,
+    "intermediate_capture": "endpoint capture with shortest-hop byte conservation; no exact ECMP paths",
+    "local_work": 3221,
+    "modern_gin": false,
+    "passed": true,
+    "physical_drop_events": 0,
+    "physical_link_transmissions": 27192,
+    "receives_with_local_gate": [],
+    "source_packets": 2878,
+    "source_payload_bytes": 18948096,
+    "writes": 2090
+  },
+  "native_runtime_bundled": false,
+  "new_python_source_root": true,
+  "original_binary_and_eight_libraries_hash_equal": true,
+  "passed": true,
+  "public_commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/topology.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/topology"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "topology",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-causal-plan",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/long/plan.json",
+        "--topology",
+        "/dev/shm/moe-causal-wave-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/long/protocol.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "plan",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-causal-wave-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/long/protocol.json",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned/work.json",
+        "--backend",
+        "/dev/shm/moe-persistent-scale-20261024/bin/stream-probe",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/network"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "network",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-wave-20261024/fresh/auditor.py",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/long/plan.json",
+        "--work",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned/work.json",
+        "--mapping",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned/mapping.json",
+        "--result",
+        "/dev/shm/moe-causal-wave-20261024/fresh/network/result.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/audit.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "long-audit",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-wave-20261024/fresh/auditor.py",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/long/plan.json",
+        "--work",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned/work.json",
+        "--mapping",
+        "/dev/shm/moe-causal-wave-20261024/fresh/planned/mapping.json",
+        "--result",
+        "/dev/shm/moe-causal-wave-20261024/fresh/network/result.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/repeat-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "long-repeat-offline",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-wave-20261024/fresh/auditor.py",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/plan.json",
+        "--work",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/plain/work.json",
+        "--mapping",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/plain/mapping.json",
+        "--result",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/network/plain/result.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/plain-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "plain-offline",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-wave-20261024/fresh/auditor.py",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/selective-plan.json",
+        "--work",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/selective/work.json",
+        "--mapping",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/selective/mapping.json",
+        "--result",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/network/selective/result.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/selective-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "selective-offline",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-causal-wave-20261024/fresh/auditor.py",
+        "--config",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/inputs/selective-plan.json",
+        "--work",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/fault/work.json",
+        "--mapping",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/planned/fault/mapping.json",
+        "--result",
+        "/dev/shm/moe-causal-wave-20261024/restored/evidence/network/fault/result.json",
+        "--output",
+        "/dev/shm/moe-causal-wave-20261024/fresh/fault-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-causal-wave-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "fault-offline",
+      "pythonpath": "/dev/shm/moe-causal-wave-20261024/restored/source/python"
+    }
+  ],
+  "scope": "one saved full frontend group on four projected endpoints; declared costs/persistent reference, not original thousand-GPU/ASTRA/modern GIN timing",
+  "total_actual_networks": 4
+}

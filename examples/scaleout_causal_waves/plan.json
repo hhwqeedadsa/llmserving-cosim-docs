@@ -1,0 +1,56 @@
+{
+  "schema_version": "moe-rdma-causal-waves/1",
+  "waves": [
+    "g0.w0.json",
+    "g1.w0.json",
+    "g0.w1.json",
+    "g1.w1.json"
+  ],
+  "streams": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 2,
+      "plane": 0,
+      "wire_port": 21000,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 1,
+      "src": 2,
+      "dst": 0,
+      "plane": 0,
+      "wire_port": 21001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 2,
+      "src": 1,
+      "dst": 3,
+      "plane": 0,
+      "wire_port": 21002,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 3,
+      "src": 3,
+      "dst": 1,
+      "plane": 0,
+      "wire_port": 21003,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    }
+  ],
+  "limits": {
+    "max_streams": 4,
+    "max_work": 128,
+    "max_link_transmissions": 200000
+  }
+}

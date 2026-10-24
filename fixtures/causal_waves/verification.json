@@ -1,0 +1,138 @@
+{
+  "cases": {
+    "complete48": {
+      "astra_scheduling_equivalence": false,
+      "finish_ns": 2666303,
+      "frontend_nodes": 7284,
+      "group_finish_ns": {
+        "g0.w0": 1336743,
+        "g0.w1": 2666303
+      },
+      "hardware_calibrated": false,
+      "intermediate_capture": "endpoint capture with shortest-hop byte conservation; no exact ECMP paths",
+      "local_work": 3221,
+      "modern_gin": false,
+      "passed": true,
+      "physical_drop_events": 0,
+      "physical_link_transmissions": 27192,
+      "receives_with_local_gate": [],
+      "source_packets": 2878,
+      "source_payload_bytes": 18948096,
+      "writes": 2090
+    },
+    "fault": {
+      "astra_scheduling_equivalence": false,
+      "finish_ns": 62845,
+      "frontend_nodes": 64,
+      "group_finish_ns": {
+        "g0.w0": 37673,
+        "g0.w1": 62845,
+        "g1.w0": 25258,
+        "g1.w1": 50440
+      },
+      "hardware_calibrated": false,
+      "local_work": 36,
+      "modern_gin": false,
+      "passed": true,
+      "physical_drop_events": 1,
+      "physical_link_transmissions": 390,
+      "receives_with_local_gate": [
+        {
+          "completed_ns": 20100,
+          "graph": "g0.w0",
+          "node": 4,
+          "rank": 0,
+          "receive_ns": 6621
+        }
+      ],
+      "source_packets": 33,
+      "source_payload_bytes": 17024,
+      "writes": 16
+    },
+    "plain": {
+      "astra_scheduling_equivalence": false,
+      "finish_ns": 57998,
+      "frontend_nodes": 64,
+      "group_finish_ns": {
+        "g0.w0": 32826,
+        "g0.w1": 57998,
+        "g1.w0": 25258,
+        "g1.w1": 50440
+      },
+      "hardware_calibrated": false,
+      "local_work": 36,
+      "modern_gin": false,
+      "passed": true,
+      "physical_drop_events": 0,
+      "physical_link_transmissions": 384,
+      "receives_with_local_gate": [
+        {
+          "completed_ns": 20100,
+          "graph": "g0.w0",
+          "node": 4,
+          "rank": 0,
+          "receive_ns": 6621
+        }
+      ],
+      "source_packets": 32,
+      "source_payload_bytes": 16024,
+      "writes": 16
+    },
+    "selective": {
+      "astra_scheduling_equivalence": false,
+      "finish_ns": 57998,
+      "frontend_nodes": 64,
+      "group_finish_ns": {
+        "g0.w0": 32826,
+        "g0.w1": 57998,
+        "g1.w0": 25258,
+        "g1.w1": 50440
+      },
+      "hardware_calibrated": false,
+      "local_work": 36,
+      "modern_gin": false,
+      "passed": true,
+      "physical_drop_events": 0,
+      "physical_link_transmissions": 384,
+      "receives_with_local_gate": [
+        {
+          "completed_ns": 20100,
+          "graph": "g0.w0",
+          "node": 4,
+          "rank": 0,
+          "receive_ns": 6621
+        }
+      ],
+      "source_packets": 32,
+      "source_payload_bytes": 16024,
+      "writes": 16
+    }
+  },
+  "compiler_source_identity": true,
+  "evidence_tampering_rejected": [
+    "recv_gate",
+    "next_wave_ack",
+    "local_time",
+    "accept_time",
+    "send_bytes",
+    "wire_port",
+    "packet_sequence"
+  ],
+  "first_test_failure": "Test labeled one-sided wait as a cycle; changed to an actual cross-rank cyclic dependency, no platform fix",
+  "network_executions_so_far": 4,
+  "new_source_public_workflow_passed": true,
+  "original_native_runtime_unchanged": true,
+  "passed": true,
+  "python_scaleout_tests": 142,
+  "scope": "frontend DAG and strong reference transport functionality; no optimization or modern GIN claim",
+  "unsafe_archive_classes_rejected_before_writes": [
+    "traversal",
+    "absolute",
+    "symlink",
+    "duplicate",
+    "file_parent",
+    "wrong_hash",
+    "missing_member",
+    "schema"
+  ]
+}

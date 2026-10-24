@@ -1,0 +1,61 @@
+{
+  "budget": {
+    "max_links": 131072,
+    "max_nodes": 8192,
+    "max_switches": 1024
+  },
+  "deployment": {
+    "gpu_type": "NONE",
+    "gpus_per_server": 2,
+    "pods": 2,
+    "segments_per_pod": 1,
+    "servers_per_segment": 1
+  },
+  "fabric": {
+    "agg_uplinks": 1,
+    "aggs_per_pod_per_group": 1,
+    "core_wiring": "grouped",
+    "cores_per_group": 1,
+    "planes": 1,
+    "rails": 1,
+    "tor_uplinks": 1,
+    "tors_per_segment_per_rail": 1,
+    "upper_tier_scope": "shared"
+  },
+  "links": {
+    "access": {
+      "delay_ns": 1000,
+      "rate_bps": 100000000000
+    },
+    "agg_core": {
+      "delay_ns": 1000,
+      "rate_bps": 100000000000
+    },
+    "tor_agg": {
+      "delay_ns": 1000,
+      "rate_bps": 100000000000
+    },
+    "tor_core": {
+      "delay_ns": 1000,
+      "rate_bps": 100000000000
+    }
+  },
+  "nic": {
+    "rails_by_gpu_slot": [
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "total_rate_bps": 100000000000
+  },
+  "port_limits": {
+    "agg": 128,
+    "core": 128,
+    "gpu": 16,
+    "tor": 128
+  },
+  "schema_version": "moe-scaleout-topology/1"
+}

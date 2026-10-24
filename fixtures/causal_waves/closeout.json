@@ -1,0 +1,81 @@
+{
+  "actual_network_executions": 4,
+  "archive": {
+    "bytes": 1448847,
+    "members": 311,
+    "sha256": "098ec0e75c0d77efa59abffd69035970f093897daffcfca48dd16df5a1b2a7a9",
+    "uncompressed_bytes": 19829603
+  },
+  "archive_safety_classes": 8,
+  "baseline": "87d8eb8",
+  "budgets": {
+    "actual_result_extra_cap_bytes": 8388608,
+    "address_bytes": 2147483648,
+    "archive_uncompressed_bytes": 33554432,
+    "artifact_bytes": 16777216,
+    "cumulative_disk_bytes": 134217728,
+    "cumulative_seconds": 300,
+    "max_network_executions": 4,
+    "max_network_ns": 5000000,
+    "per_command_seconds": 60,
+    "protocol_result_bytes": 16777216,
+    "rss_bytes": 1073741824
+  },
+  "conservative_cumulative_monitored_seconds_including_nested": 19.678212720900774,
+  "ended_utc": "2026-10-24T18:04:43.463773+00:00",
+  "evidence": {
+    "all_archive_members_verified": true,
+    "compiled_long_work_and_mapping_byte_equal": true,
+    "copy_hash_equal": true,
+    "dependency_check": "13 fixed dependencies clean",
+    "existing_native_binary_and_eight_library_hashes_verified": true,
+    "final_package_not_network_reexecuted": true,
+    "fresh_used_verified_v1_snapshot": true,
+    "installs_downloads_builds_gpu_dependency_changes_push": false,
+    "native_runtime_bundled": false,
+    "new_source_public_workflow_passed": true,
+    "original_nodes_and_inverse_rank_projection_verified": true,
+    "three_old_and_long_repeat_offline_audits_byte_equal": true
+  },
+  "failed_monitor_receipts": [
+    {
+      "exit_code": 1,
+      "path": "unit-monitor/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "failure_explanation": "First unit test incorrectly called a one-sided receive wait a cycle; corrected the test to a genuine cross-rank dependency cycle. No platform change or network retry was needed.",
+  "final_management_seconds_reserved": 10,
+  "long_frontend": {
+    "endpoint_events": 11512,
+    "ep": 4,
+    "finish_ns": 2666303,
+    "gpus": 4,
+    "layers": 48,
+    "local_work": 3221,
+    "native_wall_seconds": 2.9843709636479616,
+    "original_nodes": 7284,
+    "physical_link_transmissions": 27192,
+    "result_bytes": 4861670,
+    "source_packets": 2878,
+    "source_payload_bytes": 18948096,
+    "steps": 2,
+    "streams": 12,
+    "work": 5311,
+    "writes": 2090
+  },
+  "network_successes": 4,
+  "original_terminal_monitors": 27,
+  "overall_paper_goal_complete": false,
+  "peak_sampled_group_rss_bytes": 321482752,
+  "platform_functional_acceptance_complete": true,
+  "python_scaleout_tests": 142,
+  "remaining_monitored_live_pids": [],
+  "schema_version": "causal-wave-closeout/1",
+  "scope": "saved frontend DAG on persistent byte/local reference; not modern GIN, ASTRA scheduling equivalence, GPU visibility, original full thousand-GPU execution or calibration",
+  "source_and_final_receipt_reserve_bytes": 524288,
+  "stage_and_persistent_allocated_bytes": 34885632,
+  "stage_and_persistent_apparent_bytes": 33729577,
+  "tamper_classes": 7,
+  "total_charged_with_reserve_bytes": 35409920
+}

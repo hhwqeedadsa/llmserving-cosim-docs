@@ -1,0 +1,39 @@
+{
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "cc_mode": 1,
+  "chunk_bytes": 4000,
+  "ecn_by_rate": {
+    "100000000000": {
+      "kmax_bytes": 131072,
+      "kmin_bytes": 32768,
+      "pmax": 1.0
+    }
+  },
+  "limits": {
+    "address_bytes": 2147483648,
+    "artifact_bytes": 16777216,
+    "max_gpus": 4,
+    "max_links": 128,
+    "max_messages": 128,
+    "max_queue_events": 1,
+    "max_sim_ns": 5000000,
+    "max_switches": 16,
+    "queue_capture": "summary",
+    "result_json_bytes": 16777216,
+    "rss_bytes": 1073741824,
+    "wall_seconds": 60
+  },
+  "packet_capture": {
+    "end_ns": 5000000,
+    "max_events": 100000,
+    "nodes": [],
+    "start_ns": 0,
+    "wire_headers": true
+  },
+  "payload_bytes": 1000,
+  "queue_metrics": true,
+  "schema_version": "moe-scaleout-rdma/2",
+  "seed": 11,
+  "switch_buffer_bytes": 8388608
+}

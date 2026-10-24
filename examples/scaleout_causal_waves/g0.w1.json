@@ -1,0 +1,288 @@
+{
+  "schema_version": "moe-scaleout-wave/1",
+  "graph_id": "g0.w1",
+  "rank_ids": [
+    0,
+    2
+  ],
+  "group_index": 0,
+  "decode_step": 1,
+  "messages": [
+    {
+      "id": 8,
+      "tag": 8,
+      "src": 0,
+      "dst": 2,
+      "bytes": 1001,
+      "plane": 0,
+      "layer": 0,
+      "phase": "dispatch",
+      "contributions": 1
+    },
+    {
+      "id": 9,
+      "tag": 9,
+      "src": 2,
+      "dst": 0,
+      "bytes": 1001,
+      "plane": 0,
+      "layer": 0,
+      "phase": "dispatch",
+      "contributions": 1
+    },
+    {
+      "id": 10,
+      "tag": 10,
+      "src": 0,
+      "dst": 2,
+      "bytes": 1001,
+      "plane": 0,
+      "layer": 0,
+      "phase": "combine",
+      "contributions": 1
+    },
+    {
+      "id": 11,
+      "tag": 11,
+      "src": 2,
+      "dst": 0,
+      "bytes": 1001,
+      "plane": 0,
+      "layer": 0,
+      "phase": "combine",
+      "contributions": 1
+    }
+  ],
+  "rank_nodes": {
+    "0": [
+      {
+        "id": 1,
+        "kind": "COMP",
+        "name": "input",
+        "deps": [],
+        "duration_ns": 100
+      },
+      {
+        "id": 2,
+        "kind": "COMP",
+        "name": "receive_gate",
+        "deps": [],
+        "duration_ns": 0
+      },
+      {
+        "id": 3,
+        "kind": "SEND",
+        "name": "dispatch.send",
+        "deps": [
+          1
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 8,
+          "tag": 8,
+          "src": 0,
+          "dst": 2,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 4,
+        "kind": "RECV",
+        "name": "dispatch.recv",
+        "deps": [
+          2
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 9,
+          "tag": 9,
+          "src": 2,
+          "dst": 0,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 5,
+        "kind": "COMP",
+        "name": "experts",
+        "deps": [
+          4,
+          1
+        ],
+        "duration_ns": 200
+      },
+      {
+        "id": 6,
+        "kind": "SEND",
+        "name": "combine.send",
+        "deps": [
+          5
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 10,
+          "tag": 10,
+          "src": 0,
+          "dst": 2,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "combine",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 7,
+        "kind": "RECV",
+        "name": "combine.recv",
+        "deps": [],
+        "duration_ns": 0,
+        "message": {
+          "id": 11,
+          "tag": 11,
+          "src": 2,
+          "dst": 0,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "combine",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 8,
+        "kind": "COMP",
+        "name": "merge",
+        "deps": [
+          5,
+          7
+        ],
+        "duration_ns": 50
+      }
+    ],
+    "2": [
+      {
+        "id": 1,
+        "kind": "COMP",
+        "name": "input",
+        "deps": [],
+        "duration_ns": 120
+      },
+      {
+        "id": 2,
+        "kind": "COMP",
+        "name": "receive_gate",
+        "deps": [],
+        "duration_ns": 0
+      },
+      {
+        "id": 3,
+        "kind": "SEND",
+        "name": "dispatch.send",
+        "deps": [
+          1
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 9,
+          "tag": 9,
+          "src": 2,
+          "dst": 0,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 4,
+        "kind": "RECV",
+        "name": "dispatch.recv",
+        "deps": [
+          2
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 8,
+          "tag": 8,
+          "src": 0,
+          "dst": 2,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "dispatch",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 5,
+        "kind": "COMP",
+        "name": "experts",
+        "deps": [
+          4,
+          1
+        ],
+        "duration_ns": 200
+      },
+      {
+        "id": 6,
+        "kind": "SEND",
+        "name": "combine.send",
+        "deps": [
+          5
+        ],
+        "duration_ns": 0,
+        "message": {
+          "id": 11,
+          "tag": 11,
+          "src": 2,
+          "dst": 0,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "combine",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 7,
+        "kind": "RECV",
+        "name": "combine.recv",
+        "deps": [],
+        "duration_ns": 0,
+        "message": {
+          "id": 10,
+          "tag": 10,
+          "src": 0,
+          "dst": 2,
+          "bytes": 1001,
+          "plane": 0,
+          "layer": 0,
+          "phase": "combine",
+          "contributions": 1
+        }
+      },
+      {
+        "id": 8,
+        "kind": "COMP",
+        "name": "merge",
+        "deps": [
+          5,
+          7
+        ],
+        "duration_ns": 50
+      }
+    ]
+  },
+  "route_source": "handwritten functional frontend example, not a measured MoE",
+  "routes": []
+}

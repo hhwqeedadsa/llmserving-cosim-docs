@@ -78,6 +78,9 @@ def parser():
     session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 work after actual native callbacks; optional NIC-scoped registrations/local application views, v5 sparse windows/prepared callbacks; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
+    causal = sc.add_parser('rdma-causal-plan', help='Lower saved public wave DAGs to persistent byte/local work; not ASTRA scheduling equivalence or modern GIN')
+    for name in ('config', 'topology', 'protocol', 'output'):
+        causal.add_argument('--'+name, type=Path, required=True)
     rs = sc.add_parser('rdma-stream-probe', help='Execute persistent native byte writes; optional source_rate_capture or dcqcn_reference; not GIN/GPU visibility or hardware calibration')
     rs.add_argument('--topology', type=Path, required=True, help='Generated physical RDMA topology directory; no intra-host bypass')
     rs.add_argument('--protocol', type=Path, required=True, help='Native DCQCN, ACK interval 1; optional switch_links/1; transport_recovery belongs in work config, legacy recovery/admission excluded')
@@ -177,6 +180,9 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-transaction-session':
                 from .transaction_session import run
                 value = run(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'rdma-causal-plan':
+                from .scaleout_causal_waves import execute
+                value = execute(args.config, args.topology, args.protocol, args.output)
             elif args.scaleout_command == 'rdma-stream-probe':
                 from .scaleout_streams import probe
                 value = probe(args.topology, args.protocol, args.config, args.backend, args.output)

@@ -53,6 +53,8 @@ moe-ub build --build-dir build/default --jobs 2
 
 检查同一原生连接在多次传输和空闲后是否保留序号，可用`scaleout rdma-stream-probe --topology ... --protocol ... --config ... --backend ... --output ...`。后续工作按真实接收/ACK回调就绪；它是独立字节传输检查，不执行现代MoE或GPU可见性。构建输出的`stream_probe`路径、输入和上限见[持久传输小例](../examples/scaleout_rdma_streams/README.md)。
 
+已有前端`graphs/<graph_id>/wave.json`可通过`scaleout rdma-causal-plan`转换为普通持久字节/本地任务，再执行同一`rdma-stream-probe`，用于保留计算—Dispatch—专家—Combine及组间独立、组内轮次完成依赖。它是保存图的另一种参考执行方式，不重跑LLMServingSim/ASTRA或补出现代GIN语义；配置、连接与边界见[前端图示例](../examples/scaleout_causal_waves/README.md)。
+
 需要比较丢包恢复时，该字节入口还提供[有界选择重传](../examples/scaleout_rdma_streams/README.md#可选的有界选择重传)：配置真实扩展确认、乱序缓冲和发送窗口，使用既有运行命令。它是强传输参考基线，未接入在线推理服务。
 
 该字节入口支持在工作输入中增加`source_rate_capture`，按已有包与ACK回调记录源端速率；所有原生入口另记录实际生效的`rdma_parameters`。配置、单位与采样边界见[源端速率观测](../examples/scaleout_rdma_streams/README.md#可选的源端速率观测)。

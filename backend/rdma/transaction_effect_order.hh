@@ -38,7 +38,7 @@ inline void ValidateTransactionEffectOrder(const Json& input) {
       node.applied=node.before;node.applied.insert(id);
       for(const auto& prior:writes) {
         const bool same_carrier=prior.connection==connection && node.ancestors.count(prior.id);
-        if(prior.owner==current.owner && prior.key==current.key &&
+        if(prior.owner==current.owner &&
            current.address<prior.address+prior.bytes && prior.address<current.address+current.bytes)
           Require((atomic && prior.atomic) || node.before.count(prior.id) || same_carrier,
             "overlapping non-atomic memory writes require remote effect order; prepared does not order writes across connections");

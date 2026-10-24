@@ -36,12 +36,14 @@ int main(int argc,char** argv) {
       if(explicit_submission)keys.push_back("submission_model");
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
       if(input.contains("buffer_model"))keys.push_back("buffer_model");
+      for(const auto* name:{"registration_model","registrations"})if(input.contains(name))keys.push_back(name);
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
-    if(sparse_mode)ValidateSessionProgram(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
+    if(sparse_mode || input.contains("registration_model") || input.contains("registrations"))
+      ValidateSessionProgram(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     Fabric fabric(topology,config);RemoteTransactions transactions(fabric,input);
     std::set<unsigned> gpus;
     for(const auto& n:topology.at("nodes"))if(n.at("kind")=="gpu")gpus.insert(n.at("id").get<unsigned>());

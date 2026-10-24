@@ -6,6 +6,7 @@ import re
 from .scaleout_rdma import checked_json, digest, limits, monitored, save, NATIVE_COMMIT
 from .scaleout_streams import validate as validate_streams
 from .scaleout_topology import fields, integer, require
+from .memory_registrations import validate_registrations
 
 
 def _hex(text, maximum, name):
@@ -61,6 +62,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
            (' transport_recovery' if 'transport_recovery' in config else '')+
+           (' registration_model' if 'registration_model' in config else '')+(' registrations' if 'registrations' in config else '')+
            (' buffer_model' if 'buffer_model' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
@@ -113,6 +115,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             require(prior['owner'] != w['owner'] or w['address']+length <= prior['address'] or
                     prior['address']+n <= w['address'], 'overlapping remote windows')
         registered[key] = w, length
+    registrations=validate_registrations(config,registered,by_id)
     operations = config['operations']
     require(isinstance(operations, list) and (0 if allow_no_remote else 1) <= len(operations) <= (48 if local_mode else 32), 'transaction node budget exceeded')
     kinds, ancestors, accesses = {}, {}, []
@@ -182,6 +185,11 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         integer(op['address'], 'operation address', 0, 2**64-1)
         require(op['connection'] in by_id, 'unknown connection')
         key = by_id[op['connection']]['dst'], op['key']
+        access=None
+        if registrations is not None:
+            location=key[0],by_id[op['connection']]['destination_nic'],key[1]
+            require(location in registrations,'unknown destination NIC/key registration')
+            access=registrations[location];key=key[0],access['window_key']
         require(key in registered, 'unknown remote owner/key')
         window, size = registered[key]
         if from_source:
@@ -200,10 +208,13 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
             length = _hex(op['hex'], 32768, 'put')
         else:
             integer(op['value'], 'atomic addend', 0, 2**64-1)
-            require(window['allow_atomic'] and op['address']%8 == 0, 'atomic denied/unaligned')
+            require(window['allow_atomic'] and (access is None or access['allow_atomic']) and op['address']%8 == 0, 'atomic denied/unaligned')
             length = 8
         require(window['address'] <= op['address'] and op['address']+length <= window['address']+size,
                 'remote address out of bounds')
+        if access is not None:
+            require(access['address']<=op['address'] and op['address']+length<=access['address']+access['bytes'],
+                    'remote registration range exceeded')
         if 'queue_fence' in op:
             selected = op['queue_fence']
             require('local_wait' not in op, 'queue fence and local wait require separate application steps')

@@ -1,0 +1,26 @@
+{
+  "actual_network_executions_before_restore": 6,
+  "bounded_storage_counts_physical_bytes_once": true,
+  "changed_source_changes_four_frames_constant_atomic_request_unchanged": true,
+  "cli_rejections": 13,
+  "cpp_memory_assertions": 7085,
+  "cpp_nic_assertions": 27,
+  "cpp_sparse_assertions": 6483,
+  "default_legacy_complete_bytes_identical": true,
+  "dynamic_revocation_implemented": false,
+  "hardware_calibrated": false,
+  "independent_audits": [
+    "dense",
+    "session",
+    "changed",
+    "sparse",
+    "bounded"
+  ],
+  "native_rejections": 13,
+  "one_shot_and_online_common_result_identical": true,
+  "paper_innovation_established": false,
+  "platform_baseline": "f785197",
+  "python_distinct_units": 52,
+  "schema_version": "nic-registration-verification/1",
+  "sparse_wire_and_target_events_identical": true
+}

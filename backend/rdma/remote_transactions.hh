@@ -36,11 +36,11 @@ class RemoteTransactions {
     RemoteMemory::ReadLease source{};
   };
   struct Connection {
-    unsigned src,dst;
+    unsigned src,dst,destination_nic;
     GinWorkQueue queue;
     MemoryFrameDecoder requests,responses;
     std::vector<uint64_t> operations;
-    Connection(unsigned s,unsigned d,unsigned depth):src(s),dst(d),queue(depth,32) {}
+    Connection(unsigned s,unsigned d,unsigned nic,unsigned depth):src(s),dst(d),destination_nic(nic),queue(depth,32) {}
   };
   void Pump(uint64_t connection);
   void PumpExplicit(uint64_t connection);

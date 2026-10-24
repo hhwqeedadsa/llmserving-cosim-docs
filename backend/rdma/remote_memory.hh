@@ -89,6 +89,25 @@ class RemoteMemory {
   }
   struct Result {bool duplicate;bool atomic;uint64_t old_value;};
   struct ReadLease {unsigned owner;uint32_t key;uint64_t address,bytes;};
+  // Static functional registration: no extra backing bytes and no provider DMA.
+  struct Registration {
+    uint64_t id;unsigned owner,nic;uint32_t key,window_key;uint64_t address,bytes;bool atomic;
+  };
+  void ConfigureRegistrations() {
+    MemoryCheck(!nic_scoped_ && contexts_.empty() && registrations_.empty(),"registration model configured after use/repeated");
+    nic_scoped_=true;
+  }
+  void RegisterAccess(Registration r) {
+    MemoryCheck(nic_scoped_ && contexts_.empty() && registrations_.size()<32 && r.key && r.bytes,
+                "invalid registration mode/count/key/extent");
+    const auto& w=Range(r.owner,r.window_key,r.address,r.bytes);
+    MemoryCheck(!r.atomic || w.atomic,"registration cannot grant storage atomic permission");
+    for(const auto& p:registrations_)
+      MemoryCheck(p.id!=r.id && !(p.owner==r.owner && p.nic==r.nic && p.key==r.key),"repeated registration id or owner/NIC/key");
+    registrations_.push_back(r);
+  }
+  const std::vector<Registration>& Registrations() const {return registrations_;}
+  bool NicScoped() const {return nic_scoped_;}
   // Only the current monotonic PUT carrier can opt out of application replay.
   // This does not release windows/leases or invalidate already-in-flight bytes.
   void ConfigureCarrierOncePut() {
@@ -127,6 +146,26 @@ class RemoteMemory {
   // atomics; retained request/result cache for this bounded connection lifetime.
   // It does NOT implement PSNs, retry timers, GPU coherence or remote NIC delay.
   Result Apply(uint64_t context,unsigned owner,const MemoryFrame& frame) {
+    MemoryCheck(!nic_scoped_,"NIC-scoped target requires actual ingress NIC");
+    return ApplyImpl(context,owner,frame,nullptr);
+  }
+  Result ApplyOnNic(uint64_t context,unsigned owner,unsigned nic,const MemoryFrame& frame) {
+    if(!nic_scoped_)return Apply(context,owner,frame);
+    const auto it=std::find_if(registrations_.begin(),registrations_.end(),[&](const auto& r){
+      return r.owner==owner && r.nic==nic && r.key==frame.key;
+    });
+    MemoryCheck(it!=registrations_.end(),"unknown remote owner/NIC/key registration");
+    const uint64_t length=frame.verb==MemoryFrame::Put?frame.body.size():8;
+    MemoryCheck(length>0 && frame.address>=it->address && frame.address-it->address<=it->bytes &&
+                length<=it->bytes-(frame.address-it->address),"remote registration range exceeded");
+    MemoryCheck(frame.verb!=MemoryFrame::FetchAdd || it->atomic,"registration atomic denied");
+    const auto binding=std::pair{owner,nic};
+    MemoryCheck(!context_bindings_.count(context) || context_bindings_.at(context)==binding,"memory context changed ingress owner/NIC");
+    auto result=ApplyImpl(context,owner,frame,&*it);
+    context_bindings_.emplace(context,binding);return result;
+  }
+ private:
+  Result ApplyImpl(uint64_t context,unsigned owner,const MemoryFrame& frame,const Registration* registration) {
     MemoryCheck(frame.verb==MemoryFrame::Put || frame.verb==MemoryFrame::FetchAdd,"target received non-request");
     MemoryCheck(!carrier_once_put_ || frame.verb==MemoryFrame::Put,"carrier-once target supports put only");
     const auto encoded=EncodeMemoryFrame(frame);
@@ -139,14 +178,15 @@ class RemoteMemory {
       return {true,saved.result.atomic,saved.result.old_value};
     }
     MemoryCheck(frame.sequence==state.next && state.next<32,"memory request sequence gap/budget exceeded");
-    auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==frame.key;});
+    const auto storage_key=registration?registration->window_key:frame.key;
+    auto it=std::find_if(windows_.begin(),windows_.end(),[&](const Window& w){return w.owner==owner && w.key==storage_key;});
     MemoryCheck(it!=windows_.end(),"unknown remote memory key/owner");
     const auto length=frame.verb==MemoryFrame::Put?frame.body.size():8;
     MemoryCheck(frame.address>=it->address && frame.address-it->address<=Size(*it) &&
                 length<=Size(*it)-(frame.address-it->address),"remote memory address out of bounds");
     const auto offset=frame.address-it->address;
     if(frame.verb==MemoryFrame::FetchAdd)MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
-    CheckWritable(owner,frame.key,frame.address,length);
+    CheckWritable(owner,storage_key,frame.address,length);
     if(cache_capacity_)MemoryCheck(encoded.size()<=cache_capacity_-cache_bytes_[owner],"target request cache capacity exceeded");
     Result result{false,frame.verb==MemoryFrame::FetchAdd,0};
     if(result.atomic) {
@@ -161,6 +201,7 @@ class RemoteMemory {
     if(cache_capacity_)cache_bytes_[owner]+=encoded.size();
     return result;
   }
+ public:
   const std::vector<Window>& Windows() const {return windows_;}
   std::vector<uint8_t> ReadBytes(unsigned owner,uint32_t key,uint64_t address,uint64_t bytes) const {
     CheckReadable(owner,key,address,bytes);
@@ -272,6 +313,9 @@ class RemoteMemory {
   struct Saved {unsigned owner;std::vector<uint8_t> bytes;Result result;};
   struct Context {uint64_t next=0;std::map<uint64_t,Saved> saved;};
   std::vector<Window> windows_;
+  std::vector<Registration> registrations_;
+  std::map<uint64_t,std::pair<unsigned,unsigned>> context_bindings_;
+  bool nic_scoped_=false;
   std::map<uint64_t,ReadLease> leases_;
   std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;

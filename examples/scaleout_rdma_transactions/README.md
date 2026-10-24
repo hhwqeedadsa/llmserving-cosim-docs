@@ -43,6 +43,32 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-probe \
 
 这些事件用于功能驱动和离线核验：`applied`是目标内存模型已执行；`request_acked`是源收到请求字节的ACK；`completed`是应用队列可回收。目标事件可触发目标行为，不能把其全局记录当作现实源端已经知道的状态，也不能作为在线算法的额外观测。`applied`不代表GPU可见，`completed`不代表真实GIN flush或CQE格式。
 
+## 多NIC的权限共享同一份存储
+
+v4/v5可显式同时加入`registration_model={"mode":"nic_scoped_aliases/1"}`与`registrations`。此时`windows.key`是本地存储身份，远端操作的`key`是rkey（远端访问密钥），由目标owner、实际绑定的接收NIC及rkey共同查找；未命中直接拒绝。本地source、copy和local_wait仍使用存储key。省略两字段时保持原有行为。
+
+每项注册包含`id/owner/nic/key/window_key/address/bytes/allow_atomic`。共1—32项，id和owner/NIC/key分别唯一；NIC须出现在连接端点绑定中。`window_key`引用同owner的存储，注册仅能授予其子范围并收紧原子权限。同rkey可在不同NIC使用；不同rkey可指向相同字节。物理窗口仍不重叠且只分配一次，多个注册不复制数据；更换rkey不能绕过重叠写的因果顺序或源读、本地写保护。
+
+[nic-registration.json](nic-registration.json)有两个64B物理窗口、四项注册、两个不同NIC的正向连接和一个返回连接。它先写两段数据，再经独立原子权限加一，随后把实际修改后的内容发回，最后本地复制。以下命令使用已有原生程序；输出目录均须不存在：
+
+```bash
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout topology \
+  --config examples/scaleout_rdma_transactions/nic-registration-topology.json \
+  --output runs/nic-topology
+PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-transaction-probe \
+  --topology runs/nic-topology \
+  --protocol examples/scaleout_rdma_transactions/nic-registration-rdma.json \
+  --config examples/scaleout_rdma_transactions/nic-registration.json \
+  --backend build/native-transactions/output/moe-rdma/ns3.42-moe-rdma-transaction-probe \
+  --output runs/nic-result
+python3 -B fixtures/nic_registration/audit.py \
+  --result runs/nic-result/result.json \
+  --work examples/scaleout_rdma_transactions/nic-registration.json \
+  --output runs/nic-audit.json
+```
+
+也可用`rdma-transaction-session`和对应session二进制运行同一配置。示例使用两plane各100Gbps接入的NIC1/2（loopback为0）；不是给单端口额外增加带宽。独立核验按捕获的真实入站端口解码MRT1、重放存储并检查返回值，范围见[功能验收](../../fixtures/nic_registration/README.md)。这是静态功能权限，不模拟Protection Domain（保护域）、动态撤销、逐句柄退出、DMA在途寿命或注册成本，不能据此判定失败窗口可安全复用或计算恢复性能。
+
 ## 根据实际收到的值推进下一轮
 
 将运行命令的`--config`改为[local-waits.json](local-waits.json)，可以执行两轮目标端计数消费和通知。GPU0、GPU1向GPU4发送数据/计数；GPU4只有在本地收到的计数和数据**同时**符合条件时，才清零计数并通知两端进入下一轮。两个阶段共用一张网络、同一时钟和持久连接，不输入固定通信时刻。它是人工功能程序，不是MoE推理或现代DeepEP执行。

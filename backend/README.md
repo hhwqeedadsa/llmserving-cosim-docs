@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`memory_registrations.hh`对v4/v5静态注册做Python对应的纯输入校验。`RemoteMemory::Registration`将owner/NIC/rkey映射到物理window_key子范围；`ApplyOnNic`在实际MRT1请求解码后检查权限并修改共享字节。`PersistentStreams::Rx`独立检查实际接收端口等于destination_nic，事务保留该绑定；显式模式禁止旧`Apply`绕过NIC。跨rkey重叠写按owner和物理地址检查，读写lease也不依赖远端别名。默认不开启，报告字段不变；当前不包含PD、动态撤销、provider DMA或成本，见[公开用法](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)。
+
 `bounded_buffers.hh`纯校验transactions/4的可选复制型容量模型；原生在线入口先检查完整候选，再注册操作或修改timer。`PersistentStreams`按源节点共享payload池，完整累计ACK归还空间；显式源隔离可只丢弃重传副本。`RemoteTransactions::Pump`在捕获前检查容量，传输变化唤醒同源连接。请求body在编码入队后清空，本地快照在实际完成后清空。`RemoteMemory`默认保留请求重放缓存；可选`ConfigureCarrierOncePut`只支持单调put，拒绝帧级重放和原子，按当前载体连续字节不重复交付的保证省略完整缓存，保留序号元数据。默认模式保持原行为；支持组合、额度与排除项见[有界缓冲](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)。
 
 `transaction_session.cc`支持有界、可取消的控制timer，使用同一个原生Simulator的真实事件唤醒前端；它与GPU本地FIFO分开，也不发网络包。COMMIT先纯校验整批操作、建立和取消请求，再执行；finish不得隐式丢弃pending timer。无timer时保持默认接口与结果形状，见[接口说明](../examples/scaleout_rdma_transactions/README.md#不占用gpu队列的控制定时器)。

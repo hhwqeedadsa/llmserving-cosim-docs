@@ -1,6 +1,7 @@
 #include "remote_transactions.hh"
 #include "transaction_effect_order.hh"
 #include "bounded_buffers.hh"
+#include "memory_registrations.hh"
 
 namespace moe_rdma {
 static int64_t MemoryNow(){return ns3::Simulator::Now().GetNanoSeconds();}
@@ -59,7 +60,7 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     const auto id=c.at("id").get<uint64_t>();
     const auto src=c.at("src").get<unsigned>(),dst=c.at("dst").get<unsigned>();
     Require(id<=7 && !connections_.count(id),"invalid transaction connection id");
-    connections_.try_emplace(id,src,dst,c.at("queue_depth"));
+    connections_.try_emplace(id,src,dst,c.at("destination_nic"),c.at("queue_depth"));
     transport_.Open(id*2,src,dst,c.at("plane"),c.at("request_port"),c.at("source_nic"),c.at("destination_nic"),64);
     transport_.Open(id*2+1,dst,src,c.at("plane"),c.at("response_port"),c.at("destination_nic"),c.at("source_nic"),64);
     transport_.SetReceiver(id*2,[this,id](auto bytes){
@@ -79,6 +80,11 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
       for(const auto& s:w.at("segments"))segments.emplace_back(s.at("offset"),MemoryUnhex(s.at("hex")));
       memory_.RegisterSparse(w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),w.at("bytes"),segments);
     } else memory_.Register({w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
+  }
+  const auto registrations=MemoryRegistrations(input);
+  if(input.contains("registration_model")) {
+    memory_.ConfigureRegistrations();
+    for(const auto& r:registrations)memory_.RegisterAccess(r);
   }
   transport_.changed=[this](){
     if(bounded_buffers_)for(const auto& [id,c]:connections_)Pump(id);
@@ -345,10 +351,11 @@ void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
   // All authority, address, value and duplicate decisions come from actual bytes
   // and target state. Source operation metadata is used below only to report the
   // application event, not to decide what to write or return.
-  const auto result=memory_.Apply(connection,c.dst,frame);
+  const auto result=memory_.ApplyOnNic(connection,c.dst,c.destination_nic,frame);
   target_events_.push_back({{"order",memory_order_++},{"time_ns",MemoryNow()},{"connection",connection},{"sequence",frame.sequence},
     {"verb",frame.verb},{"key",frame.key},{"address",frame.address},{"body_hex",MemoryHex(frame.body)},
     {"duplicate",result.duplicate},{"old_value",result.old_value}});
+  if(memory_.NicScoped())target_events_.back()["destination_nic"]=c.destination_nic;
   Require(frame.sequence<c.operations.size(),"target request has no submitted application observer");
   auto& op=operations_.at(c.operations.at(frame.sequence));
   if(result.duplicate)++duplicates_;
@@ -425,6 +432,11 @@ Json RemoteTransactions::Report() const {
       }
     } else row["hex"]=MemoryHex(w.bytes);
     out["windows"].push_back(row);
+  }
+  if(memory_.NicScoped()) {
+    out["registration_model"]={{"mode","nic_scoped_aliases/1"}};out["registrations"]=Json::array();
+    for(const auto& r:memory_.Registrations())out["registrations"].push_back({{"id",r.id},{"owner",r.owner},{"nic",r.nic},
+      {"key",r.key},{"window_key",r.window_key},{"address",r.address},{"bytes",r.bytes},{"allow_atomic",r.atomic}});
   }
   for(const auto& item:connections_) {
     const auto q=item.second.queue.Snapshot();

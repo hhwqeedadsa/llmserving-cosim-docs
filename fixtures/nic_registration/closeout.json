@@ -1,0 +1,313 @@
+{
+  "additional_final_file_management_seconds_allowance": 10,
+  "artifact_usage": {
+    "/dev/shm/moe-nic-registration-20261024": {
+      "allocated_bytes": 109248512,
+      "apparent_bytes": 107476412
+    },
+    "/home/lry/moe-ub-cosim/runs/nic_registration_checkpoint_20261024": {
+      "allocated_bytes": 12472320,
+      "apparent_bytes": 12003997
+    }
+  },
+  "cli_rejections": 13,
+  "completed_networks_rerun_to_fix_checks": 0,
+  "conservative_nested_monitor_seconds": 64.23138785548508,
+  "cpp_memory_assertions": 7085,
+  "cpp_nic_assertions": 27,
+  "cpp_sparse_assertions": 6483,
+  "default_legacy_network_regressions": 1,
+  "dependency_builds": 0,
+  "dependency_changes": 0,
+  "downloads": 0,
+  "dynamic_revocation_implemented": false,
+  "feature_network_executions": 5,
+  "final_receipts_reserve_bytes": 262144,
+  "gpu_execution": false,
+  "hardware_calibrated": false,
+  "monitor_count": 52,
+  "monitored_seconds_budget": 600,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-bounded-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14239505492150784
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-changed-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1506860237568617
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-corrected-dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13387233205139637
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-corrected-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.13361148536205292
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-dense-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.14091313630342484
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/audit-sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1489386036992073
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/bounded/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7551124040037394
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/bounded-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9962446242570877
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/changed/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7662893608212471
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/changed-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9877859931439161
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-final-remote_transactions-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.523400492966175
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-nic_registration-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.331720868125558
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-remote_memory-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.7407438922673464
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-remote_transactions-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.767895869910717
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-sparse_remote_memory-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.5633612759411335
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-transaction_probe-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 7.441263314336538
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/compile-transaction_session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 8.101329697296023
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/core-nic_registration-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.024050835520029068
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/core-remote_memory-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.14619728736579418
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/core-sparse_remote_memory-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1401357203722
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/dense/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7609424870461226
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.0086607299745083
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/deps-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.4580505136400461
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/legacy-default-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5714439861476421
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/link-final-transaction-probe-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.6740198694169521
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/link-final-transaction-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5772179886698723
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/link-transaction-probe-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5655647423118353
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/link-transaction-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.5671190805733204
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/pack-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 9.490717912092805
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-bounded-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12978124804794788
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-changed-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12899471260607243
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-dense-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12732496112585068
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-live-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12652591988444328
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12649240344762802
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-audit-sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12694195844233036
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12414022162556648
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/portable-user-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.9807762112468481
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/public-variants-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.1430602539330721
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/reject-inputs-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.4438564758747816
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/restored/public-run/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.756336135789752
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/session/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.8712452147156
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/session-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.1143961381167173
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/sparse/execution/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.7707027327269316
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/sparse-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 1.107769975438714
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/topology-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12996290810406208
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-bounded_buffers_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.130571898072958
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-corrected-memory_registrations_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12339267320930958
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-memory_registrations_test.py-monitor/probe.json",
+      "status": "child_failed",
+      "wall_seconds": 0.12343764863908291
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-scaleout_transactions_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.23080610111355782
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-transaction_effect_order_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.12891484051942825
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/unit-transaction_session_alarms_test.py-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.2352151945233345
+    },
+    {
+      "path": "/dev/shm/moe-nic-registration-20261024/persist-monitor/probe.json",
+      "status": "completed",
+      "wall_seconds": 0.24105644598603249
+    }
+  ],
+  "native_rejections": 13,
+  "network_executions": 7,
+  "no_live_monitored_groups": true,
+  "not_total_calendar_time": true,
+  "original_failures_preserved": [
+    "unit topology graph budget",
+    "audit work id/ticket mismatch",
+    "temporary comparison incorrectly expected constant atomic operand to change"
+  ],
+  "paper_innovation_established": false,
+  "peak_sampled_group_rss_bytes": 657346560,
+  "per_command_limits_increased": false,
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/nic_registration_checkpoint_20261024/checkpoint.tar.gz",
+  "persistent_archive_sha256": "fc95c88a85bc460d051ae0c27d75c7fdb63f16367995ed6332cff09e3897cae4",
+  "phase_budget_bytes": 268435456,
+  "platform_baseline": "f785197",
+  "python_distinct_units": 52,
+  "restored_public_network_executions": 1,
+  "schema_version": "nic-registration-closeout/1",
+  "source_and_old_runtime_and_fixed_library_hashes_unchanged": true,
+  "total_usage_upper_bytes": 121982976
+}

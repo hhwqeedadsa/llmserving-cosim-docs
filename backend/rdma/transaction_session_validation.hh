@@ -2,6 +2,7 @@
 #include "remote_transactions.hh"
 #include "transaction_effect_order.hh"
 #include "bounded_buffers.hh"
+#include "memory_registrations.hh"
 
 namespace moe_rdma {
 // Pure admission validation. Never inspect a live byte value/lease to validate
@@ -20,6 +21,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   if(explicit_submission)root_keys.push_back("submission_model");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
+  for(const auto* name:{"registration_model","registrations"})if(input.contains(name))root_keys.push_back(name);
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
   if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
@@ -32,11 +34,13 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   const auto& connections=input.at("connections");
   Require(connections.is_array() && !connections.empty() && connections.size()<=8,"session connection budget exceeded");
   std::map<uint64_t,std::pair<uint64_t,uint64_t>> endpoints;
+  std::map<uint64_t,unsigned> destination_nics;
   for(const auto& c:connections) {
     SessionKeys(c,{"id","src","dst","plane","request_port","response_port","source_nic","destination_nic","queue_depth"});
     const auto id=SessionInteger(c.at("id"),7),src=SessionInteger(c.at("src"),31),dst=SessionInteger(c.at("dst"),31);
     Require(src!=dst && gpus.count(src) && gpus.count(dst) && endpoints.emplace(id,std::pair{src,dst}).second,"invalid session endpoints/id");
     SessionInteger(c.at("plane"),31);SessionInteger(c.at("source_nic"),1024);SessionInteger(c.at("destination_nic"),1024);
+    destination_nics.emplace(id,c.at("destination_nic"));
     const auto depth=SessionInteger(c.at("queue_depth"),32);Require(depth>0 && (depth&(depth-1))==0,"invalid session queue depth");
     for(const auto* key:{"request_port","response_port"}) {
       const auto port=SessionInteger(c.at(key),65535);Require(port>=10000 && wire_ports.insert(port).second,"invalid/repeated session wire port");
@@ -72,6 +76,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     const auto& w=windows.at({owner,key});
     Require(address>=w.address && address-w.address<=w.bytes && bytes<=w.bytes-(address-w.address),"session memory range out of bounds");
   };
+  const auto registrations=MemoryRegistrations(input);
   const auto& ops=input.at("operations");Require(ops.is_array() && ops.size()<=48,"session node budget exceeded");
   std::map<uint64_t,bool> local;
   std::map<uint64_t,std::set<uint64_t>> ancestors;
@@ -126,14 +131,22 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     }
     if(!is_local) {
       const auto dst=endpoints.at(op.at("connection")).second,key=SessionInteger(op.at("key"),UINT32_MAX),address=SessionInteger(op.at("address"));
+      uint64_t storage_key=key;const RemoteMemory::Registration* access=nullptr;
+      if(input.contains("registration_model")) {
+        for(const auto& r:registrations)if(r.owner==dst && r.nic==destination_nics.at(op.at("connection")) && r.key==key)access=&r;
+        Require(access,"unknown session destination NIC/key registration");storage_key=access->window_key;
+      }
       const auto verb=op.at("verb").get<std::string>();Require(verb=="put" || verb=="fetch_add","invalid session verb");uint64_t bytes;
       if(op.contains("source")) {
         Require(verb=="put","session source requires put");const auto& s=op.at("source");SessionKeys(s,{"key","address","bytes"});
         const auto sk=SessionInteger(s.at("key"),UINT32_MAX),sa=SessionInteger(s.at("address"));bytes=SessionInteger(s.at("bytes"),32768);range(owner,sk,sa,bytes);separate_resets(sk,sa,bytes);
       } else if(verb=="put") {bytes=MemoryUnhex(op.at("hex").get<std::string>()).size();Require(bytes>0 && bytes<=32768,"session put length exceeded");}
-      else {bytes=8;SessionInteger(op.at("value"));Require(windows.count({dst,key}) && windows.at({dst,key}).atomic && address%8==0,"session atomic denied/unaligned");}
-      range(dst,key,address,bytes);
-      for(const auto& w:writes)if(w.owner==dst && w.key==key && address<w.address+w.bytes && w.address<address+bytes)
+      else {bytes=8;SessionInteger(op.at("value"));Require(windows.count({dst,storage_key}) && windows.at({dst,storage_key}).atomic &&
+        (!access || access->atomic) && address%8==0,"session atomic denied/unaligned");}
+      range(dst,storage_key,address,bytes);
+      if(access)Require(address>=access->address && address-access->address<=access->bytes &&
+        bytes<=access->bytes-(address-access->address),"session registration range exceeded");
+      for(const auto& w:writes)if(w.owner==dst && address<w.address+w.bytes && w.address<address+bytes)
         Require((verb=="fetch_add" && w.atomic) || parents.count(w.id),"session overlapping remote writes lack causal order");
       writes.push_back({id,dst,key,address,bytes,verb=="fetch_add"});
       if(op.contains("queue_fence")) {

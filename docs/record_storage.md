@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+只有启用`registration_model.mode=nic_scoped_aliases/1`时，事务结果增加`transactions.registration_model/registrations`，原样报告静态owner/NIC/rkey到window_key及子范围的权限；`transactions.target_events`增加`destination_nic`。`windows`始终只报告物理存储一次，本地source/copy中的key仍是存储key。默认无这些新增字段；session已有`session.registrations`是操作提交记录，含义不同。详见[多NIC示例](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)。
+
 显式`buffer_model.target_delivery="carrier_once_put/1"`时，结果增加`transactions.target_delivery`：`mode`、`scope`及`contexts`。每项context保存实际`context/next_sequence/retained_requests/retained_encoded_bytes`；后两项从真实请求缓存计算，在本模式为0。`buffer_retention.owners[].target_cache_bytes`也为0，配置额度必须0；解码临时内容、序号元数据、包与观测不在内。缺省没有新增对象，完整请求缓存语义保持，详见[有序put](../examples/scaleout_rdma_transactions/README.md#有序put不保留完整请求缓存)。
 
 v4复制型`buffer_model`可选`on_source_isolation=release_copied_payload/1`，要求显式源隔离。只有此模式在`transactions.transport.payload_pool`增加`on_source_isolation/discarded_work`，事件kind允许`discarded_on_source_isolation`。每项discard含stream/work/bytes/time_ns，事件另有source/used_bytes；它在源真实隔离后归还本地副本，不修改原ACK/事务/源lease/目标状态。默认字段及行为保持，`failed_resources_released=false`不表示每一种本地副本都仍持有。详见[失败副本回收](../examples/scaleout_rdma_transactions/README.md#失败连接停止发包后归还复制池)。

@@ -1,0 +1,30 @@
+{
+  "actual_nic_wire_memory_consistent": true,
+  "atomic_replies": 0,
+  "distinct_target_nics": [
+    [
+      0,
+      1
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      4,
+      2
+    ]
+  ],
+  "physical_windows": 2,
+  "registrations": 4,
+  "schema_version": "nic-registration-independent-audit/1",
+  "source_packets": 3,
+  "tampering_rejected": [
+    "endpoint_nic",
+    "registration_mapping",
+    "target_memory",
+    "target_event"
+  ],
+  "target_applications": 3,
+  "wire_payload_bytes": 128
+}

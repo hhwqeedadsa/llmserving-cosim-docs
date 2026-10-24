@@ -1,0 +1,188 @@
+{
+  "schema_version": "moe-rdma-transactions/5",
+  "windows": [
+    {
+      "owner": 0,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 4096,
+      "initialization": "zero_fill/1",
+      "segments": []
+    },
+    {
+      "owner": 4,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "bytes": 4096,
+      "initialization": "zero_fill/1",
+      "segments": []
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "kind": "remote",
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 4096,
+      "hex": "0500000000000000",
+      "after": []
+    },
+    {
+      "id": 1,
+      "kind": "local",
+      "rank": 4,
+      "duration_ns": 100000,
+      "after": []
+    },
+    {
+      "id": 2,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 1,
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "kind": "remote",
+      "connection": 1,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 2,
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "kind": "remote",
+      "connection": 2,
+      "verb": "put",
+      "key": 7,
+      "address": 4112,
+      "hex": "7700000000000000",
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "kind": "remote",
+      "connection": 3,
+      "verb": "put",
+      "key": 7,
+      "address": 4096,
+      "source": {
+        "key": 7,
+        "address": 4096,
+        "bytes": 8
+      },
+      "after": [
+        {
+          "operation": 3,
+          "event": "completed"
+        }
+      ],
+      "local_wait": [
+        {
+          "key": 7,
+          "address": 4096,
+          "compare": "eq",
+          "value": 8
+        }
+      ]
+    }
+  ],
+  "local_model": {
+    "mode": "serial_per_gpu/1",
+    "duration_source": "declared_ns"
+  },
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "local_memory_model": {
+    "mode": "guarded_copy/1",
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1"
+  },
+  "transport_recovery": {
+    "mode": "go_back_n/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 1000
+  },
+  "self_peer_model": {
+    "mode": "declared_service_fifo/1"
+  },
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    },
+    {
+      "id": 1,
+      "src": 4,
+      "dst": 4,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2,
+      "self_service": {
+        "apply_ns": 1000,
+        "complete_ns": 3000
+      }
+    },
+    {
+      "id": 2,
+      "src": 4,
+      "dst": 4,
+      "plane": 0,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2,
+      "self_service": {
+        "apply_ns": 500,
+        "complete_ns": 2000
+      }
+    },
+    {
+      "id": 3,
+      "src": 4,
+      "dst": 0,
+      "plane": 0,
+      "request_port": 24006,
+      "response_port": 24007,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 4
+    }
+  ]
+}

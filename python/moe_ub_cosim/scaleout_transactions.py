@@ -87,7 +87,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
            (' registration_model' if 'registration_model' in config else '')+(' registrations' if 'registrations' in config else '')+
            (' buffer_model' if 'buffer_model' in config else '')+
            (' execution_limits' if 'execution_limits' in config else '')+
-           (' dcqcn_reference' if reference else ''), 'transaction root')
+           (' dcqcn_reference' if reference else '')+
+           (' self_peer_model' if 'self_peer_model' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -104,13 +105,17 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     require(isinstance(connections, list) and 1 <= len(connections) <= counts['max_connections'], 'connection count budget exceeded')
     by_id, streams = {}, []
     for c in connections:
-        fields(c, 'id src dst plane request_port response_port source_nic destination_nic queue_depth', 'connection')
+        require(isinstance(c,dict),'connection must be an object')
+        fields(c, 'id src dst plane source_nic destination_nic queue_depth '+
+               ('self_service' if 'self_service' in c else 'request_port response_port'), 'connection')
         integer(c['id'], 'connection id', 0, counts['max_connections']-1)
         integer(c['src'], 'transaction source rank', 0, 31)
         integer(c['dst'], 'transaction destination rank', 0, 31)
         integer(c['queue_depth'], 'transaction depth', 1, 32)
+        require(c['queue_depth']&(c['queue_depth']-1)==0,'queue depth must be power of two')
         require(c['id'] not in by_id, 'repeated connection id')
         by_id[c['id']] = c
+        if 'self_service' in c:continue
         for reverse in (False, True):
             streams.append(dict(id=c['id']*2+int(reverse), src=c['dst'] if reverse else c['src'],
                 dst=c['src'] if reverse else c['dst'], plane=c['plane'],
@@ -119,6 +124,7 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
                 destination_nic=c['source_nic'] if reverse else c['destination_nic'], queue_depth=c['queue_depth']))
     # Validate real physical reachability and native protocol using descriptors
     # only. These placeholder one-byte works are NEVER sent or saved as workload.
+    require(streams,'self-peer service currently requires at least one remote connection')
     descriptor=dict(schema_version='moe-rdma-stream-work/1', streams=streams,
         work=[dict(id=0, stream=streams[0]['id'], bytes=1, after=[])])
     if 'execution_limits' in config:
@@ -277,6 +283,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         effects[op['id']] = completed_effects
         remote_history.append(op)
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
+    from .self_peer_service import validate as validate_self
+    validate_self(topology,protocol,config)
     validate_application_windows(config, registered, by_id)
     require(allow_no_remote or remote_count > 0, 'transaction probe requires remote work')
     if 'buffer_model' in config:

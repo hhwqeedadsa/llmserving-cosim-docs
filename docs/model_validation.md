@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+显式self服务用于保留必要的同节点计数/屏障操作，声明时长不等于provider测量。小例核查FIFO、真实原子旧值、源捕获和远端丢包后的恰好一次应用；物理loopback/NIC争用、GPU可见、现代完整映射仍缺。见[功能验收](../fixtures/self_peer_service/README.md)。
+
 context连接规划沿用[固定provider共享范围核查](reviews/现代连接共享范围与网络优化对象_20261024.md)中的显式connection/context/NIC规则；实际执行对象仍是MRT1。两NIC功能例验证身份复用与隔离、首包丢失恢复、目标字节和原子旧值，不证明GIN QP/报文等价、self-peer、GPU可见性或现代性能。见[验收范围](../fixtures/context_transactions/README.md)。
 
 原生源NIC已修复两种唤醒错误：不可发送QP的旧`m_nextAvail`阻断其他QP，以及新增更早工作未提前旧定时器。真实双QP包/ACK小例证明旧实现依赖额外ACK才继续，修复后按实际限速时刻发送；15个CPU状态条件另核暂停、窗口、变速及同纳秒顺序。该功能证据不证明旧完整应用的全部源空闲或生产性能，既有结果仍对应其旧库身份，不能自动视为修复后结果。见[源NIC核查](../fixtures/nic_wakeup/README.md)。

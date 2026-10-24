@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reused_completed_output": true
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "--help"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0,
+      "reused_completed_output": true
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+        "rev-parse",
+        "HEAD"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/home/lry/moe-ub-cosim/third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3",
+        "status",
+        "--porcelain"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    }
+  ],
+  "dependency_check": "WARN: main repository has local file changes; review before committing\n   M backend/README.md\n   M backend/rdma/remote_transactions.cc\n   M backend/rdma/remote_transactions.hh\n   M backend/rdma/transaction_probe.cc\n   M backend/rdma/transaction_session_validation.hh\n   M docs/architecture.md\n   M docs/model_validation.md\n   M docs/record_storage.md\n   M docs/user_guide.md\n   M python/moe_ub_cosim/cli.py\n   M python/moe_ub_cosim/scaleout_transactions.py\n  ?? backend/rdma/self_peer_service.hh\n  ?? examples/scaleout_self_peer/\n  ?? fixtures/self_peer_service/\n  ?? python/moe_ub_cosim/self_peer_service.py\n  ?? tests/unit/self_peer_service_test.py\nREAD: . @ a814080e4b8f52da3d705a1a2ab42fc4013e91c3\nREAD: third_party/LLMServingSim @ e96d8391d9ad4768bfd7c4a1206abcfb8e34e9a1\nREAD: third_party/LLMServingSim/astra-sim @ 8ecf388a667de9d45866da1ee9829938d6218686\nREAD: third_party/LLMServingSim/astra-sim/extern/graph_frontend/chakra @ 30221ab8bfd9212aa9c063cd0b14a7d0a2ea6dd7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/fmt @ 7e73566ce7bd3617cd4b14a2e3a19a2a30b524c7\nREAD: third_party/LLMServingSim/astra-sim/extern/helper/spdlog @ 63f0875000bf90867aa7c76a831bd834cb7d4b5e\nREAD: third_party/LLMServingSim/astra-sim/extern/memory_backend/analytical @ 62313ef09abaf6a9764d13e2684ca61247def14b\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical @ 5dc02322f04ac42fcfbb5304d5f7f2fa20d25e3e\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/googletest @ 1204d634444b0ba6da53201a8b6caf2a502d883c\nINFO: checking transitive dependency against its parent: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/analytical/extern/yaml-cpp @ 3d2888cc8a45da2f420454ad728cdfad01a3d54f\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/csg-htsim @ 67cbbbb1cccdbddc400803414127d044ecd55290\nREAD: third_party/LLMServingSim/astra-sim/extern/network_backend/ns-3 @ 68a07f7d5e53bbe97d275af41d4964ad01b864f3\nREAD: third_party/ns-3-ub @ fee9fbf6e471f2e1db93db16fbbc44a115dda0b1\nREAD: third_party/ns-3-ub/scratch/ns-3-ub-tools @ 2afc7202f88c132b63c38e8c7dcfc08505b13bb2\nPASS: checked 13 dependency checkouts; versions and inspected states agree.\nThis result does not validate remote availability, compilation, or simulation.",
+  "parsed_python_sources": 111,
+  "new_example_links_valid": true,
+  "public_help_documents_self_service": true,
+  "v5_executor_unchanged_after_four_networks": true,
+  "final_probe_preallocation_guard_native_rejects": 8,
+  "final_probe_network_reexecuted": false,
+  "additional_network_executions": 0
+}

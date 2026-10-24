@@ -35,6 +35,7 @@ class RemoteTransactions {
     int64_t prepared=-1,ready=-1,published=-1,applied=-1,request_ack=-1,response=-1,completed=-1;
     uint64_t returned_value=0;
     bool aggregate=false,has_source=false;
+    int64_t self_started=-1,self_finished=-1;
     RemoteMemory::ReadLease source{};
   };
   struct Connection {
@@ -42,11 +43,14 @@ class RemoteTransactions {
     GinWorkQueue queue;
     MemoryFrameDecoder requests,responses;
     std::vector<uint64_t> operations;
+    bool self=false;
+    int64_t self_apply=0,self_complete=0,self_available=0;
     Connection(unsigned s,unsigned d,unsigned nic,unsigned depth,unsigned maximum):src(s),dst(d),destination_nic(nic),queue(depth,maximum) {}
   };
   void Pump(uint64_t connection);
   void PumpExplicit(uint64_t connection);
   void Send(Operation& op);
+  void EnqueueSelf(Operation& op);
   void Retire(uint64_t connection);
   void Request(uint64_t connection,const MemoryFrame& frame);
   void Response(uint64_t connection,const MemoryFrame& frame);

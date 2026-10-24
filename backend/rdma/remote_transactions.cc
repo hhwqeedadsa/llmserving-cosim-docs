@@ -67,6 +67,11 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     const auto src=c.at("src").get<unsigned>(),dst=c.at("dst").get<unsigned>();
     Require(id<execution_limits_.connections && !connections_.count(id),"invalid transaction connection id");
     connections_.try_emplace(id,src,dst,c.at("destination_nic"),c.at("queue_depth"),execution_limits_.remote);
+    if(c.contains("self_service")) {
+      auto& local=connections_.at(id);local.self=true;
+      local.self_apply=c.at("self_service").at("apply_ns");local.self_complete=c.at("self_service").at("complete_ns");
+      continue;
+    }
     transport_.Open(id*2,src,dst,c.at("plane"),c.at("request_port"),c.at("source_nic"),c.at("destination_nic"),64);
     transport_.Open(id*2+1,dst,src,c.at("plane"),c.at("response_port"),c.at("destination_nic"),c.at("source_nic"),64);
     transport_.SetReceiver(id*2,[this,id](auto bytes){
@@ -352,6 +357,7 @@ void RemoteTransactions::Pump(uint64_t connection) {
     c.queue.Prepare(op.ticket);c.queue.PublishThrough(op.ticket+1);
     const auto work=c.queue.ConsumePublished();Require(work && work->work_id==id,"transaction queue consumption mismatch");
     op.published=MemoryNow();
+    if(c.self) {EnqueueSelf(op);continue;}
     transport_.SubmitPayload(connection*2,transport_work_++,EncodeMemoryFrame(op.request),[this,id,connection](){
       auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
       w.request_ack=MemoryNow();Retire(connection);
@@ -385,9 +391,27 @@ void RemoteTransactions::Send(Operation& op) {
     SourceEvent(op.id,"captured",s,&op.request.body);
   }
   op.published=MemoryNow();const auto id=op.id,connection=op.connection;
+  if(connections_.at(connection).self) {EnqueueSelf(op);return;}
   transport_.SubmitPayload(connection*2,transport_work_++,EncodeMemoryFrame(op.request),[this,id,connection](){
     auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
     w.request_ack=MemoryNow();Retire(connection);
+  });
+}
+void RemoteTransactions::EnqueueSelf(Operation& op) {
+  auto& c=connections_.at(op.connection);
+  const auto begin=std::max(MemoryNow(),c.self_available);const auto id=op.id;
+  c.self_available=begin+c.self_complete;
+  ns3::Simulator::Schedule(ns3::NanoSeconds(begin-MemoryNow()),[this,id]() {
+    auto& operation=operations_.at(id);Require(operation.self_started<0,"duplicate self service start");
+    operation.self_started=MemoryNow();
+  });
+  // The source bytes were captured at publication under their existing lease.
+  // No physical packet, fake ACK or GIN wire frame is generated for self.
+  const auto frame=op.request;const auto connection=op.connection;
+  ns3::Simulator::Schedule(ns3::NanoSeconds(begin+c.self_apply-MemoryNow()),[this,connection,frame]() {Request(connection,frame);});
+  ns3::Simulator::Schedule(ns3::NanoSeconds(begin+c.self_complete-MemoryNow()),[this,id,connection]() {
+    auto& operation=operations_.at(id);Require(operation.applied>=0 && operation.self_finished<0,"invalid self service completion");
+    operation.self_finished=MemoryNow();Retire(connection);
   });
 }
 void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
@@ -400,11 +424,13 @@ void RemoteTransactions::Request(uint64_t connection,const MemoryFrame& frame) {
     {"verb",frame.verb},{"key",frame.key},{"address",frame.address},{"body_hex",MemoryHex(frame.body)},
     {"duplicate",result.duplicate},{"old_value",result.old_value}});
   if(memory_.NicScoped())target_events_.back()["destination_nic"]=c.destination_nic;
+  if(c.self)target_events_.back()["delivery"]="declared_self_service/1";
   Require(frame.sequence<c.operations.size(),"target request has no submitted application observer");
   auto& op=operations_.at(c.operations.at(frame.sequence));
   if(result.duplicate)++duplicates_;
   else {Require(op.applied<0,"duplicate target application");op.applied=MemoryNow();}
-  if(result.atomic) {
+  if(c.self && result.atomic)op.returned_value=result.old_value;
+  if(result.atomic && !c.self) {
     MemoryFrame reply;reply.verb=MemoryFrame::Reply;reply.sequence=frame.sequence;reply.body=MemoryInteger(result.old_value);
     transport_.SubmitPayload(connection*2+1,transport_work_++,EncodeMemoryFrame(reply),{});
   }
@@ -424,7 +450,7 @@ void RemoteTransactions::Retire(uint64_t connection) {
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
     if(op.completed>=0)continue;
-    if(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0))break;
+    if(c.self?op.self_finished<0:(op.request_ack<0 || (op.request.verb==MemoryFrame::FetchAdd && op.response<0)))break;
     op.completed=MemoryNow();c.queue.CompleteThrough(op.ticket+1);
     if(op.has_source) {memory_.ReleaseRead(id);SourceEvent(id,"released",op.source);}
     ReleaseApplicationUse(id);
@@ -455,7 +481,10 @@ Json RemoteTransactions::OperationProgress() const {
     Json value={{"id",op.id},{"connection",op.connection},{"sequence",op.request.sequence},{"ticket",op.ticket},
       {"verb",op.request.verb==MemoryFrame::Put?"put":"fetch_add"},{"ready_ns",op.ready},{"published_ns",op.published},
       {"applied_ns",op.applied},{"request_acked_ns",op.request_ack},{"response_ns",op.response},{"completed_ns",op.completed}};
-    if(op.request.verb==MemoryFrame::FetchAdd && op.response>=0)value["returned_value"]=op.returned_value;
+    if(connections_.at(op.connection).self) {
+      value["delivery"]="declared_self_service/1";value["self_started_ns"]=op.self_started;value["self_completed_ns"]=op.self_finished;
+    }
+    if(op.request.verb==MemoryFrame::FetchAdd && (op.response>=0 || op.self_finished>=0))value["returned_value"]=op.returned_value;
     if(explicit_submission_)value["prepared_ns"]=op.prepared;
     rows.push_back(value);
   }
@@ -466,6 +495,10 @@ Json RemoteTransactions::Report() const {
     {"connections",Json::array()},{"duplicate_requests",duplicates_},{"gpu_visibility_modeled",false},
     {"hardware_calibrated",false},{"roce_wire_equivalent",false},
     {"scope","MRT1 functional addressed put/fetch-add with actual native byte request/response transport; not a GIN timing baseline"}};
+  if(std::any_of(connections_.begin(),connections_.end(),[](const auto& c){return c.second.self;})) {
+    out["self_peer_model"]={{"mode","declared_service_fifo/1"},{"hardware_calibrated",false},{"physical_loopback_modeled",false}};
+    out["scope"]="Mixed actual MRT1/native remote transport and explicit functional self service; not a GIN timing baseline";
+  }
   if(explicit_limits_)out["execution_limits"]={{"max_connections",execution_limits_.connections},
     {"max_remote_operations",execution_limits_.remote},{"max_local_operations",execution_limits_.local}};
   for(const auto& w:memory_.Windows()) {
@@ -505,6 +538,10 @@ Json RemoteTransactions::Report() const {
     out["connections"].push_back({{"id",item.first},{"src",item.second.src},{"dst",item.second.dst},
       {"queue_depth",item.second.queue.Depth()},{"reserved",q.reserved},{"published",q.published},
       {"completed",q.completed},{"closed",q.closed}});
+    if(item.second.self)out["connections"].back()["self_service"]={{"mode","declared_service_fifo/1"},
+      {"apply_ns",item.second.self_apply},{"complete_ns",item.second.self_complete},
+      {"physical_packets",0},{"hardware_qps_modeled",false},{"resource_creations",1},
+      {"scope","per-connection functional service; no modeled NIC contention, loopback path, network ACK or GIN CQ"}};
   }
   if(explicit_submission_)out["submission"]={{"mode","explicit_prefix/1"},{"publications",publications_}};
   out["target_events"]=target_events_;out["local_events"]=local_events_;

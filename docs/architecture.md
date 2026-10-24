@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+transactions/5的可选`declared_service_fifo/1`为每个self连接调度独立start/apply/complete事件。它沿用源保护和目标NIC权限，释放由实际complete回调触发；不占本地GPU计算槽，也不创建网络载体或ACK。见[混合服务](../examples/scaleout_self_peer/README.md)。
+
 `context_transactions.py`将显式communicator/source/context/peer身份编译成既有MRT1请求/响应载体，保留上下文隔离及声明的物理NIC；执行仍由同一个原生事务网络推进。核查入口对照实际包和连接生命周期，不新增provider。见[上下文绑定](../examples/scaleout_context_transactions/README.md)。
 
 原生Scale-Out的可选`switch_links/1`通过同一Simulator关闭实际switch—switch两端，保留在途发送，区分本地排队/转发丢弃与物理到达丢弃。声明延迟后仅排除当时已知故障，重建同plane最短路/ECMP表，保留QP序号及拥塞状态。持久控制器监听网络状态变化，尚有配置事件时不能提前排空关闭；它不是分布式控制平面。范围见[物理链路失效](../examples/scaleout_link_failure/README.md)。

@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "default_full_result_equal_except_library_paths": true,
+  "cases": {
+    "mixed": {
+      "passed": true,
+      "self_operations": 3,
+      "remote_operations": 2,
+      "actual_source_packets": 2,
+      "retransmitted_packets": 0,
+      "target_applications": 5,
+      "finish_ns": 100000,
+      "atomic_returns": [
+        5,
+        6
+      ],
+      "final_values": {
+        "0": 8,
+        "4": 8
+      }
+    },
+    "fault-online": {
+      "passed": true,
+      "self_operations": 3,
+      "remote_operations": 2,
+      "actual_source_packets": 3,
+      "retransmitted_packets": 1,
+      "target_applications": 5,
+      "finish_ns": 104096,
+      "atomic_returns": [
+        5,
+        6
+      ],
+      "final_values": {
+        "0": 8,
+        "4": 8
+      }
+    }
+  },
+  "scope": "explicit functional self-provider and actual remote bytes; no modern GIN/GPU timing"
+}

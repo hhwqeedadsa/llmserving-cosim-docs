@@ -1,0 +1,110 @@
+{
+  "passed": true,
+  "legacy_schema_rejects": [
+    {
+      "case": "v1-missing-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v1-missing-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v1-missing-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v1-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v1-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v1-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v2-missing-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v2-missing-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v2-missing-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v2-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v2-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v2-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v3-missing-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v3-missing-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v3-missing-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v3-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v3-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v3-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v4-missing-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v4-missing-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v4-missing-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    },
+    {
+      "case": "v4-model",
+      "command": [
+        "/dev/shm/moe-self-peer-service-20261024/runtime/run-transaction-probe",
+        "/dev/shm/moe-self-peer-service-20261024/topology/topology.json",
+        "/dev/shm/moe-self-peer-service-20261024/inputs/protocol.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v4-model.json",
+        "/dev/shm/moe-self-peer-service-20261024/admission-guard/v4-model-unexpected.json"
+      ],
+      "cwd": "/dev/shm/moe-self-peer-service-20261024",
+      "exit_code": 1
+    }
+  ],
+  "unchanged_runtime_objects": {
+    "objects/remote_transactions.o": "3cfbd590e3e882797b417dba54b495af82bdf390260ec87736296fde2652c9f6",
+    "objects/transaction_session.o": "738a329c3ed42c91e0ca92706fa98b92bd9ec1e338effd1797e450a5109e5b94",
+    "runtime/transaction-session": "c49951678f922666ec68877b36e99e0ba8f4d6c7a4602f859b7357dc2acd4429"
+  },
+  "additional_network_executions": 0,
+  "original_network_binary_in": "portable-initial.tar.gz",
+  "final_probe_network_reexecuted": false,
+  "change": "pure pre-Fabric admission for self declarations in schemas1-4; v5 executor, core/session/8libraries unchanged"
+}

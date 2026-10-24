@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "native_before_fabric_rejected": [
+    "missing_model",
+    "unknown_model",
+    "self_wire_port",
+    "nonself_owner",
+    "wrong_nic",
+    "wrong_plane",
+    "nic_mismatch",
+    "reversed_times",
+    "boolean_time",
+    "over_deadline",
+    "fake_ack_dependency",
+    "atomic_permission"
+  ],
+  "independent_oracle_tamper_rejected": [
+    "fake_self_ack",
+    "wrong_self_start",
+    "early_completion",
+    "wrong_atomic_return",
+    "fabricated_self_stream",
+    "duplicate_target",
+    "wrong_final_memory",
+    "corrupt_source_capture"
+  ],
+  "native_allocation_basis": "transactions/5 invokes ValidateSessionProgram and ValidateSelfServices before Fabric; native failure stderr retained",
+  "additional_network_executions": 0
+}

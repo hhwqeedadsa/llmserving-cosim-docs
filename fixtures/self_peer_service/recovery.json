@@ -1,0 +1,37 @@
+{
+  "passed": true,
+  "restored_source_root": "/dev/shm/moe-self-peer-service-20261024/restored/source",
+  "cwd": "/dev/shm/moe-self-peer-service-20261024/restored/empty-cwd",
+  "offline_reports_byte_equal": 1,
+  "new_network_executions": 1,
+  "old_network_reexecutions": 0,
+  "zero_duration_prefix_and_source_self_executed": true,
+  "actual_bundled_ns3_libraries": [
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-applications.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-bridge.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-core.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-internet.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-network.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-point-to-point.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-stats.so",
+    "/dev/shm/moe-self-peer-service-20261024/restored/evidence/runtime/lib/libns3.42-traffic-control.so"
+  ],
+  "smoke": {
+    "passed": true,
+    "self_operations": 3,
+    "remote_operations": 1,
+    "actual_source_packets": 1,
+    "retransmitted_packets": 0,
+    "target_applications": 4,
+    "finish_ns": 12060,
+    "atomic_returns": [
+      5,
+      6
+    ],
+    "final_values": {
+      "0": 0,
+      "4": 8
+    }
+  },
+  "scope": "same-host ABI-bound runtime, new Python source root and empty cwd; not a clean native build or GIN/GPU calibration"
+}

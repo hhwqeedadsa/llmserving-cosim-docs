@@ -40,12 +40,18 @@ int main(int argc,char** argv) {
       if(input.contains("dcqcn_reference"))keys.push_back("dcqcn_reference");
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
       if(input.contains("buffer_model"))keys.push_back("buffer_model");
+      if(input.contains("self_peer_model"))keys.push_back("self_peer_model");
       for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))keys.push_back(name);
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
+    // Older schemas do not enter the v5 session validator. Reject an explicit
+    // self-service declaration there too, before constructing any network.
+    if(input.contains("self_peer_model") || std::any_of(input.at("connections").begin(),input.at("connections").end(),
+        [](const auto& c){return c.contains("self_service");}))
+      ValidateSelfServices(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     if(sparse_mode || input.contains("registration_model") || input.contains("registrations") || input.contains("application_window_model") || input.contains("application_windows"))
       ValidateSessionProgram(input,topology,config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
     PersistentStreams::ValidateReordering(input.value("transport_recovery",Json()),config.contains("limits")?config.at("limits").at("max_sim_ns").get<int64_t>():5000000);
@@ -184,6 +190,8 @@ int main(int argc,char** argv) {
     result["passed"]=passed;
     std::ofstream out(argv[4]);out<<result.dump()<<'\n';out.close();Require(bool(out),"cannot write transaction report");
     ns3::Simulator::Destroy();Require(passed,"incomplete native transaction execution; inspect report");
-    std::cout<<"completed "<<complete<<" functional remote memory transactions over actual native packets\n";return 0;
+    std::cout<<"completed "<<complete<<(input.contains("self_peer_model")?
+      " functional API transactions over actual remote packets and declared self service\n":
+      " functional remote memory transactions over actual native packets\n");return 0;
   }catch(const std::exception& e){std::cerr<<e.what()<<'\n';ns3::Simulator::Destroy();return 1;}
 }

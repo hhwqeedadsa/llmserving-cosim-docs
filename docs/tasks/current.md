@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[显式self-peer服务与共享目标内存](self_peer_service_spec.md)，基线`7549219`。为v5事务增加独立声明FIFO和实际内存服务，保留源保护/NIC权限/原子旧值及本地条件反馈，不制造self网络ACK或交换机流量。完整现代映射仍未接入，context planner保持拒绝self。固定4次网络和独立核验；600受监控秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB，网络1ms/result16MiB。只增量编译3个消费者、链接2入口，固定依赖/旧库不动，无下载/GPU/push；平台和性能研究分开。
+当前平台`completed`：[显式self-peer服务与共享目标内存](self_peer_service_spec.md)，基线`7549219`。transactions/5显式self FIFO与实际远端MRT1共享同一时钟、内存和NIC授权；保留源保护/实际原子旧值/后继读取，self不生成ACK或网络载体、不占本地GPU计算槽。4次固定网络全部完成：默认完整result除同hash库路径外相同，混合正常/真实丢包在线保持目标各应用一次；新Python根/空cwd/包内8库独立执行零时长、前缀发布及self源读取，原两组离线verification逐字节一致。
+
+8项新单元与91项相关回归、12类初始native拒绝/8类篡改、6类不安全归档及13依赖检查通过。复核发现旧schema probe绕过v5 self准入的缺口，已补Fabric前纯校验并以v1—4有/无model共8种native拒绝验证；仅重编probe，核心/session/8库不变。最终probe未追加第五次网络，收尾精确核两版差异仅该纯准入分支，初始成功程序与最终包分别保留。两次构建准备与两次收尾checker失败原样保留，无网络失败、扩限或成功网络重跑。
+
+最终457成员/56,462,774B有效包压缩11,869,742B，保存在`runs/self_peer_service_checkpoint_20261024/`；同主机ABI-bound迁移，不是从零构建或硬件校准。31原始终态监控含嵌套保守59.44秒，峰值约667.05MiB，收尾前原件/恢复/两包/持久/源码及2MiB收据预留约147.22MiB，保持600秒/384MiB、每命令60秒/1GiB/地址2GiB/阶段128MiB、4次1ms/result16MiB；最终管理收据另存运行目录。真实原生HEAD为`68a07f7`，旧输入native_commit基线常量不改写。见[验收](../../fixtures/self_peer_service/README.md)、[中文报告](../reviews/同节点服务与远端通信共享内存验收_20261024.md)、[恢复](../../fixtures/self_peer_service/recovery.json)及[收尾](../../fixtures/self_peer_service/closeout.json)。没有安装下载/GPU/依赖修改或push，仅本地提交。
+
+下一门槛仍为保留计数、屏障、self和源/目标可见边界的完整现代接入，再在同资源/信息条件下比较选择重传、恢复限速、公平调度、正常排空/provider强退出等基线，验证恢复干扰是否进入健康应用关键路径。context planner继续拒绝self，不能删操作声称完整执行；真实provider成本、GPU可见性、匹配校准、独立留出、千卡完整执行及论文主创新仍缺。平台阶段收尾，整体目标仍`in_progress`，不自动扩展本轮网络预算。
 
 当前平台`completed`：[Context身份到实际事务连接](context_transaction_binding_spec.md)，基线`32f508d`。公开`rdma-context-plan/check`保留communicator/source/context/peer身份，映射到明确NIC与既有MRT1请求/响应载体。固定3次真实网络完成：健康/首包真实丢失各6远端+1本地、4binding/8载体，跨20us本地阶段复用；原子旧值17/最终20，目标各应用一次。故障组80us真实重传，其他3binding已先完成；第三次为新Python根/空cwd/包内8库独立单put，前两网络不重跑，3份离线JSON逐字节一致。
 

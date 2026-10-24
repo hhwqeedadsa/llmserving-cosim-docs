@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+仅启用self服务时，`transactions.self_peer_model`记录功能模式和未校准边界；self连接增加`self_service`，self操作增加`delivery/self_started_ns/self_completed_ns`。`request_acked_ns/response_ns=-1`表示未发生网络确认/回复，不能当完成时间；`applied_ns/completed_ns`为共同原生时钟。见[字段说明](../examples/scaleout_self_peer/README.md)。
+
 `rdma-context-plan`保存便携输入、事务程序、`moe-rdma-context-map/1`绑定及各文件SHA-256；`rdma-context-check`输出逐binding的实际操作数、请求/响应载体、源包/目标RX数与payload字节。实际字节含重传，不等于应用有效字节或线速字节。plan没有执行，check不新增网络；字段和完整捕获要求见[上下文绑定](../examples/scaleout_context_transactions/README.md)。
 
 原生协议启用`link_failures`时，结果同名对象包含`configuration/events/pending_events/route_epoch/local_drops/scope`。`link_down`事件保存`time_ns/event_index/src/dst/src_port/dst_port/queued_bytes_before/local_drops_during_close/route_epoch/buffer_before/buffer_after`；缓冲摘要按node报告失败端口数据排队字节、全交换机入口加headroom、出口MMU及共享占用。`routes_updated`保存`time_ns/event_index/route_epoch/excluded_directed_ports`，每条已知双向边对应2个排除端口。字节视角重叠，禁止相加为内存。包采集仅在此模式增加`local_drop=5`；旧`drop=2`仍表示物理接收丢弃，后者包括真实到达已关闭端口的包。只记录事实，不携带故障身份标签或决定协议动作；默认不增加这些字段。解释及例子见[链路输出](../examples/scaleout_link_failure/README.md#输出解释与边界)。

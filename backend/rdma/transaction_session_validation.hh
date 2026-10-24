@@ -1,4 +1,5 @@
 #pragma once
+#include "self_peer_service.hh"
 #include "remote_transactions.hh"
 #include "transaction_effect_order.hh"
 #include "bounded_buffers.hh"
@@ -27,6 +28,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   if(input.contains("dcqcn_reference"))root_keys.push_back("dcqcn_reference");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
   if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
+  if(input.contains("self_peer_model"))root_keys.push_back("self_peer_model");
   for(const auto* name:{"registration_model","registrations","application_window_model","application_windows"})if(input.contains(name))root_keys.push_back(name);
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
@@ -41,14 +43,17 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   Require(connections.is_array() && !connections.empty() && connections.size()<=execution_limits.connections,"session connection budget exceeded");
   std::map<uint64_t,std::pair<uint64_t,uint64_t>> endpoints;
   std::map<uint64_t,unsigned> destination_nics;
+  ValidateSelfServices(input,topology,max_ns);
   for(const auto& c:connections) {
-    SessionKeys(c,{"id","src","dst","plane","request_port","response_port","source_nic","destination_nic","queue_depth"});
+    const bool self=c.contains("self_service");
+    SessionKeys(c,self?std::vector<std::string>{"id","src","dst","plane","source_nic","destination_nic","queue_depth","self_service"}:
+      std::vector<std::string>{"id","src","dst","plane","request_port","response_port","source_nic","destination_nic","queue_depth"});
     const auto id=SessionInteger(c.at("id"),execution_limits.connections-1),src=SessionInteger(c.at("src"),31),dst=SessionInteger(c.at("dst"),31);
-    Require(src!=dst && gpus.count(src) && gpus.count(dst) && endpoints.emplace(id,std::pair{src,dst}).second,"invalid session endpoints/id");
+    Require((self?src==dst:src!=dst) && gpus.count(src) && gpus.count(dst) && endpoints.emplace(id,std::pair{src,dst}).second,"invalid session endpoints/id");
     SessionInteger(c.at("plane"),31);SessionInteger(c.at("source_nic"),1024);SessionInteger(c.at("destination_nic"),1024);
     destination_nics.emplace(id,c.at("destination_nic"));
     const auto depth=SessionInteger(c.at("queue_depth"),32);Require(depth>0 && (depth&(depth-1))==0,"invalid session queue depth");
-    for(const auto* key:{"request_port","response_port"}) {
+    if(!self)for(const auto* key:{"request_port","response_port"}) {
       const auto port=SessionInteger(c.at(key),65535);Require(port>=10000 && wire_ports.insert(port).second,"invalid/repeated session wire port");
     }
   }

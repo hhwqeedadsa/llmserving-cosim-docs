@@ -1,5 +1,7 @@
 # 用户指南
 
+使用同一节点作为通信对端时，可在transactions/5显式声明功能self服务，并与真实远端通信共享内存和时钟。输入及公开probe/session命令见[混合服务示例](../examples/scaleout_self_peer/README.md)；context规划器仍拒绝self。
+
 验证通信域/context/peer到持久连接和物理NIC的对应，可用`scaleout rdma-context-plan`、现有`rdma-transaction-probe`及`rdma-context-check`。输入、完整捕获要求和两NIC例子见[上下文绑定](../examples/scaleout_context_transactions/README.md)；self-peer仍明确不支持。
 
 原生Scale-Out支持显式交换机间链路永久失效及声明延迟后的集中改路，沿用`rdma-probe/rdma-stream-probe/rdma-transaction-probe`。排队丢弃、在途丢弃、PFC恢复和源端重传保持实际网络事件；配置、永久分区的预期失败与边界见[链路失效示例](../examples/scaleout_link_failure/README.md)。

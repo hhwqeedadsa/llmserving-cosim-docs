@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+事务v5可选显式self服务：纯输入检查在Fabric分配及在线注册之前拒绝非法NIC/时长/ACK依赖；RemoteTransactions在同一Simulator上安排FIFO服务并用RemoteMemory::ApplyOnNic修改共享字节，不创建transport stream。普通远端路径保持。输入、功能时长与不支持项见[混合服务](../examples/scaleout_self_peer/README.md)。
+
 `ApplicationWindows`只管理本地应用视图及每操作活跃使用；共享底层域仍由物理owner/key标识。`ValidateApplicationWindows`在probe建网前、session整批准入前纯检查覆盖和completed依赖，运行时在准入/完成再次登记与释放。`RemoteMemory::ApplyOnNic`继续独立授权，视图关闭不改变MR状态或吞掉数据包。范围见[应用窗口](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。
 
 `memory_registrations.hh`对v4/v5静态注册做Python对应的纯输入校验。`RemoteMemory::Registration`将owner/NIC/rkey映射到物理window_key子范围；`ApplyOnNic`在实际MRT1请求解码后检查权限并修改共享字节。`PersistentStreams::Rx`独立检查实际接收端口等于destination_nic，事务保留该绑定；显式模式禁止旧`Apply`绕过NIC。跨rkey重叠写按owner和物理地址检查，读写lease也不依赖远端别名。默认不开启，报告字段不变；当前不包含PD、动态撤销、provider DMA或成本，见[公开用法](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)。

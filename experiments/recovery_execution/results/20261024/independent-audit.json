@@ -1,0 +1,4729 @@
+{
+  "cases": [
+    {
+      "accepted_target_effects": 5,
+      "controller_exit_classification_error": true,
+      "coverage_ns": 109997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          18,
+          21,
+          27,
+          40,
+          49,
+          59
+        ],
+        "2": [
+          176
+        ],
+        "3": [
+          253
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4890003,
+      "fragment_ready_ns": 109997,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 116021,
+      "last_received_ack_ns": 116021,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1472-data_tail-whole_token",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": false,
+      "owners": [
+        0,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "12": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "14": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 2,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 3,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 4272,
+          "node": 4,
+          "port": 1,
+          "service_ns": 341.76,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 4,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 672,
+          "node": 10,
+          "port": 1,
+          "service_ns": 53.76,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 10,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 10,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 11,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 60440,
+          "node": 11,
+          "port": 3,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 90256,
+          "node": 12,
+          "port": 1,
+          "service_ns": 7220.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 2112,
+          "node": 12,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 12,
+          "port": 4,
+          "service_ns": 172.8,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 14,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2112,
+          "node": 14,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 15,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 15,
+          "port": 3,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2112,
+          "node": 16,
+          "port": 1,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 29816,
+          "node": 16,
+          "port": 2,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2160,
+          "node": 17,
+          "port": 1,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 17,
+          "port": 2,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 43104,
+      "recovery_source_packets": 45,
+      "replay_owners": [
+        0,
+        2,
+        3
+      ],
+      "request": 1472,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 90256,
+      "source_packets": 92,
+      "source_payload_tx_bytes": 86944,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 107609,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          18,
+          21,
+          27,
+          40,
+          49,
+          59
+        ],
+        "2": [
+          176
+        ],
+        "3": [
+          253
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4892391,
+      "fragment_ready_ns": 107609,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 113633,
+      "last_received_ack_ns": 113633,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1472-data_tail-owner_retention",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2832,
+          "node": 4,
+          "port": 1,
+          "service_ns": 226.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 672,
+          "node": 10,
+          "port": 1,
+          "service_ns": 53.76,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 45532,
+          "node": 11,
+          "port": 3,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 12,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 12,
+          "port": 3,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 12,
+          "port": 4,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 14,
+          "port": 3,
+          "service_ns": 111.36,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 15,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 15,
+          "port": 3,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1392,
+          "node": 16,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1440,
+          "node": 17,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 17,
+          "port": 2,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 14368,
+      "recovery_source_packets": 15,
+      "replay_owners": [
+        0
+      ],
+      "request": 1472,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 60440,
+      "source_packets": 62,
+      "source_payload_tx_bytes": 58208,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          18,
+          21,
+          27,
+          40,
+          49,
+          59
+        ],
+        "2": [
+          176
+        ],
+        "3": [
+          253
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1472-ack_tail-whole_token",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 15716,
+          "node": 8,
+          "port": 4,
+          "service_ns": 1257.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 816,
+          "node": 10,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1536,
+          "node": 12,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 14,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1536,
+          "node": 16,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 1472,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          18,
+          21,
+          27,
+          40,
+          49,
+          59
+        ],
+        "2": [
+          176
+        ],
+        "3": [
+          253
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1472-ack_tail-owner_retention",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 15716,
+          "node": 8,
+          "port": 4,
+          "service_ns": 1257.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 816,
+          "node": 10,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1536,
+          "node": 12,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 14,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1536,
+          "node": 16,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 1472,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 5,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 109997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          0,
+          15,
+          36
+        ],
+        "1": [
+          66,
+          74,
+          76
+        ],
+        "2": [
+          130,
+          155
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4890003,
+      "fragment_ready_ns": 109997,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 116021,
+      "last_received_ack_ns": 116021,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1808-data_tail-whole_token",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": false,
+      "owners": [
+        0,
+        1,
+        2
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "10": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "12": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 1,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 2,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 4272,
+          "node": 4,
+          "port": 1,
+          "service_ns": 341.76,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 1440,
+          "node": 8,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 60440,
+          "node": 8,
+          "port": 4,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 10,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 10,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1440,
+          "node": 11,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 60440,
+          "node": 11,
+          "port": 3,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 90256,
+          "node": 12,
+          "port": 1,
+          "service_ns": 7220.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 2112,
+          "node": 12,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 12,
+          "port": 4,
+          "service_ns": 172.8,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 14,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2112,
+          "node": 14,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 15,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 15,
+          "port": 3,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2112,
+          "node": 16,
+          "port": 1,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 29816,
+          "node": 16,
+          "port": 2,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2160,
+          "node": 17,
+          "port": 1,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 17,
+          "port": 2,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 43104,
+      "recovery_source_packets": 45,
+      "replay_owners": [
+        0,
+        1,
+        2
+      ],
+      "request": 1808,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 90256,
+      "source_packets": 92,
+      "source_payload_tx_bytes": 86944,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 107609,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          0,
+          15,
+          36
+        ],
+        "1": [
+          66,
+          74,
+          76
+        ],
+        "2": [
+          130,
+          155
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4892391,
+      "fragment_ready_ns": 107609,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 113633,
+      "last_received_ack_ns": 113633,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1808-data_tail-owner_retention",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2832,
+          "node": 4,
+          "port": 1,
+          "service_ns": 226.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 45532,
+          "node": 8,
+          "port": 4,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 10,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 45532,
+          "node": 11,
+          "port": 3,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 12,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 2112,
+          "node": 12,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2112,
+          "node": 14,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 15,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2112,
+          "node": 16,
+          "port": 1,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 17,
+          "port": 2,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 14368,
+      "recovery_source_packets": 15,
+      "replay_owners": [
+        0
+      ],
+      "request": 1808,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 60440,
+      "source_packets": 62,
+      "source_payload_tx_bytes": 58208,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          0,
+          15,
+          36
+        ],
+        "1": [
+          66,
+          74,
+          76
+        ],
+        "2": [
+          130,
+          155
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1808-ack_tail-whole_token",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 10,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 12,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 14,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 16,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 1808,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          0,
+          15,
+          36
+        ],
+        "1": [
+          66,
+          74,
+          76
+        ],
+        "2": [
+          130,
+          155
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "1808-ack_tail-owner_retention",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 10,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 12,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 14,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 16,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 1808,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 7,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 111191,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          49
+        ],
+        "1": [
+          66
+        ],
+        "2": [
+          162,
+          165,
+          168,
+          169,
+          186
+        ],
+        "3": [
+          201
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4888809,
+      "fragment_ready_ns": 111191,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 117215,
+      "last_received_ack_ns": 117215,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "2675-data_tail-whole_token",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": false,
+      "owners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "10": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "12": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "14": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 1,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 2,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 3,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 5712,
+          "node": 4,
+          "port": 1,
+          "service_ns": 456.96,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 1440,
+          "node": 8,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 60440,
+          "node": 8,
+          "port": 4,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 4,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 10,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 10,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 10,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1440,
+          "node": 11,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 11,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 90256,
+          "node": 11,
+          "port": 3,
+          "service_ns": 7220.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 120072,
+          "node": 12,
+          "port": 1,
+          "service_ns": 9605.76,
+          "tier": "access"
+        },
+        {
+          "bytes": 2832,
+          "node": 12,
+          "port": 3,
+          "service_ns": 226.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2880,
+          "node": 12,
+          "port": 4,
+          "service_ns": 230.4,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 14,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2832,
+          "node": 14,
+          "port": 3,
+          "service_ns": 226.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 90256,
+          "node": 15,
+          "port": 1,
+          "service_ns": 7220.48,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2880,
+          "node": 15,
+          "port": 3,
+          "service_ns": 230.4,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2832,
+          "node": 16,
+          "port": 1,
+          "service_ns": 226.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 29816,
+          "node": 16,
+          "port": 2,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2880,
+          "node": 17,
+          "port": 1,
+          "service_ns": 230.4,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 90256,
+          "node": 17,
+          "port": 2,
+          "service_ns": 7220.48,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 57472,
+      "recovery_source_packets": 60,
+      "replay_owners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "request": 2675,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 77068,
+      "source_model_tx_bytes": 120072,
+      "source_packets": 122,
+      "source_payload_tx_bytes": 115680,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 4,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 107609,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          49
+        ],
+        "1": [
+          66
+        ],
+        "2": [
+          162,
+          165,
+          168,
+          169,
+          186
+        ],
+        "3": [
+          201
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4892391,
+      "fragment_ready_ns": 107609,
+      "full_inference": false,
+      "generic_missing_originals": [
+        0
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 113633,
+      "last_received_ack_ns": 113633,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "2675-data_tail-owner_retention",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "8": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 0,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 3552,
+          "node": 4,
+          "port": 1,
+          "service_ns": 284.16,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 45532,
+          "node": 8,
+          "port": 4,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 10,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 60440,
+          "node": 11,
+          "port": 3,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 75348,
+          "node": 12,
+          "port": 1,
+          "service_ns": 6027.84,
+          "tier": "access"
+        },
+        {
+          "bytes": 2112,
+          "node": 12,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 12,
+          "port": 4,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2112,
+          "node": 14,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 15,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 15,
+          "port": 3,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2112,
+          "node": 16,
+          "port": 1,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1440,
+          "node": 17,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 17,
+          "port": 2,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 14368,
+      "recovery_source_packets": 15,
+      "replay_owners": [
+        0
+      ],
+      "request": 2675,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 77068,
+      "source_model_tx_bytes": 75348,
+      "source_packets": 77,
+      "source_payload_tx_bytes": 72576,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 4,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 11191,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          49
+        ],
+        "1": [
+          66
+        ],
+        "2": [
+          162,
+          165,
+          168,
+          169,
+          186
+        ],
+        "3": [
+          201
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 69284,
+      "last_received_ack_ns": 68280,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "2675-ack_tail-whole_token",
+      "original_failed_owner_applied_ns": 11159,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2976,
+          "node": 4,
+          "port": 1,
+          "service_ns": 238.08,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 10,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 45532,
+          "node": 11,
+          "port": 3,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 12,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 12,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 14,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 15,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2256,
+          "node": 16,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 17,
+          "port": 2,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 2675,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 77068,
+      "source_model_tx_bytes": 60440,
+      "source_packets": 62,
+      "source_payload_tx_bytes": 58208,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 4,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 11191,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "0": [
+          49
+        ],
+        "1": [
+          66
+        ],
+        "2": [
+          162,
+          165,
+          168,
+          169,
+          186
+        ],
+        "3": [
+          201
+        ]
+      },
+      "failed_owner": 0,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 69284,
+      "last_received_ack_ns": 68280,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "2675-ack_tail-owner_retention",
+      "original_failed_owner_applied_ns": 11159,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "0": [
+          [
+            0,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 0,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2976,
+          "node": 4,
+          "port": 1,
+          "service_ns": 238.08,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 8,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 10,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 45532,
+          "node": 11,
+          "port": 3,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 12,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 12,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2256,
+          "node": 14,
+          "port": 3,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 15,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2256,
+          "node": 16,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 17,
+          "port": 2,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 2675,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 77068,
+      "source_model_tx_bytes": 60440,
+      "source_packets": 62,
+      "source_payload_tx_bytes": 58208,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 5,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 109997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "1": [
+          66,
+          76
+        ],
+        "2": [
+          131,
+          138,
+          165,
+          186
+        ],
+        "3": [
+          230,
+          235
+        ]
+      },
+      "failed_owner": 1,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4890003,
+      "fragment_ready_ns": 109997,
+      "full_inference": false,
+      "generic_missing_originals": [
+        1
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 116021,
+      "last_received_ack_ns": 116021,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "6447-data_tail-whole_token",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": false,
+      "owners": [
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "10": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "12": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "14": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 1,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 2,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 3,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 4272,
+          "node": 4,
+          "port": 1,
+          "service_ns": 341.76,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 2,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 1440,
+          "node": 9,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 9,
+          "port": 4,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 672,
+          "node": 10,
+          "port": 1,
+          "service_ns": 53.76,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 10,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 10,
+          "port": 3,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 11,
+          "port": 2,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 60440,
+          "node": 11,
+          "port": 3,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 90256,
+          "node": 12,
+          "port": 1,
+          "service_ns": 7220.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 2112,
+          "node": 12,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 12,
+          "port": 4,
+          "service_ns": 172.8,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 29816,
+          "node": 14,
+          "port": 1,
+          "service_ns": 2385.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2112,
+          "node": 14,
+          "port": 3,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 15,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 2160,
+          "node": 15,
+          "port": 3,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2112,
+          "node": 16,
+          "port": 1,
+          "service_ns": 168.96,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 29816,
+          "node": 16,
+          "port": 2,
+          "service_ns": 2385.28,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 2160,
+          "node": 17,
+          "port": 1,
+          "service_ns": 172.8,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 17,
+          "port": 2,
+          "service_ns": 4835.2,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 43104,
+      "recovery_source_packets": 45,
+      "replay_owners": [
+        1,
+        2,
+        3
+      ],
+      "request": 6447,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 90256,
+      "source_packets": 92,
+      "source_payload_tx_bytes": 86944,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 107609,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "1": [
+          66,
+          76
+        ],
+        "2": [
+          131,
+          138,
+          165,
+          186
+        ],
+        "3": [
+          230,
+          235
+        ]
+      },
+      "failed_owner": 1,
+      "failed_source_still_unacked": true,
+      "fault": "data_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4892391,
+      "fragment_ready_ns": 107609,
+      "full_inference": false,
+      "generic_missing_originals": [
+        1
+      ],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 113633,
+      "last_received_ack_ns": 113633,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "6447-data_tail-owner_retention",
+      "original_failed_owner_applied_ns": -1,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "10": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 0,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 30624,
+          "node": 1,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2832,
+          "node": 4,
+          "port": 1,
+          "service_ns": 226.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 8,
+          "port": 2,
+          "service_ns": 111.36,
+          "tier": "access"
+        },
+        {
+          "bytes": 30624,
+          "node": 8,
+          "port": 4,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 672,
+          "node": 10,
+          "port": 1,
+          "service_ns": 53.76,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 45532,
+          "node": 11,
+          "port": 3,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 60440,
+          "node": 12,
+          "port": 1,
+          "service_ns": 4835.2,
+          "tier": "access"
+        },
+        {
+          "bytes": 1392,
+          "node": 12,
+          "port": 3,
+          "service_ns": 111.36,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 12,
+          "port": 4,
+          "service_ns": 115.2,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1392,
+          "node": 14,
+          "port": 3,
+          "service_ns": 111.36,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 15,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1440,
+          "node": 15,
+          "port": 3,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1392,
+          "node": 16,
+          "port": 1,
+          "service_ns": 111.36,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1440,
+          "node": 17,
+          "port": 1,
+          "service_ns": 115.2,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 17,
+          "port": 2,
+          "service_ns": 3642.56,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 14368,
+      "recovery_source_packets": 15,
+      "replay_owners": [
+        1
+      ],
+      "request": 6447,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 60440,
+      "source_packets": 62,
+      "source_payload_tx_bytes": 58208,
+      "strategy": "owner_retention"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "1": [
+          66,
+          76
+        ],
+        "2": [
+          131,
+          138,
+          165,
+          186
+        ],
+        "3": [
+          230,
+          235
+        ]
+      },
+      "failed_owner": 1,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "6447-ack_tail-whole_token",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 2,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 15716,
+          "node": 8,
+          "port": 4,
+          "service_ns": 1257.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 816,
+          "node": 10,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1536,
+          "node": 12,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 14,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1536,
+          "node": 16,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 6447,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "whole_token"
+    },
+    {
+      "accepted_target_effects": 3,
+      "controller_exit_classification_error": false,
+      "coverage_ns": 9997,
+      "ecn_ce_seen_total": 0,
+      "experts_by_owner": {
+        "1": [
+          66,
+          76
+        ],
+        "2": [
+          131,
+          138,
+          165,
+          186
+        ],
+        "3": [
+          230,
+          235
+        ]
+      },
+      "failed_owner": 1,
+      "failed_source_still_unacked": true,
+      "fault": "ack_tail",
+      "fault_drops": 3,
+      "fragment_precedes_global_failure_cutoff_ns": 4900000,
+      "fragment_ready_ns": 100000,
+      "full_inference": false,
+      "generic_missing_originals": [],
+      "hardware_calibrated": false,
+      "last_captured_wire_event_ns": 68090,
+      "last_received_ack_ns": 67086,
+      "max_queue_at_hook_bytes": 15944,
+      "name": "6447-ack_tail-owner_retention",
+      "original_failed_owner_applied_ns": 9965,
+      "owner_plan_equivalent_to_operation_replay": true,
+      "owners": [
+        1,
+        2,
+        3
+      ],
+      "paths": {
+        "2": [
+          [
+            1,
+            8,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ],
+        "4": [
+          [
+            2,
+            9,
+            10,
+            16,
+            14,
+            12,
+            4
+          ]
+        ],
+        "6": [
+          [
+            3,
+            9,
+            11,
+            17,
+            15,
+            12,
+            4
+          ]
+        ]
+      },
+      "pfc_pause_total": 0,
+      "physical_duplicate_rx": 2,
+      "physical_out_of_order_rx": 0,
+      "port_services": [
+        {
+          "bytes": 15716,
+          "node": 1,
+          "port": 1,
+          "service_ns": 1257.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 2,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 3,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "access"
+        },
+        {
+          "bytes": 2256,
+          "node": 4,
+          "port": 1,
+          "service_ns": 180.48,
+          "tier": "access"
+        },
+        {
+          "bytes": 816,
+          "node": 8,
+          "port": 2,
+          "service_ns": 65.28,
+          "tier": "access"
+        },
+        {
+          "bytes": 15716,
+          "node": 8,
+          "port": 4,
+          "service_ns": 1257.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 720,
+          "node": 9,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "access"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 9,
+          "port": 4,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 816,
+          "node": 10,
+          "port": 1,
+          "service_ns": 65.28,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 10,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 10,
+          "port": 3,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 11,
+          "port": 2,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 30624,
+          "node": 11,
+          "port": 3,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 45532,
+          "node": 12,
+          "port": 1,
+          "service_ns": 3642.56,
+          "tier": "access"
+        },
+        {
+          "bytes": 1536,
+          "node": 12,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 12,
+          "port": 4,
+          "service_ns": 57.6,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 14908,
+          "node": 14,
+          "port": 1,
+          "service_ns": 1192.64,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 1536,
+          "node": 14,
+          "port": 3,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 15,
+          "port": 1,
+          "service_ns": 2449.92,
+          "tier": "tor_agg"
+        },
+        {
+          "bytes": 720,
+          "node": 15,
+          "port": 3,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 1536,
+          "node": 16,
+          "port": 1,
+          "service_ns": 122.88,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 14908,
+          "node": 16,
+          "port": 2,
+          "service_ns": 1192.64,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 720,
+          "node": 17,
+          "port": 1,
+          "service_ns": 57.6,
+          "tier": "agg_core"
+        },
+        {
+          "bytes": 30624,
+          "node": 17,
+          "port": 2,
+          "service_ns": 2449.92,
+          "tier": "agg_core"
+        }
+      ],
+      "recovery_payload_tx_bytes": 0,
+      "recovery_source_packets": 0,
+      "replay_owners": [],
+      "request": 6447,
+      "retained_source_lease_bytes": 14336,
+      "retransmit_payload_bytes": 736,
+      "source_failure_ns": 75874,
+      "source_model_tx_bytes": 45532,
+      "source_packets": 47,
+      "source_payload_tx_bytes": 43840,
+      "strategy": "owner_retention"
+    }
+  ],
+  "complete_matrix": true,
+  "independent_stdlib": true,
+  "schema_version": "receiver-recovery-independent-audit/1",
+  "tampering": [
+    {
+      "kind": "missing_target_effect",
+      "reason": "missing/extra target effect",
+      "rejected": true
+    },
+    {
+      "kind": "wrong_canonical",
+      "reason": "wrong canonical output",
+      "rejected": true
+    },
+    {
+      "kind": "forged_progress",
+      "reason": "forged or unfiltered receiver progress",
+      "rejected": true
+    }
+  ]
+}

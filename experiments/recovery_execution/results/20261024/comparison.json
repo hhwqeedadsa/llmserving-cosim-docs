@@ -1,0 +1,60 @@
+{
+  "data_tail_pairs": [
+    {
+      "request": 1472,
+      "owners": 3,
+      "whole_retry_bytes": 43104,
+      "retention_retry_bytes": 14368,
+      "retry_reduction_fraction": 0.6666666666666667,
+      "whole_ready_ns": 109997,
+      "retention_ready_ns": 107609,
+      "whole_all_port_model_tx_bytes": 567168,
+      "retention_all_port_model_tx_bytes": 379632,
+      "all_port_service_ns_reduction": 15002.880000000001
+    },
+    {
+      "request": 1808,
+      "owners": 3,
+      "whole_retry_bytes": 43104,
+      "retention_retry_bytes": 14368,
+      "retry_reduction_fraction": 0.6666666666666667,
+      "whole_ready_ns": 109997,
+      "retention_ready_ns": 107609,
+      "whole_all_port_model_tx_bytes": 567168,
+      "retention_all_port_model_tx_bytes": 379632,
+      "all_port_service_ns_reduction": 15002.880000000001
+    },
+    {
+      "request": 2675,
+      "owners": 4,
+      "whole_retry_bytes": 57472,
+      "retention_retry_bytes": 14368,
+      "retry_reduction_fraction": 0.75,
+      "whole_ready_ns": 111191,
+      "retention_ready_ns": 107609,
+      "whole_all_port_model_tx_bytes": 754704,
+      "retention_all_port_model_tx_bytes": 473400,
+      "all_port_service_ns_reduction": 22504.32
+    },
+    {
+      "request": 6447,
+      "owners": 3,
+      "whole_retry_bytes": 43104,
+      "retention_retry_bytes": 14368,
+      "retry_reduction_fraction": 0.6666666666666667,
+      "whole_ready_ns": 109997,
+      "retention_ready_ns": 107609,
+      "whole_all_port_model_tx_bytes": 567168,
+      "retention_all_port_model_tx_bytes": 379632,
+      "all_port_service_ns_reduction": 15002.880000000001
+    }
+  ],
+  "retention_equivalent_conditions": 8,
+  "total_retention_conditions": 8,
+  "no_fresh_output_retry_in_all_8_ack_loss_conditions": true,
+  "route_changes_explain_pair_difference": false,
+  "independent_network_runs": 16,
+  "raw_request_count": 4,
+  "source_packets": 1067,
+  "target_effects": 61
+}

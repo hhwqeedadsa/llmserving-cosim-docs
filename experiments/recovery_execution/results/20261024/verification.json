@@ -1,0 +1,88 @@
+{
+  "schema_version": "receiver-recovery-closeout/1",
+  "research_goal_status": "in_progress",
+  "actual_network_runs": 16,
+  "raw_routing_requests": 4,
+  "source_packet_transmissions": 1067,
+  "actual_target_effects": 61,
+  "output_fragments_ready": 16,
+  "native_global_successes": 0,
+  "expected_native_partial_exits": 16,
+  "first_host_terminal_classification_error_preserved": true,
+  "network_reruns": 0,
+  "remaining_15_executed_only_after_first_independent_audit": true,
+  "same_information_retention_plan_equal_to_generic_operation_replay": "8/8",
+  "candidate_novelty_supported": false,
+  "known_work_volume_benefit_against_whole_token_replay": true,
+  "tampering_rejections": [
+    {
+      "kind": "missing_target_effect",
+      "reason": "missing/extra target effect",
+      "rejected": true
+    },
+    {
+      "kind": "wrong_canonical",
+      "reason": "wrong canonical output",
+      "rejected": true
+    },
+    {
+      "kind": "forged_progress",
+      "reason": "forged or unfiltered receiver progress",
+      "rejected": true
+    }
+  ],
+  "original_platform_binary_and_eight_libraries_unchanged": true,
+  "prepared_inputs_unchanged": true,
+  "fixed_dependency_checkouts_verified": 13,
+  "code_imports_tests_or_fixtures": false,
+  "closeout_helper_initial_error": "missing PYTHONPATH before reading/writing evidence; corrected invocation; no simulator rerun",
+  "monitored_commands": 24,
+  "conservative_nested_monitor_seconds": 40.89944320358336,
+  "timing_scope": "sum of recorded monitors, nested work conservatively charged twice; excludes editing and uninstrumented inspection/initial offline audit; not full stage wall time",
+  "peak_sampled_group_rss_bytes": 428994560,
+  "remaining_live_group_pids": [],
+  "stage_usage": {
+    "apparent_bytes": 93930304,
+    "allocated_bytes": 95170560
+  },
+  "persistent_usage": {
+    "apparent_bytes": 23282756,
+    "allocated_bytes": 23289856
+  },
+  "charged_stage_and_persistent_bytes": 118460416,
+  "cumulative_artifact_limit_bytes": 201326592,
+  "offline_reproduction": {
+    "passed": true,
+    "verified_members": 279,
+    "native_network_reruns": 0,
+    "offline_audit_byte_identical": true,
+    "comparison_byte_identical": true,
+    "all_manifest_hashes_unchanged": true,
+    "platform_archive_still_compressed": true
+  },
+  "checkpoint": {
+    "archive": "/dev/shm/moe-recovery-execution-20261024/checkpoint/checkpoint.tar.gz",
+    "sha256": "5a025ae2e420982e2dbcae0e12a2855cd8a6d7097b8e49d563e277945e5d8707",
+    "archive_bytes": 23280407,
+    "members": 279,
+    "uncompressed_file_bytes": 42486645,
+    "verified_all_members": true
+  },
+  "persistent_backup": {
+    "path": "/home/lry/moe-ub-cosim/runs/recovery_execution_checkpoint_20261024/checkpoint.tar.gz",
+    "sha256": "5a025ae2e420982e2dbcae0e12a2855cd8a6d7097b8e49d563e277945e5d8707",
+    "bytes": 23280407,
+    "fsynced": true,
+    "same_local_root_filesystem": true,
+    "remote_backup": false
+  },
+  "limitations": [
+    "functional output-delivery slice, not full MoE/LLMServingSim/GPU execution",
+    "connection-identity fault, not physical link or rank failure",
+    "one token/layer from each of four previously used requests, not independent population samples",
+    "rank4 serial timer blocks early copy until 100us",
+    "failed source lease not reclaimed; no repeated failure or bank wrap",
+    "no calibrated provider/GPU visibility or process survival evidence"
+  ],
+  "next_gate": "separate control timers from GPU compute timing; then assess bounded-buffer safety/progress against same-information operation replay and explicit quiescence"
+}

@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "label": "restored-smoke",
+  "actual_network_started": false,
+  "cause": "Python current-directory precedence imported original repo; source-root assertion aborted before any invoke",
+  "monitor_sha256": "2f6080c83b533760e544ab679a7207d0567d99bf1b95d73c496d30a29f0e77c0",
+  "stderr_sha256": "65fa0247009e0888567369c9cfb33d606a1822e2dd012ba38eb46b1fdc79b856",
+  "correction": "Use python3 -P to exclude cwd from sys.path; keep same restored code and original three-network budget"
+}

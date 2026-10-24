@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "restored_source_root": "/dev/shm/moe-context-transactions-20261024/restored/source",
+  "cwd": "/dev/shm/moe-context-transactions-20261024/restored/empty-cwd",
+  "offline_reports_byte_equal": 3,
+  "new_network_executions": 1,
+  "old_network_reexecutions": 0,
+  "actual_bundled_ns3_libraries": [
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-applications.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-bridge.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-core.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-internet.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-network.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-point-to-point.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-stats.so",
+    "/dev/shm/moe-context-transactions-20261024/restored/evidence/runtime/lib/libns3.42-traffic-control.so"
+  ],
+  "smoke": {
+    "passed": true,
+    "remote_operations": 1,
+    "local_operations": 0,
+    "decoded_frames": 1,
+    "source_packets": 1,
+    "retransmitted_packets": 0,
+    "target_applications": 1,
+    "finish_ns": 12060,
+    "atomic_returns": []
+  },
+  "scope": "ABI-bound bundled runtime, new Python root and empty cwd; not clean native build or cross-host test"
+}

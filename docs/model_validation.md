@@ -1,5 +1,7 @@
 # 模型依据与适用范围
 
+context连接规划沿用[固定provider共享范围核查](reviews/现代连接共享范围与网络优化对象_20261024.md)中的显式connection/context/NIC规则；实际执行对象仍是MRT1。两NIC功能例验证身份复用与隔离、首包丢失恢复、目标字节和原子旧值，不证明GIN QP/报文等价、self-peer、GPU可见性或现代性能。见[验收范围](../fixtures/context_transactions/README.md)。
+
 原生源NIC已修复两种唤醒错误：不可发送QP的旧`m_nextAvail`阻断其他QP，以及新增更早工作未提前旧定时器。真实双QP包/ACK小例证明旧实现依赖额外ACK才继续，修复后按实际限速时刻发送；15个CPU状态条件另核暂停、窗口、变速及同纳秒顺序。该功能证据不证明旧完整应用的全部源空闲或生产性能，既有结果仍对应其旧库身份，不能自动视为修复后结果。见[源NIC核查](../fixtures/nic_wakeup/README.md)。
 
 `switch_links/1`是原生Scale-Out的永久交换机边故障功能模型：真实端口关闭、数据MMU回收、PFC恢复、在途到达丢弃与真实ACK/重传，配合声明延迟的集中最短路/ECMP更新。小例覆盖排队、headroom、多故障不同延迟、持久QP、未来事件与永久分区；[证据及限制](../fixtures/switch_link_failure/README.md)区分其功能范围。检测/控制报文、NIC故障、rail重绑定、GPU/MR恢复和硬件成本没有建模；经典改路与缓冲修复不是论文创新，未验证千卡或现代MoE性能。

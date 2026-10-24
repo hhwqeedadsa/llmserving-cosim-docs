@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+`rdma-context-plan`保存便携输入、事务程序、`moe-rdma-context-map/1`绑定及各文件SHA-256；`rdma-context-check`输出逐binding的实际操作数、请求/响应载体、源包/目标RX数与payload字节。实际字节含重传，不等于应用有效字节或线速字节。plan没有执行，check不新增网络；字段和完整捕获要求见[上下文绑定](../examples/scaleout_context_transactions/README.md)。
+
 原生协议启用`link_failures`时，结果同名对象包含`configuration/events/pending_events/route_epoch/local_drops/scope`。`link_down`事件保存`time_ns/event_index/src/dst/src_port/dst_port/queued_bytes_before/local_drops_during_close/route_epoch/buffer_before/buffer_after`；缓冲摘要按node报告失败端口数据排队字节、全交换机入口加headroom、出口MMU及共享占用。`routes_updated`保存`time_ns/event_index/route_epoch/excluded_directed_ports`，每条已知双向边对应2个排除端口。字节视角重叠，禁止相加为内存。包采集仅在此模式增加`local_drop=5`；旧`drop=2`仍表示物理接收丢弃，后者包括真实到达已关闭端口的包。只记录事实，不携带故障身份标签或决定协议动作；默认不增加这些字段。解释及例子见[链路输出](../examples/scaleout_link_failure/README.md#输出解释与边界)。
 
 仅启用`local_failover`时，`link_failures.local_failover`增加`configuration/scope/events`。每条本地调整保存`time_ns/node/event_index/candidate_destinations/candidate_next_hops/installed_next_hops/empty_destinations/removed_by_port`，最后一项为`{port,destination_entries}`数组。候选数按目的地址及全局已知路由核算，空目的数表示剔除后无下一跳；不是丢包数。记录只覆盖每次关闭后两端的本地调整，非全部全局重建日志。实际转发失败的`local_drop`端口来自入口设备，不能直接当故障出口；需结合同时刻接收、当时候选及包头核查。见[本地剔除示例](../examples/scaleout_live_ecmp/README.md)。

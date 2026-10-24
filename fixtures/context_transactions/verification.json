@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "cases": {
+    "healthy": {
+      "passed": true,
+      "remote_operations": 6,
+      "local_operations": 1,
+      "decoded_frames": 7,
+      "source_packets": 7,
+      "retransmitted_packets": 0,
+      "target_applications": 6,
+      "finish_ns": 56200,
+      "atomic_returns": [
+        17
+      ],
+      "tamper_rejected": [
+        "operation_identity",
+        "negative_ack",
+        "missing_atomic_response",
+        "duplicate_operation",
+        "incomplete_local",
+        "extra_qp",
+        "wrong_nic",
+        "wrong_source_packet",
+        "truncated_capture",
+        "invalid_wire_index",
+        "undrained"
+      ],
+      "independent_oracle_tamper_rejected": [
+        "duplicate_target",
+        "atomic_return",
+        "target_memory",
+        "missing_ack_rx"
+      ]
+    },
+    "fault": {
+      "passed": true,
+      "remote_operations": 6,
+      "local_operations": 1,
+      "decoded_frames": 7,
+      "source_packets": 8,
+      "retransmitted_packets": 1,
+      "target_applications": 6,
+      "finish_ns": 136200,
+      "atomic_returns": [
+        17
+      ],
+      "tamper_rejected": [
+        "operation_identity",
+        "negative_ack",
+        "missing_atomic_response",
+        "duplicate_operation",
+        "incomplete_local",
+        "extra_qp",
+        "wrong_nic",
+        "wrong_source_packet",
+        "truncated_capture",
+        "invalid_wire_index",
+        "undrained"
+      ],
+      "independent_oracle_tamper_rejected": [
+        "duplicate_target",
+        "atomic_return",
+        "target_memory",
+        "missing_ack_rx"
+      ]
+    }
+  },
+  "scope": "tiny explicit context bindings, inline MRT1 frames, memory and actual endpoint/ACK evidence; not GIN/GPU timing"
+}

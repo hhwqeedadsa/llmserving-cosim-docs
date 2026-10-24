@@ -1,0 +1,46 @@
+{
+  "passed": true,
+  "receipt_tamper_rejected": [
+    "input_roles",
+    "mapping_derivation",
+    "plan_hash"
+  ],
+  "syntax_files": 109,
+  "links": 5,
+  "commands": [
+    {
+      "command": [
+        "bash",
+        "scripts/check_deps.sh"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-context-plan",
+        "--help"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-context-check",
+        "--help"
+      ],
+      "cwd": "/home/lry/moe-ub-cosim",
+      "exit_code": 0
+    }
+  ]
+}

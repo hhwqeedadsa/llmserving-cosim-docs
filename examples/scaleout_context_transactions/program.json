@@ -1,0 +1,32 @@
+{
+  "schema_version": "moe-rdma-context-program/1",
+  "communicators": [
+    {"name":"ep0","requested_contexts":3,"connections":2,"ranks":[
+      {"rank":0,"node":0,"nics":[1,2]}, {"rank":1,"node":4,"nics":[1,2]}]},
+    {"name":"ep1","requested_contexts":3,"connections":2,"ranks":[
+      {"rank":0,"node":0,"nics":[1,2]}, {"rank":1,"node":4,"nics":[1,2]}]}
+  ],
+  "bindings": [
+    {"name":"ep0.ctx0","communicator":"ep0","src_rank":0,"peer_rank":1,"context_index":0,"plane":0,"request_port":24000,"response_port":24001,"queue_depth":4},
+    {"name":"ep0.ctx1","communicator":"ep0","src_rank":0,"peer_rank":1,"context_index":1,"plane":1,"request_port":24002,"response_port":24003,"queue_depth":4},
+    {"name":"ep0.ctx2","communicator":"ep0","src_rank":0,"peer_rank":1,"context_index":2,"plane":0,"request_port":24004,"response_port":24005,"queue_depth":4},
+    {"name":"ep1.ctx0","communicator":"ep1","src_rank":0,"peer_rank":1,"context_index":0,"plane":0,"request_port":24006,"response_port":24007,"queue_depth":4}
+  ],
+  "program": {
+    "schema_version":"moe-rdma-transactions/5",
+    "windows":[{"owner":4,"key":7,"address":4096,"allow_atomic":true,"bytes":4096,"initialization":"zero_fill/1","segments":[]}],
+    "operations":[
+      {"id":0,"kind":"remote","binding":"ep0.ctx0","verb":"put","key":7,"address":4096,"hex":"1100000000000000","after":[]},
+      {"id":1,"kind":"remote","binding":"ep0.ctx1","verb":"put","key":7,"address":4112,"hex":"2200000000000000","after":[]},
+      {"id":2,"kind":"remote","binding":"ep0.ctx2","verb":"put","key":7,"address":4128,"hex":"3300000000000000","after":[]},
+      {"id":3,"kind":"remote","binding":"ep1.ctx0","verb":"put","key":7,"address":4144,"hex":"4400000000000000","after":[]},
+      {"id":4,"kind":"local","rank":0,"duration_ns":20000,"after":[{"operation":0,"event":"completed"}]},
+      {"id":5,"kind":"remote","binding":"ep0.ctx0","verb":"fetch_add","key":7,"address":4096,"value":3,"after":[{"operation":4,"event":"completed"}]},
+      {"id":6,"kind":"remote","binding":"ep0.ctx0","verb":"put","key":7,"address":4160,"hex":"5500000000000000","after":[{"operation":5,"event":"completed"}]}
+    ],
+    "local_model":{"mode":"serial_per_gpu/1","duration_source":"declared_ns"},
+    "source_model":{"capture":"registered_window_at_publish/1","release":"transaction_completed/1"},
+    "local_memory_model":{"mode":"guarded_copy/1","acquire":"admission/1","capture":"start/1","commit":"completion/1"},
+    "transport_recovery":{"mode":"go_back_n/1","initial_rto_ns":80000,"max_rto_ns":640000,"max_retries":3,"max_events":1000}
+  }
+}

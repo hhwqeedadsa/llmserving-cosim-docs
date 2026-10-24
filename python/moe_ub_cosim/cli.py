@@ -78,6 +78,12 @@ def parser():
     session = sc.add_parser('rdma-transaction-session', help='Submit v4/v5 work after actual native callbacks; optional NIC-scoped registrations/local application views, v5 sparse windows/prepared callbacks; not modern GIN/GPU timing')
     for name in ('topology', 'protocol', 'config', 'backend', 'output'):
         session.add_argument('--'+name, type=Path, required=True)
+    context = sc.add_parser('rdma-context-plan', help='Bind explicit communicator/context/peer identities to NIC-bound persistent MRT1 connections; self-peer unsupported, not full GIN')
+    for name in ('config','topology','protocol','output'):
+        context.add_argument('--'+name,type=Path,required=True)
+    context_check = sc.add_parser('rdma-context-check', help='Verify a context plan against actual native transaction packets and connection reuse; requires complete endpoint/wire capture')
+    for name in ('plan','run','output'):
+        context_check.add_argument('--'+name,type=Path,required=True)
     causal = sc.add_parser('rdma-causal-plan', help='Lower saved public wave DAGs to persistent byte/local work; not ASTRA scheduling equivalence or modern GIN')
     for name in ('config', 'topology', 'protocol', 'output'):
         causal.add_argument('--'+name, type=Path, required=True)
@@ -180,6 +186,12 @@ def main(argv=None):
             elif args.scaleout_command == 'rdma-transaction-session':
                 from .transaction_session import run
                 value = run(args.topology, args.protocol, args.config, args.backend, args.output)
+            elif args.scaleout_command == 'rdma-context-plan':
+                from .context_transactions import execute
+                value = execute(args.config,args.topology,args.protocol,args.output)
+            elif args.scaleout_command == 'rdma-context-check':
+                from .context_transactions import check
+                value = check(args.plan,args.run,args.output)
             elif args.scaleout_command == 'rdma-causal-plan':
                 from .scaleout_causal_waves import execute
                 value = execute(args.config, args.topology, args.protocol, args.output)

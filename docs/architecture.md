@@ -1,6 +1,6 @@
 # 系统架构与执行过程
 
-transactions/4可选`bounded_copied_put/1`，将注册窗口、每源重传副本、目标请求缓存和本地copy快照分开限制。副本池不足时不捕获源数据，实际完整ACK清空副本并唤醒同源连接；失败和目标应用均不代替ACK。目标缓存累计保留至会话结束，源读保护仍沿用事务完成条件。实现和边界见[有界缓冲](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)。
+transactions/4可选`bounded_copied_put/1`，将注册窗口、每源重传副本、目标请求缓存和本地copy快照分开限制。副本池不足时不捕获源数据，实际完整ACK清空副本并唤醒同源连接；默认失败和目标应用均不代替ACK。可选源隔离策略只在停止本地发包后归还复制副本，已构造原生包仍可产生旧远端写入。目标缓存累计保留至会话结束，源读保护仍沿用事务完成条件。实现和边界见[有界缓冲](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)及[隔离后回收](../examples/scaleout_rdma_transactions/README.md#失败连接停止发包后归还复制池)。
 
 transactions/5可选`submission_model.mode=explicit_prefix/1`将准备与发布分开：实际队列额度允许时产生prepared，非聚合操作发布同一连接的已准备前缀，源字节在发布时捕获。在线前端可等待真实prepared回调；ACK/原子回复完成后才归还额度，未发布尾部不自动补齐。它是MRT1功能规则，不是物理门铃或现代GIN成本，见[前缀发布](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。
 

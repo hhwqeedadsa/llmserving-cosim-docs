@@ -1,0 +1,21 @@
+{
+  "isolated_copy_discards": 1,
+  "late_target_effects": 0,
+  "original_run_passed": false,
+  "pool_ack_releases": 2,
+  "pool_and_wire_and_memory_consistent": true,
+  "retained_payload_bytes": 0,
+  "retained_source_lease_ids": [
+    0,
+    4
+  ],
+  "schema_version": "isolated-copy-independent-audit/1",
+  "source_packets": 5,
+  "tampering_rejected": [
+    "packet_payload",
+    "owner_peak",
+    "early_discard",
+    "fake_failed_ack"
+  ],
+  "target_applications": 3
+}

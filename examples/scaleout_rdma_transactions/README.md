@@ -308,7 +308,7 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout 
   --backend /ABS/ns3.42-moe-rdma-transaction-probe --output /dev/shm/NEW_BUFFER_RUN
 ```
 
-在线`rdma-transaction-session`也支持相同配置。`buffer_model`有且只有以下5个字段：
+在线`rdma-transaction-session`也支持相同配置。`buffer_model`必填以下5个字段，可选源隔离回收策略见下节：
 
 ```json
 {"mode":"bounded_copied_put/1","transport_bytes_per_source":40,
@@ -325,8 +325,32 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout 
 
 整数拒绝bool、浮点、负值和额外字段；每个请求必须放得进源池。当前只支持v4的注册源put，拒绝inline put、原子、v5和explicit-prefix组合。注册/目标缓存总额在完整候选中先检查；在线超额批次不会注册其有效前部，也不会取消已有timer。
 
-不同源的池独立，同源连接共享容量。池不足时不会提前读取源窗口，也不丢弃工作；完整ACK清空真实传输副本，唤醒同源等待连接。超时、重试、目标已应用和控制timer均不释放失败副本；源lease仍按原`transaction_completed/1`释放。目标请求缓存不随ACK清除，也没有未建模的安全淘汰：长期服务会受累计接纳量限制，不能称无限连续运行。
+不同源的池独立，同源连接共享容量。池不足时不会提前读取源窗口，也不丢弃工作；完整ACK清空真实传输副本，唤醒同源等待连接。默认情况下，超时、重试、目标已应用和控制timer均不释放失败副本；源lease仍按原`transaction_completed/1`释放。目标请求缓存不随ACK清除，也没有未建模的安全淘汰：长期服务会受累计接纳量限制，不能称无限连续运行。
 
 `result.json.transactions.buffer_retention`分别列出注册内容、目标缓存、源lease引用量、本地copy当前/峰值和捕获临时向量峰值；编码后不再长期保留operation body，本地copy实际完成后清空快照。`transactions.transport.payload_pool`记录每源当前/峰值、未释放持有者及每次acquired/released的实际时间。失败partial结果可能仍持有资源，这是未完成的实际状态。
 
 这些额度只覆盖所列数据内容；元数据、解码临时对象、包、观测hex和报告副本不在内，源lease可重叠且只是引用，不能将字段相加为总RSS或GPU显存。MRT1帧头不是RoCE开销，ACK回收不提供远端撤权、GPU可见性或现代provider保证。功能验收、故障注入更正和恢复证据见[有界缓冲验收](../../fixtures/bounded_buffers/README.md)。
+
+## 失败连接停止发包后归还复制池
+
+一条失败连接若一直占满同GPU的共享复制池，其他健康连接也不能发布。当前载体先复制源字节，再复制到原生包；源端隔离后不再读取本地重传副本。因此可在`buffer_model`显式增加：
+
+```json
+"on_source_isolation": "release_copied_payload/1"
+```
+
+同时必须配置`transport_recovery.on_exhausted="isolate_stream"`。只适用于既有v4复制型put，拒绝布尔值、其他策略或全局停止模式；省略时行为和结果保持。使用新构建`backend.json`中的`transaction_probe`和上文8GPU小Clos拓扑：
+
+```bash
+python -m moe_ub_cosim scaleout rdma-transaction-probe \
+  --topology /path/to/topology \
+  --protocol examples/scaleout_rdma_transactions/rdma-isolated-copy-release.json \
+  --config examples/scaleout_rdma_transactions/isolated-copy-release.json \
+  --backend /path/to/transaction-probe --output /dev/shm/isolated-copy-release
+```
+
+本例持续丢弃连接0请求的最终ACK，预期5ms截止退出1并保存部分结果，不能称整体恢复完成。GPU0共享池只容40B帧：旧连接在60μs隔离并归还副本，健康连接的操作2、3分别在72.060/84.120μs完成。失败连接的后续操作4保持未发布、不重新捕获源字节。这些是功能输入的结果，不是GPU/生产时延。
+
+池事件`discarded_on_source_isolation`记录实际丢弃副本，`payload_pool.discarded_work`列出stream/work/bytes/time_ns；新增`on_source_isolation`说明策略。只在源移出调度并取消源计时器后丢弃。它不产生ACK或队列完成，不释放应用源lease、目标窗口或去重缓存；`failed_resources_released=false`仍为真。已构造原生包有独立字节，仍可能在回收后到达并写目标，不能据此复用旧目标地址。
+
+将协议换为普通`rdma.json`且换新输出目录，可查看无故障完整完成；同样容量和工作下不发生隔离丢弃。在线会话支持相同输入，整批容量校验仍在提交前执行。独立包/窗口/池核对、默认差分和迁移证据见[验收](../../fixtures/isolated_payload_release/README.md)。

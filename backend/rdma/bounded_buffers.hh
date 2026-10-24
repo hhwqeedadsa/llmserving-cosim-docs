@@ -12,8 +12,12 @@ inline uint64_t BufferInteger(const Json& value,uint64_t low,uint64_t high) {
 inline void ValidateBoundedBuffers(const Json& input) {
   if(!input.contains("buffer_model"))return;
   const auto& b=input.at("buffer_model");
-  Require(b.is_object() && b.size()==5 && b.at("mode")=="bounded_copied_put/1",
+  Require(b.is_object() && b.size()==5u+unsigned(b.contains("on_source_isolation")) && b.at("mode")=="bounded_copied_put/1",
           "invalid bounded buffer model fields/mode");
+  if(b.contains("on_source_isolation"))
+    Require(b.at("on_source_isolation")=="release_copied_payload/1" && input.contains("transport_recovery") &&
+      input.at("transport_recovery").is_object() && input.at("transport_recovery").value("on_exhausted",std::string())=="isolate_stream",
+      "copied payload release requires release_copied_payload/1 and explicit source isolation");
   const auto transport=BufferInteger(b.at("transport_bytes_per_source"),33,2*1024*1024);
   const auto registered=BufferInteger(b.at("registered_bytes_per_owner"),1,1024*1024);
   const auto cache=BufferInteger(b.at("target_cache_bytes_per_owner"),33,2*1024*1024);

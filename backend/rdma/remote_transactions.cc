@@ -25,7 +25,7 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
   bounded_buffers_=input.contains("buffer_model");
   if(bounded_buffers_) {
     buffer_model_=input.at("buffer_model");
-    transport_.ConfigurePayloadPool(buffer_model_.at("transport_bytes_per_source"));
+    transport_.ConfigurePayloadPool(buffer_model_.at("transport_bytes_per_source"),buffer_model_.contains("on_source_isolation"));
     memory_.ConfigureCacheBudget(buffer_model_.at("target_cache_bytes_per_owner"));
   }
   Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");

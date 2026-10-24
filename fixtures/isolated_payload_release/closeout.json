@@ -1,0 +1,519 @@
+{
+  "actual_native_network_executions": 11,
+  "artifact_usage": {
+    "/dev/shm/moe-isolated-copy-release-20261024": {
+      "allocated_bytes": 110579712,
+      "apparent_bytes": 108284759
+    },
+    "/home/lry/moe-ub-cosim/runs/isolated_payload_release_checkpoint_20261024": {
+      "allocated_bytes": 13922304,
+      "apparent_bytes": 13134871
+    }
+  },
+  "baseline": "ac413a3",
+  "built_source_and_previous_runtime_hashes_unchanged": true,
+  "cli_rejections": 8,
+  "completed_native_networks_repeated_to_fix_checks": 0,
+  "conservative_nested_monitor_seconds": 74.28407162055373,
+  "dependency_changes": 0,
+  "dependency_rebuilds": 0,
+  "failed_unit_fixture_and_result_checker_corrections_preserved": true,
+  "final_receipts_reserve_bytes": 262144,
+  "functional_native_network_executions": 8,
+  "hardware_calibrated": false,
+  "monitor_count": 79,
+  "monitored_seconds_budget": 600,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6426624,
+      "status": "completed",
+      "wall_seconds": 0.12318009696900845
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7499776,
+      "status": "completed",
+      "wall_seconds": 0.12133709713816643
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-healthy-off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12127786502242088
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-healthy-on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6389760,
+      "status": "completed",
+      "wall_seconds": 0.12174828350543976
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-isolated-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12321452610194683
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-isolated-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6430720,
+      "status": "completed",
+      "wall_seconds": 0.12290773168206215
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-late-inflight-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6447104,
+      "status": "completed",
+      "wall_seconds": 0.12238065898418427
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-old-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7458816,
+      "status": "completed",
+      "wall_seconds": 0.12356586381793022
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-final-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6402048,
+      "status": "completed",
+      "wall_seconds": 0.12272260151803493
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-healthy-off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6430720,
+      "status": "completed",
+      "wall_seconds": 0.14825567230582237
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-healthy-on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 11730944,
+      "status": "completed",
+      "wall_seconds": 0.14550834521651268
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-isolated-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6438912,
+      "status": "completed",
+      "wall_seconds": 0.12432717718183994
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-isolated-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6455296,
+      "status": "completed",
+      "wall_seconds": 0.12678569369018078
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-late-inflight-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12383751757442951
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-old-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6455296,
+      "status": "completed",
+      "wall_seconds": 0.12222906947135925
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/audit-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.24834441393613815
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/compile-persistent_streams-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 671256576,
+      "status": "completed",
+      "wall_seconds": 8.32990162447095
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/compile-remote_transactions-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 612610048,
+      "status": "completed",
+      "wall_seconds": 7.4542886931449175
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/compile-stream_probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 524820480,
+      "status": "completed",
+      "wall_seconds": 5.569593727588654
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/compile-transaction_probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 596901888,
+      "status": "completed",
+      "wall_seconds": 7.51847468316555
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/compile-transaction_session-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 636956672,
+      "status": "completed",
+      "wall_seconds": 8.057860244065523
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/default/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 369700864,
+      "status": "child_failed",
+      "wall_seconds": 0.5447305347770452
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 402423808,
+      "status": "child_failed",
+      "wall_seconds": 0.7926494516432285
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/deps-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 23367680,
+      "status": "completed",
+      "wall_seconds": 0.45547310821712017
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/healthy-off/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 371834880,
+      "status": "completed",
+      "wall_seconds": 0.5552296675741673
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/healthy-off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404598784,
+      "status": "completed",
+      "wall_seconds": 0.7677372917532921
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/healthy-on/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 375840768,
+      "status": "completed",
+      "wall_seconds": 0.6426547653973103
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/healthy-on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 401260544,
+      "status": "completed",
+      "wall_seconds": 0.8847296088933945
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/isolated-ack/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 372854784,
+      "status": "child_failed",
+      "wall_seconds": 0.6644475143402815
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/isolated-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 405647360,
+      "status": "child_failed",
+      "wall_seconds": 0.887942735105753
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/isolated-data/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 371744768,
+      "status": "child_failed",
+      "wall_seconds": 0.5495274588465691
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/isolated-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404463616,
+      "status": "child_failed",
+      "wall_seconds": 0.7793322838842869
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/late-inflight/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 371765248,
+      "status": "child_failed",
+      "wall_seconds": 0.5400224663317204
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/late-inflight-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 403988480,
+      "status": "child_failed",
+      "wall_seconds": 0.7690021730959415
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/link-session-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 148881408,
+      "status": "completed",
+      "wall_seconds": 0.6845321487635374
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/link-stream-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 114692096,
+      "status": "completed",
+      "wall_seconds": 0.5690863244235516
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/link-transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 146100224,
+      "status": "completed",
+      "wall_seconds": 0.7015831880271435
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.12790097296237946
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-healthy-off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12501825205981731
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-healthy-on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7499776,
+      "status": "completed",
+      "wall_seconds": 0.12749953009188175
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-isolated-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7438336,
+      "status": "completed",
+      "wall_seconds": 0.12858315743505955
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-isolated-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7499776,
+      "status": "completed",
+      "wall_seconds": 0.12433100305497646
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-late-inflight-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.12370301596820354
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-old-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12808982282876968
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/offline-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7438336,
+      "status": "completed",
+      "wall_seconds": 0.12766606733202934
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/old-default/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 370724864,
+      "status": "child_failed",
+      "wall_seconds": 0.5476467069238424
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/old-default-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 403533824,
+      "status": "child_failed",
+      "wall_seconds": 0.7767198048532009
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 392306688,
+      "status": "completed",
+      "wall_seconds": 0.7593849953263998
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/pack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13811712,
+      "status": "completed",
+      "wall_seconds": 10.03681993111968
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/persist-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 27222016,
+      "status": "completed",
+      "wall_seconds": 0.25180673599243164
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/portable-topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.12406189925968647
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/portable-user-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 401588224,
+      "status": "completed",
+      "wall_seconds": 0.7739344164729118
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.13610666058957577
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6434816,
+      "status": "child_failed",
+      "wall_seconds": 0.1325227916240692
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "child_failed",
+      "wall_seconds": 0.13268586993217468
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "child_failed",
+      "wall_seconds": 0.13428383506834507
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "child_failed",
+      "wall_seconds": 0.1336514763534069
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "child_failed",
+      "wall_seconds": 0.13581330329179764
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-6-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.13081195764243603
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-cli-7-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "child_failed",
+      "wall_seconds": 0.13400251045823097
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 371765248,
+      "status": "child_failed",
+      "wall_seconds": 0.5779533050954342
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 371834880,
+      "status": "child_failed",
+      "wall_seconds": 0.5575502552092075
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 371818496,
+      "status": "child_failed",
+      "wall_seconds": 0.5666350200772285
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 369725440,
+      "status": "child_failed",
+      "wall_seconds": 0.7674383204430342
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 371785728,
+      "status": "child_failed",
+      "wall_seconds": 0.5625881459563971
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 368668672,
+      "status": "child_failed",
+      "wall_seconds": 0.5584793910384178
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-6-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372850688,
+      "status": "child_failed",
+      "wall_seconds": 0.5579103343188763
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/reject-native-7-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372822016,
+      "status": "child_failed",
+      "wall_seconds": 0.5634131487458944
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/restored/public-run/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 370696192,
+      "status": "completed",
+      "wall_seconds": 0.5527484137564898
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/session-regression/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 391946240,
+      "status": "completed",
+      "wall_seconds": 0.6568835042417049
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/session-regression-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 424439808,
+      "status": "completed",
+      "wall_seconds": 0.8646917063742876
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/stream-regression/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 370708480,
+      "status": "completed",
+      "wall_seconds": 0.5487545803189278
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/stream-regression-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 403156992,
+      "status": "completed",
+      "wall_seconds": 0.7531796880066395
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6455296,
+      "status": "completed",
+      "wall_seconds": 0.12493085488677025
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/unit-corrected-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6422528,
+      "status": "completed",
+      "wall_seconds": 0.12446187995374203
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/unit-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "child_failed",
+      "wall_seconds": 0.12230537831783295
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/unit-scaleout_streams_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13394353725016117
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/unit-scaleout_transactions_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 20185088,
+      "status": "completed",
+      "wall_seconds": 0.23986177891492844
+    },
+    {
+      "path": "/dev/shm/moe-isolated-copy-release-20261024/unit-transaction_session_alarms_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 25321472,
+      "status": "completed",
+      "wall_seconds": 0.2368753533810377
+    }
+  ],
+  "native_rejections": 8,
+  "no_live_monitored_process_groups": true,
+  "not_total_calendar_wall_time": true,
+  "paper_contribution_established": false,
+  "peak_sampled_group_rss_bytes": 671256576,
+  "per_command_limits_increased": false,
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/isolated_payload_release_checkpoint_20261024/checkpoint.tar.gz",
+  "persistent_archive_bytes": 12361002,
+  "persistent_archive_sha256": "567f4b7d83ff79ae609c806f0dd58df418d199e427dd10966d886017c58839f6",
+  "portable_public_network_executions": 1,
+  "public_regression_network_executions": 2,
+  "remote_old_access_revocation_added": false,
+  "schema_version": "isolated-copy-release-closeout/1",
+  "total_artifact_budget_bytes": 268435456,
+  "total_usage_upper_bytes": 124764160,
+  "unit_tests_distinct": 49,
+  "unmonitored_outer_driver_exception_preserved_by_original_checker_and_correction": true
+}

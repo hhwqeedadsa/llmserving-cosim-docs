@@ -16,7 +16,7 @@ class BoundedBuffersTests(unittest.TestCase):
         self.protocol=json.loads((ROOT/'examples/scaleout_rdma/rdma.json').read_text())
         self.topology=dict(schema_version='moe-scaleout-physical-topology/1',
             nodes=[dict(id=i,kind='gpu') for i in range(8)]+[dict(id=8,kind='tor',plane=0)],
-            links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000) for i in range(8)])
+            links=[dict(src=i,dst=8,src_port=1,dst_port=i+1,rate_bps=100000000000,delay_ns=1000) for i in range(8)])
 
     def test_legal_boundaries_and_legacy(self):
         validate(self.topology,self.protocol,self.program)
@@ -58,6 +58,35 @@ class BoundedBuffersTests(unittest.TestCase):
     def test_inline_source_is_not_silently_copied(self):
         p=deepcopy(self.program);op=p['operations'][0];op.pop('source');op['hex']='0102030405060708'
         with self.assertRaises(ValueError):validate(self.topology,self.protocol,p)
+
+    def test_isolated_copy_release_is_explicit_and_preserves_source_contract(self):
+        p=deepcopy(self.program)
+        p['buffer_model']['on_source_isolation']='release_copied_payload/1'
+        p['transport_recovery']=dict(mode='go_back_n/1',initial_rto_ns=20000,
+            max_rto_ns=20000,max_retries=2,max_events=100,on_exhausted='isolate_stream')
+        before=deepcopy(p)
+        validate(self.topology,self.protocol,p)
+        self.assertEqual(p,before)
+        self.assertEqual(p['source_model']['release'],'transaction_completed/1')
+
+    def test_isolated_copy_release_cannot_use_stop_or_absent_recovery(self):
+        p=deepcopy(self.program);p['buffer_model']['on_source_isolation']='release_copied_payload/1'
+        with self.assertRaisesRegex(ValueError,'explicit source isolation'):
+            validate(self.topology,self.protocol,p)
+        for policy in (None,'stop_simulation'):
+            p['transport_recovery']=dict(mode='go_back_n/1',initial_rto_ns=20000,
+                max_rto_ns=20000,max_retries=2,max_events=100)
+            if policy:p['transport_recovery']['on_exhausted']=policy
+            with self.assertRaisesRegex(ValueError,'explicit source isolation'):
+                validate(self.topology,self.protocol,p)
+
+    def test_isolated_copy_release_rejects_ambiguous_values(self):
+        for value in (True,False,0,1,None,{},'release_all',''):
+            p=deepcopy(self.program);p['buffer_model']['on_source_isolation']=value
+            p['transport_recovery']=dict(mode='go_back_n/1',initial_rto_ns=20000,
+                max_rto_ns=20000,max_retries=2,max_events=100,on_exhausted='isolate_stream')
+            with self.subTest(value=value),self.assertRaises(ValueError):
+                validate(self.topology,self.protocol,p)
 
 
 if __name__=='__main__':unittest.main()

@@ -208,6 +208,16 @@ void PersistentStreams::RecoveryTimeout(uint64_t id) {
         Simulator::Cancel(s.reference->alpha_event);Simulator::Cancel(s.reference->recovery_event);
         // Receiver NP may still send real CNP for already-in-flight bytes.
       }
+      // Next() is no longer reachable for this producer. Native Packet's byte
+      // constructor copied each already-built payload; do not cancel/drop those
+      // packets or synthesize ACKs, queue credits, or application lease release.
+      if(release_payload_on_isolation_)for(auto& w:s.work)if(!w.payload.empty()) {
+        const auto bytes=w.payload.size();auto& used=payload_used_.at(s.src);
+        Require(used>=bytes && w.acked<0 && w.payload_discarded<0,"isolated payload release mismatch");
+        used-=bytes;Bytes().swap(w.payload);w.payload_discarded=StreamNow();
+        payload_events_.push_back({{"kind","discarded_on_source_isolation"},{"time_ns",StreamNow()},
+          {"source",s.src},{"stream",id},{"work",w.id},{"bytes",bytes},{"used_bytes",used}});
+      }
       nic.dev->TriggerTransmit();Notify();return;
     }
     for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
@@ -296,15 +306,18 @@ void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payloa
   Require(streams_.count(stream) && bool(streams_.at(stream).receiver),"payload stream has no receiver");
   Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
 }
-void PersistentStreams::ConfigurePayloadPool(uint64_t bytes) {
+void PersistentStreams::ConfigurePayloadPool(uint64_t bytes,bool release_on_isolation) {
   Require(streams_.empty() && !payload_capacity_ && bytes>=33 && bytes<=2*1024*1024,
-          "invalid payload pool configuration");payload_capacity_=bytes;
+          "invalid payload pool configuration");
+  Require(!release_on_isolation || isolate_failures_,"payload release requires source isolation");
+  payload_capacity_=bytes;release_payload_on_isolation_=release_on_isolation;
 }
 bool PersistentStreams::CanSubmitPayload(uint64_t stream,uint64_t bytes) const {
   if(!payload_capacity_)return true;
   const auto source=streams_.at(stream).src;
   const auto it=payload_used_.find(source);const auto used=it==payload_used_.end()?0:it->second;
   Require(bytes>0 && bytes<=payload_capacity_,"one payload exceeds source pool capacity");
+  if(release_payload_on_isolation_ && streams_.at(stream).failure_ns>=0)return false;
   return bytes<=payload_capacity_-used;
 }
 void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Bytes payload,Done accepted,Done acked) {
@@ -565,6 +578,13 @@ Json PersistentStreams::Report() const {
       held.push_back({{"source",s.src},{"stream",stream},{"work",w.id},{"bytes",w.payload.size()}});
     result["payload_pool"]={{"capacity_bytes_per_source",payload_capacity_},{"owners",owners},{"held",held},{"events",payload_events_},
       {"scope","encoded copied payload bytes; release only on full-work cumulative ACK; excludes metadata, packets and observation copies"}};
+    if(release_payload_on_isolation_) {
+      result["payload_pool"]["on_source_isolation"]="release_copied_payload/1";
+      result["payload_pool"]["scope"]="encoded copied payload bytes; full-work ACK release or local copy discard after source isolation; no ACK/credit/lease/target revocation implied; excludes packets and metadata";
+      result["payload_pool"]["discarded_work"]=Json::array();
+      for(const auto& [stream,s]:streams_)for(const auto& w:s.work)if(w.payload_discarded>=0)
+        result["payload_pool"]["discarded_work"].push_back({{"stream",stream},{"work",w.id},{"bytes",w.bytes},{"time_ns",w.payload_discarded}});
+    }
   }
   if(recovery_records_) {
     auto r=recovery_records_->Report();r["event_codes"]["prefix_published"]=5;

@@ -240,7 +240,12 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
 
 def _bounded_buffers(config, registered, connections):
     model = config['buffer_model']
-    fields(model, 'mode transport_bytes_per_source registered_bytes_per_owner target_cache_bytes_per_owner local_copy_bytes_per_owner', 'buffer model')
+    fields(model, 'mode transport_bytes_per_source registered_bytes_per_owner target_cache_bytes_per_owner local_copy_bytes_per_owner'+
+           (' on_source_isolation' if isinstance(model, dict) and 'on_source_isolation' in model else ''), 'buffer model')
+    if 'on_source_isolation' in model:
+        require(model['on_source_isolation'] == 'release_copied_payload/1' and
+                config.get('transport_recovery', {}).get('on_exhausted') == 'isolate_stream',
+                'copied payload release requires release_copied_payload/1 and explicit source isolation')
     require(model['mode'] == 'bounded_copied_put/1' and config['schema_version'] == 'moe-rdma-transactions/4'
             and 'submission_model' not in config, 'bounded copied buffers require transactions/4 without explicit submission')
     for key, low, high in (('transport_bytes_per_source', 33, 2*1024*1024),

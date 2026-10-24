@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+v4复制型`buffer_model`可选`on_source_isolation=release_copied_payload/1`，要求显式源隔离。只有此模式在`transactions.transport.payload_pool`增加`on_source_isolation/discarded_work`，事件kind允许`discarded_on_source_isolation`。每项discard含stream/work/bytes/time_ns，事件另有source/used_bytes；它在源真实隔离后归还本地副本，不修改原ACK/事务/源lease/目标状态。默认字段及行为保持，`failed_resources_released=false`不表示每一种本地副本都仍持有。详见[失败副本回收](../examples/scaleout_rdma_transactions/README.md#失败连接停止发包后归还复制池)。
+
 原生非UB协议可选`mmu_snapshot={nodes:[交换机ID],max_ports:端口总上限}`。结果同名对象在最终Report时只读所选交换机全部端口，保存`schema_version=native-switch-mmu-snapshot/1`、`time_ns/selected_nodes/complete_selected_switch_ports/switches`。每交换机有`node/physical_port_count/reserve_bytes/shared_used_bytes/ports`；每端口有`port/link_up`及8项数组`ingress_bytes/headroom_used_bytes/egress_mmu_bytes/queue_bytes/pfc_paused`。数组下标为优先级，字节均是实际原生计数，暂停项为0/1。`rdma-diagnose`仅在存在快照时增加`switch_buffer_consistency`，核对q1—7，异常不改原passed。默认无新字段，未选范围和历史不作判断；控制q0、序列化和在途字节不计入守恒，重叠计数不能相加为物理内存。配置、公开流程及失败末态解释见[交换机缓冲小例](../examples/scaleout_rdma_mmu/README.md)。
 
 启用`buffer_model`时，`transactions.buffer_retention`按owner分别报告注册内容、目标缓存、源lease引用量、本地copy当前/峰值和捕获临时向量峰值；`retained_operation_body_bytes`应为0。`transactions.transport.payload_pool`保存每源容量、当前/峰值、持有者及按实际时间记录的acquired/released事件。未启用时不增加这两项。lease可重叠，其字节数不是额外分配；这些字段不能相加为RSS或显存。字段解释见[有界缓冲输入输出](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)。

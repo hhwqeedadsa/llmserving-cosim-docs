@@ -1,0 +1,15 @@
+{
+  "checked_ports": 32,
+  "final_queued_control_bytes": 0,
+  "final_queued_data_bytes": 89096,
+  "independent_queue_reconstruction_matches": true,
+  "native_run_passed": false,
+  "network_finish_ns": 4000,
+  "queue_events": 164,
+  "schema_version": "independent-switch-buffer-audit/1",
+  "tampering_rejected": [
+    "changed_queue",
+    "changed_shared",
+    "missing_port"
+  ]
+}

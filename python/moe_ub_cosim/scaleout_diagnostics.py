@@ -97,6 +97,10 @@ def diagnose(run, output):
             'Graph edges lacking callbacks may be unissued; direct consumers are dependencies, not measured delay attribution.',
             'Graph progress counts observed node events; absent node logs give null counts, not proof of no execution.',
             'A native protocol stall is not a claim that production RDMA lacks recovery.'])
+    if 'mmu_snapshot' in result:
+        from .scaleout_mmu import analyze as analyze_mmu
+        require(result['mmu_snapshot']['time_ns'] == result['finish_ns'], 'MMU snapshot time differs from result finish')
+        summary['switch_buffer_consistency'] = analyze_mmu(result['mmu_snapshot'])
     save(output, summary)
     return dict(passed=True, output=str(output), run_passed=result['passed'],
                 completion_counts=summary['completion_counts'], unmatched_fault_rules=summary['unmatched_fault_rules'])

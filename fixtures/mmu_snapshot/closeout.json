@@ -1,0 +1,383 @@
+{
+  "actual_native_network_executions": 6,
+  "additional_extended_audits": 3,
+  "artifact_usage": {
+    "/dev/shm/moe-mmu-snapshot-20261024": {
+      "allocated_bytes": 115322880,
+      "apparent_bytes": 113460552
+    },
+    "/home/lry/moe-ub-cosim/runs/mmu_snapshot_checkpoint_20261024": {
+      "allocated_bytes": 12890112,
+      "apparent_bytes": 12265741
+    }
+  },
+  "blocked_topology_command_retried": false,
+  "cli_rejections": 10,
+  "conservative_nested_monitor_seconds": 38.683472376316786,
+  "dependency_rebuilds": 0,
+  "final_receipts_reserve_bytes": 131072,
+  "hardware_calibrated": false,
+  "including_fresh_source_public_replay": true,
+  "initial_verification_commands": 37,
+  "monitor_count": 57,
+  "monitored_seconds_budget": 450,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/affected-stream-units-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.1555610205978155
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/affected-units-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 21213184,
+      "status": "completed",
+      "wall_seconds": 0.2582092881202698
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/archive-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 4284416,
+      "status": "completed",
+      "wall_seconds": 0.1447758637368679
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-drained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.1364783886820078
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-extended-drained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 18747392,
+      "status": "completed",
+      "wall_seconds": 0.2514740340411663
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-extended-queued-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "completed",
+      "wall_seconds": 0.14892325177788734
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-extended-transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.14855333976447582
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-queued-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.1450801771134138
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/audit-transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.15526183508336544
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "child_failed",
+      "wall_seconds": 0.15494756028056145
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "child_failed",
+      "wall_seconds": 0.14701885171234608
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7491584,
+      "status": "child_failed",
+      "wall_seconds": 0.14772303588688374
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.15758512541651726
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "child_failed",
+      "wall_seconds": 0.15687463618814945
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "child_failed",
+      "wall_seconds": 0.15153965540230274
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-6-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7487488,
+      "status": "child_failed",
+      "wall_seconds": 0.1488527785986662
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-7-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.14795765466988087
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-8-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.1536129117012024
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/cli-reject-9-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "child_failed",
+      "wall_seconds": 0.15132516995072365
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/compile-fabric-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 757645312,
+      "status": "completed",
+      "wall_seconds": 10.002493627369404
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/compile-probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 481382400,
+      "status": "completed",
+      "wall_seconds": 4.199051367118955
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/deps-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 24424448,
+      "status": "completed",
+      "wall_seconds": 0.4599140025675297
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/diagnose-off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7475200,
+      "status": "completed",
+      "wall_seconds": 0.13478842750191689
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/diagnose-old-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13442569971084595
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/diagnose-on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13603063113987446
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/diagnose-queued-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.14474604092538357
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/link-probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 115879936,
+      "status": "completed",
+      "wall_seconds": 0.4696443397551775
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/link-probe-old-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 115437568,
+      "status": "completed",
+      "wall_seconds": 0.4675639905035496
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/link-transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 140173312,
+      "status": "completed",
+      "wall_seconds": 0.662818968296051
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 11780096,
+      "status": "child_failed",
+      "wall_seconds": 0.1488520037382841
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 10641408,
+      "status": "child_failed",
+      "wall_seconds": 0.14899163134396076
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 10657792,
+      "status": "child_failed",
+      "wall_seconds": 0.15157290361821651
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 10694656,
+      "status": "child_failed",
+      "wall_seconds": 0.1520966123789549
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 17113088,
+      "status": "child_failed",
+      "wall_seconds": 0.15518899261951447
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 10702848,
+      "status": "child_failed",
+      "wall_seconds": 0.15934882499277592
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-6-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13824000,
+      "status": "child_failed",
+      "wall_seconds": 0.14668226428329945
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-7-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13852672,
+      "status": "child_failed",
+      "wall_seconds": 0.15007631666958332
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-8-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13819904,
+      "status": "child_failed",
+      "wall_seconds": 0.14967373944818974
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/native-reject-9-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 12800000,
+      "status": "child_failed",
+      "wall_seconds": 0.15310905687510967
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/off-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 409317376,
+      "status": "completed",
+      "wall_seconds": 1.0017456840723753
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/old-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 408358912,
+      "status": "completed",
+      "wall_seconds": 1.0114402752369642
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/on-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 407306240,
+      "status": "completed",
+      "wall_seconds": 1.1137683931738138
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/pack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13848576,
+      "status": "completed",
+      "wall_seconds": 10.101926118135452
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/persist-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.1404942236840725
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-offline-drained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 18792448,
+      "status": "completed",
+      "wall_seconds": 0.23398355767130852
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-offline-queued-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.12923841550946236
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-offline-transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.12795107811689377
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-public-diagnosis-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "completed",
+      "wall_seconds": 0.1254583578556776
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-public-run-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 408805376,
+      "status": "completed",
+      "wall_seconds": 0.9883069936186075
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/portable-topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 0,
+      "status": "artifact_limit",
+      "wall_seconds": 0.02787754312157631
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/queued-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 405127168,
+      "status": "child_failed",
+      "wall_seconds": 0.7899860125035048
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/queued-topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "completed",
+      "wall_seconds": 0.142676318064332
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/related-metrics-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7487488,
+      "status": "completed",
+      "wall_seconds": 0.15217730030417442
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/related-units-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.1532391496002674
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.12788502126932144
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/transaction-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404656128,
+      "status": "completed",
+      "wall_seconds": 0.8018083702772856
+    },
+    {
+      "path": "/dev/shm/moe-mmu-snapshot-20261024/unit-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7458816,
+      "status": "completed",
+      "wall_seconds": 0.12468554452061653
+    }
+  ],
+  "native_rejections": 10,
+  "no_live_monitored_process_groups": true,
+  "not_total_wall_time": true,
+  "one_preexecution_artifact_scope_failure_preserved": true,
+  "paper_contribution_established": false,
+  "peak_sampled_group_rss_bytes": 757645312,
+  "per_command_limits_increased": false,
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/mmu_snapshot_checkpoint_20261024/checkpoint.tar.gz",
+  "persistent_archive_bytes": 11749459,
+  "persistent_archive_sha256": "93b88a676e1181f59aa1728a1a9b07fe5cdee1884d2e2dcc2417bb6647d9c016",
+  "platform_link_failure_support_added": false,
+  "schema_version": "switch-buffer-snapshot-closeout/1",
+  "total_artifact_budget_bytes": 201326592,
+  "total_usage_upper_bytes": 128212992,
+  "unit_tests_distinct": 46
+}

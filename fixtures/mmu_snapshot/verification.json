@@ -1,0 +1,16 @@
+{
+  "schema_version": "switch-buffer-snapshot-verification/1",
+  "old_default_result_identical": true,
+  "enabled_original_execution_fields_identical": true,
+  "default_diagnosis_identical": true,
+  "queued_network_passed": false,
+  "queued_buffer_consistent": true,
+  "queued_data_bytes": 89096,
+  "selected_switches": 10,
+  "native_rejections": 10,
+  "cli_rejections": 10,
+  "transaction_regression_passed": true,
+  "actual_snapshot_tampering_detected": true,
+  "old_objects_and_native_libraries_unchanged": true,
+  "network_recovery_or_paper_innovation_proven": false
+}

@@ -50,6 +50,8 @@ Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一�
 
 原生RDMA的确定性故障规则与包级记录由`Fabric`实现，消息身份仅通过原端点/端口被动关联，不写入包头。数据和ACK/NACK可在指定接收设备按次数与窗口丢弃；BEgressQueue与设备钩子的被动记录有明确上限。`scaleout rdma-diagnose`在执行结束后读取成功或失败结果，不参与调度。接口、完成/字节口径与协议限制见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
+`Fabric::Report`可选读取有界交换机MMU/BEgressQueue终态，选择及端口预算在分配网络前检查。没有新增仿真事件或drop修复，省略配置时保持旧结果。离线`scaleout_mmu.py`区分合法未排空与守恒不一致，详见[终态缓冲示例](../examples/scaleout_rdma_mmu/README.md)与[字段](../docs/record_storage.md)。
+
 可选每源软件准入由纯C++17的`communication_admission.hh`管理当前就绪任务与额度所有者，RDMA适配负责真实注入和完整ACK后确认发送QP映射移除，再归还额度。数据就绪只放行接收消费者。同机crossbar排除；默认不开启时保留原路径。它没有模拟有限硬件QP槽或GPU缓冲寿命，具体配置和事件见[软件准入示例](../examples/scaleout_rdma_admission/README.md)。
 
 非 UB Scale-Out 的独立入口位于 [rdma/](rdma/)，经公共 `scaleout rdma-build` 配置锁定 ASTRA 自带的 ns-3。`moe-rdma-probe` 做真实分组消息检查，`moe-rdma-service` 由实际 LLMServingSim 前端在线提交 Chakra 图；每 rank 保留 Sys，所有组共享 Fabric 和 Simulator。完成语义、串行构建兼容 overlay、观测及限制见[RDMA 小例](../examples/scaleout_rdma/README.md)。该入口只链接原生 RDMA ns-3；下面的生产 UB 入口及构建规则保持独立。

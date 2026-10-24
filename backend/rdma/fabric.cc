@@ -110,6 +110,27 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   Require(gpu_count > 0 && gpu_count <= gpu_limit && switch_count <= sw_limit,
           "GPU/switch budget exceeded before network allocation");
+  if(config.contains("mmu_snapshot")) {
+    const auto& capture=config.at("mmu_snapshot");
+    Require(capture.is_object() && capture.size()==2 && capture.contains("nodes") && capture.contains("max_ports"),
+            "MMU snapshot requires exactly nodes/max_ports");
+    const auto& selected=capture.at("nodes");const auto& bound=capture.at("max_ports");
+    Require(selected.is_array() && !selected.empty() && selected.size()<=16,
+            "MMU snapshot requires 1..16 explicit switch nodes");
+    Require(bound.is_number_integer() && bound>=1 && bound<=1024,"MMU snapshot max_ports must be integer 1..1024");
+    std::set<unsigned> seen;uint64_t total_ports=0;
+    for(const auto& value:selected) {
+      Require(value.is_number_integer() && value>=0 && value<ns.size(),"MMU snapshot node must be an actual switch integer");
+      const unsigned node=value.get<unsigned>();
+      Require(ns.at(node).at("id")==node && ns.at(node).at("kind")!="gpu" && seen.insert(node).second,
+              "MMU snapshot nodes must be distinct actual switches");
+      unsigned ports=0;
+      for(const auto& link:topology.at("links"))ports+=(link.at("src")==node)+(link.at("dst")==node);
+      Require(ports>0 && ports<SwitchMmu::pCnt,"MMU snapshot switch requires bounded physical ports");
+      total_ports+=ports;
+    }
+    Require(total_ports<=bound.get<unsigned>(),"MMU snapshot physical ports exceed max_ports");
+  }
   if(config.contains("drop_once"))Require(config.at("drop_once").at("dst_gpu").get<unsigned>()<gpu_count,
           "legacy drop destination is not a GPU");
   for (const auto& n : ns) {
@@ -636,6 +657,32 @@ Json Fabric::Report() {
         {"final_bytes",p.integral.Bytes()},{"changes",p.integral.Events()}};
     }
     r["ports"].push_back(std::move(row));
+  }
+  if(config_.contains("mmu_snapshot")) {
+    Json capture={{"schema_version","native-switch-mmu-snapshot/1"},{"time_ns",Now()},
+      {"selected_nodes",config_.at("mmu_snapshot").at("nodes")},{"complete_selected_switch_ports",true},
+      {"scope","selected switches, all physical ports, final Report instant only; evaluation, not policy input; excludes serialization and in-flight bytes"},
+      {"switches",Json::array()}};
+    for(const auto& selected:config_.at("mmu_snapshot").at("nodes")) {
+      const unsigned node=selected.get<unsigned>();auto sw=DynamicCast<SwitchNode>(nodes_.Get(node));
+      const auto mmu=sw->m_mmu;
+      Json state={{"node",node},{"physical_port_count",nodes_.Get(node)->GetNDevices()-1},
+        {"reserve_bytes",mmu->reserve},{"shared_used_bytes",mmu->shared_used_bytes},{"ports",Json::array()}};
+      for(unsigned port=1;port<ports_.at(node).size();++port) {
+        const auto dev=ports_.at(node).at(port).device;
+        Json row={{"port",port},{"link_up",dev->IsLinkUp()},
+          {"ingress_bytes",Json::array()},{"headroom_used_bytes",Json::array()},
+          {"egress_mmu_bytes",Json::array()},{"queue_bytes",Json::array()},{"pfc_paused",Json::array()}};
+        for(unsigned q=0;q<SwitchMmu::qCnt;++q) {
+          row["ingress_bytes"].push_back(mmu->ingress_bytes[port][q]);row["headroom_used_bytes"].push_back(mmu->hdrm_bytes[port][q]);
+          row["egress_mmu_bytes"].push_back(mmu->egress_bytes[port][q]);row["queue_bytes"].push_back(dev->GetQueue()->GetNBytes(q));
+          row["pfc_paused"].push_back(mmu->paused[port][q]);
+        }
+        state["ports"].push_back(std::move(row));
+      }
+      capture["switches"].push_back(std::move(state));
+    }
+    r["mmu_snapshot"]=std::move(capture);
   }
   if(queue_metrics_)r["queue_metrics_scope"]="All switch BEgressQueue ports, all priorities, [0,finish_ns]; post-change occupancy excludes serialization; exact without packet capture";
   if(config_.contains("limits")) {

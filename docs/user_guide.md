@@ -59,7 +59,7 @@ Scale-Out 可选源端超时重传、接收端重复 ACK、有限重试失败和
 
 短QP可显式启用每源容量与年龄受限的恢复历史，目的端占用可用`per_destination`限制；[恢复与资源保护示例](../examples/scaleout_rdma_resilience/README.md)给出边界和完整JSON。统一条件清单用`scaleout sweep --config <清单> --backend <原生服务> --protoc <编译器> --output <新目录>`，可改模型、batch、拓扑与已实现通信策略；预期失败、前端完成和网络停止分别报告，外层监控全部条件的总预算。
 
-Scale-Out的包级故障与失败诊断见[丢包小例](../examples/scaleout_rdma_faults/README.md)。`scaleout rdma-diagnose --run <完成或失败目录> --output <新JSON>`可读取数据/ACK/NACK丢弃和未完成回调；详细记录默认关闭，按节点、窗口与条数有界开启。
+Scale-Out的包级故障与失败诊断见[丢包小例](../examples/scaleout_rdma_faults/README.md)。`scaleout rdma-diagnose --run <完成或失败目录> --output <新JSON>`可读取数据/ACK/NACK丢弃和未完成回调；详细记录默认关闭，按节点、窗口与条数有界开启。需要检查交换机实际队列与缓冲计数时，按[终态缓冲小例](../examples/scaleout_rdma_mmu/README.md)开启`mmu_snapshot`；它不要求详细包采集，也不新增链路故障支持。
 
 每源软件并发限额、FIFO/目的端轮转及有界资源生命周期见[准入小例](../examples/scaleout_rdma_admission/README.md)。它用于研究尚未发出的通信如何等待源端额度，不等同硬件NIC容量；完整ACK后确认发送QP映射移除才归还额度，可与丢包规则组合。
 

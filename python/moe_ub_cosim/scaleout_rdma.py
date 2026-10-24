@@ -36,10 +36,12 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot') if key in c), 'RDMA protocol')
     budget=limits(c)
     from .scaleout_admission import validate_options
     validate_options(c)
+    from .scaleout_mmu import validate_options as validate_mmu_options
+    validate_mmu_options(c)
     if 'queue_metrics' in c:require(type(c['queue_metrics']) is bool,'queue_metrics must be boolean')
     if 'recovery' in c:
         from .scaleout_recovery_config import validate as validate_recovery
@@ -202,6 +204,8 @@ def validate_probe(t, c, batch, *, match_faults=True):
     require(all(str(l['rate_bps']) in c['ecn_by_rate'] for l in t['links']), 'missing ECN threshold for link rate')
     from .scaleout_fabric_buffers import require_buffers
     require_buffers(t,c)
+    from .scaleout_mmu import validate_topology as validate_mmu_topology
+    validate_mmu_topology(t,c)
     require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}

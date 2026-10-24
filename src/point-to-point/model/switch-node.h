@@ -49,6 +49,8 @@ public:
 	void ClearTable();
 	bool SwitchReceiveFromDevice(Ptr<NetDevice> device, Ptr<Packet> packet, CustomHeader &ch);
 	void SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Packet> p);
+	// Remove a queued packet without transmit/ECN/PINT side effects.
+	void SwitchNotifyDrop(uint32_t ifIndex, uint32_t qIndex, Ptr<const Packet> p);
 
 	// for approximate calc in PINT
 	int logres_shift(int b, int l);

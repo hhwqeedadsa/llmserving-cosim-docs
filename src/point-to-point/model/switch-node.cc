@@ -106,6 +106,16 @@ void SwitchNode::CheckAndSendResume(uint32_t inDev, uint32_t qIndex){
 
 void SwitchNode::SendToDev(Ptr<Packet>p, CustomHeader &ch){
 	int idx = GetOutDev(p, ch);
+	// Routing can remain stale until control-plane convergence. This packet
+	// has already arrived: drop locally without charging an egress MMU.
+	if (idx < 0 || !m_devices[idx]->IsLinkUp()) {
+		FlowIdTag tag;
+		if (p->PeekPacketTag(tag)) {
+			Ptr<QbbNetDevice> ingress = DynamicCast<QbbNetDevice>(m_devices[tag.GetFlowId()]);
+			ingress->m_traceDrop(p, 0);
+		}
+		return;
+	}
 	if (idx >= 0){
 		NS_ASSERT_MSG(m_devices[idx]->IsLinkUp(), "The routing table look up should return link that is up");
 
@@ -193,6 +203,21 @@ void SwitchNode::ClearTable(){
 bool SwitchNode::SwitchReceiveFromDevice(Ptr<NetDevice> device, Ptr<Packet> packet, CustomHeader &ch){
 	SendToDev(packet, ch);
 	return true;
+}
+
+void SwitchNode::SwitchNotifyDrop(uint32_t ifIndex, uint32_t qIndex, Ptr<const Packet> p){
+	if (qIndex == 0) return; // control traffic has no data-MMU charge
+	FlowIdTag tag;
+	NS_ABORT_MSG_IF(!p->PeekPacketTag(tag), "queued switch data has no ingress tag");
+	const uint32_t inDev = tag.GetFlowId();
+	NS_ABORT_MSG_IF(inDev >= pCnt || ifIndex >= pCnt || qIndex >= qCnt ||
+	                m_bytes[inDev][ifIndex][qIndex] < p->GetSize(), "invalid switch drop accounting");
+	m_mmu->RemoveFromIngressAdmission(inDev, qIndex, p->GetSize());
+	m_mmu->RemoveFromEgressAdmission(ifIndex, qIndex, p->GetSize());
+	m_bytes[inDev][ifIndex][qIndex] -= p->GetSize();
+	Ptr<QbbNetDevice> ingress = DynamicCast<QbbNetDevice>(m_devices[inDev]);
+	if (ingress->IsLinkUp()) CheckAndSendResume(inDev, qIndex);
+	else if (m_mmu->CheckShouldResume(inDev, qIndex)) m_mmu->SetResume(inDev, qIndex);
 }
 
 void SwitchNode::SwitchNotifyDequeue(uint32_t ifIndex, uint32_t qIndex, Ptr<Packet> p){

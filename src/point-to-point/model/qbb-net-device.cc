@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "ns3/qbb-net-device.h"
+#include "ns3/switch-node.h"
 #include "ns3/log.h"
 #include "ns3/boolean.h"
 #include "ns3/uinteger.h"
@@ -358,7 +359,8 @@ namespace ns3 {
 	{
 		NS_LOG_FUNCTION(this << packet);
 		if (!m_linkUp){
-			m_traceDrop(packet, 0);
+			// A physical arrival, unlike TakeDown's queued drops.
+			m_phyRxDropTrace(packet);
 			return;
 		}
 
@@ -406,6 +408,7 @@ namespace ns3 {
 	}
 
 	bool QbbNetDevice::SwitchSend (uint32_t qIndex, Ptr<Packet> packet, CustomHeader &ch){
+		if (!m_linkUp) {m_traceDrop(packet, qIndex); return false;}
 		m_macTxTrace(packet);
 		m_traceEnqueue(packet, qIndex);
 		m_queue->Enqueue(packet, qIndex);
@@ -539,7 +542,9 @@ namespace ns3 {
 	}
 
 	void QbbNetDevice::TakeDown(){
-		// TODO: delete packets in the queue, set link down
+		if (!m_linkUp) return;
+		m_linkUp = false;
+		Simulator::Cancel(m_nextSend);
 		if (m_node->GetNodeType() == 0){
 			// clean the high prio queue
 			m_rdmaEQ->CleanHighPrio(m_traceDrop);
@@ -553,11 +558,10 @@ namespace ns3 {
 				Ptr<Packet> p = m_queue->DequeueRR(m_paused);
 				if (!p)
 					 break;
+				DynamicCast<SwitchNode>(m_node)->SwitchNotifyDrop(m_ifIndex, m_queue->GetLastQueue(), p);
 				m_traceDrop(p, m_queue->GetLastQueue());
 			}
-			// TODO: Notify switch that this link is down
 		}
-		m_linkUp = false;
 	}
 
 	void QbbNetDevice::UpdateNextAvail(Time t){

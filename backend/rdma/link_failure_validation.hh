@@ -4,6 +4,11 @@
 namespace moe_rdma {
 // Validate the whole fault schedule before allocating the native network.
 inline Json LinkFailureEvents(const Json& config,const Json& topology,int64_t maximum) {
+  if(config.contains("local_failover")) {
+    const auto& p=config.at("local_failover");
+    Require(p.is_object() && p.size()==1 && p.contains("mode") && p.at("mode")=="live_ecmp/1" &&
+            config.contains("link_failures"),"local failover requires live_ecmp/1 and an explicit link failure schedule");
+  }
   if(!config.contains("link_failures"))return Json::array();
   const auto& model=config.at("link_failures");
   Require(model.is_object() && model.size()==2 && model.contains("mode") && model.contains("events") &&

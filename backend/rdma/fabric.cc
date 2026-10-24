@@ -95,6 +95,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   fault_counts_.resize(fault_rules_.size(),0);
   const auto& ns = topology.at("nodes");
   const auto link_failures=LinkFailureEvents(config,topology,MaxSimNs());
+  local_failover_=config.contains("local_failover");
   const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
   const unsigned gpu_limit=limit("max_gpus",32),sw_limit=limit("max_switches",16),link_limit=limit("max_links",256);
   Require(gpu_limit<=1024 && sw_limit<=256 && link_limit<=16384 && MaxMessages()<=1000000 && MaxSimNs()<=1000000000,
@@ -280,6 +281,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
 
 void Fabric::RebuildRoutes() {
   const auto& ns=topology_.at("nodes");
+  if(local_failover_)route_candidates_.clear();
   for(unsigned node=0;node<nodes_.GetN();++node) {
     if(node<gpus_)drivers_.at(node)->m_rdma->ClearTable();
     else DynamicCast<SwitchNode>(nodes_.Get(node))->ClearTable();
@@ -309,9 +311,37 @@ void Fabric::RebuildRoutes() {
         auto ip=Address(dst,plane);
         if(src<gpus_) {
           drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[(src*gpus_+dst)*planes_+plane]=true;
-        } else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
+        } else if(local_failover_)route_candidates_[src][ip.Get()].push_back(peer.port);
+        else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
       }
     }
+  }
+  if(local_failover_)for(unsigned node=gpus_;node<nodes_.GetN();++node)InstallLocalRoutes(node);
+}
+void Fabric::InstallLocalRoutes(unsigned node,bool record,unsigned event_index) {
+  // Candidates only reflect globally converged failures. IsLinkUp is read
+  // for this switch's own ports, never used in another node's reverse BFS.
+  const auto sw=DynamicCast<SwitchNode>(nodes_.Get(node));sw->ClearTable();
+  std::map<unsigned,uint64_t> removed;
+  uint64_t installed=0,empty=0,candidates=0;
+  const auto& table=route_candidates_[node];
+  for(const auto& entry:table) {
+    unsigned live=0;
+    for(auto port:entry.second) {
+      ++candidates;
+      if(devices_.at({node,port})->IsLinkUp()) {
+        auto address=Ipv4Address(entry.first);
+        sw->AddTableEntry(address,port);++live;++installed;
+      } else ++removed[port];
+    }
+    if(!live)++empty;
+  }
+  if(record) {
+    Json losses=Json::array();
+    for(const auto& item:removed)losses.push_back({{"port",item.first},{"destination_entries",item.second}});
+    local_route_updates_.push_back({{"time_ns",Now()},{"node",node},{"event_index",event_index},
+      {"candidate_destinations",table.size()},{"candidate_next_hops",candidates},
+      {"installed_next_hops",installed},{"empty_destinations",empty},{"removed_by_port",losses}});
   }
 }
 void Fabric::FailLink(Json event,unsigned index) {
@@ -338,6 +368,7 @@ void Fabric::FailLink(Json event,unsigned index) {
     {"src",a},{"dst",b},{"src_port",ap},{"dst_port",bp},{"queued_bytes_before",queued},
     {"local_drops_during_close",local_drops_-before},{"route_epoch",route_epoch_},
     {"buffer_before",before_state},{"buffer_after",Json::array({occupancy(a,ap),occupancy(b,bp)})}});
+  if(local_failover_) {InstallLocalRoutes(a,true,index);InstallLocalRoutes(b,true,index);}
   Simulator::Schedule(NanoSeconds(event.at("route_update_delay_ns").get<int64_t>()),&Fabric::UpdateRoutes,this,event,index);
   CheckDrain();if(network_state_changed_)network_state_changed_();
 }
@@ -613,6 +644,9 @@ Json Fabric::Report() {
   if(config_.contains("link_failures"))r["link_failures"]={{"configuration",config_.at("link_failures")},
     {"events",link_events_},{"pending_events",pending_link_events_},{"route_epoch",route_epoch_},{"local_drops",local_drops_},
     {"scope","permanent bidirectional switch-switch shutdown; delayed centralized shortest-path/ECMP update; declared control delay, no control packets or hardware calibration; QPs retain sequence and congestion state"}};
+  if(local_failover_)r["link_failures"]["local_failover"]={{"configuration",config_.at("local_failover")},
+    {"events",local_route_updates_},
+    {"scope","immediate local pruning of existing equal-cost candidates using own actual link state; no new paths, remote notification, control cost or hardware calibration"}};
   if(recovery_) {
     r["recovery"]=recovery_->Report();r["recovery"]["inflight_packets"]=inflight_packets_;
     r["recovery"]["finish_waiting_for_drain"]=bool(finish_);

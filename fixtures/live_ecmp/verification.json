@@ -1,0 +1,293 @@
+{
+  "passed": true,
+  "actual_networks": 6,
+  "network_reexecutions": 0,
+  "reports": {
+    "default-old": {
+      "passed": true,
+      "source_packets": 91,
+      "source_payload_bytes": 91000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 799,
+        "rx": 795,
+        "physical_drop": 4
+      },
+      "actual_feedback_received": 64,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": false,
+      "enqueues_hash_verified": 651,
+      "local_drops": {
+        "queue_close": 7,
+        "stale_forwarding": 16
+      },
+      "preconvergence_live_forwarding": {
+        "15": 46,
+        "16": 4,
+        "17": 52,
+        "14": 5,
+        "11": 54,
+        "12": 37,
+        "8": 53,
+        "pending8_after_other_update": 53
+      },
+      "route_updates": [
+        {
+          "time_ns": 16000,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        }
+      ]
+    },
+    "default-new": {
+      "passed": true,
+      "source_packets": 91,
+      "source_payload_bytes": 91000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 799,
+        "rx": 795,
+        "physical_drop": 4
+      },
+      "actual_feedback_received": 64,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": false,
+      "enqueues_hash_verified": 651,
+      "local_drops": {
+        "queue_close": 7,
+        "stale_forwarding": 16
+      },
+      "preconvergence_live_forwarding": {
+        "15": 46,
+        "16": 4,
+        "17": 52,
+        "14": 5,
+        "11": 54,
+        "12": 37,
+        "8": 53,
+        "pending8_after_other_update": 53
+      },
+      "route_updates": [
+        {
+          "time_ns": 16000,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        }
+      ]
+    },
+    "live": {
+      "passed": true,
+      "source_packets": 88,
+      "source_payload_bytes": 88000,
+      "peak_reorder_bytes": {
+        "2": 16000
+      },
+      "physical": {
+        "tx": 939,
+        "rx": 935,
+        "physical_drop": 4
+      },
+      "actual_feedback_received": 77,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": true,
+      "enqueues_hash_verified": 781,
+      "local_drops": {
+        "queue_close": 7
+      },
+      "preconvergence_live_forwarding": {
+        "15": 61,
+        "16": 4,
+        "17": 68,
+        "14": 5,
+        "11": 70,
+        "12": 50,
+        "8": 69,
+        "pending8_after_other_update": 69
+      },
+      "route_updates": [
+        {
+          "time_ns": 16000,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        }
+      ]
+    },
+    "overlap": {
+      "passed": true,
+      "source_packets": 93,
+      "source_payload_bytes": 93000,
+      "peak_reorder_bytes": {
+        "2": 18000
+      },
+      "physical": {
+        "tx": 979,
+        "rx": 975,
+        "physical_drop": 4
+      },
+      "actual_feedback_received": 79,
+      "fast_retransmits": 1,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": true,
+      "enqueues_hash_verified": 814,
+      "local_drops": {
+        "queue_close": 7,
+        "no_live_old_candidate": 3
+      },
+      "preconvergence_live_forwarding": {
+        "15": 6,
+        "16": 4,
+        "17": 6,
+        "11": 3,
+        "pending8_after_other_update": 64
+      },
+      "route_updates": [
+        {
+          "time_ns": 6000,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        },
+        {
+          "time_ns": 16000,
+          "epoch": 2,
+          "excluded_directed_ports": 4
+        }
+      ]
+    },
+    "zero": {
+      "passed": true,
+      "source_packets": 64,
+      "source_payload_bytes": 64000,
+      "peak_reorder_bytes": {},
+      "physical": {
+        "tx": 768,
+        "rx": 768
+      },
+      "actual_feedback_received": 64,
+      "fast_retransmits": 0,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": true,
+      "enqueues_hash_verified": 640,
+      "local_drops": {},
+      "preconvergence_live_forwarding": {
+        "pending8_after_other_update": 72
+      },
+      "route_updates": [
+        {
+          "time_ns": 0,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        }
+      ]
+    },
+    "fresh-empty": {
+      "passed": true,
+      "source_packets": 119,
+      "source_payload_bytes": 119000,
+      "peak_reorder_bytes": {
+        "2": 16000,
+        "8": 1000
+      },
+      "physical": {
+        "tx": 1065,
+        "rx": 1061,
+        "physical_drop": 4
+      },
+      "actual_feedback_received": 77,
+      "fast_retransmits": 2,
+      "ack_extension_model_bytes": [
+        50
+      ],
+      "local_policy": true,
+      "enqueues_hash_verified": 876,
+      "local_drops": {
+        "queue_close": 7,
+        "no_live_old_candidate": 31
+      },
+      "preconvergence_live_forwarding": {
+        "14": 32,
+        "16": 35,
+        "12": 42,
+        "8": 21,
+        "pending8_after_other_update": 21,
+        "11": 21,
+        "15": 22,
+        "17": 21
+      },
+      "route_updates": [
+        {
+          "time_ns": 16000,
+          "epoch": 1,
+          "excluded_directed_ports": 2
+        }
+      ]
+    }
+  },
+  "default_comparison": {
+    "raw_result_byte_equal": false,
+    "canonical_result_equal": true,
+    "excluded_scope": "only spelling of eight hash-verified identical native library paths"
+  },
+  "physical_sends": {
+    "default-old": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 799
+    },
+    "default-new": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 799
+    },
+    "live": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 939
+    },
+    "overlap": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 1958
+    },
+    "zero": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 768
+    },
+    "fresh-empty": {
+      "all_post_failure_tx_avoid_failed_ports": true,
+      "tx_examined_per_failure": 1065
+    }
+  },
+  "native_preallocation_rejections": 9,
+  "evidence_mutations_rejected": [
+    "local-candidate-count",
+    "global-overlap-exclusion",
+    "actual-enqueue-port",
+    "actual-ack-prefix",
+    "local-event-node",
+    "physical-arrival-time"
+  ],
+  "unsafe_archives_rejected_before_write": [
+    "absolute",
+    "parent",
+    "symlink",
+    "duplicate",
+    "parent-file-conflict",
+    "unlisted",
+    "wrong-hash",
+    "backslash"
+  ],
+  "fresh_primary_report_byte_identical": true,
+  "compiled_backend_sources_and_external_runtime_hashes_verified": true,
+  "platform_functional_acceptance_complete": true,
+  "overall_paper_goal_complete": false,
+  "scope": "single-plane artificial local failover functionality; not modern inference, calibration or research gains"
+}

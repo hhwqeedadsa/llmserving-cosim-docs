@@ -3,6 +3,11 @@ from .scaleout_topology import fields, integer, require
 
 
 def validate_options(config):
+    if 'local_failover' in config:
+        policy = config['local_failover']
+        fields(policy, 'mode', 'local failover')
+        require(policy['mode'] == 'live_ecmp/1' and 'link_failures' in config,
+                'local failover requires live_ecmp/1 and an explicit link failure schedule')
     if 'link_failures' not in config:
         return
     from .scaleout_limits import limits

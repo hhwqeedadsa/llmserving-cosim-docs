@@ -2,6 +2,8 @@
 
 原生Scale-Out支持显式交换机间链路永久失效及声明延迟后的集中改路，沿用`rdma-probe/rdma-stream-probe/rdma-transaction-probe`。排队丢弃、在途丢弃、PFC恢复和源端重传保持实际网络事件；配置、永久分区的预期失败与边界见[链路失效示例](../examples/scaleout_link_failure/README.md)。
 
+需要对照交换机利用本地端口状态避开失效出口时，可显式增加`local_failover: {"mode": "live_ecmp/1"}`，配合上述故障日程使用。它只过滤已有等价候选，无候选仍丢包，本地动作额外耗时为零；配置、公开运行命令和解释见[本地剔除示例](../examples/scaleout_live_ecmp/README.md)。
+
 事务功能小例新增[应用窗口引用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)：在v4/v5中检查本地使用寿命，区分视图关闭和底层MR退出；沿用公开probe/session命令。
 
 原生事务还可用[queue-fences.json](../examples/scaleout_rdma_transactions/queue-fences.json)验证多连接固定前缀等待，沿用`rdma-transaction-probe`，详见[输入与边界](../examples/scaleout_rdma_transactions/README.md#等待调用时已有的工作前缀)。它等待已预留工作，不自动等待未来提交或提供真实GIN flush代价。

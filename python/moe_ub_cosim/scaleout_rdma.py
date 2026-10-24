@@ -36,7 +36,7 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures','local_failover') if key in c), 'RDMA protocol')
     budget=limits(c)
     from .scaleout_admission import validate_options
     validate_options(c)

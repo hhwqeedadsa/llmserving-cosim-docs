@@ -1,0 +1,79 @@
+{
+  "schema_version": "live-ecmp-closeout/1",
+  "baseline": "7077530",
+  "ended_utc": "2026-10-24T18:57:30.854955+00:00",
+  "platform_functional_acceptance_complete": true,
+  "overall_paper_goal_complete": false,
+  "actual_network_executions": 6,
+  "successful_network_reruns": 0,
+  "original_terminal_monitors": 41,
+  "conservative_cumulative_monitored_seconds_including_nested": 81.2618937138468,
+  "final_management_seconds_reserved": 10,
+  "peak_sampled_group_rss_bytes": 778469376,
+  "stage_and_persistent_apparent_bytes": 76640907,
+  "stage_and_persistent_allocated_bytes": 78815232,
+  "source_and_final_receipt_reserve_bytes": 2097152,
+  "total_charged_with_reserve_bytes": 80912384,
+  "budgets": {
+    "cumulative_seconds": 720,
+    "cumulative_disk_bytes": 402653184,
+    "per_command_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 134217728,
+    "max_network_executions": 6,
+    "max_sim_ns": 5000000,
+    "result_bytes": 16777216
+  },
+  "failures": [
+    {
+      "path": "verification-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1
+    },
+    {
+      "path": "audit-corrected-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1
+    },
+    {
+      "path": "audit-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1
+    },
+    {
+      "path": "default-old-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1
+    },
+    {
+      "path": "compile-fabric-monitor/probe.json",
+      "status": "child_failed",
+      "exit_code": 1
+    }
+  ],
+  "remaining_monitored_live_pids": [],
+  "archive": {
+    "sha256": "b941591c964ad5542b83d76f4d303d8ceaecfd609572bab54fb445522a65edb3",
+    "members": 415,
+    "uncompressed_bytes": 3957618,
+    "compressed_bytes": 769109,
+    "scope": "source and evidence; native program/libraries are explicit external hash-verified inputs"
+  },
+  "python_link_tests": 8,
+  "related_regression_tests": 40,
+  "native_preallocation_rejections": 9,
+  "evidence_mutation_classes": 6,
+  "unsafe_archive_classes": 8,
+  "evidence": {
+    "all_final_archive_members_verified": true,
+    "final_archive_current_source_hashes_match": true,
+    "fresh_used_v1_snapshot": true,
+    "final_package_network_reexecution": false,
+    "native_runtime_bundled": false,
+    "compiled_sources_and_external_program_libraries_verified": true,
+    "dependency_check": "13 fixed dependencies clean",
+    "dependency_changes_installs_downloads_gpu_push": false
+  },
+  "scope": "ideal local pruning classical baseline, six single-plane artificial functional networks; no calibrated modern inference or new algorithm"
+}

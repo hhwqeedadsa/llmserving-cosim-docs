@@ -53,5 +53,25 @@ class LinkFailureTest(unittest.TestCase):
             with self.subTest(pair=pair), self.assertRaisesRegex(ValueError, 'actual switch-switch'):
                 validate_topology(self.topology, self.protocol)
 
+    def test_explicit_live_ecmp_is_accepted_by_public_preflight(self):
+        self.protocol['local_failover'] = dict(mode='live_ecmp/1')
+        validate_probe(self.topology, self.protocol, [dict(id=0, src=0, dst=4, plane=0, bytes=1000, ready_ns=0)])
+
+    def test_local_failover_requires_exact_mode_and_explicit_schedule(self):
+        for policy in (None, False, [], {}, dict(mode=None), dict(mode=True), dict(mode='frr'),
+                       dict(mode='live_ecmp/1', latency_ns=0)):
+            with self.subTest(policy=policy), self.assertRaises(ValueError):
+                validate_options(dict(self.protocol, local_failover=policy))
+        config = dict(self.protocol, local_failover=dict(mode='live_ecmp/1')); del config['link_failures']
+        with self.assertRaises(ValueError): validate_options(config)
+
+    def test_public_live_example_is_a_complete_persistent_input(self):
+        from moe_ub_cosim.scaleout_streams import validate
+        directory = ROOT/'examples/scaleout_live_ecmp'
+        topology, _ = generate(json.loads((directory/'topology.json').read_text()))
+        for filename in ('work.json', 'work-empty-route.json'):
+            with self.subTest(filename=filename):
+                validate(topology, json.loads((directory/'protocol.json').read_text()), json.loads((directory/filename).read_text()))
+
 
 if __name__ == '__main__': unittest.main()

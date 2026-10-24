@@ -1,0 +1,129 @@
+{
+  "passed": true,
+  "actual_networks_total": 6,
+  "new_python_source_root": true,
+  "empty_cwd": true,
+  "prior_five_offline_audits_byte_identical": true,
+  "empty_old_candidate_has_actual_packet_drop": true,
+  "fresh_case": {
+    "passed": true,
+    "source_packets": 119,
+    "source_payload_bytes": 119000,
+    "peak_reorder_bytes": {
+      "2": 16000,
+      "8": 1000
+    },
+    "physical": {
+      "tx": 1065,
+      "rx": 1061,
+      "physical_drop": 4
+    },
+    "actual_feedback_received": 77,
+    "fast_retransmits": 2,
+    "ack_extension_model_bytes": [
+      50
+    ],
+    "local_policy": true,
+    "enqueues_hash_verified": 876,
+    "local_drops": {
+      "queue_close": 7,
+      "no_live_old_candidate": 31
+    },
+    "preconvergence_live_forwarding": {
+      "14": 32,
+      "16": 35,
+      "12": 42,
+      "8": 21,
+      "pending8_after_other_update": 21,
+      "11": 21,
+      "15": 22,
+      "17": 21
+    },
+    "route_updates": [
+      {
+        "time_ns": 16000,
+        "epoch": 1,
+        "excluded_directed_ports": 2
+      }
+    ]
+  },
+  "native_runtime_bundled": false,
+  "commands": [
+    {
+      "label": "topology",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-live-ecmp-20261024/restored/source/examples/scaleout_live_ecmp/topology.json",
+        "--output",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/topology"
+      ],
+      "cwd": "/dev/shm/moe-live-ecmp-20261024/fresh/empty-cwd",
+      "pythonpath": "/dev/shm/moe-live-ecmp-20261024/restored/source/python:/dev/shm/moe-live-ecmp-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "label": "network",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-live-ecmp-20261024/restored/source/examples/scaleout_live_ecmp/protocol.json",
+        "--config",
+        "/dev/shm/moe-live-ecmp-20261024/restored/source/examples/scaleout_live_ecmp/work-empty-route.json",
+        "--backend",
+        "/dev/shm/moe-live-ecmp-20261024/bin/stream-probe",
+        "--output",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/network"
+      ],
+      "cwd": "/dev/shm/moe-live-ecmp-20261024/fresh/empty-cwd",
+      "pythonpath": "/dev/shm/moe-live-ecmp-20261024/restored/source/python:/dev/shm/moe-live-ecmp-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "label": "fresh-audit",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-c",
+        "from pathlib import Path; import json; from fixtures.live_ecmp.audit import audit; load=lambda p:json.loads(Path(p).read_text()); import sys; r=audit(load(sys.argv[1]),load(sys.argv[2]),load(sys.argv[3]),load(sys.argv[4])); assert r['local_drops'].get('no_live_old_candidate',0)>0; Path(sys.argv[5]).write_text(json.dumps(r,indent=2)+chr(10))",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/topology/topology.json",
+        "/dev/shm/moe-live-ecmp-20261024/restored/source/examples/scaleout_live_ecmp/protocol.json",
+        "/dev/shm/moe-live-ecmp-20261024/restored/source/examples/scaleout_live_ecmp/work-empty-route.json",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/network/result.json",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/audit.json"
+      ],
+      "cwd": "/dev/shm/moe-live-ecmp-20261024/fresh/empty-cwd",
+      "pythonpath": "/dev/shm/moe-live-ecmp-20261024/restored/source/python:/dev/shm/moe-live-ecmp-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "label": "primary-offline",
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "fixtures.live_ecmp.audit",
+        "--stage",
+        "/dev/shm/moe-live-ecmp-20261024/restored/evidence",
+        "--output",
+        "/dev/shm/moe-live-ecmp-20261024/fresh/primary-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-live-ecmp-20261024/fresh/empty-cwd",
+      "pythonpath": "/dev/shm/moe-live-ecmp-20261024/restored/source/python:/dev/shm/moe-live-ecmp-20261024/restored/source",
+      "exit_code": 0
+    }
+  ],
+  "scope": "new Python source/public small workflow with fixed external native binary/libraries; not clean build or research performance"
+}

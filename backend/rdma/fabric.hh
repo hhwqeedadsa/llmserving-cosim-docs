@@ -88,6 +88,7 @@ class Fabric {
   void Lifecycle(unsigned event,uint64_t id,unsigned source);
   void CheckDrain();
   void RebuildRoutes();
+  void InstallLocalRoutes(unsigned node,bool record=false,unsigned event_index=0);
   void FailLink(Json event,unsigned index);
   void UpdateRoutes(Json event,unsigned index);
   int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
@@ -145,5 +146,8 @@ class Fabric {
   uint64_t pending_link_events_=0,route_epoch_=0,local_drops_=0;
   Json link_events_=Json::array();
   Done network_state_changed_;
+  bool local_failover_=false;
+  std::map<unsigned,std::map<uint32_t,std::vector<unsigned>>> route_candidates_;
+  Json local_route_updates_=Json::array();
 };
 }

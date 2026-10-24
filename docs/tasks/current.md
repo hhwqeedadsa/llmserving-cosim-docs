@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+本轮研究从 `18025e3` 开始，按[输出恢复片段执行判别](../../experiments/recovery_execution/protocol.md)，固定四请求entry1/层4、两类连接故障和两策略共16次实际网络。只观察目标applied/本地timer后生成恢复，不读失败真值；比较整个token输出重放与owner保留，并检验后者是否与操作级强基线完全同计划。有限双bank/同版本存活owner，人工结果字节，不是GPU/现代库/完整推理。平台不改；预算300秒/192MiB及详细边界见方法，原件 `/dev/shm/moe-recovery-execution-20261024/`。论文主贡献未成立。
+
 从 `7d5d468` 完成[源端流失败隔离](source_stream_isolation_spec.md)：显式 `isolate_stream` 保留源失败资源与真实在途包，健康流及自身恢复继续；失败后才就绪的工作有界入队、未发布，修复初版提交异常拖停其他流的问题。同NIC、请求/回复源、v4/v5租约、独立CNP与在线部分失败共同验收；独立核对13条件/132源包/39迟到反馈/13目标副作用及3类篡改拒绝。默认完整结果逐字节相同，旧7/8/3/32条流程、46相关单元及13依赖通过。1,483成员/约13.75MiB持久检查点及新源码根/空cwd三组网络用包内8库复现；见[报告](../reviews/源端故障隔离与健康工作保留_20261024.md)、[验收](../../fixtures/source_stream_isolation/README.md)与[核验](../../fixtures/source_stream_isolation/verification.json)。原件在 `/dev/shm/moe-source-isolation-20261024/`，本机持久包在 `runs/source_stream_isolation_checkpoint_20261024/`。累计监控约166秒，原件/恢复/持久备份合计约169.2MiB，均在450秒/192MiB内；无下载/GPU/旧失败重跑或依赖修改，仅本地提交不push。这是后续恢复研究的平台能力，不把旧全局Stop对照当论文收益；下一步仍须在完整专家依赖、有限窗口与局部信息约束下，比较等待退出/独立窗口等强基线，验证安全保留贡献的价值。论文主贡献未成立，整体目标仍in_progress。
 
 从 `9038e44` 完成准备事件/远端副作用顺序修复：真实单包丢失使旧写晚于新写到达，100μs复制确实读到旧内容；原输入错误接纳现由Python、原生事务v1—v5和在线批次共同拒绝。同连接合法次序保留，安全对照改前改后完整结果逐字节相同。25项相关单元及事务/在线/前缀回归通过，独立重放38源包；新目录/空cwd用包内8库重现改前反例和安全对照，持久检查点在 `runs/transaction_effect_order_checkpoint_20261024/`。见[报告](../reviews/网络丢包与跨连接旧写覆盖_20261024.md)、[验收](../../fixtures/transaction_effect_order/README.md)与[规范](transaction_effect_order_spec.md)。这项平台正确性进展不是新恢复算法或外部生产漏洞；整体目标仍in_progress，下一研究仍须局部失效继续执行、安全状态保留、强基线和代表性/校准证据。

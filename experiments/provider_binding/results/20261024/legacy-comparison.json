@@ -1,0 +1,101 @@
+{
+  "pairs": [
+    {
+      "origin": {
+        "work": 90,
+        "legacy_stream": 2,
+        "physical_ranks": [
+          0,
+          4
+        ],
+        "original_ranks": [
+          0,
+          2
+        ],
+        "modern_operation": "m2.combine.data.s0.d2.t0",
+        "modern_qp": [
+          "shared_devcomm",
+          0,
+          1,
+          0,
+          2
+        ],
+        "context_index": 1
+      },
+      "target": {
+        "work": 108,
+        "legacy_stream": 2,
+        "physical_ranks": [
+          0,
+          4
+        ],
+        "original_ranks": [
+          0,
+          2
+        ],
+        "modern_operation": "m3.dispatch.data.s0.t0.d2",
+        "modern_qp": [
+          "shared_devcomm",
+          0,
+          1,
+          0,
+          2
+        ],
+        "context_index": 1
+      },
+      "old_same_qp": true,
+      "modern_same_qp_under_declared_shared_devcomm": true,
+      "transferred_rates_or_cnp": false
+    },
+    {
+      "origin": {
+        "work": 80,
+        "legacy_stream": 8,
+        "physical_ranks": [
+          4,
+          0
+        ],
+        "original_ranks": [
+          2,
+          0
+        ],
+        "modern_operation": "m2.dispatch.data.s2.t0.d0",
+        "modern_qp": [
+          "shared_devcomm",
+          2,
+          1,
+          0,
+          0
+        ],
+        "context_index": 1
+      },
+      "target": {
+        "work": 132,
+        "legacy_stream": 8,
+        "physical_ranks": [
+          4,
+          0
+        ],
+        "original_ranks": [
+          2,
+          0
+        ],
+        "modern_operation": "m3.combine.data.s2.d0.t0",
+        "modern_qp": [
+          "shared_devcomm",
+          2,
+          0,
+          0,
+          0
+        ],
+        "context_index": 0
+      },
+      "old_same_qp": true,
+      "modern_same_qp_under_declared_shared_devcomm": false,
+      "transferred_rates_or_cnp": false
+    }
+  ],
+  "matched_legacy_writes": 76,
+  "raw_route_rows_matched": 16,
+  "scope": "conditional source identity comparison; modern dedup/layout/control differs; no latency or CNP transfer"
+}

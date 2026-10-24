@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "operation_rows_independently_verified": 486,
+  "legacy_writes_matched": 76,
+  "original_route_rows": 16,
+  "scalar_function_queries": 486,
+  "mutations_rejected": [
+    "context",
+    "device",
+    "peer",
+    "bypass",
+    "phase_scope",
+    "call_scope",
+    "allocation",
+    "inheritance",
+    "rank_projection"
+  ],
+  "source_excerpts": [
+    {
+      "project": "deepep",
+      "path": "csrc/kernels/comm/context.cpp",
+      "first_line": 136,
+      "last_line": 138,
+      "text": "        reqs.ginExclusiveContexts = true;\n        reqs.ginQueueDepth = qp_depth > 0 ? qp_depth : kDefaultQPDepth;\n"
+    },
+    {
+      "project": "deepep",
+      "path": "csrc/kernels/comm/context.cpp",
+      "first_line": 148,
+      "last_line": 154,
+      "text": "        // SL index\n        if (std::getenv(\"EP_DEFAULT_RDMA_SL\") != nullptr)\n            reqs.ginTrafficClass = get_env<int>(\"EP_DEFAULT_RDMA_SL\");\n        if (sl_idx.has_value())\n            reqs.ginTrafficClass = sl_idx.value();\n        if (std::getenv(\"EP_OVERRIDE_RDMA_SL\") != nullptr)\n            reqs.ginTrafficClass = get_env<int>(\"EP_OVERRIDE_RDMA_SL\");"
+    },
+    {
+      "project": "nccl",
+      "path": "src/gin/gin_host.cc",
+      "first_line": 347,
+      "last_line": 347,
+      "text": "    reqs->ginTrafficClass != NCCL_CONFIG_UNDEF_INT ? reqs->ginTrafficClass : comm->config.trafficClass,"
+    },
+    {
+      "project": "nccl",
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 596,
+      "last_line": 596,
+      "text": "  const int trafficClass = config->trafficClass;"
+    },
+    {
+      "project": "nccl",
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 663,
+      "last_line": 666,
+      "text": "  const int ib_sl = (ncclParamIbSl() != -1)                        ? ncclParamIbSl() :\n                    (trafficClass != NCCL_NET_TRAFFIC_CLASS_UNDEF) ? trafficClass :\n                                                                     NCCL_IB_SL_DEFAULT;\n  const int ib_tc = (trafficClass != NCCL_NET_TRAFFIC_CLASS_UNDEF) ? trafficClass : NCCL_IB_TC_DEFAULT;"
+    },
+    {
+      "project": "nccl",
+      "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+      "first_line": 408,
+      "last_line": 408,
+      "text": "    DOCACHECKGOTO(doca_verbs_ah_attr_set_traffic_class(ctx->ah, ib_tc), status, destroy_verbs_ah);"
+    },
+    {
+      "project": "nccl",
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 61,
+      "last_line": 61,
+      "text": "    doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + peer;"
+    },
+    {
+      "project": "nccl",
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 167,
+      "last_line": 167,
+      "text": "    doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + peer;"
+    },
+    {
+      "project": "nccl",
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 268,
+      "last_line": 268,
+      "text": "    doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + peer;"
+    },
+    {
+      "project": "nccl",
+      "path": "src/include/nccl_device/gin/gdaki/gin_gdaki.h",
+      "first_line": 313,
+      "last_line": 313,
+      "text": "  doca_gpu_dev_verbs_qp* qp = loadConst(&gdaki->gdqp) + peer;"
+    }
+  ],
+  "new_network_executions": 0,
+  "limitation": "conditional identity/initialization semantics, not provider execution or hardware idle-state proof"
+}

@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "archive_sha256": "97716f5dfffce4bd707636ee810cd65c7977e39a321b622adf0cdc7c901f0c65",
+  "members_verified": 102,
+  "three_json_byte_identical": true,
+  "new_source_root": true,
+  "empty_cwd": true,
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.provider_binding.audit",
+        "analyze",
+        "--stage",
+        "/dev/shm/moe-provider-binding-20261024/restored/evidence",
+        "--output",
+        "/dev/shm/moe-provider-binding-20261024/restored/analysis.json"
+      ],
+      "cwd": "/dev/shm/moe-provider-binding-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-provider-binding-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.provider_binding.legacy",
+        "compare",
+        "--stage",
+        "/dev/shm/moe-provider-binding-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-provider-binding-20261024/restored/analysis.json",
+        "--output",
+        "/dev/shm/moe-provider-binding-20261024/restored/legacy-comparison.json"
+      ],
+      "cwd": "/dev/shm/moe-provider-binding-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-provider-binding-20261024/restored/source",
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "experiments.provider_binding.verify",
+        "--stage",
+        "/dev/shm/moe-provider-binding-20261024/restored/evidence",
+        "--analysis",
+        "/dev/shm/moe-provider-binding-20261024/restored/analysis.json",
+        "--comparison",
+        "/dev/shm/moe-provider-binding-20261024/restored/legacy-comparison.json",
+        "--output",
+        "/dev/shm/moe-provider-binding-20261024/restored/verification-complete.json"
+      ],
+      "cwd": "/dev/shm/moe-provider-binding-20261024/restored/empty-cwd",
+      "pythonpath": "/dev/shm/moe-provider-binding-20261024/restored/source",
+      "exit_code": 0
+    }
+  ],
+  "new_network_executions": 0,
+  "provider_or_cuda_executed": false,
+  "scope": "research sources and saved public plan/scalar outputs only; no original repository, platform imports or native runtime"
+}

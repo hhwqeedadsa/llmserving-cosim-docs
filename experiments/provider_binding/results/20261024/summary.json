@@ -1,0 +1,94 @@
+{
+  "summary": {
+    "operations": 486,
+    "provider_operations": 444,
+    "local_bypasses": 42,
+    "active_provider_qps": 37,
+    "active_remote_qps": 33,
+    "active_self_primary_qps": 4,
+    "data_control_shared_qps": 4,
+    "dispatch_combine_shared_qps": 22,
+    "multiple_call_shared_qps": 33,
+    "per_call_active_qps": 119,
+    "allocated_contexts": 6,
+    "allocated_main_qps": 96,
+    "allocated_self_responder_qps": 24,
+    "allocated_qp_objects": 120,
+    "independent_four_devcomms_allocated_objects": 480,
+    "legacy_direction_qps": 12,
+    "directions_with_multiple_modern_qps": 12
+  },
+  "roles": {
+    "combine.barrier_signal": {
+      "operations": 128,
+      "by_path": {
+        "gin_self": 32,
+        "rdma": 96
+      },
+      "active_qps": 16,
+      "active_contexts": [
+        0
+      ]
+    },
+    "combine.token_data": {
+      "operations": 51,
+      "by_path": {
+        "local": 13,
+        "rdma": 38
+      },
+      "active_qps": 19,
+      "active_contexts": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "dispatch.barrier_signal": {
+      "operations": 128,
+      "by_path": {
+        "gin_self": 32,
+        "rdma": 96
+      },
+      "active_qps": 16,
+      "active_contexts": [
+        0
+      ]
+    },
+    "dispatch.expert_count_block": {
+      "operations": 64,
+      "by_path": {
+        "gin_self": 16,
+        "rdma": 48
+      },
+      "active_qps": 16,
+      "active_contexts": [
+        0
+      ]
+    },
+    "dispatch.rank_count": {
+      "operations": 64,
+      "by_path": {
+        "local": 16,
+        "rdma": 48
+      },
+      "active_qps": 12,
+      "active_contexts": [
+        0
+      ]
+    },
+    "dispatch.token_data": {
+      "operations": 51,
+      "by_path": {
+        "local": 13,
+        "rdma": 38
+      },
+      "active_qps": 12,
+      "active_contexts": [
+        1
+      ]
+    }
+  },
+  "scope": "fixed declared launch and same Context lifetime across four calls; identities and operand bytes only",
+  "new_network_executions": 0
+}

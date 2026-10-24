@@ -13,7 +13,13 @@
 
 ## 当前范围和预算
 
-当前研究`in_progress`：[现代provider连接共享范围](../../experiments/provider_binding/protocol.md)，平台`a81061a`。固定既有4调用/16路由选择，经一次公开plan/2生成和两个原函数的CPU记录执行，逐操作核context/peer身份、数据/控制及阶段/调用复用；核QoS初始化作用域。无新网络、参数扫描或平台/依赖改动，不从现代连接持久性推出网卡空闲规则。300受监控秒/128MiB，单命令60秒/1GiB/地址2GiB/64MiB，网络0，仅独立研究CPU编译、本地提交、不push。
+当前研究`completed`：[现代provider连接共享范围](../../experiments/provider_binding/protocol.md)，平台`a81061a`。固定既有4调用/16路由选择与显式SM2/5个context/2条连接，经一次公开plan/2及两个原函数的CPU替身执行核486行；444个provider操作、42个本地旁路，37个活跃主QP含33个远端/4个self，分配对象120（含24个self responder），不等于流或包数。12个旧方向都合并了多个现代context；4条QP实际同时承载Combine数据与计数/屏障。全部数字以四调用复用同一Context为前提，不是默认配置、真实部署或现代性能。
+
+独立重建全部76个旧SEND与同一原始路由的对应：事前固定work90→108在本声明下仍同context1；work80→132分别context1/0，不能将旧同QP反馈继承解释直接搬到现代对象。未将旧CNP/速率/时延赋给新操作。9份固定源码核Git树/blob，QoS只证初始化的Context→GIN config→AH作用域，不将其等同网络PG或证明网卡空闲规则。9类篡改拒绝、13依赖、新研究源码根/空cwd三份JSON逐字节一致；补核默认counter及全76映射只读既有产物，初版核验保留，无plan/CPU驱动重跑。
+
+102成员/10,542,993B包压缩901,574B，逐成员核后保存`runs/provider_binding_checkpoint_20261024/`，含固定源码和研究代码，不含vendor/native运行时；最终恢复/收尾收据单列。13份本阶段终态监控累计5.16秒、峰值58.88MiB；原件/恢复/归档/持久/源码加1MiB预留计23.49MiB，最终管理0.066秒、预留10秒，保持300秒/128MiB与单命令60秒/1GiB/地址2GiB/64MiB，网络0，无遗留受监控PID。无新网络、平台/依赖修改、安装下载/GPU或push。见[入口](../../experiments/provider_binding/README.md)、[对照](../../experiments/provider_binding/results/20261024/legacy-comparison.json)、[核验](../../experiments/provider_binding/results/20261024/verification.json)、[恢复](../../experiments/provider_binding/results/20261024/replay.json)、[收尾](../../experiments/provider_binding/results/20261024/closeout.json)及[中文报告](../reviews/现代连接共享范围与网络优化对象_20261024.md)。
+
+下一门槛已收紧：先将现代devComm/context/peer及NIC绑定接到实际共享网络，保留计数、屏障、self-peer与目标可见边界；再按同连接/总队列/内存/信息/带宽比较调度与恢复强基线。不能继续直接优化旧80→132来源或按阶段免费清控制状态。仍需匹配GPU/NIC的空闲/拥塞控制校准、现代完整执行、独立负载、完整千卡与主创新；整体目标继续`in_progress`，本阶段不追加网络或参数搜索。
 
 当前研究`completed`：[拥塞通知来源与应用阶段](../../experiments/feedback_ancestry/protocol.md)，固定平台`f325869`。只读三份已封存结果，逐一核对84个CNP、248个唯一CE包、438个通知物理发送跳及4,874条RP控制记录。80个通知到达时标记字节已ACK，31个对应work全部完成，14个QP已发布字节全部确认；健康条件16个立即通知全部满足“标记字节已ACK”，否定用此条件安全丢弃通知。work108/132分别继承work90/80所产生反馈后的限速；跨阶段状态不证明反馈错误，也不授权重置QP。228个标记点还有其他流排队，只证明同存，不是独立可消除损失。
 

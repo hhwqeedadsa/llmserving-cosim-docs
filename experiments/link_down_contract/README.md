@@ -1,6 +1,6 @@
 # 原生端口关闭：队列清空不等于缓冲释放
 
-固定平台 `104cafa`、原生 ns-3 `3964b1d`，一次公开原生 API 状态转换探针证实：`QbbNetDevice::TakeDown()` 清空出口队列，却未解除相应的交换机缓冲管理器（MMU）占用。本项明确了物理故障接入前必须解决的正确性边界；当前公开接口仍只支持接收错误丢包，没有新增物理链路关闭或重路由。
+固定平台 `104cafa`、原生 ns-3 `3964b1d`，一次公开原生 API 状态转换探针证实：`QbbNetDevice::TakeDown()` 清空出口队列，却未解除相应的交换机缓冲管理器（MMU）占用。本项明确了物理故障接入前必须解决的正确性边界；该固定版本公开接口只支持接收错误丢包。后续平台`aa32b96`及原生补丁`6088174`已实现[真实链路关闭与声明延迟改路](../../examples/scaleout_link_failure/README.md)，新的实际排队核验见[验收](../../fixtures/switch_link_failure/README.md)。本文保留旧版本证据；这里的手工种子未填私有转发计数，不应在新补丁上当作有效转发状态重跑，构建程序会检查旧提交。
 
 ## 实际结果及范围
 
@@ -15,7 +15,7 @@
 
 入口、出口和共享计数是同一批数据的重叠视角，不能相加成物理内存。最后一行使用评价端保存的种子清单，只是守恒对照，不是部署修复。
 
-15 个清队列丢弃全部经过 `QbbDrop`；关闭端口的后续 Receive 再产生一个 `QbbDrop`。`PhyRxDrop` 与 `PhyTxBegin` 都为 0。当前 Fabric 和持久连接恢复监听的是 `PhyRxDrop`，因此未来接入链路关闭时必须分别处理排队丢弃与在途接收丢弃，不能直接沿用同一物理在途计数递减逻辑。这不证明已支持的接收错误路径存在该问题。
+15 个清队列丢弃全部经过 `QbbDrop`；关闭端口的后续 Receive 再产生一个 `QbbDrop`。`PhyRxDrop` 与 `PhyTxBegin` 都为 0。该固定版本 Fabric 和持久连接恢复监听的是 `PhyRxDrop`，因此接入链路关闭时必须分别处理排队丢弃与在途接收丢弃，不能直接沿用同一物理在途计数递减逻辑。这不证明原先已支持的接收错误路径存在该问题。
 
 源码依据：`qbb-net-device.cc::TakeDown/Receive`、`switch-node.cc::SwitchNotifyDequeue`、`switch-mmu.cc`；平台入口为 `backend/rdma/fabric.cc` 和 `persistent_streams.cc`。普通 dequeue 会减少私有 `m_bytes`、做 ECN/PFC 处理并更新发送相关状态，不能当作 drop 清理函数直接调用。
 

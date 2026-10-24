@@ -1,0 +1,70 @@
+{
+  "all_recorded_process_handles_terminal": true,
+  "archive_snapshot_before_closeout": true,
+  "artifact_budget_bytes": 268435456,
+  "charged_artifact_bytes": 255115264,
+  "dependencies_checked": 13,
+  "expected_functional_failure": "partition/execution: disconnected stream stays unACKed while healthy stream completes",
+  "final_cpp_sources_match_executed_build": true,
+  "installation_download_gpu_or_push": false,
+  "live_monitored_descendants": [],
+  "monitored_wall_budget_seconds": 600,
+  "monitored_wall_seconds": 106.15179784037173,
+  "monitors": 67,
+  "noncompleted_monitors": [
+    {
+      "exit": 1,
+      "path": "persistent-audit-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit": 1,
+      "path": "partition-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit": 1,
+      "path": "pfc-failover-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit": 1,
+      "path": "queued-audit-corrected-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit": 1,
+      "path": "queued-audit-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit": 1,
+      "path": "partition/execution/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "original_input_hashes_preserved": true,
+  "overall_research_goal": "in_progress",
+  "peak_sampled_process_tree_rss_bytes": 785326080,
+  "persisted_usage": {
+    "allocated_bytes": 10739712,
+    "apparent_bytes": 10660190
+  },
+  "phase_status": "completed",
+  "platform_commit": "aa32b968a6d7b936157e26e5d37d2ac6985655f9",
+  "preparation_failures_outside_monitors": [
+    "build-preparation-failure.json",
+    "portable-preparation-failure.json"
+  ],
+  "root_free_bytes": 79935000576,
+  "root_reserve_bytes": 67108864,
+  "schema_version": "switch-link-closeout/1",
+  "source_metadata_and_final_receipt_reserve_bytes": 1048576,
+  "stage_usage": {
+    "allocated_bytes": 244375552,
+    "apparent_bytes": 242542131
+  },
+  "tmpfs_free_bytes": 256649752576,
+  "tmpfs_reserve_bytes": 8589934592,
+  "unmonitored_final_file_management_reserve_seconds": 10
+}

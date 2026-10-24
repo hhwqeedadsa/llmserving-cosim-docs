@@ -14,7 +14,8 @@
   "offline_outputs_byte_identical": 4,
   "package": "/dev/shm/moe-switch-link-failure-20261024/restored",
   "persisted_archive": "/home/lry/moe-ub-cosim/runs/switch_link_failure_checkpoint_20261024/checkpoint.tar.gz",
-  "phase_complete": false,
+  "phase_complete": true,
+  "platform_commit": "aa32b968a6d7b936157e26e5d37d2ac6985655f9",
   "same_linux_host": true,
   "schema_version": "switch-link-replay/1",
   "whole_native_result_equal_except_library_paths": true

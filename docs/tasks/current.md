@@ -13,7 +13,11 @@
 
 ## 当前范围和预算
 
-当前平台`in_progress`：[交换机间物理链路失效](switch_link_failure_spec.md)，基线`a89f007`。复核上轮已完成研究及原生排队/MMU失效证据后，推进真实网络故障能力：原生丢弃回收、在途接收丢弃、声明延迟后的存活路径更新及公开小流程，保留真实ACK/超时与QP状态。只支持switch—switch边，不将控制延迟或功能通过当作校准/论文贡献。每命令60秒/RSS1GiB/地址2GiB/64MiB，阶段600监控秒/256MiB含恢复与持久，网络5ms/result16MiB，tmpfs8GiB/根盘64MiB预留。固定依赖建立本地补丁，不升级/下载安装/GPU或push，平台与研究分别验收和提交，整体目标仍进行中。
+当前平台`completed`：[交换机间物理链路失效](switch_link_failure_spec.md)，平台`aa32b96`、基线`a89f007`。原生补丁`6088174`修正实际排队数据MMU回收与在途接收丢弃；公开JSON支持独立延迟的switch—switch关闭和集中最短路/ECMP更新，保留QP及真实ACK/重传，未结束的未来网络事件参与排空。主例27排队包/27,972B回收，2,367发送=2,363接收+4物理丢弃，28旧路由本地丢弃；多故障、真实PFC/headroom、持久QP、未来事件、永久分区和MRT1事务均按实包独立核验。永久分区保持失联流失败且健康流完成，不假造ACK或资源退出。60项Python单元、CLI/native各18类拒绝、13类篡改拒绝、完整缺省新/旧结果比较及13固定依赖通过。
+
+522成员/10,570,936B包保存到`runs/switch_link_failure_checkpoint_20261024/`，逐成员hash核验后在新Python源码根/空cwd完成公开拓扑和真实网络执行，四份离线输出逐字节一致，完整原生结果除八库路径外一致、八库均从包内加载。这是同Linux主机增量二进制重放，未声称从零原生构建。67原始监控含嵌套保守106.15秒，峰值748.95MiB；原件/恢复/持久副本及1MiB源码/收据预留约244.30MiB，600秒/256MiB和每命令60秒/1GiB/地址2GiB/64MiB、网络5ms/result16MiB及磁盘预留保持。两次构建准备失败、一次非法PFC输入及三次离线检查错误保留，只修定位原因接续/复算，不重跑成功网络来修checker；永久分区另作预期失败。原库/复用对象hash保持，无遗留受监控进程、安装下载/GPU或push。见[验收](../../fixtures/switch_link_failure/README.md)、[核验](../../fixtures/switch_link_failure/verification.json)、[恢复](../../fixtures/switch_link_failure/recovery.json)、[收尾](../../fixtures/switch_link_failure/closeout.json)及[研究进展](../reviews/网络链路失效与鲁棒性研究进展_20261024.md)。原生→ASTRA→LLM指针已逐级本地保存，远端可获取性未验证。
+
+下一研究节点：先用实际共享队列、PFC及源重试/资源拥有者判别路由收敛之后健康任务仍等待的原因，与原生NACK、固定/Karn超时、常规改路和更强已有方法比较；同资源/信息条件下没有稳定有意义的额外等待就结束候选，不靠调参维持收益。声明控制延迟、经典改路与修复不作创新；现代GIN/GPU/MR恢复、代表性独立请求、匹配校准和千卡完整执行仍未满足，整体论文目标保持`in_progress`。
 
 当前研究`completed`：[通信域恢复与外部GIN内核适用范围](../../experiments/communicator_recovery/README.md)，平台固定`917e42d`。官方窗口注销要求buffer无NCCL访问；已有Revoke和SHRINK_ABORT须保留为强基线。外部devComm创建不自动赋内部abort指针，GIN等待分支与用户内核终止不能合并；没有证明Revoke/Shrink失效或真实GPU挂死。16份固定全文、20摘录、5精确原函数/2语句及208合成CPU条件由独立整数/调用顺序oracle核验；不是整库、合法故障并发、DMA或性能证据。
 

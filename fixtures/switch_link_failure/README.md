@@ -24,7 +24,7 @@
 
 ## 证据与复算
 
-运行原件在`/dev/shm/moe-switch-link-failure-20261024/`，其中原始monitor、命令、失败原因、结果和库身份均保留。最终持久检查点及资源收尾由本目录`recovery.json/closeout.json`记录，文件尚未生成时表示收尾尚未完成，不应当作复现已通过。
+运行原件在`/dev/shm/moe-switch-link-failure-20261024/`，其中原始monitor、命令、失败原因、结果和库身份均保留。最终持久检查点为`runs/switch_link_failure_checkpoint_20261024/`：522成员、10,570,936B。逐成员hash核验、新目录公开包执行和四份离线输出逐字节一致均通过；[恢复](recovery.json)、[独立核验](verification.json)与[资源收尾](closeout.json)保存结果。67份监控含嵌套保守106.15秒，峰值748.95MiB，原件/恢复/持久副本及1MiB源码/收据预留约244.30MiB，保持600秒/256MiB阶段预算。包为收尾前快照，之后的收据和文档单独保存。13固定依赖检查通过；没有push，不能由本地gitlink一致推断远端可取。
 
 针对已解包且逐成员hash核验的检查点，执行：
 

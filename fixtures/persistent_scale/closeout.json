@@ -1,0 +1,84 @@
+{
+  "actual_network_executions": 6,
+  "archive": {
+    "archive_bytes": 11694548,
+    "members": 491,
+    "sha256": "c0cd8d91af2841c294685768a9c1d50147b8c7c2f5996a61ea998cdfec86b28e",
+    "uncompressed_bytes": 65142194
+  },
+  "baseline": "99ab5f1b846f4a882fe6223b052f2546e273e963",
+  "budgets": {
+    "artifact_bytes": 67108864,
+    "cumulative_disk_bytes": 536870912,
+    "cumulative_seconds": 600,
+    "max_network_executions": 6,
+    "max_network_ns": 5000000,
+    "network_and_large_audit_address_bytes": 8589934592,
+    "network_and_large_audit_rss_bytes": 4294967296,
+    "ordinary_address_bytes": 2147483648,
+    "ordinary_rss_bytes": 1073741824,
+    "per_command_seconds": 60,
+    "result_bytes": 33554432,
+    "small_result_bytes": 16777216
+  },
+  "conservative_cumulative_monitored_seconds_including_nested": 119.20020450279117,
+  "ended_utc": "2026-10-24T17:26:30.808242+00:00",
+  "evidence": {
+    "all_archive_members_verified": true,
+    "copy_hash_equal": true,
+    "default_complete_result_equal_except_verified_ns3_paths": true,
+    "dependency_check": "13 fixed dependencies clean",
+    "exact_intermediate_ecmp_paths_reconstructed": false,
+    "final_package_not_network_reexecuted": true,
+    "fresh_source_root_and_empty_cwd_passed": true,
+    "fresh_workflow_used_verified_v1_snapshot": true,
+    "installs_downloads_gpu_dependency_changes_push": false,
+    "three_offline_audits_byte_equal": true,
+    "v4_v3_dynamic_results_equal": true
+  },
+  "failed_monitor_receipts": [
+    {
+      "exit_code": 1,
+      "path": "small-audit-monitor/probe.json",
+      "status": "child_failed"
+    },
+    {
+      "exit_code": 1,
+      "path": "python-scaleout_persistent_scale_test-monitor/probe.json",
+      "status": "child_failed"
+    }
+  ],
+  "failure_explanation": "Initial unit check exposed absent physical NIC acceptance; corrected Python validation and reran shared regression without native rebuild. First small offline auditor assumed registered message_id and GPU queue_metrics; corrected offline only, never reran successful networks.",
+  "final_management_seconds_reserved": 10,
+  "native_pre_fabric_rejections": 10,
+  "network_successes": 6,
+  "original_terminal_monitors": 39,
+  "overall_paper_goal_complete": false,
+  "peak_sampled_group_rss_bytes": 2356981760,
+  "platform_functional_acceptance_complete": true,
+  "python_scaleout_tests": 138,
+  "remaining_monitored_live_pids": [],
+  "schema_version": "persistent-scale-closeout/1",
+  "scope": "1024 endpoint EP4x256 short synthetic byte/local program; not full MoE, EP1024, modern GIN, GPU visibility or hardware calibration",
+  "source_and_final_receipt_reserve_bytes": 2097152,
+  "stage_and_persistent_allocated_bytes": 197857280,
+  "stage_and_persistent_apparent_bytes": 196111008,
+  "tamper_classes": 7,
+  "target": {
+    "endpoint_capture_events": 49152,
+    "ep": 4,
+    "finish_ns": 77464,
+    "gpus": 1024,
+    "groups": 256,
+    "host_wall_seconds": 18.37705798819661,
+    "local_nodes": 4096,
+    "peak_sampled_group_rss_bytes": 2356981760,
+    "physical_link_transmissions": 147456,
+    "source_packets": 12288,
+    "source_payload_bytes": 9437184,
+    "streams": 3072,
+    "work": 16384,
+    "writes": 12288
+  },
+  "total_charged_with_reserve_bytes": 199954432
+}

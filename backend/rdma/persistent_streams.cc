@@ -14,7 +14,8 @@ static CustomHeader StreamHeader(Ptr<const Packet> packet) {
 PersistentStreams::PersistentStreams(Fabric& fabric):PersistentStreams(fabric,Limits{}) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits):PersistentStreams(fabric,limits,Json()) {}
 PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& recovery):fabric_(fabric),limits_(limits) {
-  Require(limits.streams>0 && limits.streams<=128 && limits.work>0 && limits.work<=8192,
+  Require(limits.streams>0 && limits.streams<=4096 && limits.work>0 && limits.work<=65536 &&
+          limits.link_transmissions>0 && limits.link_transmissions<=2000000,
           "persistent stream count limits out of supported range");
   Require(!fabric_.persistent_stream_mode_ && fabric_.flows_.empty() && !fabric_.resource_tracking_ && !fabric_.recovery_ &&
           !fabric_.config_.contains("drop_once") &&
@@ -605,7 +606,7 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   catch(...) { hw->m_mtu=mtu;throw; }
 }
 void PersistentStreams::Tx(PersistentStreams* self,unsigned node,unsigned port,Ptr<const Packet> packet) {
-  ++self->inflight_;Require(++self->observations_<=200000,"stream packet observation budget exceeded");
+  ++self->inflight_;Require(++self->observations_<=self->limits_.link_transmissions,"stream packet observation budget exceeded");
   auto h=StreamHeader(packet);
   if(h.l3Prot==0xff && self->reference_limit_ && node<self->fabric_.gpus_) {
     auto s=self->ByPort(h.cnp.fid);

@@ -1,0 +1,130 @@
+{
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-persistent-scale-20261024/restored/source/examples/scaleout_rdma_streams/ep_groups.py",
+        "--gpus",
+        "8",
+        "--ep",
+        "4",
+        "--rounds",
+        "2",
+        "--payload-bytes",
+        "768",
+        "--local-ns",
+        "100",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/work.json"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "generate",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "topology",
+        "--config",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/inputs/8-topology.json",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/topology"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "topology",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "-m",
+        "moe_ub_cosim",
+        "scaleout",
+        "rdma-stream-probe",
+        "--topology",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/topology",
+        "--protocol",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/inputs/8-protocol.json",
+        "--config",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/work.json",
+        "--backend",
+        "/dev/shm/moe-persistent-scale-20261024/restored/runtime/bin/stream-probe",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/network"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "network",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-persistent-scale-20261024/restored/source/fixtures/persistent_scale/audit.py",
+        "--result",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/network/result.json",
+        "--work",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/work.json",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/audit.json"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "audit",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-persistent-scale-20261024/restored/source/fixtures/persistent_scale/audit.py",
+        "--result",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/network/medium/result.json",
+        "--work",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/inputs/128-work.json",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/medium-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "medium-offline",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-B",
+        "/dev/shm/moe-persistent-scale-20261024/restored/source/fixtures/persistent_scale/audit.py",
+        "--result",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/network/target/result.json",
+        "--work",
+        "/dev/shm/moe-persistent-scale-20261024/restored/evidence/inputs/1024-work.json",
+        "--output",
+        "/dev/shm/moe-persistent-scale-20261024/fresh/target-audit.json"
+      ],
+      "cwd": "/dev/shm/moe-persistent-scale-20261024/fresh/cwd",
+      "exit_code": 0,
+      "label": "target-offline",
+      "pythonpath": "/dev/shm/moe-persistent-scale-20261024/restored/source/python"
+    }
+  ],
+  "empty_cwd": true,
+  "network_executions_total": 6,
+  "new_source_root": true,
+  "other_system_libraries_compared_exactly": true,
+  "passed": true,
+  "public_generator_byte_equal": true,
+  "runtime_eight_libraries_from_package": true,
+  "scope": "same Linux host incremental native runtime; full target program audited offline, no target network rerun",
+  "small_complete_result_equal_except_verified_ns3_paths": true,
+  "three_offline_audits_byte_equal": true
+}

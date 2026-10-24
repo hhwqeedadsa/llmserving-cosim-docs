@@ -454,3 +454,5 @@ native的 `message_resources` 在图激活后记录，`message_resources_final` 
 v5事务启用同一模式时记录位于`transactions.transport.selective_repeat`。有payload接收器时增加`kind="payload_delivered"`事件：`packet_uid/sequence/hex`标识实际收到（可能此前乱序缓存）的包及交付字节，`time_ns`是该包进入连续前缀后交付给MRT1解码器的时刻；同一缺口补齐可在此时交付多个旧包。`receiver_prefix/reorder_bytes`是交付回调时该流的状态，不是逐块重算的前缀。该事件与接收、反馈、恢复事件共用`transport_recovery.max_events`，超限失败。没有接收器的纯字节模式不增加该事件；`source_payload_packets`仍表示实际发送的字节，不能把它当作已经收到或已应用。范围及核验见[事务选择重传](../examples/scaleout_rdma_transactions/README.md#选择重传下执行实际事务)。
 
 显式 `on_exhausted:isolate_stream` 时，同一传输对象新增 `source_isolation`，恢复对象新增全部源端 `failures`；字段、迟到反馈截断及未释放资源的解释见上述持久恢复输出。默认全局停止模式不新增这些结果字段。源端失败不撤回在途写，也不通知对端，不能将它当作安全重用接收窗口的依据。
+
+`rdma-stream-probe`的`moe-rdma-stream-work/4`输入在`persistent_transport`额外保存`execution_limits`和`link_transmissions`。前者是明确声明的连接/工作/全网链路发送上限，后者累计每个物理设备的实际Tx（包括数据、ACK和其他控制包）；同一个端到端包过多跳计多次。它不是源包数、采样记录数或GPU操作数。旧v1—v3不增加字段，原`source_packets`仍保存每个实际源数据包。未开启持久恢复时捕获的内部message_id可能为−1，可从实际包头及端点独立关联；不要给−1捏造工作身份。范围见[容量输入](../examples/scaleout_rdma_streams/README.md#较大集群的显式容量)及[独立核验](../fixtures/persistent_scale/README.md)。

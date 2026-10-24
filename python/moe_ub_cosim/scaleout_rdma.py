@@ -194,7 +194,7 @@ def build(directory, *, cmake='cmake', ninja='ninja', protobuf_prefix=None, resu
     return result
 
 
-def validate_probe(t, c, batch, *, match_faults=True):
+def validate_probe(t, c, batch, *, match_faults=True, max_probe_messages=128):
     validate_protocol(c)
     budget=limits(c)
     require(t.get('schema_version') in ('moe-scaleout-physical-topology/1','moe-scaleout-physical-topology/2'), 'wrong physical graph schema')
@@ -210,7 +210,8 @@ def validate_probe(t, c, batch, *, match_faults=True):
     validate_mmu_topology(t,c)
     from .scaleout_link_failures import validate_topology as validate_link_topology
     validate_link_topology(t,c)
-    require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
+    require(type(max_probe_messages) is int and 1<=max_probe_messages<=4096, 'invalid validation descriptor budget')
+    require(isinstance(batch, list) and 0 < len(batch) <= max_probe_messages, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}
     if 'drop_once' in c:

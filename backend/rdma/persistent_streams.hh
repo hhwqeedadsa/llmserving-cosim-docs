@@ -13,7 +13,7 @@ namespace moe_rdma {
 // GPU source-buffer reuse. All callbacks execute on the existing ns-3 clock.
 class PersistentStreams {
  public:
-  struct Limits { unsigned streams=16, work=64; };
+  struct Limits { unsigned streams=16, work=64, link_transmissions=200000; };
   using Done = std::function<void()>;
   explicit PersistentStreams(Fabric& fabric);
   PersistentStreams(Fabric& fabric, Limits limits);
@@ -37,6 +37,7 @@ class PersistentStreams {
   bool Drained() const;
   void Close();
   Json Report() const;
+  uint64_t LinkTransmissions() const { return observations_; }
   Done changed;
  private:
   struct Work {

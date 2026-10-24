@@ -8,18 +8,20 @@ from .scaleout_topology import fields, integer, require
 
 def stream_limits(config):
     schema=config.get('schema_version')
-    require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2','moe-rdma-stream-work/3'),'unsupported stream work schema')
+    require(schema in ('moe-rdma-stream-work/1','moe-rdma-stream-work/2','moe-rdma-stream-work/3','moe-rdma-stream-work/4'),'unsupported stream work schema')
     fields(config,'schema_version streams work'+(' limits' if not schema.endswith('/1') else '')
            +(' source_rate_capture' if 'source_rate_capture' in config else '')
            +(' dcqcn_reference' if 'dcqcn_reference' in config else '')
            +(' transport_recovery' if 'transport_recovery' in config else '')
-           +(' local_model' if schema.endswith('/3') else ''),'stream work root')
+           +(' local_model' if schema.endswith(('/3','/4')) else ''),'stream work root')
     if schema.endswith('/1'):
         return dict(max_streams=16,max_work=64)
     value=config['limits']
-    fields(value,'max_streams max_work','stream limits')
-    integer(value['max_streams'],'max_streams',1,128)
-    integer(value['max_work'],'max_work',1,8192)
+    scaled=schema.endswith('/4')
+    fields(value,'max_streams max_work'+(' max_link_transmissions' if scaled else ''),'stream limits')
+    integer(value['max_streams'],'max_streams',1,4096 if scaled else 128)
+    integer(value['max_work'],'max_work',1,65536 if scaled else 8192)
+    if scaled:integer(value['max_link_transmissions'],'max_link_transmissions',1,2000000)
     return dict(value)
 
 
@@ -44,7 +46,7 @@ def validate(topology, protocol, config):
         policy=legacy.pop('on_exhausted','stop_simulation')
         require(policy in ('stop_simulation','isolate_stream'),'invalid persistent on_exhausted policy')
         validate_recovery(legacy,budget['max_sim_ns'])
-    local_mode=config['schema_version'].endswith('/3')
+    local_mode=config['schema_version'].endswith(('/3','/4'))
     if local_mode:
         fields(config['local_model'],'mode duration_source','local model')
         require(config['local_model']==dict(mode='serial_per_gpu/1',duration_source='declared_ns'),
@@ -78,6 +80,11 @@ def validate(topology, protocol, config):
     require(not topology.get('intra_host',{}).get('enabled',False),'stream probe does not use intra-host bypass')
     require(isinstance(config['streams'],list) and 1<=len(config['streams'])<=counts['max_streams'],
             'stream count exceeds declared budget')
+    physical_ports={}
+    by_node={n['id']:n for n in topology['nodes']}
+    for link in topology['links']:
+        physical_ports[link['src'],link['src_port']]=link['dst']
+        physical_ports[link['dst'],link['dst_port']]=link['src']
     ids,ports,checks=set(),set(),[]
     for s in config['streams']:
         fields(s,'id src dst plane wire_port source_nic destination_nic queue_depth','stream declaration')
@@ -85,11 +92,15 @@ def validate(topology, protocol, config):
                         ('wire_port',10000,65535),('source_nic',1,1024),('destination_nic',1,1024),('queue_depth',1,4096)]:
             integer(s[k],k,lo,hi)
         require(s['queue_depth']&(s['queue_depth']-1)==0,'queue depth must be power of two')
+        for endpoint,nic in ((s['src'],s['source_nic']),(s['dst'],s['destination_nic'])):
+            peer=physical_ports.get((endpoint,nic))
+            require(peer is not None and by_node[peer].get('plane')==s['plane'], 'stream NIC is absent or belongs to another plane')
         require(s['id'] not in ids and s['wire_port'] not in ports,'stream id or wire port repeated')
         ids.add(s['id']);ports.add(s['wire_port'])
         # These descriptors validate topology only and are NEVER simulated.
         checks.append(dict(id=s['id'],src=s['src'],dst=s['dst'],plane=s['plane'],bytes=1,ready_ns=0))
-    validate_probe(topology,protocol,checks,match_faults=False)
+    validate_probe(topology,protocol,checks,match_faults=False,
+                   max_probe_messages=counts['max_streams'] if config['schema_version'].endswith('/4') else 128)
     for rule in protocol.get('faults',[]):
         require(rule['message_id'] in ids,'fault names an unopened persistent stream')
         require(rule['sequence']<=64*2**20,'persistent fault sequence exceeds stream budget')
@@ -131,8 +142,9 @@ def probe(topology, protocol, config, backend, output):
     validate(t,c,w)
     require(backend.is_file() and os.access(backend,os.X_OK),'pass the existing native stream-probe executable')
     budget=limits(c)
-    budget.update(wall_seconds=min(60,budget['wall_seconds']),rss_bytes=min(2**30,budget['rss_bytes']),
-                  address_bytes=min(2*2**30,budget['address_bytes']),artifact_bytes=min(64*2**20,budget['artifact_bytes']))
+    if w['schema_version']!='moe-rdma-stream-work/4':
+        budget.update(rss_bytes=min(2**30,budget['rss_bytes']),address_bytes=min(2*2**30,budget['address_bytes']))
+    budget.update(wall_seconds=min(60,budget['wall_seconds']),artifact_bytes=min(64*2**20,budget['artifact_bytes']))
     output.mkdir(exist_ok=False)
     command=[backend,topology/'topology.json',protocol,config,output/'result.json']
     save(output/'inputs.json',dict(command=list(map(str,command)),native_commit=NATIVE_COMMIT,

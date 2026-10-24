@@ -19,6 +19,26 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 若实际输出位置不同，以`backend.json.stream_probe`为准。CMake/Ninja不在PATH时，构建支持`--cmake`、`--ninja`；已有Protobuf可通过`--protobuf-prefix`指定。只使用已安装工具。CLI路径相对cwd，输出目录须不存在、父目录须存在。已有可用原生二进制时无需重新构建。
 
+## 较大集群的显式容量
+
+`moe-rdma-stream-work/4`沿用v3的write/local依赖语义，并显式声明三项上限：`max_streams`为1—4096，`max_work`为1—65536，`max_link_transmissions`为1—2000000。最后一项累计全网每条物理链路上的发送事件，包括数据、ACK及其他控制包；一次端到端包经过六跳会计六次。超限失败，不截断。输出在`persistent_transport.execution_limits/link_transmissions`保存生效声明和实际次数，只有v4增加这些字段。
+
+v4使用协议`limits`已经验证的RSS/地址预算，仍限每命令60秒和64MiB产物；旧v1—v3继续夹限1GiB RSS/2GiB地址空间。8MiB输入、每条流64MiB累计序号、工作id≤65535、全局唯一wire_port以及原有采集/结果限制仍独立生效；最大声明不表示全部参数组合都已通过。各NIC必须是端点实际端口并属于声明plane，native仍检查正反向唯一可达。
+
+生成一个可直接执行的合成小例（输出须不存在）：
+
+```bash
+python3 -B examples/scaleout_rdma_streams/ep_groups.py \
+  --gpus 8 --ep 4 --rounds 2 --payload-bytes 768 --local-ns 100 \
+  --output runs/group-work.json
+```
+
+沿用上文topology/protocol/backend执行命令，把`--config`换成生成文件即可。生成器支持N=2—1024、EP=2—32且整除N，组数N/EP；同时要求有向连接数`N*(EP-1)≤4096`、节点数`rounds*(2*N*(EP-1)+2*N)≤65536`。先检查数量再生成，不支持千卡单组全互连。每组成员按跨步rank排列，物理Pod/机架归属仍以实际topology为准；固定NIC1/plane0，其他绑定须明确修改输入并通过检查。
+
+每轮先在每组所有非self对之间发送第一阶段数据；每个rank等全部入站实际接收及出站ACK后执行声明local，再执行第二阶段All-to-All，消费完成才进入下一轮。没有固定通信ready时刻，QP及序号不重建。local时长是声明值；这不是MoE路由、专家数值计算、现代GIN自发通信或生产屏障模型。
+
+[容量验收](../../fixtures/persistent_scale/README.md)已实际执行8/128/1024端点。1024端点是256组EP4、3072条有向连接，短合成两轮共16384节点，不是完整模型或单组EP1024。旧完整模型千卡执行仍超时未通过，不能用本例18秒级宿主用时给推理加速比。更大拓扑的交换机固定数组会占用宿主内存，应在协议中显式核算并声明资源；本次目标为4GiB RSS/8GiB地址、5ms模拟、32MiB结果。
+
 ## 输入与事件
 
 `moe-rdma-stream-work/1`包含`streams`和`work`，完整输入见[work.json](work.json)。需要超过原小例计数时使用`moe-rdma-stream-work/2`，在根对象增加明确的`limits`，其他字段及事件语义相同。例如：
@@ -43,7 +63,7 @@ PYTHONPATH=python python3 -m moe_ub_cosim scaleout rdma-stream-probe \
 
 默认6次传输共31,457B。work1等work0接收后就绪，深度1使其等ACK后才发布；后续工作检查空闲后追加。另一连接同时向相同目的GPU传输，共享同一网络状态与时钟。999/1001B等尺寸检查包边界；14,464/14,400B也只是操作数，不是一次现代MoE调用。拓扑的A100标签没有GPU测量含义。
 
-本模式独占Fabric传输入口，不能混用旧Send、软件准入、旧式recovery/drop_once、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；显式持久恢复及故障配置见下节。v1仍限制rank≤31；v2按协议的`max_gpus`及实际图检查端点，协议v1默认32GPU。协议v2虽支持更大的图，持久入口本次只验收8GPU上的24连接/192工作，不代表千卡已验证；固定交换机计数器的内存检查和宿主RSS上限仍生效。
+本模式独占Fabric传输入口，不能混用旧Send、软件准入、旧式recovery/drop_once、lifecycle_capture或机内bypass。支持DCQCN、ACK间隔1及正常原生NACK处理；显式持久恢复及故障配置见下节。v1仍限制rank≤31；v2及后续按协议的`max_gpus`及实际图检查端点，协议v1默认32GPU。v2历史验收为8GPU上的24连接/192工作；后续v4另验收千端点短合成程序，范围见[显式容量](#较大集群的显式容量)。固定交换机计数器的内存检查和宿主预算仍生效，不能由此推论完整千卡MoE已验证。
 
 内部按唯一线端端口查连接，以有序累计前缀处理发布、接收和ACK，实际发送序号通过二分查找工作边界（允许原生NACK回退）。依赖只在真实回调发生后释放，以输入顺序处理同时就绪的工作。它们减少宿主扫描，不修改包、QP信用、网络时间或路径规则；没有新增网络性能收益主张。
 

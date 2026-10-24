@@ -24,19 +24,27 @@ int main(int argc,char** argv) {
     ns3::Time::SetResolution(ns3::Time::NS);
     auto config=ReadJson(argv[2]),input=ReadJson(argv[3]);
     const auto schema=input.at("schema_version").get<std::string>();
-    const bool local_mode=schema=="moe-rdma-stream-work/3";
+    const bool scale_mode=schema=="moe-rdma-stream-work/4";
+    const bool local_mode=scale_mode || schema=="moe-rdma-stream-work/3";
     Require(schema=="moe-rdma-stream-work/1" || schema=="moe-rdma-stream-work/2" || local_mode,"wrong stream work schema");
     PersistentStreams::Limits limits;
     if(schema=="moe-rdma-stream-work/2" || local_mode) {
       const auto& declared=input.at("limits");
-      Require(declared.is_object() && declared.size()==2,"stream limits require max_streams/max_work");
+      Require(declared.is_object() && declared.size()==(scale_mode?3u:2u),"stream limits require exact count and optional v4 transmission fields");
       auto count=[&](const char* key,int maximum) {
         const auto& value=declared.at(key);
         Require(value.is_number_integer() && value>=1 && value<=maximum,"invalid stream count limit");
         return value.get<unsigned>();
       };
-      limits={count("max_streams",128),count("max_work",8192)};
+      limits={count("max_streams",scale_mode?4096:128),count("max_work",scale_mode?65536:8192),
+              scale_mode?count("max_link_transmissions",2000000):200000u};
     } else Require(!input.contains("limits"),"v1 stream work has fixed limits");
+    if(scale_mode) {
+      Require(input.at("streams").is_array() && !input.at("streams").empty() && input.at("streams").size()<=limits.streams,
+              "stream count budget exceeded before allocation");
+      Require(input.at("work").is_array() && !input.at("work").empty() && input.at("work").size()<=limits.work,
+              "stream work count budget exceeded before allocation");
+    }
     ns3::RngSeedManager::SetSeed(config.at("seed"));
     const auto topology=ReadJson(argv[1]);
     Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
@@ -139,6 +147,10 @@ int main(int argc,char** argv) {
     ns3::Simulator::ScheduleNow(progress);
     ns3::Simulator::Stop(ns3::NanoSeconds(fabric.MaxSimNs()));ns3::Simulator::Run();
     auto result=fabric.Report();result["persistent_transport"]=transport.Report();
+    if(scale_mode) {
+      result["persistent_transport"]["execution_limits"]=input.at("limits");
+      result["persistent_transport"]["link_transmissions"]=transport.LinkTransmissions();
+    }
     result["completed_work"]=complete;result["loaded_libraries"]=Json::array();
     if(local_mode) {
       result["local_model"]=input.at("local_model");result["local_work"]=Json::array();

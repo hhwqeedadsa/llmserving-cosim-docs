@@ -1,0 +1,14 @@
+{
+  "actual_kernel_or_hardware_executed": false,
+  "byte_equal": {
+    "build/selected.c": "0d1dfa8cbeb8b8dba8bed1f13e9e2ee717d31341009fb1bb425e39f2b38536eb",
+    "correction.json": "4f92e00c2f5653ca44d74a8c70326e313f09bd8de3f0330e227118cab89da930",
+    "harness.json": "e682be041127a2827ac278d58909153ee88aad9411c213dd3d359e553572e383",
+    "summary.json": "1d511dfc8623818ae6f939434bb5288e40e334d2eed82981190e2abad0d3d079",
+    "verification.json": "64860b7aca11baf80f89b6447865c33c0f853f162817da3425710f5ac05a87a7"
+  },
+  "commands": 5,
+  "new_ns3_networks": 0,
+  "requires": "host Python standard library, gcc, libc; recording substitutes only",
+  "schema_version": "target-retirement-replay/1"
+}

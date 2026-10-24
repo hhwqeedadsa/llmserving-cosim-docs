@@ -1,0 +1,22 @@
+{
+  "analysis_change": "all 16 claims now include hashed source intervals, including the main DeepEP window",
+  "mlx5_dereg_definition_line": 2047,
+  "reason": "original parser selected a forward declaration instead of the later definition",
+  "schema_version": "target-retirement-parser-correction/1",
+  "source_harness_rerun_required": false,
+  "unchanged_compiled_function_count": 12,
+  "unchanged_compiled_functions": [
+    "rxe_get_next_key",
+    "mr_check_range",
+    "rxe_mr_copy",
+    "rxe_pool_get_index",
+    "rxe_elem_release",
+    "__rxe_put",
+    "__rxe_cleanup",
+    "lookup_mr",
+    "rxe_invalidate_mr",
+    "rxe_reg_fast_mr",
+    "rxe_dereg_mr",
+    "mlx5r_umr_revoke_mr"
+  ]
+}

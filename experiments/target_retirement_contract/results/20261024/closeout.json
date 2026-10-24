@@ -1,0 +1,113 @@
+{
+  "actual_kernel_or_hardware_executed": false,
+  "archive": {
+    "archive_bytes": 279601,
+    "archive_sha256": "5526f665afd61b5eec6a46296d29a6b9bfd8ed9f6c00e5169d6ac40f3eb41a93",
+    "executes_on_restore": false,
+    "members": 112,
+    "plain_bytes": 1174267,
+    "schema_version": "target-retirement-checkpoint/1"
+  },
+  "initial_raw_acquisition_wall_limit_preserved": true,
+  "initial_request_limit_violated": true,
+  "malformed_packages_rejected_before_output": 5,
+  "new_ns3_networks": 0,
+  "offline_replay_byte_equal_files": 5,
+  "own_monitor_not_yet_final": true,
+  "paper_innovation_established": false,
+  "persistent_checkpoint": "/home/lry/moe-ub-cosim/runs/target_retirement_checkpoint_20261024",
+  "platform_code_unchanged": true,
+  "platform_commit": "a30296c",
+  "post_monitor_budget_receipt": "budget.json",
+  "prior_completed_monitor_records": [
+    {
+      "name": "acquire-monitor",
+      "status": "wall_limit",
+      "wall_seconds": 60.16238693520427
+    },
+    {
+      "name": "analyze-corrected-monitor",
+      "status": "completed",
+      "wall_seconds": 0.12255038693547249
+    },
+    {
+      "name": "analyze-excerpts-monitor",
+      "status": "completed",
+      "wall_seconds": 0.12758267670869827
+    },
+    {
+      "name": "analyze-monitor",
+      "status": "child_failed",
+      "wall_seconds": 0.12226809374988079
+    },
+    {
+      "name": "api-monitor",
+      "status": "completed",
+      "wall_seconds": 3.9604512080550194
+    },
+    {
+      "name": "build-monitor",
+      "status": "completed",
+      "wall_seconds": 0.4498403016477823
+    },
+    {
+      "name": "checkpoint-monitor",
+      "status": "completed",
+      "wall_seconds": 0.2370920367538929
+    },
+    {
+      "name": "correction-monitor",
+      "status": "completed",
+      "wall_seconds": 0.12830800004303455
+    },
+    {
+      "name": "prepare-monitor",
+      "status": "completed",
+      "wall_seconds": 0.12382886558771133
+    },
+    {
+      "name": "replay-monitor",
+      "status": "completed",
+      "wall_seconds": 0.5726471487432718
+    },
+    {
+      "name": "restore-check-monitor",
+      "status": "completed",
+      "wall_seconds": 0.14209642447531223
+    },
+    {
+      "name": "restore-monitor",
+      "status": "completed",
+      "wall_seconds": 0.13359755091369152
+    },
+    {
+      "name": "source-run-monitor",
+      "status": "completed",
+      "wall_seconds": 0.018512671813368797
+    },
+    {
+      "name": "umr-monitor",
+      "status": "completed",
+      "wall_seconds": 1.174005763605237
+    },
+    {
+      "name": "verify-monitor",
+      "status": "completed",
+      "wall_seconds": 0.12954953499138355
+    }
+  ],
+  "schema_version": "target-retirement-closeout/1",
+  "source_analysis_failure_and_original_parser_preserved": true,
+  "syntax_checked": [
+    "analyze.py",
+    "build.py",
+    "check_restore.py",
+    "checkpoint.py",
+    "closeout.py",
+    "correction.py",
+    "extract.py",
+    "prepare.py",
+    "replay.py",
+    "verify.py"
+  ]
+}

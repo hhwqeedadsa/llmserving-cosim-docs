@@ -1,0 +1,154 @@
+{
+  "all_monitored_groups_exited": true,
+  "api_response_count": 8,
+  "checked_repository_links": 7,
+  "final_receipts_reserved_bytes": 131072,
+  "finalization_elapsed_before_receipts_seconds": 0.03367376886308193,
+  "finalization_seconds_reserved": 10,
+  "initial_raw_batch_unknown_outcomes_preserved": true,
+  "known_recorded_response_bytes": 264065,
+  "monitored_seconds": 68.32642882503569,
+  "original_monitor_records": [
+    {
+      "max_waited_child_rss_kib": 22876,
+      "name": "acquire-monitor",
+      "peak_sampled_group_rss_bytes": 23425024,
+      "status": "wall_limit",
+      "wall_seconds": 60.16238693520427
+    },
+    {
+      "max_waited_child_rss_kib": 17636,
+      "name": "analyze-corrected-monitor",
+      "peak_sampled_group_rss_bytes": 6443008,
+      "status": "completed",
+      "wall_seconds": 0.12255038693547249
+    },
+    {
+      "max_waited_child_rss_kib": 17616,
+      "name": "analyze-excerpts-monitor",
+      "peak_sampled_group_rss_bytes": 5353472,
+      "status": "completed",
+      "wall_seconds": 0.12758267670869827
+    },
+    {
+      "max_waited_child_rss_kib": 17632,
+      "name": "analyze-monitor",
+      "peak_sampled_group_rss_bytes": 6438912,
+      "status": "child_failed",
+      "wall_seconds": 0.12226809374988079
+    },
+    {
+      "max_waited_child_rss_kib": 16648,
+      "name": "api-monitor",
+      "peak_sampled_group_rss_bytes": 55693312,
+      "status": "completed",
+      "wall_seconds": 3.9604512080550194
+    },
+    {
+      "max_waited_child_rss_kib": 26968,
+      "name": "build-monitor",
+      "peak_sampled_group_rss_bytes": 19136512,
+      "status": "completed",
+      "wall_seconds": 0.4498403016477823
+    },
+    {
+      "max_waited_child_rss_kib": 18700,
+      "name": "checkpoint-monitor",
+      "peak_sampled_group_rss_bytes": 19148800,
+      "status": "completed",
+      "wall_seconds": 0.2370920367538929
+    },
+    {
+      "max_waited_child_rss_kib": 18648,
+      "name": "closeout-monitor",
+      "peak_sampled_group_rss_bytes": 18046976,
+      "status": "completed",
+      "wall_seconds": 0.25155339762568474
+    },
+    {
+      "max_waited_child_rss_kib": 16592,
+      "name": "correction-monitor",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "completed",
+      "wall_seconds": 0.12830800004303455
+    },
+    {
+      "max_waited_child_rss_kib": 16608,
+      "name": "deps-monitor",
+      "peak_sampled_group_rss_bytes": 22376448,
+      "status": "completed",
+      "wall_seconds": 0.47015782818198204
+    },
+    {
+      "max_waited_child_rss_kib": 16560,
+      "name": "prepare-monitor",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12382886558771133
+    },
+    {
+      "max_waited_child_rss_kib": 28044,
+      "name": "replay-monitor",
+      "peak_sampled_group_rss_bytes": 53354496,
+      "status": "completed",
+      "wall_seconds": 0.5726471487432718
+    },
+    {
+      "max_waited_child_rss_kib": 17704,
+      "name": "restore-check-monitor",
+      "peak_sampled_group_rss_bytes": 7503872,
+      "status": "completed",
+      "wall_seconds": 0.14209642447531223
+    },
+    {
+      "max_waited_child_rss_kib": 18612,
+      "name": "restore-monitor",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.13359755091369152
+    },
+    {
+      "max_waited_child_rss_kib": 9728,
+      "name": "source-run-monitor",
+      "peak_sampled_group_rss_bytes": 0,
+      "status": "completed",
+      "wall_seconds": 0.018512671813368797
+    },
+    {
+      "max_waited_child_rss_kib": 15560,
+      "name": "umr-monitor",
+      "peak_sampled_group_rss_bytes": 28745728,
+      "status": "completed",
+      "wall_seconds": 1.174005763605237
+    },
+    {
+      "max_waited_child_rss_kib": 17620,
+      "name": "verify-monitor",
+      "peak_sampled_group_rss_bytes": 6430720,
+      "status": "completed",
+      "wall_seconds": 0.12954953499138355
+    }
+  ],
+  "original_single_request_8_second_goal_violated": true,
+  "original_wall_limited_command_termination_overhead_preserved": true,
+  "root_free_bytes": 83514408960,
+  "schema_version": "target-retirement-budget/1",
+  "stage_disk_limit_bytes": 67108864,
+  "stage_limit_seconds": 240,
+  "syntax_checked_files": [
+    "analyze.py",
+    "build.py",
+    "check_restore.py",
+    "checkpoint.py",
+    "closeout.py",
+    "correction.py",
+    "extract.py",
+    "finalize.py",
+    "prepare.py",
+    "replay.py",
+    "verify.py"
+  ],
+  "tmpfs_free_bytes": 257112100864,
+  "unique_allocated_bytes_before_receipts": 3768320,
+  "unique_apparent_bytes_before_receipts": 3018422
+}

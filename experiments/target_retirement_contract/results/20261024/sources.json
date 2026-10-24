@@ -1,0 +1,126 @@
+[
+  {
+    "alias": "rxe_mr.c",
+    "bytes": 15620,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "da3dee520876a3ab392637416524bf2c68450421",
+    "path": "drivers/infiniband/sw/rxe/rxe_mr.c",
+    "project": "linux",
+    "sha256": "ad697c8fa120de1dad75566fec2e01757b6bc1d5e43355e06e7d43652e58ba4d",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_mr.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_pool.c",
+    "bytes": 6113,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "67567d62195e865023ad71dfde58bf078958e617",
+    "path": "drivers/infiniband/sw/rxe/rxe_pool.c",
+    "project": "linux",
+    "sha256": "c64c8548667a749e9bcf610f1c9875b56a93d42206cf4c6f1ad7071ff4571bbb",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_pool.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_pool.h",
+    "bytes": 2228,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "b42e26427a702924d01c780102b1a9a8dfdb594a",
+    "path": "drivers/infiniband/sw/rxe/rxe_pool.h",
+    "project": "linux",
+    "sha256": "745928a7ebf75a1745aadb47e0013fa6fd656756b3879e4621c26ce8d6df73db",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_pool.h?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_verbs.c",
+    "bytes": 34562,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "5c18f7e342f29400369758a43c0d09a92e9e01ae",
+    "path": "drivers/infiniband/sw/rxe/rxe_verbs.c",
+    "project": "linux",
+    "sha256": "c521a5938e0b92d7d08677e01cce5082cb7950cd17aae982d9ca869f148b02e1",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_verbs.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_qp.c",
+    "bytes": 20154,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "d2f7b5195c19dd2df34f3c24f3031e946804eb6d",
+    "path": "drivers/infiniband/sw/rxe/rxe_qp.c",
+    "project": "linux",
+    "sha256": "6f3c23174e2862beea5eb7094697956f143345d66dd1c68e2c3a8f4766c26e7b",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_qp.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_mw.c",
+    "bytes": 7152,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "379e65bfcd49af8f3d1389246adabe8763dad82f",
+    "path": "drivers/infiniband/sw/rxe/rxe_mw.c",
+    "project": "linux",
+    "sha256": "de52f790c6f5bdbb0de21b66fc6a126f74b0407213ad11e8305a33b4e497cbaa",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/sw/rxe/rxe_mw.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "mlx5_mr.c",
+    "bytes": 76200,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "45d9dc9c6c8fdaa30718cdf7e6ba6613f53931fa",
+    "path": "drivers/infiniband/hw/mlx5/mr.c",
+    "project": "linux",
+    "sha256": "a97ab9e9e1ce61233864689bf9d258370407492b3cd6808f3010955b2ce2e399",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/hw/mlx5/mr.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "mlx5_umr.c",
+    "bytes": 21781,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "git_blob_sha": "887fd6fa3ba930f57296f6629b4b517fae061788",
+    "path": "drivers/infiniband/hw/mlx5/umr.c",
+    "project": "linux",
+    "sha256": "9288742e6017f2b3fc88d3e73f2417b92dffc860671236f4337d35521d1ec8f9",
+    "url": "https://api.github.com/repos/torvalds/linux/contents/drivers/infiniband/hw/mlx5/umr.c?ref=adc218676eef25575469234709c2d87185ca223a"
+  },
+  {
+    "alias": "rxe_req.c",
+    "bytes": 20319,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "commit_resolution": "original fixed-tag read; tag resolved this phase; no new content fetch",
+    "git_blob_sha": "479c07e6e4ed3eab4646400455897cd20e3316a2",
+    "path": "drivers/infiniband/sw/rxe/rxe_req.c",
+    "project": "linux",
+    "ref": "v6.12",
+    "sha256": "c829196711751667ba37226cb55d9f0e2d41aa4ae7e68be25693924d6559b359",
+    "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_req.c"
+  },
+  {
+    "alias": "rxe_resp.c",
+    "bytes": 40930,
+    "commit": "adc218676eef25575469234709c2d87185ca223a",
+    "commit_resolution": "original fixed-tag read; tag resolved this phase; no new content fetch",
+    "git_blob_sha": "c11ab280551a8638e1d9c8fa33f8bc9fc743c020",
+    "path": "drivers/infiniband/sw/rxe/rxe_resp.c",
+    "project": "linux",
+    "ref": "v6.12",
+    "sha256": "b5cdbf37a48ecaa6f9d5f397e5f064317a48d93573b23546cf2fd2c602322e59",
+    "url": "https://raw.githubusercontent.com/torvalds/linux/v6.12/drivers/infiniband/sw/rxe/rxe_resp.c"
+  },
+  {
+    "alias": "gin_host_gdaki.cc",
+    "bytes": 60093,
+    "commit": "12df1a11afad322be5a204a2db890161cbf8131d",
+    "git_blob_sha": "976ab919d4ee438147f635d247721704bd511868",
+    "path": "src/transport/net_ib/gdaki/gin_host_gdaki.cc",
+    "project": "nccl",
+    "sha256": "d554a0295c463782d60a36b746ed8e998c7e427493f00e6b6813f9d945fdd361",
+    "url": "https://github.com/NVIDIA/nccl/blob/12df1a11afad322be5a204a2db890161cbf8131d/src/transport/net_ib/gdaki/gin_host_gdaki.cc"
+  },
+  {
+    "alias": "deepep_context.cpp",
+    "bytes": 12061,
+    "commit": "f6aa38fe06cd4a0489e7730365d4e0114970a2f3",
+    "git_blob_sha": "d26fdac9a7b280617653f1b6775587d056e85a28",
+    "path": "csrc/kernels/comm/context.cpp",
+    "project": "deepep",
+    "sha256": "c420b55314b9525dcb7e9f6c9d23a11cfe62a20268887493b76fc52881bb5e6a",
+    "url": "https://github.com/deepseek-ai/DeepEP/blob/f6aa38fe06cd4a0489e7730365d4e0114970a2f3/csrc/kernels/comm/context.cpp"
+  }
+]

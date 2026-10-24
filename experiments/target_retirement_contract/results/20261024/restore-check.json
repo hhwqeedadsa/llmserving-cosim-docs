@@ -1,0 +1,26 @@
+{
+  "network_or_hardware_executed": false,
+  "rejected_before_output": [
+    {
+      "kind": "traversal",
+      "reason": "unsafe member name"
+    },
+    {
+      "kind": "symlink",
+      "reason": "nonregular or duplicate member"
+    },
+    {
+      "kind": "duplicate",
+      "reason": "nonregular or duplicate member"
+    },
+    {
+      "kind": "bad_hash",
+      "reason": "checksum mismatch"
+    },
+    {
+      "kind": "oversize",
+      "reason": "package limit"
+    }
+  ],
+  "schema_version": "target-retirement-restore-check/1"
+}

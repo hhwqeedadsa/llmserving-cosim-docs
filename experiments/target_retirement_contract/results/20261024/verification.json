@@ -1,0 +1,14 @@
+{
+  "claim_excerpts": 16,
+  "exact_original_functions": 12,
+  "key_oracle_pairs": 65280,
+  "platform_or_hardware_executed": false,
+  "schema_version": "target-retirement-verification/1",
+  "source_files": 12,
+  "tampering_rejected": [
+    "weaken_fence",
+    "claim_hardware",
+    "per_expert_authority",
+    "key_count"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "monitored_reports": 62,
+  "conservative_nested_monitored_seconds": 117.67764085717499,
+  "stage_budget_seconds": 600,
+  "stage_usage": {
+    "apparent_bytes": 113900202,
+    "allocated_bytes": 118157312
+  },
+  "persistent_usage": {
+    "apparent_bytes": 12400856,
+    "allocated_bytes": 12455936
+  },
+  "combined_usage": {
+    "apparent_bytes": 126301058,
+    "allocated_bytes": 130613248
+  },
+  "stage_artifact_budget_bytes": 268435456,
+  "peak_sampled_group_rss_bytes": 663277568,
+  "expected_failure_monitors": [
+    "nack-monitor/probe.json",
+    "prefix-regression/aggregate-tail-online/execution/probe.json",
+    "prefix-regression/depth-one-online/execution/probe.json",
+    "prefix-regression/fence-does-not-publish-online/execution/probe.json",
+    "stream-regression/wrong-nic/execution/probe.json",
+    "transaction-regression/wrong-nic/execution/probe.json"
+  ],
+  "unexpected_failures": [],
+  "live_owned_monitored_group_pids": [],
+  "protected_sources_libraries_and_old_binaries_unchanged": true,
+  "build_sources_and_three_new_binaries_unchanged": true,
+  "restored_1012_members_unchanged": true,
+  "persistent_archive_hash_verified": true,
+  "archive_sha256": "21eb4a870d5590dffb8593cb572abcf3b861978dca52a06bc6174c2718484417",
+  "recovery_sha256": "f82b47672eea6e3cfcae5b08d30f017bc95814bbbbcebeb3c9b916701a79e20d",
+  "fixed_dependency_checkouts": 13,
+  "tmpfs_free_bytes": 257436274688,
+  "root_free_bytes": 435269632,
+  "counts_exclude_copied_monitor_reports_in_restored_evidence": true,
+  "resource_scope": "cumulative monitored workload time (nested conservatively double-counted), not elapsed calendar time; both stage and persistent artifact copies charged",
+  "no_download_install_gpu_or_dependency_change": true,
+  "no_old_prefill_thousand_gpu_failure_or_research_matrix_rerun": true,
+  "remote_backup": false,
+  "overall_paper_goal_complete": false,
+  "metadata_closeout_seconds": 0.4937189072370529,
+  "closeout_report_and_copy_allowance_bytes": 65536,
+  "charged_combined_artifact_bytes": 130678784,
+  "restored_member_manifest_byte_identical": true
+}

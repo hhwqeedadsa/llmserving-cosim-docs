@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "kind": "traversal",
+      "rejected": true,
+      "reason": "unsafe member: source/../../escape",
+      "destination_not_created": true
+    },
+    {
+      "kind": "hardlink",
+      "rejected": true,
+      "reason": "duplicate/nonfile/missing member",
+      "destination_not_created": true
+    },
+    {
+      "kind": "duplicate",
+      "rejected": true,
+      "reason": "duplicate/nonfile/missing member",
+      "destination_not_created": true
+    },
+    {
+      "kind": "wrong-hash",
+      "rejected": true,
+      "reason": "archive size/identity mismatch",
+      "destination_not_created": true
+    }
+  ],
+  "scope": "artifact recovery input guards; not data-plane security research"
+}

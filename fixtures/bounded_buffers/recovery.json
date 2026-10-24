@@ -1,0 +1,49 @@
+{
+  "all_members_hash_unchanged": true,
+  "cwd": "/dev/shm/moe-bounded-buffers-20261024/replayed/empty-cwd",
+  "full_probe_equal_except_library_directories": true,
+  "full_session_equal_except_session_envelope_and_library_directories": true,
+  "network_replays": 2,
+  "offline_audit_byte_equal": true,
+  "offline_audit_recomputations": 1,
+  "packaged_ns3_libraries": 8,
+  "passed": true,
+  "scope": "prebuilt runtime replay; host Linux/Python/loader/ABI still required",
+  "source": "/dev/shm/moe-bounded-buffers-20261024/restored/source",
+  "checkpoint": {
+    "all_members_verified": true,
+    "archive_bytes": 12210070,
+    "members": 1012,
+    "ns3_libraries": 8,
+    "passed": true,
+    "plain_bytes": 61046656,
+    "scope": "prebuilt Linux runtime with pinned ns-3; host ABI/Python/loader still required",
+    "sha256": "21eb4a870d5590dffb8593cb572abcf3b861978dca52a06bc6174c2718484417",
+    "transaction_binaries": 2
+  },
+  "persistence": {
+    "passed": true,
+    "destination": "/home/lry/moe-ub-cosim/runs/bounded_buffers_checkpoint_20261024",
+    "files": [
+      {
+        "name": "checkpoint.tar.gz",
+        "bytes": 12210070,
+        "sha256": "21eb4a870d5590dffb8593cb572abcf3b861978dca52a06bc6174c2718484417"
+      },
+      {
+        "name": "archive.json",
+        "bytes": 352,
+        "sha256": "ec184c38b8319a83355dd36047460472dfbcd0f5d51478e824b5938724444e64"
+      },
+      {
+        "name": "manifest.json",
+        "bytes": 179830,
+        "sha256": "351c6c7fca7d6c6a03529bf451aeb27a52363bf637799f5ea9ecb75091ef4b3d"
+      }
+    ],
+    "bytes": 12390252,
+    "root_reserve_bytes": 67108864,
+    "root_free_after": 448491520,
+    "remote_backup": false
+  }
+}

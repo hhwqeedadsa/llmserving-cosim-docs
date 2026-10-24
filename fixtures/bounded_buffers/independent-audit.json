@@ -1,0 +1,302 @@
+{
+  "actual_target_effects": 24,
+  "passed": true,
+  "pools": [
+    {
+      "acquisitions": 1,
+      "actual_source_captures": 1,
+      "case": "functional/ample",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 1,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 40
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "functional/cross-connection",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 80
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "functional/failed-exhausted",
+      "held_payload_bytes": 40,
+      "native_full_result_passed": false,
+      "releases": 1,
+      "source_lease_referenced_bytes": 16,
+      "target_cache_bytes": 80
+    },
+    {
+      "acquisitions": 3,
+      "actual_source_captures": 3,
+      "case": "functional/failed-held-with-spare",
+      "held_payload_bytes": 40,
+      "native_full_result_passed": false,
+      "releases": 2,
+      "source_lease_referenced_bytes": 8,
+      "target_cache_bytes": 120
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "functional/independent-sources",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 80
+    },
+    {
+      "acquisitions": 4,
+      "actual_source_captures": 4,
+      "case": "functional/single-frame-reuse",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 4,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 160
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "functional/tail-data-retry",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 4160
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "nack/middle-data-nack",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 4160
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "corrected-tail/tail-data-retry",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 4160
+    },
+    {
+      "acquisitions": 2,
+      "actual_source_captures": 2,
+      "case": "corrected-nack/middle-data-nack",
+      "held_payload_bytes": 0,
+      "native_full_result_passed": true,
+      "releases": 2,
+      "source_lease_referenced_bytes": 0,
+      "target_cache_bytes": 4160
+    }
+  ],
+  "scope": "independent stdlib pool/actual ACK/source bytes plus separate wire/memory replay; named contents only, not total RSS/HBM",
+  "source_transmissions": 76,
+  "tamper_rejections": [
+    {
+      "kind": "early_release",
+      "reason": "payload released before full cumulative ACK"
+    },
+    {
+      "kind": "peak",
+      "reason": "false pool peak/terminal usage"
+    },
+    {
+      "kind": "output",
+      "reason": "final memory differs from real write/copy replay"
+    }
+  ],
+  "wire_and_memory": [
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "functional/ample",
+      "control_alarms": 0,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "10": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 1488,
+      "case": "functional/cross-connection",
+      "control_alarms": 0,
+      "finish_ns": 24120,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 2,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "functional/default",
+      "control_alarms": 0,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "10": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 3720,
+      "case": "functional/failed-exhausted",
+      "control_alarms": 1,
+      "finish_ns": 5000000,
+      "local_completion_ns": {},
+      "passed": false,
+      "retained_source_leases": [
+        {
+          "address": 4096,
+          "bytes": 8,
+          "key": 7,
+          "operation": 0,
+          "owner": 0
+        },
+        {
+          "address": 4096,
+          "bytes": 8,
+          "key": 7,
+          "operation": 1,
+          "owner": 0
+        }
+      ],
+      "source_packets": 5,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 1,
+      "all_port_model_bytes": 5208,
+      "case": "functional/failed-held-with-spare",
+      "control_alarms": 1,
+      "finish_ns": 5000000,
+      "local_completion_ns": {},
+      "passed": false,
+      "retained_source_leases": [
+        {
+          "address": 4096,
+          "bytes": 8,
+          "key": 7,
+          "operation": 0,
+          "owner": 0
+        }
+      ],
+      "source_packets": 7,
+      "target_effects": 3
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 1488,
+      "case": "functional/independent-sources",
+      "control_alarms": 0,
+      "finish_ns": 12066,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 2,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 744,
+      "case": "functional/old-default",
+      "control_alarms": 0,
+      "finish_ns": 12060,
+      "local_completion_ns": {
+        "10": 6036
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 1,
+      "target_effects": 1
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 2976,
+      "case": "functional/single-frame-reuse",
+      "control_alarms": 0,
+      "finish_ns": 48240,
+      "local_completion_ns": {
+        "10": 6036,
+        "11": 18096,
+        "12": 30156,
+        "13": 42216
+      },
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 4,
+      "target_effects": 4
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 55968,
+      "case": "functional/tail-data-retry",
+      "control_alarms": 0,
+      "finish_ns": 35228,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 12,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 55968,
+      "case": "nack/middle-data-nack",
+      "control_alarms": 0,
+      "finish_ns": 35228,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 12,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 56664,
+      "case": "corrected-tail/tail-data-retry",
+      "control_alarms": 0,
+      "finish_ns": 45228,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 13,
+      "target_effects": 2
+    },
+    {
+      "alarm_callbacks": 0,
+      "all_port_model_bytes": 70656,
+      "case": "corrected-nack/middle-data-nack",
+      "control_alarms": 0,
+      "finish_ns": 45228,
+      "local_completion_ns": {},
+      "passed": true,
+      "retained_source_leases": [],
+      "source_packets": 16,
+      "target_effects": 2
+    }
+  ]
+}

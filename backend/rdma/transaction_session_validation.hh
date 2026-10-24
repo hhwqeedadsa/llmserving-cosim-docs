@@ -1,6 +1,7 @@
 #pragma once
 #include "remote_transactions.hh"
 #include "transaction_effect_order.hh"
+#include "bounded_buffers.hh"
 
 namespace moe_rdma {
 // Pure admission validation. Never inspect a live byte value/lease to validate
@@ -18,6 +19,7 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
   auto root_keys=std::vector<std::string>{"schema_version","connections","windows","operations","local_model","source_model","local_memory_model"};
   if(explicit_submission)root_keys.push_back("submission_model");
   if(input.contains("transport_recovery"))root_keys.push_back("transport_recovery");
+  if(input.contains("buffer_model"))root_keys.push_back("buffer_model");
   SessionKeys(input,root_keys);
   const bool sparse=input.at("schema_version")=="moe-rdma-transactions/5";
   if(explicit_submission)Require(sparse && input.at("submission_model")==Json{{"mode","explicit_prefix/1"}},"unsupported submission model");
@@ -142,5 +144,6 @@ inline void ValidateSessionProgram(const Json& input,const Json& topology,int64_
     Require(local_count<=16 && remote_count<=32,"session kind count budget exceeded");local[id]=is_local;ancestors[id]=std::move(parents);
   }
   ValidateTransactionEffectOrder(input);
+  ValidateBoundedBuffers(input);
 }
 }

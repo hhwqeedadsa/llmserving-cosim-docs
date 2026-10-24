@@ -89,6 +89,11 @@ class RemoteMemory {
   }
   struct Result {bool duplicate;bool atomic;uint64_t old_value;};
   struct ReadLease {unsigned owner;uint32_t key;uint64_t address,bytes;};
+  void ConfigureCacheBudget(uint64_t bytes) {
+    MemoryCheck(contexts_.empty() && !cache_capacity_ && bytes>=33 && bytes<=2*1024*1024,"invalid target cache capacity");
+    cache_capacity_=bytes;
+  }
+  const std::map<unsigned,uint64_t>& CacheBytes() const {return cache_bytes_;}
   void Register(Window window) {
     MemoryCheck(windows_.size()<16 && window.key && Size(window)>0 &&
                 (window.logical_bytes?(window.bytes.empty() && window.logical_bytes<=MaxLogicalBytes && window.pages.size()<=MaxPages):
@@ -125,6 +130,7 @@ class RemoteMemory {
     const auto offset=frame.address-it->address;
     if(frame.verb==MemoryFrame::FetchAdd)MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
     CheckWritable(owner,frame.key,frame.address,length);
+    if(cache_capacity_)MemoryCheck(encoded.size()<=cache_capacity_-cache_bytes_[owner],"target request cache capacity exceeded");
     Result result{false,frame.verb==MemoryFrame::FetchAdd,0};
     if(result.atomic) {
       MemoryCheck(it->atomic && frame.address%8==0,"remote atomic denied/unaligned");
@@ -134,6 +140,7 @@ class RemoteMemory {
       Write(*it,offset,bytes);
     } else Write(*it,offset,frame.body);
     state.saved.emplace(frame.sequence,Saved{owner,encoded,result});++state.next;
+    if(cache_capacity_)cache_bytes_[owner]+=encoded.size();
     return result;
   }
   const std::vector<Window>& Windows() const {return windows_;}
@@ -250,5 +257,7 @@ class RemoteMemory {
   std::map<uint64_t,ReadLease> leases_;
   std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;
+  uint64_t cache_capacity_=0;
+  std::map<unsigned,uint64_t> cache_bytes_;
 };
 }

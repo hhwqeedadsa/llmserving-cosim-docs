@@ -60,7 +60,8 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
     explicit = isinstance(config, dict) and 'submission_model' in config
     fields(config, 'schema_version connections windows operations'+(' local_model' if local_mode else '')+
            (' source_model' if source_mode else '')+(' local_memory_model' if memory_mode else '')+(' submission_model' if explicit and sparse_mode else '')+
-           (' transport_recovery' if 'transport_recovery' in config else ''), 'transaction root')
+           (' transport_recovery' if 'transport_recovery' in config else '')+
+           (' buffer_model' if 'buffer_model' in config else ''), 'transaction root')
     require(config['schema_version'] in ('moe-rdma-transactions/1', 'moe-rdma-transactions/2', 'moe-rdma-transactions/3', 'moe-rdma-transactions/4', 'moe-rdma-transactions/5'), 'unsupported transaction schema')
     if explicit:
         require(config['submission_model'] == dict(mode='explicit_prefix/1'), 'unsupported submission model')
@@ -233,6 +234,36 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
         remote_history.append(op)
         kinds[op['id']] = kind; ancestors[op['id']] = parents; accesses.append((op, key, length))
     require(allow_no_remote or remote_count > 0, 'transaction probe requires remote work')
+    if 'buffer_model' in config:
+        _bounded_buffers(config, registered, by_id)
+
+
+def _bounded_buffers(config, registered, connections):
+    model = config['buffer_model']
+    fields(model, 'mode transport_bytes_per_source registered_bytes_per_owner target_cache_bytes_per_owner local_copy_bytes_per_owner', 'buffer model')
+    require(model['mode'] == 'bounded_copied_put/1' and config['schema_version'] == 'moe-rdma-transactions/4'
+            and 'submission_model' not in config, 'bounded copied buffers require transactions/4 without explicit submission')
+    for key, low, high in (('transport_bytes_per_source', 33, 2*1024*1024),
+                           ('registered_bytes_per_owner', 1, 1024*1024),
+                           ('target_cache_bytes_per_owner', 33, 2*1024*1024),
+                           ('local_copy_bytes_per_owner', 1, 32768)):
+        integer(model[key], key, low, high)
+    windows, cached = {}, {}
+    for (owner, _), (_, size) in registered.items():
+        windows[owner] = windows.get(owner, 0)+size
+        require(windows[owner] <= model['registered_bytes_per_owner'], 'registered window capacity exceeded')
+    for op in config['operations']:
+        if op['kind'] == 'local':
+            if 'copy' in op:
+                require(op['copy']['source']['bytes'] <= model['local_copy_bytes_per_owner'], 'local copy snapshot capacity exceeded')
+            continue
+        require(op['verb'] == 'put' and 'source' in op and 'hex' not in op,
+                'bounded copied buffers support source-window put only')
+        size = op['source']['bytes']+32
+        require(size <= model['transport_bytes_per_source'], 'one frame exceeds source transport capacity')
+        owner = connections[op['connection']]['dst']
+        cached[owner] = cached.get(owner, 0)+size
+        require(cached[owner] <= model['target_cache_bytes_per_owner'], 'retained target request cache capacity exceeded')
 
 
 def probe(topology, protocol, config, backend, output):

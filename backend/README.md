@@ -1,5 +1,7 @@
 # 联合后端接口与执行规则
 
+`bounded_buffers.hh`纯校验transactions/4的可选复制型容量模型；原生在线入口先检查完整候选，再注册操作或修改timer。`PersistentStreams`按源节点共享payload池，仅完整累计ACK清空实际vector并归还空间；`RemoteTransactions::Pump`在捕获前检查容量，传输变化唤醒同源连接。请求body在编码入队后清空，本地快照在实际完成后清空；`RemoteMemory`的请求去重缓存按owner累计保留，不实现淘汰。默认模式保持原行为；支持组合、额度与排除项见[有界缓冲](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)。
+
 `transaction_session.cc`支持有界、可取消的控制timer，使用同一个原生Simulator的真实事件唤醒前端；它与GPU本地FIFO分开，也不发网络包。COMMIT先纯校验整批操作、建立和取消请求，再执行；finish不得隐式丢弃pending timer。无timer时保持默认接口与结果形状，见[接口说明](../examples/scaleout_rdma_transactions/README.md#不占用gpu队列的控制定时器)。
 
 transactions/4支持local节点显式copy源/目标：`AdmitLocal`先检查全部冲突，再消费并保护输入/独占输出；`StartLocal`读取实际字节，`CompleteLocal`先提交输出再释放记录，最后由probe标记完成。`RemoteMemory`将输出独占检查应用于源读、LE64、put/原子/reset；只允许持有该输出记录的提交写出。记录覆盖排队与运行，原生截止及异常保留前缀，见[本地输入输出](../examples/scaleout_rdma_transactions/README.md#本地处理显式读取输入和写出输出)。这是声明耗时的字节复制功能，未声明copy节点的旧语义保持。

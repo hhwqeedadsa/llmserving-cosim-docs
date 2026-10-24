@@ -296,10 +296,23 @@ void PersistentStreams::SubmitPayload(uint64_t stream,uint64_t work,Bytes payloa
   Require(streams_.count(stream) && bool(streams_.at(stream).receiver),"payload stream has no receiver");
   Enqueue(stream,work,bytes,std::move(payload),{},std::move(acked));
 }
+void PersistentStreams::ConfigurePayloadPool(uint64_t bytes) {
+  Require(streams_.empty() && !payload_capacity_ && bytes>=33 && bytes<=2*1024*1024,
+          "invalid payload pool configuration");payload_capacity_=bytes;
+}
+bool PersistentStreams::CanSubmitPayload(uint64_t stream,uint64_t bytes) const {
+  if(!payload_capacity_)return true;
+  const auto source=streams_.at(stream).src;
+  const auto it=payload_used_.find(source);const auto used=it==payload_used_.end()?0:it->second;
+  Require(bytes>0 && bytes<=payload_capacity_,"one payload exceeds source pool capacity");
+  return bytes<=payload_capacity_-used;
+}
 void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Bytes payload,Done accepted,Done acked) {
   Require(!closed_ && streams_.count(stream) && !work_ids_.count(work) && work_ids_.size()<limits_.work &&
           bytes>0 && bytes<=1024*1024,"invalid stream work or work budget");
   auto& s=streams_.at(stream);
+  Require(!payload_capacity_ || (!payload.empty() && CanSubmitPayload(stream,bytes)),
+          "payload submitted without source pool capacity");
   // Application work may become ready after a local source failure (including
   // replies triggered by real in-flight requests). Retain it within the same
   // finite queue budget; Pump keeps the failed producer frozen. Rejecting here
@@ -308,6 +321,11 @@ void PersistentStreams::Enqueue(uint64_t stream,uint64_t work,uint64_t bytes,Byt
   const auto ticket=s.queue.Reserve(work,work);
   Work w;w.id=work;w.bytes=bytes;w.ticket=ticket;w.ready=StreamNow();
   w.payload=std::move(payload);
+  if(payload_capacity_) {
+    auto& used=payload_used_[s.src];used+=bytes;payload_peak_[s.src]=std::max(payload_peak_[s.src],used);
+    payload_events_.push_back({{"kind","acquired"},{"time_ns",StreamNow()},{"source",s.src},
+      {"stream",stream},{"work",work},{"bytes",bytes},{"used_bytes",used}});
+  }
   w.accepted_callback=std::move(accepted);w.acked_callback=std::move(acked);
   s.work.push_back(std::move(w));s.submitted_bytes+=bytes;work_ids_.insert(work);
   Pump(s);Notify();
@@ -392,6 +410,12 @@ int PersistentStreams::Receive(unsigned node,Ptr<Packet> packet,CustomHeader& h)
     while(s->acked_prefix<s->published_prefix && s->work[s->acked_prefix].end<=s->qp->snd_una) {
       auto& w=s->work[s->acked_prefix];
       w.acked=StreamNow();++s->acked_prefix;s->queue.CompleteThrough(w.ticket+1);
+      if(payload_capacity_) {
+        Require(w.payload.size()==w.bytes && payload_used_.at(s->src)>=w.bytes,"payload pool release mismatch");
+        payload_used_.at(s->src)-=w.bytes;Bytes().swap(w.payload);
+        payload_events_.push_back({{"kind","released"},{"time_ns",StreamNow()},{"source",s->src},
+          {"stream",s->qp->GetTag()},{"work",w.id},{"bytes",w.bytes},{"used_bytes",payload_used_.at(s->src)}});
+      }
       if(w.acked_callback)Simulator::ScheduleNow(w.acked_callback);
     }
     Pump(*s);hw->m_nic[s->source_nic].dev->TriggerTransmit();Notify();return 0;
@@ -441,6 +465,7 @@ Ptr<Packet> PersistentStreams::Next(unsigned node,Ptr<RdmaQueuePair> qp) {
   auto it=std::upper_bound(s.work.begin(),end,qp->snd_nxt,
     [](uint64_t sequence,const Work& w){return sequence<w.end;});
   Require(it!=end && it->begin<=qp->snd_nxt,"stream packet covers unpublished bytes");
+  Require(!payload_capacity_ || !it->payload.empty(),"released payload selected for retransmission");
   auto hw=fabric_.drivers_[node]->m_rdma;
   // Native header and packet generation, capped at this work boundary. No
   // operation ID is encoded and neighbouring writes are never coalesced.
@@ -533,6 +558,14 @@ Json PersistentStreams::Report() const {
     {"streams",Json::array()},{"work",Json::array()},{"inflight_packets",inflight_},{"physical_drained",Drained()},
     {"closed",closed_},{"atomic_operations_supported",false},{"gpu_visibility_modeled",false},{"hardware_calibrated",false}};
   result["source_packets"]=source_packets_;
+  if(payload_capacity_) {
+    Json owners=Json::array(),held=Json::array();
+    for(const auto& [source,used]:payload_used_)owners.push_back({{"source",source},{"used_bytes",used},{"peak_bytes",payload_peak_.at(source)}});
+    for(const auto& [stream,s]:streams_)for(const auto& w:s.work)if(!w.payload.empty())
+      held.push_back({{"source",s.src},{"stream",stream},{"work",w.id},{"bytes",w.payload.size()}});
+    result["payload_pool"]={{"capacity_bytes_per_source",payload_capacity_},{"owners",owners},{"held",held},{"events",payload_events_},
+      {"scope","encoded copied payload bytes; release only on full-work cumulative ACK; excludes metadata, packets and observation copies"}};
+  }
   if(recovery_records_) {
     auto r=recovery_records_->Report();r["event_codes"]["prefix_published"]=5;
     r["config"]=recovery_config_;r["failed"]=failed_stream_>=0;

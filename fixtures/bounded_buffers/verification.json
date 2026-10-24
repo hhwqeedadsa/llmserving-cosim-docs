@@ -1,0 +1,96 @@
+{
+  "passed": true,
+  "baseline_commit": "8ddd2c61a2c18f73a54cd6790774423f66317351",
+  "new_accepted_conditions": 9,
+  "old_default_comparisons": 1,
+  "preserved_unmatched_fault_diagnostic_executions": 2,
+  "all_audited_actual_results": 12,
+  "default_complete_result_byte_identical": true,
+  "ample_equal_except_new_fields": true,
+  "new_frontend_unit_cases": 7,
+  "existing_transaction_unit_cases": 34,
+  "native_rejections": [
+    "bool-cap",
+    "negative-cap",
+    "too-large",
+    "extra-field",
+    "zero-copy",
+    "window-cap",
+    "inline",
+    "cache-batch",
+    "frame-batch",
+    "copy-batch"
+  ],
+  "corrected_fault_cases": {
+    "corrected-tail": {
+      "passed": true,
+      "additional_case": "tail-data-retry",
+      "actual_fault_drops": 1,
+      "actual_nack_received_at_source": false,
+      "source_snapshot_preserved_during_recovery": true
+    },
+    "corrected-nack": {
+      "passed": true,
+      "additional_case": "middle-data-nack",
+      "actual_fault_drops": 1,
+      "actual_nack_received_at_source": true,
+      "source_snapshot_preserved_during_recovery": true
+    }
+  },
+  "actual_source_transmissions": 76,
+  "actual_target_effects": 24,
+  "independently_audited_pools": 10,
+  "tamper_rejections": [
+    {
+      "kind": "early_release",
+      "reason": "payload released before full cumulative ACK"
+    },
+    {
+      "kind": "peak",
+      "reason": "false pool peak/terminal usage"
+    },
+    {
+      "kind": "output",
+      "reason": "final memory differs from real write/copy replay"
+    }
+  ],
+  "regressions": {
+    "stream": {
+      "passed": true,
+      "public_commands": 15,
+      "direct_native_commands": 1,
+      "expected_rejections": 5,
+      "repeat_byte_identical": true
+    },
+    "transaction": {
+      "passed": true,
+      "public_commands": 8,
+      "expected_rejections": 2,
+      "repeat_byte_identical": true
+    },
+    "session": {
+      "passed": true,
+      "all_at_once_original_fields_equal": true,
+      "public_commands": 3
+    },
+    "prefix": {
+      "passed": true,
+      "commands": 32,
+      "default_previous_equal": true
+    }
+  },
+  "fixed_dependency_checkouts": 13,
+  "binaries": {
+    "/dev/shm/moe-bounded-buffers-20261024/build/bin/ns3.42-moe-rdma-transaction-session": "f62d940c040f41a7be2b24419c894023da7ce5b60d4861528affc48b7a178f69",
+    "/dev/shm/moe-bounded-buffers-20261024/build/bin/ns3.42-moe-rdma-transaction-probe": "948348d3cd19f5a95a9e7bf457f3aea8a5871edbe1fb2dcb49005f0a0c86c8c1",
+    "/dev/shm/moe-bounded-buffers-20261024/build/bin/ns3.42-moe-rdma-stream-probe": "7b50ed2dc210a06eb567004035813bef3cc7adb43163338fc5862d6bbf83ccdc"
+  },
+  "protected_identities_unchanged": true,
+  "build_sources_unchanged": true,
+  "same_ns3_clock": true,
+  "hardware_calibrated": false,
+  "modern_provider_executed": false,
+  "paper_innovation_demonstrated": false,
+  "evidence": "/dev/shm/moe-bounded-buffers-20261024",
+  "audit_sha256": "ad5a16ca6627b7664e3d1839e356b2021e1632b814d4ad6cfa1c4c4662e20523"
+}

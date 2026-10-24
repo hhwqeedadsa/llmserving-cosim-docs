@@ -35,6 +35,7 @@ int main(int argc,char** argv) {
       if(local_memory_mode)keys.push_back("local_memory_model");
       if(explicit_submission)keys.push_back("submission_model");
       if(input.contains("transport_recovery"))keys.push_back("transport_recovery");
+      if(input.contains("buffer_model"))keys.push_back("buffer_model");
       Keys(input,keys);
       Require(input.at("local_model")==Json{{"mode","serial_per_gpu/1"},{"duration_source","declared_ns"}},"unsupported transaction local model");
     }

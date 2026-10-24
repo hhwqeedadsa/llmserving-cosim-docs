@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+启用`buffer_model`时，`transactions.buffer_retention`按owner分别报告注册内容、目标缓存、源lease引用量、本地copy当前/峰值和捕获临时向量峰值；`retained_operation_body_bytes`应为0。`transactions.transport.payload_pool`保存每源容量、当前/峰值、持有者及按实际时间记录的acquired/released事件。未启用时不增加这两项。lease可重叠，其字节数不是额外分配；这些字段不能相加为RSS或显存。字段解释见[有界缓冲输入输出](../examples/scaleout_rdma_transactions/README.md#有限副本与实际ack回收)。
+
 transactions/5的结果窗口用bytes/initialization/resident_bytes/pages保存逻辑范围和实际写过的页，不展开完整hex；每页offset相对窗口address，最后一页截短，缺页按显式zero_fill/1初值读取。页字节不含仿真器元数据，不是GPU显存或通信量。其余包/事件/完成字段保持，见[格式](../examples/scaleout_rdma_transactions/README.md#使用大地址范围与稀疏初值)。
 
 显式前缀模式另增加逐远端操作`prepared_ns`及`transactions.submission.publications`；在线事件增加prepared。发布记录保留connection、触发operation、排他ticket上界exclusive及time_ns，是逻辑发布次数。仅该模式增加这些字段，默认结果保持。未发布/未完成分别为−1，源保护可能仍活跃，不能因无包而标成成功，见[字段和边界](../examples/scaleout_rdma_transactions/README.md#准备工作后统一发布)。

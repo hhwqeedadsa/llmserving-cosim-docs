@@ -1,5 +1,7 @@
 # 远端地址与原子返回值的功能小例
 
+可选容量模型及公开例见[有限副本与实际ACK回收](#有限副本与实际ack回收)。
+
 本例验证“实际请求到达目标后才修改内存，原子旧值实际返回后才完成”的执行关系。两个源端共享同一张原生 Scale-Out 网络，执行 put（写入）与 fetch-add（取旧值并加法），目标用访问密钥和地址定位窗口。所有请求、返回值和传输确认使用同一个 ns-3 时钟；不执行 GPU、现代 DeepEP 或 LLMServingSim。
 
 **用途是验证功能，不能用作 GIN/RoCE 时延基线。** 当前 MRT1 是明确的模拟报文格式，借助已有原生 UDP/SeqTs 字节载体，返回值另走反向持久连接并有普通 ACK。真实 RoCE 原子响应、优先级、头部、CQ、并发额度及内存可见性均未等价实现。程序没有给 NIC 或 GPU 补一个未经测量的固定延迟。
@@ -290,3 +292,41 @@ v5结果窗口不含展开的`hex`，改为`bytes`、`initialization`、`residen
 ### 持久事务的丢包恢复
 
 事务v1—v5及在线v4/v5初始配置可增加`transport_recovery`，字段、累计序号和失败处理见[持久恢复](../scaleout_rdma_streams/README.md#可选的持久连接丢包恢复)。同一连接的请求stream为`connection*2`、响应stream为`connection*2+1`；协议faults中的message_id指这个stream，不能填operation ID。真实重传的重复字节不重新进入事务解析器，原子响应也经真实重传到达源端。request_acked、applied、response和completed继续独立记录；源保护/事务信用仍由已有完成条件释放。恢复状态位于`transactions.transport.recovery`，不是顶层persistent_transport。没有加入该字段时默认保持。
+
+## 有限副本与实际ACK回收
+
+[bounded-buffers.json](bounded-buffers.json)使用transactions/4，把固定注册窗口、发送重传副本、目标去重缓存和本地copy快照分别计量。三个8B put都在起点就绪，但每源40B副本池只容纳一个带32B MRT1帧头的请求；只有实际完整ACK到达后才释放副本、允许捕获下一次源数据。最后按实际应用事件复制目标窗口。它可用于检查有限容量、丢包与恢复的相互影响。
+
+在已有构建中选择本版本transaction-probe可执行文件，使用新的输出目录：
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout topology \
+  --config examples/scaleout_rdma/small-clos-100g.json --output /dev/shm/NEW_BUFFER_TOPOLOGY
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout rdma-transaction-probe \
+  --topology /dev/shm/NEW_BUFFER_TOPOLOGY --protocol examples/scaleout_rdma/rdma.json \
+  --config examples/scaleout_rdma_transactions/bounded-buffers.json \
+  --backend /ABS/ns3.42-moe-rdma-transaction-probe --output /dev/shm/NEW_BUFFER_RUN
+```
+
+在线`rdma-transaction-session`也支持相同配置。`buffer_model`有且只有以下5个字段：
+
+```json
+{"mode":"bounded_copied_put/1","transport_bytes_per_source":40,
+ "registered_bytes_per_owner":256,"target_cache_bytes_per_owner":120,
+ "local_copy_bytes_per_owner":8}
+```
+
+| 字段 | 内容和作用范围 | 接受范围（B） |
+|---|---|---|
+| transport_bytes_per_source | 同一源GPU全部连接尚未完整ACK的MRT1副本，包含32B功能帧头 | 33—2,097,152 |
+| registered_bytes_per_owner | 每owner的固定窗口内容合计 | 1—1,048,576 |
+| target_cache_bytes_per_owner | 每目标接纳的全部请求帧累计预留，实际缓存保留至会话销毁 | 33—2,097,152 |
+| local_copy_bytes_per_owner | 每GPU串行本地copy槽中的快照内容 | 1—32,768 |
+
+整数拒绝bool、浮点、负值和额外字段；每个请求必须放得进源池。当前只支持v4的注册源put，拒绝inline put、原子、v5和explicit-prefix组合。注册/目标缓存总额在完整候选中先检查；在线超额批次不会注册其有效前部，也不会取消已有timer。
+
+不同源的池独立，同源连接共享容量。池不足时不会提前读取源窗口，也不丢弃工作；完整ACK清空真实传输副本，唤醒同源等待连接。超时、重试、目标已应用和控制timer均不释放失败副本；源lease仍按原`transaction_completed/1`释放。目标请求缓存不随ACK清除，也没有未建模的安全淘汰：长期服务会受累计接纳量限制，不能称无限连续运行。
+
+`result.json.transactions.buffer_retention`分别列出注册内容、目标缓存、源lease引用量、本地copy当前/峰值和捕获临时向量峰值；编码后不再长期保留operation body，本地copy实际完成后清空快照。`transactions.transport.payload_pool`记录每源当前/峰值、未释放持有者及每次acquired/released的实际时间。失败partial结果可能仍持有资源，这是未完成的实际状态。
+
+这些额度只覆盖所列数据内容；元数据、解码临时对象、包、观测hex和报告副本不在内，源lease可重叠且只是引用，不能将字段相加为总RSS或GPU显存。MRT1帧头不是RoCE开销，ACK回收不提供远端撤权、GPU可见性或现代provider保证。功能验收、故障注入更正和恢复证据见[有界缓冲验收](../../fixtures/bounded_buffers/README.md)。

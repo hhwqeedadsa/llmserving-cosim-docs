@@ -1,0 +1,33 @@
+{
+  "schema_version": "moe-rdma-transactions/4",
+  "local_model": {"mode": "serial_per_gpu/1", "duration_source": "declared_ns"},
+  "source_model": {"capture": "registered_window_at_publish/1", "release": "transaction_completed/1"},
+  "local_memory_model": {"mode": "guarded_copy/1", "acquire": "admission/1", "capture": "start/1", "commit": "completion/1"},
+  "buffer_model": {
+    "mode": "bounded_copied_put/1",
+    "transport_bytes_per_source": 40,
+    "registered_bytes_per_owner": 256,
+    "target_cache_bytes_per_owner": 120,
+    "local_copy_bytes_per_owner": 8
+  },
+  "connections": [
+    {"id": 0, "src": 0, "dst": 4, "plane": 0, "request_port": 24000, "response_port": 24001,
+     "source_nic": 1, "destination_nic": 1, "queue_depth": 4}
+  ],
+  "windows": [
+    {"owner": 0, "key": 7, "address": 4096, "allow_atomic": false, "hex": "0102030405060708"},
+    {"owner": 4, "key": 9, "address": 8192, "allow_atomic": false,
+     "hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"}
+  ],
+  "operations": [
+    {"id": 0, "kind": "remote", "connection": 0, "verb": "put", "key": 9, "address": 8192,
+     "source": {"key": 7, "address": 4096, "bytes": 8}, "after": []},
+    {"id": 1, "kind": "remote", "connection": 0, "verb": "put", "key": 9, "address": 8208,
+     "source": {"key": 7, "address": 4096, "bytes": 8}, "after": []},
+    {"id": 2, "kind": "remote", "connection": 0, "verb": "put", "key": 9, "address": 8224,
+     "source": {"key": 7, "address": 4096, "bytes": 8}, "after": []},
+    {"id": 3, "kind": "local", "rank": 4, "duration_ns": 0,
+     "copy": {"source": {"key": 9, "address": 8224, "bytes": 8}, "target": {"key": 9, "address": 8256}},
+     "after": [{"operation": 2, "event": "applied"}]}
+  ]
+}

@@ -73,6 +73,9 @@ class RemoteTransactions {
   bool local_memory_mode_=false;
   Json local_memory_model_,local_memory_events_=Json::array();
   std::map<uint64_t,LocalCopy> local_copies_;
+  bool bounded_buffers_=false;
+  Json buffer_model_;
+  std::map<unsigned,uint64_t> source_scratch_peaks_,local_copy_peaks_;
 };
 std::vector<uint8_t> MemoryUnhex(const std::string&);
 std::string MemoryHex(const std::vector<uint8_t>&);

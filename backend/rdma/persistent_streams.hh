@@ -30,6 +30,8 @@ class PersistentStreams {
   // packet bytes, never source Work metadata or a lookup of a remote operation.
   void SetReceiver(uint64_t stream, std::function<void(Bytes)> receiver);
   void SubmitPayload(uint64_t stream, uint64_t work, Bytes payload, Done acked);
+  void ConfigurePayloadPool(uint64_t bytes_per_source);
+  bool CanSubmitPayload(uint64_t stream,uint64_t bytes) const;
   bool Drained() const;
   void Close();
   Json Report() const;
@@ -131,5 +133,8 @@ class PersistentStreams {
   bool isolate_failures_=false;
   uint64_t terminal_feedback_count_=0;
   Json terminal_feedback_=Json::array();
+  uint64_t payload_capacity_=0;
+  std::map<unsigned,uint64_t> payload_used_,payload_peak_;
+  Json payload_events_=Json::array();
 };
 }

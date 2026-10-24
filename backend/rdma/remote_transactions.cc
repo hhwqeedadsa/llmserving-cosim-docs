@@ -1,5 +1,6 @@
 #include "remote_transactions.hh"
 #include "transaction_effect_order.hh"
+#include "bounded_buffers.hh"
 
 namespace moe_rdma {
 static int64_t MemoryNow(){return ns3::Simulator::Now().GetNanoSeconds();}
@@ -20,6 +21,13 @@ std::string MemoryHex(const std::vector<uint8_t>& bytes) {
 }
 RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
     transport_(fabric,PersistentStreams::Limits{},input.value("transport_recovery",Json())) {
+  ValidateBoundedBuffers(input);
+  bounded_buffers_=input.contains("buffer_model");
+  if(bounded_buffers_) {
+    buffer_model_=input.at("buffer_model");
+    transport_.ConfigurePayloadPool(buffer_model_.at("transport_bytes_per_source"));
+    memory_.ConfigureCacheBudget(buffer_model_.at("target_cache_bytes_per_owner"));
+  }
   Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
   ValidateTransactionEffectOrder(input);
   Require(input.at("schema_version")=="moe-rdma-transactions/1" ||
@@ -71,7 +79,10 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
       memory_.RegisterSparse(w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),w.at("bytes"),segments);
     } else memory_.Register({w.at("owner"),w.at("key"),w.at("address"),w.at("allow_atomic"),MemoryUnhex(w.at("hex"))});
   }
-  transport_.changed=[this](){if(changed)changed();};
+  transport_.changed=[this](){
+    if(bounded_buffers_)for(const auto& [id,c]:connections_)Pump(id);
+    if(changed)changed();
+  };
 }
 unsigned RemoteTransactions::LocalOwner(const Json& input) const {
   if(input.value("kind",std::string())=="local")return input.at("rank").get<unsigned>();
@@ -170,6 +181,10 @@ void RemoteTransactions::StartLocal(const Json& input) {
   const auto id=input.at("id").get<uint64_t>();auto& copy=local_copies_.at(id);
   Require(!copy.started && !copy.completed,"duplicate local copy start");
   const auto& s=copy.source;copy.captured=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);copy.started=true;
+  if(bounded_buffers_) {
+    Require(copy.captured.size()<=buffer_model_.at("local_copy_bytes_per_owner").get<uint64_t>(),"local copy pool capacity exceeded");
+    local_copy_peaks_[s.owner]=std::max(local_copy_peaks_[s.owner],uint64_t(copy.captured.size()));
+  }
   LocalMemoryEvent(id,"captured",copy,&copy.captured);
 }
 void RemoteTransactions::CompleteLocal(const Json& input) {
@@ -179,6 +194,7 @@ void RemoteTransactions::CompleteLocal(const Json& input) {
   memory_.CommitWrite(id,copy.captured);LocalMemoryEvent(id,"committed",copy,&copy.captured);
   memory_.ReleaseRead(65536+id);memory_.ReleaseWrite(id);copy.completed=true;
   LocalMemoryEvent(id,"released",copy);
+  if(bounded_buffers_)std::vector<uint8_t>().swap(copy.captured);
 }
 RemoteMemory::ReadLease RemoteTransactions::Source(const Json& input) const {
   Require(source_mode_ && input.at("verb")=="put" && !input.contains("hex"),"source requires v3 put without hex");
@@ -246,14 +262,15 @@ void RemoteTransactions::Submit(const Json& input) {
   if(input.at("verb")=="put") {
     op.request.verb=MemoryFrame::Put;
     if(input.contains("source")) {
-      op.source=Source(input);op.has_source=true;op.request.body.resize(op.source.bytes); // length only, never sent before capture
+      op.source=Source(input);op.has_source=true;
+      if(!bounded_buffers_)op.request.body.resize(op.source.bytes); // legacy length placeholder
     } else op.request.body=MemoryUnhex(input.at("hex"));
   }
   else {
     Require(input.at("verb")=="fetch_add","unsupported memory transaction verb");
     op.request.verb=MemoryFrame::FetchAdd;op.request.body=MemoryInteger(input.at("value"));
   }
-  EncodeMemoryFrame(op.request);
+  if(!bounded_buffers_)EncodeMemoryFrame(op.request);
   const auto observations=LocalWaits(input);
   for(const auto& condition:observations)Require(condition.at("matched"),"submit before target-local wait satisfied");
   if(input.contains("queue_fence")) {
@@ -274,10 +291,12 @@ void RemoteTransactions::Pump(uint64_t connection) {
   for(const auto id:c.operations) {
     auto& op=operations_.at(id);
     if(op.published>=0 || !c.queue.CanPrepare(op.ticket))continue;
+    if(bounded_buffers_ && !transport_.CanSubmitPayload(connection*2,32+op.source.bytes))break;
     if(op.has_source) {
       const auto& s=op.source;
       op.request.body=memory_.ReadBytes(s.owner,s.key,s.address,s.bytes);
       SourceEvent(id,"captured",s,&op.request.body);
+      if(bounded_buffers_)source_scratch_peaks_[s.owner]=std::max(source_scratch_peaks_[s.owner],uint64_t(op.request.body.size()));
     }
     c.queue.Prepare(op.ticket);c.queue.PublishThrough(op.ticket+1);
     const auto work=c.queue.ConsumePublished();Require(work && work->work_id==id,"transaction queue consumption mismatch");
@@ -286,6 +305,7 @@ void RemoteTransactions::Pump(uint64_t connection) {
       auto& w=operations_.at(id);Require(w.request_ack<0,"duplicate request ACK callback");
       w.request_ack=MemoryNow();Retire(connection);
     });
+    if(bounded_buffers_)std::vector<uint8_t>().swap(op.request.body);
   }
 }
 // Preparation handles descriptors only; source bytes remain protected from
@@ -433,6 +453,24 @@ Json RemoteTransactions::Report() const {
       out["active_local_memory_leases"].push_back({{"operation",item.first},
         {"source",range(item.second.source)},{"target",range(item.second.target)}});
     }
+  }
+  if(bounded_buffers_) {
+    std::map<unsigned,uint64_t> registered,local,leases;
+    for(const auto& w:memory_.Windows())registered[w.owner]+=RemoteMemory::Size(w);
+    for(const auto& [id,copy]:local_copies_)local[copy.source.owner]+=copy.captured.size();
+    for(const auto& [id,op]:operations_)if(op.has_source && op.completed<0)leases[op.source.owner]+=op.source.bytes;
+    Json owners=Json::array();uint64_t bodies=0;
+    auto peak=[](const auto& values,unsigned owner)->uint64_t {const auto it=values.find(owner);return it==values.end()?0:it->second;};
+    for(const auto& [id,op]:operations_)bodies+=op.request.body.size();
+    for(const auto& [owner,bytes]:registered) {
+      const auto it=memory_.CacheBytes().find(owner);
+      owners.push_back({{"owner",owner},{"registered_bytes",bytes},
+        {"target_cache_bytes",it==memory_.CacheBytes().end()?0:it->second},
+        {"source_lease_referenced_bytes",leases[owner]},{"local_copy_snapshot_bytes",local[owner]},
+        {"local_copy_snapshot_peak_bytes",peak(local_copy_peaks_,owner)},{"source_capture_scratch_peak_bytes",peak(source_scratch_peaks_,owner)}});
+    }
+    out["buffer_retention"]={{"config",buffer_model_},{"owners",owners},{"retained_operation_body_bytes",bodies},
+      {"scope","named retained data contents only; source leases are references, not extra allocation; excludes metadata, decoder temporaries, packets and observation/report copies"}};
   }
   out["transport"]=transport_.Report();return out;
 }

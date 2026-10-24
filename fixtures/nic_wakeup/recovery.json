@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "final_two_offline_reports_byte_identical": true,
+  "new_source_root": "/dev/shm/moe-nic-wakeup-20261024/final-audit-source",
+  "empty_cwd": true,
+  "final_sources": {
+    "fixtures/nic_wakeup/verify.py": "132edffee1202476b4c661e94a6a13abfac2a7f51ea4063930e3dada6cc9f04a",
+    "fixtures/nic_wakeup/healthy_audit.py": "241e4aeeeca587fe857125f5a42ef72fe3edacd69195884065faee245cf118f5",
+    "fixtures/nic_wakeup/stage.py": "8591f991a5295524a9f915a9bb7f85db536c1022b74f0d11040b08985bb7bdb6",
+    "fixtures/nack_grace_edges/wire_fifo.py": "3b5e8daadc4b25506b8e4b8eb7c20317101739fc5b8a0493bb727d60b9b10dc3",
+    "fixtures/transaction_selective_payload/audit.py": "9f024f78b8ab2e96fa41045cbf7ead4b3218c6c07c5f989b0fb6fd28db2acb44"
+  },
+  "actual_public_network_from_verified_v1": true,
+  "new_networks_added": 0,
+  "original_replay_receipt": "replay.json",
+  "native_cpu_cases": 15,
+  "completed_networks": 4,
+  "network_phase_closed": true
+}

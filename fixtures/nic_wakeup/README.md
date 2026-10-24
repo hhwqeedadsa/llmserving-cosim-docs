@@ -10,7 +10,7 @@ A发送完后仍等实际ACK。B首包83ns发送，物理发送在166ns结束，
 
 B最终ACK完成51,780→32,605ns，差值19,175ns来自这个特定功能用例。该结果不是MoE完整应用收益或硬件测量，不能直接解释旧研究的所有空闲，也不是新的恢复算法。
 
-另有11个原生CPU调度条件和2个真实ChangeRate的变量窗口条件，使用人工QP状态，在选到可发送QP前停止，不发任何数据/控制包。旧11条件中5个错过应有唤醒；修复后全部满足，全部不可发时也不保留无用定时器。速率推后可以保留早到回调重新检查，不将一次额外回调误称为提前发送。
+另有11个原生CPU调度条件、2个真实ChangeRate的变量窗口条件和2个同纳秒暂停/唤醒顺序条件，使用人工QP状态，在选到可发送QP前停止，不发任何数据/控制包。旧11条件中5个错过应有唤醒；修复后全部满足，全部不可发时也不保留无用定时器。速率推后可以保留早到回调重新检查，不将一次额外回调误称为提前发送。
 
 公开v5事务入口启用选择重传与16us NACK等待，首个请求包实际丢失一次；5次远端操作、3次本地copy和25内存事件由实际收到的MRT1字节驱动并独立核对，目标副作用恰好一次。平台不借此声称现代GIN或生产恢复语义。
 
@@ -27,8 +27,15 @@ PYTHONPATH=python:. PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleou
   --output /tmp/nic-healthy
 ```
 
-输入包含声明宿主限额；输出路径须尚不存在。`tests/nic_wakeup_native.cc`、`tests/nic_wakeup_rate_native.cc`为CPU状态核查，`tests/nic_wakeup_packets.cc`为实际原生包级复现。`verify.py`独立读取全部保存的原件，不导入平台传输解码器或调用网络。
+输入包含声明宿主限额；输出路径须尚不存在。`tests/nic_wakeup_native.cc`、`tests/nic_wakeup_rate_native.cc`、`tests/nic_wakeup_same_time.cc`为CPU状态核查，`tests/nic_wakeup_packets.cc`为实际原生包级复现。`verify.py`独立读取全部保存的原件，不导入平台传输解码器或调用网络。
 
 原生补丁只在本地保存到native→ASTRA→LLMServingSim→父仓库的提交链，未push，不声称新提交可从远端取回。归档保留源补丁/本地Git来源，以及固定程序/库身份；普通重建仍通过公开`scaleout rdma-build`从固定源码进行。本机历史运行目录不是远程备份。
 
-本阶段的实际检查点、恢复及资源收尾结果在验收完成时写入本目录。此前研究归档不覆盖、不重跑；受影响的完整图比较须在本平台独立验收提交后另立研究协议。整体论文目标仍进行中。
+四次网络已经关闭；新源码根/空cwd再生成拓扑并实际执行默认持久小例，全部八库从恢复根加载。最终两份离线核验逐字节一致，见[独立核验](verification.json)、[恢复](recovery.json)、[资源收尾](closeout.json)与[中文报告](../../docs/reviews/源NIC遗漏唤醒的包级复现与修复_20261024.md)。持久包为本机`runs/nic_wakeup_checkpoint_20261024/evidence.tar.gz`，包含同ABI运行时、源码和证据。解包只校验/写入文件，不自动运行网络：
+
+```bash
+PYTHONPATH=python:. PYTHONDONTWRITEBYTECODE=1 python3 -B -m fixtures.nic_wakeup.checkpoint restore \
+  --archive runs/nic_wakeup_checkpoint_20261024/evidence.tar.gz --output /tmp/nic-wakeup-review
+```
+
+目标目录须尚不存在；成员全部校验后才写入，解包应纳入宿主磁盘/时间预算。`runtime/`不是干净构建产物；ABI及系统依赖仍有约束，实际运行命令和动态加载参数保存在包内。此前研究归档不覆盖、不重跑；受影响的完整图比较须在本平台独立验收提交后另立研究协议。整体论文目标仍进行中。

@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "native_packet_witness": {
+    "old": {
+      "first_paced_packet_ns": 83,
+      "physical_idle_from_ns": 166,
+      "correct_next_packet_ns": 912,
+      "actual_next_packet_ns": 20087,
+      "first_actual_ack_rx_ns": 20087,
+      "pending_wake_after_idle": -1,
+      "paced_completion_ns": 51780,
+      "payload_bytes": 17000,
+      "data_packets": 17,
+      "actual_acks": 17,
+      "source_pending_without_ack": true,
+      "physical_pairing_and_serialization": true
+    },
+    "fixed": {
+      "first_paced_packet_ns": 83,
+      "physical_idle_from_ns": 166,
+      "correct_next_packet_ns": 912,
+      "actual_next_packet_ns": 912,
+      "first_actual_ack_rx_ns": 20087,
+      "pending_wake_after_idle": 912,
+      "paced_completion_ns": 32605,
+      "payload_bytes": 17000,
+      "data_packets": 17,
+      "actual_acks": 17,
+      "source_pending_without_ack": true,
+      "physical_pairing_and_serialization": true
+    }
+  },
+  "native_cpu_cases": 15,
+  "old_cpu_missing_ready_cases": [
+    "empty-unacked",
+    "window-blocked",
+    "paused",
+    "earlier-append",
+    "resume-with-stale"
+  ],
+  "packet_shapes_equal": true,
+  "variable_window_rate_order_checked": true,
+  "native_same_ns_pause_wake_order_checked": true,
+  "transaction_payload_and_effects": {
+    "source_packets": 12,
+    "physical": {
+      "tx": 138,
+      "rx": 137,
+      "drop": 1
+    },
+    "source_payload_bytes": 6464,
+    "payload_deliveries": 11,
+    "peak_reorder_bytes": {
+      "0": 1632
+    },
+    "fast_retransmits": 0,
+    "passed": true,
+    "remote_operations": 5,
+    "local_copies": 3,
+    "memory_events": 25,
+    "timeouts": 0,
+    "last_memory_event_ns": 57628,
+    "actual_received_bytes_drive_exactly_once_target": true
+  },
+  "transaction_physical_service": {
+    "passed": true,
+    "data_fifo_dequeues": 60,
+    "all_protocol_serialized_frames": 138,
+    "scope": "switch data FIFO and all-protocol physical port service; not CNP priority FIFO or performance calibration"
+  },
+  "mutations_rejected": [
+    "deadline",
+    "tx_time",
+    "missing_ack",
+    "payload"
+  ],
+  "network_executions": 0,
+  "scope": "functional scheduler correction and small public transaction; no complete application performance or hardware claim"
+}

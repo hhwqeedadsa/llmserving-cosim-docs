@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "source_payload_bytes": 10000,
+  "remote_writes": 3,
+  "local_operations": 1,
+  "physical_pairing": true,
+  "actual_receive_and_ack_dependencies": true,
+  "all_eight_libraries_loaded_from_restored_root": true,
+  "fifo_and_serialization": {
+    "passed": true,
+    "data_fifo_dequeues": 50,
+    "all_protocol_serialized_frames": 120,
+    "scope": "switch data FIFO and all-protocol physical port service; not CNP priority FIFO or performance calibration"
+  },
+  "scope": "small public default stream executed once from fresh source/runtime root; not a clean build or performance calibration"
+}

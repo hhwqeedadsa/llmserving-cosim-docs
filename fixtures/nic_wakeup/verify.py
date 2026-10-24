@@ -68,6 +68,9 @@ def verify(stage):
     assert all(not e['pending'] for c in cpu_fixed['cases'] if c['name'] in ('all-blocked','blocked-future') for e in c['scheduled'])
     variable = load(stage/'rate-fixed.json'); assert variable['passed'] and len(variable['cases']) == 2
     assert not load(stage/'rate-old.json')['passed']
+    for version in ('old','fixed'):
+        same=load(stage/('same-ns-'+version+'.json'));assert same['passed'] and len(same['cases'])==2
+        assert [c['expected_first_ready_ns'] for c in same['cases']]==[60000,50000]
     r = load(stage/'public-transaction/result.json'); w = load(stage/'inputs/transaction-work.json'); c = load(stage/'inputs/transaction-protocol.json')
     tx = transaction_audit(r,w,c); phy = fifo_audit(r)
     assert r['fault_injection']['drop_counts'] == [1] and r['transactions']['transport']['nack_grace']['config']['wait_ns'] == 16000
@@ -85,9 +88,9 @@ def verify(stage):
         try:witness(bad,True)
         except (AssertionError,StopIteration,KeyError):rejected.append(mode)
         else:raise AssertionError('mutation accepted: '+mode)
-    return dict(passed=True, native_packet_witness=report, native_cpu_cases=13,
+    return dict(passed=True, native_packet_witness=report, native_cpu_cases=15,
         old_cpu_missing_ready_cases=failed, packet_shapes_equal=True,
-        variable_window_rate_order_checked=True, transaction_payload_and_effects=tx,
+        variable_window_rate_order_checked=True, native_same_ns_pause_wake_order_checked=True, transaction_payload_and_effects=tx,
         transaction_physical_service=phy, mutations_rejected=rejected, network_executions=0,
         scope='functional scheduler correction and small public transaction; no complete application performance or hardware claim')
 

@@ -26,7 +26,8 @@ RemoteTransactions::RemoteTransactions(Fabric& fabric,const Json& input):
   if(bounded_buffers_) {
     buffer_model_=input.at("buffer_model");
     transport_.ConfigurePayloadPool(buffer_model_.at("transport_bytes_per_source"),buffer_model_.contains("on_source_isolation"));
-    memory_.ConfigureCacheBudget(buffer_model_.at("target_cache_bytes_per_owner"));
+    if(buffer_model_.contains("target_delivery"))memory_.ConfigureCarrierOncePut();
+    else memory_.ConfigureCacheBudget(buffer_model_.at("target_cache_bytes_per_owner"));
   }
   Require(!input.contains("transport_recovery") || input.at("transport_recovery").is_object(),"transport_recovery must be an object");
   ValidateTransactionEffectOrder(input);
@@ -455,6 +456,13 @@ Json RemoteTransactions::Report() const {
     }
   }
   if(bounded_buffers_) {
+    if(buffer_model_.contains("target_delivery")) {
+      Json contexts=Json::array();
+      for(const auto& r:memory_.ReplayStates())contexts.push_back({{"context",r.context},{"next_sequence",r.next},
+        {"retained_requests",r.requests},{"retained_encoded_bytes",r.encoded_bytes}});
+      out["target_delivery"]={{"mode","carrier_once_put/1"},{"contexts",contexts},
+        {"scope","monotonic PUT on the current contiguous byte carrier; application replay rejected; excludes decoder, metadata, packets and observation copies"}};
+    }
     std::map<unsigned,uint64_t> registered,local,leases;
     for(const auto& w:memory_.Windows())registered[w.owner]+=RemoteMemory::Size(w);
     for(const auto& [id,copy]:local_copies_)local[copy.source.owner]+=copy.captured.size();

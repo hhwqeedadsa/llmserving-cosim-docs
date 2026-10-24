@@ -1,0 +1,431 @@
+{
+  "actual_native_network_executions": 8,
+  "artifact_usage": {
+    "/dev/shm/moe-carrier-once-put-20261024": {
+      "allocated_bytes": 92659712,
+      "apparent_bytes": 90790089
+    },
+    "/home/lry/moe-ub-cosim/runs/carrier_once_put_checkpoint_20261024": {
+      "allocated_bytes": 12681216,
+      "apparent_bytes": 12054306
+    }
+  },
+  "baseline": "cb67c6f",
+  "built_source_and_previous_runtime_hashes_unchanged": true,
+  "cli_rejections": 6,
+  "completed_native_networks_repeated_to_fix_checks": 0,
+  "conservative_nested_monitor_seconds": 56.63507339730859,
+  "cpp_memory_assertions": 7085,
+  "cpp_sparse_assertions": 6483,
+  "dependency_changes": 0,
+  "dependency_rebuilds": 0,
+  "failed_strict_compile_and_test_initializer_correction_preserved": true,
+  "final_receipts_reserve_bytes": 262144,
+  "functional_native_network_executions": 6,
+  "hardware_calibrated": false,
+  "monitor_count": 64,
+  "monitored_seconds_budget": 600,
+  "monitors": [
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/ack/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 370704384,
+      "status": "completed",
+      "wall_seconds": 0.5451294612139463
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404570112,
+      "status": "completed",
+      "wall_seconds": 0.7822437286376953
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13056758604943752
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13317722082138062
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6389760,
+      "status": "completed",
+      "wall_seconds": 0.12218101136386395
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12174888141453266
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-old-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.12301832623779774
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-once-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 5349376,
+      "status": "completed",
+      "wall_seconds": 0.1214582584798336
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6438912,
+      "status": "completed",
+      "wall_seconds": 0.1208968386054039
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-final-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7491584,
+      "status": "completed",
+      "wall_seconds": 0.12225759588181973
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-old-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13013112731277943
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-once-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7442432,
+      "status": "completed",
+      "wall_seconds": 0.13371221348643303
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7499776,
+      "status": "completed",
+      "wall_seconds": 0.13142080418765545
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/audit-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7487488,
+      "status": "completed",
+      "wall_seconds": 0.13587550073862076
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-corrected-remote_memory-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 158793728,
+      "status": "completed",
+      "wall_seconds": 1.5225100126117468
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-corrected-sparse_remote_memory-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 156758016,
+      "status": "completed",
+      "wall_seconds": 1.45486319065094
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-remote_memory-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 158814208,
+      "status": "child_failed",
+      "wall_seconds": 1.5365739110857248
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-remote_transactions-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 622145536,
+      "status": "completed",
+      "wall_seconds": 7.351457783952355
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-transaction_probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 604160000,
+      "status": "completed",
+      "wall_seconds": 6.7283006608486176
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/compile-transaction_session-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 639971328,
+      "status": "completed",
+      "wall_seconds": 8.033933551982045
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/core-remote_memory-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 3223552,
+      "status": "completed",
+      "wall_seconds": 0.13674471154808998
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/core-sparse_remote_memory-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 0,
+      "status": "completed",
+      "wall_seconds": 0.03492763638496399
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/data/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 371826688,
+      "status": "completed",
+      "wall_seconds": 0.5459288656711578
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404692992,
+      "status": "completed",
+      "wall_seconds": 0.7861675657331944
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/deps-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 20156416,
+      "status": "completed",
+      "wall_seconds": 0.4630309250205755
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "child_failed",
+      "wall_seconds": 0.13164066895842552
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "child_failed",
+      "wall_seconds": 0.13782010972499847
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6434816,
+      "status": "child_failed",
+      "wall_seconds": 0.1243311483412981
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7475200,
+      "status": "child_failed",
+      "wall_seconds": 0.13424866646528244
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7475200,
+      "status": "child_failed",
+      "wall_seconds": 0.13637078739702702
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-cli-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7483392,
+      "status": "child_failed",
+      "wall_seconds": 0.13525611348450184
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-0-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372826112,
+      "status": "child_failed",
+      "wall_seconds": 0.5640248786658049
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-1-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372781056,
+      "status": "child_failed",
+      "wall_seconds": 0.5621499083936214
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-2-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372916224,
+      "status": "child_failed",
+      "wall_seconds": 0.5697396509349346
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-3-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372871168,
+      "status": "child_failed",
+      "wall_seconds": 0.5765359774231911
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-4-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 371761152,
+      "status": "child_failed",
+      "wall_seconds": 0.5617465488612652
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/invalid-native-5-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 372809728,
+      "status": "child_failed",
+      "wall_seconds": 0.5639827605336905
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/isolation-regression/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 370724864,
+      "status": "child_failed",
+      "wall_seconds": 0.5534338112920523
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/isolation-regression-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 403542016,
+      "status": "child_failed",
+      "wall_seconds": 0.7702330779284239
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/link-transaction-probe-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 145534976,
+      "status": "completed",
+      "wall_seconds": 0.5502798240631819
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/link-transaction-session-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 149180416,
+      "status": "completed",
+      "wall_seconds": 0.5652442052960396
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-ack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6447104,
+      "status": "completed",
+      "wall_seconds": 0.12663400173187256
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-data-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7479296,
+      "status": "completed",
+      "wall_seconds": 0.12763769924640656
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-old-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.13143749721348286
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-once-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6438912,
+      "status": "completed",
+      "wall_seconds": 0.12661824375391006
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 7471104,
+      "status": "completed",
+      "wall_seconds": 0.12664583511650562
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/offline-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6393856,
+      "status": "completed",
+      "wall_seconds": 0.12831775099039078
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/old-retained/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 369737728,
+      "status": "completed",
+      "wall_seconds": 0.5416864473372698
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/old-retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 401555456,
+      "status": "completed",
+      "wall_seconds": 0.7656658068299294
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/once/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 371728384,
+      "status": "completed",
+      "wall_seconds": 0.5510364770889282
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/once-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 404488192,
+      "status": "completed",
+      "wall_seconds": 0.777447396889329
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/online/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 395051008,
+      "status": "completed",
+      "wall_seconds": 0.6607097517699003
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/online-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 428576768,
+      "status": "completed",
+      "wall_seconds": 0.893516642972827
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/pack-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 13873152,
+      "status": "completed",
+      "wall_seconds": 9.652836801484227
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/persist-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 26099712,
+      "status": "completed",
+      "wall_seconds": 0.23824430257081985
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/portable-topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 4300800,
+      "status": "completed",
+      "wall_seconds": 0.12249011546373367
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/portable-user-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 407781376,
+      "status": "completed",
+      "wall_seconds": 0.8630146440118551
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/restored/public-run/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 368517120,
+      "status": "completed",
+      "wall_seconds": 0.6460999399423599
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/retained/execution/probe.json",
+      "peak_sampled_group_rss_bytes": 372903936,
+      "status": "completed",
+      "wall_seconds": 0.5598538611084223
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/retained-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 401563648,
+      "status": "completed",
+      "wall_seconds": 0.789238104596734
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/topology-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6447104,
+      "status": "completed",
+      "wall_seconds": 0.12494979240000248
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/unit-bounded_buffers_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 6434816,
+      "status": "completed",
+      "wall_seconds": 0.12399466335773468
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/unit-scaleout_transactions_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 20205568,
+      "status": "completed",
+      "wall_seconds": 0.23153980262577534
+    },
+    {
+      "path": "/dev/shm/moe-carrier-once-put-20261024/unit-transaction_session_alarms_test.py-monitor/probe.json",
+      "peak_sampled_group_rss_bytes": 25321472,
+      "status": "completed",
+      "wall_seconds": 0.2401623111218214
+    }
+  ],
+  "native_rejections": 6,
+  "no_live_monitored_process_groups": true,
+  "not_total_calendar_wall_time": true,
+  "paper_contribution_established": false,
+  "peak_sampled_group_rss_bytes": 639971328,
+  "per_command_limits_increased": false,
+  "persistent_archive": "/home/lry/moe-ub-cosim/runs/carrier_once_put_checkpoint_20261024/checkpoint.tar.gz",
+  "persistent_archive_bytes": 11460376,
+  "persistent_archive_sha256": "f7b5439df94a71dcbac628122c47d4743f1abfb7d094649c92e169dc5f99045e",
+  "portable_public_network_executions": 1,
+  "public_regression_network_executions": 1,
+  "remote_old_access_revocation_added": false,
+  "schema_version": "carrier-once-put-closeout/1",
+  "temporary_unmonitored_inspection_key_error_recorded": true,
+  "total_artifact_budget_bytes": 268435456,
+  "total_usage_upper_bytes": 105603072,
+  "unit_tests_distinct": 39
+}

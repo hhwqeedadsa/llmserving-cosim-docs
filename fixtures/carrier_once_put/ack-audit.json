@@ -1,0 +1,20 @@
+{
+  "duplicate_carrier_receives": 1,
+  "isolated_copy_discards": 0,
+  "late_target_effects": 0,
+  "original_run_passed": true,
+  "pool_ack_releases": 6,
+  "pool_and_wire_and_memory_consistent": true,
+  "retained_payload_bytes": 0,
+  "retained_source_lease_ids": [],
+  "schema_version": "carrier-once-independent-audit/1",
+  "source_packets": 7,
+  "tampering_rejected": [
+    "packet_payload",
+    "owner_peak",
+    "target_memory",
+    "target_cache",
+    "application_replay"
+  ],
+  "target_applications": 6
+}

@@ -88,5 +88,30 @@ class BoundedBuffersTests(unittest.TestCase):
             with self.subTest(value=value),self.assertRaises(ValueError):
                 validate(self.topology,self.protocol,p)
 
+    def test_carrier_once_put_avoids_cumulative_cache_admission(self):
+        p=deepcopy(self.program)
+        op=deepcopy(p['operations'][0]);op.update(id=2,address=8240,after=[])
+        p['operations'].append(op)
+        p['buffer_model'].update(target_delivery='carrier_once_put/1',target_cache_bytes_per_owner=0)
+        before=deepcopy(p);validate(self.topology,self.protocol,p);self.assertEqual(p,before)
+        for key,value in (('transport_bytes_per_source',39),('registered_bytes_per_owner',127),('local_copy_bytes_per_owner',7)):
+            broken=deepcopy(p);broken['buffer_model'][key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):validate(self.topology,self.protocol,broken)
+
+    def test_carrier_once_put_requires_explicit_exact_mode_and_zero_cache(self):
+        for mode,capacity in ((True,0),({},0),('once',0),('carrier_once_put/1',40),('carrier_once_put/1',True)):
+            p=deepcopy(self.program);p['buffer_model'].update(target_delivery=mode,target_cache_bytes_per_owner=capacity)
+            with self.subTest(mode=mode,capacity=capacity),self.assertRaises(ValueError):validate(self.topology,self.protocol,p)
+        p=deepcopy(self.program);p['buffer_model']['target_cache_bytes_per_owner']=0
+        with self.assertRaises(ValueError):validate(self.topology,self.protocol,p)
+
+    def test_carrier_once_put_combines_with_explicit_source_isolation(self):
+        p=deepcopy(self.program)
+        p['buffer_model'].update(target_delivery='carrier_once_put/1',target_cache_bytes_per_owner=0,
+            on_source_isolation='release_copied_payload/1')
+        p['transport_recovery']=dict(mode='go_back_n/1',initial_rto_ns=20000,
+            max_rto_ns=20000,max_retries=2,max_events=100,on_exhausted='isolate_stream')
+        validate(self.topology,self.protocol,p)
+
 
 if __name__=='__main__':unittest.main()

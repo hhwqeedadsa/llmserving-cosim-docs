@@ -1,5 +1,7 @@
 # 观测记录与存储格式
 
+显式`buffer_model.target_delivery="carrier_once_put/1"`时，结果增加`transactions.target_delivery`：`mode`、`scope`及`contexts`。每项context保存实际`context/next_sequence/retained_requests/retained_encoded_bytes`；后两项从真实请求缓存计算，在本模式为0。`buffer_retention.owners[].target_cache_bytes`也为0，配置额度必须0；解码临时内容、序号元数据、包与观测不在内。缺省没有新增对象，完整请求缓存语义保持，详见[有序put](../examples/scaleout_rdma_transactions/README.md#有序put不保留完整请求缓存)。
+
 v4复制型`buffer_model`可选`on_source_isolation=release_copied_payload/1`，要求显式源隔离。只有此模式在`transactions.transport.payload_pool`增加`on_source_isolation/discarded_work`，事件kind允许`discarded_on_source_isolation`。每项discard含stream/work/bytes/time_ns，事件另有source/used_bytes；它在源真实隔离后归还本地副本，不修改原ACK/事务/源lease/目标状态。默认字段及行为保持，`failed_resources_released=false`不表示每一种本地副本都仍持有。详见[失败副本回收](../examples/scaleout_rdma_transactions/README.md#失败连接停止发包后归还复制池)。
 
 原生非UB协议可选`mmu_snapshot={nodes:[交换机ID],max_ports:端口总上限}`。结果同名对象在最终Report时只读所选交换机全部端口，保存`schema_version=native-switch-mmu-snapshot/1`、`time_ns/selected_nodes/complete_selected_switch_ports/switches`。每交换机有`node/physical_port_count/reserve_bytes/shared_used_bytes/ports`；每端口有`port/link_up`及8项数组`ingress_bytes/headroom_used_bytes/egress_mmu_bytes/queue_bytes/pfc_paused`。数组下标为优先级，字节均是实际原生计数，暂停项为0/1。`rdma-diagnose`仅在存在快照时增加`switch_buffer_consistency`，核对q1—7，异常不改原passed。默认无新字段，未选范围和历史不作判断；控制q0、序列化和在途字节不计入守恒，重叠计数不能相加为物理内存。配置、公开流程及失败末态解释见[交换机缓冲小例](../examples/scaleout_rdma_mmu/README.md)。

@@ -89,11 +89,26 @@ class RemoteMemory {
   }
   struct Result {bool duplicate;bool atomic;uint64_t old_value;};
   struct ReadLease {unsigned owner;uint32_t key;uint64_t address,bytes;};
+  // Only the current monotonic PUT carrier can opt out of application replay.
+  // This does not release windows/leases or invalidate already-in-flight bytes.
+  void ConfigureCarrierOncePut() {
+    MemoryCheck(contexts_.empty() && !cache_capacity_ && !carrier_once_put_,"target delivery configured after use/repeated");
+    carrier_once_put_=true;
+  }
   void ConfigureCacheBudget(uint64_t bytes) {
-    MemoryCheck(contexts_.empty() && !cache_capacity_ && bytes>=33 && bytes<=2*1024*1024,"invalid target cache capacity");
+    MemoryCheck(contexts_.empty() && !carrier_once_put_ && !cache_capacity_ && bytes>=33 && bytes<=2*1024*1024,"invalid target cache capacity");
     cache_capacity_=bytes;
   }
   const std::map<unsigned,uint64_t>& CacheBytes() const {return cache_bytes_;}
+  struct ReplayState {uint64_t context,next,requests,encoded_bytes;};
+  std::vector<ReplayState> ReplayStates() const {
+    std::vector<ReplayState> out;
+    for(const auto& [id,state]:contexts_) {
+      uint64_t bytes=0;for(const auto& [sequence,saved]:state.saved)bytes+=saved.bytes.size();
+      out.push_back({id,state.next,state.saved.size(),bytes});
+    }
+    return out;
+  }
   void Register(Window window) {
     MemoryCheck(windows_.size()<16 && window.key && Size(window)>0 &&
                 (window.logical_bytes?(window.bytes.empty() && window.logical_bytes<=MaxLogicalBytes && window.pages.size()<=MaxPages):
@@ -113,10 +128,12 @@ class RemoteMemory {
   // It does NOT implement PSNs, retry timers, GPU coherence or remote NIC delay.
   Result Apply(uint64_t context,unsigned owner,const MemoryFrame& frame) {
     MemoryCheck(frame.verb==MemoryFrame::Put || frame.verb==MemoryFrame::FetchAdd,"target received non-request");
+    MemoryCheck(!carrier_once_put_ || frame.verb==MemoryFrame::Put,"carrier-once target supports put only");
     const auto encoded=EncodeMemoryFrame(frame);
     MemoryCheck(contexts_.count(context) || contexts_.size()<8,"remote memory context budget exceeded");
     auto& state=contexts_[context];
     if(frame.sequence<state.next) {
+      MemoryCheck(!carrier_once_put_,"application replay violates carrier-once put contract");
       const auto& saved=state.saved.at(frame.sequence);
       MemoryCheck(saved.owner==owner && saved.bytes==encoded,"conflicting duplicate memory request");
       return {true,saved.result.atomic,saved.result.old_value};
@@ -139,7 +156,8 @@ class RemoteMemory {
       std::vector<uint8_t> bytes(8);for(unsigned i=0;i<8;++i)bytes[i]=updated>>(8*i);
       Write(*it,offset,bytes);
     } else Write(*it,offset,frame.body);
-    state.saved.emplace(frame.sequence,Saved{owner,encoded,result});++state.next;
+    if(!carrier_once_put_)state.saved.emplace(frame.sequence,Saved{owner,encoded,result});
+    ++state.next;
     if(cache_capacity_)cache_bytes_[owner]+=encoded.size();
     return result;
   }
@@ -258,6 +276,7 @@ class RemoteMemory {
   std::map<uint64_t,ReadLease> writers_;
   std::map<uint64_t,Context> contexts_;
   uint64_t cache_capacity_=0;
+  bool carrier_once_put_=false;
   std::map<unsigned,uint64_t> cache_bytes_;
 };
 }

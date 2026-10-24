@@ -320,7 +320,7 @@ PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout 
 |---|---|---|
 | transport_bytes_per_source | 同一源GPU全部连接尚未完整ACK的MRT1副本，包含32B功能帧头 | 33—2,097,152 |
 | registered_bytes_per_owner | 每owner的固定窗口内容合计 | 1—1,048,576 |
-| target_cache_bytes_per_owner | 每目标接纳的全部请求帧累计预留，实际缓存保留至会话销毁 | 33—2,097,152 |
+| target_cache_bytes_per_owner | 默认每目标接纳的全部请求帧累计预留；显式carrier-once put不保留完整缓存 | 默认33—2,097,152；carrier-once必须0 |
 | local_copy_bytes_per_owner | 每GPU串行本地copy槽中的快照内容 | 1—32,768 |
 
 整数拒绝bool、浮点、负值和额外字段；每个请求必须放得进源池。当前只支持v4的注册源put，拒绝inline put、原子、v5和explicit-prefix组合。注册/目标缓存总额在完整候选中先检查；在线超额批次不会注册其有效前部，也不会取消已有timer。
@@ -354,3 +354,29 @@ python -m moe_ub_cosim scaleout rdma-transaction-probe \
 池事件`discarded_on_source_isolation`记录实际丢弃副本，`payload_pool.discarded_work`列出stream/work/bytes/time_ns；新增`on_source_isolation`说明策略。只在源移出调度并取消源计时器后丢弃。它不产生ACK或队列完成，不释放应用源lease、目标窗口或去重缓存；`failed_resources_released=false`仍为真。已构造原生包有独立字节，仍可能在回收后到达并写目标，不能据此复用旧目标地址。
 
 将协议换为普通`rdma.json`且换新输出目录，可查看无故障完整完成；同样容量和工作下不发生隔离丢弃。在线会话支持相同输入，整批容量校验仍在提交前执行。独立包/窗口/池核对、默认差分和迁移证据见[验收](../../fixtures/isolated_payload_release/README.md)。
+
+## 有序put不保留完整请求缓存
+
+当前持久载体按原生字节序号过滤重复包；只有连续接收前缀前进时，才向MRT1解码器交付新字节。因此网络重传不等于应用重复提交同一帧。仅使用v4注册源put时，可显式选择：
+
+```json
+"target_delivery": "carrier_once_put/1",
+"target_cache_bytes_per_owner": 0
+```
+
+这两个字段放在`buffer_model`中。其余注册、源副本和本地copy容量必填；源隔离回收策略可同时使用。省略`target_delivery`时仍保留完整请求缓存，目标额度按累计接纳请求量检查。新模式必须为0，拒绝其他类型、策略和非零缓存额度。
+
+使用[carrier-once-put.json](carrier-once-put.json)、上文8GPU小Clos和普通协议：
+
+```bash
+PYTHONPATH=python PYTHONDONTWRITEBYTECODE=1 python3 -B -m moe_ub_cosim scaleout rdma-transaction-probe \
+  --topology /path/to/topology --protocol examples/scaleout_rdma/rdma.json \
+  --config examples/scaleout_rdma_transactions/carrier-once-put.json \
+  --backend /path/to/transaction-probe --output /dev/shm/new-carrier-once-put
+```
+
+六次put依赖前一次真实完成，复用同一目标地址；40B源复制池反复使用，完整目标请求缓存始终0。将命令改为`rdma-transaction-session`并传对应session程序，可按实际回调逐项追加。单次数据或ACK丢失仍由同一载体重传恢复，不改变请求/ACK或选路。
+
+新模式仅保留每context的下一个合法MRT1序号，拒绝应用层重放、跳号和原子请求；不会把失败误写成完成。`transactions.target_delivery.contexts`报告实际`next_sequence/retained_requests/retained_encoded_bytes`；后两项应为0。解码临时内容、序号元数据、包和观测副本不在这个0中，不能称总目标内存为0。
+
+该模式不撤回晚到包、不释放窗口或失败源lease，不提供跨连接恢复重放或GPU可见性保证。原有32远端操作等预算保持，不宣称无限连续服务。默认差分、真实重传、独立字节审计及迁移证据见[验收](../../fixtures/carrier_once_put/README.md)。

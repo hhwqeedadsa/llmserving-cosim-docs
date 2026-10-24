@@ -12,15 +12,17 @@ inline uint64_t BufferInteger(const Json& value,uint64_t low,uint64_t high) {
 inline void ValidateBoundedBuffers(const Json& input) {
   if(!input.contains("buffer_model"))return;
   const auto& b=input.at("buffer_model");
-  Require(b.is_object() && b.size()==5u+unsigned(b.contains("on_source_isolation")) && b.at("mode")=="bounded_copied_put/1",
+  Require(b.is_object() && b.size()==5u+unsigned(b.contains("on_source_isolation"))+unsigned(b.contains("target_delivery")) && b.at("mode")=="bounded_copied_put/1",
           "invalid bounded buffer model fields/mode");
+  const bool once=b.contains("target_delivery");
+  if(once)Require(b.at("target_delivery")=="carrier_once_put/1","unsupported target delivery mode");
   if(b.contains("on_source_isolation"))
     Require(b.at("on_source_isolation")=="release_copied_payload/1" && input.contains("transport_recovery") &&
       input.at("transport_recovery").is_object() && input.at("transport_recovery").value("on_exhausted",std::string())=="isolate_stream",
       "copied payload release requires release_copied_payload/1 and explicit source isolation");
   const auto transport=BufferInteger(b.at("transport_bytes_per_source"),33,2*1024*1024);
   const auto registered=BufferInteger(b.at("registered_bytes_per_owner"),1,1024*1024);
-  const auto cache=BufferInteger(b.at("target_cache_bytes_per_owner"),33,2*1024*1024);
+  const auto cache=BufferInteger(b.at("target_cache_bytes_per_owner"),once?0:33,once?0:2*1024*1024);
   const auto local=BufferInteger(b.at("local_copy_bytes_per_owner"),1,32768);
   Require(input.at("schema_version")=="moe-rdma-transactions/4" && !input.contains("submission_model"),
           "bounded copied buffers require transactions/4 without explicit submission");
@@ -42,7 +44,7 @@ inline void ValidateBoundedBuffers(const Json& input) {
     const auto size=BufferInteger(op.at("source").at("bytes"),1,32768)+32;
     Require(size<=transport,"one frame exceeds source transport capacity");
     auto& bytes=cached[destinations.at(op.at("connection"))];bytes+=size;
-    Require(bytes<=cache,"retained target request cache capacity exceeded");
+    Require(once || bytes<=cache,"retained target request cache capacity exceeded");
   }
 }
 }

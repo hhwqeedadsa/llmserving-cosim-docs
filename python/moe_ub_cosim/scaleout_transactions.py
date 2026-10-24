@@ -241,7 +241,11 @@ def validate(topology, protocol, config, *, allow_no_remote=False):
 def _bounded_buffers(config, registered, connections):
     model = config['buffer_model']
     fields(model, 'mode transport_bytes_per_source registered_bytes_per_owner target_cache_bytes_per_owner local_copy_bytes_per_owner'+
-           (' on_source_isolation' if isinstance(model, dict) and 'on_source_isolation' in model else ''), 'buffer model')
+           (' on_source_isolation' if isinstance(model, dict) and 'on_source_isolation' in model else '')+
+           (' target_delivery' if isinstance(model, dict) and 'target_delivery' in model else ''), 'buffer model')
+    once = 'target_delivery' in model
+    if once:
+        require(model['target_delivery'] == 'carrier_once_put/1', 'unsupported target delivery mode')
     if 'on_source_isolation' in model:
         require(model['on_source_isolation'] == 'release_copied_payload/1' and
                 config.get('transport_recovery', {}).get('on_exhausted') == 'isolate_stream',
@@ -250,7 +254,7 @@ def _bounded_buffers(config, registered, connections):
             and 'submission_model' not in config, 'bounded copied buffers require transactions/4 without explicit submission')
     for key, low, high in (('transport_bytes_per_source', 33, 2*1024*1024),
                            ('registered_bytes_per_owner', 1, 1024*1024),
-                           ('target_cache_bytes_per_owner', 33, 2*1024*1024),
+                           ('target_cache_bytes_per_owner', 0 if once else 33, 0 if once else 2*1024*1024),
                            ('local_copy_bytes_per_owner', 1, 32768)):
         integer(model[key], key, low, high)
     windows, cached = {}, {}
@@ -268,7 +272,7 @@ def _bounded_buffers(config, registered, connections):
         require(size <= model['transport_bytes_per_source'], 'one frame exceeds source transport capacity')
         owner = connections[op['connection']]['dst']
         cached[owner] = cached.get(owner, 0)+size
-        require(cached[owner] <= model['target_cache_bytes_per_owner'], 'retained target request cache capacity exceeded')
+        require(once or cached[owner] <= model['target_cache_bytes_per_owner'], 'retained target request cache capacity exceeded')
 
 
 def probe(topology, protocol, config, backend, output):

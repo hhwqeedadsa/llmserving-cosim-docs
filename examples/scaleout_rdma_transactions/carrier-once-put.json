@@ -1,0 +1,173 @@
+{
+  "buffer_model": {
+    "local_copy_bytes_per_owner": 8,
+    "mode": "bounded_copied_put/1",
+    "registered_bytes_per_owner": 256,
+    "target_cache_bytes_per_owner": 0,
+    "target_delivery": "carrier_once_put/1",
+    "transport_bytes_per_source": 40
+  },
+  "connections": [
+    {
+      "destination_nic": 1,
+      "dst": 4,
+      "id": 0,
+      "plane": 0,
+      "queue_depth": 2,
+      "request_port": 24000,
+      "response_port": 24001,
+      "source_nic": 1,
+      "src": 0
+    }
+  ],
+  "local_memory_model": {
+    "acquire": "admission/1",
+    "capture": "start/1",
+    "commit": "completion/1",
+    "mode": "guarded_copy/1"
+  },
+  "local_model": {
+    "duration_source": "declared_ns",
+    "mode": "serial_per_gpu/1"
+  },
+  "operations": [
+    {
+      "address": 8192,
+      "after": [],
+      "connection": 0,
+      "id": 0,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    },
+    {
+      "address": 8192,
+      "after": [
+        {
+          "event": "completed",
+          "operation": 0
+        }
+      ],
+      "connection": 0,
+      "id": 1,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    },
+    {
+      "address": 8192,
+      "after": [
+        {
+          "event": "completed",
+          "operation": 1
+        }
+      ],
+      "connection": 0,
+      "id": 2,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    },
+    {
+      "address": 8192,
+      "after": [
+        {
+          "event": "completed",
+          "operation": 2
+        }
+      ],
+      "connection": 0,
+      "id": 3,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    },
+    {
+      "address": 8192,
+      "after": [
+        {
+          "event": "completed",
+          "operation": 3
+        }
+      ],
+      "connection": 0,
+      "id": 4,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    },
+    {
+      "address": 8192,
+      "after": [
+        {
+          "event": "completed",
+          "operation": 4
+        }
+      ],
+      "connection": 0,
+      "id": 5,
+      "key": 9,
+      "kind": "remote",
+      "source": {
+        "address": 4096,
+        "bytes": 8,
+        "key": 7
+      },
+      "verb": "put"
+    }
+  ],
+  "schema_version": "moe-rdma-transactions/4",
+  "source_model": {
+    "capture": "registered_window_at_publish/1",
+    "release": "transaction_completed/1"
+  },
+  "transport_recovery": {
+    "initial_rto_ns": 20000,
+    "max_events": 1000,
+    "max_retries": 2,
+    "max_rto_ns": 20000,
+    "mode": "go_back_n/1",
+    "on_exhausted": "isolate_stream"
+  },
+  "windows": [
+    {
+      "address": 4096,
+      "allow_atomic": false,
+      "hex": "0102030405060708",
+      "key": 7,
+      "owner": 0
+    },
+    {
+      "address": 8192,
+      "allow_atomic": false,
+      "hex": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "key": 9,
+      "owner": 4
+    }
+  ]
+}

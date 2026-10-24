@@ -1,0 +1,119 @@
+{
+  "schema_version": "moe-rdma-transactions/1",
+  "connections": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 10000,
+      "response_port": 10010,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 1,
+      "src": 1,
+      "dst": 4,
+      "plane": 0,
+      "request_port": 10001,
+      "response_port": 10011,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    }
+  ],
+  "windows": [
+    {
+      "owner": 4,
+      "key": 7,
+      "address": 4096,
+      "allow_atomic": true,
+      "hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "operations": [
+    {
+      "id": 0,
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 4112,
+      "hex": "00112233445566778899aabbccddeeff",
+      "after": []
+    },
+    {
+      "id": 1,
+      "connection": 0,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 3,
+      "after": [
+        {
+          "operation": 0,
+          "event": "applied"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "connection": 1,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 7,
+      "after": []
+    },
+    {
+      "id": 3,
+      "connection": 0,
+      "verb": "put",
+      "key": 7,
+      "address": 4128,
+      "hex": "ffeeddccbbaa99887766554433221100",
+      "after": [
+        {
+          "operation": 1,
+          "event": "request_acked"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "connection": 0,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 18446744073709551615,
+      "after": [
+        {
+          "operation": 1,
+          "event": "completed"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "connection": 1,
+      "verb": "fetch_add",
+      "key": 7,
+      "address": 4096,
+      "value": 1,
+      "after": [
+        {
+          "operation": 4,
+          "event": "completed"
+        }
+      ]
+    }
+  ],
+  "transport_recovery": {
+    "mode": "go_back_n/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 10000
+  }
+}

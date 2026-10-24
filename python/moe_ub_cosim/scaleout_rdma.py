@@ -16,7 +16,7 @@ from .scaleout_limits import limits
 ROOT = Path(__file__).resolve().parents[2]
 ASTRA = ROOT / 'third_party/LLMServingSim/astra-sim'
 NS3 = ASTRA / 'extern/network_backend/ns-3'
-NATIVE_COMMIT = '3964b1d41cb5f7b51004c316b0eae1a3713c2498'
+NATIVE_COMMIT = '6088174ad6928557482a968d45b9952c85e13112'
 
 
 def save(path, value):
@@ -36,12 +36,14 @@ def checked_json(path, maximum):
 def validate_protocol(c):
     fields(c, 'schema_version cc_mode payload_bytes chunk_bytes ack_interval_bytes base_rtt_ns '
            'switch_buffer_bytes ecn_by_rate seed' + (' limits' if c.get('schema_version') == 'moe-scaleout-rdma/2' else '')
-           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot') if key in c), 'RDMA protocol')
+           + ''.join(' '+key for key in ('drop_once','faults','packet_capture','admission','lifecycle_capture','queue_metrics','recovery','mmu_snapshot','link_failures') if key in c), 'RDMA protocol')
     budget=limits(c)
     from .scaleout_admission import validate_options
     validate_options(c)
     from .scaleout_mmu import validate_options as validate_mmu_options
     validate_mmu_options(c)
+    from .scaleout_link_failures import validate_options as validate_link_options
+    validate_link_options(c)
     if 'queue_metrics' in c:require(type(c['queue_metrics']) is bool,'queue_metrics must be boolean')
     if 'recovery' in c:
         from .scaleout_recovery_config import validate as validate_recovery
@@ -206,6 +208,8 @@ def validate_probe(t, c, batch, *, match_faults=True):
     require_buffers(t,c)
     from .scaleout_mmu import validate_topology as validate_mmu_topology
     validate_mmu_topology(t,c)
+    from .scaleout_link_failures import validate_topology as validate_link_topology
+    validate_link_topology(t,c)
     require(isinstance(batch, list) and 0 < len(batch) <= 128, 'probe message budget exceeded')
     adjacency = {n['id']: [] for n in nodes}
     by_id = {n['id']: n for n in nodes}

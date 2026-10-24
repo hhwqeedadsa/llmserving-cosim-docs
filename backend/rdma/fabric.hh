@@ -33,6 +33,7 @@ class Fabric {
   unsigned Planes() const { return planes_; }
   uint64_t MaxMessages() const { return config_.contains("limits") ? config_.at("limits").at("max_messages").get<uint64_t>() : 8192; }
   int64_t MaxSimNs() const { return config_.contains("limits") ? config_.at("limits").at("max_sim_ns").get<int64_t>() : 5000000; }
+  bool NetworkEventsPending() const {return pending_link_events_!=0;}
  private:
   struct Neighbor { unsigned peer, port; };
   struct Hop { unsigned node,port;int64_t time; };
@@ -73,6 +74,7 @@ class Fabric {
   static void TxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void RxTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
   static void DropTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>);
+  static void LocalDropTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void QueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void QueueEnqueueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
   static void QueueDequeueTrace(Fabric*, unsigned, unsigned, ns3::Ptr<const ns3::Packet>, uint32_t);
@@ -85,6 +87,9 @@ class Fabric {
   void ReleaseSender(uint64_t id);
   void Lifecycle(unsigned event,uint64_t id,unsigned source);
   void CheckDrain();
+  void RebuildRoutes();
+  void FailLink(Json event,unsigned index);
+  void UpdateRoutes(Json event,unsigned index);
   int64_t PacketFlow(ns3::Ptr<const ns3::Packet>) const;
   void PacketEvent(unsigned event, unsigned node, unsigned port, ns3::Ptr<const ns3::Packet>);
   bool Corrupt(unsigned node, unsigned port, ns3::Ptr<ns3::Packet>);
@@ -136,5 +141,9 @@ class Fabric {
   Done finish_;
   bool drain_check_pending_=false;
   bool persistent_stream_mode_=false;
+  std::set<std::pair<unsigned,unsigned>> routing_down_;
+  uint64_t pending_link_events_=0,route_epoch_=0,local_drops_=0;
+  Json link_events_=Json::array();
+  Done network_state_changed_;
 };
 }

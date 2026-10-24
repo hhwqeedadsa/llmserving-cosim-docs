@@ -1,5 +1,7 @@
 # 系统架构与执行过程
 
+原生Scale-Out的可选`switch_links/1`通过同一Simulator关闭实际switch—switch两端，保留在途发送，区分本地排队/转发丢弃与物理到达丢弃。声明延迟后仅排除当时已知故障，重建同plane最短路/ECMP表，保留QP序号及拥塞状态。持久控制器监听网络状态变化，尚有配置事件时不能提前排空关闭；它不是分布式控制平面。范围见[物理链路失效](../examples/scaleout_link_failure/README.md)。
+
 v4/v5的可选`local_views/1`在物理存储和静态NIC注册之上维护应用子窗口；操作准入/实际完成之间持有本地使用，local节点完成才释放视图引用。最后引用为0只进入provider待处理状态，包接收不查询应用视图；发送方不读取目标关闭状态。见[窗口使用与关闭](../examples/scaleout_rdma_transactions/README.md#应用窗口关闭与底层注册分开)。
 
 原生事务可显式分开物理存储和NIC注册权限：同一窗口承载一次实际字节，多个owner/NIC/rkey注册映射到子范围；接收载体检查实际端口匹配连接绑定，事务按该目标NIC解析权限。源读与本地copy继续使用存储key，跨别名重叠写和lease按物理范围保护。接口与范围见[多NIC共享存储](../examples/scaleout_rdma_transactions/README.md#多nic的权限共享同一份存储)；当前仅静态权限，尚无动态MR退出或provider成本。

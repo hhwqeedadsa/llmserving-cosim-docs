@@ -4,6 +4,7 @@
 #include "ns3/rdma-hw.h"
 #include "ns3/switch-node.h"
 #include "cnp_switch.hh"
+#include "link_failure_validation.hh"
 #include <algorithm>
 #include <fstream>
 #include <queue>
@@ -93,6 +94,7 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
   }
   fault_counts_.resize(fault_rules_.size(),0);
   const auto& ns = topology.at("nodes");
+  const auto link_failures=LinkFailureEvents(config,topology,MaxSimNs());
   const auto limit=[&](const char* key,unsigned fallback){return config.contains("limits")?config.at("limits").at(key).get<unsigned>():fallback;};
   const unsigned gpu_limit=limit("max_gpus",32),sw_limit=limit("max_switches",16),link_limit=limit("max_links",256);
   Require(gpu_limit<=1024 && sw_limit<=256 && link_limit<=16384 && MaxMessages()<=1000000 && MaxSimNs()<=1000000000,
@@ -183,7 +185,8 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
           {"data_packets",0u},{"ecn_ce_seen",0u},{"pfc_pause",0u},{"pfc_resume",0u},{"max_queue_at_hook_bytes",0u}};
       Require(dev->TraceConnectWithoutContext("PhyTxBegin", MakeBoundCallback(&Fabric::TxTrace,this,host,port)), "missing native PhyTxBegin");
       Require(dev->TraceConnectWithoutContext("MacRx", MakeBoundCallback(&Fabric::RxTrace,this,host,port)), "missing native MacRx");
-      if(capture_limit_ || recovery_)Require(dev->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&Fabric::DropTrace,this,host,port)),"missing native PhyRxDrop");
+      if(capture_limit_ || recovery_ || !link_failures.empty())Require(dev->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&Fabric::DropTrace,this,host,port)),"missing native PhyRxDrop");
+      if(!link_failures.empty())Require(dev->TraceConnectWithoutContext("QbbDrop",MakeBoundCallback(&Fabric::LocalDropTrace,this,host,port)),"missing native QbbDrop");
       Require(dev->GetQueue()->TraceConnectWithoutContext("BeqEnqueue", MakeBoundCallback(&Fabric::QueueEnqueueTrace,this,host,port)), "missing BeqEnqueue");
       Require(dev->GetQueue()->TraceConnectWithoutContext("BeqDequeue", MakeBoundCallback(&Fabric::QueueDequeueTrace,this,host,port)), "missing BeqDequeue");
       Require(dev->TraceConnectWithoutContext("QbbPfc", MakeBoundCallback(&Fabric::PfcTrace,this,host,port)), "missing QbbPfc");
@@ -257,31 +260,11 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
     }
   }
   RdmaEgressQueue::ack_q_idx=0;
-  // Reverse BFS per destination address/plane; GPUs are terminal endpoints.
-  for(unsigned dst=0;dst<gpus_;++dst) for(unsigned plane=0;plane<planes_;++plane) {
-    std::vector<int> distance(nodes_.GetN(),-1); std::queue<unsigned> queue;
-    distance[dst]=0;queue.push(dst);
-    while(!queue.empty()) {
-      auto now=queue.front();queue.pop();
-      for(auto peer:adjacency_[now]) {
-        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
-        if(distance[peer.peer]<0) {
-          distance[peer.peer]=distance[now]+1;
-          if(peer.peer>=gpus_)queue.push(peer.peer);
-        }
-      }
-    }
-    for(unsigned src=0;src<nodes_.GetN();++src) {
-      if(src==dst || distance[src]<0)continue;
-      if(src>=gpus_ && ns.at(src).at("plane")!=plane)continue;
-      for(auto peer:adjacency_[src]) if(distance[peer.peer]==distance[src]-1) {
-        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
-        auto ip=Address(dst,plane);
-        if(src<gpus_) {
-          drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[(src*gpus_+dst)*planes_+plane]=true;
-        } else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
-      }
-    }
+  RebuildRoutes();
+  pending_link_events_=2*link_failures.size();
+  for(unsigned index=0;index<link_failures.size();++index) {
+    const auto& event=link_failures.at(index);
+    Simulator::Schedule(NanoSeconds(event.at("time_ns").get<int64_t>()),&Fabric::FailLink,this,event,index);
   }
   for(const auto n:capture_nodes_)Require(n<nodes_.GetN(),"capture node absent from topology");
   for(const auto& rule:fault_rules_) {
@@ -293,6 +276,78 @@ Fabric::Fabric(const Json& topology, const Json& config): topology_(topology), c
       rule.at("start_ns").get<int64_t>()<rule.at("end_ns").get<int64_t>() &&
       rule.at("end_ns").get<int64_t>()<=MaxSimNs(),"invalid bounded fault rule");
   }
+}
+
+void Fabric::RebuildRoutes() {
+  const auto& ns=topology_.at("nodes");
+  for(unsigned node=0;node<nodes_.GetN();++node) {
+    if(node<gpus_)drivers_.at(node)->m_rdma->ClearTable();
+    else DynamicCast<SwitchNode>(nodes_.Get(node))->ClearTable();
+  }
+  std::fill(reachable_.begin(),reachable_.end(),0);
+  // Reverse BFS per destination address/plane; GPUs are terminal endpoints.
+  for(unsigned dst=0;dst<gpus_;++dst) for(unsigned plane=0;plane<planes_;++plane) {
+    std::vector<int> distance(nodes_.GetN(),-1); std::queue<unsigned> queue;
+    distance[dst]=0;queue.push(dst);
+    while(!queue.empty()) {
+      auto now=queue.front();queue.pop();
+      for(auto peer:adjacency_[now]) {
+        if(routing_down_.count({now,peer.port}))continue;
+        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
+        if(distance[peer.peer]<0) {
+          distance[peer.peer]=distance[now]+1;
+          if(peer.peer>=gpus_)queue.push(peer.peer);
+        }
+      }
+    }
+    for(unsigned src=0;src<nodes_.GetN();++src) {
+      if(src==dst || distance[src]<0)continue;
+      if(src>=gpus_ && ns.at(src).at("plane")!=plane)continue;
+      for(auto peer:adjacency_[src]) if(distance[peer.peer]==distance[src]-1) {
+        if(routing_down_.count({src,peer.port}))continue;
+        if(peer.peer>=gpus_ && ns.at(peer.peer).at("plane")!=plane)continue;
+        auto ip=Address(dst,plane);
+        if(src<gpus_) {
+          drivers_[src]->m_rdma->AddTableEntry(ip,peer.port); reachable_[(src*gpus_+dst)*planes_+plane]=true;
+        } else DynamicCast<SwitchNode>(nodes_.Get(src))->AddTableEntry(ip,peer.port);
+      }
+    }
+  }
+}
+void Fabric::FailLink(Json event,unsigned index) {
+  const unsigned a=event.at("src"),b=event.at("dst"),ap=event.at("src_port"),bp=event.at("dst_port");
+  const auto first=devices_.at({a,ap}),second=devices_.at({b,bp});
+  Require(first->IsLinkUp() && second->IsLinkUp(),"repeated or unpaired link failure");
+  // Passive before/after accounting for the two switches; never policy input.
+  auto occupancy=[this](unsigned node,unsigned failed_port) {
+    const auto mmu=DynamicCast<SwitchNode>(nodes_.Get(node))->m_mmu;
+    uint64_t incoming=0,outgoing=0,queued=0;
+    for(unsigned port=1;port<ports_.at(node).size();++port)for(unsigned q=1;q<SwitchMmu::qCnt;++q) {
+      incoming+=mmu->ingress_bytes[port][q]+mmu->hdrm_bytes[port][q];
+      outgoing+=mmu->egress_bytes[port][q];
+    }
+    for(unsigned q=1;q<SwitchMmu::qCnt;++q)queued+=devices_.at({node,failed_port})->GetQueue()->GetNBytes(q);
+    return Json{{"node",node},{"failed_port_queued_data_bytes",queued},{"switch_ingress_and_headroom_bytes",incoming},
+      {"switch_egress_mmu_bytes",outgoing},{"switch_shared_used_bytes",mmu->shared_used_bytes}};
+  };
+  const Json before_state=Json::array({occupancy(a,ap),occupancy(b,bp)});
+  const uint64_t queued=first->GetQueue()->GetNBytesTotal()+second->GetQueue()->GetNBytesTotal();
+  const auto before=local_drops_;
+  first->TakeDown();second->TakeDown();--pending_link_events_;
+  link_events_.push_back({{"kind","link_down"},{"time_ns",Now()},{"event_index",index},
+    {"src",a},{"dst",b},{"src_port",ap},{"dst_port",bp},{"queued_bytes_before",queued},
+    {"local_drops_during_close",local_drops_-before},{"route_epoch",route_epoch_},
+    {"buffer_before",before_state},{"buffer_after",Json::array({occupancy(a,ap),occupancy(b,bp)})}});
+  Simulator::Schedule(NanoSeconds(event.at("route_update_delay_ns").get<int64_t>()),&Fabric::UpdateRoutes,this,event,index);
+  CheckDrain();if(network_state_changed_)network_state_changed_();
+}
+void Fabric::UpdateRoutes(Json event,unsigned index) {
+  routing_down_.emplace(event.at("src"),event.at("src_port"));
+  routing_down_.emplace(event.at("dst"),event.at("dst_port"));
+  RebuildRoutes();++route_epoch_;--pending_link_events_;
+  link_events_.push_back({{"kind","routes_updated"},{"time_ns",Now()},{"event_index",index},
+    {"route_epoch",route_epoch_},{"excluded_directed_ports",routing_down_.size()}});
+  CheckDrain();if(network_state_changed_)network_state_changed_();
 }
 
 // Internal, evaluation-only association. Never attach identity tags to packets.
@@ -344,8 +399,11 @@ bool Fabric::Corrupt(unsigned node,unsigned port,Ptr<Packet> p) {
   return false;
 }
 void Fabric::DropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
-  if(f->recovery_) {Require(f->inflight_packets_>0,"drop without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
+  if(f->recovery_ || f->config_.contains("link_failures")) {Require(f->inflight_packets_>0,"drop without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
   f->PacketEvent(2,node,port,p);
+}
+void Fabric::LocalDropTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p,uint32_t) {
+  ++f->local_drops_;f->PacketEvent(5,node,port,p);f->CheckDrain();
 }
 
 void Fabric::Send(uint64_t id, uint32_t src,uint32_t dst,uint64_t bytes,unsigned plane,Done done,Done received) {
@@ -440,7 +498,7 @@ void Fabric::CheckReceived(uint64_t id) {
   }
 }
 void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
-  if(f->recovery_)++f->inflight_packets_;
+  if(f->recovery_ || f->config_.contains("link_failures"))++f->inflight_packets_;
   f->PacketEvent(0,node,port,p);
   auto& row=f->ports_.at(node).at(port); const auto h=Header(p); const uint64_t size=p->GetSize();
   row.wire+=size;
@@ -461,7 +519,7 @@ void Fabric::TxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) 
   if(h.udp.seq==0 && static_cast<int64_t>(p->GetUid())==flow.first_packet_uid)flow.path.push_back({node,port,Now()});
 }
 void Fabric::RxTrace(Fabric* f,unsigned node,unsigned port,Ptr<const Packet> p) {
-  if(f->recovery_) {Require(f->inflight_packets_>0,"receive without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
+  if(f->recovery_ || f->config_.contains("link_failures")) {Require(f->inflight_packets_>0,"receive without in-flight transmission");--f->inflight_packets_;f->CheckDrain();}
   f->PacketEvent(1,node,port,p);
   auto h=Header(p);
   if(h.l3Prot==0x11 && h.GetIpv4EcnBits()==3) {
@@ -508,12 +566,13 @@ void Fabric::PfcTrace(Fabric* f,unsigned node,unsigned port,uint32_t type) {
   if(type)++row.pause;else ++row.resume;
 }
 bool Fabric::Drained() const {
+  if(NetworkEventsPending())return false;
   for(const auto& flow:flows_)if(!flow.second.acked)return false;
   for(auto driver:drivers_)if(!driver->m_rdma->m_qpMap.empty())return false;
   if(resource_tracking_)for(unsigned src=0;src<gpus_;++src)
     if(!admission_[src]->Active().empty() || admission_[src]->Pending() || deciding_[src])return false;
-  if(recovery_) {
-    if(!recovery_->Idle() || inflight_packets_)return false;
+  if(recovery_ || config_.contains("link_failures")) {
+    if((recovery_ && !recovery_->Idle()) || inflight_packets_)return false;
     for(const auto& node:ports_)for(const auto& port:node)if(port.device && port.device->GetQueue()->GetNBytesTotal())return false;
     for(const auto& driver:drivers_)for(const auto& nic:driver->m_rdma->m_nic)
       if(nic.dev && nic.dev->GetRdmaQueue()->m_ackQ->GetNPackets())return false;
@@ -522,7 +581,7 @@ bool Fabric::Drained() const {
 }
 void Fabric::FinishWhenDrained(Done done) {
   Require(!finish_,"finish requested twice");
-  if(!recovery_) {Require(Drained(),"premature service termination");done();return;}
+  if(!recovery_ && !config_.contains("link_failures")) {Require(Drained(),"premature service termination");done();return;}
   finish_=std::move(done);CheckDrain();
 }
 void Fabric::CheckDrain() {
@@ -551,6 +610,9 @@ Json Fabric::Report() {
       {"EwmaGain","ratio"},{"RateOnFirstCnp","ratio"},{"ClampTargetRate","boolean"},{"RateBound","boolean"},
       {"L2BackToZero","boolean"},{"FastRecoveryTimes","count"},{"CcMode","enum"},{"Mtu","bytes"},
       {"L2ChunkSize","bytes"},{"L2AckInterval","bytes"},{"TotalPauseTimes","count"}}}};
+  if(config_.contains("link_failures"))r["link_failures"]={{"configuration",config_.at("link_failures")},
+    {"events",link_events_},{"pending_events",pending_link_events_},{"route_epoch",route_epoch_},{"local_drops",local_drops_},
+    {"scope","permanent bidirectional switch-switch shutdown; delayed centralized shortest-path/ECMP update; declared control delay, no control packets or hardware calibration; QPs retain sequence and congestion state"}};
   if(recovery_) {
     r["recovery"]=recovery_->Report();r["recovery"]["inflight_packets"]=inflight_packets_;
     r["recovery"]["finish_waiting_for_drain"]=bool(finish_);
@@ -636,6 +698,10 @@ Json Fabric::Report() {
       {"observations",packet_observations_},{"complete",packet_observations_==packet_events_.size()},
       {"omitted_events",packet_observations_-packet_events_.size()},
       {"notes","rx precedes protocol acceptance; drop is PhyRxDrop; BEgressQueue hooks exclude NIC data QP and separate high-priority ACK queue; UID is ns-3 packet lineage, not globally unique transmission; sequence is data offset or cumulative ACK/NACK next expected byte; -1 means unassociated"}};
+    if(config_.contains("link_failures")) {
+      r["packet_capture"]["event_codes"]["local_drop"]=5;
+      r["packet_capture"]["local_drop_scope"]="QbbDrop after local dequeue/failed forwarding; no physical in-flight decrement; drop=2 includes actual arrival at a down receiver";
+    }
     if(capture_wire_headers_)r["packet_capture"]["wire_headers"]={
       {"columns",{"packet_uid","ip_src","ip_dst","ip_protocol","source_port","destination_port","ports_present"}},
       {"headers",wire_headers_},{"event_header_indices",event_wire_headers_},

@@ -45,6 +45,7 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
   Require(!fabric_.topology_.contains("intra_host") || !fabric_.topology_.at("intra_host").at("enabled").get<bool>(),
           "stream probe requires physical RDMA paths; intra-host bypass unsupported");
   fabric_.persistent_stream_mode_=true;
+  fabric_.network_state_changed_=[this](){Notify();};
   for(unsigned node=0;node<fabric_.drivers_.size();++node) {
     auto hw=fabric_.drivers_[node]->m_rdma;
     Require(hw->m_cc_mode==1 && hw->m_ack_interval==1 && !hw->m_backto0,"stream adapter requires DCQCN/ACK-each-packet/no-backtozero");
@@ -59,10 +60,11 @@ PersistentStreams::PersistentStreams(Fabric& fabric,Limits limits,const Json& re
       auto device=fabric_.ports_[node][port].device;if(!device)continue;
       Require(device->TraceConnectWithoutContext("PhyTxBegin",MakeBoundCallback(&PersistentStreams::Tx,this,node,port)),"missing stream Tx hook");
       Require(device->TraceConnectWithoutContext("MacRx",MakeBoundCallback(&PersistentStreams::Rx,this,node,port)),"missing stream Rx hook");
-      if(recovery_records_)Require(device->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&PersistentStreams::Drop,this,node,port)),"missing stream drop hook");
+      if(recovery_records_ || fabric_.config_.contains("link_failures"))Require(device->TraceConnectWithoutContext("PhyRxDrop",MakeBoundCallback(&PersistentStreams::Drop,this,node,port)),"missing stream drop hook");
     }
 }
 PersistentStreams::~PersistentStreams() {
+  fabric_.network_state_changed_={};
   for(auto& item:streams_)Simulator::Cancel(item.second.recovery_event);
 }
 void PersistentStreams::ValidateFaultBindings() const {
@@ -543,6 +545,7 @@ bool PersistentStreams::Drained() const {
   return WireIdle();
 }
 bool PersistentStreams::WireIdle() const {
+  if(fabric_.NetworkEventsPending())return false;
   if(inflight_)return false;
   for(const auto& item:streams_)if(item.second.reference && item.second.reference->np.Pending())return false;
   for(const auto& ports:fabric_.ports_)for(const auto& p:ports)if(p.device && p.device->GetQueue()->GetNBytesTotal())return false;

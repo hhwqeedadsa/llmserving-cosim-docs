@@ -13,6 +13,8 @@
 
 ## 当前范围和预算
 
+当前平台`in_progress`：[交换机间物理链路失效](switch_link_failure_spec.md)，基线`a89f007`。复核上轮已完成研究及原生排队/MMU失效证据后，推进真实网络故障能力：原生丢弃回收、在途接收丢弃、声明延迟后的存活路径更新及公开小流程，保留真实ACK/超时与QP状态。只支持switch—switch边，不将控制延迟或功能通过当作校准/论文贡献。每命令60秒/RSS1GiB/地址2GiB/64MiB，阶段600监控秒/256MiB含恢复与持久，网络5ms/result16MiB，tmpfs8GiB/根盘64MiB预留。固定依赖建立本地补丁，不升级/下载安装/GPU或push，平台与研究分别验收和提交，整体目标仍进行中。
+
 当前研究`completed`：[通信域恢复与外部GIN内核适用范围](../../experiments/communicator_recovery/README.md)，平台固定`917e42d`。官方窗口注销要求buffer无NCCL访问；已有Revoke和SHRINK_ABORT须保留为强基线。外部devComm创建不自动赋内部abort指针，GIN等待分支与用户内核终止不能合并；没有证明Revoke/Shrink失效或真实GPU挂死。16份固定全文、20摘录、5精确原函数/2语句及208合成CPU条件由独立整数/调用顺序oracle核验；不是整库、合法故障并发、DMA或性能证据。
 
 4次固定小原文请求取得230,030B，无重试；未改平台/依赖、无GPU/provider/ns-3执行。132成员/478,774B检查点保存在`runs/communicator_recovery_checkpoint_20261024/`，新源码根/空cwd离线重编译后，生成源码、208记录、摘录、摘要和核验五份逐字节一致。8类不安全归档在创建目标目录前拒绝，13固定依赖通过。17份原始监控共10.27秒、峰值约129.94MiB；其中3份准备/编译失败原样保留，仅修缓存接续与替身宏，原函数字节未改，不重复成功请求或已完成CPU记录来修检查。原件/恢复/持久副本及256KiB收据预留共8,044,544B，无遗留受监控进程，最终文件管理另预留10秒。包是收尾前快照，之后收据单独保存。见[中文报告](../reviews/通信域恢复与外部GIN内核边界_20261024.md)、[独立核验](../../experiments/communicator_recovery/results/20261024/verification.json)、[离线恢复](../../experiments/communicator_recovery/results/20261024/replay.json)及[预算收尾](../../experiments/communicator_recovery/results/20261024/closeout.json)。仅本地提交不push；本研究阶段完成，整体论文目标仍`in_progress`，不自动启动恢复实现或性能矩阵。

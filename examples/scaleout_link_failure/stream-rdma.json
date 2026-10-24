@@ -1,0 +1,70 @@
+{
+  "schema_version": "moe-scaleout-rdma/2",
+  "cc_mode": 1,
+  "payload_bytes": 1000,
+  "chunk_bytes": 4000,
+  "ack_interval_bytes": 1,
+  "base_rtt_ns": 14000,
+  "switch_buffer_bytes": 8388608,
+  "ecn_by_rate": {
+    "100000000000": {
+      "kmin_bytes": 32768,
+      "kmax_bytes": 131072,
+      "pmax": 1.0
+    },
+    "25000000000": {
+      "kmin_bytes": 32768,
+      "kmax_bytes": 131072,
+      "pmax": 1.0
+    }
+  },
+  "seed": 11,
+  "limits": {
+    "max_gpus": 32,
+    "max_switches": 16,
+    "max_links": 256,
+    "max_messages": 8192,
+    "max_queue_events": 200000,
+    "queue_capture": "events",
+    "max_sim_ns": 5000000,
+    "wall_seconds": 60,
+    "rss_bytes": 1073741824,
+    "address_bytes": 2147483648,
+    "artifact_bytes": 67108864,
+    "result_json_bytes": 16777216
+  },
+  "queue_metrics": true,
+  "packet_capture": {
+    "nodes": [],
+    "start_ns": 0,
+    "end_ns": 5000000,
+    "max_events": 50000,
+    "wire_headers": true
+  },
+  "mmu_snapshot": {
+    "nodes": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "max_ports": 128
+  },
+  "link_failures": {
+    "mode": "switch_links/1",
+    "events": [
+      {
+        "src": 8,
+        "dst": 10,
+        "time_ns": 4000,
+        "route_update_delay_ns": 12000
+      }
+    ]
+  }
+}

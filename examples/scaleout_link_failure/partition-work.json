@@ -1,0 +1,47 @@
+{
+  "schema_version": "moe-rdma-stream-work/1",
+  "streams": [
+    {
+      "id": 0,
+      "src": 0,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 10000,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 1
+    },
+    {
+      "id": 1,
+      "src": 2,
+      "dst": 4,
+      "plane": 0,
+      "wire_port": 10002,
+      "source_nic": 1,
+      "destination_nic": 1,
+      "queue_depth": 2
+    }
+  ],
+  "work": [
+    {
+      "id": 0,
+      "stream": 0,
+      "bytes": 64000,
+      "after": []
+    },
+    {
+      "id": 1,
+      "stream": 1,
+      "bytes": 64000,
+      "after": []
+    }
+  ],
+  "transport_recovery": {
+    "mode": "go_back_n/1",
+    "initial_rto_ns": 80000,
+    "max_rto_ns": 640000,
+    "max_retries": 3,
+    "max_events": 10000,
+    "on_exhausted": "isolate_stream"
+  }
+}

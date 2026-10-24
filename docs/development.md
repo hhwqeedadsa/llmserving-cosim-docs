@@ -80,7 +80,8 @@
 | ns-3-UB | 主仓库 | `baoy21/ns-3-ub` 的 `cosim` 分支保存项目修改 |
 | ASTRA-sim | LLMServingSim | `baoy21/astra-sim` 的 `cosim` 分支保存项目修改 |
 | Chakra、fmt、spdlog | ASTRA-sim | 原上游固定提交 |
-| analytical 内存与网络后端、csg-htsim、原生 ns-3 后端 | ASTRA-sim | 原上游固定提交 |
+| analytical 内存与网络后端、csg-htsim | ASTRA-sim | 原上游固定提交 |
+| 原生 ns-3 后端 | ASTRA-sim | 固定上游基线及本地交换机关闭补丁；只链接独立Scale-Out入口 |
 | googletest、yaml-cpp | analytical 网络后端 | 原上游固定提交 |
 | ns-3-ub-tools | ns-3-UB | GitCode 配套仓库固定提交 |
 

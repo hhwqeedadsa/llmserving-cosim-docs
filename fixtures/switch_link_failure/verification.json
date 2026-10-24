@@ -1,0 +1,214 @@
+{
+  "default_result_comparison": {
+    "equal_except_loaded_library_paths": true,
+    "full_native_result": true
+  },
+  "network": {
+    "pfc-valid-buffer": {
+      "messages": 3,
+      "observed_source_switch_ports": {
+        "(8, 10)": {
+          "0": {
+            "after": [
+              4
+            ],
+            "before": [
+              3
+            ]
+          },
+          "1": {
+            "after": [
+              4
+            ],
+            "before": [
+              4
+            ]
+          },
+          "2": {
+            "after": [],
+            "before": []
+          }
+        }
+      },
+      "pfc_pause_callbacks": 7,
+      "pfc_resume_callbacks": 7,
+      "physical_drop": 4,
+      "physical_rx": 9920,
+      "physical_tx": 9924,
+      "queued_local_drop": 110,
+      "repeated_source_packets": {
+        "0": 256
+      },
+      "route_epochs": 1,
+      "schema_version": "switch-link-functional-audit/1",
+      "scope": "complete single-plane legacy-byte examples, data priority 3; PFC callback totals, not decoded pause durations; no hardware calibration",
+      "stale_forwarding_local_drop": 102
+    },
+    "queued-failover": {
+      "messages": 3,
+      "observed_source_switch_ports": {
+        "(8, 10)": {
+          "0": {
+            "after": [
+              4
+            ],
+            "before": [
+              3
+            ]
+          },
+          "1": {
+            "after": [
+              4
+            ],
+            "before": [
+              4
+            ]
+          },
+          "2": {
+            "after": [],
+            "before": []
+          }
+        }
+      },
+      "pfc_pause_callbacks": 0,
+      "pfc_resume_callbacks": 0,
+      "physical_drop": 4,
+      "physical_rx": 2363,
+      "physical_tx": 2367,
+      "queued_local_drop": 27,
+      "repeated_source_packets": {
+        "0": 59
+      },
+      "route_epochs": 1,
+      "schema_version": "switch-link-functional-audit/1",
+      "scope": "complete single-plane legacy-byte examples, data priority 3; PFC callback totals, not decoded pause durations; no hardware calibration",
+      "stale_forwarding_local_drop": 28
+    },
+    "two-failures": {
+      "messages": 3,
+      "observed_source_switch_ports": {
+        "(8, 10)": {
+          "0": {
+            "after": [
+              4
+            ],
+            "before": [
+              3
+            ]
+          },
+          "1": {
+            "after": [
+              4
+            ],
+            "before": [
+              4
+            ]
+          },
+          "2": {
+            "after": [],
+            "before": []
+          }
+        },
+        "(9, 11)": {
+          "0": {
+            "after": [],
+            "before": []
+          },
+          "1": {
+            "after": [],
+            "before": []
+          },
+          "2": {
+            "after": [
+              3
+            ],
+            "before": [
+              4
+            ]
+          }
+        }
+      },
+      "pfc_pause_callbacks": 0,
+      "pfc_resume_callbacks": 0,
+      "physical_drop": 8,
+      "physical_rx": 2475,
+      "physical_tx": 2483,
+      "queued_local_drop": 63,
+      "repeated_source_packets": {
+        "0": 59,
+        "2": 112
+      },
+      "route_epochs": 2,
+      "schema_version": "switch-link-functional-audit/1",
+      "scope": "complete single-plane legacy-byte examples, data priority 3; PFC callback totals, not decoded pause durations; no hardware calibration",
+      "stale_forwarding_local_drop": 100
+    }
+  },
+  "persistent": {
+    "future-event": {
+      "finish_ns": 512000,
+      "local_drop": 0,
+      "partition_preserved": false,
+      "physical_drop": 0,
+      "physical_rx": 12,
+      "physical_tx": 12,
+      "source_packets": 1,
+      "streams": 1,
+      "work": 1
+    },
+    "partition": {
+      "finish_ns": 5000000,
+      "local_drop": 252,
+      "partition_preserved": true,
+      "physical_drop": 4,
+      "physical_rx": 1069,
+      "physical_tx": 1073,
+      "source_packets": 320,
+      "streams": 2,
+      "work": 2
+    },
+    "persistent-failover": {
+      "finish_ns": 139852,
+      "local_drop": 55,
+      "partition_preserved": false,
+      "physical_drop": 4,
+      "physical_rx": 1619,
+      "physical_tx": 1623,
+      "source_packets": 189,
+      "streams": 2,
+      "work": 4
+    },
+    "transaction-failover": {
+      "applied_frames": 6,
+      "final_atomic_value": 10,
+      "finish_ns": 147161,
+      "local_drop": 1,
+      "partition_preserved": false,
+      "physical_drop": 0,
+      "physical_rx": 121,
+      "physical_tx": 121,
+      "replies": 4,
+      "source_packets": 11,
+      "streams": 4,
+      "work": 10
+    }
+  },
+  "python_and_native_rejections": 18,
+  "python_unit_tests": 60,
+  "schema_version": "switch-link-verification/1",
+  "tampering": {
+    "changed_MRT1_body": "actual MRT1 body differs from operation",
+    "changed_atomic_memory": "wrong final memory",
+    "early_finish": "terminated before configured network event",
+    "early_route_update": "route update learns edge early/late or incorrect epoch",
+    "fake_ack": "fabricated completion/resource release",
+    "fake_work_ack": "fabricated work callback",
+    "lost_local_drop": "unconsumed local queue/forwarding records",
+    "lost_physical_drop": "physical transmissions lack arrival/drop",
+    "missing_final_snapshot": "incomplete final MMU snapshots",
+    "partition_success": "partition converted to global success",
+    "post_close_tx": "transmit on closed link",
+    "wrong_mmu": "MMU closure summary mismatch",
+    "wrong_queue_integral": "queue integral/peak mismatch"
+  }
+}

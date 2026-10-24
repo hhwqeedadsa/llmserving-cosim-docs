@@ -54,6 +54,8 @@ Fabric在初始化时从实际`RdmaHw`对象读回拥塞/传输属性，统一�
 
 原生RDMA的确定性故障规则与包级记录由`Fabric`实现，消息身份仅通过原端点/端口被动关联，不写入包头。数据和ACK/NACK可在指定接收设备按次数与窗口丢弃；BEgressQueue与设备钩子的被动记录有明确上限。`scaleout rdma-diagnose`在执行结束后读取成功或失败结果，不参与调度。接口、完成/字节口径与协议限制见[丢包小例](../examples/scaleout_rdma_faults/README.md)。
 
+显式`link_failures.mode=switch_links/1`在分配网络前验证完整物理边列表，`FailLink`调用两端原生`TakeDown`，逐实际排队数据回收入口/出口MMU和私有转发计数。`PhyRxDrop`结束一次在途传输；`QbbDrop`记录本地丢弃而不重复扣在途。`UpdateRoutes`仅将本次已到期故障加入`routing_down_`，不能通过`IsLinkUp()`提前获知另一故障；清表/重建不清除QP。`NetworkEventsPending`参与Fabric及持久控制器的排空检查。声明控制延迟未校准，输入及回调边界见[链路失效](../examples/scaleout_link_failure/README.md)。
+
 `Fabric::Report`可选读取有界交换机MMU/BEgressQueue终态，选择及端口预算在分配网络前检查。没有新增仿真事件或drop修复，省略配置时保持旧结果。离线`scaleout_mmu.py`区分合法未排空与守恒不一致，详见[终态缓冲示例](../examples/scaleout_rdma_mmu/README.md)与[字段](../docs/record_storage.md)。
 
 可选每源软件准入由纯C++17的`communication_admission.hh`管理当前就绪任务与额度所有者，RDMA适配负责真实注入和完整ACK后确认发送QP映射移除，再归还额度。数据就绪只放行接收消费者。同机crossbar排除；默认不开启时保留原路径。它没有模拟有限硬件QP槽或GPU缓冲寿命，具体配置和事件见[软件准入示例](../examples/scaleout_rdma_admission/README.md)。
